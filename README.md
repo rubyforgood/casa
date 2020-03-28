@@ -1,1 +1,1 @@
-An upcoming project for Ruby for Good
+An upcoming project for Ruby for Good!
