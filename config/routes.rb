@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  devise_for :all_casa_admins
+  resources :casa_orgs
   resources :case_updates
   resources :case_assignments
   resources :supervisor_volunteers
