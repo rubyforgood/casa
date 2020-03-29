@@ -43,8 +43,8 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 1. when you cd into the project diretory, let your version manager install the ruby version in `.ruby-version`
 1. `gem install bundler`
 1. `bundle install`
-1. `bundle exec rails spec`
 1. `bundle exec rails db:setup`
+1. `bundle exec rails spec`
 1. `bundle exec rails server` # run server
 
 #### One-time already-done project setup (for historical reference)
