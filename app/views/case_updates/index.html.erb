@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Case Updates</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Casa case</th>
+      <th>Update type</th>
+      <th>Other type text</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @case_updates.each do |case_update| %>
+      <tr>
+        <td><%= case_update.user_id %></td>
+        <td><%= case_update.casa_case_id %></td>
+        <td><%= case_update.update_type %></td>
+        <td><%= case_update.other_type_text %></td>
+        <td><%= link_to 'Show', case_update %></td>
+        <td><%= link_to 'Edit', edit_case_update_path(case_update) %></td>
+        <td><%= link_to 'Destroy', case_update, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Case Update', new_case_update_path %>
