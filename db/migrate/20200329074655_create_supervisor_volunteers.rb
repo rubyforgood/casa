@@ -1,9 +1,8 @@
 class CreateSupervisorVolunteers < ActiveRecord::Migration[6.0]
   def change
     create_table :supervisor_volunteers do |t|
-      t.integer :volunteer_user_id
-      t.integer :supervisor_user_id
-
+      t.references :supervisor_user, foreign_key: { to_table: :users }
+      t.references :volunteer_user, foreign_key: { to_table: :users }
       t.timestamps
     end
   end

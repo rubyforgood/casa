@@ -13,31 +13,33 @@ casa_cases = CasaCase.create(
     ]
 )
 
-users = User.create(
+volunteer_user_1 = User.create({
+                                   email: "volunteer1@example.com",
+                                   password: "123456",
+                                   password_confirmation: "123456",
+                                   role: :volunteer
+                               })
+supervisor_user_1 = User.create({
+                                    email: "supervisor1@example.com",
+                                    password: "123456",
+                                    password_confirmation: "123456",
+                                    role: :supervisor
+                                })
+casa_admin_user_1 = User.create({
+                                    email: "casa_admin1@example.com",
+                                    password: "123456",
+                                    password_confirmation: "123456",
+                                    role: :casa_admin
+                                })
+inactive_user_1 = User.create({
+                                  email: "inactive1@example.com",
+                                  password: "123456",
+                                  password_confirmation: "123456",
+                                  role: :inactive
+                              })
+
+SupervisorVolunteer.create(
     [
-        {
-            email: "volunteer1@example.com",
-            password: "123456",
-            password_confirmation: "123456",
-            role: :volunteer
-        },
-        {
-            email: "supervisor1@example.com",
-            password: "123456",
-            password_confirmation: "123456",
-            role: :supervisor
-        },
-        {
-            email: "casa_admin1@example.com",
-            password: "123456",
-            password_confirmation: "123456",
-            role: :casa_admin
-        },
-        {
-            email: "inactive1@example.com",
-            password: "123456",
-            password_confirmation: "123456",
-            role: :inactive
-        },
+        {supervisor_user_id: supervisor_user_1.id, volunteer_user_id: volunteer_user_1.id}
     ]
 )

@@ -24,10 +24,12 @@ ActiveRecord::Schema.define(version: 2020_03_29_074655) do
   end
 
   create_table "supervisor_volunteers", force: :cascade do |t|
-    t.integer "volunteer_user_id"
-    t.integer "supervisor_user_id"
+    t.bigint "supervisor_user_id"
+    t.bigint "volunteer_user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["supervisor_user_id"], name: "index_supervisor_volunteers_on_supervisor_user_id"
+    t.index ["volunteer_user_id"], name: "index_supervisor_volunteers_on_volunteer_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -43,4 +45,6 @@ ActiveRecord::Schema.define(version: 2020_03_29_074655) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "supervisor_volunteers", "users", column: "supervisor_user_id"
+  add_foreign_key "supervisor_volunteers", "users", column: "volunteer_user_id"
 end
