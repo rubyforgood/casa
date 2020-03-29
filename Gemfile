@@ -3,6 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.7.0'
 
+gem "awesome_print" # easier console reading
 gem 'paper_trail' # tracking changes
 gem "pundit" # for authorization management - based on user.role field
 gem 'devise' # for authentication
