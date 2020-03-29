@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :case_assignments
   resources :supervisor_volunteers
   devise_for :users
   root to: "casa_cases#index" # needed for devise - not sure what this will actually end up being

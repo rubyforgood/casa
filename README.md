@@ -64,8 +64,8 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 1. add devise, rails generate devise:install # followed by following some commandline instructions
 1. rails g devise:views
 1. add role to user, add pundit, rails g pundit:install
-1. rails generate scaffold SupervisorVolunteer volunteer_user_id:integer{polymorphic} supervisor_user_id:integer{polymorphic}
-1. 
+1. rails generate scaffold SupervisorVolunteer volunteer_id:integer{polymorphic} supervisor_id:integer{polymorphic}
+1. rails generate scaffold CaseAssignment volunteer_id:integer casa_case_id:reference is_active:boolean
 1. 
 
 ### TODO:
@@ -81,8 +81,8 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 1. all_casa_admin: email, name, hashed_password(devise) # for multi-tenancy
 1. case: case#, teen_program_eligible
 1. user: email, name, casa_id, hashed_password(devise), role(enum: inactive, volunteer, supervisor, casa-admin)
-1. supervisor_volunteer: volunteer_user_id, supervisor_user_id
-1. case_assignment: volunteer_user_id, case_id, is_active - since multiple volunteers can be assigned to the same case in different quarters
-1. case_update: user_id, case_id, (since a volunteer can switch cases or have multiple), update_type. (youth, school, social worker, therapeutic agency worker contact, therapist, attorney, bio-parent, foster parent, other family contact, supervisor, court, other), other_type_text
+1. supervisor_volunteer: volunteer_id, supervisor_id
+1. case_assignment: volunteer_id, casa_case_id, is_active - since multiple volunteers can be assigned to the same case in different quarters
+1. case_update: user_id, casa_case_id, (since a volunteer can switch cases or have multiple), update_type. (youth, school, social worker, therapeutic agency worker contact, therapist, attorney, bio-parent, foster parent, other family contact, supervisor, court, other), other_type_text
 1. uploaded_import: import_json (only saved fields?) maybe don't do this at all, in-memory only
 

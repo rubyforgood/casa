@@ -1,23 +1,24 @@
 class SupervisorVolunteer < ApplicationRecord
+#   validates :supervisor, :uniqueness => {:scope => :volunteer}
 end
 
 # == Schema Information
 #
 # Table name: supervisor_volunteers
 #
-#  id                 :bigint           not null, primary key
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  supervisor_user_id :bigint
-#  volunteer_user_id  :bigint
+#  id            :bigint           not null, primary key
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  supervisor_id :bigint           not null
+#  volunteer_id  :bigint           not null
 #
 # Indexes
 #
-#  index_supervisor_volunteers_on_supervisor_user_id  (supervisor_user_id)
-#  index_supervisor_volunteers_on_volunteer_user_id   (volunteer_user_id)
+#  index_supervisor_volunteers_on_supervisor_id  (supervisor_id)
+#  index_supervisor_volunteers_on_volunteer_id   (volunteer_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (supervisor_user_id => users.id)
-#  fk_rails_...  (volunteer_user_id => users.id)
+#  fk_rails_...  (supervisor_id => users.id)
+#  fk_rails_...  (volunteer_id => users.id)
 #

@@ -14,8 +14,8 @@
   <tbody>
     <% @supervisor_volunteers.each do |supervisor_volunteer| %>
       <tr>
-        <td><%= supervisor_volunteer.volunteer_user_id %></td>
-        <td><%= supervisor_volunteer.supervisor_user_id %></td>
+        <td><%= supervisor_volunteer.volunteer_id %></td>
+        <td><%= supervisor_volunteer.supervisor_id %></td>
         <td><%= link_to 'Show', supervisor_volunteer %></td>
         <td><%= link_to 'Edit', edit_supervisor_volunteer_path(supervisor_volunteer) %></td>
         <td><%= link_to 'Destroy', supervisor_volunteer, method: :delete, data: { confirm: 'Are you sure?' } %></td>

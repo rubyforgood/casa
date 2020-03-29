@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe "supervisor_volunteers/show", type: :view do
   before(:each) do
     @supervisor_volunteer = assign(:supervisor_volunteer, SupervisorVolunteer.create!(
-      volunteer_user_id: "",
-      supervisor_user_id: ""
+      volunteer_id: "",
+      supervisor_id: ""
     ))
   end
 

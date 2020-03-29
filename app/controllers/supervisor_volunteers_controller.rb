@@ -69,6 +69,6 @@ class SupervisorVolunteersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def supervisor_volunteer_params
-      params.require(:supervisor_volunteer).permit(:volunteer_user_id, :supervisor_user_id)
+      params.require(:supervisor_volunteer).permit(:volunteer_id, :supervisor_id)
     end
 end
