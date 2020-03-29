@@ -3,6 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.7.0'
 
+gem "pundit" # for authorization management - based on user.role field
 gem 'devise' # for authentication
 gem "skylight" # automated performance testing https://www.skylight.io/
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

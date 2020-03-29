@@ -61,9 +61,9 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 1. rake db:migrate
 1. brew install yarm # because of error: Yarn not installed. Please download and install Yarn from https://yarnpkg.com/lang/en/docs/install/
 1. rails server
-1. rails generate devise:install # followed by following some commandline instructions
+1. add devise, rails generate devise:install # followed by following some commandline instructions
 1. rails g devise:views
-1. 
+1. add pundit, rails g pundit:install
 1. 
 1. 
 1. 
