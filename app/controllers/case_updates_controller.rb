@@ -1,3 +1,4 @@
+# rubocop:todo Style/Documentation
 class CaseUpdatesController < ApplicationController
   before_action :set_case_update, only: %i[show edit update destroy]
 
@@ -71,3 +72,4 @@ class CaseUpdatesController < ApplicationController
     params.require(:case_update).permit(:user_id, :casa_case_id, :update_type, :other_type_text)
   end
 end
+# rubocop:enable Style/Documentation

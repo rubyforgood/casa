@@ -1,2 +1,2 @@
-module CasaCasesHelper
+module CasaCasesHelper # rubocop:todo Style/Documentation
 end

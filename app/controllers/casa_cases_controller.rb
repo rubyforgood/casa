@@ -1,3 +1,4 @@
+# rubocop:todo Style/Documentation
 class CasaCasesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_casa_case, only: %i[show edit update destroy]
@@ -72,3 +73,4 @@ class CasaCasesController < ApplicationController
     params.require(:casa_case).permit(:case_number, :teen_program_eligible)
   end
 end
+# rubocop:enable Style/Documentation

@@ -1,3 +1,4 @@
+# rubocop:todo Style/Documentation
 class CaseAssignmentsController < ApplicationController
   before_action :set_case_assignment, only: %i[show edit update destroy]
 
@@ -71,3 +72,4 @@ class CaseAssignmentsController < ApplicationController
     params.require(:case_assignment).permit(:volunteer_id, :casa_case_id, :is_active)
   end
 end
+# rubocop:enable Style/Documentation

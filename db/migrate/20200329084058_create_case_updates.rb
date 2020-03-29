@@ -1,3 +1,4 @@
+# rubocop:todo Style/Documentation
 class CreateCaseUpdates < ActiveRecord::Migration[6.0]
   def change
     create_table :case_updates do |t|
@@ -10,3 +11,4 @@ class CreateCaseUpdates < ActiveRecord::Migration[6.0]
     end
   end
 end
+# rubocop:enable Style/Documentation

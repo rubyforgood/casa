@@ -1,4 +1,4 @@
-class CasaCase < ApplicationRecord
+class CasaCase < ApplicationRecord # rubocop:todo Style/Documentation
   has_paper_trail
 end
 

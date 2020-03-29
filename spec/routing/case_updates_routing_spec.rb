@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+# rubocop:todo Metrics/BlockLength
 RSpec.describe CaseUpdatesController, type: :routing do
   describe 'routing' do
     it 'routes to #index' do
@@ -35,3 +36,4 @@ RSpec.describe CaseUpdatesController, type: :routing do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength

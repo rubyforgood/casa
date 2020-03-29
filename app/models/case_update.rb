@@ -1,4 +1,4 @@
-class CaseUpdate < ApplicationRecord
+class CaseUpdate < ApplicationRecord # rubocop:todo Style/Documentation
   has_paper_trail
   belongs_to :user
   belongs_to :casa_case

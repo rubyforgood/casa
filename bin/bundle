@@ -21,11 +21,16 @@ m = Module.new do
     ENV['BUNDLER_VERSION']
   end
 
-  def cli_arg_version
+  # rubocop:todo Metrics/PerceivedComplexity
+  # rubocop:todo Metrics/MethodLength
+  def cli_arg_version # rubocop:todo Metrics/CyclomaticComplexity
     return unless invoked_as_script? # don't want to hijack other binstubs
     unless 'update'.start_with?(ARGV.first || ' ')
       return
+      # rubocop:todo Style/CommentedKeyword
     end # must be running `bundle update`
+
+    # rubocop:enable Style/CommentedKeyword
 
     bundler_version = nil
     update_index = nil
@@ -42,6 +47,8 @@ m = Module.new do
     end
     bundler_version
   end
+  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/PerceivedComplexity
 
   def gemfile
     gemfile = ENV['BUNDLE_GEMFILE']
@@ -98,7 +105,8 @@ m = Module.new do
     activate_bundler
   end
 
-  def activate_bundler
+  # rubocop:todo Metrics/MethodLength
+  def activate_bundler # rubocop:todo Metrics/AbcSize
     gem_error = activation_error_handling do
       gem 'bundler', bundler_requirement
     end
@@ -114,6 +122,7 @@ m = Module.new do
     warn "Activating bundler (#{bundler_requirement}) failed:\n#{gem_error.message}\n\nTo install the version of bundler this project requires, run `gem install bundler -v '#{bundler_requirement}'`"
     exit 42
   end
+  # rubocop:enable Metrics/MethodLength
 
   def activation_error_handling
     yield

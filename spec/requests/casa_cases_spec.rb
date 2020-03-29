@@ -12,6 +12,7 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
+# rubocop:todo Metrics/BlockLength
 RSpec.describe '/casa_cases', type: :request do
   # CasaCase. As you add validations to CasaCase, be sure to
   # adjust the attributes here as well.
@@ -127,3 +128,4 @@ RSpec.describe '/casa_cases', type: :request do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength

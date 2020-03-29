@@ -1,4 +1,4 @@
-class CasaCasePolicy
+class CasaCasePolicy # rubocop:todo Style/Documentation
   attr_reader :user, :casa_case
 
   def initialize(user, casa_case)

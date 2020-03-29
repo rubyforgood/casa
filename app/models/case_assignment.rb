@@ -1,4 +1,4 @@
-class CaseAssignment < ApplicationRecord
+class CaseAssignment < ApplicationRecord # rubocop:todo Style/Documentation
   has_paper_trail
   validates :casa_case_id, uniqueness: { scope: :volunteer_id } # only 1 row allowed per case-volunteer pair
 end
