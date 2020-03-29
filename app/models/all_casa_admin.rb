@@ -1,4 +1,4 @@
-class AllCasaAdmin < ApplicationRecord
+class AllCasaAdmin < ApplicationRecord # rubocop:todo Style/Documentation
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
