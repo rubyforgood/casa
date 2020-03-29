@@ -67,6 +67,7 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 1. add role to user, add pundit, rails g pundit:install
 1. rails generate scaffold SupervisorVolunteer volunteer_id:integer{polymorphic} supervisor_id:integer{polymorphic}
 1. rails generate scaffold CaseAssignment volunteer_id:integer casa_case_id:reference is_active:boolean
+<<<<<<< HEAD
 1. rails generate scaffold CaseUpdate user:references casa_case:references update_type:string other_type_text:string
 1. add paper_trail
 1. add rubocop for linting and brakeman for security static inspection
@@ -75,6 +76,8 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 1. rails g migration AddDurationAndDateToCaseUpdate
 1. rails generate devise all_casa_admin # can create a user with user.role = casa_admin
 1. change column name of case_update.user to case_update.creator 
+=======
+>>>>>>> parent of d1008a1... rails generate scaffold CaseUpdate user:references casa_case:references update_type:string other_type_text:string
 1. 
 
 
