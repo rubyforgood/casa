@@ -38,6 +38,8 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 1. when you cd into the project diretory, let your version manager install the ruby versionin .ruby-version
 1. gem install bundler
 1. bundle install
+1. bundle exec rails test 
+1. bundle exec rails server # run server
 
 #### One-time already-done project setup (for historical reference)
 
@@ -48,11 +50,17 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 1. rails new . -d postgresql --webpacker react
 1. [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database (if you have an older version of postgres)
 1. rails db:create # requires running local postgres
-1. rails generate scaffold Case case_number:string teen_program_eligible:boolean
+1. rake app:update:bin # required for scaffold to not hang
+1. rails generate scaffold CasaCase case_number:string teen_program_eligible:boolean
+1. rails webpacker:install # required for rails to run
 1. rake db:migrate
-1. Yarn not installed. Please download and install Yarn from https://yarnpkg.com/lang/en/docs/install/
-1. rails webpacker:install
+1. brew install yarm # because of error: Yarn not installed. Please download and install Yarn from https://yarnpkg.com/lang/en/docs/install/
 1. rails server
+1. 
+1. 
+1. 
+1. 
+1. 
 
 
 
