@@ -72,6 +72,10 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 1. rails generate scaffold CasaOrg name:string
 1. add casa_id to user
 1. rails g migration AddDurationAndDateToCaseUpdate
+1. rails generate devise all_casa_admin # can create a user with user.role = casa_admin
+1. 
+1. 
+
 
 ### TODO:
 
@@ -81,11 +85,6 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 1. add good examples of tests
 1. 
 1. 
-1. 
 
-### Additional planned database models
 
-1. casa: name # for multi-tenancy
-1. all_casa_admin: email, name, hashed_password(devise) # for multi-tenancy
-1. uploaded_import: import_json (only saved fields?) maybe don't do this at all, in-memory only
 
