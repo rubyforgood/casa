@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Case number:</strong>
+  <%= @casa_case.case_number %>
+</p>
+
+<p>
+  <strong>Teen program eligible:</strong>
+  <%= @casa_case.teen_program_eligible %>
+</p>
+
+<%= link_to 'Edit', edit_casa_case_path(@casa_case) %> |
+<%= link_to 'Back', casa_cases_path %>
