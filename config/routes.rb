@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :casa_orgs
   resources :case_updates
   resources :case_assignments
   resources :supervisor_volunteers

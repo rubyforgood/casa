@@ -69,7 +69,8 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 1. rails generate scaffold CaseUpdate user:references casa_case:references update_type:string other_type_text:string
 1. add paper_trail
 1. add rubocop for linting and brakeman for security static inspection
-1. 
+1. rails generate scaffold CasaOrg name:string
+1. add casa_id to user
 1. 
 
 ### TODO:
