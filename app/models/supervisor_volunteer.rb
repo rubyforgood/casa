@@ -1,5 +1,5 @@
 class SupervisorVolunteer < ApplicationRecord
-#   validates :supervisor, :uniqueness => {:scope => :volunteer}
+  validates :supervisor_id, :uniqueness => {:scope => :volunteer_id} # only 1 row allowed per supervisor-volunteer pair
 end
 
 # == Schema Information

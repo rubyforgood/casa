@@ -1,5 +1,5 @@
 class CaseAssignment < ApplicationRecord
-  #   validates :case, :uniqueness => {:scope => :volunteer}
+  validates :casa_case_id, :uniqueness => {:scope => :volunteer_id} # only 1 row allowed per case-volunteer pair
 end
 
 # == Schema Information
