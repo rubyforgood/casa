@@ -7,6 +7,6 @@ services:
 jobs:
   include:
     - stage: test
-      script: rails test
-    - stage: seed data
-      script: rake db:create db:migrate db:seed
+      script: rspec
+      # - stage: seed data
+      #   script: rake db:create db:migrate db:seed
