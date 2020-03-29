@@ -1,4 +1,5 @@
-<strong>CASA Project & Organization Overview</strong>
+# CASA Project & Organization Overview
+[![Build Status](https://travis-ci.org/ruby4good/casa.svg)](https://travis-ci.org/ruby4good/casa)
 
 CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunteer sworn into a county-level juvenile dependency court system to advocate on behalf of a youth in the corresponding county's foster care system. CASA is also the namesake role of the national organization, CASA, which exists to cultivate and supervise volunteers carrying out this work – with county level chapters (operating relatively independently of each other) across the country. 
 
