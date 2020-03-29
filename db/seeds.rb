@@ -5,3 +5,9 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+casa_cases = CasaCase.create(
+    [
+        {case_number: 111, }
+    ]
+)
