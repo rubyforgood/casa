@@ -1,22 +1,40 @@
 class CasaCasePolicy # rubocop:todo Style/Documentation
-  attr_reader :user, :casa_case
+  attr_reader :user, :record
 
-  def initialize(user, casa_case)
+  def initialize(user, record)
     @user = user
-    @casa_case = casa_case
+    @record = record
+  end
+
+  def _is_casa_admin_of_case_org?
+    user.is_instance?(CasaAdmin) && (record.casa_org == user.casa_org)
+  end
+
+  def index?
+    _is_casa_admin_of_case_org?
+  end
+
+  def show?
+    _is_casa_admin_of_case_org?
+  end
+
+  def create?
+    _is_casa_admin_of_case_org?
+  end
+
+  def new?
+    _is_casa_admin_of_case_org?
   end
 
   def update?
-    user.volunteer? || user.supervisor? || user.casa_admin?
-    # user.casa_admin? or _user_is_supervisor_of_volunteer_for_case?(user) or _user_is_volunteer_assigned_to_case(user) # for the future when we have all the models
+    _is_casa_admin_of_case_org?
   end
 
-  def _user_is_supervisor_of_volunteer_for_case?(user)
-    # for the future when we have all the models
-    # user.supervisor? and user.supervisor_volunteers.any?(casa_case.case_assignments.map(&:volunteer_user))
+  def edit?
+    _is_casa_admin_of_case_org?
   end
 
-  def _user_is_volunteer_assigned_to_case(user)
-    # user.case_assignments.map(&:casa_case).includes?(@casa_case)
+  def destroy?
+    _is_casa_admin_of_case_org?
   end
 end

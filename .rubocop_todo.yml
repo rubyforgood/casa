@@ -81,5 +81,4 @@ Naming/VariableNumber:
   Exclude:
     - 'db/seeds.rb'
 
-Style/Documentation:
-  Enforce: False
+
