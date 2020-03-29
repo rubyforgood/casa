@@ -73,9 +73,8 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 
 TODO:
 
-missing react????
-
-Add CI
+1. add react.js 
+1. Add CI
 
 rails generate devise:install
 rails generate devise user
