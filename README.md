@@ -39,7 +39,7 @@ Things you may want to cover:
 1. rails db:create # requires running local postgres
 1. rails generate scaffold Case case_number:string teen_program_eligible:boolean
 1. rake db:migrate
-1. Yarn not installed. Please download and install Yarn from https://yarnpkg.com/lang/en/docs/install/
+1. brew install yarm OR https://yarnpkg.com/lang/en/docs/install/
 1. rails webpacker:install
 1. rails server
 
