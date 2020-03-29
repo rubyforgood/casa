@@ -1,5 +1,5 @@
 class SupervisorVolunteersController < ApplicationController
-  before_action :set_supervisor_volunteer, only: [:show, :edit, :update, :destroy]
+  before_action :set_supervisor_volunteer, only: %i[show edit update destroy]
 
   # GET /supervisor_volunteers
   # GET /supervisor_volunteers.json
@@ -9,8 +9,7 @@ class SupervisorVolunteersController < ApplicationController
 
   # GET /supervisor_volunteers/1
   # GET /supervisor_volunteers/1.json
-  def show
-  end
+  def show; end
 
   # GET /supervisor_volunteers/new
   def new
@@ -18,8 +17,7 @@ class SupervisorVolunteersController < ApplicationController
   end
 
   # GET /supervisor_volunteers/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /supervisor_volunteers
   # POST /supervisor_volunteers.json
@@ -62,13 +60,14 @@ class SupervisorVolunteersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_supervisor_volunteer
-      @supervisor_volunteer = SupervisorVolunteer.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def supervisor_volunteer_params
-      params.require(:supervisor_volunteer).permit(:volunteer_id, :supervisor_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_supervisor_volunteer
+    @supervisor_volunteer = SupervisorVolunteer.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def supervisor_volunteer_params
+    params.require(:supervisor_volunteer).permit(:volunteer_id, :supervisor_id)
+  end
 end

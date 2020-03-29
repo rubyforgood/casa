@@ -1,5 +1,5 @@
 class CaseAssignmentsController < ApplicationController
-  before_action :set_case_assignment, only: [:show, :edit, :update, :destroy]
+  before_action :set_case_assignment, only: %i[show edit update destroy]
 
   # GET /case_assignments
   # GET /case_assignments.json
@@ -9,8 +9,7 @@ class CaseAssignmentsController < ApplicationController
 
   # GET /case_assignments/1
   # GET /case_assignments/1.json
-  def show
-  end
+  def show; end
 
   # GET /case_assignments/new
   def new
@@ -18,8 +17,7 @@ class CaseAssignmentsController < ApplicationController
   end
 
   # GET /case_assignments/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /case_assignments
   # POST /case_assignments.json
@@ -62,13 +60,14 @@ class CaseAssignmentsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_case_assignment
-      @case_assignment = CaseAssignment.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def case_assignment_params
-      params.require(:case_assignment).permit(:volunteer_id, :casa_case_id, :is_active)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_case_assignment
+    @case_assignment = CaseAssignment.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def case_assignment_params
+    params.require(:case_assignment).permit(:volunteer_id, :casa_case_id, :is_active)
+  end
 end

@@ -7,7 +7,7 @@ class CasaCasePolicy
   end
 
   def update?
-    user.volunteer? or user.supervisor? or user.casa_admin?
+    user.volunteer? || user.supervisor? || user.casa_admin?
     # user.casa_admin? or _user_is_supervisor_of_volunteer_for_case?(user) or _user_is_volunteer_assigned_to_case(user) # for the future when we have all the models
   end
 

@@ -1,5 +1,5 @@
 class CaseUpdatesController < ApplicationController
-  before_action :set_case_update, only: [:show, :edit, :update, :destroy]
+  before_action :set_case_update, only: %i[show edit update destroy]
 
   # GET /case_updates
   # GET /case_updates.json
@@ -9,8 +9,7 @@ class CaseUpdatesController < ApplicationController
 
   # GET /case_updates/1
   # GET /case_updates/1.json
-  def show
-  end
+  def show; end
 
   # GET /case_updates/new
   def new
@@ -18,8 +17,7 @@ class CaseUpdatesController < ApplicationController
   end
 
   # GET /case_updates/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /case_updates
   # POST /case_updates.json
@@ -62,13 +60,14 @@ class CaseUpdatesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_case_update
-      @case_update = CaseUpdate.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def case_update_params
-      params.require(:case_update).permit(:user_id, :casa_case_id, :update_type, :other_type_text)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_case_update
+    @case_update = CaseUpdate.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def case_update_params
+    params.require(:case_update).permit(:user_id, :casa_case_id, :update_type, :other_type_text)
+  end
 end
