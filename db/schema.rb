@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_29_104349) do
+ActiveRecord::Schema.define(version: 2020_03_29_175337) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,19 @@ ActiveRecord::Schema.define(version: 2020_03_29_104349) do
     t.index ["volunteer_id"], name: "index_case_assignments_on_volunteer_id"
   end
 
+  create_table "case_contacts", force: :cascade do |t|
+    t.bigint "creator_id", null: false
+    t.bigint "casa_case_id", null: false
+    t.string "contact_type", null: false
+    t.string "other_type_text"
+    t.integer "duration_minutes", null: false
+    t.datetime "occurred_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["casa_case_id"], name: "index_case_contacts_on_casa_case_id"
+    t.index ["creator_id"], name: "index_case_contacts_on_creator_id"
+  end
+
   create_table "case_updates", force: :cascade do |t|
     t.bigint "casa_case_id", null: false
     t.string "update_type", null: false
@@ -62,6 +75,13 @@ ActiveRecord::Schema.define(version: 2020_03_29_104349) do
     t.bigint "creator_id", null: false
     t.index ["casa_case_id"], name: "index_case_updates_on_casa_case_id"
     t.index ["creator_id"], name: "index_case_updates_on_creator_id"
+  end
+
+  create_table "cases", force: :cascade do |t|
+    t.string "case_number"
+    t.boolean "teen_program_eligible"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "supervisor_volunteers", force: :cascade do |t|
@@ -100,6 +120,8 @@ ActiveRecord::Schema.define(version: 2020_03_29_104349) do
 
   add_foreign_key "case_assignments", "casa_cases"
   add_foreign_key "case_assignments", "users", column: "volunteer_id"
+  add_foreign_key "case_contacts", "casa_cases"
+  add_foreign_key "case_contacts", "users", column: "creator_id"
   add_foreign_key "case_updates", "casa_cases"
   add_foreign_key "case_updates", "users", column: "creator_id"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"

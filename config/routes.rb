@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :case_contacts
   devise_for :all_casa_admins
   resources :casa_orgs
   resources :case_updates

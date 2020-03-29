@@ -1,0 +1,47 @@
+<%= form_with(model: case_contact, local: true) do |form| %>
+  <% if case_contact.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(case_contact.errors.count, "error") %> prohibited this case_contact from being saved:</h2>
+
+      <ul>
+        <% case_contact.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :creator_id %>
+    <%= form.text_field :creator_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :casa_case_id %>
+    <%= form.text_field :casa_case_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :contact_type %>
+    <%= form.text_field :contact_type %>
+  </div>
+
+  <div class="field">
+    <%= form.label :other_type_text %>
+    <%= form.text_field :other_type_text %>
+  </div>
+
+  <div class="field">
+    <%= form.label :duration_minutes %>
+    <%= form.number_field :duration_minutes %>
+  </div>
+
+  <div class="field">
+    <%= form.label :occurred_at %>
+    <%= form.datetime_select :occurred_at %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
