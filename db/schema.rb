@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_29_095031) do # rubocop:todo Metrics/BlockLength
+ActiveRecord::Schema.define(version: 2020_03_29_101111) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 2020_03_29_095031) do # rubocop:todo Metric
   end
 
   create_table "casa_orgs", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -46,6 +46,8 @@ ActiveRecord::Schema.define(version: 2020_03_29_095031) do # rubocop:todo Metric
     t.string "other_type_text"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "duration_minutes", null: false
+    t.datetime "occurred_at", null: false
     t.index ["casa_case_id"], name: "index_case_updates_on_casa_case_id"
     t.index ["user_id"], name: "index_case_updates_on_user_id"
   end
@@ -68,6 +70,8 @@ ActiveRecord::Schema.define(version: 2020_03_29_095031) do # rubocop:todo Metric
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "role", default: "volunteer", null: false
+    t.bigint "casa_org_id", null: false
+    t.index ["casa_org_id"], name: "index_users_on_casa_org_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -88,4 +92,5 @@ ActiveRecord::Schema.define(version: 2020_03_29_095031) do # rubocop:todo Metric
   add_foreign_key "case_updates", "users"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"
   add_foreign_key "supervisor_volunteers", "users", column: "volunteer_id"
+  add_foreign_key "users", "casa_orgs"
 end

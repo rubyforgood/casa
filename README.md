@@ -71,12 +71,15 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 1. add rubocop for linting and brakeman for security static inspection
 1. rails generate scaffold CasaOrg name:string
 1. add casa_id to user
-1. 
+1. rails g migration AddDurationAndDateToCaseUpdate
 
 ### TODO:
 
 1. add react.js 
 1. Add CI
+1. add selenium level test?
+1. add good examples of tests
+1. 
 1. 
 1. 
 

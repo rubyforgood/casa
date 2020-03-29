@@ -76,3 +76,7 @@ Style/WordArray:
 # URISchemes: http, https
 Layout/LineLength:
   Max: 320
+
+Naming/VariableNumber:
+  Exclude:
+    - 'db/seeds.rb'

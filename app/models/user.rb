@@ -23,9 +23,15 @@ end
 #  role                   :string           default("volunteer"), not null
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  casa_org_id            :bigint           not null
 #
 # Indexes
 #
+#  index_users_on_casa_org_id           (casa_org_id)
 #  index_users_on_email                 (email) UNIQUE
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (casa_org_id => casa_orgs.id)
 #
