@@ -11,3 +11,7 @@ end
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #
+# Indexes
+#
+#  index_casa_cases_on_case_number  (case_number) UNIQUE
+#

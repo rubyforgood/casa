@@ -8,6 +8,7 @@
 
 casa_cases = CasaCase.create(
     [
-        {case_number: 111, }
+        {case_number: 111},
+        {case_number: 222},
     ]
 )
