@@ -1,0 +1,32 @@
+<%= form_with(model: case_assignment, local: true) do |form| %>
+  <% if case_assignment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(case_assignment.errors.count, "error") %> prohibited this case_assignment from being saved:</h2>
+
+      <ul>
+        <% case_assignment.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :volunteer_id %>
+    <%= form.number_field :volunteer_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :casa_case_id %>
+    <%= form.text_field :casa_case_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :is_active %>
+    <%= form.check_box :is_active %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

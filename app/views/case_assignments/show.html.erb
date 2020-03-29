@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Volunteer user:</strong>
+  <%= @case_assignment.volunteer_id %>
+</p>
+
+<p>
+  <strong>Case:</strong>
+  <%= @case_assignment.casa_case_id %>
+</p>
+
+<p>
+  <strong>Is active:</strong>
+  <%= @case_assignment.is_active %>
+</p>
+
+<%= link_to 'Edit', edit_case_assignment_path(@case_assignment) %> |
+<%= link_to 'Back', case_assignments_path %>

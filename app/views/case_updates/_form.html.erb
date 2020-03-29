@@ -1,0 +1,37 @@
+<%= form_with(model: case_update, local: true) do |form| %>
+  <% if case_update.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(case_update.errors.count, "error") %> prohibited this case_update from being saved:</h2>
+
+      <ul>
+        <% case_update.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :user_id %>
+    <%= form.text_field :user_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :casa_case_id %>
+    <%= form.text_field :casa_case_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :update_type %>
+    <%= form.text_field :update_type %>
+  </div>
+
+  <div class="field">
+    <%= form.label :other_type_text %>
+    <%= form.text_field :other_type_text %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

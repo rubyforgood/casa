@@ -1,5 +1,7 @@
+# rubocop:todo Style/Documentation
 class CasaCasesController < ApplicationController
-  before_action :set_casa_case, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
+  before_action :set_casa_case, only: %i[show edit update destroy]
 
   # GET /casa_cases
   # GET /casa_cases.json
@@ -9,8 +11,7 @@ class CasaCasesController < ApplicationController
 
   # GET /casa_cases/1
   # GET /casa_cases/1.json
-  def show
-  end
+  def show; end
 
   # GET /casa_cases/new
   def new
@@ -18,8 +19,7 @@ class CasaCasesController < ApplicationController
   end
 
   # GET /casa_cases/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /casa_cases
   # POST /casa_cases.json
@@ -62,13 +62,15 @@ class CasaCasesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_casa_case
-      @casa_case = CasaCase.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def casa_case_params
-      params.require(:casa_case).permit(:case_number, :teen_program_eligible)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_casa_case
+    @casa_case = CasaCase.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def casa_case_params
+    params.require(:casa_case).permit(:case_number, :teen_program_eligible)
+  end
 end
+# rubocop:enable Style/Documentation
