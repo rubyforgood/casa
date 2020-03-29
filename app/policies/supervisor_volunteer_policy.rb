@@ -1,4 +1,4 @@
-class CasaCasePolicy # rubocop:todo Style/Documentation
+class SupervisorVolunteerPolicy # rubocop:todo Style/Documentation
   include PolicyHelper
   attr_reader :user, :record
 

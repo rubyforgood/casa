@@ -1,4 +1,4 @@
-class CasaCasePolicy # rubocop:todo Style/Documentation
+class UserPolicy # rubocop:todo Style/Documentation
   include PolicyHelper
   attr_reader :user, :record
 
@@ -6,6 +6,9 @@ class CasaCasePolicy # rubocop:todo Style/Documentation
     @user = user
     @record = record
   end
+
+  # TODO add a scope here?
+
 
   def index?
     is_casa_admin_of_org?(user, record)

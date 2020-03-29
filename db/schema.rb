@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_29_102102) do # rubocop:todo Metrics/BlockLength
+ActiveRecord::Schema.define(version: 2020_03_29_104349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,7 +52,6 @@ ActiveRecord::Schema.define(version: 2020_03_29_102102) do # rubocop:todo Metric
   end
 
   create_table "case_updates", force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.bigint "casa_case_id", null: false
     t.string "update_type", null: false
     t.string "other_type_text"
@@ -60,8 +59,9 @@ ActiveRecord::Schema.define(version: 2020_03_29_102102) do # rubocop:todo Metric
     t.datetime "updated_at", precision: 6, null: false
     t.integer "duration_minutes", null: false
     t.datetime "occurred_at", null: false
+    t.bigint "creator_id", null: false
     t.index ["casa_case_id"], name: "index_case_updates_on_casa_case_id"
-    t.index ["user_id"], name: "index_case_updates_on_user_id"
+    t.index ["creator_id"], name: "index_case_updates_on_creator_id"
   end
 
   create_table "supervisor_volunteers", force: :cascade do |t|
@@ -101,7 +101,7 @@ ActiveRecord::Schema.define(version: 2020_03_29_102102) do # rubocop:todo Metric
   add_foreign_key "case_assignments", "casa_cases"
   add_foreign_key "case_assignments", "users", column: "volunteer_id"
   add_foreign_key "case_updates", "casa_cases"
-  add_foreign_key "case_updates", "users"
+  add_foreign_key "case_updates", "users", column: "creator_id"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"
   add_foreign_key "supervisor_volunteers", "users", column: "volunteer_id"
   add_foreign_key "users", "casa_orgs"
