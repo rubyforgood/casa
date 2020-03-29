@@ -175,6 +175,10 @@ GEM
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
+    skylight (4.2.3)
+      skylight-core (= 4.2.3)
+    skylight-core (4.2.3)
+      activesupport (>= 4.2.0)
     spring (2.1.0)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -229,6 +233,7 @@ DEPENDENCIES
   rspec-rails (~> 4.0.0)
   sass-rails (>= 6)
   selenium-webdriver
+  skylight
   spring
   spring-watcher-listen (~> 2.0.0)
   turbolinks (~> 5)
