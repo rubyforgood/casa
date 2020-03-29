@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'casa_cases/index', type: :view do
-  before(:each) do
+  before do
     assign(:casa_cases, [
              CasaCase.create!(
                case_number: 'Case Number',

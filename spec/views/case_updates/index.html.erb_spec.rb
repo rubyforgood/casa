@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'case_updates/index', type: :view do
-  before(:each) do
+  before do
     assign(:case_updates, [
              CaseUpdate.create!(
                user: nil,

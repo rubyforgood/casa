@@ -34,28 +34,25 @@ gem 'jbuilder', '~> 2.7'
 gem 'bootsnap', '>= 1.4.2', require: false
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'byebug', platforms: %i[mri mingw x64_mingw] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'rspec-rails', '~> 4.0.0'
   gem 'rubocop', '~> 0.80.1', require: false # RuboCop's development is moving at a very rapid pace and there are often backward-incompatible changes between minor releases (since we haven't reached version 1.0 yet). To prevent an unwanted RuboCop update you might want to use a conservative version lock in your Gemfile
 end
 
 group :development do
-  # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'listen', '>= 3.0.5', '< 3.2'
-  gem 'web-console', '>= 3.3.0'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'annotate' # for adding db field listings to models as comments
-  gem 'spring'
+  gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'spring' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'web-console', '>= 3.3.0' # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
 end
 
 group :test do
-  # Adds support for Capybara system testing and selenium driver
+  gem 'brakeman' # security inspection
   gem 'capybara', '>= 2.15'
+  gem 'rubocop-rspec', require: false # code linting plugin for rspec
   gem 'selenium-webdriver'
-  # Easy installation and use of web drivers to run system tests with browsers
-  gem 'webdrivers'
+  gem 'webdrivers' # Easy installation and use of web drivers to run system tests with browsers
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

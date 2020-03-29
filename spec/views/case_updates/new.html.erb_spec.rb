@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'case_updates/new', type: :view do
-  before(:each) do
+  before do
     assign(:case_update, CaseUpdate.new(
                            user: nil,
                            casa_case: nil,
@@ -10,7 +10,7 @@ RSpec.describe 'case_updates/new', type: :view do
                          ))
   end
 
-  it 'renders new case_update form' do
+  it 'renders new case_update form' do # rubocop:todo RSpec/ExampleLength
     render
 
     assert_select 'form[action=?][method=?]', case_updates_path, 'post' do

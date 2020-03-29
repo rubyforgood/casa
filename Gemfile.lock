@@ -67,6 +67,7 @@ GEM
     bindex (0.8.1)
     bootsnap (1.4.6)
       msgpack (~> 1.0)
+    brakeman (4.8.0)
     builder (3.2.4)
     byebug (11.1.1)
     capybara (3.31.0)
@@ -197,6 +198,8 @@ GEM
       rexml
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
+    rubocop-rspec (1.38.1)
+      rubocop (>= 0.68.1)
     ruby-progressbar (1.10.1)
     ruby_dep (1.5.0)
     rubyzip (2.3.0)
@@ -266,6 +269,7 @@ DEPENDENCIES
   annotate
   awesome_print
   bootsnap (>= 1.4.2)
+  brakeman
   byebug
   capybara (>= 2.15)
   devise
@@ -278,6 +282,7 @@ DEPENDENCIES
   rails (~> 6.0.2, >= 6.0.2.2)
   rspec-rails (~> 4.0.0)
   rubocop (~> 0.80.1)
+  rubocop-rspec
   sass-rails (>= 6)
   selenium-webdriver
   skylight

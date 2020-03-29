@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'casa_cases/new', type: :view do
-  before(:each) do
+  before do
     assign(:casa_case, CasaCase.new(
                          case_number: 'MyString',
                          teen_program_eligible: false

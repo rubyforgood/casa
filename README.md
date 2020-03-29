@@ -68,23 +68,20 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 1. rails generate scaffold CaseAssignment volunteer_id:integer casa_case_id:reference is_active:boolean
 1. rails generate scaffold CaseUpdate user:references casa_case:references update_type:string other_type_text:string
 1. add paper_trail
+1. add rubocop for linting and brakeman for security static inspection
+1. 
+1. 
 
 ### TODO:
 
 1. add react.js 
 1. Add CI
-1. add rubocop
-1. add linter
+1. 
 1. 
 
-### Planned database models
+### Additional planned database models
 
 1. casa: name # for multi-tenancy
 1. all_casa_admin: email, name, hashed_password(devise) # for multi-tenancy
-1. case: case#, teen_program_eligible
-1. user: email, name, casa_id, hashed_password(devise), role(enum: inactive, volunteer, supervisor, casa-admin)
-1. supervisor_volunteer: volunteer_id, supervisor_id
-1. case_assignment: volunteer_id, casa_case_id, is_active - since multiple volunteers can be assigned to the same case in different quarters
-1. case_update: user_id, casa_case_id, (since a volunteer can switch cases or have multiple), update_type. (youth, school, social worker, therapeutic agency worker contact, therapist, attorney, bio-parent, foster parent, other family contact, supervisor, court, other), other_type_text
 1. uploaded_import: import_json (only saved fields?) maybe don't do this at all, in-memory only
 

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'case_updates/show', type: :view do
-  before(:each) do
+  before do
     @case_update = assign(:case_update, CaseUpdate.create!(
                                           user: nil,
                                           casa_case: nil,
@@ -10,7 +10,7 @@ RSpec.describe 'case_updates/show', type: :view do
                                         ))
   end
 
-  it 'renders attributes in <p>' do
+  it 'renders attributes in <p>' do # rubocop:todo RSpec/MultipleExpectations
     render
     expect(rendered).to match(//)
     expect(rendered).to match(//)

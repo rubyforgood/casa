@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'case_assignments/index', type: :view do
-  before(:each) do
+  before do
     assign(:case_assignments, [
              CaseAssignment.create!(
                volunteer_id: 2,

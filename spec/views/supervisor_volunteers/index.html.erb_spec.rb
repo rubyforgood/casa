@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'supervisor_volunteers/index', type: :view do
-  before(:each) do
+  before do
     assign(:supervisor_volunteers, [
              SupervisorVolunteer.create!(
                volunteer_id: '',
