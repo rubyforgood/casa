@@ -2,20 +2,6 @@ class CaseUpdate < ApplicationRecord # rubocop:todo Style/Documentation
   has_paper_trail
   belongs_to :user
   belongs_to :casa_case
-  UPDATE_TYPES = %w[
-    youth
-    school
-    social_worker
-    therapist
-    attorney
-    bio_parent
-    foster_parent
-    other_family
-    supervisor
-    court
-    other
-  ].freeze
-  enum update_type: UPDATE_TYPES.zip(UPDATE_TYPES).to_h
 end
 
 # == Schema Information

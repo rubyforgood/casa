@@ -5,9 +5,9 @@ class User < ApplicationRecord # rubocop:todo Style/Documentation
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  ROLES = %w[inactive volunteer supervisor casa_admin].freeze
+  ALL_ROLES = %w[inactive volunteer supervisor casa_admin].freeze
 
-  enum roles: ROLES.zip(ROLES).to_h
+  enum roles: ALL_ROLES.zip(ALL_ROLES).to_h
 end
 
 # == Schema Information
