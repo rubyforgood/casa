@@ -88,7 +88,6 @@ Planned database models
 1. all_casa_admin: email, name, hashed_password(devise) # for multi-tenancy
 1. user: email, name, casa_id, hashed_password(devise), role(enum: inactive, volunteer, supervisor, casa-admin)
 1. supervisor_volunteer: volunteer_user_id, supervisor_user_id
-1. supervisor_case: supervisor_user_id, case_id
 1. case_assignment: volunteer_user_id, case_id, is_active - since multiple volunteers can be assigned to the same case in different quarters
 1. case: case#, teen_program_eligible
 1. case_update: user_id, case_id, (since a volunteer can switch cases or have multiple), update_type. (youth, school, social worker, therapeutic agency worker contact, therapist, attorney, bio-parent, foster parent, other family contact, supervisor, court, other), other_type_text
