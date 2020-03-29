@@ -1,4 +1,5 @@
 class CasaCasesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_casa_case, only: [:show, :edit, :update, :destroy]
 
   # GET /casa_cases

@@ -22,13 +22,6 @@ ActiveRecord::Schema.define(version: 2020_03_29_062155) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "cases", force: :cascade do |t|
-    t.string "case_number"
-    t.boolean "teen_program_eligible"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
