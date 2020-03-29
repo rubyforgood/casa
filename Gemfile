@@ -52,6 +52,7 @@ group :test do
   gem 'capybara', '>= 2.15'
   gem 'rubocop-rspec', require: false # code linting plugin for rspec
   gem 'selenium-webdriver'
+  gem 'simplecov', require: false
   gem 'webdrivers' # Easy installation and use of web drivers to run system tests with browsers
 end
 
