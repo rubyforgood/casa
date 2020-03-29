@@ -1,0 +1,2 @@
+class SupervisorVolunteer < ApplicationRecord
+end

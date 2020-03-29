@@ -1,0 +1,27 @@
+<%= form_with(model: supervisor_volunteer, local: true) do |form| %>
+  <% if supervisor_volunteer.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(supervisor_volunteer.errors.count, "error") %> prohibited this supervisor_volunteer from being saved:</h2>
+
+      <ul>
+        <% supervisor_volunteer.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :volunteer_user_id %>
+    <%= form.text_field :volunteer_user_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :supervisor_user_id %>
+    <%= form.text_field :supervisor_user_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
