@@ -1,4 +1,5 @@
 class CaseUpdate < ApplicationRecord
+  has_paper_trail
   belongs_to :user
   belongs_to :casa_case
   UPDATE_TYPES = %w[

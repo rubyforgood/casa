@@ -3,6 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.7.0'
 
+gem 'paper_trail' # tracking changes
 gem "pundit" # for authorization management - based on user.role field
 gem 'devise' # for authentication
 gem "skylight" # automated performance testing https://www.skylight.io/

@@ -67,13 +67,14 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 1. rails generate scaffold SupervisorVolunteer volunteer_id:integer{polymorphic} supervisor_id:integer{polymorphic}
 1. rails generate scaffold CaseAssignment volunteer_id:integer casa_case_id:reference is_active:boolean
 1. rails generate scaffold CaseUpdate user:references casa_case:references update_type:string other_type_text:string
-1. 
+1. add paper_trail
 
 ### TODO:
 
 1. add react.js 
 1. Add CI
-1. 
+1. add rubocop
+1. add linter
 1. 
 
 ### Planned database models

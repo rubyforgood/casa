@@ -1,4 +1,5 @@
 class SupervisorVolunteer < ApplicationRecord
+  has_paper_trail
   validates :supervisor_id, :uniqueness => {:scope => :volunteer_id} # only 1 row allowed per supervisor-volunteer pair
 end
 

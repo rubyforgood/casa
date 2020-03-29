@@ -1,4 +1,5 @@
 class CasaCase < ApplicationRecord
+  has_paper_trail
 end
 
 # == Schema Information
