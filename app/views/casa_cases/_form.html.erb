@@ -1,10 +1,10 @@
-<%= form_with(model: case, local: true) do |form| %>
-  <% if case.errors.any? %>
+<%= form_with(model: casa_case, local: true) do |form| %>
+  <% if casa_case.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(case.errors.count, "error") %> prohibited this case from being saved:</h2>
+      <h2><%= pluralize(casa_case.errors.count, "error") %> prohibited this casa_case from being saved:</h2>
 
       <ul>
-        <% case.errors.full_messages.each do |message| %>
+        <% casa_case.errors.full_messages.each do |message| %>
           <li><%= message %></li>
         <% end %>
       </ul>

@@ -1,0 +1,2 @@
+class CasaCase < ApplicationRecord
+end

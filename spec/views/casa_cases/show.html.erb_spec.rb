@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe "cases/show", type: :view do
+RSpec.describe "casa_cases/show", type: :view do
   before(:each) do
-    @case = assign(:case, Case.create!(
+    @casa_case = assign(:casa_case, CasaCase.create!(
       case_number: "Case Number",
       teen_program_eligible: false
     ))
