@@ -23,7 +23,7 @@ CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunte
 Many adults circulate in and out of a Foster Youth's life, but very few of them (if any) remain. CASA volunteers are by design, unpaid, unbiased, and consistent adult figures for Foster Youth who are not bound to support them by fiscal or legal requirements. 
 
 <strong>Project Terminology</strong>
-- Foster Youth = _Case_
+- Foster Youth = _CasaCase_
 - CASA Volunteer = _Volunteer_
 - Case Supervisor = _Case Supervisor_
 - CASA Administrator = _Superadmin_
