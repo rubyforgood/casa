@@ -291,6 +291,7 @@ DEPENDENCIES
   puma (~> 4.1)
   pundit
   rails (~> 6.0.2, >= 6.0.2.2)
+  rake
   rspec-rails (~> 4.0.0)
   rubocop (~> 0.80.1)
   rubocop-rspec
