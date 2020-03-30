@@ -21,8 +21,6 @@ class CaseContactsController < ApplicationController
   def edit
   end
 
-  # POST /case_contacts
-  # POST /case_contacts.json
   def create
     @case_contact = CaseContact.new(case_contact_params)
 
@@ -62,13 +60,15 @@ class CaseContactsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_case_contact
-      @case_contact = CaseContact.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def case_contact_params
-      params.require(:case_contact).permit(:user_id, :casa_case_id, :contact_type, :other_type_text, :duration_minutes, :occurred_at)
-    end
+  def set_case_contact
+    @case_contact = CaseContact.find(params[:id])
+  end
+
+  def case_contact_params
+    CaseContactParameters
+      .new(params)
+      .with_creator(current_user)
+      .with_casa_case(current_user.casa_cases.first)
+  end
 end

@@ -12,5 +12,9 @@ FactoryBot.define do
     trait :supervisor do
       role { :supervisor }
     end
+
+    trait :with_casa_case do
+      casa_cases { create_list(:casa_case, 2) }
+    end
   end
 end

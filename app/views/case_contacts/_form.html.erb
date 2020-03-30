@@ -12,18 +12,8 @@
   <% end %>
 
   <div class="field">
-    <%= form.label :creator_id %>
-    <%= form.text_field :creator_id %>
-  </div>
-
-  <div class="field">
-    <%= form.label :casa_case_id %>
-    <%= form.text_field :casa_case_id %>
-  </div>
-
-  <div class="field">
     <%= form.label :contact_type %>
-    <%= form.text_field :contact_type %>
+    <%= form.select :contact_type, CaseContact::CONTACT_TYPES %>
   </div>
 
   <div class="field">
@@ -33,7 +23,7 @@
 
   <div class="field">
     <%= form.label :duration_minutes %>
-    <%= form.number_field :duration_minutes %>
+    <%= form.number_field :duration_minutes, value: 30 %>
   </div>
 
   <div class="field">

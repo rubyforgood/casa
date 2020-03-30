@@ -1,15 +1,18 @@
-class User < ApplicationRecord # rubocop:todo Style/Documentation
+class User < ApplicationRecord
   has_paper_trail
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
   belongs_to :casa_org
 
-  ALL_ROLES = %w[inactive volunteer supervisor casa_admin].freeze
+  has_many(
+    :casa_cases,
+    foreign_key: :volunteer_id,
+    inverse_of: :volunteer
+  )
 
-  enum roles: ALL_ROLES.zip(ALL_ROLES).to_h
+  ALL_ROLES = %w[inactive volunteer supervisor casa_admin].freeze
+  enum role: ALL_ROLES.zip(ALL_ROLES).to_h
 end
 
 # == Schema Information

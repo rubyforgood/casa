@@ -5,7 +5,7 @@
 <table>
   <thead>
     <tr>
-      <th>User</th>
+      <th>Creator</th>
       <th>Casa case</th>
       <th>Contact type</th>
       <th>Other type text</th>
@@ -18,7 +18,7 @@
   <tbody>
     <% @case_contacts.each do |case_contact| %>
       <tr>
-        <td><%= case_contact.user_id %></td>
+        <td><%= case_contact.creator_id %></td>
         <td><%= case_contact.casa_case_id %></td>
         <td><%= case_contact.contact_type %></td>
         <td><%= case_contact.other_type_text %></td>

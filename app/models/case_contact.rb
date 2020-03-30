@@ -1,6 +1,7 @@
 class CaseContact < ApplicationRecord
-  belongs_to :user
+  belongs_to :creator, class_name: "User"
   belongs_to :casa_case
+
   CONTACT_TYPES = %w[
     youth
     school
@@ -14,7 +15,7 @@ class CaseContact < ApplicationRecord
     court
     other
   ].freeze
-  enum update_type: CONTACT_TYPES.zip(CONTACT_TYPES).to_h
+  enum contact_type: CONTACT_TYPES.zip(CONTACT_TYPES).to_h
 end
 
 # == Schema Information
