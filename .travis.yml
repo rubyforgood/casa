@@ -1,7 +1,6 @@
 language: ruby
 rvm:
   - 2.7.0
-  - latest
 services:
   - postgresql
 before_script:
