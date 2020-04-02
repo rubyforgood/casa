@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Casa Cases</h1>
+<h1>Your Cases</h1>
 
 <table>
   <thead>
@@ -19,11 +19,8 @@
         <td><%= link_to 'Show', casa_case %></td>
         <td><%= link_to 'Edit', edit_casa_case_path(casa_case) %></td>
         <td><%= link_to 'Destroy', casa_case, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <i class="far fa-calendar-plus"></i>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Casa Case', new_casa_case_path %>

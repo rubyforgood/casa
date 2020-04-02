@@ -1,4 +1,5 @@
 class CasaOrgsController < ApplicationController # rubocop:todo Style/Documentation
+  before_action :authenticate_user!
   before_action :set_casa_org, only: %i[show edit update destroy]
 
   # GET /casa_orgs

@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :all_casa_admins
   devise_for :users
 
-  root to: 'volunteers#index'
+  root to: 'casa_cases#index'
   resources :casa_cases
   resources :case_contacts
   resources :casa_orgs

@@ -1,12 +1,10 @@
-# rubocop:todo Style/Documentation
 class CasaCasesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_casa_case, only: %i[show edit update destroy]
 
-  # GET /casa_cases
-  # GET /casa_cases.json
   def index
-    @casa_cases = CasaCase.all
+    @casa_cases = current_user.casa_cases
+    @case_contact = CaseContact.new
   end
 
   # GET /casa_cases/1

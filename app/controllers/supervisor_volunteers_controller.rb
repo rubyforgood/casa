@@ -1,5 +1,6 @@
 # rubocop:todo Style/Documentation
 class SupervisorVolunteersController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_supervisor_volunteer, only: %i[show edit update destroy]
 
   # GET /supervisor_volunteers

@@ -1,5 +1,6 @@
 # rubocop:todo Style/Documentation
 class CaseAssignmentsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_case_assignment, only: %i[show edit update destroy]
 
   # GET /case_assignments

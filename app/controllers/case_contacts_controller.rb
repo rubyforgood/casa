@@ -1,4 +1,5 @@
 class CaseContactsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_case_contact, only: [:show, :edit, :update, :destroy]
 
   # GET /case_contacts
