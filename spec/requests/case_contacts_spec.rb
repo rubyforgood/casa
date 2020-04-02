@@ -16,6 +16,10 @@ RSpec.describe "/case_contacts", type: :request do
     skip("Add a hash of attributes invalid for your model")
   }
 
+  before(:each) {
+    sign_in volunteer
+  }
+
   describe "GET /index" do
     it "renders a successful response" do
       CaseContact.create! valid_attributes
