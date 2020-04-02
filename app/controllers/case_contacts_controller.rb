@@ -15,7 +15,7 @@ class CaseContactsController < ApplicationController
 
   # GET /case_contacts/new
   def new
-    @case_contact = CaseContact.new
+    @case_contact = CaseContact.new(casa_case_id: params[:casa_case_id])
   end
 
   # GET /case_contacts/1/edit

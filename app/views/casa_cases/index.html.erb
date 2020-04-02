@@ -7,7 +7,7 @@
     <tr>
       <th>Case number</th>
       <th>Teen program eligible</th>
-      <th colspan="3"></th>
+      <th colspan="2"></th>
     </tr>
   </thead>
 
@@ -17,9 +17,11 @@
         <td><%= casa_case.case_number %></td>
         <td><%= casa_case.teen_program_eligible %></td>
         <td><%= link_to 'Show', casa_case %></td>
-        <td><%= link_to 'Edit', edit_casa_case_path(casa_case) %></td>
-        <td><%= link_to 'Destroy', casa_case, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        <i class="far fa-calendar-plus"></i>
+        <td>
+          <%= link_to new_case_contact_path(casa_case_id: casa_case.id) do %>
+            <i class="far fa-calendar-plus"></i>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>
