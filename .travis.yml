@@ -1,7 +1,11 @@
 language: ruby
 rvm:
-  - 2.7.0
+- 2.7.0
 services:
-  - postgresql
+- postgresql
 before_script:
-  - psql -c 'create database casa_test;' -U postgres
+- psql -c 'create database casa_test;' -U postgres
+deploy:
+  provider: heroku
+  api_key:
+    secure: YKl0MWUrRueNZkPD0xWjVo7cgGBJ2rEPA3+3Mqk9Dbqg9OHv3Q7rdV29hHAsEagOL2sA9p1vB5SmEq3ZMYjlidsSHARAowlVwr4aeFk9lQYNFOOL/sPnUMopSKLiENH95BH0/wTnKRP6DdT3OpyTvqJCGG9lCy9xu/R3kBJIdkw19gvOXhpVDnKy7Eroerg6JxAKMJyRhxu81+NncBvXxynzJux6qvBW3RepnVomRbL0v4bwV7519wklROeAzjd40ab58GBTsAoOX8IhLJEgwRgX4ugvokJNHbktNou5glLD4SoOB29YFbamY7KvXs3RvuzIdGd29QA9zEXKlBWZgej869AmN9AX/i7583O5qp6AKzQl6OH2wIsSNIvN27H5MQqQVvtF4iDpk220ALJjMfrLsvco0DRcDQECmxOry5Z5hLrV7KclWSnROqi6x5caJLpA2QqzuvV8hKuhNGAaRDU+lsx48StkD00OFnQ/9+7V1+vbDPUH2YxKBzurGeVAjmA6s9mm6i/XTgATQ4Kxeuw2cHsoKnY4dgzEIUU88pyxE6W4jpDSRbPCMUPsm8dTcQVZEm0eG1FhIT42R6/zpLDoa1kS4/EilrKt4+EmmSogTRCPtLLU90qUL5iAXn85140jhLnHatChXIbb0Ujr//oatY7UrQRnY8Mpog1PzhA=
