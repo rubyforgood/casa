@@ -1,0 +1,15 @@
+<% if policy(:dashboard).see_volunteers_section? %>
+  This is the volunteers section.
+  
+  <% @volunteers.each do |volunteer| %>
+    <%= volunteer.email %>
+  <% end %>
+<% end %>
+
+<% if policy(:dashboard).see_cases_section? %>
+  This is the cases section.
+
+  <% @casa_cases.each do |casa_case| %>
+    <%= casa_case.case_number %>
+  <% end %>
+<% end %>

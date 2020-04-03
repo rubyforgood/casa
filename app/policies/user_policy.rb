@@ -1,4 +1,4 @@
-class UserPolicy # rubocop:todo Style/Documentation
+class UserPolicy
   include PolicyHelper
   attr_reader :user, :record
 
@@ -7,34 +7,54 @@ class UserPolicy # rubocop:todo Style/Documentation
     @record = record
   end
 
-  # TODO add a scope here?
+  class Scope
+    attr_reader :user, :scope
 
+    def initialize(user, scope)
+      @user = user
+      @scope = scope
+    end
 
-  def index?
-    is_casa_admin_of_org?(user, record)
+    def resolve
+      case user.role
+      when 'casa_admin'
+        # scope.in_casa_administered_by(user)
+        scope.all
+      when 'volunteer'
+        scope.where(id: user.id)
+      else
+        raise "unrecognized role"
+      end
+    end
   end
 
-  def show?
-    is_casa_admin_of_org?(user, record)
-  end
+  # TODO: Uncomment and test the below as necessary, please.
 
-  def create?
-    is_casa_admin_of_org?(user, record)
-  end
+  # def index?
+  #   is_casa_admin_of_org?(user, record)
+  # end
 
-  def new?
-    is_casa_admin_of_org?(user, record)
-  end
+  # def show?
+  #   is_casa_admin_of_org?(user, record)
+  # end
 
-  def update?
-    is_casa_admin_of_org?(user, record)
-  end
+  # def create?
+  #   is_casa_admin_of_org?(user, record)
+  # end
 
-  def edit?
-    is_casa_admin_of_org?(user, record)
-  end
+  # def new?
+  #   is_casa_admin_of_org?(user, record)
+  # end
 
-  def destroy?
-    is_casa_admin_of_org?(user, record)
-  end
+  # def update?
+  #   is_casa_admin_of_org?(user, record)
+  # end
+
+  # def edit?
+  #   is_casa_admin_of_org?(user, record)
+  # end
+
+  # def destroy?
+  #   is_casa_admin_of_org?(user, record)
+  # end
 end
