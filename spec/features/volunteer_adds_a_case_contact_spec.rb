@@ -6,7 +6,8 @@ RSpec.feature "volunteer adds a case contact", type: :feature do
 
     sign_in volunteer
 
-    visit new_case_contact_path
+    visit "/"
+    click_link_or_button "New Case Contact"
     select "school", from: "Contact type"
 
     click_on "Create Case contact"

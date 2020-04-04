@@ -54,4 +54,9 @@
       <% end %>
     </table>
   </div>
+  <%= link_to "New Case Contact",  new_case_contact_path %>
+
+  <% @casa_cases.each do |casa_case| %>
+    <%= casa_case.case_number %>
+  <% end %>
 <% end %>
