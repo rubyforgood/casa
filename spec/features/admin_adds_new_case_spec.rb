@@ -16,6 +16,10 @@ RSpec.feature "admin adds a new case", type: :feature do
     expect(find_field('Case number').value).to eq case_number
     check "Teen program eligible"
     has_checked_field? "Teen program eligible"
-    expect(page).to have_selector('.case', text: case_number)
+
+
+    click_on "Create Casa case"
+    expect(page.body).to have_content(case_number)
+      #expect(page).to have_selector('.case', text: case_number)
   end
 end

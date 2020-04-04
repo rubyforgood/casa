@@ -1,7 +1,8 @@
 class CasaCase < ApplicationRecord
   has_paper_trail
 
-  belongs_to :volunteer, class_name: "User", inverse_of: :casa_cases
+  belongs_to :volunteer, class_name: "User", inverse_of: :casa_cases, optional: true
+  scope :ordered, -> { sort_by(&:updated_at).reverse }
 end
 
 # == Schema Information
@@ -20,3 +21,4 @@ end
 #  index_casa_cases_on_case_number   (case_number) UNIQUE
 #  index_casa_cases_on_volunteer_id  (volunteer_id)
 #
+
