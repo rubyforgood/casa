@@ -9,7 +9,7 @@
 <% if policy(:dashboard).see_cases_section? %>
   This is the cases section.
 
-  <% @casa_cases.each do |casa_case| %>
+  <% @casa_cases.sort_by(&:created_at).reverse.each do |casa_case| %>
     <%= casa_case.case_number %>
   <% end %>
 <% end %>
