@@ -12,26 +12,27 @@
   <% end %>
 
   <div class="field">
-    <%= form.label :contact_type %>
-    <%= form.select :contact_type, CaseContact::CONTACT_TYPES %>
-  </div>
-
-  <div class="field">
-    <%= form.label :other_type_text %>
-    <%= form.text_field :other_type_text %>
+    <% CaseContact::CONTACT_TYPES.each do |contact_type| %>
+      <%= radio_button_tag(:contact_type, contact_type, value: contact_type) %>
+      <%= label_tag(:contact_type, contact_type.titleize) %>
+    <% end %>
   </div>
 
   <div class="field">
     <%= form.label :duration_minutes %>
-    <%= form.number_field :duration_minutes, value: 30 %>
+    <% durations = [] %>
+    <% 5.times do |i| %>
+      <% durations.push((i + 1) * 15) %>
+    <% end %>
+    <%= select_tag :duration_minutes, options_for_select(durations) %>
   </div>
 
   <div class="field">
     <%= form.label :occurred_at %>
-    <%= form.datetime_select :occurred_at %>
+    <%= form.date_field :occurred_at, :value => Time.now.strftime('%Y-%m-%d') %>
   </div>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit "Submit" %>
   </div>
 <% end %>
