@@ -42,47 +42,17 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 1. install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
 1. when you cd into the project diretory, let your version manager install the ruby version in `.ruby-version`
 1. `gem install bundler`
+1. Make sure that postgres is installed [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database (if you have an older version of postgres)
 1. `bundle install`
 1. `bundle exec rails db:setup`
 1. `bundle exec rails spec`
+1. rails db:create # requires running local postgres
+1. rails db:migrate
 1. `bundle exec rails server` # run server
 
-#### One-time already-done project setup (for historical reference)
+#### Common issues
 
-1. install a ruby version manager: rvm or rbenv
-1. rvm install ruby 2.7.0 # should be auto-installed when you cd into the casa directory because of .ruby-version
-1. gem install bundler
-1. bundle install
-1. rails new . -d postgresql --webpacker react
-1. [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database (if you have an older version of postgres)
-1. rails db:create # requires running local postgres
-1. rake app:update:bin # required for scaffold to not hang
-1. rails generate scaffold CasaCase case_number:string teen_program_eligible:boolean
-1. rails webpacker:install # required for rails to run
-1. rake db:migrate
-1. brew install yarn # because of error: Yarn not installed. Please download and install Yarn from https://yarnpkg.com/lang/en/docs/install/
-1. rails server
-1. add devise, rails generate devise:install # followed by following some commandline instructions
-1. rails g devise:views
-1. add role to user, add pundit, rails g pundit:install
-1. rails generate scaffold SupervisorVolunteer volunteer_id:integer{polymorphic} supervisor_id:integer{polymorphic}
-1. rails generate scaffold CaseAssignment volunteer_id:integer casa_case_id:reference is_active:boolean
-1. rails generate scaffold CaseUpdate user:references casa_case:references update_type:string other_type_text:string
-1. add paper_trail
-1. add rubocop for linting and brakeman for security static inspection
-1. rails generate scaffold CasaOrg name:string
-1. add casa_id to user
-1. rails g migration AddDurationAndDateToCaseUpdate
-1. rails generate devise all_casa_admin # can create a user with user.role = casa_admin
-1. change column name of case_update.user to case_update.creator 
-1. 
-
-
-### TODO:
-
-1. add many more good examples of tests
-1. add optional mileage count on a case_contact (optional) + "do you want to be reimbursed for this" box with mileage
-1. 
+1. If your rake/rake commands hang forever instead of running, try: `rails app:update:bin #`
 
 
 
