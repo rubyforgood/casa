@@ -12,5 +12,14 @@
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
     <%= yield %>
+    <% if user_signed_in? %>
+      <p class="logout-button button">
+        <%= link_to('Logout', destroy_user_session_path) %>
+      </p>
+    <% else %>
+      <p class="login-button button">
+        <%= link_to('Login', new_user_session_path) %>
+      </p>
+    <% end %>
   </body>
 </html>
