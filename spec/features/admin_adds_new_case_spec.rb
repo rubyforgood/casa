@@ -20,6 +20,5 @@ RSpec.feature "admin adds a new case", type: :feature do
 
     click_on "Create Casa case"
     expect(page.body).to have_content(case_number)
-      #expect(page).to have_selector('.case', text: case_number)
   end
 end

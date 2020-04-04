@@ -21,4 +21,3 @@ end
 #  index_casa_cases_on_case_number   (case_number) UNIQUE
 #  index_casa_cases_on_volunteer_id  (volunteer_id)
 #
-

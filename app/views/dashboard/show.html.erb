@@ -1,15 +1,16 @@
 <% if policy(:dashboard).see_volunteers_section? %>
   This is the volunteers section.
-
   <% @volunteers.each do |volunteer| %>
     <%= volunteer.email %>
   <% end %>
 <% end %>
 
 <% if policy(:dashboard).see_cases_section? %>
-  <%= link_to "Create Case", new_casa_case_path %>
   <div class="cases">
-    <table>
+    <span class="button">
+      <%= link_to "Create Case", new_casa_case_path %>
+    </span>
+    <table class="case_list">
       <tr>
         <th>Case Number</th>
         <th>Teen program eligible</th>
@@ -33,7 +34,5 @@
       </tr>
       <% end %>
     </table>
-
-
   </div>
 <% end %>
