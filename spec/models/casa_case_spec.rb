@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe CasaCase, type: :model do
   it do
     is_expected.to(
-      belong_to(:volunteer).class_name("User").inverse_of(:casa_cases)
+      belong_to(:volunteer).class_name("User").inverse_of(:casa_cases).optional(true)
     )
   end
 end
