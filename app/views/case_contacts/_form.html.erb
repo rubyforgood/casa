@@ -10,13 +10,17 @@
       </ul>
     </div>
   <% end %>
-
-  <div class="field">
+  <div class="field casa-case">
+    <%= form.label :casa_case_id %>
+    <%= form.text_field :casa_case_id %>
+  </div>
+  <div class="field contact-type">
     <%= form.label :contact_type %>
-    <%= form.select :contact_type, CaseContact::CONTACT_TYPES.map { |contact_type| contact_type.titleize } %>
+    <% case_contacts = CaseContact::CONTACT_TYPES.map { |contact_type| OpenStruct.new(value: contact_type, label: contact_type.titleize) } %>
+    <%= select_tag :contact_type, options_from_collection_for_select(case_contacts, 'value', 'label') %>
   </div>
 
-  <div class="field">
+  <div class="field duration-minutes">
     <%= form.label :duration_minutes %>
     <% durations = [] %>
     <%# For the first 2 hours %>
@@ -37,7 +41,7 @@
     <%= select_tag :duration_minutes, options_from_collection_for_select(durations, 'value', 'label') %>
   </div>
 
-  <div class="field">
+  <div class="field occurred-at">
     <%= form.label :occurred_at %>
     <%= form.date_field :occurred_at, :value => Time.now.strftime('%Y-%m-%d') %>
   </div>

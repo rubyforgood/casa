@@ -8,9 +8,18 @@ RSpec.feature "volunteer adds a case contact", type: :feature do
     login_as volunteer
 
     visit new_case_contact_path
-    select "school", from: "Contact type"
+    within "select#contact_type" do
+      select "School"
+    end
 
-    click_on "Create Case contact"
+    within "select#duration_minutes" do
+      select "60 minutes"
+    end
+
+    # find(:css, "#case_contact_occurred_at".)
+    fill_in "case_contact_occurred_at", with: "04/04/2020"
+
+    click_on "Submit"
 
     expect(CaseContact.first.contact_type).to eq "school"
   end

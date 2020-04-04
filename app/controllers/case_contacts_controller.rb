@@ -66,8 +66,11 @@ class CaseContactsController < ApplicationController
   end
 
   def case_contact_params
+    binding.pry
+    form_params = params.require(:case_contact).permit(:occurred_at, :duration_minutes, :contact_type)
+    binding.pry
     CaseContactParameters
-      .new(params)
+      .new(form_params)
       .with_creator(current_user)
       .with_casa_case(current_user.casa_cases.first)
   end
