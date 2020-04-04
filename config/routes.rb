@@ -8,4 +8,5 @@ Rails.application.routes.draw do
   resources :casa_orgs
   resources :case_assignments
   resources :supervisor_volunteers
+  resources :volunteers, only: :edit
 end

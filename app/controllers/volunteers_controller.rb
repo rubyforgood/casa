@@ -4,4 +4,7 @@ class VolunteersController < ApplicationController
   def index
     @case_contact = CaseContact.new
   end
+
+  def edit
+  end
 end

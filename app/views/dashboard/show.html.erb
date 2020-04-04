@@ -1,14 +1,12 @@
 <% if policy(:dashboard).see_volunteers_section? %>
-  This is the volunteers section.
-
   <h1>Volunteers</h1>
 
-  <table>
+  <table id="volunteers">
     <thead>
       <tr>
         <th>Volunteer</th>
         <th>Case Number</th>
-        <th colspan="2"></th>
+        <th colspan="3"></th>
       </tr>
     </thead>
 
@@ -17,11 +15,12 @@
         <tr>
           <td><%= volunteer.email %></td>
           <td><%= volunteer.casa_cases.pluck(:case_number).join(', ') %></td>
+          <td><%= link_to 'Edit', edit_volunteer_path(volunteer) %></td>
         </tr>
       <% end %>
     </tbody>
   </table>
-  
+
 <% end %>
 
 <% if policy(:dashboard).see_cases_section? %>
