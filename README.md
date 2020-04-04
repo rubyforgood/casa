@@ -36,6 +36,10 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 <p><a href="https://pgcasa.org/">Learn more about PG CASA here.</a></p>
 <p><a href="https://pgcasa.org/volunteer-description/">You can read the complete role description of a CASA volunteer in Prince George's County here.</a></p>
 
+### Want to contribute? Great!
+
+[Here is our contributing guide!](./CONTRIBUTING.md)
+
 ### Staging Environment on Heroku
 
 https://casa-r4g-staging.herokuapp.com/
