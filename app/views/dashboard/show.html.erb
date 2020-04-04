@@ -7,6 +7,7 @@
 <% end %>
 
 <% if policy(:dashboard).see_cases_section? %>
+  <%= link_to "Create Case", new_casa_case_path %>
   <div class="cases">
     This is the cases section.
     <% @casa_cases.sort_by(&:created_at).reverse.each do |casa_case| %>
