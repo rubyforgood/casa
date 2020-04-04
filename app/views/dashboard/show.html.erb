@@ -1,6 +1,8 @@
 <% if policy(:dashboard).see_volunteers_section? %>
   <h1>Volunteers</h1>
 
+  <%= link_to "New Volunteer", new_volunteer_path %>
+
   <table id="volunteers">
     <thead>
       <tr>
@@ -22,6 +24,7 @@
   </table>
 
 <% end %>
+
 
 <% if policy(:dashboard).see_cases_section? %>
   <div class="cases">

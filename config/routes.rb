@@ -8,5 +8,6 @@ Rails.application.routes.draw do
   resources :casa_orgs
   resources :case_assignments
   resources :supervisor_volunteers
-  resources :volunteers, only: :edit
+  resources :volunteers, only: [:new, :edit]
+  resources :users, only: [:create]
 end

@@ -28,4 +28,15 @@ RSpec.describe 'admin views dashboard', type: :feature do
 
     expect(page).to have_text("Editing Volunteer")
   end
+
+  it 'can go to the new volunteer page' do
+    sign_in admin
+
+    visit root_path
+
+    click_on "New Volunteer"
+
+    expect(page).to have_text("New Volunteer")
+    expect(page).to have_css("form#new_user")
+  end
 end
