@@ -1,15 +1,18 @@
 <% if policy(:dashboard).see_volunteers_section? %>
   This is the volunteers section.
-  
+
   <% @volunteers.each do |volunteer| %>
     <%= volunteer.email %>
   <% end %>
 <% end %>
 
 <% if policy(:dashboard).see_cases_section? %>
-  This is the cases section.
-
-  <% @casa_cases.sort_by(&:created_at).reverse.each do |casa_case| %>
-    <%= casa_case.case_number %>
-  <% end %>
+  <div class="cases">
+    This is the cases section.
+    <% @casa_cases.sort_by(&:created_at).reverse.each do |casa_case| %>
+      <div class="case">
+        <%= casa_case.case_number %>
+      </div>
+    <% end %>
+  </div>
 <% end %>
