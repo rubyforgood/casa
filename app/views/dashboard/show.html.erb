@@ -1,8 +1,27 @@
 <% if policy(:dashboard).see_volunteers_section? %>
   This is the volunteers section.
-  <% @volunteers.each do |volunteer| %>
-    <%= volunteer.email %>
-  <% end %>
+
+  <h1>Volunteers</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Volunteer</th>
+        <th>Case Number</th>
+        <th colspan="2"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @volunteers.each do |volunteer| %>
+        <tr>
+          <td><%= volunteer.email %></td>
+          <td><%= volunteer.casa_cases.pluck(:case_number).join(', ') %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  
 <% end %>
 
 <% if policy(:dashboard).see_cases_section? %>
@@ -10,7 +29,7 @@
     <span class="button">
       <%= link_to "Create Case", new_casa_case_path %>
     </span>
-    <table class="case_list">
+    <table class="case-list">
       <tr>
         <th>Case Number</th>
         <th>Teen program eligible</th>

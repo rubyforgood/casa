@@ -14,4 +14,11 @@ RSpec.describe "/volunteers", type: :request do
       expect(response).to be_successful
     end
   end
+
+  describe 'GET /edit' do
+    it 'render a successful response' do
+      get edit_supervisor_volunteer_url(supervisor_volunteer)
+      expect(response).to be_successful
+    end
+  end
 end
