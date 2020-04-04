@@ -6,5 +6,6 @@ class DashboardController < ApplicationController
 
     @volunteers = policy_scope(User.volunteer)
     @casa_cases = policy_scope(CasaCase.all)
+    @case_contacts = policy_scope(CaseContact.all)
   end
 end

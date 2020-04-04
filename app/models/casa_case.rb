@@ -11,6 +11,10 @@ class CasaCase < ApplicationRecord
   validates :case_number, uniqueness: { case_sensitive: false }, presence: true
 
   scope :ordered, -> { sort_by(&:updated_at).reverse }
+
+  # TODO
+  # add a class method that returns all cases currently assigned
+  # to a volunteer -- through a case_assignment OR direct volunteer_id??
 end
 
 # == Schema Information

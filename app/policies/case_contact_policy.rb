@@ -38,4 +38,25 @@ class CaseContactPolicy # rubocop:todo Style/Documentation
   def destroy?
     _is_creator_or_casa_admin?
   end
+
+  class Scope
+    attr_reader :user, :scope
+
+    def initialize(user, scope)
+      @user = user
+      @scope = scope
+    end
+
+    def resolve
+      case @user.role
+      when 'casa_admin'
+        # scope.in_casa_administered_by(@user)
+        scope.all
+      when 'volunteer'
+        []
+      else
+        raise "unrecognized role"
+      end
+    end
+  end
 end
