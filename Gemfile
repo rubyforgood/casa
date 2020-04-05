@@ -8,6 +8,8 @@ gem 'devise' # for authentication
 gem 'paper_trail' # tracking changes
 gem 'pundit' # for authorization management - based on user.role field
 gem 'skylight' # automated performance testing https://www.skylight.io/
+gem 'bootstrap', '~> 4.4.1'
+gem 'jquery-rails'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.2', '>= 6.0.2.2'
 # Use postgresql as the database for Active Record
