@@ -3,11 +3,15 @@ require "rails_helper"
 RSpec.feature "volunteer adds a case contact", type: :feature do
   scenario "is successful" do
     volunteer = create(:user, :volunteer, :with_casa_cases)
+    volunteer_casa_case_1 = volunteer.casa_cases.first
 
     sign_in volunteer
 
 <<<<<<< HEAD
     visit new_case_contact_path
+    within "select#casa_case_id" do
+      select volunteer_casa_case_1.case_number
+    end
     within "select#contact_type" do
       select "School"
     end
@@ -26,6 +30,8 @@ RSpec.feature "volunteer adds a case contact", type: :feature do
 
     click_on "Submit"
 
+    expect(CaseContact.first.casa_case_id).to eq volunteer_casa_case_1.id
     expect(CaseContact.first.contact_type).to eq "school"
+    expect(CaseContact.first.duration_minutes).to eq 60
   end
 end

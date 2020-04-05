@@ -144,16 +144,13 @@ GEM
     parser (2.7.1.0)
       ast (~> 2.4.0)
     pg (1.2.3)
+    popper_js (1.16.0)
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
-    popper_js (1.16.0)
-    pry (0.13.0)
-      coderay (~> 1.1)
-      method_source (~> 1.0)
-    pry-byebug (3.9.0)
+    pry-byebug (3.8.0)
       byebug (~> 11.0)
-      pry (~> 0.13.0)
+      pry (~> 0.10)
     public_suffix (4.0.3)
     puma (4.3.3)
       nio4r (~> 2.0)
@@ -322,6 +319,7 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.2)
   paper_trail
   pg (>= 0.18, < 2.0)
+  pry (~> 0.12.2)
   pry-byebug
   puma (~> 4.1)
   pundit
