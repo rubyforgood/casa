@@ -10,11 +10,13 @@ class CaseContactsController < ApplicationController
   # GET /case_contacts/1
   # GET /case_contacts/1.json
   def show
+    @case_contact_number = CasaCase.find(@case_contact.casa_case_id).case_number
   end
 
   # GET /case_contacts/new
   def new
     @case_contact = CaseContact.new
+    @casa_cases = current_user.casa_cases
   end
 
   # GET /case_contacts/1/edit
@@ -25,13 +27,12 @@ class CaseContactsController < ApplicationController
     info =
       {
         creator_id: current_user.id,
-        casa_case_id: params[:case_contact][:casa_case_id].to_i,
+        casa_case_id: params[:casa_case_id],
         contact_type: params[:contact_type],
         duration_minutes: params[:duration_minutes],
         occurred_at: params[:case_contact][:occurred_at]
       }
     @case_contact = CaseContact.new(info)
-    
 
     respond_to do |format|
       if @case_contact.save

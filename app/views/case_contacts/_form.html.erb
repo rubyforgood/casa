@@ -12,7 +12,7 @@
   <% end %>
   <div class="field casa-case">
     <%= form.label :casa_case_id %>
-    <%= form.text_field :casa_case_id %>
+    <%= select_tag :casa_case_id, options_from_collection_for_select(@casa_cases, 'id', 'case_number') %>
   </div>
   <div class="field contact-type">
     <%= form.label :contact_type %>
