@@ -1,3 +1,11 @@
+CaseContact.delete_all
+SupervisorVolunteer.delete_all
+CaseAssignment.delete_all
+CasaCase.delete_all
+User.delete_all
+CasaOrg.delete_all
+AllCasaAdmin.delete_all
+
 pg_casa = CasaOrg.create(name: 'Prince George CASA')
 other_casa = CasaOrg.create(name: 'Other CASA org')
 
@@ -30,13 +38,23 @@ inactive_user_1 = User.create(
   role: :inactive
 )
 
+# puts volunteer_user_1
 case_1 = CasaCase.create(
-  case_number: "111",
+  case_number: "111"
+)
+
+case_assignment_1 = CaseAssignment.create(
+  casa_case: case_1,
   volunteer: volunteer_user_1
 )
+
 case_2 = CasaCase.create(
   case_number: "222",
-  teen_program_eligible: true,
+  teen_program_eligible: true
+)
+
+case_assignment_2 = CaseAssignment.create(
+  casa_case: case_2,
   volunteer: volunteer_user_1
 )
 
