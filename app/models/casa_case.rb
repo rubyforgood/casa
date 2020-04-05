@@ -8,8 +8,12 @@ class CasaCase < ApplicationRecord
     source: :volunteer,
     class_name: "User"
   )
+  validates :case_number, uniqueness: { case_sensitive: false }, presence: true
 
   scope :ordered, -> { sort_by(&:updated_at).reverse }
+  scope :actively_assigned_to, ->(volunteer) do
+    joins(:case_assignments).where(case_assignments: {volunteer: volunteer, is_active: true})
+  end
 end
 
 # == Schema Information

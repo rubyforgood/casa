@@ -62,11 +62,17 @@ GEM
       activerecord (>= 3.2, < 7.0)
       rake (>= 10.4, < 14.0)
     ast (2.4.0)
+    autoprefixer-rails (9.7.5)
+      execjs
     awesome_print (1.8.0)
     bcrypt (3.1.13)
     bindex (0.8.1)
     bootsnap (1.4.6)
       msgpack (~> 1.0)
+    bootstrap (4.4.1)
+      autoprefixer-rails (>= 9.1.0)
+      popper_js (>= 1.14.3, < 2)
+      sassc-rails (>= 2.0.0)
     brakeman (4.8.0)
     builder (3.2.4)
     byebug (11.1.1)
@@ -79,6 +85,7 @@ GEM
       regexp_parser (~> 1.5)
       xpath (~> 3.2)
     childprocess (3.0.0)
+    choice (0.2.0)
     coderay (1.1.2)
     concurrent-ruby (1.1.6)
     crass (1.0.6)
@@ -91,6 +98,7 @@ GEM
     diff-lcs (1.3)
     docile (1.3.2)
     erubi (1.9.0)
+    execjs (2.7.0)
     factory_bot (5.1.2)
       activesupport (>= 4.2.0)
     factory_bot_rails (5.1.1)
@@ -104,6 +112,10 @@ GEM
     jaro_winkler (1.5.4)
     jbuilder (2.10.0)
       activesupport (>= 5.0.0)
+    jquery-rails (4.3.5)
+      rails-dom-testing (>= 1, < 3)
+      railties (>= 4.2.0)
+      thor (>= 0.14, < 2.0)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -135,6 +147,13 @@ GEM
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
+    popper_js (1.16.0)
+    pry (0.13.0)
+      coderay (~> 1.1)
+      method_source (~> 1.0)
+    pry-byebug (3.9.0)
+      byebug (~> 11.0)
+      pry (~> 0.13.0)
     public_suffix (4.0.3)
     puma (4.3.3)
       nio4r (~> 2.0)
@@ -163,6 +182,11 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
+    rails-erd (1.6.0)
+      activerecord (>= 4.2)
+      activesupport (>= 4.2)
+      choice (~> 0.2.0)
+      ruby-graphviz (~> 1.2)
     rails-html-sanitizer (1.3.0)
       loofah (~> 2.3)
     railties (6.0.2.2)
@@ -210,6 +234,8 @@ GEM
       unicode-display_width (>= 1.4.0, < 1.7)
     rubocop-rspec (1.38.1)
       rubocop (>= 0.68.1)
+    ruby-graphviz (1.2.5)
+      rexml
     ruby-progressbar (1.10.1)
     ruby_dep (1.5.0)
     rubyzip (2.3.0)
@@ -285,19 +311,22 @@ DEPENDENCIES
   annotate
   awesome_print
   bootsnap (>= 1.4.2)
+  bootstrap (~> 4.4.1)
   brakeman
   byebug
   capybara (>= 2.15)
   devise
   factory_bot_rails
   jbuilder (~> 2.7)
+  jquery-rails
   listen (>= 3.0.5, < 3.2)
   paper_trail
   pg (>= 0.18, < 2.0)
-  pry (~> 0.12.2)
+  pry-byebug
   puma (~> 4.1)
   pundit
   rails (~> 6.0.2, >= 6.0.2.2)
+  rails-erd
   rake
   rspec-rails (~> 4.0.0)
   rubocop (~> 0.80.1)

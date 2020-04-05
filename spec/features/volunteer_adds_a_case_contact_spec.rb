@@ -6,10 +6,16 @@ RSpec.feature "volunteer adds a case contact", type: :feature do
 
     sign_in volunteer
 
+<<<<<<< HEAD
     visit new_case_contact_path
     within "select#contact_type" do
       select "School"
     end
+=======
+    visit "/"
+    click_link_or_button "New Case Contact"
+    select "school", from: "Contact type"
+>>>>>>> c3c9820fac726fa3d10f45a54036da9132c11e68
 
     within "select#duration_minutes" do
       select "60 minutes"
