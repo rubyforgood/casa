@@ -1,4 +1,4 @@
-<!--Read comments, before commiting pull request read checklist again
+<!--Read comments, before committing pull request read checklist again
 
 # Checklist:
 
@@ -35,6 +35,15 @@ Include anything else we should know about. -->
 work as expected)
 * This change requires a documentation update
 * Documentation update
+
+### How will this affect user permissions?
+
+<!-- Please outline how each level of user permissions will be affected by this change. 
+(If user permissions will not be impacted by this change, please say "no impact") 
+
+- Volunteer permissions (will this change grant any `volunteer` access to something they should not be able to see or edit?) For a complete list of volunteer permissions, see issue #29  
+- Supervisor permissions (will this change grant any `supervisor` ((post MVP release)) access to something they should not be able to see or edit?) For a complete list of supervisor permissions, see issue #30  -->
+
 
 ### How Has This Been Tested?
 
