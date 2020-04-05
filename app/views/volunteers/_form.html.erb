@@ -1,4 +1,4 @@
-<%= form_with model: @volunteer, id: :new_user do |form| %>
+<%= form_with model: @volunteer, url: volunteers_path, id: :new_user do |form| %>
   <% if volunteer.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(volunteer.errors.count, "error") %> prohibited this volunteer from being saved:</h2>
@@ -12,9 +12,11 @@
   <% end %>
 
   <div class="field">
-    <%= form.label :id %>
-    <%= form.text_field :id %>
+    <%= form.label :email %>
+    <%= form.text_field :email %>
   </div>
+
+  <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
 
   <div class="actions">
     <%= form.submit %>
