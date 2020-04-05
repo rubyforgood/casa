@@ -22,7 +22,16 @@ class CaseContactsController < ApplicationController
   end
 
   def create
-    @case_contact = CaseContact.new(case_contact_params)
+    info =
+      {
+        creator_id: current_user.id,
+        casa_case_id: params[:case_contact][:casa_case_id].to_i,
+        contact_type: params[:contact_type],
+        duration_minutes: params[:duration_minutes],
+        occurred_at: params[:case_contact][:occurred_at]
+      }
+    @case_contact = CaseContact.new(info)
+    
 
     respond_to do |format|
       if @case_contact.save
