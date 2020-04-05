@@ -53,8 +53,8 @@ https://casa-r4g-staging.herokuapp.com/
 1. `bundle install`
 1. `bundle exec rails db:setup`
 1. `bundle exec rails spec`
-1. rails db:create # requires running local postgres
-1. rails db:migrate
+1. `rails db:create # requires running local postgres`
+1. `rails db:migrate`
 1. `bundle exec rails server` # run server
 
 #### Common issues
