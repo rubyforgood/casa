@@ -8,7 +8,7 @@ RSpec.describe "/case_contacts", type: :request do
   let(:valid_attributes) {
     attributes_for(:case_contact).merge(
       creator: volunteer,
-      casa_case: create(:casa_case, volunteer: volunteer)
+      casa_case: create(:casa_case, volunteers: [volunteer])
     )
   }
 

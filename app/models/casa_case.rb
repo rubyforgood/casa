@@ -5,7 +5,7 @@ class CasaCase < ApplicationRecord
   has_many(
     :volunteers,
     through: :case_assignments,
-    source: :user,
+    source: :volunteer,
     class_name: "User"
   )
 
