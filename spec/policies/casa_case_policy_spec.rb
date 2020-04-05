@@ -7,7 +7,7 @@ RSpec.describe CasaCasePolicy::Scope, "#resolve" do
 
     scope = CasaCasePolicy::Scope.new(user, CasaCase)
 
-    expect(scope.resolve).to eq all_casa_cases
+    expect(scope.resolve).to contain_exactly(*all_casa_cases)
   end
 
   it "returns empty array when user is volunteer" do

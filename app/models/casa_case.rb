@@ -1,7 +1,15 @@
 class CasaCase < ApplicationRecord
   has_paper_trail
 
-  belongs_to :volunteer, class_name: "User", inverse_of: :casa_cases
+  has_many :case_assignments
+  has_many(
+    :volunteers,
+    through: :case_assignments,
+    source: :volunteer,
+    class_name: "User"
+  )
+
+  scope :ordered, -> { sort_by(&:updated_at).reverse }
 end
 
 # == Schema Information
@@ -13,10 +21,8 @@ end
 #  teen_program_eligible :boolean          default(FALSE), not null
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
-#  volunteer_id          :bigint
 #
 # Indexes
 #
-#  index_casa_cases_on_case_number   (case_number) UNIQUE
-#  index_casa_cases_on_volunteer_id  (volunteer_id)
+#  index_casa_cases_on_case_number  (case_number) UNIQUE
 #

@@ -1,15 +1,12 @@
 class User < ApplicationRecord
   has_paper_trail
-  devise :database_authenticatable, :registerable,
+  devise :database_authenticatable,
          :recoverable, :rememberable, :validatable
 
   belongs_to :casa_org
 
-  has_many(
-    :casa_cases,
-    foreign_key: :volunteer_id,
-    inverse_of: :volunteer
-  )
+  has_many :case_assignments, foreign_key: "volunteer_id"
+  has_many :casa_cases, through: :case_assignments
 
   ALL_ROLES = %w[inactive volunteer supervisor casa_admin].freeze
   enum role: ALL_ROLES.zip(ALL_ROLES).to_h

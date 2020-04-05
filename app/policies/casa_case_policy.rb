@@ -19,7 +19,7 @@ class CasaCasePolicy # rubocop:todo Style/Documentation
       case @user.role
       when 'casa_admin'
         # scope.in_casa_administered_by(@user)
-        scope.all
+        scope.ordered
       when 'volunteer'
         []
       else

@@ -36,6 +36,13 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 <p><a href="https://pgcasa.org/">Learn more about PG CASA here.</a></p>
 <p><a href="https://pgcasa.org/volunteer-description/">You can read the complete role description of a CASA volunteer in Prince George's County here.</a></p>
 
+### Want to contribute? Great!
+
+[Here is our contributing guide!](./CONTRIBUTING.md)
+
+### Staging Environment on Heroku
+
+https://casa-r4g-staging.herokuapp.com/
 
 ### Setup to develop:
 
@@ -46,13 +53,14 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 1. `bundle install`
 1. `bundle exec rails db:setup`
 1. `bundle exec rails spec`
-1. rails db:create # requires running local postgres
-1. rails db:migrate
+1. `rails db:create # requires running local postgres`
+1. `rails db:migrate`
 1. `bundle exec rails server` # run server
 
 #### Common issues
 
 1. If your rake/rake commands hang forever instead of running, try: `rails app:update:bin #`
+1. There is currently no option for a user to sign up and create an account through the UI. This is intentional. If you want to log in, use a pre-seeded user account and its credentials.
 
 
 

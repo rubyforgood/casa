@@ -17,8 +17,11 @@ FactoryBot.define do
       role { :casa_admin }
     end
 
-    trait :with_casa_case do
-      casa_cases { create_list(:casa_case, 2) }
+    trait :with_casa_cases do
+      before(:create) do |user, _|
+        create(:case_assignment, volunteer: user)
+        create(:case_assignment, volunteer: user)
+      end
     end
   end
 end

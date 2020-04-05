@@ -6,6 +6,14 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+CaseContact.delete_all
+SupervisorVolunteer.delete_all
+CaseAssignment.delete_all
+CasaCase.delete_all
+User.delete_all
+CasaOrg.delete_all
+AllCasaAdmin.delete_all
+
 all_casa_admin_1 = AllCasaAdmin.create(
   email: 'all_casa_admin1@example.com',
   password: '123456',
@@ -44,13 +52,23 @@ inactive_user_1 = User.create(
   role: :inactive
 )
 
+# puts volunteer_user_1
 case_1 = CasaCase.create(
-  case_number: "111",
+  case_number: "111"
+)
+
+case_assignment_1 = CaseAssignment.create(
+  casa_case: case_1,
   volunteer: volunteer_user_1
 )
+
 case_2 = CasaCase.create(
   case_number: "222",
-  teen_program_eligible: true,
+  teen_program_eligible: true
+)
+
+case_assignment_2 = CaseAssignment.create(
+  casa_case: case_2,
   volunteer: volunteer_user_1
 )
 

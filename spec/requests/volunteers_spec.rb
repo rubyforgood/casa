@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe "/volunteers", type: :request do
+  let(:admin) {
+    create(:user, :casa_admin)
+  }
   let(:volunteer) {
     create(:user, :volunteer)
   }
@@ -11,6 +14,16 @@ RSpec.describe "/volunteers", type: :request do
 
       get "/"
 
+      expect(response).to be_successful
+    end
+  end
+
+  describe 'GET /edit' do
+    it 'render a successful response' do
+      sign_in admin
+
+      get edit_volunteer_url(volunteer)
+      
       expect(response).to be_successful
     end
   end
