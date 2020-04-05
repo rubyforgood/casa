@@ -7,7 +7,7 @@
 
 CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunteer sworn into a county-level juvenile dependency court system to advocate on behalf of a youth in the corresponding county's foster care system. CASA is also the namesake role of the national organization, CASA, which exists to cultivate and supervise volunteers carrying out this work – with county level chapters (operating relatively independently of each other) across the country. 
 
-****PG CASA (Prince George's County CASA in Maryland) seeks a volunteer management system to:**
+**PG CASA (Prince George's County CASA in Maryland) seeks a volunteer management system to:**
 - provide volunteers with a portal for logging activity
 - oversee volunteer activity
 - generate reports on volunteer activity
@@ -63,6 +63,10 @@ https://casa-r4g-staging.herokuapp.com/
 ### Documentation
 
 There is a `doc` directory at the top level that includes [Architectural Decision Records](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) and entity relationship diagram of various models.
+
+### Dependencies
+
+Beyond `gems` for the app's dependencies, this repo also has a dependency on `Graphviz` because we use [`rails-erd` gem](https://github.com/voormedia/rails-erd) and have it setup to autogenerate the ERD. Check out the [gem's recommended steps](http://voormedia.github.io/rails-erd/install.html) to install Graphviz.
 
 #### Common issues
 
