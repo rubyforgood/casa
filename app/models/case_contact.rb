@@ -16,6 +16,14 @@ class CaseContact < ApplicationRecord
     other
   ].freeze
   enum contact_type: CONTACT_TYPES.zip(CONTACT_TYPES).to_h
+
+  def humanized_type
+    "#{contact_type.humanize.titleize}#{ " - " + other_type_text if use_other_type_text?}"
+  end
+
+  def use_other_type_text?
+    contact_type == 'other'
+  end
 end
 
 # == Schema Information

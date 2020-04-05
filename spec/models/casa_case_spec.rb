@@ -19,3 +19,23 @@ RSpec.describe  CasaCase, "ordered" do
     expect(ordered_casa_cases).to eq [new_casa_case, old_casa_case, very_old_casa_case]
   end
 end
+
+RSpec.describe CasaCase, 'actively_assigned_to' do
+  it 'only returns cases actively assigned to a volunteer' do
+    current_user = create(:user)
+    inactive_case = create(:casa_case)
+    create(:case_assignment, casa_case: inactive_case, volunteer: current_user, is_active: false)
+    active_cases = create_list(:casa_case, 2)
+    active_cases.each do |casa_case|
+      create(:case_assignment, casa_case: casa_case, volunteer: current_user, is_active: true)
+    end
+
+    other_user = create(:user)
+    other_active_case = create(:casa_case)
+    other_inactive_case = create(:casa_case)
+    create(:case_assignment, casa_case: other_active_case, volunteer: other_user, is_active: true)
+    create(:case_assignment, casa_case: other_inactive_case, volunteer: other_user, is_active: false)
+
+    assert_equal active_cases, CasaCase.actively_assigned_to(current_user)
+  end
+end

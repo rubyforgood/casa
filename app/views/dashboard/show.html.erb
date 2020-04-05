@@ -28,6 +28,8 @@
 
 <% if policy(:dashboard).see_cases_section? %>
   <div class="cases">
+    <p>Hello, <%= current_user.email %></p>
+    <%= link_to "Edit Profile", edit_volunteer_path(current_user), class: "btn btn-primary" %>
     <%= link_to "Create Case", new_casa_case_path, class: "btn btn-primary" %>
     <table class="case-list">
       <tr>
@@ -54,4 +56,20 @@
       <% end %>
     </table>
   </div>
+  <%= link_to "New Case Contact",  new_case_contact_path %>
+
+  <table class="case-contacts-table">
+    <tr>
+      <th>Date</th>
+      <th>Duration</th>
+      <th>Type</th>
+    </tr>
+    <% @case_contacts.each do |contact| %>
+      <tr>
+        <td><%= time_tag contact.occurred_at %></td>
+        <td><%= pluralize(contact.duration_minutes, "minute") %></td>
+        <td><%= contact.humanized_type %></td>
+      </tr>
+    <% end %>
+  </table>
 <% end %>
