@@ -4,4 +4,11 @@ class VolunteersController < ApplicationController
   def index
     @case_contact = CaseContact.new
   end
+
+  def new
+    @volunteer = User.new(role: :volunteer)
+  end
+
+  def edit
+  end
 end
