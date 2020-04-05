@@ -19,3 +19,12 @@
     color: white;
   }
 }
+
+.case-contacts-table {
+  border-collapse: collapse;
+  tr td {
+    border-width: 2px;
+    border-color: black;
+    border-style: solid;
+  }
+}

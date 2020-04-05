@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Casa</title>
+    <title>PG CASA</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -9,17 +9,28 @@
   </head>
 
   <body>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-    <%= yield %>
-    <% if user_signed_in? %>
-      <p class="logout-button button">
-        <%= link_to('Logout', destroy_user_session_path) %>
-      </p>
-    <% else %>
-      <p class="login-button button">
-        <%= link_to('Login', new_user_session_path) %>
-      </p>
-    <% end %>
+    <nav class="navbar navbar-expand-lg bg-primary">
+      <div class="container">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <strong>CASA - Prince George's County, MD</strong>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container">
+      <p class="notice"><%= notice %></p>
+      <p class="alert"><%= alert %></p>
+      <%= yield %>
+      <% if user_signed_in? %>
+        <p class="logout-button button">
+          <%= link_to('Logout', destroy_user_session_path) %>
+        </p>
+      <% else %>
+        <p class="login-button button">
+          <%= link_to('Login', new_user_session_path) %>
+        </p>
+      <% end %>
+    </div>
   </body>
 </html>
