@@ -1,7 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe CasaCase, type: :model do
+  subject { build(:casa_case) }
   it { is_expected.to have_many(:case_assignments) }
+  it { is_expected.to validate_presence_of(:case_number) }
+  it { is_expected.to validate_uniqueness_of(:case_number).case_insensitive }
   it { is_expected.to have_many(:volunteers).through(:case_assignments) }
 end
 
