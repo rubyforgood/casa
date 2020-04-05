@@ -11,42 +11,29 @@ RSpec.describe CaseContactPolicy::Scope, "#resolve" do
   end
 
   it "returns all of the volunteer's case contacts when user is volunteer" do
-    user = create(:user, :volunteer)
-    relevant_case = create(:casa_case, volunteer: user)
+    current_user = create(:user, :volunteer)
+    other_user = create(:user, :volunteer)
+    relevant_case = create(:casa_case)
     irrelevant_case = create(:casa_case)
 
-    relevant_case_contacts = create_list(:case_contact, 2, casa_case: relevant_case)
-    
+    # we have to do a setup to test this since it's tested elsewhere
+    expect(CasaCase).to receive(:actively_assigned_to).and_return(CasaCase.where(id: relevant_case))
 
+    relevant_contacts = create_list(:case_contact, 2,
+                                    casa_case: relevant_case,
+                                    creator: current_user)
+    other_user_contact = create(:case_contact,
+                                casa_case: relevant_case,
+                                creator: other_user)
 
-    #TODO add at least one of everything
-    # casa_case, case_contact, 
-    # case_contact current user did or didn't create
-    # case_contact for casa_case the user is or isn't assigned to
-    # only combination that should show is a
-    #   case_contact the user did create
-    #   for a casa_case the user is assigned to
-    # don't show other combinations
-    # 
+    irrelevant_contacts = create_list(:case_contact, 2,
+                                      casa_case: irrelevant_case,
+                                      creator: current_user)
+    other_user_irrelevant_contacts = create(:case_contact,
+                                            casa_case: irrelevant_case,
+                                            creator: other_user)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    all_casa_cases = create_list(:casa_case, 2)
-
-    scope = CasaCasePolicy::Scope.new(user, CasaCase)
-
-    expect(scope.resolve).to eq []
+    scope = CaseContactPolicy::Scope.new(current_user, CaseContact)
+    expect(scope.resolve).to eq relevant_contacts
   end
 end

@@ -53,7 +53,7 @@ class CaseContactPolicy # rubocop:todo Style/Documentation
         # scope.in_casa_administered_by(@user)
         scope.all
       when 'volunteer'
-        []
+        scope.where(casa_case: CasaCase.actively_assigned_to(@user), creator: @user)
       else
         raise "unrecognized role"
       end

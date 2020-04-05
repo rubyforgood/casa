@@ -56,7 +56,18 @@
   </div>
   <%= link_to "New Case Contact",  new_case_contact_path %>
 
-  <% @casa_cases.each do |casa_case| %>
-    <%= casa_case.case_number %>
+  <table>
+    <tr>
+      <th>Date</th>
+      <th>Duration</th>
+      <th>Type</th>
+    </tr>
+    <% @case_contacts.each do |contact| %>
+      <tr>
+        <td><%= time_tag contact.occurred_at %></td>
+        <td><%= "minute".pluralize(contact.duration_minutes) %></td>
+        <td><%= contact.humanized_type %></td>
+      </tr>
+    </table>
   <% end %>
 <% end %>

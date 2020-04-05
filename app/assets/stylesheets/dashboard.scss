@@ -7,3 +7,15 @@
   margin-top: 20px;
 }
 
+.button {
+  border: 1px black solid;
+  padding: 10px;
+  background-color: #00447C;
+}
+
+.button > a {
+  color: white;
+  &:visited {
+    color: white;
+  }
+}
