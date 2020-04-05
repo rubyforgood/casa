@@ -6,7 +6,7 @@ RSpec.describe 'admin views dashboard', type: :feature do
   }
 
   it 'can see volunteers' do
-    volunteer = create(:user, :volunteer, :with_casa_case, email: 'casa@example.com')
+    volunteer = create(:user, :volunteer, :with_casa_cases, email: 'casa@example.com')
     casa_case = volunteer.casa_cases[0]
     sign_in admin
 
