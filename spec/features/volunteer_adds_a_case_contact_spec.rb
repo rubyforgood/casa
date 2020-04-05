@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "volunteer adds a case contact", type: :feature do
   scenario "is successful" do
-    volunteer = create(:user, :volunteer, :with_casa_case)
+    volunteer = create(:user, :volunteer, :with_casa_cases)
 
     sign_in volunteer
 
