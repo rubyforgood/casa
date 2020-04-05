@@ -56,7 +56,7 @@
   </div>
   <%= link_to "New Case Contact",  new_case_contact_path %>
 
-  <table>
+  <table class="case-contacts-table">
     <tr>
       <th>Date</th>
       <th>Duration</th>
@@ -65,9 +65,9 @@
     <% @case_contacts.each do |contact| %>
       <tr>
         <td><%= time_tag contact.occurred_at %></td>
-        <td><%= "minute".pluralize(contact.duration_minutes) %></td>
+        <td><%= pluralize(contact.duration_minutes, "minute") %></td>
         <td><%= contact.humanized_type %></td>
       </tr>
-    </table>
-  <% end %>
+    <% end %>
+  </table>
 <% end %>
