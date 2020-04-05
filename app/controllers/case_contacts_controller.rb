@@ -22,7 +22,16 @@ class CaseContactsController < ApplicationController
   end
 
   def create
-    @case_contact = CaseContact.new(case_contact_params)
+    info =
+      {
+        creator_id: current_user.id,
+        casa_case_id: params[:case_contact][:casa_case_id].to_i,
+        contact_type: params[:contact_type],
+        duration_minutes: params[:duration_minutes],
+        occurred_at: params[:case_contact][:occurred_at]
+      }
+    @case_contact = CaseContact.new(info)
+    
 
     respond_to do |format|
       if @case_contact.save
@@ -66,11 +75,8 @@ class CaseContactsController < ApplicationController
   end
 
   def case_contact_params
-    binding.pry
-    form_params = params.require(:case_contact).permit(:occurred_at, :duration_minutes, :contact_type)
-    binding.pry
     CaseContactParameters
-      .new(form_params)
+      .new(params)
       .with_creator(current_user)
       .with_casa_case(current_user.casa_cases.first)
   end
