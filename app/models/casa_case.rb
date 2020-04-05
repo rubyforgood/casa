@@ -8,6 +8,7 @@ class CasaCase < ApplicationRecord
     source: :volunteer,
     class_name: "User"
   )
+  has_many :case_contacts
 
   scope :ordered, -> { sort_by(&:updated_at).reverse }
 end
