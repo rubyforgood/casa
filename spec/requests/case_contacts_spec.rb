@@ -32,39 +32,7 @@ RSpec.describe "/case_contacts", type: :request do
     end
   end
 
-  describe "GET /new" do
-    it "renders a successful response" do
-      get new_case_contact_url
-      expect(response).to be_successful
-    end
-  end
-
-  describe "GET /edit" do
-    it "render a successful response" do
-      case_contact = CaseContact.create! valid_attributes
-      get edit_case_contact_url(case_contact)
-      expect(response).to be_successful
-    end
-  end
-
   describe "POST /create" do
-    context "with valid parameters" do
-      it "creates a new CaseContact" do
-        sign_in volunteer
-
-        expect {
-          post case_contacts_url, params: { case_contact: valid_attributes }
-        }.to change(CaseContact, :count).by(1)
-      end
-
-      it "redirects to the created case_contact" do
-        sign_in volunteer
-
-        post case_contacts_url, params: { case_contact: valid_attributes }
-        expect(response).to redirect_to(case_contact_url(CaseContact.last))
-      end
-    end
-
     context "with invalid parameters" do
       it "does not create a new CaseContact" do
         expect {

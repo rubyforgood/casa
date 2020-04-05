@@ -21,6 +21,7 @@ class CaseContactsController < ApplicationController
 
   # GET /case_contacts/1/edit
   def edit
+    @casa_cases = current_user.casa_cases
   end
 
   def create
