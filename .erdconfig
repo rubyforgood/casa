@@ -1,0 +1,22 @@
+attributes:
+  - content
+  - foreign_key
+  - inheritance
+disconnected: true
+filename: "doc/casa-entity-relationship-diagram"
+filetype: pdf
+indirect: true
+inheritance: false
+markup: true
+notation: simple
+orientation: vertical
+polymorphism: false
+sort: true
+title: "CASA Volunteer Management System - Entity Relationship Diagram"
+warn: true
+exclude: null
+only: null
+only_recursion_depth: null
+prepend_primary: false
+cluster: false
+splines: spline

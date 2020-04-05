@@ -28,9 +28,7 @@
 
 <% if policy(:dashboard).see_cases_section? %>
   <div class="cases">
-    <span class="button">
-      <%= link_to "Create Case", new_casa_case_path %>
-    </span>
+    <%= link_to "Create Case", new_casa_case_path, class: "btn btn-primary" %>
     <table class="case-list">
       <tr>
         <th>Case Number</th>
