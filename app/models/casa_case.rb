@@ -8,6 +8,7 @@ class CasaCase < ApplicationRecord
     source: :volunteer,
     class_name: "User"
   )
+  has_many :case_contacts
   validates :case_number, uniqueness: { case_sensitive: false }, presence: true
 
   scope :ordered, -> { sort_by(&:updated_at).reverse }
