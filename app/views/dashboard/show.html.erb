@@ -1,7 +1,7 @@
 <% if policy(:dashboard).see_volunteers_section? %>
   <h1>Volunteers</h1>
 
-  <%= link_to "New Volunteer", new_volunteer_path %>
+  <%= link_to "New Volunteer", new_volunteer_path, class: "btn btn-primary" %>
 
   <table id="volunteers">
     <thead>
@@ -27,36 +27,37 @@
 
 
 <% if policy(:dashboard).see_cases_section? %>
-  <div class="cases">
-    <p>Hello, <%= current_user.email %></p>
-    <%= link_to "Edit Profile", edit_volunteer_path(current_user), class: "btn btn-primary" %>
-    <%= link_to "Create Case", new_casa_case_path, class: "btn btn-primary" %>
-    <table class="case-list">
-      <tr>
-        <th>Case Number</th>
-        <th>Teen program eligible</th>
-      </tr>
-    <% @casa_cases.each do |casa_case| %>
-      <tr>
-        <td>
-        <div class="case">
-          <%= casa_case.case_number %>
-        </div>
-        </td>
+  <h1>Cases</h1>
 
-        <td>
-          <%= casa_case.teen_program_eligible %>
-        </td>
+  <%= link_to "New Case", new_casa_case_path, class: "btn btn-primary" %>
+  <table class="case-list">
+    <tr>
+      <th>Case Number</th>
+      <th>Teen program eligible</th>
+    </tr>
+  <% @casa_cases.each do |casa_case| %>
+    <tr>
+      <td>
+      <div class="case">
+        <%= casa_case.case_number %>
+      </div>
+      </td>
 
-        <td>
-          <%= link_to("Edit", edit_casa_case_path(casa_case)) %>
-        </td>
+      <td>
+        <%= casa_case.teen_program_eligible %>
+      </td>
 
-      </tr>
-      <% end %>
-    </table>
-  </div>
-  <%= link_to "New Case Contact",  new_case_contact_path %>
+      <td>
+        <%= link_to("Edit", edit_casa_case_path(casa_case)) %>
+      </td>
+
+    </tr>
+    <% end %>
+  </table>
+
+  <h1>Case Contacts</h1>
+
+  <%= link_to "New Case Contact",  new_case_contact_path, class: "btn btn-primary" %>
 
   <table class="case-contacts-table">
     <tr>

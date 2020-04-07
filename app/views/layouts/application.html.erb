@@ -16,6 +16,9 @@
             <strong>CASA - Prince George's County, MD</strong>
           </li>
         </ul>
+          <% if user_signed_in? %>
+            <%= link_to current_user.email, edit_volunteer_path(current_user), class: "btn btn-primary" %>
+          <% end %>
       </div>
 
       <div class="navbar-nav">
