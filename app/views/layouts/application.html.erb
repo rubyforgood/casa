@@ -12,25 +12,25 @@
     <nav class="navbar navbar-expand-lg bg-primary">
       <div class="container">
         <ul class="navbar-nav">
-          <li class="nav-item">
+          <li class="nav-brand">
             <strong>CASA - Prince George's County, MD</strong>
           </li>
         </ul>
       </div>
+
+      <div class="navbar-nav">
+        <% if user_signed_in? %>
+          <%= link_to('Log out', destroy_user_session_path, class: "btn btn-light") %>
+        <% else %>
+          <%= link_to('Log in', new_user_session_path, class: "btn btn-light") %>
+        <% end %>
+      </div>
     </nav>
+
     <div class="container">
       <p class="notice"><%= notice %></p>
       <p class="alert"><%= alert %></p>
       <%= yield %>
-      <% if user_signed_in? %>
-        <p class="logout-button button">
-          <%= link_to('Logout', destroy_user_session_path) %>
-        </p>
-      <% else %>
-        <p class="login-button button">
-          <%= link_to('Login', new_user_session_path) %>
-        </p>
-      <% end %>
     </div>
   </body>
 </html>
