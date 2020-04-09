@@ -10,6 +10,12 @@ class User < ApplicationRecord
 
   ALL_ROLES = %w[inactive volunteer supervisor casa_admin].freeze
   enum role: ALL_ROLES.zip(ALL_ROLES).to_h
+
+  # all contacts this user has with this casa case
+  def case_contacts_for(casa_case_id)
+    found_casa_case = casa_cases.find{|cc| cc.id == casa_case_id}
+    found_casa_case.case_contacts.filter{|contact| contact.creator_id == self.id}
+  end
 end
 
 # == Schema Information

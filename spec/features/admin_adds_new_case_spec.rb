@@ -7,9 +7,9 @@ RSpec.feature "admin adds a new case", type: :feature do
     sign_in admin
     login_as admin
     visit root_path
-    expect(page).to have_selector(".cases")
+    expect(page).to have_selector(".case-list")
 
-    click_on "Create Case"
+    click_on "New Case"
     fill_in 'Case number', with: case_number
 
 
