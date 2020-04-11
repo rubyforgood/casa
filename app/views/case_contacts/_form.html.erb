@@ -19,6 +19,10 @@
     <% case_contacts = CaseContact::CONTACT_TYPES.map { |contact_type| OpenStruct.new(value: contact_type, label: contact_type.titleize) } %>
     <%= select_tag :contact_type, options_from_collection_for_select(case_contacts, 'value', 'label') %>
   </div>
+  <div class="field other-contact-type" hidden>
+    <%= form.label :other_type_text %>
+    <%= form.text_field :other_type_text %>
+  </div>
 
   <div class="field duration-minutes">
     <%= form.label :duration_minutes %>
