@@ -21,7 +21,7 @@ class CasaCasePolicy # rubocop:todo Style/Documentation
         # scope.in_casa_administered_by(@user)
         scope.ordered
       when 'volunteer'
-        []
+        scope.actively_assigned_to(user)
       else
         raise "unrecognized role"
       end

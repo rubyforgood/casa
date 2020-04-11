@@ -23,13 +23,13 @@
     </tbody>
   </table>
 
+  <%= link_to "New Case", new_casa_case_path, class: "btn btn-primary" %>
+
 <% end %>
 
 
 <% if policy(:dashboard).see_cases_section? %>
   <h1>Cases</h1>
-
-  <%= link_to "New Case", new_casa_case_path, class: "btn btn-primary" %>
   <table class="case-list">
     <tr>
       <th>Case Number</th>
