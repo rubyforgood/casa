@@ -10,12 +10,13 @@ RSpec.describe CasaCasePolicy::Scope, "#resolve" do
     expect(scope.resolve).to contain_exactly(*all_casa_cases)
   end
 
-  it "returns empty array when user is volunteer" do
+  it "returns volunteer's active cases when user is volunteer" do
     user = create(:user, :volunteer)
-    all_casa_cases = create_list(:casa_case, 2)
+    create_list(:casa_case, 2)
+    casa_cases = create_list(:casa_case, 2, volunteers: [user])
 
     scope = CasaCasePolicy::Scope.new(user, CasaCase)
 
-    expect(scope.resolve).to eq []
+    expect(scope.resolve).to eq casa_cases
   end
 end
