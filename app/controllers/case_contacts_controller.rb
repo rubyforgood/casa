@@ -1,5 +1,6 @@
+# CaseContactsController with default actions
 class CaseContactsController < ApplicationController
-  before_action :set_case_contact, only: [:show, :edit, :update, :destroy]
+  before_action :set_case_contact, only: %i[show edit update destroy]
 
   # GET /case_contacts
   # GET /case_contacts.json
@@ -25,15 +26,7 @@ class CaseContactsController < ApplicationController
   end
 
   def create
-    info =
-      {
-        creator_id: current_user.id,
-        casa_case_id: params[:casa_case_id],
-        contact_type: params[:contact_type],
-        duration_minutes: params[:duration_minutes],
-        occurred_at: params[:case_contact][:occurred_at]
-      }
-    @case_contact = CaseContact.new(info)
+    @case_contact = CaseContact.new(create_case_contact_params)
 
     respond_to do |format|
       if @case_contact.save
@@ -76,10 +69,21 @@ class CaseContactsController < ApplicationController
     @case_contact = CaseContact.find(params[:id])
   end
 
+  # This can probably be combined with case_contact_params below, but was unsure about
+  # this line `.with_casa_case(current_user.casa_cases.first)`
+  def create_case_contact_params
+    CaseContactParameters
+      .new(params)
+      .with_creator(current_user)
+      .with_casa_case(CasaCase.find(params[:case_contact][:casa_case_id]))
+      .with_converted_duration_minutes(params[:case_contact][:duration_hours].to_i)
+  end
+
   def case_contact_params
     CaseContactParameters
       .new(params)
       .with_creator(current_user)
       .with_casa_case(current_user.casa_cases.first)
+      .with_converted_duration_minutes(params[:case_contact][:duration_hours].to_i)
   end
 end

@@ -12,12 +12,12 @@
   <% end %>
   <div class="field casa-case">
     <%= form.label :casa_case_id %>
-    <%= select_tag :casa_case_id, options_from_collection_for_select(@casa_cases, 'id', 'case_number') %>
+    <%= form.select :casa_case_id, options_from_collection_for_select(current_user.casa_cases, 'id', 'case_number') %>
   </div>
   <div class="field contact-type">
     <%= form.label :contact_type %>
     <% case_contacts = CaseContact::CONTACT_TYPES.map { |contact_type| OpenStruct.new(value: contact_type, label: contact_type.titleize) } %>
-    <%= select_tag :contact_type, options_from_collection_for_select(case_contacts, 'value', 'label') %>
+    <%= form.select :contact_type, options_from_collection_for_select(case_contacts, 'value', 'label') %>
   </div>
   <div class="field other-contact-type" hidden>
     <%= form.label :other_type_text %>
@@ -25,24 +25,9 @@
   </div>
 
   <div class="field duration-minutes">
-    <%= form.label :duration_minutes %>
-    <% durations = [] %>
-    <%# For the first 2 hours %>
-    <% 7.times do |i| %>
-      <%
-        duration = (i + 1) * 15
-        durations.push(OpenStruct.new(value: duration, label: "#{duration} minutes"))
-      %>
-    <% end %>
-    <%# For the next 22 hours %>
-    <% 23.times do |i| %>
-      <%
-        duration = (i + 2) * 60
-        durations.push(OpenStruct.new(value: duration, label: "#{i + 2} hours"))
-      %>
-    <% end %>
-
-    <%= select_tag :duration_minutes, options_from_collection_for_select(durations, 'value', 'label') %>
+    <%= form.label "Duration" %>
+    <%= duration_hours_select(form, @case_contact) %>
+    <%= duration_minutes_select(form, @case_contact) %>
   </div>
 
   <div class="field occurred-at">

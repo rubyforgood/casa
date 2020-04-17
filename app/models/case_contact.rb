@@ -1,5 +1,8 @@
+# CaseContact Model
 class CaseContact < ApplicationRecord
-  belongs_to :creator, class_name: "User"
+  attr_accessor :duration_hours
+
+  belongs_to :creator, class_name: 'User'
   belongs_to :casa_case
 
   CONTACT_TYPES = %w[
@@ -18,11 +21,25 @@ class CaseContact < ApplicationRecord
   enum contact_type: CONTACT_TYPES.zip(CONTACT_TYPES).to_h
 
   def humanized_type
-    "#{contact_type.humanize.titleize}#{ " - " + other_type_text if use_other_type_text?}"
+    "#{contact_type.humanize.titleize}#{' - ' + other_type_text if use_other_type_text?}"
   end
 
   def use_other_type_text?
     contact_type == 'other'
+  end
+
+  # This should definitely go into a decorator eventually
+  def display_duration_minutes
+    if duration_minutes >= 60
+      hour_value = duration_minutes / 60
+      minutes_value = duration_minutes.remainder(60)
+
+      return "#{hour_value} #{'hour'.pluralize(hour_value)}" if minutes_value.zero?
+
+      "#{hour_value} #{'hour'.pluralize(hour_value)} #{duration_minutes.remainder(60)} minutes"
+    else
+      "#{duration_minutes} minutes"
+    end
   end
 end
 
