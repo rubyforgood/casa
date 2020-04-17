@@ -68,7 +68,7 @@
     <% @case_contacts.each do |contact| %>
       <tr>
         <td><%= time_tag contact.occurred_at %></td>
-        <td><%= pluralize(contact.duration_minutes, "minute") %></td>
+        <td><%= contact.display_duration_minutes %></td>
         <td><%= contact.humanized_type %></td>
       </tr>
     <% end %>

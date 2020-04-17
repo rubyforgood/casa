@@ -1,8 +1,9 @@
+# Calculate values when using case contact parameters
 class CaseContactParameters < SimpleDelegator
   def initialize(params)
     params = params
-      .require(:case_contact)
-      .permit(:contact_type, :other_type_text, :duration_minutes, :occurred_at)
+             .require(:case_contact)
+             .permit(:contact_type, :other_type_text, :duration_minutes, :occurred_at)
 
     super(params)
   end
@@ -14,6 +15,13 @@ class CaseContactParameters < SimpleDelegator
 
   def with_casa_case(casa_case)
     params[:casa_case] = casa_case
+    self
+  end
+
+  def with_converted_duration_minutes(duration_hours)
+    converted_duration_hours = duration_hours * 60
+    duration_minutes = params[:duration_minutes].to_i
+    params[:duration_minutes] = converted_duration_hours + duration_minutes
     self
   end
 
