@@ -10,7 +10,7 @@ assignees: ''
 **What's the bug?**
 Tell us everything about what the bug is and **why** it's a bug. For example "because case numbers are not supposed to change!!"
 
-**To Reproduce**
+**How to make it happen**
 Steps to reproduce the behavior:
 1. Go to '...'
 2. Click on '....'

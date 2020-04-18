@@ -7,10 +7,13 @@ assignees: ''
 
 ---
 
-** what type of user is this for? volunteer/supervisor/admin/all **
+**What type of user is this for? volunteer/supervisor/admin/all**
 
-** description **
 
-** screenshots of current behavior, if any **
+**Description**
 
-** related issues, if any **
+
+**Screenshots of current behavior, if any**
+
+
+**Related issues, if any**
