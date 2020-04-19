@@ -1,7 +1,7 @@
 $('document').ready(() => {
   $.fn.dataTable.ext.search.push(
     function( settings, data, dataIndex ) {
-      var supervisor_array = [];
+      var supervisor_array = [""];
       var status_array = [];
 
       $('.supervisor-options').find('input[type="checkbox"]').each(function() {

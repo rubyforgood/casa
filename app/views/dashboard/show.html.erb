@@ -27,13 +27,7 @@
         <tr>
           <td><%= volunteer.email %></td>
           <td id="supervisor-column"><%= volunteer&.supervisor&.email %></td>
-          <td id="status-column">
-            <% if volunteer.role == "inactive" %>
-              <%= volunteer.role %>
-            <% else %>
-              Active
-            <% end %>
-          </td>
+          <td id="status-column"><%= volunteer.status %></td>
           <td><%= volunteer.casa_cases.pluck(:case_number).join(', ') %></td>
           <td><%= link_to 'Edit', edit_volunteer_path(volunteer) %></td>
         </tr>
@@ -44,7 +38,7 @@
 
 
 <% if policy(:dashboard).see_cases_section? %>
-<br>
+  <br>
   <div class="row">
     <div class="col-sm-3 col-md-2">
       <h1>Cases</h1>
@@ -88,7 +82,7 @@
     <% @case_contacts.each do |contact| %>
       <tr>
         <td><%= contact.occurred_at.strftime('%B %e, %Y') %></td>
-        <td><%= contact.display_duration_minutes %></td>
+        <td><%= contact.duration_minutes %></td>
         <td><%= contact.humanized_type %></td>
       </tr>
     <% end %>
