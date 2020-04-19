@@ -1,10 +1,13 @@
 language: ruby
 rvm:
-- 2.7.0
+  - 2.7.0
 services:
-- postgresql
+  - postgresql
 before_script:
-- psql -c 'create database casa_test;' -U postgres
+  - psql -c 'create database casa_test;' -U postgres
+script:
+  - bundle exec rails webpacker:compile
+  - bundle exec rails spec
   # deploy:
   #   provider: heroku
   #   api_key:
