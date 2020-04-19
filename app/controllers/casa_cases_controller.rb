@@ -28,7 +28,7 @@ class CasaCasesController < ApplicationController
 
     respond_to do |format|
       if @casa_case.save
-        format.html { redirect_to @casa_case, notice: 'Casa case was successfully created.' }
+        format.html { redirect_to @casa_case, notice: 'CASA case was successfully created.' }
         format.json { render :show, status: :created, location: @casa_case }
       else
         format.html { render :new }
@@ -42,7 +42,7 @@ class CasaCasesController < ApplicationController
   def update
     respond_to do |format|
       if @casa_case.update(casa_case_params)
-        format.html { redirect_to @casa_case, notice: 'Casa case was successfully updated.' }
+        format.html { redirect_to @casa_case, notice: 'CASA case was successfully updated.' }
         format.json { render :show, status: :ok, location: @casa_case }
       else
         format.html { render :edit }
@@ -56,7 +56,7 @@ class CasaCasesController < ApplicationController
   def destroy
     @casa_case.destroy
     respond_to do |format|
-      format.html { redirect_to casa_cases_url, notice: 'Casa case was successfully destroyed.' }
+      format.html { redirect_to casa_cases_url, notice: 'CASA case was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

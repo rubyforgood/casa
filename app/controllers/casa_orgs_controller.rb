@@ -26,7 +26,7 @@ class CasaOrgsController < ApplicationController # rubocop:todo Style/Documentat
 
     respond_to do |format|
       if @casa_org.save
-        format.html { redirect_to @casa_org, notice: 'Casa org was successfully created.' }
+        format.html { redirect_to @casa_org, notice: 'CASA org was successfully created.' }
         format.json { render :show, status: :created, location: @casa_org }
       else
         format.html { render :new }
@@ -40,7 +40,7 @@ class CasaOrgsController < ApplicationController # rubocop:todo Style/Documentat
   def update
     respond_to do |format|
       if @casa_org.update(casa_org_params)
-        format.html { redirect_to @casa_org, notice: 'Casa org was successfully updated.' }
+        format.html { redirect_to @casa_org, notice: 'CASA org was successfully updated.' }
         format.json { render :show, status: :ok, location: @casa_org }
       else
         format.html { render :edit }
@@ -54,7 +54,7 @@ class CasaOrgsController < ApplicationController # rubocop:todo Style/Documentat
   def destroy
     @casa_org.destroy
     respond_to do |format|
-      format.html { redirect_to casa_orgs_url, notice: 'Casa org was successfully destroyed.' }
+      format.html { redirect_to casa_orgs_url, notice: 'CASA org was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

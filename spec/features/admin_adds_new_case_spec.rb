@@ -18,7 +18,7 @@ RSpec.feature "admin adds a new case", type: :feature do
     has_checked_field? "Teen program eligible"
 
 
-    click_on "Create Casa case"
+    click_on "Create CASA case"
     expect(page.body).to have_content(case_number)
   end
 end
