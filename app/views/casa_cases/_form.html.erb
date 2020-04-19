@@ -22,6 +22,6 @@
   </div>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit casa_case.persisted? ? 'Update CASA Case' : 'Create CASA Case' %>
   </div>
 <% end %>
