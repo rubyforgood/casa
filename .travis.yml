@@ -5,6 +5,15 @@ services:
   - postgresql
 before_script:
   - psql -c 'create database casa_test;' -U postgres
+install:
+  - travis_retry gem install bundler -v '<2' # Ruby 2.2 and Rails 3.2 & 4.2 depend on bundler 1.x.
+  - travis_retry nvm install 13.5.0
+  - node -v
+  - travis_retry npm i -g yarn
+  - travis_retry bundle install
+  - travis_retry yarn
+  - bundle
+  - yarn
 script:
   - bundle exec rails webpacker:compile
   - bundle exec rails spec
