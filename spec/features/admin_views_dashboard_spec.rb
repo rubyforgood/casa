@@ -17,16 +17,16 @@ RSpec.describe 'admin views dashboard', type: :feature do
   end
 
   it 'can go to the volunteer edit page from the volunteer list' do
-    volunteer = create(:user, :volunteer)
+    create(:user, :volunteer)
     sign_in admin
 
     visit root_path
 
-    within "#volunteers" do
-      click_on "Edit"
+    within '#volunteers' do
+      click_on 'Edit'
     end
 
-    expect(page).to have_text("Editing Volunteer")
+    expect(page).to have_text('Editing Volunteer')
   end
 
   it 'can go to the new volunteer page' do
@@ -34,9 +34,27 @@ RSpec.describe 'admin views dashboard', type: :feature do
 
     visit root_path
 
-    click_on "New Volunteer"
+    click_on 'New Volunteer'
 
-    expect(page).to have_text("New Volunteer")
-    expect(page).to have_css("form#new_user")
+    expect(page).to have_text('New Volunteer')
+    expect(page).to have_css('form#new_user')
+  end
+
+  it 'can filters volunteers', type: :system do
+    3.times do
+      create(:user, :volunteer)
+    end
+
+    sign_in admin
+
+    visit root_path
+    expect(page).to have_selector('.volunteer-filters')
+    expect(page.all('table#volunteers tr').count).to eq 4
+
+    click_on 'Status'
+    find(:css, 'input[data-value="Active"]').set(false)
+
+    expect(page.all('table#volunteers tr').count).to eq 2
+    expect(page.body).to have_content('No matching records')
   end
 end

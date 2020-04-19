@@ -5,7 +5,7 @@ class CaseContactsController < ApplicationController
   # GET /case_contacts
   # GET /case_contacts.json
   def index
-    @case_contacts = CaseContact.all
+    @case_contacts = CaseContact.all.decorate
   end
 
   # GET /case_contacts/1
@@ -30,7 +30,7 @@ class CaseContactsController < ApplicationController
 
     respond_to do |format|
       if @case_contact.save
-        format.html { redirect_to @case_contact, notice: 'Case contact was successfully created.' }
+        format.html { redirect_to @case_contact.decorate, notice: 'Case contact was successfully created.' }
         format.json { render :show, status: :created, location: @case_contact }
       else
         format.html { render :new }
@@ -44,7 +44,7 @@ class CaseContactsController < ApplicationController
   def update
     respond_to do |format|
       if @case_contact.update(case_contact_params)
-        format.html { redirect_to @case_contact, notice: 'Case contact was successfully updated.' }
+        format.html { redirect_to @case_contact.decorate, notice: 'Case contact was successfully updated.' }
         format.json { render :show, status: :ok, location: @case_contact }
       else
         format.html { render :edit }

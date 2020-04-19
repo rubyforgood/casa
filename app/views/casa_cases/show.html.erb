@@ -24,14 +24,15 @@
           <thead>
             <tr>
               <th>Contact type</th>
-              <th>Duration (minutes)</th>
+              <th>Duration</th>
               <th colspan="3"></th>
             </tr>
           </thead>
           <tbody>
-            <% volunteer.case_contacts_for(@casa_case.id).each do | contact | %>
+            <% volunteer.case_contacts_for(@casa_case.id).each do |contact| %>
               <tr>
-                <td><%= contact.contact_type %></td><td> <%= contact.display_duration_minutes %></td>
+                <td><%= contact.contact_type %></td>
+                <td><%= contact.decorate.duration_minutes %></td>
               </tr>
             <% end %>
           </tbody>

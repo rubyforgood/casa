@@ -23,7 +23,7 @@ class UserPolicy
       when 'volunteer'
         scope.where(id: user.id)
       else
-        raise "unrecognized role"
+        raise 'unrecognized role'
       end
     end
   end

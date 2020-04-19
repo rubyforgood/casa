@@ -3,4 +3,4 @@ require:
   - rubocop-rspec
 
 Style/Documentation:
-  Enforce: False
+  Enabled: False

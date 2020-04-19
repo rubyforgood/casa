@@ -4,8 +4,8 @@ class DashboardController < ApplicationController
   def show
     authorize :dashboard
 
-    @volunteers = policy_scope(User.volunteer)
+    @volunteers = policy_scope(User.volunteer).decorate
     @casa_cases = policy_scope(CasaCase.all)
-    @case_contacts = policy_scope(CaseContact.all).order(occurred_at: :desc)
+    @case_contacts = policy_scope(CaseContact.all).order(occurred_at: :desc).decorate
   end
 end
