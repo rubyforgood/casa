@@ -1,0 +1,27 @@
+<div class="row volunteer-filters">
+  <div class="col-sm-12">
+    <h4 class="pull-left">Filter by:</h4>
+    <div class="dropdown pull-left">
+      <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Supervisor
+      </button>
+        <ul class="dropdown-menu supervisor-options" style="min-width: 15rem;">
+          <% SupervisorVolunteer.all.each do |relationship| %>
+            <li>
+              <a class="small" data-value="option1" tabIndex="-1"><input style="margin:0 8px;" type="checkbox" data-value="<%= relationship.supervisor.email %>" checked/><%= relationship.supervisor.email %></a>
+            </li>
+          <% end %>
+        </ul>
+    </div>
+    <div class="dropdown pull-left">
+      <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Status
+      </button>
+      <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
+        <li><a class="small" data-value="option1" tabIndex="-1"><input style="margin:0 8px;" type="checkbox" data-value="Active" checked />Active</a></li>
+        <li><a class="small" data-value="option1" tabIndex="-1"><input style="margin:0 8px;" type="checkbox" data-value="Inactive" />Inactive</a></li>
+      </div>
+    </div>
+  </div>
+</div>
+<br>

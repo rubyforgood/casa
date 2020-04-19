@@ -4,10 +4,12 @@ $primary: #00447C;
 @import "casa_cases";
 @import "dashboard";
 @import "navbar";
+@import "utilities";
+@import "dataTables/jquery.dataTables";
+
 
 @import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
 
 body {
   font-family: "Montserrat";
 }
-

@@ -1,14 +1,24 @@
 <% if policy(:dashboard).see_volunteers_section? %>
-  <h1>Volunteers</h1>
+  <div class="row">
+    <div class="col-sm-4 col-md-3">
+      <h1>Volunteers</h1>
+    </div>
+    <div class="col-sm-8 col-md-9">
+      <%= link_to "New Volunteer", new_volunteer_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+  <hr>
 
-  <%= link_to "New Volunteer", new_volunteer_path, class: "btn btn-primary" %>
+  <%= render "volunteer_filters" %>
 
-  <table id="volunteers">
+  <table class="table table-striped table-bordered" id="volunteers">
     <thead>
       <tr>
         <th>Volunteer</th>
+        <th>Supervisor</th>
+        <th>Status</th>
         <th>Case Number</th>
-        <th colspan="3"></th>
+        <th>Actions</th>
       </tr>
     </thead>
 
@@ -16,50 +26,60 @@
       <% @volunteers.each do |volunteer| %>
         <tr>
           <td><%= volunteer.email %></td>
+          <td id="supervisor-column"><%= volunteer&.supervisor&.email %></td>
+          <td id="status-column">
+            <% if volunteer.role == "inactive" %>
+              <%= volunteer.role %>
+            <% else %>
+              Active
+            <% end %>
+          </td>
           <td><%= volunteer.casa_cases.pluck(:case_number).join(', ') %></td>
           <td><%= link_to 'Edit', edit_volunteer_path(volunteer) %></td>
         </tr>
       <% end %>
     </tbody>
   </table>
-
-  <%= link_to "New Case", new_casa_case_path, class: "btn btn-primary" %>
-
 <% end %>
 
 
 <% if policy(:dashboard).see_cases_section? %>
-  <h1>Cases</h1>
-  <table class="case-list">
+<br>
+  <div class="row">
+    <div class="col-sm-3 col-md-2">
+      <h1>Cases</h1>
+    </div>
+    <% if policy(:dashboard).see_volunteers_section? %>
+      <div class="col-sm-9 col-md-10">
+        <%= link_to "New Case", new_casa_case_path, class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+  <table class="table table-striped table-bordered case-list">
     <tr>
       <th>Case Number</th>
-      <th>Teen program eligible</th>
+      <th>Teen Program Eligible</th>
+      <th>Actions</th>
     </tr>
-  <% @casa_cases.each do |casa_case| %>
-    <tr>
-      <td>
-      <div class="case">
-        <%= casa_case.case_number %>
-      </div>
-      </td>
-
-      <td>
-        <%= casa_case.teen_program_eligible %>
-      </td>
-
-      <td>
-        <%= link_to("Edit", edit_casa_case_path(casa_case)) %>
-      </td>
-
-    </tr>
+    <% @casa_cases.each do |casa_case| %>
+      <tr>
+        <td><%= casa_case.case_number %></td>
+        <td><%= casa_case.teen_program_eligible %></td>
+        <td><%= link_to("Edit", edit_casa_case_path(casa_case)) %></td>
+      </tr>
     <% end %>
   </table>
+  <br>
+  <div class="row">
+    <div class="col-sm-6 col-md-4">
+      <h1>Case Contacts</h1>
+    </div>
+    <div class="col-sm-6 col-md-8">
+      <%= link_to "New Case Contact",  new_case_contact_path, class: "btn btn-primary" %>
+    </div>
+  </div>
 
-  <h1>Case Contacts</h1>
-
-  <%= link_to "New Case Contact",  new_case_contact_path, class: "btn btn-primary" %>
-
-  <table class="case-contacts-table">
+  <table class="table case-contacts-table">
     <tr>
       <th>Date</th>
       <th>Duration</th>
@@ -67,7 +87,7 @@
     </tr>
     <% @case_contacts.each do |contact| %>
       <tr>
-        <td><%= time_tag contact.occurred_at %></td>
+        <td><%= contact.occurred_at.strftime('%B %e, %Y') %></td>
         <td><%= contact.display_duration_minutes %></td>
         <td><%= contact.humanized_type %></td>
       </tr>
