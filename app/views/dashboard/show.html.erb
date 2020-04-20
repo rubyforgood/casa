@@ -49,19 +49,23 @@
       </div>
     <% end %>
   </div>
-  <table class="table table-striped table-bordered case-list">
-    <tr>
-      <th>Case Number</th>
-      <th>Teen Program Eligible</th>
-      <th>Actions</th>
-    </tr>
-    <% @casa_cases.each do |casa_case| %>
+  <table class="table case-list" id="casa_cases">
+    <thead>
       <tr>
-        <td><%= casa_case.case_number %></td>
-        <td><%= casa_case.teen_program_eligible %></td>
-        <td><%= link_to("Edit", edit_casa_case_path(casa_case)) %></td>
+        <th>Case Number</th>
+        <th>Teen Program Eligible</th>
+        <th>Actions</th>
       </tr>
-    <% end %>
+    </thead>
+    <tbody>
+      <% @casa_cases.each do |casa_case| %>
+        <tr>
+          <td><%= casa_case.case_number %></td>
+          <td><%= casa_case.teen_program_eligible %></td>
+          <td><%= link_to("Edit", edit_casa_case_path(casa_case)) %></td>
+        </tr>
+      <% end %>
+    </tbody>
   </table>
   <br>
   <div class="row">
@@ -73,18 +77,26 @@
     </div>
   </div>
 
-  <table class="table case-contacts-table">
-    <tr>
-      <th>Date</th>
-      <th>Duration</th>
-      <th>Type</th>
-    </tr>
-    <% @case_contacts.each do |contact| %>
+  <table class="table case-contacts-table" id="case_contacts">
+    <thead>
       <tr>
-        <td><%= contact.occurred_at.strftime('%B %e, %Y') %></td>
-        <td><%= contact.duration_minutes %></td>
-        <td><%= contact.humanized_type %></td>
+        <th>Date</th>
+        <th>Duration</th>
+        <th>Contact Made</th>
+        <th>Contact Medium</th>
+        <th>Type</th>
       </tr>
-    <% end %>
+    </thead>
+    <tbody>
+      <% @case_contacts.each do |contact| %>
+        <tr>
+          <td><%= contact.occurred_at.strftime('%B %e, %Y') %></td>
+          <td><%= contact.duration_minutes %></td>
+          <td><%= contact.contact_made %></td>
+          <td><%= contact.medium_type %></td>
+          <td><%= contact.humanized_type %></td>
+        </tr>
+      <% end %>
+    </tbody>
   </table>
 <% end %>

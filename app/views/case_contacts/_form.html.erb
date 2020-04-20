@@ -10,32 +10,52 @@
       </ul>
     </div>
   <% end %>
-  <div class="field casa-case">
+
+  <div class="field casa-case form-group">
     <%= form.label :casa_case_id %>
-    <%= form.select :casa_case_id, options_from_collection_for_select(current_user.casa_cases, 'id', 'case_number') %>
+    <%= form.select :casa_case_id, options_from_collection_for_select(current_user.casa_cases, 'id', 'case_number', case_contact.casa_case_id), {}, class: "custom-select" %>
   </div>
-  <div class="field contact-type">
+
+  <div class="field contact-type form-group">
     <%= form.label :contact_type %>
-    <% case_contacts = CaseContact::CONTACT_TYPES.map { |contact_type| OpenStruct.new(value: contact_type, label: contact_type.titleize) } %>
-    <%= form.select :contact_type, options_from_collection_for_select(case_contacts, 'value', 'label') %>
+    <% contact_types = CaseContact::CONTACT_TYPES.map { |contact_type| OpenStruct.new(value: contact_type, label: contact_type.titleize) } %>
+    <%= form.select :contact_type, options_from_collection_for_select(contact_types, 'value', 'label', case_contact.contact_type), {}, class: "custom-select" %>
   </div>
-  <div class="field other-contact-type" hidden>
+
+  <div class="field other-contact-type form-group" hidden>
     <%= form.label :other_type_text %>
-    <%= form.text_field :other_type_text %>
+    <%= form.text_field :other_type_text, class: "form-control" %>
   </div>
 
-  <div class="field duration-minutes">
+  <div class="field contact-type form-group">
+    <%= form.label "Contact Made" %>
+    <%= form.select :contact_made, options_for_select([['Yes', true], ['No', false]], case_contact.contact_made), {}, class: "custom-select" %>
+  </div>
+
+  <div class="field contact-type form-group">
+    <%= form.label "Contact Medium" %>
+    <% contact_mediums = CaseContact::CONTACT_MEDIUMS.map { |contact_medium| OpenStruct.new(value: contact_medium, label: contact_medium.titleize) } %>
+    <%= form.select :medium_type, options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type), {}, class: "custom-select" %>
+  </div>
+
+  <div class="field duration-minutes form-group">
     <%= form.label "Duration" %>
-    <%= duration_hours_select(form, @case_contact) %>
-    <%= duration_minutes_select(form, @case_contact) %>
+    <div class="row">
+      <div class="col-sm-6">
+        <%= duration_hours_select(form, @case_contact) %>
+      </div>
+      <div class="col-sm-6">
+        <%= duration_minutes_select(form, @case_contact) %>
+      </div>
+    </div>
   </div>
 
-  <div class="field occurred-at">
+  <div class="field occurred-at form-group">
     <%= form.label :occurred_at %>
-    <%= form.date_field :occurred_at, :value => Time.now.strftime('%Y-%m-%d') %>
+    <%= form.date_field :occurred_at, value: Time.now.strftime('%Y-%m-%d'), class: "form-control" %>
   </div>
 
   <div class="actions">
-    <%= form.submit "Submit" %>
+    <%= form.submit "Submit", class: "btn btn-primary" %>
   </div>
 <% end %>
