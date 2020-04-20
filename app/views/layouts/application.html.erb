@@ -27,8 +27,11 @@
     </nav>
 
     <div class="container">
-      <p class="notice"><%= notice %></p>
+      <% if notice %>
+        <p class="notice"><%= notice %></p>
+      <% end %>
       <p class="alert"><%= alert %></p>
+
       <%= yield %>
     </div>
   </body>
