@@ -104,8 +104,6 @@ ActiveRecord::Schema.define(version: 2020_04_20_004403) do
   add_foreign_key "case_assignments", "users", column: "volunteer_id"
   add_foreign_key "case_contacts", "casa_cases"
   add_foreign_key "case_contacts", "users", column: "creator_id"
-  add_foreign_key "case_updates", "casa_cases"
-  add_foreign_key "case_updates", "users", column: "creator_id"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"
   add_foreign_key "supervisor_volunteers", "users", column: "volunteer_id"
   add_foreign_key "users", "casa_orgs"
