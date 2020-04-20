@@ -37,6 +37,36 @@ class CaseContact < ApplicationRecord
   def use_other_type_text?
     contact_type == 'other'
   end
+
+  def self.to_csv
+    attributes = report_headers
+
+    CSV.generate(headers: true) do |csv|
+      csv << attributes.map(&:titleize)
+
+      all.decorate.each do |case_contact|
+        csv << [
+          case_contact&.id,
+          case_contact&.casa_case&.case_number,
+          case_contact&.duration_minutes,
+          case_contact&.occurred_at,
+          case_contact&.creator&.email,
+          'N/A', # case_contact&.creator&.name, Add back in after user has name field
+          case_contact&.creator&.supervisor&.email,
+          case_contact&.contact_type
+        ]
+      end
+    end
+  end
+
+  def self.report_headers
+    headers = %w[case_contact_id casa_case_number duration occurred_at
+                 creator_email creator_name creator_supervisor_name contact_type]
+
+    # TODO: Issue 119 -- Enable multiple contact types for a case_contact
+    # headers.concat(CaseContact::CONTACT_TYPES.map { |t| "contact_type: #{t}" })
+    headers
+  end
 end
 
 # == Schema Information

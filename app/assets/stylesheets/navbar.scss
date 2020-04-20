@@ -3,12 +3,17 @@
 
   .nav-brand a {
     color: white;
+
     &:hover {
       text-decoration: none;
     }
   }
   strong {
     font-size: 2rem;
+  }
+
+  a.btn {
+    white-space: pre;
   }
 }
 

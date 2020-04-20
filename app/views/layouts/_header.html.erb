@@ -1,0 +1,28 @@
+<nav class="navbar navbar-expand-lg bg-primary">
+  <div class="container">
+    <ul class="navbar-nav">
+      <li class="nav-brand">
+        <strong><%= page_header %></strong>
+      </li>
+    </ul>
+
+  </div>
+
+  <div class="navbar-nav">
+    <% if current_user %>
+      <div class="dropdown">
+        <button class="btn btn-light dropdown-toggle" style="margin-right:12px;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <%= current_user.email %>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <%= link_to "Edit Profile", edit_volunteer_path(current_user), class: "dropdown-item" %>
+
+          <% if current_user.role == "casa_admin" %>
+            <%= link_to "Generate Reports", reports_path, class: "dropdown-item" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+    <%= session_link %>
+  </div>
+</nav>
