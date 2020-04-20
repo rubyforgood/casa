@@ -37,20 +37,6 @@ class CaseContact < ApplicationRecord
   def use_other_type_text?
     contact_type == 'other'
   end
-
-  # This should definitely go into a decorator eventually
-  # def display_duration_minutes
-  #   if duration_minutes >= 60
-  #     hour_value = duration_minutes / 60
-  #     minutes_value = duration_minutes.remainder(60)
-  #
-  #     return "#{hour_value} #{'hour'.pluralize(hour_value)}" if minutes_value.zero?
-  #
-  #     "#{hour_value} #{'hour'.pluralize(hour_value)} #{duration_minutes.remainder(60)} minutes"
-  #   else
-  #     "#{duration_minutes} minutes"
-  #   end
-  # end
 end
 
 # == Schema Information

@@ -1,2 +1,2 @@
-module SupervisorVolunteersHelper # rubocop:todo Style/Documentation
+module SupervisorVolunteersHelper
 end
