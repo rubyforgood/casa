@@ -1,6 +1,5 @@
 require 'rails_helper'
 
-# rubocop:todo Metrics/BlockLength
 RSpec.describe '/casa_cases', type: :request do
   # CasaCase. As you add validations to CasaCase, be sure to
   # adjust the attributes here as well.
@@ -140,4 +139,3 @@ RSpec.describe '/casa_cases', type: :request do
     end
   end
 end
-# rubocop:enable Metrics/BlockLength

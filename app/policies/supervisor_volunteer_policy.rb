@@ -1,4 +1,4 @@
-class SupervisorVolunteerPolicy # rubocop:todo Style/Documentation
+class SupervisorVolunteerPolicy
   include PolicyHelper
   attr_reader :user, :record
 

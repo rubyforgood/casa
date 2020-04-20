@@ -1,4 +1,4 @@
-module ApplicationHelper # rubocop:todo Style/Documentation
+module ApplicationHelper
   def page_header
     page_header_text = "CASA - Prince George's County, MD"
     user_signed_in? ? link_to(page_header_text, root_path) : page_header_text

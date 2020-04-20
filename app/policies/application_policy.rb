@@ -1,4 +1,4 @@
-class ApplicationPolicy # rubocop:todo Style/Documentation
+class ApplicationPolicy
   attr_reader :user, :record
 
   def initialize(user, record)
@@ -34,7 +34,7 @@ class ApplicationPolicy # rubocop:todo Style/Documentation
     false
   end
 
-  class Scope # rubocop:todo Style/Documentation
+  class Scope
     attr_reader :user, :scope
 
     def initialize(user, scope)

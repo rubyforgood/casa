@@ -4,3 +4,6 @@ require:
 
 Style/Documentation:
   Enabled: False
+
+Metrics/BlockLength:
+  Enabled: False
