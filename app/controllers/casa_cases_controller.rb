@@ -1,4 +1,3 @@
-# rubocop:todo Style/Documentation
 class CasaCasesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_casa_case, only: %i[show edit update destroy]
@@ -41,8 +40,8 @@ class CasaCasesController < ApplicationController
   # PATCH/PUT /casa_cases/1.json
   def update
     respond_to do |format|
-      if @casa_case.update(casa_case_params)
-        format.html { redirect_to @casa_case, notice: 'Casa case was successfully updated.' }
+      if @casa_case.update(casa_case_update_params)
+        format.html { redirect_to root_path, notice: 'Casa case was successfully updated.' }
         format.json { render :show, status: :ok, location: @casa_case }
       else
         format.html { render :edit }
@@ -72,5 +71,9 @@ class CasaCasesController < ApplicationController
   def casa_case_params
     params.require(:casa_case).permit(:case_number, :teen_program_eligible)
   end
+
+  # Separate params so only admins can update the case_number
+  def casa_case_update_params
+    params.require(:casa_case).permit(policy(@casa_case).permitted_attributes)
+  end
 end
-# rubocop:enable Style/Documentation

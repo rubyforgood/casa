@@ -1,22 +1,23 @@
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.describe CasaCasePolicy::Scope, "#resolve" do
-  it "returns all CasaCases when user is admin" do
-    user = create(:user, :casa_admin)
-    all_casa_cases = create_list(:casa_case, 2)
+RSpec.describe CasaCasePolicy do
+  subject { described_class }
 
-    scope = CasaCasePolicy::Scope.new(user, CasaCase)
+  permissions :update_case_number? do
+    context 'when user is an admin' do
+      it 'returns true' do
+        casa_case = create(:casa_case)
+        admin = create(:user, :casa_admin)
+        expect(Pundit.policy(admin, casa_case).update_case_number?).to eq true
+      end
+    end
 
-    expect(scope.resolve).to contain_exactly(*all_casa_cases)
-  end
-
-  it "returns volunteer's active cases when user is volunteer" do
-    user = create(:user, :volunteer)
-    create_list(:casa_case, 2)
-    casa_cases = create_list(:casa_case, 2, volunteers: [user])
-
-    scope = CasaCasePolicy::Scope.new(user, CasaCase)
-
-    expect(scope.resolve).to eq casa_cases
+    context 'when user is a volunteer' do
+      it 'returns false' do
+        casa_case = create(:casa_case)
+        volunteer = create(:user, :volunteer)
+        expect(Pundit.policy(volunteer, casa_case).update_case_number?).to eq false
+      end
+    end
   end
 end
