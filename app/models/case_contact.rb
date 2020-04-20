@@ -44,8 +44,10 @@ end
 # Table name: case_contacts
 #
 #  id               :bigint           not null, primary key
+#  contact_made     :boolean          default(FALSE)
 #  contact_type     :string           not null
 #  duration_minutes :integer          not null
+#  medium_type      :string
 #  occurred_at      :datetime         not null
 #  other_type_text  :string
 #  created_at       :datetime         not null
