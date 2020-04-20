@@ -1,9 +1,7 @@
 <% if policy(:dashboard).see_volunteers_section? %>
   <div class="row">
-    <div class="col-sm-4 col-md-3">
+    <div class="col-sm-12 dashboard-table-header">
       <h1>Volunteers</h1>
-    </div>
-    <div class="col-sm-8 col-md-9">
       <%= link_to "New Volunteer", new_volunteer_path, class: "btn btn-primary" %>
     </div>
   </div>
@@ -42,14 +40,12 @@
 <% if policy(:dashboard).see_cases_section? %>
   <br>
   <div class="row">
-    <div class="col-sm-3 col-md-2">
+    <div class="col-sm-12 dashboard-table-header">
       <h1>Cases</h1>
-    </div>
-    <% if policy(:dashboard).see_volunteers_section? %>
-      <div class="col-sm-9 col-md-10">
+      <% if policy(:dashboard).see_volunteers_section? %>
         <%= link_to "New Case", new_casa_case_path, class: "btn btn-primary" %>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
   </div>
   <table class="table case-list" id="casa_cases">
     <thead>
@@ -71,8 +67,11 @@
   </table>
   <br>
   <div class="row">
-    <div class="col-sm-6 col-md-4">
+    <div class="col-sm-12 dashboard-table-header">
       <h1>Case Contacts</h1>
+      <% if policy(:dashboard).create_case_contacts? %>
+        <%= link_to "New Case Contact", new_case_contact_path, class: "btn btn-primary" %>
+      <% end %>
     </div>
   </div>
 

@@ -1,4 +1,3 @@
-# rubocop:todo Style/Documentation
 class SupervisorVolunteersController < ApplicationController
   before_action :set_supervisor_volunteer, only: %i[show edit update destroy]
 
@@ -72,4 +71,3 @@ class SupervisorVolunteersController < ApplicationController
     params.require(:supervisor_volunteer).permit(:volunteer_id, :supervisor_id)
   end
 end
-# rubocop:enable Style/Documentation

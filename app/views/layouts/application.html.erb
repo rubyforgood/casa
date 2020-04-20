@@ -11,20 +11,7 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg bg-primary">
-      <div class="container">
-        <ul class="navbar-nav">
-          <li class="nav-brand">
-            <strong><%= page_header %></strong>
-          </li>
-        </ul>
-        <%= edit_profile_link %>
-      </div>
-
-      <div class="navbar-nav">
-        <%= session_link %>
-      </div>
-    </nav>
+    <%= render 'layouts/header' %>
 
     <div class="container">
       <p class="notice"><%= notice %></p>
