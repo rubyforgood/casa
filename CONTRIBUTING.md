@@ -12,7 +12,7 @@ Here are the basic steps to submit a pull request.
 
 1. Fork the [repo] and clone your forked repo locally on your machine.
 
-1. Follow [setup guidelines] to get the project setup locally.
+1. Follow [setup guidelines](https://github.com/rubyforgood/casa#setup-to-develop) to get the project setup locally.
 
 1. Run the tests. We only take pull requests with passing tests, and it's great to know that you have a clean slate: `bundle exec rake`
 
