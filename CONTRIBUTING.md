@@ -4,11 +4,11 @@ We ♥ contributors! By participating in this project, you agree to abide by the
 
 If you're unsure about an issue or have any questions or concerns, just ask in an *existing issue* or *open a new issue*. If you would like to talk to other contributors and get more context about the project before jumping in, you can request to join [RubyForGood Slack](https://rubyforgood.herokuapp.com/). Once you are in Slack, come by `#casa` channel, introducce yourself and ask us questions!
 
-If you don't have any questions and the issue is clear and not currently assigned to anyone, you can open a PR as well. You won't be yelled at for giving your best effort. The worst that can happen is that you'll be politely asked to change something. We appreciate any sort of contributions, and don't want a wall of rules to get in the way of that.
+If you don't have any questions, the issue is clear, and no one has commented saying they are working on the isssue, you can work on it! If you are so inclined, you can open a draft PR as you continue to work on it. You won't be yelled at for giving your best effort. The worst that can happen is that you'll be politely asked to change something. We appreciate any sort of contributions, and don't want a wall of rules to get in the way of that.
 
 Here are the basic steps to submit a pull request.
 
-1. Claim an issue on [our issue tracker][issues] by assigning it to yourself (core team member) or commenting. If the issue doesn't exist yet, open it.
+1. Claim an issue on [our issue tracker][issues] by commenting on the issue saying you are working on it. If the issue doesn't exist yet, open it.
 
 1. Fork the [repo] and clone your forked repo locally on your machine.
 
@@ -35,5 +35,5 @@ Some things that will increase the chance that your pull request is accepted:
 If you are wondering how to keep your fork in sync with the main [repo], follow this [github guide](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork).
 
 [code of conduct]: https://github.com/rubyforgood/code-of-conduct
-[issues]: https://github.com/rubyforgood/casa/issues?q=is%3Aopen+is%3Aissue+no%3Aassignee+label%3A%22Status%3A+Available%22
+[issues]: https://github.com/rubyforgood/casa/issues?q=is%3Aopen+is%3Aissue+label%3A%22Status%3A+Available%22
 [repo]: https://github.com/rubyforgood/casa
