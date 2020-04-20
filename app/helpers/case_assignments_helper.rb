@@ -1,2 +1,2 @@
-module CaseAssignmentsHelper # rubocop:todo Style/Documentation
+module CaseAssignmentsHelper
 end

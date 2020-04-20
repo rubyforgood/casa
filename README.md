@@ -79,3 +79,9 @@ Beyond `gems` for the app's dependencies, this repo also has a dependency on `Gr
 
 1. If your rake/rake commands hang forever instead of running, try: `rails app:update:bin #`
 1. There is currently no option for a user to sign up and create an account through the UI. This is intentional. If you want to log in, use a pre-seeded user account and its credentials.
+
+### Communication
+
+Most conversation happens in the #casa channel of the Ruby For Good slack. You can get access here: https://rubyforgood.herokuapp.com/
+
+You can also open an issue or comment on an issue on github and a maintainer will reply to you. 

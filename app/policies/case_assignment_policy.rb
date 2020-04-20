@@ -1,4 +1,4 @@
-class CaseAssignmentPolicy # rubocop:todo Style/Documentation
+class CaseAssignmentPolicy
   include PolicyHelper
   attr_reader :user, :record
 

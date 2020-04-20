@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DeviseCreateAllCasaAdmins < ActiveRecord::Migration[6.0] # rubocop:todo Style/Documentation
+class DeviseCreateAllCasaAdmins < ActiveRecord::Migration[6.0]
   def change
     create_table :all_casa_admins do |t|
       ## Database authenticatable

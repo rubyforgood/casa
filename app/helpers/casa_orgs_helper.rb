@@ -1,2 +1,2 @@
-module CasaOrgsHelper # rubocop:todo Style/Documentation
+module CasaOrgsHelper
 end
