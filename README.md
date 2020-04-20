@@ -52,19 +52,19 @@ https://casa-r4g-staging.herokuapp.com/
 If you have any troubles, also look at `.travis.yml` which is what makes the CI build run
 
 1. install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
-2. when you cd into the project diretory, let your version manager install the ruby version in `.ruby-version`
-3. `gem install bundler`
-4. Make sure that postgres is installed [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database (if you have an older version of postgres)
-5. Make sure [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) is installed
-6. Make sure [yarn](https://classic.yarnpkg.com/en/docs/instal) is installed
-7. Make sure you have [google chrome](https://chromedriver.chromium.org/) installed so the selenium tests can run
-8. `bundle install`
-9. `yarn`
-10. `bundle exec rails webpacker:compile`
-11. `bundle exec rails db:setup # requires running local postgres`
-12. `bundle exec rails spec`
-13. `rails db:migrate`
-14. `bundle exec rails server` # run server
+1. when you cd into the project diretory, let your version manager install the ruby version in `.ruby-version`
+1. `gem install bundler`
+1. Make sure that postgres is installed [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database (if you have an older version of postgres)
+1. Make sure [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) is installed
+1. Make sure [yarn](https://classic.yarnpkg.com/en/docs/instal) is installed
+1. Make sure you have [google chrome](https://chromedriver.chromium.org/) installed so the selenium tests can run
+1. `bundle install`
+1. `yarn`
+1. `bundle exec rails webpacker:compile`
+1. `bundle exec rails db:setup # requires running local postgres`
+1. `bundle exec rails spec`
+1. `rails db:migrate`
+1. `bundle exec rails server` # run server
 
 ### Documentation
 
