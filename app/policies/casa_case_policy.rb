@@ -1,4 +1,4 @@
-class CasaCasePolicy # rubocop:todo Style/Documentation
+class CasaCasePolicy
   include PolicyHelper
   attr_reader :user, :record
 
@@ -23,8 +23,21 @@ class CasaCasePolicy # rubocop:todo Style/Documentation
       when 'volunteer'
         scope.actively_assigned_to(user)
       else
-        raise "unrecognized role"
+        raise 'unrecognized role'
       end
+    end
+  end
+
+  def update_case_number?
+    user.casa_admin?
+  end
+
+  def permitted_attributes
+    case @user.role
+    when 'casa_admin'
+      %i[case_number teen_program_eligible]
+    else
+      [:teen_program_eligible]
     end
   end
 

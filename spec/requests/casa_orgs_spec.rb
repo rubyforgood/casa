@@ -12,8 +12,7 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe '/casa_orgs', type: :request do # rubocop:todo Metrics/BlockLength
-  # CasaOrg. As you add validations to CasaOrg, be sure to
+RSpec.describe '/casa_orgs', type: :request do # CasaOrg. As you add validations to CasaOrg, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) do
     skip('Add a hash of attributes valid for your model')

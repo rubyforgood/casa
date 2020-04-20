@@ -1,5 +1,29 @@
 <h1>New CASA Case</h1>
 
-<%= render 'form', casa_case: @casa_case %>
+<br>
 
-<%= link_to 'Back', casa_cases_path %>
+<div class="row">
+  <div class="col-sm-6">
+    <%= form_with(model: @casa_case, local: true) do |form| %>
+      <%= render "/shared/error_messages", resource: @casa_case %>
+
+      <div class="field form-group">
+        <%= form.label :case_number %>
+        <%= form.text_field :case_number, class: "form-control" %>
+      </div>
+
+      <div class="field">
+        <%= form.label :teen_program_eligible %>
+        <%= form.check_box :teen_program_eligible %>
+      </div>
+
+      <br>
+
+      <div class="actions">
+        <%= form.submit "Create CASA Case", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= link_to 'Back', :back %>

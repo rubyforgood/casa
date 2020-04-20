@@ -5,6 +5,8 @@ class CaseContact < ApplicationRecord
   belongs_to :creator, class_name: 'User'
   belongs_to :casa_case
 
+  validates :contact_type, presence: true
+
   CONTACT_TYPES = %w[
     youth
     school
@@ -18,6 +20,14 @@ class CaseContact < ApplicationRecord
     court
     other
   ].freeze
+
+  CONTACT_MEDIUMS = %w[
+    in-person
+    text/email
+    video
+    voice-only
+    letter
+  ].freeze
   enum contact_type: CONTACT_TYPES.zip(CONTACT_TYPES).to_h
 
   def humanized_type
@@ -27,20 +37,6 @@ class CaseContact < ApplicationRecord
   def use_other_type_text?
     contact_type == 'other'
   end
-
-  # This should definitely go into a decorator eventually
-  # def display_duration_minutes
-  #   if duration_minutes >= 60
-  #     hour_value = duration_minutes / 60
-  #     minutes_value = duration_minutes.remainder(60)
-  #
-  #     return "#{hour_value} #{'hour'.pluralize(hour_value)}" if minutes_value.zero?
-  #
-  #     "#{hour_value} #{'hour'.pluralize(hour_value)} #{duration_minutes.remainder(60)} minutes"
-  #   else
-  #     "#{duration_minutes} minutes"
-  #   end
-  # end
 end
 
 # == Schema Information
@@ -48,8 +44,10 @@ end
 # Table name: case_contacts
 #
 #  id               :bigint           not null, primary key
+#  contact_made     :boolean          default(FALSE)
 #  contact_type     :string           not null
 #  duration_minutes :integer          not null
+#  medium_type      :string
 #  occurred_at      :datetime         not null
 #  other_type_text  :string
 #  created_at       :datetime         not null

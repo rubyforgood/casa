@@ -1,4 +1,4 @@
-class CaseContactPolicy # rubocop:todo Style/Documentation
+class CaseContactPolicy
   include PolicyHelper
   attr_reader :user, :record
 

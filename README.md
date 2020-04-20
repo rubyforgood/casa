@@ -49,11 +49,18 @@ https://casa-r4g-staging.herokuapp.com/
 
 ### Setup to develop:
 
+If you have any troubles, also look at `.travis.yml` which is what makes the CI build run
+
 1. install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
 1. when you cd into the project diretory, let your version manager install the ruby version in `.ruby-version`
 1. `gem install bundler`
 1. Make sure that postgres is installed [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database (if you have an older version of postgres)
+1. Make sure [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) is installed 
+1. Make sure [yarn](https://classic.yarnpkg.com/en/docs/instal) is installed
+1. Make sure you have [google chrome](https://chromedriver.chromium.org/) installed so the selenium tests can run
 1. `bundle install`
+1. `bundle exec rails webpacker:compile`
+1. `yarn`
 1. `bundle exec rails db:setup`
 1. `bundle exec rails spec`
 1. `rails db:create # requires running local postgres`
@@ -72,3 +79,9 @@ Beyond `gems` for the app's dependencies, this repo also has a dependency on `Gr
 
 1. If your rake/rake commands hang forever instead of running, try: `rails app:update:bin #`
 1. There is currently no option for a user to sign up and create an account through the UI. This is intentional. If you want to log in, use a pre-seeded user account and its credentials.
+
+### Communication
+
+Most conversation happens in the #casa channel of the Ruby For Good slack. You can get access here: https://rubyforgood.herokuapp.com/
+
+You can also open an issue or comment on an issue on github and a maintainer will reply to you. 
