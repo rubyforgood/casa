@@ -5,6 +5,8 @@ class CaseContact < ApplicationRecord
   belongs_to :creator, class_name: 'User'
   belongs_to :casa_case
 
+  validates :contact_type, presence: true
+
   CONTACT_TYPES = %w[
     youth
     school
@@ -17,6 +19,14 @@ class CaseContact < ApplicationRecord
     supervisor
     court
     other
+  ].freeze
+
+  CONTACT_MEDIUMS = %w[
+    in-person
+    text/email
+    video
+    voice-only
+    letter
   ].freeze
   enum contact_type: CONTACT_TYPES.zip(CONTACT_TYPES).to_h
 

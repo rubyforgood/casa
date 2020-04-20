@@ -37,9 +37,12 @@ $('document').ready(() => {
     }
   );
 
-  var table = $('#volunteers').DataTable();
+  // Enable all data tables on dashboard but only filter on volunteers table
+  var volunteers_table = $('table#volunteers').DataTable();
+  $('table#casa_cases').DataTable({"searching": false});
+  $('table#case_contacts').DataTable({"searching": false});
 
   $('.volunteer-filters input[type="checkbox"]').on('click', function() {
-    table.draw();
+    volunteers_table.draw();
   })
 });

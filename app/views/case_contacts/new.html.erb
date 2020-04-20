@@ -1,5 +1,13 @@
 <h1>New Case Contact</h1>
 
-<%= render 'form', case_contact: @case_contact %>
+<br>
 
-<%= link_to 'Back', case_contacts_path %>
+<div class="row">
+  <div class="col-sm-6">
+    <%= render 'form', case_contact: @case_contact %>
+  </div>
+</div>
+
+<br>
+
+<%= link_to 'Back', :back %>
