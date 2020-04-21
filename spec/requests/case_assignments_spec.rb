@@ -15,13 +15,9 @@ require 'rails_helper'
 RSpec.describe '/case_assignments', type: :request do
   # CaseAssignment. As you add validations to CaseAssignment, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) do
-    skip('Add a hash of attributes valid for your model')
-  end
+  let(:valid_attributes) { skip('Add a hash of attributes valid for your model') }
 
-  let(:invalid_attributes) do
-    skip('Add a hash of attributes invalid for your model')
-  end
+  let(:invalid_attributes) { skip('Add a hash of attributes invalid for your model') }
 
   describe 'GET /index' do
     it 'renders a successful response' do
@@ -84,9 +80,7 @@ RSpec.describe '/case_assignments', type: :request do
 
   describe 'PATCH /update' do
     context 'with valid parameters' do
-      let(:new_attributes) do
-        skip('Add a hash of attributes valid for your model')
-      end
+      let(:new_attributes) { skip('Add a hash of attributes valid for your model') }
 
       it 'updates the requested case_assignment' do
         case_assignment = CaseAssignment.create! valid_attributes
@@ -115,9 +109,9 @@ RSpec.describe '/case_assignments', type: :request do
   describe 'DELETE /destroy' do
     it 'destroys the requested case_assignment' do
       case_assignment = CaseAssignment.create! valid_attributes
-      expect do
-        delete case_assignment_url(case_assignment)
-      end.to change(CaseAssignment, :count).by(-1)
+      expect { delete case_assignment_url(case_assignment) }.to change(CaseAssignment, :count).by(
+        -1
+      )
     end
 
     it 'redirects to the case_assignments list' do

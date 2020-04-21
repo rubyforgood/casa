@@ -1,4 +1,12 @@
-class DashboardPolicy < Struct.new(:user, :dashboard)
+class DashboardPolicy
+  include PolicyHelper
+  attr_reader :user, :dashboard
+
+  def initialize(user, dashboard)
+    @user = user
+    @dashboard = dashboard
+  end
+
   def show?
     true
   end

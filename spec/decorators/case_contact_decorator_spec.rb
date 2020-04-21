@@ -48,7 +48,7 @@ RSpec.describe CaseContactDecorator do
 
     context 'when medium_type is not nil' do
       it 'returns the titleized medium_type' do
-        case_contact = create(:case_contact, medium_type: "in-person")
+        case_contact = create(:case_contact, medium_type: 'in-person')
 
         expect(case_contact.decorate.medium_type).to eq 'In Person'
       end

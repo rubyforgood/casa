@@ -1,2 +1,1 @@
-module CasaCasesHelper
-end
+module CasaCasesHelper; end

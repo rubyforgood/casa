@@ -6,10 +6,11 @@ class ReportsController < ApplicationController
   def index; end
 
   def show
-    @case_contacts = CaseContact.all
-
     respond_to do |format|
-      format.csv { send_data @case_contacts.to_csv, filename: "case-contacts-report-#{Time.zone.now.to_i}.csv" }
+      format.csv do
+        send_data CaseContactReport.to_csv,
+                  filename: "case-contacts-report-#{Time.zone.now.to_i}.csv"
+      end
     end
   end
 end

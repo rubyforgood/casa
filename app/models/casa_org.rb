@@ -1,5 +1,4 @@
-class CasaOrg < ApplicationRecord
-end
+class CasaOrg < ApplicationRecord; end
 
 # == Schema Information
 #

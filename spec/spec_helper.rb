@@ -16,6 +16,6 @@ RSpec.configure do |config|
   config.shared_context_metadata_behavior = :apply_to_host_groups
 
   config.before(:each, type: :system) do
-    driven_by :selenium, using: :chrome, options: { args: ['headless'] }
+    driven_by :selenium, using: :chrome, options: { args: %w[headless] }
   end
 end

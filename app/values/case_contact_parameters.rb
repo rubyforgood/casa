@@ -1,9 +1,15 @@
 # Calculate values when using case contact parameters
 class CaseContactParameters < SimpleDelegator
   def initialize(params)
-    params = params
-             .require(:case_contact)
-             .permit(:contact_type, :other_type_text, :duration_minutes, :occurred_at, :contact_made, :medium_type)
+    params =
+      params.require(:case_contact).permit(
+        :contact_type,
+        :other_type_text,
+        :duration_minutes,
+        :occurred_at,
+        :contact_made,
+        :medium_type
+      )
 
     super(params)
   end

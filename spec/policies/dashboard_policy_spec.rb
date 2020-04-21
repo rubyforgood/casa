@@ -1,27 +1,46 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe DashboardPolicy do
   subject { described_class }
 
   permissions :show? do
-    it "returns true" do
+    it 'permits user to show' do
       expect(subject).to permit(create(:user))
     end
   end
 
   permissions :see_volunteers_section? do
-    it "allows casa_admins" do
+    it 'allows casa_admins' do
       expect(subject).to permit(create(:user, :casa_admin))
     end
 
-    it "does not allow volunteers" do
+    it 'does not allow volunteers' do
       expect(subject).not_to permit(create(:user, :volunteer))
     end
   end
 
+  permissions :create_cases_section? do
+    context 'when user is a volunteer' do
+      it 'permits user to see cases section' do
+        volunteer = create(:user, :volunteer)
+        expect(Pundit.policy(volunteer, :dashboard).create_case_contacts?).to eq true
+      end
+    end
+
+    context 'when user is an admin' do
+      it 'permits user to see cases section' do
+        casa_admin = create(:user, :casa_admin)
+        expect(Pundit.policy(casa_admin, :dashboard).create_case_contacts?).to eq false
+      end
+    end
+  end
+
   permissions :see_cases_section? do
-    it "returns true" do
-      expect(subject).to permit(create(:user))
+    context 'when user is a volunteer' do
+      it 'permits user to see cases section' do
+        volunteer = create(:user, :volunteer)
+        expect(Pundit.policy(volunteer, :dashboard).see_cases_section?).to eq true
+      end
     end
   end
 end

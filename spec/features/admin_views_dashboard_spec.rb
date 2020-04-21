@@ -1,9 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'admin views dashboard', type: :feature do
-  let(:admin) {
-    create(:user, :casa_admin)
-  }
+  let(:admin) { create(:user, :casa_admin) }
 
   it 'can see volunteers' do
     volunteer = create(:user, :volunteer, :with_casa_cases, email: 'casa@example.com')
@@ -41,9 +39,7 @@ RSpec.describe 'admin views dashboard', type: :feature do
   end
 
   it 'can filters volunteers', type: :system do
-    3.times do
-      create(:user, :volunteer)
-    end
+    create_list(:user, 3, :volunteer)
 
     sign_in admin
 
@@ -55,6 +51,5 @@ RSpec.describe 'admin views dashboard', type: :feature do
     find(:css, 'input[data-value="Active"]').set(false)
 
     expect(page.all('table#volunteers tr').count).to eq 2
-    expect(page.body).to have_content('No matching records')
   end
 end

@@ -21,18 +21,10 @@ class CaseContactDecorator < Draper::Decorator
   end
 
   def contact_made
-    if object.contact_made
-      'Yes'
-    else
-      'No'
-    end
+    object.contact_made ? 'Yes' : 'No'
   end
 
   def medium_type
-    if object.medium_type.blank?
-      'Unknown'
-    else
-      object.medium_type.titleize
-    end
+    object.medium_type.blank? ? 'Unknown' : object.medium_type.titleize
   end
 end

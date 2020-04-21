@@ -7,23 +7,17 @@ RSpec.describe '/case_contacts', type: :request do
 
   let(:valid_attributes) do
     attributes_for(:case_contact).merge(
-      creator: volunteer,
-      casa_case: create(:casa_case, volunteers: [volunteer]),
+      creator: volunteer, casa_case: create(:casa_case, volunteers: [volunteer])
     )
   end
 
   let(:invalid_attributes) do
     {
-      creator: nil,
-      casa_case_id: parent_casa_case.id,
-      contact_type: nil,
-      occurred_at: Time.zone.now
+      creator: nil, casa_case_id: parent_casa_case.id, contact_type: nil, occurred_at: Time.zone.now
     }
   end
 
-  before do
-    sign_in volunteer
-  end
+  before { sign_in volunteer }
 
   describe 'GET /index' do
     it 'renders a successful response' do
@@ -44,9 +38,10 @@ RSpec.describe '/case_contacts', type: :request do
   describe 'POST /create' do
     context 'with invalid parameters' do
       it 'does not create a new CaseContact' do
-        expect {
-          post case_contacts_url, params: { case_contact: invalid_attributes }
-        }.to change(CaseContact, :count).by(0)
+        expect { post case_contacts_url, params: { case_contact: invalid_attributes } }.to change(
+          CaseContact,
+          :count
+        ).by(0)
       end
 
       it 'renders a successful response (i.e. to display the new template)' do
@@ -58,12 +53,11 @@ RSpec.describe '/case_contacts', type: :request do
 
   describe 'PATCH /update' do
     context 'with valid parameters' do
-      let(:new_attributes) {
+      let(:new_attributes) do
         attributes_for(:case_contact).merge(
-          creator: other_volunteer,
-          casa_case: create(:casa_case, volunteers: [volunteer])
+          creator: other_volunteer, casa_case: create(:casa_case, volunteers: [volunteer])
         )
-      }
+      end
 
       it 'updates the requested case_contact' do
         case_contact = CaseContact.create! valid_attributes
@@ -92,9 +86,7 @@ RSpec.describe '/case_contacts', type: :request do
   describe 'DELETE /destroy' do
     it 'destroys the requested case_contact' do
       case_contact = CaseContact.create! valid_attributes
-      expect {
-        delete case_contact_url(case_contact)
-      }.to change(CaseContact, :count).by(-1)
+      expect { delete case_contact_url(case_contact) }.to change(CaseContact, :count).by(-1)
     end
 
     it 'redirects to the case_contacts list' do

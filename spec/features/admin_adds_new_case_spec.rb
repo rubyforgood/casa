@@ -1,24 +1,22 @@
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.feature "admin adds a new case", type: :feature do
-  scenario "is successful" do
+RSpec.describe 'admin adds a new case', type: :feature do
+  it 'is successful' do
     admin = create(:user, :casa_admin)
-    case_number = "12345"
+    case_number = '12345'
     sign_in admin
     login_as admin
     visit root_path
-    expect(page).to have_selector(".case-list")
+    expect(page).to have_selector('.case-list')
 
-    click_on "New Case"
+    click_on 'New Case'
     fill_in 'Case number', with: case_number
 
-
     expect(find_field('Case number').value).to eq case_number
-    check "Teen program eligible"
-    has_checked_field? "Teen program eligible"
+    check 'Teen program eligible'
+    has_checked_field? 'Teen program eligible'
 
-
-    click_on "Create CASA Case"
+    click_on 'Create CASA Case'
     expect(page.body).to have_content(case_number)
   end
 end

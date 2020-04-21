@@ -1,7 +1,6 @@
 class User < ApplicationRecord
   has_paper_trail
-  devise :database_authenticatable,
-         :recoverable, :rememberable, :validatable
+  devise :database_authenticatable, :recoverable, :rememberable, :validatable
 
   belongs_to :casa_org
 
