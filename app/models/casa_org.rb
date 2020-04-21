@@ -1,4 +1,6 @@
-class CasaOrg < ApplicationRecord; end
+class CasaOrg < ApplicationRecord
+  validates :name, presence: true
+end
 
 # == Schema Information
 #

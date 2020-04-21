@@ -1,7 +1,7 @@
 <%= form_with(model: case_contact, local: true) do |form| %>
   <% if case_contact.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(case_contact.errors.count, "error") %> prohibited this case_contact from being saved:</h2>
+      <h6><%= pluralize(case_contact.errors.count, "error") %> prohibited this case_contact from being saved:</h6>
 
       <ul>
         <% case_contact.errors.full_messages.each do |message| %>
@@ -12,8 +12,19 @@
   <% end %>
 
   <div class="field casa-case form-group">
-    <%= form.label :casa_case_id %>
-    <%= form.select :casa_case_id, options_from_collection_for_select(current_user.casa_cases, 'id', 'case_number', case_contact.casa_case_id), {}, class: "custom-select" %>
+    <% if current_user.casa_cases.length > 1 %>
+      <label for="case_contact_casa_case">Select all relevant CASA cases</label>
+    <% else %>
+      <label for="case_contact_casa_case">CASA case</label>
+    <% end %>
+    <% current_user.casa_cases.each_with_index do |casa_case, index| %>
+      <div class="form-check">
+        <input class="form-check-input casa-case-id-check" type="checkbox" value="<%= casa_case.id %>" name="case_contact[casa_case_id][<%= index %>]" <% if index.zero? %>checked required<% end %>>
+        <label class="form-check-label" for="casa-case-id-check">
+          <%= casa_case.case_number %>
+        </label>
+      </div>
+    <% end %>
   </div>
 
   <div class="field contact-type form-group">

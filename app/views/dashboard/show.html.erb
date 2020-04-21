@@ -88,7 +88,7 @@
     <tbody>
       <% @case_contacts.each do |contact| %>
         <tr>
-          <td><%= contact.occurred_at.strftime('%B %e, %Y') %></td>
+          <td data-sort="<%= contact.occurred_at.strftime("%Y%m%d%H%M%s") %>"><%= contact.occurred_at.strftime('%B %e, %Y') %></td>
           <td><%= contact.duration_minutes %></td>
           <td><%= contact.contact_made %></td>
           <td><%= contact.medium_type %></td>

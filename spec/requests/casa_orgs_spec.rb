@@ -15,9 +15,15 @@ require 'rails_helper'
 RSpec.describe '/casa_orgs', type: :request do
   # CasaOrg. As you add validations to CasaOrg, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { skip('Add a hash of attributes valid for your model') }
+  let(:valid_attributes) do
+    attributes_for(:casa_org)
+  end
 
-  let(:invalid_attributes) { skip('Add a hash of attributes invalid for your model') }
+  let(:invalid_attributes) do
+    {
+      name: nil
+    }
+  end
 
   describe 'GET /index' do
     it 'renders a successful response' do
@@ -82,13 +88,17 @@ RSpec.describe '/casa_orgs', type: :request do
 
   describe 'PATCH /update' do
     context 'with valid parameters' do
-      let(:new_attributes) { skip('Add a hash of attributes valid for your model') }
+      let(:new_attributes) do
+        {
+          name: 'New Name'
+        }
+      end
 
       it 'updates the requested casa_org' do
         casa_org = CasaOrg.create! valid_attributes
         patch casa_org_url(casa_org), params: { casa_org: new_attributes }
         casa_org.reload
-        skip('Add assertions for updated state')
+        expect(casa_org.name).to eq 'New Name'
       end
 
       it 'redirects to the casa_org' do
