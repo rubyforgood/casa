@@ -7,3 +7,11 @@ Style/Documentation:
 
 Metrics/BlockLength:
   Enabled: False
+
+RSpec/MultipleExpectations:
+  Exclude:
+    - 'spec/features/*'
+
+Rspec/ExampleLength:
+  Exclude:
+    - 'spec/features/*'

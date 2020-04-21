@@ -6,8 +6,6 @@ Rails.application.routes.draw do
   resources :casa_cases
   resources :case_contacts
   resources :casa_orgs
-  resources :case_assignments
-  resources :supervisor_volunteers
   resources :volunteers, only: %i[new edit create]
   resources :users, only: [:create]
   resources :reports, only: %i[show index]

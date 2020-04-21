@@ -26,16 +26,17 @@ class CaseContactsController < ApplicationController
   end
 
   def create
-    @case_contact = CaseContact.new(create_case_contact_params)
+    # Iterate over all casa_cases and put success boolean into array to decide
+    # what to render after loop finishes
+    success_array = casa_cases.each_with_object([]) do |casa_case, array|
+      @case_contact = casa_case.case_contacts.create(create_case_contact_params)
+      array << @case_contact.save
+    end
 
-    respond_to do |format|
-      if @case_contact.save
-        format.html { redirect_to root_path, notice: 'Case contact was successfully created.' }
-        format.json { render :show, status: :created, location: @case_contact }
-      else
-        format.html { render :new }
-        format.json { render json: @case_contact.errors, status: :unprocessable_entity }
-      end
+    if success_array.all? true
+      redirect_to root_path, notice: 'Case contact was successfully created.'
+    else
+      render :new
     end
   end
 
@@ -69,13 +70,23 @@ class CaseContactsController < ApplicationController
     @case_contact = CaseContact.find(params[:id])
   end
 
+  def casa_cases
+    # casa_case_id params are formatted like this: {"0"=>"123", "1"=>"124", "2"=>"127"}
+    case_id_array = []
+
+    params[:case_contact][:casa_case_id].each_value do |casa_case_id|
+      case_id_array << casa_case_id
+    end
+
+    CasaCase.where(id: case_id_array)
+  end
+
   # This can probably be combined with case_contact_params below, but was unsure about
   # this line `.with_casa_case(current_user.casa_cases.first)`
   def create_case_contact_params
     CaseContactParameters
       .new(params)
       .with_creator(current_user)
-      .with_casa_case(CasaCase.find(params[:case_contact][:casa_case_id]))
       .with_converted_duration_minutes(params[:case_contact][:duration_hours].to_i)
   end
 

@@ -9,7 +9,7 @@ RSpec.describe 'volunteer adds a case contact', type: :feature do
 
     visit new_case_contact_path
 
-    select volunteer_casa_case_one.case_number, from: 'case_contact[casa_case_id]'
+    find(:css, "input.casa-case-id-check[value='#{volunteer_casa_case_one.id}']").set(true)
     select 'School', from: 'case_contact[contact_type]'
     select '1 hour', from: 'case_contact[duration_hours]'
     select '45 minutes', from: 'case_contact[duration_minutes]'
@@ -30,7 +30,7 @@ RSpec.describe 'volunteer adds a case contact', type: :feature do
 
     visit new_case_contact_path
 
-    select volunteer_casa_case_one.case_number, from: 'case_contact[casa_case_id]'
+    find(:css, "input.casa-case-id-check[value='#{volunteer_casa_case_one.id}']").set(true)
     select 'School', from: 'case_contact[contact_type]'
     expect(page).not_to have_selector '#case_contact_other_type_text'
     select '3 hours', from: 'case_contact[duration_hours]'
