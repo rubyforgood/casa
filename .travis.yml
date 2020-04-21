@@ -24,7 +24,6 @@ install:
 script:
   - bundle exec rails webpacker:compile
   - RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rails spec
-  - bundle exec rubocop
   # deploy:
   #   provider: heroku
   #   api_key:
