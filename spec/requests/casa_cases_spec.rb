@@ -27,7 +27,7 @@ RSpec.describe '/casa_cases', type: :request do
 
   describe 'GET /new' do
     it 'renders a successful response' do
-      sign_in create(:user)
+      sign_in create(:user, :casa_admin)
       get new_casa_case_url
       expect(response).to be_successful
     end

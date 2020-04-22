@@ -5,20 +5,25 @@ class CasaCasesController < ApplicationController
   # GET /casa_cases
   # GET /casa_cases.json
   def index
-    @casa_cases = CasaCase.all
+    @casa_cases = policy_scope(CasaCase.all)
   end
 
   # GET /casa_cases/1
   # GET /casa_cases/1.json
-  def show; end
+  def show
+    authorize @casa_case
+  end
 
   # GET /casa_cases/new
   def new
     @casa_case = CasaCase.new
+    authorize @casa_case
   end
 
   # GET /casa_cases/1/edit
-  def edit; end
+  def edit
+    authorize @casa_case
+  end
 
   # POST /casa_cases
   # POST /casa_cases.json

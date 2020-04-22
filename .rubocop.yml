@@ -43,3 +43,11 @@ RSpec/ExampleLength:
 
 RSpec/NamedSubject:
   Enabled: False
+
+RSpec/RepeatedExample:
+  Exclude:
+    - 'spec/policies/**/*'
+
+RSpec/RepeatedDescription:
+  Exclude:
+    - 'spec/policies/**/*'
