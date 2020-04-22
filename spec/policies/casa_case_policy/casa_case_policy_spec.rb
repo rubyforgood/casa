@@ -74,6 +74,15 @@ RSpec.describe CasaCasePolicy do
       expect(subject).to permit(create(:user, :casa_admin))
     end
 
+    context 'when volunteer is assigned' do
+      it 'allows the volunteer' do
+        volunteer = create(:user, :volunteer)
+        casa_case = create(:casa_case)
+        volunteer.casa_cases << casa_case
+        expect(subject).to permit(volunteer, casa_case)
+      end
+    end
+
     it 'does not allow volunteers who are unassigned' do
       expect(subject).not_to permit(create(:user, :volunteer), create(:casa_case))
     end
