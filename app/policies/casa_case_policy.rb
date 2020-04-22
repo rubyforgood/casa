@@ -57,7 +57,7 @@ class CasaCasePolicy
   end
 
   def update?
-    _is_supervisor_or_casa_admin?
+    _is_supervisor_or_casa_admin? || _is_volunteer_actively_assigned_to_case?
   end
 
   def destroy?
