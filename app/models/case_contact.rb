@@ -5,7 +5,7 @@ class CaseContact < ApplicationRecord
   belongs_to :creator, class_name: 'User'
   belongs_to :casa_case
 
-  validates :contact_type, presence: true
+  # validates :contact_type, presence: true
 
   CONTACT_TYPES = %w[
     youth
@@ -21,10 +21,30 @@ class CaseContact < ApplicationRecord
   ].freeze
 
   CONTACT_MEDIUMS = %w[in-person text/email video voice-only letter].freeze
-  enum contact_type: CONTACT_TYPES.zip(CONTACT_TYPES).to_h
+  # enum contact_type: CONTACT_TYPES.zip(CONTACT_TYPES).to_h
 
   def humanized_type
-    contact_type.humanize.titleize.to_s
+    # contact_type.humanize.titleize.to_s
+    # "#{contact_types.map.humanize.titleize}#{' - ' + other_type_text if use_other_type_text?}"
+  end
+
+  def use_other_type_text?
+    contact_types.include?('other')
+  end
+
+  # Generate array of attributes for All Case Contacts report
+  def attributes_to_array
+    [
+      id,
+      casa_case&.case_number,
+      duration_minutes,
+      occurred_at,
+      creator&.email,
+      'N/A',
+      # creator&.name, Add back in after user has name field
+      creator&.supervisor&.email,
+      contact_types
+    ]
   end
 end
 
