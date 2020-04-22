@@ -1,6 +1,7 @@
+<%= link_to 'Back', :back %>
 <h1>Case Contacts</h1>
 
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
       <th>Creator</th>
@@ -21,7 +22,7 @@
         <td><%= case_contact.contact_type %></td>
         <td><%= case_contact.other_type_text %></td>
         <td><%= case_contact.duration_minutes %></td>
-        <td><%= case_contact.occurred_at %></td>
+        <td><%= case_contact.occurred_at.strftime('%B %e, %Y') %></td>
         <td><%= link_to 'Show', case_contact %></td>
         <td><%= link_to 'Edit', edit_case_contact_path(case_contact) %></td>
         <td><%= link_to 'Destroy', case_contact, method: :delete, data: { confirm: 'Are you sure?' } %></td>

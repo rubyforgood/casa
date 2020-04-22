@@ -29,16 +29,18 @@
           <td id="status-column"><%= volunteer.status %></td>
           <td><%= volunteer.assigned_to_transition_aged_youth? %></td>
           <td><%= volunteer.casa_cases.pluck(:case_number).join(', ') %></td>
-          <td><%= link_to 'Edit', edit_volunteer_path(volunteer) %></td>
+          <td>
+            <%= link_to 'Edit', edit_volunteer_path(volunteer) %>
+          </td>
         </tr>
       <% end %>
     </tbody>
   </table>
+  <br>
 <% end %>
 
 
 <% if policy(:dashboard).see_cases_section? %>
-  <br>
   <div class="row">
     <div class="col-sm-12 dashboard-table-header">
       <h1>Cases</h1>
@@ -53,6 +55,7 @@
         <th>Case Number</th>
         <th>Teen Program Eligible</th>
         <th>Actions</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -60,7 +63,8 @@
         <tr>
           <td><%= casa_case.case_number %></td>
           <td><%= casa_case.teen_program_eligible %></td>
-          <td><%= link_to("Edit", edit_casa_case_path(casa_case)) %></td>
+          <td><%= link_to 'Detail View', casa_case_path(casa_case) %></td>
+          <td><%= link_to 'Edit', edit_casa_case_path(casa_case) %></td>
         </tr>
       <% end %>
     </tbody>

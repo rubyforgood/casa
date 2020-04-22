@@ -8,6 +8,7 @@ require("@rails/activestorage").start()
 require("channels")
 require("jquery")
 require("packs/new_casa_contact")
+require("packs/show_casa_case")
 require("packs/dashboard")
 require('datatables.net-dt')
 import 'bootstrap'

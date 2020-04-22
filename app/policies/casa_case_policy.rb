@@ -40,33 +40,37 @@ class CasaCasePolicy
     end
   end
 
-  # TODO: Uncomment and test the below as necessary, please.
+  def show?
+    _is_supervisor_or_casa_admin? || _is_volunteer_actively_assigned_to_case?
+  end
 
-  # def index?
-  #   casa_admin_of_org?(user, record)
-  # end
+  def edit?
+    _is_supervisor_or_casa_admin? || _is_volunteer_actively_assigned_to_case?
+  end
 
-  # def show?
-  #   casa_admin_of_org?(user, record)
-  # end
+  def new?
+    _is_supervisor_or_casa_admin?
+  end
 
-  # def create?
-  #   casa_admin_of_org?(user, record)
-  # end
+  def create?
+    _is_supervisor_or_casa_admin?
+  end
 
-  # def new?
-  #   casa_admin_of_org?(user, record)
-  # end
+  def update?
+    _is_supervisor_or_casa_admin?
+  end
 
-  # def update?
-  #   casa_admin_of_org?(user, record)
-  # end
+  def destroy?
+    _is_supervisor_or_casa_admin?
+  end
 
-  # def edit?
-  #   casa_admin_of_org?(user, record)
-  # end
+  private
 
-  # def destroy?
-  #   casa_admin_of_org?(user, record)
-  # end
+  def _is_supervisor_or_casa_admin?
+    user.casa_admin? || user.supervisor?
+  end
+
+  def _is_volunteer_actively_assigned_to_case?
+    record.case_assignments.exists?(volunteer_id: user.id, is_active: true)
+  end
 end

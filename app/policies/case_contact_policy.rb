@@ -7,10 +7,6 @@ class CaseContactPolicy
     @record = record
   end
 
-  def _is_creator_or_casa_admin?
-    casa_admin_of_org?(user, record) || record.creator == user
-  end
-
   def index?
     _is_creator_or_casa_admin?
   end
@@ -24,7 +20,8 @@ class CaseContactPolicy
   end
 
   def new?
-    _is_creator_or_casa_admin?
+    # Everyone should be allowed to create a case_contact
+    true
   end
 
   def update?
@@ -57,5 +54,11 @@ class CaseContactPolicy
         raise 'unrecognized role'
       end
     end
+  end
+
+  private
+
+  def _is_creator_or_casa_admin?
+    user.casa_admin? || record.creator == user
   end
 end

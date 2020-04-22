@@ -1,11 +1,20 @@
-<h1>CASA Cases</h1>
+<%= link_to 'Back', :back %>
 
-<table>
+<div class="row">
+  <div class="col-sm-12 dashboard-table-header">
+    <h1>CASA Cases</h1>
+    <%= link_to 'New CASA Case', new_casa_case_path, class: "btn btn-primary" %>
+  </div>
+</div>
+
+<br>
+
+<table class="table table-striped">
   <thead>
     <tr>
       <th>Case number</th>
       <th>Teen program eligible</th>
-      <th colspan="3"></th>
+      <th colspan="3">Actions</th>
     </tr>
   </thead>
 
@@ -23,5 +32,3 @@
 </table>
 
 <br>
-
-<%= link_to 'New CASA Case', new_casa_case_path %>
