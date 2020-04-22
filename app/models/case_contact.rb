@@ -5,8 +5,6 @@ class CaseContact < ApplicationRecord
   belongs_to :creator, class_name: 'User'
   belongs_to :casa_case
 
-  validates :contact_types, presence: true
-
   CONTACT_TYPES = %w[
     youth
     school
@@ -22,6 +20,15 @@ class CaseContact < ApplicationRecord
 
   CONTACT_MEDIUMS = %w[in-person text/email video voice-only letter].freeze
   # enum contact_type: CONTACT_TYPES.zip(CONTACT_TYPES).to_h
+
+  validates :contact_types, presence: true
+  validate :contact_types_included
+
+  def contact_types_included
+    contact_types&.each do |contact_type|
+      errors.add(:contact_types, :invalid) unless CONTACT_TYPES.include? contact_type
+    end
+  end
 
   def humanized_type
     # contact_type.humanize.titleize.to_s
@@ -54,7 +61,7 @@ end
 #
 #  id               :bigint           not null, primary key
 #  contact_made     :boolean          default(FALSE)
-#  contact_type     :string           not null
+#  contact_types    :string           is an Array
 #  duration_minutes :integer          not null
 #  medium_type      :string
 #  occurred_at      :datetime         not null
@@ -66,8 +73,9 @@ end
 #
 # Indexes
 #
-#  index_case_contacts_on_casa_case_id  (casa_case_id)
-#  index_case_contacts_on_creator_id    (creator_id)
+#  index_case_contacts_on_casa_case_id   (casa_case_id)
+#  index_case_contacts_on_contact_types  (contact_types) USING gin
+#  index_case_contacts_on_creator_id     (creator_id)
 #
 # Foreign Keys
 #

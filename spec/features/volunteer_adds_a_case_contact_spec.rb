@@ -15,9 +15,9 @@ RSpec.describe 'volunteer adds a case contact', type: :feature do
     select '45 minutes', from: 'case_contact[duration_minutes]'
     fill_in 'case_contact_occurred_at', with: '04/04/2020'
 
-    expect{
+    expect  do
       click_on 'Submit'
-    }.to change(CaseContact, :count).by(1)
+    end.to change(CaseContact, :count).by(1)
 
     expect(CaseContact.first.casa_case_id).to eq volunteer_casa_case_one.id
     expect(CaseContact.first.contact_types).to include 'school'

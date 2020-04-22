@@ -19,7 +19,7 @@ RSpec.describe '/case_contacts', type: :request do
     {
       creator: nil,
       casa_case_id: { '0' => create(:casa_case, volunteers: [volunteer]).id },
-      contact_types: [],
+      contact_types: ['invalid type'],
       occurred_at: Time.zone.now
     }
   end
@@ -95,7 +95,7 @@ RSpec.describe '/case_contacts', type: :request do
       #
       # We have pended it out because we are not worried about
       # breaking a feature that does not actually exist.
-      xit 'renders a successful response (i.e. to display the edit template)' do
+      it 'renders a successful response (i.e. to display the edit template)' do
         case_contact = create(:case_contact)
         patch case_contact_url(case_contact), params: { case_contact: invalid_attributes }
         expect(response).to be_successful

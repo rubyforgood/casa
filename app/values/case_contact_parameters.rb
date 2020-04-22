@@ -8,7 +8,7 @@ class CaseContactParameters < SimpleDelegator
         :occurred_at,
         :contact_made,
         :medium_type,
-        contact_types: [],
+        contact_types: []
       )
 
     super(params)
