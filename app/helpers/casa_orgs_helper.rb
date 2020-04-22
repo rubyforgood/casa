@@ -1,2 +1,1 @@
-module CasaOrgsHelper
-end
+module CasaOrgsHelper; end

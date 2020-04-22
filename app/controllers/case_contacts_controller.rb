@@ -59,7 +59,9 @@ class CaseContactsController < ApplicationController
   def destroy
     @case_contact.destroy
     respond_to do |format|
-      format.html { redirect_to case_contacts_url, notice: 'Case contact was successfully destroyed.' }
+      format.html do
+        redirect_to case_contacts_url, notice: 'Case contact was successfully destroyed.'
+      end
       format.json { head :no_content }
     end
   end
@@ -91,10 +93,8 @@ class CaseContactsController < ApplicationController
   end
 
   def case_contact_params
-    CaseContactParameters
-      .new(params)
-      .with_creator(current_user)
-      .with_casa_case(current_user.casa_cases.first)
-      .with_converted_duration_minutes(params[:case_contact][:duration_hours].to_i)
+    CaseContactParameters.new(params).with_creator(current_user).with_casa_case(
+      current_user.casa_cases.first
+    ).with_converted_duration_minutes(params[:case_contact][:duration_hours].to_i)
   end
 end

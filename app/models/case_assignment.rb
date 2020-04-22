@@ -2,7 +2,7 @@ class CaseAssignment < ApplicationRecord
   has_paper_trail
 
   belongs_to :casa_case
-  belongs_to :volunteer, class_name: "User", inverse_of: "case_assignments"
+  belongs_to :volunteer, class_name: 'User', inverse_of: 'case_assignments'
 
   validates :casa_case_id, uniqueness: { scope: :volunteer_id } # only 1 row allowed per case-volunteer pair
 end

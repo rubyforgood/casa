@@ -24,9 +24,7 @@ RSpec.describe '/case_contacts', type: :request do
     }
   end
 
-  before do
-    sign_in volunteer
-  end
+  before { sign_in volunteer }
 
   describe 'GET /index' do
     it 'renders a successful response' do
@@ -55,9 +53,10 @@ RSpec.describe '/case_contacts', type: :request do
 
     context 'with invalid parameters' do
       it 'does not create a new CaseContact' do
-        expect do
-          post case_contacts_url, params: { case_contact: invalid_attributes }
-        end.to change(CaseContact, :count).by(0)
+        expect { post case_contacts_url, params: { case_contact: invalid_attributes } }.to change(
+          CaseContact,
+          :count
+        ).by(0)
       end
 
       it 'renders a successful response (i.e. to display the new template)' do
@@ -71,8 +70,7 @@ RSpec.describe '/case_contacts', type: :request do
     context 'with valid parameters' do
       let(:new_attributes) do
         attributes_for(:case_contact).merge(
-          creator: other_volunteer,
-          casa_case: create(:casa_case, volunteers: [volunteer])
+          creator: other_volunteer, casa_case: create(:casa_case, volunteers: [volunteer])
         )
       end
 

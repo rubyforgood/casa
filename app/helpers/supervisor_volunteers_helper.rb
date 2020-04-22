@@ -1,2 +1,1 @@
-module SupervisorVolunteersHelper
-end
+module SupervisorVolunteersHelper; end

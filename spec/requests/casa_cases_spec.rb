@@ -3,22 +3,11 @@ require 'rails_helper'
 RSpec.describe '/casa_cases', type: :request do
   # CasaCase. As you add validations to CasaCase, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) do
-    {
-      case_number: '1234',
-      teen_program_eligible: true
-    }
-  end
+  let(:valid_attributes) { { case_number: '1234', teen_program_eligible: true } }
 
-  let(:invalid_attributes) do
-    {
-      case_number: nil
-    }
-  end
+  let(:invalid_attributes) { { case_number: nil } }
 
-  before do
-    sign_in create(:user, :casa_admin)
-  end
+  before { sign_in create(:user, :casa_admin) }
 
   describe 'GET /index' do
     it 'renders a successful response' do
@@ -55,9 +44,10 @@ RSpec.describe '/casa_cases', type: :request do
   describe 'POST /create' do
     context 'with valid parameters' do
       it 'creates a new CasaCase' do
-        expect do
-          post casa_cases_url, params: { casa_case: valid_attributes }
-        end.to change(CasaCase, :count).by(1)
+        expect { post casa_cases_url, params: { casa_case: valid_attributes } }.to change(
+          CasaCase,
+          :count
+        ).by(1)
       end
 
       it 'redirects to the created casa_case' do
@@ -68,9 +58,10 @@ RSpec.describe '/casa_cases', type: :request do
 
     context 'with invalid parameters' do
       it 'does not create a new CasaCase' do
-        expect do
-          post casa_cases_url, params: { casa_case: invalid_attributes }
-        end.to change(CasaCase, :count).by(0)
+        expect { post casa_cases_url, params: { casa_case: invalid_attributes } }.to change(
+          CasaCase,
+          :count
+        ).by(0)
       end
 
       it "renders a successful response (i.e. to display the 'new' template)" do
@@ -82,12 +73,7 @@ RSpec.describe '/casa_cases', type: :request do
 
   describe 'PATCH /update' do
     context 'with valid parameters' do
-      let(:new_attributes) do
-        {
-          case_number: '12345',
-          teen_program_eligible: false
-        }
-      end
+      let(:new_attributes) { { case_number: '12345', teen_program_eligible: false } }
 
       it 'does not update case_number for volunteers' do
         sign_in create(:user, :volunteer)
@@ -127,9 +113,7 @@ RSpec.describe '/casa_cases', type: :request do
   describe 'DELETE /destroy' do
     it 'destroys the requested casa_case' do
       casa_case = CasaCase.create! valid_attributes
-      expect do
-        delete casa_case_url(casa_case)
-      end.to change(CasaCase, :count).by(-1)
+      expect { delete casa_case_url(casa_case) }.to change(CasaCase, :count).by(-1)
     end
 
     it 'redirects to the casa_cases list' do

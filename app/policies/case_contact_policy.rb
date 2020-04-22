@@ -8,7 +8,7 @@ class CaseContactPolicy
   end
 
   def _is_creator_or_casa_admin?
-    is_casa_admin_of_org?(user, record) || record.creator == user
+    casa_admin_of_org?(user, record) || record.creator == user
   end
 
   def index?
@@ -49,13 +49,12 @@ class CaseContactPolicy
 
     def resolve
       case @user.role
-      when 'casa_admin'
-        # scope.in_casa_administered_by(@user)
+      when 'casa_admin' # scope.in_casa_administered_by(@user)
         scope.all
       when 'volunteer'
         scope.where(casa_case: CasaCase.actively_assigned_to(@user), creator: @user)
       else
-        raise "unrecognized role"
+        raise 'unrecognized role'
       end
     end
   end

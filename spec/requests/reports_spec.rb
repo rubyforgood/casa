@@ -19,7 +19,9 @@ RSpec.describe '/reports', type: :request do
       get report_url(Time.zone.now.to_i, format: :csv)
 
       expect(response).to be_successful
-      expect(response.headers['Content-Disposition']).to include 'attachment; filename="case-contacts-report-'
+      expect(
+        response.headers['Content-Disposition']
+      ).to include 'attachment; filename="case-contacts-report-'
     end
   end
 end

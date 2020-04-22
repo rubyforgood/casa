@@ -1,17 +1,45 @@
-inherit_from: .rubocop_todo.yml
 require:
   - rubocop-rspec
 
+AllCops:
+  Exclude:
+    - 'db/**/*'
+    - 'app/views/**/*'
+    - 'node_modules/**/*'
+    - 'bin/**/*'
+
+# Layout Cops
+Layout/LineLength:
+  Max: 100
+  IgnoredPatterns: ['(\A|\s)#']
+  Exclude:
+    - 'config/**/*'
+    - 'spec/rails_helper.rb'
+
+# Style Cops
 Style/Documentation:
   Enabled: False
 
+Style/FrozenStringLiteralComment:
+  Enabled: False
+
+# Metrics Cops
 Metrics/BlockLength:
   Enabled: False
 
+Metrics/MethodLength:
+  Max: 10
+
+# RSpec Cops
 RSpec/MultipleExpectations:
+  Max: 3
   Exclude:
     - 'spec/features/*'
 
-Rspec/ExampleLength:
+RSpec/ExampleLength:
+  Max: 20
   Exclude:
     - 'spec/features/*'
+
+RSpec/NamedSubject:
+  Enabled: False

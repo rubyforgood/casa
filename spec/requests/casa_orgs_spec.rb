@@ -12,7 +12,8 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe '/casa_orgs', type: :request do # CasaOrg. As you add validations to CasaOrg, be sure to
+RSpec.describe '/casa_orgs', type: :request do
+  # CasaOrg. As you add validations to CasaOrg, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) do
     attributes_for(:casa_org)
@@ -58,9 +59,10 @@ RSpec.describe '/casa_orgs', type: :request do # CasaOrg. As you add validations
   describe 'POST /create' do
     context 'with valid parameters' do
       it 'creates a new CasaOrg' do
-        expect do
-          post casa_orgs_url, params: { casa_org: valid_attributes }
-        end.to change(CasaOrg, :count).by(1)
+        expect { post casa_orgs_url, params: { casa_org: valid_attributes } }.to change(
+          CasaOrg,
+          :count
+        ).by(1)
       end
 
       it 'redirects to the created casa_org' do
@@ -71,9 +73,10 @@ RSpec.describe '/casa_orgs', type: :request do # CasaOrg. As you add validations
 
     context 'with invalid parameters' do
       it 'does not create a new CasaOrg' do
-        expect do
-          post casa_orgs_url, params: { casa_org: invalid_attributes }
-        end.to change(CasaOrg, :count).by(0)
+        expect { post casa_orgs_url, params: { casa_org: invalid_attributes } }.to change(
+          CasaOrg,
+          :count
+        ).by(0)
       end
 
       it "renders a successful response (i.e. to display the 'new' template)" do
@@ -118,9 +121,7 @@ RSpec.describe '/casa_orgs', type: :request do # CasaOrg. As you add validations
   describe 'DELETE /destroy' do
     it 'destroys the requested casa_org' do
       casa_org = CasaOrg.create! valid_attributes
-      expect do
-        delete casa_org_url(casa_org)
-      end.to change(CasaOrg, :count).by(-1)
+      expect { delete casa_org_url(casa_org) }.to change(CasaOrg, :count).by(-1)
     end
 
     it 'redirects to the casa_orgs list' do

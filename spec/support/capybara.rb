@@ -1,1 +1,1 @@
-require "capybara/rails"
+require 'capybara/rails'
