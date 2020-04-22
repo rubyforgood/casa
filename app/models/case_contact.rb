@@ -5,7 +5,7 @@ class CaseContact < ApplicationRecord
   belongs_to :creator, class_name: 'User'
   belongs_to :casa_case
 
-  # validates :contact_type, presence: true
+  validates :contact_types, presence: true
 
   CONTACT_TYPES = %w[
     youth
