@@ -1,4 +1,3 @@
-# CaseContact Model
 class Volunteer
   TABLE_COLUMNS = %w[
     name
