@@ -1,6 +1,6 @@
 <p>
   <strong>Creator:</strong>
-  <%= @case_contact.creator_id %>
+  <%= @case_contact.creator.display_name %>
 </p>
 
 <p>
@@ -20,7 +20,7 @@
 
 <p>
   <strong>Occurred at:</strong>
-  <%= @case_contact.occurred_at %>
+  <%= @case_contact.occurred_at.strftime('%B %e, %Y') %>
 </p>
 
 <%= link_to 'Edit', edit_case_contact_path(@case_contact) %> |

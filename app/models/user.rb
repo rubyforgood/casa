@@ -33,6 +33,7 @@ end
 # Table name: users
 #
 #  id                     :bigint           not null, primary key
+#  display_name           :string           default("")
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  remember_created_at    :datetime

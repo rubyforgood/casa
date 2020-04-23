@@ -2,7 +2,9 @@ require 'simplecov'
 require 'capybara/rspec'
 require 'pundit/rspec'
 require 'pry'
-SimpleCov.start
+SimpleCov.start do
+  track_files "{app,lib}/**/*.rb"
+end
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

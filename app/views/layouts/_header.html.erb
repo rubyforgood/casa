@@ -15,7 +15,7 @@
           <%= current_user.email %>
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <%= link_to "Edit Profile", edit_volunteer_path(current_user), class: "dropdown-item" %>
+          <%= link_to "Edit Profile", edit_users_path, class: "dropdown-item" %>
 
           <% if current_user.role == "casa_admin" %>
             <%= link_to "Generate Reports", reports_path, class: "dropdown-item" %>
