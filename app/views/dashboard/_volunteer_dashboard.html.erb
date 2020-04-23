@@ -1,0 +1,56 @@
+<div class="row">
+  <div class="col-sm-12 dashboard-table-header">
+    <h1>Your <%= "Case".pluralize(@casa_cases.count) %></h1>
+  </div>
+</div>
+<table class="table case-list">
+  <thead>
+    <tr>
+      <th>Case Number</th>
+      <th>Teen Program Eligible</th>
+      <th>Actions</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @casa_cases.each do |casa_case| %>
+      <tr>
+        <td><%= casa_case.case_number %></td>
+        <td><%= casa_case.teen_program_eligible %></td>
+        <td><%= link_to 'Edit', edit_casa_case_path(casa_case) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
+<div class="row">
+  <div class="col-sm-12 dashboard-table-header">
+    <h1>Case Contacts</h1>
+    <% if policy(:dashboard).create_case_contacts? %>
+      <%= link_to "New Case Contact", new_case_contact_path, class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
+
+<table class="table case-contacts-table" id="case_contacts">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Duration</th>
+      <th>Contact Made</th>
+      <th>Contact Medium</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @case_contacts.each do |contact| %>
+      <tr>
+        <td data-sort="<%= contact.occurred_at.strftime("%Y%m%d%H%M%s") %>"><%= contact.occurred_at.strftime('%B %e, %Y') %></td>
+        <td><%= contact.duration_minutes %></td>
+        <td><%= contact.contact_made %></td>
+        <td><%= contact.medium_type %></td>
+        <td><%= contact.humanized_type %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
