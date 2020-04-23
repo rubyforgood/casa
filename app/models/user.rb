@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_many :casa_cases, through: :case_assignments
   has_one :supervisor_volunteer, foreign_key: 'volunteer_id'
   has_one :supervisor, through: :supervisor_volunteer
+  has_many :case_contacts, foreign_key: 'creator_id'
 
   ALL_ROLES = %w[inactive volunteer supervisor casa_admin].freeze
   enum role: ALL_ROLES.zip(ALL_ROLES).to_h
@@ -16,6 +17,14 @@ class User < ApplicationRecord
   def case_contacts_for(casa_case_id)
     found_casa_case = casa_cases.find { |cc| cc.id == casa_case_id }
     found_casa_case.case_contacts.filter { |contact| contact.creator_id == id }
+  end
+
+  def recent_contacts_made(days_counter = 60)
+    case_contacts.where(contact_made: true, occurred_at: days_counter.days.ago..Date.today).count
+  end
+
+  def most_recent_contact
+    case_contacts.where(contact_made: true).order(:occurred_at).first
   end
 end
 
