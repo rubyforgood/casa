@@ -28,10 +28,10 @@
         <td><%= volunteer.email %></td>
         <td id="supervisor-column"><%= volunteer&.supervisor&.email %></td>
         <td id="status-column"><%= volunteer.status %></td>
-        <td><%= volunteer.assigned_to_transition_aged_youth? %></td>
-        <td><%= volunteer.casa_cases.pluck(:case_number).join(', ') %></td>
-        <td><%= volunteer.most_recent_contact.occurred_at.strftime('%B %e, %Y') %></td>
-        <td><%= volunteer.recent_contacts_made %></td>
+        <td><%= volunteer&.assigned_to_transition_aged_youth? %></td>
+        <td><%= volunteer&.casa_cases&.pluck(:case_number)&.join(', ') %></td>
+        <td><%= volunteer&.most_recent_contact&.occurred_at&.strftime('%B %e, %Y') %></td>
+        <td><%= volunteer&.recent_contacts_made %></td>
         <td>
           <%= link_to 'Edit', edit_volunteer_path(volunteer) %>
         </td>
