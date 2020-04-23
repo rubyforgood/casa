@@ -34,9 +34,9 @@ class CasaCasePolicy
   def permitted_attributes
     case @user.role
     when 'casa_admin'
-      %i[case_number teen_program_eligible]
+      %i[case_number transition_aged_youth]
     else
-      %i[teen_program_eligible]
+      %i[transition_aged_youth]
     end
   end
 

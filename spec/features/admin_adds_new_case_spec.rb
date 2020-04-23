@@ -13,8 +13,8 @@ RSpec.describe 'admin adds a new case', type: :feature do
     fill_in 'Case number', with: case_number
 
     expect(find_field('Case number').value).to eq case_number
-    check 'Teen program eligible'
-    has_checked_field? 'Teen program eligible'
+    check 'Transition aged youth'
+    has_checked_field? 'Transition aged youth'
 
     click_on 'Create CASA Case'
     expect(page.body).to have_content(case_number)

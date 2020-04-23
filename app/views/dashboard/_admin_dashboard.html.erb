@@ -52,7 +52,7 @@
   <thead>
     <tr>
       <th>Case Number</th>
-      <th>Teen Program Eligible</th>
+      <th>Transition Aged Youth</th>
       <th>Assigned To</th>
       <th>Actions</th>
       <th></th>
@@ -62,7 +62,7 @@
     <% @casa_cases.each do |casa_case| %>
       <tr>
         <td><%= casa_case.case_number %></td>
-        <td><%= casa_case.teen_program_eligible %></td>
+        <td><%= casa_case.transition_aged_youth %></td>
         <td><%= casa_case&.volunteers&.pluck(:email)&.join(",") %></td>
         <td><%= link_to 'Detail View', casa_case_path(casa_case) %></td>
         <td><%= link_to 'Edit', edit_casa_case_path(casa_case) %></td>

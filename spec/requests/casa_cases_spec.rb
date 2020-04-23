@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe '/casa_cases', type: :request do
   # CasaCase. As you add validations to CasaCase, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { { case_number: '1234', teen_program_eligible: true } }
+  let(:valid_attributes) { { case_number: '1234', transition_aged_youth: true } }
 
   let(:invalid_attributes) { { case_number: nil } }
 
@@ -73,7 +73,7 @@ RSpec.describe '/casa_cases', type: :request do
 
   describe 'PATCH /update' do
     context 'with valid parameters' do
-      let(:new_attributes) { { case_number: '12345', teen_program_eligible: false } }
+      let(:new_attributes) { { case_number: '12345', transition_aged_youth: false } }
 
       it 'does not update case_number for volunteers' do
         sign_in create(:user, :volunteer)
@@ -82,7 +82,7 @@ RSpec.describe '/casa_cases', type: :request do
         patch casa_case_url(casa_case), params: { casa_case: new_attributes }
         casa_case.reload
         expect(casa_case.case_number).to eq '1234'
-        expect(casa_case.teen_program_eligible).to eq false
+        expect(casa_case.transition_aged_youth).to eq false
       end
 
       it 'updates the requested casa_case' do
@@ -90,7 +90,7 @@ RSpec.describe '/casa_cases', type: :request do
         patch casa_case_url(casa_case), params: { casa_case: new_attributes }
         casa_case.reload
         expect(casa_case.case_number).to eq '12345'
-        expect(casa_case.teen_program_eligible).to eq false
+        expect(casa_case.transition_aged_youth).to eq false
       end
 
       it 'redirects to the casa_case' do

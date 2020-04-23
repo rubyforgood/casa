@@ -21,7 +21,7 @@ end
 #
 #  id                    :bigint           not null, primary key
 #  case_number           :string           not null
-#  teen_program_eligible :boolean          default(FALSE), not null
+#  transition_aged_youth :boolean          default(FALSE), not null
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #

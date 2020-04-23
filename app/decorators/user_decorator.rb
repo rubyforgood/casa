@@ -11,7 +11,7 @@ class UserDecorator < Draper::Decorator
   # we return "No", otherwise they have at least one transition youth eligible case
   # and we return "Yes"
   def assigned_to_transition_aged_youth?
-    volunteer_no_transition_youth_cases = object.casa_cases.pluck(:teen_program_eligible).all? false
+    volunteer_no_transition_youth_cases = object.casa_cases.pluck(:transition_aged_youth).all? false
 
     volunteer_no_transition_youth_cases ? 'No' : 'Yes'
   end
