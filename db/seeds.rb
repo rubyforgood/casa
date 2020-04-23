@@ -50,7 +50,7 @@ case_assignment_1 = CaseAssignment.create(
 
 case_2 = CasaCase.create(
   case_number: "222",
-  teen_program_eligible: true
+  transition_aged_youth: true
 )
 
 case_assignment_2 = CaseAssignment.create(

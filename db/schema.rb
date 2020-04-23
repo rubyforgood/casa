@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_20_004403) do
+ActiveRecord::Schema.define(version: 2020_04_23_154018) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 2020_04_20_004403) do
 
   create_table "casa_cases", force: :cascade do |t|
     t.string "case_number", null: false
-    t.boolean "teen_program_eligible", default: false, null: false
+    t.boolean "transition_aged_youth", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["case_number"], name: "index_casa_cases_on_case_number", unique: true

@@ -74,7 +74,7 @@ class CasaCasesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def casa_case_params
-    params.require(:casa_case).permit(:case_number, :teen_program_eligible)
+    params.require(:casa_case).permit(:case_number, :transition_aged_youth)
   end
 
   # Separate params so only admins can update the case_number
