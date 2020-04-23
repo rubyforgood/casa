@@ -23,9 +23,9 @@ $('document').ready(() => {
         }
       });
 
-      var supervisor = data[1];
-      var status = data[2];
-      var assigned_to_transition_youth = data[3];
+      var supervisor = data[2];
+      var status = data[3];
+      var assigned_to_transition_youth = data[4];
 
       if(supervisor_array.includes(supervisor) &&
         status_array.includes(status) &&
@@ -38,11 +38,33 @@ $('document').ready(() => {
   );
 
   // Enable all data tables on dashboard but only filter on volunteers table
-  var volunteers_table = $('table#volunteers').DataTable();
+  var volunteers_table = $('table#volunteers').DataTable({
+    "autoWidth": false,
+    "columnDefs": [
+      {
+        "targets": [1],
+        "visible": false,
+      },
+      {
+        "targets": [6],
+        "visible": false
+      },
+      {
+        "targets": [7],
+        "visible": false
+      }
+    ]});
   $('table#casa_cases').DataTable({"searching": false});
   $('table#case_contacts').DataTable({"searching": false});
 
   $('.volunteer-filters input[type="checkbox"]').on('click', function() {
     volunteers_table.draw();
   })
+
+  $('input.toggle-visibility').on( 'click', function (e) {
+    // Get the column API object and toggle the visibility
+    var column = volunteers_table.column($(this).attr('data-column'));
+    column.visible(!column.visible());
+    volunteers_table.columns.adjust().draw();
+  });
 });

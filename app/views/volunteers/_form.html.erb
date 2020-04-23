@@ -11,14 +11,19 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="field form-group">
     <%= form.label :email %>
-    <%= form.text_field :email %>
+    <%= form.text_field :email, class: "form-control" %>
+  </div>
+
+  <div class="field form-group">
+    <%= form.label :display_name %>
+    <%= form.text_field :display_name, class: "form-control" %>
   </div>
 
   <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit "Create User", class: "btn btn-primary" %>
   </div>
 <% end %>

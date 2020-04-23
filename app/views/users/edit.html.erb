@@ -1,0 +1,37 @@
+<%= link_to "Back", root_path %>
+
+<h1>Edit Profile</h1>
+
+<div class="row">
+  <div class="col-sm-6">
+    <%= form_for @user, url: users_path do |form| %>
+      <% if @user.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+          <ul>
+            <% user.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="field form-group">
+        <%= form.label :email %>
+        <%= form.text_field :email, class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+        <%= form.label :display_name %>
+        <%= form.text_field :display_name, class: "form-control" %>
+      </div>
+
+      <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
+
+      <div class="actions">
+        <%= form.submit "Update Profile", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

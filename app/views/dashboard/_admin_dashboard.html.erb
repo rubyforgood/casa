@@ -11,7 +11,8 @@
 <table class="table table-striped table-bordered" id="volunteers">
   <thead>
     <tr>
-      <th>Volunteer</th>
+      <th>Name</th>
+      <th>Email</th>
       <th>Supervisor</th>
       <th>Status</th>
       <th>Assigned To Transition Aged Youth</th>
@@ -25,6 +26,7 @@
   <tbody>
     <% @volunteers.each do |volunteer| %>
       <tr>
+        <td><%= volunteer.display_name %></td>
         <td><%= volunteer.email %></td>
         <td id="supervisor-column"><%= volunteer&.supervisor&.email %></td>
         <td id="status-column"><%= volunteer.status %></td>

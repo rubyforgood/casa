@@ -30,5 +30,3 @@ class VolunteersController < ApplicationController
     params.require(:user).permit(:email, :casa_org_id)
   end
 end
-
-# RegistrationMailer.welcome(user, generated_password).deliver
