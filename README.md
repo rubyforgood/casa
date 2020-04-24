@@ -47,6 +47,11 @@ You can read the complete [role description of a CASA volunteer](https://pgcasa.
 
 https://casa-r4g-staging.herokuapp.com/
 
+### Error tracking
+
+We are currently using https://app.bugsnag.com/ to track errors in staging. 
+We may switch bugsnag accounts in the future because the current one is an old personal one. 
+
 ### Setup to develop:
 
 If you have any troubles, also look at `.travis.yml` which is what makes the CI build run
