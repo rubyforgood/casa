@@ -5,7 +5,6 @@ RSpec.describe 'admin adds a new case', type: :feature do
     admin = create(:user, :casa_admin)
     case_number = '12345'
     sign_in admin
-    login_as admin
     visit root_path
     expect(page).to have_selector('.case-list')
 
