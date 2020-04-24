@@ -3,7 +3,7 @@ require 'capybara/rspec'
 require 'pundit/rspec'
 require 'pry'
 SimpleCov.start do
-  track_files "{app,lib}/**/*.rb"
+  track_files '{app,lib}/**/*.rb'
 end
 
 RSpec.configure do |config|
