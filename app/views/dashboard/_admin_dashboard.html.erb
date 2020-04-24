@@ -26,7 +26,7 @@
   <tbody>
     <% @volunteers.each do |volunteer| %>
       <tr>
-        <td><%= volunteer.display_name %></td>
+        <td data-search="<%= volunteer.past_names %>"><%= volunteer.display_name %></td>
         <td><%= volunteer.email %></td>
         <td id="supervisor-column"><%= volunteer&.supervisor&.email %></td>
         <td id="status-column"><%= volunteer.status %></td>
