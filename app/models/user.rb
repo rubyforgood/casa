@@ -1,3 +1,4 @@
+# model for all user roles: volunteer supervisor casa_admin inactive
 class User < ApplicationRecord
   has_paper_trail
   devise :database_authenticatable, :recoverable, :rememberable, :validatable
@@ -10,7 +11,7 @@ class User < ApplicationRecord
   has_one :supervisor, through: :supervisor_volunteer
   has_many :case_contacts, foreign_key: 'creator_id'
 
-  ALL_ROLES = %w[inactive volunteer supervisor casa_admin].freeze
+  ALL_ROLES = %w[volunteer supervisor casa_admin inactive].freeze
   enum role: ALL_ROLES.zip(ALL_ROLES).to_h
 
   # all contacts this user has with this casa case
