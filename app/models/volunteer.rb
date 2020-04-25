@@ -1,3 +1,5 @@
+# not a database model -- used for display in tables
+# volunteer is a user role and is controlled by User model
 class Volunteer
   TABLE_COLUMNS = %w[
     name

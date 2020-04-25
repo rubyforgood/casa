@@ -9,6 +9,8 @@ AllCasaAdmin.delete_all
 pg_casa = CasaOrg.create(name: 'Prince George CASA')
 other_casa = CasaOrg.create(name: 'Other CASA org')
 
+# seed users for all 'roles' [volunteer supervisor casa_admin inactive]
+# volunteer users
 volunteer_user_1 = User.create(
   casa_org: pg_casa,
   email: 'volunteer1@example.com',
@@ -16,23 +18,71 @@ volunteer_user_1 = User.create(
   password_confirmation: '123456',
   role: :volunteer
 )
+volunteer_user_2 = User.create(
+  casa_org: pg_casa,
+  display_name: 'A\'Lelia Bundles',
+  email: 'volunteer2@example.com',
+  password: '123456',
+  password_confirmation: '123456',
+  role: :volunteer
+)
+volunteer_user_3 = User.create(
+  casa_org: pg_casa,
+  display_name: 'Regina Williams 45',
+  email: 'volunteer3@example.com',
+  password: '123456',
+  password_confirmation: '123456',
+  role: :volunteer
+)
+
+# supervisor users
 supervisor_user_1 = User.create(
   casa_org_id: pg_casa.id,
+  display_name: 'Gloria van derForest',
   email: 'supervisor1@example.com',
   password: '123456',
   password_confirmation: '123456',
   role: :supervisor
 )
+supervisor_user_2 = User.create(
+  casa_org_id: pg_casa.id,
+  display_name: 'בְּרֵאשִׁית, בָּרָא אֱלֹהִים, אֵת הַשָּׁמַיִם, וְאֵת הָאָרֶץ',
+  email: 'supervisor2@example.com',
+  password: '123456',
+  password_confirmation: '123456',
+  role: :supervisor
+)
+
+# casa_admin users
 casa_admin_user_1 = User.create(
   casa_org_id: pg_casa.id,
+  display_name: '1;DROP TABLE users',
   email: 'casa_admin1@example.com',
   password: '123456',
   password_confirmation: '123456',
   role: :casa_admin
 )
+casa_admin_user_2 = User.create(
+  casa_org_id: pg_casa.id,
+  display_name: 'Uche O\'Donnel',
+  email: 'casa_admin2@example.com',
+  password: '123456',
+  password_confirmation: '123456',
+  role: :casa_admin
+)
+
+# inactive users
 inactive_user_1 = User.create(
   casa_org_id: pg_casa.id,
+  display_name: 'undefined Kent II',
   email: 'inactive1@example.com',
+  password: '123456',
+  password_confirmation: '123456',
+  role: :inactive
+)
+inactive_user_2 = User.create(
+  casa_org_id: pg_casa.id,
+  email: 'inactive2@example.com',
   password: '123456',
   password_confirmation: '123456',
   role: :inactive
