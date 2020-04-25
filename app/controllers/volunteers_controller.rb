@@ -10,23 +10,27 @@ class VolunteersController < ApplicationController
   end
 
   def create
-    email = create_params[:email]
-    casa_org_id = create_params[:casa_org_id] # Create a new user with a dummy password
-    create_user_with_dummy_password(email, casa_org_id) # Send password reset email
+    volunteer = User.new(volunteer_params)
 
-    redirect_to root_path
+    if volunteer.save
+      redirect_to root_path
+    else
+      render :new
+    end
   end
 
   def edit; end
 
   private
 
-  def create_user_with_dummy_password(email, casa_org_id)
-    generated_password = Devise.friendly_token.first(8)
-    User.create!(email: email, password: generated_password, casa_org_id: casa_org_id)
+  def generate_devise_password
+    Devise.friendly_token.first(8)
   end
 
-  def create_params
-    params.require(:user).permit(:email, :casa_org_id)
+  def volunteer_params
+    VolunteerParameters
+      .new(params)
+      .with_password(generate_devise_password)
+      .with_role('volunteer')
   end
 end
