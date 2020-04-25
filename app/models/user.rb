@@ -26,6 +26,11 @@ class User < ApplicationRecord
   def most_recent_contact
     case_contacts.where(contact_made: true).order(:occurred_at).first
   end
+
+  def past_names
+    # get past_names from paper_trail gem, version_limit is 10 so no performance concerns
+    versions.map { |version| version&.reify&.display_name }
+  end
 end
 
 # == Schema Information
