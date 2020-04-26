@@ -1,6 +1,6 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
+name: 💡Feature request
+about: 🔨What needs building? ✨
 title: ''
 labels: ''
 assignees: ''
@@ -15,5 +15,3 @@ assignees: ''
 
 **Screenshots of current behavior, if any**
 
-
-**Related issues, if any**

@@ -20,12 +20,12 @@ Resolves #001
 - Supervisor permissions:
 - Admin permissions:
 
-
 ### How is this tested?
 
 
 ### Screenshots please :)
 
+
 ### Feelings gif (optional)
 
-What gif best describes your feeling working on this issue?
+What gif best describes your feeling working on this issue? https://giphy.com/
