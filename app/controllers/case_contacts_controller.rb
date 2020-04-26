@@ -1,5 +1,6 @@
 # CaseContactsController with default actions
 class CaseContactsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_case_contact, only: %i[show edit update destroy]
 
   # GET /case_contacts
