@@ -1,7 +1,7 @@
 
 ---
-name: 🐛 Bug report
-about: 🐛 You found a bug! Tell us more??
+name: Bug report
+about: You found a bug! Tell us more??
 title: "[BUG] "
 labels: ''
 assignees: ''
