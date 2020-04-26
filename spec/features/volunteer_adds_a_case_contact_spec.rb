@@ -32,7 +32,6 @@ RSpec.describe 'volunteer adds a case contact', type: :feature do
 
     find(:css, "input.casa-case-id-check[value='#{volunteer_casa_case_one.id}']").set(true)
     select 'School', from: 'case_contact[contact_type]'
-    expect(page).not_to have_selector '#case_contact_other_type_text'
     select '3 hours', from: 'case_contact[duration_hours]'
     select '15 minutes', from: 'case_contact[duration_minutes]'
     fill_in 'case_contact_occurred_at', with: '04/04/2020'
