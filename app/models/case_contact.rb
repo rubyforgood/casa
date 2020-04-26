@@ -18,18 +18,13 @@ class CaseContact < ApplicationRecord
     other_family
     supervisor
     court
-    other
   ].freeze
 
   CONTACT_MEDIUMS = %w[in-person text/email video voice-only letter].freeze
   enum contact_type: CONTACT_TYPES.zip(CONTACT_TYPES).to_h
 
   def humanized_type
-    "#{contact_type.humanize.titleize}#{' - ' + other_type_text if use_other_type_text?}"
-  end
-
-  def use_other_type_text?
-    contact_type == 'other'
+    "#{contact_type.humanize.titleize}"
   end
 
   # Generate array of attributes for All Case Contacts report
