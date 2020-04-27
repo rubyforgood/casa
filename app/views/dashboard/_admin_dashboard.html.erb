@@ -28,7 +28,7 @@
       <tr>
         <td data-search="<%= volunteer.past_names %>"><%= volunteer.display_name %></td>
         <td><%= volunteer.email %></td>
-        <td id="supervisor-column"><%= volunteer&.supervisor&.email %></td>
+        <td id="supervisor-column"><%= volunteer&.supervisor&.decorate&.name %></td>
         <td id="status-column"><%= volunteer.status %></td>
         <td><%= volunteer&.assigned_to_transition_aged_youth? %></td>
         <td><%= volunteer&.casa_cases&.pluck(:case_number)&.join(', ') %></td>

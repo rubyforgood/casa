@@ -40,6 +40,7 @@ $('document').ready(() => {
   // Enable all data tables on dashboard but only filter on volunteers table
   var volunteers_table = $('table#volunteers').DataTable({
     "autoWidth": false,
+    "stateSave": true,
     "columnDefs": [
       {
         "targets": [1],
@@ -54,6 +55,18 @@ $('document').ready(() => {
         "visible": false
       }
     ]});
+
+  // Because the table saves state, we have to check/uncheck modal inputs based on what
+  // columns are visible
+  volunteers_table.columns().every(function (index) {
+    var column_visible = this.visible();
+
+    if(column_visible)
+      $('#visibleColumns input[data-column="' + index + '"]').prop('checked', true);
+    else
+      $('#visibleColumns input[data-column="' + index + '"]').prop('checked', false)
+  })
+
   $('table#casa_cases').DataTable({"searching": false});
   $('table#case_contacts').DataTable({"searching": false});
 

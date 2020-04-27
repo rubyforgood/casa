@@ -6,9 +6,9 @@
         Supervisor
       </button>
         <ul class="dropdown-menu supervisor-options" style="min-width: 15rem;">
-          <% SupervisorVolunteer.all.each do |relationship| %>
+          <% User.where(role: "supervisor").decorate.each do |supervisor| %>
             <li>
-              <a class="small" data-value="option1" tabIndex="-1"><input style="margin:0 8px;" type="checkbox" data-value="<%= relationship.supervisor.email %>" checked/><%= relationship.supervisor.email %></a>
+              <a class="small" data-value="option1" tabIndex="-1"><input style="margin:0 8px;" type="checkbox" data-value="<%= supervisor.name %>" checked/><%= supervisor.name %></a>
             </li>
           <% end %>
         </ul>
@@ -31,18 +31,18 @@
         <li><a class="small" data-value="option1" tabIndex="-1"><input style="margin:0 8px;" type="checkbox" data-value="No" checked />No</a></li>
       </div>
     </div>
-    <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#exampleModal">
+    <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#visibleColumns">
       Pick displayed columns
     </button>
   </div>
 </div>
 <br>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="visibleColumns" tabindex="-1" role="dialog" aria-labelledby="visibleColumnsLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Pick Displayed Columns</h5>
+        <h5 class="modal-title" id="visibleColumnsLabel">Pick Displayed Columns</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

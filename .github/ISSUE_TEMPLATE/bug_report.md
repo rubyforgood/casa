@@ -1,7 +1,7 @@
 
 ---
 name: Bug report
-about: You found a bug! Tell us more??
+about: You found a bug! Tell us more?
 title: "[BUG] "
 labels: ''
 assignees: ''
@@ -24,6 +24,6 @@ If you can, please add screenshots! Note: do **not** add screenshots with any pr
 If you want to record a gif, you can use something like https://giphy.com/apps/giphycapture
 
 **Extra info:**
-Please include this with extra detail if the bug seems to be UI related, like "filters work funny" or something similar. 
+If the bug seems to be UI related (related to filters o dropdowns)
 - What device are you using? phone (Android/iOS/?), tablet(ipad/android/?), desktop (windows7, windowsXP, windows2020)
 - What browser are you using? Internet Explorer, Edge, Chrome, Firefox, ?
