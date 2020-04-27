@@ -23,6 +23,7 @@ install:
   - bundle install
 script:
   - bundle exec rails webpacker:compile
+  - bundle exec brakeman
   - RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rails spec
   # deploy:
   #   provider: heroku
