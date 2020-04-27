@@ -24,7 +24,7 @@ class CaseContact < ApplicationRecord
   enum contact_type: CONTACT_TYPES.zip(CONTACT_TYPES).to_h
 
   def humanized_type
-    "#{contact_type.humanize.titleize}"
+    contact_type.humanize.titleize.to_s
   end
 
   # Generate array of attributes for All Case Contacts report
