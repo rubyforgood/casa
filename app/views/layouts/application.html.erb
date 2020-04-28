@@ -10,19 +10,21 @@
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body>
+  <body class="<%= body_class %>">
     <%= render 'layouts/header' %>
+    <main>
+      <div class="container">
+        <% if notice %>
+          <p class="notice alert alert-success"><%= notice %></p>
+        <% elsif alert %>
+          <p class="notice alert alert-danger"><%= alert %></p>
+        <% end %>
 
-    <div class="container">
-      <% if notice %>
-        <p class="notice alert alert-success"><%= notice %></p>
-      <% elsif alert %>
-        <p class="notice alert alert-danger"><%= alert %></p>
-      <% end %>
-
-      <div class="content">
-        <%= yield %>
+        <div class="content">
+          <%= yield %>
+        </div>
       </div>
-    </div>
+    </main>
+    <%= render 'layouts/footer' %>
   </body>
 </html>

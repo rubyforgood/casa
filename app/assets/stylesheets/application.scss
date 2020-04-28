@@ -1,15 +1,14 @@
-$primary: #00447C;
+@import "base/variables";
 
 @import "bootstrap";
-@import "casa_cases";
-@import "dashboard";
-@import "navbar";
-@import "utilities";
 @import "dataTables/jquery.dataTables";
 
+@import "shared/flashes";
+@import "shared/footer";
+@import "shared/layout";
+@import "shared/navbar";
+@import "shared/typography";
+@import "shared/utilities";
 
-@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
-
-body {
-  font-family: "Montserrat";
-}
+@import "casa_cases";
+@import "dashboard";
