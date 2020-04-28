@@ -24,7 +24,7 @@ RSpec.describe 'admin views dashboard', type: :feature do
       click_on 'Edit'
     end
 
-    expect(page).to have_text('Edit Volunteer Assignments')
+    expect(page).to have_text('Editing Volunteer')
   end
 
   it 'can go to the new volunteer page' do

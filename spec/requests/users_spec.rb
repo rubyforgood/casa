@@ -24,7 +24,7 @@ RSpec.describe '/users', type: :request do
   end
 
   describe 'PATCH /update' do
-    it 'renders a csv file to download' do
+    it 'updates the user' do
       volunteer = create(:user, :volunteer)
       sign_in volunteer
 

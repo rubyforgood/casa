@@ -9,8 +9,8 @@ Rails.application.routes.draw do
   resources :casa_orgs
   resources :reports, only: %i[show index]
 
-  resources :volunteers, only: %i[new edit create] do
-    resources :case_assignments, only: %i[create destroy index]
+  resources :volunteers, only: %i[new edit create update] do
+    resources :case_assignments, only: %i[create destroy]
   end
 
   resources :users, only: [] do
