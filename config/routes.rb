@@ -4,7 +4,6 @@ Rails.application.routes.draw do
 
   root to: 'dashboard#show'
 
-
   resources :casa_cases
   resources :case_contacts
   resources :casa_orgs
