@@ -1,9 +1,5 @@
 class VolunteersController < ApplicationController
-  before_action :authenticate_user!
-
-  def index
-    @case_contact = CaseContact.new
-  end
+  before_action :must_be_admin
 
   def new
     @volunteer = User.new(role: :volunteer)
@@ -19,7 +15,9 @@ class VolunteersController < ApplicationController
     end
   end
 
-  def edit; end
+  def edit
+    @volunteer = User.find(params[:id])
+  end
 
   private
 
