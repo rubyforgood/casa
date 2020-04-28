@@ -37,4 +37,21 @@ RSpec.describe '/volunteers', type: :request do
       expect(response).to redirect_to root_path
     end
   end
+
+  describe 'PATCH /update' do
+    it 'updates the volunteer' do
+      sign_in admin
+
+      patch volunteer_path(volunteer), params: update_volunteer_params
+      volunteer.reload
+      
+      expect(volunteer.display_name).to eq 'New Name'
+      expect(volunteer.email).to eq 'newemail@gmail.com'
+      expect(volunteer.role).to eq 'inactive'
+    end
+  end
+
+  def update_volunteer_params
+    { user: { email: 'newemail@gmail.com', display_name: 'New Name', role: 'inactive' } }
+  end
 end

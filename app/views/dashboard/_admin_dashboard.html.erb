@@ -35,7 +35,7 @@
         <td><%= volunteer&.most_recent_contact&.occurred_at&.strftime('%B %e, %Y') %></td>
         <td><%= volunteer&.recent_contacts_made %></td>
         <td>
-          <%= link_to 'Edit', volunteer_case_assignments_path(volunteer) %>
+          <%= link_to 'Edit', edit_volunteer_path(volunteer) %>
         </td>
       </tr>
     <% end %>

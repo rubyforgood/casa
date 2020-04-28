@@ -1,17 +1,13 @@
 class CaseAssignmentsController < ApplicationController
   before_action :must_be_admin
 
-  def index
-    @volunteer = User.find(params[:volunteer_id]).decorate
-  end
-
   def create
     volunteer = User.find(params[:volunteer_id])
     case_assignment = volunteer.case_assignments.new(case_assignment_params)
 
     case_assignment.save
 
-    redirect_to volunteer_case_assignments_path(volunteer)
+    redirect_to edit_volunteer_path(volunteer)
   end
 
   def destroy
@@ -20,7 +16,7 @@ class CaseAssignmentsController < ApplicationController
 
     case_assignment.destroy
 
-    redirect_to volunteer_case_assignments_path(volunteer)
+    redirect_to edit_volunteer_path(volunteer)
   end
 
   private
