@@ -14,11 +14,13 @@
     <%= render 'layouts/header' %>
     <main>
       <div class="container">
-        <% if notice %>
-          <p class="notice alert alert-success"><%= notice %></p>
-        <% elsif alert %>
-          <p class="notice alert alert-danger"><%= alert %></p>
-        <% end %>
+        <div class="header-flash">
+          <% if notice %>
+            <p class="notice alert alert-success"><%= notice %></p>
+          <% elsif alert %>
+            <p class="notice alert alert-danger"><%= alert %></p>
+          <% end %>
+        </div>
 
         <div class="content">
           <%= yield %>
