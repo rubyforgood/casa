@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>PG CASA</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-    <%= render 'shared/favicons' %>
+<head>
+  <title>PG CASA</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= render 'shared/favicons' %>
 
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+</head>
 
-  <body>
-    <%= render 'layouts/header' %>
+<body>
+<%= render 'layouts/header' %>
 
-    <div class="container">
-      <% if notice %>
-        <p class="notice"><%= notice %></p>
-      <% end %>
-      <p class="alert"><%= alert %></p>
+<div class="container">
+  <% if notice %>
+    <p class="notice alert alert-success"><%= notice %></p>
+  <% elsif alert %>
+    <p class="notice alert alert-danger"><%= alert %></p>
+  <% end %>
 
-      <%= yield %>
-    </div>
-  </body>
+  <%= yield %>
+</div>
+</body>
 </html>
