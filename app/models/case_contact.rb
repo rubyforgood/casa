@@ -30,9 +30,10 @@ class CaseContact < ApplicationRecord
     end
   end
 
-  def humanized_type
-    # contact_type.humanize.titleize.to_s
-    # "#{contact_types.map.humanize.titleize}#{' - ' + other_type_text if use_other_type_text?}"
+
+  # @return [Array<String>]
+  def humanized_contact_types
+    contact_types&.map { |ct| ct.humanize.titleize }
   end
 
   def use_other_type_text?

@@ -34,6 +34,7 @@ class CaseContactReport < ApplicationRecord
     row_data.flatten
   end
 
+  # @param case_contact [CaseContact]
   def self.case_contact_fields(case_contact)
     [
       case_contact&.id,

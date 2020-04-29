@@ -49,7 +49,7 @@
         <td><%= contact.duration_minutes %></td>
         <td><%= contact.contact_made %></td>
         <td><%= contact.medium_type %></td>
-        <td><%= contact.humanized_type %></td>
+        <td><%= contact.humanized_contact_types&.join(', ') %></td>
       </tr>
     <% end %>
   </tbody>

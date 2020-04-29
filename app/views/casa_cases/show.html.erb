@@ -43,7 +43,7 @@
             <td><%= contact.decorate.duration_minutes %></td>
             <td><%= contact.contact_made %></td>
             <td><%= contact.medium_type %></td>
-            <td><%= contact.humanized_type %></td>
+            <td><%= contact.humanized_contact_types&.join(', ') %></td>
             <td><%= contact.creator&.display_name %></td>
           </tr>
         <% end %>
