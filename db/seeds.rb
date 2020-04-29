@@ -11,6 +11,9 @@ AllCasaAdmin.delete_all
 pg_casa = CasaOrg.create(name: 'Prince George CASA')
 other_casa = CasaOrg.create(name: 'Other CASA org')
 
+VOLUNTEER_COUNT = 10
+CASE_COUNT = 15
+
 # seed users for all 'roles' [volunteer supervisor casa_admin inactive]
 # volunteer users
 volunteer_user_1 = User.create(
@@ -40,7 +43,7 @@ volunteer_user_3 = User.create(
 volunteer_users = [ volunteer_user_1, volunteer_user_2, volunteer_user_3 ]
 
 # generate volunteer users via Faker gem
-10.times do
+VOLUNTEER_COUNT.times do
   volunteer_name = Faker::Name.name
   volunteer_email_name = volunteer_name.downcase.sub(' ', '')
   volunteer_user = User.create(
@@ -126,6 +129,21 @@ case_assignment_2 = CaseAssignment.create(
   casa_case: case_2,
   volunteer: volunteer_user_1
 )
+casa_cases = [ case_1, case_2 ]
+
+# generate more CasaCases, add data, assign case to volunteer
+CASE_COUNT.times do | index |
+  new_casa_case = CasaCase.create(
+    case_number: Faker::Number.unique.number(digits: 6),
+    transition_aged_youth: index % 3 == 0 # true for a third of cases
+  )
+  volunteer_assigned = volunteer_users[index % volunteer_users.length]
+  new_case_assignment = CaseAssignment.create(
+    casa_case: new_casa_case,
+    volunteer: volunteer_assigned,
+  )
+  casa_cases.push(new_casa_case)
+end
 
 # associate half of the volunteers with supervisor_user_1, half with supervisor_user_2
 volunteer_users.each_with_index do | volunteer_user, i |
