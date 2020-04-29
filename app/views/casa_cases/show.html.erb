@@ -1,61 +1,53 @@
 <%= link_to 'Back', :back %>
 
 <div class="row">
-  <div class="col-sm-12 dashboard-table-header">
+  <div class="col-sm-12 form-header">
     <h1>CASA Case Details</h1>
     <%= link_to 'Edit Case Details', edit_casa_case_path(@casa_case), class: "btn btn-primary" %>
   </div>
 </div>
 
 <p>
-  <h3>Case number:</h3>
-  <%= @casa_case.case_number %>
+  <h6><strong>Case number:</strong> <%= @casa_case.case_number %></h6>
+
 </p>
 
 <p>
-  <h3>Transition Aged Youth:</h3>
-  <%= @casa_case.transition_aged_youth %>
+  <h6><strong>Transition Aged Youth:</strong> <%= @casa_case.transition_aged_youth %></h6>
+
 </p>
 
 <div>
-  <h3>Assigned Volunteers:</h3>
-  <br>
-  <% policy_scope(@casa_case.volunteers).each_with_index do |volunteer, index|  %>
-    <h6><%= index + 1 %>. Email: <%=  volunteer.email %></h6>
-    <br/>
-    <button class="btn btn-primary show-volunteer-case-contacts" type="button" data-toggle="collapse" data-target="#collapseVolunteer<%= index %>" aria-expanded="false" aria-controls="collapseVolunteer<%= index %>">
-      Show/Hide Case Contacts of Volunteer
-    </button>
-    <div class="collapse" id="collapseVolunteer<%= index %>">
-      <div class="case-contact-list">
-        <h6 style="margin: 8px 0;"><strong>Case Contacts for <%=  volunteer.email %></strong></h6>
-
-        <div>
-          <table class="table table-bordered table-striped table-sm">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Duration</th>
-                <th>Contact Made</th>
-                <th>Contact Medium</th>
-                <th>Type</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% volunteer.case_contacts_for(@casa_case.id).each do |contact| %>
-                <tr>
-                  <td data-sort="<%= contact.occurred_at.strftime("%Y%m%d%H%M%s") %>"><%= contact.occurred_at.strftime('%B %e, %Y') %></td>
-                  <td><%= contact.decorate.duration_minutes %></td>
-                  <td><%= contact.contact_made %></td>
-                  <td><%= contact.medium_type %></td>
-                  <td><%= contact.humanized_type %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <hr>
+  <h6><strong>Assigned Volunteers:</strong></h6>
+  <% policy_scope(@casa_case.volunteers).each_with_index do |volunteer, index| %>
+    <p><%= link_to "#{volunteer.display_name} ", edit_volunteer_path(volunteer) %></p>
   <% end %>
+  <br>
+
+  <div>
+    <table class="table table-bordered table-striped table-sm" id="case_contacts">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Duration</th>
+          <th>Contact Made</th>
+          <th>Contact Medium</th>
+          <th>Type</th>
+          <th>Volunteer</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @casa_case.case_contacts.each do |contact| %>
+          <tr>
+            <td data-sort="<%= contact.occurred_at.strftime("%Y%m%d%H%M%s") %>"><%= contact.occurred_at.strftime('%B %e, %Y') %></td>
+            <td><%= contact.decorate.duration_minutes %></td>
+            <td><%= contact.contact_made %></td>
+            <td><%= contact.medium_type %></td>
+            <td><%= contact.humanized_type %></td>
+            <td><%= contact.creator&.display_name %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
