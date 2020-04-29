@@ -12,12 +12,13 @@ class CaseContactReport < ApplicationRecord
   end
 
   def self.report_headers
-    headers = %w[ internal_contact_number duration contact_type contact_made
-                  contact_medium occurred_at added_to_system_at casa_case_number
-                  volunteer_email volunteer_name supervisor_name]
+    headers = %w[internal_contact_number duration]
+    contact_type_headers = CaseContact::CONTACT_TYPES.map { |t| "contact_type: #{t}" }
+    headers.concat(contact_type_headers)
 
-    # TODO: Issue 119 -- Enable multiple contact types for a case_contact
-    # headers.concat(CaseContact::CONTACT_TYPES.map { |t| "contact_type: #{t}" })
+    headers.concat(%w[contact_made contact_medium occurred_at added_to_system_at
+                      casa_case_number volunteer_email volunteer_name supervisor_name])
+
     headers
   end
 
@@ -32,16 +33,17 @@ class CaseContactReport < ApplicationRecord
     row_data.flatten
   end
 
+  # @param case_contact [CaseContact]
   def self.case_contact_fields(case_contact)
     [
       case_contact&.id,
       case_contact&.duration_minutes,
-      case_contact&.contact_type,
+      case_contact&.contact_types,
       case_contact&.contact_made,
       case_contact&.medium_type,
       case_contact&.occurred_at&.strftime('%B %e, %Y'),
       case_contact&.created_at
-    ]
+    ].flatten
   end
 
   def self.casa_case_fields(casa_case)

@@ -54,7 +54,6 @@ ActiveRecord::Schema.define(version: 2020_04_23_204147) do
   create_table "case_contacts", force: :cascade do |t|
     t.bigint "creator_id", null: false
     t.bigint "casa_case_id", null: false
-    t.string "contact_type", null: false
     t.string "other_type_text"
     t.integer "duration_minutes", null: false
     t.datetime "occurred_at", null: false
@@ -62,7 +61,9 @@ ActiveRecord::Schema.define(version: 2020_04_23_204147) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "contact_made", default: false
     t.string "medium_type"
+    t.string "contact_types", array: true
     t.index ["casa_case_id"], name: "index_case_contacts_on_casa_case_id"
+    t.index ["contact_types"], name: "index_case_contacts_on_contact_types", using: :gin
     t.index ["creator_id"], name: "index_case_contacts_on_creator_id"
   end
 

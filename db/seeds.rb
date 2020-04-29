@@ -161,7 +161,7 @@ case_1 = casa_cases[0]
 case_1_volunteer = case_1.volunteers[0]
 CaseContact.create(
   [
-    { casa_case_id: case_1.id, creator_id: case_1_volunteer.id, duration_minutes: 15, occurred_at: DateTime.new(2020, 2, 3, 4, 5, 6), contact_type: :school },
-    { casa_case_id: case_1.id, creator_id: case_1_volunteer.id, duration_minutes: 15, occurred_at: DateTime.new(2020, 2, 10), contact_type: :school }
+    { casa_case_id: case_1.id, creator_id: case_1_volunteer.id, duration_minutes: 15, occurred_at: DateTime.new(2020, 2, 3, 4, 5, 6), contact_types: [:school] },
+    { casa_case_id: case_1.id, creator_id: case_1_volunteer.id, duration_minutes: 15, occurred_at: DateTime.new(2020, 2, 10), contact_types: [:school, :therapist] }
   ]
 )

@@ -19,7 +19,7 @@ RSpec.describe '/case_contacts', type: :request do
     {
       creator: nil,
       casa_case_id: { '0' => create(:casa_case, volunteers: [volunteer]).id },
-      contact_type: nil,
+      contact_types: ['invalid type'],
       occurred_at: Time.zone.now
     }
   end

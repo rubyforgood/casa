@@ -28,9 +28,20 @@
   </div>
 
   <div class="field contact-type form-group">
-    <%= form.label :contact_type %>
-    <% contact_types = CaseContact::CONTACT_TYPES.map { |contact_type| OpenStruct.new(value: contact_type, label: contact_type.titleize) } %>
-    <%= form.select :contact_type, options_from_collection_for_select(contact_types, 'value', 'label', case_contact.contact_type), {}, class: "custom-select" %>
+    <%= form.label :contact_types %>
+    <% contact_types = CaseContact::CONTACT_TYPES.each_with_index do |contact_type, index| %>
+      <div class="form-check">
+        <input class="form-check-input casa-case-contact-type"
+               type="checkbox"
+               value="<%= contact_type %>"
+               name="case_contact[contact_types][]"
+               id="case_contact[contact_types][<%= index %>]"
+        >
+        <label class="form-check-label" for="case_contact[contact_types][<%= index %>]">
+          <%= contact_type.titleize %>
+        </label>
+      </div>
+    <% end %>
   </div>
 
   <div class="field other-contact-type form-group" hidden>
