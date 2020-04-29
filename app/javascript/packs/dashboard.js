@@ -68,7 +68,7 @@ $('document').ready(() => {
   })
 
   $('table#casa_cases').DataTable({"searching": false});
-  $('table#case_contacts').DataTable({"searching": false});
+  $('table#case_contacts').DataTable({"searching": false, "order": [[0, "desc" ]]});
 
   $('.volunteer-filters input[type="checkbox"]').on('click', function() {
     volunteers_table.draw();
