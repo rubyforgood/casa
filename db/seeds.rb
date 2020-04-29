@@ -42,7 +42,8 @@ volunteer_user_3 = User.create(
   password_confirmation: '123456',
   role: :volunteer
 )
-volunteer_users = [ volunteer_user_1, volunteer_user_2, volunteer_user_3 ]
+# intentionally leaving volunteer_user_1 out so it will remain unassigned
+volunteer_users = [ volunteer_user_2, volunteer_user_3 ]
 
 # generate volunteer users via Faker gem
 VOLUNTEER_USER_COUNT.times do
@@ -99,6 +100,14 @@ casa_admin_user_2 = User.create(
   casa_org_id: pg_casa.id,
   display_name: 'Uche O\'Donnel',
   email: 'casa_admin2@example.com',
+  password: '123456',
+  password_confirmation: '123456',
+  role: :casa_admin
+)
+casa_admin_user_3 = User.create(
+  casa_org_id: pg_casa.id,
+  display_name: 'Zenne Zown',
+  email: 'casa_admin3@example.com',
   password: '123456',
   password_confirmation: '123456',
   role: :casa_admin
