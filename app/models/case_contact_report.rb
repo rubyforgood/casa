@@ -36,7 +36,7 @@ class CaseContactReport < ApplicationRecord
     [
       case_contact&.id,
       case_contact&.duration_minutes,
-      case_contact&.contact_type,
+      case_contact&.contact_types,
       case_contact&.contact_made,
       case_contact&.medium_type,
       case_contact&.occurred_at&.strftime('%B %e, %Y'),
