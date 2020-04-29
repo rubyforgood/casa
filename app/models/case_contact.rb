@@ -28,25 +28,6 @@ class CaseContact < ApplicationRecord
       errors.add(:contact_types, :invalid) unless CONTACT_TYPES.include? contact_type
     end
   end
-
-  def use_other_type_text?
-    contact_types.include?('other')
-  end
-
-  # Generate array of attributes for All Case Contacts report
-  def attributes_to_array
-    [
-      id,
-      casa_case&.case_number,
-      duration_minutes,
-      occurred_at,
-      creator&.email,
-      'N/A',
-      # creator&.name, Add back in after user has name field
-      creator&.supervisor&.email,
-      contact_types
-    ]
-  end
 end
 
 # == Schema Information
