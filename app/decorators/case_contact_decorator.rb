@@ -27,7 +27,7 @@ class CaseContactDecorator < Draper::Decorator
   def contact_types
     object.contact_types
       &.map { |ct| ct.humanize.titleize }
-      &.to_sentence(last_word_connector: ', and ') || ""
+      &.to_sentence(last_word_connector: ', and ') || ''
   end
 
   def medium_type
