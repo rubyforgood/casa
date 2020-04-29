@@ -37,6 +37,33 @@ RSpec.describe CaseContactDecorator do
     end
   end
 
+  describe "#contact_types" do
+    let(:case_contact) { build(:case_contact, contact_types: contact_types) }
+    let(:decorated_case_contact) {
+      described_class.new(case_contact)
+    }
+    subject(:contact_types) { decorated_case_contact.contact_types }
+    context 'when the contact_types is nil' do
+      let(:contact_types) { nil }
+      it { is_expected.to eql("") }
+    end
+
+    context 'when the contact_types is an empty array' do
+      let(:contact_types) { [] }
+      it { is_expected.to eql("") }
+    end
+
+    context 'when the contact_types is an array with three or more values' do
+      let(:contact_types) { [:school, :therapist, :bio_parent]}
+      it { is_expected.to eql("School, Therapist, and Bio Parent") }
+    end
+
+    context 'when the contact types is an array with less than three values' do
+      let(:contact_types) { [:school, :therapist]}
+      it { is_expected.to eql("School and Therapist") }
+    end
+  end
+
   describe '#medium_type' do
     context 'when medium_type is nil' do
       it 'returns Unknown' do
