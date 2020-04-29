@@ -26,21 +26,6 @@ class CaseContact < ApplicationRecord
   def humanized_type
     contact_type.humanize.titleize.to_s
   end
-
-  # Generate array of attributes for All Case Contacts report
-  def attributes_to_array
-    [
-      id,
-      casa_case&.case_number,
-      duration_minutes,
-      occurred_at,
-      creator&.email,
-      'N/A',
-      # creator&.name, Add back in after user has name field
-      creator&.supervisor&.email,
-      contact_type
-    ]
-  end
 end
 
 # == Schema Information
