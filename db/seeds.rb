@@ -1,3 +1,5 @@
+require 'faker'
+
 CaseContact.delete_all
 SupervisorVolunteer.delete_all
 CaseAssignment.delete_all
@@ -34,6 +36,20 @@ volunteer_user_3 = User.create(
   password_confirmation: '123456',
   role: :volunteer
 )
+
+# generate volunteer users via Faker gem
+10.times do
+  volunteer_name = Faker::Name.name
+  volunteer_email_name = volunteer_name.downcase.sub(' ', '')
+  User.create(
+    casa_org: pg_casa,
+    display_name:  volunteer_name,
+    email: Faker::Internet.safe_email(name: volunteer_email_name),
+    password: '123456',
+    password_confirmation: '123456',
+    role: :volunteer
+  )
+end
 
 # supervisor users
 supervisor_user_1 = User.create(
