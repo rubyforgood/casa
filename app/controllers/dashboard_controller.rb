@@ -5,7 +5,7 @@ class DashboardController < ApplicationController
     authorize :dashboard
 
     # Return all active/inactive volunteers, inactive will be filtered by default
-    @volunteers = policy_scope(User.where(role: ['inactive', 'volunteer'])).decorate
+    @volunteers = policy_scope(User.where(role: %w[inactive volunteer])).decorate
     @casa_cases = policy_scope(CasaCase.all)
     @case_contacts = policy_scope(CaseContact.all).order(occurred_at: :desc).decorate
   end

@@ -44,7 +44,7 @@ RSpec.describe '/volunteers', type: :request do
 
       patch volunteer_path(volunteer), params: update_volunteer_params
       volunteer.reload
-      
+
       expect(volunteer.display_name).to eq 'New Name'
       expect(volunteer.email).to eq 'newemail@gmail.com'
       expect(volunteer.role).to eq 'inactive'
