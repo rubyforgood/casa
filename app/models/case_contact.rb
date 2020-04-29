@@ -19,7 +19,6 @@ class CaseContact < ApplicationRecord
   ].freeze
 
   CONTACT_MEDIUMS = %w[in-person text/email video voice-only letter].freeze
-  # enum contact_type: CONTACT_TYPES.zip(CONTACT_TYPES).to_h
 
   validates :contact_types, presence: true
   validate :contact_types_included

@@ -90,11 +90,6 @@ RSpec.describe '/case_contacts', type: :request do
     end
 
     context 'with invalid parameters' do
-      # Right now, there is no way for users to edit CaseContacts
-      # And this test is failing for a reason we don't understand.
-      #
-      # We have pended it out because we are not worried about
-      # breaking a feature that does not actually exist.
       it 'renders a successful response (i.e. to display the edit template)' do
         case_contact = create(:case_contact)
         patch case_contact_url(case_contact), params: { case_contact: invalid_attributes }

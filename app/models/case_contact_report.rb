@@ -13,12 +13,11 @@ class CaseContactReport < ApplicationRecord
 
   def self.report_headers
     headers = %w[internal_contact_number duration]
+    contact_type_headers = CaseContact::CONTACT_TYPES.map { |t| "contact_type: #{t}" }
+    headers.concat(contact_type_headers)
 
-    headers.concat(CaseContact::CONTACT_TYPES.map { |t| "contact_type: #{t}" })
-
-    headers.concat(%w[ contact_made
-                       contact_medium occurred_at added_to_system_at casa_case_number
-                       volunteer_email volunteer_name supervisor_name])
+    headers.concat(%w[contact_made contact_medium occurred_at added_to_system_at
+                      casa_case_number volunteer_email volunteer_name supervisor_name])
 
     headers
   end
