@@ -11,8 +11,10 @@ AllCasaAdmin.delete_all
 pg_casa = CasaOrg.create(name: 'Prince George CASA')
 other_casa = CasaOrg.create(name: 'Other CASA org')
 
-VOLUNTEER_COUNT = 10
-CASE_COUNT = 15
+# number of volunteer users and casa cases to generate
+VOLUNTEER_USER_COUNT = 100
+CASA_CASE_COUNT = 150
+SUPERVISOR_COUNT = 5
 
 # seed users for all 'roles' [volunteer supervisor casa_admin inactive]
 # volunteer users
@@ -26,7 +28,7 @@ volunteer_user_1 = User.create(
 )
 volunteer_user_2 = User.create(
   casa_org: pg_casa,
-  display_name: 'A\'Lelia Bundles',
+  display_name: Faker::Name.name,
   email: 'volunteer2@example.com',
   password: '123456',
   password_confirmation: '123456',
@@ -34,7 +36,7 @@ volunteer_user_2 = User.create(
 )
 volunteer_user_3 = User.create(
   casa_org: pg_casa,
-  display_name: 'בְּרֵאשִׁית, בָּרָא אֱלֹהִים, אֵת הַשָּׁמַיִם, וְאֵת הָאָרֶץ',
+  display_name: 'Myra Shanjar',
   email: 'volunteer3@example.com',
   password: '123456',
   password_confirmation: '123456',
@@ -43,12 +45,13 @@ volunteer_user_3 = User.create(
 volunteer_users = [ volunteer_user_1, volunteer_user_2, volunteer_user_3 ]
 
 # generate volunteer users via Faker gem
-VOLUNTEER_COUNT.times do
+VOLUNTEER_USER_COUNT.times do
   volunteer_name = Faker::Name.name
   volunteer_email_name = volunteer_name.downcase.sub(' ', '')
   volunteer_user = User.create(
     casa_org: pg_casa,
     display_name:  volunteer_name,
+    # Generates an RFC 2606 compliant fake email, which means it will never deliver successfully
     email: Faker::Internet.safe_email(name: volunteer_email_name),
     password: '123456',
     password_confirmation: '123456',
@@ -66,14 +69,22 @@ supervisor_user_1 = User.create(
   password_confirmation: '123456',
   role: :supervisor
 )
-supervisor_user_2 = User.create(
-  casa_org_id: pg_casa.id,
-  display_name: 'Rodolfo Williams',
-  email: 'supervisor2@example.com',
-  password: '123456',
-  password_confirmation: '123456',
-  role: :supervisor
-)
+
+# generate more supervisor users via Faker gem
+supervisor_users = [ supervisor_user_1 ]
+SUPERVISOR_COUNT.times do | index |
+  supervisor_name = Faker::Name.unique.name
+  supervisor_email_name = supervisor_name.downcase.sub(' ', '')
+  new_supervisor_user = User.create(
+    casa_org_id: pg_casa.id,
+    display_name: supervisor_name,
+    email: Faker::Internet.safe_email(name: supervisor_email_name),
+    password: '123456',
+    password_confirmation: '123456',
+    role: :supervisor
+  )
+  supervisor_users.push(new_supervisor_user)
+end
 
 # casa_admin users
 casa_admin_user_1 = User.create(
@@ -104,37 +115,18 @@ inactive_user_1 = User.create(
 )
 inactive_user_2 = User.create(
   casa_org_id: pg_casa.id,
+  display_name: 'בְּרֵאשִׁית, בָּרָא אֱלֹהִים, אֵת הַשָּׁמַיִם, וְאֵת הָאָרֶץ',
   email: 'inactive2@example.com',
   password: '123456',
   password_confirmation: '123456',
   role: :inactive
 )
 
-# create CasaCases and assign volunteers to them
-case_1 = CasaCase.create(
-  case_number: "111"
-)
-
-case_assignment_1 = CaseAssignment.create(
-  casa_case: case_1,
-  volunteer: volunteer_user_1
-)
-
-case_2 = CasaCase.create(
-  case_number: "222",
-  transition_aged_youth: true
-)
-
-case_assignment_2 = CaseAssignment.create(
-  casa_case: case_2,
-  volunteer: volunteer_user_1
-)
-casa_cases = [ case_1, case_2 ]
-
 # generate more CasaCases, add data, assign case to volunteer
-CASE_COUNT.times do | index |
+casa_cases = []
+CASA_CASE_COUNT.times do | index |
   new_casa_case = CasaCase.create(
-    case_number: Faker::Number.unique.number(digits: 6),
+    case_number: Faker::Number.unique.number(digits: 6), # TODO: verify what case numbers look like
     transition_aged_youth: index % 3 == 0 # true for a third of cases
   )
   volunteer_assigned = volunteer_users[index % volunteer_users.length]
@@ -145,20 +137,22 @@ CASE_COUNT.times do | index |
   casa_cases.push(new_casa_case)
 end
 
-# associate half of the volunteers with supervisor_user_1, half with supervisor_user_2
-volunteer_users.each_with_index do | volunteer_user, i |
-  supervisor_user = i % 2 != 0 ? supervisor_user_1 : supervisor_user_2
+# associate volunteers with supervisors
+volunteer_users.each_with_index do | volunteer_user, index |
+  supervisor_assigned = supervisor_users[index % supervisor_users.length ]
   SupervisorVolunteer.create(
     [
-      { supervisor_id: supervisor_user.id, volunteer_id: volunteer_user.id }
+      { supervisor_id: supervisor_assigned.id, volunteer_id: volunteer_user.id }
     ]
   )
 end
 
 # create CaseContact and associate with CasaCase, volunteer creator and include data
+case_1 = casa_cases[0]
+case_1_volunteer = case_1.volunteers[0]
 CaseContact.create(
   [
-    { casa_case_id: case_1.id, creator_id: volunteer_user_1.id, duration_minutes: 15, occurred_at: DateTime.new(2020, 2, 3, 4, 5, 6), contact_type: :school },
-    { casa_case_id: case_1.id, creator_id: volunteer_user_1.id, duration_minutes: 15, occurred_at: DateTime.new(2020, 2, 10), contact_type: :school }
+    { casa_case_id: case_1.id, creator_id: case_1_volunteer.id, duration_minutes: 15, occurred_at: DateTime.new(2020, 2, 3, 4, 5, 6), contact_type: :school },
+    { casa_case_id: case_1.id, creator_id: case_1_volunteer.id, duration_minutes: 15, occurred_at: DateTime.new(2020, 2, 10), contact_type: :school }
   ]
 )
