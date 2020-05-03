@@ -31,7 +31,7 @@
         <td id="supervisor-column"><%= volunteer&.supervisor&.decorate&.name %></td>
         <td id="status-column"><%= volunteer.status %></td>
         <td><%= volunteer&.assigned_to_transition_aged_youth? %></td>
-        <td><%= volunteer&.casa_cases&.pluck(:case_number)&.join(', ') %></td>
+        <td><%= safe_join(volunteer&.casa_cases&.map { |c| link_to(c.case_number, c) }, ", ") %></td>
         <td><%= volunteer&.most_recent_contact&.occurred_at&.strftime('%B %e, %Y') %></td>
         <td><%= volunteer&.recent_contacts_made %></td>
         <td>
