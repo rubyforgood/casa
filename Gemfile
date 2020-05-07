@@ -17,6 +17,7 @@ gem 'pg', '>= 0.18', '< 2.0' # Use postgresql as the database for Active Record
 gem 'puma', '~> 4.1' # Use Puma as the app server
 gem 'pundit' # for authorization management - based on user.role field
 gem 'sass-rails', '>= 6' # Use SCSS for stylesheets
+gem 'sendgrid-ruby' # email
 gem 'skylight' # automated performance testing https://www.skylight.io/
 gem 'turbolinks', '~> 5' # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'webpacker', '~> 4.0' # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
@@ -32,6 +33,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 4.0.0'
   gem 'rubocop', '~> 0.80.1', require: false # RuboCop's development is moving at a very rapid pace and there are often backward-incompatible changes between minor releases (since we haven't reached version 1.0 yet). To prevent an unwanted RuboCop update you might want to use a conservative version lock in your Gemfile
   gem 'shoulda-matchers'
+  gem 'standardrb'
 end
 
 group :development do
