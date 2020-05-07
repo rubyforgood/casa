@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="col-sm-12 dashboard-table-header">
+    <h1>Cases</h1>
+    <% if policy(:dashboard).see_volunteers_section? %>
+      <%= link_to "New Case", new_casa_case_path, class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
+<table class="table case-list" id="casa_cases">
+  <thead>
+  <tr>
+    <th>Case Number</th>
+    <th>Transition Aged Youth</th>
+    <th>Assigned To</th>
+    <th>Actions</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @casa_cases.each do |casa_case| %>
+    <tr>
+      <td><%= link_to(casa_case.case_number, casa_case) %></td>
+      <td><%= casa_case.transition_aged_youth %></td>
+      <td><%= safe_join(casa_case&.volunteers&.map { |vol| link_to(vol.display_name, edit_volunteer_path(vol)) }, ", ") %></td>
+      <td><%= link_to 'Detail View', casa_case_path(casa_case) %></td>
+      <td><%= link_to 'Edit', edit_casa_case_path(casa_case) %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
