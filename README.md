@@ -70,6 +70,7 @@ If you have any troubles, also look at `.travis.yml` which is what makes the CI 
 1. `bundle exec rails spec`
 1. `rails db:migrate`
 1. `bundle exec rails server` # run server
+1. `bundle exec standardrb --fix # auto-fix linting issues (optional)` [more linter info](https://github.com/testdouble/standard)
 
 ### Documentation
 
