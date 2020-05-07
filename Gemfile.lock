@@ -258,6 +258,7 @@ GEM
       rexml
     ruby-progressbar (1.10.1)
     ruby_dep (1.5.0)
+    ruby_http_client (3.5.0)
     rubyzip (2.3.0)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
@@ -272,6 +273,8 @@ GEM
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
+    sendgrid-ruby (6.2.0)
+      ruby_http_client (~> 3.4)
     shoulda-matchers (4.3.0)
       activesupport (>= 4.2.0)
     simplecov (0.18.5)
@@ -359,6 +362,7 @@ DEPENDENCIES
   rubocop-rspec
   sass-rails (>= 6)
   selenium-webdriver
+  sendgrid-ruby
   shoulda-matchers
   simplecov
   skylight

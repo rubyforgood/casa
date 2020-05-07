@@ -17,6 +17,7 @@ gem 'pg', '>= 0.18', '< 2.0' # Use postgresql as the database for Active Record
 gem 'puma', '~> 4.1' # Use Puma as the app server
 gem 'pundit' # for authorization management - based on user.role field
 gem 'sass-rails', '>= 6' # Use SCSS for stylesheets
+gem 'sendgrid-ruby' # email
 gem 'skylight' # automated performance testing https://www.skylight.io/
 gem 'turbolinks', '~> 5' # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'webpacker', '~> 4.0' # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
