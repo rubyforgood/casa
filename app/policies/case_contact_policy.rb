@@ -50,6 +50,8 @@ class CaseContactPolicy
         scope.all
       when 'volunteer'
         scope.where(casa_case: CasaCase.actively_assigned_to(@user), creator: @user)
+      when 'supervisor'
+        scope.all
       else
         raise 'unrecognized role'
       end

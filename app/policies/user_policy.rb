@@ -21,39 +21,11 @@ class UserPolicy
         scope.all
       when 'volunteer'
         scope.where(id: user.id)
+      when 'supervisor'
+        scope.all
       else
         raise 'unrecognized role'
       end
     end
   end
-
-  # TODO: Uncomment and test the below as necessary, please.
-
-  # def index?
-  #   casa_admin_of_org?(user, record)
-  # end
-
-  # def show?
-  #   casa_admin_of_org?(user, record)
-  # end
-
-  # def create?
-  #   casa_admin_of_org?(user, record)
-  # end
-
-  # def new?
-  #   casa_admin_of_org?(user, record)
-  # end
-
-  # def update?
-  #   casa_admin_of_org?(user, record)
-  # end
-
-  # def edit?
-  #   casa_admin_of_org?(user, record)
-  # end
-
-  # def destroy?
-  #   casa_admin_of_org?(user, record)
-  # end
 end

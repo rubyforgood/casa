@@ -21,6 +21,8 @@ class CasaCasePolicy
         scope.ordered
       when 'volunteer'
         scope.actively_assigned_to(user)
+      when 'supervisor'
+        scope.ordered
       else
         raise 'unrecognized role'
       end

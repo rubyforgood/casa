@@ -1,5 +1,7 @@
 <% if current_user.casa_admin? %>
   <%= render 'admin_dashboard' %>
-<% else %>
+<% elsif current_user.volunteer? %>
   <%= render 'volunteer_dashboard' %>
+<% elsif current_user.supervisor? %>
+  <%= render 'supervisor_dashboard' %>
 <% end %>
