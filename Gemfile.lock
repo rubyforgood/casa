@@ -252,6 +252,8 @@ GEM
       rexml
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
+    rubocop-performance (1.5.2)
+      rubocop (>= 0.71.0)
     rubocop-rspec (1.38.1)
       rubocop (>= 0.68.1)
     ruby-graphviz (1.2.5)
@@ -296,6 +298,11 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    standard (0.2.5)
+      rubocop (~> 0.80.1)
+      rubocop-performance (~> 1.5.2)
+    standardrb (1.0.0)
+      standard
     thor (1.0.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
@@ -368,6 +375,7 @@ DEPENDENCIES
   skylight
   spring
   spring-watcher-listen (~> 2.0.0)
+  standardrb
   turbolinks (~> 5)
   tzinfo-data
   web-console (>= 3.3.0)
