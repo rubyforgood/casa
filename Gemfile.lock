@@ -164,7 +164,7 @@ GEM
       activerecord (>= 4.2)
       request_store (~> 1.1)
     parallel (1.19.1)
-    parser (2.7.1.0)
+    parser (2.7.1.2)
       ast (~> 2.4.0)
     pg (1.2.3)
     popper_js (1.16.0)
@@ -244,14 +244,14 @@ GEM
       rspec-mocks (~> 3.9)
       rspec-support (~> 3.9)
     rspec-support (3.9.2)
-    rubocop (0.80.1)
+    rubocop (0.82.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.7.0.1)
       rainbow (>= 2.2.2, < 4.0)
       rexml
       ruby-progressbar (~> 1.7)
-      unicode-display_width (>= 1.4.0, < 1.7)
+      unicode-display_width (>= 1.4.0, < 2.0)
     rubocop-performance (1.5.2)
       rubocop (>= 0.71.0)
     rubocop-rspec (1.38.1)
@@ -298,8 +298,8 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    standard (0.2.5)
-      rubocop (~> 0.80.1)
+    standard (0.4.0)
+      rubocop (~> 0.82.0)
       rubocop-performance (~> 1.5.2)
     standardrb (1.0.0)
       standard
@@ -311,7 +311,7 @@ GEM
     turbolinks-source (5.2.0)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
-    unicode-display_width (1.6.1)
+    unicode-display_width (1.7.0)
     warden (1.2.8)
       rack (>= 2.0.6)
     web-console (4.0.1)
@@ -365,7 +365,7 @@ DEPENDENCIES
   rails-erd
   rake
   rspec-rails (~> 4.0.0)
-  rubocop (~> 0.80.1)
+  rubocop (~> 0.82.0)
   rubocop-rspec
   sass-rails (>= 6)
   selenium-webdriver
