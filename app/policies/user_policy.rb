@@ -17,11 +17,11 @@ class UserPolicy
 
     def resolve
       case user.role
-      when 'casa_admin' # scope.in_casa_administered_by(user)
+      when "casa_admin" # scope.in_casa_administered_by(user)
         scope.all
-      when 'volunteer'
+      when "volunteer"
         scope.where(id: user.id)
-      when 'supervisor'
+      when "supervisor"
         scope.all
       else
         raise "unrecognized role #{@user.role}"

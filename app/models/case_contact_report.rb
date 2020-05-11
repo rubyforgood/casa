@@ -19,8 +19,8 @@ class CaseContactReport
     # Note: these header labels are for stakeholders and do not match the
     # Rails DB names in all cases, e.g. added_to_system_at header is case_contact.created_at
     %w[internal_contact_number duration_minutes contact_types contact_made
-       contact_medium occurred_at added_to_system_at casa_case_number
-       volunteer_email volunteer_name supervisor_name]
+      contact_medium occurred_at added_to_system_at casa_case_number
+      volunteer_email volunteer_name supervisor_name]
   end
 
   def generate_row(case_contact)
@@ -44,7 +44,7 @@ class CaseContactReport
       case_contact&.contact_types,
       case_contact&.contact_made,
       case_contact&.medium_type,
-      case_contact&.occurred_at&.strftime('%B %e, %Y'),
+      case_contact&.occurred_at&.strftime("%B %e, %Y"),
       case_contact&.created_at
     ]
   end

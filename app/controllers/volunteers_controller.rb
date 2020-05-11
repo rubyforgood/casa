@@ -23,7 +23,7 @@ class VolunteersController < ApplicationController
     @volunteer = User.find(params[:id])
 
     if @volunteer.update(update_volunteer_params)
-      redirect_to edit_volunteer_path(@volunteer), notice: 'Volunteer was successfully updated.'
+      redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was successfully updated."
     else
       render :edit
     end
@@ -39,7 +39,7 @@ class VolunteersController < ApplicationController
     VolunteerParameters
       .new(params)
       .with_password(generate_devise_password)
-      .with_role('volunteer')
+      .with_role("volunteer")
   end
 
   def update_volunteer_params

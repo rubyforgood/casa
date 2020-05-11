@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe User, type: :model do
   it { is_expected.to(belong_to(:casa_org)) }
@@ -8,7 +8,7 @@ RSpec.describe User, type: :model do
 
   it { is_expected.to(define_enum_for(:role).backed_by_column_of_type(:string)) }
 
-  it 'returns all case_contacts associated with this user and the casa case id supplied' do
+  it "returns all case_contacts associated with this user and the casa case id supplied" do
     volunteer = create(:user, :volunteer, :with_casa_cases)
 
     case_of_interest = volunteer.casa_cases.first
@@ -22,7 +22,7 @@ RSpec.describe User, type: :model do
     expect(result.length).to eq(1)
   end
 
-  it 'does not return case_contacts associated with another volunteer user' do
+  it "does not return case_contacts associated with another volunteer user" do
     volunteer = create(:user, :volunteer, :with_casa_cases)
     other_volunteer = create(:user, :volunteer, :with_casa_cases)
 

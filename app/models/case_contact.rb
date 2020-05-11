@@ -2,7 +2,7 @@
 class CaseContact < ApplicationRecord
   attr_accessor :duration_hours
 
-  belongs_to :creator, class_name: 'User'
+  belongs_to :creator, class_name: "User"
   belongs_to :casa_case
 
   CONTACT_TYPES = %w[

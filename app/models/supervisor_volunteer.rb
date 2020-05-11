@@ -1,9 +1,9 @@
 # relationship between a supervisor and volunteer
 class SupervisorVolunteer < ApplicationRecord
   has_paper_trail
-  belongs_to :volunteer, class_name: 'User'
-  belongs_to :supervisor, class_name: 'User'
-  validates :supervisor_id, uniqueness: { scope: :volunteer_id } # only 1 row allowed per supervisor-volunteer pair
+  belongs_to :volunteer, class_name: "User"
+  belongs_to :supervisor, class_name: "User"
+  validates :supervisor_id, uniqueness: {scope: :volunteer_id} # only 1 row allowed per supervisor-volunteer pair
 end
 
 # == Schema Information

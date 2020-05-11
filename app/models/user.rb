@@ -5,11 +5,11 @@ class User < ApplicationRecord
 
   belongs_to :casa_org
 
-  has_many :case_assignments, foreign_key: 'volunteer_id'
+  has_many :case_assignments, foreign_key: "volunteer_id"
   has_many :casa_cases, through: :case_assignments
-  has_one :supervisor_volunteer, foreign_key: 'volunteer_id'
+  has_one :supervisor_volunteer, foreign_key: "volunteer_id"
   has_one :supervisor, through: :supervisor_volunteer
-  has_many :case_contacts, foreign_key: 'creator_id'
+  has_many :case_contacts, foreign_key: "creator_id"
 
   ALL_ROLES = %w[volunteer supervisor casa_admin inactive].freeze
   enum role: ALL_ROLES.zip(ALL_ROLES).to_h
