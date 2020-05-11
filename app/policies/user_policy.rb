@@ -24,7 +24,7 @@ class UserPolicy
       when 'supervisor'
         scope.all
       else
-        raise 'unrecognized role'
+        raise "unrecognized role #{@user.role}"
       end
     end
   end

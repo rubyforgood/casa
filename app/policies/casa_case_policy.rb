@@ -24,7 +24,7 @@ class CasaCasePolicy
       when 'supervisor'
         scope.ordered
       else
-        raise 'unrecognized role'
+        raise "unrecognized role #{@user.role}"
       end
     end
   end
