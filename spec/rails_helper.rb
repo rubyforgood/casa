@@ -14,6 +14,7 @@ end
 RSpec.configure do |config|
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Devise::Test::IntegrationHelpers, type: :feature
+  config.include Devise::Test::IntegrationHelpers, type: :system
   config.include Warden::Test::Helpers
   config.after do
     Warden.test_reset!
