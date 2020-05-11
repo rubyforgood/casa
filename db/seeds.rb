@@ -177,19 +177,16 @@ vols.map do |vol|
     cc = ca.casa_case
     likely_durations = [15, 30, 60, 75, 4 * 60, 6 * 60]
     (1..3 * 12).map { |months_ago|
-      will_add_cc = rand(1..100) % 3 == 0
-      if will_add_cc
-        occurred_at = DateTime.now - months_ago.months
-        CaseContact.create(
-          casa_case: cc,
-          creator: vol,
-          duration_minutes:
-              likely_durations.sample,
-          occurred_at: occurred_at,
-          contact_types: [CaseContact::CONTACT_TYPES.sample(3)],
-          medium_type: CaseContact::CONTACT_MEDIUMS.sample
-        )
-      end
+      occurred_at = DateTime.now - months_ago.months
+      CaseContact.create(
+        casa_case: cc,
+        creator: vol,
+        duration_minutes:
+            likely_durations.sample,
+        occurred_at: occurred_at,
+        contact_types: CaseContact::CONTACT_TYPES.sample(3),
+        medium_type: CaseContact::CONTACT_MEDIUMS.sample
+      )
     }
   }
 end
