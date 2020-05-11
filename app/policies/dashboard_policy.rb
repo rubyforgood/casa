@@ -16,7 +16,7 @@ class DashboardPolicy
   end
 
   def create_case_contacts?
-    user.role == 'volunteer'
+    user.role == "volunteer"
   end
 
   def see_cases_section?

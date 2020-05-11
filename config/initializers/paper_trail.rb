@@ -6,10 +6,10 @@ PaperTrail::Rails::Engine.eager_load!
 # Record paper_trail whodunnit in rails console also
 # Defer evaluation in case we're using spring loader (otherwise it would be something like "spring app    | app | started 13 secs ago | development")
 PaperTrail.request.whodunnit = lambda {
-  if Rails.const_defined?('Console') || File.basename($PROGRAM_NAME) == 'rake'
+  if Rails.const_defined?("Console") || File.basename($PROGRAM_NAME) == "rake"
     "#{`whoami`.strip}: console"
   else
-    "#{`whoami`.strip}: #{File.basename($PROGRAM_NAME)} #{ARGV.join ' '}"
+    "#{`whoami`.strip}: #{File.basename($PROGRAM_NAME)} #{ARGV.join " "}"
   end
 }
 

@@ -1,8 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe UserPolicy::Scope do
-  describe '#resolve' do
-    it 'returns all Users when user is admin' do
+  describe "#resolve" do
+    it "returns all Users when user is admin" do
       admin = create(:user, :casa_admin)
       user1 = create(:user)
       user2 = create(:user)
@@ -12,7 +12,7 @@ RSpec.describe UserPolicy::Scope do
       expect(scope.resolve).to contain_exactly(admin, user1, user2)
     end
 
-    it 'returns the user when user is volunteer' do
+    it "returns the user when user is volunteer" do
       user = create(:user, :volunteer)
 
       scope = described_class.new(user, User)

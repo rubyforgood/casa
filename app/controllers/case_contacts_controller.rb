@@ -29,13 +29,13 @@ class CaseContactsController < ApplicationController
   def create
     # Iterate over all casa_cases and put success boolean into array to decide
     # what to render after loop finishes
-    success_array = casa_cases.each_with_object([]) do |casa_case, array|
+    success_array = casa_cases.each_with_object([]) { |casa_case, array|
       @case_contact = casa_case.case_contacts.create(create_case_contact_params)
       array << @case_contact.save
-    end
+    }
 
     if success_array.all? true
-      redirect_to root_path, notice: 'Case contact was successfully created.'
+      redirect_to root_path, notice: "Case contact was successfully created."
     else
       render :new
     end
@@ -46,7 +46,7 @@ class CaseContactsController < ApplicationController
   def update
     respond_to do |format|
       if @case_contact.update(case_contact_params)
-        format.html { redirect_to root_path, notice: 'Case contact was successfully updated.' }
+        format.html { redirect_to root_path, notice: "Case contact was successfully updated." }
         format.json { render :show, status: :ok, location: @case_contact }
       else
         format.html { render :edit }
@@ -61,7 +61,7 @@ class CaseContactsController < ApplicationController
     @case_contact.destroy
     respond_to do |format|
       format.html do
-        redirect_to case_contacts_url, notice: 'Case contact was successfully destroyed.'
+        redirect_to case_contacts_url, notice: "Case contact was successfully destroyed."
       end
       format.json { head :no_content }
     end

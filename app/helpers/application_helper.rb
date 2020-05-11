@@ -1,6 +1,6 @@
 module ApplicationHelper
   def body_class
-    qualified_controller_name = controller.controller_path.tr('/', '-')
+    qualified_controller_name = controller.controller_path.tr("/", "-")
     "#{qualified_controller_name} #{qualified_controller_name}-#{controller.action_name}"
   end
 
@@ -11,9 +11,9 @@ module ApplicationHelper
 
   def session_link
     if user_signed_in?
-      link_to('Log out', destroy_user_session_path, class: 'btn btn-light')
+      link_to("Log out", destroy_user_session_path, class: "btn btn-light")
     else
-      link_to('Log in', new_user_session_path, class: 'btn btn-light')
+      link_to("Log in", new_user_session_path, class: "btn btn-light")
     end
   end
 end

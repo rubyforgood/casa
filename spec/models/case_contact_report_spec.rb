@@ -1,8 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe CaseContactReport, type: :model do
-  describe '#generate_headers' do
-    it 'matches the length of row data' do
+  describe "#generate_headers" do
+    it "matches the length of row data" do
       case_contact = create(:case_contact)
       case_contact_report = described_class.new(case_contact)
 

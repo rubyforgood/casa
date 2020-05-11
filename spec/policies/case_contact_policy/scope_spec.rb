@@ -1,8 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe CaseContactPolicy::Scope do
-  describe '#resolve' do
-    it 'returns all CaseContacts when user is admin' do
+  describe "#resolve" do
+    it "returns all CaseContacts when user is admin" do
       user = create(:user, :casa_admin)
       all_case_contacts = create_list(:case_contact, 2)
 
@@ -11,8 +11,8 @@ RSpec.describe CaseContactPolicy::Scope do
       expect(scope.resolve).to eq all_case_contacts
     end
 
-    context 'when user is volunteer' do
-      it 'returns all of the case contacts of the volunteer' do
+    context "when user is volunteer" do
+      it "returns all of the case contacts of the volunteer" do
         current_user = create(:user, :volunteer)
         relevant_case = create(:casa_case)
         other_user = create(:user, :volunteer)

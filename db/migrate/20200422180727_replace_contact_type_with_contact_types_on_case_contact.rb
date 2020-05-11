@@ -1,6 +1,5 @@
 class ReplaceContactTypeWithContactTypesOnCaseContact < ActiveRecord::Migration[6.0]
   def change
-
     # NOTE: This is a destructive migration that we would normally avoid
     #       if we were working on production data, but because there is
     #       no production data we are comfortable being destructive and
