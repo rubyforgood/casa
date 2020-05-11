@@ -1,4 +1,6 @@
 class VolunteersController < ApplicationController
+  # NOTE: I don't know what auth levels to use here, but am pretty certain it needs SOMETHING.
+  before_action :authenticate_user!
   before_action :must_be_admin
 
   def new

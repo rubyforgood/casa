@@ -1,4 +1,6 @@
 class CasaOrgsController < ApplicationController
+  # NOTE: I don't know what auth levels to use here, but am pretty certain it needs SOMETHING.
+  before_action :authenticate_user!
   before_action :set_casa_org, only: %i[show edit update destroy]
 
   # GET /casa_orgs
