@@ -12,7 +12,6 @@ require "rails_helper"
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-
 RSpec.describe "/casa_orgs", type: :request do
   before do
     skip "None of these currently do authorization, and I think that might be necessary. \
