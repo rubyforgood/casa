@@ -42,7 +42,7 @@
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="user[role]" id="statusRadio2" value="inactive" <% if @volunteer.role == "inactive" %> checked<% end %>>
+          <input class="form-check-input" type="radio" name="user[role]" id="statusRadio2" value="inactive" <% if @volunteer.role == "inactive" %> checked<% end %> onclick="return confirm('WARNING: Marking a volunteer inactive will make them unable to login. They will receive an email saying their account has been marked inactive. Are you sure you want to do this?')">
           <label class="form-check-label" for="statusRadio2">
             Inactive
           </label>

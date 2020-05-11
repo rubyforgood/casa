@@ -8,18 +8,19 @@ RSpec.describe 'Admin: Editing Volunteers', type: :system do
     sign_in admin
     visit edit_volunteer_path(volunteer)  
 
-    choose "Inactive"
-
     dismiss_confirm do
-      click_on "Submit"
+      choose "Inactive"
     end
-    volunteer.reload
-    expect(volunteer).to be_is_active
+    expect(find_field("statusRadio2")).not_to be_checked
 
     accept_confirm do
-      click_on "Submit"
+      choose "Inactive"
     end
-    volunteer.reload
-    expect(volunteer).not_to be_is_active
+    expect(find_field("statusRadio2")).to be_checked
+
+    click_on "Submit"
+    expect do
+      volunteer.reload
+    end.to change{volunteer.role}.from("volunteer").to("inactive")
   end  
 end
