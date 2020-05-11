@@ -49,8 +49,7 @@ https://casa-r4g-staging.herokuapp.com/
 
 ### Error tracking
 
-We are currently using https://app.bugsnag.com/ to track errors in staging. 
-We may switch bugsnag accounts in the future because the current one is an old personal one. 
+We are currently using https://app.bugsnag.com/ to track errors in staging. Errors post to slack at #casa-bots 
 
 ### Setup to develop:
 
