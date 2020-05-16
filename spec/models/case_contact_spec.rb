@@ -19,7 +19,7 @@ RSpec.describe CaseContact, type: :model do
     expect(case_contact.errors[:contact_types]).to eq(["can't be blank"])
   end
 
-  it "validates contact types are of allowed types" do
+  it "validates contact types are of allowed types" do   
     case_contact = build(:case_contact, contact_types: ["popcorn"])
     expect(case_contact).to_not be_valid
     expect(case_contact.errors[:contact_types]).to eq(["must have valid contact types"])

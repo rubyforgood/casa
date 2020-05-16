@@ -30,7 +30,7 @@ class CaseContact < ApplicationRecord
   end
 
   def occurred_at_not_in_future
-    errors.add(:occurred_at, :invalid, message: "cannot be in the future") unless occurred_at <= Date.today
+    errors.add(:occurred_at, :invalid, message: "cannot be in the future") unless occurred_at <= Date.tomorrow
   end
 end
 
