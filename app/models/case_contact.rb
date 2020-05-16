@@ -25,7 +25,7 @@ class CaseContact < ApplicationRecord
   validate :occurred_at_not_in_future
   def contact_types_included
     contact_types&.each do |contact_type|
-      errors.add(:contact_types, :invalid) unless CONTACT_TYPES.include? contact_type
+      errors.add(:contact_types, :invalid, message: "must have valid contact types") unless CONTACT_TYPES.include? contact_type
     end
   end
 
