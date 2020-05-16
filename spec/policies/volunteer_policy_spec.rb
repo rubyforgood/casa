@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe DashboardPolicy do
+RSpec.describe VolunteerPolicy do
   subject { described_class }
 
   permissions :update_volunteer_email? do

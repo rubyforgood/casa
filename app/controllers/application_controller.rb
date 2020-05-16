@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
     redirect_to root_url
   end
 
-    def must_be_admin_or_supervisor
+  def must_be_admin_or_supervisor
     return if current_user&.casa_admin? || current_user&.supervisor?
 
     flash[:notice] = "You do not have permission to view that page."
