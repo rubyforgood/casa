@@ -1,7 +1,8 @@
 class VolunteersController < ApplicationController
-  # NOTE: I don't know what auth levels to use here, but am pretty certain it needs SOMETHING.
+  # Uses authenticate_user to redirect if no user is signed in
+  # and must_be_admin_or_supervisor to check user's role is appropriate
   before_action :authenticate_user!
-  before_action :must_be_admin
+  before_action :must_be_admin_or_supervisor
 
   def new
     @volunteer = User.new(role: :volunteer)
