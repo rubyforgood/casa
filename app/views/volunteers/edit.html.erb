@@ -19,7 +19,11 @@
 
       <div class="field form-group">
         <%= form.label :email %>
-        <%= form.text_field :email, class: "form-control" %>
+        <% if policy(:volunteer).update_volunteer_email? %>
+          <%= form.text_field :email, class: "form-control" %>
+        <% else %>
+          <input class="form-control" type="text" placeholder="<%= @volunteer.email %>" readonly>
+        <% end %>
       </div>
 
       <div class="field form-group">

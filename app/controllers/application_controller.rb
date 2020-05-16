@@ -9,4 +9,11 @@ class ApplicationController < ActionController::Base
     flash[:notice] = "You do not have permission to view that page."
     redirect_to root_url
   end
+
+  def must_be_admin_or_supervisor
+    return if current_user&.casa_admin? || current_user&.supervisor?
+
+    flash[:notice] = "You do not have permission to view that page."
+    redirect_to root_url
+  end
 end
