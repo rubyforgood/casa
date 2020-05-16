@@ -23,6 +23,9 @@ Style/Documentation:
 Style/FrozenStringLiteralComment:
   Enabled: False
 
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
 # Metrics Cops
 Metrics/BlockLength:
   Enabled: False
