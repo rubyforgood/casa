@@ -22,13 +22,18 @@ class CaseContact < ApplicationRecord
 
   validates :contact_types, presence: true
   validate :contact_types_included
-
+  validate :occurred_at_not_in_future
   def contact_types_included
     contact_types&.each do |contact_type|
-      errors.add(:contact_types, :invalid) unless CONTACT_TYPES.include? contact_type
+      errors.add(:contact_types, :invalid, message: "must have valid contact types") unless CONTACT_TYPES.include? contact_type
     end
   end
+
+  def occurred_at_not_in_future
+    errors.add(:occurred_at, :invalid, message: "cannot be in the future") unless occurred_at <= Date.tomorrow
+  end
 end
+
 
 # == Schema Information
 #
