@@ -21,8 +21,10 @@ class CaseContact < ApplicationRecord
   CONTACT_MEDIUMS = %w[in-person text/email video voice-only letter].freeze
 
   validates :contact_types, presence: true
+  validates :occurred_at, presence: true
   validate :contact_types_included
   validate :occurred_at_not_in_future
+
   def contact_types_included
     contact_types&.each do |contact_type|
       errors.add(:contact_types, :invalid, message: "must have valid contact types") unless CONTACT_TYPES.include? contact_type
@@ -30,6 +32,7 @@ class CaseContact < ApplicationRecord
   end
 
   def occurred_at_not_in_future
+    return unless occurred_at
     errors.add(:occurred_at, :invalid, message: "cannot be in the future") unless occurred_at <= Date.tomorrow
   end
 end

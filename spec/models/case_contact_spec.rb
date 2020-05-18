@@ -14,12 +14,18 @@ RSpec.describe CaseContact, type: :model do
   end
 
   it "validates presence of contact types" do
-    case_contact = build(:case_contact, contact_types: nil)
+    case_contact = build(:case_contact, contact_types: ngil)
     expect(case_contact).to_not be_valid
     expect(case_contact.errors[:contact_types]).to eq(["can't be blank"])
   end
 
-  it "validates contact types are of allowed types" do   
+  it "validates presence of occurred_at" do
+    case_contact = build(:case_contact, occurred_at: nil)
+    expect(case_contact).to_not be_valid
+    expect(case_contact.errors[:occurred_at]).to eq(["can't be blank"])
+  end
+
+  it "validates contact types are of allowed types" do
     case_contact = build(:case_contact, contact_types: ["popcorn"])
     expect(case_contact).to_not be_valid
     expect(case_contact.errors[:contact_types]).to eq(["must have valid contact types"])
@@ -31,4 +37,3 @@ RSpec.describe CaseContact, type: :model do
     expect(case_contact.errors[:occurred_at]).to eq(["cannot be in the future"])
   end
 end
-
