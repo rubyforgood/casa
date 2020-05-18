@@ -122,7 +122,6 @@ GEM
       activesupport (>= 4.2.0)
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
-    jaro_winkler (1.5.4)
     jbuilder (2.10.0)
       activesupport (>= 5.0.0)
     jquery-datatables-rails (3.4.0)
@@ -237,8 +236,7 @@ GEM
       rspec-mocks (~> 3.9)
       rspec-support (~> 3.9)
     rspec-support (3.9.2)
-    rubocop (0.82.0)
-      jaro_winkler (~> 1.5.1)
+    rubocop (0.83.0)
       parallel (~> 1.10)
       parser (>= 2.7.0.1)
       rainbow (>= 2.2.2, < 4.0)
@@ -289,8 +287,8 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
-    standard (0.4.0)
-      rubocop (~> 0.82.0)
+    standard (0.4.2)
+      rubocop (~> 0.83.0)
       rubocop-performance (~> 1.5.2)
     standardrb (1.0.0)
       standard
@@ -356,7 +354,7 @@ DEPENDENCIES
   rails (~> 6.0.3)
   rake
   rspec-rails (~> 4.0.0)
-  rubocop (~> 0.82.0)
+  rubocop (~> 0.83.0)
   rubocop-rspec
   sass-rails (>= 6)
   selenium-webdriver
