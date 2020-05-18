@@ -14,7 +14,7 @@ RSpec.describe CaseContact, type: :model do
   end
 
   it "validates presence of contact types" do
-    case_contact = build(:case_contact, contact_types: ngil)
+    case_contact = build(:case_contact, contact_types: nil)
     expect(case_contact).to_not be_valid
     expect(case_contact.errors[:contact_types]).to eq(["can't be blank"])
   end
