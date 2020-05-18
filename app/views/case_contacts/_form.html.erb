@@ -1,7 +1,7 @@
 <%= form_with(model: case_contact, local: true) do |form| %>
   <% if case_contact.errors.any? %>
-    <div id="error_explanation">
-      <h6><%= pluralize(case_contact.errors.count, "error") %> prohibited this case_contact from being saved:</h6>
+    <div id="error_explanation" class="alert alert-danger">
+      <h6><%= pluralize(case_contact.errors.count, "error") %> prohibited this Case Contact from being saved:</h6>
 
       <ul>
         <% case_contact.errors.full_messages.each do |message| %>
