@@ -1,0 +1,12 @@
+form {
+  .field_with_errors {
+    label {
+      @extend .text-danger;
+      @extend .font-weight-bold;
+    }
+
+    input {
+      border: 1px solid $red;
+    }
+  }
+}
