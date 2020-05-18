@@ -1,8 +1,8 @@
 form {
   .field_with_errors {
     label {
-      @extend .text-danger;
-      @extend .font-weight-bold;
+      @extend .text-danger !optional;
+      @extend .font-weight-bold !optional;
     }
 
     input {
