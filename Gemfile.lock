@@ -66,14 +66,14 @@ GEM
       activerecord (>= 3.2, < 7.0)
       rake (>= 10.4, < 14.0)
     ast (2.4.0)
-    autoprefixer-rails (9.7.5)
+    autoprefixer-rails (9.7.6)
       execjs
     awesome_print (1.8.0)
     bcrypt (3.1.13)
     bindex (0.8.1)
     bootsnap (1.4.6)
       msgpack (~> 1.0)
-    bootstrap (4.4.1)
+    bootstrap (4.5.0)
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
@@ -252,7 +252,7 @@ GEM
     rubyzip (2.3.0)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
-    sassc (2.2.1)
+    sassc (2.3.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
       railties (>= 4.0.0)
@@ -331,7 +331,7 @@ DEPENDENCIES
   annotate
   awesome_print
   bootsnap (>= 1.4.2)
-  bootstrap (~> 4.4.1)
+  bootstrap (~> 4.5.0)
   brakeman
   bugsnag
   byebug
