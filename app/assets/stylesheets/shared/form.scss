@@ -9,4 +9,10 @@ form {
       border: 1px solid $red;
     }
   }
+
+  .alert.alert-danger {
+    ul {
+      margin-bottom: 0;
+    }
+  }
 }
