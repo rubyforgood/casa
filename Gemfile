@@ -5,7 +5,7 @@ ruby "2.7.0"
 gem "rails", "~> 6.0.3"
 
 gem "awesome_print" # easier console reading
-gem "bootstrap", "~> 4.5.0" # frontend styling library
+gem "bootstrap", "~> 4.4.1" # frontend styling library
 gem "devise" # for authentication
 gem "draper" # adds decorators for cleaner presentation logic
 gem "faker" # creates realistic seed data, valuable for staging and demos
