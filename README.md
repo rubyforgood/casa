@@ -1,4 +1,5 @@
 # CASA Project & Organization Overview
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=rubyforgood/casa)](https://dependabot.com)
 [![Maintainability](https://api.codeclimate.com/v1/badges/???/maintainability)](https://codeclimate.com/github/rubyforgood/casa/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/???/test_coverage)](https://codeclimate.com/github/rubyforgood/casa/test_coverage)
 [![Build Status](https://travis-ci.org/rubyforgood/casa.svg?branch=master)](https://travis-ci.org/rubyforgood/casa) 
@@ -75,13 +76,9 @@ If you have any troubles, also look at `.travis.yml` which is what makes the CI 
 
 There is a `doc` directory at the top level that includes [Architectural Decision Records](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) and entity relationship diagram of various models.
 
-### Dependencies
-
-Beyond `gems` for the app's dependencies, this repo also has a dependency on `Graphviz` because we use [`rails-erd` gem](https://github.com/voormedia/rails-erd) and have it setup to autogenerate the ERD. Check out the [gem's recommended steps](http://voormedia.github.io/rails-erd/install.html) to install Graphviz.
-
 #### Common issues
 
-1. If your rake/rake commands hang forever instead of running, try: `rails app:update:bin #`
+1. If your rake/rake commands hang forever instead of running, try: `rails app:update:bin`
 1. There is currently no option for a user to sign up and create an account through the UI. This is intentional. If you want to log in, use a pre-seeded user account and its credentials.
 
 ### Communication

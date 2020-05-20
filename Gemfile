@@ -14,11 +14,12 @@ gem "jquery-datatables-rails", "~> 3.4.0"
 gem "jquery-rails" # Add jquery to asset pipeline
 gem "paper_trail" # tracking changes
 gem "pg", ">= 0.18", "< 2.0" # Use postgresql as the database for Active Record
-gem "puma", "~> 4.1" # Use Puma as the app server
+gem "puma", "~> 4.3" # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "sass-rails", ">= 6" # Use SCSS for stylesheets
 gem "sendgrid-ruby" # email
 gem "skylight" # automated performance testing https://www.skylight.io/
+gem "sprockets-rails" # Provides Sprockets implementation for Rails Asset Pipeline.
 gem "turbolinks", "~> 5" # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem "webpacker", "~> 5.1" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 
@@ -30,8 +31,8 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "pry"
   gem "pry-byebug"
-  gem "rspec-rails", "~> 4.0.0"
-  gem "rubocop", "~> 0.82.0", require: false # RuboCop's development is moving at a very rapid pace and there are often backward-incompatible changes between minor releases (since we haven't reached version 1.0 yet). To prevent an unwanted RuboCop update you might want to use a conservative version lock in your Gemfile
+  gem "rspec-rails", "~> 4.0.1"
+  gem "rubocop", "~> 0.83.0", require: false # RuboCop's development is moving at a very rapid pace and there are often backward-incompatible changes between minor releases (since we haven't reached version 1.0 yet). To prevent an unwanted RuboCop update you might want to use a conservative version lock in your Gemfile
   gem "shoulda-matchers"
   gem "standardrb"
 end
@@ -40,7 +41,6 @@ group :development do
   gem "annotate" # for adding db field listings to models as comments
   gem "letter_opener" # Opens emails in new tab for easier testing
   gem "listen", ">= 3.0.5", "< 3.3"
-  gem "rails-erd"
   gem "spring" # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring-watcher-listen", "~> 2.0.0"
   gem "web-console", ">= 3.3.0" # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
