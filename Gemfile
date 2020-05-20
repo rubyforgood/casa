@@ -19,7 +19,7 @@ gem "pundit" # for authorization management - based on user.role field
 gem "sass-rails", ">= 6" # Use SCSS for stylesheets
 gem "sendgrid-ruby" # email
 gem "skylight" # automated performance testing https://www.skylight.io/
-gem "sprockets-rails" # Pin sprockets-rails so we can use variables within scss files
+gem "sprockets-rails" # Provides Sprockets implementation for Rails Asset Pipeline.
 gem "turbolinks", "~> 5" # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem "webpacker", "~> 5.1" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 
