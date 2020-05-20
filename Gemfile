@@ -25,7 +25,7 @@ gem "webpacker", "~> 5.1" # Transpile app-like JavaScript. Read more: https://gi
 
 gem "bootsnap", ">= 1.4.2", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "bugsnag" # tracking errors in prod
-
+gem 'rails_12factor', group: :production
 group :development, :test do
   gem "byebug", platforms: %i[mri mingw x64_mingw] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "factory_bot_rails"
