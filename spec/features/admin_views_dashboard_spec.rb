@@ -56,6 +56,6 @@ RSpec.describe "admin views dashboard", type: :feature do
     click_on "Status"
     find(:css, 'input[data-value="Active"]').set(false)
 
-    expect(page.all("table#volunteers tr").count).to eq 2
+    expect(page.all("table#volunteers tr").count).to eq 4
   end
 end
