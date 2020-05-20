@@ -132,13 +132,11 @@ User.create(
 )
 
 def case_number_generator
-  # https://aoc.custhelp.com/app/answers/detail/a_id/309/~/court-case-number-format
-  # https://en.wikipedia.org/wiki/CM/ECF
+  # CINA-YY-XXXX
   years = ((DateTime.now.year - 20)..DateTime.now.year).to_a
-  year = years.sample.to_s[2..3]
-  month = (1..12).to_a.sample.to_s.rjust(2, "0")
-  sequence_num = rand(1000..9999).to_s.rjust(5, "0")
-  "D:#{year}#{month}-FMS-#{sequence_num}"
+  yy = years.sample.to_s[2..3]
+  sequence_num = rand(1000..9999)
+  "CINA-#{yy}-#{sequence_num}"
 end
 
 def chance_of_transition_aged
