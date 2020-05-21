@@ -12,12 +12,12 @@ gem "faker" # creates realistic seed data, valuable for staging and demos
 gem "jbuilder", "~> 2.7" # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jquery-datatables-rails", "~> 3.4.0"
 gem "jquery-rails" # Add jquery to asset pipeline
+gem "mailgun-ruby" # Use Mailgun for email in production
 gem "paper_trail" # tracking changes
 gem "pg", ">= 0.18", "< 2.0" # Use postgresql as the database for Active Record
 gem "puma", "~> 4.3" # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "sass-rails", ">= 6" # Use SCSS for stylesheets
-gem "sendgrid-ruby" # email
 gem "skylight" # automated performance testing https://www.skylight.io/
 gem "sprockets-rails" # Provides Sprockets implementation for Rails Asset Pipeline.
 gem "turbolinks", "~> 5" # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
