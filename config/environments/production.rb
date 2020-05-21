@@ -1,7 +1,7 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  # config.action_mailer.default_url_options = {host: "??? not sure yet what our URL will be", port: 3000} # for devise authentication
+  config.action_mailer.default_url_options = { host: ENV["DEFAULT_URL_HOST"] } # for devise authentication
   config.action_mailer.delivery_method = :mailgun
   config.action_mailer.mailgun_settings = {
     api_key: ENV["MAILGUN_API_KEY"],
