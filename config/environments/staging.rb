@@ -1,5 +1,7 @@
 Rails.application.configure do
-  config.action_mailer.default_url_options = {host: "??? not sure yet what our URL will be", port: 3000} # for devise authentication
+  config.action_mailer.default_url_options = { host: ENV["DEFAULT_URL_HOST"] } # for devise authentication
+
+
   config.cache_classes = true
   config.eager_load = true
   config.consider_all_requests_local = false
@@ -12,16 +14,11 @@ Rails.application.configure do
 
   # email
   config.action_mailer.perform_caching = false
-  config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
-  config.action_mailer.smtp_settings = {
-    user_name: "apikey",
-    password: ENV["SENDGRID_API_KEY"],
-    domain: "casa-r4g-staging.herokuapp.com",
-    address: "smtp.sendgrid.net",
-    port: 587,
-    authentication: :plain,
-    enable_starttls_auto: true
+  config.action_mailer.delivery_method = :mailgun
+  config.action_mailer.mailgun_settings = {
+    api_key: ENV["MAILGUN_API_KEY"],
+    domain: ENV["MAILGUN_DOMAIN"]
   }
 
   config.i18n.fallbacks = true
