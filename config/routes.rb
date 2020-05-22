@@ -8,9 +8,8 @@ Rails.application.routes.draw do
   resources :case_contacts
   resources :reports, only: %i[show index]
 
-  resources :volunteers, only: %i[new edit create update] do
-    resources :case_assignments, only: %i[create destroy]
-  end
+  resources :volunteers, only: %i[new edit create update]
+  resources :case_assignments, only: %i[create destroy]
 
   resources :users, only: [] do
     collection do
