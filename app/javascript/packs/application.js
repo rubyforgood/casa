@@ -7,10 +7,10 @@ require("@rails/ujs").start()
 require("@rails/activestorage").start()
 require("channels")
 require("jquery")
+require('datatables.net-dt')
 require("packs/new_casa_contact")
 require("packs/show_casa_case")
 require("packs/dashboard")
-require('datatables.net-dt')
 import 'bootstrap'
 
 // Uncomment to copy all static images under ../images to the output folder and reference
