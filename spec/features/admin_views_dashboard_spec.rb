@@ -44,18 +44,26 @@ RSpec.describe "admin views dashboard", type: :feature do
     expect(page).to have_css("form#new_user")
   end
 
-  it "can filters volunteers", type: :system do
+  it "can filter volunteers", type: :system do
     create_list(:user, 3, :volunteer)
+    create_list(:user, 2, :inactive)
 
     sign_in admin
 
     visit root_path
     expect(page).to have_selector(".volunteer-filters")
+
+    # by default, only active users are shown, so result should be 4 here
     expect(page.all("table#volunteers tr").count).to eq 4
 
     click_on "Status"
     find(:css, 'input[data-value="Active"]').set(false)
 
-    expect(page.all("table#volunteers tr").count).to eq 4
+    # when all users are hidden, the tr count will be 2 for header and "no results" row
+    expect(page.all("table#volunteers tr").count).to eq 2
+
+    find(:css, 'input[data-value="Inactive"]').set(true)
+
+    expect(page.all("table#volunteers tr").count).to eq 3
   end
 end

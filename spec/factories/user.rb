@@ -17,6 +17,10 @@ FactoryBot.define do
       role { :casa_admin }
     end
 
+    trait :inactive do
+      role { :inactive }
+    end
+
     trait :with_casa_cases do
       after(:create) do |user, _|
         create_list(:case_assignment, 2, volunteer: user)
