@@ -10,7 +10,7 @@
       <%= render "/shared/error_messages", resource: @casa_case %>
 
       <div class="field form-group">
-        <% if policy(@casa_case).update_case_number? %>
+        <% if Pundit.policy(current_user, @casa_case).update_case_number? %>
           <%= form.label :case_number %>
           <%= form.text_field :case_number, class: "form-control" %>
         <% else %>
@@ -34,51 +34,6 @@
 
 <br>
 
-<% if @casa_case.volunteers.present? %>
-  <br>
-  <div class="row">
-    <div class="col-sm-12">
-      <h3>Assigned Volunteers</h3>
-      <table class='table case-list'>
-        <thead>
-          <tr>
-            <th>Volunteer Name</th>
-            <th>Volunteer Email</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @casa_case.case_assignments.each do |assignment| %>
-            <tr>
-              <td><%= link_to assignment&.volunteer&.display_name, edit_volunteer_path(assignment.volunteer) %></td>
-              <td><%= assignment&.volunteer&.email %></td>
-              <td><%= button_to 'Unassign Volunteer', case_assignment_path(assignment, casa_case_id: @casa_case.id), method: :delete, class: "btn btn-danger" %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-  </div>
+<% if Pundit.policy(current_user, @casa_case).assign_volunteers? %>
+  <%= render "volunteer_assignment" %>
 <% end %>
-
-<br>
-
-<div class="row">
-  <div class="col-sm-6">
-    <h3>Assign a New Volunteer</h3>
-
-    <%= form_for CaseAssignment.new, url: case_assignments_path(casa_case_id: @casa_case.id) do |form| %>
-
-      <div class='form-group'>
-        <label for='case_assignment_casa_case_id'>Select a Volunteer</label>
-        <select name='case_assignment[volunteer_id]' class='form-control'>
-          <% User.where(role: "volunteer").all.order(:display_name).each do |volunteer| %>
-            <option value="<%= volunteer.id %>"><%= volunteer.display_name %></option>
-          <% end %>
-        </select>
-      </div>
-
-      <%= form.submit 'Assign Volunteer', class: 'btn btn-primary' %>
-    <% end %>
-  </div>
-</div>
