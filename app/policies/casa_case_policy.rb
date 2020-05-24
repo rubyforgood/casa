@@ -33,6 +33,10 @@ class CasaCasePolicy
     user.casa_admin?
   end
 
+  def assign_volunteers?
+    _is_supervisor_or_casa_admin?
+  end
+
   def permitted_attributes
     case @user.role
     when "casa_admin"

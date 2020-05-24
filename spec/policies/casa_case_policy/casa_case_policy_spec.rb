@@ -17,6 +17,20 @@ RSpec.describe CasaCasePolicy do
     end
   end
 
+  permissions :assign_volunteers? do
+    context "when user is an admin" do
+      it "does allow volunteer assignment" do
+        expect(subject).to permit(create(:user, :casa_admin), create(:casa_case))
+      end
+    end
+
+    context "when user is a volunteer" do
+      it "does not allow volunteer assignment" do
+        expect(subject).not_to permit(create(:user, :volunteer), create(:casa_case))
+      end
+    end
+  end
+
   permissions :show? do
     it "allows casa_admins" do
       expect(subject).to permit(create(:user, :casa_admin), create(:casa_case))
