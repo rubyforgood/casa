@@ -22,7 +22,7 @@
       <td id="status-column"><%= volunteer.status %></td>
       <td><%= volunteer&.assigned_to_transition_aged_youth? %></td>
       <td><%= safe_join(volunteer&.casa_cases&.map { |c| link_to(c.case_number, c) }, ", ") %></td>
-      <td><%= volunteer&.most_recent_contact&.occurred_at&.strftime('%B %e, %Y') %></td>
+      <td><%= link_to(volunteer.most_recent_contact.occurred_at.strftime('%B %e, %Y'), volunteer.most_recent_contact.casa_case) if volunteer&.most_recent_contact %></td>
       <td><%= volunteer&.recent_contacts_made %></td>
       <td>
         <%= link_to 'Edit', edit_volunteer_path(volunteer) %>

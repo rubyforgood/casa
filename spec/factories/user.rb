@@ -26,5 +26,12 @@ FactoryBot.define do
         create_list(:case_assignment, 2, volunteer: user)
       end
     end
+
+    trait :with_case_contact do
+      after(:create) do |user, _|
+        create(:case_assignment, volunteer: user)
+        create(:case_contact, creator: user, casa_case: user.casa_cases.first, contact_made: true)
+      end
+    end
   end
 end
