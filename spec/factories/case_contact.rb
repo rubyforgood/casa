@@ -6,5 +6,6 @@ FactoryBot.define do
     contact_types { ["therapist"] }
     duration_minutes { 60 }
     occurred_at { Time.zone.now }
+    contact_made { false }
   end
 end

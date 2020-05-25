@@ -5,6 +5,7 @@ RSpec.describe "admin views dashboard", type: :feature do
 
   it "can see volunteers and navigate to their cases" do
     volunteer = create(:user, :volunteer, :with_casa_cases, email: "casa@example.com")
+    create(:case_contact, creator: volunteer, casa_case: volunteer.casa_cases.first)
     casa_case = volunteer.casa_cases[0]
     sign_in admin
 
@@ -15,6 +16,21 @@ RSpec.describe "admin views dashboard", type: :feature do
 
     within "#volunteers" do
       click_on volunteer.casa_cases.first.case_number
+    end
+
+    expect(page).to have_text("CASA Case Details")
+  end
+
+  it "can see the last case contact and navigate to it" do
+    volunteer = create(:user, :volunteer, :with_case_contact, email: "casa@example.com")
+    sign_in admin
+
+    visit root_path
+
+    expect(page).to have_text(volunteer.most_recent_contact.occurred_at.strftime("%B %e, %Y"))
+
+    within "#volunteers" do
+      click_on volunteer.most_recent_contact.occurred_at.strftime("%B %e, %Y")
     end
 
     expect(page).to have_text("CASA Case Details")
