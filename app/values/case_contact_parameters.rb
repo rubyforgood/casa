@@ -8,6 +8,8 @@ class CaseContactParameters < SimpleDelegator
         :occurred_at,
         :contact_made,
         :medium_type,
+        :miles_driven,
+        :want_driving_reimbursement,
         contact_types: []
       )
 

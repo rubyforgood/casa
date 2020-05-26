@@ -77,6 +77,16 @@
     <%= form.date_field :occurred_at, value: Time.now.strftime('%Y-%m-%d'), class: "form-control" %>
   </div>
 
+  <div class="field miles-driven form-group">
+    <%= form.label :miles_driven %>
+    <%= form.number_field :miles_driven, class: "form-control" %>
+  </div>
+
+  <div class="field want-driving-reimbursement form-group">
+    <%= form.label :want_driving_reimbursement %>
+    <%= form.select :want_driving_reimbursement, options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement), {}, class: "custom-select" %>
+  </div>
+
   <div class="actions">
     <%= form.submit "Submit", class: "btn btn-primary" %>
   </div>

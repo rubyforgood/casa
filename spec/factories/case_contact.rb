@@ -7,5 +7,7 @@ FactoryBot.define do
     duration_minutes { 60 }
     occurred_at { Time.zone.now }
     contact_made { false }
+    miles_driven { nil }
+    want_driving_reimbursement { false }
   end
 end
