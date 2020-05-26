@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe CaseContact, type: :model do
   it "belongs to a creator" do
     case_contact = build(:case_contact, creator: nil)
-    expect(case_contact).not_to be_valid
+    expect(case_contact).to_not be_valid
     expect(case_contact.errors[:creator]).to eq(["must exist"])
   end
 
