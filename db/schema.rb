@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_23_204147) do
+ActiveRecord::Schema.define(version: 2020_05_25_220759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,8 @@ ActiveRecord::Schema.define(version: 2020_04_23_204147) do
     t.boolean "contact_made", default: false
     t.string "medium_type"
     t.string "contact_types", array: true
+    t.integer "miles_driven"
+    t.boolean "want_driving_reimbursement", default: false
     t.index ["casa_case_id"], name: "index_case_contacts_on_casa_case_id"
     t.index ["contact_types"], name: "index_case_contacts_on_contact_types", using: :gin
     t.index ["creator_id"], name: "index_case_contacts_on_creator_id"
