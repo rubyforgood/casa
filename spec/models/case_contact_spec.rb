@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe CaseContact, type: :model do
   it "belongs to a creator" do
     case_contact = build(:case_contact, creator: nil)
-    expect(case_contact).to_not be_valid
+    expect(case_contact).not_to be_valid
     expect(case_contact.errors[:creator]).to eq(["must exist"])
   end
 
@@ -35,5 +35,22 @@ RSpec.describe CaseContact, type: :model do
     case_contact = build(:case_contact, occurred_at: Time.now + 1.week)
     expect(case_contact).to_not be_valid
     expect(case_contact.errors[:occurred_at]).to eq(["cannot be in the future"])
+  end
+
+  it "validates want_driving_reimbursement can be true when miles_driven is  positive" do
+    case_contact = build(:case_contact, want_driving_reimbursement: true, miles_driven: 1)
+    expect(case_contact).to be_valid
+  end
+
+  it "validates want_driving_reimbursement cannot be true when miles_driven is nil" do
+    case_contact = build(:case_contact, want_driving_reimbursement: true, miles_driven: nil)
+    expect(case_contact).not_to be_valid
+    expect(case_contact.errors[:want_driving_reimbursement]).to eq(["cannot be true when no miles were driven"])
+  end
+
+  it "validates want_driving_reimbursement cannot be true when miles_driven is not positive" do
+    case_contact = build(:case_contact, want_driving_reimbursement: true, miles_driven: 0)
+    expect(case_contact).not_to be_valid
+    expect(case_contact.errors[:want_driving_reimbursement]).to eq(["cannot be true when no miles were driven"])
   end
 end
