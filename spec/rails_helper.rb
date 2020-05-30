@@ -3,7 +3,9 @@ ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../config/environment", __dir__) # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require "rspec/rails"
-require "support/factory_bot"
+
+# Require all support folder files
+Dir[File.expand_path(File.join(File.dirname(__FILE__), "support", "**", "*.rb"))].sort.each { |f| require f }
 
 begin
   ActiveRecord::Migration.maintain_test_schema!
