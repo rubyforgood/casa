@@ -3,4 +3,8 @@ class VolunteerMailerPreview < ActionMailer::Preview
   def deactivation
     VolunteerMailer.deactivation(User.last)
   end
+
+  def account_setup
+    VolunteerMailer.account_setup(User.last)
+  end
 end

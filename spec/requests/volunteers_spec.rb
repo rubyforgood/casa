@@ -29,12 +29,24 @@ RSpec.describe "/volunteers", type: :request do
       expected_email = "volunteer1@example.com"
       sign_in admin
 
-      post volunteers_url,
-        params: {user: {email: expected_email, casa_org_id: admin.casa_org_id}}
+      post volunteers_url, params: {
+        user: { email: expected_email, casa_org_id: admin.casa_org_id }
+      }
 
       expect(User.last.email).to eq(expected_email)
 
       expect(response).to redirect_to root_path
+    end
+
+    it "sends an account_setup email" do
+      expected_email = "volunteer1@example.com"
+      sign_in admin
+
+      expect do
+        post volunteers_url, params: {
+          user: { email: expected_email, casa_org_id: admin.casa_org_id }
+        }
+      end.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
   end
 
