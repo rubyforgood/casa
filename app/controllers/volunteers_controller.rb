@@ -9,9 +9,10 @@ class VolunteersController < ApplicationController
   end
 
   def create
-    volunteer = User.new(create_volunteer_params)
+    @volunteer = User.new(create_volunteer_params)
 
-    if volunteer.save
+    if @volunteer.save
+      VolunteerMailer.account_setup(@volunteer).deliver
       redirect_to root_path
     else
       render :new
