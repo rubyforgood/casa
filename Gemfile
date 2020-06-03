@@ -32,7 +32,7 @@ group :development, :test do
   gem "pry"
   gem "pry-byebug"
   gem "rspec-rails", "~> 4.0.1"
-  gem "rubocop", "~> 0.84.0", require: false # RuboCop's development is moving at a very rapid pace and there are often backward-incompatible changes between minor releases (since we haven't reached version 1.0 yet). To prevent an unwanted RuboCop update you might want to use a conservative version lock in your Gemfile
+  gem "rubocop", "~> 0.85.0", require: false # RuboCop's development is moving at a very rapid pace and there are often backward-incompatible changes between minor releases (since we haven't reached version 1.0 yet). To prevent an unwanted RuboCop update you might want to use a conservative version lock in your Gemfile
   gem "shoulda-matchers"
   gem "standardrb"
 end
