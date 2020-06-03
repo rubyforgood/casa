@@ -26,10 +26,10 @@ RSpec.describe "admin views dashboard", type: :feature do
 
     visit root_path
 
-    expect(page).to have_text(volunteer.most_recent_contact.occurred_at.strftime("%B %e, %Y"))
+    expect(page).to have_text(volunteer.most_recent_contact.occurred_at.strftime("%B %-e, %Y"))
 
     within "#volunteers" do
-      click_on volunteer.most_recent_contact.occurred_at.strftime("%B %e, %Y")
+      click_on volunteer.most_recent_contact.occurred_at.strftime("%B %-e, %Y")
     end
 
     expect(page).to have_text("CASA Case Details")
