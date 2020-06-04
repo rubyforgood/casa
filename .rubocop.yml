@@ -17,6 +17,9 @@ Layout/LineLength:
     - 'spec/rails_helper.rb'
 
 # Style Cops
+Style/ConditionalAssignment:
+  EnforcedStyle: assign_inside_condition
+
 Style/Documentation:
   Enabled: False
 

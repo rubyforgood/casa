@@ -29,10 +29,10 @@ class CaseContactsController < ApplicationController
   def create
     # Iterate over all casa_cases and put success boolean into array to decide
     # what to render after loop finishes
-    success_array = casa_cases.each_with_object([]) { |casa_case, array|
+    success_array = casa_cases.each_with_object([]) do |casa_case, array|
       @case_contact = casa_case.case_contacts.create(create_case_contact_params)
       array << @case_contact.save
-    }
+    end
 
     if success_array.all? true
       redirect_to root_path, notice: "Case contact was successfully created."
