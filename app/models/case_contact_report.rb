@@ -1,15 +1,19 @@
 class CaseContactReport
   attr_reader :case_contacts
 
-  def initialize(case_contacts)
-    @case_contacts = case_contacts
+  def initialize(args = {})
+    if args[:start_date] && args[:end_date]
+      @case_contacts = CaseContact.occurred_between(args[:start_date], args[:end_date])
+    else
+      @case_contacts = CaseContact.all
+    end
   end
 
   def to_csv
     CSV.generate(headers: true) do |csv|
       csv << column_headers.map(&:titleize)
 
-      CaseContact.all.decorate.each do |case_contact|
+      CaseContact.includes(:casa_case, creator: :supervisor).all.decorate.each do |case_contact|
         csv << generate_row(case_contact)
       end
     end
@@ -19,8 +23,8 @@ class CaseContactReport
     # Note: these header labels are for stakeholders and do not match the
     # Rails DB names in all cases, e.g. added_to_system_at header is case_contact.created_at
     %w[internal_contact_number duration_minutes contact_types contact_made
-      contact_medium occurred_at added_to_system_at casa_case_number
-      volunteer_email volunteer_name supervisor_name]
+       contact_medium occurred_at added_to_system_at casa_case_number
+       volunteer_email volunteer_name supervisor_name]
   end
 
   def generate_row(case_contact)

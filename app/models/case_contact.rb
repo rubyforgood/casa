@@ -28,21 +28,32 @@ class CaseContact < ApplicationRecord
 
   def contact_types_included
     contact_types&.each do |contact_type|
-      errors.add(:contact_types, :invalid, message: "must have valid contact types") unless CONTACT_TYPES.include? contact_type
+      unless CONTACT_TYPES.include? contact_type
+        errors.add(:contact_types, :invalid, message: "must have valid contact types")
+      end
     end
   end
 
   def occurred_at_not_in_future
-    return unless occurred_at
-    errors.add(:occurred_at, :invalid, message: "cannot be in the future") unless occurred_at <= Date.tomorrow
+    return unless occurred_at && occurred_at >= Date.tomorrow
+
+    errors.add(:occurred_at, :invalid, message: "cannot be in the future")
   end
-end
 
   def reimbursement_only_when_miles_driven
     return if miles_driven&.positive? || !want_driving_reimbursement
 
-    errors.add(:want_driving_reimbursement, :invalid, message: "cannot be true when no miles were driven")
+    errors.add(
+      :want_driving_reimbursement,
+      :invalid,
+      message: "cannot be true when no miles were driven"
+    )
   end
+
+  def self.occurred_between(start_date, end_date)
+    where("occurred_at BETWEEN ? AND ?", start_date, end_date)
+  end
+end
 
 # == Schema Information
 #

@@ -10,10 +10,11 @@
   <div class="col-sm-4">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title"><strong>All Case Contacts Report</strong></h5>
+        <h5 class="card-title"><strong>Case Contacts Report</strong></h5>
         <p class="card-text">
           This CSV is a listing of all fields of all existing case contacts including:
         </p>
+
         <ul>
           <li>ID</li>
           <li>Case Number</li>
@@ -24,7 +25,8 @@
           <li>Create Supervisor</li>
           <li>Contact Type</li>
         </ul>
-        <%= link_to "Download Report", report_path(id: Time.zone.now.to_i, format: :csv), class: "btn btn-primary" %>
+
+        <%= link_to "Download Report", case_contact_reports_path(format: :csv), class: "btn btn-primary" %>
       </div>
     </div>
 
