@@ -45,12 +45,12 @@ RSpec.describe CaseContact, type: :model do
   it "validates want_driving_reimbursement cannot be true when miles_driven is nil" do
     case_contact = build(:case_contact, want_driving_reimbursement: true, miles_driven: nil)
     expect(case_contact).not_to be_valid
-    expect(case_contact.errors[:want_driving_reimbursement]).to eq(["cannot be true when no miles were driven"])
+    expect(case_contact.errors[:base]).to eq(["Must enter miles driven to receive driving reimbursement."])
   end
 
   it "validates want_driving_reimbursement cannot be true when miles_driven is not positive" do
     case_contact = build(:case_contact, want_driving_reimbursement: true, miles_driven: 0)
     expect(case_contact).not_to be_valid
-    expect(case_contact.errors[:want_driving_reimbursement]).to eq(["cannot be true when no miles were driven"])
+    expect(case_contact.errors[:base]).to eq(["Must enter miles driven to receive driving reimbursement."])
   end
 end

@@ -43,11 +43,7 @@ class CaseContact < ApplicationRecord
   def reimbursement_only_when_miles_driven
     return if miles_driven&.positive? || !want_driving_reimbursement
 
-    errors.add(
-      :want_driving_reimbursement,
-      :invalid,
-      message: "cannot be true when no miles were driven"
-    )
+    errors[:base] << "Must enter miles driven to receive driving reimbursement."
   end
 
   def self.occurred_between(start_date, end_date)
