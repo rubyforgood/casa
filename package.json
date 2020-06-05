@@ -7,6 +7,7 @@
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "4.2.2",
     "bootstrap": "4.3.1",
+    "bootstrap-datepicker": "^1.9.0",
     "datatables.net-dt": "^1.10.20",
     "jquery": "^3.5.0",
     "popper.js": "^1.16.1",

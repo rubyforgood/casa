@@ -4,7 +4,7 @@ class CaseContactReportsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    case_contact_report = CaseContactReport.new
+    case_contact_report = CaseContactReport.new(report_params)
 
     respond_to do |format|
       format.csv do
@@ -17,6 +17,6 @@ class CaseContactReportsController < ApplicationController
   private
 
   def report_params
-    params.require(:case_contact_report).permit(:start_date, :end_date)
+    params.permit(:start_date, :end_date)
   end
 end
