@@ -21,4 +21,12 @@ class UserDecorator < Draper::Decorator
 
     volunteer_no_transition_youth_cases ? "No" : "Yes"
   end
+
+  def last_contact_made
+    if object.most_recent_contact.nil?
+      "None"
+    else
+      object.most_recent_contact.occurred_at.strftime("%B %-e, %Y")
+    end
+  end
 end

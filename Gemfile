@@ -27,6 +27,7 @@ gem "bootsnap", ">= 1.4.2", require: false # Reduces boot times through caching;
 gem "bugsnag" # tracking errors in prod
 
 group :development, :test do
+  gem "bullet" # Detect and fix N+1 queries
   gem "byebug", platforms: %i[mri mingw x64_mingw] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "factory_bot_rails"
   gem "pry"
