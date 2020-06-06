@@ -56,6 +56,8 @@ We are currently using https://app.bugsnag.com/ to track errors in staging. Erro
 
 If you have any troubles, also look at `.travis.yml` which is what makes the CI build run
 
+1. git clone the repo (fork it if you are not a maintainer)
+1. `cd casa/`
 1. install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
 1. when you cd into the project diretory, let your version manager install the ruby version in `.ruby-version`
 1. `gem install bundler`
