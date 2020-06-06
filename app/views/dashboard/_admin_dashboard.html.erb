@@ -2,6 +2,9 @@
   <div class="col-sm-12 dashboard-table-header">
     <h1>Volunteers</h1>
     <%= link_to "New Volunteer", new_volunteer_path, class: "btn btn-primary" %>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#visibleColumns">
+      Pick displayed columns
+    </button>
   </div>
 </div>
 <hr>
@@ -13,4 +16,3 @@
 <br>
 <%= render "casa_cases" %>
 <br>
-

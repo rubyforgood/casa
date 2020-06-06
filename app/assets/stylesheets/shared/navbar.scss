@@ -1,6 +1,16 @@
 .navbar {
   color: white;
 
+  .navbar-nav {
+    @media (max-width: 1000px) {
+      flex-direction: row;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+    }
+  }
+
   .navbar-brand a {
     color: white;
 
@@ -10,6 +20,10 @@
   }
   strong {
     font-size: 2rem;
+
+    @media (max-width: 1000px) {
+      font-size: 1.4rem;
+    }
   }
 
   a.btn {

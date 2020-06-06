@@ -1,4 +1,11 @@
 body.dashboard {
+
+  .container {
+    @media (max-width: 1200px) {
+      max-width: 95%;
+    }
+  }
+
   .dashboard-table-header {
     h1 {
       display: inline-block;
