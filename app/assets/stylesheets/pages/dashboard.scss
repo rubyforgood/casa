@@ -1,7 +1,7 @@
 body.dashboard {
 
   .container {
-    @media (min-width: 768px) {
+    @media (max-width: 1200px) {
       max-width: 95%;
     }
   }
