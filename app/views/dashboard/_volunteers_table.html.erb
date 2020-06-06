@@ -16,13 +16,13 @@
   <tbody>
   <% @volunteers.each do |volunteer| %>
     <tr>
-      <td data-search="<%= volunteer.past_names %>"><%= volunteer.display_name %></td>
+      <td data-search="<%= volunteer.past_names %>"><%= link_to(volunteer.display_name, edit_volunteer_path(volunteer)) %></td>
       <td><%= volunteer.email %></td>
       <td id="supervisor-column"><%= volunteer&.supervisor&.decorate&.name %></td>
       <td id="status-column"><%= volunteer.status %></td>
       <td><%= volunteer&.assigned_to_transition_aged_youth? %></td>
       <td><%= safe_join(volunteer&.casa_cases&.map { |c| link_to(c.case_number, c) }, ", ") %></td>
-      <td><%= link_to(volunteer.most_recent_contact.occurred_at.strftime('%B %-e, %Y'), volunteer.most_recent_contact.casa_case) if volunteer&.most_recent_contact %></td>
+      <td><%= link_to_if volunteer&.most_recent_contact.present?, volunteer.last_contact_made, volunteer&.most_recent_contact&.casa_case %></td>
       <td><%= volunteer&.recent_contacts_made %></td>
       <td>
         <%= link_to 'Edit', edit_volunteer_path(volunteer) %>

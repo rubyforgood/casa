@@ -81,6 +81,9 @@ GEM
     bugsnag (6.13.1)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
+    bullet (6.1.0)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11)
     byebug (11.1.3)
     capybara (3.32.2)
       addressable
@@ -316,6 +319,7 @@ GEM
       unf_ext
     unf_ext (0.0.7.7)
     unicode-display_width (1.7.0)
+    uniform_notifier (1.13.0)
     warden (1.2.8)
       rack (>= 2.0.6)
     web-console (4.0.2)
@@ -334,7 +338,7 @@ GEM
       semantic_range (>= 2.3.0)
     websocket-driver (0.7.1)
       websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.4)
+    websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.3.0)
@@ -349,6 +353,7 @@ DEPENDENCIES
   bootstrap (~> 4.5.0)
   brakeman
   bugsnag
+  bullet
   byebug
   capybara (>= 2.15)
   devise
