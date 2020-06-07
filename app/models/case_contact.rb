@@ -17,8 +17,12 @@ class CaseContact < ApplicationRecord
     supervisor
     court
   ].freeze
-
-  CONTACT_MEDIUMS = %w[in-person text/email video voice-only letter].freeze
+  IN_PERSON = 'in-person'
+  TEXT_EMAIL='text/email'
+  VIDEO='video'
+  VOICE_ONLY='voice-only'
+  LETTER='letter'
+  CONTACT_MEDIUMS = [IN_PERSON, TEXT_EMAIL, VIDEO, VOICE_ONLY, LETTER].freeze
 
   validates :contact_types, presence: true
   validates :occurred_at, presence: true

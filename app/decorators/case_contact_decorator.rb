@@ -21,7 +21,7 @@ class CaseContactDecorator < Draper::Decorator
   end
 
   def contact_made
-    object.contact_made ? "Yes" : "No"
+    object.contact_made ? "Yes ✅" : "No ❌"
   end
 
   def contact_types
@@ -32,5 +32,22 @@ class CaseContactDecorator < Draper::Decorator
 
   def medium_type
     object.medium_type.blank? ? "Unknown" : object.medium_type.titleize
+  end
+
+  def medium_type_icon
+    case object.medium_type
+    when CaseContact::IN_PERSON
+      "👥 #{object.medium_type}"
+    when CaseContact::TEXT_EMAIL
+      "🔤 #{object.medium_type}"
+    when CaseContact::VIDEO
+      "▶ #{object.medium_type}️"
+    when CaseContact::VOICE_ONLY
+      "📞 #{object.medium_type}"
+    when CaseContact::LETTER
+      "✉️ #{object.medium_type}️"
+    else
+      object.medium_type
+    end
   end
 end

@@ -13,7 +13,7 @@
 </p>
 
 <p>
-  <h6><strong>Transition Aged Youth:</strong> <%= @casa_case.transition_aged_youth %></h6>
+  <h6><strong>Transition Aged Youth:</strong> <%= @casa_case.decorate.transition_aged_youth_icon %></h6>
 
 </p>
 
@@ -41,10 +41,10 @@
           <tr>
             <td data-sort="<%= contact.occurred_at.strftime("%Y%m%d%H%M%s") %>"><%= contact.occurred_at.strftime('%B %e, %Y') %></td>
             <td><%= contact.decorate.duration_minutes %></td>
-            <td><%= contact.contact_made %></td>
-            <td><%= contact.medium_type %></td>
-            <td><%= contact.contact_types %></td>
-            <td><%= contact.creator&.display_name %></td>
+            <td><%= contact.decorate.contact_made %></td>
+            <td><%= contact.decorate.medium_type_icon %></td>
+            <td><%= contact.decorate.contact_types %></td>
+            <td><%= link_to "#{contact.creator&.display_name} ", edit_volunteer_path(contact.creator) %></td>
           </tr>
         <% end %>
       </tbody>
