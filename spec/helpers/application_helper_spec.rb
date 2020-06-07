@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe ApplicationHelper do
   describe "#page_header" do
-    let(:page_header_text) { "CASA - Prince George's County, MD" }
+    let(:page_header_text) { "CASA / Prince George's County, MD" }
 
     it "links to the user dashboard if user logged in" do
       allow(helper).to receive(:user_signed_in?).and_return(true)
