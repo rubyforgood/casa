@@ -24,7 +24,7 @@ RSpec.describe CaseContactDecorator do
       it "returns No" do
         case_contact = create(:case_contact, contact_made: false)
 
-        expect(case_contact.decorate.contact_made).to eq "No"
+        expect(case_contact.decorate.contact_made).to eq "No ❌"
       end
     end
 
@@ -32,7 +32,7 @@ RSpec.describe CaseContactDecorator do
       it "returns Yes" do
         case_contact = create(:case_contact, contact_made: true)
 
-        expect(case_contact.decorate.contact_made).to eq "Yes"
+        expect(case_contact.decorate.contact_made).to eq "Yes ✅"
       end
     end
   end

@@ -24,7 +24,7 @@ class UserDecorator < Draper::Decorator
 
   def last_contact_made
     if object.most_recent_contact.nil?
-      "None"
+      "None ❌"
     else
       object.most_recent_contact.occurred_at.strftime("%B %-e, %Y")
     end
