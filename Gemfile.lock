@@ -225,7 +225,7 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    regexp_parser (1.7.0)
+    regexp_parser (1.7.1)
     request_store (1.5.0)
       rack (>= 1.4)
     responders (3.0.0)
@@ -253,7 +253,7 @@ GEM
       rspec-mocks (~> 3.9)
       rspec-support (~> 3.9)
     rspec-support (3.9.3)
-    rubocop (0.85.0)
+    rubocop (0.85.1)
       parallel (~> 1.10)
       parser (>= 2.7.0.1)
       rainbow (>= 2.2.2, < 4.0)
@@ -375,7 +375,7 @@ DEPENDENCIES
   rails (~> 6.0.3)
   rake
   rspec-rails (~> 4.0.1)
-  rubocop (~> 0.85.0)
+  rubocop (~> 0.85.1)
   rubocop-rspec
   sass-rails (>= 6)
   selenium-webdriver
