@@ -18,6 +18,8 @@ RSpec.describe "admin views dashboard", type: :feature do
     end
 
     expect(page).to have_text("CASA Case Details")
+    expect(page).to have_text("Miles Driven")
+    expect(page).to have_text("Reimbursement")
   end
 
   it "can see the last case contact and navigate to it" do
