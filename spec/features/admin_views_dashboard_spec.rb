@@ -19,16 +19,17 @@ RSpec.describe "admin views dashboard", type: :feature do
 
     expect(page).to have_text("CASA Case Details")
     expect(page).to have_text("Miles Driven")
-    expect(page).to have_text("Reimbursement")
+    expect(page).to have_text("Want reimbursement?")
   end
 
   it "can see the last case contact and navigate to it" do
-    volunteer = create(:user, :volunteer, :with_case_contact, email: "casa@example.com")
+    volunteer = create(:user, :volunteer, :with_case_contact_wants_driving_reimbursement, email: "casa@example.com")
     sign_in admin
 
     visit root_path
 
     expect(page).to have_text(volunteer.most_recent_contact.occurred_at.strftime("%B %-e, %Y"))
+    expect(page).to have_text("20") # miles driven
 
     within "#volunteers" do
       click_on volunteer.most_recent_contact.occurred_at.strftime("%B %-e, %Y")

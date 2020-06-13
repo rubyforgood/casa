@@ -16,30 +16,32 @@ VOLUNTEER_USER_COUNT = 100
 CASA_CASE_COUNT = 150
 SUPERVISOR_COUNT = 5
 
+SEED_PASSWORD = "123456"
+
 # seed users for all 'roles' [volunteer supervisor casa_admin inactive]
 # volunteer users
 User.create(
   casa_org: pg_casa,
   # display_name intentionally left blank
   email: "volunteer1@example.com",
-  password: "123456",
-  password_confirmation: "123456",
+  password: SEED_PASSWORD,
+  password_confirmation: SEED_PASSWORD,
   role: :volunteer
 )
 volunteer_user_2 = User.create(
   casa_org: pg_casa,
   display_name: Faker::Name.name,
   email: "volunteer2@example.com",
-  password: "123456",
-  password_confirmation: "123456",
+  password: SEED_PASSWORD,
+  password_confirmation: SEED_PASSWORD,
   role: :volunteer
 )
 volunteer_user_3 = User.create(
   casa_org: pg_casa,
   display_name: "Myra Shanjar",
   email: "volunteer3@example.com",
-  password: "123456",
-  password_confirmation: "123456",
+  password: SEED_PASSWORD,
+  password_confirmation: SEED_PASSWORD,
   role: :volunteer
 )
 # intentionally leaving volunteer_user_1 out so it will remain unassigned
@@ -54,8 +56,8 @@ VOLUNTEER_USER_COUNT.times do
     display_name: volunteer_name,
     # Generates an RFC 2606 compliant fake email, which means it will never deliver successfully
     email: Faker::Internet.safe_email(name: volunteer_email_name),
-    password: "123456",
-    password_confirmation: "123456",
+    password: SEED_PASSWORD,
+    password_confirmation: SEED_PASSWORD,
     role: :volunteer
   )
   volunteer_users.push(volunteer_user)
@@ -66,8 +68,8 @@ supervisor_user_1 = User.create(
   casa_org_id: pg_casa.id,
   display_name: "Gloria O'Malley",
   email: "supervisor1@example.com",
-  password: "123456",
-  password_confirmation: "123456",
+  password: SEED_PASSWORD,
+  password_confirmation: SEED_PASSWORD,
   role: :supervisor
 )
 
@@ -80,8 +82,8 @@ SUPERVISOR_COUNT.times do |index|
     casa_org_id: pg_casa.id,
     display_name: supervisor_name,
     email: Faker::Internet.safe_email(name: supervisor_email_name),
-    password: "123456",
-    password_confirmation: "123456",
+    password: SEED_PASSWORD,
+    password_confirmation: SEED_PASSWORD,
     role: :supervisor
   )
   supervisor_users.push(new_supervisor_user)
@@ -92,24 +94,24 @@ User.create(
   casa_org_id: pg_casa.id,
   display_name: "1;DROP TABLE users",
   email: "casa_admin1@example.com",
-  password: "123456",
-  password_confirmation: "123456",
+  password: SEED_PASSWORD,
+  password_confirmation: SEED_PASSWORD,
   role: :casa_admin
 )
 User.create(
   casa_org_id: pg_casa.id,
   display_name: "Uche O'Donnel",
   email: "casa_admin2@example.com",
-  password: "123456",
-  password_confirmation: "123456",
+  password: SEED_PASSWORD,
+  password_confirmation: SEED_PASSWORD,
   role: :casa_admin
 )
 User.create(
   casa_org_id: pg_casa.id,
   display_name: "Zenne Zown",
   email: "casa_admin3@example.com",
-  password: "123456",
-  password_confirmation: "123456",
+  password: SEED_PASSWORD,
+  password_confirmation: SEED_PASSWORD,
   role: :casa_admin
 )
 
@@ -118,16 +120,16 @@ User.create(
   casa_org_id: pg_casa.id,
   display_name: "undefined Kent II",
   email: "inactive1@example.com",
-  password: "123456",
-  password_confirmation: "123456",
+  password: SEED_PASSWORD,
+  password_confirmation: SEED_PASSWORD,
   role: :inactive
 )
 User.create(
   casa_org_id: pg_casa.id,
   display_name: "בְּרֵאשִׁית, בָּרָא אֱלֹהִים, אֵת הַשָּׁמַיִם, וְאֵת הָאָרֶץ",
   email: "inactive2@example.com",
-  password: "123456",
-  password_confirmation: "123456",
+  password: SEED_PASSWORD,
+  password_confirmation: SEED_PASSWORD,
   role: :inactive
 )
 
@@ -176,6 +178,8 @@ vols.map do |vol|
     likely_durations = [15, 30, 60, 75, 4 * 60, 6 * 60]
     (1..3 * 12).map { |months_ago|
       occurred_at = DateTime.now - months_ago.months
+      want_driving_reimbursement = rand(100) > 50
+      miles_driven = want_driving_reimbursement ? rand(200) : nil
       CaseContact.create(
         casa_case: cc,
         creator: vol,
@@ -183,7 +187,9 @@ vols.map do |vol|
             likely_durations.sample,
         occurred_at: occurred_at,
         contact_types: CaseContact::CONTACT_TYPES.sample(3),
-        medium_type: CaseContact::CONTACT_MEDIUMS.sample
+        medium_type: CaseContact::CONTACT_MEDIUMS.sample,
+        miles_driven: rand(100) > 50,
+        want_driving_reimbursement: want_driving_reimbursement
       )
     }
   }

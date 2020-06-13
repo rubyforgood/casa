@@ -33,5 +33,12 @@ FactoryBot.define do
         create(:case_contact, creator: user, casa_case: user.casa_cases.first, contact_made: true)
       end
     end
+
+    trait :with_case_contact_wants_driving_reimbursement do
+      after(:create) do |user, _|
+        create(:case_assignment, volunteer: user)
+        create(:case_contact, :wants_reimbursement, creator: user, casa_case: user.casa_cases.first, contact_made: true)
+      end
+    end
   end
 end
