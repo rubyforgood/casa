@@ -34,6 +34,8 @@
           <th>Contact Medium</th>
           <th>Type</th>
           <th>Volunteer</th>
+          <th>Miles Driven</th>
+          <th>Reimbursement</th>
         </tr>
       </thead>
       <tbody>
@@ -45,6 +47,8 @@
             <td><%= contact.decorate.medium_type_icon %></td>
             <td><%= contact.decorate.contact_types %></td>
             <td><%= link_to "#{contact.creator&.display_name} ", edit_volunteer_path(contact.creator) %></td>
+            <td><%= contact.decorate.miles_traveled %></td>
+            <td><%= contact.decorate.reimbursement %></td>
           </tr>
         <% end %>
       </tbody>

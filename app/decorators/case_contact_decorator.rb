@@ -20,6 +20,16 @@ class CaseContactDecorator < Draper::Decorator
     end
   end
 
+  def miles_traveled
+    miles = object.miles_driven
+
+    return "#{miles} miles" if miles != nil
+  end
+
+  def reimbursement
+    object.want_driving_reimbursement ? "Yes" : "No"
+  end
+
   def contact_made
     object.contact_made ? "Yes ✅" : "No ❌"
   end
