@@ -29,7 +29,7 @@ class User < ApplicationRecord
   end
 
   def most_recent_contact
-    case_contacts.where(contact_made: true).order(:occurred_at).first
+    case_contacts.where(contact_made: true).order(:occurred_at).last
   end
 
   def past_names

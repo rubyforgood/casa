@@ -21,11 +21,11 @@ class CaseContactDecorator < Draper::Decorator
   end
 
   def miles_traveled
-    object.miles_driven || 'None'
+    object.miles_driven ? "#{object.miles_driven} 🚘" : 'None'
   end
 
   def reimbursement
-    object.want_driving_reimbursement ? "Yes" : "No"
+    object.want_driving_reimbursement ? "Yes 🟢" : "No"
   end
 
   def contact_made

@@ -182,7 +182,7 @@ vols.map do |vol|
     likely_durations = [15, 30, 60, 75, 4 * 60, 6 * 60]
     (0..20).map { |_occurrence_chance|
       if even_odds
-        (1..3).map { |months_ago|
+        (1..24).map { |months_ago|
           occurred_at = DateTime.now - months_ago.months
           miles_driven = even_odds ? rand(200) : nil
           want_driving_reimbursement = miles_driven ? even_odds : false
