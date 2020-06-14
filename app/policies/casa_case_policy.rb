@@ -1,4 +1,4 @@
-class CasaCasePolicy # rubocop:todo Style/Documentation
+class CasaCasePolicy
   include PolicyHelper
   attr_reader :user, :record
 
@@ -17,44 +17,66 @@ class CasaCasePolicy # rubocop:todo Style/Documentation
 
     def resolve
       case @user.role
-      when 'casa_admin'
-        # scope.in_casa_administered_by(@user)
+      when "casa_admin" # scope.in_casa_administered_by(@user)
         scope.ordered
-      when 'volunteer'
-        []
+      when "volunteer"
+        scope.actively_assigned_to(user)
+      when "supervisor"
+        scope.ordered
       else
-        raise "unrecognized role"
+        raise "unrecognized role #{@user.role}"
       end
     end
   end
 
-  # TODO: Uncomment and test the below as necessary, please.
+  def update_case_number?
+    user.casa_admin?
+  end
 
-  # def index?
-  #   is_casa_admin_of_org?(user, record)
-  # end
+  def assign_volunteers?
+    _is_supervisor_or_casa_admin?
+  end
 
-  # def show?
-  #   is_casa_admin_of_org?(user, record)
-  # end
+  def permitted_attributes
+    case @user.role
+    when "casa_admin"
+      %i[case_number transition_aged_youth]
+    else
+      %i[transition_aged_youth]
+    end
+  end
 
-  # def create?
-  #   is_casa_admin_of_org?(user, record)
-  # end
+  def show?
+    _is_supervisor_or_casa_admin? || _is_volunteer_actively_assigned_to_case?
+  end
 
-  # def new?
-  #   is_casa_admin_of_org?(user, record)
-  # end
+  def edit?
+    _is_supervisor_or_casa_admin? || _is_volunteer_actively_assigned_to_case?
+  end
 
-  # def update?
-  #   is_casa_admin_of_org?(user, record)
-  # end
+  def new?
+    _is_supervisor_or_casa_admin?
+  end
 
-  # def edit?
-  #   is_casa_admin_of_org?(user, record)
-  # end
+  def create?
+    _is_supervisor_or_casa_admin?
+  end
 
-  # def destroy?
-  #   is_casa_admin_of_org?(user, record)
-  # end
+  def update?
+    _is_supervisor_or_casa_admin? || _is_volunteer_actively_assigned_to_case?
+  end
+
+  def destroy?
+    _is_supervisor_or_casa_admin?
+  end
+
+  private
+
+  def _is_supervisor_or_casa_admin?
+    user.casa_admin? || user.supervisor?
+  end
+
+  def _is_volunteer_actively_assigned_to_case?
+    record.case_assignments.exists?(volunteer_id: user.id, is_active: true)
+  end
 end

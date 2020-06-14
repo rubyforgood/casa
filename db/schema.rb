@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_05_112910) do
+ActiveRecord::Schema.define(version: 2020_05_25_220759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 2020_04_05_112910) do
 
   create_table "casa_cases", force: :cascade do |t|
     t.string "case_number", null: false
-    t.boolean "teen_program_eligible", default: false, null: false
+    t.boolean "transition_aged_youth", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["case_number"], name: "index_casa_cases_on_case_number", unique: true
@@ -54,13 +54,18 @@ ActiveRecord::Schema.define(version: 2020_04_05_112910) do
   create_table "case_contacts", force: :cascade do |t|
     t.bigint "creator_id", null: false
     t.bigint "casa_case_id", null: false
-    t.string "contact_type", null: false
     t.string "other_type_text"
     t.integer "duration_minutes", null: false
     t.datetime "occurred_at", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "contact_made", default: false
+    t.string "medium_type"
+    t.string "contact_types", array: true
+    t.integer "miles_driven"
+    t.boolean "want_driving_reimbursement", default: false
     t.index ["casa_case_id"], name: "index_case_contacts_on_casa_case_id"
+    t.index ["contact_types"], name: "index_case_contacts_on_contact_types", using: :gin
     t.index ["creator_id"], name: "index_case_contacts_on_creator_id"
   end
 
@@ -83,6 +88,7 @@ ActiveRecord::Schema.define(version: 2020_04_05_112910) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "role", default: "volunteer", null: false
     t.bigint "casa_org_id", null: false
+    t.string "display_name", default: ""
     t.index ["casa_org_id"], name: "index_users_on_casa_org_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

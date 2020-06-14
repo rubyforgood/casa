@@ -34,3 +34,5 @@ yarn-debug.log*
 .yarn-integrity
 
 coverage/
+.idea/
+config/credentials.yml.enc

@@ -1,31 +1,28 @@
 require "rails_helper"
 
-RSpec.feature "volunteer adds a case contact", type: :feature do
-  scenario "is successful" do
+RSpec.describe "volunteer adds a case contact", type: :feature do
+  it "is successful" do
     volunteer = create(:user, :volunteer, :with_casa_cases)
-    volunteer_casa_case_1 = volunteer.casa_cases.first
+    volunteer_casa_case_one = volunteer.casa_cases.first
 
     sign_in volunteer
 
     visit new_case_contact_path
-    within "select#casa_case_id" do
-      select volunteer_casa_case_1.case_number
-    end
-    within "select#contact_type" do
-      select "School"
-    end
 
-    within "select#duration_minutes" do
-      select "60 minutes"
-    end
-
-    # find(:css, "#case_contact_occurred_at".)
+    find(:css, "input.casa-case-id-check[value='#{volunteer_casa_case_one.id}']").set(true)
+    find(:css, "input.casa-case-contact-type[value='school']").set(true)
+    find(:css, "input.casa-case-contact-type[value='therapist']").set(true)
+    select "1 hour", from: "case_contact[duration_hours]"
+    select "45 minutes", from: "case_contact[duration_minutes]"
     fill_in "case_contact_occurred_at", with: "04/04/2020"
 
-    click_on "Submit"
+    expect {
+      click_on "Submit"
+    }.to change(CaseContact, :count).by(1)
 
-    expect(CaseContact.first.casa_case_id).to eq volunteer_casa_case_1.id
-    expect(CaseContact.first.contact_type).to eq "school"
-    expect(CaseContact.first.duration_minutes).to eq 60
+    expect(CaseContact.first.casa_case_id).to eq volunteer_casa_case_one.id
+    expect(CaseContact.first.contact_types).to include "school"
+    expect(CaseContact.first.contact_types).to include "therapist"
+    expect(CaseContact.first.duration_minutes).to eq 105
   end
 end

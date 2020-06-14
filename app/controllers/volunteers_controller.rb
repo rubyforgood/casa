@@ -1,40 +1,52 @@
 class VolunteersController < ApplicationController
+  # Uses authenticate_user to redirect if no user is signed in
+  # and must_be_admin_or_supervisor to check user's role is appropriate
   before_action :authenticate_user!
-
-  def index
-    @case_contact = CaseContact.new
-  end
+  before_action :must_be_admin_or_supervisor
 
   def new
     @volunteer = User.new(role: :volunteer)
   end
 
   def create
-    email = create_params[:email]
-    casa_org_id = create_params[:casa_org_id]
-    # Create a new user with a dummy password
-    create_user_with_dummy_password(email, casa_org_id)
-    # Send password reset email
-    redirect_to root_path
+    @volunteer = User.new(create_volunteer_params)
+
+    if @volunteer.save
+      VolunteerMailer.account_setup(@volunteer).deliver
+      redirect_to root_path
+    else
+      render :new
+    end
   end
 
   def edit
+    @volunteer = User.find(params[:id])
+  end
+
+  def update
+    @volunteer = User.find(params[:id])
+
+    if @volunteer.update(update_volunteer_params)
+      redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was successfully updated."
+    else
+      render :edit
+    end
   end
 
   private
 
-  def create_user_with_dummy_password(email, casa_org_id)
-    generated_password = Devise.friendly_token.first(8)
-    user = User.create!(email: email, password: generated_password, casa_org_id: casa_org_id)
+  def generate_devise_password
+    Devise.friendly_token.first(8)
   end
 
-  def create_params
-    params.require(:user).permit(:email, :casa_org_id)
+  def create_volunteer_params
+    VolunteerParameters
+      .new(params)
+      .with_password(generate_devise_password)
+      .with_role("volunteer")
   end
 
+  def update_volunteer_params
+    VolunteerParameters.new(params)
+  end
 end
-
-
-
-
-# RegistrationMailer.welcome(user, generated_password).deliver

@@ -3,8 +3,20 @@ FactoryBot.define do
     association :creator, factory: :user
     association :casa_case
 
-    contact_type { "therapist" }
+    contact_types { ["therapist"] }
     duration_minutes { 60 }
     occurred_at { Time.zone.now }
+    contact_made { false }
+    miles_driven { nil }
+    want_driving_reimbursement { false }
+
+    trait :miles_driven_no_reimbursement do
+      miles_driven { 20 }
+    end
+
+    trait :wants_reimbursement do
+      miles_driven { 20 }
+      want_driving_reimbursement { true }
+    end
   end
 end

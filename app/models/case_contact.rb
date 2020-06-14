@@ -1,4 +1,7 @@
+# CaseContact Model
 class CaseContact < ApplicationRecord
+  attr_accessor :duration_hours
+
   belongs_to :creator, class_name: "User"
   belongs_to :casa_case
 
@@ -13,16 +16,42 @@ class CaseContact < ApplicationRecord
     other_family
     supervisor
     court
-    other
   ].freeze
-  enum contact_type: CONTACT_TYPES.zip(CONTACT_TYPES).to_h
+  IN_PERSON = 'in-person'
+  TEXT_EMAIL='text/email'
+  VIDEO='video'
+  VOICE_ONLY='voice-only'
+  LETTER='letter'
+  CONTACT_MEDIUMS = [IN_PERSON, TEXT_EMAIL, VIDEO, VOICE_ONLY, LETTER].freeze
 
-  def humanized_type
-    "#{contact_type.humanize.titleize}#{ " - " + other_type_text if use_other_type_text?}"
+  validates :contact_types, presence: true
+  validates :occurred_at, presence: true
+  validate :contact_types_included
+  validate :occurred_at_not_in_future
+  validate :reimbursement_only_when_miles_driven
+
+  def contact_types_included
+    contact_types&.each do |contact_type|
+      unless CONTACT_TYPES.include? contact_type
+        errors.add(:contact_types, :invalid, message: "must have valid contact types")
+      end
+    end
   end
 
-  def use_other_type_text?
-    contact_type == 'other'
+  def occurred_at_not_in_future
+    return unless occurred_at && occurred_at >= Date.tomorrow
+
+    errors.add(:occurred_at, :invalid, message: "cannot be in the future")
+  end
+
+  def reimbursement_only_when_miles_driven
+    return if miles_driven&.positive? || !want_driving_reimbursement
+
+    errors[:base] << "Must enter miles driven to receive driving reimbursement."
+  end
+
+  def self.occurred_between(start_date, end_date)
+    where("occurred_at BETWEEN ? AND ?", start_date, end_date)
   end
 end
 
@@ -30,20 +59,25 @@ end
 #
 # Table name: case_contacts
 #
-#  id               :bigint           not null, primary key
-#  contact_type     :string           not null
-#  duration_minutes :integer          not null
-#  occurred_at      :datetime         not null
-#  other_type_text  :string
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  casa_case_id     :bigint           not null
-#  creator_id       :bigint           not null
+#  id                         :bigint           not null, primary key
+#  contact_made               :boolean          default(FALSE)
+#  contact_types              :string           is an Array
+#  duration_minutes           :integer          not null
+#  medium_type                :string
+#  miles_driven               :integer
+#  occurred_at                :datetime         not null
+#  other_type_text            :string
+#  want_driving_reimbursement :boolean          default(FALSE)
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
+#  casa_case_id               :bigint           not null
+#  creator_id                 :bigint           not null
 #
 # Indexes
 #
-#  index_case_contacts_on_casa_case_id  (casa_case_id)
-#  index_case_contacts_on_creator_id    (creator_id)
+#  index_case_contacts_on_casa_case_id   (casa_case_id)
+#  index_case_contacts_on_contact_types  (contact_types) USING gin
+#  index_case_contacts_on_creator_id     (creator_id)
 #
 # Foreign Keys
 #
