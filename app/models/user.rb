@@ -44,6 +44,18 @@ class User < ApplicationRecord
 
     raw_token
   end
+
+  # Called by Devise during initial authentication and on each request to
+  # validate the user is active. For our purposes, the user is active if they
+  # do not have the inactive role.
+  def active_for_authentication?
+    super && !inactive?
+  end
+
+  # Called by Devise to generate an error message when a user is not active.
+  def inactive_message
+    inactive? ? :inactive : super
+  end
 end
 
 # == Schema Information
