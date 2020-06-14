@@ -24,9 +24,7 @@
       <td><%= safe_join(volunteer&.casa_cases&.map { |c| link_to(c.case_number, c) }, ", ") %></td>
       <td><%= link_to_if volunteer&.most_recent_contact.present?, volunteer.last_contact_made, volunteer&.most_recent_contact&.casa_case %></td>
       <td><%= volunteer&.recent_contacts_made %></td>
-      <td>
-        <%= link_to 'Edit', edit_volunteer_path(volunteer) %>
-      </td>
+      <td><%= link_to 'Edit', edit_volunteer_path(volunteer) %></td>
     </tr>
   <% end %>
   </tbody>
