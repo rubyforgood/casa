@@ -38,19 +38,25 @@
 
 
       <div class="field form-group">
-        <%= form.label "Status" %>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="user[role]" id="statusRadio1" value="volunteer" <% if @volunteer.role == "volunteer" %> checked<% end %>>
-          <label class="form-check-label" for="statusRadio1">
-            Active
-          </label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="user[role]" id="statusRadio2" value="inactive" <% if @volunteer.role == "inactive" %> checked<% end %> onclick="return confirm('WARNING: Marking a volunteer inactive will make them unable to login. They will receive an email saying their account has been marked inactive. Are you sure you want to do this?')">
-          <label class="form-check-label" for="statusRadio2">
-            Inactive
-          </label>
-        </div>
+        <% if @volunteer_active %>
+          Volunteer is <span class="badge badge-success text-uppercase display-1">Active</span>
+          <% if current_user.role == "casa_admin" || @volunteer.supervisor == current_user %>
+            <%= link_to "Deactivate volunteer",
+                        deactivate_volunteer_path(@volunteer),
+                        method: :patch,
+                        class: "btn btn-outline-danger",
+                        data:
+                            { confirm: "WARNING: Marking a volunteer inactive will make them unable to login.
+                                <br><br>They will receive an email saying their account has been marked inactive.
+                                <br><br>Are you sure you want to do this?".html_safe },
+                        hint: "NOTE: This will make connected cases unassigned and<br>
+                          the volunteer won't be able to log in to the system anymore".html_safe %>
+          <% end %>
+        <% else %>
+          <div class="alert alert-danger">
+            Volunteer was deactivated on: <%= @volunteer.updated_at.strftime("%m-%d-%Y") %>
+          </div>
+        <% end %>
       </div>
 
       <div class="actions">
@@ -70,7 +76,10 @@
           <tr>
             <th>Case Number</th>
             <th>Transition Aged Youth</th>
-            <th>Actions</th>
+            <th>Assignment status</th>
+            <% if @volunteer_active %>
+              <th>Actions</th>
+            <% end %>
           </tr>
         </thead>
         <tbody>
@@ -87,24 +96,26 @@
   </div>
 <% end %>
 
-<br>
+<% if @volunteer_active %>
+  <br>
 
-<div class="row">
-  <div class="col-sm-6">
-    <h3>Assign a New Case</h3>
+  <div class="row">
+    <div class="col-sm-6">
+      <h3>Assign a New Case</h3>
 
-    <%= form_for CaseAssignment.new, url: case_assignments_path(volunteer_id: @volunteer.id) do |form| %>
+      <%= form_for CaseAssignment.new, url: case_assignments_path(volunteer_id: @volunteer.id) do |form| %>
 
-      <div class='form-group'>
-        <label for='case_assignment_casa_case_id'>Select a Case</label>
-        <select name='case_assignment[casa_case_id]' class='form-control'>
-          <% CasaCase.all.each do |casa_case| %>
-            <option value="<%= casa_case.id %>"><%= casa_case.case_number %></option>
-          <% end %>
-        </select>
-      </div>
+        <div class='form-group'>
+          <label for='case_assignment_casa_case_id'>Select a Case</label>
+          <select name='case_assignment[casa_case_id]' class='form-control'>
+            <% CasaCase.all.each do |casa_case| %>
+              <option value="<%= casa_case.id %>"><%= casa_case.case_number %></option>
+            <% end %>
+          </select>
+        </div>
 
-      <%= form.submit 'Assign Case', class: 'btn btn-primary' %>
-    <% end %>
+        <%= form.submit 'Assign Case', class: 'btn btn-primary' %>
+      <% end %>
+    </div>
   </div>
-</div>
+<% end %>

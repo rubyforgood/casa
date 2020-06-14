@@ -21,7 +21,7 @@
                 <% if assignment.is_active? %>
                   <span class='badge badge-success text-uppercase'>Assigned</span>
                 <% else %>
-                  <span class="badge badge-danger text-uppercase">Unassigned</span>
+                  <span class="badge badge-danger text-uppercase"><%= assignment.volunteer.active_volunteer ? "Unassigned" : "Deactivated volunteer" %></span>
                 <% end %>
               </td>
               <td>
@@ -56,7 +56,7 @@
         </select>
       </div>
 
-      <%= form.submit 'Assign Volunteer', class: 'btn btn-primary' %>
+      <%= form.submit 'Assign Volunteer', class: 'btn btn-secondary' %>
     <% end %>
   </div>
 </div>

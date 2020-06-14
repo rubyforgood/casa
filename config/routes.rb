@@ -9,7 +9,12 @@ Rails.application.routes.draw do
   resources :reports, only: %i[index]
   resources :case_contact_reports, only: %i[index]
 
-  resources :volunteers, only: %i[new edit create update]
+  resources :volunteers, only: %i[new edit create update] do
+    member do
+      get :deactivate
+      patch :deactivate
+    end
+  end
   resources :case_assignments, only: %i[create destroy] do
     member do
       get :unassign
