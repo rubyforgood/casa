@@ -25,7 +25,7 @@
                 <% end %>
               </td>
               <td>
-                <% if assignment.is_active? %>
+                <% if assignment.is_active? && current_user.role == "casa_admin" || assignment.volunteer.supervisor == current_user %>
                   <%= button_to 'Unassign Volunteer', unassign_case_assignment_path(assignment), method: :patch, class: "btn btn-outline-danger" %>
                 <% else %>
                   N/A
