@@ -78,7 +78,7 @@
             <tr>
               <td><%= link_to assignment.casa_case.case_number, edit_casa_case_path(assignment.casa_case) %></td>
               <td><%= assignment.casa_case.transition_aged_youth %></td>
-              <td><%= button_to 'Unassign Case', case_assignment_path(assignment, volunteer_id: @volunteer.id), method: :delete, class: "btn btn-danger" %></td>
+              <td><%= button_to 'Unassign Case', case_assignment_path(assignment, volunteer_id: @volunteer.id), method: :delete, class: "btn btn-danger" if current_user.role == "casa_admin" || @volunteer.supervisor == current_user%></td>
             </tr>
           <% end %>
         </tbody>

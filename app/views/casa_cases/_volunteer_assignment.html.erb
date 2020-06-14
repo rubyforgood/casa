@@ -8,6 +8,7 @@
           <tr>
             <th>Volunteer Name</th>
             <th>Volunteer Email</th>
+            <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -16,7 +17,20 @@
             <tr>
               <td><%= link_to assignment&.volunteer&.display_name, edit_volunteer_path(assignment.volunteer) %></td>
               <td><%= assignment&.volunteer&.email %></td>
-              <td><%= button_to 'Unassign Volunteer', case_assignment_path(assignment, casa_case_id: @casa_case.id), method: :delete, class: "btn btn-danger" %></td>
+              <td>
+                <% if assignment.is_active? %>
+                  <span class='badge badge-success text-uppercase'>Assigned</span>
+                <% else %>
+                  <span class="badge badge-danger text-uppercase">Unassigned</span>
+                <% end %>
+              </td>
+              <td>
+                <% if assignment.is_active? && current_user.role == "casa_admin" || assignment.volunteer.supervisor == current_user %>
+                  <%= button_to 'Unassign Volunteer', unassign_case_assignment_path(assignment), method: :patch, class: "btn btn-outline-danger" %>
+                <% else %>
+                  N/A
+                <% end %>
+              </td>
             </tr>
           <% end %>
         </tbody>
