@@ -17,6 +17,23 @@ class CaseAssignmentsController < ApplicationController
     redirect_to after_action_path(case_assignment_parent)
   end
 
+  def unassign
+    case_assignment = CaseAssignment.find(params[:id])
+    casa_case = case_assignment.casa_case
+    volunteer = case_assignment.volunteer
+    flash_message = "Volunteer was unassigned from Case #{casa_case.case_number}."
+
+    if case_assignment.update_attributes(is_active: false)
+      if params[:redirect_to_path] == "volunteer"
+        redirect_to edit_volunteer_path(volunteer), notice: flash_message
+      else
+        redirect_to after_action_path(casa_case), notice: flash_message
+      end
+    else
+      render :edit
+    end
+  end
+
   private
 
   def case_assignment_parent
