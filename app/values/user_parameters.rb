@@ -1,4 +1,4 @@
-class VolunteerParameters < SimpleDelegator
+class UserParameters < SimpleDelegator
   def initialize(params)
     params =
       params.require(:user).permit(

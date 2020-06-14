@@ -40,13 +40,13 @@ class VolunteersController < ApplicationController
   end
 
   def create_volunteer_params
-    VolunteerParameters
+    UserParameters
       .new(params)
       .with_password(generate_devise_password)
       .with_role("volunteer")
   end
 
   def update_volunteer_params
-    VolunteerParameters.new(params)
+    UserParameters.new(params)
   end
 end
