@@ -40,16 +40,18 @@
       <div class="field form-group">
         <% if @volunteer_active %>
           Volunteer is <span class="badge badge-success text-uppercase display-1">Active</span>
-          <%= link_to "Deactivate volunteer",
-                      deactivate_volunteer_path(@volunteer),
-                      method: :patch,
-                      class: "btn btn-outline-danger",
-                      data:
-                          { confirm: "WARNING: Marking a volunteer inactive will make them unable to login.
-                              <br><br>They will receive an email saying their account has been marked inactive.
-                              <br><br>Are you sure you want to do this?".html_safe },
-                      hint: "NOTE: This will make connected cases unassigned and<br>
-                        the volunteer won't be able to log in to the system anymore".html_safe %>
+          <% if current_user.role == "casa_admin" || @volunteer.supervisor == current_user %>
+            <%= link_to "Deactivate volunteer",
+                        deactivate_volunteer_path(@volunteer),
+                        method: :patch,
+                        class: "btn btn-outline-danger",
+                        data:
+                            { confirm: "WARNING: Marking a volunteer inactive will make them unable to login.
+                                <br><br>They will receive an email saying their account has been marked inactive.
+                                <br><br>Are you sure you want to do this?".html_safe },
+                        hint: "NOTE: This will make connected cases unassigned and<br>
+                          the volunteer won't be able to log in to the system anymore".html_safe %>
+          <% end %>
         <% else %>
           <div class="alert alert-danger">
             Volunteer was deactivated on: <%= @volunteer.updated_at.strftime("%m-%d-%Y") %>
