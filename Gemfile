@@ -43,6 +43,7 @@ group :development, :test do
   gem 'rubocop', '~> 0.80.1', require: false # RuboCop's development is moving at a very rapid pace and there are often backward-incompatible changes between minor releases (since we haven't reached version 1.0 yet). To prevent an unwanted RuboCop update you might want to use a conservative version lock in your Gemfile
   gem 'shoulda-matchers'
   gem 'pry'
+  gem 'cypress-on-rails', '~> 1.0'
 end
 
 group :development do

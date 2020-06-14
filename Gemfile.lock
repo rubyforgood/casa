@@ -89,6 +89,8 @@ GEM
     coderay (1.1.2)
     concurrent-ruby (1.1.6)
     crass (1.0.6)
+    cypress-on-rails (1.5.1)
+      rack
     devise (4.7.1)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -312,6 +314,7 @@ DEPENDENCIES
   brakeman
   byebug
   capybara (>= 2.15)
+  cypress-on-rails (~> 1.0)
   devise
   factory_bot_rails
   jbuilder (~> 2.7)
