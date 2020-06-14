@@ -40,4 +40,20 @@ RSpec.describe User, type: :model do
     result = other_volunteer.case_contacts_for(sample_casa_case_id)
     expect(result.length).to eq(1)
   end
+
+  describe "#active_for_authentication?" do
+    it "is false when the user has an inactive role" do
+      user = create(:user, :inactive)
+      expect(user).not_to be_active_for_authentication
+      expect(user.inactive_message).to eq(:inactive)
+    end
+
+    it "is true otherwise" do
+      user = create(:user, :volunteer)
+      expect(user).to be_active_for_authentication
+
+      user = create(:user, :supervisor)
+      expect(user).to be_active_for_authentication
+    end
+  end
 end
