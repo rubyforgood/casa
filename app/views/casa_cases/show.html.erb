@@ -39,7 +39,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @casa_case.case_contacts.each do |contact| %>
+        <% @casa_case.decorate.case_contacts_ordered_by_occurred_at.each do |contact| %>
           <tr>
             <td data-sort="<%= contact.occurred_at.strftime("%Y%m%d%H%M%s") %>"><%= contact.occurred_at.strftime('%B %e, %Y') %></td>
             <td><%= contact.decorate.duration_minutes %></td>
