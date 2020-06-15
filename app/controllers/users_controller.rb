@@ -18,6 +18,10 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:email, :display_name)
+    if current_user.casa_admin?
+      params.require(:user).permit(:email, :display_name)
+    else
+      params.require(:user).permit(:display_name)
+    end
   end
 end
