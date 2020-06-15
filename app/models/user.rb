@@ -7,9 +7,13 @@ class User < ApplicationRecord
 
   has_many :case_assignments, foreign_key: "volunteer_id"
   has_many :casa_cases, through: :case_assignments
+  has_many :case_contacts, foreign_key: "creator_id"
+
+  has_many :supervisor_volunteers, foreign_key: "supervisor_id"
+  has_many :volunteers, through: :supervisor_volunteers
+
   has_one :supervisor_volunteer, foreign_key: "volunteer_id"
   has_one :supervisor, through: :supervisor_volunteer
-  has_many :case_contacts, foreign_key: "creator_id"
 
   ALL_ROLES = %w[volunteer supervisor casa_admin inactive].freeze
   enum role: ALL_ROLES.zip(ALL_ROLES).to_h
