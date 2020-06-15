@@ -22,6 +22,30 @@ RSpec.describe "admin views dashboard", type: :feature do
     expect(page).to have_text("Want reimbursement?")
   end
 
+  describe "supervisor column of volunteers table" do
+    it "is blank when volunteer has no supervisor" do
+      volunteer = create(:user, :volunteer)
+      sign_in admin
+
+      visit root_path
+      supervisor_cell = page.find("#supervisor-column")
+
+      expect(supervisor_cell.text).to eq ""
+    end
+
+    it "displays supervisor's name when volunteer has supervisor" do
+      name = "Superduper Visor"
+      supervisor = create(:user, :supervisor, display_name: name)
+      volunteer = create(:user, :volunteer, supervisor: supervisor)
+      sign_in admin
+
+      visit root_path
+      supervisor_cell = page.find("#supervisor-column")
+
+      expect(supervisor_cell.text).to eq name
+    end
+  end
+
   it "can see the last case contact and navigate to it" do
     volunteer = create(:user, :volunteer, :with_case_contact_wants_driving_reimbursement, email: "casa@example.com")
     sign_in admin

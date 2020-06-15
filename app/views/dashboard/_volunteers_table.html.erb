@@ -18,7 +18,9 @@
     <tr>
       <td data-search="<%= volunteer.past_names %>"><%= link_to(volunteer.display_name, edit_volunteer_path(volunteer)) %></td>
       <td><%= volunteer.email %></td>
-      <td id="supervisor-column"><%= volunteer&.supervisor&.decorate&.name %></td>
+      <td id="supervisor-column">
+        <%= volunteer.supervisor.nil? ? "" : link_to(volunteer.supervisor.decorate.name, edit_supervisor_path(volunteer.supervisor)) %>
+      </td>
       <td id="status-column"><%= volunteer.status %></td>
       <td><%= volunteer&.assigned_to_transition_aged_youth? %></td>
       <td><%= safe_join(volunteer&.casa_cases&.map { |c| link_to(c.case_number, c) }, ", ") %></td>

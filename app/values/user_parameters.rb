@@ -22,6 +22,11 @@ class UserParameters < SimpleDelegator
     self
   end
 
+  def without_role
+    params.delete(:role)
+    self
+  end
+
   private
 
   def params
