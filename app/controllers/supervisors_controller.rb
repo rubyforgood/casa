@@ -6,8 +6,9 @@ class SupervisorsController < ApplicationController
 
   def edit
     @supervisor = User.find(params[:id])
+    @available_volunteers = User.where(role: "volunteer").select {|vol| !vol.supervisor}
 
-    unless can_update?
+    unless can_view_update_page?
       redirect_to root_url
     end
   end
@@ -15,7 +16,7 @@ class SupervisorsController < ApplicationController
   def update
     @supervisor = User.find(params[:id])
 
-    if can_update?
+    if can_update_fields?
       if @supervisor.update(update_supervisor_params)
         redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was successfully updated."
       else
@@ -28,7 +29,12 @@ class SupervisorsController < ApplicationController
 
   private
 
-  def can_update?
+  def can_view_update_page?
+    # supervisor must be able to view edit supervisor page so they can change volunteer assignments
+    current_user.supervisor? || current_user.casa_admin?
+  end
+
+  def can_update_fields?
     current_user == @supervisor || current_user.casa_admin?
   end
 

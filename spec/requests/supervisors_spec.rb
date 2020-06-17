@@ -21,12 +21,12 @@ RSpec.describe "/supervisors", type: :request do
       expect(response).to be_successful
     end
 
-    it "other supervisor cannot view the edit supervisor page" do
+    it "other supervisor can view the edit supervisor page" do
       sign_in create(:user, :supervisor)
 
       get edit_supervisor_url(supervisor)
 
-      expect(response).not_to be_successful
+      expect(response).to be_successful
     end
   end
 
