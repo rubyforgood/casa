@@ -1,0 +1,89 @@
+<%= link_to 'Back', root_path %>
+
+<h1>Editing Supervisor</h1>
+
+<div class="row">
+  <div class="col-sm-6">
+    <%= form_for @supervisor, url: supervisor_path(@supervisor) do |form| %>
+      <% if @supervisor.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@supervisor.errors.count, "error") %> prohibited this supervisor from being saved:</h2>
+
+          <ul>
+            <% @supervisor.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="field form-group">
+        <%= form.label :email %>
+        <% if policy(:user).update_supervisor_email? %>
+          <%= form.text_field :email, class: "form-control" %>
+        <% else %>
+          <input class="form-control" type="text" placeholder="<%= @supervisor.email %>" readonly>
+        <% end %>
+      </div>
+
+      <div class="field form-group">
+        <%= form.label :display_name %>
+        <% if policy(:user).update_supervisor_name? %>
+          <%= form.text_field :display_name, class: "form-control" %>
+        <% else %>
+          <input class="form-control" type="text" placeholder="<%= @supervisor.display_name %>" readonly>
+        <% end %>
+      </div>
+
+      <div class="actions">
+        <%= form.submit "Submit", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<% if @supervisor.supervisor_volunteers.present? %>
+  <br>
+  <div class="row">
+    <div class="col-sm-12">
+      <h3>Assigned Volunteers</h3>
+      <table class='table volunteer-list'>
+        <thead>
+          <tr>
+            <th>Volunteer Name</th>
+            <th>Volunteer Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @supervisor.supervisor_volunteers.each do |assignment| %>
+            <tr>
+              <td><%= link_to assignment.volunteer.decorate.name, edit_volunteer_path(assignment.volunteer) %></td>
+              <td><%= assignment.volunteer.email %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>
+<br>
+
+<div class="row">
+  <div class="col-sm-6">
+    <h3>Assign a Volunteer</h3>
+
+    <%= form_for SupervisorVolunteer.new, url: supervisor_volunteers_path(supervisor_id: @supervisor.id) do |form| %>
+
+      <div class='form-group'>
+        <label for='supervisor_volunteer_volunteer_id'>Select a Volunteer</label>
+        <select name='supervisor_volunteer[volunteer_id]' class='form-control'>
+          <% @available_volunteers.each do |volunteer| %>
+            <option value="<%= volunteer.id %>"><%= volunteer.decorate.name %></option>
+          <% end %>
+        </select>
+      </div>
+
+      <%= form.submit 'Assign Volunteer', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+</div>

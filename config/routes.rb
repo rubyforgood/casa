@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   resources :reports, only: %i[index]
   resources :case_contact_reports, only: %i[index]
 
+resources :supervisors, only: %i[edit update]
+  resources :supervisor_volunteers, only: :create
   resources :volunteers, only: %i[new edit create update] do
     member do
       get :deactivate
@@ -22,6 +24,7 @@ Rails.application.routes.draw do
     end
   end
 
+  # TODO: Remove, if possible. Prefer to use specific role routes.
   resources :users, only: [] do
     collection do
       get :edit

@@ -1,4 +1,4 @@
-class VolunteerParameters < SimpleDelegator
+class UserParameters < SimpleDelegator
   def initialize(params)
     params =
       params.require(:user).permit(
@@ -19,6 +19,11 @@ class VolunteerParameters < SimpleDelegator
 
   def with_role(role)
     params[:role] = role
+    self
+  end
+
+  def without_role
+    params.delete(:role)
     self
   end
 
