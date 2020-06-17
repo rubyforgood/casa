@@ -6,7 +6,7 @@ class SupervisorsController < ApplicationController
 
   def edit
     @supervisor = User.find(params[:id])
-    @available_volunteers = User.where(role: "volunteer").select {|vol| !vol.supervisor}
+    @available_volunteers = User.where(role: "volunteer").select {|vol| !vol.supervisor}.sort_by(&:display_name)
 
     unless can_view_update_page?
       redirect_to root_url
