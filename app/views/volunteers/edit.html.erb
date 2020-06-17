@@ -119,7 +119,7 @@
         <div class='form-group'>
           <label for='case_assignment_casa_case_id'>Select a Case</label>
           <select name='case_assignment[casa_case_id]' class='form-control'>
-            <% CasaCase.all.each do |casa_case| %>
+            <% @available_casa_cases.each do |casa_case| %>
               <option value="<%= casa_case.id %>"><%= casa_case.case_number %></option>
             <% end %>
           </select>
