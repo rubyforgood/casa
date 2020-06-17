@@ -21,8 +21,8 @@ class VolunteersController < ApplicationController
 
   def edit
     @volunteer = User.find(params[:id])
-    @volunteer_active = @volunteer.active_volunteer
-    @available_casa_cases = CasaCase.all.select {|cc| cc.case_assignments.any?(:is_active)}.sort_by(&:case_number)
+    @volunteer_active = @volunteer.active_volunteer # TODO bug: volunteer can't unassign voluneer from case
+    @available_casa_cases = CasaCase.all.select {|cc| cc.case_assignments.any?(&:is_active)}.sort_by(&:case_number)
   #   record.case_assignments.exists?(volunteer_id: user.id, is_active: true)
   end
 

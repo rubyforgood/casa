@@ -55,7 +55,7 @@
           </tr>
         </thead>
         <tbody>
-          <% @supervisor.supervisor_volunteers.each do |assignment| %>
+          <% @assigned_volunteers.each do |assignment| %>
             <tr>
               <td><%= link_to assignment.volunteer.decorate.name, edit_volunteer_path(assignment.volunteer) %></td>
               <td><%= assignment.volunteer.email %></td>
