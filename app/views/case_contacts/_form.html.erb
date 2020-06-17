@@ -50,8 +50,14 @@
   </div>
 
   <div class="field contact-type form-group">
-    <%= form.label "Contact Made" %>
-    <%= form.select :contact_made, options_for_select([['Yes', true], ['No', false]], case_contact.contact_made), {}, class: "custom-select" %>
+    <div class="btn-group" data-toggle="buttons">
+      <label class="btn btn-secondary">
+        <input type="radio" name="options" id="option2" valse="false"> No contact made ❌
+      </label>
+      <label class="btn btn-secondary active">
+        <input type="radio" name="options" id="option1" value="true"> Contact made ✅
+      </label>
+    </div>
   </div>
 
   <div class="field contact-type form-group">
