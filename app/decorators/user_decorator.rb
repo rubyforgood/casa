@@ -19,7 +19,7 @@ class UserDecorator < Draper::Decorator
   def assigned_to_transition_aged_youth?
     volunteer_no_transition_youth_cases = object.casa_cases.pluck(:transition_aged_youth).all? false
 
-    volunteer_no_transition_youth_cases ? "No" : "Yes"
+    volunteer_no_transition_youth_cases ? "No" : "Yes 🐛🦋"
   end
 
   def last_contact_made

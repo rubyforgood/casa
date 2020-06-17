@@ -21,6 +21,7 @@ class VolunteersController < ApplicationController
 
   def edit
     @volunteer = User.find(params[:id])
+    @volunteer_active = @volunteer.active_volunteer
   end
 
   def update
@@ -28,6 +29,17 @@ class VolunteersController < ApplicationController
 
     if @volunteer.update(update_volunteer_params)
       redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was successfully updated."
+    else
+      render :edit
+    end
+  end
+
+  def deactivate
+    @volunteer = User.find(params[:id])
+
+    if @volunteer.update_attributes(role: "inactive")
+      @volunteer.case_assignments.update_all(is_active: false)
+      redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was deactivated."
     else
       render :edit
     end

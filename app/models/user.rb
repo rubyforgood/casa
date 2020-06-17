@@ -18,6 +18,10 @@ class User < ApplicationRecord
   ALL_ROLES = %w[volunteer supervisor casa_admin inactive].freeze
   enum role: ALL_ROLES.zip(ALL_ROLES).to_h
 
+  def active_volunteer
+    role == "volunteer" # !inactive
+  end
+
   # all contacts this user has with this casa case
   def case_contacts_for(casa_case_id)
     found_casa_case = casa_cases.find { |cc| cc.id == casa_case_id }
@@ -29,7 +33,7 @@ class User < ApplicationRecord
   end
 
   def most_recent_contact
-    case_contacts.where(contact_made: true).order(:occurred_at).first
+    case_contacts.where(contact_made: true).order(:occurred_at).last
   end
 
   def past_names
@@ -47,6 +51,18 @@ class User < ApplicationRecord
     save(validate: false)
 
     raw_token
+  end
+
+  # Called by Devise during initial authentication and on each request to
+  # validate the user is active. For our purposes, the user is active if they
+  # do not have the inactive role.
+  def active_for_authentication?
+    super && !inactive?
+  end
+
+  # Called by Devise to generate an error message when a user is not active.
+  def inactive_message
+    inactive? ? :inactive : super
   end
 end
 

@@ -9,10 +9,20 @@ Rails.application.routes.draw do
   resources :reports, only: %i[index]
   resources :case_contact_reports, only: %i[index]
 
-  resources :volunteers, only: %i[new edit create update]
-  resources :supervisors, only: %i[edit update]
-  resources :case_assignments, only: %i[create destroy]
+resources :supervisors, only: %i[edit update]
   resources :supervisor_volunteers, only: :create
+  resources :volunteers, only: %i[new edit create update] do
+    member do
+      get :deactivate
+      patch :deactivate
+    end
+  end
+  resources :case_assignments, only: %i[create destroy] do
+    member do
+      get :unassign
+      patch :unassign
+    end
+  end
 
   # TODO: Remove, if possible. Prefer to use specific role routes.
   resources :users, only: [] do
