@@ -1,7 +1,6 @@
 class CaseAssignmentsController < ApplicationController
-  # NOTE: I don't know what auth levels to use here, but am pretty certain it needs SOMETHING.
   before_action :authenticate_user!
-  before_action :must_be_admin
+  before_action :must_be_admin_or_supervisor # admins and supervisors can create/delete ALL case assignments
 
   def create
     case_assignment = case_assignment_parent.case_assignments.new(case_assignment_params)
