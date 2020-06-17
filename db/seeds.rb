@@ -171,7 +171,7 @@ volunteer_users.each_with_index do |volunteer_user, index|
 end
 
 def even_odds()
-  return rand(100) > 50
+  rand(100) > 50
 end
 
 # create CaseContact and associate with CasaCase, volunteer creator and include data
@@ -180,25 +180,23 @@ vols.map do |vol|
   vol.case_assignments.map { |ca|
     cc = ca.casa_case
     likely_durations = [15, 30, 60, 75, 4 * 60, 6 * 60]
-    (0..20).map { |_occurrence_chance|
+    (1..24).map { |months_ago|
       if even_odds
-        (1..24).map { |months_ago|
-          occurred_at = DateTime.now - months_ago.months
-          miles_driven = even_odds ? rand(200) : nil
-          want_driving_reimbursement = miles_driven ? even_odds : false
-          CaseContact.create(
-              casa_case: cc,
-              creator: vol,
-              duration_minutes:
-                  likely_durations.sample,
-              occurred_at: occurred_at,
-              contact_types: CaseContact::CONTACT_TYPES.sample(3),
-              medium_type: CaseContact::CONTACT_MEDIUMS.sample,
-              miles_driven: miles_driven,
-              want_driving_reimbursement: want_driving_reimbursement,
-              contact_made: even_odds
-          )
-        }
+        occurred_at = DateTime.now - months_ago.months
+        miles_driven = even_odds ? rand(200) : nil
+        want_driving_reimbursement = miles_driven ? even_odds : false
+        CaseContact.create(
+            casa_case: cc,
+            creator: vol,
+            duration_minutes:
+                likely_durations.sample,
+            occurred_at: occurred_at,
+            contact_types: CaseContact::CONTACT_TYPES.sample(3),
+            medium_type: CaseContact::CONTACT_MEDIUMS.sample,
+            miles_driven: miles_driven,
+            want_driving_reimbursement: want_driving_reimbursement,
+            contact_made: even_odds
+        )
       end
     }
   }
