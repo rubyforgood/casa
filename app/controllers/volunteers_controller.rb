@@ -38,7 +38,7 @@ class VolunteersController < ApplicationController
   def deactivate
     @volunteer = User.find(params[:id])
 
-    if @volunteer.update_attributes(role: "inactive")
+    if @volunteer.update(role: "inactive")
       @volunteer.case_assignments.update_all(is_active: false)
       redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was deactivated."
     else
