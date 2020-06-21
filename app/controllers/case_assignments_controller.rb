@@ -22,7 +22,7 @@ class CaseAssignmentsController < ApplicationController
     volunteer = case_assignment.volunteer
     flash_message = "Volunteer was unassigned from Case #{casa_case.case_number}."
 
-    if case_assignment.update_attributes(is_active: false)
+    if case_assignment.update(is_active: false)
       if params[:redirect_to_path] == "volunteer"
         redirect_to edit_volunteer_path(volunteer), notice: flash_message
       else
