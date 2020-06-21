@@ -13,6 +13,7 @@ require("packs/index_reports")
 require("packs/new_casa_contact")
 require("packs/show_casa_case")
 require("packs/dashboard")
+require("packs/case_contact")
 
 import "bootstrap"
 
