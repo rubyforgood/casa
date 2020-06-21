@@ -6,16 +6,16 @@ class CaseContact < ApplicationRecord
   belongs_to :casa_case
 
   CONTACT_TYPES = %w[
-    youth
-    school
-    social_worker
-    therapist
     attorney
     bio_parent
+    court
     foster_parent
     other_family
+    school
+    social_worker
     supervisor
-    court
+    therapist
+    youth
   ].freeze
   IN_PERSON = 'in-person'
   TEXT_EMAIL='text/email'
