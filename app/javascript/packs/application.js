@@ -9,10 +9,10 @@ require("channels")
 require("jquery")
 require("bootstrap-datepicker")
 require('datatables.net-dt')
-require("packs/index_reports")
-require("packs/new_casa_contact")
-require("packs/show_casa_case")
-require("packs/dashboard")
+require("src/index_reports")
+require("src/new_casa_contact")
+require("src/show_casa_case")
+require("src/dashboard")
 
 import "bootstrap"
 
