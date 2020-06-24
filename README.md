@@ -63,7 +63,7 @@ If you have any troubles, also look at `.travis.yml` which is what makes the CI 
 1. If you are on windows and see the error "Requirements support for mingw is not implemented yet" then use https://rubyinstaller.org/ instead
 1. If you are using Windows Subsystem for Linux or Ubuntu, see "Ubuntu and WSL" under "Common Issues".
 1. `gem install bundler`
-1. Make sure that postgres is installed [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database (if you have an older version of postgres). If you're on Ubuntu/WSL, use `sudo apt-get install libpq-dev` so the gem cand install. [Use the Postgres repo for Ubuntu or WSL to get the server and client tools](https://www.postgresql.org/download/linux/ubuntu/).
+1. Make sure that postgres is installed [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database (if you have an older version of postgres). If you're on Ubuntu/WSL, use `sudo apt-get install libpq-dev` so the gem can install. [Use the Postgres repo for Ubuntu or WSL to get the server and client tools](https://www.postgresql.org/download/linux/ubuntu/).
 1. Make sure [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) is installed
 1. Make sure you have [google chrome](https://chromedriver.chromium.org/) installed so the selenium tests can run. Installing `chromium-browser` is enough, even in WSL.
 1. `bundle install`
