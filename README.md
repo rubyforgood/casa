@@ -1,7 +1,7 @@
 # CASA Project & Organization Overview
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=rubyforgood/casa)](https://dependabot.com)
-[![Maintainability](https://api.codeclimate.com/v1/badges/???/maintainability)](https://codeclimate.com/github/rubyforgood/casa/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/???/test_coverage)](https://codeclimate.com/github/rubyforgood/casa/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/maintainability)](https://codeclimate.com/github/rubyforgood/casa/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/test_coverage)](https://codeclimate.com/github/rubyforgood/casa/test_coverage)
 [![Build Status](https://travis-ci.org/rubyforgood/casa.svg?branch=master)](https://travis-ci.org/rubyforgood/casa) 
 [![View performance data on Skylight](https://badges.skylight.io/status/tFh7xrs3Qnaf.svg?token=1C-Q7p8jEFlG7t69Yl5DaJwa-ipWI8gLw9wLJf53xmQ)](https://www.skylight.io/app/applications/tFh7xrs3Qnaf)
 [![Known Vulnerabilities](https://snyk.io/test/github/rubyforgood/casa/badge.svg)](https://snyk.io/test/github/rubyforgood/casa)
@@ -12,7 +12,7 @@ CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunte
 - provide volunteers with a portal for logging activity
 - oversee volunteer activity
 - generate reports on volunteer activity
-
+11
 **How CASA works:**
 - Foster Youth (or case worker associated with Foster Youth) requests a CASA Volunteer.
 - CASA chapter pairs Youth with Volunteer.
