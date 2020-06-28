@@ -94,6 +94,14 @@ There is a `doc` directory at the top level that includes [Architectural Decisio
 
 You'll probably hit a problem where ruby-version reads `ruby-2.7.0` but the install available to you is called `2.7.0`. If you do, install [rbenv-alias](https://github.com/tpope/rbenv-aliases) and create an alias between the two.
 
+### Testing
+
+Test credentials for https://casa-r4g-staging.herokuapp.com/
+
+1. supervisor1@example.com / 123456
+1. volunteer1@example.com / 123456
+1. casa_admin1@example.com / 123456
+
 ### Communication
 
 Most conversation happens in the #casa channel of the Ruby For Good slack. You can get access here: https://rubyforgood.herokuapp.com/
