@@ -36,6 +36,9 @@
                value="<%= contact_type %>"
                name="case_contact[contact_types][]"
                id="case_contact[contact_types][<%= index %>]"
+               <% if case_contact.contact_types.include?(contact_type) %>
+               checked=true
+               <% end %>
         >
         <label class="form-check-label" for="case_contact[contact_types][<%= index %>]">
           <%= contact_type.titleize %>
