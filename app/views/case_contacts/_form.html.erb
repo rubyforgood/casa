@@ -62,7 +62,7 @@
   <div class="field contact-type form-group">
     <%= form.label "Contact Medium" %>
     <% contact_mediums = CaseContact::CONTACT_MEDIUMS.map { |contact_medium| OpenStruct.new(value: contact_medium, label: contact_medium.titleize) } %>
-    <%= form.select :medium_type, options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type), {}, class: "custom-select" %>
+    <%= form.select :medium_type, options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type), {prompt: ""}, class: "custom-select" %>
   </div>
 
   <div class="field duration-minutes form-group">
