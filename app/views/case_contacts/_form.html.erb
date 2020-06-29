@@ -51,7 +51,12 @@
 
   <div class="field contact-type form-group">
     <%= form.label "Contact Made" %>
-    <%= form.select :contact_made, options_for_select([['Yes', true], ['No', false]], case_contact.contact_made), {}, class: "custom-select" %>
+    <br> 
+    <%= form.radio_button(:contact_made, true, checked: false) %>
+    <%= form.label "Yes", for: "case_contact_contact_made_true" %>
+    <br>
+    <%= form.radio_button(:contact_made, false, checked: false) %>
+    <%= form.label "No", for: "case_contact_contact_made_false" %>
   </div>
 
   <div class="field contact-type form-group">
