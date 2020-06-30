@@ -36,7 +36,7 @@
                value="<%= contact_type %>"
                name="case_contact[contact_types][]"
                id="case_contact[contact_types][<%= index %>]"
-               <% if case_contact.contact_types.to_s.include?(contact_type) %>
+               <% if case_contact.contact_types&.include?(contact_type) %>
                checked=true
                <% end %>
         >
@@ -54,7 +54,7 @@
 
   <div class="field contact-type form-group">
     <%= form.label "Contact Made" %>
-    <br> 
+    <br>
     <%= form.radio_button(:contact_made, true, checked: false) %>
     <%= form.label "Yes", for: "case_contact_contact_made_true" %>
     <br>
