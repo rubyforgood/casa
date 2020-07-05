@@ -36,6 +36,9 @@
                value="<%= contact_type %>"
                name="case_contact[contact_types][]"
                id="case_contact[contact_types][<%= index %>]"
+               <% if case_contact.contact_types&.include?(contact_type) %>
+               checked=true
+               <% end %>
         >
         <label class="form-check-label" for="case_contact[contact_types][<%= index %>]">
           <%= contact_type.titleize %>
@@ -51,13 +54,18 @@
 
   <div class="field contact-type form-group">
     <%= form.label "Contact Made" %>
-    <%= form.select :contact_made, options_for_select([['Yes', true], ['No', false]], case_contact.contact_made), {}, class: "custom-select" %>
+    <br>
+    <%= form.radio_button(:contact_made, true, checked: false) %>
+    <%= form.label "Yes", for: "case_contact_contact_made_true" %>
+    <br>
+    <%= form.radio_button(:contact_made, false, checked: false) %>
+    <%= form.label "No", for: "case_contact_contact_made_false" %>
   </div>
 
   <div class="field contact-type form-group">
     <%= form.label "Contact Medium" %>
     <% contact_mediums = CaseContact::CONTACT_MEDIUMS.map { |contact_medium| OpenStruct.new(value: contact_medium, label: contact_medium.titleize) } %>
-    <%= form.select :medium_type, options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type), {}, class: "custom-select" %>
+    <%= form.select :medium_type, options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type), {prompt: ""}, class: "custom-select" %>
   </div>
 
   <div class="field duration-minutes form-group">

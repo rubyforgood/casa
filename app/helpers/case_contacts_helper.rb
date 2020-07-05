@@ -9,7 +9,7 @@ module CaseContactsHelper
         "value",
         "label",
         case_contact.duration_minutes&.remainder(60)
-      ), {},
+      ), {prompt: ""},
       class: "custom-select"
   end
 
@@ -23,7 +23,7 @@ module CaseContactsHelper
         "label",
         case_contact.duration_minutes&.div(60)
       ),
-      {},
+      {prompt: ""},
       class: "custom-select"
   end
 

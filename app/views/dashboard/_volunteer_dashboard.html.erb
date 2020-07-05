@@ -40,6 +40,7 @@
       <th>Contact Made</th>
       <th>Contact Medium</th>
       <th>Type</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -50,6 +51,7 @@
         <td><%= contact.contact_made %></td>
         <td><%= contact.medium_type %></td>
         <td><%= contact.contact_types %></td>
+        <td><%= link_to 'Edit', edit_case_contact_path(contact) %></td>
       </tr>
     <% end %>
   </tbody>
