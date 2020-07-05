@@ -102,8 +102,14 @@ Test credentials for https://casa-r4g-staging.herokuapp.com/
 1. volunteer1@example.com / 123456
 1. casa_admin1@example.com / 123456
 
-### Communication
+### Communication and Collaboration
 
 Most conversation happens in the #casa channel of the Ruby For Good slack. You can get access here: https://rubyforgood.herokuapp.com/
 
 You can also open an issue or comment on an issue on github and a maintainer will reply to you. 
+
+We have a weekly team call on Sunday at 10am-11:30 Pacific where we do pair/mob programming and talk about issues- feel free to join! Join info in slack or open a github issue to request join info
+
+We have a weekly stakeholder call with PG CASA staff on Wednesday at 8:30am Pacific where we show off progress and discuss launch plans. Feel free to join! Join info in slack or open a github issue to request join info
+
+Planned launch (CASA volunteer training) 3 August 2020
