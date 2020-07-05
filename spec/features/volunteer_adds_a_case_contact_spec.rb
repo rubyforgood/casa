@@ -25,4 +25,6 @@ RSpec.describe "volunteer adds a case contact", type: :feature do
     expect(CaseContact.first.contact_types).to include "therapist"
     expect(CaseContact.first.duration_minutes).to eq 105
   end
+
+#   TODO test case_contact.js behavior
 end
