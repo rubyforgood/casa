@@ -8,6 +8,13 @@ class SupervisorVolunteersController < ApplicationController
     redirect_to after_action_path(supervisor_volunteer_parent)
   end
 
+  def destroy
+    supervisor_volunteer = SupervisorVolunteer.find(params[:id])
+    supervisor_volunteer.delete
+
+    redirect_to after_action_path(supervisor_volunteer_parent)
+  end
+
   private
 
   def supervisor_volunteer_params
