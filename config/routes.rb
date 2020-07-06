@@ -9,8 +9,8 @@ Rails.application.routes.draw do
   resources :reports, only: %i[index]
   resources :case_contact_reports, only: %i[index]
 
-resources :supervisors, only: %i[edit update]
-  resources :supervisor_volunteers, only: :create
+  resources :supervisors, only: %i[edit update]
+  resources :supervisor_volunteers, only: %i[create destroy]
   resources :volunteers, only: %i[new edit create update] do
     member do
       get :deactivate
