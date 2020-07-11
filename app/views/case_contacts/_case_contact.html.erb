@@ -1,0 +1,12 @@
+<tr>
+  <td data-sort="<%= contact.occurred_at.strftime("%Y%m%d%H%M%s") %>"><%= contact.occurred_at.strftime('%B %e, %Y') %></td>
+  <td><%= contact.decorate.duration_minutes %></td>
+  <td><%= contact.decorate.contact_made %></td>
+  <td><%= contact.decorate.medium_type_icon %></td>
+  <td><%= contact.decorate.contact_types %></td>
+  <td><%= contact.decorate.miles_traveled %></td>
+  <td><%= contact.decorate.reimbursement %></td>
+  <td><%= link_to "#{contact.creator&.display_name} ", edit_volunteer_path(contact.creator) %></td>
+
+  <td><%= link_to 'Edit', edit_case_contact_path(contact) %></td>
+</tr>
