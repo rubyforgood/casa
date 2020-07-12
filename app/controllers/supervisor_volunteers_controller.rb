@@ -1,5 +1,6 @@
 class SupervisorVolunteersController < ApplicationController
   before_action :authenticate_user!
+  before_action :must_be_admin_or_supervisor, only: :destroy
 
   def create
     supervisor_volunteer = supervisor_volunteer_parent.supervisor_volunteers.new(supervisor_volunteer_params)
@@ -10,9 +11,10 @@ class SupervisorVolunteersController < ApplicationController
 
   def destroy
     supervisor_volunteer = SupervisorVolunteer.find(params[:id])
+    supervisor = supervisor_volunteer.supervisor
     supervisor_volunteer.delete
 
-    redirect_to after_action_path(supervisor_volunteer_parent)
+    redirect_to after_action_path(supervisor)
   end
 
   private
