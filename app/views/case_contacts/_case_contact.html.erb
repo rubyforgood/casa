@@ -8,5 +8,9 @@
   <td><%= contact.decorate.reimbursement %></td>
   <td><%= link_to "#{contact.creator&.display_name} ", edit_volunteer_path(contact.creator) %></td>
 
-  <td><%= link_to 'Edit', edit_case_contact_path(contact) %></td>
+  <td>
+    <% if Pundit.policy(current_user, contact).update?  %>
+      <%= link_to 'Edit', edit_case_contact_path(contact) %>
+    <% end %>
+  </td>
 </tr>
