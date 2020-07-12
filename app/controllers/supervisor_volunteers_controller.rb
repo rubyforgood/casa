@@ -1,5 +1,6 @@
 class SupervisorVolunteersController < ApplicationController
   before_action :authenticate_user!
+  before_action :must_be_admin_or_supervisor, only: :destroy
 
   def create
     supervisor_volunteer = supervisor_volunteer_parent.supervisor_volunteers.new(supervisor_volunteer_params)
