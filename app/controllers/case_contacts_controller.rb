@@ -23,7 +23,10 @@ class CaseContactsController < ApplicationController
 
   # GET /case_contacts/1/edit
   def edit
-    @casa_cases = current_user.casa_cases
+    @case_contact = authorize CaseContact.find(params[:id])
+  rescue Pundit::NotAuthorizedError
+    flash[:alert] = "Sorry! You can only edit case contacts that you have logged."
+    redirect_to root_path
   end
 
   def create
