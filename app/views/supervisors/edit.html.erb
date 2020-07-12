@@ -60,7 +60,7 @@
             <tr>
               <td><%= link_to assignment.volunteer.decorate.name, edit_volunteer_path(assignment.volunteer) %></td>
               <td><%= assignment.volunteer.email %></td>
-              <td><%= button_to 'Unassign', supervisor_volunteer_path(assignment, supervisor_id: @supervisor.id), method: :delete, class: "btn btn-danger" %></td>
+              <td><%= button_to 'Unassign', supervisor_volunteer_path(assignment), method: :delete, class: "btn btn-danger" %></td>
             </tr>
           <% end %>
         </tbody>
