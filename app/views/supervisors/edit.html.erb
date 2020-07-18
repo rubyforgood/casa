@@ -19,7 +19,7 @@
 
       <div class="field form-group">
         <%= form.label :email %>
-        <% if policy(:user).update_supervisor_email? %>
+        <% if policy(@supervisor).update_supervisor_email? %>
           <%= form.text_field :email, class: "form-control" %>
         <% else %>
           <input class="form-control" type="text" placeholder="<%= @supervisor.email %>" readonly>
@@ -28,7 +28,7 @@
 
       <div class="field form-group">
         <%= form.label :display_name %>
-        <% if policy(:user).update_supervisor_name? %>
+        <% if policy(@supervisor).update_supervisor_name? %>
           <%= form.text_field :display_name, class: "form-control" %>
         <% else %>
           <input class="form-control" type="text" placeholder="<%= @supervisor.display_name %>" readonly>
@@ -36,7 +36,9 @@
       </div>
 
       <div class="actions">
-        <%= form.submit "Submit", class: "btn btn-primary" %>
+        <% if policy(@supervisor).update_supervisor_email? || policy(@supervisor).update_supervisor_name? %>
+          <%= form.submit "Submit", class: "btn btn-primary" %>
+        <% end %>
       </div>
     <% end %>
   </div>
