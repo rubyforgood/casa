@@ -51,4 +51,18 @@ RSpec.describe DashboardPolicy do
       end
     end
   end
+
+  permissions :see_supervisors_section? do
+    it "allows casa_admins" do
+      expect(subject).to permit(create(:user, :casa_admin))
+    end
+
+    it "does not allow supervisors" do
+      expect(subject).not_to permit(create(:user, :supervisor))
+    end
+
+    it "does not allow volunteers" do
+      expect(subject).not_to permit(create(:user, :volunteer))
+    end
+  end
 end
