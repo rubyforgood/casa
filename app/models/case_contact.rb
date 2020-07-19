@@ -2,6 +2,8 @@
 class CaseContact < ApplicationRecord
   attr_accessor :duration_hours
 
+  validates :contact_made, presence: true
+
   belongs_to :creator, class_name: "User"
   belongs_to :casa_case
 
@@ -17,6 +19,10 @@ class CaseContact < ApplicationRecord
     therapist
     youth
   ].freeze
+  ALT_CONTACT_TYPES = [
+    {id: 1, contact_type: 'attorney'},
+    {id: 2, contact_type: 'bio_parent'}
+  ]
   IN_PERSON = 'in-person'
   TEXT_EMAIL='text/email'
   VIDEO='video'

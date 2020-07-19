@@ -29,21 +29,10 @@
 
   <div class="field contact-type form-group">
     <%= form.label :contact_types %>
-    <% contact_types = CaseContact::CONTACT_TYPES.each_with_index do |contact_type, index| %>
-      <div class="form-check">
-        <input class="form-check-input casa-case-contact-type"
-               type="checkbox"
-               value="<%= contact_type %>"
-               name="case_contact[contact_types][]"
-               id="case_contact[contact_types][<%= index %>]"
-               <% if case_contact.contact_types&.include?(contact_type) %>
-               checked=true
-               <% end %>
-        >
-        <label class="form-check-label" for="case_contact[contact_types][<%= index %>]">
-          <%= contact_type.titleize %>
-        </label>
-      </div>
+    
+    <%= form.collection_check_boxes :contact_types, CaseContact::CONTACT_TYPES, :to_s, :to_s do |b| %>
+      <%= b.check_box%>
+      <%= b.label  %>
     <% end %>
   </div>
 
@@ -55,27 +44,35 @@
   <div class="field contact-type form-group">
     <%= form.label "Contact Made" %>
     <br>
-    <%= form.radio_button(:contact_made, true, checked: false) %>
+    <%= form.radio_button(:contact_made, true, checked: false, required: 'required') %>
     <%= form.label "Yes", for: "case_contact_contact_made_true" %>
     <br>
-    <%= form.radio_button(:contact_made, false, checked: false) %>
+    <%= form.radio_button(:contact_made, false, checked: false, required: 'required') %>
     <%= form.label "No", for: "case_contact_contact_made_false" %>
   </div>
 
   <div class="field contact-type form-group">
     <%= form.label "Contact Medium" %>
     <% contact_mediums = CaseContact::CONTACT_MEDIUMS.map { |contact_medium| OpenStruct.new(value: contact_medium, label: contact_medium.titleize) } %>
-    <%= form.select :medium_type, options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type), {prompt: ""}, class: "custom-select" %>
+    <%= form.select :medium_type, options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type), {prompt: "Please Select One"}, class: "custom-select", required: true %>
   </div>
 
   <div class="field duration-minutes form-group">
     <%= form.label "Duration" %>
     <div class="row">
-      <div class="col-sm-6">
-        <%= duration_hours_select(form, @case_contact) %>
+      <div class="d-flex justify-content-center col-sm-12">
+        <%= form.range_field :duration_hours, :min=>0, :max=>23, :value=>0, :class=>"row custom-range slide", :id=>"case-contact-duration-hours"%>  
       </div>
-      <div class="col-sm-6">
-        <%= duration_minutes_select(form, @case_contact) %>
+      <div class="row">
+        <%= form.text_field :duration_hours, :class=>"row col-sm-6", :id=>"casa-contact-duration-hours-display", required: 'required' %>
+        <span class="col-sm-2"> hours <span>
+      </div>
+      <div class="d-flex justify-content-center col-sm-12">
+        <%= form.range_field :duration_minutes, :min=>0, :max=>59, :step=>15, :value=>0, :class=>"row custom-range slide", :id=>"case-contact-duration-minutes"%>  
+      </div>
+      <div class="row">
+        <%= form.text_field :duration_minutes, :class=>"row col-sm-6", :id=>"casa-contact-duration-minutes-display", :value=>0 %>
+        <span class="col-sm-2"> minutes <span>
       </div>
     </div>
   </div>
