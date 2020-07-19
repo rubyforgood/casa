@@ -1,4 +1,12 @@
-class DashboardPolicy < Struct.new(:user, :dashboard)
+class DashboardPolicy
+  include PolicyHelper
+  attr_reader :user, :dashboard
+
+  def initialize(user, dashboard)
+    @user = user
+    @dashboard = dashboard
+  end
+
   def show?
     true
   end
@@ -7,7 +15,15 @@ class DashboardPolicy < Struct.new(:user, :dashboard)
     user.casa_admin?
   end
 
+  def create_case_contacts?
+    user.role == "volunteer" && user.casa_cases.present?
+  end
+
   def see_cases_section?
     true
+  end
+
+  def see_supervisors_section?
+    user.casa_admin?
   end
 end

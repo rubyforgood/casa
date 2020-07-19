@@ -1,7 +1,7 @@
 <%= form_with(model: case_contact, local: true) do |form| %>
   <% if case_contact.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(case_contact.errors.count, "error") %> prohibited this case_contact from being saved:</h2>
+    <div id="error_explanation" class="alert alert-danger">
+      <h6><%= pluralize(case_contact.errors.count, "error") %> prohibited this Case Contact from being saved:</h6>
 
       <ul>
         <% case_contact.errors.full_messages.each do |message| %>
@@ -10,43 +10,92 @@
       </ul>
     </div>
   <% end %>
-  <div class="field casa-case">
-    <%= form.label :casa_case_id %>
-    <%= select_tag :casa_case_id, options_from_collection_for_select(@casa_cases, 'id', 'case_number') %>
-  </div>
-  <div class="field contact-type">
-    <%= form.label :contact_type %>
-    <% case_contacts = CaseContact::CONTACT_TYPES.map { |contact_type| OpenStruct.new(value: contact_type, label: contact_type.titleize) } %>
-    <%= select_tag :contact_type, options_from_collection_for_select(case_contacts, 'value', 'label') %>
-  </div>
 
-  <div class="field duration-minutes">
-    <%= form.label :duration_minutes %>
-    <% durations = [] %>
-    <%# For the first 2 hours %>
-    <% 7.times do |i| %>
-      <%
-        duration = (i + 1) * 15
-        durations.push(OpenStruct.new(value: duration, label: "#{duration} minutes"))
-      %>
+  <div class="field casa-case form-group">
+    <% if current_user.casa_cases.length > 1 %>
+      <label for="case_contact_casa_case">Select all relevant CASA cases</label>
+    <% else %>
+      <label for="case_contact_casa_case">CASA case</label>
     <% end %>
-    <%# For the next 22 hours %>
-    <% 23.times do |i| %>
-      <%
-        duration = (i + 2) * 60
-        durations.push(OpenStruct.new(value: duration, label: "#{i + 2} hours"))
-      %>
+    <% current_user.casa_cases.each_with_index do |casa_case, index| %>
+      <div class="form-check">
+        <input class="form-check-input casa-case-id-check" type="checkbox" value="<%= casa_case.id %>" name="case_contact[casa_case_id][<%= index %>]" <% if index.zero? %>checked required<% end %>>
+        <label class="form-check-label" for="casa-case-id-check">
+          <%= casa_case.case_number %>
+        </label>
+      </div>
     <% end %>
-
-    <%= select_tag :duration_minutes, options_from_collection_for_select(durations, 'value', 'label') %>
   </div>
 
-  <div class="field occurred-at">
+  <div class="field contact-type form-group">
+    <%= form.label :contact_types %>
+    <% contact_types = CaseContact::CONTACT_TYPES.each_with_index do |contact_type, index| %>
+      <div class="form-check">
+        <input class="form-check-input casa-case-contact-type"
+               type="checkbox"
+               value="<%= contact_type %>"
+               name="case_contact[contact_types][]"
+               id="case_contact[contact_types][<%= index %>]"
+               <% if case_contact.contact_types&.include?(contact_type) %>
+               checked=true
+               <% end %>
+        >
+        <label class="form-check-label" for="case_contact[contact_types][<%= index %>]">
+          <%= contact_type.titleize %>
+        </label>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="field other-contact-type form-group" hidden>
+    <%= form.label :other_type_text %>
+    <%= form.text_field :other_type_text, class: "form-control" %>
+  </div>
+
+  <div class="field contact-type form-group">
+    <%= form.label "Contact Made" %>
+    <br>
+    <%= form.radio_button(:contact_made, true, checked: false) %>
+    <%= form.label "Yes", for: "case_contact_contact_made_true" %>
+    <br>
+    <%= form.radio_button(:contact_made, false, checked: false) %>
+    <%= form.label "No", for: "case_contact_contact_made_false" %>
+  </div>
+
+  <div class="field contact-type form-group">
+    <%= form.label "Contact Medium" %>
+    <% contact_mediums = CaseContact::CONTACT_MEDIUMS.map { |contact_medium| OpenStruct.new(value: contact_medium, label: contact_medium.titleize) } %>
+    <%= form.select :medium_type, options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type), {prompt: ""}, class: "custom-select" %>
+  </div>
+
+  <div class="field duration-minutes form-group">
+    <%= form.label "Duration" %>
+    <div class="row">
+      <div class="col-sm-6">
+        <%= duration_hours_select(form, @case_contact) %>
+      </div>
+      <div class="col-sm-6">
+        <%= duration_minutes_select(form, @case_contact) %>
+      </div>
+    </div>
+  </div>
+
+  <div class="field occurred-at form-group">
     <%= form.label :occurred_at %>
-    <%= form.date_field :occurred_at, :value => Time.now.strftime('%Y-%m-%d') %>
+    <%= form.date_field :occurred_at, value: Time.now.strftime('%Y-%m-%d'), class: "form-control" %>
+  </div>
+
+  <div class="field miles-driven form-group">
+    <%= form.label :miles_driven %>
+    <%= form.number_field :miles_driven, class: "form-control" %>
+  </div>
+
+  <div class="field want-driving-reimbursement form-group">
+    <%= form.label :want_driving_reimbursement %>
+    <%= form.select :want_driving_reimbursement, options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement), {}, class: "custom-select" %>
   </div>
 
   <div class="actions">
-    <%= form.submit "Submit" %>
+    <%= form.submit "Submit", class: "btn btn-primary" %>
   </div>
 <% end %>

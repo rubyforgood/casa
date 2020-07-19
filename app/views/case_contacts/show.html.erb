@@ -1,33 +1,26 @@
-<p id="notice"><%= notice %></p>
-
 <p>
   <strong>Creator:</strong>
-  <%= @case_contact.creator_id %>
+  <%= @case_contact.creator.display_name %>
 </p>
 
 <p>
-  <strong>Casa case:</strong>
+  <strong>CASA Case:</strong>
   <%= @case_contact_number %>
 </p>
 
 <p>
   <strong>Contact type:</strong>
-  <%= @case_contact.contact_type %>
+  <%= @case_contact.contact_types %>
 </p>
 
 <p>
-  <strong>Other type text:</strong>
-  <%= @case_contact.other_type_text %>
-</p>
-
-<p>
-  <strong>Duration minutes:</strong>
+  <strong>Duration:</strong>
   <%= @case_contact.duration_minutes %>
 </p>
 
 <p>
   <strong>Occurred at:</strong>
-  <%= @case_contact.occurred_at %>
+  <%= @case_contact.occurred_at.strftime('%B %e, %Y') %>
 </p>
 
 <%= link_to 'Edit', edit_case_contact_path(@case_contact) %> |

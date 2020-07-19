@@ -2,19 +2,17 @@ class CasaCase < ApplicationRecord
   has_paper_trail
 
   has_many :case_assignments
-  has_many(
-    :volunteers,
-    through: :case_assignments,
-    source: :volunteer,
-    class_name: "User"
-  )
+  has_many(:volunteers, through: :case_assignments, source: :volunteer, class_name: "User")
   has_many :case_contacts
-  validates :case_number, uniqueness: { case_sensitive: false }, presence: true
+  validates :case_number, uniqueness: {case_sensitive: false}, presence: true
 
   scope :ordered, -> { sort_by(&:updated_at).reverse }
-  scope :actively_assigned_to, ->(volunteer) do
-    joins(:case_assignments).where(case_assignments: {volunteer: volunteer, is_active: true})
-  end
+  scope :actively_assigned_to,
+    lambda { |volunteer|
+      joins(:case_assignments).where(
+        case_assignments: {volunteer: volunteer, is_active: true}
+      )
+    }
 end
 
 # == Schema Information
@@ -23,7 +21,7 @@ end
 #
 #  id                    :bigint           not null, primary key
 #  case_number           :string           not null
-#  teen_program_eligible :boolean          default(FALSE), not null
+#  transition_aged_youth :boolean          default(FALSE), not null
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #

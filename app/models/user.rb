@@ -1,20 +1,72 @@
+# model for all user roles: volunteer supervisor casa_admin inactive
 class User < ApplicationRecord
   has_paper_trail
-  devise :database_authenticatable,
-         :recoverable, :rememberable, :validatable
+  devise :database_authenticatable, :recoverable, :rememberable, :validatable
 
   belongs_to :casa_org
 
   has_many :case_assignments, foreign_key: "volunteer_id"
   has_many :casa_cases, through: :case_assignments
+  has_many :case_contacts, foreign_key: "creator_id"
 
-  ALL_ROLES = %w[inactive volunteer supervisor casa_admin].freeze
+  has_many :supervisor_volunteers, foreign_key: "supervisor_id"
+  has_many :volunteers, through: :supervisor_volunteers
+
+  has_one :supervisor_volunteer, foreign_key: "volunteer_id"
+  has_one :supervisor, through: :supervisor_volunteer
+
+  ALL_ROLES = %w[volunteer supervisor casa_admin inactive].freeze
   enum role: ALL_ROLES.zip(ALL_ROLES).to_h
+
+  def active_volunteer
+    role == "volunteer" # !inactive
+  end
 
   # all contacts this user has with this casa case
   def case_contacts_for(casa_case_id)
-    found_casa_case = casa_cases.find{|cc| cc.id == casa_case_id}
-    found_casa_case.case_contacts.filter{|contact| contact.creator_id == self.id}
+    found_casa_case = casa_cases.find { |cc| cc.id == casa_case_id }
+    found_casa_case.case_contacts.filter { |contact| contact.creator_id == id }
+  end
+
+  def recent_contacts_made(days_counter = 60)
+    case_contacts.where(contact_made: true, occurred_at: days_counter.days.ago..Date.today).count
+  end
+
+  def most_recent_contact
+    case_contacts.where(contact_made: true).order(:occurred_at).last
+  end
+
+  def past_names
+    # get past_names from paper_trail gem, version_limit is 10 so no performance concerns
+    versions.map { |version| version&.reify&.display_name }
+  end
+
+  # Generate a Devise reset_token, used for the account_setup mailer. This happens automatically
+  # when a user clicks "Reset My Password", so do not use this method in that flow.
+  def generate_password_reset_token
+    raw_token, hashed_token = Devise.token_generator.generate(self.class, :reset_password_token)
+
+    self.reset_password_token = hashed_token
+    self.reset_password_sent_at = Time.now.utc
+    save(validate: false)
+
+    raw_token
+  end
+
+  # Called by Devise during initial authentication and on each request to
+  # validate the user is active. For our purposes, the user is active if they
+  # do not have the inactive role.
+  def active_for_authentication?
+    super && !inactive?
+  end
+
+  # Called by Devise to generate an error message when a user is not active.
+  def inactive_message
+    inactive? ? :inactive : super
+  end
+
+  def serving_transition_aged_youth?
+    casa_cases.where(transition_aged_youth: true).any?
   end
 end
 
@@ -23,6 +75,7 @@ end
 # Table name: users
 #
 #  id                     :bigint           not null, primary key
+#  display_name           :string           default("")
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  remember_created_at    :datetime

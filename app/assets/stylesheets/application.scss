@@ -1,13 +1,17 @@
-$primary: #00447C;
+@import "base/variables";
 
 @import "bootstrap";
-@import "casa_cases";
-@import "dashboard";
-@import "navbar";
+@import "dataTables/jquery.dataTables";
+@import 'bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css';
 
-@import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
+@import "shared/flashes";
+@import "shared/footer";
+@import "shared/form";
+@import "shared/layout";
+@import "shared/navbar";
+@import "shared/typography";
+@import "shared/utilities";
 
-body {
-  font-family: "Montserrat";
-}
-
+@import "pages/casa_cases";
+@import "pages/dashboard";
+@import "pages/login";

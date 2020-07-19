@@ -1,4 +1,4 @@
-class ApplicationMailer < ActionMailer::Base # rubocop:todo Style/Documentation
-  default from: 'from@example.com'
-  layout 'mailer'
+class ApplicationMailer < ActionMailer::Base
+  default from: "from@example.com"
+  layout "mailer"
 end

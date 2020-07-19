@@ -1,8 +1,10 @@
-require 'simplecov'
-require 'capybara/rspec'
-require 'pundit/rspec'
-require 'pry'
-SimpleCov.start
+require "simplecov"
+require "capybara/rspec"
+require "pundit/rspec"
+require "pry"
+SimpleCov.start do
+  track_files "{app,lib}/**/*.rb"
+end
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -13,5 +15,11 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
+  config.filter_run focus: true
+  config.run_all_when_everything_filtered = true
   config.shared_context_metadata_behavior = :apply_to_host_groups
+
+  config.before(:each, type: :system) do
+    driven_by :selenium_chrome_headless
+  end
 end

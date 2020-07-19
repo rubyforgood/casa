@@ -7,6 +7,14 @@ class UserPolicy
     @record = record
   end
 
+  def update_supervisor_email?
+    user.casa_admin? || record == user
+  end
+
+  def update_supervisor_name?
+    update_supervisor_email?
+  end
+
   class Scope
     attr_reader :user, :scope
 
@@ -17,44 +25,15 @@ class UserPolicy
 
     def resolve
       case user.role
-      when 'casa_admin'
-        # scope.in_casa_administered_by(user)
+      when "casa_admin" # scope.in_casa_administered_by(user)
         scope.all
-      when 'volunteer'
+      when "volunteer"
         scope.where(id: user.id)
+      when "supervisor"
+        scope.all
       else
-        raise "unrecognized role"
+        raise "unrecognized role #{@user.role}"
       end
     end
   end
-
-  # TODO: Uncomment and test the below as necessary, please.
-
-  # def index?
-  #   is_casa_admin_of_org?(user, record)
-  # end
-
-  # def show?
-  #   is_casa_admin_of_org?(user, record)
-  # end
-
-  # def create?
-  #   is_casa_admin_of_org?(user, record)
-  # end
-
-  # def new?
-  #   is_casa_admin_of_org?(user, record)
-  # end
-
-  # def update?
-  #   is_casa_admin_of_org?(user, record)
-  # end
-
-  # def edit?
-  #   is_casa_admin_of_org?(user, record)
-  # end
-
-  # def destroy?
-  #   is_casa_admin_of_org?(user, record)
-  # end
 end

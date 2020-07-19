@@ -1,31 +1,48 @@
-<p id="notice"><%= notice %></p>
+<%= link_to 'Back', root_path %>
 
-<h1>Case Assignments</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Volunteer user</th>
-      <th>Case</th>
-      <th>Is active</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @case_assignments.each do |case_assignment| %>
-      <tr>
-        <td><%= case_assignment.volunteer_id %></td>
-        <td><%= case_assignment.casa_case_id %></td>
-        <td><%= case_assignment.is_active %></td>
-        <td><%= link_to 'Show', case_assignment %></td>
-        <td><%= link_to 'Edit', edit_case_assignment_path(case_assignment) %></td>
-        <td><%= link_to 'Destroy', case_assignment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<h1>Edit Volunteer Assignments for <%= @volunteer.name %></h1>
 
 <br>
 
-<%= link_to 'New Case Assignment', new_case_assignment_path %>
+<% if @volunteer.casa_cases %>
+  <table class='table case-list' id='casa_cases'>
+    <thead>
+      <tr>
+        <th>Case Number</th>
+        <th>Transition Aged Youth</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @volunteer.case_assignments.each do |assignment| %>
+        <tr>
+          <td><%= assignment.casa_case.case_number %></td>
+          <td><%= assignment.casa_case.decorate.transition_aged_youth_icon %></td>
+          <td><%= button_to 'Unassign Case', volunteer_case_assignment_path(@volunteer, assignment), method: :delete, class: "btn btn-danger" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<br>
+
+<div class="row">
+  <div class="col-sm-6">
+    <h3>Assign a New Case</h3>
+
+    <%= form_for CaseAssignment.new, url: volunteer_case_assignments_path do |form| %>
+
+      <div class='form-group'>
+        <label for="case_assignment_casa_case_id">Select a Case</label>
+        <select class='form-control'>
+          <% CasaCase.all.each do |casa_case| %>
+            <option value="<%= casa_case.id %>"><%= casa_case.case_number %></option>
+          <% end %>
+        </select>
+      </div>
+
+      <%= form.submit 'Assign Case', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+</div>

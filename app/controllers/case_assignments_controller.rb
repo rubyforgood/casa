@@ -1,75 +1,57 @@
-# rubocop:todo Style/Documentation
 class CaseAssignmentsController < ApplicationController
-  before_action :set_case_assignment, only: %i[show edit update destroy]
+  before_action :authenticate_user!
+  before_action :must_be_admin_or_supervisor # admins and supervisors can create/delete ALL case assignments
 
-  # GET /case_assignments
-  # GET /case_assignments.json
-  def index
-    @case_assignments = CaseAssignment.all
-  end
-
-  # GET /case_assignments/1
-  # GET /case_assignments/1.json
-  def show; end
-
-  # GET /case_assignments/new
-  def new
-    @case_assignment = CaseAssignment.new
-  end
-
-  # GET /case_assignments/1/edit
-  def edit; end
-
-  # POST /case_assignments
-  # POST /case_assignments.json
   def create
-    @case_assignment = CaseAssignment.new(case_assignment_params)
+    case_assignment = case_assignment_parent.case_assignments.new(case_assignment_params)
+    case_assignment.save
 
-    respond_to do |format|
-      if @case_assignment.save
-        format.html { redirect_to @case_assignment, notice: 'Case assignment was successfully created.' }
-        format.json { render :show, status: :created, location: @case_assignment }
-      else
-        format.html { render :new }
-        format.json { render json: @case_assignment.errors, status: :unprocessable_entity }
-      end
-    end
+    redirect_to after_action_path(case_assignment_parent)
   end
 
-  # PATCH/PUT /case_assignments/1
-  # PATCH/PUT /case_assignments/1.json
-  def update
-    respond_to do |format|
-      if @case_assignment.update(case_assignment_params)
-        format.html { redirect_to @case_assignment, notice: 'Case assignment was successfully updated.' }
-        format.json { render :show, status: :ok, location: @case_assignment }
-      else
-        format.html { render :edit }
-        format.json { render json: @case_assignment.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /case_assignments/1
-  # DELETE /case_assignments/1.json
   def destroy
-    @case_assignment.destroy
-    respond_to do |format|
-      format.html { redirect_to case_assignments_url, notice: 'Case assignment was successfully destroyed.' }
-      format.json { head :no_content }
+    case_assignment = CaseAssignment.find(params[:id])
+    case_assignment.destroy
+
+    redirect_to after_action_path(case_assignment_parent)
+  end
+
+  def unassign
+    case_assignment = CaseAssignment.find(params[:id])
+    casa_case = case_assignment.casa_case
+    volunteer = case_assignment.volunteer
+    flash_message = "Volunteer was unassigned from Case #{casa_case.case_number}."
+
+    if case_assignment.update(is_active: false)
+      if params[:redirect_to_path] == "volunteer"
+        redirect_to edit_volunteer_path(volunteer), notice: flash_message
+      else
+        redirect_to after_action_path(casa_case), notice: flash_message
+      end
+    else
+      render :edit
     end
   end
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_case_assignment
-    @case_assignment = CaseAssignment.find(params[:id])
+  def case_assignment_parent
+    if params[:volunteer_id]
+      User.find(params[:volunteer_id])
+    else
+      CasaCase.find(params[:casa_case_id])
+    end
   end
 
-  # Only allow a list of trusted parameters through.
+  def after_action_path(resource)
+    if resource.is_a? User
+      edit_volunteer_path(resource)
+    else
+      edit_casa_case_path(resource)
+    end
+  end
+
   def case_assignment_params
-    params.require(:case_assignment).permit(:volunteer_id, :casa_case_id, :is_active)
+    params.require(:case_assignment).permit(:casa_case_id, :volunteer_id)
   end
 end
-# rubocop:enable Style/Documentation

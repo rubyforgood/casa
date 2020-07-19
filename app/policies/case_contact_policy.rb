@@ -1,14 +1,10 @@
-class CaseContactPolicy # rubocop:todo Style/Documentation
+class CaseContactPolicy
   include PolicyHelper
   attr_reader :user, :record
 
   def initialize(user, record)
     @user = user
     @record = record
-  end
-
-  def _is_creator_or_casa_admin?
-    is_casa_admin_of_org?(user, record) || record.creator == user
   end
 
   def index?
@@ -24,7 +20,8 @@ class CaseContactPolicy # rubocop:todo Style/Documentation
   end
 
   def new?
-    _is_creator_or_casa_admin?
+    # Everyone should be allowed to create a case_contact
+    true
   end
 
   def update?
@@ -49,14 +46,21 @@ class CaseContactPolicy # rubocop:todo Style/Documentation
 
     def resolve
       case @user.role
-      when 'casa_admin'
-        # scope.in_casa_administered_by(@user)
+      when "casa_admin" # scope.in_casa_administered_by(@user)
         scope.all
-      when 'volunteer'
+      when "volunteer"
         scope.where(casa_case: CasaCase.actively_assigned_to(@user), creator: @user)
+      when "supervisor"
+        scope.all
       else
-        raise "unrecognized role"
+        raise "unrecognized role #{@user.role}"
       end
     end
+  end
+
+  private
+
+  def _is_creator_or_casa_admin?
+    user.casa_admin? || record.creator == user
   end
 end

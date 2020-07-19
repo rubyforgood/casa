@@ -11,17 +11,17 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="field form-group">
     <%= form.label :case_number %>
-    <%= form.text_field :case_number %>
+    <%= form.text_field :case_number, class: "form-control" %>
   </div>
 
-  <div class="field">
-    <%= form.label :teen_program_eligible %>
-    <%= form.check_box :teen_program_eligible %>
+  <div class="field form-group">
+    <%= form.label :transition_aged_youth, class: "form-check-label" %>
+    <%= form.check_box :transition_aged_youth, class: "form-check-input" %>
   </div>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit casa_case.persisted? ? 'Update CASA Case' : 'Create CASA Case' %>
   </div>
 <% end %>
