@@ -15,5 +15,7 @@ class DashboardController < ApplicationController
     @case_contacts = policy_scope(
       CaseContact.all
     ).order(occurred_at: :desc).decorate
+
+    @supervisors = policy_scope(User.where(role: %w[supervisor]))
   end
 end

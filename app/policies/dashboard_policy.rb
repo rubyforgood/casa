@@ -22,4 +22,8 @@ class DashboardPolicy
   def see_cases_section?
     true
   end
+
+  def see_supervisors_section?
+    user.casa_admin?
+  end
 end

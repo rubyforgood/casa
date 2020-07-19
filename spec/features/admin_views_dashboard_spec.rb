@@ -108,4 +108,28 @@ RSpec.describe "admin views dashboard", type: :feature do
 
     expect(page.all("table#volunteers tr").count).to eq 3
   end
+
+  it "can see supervisors" do
+    supervisor_name = "Leslie Knope"
+    create(:user, :supervisor, display_name: supervisor_name)
+    sign_in admin
+
+    visit root_path
+
+    expect(page).to have_text(supervisor_name)
+  end
+
+  it "can go to the supervisor edit page from the supervisor list" do
+    supervisor_name = "Leslie Knope"
+    create(:user, :supervisor, display_name: supervisor_name)
+    sign_in admin
+
+    visit root_path
+
+    within "#supervisors" do
+      click_on "Edit"
+    end
+
+    expect(page).to have_text("Editing Supervisor")
+  end
 end
