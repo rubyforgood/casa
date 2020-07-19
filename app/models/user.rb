@@ -64,6 +64,10 @@ class User < ApplicationRecord
   def inactive_message
     inactive? ? :inactive : super
   end
+
+  def serving_transition_aged_youth?
+    casa_cases.where(transition_aged_youth: true).any?
+  end
 end
 
 # == Schema Information

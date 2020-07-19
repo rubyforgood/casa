@@ -63,4 +63,34 @@ RSpec.describe User, type: :model do
       expect(user).to be_active_for_authentication
     end
   end
+
+  describe "#serving_transition_aged_youth?" do
+    let(:case_assignment_with_a_transition_aged_youth) do
+      create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: true))
+    end
+    let(:case_assignment_without_transition_aged_youth) do
+      create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: false))
+    end
+
+    context "when the user has a transition-aged-youth case" do
+      it "is true" do
+        case_assignments = [
+          case_assignment_with_a_transition_aged_youth,
+          case_assignment_without_transition_aged_youth
+        ]
+        user = create(:user, :volunteer, case_assignments: case_assignments)
+
+        expect(user).to be_serving_transition_aged_youth
+      end
+    end
+
+    context "when the user does not have a transition-aged-youth case" do
+      it "is false" do
+        case_assignments = [case_assignment_without_transition_aged_youth]
+        user = create(:user, :volunteer, case_assignments: case_assignments)
+
+        expect(user).not_to be_serving_transition_aged_youth
+      end
+    end
+  end
 end
