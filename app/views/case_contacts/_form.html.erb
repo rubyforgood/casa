@@ -19,7 +19,7 @@
     <% end %>
     <% current_user.casa_cases.each_with_index do |casa_case, index| %>
       <div class="form-check">
-        <input class="form-check-input casa-case-id-check" type="checkbox" value="<%= casa_case.id %>" name="case_contact[casa_case_id][<%= index %>]" <% if index.zero? %>checked required<% end %>>
+        <input class="form-check-input casa-case-id-check" type="checkbox" value="<%= casa_case.id %>" name="case_contact[casa_case_id][]" <% if index.zero? %>checked required<% end %>>
         <label class="form-check-label" for="casa-case-id-check">
           <%= casa_case.case_number %>
         </label>
