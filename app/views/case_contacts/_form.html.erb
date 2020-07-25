@@ -82,7 +82,8 @@
 
   <div class="field occurred-at form-group">
     <%= form.label :occurred_at %>
-    <%= form.date_field :occurred_at, value: Time.now.strftime('%Y-%m-%d'), class: "form-control" %>
+    <% occurred_at = @case_contact.occurred_at.present? ? @case_contact.occurred_at : Time.zone.now %>
+    <%= form.date_field :occurred_at, value: occurred_at.strftime('%Y-%m-%d'), class: "form-control" %>
   </div>
 
   <div class="field miles-driven form-group">
