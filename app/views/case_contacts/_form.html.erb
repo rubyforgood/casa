@@ -12,14 +12,14 @@
   <% end %>
 
   <div class="field casa-case form-group">
-    <% if current_user.casa_cases.length > 1 %>
+    <% if casa_cases.length > 1 %>
       <label for="case_contact_casa_case">Select all relevant CASA cases</label>
     <% else %>
       <label for="case_contact_casa_case">CASA case</label>
     <% end %>
-    <% current_user.casa_cases.each_with_index do |casa_case, index| %>
+    <% casa_cases.each_with_index do |casa_case, index| %>
       <div class="form-check">
-        <input class="form-check-input casa-case-id-check" type="checkbox" value="<%= casa_case.id %>" name="case_contact[casa_case_id][<%= index %>]" <% if index.zero? %>checked required<% end %>>
+        <input class="form-check-input casa-case-id-check" type="checkbox" value="<%= casa_case.id %>" name="case_contact[casa_case_id][]" <% if index.zero? %>checked required<% end %>>
         <label class="form-check-label" for="casa-case-id-check">
           <%= casa_case.case_number %>
         </label>
