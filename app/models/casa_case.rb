@@ -6,7 +6,7 @@ class CasaCase < ApplicationRecord
   has_many :case_contacts
   validates :case_number, uniqueness: {case_sensitive: false}, presence: true
 
-  scope :ordered, -> { sort_by(&:updated_at).reverse }
+  scope :ordered, -> { order(updated_at: :desc) }
   scope :actively_assigned_to,
     lambda { |volunteer|
       joins(:case_assignments).where(
