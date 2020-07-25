@@ -22,4 +22,18 @@ RSpec.describe "Admin: Editing Volunteers", type: :system do
       volunteer.reload
     }.to change { volunteer.role }.from("volunteer").to("inactive")
   end
+
+  it "allows an admin to reactivate a volunteer" do
+    volunteer = create(:user, :volunteer, role: "inactive")
+    sign_in admin
+    visit edit_volunteer_path(volunteer)
+
+    click_on "Activate volunteer"
+
+    expect(page).not_to have_text('Volunteer was deactivated on')
+
+    expect {
+      volunteer.reload
+    }.to change { volunteer.role }.from("inactive").to("volunteer")
+  end
 end

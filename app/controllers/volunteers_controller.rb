@@ -35,6 +35,15 @@ class VolunteersController < ApplicationController
     end
   end
 
+  def activate
+    @volunteer = User.find(params[:id])
+    if @volunteer.update(role: "volunteer")
+      redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was activated."
+    else
+      render :edit
+    end
+  end
+
   def deactivate
     @volunteer = User.find(params[:id])
 

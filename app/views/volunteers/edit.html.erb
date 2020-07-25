@@ -54,6 +54,12 @@
           <div class="alert alert-danger">
             Volunteer was deactivated on: <%= @volunteer.updated_at.strftime("%m-%d-%Y") %>
           </div>
+          <% if current_user.role == "casa_admin" || @volunteer.supervisor == current_user %>
+            <%= link_to "Activate volunteer",
+                        activate_volunteer_path(@volunteer),
+                        method: :patch,
+                        class: "btn btn-outline-success" %>
+          <% end %>
         <% end %>
       </div>
 
