@@ -2,7 +2,7 @@
 
 <div class="row">
   <div class="col-sm-12 form-header">
-    <h1>CASA Case Details</h1>
+    <h1><%= @casa_case.decorate.transition_aged_youth_only_icon %> CASA Case Details</h1>
     <%- if policy(:case_contact).new? %>
       <%= link_to "New Case Contact", new_case_contact_path(case_contact: { casa_case_id: @casa_case.id }), class: "btn btn-primary" %>
     <%- end %>
