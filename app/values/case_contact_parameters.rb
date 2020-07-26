@@ -21,11 +21,6 @@ class CaseContactParameters < SimpleDelegator
     self
   end
 
-  def with_casa_case(casa_case)
-    params[:casa_case] = casa_case
-    self
-  end
-
   def with_converted_duration_minutes(duration_hours)
     converted_duration_hours = duration_hours * 60
     duration_minutes = params[:duration_minutes].to_i

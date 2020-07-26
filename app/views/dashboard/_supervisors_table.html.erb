@@ -18,7 +18,9 @@
     <tbody>
     <% @supervisors.each do |supervisor| %>
       <tr>
-        <td id="name"> <%= supervisor.display_name %></td>
+        <td id="name">
+          <%= link_to(supervisor.display_name, edit_supervisor_path(supervisor)) %>
+        </td>
         <td id="volunteer-assignments"> <%= supervisor.volunteers.count %></td>
         <td id="serving-transition-aged-youth">
           <%= supervisor.volunteers.select { |v| v.serving_transition_aged_youth? }.count %>

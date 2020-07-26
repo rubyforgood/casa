@@ -4,7 +4,12 @@ class CaseAssignmentsController < ApplicationController
 
   def create
     case_assignment = case_assignment_parent.case_assignments.new(case_assignment_params)
-    case_assignment.save
+    if case_assignment.save
+      flash.notice = "Volunteer assigned to case"
+    else
+      errors = case_assignment.errors.full_messages.join(". ")
+      flash.alert = "Unable to assign volunteer to case: #{errors}."
+    end
 
     redirect_to after_action_path(case_assignment_parent)
   end

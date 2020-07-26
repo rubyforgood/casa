@@ -8,7 +8,14 @@
         <ul class="dropdown-menu supervisor-options" style="min-width: 15rem;">
           <% User.where(role: "supervisor").decorate.each do |supervisor| %>
             <li>
-              <a class="small" data-value="option1" tabIndex="-1"><input style="margin:0 8px;" type="checkbox" data-value="<%= supervisor.name %>" checked/><%= supervisor.name %></a>
+              <a class="small" data-value="option1" tabIndex="-1">
+                <input
+                  style="margin:0 8px;"
+                  type="checkbox"
+                  data-value="<%= supervisor.name %>" <%= logged_in_supervisor ? (logged_in_supervisor.id == supervisor.id ? 'checked' : '') : 'checked' %>
+                  />
+                <%= supervisor.name %>
+              </a>
             </li>
           <% end %>
         </ul>
@@ -27,7 +34,7 @@
         Assigned to Transition Aged Youth
       </button>
       <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton">
-        <li><a class="small" data-value="option1" tabIndex="-1"><input style="margin:0 8px;" type="checkbox" data-value="Yes" checked />Yes</a></li>
+        <li><a class="small" data-value="option1" tabIndex="-1"><input style="margin:0 8px;" type="checkbox" data-value="Yes 🐛🦋" checked />Yes</a></li>
         <li><a class="small" data-value="option1" tabIndex="-1"><input style="margin:0 8px;" type="checkbox" data-value="No" checked />No</a></li>
       </div>
     </div>

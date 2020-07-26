@@ -71,14 +71,14 @@ GEM
     awesome_print (1.8.0)
     bcrypt (3.1.13)
     bindex (0.8.1)
-    bootsnap (1.4.6)
+    bootsnap (1.4.7)
       msgpack (~> 1.0)
     bootstrap (4.5.0)
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
     brakeman (4.8.2)
-    bugsnag (6.13.1)
+    bugsnag (6.14.0)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
     bullet (6.1.0)
@@ -124,6 +124,8 @@ GEM
       i18n (>= 1.6, < 2)
     ffi (1.12.2)
     ffi (1.12.2-x64-mingw32)
+    font-awesome-rails (4.7.0.5)
+      railties (>= 3.2, < 6.1)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     http-cookie (1.0.3)
@@ -376,6 +378,7 @@ DEPENDENCIES
   draper
   factory_bot_rails
   faker
+  font-awesome-rails
   jbuilder (~> 2.7)
   jquery-datatables-rails (~> 3.4.0)
   jquery-rails
