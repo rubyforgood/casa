@@ -5,6 +5,12 @@ class CaseAssignment < ApplicationRecord
   belongs_to :volunteer, class_name: "User", inverse_of: "case_assignments"
 
   validates :casa_case_id, uniqueness: {scope: :volunteer_id} # only 1 row allowed per case-volunteer pair
+  validates :volunteer, presence: true
+  validate :assignee_must_be_volunteer
+
+  def assignee_must_be_volunteer
+    errors.add(:volunteer, "Case assignee must be a volunteer") unless volunteer.active_volunteer
+  end
 end
 
 # == Schema Information
