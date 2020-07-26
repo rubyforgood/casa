@@ -4,6 +4,8 @@ window.onload = function () {
   const durationHourDisplay = document.getElementById("casa-contact-duration-hours-display")
   const durationMinutes = document.getElementById("case-contact-duration-minutes");
   const durationMinuteDisplay = document.getElementById("casa-contact-duration-minutes-display")
+  const caseContactSubmit = document.getElementById("case-contact-submit")
+  const contactTypeForm = document.getElementById("contact-type-form")
 
   milesDriven.onchange = function () {
     const contactMedium = document.getElementById("case_contact_medium_type").value || "(contact medium not set)";
@@ -32,6 +34,17 @@ window.onload = function () {
   durationMinuteDisplay.onchange, durationMinuteDisplay.onkeyup = function ()  {
     if (durationMinuteDisplay.value !== durationMinutes.value) {
       durationMinutes.value = durationMinuteDisplay.value
+    }
+  }
+  caseContactSubmit.onclick = function () {
+    const childElements = Array.from(contactTypeForm.children)
+    const isAtLeastOneChecked = childElements.filter(x => {
+      return x.querySelector("input") && x.querySelector("input").checked
+    }).length
+    if (!isAtLeastOneChecked) {
+      childElements[2].querySelector('input').setAttribute('required', true)
+    } else {
+      childElements[2].querySelector('input').removeAttribute('required')
     }
   }
 };

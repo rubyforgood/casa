@@ -2,7 +2,14 @@
 class CaseContact < ApplicationRecord
   attr_accessor :duration_hours
 
-  validates :contact_made, presence: true
+  validate :contact_made_chosen
+  validates :contact_types, presence: true
+  validate :contact_types_included
+  validates :duration_minutes, presence: true
+  validates :medium_type, presence: true
+  validates :occurred_at, presence: true
+  validate :occurred_at_not_in_future
+  validate :reimbursement_only_when_miles_driven
 
   belongs_to :creator, class_name: "User"
   belongs_to :casa_case
@@ -19,22 +26,13 @@ class CaseContact < ApplicationRecord
     therapist
     youth
   ].freeze
-  ALT_CONTACT_TYPES = [
-    {id: 1, contact_type: 'attorney'},
-    {id: 2, contact_type: 'bio_parent'}
-  ]
+
   IN_PERSON = 'in-person'
   TEXT_EMAIL='text/email'
   VIDEO='video'
   VOICE_ONLY='voice-only'
   LETTER='letter'
   CONTACT_MEDIUMS = [IN_PERSON, TEXT_EMAIL, VIDEO, VOICE_ONLY, LETTER].freeze
-
-  validates :contact_types, presence: true
-  validates :occurred_at, presence: true
-  validate :contact_types_included
-  validate :occurred_at_not_in_future
-  validate :reimbursement_only_when_miles_driven
 
   def contact_types_included
     contact_types&.each do |contact_type|
@@ -58,6 +56,11 @@ class CaseContact < ApplicationRecord
 
   def self.occurred_between(start_date, end_date)
     where("occurred_at BETWEEN ? AND ?", start_date, end_date)
+  end
+
+  def contact_made_chosen
+    return !contact_made.nil?
+    errors[:base] << "Must enter whether the contact was made."
   end
 end
 
