@@ -8,6 +8,7 @@ FactoryBot.define do
     occurred_at { Time.zone.now }
     contact_made { false }
     miles_driven { nil }
+    medium_type { CaseContact::CONTACT_MEDIUMS.first }
     want_driving_reimbursement { false }
 
     trait :miles_driven_no_reimbursement do

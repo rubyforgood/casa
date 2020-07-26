@@ -73,7 +73,7 @@ RSpec.describe CaseContactDecorator do
   describe "#medium_type" do
     context "when medium_type is nil" do
       it "returns Unknown" do
-        case_contact = create(:case_contact, medium_type: nil)
+        case_contact = build(:case_contact, medium_type: nil)
 
         expect(case_contact.decorate.medium_type).to eq "Unknown"
       end

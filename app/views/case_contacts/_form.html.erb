@@ -29,7 +29,7 @@
 
   <div id="contact-type-form" class="field contact-type form-group">
     <h2 id="contact-type-label"><%= form.label :contact_types %></h2>
-    
+
     <% contact_types = CaseContact::CONTACT_TYPES.each_with_index do |contact_type, index| %>
       <div class="form-check">
         <input class="form-check-input casa-case-contact-type"
@@ -63,7 +63,7 @@
     <%= form.label "No", for: "case_contact_contact_made_false" %>
   </div>
 
-  <div class="field contact-type form-group">
+  <div class="field contact-medium form-group">
     <h2><%= form.label "Contact Medium" %></h2>
     <% contact_mediums = CaseContact::CONTACT_MEDIUMS.map { |contact_medium| OpenStruct.new(value: contact_medium, label: contact_medium.titleize) } %>
     <%= form.select :medium_type, options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type), {prompt: "Please Select One"}, class: "custom-select col-sm-12 col-md-4", required: true %>
@@ -77,9 +77,9 @@
         <span class="col-sm-2"> hours <span>
       </div>
       <div class="col-sm-12 col-md-6">
-        <%= form.range_field :duration_hours, :min=>0, :max=>23, :value=>0, :class=>"row custom-range slide", :id=>"case-contact-duration-hours"%>  
+        <%= form.range_field :duration_hours, :min=>0, :max=>23, :value=>0, :class=>"row custom-range slide", :id=>"case-contact-duration-hours"%>
       </div>
-      
+
     </div>
     <div class="row">
     <div class="ml-3 col-sm-12 col-md-4 row">
@@ -87,9 +87,9 @@
         <span class="col-sm-2"> minutes <span>
       </div>
       <div class="col-sm-12 col-md-6">
-        <%= form.range_field :duration_minutes, :min=>0, :max=>59, :step=>15, :value=>0, :class=>"row custom-range slide", :id=>"case-contact-duration-minutes"%>  
+        <%= form.range_field :duration_minutes, :min=>0, :max=>59, :step=>15, :value=>0, :class=>"row custom-range slide", :id=>"case-contact-duration-minutes"%>
       </div>
-      
+
     </div>
   </div>
 
