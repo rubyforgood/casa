@@ -124,6 +124,8 @@ GEM
       i18n (>= 1.6, < 2)
     ffi (1.12.2)
     ffi (1.12.2-x64-mingw32)
+    font-awesome-rails (4.7.0.5)
+      railties (>= 3.2, < 6.1)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     http-cookie (1.0.3)
@@ -376,6 +378,7 @@ DEPENDENCIES
   draper
   factory_bot_rails
   faker
+  font-awesome-rails
   jbuilder (~> 2.7)
   jquery-datatables-rails (~> 3.4.0)
   jquery-rails

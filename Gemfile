@@ -9,6 +9,7 @@ gem "bootstrap", "~> 4.5.0" # frontend styling library
 gem "devise" # for authentication
 gem "draper" # adds decorators for cleaner presentation logic
 gem "faker" # creates realistic seed data, valuable for staging and demos
+gem "font-awesome-rails"
 gem "jbuilder", "~> 2.7" # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jquery-datatables-rails", "~> 3.4.0"
 gem "jquery-rails" # Add jquery to asset pipeline
