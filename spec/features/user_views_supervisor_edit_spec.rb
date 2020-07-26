@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "view supervisor edit", type: :feature do
   context "when the current user is a supervisor" do
-    it "does not a submit button" do
+    it "does not have a submit button" do
       current_supervisor = create(:user, :supervisor)
       other_supervisor = create(:user, :supervisor)
 

@@ -13,9 +13,10 @@ RSpec.describe "admin or supervisor adds a case contact", type: :feature do
     find(:css, "input.casa-case-id-check[value='#{casa_case.id}']").set(true)
     find(:css, "input.casa-case-contact-type[value='school']").set(true)
     find(:css, "input.casa-case-contact-type[value='therapist']").set(true)
-    select "1 hour", from: "case_contact[duration_hours]"
-    select "45 minutes", from: "case_contact[duration_minutes]"
+    fill_in "case-contact-duration-hours", with: "1"
+    fill_in "case-contact-duration-minutes", with: "45"
     fill_in "case_contact_occurred_at", with: "04/04/2020"
+    select "Video", from: "case_contact[medium_type]"
 
     expect {
       click_on "Submit"
