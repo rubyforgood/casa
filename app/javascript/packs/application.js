@@ -16,6 +16,12 @@ require("src/new_casa_contact")
 
 import "bootstrap"
 
+window.setTimeout(function() {
+  $(".alert").not(".error").fadeTo(1000, 0).slideUp(1000, function() {
+    $(this).remove();
+  });
+}, 2500);
+
 // Uncomment to copy all static images under ../images to the output folder and reference
 // them with the image_pack_tag helper in views (e.g <%= image_pack_tag 'rails.png' %>)
 // or the `imagePath` JavaScript helper below.
