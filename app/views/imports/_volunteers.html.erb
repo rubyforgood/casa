@@ -1,0 +1,21 @@
+<h3><i class="fa fa-download fa-2x" aria-hidden="true"></i> 1. Download example Volunteer CSV file</h3>
+<%= link_to "/volunteers.csv", format: :csv, class: "btn btn-xs btn-success" do %>
+  <i class="fa fa-download"></i> Download
+  example volunteer csv
+<% end %>
+<br>
+<br>
+<h3><i class="fa fa-file-text-o fa-2x" aria-hidden="true"></i> 2. Upload your CSV file</h3>
+<%= form_with(url: import_volunteers_imports_path, local: :true) do |f| %>
+  <ul>
+    <li>Click the choose file button and navigate to the saved file and select it.</li>
+    <li><strong>Do not</strong> change any of the values in the first line of the example csv file.</li>
+    <li>Then click the "Import Volunteers CSV" button to import your volunteers.</li>
+
+  </ul>
+  <%= f.file_field :file, accept: 'text/csv', class: 'form-control-file', style: "margin: auto;" %>
+  <br>
+  <%= button_tag :class => "btn btn-md btn-success" do %>
+    <i class="fa fa-upload"></i> Import Volunteers CSV
+  <% end %>
+<% end %>
