@@ -75,7 +75,7 @@ RSpec.describe "/case_contacts", type: :request do
             contact_types: ["attorney"],
           }
         }
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(casa_case_path(case_contact.casa_case_id))
 
         case_contact.reload
         expect(case_contact.contact_types).to eq(["attorney"])

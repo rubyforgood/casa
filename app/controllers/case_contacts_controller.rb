@@ -33,7 +33,7 @@ class CaseContactsController < ApplicationController
     end
 
     if case_contacts.all?(&:persisted?)
-      redirect_to root_path, notice: "Case contact was successfully created."
+      redirect_to casa_case_path(@casa_cases.first), notice: "Case contact was successfully created."
     else
       @case_contact = case_contacts.first
       render :new
@@ -52,7 +52,7 @@ class CaseContactsController < ApplicationController
 
     respond_to do |format|
       if @case_contact.update(update_case_contact_params)
-        format.html { redirect_to root_path, notice: "Case contact was successfully updated." }
+        format.html { redirect_to  casa_case_path(@case_contact.casa_case), notice: "Case contact was successfully updated." }
         format.json { render :show, status: :ok, location: @case_contact }
       else
         format.html { render :edit }
