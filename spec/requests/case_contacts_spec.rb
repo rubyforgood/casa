@@ -63,6 +63,19 @@ RSpec.describe "/case_contacts", type: :request do
         expect(response).to be_successful
       end
     end
+
+    context "with no cases selected" do
+      it "presents the user with a relevant error message" do
+        expect {
+          post case_contacts_url, params: {
+            case_contact: valid_attributes.merge(casa_case_id: []),
+          }
+        }.to change(CaseContact, :count).by(0)
+
+        expect(response).to be_successful
+        expect(flash[:alert]).to be_present
+      end
+    end
   end
 
   describe "PATCH /update" do

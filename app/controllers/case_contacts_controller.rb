@@ -25,17 +25,27 @@ class CaseContactsController < ApplicationController
   end
 
   def create
-    @casa_cases = policy_scope(CasaCase).where(id: params.dig(:case_contact, :casa_case_id))
+    # These variables are used to re-render the form (render :new) if there are
+    # validation errors so that the user does not lose inputs to fields that
+    # they did previously enter.
+    @casa_cases = policy_scope(CasaCase)
+    @case_contact = CaseContact.new(create_case_contact_params)
+
+    selected_cases = @casa_cases.where(id: params.dig(:case_contact, :casa_case_id))
+    if selected_cases.empty?
+      flash[:alert] = "At least one case must be selected"
+      render :new
+      return
+    end
 
     # Create a case contact for every case that was checked
-    case_contacts = @casa_cases.map do |casa_case|
+    case_contacts = selected_cases.map do |casa_case|
       casa_case.case_contacts.create(create_case_contact_params)
     end
 
     if case_contacts.all?(&:persisted?)
       redirect_to root_path, notice: "Case contact was successfully created."
     else
-      @case_contact = case_contacts.first
       render :new
     end
   end
