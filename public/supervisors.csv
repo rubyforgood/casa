@@ -1,0 +1,3 @@
+﻿email,display_name,supervisor_volunteers
+supervisor1@example.net,Supervisor One,volunteer1@example.net
+supervisor2@example.net,Supervisor Two,"volunteer2@example.net, volunteer3@example.net"

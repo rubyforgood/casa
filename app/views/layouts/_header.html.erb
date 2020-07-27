@@ -16,6 +16,7 @@
 
             <% if current_user.role == "casa_admin" %>
               <%= link_to "Generate Reports", reports_path, class: "dropdown-item" %>
+              <%= link_to "System Imports", imports_path, class: "dropdown-item" %>
             <% end %>
           </div>
         </div>

@@ -7,6 +7,7 @@ gem "rails", "~> 6.0.3"
 gem "awesome_print" # easier console reading
 gem "bootstrap", "~> 4.5.0" # frontend styling library
 gem "devise" # for authentication
+gem 'devise_invitable'
 gem "draper" # adds decorators for cleaner presentation logic
 gem "faker" # creates realistic seed data, valuable for staging and demos
 gem "font-awesome-rails"
@@ -43,6 +44,7 @@ group :development do
   gem "annotate" # for adding db field listings to models as comments
   gem "letter_opener" # Opens emails in new tab for easier testing
   gem "listen", ">= 3.0.5", "< 3.3"
+  gem "mailcatcher"
   gem "spring" # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring-watcher-listen", "~> 2.0.0"
   gem "web-console", ">= 3.3.0" # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
