@@ -149,6 +149,7 @@ end
 casa_cases = []
 CASA_CASE_COUNT.times do |index|
   new_casa_case = CasaCase.create(
+      casa_org_id: pg_casa.id,
       case_number: case_number_generator,
       transition_aged_youth: chance_of_transition_aged
   )

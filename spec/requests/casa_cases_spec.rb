@@ -3,7 +3,10 @@ require "rails_helper"
 RSpec.describe "/casa_cases", type: :request do
   # CasaCase. As you add validations to CasaCase, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { {case_number: "1234", transition_aged_youth: true} }
+
+  let(:casa_org) { create(:casa_org) }
+
+  let(:valid_attributes) { {case_number: "1234", transition_aged_youth: true, casa_org_id: casa_org.id} }
 
   let(:invalid_attributes) { {case_number: nil} }
 

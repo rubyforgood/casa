@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_26_185103) do
+ActiveRecord::Schema.define(version: 2020_07_29_002247) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,8 @@ ActiveRecord::Schema.define(version: 2020_07_26_185103) do
     t.boolean "transition_aged_youth", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "casa_org_id", null: false
+    t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
     t.index ["case_number"], name: "index_casa_cases_on_case_number", unique: true
   end
 
@@ -116,6 +118,7 @@ ActiveRecord::Schema.define(version: 2020_07_26_185103) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "casa_cases", "casa_orgs"
   add_foreign_key "case_assignments", "casa_cases"
   add_foreign_key "case_assignments", "users", column: "volunteer_id"
   add_foreign_key "case_contacts", "casa_cases"

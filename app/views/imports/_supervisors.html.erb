@@ -6,7 +6,8 @@
 <br>
 <br>
 <h3><i class="fa fa-file-text-o fa-2x" aria-hidden="true"></i> 2. Upload your CSV file</h3>
-<%= form_with(url: import_supervisors_imports_path, local: :true) do |f| %>
+<%= form_with(url: imports_path, local: :true) do |f| %>
+  <%= f.hidden_field :import_type, value: "supervisor" %>
   <ul>
     <li>Click the choose file button and navigate to the saved file and select it.</li>
     <li><strong>Do not</strong> change any of the values in the first line of the example csv file.</li>
