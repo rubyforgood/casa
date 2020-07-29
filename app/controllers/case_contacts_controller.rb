@@ -1,17 +1,12 @@
 # CaseContactsController with default actions
 class CaseContactsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_case_contact, only: %i[show edit update destroy]
+  before_action :set_case_contact, only: %i[edit update destroy]
 
   # GET /case_contacts
   # GET /case_contacts.json
   def index
     @case_contacts = policy_scope(CaseContact).decorate
-  end
-
-  # GET /case_contacts/1
-  # GET /case_contacts/1.json
-  def show
   end
 
   # GET /case_contacts/new

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   root to: "dashboard#show"
 
   resources :casa_cases
-  resources :case_contacts
+  resources :case_contacts, except: %i[show]
   resources :reports, only: %i[index]
   resources :imports, only: %i[index create]
   resources :case_contact_reports, only: %i[index]

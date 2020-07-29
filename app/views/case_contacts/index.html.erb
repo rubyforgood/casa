@@ -10,7 +10,7 @@
       <th>Other type text</th>
       <th>Duration</th>
       <th>Occurred at</th>
-      <th colspan="3"></th>
+      <th colspan="2"></th>
     </tr>
   </thead>
 
@@ -23,7 +23,6 @@
         <td><%= case_contact.other_type_text %></td>
         <td><%= case_contact.duration_minutes %></td>
         <td><%= case_contact.occurred_at.strftime('%B %e, %Y') %></td>
-        <td><%= link_to 'Show', case_contact %></td>
         <td><%= link_to 'Edit', edit_case_contact_path(case_contact) %></td>
         <td><%= link_to 'Destroy', case_contact, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
