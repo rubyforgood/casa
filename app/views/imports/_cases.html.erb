@@ -5,12 +5,12 @@
 <br>
 <br>
 <h3><i class="fa fa-file-text-o fa-2x" aria-hidden="true"></i> 2. Upload your CSV file</h3>
-<%= form_with(url: import_cases_imports_path, local: :true) do |f| %>
+<%= form_with(url: imports_path, local: :true) do |f| %>
+  <%= f.hidden_field :import_type, value: "casa_case" %>
   <ul>
     <li>Click the choose file button and navigate to the saved file and select it.</li>
     <li><strong>Do not</strong> change any of the values in the first line of the example csv file.</li>
     <li>Then click the "Import Cases CSV" button to import your cases.</li>
-
   </ul>
   <%= f.file_field :file, accept: 'text/csv', class: 'form-control-file', style: "margin: auto;" %>
   <br>

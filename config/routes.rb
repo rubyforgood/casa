@@ -7,13 +7,7 @@ Rails.application.routes.draw do
   resources :casa_cases
   resources :case_contacts
   resources :reports, only: %i[index]
-  resources :imports, only: %i[index] do
-    collection do
-      post :import_volunteers
-      post :import_supervisors
-      post :import_cases
-    end
-  end
+  resources :imports, only: %i[index create]
   resources :case_contact_reports, only: %i[index]
 
   resources :supervisors, only: %i[edit update]
