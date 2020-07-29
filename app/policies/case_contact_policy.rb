@@ -25,11 +25,11 @@ class CaseContactPolicy
   end
 
   def update?
-    _is_creator_or_casa_admin?
+    _is_creator_or_supervisor_or_casa_admin?
   end
 
   def edit?
-    _is_creator_or_casa_admin?
+    _is_creator_or_supervisor_or_casa_admin?
   end
 
   def destroy?
@@ -61,6 +61,22 @@ class CaseContactPolicy
   private
 
   def _is_creator_or_casa_admin?
-    user.casa_admin? || record.creator == user
+    _is_admin? || _is_creator?
+  end
+
+  def _is_creator_or_supervisor_or_casa_admin?
+    _is_admin? || _is_supervisor? || _is_creator?
+  end
+
+  def _is_admin?
+    user.casa_admin?
+  end
+
+  def _is_supervisor?
+    user.supervisor?
+  end
+
+  def _is_creator?
+    record.creator == user
   end
 end
