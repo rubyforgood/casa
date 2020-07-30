@@ -14,7 +14,6 @@ gem "font-awesome-rails"
 gem "jbuilder", "~> 2.7" # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jquery-datatables-rails", "~> 3.4.0"
 gem "jquery-rails" # Add jquery to asset pipeline
-gem "mailgun-ruby" # Use Mailgun for email in production
 gem "paper_trail" # tracking changes
 gem "pg", ">= 0.18", "< 2.0" # Use postgresql as the database for Active Record
 gem "puma", "~> 4.3" # Use Puma as the app server
