@@ -60,8 +60,6 @@ If you have any troubles, also look at `.travis.yml` which is what makes the CI 
 1. `cd casa/`
 1. install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
 1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`
-1. If you are on windows and see the error "Requirements support for mingw is not implemented yet" then use https://rubyinstaller.org/ instead
-1. If you are using Windows Subsystem for Linux or Ubuntu, see "Ubuntu and WSL" under "Common Issues".
 1. `gem install bundler`
 1. Make sure that postgres is installed [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database (if you have an older version of postgres). If you're on Ubuntu/WSL, use `sudo apt-get install libpq-dev` so the gem can install. [Use the Postgres repo for Ubuntu or WSL to get the server and client tools](https://www.postgresql.org/download/linux/ubuntu/).
 1. `bundle exec rails db:setup # requires running local postgres, with a role created for whatever user you're running rails as`
@@ -83,6 +81,7 @@ There is a `doc` directory at the top level that includes [Architectural Decisio
 
 1. If your rake/rake commands hang forever instead of running, try: `rails app:update:bin`
 1. There is currently no option for a user to sign up and create an account through the UI. This is intentional. If you want to log in, use a pre-seeded user account and its credentials.
+1. If you are on windows and see the error "Requirements support for mingw is not implemented yet" then use https://rubyinstaller.org/ instead
 
 ### Ubuntu and WSL
 1. If you are on Ubuntu in Windows Subsystem for Linux (WSL) and `rbenv install` indicates that the Ruby version is unavailable, you might be using Ubuntu's default install of `ruby-build`, which only comes with old installs of Ruby (ending before 2.6.) You should uninstall rvm and ruby-build's apt packages (`apt remove rvm ruby-build`) and install them with Git like this:
@@ -101,6 +100,9 @@ Test credentials for https://casa-r4g-staging.herokuapp.com/
 1. supervisor1@example.com / 123456
 1. volunteer1@example.com / 123456
 1. casa_admin1@example.com / 123456
+
+#### Test coverage
+Test coverage is run by simplecov on all builds and aggregated by CodeClimage
 
 ### Communication and Collaboration
 
