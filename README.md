@@ -1,8 +1,8 @@
 # CASA Project & Organization Overview
+[![Build Status](https://travis-ci.com/rubyforgood/casa.svg?branch=master)](https://travis-ci.com/rubyforgood/casa)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=rubyforgood/casa)](https://dependabot.com)
 [![Maintainability](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/maintainability)](https://codeclimate.com/github/rubyforgood/casa/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/test_coverage)](https://codeclimate.com/github/rubyforgood/casa/test_coverage)
-[![Build Status](https://travis-ci.org/rubyforgood/casa.svg?branch=master)](https://travis-ci.org/rubyforgood/casa) 
 [![View performance data on Skylight](https://badges.skylight.io/status/tFh7xrs3Qnaf.svg?token=1C-Q7p8jEFlG7t69Yl5DaJwa-ipWI8gLw9wLJf53xmQ)](https://www.skylight.io/app/applications/tFh7xrs3Qnaf)
 [![Known Vulnerabilities](https://snyk.io/test/github/rubyforgood/casa/badge.svg)](https://snyk.io/test/github/rubyforgood/casa)
 
@@ -51,6 +51,11 @@ https://casa-r4g-staging.herokuapp.com/
 ### Error tracking
 
 We are currently using https://app.bugsnag.com/ to track errors in staging. Errors post to slack at #casa-bots 
+
+### Email
+
+This app sends email for user signup and deactivation. We use https://www.sendinblue.com/ because we get 300 free emails a day, which is more than we expect to need.
+We are not using Mailgun because they limited us to only 5 recipients without a paid plan.
 
 ### Setup to develop:
 
