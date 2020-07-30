@@ -2,6 +2,24 @@ require "rails_helper"
 
 RSpec.describe "/case_assignments", type: :request do
   describe "POST /create" do
+    context "when the volunteer has been previously assigned to the casa_case" do
+      it "reassigns the volunteer to the casa_case" do
+        admin = create(:user, :casa_admin)
+        volunteer = create(:user, :volunteer)
+        casa_case = create(:casa_case)
+        assignment = create(:case_assignment, is_active: false, volunteer: volunteer, casa_case: casa_case)
+
+        sign_in admin
+
+        expect do
+          post case_assignments_url(casa_case_id: casa_case.id),
+               params: { case_assignment: { volunteer_id: volunteer.id } }
+        end.to change { casa_case.case_assignments.first.is_active }.from(false).to(true)
+
+        expect(response).to redirect_to edit_casa_case_path(casa_case)
+      end
+    end
+
     context "when the case assignment parent is a volunteer" do
       it "creates a new case assignment for the volunteer" do
         admin = create(:user, :casa_admin)
