@@ -135,8 +135,6 @@ GEM
     haml (5.1.2)
       temple (>= 0.8.0)
       tilt
-    http-cookie (1.0.3)
-      domain_name (~> 0.5)
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
     jbuilder (2.10.0)
