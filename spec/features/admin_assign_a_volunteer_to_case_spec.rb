@@ -25,7 +25,7 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
     expect(assign_badge.text).to eq "Assigned"
   end
 
-  it "when a volunteer reassign from a case" do
+  it "when a volunteer unassign from a case" do
     unassign_button = page.find("input.btn-outline-danger")
     expect(unassign_button.value).to eq "Unassign Volunteer"
 
@@ -36,7 +36,7 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
 
   end
 
-  it "when a volunteer reassign from a case by other a supervisor" do
+  it "when a volunteer unassign from a case by other a supervisor" do
     click_on "Log out"
     supervisor2 = create(:user, :supervisor)
     sign_in supervisor2
