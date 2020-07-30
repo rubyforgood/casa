@@ -31,7 +31,7 @@ Rails.application.routes.draw do
     collection do
       get :edit
       patch :update
-      patch 'update_password'
+      patch "update_password"
     end
   end
 end

@@ -27,11 +27,11 @@ class CaseContact < ApplicationRecord
     youth
   ].freeze
 
-  IN_PERSON = 'in-person'
-  TEXT_EMAIL='text/email'
-  VIDEO='video'
-  VOICE_ONLY='voice-only'
-  LETTER='letter'
+  IN_PERSON = "in-person"
+  TEXT_EMAIL = "text/email"
+  VIDEO = "video"
+  VOICE_ONLY = "voice-only"
+  LETTER = "letter"
   CONTACT_MEDIUMS = [IN_PERSON, TEXT_EMAIL, VIDEO, VOICE_ONLY, LETTER].freeze
 
   def contact_types_included

@@ -1,6 +1,5 @@
 Rails.application.configure do
-  config.action_mailer.default_url_options = { host: ENV["DEFAULT_URL_HOST"] } # for devise authentication
-
+  config.action_mailer.default_url_options = {host: ENV["DEFAULT_URL_HOST"]} # for devise authentication
 
   config.cache_classes = true
   config.eager_load = true

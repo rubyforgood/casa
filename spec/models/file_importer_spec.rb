@@ -1,9 +1,7 @@
 require "rails_helper"
 
 RSpec.describe FileImporter, type: :concern do
-
   describe "#import_volunteers" do
-
     it "imports volunteers from a csv file" do
       import_user = create(:user, :casa_admin)
 
@@ -21,7 +19,7 @@ RSpec.describe FileImporter, type: :concern do
       expect { importer.import_volunteers }.to change(User, :count).by(0)
     end
 
-    it 'returns a success message with the number of volunteers imported' do
+    it "returns a success message with the number of volunteers imported" do
       import_user = create(:user, :casa_admin)
 
       import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
@@ -31,7 +29,7 @@ RSpec.describe FileImporter, type: :concern do
       expect(alert[:message]).to eq("You successfully imported 3 volunteers.")
     end
 
-    it 'returns an error message when there are volunteers not imported' do
+    it "returns an error message when there are volunteers not imported" do
       import_user = create(:user, :casa_admin)
 
       import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
@@ -73,7 +71,7 @@ RSpec.describe FileImporter, type: :concern do
       expect { supervisor_importer.import_supervisors }.to change(User, :count).by(0)
     end
 
-    it 'returns a success message with the number of supervisors imported' do
+    it "returns a success message with the number of supervisors imported" do
       import_user = create(:user, :casa_admin)
 
       import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
@@ -87,7 +85,7 @@ RSpec.describe FileImporter, type: :concern do
       expect(alert[:message]).to eq("You successfully imported 2 supervisors.")
     end
 
-    it 'returns an error message when there are volunteers not imported' do
+    it "returns an error message when there are volunteers not imported" do
       import_user = create(:user, :casa_admin)
 
       import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
@@ -133,7 +131,7 @@ RSpec.describe FileImporter, type: :concern do
       expect { FileImporter.new(import_case_path, import_user.casa_org.id).import_cases }.to change(CasaCase, :count).by(0)
     end
 
-    it 'returns a success message with the number of cases imported' do
+    it "returns a success message with the number of cases imported" do
       import_user = create(:user, :casa_admin)
 
       import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
@@ -147,7 +145,7 @@ RSpec.describe FileImporter, type: :concern do
       expect(alert[:message]).to eq("You successfully imported 2 casa_cases.")
     end
 
-    it 'returns an error message when there are cases not imported' do
+    it "returns an error message when there are cases not imported" do
       import_user = create(:user, :casa_admin)
 
       import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
