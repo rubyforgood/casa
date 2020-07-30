@@ -10,9 +10,9 @@ RSpec.describe "DELETE /supervisor_volunteers/:id", type: :request do
 
       sign_in admin
 
-      expect do
+      expect {
         delete supervisor_volunteer_path(assignment)
-      end.to change(supervisor.volunteers, :count).by(-1)
+      }.to change(supervisor.volunteers, :count).by(-1)
 
       expect(response).to redirect_to edit_supervisor_path(supervisor)
     end
@@ -26,9 +26,9 @@ RSpec.describe "DELETE /supervisor_volunteers/:id", type: :request do
 
       sign_in supervisor
 
-      expect do
+      expect {
         delete supervisor_volunteer_path(assignment)
-      end.to change(supervisor.volunteers, :count).by(-1)
+      }.to change(supervisor.volunteers, :count).by(-1)
 
       expect(response).to redirect_to edit_supervisor_path(supervisor)
     end
@@ -42,9 +42,9 @@ RSpec.describe "DELETE /supervisor_volunteers/:id", type: :request do
 
       sign_in volunteer
 
-      expect do
+      expect {
         delete supervisor_volunteer_path(assignment)
-      end.to change(supervisor.volunteers, :count).by(0)
+      }.to change(supervisor.volunteers, :count).by(0)
     end
   end
 end

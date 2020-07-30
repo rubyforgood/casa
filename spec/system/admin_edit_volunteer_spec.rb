@@ -11,12 +11,12 @@ RSpec.describe "Admin: Editing Volunteers", type: :system do
     dismiss_confirm do
       click_on "Deactivate volunteer"
     end
-    expect(page).not_to have_text('Volunteer was deactivated on')
+    expect(page).not_to have_text("Volunteer was deactivated on")
 
     accept_confirm do
       click_on "Deactivate volunteer"
     end
-    expect(page).to have_text('Volunteer was deactivated on')
+    expect(page).to have_text("Volunteer was deactivated on")
 
     expect {
       volunteer.reload
@@ -30,7 +30,7 @@ RSpec.describe "Admin: Editing Volunteers", type: :system do
 
     click_on "Activate volunteer"
 
-    expect(page).not_to have_text('Volunteer was deactivated on')
+    expect(page).not_to have_text("Volunteer was deactivated on")
 
     expect {
       volunteer.reload

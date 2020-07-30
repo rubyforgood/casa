@@ -2,7 +2,8 @@ class ImportsController < ApplicationController
   before_action :authenticate_user!
   before_action :must_be_admin
 
-  def index; end
+  def index
+  end
 
   def create
     check_empty_attachment
@@ -22,13 +23,13 @@ class ImportsController < ApplicationController
     when "casa_case"
       FileImporter.new(file, org).import_cases
     else
-      { type: :error, message: "Something went wrong with the import, did you attach a csv file?" }
+      {type: :error, message: "Something went wrong with the import, did you attach a csv file?"}
     end
   end
 
   def check_empty_attachment
     return unless params[:file].blank?
-    flash[:error] = 'You must attach a csv file in order to import information!'
+    flash[:error] = "You must attach a csv file in order to import information!"
     redirect_to imports_path
   end
 end

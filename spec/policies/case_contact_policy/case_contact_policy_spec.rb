@@ -28,6 +28,10 @@ RSpec.describe CaseContactPolicy do
       expect(subject).to permit(create(:user, :casa_admin), create(:case_contact))
     end
 
+    it "allows supervisors" do
+      expect(subject).to permit(create(:user, :supervisor), create(:case_contact))
+    end
+
     context "when volunteer is assigned" do
       it "allows the volunteer" do
         volunteer = create(:user, :volunteer)
@@ -60,6 +64,10 @@ RSpec.describe CaseContactPolicy do
 
     it "does not allow volunteers" do
       expect(subject).not_to permit(create(:user, :volunteer), create(:case_contact))
+    end
+
+    it "allows supervisors" do
+      expect(subject).to permit(create(:user, :supervisor), create(:case_contact))
     end
   end
 

@@ -30,7 +30,7 @@ RSpec.describe "/volunteers", type: :request do
       sign_in admin
 
       post volunteers_url, params: {
-        user: { email: expected_email, casa_org_id: admin.casa_org_id }
+        user: {email: expected_email, casa_org_id: admin.casa_org_id}
       }
 
       expect(User.last.email).to eq(expected_email)
@@ -42,11 +42,11 @@ RSpec.describe "/volunteers", type: :request do
       expected_email = "volunteer1@example.com"
       sign_in admin
 
-      expect do
+      expect {
         post volunteers_url, params: {
-          user: { email: expected_email, casa_org_id: admin.casa_org_id }
+          user: {email: expected_email, casa_org_id: admin.casa_org_id}
         }
-      end.to change { ActionMailer::Base.deliveries.count }.by(1)
+      }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
   end
 
