@@ -7,7 +7,7 @@ gem "rails", "~> 6.0.3"
 gem "awesome_print" # easier console reading
 gem "bootstrap", "~> 4.5.0" # frontend styling library
 gem "devise" # for authentication
-gem 'devise_invitable'
+gem "devise_invitable"
 gem "draper" # adds decorators for cleaner presentation logic
 gem "faker" # creates realistic seed data, valuable for staging and demos
 gem "font-awesome-rails"
@@ -35,9 +35,8 @@ group :development, :test do
   gem "pry"
   gem "pry-byebug"
   gem "rspec-rails", "~> 4.0.1"
-  gem "rubocop", "~> 0.88.0", require: false # RuboCop's development is moving at a very rapid pace and there are often backward-incompatible changes between minor releases (since we haven't reached version 1.0 yet). To prevent an unwanted RuboCop update you might want to use a conservative version lock in your Gemfile
   gem "shoulda-matchers"
-  gem "standardrb"
+  gem "standard" # linter https://github.com/testdouble/standard
 end
 
 group :development do
@@ -54,7 +53,6 @@ group :test do
   gem "brakeman" # security inspection
   gem "capybara", ">= 2.15"
   gem "rake"
-  gem "rubocop-rspec", require: false # code linting plugin for rspec
   gem "selenium-webdriver"
   gem "simplecov", require: false
   gem "webdrivers" # Easy installation and use of web drivers to run system tests with browsers

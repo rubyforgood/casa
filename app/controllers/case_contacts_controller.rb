@@ -34,9 +34,9 @@ class CaseContactsController < ApplicationController
     end
 
     # Create a case contact for every case that was checked
-    case_contacts = selected_cases.map do |casa_case|
+    case_contacts = selected_cases.map { |casa_case|
       casa_case.case_contacts.create(create_case_contact_params)
-    end
+    }
 
     if case_contacts.all?(&:persisted?)
       redirect_to casa_case_path(@casa_cases.first), notice: "Case contact was successfully created."
@@ -57,7 +57,7 @@ class CaseContactsController < ApplicationController
 
     respond_to do |format|
       if @case_contact.update(update_case_contact_params)
-        format.html { redirect_to  casa_case_path(@case_contact.casa_case), notice: "Case contact was successfully updated." }
+        format.html { redirect_to casa_case_path(@case_contact.casa_case), notice: "Case contact was successfully updated." }
         format.json { render :show, status: :ok, location: @case_contact }
       else
         format.html { render :edit }

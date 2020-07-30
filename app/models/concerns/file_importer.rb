@@ -71,4 +71,3 @@ class FileImporter
     end
   end
 end
-

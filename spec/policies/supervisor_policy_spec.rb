@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe 'Supervisor Policy' do
+RSpec.describe "Supervisor Policy" do
   subject { described_class }
 
   permissions :update_supervisor_email? do
