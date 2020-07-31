@@ -1,0 +1,30 @@
+<%= errors_for(@supervisor) %>
+
+<h1>Create New Supervisor</h1>
+
+<div class="row">
+  <div class="col-sm-6">
+    <%= simple_form_for @supervisor, url: supervisors_path do |form| %>
+      <div class="field form-group">
+        <%= form.label :email %>
+        <%= form.text_field :email, class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+        <%= form.label :display_name, "Display Name" %>
+        <%= form.text_field :display_name, class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+        <%= form.label :volunteer_ids, "Assign Volunteer to Supervisor" %>
+
+        <%= form.association(:volunteers, collection: @available_volunteers, label_method: :display_name, value_method: :id, include_hidden: false, input_html: { class: 'form-control selectpicker input_group'} ) %>
+
+      </div>
+      <div class="actions">
+        <%= form.submit "Create Supervisor", class: "btn btn-primary" %>
+        <%= link_to 'Return to Dashboard', root_path, class: 'btn btn-info pull-right' %>
+      </div>
+    <% end %>
+  </div>
+</div>
