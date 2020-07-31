@@ -53,7 +53,7 @@ group :test do
   gem "capybara", ">= 2.15"
   gem "rake"
   gem "selenium-webdriver"
-  gem "simplecov", "~> 0.17.1", require: false # pinned as a workaround for https://github.com/codeclimate/test-reporter/issues/418
+  gem "simplecov", "~> 0.18.5", require: false # pinned as a workaround for https://github.com/codeclimate/test-reporter/issues/418
   gem "webdrivers" # Easy installation and use of web drivers to run system tests with browsers
 end
 
