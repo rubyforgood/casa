@@ -1,0 +1,2 @@
+class CasaAdminPolicy < UserPolicy
+end

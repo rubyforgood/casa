@@ -1,31 +1,6 @@
 FactoryBot.define do
-  factory :user do
-    casa_org { create(:casa_org) }
-    sequence(:email) { |n| "email#{n}@example.com" }
-    password { "123456" }
-    password_confirmation { "123456" }
-    case_assignments { [] }
-
-    trait :volunteer do
-      role { :volunteer }
-      type { "Volunteer" }
-    end
-
-    trait :supervisor do
-      role { :supervisor }
-      type { "Supervisor" }
-    end
-
-    trait :casa_admin do
-      role { :casa_admin }
-      type { "CasaAdmin" }
-    end
-
-    trait :inactive do
-      volunteer
-      active { false }
-      role { :inactive }
-    end
+  factory :casa_admin, class: "CasaAdmin", parent: :user do
+    role { :casa_admin }
 
     trait :with_casa_cases do
       after(:create) do |user, _|

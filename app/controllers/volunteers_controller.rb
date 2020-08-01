@@ -37,7 +37,7 @@ class VolunteersController < ApplicationController
 
   def activate
     @volunteer = User.find(params[:id])
-    if @volunteer.update(role: "volunteer")
+    if @volunteer.update(active: true)
       redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was activated."
     else
       render :edit
@@ -47,7 +47,7 @@ class VolunteersController < ApplicationController
   def deactivate
     @volunteer = User.find(params[:id])
 
-    if @volunteer.update(role: "inactive")
+    if @volunteer.update(active: false)
       @volunteer.case_assignments.update_all(is_active: false)
       redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was deactivated."
     else
@@ -62,13 +62,13 @@ class VolunteersController < ApplicationController
   end
 
   def create_volunteer_params
-    UserParameters
+    VolunteerParameters
       .new(params)
       .with_password(generate_devise_password)
       .with_role("volunteer")
   end
 
   def update_volunteer_params
-    UserParameters.new(params)
+    VolunteerParameters.new(params)
   end
 end

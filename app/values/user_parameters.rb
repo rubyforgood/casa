@@ -1,7 +1,7 @@
 class UserParameters < SimpleDelegator
-  def initialize(params)
+  def initialize(params, key = :user)
     params =
-      params.require(:user).permit(
+      params.require(key).permit(
         :email,
         :casa_org_id,
         :display_name,

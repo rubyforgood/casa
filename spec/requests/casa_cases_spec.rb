@@ -10,7 +10,7 @@ RSpec.describe "/casa_cases", type: :request do
 
   let(:invalid_attributes) { {case_number: nil} }
 
-  before { sign_in create(:user, :casa_admin) }
+  before { sign_in create(:casa_admin) }
 
   describe "GET /index" do
     it "renders a successful response" do
@@ -30,7 +30,7 @@ RSpec.describe "/casa_cases", type: :request do
 
   describe "GET /new" do
     it "renders a successful response" do
-      sign_in create(:user, :casa_admin)
+      sign_in create(:casa_admin)
       get new_casa_case_url
       expect(response).to be_successful
     end
@@ -79,7 +79,7 @@ RSpec.describe "/casa_cases", type: :request do
       let(:new_attributes) { {case_number: "12345", transition_aged_youth: false} }
 
       it "does not update case_number for volunteers" do
-        sign_in create(:user, :volunteer)
+        sign_in create(:volunteer)
 
         casa_case = CasaCase.create! valid_attributes
         patch casa_case_url(casa_case), params: {casa_case: new_attributes}

@@ -3,6 +3,6 @@ FactoryBot.define do
     is_active { true }
 
     association :casa_case
-    association :volunteer, factory: :user
+    association :volunteer, factory: :volunteer
   end
 end

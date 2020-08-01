@@ -16,12 +16,12 @@ class CasaCasePolicy
     end
 
     def resolve
-      case @user.role
-      when "casa_admin" # scope.in_casa_administered_by(@user)
+      case @user
+      when CasaAdmin # scope.in_casa_administered_by(@user)
         scope.ordered
-      when "volunteer"
+      when Volunteer
         scope.actively_assigned_to(user)
-      when "supervisor"
+      when Supervisor
         scope.ordered
       else
         raise "unrecognized role #{@user.role}"
@@ -38,8 +38,8 @@ class CasaCasePolicy
   end
 
   def permitted_attributes
-    case @user.role
-    when "casa_admin"
+    case @user
+    when CasaAdmin
       %i[case_number transition_aged_youth]
     else
       %i[transition_aged_youth]

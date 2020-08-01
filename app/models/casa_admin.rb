@@ -1,0 +1,2 @@
+class CasaAdmin < User
+end

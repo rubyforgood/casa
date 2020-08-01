@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "/case_contacts", type: :request do
-  let(:volunteer) { create(:user, :volunteer) }
-  let(:other_volunteer) { create(:user, :volunteer) }
+  let(:volunteer) { create(:volunteer) }
+  let(:other_volunteer) { create(:volunteer) }
 
   let(:valid_attributes) do
     attributes_for(:case_contact).merge(

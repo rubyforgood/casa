@@ -28,9 +28,9 @@ class User < ApplicationRecord
   enum role: ALL_ROLES.zip(ALL_ROLES).to_h
 
   def active_volunteer
-    role == "volunteer" # !inactive
+    active && type == "Volunteer"
   end
-
+  
   # all contacts this user has with this casa case
   def case_contacts_for(casa_case_id)
     found_casa_case = casa_cases.find { |cc| cc.id == casa_case_id }
@@ -66,12 +66,12 @@ class User < ApplicationRecord
   # validate the user is active. For our purposes, the user is active if they
   # do not have the inactive role.
   def active_for_authentication?
-    super && !inactive?
+    super && active
   end
 
   # Called by Devise to generate an error message when a user is not active.
   def inactive_message
-    inactive? ? :inactive : super
+    !active ? :inactive : super
   end
 
   def serving_transition_aged_youth?

@@ -3,9 +3,9 @@ require "rails_helper"
 RSpec.describe UserPolicy::Scope do
   describe "#resolve" do
     it "returns all Users when user is admin" do
-      admin = create(:user, :casa_admin)
-      user1 = create(:user)
-      user2 = create(:user)
+      admin = create(:casa_admin)
+      user1 = create(:volunteer)
+      user2 = create(:supervisor)
 
       scope = described_class.new(admin, User)
 
@@ -13,7 +13,7 @@ RSpec.describe UserPolicy::Scope do
     end
 
     it "returns the user when user is volunteer" do
-      user = create(:user, :volunteer)
+      user = create(:volunteer)
 
       scope = described_class.new(user, User)
 

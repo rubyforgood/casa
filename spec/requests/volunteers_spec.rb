@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "/volunteers", type: :request do
-  let(:admin) { create(:user, :casa_admin) }
-  let(:volunteer) { create(:user, :volunteer) }
+  let(:admin) { create(:casa_admin) }
+  let(:volunteer) { create(:volunteer) }
 
   describe "GET /index" do
     it "renders a successful response" do
@@ -30,7 +30,7 @@ RSpec.describe "/volunteers", type: :request do
       sign_in admin
 
       post volunteers_url, params: {
-        user: {email: expected_email, casa_org_id: admin.casa_org_id}
+        volunteer: {email: expected_email, casa_org_id: admin.casa_org_id}
       }
 
       expect(User.last.email).to eq(expected_email)
@@ -44,7 +44,7 @@ RSpec.describe "/volunteers", type: :request do
 
       expect {
         post volunteers_url, params: {
-          user: {email: expected_email, casa_org_id: admin.casa_org_id}
+          volunteer: {email: expected_email, casa_org_id: admin.casa_org_id}
         }
       }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
@@ -64,6 +64,6 @@ RSpec.describe "/volunteers", type: :request do
   end
 
   def update_volunteer_params
-    {user: {email: "newemail@gmail.com", display_name: "New Name", role: "inactive"}}
+    {volunteer: {email: "newemail@gmail.com", display_name: "New Name", role: "inactive"}}
   end
 end

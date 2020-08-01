@@ -1,4 +1,4 @@
-class VolunteerPolicy
+class VolunteerPolicy < UserPolicy
   include PolicyHelper
   attr_reader :user, :record
 
