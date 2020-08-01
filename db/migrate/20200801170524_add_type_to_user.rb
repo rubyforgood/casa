@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  self.table_name = 'users'
+  self.table_name = "users"
 end
 
 class AddTypeToUser < ActiveRecord::Migration[6.0]

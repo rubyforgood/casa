@@ -30,7 +30,7 @@ class User < ApplicationRecord
   def active_volunteer
     active && type == "Volunteer"
   end
-  
+
   # all contacts this user has with this casa case
   def case_contacts_for(casa_case_id)
     found_casa_case = casa_cases.find { |cc| cc.id == casa_case_id }

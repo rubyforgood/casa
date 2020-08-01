@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :volunteer, class: "Volunteer", parent: :user do
     role { :volunteer }
-    
+
     trait :inactive do
       active { false }
       role { :inactive }
