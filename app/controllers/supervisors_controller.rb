@@ -16,7 +16,7 @@ class SupervisorsController < ApplicationController
     @supervisor = User.new(supervisor_params.merge(supervisor_values))
 
     if @supervisor.save
-      #@supervisor.invite!
+      # @supervisor.invite!
       redirect_to edit_supervisor_path(@supervisor)
     else
       render new_supervisor_path
@@ -35,7 +35,7 @@ class SupervisorsController < ApplicationController
 
     if can_update_fields?
       if @supervisor.update(update_supervisor_params)
-        redirect_to edit_supervisor_path(@supervisor), notice: 'Supervisor was successfully updated.'
+        redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was successfully updated."
       else
         render :edit
       end
@@ -51,7 +51,7 @@ class SupervisorsController < ApplicationController
   end
 
   def supervisor_values
-    { role: 'supervisor', password: '123456', casa_org_id: current_user.casa_org_id }
+    {role: "supervisor", password: "123456", casa_org_id: current_user.casa_org_id}
   end
 
   def supervisor_params
