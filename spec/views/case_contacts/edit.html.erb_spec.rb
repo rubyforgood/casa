@@ -18,7 +18,7 @@ describe "case_contacts/edit" do
     assign :case_contact, case_contact
     assign :casa_cases, [case_contact.casa_case]
 
-    user = build_stubbed(:user, :volunteer)
+    user = build_stubbed(:volunteer)
     allow(view).to receive(:current_user).and_return(user)
 
     render template: "case_contacts/edit"

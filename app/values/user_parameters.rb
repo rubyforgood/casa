@@ -6,7 +6,8 @@ class UserParameters < SimpleDelegator
         :casa_org_id,
         :display_name,
         :password,
-        :role
+        :active,
+        :type
       )
 
     super(params)
@@ -17,13 +18,18 @@ class UserParameters < SimpleDelegator
     self
   end
 
-  def with_role(role)
-    params[:role] = role
+  def with_type(type)
+    params[:type] = type
     self
   end
 
-  def without_role
-    params.delete(:role)
+  def without_type
+    params.delete(:type)
+    self
+  end
+
+  def without_active
+    params.delete(:active)
     self
   end
 

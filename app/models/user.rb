@@ -19,14 +19,24 @@ class User < ApplicationRecord
 
   scope :volunteers_with_no_supervisor, ->(org) do
     includes(:supervisor)
-      .where(role: "volunteer")
+      .where(type: "Volunteer")
       .where(casa_org_id: org.id)
       .where(supervisor_volunteers: {id: nil})
       .sort_by(&:display_name)
   end
-  ALL_ROLES = %w[volunteer supervisor casa_admin inactive].freeze
-  enum role: ALL_ROLES.zip(ALL_ROLES).to_h
 
+  def casa_admin?
+    is_a?(CasaAdmin)
+  end
+
+  def supervisor?
+    is_a?(Supervisor)
+  end
+
+  def volunteer?
+    is_a?(Volunteer)
+  end
+  
   def active_volunteer
     active && type == "Volunteer"
   end
@@ -64,7 +74,7 @@ class User < ApplicationRecord
 
   # Called by Devise during initial authentication and on each request to
   # validate the user is active. For our purposes, the user is active if they
-  # do not have the inactive role.
+  # are not inactive
   def active_for_authentication?
     super && active
   end
@@ -98,7 +108,6 @@ end
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
-#  role                   :string           default("volunteer"), not null
 #  type                   :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null

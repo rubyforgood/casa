@@ -2,9 +2,9 @@ class UserDecorator < Draper::Decorator
   delegate_all
 
   def status
-    return "Inactive" if object.role == "inactive"
+    return "Active" if object.active
 
-    "Active"
+    "Inactive"
   end
 
   def name

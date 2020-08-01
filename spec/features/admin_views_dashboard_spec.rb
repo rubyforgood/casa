@@ -83,7 +83,7 @@ RSpec.describe "admin views dashboard", type: :feature do
     click_on "New Volunteer"
 
     expect(page).to have_text("New Volunteer")
-    expect(page).to have_css("form#new_user")
+    expect(page).to have_css("form#new_volunteer")
   end
 
   it "can filter volunteers", type: :system do

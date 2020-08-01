@@ -1,7 +1,5 @@
 FactoryBot.define do
   factory :casa_admin, class: "CasaAdmin", parent: :user do
-    role { :casa_admin }
-
     trait :with_casa_cases do
       after(:create) do |user, _|
         create_list(:case_assignment, 2, volunteer: user)

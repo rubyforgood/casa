@@ -13,7 +13,6 @@ class FileImporter
   def import_volunteers
     CSV.foreach(import_csv, headers: true, header_converters: :symbol) do |row|
       user = Volunteer.new(row.to_hash)
-      user.role = "volunteer"
       user.casa_org_id = org_id
       user.password = "123456"
       if user.save
@@ -29,7 +28,6 @@ class FileImporter
   def import_supervisors
     CSV.foreach(import_csv, headers: true, header_converters: :symbol) do |row|
       user = Supervisor.new(email: row[:email], display_name: row[:display_name])
-      user.role = "supervisor"
       user.casa_org_id = org_id
       user.password = "123456"
       if user.save

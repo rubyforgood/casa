@@ -24,13 +24,13 @@ class CasaCasePolicy
       when Supervisor
         scope.ordered
       else
-        raise "unrecognized role #{@user.role}"
+        raise "unrecognized user type #{@user.type}"
       end
     end
   end
 
   def update_case_number?
-    user.casa_admin?
+    user.is_a?(CasaAdmin)
   end
 
   def assign_volunteers?
@@ -73,7 +73,7 @@ class CasaCasePolicy
   private
 
   def _is_supervisor_or_casa_admin?
-    user.casa_admin? || user.supervisor?
+    user.is_a?(CasaAdmin) || user.is_a?(Supervisor)
   end
 
   def _is_volunteer_actively_assigned_to_case?

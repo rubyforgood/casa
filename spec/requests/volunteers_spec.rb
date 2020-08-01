@@ -59,11 +59,11 @@ RSpec.describe "/volunteers", type: :request do
 
       expect(volunteer.display_name).to eq "New Name"
       expect(volunteer.email).to eq "newemail@gmail.com"
-      expect(volunteer.role).to eq "inactive"
+      expect(volunteer).not_to be_active
     end
   end
 
   def update_volunteer_params
-    {volunteer: {email: "newemail@gmail.com", display_name: "New Name", role: "inactive"}}
+    {volunteer: {email: "newemail@gmail.com", display_name: "New Name", active: "false"}}
   end
 end

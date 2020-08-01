@@ -13,8 +13,6 @@ RSpec.describe User, type: :model do
   it { is_expected.to have_one(:supervisor_volunteer) }
   it { is_expected.to have_one(:supervisor).through(:supervisor_volunteer) }
 
-  it { is_expected.to define_enum_for(:role).backed_by_column_of_type(:string) }
-
   it "returns all case_contacts associated with this user and the casa case id supplied" do
     volunteer = create(:volunteer, :with_casa_cases)
 
@@ -49,7 +47,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "#active_for_authentication?" do
-    it "is false when the user has an inactive role" do
+    it "is false when the user is inactive" do
       user = create(:volunteer, :inactive)
       expect(user).not_to be_active_for_authentication
       expect(user.inactive_message).to eq(:inactive)
