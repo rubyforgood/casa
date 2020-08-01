@@ -4,7 +4,7 @@
 
 <div class="row">
   <div class="col-sm-6">
-    <%= simple_form_for @supervisor, url: supervisors_path do |form| %>
+    <%= form_with model: @supervisor, local: true, url: supervisors_path do |form| %>
       <div class="field form-group">
         <%= form.label :email %>
         <%= form.text_field :email, class: "form-control" %>
