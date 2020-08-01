@@ -15,12 +15,6 @@
         <%= form.text_field :display_name, class: "form-control" %>
       </div>
 
-      <div class="field form-group">
-        <%= form.label :volunteer_ids, "Assign Volunteer to Supervisor" %>
-
-        <%= form.association(:volunteers, collection: @available_volunteers, label_method: :display_name, value_method: :id, include_hidden: false, input_html: { class: 'form-control selectpicker input_group'} ) %>
-
-      </div>
       <div class="actions">
         <%= form.submit "Create Supervisor", class: "btn btn-primary" %>
         <%= link_to 'Return to Dashboard', root_path, class: 'btn btn-info pull-right' %>
