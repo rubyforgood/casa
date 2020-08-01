@@ -84,6 +84,7 @@ end
 # Table name: users
 #
 #  id                     :bigint           not null, primary key
+#  active                 :boolean          default(TRUE)
 #  display_name           :string           default("")
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
@@ -98,6 +99,7 @@ end
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
 #  role                   :string           default("volunteer"), not null
+#  type                   :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  casa_org_id            :bigint           not null
