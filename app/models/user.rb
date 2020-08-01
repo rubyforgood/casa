@@ -18,6 +18,15 @@ class User < ApplicationRecord
   ALL_ROLES = %w[volunteer supervisor casa_admin inactive].freeze
   enum role: ALL_ROLES.zip(ALL_ROLES).to_h
 
+  def policy_class
+    case self.role
+    when "volunteer", "inactive"
+      VolunteerPolicy
+    else
+      UserPolicy
+    end
+  end
+
   def active_volunteer
     role == "volunteer" # !inactive
   end

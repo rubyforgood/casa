@@ -36,7 +36,7 @@ class VolunteersController < ApplicationController
   end
 
   def activate
-    @volunteer = User.find(params[:id])
+    @volunteer = authorize User.find(params[:id])
     if @volunteer.update(role: "volunteer")
       redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was activated."
     else
@@ -45,7 +45,7 @@ class VolunteersController < ApplicationController
   end
 
   def deactivate
-    @volunteer = User.find(params[:id])
+    @volunteer = authorize User.find(params[:id])
 
     if @volunteer.update(role: "inactive")
       @volunteer.case_assignments.update_all(is_active: false)

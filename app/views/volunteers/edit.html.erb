@@ -40,7 +40,7 @@
       <div class="field form-group">
         <% if @volunteer_active %>
           Volunteer is <span class="badge badge-success text-uppercase display-1">Active</span>
-          <% if current_user.role == "casa_admin" || @volunteer.supervisor == current_user %>
+          <% if policy(@volunteer).deactivate? %>
             <%= link_to "Deactivate volunteer",
                         deactivate_volunteer_path(@volunteer),
                         method: :patch,
@@ -54,7 +54,7 @@
           <div class="alert alert-danger">
             Volunteer was deactivated on: <%= @volunteer.updated_at.strftime("%m-%d-%Y") %>
           </div>
-          <% if current_user.role == "casa_admin" || @volunteer.supervisor == current_user %>
+          <% if policy(@volunteer).activate? %>
             <%= link_to "Activate volunteer",
                         activate_volunteer_path(@volunteer),
                         method: :patch,
