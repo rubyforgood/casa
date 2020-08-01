@@ -65,7 +65,7 @@ RSpec.describe "/supervisors", type: :request do
       end
 
       it "can set the supervisor to be inactive" do
-        patch supervisor_path(supervisor), params: { supervisor: { active: false } }
+        patch supervisor_path(supervisor), params: {supervisor: {active: false}}
         supervisor.reload
 
         expect(supervisor).not_to be_active

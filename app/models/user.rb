@@ -36,7 +36,7 @@ class User < ApplicationRecord
   def volunteer?
     is_a?(Volunteer)
   end
-  
+
   def active_volunteer
     active && type == "Volunteer"
   end
