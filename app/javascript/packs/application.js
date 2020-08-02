@@ -9,6 +9,7 @@ require("channels")
 require("jquery")
 require("bootstrap-datepicker")
 require('datatables.net-dt')
+require('bootstrap-select')
 require("src/case_contact")
 require("src/dashboard")
 require("src/index_reports")
@@ -16,6 +17,7 @@ require("src/new_casa_contact")
 require("src/sessions")
 
 import "bootstrap"
+import 'bootstrap-select'
 
 window.setTimeout(function() {
   $(".alert").not(".error").fadeTo(1000, 0).slideUp(1000, function() {

@@ -1,12 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "admin or supervisor assign and unassign a volunteer to case", type: :feature do
-  let(:supervisor1) { create(:user, :supervisor) }
+  let(:supervisor1) { create(:supervisor) }
   let(:casa_case) { create(:casa_case) }
 
   before do
     sign_in supervisor1
-    volunteer = create(:user, :volunteer)
+    volunteer = create(:volunteer)
     visit casa_case_path(casa_case.id)
     click_on "Edit Case Details"
 
@@ -37,7 +37,7 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
 
   it "when a volunteer unassign from a case by other a supervisor" do
     click_on "Log out"
-    supervisor2 = create(:user, :supervisor)
+    supervisor2 = create(:supervisor)
     sign_in supervisor2
     visit casa_case_path(casa_case.id)
     click_on "Edit Case Details"

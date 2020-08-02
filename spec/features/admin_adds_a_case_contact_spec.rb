@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "admin or supervisor adds a case contact", type: :feature do
   it "is successful" do
-    admin = create(:user, :casa_admin)
+    admin = create(:casa_admin)
     casa_case = create(:casa_case)
 
     sign_in admin

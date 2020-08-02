@@ -5,7 +5,7 @@ describe "casa_cases/edit" do
     it "does not include volunteer assignment" do
       assign :casa_case, create(:casa_case)
 
-      user = build_stubbed(:user, :volunteer)
+      user = build_stubbed(:volunteer)
       allow(view).to receive(:current_user).and_return(user)
 
       render template: "casa_cases/edit"
@@ -18,7 +18,7 @@ describe "casa_cases/edit" do
     it "includes volunteer assignment" do
       assign :casa_case, create(:casa_case)
 
-      user = build_stubbed(:user, :casa_admin)
+      user = build_stubbed(:casa_admin)
       allow(view).to receive(:current_user).and_return(user)
 
       render template: "casa_cases/edit"
