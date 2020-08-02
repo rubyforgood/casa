@@ -20,7 +20,7 @@ class VolunteersController < ApplicationController
   end
 
   def edit
-    @volunteer_active = @volunteer.active_volunteer # TODO bug: volunteer can't unassign voluneer from case
+    @volunteer_active = @volunteer.active_volunteer
     @available_casa_cases = CasaCase.all.select { |cc| cc.case_assignments.any?(&:is_active) }.sort_by(&:case_number)
   end
 
