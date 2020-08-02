@@ -7,6 +7,14 @@ class UserPolicy
     @record = record
   end
 
+  def activate?
+    @user.casa_admin? || @user.supervisor?
+  end
+
+  def deactivate?
+    activate?
+  end
+
   def update_supervisor_email?
     user.casa_admin? || record == user
   end

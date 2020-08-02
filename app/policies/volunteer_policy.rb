@@ -10,12 +10,4 @@ class VolunteerPolicy < UserPolicy
   def update_volunteer_email?
     user.casa_admin?
   end
-
-  def activate?
-    @user.casa_admin? || @user.supervisor?
-  end
-
-  def deactivate?
-    activate?
-  end
 end
