@@ -35,5 +35,18 @@ class UserPolicy
         raise "unrecognized role #{@user.type}"
       end
     end
+
+    def edit?
+      case user
+      when CasaAdmin # scope.in_casa_administered_by(user)
+        scope.all
+      when Volunteer
+        scope.where(id: user.id)
+      when Supervisor
+        scope.all
+      else
+        raise "unrecognized role #{@user.type}"
+      end
+    end
   end
 end
