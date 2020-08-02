@@ -13,6 +13,7 @@ require("src/case_contact")
 require("src/dashboard")
 require("src/index_reports")
 require("src/new_casa_contact")
+require("src/sessions")
 
 import "bootstrap"
 
