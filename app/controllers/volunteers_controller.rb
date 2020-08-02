@@ -62,9 +62,8 @@ class VolunteersController < ApplicationController
 
   def create_volunteer_params
     UserParameters
-      .new(params)
+      .new(params, key=:volunteer)
       .with_password(generate_devise_password)
-      .with_role("volunteer")
   end
 
   def update_volunteer_params

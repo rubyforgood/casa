@@ -10,7 +10,7 @@ class UserParameters < SimpleDelegator
         :type
       )
 
-    super(params)
+    super(modified_params)
   end
 
   def with_password(password)
