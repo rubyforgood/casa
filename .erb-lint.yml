@@ -1,7 +1,2 @@
 ---
 EnableDefaultLinters: true
-linters:
-  ErbSafety:
-    enabled: true
-  Rubocop:
-    enabled: true
