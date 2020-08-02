@@ -12,7 +12,7 @@ class VolunteerPolicy
   end
 
   def activate?
-    @user.casa_admin? || @record.supervisor == @user
+    @user.casa_admin? || @user.supervisor?
   end
 
   def deactivate?
