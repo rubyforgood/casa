@@ -108,6 +108,7 @@ RSpec.describe User, type: :model do
       let!(:assigned1) { create(:volunteer, display_name: 'ddd', casa_org: casa_org) }
       let!(:assignment1) { create(:supervisor_volunteer, volunteer: assigned1) }
       let!(:assigned2_different_org) { assignment1.volunteer }
+      let!(:unassigned_inactive) { create(:volunteer, display_name: 'eee', casa_org: casa_org, active: false) }
 
       it "returns unassigned volunteers" do
         expect(subject.map(&:display_name).sort).to eq(['aaa', 'bbb'])
