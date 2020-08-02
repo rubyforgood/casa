@@ -66,17 +66,17 @@ If you have any troubles, also look at `.travis.yml` which is what makes the CI 
 1. install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
 1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`
 1. `gem install bundler`
+1. `bundle install`
 1. Make sure that postgres is installed [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database (if you have an older version of postgres). If you're on Ubuntu/WSL, use `sudo apt-get install libpq-dev` so the gem can install. [Use the Postgres repo for Ubuntu or WSL to get the server and client tools](https://www.postgresql.org/download/linux/ubuntu/).
 1. `bundle exec rails db:setup # requires running local postgres, with a role created for whatever user you're running rails as`
-1. `bundle exec rails spec`
-1. `bundle exec rails server` # run server
-1. `bundle exec standardrb --fix # auto-fix linting issues (optional)` [more linter info](https://github.com/testdouble/standard)
 1. Make sure [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) is installed
 1. Make sure you have [google chrome](https://chromedriver.chromium.org/) installed so the selenium tests can run. Installing `chromium-browser` is enough, even in WSL.
-1. `bundle install`
 1. Make sure [yarn](https://classic.yarnpkg.com/en/docs/instal) is installed. On Ubuntu, [make sure you install it from the official Yarn repo instead of cmdtest](https://classic.yarnpkg.com/en/docs/install/#debian-stable).
 1. `yarn`
 1. `bundle exec rails webpacker:compile`
+1. `bundle exec rails spec`
+1. `bundle exec rails server` # run server
+1. `bundle exec standardrb --fix # auto-fix linting issues (optional)` [more linter info](https://github.com/testdouble/standard)
 
 ### Documentation
 
