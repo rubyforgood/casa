@@ -22,7 +22,7 @@ gem "puma", "~> 4.3" # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "sass-rails", ">= 6" # Use SCSS for stylesheets
 gem "skylight" # automated performance testing https://www.skylight.io/
-gem "sprockets-rails" # Provides Sprockets implementation for Rails Asset Pipeline.
+gem "sprockets-rails" # TODO remove (deprecated) Provides Sprockets implementation for Rails Asset Pipeline.
 gem "turbolinks", "~> 5" # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem "webpacker", "~> 5.1" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 
