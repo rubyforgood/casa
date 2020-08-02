@@ -149,7 +149,7 @@ RSpec.describe "admin views dashboard", type: :feature do
 
   it "can go to the supervisor edit page and see red message
       when there are no active volunteers" do
-    create(:user, :supervisor)
+    create(:supervisor)
     sign_in admin
 
     visit root_path
