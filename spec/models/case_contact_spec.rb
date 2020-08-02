@@ -25,6 +25,18 @@ RSpec.describe CaseContact, type: :model do
     expect(case_contact.errors[:occurred_at]).to eq(["can't be blank"])
   end
 
+  it "validates duration_minutes is only numeric values" do
+    case_contact = build(:case_contact, duration_minutes: nil)
+    expect(case_contact).to_not be_valid
+    expect(case_contact.errors[:duration_minutes]).to eq(["is not a number"])
+  end
+
+  it "validates duration_minutes cannot be zero values" do
+    case_contact = build(:case_contact, duration_minutes: 0)
+    expect(case_contact).to_not be_valid
+    expect(case_contact.errors[:duration_minutes]).to eq(["must be greater than 0"])
+  end
+
   it "validates contact types are of allowed types" do
     case_contact = build(:case_contact, contact_types: ["popcorn"])
     expect(case_contact).to_not be_valid

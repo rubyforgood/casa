@@ -27,6 +27,38 @@ module CaseContactsHelper
       class: "custom-select"
   end
 
+  def set_hours_form(case_contact)
+    if case_contact.duration_minutes
+      case_contact.duration_minutes / 60
+    else
+      0
+    end
+  end
+
+  def set_minutes_form(case_contact)
+    if case_contact.duration_minutes
+      case_contact.duration_minutes.remainder(60)
+    else
+      0
+    end
+  end
+
+  def set_contact_made_false(case_contact)
+    if case_contact.persisted? && case_contact.contact_made == false
+      true
+    else
+      false
+    end
+  end
+
+  def set_contact_made_true(case_contact)
+    if case_contact.contact_made
+      true
+    else
+      false
+    end
+  end
+
   private
 
   def build_minute_options

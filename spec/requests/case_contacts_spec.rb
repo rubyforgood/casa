@@ -77,7 +77,8 @@ RSpec.describe "/case_contacts", type: :request do
 
         patch case_contact_url(case_contact), params: {
           case_contact: {
-            contact_types: ["attorney"]
+            contact_types: ["attorney"],
+            duration_minutes: 60
           }
         }
         expect(response).to redirect_to(casa_case_path(case_contact.casa_case_id))

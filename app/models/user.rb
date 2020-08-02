@@ -37,6 +37,15 @@ class User < ApplicationRecord
     is_a?(Volunteer)
   end
 
+  def policy_class
+    case self.role
+    when "volunteer", "inactive"
+      VolunteerPolicy
+    else
+      UserPolicy
+    end
+  end
+
   def active_volunteer
     active && type == "Volunteer"
   end

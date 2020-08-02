@@ -89,5 +89,8 @@
 
       <%= form.submit 'Assign Volunteer', class: 'btn btn-primary' %>
     <% end %>
+    <% unless @available_volunteers.any? %>
+      <p class="text-danger">There are no active, unassigned volunteers available.</p>
+    <% end %>
   </div>
 </div>

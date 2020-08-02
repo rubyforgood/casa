@@ -52,7 +52,7 @@ class VolunteersController < ApplicationController
   private
 
   def set_volunteer
-    @volunteer = Volunteer.find(params[:id])
+    @volunteer = authorize User.find(params[:id])
   end
 
   def generate_devise_password
@@ -60,12 +60,13 @@ class VolunteersController < ApplicationController
   end
 
   def create_volunteer_params
-    VolunteerParameters
+    UserParameters
       .new(params)
       .with_password(generate_devise_password)
+      .with_role("volunteer")
   end
 
   def update_volunteer_params
-    VolunteerParameters.new(params)
+    UserParameters.new(params)
   end
 end
