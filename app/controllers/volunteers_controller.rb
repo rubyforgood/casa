@@ -67,6 +67,6 @@ class VolunteersController < ApplicationController
   end
 
   def update_volunteer_params
-    UserParameters.new(params)
+    UserParameters.new(params, :volunteer)
   end
 end
