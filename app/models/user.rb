@@ -18,6 +18,7 @@ class User < ApplicationRecord
   has_one :supervisor, through: :supervisor_volunteer
 
   scope :volunteers_with_no_supervisor, ->(org) do
+    # TODO bug- This is not working- returns none when there should be many
     includes(:supervisor)
       .where(type: "Volunteer")
       .where(casa_org_id: org.id)
@@ -38,15 +39,16 @@ class User < ApplicationRecord
   end
 
   def policy_class
-    case self.role
-    when "volunteer", "inactive"
+    case self.type
+    when Volunteer
       VolunteerPolicy
     else
       UserPolicy
     end
   end
 
-  def active_volunteer
+
+def active_volunteer
     active && type == "Volunteer"
   end
 
