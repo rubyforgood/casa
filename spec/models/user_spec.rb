@@ -104,9 +104,9 @@ RSpec.describe User, type: :model do
       let!(:unassigned1) { create(:volunteer, display_name: 'aaa', casa_org: casa_org) }
       let!(:unassigned2) { create(:volunteer, display_name: 'bbb', casa_org: casa_org) }
       let!(:unassigned2_different_org) { create(:volunteer, display_name: 'ccc',) }
+      let!(:assignment1) { create(:supervisor_volunteer, volunteer: assigned1) }
       let!(:assigned1) { create(:volunteer, display_name: 'ddd', casa_org: casa_org) }
       let!(:assignment1) { create(:supervisor_volunteer, volunteer: assigned1) }
-      let!(:assignment1) { create(:supervisor_volunteer) }
       let!(:assigned2_different_org) { assignment1.volunteer }
 
       it "returns unassigned volunteers" do

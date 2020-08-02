@@ -17,13 +17,9 @@ class User < ApplicationRecord
   has_one :supervisor_volunteer, foreign_key: "volunteer_id"
   has_one :supervisor, through: :supervisor_volunteer
 
-  scope :volunteers_with_no_supervisor, ->(org) do
-    # TODO bug- This is not working- returns none when there should be many
-    includes(:supervisor)
-      .where(type: "Volunteer")
-      .where(casa_org_id: org.id)
-      .where(supervisor_volunteers: {id: nil})
-      .sort_by(&:display_name)
+  def self.volunteers_with_no_supervisor(org)
+    # TODO make this a scope
+    Volunteer.where(casa_org_id: org.id).reject {|v| v.supervisor_volunteer }.sort_by(&:display_name)
   end
 
   def casa_admin?
@@ -48,7 +44,7 @@ class User < ApplicationRecord
   end
 
 
-def active_volunteer
+  def active_volunteer
     active && type == "Volunteer"
   end
 

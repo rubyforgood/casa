@@ -10,4 +10,8 @@ class VolunteerPolicy < UserPolicy
   def update_volunteer_email?
     user.casa_admin?
   end
+
+  def unassign_case?
+    user.casa_admin? || user.supervisor?
+  end
 end
