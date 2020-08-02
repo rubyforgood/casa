@@ -8,7 +8,6 @@ gem "rails", "~> 6.0.3"
 
 gem "awesome_print" # easier console reading
 gem "bootstrap", "~> 4.5.0" # frontend styling library
-gem "bootstrap-select-rails"
 gem "devise" # for authentication
 gem "devise_invitable"
 gem "draper" # adds decorators for cleaner presentation logic

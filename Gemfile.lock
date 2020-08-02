@@ -77,7 +77,6 @@ GEM
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
-    bootstrap-select-rails (1.13.8)
     brakeman (4.8.2)
     bugsnag (6.15.0)
       concurrent-ruby (~> 1.0)
@@ -388,7 +387,6 @@ DEPENDENCIES
   awesome_print
   bootsnap (>= 1.4.2)
   bootstrap (~> 4.5.0)
-  bootstrap-select-rails
   brakeman
   bugsnag
   bullet

@@ -16,7 +16,7 @@ class SupervisorsController < ApplicationController
     @supervisor = Supervisor.new(supervisor_params.merge(supervisor_values))
 
     if @supervisor.save
-      # @supervisor.invite!
+      @supervisor.invite!
       redirect_to edit_supervisor_path(@supervisor)
     else
       render new_supervisor_path
