@@ -27,14 +27,14 @@ Volunteer.create(
   password: SEED_PASSWORD,
   password_confirmation: SEED_PASSWORD
 )
-volunteer_user_2 = User.create(
+volunteer_user_2 = Volunteer.create(
   casa_org: pg_casa,
   display_name: Faker::Name.name,
   email: "volunteer2@example.com",
   password: SEED_PASSWORD,
   password_confirmation: SEED_PASSWORD
 )
-volunteer_user_3 = User.create(
+volunteer_user_3 = Volunteer.create(
   casa_org: pg_casa,
   display_name: "Myra Shanjar",
   email: "volunteer3@example.com",
