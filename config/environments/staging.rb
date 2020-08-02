@@ -21,7 +21,7 @@ Rails.application.configure do
     port: 587,
     user_name: ENV["SENDINBLUE_EMAIL"],
     password: ENV["SENDINBLUE_PASSWORD"],
-    authentication: 'login',
+    authentication: "login",
     enable_starttls_auto: true
   }
 
