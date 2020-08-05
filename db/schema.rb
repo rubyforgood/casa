@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_29_002247) do
+ActiveRecord::Schema.define(version: 2020_08_01_192923) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,7 +88,6 @@ ActiveRecord::Schema.define(version: 2020_07_29_002247) do
     t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "role", default: "volunteer", null: false
     t.bigint "casa_org_id", null: false
     t.string "display_name", default: ""
     t.string "invitation_token"
@@ -99,6 +98,8 @@ ActiveRecord::Schema.define(version: 2020_07_29_002247) do
     t.string "invited_by_type"
     t.bigint "invited_by_id"
     t.integer "invitations_count", default: 0
+    t.string "type"
+    t.boolean "active", default: true
     t.index ["casa_org_id"], name: "index_users_on_casa_org_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true

@@ -4,7 +4,7 @@
 
 <div class="row">
   <div class="col-sm-6">
-    <%= form_for @user, url: users_path do |form| %>
+    <%= form_for @user, as: :user, url: users_path do |form| %>
 
       <div class="field form-group">
         <%= form.label :email %>
@@ -28,7 +28,7 @@
       <% end %>
       <br>
       <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-        <%= form_for(@user, :url => { :action => "update_password" } ) do |f| %>
+        <%= form_for(@user, as: :user, :url => { :action => "update_password" } ) do |f| %>
           <div class="field form-group">
             <%= f.label :password, "Password" %><br />
             <%= f.password_field :password, :autocomplete => "off", class: "form-control"  %>

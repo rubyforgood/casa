@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # model for all user roles: volunteer supervisor casa_admin inactive
 class User < ApplicationRecord
   has_paper_trail
@@ -15,20 +17,35 @@ class User < ApplicationRecord
   has_one :supervisor_volunteer, foreign_key: "volunteer_id"
   has_one :supervisor, through: :supervisor_volunteer
 
-  ALL_ROLES = %w[volunteer supervisor casa_admin inactive].freeze
-  enum role: ALL_ROLES.zip(ALL_ROLES).to_h
+  def self.volunteers_with_no_supervisor(org)
+    # TODO make this a scope
+    Volunteer.where(casa_org_id: org.id, active: true).reject {|v| v.supervisor_volunteer }.sort_by(&:display_name)
+  end
+
+  def casa_admin?
+    is_a?(CasaAdmin)
+  end
+
+  def supervisor?
+    is_a?(Supervisor)
+  end
+
+  def volunteer?
+    is_a?(Volunteer)
+  end
 
   def policy_class
-    case self.role
-    when "volunteer", "inactive"
+    case self.type
+    when Volunteer
       VolunteerPolicy
     else
       UserPolicy
     end
   end
 
+
   def active_volunteer
-    role == "volunteer" # !inactive
+    active && type == "Volunteer"
   end
 
   # all contacts this user has with this casa case
@@ -64,14 +81,14 @@ class User < ApplicationRecord
 
   # Called by Devise during initial authentication and on each request to
   # validate the user is active. For our purposes, the user is active if they
-  # do not have the inactive role.
+  # are not inactive
   def active_for_authentication?
-    super && !inactive?
+    super && active
   end
 
   # Called by Devise to generate an error message when a user is not active.
   def inactive_message
-    inactive? ? :inactive : super
+    !active ? :inactive : super
   end
 
   def serving_transition_aged_youth?
@@ -84,6 +101,7 @@ end
 # Table name: users
 #
 #  id                     :bigint           not null, primary key
+#  active                 :boolean          default(TRUE)
 #  display_name           :string           default("")
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
@@ -97,7 +115,7 @@ end
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
-#  role                   :string           default("volunteer"), not null
+#  type                   :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  casa_org_id            :bigint           not null

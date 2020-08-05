@@ -45,15 +45,15 @@ class CaseContactPolicy
     end
 
     def resolve
-      case @user.role
-      when "casa_admin" # scope.in_casa_administered_by(@user)
+      case @user
+      when CasaAdmin # scope.in_casa_administered_by(@user)
         scope.all
-      when "volunteer"
+      when Volunteer
         scope.where(casa_case: CasaCase.actively_assigned_to(@user), creator: @user)
-      when "supervisor"
+      when Supervisor
         scope.all
       else
-        raise "unrecognized role #{@user.role}"
+        raise "unrecognized user type #{@user.type}"
       end
     end
   end

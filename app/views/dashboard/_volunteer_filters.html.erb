@@ -6,7 +6,7 @@
         Supervisor
       </button>
         <ul class="dropdown-menu supervisor-options" style="min-width: 15rem;">
-          <% User.where(role: "supervisor").decorate.each do |supervisor| %>
+          <% Supervisor.decorate.each do |supervisor| %>
             <li>
               <a class="small" data-value="option1" tabIndex="-1">
                 <input

@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "admin adds a new case", type: :feature do
   it "is successful" do
-    admin = create(:user, :casa_admin)
+    admin = create(:casa_admin)
     case_number = "12345"
     sign_in admin
     visit root_path
