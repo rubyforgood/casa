@@ -19,7 +19,7 @@ class User < ApplicationRecord
 
   def self.volunteers_with_no_supervisor(org)
     # TODO make this a scope
-    Volunteer.where(casa_org_id: org.id, active: true).reject {|v| v.supervisor_volunteer }.sort_by(&:display_name)
+    Volunteer.where(casa_org_id: org.id, active: true).reject { |v| v.supervisor_volunteer }.sort_by(&:display_name)
   end
 
   def casa_admin?
@@ -35,14 +35,13 @@ class User < ApplicationRecord
   end
 
   def policy_class
-    case self.type
+    case type
     when Volunteer
       VolunteerPolicy
     else
       UserPolicy
     end
   end
-
 
   def active_volunteer
     active && type == "Volunteer"

@@ -73,8 +73,8 @@ RSpec.describe User, type: :model do
     context "when the user has a transition-aged-youth case" do
       it "is true" do
         case_assignments = [
-            case_assignment_with_a_transition_aged_youth,
-            case_assignment_without_transition_aged_youth
+          case_assignment_with_a_transition_aged_youth,
+          case_assignment_without_transition_aged_youth
         ]
         user = create(:volunteer, case_assignments: case_assignments)
 
@@ -101,17 +101,17 @@ RSpec.describe User, type: :model do
       end
     end
     context "volunteers" do
-      let!(:unassigned1) { create(:volunteer, display_name: 'aaa', casa_org: casa_org) }
-      let!(:unassigned2) { create(:volunteer, display_name: 'bbb', casa_org: casa_org) }
-      let!(:unassigned2_different_org) { create(:volunteer, display_name: 'ccc',) }
+      let!(:unassigned1) { create(:volunteer, display_name: "aaa", casa_org: casa_org) }
+      let!(:unassigned2) { create(:volunteer, display_name: "bbb", casa_org: casa_org) }
+      let!(:unassigned2_different_org) { create(:volunteer, display_name: "ccc") }
       let!(:assignment1) { create(:supervisor_volunteer, volunteer: assigned1) }
-      let!(:assigned1) { create(:volunteer, display_name: 'ddd', casa_org: casa_org) }
+      let!(:assigned1) { create(:volunteer, display_name: "ddd", casa_org: casa_org) }
       let!(:assignment1) { create(:supervisor_volunteer, volunteer: assigned1) }
       let!(:assigned2_different_org) { assignment1.volunteer }
-      let!(:unassigned_inactive) { create(:volunteer, display_name: 'eee', casa_org: casa_org, active: false) }
+      let!(:unassigned_inactive) { create(:volunteer, display_name: "eee", casa_org: casa_org, active: false) }
 
       it "returns unassigned volunteers" do
-        expect(subject.map(&:display_name).sort).to eq(['aaa', 'bbb'])
+        expect(subject.map(&:display_name).sort).to eq(["aaa", "bbb"])
       end
     end
   end
