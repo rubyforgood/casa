@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "/dashboard", type: :request do
   describe "GET /show" do
     it "renders a successful response" do
-      sign_in create(:user, :volunteer)
+      sign_in create(:volunteer)
 
       get root_url
 

@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "volunteer adds a case contact", type: :feature do
   it "is successful" do
-    volunteer = create(:user, :volunteer, :with_casa_cases)
+    volunteer = create(:volunteer, :with_casa_cases)
     volunteer_casa_case_one = volunteer.casa_cases.first
 
     sign_in volunteer
@@ -29,7 +29,7 @@ RSpec.describe "volunteer adds a case contact", type: :feature do
 
   context "with invalid inputs" do
     it "re-renders the form with error messages" do
-      volunteer = create(:user, :volunteer, :with_casa_cases)
+      volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first
 
       sign_in volunteer

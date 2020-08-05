@@ -98,7 +98,7 @@
               </td>
               <td>
                 <% if @volunteer_active %>
-                  <%= button_to 'Unassign Case', case_assignment_path(assignment, volunteer_id: @volunteer.id), method: :delete, class: "btn btn-danger" if current_user.role == "casa_admin" || @volunteer.supervisor == current_user%>
+                  <%= button_to 'Unassign Case', case_assignment_path(assignment, volunteer_id: @volunteer.id), method: :delete, class: "btn btn-danger" if Pundit.policy(current_user, @volunteer).unassign_case? %>
                 <% else %>
                   None
                 <% end %>

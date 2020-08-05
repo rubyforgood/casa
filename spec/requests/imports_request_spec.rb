@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "/imports", type: :request do
   describe "GET /index" do
     it "renders an unsuccessful response when the user is not an admin" do
-      sign_in create(:user, :volunteer)
+      sign_in create(:volunteer)
 
       get imports_url
 
@@ -11,7 +11,7 @@ RSpec.describe "/imports", type: :request do
     end
 
     it "renders a successful response when the user is an admin" do
-      sign_in create(:user, :casa_admin)
+      sign_in create(:casa_admin)
 
       get imports_url
 

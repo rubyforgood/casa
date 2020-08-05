@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe FileImporter, type: :concern do
   describe "#import_volunteers" do
     it "imports volunteers from a csv file" do
-      import_user = create(:user, :casa_admin)
+      import_user = create(:casa_admin)
 
       import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
       importer = FileImporter.new(import_file_path, import_user.casa_org.id)
@@ -11,7 +11,7 @@ RSpec.describe FileImporter, type: :concern do
     end
 
     it "does not import duplicate volunteers from csv files" do
-      import_user = create(:user, :casa_admin)
+      import_user = create(:casa_admin)
 
       import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
       importer = FileImporter.new(import_file_path, import_user.casa_org.id)
@@ -20,7 +20,7 @@ RSpec.describe FileImporter, type: :concern do
     end
 
     it "returns a success message with the number of volunteers imported" do
-      import_user = create(:user, :casa_admin)
+      import_user = create(:casa_admin)
 
       import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
       importer = FileImporter.new(import_file_path, import_user.casa_org.id)
@@ -30,7 +30,7 @@ RSpec.describe FileImporter, type: :concern do
     end
 
     it "returns an error message when there are volunteers not imported" do
-      import_user = create(:user, :casa_admin)
+      import_user = create(:casa_admin)
 
       import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
       FileImporter.new(import_file_path, import_user.casa_org.id).import_volunteers
@@ -43,7 +43,7 @@ RSpec.describe FileImporter, type: :concern do
 
   describe "#import_supervisors" do
     it "imports supervisors and associates volunteers with them" do
-      import_user = create(:user, :casa_admin)
+      import_user = create(:casa_admin)
 
       import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
       FileImporter.new(import_file_path, import_user.casa_org.id).import_volunteers
@@ -58,7 +58,7 @@ RSpec.describe FileImporter, type: :concern do
     end
 
     it "does not import duplicate supervisors from csv files" do
-      import_user = create(:user, :casa_admin)
+      import_user = create(:casa_admin)
 
       import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
       FileImporter.new(import_file_path, import_user.casa_org.id).import_volunteers
@@ -72,7 +72,7 @@ RSpec.describe FileImporter, type: :concern do
     end
 
     it "returns a success message with the number of supervisors imported" do
-      import_user = create(:user, :casa_admin)
+      import_user = create(:casa_admin)
 
       import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
       FileImporter.new(import_file_path, import_user.casa_org.id).import_volunteers
@@ -86,7 +86,7 @@ RSpec.describe FileImporter, type: :concern do
     end
 
     it "returns an error message when there are volunteers not imported" do
-      import_user = create(:user, :casa_admin)
+      import_user = create(:casa_admin)
 
       import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
       FileImporter.new(import_file_path, import_user.casa_org.id).import_volunteers
@@ -102,7 +102,7 @@ RSpec.describe FileImporter, type: :concern do
 
   describe "#import_cases" do
     it "imports cases and associates volunteers with them" do
-      import_user = create(:user, :casa_admin)
+      import_user = create(:casa_admin)
 
       import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
       FileImporter.new(import_file_path, import_user.casa_org.id).import_volunteers
@@ -120,7 +120,7 @@ RSpec.describe FileImporter, type: :concern do
     end
 
     it "does not duplicate casa case files from csv files" do
-      import_user = create(:user, :casa_admin)
+      import_user = create(:casa_admin)
 
       import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
       FileImporter.new(import_file_path, import_user.casa_org.id).import_volunteers
@@ -132,7 +132,7 @@ RSpec.describe FileImporter, type: :concern do
     end
 
     it "returns a success message with the number of cases imported" do
-      import_user = create(:user, :casa_admin)
+      import_user = create(:casa_admin)
 
       import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
       FileImporter.new(import_file_path, import_user.casa_org.id).import_volunteers
@@ -146,7 +146,7 @@ RSpec.describe FileImporter, type: :concern do
     end
 
     it "returns an error message when there are cases not imported" do
-      import_user = create(:user, :casa_admin)
+      import_user = create(:casa_admin)
 
       import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
       FileImporter.new(import_file_path, import_user.casa_org.id).import_volunteers

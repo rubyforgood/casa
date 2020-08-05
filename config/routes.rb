@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   devise_for :all_casa_admins
   devise_for :users
@@ -10,7 +12,7 @@ Rails.application.routes.draw do
   resources :imports, only: %i[index create]
   resources :case_contact_reports, only: %i[index]
 
-  resources :supervisors, only: %i[edit update]
+  resources :supervisors, only: %i[edit update new create]
   resources :supervisor_volunteers, only: %i[create destroy]
   resources :volunteers, only: %i[new edit create update] do
     member do

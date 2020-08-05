@@ -11,18 +11,18 @@ RSpec.describe DashboardPolicy do
 
   permissions :see_volunteers_section? do
     it "allows casa_admins" do
-      expect(subject).to permit(create(:user, :casa_admin))
+      expect(subject).to permit(create(:casa_admin))
     end
 
     it "does not allow volunteers" do
-      expect(subject).not_to permit(create(:user, :volunteer))
+      expect(subject).not_to permit(create(:volunteer))
     end
   end
 
   permissions :create_cases_section? do
     context "when user is a volunteer with casa_cases" do
       it "permits user to see cases section" do
-        volunteer = create(:user, :volunteer)
+        volunteer = create(:volunteer)
         volunteer.casa_cases << create(:casa_case)
         expect(Pundit.policy(volunteer, :dashboard).create_case_contacts?).to eq true
       end
@@ -30,14 +30,14 @@ RSpec.describe DashboardPolicy do
 
     context "when user is a volunteer without casa_cases" do
       it "permits user to see cases section" do
-        volunteer = create(:user, :volunteer)
+        volunteer = create(:volunteer)
         expect(Pundit.policy(volunteer, :dashboard).create_case_contacts?).to eq false
       end
     end
 
     context "when user is an admin" do
       it "permits user to see cases section" do
-        casa_admin = create(:user, :casa_admin)
+        casa_admin = create(:casa_admin)
         expect(Pundit.policy(casa_admin, :dashboard).create_case_contacts?).to eq false
       end
     end
@@ -46,7 +46,7 @@ RSpec.describe DashboardPolicy do
   permissions :see_cases_section? do
     context "when user is a volunteer" do
       it "permits user to see cases section" do
-        volunteer = create(:user, :volunteer)
+        volunteer = create(:volunteer)
         expect(Pundit.policy(volunteer, :dashboard).see_cases_section?).to eq true
       end
     end
@@ -54,15 +54,15 @@ RSpec.describe DashboardPolicy do
 
   permissions :see_supervisors_section? do
     it "allows casa_admins" do
-      expect(subject).to permit(create(:user, :casa_admin))
+      expect(subject).to permit(create(:casa_admin))
     end
 
     it "does not allow supervisors" do
-      expect(subject).not_to permit(create(:user, :supervisor))
+      expect(subject).not_to permit(create(:supervisor))
     end
 
     it "does not allow volunteers" do
-      expect(subject).not_to permit(create(:user, :volunteer))
+      expect(subject).not_to permit(create(:volunteer))
     end
   end
 end

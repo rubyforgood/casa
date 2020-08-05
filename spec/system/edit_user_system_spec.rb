@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Editing Profile", type: :system do
-  let(:volunteer) { create(:user, :volunteer) }
+  let(:volunteer) { create(:volunteer) }
 
   it "displays password errors messages when user is unable to set a password", js: true do
     sign_in volunteer
