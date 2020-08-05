@@ -34,7 +34,11 @@ class VolunteersController < ApplicationController
 
   def activate
     if @volunteer.update(active: true)
-      redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was activated."
+      if params[:redirect_to_path] == "casa_case" && casa_case = CasaCase.find(params[:casa_case_id])
+        redirect_to edit_casa_case_path(casa_case), notice: "Volunteer was activated."
+      else
+        redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was activated."
+      end
     else
       render :edit
     end

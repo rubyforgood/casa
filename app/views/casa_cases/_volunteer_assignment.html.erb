@@ -27,6 +27,11 @@
               <td>
                 <% if assignment.is_active? && (current_user.supervisor? || current_user.casa_admin?) %>
                   <%= button_to 'Unassign Volunteer', unassign_case_assignment_path(assignment), method: :patch, class: "btn btn-outline-danger" %>
+                <% elsif !assignment.volunteer.active_volunteer && policy(assignment.volunteer).activate? %>
+                  <%= link_to "Activate Volunteer",
+                        activate_volunteer_path(assignment.volunteer, redirect_to_path: 'casa_case', casa_case_id: @casa_case.id),
+                        method: :patch,
+                        class: "btn btn-outline-success" %>
                 <% else %>
                   None
                 <% end %>
