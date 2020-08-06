@@ -12,16 +12,17 @@ Rails.application.configure do
   config.log_tags = [:request_id]
 
   # email
-  config.action_mailer.default_url_options = {host: ENV["DEFAULT_URL_HOST"]} # for devise authentication
+  config.action_mailer.default_url_options = { host: ENV["DEFAULT_URL_HOST"] } # for devise authentication
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.perform_deliveries = true
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { # WARNING do not let standardrb linter change this block, it breaks
-      :address => 'smtp-relay.sendinblue.com',
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.smtp_settings = {
+      :user_name => ENV['SENDGRID_USERNAME'],
+      :password => ENV['SENDGRID_PASSWORD'],
+      :domain => ENV["DOMAIN"],
+      :address => 'smtp.sendgrid.net',
       :port => 587,
-      :user_name => ENV["SENDINBLUE_EMAIL"],
-      :password => ENV["SENDINBLUE_PASSWORD"],
-      :authentication => 'login',
+      :authentication => :plain,
       :enable_starttls_auto => true
   }
 
