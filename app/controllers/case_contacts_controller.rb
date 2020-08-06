@@ -42,6 +42,7 @@ class CaseContactsController < ApplicationController
       redirect_to casa_case_path(@casa_cases.first), notice: "Case contact was successfully created."
     else
       @case_contact = case_contacts.first
+      @casa_cases = [@case_contact.casa_case]
       render :new
     end
   end
