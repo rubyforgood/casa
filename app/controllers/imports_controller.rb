@@ -1,12 +1,12 @@
 class ImportsController < ApplicationController
   before_action :authenticate_user!
   before_action :must_be_admin
+  before_action :check_empty_attachment, only: [:create]
 
   def index
   end
 
   def create
-    check_empty_attachment
     import = import_from_csv(params[:import_type], params[:file], current_user.casa_org_id)
     flash[import[:type]] = import[:message]
     redirect_to imports_path
