@@ -28,13 +28,13 @@ RSpec.describe CaseContact, type: :model do
   it "validates duration_minutes is only numeric values" do
     case_contact = build(:case_contact, duration_minutes: nil)
     expect(case_contact).to_not be_valid
-    expect(case_contact.errors[:duration_minutes]).to eq(["is not a number"])
+    expect(case_contact.errors[:duration_minutes]).to eq(["Minimum case contact duration should be 15 minutes."])
   end
 
-  it "validates duration_minutes cannot be zero values" do
-    case_contact = build(:case_contact, duration_minutes: 0)
+  it "validates duration_minutes cannot be less than 15 minutes." do
+    case_contact = build(:case_contact, duration_minutes: 10)
     expect(case_contact).to_not be_valid
-    expect(case_contact.errors[:duration_minutes]).to eq(["must be greater than 0"])
+    expect(case_contact.errors[:duration_minutes]).to eq(["Minimum case contact duration should be 15 minutes."])
   end
 
   it "validates contact types are of allowed types" do
