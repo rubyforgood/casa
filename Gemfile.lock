@@ -116,6 +116,8 @@ GEM
       activesupport (>= 5.0)
       request_store (>= 1.0)
     erubi (1.9.0)
+    ethon (0.12.0)
+      ffi (>= 1.3.0)
     eventmachine (1.2.7)
     eventmachine (1.2.7-x64-mingw32)
     execjs (2.7.0)
@@ -304,6 +306,9 @@ GEM
     semantic_range (2.3.0)
     shoulda-matchers (4.3.0)
       activesupport (>= 4.2.0)
+    sib-api-v3-sdk (5.5.0)
+      json (~> 2.1, >= 2.1.0)
+      typhoeus (~> 1.0, >= 1.0.1)
     simplecov (0.18.5)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -348,6 +353,8 @@ GEM
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
+    typhoeus (1.4.0)
+      ethon (>= 0.9.0)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
     tzinfo-data (1.2020.1)
@@ -415,6 +422,7 @@ DEPENDENCIES
   sass-rails (>= 6)
   selenium-webdriver
   shoulda-matchers
+  sib-api-v3-sdk
   simplecov (~> 0.18.5)
   skylight
   spring
