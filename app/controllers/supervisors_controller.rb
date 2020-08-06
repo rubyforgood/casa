@@ -51,7 +51,7 @@ class SupervisorsController < ApplicationController
   end
 
   def supervisor_values
-    {password: "123456", casa_org_id: current_user.casa_org_id}
+    {password: SecureRandom.hex(10), casa_org_id: current_user.casa_org_id}
   end
 
   def supervisor_params
