@@ -10,7 +10,7 @@ cache:
   directories:
      - /home/travis/.rvm/
 rvm:
-  - 2.7.0
+  - 2.7.1
 
 services:
   - postgresql

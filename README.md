@@ -96,7 +96,7 @@ There is a `doc` directory at the top level that includes [Architectural Decisio
 `exec $SHELL`
 `git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build`
 
-You'll probably hit a problem where ruby-version reads `ruby-2.7.0` but the install available to you is called `2.7.0`. If you do, install [rbenv-alias](https://github.com/tpope/rbenv-aliases) and create an alias between the two.
+You'll probably hit a problem where ruby-version reads `ruby-2.7.1` but the install available to you is called `2.7.1`. If you do, install [rbenv-alias](https://github.com/tpope/rbenv-aliases) and create an alias between the two.
 
 ### Testing
 
