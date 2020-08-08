@@ -3,6 +3,10 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   before_action :set_paper_trail_whodunnit
 
+  rescue_from Pundit::NotAuthorizedError, with: :not_authorized
+
+  private
+
   def must_be_admin
     return if current_user&.casa_admin?
 
@@ -15,5 +19,12 @@ class ApplicationController < ActionController::Base
 
     flash[:notice] = "You do not have permission to view that page."
     redirect_to root_url
+  end
+
+  def not_authorized(exception)
+    policy_name = exception.policy.class.to_s.underscore
+
+    flash[:error] = t "#{policy_name}.#{exception.query}", scope: "pundit", default: :default
+    redirect_to(request.referrer || root_url)
   end
 end

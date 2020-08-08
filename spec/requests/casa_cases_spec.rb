@@ -30,9 +30,19 @@ RSpec.describe "/casa_cases", type: :request do
 
   describe "GET /new" do
     it "renders a successful response" do
-      sign_in create(:casa_admin)
       get new_casa_case_url
       expect(response).to be_successful
+    end
+
+    context "as a volunteer" do
+      before { sign_in create(:volunteer) }
+
+      it "denies access and redirects elsewhere" do
+        get new_casa_case_url
+
+        expect(response).not_to be_successful
+        expect(flash[:error]).to match(/you are not authorized/)
+      end
     end
   end
 
