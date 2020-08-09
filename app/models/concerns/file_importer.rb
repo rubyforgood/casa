@@ -13,7 +13,7 @@ class FileImporter
   def import_volunteers
     CSV.foreach(import_csv || [], headers: true, header_converters: :symbol) do |row|
       # TODO DRY these methods
-      user = Volunteer.new(row.to_hash)
+      user = Volunteer.new(row.to_hash.slice(:display_name, :email))
       user.casa_org_id, user.password = org_id, SecureRandom.hex(10)
       if user.save
         user.invite!
@@ -29,7 +29,7 @@ class FileImporter
 
   def import_supervisors
     CSV.foreach(import_csv || [], headers: true, header_converters: :symbol) do |row|
-      user = Supervisor.new(email: row[:email], display_name: row[:display_name])
+      user = Supervisor.new(row.to_hash.slice(:display_name, :email))
       user.casa_org_id, user.password = org_id, SecureRandom.hex(10)
       if user.save
         user.invite!
@@ -48,7 +48,7 @@ class FileImporter
 
   def import_cases
     CSV.foreach(import_csv || [], headers: true, header_converters: :symbol) do |row|
-      casa_case = CasaCase.new(case_number: row[:case_number], transition_aged_youth: row[:transition_aged_youth])
+      casa_case = CasaCase.new(row.to_hash.slice(:case_number, :transition_aged_youth))
       casa_case.casa_org_id = org_id
       if casa_case.save
         volunteers = row[:case_assignment]
