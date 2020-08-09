@@ -1,17 +1,16 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  config.action_mailer.default_url_options = { host: ENV["DEFAULT_URL_HOST"] } # for devise authentication
+  config.action_mailer.default_url_options = {host: ENV["DEFAULT_URL_HOST"]} # for devise authentication
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
-  config.action_mailer.smtp_settings = {
-      :user_name => ENV['SENDGRID_USERNAME'],
-      :password => ENV['SENDGRID_PASSWORD'],
-      :domain => ENV["DOMAIN"],
-      :address => 'smtp.sendgrid.net',
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = { # WARNING do not let standardrb linter change this block, it breaks
+      :address => 'smtp-relay.sendinblue.com',
       :port => 587,
-      :authentication => :plain,
+      :user_name => ENV["SENDINBLUE_EMAIL"],
+      :password => ENV["SENDINBLUE_PASSWORD"],
+      :authentication => 'login',
       :enable_starttls_auto => true
   }
   # Code is not reloaded between requests.
