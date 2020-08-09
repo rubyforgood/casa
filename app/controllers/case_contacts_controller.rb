@@ -84,9 +84,6 @@ class CaseContactsController < ApplicationController
 
   def set_case_contact
     @case_contact = authorize(CaseContact.find(params[:id]))
-  rescue Pundit::NotAuthorizedError
-    flash[:alert] = "Sorry! You can only edit case contacts that you have logged."
-    redirect_to root_path
   end
 
   def create_case_contact_params
