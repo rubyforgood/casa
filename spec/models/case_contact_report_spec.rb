@@ -20,8 +20,8 @@ RSpec.describe CaseContactReport, type: :model do
         "Miles Driven",
         "Wants Driving Reimbursement",
         "Casa Case Number",
-        "Volunteer Email",
-        "Volunteer Name",
+        "Creator Email",
+        "Creator Name",
         "Supervisor Name"
       ])
       case_contact_data = parsed_csv[1]

@@ -33,8 +33,8 @@ class CaseContactReport
       miles_driven: case_contact&.miles_driven,
       wants_driving_reimbursement: case_contact&.want_driving_reimbursement,
       casa_case_number: case_contact&.casa_case&.case_number,
-      volunteer_email: case_contact&.creator&.email,
-      volunteer_name: case_contact&.creator&.display_name,
+      creator_email: case_contact&.creator&.email,
+      creator_name: case_contact&.creator&.display_name,
       supervisor_name: case_contact&.creator&.supervisor&.display_name
     }
   end
