@@ -51,10 +51,11 @@ RSpec.describe FileImporter, type: :concern do
       import_supervisor_path = Rails.root.join("spec", "fixtures", "supervisors.csv")
       supervisor_importer = FileImporter.new(import_supervisor_path, import_user.casa_org.id)
 
-      expect { supervisor_importer.import_supervisors }.to change(User, :count).by(2)
+      expect { supervisor_importer.import_supervisors }.to change(Supervisor, :count).by(3)
 
-      supervisor = User.find_by(email: "supervisor2@example.net")
-      expect(supervisor.volunteers.size).to eq(2)
+      expect(Supervisor.find_by(email: "supervisor1@example.net").volunteers.size).to eq(1)
+      expect(Supervisor.find_by(email: "supervisor2@example.net").volunteers.size).to eq(2)
+      expect(Supervisor.find_by(email: "supervisor3@example.net").volunteers.size).to eq(0)
     end
 
     it "does not import duplicate supervisors from csv files" do
@@ -68,7 +69,7 @@ RSpec.describe FileImporter, type: :concern do
 
       supervisor_importer.import_supervisors
 
-      expect { supervisor_importer.import_supervisors }.to change(User, :count).by(0)
+      expect { supervisor_importer.import_supervisors }.to change(Supervisor, :count).by(0)
     end
 
     it "returns a success message with the number of supervisors imported" do
@@ -82,7 +83,7 @@ RSpec.describe FileImporter, type: :concern do
 
       alert = supervisor_importer.import_supervisors
       expect(alert[:type]).to eq(:success)
-      expect(alert[:message]).to eq("You successfully imported 2 supervisors.")
+      expect(alert[:message]).to eq("You successfully imported 3 supervisors.")
     end
 
     it "returns an error message when there are volunteers not imported" do
@@ -108,15 +109,17 @@ RSpec.describe FileImporter, type: :concern do
       FileImporter.new(import_file_path, import_user.casa_org.id).import_volunteers
 
       import_case_path = Rails.root.join("spec", "fixtures", "casa_cases.csv")
-      expect { FileImporter.new(import_case_path, import_user.casa_org.id).import_cases }.to change(CasaCase, :count).by(2)
+      expect { FileImporter.new(import_case_path, import_user.casa_org.id).import_cases }.to change(CasaCase, :count).by(3)
 
       # correctly imports true/false transition_aged_youth
-      expect(CasaCase.last.transition_aged_youth).to be_falsey
-      expect(CasaCase.first.transition_aged_youth).to be_truthy
+      expect(CasaCase.find_by(case_number: "CINA-01-4347").transition_aged_youth).to be_truthy
+      expect(CasaCase.find_by(case_number: "CINA-01-4348").transition_aged_youth).to be_falsey
+      expect(CasaCase.find_by(case_number: "CINA-01-4349").transition_aged_youth).to be_falsey
 
       # correctly adds volunteers
-      expect(CasaCase.first.volunteers.size).to be(1)
-      expect(CasaCase.last.volunteers.size).to be(2)
+      expect(CasaCase.find_by(case_number: "CINA-01-4347").volunteers.size).to eq(1)
+      expect(CasaCase.find_by(case_number: "CINA-01-4348").volunteers.size).to eq(2)
+      expect(CasaCase.find_by(case_number: "CINA-01-4349").volunteers.size).to eq(0)
     end
 
     it "does not duplicate casa case files from csv files" do
@@ -142,7 +145,7 @@ RSpec.describe FileImporter, type: :concern do
 
       alert = case_importer.import_cases
       expect(alert[:type]).to eq(:success)
-      expect(alert[:message]).to eq("You successfully imported 2 casa_cases.")
+      expect(alert[:message]).to eq("You successfully imported 3 casa_cases.")
     end
 
     it "returns an error message when there are cases not imported" do

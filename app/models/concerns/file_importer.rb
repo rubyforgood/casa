@@ -33,9 +33,12 @@ class FileImporter
       user.casa_org_id, user.password = org_id, SecureRandom.hex(10)
       if user.save
         user.invite!
-        volunteers = row[:supervisor_volunteers]
-        lookups = volunteers.split(",").map { |email| User.find_by(email: email.strip) }
-        user.volunteers << lookups.compact if lookups.compact.present?
+
+        volunteers = String(row[:supervisor_volunteers])
+          .split(",")
+          .map { |email| User.find_by(email: email.strip) }
+          .compact
+        user.volunteers << volunteers if volunteers.present?
         @number_imported += 1
       else
         @failed_imports << row.to_hash.values.to_s
@@ -51,9 +54,11 @@ class FileImporter
       casa_case = CasaCase.new(row.to_hash.slice(:case_number, :transition_aged_youth))
       casa_case.casa_org_id = org_id
       if casa_case.save
-        volunteers = row[:case_assignment]
-        lookups = volunteers.split(",").map { |email| User.find_by(email: email.strip) }
-        casa_case.volunteers << lookups.compact if lookups.compact.present?
+        volunteers = String(row[:case_assignment])
+          .split(",")
+          .map { |email| User.find_by(email: email.strip) }
+          .compact
+        casa_case.volunteers << volunteers if volunteers.present?
         @number_imported += 1
       else
         @failed_imports << row.to_hash.values.to_s
