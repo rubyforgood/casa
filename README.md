@@ -61,7 +61,7 @@ We are not using Mailgun because they limited us to only 5 recipients without a 
 
 If you have any troubles, also look at `.travis.yml` which is what makes the CI build run
 
-1. git clone the repo (fork it if you are not a maintainer)
+1. git clone the repo (fork it if you don't have repo permissions yet)
 1. `cd casa/`
 1. install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
 1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`
