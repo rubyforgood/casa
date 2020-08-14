@@ -47,4 +47,10 @@ Rails.application.configure do
 
   # Raises error for missing translations.
   # config.action_view.raise_on_missing_translations = true
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.console = true
+    Bullet.rails_logger = true
+    # Bullet.raise = true # TODO https://github.com/rubyforgood/casa/issues/519
+  end
 end
