@@ -10,7 +10,8 @@ class SupervisorVolunteersController < ApplicationController
   end
 
   def destroy
-    supervisor_volunteer = SupervisorVolunteer.find(params[:id])
+    volunteer = Volunteer.find(params[:id])
+    supervisor_volunteer = volunteer.supervisor_volunteer
     supervisor = supervisor_volunteer.supervisor
     supervisor_volunteer.delete
 

@@ -12,16 +12,15 @@ class User < ApplicationRecord
   has_many :case_contacts, foreign_key: "creator_id"
 
   has_many :supervisor_volunteers, foreign_key: "supervisor_id"
-  has_many :volunteers, through: :supervisor_volunteers
+  has_many :volunteers, -> { order(:display_name) }, through: :supervisor_volunteers
 
   has_one :supervisor_volunteer, foreign_key: "volunteer_id"
   has_one :supervisor, through: :supervisor_volunteer
 
   def self.volunteers_with_no_supervisor(org)
     # TODO make this a scope
-    Volunteer.where(casa_org_id: org.id, active: true).reject { |v| v.supervisor_volunteer }.sort_by(&:display_name)
+    Volunteer.includes(:supervisor_volunteer).where(casa_org_id: org.id, active: true).where(supervisor_volunteers: {id: nil})
   end
-
   def casa_admin?
     is_a?(CasaAdmin)
   end
