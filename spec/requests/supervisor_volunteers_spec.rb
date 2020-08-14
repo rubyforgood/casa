@@ -6,12 +6,12 @@ RSpec.describe "DELETE /supervisor_volunteers/:id", type: :request do
       admin = create(:casa_admin)
       supervisor = create(:supervisor)
       volunteer = create(:volunteer)
-      assignment = create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer)
+      create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer)
 
       sign_in admin
 
       expect {
-        delete supervisor_volunteer_path(assignment)
+        delete supervisor_volunteer_path(volunteer)
       }.to change(supervisor.volunteers, :count).by(-1)
 
       expect(response).to redirect_to edit_supervisor_path(supervisor)
@@ -22,12 +22,12 @@ RSpec.describe "DELETE /supervisor_volunteers/:id", type: :request do
     it "destroys the assignment of a volunteer to a supervisor" do
       supervisor = create(:supervisor)
       volunteer = create(:volunteer)
-      assignment = create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer)
+      create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer)
 
       sign_in supervisor
 
       expect {
-        delete supervisor_volunteer_path(assignment)
+        delete supervisor_volunteer_path(volunteer)
       }.to change(supervisor.volunteers, :count).by(-1)
 
       expect(response).to redirect_to edit_supervisor_path(supervisor)

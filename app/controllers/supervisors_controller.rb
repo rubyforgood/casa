@@ -6,7 +6,7 @@ class SupervisorsController < ApplicationController
   before_action :authenticate_user!
   before_action :must_be_admin_or_supervisor
   before_action :must_be_admin, only: [:new, :create]
-  before_action :available_volunteers, only: [:new, :create, :edit, :update]
+  before_action :available_volunteers, only: [:edit, :update]
 
   def new
     @supervisor = Supervisor.new
@@ -25,7 +25,7 @@ class SupervisorsController < ApplicationController
 
   def edit
     @supervisor = Supervisor.find(params[:id])
-    @assigned_volunteers = @supervisor.supervisor_volunteers.sort_by { |sv| sv.volunteer.display_name }
+    @assigned_volunteers = @supervisor.volunteers
 
     redirect_to root_url unless can_view_update_page?
   end
