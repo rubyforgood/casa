@@ -54,14 +54,20 @@ We are currently using https://app.bugsnag.com/ to track errors in staging. Erro
 
 ### Email
 
-This app sends email for user signup and deactivation. We use https://www.sendinblue.com/ because we get 300 free emails a day, which is more than we expect to need.
-We are not using Mailgun because they limited us to only 5 recipients without a paid plan.
+This app sends email for user signup and deactivation. We use https://www.sendinblue.com/ because we get 300 free emails a day, which is more than we expect to need. 
+Sendinblue has historically sometimes been very slow (6 hours) in delivering email, but sometimes it delivers within a minute or two. Be wary.
+You log into sendinblue via the "log in with google" option. Sean has the credentials for this and hopefully we never need to change them.
+We are not using Mailgun because they limited us to only 5 recipients without a paid plan. We looked at using Sendgrid but our account is currently locked for unknown reasons.
+
+### Hosting
+
+Namecheap, heroku
 
 ### Setup to develop:
 
 If you have any troubles, also look at `.travis.yml` which is what makes the CI build run
 
-1. git clone the repo (fork it if you are not a maintainer)
+1. git clone the repo (fork it if you don't have repo permissions yet)
 1. `cd casa/`
 1. install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
 1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`
@@ -107,7 +113,7 @@ Test credentials for https://casa-r4g-staging.herokuapp.com/
 1. casa_admin1@example.com / 123456
 
 #### Test coverage
-Test coverage is run by simplecov on all builds and aggregated by CodeClimage
+Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 
 ### Communication and Collaboration
 
@@ -115,8 +121,11 @@ Most conversation happens in the #casa channel of the Ruby For Good slack. You c
 
 You can also open an issue or comment on an issue on github and a maintainer will reply to you. 
 
-We have a weekly team call on Sunday at 10am-11:30 Pacific where we do pair/mob programming and talk about issues- feel free to join! Join info in slack or open a github issue to request join info
+We have a weekly team call on Sunday at (new time TBD - check slack) where we do pair/mob programming and talk about issues- feel free to join! Join info in slack or open a github issue to request join info
 
-We have a weekly stakeholder call with PG CASA staff on Wednesday at 8:30am Pacific where we show off progress and discuss launch plans. Feel free to join! Join info in slack or open a github issue to request join info
+We have a weekly stakeholder call with PG CASA staff on Wednesday at 8:30am Pacific time where we show off progress and discuss launch plans. Feel free to join! Join info in slack or open a github issue to request join info
 
-Planned launch (CASA volunteer training) 3 August 2020
+### History 
+
+First CASA supervisor training: 12 August 2020 🎉
+
