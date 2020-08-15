@@ -3,8 +3,8 @@ name: 💡Feature request
 about: 🔨What needs building? ✨
 title: ''
 labels: ''
-assignees: 'compwron'
-projects: /rubyforgood/casa/1
+assignees: ''
+project: https://github.com/rubyforgood/casa/projects/1
 
 ---
 
