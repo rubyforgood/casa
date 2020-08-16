@@ -19,7 +19,7 @@ class User < ApplicationRecord
 
   def self.volunteers_with_no_supervisor(org)
     # TODO make this a scope
-    Volunteer.includes(:supervisor_volunteer).where(casa_org_id: org.id, active: true).where(supervisor_volunteers: {id: nil})
+    Volunteer.active.includes(:supervisor_volunteer).where(casa_org_id: org.id).where(supervisor_volunteers: {id: nil})
   end
   def casa_admin?
     is_a?(CasaAdmin)
