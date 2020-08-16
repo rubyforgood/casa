@@ -4,12 +4,13 @@ class ImportsController < ApplicationController
   before_action :check_empty_attachment, only: [:create]
 
   def index
+    @import_type = params.fetch(:import_type, "volunteer")
   end
 
   def create
     import = import_from_csv(params[:import_type], params[:file], current_user.casa_org_id)
     flash[import[:type]] = import[:message]
-    redirect_to imports_path
+    redirect_to imports_path(import_type: params[:import_type])
   end
 
   private
@@ -30,6 +31,6 @@ class ImportsController < ApplicationController
   def check_empty_attachment
     return unless params[:file].blank?
     flash[:error] = "You must attach a csv file in order to import information!"
-    redirect_to imports_path
+    redirect_to imports_path(import_type: params[:import_type])
   end
 end

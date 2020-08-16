@@ -17,35 +17,37 @@
           <li>Cases</li>
         </ol>
         </p>
-        <br>
         <div class="row">
-          <ul class="nav nav-pills" id="pills-tab" role="tablist">
+          <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" id="pills-volunteer-tab" data-toggle="pill" href="#pills-volunteer" role="tab" aria-controls="pills-volunteer" aria-selected="true">Import
-                Volunteers</a>
+              <%= content_tag :a, role: "tab", href: "#volunteer", id: "volunteer-tab", class: ["nav-link", ("active" if @import_type == "volunteer")].compact, data: { toggle: "tab" }, aria: { controls: "volunteer", selected: (@import_type == "volunteer") } do %>
+                Import Volunteers
+              <%- end %>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="pills-supervisor-tab" data-toggle="pill" href="#pills-supervisor" role="tab" aria-controls="pills-supervisor" aria-selected="false">Import
-                Supervisors</a>
+              <%= content_tag :a, role: "tab", href: "#supervisor", id: "supervisor-tab", class: ["nav-link", ("active" if @import_type == "supervisor")].compact, data: { toggle: "tab" }, aria: { controls: "supervisor", selected: (@import_type == "supervisor") } do %>
+                Import Supervisors
+              <%- end %>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="pills-cases-tab" data-toggle="pill" href="#pills-cases" role="tab" aria-controls="pills-cases" aria-selected="false">Import
-                Cases</a>
+              <%= content_tag :a, role: "tab", href: "#casa-case", id: "casa-case-tab", class: ["nav-link", ("active" if @import_type == "casa_case")].compact, data: { toggle: "tab" }, aria: { controls: "casa-case", selected: (@import_type == "casa_case") } do %>
+                Import Cases
+              <%- end %>
             </li>
           </ul>
-          <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="pills-volunteer" role="tabpanel" aria-labelledby="pills-volunteer-tab">
+          <div class="tab-content">
+            <%= content_tag :div, role: "tabpanel", id: "volunteer", class: ["tab-pane", "fade", ("show" if @import_type == "volunteer"), ("active" if @import_type == "volunteer")].compact, aria: { labelledby: "volunteer-tab" } do %> 
               <br>
               <%= render "volunteers" %>
-            </div>
-            <div class="tab-pane fade" id="pills-supervisor" role="tabpanel" aria-labelledby="pills-supervisor-tab">
+            <%- end %>
+            <%= content_tag :div, role: "tabpanel", id: "supervisor", class: ["tab-pane", "fade", ("show" if @import_type == "supervisor"), ("active" if @import_type == "supervisor")].compact, aria: { labelledby: "supervisor-tab" } do %> 
               <br>
               <%= render "supervisors" %>
-            </div>
-            <div class="tab-pane fade" id="pills-cases" role="tabpanel" aria-labelledby="pills-cases-tab">
+            <%- end %>
+            <%= content_tag :div, role: "tabpanel", id: "casa-case", class: ["tab-pane", "fade", ("show" if @import_type == "casa_case"), ("active" if @import_type == "casa_case")].compact, aria: { labelledby: "casa-case-tab" } do %> 
               <br>
               <%= render "cases" %>
-            </div>
+            <%- end %>
           </div>
         </div>
         <br>
