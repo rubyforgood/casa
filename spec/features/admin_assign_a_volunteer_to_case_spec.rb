@@ -50,4 +50,11 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
     assign_badge = page.find("span.badge-danger")
     expect(assign_badge.text).to eq "Unassigned"
   end
+
+  it "when can assign only active volunteer to a case" do
+    volunteer1 = create(:volunteer)
+    volunteer2 = create(:volunteer, :inactive)
+
+    expect(find("select[name='case_assignment[volunteer_id]']").all('option').count).to eq 1
+  end
 end
