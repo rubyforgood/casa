@@ -18,7 +18,7 @@ window.onload = function () {
     if (durationHourDisplay.value !== durationHours.value) {
       durationHourDisplay.value = durationHours.value
     }
-    
+
   }
   durationHourDisplay.onchange, durationHourDisplay.onkeyup = function ()  {
     if (durationHourDisplay.value !== durationHours.value) {
@@ -29,14 +29,15 @@ window.onload = function () {
     if (durationMinuteDisplay.value !== durationMinutes.value) {
       durationMinuteDisplay.value = durationMinutes.value
     }
-    
+
   }
   durationMinuteDisplay.onchange, durationMinuteDisplay.onkeyup = function ()  {
     if (durationMinuteDisplay.value !== durationMinutes.value) {
       durationMinutes.value = durationMinuteDisplay.value
     }
   }
-  caseContactSubmit.onclick = function () {
+
+  function validateContactType() {
     const childElements = Array.from(contactTypeForm.children)
     const isAtLeastOneChecked = childElements.filter(x => {
       return x.querySelector("input") && x.querySelector("input").checked
@@ -46,5 +47,23 @@ window.onload = function () {
     } else {
       childElements[2].querySelector('input').removeAttribute('required')
     }
+  }
+
+  function validateDuration() {
+    const msg = 'Please enter a minimum duration of 15 minutes (even if you spent less time than this).'
+    const fifteen_minutes = 15
+    let total_minutes = durationMinutes.value + durationHours.value * 60
+
+    if (total_minutes < fifteen_minutes) {
+      durationMinutes.setCustomValidity(msg)
+    }
+    else {
+      durationMinutes.setCustomValidity("")
+    }
+  }
+
+  caseContactSubmit.onclick = function () {
+    validateContactType()
+    validateDuration()
   }
 };
