@@ -66,19 +66,19 @@ GEM
       activerecord (>= 3.2, < 7.0)
       rake (>= 10.4, < 14.0)
     ast (2.4.1)
-    autoprefixer-rails (9.7.6)
+    autoprefixer-rails (9.8.6.1)
       execjs
     awesome_print (1.8.0)
-    bcrypt (3.1.13)
+    bcrypt (3.1.15)
     bindex (0.8.1)
-    bootsnap (1.4.6)
+    bootsnap (1.4.8)
       msgpack (~> 1.0)
-    bootstrap (4.5.0)
+    bootstrap (4.5.2)
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
-    brakeman (4.8.2)
-    bugsnag (6.13.1)
+    brakeman (4.9.0)
+    bugsnag (6.16.0)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
     bullet (6.1.0)
@@ -95,18 +95,20 @@ GEM
       xpath (~> 3.2)
     childprocess (3.0.0)
     coderay (1.1.2)
-    concurrent-ruby (1.1.6)
+    concurrent-ruby (1.1.7)
     crass (1.0.6)
+    daemons (1.3.1)
     devise (4.7.2)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    devise_invitable (2.0.2)
+      actionmailer (>= 5.0)
+      devise (>= 4.6)
     diff-lcs (1.3)
     docile (1.3.2)
-    domain_name (0.5.20190701)
-      unf (>= 0.0.5, < 1.0.0)
     draper (4.0.1)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
@@ -114,6 +116,8 @@ GEM
       activesupport (>= 5.0)
       request_store (>= 1.0)
     erubi (1.9.0)
+    eventmachine (1.2.7)
+    eventmachine (1.2.7-x64-mingw32)
     execjs (2.7.0)
     factory_bot (6.1.0)
       activesupport (>= 5.0.0)
@@ -122,13 +126,16 @@ GEM
       railties (>= 5.0.0)
     faker (2.13.0)
       i18n (>= 1.6, < 2)
-    ffi (1.12.2)
-    ffi (1.12.2-x64-mingw32)
+    ffi (1.13.1)
+    ffi (1.13.1-x64-mingw32)
+    font-awesome-rails (4.7.0.5)
+      railties (>= 3.2, < 6.1)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    http-cookie (1.0.3)
-      domain_name (~> 0.5)
-    i18n (1.8.3)
+    haml (5.1.2)
+      temple (>= 0.8.0)
+      tilt
+    i18n (1.8.5)
       concurrent-ruby (~> 1.0)
     jbuilder (2.10.0)
       activesupport (>= 5.0.0)
@@ -141,6 +148,7 @@ GEM
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
+    json (2.3.1)
     launchy (2.5.0)
       addressable (~> 2.7)
     letter_opener (1.7.0)
@@ -153,21 +161,27 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
-    mailgun-ruby (1.2.0)
-      rest-client (~> 2.0.2)
+    mailcatcher (0.2.4)
+      eventmachine
+      haml
+      i18n
+      json
+      mail
+      sinatra
+      skinny (>= 0.1.2)
+      sqlite3-ruby
+      thin
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
     method_source (1.0.0)
-    mime-types (3.3.1)
-      mime-types-data (~> 3.2015)
-    mime-types-data (3.2020.0512)
     mimemagic (0.3.5)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.14.1)
     msgpack (1.3.3)
     msgpack (1.3.3-x64-mingw32)
-    netrc (0.11.0)
+    mustermann (1.1.1)
+      ruby2_keywords (~> 0.0.1)
     nio4r (2.5.2)
     nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
@@ -195,6 +209,8 @@ GEM
     pundit (2.1.0)
       activesupport (>= 3.0.0)
     rack (2.2.3)
+    rack-protection (2.0.8.1)
+      rack
     rack-proxy (0.6.5)
       rack
     rack-test (1.1.0)
@@ -236,15 +252,6 @@ GEM
     responders (3.0.1)
       actionpack (>= 5.0)
       railties (>= 5.0)
-    rest-client (2.0.2)
-      http-cookie (>= 1.0.2, < 2.0)
-      mime-types (>= 1.16, < 4.0)
-      netrc (~> 0.8)
-    rest-client (2.0.2-x64-mingw32)
-      ffi (~> 1.9)
-      http-cookie (>= 1.0.2, < 2.0)
-      mime-types (>= 1.16, < 4.0)
-      netrc (~> 0.8)
     rexml (3.2.4)
     rspec-core (3.9.2)
       rspec-support (~> 3.9.3)
@@ -263,26 +270,27 @@ GEM
       rspec-mocks (~> 3.9)
       rspec-support (~> 3.9)
     rspec-support (3.9.3)
-    rubocop (0.88.0)
+    rubocop (0.85.1)
       parallel (~> 1.10)
-      parser (>= 2.7.1.1)
+      parser (>= 2.7.0.1)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.7)
       rexml
-      rubocop-ast (>= 0.1.0, < 1.0)
+      rubocop-ast (>= 0.0.3)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
-    rubocop-ast (0.1.0)
+    rubocop-ast (0.2.0)
       parser (>= 2.7.0.1)
-    rubocop-rspec (1.42.0)
-      rubocop (>= 0.87.0)
+    rubocop-performance (1.6.1)
+      rubocop (>= 0.71.0)
     ruby-progressbar (1.10.1)
+    ruby2_keywords (0.0.2)
     rubyzip (2.3.0)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
-    sassc (2.3.0)
+    sassc (2.4.0)
       ffi (~> 1.9)
-    sassc (2.3.0-x64-mingw32)
+    sassc (2.4.0-x64-mingw32)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
       railties (>= 4.0.0)
@@ -300,6 +308,14 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
     simplecov-html (0.12.2)
+    sinatra (2.0.8.1)
+      mustermann (~> 1.0)
+      rack (~> 2.0)
+      rack-protection (= 2.0.8.1)
+      tilt (~> 2.0)
+    skinny (0.2.2)
+      eventmachine (~> 1.0)
+      thin
     skylight (4.3.1)
       skylight-core (= 4.3.1)
     skylight-core (4.3.1)
@@ -315,10 +331,17 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    standard (0.0.36)
-      rubocop (>= 0.63)
-    standardrb (1.0.0)
-      standard
+    sqlite3 (1.4.2)
+    sqlite3-ruby (1.3.3)
+      sqlite3 (>= 1.3.3)
+    standard (0.4.7)
+      rubocop (~> 0.85.0)
+      rubocop-performance (~> 1.6.0)
+    temple (0.8.2)
+    thin (1.7.2)
+      daemons (~> 1.0, >= 1.0.9)
+      eventmachine (~> 1.0, >= 1.0.4)
+      rack (>= 1, < 3)
     thor (1.0.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
@@ -329,10 +352,6 @@ GEM
       thread_safe (~> 0.1)
     tzinfo-data (1.2020.1)
       tzinfo (>= 1.0.0)
-    unf (0.1.4)
-      unf_ext
-    unf_ext (0.0.7.7)
-    unf_ext (0.0.7.7-x64-mingw32)
     unicode-display_width (1.7.0)
     uniform_notifier (1.13.0)
     warden (1.2.8)
@@ -356,7 +375,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.3.1)
+    zeitwerk (2.4.0)
 
 PLATFORMS
   ruby
@@ -366,22 +385,24 @@ DEPENDENCIES
   annotate
   awesome_print
   bootsnap (>= 1.4.2)
-  bootstrap (~> 4.5.0)
+  bootstrap (~> 4.5.2)
   brakeman
   bugsnag
   bullet
   byebug
   capybara (>= 2.15)
   devise
+  devise_invitable
   draper
   factory_bot_rails
   faker
+  font-awesome-rails
   jbuilder (~> 2.7)
   jquery-datatables-rails (~> 3.4.0)
   jquery-rails
   letter_opener
   listen (>= 3.0.5, < 3.3)
-  mailgun-ruby
+  mailcatcher
   paper_trail
   pg (>= 0.18, < 2.0)
   pry
@@ -391,17 +412,15 @@ DEPENDENCIES
   rails (~> 6.0.3)
   rake
   rspec-rails (~> 4.0.1)
-  rubocop (~> 0.88.0)
-  rubocop-rspec
   sass-rails (>= 6)
   selenium-webdriver
   shoulda-matchers
-  simplecov
+  simplecov (~> 0.18.5)
   skylight
   spring
   spring-watcher-listen (~> 2.0.0)
   sprockets-rails
-  standardrb
+  standard
   turbolinks (~> 5)
   tzinfo-data
   web-console (>= 3.3.0)
@@ -409,7 +428,7 @@ DEPENDENCIES
   webpacker (~> 5.1)
 
 RUBY VERSION
-   ruby 2.7.0
+   ruby 2.7.1p83
 
 BUNDLED WITH
    2.1.4

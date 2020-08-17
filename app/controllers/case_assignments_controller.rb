@@ -3,8 +3,25 @@ class CaseAssignmentsController < ApplicationController
   before_action :must_be_admin_or_supervisor # admins and supervisors can create/delete ALL case assignments
 
   def create
-    case_assignment = case_assignment_parent.case_assignments.new(case_assignment_params)
-    case_assignment.save
+    case_assignments = case_assignment_parent.case_assignments
+    existing_case_assignment = case_assignments.where(volunteer_id: case_assignment_params[:volunteer_id], is_active: false).first
+
+    if existing_case_assignment.present?
+      if existing_case_assignment.update(is_active: true)
+        flash.notice = "Volunteer reassigned to case"
+      else
+        errors = existing_case_assignment.errors.full_messages.join(". ")
+        flash.alert = "Unable to reassigned volunteer to case: #{errors}."
+      end
+    else
+      case_assignment = case_assignment_parent.case_assignments.new(case_assignment_params)
+      if case_assignment.save
+        flash.notice = "Volunteer assigned to case"
+      else
+        errors = case_assignment.errors.full_messages.join(". ")
+        flash.alert = "Unable to assign volunteer to case: #{errors}."
+      end
+    end
 
     redirect_to after_action_path(case_assignment_parent)
   end

@@ -25,8 +25,13 @@
                 <% end %>
               </td>
               <td>
-                <% if assignment.is_active? && current_user.role == "casa_admin" || assignment.volunteer.supervisor == current_user %>
+                <% if assignment.is_active? && (current_user.supervisor? || current_user.casa_admin?) %>
                   <%= button_to 'Unassign Volunteer', unassign_case_assignment_path(assignment), method: :patch, class: "btn btn-outline-danger" %>
+                <% elsif !assignment.volunteer.active_volunteer && policy(assignment.volunteer).activate? %>
+                  <%= link_to "Activate Volunteer",
+                        activate_volunteer_path(assignment.volunteer, redirect_to_path: 'casa_case', casa_case_id: @casa_case.id),
+                        method: :patch,
+                        class: "btn btn-outline-success" %>
                 <% else %>
                   None
                 <% end %>
@@ -50,7 +55,7 @@
       <div class='form-group'>
         <label for='case_assignment_casa_case_id'>Select a Volunteer</label>
         <select name='case_assignment[volunteer_id]' class='form-control'>
-          <% User.where(role: "volunteer").all.order(:display_name).each do |volunteer| %>
+          <% Volunteer.active.order(:display_name).each do |volunteer| %>
             <option value="<%= volunteer.id %>"><%= volunteer.decorate.name %></option>
           <% end %>
         </select>

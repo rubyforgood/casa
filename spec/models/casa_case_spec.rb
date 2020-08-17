@@ -4,6 +4,7 @@ RSpec.describe CasaCase do
   subject { build(:casa_case) }
 
   it { is_expected.to have_many(:case_assignments) }
+  it { is_expected.to belong_to(:casa_org) }
   it { is_expected.to validate_presence_of(:case_number) }
   it { is_expected.to validate_uniqueness_of(:case_number).case_insensitive }
   it { is_expected.to have_many(:volunteers).through(:case_assignments) }
@@ -22,7 +23,7 @@ RSpec.describe CasaCase do
 
   describe "actively_assigned_to" do
     it "only returns cases actively assigned to a volunteer" do
-      current_user = create(:user)
+      current_user = create(:volunteer)
       inactive_case = create(:casa_case)
       create(:case_assignment, casa_case: inactive_case, volunteer: current_user, is_active: false)
       active_cases = create_list(:casa_case, 2)
@@ -30,7 +31,7 @@ RSpec.describe CasaCase do
         create(:case_assignment, casa_case: casa_case, volunteer: current_user, is_active: true)
       end
 
-      other_user = create(:user)
+      other_user = create(:volunteer)
       other_active_case = create(:casa_case)
       other_inactive_case = create(:casa_case)
       create(:case_assignment, casa_case: other_active_case, volunteer: other_user, is_active: true)

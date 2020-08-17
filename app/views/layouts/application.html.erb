@@ -15,10 +15,11 @@
     <main>
       <div class="container">
         <div class="header-flash">
-          <% if notice %>
-            <p class="notice alert alert-success"><%= notice %></p>
-          <% elsif alert %>
-            <p class="notice alert alert-danger"><%= alert %></p>
+          <% flash.each do |key, value| %>
+            <div class="<%= flash_class(key) %> alert-dismissible fade show" role="alert">
+              <a href="#" class="close" data-dismiss="alert" aria-label="Close" style="text-decoration: none;"><%= fa_icon('times') %></a>
+              <%= sanitize(value, tags: %w(ul li)) %>
+            </div>
           <% end %>
         </div>
 

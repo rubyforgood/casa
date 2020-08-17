@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 # model for all user roles: volunteer supervisor casa_admin inactive
 class User < ApplicationRecord
   has_paper_trail
-  devise :database_authenticatable, :recoverable, :rememberable, :validatable
+  devise :database_authenticatable, :invitable, :recoverable, :rememberable, :validatable
 
   belongs_to :casa_org
 
@@ -10,16 +12,38 @@ class User < ApplicationRecord
   has_many :case_contacts, foreign_key: "creator_id"
 
   has_many :supervisor_volunteers, foreign_key: "supervisor_id"
-  has_many :volunteers, through: :supervisor_volunteers
+  has_many :volunteers, -> { order(:display_name) }, through: :supervisor_volunteers
 
   has_one :supervisor_volunteer, foreign_key: "volunteer_id"
   has_one :supervisor, through: :supervisor_volunteer
 
-  ALL_ROLES = %w[volunteer supervisor casa_admin inactive].freeze
-  enum role: ALL_ROLES.zip(ALL_ROLES).to_h
+  def self.volunteers_with_no_supervisor(org)
+    # TODO make this a scope
+    Volunteer.active.includes(:supervisor_volunteer).where(casa_org_id: org.id).where(supervisor_volunteers: {id: nil})
+  end
+  def casa_admin?
+    is_a?(CasaAdmin)
+  end
+
+  def supervisor?
+    is_a?(Supervisor)
+  end
+
+  def volunteer?
+    is_a?(Volunteer)
+  end
+
+  def policy_class
+    case type
+    when Volunteer
+      VolunteerPolicy
+    else
+      UserPolicy
+    end
+  end
 
   def active_volunteer
-    role == "volunteer" # !inactive
+    active && type == "Volunteer"
   end
 
   # all contacts this user has with this casa case
@@ -55,14 +79,14 @@ class User < ApplicationRecord
 
   # Called by Devise during initial authentication and on each request to
   # validate the user is active. For our purposes, the user is active if they
-  # do not have the inactive role.
+  # are not inactive
   def active_for_authentication?
-    super && !inactive?
+    super && active
   end
 
   # Called by Devise to generate an error message when a user is not active.
   def inactive_message
-    inactive? ? :inactive : super
+    !active ? :inactive : super
   end
 
   def serving_transition_aged_youth?
@@ -75,22 +99,35 @@ end
 # Table name: users
 #
 #  id                     :bigint           not null, primary key
+#  active                 :boolean          default(TRUE)
 #  display_name           :string           default("")
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
+#  invitation_accepted_at :datetime
+#  invitation_created_at  :datetime
+#  invitation_limit       :integer
+#  invitation_sent_at     :datetime
+#  invitation_token       :string
+#  invitations_count      :integer          default(0)
+#  invited_by_type        :string
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
-#  role                   :string           default("volunteer"), not null
+#  type                   :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  casa_org_id            :bigint           not null
+#  invited_by_id          :bigint
 #
 # Indexes
 #
-#  index_users_on_casa_org_id           (casa_org_id)
-#  index_users_on_email                 (email) UNIQUE
-#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#  index_users_on_casa_org_id                        (casa_org_id)
+#  index_users_on_email                              (email) UNIQUE
+#  index_users_on_invitation_token                   (invitation_token) UNIQUE
+#  index_users_on_invitations_count                  (invitations_count)
+#  index_users_on_invited_by_id                      (invited_by_id)
+#  index_users_on_invited_by_type_and_invited_by_id  (invited_by_type,invited_by_id)
+#  index_users_on_reset_password_token               (reset_password_token) UNIQUE
 #
 # Foreign Keys
 #

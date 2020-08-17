@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "/case_contact_reports", type: :request do
   describe "GET /case_contact_reports with start_date and end_date" do
     it "renders a csv file to download" do
-      sign_in create(:user, :volunteer)
+      sign_in create(:volunteer)
       create(:case_contact)
 
       get case_contact_reports_url(format: :csv), params: case_contact_report_params
@@ -17,7 +17,7 @@ RSpec.describe "/case_contact_reports", type: :request do
 
   describe "GET /case_contact_reports without start_date and end_date" do
     it "renders a csv file to download" do
-      sign_in create(:user, :volunteer)
+      sign_in create(:volunteer)
       create(:case_contact)
 
       get case_contact_reports_url(format: :csv)

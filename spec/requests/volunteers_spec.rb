@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "/volunteers", type: :request do
-  let(:admin) { create(:user, :casa_admin) }
-  let(:volunteer) { create(:user, :volunteer) }
+  let(:admin) { create(:casa_admin) }
+  let(:volunteer) { create(:volunteer) }
 
   describe "GET /index" do
     it "renders a successful response" do
@@ -30,7 +30,7 @@ RSpec.describe "/volunteers", type: :request do
       sign_in admin
 
       post volunteers_url, params: {
-        user: { email: expected_email, casa_org_id: admin.casa_org_id }
+        volunteer: {email: expected_email, casa_org_id: admin.casa_org_id}
       }
 
       expect(User.last.email).to eq(expected_email)
@@ -42,11 +42,11 @@ RSpec.describe "/volunteers", type: :request do
       expected_email = "volunteer1@example.com"
       sign_in admin
 
-      expect do
+      expect {
         post volunteers_url, params: {
-          user: { email: expected_email, casa_org_id: admin.casa_org_id }
+          volunteer: {email: expected_email, casa_org_id: admin.casa_org_id}
         }
-      end.to change { ActionMailer::Base.deliveries.count }.by(1)
+      }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
   end
 
@@ -59,11 +59,11 @@ RSpec.describe "/volunteers", type: :request do
 
       expect(volunteer.display_name).to eq "New Name"
       expect(volunteer.email).to eq "newemail@gmail.com"
-      expect(volunteer.role).to eq "inactive"
+      expect(volunteer).not_to be_active
     end
   end
 
   def update_volunteer_params
-    {user: {email: "newemail@gmail.com", display_name: "New Name", role: "inactive"}}
+    {volunteer: {email: "newemail@gmail.com", display_name: "New Name", active: "false"}}
   end
 end

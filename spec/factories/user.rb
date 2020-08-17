@@ -6,19 +6,9 @@ FactoryBot.define do
     password_confirmation { "123456" }
     case_assignments { [] }
 
-    trait :volunteer do
-      role { :volunteer }
-    end
-
-    trait :supervisor do
-      role { :supervisor }
-    end
-
-    trait :casa_admin do
-      role { :casa_admin }
-    end
-
     trait :inactive do
+      volunteer
+      active { false }
       role { :inactive }
     end
 

@@ -5,7 +5,7 @@ class CaseContact < ApplicationRecord
   validate :contact_made_chosen
   validates :contact_types, presence: true
   validate :contact_types_included
-  validates :duration_minutes, presence: true
+  validates :duration_minutes, numericality: { greater_than_or_equal_to: 15, message: "Minimum case contact duration should be 15 minutes." }
   validates :medium_type, presence: true
   validates :occurred_at, presence: true
   validate :occurred_at_not_in_future
@@ -27,11 +27,11 @@ class CaseContact < ApplicationRecord
     youth
   ].freeze
 
-  IN_PERSON = 'in-person'
-  TEXT_EMAIL='text/email'
-  VIDEO='video'
-  VOICE_ONLY='voice-only'
-  LETTER='letter'
+  IN_PERSON = "in-person"
+  TEXT_EMAIL = "text/email"
+  VIDEO = "video"
+  VOICE_ONLY = "voice-only"
+  LETTER = "letter"
   CONTACT_MEDIUMS = [IN_PERSON, TEXT_EMAIL, VIDEO, VOICE_ONLY, LETTER].freeze
 
   def contact_types_included

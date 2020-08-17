@@ -3,11 +3,14 @@ require "rails_helper"
 RSpec.describe "/casa_cases", type: :request do
   # CasaCase. As you add validations to CasaCase, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { {case_number: "1234", transition_aged_youth: true} }
+
+  let(:casa_org) { create(:casa_org) }
+
+  let(:valid_attributes) { {case_number: "1234", transition_aged_youth: true, casa_org_id: casa_org.id} }
 
   let(:invalid_attributes) { {case_number: nil} }
 
-  before { sign_in create(:user, :casa_admin) }
+  before { sign_in create(:casa_admin) }
 
   describe "GET /index" do
     it "renders a successful response" do
@@ -27,9 +30,19 @@ RSpec.describe "/casa_cases", type: :request do
 
   describe "GET /new" do
     it "renders a successful response" do
-      sign_in create(:user, :casa_admin)
       get new_casa_case_url
       expect(response).to be_successful
+    end
+
+    context "as a volunteer" do
+      before { sign_in create(:volunteer) }
+
+      it "denies access and redirects elsewhere" do
+        get new_casa_case_url
+
+        expect(response).not_to be_successful
+        expect(flash[:error]).to match(/you are not authorized/)
+      end
     end
   end
 
@@ -76,7 +89,7 @@ RSpec.describe "/casa_cases", type: :request do
       let(:new_attributes) { {case_number: "12345", transition_aged_youth: false} }
 
       it "does not update case_number for volunteers" do
-        sign_in create(:user, :volunteer)
+        sign_in create(:volunteer)
 
         casa_case = CasaCase.create! valid_attributes
         patch casa_case_url(casa_case), params: {casa_case: new_attributes}

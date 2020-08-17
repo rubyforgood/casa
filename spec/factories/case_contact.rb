@@ -9,6 +9,7 @@ FactoryBot.define do
     contact_made { false }
     contact_medium { "text/email"}
     miles_driven { nil }
+    medium_type { CaseContact::CONTACT_MEDIUMS.first }
     want_driving_reimbursement { false }
 
     trait :miles_driven_no_reimbursement do

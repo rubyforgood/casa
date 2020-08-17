@@ -1,8 +1,8 @@
 # CASA Project & Organization Overview
+[![Build Status](https://travis-ci.com/rubyforgood/casa.svg?branch=master)](https://travis-ci.com/rubyforgood/casa)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=rubyforgood/casa)](https://dependabot.com)
 [![Maintainability](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/maintainability)](https://codeclimate.com/github/rubyforgood/casa/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/test_coverage)](https://codeclimate.com/github/rubyforgood/casa/test_coverage)
-[![Build Status](https://travis-ci.org/rubyforgood/casa.svg?branch=master)](https://travis-ci.org/rubyforgood/casa) 
 [![View performance data on Skylight](https://badges.skylight.io/status/tFh7xrs3Qnaf.svg?token=1C-Q7p8jEFlG7t69Yl5DaJwa-ipWI8gLw9wLJf53xmQ)](https://www.skylight.io/app/applications/tFh7xrs3Qnaf)
 [![Known Vulnerabilities](https://snyk.io/test/github/rubyforgood/casa/badge.svg)](https://snyk.io/test/github/rubyforgood/casa)
 
@@ -52,25 +52,34 @@ https://casa-r4g-staging.herokuapp.com/
 
 We are currently using https://app.bugsnag.com/ to track errors in staging. Errors post to slack at #casa-bots 
 
+### Email
+
+This app sends email for user signup and deactivation. We use https://www.sendinblue.com/ because we get 300 free emails a day, which is more than we expect to need. 
+Sendinblue has historically sometimes been very slow (6 hours) in delivering email, but sometimes it delivers within a minute or two. Be wary.
+You log into sendinblue via the "log in with google" option. Sean has the credentials for this and hopefully we never need to change them.
+We are not using Mailgun because they limited us to only 5 recipients without a paid plan. We looked at using Sendgrid but our account is currently locked for unknown reasons.
+
+### Hosting
+
+Namecheap, heroku
+
 ### Setup to develop:
 
 If you have any troubles, also look at `.travis.yml` which is what makes the CI build run
 
-1. git clone the repo (fork it if you are not a maintainer)
+1. git clone the repo (fork it if you don't have repo permissions yet)
 1. `cd casa/`
 1. install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
 1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`
-1. If you are on windows and see the error "Requirements support for mingw is not implemented yet" then use https://rubyinstaller.org/ instead
-1. If you are using Windows Subsystem for Linux or Ubuntu, see "Ubuntu and WSL" under "Common Issues".
 1. `gem install bundler`
+1. `bundle install`
 1. Make sure that postgres is installed [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database (if you have an older version of postgres). If you're on Ubuntu/WSL, use `sudo apt-get install libpq-dev` so the gem can install. [Use the Postgres repo for Ubuntu or WSL to get the server and client tools](https://www.postgresql.org/download/linux/ubuntu/).
+1. `bundle exec rails db:setup # requires running local postgres, with a role created for whatever user you're running rails as`
 1. Make sure [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) is installed
 1. Make sure you have [google chrome](https://chromedriver.chromium.org/) installed so the selenium tests can run. Installing `chromium-browser` is enough, even in WSL.
-1. `bundle install`
 1. Make sure [yarn](https://classic.yarnpkg.com/en/docs/instal) is installed. On Ubuntu, [make sure you install it from the official Yarn repo instead of cmdtest](https://classic.yarnpkg.com/en/docs/install/#debian-stable).
 1. `yarn`
 1. `bundle exec rails webpacker:compile`
-1. `bundle exec rails db:setup # requires running local postgres, with a role created for whatever user you're running rails as`
 1. `bundle exec rails spec`
 1. `bundle exec rails server` # run server
 1. `bundle exec standardrb --fix # auto-fix linting issues (optional)` [more linter info](https://github.com/testdouble/standard)
@@ -83,6 +92,7 @@ There is a `doc` directory at the top level that includes [Architectural Decisio
 
 1. If your rake/rake commands hang forever instead of running, try: `rails app:update:bin`
 1. There is currently no option for a user to sign up and create an account through the UI. This is intentional. If you want to log in, use a pre-seeded user account and its credentials.
+1. If you are on windows and see the error "Requirements support for mingw is not implemented yet" then use https://rubyinstaller.org/ instead
 
 ### Ubuntu and WSL
 1. If you are on Ubuntu in Windows Subsystem for Linux (WSL) and `rbenv install` indicates that the Ruby version is unavailable, you might be using Ubuntu's default install of `ruby-build`, which only comes with old installs of Ruby (ending before 2.6.) You should uninstall rvm and ruby-build's apt packages (`apt remove rvm ruby-build`) and install them with Git like this:
@@ -92,7 +102,7 @@ There is a `doc` directory at the top level that includes [Architectural Decisio
 `exec $SHELL`
 `git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build`
 
-You'll probably hit a problem where ruby-version reads `ruby-2.7.0` but the install available to you is called `2.7.0`. If you do, install [rbenv-alias](https://github.com/tpope/rbenv-aliases) and create an alias between the two.
+You'll probably hit a problem where ruby-version reads `ruby-2.7.1` but the install available to you is called `2.7.1`. If you do, install [rbenv-alias](https://github.com/tpope/rbenv-aliases) and create an alias between the two.
 
 ### Testing
 
@@ -102,14 +112,20 @@ Test credentials for https://casa-r4g-staging.herokuapp.com/
 1. volunteer1@example.com / 123456
 1. casa_admin1@example.com / 123456
 
+#### Test coverage
+Test coverage is run by simplecov on all builds and aggregated by CodeClimate
+
 ### Communication and Collaboration
 
 Most conversation happens in the #casa channel of the Ruby For Good slack. You can get access here: https://rubyforgood.herokuapp.com/
 
 You can also open an issue or comment on an issue on github and a maintainer will reply to you. 
 
-We have a weekly team call on Sunday at 10am-11:30 Pacific where we do pair/mob programming and talk about issues- feel free to join! Join info in slack or open a github issue to request join info
+We have a weekly team call on Sunday at (new time TBD - check slack) where we do pair/mob programming and talk about issues- feel free to join! Join info in slack or open a github issue to request join info
 
-We have a weekly stakeholder call with PG CASA staff on Wednesday at 8:30am Pacific where we show off progress and discuss launch plans. Feel free to join! Join info in slack or open a github issue to request join info
+We have a weekly stakeholder call with PG CASA staff on Wednesday at 8:30am Pacific time where we show off progress and discuss launch plans. Feel free to join! Join info in slack or open a github issue to request join info
 
-Planned launch (CASA volunteer training) 3 August 2020
+### History 
+
+First CASA supervisor training: 12 August 2020 🎉
+

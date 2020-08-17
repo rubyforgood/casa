@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_25_220759) do
+ActiveRecord::Schema.define(version: 2020_08_01_192923) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,8 @@ ActiveRecord::Schema.define(version: 2020_05_25_220759) do
     t.boolean "transition_aged_youth", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "casa_org_id", null: false
+    t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
     t.index ["case_number"], name: "index_casa_cases_on_case_number", unique: true
   end
 
@@ -86,11 +88,24 @@ ActiveRecord::Schema.define(version: 2020_05_25_220759) do
     t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "role", default: "volunteer", null: false
     t.bigint "casa_org_id", null: false
     t.string "display_name", default: ""
+    t.string "invitation_token"
+    t.datetime "invitation_created_at"
+    t.datetime "invitation_sent_at"
+    t.datetime "invitation_accepted_at"
+    t.integer "invitation_limit"
+    t.string "invited_by_type"
+    t.bigint "invited_by_id"
+    t.integer "invitations_count", default: 0
+    t.string "type"
+    t.boolean "active", default: true
     t.index ["casa_org_id"], name: "index_users_on_casa_org_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
+    t.index ["invitations_count"], name: "index_users_on_invitations_count"
+    t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
+    t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by_type_and_invited_by_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
@@ -104,6 +119,7 @@ ActiveRecord::Schema.define(version: 2020_05_25_220759) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "casa_cases", "casa_orgs"
   add_foreign_key "case_assignments", "casa_cases"
   add_foreign_key "case_assignments", "users", column: "volunteer_id"
   add_foreign_key "case_contacts", "casa_cases"

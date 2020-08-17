@@ -10,7 +10,8 @@ class SupervisorVolunteersController < ApplicationController
   end
 
   def destroy
-    supervisor_volunteer = SupervisorVolunteer.find(params[:id])
+    volunteer = Volunteer.find(params[:id])
+    supervisor_volunteer = volunteer.supervisor_volunteer
     supervisor = supervisor_volunteer.supervisor
     supervisor_volunteer.delete
 
@@ -24,7 +25,7 @@ class SupervisorVolunteersController < ApplicationController
   end
 
   def after_action_path(resource)
-    if resource.role == "supervisor"
+    if resource.supervisor?
       edit_supervisor_path(resource)
     else
       edit_volunteer_path(resource)
@@ -33,9 +34,9 @@ class SupervisorVolunteersController < ApplicationController
 
   def supervisor_volunteer_parent
     if params[:supervisor_id]
-      User.find(params[:supervisor_id])
+      Supervisor.find(params[:supervisor_id])
     else
-      User.find(params[:volunteer_id])
+      Volunteer.find(params[:volunteer_id])
     end
   end
 end

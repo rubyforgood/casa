@@ -31,3 +31,10 @@
 
 en:
   hello: "Hello world"
+  pundit:
+    default: "Sorry, you are not authorized to perform this action."
+    casa_case_policy:
+      new?: "Sorry, you are not authorized to create CASA cases."
+    case_contact_policy:
+      edit?: "Sorry, you can only edit case contacts that you have logged."
+      update?: "Sorry, you can only edit case contacts that you have logged."

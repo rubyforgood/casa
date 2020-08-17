@@ -4,6 +4,7 @@ about: 🔨What needs building? ✨
 title: ''
 labels: ''
 assignees: ''
+projects: https://github.com/rubyforgood/casa/projects/1
 
 ---
 

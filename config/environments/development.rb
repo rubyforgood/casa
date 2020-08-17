@@ -1,7 +1,11 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  config.action_mailer.default_url_options = { host: "localhost", port: 3000 } # for devise authentication
+  config.action_mailer.default_url_options = {host: "localhost", port: 3000} # for devise authentication
+
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {address: "127.0.0.1", port: 1025, domain: "127.0.0.1"}
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
@@ -67,5 +71,6 @@ Rails.application.configure do
     Bullet.enable = true
     Bullet.console = true
     Bullet.rails_logger = true
+    Bullet.bullet_logger = true
   end
 end
