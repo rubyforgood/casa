@@ -29,8 +29,8 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
 
     it "shows an assignment start date and no assignment end date" do
       expected_start_date = Date.today.strftime("%B %e, %Y")
-      assignment_start = page.find("#assignment-start").text
-      assignment_end = page.find("#assignment-end").text
+      assignment_start = page.find("td[data-test=assignment-start]").text
+      assignment_end = page.find("td[data-test=assignment-end]").text
 
       expect(assignment_start).to eq(expected_start_date)
       expect(assignment_end).to be_empty
@@ -53,8 +53,8 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
 
       click_on "Unassign Volunteer"
 
-      assignment_start = page.find("#assignment-start").text
-      assignment_end = page.find("#assignment-end").text
+      assignment_start = page.find("td[data-test=assignment-start]").text
+      assignment_end = page.find("td[data-test=assignment-end]").text
 
       expect(assignment_start).to eq(expected_start_and_end_date)
       expect(assignment_end).to eq(expected_start_and_end_date)
