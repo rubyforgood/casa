@@ -9,22 +9,30 @@
             <th>Volunteer Name</th>
             <th>Volunteer Email</th>
             <th>Status</th>
+            <th>Start Date</th>
+            <th>End Date</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <% @casa_case.case_assignments.each do |assignment| %>
             <tr>
-              <td><%= link_to assignment&.volunteer&.display_name, edit_volunteer_path(assignment.volunteer) %></td>
-              <td><%= assignment&.volunteer&.email %></td>
-              <td>
+              <td id="volunteer-name"><%= link_to assignment&.volunteer&.display_name, edit_volunteer_path(assignment.volunteer) %></td>
+              <td id="volunteer-email"><%= assignment&.volunteer&.email %></td>
+              <td id="assigned">
                 <% if assignment.is_active? %>
                   <span class='badge badge-success text-uppercase'>Assigned</span>
                 <% else %>
                   <span class="badge badge-danger text-uppercase"><%= assignment.volunteer.active_volunteer ? "Unassigned" : "Deactivated volunteer" %></span>
                 <% end %>
               </td>
-              <td>
+              <td id="assignment-start"><%= assignment.created_at.strftime("%B %e, %Y") %></td>
+              <td id="assignment-end">
+                <% unless assignment.is_active? %>
+                  <%= assignment.updated_at.strftime("%B %e, %Y") %>
+                <% end %>
+              </td>
+              <td id="action">
                 <% if assignment.is_active? && (current_user.supervisor? || current_user.casa_admin?) %>
                   <%= button_to 'Unassign Volunteer', unassign_case_assignment_path(assignment), method: :patch, class: "btn btn-outline-danger" %>
                 <% elsif !assignment.volunteer.active_volunteer && policy(assignment.volunteer).activate? %>
