@@ -9,6 +9,8 @@
             <th>Volunteer Name</th>
             <th>Volunteer Email</th>
             <th>Status</th>
+            <th>Start Date</th>
+            <th>End Date</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -22,6 +24,12 @@
                   <span class='badge badge-success text-uppercase'>Assigned</span>
                 <% else %>
                   <span class="badge badge-danger text-uppercase"><%= assignment.volunteer.active_volunteer ? "Unassigned" : "Deactivated volunteer" %></span>
+                <% end %>
+              </td>
+              <td><%= assignment.created_at.strftime('%B %e, %Y') %></td>
+              <td>
+                <% unless assignment.is_active? %>
+                  <%= assignment.updated_at.strftime('%B %e, %Y') %>
                 <% end %>
               </td>
               <td>
