@@ -26,10 +26,10 @@
                   <span class="badge badge-danger text-uppercase"><%= assignment.volunteer.active_volunteer ? "Unassigned" : "Deactivated volunteer" %></span>
                 <% end %>
               </td>
-              <td id="assignment-start"><%= assignment.created_at.strftime('%B %e, %Y') %></td>
+              <td id="assignment-start"><%= assignment.created_at.strftime("%B %e, %Y") %></td>
               <td id="assignment-end">
                 <% unless assignment.is_active? %>
-                  <%= assignment.updated_at.strftime('%B %e, %Y') %>
+                  <%= assignment.updated_at.strftime("%B %e, %Y") %>
                 <% end %>
               </td>
               <td id="action">
