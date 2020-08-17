@@ -15,24 +15,50 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
     click_on "Assign Volunteer"
   end
 
-  it "when a volunteer assign to a case" do
-    expect(casa_case.case_assignments.count).to eq 1
+  context "when a volunteer is assigned to a case" do
+    it 'marks the volunteer as assigned and shows the start date of the assignment' do
+      expect(casa_case.case_assignments.count).to eq 1
 
-    unassign_button = page.find("input.btn-outline-danger")
-    expect(unassign_button.value).to eq "Unassign Volunteer"
+      unassign_button = page.find("input.btn-outline-danger")
+      expect(unassign_button.value).to eq "Unassign Volunteer"
 
-    assign_badge = page.find("span.badge-success")
-    expect(assign_badge.text).to eq "Assigned"
+      assign_badge = page.find("span.badge-success")
+      expect(assign_badge.text).to eq "Assigned"
+
+      end
+
+    it "shows an assignment start date and no assignment end date" do
+      expected_start_date = Date.today.strftime("%B %e, %Y")
+      assignment_start = page.find("#assignment-start").text
+      assignment_end = page.find("#assignment-end").text
+
+      expect(assignment_start).to eq(expected_start_date)
+      expect(assignment_end).to be_empty
+    end
   end
 
-  it "when a volunteer unassign from a case" do
-    unassign_button = page.find("input.btn-outline-danger")
-    expect(unassign_button.value).to eq "Unassign Volunteer"
+  context "when a volunteer is unassigned from a case" do
+    it "marks the volunteer as unassigned" do
+      unassign_button = page.find("input.btn-outline-danger")
+      expect(unassign_button.value).to eq "Unassign Volunteer"
 
-    click_on "Unassign Volunteer"
+      click_on "Unassign Volunteer"
 
-    assign_badge = page.find("span.badge-danger")
-    expect(assign_badge.text).to eq "Unassigned"
+      assign_badge = page.find("span.badge-danger")
+      expect(assign_badge.text).to eq "Unassigned"
+    end
+
+    it "shows an assignment start date and an assignment end date" do
+      expected_start_and_end_date = Date.today.strftime("%B %e, %Y")
+
+      click_on "Unassign Volunteer"
+
+      assignment_start = page.find("#assignment-start").text
+      assignment_end = page.find("#assignment-end").text
+
+      expect(assignment_start).to eq(expected_start_and_end_date)
+      expect(assignment_end).to eq(expected_start_and_end_date)
+    end
   end
 
   it "when a volunteer unassign from a case by other a supervisor" do
