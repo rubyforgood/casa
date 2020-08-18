@@ -6,7 +6,7 @@ RSpec.describe "case assigned to multiple volunteers", type: :feature do
   let!(:volunteer_2) { create(:volunteer, display_name: 'BBB') }
   let!(:casa_case) { create(:casa_case) }
 
-  it "admin assigns multiple volunteers to the same case" do
+  it "supervisor assigns multiple volunteers to the same case" do
     sign_in supervisor
     visit edit_casa_case_path(casa_case.id)
 
