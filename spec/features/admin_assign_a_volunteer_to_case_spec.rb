@@ -32,7 +32,7 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
       assignment_start = page.find("td[data-test=assignment-start]").text
       assignment_end = page.find("td[data-test=assignment-end]").text
 
-      expect(assignment_start).to eq(expected_start_date)
+      expect(assignment_start).to eq(expected_start_date) # TODO this fails locally, UTC issue?
       expect(assignment_end).to be_empty
     end
   end
