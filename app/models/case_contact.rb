@@ -25,6 +25,9 @@ class CaseContact < ApplicationRecord
     supervisor
     therapist
     youth
+    medical_professional
+    dss_worker
+    other_support_worker
   ].freeze
 
   IN_PERSON = "in-person"
