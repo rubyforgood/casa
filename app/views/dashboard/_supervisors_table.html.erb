@@ -23,15 +23,12 @@
         <td id="name">
           <%= link_to(supervisor.display_name, edit_supervisor_path(supervisor)) %>
         </td>
-        <td id="volunteer-assignments"> <%= supervisor.volunteers.count %></td>
+        <td id="volunteer-assignments"> <%= supervisor.volunteers.size %></td>
         <td id="serving-transition-aged-youth">
-          <%= supervisor.volunteers.select { |v| v.serving_transition_aged_youth? }.count %>
+          <%= supervisor.volunteers_serving_transistion_aged_youth %>
         </td>
         <td id="no-contact">
-          <%=
-            days_since_contact = 14
-            supervisor.volunteers.select { |v| v.recent_contacts_made(days_since_contact) < 1 }.count
-          %>
+          <%= supervisor.no_contact_for_two_weeks %>
         </td>
         <td><%= link_to 'Edit', edit_supervisor_path(supervisor) %></td>
       </tr>
