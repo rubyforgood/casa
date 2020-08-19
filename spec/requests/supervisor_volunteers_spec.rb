@@ -41,9 +41,35 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         expect {
           post supervisor_volunteers_url, params: valid_parameters
         }.not_to change(SupervisorVolunteer, :count)
-        
+
         association.reload 
         expect(association.is_active?).to be(true)
+      end
+    end
+
+    context "when an inactive association between the volunteer and a different supervisor exists" do
+      let!(:other_supervisor) { create(:supervisor) }
+      let!(:previous_association) do
+        create(
+            :supervisor_volunteer,
+            supervisor: other_supervisor,
+            volunteer: volunteer,
+            is_active: false
+        )
+      end
+      it "replaces that association" do
+        valid_parameters = {
+            supervisor_volunteer: { volunteer_id: volunteer.id },
+            supervisor_id: supervisor.id
+        }
+        sign_in(admin)
+
+        expect do
+          post supervisor_volunteers_url, params: valid_parameters
+        end.not_to change(SupervisorVolunteer, :count)
+
+        expect(SupervisorVolunteer.exists?(previous_association.id)).to be(false)
+        expect(SupervisorVolunteer.where(supervisor: supervisor, volunteer: volunteer).exists?).to be(true)
       end
     end
   end
