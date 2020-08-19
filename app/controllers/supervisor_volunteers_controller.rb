@@ -1,6 +1,6 @@
 class SupervisorVolunteersController < ApplicationController
   before_action :authenticate_user!
-  before_action :must_be_admin_or_supervisor, only: :destroy
+  before_action :must_be_admin_or_supervisor, only: %i[destroy unassign]
 
   def create
     supervisor_volunteer = supervisor_volunteer_parent.supervisor_volunteers.new(supervisor_volunteer_params)
@@ -16,6 +16,17 @@ class SupervisorVolunteersController < ApplicationController
     supervisor_volunteer.delete
 
     redirect_to after_action_path(supervisor)
+  end
+
+  def unassign
+    volunteer = Volunteer.find(params[:id])
+    supervisor_volunteer = volunteer.supervisor_volunteer
+    supervisor_volunteer.is_active = false
+    supervisor_volunteer.save
+    supervisor = volunteer.supervisor
+    flash_message = "#{volunteer.decorate.name} was unassigned from #{supervisor.decorate.name}."
+
+    redirect_to after_action_path(supervisor), notice: flash_message
   end
 
   private
