@@ -18,7 +18,9 @@ class User < ApplicationRecord
   has_one :supervisor, through: :supervisor_volunteer
 
   scope :volunteers_with_no_supervisor, lambda { |org|
-    joins('left join supervisor_volunteers on supervisor_volunteers.volunteer_id = users.id')
+    joins("left join supervisor_volunteers "\
+          "on supervisor_volunteers.volunteer_id = users.id "\
+          "and supervisor_volunteers.is_active")
       .where(active: true)
       .where(casa_org_id: org.id)
       .where(supervisor_volunteers: { id: nil })
