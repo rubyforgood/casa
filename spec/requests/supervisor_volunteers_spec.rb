@@ -14,11 +14,9 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         }
         sign_in(admin)
 
-        expect { post supervisor_volunteers_url, params: valid_parameters }
-            .to change(
-                    SupervisorVolunteer,
-                    :count
-                ).by(1)
+        expect do
+          post supervisor_volunteers_url, params: valid_parameters
+        end.to change(SupervisorVolunteer, :count).by(1)
       end
     end
 
@@ -55,8 +53,9 @@ RSpec.describe "/supervisor_volunteers", type: :request do
             supervisor: other_supervisor,
             volunteer: volunteer,
             is_active: false
-        )
+          )
       end
+
       it "replaces that association" do
         valid_parameters = {
             supervisor_volunteer: { volunteer_id: volunteer.id },
@@ -83,9 +82,9 @@ RSpec.describe "/supervisor_volunteers", type: :request do
       it "sets the is_active flag for assignment of a volunteer to a supervisor to false" do
         sign_in admin
 
-        expect {
+        expect do
           patch unassign_supervisor_volunteer_path(volunteer)
-        }.not_to change(supervisor.volunteers, :count)
+        end.not_to change(supervisor.volunteers, :count)
 
         association.reload
 
@@ -98,9 +97,9 @@ RSpec.describe "/supervisor_volunteers", type: :request do
       it "sets the is_active flag for assignment of a volunteer to a supervisor to false" do
         sign_in supervisor
 
-        expect {
+        expect do
           patch unassign_supervisor_volunteer_path(volunteer)
-        }.not_to change(supervisor.volunteers, :count)
+        end.not_to change(supervisor.volunteers, :count)
 
         association.reload
 
@@ -116,9 +115,9 @@ RSpec.describe "/supervisor_volunteers", type: :request do
       it "does not set the is_active flag on the association to false" do
         sign_in volunteer
 
-        expect {
+        expect do
           patch unassign_supervisor_volunteer_path(volunteer)
-        }.not_to change(supervisor.volunteers, :count)
+        end.not_to change(supervisor.volunteers, :count)
 
         association.reload
 
