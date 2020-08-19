@@ -1,21 +1,12 @@
 class SupervisorVolunteersController < ApplicationController
   before_action :authenticate_user!
-  before_action :must_be_admin_or_supervisor, only: %i[destroy unassign]
+  before_action :must_be_admin_or_supervisor, only: :unassign
 
   def create
     supervisor_volunteer = supervisor_volunteer_parent.supervisor_volunteers.new(supervisor_volunteer_params)
     supervisor_volunteer.save
 
     redirect_to after_action_path(supervisor_volunteer_parent)
-  end
-
-  def destroy
-    volunteer = Volunteer.find(params[:id])
-    supervisor_volunteer = volunteer.supervisor_volunteer
-    supervisor = supervisor_volunteer.supervisor
-    supervisor_volunteer.delete
-
-    redirect_to after_action_path(supervisor)
   end
 
   def unassign

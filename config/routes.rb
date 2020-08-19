@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   resources :case_contact_reports, only: %i[index]
 
   resources :supervisors, only: %i[edit update new create]
-  resources :supervisor_volunteers, only: %i[create destroy] do
+  resources :supervisor_volunteers, only: %i[create] do
     member do
       patch :unassign
     end
