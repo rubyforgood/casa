@@ -58,11 +58,18 @@
           </tr>
         </thead>
         <tbody>
-          <% @assigned_volunteers.each do |assignment| %>
+          <% @assigned_volunteers.each do |volunteer| %>
             <tr>
-              <td><%= link_to assignment.decorate.name, edit_volunteer_path(assignment) %></td>
-              <td><%= assignment.email %></td>
-              <td><%= button_to 'Unassign', supervisor_volunteer_path(assignment), method: :delete, class: "btn btn-danger" %></td>
+              <td><%= link_to volunteer.decorate.name, edit_volunteer_path(volunteer) %></td>
+              <td><%= volunteer.email %></td>
+              <td>
+                <% if volunteer.supervisor_volunteer.is_active? %>
+                  <%= button_to 'Unassign', unassign_supervisor_volunteer_path(volunteer), method: :patch, class: "btn btn-danger" %>
+                <% else %>
+                  Unassigned
+                <% end %>
+
+              </td>
             </tr>
           <% end %>
         </tbody>
