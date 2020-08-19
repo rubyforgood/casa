@@ -17,10 +17,13 @@ class User < ApplicationRecord
   has_one :supervisor_volunteer, foreign_key: "volunteer_id"
   has_one :supervisor, through: :supervisor_volunteer
 
-  def self.volunteers_with_no_supervisor(org)
-    # TODO make this a scope
-    Volunteer.active.includes(:supervisor_volunteer).where(casa_org_id: org.id).where(supervisor_volunteers: {id: nil})
-  end
+  scope :volunteers_with_no_supervisor, lambda { |org|
+    joins('left join supervisor_volunteers on supervisor_volunteers.volunteer_id = users.id')
+      .where(active: true)
+      .where(casa_org_id: org.id)
+      .where(supervisor_volunteers: { id: nil })
+  }
+
   def casa_admin?
     is_a?(CasaAdmin)
   end

@@ -93,7 +93,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "#volunteers_with_no_supervisor?" do
-    subject { Supervisor.volunteers_with_no_supervisor(casa_org) }
+    subject { User.volunteers_with_no_supervisor(casa_org) }
     let(:casa_org) { create(:casa_org) }
     context "no volunteers" do
       it "returns none" do
