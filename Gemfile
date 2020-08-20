@@ -42,6 +42,7 @@ end
 
 group :development do
   gem "annotate" # for adding db field listings to models as comments
+  gem 'erb_lint', require: false
   gem "letter_opener" # Opens emails in new tab for easier testing
   gem "listen", ">= 3.0.5", "< 3.3"
   gem "mailcatcher"
