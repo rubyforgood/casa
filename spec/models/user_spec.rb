@@ -93,7 +93,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "#volunteers_with_no_supervisor?" do
-    subject { Supervisor.volunteers_with_no_supervisor(casa_org) }
+    subject { User.volunteers_with_no_supervisor(casa_org) }
     let(:casa_org) { create(:casa_org) }
     context "no volunteers" do
       it "returns none" do
@@ -104,14 +104,15 @@ RSpec.describe User, type: :model do
       let!(:unassigned1) { create(:volunteer, display_name: "aaa", casa_org: casa_org) }
       let!(:unassigned2) { create(:volunteer, display_name: "bbb", casa_org: casa_org) }
       let!(:unassigned2_different_org) { create(:volunteer, display_name: "ccc") }
-      let!(:assignment1) { create(:supervisor_volunteer, volunteer: assigned1) }
       let!(:assigned1) { create(:volunteer, display_name: "ddd", casa_org: casa_org) }
       let!(:assignment1) { create(:supervisor_volunteer, volunteer: assigned1) }
       let!(:assigned2_different_org) { assignment1.volunteer }
-      let!(:unassigned_inactive) { create(:volunteer, display_name: "eee", casa_org: casa_org, active: false) }
+      let!(:unassigned_inactive_volunteer) { create(:volunteer, display_name: "eee", casa_org: casa_org, active: false) }
+      let!(:previously_assigned) { create(:volunteer, display_name: "fff", casa_org: casa_org) }
+      let!(:inactive_assignment) { create(:supervisor_volunteer, volunteer: previously_assigned, is_active: false) }
 
       it "returns unassigned volunteers" do
-        expect(subject.map(&:display_name).sort).to eq(["aaa", "bbb"])
+        expect(subject.map(&:display_name).sort).to eq(["aaa", "bbb", "fff"])
       end
     end
   end
