@@ -39,7 +39,7 @@ class CaseContactsController < ApplicationController
     }
 
     if case_contacts.all?(&:persisted?)
-      redirect_to casa_case_path(@casa_cases.first), notice: "Case contact was successfully created."
+      redirect_to casa_case_path(CaseContact.last.casa_case), notice: "Case contact was successfully created."
     else
       @case_contact = case_contacts.first
       @casa_cases = [@case_contact.casa_case]
