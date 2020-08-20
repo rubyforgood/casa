@@ -54,11 +54,22 @@ class User < ApplicationRecord
   end
 
   def recent_contacts_made(days_counter = 60)
-    case_contacts.where(contact_made: true, occurred_at: days_counter.days.ago..Date.today).count
+    case_contacts.where(contact_made: true, occurred_at: days_counter.days.ago..Date.today).size
   end
 
   def most_recent_contact
     case_contacts.where(contact_made: true).order(:occurred_at).last
+  end
+
+  def volunteers_serving_transistion_aged_youth
+    volunteers.includes(:casa_cases)
+        .where(casa_cases: {transition_aged_youth: true}).size
+  end
+
+  def no_contact_for_two_weeks
+    volunteers.includes(:case_contacts)
+        .where(case_contacts: {contact_made: true})
+        .where.not(case_contacts: { occurred_at: 14.days.ago..Date.today}).size
   end
 
   def past_names
