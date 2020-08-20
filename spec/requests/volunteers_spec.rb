@@ -25,7 +25,7 @@ RSpec.describe "/volunteers", type: :request do
   end
 
   describe "POST /create" do
-    it "creates a new user" do
+    it "creates a new volunteer" do
       expected_email = "volunteer1@example.com"
       sign_in admin
 
@@ -33,7 +33,8 @@ RSpec.describe "/volunteers", type: :request do
         volunteer: {email: expected_email, casa_org_id: admin.casa_org_id}
       }
 
-      expect(User.last.email).to eq(expected_email)
+      volunteer = Volunteer.last
+      expect(volunteer.email).to eq(expected_email)
 
       expect(response).to redirect_to root_path
     end
@@ -54,16 +55,66 @@ RSpec.describe "/volunteers", type: :request do
     it "updates the volunteer" do
       sign_in admin
 
-      patch volunteer_path(volunteer), params: update_volunteer_params
+      patch volunteer_path(volunteer), params: {
+        volunteer: { email: "newemail@gmail.com", display_name: "New Name" }
+      }
       volunteer.reload
 
       expect(volunteer.display_name).to eq "New Name"
       expect(volunteer.email).to eq "newemail@gmail.com"
-      expect(volunteer).not_to be_active
+    end
+
+    # Activation/deactivation must be done separately through /activate and
+    # /deactivate, respectively
+    it "cannot change the active state" do
+      sign_in admin
+
+      patch volunteer_path(volunteer), params: {
+        volunteer: { active: false }
+      }
+      volunteer.reload
+
+      expect(volunteer.active).to eq(true)
     end
   end
 
-  def update_volunteer_params
-    {volunteer: {email: "newemail@gmail.com", display_name: "New Name", active: "false"}}
+  describe "PATCH /activate" do
+    let(:volunteer) { create(:volunteer, :inactive) }
+
+    it "activates an inactive volunteer" do
+      sign_in admin
+
+      patch activate_volunteer_path(volunteer)
+
+      volunteer.reload
+      expect(volunteer.active).to eq(true)
+    end
+
+    it "sends an activation email" do
+      sign_in admin
+
+      expect {
+        patch activate_volunteer_path(volunteer)
+      }.to change { ActionMailer::Base.deliveries.count }.by(1)
+    end
+  end
+
+  describe "PATCH /deactivate" do
+    it "deactivates an active volunteer" do
+      sign_in admin
+
+      patch deactivate_volunteer_path(volunteer)
+
+      volunteer.reload
+      expect(volunteer.active).to eq(false)
+    end
+
+    it "sends an activation email" do
+      sign_in admin
+
+      expect {
+        patch deactivate_volunteer_path(volunteer)
+      }.to change { ActionMailer::Base.deliveries.count }.by(1)
+    end
   end
 end
