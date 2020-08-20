@@ -33,7 +33,7 @@ class VolunteersController < ApplicationController
   end
 
   def activate
-    if @volunteer.update(active: true)
+    if @volunteer.activate
       VolunteerMailer.account_setup(@volunteer).deliver
 
       if params[:redirect_to_path] == "casa_case" && casa_case = CasaCase.find(params[:casa_case_id])
@@ -47,9 +47,9 @@ class VolunteersController < ApplicationController
   end
 
   def deactivate
-    if @volunteer.update(active: false)
-      @volunteer.case_assignments.update_all(is_active: false)
+    if @volunteer.deactivate
       VolunteerMailer.deactivation(@volunteer).deliver
+
       redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was deactivated."
     else
       render :edit
