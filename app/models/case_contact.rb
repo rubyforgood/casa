@@ -18,16 +18,16 @@ class CaseContact < ApplicationRecord
     attorney
     bio_parent
     court
+    dss_worker
     foster_parent
+    medical_professional
     other_family
+    other_support_worker
     school
     social_worker
     supervisor
     therapist
     youth
-    medical_professional
-    dss_worker
-    other_support_worker
   ].freeze
 
   IN_PERSON = "in-person"
