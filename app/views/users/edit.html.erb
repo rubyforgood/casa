@@ -20,8 +20,8 @@
 
       <div class="actions">
         <%= form.submit "Update Profile", class: "btn btn-primary" %>
-        <%= link_to "Back", root_path, class: "btn btn-primary"  %>
-        <button class="btn btn-warning accordion"  id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        <%= link_to "Back", root_path, class: "btn btn-primary" %>
+        <button class="btn btn-warning accordion" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
           Change Password
         </button>
       </div>
@@ -30,11 +30,11 @@
       <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
         <%= form_for(@user, as: :user, :url => { :action => "update_password" } ) do |f| %>
           <div class="field form-group">
-            <%= f.label :password, "Password" %><br />
-            <%= f.password_field :password, :autocomplete => "off", class: "form-control"  %>
+            <%= f.label :password, "Password" %><br>
+            <%= f.password_field :password, :autocomplete => "off", class: "form-control" %>
           </div>
           <div class="field form-group">
-            <%= f.label :password_confirmation, "Password Confirmation" %><br />
+            <%= f.label :password_confirmation, "Password Confirmation" %><br>
             <%= f.password_field :password_confirmation, class: "form-control" %>
           </div>
           <div class="action_container">

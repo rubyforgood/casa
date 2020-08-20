@@ -15,7 +15,7 @@
   </td>
 
   <td>
-    <% if Pundit.policy(current_user, contact).update?  %>
+    <% if Pundit.policy(current_user, contact).update? %>
       <%= link_to 'Edit', edit_case_contact_path(contact) %>
     <% end %>
   </td>
