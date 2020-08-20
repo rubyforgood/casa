@@ -20,7 +20,12 @@
     <% end %>
     <% casa_cases.each_with_index do |casa_case, index| %>
       <div class="form-check">
-        <input class="form-check-input casa-case-id-check" type="checkbox" value="<%= casa_case.id %>" name="case_contact[casa_case_id][]" <% if index.zero? %>checked required<% end %>>
+        <input
+          class="form-check-input casa-case-id-check"
+          type="checkbox"
+          value="<%= casa_case.id %>"
+          name="case_contact[casa_case_id][]"
+          <% if index.zero? %> checked required<% end %>>
         <label class="form-check-label" for="casa-case-id-check">
           <%= casa_case.case_number %>
         </label>
@@ -40,8 +45,7 @@
                id="case_contact[contact_types][<%= index %>]"
                <% if case_contact.contact_types&.include?(contact_type) %>
                checked=true
-               <% end %>
-        >
+               <% end %>>
         <label class="form-check-label" for="case_contact[contact_types][<%= index %>]">
           <%= contact_type.titleize %>
         </label>
@@ -78,7 +82,7 @@
         <span class="col-sm-2"> hours </span>
       </div>
       <div class="col-sm-12 col-md-6">
-        <%= form.range_field :duration_hours, :min=>0, :max=>23, :value=>set_hours_form(case_contact), :class=>"row custom-range slide", :id=>"case-contact-duration-hours"%>
+        <%= form.range_field :duration_hours, :min=>0, :max=>23, :value=>set_hours_form(case_contact), :class=>"row custom-range slide", :id=>"case-contact-duration-hours" %>
       </div>
 
     </div>
@@ -88,7 +92,7 @@
         <span class="col-sm-2"> minutes </span>
       </div>
       <div class="col-sm-12 col-md-6">
-        <%= form.range_field :duration_minutes, :min=>0, :max=>59, :step=>15, :value=>set_minutes_form(case_contact), :class=>"row custom-range slide", :id=>"case-contact-duration-minutes"%>
+        <%= form.range_field :duration_minutes, :min=>0, :max=>59, :step=>15, :value=>set_minutes_form(case_contact), :class=>"row custom-range slide", :id=>"case-contact-duration-minutes" %>
       </div>
 
     </div>
