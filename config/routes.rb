@@ -17,7 +17,6 @@ Rails.application.routes.draw do
   resources :volunteers, only: %i[new edit create update] do
     member do
       patch :activate
-      get :deactivate
       patch :deactivate
     end
   end

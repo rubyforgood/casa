@@ -34,6 +34,8 @@ class VolunteersController < ApplicationController
 
   def activate
     if @volunteer.update(active: true)
+      VolunteerMailer.account_setup(@volunteer).deliver
+
       if params[:redirect_to_path] == "casa_case" && casa_case = CasaCase.find(params[:casa_case_id])
         redirect_to edit_casa_case_path(casa_case), notice: "Volunteer was activated."
       else
@@ -47,6 +49,7 @@ class VolunteersController < ApplicationController
   def deactivate
     if @volunteer.update(active: false)
       @volunteer.case_assignments.update_all(is_active: false)
+      VolunteerMailer.deactivation(@volunteer).deliver
       redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was deactivated."
     else
       render :edit
@@ -57,7 +60,7 @@ class VolunteersController < ApplicationController
 
   def set_volunteer
     # @volunteer = authorize User.find(params[:id]) # TODO fix this
-    @volunteer = User.find(params[:id])
+    @volunteer = Volunteer.find(params[:id])
   end
 
   def generate_devise_password
@@ -65,12 +68,15 @@ class VolunteersController < ApplicationController
   end
 
   def create_volunteer_params
-    UserParameters
-      .new(params, key = :volunteer)
+    VolunteerParameters
+      .new(params)
       .with_password(generate_devise_password)
+      .without_active
   end
 
   def update_volunteer_params
-    UserParameters.new(params, :volunteer)
+    VolunteerParameters
+      .new(params)
+      .without_active
   end
 end
