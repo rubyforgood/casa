@@ -71,27 +71,42 @@ When you eventually start the rails server, add the `-b 0.0.0.0` option to allow
 `rails s -b 0.0.0.0`
 
 Assuming the use of the 192.168.33.10 address specified above,
-you will be able to access the running Rails server from the guest os as `192.168.33.10:3000`.
+you will be able to access the running Rails server from the guest OS as `192.168.33.10:3000`.
 
 
 #### Editing Files on the VM
 
-To edit files on the Vagrant VM, you can use `vim`, which will already be installed. 
-In addition, you can use any editor on your host OS that is capable of editing files over SSH.
-You can start looking into this [here](https://code.visualstudio.com/docs/remote/ssh-tutorial).
-The IP address will be the one you just specified in the Vagrantfile.
+To edit files on the Vagrant VM, you can use `vim`, which will already be installed. However, it's even
+easier to set up a synchronized directory tree on both the host and guest OS so that any changes made
+in one will be updated on the other. Simply add a line to the `Vagrantfile` like this one:
+
+```
+  config.vm.synced_folder "/home/kbennett/work/casa/", "/home/vagrant/casa"
+```
+
+...where the first directory spec is the host machine's project root and the second is the Vagrant VM project root.
+
+Another approach is to use an editor on your host OS that is capable of editing files over SSH.
+VS Code does this nicely, and you can start looking into this 
+[here](https://code.visualstudio.com/docs/remote/ssh-tutorial). The IP address will be the one specified
+in the Vagrant file, and the user id and password are both `vagrant`.
 
 ## Linux Development Environment Installation
 
-The commands below can be run all at once, but it's safer to execute them a section at a time,
-to more easily spot any errors that may occur.
+The commands below can be run all at once by copying and pasting them all into a file and running the file as a script
+(e.g. `bash -x script_name`). Unfortunately, copying, pasting, and running the entire set of commands at once
+on the command line will not work because some of the commands will be consumed as standard input by preceding commands.
+
+Another approach that would enable you to more easily spot any errors that may occur would be to
+copy/paste/run each section into your terminal one at a time.
 
 ```
 # Install packages available from the main Linux repos & upgrade the Vagrant image if necessary
 # 
 sudo apt update
-sudo apt upgrade
+sudo apt upgrade -y
 sudo apt install -y curl git git-gui htop hub libpq-dev net-tools nodejs npm openssh-server postgresql-12 vim zsh
+
 
 # Install NVM and Node JS
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
