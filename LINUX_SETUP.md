@@ -1,16 +1,16 @@
 # Setting Up the Application on Linux
 
 This document will provide information about getting the application up and running on Linux, 
-on either a physical system, or a virtual machine, using Vagrant. You may want to do this for the following reasons:
+on either a physical system, or a Vagrant virtual machine. You may want to do this for the following reasons:
 
 * to do software development for the project
 * to run the server
 * to test the software
 
 
-### Using a Vagrant Virutal Machine (VM)
+## Using a Vagrant Virutal Machine (VM)
 
-If you will not be using a Vagrant VM, feel free to skip this section:
+If you will not be using a Vagrant VM, feel free to skip this section.
 
 #### Installing Virtual Box and Vagrant
 
@@ -32,13 +32,13 @@ vagrant init bento/ubuntu-20.04
 
 To access a server running on the Vagrant VM from a browser on the host machine, 
 you will need to assign the VM an IP address in the `Vagrantfile`.
-Edit that file, uncomment out the following line, and change the IP address to whatever you want:
+Edit that file, uncomment out the following line, and change the IP address to whatever address you want:
 
 ```
 config.vm.network "private_network", ip: "192.168.33.10"
 ```
 
-Look at the other settings in the config file as well, to see if they may also need modification.
+You may want to look at the other settings in the config file as well, to see if they may also need modification.
 
 
 #### Start the VM and SSH Into It
@@ -55,11 +55,11 @@ your host operating system and not the VM!
 #### Your SSH Keys
 
 If you want to create new SSH keys, go to the general Linux instructions below; if you would like to save some
-time and effort and use your host OS' keys, you can do that by the commands below. Note that you must be in
+time and effort and use your host OS' keys, you can do that using the commands below. Note that you must be in
 your host OS and not inside the Vagrant VM to do this:
 
 ```
-vagrant plugin install vagrant-scp  # only need to do this once to install the plugin
+vagrant plugin install vagrant-scp
 vagrant scp ~/.ssh/id_rsa     :~/.ssh
 vagrant scp ~/.ssh/id_rsa.pub :~/.ssh
 ```
@@ -71,18 +71,45 @@ When you eventually start the rails server, add the `-b 0.0.0.0` option to allow
 `rails s -b 0.0.0.0`
 
 Assuming the use of the 192.168.33.10 address specified above,
-you will be able to access the running Rails server from the guest os as `192.168.33.10:3000`.
+you will be able to access the running Rails server from the guest OS as `192.168.33.10:3000`.
+
+
+#### Editing Files on the VM
+
+To edit files on the Vagrant VM, you can use `vim`, which will already be installed. However, it's even
+easier to set up a synchronized directory tree on both the host and guest OS so that any changes made
+in one will be updated on the other. Simply add a line to the `Vagrantfile` like this one:
+
+```
+  config.vm.synced_folder "/home/kbennett/work/casa/", "/home/vagrant/casa"
+```
+
+...where the first directory spec is the host machine's project root and the second is the Vagrant VM project root.
+
+Another approach is to use an editor on your host OS that is capable of editing files over SSH.
+VS Code does this nicely, and you can start looking into this 
+[here](https://code.visualstudio.com/docs/remote/ssh-tutorial). The IP address will be the one specified
+in the Vagrant file, and the user id and password are both `vagrant`.
 
 ## Linux Development Environment Installation
 
-The commands below can be run all at once, but it's safer to execute them a section at a time,
-to more easily spot any errors that may occur.
+The commands below can be run all at once by copying and pasting them all into a file and running the file as a script
+(e.g. `bash -x script_name`). Unfortunately, copying, pasting, and running the entire set of commands at once
+on the command line will not work because some of the commands will be consumed as standard input by preceding commands.
+
+Another approach that would enable you to more easily spot any errors that may occur would be to
+copy/paste/run each section into your terminal one at a time.
+
+The commands below include a section for installing [rvm](https://rvm.io/),
+but feel free to substitute your own favorite Ruby version manager such as [rbenv](https://github.com/rbenv/rbenv).
 
 ```
 # Install packages available from the main Linux repos & upgrade the Vagrant image if necessary
 # 
-sudo apt install -y curl git git-gui htop hub libpq-dev net-tools nodejs npm openssh-server postgresql-12 vim zsh
+sudo apt update
 sudo apt upgrade -y
+sudo apt install -y curl git git-gui htop hub libpq-dev net-tools nodejs npm openssh-server postgresql-12 vim zsh
+
 
 # Install NVM and Node JS
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
@@ -147,7 +174,7 @@ Skip this step if your public SSH key is already registered with your Github acc
 
 #### Final Steps
 
-`cd` to the directory under which you would like to install the CASA software 
+In the Vagrant VM, `cd` to the directory under which you would like to install the CASA software 
 (if the home directory, and you are not already there, `cd` alone will work).
 If you are prompted that the authenticity of the host cannot be established,
 it is probably ok to input `yes[Enter]` to accept:
