@@ -8,7 +8,7 @@ on either a physical system, or a Vagrant virtual machine. You may want to do th
 * to test the software
 
 
-### Using a Vagrant Virutal Machine (VM)
+## Using a Vagrant Virutal Machine (VM)
 
 If you will not be using a Vagrant VM, feel free to skip this section.
 
@@ -72,6 +72,14 @@ When you eventually start the rails server, add the `-b 0.0.0.0` option to allow
 
 Assuming the use of the 192.168.33.10 address specified above,
 you will be able to access the running Rails server from the guest os as `192.168.33.10:3000`.
+
+
+#### Editing Files on the VM
+
+To edit files on the Vagrant VM, you can use `vim`, which will already be installed. 
+In addition, you can use any editor on your host OS that is capable of editing files over SSH.
+You can start looking into this [here](https://code.visualstudio.com/docs/remote/ssh-tutorial).
+The IP address will be the one you just specified in the Vagrantfile.
 
 ## Linux Development Environment Installation
 
@@ -173,9 +181,3 @@ bundle exec rails server -b 0.0.0.0  # run the server
 
 If the tests all pass and you can access the running Rails server from the host OS,
 then your installation is successful.
-
-## Editing Files on the VM
-
-To edit files on the Vagrant VM, you can use `vim`, which will already be installed. 
-In addition, you can use any editor on your host OS that is capable of editing files over SSH.
-You can start looking into this [here](https://code.visualstudio.com/docs/remote/ssh-tutorial).
