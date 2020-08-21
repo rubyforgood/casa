@@ -100,6 +100,9 @@ on the command line will not work because some of the commands will be consumed 
 Another approach that would enable you to more easily spot any errors that may occur would be to
 copy/paste/run each section into your terminal one at a time.
 
+The commands below include a section for installing [rvm](https://rvm.io/),
+but feel free to substitute your own favorite Ruby version manager such as [rbenv](https://github.com/rbenv/rbenv).
+
 ```
 # Install packages available from the main Linux repos & upgrade the Vagrant image if necessary
 # 
