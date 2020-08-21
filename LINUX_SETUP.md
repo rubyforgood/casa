@@ -12,16 +12,38 @@ on either a physical system, or a virtual machine, using Vagrant. You may want t
 
 If you will not be using a Vagrant VM, feel free to skip this section:
 
+#### Installing Virtual Box and Vagrant
+
 Install [Virtual Box](https://www.virtualbox.org/) and [Vagrant](https://www.vagrantup.com/) if necessary:
 
 ```
 sudo apt install virtualbox vagrant
 ```
 
-Create a new directory for the Vagrant VM, `cd` into it, then generate the Vagrantfile config file and start the VM: 
+#### Initialize the Vagrant VM Control Directory
 
+Create a new directory for the Vagrant VM, `cd` into it, then generate the Vagrantfile config file:
+ 
 ```
 vagrant init bento/ubuntu-20.04
+```
+
+#### Accessing the VM from the Host OS
+
+To access a server running on the Vagrant VM from a browser on the host machine, 
+you will need to assign the VM an IP address in the `Vagrantfile`.
+Edit that file, uncomment out the following line, and change the IP address to whatever you want:
+
+```
+config.vm.network "private_network", ip: "192.168.33.10"
+```
+
+Look at the other settings in the config file as well, to see if they may also need modification.
+
+
+#### Start the VM and SSH Into It
+
+```
 vagrant up
 vagrant ssh
 ```
@@ -41,18 +63,6 @@ vagrant plugin install vagrant-scp  # only need to do this once to install the p
 vagrant scp ~/.ssh/id_rsa     :~/.ssh
 vagrant scp ~/.ssh/id_rsa.pub :~/.ssh
 ```
-
-#### Accessing the VM from the Host OS
-
-To access a server running on the Vagrant VM from a browser on the host machine, 
-you will need to assign the VM an IP address in the `Vagrantfile`.
-In that file, uncomment out the following line, and change the IP address to whatever you want:
-
-```
-config.vm.network "private_network", ip: "192.168.33.10"
-```
-
-If the VM is currently running, you will need to `vagrant reload` it.
 
 #### Running the Rails Server to Accept Hosts Other than the VM
 
