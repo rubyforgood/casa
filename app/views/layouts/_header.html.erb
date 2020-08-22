@@ -1,10 +1,9 @@
 <header>
   <nav class="navbar navbar-expand-lg bg-primary justify-content-between">
     <div class="navbar-brand py-0">
-      <%= image_tag("logo.png", alt: "CASA Logo", size: "70x38", class: "d-inline-block align-text-bottom") %>
+      <%= image_pack_tag("media/src/images/logo.png", alt: "CASA Logo", size: "70x38", class: "d-inline-block align-text-bottom") %>
       <strong><%= page_header %></strong>
     </div>
-
     <div class="navbar-nav">
       <% if current_user %>
         <div class="dropdown">
@@ -13,7 +12,6 @@
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <%= link_to "Edit Profile", edit_users_path, class: "dropdown-item" %>
-
             <% if current_user.is_a?(CasaAdmin) %>
               <%= link_to "Generate Reports", reports_path, class: "dropdown-item" %>
               <%= link_to "System Imports", imports_path, class: "dropdown-item" %>
