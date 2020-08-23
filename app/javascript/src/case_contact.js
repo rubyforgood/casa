@@ -1,5 +1,7 @@
 window.onload = function () {
   const milesDriven = document.getElementById("case_contact_miles_driven");
+  if (!milesDriven) return;
+
   const durationHours = document.getElementById("case-contact-duration-hours");
   const durationHourDisplay = document.getElementById("casa-contact-duration-hours-display")
   const durationMinutes = document.getElementById("case-contact-duration-minutes");
