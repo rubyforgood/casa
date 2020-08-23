@@ -15,13 +15,22 @@ window.onload = function () {
       alert(`Just checking: you drove ${milesDriven.value} miles for a ${contactMedium} contact?`)
     }
   }
-  durationHours.onchange = updateHours()
-  durationHourDisplay.onchange = updateHours()
-  durationHourDisplay.onkeyup = updateHours()
 
-  durationMinutes.onchange = updateMinutes()
-  durationMinuteDisplay.onchange = updateMinutes()
-  durationMinuteDisplay.onkeyup = updateMinutes()
+  durationHours.onchange = function () {
+    if (durationHourDisplay.value !== durationHours.value) {
+      durationHourDisplay.value = durationHours.value
+    }
+  }
+  durationHourDisplay.onchange = function () { updateHours() }
+  durationHourDisplay.onkeyup = function () { updateHours() }
+
+  durationMinutes.onchange = function () {
+    if (durationMinuteDisplay.value !== durationMinutes.value) {
+      durationMinuteDisplay.value = durationMinutes.value
+    }
+  }
+  durationMinuteDisplay.onchange = function () { updateMinutes() }
+  durationMinuteDisplay.onkeyup = function () { updateMinutes() }
 
   function updateMinutes () {
     if (durationMinuteDisplay.value !== durationMinutes.value) {
@@ -31,7 +40,7 @@ window.onload = function () {
 
   function updateHours () {
     if (durationHourDisplay.value !== durationHours.value) {
-      durationHourDisplay.value = durationHours.value
+      durationHours.value = durationHourDisplay.value
     }
   }
 
