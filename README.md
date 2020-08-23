@@ -6,7 +6,7 @@
 [![View performance data on Skylight](https://badges.skylight.io/status/tFh7xrs3Qnaf.svg?token=1C-Q7p8jEFlG7t69Yl5DaJwa-ipWI8gLw9wLJf53xmQ)](https://www.skylight.io/app/applications/tFh7xrs3Qnaf)
 [![Known Vulnerabilities](https://snyk.io/test/github/rubyforgood/casa/badge.svg)](https://snyk.io/test/github/rubyforgood/casa)
 
-CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunteer sworn into a county-level juvenile dependency court system to advocate on behalf of a youth in the corresponding county's foster care system. CASA is also the namesake role of the national organization, CASA, which exists to cultivate and supervise volunteers carrying out this work – with county level chapters (operating relatively independently of each other) across the country. 
+CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunteer sworn into a county-level juvenile dependency court system to advocate on behalf of a youth in the corresponding county's foster care system. CASA is also the namesake role of the national organization, CASA, which exists to cultivate and supervise volunteers carrying out this work – with county level chapters (operating relatively independently of each other) across the country.
 
 **PG CASA (Prince George's County CASA in Maryland) seeks a volunteer management system to:**
 - provide volunteers with a portal for logging activity
@@ -50,11 +50,11 @@ https://casa-r4g-staging.herokuapp.com/
 
 ### Error tracking
 
-We are currently using https://app.bugsnag.com/ to track errors in staging. Errors post to slack at #casa-bots 
+We are currently using https://app.bugsnag.com/ to track errors in staging. Errors post to slack at #casa-bots
 
 ### Email
 
-This app sends email for user signup and deactivation. We use https://www.sendinblue.com/ because we get 300 free emails a day, which is more than we expect to need. 
+This app sends email for user signup and deactivation. We use https://www.sendinblue.com/ because we get 300 free emails a day, which is more than we expect to need.
 Sendinblue has historically sometimes been very slow (6 hours) in delivering email, but sometimes it delivers within a minute or two. Be wary.
 You log into sendinblue via the "log in with google" option. Sean has the credentials for this and hopefully we never need to change them.
 We are not using Mailgun because they limited us to only 5 recipients without a paid plan. We looked at using Sendgrid but our account is currently locked for unknown reasons.
@@ -84,6 +84,7 @@ If you have any troubles, also look at `.travis.yml` which is what makes the CI 
 1. `bundle exec rails server` # run server
 1. `bundle exec standardrb --fix # auto-fix linting issues (optional)` [more linter info](https://github.com/testdouble/standard)
 1. `bundle exec erblint --lint-all --autocorrect` Optional [ERB linter](https://github.com/Shopify/erb-lint) (there are currently lots of errors)
+1. `npx standard --fix` Optional [JS linter](https://standardjs.com/index.html)
 
 ### Documentation
 
@@ -120,13 +121,12 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 
 Most conversation happens in the #casa channel of the Ruby For Good slack. You can get access here: https://rubyforgood.herokuapp.com/
 
-You can also open an issue or comment on an issue on github and a maintainer will reply to you. 
+You can also open an issue or comment on an issue on github and a maintainer will reply to you.
 
 We have a weekly team call on Sunday at (new time TBD - check slack) where we do pair/mob programming and talk about issues- feel free to join! Join info in slack or open a github issue to request join info
 
 We have a weekly stakeholder call with PG CASA staff on Wednesday at 8:30am Pacific time where we show off progress and discuss launch plans. Feel free to join! Join info in slack or open a github issue to request join info
 
-### History 
+### History
 
 First CASA supervisor training: 12 August 2020 🎉
-
