@@ -1,6 +1,11 @@
 {
   "name": "casa",
   "private": true,
+  "scripts": {
+    "test": "standard && jest",
+    "lint": "standard",
+    "lint:fix": "standard --fix"
+  },
   "dependencies": {
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.0.0",
@@ -16,6 +21,7 @@
   },
   "version": "0.1.0",
   "devDependencies": {
+    "jest": "^26.4.2",
     "standard": "^14.3.4",
     "webpack-dev-server": "^3.10.3"
   }
