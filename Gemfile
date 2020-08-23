@@ -7,23 +7,16 @@ ruby "2.7.1"
 gem "rails", "~> 6.0.3"
 
 gem "awesome_print" # easier console reading
-gem "bootstrap", "~> 4.5.2" # frontend styling library
 gem "devise" # for authentication
 gem "devise_invitable"
 gem "draper" # adds decorators for cleaner presentation logic
 gem "faker" # creates realistic seed data, valuable for staging and demos
-gem "font-awesome-rails"
 gem "jbuilder", "~> 2.7" # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem "jquery-datatables-rails", "~> 3.4.0"
-gem "jquery-rails" # Add jquery to asset pipeline
 gem "paper_trail" # tracking changes
 gem "pg", ">= 0.18", "< 2.0" # Use postgresql as the database for Active Record
 gem "puma", "~> 4.3" # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
-gem "sass-rails", ">= 6" # Use SCSS for stylesheets
 gem "skylight" # automated performance testing https://www.skylight.io/
-gem "sprockets-rails" # TODO remove (deprecated) Provides Sprockets implementation for Rails Asset Pipeline.
-gem "turbolinks", "~> 5" # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem "webpacker", "~> 5.2" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 
 gem "bootsnap", ">= 1.4.2", require: false # Reduces boot times through caching; required in config/boot.rb
