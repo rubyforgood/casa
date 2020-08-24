@@ -49,7 +49,9 @@ group :test do
   gem "rake"
   gem "selenium-webdriver"
   gem "simplecov", "~> 0.19.0", require: false # pinned as a workaround for https://github.com/codeclimate/test-reporter/issues/418
-  gem "webdrivers" # Easy installation and use of web drivers to run system tests with browsers
+  unless ENV["DOCKER"]
+    gem "webdrivers" # Easy installation and use of web drivers to run system tests with browsers
+  end
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
