@@ -50,6 +50,8 @@ You can read the complete [role description of a CASA volunteer](https://pgcasa.
 [Here is our contributing guide!](./CONTRIBUTING.md)
 
 ## Setting up your development environment:
+See [DOCKER.md](DOCKER.md) for instructions on setting up your environment
+using Docker. For non-Docker installations, follow the instructions below.
 
 ### Installing Tools
 
@@ -75,6 +77,12 @@ Bullet points `formatted like this` are commands you can run on your machine
   - On a Mac, you can use [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database if you have an older version of postgres, or use [Postgres.app](https://postgresapp.com/).
   - If you're on Ubuntu/WSL, use `sudo apt-get install libpq-dev` so the gem can install. [Use the Postgres repo for Ubuntu or WSL to get the server and client tools](https://www.postgresql.org/download/linux/ubuntu/).
   - If you're using Docker, do what you need to do.
+
+**Mailcatcher**
+
+1. Install the [Mailcatcher](https://mailcatcher.me) gem: `gem install mailcatcher`
+2. Start mailcatcher on the command line: `mailcatcher`
+3. All mail sent in development can be viewed at http://localhost:1080
 
 **Chromedriver**
 
