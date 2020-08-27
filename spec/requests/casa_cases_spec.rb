@@ -110,7 +110,7 @@ RSpec.describe "/casa_cases", type: :request do
         casa_case = CasaCase.create! valid_attributes
         patch casa_case_url(casa_case), params: {casa_case: new_attributes}
         casa_case.reload
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(edit_casa_case_path)
       end
     end
 
