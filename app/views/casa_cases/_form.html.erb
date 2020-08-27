@@ -21,6 +21,8 @@
     <%= form.check_box :transition_aged_youth, class: "form-check-input" %>
   </div>
 
+  <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
+
   <div class="actions">
     <%= form.submit casa_case.persisted? ? 'Update CASA Case' : 'Create CASA Case' %>
   </div>

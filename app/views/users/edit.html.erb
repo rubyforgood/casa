@@ -1,25 +1,14 @@
-<%= link_to "Back", root_path %>
+<%= errors_for(@user) %>
 
 <h1>Edit Profile</h1>
 
 <div class="row">
   <div class="col-sm-6">
-    <%= form_for @user, url: users_path do |form| %>
-      <% if @user.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
-          <ul>
-            <% user.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
+    <%= form_for @user, as: :user, url: users_path do |form| %>
 
       <div class="field form-group">
         <%= form.label :email %>
-        <%= form.text_field :email, class: "form-control" %>
+        <p class="form-control"><%= @user.email %></p>
       </div>
 
       <div class="field form-group">
@@ -31,7 +20,28 @@
 
       <div class="actions">
         <%= form.submit "Update Profile", class: "btn btn-primary" %>
+        <%= link_to "Back", root_path, class: "btn btn-primary" %>
+        <button class="btn btn-warning accordion" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Change Password
+        </button>
       </div>
-    <% end %>
+      <% end %>
+      <br>
+      <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <%= form_for(@user, as: :user, :url => { :action => "update_password" } ) do |f| %>
+          <div class="field form-group">
+            <%= f.label :password, "Password" %><br>
+            <%= f.password_field :password, :autocomplete => "off", class: "form-control" %>
+          </div>
+          <div class="field form-group">
+            <%= f.label :password_confirmation, "Password Confirmation" %><br>
+            <%= f.password_field :password_confirmation, class: "form-control" %>
+          </div>
+          <div class="action_container">
+            <%= f.submit "Update Password", class: "btn btn-danger" %>
+          </div>
+        <% end %>
+      </div>
+      <br>
   </div>
 </div>

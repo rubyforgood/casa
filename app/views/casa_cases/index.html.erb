@@ -3,7 +3,9 @@
 <div class="row">
   <div class="col-sm-12 dashboard-table-header">
     <h1>CASA Cases</h1>
-    <%= link_to 'New CASA Case', new_casa_case_path, class: "btn btn-primary" %>
+    <%- if policy(:casa_case).new? %>
+      <%= link_to 'New CASA Case', new_casa_case_path, class: "btn btn-primary" %>
+    <%- end %>
   </div>
 </div>
 
@@ -22,7 +24,7 @@
     <% @casa_cases.each do |casa_case| %>
       <tr>
         <td><%= casa_case.case_number %></td>
-        <td><%= casa_case.transition_aged_youth %></td>
+        <td><%= casa_case.decorate.transition_aged_youth_icon %></td>
         <td><%= link_to 'Show', casa_case %></td>
         <td><%= link_to 'Edit', edit_casa_case_path(casa_case) %></td>
         <td><%= link_to 'Destroy', casa_case, method: :delete, data: { confirm: 'Are you sure?' } %></td>

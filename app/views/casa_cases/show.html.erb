@@ -2,7 +2,10 @@
 
 <div class="row">
   <div class="col-sm-12 form-header">
-    <h1>CASA Case Details</h1>
+    <h1><%= @casa_case.decorate.transition_aged_youth_only_icon %> CASA Case Details</h1>
+    <%- if policy(:case_contact).new? %>
+      <%= link_to "New Case Contact", new_case_contact_path(case_contact: { casa_case_id: @casa_case.id }), class: "btn btn-primary" %>
+    <%- end %>
     <%= link_to 'Edit Case Details', edit_casa_case_path(@casa_case), class: "btn btn-primary" %>
   </div>
 </div>
@@ -20,7 +23,7 @@
 <div>
   <h6><strong>Assigned Volunteers:</strong></h6>
   <% policy_scope(@casa_case.volunteers).each_with_index do |volunteer, index| %>
-    <p><%= link_to "#{volunteer.display_name} ", edit_volunteer_path(volunteer) %></p>
+    <p><%= link_to "#{volunteer.decorate.name} ", edit_volunteer_path(volunteer) %></p>
   <% end %>
   <br>
 
@@ -33,23 +36,15 @@
           <th>Contact Made</th>
           <th>Contact Medium</th>
           <th>Type</th>
-          <th>Volunteer</th>
           <th>Miles Driven</th>
           <th>Want reimbursement?</th>
+          <th>Created by</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <% @casa_case.case_contacts.each do |contact| %>
-          <tr>
-            <td data-sort="<%= contact.occurred_at.strftime("%Y%m%d%H%M%s") %>"><%= contact.occurred_at.strftime('%B %e, %Y') %></td>
-            <td><%= contact.decorate.duration_minutes %></td>
-            <td><%= contact.decorate.contact_made %></td>
-            <td><%= contact.decorate.medium_type_icon %></td>
-            <td><%= contact.decorate.contact_types %></td>
-            <td><%= link_to "#{contact.creator&.display_name} ", edit_volunteer_path(contact.creator) %></td>
-            <td><%= contact.decorate.miles_traveled %></td>
-            <td><%= contact.decorate.reimbursement %></td>
-          </tr>
+        <% @casa_case.decorate.case_contacts_ordered_by_occurred_at.each do |contact| %>
+          <%= render "case_contacts/case_contact", contact: contact %>
         <% end %>
       </tbody>
     </table>

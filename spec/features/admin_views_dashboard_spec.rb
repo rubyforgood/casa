@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "admin views dashboard", type: :feature do
-  let(:admin) { create(:user, :casa_admin) }
+  let(:admin) { create(:casa_admin) }
 
   it "can see volunteers and navigate to their cases" do
-    volunteer = create(:user, :volunteer, :with_casa_cases, email: "casa@example.com")
+    volunteer = create(:volunteer, :with_casa_cases, email: "casa@example.com")
     casa_case = volunteer.casa_cases[0]
     sign_in admin
 
@@ -22,8 +22,32 @@ RSpec.describe "admin views dashboard", type: :feature do
     expect(page).to have_text("Want reimbursement?")
   end
 
+  describe "supervisor column of volunteers table" do
+    it "is blank when volunteer has no supervisor" do
+      volunteer = create(:volunteer)
+      sign_in admin
+
+      visit root_path
+      supervisor_cell = page.find("#supervisor-column")
+
+      expect(supervisor_cell.text).to eq ""
+    end
+
+    it "displays supervisor's name when volunteer has supervisor" do
+      name = "Superduper Visor"
+      supervisor = create(:supervisor, display_name: name)
+      volunteer = create(:volunteer, supervisor: supervisor)
+      sign_in admin
+
+      visit root_path
+      supervisor_cell = page.find("#supervisor-column")
+
+      expect(supervisor_cell.text).to eq name
+    end
+  end
+
   it "can see the last case contact and navigate to it" do
-    volunteer = create(:user, :volunteer, :with_case_contact_wants_driving_reimbursement, email: "casa@example.com")
+    volunteer = create(:volunteer, :with_case_contact_wants_driving_reimbursement, email: "casa@example.com")
     sign_in admin
 
     visit root_path
@@ -39,7 +63,7 @@ RSpec.describe "admin views dashboard", type: :feature do
   end
 
   it "can go to the volunteer edit page from the volunteer list" do
-    create(:user, :volunteer)
+    create(:volunteer)
     sign_in admin
 
     visit root_path
@@ -59,12 +83,12 @@ RSpec.describe "admin views dashboard", type: :feature do
     click_on "New Volunteer"
 
     expect(page).to have_text("New Volunteer")
-    expect(page).to have_css("form#new_user")
+    expect(page).to have_css("form#new_volunteer")
   end
 
   it "can filter volunteers", type: :system do
-    create_list(:user, 3, :volunteer)
-    create_list(:user, 2, :inactive)
+    create_list(:volunteer, 3)
+    create_list(:volunteer, 2, :inactive)
 
     sign_in admin
 
@@ -83,5 +107,57 @@ RSpec.describe "admin views dashboard", type: :feature do
     find(:css, 'input[data-value="Inactive"]').set(true)
 
     expect(page.all("table#volunteers tr").count).to eq 3
+  end
+
+  it "can see supervisors" do
+    supervisor_name = "Leslie Knope"
+    create(:supervisor, display_name: supervisor_name)
+    sign_in admin
+
+    visit root_path
+
+    expect(page).to have_text(supervisor_name)
+  end
+
+  it "can go to the supervisor edit page from the supervisor list" do
+    supervisor_name = "Leslie Knope"
+    create(:supervisor, display_name: supervisor_name)
+    sign_in admin
+
+    visit root_path
+
+    within "#supervisors" do
+      click_on "Edit"
+    end
+
+    expect(page).to have_text("Editing Supervisor")
+  end
+
+  it "can go to the supervisor edit page from the supervisor's name" do
+    supervisor_name = "Leslie Knope"
+    create(:supervisor, display_name: supervisor_name)
+    sign_in admin
+
+    visit root_path
+
+    within "#supervisors" do
+      click_on supervisor_name
+    end
+
+    expect(page).to have_text("Editing Supervisor")
+  end
+
+  it "can go to the supervisor edit page and see red message
+      when there are no active volunteers" do
+    create(:supervisor)
+    sign_in admin
+
+    visit root_path
+
+    within "#supervisors" do
+      click_on "Edit"
+    end
+
+    expect(page).to have_text("There are no active, unassigned volunteers available")
   end
 end

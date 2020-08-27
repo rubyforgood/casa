@@ -20,22 +20,34 @@ class CaseContactDecorator < Draper::Decorator
     end
   end
 
+  def report_duration_minutes
+    object.duration_minutes
+  end
+
   def miles_traveled
-    object.miles_driven || 'None'
+    object.miles_driven ? "#{object.miles_driven} 🚘" : "None"
   end
 
   def reimbursement
-    object.want_driving_reimbursement ? "Yes" : "No"
+    object.want_driving_reimbursement ? "Yes 🟢" : "No"
   end
 
   def contact_made
     object.contact_made ? "Yes ✅" : "No ❌"
   end
 
+  def report_contact_made
+    object.contact_made
+  end
+
   def contact_types
     object.contact_types
       &.map { |ct| ct.humanize.titleize }
       &.to_sentence(last_word_connector: ", and ") || ""
+  end
+
+  def report_contact_types
+    object.contact_types&.map { |ct| ct.humanize.titleize }.join("|")
   end
 
   def medium_type

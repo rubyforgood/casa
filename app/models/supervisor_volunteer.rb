@@ -11,6 +11,7 @@ end
 # Table name: supervisor_volunteers
 #
 #  id            :bigint           not null, primary key
+#  is_active     :boolean          default(TRUE)
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  supervisor_id :bigint           not null

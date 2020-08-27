@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe CaseContactPolicy::Scope do
   describe "#resolve" do
     it "returns all CaseContacts when user is admin" do
-      user = create(:user, :casa_admin)
+      user = create(:casa_admin)
       all_case_contacts = create_list(:case_contact, 2)
 
       scope = described_class.new(user, CaseContact)
@@ -13,9 +13,9 @@ RSpec.describe CaseContactPolicy::Scope do
 
     context "when user is volunteer" do
       it "returns all of the case contacts of the volunteer" do
-        current_user = create(:user, :volunteer)
+        current_user = create(:volunteer)
         relevant_case = create(:casa_case)
-        other_user = create(:user, :volunteer)
+        other_user = create(:volunteer)
 
         # we have to do a setup to test this since it's tested elsewhere
         allow(CasaCase).to receive(:actively_assigned_to)

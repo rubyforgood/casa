@@ -9,7 +9,7 @@ class CaseContactReportsController < ApplicationController
     respond_to do |format|
       format.csv do
         send_data case_contact_report.to_csv,
-                  filename: "case-contacts-report-#{Time.zone.now.to_i}.csv"
+          filename: "case-contacts-report-#{Time.zone.now.to_i}.csv"
       end
     end
   end

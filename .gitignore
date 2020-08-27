@@ -33,6 +33,9 @@
 yarn-debug.log*
 .yarn-integrity
 
+.rails_routes*
+.vscode
+
 coverage/
 .idea/
 config/credentials.yml.enc

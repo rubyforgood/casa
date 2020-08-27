@@ -5,8 +5,9 @@ class CasaCase < ApplicationRecord
   has_many(:volunteers, through: :case_assignments, source: :volunteer, class_name: "User")
   has_many :case_contacts
   validates :case_number, uniqueness: {case_sensitive: false}, presence: true
+  belongs_to :casa_org
 
-  scope :ordered, -> { sort_by(&:updated_at).reverse }
+  scope :ordered, -> { order(updated_at: :desc) }
   scope :actively_assigned_to,
     lambda { |volunteer|
       joins(:case_assignments).where(
@@ -24,8 +25,14 @@ end
 #  transition_aged_youth :boolean          default(FALSE), not null
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
+#  casa_org_id           :bigint           not null
 #
 # Indexes
 #
+#  index_casa_cases_on_casa_org_id  (casa_org_id)
 #  index_casa_cases_on_case_number  (case_number) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (casa_org_id => casa_orgs.id)
 #

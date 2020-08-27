@@ -1,0 +1,17 @@
+@import "base/variables";
+
+@import "bootstrap";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+
+@import "shared/flashes";
+@import "shared/footer";
+@import "shared/form";
+@import "shared/layout";
+@import "shared/navbar";
+@import "shared/typography";
+@import "shared/utilities";
+
+@import "pages/casa_cases";
+@import "pages/dashboard";
+@import "pages/login";

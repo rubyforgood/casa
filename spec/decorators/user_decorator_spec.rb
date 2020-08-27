@@ -4,7 +4,7 @@ RSpec.describe UserDecorator do
   describe "#status" do
     context "when user role is inactive" do
       it "returns Inactive" do
-        volunteer = build(:user, role: "inactive")
+        volunteer = build(:volunteer, :inactive)
 
         expect(volunteer.decorate.status).to eq "Inactive"
       end
@@ -12,7 +12,7 @@ RSpec.describe UserDecorator do
 
     context "when user role is volunteer" do
       it "returns Active" do
-        volunteer = build(:user, role: "volunteer")
+        volunteer = build(:volunteer)
 
         expect(volunteer.decorate.status).to eq "Active"
       end

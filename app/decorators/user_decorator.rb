@@ -2,9 +2,9 @@ class UserDecorator < Draper::Decorator
   delegate_all
 
   def status
-    return "Inactive" if object.role == "inactive"
+    return "Active" if object.active
 
-    "Active"
+    "Inactive"
   end
 
   def name
@@ -19,7 +19,7 @@ class UserDecorator < Draper::Decorator
   def assigned_to_transition_aged_youth?
     volunteer_no_transition_youth_cases = object.casa_cases.pluck(:transition_aged_youth).all? false
 
-    volunteer_no_transition_youth_cases ? "No" : "Yes"
+    volunteer_no_transition_youth_cases ? "No" : "Yes 🐛🦋"
   end
 
   def last_contact_made

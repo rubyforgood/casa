@@ -1,13 +1,21 @@
 {
   "name": "casa",
   "private": true,
+  "scripts": {
+    "test": "standard && jest",
+    "test:e2e": "cypress open",
+    "lint": "standard",
+    "lint:fix": "standard --fix"
+  },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.14.0",
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "4.2.2",
     "bootstrap": "4.3.1",
     "bootstrap-datepicker": "^1.9.0",
+    "bootstrap-select": "^1.13.18",
     "datatables.net-dt": "^1.10.20",
     "jquery": "^3.5.0",
     "popper.js": "^1.16.1",
@@ -15,7 +23,9 @@
   },
   "version": "0.1.0",
   "devDependencies": {
-    "cypress": "^4.3.0",
+    "cypress": "^4.12.1",
+    "jest": "^26.4.2",
+    "standard": "^14.3.4",
     "webpack-dev-server": "^3.10.3"
   }
 }

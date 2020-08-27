@@ -35,5 +35,7 @@ RSpec.configure do |config|
 
   config.infer_spec_type_from_file_location!
 
+  config.example_status_persistence_file_path = "#{::Rails.root}/tmp/persistent_examples.txt"
+
   config.filter_rails_from_backtrace!
 end

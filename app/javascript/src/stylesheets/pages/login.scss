@@ -1,0 +1,13 @@
+body.devise-sessions-new {
+  .container {
+    max-width: none;
+  }
+
+  aside {
+    background-position: right;
+    background-image: url("../images/login.jpg");
+    min-height: 700px;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
