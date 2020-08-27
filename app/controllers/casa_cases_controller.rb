@@ -46,7 +46,7 @@ class CasaCasesController < ApplicationController
   def update
     respond_to do |format|
       if @casa_case.update(casa_case_update_params)
-        format.html { redirect_to root_path, notice: "CASA case was successfully updated." }
+        format.html { redirect_to edit_casa_case_path, notice: "CASA case was successfully updated."}
         format.json { render :show, status: :ok, location: @casa_case }
       else
         format.html { render :edit }
