@@ -18,11 +18,11 @@ class ImportsController < ApplicationController
   def import_from_csv(import_type, file, org)
     case import_type
     when "volunteer"
-      FileImporter.new(file, org).import_volunteers
+      UserImporter.new(file, org).import_volunteers
     when "supervisor"
-      FileImporter.new(file, org).import_supervisors
+      UserImporter.new(file, org).import_supervisors
     when "casa_case"
-      FileImporter.new(file, org).import_cases
+      CaseImporter.new(file, org).import_cases
     else
       {type: :error, message: "Something went wrong with the import, did you attach a csv file?"}
     end
