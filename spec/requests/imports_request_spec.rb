@@ -43,7 +43,7 @@ RSpec.describe "/imports", type: :request do
       sign_in casa_admin
 
       # make sure appropriate volunteers exist
-      FileImporter.new(volunteer_file, casa_admin.casa_org_id).import_volunteers
+      UserImporter.new(volunteer_file, casa_admin.casa_org_id).import_volunteers
 
       expect(Supervisor.count).to eq(0)
 
