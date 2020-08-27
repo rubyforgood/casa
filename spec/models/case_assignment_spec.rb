@@ -24,6 +24,7 @@ RSpec.describe CaseAssignment do
     casa_case_1.save!
 
     expect(volunteer_1.casa_cases).to eq([casa_case_1])
+    expect(volunteer_2.casa_cases).to eq([casa_case_1])
   end
 
   it "allows volunteer to be assigned to multiple cases" do

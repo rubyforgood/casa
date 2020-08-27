@@ -26,7 +26,8 @@ class FileImporter
     end
     build_message("volunteers")
   end
-
+# TODO: dominique might need update for multiple supervisors
+# TODO: rename user to supervisor
   def import_supervisors
     CSV.foreach(import_csv || [], headers: true, header_converters: :symbol) do |row|
       user = Supervisor.new(row.to_hash.slice(:display_name, :email))

@@ -4,6 +4,7 @@ class SupervisorVolunteer < ApplicationRecord
   belongs_to :volunteer, class_name: "User"
   belongs_to :supervisor, class_name: "User"
   validates :supervisor_id, uniqueness: {scope: :volunteer_id} # only 1 row allowed per supervisor-volunteer pair
+  # TODO: add validates, test
 end
 
 # == Schema Information
