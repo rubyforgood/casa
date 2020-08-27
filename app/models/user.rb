@@ -17,10 +17,15 @@ class User < ApplicationRecord
   has_one :supervisor_volunteer, foreign_key: "volunteer_id"
   has_one :supervisor, through: :supervisor_volunteer
 
-  def self.volunteers_with_no_supervisor(org)
-    # TODO make this a scope
-    Volunteer.active.includes(:supervisor_volunteer).where(casa_org_id: org.id).where(supervisor_volunteers: {id: nil})
-  end
+  scope :volunteers_with_no_supervisor, lambda { |org|
+    joins("left join supervisor_volunteers "\
+          "on supervisor_volunteers.volunteer_id = users.id "\
+          "and supervisor_volunteers.is_active")
+      .where(active: true)
+      .where(casa_org_id: org.id)
+      .where(supervisor_volunteers: { id: nil })
+  }
+
   def casa_admin?
     is_a?(CasaAdmin)
   end
@@ -42,10 +47,6 @@ class User < ApplicationRecord
     end
   end
 
-  def active_volunteer
-    active && type == "Volunteer"
-  end
-
   # all contacts this user has with this casa case
   def case_contacts_for(casa_case_id)
     found_casa_case = casa_cases.find { |cc| cc.id == casa_case_id }
@@ -53,11 +54,22 @@ class User < ApplicationRecord
   end
 
   def recent_contacts_made(days_counter = 60)
-    case_contacts.where(contact_made: true, occurred_at: days_counter.days.ago..Date.today).count
+    case_contacts.where(contact_made: true, occurred_at: days_counter.days.ago..Date.today).size
   end
 
   def most_recent_contact
     case_contacts.where(contact_made: true).order(:occurred_at).last
+  end
+
+  def volunteers_serving_transistion_aged_youth
+    volunteers.includes(:casa_cases)
+        .where(casa_cases: {transition_aged_youth: true}).size
+  end
+
+  def no_contact_for_two_weeks
+    volunteers.includes(:case_contacts)
+        .where(case_contacts: {contact_made: true})
+        .where.not(case_contacts: { occurred_at: 14.days.ago..Date.today}).size
   end
 
   def past_names

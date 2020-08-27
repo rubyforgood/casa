@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Bug report
+    about: 🔨What needs fixing? ✨
+    url: https://github.com/rubyforgood/casa/issues/new?template=bug_report.md&projects=rubyforgood/casa/1
+  - name: 💡Feature request
+    about: 🔨What needs building? ✨
+    url: https://github.com/rubyforgood/casa/issues/new?template=feature_request.md&projects=rubyforgood/casa/1

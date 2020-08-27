@@ -14,6 +14,23 @@ class Volunteer < User
     contact_made_in_past_60_days
     actions
   ].freeze
+
+  # Activates this volunteer.
+  def activate
+    update(active: true)
+  end
+
+  # Deactivates this volunteer and all of their case assignments.
+  def deactivate
+    transaction do
+      updated = update(active: false)
+      if updated
+        case_assignments.update_all(is_active: false)
+      end
+
+      updated
+    end
+  end
 end
 
 # == Schema Information

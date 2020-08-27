@@ -9,7 +9,7 @@ class CaseAssignment < ApplicationRecord
   validate :assignee_must_be_volunteer
 
   def assignee_must_be_volunteer
-    errors.add(:volunteer, "Case assignee must be a volunteer") unless volunteer.active_volunteer
+    errors.add(:volunteer, "Case assignee must be a volunteer") unless volunteer.is_a?(Volunteer) && volunteer.active?
   end
 end
 

@@ -36,9 +36,8 @@
         <input class="form-control" type="text" placeholder="<%= @volunteer.created_at.strftime('%m/%d/%Y ') %>" readonly>
       </div>
 
-
       <div class="field form-group">
-        <% if @volunteer_active %>
+        <% if @volunteer.active? %>
           Volunteer is <span class="badge badge-success text-uppercase display-1">Active</span>
           <% if policy(@volunteer).deactivate? %>
             <%= link_to "Deactivate volunteer",
@@ -90,14 +89,14 @@
               <td><%= link_to assignment.casa_case.case_number, edit_casa_case_path(assignment.casa_case) %></td>
               <td><%= assignment.casa_case.decorate.transition_aged_youth_icon %></td>
               <td>
-                <% if @volunteer_active %>
+                <% if @volunteer.active? %>
                   Volunteer is <span class="badge badge-success text-uppercase display-1">Active</span>
                 <% else %>
                   Deactivated
                 <% end %>
               </td>
               <td>
-                <% if @volunteer_active %>
+                <% if @volunteer.active? %>
                   <%= button_to 'Unassign Case', case_assignment_path(assignment, volunteer_id: @volunteer.id), method: :delete, class: "btn btn-danger" if Pundit.policy(current_user, @volunteer).unassign_case? %>
                 <% else %>
                   None
@@ -111,7 +110,7 @@
   </div>
 <% end %>
 
-<% if @volunteer_active %>
+<% if @volunteer.active? %>
   <br>
 
   <div class="row">
@@ -122,7 +121,7 @@
 
         <div class='form-group'>
           <label for='case_assignment_casa_case_id'>Select a Case</label>
-          <select name='case_assignment[casa_case_id]' class='form-control'>
+          <select id="case_assignment_casa_case_id" name='case_assignment[casa_case_id]' class='form-control'>
             <% @available_casa_cases.each do |casa_case| %>
               <option value="<%= casa_case.id %>"><%= casa_case.case_number %></option>
             <% end %>

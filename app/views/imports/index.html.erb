@@ -36,15 +36,15 @@
             </li>
           </ul>
           <div class="tab-content">
-            <%= content_tag :div, role: "tabpanel", id: "volunteer", class: ["tab-pane", "fade", ("show" if @import_type == "volunteer"), ("active" if @import_type == "volunteer")].compact, aria: { labelledby: "volunteer-tab" } do %> 
+            <%= content_tag :div, role: "tabpanel", id: "volunteer", class: ["tab-pane", "fade", ("show" if @import_type == "volunteer"), ("active" if @import_type == "volunteer")].compact, aria: { labelledby: "volunteer-tab" } do %>
               <br>
               <%= render "volunteers" %>
             <%- end %>
-            <%= content_tag :div, role: "tabpanel", id: "supervisor", class: ["tab-pane", "fade", ("show" if @import_type == "supervisor"), ("active" if @import_type == "supervisor")].compact, aria: { labelledby: "supervisor-tab" } do %> 
+            <%= content_tag :div, role: "tabpanel", id: "supervisor", class: ["tab-pane", "fade", ("show" if @import_type == "supervisor"), ("active" if @import_type == "supervisor")].compact, aria: { labelledby: "supervisor-tab" } do %>
               <br>
               <%= render "supervisors" %>
             <%- end %>
-            <%= content_tag :div, role: "tabpanel", id: "casa-case", class: ["tab-pane", "fade", ("show" if @import_type == "casa_case"), ("active" if @import_type == "casa_case")].compact, aria: { labelledby: "casa-case-tab" } do %> 
+            <%= content_tag :div, role: "tabpanel", id: "casa-case", class: ["tab-pane", "fade", ("show" if @import_type == "casa_case"), ("active" if @import_type == "casa_case")].compact, aria: { labelledby: "casa-case-tab" } do %>
               <br>
               <%= render "cases" %>
             <%- end %>
