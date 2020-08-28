@@ -4,7 +4,13 @@ Rails.application.routes.draw do
   devise_for :all_casa_admins
   devise_for :users
 
-  root to: "dashboard#show"
+  authenticated :user do
+    root to: "dashboard#show"
+  end
+
+  devise_scope :user do
+    root to: "devise/sessions#new", as: :unauthenticated_root
+  end
 
   resources :casa_cases
   resources :case_contacts, except: %i[show]
