@@ -6,3 +6,6 @@ contact_links:
   - name: 💡Feature request
     about: 🔨What needs building? ✨
     url: https://github.com/rubyforgood/casa/issues/new?template=feature_request.md&projects=rubyforgood/casa/1
+  - name: Documentation addition/change
+    about: 🔨What needs documenting? ✨
+    url: https://github.com/rubyforgood/casa/issues/new?template=documentation.md&projects=rubyforgood/casa/1
