@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "admin views dashboard", type: :feature do
+RSpec.describe "admin views dashboard", type: :system do
   let(:admin) { create(:casa_admin) }
 
   it "can see volunteers and navigate to their cases" do
@@ -51,6 +51,10 @@ RSpec.describe "admin views dashboard", type: :feature do
     sign_in admin
 
     visit root_path
+
+    click_on "Pick displayed columns"
+    check "Last Contact Made"
+    click_on "Close"
 
     expect(page).to have_text(volunteer.most_recent_contact.occurred_at.strftime("%B %-e, %Y"))
     expect(page).to have_text("20") # miles driven

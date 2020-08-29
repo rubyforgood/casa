@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "user inputs dangerous values", type: :feature do
+RSpec.describe "user inputs dangerous values", type: :system do
   it "is successful" do
     admin = create(:casa_admin)
     volunteer = create(:volunteer)

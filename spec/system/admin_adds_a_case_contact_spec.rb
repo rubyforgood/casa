@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "admin or supervisor adds a case contact", type: :feature do
+RSpec.describe "admin or supervisor adds a case contact", type: :system do
 
   let(:admin) { create(:casa_admin) }
   let(:casa_case) { create(:casa_case) }
@@ -11,11 +11,11 @@ RSpec.describe "admin or supervisor adds a case contact", type: :feature do
     visit casa_case_path(casa_case.id)
     click_on "New Case Contact"
 
-    find(:css, "input.casa-case-id-check[value='#{casa_case.id}']").set(true)
-    find(:css, "input.casa-case-contact-type[value='school']").set(true)
-    find(:css, "input.casa-case-contact-type[value='therapist']").set(true)
-    fill_in "case_contact_occurred_at", with: "04/04/2020"
+    check "School"
+    check "Therapist"
+    choose "Yes"
     select "Video", from: "case_contact[medium_type]"
+    fill_in "case_contact_occurred_at", with: "04/04/2020"
   end
 
   it "is successful" do
@@ -34,11 +34,20 @@ RSpec.describe "admin or supervisor adds a case contact", type: :feature do
   end
 
   context "with invalid inputs" do
-    it "re-renders the form with error messages and with only current Casa Case" do
+    context "with js" do
+      it "does not submit the form" do
+        fill_in "case-contact-duration-hours", with: "0"
+        fill_in "case-contact-duration-minutes", with: "5"
 
-      casa_case1 = create(:casa_case)
-      casa_case2 = create(:casa_case)
-      casa_case3 = create(:casa_case)
+        expect {
+          click_on "Submit"
+        }.not_to change(CaseContact, :count)
+      end
+    end
+  end
+
+  context "without js", js: false do
+    it "re-renders the form with error messages and with only current Casa Case" do
 
       fill_in "case-contact-duration-hours", with: "0"
       fill_in "case-contact-duration-minutes", with: "5"

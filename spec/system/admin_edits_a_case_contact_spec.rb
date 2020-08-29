@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "admin or supervisor edits a case contact", type: :feature do
+RSpec.describe "admin or supervisor edits a case contact", type: :system do
   it "is successful" do
     admin = create(:casa_admin)
     casa_case = create(:casa_case)
@@ -10,13 +10,13 @@ RSpec.describe "admin or supervisor edits a case contact", type: :feature do
     visit casa_case_path(casa_case.id)
     click_on "New Case Contact"
 
-    find(:css, "input.casa-case-id-check[value='#{casa_case.id}']").set(true)
-    find(:css, "input.casa-case-contact-type[value='school']").set(true)
-    find(:css, "input#case_contact_contact_made_true").set(true)
+    check "School"
+    choose "Yes"
+
+    select "Video", from: "case_contact[medium_type]"
     fill_in "case-contact-duration-hours", with: "1"
     fill_in "case-contact-duration-minutes", with: "45"
     fill_in "case_contact_occurred_at", with: "04/04/2020"
-    select "Video", from: "case_contact[medium_type]"
 
     click_on "Submit"
 

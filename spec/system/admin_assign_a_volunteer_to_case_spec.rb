@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "admin or supervisor assign and unassign a volunteer to case", type: :feature do
+RSpec.describe "admin or supervisor assign and unassign a volunteer to case", type: :system do
   let(:supervisor1) { create(:supervisor) }
   let(:casa_case) { create(:casa_case) }
 
@@ -23,9 +23,8 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
       expect(unassign_button.value).to eq "Unassign Volunteer"
 
       assign_badge = page.find("span.badge-success")
-      expect(assign_badge.text).to eq "Assigned"
-
-      end
+      expect(assign_badge.text).to eq "ASSIGNED"
+    end
 
     it "shows an assignment start date and no assignment end date" do
       expected_start_date = Time.zone.now.strftime("%B %e, %Y")
@@ -45,7 +44,7 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
       click_on "Unassign Volunteer"
 
       assign_badge = page.find("span.badge-danger")
-      expect(assign_badge.text).to eq "Unassigned"
+      expect(assign_badge.text).to eq "UNASSIGNED"
     end
 
     it "shows an assignment start date and an assignment end date" do
@@ -74,7 +73,7 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
     click_on "Unassign Volunteer"
 
     assign_badge = page.find("span.badge-danger")
-    expect(assign_badge.text).to eq "Unassigned"
+    expect(assign_badge.text).to eq "UNASSIGNED"
   end
 
   it "when can assign only active volunteer to a case" do
