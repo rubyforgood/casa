@@ -96,7 +96,30 @@ The container name can be retrieved by running `docker-compose ps`
 You can view the tests in real time by using a VNC client and temporarily
 switching to the `selenium_chrome_in_container` driver set in
 [spec/spec_helper.rb](https://github.com/rubyforgood/casa/blob/master/spec/spec_helper.rb).
-If you are on a Mac, launch the Screen Sharing app. Connect to
-[vnc://localhost:5900](vnc://localhost:5900) using the password "secret". Run
-the spec(s) from the command line and you can see the test running in the browser
-through the VNC client.
+For example, you can change this:
+
+```
+    if ENV["DOCKER"]
+      driven_by :selenium_chrome_headless_in_container
+```
+
+to this:
+
+```
+    if ENV["DOCKER"]
+      # driven_by :selenium_chrome_headless_in_container
+ `    driven_by :selenium_chrome_in_container
+```
+
+Mac OS comes with a built-in screen sharing application, "Screen Sharing".
+On Ubuntu-based Linux, the VNC client application "Vinagre" (aka "Remote Desktop Viewer")
+is commonly used, and can be installed with `sudo apt install vinagre`.
+
+You can open the VNC client application and configure it directly, but in both operating systems
+it's probably easier to click on [vnc://localhost:5900](vnc://localhost:5900) 
+(or paste that into your browser's address bar) and let the browser launch the VNC client with
+ the appropriate parameters for you.
+
+The VNC password is `secret`.
+
+Run the spec(s) from the command line and you can see the test running in the browser through the VNC client.
