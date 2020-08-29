@@ -165,6 +165,8 @@ You log into sendinblue via the "log in with google" option. Sean has the creden
 
 We are not using Mailgun because they limited us to only 5 recipients without a paid plan. We looked at using Sendgrid but our account is currently locked for unknown reasons.
 
+Preview all emails at http://localhost:3000/rails/mailers/volunteer_mailer as configured by `volunteer_mailer_preview.rb`
+
 ### Hosting
 
 Namecheap, heroku
