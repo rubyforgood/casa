@@ -5,10 +5,10 @@ RSpec.describe "user inputs dangerous values", type: :feature do
     admin = create(:casa_admin)
     volunteer = create(:volunteer)
 
-    UserInputHelpers::DANGEROUS_STRINGS.each do |dangerous_string|
-      sign_in admin
-      visit edit_volunteer_path(volunteer)
+    sign_in admin
+    visit edit_volunteer_path(volunteer)
 
+    UserInputHelpers::DANGEROUS_STRINGS.each do |dangerous_string|
       fill_in "Display name", with: dangerous_string
 
       click_on "Submit"
