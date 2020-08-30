@@ -10,6 +10,7 @@ class CaseContactParameters < SimpleDelegator
         :medium_type,
         :miles_driven,
         :want_driving_reimbursement,
+        :notes,
         contact_types: []
       )
 
