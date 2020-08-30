@@ -1,6 +1,4 @@
 require "simplecov"
-require "capybara/rspec"
-require "pundit/rspec"
 require "pry"
 SimpleCov.start do
   track_files "{app,lib}/**/*.rb"
