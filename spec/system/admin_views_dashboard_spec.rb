@@ -111,7 +111,7 @@ RSpec.describe "admin views dashboard", type: :system do
     expect(page.all("table#volunteers tr").count).to eq 3
   end
 
-  it "can see supervisors", js: false do
+  it "can go to the supervisor edit page from the supervisor list", js: false do
     supervisor_name = "Leslie Knope"
     create(:supervisor, display_name: supervisor_name)
     sign_in admin
@@ -119,14 +119,6 @@ RSpec.describe "admin views dashboard", type: :system do
     visit root_path
 
     expect(page).to have_text(supervisor_name)
-  end
-
-  it "can go to the supervisor edit page from the supervisor list", js: false do
-    supervisor_name = "Leslie Knope"
-    create(:supervisor, display_name: supervisor_name)
-    sign_in admin
-
-    visit root_path
 
     within "#supervisors" do
       click_on "Edit"

@@ -18,7 +18,7 @@ RSpec.describe "admin or supervisor adds a case contact", type: :system do
     fill_in "case_contact_occurred_at", with: "04/04/2020"
   end
 
-  it "is successful" do
+  it "is successful", js: false do
 
     fill_in "case-contact-duration-hours", with: "1"
     fill_in "case-contact-duration-minutes", with: "45"
