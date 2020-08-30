@@ -8,7 +8,7 @@ RSpec.describe "Editing Profile", type: :system do
     visit edit_users_path
   end
 
-  it "displays password errors messages when user is unable to set a password", js: false do
+  it "displays password errors messages when user is unable to set a password" do
 
     click_on "Change Password"
 
@@ -21,7 +21,7 @@ RSpec.describe "Editing Profile", type: :system do
     expect(page).to have_text("Password is too short (minimum is 6 characters)")
   end
 
-  it "notifies a user when they update their password", js: false do
+  it "notifies a user when they update their password" do
 
     click_on "Change Password"
 

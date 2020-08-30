@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "view supervisor edit", type: :system do
   context "when the current user is a supervisor" do
-    it "does not have a submit button", js: false do
+    it "does not have a submit button" do
       current_supervisor = create(:supervisor)
       other_supervisor = create(:supervisor)
 
@@ -12,7 +12,7 @@ RSpec.describe "view supervisor edit", type: :system do
       expect(page).not_to have_selector(:link_or_button, "Submit")
     end
 
-    context "when the current user is editing self", js: false do
+    context "when the current user is editing self" do
       it "displays a submit button" do
         current_supervisor = create(:supervisor)
 
@@ -25,7 +25,7 @@ RSpec.describe "view supervisor edit", type: :system do
   end
 
   context "when the current user is an admin" do
-    it "displays a submit button", js: false do
+    it "displays a submit button" do
       admin = create(:casa_admin)
       supervisor = create(:supervisor)
 

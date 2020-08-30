@@ -5,7 +5,7 @@ RSpec.describe "admin views dashboard", type: :system do
   before { travel_to Time.zone.local(2020,8,29,4,5,6) }
   after { travel_back }
 
-  it "can see volunteers and navigate to their cases", js: false do
+  it "can see volunteers and navigate to their cases" do
     volunteer = create(:volunteer, :with_casa_cases, email: "casa@example.com")
     casa_case = volunteer.casa_cases[0]
     sign_in admin
@@ -24,7 +24,7 @@ RSpec.describe "admin views dashboard", type: :system do
     expect(page).to have_text("Want reimbursement?")
   end
 
-  describe "supervisor column of volunteers table", js: false do
+  describe "supervisor column of volunteers table" do
     it "is blank when volunteer has no supervisor" do
       volunteer = create(:volunteer)
       sign_in admin
@@ -35,7 +35,7 @@ RSpec.describe "admin views dashboard", type: :system do
       expect(supervisor_cell.text).to eq ""
     end
 
-    it "displays supervisor's name when volunteer has supervisor", js: false do
+    it "displays supervisor's name when volunteer has supervisor" do
       name = "Superduper Visor"
       supervisor = create(:supervisor, display_name: name)
       volunteer = create(:volunteer, supervisor: supervisor)
@@ -55,7 +55,6 @@ RSpec.describe "admin views dashboard", type: :system do
     visit root_path
 
     expect(page).to have_text("August 29, 2020")
-    expect(page).to have_text("20") # miles driven
 
     within "#volunteers" do
       click_on "August 29, 2020"
@@ -64,7 +63,7 @@ RSpec.describe "admin views dashboard", type: :system do
     expect(page).to have_text("CASA Case Details")
   end
 
-  it "can go to the volunteer edit page from the volunteer list", js: false do
+  it "can go to the volunteer edit page from the volunteer list" do
     create(:volunteer)
     sign_in admin
 
@@ -77,7 +76,7 @@ RSpec.describe "admin views dashboard", type: :system do
     expect(page).to have_text("Editing Volunteer")
   end
 
-  it "can go to the new volunteer page", js: false do
+  it "can go to the new volunteer page" do
     sign_in admin
 
     visit root_path
@@ -111,7 +110,7 @@ RSpec.describe "admin views dashboard", type: :system do
     expect(page.all("table#volunteers tr").count).to eq 3
   end
 
-  it "can go to the supervisor edit page from the supervisor list", js: false do
+  it "can go to the supervisor edit page from the supervisor list" do
     supervisor_name = "Leslie Knope"
     create(:supervisor, display_name: supervisor_name)
     sign_in admin
@@ -127,7 +126,7 @@ RSpec.describe "admin views dashboard", type: :system do
     expect(page).to have_text("Editing Supervisor")
   end
 
-  it "can go to the supervisor edit page from the supervisor's name", js: false do
+  it "can go to the supervisor edit page from the supervisor's name" do
     supervisor_name = "Leslie Knope"
     create(:supervisor, display_name: supervisor_name)
     sign_in admin
@@ -142,7 +141,7 @@ RSpec.describe "admin views dashboard", type: :system do
   end
 
   it "can go to the supervisor edit page and see red message
-      when there are no active volunteers", js: false do
+      when there are no active volunteers" do
     create(:supervisor)
     sign_in admin
 

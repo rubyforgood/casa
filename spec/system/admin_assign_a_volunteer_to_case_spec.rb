@@ -69,7 +69,7 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
     end
   end
 
-  it "when can assign only active volunteer to a case", js: false do
+  it "when can assign only active volunteer to a case" do
     volunteer1 = create(:volunteer)
     volunteer2 = create(:volunteer, :inactive)
 

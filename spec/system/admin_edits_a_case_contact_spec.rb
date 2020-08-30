@@ -4,7 +4,7 @@ RSpec.describe "admin or supervisor edits a case contact", type: :system do
   let(:casa_case) { create(:casa_case) }
   let!(:case_contact) { create(:case_contact, duration_minutes: 105, casa_case: casa_case) }
 
-  it "is successful", js: false do
+  it "is successful" do
     admin = create(:casa_admin)
     sign_in admin
 
