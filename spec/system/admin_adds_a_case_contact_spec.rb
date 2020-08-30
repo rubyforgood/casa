@@ -34,30 +34,13 @@ RSpec.describe "admin or supervisor adds a case contact", type: :system do
   end
 
   context "with invalid inputs" do
-    context "with js" do
-      it "does not submit the form" do
-        fill_in "case-contact-duration-hours", with: "0"
-        fill_in "case-contact-duration-minutes", with: "5"
-
-        expect {
-          click_on "Submit"
-        }.not_to change(CaseContact, :count)
-      end
-    end
-  end
-
-  context "without js", js: false do
-    it "re-renders the form with error messages and with only current Casa Case" do
-
+    it "does not submit the form" do
       fill_in "case-contact-duration-hours", with: "0"
       fill_in "case-contact-duration-minutes", with: "5"
 
       expect {
         click_on "Submit"
       }.not_to change(CaseContact, :count)
-
-      expect(page).to have_text("Minimum case contact duration should be 15 minutes.")
-      expect(page.all("input.casa-case-id-check").count).to eq 1
     end
   end
 end

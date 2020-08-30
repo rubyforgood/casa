@@ -29,41 +29,19 @@ RSpec.describe "volunteer adds a case contact", type: :system do
   end
 
   context "with invalid inputs" do
-    context "with javascript" do
-      it "does not submit the form" do
-        volunteer = create(:volunteer, :with_casa_cases)
-        volunteer_casa_case_one = volunteer.casa_cases.first
+    it "does not submit the form" do
+      volunteer = create(:volunteer, :with_casa_cases)
+      volunteer_casa_case_one = volunteer.casa_cases.first
 
-        sign_in volunteer
+      sign_in volunteer
 
-        visit new_case_contact_path
+      visit new_case_contact_path
 
-        find(:css, "input.casa-case-id-check[value='#{volunteer_casa_case_one.id}']").set(true)
+      find(:css, "input.casa-case-id-check[value='#{volunteer_casa_case_one.id}']").set(true)
 
-        expect {
-          click_on "Submit"
-        }.not_to change(CaseContact, :count)
-      end
-    end
-
-    context "without javascript" do
-      it "re-renders the form with error messages", js: false do
-        volunteer = create(:volunteer, :with_casa_cases)
-        volunteer_casa_case_one = volunteer.casa_cases.first
-
-        sign_in volunteer
-
-        visit new_case_contact_path
-
-        find(:css, "input.casa-case-id-check[value='#{volunteer_casa_case_one.id}']").set(true)
-
-        expect {
-          click_on "Submit"
-        }.not_to change(CaseContact, :count)
-
-        expect(page).to have_text("Contact types can't be blank")
-        expect(page).to have_text("Medium type can't be blank")
-      end
+      expect {
+        click_on "Submit"
+      }.not_to change(CaseContact, :count)
     end
   end
 end
