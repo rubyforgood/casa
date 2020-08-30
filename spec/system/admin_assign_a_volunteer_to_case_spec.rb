@@ -1,12 +1,13 @@
 require "rails_helper"
 
 RSpec.describe "admin or supervisor assign and unassign a volunteer to case", type: :system do
-  let(:supervisor1) { create(:supervisor) }
   let(:casa_case) { create(:casa_case) }
+  let(:supervisor1) { create(:supervisor) }
+  let!(:volunteer) {  create(:volunteer, supervisor: supervisor1) }
 
   before do
+    travel_to Time.zone.local(2020,8,29,4,5,6)
     sign_in supervisor1
-    volunteer = create(:volunteer)
     visit casa_case_path(casa_case.id)
     click_on "Edit Case Details"
 
@@ -14,6 +15,7 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
 
     click_on "Assign Volunteer"
   end
+  after { travel_back }
 
   context "when a volunteer is assigned to a case" do
     it 'marks the volunteer as assigned and shows the start date of the assignment' do
@@ -26,12 +28,11 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
       expect(assign_badge.text).to eq "ASSIGNED"
     end
 
-    it "shows an assignment start date and no assignment end date" do
-      expected_start_date = Time.zone.now.strftime("%B %e, %Y")
+    it "shows an assignment start date and no assignment end date", js: false do
       assignment_start = page.find("td[data-test=assignment-start]").text
       assignment_end = page.find("td[data-test=assignment-end]").text
 
-      expect(assignment_start).to eq(expected_start_date) # TODO this fails locally, UTC issue?
+      expect(assignment_start).to eq("August 29, 2020")
       expect(assignment_end).to be_empty
     end
   end
@@ -47,8 +48,8 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
       expect(assign_badge.text).to eq "UNASSIGNED"
     end
 
-    it "shows an assignment start date and an assignment end date" do
-      expected_start_and_end_date = Time.zone.now.strftime("%B %e, %Y")
+    it "shows an assignment start date and an assignment end date", js: false do
+      expected_start_and_end_date = "August 29, 2020"
 
       click_on "Unassign Volunteer"
 
@@ -60,23 +61,21 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
     end
   end
 
-  it "when a volunteer unassign from a case by other a supervisor" do
-    click_on "Log out"
-    supervisor2 = create(:supervisor)
-    sign_in supervisor2
-    visit casa_case_path(casa_case.id)
-    click_on "Edit Case Details"
+  context "when supervisor other than volunteer's supervisor" do
+    before { volunteer.update(supervisor: create(:supervisor)) }
 
-    unassign_button = page.find("input.btn-outline-danger")
-    expect(unassign_button.value).to eq "Unassign Volunteer"
+    it "unassigns volunteer" do
+      unassign_button = page.find("input.btn-outline-danger")
+      expect(unassign_button.value).to eq "Unassign Volunteer"
 
-    click_on "Unassign Volunteer"
+      click_on "Unassign Volunteer"
 
-    assign_badge = page.find("span.badge-danger")
-    expect(assign_badge.text).to eq "UNASSIGNED"
+      assign_badge = page.find("span.badge-danger")
+      expect(assign_badge.text).to eq "UNASSIGNED"
+    end
   end
 
-  it "when can assign only active volunteer to a case" do
+  it "when can assign only active volunteer to a case", js: false do
     volunteer1 = create(:volunteer)
     volunteer2 = create(:volunteer, :inactive)
 

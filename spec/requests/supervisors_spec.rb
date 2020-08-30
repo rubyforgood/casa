@@ -6,6 +6,10 @@ RSpec.describe "/supervisors", type: :request do
   let(:admin) { create(:casa_admin) }
   let(:supervisor) { create(:supervisor) }
 
+  let(:update_supervisor_params) {
+    {supervisor: {email: "newemail@gmail.com", display_name: "New Name"}}
+  }
+
   describe "GET /new" do
     it "admin can view the new supervisor page" do
       sign_in admin
@@ -111,9 +115,5 @@ RSpec.describe "/supervisors", type: :request do
         expect(response).to redirect_to(root_url)
       end
     end
-  end
-
-  def update_supervisor_params
-    {supervisor: {email: "newemail@gmail.com", display_name: "New Name"}}
   end
 end

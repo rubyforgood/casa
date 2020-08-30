@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "user inputs dangerous values", type: :system do
-  it "is successful" do
+  it "is successful", js: false do
     admin = create(:casa_admin)
     volunteer = create(:volunteer)
 

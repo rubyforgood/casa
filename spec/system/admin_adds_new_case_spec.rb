@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "admin adds a new case", type: :system do
-  it "is successful" do
+  it "is successful", js: false do
     admin = create(:casa_admin)
     case_number = "12345"
     sign_in admin

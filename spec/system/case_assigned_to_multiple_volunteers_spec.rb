@@ -6,7 +6,7 @@ RSpec.describe "case assigned to multiple volunteers", type: :system do
   let!(:volunteer_2) { create(:volunteer, display_name: 'BBB') }
   let!(:casa_case) { create(:casa_case) }
 
-  it "supervisor assigns multiple volunteers to the same case" do
+  it "supervisor assigns multiple volunteers to the same case", js: false do
     sign_in supervisor
     visit edit_casa_case_path(casa_case.id)
 

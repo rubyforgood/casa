@@ -3,9 +3,12 @@ require "rails_helper"
 RSpec.describe "Editing Profile", type: :system do
   let(:volunteer) { create(:volunteer) }
 
-  it "displays password errors messages when user is unable to set a password", js: true do
+  before do
     sign_in volunteer
     visit edit_users_path
+  end
+
+  it "displays password errors messages when user is unable to set a password", js: false do
 
     click_on "Change Password"
 
@@ -18,9 +21,7 @@ RSpec.describe "Editing Profile", type: :system do
     expect(page).to have_text("Password is too short (minimum is 6 characters)")
   end
 
-  it "notifies a user when they update their password", js: true do
-    sign_in volunteer
-    visit edit_users_path
+  it "notifies a user when they update their password", js: false do
 
     click_on "Change Password"
 

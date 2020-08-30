@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "volunteer views dashboard", type: :system do
-  it "sees all case contacts for their case" do
+  it "sees all case contacts for their case", js: false do
     volunteer = create(:volunteer)
     case_assignment = create(:case_assignment, volunteer: volunteer)
     case_contact = create(:case_contact, casa_case: case_assignment.casa_case, miles_driven: 98)
