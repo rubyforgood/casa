@@ -1,9 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "/casa_cases", type: :request do
-  # CasaCase. As you add validations to CasaCase, be sure to
-  # adjust the attributes here as well.
-
   let(:casa_org) { create(:casa_org) }
 
   let(:valid_attributes) { {case_number: "1234", transition_aged_youth: true, casa_org_id: casa_org.id} }
@@ -14,7 +11,7 @@ RSpec.describe "/casa_cases", type: :request do
 
   describe "GET /index" do
     it "renders a successful response" do
-      CasaCase.create! valid_attributes
+      create(:casa_case)
       get casa_cases_url
       expect(response).to be_successful
     end
@@ -22,7 +19,7 @@ RSpec.describe "/casa_cases", type: :request do
 
   describe "GET /show" do
     it "renders a successful response" do
-      casa_case = CasaCase.create! valid_attributes
+      casa_case = create(:casa_case)
       get casa_case_url(casa_case)
       expect(response).to be_successful
     end
@@ -48,7 +45,7 @@ RSpec.describe "/casa_cases", type: :request do
 
   describe "GET /edit" do
     it "render a successful response" do
-      casa_case = CasaCase.create! valid_attributes
+      casa_case = create(:casa_case)
       get edit_casa_case_url(casa_case)
       expect(response).to be_successful
     end
@@ -91,7 +88,7 @@ RSpec.describe "/casa_cases", type: :request do
       it "does not update case_number for volunteers" do
         sign_in create(:volunteer)
 
-        casa_case = CasaCase.create! valid_attributes
+        casa_case = create(:casa_case, case_number: "1234")
         patch casa_case_url(casa_case), params: {casa_case: new_attributes}
         casa_case.reload
         expect(casa_case.case_number).to eq "1234"
@@ -99,7 +96,7 @@ RSpec.describe "/casa_cases", type: :request do
       end
 
       it "updates the requested casa_case" do
-        casa_case = CasaCase.create! valid_attributes
+        casa_case = create(:casa_case)
         patch casa_case_url(casa_case), params: {casa_case: new_attributes}
         casa_case.reload
         expect(casa_case.case_number).to eq "12345"
@@ -107,7 +104,7 @@ RSpec.describe "/casa_cases", type: :request do
       end
 
       it "redirects to the casa_case" do
-        casa_case = CasaCase.create! valid_attributes
+        casa_case = create(:casa_case)
         patch casa_case_url(casa_case), params: {casa_case: new_attributes}
         casa_case.reload
         expect(response).to redirect_to(edit_casa_case_path)
@@ -116,7 +113,7 @@ RSpec.describe "/casa_cases", type: :request do
 
     context "with invalid parameters" do
       it "renders a successful response (i.e. to display the 'edit' template)" do
-        casa_case = CasaCase.create! valid_attributes
+        casa_case = create(:casa_case)
         patch casa_case_url(casa_case), params: {casa_case: invalid_attributes}
         expect(response).to be_successful
       end
@@ -125,12 +122,12 @@ RSpec.describe "/casa_cases", type: :request do
 
   describe "DELETE /destroy" do
     it "destroys the requested casa_case" do
-      casa_case = CasaCase.create! valid_attributes
+      casa_case = create(:casa_case)
       expect { delete casa_case_url(casa_case) }.to change(CasaCase, :count).by(-1)
     end
 
     it "redirects to the casa_cases list" do
-      casa_case = CasaCase.create! valid_attributes
+      casa_case = create(:casa_case)
       delete casa_case_url(casa_case)
       expect(response).to redirect_to(casa_cases_url)
     end
