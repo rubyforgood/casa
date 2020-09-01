@@ -18,6 +18,11 @@ SUPERVISOR_COUNT = 5
 
 SEED_PASSWORD = "123456"
 
+AllCasaAdmin.create(
+    email: "allcasaadmin@example.com",
+    password: SEED_PASSWORD,
+    password_confirmation: SEED_PASSWORD
+)
 # seed users for all types [volunteer supervisor casa_admin]
 # volunteer users
 Volunteer.create(
