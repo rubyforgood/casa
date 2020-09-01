@@ -9,8 +9,8 @@ RSpec.describe "/supervisor_volunteers", type: :request do
     context "when no pre-existing association between supervisr and volunteer exists" do
       it "creates a new supervisor_volunteers association" do
         valid_parameters = {
-            supervisor_volunteer: { volunteer_id: volunteer.id },
-            supervisor_id: supervisor.id
+          supervisor_volunteer: { volunteer_id: volunteer.id },
+          supervisor_id: supervisor.id
         }
         sign_in(admin)
 
@@ -31,8 +31,8 @@ RSpec.describe "/supervisor_volunteers", type: :request do
       end
       it "sets that association to active" do
         valid_parameters = {
-            supervisor_volunteer: { volunteer_id: volunteer.id },
-            supervisor_id: supervisor.id
+          supervisor_volunteer: { volunteer_id: volunteer.id },
+          supervisor_id: supervisor.id
         }
         sign_in(admin)
 
@@ -58,8 +58,8 @@ RSpec.describe "/supervisor_volunteers", type: :request do
 
       it "replaces that association" do
         valid_parameters = {
-            supervisor_volunteer: { volunteer_id: volunteer.id },
-            supervisor_id: supervisor.id
+          supervisor_volunteer: { volunteer_id: volunteer.id },
+          supervisor_id: supervisor.id
         }
         sign_in(admin)
 

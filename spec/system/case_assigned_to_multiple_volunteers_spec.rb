@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "case assigned to multiple volunteers", type: :feature do
+RSpec.describe "case assigned to multiple volunteers", type: :system do
   let!(:supervisor) { create(:casa_admin) }
   let!(:volunteer_1) { create(:volunteer, display_name: 'AAA') }
   let!(:volunteer_2) { create(:volunteer, display_name: 'BBB') }

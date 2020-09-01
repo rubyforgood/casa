@@ -77,6 +77,7 @@ end
 #  duration_minutes           :integer          not null
 #  medium_type                :string
 #  miles_driven               :integer
+#  notes                      :string
 #  occurred_at                :datetime         not null
 #  other_type_text            :string
 #  want_driving_reimbursement :boolean          default(FALSE)

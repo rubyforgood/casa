@@ -116,6 +116,11 @@
     <%= form.select :want_driving_reimbursement, options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement), {}, class: "custom-select" %>
   </div>
 
+  <div class="field notes form-group">
+    <h2><%= form.label :Notes %></h2>
+    <%= form.text_area :notes, :rows=>5, placeholder: t("forms.case_contact.notes_placeholder"), class: "form-control" %>
+  </div>
+
   <div class="actions">
     <%= form.submit "Submit", class: "btn btn-primary", id: "case-contact-submit" %>
   </div>

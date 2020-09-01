@@ -2,11 +2,10 @@
 
 require "rails_helper"
 
-RSpec.describe "Admin: New Supervisors", type: :system, js: true do
+RSpec.describe "Admin: New Supervisors", type: :system do
   let(:admin) { create(:casa_admin) }
 
   it "allows admin to creates a new supervisors" do
-    volunteer = create(:volunteer, display_name: "Assign Me")
 
     sign_in admin
     visit new_supervisor_path

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "volunteer views dashboard", type: :feature do
+RSpec.describe "volunteer views dashboard", type: :system do
   it "sees all case contacts for their case" do
     volunteer = create(:volunteer)
     case_assignment = create(:case_assignment, volunteer: volunteer)
