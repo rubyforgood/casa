@@ -26,8 +26,7 @@ class FileImporter
     end
     build_message("volunteers")
   end
-# TODO: dominique might need update for multiple supervisors
-# TODO: rename user to supervisor
+
   def import_supervisors
     CSV.foreach(import_csv || [], headers: true, header_converters: :symbol) do |row|
       user = Supervisor.new(row.to_hash.slice(:display_name, :email))
@@ -39,7 +38,12 @@ class FileImporter
           .split(",")
           .map { |email| User.find_by(email: email.strip) }
           .compact
-        user.volunteers << volunteers if volunteers.present?
+
+        volunteers.each do |volunteer|
+          if !volunteer.supervisor
+            user.volunteers << volunteer
+          end
+        end
         @number_imported += 1
       else
         @failed_imports << row.to_hash.values.to_s
@@ -69,7 +73,7 @@ class FileImporter
     end
     build_message("casa_cases")
   end
-
+  # TODO: add which names were imported when failed imports
   def build_message(type)
     if @failed_imports.empty?
       {type: :success, message: "You successfully imported #{@number_imported} #{type}."}
