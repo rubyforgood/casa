@@ -1,0 +1,3 @@
+ignore:
+  - 'config/environments/staging.rb'
+  - 'config/environments/production.rb'
