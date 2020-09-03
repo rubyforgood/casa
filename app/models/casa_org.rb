@@ -11,6 +11,12 @@ class CasaOrg < ApplicationRecord
   def volunteers
     users.where(type: "Volunteer")
   end
+
+  def case_contacts
+    CaseContact.where(
+      casa_case_id: CasaCase.where(casa_org_id: self.id)
+    )
+  end
 end
 
 # == Schema Information
