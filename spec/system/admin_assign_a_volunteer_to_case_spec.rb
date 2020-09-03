@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "admin or supervisor assign and unassign a volunteer to case", type: :system do
-  let(:casa_case) { create(:casa_case) }
-  let(:supervisor1) { create(:supervisor) }
-  let!(:volunteer) { create(:volunteer, supervisor: supervisor1) }
+  let(:organization) { create(:casa_org) }
+  let(:casa_case) { create(:casa_case, casa_org: organization) }
+  let(:supervisor1) { create(:supervisor, casa_org: organization) }
+  let!(:volunteer) {  create(:volunteer, supervisor: supervisor1, casa_org: organization) }
 
   before do
     travel_to Time.zone.local(2020, 8, 29, 4, 5, 6)
@@ -70,8 +71,8 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
   end
 
   it "when can assign only active volunteer to a case" do
-    volunteer1 = create(:volunteer)
-    volunteer2 = create(:volunteer, :inactive)
+    volunteer1 = create(:volunteer, casa_org: organization)
+    volunteer2 = create(:volunteer, :inactive, casa_org: organization)
 
     expect(find("select[name='case_assignment[volunteer_id]']").all("option").count).to eq 1
   end
