@@ -8,7 +8,7 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     address: ENV["MAILCATCHER_HOST"] || "127.0.0.1",
     port: 1025,
-    domain: "127.0.0.1",
+    domain: "127.0.0.1"
   }
 
   # In the development environment your application's code is reloaded on

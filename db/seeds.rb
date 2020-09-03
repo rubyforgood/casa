@@ -19,9 +19,9 @@ SUPERVISOR_COUNT = 5
 SEED_PASSWORD = "123456"
 
 AllCasaAdmin.create(
-    email: "allcasaadmin@example.com",
-    password: SEED_PASSWORD,
-    password_confirmation: SEED_PASSWORD
+  email: "allcasaadmin@example.com",
+  password: SEED_PASSWORD,
+  password_confirmation: SEED_PASSWORD
 )
 # seed users for all types [volunteer supervisor casa_admin]
 # volunteer users
@@ -111,11 +111,11 @@ CasaAdmin.create(
   password_confirmation: SEED_PASSWORD
 )
 CasaAdmin.create(
-    casa_org_id: other_casa.id,
-    display_name: "Other Casa Admin 1",
-    email: "other_casa_admin@example.com",
-    password: SEED_PASSWORD,
-    password_confirmation: SEED_PASSWORD
+  casa_org_id: other_casa.id,
+  display_name: "Other Casa Admin 1",
+  email: "other_casa_admin@example.com",
+  password: SEED_PASSWORD,
+  password_confirmation: SEED_PASSWORD
 )
 
 # inactive users

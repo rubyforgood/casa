@@ -9,7 +9,6 @@ RSpec.describe "Editing Profile", type: :system do
   end
 
   it "displays password errors messages when user is unable to set a password" do
-
     click_on "Change Password"
 
     fill_in "Password", with: "123"
@@ -22,7 +21,6 @@ RSpec.describe "Editing Profile", type: :system do
   end
 
   it "notifies a user when they update their password" do
-
     click_on "Change Password"
 
     fill_in "Password", with: "1234567"

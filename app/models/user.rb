@@ -23,7 +23,7 @@ class User < ApplicationRecord
           "and supervisor_volunteers.is_active")
       .where(active: true)
       .where(casa_org_id: org.id)
-      .where(supervisor_volunteers: { id: nil })
+      .where(supervisor_volunteers: {id: nil})
   }
 
   def casa_admin?
@@ -63,13 +63,13 @@ class User < ApplicationRecord
 
   def volunteers_serving_transistion_aged_youth
     volunteers.includes(:casa_cases)
-        .where(casa_cases: {transition_aged_youth: true}).size
+      .where(casa_cases: {transition_aged_youth: true}).size
   end
 
   def no_contact_for_two_weeks
     volunteers.includes(:case_contacts)
-        .where(case_contacts: {contact_made: true})
-        .where.not(case_contacts: { occurred_at: 14.days.ago..Date.today}).size
+      .where(case_contacts: {contact_made: true})
+      .where.not(case_contacts: {occurred_at: 14.days.ago..Date.today}).size
   end
 
   def past_names

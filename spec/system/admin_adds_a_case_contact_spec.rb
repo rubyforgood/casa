@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "admin or supervisor adds a case contact", type: :system do
-
   let(:admin) { create(:casa_admin) }
   let(:casa_case) { create(:casa_case) }
 
@@ -19,7 +18,6 @@ RSpec.describe "admin or supervisor adds a case contact", type: :system do
   end
 
   it "is successful" do
-
     fill_in "case-contact-duration-hours", with: "1"
     fill_in "case-contact-duration-minutes", with: "45"
 

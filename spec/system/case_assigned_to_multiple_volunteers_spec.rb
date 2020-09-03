@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe "case assigned to multiple volunteers", type: :system do
   let!(:supervisor) { create(:casa_admin) }
-  let!(:volunteer_1) { create(:volunteer, display_name: 'AAA') }
-  let!(:volunteer_2) { create(:volunteer, display_name: 'BBB') }
+  let!(:volunteer_1) { create(:volunteer, display_name: "AAA") }
+  let!(:volunteer_2) { create(:volunteer, display_name: "BBB") }
   let!(:casa_case) { create(:casa_case) }
 
   it "supervisor assigns multiple volunteers to the same case" do

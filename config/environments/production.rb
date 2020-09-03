@@ -6,12 +6,12 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = { # WARNING do not let standardrb linter change this block, it breaks
-      :address => 'smtp-relay.sendinblue.com',
-      :port => 587,
-      :user_name => ENV["SENDINBLUE_EMAIL"],
-      :password => ENV["SENDINBLUE_PASSWORD"],
-      :authentication => 'login',
-      :enable_starttls_auto => true
+    :address => 'smtp-relay.sendinblue.com',
+    :port => 587,
+    :user_name => ENV["SENDINBLUE_EMAIL"],
+    :password => ENV["SENDINBLUE_PASSWORD"],
+    :authentication => 'login',
+    :enable_starttls_auto => true
   }
   # Code is not reloaded between requests.
   config.cache_classes = true
@@ -84,7 +84,7 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
   if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger = ActiveSupport::Logger.new(STDOUT)
+    logger = ActiveSupport::Logger.new($stdout)
     logger.formatter = config.log_formatter
     config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
