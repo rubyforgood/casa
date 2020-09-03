@@ -16,12 +16,10 @@ class CasaCasePolicy
 
     def resolve
       case @user
-      when CasaAdmin # scope.in_casa_administered_by(@user)
-        scope.ordered
+      when CasaAdmin, Supervisor
+        scope
       when Volunteer
-        scope.ordered.actively_assigned_to(user)
-      when Supervisor
-        scope.ordered
+        scope.actively_assigned_to(user)
       else
         raise "unrecognized user type #{@user.type}"
       end
