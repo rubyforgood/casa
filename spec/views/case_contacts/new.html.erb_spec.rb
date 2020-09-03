@@ -22,6 +22,6 @@ describe "case_contacts/new" do
     allow(view).to receive(:current_user).and_return(user)
 
     render template: "case_contacts/new"
-    expect(rendered).to have_selector("textarea", :id => "case_contact_notes")
+    expect(rendered).to have_selector("textarea", id: "case_contact_notes")
   end
 end

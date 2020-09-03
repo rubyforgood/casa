@@ -27,16 +27,16 @@ RSpec.describe "/imports", type: :request do
 
       expect(Volunteer.count).to eq(0)
 
-      expect do
+      expect {
         post imports_url, {
           params: {
             import_type: "volunteer",
             file: fixture_file_upload(volunteer_file)
           }
         }
-      end.to change(Volunteer, :count).by(3)
+      }.to change(Volunteer, :count).by(3)
 
-      expect(response).to redirect_to(imports_url(import_type: 'volunteer'))
+      expect(response).to redirect_to(imports_url(import_type: "volunteer"))
     end
 
     it "creates supervisors and adds volunteers in supervisor CSV imports" do
@@ -47,20 +47,20 @@ RSpec.describe "/imports", type: :request do
 
       expect(Supervisor.count).to eq(0)
 
-      expect do
+      expect {
         post imports_url, {
           params: {
             import_type: "supervisor",
             file: fixture_file_upload(supervisor_file)
           }
         }
-      end.to change(Supervisor, :count).by(3)
+      }.to change(Supervisor, :count).by(3)
 
       expect(Supervisor.find_by(email: "supervisor1@example.net").volunteers.size).to eq(1)
       expect(Supervisor.find_by(email: "supervisor2@example.net").volunteers.size).to eq(2)
       expect(Supervisor.find_by(email: "supervisor3@example.net").volunteers.size).to eq(0)
 
-      expect(response).to redirect_to(imports_url(import_type: 'supervisor'))
+      expect(response).to redirect_to(imports_url(import_type: "supervisor"))
     end
   end
 end

@@ -3,10 +3,10 @@ require "rails_helper"
 RSpec.describe "admin or supervisor assign and unassign a volunteer to case", type: :system do
   let(:casa_case) { create(:casa_case) }
   let(:supervisor1) { create(:supervisor) }
-  let!(:volunteer) {  create(:volunteer, supervisor: supervisor1) }
+  let!(:volunteer) { create(:volunteer, supervisor: supervisor1) }
 
   before do
-    travel_to Time.zone.local(2020,8,29,4,5,6)
+    travel_to Time.zone.local(2020, 8, 29, 4, 5, 6)
     sign_in supervisor1
     visit casa_case_path(casa_case.id)
     click_on "Edit Case Details"
@@ -18,7 +18,7 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
   after { travel_back }
 
   context "when a volunteer is assigned to a case" do
-    it 'marks the volunteer as assigned and shows the start date of the assignment' do
+    it "marks the volunteer as assigned and shows the start date of the assignment" do
       expect(casa_case.case_assignments.count).to eq 1
 
       unassign_button = page.find("input.btn-outline-danger")
@@ -73,6 +73,6 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
     volunteer1 = create(:volunteer)
     volunteer2 = create(:volunteer, :inactive)
 
-    expect(find("select[name='case_assignment[volunteer_id]']").all('option').count).to eq 1
+    expect(find("select[name='case_assignment[volunteer_id]']").all("option").count).to eq 1
   end
 end

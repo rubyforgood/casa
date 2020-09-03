@@ -35,7 +35,7 @@ end
 
 group :development do
   gem "annotate" # for adding db field listings to models as comments
-  gem 'erb_lint', require: false
+  gem "erb_lint", require: false
   gem "letter_opener" # Opens emails in new tab for easier testing
   gem "listen", ">= 3.0.5", "< 3.3"
   gem "spring" # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
