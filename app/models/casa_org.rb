@@ -1,5 +1,16 @@
 class CasaOrg < ApplicationRecord
   validates :name, presence: true
+
+  has_many :users
+  has_many :casa_cases
+
+  def supervisors
+    users.where(type: "Supervisor")
+  end
+
+  def volunteers
+    users.where(type: "Volunteer")
+  end
 end
 
 # == Schema Information

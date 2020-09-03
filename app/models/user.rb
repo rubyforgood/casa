@@ -21,9 +21,15 @@ class User < ApplicationRecord
     joins("left join supervisor_volunteers "\
           "on supervisor_volunteers.volunteer_id = users.id "\
           "and supervisor_volunteers.is_active")
-      .where(active: true)
-      .where(casa_org_id: org.id)
-      .where(supervisor_volunteers: {id: nil})
+      .active
+      .in_organization(org)
+      .where(supervisor_volunteers: { id: nil })
+  }
+
+  scope :active, -> { where(active: true) }
+
+  scope :in_organization, lambda { |org|
+    where(casa_org_id: org.id)
   }
 
   def casa_admin?

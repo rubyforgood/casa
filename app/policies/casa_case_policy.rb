@@ -19,7 +19,7 @@ class CasaCasePolicy
       when CasaAdmin # scope.in_casa_administered_by(@user)
         scope.ordered
       when Volunteer
-        scope.actively_assigned_to(user)
+        scope.ordered.actively_assigned_to(user)
       when Supervisor
         scope.ordered
       else
@@ -33,7 +33,7 @@ class CasaCasePolicy
   end
 
   def assign_volunteers?
-    _is_supervisor_or_casa_admin?
+    is_in_same_org? && is_supervisor_or_casa_admin?
   end
 
   def permitted_attributes
@@ -46,36 +46,47 @@ class CasaCasePolicy
   end
 
   def show?
-    _is_supervisor_or_casa_admin? || _is_volunteer_actively_assigned_to_case?
+    is_in_same_org? && (
+      is_supervisor_or_casa_admin? || is_volunteer_actively_assigned_to_case?
+    )
   end
 
   def edit?
-    _is_supervisor_or_casa_admin? || _is_volunteer_actively_assigned_to_case?
+    is_in_same_org? && (
+      is_supervisor_or_casa_admin? || is_volunteer_actively_assigned_to_case?
+    )
   end
 
   def new?
-    _is_supervisor_or_casa_admin?
+    is_in_same_org? && is_supervisor_or_casa_admin?
   end
 
   def create?
-    _is_supervisor_or_casa_admin?
+    is_in_same_org? && is_supervisor_or_casa_admin?
   end
 
   def update?
-    _is_supervisor_or_casa_admin? || _is_volunteer_actively_assigned_to_case?
+    is_in_same_org? && (
+      is_supervisor_or_casa_admin? || is_volunteer_actively_assigned_to_case?
+    )
   end
 
   def destroy?
-    _is_supervisor_or_casa_admin?
+    is_in_same_org? && is_supervisor_or_casa_admin?
   end
 
   private
 
-  def _is_supervisor_or_casa_admin?
+  def is_in_same_org?
+    # on new? checks, record is nil, on index policy_scope, record is :casa_case
+    record.nil? || record == :casa_case || user.casa_org_id == record.casa_org_id
+  end
+
+  def is_supervisor_or_casa_admin?
     user.is_a?(CasaAdmin) || user.is_a?(Supervisor)
   end
 
-  def _is_volunteer_actively_assigned_to_case?
+  def is_volunteer_actively_assigned_to_case?
     record.case_assignments.exists?(volunteer_id: user.id, is_active: true)
   end
 end
