@@ -85,9 +85,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         expect do
           patch unassign_supervisor_volunteer_path(volunteer)
         end.not_to change(supervisor.volunteers, :count)
-
         association.reload
-
         expect(association.is_active?).to be(false)
         expect(response).to redirect_to edit_supervisor_path(supervisor)
       end
@@ -96,13 +94,13 @@ RSpec.describe "/supervisor_volunteers", type: :request do
     context "when the logged in user is a supervisor" do
       it "sets the is_active flag for assignment of a volunteer to a supervisor to false" do
         sign_in supervisor
-
+        
         expect do
           patch unassign_supervisor_volunteer_path(volunteer)
         end.not_to change(supervisor.volunteers, :count)
 
         association.reload
-
+        
         expect(association.is_active?).to be(false)
         expect(response).to redirect_to edit_supervisor_path(supervisor)
       end

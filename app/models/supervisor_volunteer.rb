@@ -1,6 +1,6 @@
 class VolunteerSingleSupervisorValidator < ActiveModel:: Validator 
   def validate(record)
-    if SupervisorVolunteer.where(volunteer_id: record.volunteer_id, is_active: true).size >= 1
+    if SupervisorVolunteer.where(volunteer_id: record.volunteer_id, is_active: true).size > 1
       record.errors[:base] << "A volunteer cannot have more than 1 supervisor"
     end
   end
