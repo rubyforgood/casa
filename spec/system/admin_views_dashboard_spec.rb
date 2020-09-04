@@ -31,7 +31,7 @@ RSpec.describe "admin views dashboard", type: :system do
 
   describe "supervisor column of volunteers table" do
     it "is blank when volunteer has no supervisor" do
-      volunteer = create(:volunteer, casa_org: organization)
+      create(:volunteer, casa_org: organization)
       sign_in admin
 
       visit root_path
@@ -43,7 +43,7 @@ RSpec.describe "admin views dashboard", type: :system do
     it "displays supervisor's name when volunteer has supervisor" do
       name = "Superduper Visor"
       supervisor = create(:supervisor, display_name: name, casa_org: organization)
-      volunteer = create(:volunteer, supervisor: supervisor, casa_org: organization)
+      create(:volunteer, supervisor: supervisor, casa_org: organization)
       sign_in admin
 
       visit root_path
@@ -56,7 +56,7 @@ RSpec.describe "admin views dashboard", type: :system do
   it "can see the last case contact and navigate to it", js: false do
     volunteer = create(:volunteer, email: "casa@example.com", casa_org: organization)
     casa_case = create(:casa_case, casa_org: organization, case_number: SecureRandom.hex(12))
-    case_contact = create(:case_contact, :wants_reimbursement, casa_case: casa_case, creator: volunteer, contact_made: true)
+    create(:case_contact, :wants_reimbursement, casa_case: casa_case, creator: volunteer, contact_made: true)
 
     volunteer.casa_cases << casa_case
 
