@@ -101,7 +101,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         }.not_to change(supervisor.volunteers, :count)
 
         association.reload
-        
+
         expect(association.is_active?).to be(false)
         expect(response).to redirect_to edit_supervisor_path(supervisor)
       end

@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "admin or supervisor adds a case contact", type: :system do
-
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:casa_case) { create(:casa_case, casa_org: organization) }

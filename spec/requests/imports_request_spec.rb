@@ -70,19 +70,19 @@ RSpec.describe "/imports", type: :request do
 
       expect(Supervisor.count).to eq(0)
 
-      expect do
+      expect {
         post imports_url, {
           params: {
             import_type: "supervisor",
             file: fixture_file_upload(supervisor_volunteers_file)
           }
         }
-      end.to change(Supervisor, :count).by(2)
+      }.to change(Supervisor, :count).by(2)
 
       expect(Supervisor.find_by(email: "s5@example.com").volunteers.size).to eq(1)
       expect(Supervisor.find_by(email: "s6@example.com").volunteers.size).to eq(0)
 
-      expect(response).to redirect_to(imports_url(import_type: 'supervisor'))
+      expect(response).to redirect_to(imports_url(import_type: "supervisor"))
     end
   end
 end

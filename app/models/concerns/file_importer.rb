@@ -40,7 +40,7 @@ class FileImporter
           .compact
 
         volunteers.each do |volunteer|
-          if !volunteer.supervisor
+          unless volunteer.supervisor
             user.volunteers << volunteer
           end
         end
@@ -73,6 +73,7 @@ class FileImporter
     end
     build_message("casa_cases")
   end
+
   # TODO: add which names were imported when failed imports
   def build_message(type)
     if @failed_imports.empty?
