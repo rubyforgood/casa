@@ -1,5 +1,4 @@
 class CaseContactPolicy
-  include PolicyHelper
   attr_reader :user, :record
 
   def initialize(user, record)

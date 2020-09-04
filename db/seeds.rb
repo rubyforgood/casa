@@ -9,7 +9,6 @@ CasaOrg.delete_all
 AllCasaAdmin.delete_all
 
 pg_casa = CasaOrg.create(name: "Prince George CASA")
-other_casa = CasaOrg.create(name: "Other CASA org")
 
 # number of volunteer users and casa cases to generate
 VOLUNTEER_USER_COUNT = 100
@@ -110,13 +109,6 @@ CasaAdmin.create(
   password: SEED_PASSWORD,
   password_confirmation: SEED_PASSWORD
 )
-CasaAdmin.create(
-  casa_org_id: other_casa.id,
-  display_name: "Other Casa Admin 1",
-  email: "other_casa_admin@example.com",
-  password: SEED_PASSWORD,
-  password_confirmation: SEED_PASSWORD
-)
 
 # inactive users
 Volunteer.create(
@@ -205,3 +197,32 @@ vols.map do |vol|
     }
   }
 end
+
+###########################
+# Other CASA Organization #
+###########################
+other_casa = CasaOrg.create(name: "Other CASA org")
+
+CasaAdmin.create(
+  casa_org: other_casa,
+  display_name: "Other Admin",
+  email: "other_casa_admin@example.com",
+  password: SEED_PASSWORD,
+  password_confirmation: SEED_PASSWORD
+)
+
+Supervisor.create(
+  casa_org: other_casa,
+  display_name: "Other Supervisor",
+  email: "other.supervisor@example.com",
+  password: SEED_PASSWORD,
+  password_confirmation: SEED_PASSWORD
+)
+
+Volunteer.create(
+  casa_org: other_casa,
+  display_name: "Other Volunteer",
+  email: "other.volunteer@example.com",
+  password: SEED_PASSWORD,
+  password_confirmation: SEED_PASSWORD
+)

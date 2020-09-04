@@ -1,11 +1,12 @@
 class CasaCasesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_casa_case, only: %i[show edit update destroy]
+  before_action :require_organization!
 
   # GET /casa_cases
   # GET /casa_cases.json
   def index
-    @casa_cases = policy_scope(CasaCase.all)
+    @casa_cases = policy_scope(current_organization.casa_cases)
   end
 
   # GET /casa_cases/1
@@ -16,7 +17,7 @@ class CasaCasesController < ApplicationController
 
   # GET /casa_cases/new
   def new
-    @casa_case = CasaCase.new
+    @casa_case = CasaCase.new(casa_org: current_organization)
     authorize @casa_case
   end
 
@@ -28,7 +29,7 @@ class CasaCasesController < ApplicationController
   # POST /casa_cases
   # POST /casa_cases.json
   def create
-    @casa_case = CasaCase.new(casa_case_params)
+    @casa_case = CasaCase.new(casa_case_params.merge(casa_org: current_organization))
 
     respond_to do |format|
       if @casa_case.save
@@ -69,12 +70,14 @@ class CasaCasesController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_casa_case
-    @casa_case = CasaCase.find(params[:id])
+    @casa_case = current_organization.casa_cases.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    head :not_found
   end
 
   # Only allow a list of trusted parameters through.
   def casa_case_params
-    params.require(:casa_case).permit(:case_number, :transition_aged_youth, :casa_org_id)
+    params.require(:casa_case).permit(:case_number, :transition_aged_youth)
   end
 
   # Separate params so only admins can update the case_number

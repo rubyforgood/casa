@@ -1,9 +1,12 @@
 class ApplicationController < ActionController::Base
   include Pundit
+  include Organizational
+
   protect_from_forgery
   before_action :set_paper_trail_whodunnit
 
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
+  rescue_from Organizational::UnknownOrganization, with: :not_authorized
 
   private
 

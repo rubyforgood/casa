@@ -28,12 +28,11 @@ RSpec.describe "/imports", type: :request do
       expect(Volunteer.count).to eq(0)
 
       expect {
-        post imports_url, {
+        post imports_url,
           params: {
             import_type: "volunteer",
             file: fixture_file_upload(volunteer_file)
           }
-        }
       }.to change(Volunteer, :count).by(3)
 
       expect(response).to redirect_to(imports_url(import_type: "volunteer"))
@@ -48,12 +47,11 @@ RSpec.describe "/imports", type: :request do
       expect(Supervisor.count).to eq(0)
 
       expect {
-        post imports_url, {
+        post imports_url,
           params: {
             import_type: "supervisor",
             file: fixture_file_upload(supervisor_file)
           }
-        }
       }.to change(Supervisor, :count).by(3)
 
       expect(Supervisor.find_by(email: "supervisor1@example.net").volunteers.size).to eq(1)
