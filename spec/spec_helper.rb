@@ -18,6 +18,7 @@ RSpec.configure do |config|
   config.filter_run focus: true
   config.run_all_when_everything_filtered = true
   config.shared_context_metadata_behavior = :apply_to_host_groups
+  config.formatter = :documentation
 
   config.before(:each, type: :system) do
     driven_by :selenium_chrome_headless
