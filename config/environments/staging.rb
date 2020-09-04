@@ -6,7 +6,6 @@ Rails.application.configure do
   config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
   config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
-  config.assets.compile = false
   config.active_storage.service = :local
   config.log_level = :debug
   config.log_tags = [:request_id]
@@ -17,12 +16,12 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = { # WARNING do not let standardrb linter change this block, it breaks
-      :address => 'smtp-relay.sendinblue.com',
-      :port => 587,
-      :user_name => ENV["SENDINBLUE_EMAIL"],
-      :password => ENV["SENDINBLUE_PASSWORD"],
-      :authentication => 'login',
-      :enable_starttls_auto => true
+    :address => 'smtp-relay.sendinblue.com',
+    :port => 587,
+    :user_name => ENV["SENDINBLUE_EMAIL"],
+    :password => ENV["SENDINBLUE_PASSWORD"],
+    :authentication => 'login',
+    :enable_starttls_auto => true
   }
 
   config.i18n.fallbacks = true
@@ -30,7 +29,7 @@ Rails.application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger = ActiveSupport::Logger.new(STDOUT)
+    logger = ActiveSupport::Logger.new($stdout)
     logger.formatter = config.log_formatter
     config.logger = ActiveSupport::TaggedLogging.new(logger)
   end

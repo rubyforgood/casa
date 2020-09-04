@@ -32,7 +32,7 @@ RSpec.describe CaseAssignment do
     volunteer_1.casa_cases << casa_case_2
     volunteer_1.save!
 
-    expect(CasaCase.find(casa_case_1.id).volunteers).to eq([volunteer_1])
-    expect(CasaCase.find(casa_case_2.id).volunteers).to eq([volunteer_1])
+    expect(casa_case_1.reload.volunteers).to eq([volunteer_1])
+    expect(casa_case_2.reload.volunteers).to eq([volunteer_1])
   end
 end

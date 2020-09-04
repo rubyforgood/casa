@@ -5,7 +5,7 @@ class CaseContact < ApplicationRecord
   validate :contact_made_chosen
   validates :contact_types, presence: true
   validate :contact_types_included
-  validates :duration_minutes, numericality: { greater_than_or_equal_to: 15, message: "Minimum case contact duration should be 15 minutes." }
+  validates :duration_minutes, numericality: {greater_than_or_equal_to: 15, message: "Minimum case contact duration should be 15 minutes."}
   validates :medium_type, presence: true
   validates :occurred_at, presence: true
   validate :occurred_at_not_in_future
@@ -77,6 +77,7 @@ end
 #  duration_minutes           :integer          not null
 #  medium_type                :string
 #  miles_driven               :integer
+#  notes                      :string
 #  occurred_at                :datetime         not null
 #  other_type_text            :string
 #  want_driving_reimbursement :boolean          default(FALSE)

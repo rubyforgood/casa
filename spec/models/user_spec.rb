@@ -48,7 +48,7 @@ RSpec.describe User, type: :model do
 
   describe "supervisors" do
     context "#volunteers_serving_transistion_aged_youth" do
-      it 'returns the number of transition aged youth on a supervisor' do
+      it "returns the number of transition aged youth on a supervisor" do
         assignment1 = create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: true))
         assignment2 = create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: true))
         assignment3 = create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: false))
@@ -61,7 +61,7 @@ RSpec.describe User, type: :model do
     end
 
     context "#no_contact_for_two_weeks" do
-      it 'returns the number of volunteers who have not made contact in over 2 weeks' do
+      it "returns the number of volunteers who have not made contact in over 2 weeks" do
         supervisor = create(:supervisor)
 
         volunteer = create(:volunteer, :with_casa_cases, supervisor: supervisor)
@@ -100,8 +100,8 @@ RSpec.describe User, type: :model do
     context "when the user has a transition-aged-youth case" do
       it "is true" do
         case_assignments = [
-            case_assignment_with_a_transition_aged_youth,
-            case_assignment_without_transition_aged_youth
+          case_assignment_with_a_transition_aged_youth,
+          case_assignment_without_transition_aged_youth
         ]
         user = create(:volunteer, case_assignments: case_assignments)
 

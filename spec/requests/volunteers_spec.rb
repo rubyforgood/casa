@@ -56,7 +56,7 @@ RSpec.describe "/volunteers", type: :request do
       sign_in admin
 
       patch volunteer_path(volunteer), params: {
-        volunteer: { email: "newemail@gmail.com", display_name: "New Name" }
+        volunteer: {email: "newemail@gmail.com", display_name: "New Name"}
       }
       volunteer.reload
 
@@ -70,7 +70,7 @@ RSpec.describe "/volunteers", type: :request do
       sign_in admin
 
       patch volunteer_path(volunteer), params: {
-        volunteer: { active: false }
+        volunteer: {active: false}
       }
       volunteer.reload
 

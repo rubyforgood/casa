@@ -1,6 +1,4 @@
 require "simplecov"
-require "capybara/rspec"
-require "pundit/rspec"
 require "pry"
 SimpleCov.start do
   track_files "{app,lib}/**/*.rb"
@@ -20,6 +18,17 @@ RSpec.configure do |config|
   config.shared_context_metadata_behavior = :apply_to_host_groups
 
   config.before(:each, type: :system) do
-    driven_by :selenium_chrome_headless
+    if ENV["DOCKER"]
+      driven_by :selenium_chrome_headless_in_container
+      Capybara.server_host = "0.0.0.0"
+      Capybara.server_port = 4000
+      Capybara.app_host = "http://web:4000"
+    else
+      driven_by :selenium_chrome_headless
+    end
+  end
+
+  config.before(:each, type: :system, js: false) do
+    driven_by :rack_test
   end
 end

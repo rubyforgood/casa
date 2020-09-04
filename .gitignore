@@ -12,6 +12,7 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+.DS_Store
 
 # Ignore uploaded files in development.
 /storage/*
@@ -34,6 +35,7 @@ yarn-debug.log*
 .yarn-integrity
 
 .rails_routes*
+.vscode
 
 coverage/
 .idea/

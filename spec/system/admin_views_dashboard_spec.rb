@@ -1,11 +1,18 @@
 require "rails_helper"
 
-RSpec.describe "admin views dashboard", type: :feature do
-  let(:admin) { create(:casa_admin) }
+RSpec.describe "admin views dashboard", type: :system do
+  let(:organization) { create(:casa_org) }
+  let(:admin) { create(:casa_admin, casa_org: organization) }
+
+  before { travel_to Time.zone.local(2020,8,29,4,5,6) }
+  after { travel_back }
 
   it "can see volunteers and navigate to their cases" do
-    volunteer = create(:volunteer, :with_casa_cases, email: "casa@example.com")
+    volunteer = create(:volunteer, email: "casa@example.com", casa_org: organization)
+    volunteer.casa_cases << create(:casa_case, casa_org: organization)
+    volunteer.casa_cases << create(:casa_case, casa_org: organization)
     casa_case = volunteer.casa_cases[0]
+
     sign_in admin
 
     visit root_path
@@ -24,7 +31,7 @@ RSpec.describe "admin views dashboard", type: :feature do
 
   describe "supervisor column of volunteers table" do
     it "is blank when volunteer has no supervisor" do
-      volunteer = create(:volunteer)
+      volunteer = create(:volunteer, casa_org: organization)
       sign_in admin
 
       visit root_path
@@ -35,8 +42,8 @@ RSpec.describe "admin views dashboard", type: :feature do
 
     it "displays supervisor's name when volunteer has supervisor" do
       name = "Superduper Visor"
-      supervisor = create(:supervisor, display_name: name)
-      volunteer = create(:volunteer, supervisor: supervisor)
+      supervisor = create(:supervisor, display_name: name, casa_org: organization)
+      volunteer = create(:volunteer, supervisor: supervisor, casa_org: organization)
       sign_in admin
 
       visit root_path
@@ -46,24 +53,31 @@ RSpec.describe "admin views dashboard", type: :feature do
     end
   end
 
-  it "can see the last case contact and navigate to it" do
-    volunteer = create(:volunteer, :with_case_contact_wants_driving_reimbursement, email: "casa@example.com")
+  it "can see the last case contact and navigate to it", js: false do
+    volunteer = create(:volunteer, email: "casa@example.com", casa_org: organization)
+    casa_case = create(:casa_case, casa_org: organization, case_number: SecureRandom.hex(12))
+    case_contact = create(:case_contact, :wants_reimbursement, casa_case: casa_case, creator: volunteer, contact_made: true)
+
+    volunteer.casa_cases << casa_case
+
     sign_in admin
 
     visit root_path
 
-    expect(page).to have_text(volunteer.most_recent_contact.occurred_at.strftime("%B %-e, %Y"))
-    expect(page).to have_text("20") # miles driven
+    # save_and_open_page
+
+    expect(page).to have_text(casa_case.case_number)
+    expect(page).to have_text("August 29, 2020")
 
     within "#volunteers" do
-      click_on volunteer.most_recent_contact.occurred_at.strftime("%B %-e, %Y")
+      click_on "August 29, 2020"
     end
 
     expect(page).to have_text("CASA Case Details")
   end
 
   it "can go to the volunteer edit page from the volunteer list" do
-    create(:volunteer)
+    create(:volunteer, casa_org: organization)
     sign_in admin
 
     visit root_path
@@ -86,9 +100,9 @@ RSpec.describe "admin views dashboard", type: :feature do
     expect(page).to have_css("form#new_volunteer")
   end
 
-  it "can filter volunteers", type: :system do
-    create_list(:volunteer, 3)
-    create_list(:volunteer, 2, :inactive)
+  it "can filter volunteers" do
+    create_list(:volunteer, 3, casa_org: organization)
+    create_list(:volunteer, 2, :inactive, casa_org: organization)
 
     sign_in admin
 
@@ -109,22 +123,14 @@ RSpec.describe "admin views dashboard", type: :feature do
     expect(page.all("table#volunteers tr").count).to eq 3
   end
 
-  it "can see supervisors" do
+  it "can go to the supervisor edit page from the supervisor list" do
     supervisor_name = "Leslie Knope"
-    create(:supervisor, display_name: supervisor_name)
+    create(:supervisor, display_name: supervisor_name, casa_org: organization)
     sign_in admin
 
     visit root_path
 
     expect(page).to have_text(supervisor_name)
-  end
-
-  it "can go to the supervisor edit page from the supervisor list" do
-    supervisor_name = "Leslie Knope"
-    create(:supervisor, display_name: supervisor_name)
-    sign_in admin
-
-    visit root_path
 
     within "#supervisors" do
       click_on "Edit"
@@ -135,7 +141,7 @@ RSpec.describe "admin views dashboard", type: :feature do
 
   it "can go to the supervisor edit page from the supervisor's name" do
     supervisor_name = "Leslie Knope"
-    create(:supervisor, display_name: supervisor_name)
+    create(:supervisor, display_name: supervisor_name, casa_org: organization)
     sign_in admin
 
     visit root_path
@@ -149,7 +155,7 @@ RSpec.describe "admin views dashboard", type: :feature do
 
   it "can go to the supervisor edit page and see red message
       when there are no active volunteers" do
-    create(:supervisor)
+    create(:supervisor, casa_org: organization)
     sign_in admin
 
     visit root_path

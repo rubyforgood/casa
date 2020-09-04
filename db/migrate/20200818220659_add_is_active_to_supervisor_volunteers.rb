@@ -3,4 +3,3 @@ class AddIsActiveToSupervisorVolunteers < ActiveRecord::Migration[6.0]
     add_column :supervisor_volunteers, :is_active, :boolean, default: true
   end
 end
-

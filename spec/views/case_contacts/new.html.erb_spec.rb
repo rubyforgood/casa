@@ -12,4 +12,16 @@ describe "case_contacts/new" do
     render template: "case_contacts/new"
     expect(rendered).to include(Time.zone.now.strftime("%Y-%m-%d"))
   end
+
+  it "displays the notes text area field" do
+    case_contact = create(:case_contact)
+    assign :case_contact, case_contact
+    assign :casa_cases, [case_contact.casa_case]
+
+    user = build_stubbed(:volunteer)
+    allow(view).to receive(:current_user).and_return(user)
+
+    render template: "case_contacts/new"
+    expect(rendered).to have_selector("textarea", id: "case_contact_notes")
+  end
 end

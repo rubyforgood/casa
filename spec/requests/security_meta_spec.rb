@@ -42,10 +42,17 @@ RSpec.describe "All Endpoints", type: :request do
         p route
       end
 
-      it "Redirects to the sign_in page with #{route.name}" do
-        send(route.verb.downcase.to_sym, route.path)
-        expect(response.status).to eq(302)
-        expect(response.header["Location"]).to be_end_with("sign_in")
+      if route.path == "/"
+        it "Renders the sign in page for root path" do
+          send(route.verb.downcase.to_sym, route.path)
+          expect(response.status).to eq(200)
+        end
+      else
+        it "Redirects to the sign_in page with #{route.name}" do
+          send(route.verb.downcase.to_sym, route.path)
+          expect(response.status).to eq(302)
+          expect(response.header["Location"]).to be_end_with("sign_in")
+        end
       end
     end
   end

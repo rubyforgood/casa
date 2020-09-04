@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "volunteer adds a case contact", type: :feature do
+RSpec.describe "volunteer adds a case contact", type: :system do
   it "is successful" do
     volunteer = create(:volunteer, :with_casa_cases)
     volunteer_casa_case_one = volunteer.casa_cases.first
@@ -10,12 +10,13 @@ RSpec.describe "volunteer adds a case contact", type: :feature do
     visit new_case_contact_path
 
     find(:css, "input.casa-case-id-check[value='#{volunteer_casa_case_one.id}']").set(true)
-    find(:css, "input.casa-case-contact-type[value='school']").set(true)
-    find(:css, "input.casa-case-contact-type[value='therapist']").set(true)
+    check "School"
+    check "Therapist"
+    choose "Yes"
+    select "Video", from: "case_contact[medium_type]"
     fill_in "case-contact-duration-hours", with: "1"
     fill_in "case-contact-duration-minutes", with: "45"
     fill_in "case_contact_occurred_at", with: "04/04/2020"
-    select "Video", from: "case_contact[medium_type]"
 
     expect(page).not_to have_text("error")
     expect {
@@ -28,7 +29,7 @@ RSpec.describe "volunteer adds a case contact", type: :feature do
   end
 
   context "with invalid inputs" do
-    it "re-renders the form with error messages" do
+    it "does not submit the form" do
       volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first
 
@@ -41,11 +42,6 @@ RSpec.describe "volunteer adds a case contact", type: :feature do
       expect {
         click_on "Submit"
       }.not_to change(CaseContact, :count)
-
-      expect(page).to have_text("Contact types can't be blank")
-      expect(page).to have_text("Medium type can't be blank")
     end
   end
-
-  #   TODO test case_contact.js behavior
 end
