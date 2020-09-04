@@ -9,7 +9,6 @@ class SupervisorVolunteer < ApplicationRecord
   def is_active?
     is_active == true
   end
-
 end
 
 # == Schema Information

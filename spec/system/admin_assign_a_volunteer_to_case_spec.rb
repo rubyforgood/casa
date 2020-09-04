@@ -4,7 +4,7 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
   let(:organization) { create(:casa_org) }
   let(:casa_case) { create(:casa_case, casa_org: organization) }
   let(:supervisor1) { create(:supervisor, casa_org: organization) }
-  let!(:volunteer) {  create(:volunteer, supervisor: supervisor1, casa_org: organization) }
+  let!(:volunteer) { create(:volunteer, supervisor: supervisor1, casa_org: organization) }
 
   before do
     travel_to Time.zone.local(2020, 8, 29, 4, 5, 6)

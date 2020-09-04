@@ -4,7 +4,7 @@ RSpec.describe "admin views dashboard", type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
 
-  before { travel_to Time.zone.local(2020,8,29,4,5,6) }
+  before { travel_to Time.zone.local(2020, 8, 29, 4, 5, 6) }
   after { travel_back }
 
   it "can see volunteers and navigate to their cases" do

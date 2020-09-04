@@ -14,7 +14,7 @@ class CasaOrg < ApplicationRecord
 
   def case_contacts
     CaseContact.where(
-      casa_case_id: CasaCase.where(casa_org_id: self.id)
+      casa_case_id: CasaCase.where(casa_org_id: id)
     )
   end
 end
