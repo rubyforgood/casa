@@ -29,12 +29,12 @@ RSpec.describe "supervisor volunteer assignment", type: :system do
 
   describe "no volunteers exist" do
     let(:organization) { create(:casa_org) }
-    let(:supervisor) { create(:supervisor, casa_org: organization) }
-    let(:volunteer_1) { create(:volunteer, display_name: "AAA", casa_org: organization) }
+    let!(:supervisor) { create(:supervisor, casa_org: organization) }
+    let!(:volunteer_1) { create(:volunteer, display_name: "AAA", casa_org: organization) }
     it "does not error out when adding non existent volunteer" do
       sign_in supervisor
       visit edit_supervisor_path(supervisor)
-      select volunteer_1.display_name, from: "Select a Volunteer"
+      click_on "Assign Volunteer"
       click_on "Assign Volunteer"
       expect(page).to have_text("There are no active, unassigned volunteers available.")
     end
