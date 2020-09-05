@@ -1,5 +1,4 @@
 class DashboardPolicy
-  include PolicyHelper
   attr_reader :user, :dashboard
 
   def initialize(user, dashboard)

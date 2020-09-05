@@ -62,8 +62,8 @@ class CaseContact < ApplicationRecord
   end
 
   def contact_made_chosen
-    return !contact_made.nil?
-    errors[:base] << "Must enter whether the contact was made."
+    errors[:base] << "Must enter whether the contact was made." if contact_made.nil?
+    !contact_made.nil?
   end
 end
 
