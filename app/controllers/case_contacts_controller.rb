@@ -19,6 +19,9 @@ class CaseContactsController < ApplicationController
     @casa_cases = @casa_cases.where(id: params.dig(:case_contact, :casa_case_id)) if params.dig(:case_contact, :casa_case_id).present?
 
     @case_contact = CaseContact.new
+
+    # By default the first case is selected
+    @selected_cases = @casa_cases[0, 1]
   end
 
   def create
@@ -28,15 +31,15 @@ class CaseContactsController < ApplicationController
     @casa_cases = policy_scope(current_organization.casa_cases)
     @case_contact = CaseContact.new(create_case_contact_params)
 
-    selected_cases = @casa_cases.where(id: params.dig(:case_contact, :casa_case_id))
-    if selected_cases.empty?
+    @selected_cases = @casa_cases.where(id: params.dig(:case_contact, :casa_case_id))
+    if @selected_cases.empty?
       flash[:alert] = "At least one case must be selected"
       render :new
       return
     end
 
     # Create a case contact for every case that was checked
-    case_contacts = selected_cases.map { |casa_case|
+    case_contacts = @selected_cases.map { |casa_case|
       casa_case.case_contacts.create(create_case_contact_params)
     }
 
@@ -52,12 +55,14 @@ class CaseContactsController < ApplicationController
   # GET /case_contacts/1/edit
   def edit
     @casa_cases = [@case_contact.casa_case]
+    @selected_cases = @casa_cases
   end
 
   # PATCH/PUT /case_contacts/1
   # PATCH/PUT /case_contacts/1.json
   def update
     @casa_cases = [@case_contact.casa_case]
+    @selected_cases = @casa_cases
 
     respond_to do |format|
       if @case_contact.update(update_case_contact_params)
