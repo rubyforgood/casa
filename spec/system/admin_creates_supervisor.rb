@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "Admin: New Supervisors", type: :system do
   let(:admin) { create(:casa_admin) }
 
-  it "allows admin to creates a new supervisors" do
+  it "allows admin to create a new supervisors" do
     sign_in admin
     visit new_supervisor_path
 
