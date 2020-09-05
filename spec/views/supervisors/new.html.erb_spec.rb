@@ -1,17 +1,17 @@
 require "rails_helper"
 
 describe "supervisors/new" do
+  subject { render template: "supervisors/new" }
+
+  before do
+    assign :supervisor, Supervisor.new
+  end
 
   context "while signed in as admin" do
     before do
-      user = build_stubbed(:casa_admin)
-      sign_in(user)
-      assign :supervisor, Supervisor.new
+      sign_in_as_admin
     end
-
-    fit "has a button to Return to Dashboard" do
-      render template: "supervisors/new"
-      expect(rendered).to have_selector("a", text: "Return to Dashboard")
-    end
+    
+    it { is_expected.to have_selector("a", text: "Return to Dashboard") }
   end
 end
