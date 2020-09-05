@@ -45,9 +45,7 @@
                         method: :patch,
                         class: "btn btn-outline-danger",
                         data:
-                            { confirm: "WARNING: Marking a volunteer inactive will make them unable to login. They will receive an email saying their account has been marked inactive. Are you sure you want to do this?".html_safe },
-                        hint: "NOTE: This will make connected cases unassigned and<br>
-                          the volunteer won't be able to log in to the system anymore".html_safe %>
+                            { confirm: "WARNING: Marking a volunteer inactive will make them unable to login. They will receive an email saying their account has been marked inactive. Are you sure you want to do this?"} %>
           <% end %>
         <% else %>
           <div class="alert alert-danger">
