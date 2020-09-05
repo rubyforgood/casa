@@ -71,5 +71,4 @@ RSpec.describe CaseContact, type: :model do
     expect(case_contact).not_to be_valid
     expect(case_contact.errors[:base]).to eq(["Must enter whether the contact was made."])
   end
-
 end
