@@ -22,7 +22,8 @@ RSpec.describe CaseContactReport, type: :model do
         "Casa Case Number",
         "Creator Email",
         "Creator Name",
-        "Supervisor Name"
+        "Supervisor Name",
+        "Case Contact Notes"
       ])
       case_contact_data = parsed_csv[1]
       expect(case_contact_data[1]).to eq("60")
