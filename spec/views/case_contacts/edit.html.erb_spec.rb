@@ -1,6 +1,11 @@
 require "rails_helper"
 
 describe "case_contacts/edit" do
+  before do
+    user = build_stubbed(:volunteer)
+    allow(view).to receive(:current_user).and_return(user)
+  end
+
   it "is listing all the contact methods from the model" do
     case_contact = create(:case_contact)
     assign :case_contact, case_contact
@@ -17,9 +22,6 @@ describe "case_contacts/edit" do
     case_contact.occurred_at = Time.zone.now - (3600 * 24)
     assign :case_contact, case_contact
     assign :casa_cases, [case_contact.casa_case]
-
-    user = build_stubbed(:volunteer)
-    allow(view).to receive(:current_user).and_return(user)
 
     render template: "case_contacts/edit"
     expect(rendered).to include(case_contact.occurred_at.strftime("%Y-%m-%d"))

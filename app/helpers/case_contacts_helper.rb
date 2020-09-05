@@ -59,6 +59,12 @@ module CaseContactsHelper
     end
   end
 
+  def render_back_link(casa_case)
+    return send_home if !current_user || current_user&.volunteer?
+
+    send_to_case(casa_case)
+  end
+
   private
 
   def build_minute_options
@@ -83,5 +89,13 @@ module CaseContactsHelper
     end
 
     durations
+  end
+
+  def send_home
+    root_path
+  end
+
+  def send_to_case(casa_case)
+    casa_case_path(casa_case)
   end
 end
