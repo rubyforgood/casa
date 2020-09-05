@@ -1,12 +1,12 @@
 require "faker"
 
 CaseContact.delete_all
-SupervisorVolunteer.delete_all
-CaseAssignment.delete_all
-CasaCase.delete_all
-User.delete_all
-CasaOrg.delete_all
-AllCasaAdmin.delete_all
+# SupervisorVolunteer.delete_all
+# CaseAssignment.delete_all
+# CasaCase.delete_all
+# User.delete_all
+# CasaOrg.delete_all
+# AllCasaAdmin.delete_all
 
 pg_casa = CasaOrg.create(name: "Prince George CASA")
 
@@ -102,8 +102,8 @@ end
 # create CaseContact and associate with CasaCase, volunteer creator and include data
 vols = Volunteer.all
 vols.map do |vol|
-  vol.case_assignments.map { |ca|
-    cc = ca.casa_case
+  vol.case_assignments.map { |case_assignment|
+    casa_case = case_assignment.casa_case
     likely_durations = [15, 30, 60, 75, 4 * 60, 6 * 60]
     (1..24).map { |months_ago|
       if even_odds
@@ -111,7 +111,7 @@ vols.map do |vol|
         miles_driven = even_odds ? rand(200) : nil
         want_driving_reimbursement = miles_driven ? even_odds : false
         CaseContact.create(
-          casa_case: cc,
+          casa_case: casa_case,
           creator: vol,
           duration_minutes:
               likely_durations.sample,
@@ -130,28 +130,25 @@ end
 ###########################
 # Other CASA Organization #
 ###########################
-other_casa = CasaOrg.create(name: "Other CASA org")
+other_casa = CasaOrg.where(name: "Other CASA org").first_or_create!
 
-CasaAdmin.create(
+CasaAdmin.where(email: "other_casa_admin@example.com",).first_or_create!(
   casa_org: other_casa,
   display_name: "Other Admin",
-  email: "other_casa_admin@example.com",
   password: SEED_PASSWORD,
   password_confirmation: SEED_PASSWORD
 )
 
-Supervisor.create(
+Supervisor.where(email: "other.supervisor@example.com").first_or_create!(
   casa_org: other_casa,
   display_name: "Other Supervisor",
-  email: "other.supervisor@example.com",
   password: SEED_PASSWORD,
   password_confirmation: SEED_PASSWORD
 )
 
-Volunteer.create(
+Volunteer.where(email: "other.volunteer@example.com").first_or_create!(
   casa_org: other_casa,
   display_name: "Other Volunteer",
-  email: "other.volunteer@example.com",
   password: SEED_PASSWORD,
   password_confirmation: SEED_PASSWORD
 )
