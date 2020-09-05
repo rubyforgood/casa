@@ -1,5 +1,13 @@
 require "faker"
 
+CaseContact.delete_all
+SupervisorVolunteer.delete_all
+CaseAssignment.delete_all
+CasaCase.delete_all
+User.delete_all
+CasaOrg.delete_all
+AllCasaAdmin.delete_all
+
 pg_casa = CasaOrg.first_or_create!(name: "Prince George CASA")
 
 # number casa cases to generate
