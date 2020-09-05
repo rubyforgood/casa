@@ -23,9 +23,10 @@
 
       <div class="actions">
         <%= form.submit "Create CASA Case", class: "btn btn-primary" %>
+        <%= link_to 'Return to Dashboard', { controller: "dashboard", action: :show}, { class: "btn btn-info pull-right" } %>
       </div>
     <% end %>
   </div>
 </div>
 <br>
-<%= link_to 'Back', :back %>
+

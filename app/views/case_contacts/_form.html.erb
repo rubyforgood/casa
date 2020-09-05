@@ -123,5 +123,6 @@
 
   <div class="actions">
     <%= form.submit "Submit", class: "btn btn-primary", id: "case-contact-submit" %>
+    <%= link_to 'Return to Dashboard', { controller: "dashboard", action: :show}, { class: "btn btn-info pull-right" } %>
   </div>
 <% end %>

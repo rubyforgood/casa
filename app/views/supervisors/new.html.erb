@@ -17,7 +17,7 @@
 
       <div class="actions">
         <%= form.submit "Create Supervisor", class: "btn btn-primary" %>
-        <%= link_to 'Return to Dashboard', root_path, class: 'btn btn-info pull-right' %>
+        <%= link_to 'Return to Dashboard', { controller: "dashboard", action: :show}, { class: "btn btn-info pull-right" } %>
       </div>
     <% end %>
   </div>
