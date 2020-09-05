@@ -12,7 +12,6 @@
   <% end %>
 
   <div class="field casa-case form-group">
-
      <% if casa_cases.length > 1 %>
       <h2><label for="case_contact_casa_case">Select all relevant CASA cases</label></h2>
     <% else %>
@@ -20,13 +19,14 @@
     <% end %>
     <% casa_cases.each_with_index do |casa_case, index| %>
       <div class="form-check">
-        <input
-          class="form-check-input casa-case-id-check"
-          type="checkbox"
-          value="<%= casa_case.id %>"
-          name="case_contact[casa_case_id][]"
-          <% if index.zero? %> checked required<% end %>>
-        <label class="form-check-label" for="casa-case-id-check">
+        <%= check_box_tag "case_contact[casa_case_id][]",
+          casa_case.id,
+          @selected_cases.include?(casa_case),
+          id: "case_contact_casa_case_id_#{index}",
+          class: ["form-check-input", "casa-case-id"],
+          disabled: case_contact.persisted?
+        %>
+        <label class="form-check-label" for="case_contact_casa_case_id_<%= index %>">
           <%= casa_case.case_number %>
         </label>
       </div>
@@ -38,15 +38,13 @@
 
     <% contact_types = CaseContact::CONTACT_TYPES.each_with_index do |contact_type, index| %>
       <div class="form-check">
-        <input class="form-check-input casa-case-contact-type"
-               type="checkbox"
-               value="<%= contact_type %>"
-               name="case_contact[contact_types][]"
-               id="case_contact[contact_types][<%= index %>]"
-               <% if case_contact.contact_types&.include?(contact_type) %>
-               checked=true
-               <% end %>>
-        <label class="form-check-label" for="case_contact[contact_types][<%= index %>]">
+        <%= check_box_tag "case_contact[contact_types][]",
+          contact_type,
+          case_contact.contact_types&.include?(contact_type),
+          id: "case_contact_contact_types_#{index}",
+          class: ["form-check-input", "case-contact-contact-type"]
+        %>
+        <label class="form-check-label" for="case_contact_contact_types_<%= index %>">
           <%= contact_type.titleize %>
         </label>
       </div>
@@ -60,16 +58,15 @@
 
   <div class="field contact-type form-group">
     <h2><%= form.label "Contact Made" %></h2>
-    <br>
-    <%= form.radio_button(:contact_made, true, checked: case_contact.contact_made, required: 'required') %>
+    <%= form.radio_button(:contact_made, true, checked: case_contact.contact_made, required: true) %>
     <%= form.label "Yes", for: "case_contact_contact_made_true" %>
     <br>
-    <%= form.radio_button(:contact_made, false, checked: !case_contact.contact_made, required: 'required') %>
+    <%= form.radio_button(:contact_made, false, checked: !case_contact.contact_made, required: true) %>
     <%= form.label "No", for: "case_contact_contact_made_false" %>
   </div>
 
   <div class="field contact-medium form-group">
-    <h2><%= form.label "Contact Medium" %></h2>
+    <h2><%= form.label :medium_type, "Contact medium" %></h2>
     <% contact_mediums = CaseContact::CONTACT_MEDIUMS.map { |contact_medium| OpenStruct.new(value: contact_medium, label: contact_medium.titleize) } %>
     <%= form.select :medium_type, options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type), {prompt: "Please Select One"}, class: "custom-select col-sm-12 col-md-4", required: true %>
   </div>
@@ -103,7 +100,6 @@
 <h2><%= form.label :occurred_at %></h2>
     <% occurred_at = @case_contact.occurred_at.present? ? @case_contact.occurred_at : Time.zone.now %>
     <%= form.date_field :occurred_at, value: occurred_at.strftime('%Y-%m-%d'), class: "form-control" %>
-
   </div>
 
   <div class="field miles-driven form-group">
@@ -117,7 +113,7 @@
   </div>
 
   <div class="field notes form-group">
-    <h2><%= form.label :Notes %></h2>
+    <h2><%= form.label :notes %></h2>
     <%= form.text_area :notes, :rows=>5, placeholder: t("forms.case_contact.notes_placeholder"), class: "form-control" %>
   </div>
 
