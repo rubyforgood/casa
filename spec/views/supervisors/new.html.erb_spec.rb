@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "supervisors/new" do
-  include Devise::TestHelpers
 
   context "while signed in as admin" do
     before do

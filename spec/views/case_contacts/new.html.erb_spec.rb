@@ -1,6 +1,7 @@
 require "rails_helper"
 
 describe "case_contacts/new" do
+
   it "displays current time in the occurred at form field" do
     case_contact = create(:case_contact)
     assign :case_contact, case_contact
