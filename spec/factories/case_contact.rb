@@ -19,5 +19,10 @@ FactoryBot.define do
       miles_driven { 456 }
       want_driving_reimbursement { true }
     end
+
+    trait :after_quarter_end do
+      occurred_at { Time.zone.now - 1.year }
+    end
+
   end
 end
