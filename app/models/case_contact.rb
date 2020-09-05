@@ -65,6 +65,13 @@ class CaseContact < ApplicationRecord
     errors[:base] << "Must enter whether the contact was made." if contact_made.nil?
     !contact_made.nil?
   end
+
+  def allowed_edit?
+    today = Time.zone.now
+    return false if occurred_at.end_of_quarter < today
+
+    true
+  end
 end
 
 # == Schema Information
