@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AllCasaAdmins::SessionsController < Devise::SessionsController
+class Users::SessionsController < Devise::SessionsController
   include Accessible
   skip_before_action :check_user, only: :destroy
   # before_action :configure_sign_in_params, only: [:create]

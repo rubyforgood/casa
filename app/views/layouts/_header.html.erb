@@ -19,6 +19,15 @@
           </div>
         </div>
       <% end %>
+      <% if current_all_casa_admin %>
+        <div class="dropdown">
+          <button class="btn btn-light dropdown-toggle" style="margin-right:12px;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <%= current_all_casa_admin.email %>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          </div>
+        </div>
+      <% end %>
       <%= session_link %>
     </div>
   </nav>
