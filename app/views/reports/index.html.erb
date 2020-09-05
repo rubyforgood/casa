@@ -1,4 +1,6 @@
-<%= link_to "Back", :back %>
+# frozen_string_literal: true
+link_to 'Back', :back
+ %>
 
 <div class="row">
   <div class="col-sm-12">
@@ -21,12 +23,16 @@
         <form>
           <div class="field form-group">
             <label><strong>Starting From:</strong></label>
-            <input name="start_date" class="form-control" data-input-type="datepicker" value="<%= 1.month.ago.to_date %>">
+# frozen_string_literal: true
+1.month.ago.to_date
+ %>">
           </div>
 
           <div class="field form-group">
             <label><strong>Ending At:</strong></label>
-            <input name="end_date" class="form-control" data-input-type="datepicker" value="<%= Date.today.to_date %>">
+# frozen_string_literal: true
+Date.today.to_date
+ %>">
           </div>
 
           <!--
@@ -34,10 +40,12 @@
             with form submission whether the action is POST or GET, so for now we are
             constructing the URL using the inputs above with javascript.
           -->
-          <%= link_to "Download Report",
-              case_contact_reports_path(start_date: 1.month.ago.to_date, end_date: Date.today.to_date, format: :csv),
-              class: "btn btn-primary",
-              data: { link_type: "download-report" } %>
+# frozen_string_literal: true
+link_to 'Download Report',
+                      case_contact_reports_path(start_date: 1.month.ago.to_date, end_date: Date.today.to_date, format: :csv),
+                      class: 'btn btn-primary',
+                      data: { link_type: 'download-report' }
+ %>
         </form>
       </div>
     </div>

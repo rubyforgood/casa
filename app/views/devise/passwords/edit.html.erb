@@ -2,29 +2,49 @@
 
 <div class="row">
   <div class="col-sm-6">
-    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-      <%= render "devise/shared/error_messages", resource: resource %>
-      <%= f.hidden_field :reset_password_token %>
+# frozen_string_literal: true
+form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put })
+ do |f| %>
+# frozen_string_literal: true
+render 'devise/shared/error_messages', resource: resource
+ %>
+# frozen_string_literal: true
+f.hidden_field :reset_password_token
+ %>
 
       <div class="field form-group">
-        <%= f.label :password, "New password" %><br>
+# frozen_string_literal: true
+f.label :password, 'New password'
+ %><br>
         <% if @minimum_password_length %>
-          <em>(<%= @minimum_password_length %> characters minimum)</em><br>
+# frozen_string_literal: true
+@minimum_password_length
+ %> characters minimum)</em><br>
         <% end %>
-        <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: "form-control" %>
+# frozen_string_literal: true
+f.password_field :password, autofocus: true, autocomplete: 'new-password', class: 'form-control'
+ %>
       </div>
 
       <div class="field form-group">
-        <%= f.label :password_confirmation, "Confirm new password" %><br>
-        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
+# frozen_string_literal: true
+f.label :password_confirmation, 'Confirm new password'
+ %><br>
+# frozen_string_literal: true
+f.password_field :password_confirmation, autocomplete: 'new-password', class: 'form-control'
+ %>
       </div>
 
       <div class="actions">
-        <%= f.submit "Change my password", class: "btn btn-primary" %>
+# frozen_string_literal: true
+f.submit 'Change my password', class: 'btn btn-primary'
+ %>
       </div>
     <% end %>
   </div>
 </div>
 
 <br>
-<%= render "devise/shared/links" %>
+# frozen_string_literal: true
+render 'devise/shared/links'
+ %>

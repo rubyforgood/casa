@@ -1,22 +1,42 @@
 <tr>
-  <td data-sort="<%= contact.occurred_at.strftime("%Y%m%d%H%M%s") %>"><%= contact.occurred_at.strftime('%B %e, %Y') %></td>
-  <td><%= contact.decorate.duration_minutes %></td>
-  <td><%= contact.decorate.contact_made %></td>
-  <td><%= contact.decorate.medium_type_icon %></td>
-  <td><%= contact.decorate.contact_types %></td>
-  <td><%= contact.decorate.miles_traveled %></td>
-  <td><%= contact.decorate.reimbursement %></td>
+# frozen_string_literal: true
+contact.occurred_at.strftime('%B %e, %Y')
+ %></td>
+# frozen_string_literal: true
+contact.decorate.duration_minutes
+ %></td>
+# frozen_string_literal: true
+contact.decorate.contact_made
+ %></td>
+# frozen_string_literal: true
+contact.decorate.medium_type_icon
+ %></td>
+# frozen_string_literal: true
+contact.decorate.contact_types
+ %></td>
+# frozen_string_literal: true
+contact.decorate.miles_traveled
+ %></td>
+# frozen_string_literal: true
+contact.decorate.reimbursement
+ %></td>
   <td>
     <% if current_user&.casa_admin? || current_user&.supervisor? %>
-      <%= link_to "#{contact.creator&.display_name} ", edit_volunteer_path(contact.creator) %>
+# frozen_string_literal: true
+link_to "#{contact.creator&.display_name} ", edit_volunteer_path(contact.creator)
+ %>
     <% else %>
-      <%= contact.creator&.display_name %>
+# frozen_string_literal: true
+contact.creator&.display_name
+ %>
     <% end %>
   </td>
 
   <td>
     <% if Pundit.policy(current_user, contact).update? %>
-      <%= link_to 'Edit', edit_case_contact_path(contact) %>
+# frozen_string_literal: true
+link_to 'Edit', edit_case_contact_path(contact)
+ %>
     <% end %>
   </td>
 </tr>

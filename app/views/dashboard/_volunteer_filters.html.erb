@@ -6,19 +6,15 @@
         Supervisor
       </button>
         <ul class="dropdown-menu supervisor-options" style="min-width: 15rem;">
-          <% Supervisor.decorate.each do |supervisor| %>
+# frozen_string_literal: true
+Supervisor.decorate.each
+ do |supervisor| %>
             <li>
               <a class="small" data-value="option1" tabIndex="-1">
                 <input
                   style="margin:0 8px;"
                   type="checkbox"
-                  data-value="<%= supervisor.name %>"
-                  <%= logged_in_supervisor ? (logged_in_supervisor.id == supervisor.id ? 'checked' : '') : 'checked' %>>
-                <%= supervisor.name %>
-              </a>
-            </li>
-          <% end %>
-        </ul>
+          <% end %>>
     </div>
     <div class="dropdown pull-left">
       <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -57,12 +53,18 @@
         <div>
           Select columns:
 
-          <% Volunteer::TABLE_COLUMNS.each_with_index do |column, index| %>
+# frozen_string_literal: true
+Volunteer::TABLE_COLUMNS.each_with_index
+ do |column, index| %>
             <div class="row">
               <div class="col-sm-12">
                 <div class="form-check">
-                  <%= check_box_tag "pick-#{column}", "1", [1,6,7].exclude?(index), class: "form-check-input toggle-visibility", data: { column: index } %>
-                  <%= label_tag "pick-#{column}", column.titleize, class: "form-check-label" %>
+# frozen_string_literal: true
+check_box_tag "pick-#{column}", '1', [1, 6, 7].exclude?(index), class: 'form-check-input toggle-visibility', data: { column: index }
+ %>
+# frozen_string_literal: true
+label_tag "pick-#{column}", column.titleize, class: 'form-check-label'
+ %>
                 </div>
               </div>
             </div>

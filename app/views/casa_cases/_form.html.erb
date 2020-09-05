@@ -1,29 +1,49 @@
-<%= form_with(model: casa_case, local: true) do |form| %>
+# frozen_string_literal: true
+form_with(model: casa_case, local: true)
+ do |form| %>
   <% if casa_case.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(casa_case.errors.count, "error") %> prohibited this casa_case from being saved:</h2>
+# frozen_string_literal: true
+pluralize(casa_case.errors.count, 'error')
+ %> prohibited this casa_case from being saved:</h2>
 
       <ul>
-        <% casa_case.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+# frozen_string_literal: true
+casa_case.errors.full_messages.each
+ do |message| %>
+# frozen_string_literal: true
+message
+ %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
   <div class="field form-group">
-    <%= form.label :case_number %>
-    <%= form.text_field :case_number, class: "form-control" %>
+# frozen_string_literal: true
+form.label :case_number
+ %>
+# frozen_string_literal: true
+form.text_field :case_number, class: 'form-control'
+ %>
   </div>
 
   <div class="field form-group">
-    <%= form.label :transition_aged_youth, class: "form-check-label" %>
-    <%= form.check_box :transition_aged_youth, class: "form-check-input" %>
+# frozen_string_literal: true
+form.label :transition_aged_youth, class: 'form-check-label'
+ %>
+# frozen_string_literal: true
+form.check_box :transition_aged_youth, class: 'form-check-input'
+ %>
   </div>
 
-  <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
+# frozen_string_literal: true
+form.hidden_field :casa_org_id, value: current_user.casa_org_id
+ %>
 
   <div class="actions">
-    <%= form.submit casa_case.persisted? ? 'Update CASA Case' : 'Create CASA Case' %>
+# frozen_string_literal: true
+form.submit casa_case.persisted? ? 'Update CASA Case' : 'Create CASA Case'
+ %>
   </div>
 <% end %>

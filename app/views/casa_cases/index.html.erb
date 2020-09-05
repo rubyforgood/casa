@@ -1,10 +1,14 @@
-<%= link_to 'Back', :back %>
+# frozen_string_literal: true
+link_to 'Back', :back
+ %>
 
 <div class="row">
   <div class="col-sm-12 dashboard-table-header">
     <h1>CASA Cases</h1>
     <%- if policy(:casa_case).new? %>
-      <%= link_to 'New CASA Case', new_casa_case_path, class: "btn btn-primary" %>
+# frozen_string_literal: true
+link_to 'New CASA Case', new_casa_case_path, class: 'btn btn-primary'
+ %>
     <%- end %>
   </div>
 </div>
@@ -21,13 +25,25 @@
   </thead>
 
   <tbody>
-    <% @casa_cases.each do |casa_case| %>
+# frozen_string_literal: true
+@casa_cases.each
+ do |casa_case| %>
       <tr>
-        <td><%= casa_case.case_number %></td>
-        <td><%= casa_case.decorate.transition_aged_youth_icon %></td>
-        <td><%= link_to 'Show', casa_case %></td>
-        <td><%= link_to 'Edit', edit_casa_case_path(casa_case) %></td>
-        <td><%= link_to 'Destroy', casa_case, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+# frozen_string_literal: true
+casa_case.case_number
+ %></td>
+# frozen_string_literal: true
+casa_case.decorate.transition_aged_youth_icon
+ %></td>
+# frozen_string_literal: true
+link_to 'Show', casa_case
+ %></td>
+# frozen_string_literal: true
+link_to 'Edit', edit_casa_case_path(casa_case)
+ %></td>
+# frozen_string_literal: true
+link_to 'Destroy', casa_case, method: :delete, data: { confirm: 'Are you sure?' }
+ %></td>
       </tr>
     <% end %>
   </tbody>

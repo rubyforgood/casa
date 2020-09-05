@@ -1,22 +1,32 @@
 <h3><i class="fa fa-download fa-2x" aria-hidden="true"></i> 1. Download example Supervisor CSV file</h3>
-<%= link_to "/supervisors.csv", format: :csv, class: "btn btn-xs btn-success" do %>
+# frozen_string_literal: true
+link_to '/supervisors.csv', format: :csv, class: 'btn btn-xs btn-success'
+ do %>
   <i class="fa fa-download"></i> Download
   example supervisor csv
 <% end %>
 <br>
 <br>
 <h3><i class="fa fa-file-text-o fa-2x" aria-hidden="true"></i> 2. Upload your CSV file</h3>
-<%= form_with(url: imports_path, local: :true) do |f| %>
-  <%= f.hidden_field :import_type, value: "supervisor" %>
+# frozen_string_literal: true
+form_with(url: imports_path, local: true)
+ do |f| %>
+# frozen_string_literal: true
+f.hidden_field :import_type, value: 'supervisor'
+ %>
   <ul>
     <li>Click the choose file button and navigate to the saved file and select it.</li>
     <li><strong>Do not</strong> change any of the values in the first line of the example csv file.</li>
     <li>Then click the "Import Supervisors CSV" button to import your supervisors.</li>
 
   </ul>
-  <%= f.file_field :file, accept: 'text/csv', class: 'form-control-file', style: "margin: auto;" %>
+# frozen_string_literal: true
+f.file_field :file, accept: 'text/csv', class: 'form-control-file', style: 'margin: auto;'
+ %>
   <br>
-  <%= button_tag :class => "btn btn-md btn-success" do %>
+# frozen_string_literal: true
+button_tag class: 'btn btn-md btn-success'
+ do %>
     <i class="fa fa-upload"></i> Import Supervisors CSV
   <% end %>
 <% end %>

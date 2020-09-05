@@ -15,31 +15,47 @@
           </tr>
         </thead>
         <tbody>
-          <% @casa_case.case_assignments.each do |assignment| %>
+# frozen_string_literal: true
+@casa_case.case_assignments.each
+ do |assignment| %>
             <tr>
-              <td data-test="volunteer-name"><%= link_to assignment&.volunteer&.display_name, edit_volunteer_path(assignment.volunteer) %></td>
-              <td data-test="volunteer-email"><%= assignment&.volunteer&.email %></td>
+# frozen_string_literal: true
+link_to assignment&.volunteer&.display_name, edit_volunteer_path(assignment.volunteer)
+ %></td>
+# frozen_string_literal: true
+assignment&.volunteer&.email
+ %></td>
               <td data-test="assigned">
                 <% if assignment.is_active? %>
                   <span class='badge badge-success text-uppercase'>Assigned</span>
                 <% else %>
-                  <span class="badge badge-danger text-uppercase"><%= assignment.volunteer.active? ? "Unassigned" : "Deactivated volunteer" %></span>
+# frozen_string_literal: true
+assignment.volunteer.active? ? 'Unassigned' : 'Deactivated volunteer'
+ %></span>
                 <% end %>
               </td>
-              <td data-test="assignment-start"><%= assignment.created_at.strftime("%B %e, %Y") %></td>
+# frozen_string_literal: true
+assignment.created_at.strftime('%B %e, %Y')
+ %></td>
               <td data-test="assignment-end">
                 <% unless assignment.is_active? %>
-                  <%= assignment.updated_at.strftime("%B %e, %Y") %>
+# frozen_string_literal: true
+assignment.updated_at.strftime('%B %e, %Y')
+ %>
                 <% end %>
               </td>
               <td data-test="action">
                 <% if assignment.is_active? && (current_user.supervisor? || current_user.casa_admin?) %>
-                  <%= button_to 'Unassign Volunteer', unassign_case_assignment_path(assignment), method: :patch, class: "btn btn-outline-danger" %>
+# frozen_string_literal: true
+button_to 'Unassign Volunteer', unassign_case_assignment_path(assignment), method: :patch, class: 'btn btn-outline-danger'
+ %>
                 <% elsif !assignment.volunteer.active? && policy(assignment.volunteer).activate? %>
-                  <%= link_to "Activate Volunteer",
-                        activate_volunteer_path(assignment.volunteer, redirect_to_path: 'casa_case', casa_case_id: @casa_case.id),
-                        method: :patch,
-                        class: "btn btn-outline-success" %>
+# frozen_string_literal: true
+link_to 'Activate Volunteer',
+                              activate_volunteer_path(assignment.volunteer, redirect_to_path: 'casa_case', casa_case_id: @casa_case.id),
+                              method: :patch,
+                              class: 'btn btn-outline-success'
+ %>
                 <% else %>
                   None
                 <% end %>
@@ -58,18 +74,26 @@
   <div class="col-sm-6">
     <h3>Assign a New Volunteer</h3>
 
-    <%= form_for CaseAssignment.new, url: case_assignments_path(casa_case_id: @casa_case.id) do |form| %>
+# frozen_string_literal: true
+form_for CaseAssignment.new, url: case_assignments_path(casa_case_id: @casa_case.id)
+ do |form| %>
 
       <div class='form-group'>
         <label for='case_assignment_casa_case_id'>Select a Volunteer</label>
         <select id='case_assignment_casa_case_id' name='case_assignment[volunteer_id]' class='form-control'>
-          <% Volunteer.active.order(:display_name).each do |volunteer| %>
-            <option value="<%= volunteer.id %>"><%= volunteer.decorate.name %></option>
+# frozen_string_literal: true
+Volunteer.active.order(:display_name).each
+ do |volunteer| %>
+# frozen_string_literal: true
+volunteer.decorate.name
+ %></option>
           <% end %>
         </select>
       </div>
 
-      <%= form.submit 'Assign Volunteer', class: 'btn btn-secondary' %>
+# frozen_string_literal: true
+form.submit 'Assign Volunteer', class: 'btn btn-secondary'
+ %>
     <% end %>
   </div>
 </div>

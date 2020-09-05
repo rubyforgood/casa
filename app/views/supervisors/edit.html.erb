@@ -1,43 +1,67 @@
-<%= link_to 'Back', root_path %>
+# frozen_string_literal: true
+link_to 'Back', root_path
+ %>
 
 <h1>Editing Supervisor</h1>
 
 <div class="row">
   <div class="col-sm-6">
-    <%= form_for @supervisor, as: :supervisor, url: supervisor_path(@supervisor) do |form| %>
+# frozen_string_literal: true
+form_for @supervisor, as: :supervisor, url: supervisor_path(@supervisor)
+ do |form| %>
       <% if @supervisor.errors.any? %>
         <div id="error_explanation">
-          <h2><%= pluralize(@supervisor.errors.count, "error") %> prohibited this supervisor from being saved:</h2>
+# frozen_string_literal: true
+pluralize(@supervisor.errors.count, 'error')
+ %> prohibited this supervisor from being saved:</h2>
 
           <ul>
-            <% @supervisor.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
+# frozen_string_literal: true
+@supervisor.errors.full_messages.each
+ do |message| %>
+# frozen_string_literal: true
+message
+ %></li>
             <% end %>
           </ul>
         </div>
       <% end %>
 
       <div class="field form-group">
-        <%= form.label :email %>
+# frozen_string_literal: true
+form.label :email
+ %>
         <% if policy(@supervisor).update_supervisor_email? %>
-          <%= form.text_field :email, class: "form-control" %>
+# frozen_string_literal: true
+form.text_field :email, class: 'form-control'
+ %>
         <% else %>
-          <input class="form-control" type="text" placeholder="<%= @supervisor.email %>" readonly>
+# frozen_string_literal: true
+@supervisor.email
+ %>" readonly>
         <% end %>
       </div>
 
       <div class="field form-group">
-        <%= form.label :display_name %>
+# frozen_string_literal: true
+form.label :display_name
+ %>
         <% if policy(@supervisor).update_supervisor_name? %>
-          <%= form.text_field :display_name, class: "form-control" %>
+# frozen_string_literal: true
+form.text_field :display_name, class: 'form-control'
+ %>
         <% else %>
-          <input class="form-control" type="text" placeholder="<%= @supervisor.display_name %>" readonly>
+# frozen_string_literal: true
+@supervisor.display_name
+ %>" readonly>
         <% end %>
       </div>
 
       <div class="actions">
         <% if policy(@supervisor).update_supervisor_email? || policy(@supervisor).update_supervisor_name? %>
-          <%= form.submit "Submit", class: "btn btn-primary" %>
+# frozen_string_literal: true
+form.submit 'Submit', class: 'btn btn-primary'
+ %>
         <% end %>
       </div>
     <% end %>
@@ -58,13 +82,21 @@
           </tr>
         </thead>
         <tbody>
-          <% @assigned_volunteers.each do |volunteer| %>
+# frozen_string_literal: true
+@assigned_volunteers.each
+ do |volunteer| %>
             <tr>
-              <td><%= link_to volunteer.decorate.name, edit_volunteer_path(volunteer) %></td>
-              <td><%= volunteer.email %></td>
+# frozen_string_literal: true
+link_to volunteer.decorate.name, edit_volunteer_path(volunteer)
+ %></td>
+# frozen_string_literal: true
+volunteer.email
+ %></td>
               <td>
                 <% if volunteer.supervisor_volunteer.is_active? %>
-                  <%= button_to 'Unassign', unassign_supervisor_volunteer_path(volunteer), method: :patch, class: "btn btn-danger" %>
+# frozen_string_literal: true
+button_to 'Unassign', unassign_supervisor_volunteer_path(volunteer), method: :patch, class: 'btn btn-danger'
+ %>
                 <% else %>
                   Unassigned
                 <% end %>
@@ -83,18 +115,26 @@
   <div class="col-sm-6">
     <h3>Assign a Volunteer</h3>
 
-    <%= form_for SupervisorVolunteer.new, url: supervisor_volunteers_path(supervisor_id: @supervisor.id) do |form| %>
+# frozen_string_literal: true
+form_for SupervisorVolunteer.new, url: supervisor_volunteers_path(supervisor_id: @supervisor.id)
+ do |form| %>
 
       <div class='form-group'>
         <label for='supervisor_volunteer_volunteer_id'>Select a Volunteer</label>
         <select name='supervisor_volunteer[volunteer_id]' class='form-control'>
-          <% @available_volunteers.each do |volunteer| %>
-            <option value="<%= volunteer.id %>"><%= volunteer.decorate.name %></option>
+# frozen_string_literal: true
+@available_volunteers.each
+ do |volunteer| %>
+# frozen_string_literal: true
+volunteer.decorate.name
+ %></option>
           <% end %>
         </select>
       </div>
 
-      <%= form.submit 'Assign Volunteer', class: 'btn btn-primary' %>
+# frozen_string_literal: true
+form.submit 'Assign Volunteer', class: 'btn btn-primary'
+ %>
     <% end %>
     <% unless @available_volunteers.any? %>
       <p class="text-danger">There are no active, unassigned volunteers available.</p>

@@ -2,7 +2,9 @@
   <div class="row">
     <div class="col-sm-12 dashboard-table-header">
       <h1>Supervisors</h1>
-      <%= link_to "New Supervisor", new_supervisor_path, class: "btn btn-primary" %>
+# frozen_string_literal: true
+link_to 'New Supervisor', new_supervisor_path, class: 'btn btn-primary'
+ %>
     </div>
   </div>
 
@@ -18,19 +20,31 @@
     </thead>
 
     <tbody>
-    <% @supervisors.each do |supervisor| %>
+# frozen_string_literal: true
+@supervisors.each
+ do |supervisor| %>
       <tr>
         <td id="name">
-          <%= link_to(supervisor.display_name, edit_supervisor_path(supervisor)) %>
+# frozen_string_literal: true
+link_to(supervisor.display_name, edit_supervisor_path(supervisor))
+ %>
         </td>
-        <td id="volunteer-assignments"> <%= supervisor.volunteers.size %></td>
+# frozen_string_literal: true
+supervisor.volunteers.size
+ %></td>
         <td id="serving-transition-aged-youth">
-          <%= supervisor.volunteers_serving_transistion_aged_youth %>
+# frozen_string_literal: true
+supervisor.volunteers_serving_transistion_aged_youth
+ %>
         </td>
         <td id="no-contact">
-          <%= supervisor.no_contact_for_two_weeks %>
+# frozen_string_literal: true
+supervisor.no_contact_for_two_weeks
+ %>
         </td>
-        <td><%= link_to 'Edit', edit_supervisor_path(supervisor) %></td>
+# frozen_string_literal: true
+link_to 'Edit', edit_supervisor_path(supervisor)
+ %></td>
       </tr>
     <% end %>
     </tbody>

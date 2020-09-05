@@ -1,30 +1,52 @@
-<%= form_for @volunteer, url: volunteers_path, id: :new_user do |form| %>
+# frozen_string_literal: true
+form_for @volunteer, url: volunteers_path, id: :new_user
+ do |form| %>
   <% if volunteer.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(volunteer.errors.count, "error") %> prohibited this volunteer from being saved:</h2>
+# frozen_string_literal: true
+pluralize(volunteer.errors.count, 'error')
+ %> prohibited this volunteer from being saved:</h2>
 
       <ul>
-        <% volunteer.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+# frozen_string_literal: true
+volunteer.errors.full_messages.each
+ do |message| %>
+# frozen_string_literal: true
+message
+ %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
   <div class="field form-group">
-    <%= form.label :email %>
-    <%= form.text_field :email, class: "form-control" %>
+# frozen_string_literal: true
+form.label :email
+ %>
+# frozen_string_literal: true
+form.text_field :email, class: 'form-control'
+ %>
   </div>
 
   <div class="field form-group">
-    <%= form.label :display_name %>
-    <%= form.text_field :display_name, class: "form-control" %>
+# frozen_string_literal: true
+form.label :display_name
+ %>
+# frozen_string_literal: true
+form.text_field :display_name, class: 'form-control'
+ %>
   </div>
 
-  <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
+# frozen_string_literal: true
+form.hidden_field :casa_org_id, value: current_user.casa_org_id
+ %>
 
   <div class="actions">
-    <%= form.submit "Create User", class: "btn btn-primary" %>
-    <%= return_to_dashboard_button %>
+# frozen_string_literal: true
+form.submit 'Create User', class: 'btn btn-primary'
+ %>
+# frozen_string_literal: true
+return_to_dashboard_button
+ %>
   </div>
 <% end %>

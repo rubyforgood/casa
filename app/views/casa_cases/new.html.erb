@@ -4,29 +4,46 @@
 
 <div class="row">
   <div class="col-sm-6">
-    <%= form_with(model: @casa_case, local: true) do |form| %>
-      <%= render "/shared/error_messages", resource: @casa_case %>
+# frozen_string_literal: true
+form_with(model: @casa_case, local: true)
+ do |form| %>
+# frozen_string_literal: true
+render '/shared/error_messages', resource: @casa_case
+ %>
 
       <div class="field form-group">
-        <%= form.label :case_number %>
-        <%= form.text_field :case_number, class: "form-control" %>
+# frozen_string_literal: true
+form.label :case_number
+ %>
+# frozen_string_literal: true
+form.text_field :case_number, class: 'form-control'
+ %>
       </div>
 
       <div class="field">
-        <%= form.label :transition_aged_youth %>
-        <%= form.check_box :transition_aged_youth %>
+# frozen_string_literal: true
+form.label :transition_aged_youth
+ %>
+# frozen_string_literal: true
+form.check_box :transition_aged_youth
+ %>
       </div>
 
-      <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
+# frozen_string_literal: true
+form.hidden_field :casa_org_id, value: current_user.casa_org_id
+ %>
 
       <br>
 
       <div class="actions">
-        <%= form.submit "Create CASA Case", class: "btn btn-primary" %>
-        <%= return_to_dashboard_button %>
+# frozen_string_literal: true
+form.submit 'Create CASA Case', class: 'btn btn-primary'
+ %>
+# frozen_string_literal: true
+return_to_dashboard_button
+ %>
       </div>
     <% end %>
   </div>
 </div>
 <br>
-

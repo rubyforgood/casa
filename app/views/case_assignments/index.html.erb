@@ -1,6 +1,10 @@
-<%= link_to 'Back', root_path %>
+# frozen_string_literal: true
+link_to 'Back', root_path
+ %>
 
-<h1>Edit Volunteer Assignments for <%= @volunteer.name %></h1>
+# frozen_string_literal: true
+@volunteer.name
+ %></h1>
 
 <br>
 
@@ -14,14 +18,22 @@
       </tr>
     </thead>
     <tbody>
-      <% @volunteer.case_assignments.each do |assignment| %>
+# frozen_string_literal: true
+@volunteer.case_assignments.each
+ do |assignment| %>
         <tr>
-          <td><%= assignment.casa_case.case_number %></td>
-          <td><%= assignment.casa_case.decorate.transition_aged_youth_icon %></td>
-          <td><%= button_to 'Unassign Case',
-                volunteer_case_assignment_path(@volunteer, assignment),
-                method: :delete,
-                class: "btn btn-danger" %>
+# frozen_string_literal: true
+assignment.casa_case.case_number
+ %></td>
+# frozen_string_literal: true
+assignment.casa_case.decorate.transition_aged_youth_icon
+ %></td>
+# frozen_string_literal: true
+button_to 'Unassign Case',
+                            volunteer_case_assignment_path(@volunteer, assignment),
+                            method: :delete,
+                            class: 'btn btn-danger'
+ %>
             </td>
         </tr>
       <% end %>
@@ -35,18 +47,26 @@
   <div class="col-sm-6">
     <h3>Assign a New Case</h3>
 
-    <%= form_for CaseAssignment.new, url: volunteer_case_assignments_path do |form| %>
+# frozen_string_literal: true
+form_for CaseAssignment.new, url: volunteer_case_assignments_path
+ do |form| %>
 
       <div class='form-group'>
         <label for="case_assignment_casa_case_id">Select a Case</label>
         <select id="is-this-used-anywhere" class='form-control'>
-          <% CasaCase.all.each do |casa_case| %>
-            <option value="<%= casa_case.id %>"><%= casa_case.case_number %></option>
+# frozen_string_literal: true
+CasaCase.all.each
+ do |casa_case| %>
+# frozen_string_literal: true
+casa_case.case_number
+ %></option>
           <% end %>
         </select>
       </div>
 
-      <%= form.submit 'Assign Case', class: 'btn btn-primary' %>
+# frozen_string_literal: true
+form.submit 'Assign Case', class: 'btn btn-primary'
+ %>
     <% end %>
   </div>
 </div>

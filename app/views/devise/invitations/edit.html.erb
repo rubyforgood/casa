@@ -1,22 +1,40 @@
-<h2><%= t "devise.invitations.edit.header" %></h2>
+# frozen_string_literal: true
+t 'devise.invitations.edit.header'
+ %></h2>
 
-<%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-  <%= f.hidden_field :invitation_token, readonly: true %>
+# frozen_string_literal: true
+form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put })
+ do |f| %>
+# frozen_string_literal: true
+render 'devise/shared/error_messages', resource: resource
+ %>
+# frozen_string_literal: true
+f.hidden_field :invitation_token, readonly: true
+ %>
 
   <% if f.object.class.require_password_on_accepting %>
     <div class="field">
-      <%= f.label :password %><br>
-      <%= f.password_field :password %>
+# frozen_string_literal: true
+f.label :password
+ %><br>
+# frozen_string_literal: true
+f.password_field :password
+ %>
     </div>
 
     <div class="field">
-      <%= f.label :password_confirmation %><br>
-      <%= f.password_field :password_confirmation %>
+# frozen_string_literal: true
+f.label :password_confirmation
+ %><br>
+# frozen_string_literal: true
+f.password_field :password_confirmation
+ %>
     </div>
   <% end %>
 
   <div class="actions">
-    <%= f.submit t("devise.invitations.edit.submit_button") %>
+# frozen_string_literal: true
+f.submit t('devise.invitations.edit.submit_button')
+ %>
   </div>
 <% end %>

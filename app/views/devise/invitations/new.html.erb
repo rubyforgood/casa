@@ -1,16 +1,30 @@
-<h2><%= t "devise.invitations.new.header" %></h2>
+# frozen_string_literal: true
+t 'devise.invitations.new.header'
+ %></h2>
 
-<%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+# frozen_string_literal: true
+form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post })
+ do |f| %>
+# frozen_string_literal: true
+render 'devise/shared/error_messages', resource: resource
+ %>
 
-  <% resource.class.invite_key_fields.each do |field| -%>
+# frozen_string_literal: true
+resource.class.invite_key_fields.each
+ do |field| -%>
     <div class="field">
-      <%= f.label field %><br>
-      <%= f.text_field field %>
+# frozen_string_literal: true
+f.label field
+ %><br>
+# frozen_string_literal: true
+f.text_field field
+ %>
     </div>
   <% end -%>
 
   <div class="actions">
-    <%= f.submit t("devise.invitations.new.submit_button") %>
+# frozen_string_literal: true
+f.submit t('devise.invitations.new.submit_button')
+ %>
   </div>
 <% end %>

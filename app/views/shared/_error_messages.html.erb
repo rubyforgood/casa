@@ -1,10 +1,16 @@
 <% if resource.errors.any? %>
   <div id="error_explanation">
-    <h6><%= pluralize(resource.errors.count, "error") %> prohibited this <%= resource.model_name.human %> from being saved:</h6>
+# frozen_string_literal: true
+resource.model_name.human
+ %> from being saved:</h6>
 
     <ul>
-      <% resource.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+# frozen_string_literal: true
+resource.errors.full_messages.each
+ do |message| %>
+# frozen_string_literal: true
+message
+ %></li>
       <% end %>
     </ul>
   </div>

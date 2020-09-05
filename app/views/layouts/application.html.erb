@@ -2,31 +2,55 @@
 <html>
   <head>
     <title>PG CASA</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-    <%= render 'shared/favicons' %>
-    <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+# frozen_string_literal: true
+csrf_meta_tags
+ %>
+# frozen_string_literal: true
+csp_meta_tag
+ %>
+# frozen_string_literal: true
+render 'shared/favicons'
+ %>
+# frozen_string_literal: true
+stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload'
+ %>
+# frozen_string_literal: true
+javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
+ %>
   </head>
-  <body class="<%= body_class %>">
-    <%= render 'layouts/header' %>
+# frozen_string_literal: true
+body_class
+ %>">
+# frozen_string_literal: true
+render 'layouts/header'
+ %>
     <main>
       <div class="container">
         <div class="header-flash">
-          <% flash.each do |key, value| %>
-            <div class="<%= flash_class(key) %> alert-dismissible fade show" role="alert">
+# frozen_string_literal: true
+flash.each
+ do |key, value| %>
+# frozen_string_literal: true
+flash_class(key)
+ %> alert-dismissible fade show" role="alert">
               <a href="#" class="close" data-dismiss="alert" aria-label="Close" style="text-decoration: none;">
                 <i class="fa fa-times" aria-hidden="true"></i>
               </a>
-              <%= sanitize(value, tags: %w(ul li)) %>
+# frozen_string_literal: true
+sanitize(value, tags: %w[ul li])
+ %>
             </div>
           <% end %>
         </div>
         <div class="content">
-          <%= yield %>
+# frozen_string_literal: true
+yield
+ %>
         </div>
       </div>
     </main>
-    <%= render 'layouts/footer' %>
+# frozen_string_literal: true
+render 'layouts/footer'
+ %>
   </body>
 </html>

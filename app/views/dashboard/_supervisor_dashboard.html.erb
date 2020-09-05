@@ -4,8 +4,14 @@
   </div>
 </div>
 <hr>
-<%= render "volunteer_filters", logged_in_supervisor: logged_in_supervisor %>
-<%= render "volunteers_table" %>
+# frozen_string_literal: true
+render 'volunteer_filters', logged_in_supervisor: logged_in_supervisor
+ %>
+# frozen_string_literal: true
+render 'volunteers_table'
+ %>
 <br>
-<%= render "casa_cases" %>
+# frozen_string_literal: true
+render 'casa_cases'
+ %>
 <br>

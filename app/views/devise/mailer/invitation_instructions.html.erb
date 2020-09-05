@@ -12,7 +12,9 @@
   </tr>
   <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
     <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-      <p><%= link_to "Set your password", accept_invitation_url(@resource, invitation_token: @token) %></p>
+# frozen_string_literal: true
+link_to 'Set your password', accept_invitation_url(@resource, invitation_token: @token)
+ %></p>
     </td>
   </tr>
 </table>

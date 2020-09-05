@@ -1,11 +1,19 @@
-<%= form_with(model: case_contact, local: true) do |form| %>
+# frozen_string_literal: true
+form_with(model: case_contact, local: true)
+ do |form| %>
   <% if case_contact.errors.any? %>
     <div id="error_explanation" class="alert alert-danger">
-      <h6><%= pluralize(case_contact.errors.count, "error") %> prohibited this Case Contact from being saved:</h6>
+# frozen_string_literal: true
+pluralize(case_contact.errors.count, 'error')
+ %> prohibited this Case Contact from being saved:</h6>
 
       <ul>
-        <% case_contact.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+# frozen_string_literal: true
+case_contact.errors.full_messages.each
+ do |message| %>
+# frozen_string_literal: true
+message
+ %></li>
         <% end %>
       </ul>
     </div>
@@ -17,74 +25,116 @@
     <% else %>
       <h2><label for="case_contact_casa_case">CASA case</label></h2>
     <% end %>
-    <% casa_cases.each_with_index do |casa_case, index| %>
+# frozen_string_literal: true
+casa_cases.each_with_index
+ do |casa_case, index| %>
       <div class="form-check">
-        <%= check_box_tag "case_contact[casa_case_id][]",
-          casa_case.id,
-          @selected_cases.include?(casa_case),
-          id: "case_contact_casa_case_id_#{index}",
-          class: ["form-check-input", "casa-case-id"],
-          disabled: case_contact.persisted?
+# frozen_string_literal: true
+check_box_tag 'case_contact[casa_case_id][]',
+                          casa_case.id,
+                          @selected_cases.include?(casa_case),
+                          id: "case_contact_casa_case_id_#{index}",
+                          class: %w[form-check-input casa-case-id],
+                          disabled: case_contact.persisted?
         %>
-        <label class="form-check-label" for="case_contact_casa_case_id_<%= index %>">
-          <%= casa_case.case_number %>
+# frozen_string_literal: true
+index
+ %>">
+# frozen_string_literal: true
+casa_case.case_number
+ %>
         </label>
       </div>
     <% end %>
   </div>
 
   <div id="contact-type-form" class="field contact-type form-group">
-    <h2 id="contact-type-label"><%= form.label :contact_types %></h2>
+# frozen_string_literal: true
+form.label :contact_types
+ %></h2>
 
-    <% contact_types = CaseContact::CONTACT_TYPES.each_with_index do |contact_type, index| %>
+# frozen_string_literal: true
+contact_types = CaseContact::CONTACT_TYPES.each_with_index
+ do |contact_type, index| %>
       <div class="form-check">
-        <%= check_box_tag "case_contact[contact_types][]",
-          contact_type,
-          case_contact.contact_types&.include?(contact_type),
-          id: "case_contact_contact_types_#{index}",
-          class: ["form-check-input", "case-contact-contact-type"]
+# frozen_string_literal: true
+check_box_tag 'case_contact[contact_types][]',
+                          contact_type,
+                          case_contact.contact_types&.include?(contact_type),
+                          id: "case_contact_contact_types_#{index}",
+                          class: %w[form-check-input case-contact-contact-type]
         %>
-        <label class="form-check-label" for="case_contact_contact_types_<%= index %>">
-          <%= contact_type.titleize %>
+# frozen_string_literal: true
+index
+ %>">
+# frozen_string_literal: true
+contact_type.titleize
+ %>
         </label>
       </div>
     <% end %>
   </div>
 
   <div class="field contact-type form-group">
-    <h2><%= form.label "Contact Made" %></h2>
-    <%= form.radio_button(:contact_made, true, checked: case_contact.contact_made, required: true) %>
-    <%= form.label "Yes", for: "case_contact_contact_made_true" %>
+# frozen_string_literal: true
+form.label 'Contact Made'
+ %></h2>
+# frozen_string_literal: true
+form.radio_button(:contact_made, true, checked: case_contact.contact_made, required: true)
+ %>
+# frozen_string_literal: true
+form.label 'Yes', for: 'case_contact_contact_made_true'
+ %>
     <br>
-    <%= form.radio_button(:contact_made, false, checked: !case_contact.contact_made, required: true) %>
-    <%= form.label "No", for: "case_contact_contact_made_false" %>
+# frozen_string_literal: true
+form.radio_button(:contact_made, false, checked: !case_contact.contact_made, required: true)
+ %>
+# frozen_string_literal: true
+form.label 'No', for: 'case_contact_contact_made_false'
+ %>
   </div>
 
   <div class="field contact-medium form-group">
-    <h2><%= form.label :medium_type, "Contact medium" %></h2>
-    <% contact_mediums = CaseContact::CONTACT_MEDIUMS.map { |contact_medium| OpenStruct.new(value: contact_medium, label: contact_medium.titleize) } %>
-    <%= form.select :medium_type, options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type), {prompt: "Please Select One"}, class: "custom-select col-sm-12 col-md-4", required: true %>
+# frozen_string_literal: true
+form.label :medium_type, 'Contact medium'
+ %></h2>
+# frozen_string_literal: true
+contact_mediums = CaseContact::CONTACT_MEDIUMS.map { |contact_medium| OpenStruct.new(value: contact_medium, label: contact_medium.titleize) }
+ %>
+# frozen_string_literal: true
+form.select :medium_type, options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type), { prompt: 'Please Select One'}, class: 'custom-select col-sm-12 col-md-4', required: true
+ %>
   </div>
 
   <div class="field duration-minutes form-group">
-    <h2><%= form.label "Duration" %></h2>
+# frozen_string_literal: true
+form.label 'Duration'
+ %></h2>
     <div class="row">
     <div class="ml-3 col-sm-12 col-md-4 row">
-        <%= form.text_field :duration_hours, :class=>"row col-sm-6 mr-1", :id=>"casa-contact-duration-hours-display", :value=>duration_hours(case_contact), required: 'required' %>
+# frozen_string_literal: true
+form.text_field :duration_hours, class: 'row col-sm-6 mr-1', id: 'casa-contact-duration-hours-display', value: duration_hours(case_contact), required: 'required'
+ %>
         <span class="col-sm-2"> hours </span>
       </div>
       <div class="col-sm-12 col-md-6">
-        <%= form.range_field :duration_hours, :min=>0, :max=>23, :value=>duration_hours(case_contact), :class=>"row custom-range slide", :id=>"case-contact-duration-hours" %>
+# frozen_string_literal: true
+form.range_field :duration_hours, min: 0, max: 23, value: duration_hours(case_contact), class: 'row custom-range slide', id: 'case-contact-duration-hours'
+ %>
       </div>
 
     </div>
     <div class="row">
     <div class="ml-3 col-sm-12 col-md-4 row">
-        <%= form.text_field :duration_minutes, :class=>"row col-sm-6 mr-1", :id=>"casa-contact-duration-minutes-display", :value=>duration_minutes(case_contact) %>
+# frozen_string_literal: true
+form.text_field :duration_minutes, class: 'row col-sm-6 mr-1', id: 'casa-contact-duration-minutes-display', value: duration_minutes(case_contact)
+ %>
         <span class="col-sm-2"> minutes </span>
       </div>
       <div class="col-sm-12 col-md-6">
-        <%= form.range_field :duration_minutes, :min=>0, :max=>59, :step=>15, :value=>duration_minutes(case_contact), :class=>"row custom-range slide", :id=>"case-contact-duration-minutes" %>
+# frozen_string_literal: true
+form.range_field :duration_minutes, min: 0, max: 59, step: 15, value: duration_minutes(case_contact), class: 'row custom-range slide', id: 'case-contact-duration-minutes'
+ %>
       </div>
 
     </div>
@@ -92,28 +142,50 @@
 
   <div class="field occurred-at form-group">
 
-<h2><%= form.label :occurred_at %></h2>
-    <% occurred_at = @case_contact.occurred_at.present? ? @case_contact.occurred_at : Time.zone.now %>
-    <%= form.date_field :occurred_at, value: occurred_at.strftime('%Y-%m-%d'), class: "form-control" %>
+# frozen_string_literal: true
+form.label :occurred_at
+ %></h2>
+# frozen_string_literal: true
+occurred_at = @case_contact.occurred_at.present? ? @case_contact.occurred_at : Time.zone.now
+ %>
+# frozen_string_literal: true
+form.date_field :occurred_at, value: occurred_at.strftime('%Y-%m-%d'), class: 'form-control'
+ %>
   </div>
 
   <div class="field miles-driven form-group">
-    <h2><%= form.label :miles_driven %></h2>
-    <%= form.number_field :miles_driven, class: "form-control" %>
+# frozen_string_literal: true
+form.label :miles_driven
+ %></h2>
+# frozen_string_literal: true
+form.number_field :miles_driven, class: 'form-control'
+ %>
   </div>
 
   <div class="field want-driving-reimbursement form-group">
-    <h2><%= form.label :want_driving_reimbursement %></h2>
-    <%= form.select :want_driving_reimbursement, options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement), {}, class: "custom-select" %>
+# frozen_string_literal: true
+form.label :want_driving_reimbursement
+ %></h2>
+# frozen_string_literal: true
+form.select :want_driving_reimbursement, options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement), {}, class: 'custom-select'
+ %>
   </div>
 
   <div class="field notes form-group">
-    <h2><%= form.label :notes %></h2>
-    <%= form.text_area :notes, :rows=>5, placeholder: t("forms.case_contact.notes_placeholder"), class: "form-control" %>
+# frozen_string_literal: true
+form.label :notes
+ %></h2>
+# frozen_string_literal: true
+form.text_area :notes, rows: 5, placeholder: t('forms.case_contact.notes_placeholder'), class: 'form-control'
+ %>
   </div>
 
   <div class="actions">
-    <%= form.submit "Submit", class: "btn btn-primary", id: "case-contact-submit" %>
-    <%= return_to_dashboard_button %>
+# frozen_string_literal: true
+form.submit 'Submit', class: 'btn btn-primary', id: 'case-contact-submit'
+ %>
+# frozen_string_literal: true
+return_to_dashboard_button
+ %>
   </div>
 <% end %>
