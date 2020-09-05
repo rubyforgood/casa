@@ -6,7 +6,7 @@ describe "case_contacts/edit" do
     assign :case_contact, case_contact
     assign :casa_cases, [case_contact.casa_case]
 
-    contact_types = CaseContact::CONTACT_TYPES.each_with_index do |contact_type, index|
+    CaseContact::CONTACT_TYPES.each_with_index do |contact_type, index|
       render template: "case_contacts/edit"
       expect(rendered).to include(contact_type)
     end
