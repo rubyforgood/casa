@@ -31,4 +31,16 @@ RSpec.describe Volunteer, type: :model do
       expect(case_contacts).to all(satisfy { |c| !c.is_active })
     end
   end
+
+  describe "#display_name" do
+    it "allows user to input dangerous values" do
+      volunteer = create(:volunteer)
+      UserInputHelpers::DANGEROUS_STRINGS.each do |dangerous_string|
+        volunteer.update_attribute(:display_name, dangerous_string)
+        volunteer.reload
+
+        expect(volunteer.display_name).to eq dangerous_string
+      end
+    end
+  end
 end
