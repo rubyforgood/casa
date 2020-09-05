@@ -7,7 +7,6 @@
       <th>Creator</th>
       <th>CASA Case</th>
       <th>Contact type</th>
-      <th>Other type text</th>
       <th>Duration</th>
       <th>Occurred at</th>
       <th colspan="2"></th>
@@ -20,7 +19,6 @@
         <td><%= case_contact.creator_id %></td>
         <td><%= case_contact.casa_case_id %></td>
         <td><%= case_contact.contact_types %></td>
-        <td><%= case_contact.other_type_text %></td>
         <td><%= case_contact.duration_minutes %></td>
         <td><%= case_contact.occurred_at.strftime('%B %e, %Y') %></td>
         <td><%= link_to 'Edit', edit_case_contact_path(case_contact) %></td>

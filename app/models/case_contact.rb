@@ -79,7 +79,6 @@ end
 #  miles_driven               :integer
 #  notes                      :string
 #  occurred_at                :datetime         not null
-#  other_type_text            :string
 #  want_driving_reimbursement :boolean          default(FALSE)
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null
