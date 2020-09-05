@@ -10,6 +10,7 @@ class CaseContact < ApplicationRecord
   validates :occurred_at, presence: true
   validate :occurred_at_not_in_future
   validate :reimbursement_only_when_miles_driven
+  validate :check_if_allow_edit
 
   belongs_to :creator, class_name: "User"
   belongs_to :casa_case
@@ -69,9 +70,16 @@ class CaseContact < ApplicationRecord
   def allowed_edit?
     today = Time.zone.now
     return false if occurred_at.end_of_quarter < today
-
+    
     true
   end
+
+  def check_if_allow_edit
+    return if allowed_edit?
+
+    errors.add(:occurred_at, :invalid, message: "cannot edit past case contacts outside of quarter")
+  end
+
 end
 
 # == Schema Information
