@@ -4,6 +4,10 @@ class CasaOrg < ApplicationRecord
   has_many :users
   has_many :casa_cases
 
+  def casa_admins
+    users.where(type: "CasaAdmin")
+  end
+
   def supervisors
     users.where(type: "Supervisor")
   end

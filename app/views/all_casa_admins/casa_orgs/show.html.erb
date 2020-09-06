@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="col-sm-12 dashboard-table-header">
+    <h1><%= @casa_org.name %></h1>
+  </div>
+</div>
+<h3>Administrators</h3>
+<table class="table admin-list">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Created At</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @casa_org.casa_admins.each do |admin| %>
+      <tr class="admin-<%= admin.id %>">
+        <td><%= admin.display_name %></td>
+        <td><%= admin.email %></td>
+        <td><%= admin.created_at.strftime('%B %e, %Y') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<a href="/">Back to dashboard</a>
