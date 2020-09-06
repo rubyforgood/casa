@@ -3,6 +3,7 @@ class CasaOrg < ApplicationRecord
 
   has_many :users
   has_many :casa_cases
+  has_one :casa_org_logo
 
   def casa_admins
     users.where(type: "CasaAdmin")
