@@ -10,7 +10,7 @@ class CaseContact < ApplicationRecord
   validates :occurred_at, presence: true
   validate :occurred_at_not_in_future
   validate :reimbursement_only_when_miles_driven
-  validate :check_if_allow_edit
+  validate :check_if_allow_edit, on: :update
 
   belongs_to :creator, class_name: "User"
   belongs_to :casa_case
