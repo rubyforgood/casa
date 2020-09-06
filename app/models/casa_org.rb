@@ -5,6 +5,8 @@ class CasaOrg < ApplicationRecord
   has_many :casa_cases
   has_one :casa_org_logo
 
+  delegate :url, :alt_text, :size, to: :casa_org_logo, prefix: :logo
+
   def casa_admins
     users.where(type: "CasaAdmin")
   end

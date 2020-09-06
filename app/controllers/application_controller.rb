@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
   before_action :set_paper_trail_whodunnit
+  before_action :set_organization
 
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
   rescue_from Organizational::UnknownOrganization, with: :not_authorized
@@ -29,5 +30,10 @@ class ApplicationController < ActionController::Base
 
     flash[:error] = t "#{policy_name}.#{exception.query}", scope: "pundit", default: :default
     redirect_to(request.referrer || root_url)
+  end
+
+  # Tmp probably until we get more multi-tenancy stuff in place
+  def set_organization
+    @casa_org = current_user ? current_user.casa_org : CasaOrg.first
   end
 end
