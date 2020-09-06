@@ -27,13 +27,13 @@ volunteer_users = []
 
 # generate volunteer users via Faker gem
 VOLUNTEER_USER_COUNT.times do |index|
-  volunteer_email = "volunteer#{index+1}@example.com"
+  volunteer_email = "volunteer#{index + 1}@example.com"
   volunteer_user = Volunteer.where(email: volunteer_email).first_or_create!(
     casa_org: pg_casa,
     display_name: Faker::Name.unique.name,
     password: SEED_PASSWORD,
     password_confirmation: SEED_PASSWORD,
-    active: index % 30 != 0 #creates an inactive user every 30 times this is run
+    active: index % 30 != 0 # creates an inactive user every 30 times this is run
   )
   volunteer_users.push(volunteer_user)
 end
@@ -41,7 +41,7 @@ end
 # generate more supervisor users via Faker gem
 supervisor_users = []
 SUPERVISOR_COUNT.times do |index|
-  supervisor_email ="supervisor#{index+1}@example.com"
+  supervisor_email = "supervisor#{index + 1}@example.com"
   new_supervisor_user = Supervisor.where(email: supervisor_email).first_or_create!(
     casa_org_id: pg_casa.id,
     display_name: Faker::Name.unique.name,
@@ -54,7 +54,7 @@ end
 # casa_admin users
 CASA_ADMIN_COUNT = 3
 CASA_ADMIN_COUNT.times do |index|
-  casa_admin_email = "casa_admin#{index+1}@example.com"
+  casa_admin_email = "casa_admin#{index + 1}@example.com"
   CasaAdmin.where(email: casa_admin_email).first_or_create!(
     casa_org_id: pg_casa.id,
     display_name: Faker::Name.unique.name,
@@ -71,13 +71,12 @@ def case_number_generator
   "CINA-#{yy}-#{sequence_num}"
 end
 
-
 # generate more CasaCases, add data, assign case to volunteer
 casa_cases = []
 years = ((DateTime.now.year - 20)..DateTime.now.year).to_a
 yy = years.sample.to_s[2..3]
 CASA_CASE_COUNT.times do |index|
-  new_casa_case = CasaCase.where(case_number: "CINA-#{yy}-#{1001+index}").first_or_create!(
+  new_casa_case = CasaCase.where(case_number: "CINA-#{yy}-#{1001 + index}").first_or_create!(
     casa_org_id: pg_casa.id,
     transition_aged_youth: chance_of_transition_aged
   )
@@ -132,7 +131,7 @@ end
 ###########################
 other_casa = CasaOrg.where(name: "Other CASA org").first_or_create!
 
-CasaAdmin.where(email: "other_casa_admin@example.com",).first_or_create!(
+CasaAdmin.where(email: "other_casa_admin@example.com").first_or_create!(
   casa_org: other_casa,
   display_name: "Other Admin",
   password: SEED_PASSWORD,

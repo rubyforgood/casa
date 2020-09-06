@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  devise_for :all_casa_admins, path: 'all_casa_admins', controllers: { sessions: "all_casa_admins/sessions" }
-  devise_for :users, controllers: { sessions: 'users/sessions' }
+  devise_for :all_casa_admins, path: "all_casa_admins", controllers: {sessions: "all_casa_admins/sessions"}
+  devise_for :users, controllers: { sessions: "users/sessions" }
 
   authenticated :all_casa_admin do
     root to: "all_casa_admins/dashboard#show", as: :authenticated_all_casa_admin_root
