@@ -56,7 +56,7 @@
     <%= form.radio_button(:contact_made, true, checked: case_contact.contact_made, required: true) %>
     <%= form.label "Yes", for: "case_contact_contact_made_true" %>
     <br>
-    <%= form.radio_button(:contact_made, false, checked: !case_contact.contact_made, required: true) %>
+    <%= form.radio_button(:contact_made, false, checked: set_contact_made_false(case_contact), required: true) %>
     <%= form.label "No", for: "case_contact_contact_made_false" %>
   </div>
 
