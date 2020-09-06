@@ -15,7 +15,7 @@ class DashboardPolicy
   end
 
   def create_case_contacts?
-    user.volunteer? && user.casa_cases.present?
+    user.volunteer? && user.casa_cases.size > 0
   end
 
   def see_cases_section?
