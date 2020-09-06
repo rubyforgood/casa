@@ -3,8 +3,8 @@ class FileImporter
 
   attr_reader :csv_filespec, :org_id, :number_imported, :failed_imports
 
-  def initialize(import_csv, org_id)
-    @csv_filespec = import_csv
+  def initialize(csv_filespec, org_id)
+    @csv_filespec = csv_filespec
     @org_id = org_id
     @failed_imports = []
     @number_imported = 0
