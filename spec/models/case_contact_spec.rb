@@ -73,8 +73,8 @@ RSpec.describe CaseContact, type: :model do
   end
 
   it "validates that occurred at date not past the current quarter" do
-    case_contact = build(:case_contact, occurred_at: Time.zone.now - 1.year)
+    case_contact = create(:case_contact, occurred_at: Time.zone.now - 1.year)
     expect(case_contact).to_not be_valid
-    expect(case_contact.errors[:occurred_at]).to eq(["cannot edit past case contacts outside of quarter"])
+    expect(case_contact.errors[:base]).to eq(["cannot edit past case contacts outside of quarter"])
   end
 end

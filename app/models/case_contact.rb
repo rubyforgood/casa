@@ -77,7 +77,7 @@ class CaseContact < ApplicationRecord
   def check_if_allow_edit
     return if allowed_edit?
 
-    errors.add(:occurred_at, :invalid, message: "cannot edit past case contacts outside of quarter")
+    errors[:base] << "cannot edit past case contacts outside of quarter"
   end
 
 end
