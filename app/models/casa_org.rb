@@ -5,7 +5,7 @@ class CasaOrg < ApplicationRecord
   has_many :casa_cases
   has_one :casa_org_logo, dependent: :destroy
 
-  delegate :url, :alt_text, :size, to: :casa_org_logo, prefix: :logo
+  delegate :url, :alt_text, :size, to: :casa_org_logo, prefix: :logo, allow_nil: true
 
   def casa_admins
     users.where(type: "CasaAdmin")

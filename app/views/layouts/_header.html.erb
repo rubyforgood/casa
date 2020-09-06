@@ -4,7 +4,7 @@
       <%= image_pack_tag(@casa_org.logo_url,
         alt: @casa_org.logo_alt_text || "CASA Logo",
         size: @casa_org.logo_size,
-        class: "d-inline-block align-text-bottom") %>
+        class: "d-inline-block align-text-bottom") if @casa_org.logo_url %>
       <strong><%= page_header %></strong>
     </div>
     <div class="navbar-nav">

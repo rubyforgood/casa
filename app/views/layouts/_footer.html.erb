@@ -1,7 +1,7 @@
 <footer>
   <p class="copyright">© <%= @casa_org.display_name %></p>
   <p class="address"><%= @casa_org.address %></p>
-  <%= image_pack_tag(@casa_org.logo_url) %>
+  <%= image_pack_tag(@casa_org.logo_url) if @casa_org.logo_url %>
   <ul class="site-footer__links">
     <% @casa_org.footer_links.each do |href, label_text| %>
       <li><%= link_to label_text, href %></li>
