@@ -27,7 +27,7 @@ RSpec.describe "Admin: Editing Volunteers", type: :system do
     sign_in admin
     visit edit_volunteer_path(inactive_volunteer)
 
-    click_on "Activate volunteer"
+    click_on "Activate Volunteer"
 
     expect(page).not_to have_text("Volunteer was deactivated on")
 

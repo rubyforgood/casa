@@ -26,7 +26,7 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
       expect(unassign_button.value).to eq "Unassign Volunteer"
 
       assign_badge = page.find("span.badge-success")
-      expect(assign_badge.text).to eq "Assigned"
+      expect(assign_badge.text).to eq "ASSIGNED"
 
       assignment_start = page.find("td[data-test=assignment-start]").text
       assignment_end = page.find("td[data-test=assignment-end]").text
@@ -44,7 +44,7 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
       click_on "Unassign Volunteer"
 
       assign_badge = page.find("span.badge-danger")
-      expect(assign_badge.text).to eq "Unassigned"
+      expect(assign_badge.text).to eq "UNASSIGNED"
 
       expected_start_and_end_date = "August 29, 2020"
 
@@ -66,7 +66,7 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
       click_on "Unassign Volunteer"
 
       assign_badge = page.find("span.badge-danger")
-      expect(assign_badge.text).to eq "Unassigned"
+      expect(assign_badge.text).to eq "UNASSIGNED"
     end
   end
 
