@@ -34,6 +34,6 @@ class ApplicationController < ActionController::Base
 
   # Tmp probably until we get more multi-tenancy stuff in place
   def set_organization
-    @casa_org = current_user ? current_user.casa_org : CasaOrg.first
+    @casa_org = CasaOrg.last #current_user ? current_user.casa_org : CasaOrg.first
   end
 end
