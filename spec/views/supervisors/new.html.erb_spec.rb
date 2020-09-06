@@ -11,7 +11,7 @@ describe "supervisors/new" do
     before do
       sign_in_as_admin
     end
-    
+
     it { is_expected.to have_selector("a", text: "Return to Dashboard") }
   end
 end

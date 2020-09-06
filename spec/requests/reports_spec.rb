@@ -2,7 +2,10 @@ require "rails_helper"
 
 RSpec.describe "/reports", type: :request do
   describe "GET #index" do
-    subject { get reports_url; response }
+    subject do
+      get reports_url
+      response
+    end
 
     context "while signed in as an admin" do
       before do
@@ -27,6 +30,5 @@ RSpec.describe "/reports", type: :request do
 
       it { is_expected.not_to be_successful }
     end
-    
   end
 end

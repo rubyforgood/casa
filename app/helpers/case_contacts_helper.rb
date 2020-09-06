@@ -8,6 +8,10 @@ module CaseContactsHelper
     case_contact.duration_minutes.to_i.remainder(60)
   end
 
+  def set_contact_made_false(case_contact)
+    case_contact.persisted? && case_contact.contact_made == false
+  end
+
   def render_back_link(casa_case)
     return send_home if !current_user || current_user&.volunteer?
 

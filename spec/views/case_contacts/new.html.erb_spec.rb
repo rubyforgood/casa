@@ -17,10 +17,8 @@ describe "case_contacts/new" do
 
     let(:current_time) { Time.zone.now.strftime("%Y-%m-%d") }
 
-    it { is_expected.to have_field('Occurred at', with: current_time) }
+    it { is_expected.to have_field("Occurred at", with: current_time) }
     it { is_expected.to have_selector("textarea", id: "case_contact_notes") }
     it { is_expected.to have_selector("a", text: "Return to Dashboard") }
   end
-
-  
 end

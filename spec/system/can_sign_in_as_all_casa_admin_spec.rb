@@ -1,13 +1,15 @@
 require "rails_helper"
 
 describe "AllCasaAdmin auth", type: :system do
+  let(:all_casa_admin) { create(:all_casa_admin) }
+  let(:volunteer) { create(:volunteer) }
+
   context "when authenticated user" do
-    let(:all_casa_admin) { create(:all_casa_admin) }
     before { sign_in all_casa_admin }
 
     it "renders AllCasaAdmin dashboard page" do
       visit "/"
-      expect(page).to have_text "Welcome Super Admin!"
+      expect(page).to have_text "All CASA Admin"
     end
 
     it "allows sign out" do
@@ -15,6 +17,37 @@ describe "AllCasaAdmin auth", type: :system do
       click_link "Log out"
       expect(page).to_not have_text "sign in before continuing"
       expect(page).to have_text "Signed out successfully"
+    end
+  end
+
+  context "when unauthenticated" do
+    it "shows sign in page" do
+      visit "/all_casa_admins/sign_in"
+      expect(page).to have_text "All CASA Log In"
+    end
+
+    it "allows sign in" do
+      visit "/all_casa_admins/sign_in"
+
+      fill_in "Email", with: all_casa_admin.email
+      fill_in "Password", with: "123456"
+      within ".actions" do
+        click_on "Log in"
+      end
+
+      expect(page).to have_text "All CASA Admin"
+    end
+
+    it "prevents User sign in" do
+      visit "/all_casa_admins/sign_in"
+
+      fill_in "Email", with: volunteer.email
+      fill_in "Password", with: "123456"
+      within ".actions" do
+        click_on "Log in"
+      end
+
+      expect(page).to have_text "Invalid Email or password"
     end
   end
 end
