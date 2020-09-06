@@ -9,7 +9,7 @@ describe "AllCasaAdmin auth", type: :system do
 
     it "renders AllCasaAdmin dashboard page" do
       visit "/"
-      expect(page).to have_text "Welcome Super Admin!"
+      expect(page).to have_text "All CASA Admin"
     end
 
     it "allows sign out" do
