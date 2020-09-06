@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe "Admin: Editing Volunteers", type: :system do
-  let(:admin) { create(:casa_admin) }
-  let(:volunteer) { create(:volunteer, casa_org: admin.casa_org) }
-  let(:inactive_volunteer) { create(:volunteer, :inactive, casa_org: admin.casa_org) }
+  let(:organization) { create(:casa_org) }
+  let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
+  let(:volunteer) { create(:volunteer, casa_org_id: organization.id) }
 
   it "saves the user as inactive, but only if the admin confirms" do
     sign_in admin
@@ -23,13 +23,14 @@ RSpec.describe "Admin: Editing Volunteers", type: :system do
   end
 
   it "allows an admin to reactivate a volunteer" do
+    inactive_volunteer = create(:volunteer, casa_org_id: organization.id)
     sign_in admin
-    visit edit_volunteer_path(volunteer)
+    visit edit_volunteer_path(inactive_volunteer)
 
     click_on "Activate volunteer"
 
     expect(page).not_to have_text("Volunteer was deactivated on")
 
-    expect(volunteer.reload).to be_active
+    expect(inactive_volunteer.reload).to be_active
   end
 end
