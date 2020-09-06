@@ -7,7 +7,7 @@ RSpec.describe "/case_assignments", type: :request do
         admin = create(:casa_admin)
         volunteer = create(:volunteer)
         casa_case = create(:casa_case)
-        assignment = create(:case_assignment, is_active: false, volunteer: volunteer, casa_case: casa_case)
+        create(:case_assignment, is_active: false, volunteer: volunteer, casa_case: casa_case)
 
         sign_in admin
 

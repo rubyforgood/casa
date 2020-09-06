@@ -115,7 +115,7 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 **Cleaning up before you commit**
 
 1. `bundle exec standardrb --fix` auto-fix Ruby linting issues [more linter info](https://github.com/testdouble/standard)
-1. `bundle exec erblint --lint-all --autocorrect` [ERB linter](https://github.com/Shopify/erb-lint)
+1. `bundle exec erblint --lint-all --enable-all-linters --autocorrect` [ERB linter](https://github.com/Shopify/erb-lint)
 1. `yarn lint:fix` to run the [JS linter](https://standardjs.com/index.html) and fix isses
 
 If you have any troubles running tests, check out `.travis.yml` which is what makes the CI build run.
@@ -173,15 +173,15 @@ Namecheap, heroku
 
 ## Communication and Collaboration
 
-Most conversation happens in the #casa channel of the Ruby For Good slack. You can get access here: https://rubyforgood.herokuapp.com/
+Most conversation happens in the #casa channel of the Ruby For Good slack. Get access here: https://rubyforgood.herokuapp.com/
 
 You can also open an issue or comment on an issue on github and a maintainer will reply to you.
 
-We have a weekly team call on Sunday at (new time TBD - check slack) where we do pair/mob programming and talk about issues- feel free to join!
+We have a weekly team office hours / hangout on Wednesday 6-8pm Pacific time where we do pair/mob programming and talk about issues. Please stop by!
 
-We have a weekly stakeholder call with PG CASA staff on Wednesday at _TBD_ Pacific time where we show off progress and discuss launch plans. Feel free to join!
+We have a weekly stakeholder call with PG CASA staff on Wednesday at 8:30am Pacific time where we show off progress and discuss launch plans. Feel free to join!
 
-Join info for all public meetings is posted in slack in the #casa channel or you can open a github issue to request join info.
+Join info for all public meetings is posted in the rubyforgood slack in the #casa channel
 
 ### History
 

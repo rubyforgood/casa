@@ -93,7 +93,7 @@
           <% end %>
         </select>
       </div>
-
+      <%= form.hidden_field :supervisor_id, :value => @supervisor.id %>
       <%= form.submit 'Assign Volunteer', class: 'btn btn-primary' %>
     <% end %>
     <% unless @available_volunteers.any? %>
