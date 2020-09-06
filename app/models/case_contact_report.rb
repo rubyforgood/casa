@@ -13,7 +13,7 @@ class CaseContactReport
     CSV.generate(headers: true) do |csv|
       csv << full_data(nil).keys.map(&:to_s).map(&:titleize)
 
-      @case_contacts.includes(:casa_case, creator: :supervisor).decorate.each do |case_contact|
+      @case_contacts.includes(:casa_case, :creator).decorate.each do |case_contact|
         csv << full_data(case_contact).values
       end
     end

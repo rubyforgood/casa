@@ -6,7 +6,8 @@ class CasaCasesController < ApplicationController
   # GET /casa_cases
   # GET /casa_cases.json
   def index
-    @casa_cases = policy_scope(current_organization.casa_cases)
+    org_cases = CasaOrg.includes(:casa_cases).references(:casa_cases).find_by(id: current_user.casa_org_id).casa_cases
+    @casa_cases = policy_scope(org_cases)
   end
 
   # GET /casa_cases/1
@@ -67,7 +68,6 @@ class CasaCasesController < ApplicationController
   end
 
   private
-
   # Use callbacks to share common setup or constraints between actions.
   def set_casa_case
     @casa_case = current_organization.casa_cases.find(params[:id])
