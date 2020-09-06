@@ -36,7 +36,6 @@ describe "case_contacts/edit" do
     assign :selected_cases, [case_contact.casa_case]
 
     render template: "case_contacts/edit"
-    expect(rendered).to include("DSS") 
+    expect(rendered).to include("DSS")
   end
-
 end
