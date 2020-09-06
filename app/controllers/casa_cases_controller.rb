@@ -6,13 +6,7 @@ class CasaCasesController < ApplicationController
   # GET /casa_cases
   # GET /casa_cases.json
   def index
-    org_cases = if current_user.volunteer?
-                  current_organization.casa_cases
-                else
-                  # to avoid N + 1 error raised by bullet
-                  CasaOrg.includes(:casa_cases).find_by(id: current_user.casa_org_id).casa_cases
-                end
-
+    org_cases = CasaOrg.includes(:casa_cases).references(:casa_cases).find_by(id: current_user.casa_org_id).casa_cases
     @casa_cases = policy_scope(org_cases)
   end
 
