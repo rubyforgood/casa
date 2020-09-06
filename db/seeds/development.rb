@@ -1,12 +1,12 @@
 require "faker"
 
-CaseContact.delete_all
-SupervisorVolunteer.delete_all
-CaseAssignment.delete_all
-CasaCase.delete_all
-User.delete_all
-CasaOrg.delete_all
-AllCasaAdmin.delete_all
+CaseContact.destroy_all
+SupervisorVolunteer.destroy_all
+CaseAssignment.destroy_all
+CasaCase.destroy_all
+User.destroy_all
+CasaOrg.destroy_all
+AllCasaAdmin.destroy_all
 
 logo = CasaOrgLogo.new(
   url: "media/src/images/logo.png",
