@@ -29,19 +29,27 @@ class FileImporter
 
   def import_supervisors
     CSV.foreach(import_csv || [], headers: true, header_converters: :symbol) do |row|
-      user = Supervisor.new(row.to_hash.slice(:display_name, :email))
-      user.casa_org_id, user.password = org_id, SecureRandom.hex(10)
-      if user.save
-        user.invite!
-
+      puts "row: " + row.to_hash.values.to_s
+      supervisor = Supervisor.new(row.to_hash.slice(:display_name, :email))
+      supervisor.casa_org_id, supervisor.password = org_id, SecureRandom.hex(10)
+      if supervisor.save
+        puts "saved supervisor: " + supervisor.email
+        supervisor.invite!
+        puts "row[:supervisor_volunteers]: " + String(row[:supervisor_volunteers])
         volunteers = String(row[:supervisor_volunteers])
           .split(",")
           .map { |email| User.find_by(email: email.strip) }
           .compact
-
+        puts "after volunteers"
+        puts volunteers
+        puts "----"
         volunteers.each do |volunteer|
-          unless volunteer.supervisor
-            user.volunteers << volunteer
+          if volunteer.supervisor
+            puts "volunteer.supervisor: " + volunteer.supervisor
+            @failed_imports << row.to_hash.values.to_s
+          else
+            supervisor.volunteers << volunteer
+            puts "added volunteer to supervisor"
           end
         end
         @number_imported += 1
@@ -52,6 +60,13 @@ class FileImporter
       @failed_imports << row.to_hash.values.to_s
     end
     build_message("supervisors")
+  end
+
+  def get_list_volunteers(volunteers_string)
+    volunteers_string
+    .split(",")
+    .map { |email| User.find_by(email: email.strip) }
+    .compact
   end
 
   def import_cases

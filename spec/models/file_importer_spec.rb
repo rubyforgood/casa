@@ -99,6 +99,24 @@ RSpec.describe FileImporter, type: :concern do
       expect(alert[:type]).to eq(:error)
       expect(alert[:message]).to include("You successfully imported 0 supervisors, the following supervisors were not")
     end
+
+    it "returns an error message when there are volunteers not imported" do
+      import_user = create(:casa_admin)
+      create(:volunteer, email: "volunteer1@example.com")
+      import_supervisor_path = Rails.root.join("spec", "fixtures", "supervisor_volunteers.csv")
+      alert = FileImporter.new(import_supervisor_path, import_user.casa_org.id).import_supervisors
+
+      expect(alert[:type]).to eq(:error)
+      expect(alert[:message]).to include("You successfully imported 0 supervisors, the following supervisors were not")
+    end
+  end
+
+  describe "#get_list_volunteers" do
+    it "returns list of users given string of user emails" do
+      volunteer1 = create(:volunteer, email: "volunteer1@example.com")
+      volunteer2 = create(:volunteer, email: "volunteer2@example.com")
+      expect(FileImporter.new("", 1).get_list_volunteers('volunteer1@example.com,volunteer2@example.com')).to eq([volunteer1, volunteer2])
+    end
   end
 
   describe "#import_cases" do
