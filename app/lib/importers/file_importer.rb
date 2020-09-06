@@ -1,10 +1,10 @@
 class FileImporter
   require "csv"
 
-  attr_reader :import_csv, :org_id, :number_imported, :failed_imports
+  attr_reader :csv_filespec, :org_id, :number_imported, :failed_imports
 
-  def initialize(import_csv, org_id)
-    @import_csv = import_csv
+  def initialize(csv_filespec, org_id)
+    @csv_filespec = csv_filespec
     @org_id = org_id
     @failed_imports = []
     @number_imported = 0
@@ -12,7 +12,7 @@ class FileImporter
 
   def import
     @number_imported = 0
-    CSV.foreach(import_csv || [], headers: true, header_converters: :symbol) do |row|
+    CSV.foreach(csv_filespec || [], headers: true, header_converters: :symbol) do |row|
       yield(row)
       @number_imported += 1
     rescue StandardError => e
@@ -36,5 +36,6 @@ class FileImporter
     comma_separated_emails.split(",")
       .map { |email| clazz.find_by(email: email.strip) }
       .compact
+      .sort
   end
 end

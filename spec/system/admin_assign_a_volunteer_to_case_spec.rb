@@ -28,6 +28,10 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
       assign_badge = page.find("span.badge-success")
       expect(assign_badge.text).to eq "ASSIGNED"
 
+      end
+
+    it "shows an assignment start date and no assignment end date" do
+      expected_start_date = Time.zone.now.strftime("%B %-e, %Y")
       assignment_start = page.find("td[data-test=assignment-start]").text
       assignment_end = page.find("td[data-test=assignment-end]").text
 
@@ -45,8 +49,11 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
 
       assign_badge = page.find("span.badge-danger")
       expect(assign_badge.text).to eq "UNASSIGNED"
+      expect(assign_badge.text).to eq "Unassigned"
+    end
 
-      expected_start_and_end_date = "August 29, 2020"
+    it "shows an assignment start date and an assignment end date" do
+      expected_start_and_end_date = Time.zone.now.strftime("%B %-e, %Y")
 
       assignment_start = page.find("td[data-test=assignment-start]").text
       assignment_end = page.find("td[data-test=assignment-end]").text
