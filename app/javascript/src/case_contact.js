@@ -75,3 +75,6 @@ window.onload = function () {
     validateDuration()
   }
 }
+$('document').ready(() => {
+  $('.add-tooltip a').tooltip('disable')
+})
