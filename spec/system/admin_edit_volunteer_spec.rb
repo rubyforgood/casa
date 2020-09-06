@@ -2,7 +2,8 @@ require "rails_helper"
 
 RSpec.describe "Admin: Editing Volunteers", type: :system do
   let(:admin) { create(:casa_admin) }
-  let(:volunteer) { create(:volunteer) }
+  let(:volunteer) { create(:volunteer, casa_org: admin.casa_org) }
+  let(:inactive_volunteer) { create(:volunteer, :inactive, casa_org: admin.casa_org) }
 
   it "saves the user as inactive, but only if the admin confirms" do
     sign_in admin
@@ -22,7 +23,6 @@ RSpec.describe "Admin: Editing Volunteers", type: :system do
   end
 
   it "allows an admin to reactivate a volunteer" do
-    volunteer = create(:volunteer, :inactive)
     sign_in admin
     visit edit_volunteer_path(volunteer)
 

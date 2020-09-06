@@ -19,7 +19,7 @@ RSpec.describe UserImporter do
 
     context "when the volunteers have been imported already" do
       before { user_importer.import_volunteers }
-      
+
       it "does not import duplicate volunteers from csv files" do
         expect { user_importer.import_volunteers }.to change(User, :count).by(0)
       end
@@ -36,7 +36,7 @@ RSpec.describe UserImporter do
     let(:import_file_path) { Rails.root.join("spec", "fixtures", "supervisors.csv") }
 
     before(:each) do
-      allow(user_importer).to receive(:gather_users) do |supervisor_volunteers|
+      allow(user_importer).to receive(:gather_users) do |clazz, supervisor_volunteers|
         create_list(:volunteer, supervisor_volunteers.split(',').size)
       end
     end
@@ -53,7 +53,7 @@ RSpec.describe UserImporter do
       expect(alert[:type]).to eq(:success)
       expect(alert[:message]).to eq("You successfully imported 3 supervisors.")
     end
-    
+
     context "when the supervisors have already been imported" do
       before { user_importer.import_supervisors }
 
@@ -67,6 +67,6 @@ RSpec.describe UserImporter do
         expect(alert[:message]).to include("You successfully imported 0 supervisors, the following supervisors were not")
       end
     end
-    
+
   end
 end
