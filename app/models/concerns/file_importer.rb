@@ -28,28 +28,18 @@ class FileImporter
   end
 
   def import_supervisors
-    CSV.foreach(import_csv || [], headers: true, header_converters: :symbol) do |row|
-      puts "row: " + row.to_hash.values.to_s
+    failed_volunteers = []
+    CSV.foreach(import_csv || [], headers: true, header_converters: :symbol).with_index(1) do |row, index|
       supervisor = Supervisor.new(row.to_hash.slice(:display_name, :email))
       supervisor.casa_org_id, supervisor.password = org_id, SecureRandom.hex(10)
       if supervisor.save
-        puts "saved supervisor: " + supervisor.email
         supervisor.invite!
-        puts "row[:supervisor_volunteers]: " + String(row[:supervisor_volunteers])
-        volunteers = String(row[:supervisor_volunteers])
-          .split(",")
-          .map { |email| User.find_by(email: email.strip) }
-          .compact
-        puts "after volunteers"
-        puts volunteers
-        puts "----"
+        volunteers = get_list_volunteers(String(row[:supervisor_volunteers]))
         volunteers.each do |volunteer|
           if volunteer.supervisor
-            puts "volunteer.supervisor: " + volunteer.supervisor
-            @failed_imports << row.to_hash.values.to_s
+            failed_volunteers << [volunteer, supervisor, index]
           else
             supervisor.volunteers << volunteer
-            puts "added volunteer to supervisor"
           end
         end
         @number_imported += 1
@@ -59,14 +49,7 @@ class FileImporter
     rescue ActiveModel::UnknownAttributeError
       @failed_imports << row.to_hash.values.to_s
     end
-    build_message("supervisors")
-  end
-
-  def get_list_volunteers(volunteers_string)
-    volunteers_string
-    .split(",")
-    .map { |email| User.find_by(email: email.strip) }
-    .compact
+    build_message("supervisors", failed_volunteers)
   end
 
   def import_cases
@@ -89,13 +72,29 @@ class FileImporter
     build_message("casa_cases")
   end
 
-  # TODO: add which names were imported when failed imports
-  def build_message(type)
-    if @failed_imports.empty?
-      {type: :success, message: "You successfully imported #{@number_imported} #{type}."}
+  def build_message(type, failed_volunteers = [])
+    message = ["You successfully imported #{@number_imported} #{type}."]
+    if @failed_imports.empty? && failed_volunteers.empty?
+      message_type = :success
     else
-      {type: :error, message: "You successfully imported #{@number_imported} #{type}, the "\
-        "following #{type} were not imported: #{@failed_imports.join(", ")}."}
+      message_type = :error
+      if @failed_imports.present?
+        message << "The following #{type} were not imported: #{@failed_imports.join(", ")}."
+      end
+      if failed_volunteers.present?
+        message << "The following volunteers were not imported:"
+        message << failed_volunteers.map { |volunteer, supervisor, row_num|
+          "#{volunteer.email} was not assigned to supervisor #{supervisor.email} on row ##{row_num}"
+        }.join(", ")
+      end
     end
+    {type: message_type, message: message.join(" ")}
+  end
+  
+  def get_list_volunteers(volunteers_string)
+    volunteers_string
+      .split(",")
+      .map { |email| User.find_by(email: email.strip) }
+      .compact
   end
 end
