@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "case_contacts/case_contact" do
-  it "allows edit before quarter-end" do
+  it "shows edit button when occured_at is before the last day of the month in the quarter that the case contact was created" do
     case_contact = create(:case_contact)
     assign :case_contact, case_contact
     assign :casa_cases, [case_contact.casa_case]
@@ -13,7 +13,7 @@ describe "case_contacts/case_contact" do
     expect(rendered).to have_link(nil, href: "/case_contacts/#{case_contact.id}/edit")
   end
 
-  it "disallows edit before quarter-end" do
+  it "does not show edit button when occured_at is after the last day of the month in the quarter that the case contact was created" do
     case_contact = create(:case_contact, occured_at: Time.zone.now - 1.year)
     assign :case_contact, case_contact
     assign :casa_cases, [case_contact.casa_case]
