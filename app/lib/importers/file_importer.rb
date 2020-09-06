@@ -32,9 +32,9 @@ class FileImporter
     end
   end
 
-  def gather_users(comma_separated_emails)
+  def gather_users(clazz, comma_separated_emails)
     comma_separated_emails.split(",")
-      .map { |email| User.find_by(email: email.strip) }
+      .map { |email| clazz.find_by(email: email.strip) }
       .compact
   end
 end
