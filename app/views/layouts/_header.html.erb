@@ -12,8 +12,10 @@
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <%= link_to "Edit Profile", edit_users_path, class: "dropdown-item" %>
-            <% if current_user.is_a?(CasaAdmin) %>
+            <% if current_user.is_a?(CasaAdmin) || current_user.is_a?(Supervisor) %>
               <%= link_to "Generate Reports", reports_path, class: "dropdown-item" %>
+            <% end %>
+            <% if current_user.is_a?(CasaAdmin) %>
               <%= link_to "System Imports", imports_path, class: "dropdown-item" %>
             <% end %>
           </div>
