@@ -72,6 +72,12 @@ RSpec.describe CaseContact, type: :model do
     expect(case_contact.errors[:base]).to eq(["Must enter whether the contact was made."])
   end
 
+  it "can be updated when occured_at is before the last day of the month in the quarter that the case contact was created" do
+    case_contact = create(:case_contact)
+    case_contact.update(occurred_at: Time.zone.now)
+    expect(case_contact).to be_valid
+  end
+
   it "can't be updated when occured_at is after the last day of the month in the quarter that the case contact was created" do
     case_contact = create(:case_contact, occurred_at: Time.zone.now - 1.year)
     expect(case_contact).to_not be_valid
