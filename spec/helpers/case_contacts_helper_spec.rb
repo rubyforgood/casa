@@ -67,4 +67,21 @@ describe CaseContactsHelper do
       expect(helper.duration_hours(case_contact)).to eq(0)
     end
   end
+
+  describe "#set_contact_made_false" do
+    it "returns false if contact_made is true" do
+      case_contact = create(:case_contact, contact_made: true)
+      expect(helper.set_contact_made_false(case_contact)).to eq(false)
+    end
+
+    it "returns true if contact_made is false" do
+      case_contact = create(:case_contact, contact_made: false)
+      expect(helper.set_contact_made_false(case_contact)).to eq(true)
+    end
+
+    it "returns false if contact_made is nil" do
+      case_contact = build(:case_contact, contact_made: nil)
+      expect(helper.set_contact_made_false(case_contact)).to eq(false)
+    end
+  end
 end
