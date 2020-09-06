@@ -14,7 +14,7 @@ describe "case_contacts/case_contact" do
   end
 
   it "disallows edit before quarter-end" do
-    case_contact = create(:case_contact, :after_quarter_end)
+    case_contact = create(:case_contact, occured_at: Time.zone.now - 1.year)
     assign :case_contact, case_contact
     assign :casa_cases, [case_contact.casa_case]
 
