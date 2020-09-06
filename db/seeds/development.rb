@@ -106,7 +106,20 @@ CaseContact.first_or_create!(
 ############################
 ## Other CASA Organization #
 ############################
-other_casa = CasaOrg.first_or_create!(name: "Other CASA org")
+other_logo = CasaOrgLogo.new(
+  url: "media/src/images/dog2.jpeg",
+  alt_text: "CASA Puppy Logo",
+  size: "166x125",
+)
+other_casa = CasaOrg.where(name: "Puppy CASA").first_or_create!(
+  casa_org_logo: other_logo,
+  display_name: "CASA / Puppy County, MD",
+  address: "123 Main St, Suite 101, Kennelwood, MD 01234",
+  footer_links: [
+    ["https://example.com/contact/", "Contact Us"],
+    ["https://example.com/subscribe-to-newsletter/", "Subscribe to newsletter"],
+  ]
+)
 
 CasaAdmin.where(
   email: "other_casa_admin@example.com"
