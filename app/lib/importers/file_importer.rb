@@ -36,5 +36,6 @@ class FileImporter
     comma_separated_emails.split(",")
       .map { |email| User.find_by(email: email.strip) }
       .compact
+      .sort
   end
 end
