@@ -35,7 +35,7 @@ describe "AllCasaAdmin auth", type: :system do
         click_on "Log in"
       end
 
-      expect(page).to have_text "Welcome Super Admin!"
+      expect(page).to have_text "All CASA Admin"
     end
 
     it "prevents User sign in" do
