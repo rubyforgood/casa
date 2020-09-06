@@ -29,4 +29,41 @@ RSpec.describe CaseContactReport, type: :model do
       expect(case_contact_data[1]).to eq("60")
     end
   end
+  describe "filter behavior" do
+    describe "occured at range filter" do
+      
+      it "uses date range if provided" do
+        create(:case_contact, {occurred_at: 20.days.ago})
+        create(:case_contact, {occurred_at: 100.days.ago})
+        report = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago})
+        contacts = report.case_contacts
+        expect(contacts.length).to eq(1)
+      end
+      it "returns all date ranges if not provided" do
+        create(:case_contact, {occurred_at: 20.days.ago})
+        create(:case_contact, {occurred_at: 100.days.ago})
+        report = CaseContactReport.new({})
+        contacts = report.case_contacts
+        expect(contacts.length).to eq(2)
+      end
+      it "returns only the volunteer" do
+        volunteer = create(:volunteer)
+        create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
+        create(:case_contact, {occurred_at: 100.days.ago})
+        report = CaseContactReport.new({creator_id: volunteer.id})
+        contacts = report.case_contacts
+        expect(contacts.length).to eq(1)
+      end
+      it "returns only the volunteer with date range" do
+        volunteer = create(:volunteer)
+        create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
+        create(:case_contact, {occurred_at: 100.days.ago, creator_id: volunteer.id})
+       
+        create(:case_contact, {occurred_at: 100.days.ago})
+        report = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, creator_id: volunteer.id})
+        contacts = report.case_contacts
+        expect(contacts.length).to eq(1)
+      end
+    end
+  end
 end
