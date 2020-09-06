@@ -6,7 +6,7 @@ class DashboardController < ApplicationController
 
     # Return all active/inactive volunteers, inactive will be filtered by default
     @volunteers = policy_scope(
-      current_organization.volunteers.includes(:case_assignments, :casa_cases, :versions)
+      current_organization.volunteers.includes(:versions, :supervisor, :casa_cases, case_assignments: [:casa_case]).references(:supervisor, :casa_cases)
     ).decorate
 
     @casa_cases = policy_scope(current_organization.casa_cases.includes(:case_assignments, :volunteers))
