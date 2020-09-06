@@ -115,7 +115,7 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 **Cleaning up before you commit**
 
 1. `bundle exec standardrb --fix` auto-fix Ruby linting issues [more linter info](https://github.com/testdouble/standard)
-1. `bundle exec erblint --lint-all --enable-all-linters --autocorrect` [ERB linter](https://github.com/Shopify/erb-lint)
+1. `bundle exec erblint --lint-all --autocorrect` [ERB linter](https://github.com/Shopify/erb-lint)
 1. `yarn lint:fix` to run the [JS linter](https://standardjs.com/index.html) and fix isses
 
 If you have any troubles running tests, check out `.travis.yml` which is what makes the CI build run.

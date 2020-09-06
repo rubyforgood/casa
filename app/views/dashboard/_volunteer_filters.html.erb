@@ -61,7 +61,11 @@
             <div class="row">
               <div class="col-sm-12">
                 <div class="form-check">
-                  <%= check_box_tag "pick-#{column}", "1", [1,6,7].exclude?(index), class: "form-check-input toggle-visibility", data: { column: index } %>
+                  <%= check_box_tag "pick-#{column}",
+                    "1",
+                    [1,6,7].exclude?(index),
+                    class: "form-check-input toggle-visibility",
+                    data: { column: index } %>
                   <%= label_tag "pick-#{column}", column.titleize, class: "form-check-label" %>
                 </div>
               </div>

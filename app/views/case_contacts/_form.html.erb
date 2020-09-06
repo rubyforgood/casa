@@ -24,8 +24,7 @@
           @selected_cases.include?(casa_case),
           id: "case_contact_casa_case_id_#{index}",
           class: ["form-check-input", "casa-case-id"],
-          disabled: case_contact.persisted?
-        %>
+          disabled: case_contact.persisted? %>
         <label class="form-check-label" for="case_contact_casa_case_id_<%= index %>">
           <%= casa_case.case_number %>
         </label>
@@ -42,8 +41,7 @@
           contact_type,
           case_contact.contact_types&.include?(contact_type),
           id: "case_contact_contact_types_#{index}",
-          class: ["form-check-input", "case-contact-contact-type"]
-        %>
+          class: ["form-check-input", "case-contact-contact-type"] %>
         <label class="form-check-label" for="case_contact_contact_types_<%= index %>">
           <%= contact_type.titleize %>
         </label>
@@ -62,29 +60,50 @@
 
   <div class="field contact-medium form-group">
     <h2><%= form.label :medium_type, "Contact medium" %></h2>
-    <% contact_mediums = CaseContact::CONTACT_MEDIUMS.map { |contact_medium| OpenStruct.new(value: contact_medium, label: contact_medium.titleize) } %>
-    <%= form.select :medium_type, options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type), {prompt: "Please Select One"}, class: "custom-select col-sm-12 col-md-4", required: true %>
+    <%= form.select :medium_type,
+      options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type),
+      { prompt: "Please Select One" },
+      class: "custom-select col-sm-12 col-md-4",
+      required: true %>
   </div>
 
   <div class="field duration-minutes form-group">
     <h2><%= form.label "Duration" %></h2>
     <div class="row">
     <div class="ml-3 col-sm-12 col-md-4 row">
-        <%= form.text_field :duration_hours, :class=>"row col-sm-6 mr-1", :id=>"casa-contact-duration-hours-display", :value=>duration_hours(case_contact), required: 'required' %>
+      <%= form.text_field :duration_hours,
+        class: "row col-sm-6 mr-1",
+        id: "casa-contact-duration-hours-display",
+        value: duration_hours(case_contact),
+        required: true %>
         <span class="col-sm-2"> hours </span>
       </div>
       <div class="col-sm-12 col-md-6">
-        <%= form.range_field :duration_hours, :min=>0, :max=>23, :value=>duration_hours(case_contact), :class=>"row custom-range slide", :id=>"case-contact-duration-hours" %>
+        <%= form.range_field :duration_hours,
+          class: "row custom-range slide",
+          id: "case-contact-duration-hours",
+          min: 0,
+          max: 23,
+          value: duration_hours(case_contact) %>
       </div>
 
     </div>
     <div class="row">
     <div class="ml-3 col-sm-12 col-md-4 row">
-        <%= form.text_field :duration_minutes, :class=>"row col-sm-6 mr-1", :id=>"casa-contact-duration-minutes-display", :value=>duration_minutes(case_contact) %>
+      <%= form.text_field :duration_minutes,
+        class: "row col-sm-6 mr-1",
+        id: "casa-contact-duration-minutes-display",
+        value: duration_minutes(case_contact) %>
         <span class="col-sm-2"> minutes </span>
       </div>
       <div class="col-sm-12 col-md-6">
-        <%= form.range_field :duration_minutes, :min=>0, :max=>59, :step=>15, :value=>duration_minutes(case_contact), :class=>"row custom-range slide", :id=>"case-contact-duration-minutes" %>
+        <%= form.range_field :duration_minutes,
+          class: "row custom-range slide",
+          id: "case-contact-duration-minutes",
+          min: 0,
+          max: 59,
+          step: 15,
+          value: duration_minutes(case_contact) %>
       </div>
 
     </div>
@@ -104,7 +123,10 @@
 
   <div class="field want-driving-reimbursement form-group">
     <h2><%= form.label :want_driving_reimbursement %></h2>
-    <%= form.select :want_driving_reimbursement, options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement), {}, class: "custom-select" %>
+    <%= form.select :want_driving_reimbursement,
+      options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement),
+      {},
+      class: "custom-select" %>
   </div>
 
   <div class="field notes form-group">

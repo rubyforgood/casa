@@ -19,12 +19,18 @@
       <td data-search="<%= volunteer.past_names %>"><%= link_to(volunteer.decorate.name, edit_volunteer_path(volunteer)) %></td>
       <td><%= volunteer.email %></td>
       <td id="supervisor-column">
-        <%= volunteer.supervisor.nil? ? "" : link_to(volunteer.supervisor.decorate.name, edit_supervisor_path(volunteer.supervisor)) %>
+        <%- unless volunteer.supervisor.nil? %>
+          <%= link_to(volunteer.supervisor.decorate.name, edit_supervisor_path(volunteer.supervisor)) %>
+        <%- end %>
       </td>
       <td id="status-column"><%= volunteer.status %></td>
       <td><%= volunteer&.assigned_to_transition_aged_youth? %></td>
       <td><%= safe_join(volunteer&.casa_cases&.map { |c| link_to(c.case_number, c) }, ", ") %></td>
-      <td><%= link_to_if volunteer&.most_recent_contact.present?, volunteer.last_contact_made, volunteer&.most_recent_contact&.casa_case %></td>
+      <td>
+        <%= link_to_if volunteer&.most_recent_contact.present?,
+          volunteer.last_contact_made,
+          volunteer&.most_recent_contact&.casa_case %>
+      </td>
       <td><%= volunteer&.recent_contacts_made %></td>
       <td><%= link_to 'Edit', edit_volunteer_path(volunteer) %></td>
     </tr>

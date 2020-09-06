@@ -12,6 +12,12 @@ module CaseContactsHelper
     case_contact.persisted? && case_contact.contact_made == false
   end
 
+  def contact_mediums
+    CaseContact::CONTACT_MEDIUMS.map { |contact_medium|
+      OpenStruct.new(value: contact_medium, label: contact_medium.titleize)
+    }
+  end
+
   def render_back_link(casa_case)
     return send_home if !current_user || current_user&.volunteer?
 

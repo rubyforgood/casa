@@ -17,13 +17,17 @@
         <tbody>
           <% @casa_case.case_assignments.each do |assignment| %>
             <tr>
-              <td data-test="volunteer-name"><%= link_to  assignment.volunteer.decorate.name, edit_volunteer_path(assignment.volunteer) %></td>
+              <td data-test="volunteer-name">
+                <%= link_to assignment.volunteer.decorate.name, edit_volunteer_path(assignment.volunteer) %>
+              </td>
               <td data-test="volunteer-email"><%= assignment&.volunteer&.email %></td>
               <td data-test="assigned">
                 <% if assignment.is_active? %>
                   <span class='badge badge-success text-uppercase'>Assigned</span>
                 <% else %>
-                  <span class="badge badge-danger text-uppercase"><%= assignment.volunteer.active? ? "Unassigned" : "Deactivated volunteer" %></span>
+                  <span class="badge badge-danger text-uppercase">
+                    <%= assignment.volunteer.active? ? "Unassigned" : "Deactivated volunteer" %>
+                  </span>
                 <% end %>
               </td>
               <td data-test="assignment-start"><%= assignment.created_at.strftime("%B %e, %Y") %></td>
@@ -34,12 +38,18 @@
               </td>
               <td data-test="action">
                 <% if assignment.is_active? && (current_user.supervisor? || current_user.casa_admin?) %>
-                  <%= button_to 'Unassign Volunteer', unassign_case_assignment_path(assignment), method: :patch, class: "btn btn-outline-danger" %>
+                  <%= button_to 'Unassign Volunteer',
+                    unassign_case_assignment_path(assignment),
+                    method: :patch,
+                    class: "btn btn-outline-danger" %>
                 <% elsif !assignment.volunteer.active? && policy(assignment.volunteer).activate? %>
                   <%= link_to "Activate Volunteer",
-                        activate_volunteer_path(assignment.volunteer, redirect_to_path: 'casa_case', casa_case_id: @casa_case.id),
-                        method: :patch,
-                        class: "btn btn-outline-success" %>
+                    activate_volunteer_path(assignment.volunteer,
+                      redirect_to_path: 'casa_case',
+                      casa_case_id: @casa_case.id
+                    ),
+                    method: :patch,
+                    class: "btn btn-outline-success" %>
                 <% else %>
                   None
                 <% end %>
