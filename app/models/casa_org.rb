@@ -27,8 +27,11 @@ end
 #
 # Table name: casa_orgs
 #
-#  id         :bigint           not null, primary key
-#  name       :string           not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id           :bigint           not null, primary key
+#  address      :string
+#  display_name :string
+#  footer_links :string           default([]), is an Array
+#  name         :string           not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
 #
