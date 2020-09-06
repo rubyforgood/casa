@@ -2,7 +2,7 @@
 
 Rails.application.routes.draw do
   devise_for :all_casa_admins, path: "all_casa_admins", controllers: {sessions: "all_casa_admins/sessions"}
-  devise_for :users, controllers: { sessions: "users/sessions" }
+  devise_for :users, controllers: {sessions: "users/sessions"}
 
   authenticated :all_casa_admin do
     root to: "all_casa_admins/dashboard#show", as: :authenticated_all_casa_admin_root
@@ -43,6 +43,10 @@ Rails.application.routes.draw do
       get :unassign
       patch :unassign
     end
+  end
+
+  namespace :all_casa_admins do
+    resources :casa_orgs, only: [:new, :create, :show]
   end
 
   # TODO: Remove, if possible. Prefer to use specific role routes.
