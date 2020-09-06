@@ -74,7 +74,7 @@ RSpec.describe "volunteer adds a case contact", type: :system do
     end
   end
 
-   context "with contact made not checked" do
+  context "with contact made not checked" do
     it "does not re-render form, preserves all previously entered selections" do
       volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first
@@ -116,5 +116,4 @@ RSpec.describe "volunteer adds a case contact", type: :system do
       expect(page).to have_field("Notes", with: "Hello world")
     end
   end
-
 end
