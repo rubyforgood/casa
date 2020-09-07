@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe CaseImporter do
-  subject(:case_importer) { CaseImporter.new(import_file_path, import_user.casa_org.id) }
+  let(:casa_org_id) { import_user.casa_org.id }
+  subject(:case_importer) { CaseImporter.new(import_file_path, casa_org_id) }
   let!(:import_user) { create(:casa_admin) }
   let(:import_file_path) { Rails.root.join("spec", "fixtures", "casa_cases.csv") }
 
@@ -32,6 +33,17 @@ RSpec.describe CaseImporter do
       expect(alert[:message]).to eq("You successfully imported 3 casa_cases.")
     end
 
+    specify 'static and instance methods have identical results' do
+      CaseImporter.new(import_file_path, casa_org_id).import_cases
+      data_using_instance = CasaCase.pluck(:case_number).sort
+
+      CasaCase.delete_all
+      CaseImporter.import_cases(import_file_path, casa_org_id)
+      data_using_static = CasaCase.pluck(:case_number).sort
+
+      expect(data_using_static).to eq(data_using_instance)
+      expect(data_using_static).to_not be_empty
+    end
 
     context "when the importer has already run once" do
       before { case_importer.import_cases }

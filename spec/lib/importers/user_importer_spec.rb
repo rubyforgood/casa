@@ -2,7 +2,8 @@ require "rails_helper"
 
 RSpec.describe UserImporter do
   let!(:import_user) { create(:casa_admin) }
-  let(:user_importer) { UserImporter.new(import_file_path, import_user.casa_org.id) }
+  let(:casa_org_id) { import_user.casa_org.id }
+  let(:user_importer) { UserImporter.new(import_file_path, casa_org_id) }
 
   describe "#import_volunteers" do
     let(:import_file_path) { Rails.root.join("spec", "fixtures", "volunteers.csv") }
@@ -28,6 +29,18 @@ RSpec.describe UserImporter do
         alert = UserImporter.new(import_file_path, import_user.casa_org.id).import_volunteers
         expect(alert[:type]).to eq(:error)
         expect(alert[:message]).to include("You successfully imported 0 volunteers, the following volunteers were not")
+      end
+
+      specify 'static and instance methods have identical results' do
+        UserImporter.new(import_file_path, casa_org_id).import_volunteers
+        data_using_instance = Volunteer.pluck(:email).sort
+
+        Volunteer.delete_all
+        UserImporter.import_volunteers(import_file_path, casa_org_id)
+        data_using_static = Volunteer.pluck(:email).sort
+
+        expect(data_using_static).to eq(data_using_instance)
+        expect(data_using_static).to_not be_empty
       end
     end
   end
@@ -67,6 +80,17 @@ RSpec.describe UserImporter do
         expect(alert[:message]).to include("You successfully imported 0 supervisors, the following supervisors were not")
       end
     end
-    
+
+    specify 'static and instance methods have identical results' do
+      UserImporter.new(import_file_path, casa_org_id).import_supervisors
+      data_using_instance = Supervisor.pluck(:email).sort
+
+      Supervisor.delete_all
+      UserImporter.import_supervisors(import_file_path, casa_org_id)
+      data_using_static = Supervisor.pluck(:email).sort
+
+      expect(data_using_static).to eq(data_using_instance)
+      expect(data_using_static).to_not be_empty
+    end
   end
 end
