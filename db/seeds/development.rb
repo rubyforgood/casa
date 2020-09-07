@@ -106,8 +106,8 @@ CaseContact.first_or_create!(
 ############################
 ## Other CASA Organization #
 ############################
-other_casa = CasaOrg.where(name: "Puppy CASA").first_or_create!(
-  display_name: "CASA / Puppy County, MD",
+other_casa = CasaOrg.where(name: "Other CASA org").first_or_create!(
+  display_name: "CASA / Other County, MD",
   address: "123 Main St, Suite 101, Kennelwood, MD 01234",
   footer_links: [
     ["https://example.com/contact/", "Contact Us"],
