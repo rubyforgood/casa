@@ -62,6 +62,7 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    after_party (1.11.2)
     annotate (3.1.1)
       activerecord (>= 3.2, < 7.0)
       rake (>= 10.4, < 14.0)
@@ -327,6 +328,7 @@ PLATFORMS
   x64-mingw32
 
 DEPENDENCIES
+  after_party
   annotate
   awesome_print
   bootsnap (>= 1.4.2)

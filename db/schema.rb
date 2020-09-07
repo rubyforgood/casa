@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_06_184455) do
+ActiveRecord::Schema.define(version: 2020_09_07_142411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,6 +93,10 @@ ActiveRecord::Schema.define(version: 2020_09_06_184455) do
     t.boolean "is_active", default: true
     t.index ["supervisor_id"], name: "index_supervisor_volunteers_on_supervisor_id"
     t.index ["volunteer_id"], name: "index_supervisor_volunteers_on_volunteer_id"
+  end
+
+  create_table "task_records", id: false, force: :cascade do |t|
+    t.string "version", null: false
   end
 
   create_table "users", force: :cascade do |t|
