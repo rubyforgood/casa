@@ -43,4 +43,8 @@ RSpec.configure do |config|
   config.example_status_persistence_file_path = "#{::Rails.root}/tmp/persistent_examples.txt"
 
   config.filter_rails_from_backtrace!
+
+  # Tmp until we handle the multi-tenancy case where we do not know what
+  # casa org we are when we hit the sign-in page.
+  config.before(:each) { create(:casa_org) }
 end
