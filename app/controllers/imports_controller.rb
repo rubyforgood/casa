@@ -15,7 +15,7 @@ class ImportsController < ApplicationController
 
   private
 
-  def import_from_csv(import_type, file, org)
+  def import_from_csv(import_type, file, org_id)
 
     unless File.file?(file)
       return { type: :error, message: "CSV import file not found: #{file}" }
@@ -23,11 +23,11 @@ class ImportsController < ApplicationController
 
     case import_type
     when "volunteer"
-      UserImporter.new(file, org).import_volunteers
+      UserImporter.import_volunteers(file, org_id)
     when "supervisor"
-      UserImporter.new(file, org).import_supervisors
+      UserImporter.import_supervisors(file, org_id)
     when "casa_case"
-      CaseImporter.new(file, org).import_cases
+      CaseImporter.import_cases(file, org_id)
     else
       valid_import_types_string = %w{volunteer supervisor casa_case}.to_s
       {type: :error, message: "Bad import type '#{import_type}'. Must be one of #{valid_import_types_string}." }

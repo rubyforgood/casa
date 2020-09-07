@@ -1,4 +1,9 @@
 class CaseImporter < FileImporter
+
+  def self.import_cases(csv_filespec, org_id)
+    new(csv_filespec, org_id).import_cases
+  end
+
   def import_cases
     import do |row|
       casa_case = CasaCase.new(row.to_hash.slice(:case_number, :transition_aged_youth))
