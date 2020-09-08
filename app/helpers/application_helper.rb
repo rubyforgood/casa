@@ -5,7 +5,7 @@ module ApplicationHelper
   end
 
   def page_header
-    page_header_text = "CASA / Prince George's County, MD"
+    page_header_text = @casa_org.display_name
     user_signed_in? ? link_to(page_header_text, root_path) : page_header_text
   end
 
