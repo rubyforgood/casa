@@ -53,7 +53,7 @@ RSpec.describe CaseImporter do
       it "returns an error message when there are cases not imported" do
         alert = case_importer.import_cases
         expect(alert[:type]).to eq(:error)
-        expect(alert[:message]).to include("You successfully imported 0 casa_cases, the following casa_cases were not")
+        expect(alert[:message]).to include("You successfully imported 0 casa_cases. The following casa_cases were not")
       end
     end
   end

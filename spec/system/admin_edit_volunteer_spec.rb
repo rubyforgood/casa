@@ -24,10 +24,13 @@ RSpec.describe "Admin: Editing Volunteers", type: :system do
 
   it "allows an admin to reactivate a volunteer" do
     inactive_volunteer = create(:volunteer, casa_org_id: organization.id)
+    inactive_volunteer.deactivate
+
     sign_in admin
+
     visit edit_volunteer_path(inactive_volunteer)
 
-    click_on "Activate Volunteer"
+    click_on "Activate volunteer"
 
     expect(page).not_to have_text("Volunteer was deactivated on")
 

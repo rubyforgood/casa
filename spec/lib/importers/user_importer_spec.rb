@@ -28,7 +28,7 @@ RSpec.describe UserImporter do
       it "returns an error message when there are volunteers not imported" do
         alert = UserImporter.new(import_file_path, import_user.casa_org.id).import_volunteers
         expect(alert[:type]).to eq(:error)
-        expect(alert[:message]).to include("You successfully imported 0 volunteers, the following volunteers were not")
+        expect(alert[:message]).to include("You successfully imported 0 volunteers. The following volunteers were not")
       end
 
       specify 'static and instance methods have identical results' do
@@ -77,7 +77,30 @@ RSpec.describe UserImporter do
       it "returns an error message when there are volunteers not imported" do
         alert = UserImporter.new(import_file_path, import_user.casa_org.id).import_supervisors
         expect(alert[:type]).to eq(:error)
-        expect(alert[:message]).to include("You successfully imported 0 supervisors, the following supervisors were not")
+        expect(alert[:message]).to include("You successfully imported 0 supervisors. The following supervisors were not")
+
+        import_user = create(:casa_admin)
+
+        import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
+        UserImporter.new(import_file_path, import_user.casa_org.id).import_volunteers
+
+        import_supervisor_path = Rails.root.join("spec", "fixtures", "supervisors.csv")
+        UserImporter.new(import_supervisor_path, import_user.casa_org.id).import_supervisors
+
+        alert = UserImporter.new(import_file_path, import_user.casa_org.id).import_supervisors
+        expect(alert[:type]).to eq(:error)
+        expect(alert[:message]).to include("You successfully imported 0 supervisors. The following supervisors were not")
+      end
+
+      it "returns an error message when there are only some volunteers not imported" do
+        import_user = create(:casa_admin)
+        create(:volunteer, email: "volunteer1@example.net")
+        import_supervisor_path = Rails.root.join("spec", "fixtures", "supervisor_volunteers.csv")
+        alert = UserImporter.new(import_supervisor_path, import_user.casa_org.id).import_supervisors
+
+        expect(alert[:type]).to eq(:error)
+        # expect(alert[:message]).to include("You successfully imported 1 supervisors. The following supervisors were not imported: volunteer1@example.net was not assigned to supervisor s6@example.com on row #2")
+        # TODO bring back this functionality
       end
     end
 

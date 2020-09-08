@@ -1,12 +1,13 @@
 class FileImporter
   require "csv"
 
-  attr_reader :csv_filespec, :org_id, :number_imported, :failed_imports
+  attr_reader :csv_filespec, :org_id, :number_imported, :failed_imports, :failed_volunteers
 
   def initialize(csv_filespec, org_id)
     @csv_filespec = csv_filespec
     @org_id = org_id
     @failed_imports = []
+    @failed_volunteers = []
     @number_imported = 0
   end
 
@@ -23,13 +24,22 @@ class FileImporter
   private
 
   def result_hash(type)
-    successful_import_message = "You successfully imported #{number_imported} #{type}"
-    if failed_imports.empty?
-      {type: :success, message: "#{successful_import_message}."}
+    message = ["You successfully imported #{@number_imported} #{type}."]
+    if failed_imports.empty? && failed_volunteers.empty?
+      message_type = :success
     else
-      {type: :error, message: "#{successful_import_message}, "\
-        "the following #{type} were not imported: #{failed_imports.join(", ")}."}
+      message_type = :error
+      if failed_imports.present?
+        message << "The following #{type} were not imported: #{failed_imports.join(", ")}."
+      end
+      if failed_volunteers.present?
+        message << "The following volunteers were not imported:"
+        message << failed_volunteers.map { |volunteer, supervisor, row_num|
+          "#{volunteer.email} was not assigned to supervisor #{supervisor.email} on row ##{row_num}"
+        }.join(", ")
+      end
     end
+    {type: message_type, message: message.join(" ")}
   end
 
   def gather_users(clazz, comma_separated_emails)

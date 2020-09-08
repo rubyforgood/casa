@@ -18,12 +18,21 @@ class UserImporter < FileImporter
   def import_supervisors
     import do |row|
       supervisor = create_user_record(Supervisor, row)
-      gather_users(Volunteer, String(row[:supervisor_volunteers])).each { |volunteer|
-        if !volunteer.supervisor
-          supervisor.volunteers << volunteer
+      if supervisor
+        gather_users(Volunteer, String(row[:supervisor_volunteers])).each do |volunteer|
+          if volunteer.supervisor
+            @failed_volunteers << [volunteer, supervisor, index]
+          else
+            supervisor.volunteers << volunteer
+          end
         end
-      }
+      else
+        # TODO: This should be unreachable because `user.save!` will throw an error on failure, right?
+        # Should we use `user.save` instead?
+        @failed_imports << row.to_hash.values.to_s
+      end
     end
+
     result_hash("supervisors")
   end
 

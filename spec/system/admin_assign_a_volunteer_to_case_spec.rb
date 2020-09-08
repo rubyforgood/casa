@@ -27,6 +27,7 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
 
       assign_badge = page.find("span.badge-success")
       expect(assign_badge.text).to eq "ASSIGNED"
+    end
 
     it "shows an assignment start date and no assignment end date" do
       assignment_start = page.find("td[data-test=assignment-start]").text
@@ -78,3 +79,5 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
     expect(find("select[name='case_assignment[volunteer_id]']").all("option").count).to eq 1
   end
 end
+
+
