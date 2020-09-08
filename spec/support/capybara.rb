@@ -13,6 +13,6 @@ Capybara.register_driver :selenium_chrome_headless_in_container do |app|
     browser: :remote,
     url: "http://selenium_chrome:4444/wd/hub",
     desired_capabilities: Selenium::WebDriver::Remote::Capabilities.chrome(
-      chromeOptions: { args: %w(headless disable-gpu) }
+      chromeOptions: {args: %w[headless disable-gpu]}
     )
 end

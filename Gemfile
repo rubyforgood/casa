@@ -35,7 +35,7 @@ end
 
 group :development do
   gem "annotate" # for adding db field listings to models as comments
-  gem 'erb_lint', require: false
+  gem "erb_lint", require: false
   gem "letter_opener" # Opens emails in new tab for easier testing
   gem "listen", ">= 3.0.5", "< 3.3"
   gem "spring" # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -49,9 +49,7 @@ group :test do
   gem "rake"
   gem "selenium-webdriver"
   gem "simplecov", "~> 0.19.0", require: false # pinned as a workaround for https://github.com/codeclimate/test-reporter/issues/418
-  unless ENV["DOCKER"]
-    gem "webdrivers" # Easy installation and use of web drivers to run system tests with browsers
-  end
+  gem "webdrivers", require: false # Easy installation and use of web drivers to run system tests with browsers; do not initially require as causes conflict with Docker setup
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

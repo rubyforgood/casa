@@ -3,7 +3,7 @@ require "csv"
 RSpec.describe CaseContactReport, type: :model do
   describe "#generate_headers" do
     it "matches the length of row data" do
-      case_contact = create(:case_contact)
+      create(:case_contact)
       csv = described_class.new.to_csv
       parsed_csv = CSV.parse(csv)
 
@@ -22,7 +22,8 @@ RSpec.describe CaseContactReport, type: :model do
         "Casa Case Number",
         "Creator Email",
         "Creator Name",
-        "Supervisor Name"
+        "Supervisor Name",
+        "Case Contact Notes"
       ])
       case_contact_data = parsed_csv[1]
       expect(case_contact_data[1]).to eq("60")

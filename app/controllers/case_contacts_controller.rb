@@ -2,39 +2,44 @@
 class CaseContactsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_case_contact, only: %i[edit update destroy]
+  before_action :require_organization!
 
   # GET /case_contacts
   # GET /case_contacts.json
   def index
-    @case_contacts = policy_scope(CaseContact).decorate
+    @case_contacts = policy_scope(current_organization.case_contacts).decorate
   end
 
   # GET /case_contacts/new
   def new
-    @casa_cases = policy_scope(CasaCase)
+    @casa_cases = policy_scope(current_organization.casa_cases)
+
     # Admins and supervisors who are navigating to this page from a specific
     # case detail page will only see that case as an option
-    @casa_cases.where!(id: params.dig(:case_contact, :casa_case_id)) if params.dig(:case_contact, :casa_case_id).present?
+    @casa_cases = @casa_cases.where(id: params.dig(:case_contact, :casa_case_id)) if params.dig(:case_contact, :casa_case_id).present?
 
     @case_contact = CaseContact.new
+
+    # By default the first case is selected
+    @selected_cases = @casa_cases[0, 1]
   end
 
   def create
     # These variables are used to re-render the form (render :new) if there are
     # validation errors so that the user does not lose inputs to fields that
     # they did previously enter.
-    @casa_cases = policy_scope(CasaCase)
+    @casa_cases = policy_scope(current_organization.casa_cases)
     @case_contact = CaseContact.new(create_case_contact_params)
 
-    selected_cases = @casa_cases.where(id: params.dig(:case_contact, :casa_case_id))
-    if selected_cases.empty?
+    @selected_cases = @casa_cases.where(id: params.dig(:case_contact, :casa_case_id))
+    if @selected_cases.empty?
       flash[:alert] = "At least one case must be selected"
       render :new
       return
     end
 
     # Create a case contact for every case that was checked
-    case_contacts = selected_cases.map { |casa_case|
+    case_contacts = @selected_cases.map { |casa_case|
       casa_case.case_contacts.create(create_case_contact_params)
     }
 
@@ -50,12 +55,14 @@ class CaseContactsController < ApplicationController
   # GET /case_contacts/1/edit
   def edit
     @casa_cases = [@case_contact.casa_case]
+    @selected_cases = @casa_cases
   end
 
   # PATCH/PUT /case_contacts/1
   # PATCH/PUT /case_contacts/1.json
   def update
     @casa_cases = [@case_contact.casa_case]
+    @selected_cases = @casa_cases
 
     respond_to do |format|
       if @case_contact.update(update_case_contact_params)
@@ -83,7 +90,7 @@ class CaseContactsController < ApplicationController
   private
 
   def set_case_contact
-    @case_contact = authorize(CaseContact.find(params[:id]))
+    @case_contact = authorize(current_organization.case_contacts.find(params[:id]))
   end
 
   def create_case_contact_params

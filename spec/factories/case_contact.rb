@@ -16,7 +16,7 @@ FactoryBot.define do
     end
 
     trait :wants_reimbursement do
-      miles_driven { 20 }
+      miles_driven { 456 }
       want_driving_reimbursement { true }
     end
   end

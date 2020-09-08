@@ -7,8 +7,8 @@ RSpec.describe CaseImporter do
   let(:import_file_path) { Rails.root.join("spec", "fixtures", "casa_cases.csv") }
 
   before(:each) do
-    allow(case_importer).to receive(:gather_users) do |case_assignment|
-      create_list(:volunteer, case_assignment.split(',').size)
+    allow(case_importer).to receive(:gather_users) do |clazz, comma_separated_emails|
+      create_list(:volunteer, comma_separated_emails.split(',').size)
     end
   end
 

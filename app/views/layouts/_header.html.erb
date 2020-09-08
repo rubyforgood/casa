@@ -12,10 +12,21 @@
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <%= link_to "Edit Profile", edit_users_path, class: "dropdown-item" %>
-            <% if current_user.is_a?(CasaAdmin) %>
+            <% if policy(:application).see_reports_page? %>
               <%= link_to "Generate Reports", reports_path, class: "dropdown-item" %>
+            <% end %>
+            <% if policy(:application).see_import_page? %>
               <%= link_to "System Imports", imports_path, class: "dropdown-item" %>
             <% end %>
+          </div>
+        </div>
+      <% end %>
+      <% if current_all_casa_admin %>
+        <div class="dropdown">
+          <button class="btn btn-light dropdown-toggle" style="margin-right:12px;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <%= current_all_casa_admin.email %>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           </div>
         </div>
       <% end %>

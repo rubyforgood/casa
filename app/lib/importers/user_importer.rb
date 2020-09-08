@@ -17,8 +17,12 @@ class UserImporter < FileImporter
 
   def import_supervisors
     import do |row|
-      user = create_user_record(Supervisor, row)
-      user.volunteers << gather_users(String(row[:supervisor_volunteers]))
+      supervisor = create_user_record(Supervisor, row)
+      gather_users(Volunteer, String(row[:supervisor_volunteers])).each { |volunteer|
+        if !volunteer.supervisor
+          supervisor.volunteers << volunteer
+        end
+      }
     end
     result_hash("supervisors")
   end

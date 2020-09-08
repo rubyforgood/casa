@@ -35,7 +35,8 @@ class CaseContactReport
       casa_case_number: case_contact&.casa_case&.case_number,
       creator_email: case_contact&.creator&.email,
       creator_name: case_contact&.creator&.display_name,
-      supervisor_name: case_contact&.creator&.supervisor&.display_name
+      supervisor_name: case_contact&.creator&.supervisor&.display_name,
+      case_contact_notes: case_contact&.notes
     }
   end
 end

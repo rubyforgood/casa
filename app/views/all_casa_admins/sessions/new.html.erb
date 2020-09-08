@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col-md-12 vertically-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h2>All CASA Log In</h2>
+          <br>
+
+          <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+            <div class="field form-group">
+              <%= f.label :email %><br>
+              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+            </div>
+
+            <div class="field form-group">
+              <%= f.label :password %><br>
+              <%= f.password_field :password, autocomplete: "current-password", class: "form-control" %>
+            </div>
+
+            <% if devise_mapping.rememberable? %>
+              <div class="field">
+                <%= f.check_box :remember_me %>
+                <%= f.label :remember_me %>
+              </div>
+            <% end %>
+
+            <div class="actions">
+              <%= f.submit "Log in", class: "btn btn-outline-primary" %>
+            </div>
+          <% end %>
+
+          <%= render "all_casa_admins/shared/links" %>
+
+          <br/>
+          <p>
+            <strong>Not able to sign in?</strong>
+            You might be looking for the <a href="/">CASA user sign in page</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

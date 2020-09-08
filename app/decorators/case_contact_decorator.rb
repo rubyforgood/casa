@@ -47,7 +47,7 @@ class CaseContactDecorator < Draper::Decorator
   end
 
   def report_contact_types
-    object.contact_types&.map { |ct| ct.humanize.titleize }.join("|")
+    object.contact_types&.map { |ct| ct.humanize.titleize }&.join("|")
   end
 
   def medium_type

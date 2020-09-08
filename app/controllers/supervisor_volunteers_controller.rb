@@ -19,7 +19,7 @@ class SupervisorVolunteersController < ApplicationController
     volunteer = Volunteer.find(params[:id])
     supervisor_volunteer = volunteer.supervisor_volunteer
     supervisor_volunteer.is_active = false
-    supervisor_volunteer.save
+    supervisor_volunteer.save!
     supervisor = volunteer.supervisor
     flash_message = "#{volunteer.decorate.name} was unassigned from #{supervisor.decorate.name}."
 

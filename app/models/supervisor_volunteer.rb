@@ -4,6 +4,11 @@ class SupervisorVolunteer < ApplicationRecord
   belongs_to :volunteer, class_name: "User"
   belongs_to :supervisor, class_name: "User"
   validates :supervisor_id, uniqueness: {scope: :volunteer_id} # only 1 row allowed per supervisor-volunteer pair
+  validates :volunteer_id, uniqueness: {scope: :is_active}, if: :is_active?
+
+  def is_active?
+    is_active == true
+  end
 end
 
 # == Schema Information

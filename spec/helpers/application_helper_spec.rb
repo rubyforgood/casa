@@ -27,7 +27,7 @@ describe ApplicationHelper do
 
     it "links to the sign_in page when user is not signed in" do
       allow(helper).to receive(:user_signed_in?).and_return(false)
-
+      allow(helper).to receive(:all_casa_admin_signed_in?).and_return(false)
       expect(helper.session_link).to match(new_user_session_path)
     end
   end

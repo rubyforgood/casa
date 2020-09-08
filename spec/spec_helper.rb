@@ -1,6 +1,4 @@
 require "simplecov"
-require "capybara/rspec"
-require "pundit/rspec"
 require "pry"
 SimpleCov.start do
   track_files "{app,lib}/**/*.rb"
@@ -18,6 +16,7 @@ RSpec.configure do |config|
   config.filter_run focus: true
   config.run_all_when_everything_filtered = true
   config.shared_context_metadata_behavior = :apply_to_host_groups
+  config.formatter = :documentation
 
   config.before(:each, type: :system) do
     if ENV["DOCKER"]
@@ -28,5 +27,9 @@ RSpec.configure do |config|
     else
       driven_by :selenium_chrome_headless
     end
+  end
+
+  config.before(:each, type: :system, js: false) do
+    driven_by :rack_test
   end
 end
