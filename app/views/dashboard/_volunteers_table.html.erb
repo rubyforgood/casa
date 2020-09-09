@@ -19,7 +19,7 @@
       <td data-search="<%= volunteer.past_names %>"><%= link_to(volunteer.decorate.name, edit_volunteer_path(volunteer)) %></td>
       <td><%= volunteer.email %></td>
       <td id="supervisor-column">
-        <%- unless volunteer.supervisor.nil? %>
+        <%- if volunteer.has_supervisor? %>
           <%= link_to(volunteer.supervisor.decorate.name, edit_supervisor_path(volunteer.supervisor)) %>
         <%- end %>
       </td>
