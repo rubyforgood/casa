@@ -29,6 +29,10 @@ class Volunteer < User
       updated
     end
   end
+
+  def has_supervisor?
+    supervisor_volunteer.present? && supervisor_volunteer.is_active?
+  end
 end
 
 # == Schema Information

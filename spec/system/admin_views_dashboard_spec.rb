@@ -69,6 +69,17 @@ RSpec.describe "admin views dashboard", type: :system do
 
       expect(supervisor_cell.text).to eq name
     end
+
+    it "is blank when volunteer has been unassigned from supervisor" do
+      volunteer = create(:volunteer, casa_org: organization)
+      sv = create(:supervisor_volunteer, volunteer: volunteer, is_active: false)
+      sign_in admin
+
+      visit root_path
+      supervisor_cell = page.find("#supervisor-column")
+
+      expect(supervisor_cell.text).to eq ""
+    end
   end
 
   it "can see the last case contact and navigate to it", js: false do

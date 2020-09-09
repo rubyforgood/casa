@@ -43,4 +43,32 @@ RSpec.describe Volunteer, type: :model do
       end
     end
   end
+
+  describe "has_supervisor?" do
+    context "when no supervisor_volunteer record" do
+      let(:volunteer) { create(:volunteer) }
+
+      it "returns false" do
+        expect(volunteer.has_supervisor?).to be false
+      end
+    end
+
+    context "when active supervisor_volunteer record" do
+      let(:sv) { create(:supervisor_volunteer, is_active: true) }
+      let(:volunteer) { sv.volunteer }
+
+      it "returns true" do
+        expect(volunteer.has_supervisor?).to be true
+      end
+    end
+
+    context "when inactive supervisor_volunteer record" do
+      let(:sv) { create(:supervisor_volunteer, is_active: false) }
+      let(:volunteer) { sv.volunteer }
+
+      it "returns false" do
+        expect(volunteer.has_supervisor?).to be false
+      end
+    end
+  end
 end
