@@ -8,7 +8,6 @@ window.onload = function () {
   const durationMinutes = document.getElementById('case-contact-duration-minutes')
   const durationMinuteDisplay = document.getElementById('casa-contact-duration-minutes-display')
   const caseContactSubmit = document.getElementById('case-contact-submit')
-  const contactTypeForm = document.getElementById('contact-type-form')
 
   milesDriven.onchange = function () {
     const contactMedium = document.getElementById('case_contact_medium_type').value || '(contact medium not set)'
