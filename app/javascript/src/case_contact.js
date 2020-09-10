@@ -45,15 +45,15 @@ window.onload = function () {
     }
   }
 
-  function validateAtLeastOneChecked(elements) {
+  function validateAtLeastOneChecked (elements) {
     // convert to Array
-    const elementsArray = Array.prototype.slice.call(elements);
+    const elementsArray = Array.prototype.slice.call(elements)
 
-    const numChecked = elementsArray.filter(x => x.checked).length;
-    if (numChecked == 0) {
-      elementsArray[0].required = true;
+    const numChecked = elementsArray.filter(x => x.checked).length
+    if (numChecked === 0) {
+      elementsArray[0].required = true
     } else {
-      elementsArray[0].required = false;
+      elementsArray[0].required = false
     }
   }
 
