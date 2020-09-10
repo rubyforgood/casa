@@ -8,7 +8,6 @@ window.onload = function () {
   const durationMinutes = document.getElementById('case-contact-duration-minutes')
   const durationMinuteDisplay = document.getElementById('casa-contact-duration-minutes-display')
   const caseContactSubmit = document.getElementById('case-contact-submit')
-  const contactTypeForm = document.getElementById('contact-type-form')
 
   milesDriven.onchange = function () {
     const contactMedium = document.getElementById('case_contact_medium_type').value || '(contact medium not set)'
@@ -46,15 +45,15 @@ window.onload = function () {
     }
   }
 
-  function validateAtLeastOneChecked(elements) {
+  function validateAtLeastOneChecked (elements) {
     // convert to Array
-    const elementsArray = Array.prototype.slice.call(elements);
+    const elementsArray = Array.prototype.slice.call(elements)
 
-    const numChecked = elementsArray.filter(x => x.checked).length;
-    if (numChecked == 0) {
-      elementsArray[0].required = true;
+    const numChecked = elementsArray.filter(x => x.checked).length
+    if (numChecked === 0) {
+      elementsArray[0].required = true
     } else {
-      elementsArray[0].required = false;
+      elementsArray[0].required = false
     }
   }
 
