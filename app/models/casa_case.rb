@@ -14,6 +14,12 @@ class CasaCase < ApplicationRecord
         case_assignments: {volunteer: volunteer, is_active: true}
       )
     }
+
+  class << self
+    def available
+      order(:case_number)
+    end
+  end
 end
 
 # == Schema Information

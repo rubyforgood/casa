@@ -30,6 +30,10 @@ class Volunteer < User
     end
   end
 
+  def case_assignments_with_cases
+    case_assignments.includes(:casa_case)
+  end
+
   def has_supervisor?
     supervisor_volunteer.present? && supervisor_volunteer.is_active?
   end

@@ -5,6 +5,31 @@ RSpec.describe "Admin: Editing Volunteers", type: :system do
   let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
   let(:volunteer) { create(:volunteer, casa_org_id: organization.id) }
 
+  describe "updating volunteer personal data" do
+    before do
+      sign_in admin
+      visit edit_volunteer_path(volunteer)
+    end
+
+    context "with valid data" do
+      it "updates successfully" do
+        fill_in "volunteer_email", with: "newemail@example.com"
+        fill_in "volunteer_display_name", with: "Mickey Mouse"
+        click_on "Submit"
+        expect(page).to have_text "Volunteer was successfully updated."
+      end
+    end
+
+    context "with invalid data" do
+      it "shows error message" do
+        fill_in "volunteer_email", with: admin.email
+        fill_in "volunteer_display_name", with: "Mickey Mouse"
+        click_on "Submit"
+        expect(page).to have_text "already been taken"
+      end
+    end
+  end
+
   it "saves the user as inactive, but only if the admin confirms" do
     sign_in admin
     visit edit_volunteer_path(volunteer)

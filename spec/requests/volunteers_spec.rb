@@ -52,23 +52,39 @@ RSpec.describe "/volunteers", type: :request do
   end
 
   describe "PATCH /update" do
-    it "updates the volunteer" do
-      sign_in admin
+    before { sign_in admin }
 
-      patch volunteer_path(volunteer), params: {
-        volunteer: {email: "newemail@gmail.com", display_name: "New Name"}
-      }
-      volunteer.reload
+    context "with valid params" do
+      it "updates the volunteer" do
+        patch volunteer_path(volunteer), params: {
+          volunteer: {email: "newemail@gmail.com", display_name: "New Name"}
+        }
+        expect(response).to have_http_status(:redirect)
 
-      expect(volunteer.display_name).to eq "New Name"
-      expect(volunteer.email).to eq "newemail@gmail.com"
+        volunteer.reload
+        expect(volunteer.display_name).to eq "New Name"
+        expect(volunteer.email).to eq "newemail@gmail.com"
+      end
+    end
+
+    context "with invalid params" do
+      let!(:other_volunteer) { create(:volunteer) }
+
+      it "does not update the volunteer" do
+        patch volunteer_path(volunteer), params: {
+          volunteer: {email: other_volunteer.email, display_name: "New Name"}
+        }
+        expect(response).to have_http_status(:success) # Re-renders form
+
+        volunteer.reload
+        expect(volunteer.display_name).to_not eq "New Name"
+        expect(volunteer.email).to_not eq other_volunteer.email
+      end
     end
 
     # Activation/deactivation must be done separately through /activate and
     # /deactivate, respectively
     it "cannot change the active state" do
-      sign_in admin
-
       patch volunteer_path(volunteer), params: {
         volunteer: {active: false}
       }
