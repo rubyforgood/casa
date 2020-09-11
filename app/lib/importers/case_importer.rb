@@ -9,7 +9,7 @@ class CaseImporter < FileImporter
       casa_case = CasaCase.new(row.to_hash.slice(:case_number, :transition_aged_youth))
       casa_case.casa_org_id = org_id
       casa_case.save!
-      casa_case.volunteers << gather_users(Volunteer, String(row[:case_assignment]))
+      casa_case.volunteers << email_addresses_to_users(Volunteer, String(row[:case_assignment]))
     end
     result_hash("casa_cases")
   end

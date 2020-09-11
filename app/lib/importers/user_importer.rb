@@ -19,7 +19,7 @@ class UserImporter < FileImporter
     import do |row|
       supervisor = create_user_record(Supervisor, row)
       if supervisor
-        gather_users(Volunteer, String(row[:supervisor_volunteers])).each do |volunteer|
+        email_addresses_to_users(Volunteer, String(row[:supervisor_volunteers])).each do |volunteer|
           if volunteer.supervisor
             @failed_volunteers << [volunteer, supervisor, index]
           else

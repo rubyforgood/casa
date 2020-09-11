@@ -42,7 +42,7 @@ class FileImporter
     {type: message_type, message: message.join(" ")}
   end
 
-  def gather_users(clazz, comma_separated_emails)
+  def email_addresses_to_users(clazz, comma_separated_emails)
     comma_separated_emails.split(",")
       .map { |email| clazz.find_by(email: email.strip) }
       .compact

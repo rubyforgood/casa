@@ -49,7 +49,7 @@ RSpec.describe UserImporter do
     let(:import_file_path) { Rails.root.join("spec", "fixtures", "supervisors.csv") }
 
     before(:each) do
-      allow(user_importer).to receive(:gather_users) do |clazz, supervisor_volunteers|
+      allow(user_importer).to receive(:email_addresses_to_users) do |clazz, supervisor_volunteers|
         create_list(:volunteer, supervisor_volunteers.split(',').size)
       end
     end

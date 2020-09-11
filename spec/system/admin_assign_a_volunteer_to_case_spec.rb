@@ -79,5 +79,3 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
     expect(find("select[name='case_assignment[volunteer_id]']").all("option").count).to eq 1
   end
 end
-
-
