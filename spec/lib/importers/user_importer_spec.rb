@@ -3,30 +3,34 @@ require "rails_helper"
 RSpec.describe UserImporter do
   let!(:import_user) { create(:casa_admin) }
   let(:casa_org_id) { import_user.casa_org.id }
-  let(:user_importer) { UserImporter.new(import_file_path, casa_org_id) }
+  let(:volunteer_importer) { -> { UserImporter.import_volunteers(import_file_path, casa_org_id) } }
+  let(:supervisor_importer) { UserImporter.new(import_file_path, casa_org_id) }
 
+
+  # Use of the static method UserImporter.import_volunteers functions identically to UserImporter.new(...).import_volunteers
+  # but is preferred.
   describe "#import_volunteers" do
     let(:import_file_path) { Rails.root.join("spec", "fixtures", "volunteers.csv") }
 
     it "imports volunteers from a csv file" do
-      expect { user_importer.import_volunteers }.to change(User, :count).by(3)
+      expect { volunteer_importer.() }.to change(User, :count).by(3)
     end
 
     it "returns a success message with the number of volunteers imported" do
-      alert = user_importer.import_volunteers
+      alert = volunteer_importer.()
       expect(alert[:type]).to eq(:success)
       expect(alert[:message]).to eq("You successfully imported 3 volunteers.")
     end
 
     context "when the volunteers have been imported already" do
-      before { user_importer.import_volunteers }
+      before { volunteer_importer.() }
 
       it "does not import duplicate volunteers from csv files" do
-        expect { user_importer.import_volunteers }.to change(User, :count).by(0)
+        expect { volunteer_importer.() }.to change(User, :count).by(0)
       end
 
       it "returns an error message when there are volunteers not imported" do
-        alert = UserImporter.new(import_file_path, import_user.casa_org.id).import_volunteers
+        alert = UserImporter.import_volunteers(import_file_path, import_user.casa_org.id)
         expect(alert[:type]).to eq(:error)
         expect(alert[:message]).to include("You successfully imported 0 volunteers. The following volunteers were not")
       end
@@ -45,33 +49,36 @@ RSpec.describe UserImporter do
     end
   end
 
+  # Use of the static method UserImporter.import_supervisors functions identically to
+  # UserImporter.new(...).import_supervisors, but is preferred. However, it cannot be used for these tests
+  # beaause of the allow...to...receive used here.
   describe "#import_supervisors" do
     let(:import_file_path) { Rails.root.join("spec", "fixtures", "supervisors.csv") }
 
     before(:each) do
-      allow(user_importer).to receive(:email_addresses_to_users) do |clazz, supervisor_volunteers|
+      allow(supervisor_importer).to receive(:email_addresses_to_users) do |clazz, supervisor_volunteers|
         create_list(:volunteer, supervisor_volunteers.split(',').size)
       end
     end
 
     it "imports supervisors and associates volunteers with them" do
-      expect { user_importer.import_supervisors }.to change(Supervisor, :count).by(3)
+      expect { supervisor_importer.import_supervisors }.to change(Supervisor, :count).by(3)
       expect(Supervisor.find_by(email: "supervisor1@example.net").volunteers.size).to eq(1)
       expect(Supervisor.find_by(email: "supervisor2@example.net").volunteers.size).to eq(2)
       expect(Supervisor.find_by(email: "supervisor3@example.net").volunteers.size).to eq(0)
     end
 
     it "returns a success message with the number of supervisors imported" do
-      alert = user_importer.import_supervisors
+      alert = supervisor_importer.import_supervisors
       expect(alert[:type]).to eq(:success)
       expect(alert[:message]).to eq("You successfully imported 3 supervisors.")
     end
 
     context "when the supervisors have already been imported" do
-      before { user_importer.import_supervisors }
+      before { supervisor_importer.import_supervisors }
 
       it "does not import duplicate supervisors from csv files" do
-        expect { user_importer.import_supervisors }.to change(Supervisor, :count).by(0)
+        expect { supervisor_importer.import_supervisors }.to change(Supervisor, :count).by(0)
       end
 
       it "returns an error message when there are volunteers not imported" do
