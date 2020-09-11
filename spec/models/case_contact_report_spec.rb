@@ -78,19 +78,6 @@ RSpec.describe CaseContactReport, type: :model do
         contacts = report.case_contacts
         # expect(contacts.length).to eq(1)
       end
-      it "returns only the volunteer with the specified supervisors" do
-        supervisor = create(:supervisor)
-        volunteer = create(:volunteer)
-        volunteer2 = create(:volunteer)
-        supervisor_volunteer = create(:supervisor_volunteer, volunteer: volunteer, supervisor: supervisor)
-        
-        create(:case_contact, {creator_id: volunteer.id})
-        create(:case_contact, {creator_id: volunteer2.id})
-       
-        report = CaseContactReport.new({supervisor_ids: [supervisor.id]})
-        contacts = report.case_contacts
-        expect(contacts.length).to eq(1)
-      end
       describe "case contact behavior" do
         it "returns only the case contacts with where contact was made" do
           create(:case_contact, {contact_made: true})
@@ -192,16 +179,26 @@ RSpec.describe CaseContactReport, type: :model do
       # end
       describe "multiple filter behavior" do
         it "only returns records that occured less than 30 days ago, the youth has transitioned, and the contact type was either court or therapist" do
-          create(:case_contact, occurred_at: 20.days.ago, has_transitioned: true, contact_types: ["court"])
-          create(:case_contact, occurred_at: 40.days.ago, has_transitioned: true, contact_types: ["court"])
-          create(:case_contact, occurred_at: 20.days.ago, has_transitioned: false, contact_types: ["court"])
-          create(:case_contact, occurred_at: 20.days.ago, has_transitioned: true, contact_types: ["school"])
-          create(:case_contact, occurred_at: 20.days.ago, has_transitioned: true, contact_types: ["court", "school"])
-          create(:case_contact, occurred_at: 20.days.ago, has_transitioned: true, contact_types: ["therapist"])
+          untransitioned_casa_case = create(:casa_case, transition_aged_youth: false)
+          transitioned_casa_case = create(:casa_case, transition_aged_youth: true)
+          create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, contact_types: ["court"])
+          create(:case_contact, occurred_at: 40.days.ago, casa_case: transitioned_casa_case, contact_types: ["court"])
+          create(:case_contact, occurred_at: 20.days.ago, casa_case: untransitioned_casa_case, contact_types: ["court"])
+          create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, contact_types: ["school"])
+          create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, contact_types: ["court", "school"])
+          create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, contact_types: ["therapist"])
 
-          20_days_ago_court_transitioned_report = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, has_transitioned: true, contact_types: ["court"] })
-          contacts = 20_days_ago_court_transitioned_report.case_contacts
-          expect(contacts.length).to eq(1)
+          report_20_days_ago_court_transitioned = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, has_transitioned: true, contact_types: ["court"]})
+          contacts = report_20_days_ago_court_transitioned.case_contacts
+          expect(contacts.length).to eq(4)
+
+          report_20_days_ago_court_school_transitioned = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, has_transitioned: true, contact_types: ["court", "school"]})
+          contacts = report_20_days_ago_court_transitioned.case_contacts
+          expect(contacts.length).to eq(5)
+
+          report_20_days_ago_school_therapist_transitioned = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, has_transitioned: true, contact_types: ["school", "therapist"]})
+          contacts = report_20_days_ago_court_transitioned.case_contacts
+          expect(contacts.length).to eq(2)
 
         end
       end
