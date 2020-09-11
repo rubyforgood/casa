@@ -69,9 +69,7 @@ class CaseContact < ApplicationRecord
 
   def allowed_edit?
     today = Time.zone.now
-    return false if occurred_at.end_of_quarter < today
-    
-    true
+    occurred_at.end_of_quarter > today
   end
 
   def check_if_allow_edit
