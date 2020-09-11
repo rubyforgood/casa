@@ -1,7 +1,10 @@
 <header>
   <nav class="navbar navbar-expand-lg bg-primary justify-content-between">
     <div class="navbar-brand py-0">
-      <%= image_pack_tag("media/src/images/logo.png", alt: "CASA Logo", size: "70x38", class: "d-inline-block align-text-bottom") %>
+      <%= image_pack_tag(@casa_org.logo_url,
+        alt: @casa_org.logo_alt_text || "CASA Logo",
+        size: @casa_org.logo_size,
+        class: "d-inline-block align-text-bottom") if @casa_org.logo_url %>
       <strong><%= page_header %></strong>
     </div>
     <div class="navbar-nav">
@@ -12,10 +15,21 @@
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <%= link_to "Edit Profile", edit_users_path, class: "dropdown-item" %>
-            <% if current_user.is_a?(CasaAdmin) %>
+            <% if policy(:application).see_reports_page? %>
               <%= link_to "Generate Reports", reports_path, class: "dropdown-item" %>
+            <% end %>
+            <% if policy(:application).see_import_page? %>
               <%= link_to "System Imports", imports_path, class: "dropdown-item" %>
             <% end %>
+          </div>
+        </div>
+      <% end %>
+      <% if current_all_casa_admin %>
+        <div class="dropdown">
+          <button class="btn btn-light dropdown-toggle" style="margin-right:12px;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <%= current_all_casa_admin.email %>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           </div>
         </div>
       <% end %>

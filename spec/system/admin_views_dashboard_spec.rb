@@ -7,26 +7,44 @@ RSpec.describe "admin views dashboard", type: :system do
   before { travel_to Time.zone.local(2020, 8, 29, 4, 5, 6) }
   after { travel_back }
 
-  it "can see volunteers and navigate to their cases" do
-    volunteer = create(:volunteer, email: "casa@example.com", casa_org: organization)
-    volunteer.casa_cases << create(:casa_case, casa_org: organization)
-    volunteer.casa_cases << create(:casa_case, casa_org: organization)
-    casa_case = volunteer.casa_cases[0]
+  context "when no logo_url" do 
+    it "can see volunteers and navigate to their cases" do
+      volunteer = create(:volunteer, email: "casa@example.com", casa_org: organization)
+      volunteer.casa_cases << create(:casa_case, casa_org: organization)
+      volunteer.casa_cases << create(:casa_case, casa_org: organization)
+      casa_case = volunteer.casa_cases[0]
 
-    sign_in admin
+      sign_in admin
 
-    visit root_path
+      visit root_path
 
-    expect(page).to have_text("casa@example.com")
-    expect(page).to have_text(casa_case.case_number)
+      expect(page).to have_text("casa@example.com")
+      expect(page).to have_text(casa_case.case_number)
 
-    within "#volunteers" do
-      click_on volunteer.casa_cases.first.case_number
+      within "#volunteers" do
+        click_on volunteer.casa_cases.first.case_number
+      end
+
+      expect(page).to have_text("CASA Case Details")
+      expect(page).to have_text("Miles Driven")
+      expect(page).to have_text("Want reimbursement?")
     end
+  end
 
-    expect(page).to have_text("CASA Case Details")
-    expect(page).to have_text("Miles Driven")
-    expect(page).to have_text("Want reimbursement?")
+  context "when logo_url" do 
+    let(:logo) { create(:casa_org_logo) }
+    let(:organization) { create(:casa_org, casa_org_logo: logo, display_name: "FOO", address: "123 Main St", footer_links:[["www.example.com", "First Link"], ["www.foobar.com", "Second Link"] ]) }
+    
+    it "displays logo, display name, address footer links" do
+      volunteer = create(:volunteer, email: "casa@example.com", casa_org: organization)
+      sign_in admin
+      visit root_path
+      expect(page).to have_text "FOO"
+      expect(page).to have_text "123 Main St"
+      expect(page).to have_link "First Link", href: "www.example.com"
+      expect(page).to have_link "Second Link", href: "www.foobar.com"
+      expect(page).to have_text "Volunteer"
+    end
   end
 
   describe "supervisor column of volunteers table" do
@@ -50,6 +68,17 @@ RSpec.describe "admin views dashboard", type: :system do
       supervisor_cell = page.find("#supervisor-column")
 
       expect(supervisor_cell.text).to eq name
+    end
+
+    it "is blank when volunteer has been unassigned from supervisor" do
+      volunteer = create(:volunteer, casa_org: organization)
+      sv = create(:supervisor_volunteer, volunteer: volunteer, is_active: false)
+      sign_in admin
+
+      visit root_path
+      supervisor_cell = page.find("#supervisor-column")
+
+      expect(supervisor_cell.text).to eq ""
     end
   end
 

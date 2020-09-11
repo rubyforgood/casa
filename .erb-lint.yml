@@ -4,3 +4,11 @@ linters:
   ErbSafety:
     enabled: true
     better_html_config: .better-html.yml
+  Rubocop:
+    enabled: true
+    rubocop_config:
+      Layout/LineLength:
+        Exclude:
+          - app/views/devise/mailer/reset_password_instructions.html.erb
+    only:
+      - Layout/LineLength

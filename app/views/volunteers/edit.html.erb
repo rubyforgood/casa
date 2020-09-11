@@ -41,11 +41,10 @@
           Volunteer is <span class="badge badge-success text-uppercase display-1">Active</span>
           <% if policy(@volunteer).deactivate? %>
             <%= link_to "Deactivate volunteer",
-                        deactivate_volunteer_path(@volunteer),
-                        method: :patch,
-                        class: "btn btn-outline-danger",
-                        data:
-                            { confirm: "WARNING: Marking a volunteer inactive will make them unable to login. They will receive an email saying their account has been marked inactive. Are you sure you want to do this?"} %>
+              deactivate_volunteer_path(@volunteer),
+              method: :patch,
+              class: "btn btn-outline-danger",
+              data: { confirm: t("forms.volunteer.mark_inactive_warning") } %>
           <% end %>
         <% else %>
           <div class="alert alert-danger">
@@ -67,7 +66,7 @@
   </div>
 </div>
 
-<% if @volunteer.casa_cases.present? %>
+<% if @volunteer.casa_cases.size > 0 %>
   <br>
   <div class="row">
     <div class="col-sm-12">
@@ -82,7 +81,7 @@
           </tr>
         </thead>
         <tbody>
-          <% @volunteer.case_assignments.each do |assignment| %>
+          <% @case_assignments.each do |assignment| %>
             <tr>
               <td><%= link_to assignment.casa_case.case_number, casa_case_path(assignment.casa_case) %></td>
               <td><%= assignment.casa_case.decorate.transition_aged_youth_icon %></td>
@@ -95,7 +94,12 @@
               </td>
               <td>
                 <% if @volunteer.active? %>
-                  <%= button_to 'Unassign Case', case_assignment_path(assignment, volunteer_id: @volunteer.id), method: :delete, class: "btn btn-danger" if Pundit.policy(current_user, @volunteer).unassign_case? %>
+                  <%- if Pundit.policy(current_user, @volunteer).unassign_case? %>
+                    <%= button_to 'Unassign Case',
+                      case_assignment_path(assignment, volunteer_id: @volunteer.id),
+                      method: :delete,
+                      class: "btn btn-danger" %>
+                  <%- end %>
                 <% else %>
                   None
                 <% end %>

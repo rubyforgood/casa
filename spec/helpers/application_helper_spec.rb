@@ -3,6 +3,9 @@ require "rails_helper"
 describe ApplicationHelper do
   describe "#page_header" do
     let(:page_header_text) { "CASA / Prince George's County, MD" }
+    before do
+      assign(:casa_org, build_stubbed(:casa_org, display_name: page_header_text ))
+    end
 
     it "links to the user dashboard if user logged in" do
       allow(helper).to receive(:user_signed_in?).and_return(true)
@@ -27,7 +30,7 @@ describe ApplicationHelper do
 
     it "links to the sign_in page when user is not signed in" do
       allow(helper).to receive(:user_signed_in?).and_return(false)
-
+      allow(helper).to receive(:all_casa_admin_signed_in?).and_return(false)
       expect(helper.session_link).to match(new_user_session_path)
     end
   end

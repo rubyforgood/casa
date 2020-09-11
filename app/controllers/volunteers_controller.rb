@@ -20,6 +20,7 @@ class VolunteersController < ApplicationController
   end
 
   def edit
+    @case_assignments = @volunteer.case_assignments.includes(:casa_case)
     @available_casa_cases = CasaCase.all.order(:case_number)
   end
 

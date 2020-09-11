@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="col-sm-12 dashboard-table-header">
+    <h1>All CASA Admin</h1>
+  </div>
+</div>
+<h2>CASA Organizations</h2>
+<table class="table organization-list">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Created At</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @casa_orgs.each do |casa_org| %>
+      <tr>
+        <td><%= link_to casa_org.name, all_casa_admins_casa_org_path(casa_org) %></td>
+        <td><%= casa_org.created_at.strftime('%B %e, %Y') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

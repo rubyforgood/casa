@@ -8,7 +8,6 @@ window.onload = function () {
   const durationMinutes = document.getElementById('case-contact-duration-minutes')
   const durationMinuteDisplay = document.getElementById('casa-contact-duration-minutes-display')
   const caseContactSubmit = document.getElementById('case-contact-submit')
-  const contactTypeForm = document.getElementById('contact-type-form')
 
   milesDriven.onchange = function () {
     const contactMedium = document.getElementById('case_contact_medium_type').value || '(contact medium not set)'
@@ -46,15 +45,15 @@ window.onload = function () {
     }
   }
 
-  function validateContactType () {
-    const childElements = Array.from(contactTypeForm.children)
-    const isAtLeastOneChecked = childElements.filter(x => {
-      return x.querySelector('input') && x.querySelector('input').checked
-    }).length
-    if (!isAtLeastOneChecked) {
-      childElements[2].querySelector('input').setAttribute('required', true)
+  function validateAtLeastOneChecked (elements) {
+    // convert to Array
+    const elementsArray = Array.prototype.slice.call(elements)
+
+    const numChecked = elementsArray.filter(x => x.checked).length
+    if (numChecked === 0) {
+      elementsArray[0].required = true
     } else {
-      childElements[2].querySelector('input').removeAttribute('required')
+      elementsArray[0].required = false
     }
   }
 
@@ -71,7 +70,9 @@ window.onload = function () {
   }
 
   caseContactSubmit.onclick = function () {
-    validateContactType()
+    validateAtLeastOneChecked(document.querySelectorAll('.casa-case-id'))
+    validateAtLeastOneChecked(document.querySelectorAll('.case-contact-contact-type'))
+
     validateDuration()
   }
 }

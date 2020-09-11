@@ -44,7 +44,7 @@
   </div>
 </div>
 
-<% if @supervisor.supervisor_volunteers.present? %>
+<% if @supervisor.supervisor_volunteers.size > 0 %>
   <br>
   <div class="row">
     <div class="col-sm-12">
@@ -64,7 +64,10 @@
               <td><%= volunteer.email %></td>
               <td>
                 <% if volunteer.supervisor_volunteer.is_active? %>
-                  <%= button_to 'Unassign', unassign_supervisor_volunteer_path(volunteer), method: :patch, class: "btn btn-danger" %>
+                  <%= button_to 'Unassign',
+                    unassign_supervisor_volunteer_path(volunteer),
+                    method: :patch,
+                    class: "btn btn-danger" %>
                 <% else %>
                   Unassigned
                 <% end %>
@@ -93,7 +96,7 @@
           <% end %>
         </select>
       </div>
-
+      <%= form.hidden_field :supervisor_id, :value => @supervisor.id %>
       <%= form.submit 'Assign Volunteer', class: 'btn btn-primary' %>
     <% end %>
     <% unless @available_volunteers.any? %>

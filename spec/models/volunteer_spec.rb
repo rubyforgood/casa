@@ -31,4 +31,44 @@ RSpec.describe Volunteer, type: :model do
       expect(case_contacts).to all(satisfy { |c| !c.is_active })
     end
   end
+
+  describe "#display_name" do
+    it "allows user to input dangerous values" do
+      volunteer = create(:volunteer)
+      UserInputHelpers::DANGEROUS_STRINGS.each do |dangerous_string|
+        volunteer.update_attribute(:display_name, dangerous_string)
+        volunteer.reload
+
+        expect(volunteer.display_name).to eq dangerous_string
+      end
+    end
+  end
+
+  describe "has_supervisor?" do
+    context "when no supervisor_volunteer record" do
+      let(:volunteer) { create(:volunteer) }
+
+      it "returns false" do
+        expect(volunteer.has_supervisor?).to be false
+      end
+    end
+
+    context "when active supervisor_volunteer record" do
+      let(:sv) { create(:supervisor_volunteer, is_active: true) }
+      let(:volunteer) { sv.volunteer }
+
+      it "returns true" do
+        expect(volunteer.has_supervisor?).to be true
+      end
+    end
+
+    context "when inactive supervisor_volunteer record" do
+      let(:sv) { create(:supervisor_volunteer, is_active: false) }
+      let(:volunteer) { sv.volunteer }
+
+      it "returns false" do
+        expect(volunteer.has_supervisor?).to be false
+      end
+    end
+  end
 end

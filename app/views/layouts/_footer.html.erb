@@ -1,16 +1,10 @@
 <footer>
-  <p class="copyright">© CASA Prince George's County</p>
-  <p class="address">6811 Kenilworth Avenue, Suite 402 Riverdale, MD 20737</p>
-  <%= image_pack_tag("media/src/images/logo.png") %>
+  <p class="copyright">© <%= @casa_org.display_name %></p>
+  <p class="address"><%= @casa_org.address %></p>
+  <%= image_pack_tag(@casa_org.logo_url) if @casa_org.logo_url %>
   <ul class="site-footer__links">
-    <li>
-      <a href="https://pgcasa.org/contact/">Contact Us</a>
-    </li>
-    <li>
-      <a href="https://pgcasa.org/subscribe-to-newsletter/">Subscribe to newsletter</a>
-    </li>
-    <li>
-      <a href="https://www.givedirect.org/give/givefrm.asp?CID=4450">Donate</a>
-    </li>
+    <% @casa_org.footer_links.each do |href, label_text| %>
+      <li><%= link_to label_text, href %></li>
+    <% end %>
   </ul>
 </footer>

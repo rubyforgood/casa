@@ -33,4 +33,55 @@ describe CaseContactsHelper do
       expect(helper.render_back_link(casa_case)).to eq(casa_case_path(casa_case))
     end
   end
+
+  describe "#duration_minutes" do
+    it "returns remainder if duration_minutes is set" do
+      case_contact = build(:case_contact, duration_minutes: 80)
+      expect(helper.duration_minutes(case_contact)).to eq(20)
+    end
+
+    it "returns zero if duration_minutes is zero" do
+      case_contact = build(:case_contact, duration_minutes: 0)
+      expect(helper.duration_minutes(case_contact)).to eq(0)
+    end
+
+    it "returns zero if duration_minutes is nil" do
+      case_contact = build(:case_contact, duration_minutes: nil)
+      expect(helper.duration_minutes(case_contact)).to eq(0)
+    end
+  end
+
+  describe "#duration_hours" do
+    it "returns minutes if duration_minutes is set" do
+      case_contact = build(:case_contact, duration_minutes: 80)
+      expect(helper.duration_hours(case_contact)).to eq(1)
+    end
+
+    it "returns zero if duration_minutes is zero" do
+      case_contact = build(:case_contact, duration_minutes: 0)
+      expect(helper.duration_hours(case_contact)).to eq(0)
+    end
+
+    it "returns zero if duration_minutes is nil" do
+      case_contact = build(:case_contact, duration_minutes: nil)
+      expect(helper.duration_hours(case_contact)).to eq(0)
+    end
+  end
+
+  describe "#set_contact_made_false" do
+    it "returns false if contact_made is true" do
+      case_contact = create(:case_contact, contact_made: true)
+      expect(helper.set_contact_made_false(case_contact)).to eq(false)
+    end
+
+    it "returns true if contact_made is false" do
+      case_contact = create(:case_contact, contact_made: false)
+      expect(helper.set_contact_made_false(case_contact)).to eq(true)
+    end
+
+    it "returns false if contact_made is nil" do
+      case_contact = build(:case_contact, contact_made: nil)
+      expect(helper.set_contact_made_false(case_contact)).to eq(false)
+    end
+  end
 end
