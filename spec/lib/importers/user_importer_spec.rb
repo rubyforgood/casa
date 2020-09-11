@@ -3,14 +3,12 @@ require "rails_helper"
 RSpec.describe UserImporter do
   let!(:import_user) { create(:casa_admin) }
   let(:casa_org_id) { import_user.casa_org.id }
-  let(:volunteer_importer) { -> { UserImporter.import_volunteers(import_file_path, casa_org_id) } }
-  let(:supervisor_importer) { UserImporter.new(import_file_path, casa_org_id) }
-
 
   # Use of the static method UserImporter.import_volunteers functions identically to UserImporter.new(...).import_volunteers
   # but is preferred.
   describe "#import_volunteers" do
     let(:import_file_path) { Rails.root.join("spec", "fixtures", "volunteers.csv") }
+    let(:volunteer_importer) { -> { UserImporter.import_volunteers(import_file_path, casa_org_id) } }
 
     it "imports volunteers from a csv file" do
       expect { volunteer_importer.() }.to change(User, :count).by(3)
@@ -55,10 +53,12 @@ RSpec.describe UserImporter do
   describe "#import_supervisors" do
     let(:import_file_path) { Rails.root.join("spec", "fixtures", "supervisors.csv") }
 
-    before(:each) do
-      allow(supervisor_importer).to receive(:email_addresses_to_users) do |clazz, supervisor_volunteers|
+    let(:supervisor_importer) do
+      importer = UserImporter.new(import_file_path, casa_org_id)
+      allow(importer).to receive(:email_addresses_to_users) do |clazz, supervisor_volunteers|
         create_list(:volunteer, supervisor_volunteers.split(',').size)
       end
+      importer
     end
 
     it "imports supervisors and associates volunteers with them" do
