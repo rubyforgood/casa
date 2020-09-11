@@ -20,6 +20,10 @@ class CasaCase < ApplicationRecord
       order(:case_number)
     end
   end
+
+  def has_transitioned?
+    transition_aged_youth
+  end
 end
 
 # == Schema Information

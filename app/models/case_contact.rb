@@ -13,6 +13,9 @@ class CaseContact < ApplicationRecord
   validate :check_if_allow_edit, on: :update
 
   belongs_to :creator, class_name: "User"
+  has_many :supervisor_volunteers, primary_key: :creator_id, foreign_key: :volunteer_id
+  has_many :supervisors, through: :supervisor_volunteers
+
   belongs_to :casa_case
 
   CONTACT_TYPES = %w[
@@ -31,11 +34,11 @@ class CaseContact < ApplicationRecord
     youth
   ].freeze
 
-  IN_PERSON = "in-person"
-  TEXT_EMAIL = "text/email"
-  VIDEO = "video"
-  VOICE_ONLY = "voice-only"
-  LETTER = "letter"
+  IN_PERSON = "in-person".freeze
+  TEXT_EMAIL = "text/email".freeze
+  VIDEO = "video".freeze
+  VOICE_ONLY = "voice-only".freeze
+  LETTER = "letter".freeze
   CONTACT_MEDIUMS = [IN_PERSON, TEXT_EMAIL, VIDEO, VOICE_ONLY, LETTER].freeze
 
   def contact_types_included
@@ -76,6 +79,14 @@ class CaseContact < ApplicationRecord
     return if allowed_edit?
 
     errors[:base] << "cannot edit past case contacts outside of quarter"
+  end
+
+  def supervisor_id
+    supervisors.first&.id
+  end
+
+  def has_casa_case_transitioned
+    casa_case.has_transitioned?
   end
 end
 
