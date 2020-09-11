@@ -76,5 +76,5 @@ window.onload = function () {
   }
 }
 $('document').ready(() => {
-  $('.add-tooltip a').tooltip('disable')
+  $('.add-disallow-edit-tooltip a').tooltip('disable')
 })
