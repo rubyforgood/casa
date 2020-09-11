@@ -23,14 +23,14 @@ class FileImporter
 
   private
 
-  def result_hash(type)
-    message = ["You successfully imported #{@number_imported} #{type}."]
+  def result_hash(pluralized_type_label)
+    message = ["You successfully imported #{@number_imported} #{pluralized_type_label}."]
     if failed_imports.empty? && failed_volunteers.empty?
       message_type = :success
     else
       message_type = :error
       if failed_imports.present?
-        message << "The following #{type} were not imported: #{failed_imports.join(", ")}."
+        message << "The following #{pluralized_type_label} were not imported: #{failed_imports.join(", ")}."
       end
       if failed_volunteers.present?
         message << "The following volunteers were not imported:"
