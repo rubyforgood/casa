@@ -15,7 +15,9 @@ class User < ApplicationRecord
   has_many :volunteers, -> { includes(:supervisor_volunteer).order(:display_name) },
     through: :supervisor_volunteers
 
-  has_one :supervisor_volunteer, foreign_key: "volunteer_id"
+  has_one :supervisor_volunteer, -> {
+    where(is_active: true)
+  }, foreign_key: "volunteer_id"
   has_one :supervisor, through: :supervisor_volunteer
 
   scope :volunteers_with_no_supervisor, lambda { |org|

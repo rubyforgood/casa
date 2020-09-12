@@ -2,11 +2,18 @@ class CaseContactReport
   attr_reader :case_contacts
 
   def initialize(args = {})
-    @case_contacts = if args[:start_date] && args[:end_date]
-      CaseContact.occurred_between(args[:start_date], args[:end_date])
-    else
-      CaseContact.all
-    end
+    @case_contacts = filtered_case_contacts(args)
+  end
+
+  def filtered_case_contacts(args)
+    CaseContact
+      .supervisors(args[:supervisor_ids])
+      .creators(args[:creator_ids])
+      .occurred_between(args[:start_date], args[:end_date])
+      .contact_made(args[:contact_made])
+      .has_transitioned(args[:has_transitioned])
+      .want_driving_reimbursement(args[:want_driving_reimbursement])
+      .contact_type(args[:contact_type])
   end
 
   def to_csv

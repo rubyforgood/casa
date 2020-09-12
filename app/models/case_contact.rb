@@ -1,4 +1,3 @@
-# CaseContact Model
 class CaseContact < ApplicationRecord
   attr_accessor :duration_hours
 
@@ -13,8 +12,34 @@ class CaseContact < ApplicationRecord
   validate :check_if_allow_edit, on: :update
 
   belongs_to :creator, class_name: "User"
+  has_one :supervisor_volunteer, -> {
+    where(is_active: true)
+  }, primary_key: :creator_id, foreign_key: :volunteer_id
+  has_one :supervisor, through: :creator
+
   belongs_to :casa_case
 
+  scope :supervisors, ->(supervisor_ids = nil) {
+    joins(:supervisor_volunteer).where(supervisor_volunteers: {supervisor_id: supervisor_ids}) if supervisor_ids.present?
+  }
+  scope :creators, ->(creator_ids = nil) {
+    where(creator_id: creator_ids) if creator_ids.present?
+  }
+  scope :occurred_between, ->(start_date = nil, end_date = nil) {
+    where("occurred_at BETWEEN ? AND ?", start_date, end_date) if start_date.present? && end_date.present?
+  }
+  scope :contact_made, ->(contact_made = nil) {
+    where(contact_made: contact_made) if contact_made == true || contact_made == false
+  }
+  scope :has_transitioned, ->(has_transitioned = nil) {
+    joins(:casa_case).where(casa_cases: {transition_aged_youth: has_transitioned}) if has_transitioned == true || has_transitioned == false
+  }
+  scope :want_driving_reimbursement, ->(want_driving_reimbursement = nil) {
+    where(want_driving_reimbursement: want_driving_reimbursement) if want_driving_reimbursement == true || want_driving_reimbursement == false
+  }
+  scope :contact_type, ->(contact_type = nil) {
+    where("? = ANY (contact_types)", contact_type) if contact_type.present?
+  }
   CONTACT_TYPES = %w[
     attorney
     bio_parent
@@ -31,11 +56,11 @@ class CaseContact < ApplicationRecord
     youth
   ].freeze
 
-  IN_PERSON = "in-person"
-  TEXT_EMAIL = "text/email"
-  VIDEO = "video"
-  VOICE_ONLY = "voice-only"
-  LETTER = "letter"
+  IN_PERSON = "in-person".freeze
+  TEXT_EMAIL = "text/email".freeze
+  VIDEO = "video".freeze
+  VOICE_ONLY = "voice-only".freeze
+  LETTER = "letter".freeze
   CONTACT_MEDIUMS = [IN_PERSON, TEXT_EMAIL, VIDEO, VOICE_ONLY, LETTER].freeze
 
   def contact_types_included
@@ -58,10 +83,6 @@ class CaseContact < ApplicationRecord
     errors[:base] << "Must enter miles driven to receive driving reimbursement."
   end
 
-  def self.occurred_between(start_date, end_date)
-    where("occurred_at BETWEEN ? AND ?", start_date, end_date)
-  end
-
   def contact_made_chosen
     errors[:base] << "Must enter whether the contact was made." if contact_made.nil?
     !contact_made.nil?
@@ -76,6 +97,14 @@ class CaseContact < ApplicationRecord
     return if allowed_edit?
 
     errors[:base] << "cannot edit past case contacts outside of quarter"
+  end
+
+  def supervisor_id
+    supervisor.id
+  end
+
+  def has_casa_case_transitioned
+    casa_case.has_transitioned?
   end
 end
 
