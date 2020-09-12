@@ -15,25 +15,26 @@ RSpec.describe "/all_casa_admins", type: :request do
 
   describe "PATCH /update" do
     context "with valid parameters" do
-        it "updates the all_casa_admin" do
+      it "updates the all_casa_admin" do
         admin = create(:all_casa_admin)
         sign_in admin
 
         patch all_casa_admins_path, params: {all_casa_admin: {email: "newemail@example.com"}}
+        expect(response).to have_http_status(:redirect)
 
         expect(admin.email).to eq "newemail@example.com"
-        expect(response).to have_http_status(:redirect)
       end
     end
+
     context "with invalid parameters" do
-        it "does not update the all_casa_admin" do
+      it "does not update the all_casa_admin" do
         admin = create(:all_casa_admin)
         sign_in admin
         other_admin = create(:all_casa_admin)
         patch all_casa_admins_path, params: {all_casa_admin: {email: other_admin.email}}
+        expect(response).to have_http_status(:ok)
 
         expect(admin.email).to_not eq "newemail@example.com"
-        expect(response).to have_http_status(:ok)
       end
     end
   end
