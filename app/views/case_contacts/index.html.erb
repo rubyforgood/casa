@@ -21,8 +21,12 @@
         <td><%= case_contact.contact_types %></td>
         <td><%= case_contact.duration_minutes %></td>
         <td><%= case_contact.occurred_at.strftime('%B %e, %Y') %></td>
-        <td><%= link_to 'Edit', edit_case_contact_path(case_contact) %></td>
-        <td><%= link_to 'Destroy', case_contact, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><div class="add-disallow-edit-tooltip" data-toggle="tooltip" title="Disallow edit contact after end of quarter">
+          <%= link_to_if case_contact.allowed_edit?, 'Edit', edit_case_contact_path(case_contact) %>
+        </div></td>
+        <td><div class="add-disallow-edit-tooltip" data-toggle="tooltip" title="Disallow delete contact after end of quarter">
+          <%= link_to_if case_contact.allowed_edit?, 'Destroy', case_contact, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </div></td>
       </tr>
     <% end %>
   </tbody>

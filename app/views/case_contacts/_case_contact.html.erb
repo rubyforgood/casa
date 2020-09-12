@@ -13,10 +13,12 @@
       <%= contact.creator&.display_name %>
     <% end %>
   </td>
-
   <td>
+    <%# TODO What text for tooltip? %>
     <% if Pundit.policy(current_user, contact).update? %>
-      <%= link_to 'Edit', edit_case_contact_path(contact) %>
+    <div class="add-disallow-edit-tooltip" data-toggle="tooltip" title="Disallow edit contact after end of quarter">
+      <%= link_to_if contact.allowed_edit?, 'Edit', edit_case_contact_path(contact) %>
     <% end %>
+    </div>
   </td>
 </tr>

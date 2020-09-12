@@ -76,3 +76,6 @@ window.onload = function () {
     validateDuration()
   }
 }
+$('document').ready(() => {
+  $('.add-disallow-edit-tooltip a').tooltip('disable')
+})
