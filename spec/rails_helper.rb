@@ -23,6 +23,7 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :view
   config.include Warden::Test::Helpers
   config.include SessionHelper, type: :view
+  config.include Capybara::DSL
   config.after do
     Warden.test_reset!
   end
