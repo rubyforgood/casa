@@ -8,8 +8,6 @@ describe "volunteers/new" do
 
   context "while signed in as admin" do
     before do
-      $stderr.puts("Casa Admin")
-      $stderr.puts(CasaAdmin.first)
       sign_in_as_admin
       visit new_volunteer_path
     end
