@@ -7,7 +7,7 @@ RSpec.describe "admin views dashboard", type: :system do
   before { travel_to Time.zone.local(2020, 8, 29, 4, 5, 6) }
   after { travel_back }
 
-  context "when no logo_url" do 
+  context "when no logo_url" do
     it "can see volunteers and navigate to their cases" do
       volunteer = create(:volunteer, email: "casa@example.com", casa_org: organization)
       volunteer.casa_cases << create(:casa_case, casa_org: organization)
@@ -31,12 +31,12 @@ RSpec.describe "admin views dashboard", type: :system do
     end
   end
 
-  context "when logo_url" do 
+  context "when logo_url" do
     let(:logo) { create(:casa_org_logo) }
-    let(:organization) { create(:casa_org, casa_org_logo: logo, display_name: "FOO", address: "123 Main St", footer_links:[["www.example.com", "First Link"], ["www.foobar.com", "Second Link"] ]) }
-    
+    let(:organization) { create(:casa_org, casa_org_logo: logo, display_name: "FOO", address: "123 Main St", footer_links: [["www.example.com", "First Link"], ["www.foobar.com", "Second Link"]]) }
+
     it "displays logo, display name, address footer links" do
-      volunteer = create(:volunteer, email: "casa@example.com", casa_org: organization)
+      create(:volunteer, email: "casa@example.com", casa_org: organization)
       sign_in admin
       visit root_path
       expect(page).to have_text "FOO"
@@ -72,7 +72,7 @@ RSpec.describe "admin views dashboard", type: :system do
 
     it "is blank when volunteer has been unassigned from supervisor" do
       volunteer = create(:volunteer, casa_org: organization)
-      sv = create(:supervisor_volunteer, volunteer: volunteer, is_active: false)
+      create(:supervisor_volunteer, volunteer: volunteer, is_active: false)
       sign_in admin
 
       visit root_path

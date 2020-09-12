@@ -16,7 +16,7 @@ class FileImporter
     CSV.foreach(csv_filespec || [], headers: true, header_converters: :symbol) do |row|
       yield(row)
       @number_imported += 1
-    rescue StandardError => e
+    rescue
       @failed_imports << row.to_hash.values.to_s
     end
   end

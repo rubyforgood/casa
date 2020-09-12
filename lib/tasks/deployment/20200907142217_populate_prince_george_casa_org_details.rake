@@ -1,5 +1,5 @@
 namespace :after_party do
-  desc 'Deployment task: populate_prince_george_casa_org_details'
+  desc "Deployment task: populate_prince_george_casa_org_details"
   task populate_prince_george_casa_org_details: :environment do
     puts "Running deploy task 'populate_prince_george_casa_org_details'"
 
@@ -11,7 +11,7 @@ namespace :after_party do
     logo.update!(
       url: "media/src/images/logo.png",
       alt_text: "CASA Logo",
-      size: "70x38",
+      size: "70x38"
     )
 
     casa_org.update!(
@@ -21,7 +21,7 @@ namespace :after_party do
       footer_links: [
         ["https://pgcasa.org/contact/", "Contact Us"],
         ["https://pgcasa.org/subscribe-to-newsletter/", "Subscribe to newsletter"],
-        ["https://www.givedirect.org/give/givefrm.asp?CID=4450", "Donate"],
+        ["https://www.givedirect.org/give/givefrm.asp?CID=4450", "Donate"]
       ]
     )
 
