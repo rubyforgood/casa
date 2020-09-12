@@ -2,11 +2,15 @@ require "rails_helper"
 
 RSpec.describe "view supervisor edit", type: :system do
   context "when the current user is a supervisor" do
+    before do
+      sign_in current_supervisor
+    end
+
+    let(:current_supervisor) { create(:supervisor) }
+
     it "does not have a submit button" do
-      current_supervisor = create(:supervisor)
       other_supervisor = create(:supervisor)
 
-      sign_in current_supervisor
       visit edit_supervisor_path(other_supervisor)
 
       expect(page).not_to have_selector(:link_or_button, "Submit")
@@ -14,9 +18,6 @@ RSpec.describe "view supervisor edit", type: :system do
 
     context "when the current user is editing self" do
       it "displays a submit button" do
-        current_supervisor = create(:supervisor)
-
-        sign_in current_supervisor
         visit edit_supervisor_path(current_supervisor)
 
         expect(page).to have_selector(:link_or_button, "Submit")
@@ -24,15 +25,40 @@ RSpec.describe "view supervisor edit", type: :system do
     end
   end
 
-  context "when the current user is an admin" do
-    it "displays a submit button" do
-      admin = create(:casa_admin)
-      supervisor = create(:supervisor)
+  context "when the current user is an casa_admin" do
+    before do
+      sign_in create(:casa_admin)
+    end
 
-      sign_in admin
-      visit edit_supervisor_path(supervisor)
+    let(:supervisor) { create(:supervisor, :with_volunteers) }
 
-      expect(page).to have_selector(:link_or_button, "Submit")
+    context "when entering valid information" do
+      it "updates the e-mail address successfully" do
+        visit edit_supervisor_path(supervisor)
+
+        expect do
+          fill_in "supervisor_email", with: ""
+          fill_in "supervisor_email", with: "new" + supervisor.email
+          click_on "Submit"
+          page.find ".header-flash > div"
+          supervisor.reload
+        end.to change{supervisor.email}.to "new" + supervisor.email
+      end
+    end
+
+    context "when the email exists already" do
+      let!(:existing_supervisor) { create(:supervisor) }
+
+      it "responds with a notice" do
+        visit edit_supervisor_path(supervisor)
+        fill_in "supervisor_email", with: ''
+        fill_in "supervisor_email", with: existing_supervisor.email
+        click_on "Submit"
+
+        within "#error_explanation" do
+          expect(page).to have_content(/already been taken/i)
+        end
+      end
     end
   end
 end

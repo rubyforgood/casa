@@ -7,6 +7,7 @@ class SupervisorsController < ApplicationController
   before_action :must_be_admin_or_supervisor
   before_action :must_be_admin, only: [:new, :create]
   before_action :available_volunteers, only: [:edit, :update]
+  before_action :set_supervisor, only: [:edit, :update]
 
   def new
     @supervisor = Supervisor.new
@@ -24,15 +25,10 @@ class SupervisorsController < ApplicationController
   end
 
   def edit
-    @supervisor = Supervisor.find(params[:id])
-    @assigned_volunteers = @supervisor.volunteers
-
     redirect_to root_url unless can_view_update_page?
   end
 
   def update
-    @supervisor = Supervisor.find(params[:id])
-
     if can_update_fields?
       if @supervisor.update(update_supervisor_params)
         redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was successfully updated."
@@ -45,6 +41,10 @@ class SupervisorsController < ApplicationController
   end
 
   private
+
+  def set_supervisor
+    @supervisor = Supervisor.find(params[:id])
+  end
 
   def available_volunteers
     @available_volunteers = Volunteer.volunteers_with_no_supervisor(current_user.casa_org)
