@@ -61,7 +61,7 @@ class VolunteersController < ApplicationController
   private
 
   def get_available_casa_cases
-    CasaCase.all.order(:case_number) || []
+    CasaCase.all.order(:case_number).reject {|cc| cc.volunteers.include?(current_user)} # not working yet still in progress
   end
 
   def set_volunteer
