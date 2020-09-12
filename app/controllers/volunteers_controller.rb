@@ -21,7 +21,7 @@ class VolunteersController < ApplicationController
 
   def edit
     @case_assignments = @volunteer.case_assignments.includes(:casa_case)
-    @available_casa_cases = _get_available_casa_cases
+    @available_casa_cases = get_available_casa_cases
   end
 
   def update
@@ -33,7 +33,7 @@ class VolunteersController < ApplicationController
   end
 
   def activate
-    @available_casa_cases = _get_available_casa_cases
+    @available_casa_cases = get_available_casa_cases
     if @volunteer.activate
       VolunteerMailer.account_setup(@volunteer).deliver
 
@@ -48,7 +48,7 @@ class VolunteersController < ApplicationController
   end
 
   def deactivate
-    @available_casa_cases = _get_available_casa_cases
+    @available_casa_cases = get_available_casa_cases
     if @volunteer.deactivate
       VolunteerMailer.deactivation(@volunteer).deliver
 
@@ -60,7 +60,7 @@ class VolunteersController < ApplicationController
 
   private
 
-  def _get_available_casa_cases
+  def get_available_casa_cases
     CasaCase.all.order(:case_number) || []
   end
 
