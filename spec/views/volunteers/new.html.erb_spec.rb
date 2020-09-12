@@ -15,7 +15,7 @@ describe "volunteers/new" do
     it { is_expected.to have_selector("a", text: "Return to Dashboard") }
     
     it "should display two error messages when blank fields are submitted" do
-      click "Create User"
+      click_on "commit"
       expect(page.contains "Email can't be blank")
       expect(page.contains "Display name can't be blank")
     end
