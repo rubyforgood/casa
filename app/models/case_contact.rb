@@ -29,13 +29,13 @@ class CaseContact < ApplicationRecord
     where("occurred_at BETWEEN ? AND ?", start_date, end_date) if start_date.present? && end_date.present?
   }
   scope :contact_made, ->(contact_made = nil) {
-    where(contact_made: contact_made) if (contact_made == true || contact_made == false)
+    where(contact_made: contact_made) if contact_made == true || contact_made == false
   }
   scope :has_transitioned, ->(has_transitioned = nil) {
-    joins(:casa_case).where(casa_cases: {transition_aged_youth: has_transitioned}) if (has_transitioned == true || has_transitioned == false)
+    joins(:casa_case).where(casa_cases: {transition_aged_youth: has_transitioned}) if has_transitioned == true || has_transitioned == false
   }
   scope :want_driving_reimbursement, ->(want_driving_reimbursement = nil) {
-    where(want_driving_reimbursement: want_driving_reimbursement) if (want_driving_reimbursement == true || want_driving_reimbursement == false)
+    where(want_driving_reimbursement: want_driving_reimbursement) if want_driving_reimbursement == true || want_driving_reimbursement == false
   }
   scope :contact_type, ->(contact_type = nil) {
     where("? = ANY (contact_types)", contact_type) if contact_type.present?

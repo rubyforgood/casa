@@ -21,7 +21,7 @@ describe "case_contacts/case_contact" do
     user = build_stubbed(:supervisor)
     allow(view).to receive(:current_user).and_return(user)
 
-    render(partial: "case_contacts/case_contact", locals: { contact: case_contact})
+    render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
     expect(rendered).to have_no_link(nil, href: "/case_contacts/#{case_contact.id}/edit")
   end
 end
