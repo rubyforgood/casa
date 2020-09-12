@@ -19,7 +19,7 @@ RSpec.describe "all_casa_admin_edit_spec", type: :system do
   describe "with invalid parameters" do
     let!(:other_admin) { create(:all_casa_admin) }
 
-    it "updates email" do
+    it "does not update email" do
       visit edit_all_casa_admins_path
       fill_in "all_casa_admin_email", with: other_admin.email
       click_on "Update Profile"

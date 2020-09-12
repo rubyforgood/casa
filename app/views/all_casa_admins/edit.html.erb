@@ -8,7 +8,7 @@
 
       <div class="field form-group">
         <%= form.label :email %>
-        <p class="form-control"><%= @user.email %></p>
+        <%= form.email_field :email, class: "form-control" %>
       </div>
 
       <div class="actions">
