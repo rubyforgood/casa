@@ -195,4 +195,19 @@ RSpec.describe "admin views dashboard", type: :system do
 
     expect(page).to have_text("There are no active, unassigned volunteers available")
   end
+
+  it "displays other admins within the same CASA organization" do
+    admin2 = create(:casa_admin, email: "Jon@org.com", casa_org: organization)
+    admin3 = create(:casa_admin, email: "Bon@org.com", casa_org: organization)
+    different_org_admin = create(:casa_admin, email: "Jovi@something.else", casa_org: create(:casa_org))
+
+    sign_in admin
+    visit root_path
+
+    within "#admins" do
+      expect(page).to have_content(admin2.name)
+      expect(page).to have_content(admin3.name)
+      expect(page).to have_no_content(different_org_admin.name)
+    end
+  end
 end
