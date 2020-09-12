@@ -6,22 +6,14 @@ class CaseContactReport
   end
 
   def filtered_case_contacts(args)
-    return CaseContact.all if args.empty?
-
-    contact = CaseContact
-    contact = contact.where(supervisors: args[:supervisor_ids]) if args.has_key?(:supervisor_ids) # supervisor, as an array
-    contact = contact.where(creator_id: args[:creator_id]) if args.has_key?(:creator_id) # volunteer
-    contact = contact.occurred_between(args[:start_date], args[:end_date]) if args.has_key?(:start_date) && args.has_key?(:end_date)
-    contact = contact.where(contact_made: args[:contact_made]) if args.has_key?(:contact_made) # contact made, boolean
-    contact = contact.joins(:casa_case).where("casa_cases.transition_aged_youth in (?)", args[:has_transitioned]) if args.has_key?(:has_transitioned) # boolean, but also in the casa cases table
-    contact = contact.where(want_driving_reimbursement: args[:want_driving_reimbursement]) if args.has_key?(:want_driving_reimbursement)
-    # This filter is not working properly, commenting it out for now
-    # if args[:contact_types]
-    #   args[:contact_types].each do |contact_type|
-    #     contact = contact.where "contact_types @> ARRAY[?]::varchar[]", [contact_type]
-    #   end
-    # end
-    contact
+    CaseContact
+                .supervisors(args[:supervisor_ids])
+                .creators(args[:creator_ids])
+                .occurred_between(args[:start_date], args[:end_date])
+                .contact_made(args[:contact_made])
+                .has_transitioned(args[:has_transitioned])
+                .want_driving_reimbursement(args[:want_driving_reimbursement])
+                .contact_type(args[:contact_type])
   end
 
   def to_csv
