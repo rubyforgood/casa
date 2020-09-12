@@ -48,7 +48,13 @@ Rails.application.routes.draw do
   namespace :all_casa_admins do
     resources :casa_orgs, only: [:new, :create, :show]
   end
-
+  resources :all_casa_admins, only: [] do
+    collection do
+      get :edit
+      patch :update
+      patch "update_password"
+    end
+  end
   # TODO: Remove, if possible. Prefer to use specific role routes.
   resources :users, only: [] do
     collection do
