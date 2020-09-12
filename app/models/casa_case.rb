@@ -14,13 +14,19 @@ class CasaCase < ApplicationRecord
     )
   }
 
-  scope :available_for_volunteer, ->(volunteer) {
-    joins("LEFT JOIN case_assignments ON (case_assignments.casa_case_id = casa_cases.id)")
-      .where("case_assignments.id IS NULL OR case_assignments.volunteer_id != ?", volunteer.id)
-      .where(casa_org: volunteer.casa_org)
+  def self.available_for_volunteer(volunteer)
+    ids = connection.select_values(%{
+      SELECT casa_cases.id
+      FROM casa_cases
+      WHERE id NOT IN (SELECT ca.casa_case_id
+                      FROM case_assignments ca
+                      WHERE ca.volunteer_id = #{volunteer.id}
+                      GROUP BY ca.casa_case_id)
+      GROUP BY casa_cases.id;
+    })
+    where(id: ids, casa_org: volunteer.casa_org)
       .order(:case_number)
-      .distinct
-  }
+  end
 end
 
 # == Schema Information
