@@ -8,15 +8,15 @@ class CasaOrg < ApplicationRecord
   delegate :url, :alt_text, :size, to: :casa_org_logo, prefix: :logo, allow_nil: true
 
   def casa_admins
-    users.where(type: "CasaAdmin")
+    CasaAdmin.in_organization(self)
   end
 
   def supervisors
-    users.where(type: "Supervisor")
+    Supervisor.in_organization(self)
   end
 
   def volunteers
-    users.where(type: "Volunteer")
+    Volunteer.in_organization(self)
   end
 
   def case_contacts
