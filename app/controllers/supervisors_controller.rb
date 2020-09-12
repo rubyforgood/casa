@@ -32,6 +32,7 @@ class SupervisorsController < ApplicationController
 
   def update
     @supervisor = Supervisor.find(params[:id])
+    @assigned_volunteers = @supervisor.volunteers
 
     if can_update_fields?
       if @supervisor.update(update_supervisor_params)
