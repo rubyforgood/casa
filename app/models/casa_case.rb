@@ -16,8 +16,12 @@ class CasaCase < ApplicationRecord
     }
 
   class << self
-    def available
-      joins(:case_assignments).where.not(case_assignments: {volunteer_id: current_user.id}).order(:case_number)
+    def available_for_volunteer(volunteer)
+      joins("LEFT JOIN case_assignments ON (case_assignments.casa_case_id = casa_cases.id)")
+        .where("case_assignments.id IS NULL OR case_assignments.volunteer_id != ?", volunteer.id)
+        .where(casa_org: volunteer.casa_org)
+        .order(:case_number)
+        .distinct
     end
   end
 end
