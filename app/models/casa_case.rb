@@ -8,22 +8,19 @@ class CasaCase < ApplicationRecord
   belongs_to :casa_org
 
   scope :ordered, -> { order(updated_at: :desc) }
-  scope :actively_assigned_to,
-    lambda { |volunteer|
-      joins(:case_assignments).where(
-        case_assignments: {volunteer: volunteer, is_active: true}
-      )
-    }
+  scope :actively_assigned_to, ->(volunteer) {
+    joins(:case_assignments).where(
+      case_assignments: {volunteer: volunteer, is_active: true}
+    )
+  }
 
-  class << self
-    def available_for_volunteer(volunteer)
-      joins("LEFT JOIN case_assignments ON (case_assignments.casa_case_id = casa_cases.id)")
-        .where("case_assignments.id IS NULL OR case_assignments.volunteer_id != ?", volunteer.id)
-        .where(casa_org: volunteer.casa_org)
-        .order(:case_number)
-        .distinct
-    end
-  end
+  scope :available_for_volunteer, ->(volunteer) {
+    joins("LEFT JOIN case_assignments ON (case_assignments.casa_case_id = casa_cases.id)")
+      .where("case_assignments.id IS NULL OR case_assignments.volunteer_id != ?", volunteer.id)
+      .where(casa_org: volunteer.casa_org)
+      .order(:case_number)
+      .distinct
+  }
 end
 
 # == Schema Information
