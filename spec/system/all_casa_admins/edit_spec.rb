@@ -14,6 +14,14 @@ RSpec.describe "all_casa_admin_edit_spec", type: :system do
       click_on "Update Profile"
       expect(page).to have_text "successfully updated"
     end
+
+    it "updates password" do
+      click_on "Change Password"
+      fill_in "all_casa_admin_password", with: "newpassword"
+      fill_in "all_casa_admin_password_confirmation", with: "newpassword"
+      click_on "Update Password"
+      expect(page).to have_text "successfully updated"
+    end
   end
 
   describe "with invalid parameters" do
@@ -24,6 +32,14 @@ RSpec.describe "all_casa_admin_edit_spec", type: :system do
       fill_in "all_casa_admin_email", with: other_admin.email
       click_on "Update Profile"
       expect(page).to have_text "already been taken"
+    end
+
+    it "does not update password" do
+      click_on "Change Password"
+      fill_in "all_casa_admin_password", with: "newpassword"
+      fill_in "all_casa_admin_password_confirmation", with: "badmatch"
+      click_on "Update Password"
+      expect(page).to have_text "confirmation doesn't match"
     end
   end
 end
