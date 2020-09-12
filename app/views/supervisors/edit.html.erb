@@ -44,7 +44,7 @@
   </div>
 </div>
 
-<% if @supervisor.supervisor_volunteers.size > 0 %>
+<% if @supervisor.volunteers.any? %>
   <br>
   <div class="row">
     <div class="col-sm-12">
@@ -58,7 +58,7 @@
           </tr>
         </thead>
         <tbody>
-          <% @assigned_volunteers.each do |volunteer| %>
+          <% @supervisor.volunteers.each do |volunteer| %>
             <tr>
               <td><%= link_to volunteer.decorate.name, edit_volunteer_path(volunteer) %></td>
               <td><%= volunteer.email %></td>
