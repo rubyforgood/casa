@@ -38,4 +38,44 @@ RSpec.describe "/all_casa_admins", type: :request do
       end
     end
   end
+
+  describe "PATCH /update_password" do
+    let(:admin) { create(:all_casa_admin) }
+
+    before { sign_in admin }
+
+    context "with valid parameters" do
+      let(:params) {
+        {
+          all_casa_admin: {
+            password: "newpassword",
+            password_confirmation: "newpassword",
+          }
+        }
+      }
+
+      it "updates the all_casa_admin password" do
+        patch update_password_all_casa_admins_path, params: params
+        expect(response).to have_http_status(:redirect)
+        expect(admin.valid_password?("newpassword")).to be true
+      end
+    end
+
+    context "with invalid parameters" do
+      let(:params) {
+        {
+          all_casa_admin: {
+            password: "newpassword",
+            password_confirmation: "badmatch",
+          }
+        }
+      }
+
+      it "does not update the all_casa_admin password" do
+        patch update_password_all_casa_admins_path, params: params
+        expect(response).to have_http_status(:ok)
+        expect(admin.reload.valid_password?("newpassword")).to be false
+      end
+    end
+  end
 end
