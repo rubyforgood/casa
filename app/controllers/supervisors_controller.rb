@@ -43,7 +43,7 @@ class SupervisorsController < ApplicationController
   private
 
   def set_supervisor
-    @supervisor = Supervisor.includes(:volunteers).find(params[:id])
+    @supervisor = Supervisor.find(params[:id])
   end
 
   def available_volunteers
