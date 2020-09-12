@@ -21,6 +21,7 @@ describe "all casa admins with casa orgs", type: :system do
       click_on casa_org.name
 
       expect(page).to have_text "Administrators"
+      expect(page).to have_text "New CASA Admin"
       expect(page).to have_text "Back to dashboard"
       expect(page).to_not have_text vol.email
       expect(page).to_not have_text sup.email
@@ -67,6 +68,17 @@ describe "all casa admins with casa orgs", type: :system do
         CasaOrg,
         :count
       ).by(0)
+    end
+
+    it "allows an admin to create new casa_admins" do
+      visit all_casa_admins_casa_org_path(casa_org)
+      click_on "New CASA Admin"
+
+      fill_in "Email", with: "admin1@example.com"
+      fill_in "Display name", with: "Example Admin"
+      click_on "Submit"
+
+      expect(page).to have_text("CASA Admin was successfully created.")
     end
   end
 
