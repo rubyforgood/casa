@@ -41,9 +41,9 @@ class CaseContactsController < ApplicationController
     end
 
     # Create a case contact for every case that was checked
-    case_contacts = @selected_cases.map do |casa_case|
+    case_contacts = @selected_cases.map { |casa_case|
       casa_case.case_contacts.create(create_case_contact_params)
-    end
+    }
 
     if case_contacts.all?(&:persisted?)
       redirect_to casa_case_path(CaseContact.last.casa_case), notice: "Case contact was successfully created."

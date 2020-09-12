@@ -31,7 +31,6 @@ RSpec.describe CaseContactReport, type: :model do
   end
   describe "filter behavior" do
     describe "occured at range filter" do
-      
       it "uses date range if provided" do
         create(:case_contact, {occurred_at: 20.days.ago})
         create(:case_contact, {occurred_at: 100.days.ago})
@@ -58,7 +57,7 @@ RSpec.describe CaseContactReport, type: :model do
         volunteer = create(:volunteer)
         create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
         create(:case_contact, {occurred_at: 100.days.ago, creator_id: volunteer.id})
-       
+
         create(:case_contact, {occurred_at: 100.days.ago})
         report = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, creator_id: volunteer.id})
         contacts = report.case_contacts
@@ -69,10 +68,10 @@ RSpec.describe CaseContactReport, type: :model do
         volunteer = create(:volunteer)
         volunteer2 = create(:volunteer)
         supervisor_volunteer = create(:supervisor_volunteer, volunteer: volunteer, supervisor: supervisor)
-        
+
         create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
         create(:case_contact, {occurred_at: 100.days.ago, creator_id: volunteer2.id})
-       
+
         create(:case_contact, {occurred_at: 100.days.ago})
         report = CaseContactReport.new({supervisor_ids: [supervisor.id]})
         contacts = report.case_contacts
@@ -167,10 +166,10 @@ RSpec.describe CaseContactReport, type: :model do
       #     volunteer = create(:volunteer)
       #     volunteer2 = create(:volunteer)
       #     supervisor_volunteer = create(:supervisor_volunteer, volunteer: volunteer, supervisor: supervisor)
-          
+
       #     create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id, contact_types: ["court"]})
       #     create(:case_contact, {occurred_at: 100.days.ago, creator_id: volunteer2.id, contact_types: ["school"]})
-        
+
       #     create(:case_contact, {occurred_at: 100.days.ago})
       #     report = CaseContactReport.new({contact_types: ["court"]})
       #     contacts = report.case_contacts
@@ -199,7 +198,6 @@ RSpec.describe CaseContactReport, type: :model do
           report_20_days_ago_school_therapist_transitioned = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, has_transitioned: true, contact_types: ["school", "therapist"]})
           contacts = report_20_days_ago_court_transitioned.case_contacts
           expect(contacts.length).to eq(2)
-
         end
       end
     end
