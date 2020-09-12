@@ -152,6 +152,29 @@ RSpec.describe "admin views dashboard", type: :system do
     expect(page.all("table#volunteers tr").count).to eq 3
   end
 
+  it "can show/hide columns on volunteers table" do
+    sign_in admin
+
+    visit root_path
+    expect(page).to have_text("Pick displayed columns")
+    expected_columns = [
+        'Name', 'Email', 'Supervisor', 'Status', 'Assigned To Transition Aged Youth',
+        'Case Number', 'Last Contact Made','Contact Made In Past 60 Days','Actions'
+    ]
+    expected_columns.each do |column_name|
+      click_on "Pick displayed columns"
+      expect(page).to have_text(column_name)
+      check column_name
+      click_on "Close"
+      expect(page).to have_text(column_name)
+
+      click_on "Pick displayed columns"
+      uncheck column_name
+      click_on "Close"
+      expect(page).not_to have_text(column_name)
+    end
+  end
+
   it "can go to the supervisor edit page from the supervisor list" do
     supervisor_name = "Leslie Knope"
     create(:supervisor, display_name: supervisor_name, casa_org: organization)
