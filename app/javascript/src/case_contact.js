@@ -1,4 +1,4 @@
-/* global alert */
+/* global alert $ */
 window.onload = function () {
   const milesDriven = document.getElementById('case_contact_miles_driven')
   if (!milesDriven) return
