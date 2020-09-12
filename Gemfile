@@ -7,7 +7,7 @@ ruby "2.7.1"
 gem "rails", "~> 6.0.3"
 
 gem "after_party" # post-deployment tasks
-gem "awesome_print" # easier console reading
+gem "amazing_print" # easier console reading
 gem "devise" # for authentication
 gem "devise_invitable"
 gem "draper" # adds decorators for cleaner presentation logic
