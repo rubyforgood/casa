@@ -74,6 +74,17 @@ RSpec.describe "/supervisors", type: :request do
 
         expect(supervisor).not_to be_active
       end
+
+      context "when the email exists already and the supervisor has volunteers assigned" do
+        let(:other_supervisor) { create(:supervisor) }
+        let(:supervisor) { create(:supervisor, :with_volunteers) }
+
+        it "gracefully fails" do
+          patch supervisor_path(supervisor), params: {supervisor: {email: other_supervisor.email}}
+
+          expect(response).to be_successful
+        end
+      end
     end
 
     context "while signed in as a supervisor" do

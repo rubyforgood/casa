@@ -11,20 +11,20 @@ RSpec.describe UserImporter do
     let(:volunteer_importer) { -> { UserImporter.import_volunteers(import_file_path, casa_org_id) } }
 
     it "imports volunteers from a csv file" do
-      expect { volunteer_importer.() }.to change(User, :count).by(3)
+      expect { volunteer_importer.call }.to change(User, :count).by(3)
     end
 
     it "returns a success message with the number of volunteers imported" do
-      alert = volunteer_importer.()
+      alert = volunteer_importer.call
       expect(alert[:type]).to eq(:success)
       expect(alert[:message]).to eq("You successfully imported 3 volunteers.")
     end
 
     context "when the volunteers have been imported already" do
-      before { volunteer_importer.() }
+      before { volunteer_importer.call }
 
       it "does not import duplicate volunteers from csv files" do
-        expect { volunteer_importer.() }.to change(User, :count).by(0)
+        expect { volunteer_importer.call }.to change(User, :count).by(0)
       end
 
       it "returns an error message when there are volunteers not imported" do
@@ -33,7 +33,7 @@ RSpec.describe UserImporter do
         expect(alert[:message]).to include("You successfully imported 0 volunteers. The following volunteers were not")
       end
 
-      specify 'static and instance methods have identical results' do
+      specify "static and instance methods have identical results" do
         UserImporter.new(import_file_path, casa_org_id).import_volunteers
         data_using_instance = Volunteer.pluck(:email).sort
 
@@ -56,7 +56,7 @@ RSpec.describe UserImporter do
     let(:supervisor_importer) do
       importer = UserImporter.new(import_file_path, casa_org_id)
       allow(importer).to receive(:email_addresses_to_users) do |clazz, supervisor_volunteers|
-        create_list(:volunteer, supervisor_volunteers.split(',').size)
+        create_list(:volunteer, supervisor_volunteers.split(",").size)
       end
       importer
     end
@@ -111,7 +111,7 @@ RSpec.describe UserImporter do
       end
     end
 
-    specify 'static and instance methods have identical results' do
+    specify "static and instance methods have identical results" do
       UserImporter.new(import_file_path, casa_org_id).import_supervisors
       data_using_instance = Supervisor.pluck(:email).sort
 

@@ -17,7 +17,6 @@ require('bootstrap-datepicker')
 require('datatables.net-dt')
 require('datatables.net-dt/css/jquery.dataTables.css')
 
-require('src/shared')
 require('src/case_contact')
 require('src/dashboard')
 require('src/index_reports')

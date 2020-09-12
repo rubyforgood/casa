@@ -12,7 +12,8 @@ class User < ApplicationRecord
   has_many :case_contacts, foreign_key: "creator_id"
 
   has_many :supervisor_volunteers, foreign_key: "supervisor_id"
-  has_many :volunteers, -> { order(:display_name) }, through: :supervisor_volunteers
+  has_many :volunteers, -> { includes(:supervisor_volunteer).order(:display_name) },
+    through: :supervisor_volunteers
 
   has_one :supervisor_volunteer, foreign_key: "volunteer_id"
   has_one :supervisor, through: :supervisor_volunteer

@@ -20,8 +20,6 @@ class VolunteersController < ApplicationController
   end
 
   def edit
-    @case_assignments = @volunteer.case_assignments.includes(:casa_case)
-    @available_casa_cases = get_available_casa_cases
   end
 
   def update
@@ -33,7 +31,6 @@ class VolunteersController < ApplicationController
   end
 
   def activate
-    @available_casa_cases = get_available_casa_cases
     if @volunteer.activate
       VolunteerMailer.account_setup(@volunteer).deliver
 
@@ -48,7 +45,6 @@ class VolunteersController < ApplicationController
   end
 
   def deactivate
-    @available_casa_cases = get_available_casa_cases
     if @volunteer.deactivate
       VolunteerMailer.deactivation(@volunteer).deliver
 
@@ -59,10 +55,6 @@ class VolunteersController < ApplicationController
   end
 
   private
-
-  def get_available_casa_cases
-    CasaCase.joins(:case_assignments).where.not(case_assignments: {volunteer_id: current_user.id}).order(:case_number)
-  end
 
   def set_volunteer
     # @volunteer = authorize User.find(params[:id]) # TODO fix this

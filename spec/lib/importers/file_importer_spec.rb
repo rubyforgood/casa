@@ -26,13 +26,12 @@ RSpec.describe FileImporter do
     end
 
     it "captures errors" do
-      expect do
+      expect {
         file_importer.import do |row|
           raise "Something bad"
         end
-      end.not_to raise_error
+      }.not_to raise_error
       expect(file_importer.failed_imports.size).to eq(2)
     end
   end
-    
 end

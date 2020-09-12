@@ -14,6 +14,12 @@ class CasaCase < ApplicationRecord
         case_assignments: {volunteer: volunteer, is_active: true}
       )
     }
+
+  class << self
+    def available
+      joins(:case_assignments).where.not(case_assignments: {volunteer_id: current_user.id}).order(:case_number)
+    end
+  end
 end
 
 # == Schema Information

@@ -7,7 +7,7 @@ RSpec.describe "admin views dashboard", type: :system do
   before { travel_to Time.zone.local(2020, 8, 29, 4, 5, 6) }
   after { travel_back }
 
-  context "when no logo_url" do 
+  context "when no logo_url" do
     it "can see volunteers and navigate to their cases" do
       volunteer = create(:volunteer, email: "casa@example.com", casa_org: organization)
       volunteer.casa_cases << create(:casa_case, casa_org: organization)
@@ -31,12 +31,12 @@ RSpec.describe "admin views dashboard", type: :system do
     end
   end
 
-  context "when logo_url" do 
+  context "when logo_url" do
     let(:logo) { create(:casa_org_logo) }
-    let(:organization) { create(:casa_org, casa_org_logo: logo, display_name: "FOO", address: "123 Main St", footer_links:[["www.example.com", "First Link"], ["www.foobar.com", "Second Link"] ]) }
-    
+    let(:organization) { create(:casa_org, casa_org_logo: logo, display_name: "FOO", address: "123 Main St", footer_links: [["www.example.com", "First Link"], ["www.foobar.com", "Second Link"]]) }
+
     it "displays logo, display name, address footer links" do
-      volunteer = create(:volunteer, email: "casa@example.com", casa_org: organization)
+      create(:volunteer, email: "casa@example.com", casa_org: organization)
       sign_in admin
       visit root_path
       expect(page).to have_text "FOO"
@@ -72,7 +72,7 @@ RSpec.describe "admin views dashboard", type: :system do
 
     it "is blank when volunteer has been unassigned from supervisor" do
       volunteer = create(:volunteer, casa_org: organization)
-      sv = create(:supervisor_volunteer, volunteer: volunteer, is_active: false)
+      create(:supervisor_volunteer, volunteer: volunteer, is_active: false)
       sign_in admin
 
       visit root_path
@@ -194,5 +194,24 @@ RSpec.describe "admin views dashboard", type: :system do
     end
 
     expect(page).to have_text("There are no active, unassigned volunteers available")
+  end
+
+  it "displays other admins within the same CASA organization" do
+    admin2 = create(:casa_admin, email: "Jon@org.com", casa_org: organization)
+    admin3 = create(:casa_admin, email: "Bon@org.com", casa_org: organization)
+    different_org_admin = create(:casa_admin, email: "Jovi@something.else", casa_org: create(:casa_org))
+    supervisor = create(:supervisor, email: "super@visor.com", casa_org: organization)
+    volunteer = create(:volunteer, email: "volun@tear.com", casa_org: organization)
+
+    sign_in admin
+    visit root_path
+
+    within "#admins" do
+      expect(page).to have_content(admin2.email)
+      expect(page).to have_content(admin3.email)
+      expect(page).to have_no_content(different_org_admin.email)
+      expect(page).to have_no_content(supervisor.email)
+      expect(page).to have_no_content(volunteer.email)
+    end
   end
 end

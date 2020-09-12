@@ -77,7 +77,6 @@ class CaseContact < ApplicationRecord
 
     errors[:base] << "cannot edit past case contacts outside of quarter"
   end
-
 end
 
 # == Schema Information
