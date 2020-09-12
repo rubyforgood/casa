@@ -31,7 +31,6 @@ class VolunteersController < ApplicationController
   end
 
   def activate
-    @available_casa_cases = _get_available_casa_cases
     if @volunteer.activate
       VolunteerMailer.account_setup(@volunteer).deliver
 
@@ -46,7 +45,6 @@ class VolunteersController < ApplicationController
   end
 
   def deactivate
-    @available_casa_cases = _get_available_casa_cases
     if @volunteer.deactivate
       VolunteerMailer.deactivation(@volunteer).deliver
 
@@ -57,10 +55,6 @@ class VolunteersController < ApplicationController
   end
 
   private
-
-  def _get_available_casa_cases
-    CasaCase.all.order(:case_number) || []
-  end
 
   def set_volunteer
     # @volunteer = authorize User.find(params[:id]) # TODO fix this
