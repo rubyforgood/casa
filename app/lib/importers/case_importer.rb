@@ -1,5 +1,4 @@
 class CaseImporter < FileImporter
-
   def self.import_cases(csv_filespec, org_id)
     new(csv_filespec, org_id).import_cases
   end

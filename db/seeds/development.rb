@@ -11,7 +11,7 @@ AllCasaAdmin.destroy_all
 logo = CasaOrgLogo.new(
   url: "media/src/images/logo.png",
   alt_text: "CASA Logo",
-  size: "70x38",
+  size: "70x38"
 )
 
 pg_casa = CasaOrg.where(name: "Prince George CASA").first_or_create!(
@@ -21,7 +21,7 @@ pg_casa = CasaOrg.where(name: "Prince George CASA").first_or_create!(
   footer_links: [
     ["https://pgcasa.org/contact/", "Contact Us"],
     ["https://pgcasa.org/subscribe-to-newsletter/", "Subscribe to newsletter"],
-    ["https://www.givedirect.org/give/givefrm.asp?CID=4450", "Donate"],
+    ["https://www.givedirect.org/give/givefrm.asp?CID=4450", "Donate"]
   ]
 )
 
@@ -111,7 +111,7 @@ other_casa = CasaOrg.where(name: "Other CASA org").first_or_create!(
   address: "123 Main St, Suite 101, Kennelwood, MD 01234",
   footer_links: [
     ["https://example.com/contact/", "Contact Us"],
-    ["https://example.com/subscribe-to-newsletter/", "Subscribe to newsletter"],
+    ["https://example.com/subscribe-to-newsletter/", "Subscribe to newsletter"]
   ]
 )
 

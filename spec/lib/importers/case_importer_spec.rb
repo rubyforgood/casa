@@ -8,7 +8,7 @@ RSpec.describe CaseImporter do
 
   before(:each) do
     allow(case_importer).to receive(:email_addresses_to_users) do |_clazz, comma_separated_emails|
-      create_list(:volunteer, comma_separated_emails.split(',').size)
+      create_list(:volunteer, comma_separated_emails.split(",").size)
     end
   end
 
@@ -33,7 +33,7 @@ RSpec.describe CaseImporter do
       expect(alert[:message]).to eq("You successfully imported 3 casa_cases.")
     end
 
-    specify 'static and instance methods have identical results' do
+    specify "static and instance methods have identical results" do
       CaseImporter.new(import_file_path, casa_org_id).import_cases
       data_using_instance = CasaCase.pluck(:case_number).sort
 
