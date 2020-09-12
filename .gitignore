@@ -41,3 +41,4 @@ coverage/
 .idea/
 config/credentials.yml.enc
 vendor/bundle/
+.generators
