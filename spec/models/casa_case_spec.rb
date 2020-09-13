@@ -46,10 +46,10 @@ RSpec.describe CasaCase do
 
   describe ".available_for_volunteer" do
     let(:casa_org) { create(:casa_org) }
-    let!(:casa_case1) { create(:casa_case, :with_case_assignments, case_number: "foo", casa_org: casa_org ) }
-    let!(:casa_case2) { create(:casa_case, :with_case_assignments, case_number: "bar", casa_org: casa_org ) }
-    let!(:casa_case3) { create(:casa_case, case_number: "baz", casa_org: casa_org ) }
-    let!(:casa_case4) { create(:casa_case, casa_org: create(:casa_org) ) }
+    let!(:casa_case1) { create(:casa_case, :with_case_assignments, case_number: "foo", casa_org: casa_org) }
+    let!(:casa_case2) { create(:casa_case, :with_case_assignments, case_number: "bar", casa_org: casa_org) }
+    let!(:casa_case3) { create(:casa_case, case_number: "baz", casa_org: casa_org) }
+    let!(:casa_case4) { create(:casa_case, casa_org: create(:casa_org)) }
     let(:volunteer) { create(:volunteer, casa_org: casa_org) }
 
     context "when volunteer has no case assignments" do

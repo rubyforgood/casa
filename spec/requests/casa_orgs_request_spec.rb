@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "CasaOrgs", type: :request do
   let(:casa_org) { create(:casa_org) }
@@ -16,7 +16,6 @@ RSpec.describe "CasaOrgs", type: :request do
     end
     describe "PATCH /update" do
       context "with valid parameters" do
-
         it "updates the requested casa_org" do
           patch casa_org_url(casa_org), params: {casa_org: valid_attributes}
           casa_org.reload

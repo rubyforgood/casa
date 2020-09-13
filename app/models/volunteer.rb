@@ -43,15 +43,16 @@ class Volunteer < User
     total_cases_count = casa_cases.count
     return true if total_cases_count.zero?
     current_contact_cases_count = cases_where_contact_made_in_days(num_days).count
-    return current_contact_cases_count == total_cases_count
+    current_contact_cases_count == total_cases_count
   end
 
   private
+
   def cases_where_contact_made_in_days(num_days = 30)
     casa_cases
       .joins(:case_contacts)
-      .where(case_contacts: { contact_made: true })
-      .where("case_contacts.occurred_at > ?", Date.today - num_days.days)
+      .where(case_contacts: {contact_made: true })
+      .where("case_contacts.occurred_at > ?", Date.current - num_days.days)
   end
 end
 

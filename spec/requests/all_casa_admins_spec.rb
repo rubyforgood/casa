@@ -49,7 +49,7 @@ RSpec.describe "/all_casa_admins", type: :request do
         {
           all_casa_admin: {
             password: "newpassword",
-            password_confirmation: "newpassword",
+            password_confirmation: "newpassword"
           }
         }
       }
@@ -66,7 +66,7 @@ RSpec.describe "/all_casa_admins", type: :request do
         {
           all_casa_admin: {
             password: "newpassword",
-            password_confirmation: "badmatch",
+            password_confirmation: "badmatch"
           }
         }
       }
