@@ -47,7 +47,7 @@ RSpec.describe "CasaOrgs", type: :request do
       it "render a failed response" do
         get edit_casa_org_url(casa_org)
         expect(response).to redirect_to(root_url)
-        expect(flash[:notice]).to match(/You do not have permission to view that page./)
+        expect(flash[:notice]).to match(/you are not authorized/)
       end
     end
   end
