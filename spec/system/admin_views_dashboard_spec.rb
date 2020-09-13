@@ -9,7 +9,7 @@ RSpec.describe "admin views dashboard", type: :system do
 
   context "when no logo_url" do
     it "can see volunteers and navigate to their cases" do
-      volunteer = create(:volunteer, display_name: "User 1" email: "casa@example.com", casa_org: organization)
+      volunteer = create(:volunteer, display_name: "User 1", email: "casa@example.com", casa_org: organization)
       volunteer.casa_cases << create(:casa_case, casa_org: organization)
       volunteer.casa_cases << create(:casa_case, casa_org: organization)
       casa_case = volunteer.casa_cases[0]
