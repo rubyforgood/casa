@@ -135,9 +135,7 @@
   </div>
 
   <div class="actions">
-    <button type="button" id="case-contact-submit" class="btn btn-primary" data-target="#confirm-submit">
-      Submit
-    </button>
+    <%= form.submit "Submit", class: "btn btn-primary", id: "case-contact-submit", "data-target": "#confirm-submit" %>
     <%= return_to_dashboard_button %>
   </div>
   <%= render 'confirm_note_content_dialog', form: form %>

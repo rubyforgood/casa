@@ -22,13 +22,102 @@ RSpec.describe "volunteer adds a case contact", type: :system do
     fill_in "Notes", with: "Hello world"
 
     expect(page).not_to have_text("error")
+    click_on "Submit"
+    expect(page).to have_text("Confirm Note Content")
     expect {
-      click_on "Submit"
+      click_on "Continue Submitting"
     }.to change(CaseContact, :count).by(1)
+
     expect(CaseContact.first.casa_case_id).to eq volunteer_casa_case_one.id
     expect(CaseContact.first.contact_types).to include "school"
     expect(CaseContact.first.contact_types).to include "therapist"
     expect(CaseContact.first.duration_minutes).to eq 105
+  end
+
+  it "submits the form when no note was added" do
+    volunteer = create(:volunteer, :with_casa_cases)
+    volunteer_casa_case_one = volunteer.casa_cases.first
+
+    sign_in volunteer
+
+    visit new_case_contact_path
+
+    check volunteer_casa_case_one.case_number
+    check "School"
+    check "Therapist"
+    choose "Yes"
+    select "In Person", from: "Contact medium"
+    fill_in "case-contact-duration-hours", with: "1"
+    fill_in "case-contact-duration-minutes", with: "45"
+    fill_in "Occurred at", with: "04/04/2020"
+    fill_in "Miles driven", with: "30"
+    select "Yes", from: "Want driving reimbursement"
+    fill_in "Notes", with: ""
+
+    expect(page).not_to have_text("error")
+    expect {
+      click_on "Submit"
+    }.to change(CaseContact, :count).by(1)
+
+    expect(CaseContact.first.notes).to eq ""
+  end
+
+  it "submits the form when note is added and confirmed" do
+    volunteer = create(:volunteer, :with_casa_cases)
+    volunteer_casa_case_one = volunteer.casa_cases.first
+
+    sign_in volunteer
+
+    visit new_case_contact_path
+
+    check volunteer_casa_case_one.case_number
+    check "School"
+    check "Therapist"
+    choose "Yes"
+    select "In Person", from: "Contact medium"
+    fill_in "case-contact-duration-hours", with: "1"
+    fill_in "case-contact-duration-minutes", with: "45"
+    fill_in "Occurred at", with: "04/04/2020"
+    fill_in "Miles driven", with: "30"
+    select "Yes", from: "Want driving reimbursement"
+    fill_in "Notes", with: "This is the note"
+
+    expect(page).not_to have_text("error")
+    click_on "Submit"
+    expect(page).to have_text("Confirm Note Content")
+    expect {
+      click_on "Continue Submitting"
+    }.to change(CaseContact, :count).by(1)
+
+    expect(CaseContact.first.notes).to eq "This is the note"
+  end
+
+  it "does not submit the form when note is added but not confirmed" do
+    volunteer = create(:volunteer, :with_casa_cases)
+    volunteer_casa_case_one = volunteer.casa_cases.first
+
+    sign_in volunteer
+
+    visit new_case_contact_path
+
+    check volunteer_casa_case_one.case_number
+    check "School"
+    check "Therapist"
+    choose "Yes"
+    select "In Person", from: "Contact medium"
+    fill_in "case-contact-duration-hours", with: "1"
+    fill_in "case-contact-duration-minutes", with: "45"
+    fill_in "Occurred at", with: "04/04/2020"
+    fill_in "Miles driven", with: "30"
+    select "Yes", from: "Want driving reimbursement"
+    fill_in "Notes", with: "This is the note"
+
+    expect(page).not_to have_text("error")
+    click_on "Submit"
+    expect(page).to have_text("Confirm Note Content")
+    expect {
+      click_on "Go Back to Form"
+    }.not_to change(CaseContact, :count)
   end
 
   context "with invalid inputs" do
@@ -54,8 +143,10 @@ RSpec.describe "volunteer adds a case contact", type: :system do
       select "Yes", from: "Want driving reimbursement"
       fill_in "Notes", with: "Hello world"
 
+      click_on "Submit"
+      expect(page).to have_text("Confirm Note Content")
       expect {
-        click_on "Submit"
+        click_on "Continue Submitting"
       }.not_to change(CaseContact, :count)
 
       expect(page).to have_text("Occurred at cannot be in the future")

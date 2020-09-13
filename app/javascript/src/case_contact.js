@@ -69,23 +69,37 @@ window.onload = function () {
     }
   }
 
-  function validateNoteContent () {
+  function validateNoteContent (e) {
     const note_content = document.getElementById('case_contact_notes').value;
-    if (note_content == '') {
-      $('#casa-contact-form').submit();
-    }else{
+    if (note_content != '') {
+      e.preventDefault();
       $('#confirm-submit').modal('show');
-      var text_note = document.createTextNode(note_content);
-      document.getElementById('note-content').appendChild(text_note);
+      document.getElementById('note-content').innerHTML = note_content;
     }
   }
 
-  caseContactSubmit.onclick = function () {
+  $('#casa-contact-form').submit(function(e) {
+    validateNoteContent(e)
+  });
+
+  $("#confirm-submit").on("focus", function () {
+    document.getElementById('modal-case-contact-submit').disabled = false;
+  });
+
+  $("#confirm-submit").on("hide.bs.modal", function () {
+    caseContactSubmit.disabled = false
+  });
+
+  const caseContactSubmitFromModal = document.getElementById('modal-case-contact-submit')
+  caseContactSubmitFromModal.onclick = function () {
+    $('#casa-contact-form').unbind("submit");
+  }
+
+  caseContactSubmit.onclick = function (e) {
     validateAtLeastOneChecked(document.querySelectorAll('.casa-case-id'))
     validateAtLeastOneChecked(document.querySelectorAll('.case-contact-contact-type'))
 
     validateDuration()
-    validateNoteContent()
   }
 }
 $('document').ready(() => {
