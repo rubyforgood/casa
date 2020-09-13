@@ -1,13 +1,11 @@
 <h1>Editing Case Contact</h1>
-
 <br>
-
 <div class="row">
-  <div class="col-sm-6">
+  <div class="col-sm-12">
     <%= render 'form', case_contact: @case_contact, casa_cases: @casa_cases %>
   </div>
 </div>
-
 <br>
-
-<%= link_to 'Back', render_back_link(@case_contact.casa_case) %>
+<div class="row">
+  <%= link_to 'Back', render_back_link(@case_contact.casa_case) %>
+</div>

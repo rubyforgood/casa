@@ -1,4 +1,4 @@
-<%= form_with(model: case_contact, local: true) do |form| %>
+<%= form_with(model: case_contact, local: true, id: "casa-contact-form") do |form| %>
   <% if case_contact.errors.any? %>
     <div id="error_explanation" class="alert alert-danger">
       <h6><%= pluralize(case_contact.errors.count, "error") %> prohibited this Case Contact from being saved:</h6>
@@ -135,7 +135,12 @@
   </div>
 
   <div class="actions">
-    <%= form.submit "Submit", class: "btn btn-primary", id: "case-contact-submit" %>
+    <button type="button" id="case-contact-submit" class="btn btn-primary" data-target="#confirm-submit">
+      Submit
+    </button>
     <%= return_to_dashboard_button %>
   </div>
+  <%= render 'confirm_note_content_dialog', form: form %>
 <% end %>
+
+

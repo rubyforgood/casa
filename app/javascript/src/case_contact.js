@@ -69,11 +69,23 @@ window.onload = function () {
     }
   }
 
+  function validateNoteContent () {
+    const note_content = document.getElementById('case_contact_notes').value;
+    if (note_content == '') {
+      $('#casa-contact-form').submit();
+    }else{
+      $('#confirm-submit').modal('show');
+      var text_note = document.createTextNode(note_content);
+      document.getElementById('note-content').appendChild(text_note);
+    }
+  }
+
   caseContactSubmit.onclick = function () {
     validateAtLeastOneChecked(document.querySelectorAll('.casa-case-id'))
     validateAtLeastOneChecked(document.querySelectorAll('.case-contact-contact-type'))
 
     validateDuration()
+    validateNoteContent()
   }
 }
 $('document').ready(() => {
