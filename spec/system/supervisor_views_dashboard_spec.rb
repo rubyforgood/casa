@@ -34,21 +34,21 @@ RSpec.describe "supervisor views dashboard", type: :system do
     expect(page).to have_text("Pick displayed columns")
 
     click_on "Pick displayed columns"
-    expect(page).to have_text('Name')
-    expect(page).to have_text('Status')
-    expect(page).to have_text('Contact Made In Past 60 Days')
-    expect(page).to have_text('Last Contact Made')
-    check 'Name'
-    check 'Status'
-    uncheck 'Contact Made In Past 60 Days'
-    uncheck 'Last Contact Made'
+    expect(page).to have_text("Name")
+    expect(page).to have_text("Status")
+    expect(page).to have_text("Contact Made In Past 60 Days")
+    expect(page).to have_text("Last Contact Made")
+    check "Name"
+    check "Status"
+    uncheck "Contact Made In Past 60 Days"
+    uncheck "Last Contact Made"
     within(".modal-dialog") do
       click_button "Close"
     end
 
-    expect(page).to have_text('Name')
-    expect(page).to have_text('Status')
-    expect(page).not_to have_text('Contact Made In Past 60 Days')
-    expect(page).not_to have_text('Last Contact Made')
+    expect(page).to have_text("Name")
+    expect(page).to have_text("Status")
+    expect(page).not_to have_text("Contact Made In Past 60 Days")
+    expect(page).not_to have_text("Last Contact Made")
   end
 end

@@ -36,13 +36,13 @@ RSpec.describe "view supervisor edit", type: :system do
       it "updates the e-mail address successfully" do
         visit edit_supervisor_path(supervisor)
 
-        expect do
+        expect {
           fill_in "supervisor_email", with: ""
           fill_in "supervisor_email", with: "new" + supervisor.email
           click_on "Submit"
           page.find ".header-flash > div"
           supervisor.reload
-        end.to change{supervisor.email}.to "new" + supervisor.email
+        }.to change {supervisor.email}.to "new" + supervisor.email
       end
     end
 
@@ -51,7 +51,7 @@ RSpec.describe "view supervisor edit", type: :system do
 
       it "responds with a notice" do
         visit edit_supervisor_path(supervisor)
-        fill_in "supervisor_email", with: ''
+        fill_in "supervisor_email", with: ""
         fill_in "supervisor_email", with: existing_supervisor.email
         click_on "Submit"
 

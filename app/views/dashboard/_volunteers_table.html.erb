@@ -16,7 +16,12 @@
   <tbody>
   <% @volunteers.each do |volunteer| %>
     <tr>
-      <td data-search="<%= volunteer.past_names %>"><%= link_to(volunteer.decorate.name, edit_volunteer_path(volunteer)) %></td>
+      <td data-search="<%= volunteer.past_names %>">
+          <%= link_to(volunteer.decorate.name, edit_volunteer_path(volunteer)) %>
+          <% if !volunteer.made_contact_with_all_cases_in_days? %>
+            🕐
+          <% end %>
+      </td>
       <td><%= volunteer.email %></td>
       <td id="supervisor-column">
         <%- if volunteer.has_supervisor? %>
