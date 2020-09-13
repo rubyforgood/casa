@@ -21,6 +21,9 @@
             <% if policy(:application).see_import_page? %>
               <%= link_to "System Imports", imports_path, class: "dropdown-item" %>
             <% end %>
+            <% if policy(:application).modify_organization? %>
+              <%= link_to "Edit Organization", edit_casa_org_path(current_organization), class: "dropdown-item" %>
+            <% end %>
           </div>
         </div>
       <% end %>

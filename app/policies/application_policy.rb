@@ -12,4 +12,8 @@ class ApplicationPolicy
   def see_import_page?
     user.casa_admin?
   end
+
+  def modify_organization?
+    user.casa_admin?
+  end
 end
