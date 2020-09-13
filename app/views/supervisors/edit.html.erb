@@ -90,7 +90,7 @@
 
       <div class='form-group'>
         <label for='supervisor_volunteer_volunteer_id'>Select a Volunteer</label>
-        <select name='supervisor_volunteer[volunteer_id]' class='form-control'>
+        <select name='supervisor_volunteer[volunteer_id]' class='form-control select2'>
           <% @available_volunteers.each do |volunteer| %>
             <option value="<%= volunteer.id %>"><%= volunteer.decorate.name %></option>
           <% end %>
