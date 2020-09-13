@@ -25,29 +25,56 @@ RSpec.describe "/volunteers", type: :request do
   end
 
   describe "POST /create" do
-    it "creates a new volunteer" do
-      expected_email = "volunteer1@example.com"
+    before do
       sign_in admin
-
-      post volunteers_url, params: {
-        volunteer: {email: expected_email, casa_org_id: admin.casa_org_id}
-      }
-
-      volunteer = Volunteer.last
-      expect(volunteer.email).to eq(expected_email)
-
-      expect(response).to redirect_to root_path
     end
-
-    it "sends an account_setup email" do
-      expected_email = "volunteer1@example.com"
-      sign_in admin
-
-      expect {
-        post volunteers_url, params: {
-          volunteer: {email: expected_email, casa_org_id: admin.casa_org_id}
+    context "with valid params" do
+      let(:params) {
+        {
+          volunteer: {
+            display_name: "Example",
+            email: "volunteer1@example.com",
+            casa_org_id: admin.casa_org_id
+          }
         }
-      }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      }
+      it "creates a new volunteer" do
+        post volunteers_url, params: params
+        expect(response).to have_http_status(:redirect)
+        volunteer = Volunteer.last
+        expect(volunteer.email).to eq("volunteer1@example.com")
+        expect(volunteer.display_name).to eq("Example")
+        expect(response).to redirect_to root_path
+      end
+
+      it "sends an account_setup email" do
+        expect {
+          post volunteers_url, params: params
+        }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+    end
+    context "with invalid parameters" do
+      let(:params) {
+        {
+          volunteer: {
+            display_name: "",
+            email: "volunteer1@example.com",
+            casa_org_id: admin.casa_org_id
+          }
+        }
+      }
+      it "does not create a new volunteer" do
+        expect {
+          post volunteers_url, params: params
+        }.to_not change { Volunteer.count }
+        expect(response).to have_http_status(:success)
+      end
+
+      it "sends an account_setup email" do
+        expect {
+          post volunteers_url, params: params
+        }.to_not change { ActionMailer::Base.deliveries.count }
+      end
     end
   end
 
