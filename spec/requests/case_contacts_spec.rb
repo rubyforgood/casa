@@ -27,14 +27,6 @@ RSpec.describe "/case_contacts", type: :request do
 
   before { sign_in volunteer }
 
-  describe "GET /index" do
-    it "renders a successful response" do
-      create(:case_contact, casa_case: casa_case)
-      get case_contacts_url
-      expect(response).to be_successful
-    end
-  end
-
   describe "POST /create" do
     context "with valid parameters" do
       it "does create two new CaseContacts" do
