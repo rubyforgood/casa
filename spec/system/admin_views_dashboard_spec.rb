@@ -152,6 +152,31 @@ RSpec.describe "admin views dashboard", type: :system do
     expect(page.all("table#volunteers tr").count).to eq 3
   end
 
+  it "can show/hide columns on volunteers table" do
+    sign_in admin
+
+    visit root_path
+    expect(page).to have_text("Pick displayed columns")
+
+    click_on "Pick displayed columns"
+    expect(page).to have_text('Name')
+    expect(page).to have_text('Status')
+    expect(page).to have_text('Contact Made In Past 60 Days')
+    expect(page).to have_text('Last Contact Made')
+    check 'Name'
+    check 'Status'
+    uncheck 'Contact Made In Past 60 Days'
+    uncheck 'Last Contact Made'
+    within(".modal-dialog") do
+      click_button "Close"
+    end
+
+    expect(page).to have_text('Name')
+    expect(page).to have_text('Status')
+    expect(page).not_to have_text('Contact Made In Past 60 Days')
+    expect(page).not_to have_text('Last Contact Made')
+  end
+
   it "can go to the supervisor edit page from the supervisor list" do
     supervisor_name = "Leslie Knope"
     create(:supervisor, display_name: supervisor_name, casa_org: organization)
@@ -194,5 +219,24 @@ RSpec.describe "admin views dashboard", type: :system do
     end
 
     expect(page).to have_text("There are no active, unassigned volunteers available")
+  end
+
+  it "displays other admins within the same CASA organization" do
+    admin2 = create(:casa_admin, email: "Jon@org.com", casa_org: organization)
+    admin3 = create(:casa_admin, email: "Bon@org.com", casa_org: organization)
+    different_org_admin = create(:casa_admin, email: "Jovi@something.else", casa_org: create(:casa_org))
+    supervisor = create(:supervisor, email: "super@visor.com", casa_org: organization)
+    volunteer = create(:volunteer, email: "volun@tear.com", casa_org: organization)
+
+    sign_in admin
+    visit root_path
+
+    within "#admins" do
+      expect(page).to have_content(admin2.email)
+      expect(page).to have_content(admin3.email)
+      expect(page).to have_no_content(different_org_admin.email)
+      expect(page).to have_no_content(supervisor.email)
+      expect(page).to have_no_content(volunteer.email)
+    end
   end
 end

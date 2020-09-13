@@ -16,7 +16,9 @@ class CaseContactsController < ApplicationController
 
     # Admins and supervisors who are navigating to this page from a specific
     # case detail page will only see that case as an option
-    @casa_cases = @casa_cases.where(id: params.dig(:case_contact, :casa_case_id)) if params.dig(:case_contact, :casa_case_id).present?
+    if params.dig(:case_contact, :casa_case_id).present?
+      @casa_cases = @casa_cases.where(id: params.dig(:case_contact, :casa_case_id))
+    end
 
     @case_contact = CaseContact.new
 

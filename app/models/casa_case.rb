@@ -8,17 +8,28 @@ class CasaCase < ApplicationRecord
   belongs_to :casa_org
 
   scope :ordered, -> { order(updated_at: :desc) }
-  scope :actively_assigned_to,
-    lambda { |volunteer|
-      joins(:case_assignments).where(
-        case_assignments: {volunteer: volunteer, is_active: true}
-      )
-    }
+  scope :actively_assigned_to, ->(volunteer) {
+    joins(:case_assignments).where(
+      case_assignments: {volunteer: volunteer, is_active: true}
+    )
+  }
 
-  class << self
-    def available
-      order(:case_number)
-    end
+  def self.available_for_volunteer(volunteer)
+    ids = connection.select_values(%{
+      SELECT casa_cases.id
+      FROM casa_cases
+      WHERE id NOT IN (SELECT ca.casa_case_id
+                      FROM case_assignments ca
+                      WHERE ca.volunteer_id = #{volunteer.id}
+                      GROUP BY ca.casa_case_id)
+      GROUP BY casa_cases.id;
+    })
+    where(id: ids, casa_org: volunteer.casa_org)
+      .order(:case_number)
+  end
+
+  def has_transitioned?
+    transition_aged_youth
   end
 end
 
