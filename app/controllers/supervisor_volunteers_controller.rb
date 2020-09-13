@@ -7,11 +7,6 @@ class SupervisorVolunteersController < ApplicationController
     supervisor_volunteer.is_active = true unless supervisor_volunteer.is_active?
     supervisor_volunteer.save
 
-    SupervisorVolunteer
-      .where(volunteer_id: supervisor_volunteer.volunteer, is_active: false)
-      .where.not(supervisor_id: supervisor_volunteer.supervisor.id)
-      .destroy_all
-
     redirect_to after_action_path(supervisor_volunteer_parent)
   end
 

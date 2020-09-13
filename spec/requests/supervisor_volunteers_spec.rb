@@ -17,6 +17,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         expect {
           post supervisor_volunteers_url, params: valid_parameters
         }.to change(SupervisorVolunteer, :count).by(1)
+        expect(response).to redirect_to edit_supervisor_path(supervisor)
       end
     end
 
@@ -39,6 +40,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         expect {
           post supervisor_volunteers_url, params: valid_parameters
         }.not_to change(SupervisorVolunteer, :count)
+        expect(response).to redirect_to edit_supervisor_path(supervisor)
 
         association.reload
         expect(association.is_active?).to be(true)
@@ -56,7 +58,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         )
       end
 
-      it "replaces that association" do
+      it "does not remove association" do
         valid_parameters = {
           supervisor_volunteer: {volunteer_id: volunteer.id},
           supervisor_id: supervisor.id
@@ -65,9 +67,10 @@ RSpec.describe "/supervisor_volunteers", type: :request do
 
         expect {
           post supervisor_volunteers_url, params: valid_parameters
-        }.not_to change(SupervisorVolunteer, :count)
+        }.to change(SupervisorVolunteer, :count).by(1)
+        expect(response).to redirect_to edit_supervisor_path(supervisor)
 
-        expect(SupervisorVolunteer.exists?(previous_association.id)).to be(false)
+        expect(previous_association.reload.is_active?).to be(false)
         expect(SupervisorVolunteer.where(supervisor: supervisor, volunteer: volunteer).exists?).to be(true)
       end
     end
