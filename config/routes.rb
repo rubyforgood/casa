@@ -47,7 +47,9 @@ Rails.application.routes.draw do
   end
 
   namespace :all_casa_admins do
-    resources :casa_orgs, only: [:new, :create, :show]
+    resources :casa_orgs, only: [:new, :create, :show] do
+      resources :casa_admins, only: [:new, :create]
+    end
   end
 
   resources :all_casa_admins, only: [] do

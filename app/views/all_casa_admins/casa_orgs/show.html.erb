@@ -1,25 +1,31 @@
 <div class="row">
-  <div class="col-sm-12 dashboard-table-header">
+  <div class="col-sm-12">
     <h1><%= @casa_org.name %></h1>
   </div>
 </div>
-<h3>Administrators</h3>
-<table class="table admin-list">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Created At</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @casa_org.casa_admins.each do |admin| %>
-      <tr class="admin-<%= admin.id %>">
-        <td><%= admin.display_name %></td>
-        <td><%= admin.email %></td>
-        <td><%= admin.created_at.strftime('%B %e, %Y') %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-<a href="/">Back to dashboard</a>
+<div class="row">
+  <div class="col-sm-12 dashboard-table-header">
+    <h3>Administrators</h3>
+    <%= link_to "New CASA Admin", new_all_casa_admins_casa_org_casa_admin_path(@casa_org), class: "btn btn-primary" %>
+
+    <table class="table admin-list">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Created At</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @casa_org.casa_admins.each do |admin| %>
+          <tr class="admin-<%= admin.id %>">
+            <td><%= admin.display_name %></td>
+            <td><%= admin.email %></td>
+            <td><%= admin.created_at.strftime('%B %e, %Y') %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <a href="/">Back to dashboard</a>
+  </div>
+</div>
