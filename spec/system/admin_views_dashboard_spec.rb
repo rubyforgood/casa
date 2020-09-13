@@ -152,6 +152,31 @@ RSpec.describe "admin views dashboard", type: :system do
     expect(page.all("table#volunteers tr").count).to eq 3
   end
 
+  it "can show/hide columns on volunteers table" do
+    sign_in admin
+
+    visit root_path
+    expect(page).to have_text("Pick displayed columns")
+
+    click_on "Pick displayed columns"
+    expect(page).to have_text('Name')
+    expect(page).to have_text('Status')
+    expect(page).to have_text('Contact Made In Past 60 Days')
+    expect(page).to have_text('Last Contact Made')
+    check 'Name'
+    check 'Status'
+    uncheck 'Contact Made In Past 60 Days'
+    uncheck 'Last Contact Made'
+    within(".modal-dialog") do
+      click_button "Close"
+    end
+
+    expect(page).to have_text('Name')
+    expect(page).to have_text('Status')
+    expect(page).not_to have_text('Contact Made In Past 60 Days')
+    expect(page).not_to have_text('Last Contact Made')
+  end
+
   it "can go to the supervisor edit page from the supervisor list" do
     supervisor_name = "Leslie Knope"
     create(:supervisor, display_name: supervisor_name, casa_org: organization)
