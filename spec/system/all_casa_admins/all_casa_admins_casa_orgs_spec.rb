@@ -39,14 +39,34 @@ describe "all casa admins with casa orgs", type: :system do
       fill_in "Display name", with: "A new org"
       fill_in "Address", with: "123 Whole St"
 
-      click_on "Create CASA Organization"
-
-      expect(page).to have_text "CASA Organization was successfully created."
+      expect {
+        click_on "Create CASA Organization"
+        expect(page).to have_text "CASA Organization was successfully created."
+      }.to change(
+        CasaOrg,
+        :count
+      ).by(1)
 
       new_org = CasaOrg.last
       expect(new_org.name).to eq "A new org"
       expect(new_org.display_name).to eq "A new org"
       expect(new_org.address).to eq "123 Whole St"
+    end
+
+    it "requires name" do
+      visit "/"
+      expect(page).to have_text "All CASA Admin"
+
+      click_on "New CASA Organization"
+      expect(page).to have_text "Create a new CASA Organization"
+
+      expect {
+        click_on "Create CASA Organization"
+        expect(page).to have_text "Name can't be blank"
+      }.to change(
+        CasaOrg,
+        :count
+      ).by(0)
     end
   end
 
