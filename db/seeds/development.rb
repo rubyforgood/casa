@@ -40,7 +40,7 @@ AllCasaAdmin.first_or_create!(
 # volunteer users
 volunteer = Volunteer.first_or_create!(
   casa_org: pg_casa,
-  # display_name intentionally left blank
+  display_name: Faker::Name.name,
   email: "volunteer1@example.com",
   password: SEED_PASSWORD,
   password_confirmation: SEED_PASSWORD

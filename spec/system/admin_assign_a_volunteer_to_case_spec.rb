@@ -12,7 +12,7 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
     visit casa_case_path(casa_case.id)
     click_on "Edit Case Details"
 
-    select volunteer.email, from: "case_assignment[volunteer_id]"
+    select volunteer.display_name, from: "case_assignment[volunteer_id]"
 
     click_on "Assign Volunteer"
   end

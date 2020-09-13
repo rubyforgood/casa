@@ -5,6 +5,9 @@ class User < ApplicationRecord
   has_paper_trail
   devise :database_authenticatable, :invitable, :recoverable, :rememberable, :validatable
 
+  validates :email, presence: true
+  validates :display_name, presence: true
+
   belongs_to :casa_org
 
   has_many :case_assignments, foreign_key: "volunteer_id"
