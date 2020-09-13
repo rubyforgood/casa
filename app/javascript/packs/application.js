@@ -6,10 +6,6 @@
 // this is how stylesheets are loaded into the running application
 import 'src/stylesheets/application.scss'
 
-import 'bootstrap'
-import 'bootstrap-select'
-import Select2 from 'select2'
-
 require('@rails/ujs').start()
 require('@rails/activestorage').start()
 require('channels')
@@ -17,6 +13,9 @@ require('jquery')
 require('bootstrap-datepicker')
 require('datatables.net-dt')
 require('datatables.net-dt/css/jquery.dataTables.css')
+require('bootstrap')
+require('bootstrap-select')
+require('select2')
 require('select2/dist/css/select2')
 
 require('src/case_contact')
