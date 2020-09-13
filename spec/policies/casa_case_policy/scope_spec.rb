@@ -29,7 +29,7 @@ RSpec.describe CasaCasePolicy::Scope do
 
       expect(CasaCase.count).to eq 6
       expect(scope.resolve.count).to eq 2
-      expect(scope.resolve).to eq casa_cases
+      expect(scope.resolve).to match_array casa_cases
     end
   end
 end
