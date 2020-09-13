@@ -21,11 +21,17 @@ RSpec.describe "Admin: Editing Volunteers", type: :system do
     end
 
     context "with invalid data" do
-      it "shows error message" do
+      it "shows error message for duplicate email" do
         fill_in "volunteer_email", with: admin.email
         fill_in "volunteer_display_name", with: "Mickey Mouse"
         click_on "Submit"
         expect(page).to have_text "already been taken"
+      end
+      it "shows error message for empty fields" do
+        fill_in "volunteer_email", with: ""
+        fill_in "volunteer_display_name", with: ""
+        click_on "Submit"
+        expect(page).to have_text "can't be blank"
       end
     end
   end

@@ -13,6 +13,10 @@ RSpec.describe User, type: :model do
   it { is_expected.to have_one(:supervisor_volunteer) }
   it { is_expected.to have_one(:supervisor).through(:supervisor_volunteer) }
 
+  it "requires display name" do
+    user = build(:user, display_name: "")
+    expect(user.valid?).to be false
+  end
   it "returns all case_contacts associated with this user and the casa case id supplied" do
     volunteer = create(:volunteer, :with_casa_cases)
 
