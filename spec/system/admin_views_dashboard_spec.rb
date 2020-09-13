@@ -157,22 +157,24 @@ RSpec.describe "admin views dashboard", type: :system do
 
     visit root_path
     expect(page).to have_text("Pick displayed columns")
-    expected_columns = [
-        'Name', 'Email', 'Supervisor', 'Status', 'Assigned To Transition Aged Youth',
-        'Case Number', 'Last Contact Made','Contact Made In Past 60 Days','Actions'
-    ]
-    expected_columns.each do |column_name|
-      click_on "Pick displayed columns"
-      expect(page).to have_text(column_name)
-      check column_name
-      click_on "Close"
-      expect(page).to have_text(column_name)
 
-      click_on "Pick displayed columns"
-      uncheck column_name
-      click_on "Close"
-      expect(page).not_to have_text(column_name)
+    click_on "Pick displayed columns"
+    expect(page).to have_text('Name')
+    expect(page).to have_text('Status')
+    expect(page).to have_text('Contact Made In Past 60 Days')
+    expect(page).to have_text('Last Contact Made')
+    check 'Name'
+    check 'Status'
+    uncheck 'Contact Made In Past 60 Days'
+    uncheck 'Last Contact Made'
+    within(".modal-dialog") do
+      click_button "Close"
     end
+
+    expect(page).to have_text('Name')
+    expect(page).to have_text('Status')
+    expect(page).not_to have_text('Contact Made In Past 60 Days')
+    expect(page).not_to have_text('Last Contact Made')
   end
 
   it "can go to the supervisor edit page from the supervisor list" do
