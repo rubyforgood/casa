@@ -31,19 +31,14 @@ RSpec.describe "admin views dashboard", type: :system do
     end
   end
 
-  context "when logo_url" do
-    let(:logo) { create(:casa_org_logo) }
-    let(:organization) { create(:casa_org, casa_org_logo: logo, display_name: "FOO", address: "123 Main St", footer_links: [["www.example.com", "First Link"], ["www.foobar.com", "Second Link"]]) }
+  context "in the footer" do
+    let(:organization) { create(:casa_org) }
 
-    it "displays logo, display name, address footer links" do
+    it "displays rfg logo" do
       create(:volunteer, email: "casa@example.com", casa_org: organization)
       sign_in admin
       visit root_path
-      expect(page).to have_text "FOO"
-      expect(page).to have_text "123 Main St"
-      expect(page).to have_link "First Link", href: "www.example.com"
-      expect(page).to have_link "Second Link", href: "www.foobar.com"
-      expect(page).to have_text "Volunteer"
+      expect(page).to have_css "footer .rfglink"
     end
   end
 
