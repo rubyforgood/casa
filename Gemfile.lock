@@ -140,7 +140,7 @@ GEM
     html_tokenizer (0.0.7)
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
-    jbuilder (2.10.0)
+    jbuilder (2.10.1)
       activesupport (>= 5.0.0)
     launchy (2.5.0)
       addressable (~> 2.7)
@@ -343,7 +343,7 @@ DEPENDENCIES
   erb_lint
   factory_bot_rails
   faker
-  jbuilder (~> 2.7)
+  jbuilder (~> 2.10)
   letter_opener
   listen (>= 3.0.5, < 3.3)
   paper_trail
