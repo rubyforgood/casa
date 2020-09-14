@@ -78,12 +78,6 @@ Bullet points `formatted like this` are commands you can run on your machine
   - If you're on Ubuntu/WSL, use `sudo apt-get install libpq-dev` so the gem can install. [Use the Postgres repo for Ubuntu or WSL to get the server and client tools](https://www.postgresql.org/download/linux/ubuntu/).
   - If you're using Docker, do what you need to do.
 
-**Mailcatcher**
-
-1. Install the [Mailcatcher](https://mailcatcher.me) gem: `gem install mailcatcher`
-2. Start mailcatcher on the command line: `mailcatcher`
-3. All mail sent in development can be viewed at http://localhost:1080
-
 **Chromedriver**
 
 1. Install the current stable release of [chromedriver](https://chromedriver.chromium.org/) for your operating system so the browser-based Ruby feature/integration tests can run. Installing `chromium-browser` is enough, even in WSL.

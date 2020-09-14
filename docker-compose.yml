@@ -23,12 +23,6 @@ services:
     ports:
       - '5435:5432'
 
-  mailcatcher:
-    image: schickling/mailcatcher:latest
-    ports:
-      - '1080:1080'
-      - '1025:1025'
-
   selenium_chrome:
     image: selenium/standalone-chrome-debug
     logging:
