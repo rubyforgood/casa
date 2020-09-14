@@ -35,7 +35,7 @@ class Volunteer < User
   end
 
   def has_supervisor?
-    supervisor_volunteer.present? && supervisor_volunteer.is_active?
+    supervisor_volunteer.present? && supervisor_volunteer&.is_active?
   end
 
   # false if volunteer has any case with no contact in the past 30 days
