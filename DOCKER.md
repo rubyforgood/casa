@@ -67,10 +67,6 @@ $ docker-compose exec database psql -h database -Upostgres casa_development
 $ docker-compose exec web rails c
 ```
 
-## Mailcatcher
-We use [Mailcatcher](https://mailcatcher.me/) to receive mail in development.
-All mail sent in the development environment can be viewed at http://localhost:1080.
-
 ## Testing Suite
 Run the testing suite from within the container:
 

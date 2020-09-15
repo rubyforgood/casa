@@ -78,12 +78,6 @@ Bullet points `formatted like this` are commands you can run on your machine
   - If you're on Ubuntu/WSL, use `sudo apt-get install libpq-dev` so the gem can install. [Use the Postgres repo for Ubuntu or WSL to get the server and client tools](https://www.postgresql.org/download/linux/ubuntu/).
   - If you're using Docker, do what you need to do.
 
-**Mailcatcher**
-
-1. Install the [Mailcatcher](https://mailcatcher.me) gem: `gem install mailcatcher`
-2. Start mailcatcher on the command line: `mailcatcher`
-3. All mail sent in development can be viewed at http://localhost:1080
-
 **Chromedriver**
 
 1. Install the current stable release of [chromedriver](https://chromedriver.chromium.org/) for your operating system so the browser-based Ruby feature/integration tests can run. Installing `chromium-browser` is enough, even in WSL.
@@ -119,6 +113,12 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 1. `yarn lint:fix` to run the [JS linter](https://standardjs.com/index.html) and fix isses
 
 If you have any troubles running tests, check out `.travis.yml` which is what makes the CI build run.
+
+**Mail**
+
+We are using [Letter Opener](https://github.com/ryanb/letter_opener) in
+development to receive mail. All emails sent in development should open in a
+new tab in the browser.
 
 ### Documentation
 
