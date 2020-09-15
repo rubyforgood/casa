@@ -1,14 +1,15 @@
 require "rails_helper"
 
 RSpec.describe "Editing Profile", type: :system do
+  let(:organization) { create(:casa_org) }
   let(:volunteer) { create(:volunteer) }
-
-  before do
-    sign_in volunteer
-    visit edit_users_path
-  end
+  let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
+  let(:supervisor) { create(:supervisor) }
 
   it "displays password errors messages when user is unable to set a password" do
+    sign_in volunteer
+    visit edit_users_path
+
     click_on "Change Password"
 
     fill_in "Password", with: "123"
@@ -21,6 +22,9 @@ RSpec.describe "Editing Profile", type: :system do
   end
 
   it "notifies a user when they update their password" do
+    sign_in volunteer
+    visit edit_users_path
+
     click_on "Change Password"
 
     fill_in "Password", with: "1234567"
@@ -29,5 +33,28 @@ RSpec.describe "Editing Profile", type: :system do
     click_on "Update Password"
 
     expect(page).to have_text("Password was successfully updated.")
+  end
+
+  it "should not be able to update the email if user is a volunteer" do
+    sign_in volunteer
+    visit edit_users_path
+    expect(page).to have_field('Email', disabled: true)
+  end
+
+  it "should not be able to update the email if user is a supervisor" do
+    sign_in supervisor
+    visit edit_users_path
+    expect(page).to have_field('Email', disabled: true)
+  end
+
+  it "should be able to update the email if user is a admin" do
+    sign_in admin
+    visit edit_users_path
+    expect(page).to have_field('Email', disabled: false)
+    fill_in "Email", with: "new_admin@example.com"
+    click_on "Update Profile"
+    expect(page).to have_text("Profile was successfully updated.")
+    expect(page).to have_text("new_admin@example.com")
+    assert_equal "new_admin@example.com", admin.reload.email
   end
 end
