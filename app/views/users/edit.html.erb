@@ -8,7 +8,7 @@
 
       <div class="field form-group">
         <%= form.label :email %>
-        <p class="form-control"><%= @user.email %></p>
+        <%= form.text_field :email, class: "form-control", disabled: !current_user.casa_admin? %>
       </div>
 
       <div class="field form-group">
