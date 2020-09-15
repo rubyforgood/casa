@@ -114,6 +114,12 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 
 If you have any troubles running tests, check out `.travis.yml` which is what makes the CI build run.
 
+**Mail**
+
+We are using [Letter Opener](https://github.com/ryanb/letter_opener) in
+development to receive mail. All emails sent in development should open in a
+new tab in the browser.
+
 ### Documentation
 
 There is a `doc` directory at the top level that includes [Architectural Decision Records](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) and entity relationship diagrams of various models.
