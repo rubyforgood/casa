@@ -20,8 +20,15 @@ The following commands should just be run for the initial setup only. Rebuilding
 
 ## For ongoing development:
 1. Run `docker-compose up -d` to start all services.
+1. Run `docker-compose up -d --force-recreate` to start services with new
+   containers.
+1. Run `docker-compose build web` to build a new image for the web service.
+   After re-building an image, run `docker-compose up -d --force-recreate web`
+   to start a container running the new image.
 5. Run `docker-compose ps` to view status of containers.
 1. Run `docker-compose stop` to stop all services.
+1. Run `docker-compose rm <service>` to remove a stopped container.
+1. Run `docker-compose rm -f <service>` to force remove a stopped container.
 1. Run `docker-compose restart web` to restart the web server.
 4. Run `docker-compose down -v` to stop and remove all containers, as well as
    volumes and networks. This command is helpful if you want to start with a
@@ -74,18 +81,9 @@ Run the testing suite from within the container:
 $ docker-compose exec web rspec spec -fd
 ```
 
-System tests will generate a screenshot upon failure. The screenshot can be copied out of the container to your host as follows:
-
-```
-$ docker cp <container_name>:<path to image> <path on host>
-```
-
-For example:
-
-```
-$ docker cp casa_web_1:/usr/src/app/tmp/screenshots/failures_r_spec_example_groups_admin_new_supervisors_allows_admin_to_creates_a_new_supervisors_300.png .
-```
-The container name can be retrieved by running `docker-compose ps`
+System tests will generate a screenshot upon failure. The screenshots can be
+found in the local `tmp/screenshots` directory which maps to the
+`/usr/src/app/tmp/screenshots` directory inside the container.
 
 ### Watching tests run
 
