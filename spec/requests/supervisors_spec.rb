@@ -26,6 +26,13 @@ RSpec.describe "/supervisors", type: :request do
 
       expect(response).to_not be_successful
     end
+    
+    it "sends an invitation email" do
+      sign_in admin
+      get new_supervisor_url(supervisor)
+      
+      expect(Devise.mailer.deliveries.count).to eq(1)
+    end
   end
 
   describe "GET /edit" do
