@@ -117,7 +117,7 @@ end
 #  contact_types              :string           is an Array
 #  duration_minutes           :integer          not null
 #  medium_type                :string
-#  miles_driven               :integer
+#  miles_driven               :integer          default(0), not null
 #  notes                      :string
 #  occurred_at                :datetime         not null
 #  want_driving_reimbursement :boolean          default(FALSE)

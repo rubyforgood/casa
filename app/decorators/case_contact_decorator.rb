@@ -25,7 +25,7 @@ class CaseContactDecorator < Draper::Decorator
   end
 
   def miles_traveled
-    (object.miles_driven.nil? || object.miles_driven == 0) ? "" : object.miles_driven 
+    object.miles_driven.zero? ? "" : object.miles_driven
   end
 
   def reimbursement
