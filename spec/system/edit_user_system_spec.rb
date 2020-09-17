@@ -38,19 +38,19 @@ RSpec.describe "Editing Profile", type: :system do
   it "should not be able to update the email if user is a volunteer" do
     sign_in volunteer
     visit edit_users_path
-    expect(page).to have_field('Email', disabled: true)
+    expect(page).to have_field("Email", disabled: true)
   end
 
   it "should not be able to update the email if user is a supervisor" do
     sign_in supervisor
     visit edit_users_path
-    expect(page).to have_field('Email', disabled: true)
+    expect(page).to have_field("Email", disabled: true)
   end
 
   it "should be able to update the email if user is a admin" do
     sign_in admin
     visit edit_users_path
-    expect(page).to have_field('Email', disabled: false)
+    expect(page).to have_field("Email", disabled: false)
     fill_in "Email", with: "new_admin@example.com"
     click_on "Update Profile"
     expect(page).to have_text("Profile was successfully updated.")
