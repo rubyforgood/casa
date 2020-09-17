@@ -13,6 +13,11 @@ RSpec.describe CaseContact, type: :model do
     expect(case_contact.errors[:casa_case]).to eq(["must exist"])
   end
 
+  it "defaults miles_driven to zero" do
+    case_contact = create(:case_contact)
+    expect(case_contact.miles_driven).to eq 0
+  end
+
   it "validates presence of contact types" do
     case_contact = build(:case_contact, contact_types: nil)
     expect(case_contact).to_not be_valid
