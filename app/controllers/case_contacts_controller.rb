@@ -96,6 +96,7 @@ class CaseContactsController < ApplicationController
   end
 
   def create_case_contact_params
+    params[:case_contact][:miles_driven] = 0 if params[:case_contact][:miles_driven].nil?
     CaseContactParameters
       .new(params)
       .with_creator(current_user)
