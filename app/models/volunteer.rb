@@ -51,7 +51,7 @@ class Volunteer < User
   def cases_where_contact_made_in_days(num_days = 30)
     casa_cases
       .joins(:case_contacts)
-      .where(case_contacts: {contact_made: true })
+      .where(case_contacts: {contact_made: true})
       .where("case_contacts.occurred_at > ?", Date.current - num_days.days)
   end
 end

@@ -1,5 +1,5 @@
 namespace :after_party do
-  desc 'Deployment task: populate_missing_display_names'
+  desc "Deployment task: populate_missing_display_names"
   task populate_missing_display_names: :environment do
     puts "Running deploy task 'populate_missing_display_names'"
 

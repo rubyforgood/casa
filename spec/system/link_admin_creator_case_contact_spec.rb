@@ -8,15 +8,15 @@ RSpec.describe "admin or supervisor see link to own edit page after create case 
 
   it "admin see link to index admin page" do
     sign_in admin
-    case_contact = create(:case_contact, creator: admin, casa_case_id: casa_case.id)
+    create(:case_contact, creator: admin, casa_case_id: casa_case.id)
     visit casa_case_path(casa_case.id)
 
-    expect(page).to have_link(href: '/users/edit')
+    expect(page).to have_link(href: "/users/edit")
   end
 
   it "supervisor see link to own edit page" do
     sign_in supervisor
-    case_contact = create(:case_contact, creator: supervisor, casa_case_id: casa_case.id)
+    create(:case_contact, creator: supervisor, casa_case_id: casa_case.id)
     visit casa_case_path(casa_case.id)
 
     expect(page).to have_link(href: "/supervisors/#{supervisor.id}/edit")

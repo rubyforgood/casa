@@ -13,7 +13,7 @@ RSpec.describe "/all_casa_admins/casa_orgs/:casa_org_id/casa_admins" do
           post all_casa_admins_casa_org_casa_admins_path(casa_org), params: {
             casa_admin: {
               email: "admin1@example.com",
-              display_name: "Example Admin",
+              display_name: "Example Admin"
             }
           }
         }.to change(CasaAdmin, :count).by(1)
