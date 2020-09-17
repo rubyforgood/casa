@@ -127,4 +127,16 @@ RSpec.describe "/supervisors", type: :request do
       end
     end
   end
+  
+  describe "POST /create" do
+    it "sends an invitation email" do
+      sign_in admin
+      
+      post supervisors_url, params: {supervisor: {display_name: "Display Name", email: "displayname@example.com"}}
+      
+      expect(Devise.mailer.deliveries.count).to eq(1)
+      expect(Devise.mailer.deliveries.first.text_part.body.to_s).to include("A CASA/Prince George’s County Supervisor console")
+      expect(Devise.mailer.deliveries.first.text_part.body.to_s).to include("This is the first step to accessing your new Supervisor account.")
+    end
+  end
 end
