@@ -5,16 +5,16 @@ namespace :after_party do
 
     # Seed existing PG CASA logo/display details for production
     # (Okay to run on dev too - will just duplicate seed data)
-    casa_org = CasaOrg.first
+    casa_org = CasaOrg.first # TODO this breaks new deploys, write a test to prevent breaking new deploys ?
 
-    logo = casa_org.casa_org_logo || casa_org.build_casa_org_logo
-    logo.update!(
+    logo = casa_org&.casa_org_logo || casa_org&.build_casa_org_logo
+    logo&.update!(
       url: "media/src/images/logo.png",
       alt_text: "CASA Logo",
       size: "70x38"
     )
 
-    casa_org.update!(
+    casa_org&.update!(
       casa_org_logo: logo,
       display_name: "CASA / Prince George's County, MD",
       address: "6811 Kenilworth Avenue, Suite 402 Riverdale, MD 20737",
