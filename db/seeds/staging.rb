@@ -78,7 +78,7 @@ yy = years.sample.to_s[2..3]
 CASA_CASE_COUNT.times do |index|
   new_casa_case = CasaCase.where(case_number: "CINA-#{yy}-#{1001 + index}").first_or_create!(
     casa_org_id: pg_casa.id,
-    transition_aged_youth: chance_of_transition_aged
+    transition_aged_youth: fakse
   )
   volunteer_assigned = volunteer_users[index % volunteer_users.length]
   CaseAssignment.create(
