@@ -120,6 +120,23 @@ We are using [Letter Opener](https://github.com/ryanb/letter_opener) in
 development to receive mail. All emails sent in development should open in a
 new tab in the browser.
 
+**Post-deployment tasks**
+
+We are using [After Party](https://github.com/theSteveMitchell/after_party) to
+run post-deployment tasks. These tasks may include one-time necessary updates to the
+database. Run the tasks manually by:
+
+```
+bundle exec rake after_party:run
+```
+
+Alternatively, every time you pull the master branch, run:
+```
+bin/update
+```
+which will run any database migrations, update gems and yarn packages, and run
+the after party post-deployment tasks.
+
 ### Documentation
 
 There is a `doc` directory at the top level that includes [Architectural Decision Records](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) and entity relationship diagrams of various models.

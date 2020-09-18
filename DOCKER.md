@@ -52,6 +52,15 @@ running `docker-compose build web` first.  If you have been making gem updates
 to your container without rebuilding the image, then the one-off container will
 be out of date.
 
+### Running webpack dev server
+To speed compiling of assets, run the webpack dev server in a separate terminal
+window:
+
+```
+$ docker-compose exec web bin/webpack-dev-server
+```
+
+
 ### Viewing logs
 To view the logs, run:
 ```
