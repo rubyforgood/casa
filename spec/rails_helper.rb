@@ -21,6 +21,7 @@ RSpec.configure do |config|
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Devise::Test::IntegrationHelpers, type: :system
   config.include Devise::Test::ControllerHelpers, type: :view
+  config.include PunditHelper, type: :view
   config.include Warden::Test::Helpers
   config.include SessionHelper, type: :view
   config.after do

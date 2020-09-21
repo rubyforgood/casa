@@ -1,29 +1,29 @@
 <% if policy(:dashboard).see_admins_section? %>
-  <div class="row">
-    <div class="col-sm-12 dashboard-table-header">
-      <h1>Admins</h1>
-    </div>
+<div class="row">
+  <div class="col-sm-12 dashboard-table-header">
+    <h1>Admins</h1>
   </div>
+</div>
 
-  <table class="table table-striped table-bordered" id="admins">
-    <thead>
+<table class="table table-striped table-bordered" id="admins">
+  <thead>
     <tr>
       <th>Admin Email</th>
       <th>Actions</th>
     </tr>
-    </thead>
+  </thead>
 
-    <tbody>
+  <tbody>
     <% @admins.each do |admin| %>
-      <tr id="admin-<%= admin.id %>">
-        <th scope="row">
-          <%= admin.email %>
-        </th>
-        <td>
-          <a href="#">TBA!</a>a
-        </td>
-      </tr>
+    <tr id="admin-<%= admin.id %>">
+      <th scope="row">
+        <%= admin.email %>
+      </th>
+      <td>
+        <a href="#">TBA!</a>a
+      </td>
+    </tr>
     <% end %>
-    </tbody>
-  </table>
+  </tbody>
+</table>
 <% end %>
