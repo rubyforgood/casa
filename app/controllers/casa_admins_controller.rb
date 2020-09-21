@@ -11,6 +11,7 @@ class CasaAdminsController < ApplicationController
 
     if @casa_admin.save
       @casa_admin.invite!
+      flash[:notice] = "New Admin created."
       redirect_to root_path
     else
       render new_casa_admin_path
