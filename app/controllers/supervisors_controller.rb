@@ -14,7 +14,7 @@ class SupervisorsController < ApplicationController
   end
 
   def create
-    @supervisor = Supervisor.new(supervisor_params.merge(supervisor_values))
+    @supervisor = Supervisor.new(supervisor_params.merge(supervisor_values) )
 
     if @supervisor.save
       @supervisor.invite!
