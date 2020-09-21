@@ -3,6 +3,8 @@ footer {
   text-align: center;
   background-color: $primary;
   color: #fff;
+  display: flex;
+  justify-content: space-evenly;
 
   ul {
     list-style: none;

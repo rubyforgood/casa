@@ -1,10 +1,10 @@
 <header>
   <nav class="navbar navbar-expand-lg bg-primary justify-content-between">
     <div class="navbar-brand py-0">
-      <%= image_pack_tag(@casa_org.logo_url,
-        alt: @casa_org.logo_alt_text || "CASA Logo",
-        size: @casa_org.logo_size,
-        class: "d-inline-block align-text-bottom") if @casa_org.logo_url %>
+      <%= image_pack_tag(current_organization.logo_url,
+        alt: current_organization.logo_alt_text || "CASA Logo",
+        size: current_organization.logo_size,
+        class: "d-inline-block align-text-bottom") if current_organization.logo_url %>
       <strong><%= page_header %></strong>
     </div>
     <div class="navbar-nav">

@@ -1,3 +1,15 @@
 <footer>
-  <a href="https://rubyforgood.org/" class="rfglink" target="_blank"><%= image_pack_tag("media/src/images/rfglogo.png") %></a>
+  <div>
+    <p class="copyright">© <%= current_organization.display_name %></p>
+    <p class="address"><%= current_organization.address %></p>
+    <%= image_pack_tag(current_organization.logo_url) if current_organization.logo_url %>
+    <ul class="site-footer__links">
+      <% current_organization.footer_links.each do |href, label_text| %>
+        <li><%= link_to label_text, href %></li>
+      <% end %>
+    </ul>
+  </div>
+  <div>
+    <a href="https://rubyforgood.org/" class="rfglink" target="_blank"><%= image_pack_tag("media/src/images/rfglogo.png") %></a>
+  </div>
 </footer>
