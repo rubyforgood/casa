@@ -24,6 +24,6 @@ class CasaAdminsController < ApplicationController
   end
 
   def casa_admin_params
-    params.require(:casa_admin).permit(:display_name, :email)
+    params.require(:casa_admin).permit(:display_name, :email, :password, :casa_org_id)
   end
 end
