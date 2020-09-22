@@ -38,4 +38,22 @@ RSpec.describe "admin editing admin users", type: :system do
       expect(page).to have_text "Display name can't be blank"
     end
   end
+
+  it "can successfully deactivate" do
+    another = create(:casa_admin)
+    visit edit_casa_admin_path(another)
+
+    dismiss_confirm do
+      click_on "Deactivate"
+    end
+
+    expect(page).not_to have_text "Admin was deactivated."
+
+    accept_confirm do
+      click_on "Deactivate"
+    end
+
+    expect(page).to have_text "Admin was deactivated."
+    expect(another.reload.active).to be_falsey
+  end
 end
