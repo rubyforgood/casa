@@ -19,6 +19,10 @@ class CaseContact < ApplicationRecord
 
   belongs_to :casa_case
 
+  has_many :case_contact_contact_type
+  # TODO: Rename to contact_types when the migration is over
+  has_many :db_contact_types, through: :case_contact_contact_type, source: :contact_type
+
   scope :supervisors, ->(supervisor_ids = nil) {
     joins(:supervisor_volunteer).where(supervisor_volunteers: {supervisor_id: supervisor_ids}) if supervisor_ids.present?
   }
