@@ -6,7 +6,7 @@ class CasaAdminsController < ApplicationController
   def edit; end
 
   def update
-    if @admin.update(update_casa_admin_params)
+    if @casa_admin.update(update_casa_admin_params)
       redirect_to root_path, notice: "Admin was successfully updated."
     else
       render :edit
@@ -31,7 +31,7 @@ class CasaAdminsController < ApplicationController
   private
 
   def set_admin
-    @admin = CasaAdmin.find(params[:id])
+    @casa_admin = CasaAdmin.find(params[:id])
   end
 
   def update_casa_admin_params
