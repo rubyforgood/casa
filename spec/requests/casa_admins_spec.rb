@@ -24,7 +24,7 @@ RSpec.describe "/casa_admins", type: :request do
     end
 
     context "unauthenticated request" do
-      it "can successfully access a casa admin edit page" do
+      it "cannot access a casa admin edit page" do
         get edit_casa_admin_path(create(:casa_admin))
 
         expect(response).to redirect_to new_user_session_path
