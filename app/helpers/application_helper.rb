@@ -5,7 +5,7 @@ module ApplicationHelper
   end
 
   def page_header
-    page_header_text = @casa_org.display_name
+    page_header_text = current_organization.display_name
     user_signed_in? ? link_to(page_header_text, root_path) : page_header_text
   end
 

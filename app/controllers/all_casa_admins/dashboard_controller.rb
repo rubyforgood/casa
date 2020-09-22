@@ -1,5 +1,5 @@
 class AllCasaAdmins::DashboardController < AllCasaAdminsController
   def show
-    @casa_orgs = CasaOrg.all
+    @current_organizations = CasaOrg.all
   end
 end

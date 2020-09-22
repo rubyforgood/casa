@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
   before_action :set_paper_trail_whodunnit
-  before_action :set_organization
 
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
   rescue_from Organizational::UnknownOrganization, with: :not_authorized
