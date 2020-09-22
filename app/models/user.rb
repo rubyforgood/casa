@@ -3,7 +3,7 @@
 # model for all user roles: volunteer supervisor casa_admin inactive
 class User < ApplicationRecord
   has_paper_trail
-  devise :database_authenticatable, :invitable, :recoverable, :rememberable, :validatable
+  devise :database_authenticatable, :invitable, :recoverable, :rememberable, :validatable, :timeoutable
 
   validates :email, presence: true
   validates :display_name, presence: true
