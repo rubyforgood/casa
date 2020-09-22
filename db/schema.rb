@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_18_115741) do
+ActiveRecord::Schema.define(version: 2020_09_22_150754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,6 +83,22 @@ ActiveRecord::Schema.define(version: 2020_09_18_115741) do
     t.index ["casa_case_id"], name: "index_case_contacts_on_casa_case_id"
     t.index ["contact_types"], name: "index_case_contacts_on_contact_types", using: :gin
     t.index ["creator_id"], name: "index_case_contacts_on_creator_id"
+  end
+
+  create_table "contact_type_groups", force: :cascade do |t|
+    t.bigint "casa_org_id", null: false
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["casa_org_id"], name: "index_contact_type_groups_on_casa_org_id"
+  end
+
+  create_table "contact_types", force: :cascade do |t|
+    t.bigint "contact_type_group_id", null: false
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["contact_type_group_id"], name: "index_contact_types_on_contact_type_group_id"
   end
 
   create_table "supervisor_volunteers", force: :cascade do |t|
