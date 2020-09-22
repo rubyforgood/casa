@@ -64,15 +64,15 @@ class CaseContactPolicy
   end
 
   def _is_creator_or_supervisor_or_casa_admin?
-    _is_admin? || _is_supervisor? || _is_creator?
+    _is_admin? || _is_creator? || _is_creator_supervisor?
   end
 
   def _is_admin?
     user.casa_admin?
   end
 
-  def _is_supervisor?
-    user.supervisor?
+  def _is_creator_supervisor?
+    record.creator&.supervisor == user
   end
 
   def _is_creator?

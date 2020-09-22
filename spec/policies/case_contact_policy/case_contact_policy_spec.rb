@@ -28,8 +28,25 @@ RSpec.describe CaseContactPolicy do
       expect(subject).to permit(create(:casa_admin), create(:case_contact))
     end
 
-    it "allows supervisors" do
-      expect(subject).to permit(create(:supervisor), create(:case_contact))
+    context "when supervisor" do
+      it "allows if is creator" do
+        supervisor = create(:supervisor)
+        expect(subject).to permit(supervisor, create(:case_contact, creator: supervisor))
+      end
+
+      it "does not allow if is not the creator" do
+        expect(subject).to_not permit(create(:supervisor), create(:case_contact, creator: create(:supervisor)))
+      end
+
+      it "allows if is supervisor of the creator" do
+        supervisor = create(:supervisor)
+        expect(subject).to permit(supervisor, create(:case_contact, creator: create(:volunteer, supervisor: supervisor)))
+      end
+
+      it "does not allow if is not supervisor of the creator" do
+        expect(subject).to_not permit(create(:supervisor),
+                                      create(:case_contact, creator: create(:volunteer, supervisor: create(:supervisor))))
+      end
     end
 
     context "when volunteer is assigned" do
@@ -66,8 +83,25 @@ RSpec.describe CaseContactPolicy do
       expect(subject).not_to permit(create(:volunteer), create(:case_contact))
     end
 
-    it "allows supervisors" do
-      expect(subject).to permit(create(:supervisor), create(:case_contact))
+    context "when supervisor" do
+      it "allows if is creator" do
+        supervisor = create(:supervisor)
+        expect(subject).to permit(supervisor, create(:case_contact, creator: supervisor))
+      end
+
+      it "does not allow if is not the creator" do
+        expect(subject).to_not permit(create(:supervisor), create(:case_contact, creator: create(:supervisor)))
+      end
+
+      it "allows if is supervisor of the creator" do
+        supervisor = create(:supervisor)
+        expect(subject).to permit(supervisor, create(:case_contact, creator: create(:volunteer, supervisor: supervisor)))
+      end
+
+      it "does not allow if is not supervisor of the creator" do
+        expect(subject).to_not permit(create(:supervisor),
+                                      create(:case_contact, creator: create(:volunteer, supervisor: create(:supervisor))))
+      end
     end
   end
 
