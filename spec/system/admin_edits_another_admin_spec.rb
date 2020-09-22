@@ -13,9 +13,9 @@ RSpec.describe "admin editing admin users", type: :system do
       visit edit_casa_admin_path(admin)
 
       fill_in "Email", with: expected_email
-      fill_in "Display name", with: expected_display_name
+      fill_in "Display Name", with: expected_display_name
 
-      click_on "Update"
+      click_on "Submit"
 
       admin.reload
 
@@ -30,9 +30,9 @@ RSpec.describe "admin editing admin users", type: :system do
       visit edit_casa_admin_path(admin)
 
       fill_in "Email", with: ""
-      fill_in "Display name", with: ""
+      fill_in "Display Name", with: ""
 
-      click_on "Update"
+      click_on "Submit"
 
       expect(page).to have_text "Email can't be blank"
       expect(page).to have_text "Display name can't be blank"
