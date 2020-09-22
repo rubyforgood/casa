@@ -1,12 +1,16 @@
 body {
-  background-color: #fff;
+  background-color: #F4F7FA;
   display: grid;
   min-height: 100vh;
   min-width: 320px;
 }
 
 .content {
-  padding: 3em 1em;
+  padding: 4rem 4rem;
+  margin-left: 20%;
+  position: relative;
+  overflow: auto;
+  z-index: 1;
 }
 
 label {
@@ -15,4 +19,8 @@ label {
 
 .fa-car {
   color: #00447C
+}
+
+.card.card-container {
+  box-shadow: 0 4px 12px 5px rgba(0,0,0,0.08);
 }

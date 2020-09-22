@@ -1,22 +1,55 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>PG CASA</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= render 'shared/favicons' %>
     <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-
     <% if all_casa_admin_signed_in? %>
       <%= javascript_pack_tag 'all_casa_admin', 'data-turbolinks-track': 'reload' %>
       <%= stylesheet_pack_tag 'all_casa_admin', 'data-turbolinks-track': 'reload' %>
     <% end %>
   </head>
   <body class="<%= body_class %>">
-    <%= render 'layouts/header' %>
-    <main>
-      <div class="container">
+    <div class="d-flex" id="wrapper">
+      <div id="sidebar-wrapper">
+        <div class="sidebar-heading">
+          <%= image_pack_tag(@casa_org.logo_url,
+            alt: @casa_org.logo_alt_text || "CASA Logo",
+            class: "d-inline-block align-text-bottom") if @casa_org.logo_url %>
+        </div>
+        <div class="sidebar-container">
+          <div class="sidebar-menu">
+            <% if current_user %>
+              <div class="list-group list-group-flush">
+                <%= link_to "Edit Profile", edit_users_path, class: "list-group-item" %>
+                <% if policy(:application).see_reports_page? %>
+                  <%= link_to "Generate Reports", reports_path, class: "list-group-item" %>
+                <% end %>
+                <% if policy(:application).see_import_page? %>
+                  <%= link_to "System Imports", imports_path, class: "list-group-item" %>
+                <% end %>
+                <% if policy(:application).modify_organization? %>
+                  <%= link_to "Edit Organization", edit_casa_org_path(current_organization), class: "list-group-item" %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+          <div class="sidebar-footer">
+            <div class="list-group list-group-flush">
+              <% if current_all_casa_admin %>
+                <%= current_all_casa_admin.email %>
+                <%= link_to "Edit Profile", edit_all_casa_admins_path, class: "list-group-item" %>
+              <% end %>
+              <%= current_user.email %>
+              <%= session_link %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="page-content-wrapper">
         <div class="header-flash">
           <% flash.each do |key, value| %>
             <div class="<%= flash_class(key) %> alert-dismissible fade show" role="alert">
@@ -27,11 +60,15 @@
             </div>
           <% end %>
         </div>
-        <div class="content">
-          <%= yield %>
+        <div class="container-fluid">
+          <div class="content">
+            <%= yield %>
+          </div>
         </div>
+        <%= render 'layouts/footer' %>
       </div>
-    </main>
-    <%= render 'layouts/footer' %>
+
+    </div>
   </body>
 </html>
+

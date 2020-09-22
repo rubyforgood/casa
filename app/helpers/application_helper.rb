@@ -11,11 +11,11 @@ module ApplicationHelper
 
   def session_link
     if user_signed_in?
-      link_to("Log out", destroy_user_session_path, class: "btn btn-light")
+      link_to("Log out", destroy_user_session_path, class: "list-group-item")
     elsif all_casa_admin_signed_in?
-      link_to("Log out", destroy_all_casa_admin_session_path, class: "btn btn-light")
+      link_to("Log out", destroy_all_casa_admin_session_path, class: "list-group-item")
     else
-      link_to("Log in", new_user_session_path, class: "btn btn-light")
+      link_to("Log in", new_user_session_path, class: "list-group-item")
     end
   end
 
