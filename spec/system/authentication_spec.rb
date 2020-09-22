@@ -22,9 +22,7 @@ RSpec.describe "Authentication", type: :system do
           click_on "Log in"
         end
 
-        within ".navbar-nav" do
-          expect(page).to have_text user.email
-        end
+        expect(page).to have_text user.email
       end
     end
 
