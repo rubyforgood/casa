@@ -21,11 +21,9 @@
     <div class="actions">
       <%= form.submit "Update Profile", class: "btn btn-primary" %>
       <%= link_to "Back", root_path, class: "btn btn-primary" %>
-      <% if policy(@user).update_password? %>
-        <button class="btn btn-warning accordion" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          Change Password
-        </button>
-      <% end %>
+      <button class="btn btn-warning accordion" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        Change Password
+      </button>
     </div>
     <% end %>
     <br>

@@ -1,40 +1,41 @@
 require "rails_helper"
 
 RSpec.describe "admin editing admin users", type: :system do
-  context "editing themselves" do
-    it "can edit their password" do
-      admin = create(:casa_admin)
+  let(:admin) { create :casa_admin }
 
-      sign_in admin
-      visit root_path
-      expect(page).to have_selector("#admins")
+  before { sign_in admin }
 
-      within "#admin-#{admin.id}" do
-        click_on "Edit"
-      end
+  context "with valid data" do
+    it "can successfully edit user email and display name" do
+      expected_email = "root@casa.com"
+      expected_display_name = "Root Admin"
 
-      expect(page).to have_text("Edit Profile")
-      expect(page).to have_text("Change Password")
+      visit edit_casa_admin_path(admin)
+
+      fill_in "Email", with: expected_email
+      fill_in "Display name", with: expected_display_name
+
+      click_on "Update"
+
+      admin.reload
+
+      expect(page).to have_text "Admin was successfully updated."
+      expect(admin.email).to eq expected_email
+      expect(admin.display_name).to eq expected_display_name
     end
   end
 
-  context "editing other admins" do
-    it "can't change their password" do
-      admin1 = create(:casa_admin)
-      admin2 = create(:casa_admin)
+  context "with invalid data" do
+    it "shows error message for empty email" do
+      visit edit_casa_admin_path(admin)
 
-      sign_in admin1
+      fill_in "Email", with: ""
+      fill_in "Display name", with: ""
 
-      visit root_path
+      click_on "Update"
 
-      expect(page).to have_selector("#admins")
-
-      within "#admin-#{admin2.id}" do
-        click_on "Edit"
-      end
-
-      expect(page).to have_text("Edit Profile")
-      expect(page).to_not have_text("Change Password")
+      expect(page).to have_text "Email can't be blank"
+      expect(page).to have_text "Display name can't be blank"
     end
   end
 end

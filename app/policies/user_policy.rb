@@ -30,10 +30,6 @@ class UserPolicy
     update_supervisor_email?
   end
 
-  def update_password?
-    record == user
-  end
-
   class Scope
     attr_reader :user, :scope
 
