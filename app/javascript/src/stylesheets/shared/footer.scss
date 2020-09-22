@@ -3,8 +3,16 @@ footer {
   text-align: center;
   background-color: $primary;
   color: #fff;
-  display: flex;
-  justify-content: space-evenly;
+
+  .footer-logos{
+
+    .rfglink {
+
+      .rfglogo{
+        max-height: 6em;
+      }
+    }
+  }
 
   ul {
     list-style: none;
