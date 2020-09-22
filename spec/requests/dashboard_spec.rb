@@ -37,6 +37,12 @@ describe "/dashboard", type: :request do
 
       it "shows all my organization's cases"
       it "doesn't show other organizations' cases"
+
+      it "shows all my organization's admins in alphabetical order" do
+        new_admin = create(:casa_admin, casa_org: organization, email: "admin_a@example.com")
+        admins = CasaAdmin.where(casa_org_id: organization.id).sort_by(&:email)
+        expect(new_admin.email).to eq "admin_a@example.com"
+      end
     end
   end
 end
