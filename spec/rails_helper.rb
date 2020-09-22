@@ -24,6 +24,7 @@ RSpec.configure do |config|
   config.include PunditHelper, type: :view
   config.include Warden::Test::Helpers
   config.include SessionHelper, type: :view
+  config.include SessionHelper, type: :request
   config.after do
     Warden.test_reset!
   end
