@@ -19,8 +19,6 @@ class CasaAdminsController < ApplicationController
   end
 
   def update_casa_admin_params
-    CasaAdminParameters
-      .new(params)
-      .without_active
+    CasaAdminParameters.new(params)
   end
 end
