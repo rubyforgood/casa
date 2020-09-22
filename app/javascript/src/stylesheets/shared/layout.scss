@@ -10,7 +10,6 @@ body {
   margin-left: 20%;
   position: relative;
   overflow: auto;
-  z-index: 1;
 }
 
 label {
@@ -18,7 +17,7 @@ label {
 }
 
 .fa-car {
-  color: #00447C
+  color: #00447C;
 }
 
 .card.card-container {
