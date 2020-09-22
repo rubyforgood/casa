@@ -1,0 +1,24 @@
+<%= errors_for(@casa_admin) %>
+
+<h1>Create New Casa Admin</h1>
+
+<div class="row">
+  <div class="col-sm-6">
+    <%= form_with model: @casa_admin, local: true, url: casa_admins_path do |form| %>
+      <div class="field form-group">
+        <%= form.label :email %>
+        <%= form.text_field :email, class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+        <%= form.label :display_name, "Display Name" %>
+        <%= form.text_field :display_name, class: "form-control" %>
+      </div>
+
+      <div class="actions">
+        <%= form.submit "Create Casa Admin", class: "btn btn-primary" %>
+        <%= return_to_dashboard_button %>
+      </div>
+    <% end %>
+  </div>
+</div>
