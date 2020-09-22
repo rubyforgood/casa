@@ -20,8 +20,8 @@
             class: "d-inline-block align-text-bottom") if @casa_org.logo_url %>
         </div>
         <div class="sidebar-container">
-          <div class="sidebar-menu">
-            <% if current_user %>
+          <% if current_user %>
+            <div class="sidebar-menu">
               <div class="list-group list-group-flush">
                 <%= link_to "Edit Profile", edit_users_path, class: "list-group-item" %>
                 <% if policy(:application).see_reports_page? %>
@@ -34,18 +34,18 @@
                   <%= link_to "Edit Organization", edit_casa_org_path(current_organization), class: "list-group-item" %>
                 <% end %>
               </div>
-            <% end %>
-          </div>
-          <div class="sidebar-footer">
-            <div class="list-group list-group-flush">
-              <% if current_all_casa_admin %>
-                <%= current_all_casa_admin.email %>
-                <%= link_to "Edit Profile", edit_all_casa_admins_path, class: "list-group-item" %>
-              <% end %>
-              <%= current_user.email %>
-              <%= session_link %>
             </div>
-          </div>
+            <div class="sidebar-footer">
+              <div class="list-group list-group-flush">
+                <% if current_all_casa_admin %>
+                  <%= current_all_casa_admin.email %>
+                  <%= link_to "Edit Profile", edit_all_casa_admins_path, class: "list-group-item" %>
+                <% end %>
+                <%= current_user.email %>
+                <%= session_link %>
+              </div>
+            </div>
+          <% end %>
         </div>
       </div>
 
