@@ -28,10 +28,10 @@
     <% end %>
     <br>
     <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-      <%= form_for(@user, as: :user, :url => { :action => "update_password" } ) do |f| %>
+      <%= form_for(@user, as: :user, url: { action: "update_password" } ) do |f| %>
       <div class="field form-group">
         <%= f.label :password, "Password" %><br>
-        <%= f.password_field :password, :autocomplete => "off", class: "form-control" %>
+        <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
       </div>
       <div class="field form-group">
         <%= f.label :password_confirmation, "Password Confirmation" %><br>
