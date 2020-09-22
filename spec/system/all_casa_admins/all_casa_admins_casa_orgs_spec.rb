@@ -12,7 +12,6 @@ describe "all casa admins with casa orgs", type: :system do
       ca2 = create(:casa_admin, casa_org: current_organization)
       vol = create(:volunteer, casa_org: current_organization)
       sup = create(:supervisor, casa_org: current_organization)
-      binding.pry
 
       visit "/"
 
