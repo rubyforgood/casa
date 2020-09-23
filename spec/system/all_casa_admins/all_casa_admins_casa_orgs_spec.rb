@@ -71,7 +71,7 @@ describe "all casa admins with casa orgs", type: :system do
     end
 
     it "allows an admin to create new casa_admins" do
-      visit all_casa_admins_casa_org_path(casa_org)
+      visit all_casa_admins_casa_org_path(current_organization)
       click_on "New CASA Admin"
 
       fill_in "Email", with: "admin1@example.com"
@@ -83,7 +83,7 @@ describe "all casa admins with casa orgs", type: :system do
   end
 
   context "as any other user" do
-    let(:casa_admin) { create(:casa_admin, casa_org: casa_org) }
+    let(:casa_admin) { create(:casa_admin, casa_org: current_organization) }
 
     before { sign_in casa_admin }
 

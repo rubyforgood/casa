@@ -8,8 +8,9 @@ describe ApplicationHelper do
     end
 
     it "links to the user dashboard if user logged in" do
+      organization = build_stubbed(:casa_org)
       allow(helper).to receive(:user_signed_in?).and_return(true)
-      dashboard_link = helper.link_to(page_header_text, root_path)
+      dashboard_link = helper.link_to(organization.display_name, root_path)
 
       expect(helper.page_header).to eq(dashboard_link)
     end

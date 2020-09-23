@@ -9,7 +9,7 @@ module Organizational
   end
 
   def current_organization
-    @current_organization ||= current_user ? current_user.casa_org : CasaOrg.first
+    @current_organization ||= current_user&.casa_org
   end
 
   included do
