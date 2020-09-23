@@ -4,8 +4,17 @@ footer {
   background-color: $primary;
   color: #fff;
 
-  .footer-logos{
+  .default-footer {
+    a.rfglink {
+      color: #fff;
+    }
 
+    .rfglogo{
+      max-height: 3em;
+    }
+  }
+
+  .footer-logos{
     .rfglink {
 
       .rfglogo{

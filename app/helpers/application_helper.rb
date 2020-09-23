@@ -5,7 +5,7 @@ module ApplicationHelper
   end
 
   def page_header
-    return "CASA Volunteer Tracking" if current_organization.blank?
+    return "CASA / Volunteer Tracking" if current_organization.blank?
 
     page_header_text = current_organization.display_name
     user_signed_in? ? link_to(page_header_text, root_path) : page_header_text
@@ -52,6 +52,14 @@ module ApplicationHelper
       render 'layouts/headers/current_all_casa_admin'
     else
       render 'layouts/headers/not_logged_in'
+    end
+  end
+
+  def footer_partials
+    if current_user
+      render 'layouts/footers/logged_in'
+    else
+      render 'layouts/footers/not_logged_in'
     end
   end
 end
