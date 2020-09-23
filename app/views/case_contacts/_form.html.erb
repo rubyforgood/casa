@@ -37,8 +37,8 @@
 
     <% contact_types = ContactType.for_organization(current_organization).each_with_index do |contact_type, index| %>
       <div class="form-check">
-        <%= check_box_tag "case_contact[contact_types][]",
-          contact_type,
+        <%= check_box_tag "case_contact[case_contact_contact_type_attributes][]",
+          contact_type.id,
           case_contact.db_contact_types.map(&:name)&.include?(contact_type),
           id: "case_contact_contact_types_#{index}",
           class: ["form-check-input", "case-contact-contact-type"] %>

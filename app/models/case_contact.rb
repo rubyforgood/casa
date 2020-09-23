@@ -2,8 +2,6 @@ class CaseContact < ApplicationRecord
   attr_accessor :duration_hours
 
   validate :contact_made_chosen
-  validates :contact_types, presence: true
-  validate :contact_types_included
   validates :duration_minutes, numericality: {greater_than_or_equal_to: 15, message: "Minimum case contact duration should be 15 minutes."}
   validates :medium_type, presence: true
   validates :occurred_at, presence: true
@@ -22,6 +20,8 @@ class CaseContact < ApplicationRecord
   has_many :case_contact_contact_type
   # TODO: Rename this relation to `contact_types` when the column with the same name is droped
   has_many :db_contact_types, through: :case_contact_contact_type, source: :contact_type
+
+  accepts_nested_attributes_for :case_contact_contact_type
 
   scope :supervisors, ->(supervisor_ids = nil) {
     joins(:supervisor_volunteer).where(supervisor_volunteers: {supervisor_id: supervisor_ids}) if supervisor_ids.present?
@@ -68,14 +68,6 @@ class CaseContact < ApplicationRecord
   VOICE_ONLY = "voice-only".freeze
   LETTER = "letter".freeze
   CONTACT_MEDIUMS = [IN_PERSON, TEXT_EMAIL, VIDEO, VOICE_ONLY, LETTER].freeze
-
-  def contact_types_included
-    contact_types&.each do |contact_type|
-      unless CONTACT_TYPES.include? contact_type
-        errors.add(:contact_types, :invalid, message: "must have valid contact types")
-      end
-    end
-  end
 
   def occurred_at_not_in_future
     return unless occurred_at && occurred_at >= Date.tomorrow
