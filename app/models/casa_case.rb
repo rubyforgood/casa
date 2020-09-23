@@ -37,12 +37,13 @@ end
 #
 # Table name: casa_cases
 #
-#  id                    :bigint           not null, primary key
-#  case_number           :string           not null
-#  transition_aged_youth :boolean          default(FALSE), not null
-#  created_at            :datetime         not null
-#  updated_at            :datetime         not null
-#  casa_org_id           :bigint           not null
+#  id                     :bigint           not null, primary key
+#  birth_month_year_youth :datetime
+#  case_number            :string           not null
+#  transition_aged_youth  :boolean          default(FALSE), not null
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  casa_org_id            :bigint           not null
 #
 # Indexes
 #
