@@ -1,0 +1,53 @@
+<div id="sidebar-wrapper">
+  <div class="sidebar-heading">
+    <%= image_pack_tag(@casa_org.logo_url,
+        alt: @casa_org.logo_alt_text || "CASA Logo",
+        class: "d-inline-block align-text-bottom") if @casa_org.logo_url %>
+  </div>
+  <div class="sidebar-container">
+    <div class="sidebar-menu">
+      <div class="list-group list-group-flush">
+        <a href="0" class="list-group-item active">Active Link Example</a>
+        <a href="0" class="list-group-item">Dummy Link</a>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="list-group list-group-flush account-details">
+        <li class="list-group-item">
+          <span class="label">Location</span>
+          <span class="value"><%= casa_org %></span>
+        </li>
+        <li class="list-group-item">
+          <span class="label">Role</span>
+          <span class="value">Supervisor</span>
+        </li>
+      </div>
+      <div class="list-group list-group-flush footer-nav">
+        <% if current_user %>
+          <%= link_to "Edit Profile", edit_users_path, class: "list-group-item" %>
+
+          <% if policy(:application).see_reports_page? %>
+            <%= link_to "Generate Reports", reports_path, class: "list-group-item" %>
+          <% end %>
+          <% if policy(:application).see_import_page? %>
+            <%= link_to "System Imports", imports_path, class: "list-group-item" %>
+          <% end %>
+          <% if policy(:application).modify_organization? %>
+            <%= link_to "Edit Organization", edit_casa_org_path(current_organization), class: "list-group-item" %>
+          <% end %>
+          <li class="list-group-item">
+            <%= current_user.email %>
+          </li>
+        <% end %>
+
+        <% if current_all_casa_admin %>
+          <li class="list-group-item">
+            <%= current_all_casa_admin.email %>
+            <%= link_to "Edit Profile", edit_all_casa_admins_path %>
+          </li>
+        <% end %>
+        <%= session_link %>
+      </div>
+    </div>
+  </div>
+</div>

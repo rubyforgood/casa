@@ -4,18 +4,18 @@ module ApplicationHelper
     "#{qualified_controller_name} #{qualified_controller_name}-#{controller.action_name}"
   end
 
-  def page_header
-    page_header_text = @casa_org.display_name
-    user_signed_in? ? link_to(page_header_text, root_path) : page_header_text
+  def casa_org
+    casa_org_display_name = @casa_org.display_name
+    user_signed_in? ? link_to(casa_org_display_name, root_path) : casa_org_display_name
   end
 
   def session_link
     if user_signed_in?
-      link_to("Log out", destroy_user_session_path, class: "btn btn-light")
+      link_to("Log out", destroy_user_session_path, class: "list-group-item")
     elsif all_casa_admin_signed_in?
-      link_to("Log out", destroy_all_casa_admin_session_path, class: "btn btn-light")
+      link_to("Log out", destroy_all_casa_admin_session_path, class: "list-group-item")
     else
-      link_to("Log in", new_user_session_path, class: "btn btn-light")
+      link_to("Log in", new_user_session_path, class: "list-group-item")
     end
   end
 
