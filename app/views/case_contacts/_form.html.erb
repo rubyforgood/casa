@@ -39,7 +39,7 @@
       <div class="form-check">
         <%= check_box_tag "case_contact[case_contact_contact_type_attributes][][contact_type_id]",
           contact_type.id,
-          case_contact.db_contact_types.map(&:name)&.include?(contact_type),
+          case_contact.db_contact_types.map(&:id)&.include?(contact_type.id),
           id: "case_contact_contact_types_#{index}",
           class: ["form-check-input", "case-contact-contact-type"] %>
         <label class="form-check-label" for="case_contact_contact_types_<%= index %>">
