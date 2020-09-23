@@ -15,7 +15,7 @@ RSpec.feature "When an admin creates a new admin", type: :system do
   scenario "it creates when providing a valid email" do
     fill_in "Email", with: "casa_admin1@example.com"
     fill_in "Display Name", with: "Derrick Dev"
-    click_button("Create Casa Admin")
+    click_button("Submit")
 
     expect(page).to have_content "New Admin created."
   end
@@ -23,7 +23,7 @@ RSpec.feature "When an admin creates a new admin", type: :system do
   scenario "it fails when providing an invalid email" do
     fill_in "Email", with: "casa_admin1@"
     fill_in "Display Name", with: "Derrick Dev"
-    click_button("Create Casa Admin")
+    click_button("Submit")
 
     expect(page).to have_content "Email is invalid"
   end
