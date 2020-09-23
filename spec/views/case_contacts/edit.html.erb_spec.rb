@@ -12,7 +12,7 @@ describe "case_contacts/edit" do
     assign :casa_cases, [case_contact.casa_case]
     assign :selected_cases, [case_contact.casa_case]
 
-    CaseContact::CONTACT_TYPES.each_with_index do |contact_type, index|
+    ContactType.all.each_with_index do |contact_type, index|
       render template: "case_contacts/edit"
       expect(rendered).to include(contact_type)
     end

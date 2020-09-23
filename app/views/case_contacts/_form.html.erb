@@ -35,15 +35,15 @@
   <div id="contact-type-form" class="field contact-type form-group">
     <h2 id="contact-type-label"><%= form.label :contact_types %></h2>
 
-    <% contact_types = CaseContact::CONTACT_TYPES.each_with_index do |contact_type, index| %>
+    <% contact_types = ContactType.for_organization(current_organization).each_with_index do |contact_type, index| %>
       <div class="form-check">
         <%= check_box_tag "case_contact[contact_types][]",
           contact_type,
-          case_contact.contact_types&.include?(contact_type),
+          case_contact.db_contact_types.map(&:name)&.include?(contact_type),
           id: "case_contact_contact_types_#{index}",
           class: ["form-check-input", "case-contact-contact-type"] %>
         <label class="form-check-label" for="case_contact_contact_types_<%= index %>">
-          <%= contact_type.titleize %>
+          <%= contact_type.name %>
         </label>
       </div>
     <% end %>

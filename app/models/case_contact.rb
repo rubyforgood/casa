@@ -20,7 +20,7 @@ class CaseContact < ApplicationRecord
   belongs_to :casa_case
 
   has_many :case_contact_contact_type
-  # TODO: Rename to contact_types when the migration is over
+  # TODO: Rename this relation to `contact_types` when the column with the same name is droped
   has_many :db_contact_types, through: :case_contact_contact_type, source: :contact_type
 
   scope :supervisors, ->(supervisor_ids = nil) {
@@ -42,8 +42,10 @@ class CaseContact < ApplicationRecord
     where(want_driving_reimbursement: want_driving_reimbursement) if want_driving_reimbursement == true || want_driving_reimbursement == false
   }
   scope :contact_type, ->(contact_type = nil) {
-    where("? = ANY (contact_types)", contact_type) if contact_type.present?
+    joins(:db_contact_types)
+      .where("contact_types.name in (?)", contact_type) if contact_type.present?
   }
+
   CONTACT_TYPES = %w[
     attorney
     bio_parent
