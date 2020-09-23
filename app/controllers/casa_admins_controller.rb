@@ -28,6 +28,14 @@ class CasaAdminsController < ApplicationController
     end
   end
 
+  def activate
+    if @casa_admin.activate
+      redirect_to edit_casa_admin_path(@casa_admin), notice: "Admin was activated."
+    else
+      render :edit
+    end
+  end
+
   def deactivate
     if @casa_admin.deactivate
       redirect_to edit_casa_admin_path(@casa_admin), notice: "Admin was deactivated."
