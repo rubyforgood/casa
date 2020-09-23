@@ -85,4 +85,41 @@ RSpec.describe "/casa_admins", type: :request do
       end
     end
   end
+
+  describe "PATCH /casa_admins/:id/deactivate" do
+    context "logged in as admin user" do
+      it "can successfully deactivate a casa admin user" do
+        sign_in_as_admin
+        casa_admin = create(:casa_admin)
+        expected_display_name = "Admin 2"
+        expected_email = "admin2@casa.com"
+
+        patch deactivate_casa_admin_path(casa_admin)
+        casa_admin.reload
+        expect(casa_admin.active).to be_falsey
+
+        expect(response).to redirect_to edit_casa_admin_path(casa_admin)
+        expect(response.request.flash[:notice]).to eq "Admin was deactivated."
+      end
+    end
+
+    context "logged in as a non-admin user" do
+      it "cannot update a casa admin user" do
+        sign_in_as_volunteer
+
+        patch deactivate_casa_admin_path(create(:casa_admin))
+
+        expect(response).to redirect_to root_path
+        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+      end
+    end
+
+    context "unauthenticated request" do
+      it "cannot update a casa admin user" do
+        patch deactivate_casa_admin_path(create(:casa_admin))
+
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+  end
 end
