@@ -30,6 +30,8 @@ class CasaAdminsController < ApplicationController
 
   def activate
     if @casa_admin.activate
+      CasaAdminMailer.account_setup(@casa_admin).deliver
+
       redirect_to edit_casa_admin_path(@casa_admin), notice: "Admin was activated."
     else
       render :edit
@@ -38,6 +40,8 @@ class CasaAdminsController < ApplicationController
 
   def deactivate
     if @casa_admin.deactivate
+      CasaAdminMailer.deactivation(@casa_admin).deliver
+
       redirect_to edit_casa_admin_path(@casa_admin), notice: "Admin was deactivated."
     else
       render :edit

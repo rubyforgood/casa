@@ -97,13 +97,22 @@ RSpec.describe "/casa_admins", type: :request do
       casa_admin.reload
       expect(casa_admin.active).to eq(true)
     end
+
+    it "sends an activation email" do
+      sign_in_as_admin
+
+      expect {
+        patch activate_casa_admin_path(casa_admin)
+      }.to change { ActionMailer::Base.deliveries.count }.by(1)
+    end
   end
 
   describe "PATCH /casa_admins/:id/deactivate" do
+    let(:casa_admin) { create(:casa_admin, active: false) }
+
     context "logged in as admin user" do
       it "can successfully deactivate a casa admin user" do
         sign_in_as_admin
-        casa_admin = create(:casa_admin)
         expected_display_name = "Admin 2"
         expected_email = "admin2@casa.com"
 
@@ -113,6 +122,14 @@ RSpec.describe "/casa_admins", type: :request do
 
         expect(response).to redirect_to edit_casa_admin_path(casa_admin)
         expect(response.request.flash[:notice]).to eq "Admin was deactivated."
+      end
+
+      it "sends a deactivation email" do
+        sign_in_as_admin
+
+        expect {
+          patch deactivate_casa_admin_path(casa_admin)
+        }.to change { ActionMailer::Base.deliveries.count }.by(1)
       end
     end
 
