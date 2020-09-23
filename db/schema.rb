@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 2020_09_22_170308) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "casa_org_id", null: false
+    t.datetime "birth_month_year_youth"
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
     t.index ["case_number"], name: "index_casa_cases_on_case_number", unique: true
   end
