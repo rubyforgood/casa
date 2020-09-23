@@ -24,7 +24,11 @@ Rails.application.routes.draw do
   resources :casa_admins, only: %i[new create]
   resources :case_contacts, except: %i[index show]
   resources :reports, only: %i[index]
-  resources :imports, only: %i[index create]
+  resources :imports, only: %i[index create] do
+    collection do
+      get :download_failed
+    end
+  end
   resources :case_contact_reports, only: %i[index]
   resources :casa_orgs, only: %i[edit update]
 

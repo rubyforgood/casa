@@ -1,4 +1,6 @@
 class ImportsController < ApplicationController
+  include ActionView::Helpers::UrlHelper
+
   before_action :authenticate_user!
   before_action :must_be_admin
   before_action :check_empty_attachment, only: [:create]
@@ -9,8 +11,19 @@ class ImportsController < ApplicationController
 
   def create
     import = import_from_csv(params[:import_type], params[:file], current_user.casa_org_id)
+    message = import[:message]
+    if import[:exported_rows]
+      message << " " + link_to("Click here to download failed rows.", download_failed_imports_path)
+      session[:exported_rows] = import[:exported_rows]
+    end
     flash[import[:type]] = import[:message]
     redirect_to imports_path(import_type: params[:import_type])
+  end
+
+  def download_failed
+    data = session[:exported_rows]
+    session[:exported_rows] = nil
+    send_data data, format: :csv, filename: "failed_rows.csv"
   end
 
   private
