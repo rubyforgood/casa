@@ -13,7 +13,9 @@
   </head>
   <body class="<%= body_class %>">
     <div class="d-flex" id="wrapper">
+
       <%= render 'layouts/sidebar' %>
+
       <div id="page-content-wrapper">
         <div class="header-flash">
           <% flash.delete(:timedout).each do |key, value| %>

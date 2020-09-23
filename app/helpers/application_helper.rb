@@ -4,9 +4,9 @@ module ApplicationHelper
     "#{qualified_controller_name} #{qualified_controller_name}-#{controller.action_name}"
   end
 
-  def page_header
-    page_header_text = @casa_org.display_name
-    user_signed_in? ? link_to(page_header_text, root_path) : page_header_text
+  def casa_org
+    casa_org_display_name = @casa_org.display_name
+    user_signed_in? ? link_to(casa_org_display_name, root_path) : casa_org_display_name
   end
 
   def session_link
