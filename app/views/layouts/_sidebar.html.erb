@@ -11,6 +11,7 @@
           <%= link_to "Volunteers", volunteers_path, class: "list-group-item #{active_class(root_path)}" %>
           <%= link_to "My Cases", casa_cases_path, class: "list-group-item #{active_class(casa_cases_path)}" %>
         <% end %>
+        <%= menu_item(label: "Supervisors", path: supervisors_path, visible: policy(Supervisor).index?) %>
       </div>
     </div>
     <div class="sidebar-footer">

@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   resources :casa_orgs, only: %i[edit update]
 
   resources :casa_admins, only: %i[edit update]
-  resources :supervisors, only: %i[edit update new create]
+  resources :supervisors, except: %i[destroy]
   resources :supervisor_volunteers, only: %i[create] do
     member do
       patch :unassign
