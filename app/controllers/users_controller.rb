@@ -3,6 +3,7 @@ class UsersController < ApplicationController
 
   def edit
     @user = current_user
+    @active_casa_admins = CasaAdmin.where(casa_org_id: @user.casa_org_id).active
   end
 
   def update
