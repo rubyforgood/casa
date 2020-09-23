@@ -9,6 +9,9 @@
       <div class="list-group list-group-flush">
         <a href="0" class="list-group-item active">Active Link Example</a>
         <a href="0" class="list-group-item">Dummy Link</a>
+        <% if current_user&.casa_admin? %>
+          <%= link_to "Admins", casa_admins_path, class: "list-group-item" %>
+        <% end %>
       </div>
     </div>
     <div class="sidebar-footer">

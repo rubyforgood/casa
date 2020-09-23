@@ -3,6 +3,10 @@ class CasaAdminsController < ApplicationController
   before_action :set_admin, only: [:edit, :update]
   before_action :require_organization!
 
+  def index
+    @admins = policy_scope(current_organization.casa_admins).sort_by(&:email)
+  end
+
   def edit; end
 
   def update

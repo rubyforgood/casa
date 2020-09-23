@@ -21,14 +21,13 @@ Rails.application.routes.draw do
   end
 
   resources :casa_cases
-  resources :casa_admins, only: %i[new create]
+  resources :casa_admins, except: %i[destroy]
   resources :case_contacts, except: %i[index show]
   resources :reports, only: %i[index]
   resources :imports, only: %i[index create]
   resources :case_contact_reports, only: %i[index]
   resources :casa_orgs, only: %i[edit update]
 
-  resources :casa_admins, only: %i[edit update]
   resources :supervisors, only: %i[edit update new create]
   resources :supervisor_volunteers, only: %i[create] do
     member do
