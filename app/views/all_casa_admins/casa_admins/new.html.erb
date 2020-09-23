@@ -1,8 +1,8 @@
-<h1><%= current_organization.name %></h1>
+<h1><%= selected_organization.name %></h1>
 <h2>New CASA Admin</h2>
 
 <div class="row">
   <div class="col-sm-6">
-    <%= render "form", casa_org: current_organization, casa_admin: @casa_admin %>
+    <%= render "form", casa_org: selected_organization, casa_admin: @casa_admin %>
   </div>
 </div>

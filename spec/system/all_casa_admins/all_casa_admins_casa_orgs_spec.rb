@@ -1,10 +1,9 @@
 require "rails_helper"
 
 describe "all casa admins with casa orgs", type: :system do
-  let(:all_casa_admin) { create(:all_casa_admin) }
-  let!(:current_organization) { create(:casa_org) }
-
   context "as an all casa admin" do
+    let(:all_casa_admin) { create(:all_casa_admin, email: "theexample@example.com") }
+    let(:current_organization) { create(:casa_org) }
     before { sign_in all_casa_admin }
 
     it "lets admin navigate to an organization and see casa_admins" do
@@ -71,7 +70,10 @@ describe "all casa admins with casa orgs", type: :system do
     end
 
     it "allows an admin to create new casa_admins" do
-      visit all_casa_admins_casa_org_path(current_organization)
+      casa_org = create(:casa_org)
+      all_casa_admin = create(:all_casa_admin)
+
+      visit all_casa_admins_casa_org_path(casa_org)
       click_on "New CASA Admin"
 
       fill_in "Email", with: "admin1@example.com"
@@ -83,6 +85,7 @@ describe "all casa admins with casa orgs", type: :system do
   end
 
   context "as any other user" do
+    let(:current_organization) { create(:casa_org) }
     let(:casa_admin) { create(:casa_admin, casa_org: current_organization) }
 
     before { sign_in casa_admin }
