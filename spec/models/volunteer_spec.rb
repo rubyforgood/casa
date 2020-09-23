@@ -44,7 +44,7 @@ RSpec.describe Volunteer, type: :model do
     end
   end
 
-  describe "has_supervisor?" do
+  describe "#has_supervisor?" do
     context "when no supervisor_volunteer record" do
       let(:volunteer) { create(:volunteer) }
 
@@ -120,6 +120,33 @@ RSpec.describe Volunteer, type: :model do
         volunteer2 = create(:volunteer)
         expect(volunteer2.made_contact_with_all_cases_in_days?).to eq(true)
       end
+    end
+  end
+
+  describe "#supervised_by?" do
+    it "is supervised by the currently active supervisor" do
+      supervisor = create :supervisor
+      volunteer = create :volunteer, supervisor: supervisor
+
+      expect(volunteer).to be_supervised_by(supervisor)
+    end
+
+    it "is not supervised by supervisors that have never supervised the volunteer before" do
+      supervisor = create :supervisor
+      volunteer = create :volunteer
+
+      expect(volunteer).to_not be_supervised_by(supervisor)
+    end
+
+    it "is not supervised by supervisor that had the volunteer unassinged" do
+      old_supervisor = create :supervisor
+      new_supervisor = create :supervisor
+      volunteer = create :volunteer, supervisor: old_supervisor
+
+      volunteer.update supervisor: new_supervisor
+
+      expect(volunteer).to_not be_supervised_by(old_supervisor)
+      expect(volunteer).to be_supervised_by(new_supervisor)
     end
   end
 end
