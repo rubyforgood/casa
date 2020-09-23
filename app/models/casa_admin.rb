@@ -10,7 +10,6 @@ end
 #
 #  id                     :bigint           not null, primary key
 #  active                 :boolean          default(TRUE)
-#  deactivated_account_at :datetime
 #  display_name           :string           default("")
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
