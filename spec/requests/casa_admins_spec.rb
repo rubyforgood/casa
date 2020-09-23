@@ -86,6 +86,19 @@ RSpec.describe "/casa_admins", type: :request do
     end
   end
 
+  describe "PATCH /activate" do
+    let(:casa_admin) { create(:casa_admin, active: false) }
+
+    it "activates an inactive casa_admin" do
+      sign_in_as_admin
+
+      patch activate_casa_admin_path(casa_admin)
+
+      casa_admin.reload
+      expect(casa_admin.active).to eq(true)
+    end
+  end
+
   describe "PATCH /casa_admins/:id/deactivate" do
     context "logged in as admin user" do
       it "can successfully deactivate a casa admin user" do
