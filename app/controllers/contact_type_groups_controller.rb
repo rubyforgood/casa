@@ -8,12 +8,10 @@ class ContactTypeGroupsController < ApplicationController
   def create
     @contact_type_group = ContactTypeGroup.new(contact_type_group_params.merge(casa_org: current_organization))
 
-    respond_to do |format|
-      if @contact_type_group.save
-        format.html { redirect_to edit_casa_org_path(current_organization), notice: "Contact Type Group was successfully created." }
-      else
-        format.html { render :new }
-      end
+    if @contact_type_group.save
+      redirect_to edit_casa_org_path(current_organization), notice: "Contact Type Group was successfully created."
+    else
+      render :new
     end
   end
 
