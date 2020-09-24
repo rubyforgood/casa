@@ -13,10 +13,10 @@
     </tr>
   </thead>
   <tbody>
-    <% @current_organizations.each do |current_organization| %>
+    <% @organizations.each do |organization| %>
       <tr>
-        <td><%= link_to current_organization.name, all_casa_admins_casa_org_path(current_organization) %></td>
-        <td><%= current_organization.created_at.strftime('%B %e, %Y') %></td>
+        <td><%= link_to organization.name, all_casa_admins_casa_org_path(organization) %></td>
+        <td><%= organization.created_at.strftime('%B %e, %Y') %></td>
       </tr>
     <% end %>
   </tbody>
