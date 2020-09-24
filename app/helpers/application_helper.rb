@@ -4,9 +4,23 @@ module ApplicationHelper
     "#{qualified_controller_name} #{qualified_controller_name}-#{controller.action_name}"
   end
 
-  def casa_org
-    casa_org_display_name = @casa_org.display_name
-    user_signed_in? ? link_to(casa_org_display_name, root_path) : casa_org_display_name
+  def logged_in?
+    user_signed_in? || all_casa_admin_signed_in?
+  end
+
+  def not_logged_in?
+    !logged_in?
+  end
+
+  def page_header
+    return default_page_header unless user_signed_in?
+
+    page_header_text = current_organization.display_name
+    user_signed_in? ? link_to(page_header_text, root_path) : page_header_text
+  end
+
+  def default_page_header
+    "CASA / Volunteer Tracking"
   end
 
   def session_link
