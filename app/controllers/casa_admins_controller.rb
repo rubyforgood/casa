@@ -1,6 +1,6 @@
 class CasaAdminsController < ApplicationController
   before_action :authenticate_user!, :must_be_admin
-  before_action :set_admin, only: [:edit, :update]
+  before_action :set_admin, except: [:new, :create]
   before_action :require_organization!
 
   def index
@@ -29,6 +29,14 @@ class CasaAdminsController < ApplicationController
       redirect_to root_path, notice: "New Admin created."
     else
       render new_casa_admin_path
+    end
+  end
+
+  def deactivate
+    if @casa_admin.deactivate
+      redirect_to edit_casa_admin_path(@casa_admin), notice: "Admin was deactivated."
+    else
+      render :edit
     end
   end
 

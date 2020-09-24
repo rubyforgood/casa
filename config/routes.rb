@@ -21,7 +21,13 @@ Rails.application.routes.draw do
   end
 
   resources :casa_cases
-  resources :casa_admins, except: %i[destroy]
+
+  resources :casa_admins, except: %i[destroy] do
+    member do
+      patch :deactivate
+    end
+  end
+
   resources :case_contacts, except: %i[index show]
   resources :reports, only: %i[index]
   resources :imports, only: %i[index create]
