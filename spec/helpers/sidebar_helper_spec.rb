@@ -22,7 +22,6 @@ describe SidebarHelper do
           allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :index).and_return(false)
           allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :edit).and_return(false)
           allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :new).and_return(false)
-          allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :show).and_return(false)
 
           menu_item = helper.menu_item(label: "Supervisors", path: supervisors_path, visible: true)
 
@@ -43,6 +42,7 @@ describe SidebarHelper do
       context "when accessing an edit route" do
         it "renders sidebar menu item as an active link" do
           allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :index).and_return(false)
+          allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :new).and_return(false)
           allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :edit).and_return(true)
 
           menu_item = helper.menu_item(label: "Supervisors", path: supervisors_path, visible: true)
@@ -54,21 +54,7 @@ describe SidebarHelper do
       context "when accessing a 'new' route" do
         it "renders sidebar menu item as an active link" do
           allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :index).and_return(false)
-          allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :edit).and_return(false)
           allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :new).and_return(true)
-
-          menu_item = helper.menu_item(label: "Supervisors", path: supervisors_path, visible: true)
-
-          expect(menu_item).to match "class=\"list-group-item active\""
-        end
-      end
-
-      context "when accessing a show route" do
-        it "renders sidebar menu item as an active link" do
-          allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :index).and_return(false)
-          allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :edit).and_return(false)
-          allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :new).and_return(false)
-          allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :show).and_return(true)
 
           menu_item = helper.menu_item(label: "Supervisors", path: supervisors_path, visible: true)
 
