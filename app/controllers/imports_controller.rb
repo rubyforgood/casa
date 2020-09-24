@@ -63,9 +63,9 @@ class ImportsController < ApplicationController
 
     case import_type
     when "volunteer"
-      UserImporter.import_volunteers(file, org_id)
+      VolunteerImporter.import_volunteers(file, org_id)
     when "supervisor"
-      UserImporter.import_supervisors(file, org_id)
+      SupervisorImporter.import_supervisors(file, org_id)
     when "casa_case"
       CaseImporter.import_cases(file, org_id)
     else

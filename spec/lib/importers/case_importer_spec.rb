@@ -21,6 +21,11 @@ RSpec.describe CaseImporter do
       expect(CasaCase.find_by(case_number: "CINA-01-4348").transition_aged_youth).to be_falsey
       expect(CasaCase.find_by(case_number: "CINA-01-4349").transition_aged_youth).to be_falsey
 
+      # correctly imports birth_month_year_youth
+      expect(CasaCase.find_by(case_number: "CINA-01-4347").birth_month_year_youth).to be_nil
+      expect(CasaCase.find_by(case_number: "CINA-01-4348").birth_month_year_youth&.strftime("%Y-%m-%d")).to eql "2014-02-01"
+      expect(CasaCase.find_by(case_number: "CINA-01-4349").birth_month_year_youth&.strftime("%Y-%m-%d")).to eql "2016-12-01"
+
       # correctly adds volunteers
       expect(CasaCase.find_by(case_number: "CINA-01-4347").volunteers.size).to eq(1)
       expect(CasaCase.find_by(case_number: "CINA-01-4348").volunteers.size).to eq(2)
@@ -53,7 +58,7 @@ RSpec.describe CaseImporter do
       it "returns an error message when there are cases not imported" do
         alert = case_importer.import_cases
         expect(alert[:type]).to eq(:error)
-        expect(alert[:message]).to include("You successfully imported 0 casa_cases. The following casa_cases were not")
+        expect(alert[:message]).to include("Not all rows were imported.")
       end
     end
   end
