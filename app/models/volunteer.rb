@@ -38,6 +38,10 @@ class Volunteer < User
     supervisor_volunteer.present? && supervisor_volunteer&.is_active?
   end
 
+  def supervised_by?(supervisor)
+    self.supervisor == supervisor
+  end
+
   # false if volunteer has any case with no contact in the past 30 days
   def made_contact_with_all_cases_in_days?(num_days = 30)
     total_cases_count = casa_cases.count

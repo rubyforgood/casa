@@ -1,6 +1,7 @@
 class CasaOrgsController < ApplicationController
   before_action :set_casa_org, only: %i[edit update]
   before_action :must_be_admin
+  before_action :require_organization!
 
   def edit
     @contact_type_groups = @casa_org.contact_type_groups
