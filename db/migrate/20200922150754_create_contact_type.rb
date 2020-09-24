@@ -8,7 +8,7 @@ class CreateContactType < ActiveRecord::Migration[6.0]
 
     create_table :contact_types do |t|
       t.references :contact_type_group, null: false
-      t.string :name
+      t.string :name, null: false
       t.timestamps
     end
 

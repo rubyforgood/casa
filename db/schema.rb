@@ -105,7 +105,7 @@ ActiveRecord::Schema.define(version: 2020_09_22_170308) do
 
   create_table "contact_types", force: :cascade do |t|
     t.bigint "contact_type_group_id", null: false
-    t.string "name"
+    t.string "name", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["contact_type_group_id"], name: "index_contact_types_on_contact_type_group_id"
