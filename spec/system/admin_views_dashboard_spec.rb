@@ -34,7 +34,7 @@ RSpec.describe "admin views dashboard", type: :system do
   context "in the footer" do
     let(:organization) { create(:casa_org) }
 
-    it "displays rfg logo, company logo, display name, address, footer, links" do
+    xit "displays rfg logo, company logo, display name, address, footer, links" do
       create(:volunteer, email: "casa@example.com", casa_org: organization)
       sign_in admin
       visit root_path
