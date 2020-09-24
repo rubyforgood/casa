@@ -43,7 +43,7 @@ class CaseContact < ApplicationRecord
   }
   scope :contact_type, ->(contact_type = nil) {
     joins(:db_contact_types)
-      .where(contact_types: { name: contact_type }) if contact_type.present?
+      .where("contact_types.name in (?)", contact_type) if contact_type.present?
   }
 
   IN_PERSON = "in-person".freeze
