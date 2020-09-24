@@ -9,8 +9,7 @@ RSpec.describe "Volunteer logs in and clicks 'Case Contacts' ", type: :system do
     case_contact_for_other_case = create(:case_contact, miles_driven: 777)
 
     sign_in volunteer
-    visit root_path
-    click_on "Case Contacts"
+    visit casa_contacts_path
 
     expect(page).to have_text(case_assignment.casa_case.case_number)
     expect(page).to have_text(case_contact.miles_driven)
