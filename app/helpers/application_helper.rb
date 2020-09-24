@@ -5,8 +5,14 @@ module ApplicationHelper
   end
 
   def page_header
-    page_header_text = @casa_org.display_name
+    return default_page_header unless user_signed_in?
+
+    page_header_text = current_organization.display_name
     user_signed_in? ? link_to(page_header_text, root_path) : page_header_text
+  end
+
+  def default_page_header
+    "CASA / Volunteer Tracking"
   end
 
   def session_link
@@ -40,6 +46,24 @@ module ApplicationHelper
           end
         })
       end
+    end
+  end
+
+  def header_partials
+    if current_user
+      render 'layouts/headers/current_user'
+    elsif all_casa_admin_signed_in?
+      render 'layouts/headers/current_all_casa_admin'
+    else
+      render 'layouts/headers/not_logged_in'
+    end
+  end
+
+  def footer_partials
+    if current_user
+      render 'layouts/footers/logged_in'
+    else
+      render 'layouts/footers/not_logged_in'
     end
   end
 end

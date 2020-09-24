@@ -1,12 +1,12 @@
 <div class="row">
   <div class="col-sm-12">
-    <h1><%= @casa_org.name %></h1>
+    <h1><%= selected_organization.name %></h1>
   </div>
 </div>
 <div class="row">
   <div class="col-sm-12 dashboard-table-header">
     <h3>Administrators</h3>
-    <%= link_to "New CASA Admin", new_all_casa_admins_casa_org_casa_admin_path(@casa_org), class: "btn btn-primary" %>
+    <%= link_to "New CASA Admin", new_all_casa_admins_casa_org_casa_admin_path(selected_organization), class: "btn btn-primary" %>
 
     <table class="table admin-list">
       <thead>
@@ -17,7 +17,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @casa_org.casa_admins.each do |admin| %>
+        <% selected_organization.casa_admins.each do |admin| %>
           <tr class="admin-<%= admin.id %>">
             <td><%= admin.display_name %></td>
             <td><%= admin.email %></td>
