@@ -27,6 +27,8 @@ class CaseContactsController < ApplicationController
     @selected_cases = @casa_cases[0, 1]
 
     @selected_contact_types = []
+
+    @current_organization_groups = current_organization.contact_type_groups
   end
 
   def create
