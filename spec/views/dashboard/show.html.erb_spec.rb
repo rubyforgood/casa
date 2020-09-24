@@ -7,7 +7,6 @@ describe "dashboard/show", type: :view do
       enable_pundit(view, admin)
       allow(view).to receive(:current_user).and_return(admin)
 
-      assign :admins, [admin.decorate]
       assign :volunteers, [build_stubbed(:volunteer).decorate]
       assign :casa_cases, [build_stubbed(:casa_case).decorate]
       assign :supervisors, [build_stubbed(:supervisor).decorate]
@@ -16,7 +15,7 @@ describe "dashboard/show", type: :view do
 
       render template: "dashboard/show"
 
-      expect(rendered).to have_text("Admins")
+      expect(rendered).to have_text("Volunteers")
     end
   end
 end
