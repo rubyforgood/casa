@@ -6,6 +6,7 @@ RSpec.describe "admin adds a new case", type: :system do
     case_number = "12345"
     sign_in admin
     visit root_path
+    click_on "Cases"
     expect(page).to have_selector(".case-list")
 
     click_on "New Case"
