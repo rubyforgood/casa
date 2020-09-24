@@ -2,6 +2,7 @@
 class CaseContactsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_case_contact, only: %i[edit update destroy]
+  before_action :set_contact_types, only: %i[new edit update create]
   before_action :require_organization!
 
   # GET /case_contacts
@@ -24,6 +25,8 @@ class CaseContactsController < ApplicationController
 
     # By default the first case is selected
     @selected_cases = @casa_cases[0, 1]
+
+    @selected_contact_types = []
   end
 
   def create
@@ -32,6 +35,7 @@ class CaseContactsController < ApplicationController
     # they did previously enter.
     @casa_cases = policy_scope(current_organization.casa_cases)
     @case_contact = CaseContact.new(create_case_contact_params)
+    @selected_contact_types = dig_selected_contact_types
 
     @selected_cases = @casa_cases.where(id: params.dig(:case_contact, :casa_case_id))
     if @selected_cases.empty?
@@ -95,6 +99,10 @@ class CaseContactsController < ApplicationController
     @case_contact = authorize(current_organization.case_contacts.find(params[:id]))
   end
 
+  def set_contact_types
+    @contact_types = ContactType.for_organization(current_organization)
+  end
+
   def create_case_contact_params
     CaseContactParameters
       .new(params)
@@ -107,5 +115,9 @@ class CaseContactsController < ApplicationController
     CaseContactParameters
       .new(params)
       .with_converted_duration_minutes(params[:case_contact][:duration_hours].to_i)
+  end
+
+  def dig_selected_contact_types
+    (params.dig(:case_contact, :case_contact_contact_type_attributes) || []).map { |attr| attr["contact_type_id"].to_i }
   end
 end

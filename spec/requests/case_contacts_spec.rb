@@ -20,7 +20,6 @@ RSpec.describe "/case_contacts", type: :request do
     {
       creator: nil,
       casa_case_id: [create(:casa_case, volunteers: [volunteer], casa_org: organization).id],
-      contact_types: ["invalid type"],
       occurred_at: Time.zone.now
     }
   end
@@ -68,17 +67,17 @@ RSpec.describe "/case_contacts", type: :request do
     context "with valid parameters" do
       it "updates the requested case_contact and redirects to the root path" do
         case_contact = create(:case_contact, creator: volunteer, casa_case: casa_case)
+        contact_type = create(:contact_type, name: "Attorney")
 
         patch case_contact_url(case_contact), params: {
           case_contact: {
-            contact_types: ["attorney"],
+            case_contact_contact_type_attributes: [{ contact_type_id: contact_type.id }],
             duration_minutes: 60
           }
         }
         expect(response).to redirect_to(casa_case_path(case_contact.casa_case_id))
 
-        case_contact.reload
-        expect(case_contact.contact_types).to eq(["attorney"])
+        expect(case_contact.reload.db_contact_types.first.name).to eq "Attorney"
       end
     end
 
