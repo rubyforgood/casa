@@ -1,22 +1,36 @@
-<h3><i class="fa fa-download fa-2x" aria-hidden="true"></i> 1. Download example Supervisor CSV file</h3>
-<%= link_to "/supervisors.csv", format: :csv, class: "btn btn-xs btn-success", download: "supervisors.csv" do %>
-  <i class="fa fa-download"></i> Download
-  example supervisor csv
-<% end %>
-<br>
-<br>
-<h3><i class="fa fa-file-text-o fa-2x" aria-hidden="true"></i> 2. Upload your CSV file</h3>
-<%= form_with(url: imports_path, local: :true) do |f| %>
+<div class="mb-3">
+  <h4>
+    1.
+    <%= link_to "/supervisors.csv", format: :csv, download: "supervisors.csv" do %>
+      Download and reference example Supervisor CSV file
+      <i class="fa fa-file-download"></i>
+    <% end %>
+  </h4>
+</div>
+
+<div class="mb-3">
+  <h4>
+    2. Upload your CSV file
+    <i class="fa fa-file-csv" aria-hidden="true"></i>
+  </h4>
+  <%= form_with(url: imports_path, local: :true) do |f| %>
   <%= f.hidden_field :import_type, value: "supervisor" %>
   <ul>
     <li>Click the choose file button and navigate to the saved file and select it.</li>
     <li><strong>Do not</strong> change any of the values in the first line of the example csv file.</li>
     <li>Then click the "Import Supervisors CSV" button to import your supervisors.</li>
-
   </ul>
-  <%= f.file_field :file, accept: 'text/csv', class: 'form-control-file', style: "margin: auto;" %>
-  <br>
-  <%= button_tag :class => "btn btn-md btn-success" do %>
-    <i class="fa fa-upload"></i> Import Supervisors CSV
-  <% end %>
+  <%= f.file_field :file, id: 'supervisor-file', accept: 'text/csv', class: 'form-control-file', style: "margin: auto;" %>
+</div>
+
+<%= button_tag id: "supervisor-import-button", :class => "btn btn-md btn-success pull-right", 
+      disabled: true, data: { disable_with: "<i class='fa fa-refresh fa-spin'></i> Importing File..."} do %>
+  <i class="fa fa-upload"></i> Import Supervisors CSV
+<% end %>
+
+<script type="text/javascript">
+  document.getElementById('supervisor-file').addEventListener('change', function(event) {
+    document.getElementById('supervisor-import-button').disabled = (event.target.value == "");
+  });
+</script>
 <% end %>
