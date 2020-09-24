@@ -1,6 +1,6 @@
 class CasaAdminsController < ApplicationController
   before_action :authenticate_user!, :must_be_admin
-  before_action :set_admin, except: [:new, :create]
+  before_action :set_admin, except: [:index, :new, :create]
   before_action :require_organization!
 
   def index
