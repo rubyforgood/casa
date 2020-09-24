@@ -1,0 +1,21 @@
+<header>
+  <nav class="navbar navbar-expand-lg bg-primary justify-content-between">
+    <div class="navbar-brand py-0">
+      <%= image_pack_tag("media/src/images/default-logo.png",
+        alt: "CASA Logo",
+        size: "70x38") %>
+      <strong><%= page_header %></strong>
+    </div>
+    <div class="navbar-nav">
+      <div class="dropdown">
+        <button class="btn btn-light dropdown-toggle" style="margin-right:12px;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <%= current_all_casa_admin.email %>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <%= link_to "Edit Profile", edit_all_casa_admins_path, class: "dropdown-item" %>
+        </div>
+      </div>
+      <%= session_link %>
+    </div>
+  </nav>
+</header>

@@ -13,6 +13,7 @@ describe "casa_cases/edit" do
       render template: "casa_cases/edit"
 
       expect(rendered).not_to include("Assign a New Volunteer")
+      expect(rendered).not_to include(CGI.escapeHTML("Youth's Birth Month & Year"))
     end
   end
 
@@ -26,6 +27,7 @@ describe "casa_cases/edit" do
       render template: "casa_cases/edit"
 
       expect(rendered).to include("Assign a New Volunteer")
+      expect(rendered).to include(CGI.escapeHTML("Youth's Birth Month & Year"))
     end
   end
 end

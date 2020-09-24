@@ -12,7 +12,7 @@ class VolunteersController < ApplicationController
     @volunteer = Volunteer.new(create_volunteer_params)
 
     if @volunteer.save
-      VolunteerMailer.account_setup(@volunteer).deliver
+      @volunteer.invite!
       redirect_to root_path
     else
       render :new

@@ -4,6 +4,25 @@ footer {
   background-color: $primary;
   color: #fff;
 
+  .default-footer {
+    a.rfglink {
+      color: #fff;
+    }
+
+    .rfglogo{
+      max-height: 3em;
+    }
+  }
+
+  .footer-logos{
+    .rfglink {
+
+      .rfglogo{
+        max-height: 6em;
+      }
+    }
+  }
+
   ul {
     list-style: none;
     padding-left: 0;

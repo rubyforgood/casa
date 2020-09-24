@@ -1,4 +1,7 @@
 class CasaAdmin < User
+  def deactivate
+    update(active: false)
+  end
 end
 
 # == Schema Information

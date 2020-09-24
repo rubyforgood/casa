@@ -23,6 +23,7 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :view
   config.include PunditHelper, type: :view
   config.include Warden::Test::Helpers
+  config.include Organizational, type: :helper
   config.include SessionHelper, type: :view
   config.include SessionHelper, type: :request
   config.include Organizational, type: :view
