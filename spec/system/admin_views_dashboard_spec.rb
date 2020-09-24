@@ -178,50 +178,6 @@ RSpec.describe "admin views dashboard", type: :system do
     expect(page).not_to have_text("Last Contact Made")
   end
 
-  it "can go to the supervisor edit page from the supervisor list" do
-    supervisor_name = "Leslie Knope"
-    create(:supervisor, display_name: supervisor_name, casa_org: organization)
-    sign_in admin
-
-    visit root_path
-
-    expect(page).to have_text(supervisor_name)
-
-    within "#supervisors" do
-      click_on "Edit"
-    end
-
-    expect(page).to have_text("Editing Supervisor")
-  end
-
-  it "can go to the supervisor edit page from the supervisor's name" do
-    supervisor_name = "Leslie Knope"
-    create(:supervisor, display_name: supervisor_name, casa_org: organization)
-    sign_in admin
-
-    visit root_path
-
-    within "#supervisors" do
-      click_on supervisor_name
-    end
-
-    expect(page).to have_text("Editing Supervisor")
-  end
-
-  it "can go to the supervisor edit page and see red message
-      when there are no active volunteers" do
-    create(:supervisor, casa_org: organization)
-    sign_in admin
-
-    visit root_path
-
-    within "#supervisors" do
-      click_on "Edit"
-    end
-
-    expect(page).to have_text("There are no active, unassigned volunteers available")
-  end
-
   it "displays other admins within the same CASA organization" do
     admin2 = create(:casa_admin, email: "Jon@org.com", casa_org: organization)
     admin3 = create(:casa_admin, email: "Bon@org.com", casa_org: organization)
