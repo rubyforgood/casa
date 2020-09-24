@@ -57,4 +57,24 @@ RSpec.describe "Supervisor Policy" do
       end
     end
   end
+
+  permissions :create? do
+    it "allows admins to create supervisors" do
+      user = create :casa_admin
+
+      expect(Pundit.policy(user, Supervisor).create?).to be true
+    end
+
+    it "does not allow supervisors to create supervisors" do
+      user = create :supervisor
+
+      expect(Pundit.policy(user, Supervisor).create?).to be false
+    end
+
+    it "does not allow volunteers to create supervisors" do
+      user = create :supervisor
+
+      expect(Pundit.policy(user, Supervisor).create?).to be false
+    end
+  end
 end
