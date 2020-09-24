@@ -9,9 +9,12 @@ RSpec.describe "volunteer views dashboard", type: :system do
     case_contact_for_other_case = create(:case_contact, miles_driven: 777)
 
     sign_in volunteer
-    visit root_path
+    visit "/casa_cases"
     expect(page).to have_text(case_assignment.casa_case.case_number)
-    expect(page).to have_text(case_contact.miles_driven)
-    expect(page).not_to have_text(case_contact_for_other_case.miles_driven)
+
+    # Uncomment once https://github.com/rubyforgood/casa/pull/857 is merged
+    # visit "/case_contacts"
+    # expect(page).to have_text(case_contact.miles_driven)
+    # expect(page).not_to have_text(case_contact_for_other_case.miles_driven)
   end
 end
