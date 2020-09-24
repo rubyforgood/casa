@@ -23,6 +23,42 @@ RSpec.describe "/imports", type: :request do
       expect(response).to be_successful
     end
 
+    it "validates volunteers CSV header" do
+      sign_in casa_admin
+
+      post imports_url, params: {
+        import_type: "volunteer",
+        file: fixture_file_upload(supervisor_file)
+      }
+      
+      expect(request.session[:import_error]).to include("Expected", VolunteerImporter::IMPORT_HEADER.to_s)
+      expect(response).to redirect_to(imports_url(import_type: "volunteer"))
+    end
+
+    it "validates supervisors CSV header" do
+      sign_in casa_admin
+
+      post imports_url, params: {
+        import_type: "supervisor",
+        file: fixture_file_upload(volunteer_file)
+      }
+      
+      expect(request.session[:import_error]).to include("Expected", SupervisorImporter::IMPORT_HEADER.to_s)
+      expect(response).to redirect_to(imports_url(import_type: "supervisor"))
+    end
+
+    it "validates cases CSV header" do
+      sign_in casa_admin
+
+      post imports_url, params: {
+        import_type: "casa_case",
+        file: fixture_file_upload(supervisor_file)
+      }
+      
+      expect(request.session[:import_error]).to include("Expected", CaseImporter::IMPORT_HEADER.to_s)
+      expect(response).to redirect_to(imports_url(import_type: "casa_case"))
+    end
+
     it "creates volunteers in volunteer CSV imports" do
       sign_in casa_admin
 
