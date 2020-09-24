@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "admin views dashboard", type: :system do
+RSpec.describe "admin views Volunteers page", type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
 
