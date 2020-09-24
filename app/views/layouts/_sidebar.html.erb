@@ -13,6 +13,7 @@
   <div class="sidebar-container">
     <div class="sidebar-menu">
       <div class="list-group list-group-flush">
+        <%= menu_item(label: "Supervisors", path: supervisors_path, visible: policy(Supervisor).index?) %>
         <%= menu_item(label: "Cases", path: casa_cases_path, visible: policy(Supervisor).index?) %>
         <%= menu_item(label: "My Cases", path: casa_cases_path, visible: policy(Volunteer).index?) %>
       </div>
