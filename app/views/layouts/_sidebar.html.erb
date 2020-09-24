@@ -12,6 +12,7 @@
           <%= link_to "My Cases", casa_cases_path, class: "list-group-item #{active_class(casa_cases_path)}" %>
         <% end %>
         <%= menu_item(label: "Supervisors", path: supervisors_path, visible: policy(Supervisor).index?) %>
+        <%= link_to "My Cases", casa_cases_path, class: "list-group-item #{active_class(casa_cases_path)}" %>
       </div>
     </div>
     <div class="sidebar-footer">
