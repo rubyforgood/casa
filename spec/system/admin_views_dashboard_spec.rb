@@ -10,10 +10,16 @@ RSpec.describe "admin views dashboard", type: :system do
   context "in the footer" do
     let(:organization) { create(:casa_org) }
 
-    it "displays rfg logo" do
+    xit "displays rfg logo, company logo, display name, address, footer, links" do
       create(:volunteer, email: "casa@example.com", casa_org: organization)
       sign_in admin
       visit root_path
+
+      expect(page).to have_text "CASA"
+      expect(page).to have_text "123 Main St"
+      expect(page).to have_link "First Link", href: "www.example.com"
+      expect(page).to have_link "Second Link", href: "www.foobar.com"
+      expect(page).to have_text "Volunteer"
       expect(page).to have_css "footer .rfglink"
     end
   end

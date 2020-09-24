@@ -1,23 +1,24 @@
 require "rails_helper"
 
-describe ApplicationHelper do
-  describe "#casa_org" do
-    let(:casa_org_display_name) { "CASA / Prince George's County, MD" }
-    before do
-      assign(:casa_org, build_stubbed(:casa_org, display_name: casa_org_display_name))
-    end
+describe ApplicationHelper, type: :helper do
+  describe "#page_header" do
+     it "links to the user dashboard if user logged in" do
+      current_organization = build_stubbed(:casa_org)
+      user = build_stubbed(:user, casa_org: current_organization)
 
-    it "links to the user dashboard if user logged in" do
       allow(helper).to receive(:user_signed_in?).and_return(true)
-      dashboard_link = helper.link_to(casa_org_display_name, root_path)
+      allow(helper).to receive(:current_user).and_return(user)
+      allow(helper).to receive(:current_organization).and_return(current_organization)
 
-      expect(helper.casa_org).to eq(dashboard_link)
+      dashboard_link = helper.link_to(current_organization.display_name, root_path)
+
+      expect(helper.page_header).to eq(dashboard_link)
     end
 
     it "displays the header when user is not logged in" do
       allow(helper).to receive(:user_signed_in?).and_return(false)
 
-      expect(helper.casa_org).to eq(casa_org_display_name)
+      expect(helper.page_header).to eq(helper.default_page_header)
     end
   end
 

@@ -15,6 +15,23 @@
         <%= form.text_field :display_name, class: "form-control" %>
       </div>
 
+      <% if casa_admin.persisted? %>
+        <div class="field form-group">
+          <% if casa_admin.active? %>
+            Admin is <span class="badge badge-success text-uppercase display-1">Active</span>
+            <%= link_to "Deactivate",
+              deactivate_casa_admin_path(casa_admin),
+              method: :patch,
+              class: "btn btn-outline-danger",
+              data: { confirm: t("forms.casa_admin.mark_inactive_warning") } %>
+          <% else %>
+            <div class="alert alert-danger">
+              Admin was deactivated on: <%= casa_admin.updated_at.strftime("%m-%d-%Y") %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
       <div class="actions">
         <%= form.submit "Submit", class: "btn btn-primary" %>
         <%= return_to_dashboard_button %>
