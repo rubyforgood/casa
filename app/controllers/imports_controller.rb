@@ -20,7 +20,13 @@ class ImportsController < ApplicationController
       session[:exported_rows] = import[:exported_rows]
     end
 
-    session[:import_error] = message
+    if import[:type] == :error
+      session[:import_error] = message
+    # Only use flash for success messages. Otherwise may cause CookieOverflow
+    else
+      flash[:success] = message
+    end
+
     redirect_to imports_path(import_type: params[:import_type])
   end
 
