@@ -37,7 +37,7 @@ class CasaCasePolicy
   def permitted_attributes
     case @user
     when CasaAdmin
-      %i[case_number transition_aged_youth]
+      %i[case_number transition_aged_youth birth_month_year_youth]
     else
       %i[transition_aged_youth]
     end

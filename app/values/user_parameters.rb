@@ -13,6 +13,11 @@ class UserParameters < SimpleDelegator
     super(params)
   end
 
+  def with_organization(organization)
+    params[:casa_org_id] = organization.id
+    self
+  end
+
   def with_password(password)
     params[:password] = password
     self
@@ -31,6 +36,15 @@ class UserParameters < SimpleDelegator
   def without_active
     params.delete(:active)
     self
+  end
+
+  def with_only(*keys)
+    params.slice!(*keys)
+    self
+  end
+
+  def without(*keys)
+    params.reject! { |key| keys.include?(key) }
   end
 
   private

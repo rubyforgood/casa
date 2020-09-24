@@ -33,7 +33,7 @@ class CaseImporter < FileImporter
   private
 
   def create_casa_case(row_data)
-    casa_case_params = row_data.to_hash.slice(:case_number, :transition_aged_youth)
+    casa_case_params = row_data.to_hash.slice(:case_number, :transition_aged_youth, :birth_month_year_youth)
     casa_case = CasaCase.find_by(casa_case_params)
     return { casa_case: casa_case, existing: true } if casa_case.present?
 
