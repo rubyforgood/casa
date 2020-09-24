@@ -75,4 +75,16 @@ private
     emails = comma_separated_emails.split(",").map!(&:strip)
     clazz.where(email: [emails]).distinct.order(:email).to_a
   end
+
+  def create_user_record(user_class, row_data)
+    user_params = row_data.to_hash.slice(:display_name, :email)
+    user = user_class.find_by(user_params)
+    return { user: user, existing: true } if user.present?
+
+    user = user_class.new(user_params)
+    user.casa_org_id, user.password = org_id, SecureRandom.hex(10)
+    user.save!
+    user.invite!
+    { user: user, existing: false }
+  end
 end

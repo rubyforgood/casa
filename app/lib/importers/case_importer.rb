@@ -1,6 +1,10 @@
 class CaseImporter < FileImporter
   def self.import_cases(csv_filespec, org_id)
-    new(csv_filespec, org_id, "casa_cases", ["case_number", "transition_aged_youth", "case_assignment"]).import_cases
+    new(csv_filespec, org_id).import_cases
+  end
+
+  def initialize(csv_filespec, org_id)
+    super(csv_filespec, org_id, "casa_cases", ["case_number", "transition_aged_youth", "case_assignment", "birth_month_year_youth"])
   end
 
   def import_cases
