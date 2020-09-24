@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "volunteer views dashboard", type: :system do
+RSpec.describe "Volunteer logs in and clicks 'Case Contacts' ", type: :system do
   it "sees all case contacts for their case" do
     volunteer = create(:volunteer)
     casa_case = create(:casa_case, casa_org: volunteer.casa_org)
@@ -10,6 +10,8 @@ RSpec.describe "volunteer views dashboard", type: :system do
 
     sign_in volunteer
     visit root_path
+    click_on "Case Contacts"
+
     expect(page).to have_text(case_assignment.casa_case.case_number)
     expect(page).to have_text(case_contact.miles_driven)
     expect(page).not_to have_text(case_contact_for_other_case.miles_driven)

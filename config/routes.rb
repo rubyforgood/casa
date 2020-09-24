@@ -26,7 +26,7 @@ Rails.application.routes.draw do
       patch :deactivate
     end
   end
-  resources :case_contacts, except: %i[index show]
+  resources :case_contacts, except: %i[show]
   resources :reports, only: %i[index]
   resources :imports, only: %i[index create]
   resources :case_contact_reports, only: %i[index]
