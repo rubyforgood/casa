@@ -1,4 +1,5 @@
 class CasaAdmin < User
+  default_scope { order(email: :asc) }
 end
 
 # == Schema Information

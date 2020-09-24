@@ -4,7 +4,7 @@ class CasaAdminsController < ApplicationController
   before_action :require_organization!
 
   def index
-    @admins = policy_scope(current_organization.casa_admins).sort_by(&:email)
+    @admins = policy_scope(current_organization.casa_admins)
   end
 
   def edit; end
