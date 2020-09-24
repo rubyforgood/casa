@@ -1,29 +1,31 @@
 <%= form_with(model: casa_case, local: true) do |form| %>
-  <% if casa_case.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(casa_case.errors.count, "error") %> prohibited this casa_case from being saved:</h2>
+  <%= render "/shared/error_messages", resource: casa_case %>
 
-      <ul>
-        <% casa_case.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+  <div class="field form-group">
+    <% if !casa_case.persisted? || Pundit.policy(current_user, casa_case).update_case_number? %>
+      <%= form.label :case_number %>
+      <%= form.text_field :case_number, class: "form-control" %>
+    <% else %>
+      <label for="casa_case_case_number">Case number: <%= casa_case.case_number %></label>
+    <% end %>
+  </div>
+
+  <% if current_user.casa_admin? %>
+    <div class="field form-group">
+      <%= form.label :birth_month_year_youth, "Youth's Birth Month & Year" %>
+      <br>
+      <span class="datetime-year-month"> <%= form.date_select :birth_month_year_youth, {order: [:month, :year], start_year: Date.current.year, end_year: 1989, prompt: {month: 'Month', year: 'Year'}, discard_day: true }, class: "select2 date-input"%></span>
     </div>
   <% end %>
 
   <div class="field form-group">
-    <%= form.label :case_number %>
-    <%= form.text_field :case_number, class: "form-control" %>
+    <%= form.label :transition_aged_youth %>
+    <%= form.check_box :transition_aged_youth %>
   </div>
 
-  <div class="field form-group">
-    <%= form.label :transition_aged_youth, class: "form-check-label" %>
-    <%= form.check_box :transition_aged_youth, class: "form-check-input" %>
-  </div>
-
-  <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
+  <br>
 
   <div class="actions">
-    <%= form.submit casa_case.persisted? ? 'Update CASA Case' : 'Create CASA Case' %>
+    <%= form.submit casa_case.persisted? ? 'Update CASA Case' : 'Create CASA Case', class: "btn btn-primary" %>
   </div>
 <% end %>
