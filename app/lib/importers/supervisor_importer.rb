@@ -1,4 +1,6 @@
 class SupervisorImporter < FileImporter
+  IMPORT_HEADER = ["email", "display_name", "supervisor_volunteers"]
+  
   def self.import_supervisors(csv_filespec, org_id)
     new(csv_filespec, org_id).import_supervisors
   end

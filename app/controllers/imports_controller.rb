@@ -49,9 +49,9 @@ class ImportsController < ApplicationController
 
   def header
     {
-      "volunteer" => ["display_name", "email"],
-      "supervisor" => ["email", "display_name", "supervisor_volunteers"],
-      "casa_case" => ["case_number", "transition_aged_youth", "case_assignment", "birth_month_year_youth"]
+      "volunteer" => VolunteerImporter::IMPORT_HEADER,
+      "supervisor" => SupervisorImporter::IMPORT_HEADER,
+      "casa_case" => CaseImporter::IMPORT_HEADER,
     }
   end
 

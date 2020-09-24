@@ -1,4 +1,6 @@
 class CaseImporter < FileImporter
+  IMPORT_HEADER = ["case_number", "transition_aged_youth", "case_assignment", "birth_month_year_youth"]
+
   def self.import_cases(csv_filespec, org_id)
     new(csv_filespec, org_id).import_cases
   end
