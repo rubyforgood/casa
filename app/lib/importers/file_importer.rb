@@ -1,6 +1,9 @@
 class FileImporter
   require "csv"
 
+  ERR_NOT_ALL_IMPORTED = "Not all rows were imported."
+  ERR_NO_ROWS = "File did not contain any rows."
+
   attr_reader :csv_filespec, :org_id, :type_label, :header_names, :number_imported, :failed_imports
 
   def initialize(csv_filespec, org_id, type_label, header_names)
@@ -14,7 +17,10 @@ class FileImporter
 
   def import
     @number_imported = 0
+    @file_no_rows = true
+
     CSV.foreach(csv_filespec || [], headers: true, header_converters: :symbol) do |row|
+      @file_no_rows = false
       yield(row)
       @number_imported += 1
     rescue StandardError => error
@@ -42,13 +48,14 @@ private
   end
 
   def success?
-    !failed?
+    !failed?  && !@file_no_rows
   end
 
   def message
     messages = []
     messages << "You successfully imported #{@number_imported} #{@type_label}." if @number_imported > 0
-    messages << "Not all rows were imported." if failed?
+    messages << ERR_NO_ROWS if @file_no_rows
+    messages << ERR_NOT_ALL_IMPORTED if failed?
     messages.join(" ")
   end
 
