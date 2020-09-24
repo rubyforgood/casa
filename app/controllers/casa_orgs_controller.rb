@@ -1,11 +1,10 @@
 class CasaOrgsController < ApplicationController
   before_action :set_casa_org, only: %i[edit update]
+  before_action :set_contact_type_data, only: %i[edit update]
   before_action :must_be_admin
   before_action :require_organization!
 
   def edit
-    @contact_type_groups = @casa_org.contact_type_groups
-    @contact_types = ContactType.for_organization(@casa_org)
   end
 
   def update
@@ -30,5 +29,10 @@ class CasaOrgsController < ApplicationController
 
   def casa_org_update_params
     params.require(:casa_org).permit(:name, :display_name, :address)
+  end
+
+  def set_contact_type_data
+    @contact_type_groups = @casa_org.contact_type_groups
+    @contact_types = ContactType.for_organization(@casa_org)
   end
 end
