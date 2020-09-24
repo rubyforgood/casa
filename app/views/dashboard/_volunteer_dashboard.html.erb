@@ -1,33 +1,3 @@
-<div class="row">
-  <div class="col-sm-12 dashboard-table-header">
-    <h1>Your <%= "Case".pluralize(@casa_cases.count) %></h1>
-  </div>
-</div>
-<div class="card card-container">
-  <div class="card-body">
-    <table class="table case-list">
-      <thead>
-      <tr>
-        <th>Case Number</th>
-        <th>Transition Aged Youth</th>
-        <th>Actions</th>
-        <th></th>
-      </tr>
-      </thead>
-      <tbody >
-        <% @casa_cases.each do |casa_case| %>
-          <tr>
-            <td><%= casa_case.cas
-            e_number %></td>
-            <td><%= casa_case.decorate.transition_aged_youth_icon %></td>
-            <td><%= link_to 'Edit', edit_casa_case_path(casa_case) %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-</div>
-
 <br>
 <div class="row">
   <div class="col-sm-12 dashboard-table-header">
