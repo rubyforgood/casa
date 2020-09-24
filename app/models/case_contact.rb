@@ -46,22 +46,6 @@ class CaseContact < ApplicationRecord
       .where(contact_types: { name: contact_type }) if contact_type.present?
   }
 
-  CONTACT_TYPES = %w[
-    attorney
-    bio_parent
-    court
-    dss_worker
-    foster_parent
-    medical_professional
-    other_family
-    other_support_worker
-    school
-    social_worker
-    supervisor
-    therapist
-    youth
-  ].freeze
-
   IN_PERSON = "in-person".freeze
   TEXT_EMAIL = "text/email".freeze
   VIDEO = "video".freeze
