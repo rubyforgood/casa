@@ -31,6 +31,7 @@ Rails.application.routes.draw do
   resources :imports, only: %i[index create]
   resources :case_contact_reports, only: %i[index]
   resources :casa_orgs, only: %i[edit update]
+  resources :contact_type_groups, only: %i[new create]
 
   resources :casa_admins, only: %i[edit update]
   resources :supervisors, only: %i[edit update new create]

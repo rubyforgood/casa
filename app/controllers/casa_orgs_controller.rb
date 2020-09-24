@@ -3,6 +3,7 @@ class CasaOrgsController < ApplicationController
   before_action :must_be_admin
 
   def edit
+    @contact_type_groups = @casa_org.contact_type_groups
   end
 
   def update

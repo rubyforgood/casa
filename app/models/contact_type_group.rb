@@ -1,6 +1,8 @@
 class ContactTypeGroup < ApplicationRecord
   belongs_to :casa_org
   has_many :contact_types
+
+  validates :name, presence: true
 end
 
 # == Schema Information
