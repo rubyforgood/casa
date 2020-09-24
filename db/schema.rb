@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_22_170308) do
+ActiveRecord::Schema.define(version: 2020_09_24_192310) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,15 @@ ActiveRecord::Schema.define(version: 2020_09_22_170308) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_all_casa_admins_on_email", unique: true
     t.index ["reset_password_token"], name: "index_all_casa_admins_on_reset_password_token", unique: true
+  end
+
+  create_table "casa_case_contact_types", force: :cascade do |t|
+    t.bigint "case_contact_id", null: false
+    t.bigint "casa_case_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["casa_case_id"], name: "index_casa_case_contact_types_on_casa_case_id"
+    t.index ["case_contact_id"], name: "index_casa_case_contact_types_on_case_contact_id"
   end
 
   create_table "casa_cases", force: :cascade do |t|
