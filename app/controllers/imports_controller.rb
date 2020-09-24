@@ -16,7 +16,8 @@ class ImportsController < ApplicationController
 
     # If there were failed imports
     if import[:exported_rows]
-      message << "<p class='mt-4'>" + link_to("Click here to download failed rows.", download_failed_imports_path) + "</p>"
+      message << "<p class='mt-4'>" + link_to("Click here to download failed rows.", download_failed_imports_path) + 
+        "</p>" + "<p>#{ERR_FAILED_IMPORT_NOTE}</p>"
       session[:exported_rows] = import[:exported_rows]
     end
 
@@ -38,6 +39,8 @@ class ImportsController < ApplicationController
 
   private
 
+  ERR_FAILED_IMPORT_NOTE = "Note: An additional 'error' column has been added to the file. " \
+    "Please note the failure reason and remove the column when resubmitting."
   ERR_FILE_NOT_ATTACHED = "You must attach a CSV file in order to import information!"
   ERR_FILE_NOT_FOUND = "CSV import file not found"
   ERR_FILE_EMPTY = "File can not be empty."
