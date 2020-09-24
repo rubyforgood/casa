@@ -7,8 +7,10 @@
   <div class="sidebar-container">
     <div class="sidebar-menu">
       <div class="list-group list-group-flush">
-        <a href="0" class="list-group-item active">Active Link Example</a>
-        <a href="0" class="list-group-item">Dummy Link</a>
+        <% if current_user.supervisor? %>
+          <%= link_to "Volunteers", volunteers_path, class: "list-group-item #{active_class(root_path)}" %>
+          <%= link_to "My Cases", casa_cases_path, class: "list-group-item #{active_class(casa_cases_path)}" %>
+        <% end %>
       </div>
     </div>
     <div class="sidebar-footer">

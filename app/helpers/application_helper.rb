@@ -19,6 +19,10 @@ module ApplicationHelper
     end
   end
 
+  def active_class(link_path)
+    current_page?(link_path) ? "active" : ""
+  end  
+
   def flash_class(level)
     case level
     when "notice" then "alert notice alert-info"
