@@ -3,20 +3,24 @@ class ImportsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :must_be_admin
-  before_action :check_empty_attachment, only: [:create]
 
   def index
     @import_type = params.fetch(:import_type, "volunteer")
+    @import_error = session[:import_error]
+    session[:import_error] = nil
   end
 
   def create
     import = import_from_csv(params[:import_type], params[:file], current_user.casa_org_id)
     message = import[:message]
+
+    # If there were failed imports
     if import[:exported_rows]
-      message << " " + link_to("Click here to download failed rows.", download_failed_imports_path)
+      message << "<p class='mt-4'>" + link_to("Click here to download failed rows.", download_failed_imports_path) + "</p>"
       session[:exported_rows] = import[:exported_rows]
     end
-    flash[import[:type]] = import[:message]
+
+    session[:import_error] = message
     redirect_to imports_path(import_type: params[:import_type])
   end
 
@@ -28,10 +32,28 @@ class ImportsController < ApplicationController
 
   private
 
+  ERR_FILE_NOT_ATTACHED = "You must attach a CSV file in order to import information!"
+  ERR_FILE_NOT_FOUND = "CSV import file not found"
+  ERR_FILE_EMPTY = "File can not be empty."
+  ERR_INVALID_HEADER = "Looks like this CSV contains invalid formatting. " \
+    "Please download an example CSV for reference and try again."
+
+  def header
+    {
+      "volunteer" => ["display_name", "email"],
+      "supervisor" => ["email", "display_name", "supervisor_volunteers"],
+      "casa_case" => ["case_number", "transition_aged_youth", "case_assignment", "birth_month_year_youth"]
+    }
+  end
+
+  def header_valid?(file_header, import_type)
+    file_header == header[import_type]
+  end
+
   def import_from_csv(import_type, file, org_id)
-    unless File.file?(file)
-      return {type: :error, message: "CSV import file not found: #{file}"}
-    end
+    validated_file = validate_file(file, import_type)
+
+    return validated_file unless validated_file.nil?
 
     case import_type
     when "volunteer"
@@ -46,9 +68,31 @@ class ImportsController < ApplicationController
     end
   end
 
-  def check_empty_attachment
-    return unless params[:file].blank?
-    flash[:error] = "You must attach a csv file in order to import information!"
-    redirect_to imports_path(import_type: params[:import_type])
+  def validate_file(file, import_type)
+    # Validate that file is attached
+    if file.blank?
+      return {type: :error, message: ERR_FILE_NOT_ATTACHED}
+    end
+
+    # Validate that file exists
+    unless File.file?(file)
+      return {type: :error, message: ERR_FILE_NOT_FOUND + ": #{file}"}
+    end
+
+    # Validate that the file is not empty
+    if File.zero?(file)
+      return {type: :error, message: ERR_FILE_EMPTY}
+    end
+
+    # Validate header
+    file_header = File.open(file, "r:bom|utf-8", &:readline).squish.split(",")
+
+    unless header_valid?(file_header, import_type)
+      message = "#{ERR_INVALID_HEADER}<p class='mt-4'>" \
+        "<b>Expected Header</b>: #{header[import_type].to_s}.</p>" \
+        "<p><b>Received Header</b>: #{file_header.to_s}</p>"
+        
+      return {type: :error, message: message}
+    end
   end
 end
