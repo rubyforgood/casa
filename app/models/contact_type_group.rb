@@ -3,6 +3,8 @@ class ContactTypeGroup < ApplicationRecord
   has_many :contact_types
 
   validates :name, presence: true
+
+  scope :for_organization, ->(org) { where(casa_org: org) }
 end
 
 # == Schema Information

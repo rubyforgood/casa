@@ -5,6 +5,7 @@ class CasaOrgsController < ApplicationController
 
   def edit
     @contact_type_groups = @casa_org.contact_type_groups
+    @contact_types = ContactType.for_organization(@casa_org)
   end
 
   def update
