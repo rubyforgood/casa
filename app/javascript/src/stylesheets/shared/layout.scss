@@ -1,6 +1,5 @@
 body {
   background-color: #F4F7FA;
-  // min-height: 100vh;
   min-width: 320px;
 }
 
@@ -16,7 +15,7 @@ label {
 }
 
 .fa-car {
-  color: #00447C;
+  color: $primary;
 }
 
 .card.card-container {

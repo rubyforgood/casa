@@ -20,8 +20,10 @@
     <span class="mobile-label">Miles Driven</span>
     <%= contact.decorate.miles_traveled %>
     <% unless contact.decorate.miles_traveled.blank? %>
-      <i class="fa fa-car" aria-hidden="true"></i></td><%= " "%>
+      <%= " "%>
+      <i class="fa fa-car" aria-hidden="true"></i>
     <% end %>
+  </td>
   <td>
     <span class="mobile-label">Want Reimbursement?</span>
     <%= contact.decorate.reimbursement %>
