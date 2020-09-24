@@ -12,7 +12,7 @@ describe ApplicationHelper, type: :helper do
 
       dashboard_link = helper.link_to(current_organization.display_name, root_path)
 
-      expect(helper.casa_org).to eq(dashboard_link)
+      expect(helper.page_header).to eq(dashboard_link)
     end
 
     it "displays the header when user is not logged in" do

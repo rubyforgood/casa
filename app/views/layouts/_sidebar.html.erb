@@ -1,8 +1,14 @@
 <div id="sidebar-wrapper">
   <div class="sidebar-heading">
-    <%= image_pack_tag(@casa_org.logo_url,
-        alt: @casa_org.logo_alt_text || "CASA Logo",
-        class: "d-inline-block align-text-bottom") if @casa_org.logo_url %>
+    <% if all_casa_admin_signed_in? %>
+      <%= image_pack_tag("media/src/images/default-logo.png",
+          alt: "CASA Logo",
+          class: "d-inline-block align-text-bottom") %>
+    <% else %>
+      <%= image_pack_tag(current_organization.logo_url,
+          alt: current_organization.logo_alt_text || "CASA Logo",
+          class: "d-inline-block align-text-bottom") if current_organization&.logo_url %>
+    <% end %>
   </div>
   <div class="sidebar-container">
     <div class="sidebar-menu">
@@ -14,7 +20,7 @@
       <div class="list-group list-group-flush account-details">
         <li class="list-group-item">
           <span class="label">Location</span>
-          <span class="value"><%= casa_org %></span>
+          <span class="value"><%= page_header %></span>
         </li>
         <li class="list-group-item">
           <span class="label">Role</span>
