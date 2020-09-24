@@ -13,6 +13,7 @@ describe "case_contacts/edit" do
     assign :casa_cases, [case_contact.casa_case]
     assign :selected_cases, [case_contact.casa_case]
     assign :contact_types, [contact_type]
+    assign :selected_contact_types, []
 
     render template: "case_contacts/edit"
     expect(rendered).to include(contact_type.name)
@@ -26,6 +27,7 @@ describe "case_contacts/edit" do
     assign :casa_cases, [case_contact.casa_case]
     assign :selected_cases, [case_contact.casa_case]
     assign :contact_types, [contact_type]
+    assign :selected_contact_types, []
 
     render template: "case_contacts/edit"
     expect(rendered).to include(case_contact.occurred_at.strftime("%Y-%m-%d"))
