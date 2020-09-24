@@ -18,9 +18,5 @@ FactoryBot.define do
       miles_driven { 456 }
       want_driving_reimbursement { true }
     end
-
-    trait :in_person_contact do
-      db_contact_type { create(:contact_type, name: "In Person") }
-    end
   end
 end
