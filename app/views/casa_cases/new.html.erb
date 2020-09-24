@@ -1,9 +1,8 @@
+<%= link_to "Back", :back %>
 <h1>New CASA Case</h1>
 
-<br>
-
-<div class="row">
-  <div class="col-sm-6">
+<div class="card card-container">
+  <div class="card-body">
     <%= form_with(model: @casa_case, local: true) do |form| %>
       <%= render "/shared/error_messages", resource: @casa_case %>
 
@@ -26,8 +25,6 @@
       </div>
 
       <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
-
-      <br>
 
       <div class="actions">
         <%= form.submit "Create CASA Case", class: "btn btn-primary" %>

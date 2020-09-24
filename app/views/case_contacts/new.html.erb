@@ -1,11 +1,9 @@
+<%= link_to "Back", :back %>
+
 <h1>New Case Contact</h1>
-<br>
-<div class="row">
-  <div class="col-sm-12">
+
+<div class="card card-container">
+  <div class="card-body">
     <%= render 'form', case_contact: @case_contact, casa_cases: @casa_cases %>
   </div>
-</div>
-<br>
-<div class="row">
-  <%= link_to 'Back', :back %>
 </div>

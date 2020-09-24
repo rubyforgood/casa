@@ -1,8 +1,8 @@
-<%= link_to "Back", root_path %>
+<%= link_to "Back", :back %>
 <h1>Create a new CASA Organization</h1>
 
-<div class="row">
-  <div class="col-md-6">
+<div class="card card-container">
+  <div class="card-body">
     <%= form_with model: selected_organization, url: all_casa_admins_casa_orgs_path, method: :post, local: true do |form| %>
       <%= render "/shared/error_messages", resource: selected_organization %>
 

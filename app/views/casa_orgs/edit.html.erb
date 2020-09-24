@@ -1,11 +1,8 @@
-<%= link_to 'Back', root_path %>
-
+<%= link_to "Back", :back %>
 <h1>Editing CASA Organization</h1>
 
-<br>
-
-<div class="row">
-  <div class="col-sm-6">
+<div class="card card-container">
+  <div class="card-body">
     <%= form_with(model: current_organization, local: true) do |form| %>
       <%= render "/shared/error_messages", resource: current_organization %>
         <div class="field form-group">
@@ -30,5 +27,3 @@
     <% end %>
   </div>
 </div>
-
-<br>

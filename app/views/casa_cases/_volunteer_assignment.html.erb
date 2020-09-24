@@ -1,7 +1,9 @@
-<% if @casa_case.volunteers.present? %>
-  <br>
-  <div class="row">
-    <div class="col-sm-12">
+<h1 class="pt-5">Manage Volunteers</h1>
+
+<div class="card card-container">
+  <div class="card-body">
+    <% if @casa_case.volunteers.present? %>
+      <br>
       <h3>Assigned Volunteers</h3>
       <table class='table case-list'>
         <thead>
@@ -58,14 +60,10 @@
           <% end %>
         </tbody>
       </table>
-    </div>
-  </div>
-<% end %>
+    <% end %>
 
-<br>
+    <br>
 
-<div class="row">
-  <div class="col-sm-6">
     <h3>Assign a New Volunteer</h3>
 
     <%= form_for CaseAssignment.new, url: case_assignments_path(casa_case_id: @casa_case.id) do |form| %>

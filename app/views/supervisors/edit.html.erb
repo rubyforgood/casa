@@ -1,9 +1,8 @@
-<%= link_to 'Back', root_path %>
-
+<%= link_to "Back", :back %>
 <h1>Editing Supervisor</h1>
 
-<div class="row">
-  <div class="col-sm-6">
+<div class="card card-container">
+  <div class="card-body">
     <%= form_for @supervisor, as: :supervisor, url: supervisor_path(@supervisor) do |form| %>
       <% if @supervisor.errors.any? %>
         <div id="error_explanation">
@@ -44,10 +43,11 @@
   </div>
 </div>
 
-<% if @supervisor.volunteers.any? %>
-  <br>
-  <div class="row">
-    <div class="col-sm-12">
+<h1 class="pt-5">Manage Volunteers</h1>
+
+  <div class="card card-container">
+    <div class="card-body">
+    <% if @supervisor.volunteers.any? %>
       <h3>Assigned Volunteers</h3>
       <table class='table volunteer-list'>
         <thead>
@@ -77,13 +77,8 @@
           <% end %>
         </tbody>
       </table>
-    </div>
-  </div>
-<% end %>
-<br>
+    <% end %>
 
-<div class="row">
-  <div class="col-sm-6">
     <h3>Assign a Volunteer</h3>
 
     <%= form_for SupervisorVolunteer.new, url: supervisor_volunteers_path(supervisor_id: @supervisor.id) do |form| %>
