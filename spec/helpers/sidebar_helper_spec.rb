@@ -2,40 +2,65 @@ require "rails_helper"
 
 describe SidebarHelper do
   describe "#menu_item" do
-    it "renders sidebar menu item label correctly" do
-      path = "/supervisors"
+    it "does not render sidebar menu item when not visible" do
+      menu_item = helper.menu_item(label: "Supervisors", path: supervisors_path, visible: false)
 
-      menu_item = helper.menu_item(label: "Supervisors", path: path, visible: true)
+      expect(menu_item).to be nil
+    end
+
+    it "renders sidebar menu item label correctly" do
+      allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :index).and_return(true)
+
+      menu_item = helper.menu_item(label: "Supervisors", path: supervisors_path, visible: true)
 
       expect(menu_item).to match ">Supervisors</a>"
     end
 
-    it "renders sidebar menu item without active link class" do
-      path = "/supervisors"
+    describe "menu item active state" do
+      context "when current page does not match the menu item path" do
+        it "renders sidebar menu item as an inactive link" do
+          allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :index).and_return(false)
+          allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :edit).and_return(false)
+          allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :show).and_return(false)
 
-      allow(helper).to receive(:current_page?).with(path).and_return(false)
+          menu_item = helper.menu_item(label: "Supervisors", path: supervisors_path, visible: true)
 
-      menu_item = helper.menu_item(label: "Supervisors", path: path, visible: true)
+          expect(menu_item).to match "class=\"list-group-item \""
+        end
+      end
 
-      expect(menu_item).to match "class=\"list-group-item \""
-    end
+      context "when accessing an index route" do
+        it "renders sidebar menu item as an active link" do
+          allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :index).and_return(true)
 
-    it "renders sidebar menu item with active link class" do
-      path = "/supervisors"
+          menu_item = helper.menu_item(label: "Supervisors", path: supervisors_path, visible: true)
 
-      allow(helper).to receive(:current_page?).with(path).and_return(true)
+          expect(menu_item).to match "class=\"list-group-item active\""
+        end
+      end
 
-      menu_item = helper.menu_item(label: "Supervisors", path: path, visible: true)
+      context "when accessing an edit route" do
+        it "renders sidebar menu item as an active link" do
+          allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :index).and_return(false)
+          allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :edit).and_return(true)
 
-      expect(menu_item).to match "class=\"list-group-item active\""
-    end
+          menu_item = helper.menu_item(label: "Supervisors", path: supervisors_path, visible: true)
 
-    it "does not render sidebar menu item when not visible" do
-      path = "/supervisors"
+          expect(menu_item).to match "class=\"list-group-item active\""
+        end
+      end
 
-      menu_item = helper.menu_item(label: "Supervisors", path: path, visible: false)
+      context "when accessing a show route" do
+        it "renders sidebar menu item as an active link" do
+          allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :index).and_return(false)
+          allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :edit).and_return(false)
+          allow(helper).to receive(:current_page?).with(controller: "supervisors", action: :show).and_return(true)
 
-      expect(menu_item).to be nil
+          menu_item = helper.menu_item(label: "Supervisors", path: supervisors_path, visible: true)
+
+          expect(menu_item).to match "class=\"list-group-item active\""
+        end
+      end
     end
   end
 end
