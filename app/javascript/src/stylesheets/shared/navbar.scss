@@ -1,32 +1,21 @@
 .navbar {
-  color: white;
+  background: #00447c;
+  box-shadow: 0 0 4px 4px rgba(0,0,0,0.28);
+  display: none;
+  height: 72px;
+  justify-content: space-between;
+  padding: 16px;
+  width: 100%;
+  z-index: 3;
+}
 
-  .navbar-nav {
-    @media (max-width: 1000px) {
-      flex-direction: row;
-    }
+.mobile-icon {
+  top: -2px;
+  width: 40px;
+}
 
-    .dropdown-menu {
-      position: absolute;
-    }
-  }
-
-  .navbar-brand a {
-    color: white;
-
-    &:hover {
-      text-decoration: none;
-    }
-  }
-  strong {
-    font-size: 2rem;
-
-    @media (max-width: 1000px) {
-      font-size: 1.4rem;
-    }
-  }
-
-  a.btn {
-    white-space: pre;
+@media only screen and (max-width: 1024px) {
+  .navbar {
+    display: flex;
   }
 }

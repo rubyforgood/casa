@@ -1,16 +1,33 @@
 <tr>
   <td data-sort="<%= contact.occurred_at.strftime("%Y%m%d%H%M%s") %>"><%= contact.occurred_at.strftime('%B %e, %Y') %></td>
-  <td><%= contact.decorate.duration_minutes %></td>
-  <td><%= contact.decorate.contact_made %></td>
-  <td><%= contact.decorate.medium_type_icon %></td>
-  <td><%= contact.decorate.contact_types %></td>
-  <td><%= contact.decorate.miles_traveled %>
-
-  <% unless contact.decorate.miles_traveled.blank? %>
-    <i class="fa fa-car" aria-hidden="true"></i></td><%= " "%>
-  <% end %>
-  <td><%= contact.decorate.reimbursement %></td>
   <td>
+    <span class="mobile-label">Duration</span>
+    <%= contact.decorate.duration_minutes %>
+    </td>
+  <td>
+    <span class="mobile-label">Contact Made?</span>
+    <%= contact.decorate.contact_made %>
+    </td>
+  <td>
+    <span class="mobile-label">Contact Medium</span>
+    <%= contact.decorate.medium_type_icon %>
+    </td>
+  <td>
+    <span class="mobile-label">Type</span>
+    <%= contact.decorate.contact_types %>
+    </td>
+  <td>
+    <span class="mobile-label">Miles Driven</span>
+    <%= contact.decorate.miles_traveled %>
+    <% unless contact.decorate.miles_traveled.blank? %>
+      <i class="fa fa-car" aria-hidden="true"></i></td><%= " "%>
+    <% end %>
+  <td>
+    <span class="mobile-label">Want Reimbursement?</span>
+    <%= contact.decorate.reimbursement %>
+  </td>
+  <td>
+    <span class="mobile-label">Creator</span>
     <% if current_user&.casa_admin? || current_user&.supervisor? %>
       <% if contact.creator&.supervisor? %>
         <%= link_to "#{contact.creator&.display_name} ", edit_supervisor_path(current_user) %>

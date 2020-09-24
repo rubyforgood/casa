@@ -1,0 +1,9 @@
+<nav class="navbar">
+    <%#= image_pack_tag(@casa_org.logo_url,
+        alt: @casa_org.logo_alt_text || "CASA Logo",
+        class: "d-inline-block align-text-bottom") if @casa_org.logo_url %>
+    <%= image_pack_tag "media/src/images/icon-logo.png", sizes: "72x72", rel: "icon", type: "image/png", class: "mobile-icon" %>
+
+
+    <button id="toggle-sidebar-js" type="button" class="btn btn-outline-light">Menu</button>
+</nav>
