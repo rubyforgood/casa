@@ -4,7 +4,7 @@ RSpec.feature "When an admin creates a new admin", type: :system do
   before do
     admin = create(:casa_admin)
     sign_in admin
-    visit root_path
+    visit casa_admins_path
     click_on("New Admin")
   end
 
