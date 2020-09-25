@@ -3,6 +3,7 @@ class CasaOrg < ApplicationRecord
 
   has_many :users
   has_many :casa_cases
+  has_many :contact_type_groups
   has_one :casa_org_logo, dependent: :destroy
 
   delegate :url, :alt_text, :size, to: :casa_org_logo, prefix: :logo, allow_nil: true

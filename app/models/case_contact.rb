@@ -2,8 +2,6 @@ class CaseContact < ApplicationRecord
   attr_accessor :duration_hours
 
   validate :contact_made_chosen
-  validates :contact_types, presence: true
-  validate :contact_types_included
   validates :duration_minutes, numericality: {greater_than_or_equal_to: 15, message: "Minimum case contact duration should be 15 minutes."}
   validates :medium_type, presence: true
   validates :occurred_at, presence: true
@@ -18,6 +16,12 @@ class CaseContact < ApplicationRecord
   has_one :supervisor, through: :creator
 
   belongs_to :casa_case
+
+  has_many :case_contact_contact_type
+  # TODO: Rename this relation to `contact_types` when the column with the same name is droped
+  has_many :db_contact_types, through: :case_contact_contact_type, source: :contact_type
+
+  accepts_nested_attributes_for :case_contact_contact_type
 
   scope :supervisors, ->(supervisor_ids = nil) {
     joins(:supervisor_volunteer).where(supervisor_volunteers: {supervisor_id: supervisor_ids}) if supervisor_ids.present?
@@ -38,23 +42,9 @@ class CaseContact < ApplicationRecord
     where(want_driving_reimbursement: want_driving_reimbursement) if want_driving_reimbursement == true || want_driving_reimbursement == false
   }
   scope :contact_type, ->(contact_type = nil) {
-    where("? = ANY (contact_types)", contact_type) if contact_type.present?
+    joins(:db_contact_types)
+      .where("contact_types.name in (?)", contact_type) if contact_type.present?
   }
-  CONTACT_TYPES = %w[
-    attorney
-    bio_parent
-    court
-    dss_worker
-    foster_parent
-    medical_professional
-    other_family
-    other_support_worker
-    school
-    social_worker
-    supervisor
-    therapist
-    youth
-  ].freeze
 
   IN_PERSON = "in-person".freeze
   TEXT_EMAIL = "text/email".freeze
@@ -63,11 +53,10 @@ class CaseContact < ApplicationRecord
   LETTER = "letter".freeze
   CONTACT_MEDIUMS = [IN_PERSON, TEXT_EMAIL, VIDEO, VOICE_ONLY, LETTER].freeze
 
-  def contact_types_included
-    contact_types&.each do |contact_type|
-      unless CONTACT_TYPES.include? contact_type
-        errors.add(:contact_types, :invalid, message: "must have valid contact types")
-      end
+  def update_cleaning_contact_types(args)
+    transaction do
+      case_contact_contact_type.destroy_all
+      update(args)
     end
   end
 

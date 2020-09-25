@@ -2,6 +2,7 @@
 class CaseContactsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_case_contact, only: %i[edit update destroy]
+  before_action :set_contact_types, only: %i[new edit update create]
   before_action :require_organization!
 
   # GET /case_contacts
@@ -67,7 +68,7 @@ class CaseContactsController < ApplicationController
     @selected_cases = @casa_cases
 
     respond_to do |format|
-      if @case_contact.update(update_case_contact_params)
+      if @case_contact.update_cleaning_contact_types(update_case_contact_params)
         format.html { redirect_to casa_case_path(@case_contact.casa_case), notice: "Case contact was successfully updated." }
         format.json { render :show, status: :ok, location: @case_contact }
       else
@@ -93,6 +94,10 @@ class CaseContactsController < ApplicationController
 
   def set_case_contact
     @case_contact = authorize(current_organization.case_contacts.find(params[:id]))
+  end
+
+  def set_contact_types
+    @contact_types = ContactType.for_organization(current_organization)
   end
 
   def create_case_contact_params

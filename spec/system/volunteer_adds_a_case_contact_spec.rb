@@ -4,6 +4,7 @@ RSpec.describe "volunteer adds a case contact", type: :system do
   it "is successful" do
     volunteer = create(:volunteer, :with_casa_cases)
     volunteer_casa_case_one = volunteer.casa_cases.first
+    create_contact_types(volunteer_casa_case_one.casa_org)
 
     sign_in volunteer
 
@@ -29,14 +30,15 @@ RSpec.describe "volunteer adds a case contact", type: :system do
     }.to change(CaseContact, :count).by(1)
 
     expect(CaseContact.first.casa_case_id).to eq volunteer_casa_case_one.id
-    expect(CaseContact.first.contact_types).to include "school"
-    expect(CaseContact.first.contact_types).to include "therapist"
+    expect(CaseContact.first.db_contact_types.map(&:name)).to include "School"
+    expect(CaseContact.first.db_contact_types.map(&:name)).to include "Therapist"
     expect(CaseContact.first.duration_minutes).to eq 105
   end
 
   it "submits the form when no note was added" do
     volunteer = create(:volunteer, :with_casa_cases)
     volunteer_casa_case_one = volunteer.casa_cases.first
+    create_contact_types(volunteer_casa_case_one.casa_org)
 
     sign_in volunteer
 
@@ -65,6 +67,7 @@ RSpec.describe "volunteer adds a case contact", type: :system do
   it "submits the form when note is added and confirmed" do
     volunteer = create(:volunteer, :with_casa_cases)
     volunteer_casa_case_one = volunteer.casa_cases.first
+    create_contact_types(volunteer_casa_case_one.casa_org)
 
     sign_in volunteer
 
@@ -95,6 +98,7 @@ RSpec.describe "volunteer adds a case contact", type: :system do
   it "does not submit the form when note is added but not confirmed" do
     volunteer = create(:volunteer, :with_casa_cases)
     volunteer_casa_case_one = volunteer.casa_cases.first
+    create_contact_types(volunteer_casa_case_one.casa_org)
 
     sign_in volunteer
 
@@ -125,6 +129,7 @@ RSpec.describe "volunteer adds a case contact", type: :system do
       volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first
       future_date = 2.days.from_now
+      create_contact_types(volunteer_casa_case_one.casa_org)
 
       sign_in volunteer
 
@@ -170,6 +175,7 @@ RSpec.describe "volunteer adds a case contact", type: :system do
       volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first
       future_date = 2.days.from_now
+      create_contact_types(volunteer_casa_case_one.casa_org)
 
       sign_in volunteer
 
@@ -205,6 +211,16 @@ RSpec.describe "volunteer adds a case contact", type: :system do
       expect(page).to have_field("Miles driven", with: "30")
       expect(page).to have_select("Want driving reimbursement", selected: "Yes")
       expect(page).to have_field("Notes", with: "Hello world")
+    end
+  end
+
+private
+
+  def create_contact_types(org)
+    create(:contact_type_group, casa_org: org).tap do |group|
+      create(:contact_type, contact_type_group: group, name: "Attorney")
+      create(:contact_type, contact_type_group: group, name: "School")
+      create(:contact_type, contact_type_group: group, name: "Therapist")
     end
   end
 end
