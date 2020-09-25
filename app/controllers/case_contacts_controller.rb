@@ -79,16 +79,6 @@ class CaseContactsController < ApplicationController
     end
   end
 
-  def destroy
-    @case_contact.destroy
-    respond_to do |format|
-      format.html do
-        redirect_to case_contacts_url, notice: "Case contact was successfully destroyed."
-      end
-      format.json { head :no_content }
-    end
-  end
-
   private
 
   def set_case_contact
