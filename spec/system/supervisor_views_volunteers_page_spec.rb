@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "supervisor views dashboard", type: :system do
+RSpec.describe "supervisor views Volunteers page", type: :system do
   let(:organization) { create(:casa_org) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
 
@@ -10,7 +10,7 @@ RSpec.describe "supervisor views dashboard", type: :system do
 
     sign_in supervisor
 
-    visit root_path
+    visit volunteers_path
     expect(page).to have_selector(".volunteer-filters")
 
     # by default, only active users are shown, so result should be 4 here
@@ -30,7 +30,7 @@ RSpec.describe "supervisor views dashboard", type: :system do
   it "can show/hide columns on volunteers table" do
     sign_in supervisor
 
-    visit root_path
+    visit volunteers_path
     expect(page).to have_text("Pick displayed columns")
 
     click_on "Pick displayed columns"
