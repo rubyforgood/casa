@@ -19,7 +19,7 @@ class ContactTypesController < ApplicationController
     end
   end
 
-  def edit; end;
+  def edit; end
 
   def update
     if @contact_type.update(contact_type_params)
