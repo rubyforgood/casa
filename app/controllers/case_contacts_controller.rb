@@ -62,6 +62,7 @@ class CaseContactsController < ApplicationController
   def edit
     @casa_cases = [@case_contact.casa_case]
     @selected_cases = @casa_cases
+    @current_organization_groups = current_organization.contact_type_groups
   end
 
   # PATCH/PUT /case_contacts/1
