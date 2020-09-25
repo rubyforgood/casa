@@ -10,6 +10,11 @@ AllCasaAdmin.delete_all
 
 pg_casa = CasaOrg.create(name: "Prince George CASA")
 
+ContactTypeGroup.create(casa_org: pg_casa, name: "CASA").tap do |group|
+  ContactType.create(contact_type_group: group, name: "Youth")
+  ContactType.create(contact_type_group: group, name: "Supervisor")
+end
+
 # number of volunteer users and casa cases to generate
 VOLUNTEER_USER_COUNT = 100
 CASA_CASE_COUNT = 150
@@ -115,7 +120,7 @@ vols.map do |vol|
           duration_minutes:
               likely_durations.sample,
           occurred_at: occurred_at,
-          contact_types: CaseContact::CONTACT_TYPES.sample(3),
+          db_contact_types: ContactType.take(2),
           medium_type: CaseContact::CONTACT_MEDIUMS.sample,
           miles_driven: miles_driven,
           want_driving_reimbursement: want_driving_reimbursement,

@@ -18,12 +18,6 @@ RSpec.describe CaseContact, type: :model do
     expect(case_contact.miles_driven).to eq 0
   end
 
-  it "validates presence of contact types" do
-    case_contact = build(:case_contact, contact_types: nil)
-    expect(case_contact).to_not be_valid
-    expect(case_contact.errors[:contact_types]).to eq(["can't be blank"])
-  end
-
   it "validates presence of occurred_at" do
     case_contact = build(:case_contact, occurred_at: nil)
     expect(case_contact).to_not be_valid
@@ -40,12 +34,6 @@ RSpec.describe CaseContact, type: :model do
     case_contact = build(:case_contact, duration_minutes: 10)
     expect(case_contact).to_not be_valid
     expect(case_contact.errors[:duration_minutes]).to eq(["Minimum case contact duration should be 15 minutes."])
-  end
-
-  it "validates contact types are of allowed types" do
-    case_contact = build(:case_contact, contact_types: ["popcorn"])
-    expect(case_contact).to_not be_valid
-    expect(case_contact.errors[:contact_types]).to eq(["must have valid contact types"])
   end
 
   it "verifies occurred at is not in the future" do

@@ -25,6 +25,11 @@ pg_casa = CasaOrg.where(name: "Prince George CASA").first_or_create!(
   ]
 )
 
+ContactTypeGroup.create(casa_org: pg_casa, name: "CASA").tap do |group|
+  ContactType.create(contact_type_group: group, name: "Youth")
+  ContactType.create(contact_type_group: group, name: "Supervisor")
+end
+
 # number casa cases to generate
 CASA_CASE_COUNT = 2
 
@@ -96,7 +101,7 @@ CaseContact.first_or_create!(
   creator: volunteer,
   duration_minutes: 30,
   occurred_at: 2.months.ago,
-  contact_types: CaseContact::CONTACT_TYPES.sample(3),
+  db_contact_types: ContactType.take(2),
   medium_type: CaseContact::CONTACT_MEDIUMS.sample,
   miles_driven: 5,
   want_driving_reimbursement: false,
