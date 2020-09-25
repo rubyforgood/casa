@@ -1,9 +1,10 @@
 class ContactTypesController < ApplicationController
   before_action :must_be_admin
+  before_action :set_group_options, only: [:new, :edit]
+  before_action :set_contact_type, except: [:new, :create]
 
   def new
     @contact_type = ContactType.new
-    @group_options = ContactTypeGroup.for_organization(current_organization).collect { |group| [group.name, group.id] }
   end
 
   def create
@@ -23,6 +24,14 @@ class ContactTypesController < ApplicationController
   def update; end;
 
 private
+
+  def set_group_options
+    @group_options = ContactTypeGroup.for_organization(current_organization).collect { |group| [group.name, group.id] }
+  end
+
+  def set_contact_type
+    @contact_type = ContactType.find(params[:id])
+  end
 
   def contact_type_params
     params.require(:contact_type).permit(:name, :contact_type_group_id)

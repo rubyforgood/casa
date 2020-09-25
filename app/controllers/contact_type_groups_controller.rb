@@ -28,11 +28,11 @@ class ContactTypeGroupsController < ApplicationController
 
 private
 
-  def contact_type_group_params
-    params.require(:contact_type_group).permit(:name)
-  end
+    def contact_type_group_params
+      params.require(:contact_type_group).permit(:name)
+    end
 
-  def set_contact_type_group
-    @contact_type_group = ContactTypeGroup.find(params[:id])
-  end
+    def set_contact_type_group
+      @contact_type_group = ContactTypeGroup.find(params[:id])
+    end
 end
