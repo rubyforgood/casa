@@ -4,6 +4,7 @@ describe "layout/sidebar", type: :view do
   before do
     enable_pundit(view, user)
     allow(view).to receive(:current_user).and_return(user)
+    allow(view).to receive(:user_signed_in?).and_return(true)
     allow(view).to receive(:current_organization).and_return(user.casa_org)
     allow(view).to receive(:user_signed_in?).and_return(true)
 
