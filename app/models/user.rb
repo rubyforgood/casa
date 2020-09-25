@@ -79,43 +79,15 @@ class User < ApplicationRecord
   end
 
   def no_contact_for_two_weeks
-    no_contact_count = 0
-
-    # Supervisor is passed in
-    # Get ACTIVE volunteers that have ACTIVE supervisor assignments with at least one ACTIVE case
-    active_volunteers = volunteers
+    volunteers
       .includes(:case_assignments)
+      .joins("LEFT JOIN case_contacts cc on cc.creator_id = users.id AND cc.occurred_at > (CURRENT_DATE - INTERVAL '14 days')")
+      .having("SUM(CASE WHEN cc.contact_made IS NULL THEN 1 WHEN cc.contact_made = false THEN 1 ELSE 0 END) = COUNT(users.id)")
+      .group("users.id, supervisor_volunteers_users.id, case_assignments.id")
       .where(active: true)
       .where(supervisor_volunteers: {is_active: true})
       .where(case_assignments: {is_active: true})
-
-    # Iterate all considered volunteers
-    active_volunteers.each do |volunteer|
-      contacts_past_two_weeks = volunteer
-        .case_contacts
-        .where(occurred_at: 14.days.ago..Date.today)
-
-      # 1st condition: Volunteer has not created a contact AT ALL within the past 14 days
-      if contacts_past_two_weeks.size == 0
-        no_contact_count += 1
-        break
-      end
-
-      # 2nd condition: Volunteer has ONLY created contacts in which contact_made = false within the past 14 days
-      any_contact_made = false
-      contacts_past_two_weeks.each do |contact|
-        if contact.contact_made
-          any_contact_made = true
-          break
-        end
-      end
-
-      unless any_contact_made
-        no_contact_count += 1
-      end
-    end
-
-    no_contact_count
+      .length
   end
 
   def past_names
