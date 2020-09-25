@@ -68,7 +68,7 @@ class CaseContactsController < ApplicationController
     @selected_cases = @casa_cases
 
     respond_to do |format|
-      if @case_contact.update(update_case_contact_params)
+      if @case_contact.update_cleaning_contact_types(update_case_contact_params)
         format.html { redirect_to casa_case_path(@case_contact.casa_case), notice: "Case contact was successfully updated." }
         format.json { render :show, status: :ok, location: @case_contact }
       else
