@@ -73,6 +73,10 @@ class CasaCasePolicy
     is_in_same_org? && is_supervisor_or_casa_admin?
   end
 
+  def index?
+    user.casa_admin? || user.supervisor? || user.volunteer?
+  end
+
   private
 
   def is_in_same_org?
