@@ -46,7 +46,7 @@ Rails.application.routes.draw do
       patch :unassign
     end
   end
-  resources :volunteers, only: %i[new edit create update] do
+  resources :volunteers, except: %i[destroy] do
     member do
       patch :activate
       patch :deactivate
