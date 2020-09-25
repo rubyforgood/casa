@@ -32,7 +32,7 @@ RSpec.describe "admin views dashboard", type: :system do
     volunteer = create(:volunteer, email: "volun@tear.com", casa_org: organization)
 
     sign_in admin
-    visit root_path
+    visit casa_admins_path
 
     within "#admins" do
       expect(page).to have_content(admin2.email)

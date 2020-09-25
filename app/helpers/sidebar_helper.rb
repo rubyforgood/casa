@@ -14,4 +14,10 @@ module SidebarHelper
   rescue ActionController::UrlGenerationError
     ""
   end
+
+  def cases_index_title
+    return "My Cases" if current_user.volunteer?
+
+    "Cases"
+  end
 end
