@@ -1,6 +1,10 @@
 class CasaAdmin < User
   default_scope { order(email: :asc) }
 
+  def activate
+    update(active: true)
+  end
+
   def deactivate
     update(active: false)
   end

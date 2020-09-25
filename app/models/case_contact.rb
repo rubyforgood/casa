@@ -53,6 +53,13 @@ class CaseContact < ApplicationRecord
   LETTER = "letter".freeze
   CONTACT_MEDIUMS = [IN_PERSON, TEXT_EMAIL, VIDEO, VOICE_ONLY, LETTER].freeze
 
+  def update_cleaning_contact_types(args)
+    transaction do
+      case_contact_contact_type.destroy_all
+      update(args)
+    end
+  end
+
   def occurred_at_not_in_future
     return unless occurred_at && occurred_at >= Date.tomorrow
 

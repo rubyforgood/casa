@@ -123,11 +123,7 @@
 
         <div class='form-group'>
           <label for='case_assignment_casa_case_id'>Select a Case</label>
-          <select id="case_assignment_casa_case_id" name='case_assignment[casa_case_id]' class='form-control select2'>
-            <% CasaCase.available_for_volunteer(@volunteer).find_each do |casa_case| %>
-              <option value="<%= casa_case.id %>"><%= casa_case.case_number %></option>
-            <% end %>
-          </select>
+          <%= form.select :casa_case_id, grouped_options_for_assigning_case(@volunteer), {}, { class: "form-control select2" } %>
         </div>
 
         <%= form.submit 'Assign Case', class: 'btn btn-primary' %>

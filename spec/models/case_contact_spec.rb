@@ -76,4 +76,22 @@ RSpec.describe CaseContact, type: :model do
     expect(case_contact).to_not be_valid
     expect(case_contact.errors[:base]).to eq(["cannot edit past case contacts outside of quarter"])
   end
+
+  context "#update_cleaning_contact_types" do
+    it "cleans up contact types before saving" do
+      group = create(:contact_type_group)
+      type1 = create(:contact_type, contact_type_group: group)
+      type2 = create(:contact_type, contact_type_group: group)
+
+      case_contact = create(:case_contact, db_contact_types: [type1])
+
+      expect(case_contact.case_contact_contact_type.count).to eql 1
+      expect(case_contact.db_contact_types).to match_array([type1])
+
+      case_contact.update_cleaning_contact_types({case_contact_contact_type_attributes: [{ contact_type_id: type2.id }]})
+
+      expect(case_contact.case_contact_contact_type.count).to eql 1
+      expect(case_contact.db_contact_types.reload).to match_array([type2])
+    end
+  end
 end

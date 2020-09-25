@@ -1,6 +1,8 @@
 class ContactType < ApplicationRecord
   belongs_to :contact_type_group
 
+  validates :name, presence: true
+
   scope :for_organization, ->(org) {
     joins(:contact_type_group)
       .where(contact_type_groups: { casa_org: org })
