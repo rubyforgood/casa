@@ -1,9 +1,10 @@
 <%= errors_for(casa_admin) %>
 
+<%= link_to "Back", casa_admins_path %>
 <h1><%= title %></h1>
 
-<div class="row">
-  <div class="col-sm-6">
+<div class="card card-container">
+  <div class="card-body">
     <%= form_with(model: casa_admin, local: true) do |form| %>
       <div class="field form-group">
         <%= form.label :email %>

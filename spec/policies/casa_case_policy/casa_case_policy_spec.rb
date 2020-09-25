@@ -8,6 +8,7 @@ RSpec.describe CasaCasePolicy do
   let(:casa_admin) { create(:casa_admin, casa_org: organization) }
   let(:casa_case) { create(:casa_case, casa_org: organization) }
   let(:volunteer) { create(:volunteer, casa_org: organization) }
+  let(:supervisor) { create(:supervisor, casa_org: organization) }
   let(:casa_admin) { create(:casa_admin, casa_org: organization) }
 
   permissions :update_case_number? do
@@ -126,6 +127,20 @@ RSpec.describe CasaCasePolicy do
 
     it "does not allow volunteers" do
       expect(subject).not_to permit(volunteer)
+    end
+  end
+
+  permissions :index? do
+    it "allows casa_admins" do
+      expect(subject).to permit(casa_admin)
+    end
+
+    it "allows supervisor" do
+      expect(subject).to permit(supervisor)
+    end
+
+    it "allows supervisor" do
+      expect(subject).to permit(volunteer)
     end
   end
 end

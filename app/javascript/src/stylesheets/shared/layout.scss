@@ -1,12 +1,13 @@
 body {
-  background-color: #fff;
-  display: grid;
-  min-height: 100vh;
+  background-color: #F4F7FA;
   min-width: 320px;
 }
 
 .content {
-  padding: 3em 1em;
+  margin-left: 320px;
+  padding: 4%;
+  position: relative;
+  overflow: auto;
 }
 
 label {
@@ -14,5 +15,45 @@ label {
 }
 
 .fa-car {
-  color: #00447C
+  color: $primary;
+}
+
+.card.card-container {
+  box-shadow: 0 4px 12px 5px rgba(0,0,0,0.08);
+}
+
+@media only screen and (max-width: 1024px) {
+  .content {
+    padding: 3rem 0;
+    margin-left: 0;
+  }
+
+  .card-body {
+    padding: 0.5rem;
+  }
+  
+  table.table {
+    thead {
+      display: none;
+    }
+
+    tr {
+      display: table;
+      width: 100%;
+      border-bottom: 1px solid #efefef;
+      > * {
+        display: block;
+      }
+    }
+
+    th, td {
+      border-top: none;
+      font-size: 1.25rem;
+      span.mobile-label {
+        color: #757575;
+        display: block;
+        font-size: 0.9rem;
+      }
+    }
+  }
 }

@@ -9,6 +9,10 @@ class SupervisorsController < ApplicationController
   before_action :available_volunteers, only: [:edit, :update]
   before_action :set_supervisor, only: [:edit, :update]
 
+  def index
+    @supervisors = policy_scope(current_organization.supervisors)
+  end
+
   def new
     @supervisor = Supervisor.new
   end

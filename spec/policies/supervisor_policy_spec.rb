@@ -31,4 +31,50 @@ RSpec.describe "Supervisor Policy" do
       end
     end
   end
+
+  permissions :index? do
+    context "when user is an admin" do
+      it "has access to the supervisors index action" do
+        user = create :casa_admin
+
+        expect(Pundit.policy(user, Supervisor).index?).to be true
+      end
+    end
+
+    context "when user is a supervisor" do
+      it "has access to the supervisors index action" do
+        user = create :supervisor
+
+        expect(Pundit.policy(user, Supervisor).index?).to be true
+      end
+    end
+
+    context "when user is a volunteer" do
+      it "does not have access to the supervisors index action" do
+        user = create :volunteer
+
+        expect(Pundit.policy(user, Supervisor).index?).to be false
+      end
+    end
+  end
+
+  permissions :create? do
+    it "allows admins to create supervisors" do
+      user = create :casa_admin
+
+      expect(Pundit.policy(user, Supervisor).create?).to be true
+    end
+
+    it "does not allow supervisors to create supervisors" do
+      user = create :supervisor
+
+      expect(Pundit.policy(user, Supervisor).create?).to be false
+    end
+
+    it "does not allow volunteers to create supervisors" do
+      user = create :supervisor
+
+      expect(Pundit.policy(user, Supervisor).create?).to be false
+    end
+  end
 end
