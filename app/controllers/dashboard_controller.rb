@@ -12,6 +12,5 @@ class DashboardController < ApplicationController
     )).order(occurred_at: :desc).decorate
 
     @supervisors = policy_scope(current_organization.supervisors)
-    @admins = policy_scope(current_organization.casa_admins).sort_by(&:email)
   end
 end

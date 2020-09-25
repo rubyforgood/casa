@@ -21,11 +21,13 @@ Rails.application.routes.draw do
   end
 
   resources :casa_cases
-  resources :casa_admins, only: %i[new create] do
+
+  resources :casa_admins, except: %i[destroy] do
     member do
       patch :deactivate
     end
   end
+
   resources :case_contacts, except: %i[index show]
   resources :reports, only: %i[index]
   resources :imports, only: %i[index create] do
@@ -38,7 +40,6 @@ Rails.application.routes.draw do
   resources :contact_type_groups, only: %i[new create]
   resources :contact_types, only: %i[new create]
 
-  resources :casa_admins, only: %i[edit update]
   resources :supervisors, except: %i[destroy]
   resources :supervisor_volunteers, only: %i[create] do
     member do
