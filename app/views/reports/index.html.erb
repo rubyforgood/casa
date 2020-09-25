@@ -1,46 +1,35 @@
-<%= link_to "Back", :back %>
+<h1>Report Categories</h1>
 
-<div class="row">
-  <div class="col-sm-12">
-    <h1>Report Categories</h1>
-  </div>
-</div>
-<br>
-<div class="row">
-  <div class="col-sm-4">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title"><strong>Case Contacts Report</strong></h5>
-        <p class="card-text">
-          This CSV is a listing of all fields for the case contacts of all volunteers. Select the start
-          and end date.
-        </p>
+<div class="card card-container">
+  <div class="card-body">
+    <h5 class="card-title"><strong>Case Contacts Report</strong></h5>
+    <p class="card-text">
+      This CSV is a listing of all fields for the case contacts of all volunteers. Select the start
+      and end date.
+    </p>
 
-        <hr>
+    <hr>
 
-        <form>
-          <div class="field form-group">
-            <label><strong>Starting From:</strong></label>
-            <input name="start_date" class="form-control" data-input-type="datepicker" value="<%= 1.month.ago.to_date %>">
-          </div>
-
-          <div class="field form-group">
-            <label><strong>Ending At:</strong></label>
-            <input name="end_date" class="form-control" data-input-type="datepicker" value="<%= Date.today.to_date %>">
-          </div>
-
-          <!--
-            It seems like the send_data method used to download the CSV here does not work
-            with form submission whether the action is POST or GET, so for now we are
-            constructing the URL using the inputs above with javascript.
-          -->
-          <%= link_to "Download Report",
-              case_contact_reports_path(start_date: 1.month.ago.to_date, end_date: Date.today.to_date, format: :csv),
-              class: "btn btn-primary",
-              data: { link_type: "download-report" } %>
-        </form>
+    <form>
+      <div class="field form-group">
+        <label><strong>Starting From:</strong></label>
+        <input name="start_date" class="form-control" data-input-type="datepicker" value="<%= 1.month.ago.to_date %>">
       </div>
-    </div>
 
+      <div class="field form-group">
+        <label><strong>Ending At:</strong></label>
+        <input name="end_date" class="form-control" data-input-type="datepicker" value="<%= Date.today.to_date %>">
+      </div>
+
+      <!--
+        It seems like the send_data method used to download the CSV here does not work
+        with form submission whether the action is POST or GET, so for now we are
+        constructing the URL using the inputs above with javascript.
+      -->
+      <%= link_to "Download Report",
+          case_contact_reports_path(start_date: 1.month.ago.to_date, end_date: Date.today.to_date, format: :csv),
+          class: "btn btn-primary",
+          data: { link_type: "download-report" } %>
+    </form>
   </div>
 </div>

@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "admin adds a new case", type: :system do
-  it "is successful" do
+  xit "is successful" do
     admin = create(:casa_admin)
     case_number = "12345"
     sign_in admin
     visit root_path
+    click_on "Cases"
     expect(page).to have_selector(".case-list")
 
     click_on "New Case"

@@ -1,34 +1,46 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>PG CASA</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= render 'shared/favicons' %>
     <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-
     <% if all_casa_admin_signed_in? %>
       <%= javascript_pack_tag 'all_casa_admin', 'data-turbolinks-track': 'reload' %>
       <%= stylesheet_pack_tag 'all_casa_admin', 'data-turbolinks-track': 'reload' %>
     <% end %>
   </head>
   <body class="<%= body_class %>">
-    <%= header_partials %>
-    <main>
-      <div class="container">
-        <div class="header-flash">
-          <% flash.delete(:timedout).each do |key, value| %>
-            <div class="<%= flash_class(key) %> alert-dismissible fade show" role="alert">
-              <%= sanitize(value, tags: %w(ul li)) %>
-            </div>
-          <% end %>
+    <div class="header-flash">
+      <% flash.delete(:timedout).each do |key, value| %>
+        <div class="<%= flash_class(key) %> alert-dismissible fade show" role="alert">
+          <%= sanitize(value, tags: %w(ul li)) %>
         </div>
-        <div class="content">
-          <%= yield %>
+      <% end %>
+    </div>
+
+    <%= render 'layouts/mobile-navbar' %>
+
+    <% if logged_in? %>
+      <%= render 'layouts/sidebar' %>
+    <% end %>
+
+    <div class="d-flex" id="wrapper">
+      <div id="page-content-wrapper">
+        <% if not_logged_in? %>
+          <%= render 'layouts/headers/not_logged_in' %>
+        <% end%>
+        <div class="container-fluid">
+          <div class="content">
+            <%= yield %>
+          </div>
         </div>
       </div>
-    </main>
-    <%= footer_partials %>
+      <% if not_logged_in? %>
+        <%= render 'layouts/footers/not_logged_in' %>
+      <% end %>
+    </div>
   </body>
 </html>

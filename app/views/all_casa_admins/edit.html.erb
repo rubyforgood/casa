@@ -2,8 +2,8 @@
 
 <h1>Edit Profile</h1>
 
-<div class="row">
-  <div class="col-sm-6">
+<div class="card card-container">
+  <div class="card-body">
     <%= form_for @user, as: :all_casa_admin, url: all_casa_admins_path do |form| %>
 
       <div class="field form-group">
@@ -13,7 +13,6 @@
 
       <div class="actions">
         <%= form.submit "Update Profile", class: "btn btn-primary" %>
-        <%= link_to "Back", authenticated_all_casa_admin_root_path, class: "btn btn-primary" %>
         <button class="btn btn-warning accordion" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
           Change Password
         </button>

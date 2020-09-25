@@ -3,7 +3,7 @@
   <p class="address"><%= current_organization.address %></p>
 
   <div class="footer-logos">
-    <%= image_pack_tag(current_organization.logo_url) if current_organization.logo_url %>
+    <%= image_pack_tag(current_organization.logo_url) if current_organization&.logo_url %>
     <a href="https://rubyforgood.org/" class="rfglink" target="_blank"><%= image_pack_tag("media/src/images/rfglogo.png", class: "rfglogo") %></a>
   </div>
 

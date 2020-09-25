@@ -1,8 +1,8 @@
-<h1><%= selected_organization.name %></h1>
-<h2>New CASA Admin</h2>
+<%= link_to "Back", all_casa_admins_casa_org_path(selected_organization) %>
+<h1>New CASA Admin for <%= selected_organization.name %></h1>
 
-<div class="row">
-  <div class="col-sm-6">
+<div class="card card-container">
+  <div class="card-body">
     <%= render "form", casa_org: selected_organization, casa_admin: @casa_admin %>
   </div>
 </div>
