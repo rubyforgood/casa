@@ -24,48 +24,27 @@ RSpec.describe "admin views dashboard", type: :system do
     end
   end
 
-  it "can go to the supervisor edit page from the supervisor list" do
-    supervisor_name = "Leslie Knope"
-    create(:supervisor, display_name: supervisor_name, casa_org: organization)
+  it "can see the last case contact and navigate to it", js: false do
+    volunteer = create(:volunteer, email: "casa@example.com", casa_org: organization)
+    casa_case = create(:casa_case, casa_org: organization, case_number: SecureRandom.hex(12))
+    create(:case_contact, :wants_reimbursement, casa_case: casa_case, creator: volunteer, contact_made: true)
+
+    volunteer.casa_cases << casa_case
+
     sign_in admin
 
     visit root_path
 
-    expect(page).to have_text(supervisor_name)
+    # save_and_open_page
 
-    within "#supervisors" do
-      click_on "Edit"
+    expect(page).to have_text(casa_case.case_number)
+    expect(page).to have_text("August 29, 2020")
+
+    within "#volunteers" do
+      click_on "August 29, 2020"
     end
 
-    expect(page).to have_text("Editing Supervisor")
-  end
-
-  it "can go to the supervisor edit page from the supervisor's name" do
-    supervisor_name = "Leslie Knope"
-    create(:supervisor, display_name: supervisor_name, casa_org: organization)
-    sign_in admin
-
-    visit root_path
-
-    within "#supervisors" do
-      click_on supervisor_name
-    end
-
-    expect(page).to have_text("Editing Supervisor")
-  end
-
-  it "can go to the supervisor edit page and see red message
-      when there are no active volunteers" do
-    create(:supervisor, casa_org: organization)
-    sign_in admin
-
-    visit root_path
-
-    within "#supervisors" do
-      click_on "Edit"
-    end
-
-    expect(page).to have_text("There are no active, unassigned volunteers available")
+    expect(page).to have_text("CASA Case Details")
   end
 
   it "displays other admins within the same CASA organization" do

@@ -13,9 +13,8 @@
   <div class="sidebar-container">
     <div class="sidebar-menu">
       <div class="list-group list-group-flush">
-        <a href="0" class="list-group-item active">Active Link Example</a>
-        <a href="0" class="list-group-item">Dummy Link</a>
         <%= link_to_if(current_user&.casa_admin? || current_user&.supervisor?, "Volunteers", volunteers_path, class: "list-group-item") {} %>
+        <%= menu_item(label: "Supervisors", path: supervisors_path, visible: policy(Supervisor).index?) %>
       </div>
     </div>
     <div class="sidebar-footer">
