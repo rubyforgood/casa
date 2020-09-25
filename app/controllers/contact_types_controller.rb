@@ -1,5 +1,5 @@
 class ContactTypesController < ApplicationController
-  before_action :must_be_admin
+  before_action :authenticate_user!, :must_be_admin
   before_action :set_group_options, only: [:new, :edit, :update]
   before_action :set_contact_type, except: [:new, :create]
 
