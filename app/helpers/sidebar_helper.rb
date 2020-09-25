@@ -7,6 +7,7 @@ module SidebarHelper
     controller_name = link_path.split("/").second
     is_active = current_page?(controller: controller_name, action: :index) ||
                 current_page?(controller: controller_name, action: :new) ||
+                current_page?(controller: controller_name, action: :show) ||
                 current_page?(controller: controller_name, action: :edit)
 
     is_active ? "active" : ""

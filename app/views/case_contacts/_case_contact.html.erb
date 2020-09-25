@@ -5,6 +5,7 @@
   <td><%= contact.decorate.medium_type_icon %></td>
   <td><%= contact.decorate.contact_types %></td>
   <td><%= contact.decorate.miles_traveled %>
+
   <% unless contact.decorate.miles_traveled.blank? %>
     <i class="fa fa-car" aria-hidden="true"></i></td><%= " "%>
   <% end %>
