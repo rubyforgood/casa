@@ -27,6 +27,8 @@ class CaseContactsController < ApplicationController
 
     # By default the first case is selected
     @selected_cases = @casa_cases[0, 1]
+
+    @current_organization_groups = current_organization.contact_type_groups
   end
 
   def create
@@ -35,6 +37,7 @@ class CaseContactsController < ApplicationController
     # they did previously enter.
     @casa_cases = policy_scope(current_organization.casa_cases)
     @case_contact = CaseContact.new(create_case_contact_params)
+    @current_organization_groups = current_organization.contact_type_groups
 
     @selected_cases = @casa_cases.where(id: params.dig(:case_contact, :casa_case_id))
     if @selected_cases.empty?
@@ -61,6 +64,7 @@ class CaseContactsController < ApplicationController
   def edit
     @casa_cases = [@case_contact.casa_case]
     @selected_cases = @casa_cases
+    @current_organization_groups = current_organization.contact_type_groups
   end
 
   # PATCH/PUT /case_contacts/1
@@ -68,6 +72,7 @@ class CaseContactsController < ApplicationController
   def update
     @casa_cases = [@case_contact.casa_case]
     @selected_cases = @casa_cases
+    @current_organization_groups = current_organization.contact_type_groups
 
     respond_to do |format|
       if @case_contact.update_cleaning_contact_types(update_case_contact_params)
