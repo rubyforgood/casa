@@ -1,12 +1,11 @@
 require "rails_helper"
 
 describe "layout/sidebar", type: :view do
-  let(:user) { nil }
-
   before do
     enable_pundit(view, user)
     allow(view).to receive(:current_user).and_return(user)
     allow(view).to receive(:current_organization).and_return(user.casa_org)
+    allow(view).to receive(:user_signed_in?).and_return(true)
 
     assign :casa_org, user.casa_org
   end

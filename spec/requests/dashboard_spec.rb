@@ -14,7 +14,7 @@ describe "/dashboard", type: :request do
       it "renders a successful response" do
         get root_url
 
-        expect(response).to be_successful
+        expect(response).to redirect_to(casa_cases_path)
       end
 
       it "shows my cases"
@@ -32,7 +32,7 @@ describe "/dashboard", type: :request do
       it "renders a successful response" do
         get root_url
 
-        expect(response).to be_successful
+        expect(response).to redirect_to(supervisors_path)
       end
 
       it "shows all my organization's cases"
