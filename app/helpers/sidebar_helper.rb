@@ -3,15 +3,9 @@ module SidebarHelper
     link_to label, path, class: "list-group-item #{active_class(path)}" if visible
   end
 
-   def active_class(link_path)
+  def active_class(link_path)
     controller_name = link_path.split("/").second
-    is_active = current_page?(controller: controller_name, action: :index) ||
-                current_page?(controller: controller_name, action: :new) ||
-                current_page?(controller: controller_name, action: :show) ||
-                current_page?(controller: controller_name, action: :edit)
-
-    is_active ? "active" : ""
-
+    current_page?(controller: controller_name, action: action_name) ? "active" : ""
   rescue ActionController::UrlGenerationError
     ""
   end
