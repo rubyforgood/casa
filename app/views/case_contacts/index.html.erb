@@ -8,6 +8,7 @@
 <% @casa_cases.each do |casa_case| %>
   <div class="card card-container">
     <div class="card-body">
+      <h3><%= casa_case.case_number %></h3>
       <table class="table case-contacts-table" id="case_contacts">
         <thead>
         <tr>
@@ -30,4 +31,5 @@
       </table>
     </div>
   </div>
+  <br/>
 <% end %>

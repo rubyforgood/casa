@@ -2,8 +2,8 @@
 
 <h1>Edit Profile</h1>
 
-<div class="row">
-  <div class="col-sm-6">
+<div class="card card-container">
+  <div class="card-body">
     <%= form_for @user, as: :user, url: users_path do |form| %>
 
     <div class="field form-group">
@@ -20,10 +20,10 @@
 
     <div class="actions">
       <%= form.submit "Update Profile", class: "btn btn-primary mb-3" %>
-      <%= link_to "Back", root_path, class: "btn btn-primary mb-3" %>
       <button class="btn btn-warning accordion mb-3" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
         Change Password
       </button>
+
       <% if current_user.casa_admin? && current_user.active? %>
         <% if @active_casa_admins.length > 1 %>
           <%= link_to "Deactivate",
@@ -40,8 +40,8 @@
       <% end %>
     </div>
     <% end %>
-    <br>
     <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <br>
       <%= form_for(@user, as: :user, url: { action: "update_password" } ) do |f| %>
       <div class="field form-group">
         <%= f.label :password, "Password" %><br>
@@ -56,6 +56,5 @@
       </div>
       <% end %>
     </div>
-    <br>
   </div>
 </div>
