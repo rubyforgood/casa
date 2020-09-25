@@ -23,6 +23,7 @@ require('select2/dist/css/select2')
 require('src/case_contact')
 require('src/select')
 require('src/dashboard')
+require('src/sidebar')
 require('src/index_reports')
 require('src/sessions')
 
