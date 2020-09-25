@@ -1,6 +1,6 @@
 module UiHelper
   def return_to_dashboard_button
-    link_to "Return to Dashboard", root_path, {class: "btn btn-info pull-right"}
+    link_to "Return to Dashboard", root_path, {class: "btn btn-outline-primary pull-right"}
   end
 
   def grouped_options_for_assigning_case(volunteer)

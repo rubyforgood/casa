@@ -1,12 +1,16 @@
 <div class="row">
   <div class="col-sm-12">
-    <h1><%= selected_organization.name %></h1>
+    <div class="section-header">
+        <h1 class="section-header__title"><%= selected_organization.name %></h1>
+        <div></div>
+    </div>
   </div>
 </div>
+
 <div class="row">
   <div class="col-sm-12 dashboard-table-header">
     <h3>Administrators</h3>
-    <%= link_to "New CASA Admin", new_all_casa_admins_casa_org_casa_admin_path(selected_organization), class: "btn btn-primary" %>
+    <%= link_to "Create New CASA Admin", new_all_casa_admins_casa_org_casa_admin_path(selected_organization), class: "btn btn-primary" %>
 
     <table class="table admin-list">
       <thead>

@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-sm-12">
-    <h1>Import Categories</h1>
+    <h1 class="section-header__title">Import Categories</h1>
   </div>
 </div>
 <br>
@@ -107,7 +107,7 @@
         <br>
       </div>
     </div>
-    <%= link_to 'Return to Dashboard', root_path, class: 'btn btn-info' %>
+    <%= link_to 'Return to Dashboard', root_path, class: 'btn btn-link' %>
   </div>
   <%= render "csv_error_modal", {import_error: @import_error} if @import_error %>
 </div>

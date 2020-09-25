@@ -8,7 +8,7 @@ RSpec.describe "admin adds a new case", type: :system do
     visit root_path
     expect(page).to have_selector(".case-list")
 
-    click_on "New Case"
+    click_on "Create New Case"
     fill_in "Case number", with: case_number
 
     expect(find_field("Case number").value).to eq case_number

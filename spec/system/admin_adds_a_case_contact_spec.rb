@@ -12,7 +12,7 @@ RSpec.describe "admin or supervisor adds a case contact", type: :system do
     sign_in admin
 
     visit casa_case_path(casa_case.id)
-    click_on "New Case Contact"
+    click_on "Create New Case Contact"
 
     check "School"
     check "Therapist"

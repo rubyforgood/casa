@@ -1,6 +1,6 @@
 <%= errors_for(@user) %>
 
-<h1>Edit Profile</h1>
+<h1 class="section-header__title">Edit Profile</h1>
 
 <div class="row">
   <div class="col-sm-6">
@@ -19,11 +19,8 @@
     <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
 
     <div class="actions">
+      <%= link_to "Back", root_path, class: "btn btn-link mb-3" %>
       <%= form.submit "Update Profile", class: "btn btn-primary mb-3" %>
-      <%= link_to "Back", root_path, class: "btn btn-primary mb-3" %>
-      <button class="btn btn-warning accordion mb-3" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-        Change Password
-      </button>
       <% if current_user.casa_admin? && current_user.active? %>
         <% if @active_casa_admins.length > 1 %>
           <%= link_to "Deactivate",
@@ -39,21 +36,25 @@
         <% end %>
       <% end %>
     </div>
+    <hr>
+    <button class="btn btn-warning accordion" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+      Change Password
+    </button>
     <% end %>
     <br>
     <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
       <%= form_for(@user, as: :user, url: { action: "update_password" } ) do |f| %>
-      <div class="field form-group">
-        <%= f.label :password, "Password" %><br>
-        <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
-      </div>
-      <div class="field form-group">
-        <%= f.label :password_confirmation, "Password Confirmation" %><br>
-        <%= f.password_field :password_confirmation, class: "form-control" %>
-      </div>
-      <div class="action_container">
-        <%= f.submit "Update Password", class: "btn btn-danger" %>
-      </div>
+        <div class="field form-group">
+          <%= f.label :password, "Password" %><br>
+          <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
+        </div>
+        <div class="field form-group">
+          <%= f.label :password_confirmation, "Password Confirmation" %><br>
+          <%= f.password_field :password_confirmation, class: "form-control" %>
+        </div>
+        <div class="action_container">
+          <%= f.submit "Update Password", class: "btn btn-danger" %>
+        </div>
       <% end %>
     </div>
     <br>
