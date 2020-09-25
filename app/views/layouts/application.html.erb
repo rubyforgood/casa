@@ -20,10 +20,13 @@
         </div>
       <% end %>
     </div>
+
     <%= render 'layouts/mobile-navbar' %>
+
     <% if logged_in? %>
       <%= render 'layouts/sidebar' %>
     <% end %>
+
     <div class="d-flex" id="wrapper">
       <div id="page-content-wrapper">
         <% if not_logged_in? %>
@@ -34,7 +37,6 @@
             <%= yield %>
           </div>
         </div>
-        <%= render 'layouts/footer' %>
       </div>
       <% if not_logged_in? %>
         <%= render 'layouts/footers/not_logged_in' %>
