@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   resources :casa_admins, only: %i[new create] do
     member do
       patch :deactivate
+      patch :activate
     end
   end
   resources :case_contacts, except: %i[index show]
