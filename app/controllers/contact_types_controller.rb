@@ -1,6 +1,6 @@
 class ContactTypesController < ApplicationController
   before_action :must_be_admin
-  before_action :set_group_options, only: [:new, :edit]
+  before_action :set_group_options, only: [:new, :edit, :update]
   before_action :set_contact_type, except: [:new, :create]
 
   def new
@@ -21,7 +21,13 @@ class ContactTypesController < ApplicationController
 
   def edit; end;
 
-  def update; end;
+  def update
+    if @contact_type.update(contact_type_params)
+      redirect_to edit_casa_org_path(current_organization), notice: "Contact Type was successfully updated."
+    else
+      render :edit
+    end
+  end
 
 private
 
