@@ -28,7 +28,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :case_contacts, except: %i[index show]
+  resources :case_contacts, except: %i[show]
   resources :reports, only: %i[index]
   resources :imports, only: %i[index create] do
     collection do
