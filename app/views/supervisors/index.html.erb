@@ -1,10 +1,9 @@
-<%= render "volunteers_display_columns" %>
-<%= render "volunteer_filters", logged_in_supervisor: logged_in_supervisor %>
-<%= render "volunteers_table" %>
 <div class="row">
   <div class="col-sm-12 dashboard-table-header">
     <h1>Supervisors</h1>
-    <%= link_to "New Supervisor", new_supervisor_path, class: "btn btn-primary" %>
+    <% if policy(Supervisor).create? %>
+      <%= link_to "New Supervisor", new_supervisor_path, class: "btn btn-primary" %>
+    <% end %>
   </div>
 </div>
 
