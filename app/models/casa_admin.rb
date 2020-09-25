@@ -1,4 +1,8 @@
 class CasaAdmin < User
+  def activate
+    update(active: true)
+  end
+
   def deactivate
     update(active: false)
   end

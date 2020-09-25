@@ -43,24 +43,8 @@ class CaseContact < ApplicationRecord
   }
   scope :contact_type, ->(contact_type = nil) {
     joins(:db_contact_types)
-      .where(contact_types: { name: contact_type }) if contact_type.present?
+      .where("contact_types.name in (?)", contact_type) if contact_type.present?
   }
-
-  CONTACT_TYPES = %w[
-    attorney
-    bio_parent
-    court
-    dss_worker
-    foster_parent
-    medical_professional
-    other_family
-    other_support_worker
-    school
-    social_worker
-    supervisor
-    therapist
-    youth
-  ].freeze
 
   IN_PERSON = "in-person".freeze
   TEXT_EMAIL = "text/email".freeze
@@ -68,6 +52,13 @@ class CaseContact < ApplicationRecord
   VOICE_ONLY = "voice-only".freeze
   LETTER = "letter".freeze
   CONTACT_MEDIUMS = [IN_PERSON, TEXT_EMAIL, VIDEO, VOICE_ONLY, LETTER].freeze
+
+  def update_cleaning_contact_types(args)
+    transaction do
+      case_contact_contact_type.destroy_all
+      update(args)
+    end
+  end
 
   def occurred_at_not_in_future
     return unless occurred_at && occurred_at >= Date.tomorrow
