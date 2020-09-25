@@ -35,6 +35,7 @@ class CaseContactsController < ApplicationController
     # they did previously enter.
     @casa_cases = policy_scope(current_organization.casa_cases)
     @case_contact = CaseContact.new(create_case_contact_params)
+    @current_organization_groups = current_organization.contact_type_groups
 
     @selected_cases = @casa_cases.where(id: params.dig(:case_contact, :casa_case_id))
     if @selected_cases.empty?

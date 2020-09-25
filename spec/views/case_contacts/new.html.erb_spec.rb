@@ -9,6 +9,7 @@ describe "case_contacts/new" do
     assign :casa_cases, [case_contact.casa_case]
     assign :selected_cases, [case_contact.casa_case]
     assign :contact_types, []
+    assign :current_organization_groups, []
   end
 
   context "while signed-in as a volunteer" do
