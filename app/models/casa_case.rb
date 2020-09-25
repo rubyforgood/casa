@@ -7,6 +7,10 @@ class CasaCase < ApplicationRecord
   validates :case_number, uniqueness: {case_sensitive: false}, presence: true
   belongs_to :casa_org
 
+  has_many :casa_case_contact_types
+  has_many :contact_types, through: :casa_case_contact_types, source: :contact_type
+  accepts_nested_attributes_for :casa_case_contact_types
+
   scope :ordered, -> { order(updated_at: :desc) }
   scope :actively_assigned_to, ->(volunteer) {
     joins(:case_assignments).where(

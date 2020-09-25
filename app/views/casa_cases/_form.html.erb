@@ -23,6 +23,25 @@
     <%= form.check_box :transition_aged_youth %>
   </div>
 
+  <% if Pundit.policy(current_user, casa_case).update_contact_types? %>
+    <div id="contact-type-form" class="field contact-type form-group">
+      <h2 id="contact-type-label"><%= form.label :contact_types %></h2>
+
+      <% @contact_types.each_with_index do |contact_type, index| %>
+        <div class="form-check">
+          <%= check_box_tag "casa_case[casa_case_contact_types_attributes][][contact_type_id]",
+            contact_type.id,
+            @casa_case.casa_case_contact_types.map(&:contact_type_id).include?(contact_type.id),
+            id: "casa_case_contact_types_#{index}",
+            class: ["form-check-input", "casa-case-contact-type"] %>
+          <label class="form-check-label" for="casa_case_contact_types_<%= index %>">
+            <%= contact_type.name %>
+          </label>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
   <br>
 
   <div class="actions">

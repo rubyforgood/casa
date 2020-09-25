@@ -1,6 +1,6 @@
 class CasaCaseContactType < ApplicationRecord
-  belongs_to :case_contact, class_name: "CaseContact"
-  belongs_to :contact_type, class_name: "ContactType"
+  belongs_to :casa_case
+  belongs_to :contact_type
 end
 
 # == Schema Information
@@ -11,10 +11,10 @@ end
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  casa_case_id    :bigint           not null
-#  case_contact_id :bigint           not null
+#  contact_type_id :bigint           not null
 #
 # Indexes
 #
 #  index_casa_case_contact_types_on_casa_case_id     (casa_case_id)
-#  index_casa_case_contact_types_on_case_contact_id  (case_contact_id)
+#  index_casa_case_contact_types_on_contact_type_id  (contact_type_id)
 #

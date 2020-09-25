@@ -28,12 +28,12 @@ ActiveRecord::Schema.define(version: 2020_09_24_192310) do
   end
 
   create_table "casa_case_contact_types", force: :cascade do |t|
-    t.bigint "case_contact_id", null: false
+    t.bigint "contact_type_id", null: false
     t.bigint "casa_case_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["casa_case_id"], name: "index_casa_case_contact_types_on_casa_case_id"
-    t.index ["case_contact_id"], name: "index_casa_case_contact_types_on_case_contact_id"
+    t.index ["contact_type_id"], name: "index_casa_case_contact_types_on_contact_type_id"
   end
 
   create_table "casa_cases", force: :cascade do |t|
