@@ -8,12 +8,14 @@ RSpec.describe "CasaOrgs", type: :request do
 
   describe "as an admin" do
     before { sign_in create(:casa_admin, casa_org: casa_org) }
+
     describe "GET /edit" do
       it "render a successful response" do
         get edit_casa_org_url(casa_org)
         expect(response).to be_successful
       end
     end
+
     describe "PATCH /update" do
       context "with valid parameters" do
         it "updates the requested casa_org" do
@@ -40,6 +42,7 @@ RSpec.describe "CasaOrgs", type: :request do
       end
     end
   end
+
   describe "as a volunteer" do
     before { sign_in create(:volunteer, casa_org: casa_org) }
     describe "GET /edit" do
