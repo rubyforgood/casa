@@ -4,6 +4,14 @@ module ApplicationHelper
     "#{qualified_controller_name} #{qualified_controller_name}-#{controller.action_name}"
   end
 
+  def logged_in?
+    user_signed_in? || all_casa_admin_signed_in?
+  end
+
+  def not_logged_in?
+    !logged_in?
+  end
+
   def page_header
     return default_page_header unless user_signed_in?
 
@@ -17,11 +25,11 @@ module ApplicationHelper
 
   def session_link
     if user_signed_in?
-      link_to("Log out", destroy_user_session_path, class: "btn btn-light")
+      link_to("Log out", destroy_user_session_path, class: "list-group-item")
     elsif all_casa_admin_signed_in?
-      link_to("Log out", destroy_all_casa_admin_session_path, class: "btn btn-light")
+      link_to("Log out", destroy_all_casa_admin_session_path, class: "list-group-item")
     else
-      link_to("Log in", new_user_session_path, class: "btn btn-light")
+      link_to("Log in", new_user_session_path, class: "list-group-item")
     end
   end
 
@@ -46,24 +54,6 @@ module ApplicationHelper
           end
         })
       end
-    end
-  end
-
-  def header_partials
-    if current_user
-      render 'layouts/headers/current_user'
-    elsif all_casa_admin_signed_in?
-      render 'layouts/headers/current_all_casa_admin'
-    else
-      render 'layouts/headers/not_logged_in'
-    end
-  end
-
-  def footer_partials
-    if current_user
-      render 'layouts/footers/logged_in'
-    else
-      render 'layouts/footers/not_logged_in'
     end
   end
 end

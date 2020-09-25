@@ -1,9 +1,9 @@
-<%= link_to 'Back', root_path %>
+<%= link_to 'Back', volunteers_path %>
 
 <h1>Editing Volunteer</h1>
 
-<div class="row">
-  <div class="col-sm-6">
+<div class="card card-container">
+  <div class="card-body">
     <%= form_for @volunteer, url: volunteer_path(@volunteer) do |form| %>
       <% if @volunteer.errors.any? %>
         <div id="error_explanation">
@@ -66,10 +66,12 @@
   </div>
 </div>
 
-<% if @volunteer.casa_cases.size > 0 %>
-  <br>
-  <div class="row">
-    <div class="col-sm-12">
+<h1 class="pt-5">Manage Cases</h1>
+
+<div class="card card-container">
+  <div class="card-body">
+    <% if @volunteer.casa_cases.size > 0 %>
+      <br>
       <h3>Assigned Cases</h3>
       <table class='table case-list'>
         <thead>
@@ -108,15 +110,11 @@
           <% end %>
         </tbody>
       </table>
-    </div>
-  </div>
-<% end %>
+    <% end %>
 
-<% if @volunteer.active? %>
-  <br>
+    <% if @volunteer.active? %>
+      <br>
 
-  <div class="row">
-    <div class="col-sm-6">
       <h3>Assign a New Case</h3>
 
       <%= form_for CaseAssignment.new, url: case_assignments_path(volunteer_id: @volunteer.id) do |form| %>
@@ -128,6 +126,6 @@
 
         <%= form.submit 'Assign Case', class: 'btn btn-primary' %>
       <% end %>
-    </div>
+    <% end %>
   </div>
-<% end %>
+</div>

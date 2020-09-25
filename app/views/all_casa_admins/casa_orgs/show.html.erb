@@ -1,13 +1,12 @@
-<div class="row">
-  <div class="col-sm-12">
-    <h1><%= selected_organization.name %></h1>
-  </div>
-</div>
-<div class="row">
-  <div class="col-sm-12 dashboard-table-header">
+<%= link_to "Back", root_path %>
+<h1><%= selected_organization.name %></h1>
+
+<div class="card card-container">
+  <div class="card-body">
+    <div class="dashboard-table-header">
     <h3>Administrators</h3>
     <%= link_to "New CASA Admin", new_all_casa_admins_casa_org_casa_admin_path(selected_organization), class: "btn btn-primary" %>
-
+    </div>
     <table class="table admin-list">
       <thead>
         <tr>
@@ -26,6 +25,5 @@
         <% end %>
       </tbody>
     </table>
-    <a href="/">Back to dashboard</a>
   </div>
 </div>

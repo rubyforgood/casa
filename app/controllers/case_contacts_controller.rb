@@ -8,6 +8,8 @@ class CaseContactsController < ApplicationController
   # GET /case_contacts
   # GET /case_contacts.json
   def index
+    org_cases = CasaOrg.includes(:casa_cases).references(:casa_cases).find_by(id: current_user.casa_org_id).casa_cases
+    @casa_cases = policy_scope(org_cases)
     @case_contacts = policy_scope(current_organization.case_contacts).decorate
   end
 

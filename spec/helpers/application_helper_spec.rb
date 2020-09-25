@@ -16,7 +16,6 @@ describe ApplicationHelper, type: :helper do
     end
 
     it "displays the header when user is not logged in" do
-      current_organization = build_stubbed(:casa_org)
       allow(helper).to receive(:user_signed_in?).and_return(false)
 
       expect(helper.page_header).to eq(helper.default_page_header)
