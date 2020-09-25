@@ -34,24 +34,21 @@ RSpec.describe "/contact_types", type: :request do
   end
 
   describe "POST /contact_types" do
+    let(:params) { { contact_type: { name: "New Contact", contact_type_group_id: group.id, active: true } } }
     context "logged in as admin user" do
       it "can successfully create a contact type" do
         casa_org = create(:casa_org)
         sign_in create(:casa_admin, casa_org: casa_org)
 
         expect {
-          post contact_types_path params: {
-            contact_type: {
-              name: "New Contact",
-              contact_type_group_id: group.id
-            }
-          }
+          post contact_types_path, params: params
         }.to change(ContactType, :count).by(1)
 
         contact_type = ContactType.last
 
         expect(contact_type.name).to eql "New Contact"
         expect(contact_type.contact_type_group).to eql group
+        expect(contact_type.active).to be_truthy
         expect(response).to redirect_to edit_casa_org_path(casa_org)
         expect(response.request.flash[:notice]).to eq "Contact Type was successfully created."
       end
@@ -61,12 +58,7 @@ RSpec.describe "/contact_types", type: :request do
       it "cannot create a contact type" do
         sign_in_as_volunteer
 
-        post contact_types_path params: {
-          contact_type: {
-            name: "New Contact",
-            contact_type_group_id: group.id
-          }
-        }
+        post contact_types_path, params: params
 
         expect(response).to redirect_to root_path
         expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
@@ -75,12 +67,7 @@ RSpec.describe "/contact_types", type: :request do
 
     context "unauthenticated request" do
       it "cannot create a contact type" do
-        post contact_types_path params: {
-          contact_type: {
-            name: "New Contact",
-            contact_type_group_id: group.id
-          }
-        }
+        post contact_types_path, params: params
 
         expect(response).to redirect_to new_user_session_path
       end
@@ -119,25 +106,21 @@ RSpec.describe "/contact_types", type: :request do
   end
 
   describe "PUT /contact_types/:id" do
+    let(:casa_org) { create(:casa_org) }
+    let(:new_group) { create(:contact_type_group, casa_org: casa_org) }
+    let(:params) { { contact_type: { name: "New Name", contact_type_group_id: new_group.id, active: false } } }
     context "logged in as admin user" do
       it "can successfully update a contact type" do
-        casa_org = create(:casa_org)
         sign_in create(:casa_admin, casa_org: casa_org)
 
         contact_type = create(:contact_type, contact_type_group: group)
-        expected_name = "New Contact Type"
-        expected_group = create(:contact_type_group, casa_org: casa_org)
 
-        put contact_type_path(contact_type), params: {
-          contact_type: {
-            name: expected_name,
-            contact_type_group_id: expected_group.id
-          }
-        }
+        put contact_type_path(contact_type), params: params
 
         contact_type.reload
-        expect(contact_type.name).to eq expected_name
-        expect(contact_type.contact_type_group).to eq expected_group
+        expect(contact_type.name).to eq "New Name"
+        expect(contact_type.contact_type_group).to eq new_group
+        expect(contact_type.active).to be_falsey
 
         expect(response).to redirect_to edit_casa_org_path(casa_org)
         expect(response.request.flash[:notice]).to eq "Contact Type was successfully updated."
@@ -148,12 +131,7 @@ RSpec.describe "/contact_types", type: :request do
       it "cannot update a update a contact type" do
         sign_in_as_volunteer
 
-        put contact_type_path(create(:contact_type)), params: {
-          contact_type: {
-            name: "New Name",
-            contact_type_group_id: group.id
-          }
-        }
+        put contact_type_path(create(:contact_type)), params: params
 
         expect(response).to redirect_to root_path
         expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
@@ -162,12 +140,7 @@ RSpec.describe "/contact_types", type: :request do
 
     context "unauthenticated request" do
       it "cannot update a update a contact type" do
-        put contact_type_path(create(:contact_type)), params: {
-          contact_type: {
-            name: "New Name",
-            contact_type_group_id: group.id
-          }
-        }
+        put contact_type_path(create(:contact_type)), params: params
 
         expect(response).to redirect_to new_user_session_path
       end

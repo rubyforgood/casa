@@ -12,6 +12,11 @@
           <%= form.text_field :name, class: "form-control" %>
       </div>
 
+      <div class="field form-group">
+        <%= form.check_box :active %>
+        <%= form.label :active %>
+      </div>
+
       <div class="actions">
         <%= form.submit "Submit", class: "btn btn-primary" %>
       </div>

@@ -9,6 +9,7 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th>Active?</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -16,9 +17,12 @@
   <tbody>
     <% @contact_type_groups.each do |group| %>
       <tr id="group-<%= group.id %>">
-        <th scope="row">
+        <td scope="row">
           <%= group.name %>
-        </th>
+        </td>
+        <td scope="row">
+          <%= group.active? ? "Yes" : "No" %>
+        </td>
         <td>
           <%= link_to "Edit", edit_contact_type_group_path(group) %>
         </td>

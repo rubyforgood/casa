@@ -40,6 +40,6 @@ private
   end
 
   def contact_type_params
-    params.require(:contact_type).permit(:name, :contact_type_group_id)
+    params.require(:contact_type).permit(:name, :contact_type_group_id, :active)
   end
 end
