@@ -47,6 +47,13 @@ class CasaCase < ApplicationRecord
   def has_transitioned?
     transition_aged_youth
   end
+
+  def update_cleaning_contact_types(args)
+    transaction do
+      casa_case_contact_types.destroy_all
+      update(args)
+    end
+  end
 end
 
 # == Schema Information

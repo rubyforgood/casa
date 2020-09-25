@@ -68,4 +68,23 @@ RSpec.describe CasaCase do
       end
     end
   end
+
+
+  context "#update_cleaning_contact_types" do
+    it "cleans up contact types before saving" do
+      group = create(:contact_type_group)
+      type1 = create(:contact_type, contact_type_group: group)
+      type2 = create(:contact_type, contact_type_group: group)
+
+      casa_case = create(:casa_case, contact_types: [type1])
+
+      expect(casa_case.casa_case_contact_types.count).to eql 1
+      expect(casa_case.contact_types).to match_array([type1])
+
+      casa_case.update_cleaning_contact_types({casa_case_contact_types_attributes: [{ contact_type_id: type2.id }]})
+
+      expect(casa_case.casa_case_contact_types.count).to eql 1
+      expect(casa_case.contact_types.reload).to match_array([type2])
+    end
+  end
 end
