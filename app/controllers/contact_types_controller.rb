@@ -18,6 +18,10 @@ class ContactTypesController < ApplicationController
     end
   end
 
+  def edit; end;
+
+  def update; end;
+
 private
 
   def contact_type_params
