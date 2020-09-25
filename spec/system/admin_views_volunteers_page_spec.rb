@@ -103,29 +103,6 @@ RSpec.describe "admin views Volunteers page", type: :system do
     expect(page).to have_css("form#new_volunteer")
   end
 
-  it "can see the last case contact and navigate to it", js: false do
-    volunteer = create(:volunteer, email: "casa@example.com", casa_org: organization)
-    casa_case = create(:casa_case, casa_org: organization, case_number: SecureRandom.hex(12))
-    create(:case_contact, :wants_reimbursement, casa_case: casa_case, creator: volunteer, contact_made: true)
-
-    volunteer.casa_cases << casa_case
-
-    sign_in admin
-
-    visit volunteers_path
-
-    # save_and_open_page
-
-    expect(page).to have_text(casa_case.case_number)
-    expect(page).to have_text("August 29, 2020")
-
-    within "#volunteers" do
-      click_on "August 29, 2020"
-    end
-
-    expect(page).to have_text("CASA Case Details")
-  end
-
   describe "supervisor column of volunteers table" do
     it "is blank when volunteer has no supervisor" do
       create(:volunteer, casa_org: organization)

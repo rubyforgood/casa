@@ -24,29 +24,6 @@ RSpec.describe "admin views dashboard", type: :system do
     end
   end
 
-  it "can see the last case contact and navigate to it", js: false do
-    volunteer = create(:volunteer, email: "casa@example.com", casa_org: organization)
-    casa_case = create(:casa_case, casa_org: organization, case_number: SecureRandom.hex(12))
-    create(:case_contact, :wants_reimbursement, casa_case: casa_case, creator: volunteer, contact_made: true)
-
-    volunteer.casa_cases << casa_case
-
-    sign_in admin
-
-    visit root_path
-
-    # save_and_open_page
-
-    expect(page).to have_text(casa_case.case_number)
-    expect(page).to have_text("August 29, 2020")
-
-    within "#volunteers" do
-      click_on "August 29, 2020"
-    end
-
-    expect(page).to have_text("CASA Case Details")
-  end
-
   it "displays other admins within the same CASA organization" do
     admin2 = create(:casa_admin, email: "Jon@org.com", casa_org: organization)
     admin3 = create(:casa_admin, email: "Bon@org.com", casa_org: organization)
