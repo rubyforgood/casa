@@ -69,7 +69,6 @@ RSpec.describe CasaCase do
     end
   end
 
-
   context "#update_cleaning_contact_types" do
     it "cleans up contact types before saving" do
       group = create(:contact_type_group)

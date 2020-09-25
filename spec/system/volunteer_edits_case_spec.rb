@@ -9,7 +9,7 @@ RSpec.describe "volunteer edits case", type: :system do
     sign_in volunteer
     visit edit_casa_case_path(casa_case)
     check "Transition aged youth"
-    click_on "Submit"
+    click_on "Update CASA Case"
 
     has_checked_field? :transition_aged_youth
 

@@ -46,7 +46,7 @@ class CasaCasePolicy
 
     case @user
     when CasaAdmin
-      common_attrs.merge(%i[case_number birth_month_year_youth])
+      common_attrs.concat(%i[case_number birth_month_year_youth])
     else
       common_attrs
     end
