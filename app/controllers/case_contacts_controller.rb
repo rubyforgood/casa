@@ -70,6 +70,7 @@ class CaseContactsController < ApplicationController
   def update
     @casa_cases = [@case_contact.casa_case]
     @selected_cases = @casa_cases
+    @current_organization_groups = current_organization.contact_type_groups
 
     respond_to do |format|
       if @case_contact.update_cleaning_contact_types(update_case_contact_params)
