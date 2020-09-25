@@ -17,8 +17,8 @@
           <li>Cases</li>
         </ol>
         </p>
-        <div class="row">
-          <ul class="nav nav-tabs" role="tablist">
+        <div>
+          <ul class="nav nav-tabs nav-justified" role="tablist">
             <li class="nav-item">
               <%= content_tag :a,
                 role: "tab",
@@ -109,4 +109,5 @@
     </div>
     <%= link_to 'Return to Dashboard', root_path, class: 'btn btn-info' %>
   </div>
+  <%= render "csv_error_modal", {import_error: @import_error} if @import_error %>
 </div>
