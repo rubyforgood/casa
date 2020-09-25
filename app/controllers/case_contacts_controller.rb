@@ -8,6 +8,8 @@ class CaseContactsController < ApplicationController
   # GET /case_contacts
   # GET /case_contacts.json
   def index
+    org_cases = CasaOrg.includes(:casa_cases).references(:casa_cases).find_by(id: current_user.casa_org_id).casa_cases
+    @casa_cases = policy_scope(org_cases)
     @case_contacts = policy_scope(current_organization.case_contacts).decorate
   end
 
@@ -68,7 +70,7 @@ class CaseContactsController < ApplicationController
     @selected_cases = @casa_cases
 
     respond_to do |format|
-      if @case_contact.update(update_case_contact_params)
+      if @case_contact.update_cleaning_contact_types(update_case_contact_params)
         format.html { redirect_to casa_case_path(@case_contact.casa_case), notice: "Case contact was successfully updated." }
         format.json { render :show, status: :ok, location: @case_contact }
       else

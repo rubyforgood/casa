@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "volunteer views dashboard", type: :system do
-  it "sees all case contacts for their case" do
+  xit "sees all case contacts for their case" do
     volunteer = create(:volunteer)
     casa_case = create(:casa_case, casa_org: volunteer.casa_org)
     case_assignment = create(:case_assignment, volunteer: volunteer, casa_case: casa_case)

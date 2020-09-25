@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="col-sm-12 dashboard-table-header">
+    <h1>Case Contacts</h1>
+      <%= link_to "New Case Contact", new_case_contact_path, class: "btn btn-primary" %>
+  </div>
+</div>
+
+<% @casa_cases.each do |casa_case| %>
+  <div class="card card-container">
+    <div class="card-body">
+      <table class="table case-contacts-table" id="case_contacts">
+        <thead>
+        <tr>
+          <th>Date</th>
+          <th>Duration</th>
+          <th>Contact Made</th>
+          <th>Contact Medium</th>
+          <th>Type</th>
+          <th>Miles Driven</th>
+          <th>Want reimbursement?</th>
+          <th>Created by</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% casa_case.decorate.case_contacts_ordered_by_occurred_at.each do |contact| %>
+          <%= render "case_contacts/case_contact", contact: contact %>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

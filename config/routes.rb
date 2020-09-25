@@ -21,12 +21,15 @@ Rails.application.routes.draw do
   end
 
   resources :casa_cases
-  resources :casa_admins, only: %i[new create] do
+
+  resources :casa_admins, except: %i[destroy] do
     member do
       patch :deactivate
+      patch :activate
     end
   end
-  resources :case_contacts, except: %i[index show]
+
+  resources :case_contacts, except: %i[show]
   resources :reports, only: %i[index]
   resources :imports, only: %i[index create] do
     collection do
@@ -35,17 +38,16 @@ Rails.application.routes.draw do
   end
   resources :case_contact_reports, only: %i[index]
   resources :casa_orgs, only: %i[edit update]
-  resources :contact_type_groups, only: %i[new create]
-  resources :contact_types, only: %i[new create]
+  resources :contact_type_groups, only: %i[new create edit update]
+  resources :contact_types, only: %i[new create edit update]
 
-  resources :casa_admins, only: %i[edit update]
   resources :supervisors, except: %i[destroy]
   resources :supervisor_volunteers, only: %i[create] do
     member do
       patch :unassign
     end
   end
-  resources :volunteers, only: %i[new edit create update] do
+  resources :volunteers, except: %i[destroy] do
     member do
       patch :activate
       patch :deactivate
