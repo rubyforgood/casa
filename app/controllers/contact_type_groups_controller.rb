@@ -29,7 +29,7 @@ class ContactTypeGroupsController < ApplicationController
 private
 
     def contact_type_group_params
-      params.require(:contact_type_group).permit(:name)
+      params.require(:contact_type_group).permit(:name, :active)
     end
 
     def set_contact_type_group
