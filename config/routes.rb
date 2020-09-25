@@ -35,9 +35,11 @@ Rails.application.routes.draw do
   end
   resources :case_contact_reports, only: %i[index]
   resources :casa_orgs, only: %i[edit update]
+  resources :contact_type_groups, only: %i[new create]
+  resources :contact_types, only: %i[new create]
 
   resources :casa_admins, only: %i[edit update]
-  resources :supervisors, only: %i[edit update new create]
+  resources :supervisors, except: %i[destroy]
   resources :supervisor_volunteers, only: %i[create] do
     member do
       patch :unassign

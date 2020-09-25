@@ -14,6 +14,7 @@
     <div class="sidebar-menu">
       <div class="list-group list-group-flush">
         <%= menu_item(label: "Case Contacts", path: case_contacts_path) %>
+        <%= menu_item(label: "Supervisors", path: supervisors_path, visible: policy(Supervisor).index?) %>
       </div>
     </div>
     <div class="sidebar-footer">

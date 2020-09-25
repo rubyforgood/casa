@@ -2,6 +2,7 @@
 class CaseContactsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_case_contact, only: %i[edit update destroy]
+  before_action :set_contact_types, only: %i[new edit update create]
   before_action :require_organization!
 
   # GET /case_contacts
@@ -95,6 +96,10 @@ class CaseContactsController < ApplicationController
 
   def set_case_contact
     @case_contact = authorize(current_organization.case_contacts.find(params[:id]))
+  end
+
+  def set_contact_types
+    @contact_types = ContactType.for_organization(current_organization)
   end
 
   def create_case_contact_params
