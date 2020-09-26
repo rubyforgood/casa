@@ -25,5 +25,7 @@
 @media only screen and (max-width: 1024px) {
   .navbar.mobile {
     display: flex;
+    position: sticky;
+    top: 0;
   }
 }
