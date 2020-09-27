@@ -20,4 +20,9 @@ RSpec.describe CasaAdmin, type: :model do
       expect(casa_admin.active).to eq(true)
     end
   end
+
+  describe "#role" do
+    subject(:admin) { create :casa_admin }
+    it { expect(admin.role).to eq "Casa Admin" }
+  end
 end

@@ -2,6 +2,8 @@
 
 # model for all user roles: volunteer supervisor casa_admin inactive
 class User < ApplicationRecord
+  include Roles
+
   has_paper_trail
   devise :database_authenticatable, :invitable, :recoverable, :validatable, :timeoutable
 

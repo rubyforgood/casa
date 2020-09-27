@@ -149,4 +149,9 @@ RSpec.describe Volunteer, type: :model do
       expect(volunteer).to be_supervised_by(new_supervisor)
     end
   end
+
+  describe "#role" do
+    subject(:volunteer) { create :volunteer }
+    it { expect(volunteer.role).to eq "Volunteer" }
+  end
 end
