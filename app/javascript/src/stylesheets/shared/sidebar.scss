@@ -7,9 +7,13 @@
   min-height: 100vh;
   position: fixed;
   width: 320px;
+  overflow: auto;
 }
 
 .sidebar-wrapper .sidebar-heading {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   background: $primary;
   border-bottom: 1px solid #103862;
   font-size: 1.2rem;
@@ -88,7 +92,7 @@
     background: #103862;
     padding: 1rem 0;
     width: 100%;
-    .list-group-item {
+    a.list-group-item {
       background: none !important;
       border: none;
       color: #fff;

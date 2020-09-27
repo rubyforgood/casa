@@ -34,7 +34,7 @@
         </li>
       </div>
       <div class="list-group list-group-flush footer-nav">
-        <% if current_user %>
+        <% if user_signed_in? %>
           <%= link_to "Edit Profile", edit_users_path, class: "list-group-item" %>
 
           <% if policy(:application).see_reports_page? %>
@@ -51,11 +51,11 @@
           </li>
         <% end %>
 
-        <% if current_all_casa_admin %>
-          <li class="list-group-item">
+        <% if all_casa_admin_signed_in? %>
+          <div class="list-group-item">
             <%= current_all_casa_admin.email %>
-            <%= link_to "Edit Profile", edit_all_casa_admins_path %>
-          </li>
+          </div>
+          <%= link_to "Edit Profile", edit_all_casa_admins_path, class: "list-group-item" %>
         <% end %>
         <%= session_link %>
       </div>

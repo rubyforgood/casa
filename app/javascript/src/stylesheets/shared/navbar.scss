@@ -1,12 +1,20 @@
 .navbar {
+  color: #fff;
   background: #00447c;
   box-shadow: 0 0 4px 4px rgba(0,0,0,0.28);
-  display: none;
   height: 80px;
   justify-content: space-between;
   padding: 16px;
   width: 100%;
   z-index: 3;
+}
+
+.navbar strong {
+  font-size: 2rem;
+}
+
+.navbar.mobile {
+  display: none;
 }
 
 .mobile-icon {
@@ -15,7 +23,9 @@
 }
 
 @media only screen and (max-width: 1024px) {
-  .navbar {
+  .navbar.mobile {
     display: flex;
+    position: sticky;
+    top: 0;
   }
 }
