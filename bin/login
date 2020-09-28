@@ -1,16 +1,6 @@
 #!/usr/bin/env ruby
 
-# This script simplifies login for experimentation with the users added to the application when it is seeded
-# in development mode.
-#
-# It outputs the available users and accepts a numbered choice. It then logs in as that choice,
-# at the URL appropriate for that user.
-#
-# The browser window remains open as long as the script has not yet terminated (using Ctrl-C).
-# You can either keep a terminal with this script open, or you can send it to the background with Ctrl-Z.
-# If the latter, when you are finished using the browser, you can bring the script back to the foreground with `fg[Enter]`.
-#
-# Usage: `bin/login` from the project root
+# See HELP_TEXT below for description.
 
 require 'webdrivers'
 require 'capybara/dsl'
@@ -36,6 +26,24 @@ class LoginExecutor
       User.new('allcasaadmin@example.com',     ALL_CASA_ADMIN_LOGIN_URL),
   ]
 
+  HELP_TEXT = <<~HEREDOC
+    
+    Usage: bin/login [user_number]
+
+    This script automates login for experimentation with the users added to the application when it is seeded
+    in development mode.
+                        
+    If executed without any arguments, it outputs the available users and accepts a numbered choice.
+    It then logs in as that choice, at the URL appropriate for that user.
+                                    
+    It can also be executed with the user list element number passed as an argument, to bypass interactive mode.
+
+    The browser window remains open as long as the script has not yet terminated (using Ctrl-C).
+    You can either keep a terminal with this script open, or you can send it to the background with Ctrl-Z.
+    If the latter, when you are finished using the browser, you can bring the script back to the foreground with `fg[Enter]`.
+
+  HEREDOC
+
 
   def self.login
     self.new.call
@@ -43,16 +51,16 @@ class LoginExecutor
 
 
   def call
+
+    if ARGV.first == '-h'
+      puts HELP_TEXT
+      exit 0
+    end
+
     user = ARGV.empty? ? get_user_from_input : get_user_from_arg
     puts "\nLogging in to #{user.url} as #{user.email}...\n\n"
     visit_and_log_in(user)
-
-    loop do
-      puts "\n\nPress Ctrl-C to exit and close browser.\n\n"
-      puts "You can also press Ctrl-Z to send this to the background to continue using your terminal."
-      puts "When you are done, type fg[Enter] and then Ctrl-C."
-      $stdin.gets
-    end
+    print_post_open_message_and_wait
   end
 
 
@@ -89,6 +97,23 @@ class LoginExecutor
     exit unless (1..(USERS.size)).include?(choice)
 
     USERS[choice - 1]
+  end
+
+
+  def print_post_open_message_and_wait
+    loop do
+      puts <<~HEREDOC
+
+      --------------------------------------------------------------------------------
+      Press Ctrl-C to exit and close browser.
+
+      You can also press Ctrl-Z to send this to the background to continue using your terminal.
+      When you are done, type fg[Enter] and then Ctrl-C.
+
+      Next time you can pass the user number on the command line if you like.
+      HEREDOC
+      $stdin.gets
+    end
   end
 end
 
