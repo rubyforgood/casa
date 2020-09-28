@@ -1,0 +1,96 @@
+#!/usr/bin/env ruby
+
+# This script simplifies login for experimentation with the users added to the application when it is seeded
+# in development mode.
+#
+# It outputs the available users and accepts a numbered choice. It then logs in as that choice,
+# at the URL appropriate for that user.
+#
+# The browser window remains open as long as the script has not yet terminated (using Ctrl-C).
+# You can either keep a terminal with this script open, or you can send it to the background with Ctrl-Z.
+# If the latter, when you are finished using the browser, you can bring the script back to the foreground with `fg[Enter]`.
+#
+# Usage: `bin/login` from the project root
+
+require 'webdrivers'
+require 'capybara/dsl'
+
+class LoginExecutor
+
+  include Capybara::DSL
+
+  Capybara.default_driver = :selenium
+
+  DEFAULT_LOGIN_URL        = ENV['CASA_DEFAULT_LOGIN_URL'] || 'http://localhost:3000'
+  ALL_CASA_ADMIN_LOGIN_URL = ENV['ALL_CASA_ADMIN_LOGIN_URL'] || 'http://localhost:3000/all_casa_admins/sign_in'
+
+  User = Struct.new(:email, :url)
+
+  USERS = [
+      User.new('volunteer1@example.com',       DEFAULT_LOGIN_URL),
+      User.new('supervisor1@example.com',      DEFAULT_LOGIN_URL),
+      User.new('casa_admin1@example.com',      DEFAULT_LOGIN_URL),
+      User.new('other_casa_admin@example.com', DEFAULT_LOGIN_URL),
+      User.new('other.supervisor@example.com', DEFAULT_LOGIN_URL),
+      User.new('other.volunteer@example.com',  DEFAULT_LOGIN_URL),
+      User.new('allcasaadmin@example.com',     ALL_CASA_ADMIN_LOGIN_URL),
+  ]
+
+
+  def self.login
+    self.new.call
+  end
+
+
+  def call
+    user = ARGV.empty? ? get_user_from_input : get_user_from_arg
+    puts "\nLogging in to #{user.url} as #{user.email}...\n\n"
+    visit_and_log_in(user)
+
+    loop do
+      puts "\n\nPress Ctrl-C to exit and close browser.\n\n"
+      puts "You can also press Ctrl-Z to send this to the background to continue using your terminal."
+      puts "When you are done, type fg[Enter] and then Ctrl-C."
+      $stdin.gets
+    end
+  end
+
+
+  private  # ----------------------------- all methods below are private ----------------
+
+  def visit_and_log_in(user)
+    visit user.url
+    fill_in "Email", with: user.email
+    fill_in "Password", with: "123456"
+    click_on "Log in"
+  end
+
+
+  def get_user_from_arg
+    arg = ARGV.first.strip
+    user = USERS[arg.to_i - 1]
+    unless user
+      puts "\nInvalid option: #{arg}. Must be a number between 1 and #{USERS.size}"
+      exit -1
+    end
+    user
+  end
+
+
+  def get_user_from_input
+    puts "With which user would you like to log in to CASA?\n\n"
+    USERS.each_with_index do |user, index|
+      puts "#{index + 1}) #{user.email}"
+    end
+    puts "\nInput a number, then [Enter]. An invalid entry will exit."
+
+    choice = $stdin.gets.chomp.to_i
+
+    exit unless (1..(USERS.size)).include?(choice)
+
+    USERS[choice - 1]
+  end
+end
+
+
+LoginExecutor.login
