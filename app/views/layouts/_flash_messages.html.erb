@@ -1,0 +1,7 @@
+<div class="header-flash">
+  <% flash.delete(:timedout).each do |key, value| %>
+    <div class="<%= flash_class(key) %> alert-dismissible fade show" role="alert">
+      <%= sanitize(value, tags: %w(ul li)) %>
+    </div>
+  <% end %>
+</div>

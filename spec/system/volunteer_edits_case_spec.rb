@@ -15,6 +15,6 @@ RSpec.describe "volunteer edits case", type: :system do
 
     click_on "Back"
 
-    expect(page).to have_text("Your Case")
+    expect(page).to have_text("My Case")
   end
 end

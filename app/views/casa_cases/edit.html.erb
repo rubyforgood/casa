@@ -1,16 +1,7 @@
-<%= link_to 'Back', root_path %>
-
+<%= link_to "Back", casa_cases_path %>
 <h1>Editing CASA Case</h1>
 
-<br>
-
-<div class="row">
-  <div class="col-sm-6">
-    <%= render 'form', casa_case: @casa_case %>
-  </div>
-</div>
-
-<br>
+<%= render 'form', casa_case: @casa_case %>
 
 <% if Pundit.policy(current_user, @casa_case).assign_volunteers? %>
   <%= render "volunteer_assignment" %>

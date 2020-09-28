@@ -65,14 +65,52 @@ RSpec.describe User, type: :model do
     end
 
     context "#no_contact_for_two_weeks" do
-      it "returns the number of volunteers who have not made contact in over 2 weeks" do
-        supervisor = create(:supervisor)
+      let(:supervisor) {create(:supervisor)}
 
-        volunteer = create(:volunteer, :with_casa_cases, supervisor: supervisor)
+      it "returns zero for a volunteer that has successfully made contact in at least one contact_case within the last 2 weeks" do
+        volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
 
-        case_of_interest = volunteer.casa_cases.first
-        create(:case_contact, creator: volunteer, casa_case: case_of_interest, contact_made: true, occurred_at: 3.weeks.ago)
+        case_of_interest_1 = volunteer_1.casa_cases.first
+        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: false, occurred_at: 1.weeks.ago)
         expect(supervisor.no_contact_for_two_weeks).to eq(1)
+        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, occurred_at: 1.weeks.ago)
+        expect(supervisor.no_contact_for_two_weeks).to eq(0)
+      end
+
+      it "returns one for a volunteer that has not made any contact_cases within the last 2 weeks" do
+        volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
+
+        case_of_interest_1 = volunteer_1.casa_cases.first
+
+        expect(supervisor.no_contact_for_two_weeks).to eq(1)
+      end
+
+      it "returns zero for a volunteer that is not assigned to any casa cases" do
+        volunteer_2 = create(:volunteer, supervisor: supervisor)
+
+        expect(supervisor.no_contact_for_two_weeks).to eq(0)
+      end
+
+      it "returns one for a volunteer that has successfully made contact in at least one contact_case with occurred_at after 2 weeks" do
+        volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
+
+        case_of_interest_1 = volunteer_1.casa_cases.first
+
+        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, occurred_at: 3.weeks.ago)
+        expect(supervisor.no_contact_for_two_weeks).to eq(1)
+      end
+
+      it "returns zero for a volunteer that has no active casa case assignments" do
+        volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
+
+        case_of_interest_1 = volunteer_1.casa_cases.first
+        case_of_interest_2 = volunteer_1.casa_cases.last
+        case_assignment_1 = case_of_interest_1.case_assignments.find_by(volunteer: volunteer_1)
+        case_assignment_2 = case_of_interest_2.case_assignments.find_by(volunteer: volunteer_1)
+        case_assignment_1.update!(is_active: false)
+        case_assignment_2.update!(is_active: false)
+
+        expect(supervisor.no_contact_for_two_weeks).to eq(0)
       end
     end
   end

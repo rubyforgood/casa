@@ -1,11 +1,7 @@
-<%= link_to 'Back', root_path %>
-
 <h1>Editing CASA Organization</h1>
 
-<br>
-
-<div class="row">
-  <div class="col-sm-6">
+<div class="card card-container">
+  <div class="card-body">
     <%= form_with(model: current_organization, local: true) do |form| %>
       <%= render "/shared/error_messages", resource: current_organization %>
         <div class="field form-group">
@@ -31,10 +27,12 @@
   </div>
 </div>
 
-<br />
+<h1 class="pt-5">Manage Contact Types</h1>
 
-<%= render "contact_type_groups" %>
+<div class="card card-container">
+  <div class="card-body">
+    <%= render "contact_type_groups" %>
 
-<br />
-
-<%= render "contact_types" %>
+    <%= render "contact_types" %>
+  </div>
+</div>

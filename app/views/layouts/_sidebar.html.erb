@@ -1,0 +1,64 @@
+<div id="sidebar-js" class="sidebar-wrapper">
+  <div class="sidebar-heading">
+    <% if all_casa_admin_signed_in? %>
+      <%= image_pack_tag("media/src/images/default-logo.png",
+          alt: "CASA Logo",
+          class: "d-inline-block align-text-bottom") %>
+    <% else %>
+      <%= image_pack_tag(current_organization.logo_url,
+          alt: current_organization.logo_alt_text || "CASA Logo",
+          class: "d-inline-block align-text-bottom") if current_organization&.logo_url %>
+    <% end %>
+  </div>
+  <div class="sidebar-container">
+    <div class="sidebar-menu">
+      <div class="list-group list-group-flush">
+        <% if user_signed_in? %>
+          <%= menu_item(label: "Supervisors", path: supervisors_path, visible: policy(Supervisor).index?) %>
+          <%= menu_item(label: "Volunteers", path: volunteers_path, visible: policy(Volunteer).index?) %>
+          <%= menu_item(label: cases_index_title, path: casa_cases_path) %>
+          <%= menu_item(label: "Case Contacts", path: case_contacts_path) %>
+          <%= menu_item(label: "Admins", path: casa_admins_path, visible: policy(CasaAdmin).index?) %>
+        <% end %>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="list-group list-group-flush account-details">
+        <li class="list-group-item">
+          <span class="label">Location</span>
+          <span class="value"><%= page_header %></span>
+        </li>
+        <li class="list-group-item">
+          <span class="label">Role</span>
+          <span class="value"><%= current_role %></span>
+        </li>
+      </div>
+      <div class="list-group list-group-flush footer-nav">
+        <% if user_signed_in? %>
+          <%= link_to "Edit Profile", edit_users_path, class: "list-group-item" %>
+
+          <% if policy(:application).see_reports_page? %>
+            <%= link_to "Generate Reports", reports_path, class: "list-group-item" %>
+          <% end %>
+          <% if policy(:application).see_import_page? %>
+            <%= link_to "System Imports", imports_path, class: "list-group-item" %>
+          <% end %>
+          <% if policy(:application).modify_organization? %>
+            <%= link_to "Edit Organization", edit_casa_org_path(current_organization), class: "list-group-item" %>
+          <% end %>
+          <li class="list-group-item">
+            <%= current_user.email %>
+          </li>
+        <% end %>
+
+        <% if all_casa_admin_signed_in? %>
+          <div class="list-group-item">
+            <%= current_all_casa_admin.email %>
+          </div>
+          <%= link_to "Edit Profile", edit_all_casa_admins_path, class: "list-group-item" %>
+        <% end %>
+        <%= session_link %>
+      </div>
+    </div>
+  </div>
+</div>

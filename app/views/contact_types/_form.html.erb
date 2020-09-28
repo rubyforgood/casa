@@ -2,10 +2,8 @@
 
 <h1><%= title %></h1>
 
-<br />
-
-<div class="row">
-  <div class="col-sm-6">
+<div class="card card-container">
+  <div class="card-body">
     <%= form_with(model: contact_type, local: true) do |form| %>
       <%= render "/shared/error_messages", resource: contact_type %>
       <div class="field form-group">
@@ -20,7 +18,6 @@
         <%= form.check_box :active %>
         <%= form.label :active %>
       </div>
-      <br>
 
       <div class="actions">
         <%= form.submit "Submit", class: "btn btn-primary" %>
