@@ -30,16 +30,25 @@ class CasaCasePolicy
     user.is_a?(CasaAdmin)
   end
 
+  def update_contact_types?
+    user.is_a?(Supervisor)
+  end
+
   def assign_volunteers?
     is_in_same_org? && is_supervisor_or_casa_admin?
   end
 
   def permitted_attributes
+    common_attrs = [
+      :transition_aged_youth,
+      casa_case_contact_types_attributes: [:contact_type_id],
+    ]
+
     case @user
     when CasaAdmin
-      %i[case_number transition_aged_youth birth_month_year_youth]
+      common_attrs.concat(%i[case_number birth_month_year_youth])
     else
-      %i[transition_aged_youth]
+      common_attrs
     end
   end
 

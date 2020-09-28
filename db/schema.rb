@@ -27,6 +27,15 @@ ActiveRecord::Schema.define(version: 2020_09_25_181042) do
     t.index ["reset_password_token"], name: "index_all_casa_admins_on_reset_password_token", unique: true
   end
 
+  create_table "casa_case_contact_types", force: :cascade do |t|
+    t.bigint "contact_type_id", null: false
+    t.bigint "casa_case_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["casa_case_id"], name: "index_casa_case_contact_types_on_casa_case_id"
+    t.index ["contact_type_id"], name: "index_casa_case_contact_types_on_contact_type_id"
+  end
+
   create_table "casa_cases", force: :cascade do |t|
     t.string "case_number", null: false
     t.boolean "transition_aged_youth", default: false, null: false

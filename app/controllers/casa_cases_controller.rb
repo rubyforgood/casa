@@ -1,6 +1,7 @@
 class CasaCasesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_casa_case, only: %i[show edit update destroy]
+  before_action :set_contact_types, only: %i[new edit update create]
   before_action :require_organization!
 
   # GET /casa_cases
@@ -47,7 +48,7 @@ class CasaCasesController < ApplicationController
   # PATCH/PUT /casa_cases/1.json
   def update
     respond_to do |format|
-      if @casa_case.update(casa_case_update_params)
+      if @casa_case.update_cleaning_contact_types(casa_case_update_params)
         format.html { redirect_to edit_casa_case_path, notice: "CASA case was successfully updated." }
         format.json { render :show, status: :ok, location: @casa_case }
       else
@@ -84,5 +85,9 @@ class CasaCasesController < ApplicationController
   # Separate params so only admins can update the case_number
   def casa_case_update_params
     params.require(:casa_case).permit(policy(@casa_case).permitted_attributes)
+  end
+
+  def set_contact_types
+    @contact_types = ContactType.for_organization(current_organization)
   end
 end

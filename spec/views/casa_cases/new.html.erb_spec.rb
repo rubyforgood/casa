@@ -5,6 +5,7 @@ describe "casa_cases/new" do
 
   before do
     assign :casa_case, CasaCase.new
+    assign :contact_types, []
   end
 
   context "while signed in as admin" do
@@ -12,7 +13,7 @@ describe "casa_cases/new" do
       sign_in_as_admin
     end
 
-    it { is_expected.to have_selector("a", text: "Return to Dashboard") }
+    it { is_expected.to have_selector("a", text: "Back") }
     it { is_expected.to include(CGI.escapeHTML("Youth's Birth Month & Year")) }
   end
 
@@ -21,6 +22,8 @@ describe "casa_cases/new" do
       sign_in_as_supervisor
     end
 
+    it { is_expected.to have_selector("a", text: "Back") }
     it { is_expected.not_to include(CGI.escapeHTML("Youth's Birth Month & Year")) }
+    it { is_expected.to have_selector("label", text: "Contact types") }
   end
 end
