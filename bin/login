@@ -107,11 +107,14 @@ class LoginExecutor
       --------------------------------------------------------------------------------
       Press Ctrl-C to exit and close browser.
 
-      You can also press Ctrl-Z to send this to the background to continue using your terminal.
-      When you are done, type fg[Enter] and then Ctrl-C.
-
-      Next time you can pass the user number on the command line if you like.
+      To move this script to the background so you can continue using your terminal:
+        Press Ctrl-Z.
+        When you are done, type fg[Enter] and then Ctrl-C.
       HEREDOC
+
+      if ARGV.empty?
+        puts "\nNext time you can pass the user number on the command line if you like.\n\n"
+      end
       $stdin.gets
     end
   end
