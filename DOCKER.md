@@ -9,7 +9,6 @@ The following commands should just be run for the initial setup only. Rebuilding
    don't have permission to commit directly to this repo.
 4. Change into the application directory: `cd casa`
 5. Run `docker-compose build` to build images for all services.
-6. Run `docker-compose up -d database` to start the database service.
 7. Run `docker-compose run --rm web rails db:reset` to create the dev and test
    databases, load the schema, and run the seeds file.
 8. Run `docker-compose up -d` to start all the remaining services.
@@ -20,16 +19,16 @@ The following commands should just be run for the initial setup only. Rebuilding
 
 ## For ongoing development:
 1. Run `docker-compose up -d` to start all services.
+5. Run `docker-compose ps` to view status of containers.
+1. Run `docker-compose stop` to stop all services.
+1. Run `docker-compose restart web` to restart the web server.
+1. Run `docker-compose rm <service>` to remove a stopped container.
+1. Run `docker-compose rm -f <service>` to force remove a stopped container.
 1. Run `docker-compose up -d --force-recreate` to start services with new
    containers.
 1. Run `docker-compose build web` to build a new image for the web service.
    After re-building an image, run `docker-compose up -d --force-recreate web`
    to start a container running the new image.
-5. Run `docker-compose ps` to view status of containers.
-1. Run `docker-compose stop` to stop all services.
-1. Run `docker-compose rm <service>` to remove a stopped container.
-1. Run `docker-compose rm -f <service>` to force remove a stopped container.
-1. Run `docker-compose restart web` to restart the web server.
 4. Run `docker-compose down -v` to stop and remove all containers, as well as
    volumes and networks. This command is helpful if you want to start with a
    clean slate.  However, it will completely remove the database and you will

@@ -11,6 +11,8 @@ services:
       - /usr/src/app/node_modules
     env_file:
       - config/docker.env
+    depends_on:
+      - database
     stdin_open: true
     tty: true
 
