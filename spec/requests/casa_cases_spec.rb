@@ -6,8 +6,10 @@ RSpec.describe "/casa_cases", type: :request do
   let(:invalid_attributes) { {case_number: nil} }
   let(:casa_case) { create(:casa_case, casa_org: organization, case_number: "111") }
 
+  before { sign_in user }
+
   describe "as an admin" do
-    before { sign_in create(:casa_admin, casa_org: organization) }
+    let(:user) { create(:casa_admin, casa_org: organization) }
 
     describe "GET /index" do
       it "renders a successful response" do
@@ -118,11 +120,9 @@ RSpec.describe "/casa_cases", type: :request do
     end
   end
 
-  context "as a volunteer" do
-    let(:volunteer) { create(:volunteer, casa_org: organization) }
-    let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
-
-    before { sign_in volunteer }
+  describe "as a volunteer" do
+    let(:user) { create(:volunteer, casa_org: organization) }
+    let!(:case_assignment) { create(:case_assignment, volunteer: user, casa_case: casa_case) }
 
     describe "GET /new" do
       it "denies access and redirects elsewhere" do
@@ -142,13 +142,14 @@ RSpec.describe "/casa_cases", type: :request do
 
     describe "PATCH /update" do
       context "with valid parameters" do
-        let(:new_attributes) { { case_number: "12345", transition_aged_youth: true } }
+        let(:new_attributes) { { case_number: "12345", transition_aged_youth: true, court_report_submitted: true } }
 
         it "updates fields (except case_number)" do
           patch casa_case_url(casa_case), params: { casa_case: new_attributes }
           casa_case.reload
           expect(casa_case.case_number).to eq "111"
           expect(casa_case.transition_aged_youth).to be true
+          expect(casa_case.court_report_submitted).to be true
         end
 
         it "redirects to the casa_case" do
@@ -163,13 +164,58 @@ RSpec.describe "/casa_cases", type: :request do
         mine = create(:casa_case, casa_org: organization, case_number: SecureRandom.hex(32))
         other = create(:casa_case, casa_org: organization, case_number: SecureRandom.hex(32))
 
-        volunteer.casa_cases << mine
+        user.casa_cases << mine
 
         get casa_cases_url
 
         expect(response).to be_successful
         expect(response.body).to include(mine.case_number)
         expect(response.body).not_to include(other.case_number)
+      end
+    end
+  end
+
+  describe "as a supervisor" do
+    let(:user) { create(:supervisor, casa_org: organization) }
+
+    describe "GET /new" do
+      it "renders a successful response" do
+        get new_casa_case_url
+        expect(response).to be_successful
+      end
+    end
+
+    describe "GET /edit" do
+      it "render a successful response" do
+        get edit_casa_case_url(casa_case)
+        expect(response).to be_successful
+      end
+    end
+
+    describe "PATCH /update" do
+      context "with valid parameters" do
+        let(:new_attributes) { { case_number: "12345", transition_aged_youth: true, court_report_submitted: true } }
+
+        it "updates fields (except case_number)" do
+          patch casa_case_url(casa_case), params: { casa_case: new_attributes }
+          casa_case.reload
+          expect(casa_case.case_number).to eq "111"
+          expect(casa_case.transition_aged_youth).to be true
+          expect(casa_case.court_report_submitted).to be true
+        end
+
+        it "redirects to the casa_case" do
+          patch casa_case_url(casa_case), params: {casa_case: new_attributes}
+          expect(response).to redirect_to(edit_casa_case_path(casa_case))
+        end
+      end
+    end
+
+    describe "GET /index" do
+      it "renders a successful response" do
+        create(:casa_case)
+        get casa_cases_url
+        expect(response).to be_successful
       end
     end
   end

@@ -24,6 +24,10 @@
         <%= form.label :transition_aged_youth %>
         <%= form.check_box :transition_aged_youth %>
       </div>
+      <div class="field form-group">
+        <%= form.label :court_report_submitted %>
+        <%= form.check_box :court_report_submitted %>
+      </div>
 
       <% if Pundit.policy(current_user, casa_case).update_contact_types? %>
         <div id="contact-type-form" class="field contact-type form-group">
