@@ -13,7 +13,6 @@ RSpec.describe "admin edits case", type: :system do
 
     visit edit_casa_case_path(casa_case)
 
-    check "Transition aged youth"
     check "Court report submitted"
     click_on "Update CASA Case"
 

@@ -11,7 +11,7 @@ RSpec.describe "volunteer edits case", type: :system do
   end
 
   it "clicks back button after editing case" do
-    check "Transition aged youth"
+    check "Court report submitted"
     click_on "Update CASA Case"
 
     has_no_checked_field? :court_report_submitted
