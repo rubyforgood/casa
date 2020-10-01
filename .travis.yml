@@ -38,7 +38,6 @@ install:
 script:
   - bundle exec rails webpacker:compile
   - bundle exec brakeman
-<<<<<<< HEAD
   - $(yarn bin)/cypress run --record
   - RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rails spec
   # deploy:
@@ -49,9 +48,7 @@ script:
   #   app:
   #     master: casa-r4g-staging
   #     production: none-yet
-=======
   - RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
->>>>>>> 55331e73952f3877c0f2796709cbc6ac83ca5bd0
