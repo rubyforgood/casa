@@ -1,36 +1,39 @@
-<%= link_to 'Back', :back %>
-
 <div class="row">
   <div class="col-sm-12 dashboard-table-header">
-    <h1>CASA Cases</h1>
-    <%- if policy(:casa_case).new? %>
-      <%= link_to 'New CASA Case', new_casa_case_path, class: "btn btn-primary" %>
-    <%- end %>
+    <% if current_user.volunteer? %>
+      <h1>My <%= "Case".pluralize(@casa_cases.count) %></h1>
+    <% else %>
+      <h1><%= "Case".pluralize(@casa_cases.count) %></h1>
+    <% end %>
+    <% if policy(:dashboard).see_volunteers_section? %>
+      <%= link_to "New Case", new_casa_case_path, class: "btn btn-primary" %>
+    <% end %>
   </div>
 </div>
 
-<br>
-
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Case number</th>
-      <th>Transition Aged Youth</th>
-      <th colspan="3">Actions</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @casa_cases.each do |casa_case| %>
+<div class="card card-container">
+  <div class="card-body">
+    <table class="table case-list" id="casa_cases">
+      <thead>
       <tr>
-        <td><%= casa_case.case_number %></td>
-        <td><%= casa_case.decorate.transition_aged_youth_icon %></td>
-        <td><%= link_to 'Show', casa_case %></td>
-        <td><%= link_to 'Edit', edit_casa_case_path(casa_case) %></td>
-        <td><%= link_to 'Destroy', casa_case, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th>Case Number</th>
+        <th>Transition Aged Youth</th>
+        <th>Assigned To</th>
+        <th>Actions</th>
+        <th></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
+      </thead>
+      <tbody>
+      <% @casa_cases.each do |casa_case| %>
+        <tr>
+          <td><%= link_to(casa_case.case_number, casa_case) %></td>
+          <td><%= casa_case.decorate.transition_aged_youth_icon %></td>
+          <td><%= safe_join(casa_case&.volunteers&.map { |vol| link_to(vol.display_name, edit_volunteer_path(vol)) }, ", ") %></td>
+          <td><%= link_to 'Detail View', casa_case_path(casa_case) %></td>
+          <td><%= link_to 'Edit', edit_casa_case_path(casa_case) %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

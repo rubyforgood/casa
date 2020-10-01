@@ -1,4 +1,4 @@
-<%= link_to 'Back', root_path %>
+<%= link_to "Back", root_path %>
 
 <h1>Edit Volunteer Assignments for <%= @volunteer.name %></h1>
 
@@ -16,9 +16,20 @@
     <tbody>
       <% @volunteer.case_assignments.each do |assignment| %>
         <tr>
-          <td><%= assignment.casa_case.case_number %></td>
-          <td><%= assignment.casa_case.decorate.transition_aged_youth_icon %></td>
-          <td><%= button_to 'Unassign Case', volunteer_case_assignment_path(@volunteer, assignment), method: :delete, class: "btn btn-danger" %></td>
+          <td>
+            <span class="mobile-label">Case Number</span>
+            <%= assignment.casa_case.case_number %>
+          </td>
+          <td>
+            <span class="mobile-label">Transition Aged Youth</span>
+            <%= assignment.casa_case.decorate.transition_aged_youth_icon %>
+          </td>
+          <td>
+            <%= button_to 'Unassign Case',
+                volunteer_case_assignment_path(@volunteer, assignment),
+                method: :delete,
+                class: "btn btn-danger" %>
+          </td>
         </tr>
       <% end %>
     </tbody>
@@ -35,7 +46,7 @@
 
       <div class='form-group'>
         <label for="case_assignment_casa_case_id">Select a Case</label>
-        <select id="is-this-used-anywhere" class='form-control'>
+        <select id="is-this-used-anywhere" class='form-control select2'>
           <% CasaCase.all.each do |casa_case| %>
             <option value="<%= casa_case.id %>"><%= casa_case.case_number %></option>
           <% end %>

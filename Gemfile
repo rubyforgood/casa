@@ -6,15 +6,16 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "2.7.1"
 gem "rails", "~> 6.0.3"
 
-gem "awesome_print" # easier console reading
+gem "after_party" # post-deployment tasks
+gem "amazing_print" # easier console reading
 gem "devise" # for authentication
 gem "devise_invitable"
 gem "draper" # adds decorators for cleaner presentation logic
 gem "faker" # creates realistic seed data, valuable for staging and demos
-gem "jbuilder", "~> 2.7" # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem "jbuilder", "~> 2.10" # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "paper_trail" # tracking changes
 gem "pg", ">= 0.18", "< 2.0" # Use postgresql as the database for Active Record
-gem "puma", "~> 4.3" # Use Puma as the app server
+gem "puma", "~> 5.0" # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "skylight" # automated performance testing https://www.skylight.io/
 gem "webpacker", "~> 5.2" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
@@ -36,7 +37,7 @@ end
 
 group :development do
   gem "annotate" # for adding db field listings to models as comments
-  gem 'erb_lint', require: false
+  gem "erb_lint", require: false
   gem "letter_opener" # Opens emails in new tab for easier testing
   gem "listen", ">= 3.0.5", "< 3.3"
   gem "spring" # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -50,9 +51,7 @@ group :test do
   gem "rake"
   gem "selenium-webdriver"
   gem "simplecov", "~> 0.19.0", require: false # pinned as a workaround for https://github.com/codeclimate/test-reporter/issues/418
-  unless ENV["DOCKER"]
-    gem "webdrivers" # Easy installation and use of web drivers to run system tests with browsers
-  end
+  gem "webdrivers", require: false # Easy installation and use of web drivers to run system tests with browsers; do not initially require as causes conflict with Docker setup
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

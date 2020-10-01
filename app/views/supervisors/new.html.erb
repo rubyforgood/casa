@@ -1,9 +1,10 @@
 <%= errors_for(@supervisor) %>
 
+<%= link_to "Back", supervisors_path %>
 <h1>Create New Supervisor</h1>
 
-<div class="row">
-  <div class="col-sm-6">
+<div class="card card-container">
+  <div class="card-body">
     <%= form_with model: @supervisor, local: true, url: supervisors_path do |form| %>
       <div class="field form-group">
         <%= form.label :email %>
@@ -17,7 +18,7 @@
 
       <div class="actions">
         <%= form.submit "Create Supervisor", class: "btn btn-primary" %>
-        <%= link_to 'Return to Dashboard', root_path, class: 'btn btn-info pull-right' %>
+        <%= return_to_dashboard_button %>
       </div>
     <% end %>
   </div>

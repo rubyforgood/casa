@@ -6,6 +6,10 @@ RSpec.describe "/supervisors", type: :request do
   let(:admin) { create(:casa_admin) }
   let(:supervisor) { create(:supervisor) }
 
+  let(:update_supervisor_params) {
+    {supervisor: {email: "newemail@gmail.com", display_name: "New Name"}}
+  }
+
   describe "GET /new" do
     it "admin can view the new supervisor page" do
       sign_in admin
@@ -70,6 +74,17 @@ RSpec.describe "/supervisors", type: :request do
 
         expect(supervisor).not_to be_active
       end
+
+      context "when the email exists already and the supervisor has volunteers assigned" do
+        let(:other_supervisor) { create(:supervisor) }
+        let(:supervisor) { create(:supervisor, :with_volunteers) }
+
+        it "gracefully fails" do
+          patch supervisor_path(supervisor), params: {supervisor: {email: other_supervisor.email}}
+
+          expect(response).to be_successful
+        end
+      end
     end
 
     context "while signed in as a supervisor" do
@@ -113,7 +128,15 @@ RSpec.describe "/supervisors", type: :request do
     end
   end
 
-  def update_supervisor_params
-    {supervisor: {email: "newemail@gmail.com", display_name: "New Name"}}
+  describe "POST /create" do
+    it "sends an invitation email" do
+      sign_in admin
+
+      post supervisors_url, params: {supervisor: {display_name: "Display Name", email: "displayname@example.com"}}
+
+      expect(Devise.mailer.deliveries.count).to eq(1)
+      expect(Devise.mailer.deliveries.first.text_part.body.to_s).to include("A CASA/Prince George’s County Supervisor console")
+      expect(Devise.mailer.deliveries.first.text_part.body.to_s).to include("This is the first step to accessing your new Supervisor account.")
+    end
   end
 end

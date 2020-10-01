@@ -1,4 +1,4 @@
-/* global alert */
+/* global alert $ */
 window.onload = function () {
   const milesDriven = document.getElementById('case_contact_miles_driven')
   if (!milesDriven) return
@@ -8,7 +8,6 @@ window.onload = function () {
   const durationMinutes = document.getElementById('case-contact-duration-minutes')
   const durationMinuteDisplay = document.getElementById('casa-contact-duration-minutes-display')
   const caseContactSubmit = document.getElementById('case-contact-submit')
-  const contactTypeForm = document.getElementById('contact-type-form')
 
   milesDriven.onchange = function () {
     const contactMedium = document.getElementById('case_contact_medium_type').value || '(contact medium not set)'
@@ -46,15 +45,15 @@ window.onload = function () {
     }
   }
 
-  function validateContactType () {
-    const childElements = Array.from(contactTypeForm.children)
-    const isAtLeastOneChecked = childElements.filter(x => {
-      return x.querySelector('input') && x.querySelector('input').checked
-    }).length
-    if (!isAtLeastOneChecked) {
-      childElements[2].querySelector('input').setAttribute('required', true)
+  function validateAtLeastOneChecked (elements) {
+    // convert to Array
+    const elementsArray = Array.prototype.slice.call(elements)
+
+    const numChecked = elementsArray.filter(x => x.checked).length
+    if (numChecked === 0) {
+      elementsArray[0].required = true
     } else {
-      childElements[2].querySelector('input').removeAttribute('required')
+      elementsArray[0].required = false
     }
   }
 
@@ -70,8 +69,39 @@ window.onload = function () {
     }
   }
 
-  caseContactSubmit.onclick = function () {
-    validateContactType()
+  function validateNoteContent (e) {
+    const note_content = document.getElementById('case_contact_notes').value;
+    if (note_content != '') {
+      e.preventDefault();
+      $('#confirm-submit').modal('show');
+      document.getElementById('note-content').innerHTML = note_content;
+    }
+  }
+
+  $('#casa-contact-form').submit(function(e) {
+    validateNoteContent(e)
+  });
+
+  $("#confirm-submit").on("focus", function () {
+    document.getElementById('modal-case-contact-submit').disabled = false;
+  });
+
+  $("#confirm-submit").on("hide.bs.modal", function () {
+    caseContactSubmit.disabled = false
+  });
+
+  const caseContactSubmitFromModal = document.getElementById('modal-case-contact-submit')
+  caseContactSubmitFromModal.onclick = function () {
+    $('#casa-contact-form').unbind("submit");
+  }
+
+  caseContactSubmit.onclick = function (e) {
+    validateAtLeastOneChecked(document.querySelectorAll('.casa-case-id'))
+    validateAtLeastOneChecked(document.querySelectorAll('.case-contact-contact-type'))
+
     validateDuration()
   }
 }
+$('document').ready(() => {
+  $('.add-disallow-edit-tooltip a').tooltip('disable')
+})

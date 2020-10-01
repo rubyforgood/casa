@@ -62,11 +62,12 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    after_party (1.11.2)
+    amazing_print (1.2.1)
     annotate (3.1.1)
       activerecord (>= 3.2, < 7.0)
       rake (>= 10.4, < 14.0)
     ast (2.4.1)
-    awesome_print (1.8.0)
     bcrypt (3.1.13)
     better_html (1.0.15)
       actionview (>= 4.0)
@@ -179,7 +180,7 @@ GEM
       byebug (~> 11.0)
       pry (~> 0.13.0)
     public_suffix (4.0.5)
-    puma (4.3.5)
+    puma (5.0.2)
       nio4r (~> 2.0)
     pundit (2.1.0)
       activesupport (>= 3.0.0)
@@ -320,8 +321,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  after_party
+  amazing_print
   annotate
-  awesome_print
   bootsnap (>= 1.4.2)
   brakeman
   bugsnag
@@ -335,14 +337,14 @@ DEPENDENCIES
   erb_lint
   factory_bot_rails
   faker
-  jbuilder (~> 2.7)
+  jbuilder (~> 2.10)
   letter_opener
   listen (>= 3.0.5, < 3.3)
   paper_trail
   pg (>= 0.18, < 2.0)
   pry
   pry-byebug
-  puma (~> 4.3)
+  puma (~> 5.0)
   pundit
   rails (~> 6.0.3)
   rake

@@ -4,13 +4,8 @@ class SupervisorVolunteersController < ApplicationController
 
   def create
     supervisor_volunteer = supervisor_volunteer_parent.supervisor_volunteers.find_or_create_by!(supervisor_volunteer_params)
-    supervisor_volunteer.is_active = true unless supervisor_volunteer.is_active?
+    supervisor_volunteer.is_active = true unless supervisor_volunteer&.is_active?
     supervisor_volunteer.save
-
-    SupervisorVolunteer
-      .where(volunteer_id: supervisor_volunteer.volunteer, is_active: false)
-      .where.not(supervisor_id: supervisor_volunteer.supervisor.id)
-      .destroy_all
 
     redirect_to after_action_path(supervisor_volunteer_parent)
   end
@@ -18,9 +13,9 @@ class SupervisorVolunteersController < ApplicationController
   def unassign
     volunteer = Volunteer.find(params[:id])
     supervisor_volunteer = volunteer.supervisor_volunteer
-    supervisor_volunteer.is_active = false
-    supervisor_volunteer.save
     supervisor = volunteer.supervisor
+    supervisor_volunteer.is_active = false
+    supervisor_volunteer.save!
     flash_message = "#{volunteer.decorate.name} was unassigned from #{supervisor.decorate.name}."
 
     redirect_to after_action_path(supervisor), notice: flash_message

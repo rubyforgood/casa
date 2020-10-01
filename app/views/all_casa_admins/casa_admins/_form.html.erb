@@ -1,0 +1,18 @@
+<%= form_for casa_admin, url: all_casa_admins_casa_org_casa_admins_path(casa_org), id: :new_casa_admin do |form| %>
+  <%= render "all_casa_admins/shared/error_messages", resource: casa_admin %>
+
+  <div class="field form-group">
+    <%= form.label :email %>
+    <%= form.text_field :email, class: "form-control" %>
+  </div>
+
+  <div class="field form-group">
+    <%= form.label :display_name %>
+    <%= form.text_field :display_name, class: "form-control" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Submit", class: "btn btn-primary" %>
+    <%= return_to_dashboard_button %>
+  </div>
+<% end %>

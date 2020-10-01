@@ -1,11 +1,14 @@
 class CasaCasesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_casa_case, only: %i[show edit update destroy]
+  before_action :set_contact_types, only: %i[new edit update create]
+  before_action :require_organization!
 
   # GET /casa_cases
   # GET /casa_cases.json
   def index
-    @casa_cases = policy_scope(CasaCase.all)
+    org_cases = CasaOrg.includes(:casa_cases).references(:casa_cases).find_by(id: current_user.casa_org_id).casa_cases
+    @casa_cases = policy_scope(org_cases)
   end
 
   # GET /casa_cases/1
@@ -16,7 +19,7 @@ class CasaCasesController < ApplicationController
 
   # GET /casa_cases/new
   def new
-    @casa_case = CasaCase.new
+    @casa_case = CasaCase.new(casa_org: current_organization)
     authorize @casa_case
   end
 
@@ -28,7 +31,7 @@ class CasaCasesController < ApplicationController
   # POST /casa_cases
   # POST /casa_cases.json
   def create
-    @casa_case = CasaCase.new(casa_case_params)
+    @casa_case = CasaCase.new(casa_case_params.merge(casa_org: current_organization))
 
     respond_to do |format|
       if @casa_case.save
@@ -45,8 +48,8 @@ class CasaCasesController < ApplicationController
   # PATCH/PUT /casa_cases/1.json
   def update
     respond_to do |format|
-      if @casa_case.update(casa_case_update_params)
-        format.html { redirect_to root_path, notice: "CASA case was successfully updated." }
+      if @casa_case.update_cleaning_contact_types(casa_case_update_params)
+        format.html { redirect_to edit_casa_case_path, notice: "CASA case was successfully updated." }
         format.json { render :show, status: :ok, location: @casa_case }
       else
         format.html { render :edit }
@@ -69,16 +72,22 @@ class CasaCasesController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_casa_case
-    @casa_case = CasaCase.find(params[:id])
+    @casa_case = current_organization.casa_cases.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    head :not_found
   end
 
   # Only allow a list of trusted parameters through.
   def casa_case_params
-    params.require(:casa_case).permit(:case_number, :transition_aged_youth, :casa_org_id)
+    params.require(:casa_case).permit(:case_number, :transition_aged_youth, :birth_month_year_youth)
   end
 
   # Separate params so only admins can update the case_number
   def casa_case_update_params
     params.require(:casa_case).permit(policy(@casa_case).permitted_attributes)
+  end
+
+  def set_contact_types
+    @contact_types = ContactType.for_organization(current_organization)
   end
 end

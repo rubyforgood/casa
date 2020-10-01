@@ -1,8 +1,6 @@
 # not a database model -- used for display in tables
 # volunteer is a user role and is controlled by User model
 class Volunteer < User
-  scope :active, -> { where(active: true) }
-
   TABLE_COLUMNS = %w[
     name
     email
@@ -30,6 +28,35 @@ class Volunteer < User
 
       updated
     end
+  end
+
+  def case_assignments_with_cases
+    case_assignments.includes(:casa_case)
+  end
+
+  def has_supervisor?
+    supervisor_volunteer.present? && supervisor_volunteer&.is_active?
+  end
+
+  def supervised_by?(supervisor)
+    self.supervisor == supervisor
+  end
+
+  # false if volunteer has any case with no contact in the past 30 days
+  def made_contact_with_all_cases_in_days?(num_days = 30)
+    total_cases_count = casa_cases.count
+    return true if total_cases_count.zero?
+    current_contact_cases_count = cases_where_contact_made_in_days(num_days).count
+    current_contact_cases_count == total_cases_count
+  end
+
+  private
+
+  def cases_where_contact_made_in_days(num_days = 30)
+    casa_cases
+      .joins(:case_contacts)
+      .where(case_contacts: {contact_made: true})
+      .where("case_contacts.occurred_at > ?", Date.current - num_days.days)
   end
 end
 

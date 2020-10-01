@@ -52,7 +52,7 @@ RSpec.describe DashboardPolicy do
     end
   end
 
-  permissions :see_supervisors_section? do
+  permissions :see_admins_section? do
     it "allows casa_admins" do
       expect(subject).to permit(create(:casa_admin))
     end

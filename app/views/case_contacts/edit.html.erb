@@ -1,14 +1,8 @@
+<%= link_to "Back", case_contacts_path %>
 <h1>Editing Case Contact</h1>
 
-<br>
-
-<div class="row">
-  <div class="col-sm-6">
+<div class="card card-container">
+  <div class="card-body">
     <%= render 'form', case_contact: @case_contact, casa_cases: @casa_cases %>
   </div>
 </div>
-
-<br>
-
-<%= link_to 'Show', @case_contact %> |
-<%= link_to 'Back', :back %>

@@ -3,14 +3,14 @@ class CaseContactParameters < SimpleDelegator
   def initialize(params)
     params =
       params.require(:case_contact).permit(
-        :other_type_text,
         :duration_minutes,
         :occurred_at,
         :contact_made,
         :medium_type,
         :miles_driven,
         :want_driving_reimbursement,
-        contact_types: []
+        :notes,
+        case_contact_contact_type_attributes: [:contact_type_id]
       )
 
     super(params)

@@ -25,7 +25,7 @@ class CaseContactDecorator < Draper::Decorator
   end
 
   def miles_traveled
-    object.miles_driven ? "#{object.miles_driven} 🚘" : "None"
+    object.miles_driven.zero? ? "" : object.miles_driven
   end
 
   def reimbursement
@@ -41,13 +41,13 @@ class CaseContactDecorator < Draper::Decorator
   end
 
   def contact_types
-    object.contact_types
-      &.map { |ct| ct.humanize.titleize }
+    object.db_contact_types
+      &.map { |ct| ct.name }
       &.to_sentence(last_word_connector: ", and ") || ""
   end
 
   def report_contact_types
-    object.contact_types&.map { |ct| ct.humanize.titleize }.join("|")
+    object.db_contact_types&.map { |ct| ct.name }&.join("|")
   end
 
   def medium_type

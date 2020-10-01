@@ -1,5 +1,4 @@
 class DashboardPolicy
-  include PolicyHelper
   attr_reader :user, :dashboard
 
   def initialize(user, dashboard)
@@ -16,14 +15,14 @@ class DashboardPolicy
   end
 
   def create_case_contacts?
-    user.volunteer? && user.casa_cases.present?
+    user.volunteer? && user.casa_cases.size > 0
   end
 
   def see_cases_section?
     true
   end
 
-  def see_supervisors_section?
+  def see_admins_section?
     user.casa_admin?
   end
 end

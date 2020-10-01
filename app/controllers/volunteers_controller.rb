@@ -2,7 +2,14 @@ class VolunteersController < ApplicationController
   # Uses authenticate_user to redirect if no user is signed in
   # and must_be_admin_or_supervisor to check user's role is appropriate
   before_action :authenticate_user!, :must_be_admin_or_supervisor
-  before_action :set_volunteer, except: [:new, :create]
+  before_action :set_volunteer, except: [:index, :new, :create]
+
+  def index
+    # Return all active/inactive volunteers, inactive will be filtered by default
+    @volunteers = policy_scope(
+      current_organization.volunteers.includes(:versions, :supervisor, :casa_cases, case_assignments: [:casa_case]).references(:supervisor, :casa_cases)
+    ).decorate
+  end
 
   def new
     @volunteer = Volunteer.new
@@ -12,7 +19,7 @@ class VolunteersController < ApplicationController
     @volunteer = Volunteer.new(create_volunteer_params)
 
     if @volunteer.save
-      VolunteerMailer.account_setup(@volunteer).deliver
+      @volunteer.invite!
       redirect_to root_path
     else
       render :new
@@ -20,7 +27,6 @@ class VolunteersController < ApplicationController
   end
 
   def edit
-    @available_casa_cases = CasaCase.all.order(:case_number)
   end
 
   def update
@@ -35,7 +41,7 @@ class VolunteersController < ApplicationController
     if @volunteer.activate
       VolunteerMailer.account_setup(@volunteer).deliver
 
-      if params[:redirect_to_path] == "casa_case" && casa_case = CasaCase.find(params[:casa_case_id])
+      if (params[:redirect_to_path] == "casa_case") && (casa_case = CasaCase.find(params[:casa_case_id]))
         redirect_to edit_casa_case_path(casa_case), notice: "Volunteer was activated."
       else
         redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was activated."

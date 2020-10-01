@@ -23,5 +23,6 @@ module Casa
     config.serve_static_assets = true
     config.skylight.environments << "staging"
     config.action_mailer.preview_path = "#{Rails.root}/lib/mailers/previews"
+    config.eager_load_paths << Rails.root.join("app", "lib", "importers")
   end
 end

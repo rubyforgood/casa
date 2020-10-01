@@ -4,11 +4,13 @@
 @import "~@fortawesome/fontawesome-free/scss/fontawesome";
 @import "~@fortawesome/fontawesome-free/scss/solid";
 
+@import "shared/dashboard";
 @import "shared/flashes";
 @import "shared/footer";
 @import "shared/form";
 @import "shared/layout";
 @import "shared/navbar";
+@import "shared/sidebar";
 @import "shared/typography";
 @import "shared/utilities";
 

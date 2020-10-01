@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_18_220659) do
+ActiveRecord::Schema.define(version: 2020_09_28_233606) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,20 +27,45 @@ ActiveRecord::Schema.define(version: 2020_08_18_220659) do
     t.index ["reset_password_token"], name: "index_all_casa_admins_on_reset_password_token", unique: true
   end
 
+  create_table "casa_case_contact_types", force: :cascade do |t|
+    t.bigint "contact_type_id", null: false
+    t.bigint "casa_case_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["casa_case_id"], name: "index_casa_case_contact_types_on_casa_case_id"
+    t.index ["contact_type_id"], name: "index_casa_case_contact_types_on_contact_type_id"
+  end
+
   create_table "casa_cases", force: :cascade do |t|
     t.string "case_number", null: false
     t.boolean "transition_aged_youth", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "casa_org_id", null: false
+    t.datetime "birth_month_year_youth"
+    t.boolean "court_report_submitted", default: false, null: false
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
     t.index ["case_number"], name: "index_casa_cases_on_case_number", unique: true
+  end
+
+  create_table "casa_org_logos", force: :cascade do |t|
+    t.bigint "casa_org_id", null: false
+    t.string "url"
+    t.string "alt_text"
+    t.string "size"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "banner_color"
+    t.index ["casa_org_id"], name: "index_casa_org_logos_on_casa_org_id"
   end
 
   create_table "casa_orgs", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "display_name"
+    t.string "address"
+    t.string "footer_links", default: [], array: true
   end
 
   create_table "case_assignments", force: :cascade do |t|
@@ -53,10 +78,18 @@ ActiveRecord::Schema.define(version: 2020_08_18_220659) do
     t.index ["volunteer_id"], name: "index_case_assignments_on_volunteer_id"
   end
 
+  create_table "case_contact_contact_types", force: :cascade do |t|
+    t.bigint "case_contact_id", null: false
+    t.bigint "contact_type_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["case_contact_id"], name: "index_case_contact_contact_types_on_case_contact_id"
+    t.index ["contact_type_id"], name: "index_case_contact_contact_types_on_contact_type_id"
+  end
+
   create_table "case_contacts", force: :cascade do |t|
     t.bigint "creator_id", null: false
     t.bigint "casa_case_id", null: false
-    t.string "other_type_text"
     t.integer "duration_minutes", null: false
     t.datetime "occurred_at", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -64,11 +97,30 @@ ActiveRecord::Schema.define(version: 2020_08_18_220659) do
     t.boolean "contact_made", default: false
     t.string "medium_type"
     t.string "contact_types", array: true
-    t.integer "miles_driven"
+    t.integer "miles_driven", default: 0, null: false
     t.boolean "want_driving_reimbursement", default: false
+    t.string "notes"
     t.index ["casa_case_id"], name: "index_case_contacts_on_casa_case_id"
     t.index ["contact_types"], name: "index_case_contacts_on_contact_types", using: :gin
     t.index ["creator_id"], name: "index_case_contacts_on_creator_id"
+  end
+
+  create_table "contact_type_groups", force: :cascade do |t|
+    t.bigint "casa_org_id", null: false
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active", default: true
+    t.index ["casa_org_id"], name: "index_contact_type_groups_on_casa_org_id"
+  end
+
+  create_table "contact_types", force: :cascade do |t|
+    t.bigint "contact_type_group_id", null: false
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active", default: true
+    t.index ["contact_type_group_id"], name: "index_contact_types_on_contact_type_group_id"
   end
 
   create_table "supervisor_volunteers", force: :cascade do |t|
@@ -79,6 +131,10 @@ ActiveRecord::Schema.define(version: 2020_08_18_220659) do
     t.boolean "is_active", default: true
     t.index ["supervisor_id"], name: "index_supervisor_volunteers_on_supervisor_id"
     t.index ["volunteer_id"], name: "index_supervisor_volunteers_on_volunteer_id"
+  end
+
+  create_table "task_records", id: false, force: :cascade do |t|
+    t.string "version", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -121,6 +177,7 @@ ActiveRecord::Schema.define(version: 2020_08_18_220659) do
   end
 
   add_foreign_key "casa_cases", "casa_orgs"
+  add_foreign_key "casa_org_logos", "casa_orgs"
   add_foreign_key "case_assignments", "casa_cases"
   add_foreign_key "case_assignments", "users", column: "volunteer_id"
   add_foreign_key "case_contacts", "casa_cases"

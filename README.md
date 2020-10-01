@@ -78,12 +78,6 @@ Bullet points `formatted like this` are commands you can run on your machine
   - If you're on Ubuntu/WSL, use `sudo apt-get install libpq-dev` so the gem can install. [Use the Postgres repo for Ubuntu or WSL to get the server and client tools](https://www.postgresql.org/download/linux/ubuntu/).
   - If you're using Docker, do what you need to do.
 
-**Mailcatcher**
-
-1. Install the [Mailcatcher](https://mailcatcher.me) gem: `gem install mailcatcher`
-2. Start mailcatcher on the command line: `mailcatcher`
-3. All mail sent in development can be viewed at http://localhost:1080
-
 **Chromedriver**
 
 1. Install the current stable release of [chromedriver](https://chromedriver.chromium.org/) for your operating system so the browser-based Ruby feature/integration tests can run. Installing `chromium-browser` is enough, even in WSL.
@@ -119,6 +113,29 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 1. `yarn lint:fix` to run the [JS linter](https://standardjs.com/index.html) and fix isses
 
 If you have any troubles running tests, check out `.travis.yml` which is what makes the CI build run.
+
+**Mail**
+
+We are using [Letter Opener](https://github.com/ryanb/letter_opener) in
+development to receive mail. All emails sent in development should open in a
+new tab in the browser.
+
+**Post-deployment tasks**
+
+We are using [After Party](https://github.com/theSteveMitchell/after_party) to
+run post-deployment tasks. These tasks may include one-time necessary updates to the
+database. Run the tasks manually by:
+
+```
+bundle exec rake after_party:run
+```
+
+Alternatively, every time you pull the master branch, run:
+```
+bin/update
+```
+which will run any database migrations, update gems and yarn packages, and run
+the after party post-deployment tasks.
 
 ### Documentation
 
@@ -165,21 +182,23 @@ You log into sendinblue via the "log in with google" option. Sean has the creden
 
 We are not using Mailgun because they limited us to only 5 recipients without a paid plan. We looked at using Sendgrid but our account is currently locked for unknown reasons.
 
+Preview all emails at http://localhost:3000/rails/mailers/volunteer_mailer as configured by `volunteer_mailer_preview.rb`
+
 ### Hosting
 
 Namecheap, heroku
 
 ## Communication and Collaboration
 
-Most conversation happens in the #casa channel of the Ruby For Good slack. You can get access here: https://rubyforgood.herokuapp.com/
+Most conversation happens in the #casa channel of the Ruby For Good slack. Get access here: https://rubyforgood.herokuapp.com/
 
 You can also open an issue or comment on an issue on github and a maintainer will reply to you.
 
-We have a weekly team call on Sunday at (new time TBD - check slack) where we do pair/mob programming and talk about issues- feel free to join!
+We have a weekly team office hours / hangout on Wednesday 6-8pm Pacific time where we do pair/mob programming and talk about issues. Please stop by!
 
-We have a weekly stakeholder call with PG CASA staff on Wednesday at _TBD_ Pacific time where we show off progress and discuss launch plans. Feel free to join!
+We have a weekly stakeholder call with PG CASA staff on Wednesday at 8:30am Pacific time where we show off progress and discuss launch plans. Feel free to join!
 
-Join info for all public meetings is posted in slack in the #casa channel or you can open a github issue to request join info.
+Join info for all public meetings is posted in the rubyforgood slack in the #casa channel
 
 ### History
 

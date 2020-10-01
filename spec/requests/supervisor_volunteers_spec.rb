@@ -9,14 +9,15 @@ RSpec.describe "/supervisor_volunteers", type: :request do
     context "when no pre-existing association between supervisr and volunteer exists" do
       it "creates a new supervisor_volunteers association" do
         valid_parameters = {
-            supervisor_volunteer: { volunteer_id: volunteer.id },
-            supervisor_id: supervisor.id
+          supervisor_volunteer: {volunteer_id: volunteer.id},
+          supervisor_id: supervisor.id
         }
         sign_in(admin)
 
-        expect do
+        expect {
           post supervisor_volunteers_url, params: valid_parameters
-        end.to change(SupervisorVolunteer, :count).by(1)
+        }.to change(SupervisorVolunteer, :count).by(1)
+        expect(response).to redirect_to edit_supervisor_path(supervisor)
       end
     end
 
@@ -31,16 +32,17 @@ RSpec.describe "/supervisor_volunteers", type: :request do
       end
       it "sets that association to active" do
         valid_parameters = {
-            supervisor_volunteer: { volunteer_id: volunteer.id },
-            supervisor_id: supervisor.id
+          supervisor_volunteer: {volunteer_id: volunteer.id},
+          supervisor_id: supervisor.id
         }
         sign_in(admin)
 
         expect {
           post supervisor_volunteers_url, params: valid_parameters
         }.not_to change(SupervisorVolunteer, :count)
+        expect(response).to redirect_to edit_supervisor_path(supervisor)
 
-        association.reload 
+        association.reload
         expect(association.is_active?).to be(true)
       end
     end
@@ -49,25 +51,26 @@ RSpec.describe "/supervisor_volunteers", type: :request do
       let!(:other_supervisor) { create(:supervisor) }
       let!(:previous_association) do
         create(
-            :supervisor_volunteer,
-            supervisor: other_supervisor,
-            volunteer: volunteer,
-            is_active: false
-          )
+          :supervisor_volunteer,
+          supervisor: other_supervisor,
+          volunteer: volunteer,
+          is_active: false
+        )
       end
 
-      it "replaces that association" do
+      it "does not remove association" do
         valid_parameters = {
-            supervisor_volunteer: { volunteer_id: volunteer.id },
-            supervisor_id: supervisor.id
+          supervisor_volunteer: {volunteer_id: volunteer.id},
+          supervisor_id: supervisor.id
         }
         sign_in(admin)
 
-        expect do
+        expect {
           post supervisor_volunteers_url, params: valid_parameters
-        end.not_to change(SupervisorVolunteer, :count)
+        }.to change(SupervisorVolunteer, :count).by(1)
+        expect(response).to redirect_to edit_supervisor_path(supervisor)
 
-        expect(SupervisorVolunteer.exists?(previous_association.id)).to be(false)
+        expect(previous_association.reload.is_active?).to be(false)
         expect(SupervisorVolunteer.where(supervisor: supervisor, volunteer: volunteer).exists?).to be(true)
       end
     end
@@ -82,12 +85,11 @@ RSpec.describe "/supervisor_volunteers", type: :request do
       it "sets the is_active flag for assignment of a volunteer to a supervisor to false" do
         sign_in admin
 
-        expect do
+        expect {
           patch unassign_supervisor_volunteer_path(volunteer)
-        end.not_to change(supervisor.volunteers, :count)
+        }.not_to change(supervisor.volunteers, :count)
 
         association.reload
-
         expect(association.is_active?).to be(false)
         expect(response).to redirect_to edit_supervisor_path(supervisor)
       end
@@ -97,9 +99,9 @@ RSpec.describe "/supervisor_volunteers", type: :request do
       it "sets the is_active flag for assignment of a volunteer to a supervisor to false" do
         sign_in supervisor
 
-        expect do
+        expect {
           patch unassign_supervisor_volunteer_path(volunteer)
-        end.not_to change(supervisor.volunteers, :count)
+        }.not_to change(supervisor.volunteers, :count)
 
         association.reload
 
@@ -115,9 +117,9 @@ RSpec.describe "/supervisor_volunteers", type: :request do
       it "does not set the is_active flag on the association to false" do
         sign_in volunteer
 
-        expect do
+        expect {
           patch unassign_supervisor_volunteer_path(volunteer)
-        end.not_to change(supervisor.volunteers, :count)
+        }.not_to change(supervisor.volunteers, :count)
 
         association.reload
 

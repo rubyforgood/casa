@@ -6,10 +6,9 @@ RSpec.describe "/volunteers", type: :request do
 
   describe "GET /index" do
     it "renders a successful response" do
-      sign_in volunteer
+      sign_in admin
 
-      get "/"
-
+      get volunteers_path
       expect(response).to be_successful
     end
   end
@@ -25,52 +24,95 @@ RSpec.describe "/volunteers", type: :request do
   end
 
   describe "POST /create" do
-    it "creates a new volunteer" do
-      expected_email = "volunteer1@example.com"
+    before do
       sign_in admin
-
-      post volunteers_url, params: {
-        volunteer: {email: expected_email, casa_org_id: admin.casa_org_id}
-      }
-
-      volunteer = Volunteer.last
-      expect(volunteer.email).to eq(expected_email)
-
-      expect(response).to redirect_to root_path
     end
-
-    it "sends an account_setup email" do
-      expected_email = "volunteer1@example.com"
-      sign_in admin
-
-      expect {
-        post volunteers_url, params: {
-          volunteer: {email: expected_email, casa_org_id: admin.casa_org_id}
+    context "with valid params" do
+      let(:params) {
+        {
+          volunteer: {
+            display_name: "Example",
+            email: "volunteer1@example.com",
+            casa_org_id: admin.casa_org_id
+          }
         }
-      }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      }
+      it "creates a new volunteer" do
+        post volunteers_url, params: params
+        expect(response).to have_http_status(:redirect)
+        volunteer = Volunteer.last
+        expect(volunteer.email).to eq("volunteer1@example.com")
+        expect(volunteer.display_name).to eq("Example")
+        expect(response).to redirect_to root_path
+      end
+
+      it "sends an account_setup email" do
+        expect {
+          post volunteers_url, params: params
+        }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+    end
+    context "with invalid parameters" do
+      let(:params) {
+        {
+          volunteer: {
+            display_name: "",
+            email: "volunteer1@example.com",
+            casa_org_id: admin.casa_org_id
+          }
+        }
+      }
+      it "does not create a new volunteer" do
+        expect {
+          post volunteers_url, params: params
+        }.to_not change { Volunteer.count }
+        expect(response).to have_http_status(:success)
+      end
+
+      it "sends an account_setup email" do
+        expect {
+          post volunteers_url, params: params
+        }.to_not change { ActionMailer::Base.deliveries.count }
+      end
     end
   end
 
   describe "PATCH /update" do
-    it "updates the volunteer" do
-      sign_in admin
+    before { sign_in admin }
 
-      patch volunteer_path(volunteer), params: {
-        volunteer: { email: "newemail@gmail.com", display_name: "New Name" }
-      }
-      volunteer.reload
+    context "with valid params" do
+      it "updates the volunteer" do
+        patch volunteer_path(volunteer), params: {
+          volunteer: {email: "newemail@gmail.com", display_name: "New Name"}
+        }
+        expect(response).to have_http_status(:redirect)
 
-      expect(volunteer.display_name).to eq "New Name"
-      expect(volunteer.email).to eq "newemail@gmail.com"
+        volunteer.reload
+        expect(volunteer.display_name).to eq "New Name"
+        expect(volunteer.email).to eq "newemail@gmail.com"
+      end
+    end
+
+    context "with invalid params" do
+      let!(:other_volunteer) { create(:volunteer) }
+
+      it "does not update the volunteer" do
+        patch volunteer_path(volunteer), params: {
+          volunteer: {email: other_volunteer.email, display_name: "New Name"}
+        }
+        expect(response).to have_http_status(:success) # Re-renders form
+
+        volunteer.reload
+        expect(volunteer.display_name).to_not eq "New Name"
+        expect(volunteer.email).to_not eq other_volunteer.email
+      end
     end
 
     # Activation/deactivation must be done separately through /activate and
     # /deactivate, respectively
     it "cannot change the active state" do
-      sign_in admin
-
       patch volunteer_path(volunteer), params: {
-        volunteer: { active: false }
+        volunteer: {active: false}
       }
       volunteer.reload
 

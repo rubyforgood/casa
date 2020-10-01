@@ -38,3 +38,10 @@ en:
     case_contact_policy:
       edit?: "Sorry, you can only edit case contacts that you have logged."
       update?: "Sorry, you can only edit case contacts that you have logged."
+  forms:
+    casa_admin:
+      mark_inactive_warning: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"
+    case_contact:
+      notes_placeholder: "Please refer to individuals by their roles instead of by their names. Ex: My supervisor joined me for a call with the social worker to discuss my youth."
+    volunteer:
+      mark_inactive_warning: "WARNING: Marking a volunteer inactive will make them unable to login. They will receive an email saying their account has been marked inactive. Are you sure you want to do this?"

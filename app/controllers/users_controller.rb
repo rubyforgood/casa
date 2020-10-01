@@ -3,6 +3,7 @@ class UsersController < ApplicationController
 
   def edit
     @user = current_user
+    @active_casa_admins = CasaAdmin.in_organization(current_organization).active
   end
 
   def update

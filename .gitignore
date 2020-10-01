@@ -12,6 +12,7 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+.DS_Store
 
 # Ignore uploaded files in development.
 /storage/*
@@ -39,3 +40,5 @@ yarn-debug.log*
 coverage/
 .idea/
 config/credentials.yml.enc
+vendor/bundle/
+.generators

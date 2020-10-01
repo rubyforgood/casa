@@ -2,18 +2,25 @@ class CaseContactReport
   attr_reader :case_contacts
 
   def initialize(args = {})
-    @case_contacts = if args[:start_date] && args[:end_date]
-      CaseContact.occurred_between(args[:start_date], args[:end_date])
-    else
-      CaseContact.all
-    end
+    @case_contacts = filtered_case_contacts(args)
+  end
+
+  def filtered_case_contacts(args)
+    CaseContact
+      .supervisors(args[:supervisor_ids])
+      .creators(args[:creator_ids])
+      .occurred_between(args[:start_date], args[:end_date])
+      .contact_made(args[:contact_made])
+      .has_transitioned(args[:has_transitioned])
+      .want_driving_reimbursement(args[:want_driving_reimbursement])
+      .contact_type(args[:contact_type])
   end
 
   def to_csv
     CSV.generate(headers: true) do |csv|
       csv << full_data(nil).keys.map(&:to_s).map(&:titleize)
 
-      @case_contacts.includes(:casa_case, creator: :supervisor).decorate.each do |case_contact|
+      @case_contacts.includes(:casa_case, :creator).decorate.each do |case_contact|
         csv << full_data(case_contact).values
       end
     end
@@ -35,7 +42,8 @@ class CaseContactReport
       casa_case_number: case_contact&.casa_case&.case_number,
       creator_email: case_contact&.creator&.email,
       creator_name: case_contact&.creator&.display_name,
-      supervisor_name: case_contact&.creator&.supervisor&.display_name
+      supervisor_name: case_contact&.creator&.supervisor&.display_name,
+      case_contact_notes: case_contact&.notes
     }
   end
 end

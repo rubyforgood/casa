@@ -11,6 +11,8 @@ services:
       - /usr/src/app/node_modules
     env_file:
       - config/docker.env
+    depends_on:
+      - database
     stdin_open: true
     tty: true
 
@@ -22,12 +24,6 @@ services:
       - db_data:/var/lib/postgresql/data
     ports:
       - '5435:5432'
-
-  mailcatcher:
-    image: schickling/mailcatcher:latest
-    ports:
-      - '1080:1080'
-      - '1025:1025'
 
   selenium_chrome:
     image: selenium/standalone-chrome-debug

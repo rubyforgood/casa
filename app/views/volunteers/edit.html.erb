@@ -1,9 +1,9 @@
-<%= link_to 'Back', root_path %>
+<%= link_to 'Back', volunteers_path %>
 
 <h1>Editing Volunteer</h1>
 
-<div class="row">
-  <div class="col-sm-6">
+<div class="card card-container">
+  <div class="card-body">
     <%= form_for @volunteer, url: volunteer_path(@volunteer) do |form| %>
       <% if @volunteer.errors.any? %>
         <div id="error_explanation">
@@ -41,13 +41,10 @@
           Volunteer is <span class="badge badge-success text-uppercase display-1">Active</span>
           <% if policy(@volunteer).deactivate? %>
             <%= link_to "Deactivate volunteer",
-                        deactivate_volunteer_path(@volunteer),
-                        method: :patch,
-                        class: "btn btn-outline-danger",
-                        data:
-                            { confirm: "WARNING: Marking a volunteer inactive will make them unable to login. They will receive an email saying their account has been marked inactive. Are you sure you want to do this?".html_safe },
-                        hint: "NOTE: This will make connected cases unassigned and<br>
-                          the volunteer won't be able to log in to the system anymore".html_safe %>
+              deactivate_volunteer_path(@volunteer),
+              method: :patch,
+              class: "btn btn-outline-danger",
+              data: { confirm: t("forms.volunteer.mark_inactive_warning") } %>
           <% end %>
         <% else %>
           <div class="alert alert-danger">
@@ -69,10 +66,12 @@
   </div>
 </div>
 
-<% if @volunteer.casa_cases.present? %>
-  <br>
-  <div class="row">
-    <div class="col-sm-12">
+<h1 class="pt-5">Manage Cases</h1>
+
+<div class="card card-container">
+  <div class="card-body">
+    <% if @volunteer.casa_cases.size > 0 %>
+      <br>
       <h3>Assigned Cases</h3>
       <table class='table case-list'>
         <thead>
@@ -84,9 +83,9 @@
           </tr>
         </thead>
         <tbody>
-          <% @volunteer.case_assignments.each do |assignment| %>
+          <% @volunteer.case_assignments_with_cases.each do |assignment| %>
             <tr>
-              <td><%= link_to assignment.casa_case.case_number, edit_casa_case_path(assignment.casa_case) %></td>
+              <td><%= link_to assignment.casa_case.case_number, casa_case_path(assignment.casa_case) %></td>
               <td><%= assignment.casa_case.decorate.transition_aged_youth_icon %></td>
               <td>
                 <% if @volunteer.active? %>
@@ -97,7 +96,12 @@
               </td>
               <td>
                 <% if @volunteer.active? %>
-                  <%= button_to 'Unassign Case', case_assignment_path(assignment, volunteer_id: @volunteer.id), method: :delete, class: "btn btn-danger" if Pundit.policy(current_user, @volunteer).unassign_case? %>
+                  <%- if Pundit.policy(current_user, @volunteer).unassign_case? %>
+                    <%= button_to 'Unassign Case',
+                      case_assignment_path(assignment, volunteer_id: @volunteer.id),
+                      method: :delete,
+                      class: "btn btn-danger" %>
+                  <%- end %>
                 <% else %>
                   None
                 <% end %>
@@ -106,30 +110,22 @@
           <% end %>
         </tbody>
       </table>
-    </div>
-  </div>
-<% end %>
+    <% end %>
 
-<% if @volunteer.active? %>
-  <br>
+    <% if @volunteer.active? %>
+      <br>
 
-  <div class="row">
-    <div class="col-sm-6">
       <h3>Assign a New Case</h3>
 
       <%= form_for CaseAssignment.new, url: case_assignments_path(volunteer_id: @volunteer.id) do |form| %>
 
         <div class='form-group'>
           <label for='case_assignment_casa_case_id'>Select a Case</label>
-          <select id="case_assignment_casa_case_id" name='case_assignment[casa_case_id]' class='form-control'>
-            <% @available_casa_cases.each do |casa_case| %>
-              <option value="<%= casa_case.id %>"><%= casa_case.case_number %></option>
-            <% end %>
-          </select>
+          <%= form.select :casa_case_id, grouped_options_for_assigning_case(@volunteer), {}, { class: "form-control select2" } %>
         </div>
 
         <%= form.submit 'Assign Case', class: 'btn btn-primary' %>
       <% end %>
-    </div>
+    <% end %>
   </div>
-<% end %>
+</div>

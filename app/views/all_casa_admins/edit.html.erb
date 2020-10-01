@@ -1,0 +1,39 @@
+<%= errors_for(@user) %>
+
+<h1>Edit Profile</h1>
+
+<div class="card card-container">
+  <div class="card-body">
+    <%= form_for @user, as: :all_casa_admin, url: all_casa_admins_path do |form| %>
+
+      <div class="field form-group">
+        <%= form.label :email %>
+        <%= form.email_field :email, class: "form-control" %>
+      </div>
+
+      <div class="actions">
+        <%= form.submit "Update Profile", class: "btn btn-primary" %>
+        <button class="btn btn-warning accordion" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Change Password
+        </button>
+      </div>
+      <% end %>
+      <br>
+      <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <%= form_for(@user, as: :all_casa_admin, url: { action: "update_password" } ) do |f| %>
+          <div class="field form-group">
+            <%= f.label :password, "Password" %><br>
+            <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
+          </div>
+          <div class="field form-group">
+            <%= f.label :password_confirmation, "Password Confirmation" %><br>
+            <%= f.password_field :password_confirmation, class: "form-control" %>
+          </div>
+          <div class="action_container">
+            <%= f.submit "Update Password", class: "btn btn-danger" %>
+          </div>
+        <% end %>
+      </div>
+      <br>
+  </div>
+</div>

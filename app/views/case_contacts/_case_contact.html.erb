@@ -1,22 +1,53 @@
 <tr>
   <td data-sort="<%= contact.occurred_at.strftime("%Y%m%d%H%M%s") %>"><%= contact.occurred_at.strftime('%B %e, %Y') %></td>
-  <td><%= contact.decorate.duration_minutes %></td>
-  <td><%= contact.decorate.contact_made %></td>
-  <td><%= contact.decorate.medium_type_icon %></td>
-  <td><%= contact.decorate.contact_types %></td>
-  <td><%= contact.decorate.miles_traveled %></td>
-  <td><%= contact.decorate.reimbursement %></td>
   <td>
+    <span class="mobile-label">Duration</span>
+    <%= contact.decorate.duration_minutes %>
+    </td>
+  <td>
+    <span class="mobile-label">Contact Made?</span>
+    <%= contact.decorate.contact_made %>
+    </td>
+  <td>
+    <span class="mobile-label">Contact Medium</span>
+    <%= contact.decorate.medium_type_icon %>
+    </td>
+  <td>
+    <span class="mobile-label">Type</span>
+    <%= contact.decorate.contact_types %>
+    </td>
+  <td>
+    <span class="mobile-label">Miles Driven</span>
+    <%= contact.decorate.miles_traveled %>
+    <% unless contact.decorate.miles_traveled.blank? %>
+      <%= " "%>
+      <i class="fa fa-car" aria-hidden="true"></i>
+    <% end %>
+  </td>
+  <td>
+    <span class="mobile-label">Want Reimbursement?</span>
+    <%= contact.decorate.reimbursement %>
+  </td>
+  <td>
+    <span class="mobile-label">Creator</span>
     <% if current_user&.casa_admin? || current_user&.supervisor? %>
-      <%= link_to "#{contact.creator&.display_name} ", edit_volunteer_path(contact.creator) %>
+      <% if contact.creator&.supervisor? %>
+        <%= link_to "#{contact.creator&.display_name} ", edit_supervisor_path(current_user) %>
+      <% elsif contact.creator&.casa_admin? %>
+        <%= link_to "#{contact.creator&.display_name} ", edit_users_path %>
+      <% else %>
+        <%= link_to "#{contact.creator&.display_name} ", edit_volunteer_path(contact.creator) %>
+      <%end%>
     <% else %>
       <%= contact.creator&.display_name %>
     <% end %>
   </td>
-
   <td>
+    <%# TODO What text for tooltip? %>
     <% if Pundit.policy(current_user, contact).update? %>
-      <%= link_to 'Edit', edit_case_contact_path(contact) %>
+      <div class="add-disallow-edit-tooltip" data-toggle="tooltip" title="Disallow edit contact after end of quarter">
+        <%= link_to_if contact.allowed_edit?, 'Edit', edit_case_contact_path(contact) %>
+      </div>
     <% end %>
   </td>
 </tr>

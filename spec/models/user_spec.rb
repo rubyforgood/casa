@@ -13,6 +13,10 @@ RSpec.describe User, type: :model do
   it { is_expected.to have_one(:supervisor_volunteer) }
   it { is_expected.to have_one(:supervisor).through(:supervisor_volunteer) }
 
+  it "requires display name" do
+    user = build(:user, display_name: "")
+    expect(user.valid?).to be false
+  end
   it "returns all case_contacts associated with this user and the casa case id supplied" do
     volunteer = create(:volunteer, :with_casa_cases)
 
@@ -48,7 +52,7 @@ RSpec.describe User, type: :model do
 
   describe "supervisors" do
     context "#volunteers_serving_transistion_aged_youth" do
-      it 'returns the number of transition aged youth on a supervisor' do
+      it "returns the number of transition aged youth on a supervisor" do
         assignment1 = create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: true))
         assignment2 = create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: true))
         assignment3 = create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: false))
@@ -61,14 +65,52 @@ RSpec.describe User, type: :model do
     end
 
     context "#no_contact_for_two_weeks" do
-      it 'returns the number of volunteers who have not made contact in over 2 weeks' do
-        supervisor = create(:supervisor)
+      let(:supervisor) {create(:supervisor)}
 
-        volunteer = create(:volunteer, :with_casa_cases, supervisor: supervisor)
+      it "returns zero for a volunteer that has successfully made contact in at least one contact_case within the last 2 weeks" do
+        volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
 
-        case_of_interest = volunteer.casa_cases.first
-        create(:case_contact, creator: volunteer, casa_case: case_of_interest, contact_made: true, occurred_at: 3.weeks.ago)
+        case_of_interest_1 = volunteer_1.casa_cases.first
+        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: false, occurred_at: 1.weeks.ago)
         expect(supervisor.no_contact_for_two_weeks).to eq(1)
+        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, occurred_at: 1.weeks.ago)
+        expect(supervisor.no_contact_for_two_weeks).to eq(0)
+      end
+
+      it "returns one for a volunteer that has not made any contact_cases within the last 2 weeks" do
+        volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
+
+        case_of_interest_1 = volunteer_1.casa_cases.first
+
+        expect(supervisor.no_contact_for_two_weeks).to eq(1)
+      end
+
+      it "returns zero for a volunteer that is not assigned to any casa cases" do
+        volunteer_2 = create(:volunteer, supervisor: supervisor)
+
+        expect(supervisor.no_contact_for_two_weeks).to eq(0)
+      end
+
+      it "returns one for a volunteer that has successfully made contact in at least one contact_case with occurred_at after 2 weeks" do
+        volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
+
+        case_of_interest_1 = volunteer_1.casa_cases.first
+
+        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, occurred_at: 3.weeks.ago)
+        expect(supervisor.no_contact_for_two_weeks).to eq(1)
+      end
+
+      it "returns zero for a volunteer that has no active casa case assignments" do
+        volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
+
+        case_of_interest_1 = volunteer_1.casa_cases.first
+        case_of_interest_2 = volunteer_1.casa_cases.last
+        case_assignment_1 = case_of_interest_1.case_assignments.find_by(volunteer: volunteer_1)
+        case_assignment_2 = case_of_interest_2.case_assignments.find_by(volunteer: volunteer_1)
+        case_assignment_1.update!(is_active: false)
+        case_assignment_2.update!(is_active: false)
+
+        expect(supervisor.no_contact_for_two_weeks).to eq(0)
       end
     end
   end
@@ -100,8 +142,8 @@ RSpec.describe User, type: :model do
     context "when the user has a transition-aged-youth case" do
       it "is true" do
         case_assignments = [
-            case_assignment_with_a_transition_aged_youth,
-            case_assignment_without_transition_aged_youth
+          case_assignment_with_a_transition_aged_youth,
+          case_assignment_without_transition_aged_youth
         ]
         user = create(:volunteer, case_assignments: case_assignments)
 

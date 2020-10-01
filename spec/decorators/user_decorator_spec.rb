@@ -27,13 +27,5 @@ RSpec.describe UserDecorator do
         expect(user.decorate.name).to eq user.display_name
       end
     end
-
-    context "when user has no name" do
-      it "returns the email" do
-        user = build(:user)
-
-        expect(user.decorate.name).to eq user.email
-      end
-    end
   end
 end

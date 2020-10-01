@@ -1,9 +1,8 @@
-<%= link_to 'Back', root_path %>
-
+<%= link_to "Back", supervisors_path %>
 <h1>Editing Supervisor</h1>
 
-<div class="row">
-  <div class="col-sm-6">
+<div class="card card-container">
+  <div class="card-body">
     <%= form_for @supervisor, as: :supervisor, url: supervisor_path(@supervisor) do |form| %>
       <% if @supervisor.errors.any? %>
         <div id="error_explanation">
@@ -44,10 +43,11 @@
   </div>
 </div>
 
-<% if @supervisor.supervisor_volunteers.present? %>
-  <br>
-  <div class="row">
-    <div class="col-sm-12">
+<h1 class="pt-5">Manage Volunteers</h1>
+
+  <div class="card card-container">
+    <div class="card-body">
+    <% if @supervisor.volunteers.any? %>
       <h3>Assigned Volunteers</h3>
       <table class='table volunteer-list'>
         <thead>
@@ -58,13 +58,16 @@
           </tr>
         </thead>
         <tbody>
-          <% @assigned_volunteers.each do |volunteer| %>
+          <% @supervisor.volunteers.each do |volunteer| %>
             <tr>
               <td><%= link_to volunteer.decorate.name, edit_volunteer_path(volunteer) %></td>
               <td><%= volunteer.email %></td>
               <td>
-                <% if volunteer.supervisor_volunteer.is_active? %>
-                  <%= button_to 'Unassign', unassign_supervisor_volunteer_path(volunteer), method: :patch, class: "btn btn-danger" %>
+                <% if volunteer.supervised_by?(@supervisor) %>
+                  <%= button_to 'Unassign',
+                    unassign_supervisor_volunteer_path(volunteer),
+                    method: :patch,
+                    class: "btn btn-danger" %>
                 <% else %>
                   Unassigned
                 <% end %>
@@ -74,26 +77,21 @@
           <% end %>
         </tbody>
       </table>
-    </div>
-  </div>
-<% end %>
-<br>
+    <% end %>
 
-<div class="row">
-  <div class="col-sm-6">
     <h3>Assign a Volunteer</h3>
 
     <%= form_for SupervisorVolunteer.new, url: supervisor_volunteers_path(supervisor_id: @supervisor.id) do |form| %>
 
       <div class='form-group'>
         <label for='supervisor_volunteer_volunteer_id'>Select a Volunteer</label>
-        <select name='supervisor_volunteer[volunteer_id]' class='form-control'>
+        <select name='supervisor_volunteer[volunteer_id]' class='form-control select2'>
           <% @available_volunteers.each do |volunteer| %>
             <option value="<%= volunteer.id %>"><%= volunteer.decorate.name %></option>
           <% end %>
         </select>
       </div>
-
+      <%= form.hidden_field :supervisor_id, :value => @supervisor.id %>
       <%= form.submit 'Assign Volunteer', class: 'btn btn-primary' %>
     <% end %>
     <% unless @available_volunteers.any? %>
