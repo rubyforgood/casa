@@ -40,7 +40,6 @@ class CasaCasePolicy
 
   def permitted_attributes
     common_attrs = [
-      :transition_aged_youth,
       :court_report_submitted,
       casa_case_contact_types_attributes: [:contact_type_id],
     ]

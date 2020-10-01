@@ -9,6 +9,19 @@
 
 CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunteer sworn into a county-level juvenile dependency court system to advocate on behalf of a youth in the corresponding county's foster care system. CASA is also the namesake role of the national organization, CASA, which exists to cultivate and supervise volunteers carrying out this work – with county level chapters (operating relatively independently of each other) across the country.
 
+
+## Welcome Hacktoberfest contributors!
+
+We are very happy to have you. If you have problems or questions, the fastest way to an answer is in slack https://rubyforgood.herokuapp.com/
+
+ALL open issues are fair game **unless** they are already assigned to a contibutor. PRs which are not for an issue but which improve the codebase by adding a test or improving the code are also welcome.
+
+A maintainer will be keeping an eye on issues and merging PRs at least once a day. We want to merge your PRs! :) 
+
+Some PRs may be rejected if they make non-useful readme changes or similar changes. 
+
+### About this project
+
 **PG CASA (Prince George's County CASA in Maryland) seeks a volunteer management system to:**
 
 - provide volunteers with a portal for logging activity
