@@ -80,13 +80,12 @@ RSpec.describe "/casa_cases", type: :request do
 
     describe "PATCH /update" do
       context "with valid parameters" do
-        let(:new_attributes) { {case_number: "12345", transition_aged_youth: true} }
+        let(:new_attributes) { {case_number: "12345"} }
 
         it "updates the requested casa_case" do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes}
           casa_case.reload
           expect(casa_case.case_number).to eq "12345"
-          expect(casa_case.transition_aged_youth).to be true
         end
 
         it "redirects to the casa_case" do
@@ -142,13 +141,12 @@ RSpec.describe "/casa_cases", type: :request do
 
     describe "PATCH /update" do
       context "with valid parameters" do
-        let(:new_attributes) { { case_number: "12345", transition_aged_youth: true, court_report_submitted: true } }
+        let(:new_attributes) { { case_number: "12345", court_report_submitted: true } }
 
         it "updates fields (except case_number)" do
           patch casa_case_url(casa_case), params: { casa_case: new_attributes }
           casa_case.reload
           expect(casa_case.case_number).to eq "111"
-          expect(casa_case.transition_aged_youth).to be true
           expect(casa_case.court_report_submitted).to be true
         end
 
@@ -194,13 +192,12 @@ RSpec.describe "/casa_cases", type: :request do
 
     describe "PATCH /update" do
       context "with valid parameters" do
-        let(:new_attributes) { { case_number: "12345", transition_aged_youth: true, court_report_submitted: true } }
+        let(:new_attributes) { { case_number: "12345", court_report_submitted: true } }
 
         it "updates fields (except case_number)" do
           patch casa_case_url(casa_case), params: { casa_case: new_attributes }
           casa_case.reload
           expect(casa_case.case_number).to eq "111"
-          expect(casa_case.transition_aged_youth).to be true
           expect(casa_case.court_report_submitted).to be true
         end
 
