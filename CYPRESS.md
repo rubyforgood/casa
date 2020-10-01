@@ -4,6 +4,9 @@ running cypress locally involves two terminal windows:
 
 2) run `yarn cypress open`
 
+OR
+run `npm run test:e2e`
+
 
 The files cypress reside in the cypress folder.
 
