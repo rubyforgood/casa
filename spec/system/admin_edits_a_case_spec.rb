@@ -23,5 +23,9 @@ RSpec.describe "admin edits case", type: :system do
     expect(page).to have_text("Volunteer")
     expect(page).to have_text("Case")
     expect(page).to have_text("Supervisor")
+    expect(page).to have_text("Court Date")
+    expect(page).to have_text("Day")
+    expect(page).to have_text("Month")
+    expect(page).to have_text("Year")
   end
 end
