@@ -5,17 +5,7 @@
 <div class="card card-container">
   <div class="card-body">
     <%= form_for @volunteer, url: volunteer_path(@volunteer) do |form| %>
-      <% if @volunteer.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= pluralize(@volunteer.errors.count, "error") %> prohibited this volunteer from being saved:</h2>
-
-          <ul>
-            <% @volunteer.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
+      <%= render "/shared/error_messages", resource: @volunteer %>
 
       <div class="field form-group">
         <%= form.label :email %>

@@ -1,5 +1,5 @@
 <%= form_for casa_admin, url: all_casa_admins_casa_org_casa_admins_path(casa_org), id: :new_casa_admin do |form| %>
-  <%= render "all_casa_admins/shared/error_messages", resource: casa_admin %>
+  <%= render "/shared/error_messages", resource: casa_admin %>
 
   <div class="field form-group">
     <%= form.label :email %>
