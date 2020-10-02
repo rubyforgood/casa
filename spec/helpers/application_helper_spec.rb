@@ -35,4 +35,10 @@ describe ApplicationHelper, type: :helper do
       expect(helper.session_link).to match(new_user_session_path)
     end
   end
+
+  describe "#og_tag" do
+    subject { helper.og_tag(:title, content: 'Website Title') }
+
+    it { is_expected.to eql('<meta property="og:title" content="Website Title">') }
+  end
 end
