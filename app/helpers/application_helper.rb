@@ -41,4 +41,8 @@ module ApplicationHelper
     when "alert" then "alert alert-warning"
     end
   end
+
+  def og_tag(type, options = {})
+    tag.meta(property: "og:#{type}", **options)
+  end
 end
