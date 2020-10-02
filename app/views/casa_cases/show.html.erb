@@ -22,6 +22,10 @@
       <h6><strong>Transition Aged Youth:</strong> <%= @casa_case.decorate.transition_aged_youth_icon %></h6>
     </p>
 
+    <p>
+      <h6><strong>Next Court Date:</strong> <%= @casa_case.court_date&.to_s :date_only %></h6>
+    </p>
+
     <div>
       <h6><strong>Assigned Volunteers:</strong></h6>
       <% policy_scope(@casa_case.volunteers).each_with_index do |volunteer, index| %>
