@@ -26,5 +26,10 @@ RSpec.describe "volunteer edits case", type: :system do
     check "Court report submitted"
     click_on "Update CASA Case"
     has_checked_field? :court_report_submitted
+
+    expect(page).to have_text("Court Date")
+    expect(page).not_to have_text("Day")
+    expect(page).not_to have_text("Month")
+    expect(page).not_to have_text("Year")
   end
 end
