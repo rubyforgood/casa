@@ -111,7 +111,7 @@ RSpec.describe "admin views Volunteers page", type: :system do
       sign_in admin
 
       visit volunteers_path
-      supervisor_cell = page.find("#supervisor-column")
+      supervisor_cell = page.find(".supervisor-column")
 
       expect(supervisor_cell.text).to eq ""
     end
@@ -123,7 +123,7 @@ RSpec.describe "admin views Volunteers page", type: :system do
       sign_in admin
 
       visit volunteers_path
-      supervisor_cell = page.find("#supervisor-column")
+      supervisor_cell = page.find(".supervisor-column")
 
       expect(supervisor_cell.text).to eq name
     end
@@ -134,7 +134,7 @@ RSpec.describe "admin views Volunteers page", type: :system do
       sign_in admin
 
       visit volunteers_path
-      supervisor_cell = page.find("#supervisor-column")
+      supervisor_cell = page.find(".supervisor-column")
 
       expect(supervisor_cell.text).to eq ""
     end
