@@ -4,17 +4,7 @@
 <div class="card card-container">
   <div class="card-body">
     <%= form_for @supervisor, as: :supervisor, url: supervisor_path(@supervisor) do |form| %>
-      <% if @supervisor.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= pluralize(@supervisor.errors.count, "error") %> prohibited this supervisor from being saved:</h2>
-
-          <ul>
-            <% @supervisor.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
+      <%= render "/shared/error_messages", resource: supervisor %>
 
       <div class="field form-group">
         <%= form.label :email %>
