@@ -32,6 +32,7 @@ group :development, :test do
   gem "rspec-rails", "~> 4.0.1"
   gem "shoulda-matchers"
   gem "standard" # linter https://github.com/testdouble/standard
+  gem 'cypress-on-rails', '~> 1.0'
 end
 
 group :development do
