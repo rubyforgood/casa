@@ -82,7 +82,7 @@ Bullet points `formatted like this` are commands you can run on your machine
 
 1. Install [nvm](https://github.com/nvm-sh/nvm#installing-and-updating), which is a **n**ode **v**ersion **m**anager.
 1. Install a current LTS version of Node. 12.16.2 works.
-1. Make sure [yarn](https://classic.yarnpkg.com/en/docs/instal) is installed. On Ubuntu, [make sure you install it from the official Yarn repo instead of cmdtest](https://classic.yarnpkg.com/en/docs/install/#debian-stable).
+1. Make sure [yarn](https://classic.yarnpkg.com/en/docs/install) is installed. On Ubuntu, [make sure you install it from the official Yarn repo instead of cmdtest](https://classic.yarnpkg.com/en/docs/install/#debian-stable).
 
 **Postgres**
 
