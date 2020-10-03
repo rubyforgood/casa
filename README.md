@@ -63,6 +63,9 @@ You can read the complete [role description of a CASA volunteer](https://pgcasa.
 [Here is our contributing guide!](./CONTRIBUTING.md)
 
 ## Setting up your development environment:
+See [LINUX_SETUP.md](LINUX_SETUP.md) for instructions on setting up your environment
+on Linux.
+
 See [DOCKER.md](DOCKER.md) for instructions on setting up your environment
 using Docker. For non-Docker installations, follow the instructions below.
 
