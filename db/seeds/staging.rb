@@ -83,7 +83,7 @@ yy = years.sample.to_s[2..3]
 CASA_CASE_COUNT.times do |index|
   new_casa_case = CasaCase.where(case_number: "CINA-#{yy}-#{1001 + index}").first_or_create!(
     casa_org_id: pg_casa.id,
-    transition_aged_youth: fakse
+    transition_aged_youth: false
   )
   volunteer_assigned = volunteer_users[index % volunteer_users.length]
   CaseAssignment.create(
@@ -112,7 +112,7 @@ vols.map do |vol|
     (1..24).map { |months_ago|
       if even_odds
         occurred_at = DateTime.now - months_ago.months
-        miles_driven = even_odds ? rand(200) : nil
+        miles_driven = even_odds ? rand(200) : 0
         want_driving_reimbursement = miles_driven ? even_odds : false
         CaseContact.create(
           casa_case: casa_case,
