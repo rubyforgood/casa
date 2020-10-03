@@ -71,7 +71,7 @@ describe "all casa admins with casa orgs", type: :system do
 
     it "allows an admin to create new casa_admins" do
       casa_org = create(:casa_org)
-      all_casa_admin = create(:all_casa_admin)
+      create(:all_casa_admin)
 
       visit all_casa_admins_casa_org_path(casa_org)
       click_on "New CASA Admin"
