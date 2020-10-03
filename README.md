@@ -66,6 +66,9 @@ You can read the complete [role description of a CASA volunteer](https://pgcasa.
 See [LINUX_SETUP.md](LINUX_SETUP.md) for instructions on setting up your environment
 on Linux.
 
+See [MAC_OS.md](MAC_OS.md) for instructions on setting up your environment 
+on Mac OS.
+
 See [DOCKER.md](DOCKER.md) for instructions on setting up your environment
 using Docker. For non-Docker installations, follow the instructions below.
 
