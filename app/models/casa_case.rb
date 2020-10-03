@@ -30,6 +30,11 @@ class CasaCase < ApplicationRecord
       .order(:case_number)
   }
 
+  scope :should_transition, -> {
+    where(transition_aged_youth: false)
+      .where('birth_month_year_youth <= ?', 14.years.ago)
+  }
+
   def self.available_for_volunteer(volunteer)
     ids = connection.select_values(%{
       SELECT casa_cases.id

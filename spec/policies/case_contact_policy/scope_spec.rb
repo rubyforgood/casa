@@ -27,7 +27,11 @@ RSpec.describe CaseContactPolicy::Scope do
         create_irrelevant_contacts(current_user, other_user)
 
         scope = described_class.new(current_user, CaseContact)
-        expect(scope.resolve).to eq relevant_contacts
+        aggregate_failures do
+          expect(scope.resolve.include?(relevant_contacts[0])).to eq true
+          expect(scope.resolve.include?(relevant_contacts[1])).to eq true
+          expect(scope.resolve.length).to eq 2
+        end
       end
     end
 
