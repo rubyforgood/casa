@@ -113,9 +113,6 @@ RSpec.describe "/casa_admins", type: :request do
     context "logged in as admin user" do
       it "can successfully deactivate a casa admin user" do
         sign_in_as_admin
-        expected_display_name = "Admin 2"
-        expected_email = "admin2@casa.com"
-
         patch deactivate_casa_admin_path(casa_admin)
         casa_admin.reload
         expect(casa_admin.active).to be_falsey
