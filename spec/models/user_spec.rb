@@ -65,7 +65,7 @@ RSpec.describe User, type: :model do
     end
 
     context "#no_contact_for_two_weeks" do
-      let(:supervisor) {create(:supervisor)}
+      let(:supervisor) { create(:supervisor)}
 
       it "returns zero for a volunteer that has successfully made contact in at least one contact_case within the last 2 weeks" do
         volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)

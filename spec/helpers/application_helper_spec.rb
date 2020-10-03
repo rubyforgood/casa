@@ -37,7 +37,7 @@ describe ApplicationHelper, type: :helper do
   end
 
   describe "#og_tag" do
-    subject { helper.og_tag(:title, content: 'Website Title') }
+    subject { helper.og_tag(:title, content: "Website Title") }
 
     it { is_expected.to eql('<meta property="og:title" content="Website Title">') }
   end
