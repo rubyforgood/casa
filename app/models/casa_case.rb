@@ -17,16 +17,16 @@ class CasaCase < ApplicationRecord
       case_assignments: {volunteer: volunteer, is_active: true}
     )
   }
-  scope :actively_assigned_excluding_volunteer, -> (volunteer) {
+  scope :actively_assigned_excluding_volunteer, ->(volunteer) {
     joins(:case_assignments)
-      .where(case_assignments: { is_active: true })
-      .where.not(case_assignments: { volunteer: volunteer })
+      .where(case_assignments: {is_active: true})
+      .where.not(case_assignments: {volunteer: volunteer})
       .order(:case_number)
   }
-  scope :not_assigned, -> (casa_org) {
+  scope :not_assigned, ->(casa_org) {
     where(casa_org_id: casa_org.id)
       .left_outer_joins(:case_assignments)
-      .where(case_assignments: { id: nil })
+      .where(case_assignments: {id: nil})
       .order(:case_number)
   }
 

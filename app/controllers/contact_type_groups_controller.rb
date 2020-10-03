@@ -16,7 +16,8 @@ class ContactTypeGroupsController < ApplicationController
     end
   end
 
-  def edit; end
+  def edit
+  end
 
   def update
     if @contact_type_group.update(contact_type_group_params)
@@ -26,13 +27,13 @@ class ContactTypeGroupsController < ApplicationController
     end
   end
 
-private
+  private
 
-    def contact_type_group_params
-      params.require(:contact_type_group).permit(:name, :active)
-    end
+  def contact_type_group_params
+    params.require(:contact_type_group).permit(:name, :active)
+  end
 
-    def set_contact_type_group
-      @contact_type_group = ContactTypeGroup.find(params[:id])
-    end
+  def set_contact_type_group
+    @contact_type_group = ContactTypeGroup.find(params[:id])
+  end
 end

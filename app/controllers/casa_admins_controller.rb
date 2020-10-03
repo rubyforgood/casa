@@ -7,7 +7,8 @@ class CasaAdminsController < ApplicationController
     @admins = policy_scope(current_organization.casa_admins)
   end
 
-  def edit; end
+  def edit
+  end
 
   def update
     if @casa_admin.update(update_casa_admin_params)

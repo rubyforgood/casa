@@ -70,29 +70,29 @@ window.onload = function () {
   }
 
   function validateNoteContent (e) {
-    const note_content = document.getElementById('case_contact_notes').value;
+    const note_content = document.getElementById('case_contact_notes').value
     if (note_content != '') {
-      e.preventDefault();
-      $('#confirm-submit').modal('show');
-      document.getElementById('note-content').innerHTML = note_content;
+      e.preventDefault()
+      $('#confirm-submit').modal('show')
+      document.getElementById('note-content').innerHTML = note_content
     }
   }
 
-  $('#casa-contact-form').submit(function(e) {
+  $('#casa-contact-form').submit(function (e) {
     validateNoteContent(e)
-  });
+  })
 
-  $("#confirm-submit").on("focus", function () {
-    document.getElementById('modal-case-contact-submit').disabled = false;
-  });
+  $('#confirm-submit').on('focus', function () {
+    document.getElementById('modal-case-contact-submit').disabled = false
+  })
 
-  $("#confirm-submit").on("hide.bs.modal", function () {
+  $('#confirm-submit').on('hide.bs.modal', function () {
     caseContactSubmit.disabled = false
-  });
+  })
 
   const caseContactSubmitFromModal = document.getElementById('modal-case-contact-submit')
   caseContactSubmitFromModal.onclick = function () {
-    $('#casa-contact-form').unbind("submit");
+    $('#casa-contact-form').unbind('submit')
   }
 
   caseContactSubmit.onclick = function (e) {

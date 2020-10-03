@@ -20,7 +20,7 @@ class LinkCaseContactsToContactTypes < ActiveRecord::Migration[6.0]
       social_worker: ContactType.where(name: "Social Worker").first,
       supervisor: ContactType.where(name: "Supervisor").first,
       therapist: ContactType.where(name: "Therapist").first,
-      youth: ContactType.where(name: "Youth").first,
+      youth: ContactType.where(name: "Youth").first
     }
 
     # Point case_contact to contact_types
