@@ -43,7 +43,7 @@ RSpec.describe "/casa_admins", type: :request do
         put casa_admin_path(casa_admin), params: {
           casa_admin: {
             email: expected_email,
-            display_name: expected_display_name,
+            display_name: expected_display_name
           }
         }
 
@@ -63,7 +63,7 @@ RSpec.describe "/casa_admins", type: :request do
         put casa_admin_path(create(:casa_admin)), params: {
           casa_admin: {
             email: "admin@casa.com",
-            display_name: "The admin",
+            display_name: "The admin"
           }
         }
 
@@ -77,7 +77,7 @@ RSpec.describe "/casa_admins", type: :request do
         put casa_admin_path(create(:casa_admin)), params: {
           casa_admin: {
             email: "admin@casa.com",
-            display_name: "The admin",
+            display_name: "The admin"
           }
         }
 

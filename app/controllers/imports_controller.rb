@@ -16,7 +16,7 @@ class ImportsController < ApplicationController
 
     # If there were failed imports
     if import[:exported_rows]
-      message << "<p class='mt-4'>" + link_to("Click here to download failed rows.", download_failed_imports_path) + 
+      message << "<p class='mt-4'>" + link_to("Click here to download failed rows.", download_failed_imports_path) +
         "</p>" + "<p>#{ERR_FAILED_IMPORT_NOTE}</p>"
       session[:exported_rows] = import[:exported_rows]
     end
@@ -51,7 +51,7 @@ class ImportsController < ApplicationController
     {
       "volunteer" => VolunteerImporter::IMPORT_HEADER,
       "supervisor" => SupervisorImporter::IMPORT_HEADER,
-      "casa_case" => CaseImporter::IMPORT_HEADER,
+      "casa_case" => CaseImporter::IMPORT_HEADER
     }
   end
 
@@ -98,10 +98,10 @@ class ImportsController < ApplicationController
 
     unless header_valid?(file_header, import_type)
       message = "#{ERR_INVALID_HEADER}<p class='mt-4'>" \
-        "<b>Expected Header</b>: #{header[import_type].to_s}.</p>" \
-        "<p><b>Received Header</b>: #{file_header.to_s}</p>"
-        
-      return {type: :error, message: message}
+        "<b>Expected Header</b>: #{header[import_type]}.</p>" \
+        "<p><b>Received Header</b>: #{file_header}</p>"
+
+      {type: :error, message: message}
     end
   end
 end

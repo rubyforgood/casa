@@ -45,7 +45,7 @@ RSpec.describe CaseContactPolicy do
 
       it "does not allow if is not supervisor of the creator" do
         expect(subject).to_not permit(create(:supervisor),
-                                      create(:case_contact, creator: create(:volunteer, supervisor: create(:supervisor))))
+          create(:case_contact, creator: create(:volunteer, supervisor: create(:supervisor))))
       end
     end
 
@@ -100,7 +100,7 @@ RSpec.describe CaseContactPolicy do
 
       it "does not allow if is not supervisor of the creator" do
         expect(subject).to_not permit(create(:supervisor),
-                                      create(:case_contact, creator: create(:volunteer, supervisor: create(:supervisor))))
+          create(:case_contact, creator: create(:volunteer, supervisor: create(:supervisor))))
       end
     end
   end

@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe ApplicationHelper, type: :helper do
   describe "#page_header" do
-     it "links to the user dashboard if user logged in" do
+    it "links to the user dashboard if user logged in" do
       current_organization = build_stubbed(:casa_org)
       user = build_stubbed(:user, casa_org: current_organization)
 
