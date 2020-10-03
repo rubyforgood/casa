@@ -9,3 +9,12 @@
     display: inline-block;
   }
 }
+
+.dropdown-menu {
+  li {
+    input[type="checkbox"] {
+      transform: scale(1.5);
+      margin: 0 8px;
+    }
+  }
+}
