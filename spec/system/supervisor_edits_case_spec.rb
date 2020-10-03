@@ -10,10 +10,12 @@ RSpec.describe "supervisor edits case", type: :system do
 
   before do
     sign_in supervisor
-    visit edit_casa_case_path(casa_case)
   end
 
   it "edits case" do
+    visit casa_case_path(casa_case)
+    expect(page).to have_text("Court Report Submission: Not Submitted")
+    visit edit_casa_case_path(casa_case)
     has_no_checked_field? :court_report_submitted
     check "Court report submitted"
     check "Youth"
@@ -21,5 +23,7 @@ RSpec.describe "supervisor edits case", type: :system do
     has_checked_field? :court_report_submitted
     has_checked_field? "Youth"
     has_no_checked_field? "Supervisor"
+    visit casa_case_path(casa_case)
+    expect(page).to have_text("Court Report Submission: Submitted")
   end
 end
