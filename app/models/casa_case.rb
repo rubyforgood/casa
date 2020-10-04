@@ -54,12 +54,11 @@ class CasaCase < ApplicationRecord
   end
 
   def update_cleaning_contact_types(args)
-    begin
-      args = parse_court_date(args)
-    rescue Date::Error
-      errors.messages[:court_date] << "was not a valid date."
-      return false
-    end
+    args = parse_date("court_date", args)
+    args = parse_date("court_report_due_date", args)
+
+    return false unless errors.messages.empty?
+
     transaction do
       casa_case_contact_types.destroy_all
       update(args)
@@ -68,14 +67,23 @@ class CasaCase < ApplicationRecord
 
   private
 
-  def parse_court_date(args)
-    day = args.delete("court_date(3i)")
-    month = args.delete("court_date(2i)")
-    year = args.delete("court_date(1i)")
-    return args if day.blank? && month.blank? && year.blank?
+  def validate_date(day, month, year)
     raise Date::Error if day.blank? || month.blank? || year.blank?
-    court_date = Date.parse("#{day}-#{month}-#{year}")
-    args["court_date"] = court_date
+
+    Date.parse("#{day}-#{month}-#{year}")
+  end
+
+  def parse_date(date_field_name, args)
+    day = args.delete("#{date_field_name}(3i)")
+    month = args.delete("#{date_field_name}(2i)")
+    year = args.delete("#{date_field_name}(1i)")
+
+    return args if day.blank? && month.blank? && year.blank?
+
+    args[date_field_name.to_sym] = validate_date(day, month, year)
+    args
+  rescue Date::Error
+    errors.messages[date_field_name.to_sym] << "was not a valid date."
     args
   end
 end
@@ -88,6 +96,7 @@ end
 #  birth_month_year_youth :datetime
 #  case_number            :string           not null
 #  court_date             :datetime
+#  court_report_due_date  :datetime
 #  court_report_submitted :boolean          default(FALSE), not null
 #  transition_aged_youth  :boolean          default(FALSE), not null
 #  created_at             :datetime         not null
