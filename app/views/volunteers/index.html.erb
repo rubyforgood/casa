@@ -22,7 +22,7 @@
           <% Supervisor.decorate.each do |supervisor| %>
             <li>
               <a class="small" data-value="option1" tabIndex="-1">
-              <% if !current_user.supervisor? or supervisor.id == current_user.id %>
+              <% if !current_user.supervisor? || supervisor == current_user %>
                 <input
                   type="checkbox"
                   data-value="<%= supervisor.name %>"
