@@ -41,7 +41,7 @@ $('document').ready(() => {
   // Enable all data tables on dashboard but only filter on volunteers table
   var volunteersTable = $('table#volunteers').DataTable({
     autoWidth: false,
-    stateSave: true,
+    stateSave: false,
     columnDefs: [
       {
         targets: [1],
