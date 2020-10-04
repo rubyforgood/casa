@@ -3,7 +3,8 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = {host: ENV["DEFAULT_URL_HOST"]} # for devise authentication
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.perform_deliveries = true
+  # Do not send emails in staging or qa
+  config.action_mailer.perform_deliveries = ENV["APP_ENVIRONMENT"] == "production"
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = { # WARNING do not let standardrb linter change this block, it breaks
     address: 'smtp-relay.sendinblue.com',
