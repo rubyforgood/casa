@@ -135,7 +135,7 @@ RSpec.describe "/supervisors", type: :request do
       post supervisors_url, params: {supervisor: {display_name: "Display Name", email: "displayname@example.com"}}
 
       expect(Devise.mailer.deliveries.count).to eq(1)
-      expect(Devise.mailer.deliveries.first.text_part.body.to_s).to include(admin.casa_org_display_name)
+      expect(Devise.mailer.deliveries.first.text_part.body.to_s).to include(admin.casa_org.display_name)
       expect(Devise.mailer.deliveries.first.text_part.body.to_s).to include("This is the first step to accessing your new Supervisor account.")
     end
   end
