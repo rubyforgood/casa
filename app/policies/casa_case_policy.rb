@@ -40,14 +40,15 @@ class CasaCasePolicy
 
   def permitted_attributes
     common_attrs = [
-      :court_date,
       :court_report_submitted,
       casa_case_contact_types_attributes: [:contact_type_id],
     ]
 
     case @user
     when CasaAdmin
-      common_attrs.concat(%i[case_number birth_month_year_youth])
+      common_attrs.concat(%i[case_number birth_month_year_youth court_date])
+    when Supervisor
+      common_attrs.concat(%i[court_date])
     else
       common_attrs
     end
