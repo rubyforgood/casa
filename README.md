@@ -174,11 +174,7 @@ See `db/seeds` for seed data. Test data includes the below
 1. casa_admin1@example.com / 123456 https://<URL>.herokuapp.com/ 
 1. allcasaadmin@example.com / 123456 https://<URL>.herokuapp.com/all_casa_admins/sign_in 
 
-### QA
 
-Merged PRs auto-deploy to QA. See the #casa-bots slack channel for deployments and exceptions
-
-https://casa-r4g-staging.herokuapp.com/
 
 ### Staging
 
