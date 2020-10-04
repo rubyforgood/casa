@@ -68,6 +68,7 @@ end
 #  id                     :bigint           not null, primary key
 #  birth_month_year_youth :datetime
 #  case_number            :string           not null
+#  court_date             :datetime
 #  court_report_submitted :boolean          default(FALSE), not null
 #  transition_aged_youth  :boolean          default(FALSE), not null
 #  created_at             :datetime         not null
