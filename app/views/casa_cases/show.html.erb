@@ -23,7 +23,7 @@
     </p>
 
     <p>
-      <h6><strong>Next Court Date:</strong> <%= l @casa_case.court_date, format: :date_only %></h6>
+      <h6><strong>Next Court Date:</strong> <%= l @casa_case.court_date, format: :day_and_date, default: '' %></h6>
     </p>
 
     <div>

@@ -47,4 +47,4 @@ en:
       mark_inactive_warning: "WARNING: Marking a volunteer inactive will make them unable to login. They will receive an email saying their account has been marked inactive. Are you sure you want to do this?"
   time:
     formats:
-      date: "%A, %v"
+      day_and_date: "%A, %v"
