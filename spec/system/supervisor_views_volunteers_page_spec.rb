@@ -51,4 +51,17 @@ RSpec.describe "supervisor views Volunteers page", type: :system do
     expect(page).not_to have_text("Contact Made In Past 60 Days")
     expect(page).not_to have_text("Last Contact Made")
   end
+
+  describe "filters" do
+    let(:supervisor) { create(:supervisor, :with_volunteers) }
+
+    it "by default only shows volunteers filtered by signed in supervisor" do
+      sign_in supervisor
+
+      visit volunteers_path
+      expect(page).to have_selector(".volunteer-filters")
+      
+      expect(page.all("table#volunteers tr").count).to eq(supervisor.volunteers.count + 1)
+    end
+  end
 end
