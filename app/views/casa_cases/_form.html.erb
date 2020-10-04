@@ -16,7 +16,7 @@
         <% if current_user.casa_admin? || current_user.supervisor?  %>
           <%= form.label :court_date, "Next Court Date" %>
           <br>
-          <span class="datetime-year-month"> <%= form.date_select :court_date, {order: [:day, :month, :year], start_year: Date.current.year, end_year: 1989, prompt: {day: 'Day', month: 'Month', year: 'Year'} }, class: "select2 date-input"%></span>
+          <span class="datetime-year-month"> <%= form.date_select :court_date, {order: [:day, :month, :year], start_year: Date.current.year + 3, end_year: 2000, prompt: {day: 'Day', month: 'Month', year: 'Year'} }, class: "select2 date-input"%></span>
         <% else %>
           <label for="court_date">Next Court Date: <%= casa_case.court_date&.to_s :date_only %></label>
         <% end %>
