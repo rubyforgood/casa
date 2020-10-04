@@ -21,6 +21,27 @@ RSpec.describe CasaCase do
     end
   end
 
+  describe "#should_transition" do
+    it "returns only youth who should have transitioned but have not" do
+      not_transitioned_13_yo = create(:casa_case,
+        birth_month_year_youth: Date.current - 13.years,
+        transition_aged_youth: false)
+      transitioned_14_yo = create(:casa_case,
+        birth_month_year_youth: Date.current - 14.years,
+        transition_aged_youth: true)
+      not_transitioned_14_yo = create(:casa_case,
+        birth_month_year_youth: Date.current - 14.years,
+        transition_aged_youth: false)
+      cases = CasaCase.should_transition
+      aggregate_failures do
+        expect(cases.length).to eq 1
+        expect(cases.include?(not_transitioned_14_yo)).to eq true
+        expect(cases.include?(not_transitioned_13_yo)).to eq false
+        expect(cases.include?(transitioned_14_yo)).to eq false
+      end
+    end
+  end
+
   describe ".actively_assigned_to" do
     it "only returns cases actively assigned to a volunteer" do
       current_user = create(:volunteer)
@@ -80,7 +101,7 @@ RSpec.describe CasaCase do
       expect(casa_case.casa_case_contact_types.count).to eql 1
       expect(casa_case.contact_types).to match_array([type1])
 
-      casa_case.update_cleaning_contact_types({casa_case_contact_types_attributes: [{ contact_type_id: type2.id }]})
+      casa_case.update_cleaning_contact_types({casa_case_contact_types_attributes: [{contact_type_id: type2.id}]})
 
       expect(casa_case.casa_case_contact_types.count).to eql 1
       expect(casa_case.contact_types.reload).to match_array([type2])

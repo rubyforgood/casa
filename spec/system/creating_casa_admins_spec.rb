@@ -27,5 +27,4 @@ RSpec.feature "When an admin creates a new admin", type: :system do
 
     expect(page).to have_content "Email is invalid"
   end
-
 end

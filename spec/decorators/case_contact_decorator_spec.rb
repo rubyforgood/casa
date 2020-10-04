@@ -56,7 +56,7 @@ RSpec.describe CaseContactDecorator do
         [
           build(:contact_type, name: "School"),
           build(:contact_type, name: "Therapist"),
-          build(:contact_type, name: "Bio Parent"),
+          build(:contact_type, name: "Bio Parent")
         ]
       end
 
@@ -67,7 +67,7 @@ RSpec.describe CaseContactDecorator do
       let(:db_contact_types) do
         [
           build(:contact_type, name: "School"),
-          build(:contact_type, name: "Therapist"),
+          build(:contact_type, name: "Therapist")
         ]
       end
 

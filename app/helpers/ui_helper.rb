@@ -9,13 +9,13 @@ module UiHelper
         "Not Assigned",
         CasaCase
           .not_assigned(@volunteer.casa_org)
-          .map{ |casa_case| [casa_case.case_number, casa_case.id] }
+          .map { |casa_case| [casa_case.case_number, casa_case.id] }
       ],
       [
         "Assigned",
         CasaCase
           .actively_assigned_excluding_volunteer(@volunteer)
-          .map{ |casa_case| [casa_case.case_number, casa_case.id] }
+          .map { |casa_case| [casa_case.case_number, casa_case.id] }
       ]
     ]
   end

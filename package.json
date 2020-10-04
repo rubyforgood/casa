@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "test": "standard && jest",
+    "test:e2e": "cypress open",
     "lint": "standard",
     "lint:fix": "standard --fix"
   },
@@ -23,6 +24,7 @@
   },
   "version": "0.1.0",
   "devDependencies": {
+    "cypress": "^4.12.1",
     "jest": "^26.4.2",
     "standard": "^14.3.4",
     "webpack-dev-server": "^3.10.3"

@@ -1,6 +1,6 @@
 class SupervisorImporter < FileImporter
   IMPORT_HEADER = ["email", "display_name", "supervisor_volunteers"]
-  
+
   def self.import_supervisors(csv_filespec, org_id)
     new(csv_filespec, org_id).import_supervisors
   end
@@ -17,17 +17,15 @@ class SupervisorImporter < FileImporter
         failures = []
         failures << "Supervisor #{supervisor.email} already exists" if result[:existing]
         email_addresses_to_users(Volunteer, String(row[:supervisor_volunteers])).each do |volunteer|
-          begin
-            if volunteer.supervisor
-              next if volunteer.supervisor == supervisor
+          if volunteer.supervisor
+            next if volunteer.supervisor == supervisor
 
-              failures << "Volunteer #{volunteer.email} already has a supervisor"
-            else
-              supervisor.volunteers << volunteer
-            end
-          rescue StandardError => error
-            failures << error.to_s
+            failures << "Volunteer #{volunteer.email} already has a supervisor"
+          else
+            supervisor.volunteers << volunteer
           end
+        rescue => error
+          failures << error.to_s
         end
       end
 

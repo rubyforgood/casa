@@ -214,7 +214,7 @@ RSpec.describe "volunteer adds a case contact", type: :system do
     end
   end
 
-private
+  private
 
   def create_contact_types(org)
     create(:contact_type_group, casa_org: org).tap do |group|

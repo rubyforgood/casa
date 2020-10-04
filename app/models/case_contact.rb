@@ -42,8 +42,10 @@ class CaseContact < ApplicationRecord
     where(want_driving_reimbursement: want_driving_reimbursement) if want_driving_reimbursement == true || want_driving_reimbursement == false
   }
   scope :contact_type, ->(contact_type = nil) {
-    joins(:db_contact_types)
-      .where("contact_types.name in (?)", contact_type) if contact_type.present?
+    if contact_type.present?
+      joins(:db_contact_types)
+        .where("contact_types.name in (?)", contact_type)
+    end
   }
 
   IN_PERSON = "in-person".freeze

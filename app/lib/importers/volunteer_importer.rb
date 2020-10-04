@@ -1,6 +1,6 @@
 class VolunteerImporter < FileImporter
   IMPORT_HEADER = ["display_name", "email"]
-  
+
   def self.import_volunteers(csv_filespec, org_id)
     new(csv_filespec, org_id).import_volunteers
   end

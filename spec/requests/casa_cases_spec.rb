@@ -141,10 +141,10 @@ RSpec.describe "/casa_cases", type: :request do
 
     describe "PATCH /update" do
       context "with valid parameters" do
-        let(:new_attributes) { { case_number: "12345", court_report_submitted: true } }
+        let(:new_attributes) { {case_number: "12345", court_report_submitted: true} }
 
         it "updates fields (except case_number)" do
-          patch casa_case_url(casa_case), params: { casa_case: new_attributes }
+          patch casa_case_url(casa_case), params: {casa_case: new_attributes}
           casa_case.reload
           expect(casa_case.case_number).to eq "111"
           expect(casa_case.court_report_submitted).to be true
@@ -192,10 +192,10 @@ RSpec.describe "/casa_cases", type: :request do
 
     describe "PATCH /update" do
       context "with valid parameters" do
-        let(:new_attributes) { { case_number: "12345", court_report_submitted: true } }
+        let(:new_attributes) { {case_number: "12345", court_report_submitted: true} }
 
         it "updates fields (except case_number)" do
-          patch casa_case_url(casa_case), params: { casa_case: new_attributes }
+          patch casa_case_url(casa_case), params: {casa_case: new_attributes}
           casa_case.reload
           expect(casa_case.case_number).to eq "111"
           expect(casa_case.court_report_submitted).to be true

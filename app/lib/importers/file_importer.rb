@@ -23,7 +23,7 @@ class FileImporter
       @file_no_rows = false
       yield(row)
       @number_imported += 1
-    rescue StandardError => error
+    rescue => error
       # email for supervisor or volunteer
       # display name for supervisor or volunteer
       # case number for casa_case
@@ -41,14 +41,14 @@ class FileImporter
     }
   end
 
-private
+  private
 
   def failed?
     !failed_imports.blank?
   end
 
   def success?
-    !failed?  && !@file_no_rows
+    !failed? && !@file_no_rows
   end
 
   def message
@@ -86,12 +86,12 @@ private
   def create_user_record(user_class, row_data)
     user_params = row_data.to_hash.slice(:display_name, :email)
     user = user_class.find_by(user_params)
-    return { user: user, existing: true } if user.present?
+    return {user: user, existing: true} if user.present?
 
     user = user_class.new(user_params)
     user.casa_org_id, user.password = org_id, SecureRandom.hex(10)
     user.save!
     user.invite!
-    { user: user, existing: false }
+    {user: user, existing: false}
   end
 end

@@ -26,6 +26,10 @@
       <h6><strong>Next Court Date:</strong> <%= l @casa_case.court_date, format: :day_and_date, default: '' %></h6>
     </p>
 
+    <p>
+      <h6><strong>Court Report Submission:</strong> <%= @casa_case.decorate.court_report_submission %>
+    </p>
+
     <div>
       <h6><strong>Assigned Volunteers:</strong></h6>
       <% policy_scope(@casa_case.volunteers).each_with_index do |volunteer, index| %>

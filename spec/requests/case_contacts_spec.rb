@@ -71,7 +71,7 @@ RSpec.describe "/case_contacts", type: :request do
 
         patch case_contact_url(case_contact), params: {
           case_contact: {
-            case_contact_contact_type_attributes: [{ contact_type_id: contact_type.id }],
+            case_contact_contact_type_attributes: [{contact_type_id: contact_type.id}],
             duration_minutes: 60
           }
         }
