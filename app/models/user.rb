@@ -128,6 +128,10 @@ class User < ApplicationRecord
   def serving_transition_aged_youth?
     casa_cases.where(transition_aged_youth: true).any?
   end
+
+  def casa_org_display_name
+    CasaOrg.find(casa_org_id).display_name
+  end
 end
 
 # == Schema Information
