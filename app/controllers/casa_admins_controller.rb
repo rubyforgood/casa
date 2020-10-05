@@ -51,6 +51,10 @@ class CasaAdminsController < ApplicationController
     else
       render :edit
     end
+  rescue Errno::ECONNREFUSED => error
+    Bugsnag.notify(error)
+
+    redirect_to edit_casa_admin_path(@casa_admin), alert: "Email not sent."
   end
 
   private
