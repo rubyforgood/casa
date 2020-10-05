@@ -11,8 +11,8 @@ describe "AllCasaAdmin auth", type: :system do
       visit "/"
       expect(page).to have_text "All CASA Admin"
     end
-    # Add back when Travis CI correctly handles large screen size
-    xit "allows sign out" do
+
+    it "allows sign out" do
       visit "/"
       click_link "Log out"
       expect(page).to_not have_text "sign in before continuing"
