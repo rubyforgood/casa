@@ -105,6 +105,28 @@ RSpec.describe "/casa_admins", type: :request do
         patch activate_casa_admin_path(casa_admin)
       }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
+
+    context 'when occurs send errors' do
+      it 'redirects to admin edition page' do
+        sign_in_as_admin
+
+        allow(CasaAdminMailer).to receive_message_chain(:account_setup, :deliver) { raise Errno::ECONNREFUSED }
+
+        patch activate_casa_admin_path(casa_admin)
+
+        expect(response).to redirect_to(edit_casa_admin_path(casa_admin))
+      end
+
+      it 'shows error message' do
+        sign_in_as_admin
+
+        allow(CasaAdminMailer).to receive_message_chain(:account_setup, :deliver) { raise Errno::ECONNREFUSED }
+
+        patch activate_casa_admin_path(casa_admin)
+
+        expect(flash[:alert]).to eq('Email not sent.')
+      end
+    end
   end
 
   describe "PATCH /casa_admins/:id/deactivate" do
@@ -130,7 +152,7 @@ RSpec.describe "/casa_admins", type: :request do
       end
 
       context 'when occurs send errors' do
-        it 'redirects to admin edition page when occurs errors' do
+        it 'redirects to admin edition page' do
           sign_in_as_admin
 
           allow(CasaAdminMailer).to receive_message_chain(:deactivation, :deliver) { raise Errno::ECONNREFUSED }
@@ -140,7 +162,7 @@ RSpec.describe "/casa_admins", type: :request do
           expect(response).to redirect_to(edit_casa_admin_path(casa_admin))
         end
 
-        it 'shows error message when occurs errors' do
+        it 'shows error message' do
           sign_in_as_admin
 
           allow(CasaAdminMailer).to receive_message_chain(:deactivation, :deliver) { raise Errno::ECONNREFUSED }

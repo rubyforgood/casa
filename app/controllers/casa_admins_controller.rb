@@ -41,6 +41,8 @@ class CasaAdminsController < ApplicationController
     else
       render :edit
     end
+  rescue Errno::ECONNREFUSED => error
+    redirect_to_casa_admin_edition_page(error)
   end
 
   def deactivate
@@ -52,12 +54,16 @@ class CasaAdminsController < ApplicationController
       render :edit
     end
   rescue Errno::ECONNREFUSED => error
+    redirect_to_casa_admin_edition_page(error)
+  end
+
+  private
+
+  def redirect_to_casa_admin_edition_page(error)
     Bugsnag.notify(error)
 
     redirect_to edit_casa_admin_path(@casa_admin), alert: "Email not sent."
   end
-
-  private
 
   def set_admin
     @casa_admin = CasaAdmin.find(params[:id])
