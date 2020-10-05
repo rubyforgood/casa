@@ -14,7 +14,7 @@ CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunte
 
 We are very happy to have you. If you have problems or questions, the fastest way to an answer is in slack https://rubyforgood.herokuapp.com/
 
-ALL open issues on the issue board https://github.com/rubyforgood/casa/projects/1 are fair game **unless** they are already assigned to a contibutor. Assign an issue to yourself or comment on it it "I am working on this issue". 
+ALL open issues on the issue board https://github.com/rubyforgood/casa/projects/1 are fair game **unless** they are already assigned to a contributor. Assign an issue to yourself or comment on it "I am working on this issue".
 
 PRs which are not for an issue but which improve the codebase by adding a test or improving the code are also welcome!
 
@@ -67,7 +67,7 @@ using Docker. For non-Docker installations, follow the instructions below.
 
 ### Installing Tools
 
-You needRuby, bundler, node.js, yarn, postgres, and chromedriver 
+You need Ruby, bundler, node.js, yarn, postgres, and chromedriver.
 
 **Ruby**
 
@@ -79,7 +79,7 @@ You needRuby, bundler, node.js, yarn, postgres, and chromedriver
 
 1. (Recommended) Install [nvm](https://github.com/nvm-sh/nvm#installing-and-updating), which is a **n**ode **v**ersion **m**anager.
 1. Install a current LTS version of Node. 12.16.2 works.
-1. Install [yarn](https://classic.yarnpkg.com/en/docs/install) is installed. On Ubuntu, [make sure you install it from the official Yarn repo instead of cmdtest](https://classic.yarnpkg.com/en/docs/install/#debian-stable).
+1. Install [yarn](https://classic.yarnpkg.com/en/docs/install). On Ubuntu, [make sure you install it from the official Yarn repo instead of cmdtest](https://classic.yarnpkg.com/en/docs/install/#debian-stable).
 
 **PostgreSQL ("postgres")**
 
@@ -169,10 +169,10 @@ You'll probably hit a problem where ruby-version reads `ruby-2.7.1` but the inst
 
 See `db/seeds` for seed data. Test data includes the below
 
-1. volunteer1@example.com / 123456 https://<URL>.herokuapp.com/
-1. supervisor1@example.com / 123456 https://<URL>.herokuapp.com/
-1. casa_admin1@example.com / 123456 https://<URL>.herokuapp.com/ 
-1. allcasaadmin@example.com / 123456 https://<URL>.herokuapp.com/all_casa_admins/sign_in 
+1. volunteer1@example.com / 123456 https://\<URL\>.herokuapp.com/
+1. supervisor1@example.com / 123456 https://\<URL\>.herokuapp.com/
+1. casa_admin1@example.com / 123456 https://\<URL\>.herokuapp.com/
+1. allcasaadmin@example.com / 123456 https://\<URL\>.herokuapp.com/all_casa_admins/sign_in
 
 
 
@@ -184,7 +184,7 @@ https://casa-r4g-staging.herokuapp.com/
 
 ### Error tracking
 
-We are currently using https://app.bugsnag.com/ to track errors in staging. Errors post to slack at #casa-bots
+We are currently using https://app.bugsnag.com/ to track errors in staging. Errors post to slack at #casa-bots.
 
 ### Email
 
@@ -200,7 +200,7 @@ Preview all emails at http://localhost:3000/rails/mailers/volunteer_mailer as co
 
 ### Hosting
 
-Namecheap, heroku
+Namecheap, Heroku
 
 ## Communication and Collaboration
 
