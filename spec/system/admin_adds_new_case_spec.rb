@@ -44,7 +44,7 @@ RSpec.describe 'admin adds a new case', type: :system do
   end
 
   context 'when the case number field is not filled' do
-    it 'is successful' do
+    it 'does not create a new case' do
       click_on 'Create CASA Case'
 
       expect(current_path).to eq(casa_cases_path)
@@ -55,7 +55,7 @@ RSpec.describe 'admin adds a new case', type: :system do
   context 'when the case number already exists' do
     let!(:casa_case) { create(:casa_case, case_number: case_number) }
     
-    it 'is successful' do
+    it 'does not create a new case' do
       fill_in 'Case number', with: case_number
       click_on 'Create CASA Case'
 
