@@ -57,8 +57,7 @@ RSpec.describe "Editing Profile", type: :system do
     expect(page).to have_text("Display name can't be blank")
   end
 
-  # Add back when Travis CI correctly handles large screen size
-  xit "should be able to update the email if user is a admin" do
+  it "should be able to update the email if user is a admin" do
     sign_in admin
     visit edit_users_path
     expect(page).to have_field("Email", disabled: false)
