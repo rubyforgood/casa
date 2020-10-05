@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "db:seed" do
   describe "#development seed file" do
@@ -31,5 +31,5 @@ RSpec.describe "db:seed" do
     it "creates a Supervisor" do
       expect(Supervisor.all.size).to eq(6)
     end
-  end 
+  end
 end
