@@ -6,7 +6,7 @@ Rails.application.configure do
   # Do not send emails in staging or qa
   config.action_mailer.perform_deliveries = ENV["APP_ENVIRONMENT"] == "production"
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { # WARNING do not let standardrb linter change this block, it breaks
+  config.action_mailer.smtp_settings = {
     address: 'smtp-relay.sendinblue.com',
     port: 587,
     user_name: ENV["SENDINBLUE_EMAIL"],
