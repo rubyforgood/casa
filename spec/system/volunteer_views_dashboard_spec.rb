@@ -9,9 +9,8 @@ RSpec.describe "volunteer views dashboard", type: :system do
     create(:case_assignment, volunteer: volunteer, casa_case: casa_case_1)
     create(:case_assignment, volunteer: volunteer, casa_case: casa_case_2)
 
-
     sign_in volunteer
-    visit root_path 
+    visit root_path
     expect(page).to have_text("My Cases")
     expect(page).to have_text(casa_case_1.case_number)
     expect(page).to have_text(casa_case_2.case_number)

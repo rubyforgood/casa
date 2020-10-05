@@ -32,7 +32,7 @@ class CasaCase < ApplicationRecord
 
   scope :should_transition, -> {
     where(transition_aged_youth: false)
-      .where('birth_month_year_youth <= ?', 14.years.ago)
+      .where("birth_month_year_youth <= ?", 14.years.ago)
   }
 
   def self.available_for_volunteer(volunteer)

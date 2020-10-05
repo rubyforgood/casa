@@ -23,10 +23,10 @@ RSpec.describe "supervisor edits case", type: :system do
     has_checked_field? :court_report_submitted
     has_checked_field? "Youth"
     has_no_checked_field? "Supervisor"
-    expect(page).to have_text('Court Date')
-    expect(page).to have_text('Day')
-    expect(page).to have_text('Month')
-    expect(page).to have_text('Year')
+    expect(page).to have_text("Court Date")
+    expect(page).to have_text("Day")
+    expect(page).to have_text("Month")
+    expect(page).to have_text("Year")
 
     visit casa_case_path(casa_case)
     expect(page).to have_text("Court Report Submission: Submitted")
