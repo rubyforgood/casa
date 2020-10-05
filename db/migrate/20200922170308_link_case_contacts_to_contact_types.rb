@@ -25,7 +25,7 @@ class LinkCaseContactsToContactTypes < ActiveRecord::Migration[6.0]
 
     # Point case_contact to contact_types
     CaseContact.find_each do |case_contact|
-      case_contact.contact_types.each do |contact_type|
+      case_contact.contact_types&.each do |contact_type|
         CaseContactContactType.create(
           case_contact: case_contact,
           contact_type: code_to_name_mapping[contact_type.to_sym]
