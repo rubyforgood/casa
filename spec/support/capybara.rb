@@ -1,4 +1,6 @@
 require "capybara/rails"
+require "capybara/rspec"
+require "capybara-screenshot/rspec"
 require "selenium/webdriver"
 
 Capybara.register_driver :selenium_chrome_in_container do |app|

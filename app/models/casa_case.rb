@@ -54,10 +54,29 @@ class CasaCase < ApplicationRecord
   end
 
   def update_cleaning_contact_types(args)
+    begin
+      args = parse_court_date(args)
+    rescue Date::Error
+      errors.messages[:court_date] << "was not a valid date."
+      return false
+    end
     transaction do
       casa_case_contact_types.destroy_all
       update(args)
     end
+  end
+
+  private
+
+  def parse_court_date(args)
+    day = args.delete("court_date(3i)")
+    month = args.delete("court_date(2i)")
+    year = args.delete("court_date(1i)")
+    return args if day.blank? && month.blank? && year.blank?
+    raise Date::Error if day.blank? || month.blank? || year.blank?
+    court_date = Date.parse("#{day}-#{month}-#{year}")
+    args["court_date"] = court_date
+    args
   end
 end
 
