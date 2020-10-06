@@ -21,7 +21,7 @@ RSpec.describe CaseContact, type: :model do
   it "validates miles_driven should not be negative" do
     case_contact = build(:case_contact, miles_driven: -1)
     expect(case_contact).to_not be_valid
-    expect(case_contact.errors[:miles_driven]).to eq(['should not be negative'])
+    expect(case_contact.errors[:miles_driven]).to eq(['should not be negative.'])
   end
 
   it "validates presence of occurred_at" do
