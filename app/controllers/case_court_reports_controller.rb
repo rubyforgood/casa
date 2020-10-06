@@ -3,6 +3,6 @@ class CaseCourtReportsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @assigned_cases = current_user.casa_cases
+    @assigned_cases = CasaCase.actively_assigned_to(current_user)
   end
 end
