@@ -5,41 +5,47 @@ namespace :after_party do
 
     # Create Groups and Contact types for each existing organization
     CasaOrg.all.each do |org|
-      ContactTypeGroup.create(casa_org: org, name: "CASA").tap do |group|
-        ContactType.create(contact_type_group: group, name: "Youth")
-        ContactType.create(contact_type_group: group, name: "Supervisor")
+      ContactTypeGroup.find_or_create_by!(casa_org: org, name: "CASA").tap do |group|
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Youth")
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Supervisor")
       end
 
-      ContactTypeGroup.create(casa_org: org, name: "Biological family").tap do |group|
-        ContactType.create(contact_type_group: group, name: "Bio Parent")
-        ContactType.create(contact_type_group: group, name: "Other Family")
+      ContactTypeGroup.find_or_create_by!(casa_org: org, name: "Family").tap do |group|
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Parent")
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Other Family")
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Sibling")
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Grandparent")
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Aunt Uncle or Cousin")
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Fictive Kin")
       end
 
-      ContactTypeGroup.create(casa_org: org, name: "Placement").tap do |group|
-        ContactType.create(contact_type_group: group, name: "Foster Parent")
+      ContactTypeGroup.find_or_create_by!(casa_org: org, name: "Placement").tap do |group|
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Foster Parent")
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Caregiver Family")
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Therapeutic Agency Worker")
       end
 
-      ContactTypeGroup.create(casa_org: org, name: "Social Services").tap do |group|
-        ContactType.create(contact_type_group: group, name: "Social Worker")
-        ContactType.create(contact_type_group: group, name: "DSS Worker")
+      ContactTypeGroup.find_or_create_by!(casa_org: org, name: "Social Services").tap do |group|
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Social Worker")
       end
 
-      ContactTypeGroup.create(casa_org: org, name: "Legal").tap do |group|
-        ContactType.create(contact_type_group: group, name: "Court")
-        ContactType.create(contact_type_group: group, name: "Attorney")
+      ContactTypeGroup.find_or_create_by!(casa_org: org, name: "Legal").tap do |group|
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Court")
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Attorney")
       end
 
-      ContactTypeGroup.create(casa_org: org, name: "Health").tap do |group|
-        ContactType.create(contact_type_group: group, name: "Medical Professional")
-        ContactType.create(contact_type_group: group, name: "Therapist")
+      ContactTypeGroup.find_or_create_by!(casa_org: org, name: "Health").tap do |group|
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Medical Professional")
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Mental Health Therapist")
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Other Therapist")
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Psychiatric Practitioner")
       end
 
-      ContactTypeGroup.create(casa_org: org, name: "Education").tap do |group|
-        ContactType.create(contact_type_group: group, name: "School")
-      end
-
-      ContactTypeGroup.create(casa_org: org, name: "Support Worker").tap do |group|
-        ContactType.create(contact_type_group: group, name: "Other Support Worker")
+      ContactTypeGroup.find_or_create_by!(casa_org: org, name: "Education").tap do |group|
+        ContactType.find_or_create_by!(contact_type_group: group, name: "School")
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Guidance Counselor")
+        ContactType.find_or_create_by!(contact_type_group: group, name: "Teacher")
+        ContactType.find_or_create_by!(contact_type_group: group, name: "IEP Team")
       end
     end
 

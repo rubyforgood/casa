@@ -22,7 +22,7 @@ namespace :after_party do
     # Point case_contact to contact_types
     CaseContact.find_each do |case_contact|
       case_contact.contact_types&.each do |contact_type|
-        CaseContactContactType.create(
+        CaseContactContactType.find_or_create!(
           case_contact: case_contact,
           contact_type: code_to_name_mapping[contact_type.to_sym]
         )
