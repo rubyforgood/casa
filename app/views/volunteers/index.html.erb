@@ -19,6 +19,16 @@
         Supervisor
       </button>
         <ul class="dropdown-menu supervisor-options" style="min-width: 15rem;">
+          <li>
+            <a class="small" data-value="option1" tabIndex="-1">
+              <input
+                id="unassigned-vol-filter"
+                type="checkbox"
+                data-value="No supervisor assignment"
+                unchecked>
+              No supervisor assignment
+            </a>
+          </li>
           <% Supervisor.decorate.each do |supervisor| %>
             <li>
               <a class="small" data-value="option1" tabIndex="-1">
