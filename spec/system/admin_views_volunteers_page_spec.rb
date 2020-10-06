@@ -66,6 +66,10 @@ RSpec.describe "admin views Volunteers page", type: :system do
     # by default, only active users are shown
     expect(page.all("table#volunteers tbody tr").count).to eq assigned_volunteers.count
 
+    click_on "Supervisor"
+    find(:css, "#unassigned-vol-filter").set(true)
+
+    expect(page.all("table#volunteers tbody tr").count).to eq unassigned_volunteers.count
 
     click_on "Status"
     find(:css, 'input[data-value="Active"]').set(false)
