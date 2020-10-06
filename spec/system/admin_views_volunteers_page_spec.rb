@@ -4,12 +4,9 @@ RSpec.describe "admin views Volunteers page", type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
 
-  before { travel_to Time.zone.local(2020, 8, 29, 4, 5, 6) }
-  after { travel_back }
-
   context "when no logo_url" do
     it "can see volunteers and navigate to their cases" do
-      volunteer = create(:volunteer, display_name: "User 1", email: "casa@example.com", casa_org: organization)
+      volunteer = create(:volunteer, :with_assigned_supervisor, display_name: "User 1", email: "casa@example.com", casa_org: organization)
       volunteer.casa_cases << create(:casa_case, casa_org: organization)
       volunteer.casa_cases << create(:casa_case, casa_org: organization)
       casa_case = volunteer.casa_cases[0]
@@ -57,26 +54,27 @@ RSpec.describe "admin views Volunteers page", type: :system do
   end
 
   it "can filter volunteers" do
-    create_list(:volunteer, 3, casa_org: organization)
-    create_list(:volunteer, 2, :inactive, casa_org: organization)
+    assigned_volunteers = create_list(:volunteer, 3, :with_assigned_supervisor, casa_org: organization)
+    inactive_volunteers = create_list(:volunteer, 2, :inactive, casa_org: organization)
+    unassigned_volunteers = create_list(:volunteer, 1)
 
     sign_in admin
 
     visit volunteers_path
     expect(page).to have_selector(".volunteer-filters")
 
-    # by default, only active users are shown, so result should be 4 here
-    expect(page.all("table#volunteers tbody tr").count).to eq 3
+    # by default, only active users are shown
+    expect(page.all("table#volunteers tbody tr").count).to eq assigned_volunteers.count
+
 
     click_on "Status"
     find(:css, 'input[data-value="Active"]').set(false)
 
-    # when all users are hidden, the tr count will be 2 for header and "no results" row
-    expect(page.all("table#volunteers tbody tr").count).to eq 1
+    expect(page).to have_text("No matching records found")
 
     find(:css, 'input[data-value="Inactive"]').set(true)
 
-    expect(page.all("table#volunteers tbody tr").count).to eq 2
+    expect(page.all("table#volunteers tbody tr").count).to eq inactive_volunteers.count
   end
 
   it "can go to the volunteer edit page from the volunteer list" do
