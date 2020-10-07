@@ -40,6 +40,7 @@ Rails.application.routes.draw do
   resources :casa_orgs, only: %i[edit update]
   resources :contact_type_groups, only: %i[new create edit update]
   resources :contact_types, only: %i[new create edit update]
+  resources :hearing_types, only: %i[new create edit update]
 
   resources :supervisors, except: %i[destroy]
   resources :supervisor_volunteers, only: %i[create] do

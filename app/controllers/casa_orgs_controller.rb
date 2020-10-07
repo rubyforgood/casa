@@ -1,6 +1,8 @@
 class CasaOrgsController < ApplicationController
+  before_action :authenticate_user!, :must_be_admin
   before_action :set_casa_org, only: %i[edit update]
   before_action :set_contact_type_data, only: %i[edit update]
+  before_action :set_hearing_types, only: %i[edit]
   before_action :must_be_admin
   before_action :require_organization!
 
@@ -34,5 +36,9 @@ class CasaOrgsController < ApplicationController
   def set_contact_type_data
     @contact_type_groups = @casa_org.contact_type_groups
     @contact_types = ContactType.for_organization(@casa_org)
+  end
+
+  def set_hearing_types
+    @hearing_types = HearingType.for_organization(@casa_org)
   end
 end
