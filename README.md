@@ -182,6 +182,14 @@ Deploy to Staging is manual. Training of new users is done in staging.
 
 https://casa-r4g-staging.herokuapp.com/
 
+### QA environment
+
+QA is done on the staging servers
+
+- https://casa-qa.herokuapp.com/
+
+See [Non-development environments](#non-development-environments) section for log in credentials
+
 ### Error tracking
 
 We are currently using https://app.bugsnag.com/ to track errors in staging. Errors post to slack at #casa-bots.
