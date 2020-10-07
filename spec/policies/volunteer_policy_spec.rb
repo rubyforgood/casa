@@ -18,4 +18,28 @@ RSpec.describe VolunteerPolicy do
       end
     end
   end
+
+  permissions :create? do
+    context "when user is a casa admin" do
+      it 'permits create a volunteer' do
+        admin = create(:casa_admin)
+        expect(subject).to permit(admin, :volunteer)
+      end
+    end
+
+    context "when user is a supervisor" do
+      it 'does not permit create' do
+        supervisor = create(:supervisor)
+        expect(subject).not_to permit(supervisor, :volunteer)
+      end
+    end
+
+    context "when user is a volunteer" do
+      it 'does not permit create' do
+        volunteer = create(:volunteer)
+        expect(subject).not_to permit(volunteer, :volunteer)
+      end
+    end
+
+  end
 end

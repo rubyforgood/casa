@@ -5,6 +5,14 @@ class VolunteerPolicy < UserPolicy
     user.casa_admin? || user.supervisor?
   end
 
+  def new?
+    create?
+  end
+
+  def create?
+    user.casa_admin?
+  end
+
   def initialize(user, record)
     @user = user
     @record = record
