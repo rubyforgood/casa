@@ -10,27 +10,9 @@ AllCasaAdmin.destroy_all
 ContactType.destroy_all
 ContactTypeGroup.destroy_all
 
-logo = CasaOrgLogo.new(
-  url: "media/src/images/logo.png",
-  alt_text: "CASA Logo",
-  size: "70x38"
-)
+Rake::Task['after_party:run'].invoke
 
-pg_casa = CasaOrg.where(name: "Prince George CASA").first_or_create!(
-  casa_org_logo: logo,
-  display_name: "CASA / Prince George's County, MD",
-  address: "6811 Kenilworth Avenue, Suite 402 Riverdale, MD 20737",
-  footer_links: [
-    ["https://pgcasa.org/contact/", "Contact Us"],
-    ["https://pgcasa.org/subscribe-to-newsletter/", "Subscribe to newsletter"],
-    ["https://www.givedirect.org/give/givefrm.asp?CID=4450", "Donate"]
-  ]
-)
-
-ContactTypeGroup.create(casa_org: pg_casa, name: "CASA").tap do |group|
-  ContactType.create(contact_type_group: group, name: "Youth")
-  ContactType.create(contact_type_group: group, name: "Supervisor")
-end
+pg_casa = CasaOrg.first
 
 # number casa cases to generate
 CASA_CASE_COUNT = 2

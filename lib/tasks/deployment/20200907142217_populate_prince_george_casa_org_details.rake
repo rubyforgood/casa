@@ -4,17 +4,13 @@ namespace :after_party do
     puts "Running deploy task 'populate_prince_george_casa_org_details'"
 
     # Seed existing PG CASA logo/display details for production
-    # (Okay to run on dev too - will just duplicate seed data)
-    casa_org = CasaOrg.first # TODO this breaks new deploys, write a test to prevent breaking new deploys ?
-
-    logo = casa_org&.casa_org_logo || casa_org&.build_casa_org_logo
-    logo&.update!(
+    logo = CasaOrgLogo.new(
       url: "media/src/images/logo.png",
       alt_text: "CASA Logo",
       size: "70x38"
     )
 
-    casa_org&.update!(
+    CasaOrg.where(name: "Prince George CASA").first_or_create!(
       casa_org_logo: logo,
       display_name: "CASA / Prince George's County, MD",
       address: "6811 Kenilworth Avenue, Suite 402 Riverdale, MD 20737",
