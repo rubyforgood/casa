@@ -46,9 +46,9 @@ class CasaCasePolicy
 
     case @user
     when CasaAdmin
-      common_attrs.concat(%i[case_number birth_month_year_youth court_date])
+      common_attrs.concat(%i[case_number birth_month_year_youth court_date court_report_due_date])
     when Supervisor
-      common_attrs.concat(%i[court_date])
+      common_attrs.concat(%i[court_date court_report_due_date])
     else
       common_attrs
     end
