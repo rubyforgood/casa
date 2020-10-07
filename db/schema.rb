@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 2020_10_05_191326) do
     t.datetime "birth_month_year_youth"
     t.boolean "court_report_submitted", default: false, null: false
     t.datetime "court_date"
+    t.datetime "court_report_due_date"
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
     t.index ["case_number"], name: "index_casa_cases_on_case_number", unique: true
   end

@@ -31,6 +31,7 @@ Rails.application.routes.draw do
 
   resources :case_contacts, except: %i[show]
   resources :reports, only: %i[index]
+  resources :case_court_reports, only: %i[index]
   resources :imports, only: %i[index create] do
     collection do
       get :download_failed

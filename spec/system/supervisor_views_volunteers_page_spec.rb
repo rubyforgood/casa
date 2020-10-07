@@ -3,28 +3,31 @@ require "rails_helper"
 RSpec.describe "supervisor views Volunteers page", type: :system do
   let(:organization) { create(:casa_org) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
-  # Add back when Travis CI correctly handles large screen size
+  
   it "can filter volunteers" do
-    create_list(:volunteer, 3, casa_org: organization)
-    create_list(:volunteer, 2, :inactive, casa_org: organization)
+    active_volunteers = create_list(:volunteer, 3, :with_assigned_supervisor, casa_org: organization)
+    active_volunteers[2].supervisor = supervisor
+
+    inactive_volunteers = create_list(:volunteer, 2, :with_assigned_supervisor, :inactive, casa_org: organization)
+    inactive_volunteers[0].supervisor = supervisor
+    inactive_volunteers[1].supervisor = supervisor
 
     sign_in supervisor
 
     visit volunteers_path
     expect(page).to have_selector(".volunteer-filters")
 
-    # by default, only active users are shown, so result should be 3 here
-    expect(page.all("table#volunteers tr").count).to eq 3
+    expect(page.all("table#volunteers tbody tr").count).to eq 1
 
     click_on "Status"
     find(:css, 'input[data-value="Active"]').set(false)
 
     # when all users are hidden, the tr count will be 1 for "no results" row
-    expect(page.all("table#volunteers tr").count).to eq 1
+    expect(page.all("table#volunteers tbody tr").count).to eq 1
 
     find(:css, 'input[data-value="Inactive"]').set(true)
 
-    expect(page.all("table#volunteers tr").count).to eq 2
+    expect(page.all("table#volunteers tbody tr").count).to eq inactive_volunteers.count
   end
 
   it "can show/hide columns on volunteers table" do

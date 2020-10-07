@@ -53,6 +53,7 @@ describe "layout/sidebar", type: :view do
 
       expect(rendered).to have_link("My Cases", href: "/casa_cases")
       expect(rendered).to have_link("Case Contacts", href: "/case_contacts")
+      expect(rendered).to have_link("Generate Court Report", href: "/case_court_reports")
       expect(rendered).to_not have_link("Volunteers", href: "/volunteers")
       expect(rendered).to_not have_link("Supervisors", href: "/supervisors")
       expect(rendered).to_not have_link("Admins", href: "/casa_admins")

@@ -29,6 +29,7 @@ RSpec.describe "admin edits case", type: :system do
 
     has_checked_field? :court_report_submitted
     expect(page).to have_text("Court Date")
+    expect(page).to have_text("Court Report Due Date")
     expect(page).to have_text("Day")
     expect(page).to have_text("Month")
     expect(page).to have_text("Year")

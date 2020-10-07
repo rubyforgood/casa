@@ -36,7 +36,7 @@
       <div class="list-group list-group-flush footer-nav">
         <% if user_signed_in? %>
           <%= link_to "Edit Profile", edit_users_path, class: "list-group-item" %>
-
+          <%= link_to  "Generate Court Reports", case_court_reports_path, class: "list-group-item" %>
           <% if policy(:application).see_reports_page? %>
             <%= link_to "Generate Reports", reports_path, class: "list-group-item" %>
           <% end %>
