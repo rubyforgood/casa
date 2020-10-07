@@ -32,7 +32,7 @@ class CasaCase < ApplicationRecord
 
   scope :should_transition, -> {
     where(transition_aged_youth: false)
-      .where('birth_month_year_youth <= ?', 14.years.ago)
+      .where("birth_month_year_youth <= ?", 14.years.ago)
   }
 
   def self.available_for_volunteer(volunteer)
@@ -54,10 +54,37 @@ class CasaCase < ApplicationRecord
   end
 
   def update_cleaning_contact_types(args)
+    args = parse_date("court_date", args)
+    args = parse_date("court_report_due_date", args)
+
+    return false unless errors.messages.empty?
+
     transaction do
       casa_case_contact_types.destroy_all
       update(args)
     end
+  end
+
+  private
+
+  def validate_date(day, month, year)
+    raise Date::Error if day.blank? || month.blank? || year.blank?
+
+    Date.parse("#{day}-#{month}-#{year}")
+  end
+
+  def parse_date(date_field_name, args)
+    day = args.delete("#{date_field_name}(3i)")
+    month = args.delete("#{date_field_name}(2i)")
+    year = args.delete("#{date_field_name}(1i)")
+
+    return args if day.blank? && month.blank? && year.blank?
+
+    args[date_field_name.to_sym] = validate_date(day, month, year)
+    args
+  rescue Date::Error
+    errors.messages[date_field_name.to_sym] << "was not a valid date."
+    args
   end
 end
 
@@ -69,6 +96,7 @@ end
 #  birth_month_year_youth :datetime
 #  case_number            :string           not null
 #  court_date             :datetime
+#  court_report_due_date  :datetime
 #  court_report_submitted :boolean          default(FALSE), not null
 #  transition_aged_youth  :boolean          default(FALSE), not null
 #  created_at             :datetime         not null
