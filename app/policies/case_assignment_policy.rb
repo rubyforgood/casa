@@ -19,7 +19,7 @@ class CaseAssignmentPolicy
     end
   end
 
-  def unassing?
+  def unassign?
     record.is_active? && (user.supervisor? || user.casa_admin?) 
   end
 end
