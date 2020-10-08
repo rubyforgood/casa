@@ -2,13 +2,13 @@
 # The action is set up in ./workflows/label.yml
 # See https://github.com/actions/labeler for more details
 ruby:
-  - ./**/*.rb
+- ./**/*.rb
 
 javascript:
-  - ./**/*.js
+- ./**/*.js
 
 Tests! 🎉💖👏:
-  - any: ['app/javascript/__tests__/**.test.js', 'cypress/**.spec.js', 'spec/**/_spec.rb']
+- any: ['app/javascript/__tests__/**.test.js', 'cypress/**.spec.js', 'spec/**/_spec.rb']
 
 dependencies:
-  - any: ['Gemfile*', 'package*.json', 'yarn.lock']
+- any: ['Gemfile*', 'package*.json', 'yarn.lock']
