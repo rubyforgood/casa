@@ -51,7 +51,7 @@ RSpec.describe "/casa_admins", type: :request do
         expect(casa_admin.email).to eq expected_email
         expect(casa_admin.display_name).to eq expected_display_name
 
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to casa_admins_path
         expect(response.request.flash[:notice]).to eq "Admin was successfully updated."
       end
     end
