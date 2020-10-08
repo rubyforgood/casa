@@ -33,3 +33,4 @@ RSpec.describe CasaCasePolicy::Scope do
     end
   end
 end
+test

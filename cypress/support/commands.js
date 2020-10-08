@@ -34,3 +34,5 @@ Cypress.Commands.add("loginAsVolunteerProgrammatically", () => {
   cy.get('#user_password').type('123456')
   cy.get('.actions > .btn').click()
 })
+
+test

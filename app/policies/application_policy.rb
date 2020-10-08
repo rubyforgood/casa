@@ -17,3 +17,4 @@ class ApplicationPolicy
     user.casa_admin?
   end
 end
+test
