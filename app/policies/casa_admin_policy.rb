@@ -4,7 +4,7 @@ class CasaAdminPolicy < UserPolicy
   end
 
   def deactivate?
-    show_deactivate_option? && CasaAdmin.in_organization(current_organization).active.size > 1
+    see_deactivate_option? && CasaAdmin.in_organization(current_organization).active.size > 1
   end
 
   def see_deactivate_option?
@@ -14,6 +14,6 @@ class CasaAdminPolicy < UserPolicy
   private
 
   def current_organization
-    current_user&.casa_org
+    user&.casa_org
   end
 end
