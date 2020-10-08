@@ -38,7 +38,6 @@ install:
   - travis_retry bundle install
   - travis_retry yarn
   - bundle install
-  - $(npm bin)/print-env TRAVIS
   - npm run start:ci &
   - npm run cy:run -- --record --parallel
   # after all tests finish running we need
