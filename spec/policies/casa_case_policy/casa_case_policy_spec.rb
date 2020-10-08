@@ -25,6 +25,46 @@ RSpec.describe CasaCasePolicy do
     end
   end
 
+  permissions :update_court_date? do
+    context "when user is an admin" do
+      it "allow update" do
+        expect(subject).to permit(casa_admin, casa_case)
+      end
+    end
+
+    context "when user is a supervisor" do
+      it "allow update" do
+        expect(subject).to permit(supervisor, casa_case)
+      end
+    end
+
+    context "when user is a volunteer" do
+      it "does not allow update" do
+        expect(subject).not_to permit(volunteer, casa_case)
+      end
+    end
+  end
+
+  permissions :update_birth_month_year_youth? do
+    context "when user is an admin" do
+      it "allow update" do
+        expect(subject).to permit(casa_admin, casa_case)
+      end
+    end
+
+    context "when user is a supervisor" do
+      it "doest not allow update" do
+        expect(subject).not_to permit(supervisor, casa_case)
+      end
+    end
+
+    context "when user is a volunteer" do
+      it "does not allow update" do
+        expect(subject).not_to permit(volunteer, casa_case)
+      end
+    end
+  end
+
   permissions :assign_volunteers? do
     context "when user is an admin" do
       it "does allow volunteer assignment" do
