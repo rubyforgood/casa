@@ -39,7 +39,7 @@
                 <% end %>
               </td>
               <td data-test="action">
-                <% if policy(assignment).unassing? %>
+                <% if policy(assignment).unassign? %>
                   <%= button_to 'Unassign Volunteer',
                     unassign_case_assignment_path(assignment),
                     method: :patch,
