@@ -6,7 +6,7 @@ RSpec.describe "populate prince george org details" do
   it "creates an org with correct details if DB is empty" do
     Rake::Task["after_party:populate_prince_george_casa_org_details"].invoke
     Rake::Task["after_party:populate_prince_george_casa_org_details"].reenable
-    casa_org = CasaOrg.find_by_name("Prince George CASA")
+    casa_org = CasaOrg.find_by(name: "Prince George CASA")
     aggregate_failures do
       expect(casa_org.display_name).to eq("CASA / Prince George's County, MD")
       expect(casa_org.address).to eq("6811 Kenilworth Avenue, Suite 402 Riverdale, MD 20737")
@@ -22,7 +22,7 @@ RSpec.describe "populate prince george org details" do
                    footer_links: "boop!")
     Rake::Task["after_party:populate_prince_george_casa_org_details"].invoke
     Rake::Task["after_party:populate_prince_george_casa_org_details"].reenable
-    casa_org = CasaOrg.find_by_name("Prince George CASA")
+    casa_org = CasaOrg.find_by(name: "Prince George CASA")
     aggregate_failures do
       expect(casa_org.display_name).to eq("CASA / Prince George's County, MD")
       expect(casa_org.address).to eq("6811 Kenilworth Avenue, Suite 402 Riverdale, MD 20737")

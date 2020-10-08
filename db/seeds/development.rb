@@ -7,6 +7,10 @@ CasaCase.destroy_all
 User.destroy_all
 CasaOrg.destroy_all
 AllCasaAdmin.destroy_all
+ContactType.destroy_all
+ContactTypeGroup.destroy_all
+
+Rake::Task['after_party:run'].invoke
 
 logo = CasaOrgLogo.new(
   url: "media/src/images/logo.png",
@@ -24,11 +28,6 @@ pg_casa = CasaOrg.where(name: "Prince George CASA").first_or_create!(
     ["https://www.givedirect.org/give/givefrm.asp?CID=4450", "Donate"]
   ]
 )
-
-ContactTypeGroup.create(casa_org: pg_casa, name: "CASA").tap do |group|
-  ContactType.create(contact_type_group: group, name: "Youth")
-  ContactType.create(contact_type_group: group, name: "Supervisor")
-end
 
 # number casa cases to generate
 CASA_CASE_COUNT = 2
