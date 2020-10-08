@@ -8,7 +8,7 @@ javascript:
   - ./**/*.js
 
 Tests! 🎉💖👏:
-  - any: ['spec/**/_spec.rb', 'cypress/**.spec.js']
+  - any: ['app/javascript/__tests__/**.test.js', 'cypress/**.spec.js', 'spec/**/_spec.rb']
 
 dependencies:
   - any: ['Gemfile*', 'package*.json', 'yarn.lock']
