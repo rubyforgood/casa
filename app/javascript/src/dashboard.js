@@ -2,7 +2,11 @@
 $('document').ready(() => {
   $.fn.dataTable.ext.search.push(
     function (settings, data, dataIndex) {
-      var supervisorArray = ['']
+      if ($('#unassigned-vol-filter').is(':checked')) {
+        var supervisorArray = ['']
+      } else {
+        var supervisorArray = []
+      }
       var statusArray = []
       var assignedToTransitionYouthArray = []
 
@@ -33,7 +37,6 @@ $('document').ready(() => {
         assignedToTransitionYouthArray.includes(assignedToTransitionYouth)) {
         return true
       }
-
       return false
     }
   )
@@ -69,7 +72,22 @@ $('document').ready(() => {
   $('table#casa_cases').DataTable({ searching: false })
   $('table#case_contacts').DataTable({ searching: false, order: [[0, 'desc']] })
 
-  $('.volunteer-filters input[type="checkbox"]').on('click', function () {
+  function filterOutUnassignedVolunteers (checked) {
+    $('.supervisor-options').find('input[type="checkbox"]').not('#unassigned-vol-filter').each(function () {
+      this.checked = checked
+    })
+  }
+
+  $('#unassigned-vol-filter').on('click', function () {
+    if ($('#unassigned-vol-filter').is(':checked')) {
+      filterOutUnassignedVolunteers(false)
+    } else {
+      filterOutUnassignedVolunteers(true)
+    }
+    volunteersTable.draw()
+  })
+
+  $('.volunteer-filters input[type="checkbox"]').not('#unassigned-vol-filter').on('click', function () {
     volunteersTable.draw()
   })
 

@@ -27,6 +27,10 @@
     </p>
 
     <p>
+      <h6><strong>Court Report Due Date:</strong> <%= l @casa_case.court_report_due_date, format: :day_and_date, default: '' %></h6>
+    </p>
+
+    <p>
       <h6><strong>Court Report Submission:</strong> <%= @casa_case.decorate.court_report_submission %>
     </p>
 

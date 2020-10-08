@@ -48,6 +48,7 @@ end
 group :test do
   gem "brakeman" # security inspection
   gem "capybara", ">= 2.15"
+  gem "capybara-screenshot"
   gem "rake"
   gem "selenium-webdriver"
   gem "simplecov", "~> 0.19.0", require: false # pinned as a workaround for https://github.com/codeclimate/test-reporter/issues/418
