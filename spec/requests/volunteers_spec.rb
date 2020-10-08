@@ -13,15 +13,6 @@ RSpec.describe "/volunteers", type: :request do
     end
   end
 
-  describe "GET /new" do
-    it "renders a successful response only for admin user" do
-      sign_in admin
-
-      get new_volunteer_path
-      expect(response).to be_successful
-    end
-  end
-
   describe "GET /edit" do
     it "render a successful response" do
       sign_in admin

@@ -39,7 +39,7 @@
                 <% end %>
               </td>
               <td data-test="action">
-                <% if policy(assignment).unassign? %>
+                <% if assignment.is_active? && (current_user.supervisor? || current_user.casa_admin?) %>
                   <%= button_to 'Unassign Volunteer',
                     unassign_case_assignment_path(assignment),
                     method: :patch,

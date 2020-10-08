@@ -30,7 +30,7 @@
   </td>
   <td>
     <span class="mobile-label">Creator</span>
-    <% if policy(contact).edit? %>
+    <% if current_user&.casa_admin? || current_user&.supervisor? %>
       <% if contact.creator&.supervisor? %>
         <%= link_to "#{contact.creator&.display_name} ", edit_supervisor_path(current_user) %>
       <% elsif contact.creator&.casa_admin? %>
