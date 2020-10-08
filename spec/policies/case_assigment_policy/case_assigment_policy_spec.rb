@@ -13,7 +13,7 @@ RSpec.describe CaseAssignmentPolicy do
   let(:supervisor) { create(:supervisor, casa_org: organization) }
   let(:casa_admin) { create(:casa_admin, casa_org: organization) }
 
-  permissions :unassing? do
+  permissions :unassign? do
     it "does not allow unassign if case_assignment is inactive" do
       expect(subject).not_to permit(casa_admin, case_assignment_inactive)
     end
