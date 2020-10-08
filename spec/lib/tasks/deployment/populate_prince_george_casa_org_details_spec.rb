@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "populate prince george org details" do
   setup { Casa::Application.load_tasks }
 
-  xit "creates an org with correct details if DB is empty" do
+  it "creates an org with correct details if DB is empty" do
     Rake::Task["after_party:populate_prince_george_casa_org_details"].invoke
     Rake::Task["after_party:populate_prince_george_casa_org_details"].reenable
     casa_org = CasaOrg.find_by(name: "Prince George CASA")
@@ -16,7 +16,7 @@ RSpec.describe "populate prince george org details" do
   end
 
   it "updates an existing org with correct details" do
-    CasaOrg.create(name: "Prince George CASA",
+    CasaOrg.create!(name: "Prince George CASA",
                    display_name: "Bad Name",
                    address: "123 Main St",
                    footer_links: "boop!")

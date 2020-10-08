@@ -88,11 +88,11 @@ RSpec.describe "volunteer adds a case contact", type: :system do
     expect(page).not_to have_text("error")
     click_on "Submit"
     expect(page).to have_text("Confirm Note Content")
-    # expect {
-    #   click_on "Continue Submitting"
-    # }.to change(CaseContact, :count).by(1) # TODO fix this
+    expect {
+      click_on "Continue Submitting"
+    }.to change(CaseContact, :count).by(1) # this is flaky depending on test order?
 
-    expect(CaseContact.first.notes).to eq "This is the note"
+    expect(volunteer.casa_cases.first.case_contacts.first.notes).to eq "This is the note"
   end
 
   it "does not submit the form when note is added but not confirmed" do
