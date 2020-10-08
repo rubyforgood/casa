@@ -4,7 +4,9 @@ RSpec.describe "populate prince george org details" do
   setup { Casa::Application.load_tasks }
 
   it "creates an org with correct details if DB is empty" do
-    Rake::Task["after_party:populate_prince_george_casa_org_details"].invoke
+    expect {
+      Rake::Task["after_party:populate_prince_george_casa_org_details"].invoke
+    }.to change(AfterParty::TaskRecord, :count).by(2)
     Rake::Task["after_party:populate_prince_george_casa_org_details"].reenable
     casa_org = CasaOrg.find_by(name: "Prince George CASA")
     aggregate_failures do
@@ -17,10 +19,12 @@ RSpec.describe "populate prince george org details" do
 
   it "updates an existing org with correct details" do
     CasaOrg.create!(name: "Prince George CASA",
-                   display_name: "Bad Name",
-                   address: "123 Main St",
-                   footer_links: "boop!")
-    Rake::Task["after_party:populate_prince_george_casa_org_details"].invoke
+                    display_name: "Bad Name",
+                    address: "123 Main St",
+                    footer_links: "boop!")
+    expect {
+      Rake::Task["after_party:populate_prince_george_casa_org_details"].invoke
+    }.to change(AfterParty::TaskRecord, :count).by(1)
     Rake::Task["after_party:populate_prince_george_casa_org_details"].reenable
     casa_org = CasaOrg.find_by(name: "Prince George CASA")
     aggregate_failures do
