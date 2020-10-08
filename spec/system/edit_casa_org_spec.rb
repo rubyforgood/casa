@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Edit Casa Org", type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
-  let(:hearing_type) { create(:hearing_type, casa_org: organization, name: "Spec Test Hearing Type") }
+  let!(:hearing_type) { create(:hearing_type, casa_org: organization, name: "Spec Test Hearing Type") }
 
   before do
     sign_in admin
@@ -18,6 +18,6 @@ RSpec.describe "Edit Casa Org", type: :system do
 
   it "has hearing types content" do
     expect(page).to have_text("Spec Test Hearing Type")
-    expect(page).to have_text("New Hearing Type")
+    expect(page).to have_text(hearing_type.name)
   end
 end
