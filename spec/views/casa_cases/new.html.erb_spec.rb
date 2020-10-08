@@ -6,15 +6,11 @@ describe "casa_cases/new" do
   before do
     assign :casa_case, CasaCase.new
     assign :contact_types, []
-
-    enable_pundit(view, user)
-    allow(view).to receive(:current_user).and_return(user)
   end
 
   context "while signed in as admin" do
-    let(:user) { build_stubbed(:casa_admin)}
     before do
-      sign_in user 
+      sign_in_as_admin
     end
 
     it { is_expected.to have_selector("a", text: "Back") }
@@ -22,9 +18,8 @@ describe "casa_cases/new" do
   end
 
   context "while signed in as supervisor" do
-    let(:user) { build_stubbed(:supervisor) }
     before do
-      sign_in user
+      sign_in_as_supervisor
     end
 
     it { is_expected.to have_selector("a", text: "Back") }

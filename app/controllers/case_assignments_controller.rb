@@ -35,7 +35,6 @@ class CaseAssignmentsController < ApplicationController
 
   def unassign
     case_assignment = CaseAssignment.find(params[:id])
-    authorize case_assignment, :unassign?
     casa_case = case_assignment.casa_case
     volunteer = case_assignment.volunteer
     flash_message = "Volunteer was unassigned from Case #{casa_case.case_number}."

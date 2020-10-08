@@ -46,7 +46,6 @@ class CasaAdminsController < ApplicationController
   end
 
   def deactivate
-    authorize @casa_admin, :deactivate?
     if @casa_admin.deactivate
       CasaAdminMailer.deactivation(@casa_admin).deliver
 
