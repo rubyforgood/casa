@@ -9,10 +9,6 @@ cache:
   yarn: true
   directories:
     - /home/travis/.rvm/
-override:
-  - npm ci
-  - npm run cy:verify
-  - npm run cy:info
 rvm:
   - 2.7.1
 
@@ -38,11 +34,6 @@ install:
   - travis_retry bundle install
   - travis_retry yarn
   - bundle install
-  - npm run start:ci &
-  - npm run cy:run -- --record --parallel
-  # after all tests finish running we need
-  # to kill all background jobs (like "npm start &")
-  - kill $(jobs -p) || true
 
 script:
   - bundle exec rails webpacker:compile
