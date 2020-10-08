@@ -34,6 +34,18 @@ class CasaCasePolicy
     user.is_a?(Supervisor)
   end
 
+  def update_court_date?
+    user.casa_admin? || user.supervisor?
+  end
+
+  def update_court_report_due_date?
+    user.casa_admin? || user.supervisor?
+  end
+
+  def update_birth_month_year_youth?
+    user.casa_admin?
+  end
+
   def assign_volunteers?
     is_in_same_org? && is_supervisor_or_casa_admin?
   end
