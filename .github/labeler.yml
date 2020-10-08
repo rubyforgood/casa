@@ -1,0 +1,14 @@
+# Configuration for the Labeler action
+# The action is set up in ./workflows/label.yml
+# See https://github.com/actions/labeler for more details
+ruby:
+  - ./**/*.rb
+
+javascript:
+  - ./**/*.js
+
+Tests! 🎉💖👏:
+  - any: ['spec/**/_spec.rb', 'cypress/**.spec.js']
+
+dependencies:
+  - any: ['Gemfile*', 'package*.json', 'yarn.lock']
