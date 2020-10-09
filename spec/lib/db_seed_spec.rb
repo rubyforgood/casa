@@ -1,7 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "db:seed" do
-  before { Casa::Application.load_tasks }
+  before do
+    Rake::Task.clear
+    Casa::Application.load_tasks
+  end
 
   describe "#development seed file" do
     before do
