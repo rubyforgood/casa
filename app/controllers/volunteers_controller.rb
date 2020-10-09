@@ -12,6 +12,7 @@ class VolunteersController < ApplicationController
   end
 
   def new
+    authorize :volunteer
     @volunteer = Volunteer.new
   end
 
