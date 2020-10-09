@@ -11,7 +11,6 @@ ContactType.destroy_all
 ContactTypeGroup.destroy_all
 
 Rake::Task['after_party:run'].invoke
-Rake::Task['after_party:run'].reenable
 
 logo = CasaOrgLogo.new(
   url: "media/src/images/logo.png",

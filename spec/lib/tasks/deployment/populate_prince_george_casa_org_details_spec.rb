@@ -24,7 +24,6 @@ RSpec.describe "populate prince george org details" do
                    address: "123 Main St",
                    footer_links: "boop!")
     Rake::Task["after_party:populate_prince_george_casa_org_details"].invoke
-    Rake::Task["after_party:populate_prince_george_casa_org_details"].reenable
     casa_org = CasaOrg.find_by(name: "Prince George CASA")
     aggregate_failures do
       expect(casa_org.display_name).to eq("CASA / Prince George's County, MD")
