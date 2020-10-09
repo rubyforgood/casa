@@ -175,6 +175,12 @@ See `db/seeds` for seed data. Test data includes the below
 1. allcasaadmin@example.com / 123456 https://\<URL\>.herokuapp.com/all_casa_admins/sign_in
 
 
+### QA environment
+
+When pull requests are merged, the code auto-deploys to QA (because of a heroku setting) 
+
+https://casa-qa.herokuapp.com/
+
 
 ### Staging
 
@@ -182,13 +188,13 @@ Deploy to Staging is manual. Training of new users is done in staging.
 
 https://casa-r4g-staging.herokuapp.com/
 
-### QA environment
 
-QA is done on the staging servers
+### Production
 
-- https://casa-qa.herokuapp.com/
+We have real users in production! 
 
-See [Non-development environments](#non-development-environments) section for log in credentials
+If you represent a CASA organization which wants to use this, please contact us! polly@rubyforgood.org
+
 
 ### Error tracking
 
