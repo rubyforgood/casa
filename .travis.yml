@@ -11,7 +11,10 @@ cache:
     - /home/travis/.rvm/
 rvm:
   - 2.7.1
-
+jobs:
+  include:
+    - language: node_js
+      node_js: "lts/*"
 services:
   - postgresql
 
