@@ -39,6 +39,7 @@ script:
   - bundle exec rails webpacker:compile
   - bundle exec brakeman
   - RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
-  - npx cypress run --headless
+  - bundle exec rails s --port 3000 &
+  - npm run cy:run & wait-on http://localhost:3000
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
