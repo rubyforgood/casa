@@ -7,15 +7,8 @@ language: ruby
 cache:
   bundler: true
   yarn: true
-  npm: true
   directories:
     - /home/travis/.rvm/
-    - ~/.npm
-    - ./node_modules
-    - ~/.cache
-  override:
-    - npm ci
-    - npm run cy:verify
 rvm:
   - 2.7.1
 jobs:
@@ -30,9 +23,6 @@ addons:
   apt:
     - google-chrome-stable
     - chromium-chromedriver
-    packages:
-      # Ubuntu 16+ does not install this dependency by default, so we need to install it ourselves
-      - libgconf-2-4
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
@@ -48,17 +38,11 @@ install:
   - travis_retry bundle install
   - travis_retry yarn
   - bundle install
-  - npm ci
 
 script:
   - bundle exec rails webpacker:compile
   - bundle exec brakeman
   - RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
-  - bundle exec rails s &
-  - npm run cy:run & wait-on http://localhost:3000
-  # after all tests finish running we need
-  # to kill all background jobs (like "npm start &")
-  - kill $(jobs -p) || true
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
