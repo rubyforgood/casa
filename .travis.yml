@@ -2,15 +2,28 @@ env:
   global:
     - CC_TEST_REPORTER_ID=31464536e34ab26588cb951d0fa6b5898abdf401dbe912fd47274df298e432ac
 
-language: ruby
+matrix:
+  include:
+    - language: ruby
+      rvm:
+        - 2.7.1
+  include:
+    - language: node_js
+      node_js:
+        - 'lts/*'
 
 cache:
   bundler: true
   yarn: true
+  npm: true
   directories:
     - /home/travis/.rvm/
-rvm:
-  - 2.7.1
+    - ~/.npm
+    - ./node_modules
+    - ~/.cache
+  override:
+    - npm ci
+    - npm run cy:verify
 
 services:
   - postgresql
@@ -19,6 +32,8 @@ addons:
   apt:
     - google-chrome-stable
     - chromium-chromedriver
+    packages:
+      - libgconf-2-4
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
@@ -34,6 +49,7 @@ install:
   - travis_retry bundle install
   - travis_retry yarn
   - bundle install
+  - npm ci
 
 script:
   - bundle exec rails webpacker:compile
@@ -41,5 +57,6 @@ script:
   - RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
   - bundle exec rails s --port 3000 &
   - npm run cy:run & wait-on http://localhost:3000
+  - kill $(jobs -p) || true
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
