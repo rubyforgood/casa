@@ -15,29 +15,32 @@ ContactTypeGroup.create(casa_org: pg_casa, name: "CASA").tap do |group|
   ContactType.create(contact_type_group: group, name: "Supervisor")
 end
 
+#
+# Config
+#
 # number of volunteer users and casa cases to generate
-VOLUNTEER_USER_COUNT = 100
-CASA_CASE_COUNT = 150
-SUPERVISOR_COUNT = 5
-
-SEED_PASSWORD = "123456"
+volunteer_user_count = 100
+casa_case_count = 150
+supervisor_count = 5
+seed_password = "123456"
+casa_admin_count = 3
 
 AllCasaAdmin.first_or_create(
   email: "allcasaadmin@example.com",
-  password: SEED_PASSWORD,
-  password_confirmation: SEED_PASSWORD
+  password: seed_password,
+  password_confirmation: seed_password
 )
 
 volunteer_users = []
 
 # generate volunteer users via Faker gem
-VOLUNTEER_USER_COUNT.times do |index|
+volunteer_user_count.times do |index|
   volunteer_email = "volunteer#{index + 1}@example.com"
   volunteer_user = Volunteer.where(email: volunteer_email).first_or_create!(
     casa_org: pg_casa,
     display_name: Faker::Name.unique.name,
-    password: SEED_PASSWORD,
-    password_confirmation: SEED_PASSWORD,
+    password: seed_password,
+    password_confirmation: seed_password,
     active: index % 30 != 0 # creates an inactive user every 30 times this is run
   )
   volunteer_users.push(volunteer_user)
@@ -45,26 +48,25 @@ end
 
 # generate more supervisor users via Faker gem
 supervisor_users = []
-SUPERVISOR_COUNT.times do |index|
+supervisor_count.times do |index|
   supervisor_email = "supervisor#{index + 1}@example.com"
   new_supervisor_user = Supervisor.where(email: supervisor_email).first_or_create!(
     casa_org_id: pg_casa.id,
     display_name: Faker::Name.unique.name,
-    password: SEED_PASSWORD,
-    password_confirmation: SEED_PASSWORD
+    password: seed_password,
+    password_confirmation: seed_password
   )
   supervisor_users.push(new_supervisor_user)
 end
 
 # casa_admin users
-CASA_ADMIN_COUNT = 3
-CASA_ADMIN_COUNT.times do |index|
+casa_admin_count.times do |index|
   casa_admin_email = "casa_admin#{index + 1}@example.com"
   CasaAdmin.where(email: casa_admin_email).first_or_create!(
     casa_org_id: pg_casa.id,
     display_name: Faker::Name.unique.name,
-    password: SEED_PASSWORD,
-    password_confirmation: SEED_PASSWORD
+    password: seed_password,
+    password_confirmation: seed_password
   )
 end
 
@@ -80,10 +82,10 @@ end
 casa_cases = []
 years = ((DateTime.now.year - 20)..DateTime.now.year).to_a
 yy = years.sample.to_s[2..3]
-CASA_CASE_COUNT.times do |index|
+casa_case_count.times do |index|
   new_casa_case = CasaCase.where(case_number: "CINA-#{yy}-#{1001 + index}").first_or_create!(
     casa_org_id: pg_casa.id,
-    transition_aged_youth: fakse
+    transition_aged_youth: index % 2 == 0
   )
   volunteer_assigned = volunteer_users[index % volunteer_users.length]
   CaseAssignment.create(
@@ -139,20 +141,20 @@ other_casa = CasaOrg.where(name: "Other CASA org").first_or_create!
 CasaAdmin.where(email: "other_casa_admin@example.com").first_or_create!(
   casa_org: other_casa,
   display_name: "Other Admin",
-  password: SEED_PASSWORD,
-  password_confirmation: SEED_PASSWORD
+  password: seed_password,
+  password_confirmation: seed_password
 )
 
 Supervisor.where(email: "other.supervisor@example.com").first_or_create!(
   casa_org: other_casa,
   display_name: "Other Supervisor",
-  password: SEED_PASSWORD,
-  password_confirmation: SEED_PASSWORD
+  password: seed_password,
+  password_confirmation: seed_password
 )
 
 Volunteer.where(email: "other.volunteer@example.com").first_or_create!(
   casa_org: other_casa,
   display_name: "Other Volunteer",
-  password: SEED_PASSWORD,
-  password_confirmation: SEED_PASSWORD
+  password: seed_password,
+  password_confirmation: seed_password
 )

@@ -1,8 +1,9 @@
 require "rails_helper"
 
 describe "case_contacts/index" do
+  let(:user) { build_stubbed(:volunteer) }
   before do
-    user = build_stubbed(:volunteer)
+    enable_pundit(view, user)
     allow(view).to receive(:current_user).and_return(user)
     case_contact = create(:case_contact)
     assign :case_contact, case_contact

@@ -131,7 +131,7 @@
 
   <div class="field miles-driven form-group">
     <h2><%= form.label :miles_driven %></h2>
-    <%= form.number_field :miles_driven, class: "form-control" %>
+    <%= form.number_field :miles_driven, class: "form-control", required: true, min: "0", max: 10000 %>
   </div>
 
   <div class="field want-driving-reimbursement form-group">
@@ -153,5 +153,3 @@
   </div>
   <%= render 'confirm_note_content_dialog', form: form %>
 <% end %>
-
-

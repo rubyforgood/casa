@@ -42,7 +42,7 @@ RSpec.describe "view supervisor edit", type: :system do
           click_on "Submit"
           page.find ".header-flash > div"
           supervisor.reload
-        }.to change {supervisor.email}.to "new" + supervisor.email
+        }.to change { supervisor.email }.to "new" + supervisor.email
       end
     end
 

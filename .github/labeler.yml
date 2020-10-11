@@ -1,0 +1,30 @@
+# Configuration for the Labeler action
+# The action is set up in ./workflows/label.yml
+# See https://github.com/actions/labeler for more details
+#
+# Warning - Testing changes to this file can be tricky
+# At the time of writing, you need to have changes committed to master for the
+# Action to use them. This isn't ideal for rapid iteration. If you want to make
+# changes to this file and experiment with changes, please consider testing the
+# changes in a fork of this repo first. This allows you to add changes to
+# master as needed and also create multiple Pull Requests to confirm labels are
+# properly added.
+
+ruby:
+- "**/*.rb"
+- "Gemfile*"
+
+javascript:
+- "**/*.js"
+- "package*.json"
+- "yarn.lock"
+
+Tests! 🎉💖👏:
+- "app/javascript/__tests__/**.test.js"
+- "cypress/**/*.spec.js"
+- "spec/**/*_spec.rb"
+
+dependencies:
+- "Gemfile*"
+- "package*.json"
+- "yarn.lock"

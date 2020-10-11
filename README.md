@@ -14,11 +14,13 @@ CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunte
 
 We are very happy to have you. If you have problems or questions, the fastest way to an answer is in slack https://rubyforgood.herokuapp.com/
 
-ALL open issues are fair game **unless** they are already assigned to a contibutor. PRs which are not for an issue but which improve the codebase by adding a test or improving the code are also welcome.
+ALL open issues on the issue board https://github.com/rubyforgood/casa/projects/1 are fair game **unless** they are already assigned to a contributor. Assign an issue to yourself or comment on it "I am working on this issue".
 
-A maintainer will be keeping an eye on issues and merging PRs at least once a day. We want to merge your PRs! :) 
+PRs which are not for an issue but which improve the codebase by adding a test or improving the code are also welcome!
 
-Some PRs may be rejected if they make non-useful readme changes or similar changes. 
+A maintainer will be keeping an eye on issues and merging PRs at least once a day. Some PRs may be rejected if they make non-useful readme changes or similar changes. We want to merge your PRs! :)  
+
+See also our [contributing guide](./CONTRIBUTING.md) 💖
 
 ### About this project
 
@@ -58,19 +60,14 @@ Learn more about PG CASA [here](https://pgcasa.org/).
 
 You can read the complete [role description of a CASA volunteer](https://pgcasa.org/volunteer-description/) in Prince George's County as well.
 
-## Want to contribute? Great!
+## Developing! ✨🛠✨
 
-[Here is our contributing guide!](./CONTRIBUTING.md)
-
-## Setting up your development environment:
 See [DOCKER.md](DOCKER.md) for instructions on setting up your environment
 using Docker. For non-Docker installations, follow the instructions below.
 
 ### Installing Tools
 
-You'll need Ruby, bundler, node.js, yarn, Postgres, and chromedriver to work on this application.
-
-Bullet points `formatted like this` are commands you can run on your machine
+You need Ruby, bundler, node.js, yarn, postgres, and chromedriver.
 
 **Ruby**
 
@@ -80,26 +77,23 @@ Bullet points `formatted like this` are commands you can run on your machine
 
 **node.js**
 
-1. Install [nvm](https://github.com/nvm-sh/nvm#installing-and-updating), which is a **n**ode **v**ersion **m**anager.
+1. (Recommended) Install [nvm](https://github.com/nvm-sh/nvm#installing-and-updating), which is a **n**ode **v**ersion **m**anager.
 1. Install a current LTS version of Node. 12.16.2 works.
-1. Make sure [yarn](https://classic.yarnpkg.com/en/docs/instal) is installed. On Ubuntu, [make sure you install it from the official Yarn repo instead of cmdtest](https://classic.yarnpkg.com/en/docs/install/#debian-stable).
+1. Install [yarn](https://classic.yarnpkg.com/en/docs/install). On Ubuntu, [make sure you install it from the official Yarn repo instead of cmdtest](https://classic.yarnpkg.com/en/docs/install/#debian-stable).
 
-**Postgres**
+**PostgreSQL ("postgres")**
 
 1. Make sure that postgres is installed.
   - On a Mac, you can use [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database if you have an older version of postgres, or use [Postgres.app](https://postgresapp.com/).
   - If you're on Ubuntu/WSL, use `sudo apt-get install libpq-dev` so the gem can install. [Use the Postgres repo for Ubuntu or WSL to get the server and client tools](https://www.postgresql.org/download/linux/ubuntu/).
-  - If you're using Docker, do what you need to do.
 
 **Chromedriver**
 
-1. Install the current stable release of [chromedriver](https://chromedriver.chromium.org/) for your operating system so the browser-based Ruby feature/integration tests can run. Installing `chromium-browser` is enough, even in WSL.
+1. If you use the Chrome browser, that is enough. If not, install the current stable release of [chromedriver](https://chromedriver.chromium.org/) for your operating system so the browser-based Ruby feature/integration tests can run. Installing `chromium-browser` is enough, even in WSL.
 
-### Getting the CASA App Running
+### Running the app
 
 (*on a Mac or Linux machine*)
-
-**Setting up your working environment**
 
 1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine. You should create a fork in GitHub if you don't have permission to commit directly to this repo, though. See [our contributing guide](./CONTRIBUTING.md) for more detailed instructions.
 1. `cd casa/`
@@ -127,7 +121,7 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 
 If you have any troubles running tests, check out `.travis.yml` which is what makes the CI build run.
 
-**Mail**
+**Local email**
 
 We are using [Letter Opener](https://github.com/ryanb/letter_opener) in
 development to receive mail. All emails sent in development should open in a
@@ -171,19 +165,40 @@ There is a `doc` directory at the top level that includes [Architectural Decisio
 
 You'll probably hit a problem where ruby-version reads `ruby-2.7.1` but the install available to you is called `2.7.1`. If you do, install [rbenv-alias](https://github.com/tpope/rbenv-aliases) and create an alias between the two.
 
-## CASA App in the wild
+## Non-development environments
 
-### Browsing the staging server
+See `db/seeds` for seed data. Test data includes the below
 
-Test users for https://casa-r4g-staging.herokuapp.com/. All passwords are `123456`.
+1. volunteer1@example.com / 123456 https://\<URL\>.herokuapp.com/
+1. supervisor1@example.com / 123456 https://\<URL\>.herokuapp.com/
+1. casa_admin1@example.com / 123456 https://\<URL\>.herokuapp.com/
+1. allcasaadmin@example.com / 123456 https://\<URL\>.herokuapp.com/all_casa_admins/sign_in
 
-1. supervisor1@example.com
-1. volunteer1@example.com
-1. casa_admin1@example.com
+
+### QA environment
+
+When pull requests are merged, the code auto-deploys to QA (because of a heroku setting) 
+
+https://casa-qa.herokuapp.com/
+
+
+### Staging
+
+Deploy to Staging is manual. Training of new users is done in staging. 
+
+https://casa-r4g-staging.herokuapp.com/
+
+
+### Production
+
+We have real users in production! 
+
+If you represent a CASA organization which wants to use this, please contact us! polly@rubyforgood.org
+
 
 ### Error tracking
 
-We are currently using https://app.bugsnag.com/ to track errors in staging. Errors post to slack at #casa-bots
+We are currently using https://app.bugsnag.com/ to track errors in staging. Errors post to slack at #casa-bots.
 
 ### Email
 
@@ -199,7 +214,7 @@ Preview all emails at http://localhost:3000/rails/mailers/volunteer_mailer as co
 
 ### Hosting
 
-Namecheap, heroku
+Namecheap, Heroku
 
 ## Communication and Collaboration
 

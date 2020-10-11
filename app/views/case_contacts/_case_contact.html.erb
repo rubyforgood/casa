@@ -20,7 +20,7 @@
     <span class="mobile-label">Miles Driven</span>
     <%= contact.decorate.miles_traveled %>
     <% unless contact.decorate.miles_traveled.blank? %>
-      <%= " "%>
+      <%= " " %>
       <i class="fa fa-car" aria-hidden="true"></i>
     <% end %>
   </td>
@@ -30,14 +30,14 @@
   </td>
   <td>
     <span class="mobile-label">Creator</span>
-    <% if current_user&.casa_admin? || current_user&.supervisor? %>
+    <% if policy(contact).edit? %>
       <% if contact.creator&.supervisor? %>
         <%= link_to "#{contact.creator&.display_name} ", edit_supervisor_path(current_user) %>
       <% elsif contact.creator&.casa_admin? %>
         <%= link_to "#{contact.creator&.display_name} ", edit_users_path %>
       <% else %>
         <%= link_to "#{contact.creator&.display_name} ", edit_volunteer_path(contact.creator) %>
-      <%end%>
+      <% end %>
     <% else %>
       <%= contact.creator&.display_name %>
     <% end %>

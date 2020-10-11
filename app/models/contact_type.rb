@@ -5,7 +5,7 @@ class ContactType < ApplicationRecord
 
   scope :for_organization, ->(org) {
     joins(:contact_type_group)
-      .where(contact_type_groups: { casa_org: org })
+      .where(contact_type_groups: {casa_org: org})
   }
 end
 

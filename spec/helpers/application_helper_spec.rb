@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe ApplicationHelper, type: :helper do
   describe "#page_header" do
-     it "links to the user dashboard if user logged in" do
+    it "links to the user dashboard if user logged in" do
       current_organization = build_stubbed(:casa_org)
       user = build_stubbed(:user, casa_org: current_organization)
 
@@ -34,5 +34,11 @@ describe ApplicationHelper, type: :helper do
       allow(helper).to receive(:all_casa_admin_signed_in?).and_return(false)
       expect(helper.session_link).to match(new_user_session_path)
     end
+  end
+
+  describe "#og_tag" do
+    subject { helper.og_tag(:title, content: "Website Title") }
+
+    it { is_expected.to eql('<meta property="og:title" content="Website Title">') }
   end
 end

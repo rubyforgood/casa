@@ -40,7 +40,7 @@ RSpec.describe FileImporter do
     end
 
     it "returns an error if file has no rows" do
-      no_row_path = Rails.root.join("spec", "fixtures", "no_rows.csv") 
+      no_row_path = Rails.root.join("spec", "fixtures", "no_rows.csv")
       no_row_importer = FileImporter.new(no_row_path, import_user.casa_org.id, "something", ["header"])
       expect(no_row_importer.import[:message]).eql?(FileImporter::ERR_NO_ROWS)
     end

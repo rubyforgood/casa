@@ -65,7 +65,7 @@ RSpec.describe User, type: :model do
     end
 
     context "#no_contact_for_two_weeks" do
-      let(:supervisor) {create(:supervisor)}
+      let(:supervisor) { create(:supervisor) }
 
       it "returns zero for a volunteer that has successfully made contact in at least one contact_case within the last 2 weeks" do
         volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
@@ -78,16 +78,12 @@ RSpec.describe User, type: :model do
       end
 
       it "returns one for a volunteer that has not made any contact_cases within the last 2 weeks" do
-        volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
-
-        case_of_interest_1 = volunteer_1.casa_cases.first
-
+        create(:volunteer, :with_casa_cases, supervisor: supervisor)
         expect(supervisor.no_contact_for_two_weeks).to eq(1)
       end
 
       it "returns zero for a volunteer that is not assigned to any casa cases" do
-        volunteer_2 = create(:volunteer, supervisor: supervisor)
-
+        create(:volunteer, supervisor: supervisor)
         expect(supervisor.no_contact_for_two_weeks).to eq(0)
       end
 

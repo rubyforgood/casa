@@ -32,6 +32,7 @@ group :development, :test do
   gem "rspec-rails", "~> 4.0.1"
   gem "shoulda-matchers"
   gem "standard" # linter https://github.com/testdouble/standard
+  gem "cypress-on-rails", "~> 1.0"
 end
 
 group :development do
@@ -47,6 +48,7 @@ end
 group :test do
   gem "brakeman" # security inspection
   gem "capybara", ">= 2.15"
+  gem "capybara-screenshot"
   gem "rake"
   gem "selenium-webdriver"
   gem "simplecov", "~> 0.19.0", require: false # pinned as a workaround for https://github.com/codeclimate/test-reporter/issues/418

@@ -1,6 +1,6 @@
 require "spec_helper"
 ENV["RAILS_ENV"] ||= "test"
-require File.expand_path("../config/environment", __dir__) # Prevent database truncation if the environment is production
+require File.expand_path("../config/environment", __dir__) # Prevent database truncation in production. Local? Try RAILS_ENV=test
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
@@ -47,8 +47,4 @@ RSpec.configure do |config|
   config.example_status_persistence_file_path = "#{::Rails.root}/tmp/persistent_examples.txt"
 
   config.filter_rails_from_backtrace!
-
-  # Tmp until we handle the multi-tenancy case where we do not know what
-  # casa org we are when we hit the sign-in page.
-  config.before(:each) { create(:casa_org) }
 end
