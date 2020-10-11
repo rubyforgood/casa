@@ -12,7 +12,7 @@ CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunte
 
 ## Welcome Hacktoberfest contributors!
 
-We are very happy to have you. If you have problems or questions, the fastest way to an answer is in slack https://rubyforgood.herokuapp.com/
+We are very happy to have you. If you have problems or questions, the fastest way to an answer is in slack https://rubyforgood.herokuapp.com/ #casa channel
 
 ALL open issues on the issue board https://github.com/rubyforgood/casa/projects/1 are fair game **unless** they are already assigned to a contributor. Assign an issue to yourself or comment on it "I am working on this issue".
 
