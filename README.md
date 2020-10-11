@@ -20,7 +20,7 @@ PRs which are not for an issue but which improve the codebase by adding a test o
 
 A maintainer will be keeping an eye on issues and merging PRs at least once a day. Some PRs may be rejected if they make non-useful readme changes or similar changes. We want to merge your PRs! :)  
 
-See also our [contributing guide](./CONTRIBUTING.md) 💖
+See also our [contributing guide](docs/CONTRIBUTING.md) 💖
 
 ### About this project
 
@@ -62,7 +62,7 @@ You can read the complete [role description of a CASA volunteer](https://pgcasa.
 
 ## Developing! ✨🛠✨
 
-See [DOCKER.md](DOCKER.md) for instructions on setting up your environment
+See [DOCKER.md](docs/DOCKER.md) for instructions on setting up your environment
 using Docker. For non-Docker installations, follow the instructions below.
 
 ### Installing Tools
@@ -95,7 +95,7 @@ You need Ruby, bundler, node.js, yarn, postgres, and chromedriver.
 
 (*on a Mac or Linux machine*)
 
-1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine. You should create a fork in GitHub if you don't have permission to commit directly to this repo, though. See [our contributing guide](./CONTRIBUTING.md) for more detailed instructions.
+1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine. You should create a fork in GitHub if you don't have permission to commit directly to this repo, though. See [our contributing guide](docs/CONTRIBUTING.md) for more detailed instructions.
 1. `cd casa/`
 1. `bundle install` to install all the Ruby dependencies.
 1. `yarn install` to install all the Javascript dependencies.
