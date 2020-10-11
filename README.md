@@ -231,3 +231,7 @@ Join info for all public meetings is posted in the rubyforgood slack in the #cas
 ### History
 
 First CASA supervisor training: 12 August 2020 🎉
+
+### Other Documents
+
+Other documents can be found in the `docs` subdirectory.
