@@ -27,7 +27,7 @@
         constructing the URL using the inputs above with javascript.
       -->
       <%= link_to "Download Report",
-          case_contact_reports_path(start_date: 1.month.ago.to_date, end_date: Date.today.to_date, format: :csv),
+          case_contact_reports_path(start_date: 1.month.ago.to_date, end_date: Date.today.to_date),
           class: "btn btn-primary",
           data: { link_type: "download-report" } %>
     </form>
