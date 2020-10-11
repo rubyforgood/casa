@@ -9,5 +9,4 @@ context('Logging into cypress as a volunteer', () => {
     cy.get('.col-sm-12 > .btn').click()
     cy.contains('New Case Contact').should('exist')
   })
-
 })

@@ -1,5 +1,5 @@
 namespace :after_party do
-  desc 'Deployment task: populate_contact_type_groups_and_contact_types'
+  desc "Deployment task: populate_contact_type_groups_and_contact_types"
   task populate_contact_type_groups_and_contact_types: :environment do
     puts "Running deploy task 'populate_contact_type_groups_and_contact_types'"
 

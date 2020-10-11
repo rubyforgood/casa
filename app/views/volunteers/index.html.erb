@@ -36,11 +36,11 @@
                 <input
                   type="checkbox"
                   data-value="<%= supervisor.name %>"
-                  checked />
+                  checked>
                 <% else %>
                 <input
                   type="checkbox"
-                  data-value="<%= supervisor.name %>" />
+                  data-value="<%= supervisor.name %>">
                 <% end %>
                 <%= supervisor.name %>
               </a>
@@ -139,12 +139,12 @@
               <% end %>
           </td>
           <td><%= volunteer.email %></td>
-          <td class="supervisor-column">
+          <td class=" supervisor-column ">
             <%- if volunteer.has_supervisor? %>
               <%= link_to(volunteer.supervisor.decorate.name, edit_supervisor_path(volunteer.supervisor)) %>
             <%- end %>
           </td>
-          <td class="status-column"><%= volunteer.status %></td>
+          <td class=" status-column "><%= volunteer.status %></td>
           <td><%= volunteer&.assigned_to_transition_aged_youth? %></td>
           <td><%= safe_join(volunteer&.casa_cases&.map { |c| link_to(c.case_number, c) }, ", ") %></td>
           <td>

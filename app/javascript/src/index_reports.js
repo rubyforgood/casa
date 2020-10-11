@@ -15,10 +15,10 @@ $('document').ready(() => {
     const downloadButton = $form.find('a[data-link-type="download-report"]')
 
     if (startDate > endDate) {
-      downloadButton.attr('hidden', true);
-      alert("Starting from date should be earlier than ending at date!!");
+      downloadButton.attr('hidden', true)
+      alert('Starting from date should be earlier than ending at date!!')
     } else {
-      downloadButton.attr('hidden', false);
+      downloadButton.attr('hidden', false)
     }
 
     const downloadUrl = '/case_contact_reports.csv?' + 'start_date=' + startDate + '&end_date=' + endDate

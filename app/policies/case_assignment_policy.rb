@@ -15,11 +15,11 @@ class CaseAssignmentPolicy
     end
 
     def resolve
-      scope.all 
+      scope.all
     end
   end
 
   def unassign?
-    record.is_active? && (user.supervisor? || user.casa_admin?) 
+    record.is_active? && (user.supervisor? || user.casa_admin?)
   end
 end

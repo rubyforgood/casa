@@ -12,8 +12,8 @@ describe "volunteers" do
       assign :volunteers, []
       sign_in user
     end
-    
-    it do 
+
+    it do
       is_expected.not_to have_selector("a", text: "New Volunteer")
     end
   end

@@ -12,9 +12,9 @@ describe "casa_cases/new" do
   end
 
   context "while signed in as admin" do
-    let(:user) { build_stubbed(:casa_admin)}
+    let(:user) { build_stubbed(:casa_admin) }
     before do
-      sign_in user 
+      sign_in user
     end
 
     it { is_expected.to have_selector("a", text: "Back") }
