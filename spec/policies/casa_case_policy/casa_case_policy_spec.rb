@@ -63,7 +63,6 @@ RSpec.describe CasaCasePolicy do
         expect(subject).not_to permit(volunteer, casa_case)
       end
     end
-
   end
 
   permissions :update_birth_month_year_youth? do

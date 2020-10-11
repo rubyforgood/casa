@@ -23,6 +23,6 @@ Capybara.register_driver :selenium_chrome_headless do |app|
   Capybara::Selenium::Driver.new app,
     browser: :chrome,
     options: Selenium::WebDriver::Chrome::Options.new(
-      args:  %w[--headless --disable-gpu --disable-site-isolation-trials --window-size=1280,900]
+      args: %w[--headless --disable-gpu --disable-site-isolation-trials --window-size=1280,900]
     )
 end

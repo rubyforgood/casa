@@ -9,7 +9,7 @@ RSpec.describe "Seeds" do
         allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new(environment))
       end
 
-      it 'executes without raising an exception' do
+      it "executes without raising an exception" do
         expect { ActiveRecord::Tasks::DatabaseTasks.load_seed }.not_to raise_error
       end
     end

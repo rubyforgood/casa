@@ -71,10 +71,10 @@ $('document').ready(() => {
 
   $('table#casa_cases').DataTable({ searching: false })
   $('table#case_contacts').DataTable(
-    { 
+    {
       scrollX: true,
-      searching: false, 
-      order: [[0, 'desc']] 
+      searching: false,
+      order: [[0, 'desc']]
     }
   )
 

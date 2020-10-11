@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe CaseContact, type: :model do
-  context 'validations' do
+  context "validations" do
     it { should validate_numericality_of(:miles_driven).is_less_than 10000 }
     it { should validate_numericality_of(:miles_driven).is_greater_than_or_equal_to 0 }
   end

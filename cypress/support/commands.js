@@ -23,13 +23,13 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-Cypress.Commands.add("loginAsVolunteer", () => {
+Cypress.Commands.add('loginAsVolunteer', () => {
   cy.get('#user_email').type('volunteer1@example.com')
   cy.get('#user_password').type('123456')
   cy.get('.actions > .btn').click()
 })
 
-Cypress.Commands.add("loginAsVolunteerProgrammatically", () => {
+Cypress.Commands.add('loginAsVolunteerProgrammatically', () => {
   cy.get('#user_email').type('volunteer1@example.com')
   cy.get('#user_password').type('123456')
   cy.get('.actions > .btn').click()
