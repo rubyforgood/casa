@@ -70,11 +70,11 @@ window.onload = function () {
   }
 
   function validateNoteContent (e) {
-    const note_content = document.getElementById('case_contact_notes').value
-    if (note_content != '') {
+    const noteContent = document.getElementById('case_contact_notes').value
+    if (noteContent !== '') {
       e.preventDefault()
       $('#confirm-submit').modal('show')
-      document.getElementById('note-content').innerHTML = note_content
+      document.getElementById('note-content').innerHTML = noteContent
     }
   }
 
