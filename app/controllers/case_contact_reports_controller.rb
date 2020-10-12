@@ -4,6 +4,7 @@ class CaseContactReportsController < ApplicationController
   before_action :authenticate_user!
 
   def index
+    authorize :application, :see_reports_page?
     case_contact_report = CaseContactReport.new(report_params)
 
     respond_to do |format|
