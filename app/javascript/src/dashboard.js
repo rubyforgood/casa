@@ -2,11 +2,12 @@
 $('document').ready(() => {
   $.fn.dataTable.ext.search.push(
     function (settings, data, dataIndex) {
+      var supervisorArray = []
+
       if ($('#unassigned-vol-filter').is(':checked')) {
-        var supervisorArray = ['']
-      } else {
-        var supervisorArray = []
+        supervisorArray = ['']
       }
+
       var statusArray = []
       var assignedToTransitionYouthArray = []
 

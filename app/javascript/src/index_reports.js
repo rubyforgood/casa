@@ -16,7 +16,7 @@ $('document').ready(() => {
 
     if (startDate > endDate) {
       downloadButton.attr('hidden', true)
-      alert('Starting from date should be earlier than ending at date!!')
+      window.alert('Starting from date should be earlier than ending at date!!')
     } else {
       downloadButton.attr('hidden', false)
     }
