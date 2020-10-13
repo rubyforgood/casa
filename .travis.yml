@@ -13,10 +13,6 @@ cache:
   yarn: true
   directories:
     - /home/travis/.rvm/
-jobs:
-  include:
-    rvm:
-      - 2.7.1
 
 services:
   - postgresql
@@ -32,6 +28,7 @@ before_script:
   - ./cc-test-reporter before-build
   - psql -c 'create database casa_test;' -U postgres
   - ln -s /usr/lib/chromium-browser/chromedriver ~/bin/chromedriver
+  - rvm use 2.7.1
 
 install:
   - travis_retry gem install bundler
