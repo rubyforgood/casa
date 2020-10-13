@@ -4,6 +4,9 @@ env:
 matrix:
   include:
     - language: ruby
+  include:
+    - language: node_js
+      node_js: "lts/*"
 
 cache:
   bundler: true
