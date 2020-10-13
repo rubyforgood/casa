@@ -9,6 +9,10 @@ cache:
   yarn: true
   directories:
     - /home/travis/.rvm/
+    override:
+      - npm ci
+      - npm run cy:verify
+      - npm run cy:info
 rvm:
   - 2.7.1
 
@@ -40,7 +44,10 @@ script:
   - bundle exec rails webpacker:compile
   - bundle exec brakeman
   - RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
+  - $(npm bin)/print-env TRAVIS
+  - nohup rails server -p 3000 &
   - $(npm bin)/cypress run
+  - kill $(jobs -p) || true
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
