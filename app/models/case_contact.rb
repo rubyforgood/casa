@@ -106,7 +106,6 @@ end
 #
 #  id                         :bigint           not null, primary key
 #  contact_made               :boolean          default(FALSE)
-#  contact_types              :string           is an Array
 #  duration_minutes           :integer          not null
 #  medium_type                :string
 #  miles_driven               :integer          default(0), not null
@@ -120,9 +119,8 @@ end
 #
 # Indexes
 #
-#  index_case_contacts_on_casa_case_id   (casa_case_id)
-#  index_case_contacts_on_contact_types  (contact_types) USING gin
-#  index_case_contacts_on_creator_id     (creator_id)
+#  index_case_contacts_on_casa_case_id  (casa_case_id)
+#  index_case_contacts_on_creator_id    (creator_id)
 #
 # Foreign Keys
 #
