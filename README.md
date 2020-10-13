@@ -12,7 +12,7 @@ CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunte
 
 ## Welcome Hacktoberfest contributors!
 
-We are very happy to have you. If you have problems or questions, the fastest way to an answer is in slack https://rubyforgood.herokuapp.com/
+We are very happy to have you. If you have problems or questions, the fastest way to an answer is in slack https://rubyforgood.herokuapp.com/ #casa channel
 
 ALL open issues on the issue board https://github.com/rubyforgood/casa/projects/1 are fair game **unless** they are already assigned to a contributor. Assign an issue to yourself or comment on it "I am working on this issue".
 
@@ -20,7 +20,7 @@ PRs which are not for an issue but which improve the codebase by adding a test o
 
 A maintainer will be keeping an eye on issues and merging PRs at least once a day. Some PRs may be rejected if they make non-useful readme changes or similar changes. We want to merge your PRs! :)  
 
-See also our [contributing guide](./CONTRIBUTING.md) 💖
+See also our [contributing guide](doc/CONTRIBUTING.md) 💖
 
 ### About this project
 
@@ -62,7 +62,7 @@ You can read the complete [role description of a CASA volunteer](https://pgcasa.
 
 ## Developing! ✨🛠✨
 
-See [DOCKER.md](DOCKER.md) for instructions on setting up your environment
+See [DOCKER.md](doc/DOCKER.md) for instructions on setting up your environment
 using Docker. For non-Docker installations, follow the instructions below.
 
 ### Installing Tools
@@ -95,7 +95,7 @@ You need Ruby, bundler, node.js, yarn, postgres, and chromedriver.
 
 (*on a Mac or Linux machine*)
 
-1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine. You should create a fork in GitHub if you don't have permission to commit directly to this repo, though. See [our contributing guide](./CONTRIBUTING.md) for more detailed instructions.
+1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine. You should create a fork in GitHub if you don't have permission to commit directly to this repo, though. See [our contributing guide](doc/CONTRIBUTING.md) for more detailed instructions.
 1. `cd casa/`
 1. `bundle install` to install all the Ruby dependencies.
 1. `yarn install` to install all the Javascript dependencies.
@@ -144,9 +144,19 @@ bin/update
 which will run any database migrations, update gems and yarn packages, and run
 the after party post-deployment tasks.
 
-### Documentation
+### Other Documentation
 
-There is a `doc` directory at the top level that includes [Architectural Decision Records](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) and entity relationship diagrams of various models.
+There is a `doc` directory at the top level that includes:
+ 
+* an `architecture-decisions` directory containing important architectural decisions and entity relationship diagrams of various models
+(see the article [Architectural Decision Records](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) describing this approach).
+* [Code of Conduct](doc/code-of-conduct.md)
+* [CONTRIBUTING.md](doc/CONTRIBUTING.md)
+* [CYPRESS.md](doc/CYPRESS.md)
+* [DOCKER.md](doc/DOCKER.md)
+* [LINUX_SETUP.md](doc/LINUX_SETUP.md)
+* [SECURITY.md](doc/SECURITY.md)
+
 
 ### Common issues
 

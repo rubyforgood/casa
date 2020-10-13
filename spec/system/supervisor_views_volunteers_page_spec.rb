@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "supervisor views Volunteers page", type: :system do
   let(:organization) { create(:casa_org) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
-  
+
   it "can filter volunteers" do
     active_volunteers = create_list(:volunteer, 3, :with_assigned_supervisor, casa_org: organization)
     active_volunteers[2].supervisor = supervisor

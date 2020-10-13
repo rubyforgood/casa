@@ -1,8 +1,9 @@
 env:
   global:
     - CC_TEST_REPORTER_ID=31464536e34ab26588cb951d0fa6b5898abdf401dbe912fd47274df298e432ac
-
-language: ruby
+matrix:
+  include:
+    - language: ruby
 
 cache:
   bundler: true
@@ -11,10 +12,6 @@ cache:
     - /home/travis/.rvm/
 rvm:
   - 2.7.1
-jobs:
-  include:
-    - language: node_js
-      node_js: "lts/*"
 
 services:
   - postgresql

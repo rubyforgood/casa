@@ -12,7 +12,7 @@ class CasaAdminsController < ApplicationController
 
   def update
     if @casa_admin.update(update_casa_admin_params)
-      redirect_to root_path, notice: "Admin was successfully updated."
+      redirect_to casa_admins_path, notice: "Admin was successfully updated."
     else
       render :edit
     end
@@ -27,7 +27,7 @@ class CasaAdminsController < ApplicationController
 
     if @casa_admin.save
       @casa_admin.invite!
-      redirect_to root_path, notice: "New Admin created."
+      redirect_to casa_admins_path, notice: "New Admin created."
     else
       render new_casa_admin_path
     end
@@ -46,6 +46,7 @@ class CasaAdminsController < ApplicationController
   end
 
   def deactivate
+    authorize @casa_admin, :deactivate?
     if @casa_admin.deactivate
       CasaAdminMailer.deactivation(@casa_admin).deliver
 

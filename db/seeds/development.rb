@@ -7,6 +7,10 @@ CasaCase.destroy_all
 User.destroy_all
 CasaOrg.destroy_all
 AllCasaAdmin.destroy_all
+ContactType.destroy_all
+ContactTypeGroup.destroy_all
+
+Rake::Task["after_party:run"].invoke
 
 logo = CasaOrgLogo.new(
   url: "media/src/images/logo.png",
@@ -25,20 +29,17 @@ pg_casa = CasaOrg.where(name: "Prince George CASA").first_or_create!(
   ]
 )
 
-ContactTypeGroup.create(casa_org: pg_casa, name: "CASA").tap do |group|
-  ContactType.create(contact_type_group: group, name: "Youth")
-  ContactType.create(contact_type_group: group, name: "Supervisor")
-end
-
+#
+# Config
+#
 # number casa cases to generate
-CASA_CASE_COUNT = 2
-
-SEED_PASSWORD = "123456"
+casa_case_count = 2
+seed_password = "123456"
 
 AllCasaAdmin.first_or_create!(
   email: "allcasaadmin@example.com",
-  password: SEED_PASSWORD,
-  password_confirmation: SEED_PASSWORD
+  password: seed_password,
+  password_confirmation: seed_password
 )
 
 # seed users for all types [volunteer supervisor casa_admin]
@@ -47,8 +48,8 @@ volunteer = Volunteer.first_or_create!(
   casa_org: pg_casa,
   display_name: Faker::Name.name,
   email: "volunteer1@example.com",
-  password: SEED_PASSWORD,
-  password_confirmation: SEED_PASSWORD
+  password: seed_password,
+  password_confirmation: seed_password
 )
 
 # supervisor user
@@ -56,8 +57,8 @@ supervisor = Supervisor.first_or_create!(
   casa_org_id: pg_casa.id,
   display_name: "Gloria O'Malley",
   email: "supervisor1@example.com",
-  password: SEED_PASSWORD,
-  password_confirmation: SEED_PASSWORD
+  password: seed_password,
+  password_confirmation: seed_password
 )
 
 # Will fail silently if supervisor-volunteer record already exists.
@@ -68,8 +69,8 @@ CasaAdmin.first_or_create!(
   casa_org_id: pg_casa.id,
   display_name: Faker::Name.name,
   email: "casa_admin1@example.com",
-  password: SEED_PASSWORD,
-  password_confirmation: SEED_PASSWORD
+  password: seed_password,
+  password_confirmation: seed_password
 )
 
 def case_number_generator
@@ -82,7 +83,7 @@ end
 
 # generate more CasaCases, add data, assign case to volunteer
 unless CasaCase.count > 0
-  CASA_CASE_COUNT.times do |index|
+  casa_case_count.times do |index|
     new_casa_case = CasaCase.create!(
       casa_org_id: pg_casa.id,
       case_number: case_number_generator,
@@ -125,8 +126,8 @@ CasaAdmin.where(
 ).first_or_create!(
   casa_org: other_casa,
   display_name: "Other Admin",
-  password: SEED_PASSWORD,
-  password_confirmation: SEED_PASSWORD
+  password: seed_password,
+  password_confirmation: seed_password
 )
 
 Supervisor.where(
@@ -134,8 +135,8 @@ Supervisor.where(
 ).first_or_create!(
   casa_org: other_casa,
   display_name: "Other Supervisor",
-  password: SEED_PASSWORD,
-  password_confirmation: SEED_PASSWORD
+  password: seed_password,
+  password_confirmation: seed_password
 )
 
 Volunteer.where(
@@ -143,6 +144,6 @@ Volunteer.where(
 ).first_or_create!(
   casa_org: other_casa,
   display_name: "Other Volunteer",
-  password: SEED_PASSWORD,
-  password_confirmation: SEED_PASSWORD
+  password: seed_password,
+  password_confirmation: seed_password
 )

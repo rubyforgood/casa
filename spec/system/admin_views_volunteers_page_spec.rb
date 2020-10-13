@@ -131,7 +131,7 @@ RSpec.describe "admin views Volunteers page", type: :system do
     end
 
     it "is blank when volunteer's supervisor is inactive" do
-      volunteer = create(:volunteer, :with_inactive_supervisor, casa_org: organization)
+      create(:volunteer, :with_inactive_supervisor, casa_org: organization)
       sign_in admin
 
       visit volunteers_path

@@ -21,4 +21,35 @@ RSpec.describe CasaAdminPolicy do
       expect(subject).to_not permit(volunteer)
     end
   end
+
+  permissions :deactivate? do
+    context "when user is a casa admin" do
+      let(:admin_inactive) { create(:casa_admin, active: false, casa_org: organization) }
+
+      it "does permit if is a inactive user" do
+        expect(subject).not_to permit(admin_inactive, :casa_admin)
+      end
+
+      it "does permit if is the only admin" do
+        expect(subject).not_to permit(casa_admin, :casa_admin)
+      end
+
+      it "permit if is a active user and exist other casa admins" do
+        create(:casa_admin, casa_org: organization)
+        expect(subject).to permit(casa_admin, :casa_admin)
+      end
+    end
+
+    context "when user is a supervisor" do
+      it "does not permit" do
+        expect(subject).not_to permit(supervisor, :casa_admin)
+      end
+    end
+
+    context "when user is a volunteer" do
+      it "does not permit" do
+        expect(subject).not_to permit(volunteer)
+      end
+    end
+  end
 end

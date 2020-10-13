@@ -70,7 +70,13 @@ $('document').ready(() => {
   })
 
   $('table#casa_cases').DataTable({ searching: false })
-  $('table#case_contacts').DataTable({ searching: false, order: [[0, 'desc']] })
+  $('table#case_contacts').DataTable(
+    {
+      scrollX: true,
+      searching: false,
+      order: [[0, 'desc']]
+    }
+  )
 
   function filterOutUnassignedVolunteers (checked) {
     $('.supervisor-options').find('input[type="checkbox"]').not('#unassigned-vol-filter').each(function () {

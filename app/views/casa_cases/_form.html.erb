@@ -13,10 +13,19 @@
       </div>
 
       <div class="field form-group">
-        <% if current_user.casa_admin? || current_user.supervisor? %>
+        <% if policy(casa_case).update_court_date? %>
           <%= form.label :court_date, "Next Court Date" %>
           <br>
-          <span class="datetime-year-month"> <%= form.date_select :court_date, {order: [:day, :month, :year], start_year: Date.current.year + 3, end_year: 2000, prompt: {day: 'Day', month: 'Month', year: 'Year'} }, class: "select2 date-input" %></span>
+          <span class="datetime-year-month">
+            <%= form.date_select :court_date,
+                                 {
+                                     order: [:day, :month, :year],
+                                     start_year: Date.current.year + 3,
+                                     end_year: 2000,
+                                     prompt: {day: 'Day', month: 'Month', year: 'Year'}
+                                 },
+                                 class: "select2 date-input" %>
+          </span>
         <% else %>
           <label for="court_date">
             Next Court Date: <%= l @casa_case.court_date, format: :day_and_date, default: '' %>
@@ -25,10 +34,19 @@
       </div>
 
       <div class="field form-group">
-        <% if current_user.casa_admin? || current_user.supervisor? %>
+        <% if policy(casa_case).update_court_report_due_date? %>
           <%= form.label :court_report_due_date, "Court Report Due Date" %>
           <br>
-          <span class="datetime-year-month"> <%= form.date_select :court_report_due_date, {order: [:day, :month, :year], start_year: Date.current.year + 3, end_year: 2000, prompt: {day: 'Day', month: 'Month', year: 'Year'} }, class: "select2 date-input" %></span>
+          <span class="datetime-year-month">
+            <%= form.date_select :court_report_due_date,
+                                 {
+                                     order: [:day, :month, :year],
+                                     start_year: Date.current.year + 3,
+                                     end_year: 2000,
+                                     prompt: {day: 'Day', month: 'Month', year: 'Year'}
+                                 },
+                                 class: "select2 date-input" %>
+          </span>
         <% else %>
           <label for="court_report_due_date">
             Court Report Due Date: <%= l @casa_case.court_report_due_date, format: :day_and_date, default: '' %>
@@ -36,11 +54,20 @@
         <% end %>
       </div>
 
-      <% if current_user.casa_admin? %>
+      <% if policy(casa_case).update_birth_month_year_youth? %>
         <div class="field form-group">
           <%= form.label :birth_month_year_youth, "Youth's Birth Month & Year" %>
           <br>
-          <span class="datetime-year-month"> <%= form.date_select :birth_month_year_youth, {order: [:month, :year], start_year: Date.current.year, end_year: 1989, prompt: {month: 'Month', year: 'Year'}, discard_day: true }, class: "select2 date-input" %></span>
+          <span class="datetime-year-month">
+            <%= form.date_select :birth_month_year_youth,
+                                 {
+                                     order: [:month, :year],
+                                     start_year: Date.current.year,
+                                     end_year: 1989,
+                                     prompt: {month: 'Month', year: 'Year'},
+                                     discard_day: true
+                                 }, class: "select2 date-input" %>
+          </span>
         </div>
       <% end %>
 
@@ -63,10 +90,10 @@
           <% @contact_types.each_with_index do |contact_type, index| %>
             <div class="form-check">
               <%= check_box_tag "casa_case[casa_case_contact_types_attributes][][contact_type_id]",
-                contact_type.id,
-                @casa_case.casa_case_contact_types.map(&:contact_type_id).include?(contact_type.id),
-                id: "casa_case_contact_types_#{index}",
-                class: ["form-check-input", "casa-case-contact-type"] %>
+                                contact_type.id,
+                                @casa_case.casa_case_contact_types.map(&:contact_type_id).include?(contact_type.id),
+                                id: "casa_case_contact_types_#{index}",
+                                class: ["form-check-input", "casa-case-contact-type"] %>
               <label class="form-check-label" for="casa_case_contact_types_<%= index %>">
                 <%= contact_type.name %>
               </label>

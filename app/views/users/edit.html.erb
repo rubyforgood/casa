@@ -23,7 +23,7 @@
         Change Password
       </button>
 
-      <% if current_user.casa_admin? && current_user.active? %>
+      <% if policy(CasaAdmin).see_deactivate_option? %>
         <% if @active_casa_admins.length > 1 %>
           <%= link_to "Deactivate",
             deactivate_casa_admin_path(current_user),

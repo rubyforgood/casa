@@ -98,8 +98,8 @@ class ImportsController < ApplicationController
 
     unless header_valid?(file_header, import_type)
       message = "#{ERR_INVALID_HEADER}<p class='mt-4'>" \
-        "<b>Expected Header</b>: #{header[import_type]}.</p>" \
-        "<p><b>Received Header</b>: #{file_header}</p>"
+        "<b>Expected Header</b>: #{header[import_type].join(",")}.</p>" \
+        "<p><b>Received Header</b>: #{file_header.join(",")}</p>"
 
       {type: :error, message: message}
     end

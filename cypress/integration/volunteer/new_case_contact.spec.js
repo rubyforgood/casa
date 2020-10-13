@@ -1,6 +1,6 @@
 context("Logging into cypress as a volunteer", () => {
   before(() => {
-    cy.visit("http://localhost:3000");
+    cy.visit("http://127.0.0.1:3000");
     cy.loginAsVolunteer();
   });
   it("should go to the new case contact page", () => {

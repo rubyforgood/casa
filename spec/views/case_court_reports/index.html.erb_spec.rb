@@ -1,9 +1,7 @@
 require "rails_helper"
 
-describe 'case_court_reports/index', type: :view do
-
+describe "case_court_reports/index", type: :view do
   context "Volunteer views 'Generate Court Report' form" do
-
     let(:user) { create(:volunteer, :with_casa_cases) }
     let(:active_assigned_cases) { CasaCase.actively_assigned_to(user) }
 
@@ -41,7 +39,5 @@ describe 'case_court_reports/index', type: :view do
     it "has a 'Download Court Report' button" do
       expect(rendered).to have_link("Download Court Report", id: "btnDownloadReport", href: "#")
     end
-
   end
-
 end

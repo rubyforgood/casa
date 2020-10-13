@@ -9,11 +9,19 @@ $('document').ready(() => {
   $('input[data-input-type="datepicker"]').on('changeDate', function () {
     const $form = $(this).parents('form')
 
-    const startDate = $form.find('input[name="startDate"]').val()
-    const endDate = $form.find('input[name="endDate"]').val()
+    const startDate = $form.find('input[name="start_date"]').val()
+    const endDate = $form.find('input[name="end_date"]').val()
 
     const downloadButton = $form.find('a[data-link-type="download-report"]')
-    const downloadUrl = '/case_contact_reports.csv?' + 'startDate=' + startDate + '&endDate=' + endDate
+
+    if (startDate > endDate) {
+      downloadButton.attr('hidden', true)
+      alert('Starting from date should be earlier than ending at date!!')
+    } else {
+      downloadButton.attr('hidden', false)
+    }
+
+    const downloadUrl = '/case_contact_reports.csv?' + 'start_date=' + startDate + '&end_date=' + endDate
 
     downloadButton.attr('href', downloadUrl)
   })

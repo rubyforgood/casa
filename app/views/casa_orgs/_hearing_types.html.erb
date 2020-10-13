@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="col-sm-12 dashboard-table-header pt-2 pb-2">
+    <h3>Hearing Types</h3>
+    <%= link_to "New Hearing Type", new_hearing_type_path, class: "btn btn-primary" %>
+  </div>
+</div>
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Active</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @hearing_types.each do |hearing_type| %>
+      <tr id="hearing_type-<%= hearing_type.id %>">
+        <td scope="row">
+          <%= hearing_type.name %>
+        </td>
+        <td scope="row">
+          <%= hearing_type.active %>
+        </td>
+        <td>
+          <%= link_to "Edit", edit_hearing_type_path(hearing_type) %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

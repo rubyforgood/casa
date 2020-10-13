@@ -22,6 +22,12 @@ label {
   box-shadow: 0 4px 12px 5px rgba(0,0,0,0.08);
 }
 
+/* ASSUMPTION: default screen size is desktop view (> 1024px) */
+/* As 'mobile-label' class is mobile only, not display them on desktop view */
+table.table {
+  span.mobile-label { display: none; }
+}
+
 @media only screen and (max-width: 1024px) {
   .content {
     padding: 3rem 0;
