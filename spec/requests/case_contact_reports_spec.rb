@@ -4,7 +4,7 @@ RSpec.describe "/case_contact_reports", type: :request do
   let!(:case_contact) { create(:case_contact) }
 
   before do
-    travel_to Time.local(2020,1,1)
+    travel_to Time.zone.local(2020,1,1)
     sign_in user
   end
   after { travel_back }
