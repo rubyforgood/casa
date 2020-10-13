@@ -45,7 +45,7 @@ script:
   - bundle exec brakeman
   - RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
   - $(npm bin)/print-env TRAVIS
-  - nohup rails server -p 3000 &
+  - rails server -p 3000 &
   - $(npm bin)/cypress run
   - kill $(jobs -p) || true
 
