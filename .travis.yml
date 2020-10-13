@@ -34,12 +34,13 @@ install:
   - travis_retry bundle install
   - travis_retry yarn
   - bundle install
-  - nvm --version
+  - npm ci
 
 script:
   - bundle exec rails webpacker:compile
   - bundle exec brakeman
   - RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
+  - $(npm bin)/cypress run
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
