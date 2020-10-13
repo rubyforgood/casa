@@ -1,14 +1,14 @@
 # Setting Up the Application on Linux
 
 This document will provide information about getting the application up and running on Linux, 
-on either a physical system, or a Vagrant virtual machine. You may want to do this for the following reasons:
+on either a physical system or a Vagrant virtual machine. You may want to do this for the following reasons:
 
-* to do software development for the project
+* to do software development
 * to run the server
 * to test the software
 
 
-## Using a Vagrant Virutal Machine (VM)
+## Using a Vagrant Virtual Machine (VM)
 
 If you will not be using a Vagrant VM, feel free to skip this section.
 
@@ -94,11 +94,9 @@ in the Vagrant file, and the user id and password are both `vagrant`.
 ## Linux Development Environment Installation
 
 The commands below can be run all at once by copying and pasting them all into a file and running the file as a script
-(e.g. `bash -x script_name`). Unfortunately, copying, pasting, and running the entire set of commands at once
-on the command line will not work because some of the commands will be consumed as standard input by preceding commands.
-
-Another approach that would enable you to more easily spot any errors that may occur would be to
-copy/paste/run each section into your terminal one at a time.
+(e.g. `bash -x script_name`).
+ 
+If you copy and paste directly from this page to your command line, we recommend you do so one section (or even one line) at a time.
 
 The commands below include a section for installing [rvm](https://rvm.io/),
 but feel free to substitute your own favorite Ruby version manager such as [rbenv](https://github.com/rbenv/rbenv).
@@ -109,20 +107,23 @@ but feel free to substitute your own favorite Ruby version manager such as [rben
 sudo apt update
 sudo apt upgrade -y
 sudo apt install -y curl git git-gui htop hub libpq-dev net-tools nodejs npm openssh-server postgresql-12 vim zsh
+```
 
-
+```
 # Install NVM and Node JS
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 . ./.bashrc
 nvm install 13.7.0
+```
 
-
+```
 # Install Yarn
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 sudo apt update && sudo apt install --no-install-recommends yarn
+```
 
-
+```
 # Install RVM (Part 1)
 gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
 
@@ -131,22 +132,20 @@ gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703
 rvm get head
 rvm install 2.7.1
 rvm alias create ruby 2.7.1
+rvm alias create default ruby-2.7.1
+```
 
-
-# Download the Chrome browser (for RSpec testing):
+```# Download the Chrome browser (for RSpec testing):
 sudo curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 sudo echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
 sudo apt-get -y update
 sudo apt-get -y install google-chrome-stable
-
-
-# Add user to Postgres:
-sudo -u postgres psql -c "create user $(whoami) with createdb"
 ```
 
-Press [Ctrl-D] to log out and log back in again in a new shell (`vagrant ssh` for Vagrant), then:
-
-`rvm --default 2.7.1`
+```
+# Add user to Postgres:
+sudo -u postgres psql -c "create user vagrant with createdb"
+```
 
 #### Creating an SSH Key Pair
 
@@ -174,28 +173,44 @@ Skip this step if your public SSH key is already registered with your Github acc
 
 #### Final Steps
 
-In the Vagrant VM, `cd` to the directory under which you would like to install the CASA software 
-(if the home directory, and you are not already there, `cd` alone will work).
-If you are prompted that the authenticity of the host cannot be established,
-it is probably ok to input `yes[Enter]` to accept:
+(If your host is a Vagrant VM, `vagrant ssh` into it if you are not already there.)
+
+`cd` to the directory under which you would like to install the CASA software 
+(if the home directory, and you are not already there, `cd` alone will work). Then:
 
 ```
 git clone git@github.com:rubyforgood/casa.git
-cd casa
-
-# If any of the below fail, execute them one at a time if you need to, to identify which one failed:
-bundle && yarn && bundle exec rails db:setup && bundle exec rails webpacker:compile
 ```
+
+If you see this, respond with yes:
+
+```
+The authenticity of host 'github.com (140.82.112.3)' can't be established.
+RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+```
+
+Now to set up the gems, JavaScript libraries, and data base:
+
+```
+cd casa
+bin/rails db:setup
+bin/update
+```
+
+(`bin/update` is a very useful script that should be run after each `git pull` and can be used whenever you want to make sure your setup is up to date with respect to code and configuration changes.)
 
 Run the tests and/or the server!:
 
 ```
-bundle exec rails spec               # run the tests
+bin/rails spec               # run the tests
 
-bundle exec rails server             # run the server
+bin/rails server             # run the server only for localhost clients
 # or 
-bundle exec rails server -b 0.0.0.0  # run the server
+bin/rails server -b 0.0.0.0  # run the server for any network-connected clients
 ```
 
 If the tests all pass and you can access the running Rails server from the host OS,
-then your installation is successful.
+then your installation is successful!
+
+A `bin/login` script is provided to simplify the launching and logging in to the application. It cannot be used on the Vagrant VM since the Vagrant VM has no graphical environment.
