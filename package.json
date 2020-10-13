@@ -30,5 +30,10 @@
     "standard": "^14.3.4",
     "start-server-and-test": "^1.11.5",
     "webpack-dev-server": "^3.10.3"
+  },
+  "standard": {
+    "ignore": [
+      "cypress"
+    ]
   }
 }

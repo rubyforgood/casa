@@ -8,7 +8,6 @@ import 'src/stylesheets/application.scss'
 
 import 'bootstrap'
 import 'bootstrap-select'
-import Select2 from 'select2'
 require('@rails/ujs').start()
 require('@rails/activestorage').start()
 require('channels')
