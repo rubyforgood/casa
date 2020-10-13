@@ -23,14 +23,15 @@ RSpec.describe "volunteer edits a case contact", type: :system do
 
   end
 
-  it "is not has 'Edit' link after end of quarter" do
+  it "does not have 'Edit' link after end of quarter" do
     past_date = 94.days.ago
-    case_contact =  create(:case_contact, duration_minutes: 105,
-                            casa_case: casa_case, creator: volunteer, occurred_at: past_date)
+    case_contact =  create(:case_contact, casa_case: casa_case, 
+                            creator: volunteer, occurred_at: past_date)
 
     sign_in volunteer
 
-    expect(page).not_to have_text('Edit')
+    visit case_contacts_path
+    expect(page).not_to have_link 'Edit', href: edit_case_contact_path(case_contact)
   end
 
 end
