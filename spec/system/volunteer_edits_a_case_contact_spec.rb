@@ -7,7 +7,7 @@ RSpec.describe "volunteer edits a case contact", type: :system do
 
   it "is successful" do
     case_contact =  create(:case_contact, duration_minutes: 105, casa_case: casa_case, creator: volunteer)
-    sign_in volunteer  
+    sign_in volunteer
     visit edit_case_contact_path(case_contact)
 
     choose "Yes"
@@ -27,7 +27,7 @@ RSpec.describe "volunteer edits a case contact", type: :system do
     past_date = 94.days.ago
     case_contact =  create(:case_contact, duration_minutes: 105,
                             casa_case: casa_case, creator: volunteer, occurred_at: past_date)
-                            
+
     sign_in volunteer
 
     expect(page).not_to have_text('Edit')

@@ -43,7 +43,6 @@
     <% end %>
   </td>
   <td>
-    <%# TODO What text for tooltip? %>
     <% if Pundit.policy(current_user, contact).update? %>
       <% if contact.allowed_edit? %>
         <%= link_to 'Edit', edit_case_contact_path(contact) %>
