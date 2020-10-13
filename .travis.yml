@@ -40,6 +40,7 @@ script:
   - bundle exec rails webpacker:compile
   - bundle exec brakeman
   - RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
+  - bundle exec rails s -p 3000 &
   - $(npm bin)/cypress run
 
 after_script:
