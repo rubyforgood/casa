@@ -52,14 +52,19 @@ class CaseCourtReportsController < ApplicationController
   def generate_report(casa_case)
     return unless casa_case
 
+    type = report_type(casa_case)
     court_report = CaseCourtReport.new(
       volunteer_id: current_user.id,
       case_id: casa_case.id,
-      path_to_template: path_to_template,
+      path_to_template: path_to_template(type),
       path_to_report: path_to_report(casa_case.case_number)
     )
     court_report.generate!
     court_report
+  end
+
+  def report_type(casa_case)
+    casa_case.has_transitioned? ? 'transition' : 'non_transition'
   end
 
   def directory_to_template
@@ -78,7 +83,7 @@ class CaseCourtReportsController < ApplicationController
     "#{directory_to_template}/#{report_file_name(case_number)}"
   end
 
-  def path_to_template
-    'app/documents/templates/report_template_transition.docx'
+  def path_to_template(type)
+    "app/documents/templates/report_template_#{type}.docx"
   end
 end
