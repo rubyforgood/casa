@@ -40,8 +40,10 @@ script:
   - bundle exec rails webpacker:compile
   - bundle exec brakeman
   - RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
-  - bundle exec rails s -p 3000 &
-  - $(npm bin)/cypress run
+  - RAILS_ENV=test bundle exec rails server -b 0.0.0.0 -p 3000 -d
+  - RAILS_ENV=test bundle exec rake db:migrate
+  - npm run cy:run
+  - kill $(jobs -p) || true
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
