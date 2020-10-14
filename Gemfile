@@ -22,6 +22,7 @@ gem "webpacker", "~> 5.2" # Transpile app-like JavaScript. Read more: https://gi
 
 gem "bootsnap", ">= 1.4.2", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "bugsnag" # tracking errors in prod
+gem "sablon" # Word document templating tool for Case Court Reports
 
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
