@@ -88,7 +88,6 @@ RSpec.describe "/case_contacts", type: :request do
         contact_type = create(:contact_type, name: "Attorney")
         contact_type2 = create(:contact_type, name: "Therapist")
         case_contact = create(:case_contact, creator: volunteer, casa_case: casa_case, contact_types: [contact_type])
-        #case_contact = create(:case_contact, creator: volunteer, case_contact_contact_type: [case_contact_contact_type], casa_case: casa_case)
 
         patch case_contact_url(case_contact), params: {
           case_contact: {
