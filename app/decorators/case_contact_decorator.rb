@@ -41,13 +41,13 @@ class CaseContactDecorator < Draper::Decorator
   end
 
   def contact_types
-    object.db_contact_types
+    object.contact_types
       &.map { |ct| ct.name }
       &.to_sentence(last_word_connector: ", and ") || ""
   end
 
   def report_contact_types
-    object.db_contact_types&.map { |ct| ct.name }&.join("|")
+    object.contact_types&.map { |ct| ct.name }&.join("|")
   end
 
   def medium_type
