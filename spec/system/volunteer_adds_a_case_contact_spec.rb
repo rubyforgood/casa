@@ -30,8 +30,8 @@ RSpec.describe "volunteer adds a case contact", type: :system do
     }.to change(CaseContact, :count).by(1)
 
     expect(CaseContact.first.casa_case_id).to eq volunteer_casa_case_one.id
-    expect(CaseContact.first.db_contact_types.map(&:name)).to include "School"
-    expect(CaseContact.first.db_contact_types.map(&:name)).to include "Therapist"
+    expect(CaseContact.first.contact_types.map(&:name)).to include "School"
+    expect(CaseContact.first.contact_types.map(&:name)).to include "Therapist"
     expect(CaseContact.first.duration_minutes).to eq 105
   end
 

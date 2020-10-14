@@ -19,8 +19,7 @@ class CaseContact < ApplicationRecord
   belongs_to :casa_case
 
   has_many :case_contact_contact_type
-  # TODO: Rename this relation to `contact_types` when the column with the same name is droped
-  has_many :db_contact_types, through: :case_contact_contact_type, source: :contact_type
+  has_many :contact_types, through: :case_contact_contact_type, source: :contact_type
 
   accepts_nested_attributes_for :case_contact_contact_type
 
@@ -44,7 +43,7 @@ class CaseContact < ApplicationRecord
   }
   scope :contact_type, ->(contact_type = nil) {
     if contact_type.present?
-      joins(:db_contact_types)
+      joins(:contact_types)
         .where("contact_types.name in (?)", contact_type)
     end
   }

@@ -102,7 +102,7 @@ CaseContact.first_or_create!(
   creator: volunteer,
   duration_minutes: 30,
   occurred_at: 2.months.ago,
-  db_contact_types: ContactType.take(2),
+  contact_types: ContactType.take(2),
   medium_type: CaseContact::CONTACT_MEDIUMS.sample,
   miles_driven: 5,
   want_driving_reimbursement: false,
