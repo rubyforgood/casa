@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 require "date"
-require "pathname"
 require "sablon"
-require "ostruct"
 
 class CaseCourtReport
   attr_reader :report_path
