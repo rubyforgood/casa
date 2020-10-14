@@ -17,7 +17,7 @@
                         @assigned_cases,
                         :case_number,
                         :case_number,
-                        { disabled: @assigned_cases.select(&:transition_aged_youth).map(&:case_number) }
+                        { disabled: @assigned_cases.reject(&:transition_aged_youth).map(&:case_number) }
                         ),
                       prompt: "Select a case to generate report",
                       include_blank: false,
