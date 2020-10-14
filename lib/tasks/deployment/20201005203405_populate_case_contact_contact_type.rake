@@ -44,7 +44,6 @@ namespace :after_party do
       end
     end
 
-    p { ContactType : ContactType.count, ContactTypeGroup : ContactTypeGroup.count, CaseContact : CaseContact.count, CasaOrg : CasaOrg.count, CasaAdmin : CasaAdmin.count, Supervisor : Supervisor.count, Volunteer : Volunteer.count, AllCasaAdmin : AllCasaAdmin.count }
 
     # Update task as completed.  If you remove the line below, the task will
     # run with every deploy (or every time you call after_party:run).
