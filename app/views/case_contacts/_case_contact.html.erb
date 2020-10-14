@@ -46,6 +46,8 @@
     <% if Pundit.policy(current_user, contact).update? %>
       <% if contact.allowed_edit? %>
         <%= link_to 'Edit', edit_case_contact_path(contact) %>
+      <% else %>
+        <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="Disallow edit contact after end of quarter"></i>
       <% end %>
     <% end %>
   </td>
