@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "volunteer adds a case contact", type: :system do
-  xit "is successful" do
+  it "is successful" do
     volunteer = create(:volunteer, :with_casa_cases)
     volunteer_casa_case_one = volunteer.casa_cases.first
     create_contact_types(volunteer_casa_case_one.casa_org)
@@ -35,7 +35,7 @@ RSpec.describe "volunteer adds a case contact", type: :system do
     expect(CaseContact.first.duration_minutes).to eq 105
   end
 
-  xit "submits the form when no note was added" do
+  it "submits the form when no note was added" do
     volunteer = create(:volunteer, :with_casa_cases)
     volunteer_casa_case_one = volunteer.casa_cases.first
     create_contact_types(volunteer_casa_case_one.casa_org)
@@ -64,7 +64,7 @@ RSpec.describe "volunteer adds a case contact", type: :system do
     expect(CaseContact.first.notes).to eq ""
   end
 
-  xit "submits the form when note is added and confirmed" do
+  it "submits the form when note is added and confirmed" do
     volunteer = create(:volunteer, :with_casa_cases)
     volunteer_casa_case_one = volunteer.casa_cases.first
     create_contact_types(volunteer_casa_case_one.casa_org)
