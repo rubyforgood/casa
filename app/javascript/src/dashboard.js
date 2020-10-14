@@ -70,7 +70,15 @@ $('document').ready(() => {
     if (columnVisible) { $('#visibleColumns input[data-column="' + index + '"]').prop('checked', true) } else { $('#visibleColumns input[data-column="' + index + '"]').prop('checked', false) }
   })
 
-  $('table#casa_cases').DataTable({ searching: false })
+  $('table#casa_cases').DataTable(
+    {
+      language: {
+        emptyTable: "No active cases"
+      },
+      searching: false
+    }
+  )
+
   $('table#case_contacts').DataTable(
     {
       scrollX: true,
