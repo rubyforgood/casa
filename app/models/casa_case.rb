@@ -65,8 +65,13 @@ class CasaCase < ApplicationRecord
     end
   end
 
-  def clear_date_if_passed
-    update(court_date: nil) if court_date < Time.now
+  def clear_court_dates_when_passed
+    
+  update(court_date: nil, 
+    court_report_due_date: nil,
+    court_report_submitted: false
+  ) if court_date < Time.now
+  
   end
 
   private
