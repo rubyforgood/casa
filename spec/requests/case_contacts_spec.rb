@@ -77,7 +77,7 @@ RSpec.describe "/case_contacts", type: :request do
         }
         expect(response).to redirect_to(casa_case_path(case_contact.casa_case_id))
 
-        expect(case_contact.reload.db_contact_types.first.name).to eq "Attorney"
+        expect(case_contact.reload.contact_types.first.name).to eq "Attorney"
       end
     end
 
@@ -85,17 +85,19 @@ RSpec.describe "/case_contacts", type: :request do
       before { sign_in other_volunteer }
 
       it "does not allow update of case contacts created by other volunteers" do
-        case_contact = create(:case_contact, creator: volunteer, contact_types: ["therapist"], casa_case: casa_case)
+        contact_type = create(:contact_type, name: "Attorney")
+        contact_type2 = create(:contact_type, name: "Therapist")
+        case_contact = create(:case_contact, creator: volunteer, casa_case: casa_case, contact_types: [contact_type])
 
         patch case_contact_url(case_contact), params: {
           case_contact: {
-            contact_types: ["attorney"]
+            contact_types: [contact_type2]
           }
         }
         expect(response).to redirect_to(root_path)
 
         case_contact.reload
-        expect(case_contact.contact_types).to eq(["therapist"])
+        expect(case_contact.contact_types.first.name).to eq("Attorney")
       end
     end
 

@@ -30,7 +30,7 @@ RSpec.describe "admin or supervisor adds a case contact", type: :system do
     }.to change(CaseContact, :count).by(1)
 
     expect(CaseContact.first.casa_case_id).to eq casa_case.id
-    expect(CaseContact.first.db_contact_types).to match_array([school, therapist])
+    expect(CaseContact.first.contact_types).to match_array([school, therapist])
     expect(CaseContact.first.duration_minutes).to eq 105
   end
 

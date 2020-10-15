@@ -3,7 +3,7 @@ FactoryBot.define do
     association :creator, factory: :user
     association :casa_case
 
-    contact_types { ["therapist"] }
+    contact_types { [create(:contact_type)] }
     duration_minutes { 60 }
     occurred_at { Time.zone.now }
     contact_made { false }

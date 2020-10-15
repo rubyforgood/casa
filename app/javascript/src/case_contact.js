@@ -103,5 +103,5 @@ window.onload = function () {
   }
 }
 $('document').ready(() => {
-  $('.add-disallow-edit-tooltip a').tooltip('disable')
+  $('[data-toggle="tooltip"]').tooltip()
 })
