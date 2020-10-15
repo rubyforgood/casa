@@ -16,8 +16,8 @@ services:
   - postgresql
 
 addons:
+  chrome: stable
   apt:
-    - google-chrome-stable
     - chromium-chromedriver
 
 before_script:
