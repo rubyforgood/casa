@@ -73,7 +73,7 @@ $('document').ready(() => {
   $('table#casa_cases').DataTable(
     {
       language: {
-        emptyTable: "No active cases"
+        emptyTable: 'No active cases'
       },
       searching: false
     }

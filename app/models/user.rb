@@ -121,8 +121,12 @@ class User < ApplicationRecord
   end
 
   # Called by Devise to generate an error message when a user is not active.
-  def inactive_message 
-    !active ? ( admin_self_deactivated? ? :admin_self_deactivated : :inactive ) : super
+  def inactive_message
+    if !active
+      admin_self_deactivated? ? :admin_self_deactivated : :inactive
+    else
+      super
+    end
   end
 
   def serving_transition_aged_youth?
@@ -130,12 +134,12 @@ class User < ApplicationRecord
   end
 
   def admin_self_deactivated?
-    return false if (!casa_admin? || active)
-    return id.to_s == last_deactivated_by
+    return false if !casa_admin? || active
+    id.to_s == last_deactivated_by
   end
 
   def last_deactivated_by
-    versions.where(event: "update").reverse.each do |version|
+    versions.where(event: "update").reverse_each do |version|
       return version.whodunnit if version.reify.active
     end
   end

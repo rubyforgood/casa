@@ -4,19 +4,19 @@ namespace :after_party do
     puts "Running deploy task 'populate_case_contact_contact_type'"
 
     code_to_name_mapping = {
-        attorney: "Attorney",
-        bio_parent: "Bio Parent",
-        court: "Court",
-        dss_worker: "DSS Worker",
-        foster_parent: "Foster Parent",
-        medical_professional: "Medical Professional",
-        other_family: "Other Family",
-        other_support_worker: "Other Support Worker",
-        school: "School",
-        social_worker: "Social Worker",
-        supervisor: "Supervisor",
-        therapist: "Therapist",
-        youth: "Youth",
+      attorney: "Attorney",
+      bio_parent: "Bio Parent",
+      court: "Court",
+      dss_worker: "DSS Worker",
+      foster_parent: "Foster Parent",
+      medical_professional: "Medical Professional",
+      other_family: "Other Family",
+      other_support_worker: "Other Support Worker",
+      school: "School",
+      social_worker: "Social Worker",
+      supervisor: "Supervisor",
+      therapist: "Therapist",
+      youth: "Youth"
     }
 
     # TODO write a TEST for this
@@ -44,10 +44,9 @@ namespace :after_party do
       end
     end
 
-
     # Update task as completed.  If you remove the line below, the task will
     # run with every deploy (or every time you call after_party:run).
     AfterParty::TaskRecord
-        .create version: AfterParty::TaskRecorder.new(__FILE__).timestamp
+      .create version: AfterParty::TaskRecorder.new(__FILE__).timestamp
   end
 end
