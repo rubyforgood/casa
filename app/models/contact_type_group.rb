@@ -2,7 +2,7 @@ class ContactTypeGroup < ApplicationRecord
   belongs_to :casa_org
   has_many :contact_types
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
 
   scope :for_organization, ->(org) { where(casa_org: org) }
 end
