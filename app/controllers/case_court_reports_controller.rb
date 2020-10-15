@@ -2,7 +2,7 @@
 
 class CaseCourtReportsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_casa_case, only: %i[show check_access]
+  before_action :set_casa_case, only: %i[show]
 
   # GET /case_court_reports
   def index
@@ -12,28 +12,34 @@ class CaseCourtReportsController < ApplicationController
 
   # GET /case_court_reports/:id
   def show
-    report_path = path_to_report(params[:id])
-
-    unless File.exist?(report_path)
-      flash[:error] = 'File is not found.'
+    unless @casa_case
+      flash[:alert] = "Report #{params[:id]} is not found."
       redirect_to case_court_reports_path and return
     end
 
     respond_to do |format|
-      format.docx { send_file report_path, type: :docx, disposition: 'attachment', status: :ok }
+      format.docx do
+        report_data = generate_report_to_string(@casa_case)
+        send_report(report_data)
+      end
     end
   end
 
   # POST /case_court_reports
   def generate
-    casa_case   = CasaCase.find_by(case_params)
-    report      = generate_report(casa_case)
-    file_link   = case_court_report_path(casa_case.case_number, format: "docx")
-    status      = File.exist?(report.report_path) ? :ok : :not_found
+    casa_case = CasaCase.find_by(case_params)
 
     respond_to do |format|
       format.json do
-        render json: { link: file_link, status: status }
+        if casa_case
+          render json: { link: case_court_report_path(casa_case.case_number, format: "docx"), status: :ok }
+        else
+          flash[:alert] = "Report #{params[:case_number]} is not found."
+          error_messages = render_to_string partial: 'layouts/flash_messages.html.erb', layout: false, locals: flash
+          flash.discard
+
+          render json: { link: "", status: :not_found, error_messages: error_messages }
+        end
       end
     end
   end
@@ -48,41 +54,33 @@ class CaseCourtReportsController < ApplicationController
     @casa_case = CasaCase.find_by(case_number: params[:id])
   end
 
-  def generate_report(casa_case)
+  def generate_report_to_string(casa_case)
     return unless casa_case
 
     type = report_type(casa_case)
     court_report = CaseCourtReport.new(
       volunteer_id: current_user.id,
       case_id: casa_case.id,
-      path_to_template: path_to_template(type),
-      path_to_report: path_to_report(casa_case.case_number)
+      path_to_template: path_to_template(type)
     )
-    court_report.generate!
-    court_report
+    court_report.generate_to_string
   end
 
   def report_type(casa_case)
     casa_case.has_transitioned? ? 'transition' : 'non_transition'
   end
 
-  def directory_to_template
-    directory = "tmp/reports"
-
-    FileUtils.mkdir_p directory unless File.directory?(directory)
-
-    directory
-  end
-
-  def report_file_name(case_number)
-    "#{case_number}.docx"
-  end
-
-  def path_to_report(case_number)
-    "#{directory_to_template}/#{report_file_name(case_number)}"
-  end
-
   def path_to_template(type)
     "app/documents/templates/report_template_#{type}.docx"
+  end
+
+  def send_report(data)
+    Tempfile.create do |t|
+      t.binmode
+      t.write(data)
+      t.rewind
+      t.close
+      send_data File.open(t.path, 'rb').read, type: :docx, disposition: 'attachment', status: :ok
+    end
   end
 end
