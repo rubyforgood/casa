@@ -56,14 +56,6 @@ const ELEMENTS = {
   "downloadBtn": "#btnDownloadReport",
   "generateBtn": "#btnGenerateReport"
 }
-const GENERATE_BTN_STATES = {
-  "enabled": 1,
-  "disabled": 0
-}
-const DOWNLOAD_BTN_STATES = {
-  "show": 1,
-  "hide": 0
-}
 const showBtn = el => el.classList.remove("d-none");
 const hideBtn = el => el.classList.add("d-none");
 const setBtnText = (el, text) => el.innerText = text;
@@ -90,6 +82,7 @@ const handleGenerateReport = (e) => {
   disableBtn(generateBtn);
   setBtnText(generateBtn, generateBtn.dataset.disableWith);
 
+  <%# This will show "/case_court_reports/generate"  %>
   const url = "<%= generate_case_court_reports_path %>"
   const options = { 
     method: 'POST',
