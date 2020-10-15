@@ -27,14 +27,13 @@ class CaseCourtReportsController < ApplicationController
   # POST /case_court_reports
   def generate
     casa_case   = CasaCase.find_by(case_params)
-
     report      = generate_report(casa_case)
-    client_link = generate_case_court_reports_path.gsub('generate', report_file_name(casa_case.case_number))
+    file_link   = case_court_report_path(casa_case.case_number, format: "docx")
     status      = File.exist?(report.report_path) ? :ok : :not_found
 
     respond_to do |format|
       format.json do
-        render json: { link: client_link, status: status }
+        render json: { link: file_link, status: status }
       end
     end
   end
