@@ -2,7 +2,7 @@
   "name": "casa",
   "private": true,
   "scripts": {
-    "cy:run": "cypress run",
+    "test:cypress": "$(npm bin)/cypress run",
     "test": "standard && jest",
     "test:e2e": "cypress open",
     "lint": "standard",

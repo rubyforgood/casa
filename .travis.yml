@@ -1,30 +1,27 @@
-env:
-  global:
-    - CC_TEST_REPORTER_ID=31464536e34ab26588cb951d0fa6b5898abdf401dbe912fd47274df298e432ac
-
 language: ruby
+
+addons:
+  chrome: stable
+  apt:
+    packages:
+      # Ubuntu 16+ does not install this dependency by default, so we need to install it ourselves
+      - libgconf-2-4
 
 cache:
   bundler: true
   yarn: true
   directories:
     - /home/travis/.rvm/
+    - ~/.npm
+    - ./node_modules
+    - ~/.cache
+  override:
+    - npm ci
+    - npm run cy:verify
 rvm:
   - 2.7.1
 
-services:
-  - postgresql
-
-addons:
-  apt:
-    - google-chrome-stable
-    - chromium-chromedriver
-
 before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
-  - psql -c 'create database casa_test;' -U postgres
   - ln -s /usr/lib/chromium-browser/chromedriver ~/bin/chromedriver
 
 install:
@@ -38,11 +35,11 @@ install:
 
 script:
   - bundle exec rails webpacker:compile
-  - bundle exec brakeman
-  - RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
+  - bundle exec rspec
   - RAILS_ENV=test bundle exec rails server -b 0.0.0.0 -p 3000 -d
   - RAILS_ENV=test bundle exec rake db:migrate
-  - npm run cy:run
+  - CYPRESS_RECORD_KEY=00c787ee-8a73-44b0-8ce6-c56549874b92
+  - npm run test:cypress
   - kill $(jobs -p) || true
 
 after_script:
