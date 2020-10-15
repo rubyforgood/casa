@@ -38,7 +38,7 @@ install:
 script:
   - bundle exec rails webpacker:compile
   - bundle exec brakeman
-  - RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
+  - bundle exec rspec
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
