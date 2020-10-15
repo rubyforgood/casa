@@ -107,4 +107,16 @@ RSpec.describe CasaCase do
       expect(casa_case.contact_types.reload).to match_array([type2])
     end
   end
+  
+  describe "#clear_date_if_passed" do
+    context "when court date has passed" do
+      it "it clears court date" do
+        
+        casa_case = create(:casa_case, court_date: "2020-09-13 02:11:58")
+        casa_case.clear_date_if_passed
+
+        expect(casa_case.court_date).to eql nil
+      end
+    end
+  end 
 end

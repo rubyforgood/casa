@@ -65,6 +65,10 @@ class CasaCase < ApplicationRecord
     end
   end
 
+  def clear_date_if_passed
+    update(court_date: nil) if court_date < Time.now
+  end
+
   private
 
   def validate_date(day, month, year)
