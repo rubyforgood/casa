@@ -22,7 +22,7 @@ RSpec.describe "reports/index", type: :system do
     it "downloads report" do
       expect(page).to have_text "Case Contacts Report"
       click_on "Download Report"
-      expect(page).to have_text "Download Report"
+      expect(page).to have_button "Download Report"
     end
   end
 

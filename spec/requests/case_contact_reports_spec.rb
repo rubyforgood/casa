@@ -48,6 +48,23 @@ RSpec.describe "/case_contact_reports", type: :request do
           ).to include 'attachment; filename="case-contacts-report-1577836800.csv'
         end
       end
+
+      context "with supervisor_ids filter" do
+        it "renders csv with only the volunteer" do
+          volunteer = create(:volunteer)
+          contact = create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
+          create(:case_contact, {occurred_at: 100.days.ago})
+
+          get case_contact_reports_url(format: :csv), params: { creator_ids: [volunteer.id] }
+
+          expect(response).to be_successful
+          expect(
+            response.headers["Content-Disposition"]
+          ).to include 'attachment; filename="case-contacts-report-'
+          expect(response.body).to match(/^#{contact.id},/)
+          expect(response.body.lines.length).to eq(2)
+        end
+      end
     end
 
     context "as supervisor" do
@@ -61,5 +78,12 @@ RSpec.describe "/case_contact_reports", type: :request do
         let(:user) { create(:casa_admin) }
       end
     end
+  end
+
+  def case_contact_report_params
+    {
+      start_date: 1.month.ago,
+      end_date: Date.today
+    }
   end
 end
