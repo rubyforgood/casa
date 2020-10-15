@@ -21,8 +21,12 @@ cache:
 rvm:
   - 2.7.1
 
+services:
+  - postgresql
+
 before_script:
   - ln -s /usr/lib/chromium-browser/chromedriver ~/bin/chromedriver
+  - psql -c 'create database casa_test;' -U postgres
 
 install:
   - travis_retry gem install bundler
