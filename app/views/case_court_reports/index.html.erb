@@ -12,18 +12,23 @@
     <%= form_with do |form| %>
       <div class="field form-group">
         <%= label_tag :case_number, "Case Number:" %>
+        <% select_options = @assigned_cases.map { |casa_case| 
+                            [
+                              "#{casa_case.case_number} - #{casa_case.has_transitioned? ? "transition" : "non-transition"}", 
+                              casa_case.case_number, 
+                              { "data-transitioned": casa_case.has_transitioned? }
+                            ]
+                          } %>
         <%= select_tag :case_number,
-                      options_from_collection_for_select(
-                        @assigned_cases,
-                        :case_number,
-                        :case_number,
+                      options_for_select(
+                        select_options,
                         { disabled: @assigned_cases.reject(&:transition_aged_youth).map(&:case_number) }
-                        ),
+                      ),
                       prompt: "Select a case to generate report",
                       include_blank: false,
                       id: "case-selection",
-                      class: "custom-select",
-                      data: { options: @assigned_cases } %>
+                      class: "custom-select" %>
+
         <p class="small">
           * Reporting for Non-transition cases is not current available
         </p>
@@ -70,6 +75,16 @@ const enableBtn = (el) => {
   el.classList.remove('disabled');
   el.removeAttribute("aria-disabled");
 }
+const resetGenerateBtn = (btn) => {
+  // btn is enabled and has name "Generate Report"
+  enableBtn(btn);
+  setBtnText(btn, btn.dataset.buttonName);
+}
+const resetDownloadBtn = (btn) => {
+  // btn is hidden, and no download link is present
+  hideBtn(btn);
+  setBtnHref(btn, "#");
+}
 
 const handleGenerateReport = (e) => {
   e.preventDefault();
@@ -111,13 +126,9 @@ const handleSelect = (e) => {
   const generateBtn = selectEl.form.querySelector(ELEMENTS.generateBtn);
   const downloadBtn = selectEl.form.querySelector(ELEMENTS.downloadBtn);
 
-  // when selecting a case, enable 'Generate Report' btn
-  enableBtn(generateBtn);
-  setBtnText(generateBtn, generateBtn.dataset.buttonName);
-
-  // and, hide 'Download Court Report' & reset its href link
-  hideBtn(downloadBtn);
-  setBtnHref(downloadBtn, "#");
+  // when selecting a case, reset buttons to initial state
+  resetGenerateBtn(generateBtn) 
+  resetDownloadBtn(downloadBtn)
 }
 
 const bindElements = () => {
