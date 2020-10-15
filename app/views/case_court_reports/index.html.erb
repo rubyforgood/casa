@@ -85,6 +85,10 @@ const resetDownloadBtn = (btn) => {
   hideBtn(btn);
   setBtnHref(btn, "#");
 }
+const showAlert = (html) => {
+  const alertEl = new DOMParser().parseFromString(html, 'text/html').body.firstElementChild;
+  document.querySelector(".header-flash").replaceWith(alertEl);
+}
 
 const handleGenerateReport = (e) => {
   e.preventDefault();
@@ -110,7 +114,11 @@ const handleGenerateReport = (e) => {
   fetch(url, options)
     .then(response => response.json())
     .then(data => {
-      if (data.status !== "ok") return;
+      if (data.status !== "ok") {
+        showAlert(data.error_messages);
+        resetGenerateBtn(generateBtn);
+        return;
+      }
       // when receiving a link to report, show 'Download Court Report' btn and show the link in the button
       const downloadBtn = generateBtn.form.querySelector(ELEMENTS.downloadBtn);
       showBtn(downloadBtn);
@@ -127,7 +135,7 @@ const handleSelect = (e) => {
   const downloadBtn = selectEl.form.querySelector(ELEMENTS.downloadBtn);
 
   // when selecting a case, reset buttons to initial state
-  resetGenerateBtn(generateBtn) 
+  resetGenerateBtn(generateBtn)
   resetDownloadBtn(downloadBtn)
 }
 
