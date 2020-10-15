@@ -16,11 +16,26 @@ class CaseCourtReport
     @casa_case      = CasaCase.find(args[:case_id])
     @volunteer      = Volunteer.find(args[:volunteer_id])
     @template_path  = args[:path_to_template]
+
+    @context        = prepare_context
+    @template       = Sablon.template(@template_path)
+
+    # optional
     @report_path    = args[:path_to_report]
   end
 
   def generate!
-    context = {
+    @template.render_to_file(@report_path, @context)
+  end
+
+  def generate_to_string
+    @template.render_to_string(@context)
+  end
+
+  private
+
+  def prepare_context
+    {
       created_date: Date.today.strftime(DATE_FORMATS[:long_date]),
       casa_case: prepare_case_details,
       case_contacts: prepare_case_contacts,
@@ -29,11 +44,7 @@ class CaseCourtReport
         supervisor_name: @volunteer.supervisor.display_name
       }
     }
-
-    Sablon.template(@template_path).render_to_file(@report_path, context)
   end
-
-  private
 
   def format_date_contact_attempt(case_contact)
     case_contact.occurred_at.strftime(DATE_FORMATS[:short_date]).
