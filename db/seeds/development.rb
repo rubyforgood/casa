@@ -1,12 +1,16 @@
 require "faker"
 
+# This seed script populates the development DB with minimal data.
+# You can control the randomness of the data provided by FAKER via the FAKER_RANDOM_SEED environment variable.
+# If you specify a number, that number will be used as the seed, so you can enforce consistent data across runs
+#   with nondefault content.
+# If you specify the string 'random' (i.e. `export FAKER_RANDOM_SEED=random`), a random seed will be assigned for you.
+# If you don't specify anything, 0 will be used as the seed, ensuring consistent data across hosts and runs.
 
 module DevelopmentSeederHelper
 
   CASA_CASE_COUNT = 2  # number of CASA cases to generate
   SEED_PASSWORD   = "123456"
-
-  module_function
 
   def case_number_generator
     # CINA-YY-XXXX
@@ -33,6 +37,7 @@ class PgCasaSeeder
   attr_reader :casa_org, :volunteer
 
   def seed
+    puts "Seeding PG Casa Organization"
     create_org
     create_users
     create_cases
@@ -138,6 +143,7 @@ class OtherCasaOrgSeeder
   attr_reader :casa_org
 
   def seed
+    puts "Seeding Other Organization"
     create_org
     create_users
   end
@@ -185,28 +191,63 @@ class OtherCasaOrgSeeder
   end
 end
 
+
+ACTIVE_RECORD_CLASSES = [
+    CasaOrg,
+    CasaCase,
+    User,
+    Volunteer,
+    Supervisor,
+    CasaAdmin,
+    AllCasaAdmin,
+    SupervisorVolunteer,
+    CaseAssignment,
+    ContactType,
+    ContactTypeGroup,
+    CaseContact,
+]
+
 def destroy_all
-  CaseContact.destroy_all
-  SupervisorVolunteer.destroy_all
-  CaseAssignment.destroy_all
-  CasaCase.destroy_all
-  User.destroy_all
-  CasaOrg.destroy_all
-  AllCasaAdmin.destroy_all
-  ContactType.destroy_all
-  ContactTypeGroup.destroy_all
+  ACTIVE_RECORD_CLASSES.each { |klass| klass.destroy_all }
 end
 
 def after_party
   Rake::Task["after_party:run"].invoke
 end
 
+def process_faker_random_seed
+  seed_environment_value = ENV['FAKER_RANDOM_SEED']
+
+  if seed_environment_value.empty?
+    seed = 0
+    puts "\nENV['FAKER_RANDOM_SEED'] not set to 'random' or a number; setting seed to 0.\n\n"
+  elsif seed_environment_value.casecmp('random') == 0
+    seed = Random.new_seed
+    puts "\n'random' specified in ENV['FAKER_RANDOM_SEED']; setting seed to #{seed}.\n\n"
+  else
+    seed = seed_environment_value.to_i
+    puts "\nUsing random seed #{seed} specified in ENV['FAKER_RANDOM_SEED'].\n\n"
+  end
+
+  Faker::Config.random = Random.new(seed)
+end
+
+
+def report_object_counts
+  puts "\nRecords written to the DB:\n\nCount  Class Name\n-----  ----------\n\n"
+  ACTIVE_RECORD_CLASSES.each do |klass|
+    puts "%5d  %s" % [klass.count, klass.name]
+  end
+end
+
 def seed
+  process_faker_random_seed
   destroy_all
   after_party
   PgCasaSeeder.new.seed
   OtherCasaOrgSeeder.new.seed
+  report_object_counts
+  puts "\nDone.\n\n"
 end
-
 
 seed
