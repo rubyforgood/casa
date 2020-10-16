@@ -13,6 +13,10 @@ class ApplicationPolicy
     user.casa_admin?
   end
 
+  def see_court_reports_page?
+    user.volunteer?
+  end
+
   def modify_organization?
     user.casa_admin?
   end

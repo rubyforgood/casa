@@ -45,3 +45,10 @@ vendor/bundle/
 
 cypress/screenshots/*
 cypress/videos/*
+
+# produced by tests (?)
+.rakeTasks
+
+# produced by tests (?)
+*.csv
+
