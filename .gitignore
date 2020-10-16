@@ -42,3 +42,9 @@ coverage/
 config/credentials.yml.enc
 vendor/bundle/
 .generators
+
+# produced by tests (?)
+.rakeTasks
+
+# produced by tests (?)
+*.csv
