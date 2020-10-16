@@ -10,26 +10,98 @@
 
     <hr>
 
-    <form>
+    <%= form_with url: case_contact_reports_path(format: :csv), method: :get, local: true do |f| %>
       <div class="field form-group">
         <label><strong>Starting From:</strong></label>
-        <input name="start_date" class="form-control" data-input-type="datepicker" value="<%= 1.month.ago.to_date %>">
+        <%= f.date_field :start_date, class: "form-control", value: 1.month.ago.to_date %>
       </div>
 
       <div class="field form-group">
         <label><strong>Ending At:</strong></label>
-        <input name="end_date" class="form-control" data-input-type="datepicker" value="<%= Date.today.to_date %>">
+        <%= f.date_field :end_date, class: "form-control", value: Date.today.to_date %>
       </div>
 
-      <!--
-        It seems like the send_data method used to download the CSV here does
-        not work with form submission whether the action is POST or GET, so for
-        now we are constructing the URL using the inputs above with javascript.
-      -->
-      <%= link_to "Download Report",
-          case_contact_reports_path(start_date: 1.month.ago.to_date, end_date: Date.today.to_date, format: :csv),
-          class: "btn btn-primary",
-          data: { link_type: "download-report" } %>
-    </form>
+      <% if current_user&.casa_admin? || current_user&.supervisor? %>
+        <div class="field form-group">
+          <label><strong>Assigned To:</strong></label>
+          <%= f.collection_select(
+            :supervisor_ids,
+            Supervisor.where(casa_org: current_user.casa_org),
+            :id, :display_name,
+            { include_hidden: false, prompt: "-Select Supervisors-" },
+            { class: "form-control", multiple: true }
+          ) %>
+        </div>
+
+        <div class="field form-group">
+          <label><strong>Volunteers</strong></label>
+          <%= f.collection_select(
+            :creator_ids,
+            Volunteer.where(casa_org: current_user.casa_org),
+            :id,
+            :display_name,
+            { include_hidden: false, prompt: "-Select Volunteers-" },
+            { class: "form-control", multiple: true }
+          ) %>
+        </div>
+
+        <div class="field form-group">
+          <label><strong>Contact Type:</strong></label>
+          <%= f.collection_select(
+            :contact_type_ids,
+            ContactType.for_organization(current_user.casa_org),
+            :id,
+            :name,
+            { include_hidden: false, prompt: "-Select Contact Types-" },
+            { class: "form-control", multiple: true }
+          ) %>
+        </div>
+
+        <div class="field form-group">
+          <label><strong>Contact Type Group:</strong></label>
+          <%= f.collection_select(
+            :contact_type_group_ids,
+            ContactTypeGroup.for_organization(current_user.casa_org),
+            :id,
+            :name,
+            { include_hidden: false, prompt: "-Select Contact Type Groups-" },
+            { class: "form-control", multiple: true }
+          ) %>
+        </div>
+
+        <div class="field form-group">
+          <label><strong>Want Driving Reimbursement:</strong></label>
+          <%= f.collection_radio_buttons :want_driving_reimbursement, boolean_choices, :last, :first do |b| %>
+            <div class="form-check">
+              <%= b.radio_button(class: "form-check-input") %>
+              <%= b.label(class: "form-check-label") %>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="field form-group">
+          <label><strong>Contact Made:</strong></label>
+          <%= f.collection_radio_buttons :contact_made, boolean_choices, :last, :first do |b| %>
+            <div class="form-check">
+              <%= b.radio_button(class: "form-check-input") %>
+              <%= b.label(class: "form-check-label") %>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="field form-group">
+          <label><strong>Transition Aged Youth:</strong></label>
+          <%= f.collection_radio_buttons :has_transitioned, boolean_choices, :last, :first do |b| %>
+            <div class="form-check">
+              <%= b.radio_button(class: "form-check-input") %>
+              <%= b.label(class: "form-check-label") %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
+      <%= f.submit "Download Report", class: "btn btn-primary", data: { disable_with: false } %>
+    <% end %>
+
   </div>
 </div>

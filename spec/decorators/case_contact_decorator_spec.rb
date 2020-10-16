@@ -40,19 +40,19 @@ RSpec.describe CaseContactDecorator do
   describe "#contact_types" do
     subject(:contact_types) { decorated_case_contact.contact_types }
 
-    let(:case_contact) { build(:case_contact, db_contact_types: db_contact_types) }
+    let(:case_contact) { build(:case_contact, contact_types: contact_types) }
     let(:decorated_case_contact) do
       described_class.new(case_contact)
     end
 
     context "when the contact_types is an empty array" do
-      let(:db_contact_types) { [] }
+      let(:contact_types) { [] }
 
       it { is_expected.to eql("") }
     end
 
     context "when the contact_types is an array with three or more values" do
-      let(:db_contact_types) do
+      let(:contact_types) do
         [
           build(:contact_type, name: "School"),
           build(:contact_type, name: "Therapist"),
@@ -64,7 +64,7 @@ RSpec.describe CaseContactDecorator do
     end
 
     context "when the contact types is an array with less than three values" do
-      let(:db_contact_types) do
+      let(:contact_types) do
         [
           build(:contact_type, name: "School"),
           build(:contact_type, name: "Therapist")

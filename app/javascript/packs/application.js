@@ -22,7 +22,6 @@ require('src/case_contact')
 require('src/select')
 require('src/dashboard')
 require('src/sidebar')
-require('src/index_reports')
 require('src/sessions')
 
 // Uncomment to copy all static images under ../images to the output folder and

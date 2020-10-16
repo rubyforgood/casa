@@ -122,7 +122,7 @@ vols.map do |vol|
           duration_minutes:
               likely_durations.sample,
           occurred_at: occurred_at,
-          db_contact_types: ContactType.take(2),
+          contact_types: ContactType.take(2),
           medium_type: CaseContact::CONTACT_MEDIUMS.sample,
           miles_driven: miles_driven,
           want_driving_reimbursement: want_driving_reimbursement,

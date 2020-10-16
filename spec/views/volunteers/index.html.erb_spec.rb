@@ -4,7 +4,7 @@ describe "volunteers" do
   subject { render template: "volunteers/index" }
 
   context "while signed in as other user diferent to admin" do
-    let(:user) { build_stubbed :volunteer}
+    let(:user) { build_stubbed :volunteer }
 
     before do
       enable_pundit(view, user)

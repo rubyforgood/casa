@@ -104,6 +104,7 @@ RSpec.describe CaseContactReport, type: :model do
           expect(contacts.length).to eq(2)
         end
       end
+
       describe "has transitioned behavior" do
         it "returns only case contacts the youth has transitioned" do
           case_case_1 = create(:casa_case, transition_aged_youth: false)
@@ -114,6 +115,7 @@ RSpec.describe CaseContactReport, type: :model do
           contacts = report.case_contacts
           expect(contacts.length).to eq(1)
         end
+
         it "returns only case contacts the youth has transitioned" do
           case_case_1 = create(:casa_case, transition_aged_youth: false)
           case_case_2 = create(:casa_case, transition_aged_youth: true)
@@ -122,6 +124,16 @@ RSpec.describe CaseContactReport, type: :model do
           report = CaseContactReport.new({has_transitioned: true})
           contacts = report.case_contacts
           expect(contacts.length).to eq(1)
+        end
+
+        it "returns case contacts with both youth has transitioned and youth has not transitioned" do
+          case_case_1 = create(:casa_case, transition_aged_youth: false)
+          case_case_2 = create(:casa_case, transition_aged_youth: true)
+          create(:case_contact, {casa_case: case_case_1})
+          create(:case_contact, {casa_case: case_case_2})
+          report = CaseContactReport.new({has_transitioned: ""})
+          contacts = report.case_contacts
+          expect(contacts.length).to eq(2)
         end
       end
 
@@ -135,6 +147,7 @@ RSpec.describe CaseContactReport, type: :model do
           contacts = report.case_contacts
           expect(contacts.length).to eq(1)
         end
+
         it "returns only contacts that DO NOT want reimbursement" do
           # want_driving_reimbursement
           create(:case_contact, {miles_driven: 50, want_driving_reimbursement: true})
@@ -143,6 +156,16 @@ RSpec.describe CaseContactReport, type: :model do
           report = CaseContactReport.new({want_driving_reimbursement: false})
           contacts = report.case_contacts
           expect(contacts.length).to eq(1)
+        end
+
+        it "returns contacts that both want reimbursement and do not want reimbursement" do
+          # want_driving_reimbursement
+          create(:case_contact, {miles_driven: 50, want_driving_reimbursement: true})
+          create(:case_contact, {miles_driven: 50, want_driving_reimbursement: false})
+
+          report = CaseContactReport.new({want_driving_reimbursement: ""})
+          contacts = report.case_contacts
+          expect(contacts.length).to eq(2)
         end
       end
 
@@ -155,11 +178,32 @@ RSpec.describe CaseContactReport, type: :model do
           school = create(:contact_type, name: "School")
           create(:supervisor_volunteer, volunteer: volunteer, supervisor: supervisor)
 
-          contact = create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id, db_contact_types: [court]})
-          create(:case_contact, {occurred_at: 100.days.ago, creator_id: volunteer2.id, db_contact_types: [school]})
+          contact = create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id, contact_types: [court]})
+          create(:case_contact, {occurred_at: 100.days.ago, creator_id: volunteer2.id, contact_types: [school]})
 
           create(:case_contact, {occurred_at: 100.days.ago})
           report = CaseContactReport.new({contact_type: "Court"})
+          contacts = report.case_contacts
+          expect(contacts.length).to eq(1)
+          expect(contacts).to eq([contact])
+        end
+      end
+
+      describe "contact type group filter functionality" do
+        it "returns only the case contacts whose contact_type includes the case contact type group ids" do
+          supervisor = create(:supervisor)
+          volunteer = create(:volunteer)
+          volunteer2 = create(:volunteer)
+          contact_type_group = create(:contact_type_group, name: "Placement")
+          court = create(:contact_type, name: "Court", contact_type_group: contact_type_group)
+          school = create(:contact_type, name: "School")
+          create(:supervisor_volunteer, volunteer: volunteer, supervisor: supervisor)
+
+          contact = create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id, contact_types: [court]})
+          create(:case_contact, {occurred_at: 100.days.ago, creator_id: volunteer2.id, contact_types: [school]})
+
+          create(:case_contact, {occurred_at: 100.days.ago})
+          report = CaseContactReport.new({contact_type_group_ids: [contact_type_group.id]})
           contacts = report.case_contacts
           expect(contacts.length).to eq(1)
           expect(contacts).to eq([contact])
@@ -173,12 +217,12 @@ RSpec.describe CaseContactReport, type: :model do
           therapist = create(:contact_type, name: "Therapist")
           untransitioned_casa_case = create(:casa_case, transition_aged_youth: false)
           transitioned_casa_case = create(:casa_case, transition_aged_youth: true)
-          contact1 = create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, db_contact_types: [court])
-          create(:case_contact, occurred_at: 40.days.ago, casa_case: transitioned_casa_case, db_contact_types: [court])
-          create(:case_contact, occurred_at: 20.days.ago, casa_case: untransitioned_casa_case, db_contact_types: [court])
-          contact4 = create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, db_contact_types: [school])
-          contact5 = create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, db_contact_types: [court, school])
-          contact6 = create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, db_contact_types: [therapist])
+          contact1 = create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, contact_types: [court])
+          create(:case_contact, occurred_at: 40.days.ago, casa_case: transitioned_casa_case, contact_types: [court])
+          create(:case_contact, occurred_at: 20.days.ago, casa_case: untransitioned_casa_case, contact_types: [court])
+          contact4 = create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, contact_types: [school])
+          contact5 = create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, contact_types: [court, school])
+          contact6 = create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, contact_types: [therapist])
 
           aggregate_failures do
             report_1 = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, has_transitioned: true, contact_type: "Court"})

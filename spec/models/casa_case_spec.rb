@@ -61,7 +61,7 @@ RSpec.describe CasaCase do
         casa_case: other_inactive_case, volunteer: other_user, is_active: false
       )
 
-      assert_equal active_cases, described_class.actively_assigned_to(current_user)
+      assert_equal active_cases.map(&:case_number).sort, described_class.actively_assigned_to(current_user).map(&:case_number).sort
     end
   end
 

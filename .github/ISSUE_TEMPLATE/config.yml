@@ -9,3 +9,6 @@ contact_links:
   - name: Documentation addition/change
     about: 🔨What needs documenting? ✨
     url: https://github.com/rubyforgood/casa/issues/new?template=documentation.md&projects=rubyforgood/casa/1
+  - name: Chore
+    about: 🔨What needs updating or removing? ✨
+    url: https://github.com/rubyforgood/casa/issues/new?template=chore.md&projects=rubyforgood/casa/1
