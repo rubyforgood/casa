@@ -143,7 +143,7 @@ RSpec.describe "volunteer adds a case contact", type: :system do
       fill_in "case-contact-duration-hours", with: "1"
       fill_in "case-contact-duration-minutes", with: "45"
       # Future date: invalid
-      fill_in "Occurred at", with: future_date.strftime("%m/%d/%Y")
+      fill_in "Occurred at", with: future_date.strftime("%Y/%m/%d")
       fill_in "Miles driven", with: "30"
       select "Yes", from: "Want driving reimbursement"
       fill_in "Notes", with: "Hello world"
@@ -188,7 +188,7 @@ RSpec.describe "volunteer adds a case contact", type: :system do
       fill_in "case-contact-duration-hours", with: "1"
       fill_in "case-contact-duration-minutes", with: "45"
       # Future date: invalid
-      fill_in "Occurred at", with: future_date.strftime("%m/%d/%Y")
+      fill_in "Occurred at", with: future_date.strftime("%Y/%m/%d")
       fill_in "Miles driven", with: "30"
       select "Yes", from: "Want driving reimbursement"
       fill_in "Notes", with: "Hello world"
@@ -207,7 +207,7 @@ RSpec.describe "volunteer adds a case contact", type: :system do
       expect(page).to have_select("Contact medium", selected: "In Person")
       expect(page).to have_field("case-contact-duration-hours", with: "1")
       expect(page).to have_field("case-contact-duration-minutes", with: "45")
-      expect(page).to have_field("Occurred at", with: future_date.strftime("%Y-%m-%d"))
+      expect(page).to have_field("Occurred at", with: future_date.strftime("%Y/%m/%d"))
       expect(page).to have_field("Miles driven", with: "30")
       expect(page).to have_select("Want driving reimbursement", selected: "Yes")
       expect(page).to have_field("Notes", with: "Hello world")
