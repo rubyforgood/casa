@@ -34,6 +34,9 @@ install:
 
 script:
   - bundle exec rails webpacker:compile
-
+  - RAILS_ENV=test bundle exec rails server -b 0.0.0.0 -p 4040 -d
+  - RAILS_ENV=test bundle exec rake db:migrate
+  - npm run test:cypress
+  - kill $(jobs -p) || true
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
