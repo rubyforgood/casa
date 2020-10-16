@@ -27,16 +27,6 @@ describe('dashboard.js', () => {
       document.body.innerHTML = mockTable
     }
 
-    describe('casa_cases table', () => {
-      test("displays 'No active cases' if the table is empty", () => {
-        window.onload = (event) => {
-        }
-        initializeDocumentWithTable('casa_cases', 0)
-
-        expect($.contains($('table'), 'No active cases')).toBe(true)
-      })
-    })
-
     describe('tables with scroll enabled', () => {
       beforeEach(() => {
         initializeDocumentWithTable('case_contacts', 1, 'case-contacts-table')
