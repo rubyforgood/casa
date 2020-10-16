@@ -43,8 +43,12 @@ config/credentials.yml.enc
 vendor/bundle/
 .generators
 
+cypress/screenshots/*
+cypress/videos/*
+
 # produced by tests (?)
 .rakeTasks
 
 # produced by tests (?)
 *.csv
+

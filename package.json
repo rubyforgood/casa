@@ -2,6 +2,7 @@
   "name": "casa",
   "private": true,
   "scripts": {
+    "test:cypress": "$(npm bin)/cypress run",
     "test": "standard && jest",
     "test:e2e": "cypress open",
     "lint": "standard",
@@ -27,6 +28,7 @@
     "cypress": "^4.12.1",
     "jest": "^26.4.2",
     "standard": "^14.3.4",
+    "start-server-and-test": "^1.11.5",
     "webpack-dev-server": "^3.10.3"
   },
   "standard": {
