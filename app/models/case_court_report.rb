@@ -4,7 +4,7 @@ require "date"
 require "sablon"
 
 class CaseCourtReport
-  attr_reader :report_path
+  attr_reader :report_path, :context
 
   DATE_FORMATS = {
     long_date: "%B %d, %Y",
@@ -41,7 +41,8 @@ class CaseCourtReport
       case_contacts: prepare_case_contacts,
       volunteer: {
         name: @volunteer.display_name,
-        supervisor_name: @volunteer.supervisor.display_name
+        supervisor_name: @volunteer.supervisor.display_name,
+        assignment_date: @casa_case.case_assignments.find_by(volunteer: @volunteer).created_at&.strftime(DATE_FORMATS[:long_date])
       }
     }
   end
@@ -85,8 +86,7 @@ class CaseCourtReport
     {
       court_date: @casa_case.court_date&.strftime(DATE_FORMATS[:long_date]),
       case_number: @casa_case.case_number,
-      dob: @casa_case.birth_month_year_youth&.strftime(DATE_FORMATS[:youth_dob]),
-      assignment_date: @casa_case.case_assignments.find_by(volunteer: @volunteer).created_at&.strftime(DATE_FORMATS[:long_date])
+      dob: @casa_case.birth_month_year_youth&.strftime(DATE_FORMATS[:youth_dob])
     }
   end
 end
