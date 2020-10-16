@@ -21,6 +21,7 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
   - psql -c 'create database casa_test;' -U postgres
+  - psql -c 'create database casa_development;' -U postgres
   - ln -s /usr/lib/chromium-browser/chromedriver ~/bin/chromedriver
   - nvm use stable
 
@@ -36,7 +37,7 @@ script:
   - bundle exec rails webpacker:compile
   - RAILS_ENV=test bundle exec rails server -b 0.0.0.0 -p 4040 -d
   - RAILS_ENV=test bundle exec rake db:migrate
-  - RAILS_ENV=development bundle exec rake db:seed
+  - RAILS_ENV=test bundle exec rake db:seed
   - npm run test:cypress
   - kill $(jobs -p) || true
 after_script:
