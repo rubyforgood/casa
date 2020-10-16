@@ -1,7 +1,3 @@
-env:
-  global:
-    - CC_TEST_REPORTER_ID=31464536e34ab26588cb951d0fa6b5898abdf401dbe912fd47274df298e432ac
-
 language: ruby
 
 cache:
@@ -38,8 +34,6 @@ install:
 
 script:
   - bundle exec rails webpacker:compile
-  - bundle exec brakeman
-  - RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
