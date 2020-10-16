@@ -1,5 +1,12 @@
 User.destroy_all
+CasaOrgLogo.destroy_all
+
 seed_password = "123456"
+logo = CasaOrgLogo.new(
+  url: "media/src/images/logo.png",
+  alt_text: "CASA Logo",
+  size: "70x38"
+)
 pg_casa = CasaOrg.where(name: "Prince George CASA").first_or_create!(
   casa_org_logo: logo,
   display_name: "CASA / Prince George's County, MD",
