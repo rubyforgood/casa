@@ -132,10 +132,6 @@ class PgCasaSeeder
 end
 
 
-  ############################
-  ## Other CASA Organization #
-  ############################
-
 class OtherCasaOrgSeeder
 
   include DevelopmentSeederHelper
@@ -215,7 +211,7 @@ def after_party
   Rake::Task["after_party:run"].invoke
 end
 
-def process_faker_random_seed
+def process_faker_seed_specification
   seed_environment_value = ENV['FAKER_RANDOM_SEED']
 
   if seed_environment_value.empty?
@@ -223,7 +219,7 @@ def process_faker_random_seed
     puts "\nENV['FAKER_RANDOM_SEED'] not set to 'random' or a number; setting seed to 0.\n\n"
   elsif seed_environment_value.casecmp('random') == 0
     seed = Random.new_seed
-    puts "\n'random' specified in ENV['FAKER_RANDOM_SEED']; setting seed to #{seed}.\n\n"
+    puts "\n'random' specified in ENV['FAKER_RANDOM_SEED']; setting seed to randomly generated value #{seed}.\n\n"
   else
     seed = seed_environment_value.to_i
     puts "\nUsing random seed #{seed} specified in ENV['FAKER_RANDOM_SEED'].\n\n"
@@ -241,7 +237,7 @@ def report_object_counts
 end
 
 def seed
-  process_faker_random_seed
+  process_faker_seed_specification
   destroy_all
   after_party
   PgCasaSeeder.new.seed
