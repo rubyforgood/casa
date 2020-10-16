@@ -214,7 +214,7 @@ end
 def process_faker_seed_specification
   seed_environment_value = ENV['FAKER_RANDOM_SEED']
 
-  if [nil, ''].include?(seed_environment_value)
+  if seed_environment_value.blank?
     seed = 0
     puts "\nENV['FAKER_RANDOM_SEED'] not set to 'random' or a number; setting seed to 0.\n\n"
   elsif seed_environment_value.casecmp('random') == 0
