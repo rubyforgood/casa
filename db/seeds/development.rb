@@ -204,7 +204,12 @@ ACTIVE_RECORD_CLASSES = [
 ]
 
 def destroy_all
-  ACTIVE_RECORD_CLASSES.each { |klass| klass.destroy_all }
+  [CasaOrg, AllCasaAdmin, ContactType].each { |klass| klass.destroy_all }
+
+  non_empty_classes = ACTIVE_RECORD_CLASSES.select { |klass| klass.count > 0 }
+  unless non_empty_classes.empty?
+    raise "destroy_all did not result in the following classes being empty: #{non_empty_classes.join(', ')}"
+  end
 end
 
 def after_party
