@@ -4,7 +4,7 @@ require "date"
 require "sablon"
 
 class CaseCourtReport
-  attr_reader :report_path, :context
+  attr_reader :report_path, :context, :template
 
   DATE_FORMATS = {
     long_date: "%B %d, %Y",
@@ -15,10 +15,9 @@ class CaseCourtReport
   def initialize(args = {})
     @casa_case      = CasaCase.find(args[:case_id])
     @volunteer      = Volunteer.find(args[:volunteer_id])
-    @template_path  = args[:path_to_template]
 
     @context        = prepare_context
-    @template       = Sablon.template(@template_path)
+    @template       = Sablon.template(args[:path_to_template])
 
     # optional
     @report_path    = args[:path_to_report]
@@ -56,9 +55,10 @@ class CaseCourtReport
     interviewees = CaseContactContactType.includes(:case_contact, :contact_type).where("case_contacts.casa_case_id": @casa_case.id)
     interviewees = interviewees.where("occurred_at > ?", @casa_case.court_date) if @casa_case.court_date
 
-    contact_dates = aggregate_contact_dates(interviewees)
+    return [] unless interviewees.size.positive?
 
-    contact_dates.map do |type, dates|
+    contact_dates_as_hash = aggregate_contact_dates(interviewees)
+    contact_dates_as_hash.map do |type, dates|
       {
         name: "Firstname Lastname",
         type: type,
