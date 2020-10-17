@@ -20,4 +20,9 @@ RSpec.describe "Edit Casa Org", type: :system do
     expect(page).to have_text("Spec Test Hearing Type")
     expect(page).to have_text(hearing_type.name)
   end
+
+  it "has hearing types table" do
+    scroll_to(page.find("table#hearing-types", visible: false))
+    expect(page).to have_table(id: 'hearing-types')
+  end
 end
