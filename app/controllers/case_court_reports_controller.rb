@@ -38,7 +38,7 @@ class CaseCourtReportsController < ApplicationController
           error_messages = render_to_string partial: 'layouts/flash_messages.html.erb', layout: false, locals: flash
           flash.discard
 
-          render json: { link: "", status: :not_found, error_messages: error_messages }
+          render json: { link: "", status: :not_found, error_messages: error_messages }, status: :not_found
         end
       end
     end
