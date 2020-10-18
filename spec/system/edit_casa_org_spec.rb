@@ -24,10 +24,10 @@ RSpec.describe "Edit Casa Org", type: :system do
   it "has hearing types table" do
     scroll_to(page.find("table#hearing-types", visible: false))
     expect(page).to have_table(
-      id: 'hearing-types',
+      id: "hearing-types",
       with_rows:
       [
-        ['Spec Test Hearing Type', 'Yes', 'Edit']
+        ["Spec Test Hearing Type", "Yes", "Edit"]
       ]
     )
   end
