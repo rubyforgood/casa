@@ -9,7 +9,6 @@
 
 CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunteer sworn into a county-level juvenile dependency court system to advocate on behalf of a youth in the corresponding county's foster care system. CASA is also the namesake role of the national organization, CASA, which exists to cultivate and supervise volunteers carrying out this work – with county level chapters (operating relatively independently of each other) across the country.
 
-
 ## Welcome Hacktoberfest contributors!
 
 We are very happy to have you. If you have problems or questions, the fastest way to an answer is in slack https://rubyforgood.herokuapp.com/ #casa channel
@@ -18,9 +17,9 @@ ALL open issues on the issue board https://github.com/rubyforgood/casa/projects/
 
 PRs which are not for an issue but which improve the codebase by adding a test or improving the code are also welcome!
 
-A maintainer will be keeping an eye on issues and merging PRs at least once a day. Some PRs may be rejected if they make non-useful readme changes or similar changes. We want to merge your PRs! :)  
+A maintainer will be keeping an eye on issues and merging PRs at least once a day. Some PRs may be rejected if they make non-useful readme changes or similar changes. We want to merge your PRs! :)
 
-See also our [contributing guide](doc/CONTRIBUTING.md) 💖
+See also our [contributing guide](./doc/CONTRIBUTING.md) 💖
 
 ### About this project
 
@@ -84,8 +83,9 @@ You need Ruby, bundler, node.js, yarn, postgres, and chromedriver.
 **PostgreSQL ("postgres")**
 
 1. Make sure that postgres is installed.
-  - On a Mac, you can use [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database if you have an older version of postgres, or use [Postgres.app](https://postgresapp.com/).
-  - If you're on Ubuntu/WSL, use `sudo apt-get install libpq-dev` so the gem can install. [Use the Postgres repo for Ubuntu or WSL to get the server and client tools](https://www.postgresql.org/download/linux/ubuntu/).
+
+- On a Mac, you can use [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database if you have an older version of postgres, or use [Postgres.app](https://postgresapp.com/).
+- If you're on Ubuntu/WSL, use `sudo apt-get install libpq-dev` so the gem can install. [Use the Postgres repo for Ubuntu or WSL to get the server and client tools](https://www.postgresql.org/download/linux/ubuntu/).
 
 **Chromedriver**
 
@@ -93,7 +93,7 @@ You need Ruby, bundler, node.js, yarn, postgres, and chromedriver.
 
 ### Running the app
 
-(*on a Mac or Linux machine*)
+(_on a Mac or Linux machine_)
 
 1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine. You should create a fork in GitHub if you don't have permission to commit directly to this repo, though. See [our contributing guide](doc/CONTRIBUTING.md) for more detailed instructions.
 1. `cd casa/`
@@ -138,25 +138,26 @@ bundle exec rake after_party:run
 ```
 
 Alternatively, every time you pull the master branch, run:
+
 ```
 bin/update
 ```
+
 which will run any database migrations, update gems and yarn packages, and run
 the after party post-deployment tasks.
 
 ### Other Documentation
 
 There is a `doc` directory at the top level that includes:
- 
-* an `architecture-decisions` directory containing important architectural decisions and entity relationship diagrams of various models
-(see the article [Architectural Decision Records](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) describing this approach).
-* [Code of Conduct](doc/code-of-conduct.md)
-* [CONTRIBUTING.md](doc/CONTRIBUTING.md)
-* [CYPRESS.md](doc/CYPRESS.md)
-* [DOCKER.md](doc/DOCKER.md)
-* [LINUX_SETUP.md](doc/LINUX_SETUP.md)
-* [SECURITY.md](doc/SECURITY.md)
 
+- an `architecture-decisions` directory containing important architectural decisions and entity relationship diagrams of various models
+  (see the article [Architectural Decision Records](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) describing this approach).
+- [Code of Conduct](doc/code-of-conduct.md)
+- [CONTRIBUTING.md](doc/CONTRIBUTING.md)
+- [CYPRESS.md](doc/CYPRESS.md)
+- [DOCKER.md](doc/DOCKER.md)
+- [LINUX_SETUP.md](doc/LINUX_SETUP.md)
+- [SECURITY.md](doc/SECURITY.md)
 
 ### Common issues
 
@@ -167,11 +168,12 @@ There is a `doc` directory at the top level that includes:
 ### Ubuntu and WSL
 
 1. If you are on Ubuntu in Windows Subsystem for Linux (WSL) and `rbenv install` indicates that the Ruby version is unavailable, you might be using Ubuntu's default install of `ruby-build`, which only comes with old installs of Ruby (ending before 2.6.) You should uninstall rvm and ruby-build's apt packages (`apt remove rvm ruby-build`) and install them with Git like this:
-  - `git clone https://github.com/rbenv/rbenv.git ~/.rbenv`
-  - `echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc`
-  - `echo 'eval "$(rbenv init -)"' >> ~/.bashrc`
-  - `exec $SHELL`
-  - `git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build`
+
+- `git clone https://github.com/rbenv/rbenv.git ~/.rbenv`
+- `echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc`
+- `echo 'eval "$(rbenv init -)"' >> ~/.bashrc`
+- `exec $SHELL`
+- `git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build`
 
 You'll probably hit a problem where ruby-version reads `ruby-2.7.1` but the install available to you is called `2.7.1`. If you do, install [rbenv-alias](https://github.com/tpope/rbenv-aliases) and create an alias between the two.
 
@@ -184,27 +186,23 @@ See `db/seeds` for seed data. Test data includes the below
 1. casa_admin1@example.com / 123456 https://\<URL\>.herokuapp.com/
 1. allcasaadmin@example.com / 123456 https://\<URL\>.herokuapp.com/all_casa_admins/sign_in
 
-
 ### QA environment
 
-When pull requests are merged, the code auto-deploys to QA (because of a heroku setting) 
+When pull requests are merged, the code auto-deploys to QA (because of a heroku setting)
 
 https://casa-qa.herokuapp.com/
 
-
 ### Staging
 
-Deploy to Staging is manual. Training of new users is done in staging. 
+Deploy to Staging is manual. Training of new users is done in staging.
 
 https://casa-r4g-staging.herokuapp.com/
 
-
 ### Production
 
-We have real users in production! 
+We have real users in production!
 
 If you represent a CASA organization which wants to use this, please contact us! polly@rubyforgood.org
-
 
 ### Error tracking
 
