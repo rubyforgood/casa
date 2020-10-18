@@ -16,7 +16,7 @@ def empty_ar_classes
       User,
       Volunteer,
   ]
-  ar_classes.select { |klass| klass.count == 0 }
+  ar_classes.select { |klass| klass.count == 0 }.map(&:name)
 end
 
 RSpec.describe "Seeds" do
@@ -27,7 +27,7 @@ RSpec.describe "Seeds" do
         allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new(environment))
       end
 
-      it "successfully populates all necessary tables in environment '#{environment}'" do
+      it "successfully populates all necessary tables" do
         ActiveRecord::Tasks::DatabaseTasks.load_seed
         expect(empty_ar_classes).to eq([])
       end
