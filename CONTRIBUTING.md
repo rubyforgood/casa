@@ -1,1 +1,1 @@
-Please press [here if you want to contribute!](./doc/CONTRIBUTING.md)
+[Please press here if you want to contribute!](./doc/CONTRIBUTING.md)
