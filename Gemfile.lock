@@ -264,6 +264,9 @@ GEM
       rubocop-ast (>= 0.4.0)
     ruby-progressbar (1.10.1)
     rubyzip (2.3.0)
+    sablon (0.3.2)
+      nokogiri (>= 1.8.5)
+      rubyzip (>= 1.1.1)
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
@@ -355,6 +358,7 @@ DEPENDENCIES
   rails (~> 6.0.3)
   rake
   rspec-rails (~> 4.0.1)
+  sablon
   selenium-webdriver
   shoulda-matchers
   simplecov (~> 0.19.0)
