@@ -60,11 +60,16 @@ class PgCasaSeeder
   end
 
   def create_users
-    AllCasaAdmin.first_or_create!(
-        email: "allcasaadmin@example.com",
-        password: SEED_PASSWORD,
-        password_confirmation: SEED_PASSWORD
-    )
+
+    all_casa_admins = ["allcasaadmin@example.com", "all_casa_admin2@example.com", "all_casa_admin3@example.com"]
+
+    all_casa_admins.each do |admin_email|
+      AllCasaAdmin.create!(
+          email: admin_email,
+          password: SEED_PASSWORD,
+          password_confirmation: SEED_PASSWORD
+      )
+    end
 
     # seed users for all types [volunteer supervisor casa_admin]
     # volunteer users

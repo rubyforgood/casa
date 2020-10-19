@@ -24,12 +24,15 @@ casa_case_count = 150
 supervisor_count = 5
 seed_password = "123456"
 casa_admin_count = 3
+all_casa_admins = ["allcasaadmin@example.com", "all_casa_admin2@example.com", "all_casa_admin3@example.com"]
 
-AllCasaAdmin.first_or_create(
-  email: "allcasaadmin@example.com",
-  password: seed_password,
-  password_confirmation: seed_password
-)
+all_casa_admins.each do |admin_email|
+  AllCasaAdmin.create!(
+    email: admin_email,
+    password: seed_password,
+    password_confirmation: seed_password
+  )
+end
 
 volunteer_users = []
 
