@@ -1,6 +1,11 @@
 require "rails_helper"
 
 RSpec.describe "volunteer adds a case contact", type: :system do
+  let(:organization) { create(:casa_org) }
+  let!(:empty) { create(:contact_type_group, name: "Empty", casa_org: organization) }
+  let!(:grp_with_hidden) { create(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization) }
+  let!(:hidden_type) { create(:contact_type, name: "Hidden", active: false, contact_type_group: grp_with_hidden) }
+
   it "is successful" do
     volunteer = create(:volunteer, :with_casa_cases)
     volunteer_casa_case_one = volunteer.casa_cases.first
@@ -23,6 +28,9 @@ RSpec.describe "volunteer adds a case contact", type: :system do
     fill_in "Notes", with: "Hello world"
 
     expect(page).not_to have_text("error")
+    expect(page).to_not have_text("Empty") # this line and the next should work like the admin_adds_a_case_contact_spec but does not
+    expect(page).to_not have_text("Hidden") # will review after these test cases have been re-factored
+
     click_on "Submit"
     expect(page).to have_text("Confirm Note Content")
     expect {

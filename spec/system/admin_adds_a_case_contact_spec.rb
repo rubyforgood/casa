@@ -5,6 +5,9 @@ RSpec.describe "admin or supervisor adds a case contact", type: :system do
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:casa_case) { create(:casa_case, casa_org: organization) }
   let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
+  let!(:empty) { create(:contact_type_group, name: "Empty", casa_org: organization) }
+  let!(:grp_with_hidden) { create(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization) }
+  let!(:hidden_type) { create(:contact_type, name: "Hidden", active: false, contact_type_group: grp_with_hidden) }
   let!(:school) { create(:contact_type, name: "School", contact_type_group: contact_type_group) }
   let!(:therapist) { create(:contact_type, name: "Therapist", contact_type_group: contact_type_group) }
 
@@ -32,6 +35,14 @@ RSpec.describe "admin or supervisor adds a case contact", type: :system do
     expect(CaseContact.first.casa_case_id).to eq casa_case.id
     expect(CaseContact.first.contact_types).to match_array([school, therapist])
     expect(CaseContact.first.duration_minutes).to eq 105
+  end
+
+  it "should not show empty contact type groups" do
+    expect(page).to_not have_text("Empty")
+  end
+
+  it "should not show contact type groups with only hidden contact types" do
+    expect(page).to_not have_text("Hidden")
   end
 
   context "with invalid inputs" do
