@@ -48,7 +48,10 @@ class CaseContact < ApplicationRecord
     end
   }
   scope :contact_type_groups, ->(contact_type_group_ids = nil) {
-    joins(:contact_types).where("contact_types.contact_type_group_id in (?)", contact_type_group_ids) if contact_type_group_ids.present?
+    if contact_type_group_ids.present?
+      joins(contact_types: :contact_type_group)
+        .where(contact_type_groups: { id: contact_type_group_ids })
+    end
   }
 
   IN_PERSON = "in-person".freeze

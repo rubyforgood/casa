@@ -190,23 +190,35 @@ RSpec.describe CaseContactReport, type: :model do
       end
 
       describe "contact type group filter functionality" do
-        it "returns only the case contacts whose contact_type includes the case contact type group ids" do
+        before do
           supervisor = create(:supervisor)
           volunteer = create(:volunteer)
           volunteer2 = create(:volunteer)
-          contact_type_group = create(:contact_type_group, name: "Placement")
-          court = create(:contact_type, name: "Court", contact_type_group: contact_type_group)
+          @contact_type_group = create(:contact_type_group, name: "Placement")
+          court = create(:contact_type, name: "Court", contact_type_group: @contact_type_group)
           school = create(:contact_type, name: "School")
           create(:supervisor_volunteer, volunteer: volunteer, supervisor: supervisor)
 
-          contact = create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id, contact_types: [court]})
+          @expected_contact = create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id, contact_types: [court]})
           create(:case_contact, {occurred_at: 100.days.ago, creator_id: volunteer2.id, contact_types: [school]})
 
           create(:case_contact, {occurred_at: 100.days.ago})
-          report = CaseContactReport.new({contact_type_group_ids: [contact_type_group.id]})
-          contacts = report.case_contacts
-          expect(contacts.length).to eq(1)
-          expect(contacts).to eq([contact])
+        end
+
+        it "returns only the case contacts whose contact_type includes the case contact type group ids" do
+          report = CaseContactReport.new(
+            { contact_type_group_ids: [@contact_type_group.id] }
+          )
+          expect(report.case_contacts.length).to eq(1)
+          expect(report.case_contacts).to eq([@expected_contact])
+        end
+
+        it "behaves the same when contact_type_group_ids have empty values" do
+          report = CaseContactReport.new(
+            { contact_type_group_ids: ['', @contact_type_group.id, ''] }
+          )
+          expect(report.case_contacts.length).to eq(1)
+          expect(report.case_contacts).to eq([@expected_contact])
         end
       end
 
