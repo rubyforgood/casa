@@ -209,7 +209,14 @@ ACTIVE_RECORD_CLASSES = [
 ]
 
 def destroy_all
-  ACTIVE_RECORD_CLASSES.each { |klass| klass.destroy_all }
+  # Order is important here; CaseContact must be destroyed before the User that created it.
+  # The User is destroyed as a result of destroying the CasaOrg.
+  [CaseContact, CasaOrg, AllCasaAdmin, ContactType].each { |klass| klass.destroy_all }
+
+  non_empty_classes = ACTIVE_RECORD_CLASSES.select { |klass| klass.count > 0 }
+  unless non_empty_classes.empty?
+    raise "destroy_all did not result in the following classes being empty: #{non_empty_classes.join(', ')}"
+  end
 end
 
 def after_party
