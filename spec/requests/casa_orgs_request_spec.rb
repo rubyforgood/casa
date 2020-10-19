@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe "CasaOrgs", type: :request do
   let(:casa_org) { create(:casa_org) }
   let(:valid_attributes) { {name: "name", display_name: "display_name", address: "address"} }
+  let(:logo) { fixture_file_upload("#{Rails.root}/spec/fixtures/company_logo.png", 'image/png') }
   let(:invalid_attributes) { {name: nil} }
   let(:casa_case) { create(:casa_case, casa_org: casa_org) }
 
@@ -24,6 +25,12 @@ RSpec.describe "CasaOrgs", type: :request do
           expect(casa_org.name).to eq "name"
           expect(casa_org.display_name).to eq "display_name"
           expect(casa_org.address).to eq "address"
+        end
+
+        it "uploads the company logo" do
+          expect {
+            patch casa_org_url(casa_org), params: { casa_org: { logo: logo } }
+          }.to change(ActiveStorage::Attachment, :count).by(1)
         end
 
         it "redirects to the casa_org" do
