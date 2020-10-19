@@ -96,7 +96,7 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (~> 1.5)
       xpath (~> 3.2)
-    capybara-screenshot (1.0.24)
+    capybara-screenshot (1.0.25)
       capybara (>= 1.0, < 4)
       launchy
     childprocess (3.0.0)
@@ -224,7 +224,7 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    regexp_parser (1.8.1)
+    regexp_parser (1.8.2)
     request_store (1.5.0)
       rack (>= 1.4)
     responders (3.0.1)
