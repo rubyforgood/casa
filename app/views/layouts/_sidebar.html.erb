@@ -1,6 +1,6 @@
 <div id="sidebar-js" class="sidebar-wrapper">
   <div class="sidebar-heading">
-    <% if all_casa_admin_signed_in? %>
+    <% if all_casa_admin_signed_in? || !current_organization.logo_url %>
       <%= image_pack_tag("media/src/images/default-logo.png",
           alt: "CASA Logo",
           class: "d-inline-block align-text-bottom") %>
