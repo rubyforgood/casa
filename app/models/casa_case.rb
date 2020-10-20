@@ -35,6 +35,10 @@ class CasaCase < ApplicationRecord
       .where("birth_month_year_youth <= ?", 14.years.ago)
   }
 
+  scope :due_date_passed, -> {
+    where("court_date < ?", Time.now)
+  }
+
   def self.available_for_volunteer(volunteer)
     ids = connection.select_values(%{
       SELECT casa_cases.id
@@ -65,12 +69,12 @@ class CasaCase < ApplicationRecord
     end
   end
 
-  def clear_court_dates_when_passed
+  def clear_court_dates
     
   update(court_date: nil, 
     court_report_due_date: nil,
     court_report_submitted: false
-  ) if court_date < Time.now
+  ) 
   
   end
 
