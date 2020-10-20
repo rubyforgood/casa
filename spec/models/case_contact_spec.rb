@@ -79,7 +79,7 @@ RSpec.describe CaseContact, type: :model do
   it "can't be updated when occured_at is after the last day of the month in the quarter that the case contact was created" do
     case_contact = create(:case_contact, occurred_at: Time.zone.now - 1.year)
     expect(case_contact).to_not be_valid
-    expect(case_contact.errors[:base]).to eq(["cannot edit past case contacts outside of quarter"])
+    expect(case_contact.errors[:base]).to eq(["cannot edit case contacts created before the current quarter"])
   end
 
   context "#update_cleaning_contact_types" do

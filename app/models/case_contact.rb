@@ -82,15 +82,15 @@ class CaseContact < ApplicationRecord
     !contact_made.nil?
   end
 
-  def allowed_edit?
+  def created_in_current_quarter?
     today = Time.zone.now
     occurred_at.end_of_quarter > today
   end
 
   def check_if_allow_edit
-    return if allowed_edit?
+    return if created_in_current_quarter?
 
-    errors[:base] << "cannot edit past case contacts outside of quarter"
+    errors[:base] << "cannot edit case contacts created before the current quarter"
   end
 
   def supervisor_id
