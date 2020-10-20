@@ -9,24 +9,10 @@
 require "faker"
 require_relative 'seeds/casa_org_populator_presets'
 require_relative 'seeds/db_populator'
+require_relative '../lib/tasks/data_post_processors/case_contact_populator'
+require_relative '../lib/tasks/data_post_processors/contact_type_populator'
 
 class SeederMain
-
-  # Used for reporting record counts after completion:
-  ACTIVE_RECORD_CLASSES = [
-      CasaOrg,
-      CasaCase,
-      User,
-      Volunteer,
-      Supervisor,
-      CasaAdmin,
-      AllCasaAdmin,
-      SupervisorVolunteer,
-      CaseAssignment,
-      ContactType,
-      ContactTypeGroup,
-      CaseContact,
-  ]
 
   attr_reader :db_populator, :rng
 
@@ -46,8 +32,7 @@ class SeederMain
     db_populator.create_org(CasaOrgPopulatorPresets.for_environment.merge({org_name: 'Prince George CASA'}))
     db_populator.create_org(CasaOrgPopulatorPresets.minimal_dataset_options)
 
-    puts "Processing after_party..."
-    after_party
+    post_process_data
 
     report_object_counts
     puts "\nDone.\n\n"
@@ -55,19 +40,37 @@ class SeederMain
 
   private # -------------------------------------------------------------------------------------------------------
 
+  # Used for reporting record counts after completion:
+  def active_record_classes
+    @active_record_classes ||= [
+        CasaOrg,
+        CasaCase,
+        User,
+        Volunteer,
+        Supervisor,
+        CasaAdmin,
+        AllCasaAdmin,
+        SupervisorVolunteer,
+        CaseAssignment,
+        ContactType,
+        ContactTypeGroup,
+        CaseContact,
+    ]
+  end
+
   def destroy_all
     # Order is important here; CaseContact must be destroyed before the User that created it.
     # The User is destroyed as a result of destroying the CasaOrg.
-    [CaseContact, CasaOrg, AllCasaAdmin, ContactType].each { |klass| klass.destroy_all }
-
-    non_empty_classes = ACTIVE_RECORD_CLASSES.select { |klass| klass.count > 0 }
+    [SupervisorVolunteer, CaseContact, CasaOrg, AllCasaAdmin, ContactTypeGroup, ContactType].each { |klass| klass.destroy_all }
+    non_empty_classes = active_record_classes.select { |klass| klass.count > 0 }
     unless non_empty_classes.empty?
       raise "destroy_all did not result in the following classes being empty: #{non_empty_classes.join(', ')}"
     end
   end
 
-  def after_party
-    Rake::Task["after_party:run"].invoke
+  def post_process_data
+    ContactTypePopulator.populate
+    CaseContactPopulator.populate
   end
 
   def get_seed_specification
@@ -88,7 +91,7 @@ class SeederMain
 
   def report_object_counts
     puts "\nRecords written to the DB:\n\nCount  Class Name\n-----  ----------\n\n"
-    ACTIVE_RECORD_CLASSES.each do |klass|
+    active_record_classes.each do |klass|
       puts "%5d  %s" % [klass.count, klass.name]
     end
   end
