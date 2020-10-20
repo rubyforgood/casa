@@ -14,7 +14,7 @@ describe "layout/sidebar", type: :view do
   context "when no organization logo is set" do
     let(:user) { build_stubbed :volunteer }
 
-    it "displays default logo" do 
+    it "displays default logo" do
       sign_in user
 
       render partial: "layouts/sidebar"
