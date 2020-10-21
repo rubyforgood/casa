@@ -13,6 +13,16 @@
       </div>
 
       <div class="field form-group">
+        <%= form.label :hearing_type_id %>
+        <%= form.collection_select(
+          :hearing_type_id,
+          HearingType.active.for_organization(current_organization),
+          :id, :name,
+          { include_hidden: false, prompt: "-Select Hearing Type-" },
+          { class: "form-control" }
+        ) %>
+      </div>
+      <div class="field form-group">
         <% if policy(casa_case).update_court_date? %>
           <%= form.label :court_date, "Next Court Date" %>
           <br>
