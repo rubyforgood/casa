@@ -16,7 +16,7 @@
         <%= form.label :hearing_type_id %>
         <%= form.collection_select(
           :hearing_type_id,
-          HearingType.active.for_organization(current_organization),
+          HearingType.active.for_organization(current_user.casa_org),
           :id, :name,
           { include_hidden: false, prompt: "-Select Hearing Type-" },
           { class: "form-control" }
