@@ -76,7 +76,7 @@ RSpec.describe CasaCase do
 
     context "when volunteer has no case assignments" do
       it "returns all cases in volunteer's organization" do
-        expect(described_class.available_for_volunteer(volunteer)).to eq [casa_case2, casa_case3, casa_case1]
+        expect(described_class.available_for_volunteer(volunteer).ids).to eq [casa_case2.id, casa_case3.id, casa_case1.id]
       end
     end
 

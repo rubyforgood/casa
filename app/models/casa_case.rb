@@ -40,6 +40,8 @@ class CasaCase < ApplicationRecord
     where("court_date < ?", Time.now)
   }
 
+  delegate :name, to: :hearing_type, prefix: true, allow_nil: true
+
   def self.available_for_volunteer(volunteer)
     ids = connection.select_values(%{
       SELECT casa_cases.id
