@@ -37,6 +37,7 @@ install:
 script:
   - bundle exec rails webpacker:compile
   - bundle exec brakeman
+  - bundle exec standardrb
   - RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
   - RAILS_ENV=test bundle exec rails server -b 0.0.0.0 -p 4040 -d
   - RAILS_ENV=test bundle exec rake db:migrate

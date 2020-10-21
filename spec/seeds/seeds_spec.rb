@@ -3,18 +3,18 @@ require "rake"
 
 def empty_ar_classes
   ar_classes = [
-      AllCasaAdmin,
-      CasaAdmin,
-      CasaCase,
-      CasaOrg,
-      CaseAssignment,
-      CaseContact,
-      ContactType,
-      ContactTypeGroup,
-      Supervisor,
-      SupervisorVolunteer,
-      User,
-      Volunteer,
+    AllCasaAdmin,
+    CasaAdmin,
+    CasaCase,
+    CasaOrg,
+    CaseAssignment,
+    CaseContact,
+    ContactType,
+    ContactTypeGroup,
+    Supervisor,
+    SupervisorVolunteer,
+    User,
+    Volunteer
   ]
   ar_classes.select { |klass| klass.count == 0 }.map(&:name)
 end

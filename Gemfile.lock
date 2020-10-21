@@ -69,12 +69,11 @@ GEM
       rake (>= 10.4, < 14.0)
     ast (2.4.1)
     bcrypt (3.1.16)
-    better_html (1.0.15)
+    better_html (0.0.12)
       actionview (>= 4.0)
       activesupport (>= 4.0)
-      ast (~> 2.0)
       erubi (~> 1.4)
-      html_tokenizer (~> 0.0.6)
+      html_tokenizer
       parser (>= 2.4)
       smart_properties
     bindex (0.8.1)
@@ -122,14 +121,10 @@ GEM
       activemodel-serializers-xml (>= 1.0)
       activesupport (>= 5.0)
       request_store (>= 1.0)
-    erb_lint (0.0.35)
-      activesupport
-      better_html (~> 1.0.7)
+    erb_lint (0.0.9)
+      better_html (~> 0.0.10)
       html_tokenizer
-      parser (>= 2.7.1.4)
-      rainbow
-      rubocop (~> 0.79)
-      smart_properties
+      rubocop
     erubi (1.9.0)
     factory_bot (6.1.0)
       activesupport (>= 5.0.0)
@@ -253,16 +248,16 @@ GEM
       rspec-mocks (~> 3.9)
       rspec-support (~> 3.9)
     rspec-support (3.9.3)
-    rubocop (0.92.0)
+    rubocop (1.0.0)
       parallel (~> 1.10)
       parser (>= 2.7.1.5)
       rainbow (>= 2.2.2, < 4.0)
-      regexp_parser (>= 1.7)
+      regexp_parser (>= 1.8)
       rexml
-      rubocop-ast (>= 0.5.0)
+      rubocop-ast (>= 0.6.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
-    rubocop-ast (0.7.1)
+    rubocop-ast (1.0.0)
       parser (>= 2.7.1.5)
     rubocop-performance (1.8.1)
       rubocop (>= 0.87.0)
@@ -301,8 +296,8 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    standard (0.7)
-      rubocop (= 0.92)
+    standard (0.8)
+      rubocop (= 1.0.0)
       rubocop-performance (= 1.8.1)
     thor (1.0.1)
     thread_safe (0.3.6)
@@ -374,7 +369,7 @@ DEPENDENCIES
   skylight
   spring
   spring-watcher-listen (~> 2.0.0)
-  standard
+  standard (~> 0.8)
   tzinfo-data
   web-console (>= 3.3.0)
   webdrivers
