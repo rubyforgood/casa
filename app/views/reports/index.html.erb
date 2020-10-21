@@ -13,7 +13,7 @@
     <%= form_with url: case_contact_reports_path(format: :csv), method: :get, local: true do |f| %>
       <div class="field form-group">
         <label><strong>Starting From:</strong></label>
-        <%= f.date_field :start_date, class: "form-control", value: 1.month.ago.to_date %>
+        <%= f.date_field :start_date, class: "form-control", value: 6.months.ago.to_date %>
       </div>
 
       <div class="field form-group">

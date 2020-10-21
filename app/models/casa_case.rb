@@ -71,12 +71,9 @@ class CasaCase < ApplicationRecord
   end
 
   def clear_court_dates
-
-  update(court_date: nil,
-    court_report_due_date: nil,
-    court_report_submitted: false
-  )
-
+    update(court_date: nil,
+           court_report_due_date: nil,
+           court_report_submitted: false)
   end
 
   private

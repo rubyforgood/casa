@@ -13,14 +13,14 @@ class CaseCourtReport
   }.freeze
 
   def initialize(args = {})
-    @casa_case      = CasaCase.find(args[:case_id])
-    @volunteer      = Volunteer.find(args[:volunteer_id])
+    @casa_case = CasaCase.find(args[:case_id])
+    @volunteer = Volunteer.find(args[:volunteer_id])
 
-    @context        = prepare_context
-    @template       = Sablon.template(args[:path_to_template])
+    @context = prepare_context
+    @template = Sablon.template(args[:path_to_template])
 
     # optional
-    @report_path    = args[:path_to_report]
+    @report_path = args[:path_to_report]
   end
 
   def generate!
@@ -47,8 +47,8 @@ class CaseCourtReport
   end
 
   def format_date_contact_attempt(case_contact)
-    case_contact.occurred_at.strftime(DATE_FORMATS[:short_date]).
-      concat(case_contact.contact_made ? "" : "*")
+    case_contact.occurred_at.strftime(DATE_FORMATS[:short_date])
+      .concat(case_contact.contact_made ? "" : "*")
   end
 
   def prepare_case_contacts
@@ -74,7 +74,7 @@ class CaseCourtReport
       contact_type = person.contact_type.name
       date_with_format = format_date_contact_attempt(person.case_contact)
 
-      contact_dates[contact_type] << date_with_format and next if contact_dates.key?(contact_type)
+      contact_dates[contact_type] << (date_with_format) && next if contact_dates.key?(contact_type)
 
       contact_dates[contact_type] = [date_with_format]
     end
