@@ -30,6 +30,7 @@ ARG RAILS_ROOT=/usr/src/app/
 
 RUN apk update && apk upgrade && apk add --update --no-cache \
   bash \
+  imagemagick \
   nodejs \
   postgresql-client \
   tzdata \
