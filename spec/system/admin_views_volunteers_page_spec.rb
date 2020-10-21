@@ -26,6 +26,14 @@ RSpec.describe "admin views Volunteers page", type: :system do
       expect(page).to have_text("Miles Driven")
       expect(page).to have_text("Want reimbursement?")
     end
+
+    it "displays default logo" do
+      sign_in admin
+
+      visit volunteers_path
+
+      expect(page).to have_xpath("//img[@src = '/packs-test/media/src/images/default-logo-c9048fc43854499e952e4b62a505bf35.png' and @alt='CASA Logo']")
+    end
   end
 
   it "can show/hide columns on volunteers table" do
