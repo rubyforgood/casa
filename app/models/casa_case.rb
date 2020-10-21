@@ -106,6 +106,7 @@ end
 # Table name: casa_cases
 #
 #  id                     :bigint           not null, primary key
+#  active                 :boolean          default(TRUE), not null
 #  birth_month_year_youth :datetime
 #  case_number            :string           not null
 #  court_date             :datetime
