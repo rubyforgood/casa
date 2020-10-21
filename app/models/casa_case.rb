@@ -5,7 +5,7 @@ class CasaCase < ApplicationRecord
   has_many(:volunteers, through: :case_assignments, source: :volunteer, class_name: "User")
   has_many :case_contacts, dependent: :destroy
   validates :case_number, uniqueness: {case_sensitive: false}, presence: true
-  belongs_to :hearing_type
+  belongs_to :hearing_type, optional: true
   belongs_to :casa_org
 
   has_many :casa_case_contact_types
