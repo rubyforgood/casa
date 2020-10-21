@@ -1,10 +1,12 @@
 class CasaOrg < ApplicationRecord
   validates :name, presence: true, uniqueness: true
 
-  has_many :users
-  has_many :casa_cases
-  has_many :contact_type_groups
+  has_many :users, dependent: :destroy
+  has_many :casa_cases, dependent: :destroy
+  has_many :contact_type_groups, dependent: :destroy
   has_one :casa_org_logo, dependent: :destroy
+  has_many :hearing_types, dependent: :destroy
+  has_one_attached :logo
 
   delegate :url, :alt_text, :size, to: :casa_org_logo, prefix: :logo, allow_nil: true
 

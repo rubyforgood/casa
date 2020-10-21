@@ -4,7 +4,7 @@ RSpec.describe "/case_contact_reports", type: :request do
   let!(:case_contact) { create(:case_contact) }
 
   before do
-    travel_to Time.zone.local(2020,1,1)
+    travel_to Time.zone.local(2020, 1, 1)
     sign_in user
   end
   after { travel_back }
@@ -55,7 +55,7 @@ RSpec.describe "/case_contact_reports", type: :request do
           contact = create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
           create(:case_contact, {occurred_at: 100.days.ago})
 
-          get case_contact_reports_url(format: :csv), params: { creator_ids: [volunteer.id] }
+          get case_contact_reports_url(format: :csv), params: {creator_ids: [volunteer.id]}
 
           expect(response).to be_successful
           expect(

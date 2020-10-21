@@ -1,6 +1,24 @@
 require "rails_helper"
 require "rake"
 
+def empty_ar_classes
+  ar_classes = [
+      AllCasaAdmin,
+      CasaAdmin,
+      CasaCase,
+      CasaOrg,
+      CaseAssignment,
+      CaseContact,
+      ContactType,
+      ContactTypeGroup,
+      Supervisor,
+      SupervisorVolunteer,
+      User,
+      Volunteer,
+  ]
+  ar_classes.select { |klass| klass.count == 0 }.map(&:name)
+end
+
 RSpec.describe "Seeds" do
   ["development", "qa", "staging"].each do |environment|
     describe "for environment: #{environment}" do
@@ -9,8 +27,9 @@ RSpec.describe "Seeds" do
         allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new(environment))
       end
 
-      it "executes without raising an exception" do
-        expect { ActiveRecord::Tasks::DatabaseTasks.load_seed }.not_to raise_error
+      it "successfully populates all necessary tables" do
+        ActiveRecord::Tasks::DatabaseTasks.load_seed
+        expect(empty_ar_classes).to eq([])
       end
     end
   end

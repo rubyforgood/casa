@@ -44,10 +44,10 @@
   </td>
   <td>
     <% if Pundit.policy(current_user, contact).update? %>
-      <% if contact.allowed_edit? %>
+      <% if contact.created_in_current_quarter? %>
         <%= link_to 'Edit', edit_case_contact_path(contact) %>
       <% else %>
-        <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="Disallow edit contact after end of quarter"></i>
+        <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="This case contact was created in a previous quarter and is therefore no longer editable"></i>
       <% end %>
     <% end %>
   </td>

@@ -19,9 +19,11 @@ gem "puma", "~> 5.0" # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "skylight" # automated performance testing https://www.skylight.io/
 gem "webpacker", "~> 5.2" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
+gem "image_processing", "~> 1.2" # Set of higher-level helper methods for image processing.
 
 gem "bootsnap", ">= 1.4.2", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "bugsnag" # tracking errors in prod
+gem "sablon" # Word document templating tool for Case Court Reports
 
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries

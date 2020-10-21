@@ -1,9 +1,9 @@
 class CasaCase < ApplicationRecord
   has_paper_trail
 
-  has_many :case_assignments
+  has_many :case_assignments, dependent: :destroy
   has_many(:volunteers, through: :case_assignments, source: :volunteer, class_name: "User")
-  has_many :case_contacts
+  has_many :case_contacts, dependent: :destroy
   validates :case_number, uniqueness: {case_sensitive: false}, presence: true
   belongs_to :casa_org
 
@@ -35,6 +35,10 @@ class CasaCase < ApplicationRecord
       .where("birth_month_year_youth <= ?", 14.years.ago)
   }
 
+  scope :due_date_passed, -> {
+    where("court_date < ?", Time.now)
+  }
+
   def self.available_for_volunteer(volunteer)
     ids = connection.select_values(%{
       SELECT casa_cases.id
@@ -63,6 +67,15 @@ class CasaCase < ApplicationRecord
       casa_case_contact_types.destroy_all
       update(args)
     end
+  end
+
+  def clear_court_dates
+    
+  update(court_date: nil, 
+    court_report_due_date: nil,
+    court_report_submitted: false
+  ) 
+  
   end
 
   private

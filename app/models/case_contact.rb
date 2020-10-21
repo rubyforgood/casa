@@ -48,7 +48,12 @@ class CaseContact < ApplicationRecord
     end
   }
   scope :contact_type_groups, ->(contact_type_group_ids = nil) {
-    joins(:contact_types).where("contact_types.contact_type_group_id in (?)", contact_type_group_ids) if contact_type_group_ids.present?
+    # to handle case when passing ids == [''] && ids == nil
+    if contact_type_group_ids&.join&.length&.positive?
+      joins(contact_types: :contact_type_group)
+        .where(contact_type_groups: { id: contact_type_group_ids })
+        .group(:id)
+    end
   }
 
   IN_PERSON = "in-person".freeze
@@ -82,15 +87,15 @@ class CaseContact < ApplicationRecord
     !contact_made.nil?
   end
 
-  def allowed_edit?
+  def created_in_current_quarter?
     today = Time.zone.now
     occurred_at.end_of_quarter > today
   end
 
   def check_if_allow_edit
-    return if allowed_edit?
+    return if created_in_current_quarter?
 
-    errors[:base] << "cannot edit past case contacts outside of quarter"
+    errors[:base] << "cannot edit case contacts created before the current quarter"
   end
 
   def supervisor_id

@@ -12,7 +12,7 @@ class User < ApplicationRecord
 
   belongs_to :casa_org
 
-  has_many :case_assignments, foreign_key: "volunteer_id"
+  has_many :case_assignments, foreign_key: "volunteer_id", dependent: :destroy
   has_many :casa_cases, through: :case_assignments
   has_many :case_contacts, foreign_key: "creator_id"
 
@@ -22,7 +22,7 @@ class User < ApplicationRecord
 
   has_one :supervisor_volunteer, -> {
     where(is_active: true)
-  }, foreign_key: "volunteer_id"
+  }, foreign_key: "volunteer_id", dependent: :destroy
   has_one :supervisor, through: :supervisor_volunteer
 
   scope :volunteers_with_no_supervisor, lambda { |org|
@@ -121,8 +121,12 @@ class User < ApplicationRecord
   end
 
   # Called by Devise to generate an error message when a user is not active.
-  def inactive_message 
-    !active ? ( admin_self_deactivated? ? :admin_self_deactivated : :inactive ) : super
+  def inactive_message
+    if !active
+      admin_self_deactivated? ? :admin_self_deactivated : :inactive
+    else
+      super
+    end
   end
 
   def serving_transition_aged_youth?
@@ -130,12 +134,12 @@ class User < ApplicationRecord
   end
 
   def admin_self_deactivated?
-    return false if (!casa_admin? || active)
-    return id.to_s == last_deactivated_by
+    return false if !casa_admin? || active
+    id.to_s == last_deactivated_by
   end
 
   def last_deactivated_by
-    versions.where(event: "update").reverse.each do |version|
+    versions.where(event: "update").reverse_each do |version|
       return version.whodunnit if version.reify.active
     end
   end
