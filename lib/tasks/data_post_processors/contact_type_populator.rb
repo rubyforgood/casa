@@ -1,5 +1,4 @@
 module ContactTypePopulator
-
   # Create Groups and Contact types for each existing organization
   def self.populate
     CasaOrg.all.each do |org|

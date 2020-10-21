@@ -7,18 +7,17 @@
 # If you don't specify anything, 0 will be used as the seed, ensuring consistent data across hosts and runs.
 
 require "faker"
-require_relative 'seeds/casa_org_populator_presets'
-require_relative 'seeds/db_populator'
-require_relative '../lib/tasks/data_post_processors/case_contact_populator'
-require_relative '../lib/tasks/data_post_processors/contact_type_populator'
+require_relative "seeds/casa_org_populator_presets"
+require_relative "seeds/db_populator"
+require_relative "../lib/tasks/data_post_processors/case_contact_populator"
+require_relative "../lib/tasks/data_post_processors/contact_type_populator"
 
 class SeederMain
-
   attr_reader :db_populator, :rng
 
   def initialize
     random_seed = get_seed_specification
-    @rng = Random.new(random_seed)  # rng = random number generator
+    @rng = Random.new(random_seed) # rng = random number generator
     @db_populator = DbPopulator.new(rng)
     Faker::Config.random = rng
   end
@@ -28,8 +27,8 @@ class SeederMain
     destroy_all
 
     puts "Creating the objects in the data base..."
-    db_populator.create_all_casa_admin('allcasaadmin@example.com')
-    db_populator.create_org(CasaOrgPopulatorPresets.for_environment.merge({org_name: 'Prince George CASA'}))
+    db_populator.create_all_casa_admin("allcasaadmin@example.com")
+    db_populator.create_org(CasaOrgPopulatorPresets.for_environment.merge({org_name: "Prince George CASA"}))
     db_populator.create_org(CasaOrgPopulatorPresets.minimal_dataset_options)
 
     post_process_data
@@ -43,18 +42,18 @@ class SeederMain
   # Used for reporting record counts after completion:
   def active_record_classes
     @active_record_classes ||= [
-        CasaOrg,
-        CasaCase,
-        User,
-        Volunteer,
-        Supervisor,
-        CasaAdmin,
-        AllCasaAdmin,
-        SupervisorVolunteer,
-        CaseAssignment,
-        ContactType,
-        ContactTypeGroup,
-        CaseContact,
+      CasaOrg,
+      CasaCase,
+      User,
+      Volunteer,
+      Supervisor,
+      CasaAdmin,
+      AllCasaAdmin,
+      SupervisorVolunteer,
+      CaseAssignment,
+      ContactType,
+      ContactTypeGroup,
+      CaseContact
     ]
   end
 
@@ -64,7 +63,7 @@ class SeederMain
     [SupervisorVolunteer, CaseContact, CasaOrg, AllCasaAdmin, ContactTypeGroup, ContactType].each { |klass| klass.destroy_all }
     non_empty_classes = active_record_classes.select { |klass| klass.count > 0 }
     unless non_empty_classes.empty?
-      raise "destroy_all did not result in the following classes being empty: #{non_empty_classes.join(', ')}"
+      raise "destroy_all did not result in the following classes being empty: #{non_empty_classes.join(", ")}"
     end
   end
 
@@ -74,12 +73,12 @@ class SeederMain
   end
 
   def get_seed_specification
-    seed_environment_value = ENV['DB_SEEDS_RANDOM_SEED']
+    seed_environment_value = ENV["DB_SEEDS_RANDOM_SEED"]
 
     if seed_environment_value.blank?
       seed = 0
       puts "\nENV['DB_SEEDS_RANDOM_SEED'] not set to 'random' or a number; setting seed to 0.\n\n"
-    elsif seed_environment_value.casecmp('random') == 0
+    elsif seed_environment_value.casecmp("random") == 0
       seed = Random.new_seed
       puts "\n'random' specified in ENV['DB_SEEDS_RANDOM_SEED']; setting seed to randomly generated value #{seed}.\n\n"
     else

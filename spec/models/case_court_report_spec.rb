@@ -1,10 +1,9 @@
 require "rails_helper"
 require "sablon"
 
-RSpec.describe CaseCourtReport, type: :model do  
+RSpec.describe CaseCourtReport, type: :model do
   let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
   let(:casa_case_without_contacts) { volunteer.casa_cases.second }
-
 
   describe "when receiving valid case, volunteer, and path_to_template" do
     let(:casa_case_with_contacts) { volunteer.casa_cases.first }
@@ -18,16 +17,16 @@ RSpec.describe CaseCourtReport, type: :model do
         path_to_report: path_to_report
       )
     end
-  
+
     describe "has valid @path_to_template" do
       it "is existing" do
         path = report.template.instance_variable_get(:@path)
-  
+
         expect(File.exist?(path_to_template)).to eq true
         expect(File.exist?(path)).to eq true
       end
     end
-    
+
     describe "has valid @context" do
       subject { report.context }
 
