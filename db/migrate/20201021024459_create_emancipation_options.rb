@@ -1,4 +1,4 @@
-class CreateEmanipationOptions < ActiveRecord::Migration[6.0]
+class CreateEmancipationOptions < ActiveRecord::Migration[6.0]
   def change
     create_table :emancipation_options do |t|
       t.references :emancipation_category, null: false, foreign_key: true
