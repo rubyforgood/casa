@@ -211,7 +211,7 @@ RSpec.describe CaseContactReport, type: :model do
         context "when select 1 contact type group" do
           it "returns 1 case contact whose contact_types belong to that group" do
             report = CaseContactReport.new(
-              { contact_type_group_ids: [@contact_type_group.id] }
+              {contact_type_group_ids: [@contact_type_group.id]}
             )
             expect(report.case_contacts.length).to eq(1)
             expect(report.case_contacts).to eq([@expected_contact])
@@ -221,7 +221,7 @@ RSpec.describe CaseContactReport, type: :model do
         context "when select prompt option (value is empty) and 1 contact type group" do
           it "returns 1 case contact whose contact_types belong to that group" do
             report = CaseContactReport.new(
-              { contact_type_group_ids: ['', @contact_type_group.id, ''] }
+              {contact_type_group_ids: ["", @contact_type_group.id, ""]}
             )
             expect(report.case_contacts.length).to eq(1)
             expect(report.case_contacts).to eq([@expected_contact])
@@ -231,7 +231,7 @@ RSpec.describe CaseContactReport, type: :model do
         context "when select ONLY prompt option (value is empty) and NO contact type group" do
           it "does no filtering & returns 3 case contacts" do
             report = CaseContactReport.new(
-              { contact_type_group_ids: [''] }
+              {contact_type_group_ids: [""]}
             )
             expect(report.case_contacts.length).to eq(3)
             expect(report.case_contacts).to eq(CaseContact.all)
@@ -240,7 +240,7 @@ RSpec.describe CaseContactReport, type: :model do
         context "when select nothing on Case Type Group" do
           it "does no filtering & returns 3 case contacts" do
             report = CaseContactReport.new(
-              { contact_type_group_ids: nil }
+              {contact_type_group_ids: nil}
             )
             expect(report.case_contacts.length).to eq(3)
             expect(report.case_contacts).to eq(CaseContact.all)

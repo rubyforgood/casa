@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe SupervisorPolicy do
-  let(:casa_admin)  { create(:casa_admin) }
-  let(:supervisor)  { create(:supervisor) }
-  let(:volunteer)   { create(:volunteer) }
+  let(:casa_admin) { create(:casa_admin) }
+  let(:supervisor) { create(:supervisor) }
+  let(:volunteer) { create(:volunteer) }
   subject { described_class }
 
   permissions :update_supervisor_email? do

@@ -11,6 +11,18 @@ describe "layout/sidebar", type: :view do
     assign :casa_org, user.casa_org
   end
 
+  context "when no organization logo is set" do
+    let(:user) { build_stubbed :volunteer }
+
+    it "displays default logo" do
+      sign_in user
+
+      render partial: "layouts/sidebar"
+
+      expect(rendered).to have_xpath("//img[@src = '/packs-test/media/src/images/default-logo-c9048fc43854499e952e4b62a505bf35.png' and @alt='CASA Logo']")
+    end
+  end
+
   context "when logged in as a supervisor" do
     let(:user) { build_stubbed :supervisor }
 

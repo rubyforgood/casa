@@ -51,7 +51,7 @@ class CaseContact < ApplicationRecord
     # to handle case when passing ids == [''] && ids == nil
     if contact_type_group_ids&.join&.length&.positive?
       joins(contact_types: :contact_type_group)
-        .where(contact_type_groups: { id: contact_type_group_ids })
+        .where(contact_type_groups: {id: contact_type_group_ids})
         .group(:id)
     end
   }
