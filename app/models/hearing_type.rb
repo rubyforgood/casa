@@ -7,6 +7,7 @@ class HearingType < ApplicationRecord
   validates :active, presence: true
 
   scope :for_organization, ->(org) { where(casa_org: org) }
+  scope :active, -> { where(active: true) }
 end
 
 # == Schema Information

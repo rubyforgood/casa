@@ -5,6 +5,7 @@ RSpec.describe CasaCase do
 
   it { is_expected.to have_many(:case_assignments) }
   it { is_expected.to belong_to(:casa_org) }
+  it { is_expected.to belong_to(:hearing_type).optional }
   it { is_expected.to validate_presence_of(:case_number) }
   it { is_expected.to validate_uniqueness_of(:case_number).case_insensitive }
   it { is_expected.to have_many(:volunteers).through(:case_assignments) }
@@ -75,7 +76,7 @@ RSpec.describe CasaCase do
 
     context "when volunteer has no case assignments" do
       it "returns all cases in volunteer's organization" do
-        expect(described_class.available_for_volunteer(volunteer)).to eq [casa_case2, casa_case3, casa_case1]
+        expect(described_class.available_for_volunteer(volunteer).ids).to eq [casa_case2.id, casa_case3.id, casa_case1.id]
       end
     end
 
