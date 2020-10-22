@@ -64,22 +64,14 @@ class DbPopulator
           email: email.call(klass, n),
           display_name: Faker::Name.name,
           password: SEED_PASSWORD,
-          password_confirmation: SEED_PASSWORD
+          password_confirmation: SEED_PASSWORD,
+          active: true
         }
-        if klass == "Volunteer" && random(30, random: rng) == 0
-          attributes.merge(active: false)
+        # Approximately 1 out of 30 volunteers should be set to inactive.
+        if klass == Volunteer && rng.rand(30) == 0
+          attributes[:active] = false
         end
         klass.create!(attributes)
-      end
-    end
-
-    set_some_volunteers_inactive = -> do
-      volunteers = Volunteer.all.to_a
-      inactive_count = volunteers.size / 30
-      inactive_volunteers = volunteers.sample(inactive_count, random: rng)
-      inactive_volunteers.each do |v|
-        v.active = false
-        v.save!
       end
     end
 
@@ -88,7 +80,6 @@ class DbPopulator
     create_users_of_type.call(Volunteer, options.volunteer_count)
     supervisors = Supervisor.all.to_a
     Volunteer.all.each { |v| v.supervisor = supervisors.sample(random: rng) }
-    set_some_volunteers_inactive.call
   end
 
   def generate_case_number

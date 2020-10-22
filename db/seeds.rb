@@ -62,7 +62,7 @@ class SeederMain
     # The User is destroyed as a result of destroying the CasaOrg.
     [SupervisorVolunteer, CaseContact, CasaOrg, AllCasaAdmin, ContactTypeGroup, ContactType].each { |klass| klass.destroy_all }
     non_empty_classes = active_record_classes.select { |klass| klass.count > 0 }
-    unless non_empty_classes.empty?
+    if non_empty_classes.any?
       raise "destroy_all did not result in the following classes being empty: #{non_empty_classes.join(", ")}"
     end
   end
