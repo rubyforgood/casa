@@ -1,4 +1,14 @@
 /* global $ */
+var defineCaseContactsTable  = function () {
+  $('table#case_contacts').DataTable(
+    {
+      scrollX: true,
+      searching: false,
+      order: [[0, 'desc']]
+    }
+  )
+}
+
 $('document').ready(() => {
   $.fn.dataTable.ext.search.push(
     function (settings, data, dataIndex) {
@@ -78,14 +88,7 @@ $('document').ready(() => {
       searching: false
     }
   )
-
-  $('table#case_contacts').DataTable(
-    {
-      scrollX: true,
-      searching: false,
-      order: [[0, 'desc']]
-    }
-  )
+  defineCaseContactsTable()
 
   function filterOutUnassignedVolunteers (checked) {
     $('.supervisor-options').find('input[type="checkbox"]').not('#unassigned-vol-filter').each(function () {
@@ -113,3 +116,5 @@ $('document').ready(() => {
     volunteersTable.columns.adjust().draw()
   })
 })
+
+export { defineCaseContactsTable }
