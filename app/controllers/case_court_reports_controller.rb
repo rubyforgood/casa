@@ -14,7 +14,7 @@ class CaseCourtReportsController < ApplicationController
   def show
     unless @casa_case
       flash[:alert] = "Report #{params[:id]} is not found."
-      redirect_to(case_court_reports_path) && return
+      redirect_to(case_court_reports_path) and return # rubocop:disable Style/AndOr
     end
 
     respond_to do |format|
