@@ -19,9 +19,11 @@ gem "puma", "~> 5.0" # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "skylight" # automated performance testing https://www.skylight.io/
 gem "webpacker", "~> 5.2" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
+gem "image_processing", "~> 1.2" # Set of higher-level helper methods for image processing.
 
 gem "bootsnap", ">= 1.4.2", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "bugsnag" # tracking errors in prod
+gem "sablon" # Word document templating tool for Case Court Reports
 
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
@@ -31,7 +33,7 @@ group :development, :test do
   gem "pry-byebug"
   gem "rspec-rails", "~> 4.0.1"
   gem "shoulda-matchers"
-  gem "standard" # linter https://github.com/testdouble/standard
+  gem "standard", "~> 0.8" # linter https://github.com/testdouble/standard
   gem "cypress-on-rails", "~> 1.0"
 end
 
@@ -51,7 +53,7 @@ group :test do
   gem "capybara-screenshot"
   gem "rake"
   gem "selenium-webdriver"
-  gem "simplecov", "~> 0.19.0", require: false # pinned as a workaround for https://github.com/codeclimate/test-reporter/issues/418
+  gem "simplecov", "~> 0.17.1", require: false # 0.17.1 pinned as a workaround for https://github.com/codeclimate/test-reporter/issues/418
   gem "webdrivers", require: false # Easy installation and use of web drivers to run system tests with browsers; do not initially require as causes conflict with Docker setup
 end
 

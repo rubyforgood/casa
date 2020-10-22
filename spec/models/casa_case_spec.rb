@@ -107,4 +107,29 @@ RSpec.describe CasaCase do
       expect(casa_case.contact_types.reload).to match_array([type2])
     end
   end
+
+  describe "#clear_court_dates" do
+    context "when court date has passed" do
+      it "clears court date" do
+        casa_case = create(:casa_case, court_date: "2020-09-13 02:11:58")
+        casa_case.clear_court_dates
+
+        expect(casa_case.court_date).to eql nil
+      end
+
+      it "clears report due date" do
+        casa_case = create(:casa_case, court_date: "2020-09-13 02:11:58", court_report_due_date: "2020-09-13 02:11:58")
+        casa_case.clear_court_dates
+
+        expect(casa_case.court_report_due_date).to eql nil
+      end
+
+      it "sets court report as unsubmitted" do
+        casa_case = create(:casa_case, court_date: "2020-09-13 02:11:58", court_report_submitted: true)
+        casa_case.clear_court_dates
+
+        expect(casa_case.court_report_submitted).to eql false
+      end
+    end
+  end
 end

@@ -16,4 +16,12 @@ RSpec.describe CasaOrg, type: :model do
       expect(org.logo_url).to eq "foo.com"
     end
   end
+
+  describe "Attachment" do
+    it "is valid" do
+      subject.logo.attach(io: File.open("#{Rails.root}/spec/fixtures/company_logo.png"),
+                          filename: "company_logo.png", content_type: "logo/png")
+      expect(subject.logo).to be_attached
+    end
+  end
 end
