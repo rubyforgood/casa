@@ -3,18 +3,18 @@ require "rake"
 
 def empty_ar_classes
   ar_classes = [
-      AllCasaAdmin,
-      CasaAdmin,
-      CasaCase,
-      CasaOrg,
-      CaseAssignment,
-      CaseContact,
-      ContactType,
-      ContactTypeGroup,
-      Supervisor,
-      SupervisorVolunteer,
-      User,
-      Volunteer
+    AllCasaAdmin,
+    CasaAdmin,
+    CasaCase,
+    CasaOrg,
+    CaseAssignment,
+    CaseContact,
+    ContactType,
+    ContactTypeGroup,
+    Supervisor,
+    SupervisorVolunteer,
+    User,
+    Volunteer
   ]
   ar_classes.select { |klass| klass.count == 0 }.map(&:name)
 end
@@ -23,7 +23,7 @@ RSpec.describe "Seeds" do
   describe "test development DB" do
     before do
       Rails.application.load_tasks
-      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new('development'))
+      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("development"))
     end
 
     it "successfully populates all necessary tables" do
