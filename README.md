@@ -205,6 +205,8 @@ We have real users in production!
 
 If you represent a CASA organization which wants to use this, please contact us! polly@rubyforgood.org
 
+[Follow this Deployment Checklist](./DEPLOY_CHECKLIST.md)
+
 
 ### Error tracking
 
