@@ -1,4 +1,12 @@
 class EmancipationOption < ApplicationRecord
+  belongs_to :emancipation_category
+  has_and_belongs_to_many :casa_cases
+
+  validates :name, presence: true
+
+  def get_category
+    return emancipation_category.name
+  end
 end
 
 # == Schema Information

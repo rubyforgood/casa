@@ -1,4 +1,8 @@
 class EmancipationCategory < ApplicationRecord
+  has_many :emancipation_options, -> { where mutually_exclusive: true }
+  has_one  :emancipation_options, -> { where mutually_exclusive: false }
+  validates :name, presence: true
+  validates :mutually_exclusive, presence: true 
 end
 
 # == Schema Information
