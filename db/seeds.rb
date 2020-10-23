@@ -1,1 +1,22 @@
+# Emancipation Checklist Form Data
+categoryHousing = EmancipationCategory.create(name: "Youth has housing.", mutually_exclusive: true)
+EmancipationCategory.create(name: "Youth has income to achieve self-sufficiency.", mutually_exclusive: false)
+EmancipationCategory.create(name: "Youth has completed a budget.", mutually_exclusive: false)
+EmancipationCategory.create(name: "Youth is employed.", mutually_exclusive: true)
+EmancipationCategory.create(name: "Youth is attending an educational or vocational program.", mutually_exclusive: true)
+EmancipationCategory.create(name: "Youth has a high school diploma or equivalency.", mutually_exclusive: true)
+EmancipationCategory.create(name: "Youth has medical insurance.", mutually_exclusive: false)
+EmancipationCategory.create(name: "Youth can identify permanent family and/or adult connections.", mutually_exclusive: false)
+EmancipationCategory.create(name: "Youth is accessing community activities.", mutually_exclusive: false)
+EmancipationCategory.create(name: "Youth has all identifying documents.", mutually_exclusive: false)
+EmancipationCategory.create(name: "Youth has access to transportation.", mutually_exclusive: false)
+EmancipationCategory.create(name: "Youth has been or is involved in past or current juvenile cases.", mutually_exclusive: false)
+EmancipationCategory.create(name: "Youth has been or is involved in past or current adult criminal cases.", mutually_exclusive: false)
+EmancipationCategory.create(name: "Youth has been or is involved in civil or family cases.", mutually_exclusive: false)
+EmancipationCategory.create(name: "Youth has a bank account in good standing.", mutually_exclusive: false)
+EmancipationCategory.create(name: "Youth has obtained a copy of his/her/their credit report.", mutually_exclusive: false)
+EmancipationCategory.create(name: "Youth can identify his/her/their core values.", mutually_exclusive: false)
+EmancipationCategory.create(name: "Youth has completed the Ansell Casey Assessment.", mutually_exclusive: false)
+
+
 load(Rails.root.join("db", "seeds", "#{Rails.env.downcase}.rb"))
