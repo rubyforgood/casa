@@ -132,7 +132,7 @@
       <tbody>
       <% @volunteers.each do |volunteer| %>
         <tr>
-          <td data-search="<%= volunteer.past_names %>|<%= volunteer.display_name %>>
+          <td data-search="<%= volunteer.past_names %>|<%= volunteer.display_name %>">
               <%= link_to(volunteer.decorate.name, edit_volunteer_path(volunteer)) %>
               <% if !volunteer.made_contact_with_all_cases_in_days? %>
                 🕐
