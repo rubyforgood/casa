@@ -3,6 +3,10 @@ class EmancipationCategory < ApplicationRecord
   has_one  :emancipation_options, -> { where mutually_exclusive: false }
   validates :name, presence: true
   validates :mutually_exclusive, presence: true 
+
+  def addOption(optionName)
+    EmancipationOption.create(emancipation_category_id: self[:id], name: optionName)
+  end
 end
 
 # == Schema Information
