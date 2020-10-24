@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_20_095451) do
+ActiveRecord::Schema.define(version: 2020_10_24_121156) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -146,6 +146,14 @@ ActiveRecord::Schema.define(version: 2020_10_20_095451) do
     t.index ["contact_type_group_id"], name: "index_contact_types_on_contact_type_group_id"
   end
 
+  create_table "court_dates", force: :cascade do |t|
+    t.datetime "date", null: false
+    t.bigint "casa_case_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["casa_case_id"], name: "index_court_dates_on_casa_case_id"
+  end
+
   create_table "hearing_types", force: :cascade do |t|
     t.bigint "casa_org_id", null: false
     t.string "name", null: false
@@ -213,6 +221,7 @@ ActiveRecord::Schema.define(version: 2020_10_20_095451) do
   add_foreign_key "case_assignments", "users", column: "volunteer_id"
   add_foreign_key "case_contacts", "casa_cases"
   add_foreign_key "case_contacts", "users", column: "creator_id"
+  add_foreign_key "court_dates", "casa_cases"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"
   add_foreign_key "supervisor_volunteers", "users", column: "volunteer_id"
   add_foreign_key "users", "casa_orgs"
