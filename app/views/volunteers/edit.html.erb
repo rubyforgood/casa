@@ -85,7 +85,7 @@
               <% if @volunteer.active? && assignment.casa_case.active? %>
                 Volunteer is <span class="badge badge-success text-uppercase display-1">Active</span>
               <% elsif @volunteer.active? %>
-                Case has been inactivated.
+                Case was deactivated on: <%= assignment.casa_case.updated_at.strftime("%m-%d-%Y") %>
               <% else %>
                 Deactivated
               <% end %>
