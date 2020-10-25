@@ -16,7 +16,9 @@
           <%= menu_item(label: "Supervisors", path: supervisors_path, visible: policy(Supervisor).index?) %>
           <%= menu_item(label: "Volunteers", path: volunteers_path, visible: policy(Volunteer).index?) %>
           <%= menu_item(label: cases_index_title, path: casa_cases_path) %>
-          <%= menu_item(label: "Case Contacts", path: case_contacts_path) %>
+          <% if current_user.volunteer? %>
+            <%= menu_item(label: "Case Contacts", path: case_contacts_path) %>
+          <% end %>
           <%= menu_item(label: "Admins", path: casa_admins_path, visible: policy(CasaAdmin).index?) %>
         <% end %>
       </div>
