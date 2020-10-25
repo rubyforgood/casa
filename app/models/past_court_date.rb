@@ -1,12 +1,10 @@
-class CourtDate < ApplicationRecord
+class PastCourtDate < ApplicationRecord
   belongs_to :casa_case
-
-  scope :passed, -> { where("date < ?", Time.now)}
 end
 
 # == Schema Information
 #
-# Table name: court_dates
+# Table name: past_court_dates
 #
 #  id           :bigint           not null, primary key
 #  date         :datetime         not null
@@ -16,7 +14,7 @@ end
 #
 # Indexes
 #
-#  index_court_dates_on_casa_case_id  (casa_case_id)
+#  index_past_court_dates_on_casa_case_id  (casa_case_id)
 #
 # Foreign Keys
 #
