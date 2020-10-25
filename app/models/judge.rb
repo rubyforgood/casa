@@ -1,4 +1,4 @@
-class HearingType < ApplicationRecord
+class Judge < ApplicationRecord
   has_paper_trail
 
   belongs_to :casa_org
@@ -11,14 +11,20 @@ end
 
 # == Schema Information
 #
-# Table name: hearing_types
+# Table name: judges
 #
 #  id          :bigint           not null, primary key
-#  active      :boolean          default(TRUE), not null
-#  name        :string           not null
+#  active      :boolean          default(TRUE)
+#  name        :string
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
 #  casa_org_id :bigint           not null
 #
 # Indexes
 #
-#  index_hearing_types_on_casa_org_id  (casa_org_id)
+#  index_judges_on_casa_org_id  (casa_org_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (casa_org_id => casa_orgs.id)
 #

@@ -52,7 +52,6 @@
             <%= current_user.email %>
           </li>
         <% end %>
-
         <% if all_casa_admin_signed_in? %>
           <div class="list-group-item">
             <%= current_all_casa_admin.email %>
@@ -60,6 +59,7 @@
           <%= link_to "Edit Profile", edit_all_casa_admins_path, class: "list-group-item" %>
         <% end %>
         <%= session_link %>
+        <li></li>
       </div>
     </div>
   </div>

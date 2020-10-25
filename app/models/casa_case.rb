@@ -5,6 +5,7 @@ class CasaCase < ApplicationRecord
   has_many(:volunteers, through: :case_assignments, source: :volunteer, class_name: "User")
   has_many :case_contacts, dependent: :destroy
   validates :case_number, uniqueness: {case_sensitive: false}, presence: true
+  belongs_to :hearing_type, optional: true
   belongs_to :casa_org
 
   has_many :casa_case_contact_types
@@ -39,6 +40,8 @@ class CasaCase < ApplicationRecord
     where("court_date < ?", Time.now)
   }
 
+  delegate :name, to: :hearing_type, prefix: true, allow_nil: true
+
   def self.available_for_volunteer(volunteer)
     ids = connection.select_values(%{
       SELECT casa_cases.id
@@ -70,12 +73,9 @@ class CasaCase < ApplicationRecord
   end
 
   def clear_court_dates
-    
-  update(court_date: nil, 
-    court_report_due_date: nil,
-    court_report_submitted: false
-  ) 
-  
+    update(court_date: nil,
+           court_report_due_date: nil,
+           court_report_submitted: false)
   end
 
   def deactivate
@@ -125,11 +125,13 @@ end
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  casa_org_id            :bigint           not null
+#  hearing_type_id        :bigint
 #
 # Indexes
 #
-#  index_casa_cases_on_casa_org_id  (casa_org_id)
-#  index_casa_cases_on_case_number  (case_number) UNIQUE
+#  index_casa_cases_on_casa_org_id      (casa_org_id)
+#  index_casa_cases_on_case_number      (case_number) UNIQUE
+#  index_casa_cases_on_hearing_type_id  (hearing_type_id)
 #
 # Foreign Keys
 #

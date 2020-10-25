@@ -1,6 +1,6 @@
 # CASA Project & Organization Overview
 
-[![Build Status](https://travis-ci.com/rubyforgood/casa.svg?branch=master)](https://travis-ci.com/rubyforgood/casa)
+[![Build Status](https://travis-ci.com/rubyforgood/casa.svg?branch=main)](https://travis-ci.com/rubyforgood/casa)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=rubyforgood/casa)](https://dependabot.com)
 [![Maintainability](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/maintainability)](https://codeclimate.com/github/rubyforgood/casa/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/test_coverage)](https://codeclimate.com/github/rubyforgood/casa/test_coverage)
@@ -137,7 +137,7 @@ database. Run the tasks manually by:
 bundle exec rake after_party:run
 ```
 
-Alternatively, every time you pull the master branch, run:
+Alternatively, every time you pull the main branch, run:
 ```
 bin/update
 ```
@@ -204,6 +204,8 @@ https://casa-r4g-staging.herokuapp.com/
 We have real users in production! 
 
 If you represent a CASA organization which wants to use this, please contact us! polly@rubyforgood.org
+
+[Follow this Deployment Checklist](./DEPLOY_CHECKLIST.md)
 
 
 ### Error tracking
