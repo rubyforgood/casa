@@ -35,7 +35,7 @@ class CasaCasePolicy
   end
 
   def update_case_status?
-    user.is_a?(Supervisor)
+    user.is_a?(CasaAdmin)
   end
 
   def update_court_date?

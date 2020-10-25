@@ -83,32 +83,17 @@ RSpec.describe "supervisor edits case", type: :system do
     expect(page).to have_text("Court report due date was not a valid date.")
   end
 
-  it "deactivates a case" do
+  it "views deactivated case" do
+    casa_case.deactivate
     visit edit_casa_case_path(casa_case)
 
-    click_on "Deactivate CASA Case"
-
-    expect(page).to have_text("Case #{casa_case.case_number} has been deactivated.")
     expect(page).to have_text("This case has been inactivated by a supervisor.")
-    expect(page).to have_text("Reactivate CASA Case")
-    expect(page).to_not have_text("Court Date")
-    expect(page).to_not have_text("Court Report Due Date")
-    expect(page).to_not have_text("Day")
-    expect(page).to_not have_text("Month")
-    expect(page).to_not have_text("Year")
-  end
-
-  it "reactivates a case" do
-    visit edit_casa_case_path(casa_case)
-    click_on "Deactivate CASA Case"
-    click_on "Reactivate CASA Case"
-
-    expect(page).to have_text("Case #{casa_case.case_number} has been reactivated.")
-    expect(page).to have_text("Deactivate CASA Case")
-    expect(page).to have_text("Court Date")
-    expect(page).to have_text("Court Report Due Date")
-    expect(page).to have_text("Day")
-    expect(page).to have_text("Month")
-    expect(page).to have_text("Year")
+    expect(page).not_to have_text("Court Date")
+    expect(page).not_to have_text("Court Report Due Date")
+    expect(page).not_to have_text("Day")
+    expect(page).not_to have_text("Month")
+    expect(page).not_to have_text("Year")
+    expect(page).not_to have_text("Reactivate Case")
+    expect(page).not_to have_text("Update Casa Case")
   end
 end
