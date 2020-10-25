@@ -35,6 +35,7 @@ RSpec.describe "volunteer edits case", type: :system do
     expect(page).not_to have_text("Day")
     expect(page).not_to have_text("Month")
     expect(page).not_to have_text("Year")
+    expect(page).not_to have_text("Deactivate Case")
 
     visit casa_case_path(casa_case)
     expect(page).to have_text("Court Report Submission: Submitted")
