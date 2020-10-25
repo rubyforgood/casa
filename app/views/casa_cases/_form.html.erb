@@ -22,6 +22,18 @@
           { class: "form-control" }
         ) %>
       </div>
+
+      <div class="field form-group">
+        <%= form.label :judge_id %>
+        <%= form.collection_select(
+          :judge_id,
+          Judge.for_organization(current_organization),
+          :id, :name,
+          { include_hidden: false, prompt: "-Select Judge-" },
+          { class: "form-control" }
+        ) %>
+      </div>
+
       <div class="field form-group">
         <% if policy(casa_case).update_court_date? %>
           <%= form.label :court_date, "Next Court Date" %>
