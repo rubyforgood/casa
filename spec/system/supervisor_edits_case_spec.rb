@@ -87,7 +87,7 @@ RSpec.describe "supervisor edits case", type: :system do
     casa_case.deactivate
     visit edit_casa_case_path(casa_case)
 
-    expect(page).to have_text("This case has been inactivated by a supervisor.")
+    expect(page).to have_text("This case has been inactivated by an administrator.")
     expect(page).not_to have_text("Court Date")
     expect(page).not_to have_text("Court Report Due Date")
     expect(page).not_to have_text("Day")
