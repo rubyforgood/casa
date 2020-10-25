@@ -67,4 +67,17 @@ RSpec.describe "Admin: Editing Volunteers", type: :system do
 
     expect(inactive_volunteer.reload).to be_active
   end
+
+  context "with a deactivated case" do
+    before do
+      deactivated_casa_case = create(:casa_case, active: false, volunteers: [volunteer])
+    end
+
+    it "displays inactive message" do
+      sign_in admin
+
+      visit edit_volunteer_path(volunteer)
+      expect(page).to have_text "Case has been inactivated."
+    end
+  end
 end
