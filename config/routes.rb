@@ -74,7 +74,12 @@ Rails.application.routes.draw do
 
   namespace :all_casa_admins do
     resources :casa_orgs, only: [:new, :create, :show] do
-      resources :casa_admins, only: [:new, :create]
+      resources :casa_admins, only: [:new, :create, :edit, :update] do
+        member do
+          patch :deactivate
+          patch :activate
+        end
+      end
     end
   end
 
