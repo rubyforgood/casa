@@ -23,23 +23,23 @@ RSpec.describe "/all_casa_admins/casa_orgs/:casa_org_id/casa_admins" do
 
   describe "PATCH /update" do
     let(:email) { "casa_admin@example.com" }
-    let(:casa_admin) { CasaAdmin.new}
+    let(:casa_admin) { CasaAdmin.new }
 
     context "when current casa admin is editing another casa admin's profile" do
       it "should successfully update another casa admin's email" do
-        casa_admin.update(:email => "new_email@example.com")
+        casa_admin.update(email: "new_email@example.com")
 
         expect(casa_admin.email).to eq("new_email@example.com")
       end
       it "should successfully deactivate another casa admin's profile" do
-        casa_admin.active == true
+        casa_admin.active = true
         casa_admin.deactivate
 
         expect(casa_admin.active).to eq(false)
       end
 
       it "should successfully activate another casa admin's profile" do
-        casa_admin.active == false
+        casa_admin.active = false
         casa_admin.activate
 
         expect(casa_admin.active).to eq(true)
