@@ -18,12 +18,11 @@ class CaseContactReportsController < ApplicationController
   private
 
   def report_params
-    params.permit(
-      :start_date, :end_date, :contact_made, :has_transitioned, :want_driving_reimbursement,
+    params.require(:report).permit(:start_date, :end_date,
+      :contact_made, :has_transitioned, :want_driving_reimbursement,
       {contact_type_ids: []},
       {contact_type_group_ids: []},
       {creator_ids: []},
-      {supervisor_ids: []}
-    )
+      {supervisor_ids: []})
   end
 end
