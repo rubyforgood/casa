@@ -3,12 +3,14 @@
 <div class="row">
   <div class="col-sm-12 form-header">
     <h1><%= @casa_case.decorate.transition_aged_youth_only_icon %> CASA Case Details</h1>
-    <%- if policy(:case_contact).new? %>
+    <%- if policy(:case_contact).new? & @casa_case.active? %>
       <%= link_to "New Case Contact",
                   new_case_contact_path(case_contact: {casa_case_id: @casa_case.id}),
                   class: "btn btn-primary" %>
     <%- end %>
-    <%= link_to 'Edit Case Details', edit_casa_case_path(@casa_case), class: "btn btn-primary" %>
+    <% if @casa_case.active? %>
+      <%= link_to 'Edit Case Details', edit_casa_case_path(@casa_case), class: "btn btn-primary" %>
+    <% end %>
   </div>
 </div>
 
