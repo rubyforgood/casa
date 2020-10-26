@@ -80,7 +80,7 @@ class CasaCase < ApplicationRecord
 
   def deactivate
     update(active: false)
-    case_assignments.map {|ca| ca.update(is_active: false) }
+    case_assignments.map { |ca| ca.update(is_active: false) }
   end
 
   def reactivate
