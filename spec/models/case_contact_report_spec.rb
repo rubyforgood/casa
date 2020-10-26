@@ -181,9 +181,8 @@ RSpec.describe CaseContactReport, type: :model do
 
         contact = create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id, contact_types: [court]})
         create(:case_contact, {occurred_at: 100.days.ago, creator_id: volunteer2.id, contact_types: [school]})
-
         create(:case_contact, {occurred_at: 100.days.ago})
-        report = CaseContactReport.new({contact_type: "Court"})
+        report = CaseContactReport.new({contact_type: [court.id]})
         contacts = report.case_contacts
         expect(contacts.length).to eq(1)
         expect(contacts).to eq([contact])
@@ -264,15 +263,15 @@ RSpec.describe CaseContactReport, type: :model do
         contact6 = create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, contact_types: [therapist])
 
         aggregate_failures do
-          report_1 = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, has_transitioned: true, contact_type: "Court"})
+          report_1 = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, has_transitioned: true, contact_type: [court.id]})
           expect(report_1.case_contacts.length).to eq(2)
           expect((report_1.case_contacts - [contact1, contact5]).empty?).to eq(true)
 
-          report_2 = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, has_transitioned: true, contact_type: "School"})
+          report_2 = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, has_transitioned: true, contact_type: [school.id]})
           expect(report_2.case_contacts.length).to eq(2)
           expect((report_2.case_contacts - [contact4, contact5]).empty?).to eq(true)
 
-          report_3 = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, has_transitioned: true, contact_type: "Therapist"})
+          report_3 = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, has_transitioned: true, contact_type: [therapist.id]})
           expect(report_3.case_contacts.length).to eq(1)
           expect(report_3.case_contacts.include?(contact6)).to eq(true)
         end

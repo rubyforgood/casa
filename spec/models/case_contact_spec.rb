@@ -99,4 +99,24 @@ RSpec.describe CaseContact, type: :model do
       expect(case_contact.contact_types.reload).to match_array([type2])
     end
   end
+
+  describe 'scopes' do
+    describe '.contact_type' do
+      it 'returns case contacts filtered by contact type id' do
+        group           = create(:contact_type_group)
+        youth_type      = create(:contact_type, name: 'Youth', contact_type_group: group)
+        supervisor_type = create(:contact_type, name: 'Supervisor', contact_type_group: group)
+        parent_type     = create(:contact_type, name: 'Parent', contact_type_group: group)
+
+        case_contacts_to_match = [
+          create(:case_contact, contact_types: [youth_type, supervisor_type]),
+          create(:case_contact, contact_types: [supervisor_type]),
+          create(:case_contact, contact_types: [youth_type, parent_type])
+        ]
+        create(:case_contact, contact_types: [parent_type])
+
+        expect(CaseContact.contact_type([youth_type.id, supervisor_type.id])).to match_array(case_contacts_to_match)
+      end
+    end
+  end
 end
