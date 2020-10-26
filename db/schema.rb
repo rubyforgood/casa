@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_24_003821) do
+ActiveRecord::Schema.define(version: 2020_10_25_162142) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,9 +68,11 @@ ActiveRecord::Schema.define(version: 2020_10_24_003821) do
     t.datetime "court_date"
     t.datetime "court_report_due_date"
     t.bigint "hearing_type_id"
+    t.bigint "judge_id"
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
     t.index ["case_number"], name: "index_casa_cases_on_case_number", unique: true
     t.index ["hearing_type_id"], name: "index_casa_cases_on_hearing_type_id"
+    t.index ["judge_id"], name: "index_casa_cases_on_judge_id"
   end
 
   create_table "casa_org_logos", force: :cascade do |t|
