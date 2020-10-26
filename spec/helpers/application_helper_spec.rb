@@ -29,6 +29,13 @@ describe ApplicationHelper, type: :helper do
       expect(helper.session_link).to match(destroy_user_session_path)
     end
 
+    it "links to the sign_out page when all_casa_admin is signed in" do
+      allow(helper).to receive(:user_signed_in?).and_return(false)
+      allow(helper).to receive(:all_casa_admin_signed_in?).and_return(true)
+
+      expect(helper.session_link).to match(destroy_all_casa_admin_session_path)
+    end
+
     it "links to the sign_in page when user is not signed in" do
       allow(helper).to receive(:user_signed_in?).and_return(false)
       allow(helper).to receive(:all_casa_admin_signed_in?).and_return(false)
