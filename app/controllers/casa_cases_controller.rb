@@ -58,6 +58,28 @@ class CasaCasesController < ApplicationController
     end
   end
 
+  def deactivate
+    casa_case = CasaCase.find(params[:id])
+    # TODO: authorize action with pundit
+    flash_message = "Case #{casa_case.case_number} has been deactivated."
+    if casa_case.deactivate
+      redirect_to edit_casa_case_path(casa_case), notice: flash_message
+    else
+      render :edit
+    end
+  end
+
+  def reactivate
+    casa_case = CasaCase.find(params[:id])
+    # TODO: authorize action w/ Pundit
+    flash_message = "Case #{casa_case.case_number} has been reactivated."
+    if casa_case.reactivate
+      redirect_to edit_casa_case_path(casa_case), notice: flash_message
+    else
+      render :edit
+    end
+  end
+
   # DELETE /casa_cases/1
   # DELETE /casa_cases/1.json
   def destroy

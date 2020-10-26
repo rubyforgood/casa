@@ -80,6 +80,15 @@ class CasaCase < ApplicationRecord
            court_report_submitted: false)
   end
 
+  def deactivate
+    update(active: false)
+    case_assignments.map { |ca| ca.update(is_active: false) }
+  end
+
+  def reactivate
+    update(active: true)
+  end
+
   private
 
   def validate_date(day, month, year)
@@ -108,6 +117,7 @@ end
 # Table name: casa_cases
 #
 #  id                     :bigint           not null, primary key
+#  active                 :boolean          default(TRUE), not null
 #  birth_month_year_youth :datetime
 #  case_number            :string           not null
 #  court_date             :datetime

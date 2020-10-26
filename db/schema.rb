@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 2020_10_25_162142) do
     t.boolean "court_report_submitted", default: false, null: false
     t.datetime "court_date"
     t.datetime "court_report_due_date"
+    t.boolean "active", default: true, null: false
     t.bigint "hearing_type_id"
     t.bigint "judge_id"
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
