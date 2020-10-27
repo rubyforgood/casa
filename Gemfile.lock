@@ -77,7 +77,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bindex (0.8.1)
-    bootsnap (1.4.8)
+    bootsnap (1.4.9)
       msgpack (~> 1.0)
     brakeman (4.10.0)
     bugsnag (6.17.0)
