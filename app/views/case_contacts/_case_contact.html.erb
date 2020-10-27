@@ -42,6 +42,21 @@
       <%= contact.creator&.display_name %>
     <% end %>
   </td>
+  <td class="read-more">
+    <span class="mobile-label">Notes</span>
+    <%- if contact.notes && contact.notes.length > CaseContactDecorator::NOTES_WORD_LIMIT %>
+      <div class="limited-notes" style="display: block;">
+        <%= contact.decorate.notes %>
+        <span><a role="button" href="#" onClick="moreText(event)">Read more</a></span>
+      </div>
+      <div class="full-notes" style="display: none;">
+        <%= contact.notes %>
+        <span><a role="button" href="#" onClick="lessText(event)">Hide</a></span>
+      </div>
+    <%- else %>
+      <%= contact.notes %>
+    <%- end %>
+  </td>
   <td>
     <% if Pundit.policy(current_user, contact).update? %>
       <% if contact.created_in_current_quarter? %>
@@ -52,3 +67,22 @@
     <% end %>
   </td>
 </tr>
+
+<script type="text/javascript">
+
+  function moreText(event) {
+    event.preventDefault();
+    const table_cell = event.target.closest('td');
+
+    table_cell.querySelectorAll('.full-notes')[0].style.display = 'block';
+    table_cell.querySelectorAll('.limited-notes')[0].style.display = 'none';
+  }
+
+  function lessText(event) {
+    event.preventDefault();
+    const table_cell = event.target.closest('td');
+
+    table_cell.querySelectorAll('.full-notes')[0].style.display = 'none';
+    table_cell.querySelectorAll('.limited-notes')[0].style.display = 'block';
+  }
+</script>
