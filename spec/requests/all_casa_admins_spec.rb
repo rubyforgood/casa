@@ -45,14 +45,14 @@ RSpec.describe "/all_casa_admins", type: :request do
     before { sign_in admin }
 
     context "with valid parameters" do
-      let(:params) {
+      let(:params) do
         {
           all_casa_admin: {
             password: "newpassword",
             password_confirmation: "newpassword"
           }
         }
-      }
+      end
 
       it "updates the all_casa_admin password" do
         patch update_password_all_casa_admins_path, params: params
@@ -62,14 +62,14 @@ RSpec.describe "/all_casa_admins", type: :request do
     end
 
     context "with invalid parameters" do
-      let(:params) {
+      let(:params) do
         {
           all_casa_admin: {
             password: "newpassword",
             password_confirmation: "badmatch"
           }
         }
-      }
+      end
 
       it "does not update the all_casa_admin password" do
         patch update_password_all_casa_admins_path, params: params

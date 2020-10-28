@@ -107,6 +107,7 @@ RSpec.describe "/contact_type_groups", type: :request do
 
   describe "PUT /contact_type_groups/:id" do
     let(:params) { {contact_type_group: {name: "New Group Name", active: false}} }
+
     context "logged in as admin user" do
       it "can successfully update a contact type group" do
         casa_org = create(:casa_org)

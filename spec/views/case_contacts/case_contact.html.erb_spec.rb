@@ -2,6 +2,7 @@ require "rails_helper"
 
 describe "case_contacts/case_contact" do
   let(:user) { build_stubbed(:casa_admin) }
+
   before do
     enable_pundit(view, user)
     allow(view).to receive(:current_user).and_return(user)

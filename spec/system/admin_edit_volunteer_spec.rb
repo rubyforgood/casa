@@ -27,6 +27,7 @@ RSpec.describe "Admin: Editing Volunteers", type: :system do
         click_on "Submit"
         expect(page).to have_text "already been taken"
       end
+
       it "shows error message for empty fields" do
         fill_in "volunteer_email", with: ""
         fill_in "volunteer_display_name", with: ""

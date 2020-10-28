@@ -7,6 +7,7 @@ RSpec.describe "/case_contact_reports", type: :request do
     travel_to Time.zone.local(2020, 1, 1)
     sign_in user
   end
+
   after { travel_back }
 
   describe "GET /case_contact_reports" do
@@ -21,12 +22,12 @@ RSpec.describe "/case_contact_reports", type: :request do
 
     shared_examples "can view reports" do
       context "with start_date and end_date" do
-        let(:case_contact_report_params) {
+        let(:case_contact_report_params) do
           {
             start_date: 1.month.ago,
             end_date: Date.today
           }
-        }
+        end
 
         it "renders a csv file to download" do
           get case_contact_reports_url(format: :csv), params: {report: {start_date: 1.month.ago, end_date: Date.today}}

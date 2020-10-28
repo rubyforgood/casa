@@ -11,6 +11,7 @@ describe "casa_cases/edit" do
 
   context "when accessed by a volunteer" do
     let(:user) { build_stubbed(:volunteer, casa_org: organization) }
+
     it "does not include volunteer assignment" do
       assign :casa_case, create(:casa_case, casa_org: organization)
 

@@ -34,6 +34,7 @@ RSpec.describe "/judges", type: :request do
 
   describe "POST /judges" do
     let(:params) { {judge: {name: "Joe Judge", active: true}} }
+
     context "logged in as admin user" do
       it "can successfully create a judge" do
         casa_org = create(:casa_org)
@@ -109,6 +110,7 @@ RSpec.describe "/judges", type: :request do
   describe "PUT /judges/:id" do
     let(:judge) { create(:judge) }
     let(:params) { {judge: {name: "New Name", judge_id: judge.id, active: false}} }
+
     context "logged in as admin user" do
       it "can successfully update a judge" do
         casa_org = create(:casa_org)

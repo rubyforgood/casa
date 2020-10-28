@@ -14,6 +14,7 @@ describe "casa_cases/new" do
 
   context "while signed in as admin" do
     let(:user) { build_stubbed(:casa_admin) }
+
     before do
       sign_in user
     end
@@ -24,6 +25,7 @@ describe "casa_cases/new" do
 
   context "while signed in as supervisor" do
     let(:user) { build_stubbed(:supervisor) }
+
     before do
       sign_in user
     end

@@ -2,6 +2,7 @@ require "rails_helper"
 
 describe "volunteers" do
   subject { render template: "volunteers/index" }
+
   let(:user) { build_stubbed :volunteer }
   let(:volunteer) { create :volunteer }
 

@@ -1,10 +1,11 @@
 require "rails_helper"
 
 RSpec.describe ApplicationPolicy do
+  subject { described_class }
+
   let(:casa_admin) { create(:casa_admin) }
   let(:supervisor) { create(:supervisor) }
   let(:volunteer) { create(:volunteer) }
-  subject { described_class }
 
   permissions :see_reports_page? do
     it "allows casa_admins" do

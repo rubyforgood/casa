@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe DashboardPolicy do
+  subject { described_class }
+
   let(:user) { create(:user) }
   let(:casa_admin) { create(:casa_admin) }
   let(:supervisor) { create(:supervisor) }
   let(:volunteer) { create(:volunteer) }
-  subject { described_class }
 
   permissions :show? do
     it "permits user to show" do

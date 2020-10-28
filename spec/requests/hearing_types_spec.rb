@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "/hearing_types", type: :request do
   describe "GET /hearing_types/new" do
     context "when logged in as admin user" do
-      it "should allow access to hearing type create page" do
+      it "allows access to hearing type create page" do
         sign_in_as_admin
 
         get new_hearing_type_path
@@ -13,7 +13,7 @@ RSpec.describe "/hearing_types", type: :request do
     end
 
     context "when logged in as a non-admin user" do
-      it "should not allow access to hearing type create page" do
+      it "does not allow access to hearing type create page" do
         sign_in_as_volunteer
 
         get new_hearing_type_path
@@ -24,7 +24,7 @@ RSpec.describe "/hearing_types", type: :request do
     end
 
     context "when an unauthenticated request is made" do
-      it "should not allow access to hearing type create page" do
+      it "does not allow access to hearing type create page" do
         get new_hearing_type_path
 
         expect(response).to redirect_to new_user_session_path
@@ -34,8 +34,9 @@ RSpec.describe "/hearing_types", type: :request do
 
   describe "POST /hearing_types" do
     let(:params) { {hearing_type: {name: "New Hearing", active: true}} }
+
     context "when logged in as admin user" do
-      it "should successfully create a hearing type" do
+      it "successfully create a hearing type" do
         casa_org = create(:casa_org)
         sign_in create(:casa_admin, casa_org: casa_org)
 
@@ -53,7 +54,7 @@ RSpec.describe "/hearing_types", type: :request do
     end
 
     context "when logged in as a non-admin user" do
-      it "should not create a hearing type" do
+      it "does not create a hearing type" do
         sign_in_as_volunteer
 
         post hearing_types_path, params: params
@@ -64,7 +65,7 @@ RSpec.describe "/hearing_types", type: :request do
     end
 
     context "when an unauthenticated request is made" do
-      it "should not create a hearing type" do
+      it "does not create a hearing type" do
         post hearing_types_path, params: params
 
         expect(response).to redirect_to new_user_session_path
@@ -74,7 +75,7 @@ RSpec.describe "/hearing_types", type: :request do
 
   describe "GET /hearing_types/:id/edit" do
     context "when logged in as admin user" do
-      it "should allow access to hearing type edit page" do
+      it "allows access to hearing type edit page" do
         sign_in_as_admin
 
         get edit_hearing_type_path(create(:hearing_type))
@@ -84,7 +85,7 @@ RSpec.describe "/hearing_types", type: :request do
     end
 
     context "when logged in as a non-admin user" do
-      it "should not allow access to hearing type edit page" do
+      it "does not allow access to hearing type edit page" do
         sign_in_as_volunteer
 
         get edit_hearing_type_path(create(:hearing_type))
@@ -95,7 +96,7 @@ RSpec.describe "/hearing_types", type: :request do
     end
 
     context "when an unauthenticated request is made" do
-      it "should not allow access to hearing type edit page" do
+      it "does not allow access to hearing type edit page" do
         get edit_hearing_type_path(create(:hearing_type))
 
         expect(response).to redirect_to new_user_session_path
@@ -108,7 +109,7 @@ RSpec.describe "/hearing_types", type: :request do
     let(:params) { {hearing_type: {name: "New Name", active: true}} }
 
     context "when logged in as admin user" do
-      it "should successfully update hearing type with active status" do
+      it "successfully update hearing type with active status" do
         sign_in create(:casa_admin, casa_org: casa_org)
 
         hearing_type = create(:hearing_type)
@@ -123,7 +124,7 @@ RSpec.describe "/hearing_types", type: :request do
         expect(response.request.flash[:notice]).to eq "Hearing Type was successfully updated."
       end
 
-      it "should successfully update hearing type with inactive status" do
+      it "successfully update hearing type with inactive status" do
         sign_in create(:casa_admin, casa_org: casa_org)
 
         hearing_type = create(:hearing_type)
@@ -141,7 +142,7 @@ RSpec.describe "/hearing_types", type: :request do
     end
 
     context "when logged in as a non-admin user" do
-      it "should not update hearing type" do
+      it "does not update hearing type" do
         sign_in_as_volunteer
 
         put hearing_type_path(create(:hearing_type)), params: params
@@ -152,7 +153,7 @@ RSpec.describe "/hearing_types", type: :request do
     end
 
     context "when an unauthenticated request is made" do
-      it "should not update hearing type" do
+      it "does not update hearing type" do
         put hearing_type_path(create(:hearing_type)), params: params
 
         expect(response).to redirect_to new_user_session_path

@@ -4,6 +4,7 @@ describe "all casa admins with casa orgs", type: :system do
   context "as an all casa admin" do
     let(:all_casa_admin) { create(:all_casa_admin, email: "theexample@example.com") }
     let(:current_organization) { create(:casa_org) }
+
     before { sign_in all_casa_admin }
 
     it "lets admin navigate to an organization and see casa_admins" do
