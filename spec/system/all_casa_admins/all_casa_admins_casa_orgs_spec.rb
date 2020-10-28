@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "all casa admins with casa orgs", type: :system do
+RSpec.describe "all casa admins with casa orgs", type: :system do
   context "as an all casa admin" do
     let(:all_casa_admin) { create(:all_casa_admin, email: "theexample@example.com") }
     let(:current_organization) { create(:casa_org) }

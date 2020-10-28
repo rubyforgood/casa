@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "case_contacts/index" do
+RSpec.describe "case_contacts/index" do
   let(:user) { build_stubbed(:volunteer) }
 
   before do

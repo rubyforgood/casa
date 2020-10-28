@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "case_contacts/case_contact" do
+RSpec.describe "case_contacts/case_contact" do
   let(:user) { build_stubbed(:casa_admin) }
 
   before do

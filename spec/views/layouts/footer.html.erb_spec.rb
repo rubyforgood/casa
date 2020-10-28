@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "layout/footer", type: :view do
+RSpec.describe "layout/footer", type: :view do
   context "when not logged in" do
     it "renders report issue link on the footer" do
       render partial: "layouts/footers/not_logged_in"

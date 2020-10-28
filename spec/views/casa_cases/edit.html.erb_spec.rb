@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "casa_cases/edit" do
+RSpec.describe "casa_cases/edit" do
   let(:organization) { create(:casa_org) }
 
   before do
