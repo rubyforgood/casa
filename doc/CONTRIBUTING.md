@@ -8,7 +8,7 @@ If you don't have any questions, the issue is clear, and no one has commented sa
 
 Here are the basic steps to submit a pull request.
 
-1. Claim an issue on [our issue tracker][issues] by commenting on the issue saying you are working on it. If the issue doesn't exist yet, open it.
+1. Claim an issue on [our issue tracker][issues] by commenting on the issue saying you are working on it. If the issue doesn't exist yet, open it. Please only claim one at a time.
 
 1. Fork the [repo] and clone your forked repo locally on your machine.
 
@@ -19,6 +19,12 @@ Here are the basic steps to submit a pull request.
 1. Add a test for your change. If you are adding functionality or fixing a  bug, you should add a test!
 
 1. Make the test pass.
+
+1. Run linters and fix any linting errors they brings up.
+   1. `bundle exec standardrb --fix` is required by CI
+   1. But you should also be a good citizen and run:
+      1. `bundle exec erblint --lint-all --autocorrect`
+      1. `yarn lint:fix`
 
 1. Push to your fork and submit a pull request. Include the issue number (ex. `Resolves #1`) in the PR description.
 
@@ -31,6 +37,15 @@ Some things that will increase the chance that your pull request is accepted:
 * Use Rails idioms and helpers
 * Include tests that fail without your code, and pass with it
 * Update the documentation, the surrounding one, examples elsewhere, guides, whatever is affected by your contribution
+* Ensure that the following all pass locally:
+```
+bundle exec brakeman
+bundle exec standardrb
+bundle exec rake
+## to run cypress tests
+bundle exec rails s -p 4040
+npm run test:cypress
+```
 
 If you are wondering how to keep your fork in sync with the main [repo], follow this [github guide](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork).
 
