@@ -1,5 +1,5 @@
 /* global $ */
-var defineCaseContactsTable  = function () {
+var defineCaseContactsTable = function () {
   $('table#case_contacts').DataTable(
     {
       scrollX: true,
