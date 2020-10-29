@@ -1,10 +1,11 @@
 require "rails_helper"
 
 RSpec.describe VolunteerPolicy do
+  subject { described_class }
+
   let(:admin) { create(:casa_admin) }
   let(:supervisor) { create(:supervisor) }
   let(:volunteer) { create(:volunteer) }
-  subject { described_class }
 
   permissions :create?, :new?, :update_volunteer_email? do
     context "when user is a casa admin" do

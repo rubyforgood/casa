@@ -30,8 +30,8 @@ RSpec.describe CaseCourtReport, type: :model do
     describe "has valid @context" do
       subject { report.context }
 
-      it { should_not be_empty }
-      it { should be_instance_of Hash }
+      it { is_expected.not_to be_empty }
+      it { is_expected.to be_instance_of Hash }
 
       it "has the following keys [:created_date, :casa_case, :case_contacts, :volunteer]" do
         expected = %i[created_date casa_case case_contacts volunteer]
@@ -62,6 +62,7 @@ RSpec.describe CaseCourtReport, type: :model do
   describe "when receiving INVALID path_to_template" do
     let(:casa_case_with_contacts) { volunteer.casa_cases.first }
     let(:nonexistent_path) { "app/documents/templates/nonexisitent_report_template.docx" }
+
     it "will raise Zip::Error when generating report" do
       bad_report = CaseCourtReport.new(
         case_id: casa_case_with_contacts.id,

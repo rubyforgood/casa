@@ -3,6 +3,7 @@ class CasaOrgsController < ApplicationController
   before_action :set_casa_org, only: %i[edit update]
   before_action :set_contact_type_data, only: %i[edit update]
   before_action :set_hearing_types, only: %i[edit update]
+  before_action :set_judges, only: %i[edit update]
   before_action :must_be_admin
   before_action :require_organization!
 
@@ -41,5 +42,9 @@ class CasaOrgsController < ApplicationController
 
   def set_hearing_types
     @hearing_types = HearingType.for_organization(@casa_org)
+  end
+
+  def set_judges
+    @judges = Judge.for_organization(@casa_org)
   end
 end

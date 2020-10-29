@@ -21,6 +21,7 @@ RSpec.describe "/case_court_reports", type: :request do
   describe "GET /case_court_reports/:id" do
     context "when a valid / existing case is sent" do
       let(:casa_case) { volunteer.casa_cases.first }
+
       before do
         get case_court_report_path(casa_case.case_number, format: "docx")
       end
@@ -36,6 +37,7 @@ RSpec.describe "/case_court_reports", type: :request do
 
     context "when an INVALID / non-existing case is sent" do
       let(:invalid_casa_case) { build_stubbed(:casa_case) }
+
       before do
         get case_court_report_path(invalid_casa_case.case_number, format: "docx")
       end

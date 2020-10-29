@@ -29,6 +29,7 @@ RSpec.describe "supervisor volunteer assignment", type: :system do
     let(:organization) { create(:casa_org) }
     let!(:supervisor) { create(:supervisor, casa_org: organization) }
     let!(:volunteer_1) { create(:volunteer, display_name: "AAA", casa_org: organization) }
+
     it "does not error out when adding non existent volunteer" do
       sign_in supervisor
       visit edit_supervisor_path(supervisor)
