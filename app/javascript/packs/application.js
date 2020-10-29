@@ -4,16 +4,15 @@
 // that code so it'll be compiled.
 
 // this is how stylesheets are loaded into the running application
-//= require sweetalert2-rails
 
 import 'src/stylesheets/application.scss'
 
 import 'bootstrap'
 import 'bootstrap-select'
+import '../sweet-alert-confirm'
 require('@rails/ujs').start()
 require('@rails/activestorage').start()
 require('channels')
-import '../sweet-alert-confirm';
 
 require('jquery')
 require('bootstrap-datepicker')
