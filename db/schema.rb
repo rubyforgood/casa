@@ -156,6 +156,14 @@ ActiveRecord::Schema.define(version: 2020_10_25_162142) do
     t.index ["casa_org_id"], name: "index_hearing_types_on_casa_org_id"
   end
 
+  create_table "past_court_dates", force: :cascade do |t|
+    t.datetime "date", null: false
+    t.bigint "casa_case_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["casa_case_id"], name: "index_past_court_dates_on_casa_case_id"
+  end
+  
   create_table "judges", force: :cascade do |t|
     t.bigint "casa_org_id", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -225,6 +233,9 @@ ActiveRecord::Schema.define(version: 2020_10_25_162142) do
   add_foreign_key "case_assignments", "users", column: "volunteer_id"
   add_foreign_key "case_contacts", "casa_cases"
   add_foreign_key "case_contacts", "users", column: "creator_id"
+
+
+  add_foreign_key "past_court_dates", "casa_cases"
   add_foreign_key "judges", "casa_orgs"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"
   add_foreign_key "supervisor_volunteers", "users", column: "volunteer_id"

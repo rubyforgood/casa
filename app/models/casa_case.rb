@@ -4,6 +4,7 @@ class CasaCase < ApplicationRecord
   has_many :case_assignments, dependent: :destroy
   has_many(:volunteers, through: :case_assignments, source: :volunteer, class_name: "User")
   has_many :case_contacts, dependent: :destroy
+  has_many :past_court_dates, dependent: :destroy
   validates :case_number, uniqueness: {case_sensitive: false}, presence: true
   belongs_to :hearing_type, optional: true
   belongs_to :judge, optional: true
