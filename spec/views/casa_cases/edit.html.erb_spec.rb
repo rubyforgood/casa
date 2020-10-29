@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "casa_cases/edit" do
+RSpec.describe "casa_cases/edit" do
   let(:organization) { create(:casa_org) }
 
   before do
@@ -11,6 +11,7 @@ describe "casa_cases/edit" do
 
   context "when accessed by a volunteer" do
     let(:user) { build_stubbed(:volunteer, casa_org: organization) }
+
     it "does not include volunteer assignment" do
       assign :casa_case, create(:casa_case, casa_org: organization)
 

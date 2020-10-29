@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe CaseContactPolicy do
+  subject { described_class }
+
   let(:casa_admin) { create(:casa_admin) }
   let(:case_contact) { create(:case_contact) }
   let(:volunteer) { create(:volunteer) }
   let(:supervisor) { create(:supervisor) }
-  subject { described_class }
 
   permissions :show? do
     it "allows casa_admins" do

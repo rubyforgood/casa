@@ -29,6 +29,7 @@ RSpec.describe CaseContactReport, type: :model do
       expect(case_contact_data[1]).to eq("60")
     end
   end
+
   describe "filter behavior" do
     describe "occured at range filter" do
       it "uses date range if provided" do
@@ -38,6 +39,7 @@ RSpec.describe CaseContactReport, type: :model do
         contacts = report.case_contacts
         expect(contacts.length).to eq(1)
       end
+
       it "returns all date ranges if not provided" do
         create(:case_contact, {occurred_at: 20.days.ago})
         create(:case_contact, {occurred_at: 100.days.ago})
@@ -45,6 +47,7 @@ RSpec.describe CaseContactReport, type: :model do
         contacts = report.case_contacts
         expect(contacts.length).to eq(2)
       end
+
       it "returns only the volunteer" do
         volunteer = create(:volunteer)
         create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
@@ -53,6 +56,7 @@ RSpec.describe CaseContactReport, type: :model do
         contacts = report.case_contacts
         expect(contacts.length).to eq(1)
       end
+
       it "returns only the volunteer with date range" do
         volunteer = create(:volunteer)
         create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
@@ -63,6 +67,7 @@ RSpec.describe CaseContactReport, type: :model do
         contacts = report.case_contacts
         expect(contacts.length).to eq(1)
       end
+
       it "returns only the volunteer with the specified supervisors" do
         supervisor = create(:supervisor)
         volunteer = create(:volunteer)
@@ -79,6 +84,7 @@ RSpec.describe CaseContactReport, type: :model do
         expect(contacts).to eq([contact])
       end
     end
+
     describe "case contact behavior" do
       it "returns only the case contacts with where contact was made" do
         create(:case_contact, {contact_made: true})
@@ -88,6 +94,7 @@ RSpec.describe CaseContactReport, type: :model do
         contacts = report.case_contacts
         expect(contacts.length).to eq(1)
       end
+
       it "returns only the case contacts with where contact was NOT made" do
         create(:case_contact, {contact_made: true})
         create(:case_contact, {contact_made: false})
@@ -96,6 +103,7 @@ RSpec.describe CaseContactReport, type: :model do
         contacts = report.case_contacts
         expect(contacts.length).to eq(1)
       end
+
       it "returns only the case contacts with where contact was made or NOT made" do
         create(:case_contact, {contact_made: true})
         create(:case_contact, {contact_made: false})
@@ -236,6 +244,7 @@ RSpec.describe CaseContactReport, type: :model do
             expect(report.case_contacts).to eq(CaseContact.all)
           end
         end
+
         context "when select nothing on Case Type Group" do
           it "does no filtering & returns 3 case contacts" do
             report = CaseContactReport.new(

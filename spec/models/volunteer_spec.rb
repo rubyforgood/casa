@@ -75,11 +75,12 @@ RSpec.describe Volunteer, type: :model do
   describe "#made_contact_with_all_cases_in_days?" do
     let(:volunteer) { create(:volunteer) }
     let(:casa_case) { create(:casa_case) }
-    let(:create_case_contact) {
-      ->(occurred_at, contact_made) {
+    let(:create_case_contact) do
+      lambda { |occurred_at, contact_made|
         create(:case_contact, casa_case: casa_case, creator: volunteer, occurred_at: occurred_at, contact_made: contact_made)
       }
-    }
+    end
+
     before do
       create(:case_assignment, casa_case: casa_case, volunteer: volunteer, is_active: true)
     end
@@ -152,6 +153,7 @@ RSpec.describe Volunteer, type: :model do
 
   describe "#role" do
     subject(:volunteer) { create :volunteer }
+
     it { expect(volunteer.role).to eq "Volunteer" }
   end
 end

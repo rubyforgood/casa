@@ -37,11 +37,11 @@ RSpec.describe "admin or supervisor adds a case contact", type: :system do
     expect(CaseContact.first.duration_minutes).to eq 105
   end
 
-  it "should not show empty contact type groups" do
+  it "does not show empty contact type groups" do
     expect(page).to_not have_text("Empty")
   end
 
-  it "should not show contact type groups with only hidden contact types" do
+  it "does not show contact type groups with only hidden contact types" do
     expect(page).to_not have_text("Hidden")
   end
 

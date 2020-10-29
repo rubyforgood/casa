@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "AllCasaAdmin auth", type: :system do
+RSpec.describe "AllCasaAdmin auth", type: :system do
   let(:all_casa_admin) { create(:all_casa_admin) }
   let(:volunteer) { create(:volunteer) }
 

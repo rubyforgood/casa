@@ -21,6 +21,7 @@ RSpec.describe "volunteer edits a case contact", type: :system do
     expect(case_contact.medium_type).to eq "letter"
     expect(case_contact.contact_made).to eq true
   end
+
   context "when the case contact occurred last quarter" do
     let!(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 94.days.ago) }
 

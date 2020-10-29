@@ -1,7 +1,8 @@
 require "rails_helper"
 
-describe "volunteers/new" do
+RSpec.describe "volunteers/new" do
   subject { render template: "volunteers/new" }
+
   before do
     assign :volunteer, Volunteer.new
   end

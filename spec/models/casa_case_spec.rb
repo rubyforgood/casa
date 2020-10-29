@@ -92,7 +92,7 @@ RSpec.describe CasaCase do
     end
   end
 
-  context "#update_cleaning_contact_types" do
+  describe "#update_cleaning_contact_types" do
     it "cleans up contact types before saving" do
       group = create(:contact_type_group)
       type1 = create(:contact_type, contact_type_group: group)
@@ -100,12 +100,12 @@ RSpec.describe CasaCase do
 
       casa_case = create(:casa_case, contact_types: [type1])
 
-      expect(casa_case.casa_case_contact_types.count).to eql 1
+      expect(casa_case.casa_case_contact_types.count).to be 1
       expect(casa_case.contact_types).to match_array([type1])
 
       casa_case.update_cleaning_contact_types({casa_case_contact_types_attributes: [{contact_type_id: type2.id}]})
 
-      expect(casa_case.casa_case_contact_types.count).to eql 1
+      expect(casa_case.casa_case_contact_types.count).to be 1
       expect(casa_case.contact_types.reload).to match_array([type2])
     end
   end
@@ -116,21 +116,21 @@ RSpec.describe CasaCase do
         casa_case = create(:casa_case, court_date: "2020-09-13 02:11:58")
         casa_case.clear_court_dates
 
-        expect(casa_case.court_date).to eql nil
+        expect(casa_case.court_date).to be nil
       end
 
       it "clears report due date" do
         casa_case = create(:casa_case, court_date: "2020-09-13 02:11:58", court_report_due_date: "2020-09-13 02:11:58")
         casa_case.clear_court_dates
 
-        expect(casa_case.court_report_due_date).to eql nil
+        expect(casa_case.court_report_due_date).to be nil
       end
 
       it "sets court report as unsubmitted" do
         casa_case = create(:casa_case, court_date: "2020-09-13 02:11:58", court_report_submitted: true)
         casa_case.clear_court_dates
 
-        expect(casa_case.court_report_submitted).to eql false
+        expect(casa_case.court_report_submitted).to be false
       end
     end
   end
