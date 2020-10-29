@@ -40,13 +40,13 @@
               </td>
               <td data-test="action">
                 <% if policy(assignment).unassign? %>
-                  <%= button_to 'Unassign Volunteer',
-                    unassign_case_assignment_path(assignment),
-                    method: :patch,
-                    class: "btn btn-outline-danger" %>
-                <% elsif !assignment.volunteer.active? && policy(assignment.volunteer).activate? %>
-                  <%= link_to "Activate Volunteer",
-                    activate_volunteer_path(assignment.volunteer,
+                    <%= button_to 'Unassign Volunteer',
+                      unassign_case_assignment_path(assignment),
+                      method: :patch,
+                      class: "btn btn-outline-danger text-wrap" %>
+                  <% elsif !assignment.volunteer.active? && policy(assignment.volunteer).activate? %>
+                    <%= link_to "Activate Volunteer",
+                      activate_volunteer_path(assignment.volunteer,
                       redirect_to_path: 'casa_case',
                       casa_case_id: @casa_case.id
                     ),
