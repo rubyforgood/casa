@@ -1,13 +1,13 @@
 /* eslint-env jest */
+// global.jQuery = $
+import { defineCaseContactsTable } from '../src/dashboard'
 'use strict'
 
 require('jest')
 var $ = require('jquery')
-var dt = require( 'datatables.net' )()
+var dt = require('datatables.net')()
 var _ = require('lodash')
 global.$ = $
-//global.jQuery = $
-import { defineCaseContactsTable } from '../src/dashboard'
 
 describe('dashboard.js', () => {
   describe('DataTable tests', () => {

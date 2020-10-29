@@ -12,10 +12,10 @@
     <%= form_with do |form| %>
       <div class="field form-group">
         <%= label_tag :case_number, "Case Number:" %>
-        <% select_options = @assigned_cases.map { |casa_case| 
+        <% select_options = @assigned_cases.map { |casa_case|
                             [
-                              "#{casa_case.case_number} - #{casa_case.has_transitioned? ? "transition" : "non-transition"}", 
-                              casa_case.case_number, 
+                              "#{casa_case.case_number} - #{casa_case.has_transitioned? ? "transition" : "non-transition"}",
+                              casa_case.case_number,
                               { "data-transitioned": casa_case.has_transitioned? }
                             ]
                           } %>
@@ -103,13 +103,13 @@ const handleGenerateReport = (e) => {
 
   <%# This will show "/case_court_reports/generate"  %>
   const url = "<%= generate_case_court_reports_path %>"
-  const options = { 
+  const options = {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(formData) 
+    body: JSON.stringify(formData)
   }
   fetch(url, options)
     .then(response => response.json())
@@ -143,7 +143,7 @@ const bindElements = () => {
   const caseSelectEl = document.querySelector(ELEMENTS.caseSelect);
   const generateReportEl = document.querySelector(ELEMENTS.generateBtn);
 
-  if (caseSelectEl) 
+  if (caseSelectEl)
     caseSelectEl.addEventListener('change', handleSelect);
   if (generateReportEl)
     generateReportEl.addEventListener('click', handleGenerateReport);

@@ -42,7 +42,7 @@ describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Supervisors", href: "/supervisors")
       expect(rendered).to have_link("Volunteers", href: "/volunteers")
       expect(rendered).to have_link("Cases", href: "/casa_cases")
-      expect(rendered).to have_link("Case Contacts", href: "/case_contacts")
+      expect(rendered).to_not have_link("Case Contacts", href: "/case_contacts")
       expect(rendered).to have_link("Report a site issue", href: "https://rubyforgood.typeform.com/to/iXY4BubB")
       expect(rendered).to_not have_link("Admins", href: "/casa_admins")
       expect(rendered).to_not have_link("Generate Court Reports", href: "/case_court_reports")
@@ -93,7 +93,7 @@ describe "layout/sidebar", type: :view do
 
       expect(rendered).to have_link("Volunteers", href: "/volunteers")
       expect(rendered).to have_link("Cases", href: "/casa_cases")
-      expect(rendered).to have_link("Case Contacts", href: "/case_contacts")
+      expect(rendered).to_not have_link("Case Contacts", href: "/case_contacts")
       expect(rendered).to have_link("Supervisors", href: "/supervisors")
       expect(rendered).to have_link("Admins", href: "/casa_admins")
       expect(rendered).to have_link("Report a site issue", href: "https://rubyforgood.typeform.com/to/iXY4BubB")

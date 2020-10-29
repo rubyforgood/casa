@@ -18,6 +18,41 @@ class AllCasaAdmins::CasaAdminsController < AllCasaAdminsController
     end
   end
 
+  def edit
+    @casa_admin = CasaAdmin.find(params[:id])
+  end
+
+  def update
+    @casa_admin = CasaAdmin.find(params[:id])
+    if @casa_admin.update(all_casa_admin_params)
+      redirect_to edit_all_casa_admins_casa_org_casa_admin_path, notice: "Admin was successfully updated."
+    else
+      render :edit
+    end
+  end
+
+  def activate
+    @casa_admin = CasaAdmin.find(params[:id])
+    if @casa_admin.activate
+      CasaAdminMailer.account_setup(@casa_admin).deliver
+
+      redirect_to edit_all_casa_admins_casa_org_casa_admin_path, notice: "Admin was activated."
+    else
+      render :edit
+    end
+  end
+
+  def deactivate
+    @casa_admin = CasaAdmin.find(params[:id])
+    if @casa_admin.deactivate
+      CasaAdminMailer.deactivation(@casa_admin).deliver
+
+      redirect_to edit_all_casa_admins_casa_org_casa_admin_path, notice: "Admin was deactivated."
+    else
+      render :edit
+    end
+  end
+
   private
 
   def set_casa_org

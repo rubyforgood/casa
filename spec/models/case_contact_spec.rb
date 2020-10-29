@@ -99,4 +99,117 @@ RSpec.describe CaseContact, type: :model do
       expect(case_contact.contact_types.reload).to match_array([type2])
     end
   end
+
+  describe "scopes" do
+    describe ".contact_type" do
+      it "returns case contacts filtered by contact type id" do
+        group = create(:contact_type_group)
+        youth_type = create(:contact_type, name: "Youth", contact_type_group: group)
+        supervisor_type = create(:contact_type, name: "Supervisor", contact_type_group: group)
+        parent_type = create(:contact_type, name: "Parent", contact_type_group: group)
+
+        case_contacts_to_match = [
+          create(:case_contact, contact_types: [youth_type, supervisor_type]),
+          create(:case_contact, contact_types: [supervisor_type]),
+          create(:case_contact, contact_types: [youth_type, parent_type])
+        ]
+        create(:case_contact, contact_types: [parent_type])
+
+        expect(CaseContact.contact_type([youth_type.id, supervisor_type.id])).to match_array(case_contacts_to_match)
+      end
+    end
+
+    describe ".contact_made" do
+      context "with both option" do
+        it "returns case contacts filtered by contact made option" do
+          case_contact_1 = create(:case_contact, contact_made: false)
+          case_contact_2 = create(:case_contact, contact_made: true)
+
+          expect(CaseContact.contact_made("")).to match_array([case_contact_1, case_contact_2])
+        end
+      end
+
+      context "with yes option" do
+        it "returns case contacts filtered by contact made option" do
+          case_contact = create(:case_contact, contact_made: true)
+          create(:case_contact, contact_made: false)
+
+          expect(CaseContact.contact_made(true)).to match_array([case_contact])
+        end
+      end
+
+      context "with no option" do
+        it "returns case contacts filtered by contact made option" do
+          case_contact = create(:case_contact, contact_made: false)
+          create(:case_contact, contact_made: true)
+
+          expect(CaseContact.contact_made(false)).to match_array([case_contact])
+        end
+      end
+    end
+
+    describe ".has_transitioned" do
+      context "with both option" do
+        it "returns case contacts filtered by contact made option" do
+          case_case_1 = create(:casa_case, transition_aged_youth: true)
+          case_case_2 = create(:casa_case, transition_aged_youth: false)
+          case_contact_1 = create(:case_contact, {casa_case: case_case_1})
+          case_contact_2 = create(:case_contact, {casa_case: case_case_2})
+
+          expect(CaseContact.has_transitioned("")).to match_array([case_contact_1, case_contact_2])
+        end
+      end
+
+      context "with yes option" do
+        it "returns case contacts filtered by contact made option" do
+          case_case_1 = create(:casa_case, transition_aged_youth: true)
+          case_case_2 = create(:casa_case, transition_aged_youth: false)
+          case_contact = create(:case_contact, {casa_case: case_case_1})
+          create(:case_contact, {casa_case: case_case_2})
+
+          expect(CaseContact.has_transitioned(true)).to match_array([case_contact])
+        end
+      end
+
+      context "with no option" do
+        it "returns case contacts filtered by contact made option" do
+          case_case_1 = create(:casa_case, transition_aged_youth: true)
+          case_case_2 = create(:casa_case, transition_aged_youth: false)
+          create(:case_contact, {casa_case: case_case_1})
+          case_contact = create(:case_contact, {casa_case: case_case_2})
+
+          expect(CaseContact.has_transitioned(false)).to match_array([case_contact])
+        end
+      end
+    end
+
+    describe ".want_driving_reimbursement" do
+      context "with both option" do
+        it "returns case contacts filtered by contact made option" do
+          case_contact_1 = create(:case_contact, {miles_driven: 50, want_driving_reimbursement: true})
+          case_contact_2 = create(:case_contact, {miles_driven: 50, want_driving_reimbursement: false})
+
+          expect(CaseContact.want_driving_reimbursement("")).to match_array([case_contact_1, case_contact_2])
+        end
+      end
+
+      context "with yes option" do
+        it "returns case contacts filtered by contact made option" do
+          case_contact = create(:case_contact, {miles_driven: 50, want_driving_reimbursement: true})
+          create(:case_contact, {miles_driven: 50, want_driving_reimbursement: false})
+
+          expect(CaseContact.want_driving_reimbursement(true)).to match_array([case_contact])
+        end
+      end
+
+      context "with no option" do
+        it "returns case contacts filtered by contact made option" do
+          create(:case_contact, {miles_driven: 50, want_driving_reimbursement: true})
+          case_contact = create(:case_contact, {miles_driven: 50, want_driving_reimbursement: false})
+
+          expect(CaseContact.want_driving_reimbursement(false)).to match_array([case_contact])
+        end
+      end
+    end
+  end
 end
