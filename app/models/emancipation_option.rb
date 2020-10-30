@@ -4,6 +4,10 @@ class EmancipationOption < ApplicationRecord
 
   validates :name, presence: true
 
+  scope :categoryOptions, -> (emancipation_category_id) {
+    where(emancipation_category_id: emancipation_category_id)
+  }
+
   def get_category
     return emancipation_category.name
   end
