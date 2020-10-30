@@ -14,6 +14,7 @@
         <th>Name</th>
         <th>Email</th>
         <th>Created At</th>
+        <th>Actions</th>
       </tr>
       </thead>
       <tbody>
@@ -22,6 +23,7 @@
           <td><%= admin.display_name %></td>
           <td><%= admin.email %></td>
           <td><%= admin.created_at.strftime('%B %e, %Y') %></td>
+          <td><%= link_to "Edit", edit_all_casa_admins_casa_org_casa_admin_path(selected_organization, admin) %></td>
         </tr>
       <% end %>
       </tbody>

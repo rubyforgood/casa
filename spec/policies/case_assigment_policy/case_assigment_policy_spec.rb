@@ -17,6 +17,7 @@ RSpec.describe CaseAssignmentPolicy do
     it "does not allow unassign if case_assignment is inactive" do
       is_expected.not_to permit(casa_admin, case_assignment_inactive)
     end
+
     context "when user is an admin" do
       it "allow update when case_assignment is active" do
         is_expected.to permit(casa_admin, case_assignment)

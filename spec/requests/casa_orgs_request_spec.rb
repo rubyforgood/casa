@@ -52,6 +52,7 @@ RSpec.describe "CasaOrgs", type: :request do
 
   describe "as a volunteer" do
     before { sign_in create(:volunteer, casa_org: casa_org) }
+
     describe "GET /edit" do
       it "render a failed response" do
         get edit_casa_org_url(casa_org)

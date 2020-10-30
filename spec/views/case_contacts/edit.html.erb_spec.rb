@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "case_contacts/edit" do
+RSpec.describe "case_contacts/edit" do
   before do
     user = build_stubbed(:volunteer)
     allow(view).to receive(:current_user).and_return(user)

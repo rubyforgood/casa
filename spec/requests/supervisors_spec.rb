@@ -6,9 +6,9 @@ RSpec.describe "/supervisors", type: :request do
   let(:admin) { create(:casa_admin) }
   let(:supervisor) { create(:supervisor) }
 
-  let(:update_supervisor_params) {
+  let(:update_supervisor_params) do
     {supervisor: {email: "newemail@gmail.com", display_name: "New Name"}}
-  }
+  end
 
   describe "GET /new" do
     it "admin can view the new supervisor page" do

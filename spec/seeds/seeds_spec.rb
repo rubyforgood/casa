@@ -20,17 +20,15 @@ def empty_ar_classes
 end
 
 RSpec.describe "Seeds" do
-  ["development", "qa", "staging"].each do |environment|
-    describe "for environment: #{environment}" do
-      before do
-        Rails.application.load_tasks
-        allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new(environment))
-      end
+  describe "test development DB" do
+    before do
+      Rails.application.load_tasks
+      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("development"))
+    end
 
-      it "successfully populates all necessary tables" do
-        ActiveRecord::Tasks::DatabaseTasks.load_seed
-        expect(empty_ar_classes).to eq([])
-      end
+    it "successfully populates all necessary tables" do
+      ActiveRecord::Tasks::DatabaseTasks.load_seed
+      expect(empty_ar_classes).to eq([])
     end
   end
 end

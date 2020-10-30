@@ -7,13 +7,13 @@ RSpec.describe FileImporter do
 
   describe "import" do
     it "assumes headers" do
-      file_importer.import { |f| true }
+      file_importer.import { |_f| true }
       expect(file_importer.number_imported).to eq(2)
     end
 
     it "resets the count of how many have been imported, each time" do
-      file_importer.import { |f| true }
-      file_importer.import { |f| true }
+      file_importer.import { |_f| true }
+      file_importer.import { |_f| true }
       expect(file_importer.number_imported).to eq(2)
     end
 
@@ -27,7 +27,7 @@ RSpec.describe FileImporter do
 
     it "captures errors" do
       expect {
-        file_importer.import do |row|
+        file_importer.import do |_row|
           raise "Something bad"
         end
       }.not_to raise_error
@@ -35,7 +35,7 @@ RSpec.describe FileImporter do
     end
 
     it "returns hash with expected attributes" do
-      result = file_importer.import { |f| true }
+      result = file_importer.import { |_f| true }
       expect(result.keys).to contain_exactly(:type, :message, :exported_rows)
     end
 

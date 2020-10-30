@@ -1,10 +1,11 @@
 require "rails_helper"
 
 RSpec.describe SupervisorPolicy do
+  subject { described_class }
+
   let(:casa_admin) { create(:casa_admin) }
   let(:supervisor) { create(:supervisor) }
   let(:volunteer) { create(:volunteer) }
-  subject { described_class }
 
   permissions :update_supervisor_email? do
     context "when user is an admin or is the record" do

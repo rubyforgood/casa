@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "/dashboard", type: :request do
+RSpec.describe "/dashboard", type: :request do
   let(:organization) { create(:casa_org) }
   let(:volunteer) { create(:volunteer, casa_org: organization) }
   let(:admin) { create(:casa_admin, casa_org: organization) }

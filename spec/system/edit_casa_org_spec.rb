@@ -4,6 +4,7 @@ RSpec.describe "Edit Casa Org", type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
   let!(:hearing_type) { create(:hearing_type, casa_org: organization, name: "Spec Test Hearing Type") }
+  let!(:judge) { create(:judge, casa_org: organization, name: "Joey Tom") }
 
   before do
     sign_in admin
@@ -30,5 +31,9 @@ RSpec.describe "Edit Casa Org", type: :system do
         ["Spec Test Hearing Type", "Yes", "Edit"]
       ]
     )
+  end
+
+  it "has judge content" do
+    expect(page).to have_text(judge.name)
   end
 end

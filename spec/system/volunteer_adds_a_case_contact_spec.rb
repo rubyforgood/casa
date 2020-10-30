@@ -196,7 +196,7 @@ RSpec.describe "volunteer adds a case contact", type: :system do
       fill_in "case-contact-duration-hours", with: "1"
       fill_in "case-contact-duration-minutes", with: "45"
       # Future date: invalid
-      fill_in "Occurred at", with: future_date.strftime("%Y/%m/%d")
+      fill_in "Occurred at", with: future_date.strftime("%Y-%m-%d")
       fill_in "Miles driven", with: "30"
       select "Yes", from: "Want driving reimbursement"
       fill_in "Notes", with: "Hello world"

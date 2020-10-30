@@ -4,7 +4,10 @@ class CasaCase < ApplicationRecord
   has_many :case_assignments, dependent: :destroy
   has_many(:volunteers, through: :case_assignments, source: :volunteer, class_name: "User")
   has_many :case_contacts, dependent: :destroy
+  has_many :past_court_dates, dependent: :destroy
   validates :case_number, uniqueness: {case_sensitive: false}, presence: true
+  belongs_to :hearing_type, optional: true
+  belongs_to :judge, optional: true
   belongs_to :casa_org
 
   has_many :casa_case_contact_types
@@ -38,6 +41,9 @@ class CasaCase < ApplicationRecord
   scope :due_date_passed, -> {
     where("court_date < ?", Time.now)
   }
+
+  delegate :name, to: :hearing_type, prefix: true, allow_nil: true
+  delegate :name, to: :judge, prefix: true, allow_nil: true
 
   def self.available_for_volunteer(volunteer)
     ids = connection.select_values(%{
@@ -75,6 +81,15 @@ class CasaCase < ApplicationRecord
            court_report_submitted: false)
   end
 
+  def deactivate
+    update(active: false)
+    case_assignments.map { |ca| ca.update(is_active: false) }
+  end
+
+  def reactivate
+    update(active: true)
+  end
+
   private
 
   def validate_date(day, month, year)
@@ -103,6 +118,7 @@ end
 # Table name: casa_cases
 #
 #  id                     :bigint           not null, primary key
+#  active                 :boolean          default(TRUE), not null
 #  birth_month_year_youth :datetime
 #  case_number            :string           not null
 #  court_date             :datetime
@@ -112,11 +128,15 @@ end
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  casa_org_id            :bigint           not null
+#  hearing_type_id        :bigint
+#  judge_id               :bigint
 #
 # Indexes
 #
-#  index_casa_cases_on_casa_org_id  (casa_org_id)
-#  index_casa_cases_on_case_number  (case_number) UNIQUE
+#  index_casa_cases_on_casa_org_id      (casa_org_id)
+#  index_casa_cases_on_case_number      (case_number) UNIQUE
+#  index_casa_cases_on_hearing_type_id  (hearing_type_id)
+#  index_casa_cases_on_judge_id         (judge_id)
 #
 # Foreign Keys
 #

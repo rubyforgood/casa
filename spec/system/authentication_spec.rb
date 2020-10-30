@@ -45,6 +45,7 @@ RSpec.describe "Authentication", type: :system do
 
   context "when authenticated user" do
     let(:user) { create(:casa_admin) }
+
     before { sign_in user }
 
     it "renders dashboard page and shows correct flash message upon sign out" do

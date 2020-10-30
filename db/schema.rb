@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_19_120548) do
+ActiveRecord::Schema.define(version: 2020_10_25_162142) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,8 +67,13 @@ ActiveRecord::Schema.define(version: 2020_10_19_120548) do
     t.boolean "court_report_submitted", default: false, null: false
     t.datetime "court_date"
     t.datetime "court_report_due_date"
+    t.bigint "hearing_type_id"
+    t.boolean "active", default: true, null: false
+    t.bigint "judge_id"
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
     t.index ["case_number"], name: "index_casa_cases_on_case_number", unique: true
+    t.index ["hearing_type_id"], name: "index_casa_cases_on_hearing_type_id"
+    t.index ["judge_id"], name: "index_casa_cases_on_judge_id"
   end
 
   create_table "casa_org_logos", force: :cascade do |t|
@@ -151,6 +156,23 @@ ActiveRecord::Schema.define(version: 2020_10_19_120548) do
     t.index ["casa_org_id"], name: "index_hearing_types_on_casa_org_id"
   end
 
+  create_table "judges", force: :cascade do |t|
+    t.bigint "casa_org_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active", default: true
+    t.string "name"
+    t.index ["casa_org_id"], name: "index_judges_on_casa_org_id"
+  end
+
+  create_table "past_court_dates", force: :cascade do |t|
+    t.datetime "date", null: false
+    t.bigint "casa_case_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["casa_case_id"], name: "index_past_court_dates_on_casa_case_id"
+  end
+
   create_table "supervisor_volunteers", force: :cascade do |t|
     t.bigint "supervisor_id", null: false
     t.bigint "volunteer_id", null: false
@@ -211,6 +233,8 @@ ActiveRecord::Schema.define(version: 2020_10_19_120548) do
   add_foreign_key "case_assignments", "users", column: "volunteer_id"
   add_foreign_key "case_contacts", "casa_cases"
   add_foreign_key "case_contacts", "users", column: "creator_id"
+  add_foreign_key "judges", "casa_orgs"
+  add_foreign_key "past_court_dates", "casa_cases"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"
   add_foreign_key "supervisor_volunteers", "users", column: "volunteer_id"
   add_foreign_key "users", "casa_orgs"

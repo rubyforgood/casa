@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe "Session", type: :system do
   context "when a user is timed out" do
     let(:user) { create(:casa_admin) }
+
     before { sign_in user }
 
     it "ends the current session and redirects to sign in page after timeout" do
