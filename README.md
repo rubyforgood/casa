@@ -84,8 +84,8 @@ You need Ruby, bundler, node.js, yarn, postgres, and chromedriver.
 
 1. Make sure that postgres is installed.
 
-- On a Mac, you can use [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database if you have an older version of postgres, or use [Postgres.app](https://postgresapp.com/).
-- If you're on Ubuntu/WSL, use `sudo apt-get install libpq-dev` so the gem can install. [Use the Postgres repo for Ubuntu or WSL to get the server and client tools](https://www.postgresql.org/download/linux/ubuntu/).
+* On a Mac, you can use [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database if you have an older version of postgres, or use [Postgres.app](https://postgresapp.com/).
+* If you're on Ubuntu/WSL, use `sudo apt-get install libpq-dev` so the gem can install. [Use the Postgres repo for Ubuntu or WSL to get the server and client tools](https://www.postgresql.org/download/linux/ubuntu/).
 
 **Chromedriver**
 
@@ -93,7 +93,7 @@ You need Ruby, bundler, node.js, yarn, postgres, and chromedriver.
 
 ### Running the app
 
-(_on a Mac or Linux machine_)
+(*on a Mac or Linux machine*)
 
 1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine. You should create a fork in GitHub if you don't have permission to commit directly to this repo, though. See [our contributing guide](doc/CONTRIBUTING.md) for more detailed instructions.
 1. `cd casa/`
@@ -150,14 +150,14 @@ the after party post-deployment tasks.
 
 There is a `doc` directory at the top level that includes:
 
-- an `architecture-decisions` directory containing important architectural decisions and entity relationship diagrams of various models
+* an `architecture-decisions` directory containing important architectural decisions and entity relationship diagrams of various models
   (see the article [Architectural Decision Records](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) describing this approach).
-- [Code of Conduct](doc/code-of-conduct.md)
-- [CONTRIBUTING.md](doc/CONTRIBUTING.md)
-- [CYPRESS.md](doc/CYPRESS.md)
-- [DOCKER.md](doc/DOCKER.md)
-- [LINUX_SETUP.md](doc/LINUX_SETUP.md)
-- [SECURITY.md](doc/SECURITY.md)
+* [Code of Conduct](doc/code-of-conduct.md)
+* [CONTRIBUTING.md](doc/CONTRIBUTING.md)
+* [CYPRESS.md](doc/CYPRESS.md)
+* [DOCKER.md](doc/DOCKER.md)
+* [LINUX_SETUP.md](doc/LINUX_SETUP.md)
+* [SECURITY.md](doc/SECURITY.md)
 
 ### Common issues
 
