@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "supervisors/edit", type: :view do
+RSpec.describe "supervisors/edit", type: :view do
   before do
     admin = build_stubbed :casa_admin
     enable_pundit(view, admin)

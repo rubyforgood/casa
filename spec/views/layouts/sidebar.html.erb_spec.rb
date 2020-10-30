@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "layout/sidebar", type: :view do
+RSpec.describe "layout/sidebar", type: :view do
   before do
     enable_pundit(view, user)
     allow(view).to receive(:current_user).and_return(user)
@@ -9,6 +9,18 @@ describe "layout/sidebar", type: :view do
     allow(view).to receive(:current_organization).and_return(user.casa_org)
 
     assign :casa_org, user.casa_org
+  end
+
+  context "when no organization logo is set" do
+    let(:user) { build_stubbed :volunteer }
+
+    it "displays default logo" do
+      sign_in user
+
+      render partial: "layouts/sidebar"
+
+      expect(rendered).to have_xpath("//img[@src = '/packs-test/media/src/images/default-logo-c9048fc43854499e952e4b62a505bf35.png' and @alt='CASA Logo']")
+    end
   end
 
   context "when logged in as a supervisor" do
@@ -30,7 +42,7 @@ describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Supervisors", href: "/supervisors")
       expect(rendered).to have_link("Volunteers", href: "/volunteers")
       expect(rendered).to have_link("Cases", href: "/casa_cases")
-      expect(rendered).to have_link("Case Contacts", href: "/case_contacts")
+      expect(rendered).to_not have_link("Case Contacts", href: "/case_contacts")
       expect(rendered).to have_link("Report a site issue", href: "https://rubyforgood.typeform.com/to/iXY4BubB")
       expect(rendered).to_not have_link("Admins", href: "/casa_admins")
       expect(rendered).to_not have_link("Generate Court Reports", href: "/case_court_reports")
@@ -82,7 +94,7 @@ describe "layout/sidebar", type: :view do
 
       expect(rendered).to have_link("Volunteers", href: "/volunteers")
       expect(rendered).to have_link("Cases", href: "/casa_cases")
-      expect(rendered).to have_link("Case Contacts", href: "/case_contacts")
+      expect(rendered).to_not have_link("Case Contacts", href: "/case_contacts")
       expect(rendered).to have_link("Supervisors", href: "/supervisors")
       expect(rendered).to have_link("Admins", href: "/casa_admins")
       expect(rendered).to have_link("Report a site issue", href: "https://rubyforgood.typeform.com/to/iXY4BubB")

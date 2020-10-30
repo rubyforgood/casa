@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "casa_cases/new" do
+RSpec.describe "casa_cases/new" do
   subject { render template: "casa_cases/new" }
 
   before do
@@ -9,10 +9,12 @@ describe "casa_cases/new" do
 
     enable_pundit(view, user)
     allow(view).to receive(:current_user).and_return(user)
+    allow(view).to receive(:current_organization).and_return(user.casa_org)
   end
 
   context "while signed in as admin" do
     let(:user) { build_stubbed(:casa_admin) }
+
     before do
       sign_in user
     end
@@ -23,6 +25,7 @@ describe "casa_cases/new" do
 
   context "while signed in as supervisor" do
     let(:user) { build_stubbed(:supervisor) }
+
     before do
       sign_in user
     end

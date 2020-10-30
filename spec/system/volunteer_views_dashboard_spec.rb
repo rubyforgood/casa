@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "volunteer views dashboard", type: :system do
   let(:volunteer) { create(:volunteer) }
 
-  before(:each) do
+  before do
     sign_in volunteer
   end
 

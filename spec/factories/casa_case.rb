@@ -4,6 +4,8 @@ FactoryBot.define do
     transition_aged_youth { false }
     birth_month_year_youth { 16.years.ago }
     casa_org
+    hearing_type
+    judge
 
     trait :with_case_assignments do
       case_assignments { build_list(:case_assignment, 2) }

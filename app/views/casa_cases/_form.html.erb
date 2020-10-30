@@ -13,6 +13,28 @@
       </div>
 
       <div class="field form-group">
+        <%= form.label :hearing_type_id %>
+        <%= form.collection_select(
+          :hearing_type_id,
+          HearingType.active.for_organization(current_organization),
+          :id, :name,
+          { include_hidden: false, prompt: "-Select Hearing Type-" },
+          { class: "form-control" }
+        ) %>
+      </div>
+
+      <div class="field form-group">
+        <%= form.label :judge_id %>
+        <%= form.collection_select(
+          :judge_id,
+          Judge.for_organization(current_organization),
+          :id, :name,
+          { include_hidden: false, prompt: "-Select Judge-" },
+          { class: "form-control" }
+        ) %>
+      </div>
+
+      <div class="field form-group">
         <% if policy(casa_case).update_court_date? %>
           <%= form.label :court_date, "Next Court Date" %>
           <br>
@@ -105,7 +127,12 @@
       <br>
 
       <div class="actions">
-        <%= form.submit casa_case.persisted? ? 'Update CASA Case' : 'Create CASA Case', class: "btn btn-primary" %>
+        <% if casa_case.active %>
+          <%= form.submit casa_case.persisted? ? 'Update CASA Case' : 'Create CASA Case', class: "btn btn-primary" %>
+          <%= link_to 'Deactivate CASA Case', deactivate_casa_case_path(casa_case), method: :patch, class: "btn btn-outline-danger pull-right", data: { confirm_swal: "Deactivating a CASA Case will unassign any volunteers currently assigned to this case.", reload: true, success: "Yes, deactivate", fail: "No, go back" }  if Pundit.policy(current_user, casa_case).update_case_status? && casa_case.persisted? %>
+          <% else %>
+          <%= link_to 'Reactivate CASA Case', reactivate_casa_case_path(casa_case), method: :patch, class: "btn btn-primary" if Pundit.policy(current_user, casa_case).update_case_status? %>
+        <% end %>
       </div>
     <% end %>
   </div>

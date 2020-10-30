@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "layouts/application", type: :view do
+RSpec.describe "layouts/application", type: :view do
   subject { rendered }
 
   let(:title) { "CASA Volunteer Tracking" }

@@ -3,6 +3,7 @@ class CasaOrgsController < ApplicationController
   before_action :set_casa_org, only: %i[edit update]
   before_action :set_contact_type_data, only: %i[edit update]
   before_action :set_hearing_types, only: %i[edit update]
+  before_action :set_judges, only: %i[edit update]
   before_action :must_be_admin
   before_action :require_organization!
 
@@ -12,6 +13,7 @@ class CasaOrgsController < ApplicationController
   def update
     respond_to do |format|
       if @casa_org.update(casa_org_update_params)
+        @casa_org.logo.attach(casa_org_update_params[:logo])
         format.html { redirect_to edit_casa_org_path, notice: "CASA organization was successfully updated." }
         format.json { render :show, status: :ok, location: @casa_org }
       else
@@ -30,7 +32,7 @@ class CasaOrgsController < ApplicationController
   end
 
   def casa_org_update_params
-    params.require(:casa_org).permit(:name, :display_name, :address)
+    params.require(:casa_org).permit(:name, :display_name, :address, :logo)
   end
 
   def set_contact_type_data
@@ -40,5 +42,9 @@ class CasaOrgsController < ApplicationController
 
   def set_hearing_types
     @hearing_types = HearingType.for_organization(@casa_org)
+  end
+
+  def set_judges
+    @judges = Judge.for_organization(@casa_org)
   end
 end

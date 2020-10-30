@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "case_contacts/new" do
+RSpec.describe "case_contacts/new" do
   subject { render template: "case_contacts/new" }
 
   before do

@@ -17,6 +17,8 @@
       <thead>
       <tr>
         <th>Case Number</th>
+        <th>Hearing Type</th>
+        <th>Judge</th>
         <th>Transition Aged Youth</th>
         <th>Assigned To</th>
         <th>Actions</th>
@@ -25,12 +27,18 @@
       </thead>
       <tbody>
       <% @casa_cases.each do |casa_case| %>
-        <tr>
+        <tr class=<%= !casa_case.active ? "table-secondary" : "" %> >
           <td><%= link_to(casa_case.case_number, casa_case) %></td>
+          <td><%= casa_case.hearing_type_name %></td>
+          <td><%= casa_case.judge_name %></td>
           <td><%= casa_case.decorate.transition_aged_youth_icon %></td>
           <td>
-            <%= safe_join(casa_case&.volunteers&.map { |vol| link_to(vol.display_name, edit_volunteer_path(vol)) },
+            <% if casa_case.active? %>
+              <%= safe_join(casa_case&.volunteers&.map { |vol| link_to(vol.display_name, edit_volunteer_path(vol)) },
                           ", ") %>
+            <% else %>
+              Case was deactivated on: <%= casa_case.updated_at.strftime("%m-%d-%Y") %>
+            <% end %>
           </td>
           <td><%= link_to 'Detail View', casa_case_path(casa_case) %></td>
           <td><%= link_to 'Edit', edit_casa_case_path(casa_case) %></td>

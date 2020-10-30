@@ -10,7 +10,7 @@ RSpec.describe SupervisorImporter do
 
   let(:supervisor_importer) do
     importer = SupervisorImporter.new(import_file_path, casa_org_id)
-    allow(importer).to receive(:email_addresses_to_users) do |clazz, supervisor_volunteers|
+    allow(importer).to receive(:email_addresses_to_users) do |_clazz, supervisor_volunteers|
       create_list(:volunteer, supervisor_volunteers.split(",").size)
     end
     importer

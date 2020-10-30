@@ -4,9 +4,9 @@ class HearingType < ApplicationRecord
   belongs_to :casa_org
 
   validates :name, presence: true, uniqueness: {scope: %i[casa_org]}
-  validates :active, presence: true
 
   scope :for_organization, ->(org) { where(casa_org: org) }
+  scope :active, -> { where(active: true) }
 end
 
 # == Schema Information
