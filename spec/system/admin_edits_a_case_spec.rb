@@ -42,8 +42,8 @@ RSpec.describe "admin edits case", type: :system do
     visit edit_casa_case_path(casa_case)
 
     click_on "Deactivate CASA Case"
-    page.driver.browser.switch_to.alert.accept
-
+    sleep 10
+    click_on "Yes, deactivate"
     expect(page).to have_text("Case #{casa_case.case_number} has been deactivated")
     expect(page).to have_text("Case was deactivated on: #{casa_case.updated_at.strftime("%m-%d-%Y")}")
     expect(page).to have_text("Reactivate CASA Case")
@@ -57,7 +57,8 @@ RSpec.describe "admin edits case", type: :system do
   it "reactivates a case" do
     visit edit_casa_case_path(casa_case)
     click_on "Deactivate CASA Case"
-    page.driver.browser.switch_to.alert.accept
+    sleep 10
+    click_on "Yes, deactivate"
     click_on "Reactivate CASA Case"
 
     expect(page).to have_text("Case #{casa_case.case_number} has been reactivated.")
