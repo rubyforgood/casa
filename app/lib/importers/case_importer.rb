@@ -17,10 +17,10 @@ class CaseImporter < FileImporter
         case_number = casa_case.case_number
         failures = []
         if result[:existing]
-          if result[:deactivated]
-            failures << "Case #{case_number} already exists, but is inactive. Reactivate the CASA case instead."
+          failures << if result[:deactivated]
+            "Case #{case_number} already exists, but is inactive. Reactivate the CASA case instead."
           else
-            failures << "Case #{case_number} already exists"
+            "Case #{case_number} already exists"
           end
         end
         volunteers = email_addresses_to_users(Volunteer, String(row[:case_assignment]))
