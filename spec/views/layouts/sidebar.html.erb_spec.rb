@@ -65,6 +65,7 @@ RSpec.describe "layout/sidebar", type: :view do
 
       render partial: "layouts/sidebar"
 
+      expect(rendered).to have_link("Emancipation Checklist", href: "/emancipation_checklists/0")
       expect(rendered).to have_link("My Cases", href: "/casa_cases")
       expect(rendered).to have_link("Case Contacts", href: "/case_contacts")
       expect(rendered).to have_link("Generate Court Report", href: "/case_court_reports")
