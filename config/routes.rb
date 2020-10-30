@@ -54,7 +54,6 @@ Rails.application.routes.draw do
   resources :emancipation_checklists, only: %i[show]
   resources :judges, only: %i[new create edit update]
 
-
   resources :supervisors, except: %i[destroy]
   resources :supervisor_volunteers, only: %i[create] do
     member do
