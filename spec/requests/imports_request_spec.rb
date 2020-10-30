@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.describe "/imports", type: :request do
   let(:volunteer_file) { Rails.root.join("spec", "fixtures", "volunteers.csv") }
   let(:supervisor_file) { Rails.root.join("spec", "fixtures", "supervisors.csv") }
+  let(:case_file) { Rails.root.join("spec", "fixtures", "casa_cases.csv") }
+  let(:existing_case_file) { Rails.root.join("spec", "fixtures", "existing_casa_case.csv") }
   let(:supervisor_volunteers_file) { Rails.root.join("spec", "fixtures", "supervisor_volunteers.csv") }
   let(:casa_admin) { create(:casa_admin) }
 
@@ -120,6 +122,59 @@ RSpec.describe "/imports", type: :request do
       expect(Supervisor.find_by(email: "s6@example.com").volunteers.size).to eq(0)
 
       expect(response).to redirect_to(imports_url(import_type: "supervisor"))
+    end
+
+    it "creates case in cases CSV imports" do
+      sign_in casa_admin
+
+      expect(CasaCase.count).to eq(0)
+
+      expect {
+        post imports_url,
+          params: {
+            import_type: "casa_case",
+            file: fixture_file_upload(case_file)
+          }
+      }.to change(CasaCase, :count).by(3)
+
+      expect(response).to redirect_to(imports_url(import_type: "casa_case"))
+    end
+    it "produces an error when a case already exists in cases CSV imports" do
+      sign_in casa_admin
+      create(:casa_case, case_number: "CINA-00-0000", transition_aged_youth: "true", birth_month_year_youth: nil)
+
+      expect(CasaCase.count).to eq(1)
+
+      expect {
+        post imports_url,
+          params: {
+            import_type: "casa_case",
+            file: fixture_file_upload(existing_case_file)
+          }
+      }.to change(CasaCase, :count).by(0)
+
+      expect(request.session[:import_error]).to include("Not all rows were imported.")
+      expect(request.session[:exported_rows]).to include("Case CINA-00-0000 already exists")
+      expect(response).to redirect_to(imports_url(import_type: "casa_case"))
+    end
+    it "produces an error when a deactivated case already exists in cases CSV imports" do
+      sign_in casa_admin
+
+      create(:casa_case, case_number: "CINA-00-0000", transition_aged_youth: "true", birth_month_year_youth: nil, active: "false")
+
+      expect(CasaCase.count).to eq(1)
+
+      expect {
+        post imports_url,
+          params: {
+            import_type: "casa_case",
+            file: fixture_file_upload(existing_case_file)
+          }
+      }.to change(CasaCase, :count).by(0)
+
+      expect(request.session[:import_error]).to include("Not all rows were imported.")
+      expect(request.session[:exported_rows]).to include("Case CINA-00-0000 already exists, but is inactive. Reactivate the CASA case instead.")
+      expect(response).to redirect_to(imports_url(import_type: "casa_case"))
     end
   end
 end
