@@ -55,6 +55,14 @@ class CasaCase < ApplicationRecord
     transition_aged_youth
   end
 
+  def addEmancipationOption(optionId)
+    self.emancipation_options << EmancipationOption.find(optionId)
+  end
+
+  def removeEmancipationOption(optionId)
+    self.emancipation_options.delete(EmancipationOption.find(optionId))
+  end
+
   def update_cleaning_contact_types(args)
     args = parse_date("court_date", args)
     args = parse_date("court_report_due_date", args)
