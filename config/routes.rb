@@ -21,7 +21,11 @@ Rails.application.routes.draw do
   end
 
   resources :casa_cases do
-    resource :emancipation
+    resource :emancipation do
+      member do
+        post "save"
+      end
+    end
   end
 
   resources :casa_admins, except: %i[destroy] do
