@@ -20,7 +20,9 @@ Rails.application.routes.draw do
     root to: "all_casa_admins/sessions#new", as: :unauthenticated_all_casa_root
   end
 
-  resources :casa_cases
+  resources :casa_cases do
+    resource :emancipation
+  end
 
   resources :casa_admins, except: %i[destroy] do
     member do
