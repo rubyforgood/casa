@@ -66,6 +66,17 @@ RSpec.describe "/all_casa_admins/casa_orgs/:casa_org_id/casa_admins" do
         expect(response).to have_http_status(:redirect)
       end
     end
+
+    context "when user does not have all casa admin permissions" do
+      it "should not allow access to edit admin page" do
+        sign_out all_casa_admin
+        sign_in other_admin
+
+        get edit_all_casa_admins_casa_org_casa_admin_path(casa_org, create(:casa_admin))
+
+        expect(response).to have_http_status(:redirect)
+      end
+    end
   end
 end
 # TODO: test admin creation as an all_casa_admin
