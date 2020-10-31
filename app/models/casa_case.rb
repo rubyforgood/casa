@@ -42,6 +42,14 @@ class CasaCase < ApplicationRecord
     where("court_date < ?", Time.now)
   }
 
+  scope :active, -> {
+    where(active: true)
+  }
+
+  scope :inactive, -> {
+    where(active: false)
+  }
+
   delegate :name, to: :hearing_type, prefix: true, allow_nil: true
   delegate :name, to: :judge, prefix: true, allow_nil: true
 
