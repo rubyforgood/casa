@@ -27,7 +27,7 @@ class CasaCase < ApplicationRecord
       .order(:case_number)
   }
   scope :not_assigned, ->(casa_org) {
-    where(casa_org_id: casa_org.id, active: true)
+    where(casa_org_id: casa_org.id)
       .left_outer_joins(:case_assignments)
       .where(case_assignments: {id: nil})
       .order(:case_number)
@@ -40,6 +40,14 @@ class CasaCase < ApplicationRecord
 
   scope :due_date_passed, -> {
     where("court_date < ?", Time.now)
+  }
+
+  scope :active, -> {
+    where(active: true)
+  }
+
+  scope :inactive, -> {
+    where(active: false)
   }
 
   delegate :name, to: :hearing_type, prefix: true, allow_nil: true
