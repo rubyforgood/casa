@@ -27,7 +27,7 @@ class CasaCase < ApplicationRecord
       .order(:case_number)
   }
   scope :not_assigned, ->(casa_org) {
-    where(casa_org_id: casa_org.id)
+    where(casa_org_id: casa_org.id, active: true)
       .left_outer_joins(:case_assignments)
       .where(case_assignments: {id: nil})
       .order(:case_number)
