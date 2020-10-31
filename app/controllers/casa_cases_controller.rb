@@ -60,7 +60,9 @@ class CasaCasesController < ApplicationController
 
   def deactivate
     casa_case = CasaCase.find(params[:id])
-    # TODO: authorize action with pundit
+
+    return render :edit unless Pundit.policy(current_user, casa_case).update_case_status?
+
     flash_message = "Case #{casa_case.case_number} has been deactivated."
     if casa_case.deactivate
       redirect_to edit_casa_case_path(casa_case), notice: flash_message
@@ -71,7 +73,9 @@ class CasaCasesController < ApplicationController
 
   def reactivate
     casa_case = CasaCase.find(params[:id])
-    # TODO: authorize action w/ Pundit
+
+    return render :edit unless Pundit.policy(current_user, casa_case).update_case_status?
+
     flash_message = "Case #{casa_case.case_number} has been reactivated."
     if casa_case.reactivate
       redirect_to edit_casa_case_path(casa_case), notice: flash_message
