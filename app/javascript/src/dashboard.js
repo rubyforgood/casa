@@ -65,6 +65,7 @@ $('document').ready(() => {
       var assignedToVolunteerArray = []
       var assignedToMoreThanOneVolunteerArray = []
       var assignedToTransitionYouthArray = []
+      var caseNumberPrefixArray = []
 
       $('.status-options').find('input[type="checkbox"]').each(function () {
         if ($(this).is(':checked')) {
@@ -90,15 +91,25 @@ $('document').ready(() => {
         }
       })
 
+      $('.case-number-prefix-options').find('input[type="checkbox"]').each(function () {
+        if ($(this).is(':checked')) {
+          caseNumberPrefixArray.push($(this).data('value'))
+        }
+      })
+
       var status = data[3]
       var assignedToVolunteer = (data[5] !== '' && data[5].split(',').length === 1) ? 'Yes' : 'No'
       var assignedToMoreThanOneVolunteer = (data[5] !== '' && data[5].split(',').length > 1) ? 'Yes' : 'No'
       var assignedToTransitionYouth = data[4]
+      var regex = /^(CINA|TPR)/g
+      var caseNumberPrefix = data[0].match(regex)[0]
 
       if (statusArray.includes(status) &&
         assignedToVolunteerArray.includes(assignedToVolunteer) &&
         assignedToMoreThanOneVolunteerArray.includes(assignedToMoreThanOneVolunteer) &&
-        assignedToTransitionYouthArray.includes(assignedToTransitionYouth)) {
+        assignedToTransitionYouthArray.includes(assignedToTransitionYouth) &&
+        caseNumberPrefixArray.includes(caseNumberPrefix)
+      ) {
         return true
       }
       return false
