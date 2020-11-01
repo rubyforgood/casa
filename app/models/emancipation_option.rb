@@ -4,8 +4,14 @@ class EmancipationOption < ApplicationRecord
 
   validates :name, presence: true
 
-  scope :categoryOptions, -> (emancipation_category_id) {
+  scope :category_options, -> (emancipation_category_id) {
     where(emancipation_category_id: emancipation_category_id)
+  }
+
+  scope :options_with_category_and_case, -> (emancipation_category_id, casa_case_id) {
+    joins(:casa_cases)
+      .where(casa_cases_emancipation_options: {casa_case_id: casa_case_id})
+      .where(emancipation_category_id: emancipation_category_id)
   }
 
   def get_category
