@@ -8,5 +8,9 @@ class VolunteerMailerPreview < ActionMailer::Preview
   def account_setup
     VolunteerMailer.account_setup(User.last)
   end
+
+  def court_report_reminder
+    VolunteerMailer.court_report_reminder(User.last, Date.today)
+  end
 end
 # :nocov:
