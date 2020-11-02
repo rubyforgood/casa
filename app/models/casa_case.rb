@@ -31,7 +31,6 @@ class CasaCase < ApplicationRecord
       .where(case_assignments: {id: nil})
       .order(:case_number)
   }
-
   scope :should_transition, -> {
     where(transition_aged_youth: false)
       .where("birth_month_year_youth <= ?", 14.years.ago)
@@ -56,7 +55,10 @@ class CasaCase < ApplicationRecord
   end
 
   def addEmancipationOption(optionId)
-    self.emancipation_options << EmancipationOption.find(optionId)
+    option_category_id = EmancipationOption.find(optionId).emancipation_category_id
+    if !(EmancipationCategory.find(option_category_id).mutually_exclusive && EmancipationOption.options_with_category_and_case(option_category_id, self[:id]).any?)
+      self.emancipation_options << EmancipationOption.find(optionId)
+    end
   end
 
   def removeEmancipationOption(optionId)
