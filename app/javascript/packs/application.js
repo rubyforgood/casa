@@ -19,6 +19,7 @@ require('select2')
 require('select2/dist/css/select2')
 
 require('src/case_contact')
+require('src/case_emancipation')
 require('src/select')
 require('src/dashboard')
 require('src/sidebar')
