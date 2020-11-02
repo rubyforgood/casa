@@ -25,7 +25,7 @@
       <% else %>
         <h6><strong> <%= category[:category].name %> </strong></h6>
         <% category[:options].each do |option| %>
-          <input type="checkbox" id="O<%= option.id %>" class="emancipation_check_box">
+          <input type="checkbox" id="O<%= option.id %>" class="emancipation_check_box" value="<%= option.id %>">
           <label for="O<%= option.id %>"><%= option.name %></label>
           <br>
         <% end %>

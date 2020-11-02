@@ -1,3 +1,5 @@
+const savePath = window.location.pathname + '/save'
+
 $('document').ready(() => {
   let waitingSaveOperationCount = 0
 
@@ -12,7 +14,7 @@ $('document').ready(() => {
     waitingSaveOperationCount += 2
 
     if (thisSelect.data().prev) {
-      $.post(window.location.pathname + '/save', {
+      $.post(savePath, {
         option_action: 'delete',
         option_id: thisSelect.data().prev
       })
@@ -21,10 +23,10 @@ $('document').ready(() => {
       });
     }
 
-    $.post(window.location.pathname + "/save", 
+    $.post(savePath,
     {
       option_action: 'add',
-      option_id: $(this).val()
+      option_id: thisSelect.val()
     })
     .done(function( response ) {
       console.log(response)
@@ -32,5 +34,31 @@ $('document').ready(() => {
     });
 
     thisSelect.data('prev', thisSelect.val());
+  })
+
+  $('.emancipation_check_box').change(function() {
+    let thisCheckBox = $(this)
+
+    if (thisCheckBox.prop('checked')) {
+      $.post(savePath,
+      {
+        option_action: 'add',
+        option_id: thisCheckBox.val()
+      })
+      .done(function( response ) {
+        console.log(response)
+        waitingSaveOperationCount--
+      });
+    } else {
+      $.post(savePath,
+      {
+        option_action: 'delete',
+        option_id: thisCheckBox.val()
+      })
+      .done(function( response ) {
+        console.log(response)
+        waitingSaveOperationCount--
+      });
+    }
   })
 })
