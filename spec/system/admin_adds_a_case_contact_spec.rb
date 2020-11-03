@@ -45,6 +45,53 @@ RSpec.describe "admin or supervisor adds a case contact", type: :system do
     expect(page).to_not have_text("Hidden")
   end
 
+  it "should display full text in table if notes are less than 100 characters" do
+    fill_in "case-contact-duration-hours", with: "1"
+    fill_in "case-contact-duration-minutes", with: "45"
+
+    short_notes = "Hello world!"
+    fill_in "Notes", with: short_notes
+    click_on "Submit"
+
+    expect(page).to have_text("Confirm Note Content")
+
+    expect {
+      click_on "Continue Submitting"
+    }.to change(CaseContact, :count).by(1)
+
+    expect(page).to have_text(short_notes)
+    expect(page).not_to have_text("Read more")
+  end
+
+  it "should allow expanding or hiding if notes are more than 100 characters" do
+    fill_in "case-contact-duration-hours", with: "1"
+    fill_in "case-contact-duration-minutes", with: "45"
+
+    long_notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."\
+    "Nullam id placerat eros. Fusce egestas sem facilisis interdum maximus."\
+    "Donec ullamcorper ligula et consectetur placerat. Duis vel purus molestie,"\
+    "euismod diam pretium, mattis nibh. Fusce eget leo ex. Donec vitae lacus eu"\
+    "magna tincidunt placerat. Mauris nibh nibh, venenatis sit amet libero in,"\
+
+    fill_in "Notes", with: long_notes
+    click_on "Submit"
+
+    expect(page).to have_text("Confirm Note Content")
+    expect {
+      click_on "Continue Submitting"
+    }.to change(CaseContact, :count).by(1)
+
+    expected_text = long_notes.truncate(100)
+    expect(page).to have_text("Read more")
+    expect(page).to have_text(expected_text)
+
+    click_link "Read more"
+
+    expect(page).to have_text("Hide")
+    expect(page).to have_text(long_notes)
+    expect(page).not_to have_text("Read more")
+  end
+
   context "with invalid inputs" do
     it "does not submit the form" do
       fill_in "case-contact-duration-hours", with: "0"
