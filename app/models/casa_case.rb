@@ -39,7 +39,7 @@ class CasaCase < ApplicationRecord
   }
 
   scope :due_date_passed, -> {
-    where("court_date < ?", Time.now)
+    where("court_date < ?", Time.current)
   }
 
   scope :active, -> {
@@ -86,7 +86,7 @@ class CasaCase < ApplicationRecord
   def clear_court_dates
     update(court_date: nil,
            court_report_due_date: nil,
-           court_report_submitted: false) if court_date.present? && court_date < Time.now
+           court_report_submitted: false) if court_date < Time.current
   end
 
   def deactivate
