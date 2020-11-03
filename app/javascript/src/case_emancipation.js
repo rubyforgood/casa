@@ -1,5 +1,36 @@
 const savePath = window.location.pathname + '/save'
 
+// Adds or deletes an option from the current casa case
+//  @param    {boolean}           isAdding true if adding the option to the case, false if deleting the option from the case
+//  @param    {integeri | string} optionId The id of the emancipation option to add or delete
+//  @returns  {array} a jQuery jqXHR object. See https://api.jquery.com/jQuery.ajax/#jqXHR
+//  @throws   {TypeError}  for a parameter of the incorrect type
+//  @throws   {RangeError} if optionId is negative
+function addOrDeleteOption(isAdding, optionId){
+  // Input check
+  if (typeof optionId === 'string') {
+    let optionIdAsNum = parseInt(optionId)
+
+    if (!optionIdAsNum) {
+      throw new TypeError('Param optionId is not an integer')
+    } else if (optionIdAsNum < 0) {
+      throw new RangeError('Param optionId cannot be negative')
+    }
+  } else {
+    if(!Number.isInteger(optionId)) {
+      throw new TypeError('Param optionId is not an integer')
+    } else if (optionId < 0) {
+      throw new RangeError('Param optionId cannot be negative')
+    }
+  }
+
+  // Post request
+  return $.post(savePath, {
+    option_action: isAdding ? 'add' : 'delete',
+    option_id: optionId
+  })
+}
+
 $('document').ready(() => {
   let waitingSaveOperationCount = 0
 
@@ -14,20 +45,13 @@ $('document').ready(() => {
     waitingSaveOperationCount += 2
 
     if (thisSelect.data().prev) {
-      $.post(savePath, {
-        option_action: 'delete',
-        option_id: thisSelect.data().prev
-      })
+      addOrDeleteOption(false, thisSelect.data().prev)
       .done(function( response ) {
         waitingSaveOperationCount--
       });
     }
 
-    $.post(savePath,
-    {
-      option_action: 'add',
-      option_id: thisSelect.val()
-    })
+    addOrDeleteOption(true, thisSelect.val())
     .done(function( response ) {
       console.log(response)
       waitingSaveOperationCount--
@@ -38,23 +62,16 @@ $('document').ready(() => {
 
   $('.emancipation_check_box').change(function() {
     let thisCheckBox = $(this)
+    waitingSaveOperationCount++
 
     if (thisCheckBox.prop('checked')) {
-      $.post(savePath,
-      {
-        option_action: 'add',
-        option_id: thisCheckBox.val()
-      })
+      addOrDeleteOption(true, thisCheckBox.val())
       .done(function( response ) {
         console.log(response)
         waitingSaveOperationCount--
       });
     } else {
-      $.post(savePath,
-      {
-        option_action: 'delete',
-        option_id: thisCheckBox.val()
-      })
+      addOrDeleteOption(false, thisCheckBox.val())
       .done(function( response ) {
         console.log(response)
         waitingSaveOperationCount--
