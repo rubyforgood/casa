@@ -84,9 +84,11 @@ class CasaCase < ApplicationRecord
   end
 
   def clear_court_dates
-    update(court_date: nil,
-           court_report_due_date: nil,
-           court_report_submitted: false) if court_date < Time.current
+    if court_date < Time.current
+      update(court_date: nil,
+             court_report_due_date: nil,
+             court_report_submitted: false)
+    end
   end
 
   def deactivate
