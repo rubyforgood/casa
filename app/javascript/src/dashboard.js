@@ -12,8 +12,8 @@ var defineCaseContactsTable = function () {
 $('document').ready(() => {
   $.fn.dataTable.ext.search.push(
     function (settings, data, dataIndex) {
-      if ( settings.nTable.id !== 'volunteers' ) {
-        return true;
+      if (settings.nTable.id !== 'volunteers') {
+        return true
       }
       var supervisorArray = []
 
@@ -57,8 +57,8 @@ $('document').ready(() => {
 
   $.fn.dataTable.ext.search.push(
     function (settings, data, dataIndex) {
-      if ( settings.nTable.id !== 'casa-cases' ) {
-        return true;
+      if (settings.nTable.id !== 'casa-cases') {
+        return true
       }
 
       var statusArray = []
