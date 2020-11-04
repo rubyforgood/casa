@@ -3,7 +3,7 @@ class EmancipationsController < ApplicationController
 
   # GET /casa_cases/:casa_case_id/emancipation
   def show
-    @case_options = CasaCase.find(params[:casa_case_id]).emancipation_options
+    @current_case = CasaCase.find(params[:casa_case_id])
     @emancipation_form_data = EmancipationCategory.all.map { |category| {:category => category, :options => EmancipationOption.category_options(category.id)} }
   end
 
