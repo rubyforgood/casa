@@ -18,7 +18,7 @@
           <select id="C<%= category[:category].id %>" class="emancipation_select">
             <option value="">empty</option>
             <% category[:options].each do |option| %>
-              <option value="<%= option.id %>"><%= option.name %></option>
+              <option value="<%= option.id %>" <%= @current_case.containsEmancipationOption(option.id) ? 'selected' : nil %>><%= option.name %></option>
             <% end %>
           </select>
         <h6>
