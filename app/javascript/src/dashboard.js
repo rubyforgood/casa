@@ -57,7 +57,7 @@ $('document').ready(() => {
 
   $.fn.dataTable.ext.search.push(
     function (settings, data, dataIndex) {
-      if ( settings.nTable.id !== 'casa_cases' ) {
+      if ( settings.nTable.id !== 'casa-cases' ) {
         return true;
       }
 
@@ -98,11 +98,11 @@ $('document').ready(() => {
       })
 
       var status = data[3]
-      var assignedToVolunteer = (data[5] !== '' && data[5].split(',').length === 1) ? 'Yes' : 'No'
+      var assignedToVolunteer = (data[5] !== '' && data[5].split(',').length >= 1) ? 'Yes' : 'No'
       var assignedToMoreThanOneVolunteer = (data[5] !== '' && data[5].split(',').length > 1) ? 'Yes' : 'No'
       var assignedToTransitionYouth = data[4]
       var regex = /^(CINA|TPR)/g
-      var caseNumberPrefix = data[0].match(regex)[0]
+      var caseNumberPrefix = data[0].match(regex) ? data[0].match(regex)[0] : ''
 
       if (statusArray.includes(status) &&
         assignedToVolunteerArray.includes(assignedToVolunteer) &&
@@ -144,7 +144,7 @@ $('document').ready(() => {
     if (columnVisible) { $('#visibleColumns input[data-column="' + index + '"]').prop('checked', true) } else { $('#visibleColumns input[data-column="' + index + '"]').prop('checked', false) }
   })
 
-  var casaCasesTable = $('table#casa_cases').DataTable({
+  var casaCasesTable = $('table#casa-cases').DataTable({
     autoWidth: false,
     stateSave: false,
     columnDefs: [],
