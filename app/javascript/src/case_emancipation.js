@@ -36,26 +36,37 @@ $('document').ready(() => {
 
   $('.emancipation_select').each(function() {
     let thisSelect = $(this)
+
     thisSelect.data('prev', thisSelect.val())
   })
 
   $('.emancipation_select').change(function(data) {
     let thisSelect = $(this)
 
-    waitingSaveOperationCount += 2
+    waitingSaveOperationCount += thisSelect.data().prev ? 1 : 0
+    waitingSaveOperationCount += thisSelect.val() ? 1 : 0
 
     if (thisSelect.data().prev) {
       addOrDeleteOption(false, thisSelect.data().prev)
       .done(function( response ) {
         waitingSaveOperationCount--
+
+        if (thisSelect.val()) {
+          addOrDeleteOption(true, thisSelect.val())
+          .done(function( response ) {
+            console.log(response)
+            waitingSaveOperationCount--
+          });
+        }
+      });
+    } else if (thisSelect.val()) {
+      addOrDeleteOption(true, thisSelect.val())
+      .done(function( response ) {
+        console.log(response)
+        waitingSaveOperationCount--
       });
     }
 
-    addOrDeleteOption(true, thisSelect.val())
-    .done(function( response ) {
-      console.log(response)
-      waitingSaveOperationCount--
-    });
 
     thisSelect.data('prev', thisSelect.val());
   })
