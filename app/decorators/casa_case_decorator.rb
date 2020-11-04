@@ -1,6 +1,10 @@
 class CasaCaseDecorator < Draper::Decorator
   delegate_all
 
+  def status
+    object.active ? "Active" : "Inactive"
+  end
+
   def transition_aged_youth_icon
     object.transition_aged_youth ? "Yes 🐛🦋" : "No"
   end

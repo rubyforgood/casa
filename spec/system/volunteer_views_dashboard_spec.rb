@@ -8,9 +8,9 @@ RSpec.describe "volunteer views dashboard", type: :system do
   end
 
   it "sees all their casa cases" do
-    casa_case_1 = create(:casa_case, casa_org: volunteer.casa_org, case_number: "SLAVA-1")
-    casa_case_2 = create(:casa_case, casa_org: volunteer.casa_org, case_number: "SLAVA-2")
-    casa_case_3 = create(:casa_case, casa_org: volunteer.casa_org, case_number: "SLAVA-3")
+    casa_case_1 = create(:casa_case, active: true, casa_org: volunteer.casa_org, case_number: "CINA-1")
+    casa_case_2 = create(:casa_case, active: true, casa_org: volunteer.casa_org, case_number: "CINA-2")
+    casa_case_3 = create(:casa_case, active: true, casa_org: volunteer.casa_org, case_number: "CINA-3")
     create(:case_assignment, volunteer: volunteer, casa_case: casa_case_1)
     create(:case_assignment, volunteer: volunteer, casa_case: casa_case_2)
 

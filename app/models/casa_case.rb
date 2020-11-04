@@ -1,4 +1,13 @@
 class CasaCase < ApplicationRecord
+  TABLE_COLUMNS = %w[
+    case_number
+    hearing_type_name
+    judge_name
+    status
+    transition_aged_youth_icon
+    assigned_to
+    actions
+  ].freeze
   has_paper_trail
 
   has_many :case_assignments, dependent: :destroy
