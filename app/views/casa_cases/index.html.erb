@@ -125,7 +125,7 @@
       </thead>
       <tbody>
       <% @casa_cases.each do |casa_case| %>
-        <tr class=<%= !casa_case.active ? "table-secondary" : "" %> >
+        <tr class=<%= !casa_case.active ? "table-secondary" : "" %>>
           <td><%= link_to(casa_case.case_number, casa_case) %></td>
           <td><%= casa_case.hearing_type_name %></td>
           <td><%= casa_case.judge_name %></td>

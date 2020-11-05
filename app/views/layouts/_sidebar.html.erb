@@ -19,11 +19,11 @@
           <% if current_user.volunteer? %>
             <%= menu_item(label: "Case Contacts", path: case_contacts_path) %>
           <% end %>
-        
+
           <%#<% if current_user.casa_case&.emancipation_checklist  %>
           <%#<%= menu_item(label: "Emancipation Checklist", path: emancipation_checklist_path) %>
           <%# <% end %>
-        
+
           <%= menu_item(label: "Emancipation Checklist", path: emancipation_checklist_path(0)) %>
           <%= menu_item(label: "Admins", path: casa_admins_path, visible: policy(CasaAdmin).index?) %>
         <% end %>

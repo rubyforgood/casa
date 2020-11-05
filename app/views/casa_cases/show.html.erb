@@ -16,8 +16,8 @@
 
 <div class="card card-container">
   <div class="card-body">
-    <% if !@casa_case.active%>
-      <%= render "inactive_case", casa_case: @casa_case%>
+    <% if !@casa_case.active %>
+      <%= render "inactive_case", casa_case: @casa_case %>
     <% end %>
     <p>
     <h6><strong>Case number:</strong> <%= @casa_case.case_number %></h6>
