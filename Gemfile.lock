@@ -257,7 +257,7 @@ GEM
       rubocop-ast (>= 0.6.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
-    rubocop-ast (1.1.0)
+    rubocop-ast (1.1.1)
       parser (>= 2.7.1.5)
     rubocop-performance (1.8.1)
       rubocop (>= 0.87.0)
@@ -342,7 +342,7 @@ DEPENDENCIES
   byebug
   capybara (>= 2.15)
   capybara-screenshot
-  cypress-on-rails (~> 1.0)
+  cypress-on-rails
   devise
   devise_invitable
   draper
@@ -352,7 +352,7 @@ DEPENDENCIES
   image_processing (~> 1.2)
   jbuilder (~> 2.10)
   letter_opener
-  listen (>= 3.0.5, < 3.3)
+  listen
   paper_trail
   pg (>= 0.18, < 2.0)
   pry
@@ -361,17 +361,17 @@ DEPENDENCIES
   pundit
   rails (~> 6.0.3)
   rake
-  rspec-rails (~> 4.0.1)
+  rspec-rails
   sablon
   selenium-webdriver
   shoulda-matchers
   simplecov (~> 0.17.1)
   skylight
   spring
-  spring-watcher-listen (~> 2.0.0)
+  spring-watcher-listen
   standard (~> 0.8.1)
   tzinfo-data
-  web-console (>= 3.3.0)
+  web-console
   webdrivers
   webpacker (~> 5.2)
 
