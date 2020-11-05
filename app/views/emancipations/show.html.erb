@@ -13,9 +13,9 @@
       <% if category[:category].mutually_exclusive %>
         <h6>
           <label for="C<%= category[:category].id %>">
-            <strong> <%= category[:category].name %> <strong>
+            <strong> <%= category[:category].name %> </strong>
           </label>
-          <select id="C<%= category[:category].id %>" class="emancipation_select">
+          <select id="C<%= category[:category].id %>" class="emancipation-select">
             <option value="">empty</option>
             <% category[:options].each do |option| %>
               <option value="<%= option.id %>" <%= @current_case.containsEmancipationOption(option.id) ? 'selected' : nil %>><%= option.name %></option>
@@ -25,7 +25,7 @@
       <% else %>
         <h6><strong> <%= category[:category].name %> </strong></h6>
         <% category[:options].each do |option| %>
-          <input type="checkbox" id="O<%= option.id %>" class="emancipation_check_box" value="<%= option.id %>" <%= @current_case.containsEmancipationOption(option.id) ? 'checked' : nil %> >
+          <input type="checkbox" id="O<%= option.id %>" class="emancipation-check-box" value="<%= option.id %>" <%= @current_case.containsEmancipationOption(option.id) ? 'checked' : nil %> >
           <label for="O<%= option.id %>"><%= option.name %></label>
           <br>
         <% end %>
@@ -33,4 +33,3 @@
     <% end %>
   </div>
 </div>
-

@@ -34,13 +34,13 @@ function addOrDeleteOption(isAdding, optionId){
 $('document').ready(() => {
   let waitingSaveOperationCount = 0
 
-  $('.emancipation_select').each(function() {
+  $('.emancipation-select').each(function() {
     let thisSelect = $(this)
 
     thisSelect.data('prev', thisSelect.val())
   })
 
-  $('.emancipation_select').change(function(data) {
+  $('.emancipation-select').change(function(data) {
     let thisSelect = $(this)
 
     waitingSaveOperationCount += thisSelect.data().prev ? 1 : 0
@@ -71,7 +71,7 @@ $('document').ready(() => {
     thisSelect.data('prev', thisSelect.val());
   })
 
-  $('.emancipation_check_box').change(function() {
+  $('.emancipation-check-box').change(function() {
     let thisCheckBox = $(this)
     waitingSaveOperationCount++
 
