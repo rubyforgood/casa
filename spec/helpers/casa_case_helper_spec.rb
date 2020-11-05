@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe CasaCaseHelper do
+RSpec.describe CasaCaseHelper do
   let(:volunteer1) { create(:volunteer) }
   let(:volunteer2) { create(:volunteer) }
   let(:case_assignment1) { create(:case_assignment, is_active: false, volunteer: volunteer1) }

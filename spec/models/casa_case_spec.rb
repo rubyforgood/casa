@@ -19,7 +19,7 @@ RSpec.describe CasaCase do
 
       ordered_casa_cases = described_class.ordered
 
-      expect(ordered_casa_cases).to eq [new_casa_case, old_casa_case, very_old_casa_case]
+      expect(ordered_casa_cases.map(&:id)).to eq [new_casa_case.id, old_casa_case.id, very_old_casa_case.id]
     end
   end
 

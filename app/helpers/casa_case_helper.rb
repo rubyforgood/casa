@@ -1,5 +1,16 @@
 module CasaCaseHelper
   def assigned_volunteers(casa_case)
-    casa_case.case_assignments.filter_map { |assignment| assignment.volunteer if assignment.is_active }
+    # TODO: make this more rails-ish
+    Volunteer.joins(
+      "left join case_assignments on case_assignments.volunteer_id = users.id"
+    ).joins(
+      "left join casa_cases on case_assignments.casa_case_id = casa_cases.id"
+    ).where(
+      "casa_cases.id = #{casa_case.id}"
+    ).where(
+      "users.active = true"
+    ).where(
+      "case_assignments.is_active = true"
+    )
   end
 end
