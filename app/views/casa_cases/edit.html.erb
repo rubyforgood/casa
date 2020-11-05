@@ -1,8 +1,8 @@
 <%= link_to "Back", casa_cases_path %>
 <h1>Editing CASA Case</h1>
 
-<% if !@casa_case.active%>
-  <%= render 'inactive_case', casa_case: @casa_case%>
+<% if !@casa_case.active %>
+  <%= render 'inactive_case', casa_case: @casa_case %>
 <% else %>
   <%= render 'form', casa_case: @casa_case %>
 <% end %>
