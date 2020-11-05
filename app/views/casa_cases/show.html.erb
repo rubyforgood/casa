@@ -50,7 +50,7 @@
 
     <div>
       <h6><strong>Assigned Volunteers:</strong></h6>
-      <% policy_scope(@casa_case.volunteers).each_with_index do |volunteer, index| %>
+      <% assigned_volunteers(policy_scope(@casa_case)).each_with_index do |volunteer, index| %>
         <p><%= link_to "#{volunteer.decorate.name} ", edit_volunteer_path(volunteer) %></p>
       <% end %>
       <br>
