@@ -15,23 +15,24 @@ RSpec.describe CaseAssignmentPolicy do
 
   permissions :unassign? do
     it "does not allow unassign if case_assignment is inactive" do
-      expect(subject).not_to permit(casa_admin, case_assignment_inactive)
+      is_expected.not_to permit(casa_admin, case_assignment_inactive)
     end
+
     context "when user is an admin" do
       it "allow update when case_assignment is active" do
-        expect(subject).to permit(casa_admin, case_assignment)
+        is_expected.to permit(casa_admin, case_assignment)
       end
     end
 
     context "when user is a supervisor" do
       it "allow update when case_assignment is active" do
-        expect(subject).to permit(supervisor, case_assignment)
+        is_expected.to permit(supervisor, case_assignment)
       end
     end
 
     context "when user is a volunteer" do
       it "does not allow unassign" do
-        expect(subject).not_to permit(volunteer, case_assignment)
+        is_expected.not_to permit(volunteer, case_assignment)
       end
     end
   end

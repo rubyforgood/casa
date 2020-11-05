@@ -1,6 +1,6 @@
 running cypress locally involves two terminal windows:
 
-1) run `bundle exec rails s`
+1) run `bundle exec rails s -p 4040`
 
 2) run `yarn cypress open`
 

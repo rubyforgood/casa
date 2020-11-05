@@ -16,7 +16,13 @@ class CaseImporter < FileImporter
       if casa_case
         case_number = casa_case.case_number
         failures = []
-        failures << "Case #{case_number} already exists" if result[:existing]
+        if result[:existing]
+          failures << if result[:deactivated]
+            "Case #{case_number} already exists, but is inactive. Reactivate the CASA case instead."
+          else
+            "Case #{case_number} already exists"
+          end
+        end
         volunteers = email_addresses_to_users(Volunteer, String(row[:case_assignment]))
         volunteers.each do |volunteer|
           if volunteer.casa_cases.exists?(casa_case.id)
@@ -38,7 +44,10 @@ class CaseImporter < FileImporter
   def create_casa_case(row_data)
     casa_case_params = row_data.to_hash.slice(:case_number, :transition_aged_youth, :birth_month_year_youth)
     casa_case = CasaCase.find_by(casa_case_params)
-    return {casa_case: casa_case, existing: true} if casa_case.present?
+
+    return {casa_case: casa_case, existing: true, deactivated: true} if casa_case.present? && !casa_case.active
+
+    return {casa_case: casa_case, existing: true, deactivated: false} if casa_case.present?
 
     casa_case = CasaCase.new(casa_case_params)
     casa_case.casa_org_id = org_id

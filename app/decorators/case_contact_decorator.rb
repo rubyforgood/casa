@@ -5,6 +5,9 @@ class CaseContactDecorator < Draper::Decorator
   # - `N` minutes
   # - `N` hours `M` minutes
   # - `N` hours
+
+  NOTES_WORD_LIMIT = 100
+
   def duration_minutes
     minutes = object.duration_minutes
 
@@ -69,5 +72,9 @@ class CaseContactDecorator < Draper::Decorator
     else
       object.medium_type
     end
+  end
+
+  def notes
+    object.notes.to_s.truncate(NOTES_WORD_LIMIT)
   end
 end

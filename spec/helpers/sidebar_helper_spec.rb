@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe SidebarHelper do
+RSpec.describe SidebarHelper do
   describe "#menu_item" do
     it "does not render sidebar menu item when not visible" do
       menu_item = helper.menu_item(label: "Supervisors", path: supervisors_path, visible: false)

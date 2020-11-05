@@ -28,7 +28,7 @@ class CaseContactsController < ApplicationController
     # By default the first case is selected
     @selected_cases = @casa_cases[0, 1]
 
-    @current_organization_groups = current_organization.contact_type_groups
+    @current_organization_groups = current_organization.contact_type_groups.joins(:contact_types).where(contact_types: {active: true}).uniq
   end
 
   def create

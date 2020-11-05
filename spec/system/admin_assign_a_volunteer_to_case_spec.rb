@@ -16,6 +16,7 @@ RSpec.describe "admin or supervisor assign and unassign a volunteer to case", ty
 
     click_on "Assign Volunteer"
   end
+
   after { travel_back }
 
   context "when a volunteer is assigned to a case" do

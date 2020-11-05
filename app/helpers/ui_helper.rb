@@ -8,7 +8,7 @@ module UiHelper
       [
         "Not Assigned",
         CasaCase
-          .not_assigned(@volunteer.casa_org)
+          .not_assigned(@volunteer.casa_org).active
           .map { |casa_case| [casa_case.case_number, casa_case.id] }
       ],
       [

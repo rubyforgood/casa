@@ -17,6 +17,7 @@ RSpec.describe User, type: :model do
     user = build(:user, display_name: "")
     expect(user.valid?).to be false
   end
+
   it "returns all case_contacts associated with this user and the casa case id supplied" do
     volunteer = create(:volunteer, :with_casa_cases)
 
@@ -51,7 +52,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "supervisors" do
-    context "#volunteers_serving_transistion_aged_youth" do
+    describe "#volunteers_serving_transistion_aged_youth" do
       it "returns the number of transition aged youth on a supervisor" do
         assignment1 = create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: true))
         assignment2 = create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: true))
@@ -64,16 +65,16 @@ RSpec.describe User, type: :model do
       end
     end
 
-    context "#no_contact_for_two_weeks" do
+    describe "#no_contact_for_two_weeks" do
       let(:supervisor) { create(:supervisor) }
 
       it "returns zero for a volunteer that has successfully made contact in at least one contact_case within the last 2 weeks" do
         volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
 
         case_of_interest_1 = volunteer_1.casa_cases.first
-        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: false, occurred_at: 1.weeks.ago)
+        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: false, occurred_at: 1.week.ago)
         expect(supervisor.no_contact_for_two_weeks).to eq(1)
-        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, occurred_at: 1.weeks.ago)
+        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, occurred_at: 1.week.ago)
         expect(supervisor.no_contact_for_two_weeks).to eq(0)
       end
 
@@ -159,12 +160,15 @@ RSpec.describe User, type: :model do
 
   describe "#volunteers_with_no_supervisor?" do
     subject { User.volunteers_with_no_supervisor(casa_org) }
+
     let(:casa_org) { create(:casa_org) }
+
     context "no volunteers" do
       it "returns none" do
         expect(subject).to eq([])
       end
     end
+
     context "volunteers" do
       let!(:unassigned1) { create(:volunteer, display_name: "aaa", casa_org: casa_org) }
       let!(:unassigned2) { create(:volunteer, display_name: "bbb", casa_org: casa_org) }

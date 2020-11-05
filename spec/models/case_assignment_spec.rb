@@ -8,7 +8,7 @@ RSpec.describe CaseAssignment do
   let(:casa_case_2) { create(:casa_case) }
   let(:volunteer_2) { create(:volunteer) }
 
-  it "should only allow active volunteers to be assigned" do
+  it "only allow active volunteers to be assigned" do
     expect(casa_case_1.case_assignments.new(volunteer: volunteer_1)).to be_valid
     casa_case_1.reload
 

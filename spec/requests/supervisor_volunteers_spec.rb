@@ -30,6 +30,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
           is_active: false
         )
       end
+
       it "sets that association to active" do
         valid_parameters = {
           supervisor_volunteer: {volunteer_id: volunteer.id},
@@ -114,6 +115,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
       let!(:association) do
         create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer)
       end
+
       it "does not set the is_active flag on the association to false" do
         sign_in volunteer
 

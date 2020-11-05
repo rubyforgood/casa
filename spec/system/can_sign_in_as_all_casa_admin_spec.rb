@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "AllCasaAdmin auth", type: :system do
+RSpec.describe "AllCasaAdmin auth", type: :system do
   let(:all_casa_admin) { create(:all_casa_admin) }
   let(:volunteer) { create(:volunteer) }
 
@@ -17,6 +17,7 @@ describe "AllCasaAdmin auth", type: :system do
       click_link "Log out"
       expect(page).to_not have_text "sign in before continuing"
       expect(page).to have_text "Signed out successfully"
+      expect(page).to have_text "All CASA Log In"
     end
   end
 

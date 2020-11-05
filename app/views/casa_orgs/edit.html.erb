@@ -18,6 +18,11 @@
             <%= form.label :address %>
             <%= form.text_field :address, class: "form-control" %>
         </div>
+
+        <div class="custom-file mb-5">
+          <%= form.label :logo %>
+          <%= form.file_field :logo, class: "form-control" %>
+        </div>
       <br>
 
       <div class="actions">
@@ -42,5 +47,6 @@
 <div class="card card-container">
   <div class="card-body">
     <%= render "hearing_types" %>
+    <%= render "judges" %>
   </div>
 </div>

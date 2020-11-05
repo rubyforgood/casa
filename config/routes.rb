@@ -20,7 +20,12 @@ Rails.application.routes.draw do
     root to: "all_casa_admins/sessions#new", as: :unauthenticated_all_casa_root
   end
 
-  resources :casa_cases
+  resources :casa_cases do
+    member do
+      patch :deactivate
+      patch :reactivate
+    end
+  end
 
   resources :casa_admins, except: %i[destroy] do
     member do
@@ -31,7 +36,11 @@ Rails.application.routes.draw do
 
   resources :case_contacts, except: %i[show]
   resources :reports, only: %i[index]
-  resources :case_court_reports, only: %i[index]
+  resources :case_court_reports, only: %i[index show] do
+    collection do
+      post :generate
+    end
+  end
   resources :imports, only: %i[index create] do
     collection do
       get :download_failed
@@ -42,6 +51,8 @@ Rails.application.routes.draw do
   resources :contact_type_groups, only: %i[new create edit update]
   resources :contact_types, only: %i[new create edit update]
   resources :hearing_types, only: %i[new create edit update]
+  resources :emancipation_checklists, only: %i[show]
+  resources :judges, only: %i[new create edit update]
 
   resources :supervisors, except: %i[destroy]
   resources :supervisor_volunteers, only: %i[create] do
@@ -64,7 +75,12 @@ Rails.application.routes.draw do
 
   namespace :all_casa_admins do
     resources :casa_orgs, only: [:new, :create, :show] do
-      resources :casa_admins, only: [:new, :create]
+      resources :casa_admins, only: [:new, :create, :edit, :update] do
+        member do
+          patch :deactivate
+          patch :activate
+        end
+      end
     end
   end
 

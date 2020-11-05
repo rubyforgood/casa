@@ -3,4 +3,3 @@ module ReportHelper
     [["Both", ""], ["Yes", true], ["No", false]]
   end
 end
-
