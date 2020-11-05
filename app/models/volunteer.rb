@@ -43,7 +43,8 @@ class Volunteer < User
   end
 
   # false if volunteer has any case with no contact in the past 30 days
-  def made_contact_with_all_cases_in_days?(num_days = 30) # should be 14!
+  def made_contact_with_all_cases_in_days?(num_days = 14)
+    # should be 14!
     # this should do the same thing as no_contact_for_two_weeks but for a volunteer
     total_cases_count = casa_cases.count
     return true if total_cases_count.zero?
@@ -53,7 +54,7 @@ class Volunteer < User
 
   private
 
-  def cases_where_contact_made_in_days(num_days = 30)
+  def cases_where_contact_made_in_days(num_days = 14)
     casa_cases
       .joins(:case_contacts)
       .where(case_contacts: {contact_made: true})
