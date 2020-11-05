@@ -1,1 +1,1 @@
-[View our Code of Conduct here!](./doc/code-of-conduct.md)
+[Code of Conduct](./doc/code-of-conduct.md)
