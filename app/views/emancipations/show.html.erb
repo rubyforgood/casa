@@ -2,8 +2,15 @@
   <div class="col-sm-12 dashboard-table-header">
     <h3>
       Emancipation Checklist
-      <strong>Case number:</strong> <%= @case_id %>
     </h3>
+    <noscript>
+      <h3 class="noscript">
+        Javascript is disabled
+      </h3>
+      <p class="noscript">
+        This page requires javascript to work
+      </p>
+    </noscript>
   </div> 
 </div>
 
@@ -35,10 +42,10 @@
 </div>
 
 <div id="async-notifications">
-  <div id="async-waiting-indicator">
+  <div id="async-waiting-indicator" style="display: none">
     Saving <div class="load-spinner"></div>
   </div>
-  <div id="async-success-indicator">
+  <div id="async-success-indicator" style="display: none">
     Saved
   </div>
 </div>
