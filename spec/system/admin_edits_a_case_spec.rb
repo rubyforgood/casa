@@ -25,11 +25,14 @@ RSpec.describe "admin edits case", type: :system do
   it "edits case" do
     visit casa_case_path(casa_case.id)
     click_on "Edit Case Details"
+    expect(page).to have_select("Hearing type")
+    expect(page).to have_select("Judge")
     has_no_checked_field? :court_report_submitted
     check "Court report submitted"
     click_on "Update CASA Case"
 
     has_checked_field? :court_report_submitted
+
     expect(page).to have_text("Court Date")
     expect(page).to have_text("Court Report Due Date")
     expect(page).to have_text("Day")

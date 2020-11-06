@@ -11,6 +11,10 @@ RSpec.describe "volunteer edits case", type: :system do
 
   it "clicks back button after editing case" do
     visit edit_casa_case_path(casa_case)
+
+    expect(page).to_not have_select("Hearing type")
+    expect(page).to_not have_select("Judge")
+
     check "Court report submitted"
     click_on "Update CASA Case"
 

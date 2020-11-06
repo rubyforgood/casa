@@ -4,7 +4,7 @@
       <%= render "/shared/error_messages", resource: casa_case %>
 
       <div class="field form-group">
-        <% if !casa_case.persisted? || Pundit.policy(current_user, casa_case).update_case_number? %>
+        <% if casa_case.new_record? || policy(casa_case).update_case_number? %>
           <%= form.label :case_number %>
           <%= form.text_field :case_number, class: "form-control" %>
         <% else %>
@@ -12,27 +12,31 @@
         <% end %>
       </div>
 
-      <div class="field form-group">
-        <%= form.label :hearing_type_id %>
-        <%= form.collection_select(
-          :hearing_type_id,
-          HearingType.active.for_organization(current_organization),
-          :id, :name,
-          { include_hidden: false, prompt: "-Select Hearing Type-" },
-          { class: "form-control" }
-        ) %>
-      </div>
+      <% if policy(casa_case).update_hearing_type? %>
+        <div class="field form-group">
+          <%= form.label :hearing_type_id %>
+          <%= form.collection_select(
+            :hearing_type_id,
+            HearingType.active.for_organization(current_organization),
+            :id, :name,
+            { include_hidden: false, prompt: "-Select Hearing Type-" },
+            { class: "form-control" }
+          ) %>
+        </div>
+      <% end %>
 
-      <div class="field form-group">
-        <%= form.label :judge_id %>
-        <%= form.collection_select(
-          :judge_id,
-          Judge.for_organization(current_organization),
-          :id, :name,
-          { include_hidden: false, prompt: "-Select Judge-" },
-          { class: "form-control" }
-        ) %>
-      </div>
+      <% if policy(casa_case).update_judge? %>
+        <div class="field form-group">
+          <%= form.label :judge_id %>
+          <%= form.collection_select(
+            :judge_id,
+            Judge.for_organization(current_organization),
+            :id, :name,
+            { include_hidden: false, prompt: "-Select Judge-" },
+            { class: "form-control" }
+          ) %>
+        </div>
+      <% end %>
 
       <div class="field form-group">
         <% if policy(casa_case).update_court_date? %>
