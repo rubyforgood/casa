@@ -1,4 +1,5 @@
 const savePath = window.location.pathname + '/save'
+let notifications;
 
 // Adds or deletes an option from the current casa case
 //  @param    {boolean}           isAdding true if adding the option to the case, false if deleting the option from the case
@@ -31,16 +32,35 @@ function addOrDeleteOption(isAdding, optionId){
   })
 }
 
+// Shows an error notification
+//  @param    {string}  errorMsg
+//  @throws   {TypeError}  for a parameter of the incorrect type
+function notifyError(errorMsg) {
+  if (typeof errorMsg !== 'string') {
+    throw new TypeError('Param errorMsg is not a string')
+  }
+
+  notifications.append(`
+  <div class="async-failure-indicator">
+    Error: ${errorMsg}
+    <button class="btn btn-danger btn-sm">×</button>
+  </div>`).find('.async-failure-indicator button').click( function () {
+    $(this).parent().remove()
+  })
+}
+
 $('document').ready(() => {
   let waitingSaveOperationCount = 0
+  let emancipationSelects = $('.emancipation-select')
+  notifications = $('#async-notifications')
 
-  $('.emancipation-select').each(function() {
+  emancipationSelects.each(function() {
     let thisSelect = $(this)
 
     thisSelect.data('prev', thisSelect.val())
   })
 
-  $('.emancipation-select').change(function(data) {
+  emancipationSelects.change(function(data) {
     let thisSelect = $(this)
 
     waitingSaveOperationCount += thisSelect.data().prev ? 1 : 0
