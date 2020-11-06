@@ -1,5 +1,9 @@
-const savePath = window.location.pathname + '/save'
-let notifications;
+const emancipationPage = {
+  emancipationSelects: null,
+  notifications: null,
+  savePath: window.location.pathname + '/save',
+  waitingSaveOperationCount: 0
+}
 
 // Adds or deletes an option from the current casa case
 //  @param    {boolean}           isAdding true if adding the option to the case, false if deleting the option from the case
@@ -26,7 +30,7 @@ function addOrDeleteOption(isAdding, optionId){
   }
 
   // Post request
-  return $.post(savePath, {
+  return $.post(emancipationPage.savePath, {
     option_action: isAdding ? 'add' : 'delete',
     option_id: optionId
   })
@@ -40,7 +44,7 @@ function notifyError(errorMsg) {
     throw new TypeError('Param errorMsg is not a string')
   }
 
-  notifications.append(`
+  emancipationPage.notifications.append(`
   <div class="async-failure-indicator">
     Error: ${errorMsg}
     <button class="btn btn-danger btn-sm">×</button>
@@ -50,32 +54,33 @@ function notifyError(errorMsg) {
 }
 
 $('document').ready(() => {
-  let waitingSaveOperationCount = 0
-  let emancipationSelects = $('.emancipation-select')
-  notifications = $('#async-notifications')
+  emancipationPage.emancipationSelects = $('.emancipation-select')
+  emancipationPage.notifications = $('#async-notifications')
 
-  emancipationSelects.each(function() {
+  emancipationPage.notifications.find('#async-waiting-indicator').show()
+
+  emancipationPage.emancipationSelects.each(function() {
     let thisSelect = $(this)
 
     thisSelect.data('prev', thisSelect.val())
   })
 
-  emancipationSelects.change(function(data) {
+  emancipationPage.emancipationSelects.change(function(data) {
     let thisSelect = $(this)
 
-    waitingSaveOperationCount += thisSelect.data().prev ? 1 : 0
-    waitingSaveOperationCount += thisSelect.val() ? 1 : 0
+    emancipationPage.waitingSaveOperationCount += thisSelect.data().prev ? 1 : 0
+    emancipationPage.waitingSaveOperationCount += thisSelect.val() ? 1 : 0
 
     if (thisSelect.data().prev) {
       addOrDeleteOption(false, thisSelect.data().prev)
       .done(function( response ) {
-        waitingSaveOperationCount--
+        emancipationPage.waitingSaveOperationCount--
 
         if (thisSelect.val()) {
           addOrDeleteOption(true, thisSelect.val())
           .done(function( response ) {
             console.log(response)
-            waitingSaveOperationCount--
+            emancipationPage.waitingSaveOperationCount--
           });
         }
       });
@@ -83,7 +88,7 @@ $('document').ready(() => {
       addOrDeleteOption(true, thisSelect.val())
       .done(function( response ) {
         console.log(response)
-        waitingSaveOperationCount--
+        emancipationPage.waitingSaveOperationCount--
       });
     }
 
@@ -93,19 +98,19 @@ $('document').ready(() => {
 
   $('.emancipation-check-box').change(function() {
     let thisCheckBox = $(this)
-    waitingSaveOperationCount++
+    emancipationPage.waitingSaveOperationCount++
 
     if (thisCheckBox.prop('checked')) {
       addOrDeleteOption(true, thisCheckBox.val())
       .done(function( response ) {
         console.log(response)
-        waitingSaveOperationCount--
+        emancipationPage.waitingSaveOperationCount--
       });
     } else {
       addOrDeleteOption(false, thisCheckBox.val())
       .done(function( response ) {
         console.log(response)
-        waitingSaveOperationCount--
+        emancipationPage.waitingSaveOperationCount--
       });
     }
   })
