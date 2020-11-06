@@ -42,6 +42,14 @@ class CasaCasePolicy
     user.casa_admin? || user.supervisor?
   end
 
+  def update_hearing_type?
+    user.casa_admin? || user.supervisor?
+  end
+
+  def update_judge?
+    user.casa_admin? || user.supervisor?
+  end
+
   def update_court_report_due_date?
     user.casa_admin? || user.supervisor?
   end
@@ -62,9 +70,9 @@ class CasaCasePolicy
 
     case @user
     when CasaAdmin
-      common_attrs.concat(%i[case_number birth_month_year_youth court_date court_report_due_date])
+      common_attrs.concat(%i[case_number birth_month_year_youth court_date court_report_due_date hearing_type_id judge_id])
     when Supervisor
-      common_attrs.concat(%i[court_date court_report_due_date])
+      common_attrs.concat(%i[court_date court_report_due_date hearing_type_id judge_id])
     else
       common_attrs
     end
