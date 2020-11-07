@@ -1,6 +1,5 @@
 const emancipationPage = {
-  emancipationSelects: null,
-  notifications: null,
+  saveOperationSuccessful: false,
   savePath: window.location.pathname + '/save',
   waitingSaveOperationCount: 0
 }
@@ -36,28 +35,59 @@ function addOrDeleteOption(isAdding, optionId){
   })
 }
 
-// Shows an error notification
-//  @param    {string}  errorMsg
+// Called when an async operation completes. May show notifications describing how the operation completed
+//  @param    {string=}  errorMsg The error message to be displayed if there was an error
 //  @throws   {TypeError}  for a parameter of the incorrect type
-function notifyError(errorMsg) {
-  if (typeof errorMsg !== 'string') {
-    throw new TypeError('Param errorMsg is not a string')
+//  @throws   {Error}      for trying to resolve more async operations than the amount currently awaiting
+function resolveAsyncOperation (errorMsg) {
+  if (emancipationPage.waitingSaveOperationCount < 1) {
+    throw new Error('Attempted to resolve an async operation when awaiting none')
   }
 
-  emancipationPage.notifications.append(`
-  <div class="async-failure-indicator">
-    Error: ${errorMsg}
-    <button class="btn btn-danger btn-sm">×</button>
-  </div>`).find('.async-failure-indicator button').click( function () {
-    $(this).parent().remove()
-  })
+  if (errorMsg) {
+    if (typeof errorMsg !== 'string') {
+      throw new TypeError('Param errorMsg is not a string')
+    }
+
+    emancipationPage.notifications.append(`
+    <div class="async-failure-indicator">
+      Error: ${errorMsg}
+      <button class="btn btn-danger btn-sm">×</button>
+    </div>`).find('.async-failure-indicator button').click( function () {
+      $(this).parent().remove()
+    })
+  } else {
+    emancipationPage.saveOperationSuccessful = true
+  }
+
+  emancipationPage.waitingSaveOperationCount--
+
+  if (emancipationPage.waitingSaveOperationCount === 0) {
+    emancipationPage.asyncWaitIndicator.hide()
+
+    if (emancipationPage.saveOperationSuccessful) {
+      emancipationPage.asyncSuccessIndicator.show()
+
+      setTimeout(function () {
+        emancipationPage.asyncSuccessIndicator.hide()
+      }, 2000)
+    }
+
+    emancipationPage.saveOperationSuccessful = false
+  }
+}
+
+// Shows the saving notification
+function waitForAsyncOperation () {
+  emancipationPage.waitingSaveOperationCount++
+  emancipationPage.asyncWaitIndicator.show()
 }
 
 $('document').ready(() => {
   emancipationPage.emancipationSelects = $('.emancipation-select')
   emancipationPage.notifications = $('#async-notifications')
-
-  emancipationPage.notifications.find('#async-waiting-indicator').show()
+  emancipationPage.asyncSuccessIndicator = emancipationPage.notifications.find('#async-success-indicator')
+  emancipationPage.asyncWaitIndicator = emancipationPage.notifications.find('#async-waiting-indicator')
 
   emancipationPage.emancipationSelects.each(function() {
     let thisSelect = $(this)
@@ -68,19 +98,24 @@ $('document').ready(() => {
   emancipationPage.emancipationSelects.change(function(data) {
     let thisSelect = $(this)
 
-    emancipationPage.waitingSaveOperationCount += thisSelect.data().prev ? 1 : 0
-    emancipationPage.waitingSaveOperationCount += thisSelect.val() ? 1 : 0
+    if (thisSelect.data().prev) {
+      waitForAsyncOperation()
+    }
+
+    if (thisSelect.val()) {
+      waitForAsyncOperation()
+    }
 
     if (thisSelect.data().prev) {
       addOrDeleteOption(false, thisSelect.data().prev)
       .done(function( response ) {
-        emancipationPage.waitingSaveOperationCount--
+        resolveAsyncOperation()
 
         if (thisSelect.val()) {
           addOrDeleteOption(true, thisSelect.val())
           .done(function( response ) {
             console.log(response)
-            emancipationPage.waitingSaveOperationCount--
+            resolveAsyncOperation()
           });
         }
       });
@@ -88,7 +123,7 @@ $('document').ready(() => {
       addOrDeleteOption(true, thisSelect.val())
       .done(function( response ) {
         console.log(response)
-        emancipationPage.waitingSaveOperationCount--
+        resolveAsyncOperation()
       });
     }
 
@@ -98,19 +133,19 @@ $('document').ready(() => {
 
   $('.emancipation-check-box').change(function() {
     let thisCheckBox = $(this)
-    emancipationPage.waitingSaveOperationCount++
+    waitForAsyncOperation()
 
     if (thisCheckBox.prop('checked')) {
       addOrDeleteOption(true, thisCheckBox.val())
       .done(function( response ) {
         console.log(response)
-        emancipationPage.waitingSaveOperationCount--
+        resolveAsyncOperation()
       });
     } else {
       addOrDeleteOption(false, thisCheckBox.val())
       .done(function( response ) {
         console.log(response)
-        emancipationPage.waitingSaveOperationCount--
+        resolveAsyncOperation()
       });
     }
   })
