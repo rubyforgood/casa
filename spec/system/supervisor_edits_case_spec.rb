@@ -96,4 +96,24 @@ RSpec.describe "supervisor edits case", type: :system do
     expect(page).not_to have_text("Reactivate Case")
     expect(page).not_to have_text("Update Casa Case")
   end
+
+  context "When a Casa instance has no judge names added" do
+    it "does not display judge names details" do
+      casa_case = create(:casa_case, casa_org: casa_org, judge: nil)
+
+      visit edit_casa_case_path(casa_case)
+
+      expect(page).not_to have_select("Judge")
+    end
+  end
+
+  context "When an admin has added judge names to a Casa instance" do
+    it "displays judge details as select option" do
+      judge = create :judge, casa_org: casa_org
+
+      visit edit_casa_case_path(casa_case)
+
+      expect(page).to have_select("Judge")
+    end
+  end
 end

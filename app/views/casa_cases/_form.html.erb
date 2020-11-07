@@ -25,17 +25,19 @@
         </div>
       <% end %>
 
-      <% if policy(casa_case).update_judge? %>
-        <div class="field form-group">
-          <%= form.label :judge_id %>
-          <%= form.collection_select(
-            :judge_id,
-            Judge.for_organization(current_organization),
-            :id, :name,
-            { include_hidden: false, prompt: "-Select Judge-" },
-            { class: "form-control" }
-          ) %>
-        </div>
+      <% if Judge.for_organization(current_organization).any? %>
+        <% if policy(casa_case).update_judge? %>
+          <div class="field form-group">
+            <%= form.label :judge_id %>
+            <%= form.collection_select(
+              :judge_id,
+              Judge.for_organization(current_organization),
+              :id, :name,
+              { include_hidden: false, prompt: "-Select Judge-" },
+              { class: "form-control" }
+            ) %>
+          </div>
+        <% end %>
       <% end %>
 
       <div class="field form-group">
