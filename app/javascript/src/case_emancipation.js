@@ -101,6 +101,8 @@ function addOrDeleteOption(isAdding, optionId){
     }
   }
 
+  waitForAsyncOperation()
+
   // Post request
   return $.post(emancipationPage.savePath, {
     option_action: isAdding ? 'add' : 'delete',
@@ -134,30 +136,14 @@ $('document').ready(() => {
     let thisSelect = $(this)
 
     if (thisSelect.data().prev) {
-      waitForAsyncOperation()
-    }
-
-    if (thisSelect.val()) {
-      waitForAsyncOperation()
-    }
-
-    if (thisSelect.data().prev) {
       addOrDeleteOption(false, thisSelect.data().prev)
       .done(function( response ) {
-        resolveAsyncOperation()
-
         if (thisSelect.val()) {
           addOrDeleteOption(true, thisSelect.val())
-          .done(function( response ) {
-            resolveAsyncOperation()
-          });
         }
       });
     } else if (thisSelect.val()) {
       addOrDeleteOption(true, thisSelect.val())
-      .done(function( response ) {
-        resolveAsyncOperation()
-      });
     }
 
 
@@ -166,18 +152,11 @@ $('document').ready(() => {
 
   $('.emancipation-check-box').change(function() {
     let thisCheckBox = $(this)
-    waitForAsyncOperation()
 
     if (thisCheckBox.prop('checked')) {
       addOrDeleteOption(true, thisCheckBox.val())
-      .done(function( response ) {
-        resolveAsyncOperation()
-      });
     } else {
       addOrDeleteOption(false, thisCheckBox.val())
-      .done(function( response ) {
-        resolveAsyncOperation()
-      });
     }
   })
 })
