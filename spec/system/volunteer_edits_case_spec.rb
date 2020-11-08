@@ -15,7 +15,7 @@ RSpec.describe "volunteer edits case", type: :system do
     expect(page).to_not have_select("Hearing type")
     expect(page).to_not have_select("Judge")
 
-    select 'Submitted', from: "casa_case_court_report_status"
+    select "Submitted", from: "casa_case_court_report_status"
     click_on "Update CASA Case"
 
     click_on "Back"
@@ -27,7 +27,7 @@ RSpec.describe "volunteer edits case", type: :system do
     visit casa_case_path(casa_case)
     expect(page).to have_text("Court Report Status: Not submitted")
     visit edit_casa_case_path(casa_case)
-    select 'Submitted', from: "casa_case_court_report_status"
+    select "Submitted", from: "casa_case_court_report_status"
     click_on "Update CASA Case"
 
     expect(page).to have_text("Court Date")

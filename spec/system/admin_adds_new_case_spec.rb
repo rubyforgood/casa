@@ -22,12 +22,12 @@ RSpec.describe "admin adds a new case", type: :system do
 
       select "1", from: "casa_case_court_report_due_date_3i"
       select "April", from: "casa_case_court_report_due_date_2i"
-      select next_year, from: "casa_case_court_report_due_date_1i" 
+      select next_year, from: "casa_case_court_report_due_date_1i"
 
       check "Transition aged youth"
       has_checked_field? "Transition aged youth"
 
-      select 'Submitted', from: "casa_case_court_report_status"
+      select "Submitted", from: "casa_case_court_report_status"
 
       click_on "Create CASA Case"
 
