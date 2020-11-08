@@ -12,6 +12,6 @@ echo '--------------------------------------------'
 echo 'BEGIN: docker-compose run web rails db:reset'
 echo '--------------------------------------------'
 docker-compose run web rails db:reset
-echo '--------------------------------------------'
+echo '------------------------------------------'
 echo 'END: docker-compose run web rails db:reset'
-echo '--------------------------------------------'
+echo '------------------------------------------'
