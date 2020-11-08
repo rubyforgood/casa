@@ -139,7 +139,7 @@ RSpec.describe "/casa_cases", type: :request do
 
     describe "PATCH /casa_cases/:id/deactivate" do
       let(:casa_case) { create(:casa_case, :active, casa_org: organization, case_number: "111") }
-      let(:params) { { id: casa_case.id } }
+      let(:params) { {id: casa_case.id} }
 
       it "deactivates the requested casa_case" do
         patch deactivate_casa_case_path(casa_case), params: params
@@ -158,7 +158,7 @@ RSpec.describe "/casa_cases", type: :request do
         expect(flash[:notice]).to include("Case #{casa_case.case_number} has been deactivated.")
       end
 
-      context 'when deactivation fails' do
+      context "when deactivation fails" do
         before do
           allow_any_instance_of(CasaCase).to receive(:deactivate).and_return(false)
         end
@@ -173,7 +173,7 @@ RSpec.describe "/casa_cases", type: :request do
 
     describe "PATCH /casa_cases/:id/reactivate" do
       let(:casa_case) { create(:casa_case, :inactive, casa_org: organization, case_number: "111") }
-      let(:params) { { id: casa_case.id } }
+      let(:params) { {id: casa_case.id} }
 
       it "reactivates the requested casa_case" do
         patch reactivate_casa_case_path(casa_case), params: params
@@ -192,7 +192,7 @@ RSpec.describe "/casa_cases", type: :request do
         expect(flash[:notice]).to include("Case #{casa_case.case_number} has been reactivated.")
       end
 
-      context 'when reactivation fails' do
+      context "when reactivation fails" do
         before do
           allow_any_instance_of(CasaCase).to receive(:reactivate).and_return(false)
         end
@@ -272,7 +272,7 @@ RSpec.describe "/casa_cases", type: :request do
 
     describe "PATCH /casa_cases/:id/deactivate" do
       let(:casa_case) { create(:casa_case, :active, casa_org: organization, case_number: "111") }
-      let(:params) { { id: casa_case.id } }
+      let(:params) { {id: casa_case.id} }
 
       it "does not deactivate the requested casa_case" do
         patch deactivate_casa_case_path(casa_case), params: params
@@ -283,7 +283,7 @@ RSpec.describe "/casa_cases", type: :request do
 
     describe "PATCH /casa_cases/:id/reactivate" do
       let(:casa_case) { create(:casa_case, :inactive, casa_org: organization, case_number: "111") }
-      let(:params) { { id: casa_case.id } }
+      let(:params) { {id: casa_case.id} }
 
       it "does not deactivate the requested casa_case" do
         patch deactivate_casa_case_path(casa_case), params: params
@@ -338,7 +338,7 @@ RSpec.describe "/casa_cases", type: :request do
 
     describe "PATCH /casa_cases/:id/deactivate" do
       let(:casa_case) { create(:casa_case, :active, casa_org: organization, case_number: "111") }
-      let(:params) { { id: casa_case.id } }
+      let(:params) { {id: casa_case.id} }
 
       it "does not deactivate the requested casa_case" do
         patch deactivate_casa_case_path(casa_case), params: params
@@ -349,7 +349,7 @@ RSpec.describe "/casa_cases", type: :request do
 
     describe "PATCH /casa_cases/:id/reactivate" do
       let(:casa_case) { create(:casa_case, :inactive, casa_org: organization, case_number: "111") }
-      let(:params) { { id: casa_case.id } }
+      let(:params) { {id: casa_case.id} }
 
       it "does not deactivate the requested casa_case" do
         patch deactivate_casa_case_path(casa_case), params: params
