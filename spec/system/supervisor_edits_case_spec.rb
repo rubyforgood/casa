@@ -15,10 +15,9 @@ RSpec.describe "supervisor edits case", type: :system do
 
   it "edits case" do
     visit casa_case_path(casa_case)
-    expect(page).to have_text("Court Report Submission: Not Submitted")
+    expect(page).to have_text("Court Report Status: Not submitted")
     visit edit_casa_case_path(casa_case)
-    has_no_checked_field? :court_report_submitted
-    check "Court report submitted"
+    select "Submitted", from: "casa_case_court_report_status"
     check "Youth"
     select "4", from: "casa_case_court_date_3i"
     select "November", from: "casa_case_court_date_2i"
@@ -29,7 +28,6 @@ RSpec.describe "supervisor edits case", type: :system do
     select next_year, from: "casa_case_court_report_due_date_1i"
 
     click_on "Update CASA Case"
-    has_checked_field? :court_report_submitted
     has_checked_field? "Youth"
     has_no_checked_field? "Supervisor"
 
@@ -43,16 +41,15 @@ RSpec.describe "supervisor edits case", type: :system do
 
     visit casa_case_path(casa_case)
 
-    expect(page).to have_text("Court Report Submission: Submitted")
+    expect(page).to have_text("Court Report Status: Submitted")
     expect(page).to have_text("4-NOV-#{next_year}")
     expect(page).to have_text("8-SEP-#{next_year}")
   end
 
   it "will return error message if date fields are not fully selected" do
     visit casa_case_path(casa_case)
-    expect(page).to have_text("Court Report Submission: Not Submitted")
+    expect(page).to have_text("Court Report Status: Not submitted")
     visit edit_casa_case_path(casa_case)
-    has_no_checked_field? :court_report_submitted
 
     select "November", from: "casa_case_court_date_2i"
     select "April", from: "casa_case_court_report_due_date_2i"
@@ -65,9 +62,8 @@ RSpec.describe "supervisor edits case", type: :system do
 
   it "will return error message if date fields are not valid" do
     visit casa_case_path(casa_case)
-    expect(page).to have_text("Court Report Submission: Not Submitted")
+    expect(page).to have_text("Court Report Status: Not submitted")
     visit edit_casa_case_path(casa_case)
-    has_no_checked_field? :court_report_submitted
 
     select "31", from: "casa_case_court_date_3i"
     select "April", from: "casa_case_court_date_2i"

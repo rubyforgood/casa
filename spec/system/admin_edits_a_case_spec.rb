@@ -14,12 +14,10 @@ RSpec.describe "admin edits case", type: :system do
 
   it "clicks back button after editing case" do
     visit edit_casa_case_path(casa_case)
-    check "Court report submitted"
-    has_checked_field? :court_report_submitted
+    select "Submitted", from: "casa_case_court_report_status"
     click_on "Back"
     visit edit_casa_case_path(casa_case)
-
-    has_no_checked_field? :court_report_submitted
+    expect(casa_case).not_to be_court_report_submitted
   end
 
   it "edits case" do
@@ -27,12 +25,9 @@ RSpec.describe "admin edits case", type: :system do
     click_on "Edit Case Details"
     expect(page).to have_select("Hearing type")
     expect(page).to have_select("Judge")
-    has_no_checked_field? :court_report_submitted
-    check "Court report submitted"
+    select "Submitted", from: "casa_case_court_report_status"
     click_on "Update CASA Case"
-
-    has_checked_field? :court_report_submitted
-
+    expect(page).to have_text("Submitted")
     expect(page).to have_text("Court Date")
     expect(page).to have_text("Court Report Due Date")
     expect(page).to have_text("Day")
