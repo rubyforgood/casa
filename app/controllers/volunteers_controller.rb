@@ -21,7 +21,7 @@ class VolunteersController < ApplicationController
 
     if @volunteer.save
       @volunteer.invite!
-      redirect_to root_path
+      redirect_to volunteers_path
     else
       render :new
     end
