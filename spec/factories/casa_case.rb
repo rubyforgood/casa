@@ -6,6 +6,7 @@ FactoryBot.define do
     casa_org
     hearing_type
     judge
+    court_report_status { :not_submitted }
 
     trait :with_case_assignments do
       case_assignments { build_list(:case_assignment, 2) }

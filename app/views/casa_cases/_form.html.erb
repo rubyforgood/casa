@@ -104,9 +104,10 @@
           <%= form.check_box :transition_aged_youth %>
         </div>
       <% end %>
+
       <div class="field form-group">
-        <%= form.label :court_report_submitted %>
-        <%= form.check_box :court_report_submitted %>
+        <%= form.label :court_report_status %>
+        <%= form.select :court_report_status, CasaCase.court_report_statuses.map { |status| [status.first.humanize, status.first] } %>
       </div>
 
       <% if Pundit.policy(current_user, casa_case).update_contact_types? %>

@@ -231,7 +231,7 @@ RSpec.describe "/casa_cases", type: :request do
         let(:new_attributes) {
           {
             case_number: "12345",
-            court_report_submitted: true,
+            court_report_status: :submitted,
             hearing_type_id: hearing_type.id,
             judge_id: judge.id
           }
@@ -240,7 +240,7 @@ RSpec.describe "/casa_cases", type: :request do
         it "updates permitted fields" do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes}
           casa_case.reload
-          expect(casa_case.court_report_submitted).to be true
+          expect(casa_case.submitted?).to be_truthy
 
           # Not permitted
           expect(casa_case.case_number).to eq "111"
@@ -312,13 +312,13 @@ RSpec.describe "/casa_cases", type: :request do
 
     describe "PATCH /update" do
       context "with valid parameters" do
-        let(:new_attributes) { {case_number: "12345", court_report_submitted: true} }
+        let(:new_attributes) { {case_number: "12345", court_report_status: :completed} }
 
         it "updates fields (except case_number)" do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes}
           casa_case.reload
           expect(casa_case.case_number).to eq "111"
-          expect(casa_case.court_report_submitted).to be true
+          expect(casa_case.completed?).to be true
         end
 
         it "redirects to the casa_case" do
