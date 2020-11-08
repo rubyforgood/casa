@@ -9,6 +9,10 @@ class ApplicationPolicy
     user.supervisor? || user.casa_admin?
   end
 
+  def see_emancipation_checklist?
+    user.volunteer?
+  end
+
   def see_import_page?
     user.casa_admin?
   end

@@ -46,6 +46,7 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Report a site issue", href: "https://rubyforgood.typeform.com/to/iXY4BubB")
       expect(rendered).to_not have_link("Admins", href: "/casa_admins")
       expect(rendered).to_not have_link("Generate Court Reports", href: "/case_court_reports")
+      expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists/0")
     end
   end
 
@@ -99,6 +100,7 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Admins", href: "/casa_admins")
       expect(rendered).to have_link("Report a site issue", href: "https://rubyforgood.typeform.com/to/iXY4BubB")
       expect(rendered).to_not have_link("Generate Court Reports", href: "/case_court_reports")
+      expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists/0")
     end
   end
 end
