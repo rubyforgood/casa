@@ -10,5 +10,13 @@ FactoryBot.define do
     trait :with_case_assignments do
       case_assignments { build_list(:case_assignment, 2) }
     end
+
+    trait :active do
+      active { true }
+    end
+
+    trait :inactive do
+      active { false }
+    end
   end
 end
