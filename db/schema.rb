@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_25_162142) do
+ActiveRecord::Schema.define(version: 2020_11_08_142333) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,8 @@ ActiveRecord::Schema.define(version: 2020_10_25_162142) do
     t.bigint "hearing_type_id"
     t.boolean "active", default: true, null: false
     t.bigint "judge_id"
+    t.datetime "court_report_submitted_at"
+    t.integer "court_report_status", default: 0
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
     t.index ["case_number"], name: "index_casa_cases_on_case_number", unique: true
     t.index ["hearing_type_id"], name: "index_casa_cases_on_hearing_type_id"

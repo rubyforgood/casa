@@ -45,8 +45,12 @@
     </p>
 
     <p>
-    <h6><strong>Court Report Submission:</strong> <%= @casa_case.decorate.court_report_submission %>
+    <h6><strong>Court Report Status:</strong> <%= @casa_case.decorate.court_report_submission %></h6>
     </p>
+
+    <% if @casa_case.court_report_submitted_at %>
+      <p><h6><strong>Court Report Submitted Date:</strong> <%= @casa_case.decorate.court_report_submitted_date %></h6></p>
+    <% end %>
 
     <div>
       <h6><strong>Assigned Volunteers:</strong></h6>
