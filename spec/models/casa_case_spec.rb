@@ -67,7 +67,7 @@ RSpec.describe CasaCase do
     end
   end
 
-  describe '#court_report_status=' do
+  describe "#court_report_status=" do
     let(:casa_case) { build(:casa_case) }
     subject { casa_case.court_report_status = court_report_status }
 
@@ -76,49 +76,49 @@ RSpec.describe CasaCase do
     before do
       travel_to submitted_time
     end
-  
+
     after do
       travel_back
     end
 
-    context 'when the case is already submitted' do
+    context "when the case is already submitted" do
       let(:casa_case) { build(:casa_case, court_report_status: :submitted, court_report_submitted_at: submitted_time) }
       before do
         travel_to the_future
       end
 
-      context 'when the status is completed' do
+      context "when the status is completed" do
         let(:court_report_status) { :completed }
 
-        it 'completes the court report and does not update time' do
+        it "completes the court report and does not update time" do
           is_expected.to eq :completed
           expect(casa_case.court_report_submitted_at).to eq(submitted_time)
         end
       end
 
-      context 'when the status is not_submitted' do
+      context "when the status is not_submitted" do
         let(:court_report_status) { :not_submitted }
 
-        it 'clears submission date and value' do
+        it "clears submission date and value" do
           is_expected.to eq :not_submitted
           expect(casa_case.court_report_submitted_at).to be_nil
         end
       end
     end
 
-    context 'when status is submitted' do
+    context "when status is submitted" do
       let(:court_report_status) { :submitted }
 
-      it 'tracks the court report submission' do
+      it "tracks the court report submission" do
         is_expected.to eq :submitted
         expect(casa_case.court_report_submitted_at).to eq(submitted_time)
       end
     end
 
-    context 'when the status is in review' do
+    context "when the status is in review" do
       let(:court_report_status) { :in_review }
 
-      it 'tracks the court report submission' do
+      it "tracks the court report submission" do
         is_expected.to eq :in_review
         expect(casa_case.court_report_submitted_at).to eq(submitted_time)
       end

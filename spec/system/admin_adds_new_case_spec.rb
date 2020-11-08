@@ -27,6 +27,8 @@ RSpec.describe "admin adds a new case", type: :system do
       check "Transition aged youth"
       has_checked_field? "Transition aged youth"
 
+      select "Submitted", from: "casa_case_court_report_status"
+
       click_on "Create CASA Case"
 
       expect(page.body).to have_content(case_number)

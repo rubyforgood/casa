@@ -23,7 +23,7 @@ class CasaCase < ApplicationRecord
   has_many :contact_types, through: :casa_case_contact_types, source: :contact_type
   accepts_nested_attributes_for :casa_case_contact_types
 
-  enum court_report_status: { not_submitted: 0, submitted: 1, in_review: 2, completed: 3 }, _prefix: :court_report
+  enum court_report_status: {not_submitted: 0, submitted: 1, in_review: 2, completed: 3}, _prefix: :court_report
 
   scope :ordered, -> { order(updated_at: :desc) }
   scope :actively_assigned_to, ->(volunteer) {
@@ -66,7 +66,7 @@ class CasaCase < ApplicationRecord
 
   def court_report_status=(value)
     super
-    if (court_report_not_submitted?)
+    if court_report_not_submitted?
       self.court_report_submitted_at = nil
     else
       self.court_report_submitted_at ||= Time.current

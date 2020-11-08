@@ -18,7 +18,7 @@ class CasaCaseDecorator < Draper::Decorator
   end
 
   def court_report_submitted_date
-    object.court_report_submitted_at&.strftime('%B%e, %Y')
+    object.court_report_submitted_at&.strftime("%B%e, %Y")
   end
 
   def case_contacts_ordered_by_occurred_at
