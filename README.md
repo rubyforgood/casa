@@ -1,6 +1,7 @@
 # CASA Project & Organization Overview
 
-[![Build Status](https://travis-ci.org/rubyforgood/casa.svg?branch=main)](https://travis-ci.org/rubyforgood/casa)
+![CI](https://github.com/rubyforgood/casa/workflows/rspec%20and%20cypress/badge.svg)
+![lint](https://github.com/rubyforgood/casa/workflows/standardrb%20lint/badge.svg)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=rubyforgood/casa)](https://dependabot.com)
 [![Maintainability](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/maintainability)](https://codeclimate.com/github/rubyforgood/casa/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/test_coverage)](https://codeclimate.com/github/rubyforgood/casa/test_coverage)
@@ -120,7 +121,7 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 1. `bundle exec erblint --lint-all --autocorrect` [ERB linter](https://github.com/Shopify/erb-lint)
 1. `yarn lint:fix` to run the [JS linter](https://standardjs.com/index.html) and fix isses
 
-If you have any troubles running tests, check out `.travis.yml` which is what makes the CI build run.
+If you have any troubles running tests, check out the files in `.github/workflow/` which is what makes the CI build run.
 
 **Local email**
 

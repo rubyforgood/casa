@@ -67,6 +67,64 @@ RSpec.describe CasaCase do
     end
   end
 
+  describe "#court_report_status=" do
+    let(:casa_case) { build(:casa_case) }
+    subject { casa_case.court_report_status = court_report_status }
+
+    let(:submitted_time) { Time.parse("Sun Nov 08 11:06:20 2020") }
+    let(:the_future) { submitted_time + 2.days }
+    before do
+      travel_to submitted_time
+    end
+
+    after do
+      travel_back
+    end
+
+    context "when the case is already submitted" do
+      let(:casa_case) { build(:casa_case, court_report_status: :submitted, court_report_submitted_at: submitted_time) }
+      before do
+        travel_to the_future
+      end
+
+      context "when the status is completed" do
+        let(:court_report_status) { :completed }
+
+        it "completes the court report and does not update time" do
+          is_expected.to eq :completed
+          expect(casa_case.court_report_submitted_at).to eq(submitted_time)
+        end
+      end
+
+      context "when the status is not_submitted" do
+        let(:court_report_status) { :not_submitted }
+
+        it "clears submission date and value" do
+          is_expected.to eq :not_submitted
+          expect(casa_case.court_report_submitted_at).to be_nil
+        end
+      end
+    end
+
+    context "when status is submitted" do
+      let(:court_report_status) { :submitted }
+
+      it "tracks the court report submission" do
+        is_expected.to eq :submitted
+        expect(casa_case.court_report_submitted_at).to eq(submitted_time)
+      end
+    end
+
+    context "when the status is in review" do
+      let(:court_report_status) { :in_review }
+
+      it "tracks the court report submission" do
+        is_expected.to eq :in_review
+        expect(casa_case.court_report_submitted_at).to eq(submitted_time)
+      end
+    end
+  end
+
   describe ".available_for_volunteer" do
     let(:casa_org) { create(:casa_org) }
     let!(:casa_case1) { create(:casa_case, :with_case_assignments, case_number: "foo", casa_org: casa_org) }
@@ -127,7 +185,7 @@ RSpec.describe CasaCase do
       end
 
       it "sets court report as unsubmitted" do
-        casa_case = create(:casa_case, court_date: "2020-09-13 02:11:58", court_report_submitted: true)
+        casa_case = create(:casa_case, court_date: "2020-09-13 02:11:58", court_report_status: :submitted)
         casa_case.clear_court_dates
 
         expect(casa_case.court_report_submitted).to be false

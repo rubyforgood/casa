@@ -136,6 +136,74 @@ RSpec.describe "/casa_cases", type: :request do
         expect(response).to redirect_to(casa_cases_url)
       end
     end
+
+    describe "PATCH /casa_cases/:id/deactivate" do
+      let(:casa_case) { create(:casa_case, :active, casa_org: organization, case_number: "111") }
+      let(:params) { {id: casa_case.id} }
+
+      it "deactivates the requested casa_case" do
+        patch deactivate_casa_case_path(casa_case), params: params
+        casa_case.reload
+        expect(casa_case.active).to eq false
+      end
+
+      it "redirects to the casa_case" do
+        patch deactivate_casa_case_path(casa_case), params: params
+        casa_case.reload
+        expect(response).to redirect_to(edit_casa_case_path)
+      end
+
+      it "flashes success message" do
+        patch deactivate_casa_case_path(casa_case), params: params
+        expect(flash[:notice]).to include("Case #{casa_case.case_number} has been deactivated.")
+      end
+
+      context "when deactivation fails" do
+        before do
+          allow_any_instance_of(CasaCase).to receive(:deactivate).and_return(false)
+        end
+
+        it "does not deactivate the requested casa_case" do
+          patch deactivate_casa_case_path(casa_case), params: params
+          casa_case.reload
+          expect(casa_case.active).to eq true
+        end
+      end
+    end
+
+    describe "PATCH /casa_cases/:id/reactivate" do
+      let(:casa_case) { create(:casa_case, :inactive, casa_org: organization, case_number: "111") }
+      let(:params) { {id: casa_case.id} }
+
+      it "reactivates the requested casa_case" do
+        patch reactivate_casa_case_path(casa_case), params: params
+        casa_case.reload
+        expect(casa_case.active).to eq true
+      end
+
+      it "redirects to the casa_case" do
+        patch reactivate_casa_case_path(casa_case), params: params
+        casa_case.reload
+        expect(response).to redirect_to(edit_casa_case_path)
+      end
+
+      it "flashes success message" do
+        patch reactivate_casa_case_path(casa_case), params: params
+        expect(flash[:notice]).to include("Case #{casa_case.case_number} has been reactivated.")
+      end
+
+      context "when reactivation fails" do
+        before do
+          allow_any_instance_of(CasaCase).to receive(:reactivate).and_return(false)
+        end
+
+        it "does not reactivate the requested casa_case" do
+          patch deactivate_casa_case_path(casa_case), params: params
+          casa_case.reload
+          expect(casa_case.active).to eq false
+        end
+      end
+    end
   end
 
   describe "as a volunteer" do
@@ -163,7 +231,7 @@ RSpec.describe "/casa_cases", type: :request do
         let(:new_attributes) {
           {
             case_number: "12345",
-            court_report_submitted: true,
+            court_report_status: :submitted,
             hearing_type_id: hearing_type.id,
             judge_id: judge.id
           }
@@ -172,7 +240,7 @@ RSpec.describe "/casa_cases", type: :request do
         it "updates permitted fields" do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes}
           casa_case.reload
-          expect(casa_case.court_report_submitted).to be true
+          expect(casa_case.court_report_submitted?).to be_truthy
 
           # Not permitted
           expect(casa_case.case_number).to eq "111"
@@ -201,6 +269,28 @@ RSpec.describe "/casa_cases", type: :request do
         expect(response.body).not_to include(other.case_number)
       end
     end
+
+    describe "PATCH /casa_cases/:id/deactivate" do
+      let(:casa_case) { create(:casa_case, :active, casa_org: organization, case_number: "111") }
+      let(:params) { {id: casa_case.id} }
+
+      it "does not deactivate the requested casa_case" do
+        patch deactivate_casa_case_path(casa_case), params: params
+        casa_case.reload
+        expect(casa_case.active).to eq true
+      end
+    end
+
+    describe "PATCH /casa_cases/:id/reactivate" do
+      let(:casa_case) { create(:casa_case, :inactive, casa_org: organization, case_number: "111") }
+      let(:params) { {id: casa_case.id} }
+
+      it "does not deactivate the requested casa_case" do
+        patch deactivate_casa_case_path(casa_case), params: params
+        casa_case.reload
+        expect(casa_case.active).to eq false
+      end
+    end
   end
 
   describe "as a supervisor" do
@@ -222,13 +312,13 @@ RSpec.describe "/casa_cases", type: :request do
 
     describe "PATCH /update" do
       context "with valid parameters" do
-        let(:new_attributes) { {case_number: "12345", court_report_submitted: true} }
+        let(:new_attributes) { {case_number: "12345", court_report_status: :completed} }
 
         it "updates fields (except case_number)" do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes}
           casa_case.reload
           expect(casa_case.case_number).to eq "111"
-          expect(casa_case.court_report_submitted).to be true
+          expect(casa_case.court_report_completed?).to be true
         end
 
         it "redirects to the casa_case" do
@@ -243,6 +333,28 @@ RSpec.describe "/casa_cases", type: :request do
         create(:casa_case)
         get casa_cases_url
         expect(response).to be_successful
+      end
+    end
+
+    describe "PATCH /casa_cases/:id/deactivate" do
+      let(:casa_case) { create(:casa_case, :active, casa_org: organization, case_number: "111") }
+      let(:params) { {id: casa_case.id} }
+
+      it "does not deactivate the requested casa_case" do
+        patch deactivate_casa_case_path(casa_case), params: params
+        casa_case.reload
+        expect(casa_case.active).to eq true
+      end
+    end
+
+    describe "PATCH /casa_cases/:id/reactivate" do
+      let(:casa_case) { create(:casa_case, :inactive, casa_org: organization, case_number: "111") }
+      let(:params) { {id: casa_case.id} }
+
+      it "does not deactivate the requested casa_case" do
+        patch deactivate_casa_case_path(casa_case), params: params
+        casa_case.reload
+        expect(casa_case.active).to eq false
       end
     end
   end

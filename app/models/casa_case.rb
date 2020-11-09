@@ -23,6 +23,8 @@ class CasaCase < ApplicationRecord
   has_many :contact_types, through: :casa_case_contact_types, source: :contact_type
   accepts_nested_attributes_for :casa_case_contact_types
 
+  enum court_report_status: {not_submitted: 0, submitted: 1, in_review: 2, completed: 3}, _prefix: :court_report
+
   scope :ordered, -> { order(updated_at: :desc) }
   scope :actively_assigned_to, ->(volunteer) {
     joins(:case_assignments).where(
@@ -62,6 +64,16 @@ class CasaCase < ApplicationRecord
   delegate :name, to: :hearing_type, prefix: true, allow_nil: true
   delegate :name, to: :judge, prefix: true, allow_nil: true
 
+  def court_report_status=(value)
+    super
+    if court_report_not_submitted?
+      self.court_report_submitted_at = nil
+    else
+      self.court_report_submitted_at ||= Time.current
+    end
+    court_report_status
+  end
+
   def self.available_for_volunteer(volunteer)
     ids = connection.select_values(%{
       SELECT casa_cases.id
@@ -96,7 +108,7 @@ class CasaCase < ApplicationRecord
     if court_date && court_date < Time.current
       update(court_date: nil,
              court_report_due_date: nil,
-             court_report_submitted: false)
+             court_report_status: :not_submitted)
     end
   end
 
@@ -136,19 +148,21 @@ end
 #
 # Table name: casa_cases
 #
-#  id                     :bigint           not null, primary key
-#  active                 :boolean          default(TRUE), not null
-#  birth_month_year_youth :datetime
-#  case_number            :string           not null
-#  court_date             :datetime
-#  court_report_due_date  :datetime
-#  court_report_submitted :boolean          default(FALSE), not null
-#  transition_aged_youth  :boolean          default(FALSE), not null
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  casa_org_id            :bigint           not null
-#  hearing_type_id        :bigint
-#  judge_id               :bigint
+#  id                        :bigint           not null, primary key
+#  active                    :boolean          default(TRUE), not null
+#  birth_month_year_youth    :datetime
+#  case_number               :string           not null
+#  court_date                :datetime
+#  court_report_due_date     :datetime
+#  court_report_status       :integer          default("not_submitted")
+#  court_report_submitted    :boolean          default(FALSE), not null
+#  court_report_submitted_at :datetime
+#  transition_aged_youth     :boolean          default(FALSE), not null
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
+#  casa_org_id               :bigint           not null
+#  hearing_type_id           :bigint
+#  judge_id                  :bigint
 #
 # Indexes
 #
