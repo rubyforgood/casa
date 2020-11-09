@@ -24,7 +24,7 @@ RSpec.configure do |config|
   config.order = :random
 
   config.before(:each, type: :system) do
-    if ENV["DOCKER"]
+    if ENV['DOCKER']
       driven_by :selenium_chrome_headless_in_container
       Capybara.server_host = "0.0.0.0"
       Capybara.server_port = 4000
