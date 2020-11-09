@@ -80,7 +80,5 @@ jobs:
           RAILS_ENV=test bundle exec rails server -b 0.0.0.0 -p 4040 -d
           RAILS_ENV=test bundle exec rake db:migrate
           RAILS_ENV=test bundle exec rake db:seed
-          npm run test:cypress
-          kill $(jobs -p) || true
-          ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+          npm run test:cypress --exit-code 0
 
