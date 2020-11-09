@@ -1,35 +1,55 @@
 # Development setup using Docker
 
-## Initial setup
-The following commands should just be run for the initial setup only. Rebuilding the docker images is only necessary when upgrading, if there are changes to the Dockerfile, or if gems have been added or updated.
-1. Install [Docker Community Edition](https://docs.docker.com/install/) if it
-   is not already installed.
-3. Clone the respository to your local machine: `git clone
+## Installing Docker.
+Install [Docker Community Edition](https://docs.docker.com/install/) if it is not already installed.
+
+## Using Automated Scripts
+
+### Initial setup
+1. Clone the respository to your local machine: `git clone
    https://github.com/rubyforgood/casa.git` or create a fork in GitHub if you
    don't have permission to commit directly to this repo.
-4. Change into the application directory: `cd casa`
-5. Run `docker-compose build` to build images for all services.
-7. Run `docker-compose run --rm web rails db:reset` to create the dev and test
+2. Change into the application directory: `cd casa`
+3. Run `docker/build` to build the app, seed the database, run the local web server (in a detached state), run the test suite, and log the screen outputs of these processes in the log directory.
+4. Run `docker/test` to run the test suite and log the screen output in the log directory.
+
+### Other Automated Scripts
+* Run `docker/seed` to reseed the database.
+* Run `docker/server` to restart the local web server (in a detached state).
+* Run `docker/nukec` to delete all of the Docker containers.
+* Run `docker/nuke` to delete all Docker containers, Docker networks, and Docker images.
+* Run `docker/console` to start the Rails Console.
+* Run `docker/sandbox` to start the Rails Sandbox.
+* Use the `docker/run` script to run any command within the Rails Docker container.  For example, entering `docker/run cat /etc/os-release` executes the command `cat /etc/os-release` within the Rails Docker container.
+
+## Initial setup
+The following commands should just be run for the initial setup only. Rebuilding the docker images is only necessary when upgrading, if there are changes to the Dockerfile, or if gems have been added or updated.
+1. Clone the respository to your local machine: `git clone
+   https://github.com/rubyforgood/casa.git` or create a fork in GitHub if you
+   don't have permission to commit directly to this repo.
+2. Change into the application directory: `cd casa`
+3. Run `docker-compose build` to build images for all services.
+4. Run `docker-compose run --rm web rails db:reset` to create the dev and test
    databases, load the schema, and run the seeds file.
-8. Run `docker-compose up -d` to start all the remaining services.
-9. Run `docker-compose ps` to view status of the containers. All should have
+5. Run `docker-compose up -d` to start all the remaining services.
+6. Run `docker-compose ps` to view status of the containers. All should have
    state "Up". Check the [logs](#viewing-logs) if there are any containers that
    did not start.
-10. The web application will be available at http://localhost:3000
+7. The web application will be available at http://localhost:3000
 
 ## For ongoing development:
-1. Run `docker-compose up -d` to start all services.
-5. Run `docker-compose ps` to view status of containers.
-1. Run `docker-compose stop` to stop all services.
-1. Run `docker-compose restart web` to restart the web server.
-1. Run `docker-compose rm <service>` to remove a stopped container.
-1. Run `docker-compose rm -f <service>` to force remove a stopped container.
-1. Run `docker-compose up -d --force-recreate` to start services with new
+* Run `docker-compose up -d` to start all services.
+* Run `docker-compose ps` to view status of containers.
+* Run `docker-compose stop` to stop all services.
+* Run `docker-compose restart web` to restart the web server.
+* Run `docker-compose rm <service>` to remove a stopped container.
+* Run `docker-compose rm -f <service>` to force remove a stopped container.
+* Run `docker-compose up -d --force-recreate` to start services with new
    containers.
-1. Run `docker-compose build web` to build a new image for the web service.
+* Run `docker-compose build web` to build a new image for the web service.
    After re-building an image, run `docker-compose up -d --force-recreate web`
    to start a container running the new image.
-4. Run `docker-compose down -v` to stop and remove all containers, as well as
+* Run `docker-compose down -v` to stop and remove all containers, as well as
    volumes and networks. This command is helpful if you want to start with a
    clean slate.  However, it will completely remove the database and you will
    need to go through the database setup steps again above.
