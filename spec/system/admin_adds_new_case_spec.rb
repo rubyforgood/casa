@@ -15,7 +15,7 @@ RSpec.describe "admin adds a new case", type: :system do
 
   context "when all fields are filled" do
     it "is successful" do
-      fill_in "Case number", with: case_number
+      fill_in "Case numberasdasdasd", with: case_number
       select "3", from: "casa_case_court_date_3i"
       select "March", from: "casa_case_court_date_2i"
       select next_year, from: "casa_case_court_date_1i"
