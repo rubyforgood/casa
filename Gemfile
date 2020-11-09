@@ -33,7 +33,7 @@ group :development, :test do
   gem "pry-byebug"
   gem "rspec-rails", "~> 4.0.1"
   gem "shoulda-matchers"
-  gem "standard", "~> 0.8.1" # linter https://github.com/testdouble/standard
+  gem "standard", "~> 0.9.0" # linter https://github.com/testdouble/standard
   gem "cypress-on-rails", "~> 1.0"
 end
 

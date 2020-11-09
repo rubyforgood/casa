@@ -173,7 +173,7 @@ GEM
     paper_trail (11.0.0)
       activerecord (>= 5.2)
       request_store (~> 1.1)
-    parallel (1.19.2)
+    parallel (1.20.0)
     parser (2.7.2.0)
       ast (~> 2.4.1)
     pg (1.2.3)
@@ -248,16 +248,16 @@ GEM
       rspec-mocks (~> 3.9)
       rspec-support (~> 3.9)
     rspec-support (3.10.0)
-    rubocop (1.0.0)
+    rubocop (1.2.0)
       parallel (~> 1.10)
       parser (>= 2.7.1.5)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8)
       rexml
-      rubocop-ast (>= 0.6.0)
+      rubocop-ast (>= 1.0.1)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
-    rubocop-ast (1.1.0)
+    rubocop-ast (1.1.1)
       parser (>= 2.7.1.5)
     rubocop-performance (1.8.1)
       rubocop (>= 0.87.0)
@@ -296,8 +296,8 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    standard (0.8.1)
-      rubocop (= 1.0.0)
+    standard (0.9.0)
+      rubocop (= 1.2.0)
       rubocop-performance (= 1.8.1)
     thor (1.0.1)
     thread_safe (0.3.6)
@@ -369,7 +369,7 @@ DEPENDENCIES
   skylight
   spring
   spring-watcher-listen (~> 2.0.0)
-  standard (~> 0.8.1)
+  standard (~> 0.9.0)
   tzinfo-data
   web-console (>= 3.3.0)
   webdrivers
