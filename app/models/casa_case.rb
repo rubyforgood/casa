@@ -68,6 +68,8 @@ class CasaCase < ApplicationRecord
     option_category_id = EmancipationOption.find(optionId).emancipation_category_id
     if !(EmancipationCategory.find(option_category_id).mutually_exclusive && EmancipationOption.options_with_category_and_case(option_category_id, self[:id]).any?)
       self.emancipation_options << EmancipationOption.find(optionId)
+    else
+      raise "Attempted adding multiple options belonging to a mutually exclusive category"
     end
   end
 
