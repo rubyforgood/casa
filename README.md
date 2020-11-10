@@ -10,7 +10,7 @@
 
 CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunteer sworn into a county-level juvenile dependency court system to advocate on behalf of a youth in the corresponding county's foster care system. CASA is also the namesake role of the national organization, CASA, which exists to cultivate and supervise volunteers carrying out this work – with county level chapters (operating relatively independently of each other) across the country.
 
-## Welcome Hacktoberfest contributors!
+## Welcome contributors!
 
 We are very happy to have you. If you have problems or questions, the fastest way to an answer is in slack https://rubyforgood.herokuapp.com/ #casa channel
 
@@ -194,6 +194,8 @@ See `db/seeds` for seed data. Test data includes the below
 When pull requests are merged, the code auto-deploys to QA (because of a heroku setting)
 
 https://casa-qa.herokuapp.com/
+
+If you would like to help run quality assurance, please check out the _Merged to QA_ section of our project board. For each ticket in this column, log into the QA environment to confirm whether or not this change has indeed been made and is working as intended. If yes, please add the label: _working-in-qa_ to the ticket. If it is not, please add the label: _not-working-in-qa_ to the ticket. If you discover bugs in this process, please file an issue for it, add the label: _bug_, and add it to the _To do_ column. ***This is a great task for PM contributors looking to familiarize themselves with the application and project board. 
 
 ### Staging
 
