@@ -55,7 +55,11 @@
     <div>
       <h6><strong>Assigned Volunteers:</strong></h6>
       <% policy_scope(assigned_volunteers(@casa_case)).each_with_index do |volunteer, index| %>
-        <p><%= link_to "#{volunteer.decorate.name} ", edit_volunteer_path(volunteer) %></p>
+        <% if current_user.volunteer? %>
+          <p><%= volunteer.decorate.name %></p>
+        <% else %>
+          <p><%= link_to "#{volunteer.decorate.name} ", edit_volunteer_path(volunteer) %></p>
+        <% end %>
       <% end %>
       <br>
 
