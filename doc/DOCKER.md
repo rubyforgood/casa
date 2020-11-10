@@ -20,6 +20,7 @@ Install [Docker Community Edition](https://docs.docker.com/install/) if it is no
 * Run `docker/nuke` to delete all Docker containers, Docker networks, and Docker images.
 * Run `docker/console` to start the Rails Console.
 * Run `docker/sandbox` to start the Rails Sandbox.
+* Run `docker/brakeman` to run the Brakeman security tool, which checks for security vulnerabilities.
 * Use the `docker/run` script to run any command within the Rails Docker container.  For example, entering `docker/run cat /etc/os-release` executes the command `cat /etc/os-release` within the Rails Docker container.
 
 ## Initial setup
