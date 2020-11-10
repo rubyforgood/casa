@@ -1,0 +1,25 @@
+#!/bin/bash
+set -e
+
+# This script builds the Docker container, seeds the app with sample data, starts the server, runs the tests, and logs the screen output.
+
+DATE=`date +%Y%m%d-%H%M%S-%3N`
+mkdir log/$DATE
+docker/build-log 2>&1 | tee log/$DATE/build.log
+wait
+docker/seed 2>&1 | tee log/$DATE/seed.log
+wait
+docker/server-log 2>&1 | tee log/$DATE/server.log
+wait
+docker/test-log 2>&1 | tee log/$DATE/test.log
+wait
+echo '******************************'
+echo 'The build process is complete!'
+echo ''
+echo "The logs are in the log/$DATE directory."
+echo ''
+echo 'You should be able to view this app at http://localhost:3000/'
+echo ''
+echo 'If all went well, the local app has been seeded,'
+echo 'and all the tests passed.'
+echo ''

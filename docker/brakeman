@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+echo '*******************************'
+echo 'docker-compose run web brakeman'
+docker-compose run web brakeman
