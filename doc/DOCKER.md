@@ -12,6 +12,7 @@ Install [Docker Community Edition](https://docs.docker.com/install/) if it is no
 2. Change into the application directory: `cd casa`
 3. Run `docker/build` to build the app, seed the database, run the local web server (in a detached state), run the test suite, and log the screen outputs of these processes in the log directory.
 4. Run `docker/test` to run the test suite and log the screen output in the log directory.
+5. If you reboot the machine, restart Docker, or stop any services, the tests and many other functions will not work.  Please run `docker/server` to restart the app and allow the tests and other functions to work.
 
 ### Other Automated Scripts
 * Run `docker/seed` to reseed the database.
