@@ -2,7 +2,7 @@
 
 After you install Docker, please follow either the automatic setup or the manual setup.
 
-## Installing Docker.
+## Installing Docker
 Install [Docker Community Edition](https://docs.docker.com/install/) if it is not already installed.
 
 ## Automatic Setup
