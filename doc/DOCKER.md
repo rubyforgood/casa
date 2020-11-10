@@ -114,7 +114,7 @@ $ docker-compose exec web rails c
 Run the testing suite from within the container:
 
 ```
-$ docker-compose exec web rspec spec -fd
+$ docker-compose exec web rspec spec
 ```
 
 System tests will generate a screenshot upon failure. The screenshots can be
