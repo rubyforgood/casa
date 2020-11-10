@@ -1,9 +1,11 @@
 class EmancipationsController < ApplicationController
   before_action :authenticate_user!
+  before_action :require_organization!
 
   # GET /casa_cases/:casa_case_id/emancipation
   def show
     @current_case = CasaCase.find(params[:casa_case_id])
+    authorize @current_case
     @emancipation_form_data = EmancipationCategory.all.map { |category| {:category => category, :options => EmancipationOption.category_options(category.id)} }
   end
 
@@ -32,6 +34,7 @@ class EmancipationsController < ApplicationController
 
     begin
       current_case = CasaCase.find(params[:casa_case_id])
+      authorize current_case, :update_emancipation_option?
     rescue ActiveRecord::RecordNotFound
       render json: { error: "Could not find case from id given by casa_case_id" }
       return
