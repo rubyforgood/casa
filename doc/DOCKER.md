@@ -114,6 +114,12 @@ $ docker-compose exec web rails c
 Run the testing suite from within the container:
 
 ```
+$ docker-compose exec web rspec spec -fd
+```
+
+For a shorter screen output from running the testing suite from within the container:
+
+```
 $ docker-compose exec web rspec spec
 ```
 
