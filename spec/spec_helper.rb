@@ -2,6 +2,7 @@ require "simplecov"
 require "pry"
 SimpleCov.start do
   track_files "{app,lib}/**/*.rb"
+  add_filter '/spec/'
 end
 
 RSpec.configure do |config|
