@@ -1,16 +1,19 @@
 # Development setup using Docker
 
+After you install Docker, please follow either the automatic setup or the manual setup.
+
 ## Installing Docker.
 Install [Docker Community Edition](https://docs.docker.com/install/) if it is not already installed.
 
-## Using Automated Scripts
+## Automatic Setup
+The automatic setup explained here relies on Bash scripts in the docker directory to execute the most basic and frequent tasks in Docker.  There is substantially less typing to do under the automatic setup than under the manual setup.
 
 ### Initial setup
 1. Clone the respository to your local machine: `git clone
    https://github.com/rubyforgood/casa.git` or create a fork in GitHub if you
    don't have permission to commit directly to this repo.
 2. Change into the application directory: `cd casa`
-3. Run `docker/build` to build the app, seed the database, run the local web server (in a detached state), run the test suite, and log the screen outputs of these processes in the log directory.
+3. Run `docker/build` to build the app, seed the database, run the local web server (in a detached state), run the test suite, and log the screen outputs of these processes in the log directory.  The web application will be available at http://localhost:3000.
 4. Run `docker/test` to run the test suite and log the screen output in the log directory.
 5. If you reboot the machine, restart Docker, or stop any services, the tests and many other functions will not work.  Please run `docker/server` to restart the app and allow the tests and other functions to work.
 
@@ -24,7 +27,10 @@ Install [Docker Community Edition](https://docs.docker.com/install/) if it is no
 * Run `docker/brakeman` to run the Brakeman security tool, which checks for security vulnerabilities.
 * Use the `docker/run` script to run any command within the Rails Docker container.  For example, entering `docker/run cat /etc/os-release` executes the command `cat /etc/os-release` within the Rails Docker container.
 
-## Initial setup
+## Manual Setup
+The manual setup explained here is the legacy procedure for using Docker.  Be prepared to enter long commands beginning with `docker-compose`.
+
+### Initial setup
 The following commands should just be run for the initial setup only. Rebuilding the docker images is only necessary when upgrading, if there are changes to the Dockerfile, or if gems have been added or updated.
 1. Clone the respository to your local machine: `git clone
    https://github.com/rubyforgood/casa.git` or create a fork in GitHub if you
@@ -39,7 +45,7 @@ The following commands should just be run for the initial setup only. Rebuilding
    did not start.
 7. The web application will be available at http://localhost:3000
 
-## For ongoing development:
+### For ongoing development:
 * Run `docker-compose up -d` to start all services.
 * Run `docker-compose ps` to view status of containers.
 * Run `docker-compose stop` to stop all services.
@@ -56,7 +62,7 @@ The following commands should just be run for the initial setup only. Rebuilding
    clean slate.  However, it will completely remove the database and you will
    need to go through the database setup steps again above.
 
-### Running commands
+#### Running commands
 In order to run rake tasks, rails generators, bundle commands, etc., they need to be run inside the container:
 ```
 $ docker-compose exec web rails db:migrate
@@ -73,7 +79,7 @@ running `docker-compose build web` first.  If you have been making gem updates
 to your container without rebuilding the image, then the one-off container will
 be out of date.
 
-### Running webpack dev server
+#### Running webpack dev server
 To speed compiling of assets, run the webpack dev server in a separate terminal
 window:
 
@@ -82,7 +88,7 @@ $ docker-compose exec web bin/webpack-dev-server
 ```
 
 
-### Viewing logs
+#### Viewing logs
 To view the logs, run:
 ```
 $ docker-compose logs -f <service>
@@ -93,18 +99,18 @@ For example:
 $ docker-compose logs -f web
 ```
 
-### Accessing services
-#### Postgres database
+#### Accessing services
+##### Postgres database
 ```
 $ docker-compose exec database psql -h database -Upostgres casa_development
 ```
 
-#### Rails console
+##### Rails console
 ```
 $ docker-compose exec web rails c
 ```
 
-## Testing Suite
+### Testing Suite
 Run the testing suite from within the container:
 
 ```
@@ -115,7 +121,7 @@ System tests will generate a screenshot upon failure. The screenshots can be
 found in the local `tmp/screenshots` directory which maps to the
 `/usr/src/app/tmp/screenshots` directory inside the container.
 
-### Watching tests run
+#### Watching tests run
 
 You can view the tests in real time by using a VNC client and temporarily
 switching to the `selenium_chrome_in_container` driver set in
