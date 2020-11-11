@@ -1,7 +1,12 @@
 name: standardrb lint
 
 on:
-  - pull_request_target
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   lint:
