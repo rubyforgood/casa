@@ -1,7 +1,7 @@
 namespace :after_party do
   desc "Deployment task: populate_prince_george_casa_org_details"
   task populate_prince_george_casa_org_details: :environment do
-    puts "Running deploy task 'populate_prince_george_casa_org_details'"
+    puts "Running deploy task 'populate_prince_george_casa_org_details'" unless Rails.env.test?
 
     # Seed existing PG CASA logo/display details for production
     # (Okay to run on dev too - will just duplicate seed data)

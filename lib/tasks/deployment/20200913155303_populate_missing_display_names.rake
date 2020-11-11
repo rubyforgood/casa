@@ -1,7 +1,7 @@
 namespace :after_party do
   desc "Deployment task: populate_missing_display_names"
   task populate_missing_display_names: :environment do
-    puts "Running deploy task 'populate_missing_display_names'"
+    puts "Running deploy task 'populate_missing_display_names'" unless Rails.env.test?
 
     User.find_each do |user|
       if user.display_name.blank?
