@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  lint:
+  erb_lint:
 
     runs-on: ubuntu-latest
 
