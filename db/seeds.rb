@@ -23,10 +23,10 @@ class SeederMain
   end
 
   def seed
-    puts "Erasing all objects from the data base..."
+    # puts "Erasing all objects from the data base..."
     destroy_all
 
-    puts "Creating the objects in the data base..."
+    # puts "Creating the objects in the data base..."
     db_populator.create_all_casa_admin("allcasaadmin@example.com")
     db_populator.create_org(CasaOrgPopulatorPresets.for_environment.merge({org_name: "Prince George CASA"}))
     db_populator.create_org(CasaOrgPopulatorPresets.minimal_dataset_options)
@@ -34,7 +34,7 @@ class SeederMain
     post_process_data
 
     report_object_counts
-    puts "\nDone.\n\n"
+    # puts "\nDone.\n\n"
   end
 
   private # -------------------------------------------------------------------------------------------------------
@@ -77,21 +77,21 @@ class SeederMain
 
     if seed_environment_value.blank?
       seed = 0
-      puts "\nENV['DB_SEEDS_RANDOM_SEED'] not set to 'random' or a number; setting seed to 0.\n\n"
+      # puts "\nENV['DB_SEEDS_RANDOM_SEED'] not set to 'random' or a number; setting seed to 0.\n\n"
     elsif seed_environment_value.casecmp("random") == 0
       seed = Random.new_seed
-      puts "\n'random' specified in ENV['DB_SEEDS_RANDOM_SEED']; setting seed to randomly generated value #{seed}.\n\n"
+      # puts "\n'random' specified in ENV['DB_SEEDS_RANDOM_SEED']; setting seed to randomly generated value #{seed}.\n\n"
     else
       seed = seed_environment_value.to_i
-      puts "\nUsing random seed #{seed} specified in ENV['DB_SEEDS_RANDOM_SEED'].\n\n"
+      # puts "\nUsing random seed #{seed} specified in ENV['DB_SEEDS_RANDOM_SEED'].\n\n"
     end
     seed
   end
 
   def report_object_counts
-    puts "\nRecords written to the DB:\n\nCount  Class Name\n-----  ----------\n\n"
+    # puts "\nRecords written to the DB:\n\nCount  Class Name\n-----  ----------\n\n"
     active_record_classes.each do |klass|
-      puts "%5d  %s" % [klass.count, klass.name]
+      # puts "%5d  %s" % [klass.count, klass.name]
     end
   end
 end
