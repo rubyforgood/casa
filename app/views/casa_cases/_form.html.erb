@@ -151,8 +151,7 @@
           <%= link_to 'Reactivate CASA Case',
                       reactivate_casa_case_path(casa_case),
                       method: :patch,
-                      class: "btn btn-primary"
-              if Pundit.policy(current_user, casa_case).update_case_status? %>
+                      class: "btn btn-primary" if Pundit.policy(current_user, casa_case).update_case_status? %>
         <% end %>
       </div>
     <% end %>
