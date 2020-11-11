@@ -8,6 +8,7 @@ class CaseCourtReportsController < ApplicationController
   def index
     @assigned_cases = CasaCase.actively_assigned_to(current_user)
       .select(:id, :case_number, :transition_aged_youth)
+    @non_transition_aged_youth_cases = @assigned_cases&.reject(&:transition_aged_youth)&.map(&:case_number)
   end
 
   # GET /case_court_reports/:id

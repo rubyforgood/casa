@@ -133,7 +133,7 @@
           <td><%= casa_case.decorate.transition_aged_youth_icon %></td>
           <td>
             <% if casa_case.active? %>
-            <%= safe_join(assigned_volunteers(casa_case).map { |vol| 
+            <%= safe_join(assigned_volunteers(casa_case).map { |vol|
               link_to(vol.display_name, edit_volunteer_path(vol)) },
               ", ") %>
             <% else %>
