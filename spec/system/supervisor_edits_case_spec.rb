@@ -105,7 +105,7 @@ RSpec.describe "supervisor edits case", type: :system do
 
   context "When an admin has added judge names to a Casa instance" do
     it "displays judge details as select option" do
-      judge = create :judge, casa_org: casa_org
+      create :judge, casa_org: casa_org
 
       visit edit_casa_case_path(casa_case)
 
