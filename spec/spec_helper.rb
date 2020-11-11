@@ -1,7 +1,21 @@
 require "simplecov"
 require "pry"
 SimpleCov.start do
-  track_files "{app,lib}/**/*.rb"
+  add_filter '/spec/'
+  add_filter '/lib/tasks/auto_annotate_models.rake'
+  add_group "Models", "/app/models"
+  add_group "Controllers", "/app/controllers"
+  add_group "Channels", "/app/channels"
+  add_group "Decorators", "/app/decorators"
+  add_group "Helpers", "/app/helpers"
+  add_group "Jobs", "/app/jobs"
+  add_group "Importers", "/app/lib/importers"
+  add_group "Mailers", "/app/mailers"
+  add_group "Policies", "/app/policies"
+  add_group "Values", "/app/values"
+  add_group "Tasks", "/lib/tasks"
+  add_group "Config", "/config"
+  add_group "Database", "/db"
 end
 
 RSpec.configure do |config|
