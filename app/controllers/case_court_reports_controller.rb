@@ -15,7 +15,7 @@ class CaseCourtReportsController < ApplicationController
         {"data-transitioned": casa_case.has_transitioned?}
       ]
     }
-    @non_transition_aged_youth_cases = @assigned_cases.reject(&:transition_aged_youth).map(&:case_number)
+    @non_transition_aged_youth_cases = @assigned_cases&.reject(&:transition_aged_youth).map(&:case_number)
   end
 
   # GET /case_court_reports/:id
