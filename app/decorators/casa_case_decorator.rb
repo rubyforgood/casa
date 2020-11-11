@@ -24,4 +24,12 @@ class CasaCaseDecorator < Draper::Decorator
   def case_contacts_ordered_by_occurred_at
     object.case_contacts.sort_by(&:occurred_at)
   end
+
+  def court_report_select_option
+    [
+      "#{object.case_number} - #{object.has_transitioned? ? "transition" : "non-transition"}",
+      object.case_number,
+      {"data-transitioned": object.has_transitioned?}
+    ]
+  end
 end

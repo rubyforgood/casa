@@ -8,13 +8,6 @@ class CaseCourtReportsController < ApplicationController
   def index
     @assigned_cases = CasaCase.actively_assigned_to(current_user)
       .select(:id, :case_number, :transition_aged_youth)
-    @select_options = @assigned_cases.map { |casa_case|
-      [
-        "#{casa_case.case_number} - #{casa_case.has_transitioned? ? "transition" : "non-transition"}",
-        casa_case.case_number,
-        {"data-transitioned": casa_case.has_transitioned?}
-      ]
-    }
     @non_transition_aged_youth_cases = @assigned_cases&.reject(&:transition_aged_youth)&.map(&:case_number)
   end
 
