@@ -109,7 +109,7 @@
 
       <div class="field form-group">
         <%= form.label :court_report_status %>
-        <%= form.select :court_report_status, @@court_report_statuses %>
+        <%= form.select :court_report_status, @court_report_statuses %>
       </div>
 
       <% if Pundit.policy(current_user, casa_case).update_contact_types? %>
