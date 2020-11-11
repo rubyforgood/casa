@@ -56,7 +56,10 @@
           <% if policy(:application).modify_organization? %>
             <%= link_to "Edit Organization", edit_casa_org_path(current_organization), class: "list-group-item" %>
           <% end %>
-          <%= link_to "Report a site issue", "https://rubyforgood.typeform.com/to/iXY4BubB", class: "list-group-item", target:"_blank" %>
+          <%= link_to "Report a site issue",
+                      "https://rubyforgood.typeform.com/to/iXY4BubB",
+                      class: "list-group-item",
+                      target:"_blank" %>
           <li class="list-group-item">
             <%= current_user.email %>
           </li>

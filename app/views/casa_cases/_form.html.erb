@@ -109,7 +109,7 @@
 
       <div class="field form-group">
         <%= form.label :court_report_status %>
-        <%= form.select :court_report_status, CasaCase.court_report_statuses.map { |status| [status.first.humanize, status.first] } %>
+        <%= form.select :court_report_status, @@court_report_statuses %>
       </div>
 
       <% if Pundit.policy(current_user, casa_case).update_contact_types? %>
@@ -136,9 +136,23 @@
       <div class="actions">
         <% if casa_case.active %>
           <%= form.submit casa_case.persisted? ? 'Update CASA Case' : 'Create CASA Case', class: "btn btn-primary" %>
-          <%= link_to 'Deactivate CASA Case', deactivate_casa_case_path(casa_case), method: :patch, class: "btn btn-outline-danger pull-right", data: { confirm_swal: "Deactivating a CASA Case will unassign any volunteers currently assigned to this case.", reload: true, success: "Yes, deactivate", fail: "No, go back" }  if Pundit.policy(current_user, casa_case).update_case_status? && casa_case.persisted? %>
+          <%= link_to 'Deactivate CASA Case',
+                      deactivate_casa_case_path(casa_case),
+                      method: :patch,
+                      class: "btn btn-outline-danger pull-right",
+                      data: {
+                          confirm_swal:
+                              "Deactivating a CASA Case will unassign any volunteers currently assigned to this case.",
+                          reload: true,
+                          success: "Yes, deactivate",
+                          fail: "No, go back"
+                      }  if Pundit.policy(current_user, casa_case).update_case_status? && casa_case.persisted? %>
           <% else %>
-          <%= link_to 'Reactivate CASA Case', reactivate_casa_case_path(casa_case), method: :patch, class: "btn btn-primary" if Pundit.policy(current_user, casa_case).update_case_status? %>
+          <%= link_to 'Reactivate CASA Case',
+                      reactivate_casa_case_path(casa_case),
+                      method: :patch,
+                      class: "btn btn-primary"
+              if Pundit.policy(current_user, casa_case).update_case_status? %>
         <% end %>
       </div>
     <% end %>
