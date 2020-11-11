@@ -1,4 +1,2 @@
 ignore:
-  - 'config/environments/staging.rb'
-  - 'config/environments/production.rb'
   - 'lib/tasks/deployment/20201005203405_populate_case_contact_contact_type.rake'
