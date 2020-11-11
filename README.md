@@ -1,6 +1,6 @@
 # CASA Project & Organization Overview
 
-![rspec](https://github.com/rubyforgood/casa/workflows/rspec/badge.svg)]
+![rspec](https://github.com/rubyforgood/casa/workflows/rspec/badge.svg)
 ![cypress](https://github.com/rubyforgood/casa/workflows/cypress/badge.svg)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=rubyforgood/casa)](https://dependabot.com)
 [![Maintainability](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/maintainability)](https://codeclimate.com/github/rubyforgood/casa/maintainability)
