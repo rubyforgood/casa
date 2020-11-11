@@ -78,12 +78,15 @@ function waitForAsyncOperation () {
 }
 
 // Adds or deletes an option from the current casa case
-//  @param    {boolean}           isAdding true if adding the option to the case, false if deleting the option from the case
-//  @param    {integer | string} optionId The id of the emancipation option to add or delete
+//  @param    {string}            optionAction
+//    'add'     to add an option to the case
+//    'delete'  to remove an option from the case
+//    'set'     to set the option for a mutually exclusive category
+//  @param    {integer | string}  optionId The id of the emancipation option to add or delete
 //  @returns  {array} a jQuery jqXHR object. See https://api.jquery.com/jQuery.ajax/#jqXHR
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {RangeError} if optionId is negative
-function addOrDeleteOption(isAdding, optionId){
+function changeOptions(optionAction, optionId){
   // Input check
   if (typeof optionId === 'string') {
     let optionIdAsNum = parseInt(optionId)
@@ -105,7 +108,7 @@ function addOrDeleteOption(isAdding, optionId){
 
   // Post request
   return $.post(emancipationPage.savePath, {
-    option_action: isAdding ? 'add' : 'delete',
+    option_action: optionAction,
     option_id: optionId
   }).done(function (response, textStatus) {
     if (response.error) {
@@ -135,17 +138,11 @@ $('document').ready(() => {
   emancipationPage.emancipationSelects.change(function(data) {
     let thisSelect = $(this)
 
-    if (thisSelect.data().prev) {
-      addOrDeleteOption(false, thisSelect.data().prev)
-      .done(function( response ) {
-        if (thisSelect.val()) {
-          addOrDeleteOption(true, thisSelect.val())
-        }
-      });
-    } else if (thisSelect.val()) {
-      addOrDeleteOption(true, thisSelect.val())
+    if (thisSelect.val()) {
+      changeOptions('set', thisSelect.val())
+    } else {
+      changeOptions('delete', thisSelect.data().prev)
     }
-
 
     thisSelect.data('prev', thisSelect.val());
   })
@@ -154,9 +151,9 @@ $('document').ready(() => {
     let thisCheckBox = $(this)
 
     if (thisCheckBox.prop('checked')) {
-      addOrDeleteOption(true, thisCheckBox.val())
+      changeOptions('add', thisCheckBox.val())
     } else {
-      addOrDeleteOption(false, thisCheckBox.val())
+      changeOptions('delete', thisCheckBox.val())
     }
   })
 })

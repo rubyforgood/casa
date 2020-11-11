@@ -41,11 +41,16 @@ class EmancipationsController < ApplicationController
     end
 
     begin
-      if params[:option_action] == "add"
+      case params[:option_action]
+      when "add"
         current_case.addEmancipationOption(params[:option_id])
         render json: "success".to_json
-      elsif params[:option_action] == "delete"
+      when "delete"
         current_case.removeEmancipationOption(params[:option_id])
+        render json: "success".to_json
+      when "set"
+        current_case.emancipation_options.delete(EmancipationOption.category_options(EmancipationOption.find(params[:option_id]).emancipation_category_id))
+        current_case.addEmancipationOption(params[:option_id])
         render json: "success".to_json
       else
         render json: { error: "Param option_action did not contain a supported action" }
