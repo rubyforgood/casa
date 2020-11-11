@@ -2,7 +2,7 @@
 # :nocov:
 class SupervisorMailerPreview < ActionMailer::Preview
   def weekly_digest
-    SupervisorMailer.weekly_digest(User.last, User.first)
+    SupervisorMailer.weekly_digest(User.last)
   end
 end
 # :nocov:

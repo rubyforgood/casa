@@ -24,4 +24,8 @@ class CasaCaseDecorator < Draper::Decorator
   def case_contacts_ordered_by_occurred_at
     object.case_contacts.sort_by(&:occurred_at)
   end
+
+  def case_contacts_latest
+    object.case_contacts.sort_by(&:occurred_at).last
+  end
 end
