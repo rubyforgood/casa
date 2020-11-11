@@ -4,6 +4,7 @@ RSpec.describe "admin edits case", type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:casa_case) { create(:casa_case, casa_org: organization) }
+  let!(:judge) { create(:judge, casa_org: organization) }
   let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
   let!(:school) { create(:contact_type, name: "School", contact_type_group: contact_type_group) }
   let!(:therapist) { create(:contact_type, name: "Therapist", contact_type_group: contact_type_group) }
