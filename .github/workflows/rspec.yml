@@ -1,7 +1,6 @@
 name: rspec and cypress
 
 on:
-  - push
   - pull_request_target
 
 jobs:

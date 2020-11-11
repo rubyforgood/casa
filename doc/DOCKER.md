@@ -117,6 +117,12 @@ Run the testing suite from within the container:
 $ docker-compose exec web rspec spec -fd
 ```
 
+For a shorter screen output from running the testing suite from within the container:
+
+```
+$ docker-compose exec web rspec spec
+```
+
 System tests will generate a screenshot upon failure. The screenshots can be
 found in the local `tmp/screenshots` directory which maps to the
 `/usr/src/app/tmp/screenshots` directory inside the container.
