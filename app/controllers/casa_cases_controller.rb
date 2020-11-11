@@ -123,6 +123,5 @@ class CasaCasesController < ApplicationController
 
   def set_contact_types
     @contact_types = ContactType.for_organization(current_organization)
-    @court_report_statuses = CasaCase.court_report_statuses.map { |status| [status.first.humanize, status.first] }
   end
 end
