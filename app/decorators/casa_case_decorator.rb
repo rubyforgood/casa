@@ -32,4 +32,8 @@ class CasaCaseDecorator < Draper::Decorator
       {"data-transitioned": object.has_transitioned?}
     ]
   end
+
+  def inactive_class
+    !object.active ? "table-secondary" : ""
+  end
 end
