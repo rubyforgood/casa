@@ -34,7 +34,7 @@ RSpec.describe User, type: :model do
 
   it "does not return case_contacts associated with another volunteer user" do
     volunteer = create(:volunteer, :with_casa_cases)
-    other_volunteer = create(:volunteer, :with_casa_cases)
+    other_volunteer = create(:volunteer, :with_casa_cases, casa_org: volunteer.casa_org)
 
     case_of_interest = volunteer.casa_cases.first
     create(:case_contact, creator: volunteer, casa_case: case_of_interest)
@@ -54,13 +54,17 @@ RSpec.describe User, type: :model do
   describe "supervisors" do
     describe "#volunteers_serving_transistion_aged_youth" do
       it "returns the number of transition aged youth on a supervisor" do
-        assignment1 = create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: true))
-        assignment2 = create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: true))
-        assignment3 = create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: false))
+        casa_org = create(:casa_org)
+        casa_cases = [
+          create(:casa_case, casa_org: casa_org, transition_aged_youth: true),
+          create(:casa_case, casa_org: casa_org, transition_aged_youth: true),
+          create(:casa_case, casa_org: casa_org, transition_aged_youth: false)
+        ]
         supervisor = create(:supervisor)
-        create(:volunteer, case_assignments: [assignment1], supervisor: supervisor)
-        create(:volunteer, case_assignments: [assignment2], supervisor: supervisor)
-        create(:volunteer, case_assignments: [assignment3], supervisor: supervisor)
+        casa_cases.each do |casa_case|
+          volunteer = create(:volunteer, supervisor: supervisor, casa_org: casa_org)
+          volunteer.casa_cases << casa_case
+        end
         expect(supervisor.volunteers_serving_transistion_aged_youth).to eq(2)
       end
     end
@@ -129,30 +133,24 @@ RSpec.describe User, type: :model do
   end
 
   describe "#serving_transition_aged_youth?" do
+    let(:casa_org) { create(:casa_org) }
+    let(:user) { create(:volunteer, casa_org: casa_org) }
     let(:case_assignment_with_a_transition_aged_youth) do
-      create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: true))
+      create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org, transition_aged_youth: true), volunteer: user)
     end
-    let(:case_assignment_without_transition_aged_youth) do
-      create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: false))
+    let!(:case_assignment_without_transition_aged_youth) do
+      create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org, transition_aged_youth: false), volunteer: user)
     end
 
     context "when the user has a transition-aged-youth case" do
       it "is true" do
-        case_assignments = [
-          case_assignment_with_a_transition_aged_youth,
-          case_assignment_without_transition_aged_youth
-        ]
-        user = create(:volunteer, case_assignments: case_assignments)
-
+        case_assignment_with_a_transition_aged_youth.inspect
         expect(user).to be_serving_transition_aged_youth
       end
     end
 
     context "when the user does not have a transition-aged-youth case" do
       it "is false" do
-        case_assignments = [case_assignment_without_transition_aged_youth]
-        user = create(:volunteer, case_assignments: case_assignments)
-
         expect(user).not_to be_serving_transition_aged_youth
       end
     end

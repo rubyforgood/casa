@@ -27,7 +27,7 @@ RSpec.describe DashboardPolicy do
   permissions :create_cases_section? do
     context "when user is a volunteer with casa_cases" do
       it "permits user to see cases section" do
-        volunteer.casa_cases << create(:casa_case)
+        volunteer.casa_cases << create(:casa_case, casa_org: volunteer.casa_org)
         expect(Pundit.policy(volunteer, :dashboard).create_case_contacts?).to eq true
       end
     end

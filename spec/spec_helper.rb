@@ -1,8 +1,8 @@
 require "simplecov"
 require "pry"
 SimpleCov.start do
-  add_filter '/spec/'
-  add_filter '/lib/tasks/auto_annotate_models.rake'
+  add_filter "/spec/"
+  add_filter "/lib/tasks/auto_annotate_models.rake"
   add_group "Models", "/app/models"
   add_group "Controllers", "/app/controllers"
   add_group "Channels", "/app/channels"

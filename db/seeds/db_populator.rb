@@ -130,7 +130,8 @@ class DbPopulator
         case_number: generate_case_number,
         transition_aged_youth: random_true_false
       )
-      CaseAssignment.create!(casa_case: new_casa_case, volunteer: volunteers.sample(random: rng))
+      casa_org_volunteers = volunteers.select { |volunteer| volunteer.casa_org_id = casa_org.id }
+      CaseAssignment.create!(casa_case: new_casa_case, volunteer: casa_org_volunteers.sample(random: rng))
 
       random_case_contact_count.times do
         create_case_contact(new_casa_case)

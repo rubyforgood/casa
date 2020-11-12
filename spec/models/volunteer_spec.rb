@@ -23,7 +23,10 @@ RSpec.describe Volunteer, type: :model do
     end
 
     it "sets all of a volunteer's case assignments to inactive" do
-      case_contacts = create_list(:case_assignment, 3, volunteer: volunteer)
+      case_contacts =
+        3.times.map {
+          create(:case_assignment, casa_case: create(:casa_case, casa_org: volunteer.casa_org), volunteer: volunteer)
+        }
 
       volunteer.deactivate
 
@@ -74,7 +77,7 @@ RSpec.describe Volunteer, type: :model do
 
   describe "#made_contact_with_all_cases_in_days?" do
     let(:volunteer) { create(:volunteer) }
-    let(:casa_case) { create(:casa_case) }
+    let(:casa_case) { create(:casa_case, casa_org: volunteer.casa_org) }
     let(:create_case_contact) do
       lambda { |occurred_at, contact_made|
         create(:case_contact, casa_case: casa_case, creator: volunteer, occurred_at: occurred_at, contact_made: contact_made)
@@ -108,7 +111,7 @@ RSpec.describe Volunteer, type: :model do
 
     context "when volunteer has not made recent contact in just one case" do
       it "returns false" do
-        casa_case2 = create(:casa_case)
+        casa_case2 = create(:casa_case, casa_org: volunteer.casa_org)
         create(:case_assignment, casa_case: casa_case2, volunteer: volunteer, is_active: true)
         create(:case_contact, casa_case: casa_case2, creator: volunteer, occurred_at: Date.current - 60.days, contact_made: true)
         create_case_contact.call(Date.current, true)
