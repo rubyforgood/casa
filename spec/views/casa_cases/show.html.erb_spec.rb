@@ -6,8 +6,8 @@ RSpec.describe "casa_cases/show", type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:volunteer) { create :volunteer, display_name: "Andy Dwyer", casa_org: organization }
-  let(:case_assignment) { create(:case_assignment, volunteer: volunteer) }
-  let(:casa_case) { create(:casa_case, casa_org: organization, case_assignments: [case_assignment]) }
+  let!(:case_assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer) }
+  let(:casa_case) { create(:casa_case, casa_org: organization) }
 
   context "user is an admin" do
     it "redirects to edit volunteer page when volunteer name clicked" do

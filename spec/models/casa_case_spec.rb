@@ -47,16 +47,16 @@ RSpec.describe CasaCase do
   describe ".actively_assigned_to" do
     it "only returns cases actively assigned to a volunteer" do
       current_user = create(:volunteer)
-      inactive_case = create(:casa_case)
+      inactive_case = create(:casa_case, casa_org: current_user.casa_org)
       create(:case_assignment, casa_case: inactive_case, volunteer: current_user, is_active: false)
-      active_cases = create_list(:casa_case, 2)
+      active_cases = create_list(:casa_case, 2, casa_org: current_user.casa_org)
       active_cases.each do |casa_case|
         create(:case_assignment, casa_case: casa_case, volunteer: current_user, is_active: true)
       end
 
       other_user = create(:volunteer)
-      other_active_case = create(:casa_case)
-      other_inactive_case = create(:casa_case)
+      other_active_case = create(:casa_case, casa_org: other_user.casa_org)
+      other_inactive_case = create(:casa_case, casa_org: other_user.casa_org)
       create(:case_assignment, casa_case: other_active_case, volunteer: other_user, is_active: true)
       create(
         :case_assignment,
@@ -140,8 +140,9 @@ RSpec.describe CasaCase do
     end
 
     context "when volunteer has case assignments" do
-      let(:case_assignment1) { create(:case_assignment, volunteer: volunteer) }
-      let(:case_assignment2) { create(:case_assignment) }
+      let(:volunteer2) { create(:volunteer, casa_org: casa_org) }
+      let(:case_assignment1) { build(:case_assignment, volunteer: volunteer) }
+      let(:case_assignment2) { build(:case_assignment, volunteer: volunteer2) }
       let!(:casa_case) { create(:casa_case, case_assignments: [case_assignment1, case_assignment2], casa_org: casa_org) }
 
       it "returns cases to which volunteer is not assigned in same org" do

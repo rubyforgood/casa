@@ -1,12 +1,13 @@
 require "rails_helper"
 
 RSpec.describe "/case_assignments", type: :request do
+  let(:admin) { create(:casa_admin) }
+  let(:volunteer) { create(:volunteer) }
+  let(:casa_case) { create(:casa_case, casa_org: volunteer.casa_org) }
+
   describe "POST /create" do
     context "when the volunteer has been previously assigned to the casa_case" do
       it "reassigns the volunteer to the casa_case" do
-        admin = create(:casa_admin)
-        volunteer = create(:volunteer)
-        casa_case = create(:casa_case)
         create(:case_assignment, is_active: false, volunteer: volunteer, casa_case: casa_case)
 
         sign_in admin
@@ -22,10 +23,6 @@ RSpec.describe "/case_assignments", type: :request do
 
     context "when the case assignment parent is a volunteer" do
       it "creates a new case assignment for the volunteer" do
-        admin = create(:casa_admin)
-        volunteer = create(:volunteer)
-        casa_case = create(:casa_case)
-
         sign_in admin
 
         expect {
@@ -39,10 +36,6 @@ RSpec.describe "/case_assignments", type: :request do
 
     context "when the case assignment parent is a casa_case" do
       it "creates a new case assignment for the casa_case" do
-        admin = create(:casa_admin)
-        volunteer = create(:volunteer)
-        casa_case = create(:casa_case)
-
         sign_in admin
 
         expect {
@@ -58,9 +51,6 @@ RSpec.describe "/case_assignments", type: :request do
   describe "DELETE /destroy" do
     context "when the case assignment parent is a volunteer" do
       it "destroys the case assignment from the volunteer" do
-        admin = create(:casa_admin)
-        volunteer = create(:volunteer)
-        casa_case = create(:casa_case)
         assignment = create(:case_assignment, volunteer: volunteer, casa_case: casa_case)
 
         sign_in admin
@@ -75,9 +65,6 @@ RSpec.describe "/case_assignments", type: :request do
 
     context "when the case assignment parent is a casa_case" do
       it "destroys the case assignment from the casa_case" do
-        admin = create(:casa_admin)
-        volunteer = create(:volunteer)
-        casa_case = create(:casa_case)
         assignment = create(:case_assignment, volunteer: volunteer, casa_case: casa_case)
 
         sign_in admin

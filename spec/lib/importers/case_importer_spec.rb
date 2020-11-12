@@ -9,7 +9,7 @@ RSpec.describe CaseImporter do
 
   before do
     allow(case_importer).to receive(:email_addresses_to_users) do |_clazz, comma_separated_emails|
-      create_list(:volunteer, comma_separated_emails.split(",").size)
+      create_list(:volunteer, comma_separated_emails.split(",").size, casa_org_id: casa_org_id)
     end
   end
 
