@@ -1,7 +1,7 @@
 namespace :after_party do
   desc "Deployment task: Backfill court_report_submitted_at and court_report_status"
   task backfill_court_report_submitted_at: :environment do
-    puts "Running deploy task 'backfill_court_report_submitted_at'"
+    puts "Running deploy task 'backfill_court_report_submitted_at'" unless Rails.env.test?
 
     CasaCase.where(court_report_submitted: true).in_batches.update_all(court_report_status: :submitted,
                                                                        court_report_submitted_at: Time.current)
