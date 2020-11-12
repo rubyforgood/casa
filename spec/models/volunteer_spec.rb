@@ -24,9 +24,9 @@ RSpec.describe Volunteer, type: :model do
 
     it "sets all of a volunteer's case assignments to inactive" do
       case_contacts =
-        3.times.map do
+        3.times.map {
           create(:case_assignment, casa_case: create(:casa_case, casa_org: volunteer.casa_org), volunteer: volunteer)
-        end
+        }
 
       volunteer.deactivate
 
