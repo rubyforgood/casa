@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :casa_case do
-    sequence(:case_number) { |n| n }
+    sequence(:case_number) { |n| "CINA-#{n}" }
     transition_aged_youth { false }
     birth_month_year_youth { 16.years.ago }
     casa_org

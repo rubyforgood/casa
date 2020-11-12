@@ -43,16 +43,18 @@ RSpec.describe "casa_cases/index", type: :system do
 
   it "Filters active/inactive casa_cases" do
     active_case = create(:casa_case, active: true, casa_org: organization)
+    active_case1 = create(:casa_case, active: true, casa_org: organization)
     inactive_case = create(:casa_case, active: false, casa_org: organization)
 
     create(:case_assignment, volunteer: volunteer, casa_case: active_case)
+    create(:case_assignment, volunteer: volunteer, casa_case: active_case1)
     create(:case_assignment, volunteer: volunteer, casa_case: inactive_case)
 
     visit casa_cases_path
     expect(page).to have_selector(".casa-case-filters")
 
     # by default, only active casa cases are shown
-    expect(page.all("table#casa-cases tbody tr").count).to eq [active_case].size
+    expect(page.all("table#casa-cases tbody tr").count).to eq [active_case, active_case1].size
 
     click_on "Status"
     find(:css, 'input[data-value="Active"]').click
