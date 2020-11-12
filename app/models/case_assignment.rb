@@ -18,7 +18,7 @@ class CaseAssignment < ApplicationRecord
   def casa_case_and_volunteer_must_belong_to_same_casa_org
     return if casa_case.casa_org_id == volunteer.casa_org_id
 
-    errors.add(:volunteer, "Volunteer and case must belong to the same organization")
+    errors.add(:volunteer, "and case must belong to the same organization")
   end
 end
 
