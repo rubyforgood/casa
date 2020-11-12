@@ -1,6 +1,8 @@
 # Development setup using Docker
 
-After you install Docker, please follow either the automatic setup or the manual setup.
+After you install Docker, please follow either the automatic setup or the manual
+setup. If you are new to Docker, it is recommended that you follow the manual
+setup.
 
 ## Installing Docker
 Install [Docker Community Edition](https://docs.docker.com/install/) if it is not already installed.
@@ -28,8 +30,9 @@ The automatic setup explained here relies on Bash scripts in the docker director
 * Use the `docker/run` script to run any command within the Rails Docker container.  For example, entering `docker/run cat /etc/os-release` executes the command `cat /etc/os-release` within the Rails Docker container.
 
 ## Manual Setup
-The manual setup explained here is the legacy procedure for using Docker.  Be prepared to enter long commands beginning with `docker-compose`.
-
+The manual setup instructions walk you through building the images and starting
+the containers using Docker Compose commands directly. This setup method is particularly
+recommended if you are new to Docker.
 ### Initial setup
 The following commands should just be run for the initial setup only. Rebuilding the docker images is only necessary when upgrading, if there are changes to the Dockerfile, or if gems have been added or updated.
 1. Clone the respository to your local machine: `git clone
