@@ -19,7 +19,7 @@ class Volunteer < User
           "and supervisor_volunteers.is_active")
       .active
       .in_organization(org)
-      .where(supervisor_volunteers: { id: nil })
+      .where(supervisor_volunteers: {id: nil})
   }
 
   # Activates this volunteer.

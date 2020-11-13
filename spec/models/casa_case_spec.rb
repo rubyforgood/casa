@@ -141,11 +141,11 @@ RSpec.describe CasaCase do
 
     context "when volunteer has case assignments" do
       let(:volunteer2) { create(:volunteer, casa_org: casa_org) }
-      let(:case_assignment1) { build(:case_assignment, volunteer: volunteer) }
-      let(:case_assignment2) { build(:case_assignment, volunteer: volunteer2) }
-      let!(:casa_case) { create(:casa_case, case_assignments: [case_assignment1, case_assignment2], casa_org: casa_org) }
+      let(:casa_case) { create(:casa_case, casa_org: casa_org) }
 
       it "returns cases to which volunteer is not assigned in same org" do
+        casa_case.volunteers << volunteer
+        casa_case.volunteers << volunteer2
         expect(described_class.available_for_volunteer(volunteer)).to eq [casa_case2, casa_case3, casa_case1]
       end
     end
