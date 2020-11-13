@@ -11,7 +11,6 @@ RSpec.describe CasaCase do
   it { is_expected.to validate_uniqueness_of(:case_number).case_insensitive }
   it { is_expected.to have_many(:volunteers).through(:case_assignments) }
 
-
   describe ".ordered" do
     it "orders the casa cases by updated at date" do
       very_old_casa_case = create(:casa_case, updated_at: 5.days.ago)
