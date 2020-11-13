@@ -7,7 +7,7 @@ class CasaCasesController < ApplicationController
   # GET /casa_cases
   # GET /casa_cases.json
   def index
-    org_cases = CasaOrg.includes(:casa_cases).references(:casa_cases).find_by(id: current_user.casa_org_id).casa_cases
+    org_cases = current_user.casa_org.casa_cases.includes(:assigned_volunteers)
     @casa_cases = policy_scope(org_cases)
   end
 

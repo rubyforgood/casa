@@ -134,10 +134,10 @@
           <td>
             <% if casa_case.active? %>
               <% if current_user.volunteer? %>
-                <%= safe_join(assigned_volunteers(casa_case).map { |vol| 
+                <%= safe_join(casa_case.assigned_volunteers.map { |vol|
                   vol.display_name }, ", ") %>
               <% else %>
-                <%= safe_join(assigned_volunteers(casa_case).map { |vol| 
+                <%= safe_join(casa_case.assigned_volunteers.map { |vol|
                   link_to(vol.display_name, edit_volunteer_path(vol)) },
                   ", ") %>
               <% end %>

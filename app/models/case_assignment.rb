@@ -9,6 +9,8 @@ class CaseAssignment < ApplicationRecord
   validate :assignee_must_be_volunteer
   validate :casa_case_and_volunteer_must_belong_to_same_casa_org, if: -> { casa_case.present? && volunteer.present? }
 
+  scope :is_active, -> { where(is_active: true) }
+
   private
 
   def assignee_must_be_volunteer
