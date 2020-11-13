@@ -194,8 +194,8 @@ RSpec.describe CasaCase do
     end
   end
 
-  describe '#active_case_assignments' do
-    it 'only includes active assignments' do
+  describe "#active_case_assignments" do
+    it "only includes active assignments" do
       casa_org = create(:casa_org)
       casa_case = create(:casa_case, casa_org: casa_org)
       case_assignments = 2.times.map { create(:case_assignment, casa_case: casa_case, volunteer: create(:volunteer, casa_org: casa_org)) }
@@ -207,7 +207,7 @@ RSpec.describe CasaCase do
     end
   end
 
-  describe '#assigned_volunteers' do
+  describe "#assigned_volunteers" do
     let(:casa_org) { create(:casa_org) }
     let(:casa_case) { create(:casa_case, casa_org: casa_org) }
     let(:volunteer1) { create(:volunteer, casa_org: casa_org) }
@@ -215,14 +215,14 @@ RSpec.describe CasaCase do
     let!(:case_assignment1) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer1) }
     let!(:case_assignment2) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer2) }
 
-    it 'only includes volunteers through active assignments' do
+    it "only includes volunteers through active assignments" do
       expect(casa_case.assigned_volunteers).to eq [volunteer1, volunteer2]
 
       case_assignment1.update(is_active: false)
       expect(casa_case.reload.assigned_volunteers).to eq [volunteer2]
     end
 
-    it 'only includes active volunteers' do
+    it "only includes active volunteers" do
       expect(casa_case.assigned_volunteers).to eq [volunteer1, volunteer2]
 
       volunteer1.update(active: false)

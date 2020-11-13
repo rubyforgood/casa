@@ -43,8 +43,8 @@ RSpec.describe CaseAssignment do
     expect { volunteer_1.update(casa_org: casa_org_2) }.to change(case_assignment, :valid?).to false
   end
 
-  describe '.is_active' do
-    it 'only includes active case assignments' do
+  describe ".is_active" do
+    it "only includes active case assignments" do
       casa_case = create(:casa_case)
       case_assignments = 2.times.map { create(:case_assignment, casa_case: casa_case, volunteer: create(:volunteer, casa_org: casa_case.casa_org)) }
       expect(CaseAssignment.is_active).to eq case_assignments
