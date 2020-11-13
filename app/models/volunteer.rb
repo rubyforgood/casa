@@ -13,6 +13,15 @@ class Volunteer < User
     actions
   ].freeze
 
+  scope :with_no_supervisor, lambda { |org|
+    joins("left join supervisor_volunteers "\
+          "on supervisor_volunteers.volunteer_id = users.id "\
+          "and supervisor_volunteers.is_active")
+      .active
+      .in_organization(org)
+      .where(supervisor_volunteers: { id: nil })
+  }
+
   # Activates this volunteer.
   def activate
     update(active: true)
