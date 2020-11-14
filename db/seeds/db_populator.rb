@@ -5,6 +5,7 @@
 
 class DbPopulator
   SEED_PASSWORD = "123456"
+  WORD_LENGTH_TUNING = 10
 
   attr_reader :rng
 
@@ -96,7 +97,7 @@ class DbPopulator
   end
 
   def random_case_contact_count
-    @random_case_contact_counts ||= [0, 1, 2, 2, 2, 3, 3, 3, 11]
+    @random_case_contact_counts ||= [0, 1, 2, 2, 2, 3, 3, 3, 11, 11, 11]
     @random_case_contact_counts.sample(random: rng)
   end
 
@@ -106,6 +107,11 @@ class DbPopulator
 
   def logo
     @logo ||= CasaOrgLogo.new(url: "media/src/images/logo.png", alt_text: "CASA Logo", size: "70x38")
+  end
+
+  def note_generator(note_length)
+    available_chars = [("a".."z"), ("A".."Z"), (1..9), [" "] * WORD_LENGTH_TUNING].map(&:to_a).flatten.map(&:to_s)
+    (0...note_length).map { available_chars[rng.rand(available_chars.length)] }.join
   end
 
   def create_case_contact(casa_case)
@@ -118,7 +124,8 @@ class DbPopulator
       medium_type: CaseContact::CONTACT_MEDIUMS.sample(random: rng),
       miles_driven: rng.rand(5..40),
       want_driving_reimbursement: random_true_false,
-      contact_made: random_true_false
+      contact_made: random_true_false,
+      notes: note_generator(rng.rand(0..4000))
     )
   end
 
