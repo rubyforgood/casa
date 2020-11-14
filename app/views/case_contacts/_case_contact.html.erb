@@ -46,15 +46,15 @@
     <span class="mobile-label">Notes</span>
     <%- if contact.notes && contact.notes.length > CaseContactDecorator::NOTES_WORD_LIMIT %>
       <div class="limited-notes" style="display: block;">
-        <%= contact.decorate.notes %>
+        <%= simple_format(contact.decorate.limited_notes) %>
         <span><a role="button" href="#" onClick="moreText(event)">Read more</a></span>
       </div>
       <div class="full-notes" style="display: none;">
-        <%= contact.notes %>
+        <%= simple_format(contact.decorate.full_notes) %>
         <span><a role="button" href="#" onClick="lessText(event)">Hide</a></span>
       </div>
     <%- else %>
-      <%= contact.notes %>
+      <%= simple_format(contact.decorate.full_notes) %>
     <%- end %>
   </td>
   <td>
