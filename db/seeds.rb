@@ -23,10 +23,10 @@ class SeederMain
   end
 
   def seed
-    puts "Erasing all objects from the data base..."
+    puts "Erasing all objects from the database..."
     destroy_all
 
-    puts "Creating the objects in the data base..."
+    puts "Creating the objects in the database..."
     db_populator.create_all_casa_admin("allcasaadmin@example.com")
     db_populator.create_all_casa_admin("all_casa_admin1@example.com")
     # TODO - always create at least 2 CASAs with different-looking data so we can find cross-CASA bugs
