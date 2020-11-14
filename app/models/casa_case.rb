@@ -74,7 +74,7 @@ class CasaCase < ApplicationRecord
   end
 
   def removeEmancipationOption(optionId)
-    self.emancipation_options.delete(EmancipationOption.find(optionId))
+    self.emancipation_options.destroy(EmancipationOption.find(optionId))
   end
 
   def update_cleaning_contact_types(args)
