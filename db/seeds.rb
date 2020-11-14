@@ -28,6 +28,8 @@ class SeederMain
 
     puts "Creating the objects in the data base..."
     db_populator.create_all_casa_admin("allcasaadmin@example.com")
+    db_populator.create_all_casa_admin("all_casa_admin1@example.com")
+    # TODO - always create at least 2 CASAs with different-looking data so we can find cross-CASA bugs
     db_populator.create_org(CasaOrgPopulatorPresets.for_environment.merge({org_name: "Prince George CASA"}))
     db_populator.create_org(CasaOrgPopulatorPresets.minimal_dataset_options)
 
