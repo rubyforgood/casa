@@ -110,7 +110,7 @@ class DbPopulator
   end
 
   def note_generator(note_length)
-    available_chars = [('a'..'z'), ('A'..'Z'), (1..9), [' '] * WORD_LENGTH_TUNING].map(&:to_a).flatten.map(&:to_s)
+    available_chars = [("a".."z"), ("A".."Z"), (1..9), [" "] * WORD_LENGTH_TUNING].map(&:to_a).flatten.map(&:to_s)
     (0...note_length).map { available_chars[rng.rand(available_chars.length)] }.join
   end
 
