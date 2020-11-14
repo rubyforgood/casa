@@ -28,10 +28,7 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: 2.7.1
-
-    - name: install dependencies
-      run: |
-        bundle install
+        bundler-cache: true
 
     - name: lint
       run: bundle exec standardrb
