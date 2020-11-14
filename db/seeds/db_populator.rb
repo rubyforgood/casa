@@ -7,7 +7,7 @@ class DbPopulator
   SEED_PASSWORD = "123456"
   WORD_LENGTH_TUNING = 10
   LINE_BREAK_TUNING = 5
-  PREFIX_OPTIONS = ('A'.ord..'Z'.ord).to_a.map(&:chr)
+  PREFIX_OPTIONS = ("A".ord.."Z".ord).to_a.map(&:chr)
 
   attr_reader :rng
 
