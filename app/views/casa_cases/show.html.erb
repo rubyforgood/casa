@@ -54,7 +54,7 @@
 
     <div>
       <h6><strong>Assigned Volunteers:</strong></h6>
-      <% policy_scope(assigned_volunteers(@casa_case)).each_with_index do |volunteer, index| %>
+      <% policy_scope(@casa_case.assigned_volunteers).each_with_index do |volunteer, index| %>
         <% if current_user.volunteer? %>
           <p><%= volunteer.decorate.name %></p>
         <% else %>
