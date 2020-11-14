@@ -1,6 +1,7 @@
 class CaseAssignmentsController < ApplicationController
   before_action :authenticate_user!
   before_action :must_be_admin_or_supervisor # admins and supervisors can create/delete ALL case assignments
+  before_action :load_case_assignment, only: %i[destroy unassign]
 
   def create
     case_assignments = case_assignment_parent.case_assignments
@@ -27,20 +28,18 @@ class CaseAssignmentsController < ApplicationController
   end
 
   def destroy
-    case_assignment = CaseAssignment.find(params[:id])
-    case_assignment.destroy
+    @case_assignment.destroy
 
     redirect_to after_action_path(case_assignment_parent)
   end
 
   def unassign
-    case_assignment = CaseAssignment.find(params[:id])
-    authorize case_assignment, :unassign?
-    casa_case = case_assignment.casa_case
-    volunteer = case_assignment.volunteer
+    authorize @case_assignment, :unassign?
+    casa_case = @case_assignment.casa_case
+    volunteer = @case_assignment.volunteer
     flash_message = "Volunteer was unassigned from Case #{casa_case.case_number}."
 
-    if case_assignment.update(is_active: false)
+    if @case_assignment.update(is_active: false)
       if params[:redirect_to_path] == "volunteer"
         redirect_to edit_volunteer_path(volunteer), notice: flash_message
       else
@@ -71,5 +70,15 @@ class CaseAssignmentsController < ApplicationController
 
   def case_assignment_params
     params.require(:case_assignment).permit(:casa_case_id, :volunteer_id)
+  end
+
+  def load_case_assignment
+    @case_assignment =
+      CaseAssignment
+        .joins(:casa_case)
+        .where(casa_cases: {casa_org_id: current_organization.id})
+        .find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    head :not_found
   end
 end

@@ -29,7 +29,7 @@ RSpec.describe "/casa_cases", type: :request do
 
       it "fails across organizations" do
         other_org = create(:casa_org)
-        other_case = create(:casa_admin, casa_org: other_org)
+        other_case = create(:casa_case, casa_org: other_org)
 
         get casa_case_url(other_case)
         expect(response).to be_not_found
@@ -47,6 +47,14 @@ RSpec.describe "/casa_cases", type: :request do
       it "render a successful response" do
         get edit_casa_case_url(casa_case)
         expect(response).to be_successful
+      end
+
+      it "fails across organizations" do
+        other_org = create(:casa_org)
+        other_case = create(:casa_case, casa_org: other_org)
+
+        get edit_casa_case_url(other_case)
+        expect(response).to be_not_found
       end
     end
 
@@ -74,6 +82,21 @@ RSpec.describe "/casa_cases", type: :request do
         end
       end
 
+      it "only creates cases within user's organizations" do
+        other_org = create(:casa_org)
+        attributes = {
+          case_number: "1234",
+          transition_aged_youth: true,
+          casa_org_id: other_org.id,
+          hearing_type_id: hearing_type.id,
+          judge_id: judge.id
+        }
+
+        expect { post casa_cases_url, params: {casa_case: attributes} }.to(
+          change { [organization.casa_cases.count, other_org.casa_cases.count] }.from([0, 0]).to([1, 0])
+        )
+      end
+
       context "with invalid parameters" do
         it "does not create a new CasaCase" do
           expect { post casa_cases_url, params: {casa_case: invalid_attributes} }.to change(
@@ -90,15 +113,15 @@ RSpec.describe "/casa_cases", type: :request do
     end
 
     describe "PATCH /update" do
-      context "with valid parameters" do
-        let(:new_attributes) {
-          {
-            case_number: "12345",
-            hearing_type_id: hearing_type.id,
-            judge_id: judge.id
-          }
+      let(:new_attributes) {
+        {
+          case_number: "12345",
+          hearing_type_id: hearing_type.id,
+          judge_id: judge.id
         }
+      }
 
+      context "with valid parameters" do
         it "updates the requested casa_case" do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes}
           casa_case.reload
@@ -120,6 +143,15 @@ RSpec.describe "/casa_cases", type: :request do
           expect(response).to be_successful
         end
       end
+
+      it "does not update across organizations" do
+        other_org = create(:casa_org)
+        other_casa_case = create(:casa_case, case_number: "abc", casa_org: other_org)
+
+        expect { patch casa_case_url(other_casa_case), params: {casa_case: new_attributes} }.not_to(
+          change { other_casa_case.reload.case_number }
+        )
+      end
     end
 
     describe "DELETE /destroy" do
@@ -134,6 +166,13 @@ RSpec.describe "/casa_cases", type: :request do
       it "redirects to the casa_cases list" do
         delete casa_case_url(casa_case)
         expect(response).to redirect_to(casa_cases_url)
+      end
+
+      it "fails across organizations" do
+        other_org = create(:casa_org)
+        other_casa_case = create(:casa_case, casa_org: other_org)
+        delete casa_case_url(other_casa_case)
+        expect(response).to be_not_found
       end
     end
 
@@ -156,6 +195,14 @@ RSpec.describe "/casa_cases", type: :request do
       it "flashes success message" do
         patch deactivate_casa_case_path(casa_case), params: params
         expect(flash[:notice]).to include("Case #{casa_case.case_number} has been deactivated.")
+      end
+
+      it "fails across organizations" do
+        other_org = create(:casa_org)
+        other_casa_case = create(:casa_case, casa_org: other_org)
+
+        patch deactivate_casa_case_path(other_casa_case), params: params
+        expect(response).to be_not_found
       end
 
       context "when deactivation fails" do
@@ -192,6 +239,14 @@ RSpec.describe "/casa_cases", type: :request do
         expect(flash[:notice]).to include("Case #{casa_case.case_number} has been reactivated.")
       end
 
+      it "fails across organizations" do
+        other_org = create(:casa_org)
+        other_casa_case = create(:casa_case, casa_org: other_org)
+
+        patch reactivate_casa_case_path(other_casa_case), params: params
+        expect(response).to be_not_found
+      end
+
       context "when reactivation fails" do
         before do
           allow_any_instance_of(CasaCase).to receive(:reactivate).and_return(false)
@@ -224,19 +279,27 @@ RSpec.describe "/casa_cases", type: :request do
         get edit_casa_case_url(casa_case)
         expect(response).to be_successful
       end
+
+      it "fails across organizations" do
+        other_org = create(:casa_org)
+        other_case = create(:casa_case, casa_org: other_org)
+
+        get edit_casa_case_url(other_case)
+        expect(response).to be_not_found
+      end
     end
 
     describe "PATCH /update" do
-      context "with valid parameters" do
-        let(:new_attributes) {
-          {
-            case_number: "12345",
-            court_report_status: :submitted,
-            hearing_type_id: hearing_type.id,
-            judge_id: judge.id
-          }
+      let(:new_attributes) {
+        {
+          case_number: "12345",
+          court_report_status: :submitted,
+          hearing_type_id: hearing_type.id,
+          judge_id: judge.id
         }
+      }
 
+      context "with valid parameters" do
         it "updates permitted fields" do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes}
           casa_case.reload
@@ -252,6 +315,15 @@ RSpec.describe "/casa_cases", type: :request do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes}
           expect(response).to redirect_to(edit_casa_case_path(casa_case))
         end
+      end
+
+      it "does not update across organizations" do
+        other_org = create(:casa_org)
+        other_casa_case = create(:casa_case, case_number: "abc", casa_org: other_org)
+
+        expect { patch casa_case_url(other_casa_case), params: {casa_case: new_attributes} }.not_to(
+          change { other_casa_case.reload.attributes }
+        )
       end
     end
 
@@ -308,12 +380,20 @@ RSpec.describe "/casa_cases", type: :request do
         get edit_casa_case_url(casa_case)
         expect(response).to be_successful
       end
+
+      it "fails across organizations" do
+        other_org = create(:casa_org)
+        other_case = create(:casa_case, casa_org: other_org)
+
+        get edit_casa_case_url(other_case)
+        expect(response).to be_not_found
+      end
     end
 
     describe "PATCH /update" do
-      context "with valid parameters" do
-        let(:new_attributes) { {case_number: "12345", court_report_status: :completed} }
+      let(:new_attributes) { {case_number: "12345", court_report_status: :completed} }
 
+      context "with valid parameters" do
         it "updates fields (except case_number)" do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes}
           casa_case.reload
@@ -325,6 +405,15 @@ RSpec.describe "/casa_cases", type: :request do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes}
           expect(response).to redirect_to(edit_casa_case_path(casa_case))
         end
+      end
+
+      it "does not update across organizations" do
+        other_org = create(:casa_org)
+        other_casa_case = create(:casa_case, case_number: "abc", casa_org: other_org)
+
+        expect { patch casa_case_url(other_casa_case), params: {casa_case: new_attributes} }.not_to(
+          change { other_casa_case.reload.attributes }
+        )
       end
     end
 

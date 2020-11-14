@@ -1,9 +1,11 @@
 require "rails_helper"
 
 RSpec.describe SupervisorVolunteer do
-  let(:volunteer_1) { create(:volunteer) }
-  let(:supervisor_1) { create(:supervisor) }
-  let(:supervisor_2) { create(:supervisor) }
+  let(:casa_org_1) { create(:casa_org) }
+  let(:casa_org_2) { create(:casa_org) }
+  let(:volunteer_1) { create(:volunteer, casa_org: casa_org_1) }
+  let(:supervisor_1) { create(:supervisor, casa_org: casa_org_1) }
+  let(:supervisor_2) { create(:supervisor, casa_org: casa_org_1) }
 
   it "assigns a volunteer to a supervisor" do
     supervisor_1.volunteers << volunteer_1
@@ -14,5 +16,10 @@ RSpec.describe SupervisorVolunteer do
     supervisor_1.volunteers << volunteer_1
     supervisor_1.save
     expect { supervisor_2.volunteers << volunteer_1 }.to raise_error(StandardError)
+  end
+
+  it "requires supervisor and volunteer belong to same casa_org" do
+    supervisor_volunteer = supervisor_1.supervisor_volunteers.new(volunteer: volunteer_1)
+    expect { volunteer_1.update(casa_org: casa_org_2) }.to change(supervisor_volunteer, :valid?).to(false)
   end
 end

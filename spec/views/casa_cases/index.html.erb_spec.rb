@@ -63,4 +63,14 @@ RSpec.describe "casa_cases/index", type: :system do
     find(:css, 'input[data-value="Inactive"]').click
     expect(page.all("table#casa-cases tbody tr").count).to eq [inactive_case].size
   end
+
+  it "Only displays cases belonging to user's org" do
+    org_cases = create_list :casa_case, 3, active: true, casa_org: organization
+    other_org_cases = create_list :casa_case, 3, active: true
+
+    visit casa_cases_path
+
+    org_cases.each { |casa_case| expect(page).to have_content casa_case.case_number }
+    other_org_cases.each { |casa_case| expect(page).not_to have_content casa_case.case_number }
+  end
 end

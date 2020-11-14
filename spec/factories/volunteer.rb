@@ -1,5 +1,9 @@
 FactoryBot.define do
   factory :volunteer, class: "Volunteer", parent: :user do
+    casa_org do
+      @overrides[:casa_org] || @overrides[:supervisor].try(:casa_org) || create(:casa_org)
+    end
+
     trait :inactive do
       active { false }
     end

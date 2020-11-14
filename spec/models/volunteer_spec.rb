@@ -159,4 +159,32 @@ RSpec.describe Volunteer, type: :model do
 
     it { expect(volunteer.role).to eq "Volunteer" }
   end
+
+  describe "#with_no_supervisor" do
+    subject { Volunteer.with_no_supervisor(casa_org) }
+
+    let(:casa_org) { create(:casa_org) }
+
+    context "no volunteers" do
+      it "returns none" do
+        expect(subject).to eq []
+      end
+    end
+
+    context "volunteers" do
+      let!(:unassigned1) { create(:volunteer, display_name: "aaa", casa_org: casa_org) }
+      let!(:unassigned2) { create(:volunteer, display_name: "bbb", casa_org: casa_org) }
+      let!(:unassigned2_different_org) { create(:volunteer, display_name: "ccc") }
+      let!(:assigned1) { create(:volunteer, display_name: "ddd", casa_org: casa_org) }
+      let!(:assignment1) { create(:supervisor_volunteer, volunteer: assigned1) }
+      let!(:assigned2_different_org) { assignment1.volunteer }
+      let!(:unassigned_inactive_volunteer) { create(:volunteer, display_name: "eee", casa_org: casa_org, active: false) }
+      let!(:previously_assigned) { create(:volunteer, display_name: "fff", casa_org: casa_org) }
+      let!(:inactive_assignment) { create(:supervisor_volunteer, volunteer: previously_assigned, is_active: false) }
+
+      it "returns unassigned volunteers" do
+        expect(subject.map(&:display_name).sort).to eq ["aaa", "bbb", "fff"]
+      end
+    end
+  end
 end
