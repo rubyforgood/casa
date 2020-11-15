@@ -40,7 +40,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7.1
+          bundler-cache: true
 
       - name: Install PostgreSQL client
         run: |
@@ -56,8 +56,7 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
           POSTGRES_PORT: 5432
         run: |
-          bundle install
-          skylight disable_dev_warning
+          bundle exec skylight disable_dev_warning
           yarn
           bundle exec rake db:create
           bundle exec rake db:schema:load
@@ -80,5 +79,4 @@ jobs:
           RAILS_ENV: test
         run: |
           RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
-
 

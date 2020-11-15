@@ -26,12 +26,9 @@ jobs:
 
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 2.7.1
 
     - name: install gem erb_lint
-      run: |
-        gem install erb_lint
+      run: gem install erb_lint
 
     - name: ERB lint
       run: erblint --lint-all --autocorrect
