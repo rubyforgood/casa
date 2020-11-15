@@ -6,21 +6,19 @@ RSpec.describe EmancipationCategory, type: :model do
   it { is_expected.to validate_presence_of(:name) }
 
   context "When creating a new category" do
-    context "When passing valid parameters" do
-      it "creates a new category in the database" do
-        expect {
-          create(:emancipation_category)
-        }.to change { EmancipationCategory.count }
-      end
+    it "creates a new category in the database" do
+      expect {
+        create(:emancipation_category)
+      }.to change { EmancipationCategory.count }
+    end
 
-      it "raises an exception for duplicate entries" do
-        duplicate_category_name = "test category"
+    it "raises an exception for duplicate entries" do
+      duplicate_category_name = "test category"
 
-        expect {
-          create(:emancipation_category, name: duplicate_category_name)
-          create(:emancipation_category, name: duplicate_category_name)
-        }.to raise_error(ActiveRecord::RecordNotUnique)
-      end
+      expect {
+        create(:emancipation_category, name: duplicate_category_name)
+        create(:emancipation_category, name: duplicate_category_name)
+      }.to raise_error(ActiveRecord::RecordNotUnique)
     end
   end
 
