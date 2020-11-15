@@ -32,10 +32,10 @@ module CasaOrgPopulatorPresets
 
   def large_dataset_options
     {
-      case_count: 200,
-      volunteer_count: 200,
+      case_count: 160,
+      volunteer_count: 100,
       supervisor_count: 10,
-      casa_admin_count: 5
+      casa_admin_count: 3
     }
   end
 
