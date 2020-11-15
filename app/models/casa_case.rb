@@ -54,7 +54,7 @@ class CasaCase < ApplicationRecord
     transition_aged_youth
   end
 
-  def containsEmancipationOption(optionId)
+  def contains_emancipation_option?(optionId)
     begin
       self.emancipation_options.find(optionId)
     rescue ActiveRecord::RecordNotFound
@@ -64,7 +64,7 @@ class CasaCase < ApplicationRecord
     return true
   end
 
-  def addEmancipationOption(optionId)
+  def add_emancipation_option(optionId)
     option_category_id = EmancipationOption.find(optionId).emancipation_category_id
     if !(EmancipationCategory.find(option_category_id).mutually_exclusive && EmancipationOption.options_with_category_and_case(option_category_id, self[:id]).any?)
       self.emancipation_options << EmancipationOption.find(optionId)
@@ -73,7 +73,7 @@ class CasaCase < ApplicationRecord
     end
   end
 
-  def removeEmancipationOption(optionId)
+  def remove_emancipation_option(optionId)
     self.emancipation_options.destroy(EmancipationOption.find(optionId))
   end
 
