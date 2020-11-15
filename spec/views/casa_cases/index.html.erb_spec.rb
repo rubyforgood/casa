@@ -43,16 +43,18 @@ RSpec.describe "casa_cases/index", type: :system do
 
   it "Filters active/inactive casa_cases" do
     active_case = create(:casa_case, active: true, casa_org: organization)
+    active_case1 = create(:casa_case, active: true, casa_org: organization)
     inactive_case = create(:casa_case, active: false, casa_org: organization)
 
     create(:case_assignment, volunteer: volunteer, casa_case: active_case)
+    create(:case_assignment, volunteer: volunteer, casa_case: active_case1)
     create(:case_assignment, volunteer: volunteer, casa_case: inactive_case)
 
     visit casa_cases_path
     expect(page).to have_selector(".casa-case-filters")
 
     # by default, only active casa cases are shown
-    expect(page.all("table#casa-cases tbody tr").count).to eq [active_case].size
+    expect(page.all("table#casa-cases tbody tr").count).to eq [active_case, active_case1].size
 
     click_on "Status"
     find(:css, 'input[data-value="Active"]').click
@@ -60,5 +62,15 @@ RSpec.describe "casa_cases/index", type: :system do
 
     find(:css, 'input[data-value="Inactive"]').click
     expect(page.all("table#casa-cases tbody tr").count).to eq [inactive_case].size
+  end
+
+  it "Only displays cases belonging to user's org" do
+    org_cases = create_list :casa_case, 3, active: true, casa_org: organization
+    other_org_cases = create_list :casa_case, 3, active: true
+
+    visit casa_cases_path
+
+    org_cases.each { |casa_case| expect(page).to have_content casa_case.case_number }
+    other_org_cases.each { |casa_case| expect(page).not_to have_content casa_case.case_number }
   end
 end

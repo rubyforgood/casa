@@ -69,9 +69,10 @@ RSpec.describe CaseContactReport, type: :model do
       end
 
       it "returns only the volunteer with the specified supervisors" do
-        supervisor = create(:supervisor)
-        volunteer = create(:volunteer)
-        volunteer2 = create(:volunteer)
+        casa_org = create(:casa_org)
+        supervisor = create(:supervisor, casa_org: casa_org)
+        volunteer = create(:volunteer, casa_org: casa_org)
+        volunteer2 = create(:volunteer, casa_org: casa_org)
         create(:supervisor_volunteer, volunteer: volunteer, supervisor: supervisor)
 
         contact = create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
@@ -180,9 +181,10 @@ RSpec.describe CaseContactReport, type: :model do
 
     describe "contact type filter functionality" do
       it "returns only the case contacts that include the case contact" do
-        supervisor = create(:supervisor)
-        volunteer = create(:volunteer)
-        volunteer2 = create(:volunteer)
+        casa_org = create(:casa_org)
+        supervisor = create(:supervisor, casa_org: casa_org)
+        volunteer = create(:volunteer, casa_org: casa_org)
+        volunteer2 = create(:volunteer, casa_org: casa_org)
         court = create(:contact_type, name: "Court")
         school = create(:contact_type, name: "School")
         create(:supervisor_volunteer, volunteer: volunteer, supervisor: supervisor)
@@ -199,9 +201,10 @@ RSpec.describe CaseContactReport, type: :model do
 
     describe "contact type group filter functionality" do
       before do
-        supervisor = create(:supervisor)
-        volunteer = create(:volunteer)
-        volunteer2 = create(:volunteer)
+        casa_org = create(:casa_org)
+        supervisor = create(:supervisor, casa_org: casa_org)
+        volunteer = create(:volunteer, casa_org: casa_org)
+        volunteer2 = create(:volunteer, casa_org: casa_org)
         create(:supervisor_volunteer, volunteer: volunteer, supervisor: supervisor)
 
         @contact_type_group = create(:contact_type_group, name: "Legal")

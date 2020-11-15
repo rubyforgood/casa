@@ -74,7 +74,11 @@ class CaseContactDecorator < Draper::Decorator
     end
   end
 
-  def notes
-    object.notes.to_s.truncate(NOTES_WORD_LIMIT)
+  def limited_notes
+    object.notes.truncate(NOTES_WORD_LIMIT)
+  end
+
+  def full_notes
+    object.notes
   end
 end

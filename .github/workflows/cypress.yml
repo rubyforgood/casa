@@ -1,4 +1,4 @@
-name: rspec
+name: cypress
 
 on:
   push:
@@ -17,7 +17,7 @@ on:
       - 'bin/*'
 
 jobs:
-  rspec:
+  cypress:
 
     runs-on: ubuntu-latest
 
@@ -66,7 +66,7 @@ jobs:
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
 
-      - name: Run rspec
+      - name: Run cypress
         env:
           POSTGRES_HOST: localhost
           DATABASE_HOST: localhost
@@ -75,10 +75,9 @@ jobs:
           POSTGRES_PASSWORD: password
           POSTGRES_HOST_AUTH_METHOD: trust
           POSTGRES_PORT: 5432
-          PGHOST: localhost
-          PGUSER: postgres
-          RAILS_ENV: test
         run: |
-          RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
-
+          RAILS_ENV=test bundle exec rails server -b 0.0.0.0 -p 4040 -d
+          RAILS_ENV=test bundle exec rake db:migrate
+          RAILS_ENV=test bundle exec rake db:seed
+          npm run test:cypress --exit-code 0
 

@@ -71,7 +71,7 @@ RSpec.describe "Admin: Editing Volunteers", type: :system do
 
   context "with a deactivated case" do
     it "displays inactive message" do
-      deactivated_casa_case = create(:casa_case, active: false, volunteers: [volunteer])
+      deactivated_casa_case = create(:casa_case, active: false, casa_org: volunteer.casa_org, volunteers: [volunteer])
       sign_in admin
 
       visit edit_volunteer_path(volunteer)

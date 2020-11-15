@@ -25,15 +25,6 @@ class User < ApplicationRecord
   }, foreign_key: "volunteer_id", dependent: :destroy
   has_one :supervisor, through: :supervisor_volunteer
 
-  scope :volunteers_with_no_supervisor, lambda { |org|
-    joins("left join supervisor_volunteers "\
-          "on supervisor_volunteers.volunteer_id = users.id "\
-          "and supervisor_volunteers.is_active")
-      .active
-      .in_organization(org)
-      .where(supervisor_volunteers: {id: nil})
-  }
-
   scope :active, -> { where(active: true) }
 
   scope :in_organization, lambda { |org|

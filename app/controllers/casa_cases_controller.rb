@@ -1,13 +1,13 @@
 class CasaCasesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_casa_case, only: %i[show edit update destroy]
+  before_action :set_casa_case, only: %i[show edit update destroy deactivate reactivate]
   before_action :set_contact_types, only: %i[new edit update create]
   before_action :require_organization!
 
   # GET /casa_cases
   # GET /casa_cases.json
   def index
-    org_cases = CasaOrg.includes(:casa_cases).references(:casa_cases).find_by(id: current_user.casa_org_id).casa_cases
+    org_cases = current_user.casa_org.casa_cases.includes(:assigned_volunteers)
     @casa_cases = policy_scope(org_cases)
   end
 
@@ -59,8 +59,6 @@ class CasaCasesController < ApplicationController
   end
 
   def deactivate
-    @casa_case = CasaCase.find(params[:id])
-
     authorize @casa_case, :update_case_status?
 
     if @casa_case.deactivate
@@ -72,8 +70,6 @@ class CasaCasesController < ApplicationController
   end
 
   def reactivate
-    @casa_case = CasaCase.find(params[:id])
-
     authorize @casa_case, :update_case_status?
 
     if @casa_case.reactivate

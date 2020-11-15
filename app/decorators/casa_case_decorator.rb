@@ -37,5 +37,16 @@ class CasaCaseDecorator < Draper::Decorator
   def unsuccessful_contacts_this_week
     this_week = Date.today - 7.days..Date.today
     object.case_contacts.where(occurred_at: this_week).where(contact_made: false).count
+    
+  def court_report_select_option
+    [
+      "#{object.case_number} - #{object.has_transitioned? ? "transition" : "non-transition"}",
+      object.case_number,
+      {"data-transitioned": object.has_transitioned?}
+    ]
+  end
+
+  def inactive_class
+    !object.active ? "table-secondary" : ""
   end
 end

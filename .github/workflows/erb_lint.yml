@@ -1,0 +1,37 @@
+name: ERB lint
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - 'bin/*'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - 'bin/*'
+
+jobs:
+  erb_lint:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7.1
+
+    - name: install gem erb_lint
+      run: |
+        gem install erb_lint
+
+    - name: ERB lint
+      run: erblint --lint-all --autocorrect

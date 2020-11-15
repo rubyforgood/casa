@@ -1,11 +1,23 @@
 name: standardrb lint
 
 on:
-  - push
-  - pull_request_target
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - 'bin/*'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - 'bin/*'
 
 jobs:
-  lint:
+  ruby_lint:
 
     runs-on: ubuntu-latest
 
