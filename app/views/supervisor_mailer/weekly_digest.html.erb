@@ -28,15 +28,17 @@
             <% recent_contact =  casa_case.decorate.case_contacts_latest %>
             <%= "Most recent contact attempted:" %>
             <br>
-            <%= "Date: #{recent_contact&.occurred_at&.strftime("%B %e, %Y")}" %>
+            <%= " - Date: #{recent_contact&.occurred_at&.strftime("%B %e, %Y")}" %>
             <br>
-            <%= "Duration: #{recent_contact&.duration_minutes}" %>
+            <%= " - Type: #{recent_contact&.decorate.contact_types}" %>
             <br>
-            <%= "Contact Made: #{recent_contact&.contact_made}" %>
+            <%= " - Duration: #{recent_contact&.duration_minutes}" %>
             <br>
-            <%= "Medium Type: #{recent_contact&.medium_type}" %>
+            <%= " - Contact Made: #{recent_contact&.contact_made}" %>
             <br>
-            <%= "Notes: #{recent_contact&.notes}" %>
+            <%= " - Medium Type: #{recent_contact&.medium_type}" %>
+            <br>
+            <%= " - Notes: #{recent_contact&.notes}" %>
           <% else %>
             No contact attempts for this week.
           <% end %>
