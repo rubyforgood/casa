@@ -1,20 +1,34 @@
-<h2>Forgot your password?</h2>
-
 <div class="row">
-  <div class="col-sm-6">
-    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-      <%= render "/shared/error_messages", resource: resource %>
+  <div class="col-lg-5 col-md-12 vertically-center">
+    <div class="container">
+      <div class="row">
+        <div class="offset-xl-2 col-xl-8 col-lg-12 col-sm-8 col-md-8">
+          <br>
+          <h2>Forgot your password?</h2>
+          <br>
 
-      <div class="field form-group">
-        <%= f.label :email %><br>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
-      </div>
+          <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+            <%= render "/shared/error_messages", resource: resource %>
 
-      <div class="actions">
-        <%= f.submit "Send me reset password instructions", class: "btn btn-primary" %>
+            <div class="field form-group">
+              <%= f.label :email %><br>
+              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+            </div>
+
+            <div class="actions">
+              <%= f.submit "Send me reset password instructions", class: "btn btn-primary" %>
+            </div>
+          <% end %>
+
+          <br>
+          <%= render "devise/shared/links" %>
+          <br>
+        </div>
       </div>
-    <% end %>
+    </div>
+  </div>
+
+  <div class="col-lg-7 d-none d-lg-block">
+    <aside class="display-image"></aside>
   </div>
 </div>
-<br>
-<%= render "devise/shared/links" %>
