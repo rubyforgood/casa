@@ -6,10 +6,10 @@ RSpec.describe EmancipationCategory, type: :model do
   it { is_expected.to validate_presence_of(:name) }
 
   context "When creating a new category" do
-    it "creates a new category in the database" do
+    it "creates a new category in the database when passed valid parameters" do
       expect {
         create(:emancipation_category)
-      }.to change { EmancipationCategory.count }
+      }.to change { EmancipationCategory.count }.by(1)
     end
 
     it "raises an exception for duplicate entries" do
