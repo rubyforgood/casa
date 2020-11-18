@@ -9,9 +9,6 @@
 # 3/23/2000,,,,CINA 13-1234,
 # """
 
-case_not_found = []
-already_has_nonmatching_date = []
-no_edit_made = []
 
 def update_casa_case_birth_month_year_youth(casa_case, new_date)
   casa_case.update!(birth_month_year_youth: Date.new(new_date.year, new_date.month, 1))
@@ -21,7 +18,7 @@ def dates_match(casa_case, new_date)
   casa_case.birth_month_year_youth.year == new_date.year && casa_case.birth_month_year_youth.month == new_date.month
 end
 
-def update_casa_case_dates_of_birth(data, case_not_found, already_has_nonmatching_date, no_edit_made)
+def update_casa_case_dates_of_birth(data, case_not_found, already_has_nonmatching_date, no_edit_made, updated_casa_cases)
   casa_org = CasaOrg.find_by(name: "Prince George CASA")
   return "Prince George CASA not found" unless casa_org
   data.split("\n").map(&:strip).reject(&:empty?).each do |row|
@@ -41,10 +38,24 @@ def update_casa_case_dates_of_birth(data, case_not_found, already_has_nonmatchin
         end
       else
         update_casa_case_birth_month_year_youth(cc, d2)
+        updated_casa_cases << case_number
       end
     else
       case_not_found << case_number
     end
   end
-  {not_found: case_not_found, nonmatching: already_has_nonmatching_date, no_edit_made: no_edit_made}
+  {not_found: case_not_found, nonmatching: already_has_nonmatching_date, no_edit_made: no_edit_made, updated_casa_cases: updated_casa_cases}
 end
+
+# data = """
+# 1/21/2000,,,,CINA 11-1234,
+# 2/22/2000,,,,TPR 12-1234,
+# 3/23/2000,,,,CINA 13-1234,
+# """
+# case_not_found = []
+# already_has_nonmatching_date = []
+# no_edit_made = []
+# updated_casa_cases = []
+# r1 = update_casa_case_dates_of_birth(data, case_not_found, already_has_nonmatching_date, no_edit_made, updated_casa_cases)
+# r1
+# puts CasaCase.all.pluck(:case_number, :birth_month_year_youth).map {|i| i.join(", ")}.sort
