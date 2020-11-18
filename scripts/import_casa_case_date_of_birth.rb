@@ -9,7 +9,6 @@
 # 3/23/2000,,,,CINA 13-1234,
 # """
 
-
 def update_casa_case_birth_month_year_youth(casa_case, new_date)
   casa_case.update!(birth_month_year_youth: Date.new(new_date.year, new_date.month, 1))
 end
