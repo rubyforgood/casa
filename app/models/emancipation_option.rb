@@ -13,10 +13,6 @@ class EmancipationOption < ApplicationRecord
       .where(casa_cases_emancipation_options: {casa_case_id: casa_case_id})
       .where(emancipation_category_id: emancipation_category_id)
   }
-
-  def get_category
-    return emancipation_category.name
-  end
 end
 
 # == Schema Information
