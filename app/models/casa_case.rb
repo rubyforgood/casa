@@ -54,9 +54,9 @@ class CasaCase < ApplicationRecord
     transition_aged_youth
   end
 
-  def contains_emancipation_option?(optionId)
+  def contains_emancipation_option?(option_id)
     begin
-      self.emancipation_options.find(optionId)
+      self.emancipation_options.find(option_id)
     rescue ActiveRecord::RecordNotFound
       return false
     end
@@ -64,17 +64,18 @@ class CasaCase < ApplicationRecord
     return true
   end
 
-  def add_emancipation_option(optionId)
-    option_category_id = EmancipationOption.find(optionId).emancipation_category_id
+  def add_emancipation_option(option_id)
+    option_category_id = EmancipationOption.find(option_id).emancipation_category_id
+
     if !(EmancipationCategory.find(option_category_id).mutually_exclusive && EmancipationOption.options_with_category_and_case(option_category_id, self[:id]).any?)
-      self.emancipation_options << EmancipationOption.find(optionId)
+      self.emancipation_options << EmancipationOption.find(option_id)
     else
       raise "Attempted adding multiple options belonging to a mutually exclusive category"
     end
   end
 
-  def remove_emancipation_option(optionId)
-    self.emancipation_options.destroy(EmancipationOption.find(optionId))
+  def remove_emancipation_option(option_id)
+    self.emancipation_options.destroy(EmancipationOption.find(option_id))
   end
 
   def update_cleaning_contact_types(args)
