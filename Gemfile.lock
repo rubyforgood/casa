@@ -189,6 +189,8 @@ GEM
     pundit (2.1.0)
       activesupport (>= 3.0.0)
     rack (2.2.3)
+    rack-attack (6.3.1)
+      rack (>= 1.0, < 3)
     rack-proxy (0.6.5)
       rack
     rack-test (1.1.0)
@@ -359,6 +361,7 @@ DEPENDENCIES
   pry-byebug
   puma (~> 5.0)
   pundit
+  rack-attack
   rails (~> 6.0.3)
   rake
   rspec-rails (~> 4.0.1)
