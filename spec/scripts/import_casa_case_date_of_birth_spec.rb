@@ -15,7 +15,7 @@ RSpec.describe "ImportCasaCaseDateOfBirth" do
     no_edit_made = []
     create(:casa_org, name: "Prince George CASA")
     result = update_casa_case_dates_of_birth(data, case_not_found, already_has_nonmatching_date, no_edit_made, [])
-    expect(result).to eq({nonmatching: [], not_found: ["CINA 11-1234", "TPR 12-1234", "CINA 13-1234"], no_edit_made: []})
+    expect(result).to eq({nonmatching: [], not_found: ["CINA 11-1234", "TPR 12-1234", "CINA 13-1234"], no_edit_made: [], :updated_casa_cases=>[]})
     expect(case_not_found).to eq(["CINA 11-1234", "TPR 12-1234", "CINA 13-1234"])
     expect(already_has_nonmatching_date).to eq([])
     expect(no_edit_made).to eq([])
