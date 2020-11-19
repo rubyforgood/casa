@@ -13,7 +13,7 @@ class ApplicationPolicy
     user.volunteer?
   end
 
-  def see_import_page?
+  def is_admin?
     user.casa_admin?
   end
 
@@ -21,5 +21,6 @@ class ApplicationPolicy
     user.volunteer?
   end
 
-  alias_method :modify_organization?, :see_import_page?
+  alias_method :modify_organization?, :is_admin?
+  alias_method :see_import_page?, :is_admin?
 end
