@@ -15,8 +15,7 @@ module ApplicationHelper
   def page_header
     return default_page_header unless user_signed_in?
 
-    page_header_text = current_organization.display_name
-    user_signed_in? ? link_to(page_header_text, root_path) : page_header_text
+    current_organization.display_name
   end
 
   def default_page_header
