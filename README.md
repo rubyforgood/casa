@@ -124,6 +124,10 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 
 If you have any troubles running tests, check out the files in `.github/workflow/` which is what makes the CI build run.
 
+If additional work arises from your commit that is outside the scope of the issue it resolves, please open a new issue and either:
+- assign it to yourself if you'd like to take it on
+- or add it to the to-do column without an assignee so someone else can pick up this new issue.
+
 **Local email**
 
 We are using [Letter Opener](https://github.com/ryanb/letter_opener) in
