@@ -18,11 +18,6 @@ class DashboardPolicy
     user.volunteer? && user.casa_cases.size > 0
   end
 
-  def see_cases_section?
-    true
-  end
-
-  def see_admins_section?
-    user.casa_admin?
-  end
+  alias_method :see_admins_section?, :see_volunteers_section?
+  alias_method :see_cases_section?, :show?
 end

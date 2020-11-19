@@ -10,14 +10,6 @@ class CaseContactPolicy
     _is_creator_or_casa_admin?
   end
 
-  def show?
-    _is_creator_or_casa_admin?
-  end
-
-  def create?
-    _is_creator_or_casa_admin?
-  end
-
   def new?
     # Everyone should be allowed to create a case_contact
     true
@@ -27,13 +19,10 @@ class CaseContactPolicy
     _is_creator_or_supervisor_or_casa_admin?
   end
 
-  def edit?
-    _is_creator_or_supervisor_or_casa_admin?
-  end
-
-  def destroy?
-    _is_creator_or_casa_admin?
-  end
+  alias_method :show?, :index?
+  alias_method :create?, :index?
+  alias_method :destroy?, :index?
+  alias_method :edit?, :update?
 
   class Scope
     attr_reader :user, :scope

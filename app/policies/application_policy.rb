@@ -21,7 +21,5 @@ class ApplicationPolicy
     user.volunteer?
   end
 
-  def modify_organization?
-    user.casa_admin?
-  end
+  alias_method :modify_organization?, :see_import_page?
 end
