@@ -45,6 +45,15 @@ Rails.application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
+  # Rack Attack configuration
+  #
+  # The specs on Docker can be really slow to run, so increase the period of
+  # time that the limit is allowed
+  config.throttle_login_period = 2.minutes
+  # Set IP_BLOCKLIST for testing. Can't stub in spec since environment variable
+  # gets read during application initialization.
+  ENV["IP_BLOCKLIST"] = "4.5.6.7, 9.8.7.6,100.101.102.103"
+
   # Raises error for missing translations.
   # config.action_view.raise_on_missing_translations = true
   config.after_initialize do
