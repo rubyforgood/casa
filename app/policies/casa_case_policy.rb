@@ -34,23 +34,7 @@ class CasaCasePolicy
     user.is_a?(Supervisor)
   end
 
-  def update_case_status?
-    user.is_a?(CasaAdmin)
-  end
-
   def update_court_date?
-    user.casa_admin? || user.supervisor?
-  end
-
-  def update_hearing_type?
-    user.casa_admin? || user.supervisor?
-  end
-
-  def update_judge?
-    user.casa_admin? || user.supervisor?
-  end
-
-  def update_court_report_due_date?
     user.casa_admin? || user.supervisor?
   end
 
@@ -61,6 +45,11 @@ class CasaCasePolicy
   def assign_volunteers?
     is_in_same_org? && is_supervisor_or_casa_admin?
   end
+
+  alias_method :update_case_status?, :update_case_number?
+  alias_method :update_hearing_type?, :update_court_date?
+  alias_method :update_judge?, :update_court_date?
+  alias_method :update_court_report_due_date?, :update_court_date?
 
   def permitted_attributes
     common_attrs = [
@@ -85,33 +74,18 @@ class CasaCasePolicy
     )
   end
 
-  def edit?
-    is_in_same_org? && (
-      is_supervisor_or_casa_admin? || is_volunteer_actively_assigned_to_case?
-    )
-  end
-
   def new?
-    is_in_same_org? && is_supervisor_or_casa_admin?
-  end
-
-  def create?
-    is_in_same_org? && is_supervisor_or_casa_admin?
-  end
-
-  def update?
-    is_in_same_org? && (
-      is_supervisor_or_casa_admin? || is_volunteer_actively_assigned_to_case?
-    )
-  end
-
-  def destroy?
     is_in_same_org? && is_supervisor_or_casa_admin?
   end
 
   def index?
     user.casa_admin? || user.supervisor? || user.volunteer?
   end
+
+  alias_method :edit?, :show?
+  alias_method :update?, :show?
+  alias_method :create?, :new?
+  alias_method :destroy?, :new?
 
   private
 
