@@ -189,7 +189,7 @@ RSpec.describe CasaCase do
         casa_case = create(:casa_case, court_date: "2020-09-13 02:11:58", court_report_status: :submitted)
         casa_case.clear_court_dates
 
-        expect(casa_case.court_report_submitted).to be false
+        expect(casa_case.court_report_status).to eq "not_submitted"
       end
     end
   end
