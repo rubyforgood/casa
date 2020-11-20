@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_20_103146) do
+ActiveRecord::Schema.define(version: 2020_11_20_215756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,7 +63,6 @@ ActiveRecord::Schema.define(version: 2020_11_20_103146) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "casa_org_id", null: false
     t.datetime "birth_month_year_youth"
-    t.boolean "court_report_submitted", default: false, null: false
     t.datetime "court_date"
     t.datetime "court_report_due_date"
     t.bigint "hearing_type_id"

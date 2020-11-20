@@ -157,7 +157,6 @@ end
 #  court_date                :datetime
 #  court_report_due_date     :datetime
 #  court_report_status       :integer          default("not_submitted")
-#  court_report_submitted    :boolean          default(FALSE), not null
 #  court_report_submitted_at :datetime
 #  transition_aged_youth     :boolean          default(FALSE), not null
 #  created_at                :datetime         not null
