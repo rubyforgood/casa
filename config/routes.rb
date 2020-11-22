@@ -1,23 +1,23 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  devise_for :all_casa_admins, path: "all_casa_admins", controllers: {sessions: "all_casa_admins/sessions"}
-  devise_for :users, controllers: {sessions: "users/sessions"}
+  devise_for :all_casa_admins, path: 'all_casa_admins', controllers: { sessions: 'all_casa_admins/sessions' }
+  devise_for :users, controllers: { sessions: 'users/sessions' }
 
   authenticated :all_casa_admin do
-    root to: "all_casa_admins/dashboard#show", as: :authenticated_all_casa_admin_root
+    root to: 'all_casa_admins/dashboard#show', as: :authenticated_all_casa_admin_root
   end
 
   authenticated :user do
-    root to: "dashboard#show", as: :authenticated_user_root
+    root to: 'dashboard#show', as: :authenticated_user_root
   end
 
   devise_scope :user do
-    root to: "devise/sessions#new"
+    root to: 'devise/sessions#new'
   end
 
   devise_scope :all_casa_admins do
-    root to: "all_casa_admins/sessions#new", as: :unauthenticated_all_casa_root
+    root to: 'all_casa_admins/sessions#new', as: :unauthenticated_all_casa_root
   end
 
   resources :casa_cases do
@@ -34,7 +34,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :case_contacts, except: %i[show]
+  resources :case_contacts, except: %i[show] do
+    member do
+      match '/table' => 'case_contacts#table', via: %i[get post]
+    end
+  end
+
   resources :reports, only: %i[index]
   resources :case_court_reports, only: %i[index show] do
     collection do
@@ -74,8 +79,8 @@ Rails.application.routes.draw do
   end
 
   namespace :all_casa_admins do
-    resources :casa_orgs, only: [:new, :create, :show] do
-      resources :casa_admins, only: [:new, :create, :edit, :update] do
+    resources :casa_orgs, only: %i[new create show] do
+      resources :casa_admins, only: %i[new create edit update] do
         member do
           patch :deactivate
           patch :activate
@@ -88,7 +93,7 @@ Rails.application.routes.draw do
     collection do
       get :edit
       patch :update
-      patch "update_password"
+      patch 'update_password'
     end
   end
 
@@ -97,7 +102,7 @@ Rails.application.routes.draw do
     collection do
       get :edit
       patch :update
-      patch "update_password"
+      patch 'update_password'
     end
   end
 end

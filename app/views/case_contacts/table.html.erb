@@ -1,0 +1,13 @@
+<h1>My Case Contacts</h1>
+
+<main class="case-contacts-wrapper">
+  <%= render partial: 'table_header', locals: { casa_cases: @casa_cases, selected_case: @casa_cases[0] } %>
+
+  <% if @casa_cases[0].case_contacts %>
+    <% @casa_cases[0].case_contacts.each do |case_contact| %>
+      <%= render partial: 'table_article', locals: { case_contact: case_contact } %>
+    <% end %>
+  <% else %>
+    <p>This case has no contacts.<p>
+  <% end %>
+</main>

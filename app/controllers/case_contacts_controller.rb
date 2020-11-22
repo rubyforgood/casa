@@ -13,6 +13,12 @@ class CaseContactsController < ApplicationController
     @case_contacts = policy_scope(current_organization.case_contacts).decorate
   end
 
+  def table
+    @casa_cases = policy_scope(current_organization.casa_cases)
+    # @case_contact = current_organization.case_contacts.find(params[:id])
+    render :table
+  end
+
   # GET /case_contacts/new
   def new
     @casa_cases = policy_scope(current_organization.casa_cases)
@@ -28,7 +34,7 @@ class CaseContactsController < ApplicationController
     # By default the first case is selected
     @selected_cases = @casa_cases[0, 1]
 
-    @current_organization_groups = current_organization.contact_type_groups.joins(:contact_types).where(contact_types: {active: true}).uniq
+    @current_organization_groups = current_organization.contact_type_groups.joins(:contact_types).where(contact_types: { active: true }).uniq
   end
 
   def create
@@ -41,18 +47,18 @@ class CaseContactsController < ApplicationController
 
     @selected_cases = @casa_cases.where(id: params.dig(:case_contact, :casa_case_id))
     if @selected_cases.empty?
-      flash[:alert] = "At least one case must be selected"
+      flash[:alert] = 'At least one case must be selected'
       render :new
       return
     end
 
     # Create a case contact for every case that was checked
-    case_contacts = @selected_cases.map { |casa_case|
+    case_contacts = @selected_cases.map do |casa_case|
       casa_case.case_contacts.create(create_case_contact_params)
-    }
+    end
 
     if case_contacts.all?(&:persisted?)
-      redirect_to casa_case_path(CaseContact.last.casa_case), notice: "Case contact was successfully created."
+      redirect_to casa_case_path(CaseContact.last.casa_case), notice: 'Case contact was successfully created.'
     else
       @case_contact = case_contacts.first
       @casa_cases = [@case_contact.casa_case]
@@ -76,7 +82,7 @@ class CaseContactsController < ApplicationController
 
     respond_to do |format|
       if @case_contact.update_cleaning_contact_types(update_case_contact_params)
-        format.html { redirect_to casa_case_path(@case_contact.casa_case), notice: "Case contact was successfully updated." }
+        format.html { redirect_to casa_case_path(@case_contact.casa_case), notice: 'Case contact was successfully updated.' }
         format.json { render :show, status: :ok, location: @case_contact }
       else
         format.html { render :edit }
@@ -91,7 +97,7 @@ class CaseContactsController < ApplicationController
     @case_contact.destroy
     respond_to do |format|
       format.html do
-        redirect_to case_contacts_url, notice: "Case contact was successfully destroyed."
+        redirect_to case_contacts_url, notice: 'Case contact was successfully destroyed.'
       end
       format.json { head :no_content }
     end

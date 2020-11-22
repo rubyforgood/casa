@@ -10,3 +10,56 @@
   display: flex;
   align-items: center;
 }
+
+.flex {
+  &.center {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
+
+.no-wrap {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.button {
+  padding: 0.5rem 1.25rem;
+  font-weight: bold;
+  border-radius: 7px;
+
+  &.primary {
+    background: $primary;
+    color: $white;
+    border: $white-border;
+  }
+
+  &.secondary {
+    background: $white;
+    color: $primary;
+    border: $white-border;
+  }
+
+  &.page {
+    background: $white;
+    color: $primary;
+    border: $blue-border;
+  }
+}
+
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}

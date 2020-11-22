@@ -1,33 +1,124 @@
-
 fieldset {
-    border: 1px double #CCC;
+  border: 1px double #ccc;
 }
 
 .slide-container {
-    padding: 0rem 1rem;
+  padding: 0rem 1rem;
 }
 
 legend {
-    font-size: small;
+  font-size: small;
 }
 
 .slider {
-    display: inline;
+  display: inline;
 }
 
 .range-value {
-    justify-content: center;
+  justify-content: center;
 }
 
 .range-value input {
-    width: 60%;
+  width: 60%;
 }
 
 .slider-row {
-    margin: 0px;
+  margin: 0px;
 }
 
 .dataTables_scrollHeadInner,
 .case-contacts-table {
   width: 100% !important;
+}
+
+#case-contacts-header {
+  background: $secondary;
+  color: $white;
+  width: 100%;
+  padding: 1rem;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+
+  p,
+  a {
+    margin: 0 0.5rem 0 0;
+  }
+
+  .youth-icon {
+    height: 2rem;
+
+    &.caterpillar {
+      margin-left: 0.5rem;
+    }
+  }
+
+  select {
+    background: transparent;
+    color: $white;
+    border: none;
+
+    &#select-case-number {
+      font-size: large;
+      font-weight: bold;
+    }
+  }
+
+  label {
+    font-weight: normal;
+    display: block;
+  }
+}
+
+.case-contact-item {
+  padding: 1rem;
+  background: $white;
+  border-bottom: 1px solid $primary;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+}
+
+.read-more-link {
+  text-decoration: underline;
+}
+
+.followup-alert {
+  display: inline-flex;
+  justify-content: start;
+  align-items: center;
+
+  img {
+    margin-right: 1rem;
+  }
+
+  h3 {
+    margin: 0;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  a {
+    font-weight: bold;
+  }
+}
+
+@media only screen and (max-width: 1280px) {
+  h1 {
+    margin-bottom: 4rem;
+  }
+  #case-contacts-header #select-case-number,
+  .youth-icon {
+    position: absolute;
+    margin-top: -10rem;
+    color: $primary;
+  }
+
+  #select-case-number {
+    margin-left: 2.5rem;
+  }
 }
