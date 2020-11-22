@@ -2,6 +2,8 @@ class EmancipationsController < ApplicationController
   before_action :authenticate_user!
   before_action :require_organization!
 
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
   # GET /casa_cases/:casa_case_id/emancipation
   def show
     @current_case = CasaCase.find(params[:casa_case_id])
@@ -61,6 +63,15 @@ class EmancipationsController < ApplicationController
       render json: { error: "Option already added to case" }
     rescue StandardError => error
       render json: { error: error.message }
+    end
+  end
+
+  def user_not_authorized (exception)
+    if exception.backtrace[1] =~ /save'\z/
+      render json: { error: "Not authorized to perform this action. Did the session expire?" }
+    else
+      flash[:error] = "Sorry, you are not authorized to perform this action."
+      redirect_to(request.referrer || root_path)
     end
   end
 end
