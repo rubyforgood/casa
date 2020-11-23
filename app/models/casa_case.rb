@@ -16,7 +16,7 @@ class CasaCase < ApplicationRecord
   has_many :assigned_volunteers, -> { active }, through: :active_case_assignments, source: :volunteer, class_name: "Volunteer"
   has_many :case_contacts, dependent: :destroy
   has_many :past_court_dates, dependent: :destroy
-  validates :case_number, uniqueness: {case_sensitive: false}, presence: true
+  validates :case_number, uniqueness: {scope: :casa_org_id, case_sensitive: false}, presence: true
   belongs_to :hearing_type, optional: true
   belongs_to :judge, optional: true
   belongs_to :casa_org
@@ -167,10 +167,10 @@ end
 #
 # Indexes
 #
-#  index_casa_cases_on_casa_org_id      (casa_org_id)
-#  index_casa_cases_on_case_number      (case_number) UNIQUE
-#  index_casa_cases_on_hearing_type_id  (hearing_type_id)
-#  index_casa_cases_on_judge_id         (judge_id)
+#  index_casa_cases_on_casa_org_id                  (casa_org_id)
+#  index_casa_cases_on_case_number_and_casa_org_id  (case_number,casa_org_id) UNIQUE
+#  index_casa_cases_on_hearing_type_id              (hearing_type_id)
+#  index_casa_cases_on_judge_id                     (judge_id)
 #
 # Foreign Keys
 #
