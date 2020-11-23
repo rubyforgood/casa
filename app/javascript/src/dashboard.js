@@ -12,51 +12,6 @@ var defineCaseContactsTable = function () {
 $('document').ready(() => {
   $.fn.dataTable.ext.search.push(
     function (settings, data, dataIndex) {
-      if (settings.nTable.id !== 'volunteers') {
-        return true
-      }
-      var supervisorArray = []
-
-      if ($('#unassigned-vol-filter').is(':checked')) {
-        supervisorArray = ['']
-      }
-
-      var statusArray = []
-      var assignedToTransitionYouthArray = []
-
-      $('.supervisor-options').find('input[type="checkbox"]').each(function () {
-        if ($(this).is(':checked')) {
-          supervisorArray.push($(this).data('value'))
-        }
-      })
-
-      $('.status-options').find('input[type="checkbox"]').each(function () {
-        if ($(this).is(':checked')) {
-          statusArray.push($(this).data('value'))
-        }
-      })
-
-      $('.transition-youth-options').find('input[type="checkbox"]').each(function () {
-        if ($(this).is(':checked')) {
-          assignedToTransitionYouthArray.push($(this).data('value'))
-        }
-      })
-
-      var supervisor = data[2]
-      var status = data[3]
-      var assignedToTransitionYouth = data[4]
-
-      if (supervisorArray.includes(supervisor) &&
-        statusArray.includes(status) &&
-        assignedToTransitionYouthArray.includes(assignedToTransitionYouth)) {
-        return true
-      }
-      return false
-    }
-  )
-
-  $.fn.dataTable.ext.search.push(
-    function (settings, data, dataIndex) {
       if (settings.nTable.id !== 'casa-cases') {
         return true
       }
@@ -120,20 +75,71 @@ $('document').ready(() => {
   var volunteersTable = $('table#volunteers').DataTable({
     autoWidth: false,
     stateSave: false,
-    columnDefs: [
+    columns: [
       {
-        targets: [1],
+        data: "display_name"
+      },
+      {
+        data: "email",
         visible: false
       },
       {
-        targets: [6],
+        className: "supervisor-column",
+        data: "supervisor_name",
+      },
+      {
+        data: "active",
+        searchable: false,
+      },
+      {
+        data: "has_transition_aged_youth_cases",
+        searchable: false
+      },
+      {
+        data: "case_numbers",
+        orderable: false
+      },
+      {
+        data: "most_recent_contact_occurred_at",
+        searchable: false,
         visible: false
       },
       {
-        targets: [7],
+        data: "contacts_made_in_past_60_days",
+        searchable: false,
         visible: false
+      },
+      {
+        data: "actions",
+        orderable: false,
+        searchable: false
       }
-    ]
+    ],
+    processing: true,
+    serverSide: true,
+    ajax: {
+      url: $('table#volunteers').data('source'),
+      type: "POST",
+      data: function (d) {
+        const supervisorOptions = $(".supervisor-options input:checked");
+        const supervisorFilter = Array.from(supervisorOptions).map(option => option.dataset.value);
+
+        const statusOptions = $(".status-options input:checked");
+        const statusFilter = Array.from(statusOptions).map(option => JSON.parse(option.dataset.value));
+
+        const transitionYouthOptions = $(".transition-youth-options input:checked");
+        const transitionYouthFilter = Array.from(transitionYouthOptions).map(option => JSON.parse(option.dataset.value));
+
+        return $.extend({}, d, {
+          additional_filters: {
+            supervisor: supervisorFilter,
+            active: statusFilter,
+            transition_aged_youth: transitionYouthFilter
+          }
+        });
+      },
+      dataType: 'json'
+    }
   })
 
   // Because the table saves state, we have to check/uncheck modal inputs based on what

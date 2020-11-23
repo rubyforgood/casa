@@ -22,6 +22,8 @@ class Volunteer < User
       .where(supervisor_volunteers: {id: nil})
   }
 
+  has_many :cases_where_contact_made_in_14_days, -> { joins(:case_contacts) }, through: :case_assignments
+
   # Activates this volunteer.
   def activate
     update(active: true)
@@ -52,23 +54,13 @@ class Volunteer < User
   end
 
   # false if volunteer has any case with no contact in the past 30 days
-  def made_contact_with_all_cases_in_days?(num_days = 14)
+  def made_contact_with_all_cases_in_14_days?
     # should be 14!
     # this should do the same thing as no_contact_for_two_weeks but for a volunteer
-    total_cases_count = casa_cases.count
+    total_cases_count = casa_cases.size
     return true if total_cases_count.zero?
-    current_contact_cases_count = cases_where_contact_made_in_days(num_days).count
+    current_contact_cases_count = cases_where_contact_made_in_14_days.size
     current_contact_cases_count == total_cases_count
-  end
-
-  private
-
-  def cases_where_contact_made_in_days(num_days = 14)
-    casa_cases
-      .joins(:case_contacts)
-      .where(case_contacts: {contact_made: true})
-      .where("case_contacts.occurred_at > ?", Date.current - num_days.days)
-    # this should respect current vs past cases
   end
 end
 

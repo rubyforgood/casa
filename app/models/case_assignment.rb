@@ -3,6 +3,12 @@ class CaseAssignment < ApplicationRecord
 
   belongs_to :casa_case
   belongs_to :volunteer, class_name: "User", inverse_of: "case_assignments"
+  has_many :cases_where_contact_made_in_14_days, lambda {
+    joins(:case_contacts)
+      .where(case_contacts: {contact_made: true})
+      .where("case_contacts.occurred_at > ?", Date.current - 14.days)
+    # this should respect current vs past cases
+  }, class_name: "CasaCase", primary_key: :casa_case_id, foreign_key: :id
 
   validates :casa_case_id, uniqueness: {scope: :volunteer_id} # only 1 row allowed per case-volunteer pair
   validates :volunteer, presence: true
