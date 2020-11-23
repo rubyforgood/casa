@@ -68,7 +68,7 @@ class EmancipationsController < ApplicationController
 
   def user_not_authorized (exception)
     if exception.backtrace[1] =~ /save'\z/
-      render json: { error: "Not authorized to perform this action. Did the session expire?" }
+      render json: { error: "Sorry, you are not authorized to perform this action. Did the session expire?" }
     else
       flash[:error] = "Sorry, you are not authorized to perform this action."
       redirect_to(request.referrer || root_path)
