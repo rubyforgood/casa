@@ -66,7 +66,7 @@ class User < ApplicationRecord
     case_contacts.where(contact_made: true).order(:occurred_at).last
   end
 
-  def volunteers_serving_transistion_aged_youth
+  def volunteers_serving_transition_aged_youth
     volunteers.includes(:casa_cases)
       .where(casa_cases: {transition_aged_youth: true}).size
   end
