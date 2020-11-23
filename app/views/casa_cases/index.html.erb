@@ -8,15 +8,115 @@
     <% if policy(:dashboard).see_volunteers_section? %>
       <%= link_to "New Case", new_casa_case_path, class: "btn btn-primary" %>
     <% end %>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#visibleColumns">
+      Pick displayed columns
+    </button>
+  </div>
+</div>
+
+<div class="row casa-case-filters">
+  <div class="col-sm-12">
+    <h4 class="pull-left mr-2">Filter by:</h4>
+    <div class="dropdown pull-left mr-2">
+      <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Status
+      </button>
+      <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
+        <li>
+          <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Active" checked>
+            Active</a>
+        </li>
+        <li>
+          <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Inactive">
+            Inactive</a>
+        </li>
+      </div>
+    </div>
+    <div class="dropdown pull-left mr-2">
+      <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Assigned to Volunteer
+      </button>
+      <div class="dropdown-menu assigned-to-volunteer-options" aria-labelledby="dropdownMenuButton">
+        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Yes" checked>Yes</a></li>
+        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No" checked>No</a></li>
+      </div>
+    </div>
+    <div class="dropdown pull-left mr-2">
+      <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Assigned to more than 1 Volunteer
+      </button>
+      <div class="dropdown-menu more-than-one-volunteer-options" aria-labelledby="dropdownMenuButton">
+        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Yes" checked>Yes</a></li>
+        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No" checked>No</a></li>
+      </div>
+    </div>
+    <div class="dropdown pull-left mr-2">
+      <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Assigned to Transition Aged Youth
+      </button>
+      <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton">
+        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Yes 🐛🦋" checked>Yes</a></li>
+        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No" checked>No</a></li>
+      </div>
+    </div>
+    <div class="dropdown pull-left mr-2">
+      <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Casa Case Prefix
+      </button>
+      <div class="dropdown-menu case-number-prefix-options" aria-labelledby="dropdownMenuButton">
+        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="CINA" checked>CINA</a></li>
+        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="TPR" checked>TPR</a></li>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+
+<div class="modal fade" id="visibleColumns" tabindex="-1" role="dialog" aria-labelledby="visibleColumnsLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="visibleColumnsLabel">Pick Displayed Columns</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+          Select columns:
+
+          <% CasaCase::TABLE_COLUMNS.each_with_index do |column, index| %>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-check">
+                  <%= check_box_tag "pick-#{column}",
+                                    "1",
+                                    false,
+                                    class: "form-check-input toggle-visibility",
+                                    data: { column: index } %>
+                  <%= label_tag "pick-#{column}", column.titleize, class: "form-check-label" %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class="card card-container">
   <div class="card-body">
-    <table class="table case-list" id="casa_cases">
+    <table class="table table-striped table-bordered case-list" id="casa-cases">
       <thead>
       <tr>
         <th>Case Number</th>
+        <th>Hearing Type</th>
+        <th>Judge</th>
+        <th>Status</th>
         <th>Transition Aged Youth</th>
         <th>Assigned To</th>
         <th>Actions</th>
@@ -25,12 +125,25 @@
       </thead>
       <tbody>
       <% @casa_cases.each do |casa_case| %>
-        <tr>
+        <tr class="<%= casa_case.decorate.inactive_class %>">
           <td><%= link_to(casa_case.case_number, casa_case) %></td>
+          <td><%= casa_case.hearing_type_name %></td>
+          <td><%= casa_case.judge_name %></td>
+          <td><%= casa_case.decorate.status %></td>
           <td><%= casa_case.decorate.transition_aged_youth_icon %></td>
           <td>
-            <%= safe_join(casa_case&.volunteers&.map { |vol| link_to(vol.display_name, edit_volunteer_path(vol)) },
-                          ", ") %>
+            <% if casa_case.active? %>
+              <% if current_user.volunteer? %>
+                <%= safe_join(casa_case.assigned_volunteers.map { |vol|
+                  vol.display_name }, ", ") %>
+              <% else %>
+                <%= safe_join(casa_case.assigned_volunteers.map { |vol|
+                  link_to(vol.display_name, edit_volunteer_path(vol)) },
+                  ", ") %>
+              <% end %>
+            <% else %>
+              Case was deactivated on: <%= casa_case.updated_at.strftime("%m-%d-%Y") %>
+            <% end %>
           </td>
           <td><%= link_to 'Detail View', casa_case_path(casa_case) %></td>
           <td><%= link_to 'Edit', edit_casa_case_path(casa_case) %></td>

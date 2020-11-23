@@ -2,8 +2,9 @@ require "rails_helper"
 
 RSpec.describe "/supervisor_volunteers", type: :request do
   let!(:admin) { create(:casa_admin) }
-  let!(:supervisor) { create(:supervisor) }
-  let!(:volunteer) { create(:volunteer) }
+  let!(:casa_org) { create(:casa_org) }
+  let!(:supervisor) { create(:supervisor, casa_org: casa_org) }
+  let!(:volunteer) { create(:volunteer, casa_org: casa_org) }
 
   context "POST /create" do
     context "when no pre-existing association between supervisr and volunteer exists" do
@@ -30,6 +31,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
           is_active: false
         )
       end
+
       it "sets that association to active" do
         valid_parameters = {
           supervisor_volunteer: {volunteer_id: volunteer.id},
@@ -48,7 +50,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
     end
 
     context "when an inactive association between the volunteer and a different supervisor exists" do
-      let!(:other_supervisor) { create(:supervisor) }
+      let!(:other_supervisor) { create(:supervisor, casa_org: casa_org) }
       let!(:previous_association) do
         create(
           :supervisor_volunteer,
@@ -114,6 +116,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
       let!(:association) do
         create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer)
       end
+
       it "does not set the is_active flag on the association to false" do
         sign_in volunteer
 

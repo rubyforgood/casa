@@ -27,6 +27,7 @@ RSpec.describe "Admin: Editing Volunteers", type: :system do
         click_on "Submit"
         expect(page).to have_text "already been taken"
       end
+
       it "shows error message for empty fields" do
         fill_in "volunteer_email", with: ""
         fill_in "volunteer_display_name", with: ""
@@ -66,5 +67,15 @@ RSpec.describe "Admin: Editing Volunteers", type: :system do
     expect(page).not_to have_text("Volunteer was deactivated on")
 
     expect(inactive_volunteer.reload).to be_active
+  end
+
+  context "with a deactivated case" do
+    it "displays inactive message" do
+      deactivated_casa_case = create(:casa_case, active: false, casa_org: volunteer.casa_org, volunteers: [volunteer])
+      sign_in admin
+
+      visit edit_volunteer_path(volunteer)
+      expect(page).to have_text "Case was deactivated on: #{deactivated_casa_case.updated_at.strftime("%m-%d-%Y")}"
+    end
   end
 end

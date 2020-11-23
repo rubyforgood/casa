@@ -11,10 +11,12 @@ RSpec.describe "volunteer edits case", type: :system do
 
   it "clicks back button after editing case" do
     visit edit_casa_case_path(casa_case)
-    check "Court report submitted"
-    click_on "Update CASA Case"
 
-    has_no_checked_field? :court_report_submitted
+    expect(page).to_not have_select("Hearing type")
+    expect(page).to_not have_select("Judge")
+
+    select "Submitted", from: "casa_case_court_report_status"
+    click_on "Update CASA Case"
 
     click_on "Back"
 
@@ -23,20 +25,19 @@ RSpec.describe "volunteer edits case", type: :system do
 
   it "edits case" do
     visit casa_case_path(casa_case)
-    expect(page).to have_text("Court Report Submission: Not Submitted")
+    expect(page).to have_text("Court Report Status: Not submitted")
     visit edit_casa_case_path(casa_case)
-    has_no_checked_field? :court_report_submitted
-    check "Court report submitted"
+    select "Submitted", from: "casa_case_court_report_status"
     click_on "Update CASA Case"
-    has_checked_field? :court_report_submitted
 
     expect(page).to have_text("Court Date")
     expect(page).to have_text("Court Report Due Date")
     expect(page).not_to have_text("Day")
     expect(page).not_to have_text("Month")
     expect(page).not_to have_text("Year")
+    expect(page).not_to have_text("Deactivate Case")
 
     visit casa_case_path(casa_case)
-    expect(page).to have_text("Court Report Submission: Submitted")
+    expect(page).to have_text("Court Report Status: Submitted")
   end
 end

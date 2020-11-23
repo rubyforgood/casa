@@ -17,6 +17,7 @@ RSpec.describe User, type: :model do
     user = build(:user, display_name: "")
     expect(user.valid?).to be false
   end
+
   it "returns all case_contacts associated with this user and the casa case id supplied" do
     volunteer = create(:volunteer, :with_casa_cases)
 
@@ -33,7 +34,7 @@ RSpec.describe User, type: :model do
 
   it "does not return case_contacts associated with another volunteer user" do
     volunteer = create(:volunteer, :with_casa_cases)
-    other_volunteer = create(:volunteer, :with_casa_cases)
+    other_volunteer = create(:volunteer, :with_casa_cases, casa_org: volunteer.casa_org)
 
     case_of_interest = volunteer.casa_cases.first
     create(:case_contact, creator: volunteer, casa_case: case_of_interest)
@@ -51,29 +52,33 @@ RSpec.describe User, type: :model do
   end
 
   describe "supervisors" do
-    context "#volunteers_serving_transistion_aged_youth" do
+    describe "#volunteers_serving_transition_aged_youth" do
       it "returns the number of transition aged youth on a supervisor" do
-        assignment1 = create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: true))
-        assignment2 = create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: true))
-        assignment3 = create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: false))
-        supervisor = create(:supervisor)
-        create(:volunteer, case_assignments: [assignment1], supervisor: supervisor)
-        create(:volunteer, case_assignments: [assignment2], supervisor: supervisor)
-        create(:volunteer, case_assignments: [assignment3], supervisor: supervisor)
-        expect(supervisor.volunteers_serving_transistion_aged_youth).to eq(2)
+        casa_org = create(:casa_org)
+        casa_cases = [
+          create(:casa_case, casa_org: casa_org, transition_aged_youth: true),
+          create(:casa_case, casa_org: casa_org, transition_aged_youth: true),
+          create(:casa_case, casa_org: casa_org, transition_aged_youth: false)
+        ]
+        supervisor = create(:supervisor, casa_org: casa_org)
+        casa_cases.each do |casa_case|
+          volunteer = create(:volunteer, supervisor: supervisor, casa_org: casa_org)
+          volunteer.casa_cases << casa_case
+        end
+        expect(supervisor.volunteers_serving_transition_aged_youth).to eq(2)
       end
     end
 
-    context "#no_contact_for_two_weeks" do
+    describe "#no_contact_for_two_weeks" do
       let(:supervisor) { create(:supervisor) }
 
       it "returns zero for a volunteer that has successfully made contact in at least one contact_case within the last 2 weeks" do
         volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
 
         case_of_interest_1 = volunteer_1.casa_cases.first
-        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: false, occurred_at: 1.weeks.ago)
+        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: false, occurred_at: 1.week.ago)
         expect(supervisor.no_contact_for_two_weeks).to eq(1)
-        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, occurred_at: 1.weeks.ago)
+        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, occurred_at: 1.week.ago)
         expect(supervisor.no_contact_for_two_weeks).to eq(0)
       end
 
@@ -128,56 +133,25 @@ RSpec.describe User, type: :model do
   end
 
   describe "#serving_transition_aged_youth?" do
+    let(:casa_org) { create(:casa_org) }
+    let(:user) { create(:volunteer, casa_org: casa_org) }
     let(:case_assignment_with_a_transition_aged_youth) do
-      create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: true))
+      create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org, transition_aged_youth: true), volunteer: user)
     end
-    let(:case_assignment_without_transition_aged_youth) do
-      create(:case_assignment, casa_case: create(:casa_case, transition_aged_youth: false))
+    let!(:case_assignment_without_transition_aged_youth) do
+      create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org, transition_aged_youth: false), volunteer: user)
     end
 
     context "when the user has a transition-aged-youth case" do
       it "is true" do
-        case_assignments = [
-          case_assignment_with_a_transition_aged_youth,
-          case_assignment_without_transition_aged_youth
-        ]
-        user = create(:volunteer, case_assignments: case_assignments)
-
+        case_assignment_with_a_transition_aged_youth.inspect
         expect(user).to be_serving_transition_aged_youth
       end
     end
 
     context "when the user does not have a transition-aged-youth case" do
       it "is false" do
-        case_assignments = [case_assignment_without_transition_aged_youth]
-        user = create(:volunteer, case_assignments: case_assignments)
-
         expect(user).not_to be_serving_transition_aged_youth
-      end
-    end
-  end
-
-  describe "#volunteers_with_no_supervisor?" do
-    subject { User.volunteers_with_no_supervisor(casa_org) }
-    let(:casa_org) { create(:casa_org) }
-    context "no volunteers" do
-      it "returns none" do
-        expect(subject).to eq([])
-      end
-    end
-    context "volunteers" do
-      let!(:unassigned1) { create(:volunteer, display_name: "aaa", casa_org: casa_org) }
-      let!(:unassigned2) { create(:volunteer, display_name: "bbb", casa_org: casa_org) }
-      let!(:unassigned2_different_org) { create(:volunteer, display_name: "ccc") }
-      let!(:assigned1) { create(:volunteer, display_name: "ddd", casa_org: casa_org) }
-      let!(:assignment1) { create(:supervisor_volunteer, volunteer: assigned1) }
-      let!(:assigned2_different_org) { assignment1.volunteer }
-      let!(:unassigned_inactive_volunteer) { create(:volunteer, display_name: "eee", casa_org: casa_org, active: false) }
-      let!(:previously_assigned) { create(:volunteer, display_name: "fff", casa_org: casa_org) }
-      let!(:inactive_assignment) { create(:supervisor_volunteer, volunteer: previously_assigned, is_active: false) }
-
-      it "returns unassigned volunteers" do
-        expect(subject.map(&:display_name).sort).to eq(["aaa", "bbb", "fff"])
       end
     end
   end

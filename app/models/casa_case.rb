@@ -1,10 +1,24 @@
 class CasaCase < ApplicationRecord
+  TABLE_COLUMNS = %w[
+    case_number
+    hearing_type_name
+    judge_name
+    status
+    transition_aged_youth_icon
+    assigned_to
+    actions
+  ].freeze
   has_paper_trail
 
   has_many :case_assignments, dependent: :destroy
   has_many(:volunteers, through: :case_assignments, source: :volunteer, class_name: "User")
+  has_many :active_case_assignments, -> { is_active }, class_name: "CaseAssignment"
+  has_many :assigned_volunteers, -> { active }, through: :active_case_assignments, source: :volunteer, class_name: "Volunteer"
   has_many :case_contacts, dependent: :destroy
-  validates :case_number, uniqueness: {case_sensitive: false}, presence: true
+  has_many :past_court_dates, dependent: :destroy
+  validates :case_number, uniqueness: {scope: :casa_org_id, case_sensitive: false}, presence: true
+  belongs_to :hearing_type, optional: true
+  belongs_to :judge, optional: true
   belongs_to :casa_org
 
   has_many :casa_case_contact_types
@@ -12,6 +26,7 @@ class CasaCase < ApplicationRecord
   accepts_nested_attributes_for :casa_case_contact_types
 
   has_and_belongs_to_many :emancipation_options
+  enum court_report_status: {not_submitted: 0, submitted: 1, in_review: 2, completed: 3}, _prefix: :court_report
 
   scope :ordered, -> { order(updated_at: :desc) }
   scope :actively_assigned_to, ->(volunteer) {
@@ -35,6 +50,31 @@ class CasaCase < ApplicationRecord
     where(transition_aged_youth: false)
       .where("birth_month_year_youth <= ?", 14.years.ago)
   }
+
+  scope :due_date_passed, -> {
+    where("court_date < ?", Time.current)
+  }
+
+  scope :active, -> {
+    where(active: true)
+  }
+
+  scope :inactive, -> {
+    where(active: false)
+  }
+
+  delegate :name, to: :hearing_type, prefix: true, allow_nil: true
+  delegate :name, to: :judge, prefix: true, allow_nil: true
+
+  def court_report_status=(value)
+    super
+    if court_report_not_submitted?
+      self.court_report_submitted_at = nil
+    else
+      self.court_report_submitted_at ||= Time.current
+    end
+    court_report_status
+  end
 
   def self.available_for_volunteer(volunteer)
     ids = connection.select_values(%{
@@ -90,6 +130,23 @@ class CasaCase < ApplicationRecord
     end
   end
 
+  def clear_court_dates
+    if court_date && court_date < Time.current
+      update(court_date: nil,
+             court_report_due_date: nil,
+             court_report_status: :not_submitted)
+    end
+  end
+
+  def deactivate
+    update(active: false)
+    case_assignments.map { |ca| ca.update(is_active: false) }
+  end
+
+  def reactivate
+    update(active: true)
+  end
+
   private
 
   def validate_date(day, month, year)
@@ -117,21 +174,27 @@ end
 #
 # Table name: casa_cases
 #
-#  id                     :bigint           not null, primary key
-#  birth_month_year_youth :datetime
-#  case_number            :string           not null
-#  court_date             :datetime
-#  court_report_due_date  :datetime
-#  court_report_submitted :boolean          default(FALSE), not null
-#  transition_aged_youth  :boolean          default(FALSE), not null
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  casa_org_id            :bigint           not null
+#  id                        :bigint           not null, primary key
+#  active                    :boolean          default(TRUE), not null
+#  birth_month_year_youth    :datetime
+#  case_number               :string           not null
+#  court_date                :datetime
+#  court_report_due_date     :datetime
+#  court_report_status       :integer          default("not_submitted")
+#  court_report_submitted_at :datetime
+#  transition_aged_youth     :boolean          default(FALSE), not null
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
+#  casa_org_id               :bigint           not null
+#  hearing_type_id           :bigint
+#  judge_id                  :bigint
 #
 # Indexes
 #
-#  index_casa_cases_on_casa_org_id  (casa_org_id)
-#  index_casa_cases_on_case_number  (case_number) UNIQUE
+#  index_casa_cases_on_casa_org_id                  (casa_org_id)
+#  index_casa_cases_on_case_number_and_casa_org_id  (case_number,casa_org_id) UNIQUE
+#  index_casa_cases_on_hearing_type_id              (hearing_type_id)
+#  index_casa_cases_on_judge_id                     (judge_id)
 #
 # Foreign Keys
 #

@@ -1,13 +1,12 @@
 <div id="sidebar-js" class="sidebar-wrapper">
-  <div class="sidebar-heading">
-    <% if all_casa_admin_signed_in? %>
+  <div class="sidebar-heading text-center">
+    <% if all_casa_admin_signed_in? || !current_organization.logo.attached? %>
       <%= image_pack_tag("media/src/images/default-logo.png",
           alt: "CASA Logo",
           class: "d-inline-block align-text-bottom") %>
     <% else %>
-      <%= image_pack_tag(current_organization.logo_url,
-          alt: current_organization.logo_alt_text || "CASA Logo",
-          class: "d-inline-block align-text-bottom") if current_organization&.logo_url %>
+      <%= image_tag(current_organization.logo.variant(resize_to_limit: [200, 100]),
+          alt: current_organization.logo_alt_text || "CASA Logo") %>
     <% end %>
   </div>
   <div class="sidebar-container">
@@ -17,7 +16,16 @@
           <%= menu_item(label: "Supervisors", path: supervisors_path, visible: policy(Supervisor).index?) %>
           <%= menu_item(label: "Volunteers", path: volunteers_path, visible: policy(Volunteer).index?) %>
           <%= menu_item(label: cases_index_title, path: casa_cases_path) %>
-          <%= menu_item(label: "Case Contacts", path: case_contacts_path) %>
+          <% if current_user.volunteer? %>
+            <%= menu_item(label: "Case Contacts", path: case_contacts_path) %>
+          <% end %>
+
+          <%#<% if current_user.casa_case&.emancipation_checklist  %>
+          <%#<%= menu_item(label: "Emancipation Checklist", path: emancipation_checklist_path) %>
+          <%# <% end %>
+          <% if policy(:application).see_emancipation_checklist? %>
+            <%= menu_item(label: "Emancipation Checklist", path: emancipation_checklist_path(0)) %>
+          <% end %>
           <%= menu_item(label: "Admins", path: casa_admins_path, visible: policy(CasaAdmin).index?) %>
         <% end %>
       </div>
@@ -48,16 +56,18 @@
           <% if policy(:application).modify_organization? %>
             <%= link_to "Edit Organization", edit_casa_org_path(current_organization), class: "list-group-item" %>
           <% end %>
-          <%= link_to "Report a site issue", "https://rubyforgood.typeform.com/to/iXY4BubB", class: "list-group-item", target:"_blank" %>
+          <%= link_to "Report a site issue",
+                      "https://rubyforgood.typeform.com/to/iXY4BubB",
+                      class: "list-group-item",
+                      target:"_blank" %>
           <li class="list-group-item">
             <%= current_user.email %>
           </li>
         <% end %>
-
         <% if all_casa_admin_signed_in? %>
-          <div class="list-group-item">
+          <li class="list-group-item">
             <%= current_all_casa_admin.email %>
-          </div>
+          </li>
           <%= link_to "Edit Profile", edit_all_casa_admins_path, class: "list-group-item" %>
         <% end %>
         <%= session_link %>

@@ -1,16 +1,17 @@
 # CASA Project & Organization Overview
 
-[![Build Status](https://travis-ci.com/rubyforgood/casa.svg?branch=master)](https://travis-ci.com/rubyforgood/casa)
+![rspec](https://github.com/rubyforgood/casa/workflows/rspec/badge.svg)
+![cypress](https://github.com/rubyforgood/casa/workflows/cypress/badge.svg)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=rubyforgood/casa)](https://dependabot.com)
 [![Maintainability](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/maintainability)](https://codeclimate.com/github/rubyforgood/casa/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/test_coverage)](https://codeclimate.com/github/rubyforgood/casa/test_coverage)
 [![View performance data on Skylight](https://badges.skylight.io/status/tFh7xrs3Qnaf.svg?token=1C-Q7p8jEFlG7t69Yl5DaJwa-ipWI8gLw9wLJf53xmQ)](https://www.skylight.io/app/applications/tFh7xrs3Qnaf)
 [![Known Vulnerabilities](https://snyk.io/test/github/rubyforgood/casa/badge.svg)](https://snyk.io/test/github/rubyforgood/casa)
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/rubyforgood/casa.svg)](http://isitmaintained.com/project/rubyforgood/casa "Average time to resolve an issue")
 
 CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunteer sworn into a county-level juvenile dependency court system to advocate on behalf of a youth in the corresponding county's foster care system. CASA is also the namesake role of the national organization, CASA, which exists to cultivate and supervise volunteers carrying out this work – with county level chapters (operating relatively independently of each other) across the country.
 
-
-## Welcome Hacktoberfest contributors!
+## Welcome contributors!
 
 We are very happy to have you. If you have problems or questions, the fastest way to an answer is in slack https://rubyforgood.herokuapp.com/ #casa channel
 
@@ -18,9 +19,9 @@ ALL open issues on the issue board https://github.com/rubyforgood/casa/projects/
 
 PRs which are not for an issue but which improve the codebase by adding a test or improving the code are also welcome!
 
-A maintainer will be keeping an eye on issues and merging PRs at least once a day. Some PRs may be rejected if they make non-useful readme changes or similar changes. We want to merge your PRs! :)  
+A maintainer will be keeping an eye on issues and merging PRs at least once a day. Some PRs may be rejected if they make non-useful readme changes or similar changes. We want to merge your PRs! :)
 
-See also our [contributing guide](doc/CONTRIBUTING.md) 💖
+See also our [contributing guide](./doc/CONTRIBUTING.md) 💖
 
 ### About this project
 
@@ -84,8 +85,10 @@ You need Ruby, bundler, node.js, yarn, postgres, and chromedriver.
 **PostgreSQL ("postgres")**
 
 1. Make sure that postgres is installed.
+
   - On a Mac, you can use [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database if you have an older version of postgres, or use [Postgres.app](https://postgresapp.com/).
   - If you're on Ubuntu/WSL, use `sudo apt-get install libpq-dev` so the gem can install. [Use the Postgres repo for Ubuntu or WSL to get the server and client tools](https://www.postgresql.org/download/linux/ubuntu/).
+  - If you're on Fedora/Cent Os use `sudo dnf install libpq-devel`. [If you prefer choose package of libpq-devel via rpm](https://pkgs.org/download/libpq-devel)
 
 **Chromedriver**
 
@@ -119,7 +122,11 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 1. `bundle exec erblint --lint-all --autocorrect` [ERB linter](https://github.com/Shopify/erb-lint)
 1. `yarn lint:fix` to run the [JS linter](https://standardjs.com/index.html) and fix isses
 
-If you have any troubles running tests, check out `.travis.yml` which is what makes the CI build run.
+If you have any troubles running tests, check out the files in `.github/workflow/` which is what makes the CI build run.
+
+If additional work arises from your commit that is outside the scope of the issue it resolves, please open a new issue and either:
+- assign it to yourself if you'd like to take it on
+- or add it to the to-do column without an assignee so someone else can pick up this new issue.
 
 **Local email**
 
@@ -137,26 +144,28 @@ database. Run the tasks manually by:
 bundle exec rake after_party:run
 ```
 
-Alternatively, every time you pull the master branch, run:
+
+Alternatively, every time you pull the main branch, run:
+
 ```
 bin/update
 ```
+
 which will run any database migrations, update gems and yarn packages, and run
 the after party post-deployment tasks.
 
 ### Other Documentation
 
 There is a `doc` directory at the top level that includes:
- 
+
 * an `architecture-decisions` directory containing important architectural decisions and entity relationship diagrams of various models
-(see the article [Architectural Decision Records](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) describing this approach).
+  (see the article [Architectural Decision Records](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) describing this approach).
 * [Code of Conduct](doc/code-of-conduct.md)
 * [CONTRIBUTING.md](doc/CONTRIBUTING.md)
 * [CYPRESS.md](doc/CYPRESS.md)
 * [DOCKER.md](doc/DOCKER.md)
 * [LINUX_SETUP.md](doc/LINUX_SETUP.md)
 * [SECURITY.md](doc/SECURITY.md)
-
 
 ### Common issues
 
@@ -167,11 +176,12 @@ There is a `doc` directory at the top level that includes:
 ### Ubuntu and WSL
 
 1. If you are on Ubuntu in Windows Subsystem for Linux (WSL) and `rbenv install` indicates that the Ruby version is unavailable, you might be using Ubuntu's default install of `ruby-build`, which only comes with old installs of Ruby (ending before 2.6.) You should uninstall rvm and ruby-build's apt packages (`apt remove rvm ruby-build`) and install them with Git like this:
-  - `git clone https://github.com/rbenv/rbenv.git ~/.rbenv`
-  - `echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc`
-  - `echo 'eval "$(rbenv init -)"' >> ~/.bashrc`
-  - `exec $SHELL`
-  - `git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build`
+
+- `git clone https://github.com/rbenv/rbenv.git ~/.rbenv`
+- `echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc`
+- `echo 'eval "$(rbenv init -)"' >> ~/.bashrc`
+- `exec $SHELL`
+- `git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build`
 
 You'll probably hit a problem where ruby-version reads `ruby-2.7.1` but the install available to you is called `2.7.1`. If you do, install [rbenv-alias](https://github.com/tpope/rbenv-aliases) and create an alias between the two.
 
@@ -184,27 +194,28 @@ See `db/seeds` for seed data. Test data includes the below
 1. casa_admin1@example.com / 123456 https://\<URL\>.herokuapp.com/
 1. allcasaadmin@example.com / 123456 https://\<URL\>.herokuapp.com/all_casa_admins/sign_in
 
-
 ### QA environment
 
-When pull requests are merged, the code auto-deploys to QA (because of a heroku setting) 
+When pull requests are merged, the code auto-deploys to QA (because of a heroku setting)
 
 https://casa-qa.herokuapp.com/
 
+If you would like to help run quality assurance, please check out the _Merged to QA_ section of our project board. For each ticket in this column, log into the QA environment to confirm whether or not this change has indeed been made and is working as intended. If yes, please add the label: _working-in-qa_ to the ticket. If it is not, please add the label: _not-working-in-qa_ to the ticket. If you discover bugs in this process, please file an issue for it, add the label: _bug_, and add it to the _To do_ column. ***This is a great task for PM contributors looking to familiarize themselves with the application and project board. 
 
 ### Staging
 
-Deploy to Staging is manual. Training of new users is done in staging. 
+Deploy to Staging is manual. Training of new users is done in staging.
 
 https://casa-r4g-staging.herokuapp.com/
 
-
 ### Production
 
-We have real users in production! 
+We have real users in production!
 
 If you represent a CASA organization which wants to use this, please contact us! polly@rubyforgood.org
 
+### Deployment
+[Follow this Deployment Checklist](./DEPLOY_CHECKLIST.md)
 
 ### Error tracking
 

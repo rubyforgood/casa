@@ -20,7 +20,9 @@ RSpec.describe "reports/index", type: :system do
 
   shared_examples "can view page" do
     it "downloads report" do
-      expect(page).to have_text "Case Contacts Report"
+      expect(page).to have_text("Case Contacts Report") &
+        have_field("report_start_date", with: 6.months.ago.to_date) &
+        have_field("report_end_date", with: Date.today.to_date)
       click_on "Download Report"
       expect(page).to have_button "Download Report"
     end

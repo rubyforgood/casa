@@ -17,8 +17,10 @@ gem "paper_trail" # tracking changes
 gem "pg", ">= 0.18", "< 2.0" # Use postgresql as the database for Active Record
 gem "puma", "~> 5.0" # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
+gem "rack-attack" # for blocking & throttling abusive requests
 gem "skylight" # automated performance testing https://www.skylight.io/
 gem "webpacker", "~> 5.2" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
+gem "image_processing", "~> 1.12" # Set of higher-level helper methods for image processing.
 
 gem "bootsnap", ">= 1.4.2", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "bugsnag" # tracking errors in prod
@@ -32,7 +34,7 @@ group :development, :test do
   gem "pry-byebug"
   gem "rspec-rails", "~> 4.0.1"
   gem "shoulda-matchers"
-  gem "standard" # linter https://github.com/testdouble/standard
+  gem "standard", "~> 0.9.0" # linter https://github.com/testdouble/standard
   gem "cypress-on-rails", "~> 1.0"
 end
 
@@ -40,7 +42,7 @@ group :development do
   gem "annotate" # for adding db field listings to models as comments
   gem "erb_lint", require: false
   gem "letter_opener" # Opens emails in new tab for easier testing
-  gem "listen", ">= 3.0.5", "< 3.3"
+  gem "listen", ">= 3.0.5", "< 3.4"
   gem "spring" # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring-watcher-listen", "~> 2.0.0"
   gem "web-console", ">= 3.3.0" # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
@@ -52,7 +54,7 @@ group :test do
   gem "capybara-screenshot"
   gem "rake"
   gem "selenium-webdriver"
-  gem "simplecov", "~> 0.19.0", require: false # pinned as a workaround for https://github.com/codeclimate/test-reporter/issues/418
+  gem "simplecov", "~> 0.17.1", require: false # 0.17.1 pinned as a workaround for https://github.com/codeclimate/test-reporter/issues/418
   gem "webdrivers", require: false # Easy installation and use of web drivers to run system tests with browsers; do not initially require as causes conflict with Docker setup
 end
 

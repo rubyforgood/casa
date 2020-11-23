@@ -25,15 +25,6 @@ class User < ApplicationRecord
   }, foreign_key: "volunteer_id", dependent: :destroy
   has_one :supervisor, through: :supervisor_volunteer
 
-  scope :volunteers_with_no_supervisor, lambda { |org|
-    joins("left join supervisor_volunteers "\
-          "on supervisor_volunteers.volunteer_id = users.id "\
-          "and supervisor_volunteers.is_active")
-      .active
-      .in_organization(org)
-      .where(supervisor_volunteers: {id: nil})
-  }
-
   scope :active, -> { where(active: true) }
 
   scope :in_organization, lambda { |org|
@@ -75,7 +66,7 @@ class User < ApplicationRecord
     case_contacts.where(contact_made: true).order(:occurred_at).last
   end
 
-  def volunteers_serving_transistion_aged_youth
+  def volunteers_serving_transition_aged_youth
     volunteers.includes(:casa_cases)
       .where(casa_cases: {transition_aged_youth: true}).size
   end
@@ -161,7 +152,6 @@ end
 #  invitation_token       :string
 #  invitations_count      :integer          default(0)
 #  invited_by_type        :string
-#  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
 #  type                   :string

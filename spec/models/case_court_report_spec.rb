@@ -1,10 +1,9 @@
 require "rails_helper"
 require "sablon"
 
-RSpec.describe CaseCourtReport, type: :model do  
+RSpec.describe CaseCourtReport, type: :model do
   let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
   let(:casa_case_without_contacts) { volunteer.casa_cases.second }
-
 
   describe "when receiving valid case, volunteer, and path_to_template" do
     let(:casa_case_with_contacts) { volunteer.casa_cases.first }
@@ -18,21 +17,21 @@ RSpec.describe CaseCourtReport, type: :model do
         path_to_report: path_to_report
       )
     end
-  
+
     describe "has valid @path_to_template" do
       it "is existing" do
         path = report.template.instance_variable_get(:@path)
-  
+
         expect(File.exist?(path_to_template)).to eq true
         expect(File.exist?(path)).to eq true
       end
     end
-    
+
     describe "has valid @context" do
       subject { report.context }
 
-      it { should_not be_empty }
-      it { should be_instance_of Hash }
+      it { is_expected.not_to be_empty }
+      it { is_expected.to be_instance_of Hash }
 
       it "has the following keys [:created_date, :casa_case, :case_contacts, :volunteer]" do
         expected = %i[created_date casa_case case_contacts volunteer]
@@ -63,6 +62,7 @@ RSpec.describe CaseCourtReport, type: :model do
   describe "when receiving INVALID path_to_template" do
     let(:casa_case_with_contacts) { volunteer.casa_cases.first }
     let(:nonexistent_path) { "app/documents/templates/nonexisitent_report_template.docx" }
+
     it "will raise Zip::Error when generating report" do
       bad_report = CaseCourtReport.new(
         case_id: casa_case_with_contacts.id,

@@ -7,6 +7,7 @@ RSpec.describe "/case_contact_reports", type: :request do
     travel_to Time.zone.local(2020, 1, 1)
     sign_in user
   end
+
   after { travel_back }
 
   describe "GET /case_contact_reports" do
@@ -14,22 +15,22 @@ RSpec.describe "/case_contact_reports", type: :request do
       let(:user) { create(:volunteer) }
 
       it "cannot view reports" do
-        get case_contact_reports_url(format: :csv)
+        get case_contact_reports_url(format: :csv), params: {report: {}}
         expect(response).to redirect_to root_path
       end
     end
 
     shared_examples "can view reports" do
       context "with start_date and end_date" do
-        let(:case_contact_report_params) {
+        let(:case_contact_report_params) do
           {
             start_date: 1.month.ago,
             end_date: Date.today
           }
-        }
+        end
 
         it "renders a csv file to download" do
-          get case_contact_reports_url(format: :csv), params: case_contact_report_params
+          get case_contact_reports_url(format: :csv), params: {report: {start_date: 1.month.ago, end_date: Date.today}}
 
           expect(response).to be_successful
           expect(
@@ -40,7 +41,7 @@ RSpec.describe "/case_contact_reports", type: :request do
 
       context "without start_date and end_date" do
         it "renders a csv file to download" do
-          get case_contact_reports_url(format: :csv)
+          get case_contact_reports_url(format: :csv), params: {report: {start_date: "", end_date: ""}}
 
           expect(response).to be_successful
           expect(
@@ -55,7 +56,7 @@ RSpec.describe "/case_contact_reports", type: :request do
           contact = create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
           create(:case_contact, {occurred_at: 100.days.ago})
 
-          get case_contact_reports_url(format: :csv), params: {creator_ids: [volunteer.id]}
+          get case_contact_reports_url(format: :csv), params: {report: {creator_ids: [volunteer.id]}}
 
           expect(response).to be_successful
           expect(

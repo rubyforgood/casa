@@ -11,13 +11,13 @@ RSpec.describe "/case_court_reports/index ", type: :system do
 
   context "when first arriving to 'Generate Court Report' page, by default" do
     it "sees 'Generate Report' button" do
-      options = { text: "Generate Report" }
+      options = {text: "Generate Report"}
 
       expect(page).to have_selector "#btnGenerateReport", **options
     end
 
     it "does not see 'Download Court Report' button, which is hidden" do
-      options = { text: "Download Court Report", visible: :hidden }
+      options = {text: "Download Court Report", visible: :hidden}
 
       expect(page).to have_selector "#btnDownloadReport", **options
     end
@@ -66,7 +66,7 @@ RSpec.describe "/case_court_reports/index ", type: :system do
       end
 
       it "does not have label changed to 'Court report generating. Do not refresh or leave this page'" do
-        options = { text: "Court report generating. Do not refresh or leave this page" }
+        options = {text: "Court report generating. Do not refresh or leave this page"}
 
         expect(page).not_to have_selector "#btnGenerateReport[disabled]", **options
       end
@@ -74,13 +74,13 @@ RSpec.describe "/case_court_reports/index ", type: :system do
 
     context "'Download Court Report' button" do
       it "does not become visible" do
-        options = { text: "Download Court Report", visible: :hidden }
+        options = {text: "Download Court Report", visible: :hidden}
 
         expect(page).to have_selector "#btnDownloadReport", **options
       end
 
       it "does not change href value from '#'" do
-        options = { id: "btnDownloadReport", visible: :hidden, href: "#" }
+        options = {id: "btnDownloadReport", visible: :hidden, href: "#"}
 
         expect(page).to have_link "Download Court Report", **options
       end
@@ -88,7 +88,7 @@ RSpec.describe "/case_court_reports/index ", type: :system do
   end
 
   context "when selecting transition case, volunteer can generate and download a report" do
-    let(:case_number) { casa_cases.select(&:has_transitioned?).first.case_number.to_s }
+    let(:case_number) { casa_cases.find(&:has_transitioned?).case_number.to_s }
     let(:transition_option_text) { "#{case_number} - transition" }
 
     before do
@@ -108,7 +108,7 @@ RSpec.describe "/case_court_reports/index ", type: :system do
       end
 
       it "has label changed to 'Court report generating. Do not refresh or leave this page'" do
-        options = { text: "Court report generating. Do not refresh or leave this page" }
+        options = {text: "Court report generating. Do not refresh or leave this page"}
 
         expect(page).to have_selector "#btnGenerateReport[disabled]", **options
       end
@@ -116,7 +116,7 @@ RSpec.describe "/case_court_reports/index ", type: :system do
 
     context "'Download Court Report' button" do
       it "becomes visible" do
-        options = { text: "Download Court Report", visible: :visible }
+        options = {text: "Download Court Report", visible: :visible}
 
         expect(page).to have_selector "#btnDownloadReport", **options
       end
@@ -124,7 +124,7 @@ RSpec.describe "/case_court_reports/index ", type: :system do
       it "changes href value from '#' to a link with .docx format" do
         download_link = "/case_court_reports/#{case_number}.docx"
 
-        options = { id: "btnDownloadReport", visible: :visible, href: download_link }
+        options = {id: "btnDownloadReport", visible: :visible, href: download_link}
 
         expect(page).to have_link "Download Court Report", **options
       end

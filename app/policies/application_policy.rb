@@ -9,7 +9,11 @@ class ApplicationPolicy
     user.supervisor? || user.casa_admin?
   end
 
-  def see_import_page?
+  def see_emancipation_checklist?
+    user.volunteer?
+  end
+
+  def is_admin?
     user.casa_admin?
   end
 
@@ -17,7 +21,6 @@ class ApplicationPolicy
     user.volunteer?
   end
 
-  def modify_organization?
-    user.casa_admin?
-  end
+  alias_method :modify_organization?, :is_admin?
+  alias_method :see_import_page?, :is_admin?
 end

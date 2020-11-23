@@ -31,24 +31,62 @@
   <td>
     <span class="mobile-label">Creator</span>
     <% if policy(contact).edit? %>
-      <% if contact.creator&.supervisor? %>
-        <%= link_to "#{contact.creator&.display_name} ", edit_supervisor_path(current_user) %>
-      <% elsif contact.creator&.casa_admin? %>
-        <%= link_to "#{contact.creator&.display_name} ", edit_users_path %>
+      <% if current_user.volunteer? %>
+        <%= contact.creator&.decorate.name %>
       <% else %>
-        <%= link_to "#{contact.creator&.display_name} ", edit_volunteer_path(contact.creator) %>
+        <% if contact.creator&.supervisor? %>
+          <%= link_to contact.creator&.decorate.name, edit_supervisor_path(current_user) %>
+        <% elsif contact.creator&.casa_admin? %>
+          <%= link_to contact.creator&.decorate.name, edit_users_path %>
+        <% else %>
+          <%= link_to contact.creator&.decorate.name, edit_volunteer_path(contact.creator) %>
+        <% end %>
       <% end %>
     <% else %>
-      <%= contact.creator&.display_name %>
+      <%= contact.creator&.decorate.name %>
     <% end %>
+  </td>
+  <td class="read-more">
+    <span class="mobile-label">Notes</span>
+    <%- if contact.notes && contact.notes.length > CaseContactDecorator::NOTES_WORD_LIMIT %>
+      <div class="limited-notes" style="display: block;">
+        <%= simple_format(contact.decorate.limited_notes) %>
+        <span><a role="button" href="#" onClick="moreText(event)">Read more</a></span>
+      </div>
+      <div class="full-notes" style="display: none;">
+        <%= simple_format(contact.decorate.full_notes) %>
+        <span><a role="button" href="#" onClick="lessText(event)">Hide</a></span>
+      </div>
+    <%- else %>
+      <%= simple_format(contact.decorate.full_notes) %>
+    <%- end %>
   </td>
   <td>
     <% if Pundit.policy(current_user, contact).update? %>
-      <% if contact.allowed_edit? %>
+      <% if contact.created_in_current_quarter? %>
         <%= link_to 'Edit', edit_case_contact_path(contact) %>
       <% else %>
-        <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="Disallow edit contact after end of quarter"></i>
+        <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="This case contact was created in a previous quarter and is therefore no longer editable"></i>
       <% end %>
     <% end %>
   </td>
 </tr>
+
+<script type="text/javascript">
+
+  function moreText(event) {
+    event.preventDefault();
+    const table_cell = event.target.closest('td');
+
+    table_cell.querySelectorAll('.full-notes')[0].style.display = 'block';
+    table_cell.querySelectorAll('.limited-notes')[0].style.display = 'none';
+  }
+
+  function lessText(event) {
+    event.preventDefault();
+    const table_cell = event.target.closest('td');
+
+    table_cell.querySelectorAll('.full-notes')[0].style.display = 'none';
+    table_cell.querySelectorAll('.limited-notes')[0].style.display = 'block';
+  }
+</script>

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "supervisors/index" do
+RSpec.describe "supervisors/index" do
   let(:user) {}
 
   before do

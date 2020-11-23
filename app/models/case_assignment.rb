@@ -7,9 +7,20 @@ class CaseAssignment < ApplicationRecord
   validates :casa_case_id, uniqueness: {scope: :volunteer_id} # only 1 row allowed per case-volunteer pair
   validates :volunteer, presence: true
   validate :assignee_must_be_volunteer
+  validate :casa_case_and_volunteer_must_belong_to_same_casa_org, if: -> { casa_case.present? && volunteer.present? }
+
+  scope :is_active, -> { where(is_active: true) }
+
+  private
 
   def assignee_must_be_volunteer
     errors.add(:volunteer, "Case assignee must be a volunteer") unless volunteer.is_a?(Volunteer) && volunteer.active?
+  end
+
+  def casa_case_and_volunteer_must_belong_to_same_casa_org
+    return if casa_case.casa_org_id == volunteer.casa_org_id
+
+    errors.add(:volunteer, "and case must belong to the same organization")
   end
 end
 

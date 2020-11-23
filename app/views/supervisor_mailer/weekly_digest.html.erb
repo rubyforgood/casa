@@ -1,0 +1,49 @@
+<meta itemprop="name" content="Court Report Due Reminder Email" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+<table width="100%" cellpadding="0" cellspacing="0" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+    <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 18px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+      <%= @supervisor.display_name %>,
+    </td>
+  </tr>
+  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; margin: 0;">
+    <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+      Here's a summary of what happened with your volunteers this last week.
+    </td>
+  </tr>
+  <% @supervisor.volunteers.each do |volunteer| %>
+
+    <% volunteer.case_assignments_with_cases.each do |case_assignment| %>
+      <% casa_case = case_assignment.casa_case %>
+      <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; text-align: left;">
+        <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+          <b><%= "Summary for #{volunteer.display_name} Case #{casa_case.case_number}" %></b>
+          <br>
+          <% successful_contacts = casa_case.decorate.successful_contacts_this_week %>
+          <% unsuccessful_contacts = casa_case.decorate.unsuccessful_contacts_this_week %>
+          <% if successful_contacts + unsuccessful_contacts > 0 %>
+            <%= "Number of succesful case contacts made this week: #{successful_contacts}" %>
+            <br>
+            <%= "Number of unsuccesful case contacts made this week: #{unsuccessful_contacts} " %>
+            <br>
+            <% recent_contact =  casa_case.decorate.case_contacts_latest %>
+            <%= "Most recent contact attempted:" %>
+            <br>
+            <%= " - Date: #{recent_contact&.occurred_at&.strftime("%B %e, %Y")}" %>
+            <br>
+            <%= " - Type: #{recent_contact&.decorate.contact_types}" %>
+            <br>
+            <%= " - Duration: #{recent_contact&.duration_minutes}" %>
+            <br>
+            <%= " - Contact Made: #{recent_contact&.contact_made}" %>
+            <br>
+            <%= " - Medium Type: #{recent_contact&.medium_type}" %>
+            <br>
+            <%= " - Notes: #{recent_contact&.notes}" %>
+          <% else %>
+            No contact attempts for this week.
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+</table>

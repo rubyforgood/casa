@@ -13,6 +13,15 @@ class Volunteer < User
     actions
   ].freeze
 
+  scope :with_no_supervisor, lambda { |org|
+    joins("left join supervisor_volunteers "\
+          "on supervisor_volunteers.volunteer_id = users.id "\
+          "and supervisor_volunteers.is_active")
+      .active
+      .in_organization(org)
+      .where(supervisor_volunteers: {id: nil})
+  }
+
   # Activates this volunteer.
   def activate
     update(active: true)
@@ -43,7 +52,9 @@ class Volunteer < User
   end
 
   # false if volunteer has any case with no contact in the past 30 days
-  def made_contact_with_all_cases_in_days?(num_days = 30)
+  def made_contact_with_all_cases_in_days?(num_days = 14)
+    # should be 14!
+    # this should do the same thing as no_contact_for_two_weeks but for a volunteer
     total_cases_count = casa_cases.count
     return true if total_cases_count.zero?
     current_contact_cases_count = cases_where_contact_made_in_days(num_days).count
@@ -52,11 +63,12 @@ class Volunteer < User
 
   private
 
-  def cases_where_contact_made_in_days(num_days = 30)
+  def cases_where_contact_made_in_days(num_days = 14)
     casa_cases
       .joins(:case_contacts)
       .where(case_contacts: {contact_made: true})
       .where("case_contacts.occurred_at > ?", Date.current - num_days.days)
+    # this should respect current vs past cases
   end
 end
 
@@ -76,7 +88,6 @@ end
 #  invitation_token       :string
 #  invitations_count      :integer          default(0)
 #  invited_by_type        :string
-#  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
 #  type                   :string

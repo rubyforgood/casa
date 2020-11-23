@@ -26,6 +26,10 @@ Rails.application.routes.draw do
         post "save"
       end
     end
+    member do
+      patch :deactivate
+      patch :reactivate
+    end
   end
 
   resources :casa_admins, except: %i[destroy] do
@@ -52,6 +56,8 @@ Rails.application.routes.draw do
   resources :contact_type_groups, only: %i[new create edit update]
   resources :contact_types, only: %i[new create edit update]
   resources :hearing_types, only: %i[new create edit update]
+  resources :emancipation_checklists, only: %i[show]
+  resources :judges, only: %i[new create edit update]
 
   resources :supervisors, except: %i[destroy]
   resources :supervisor_volunteers, only: %i[create] do
@@ -74,7 +80,12 @@ Rails.application.routes.draw do
 
   namespace :all_casa_admins do
     resources :casa_orgs, only: [:new, :create, :show] do
-      resources :casa_admins, only: [:new, :create]
+      resources :casa_admins, only: [:new, :create, :edit, :update] do
+        member do
+          patch :deactivate
+          patch :activate
+        end
+      end
     end
   end
 

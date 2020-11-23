@@ -10,17 +10,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2020_10_22_034445) do
+=======
+ActiveRecord::Schema.define(version: 2020_11_23_112651) do
+>>>>>>> upstream/main
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
 
   create_table "all_casa_admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_all_casa_admins_on_email", unique: true
@@ -43,11 +67,17 @@ ActiveRecord::Schema.define(version: 2020_10_22_034445) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "casa_org_id", null: false
     t.datetime "birth_month_year_youth"
-    t.boolean "court_report_submitted", default: false, null: false
     t.datetime "court_date"
     t.datetime "court_report_due_date"
+    t.bigint "hearing_type_id"
+    t.boolean "active", default: true, null: false
+    t.bigint "judge_id"
+    t.datetime "court_report_submitted_at"
+    t.integer "court_report_status", default: 0
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
-    t.index ["case_number"], name: "index_casa_cases_on_case_number", unique: true
+    t.index ["case_number", "casa_org_id"], name: "index_casa_cases_on_case_number_and_casa_org_id", unique: true
+    t.index ["hearing_type_id"], name: "index_casa_cases_on_hearing_type_id"
+    t.index ["judge_id"], name: "index_casa_cases_on_judge_id"
   end
 
   create_table "casa_cases_emancipation_options", id: false, force: :cascade do |t|
@@ -153,6 +183,23 @@ ActiveRecord::Schema.define(version: 2020_10_22_034445) do
     t.index ["casa_org_id"], name: "index_hearing_types_on_casa_org_id"
   end
 
+  create_table "judges", force: :cascade do |t|
+    t.bigint "casa_org_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active", default: true
+    t.string "name"
+    t.index ["casa_org_id"], name: "index_judges_on_casa_org_id"
+  end
+
+  create_table "past_court_dates", force: :cascade do |t|
+    t.datetime "date", null: false
+    t.bigint "casa_case_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["casa_case_id"], name: "index_past_court_dates_on_casa_case_id"
+  end
+
   create_table "supervisor_volunteers", force: :cascade do |t|
     t.bigint "supervisor_id", null: false
     t.bigint "volunteer_id", null: false
@@ -172,7 +219,6 @@ ActiveRecord::Schema.define(version: 2020_10_22_034445) do
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "casa_org_id", null: false
@@ -206,6 +252,7 @@ ActiveRecord::Schema.define(version: 2020_10_22_034445) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "casa_cases", "casa_orgs"
   add_foreign_key "casa_cases_emancipation_options", "casa_cases"
   add_foreign_key "casa_cases_emancipation_options", "emancipation_options"
@@ -214,7 +261,12 @@ ActiveRecord::Schema.define(version: 2020_10_22_034445) do
   add_foreign_key "case_assignments", "users", column: "volunteer_id"
   add_foreign_key "case_contacts", "casa_cases"
   add_foreign_key "case_contacts", "users", column: "creator_id"
+<<<<<<< HEAD
   add_foreign_key "emancipation_options", "emancipation_categories"
+=======
+  add_foreign_key "judges", "casa_orgs"
+  add_foreign_key "past_court_dates", "casa_cases"
+>>>>>>> upstream/main
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"
   add_foreign_key "supervisor_volunteers", "users", column: "volunteer_id"
   add_foreign_key "users", "casa_orgs"

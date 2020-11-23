@@ -21,6 +21,7 @@ RSpec.describe "/case_court_reports", type: :request do
   describe "GET /case_court_reports/:id" do
     context "when a valid / existing case is sent" do
       let(:casa_case) { volunteer.casa_cases.first }
+
       before do
         get case_court_report_path(casa_case.case_number, format: "docx")
       end
@@ -36,6 +37,7 @@ RSpec.describe "/case_court_reports", type: :request do
 
     context "when an INVALID / non-existing case is sent" do
       let(:invalid_casa_case) { build_stubbed(:casa_case) }
+
       before do
         get case_court_report_path(invalid_casa_case.case_number, format: "docx")
       end
@@ -59,10 +61,10 @@ RSpec.describe "/case_court_reports", type: :request do
   describe "POST /case_court_reports" do
     before do
       post generate_case_court_reports_path,
-           params: {
-             "case_court_report": { "case_number": casa_case.case_number.to_s }
-           },
-           headers: { "ACCEPT": "application/json" }
+        params: {
+          "case_court_report": {"case_number": casa_case.case_number.to_s}
+        },
+        headers: {"ACCEPT": "application/json"}
     end
 
     context "when a valid / existing case is sent" do

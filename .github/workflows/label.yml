@@ -4,7 +4,7 @@
 # See ../labeler.yml for mapping of files and labels
 # See https://github.com/actions/labeler for more details on the action
 
-name: "Pull Request Labeler"
+name: filetype labeler
 on:
 - pull_request_target
 

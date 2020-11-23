@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "admins_table", type: :view do
+RSpec.describe "admins_table", type: :view do
   it "allows editing admin users" do
     admin = build_stubbed :casa_admin
     enable_pundit(view, admin)

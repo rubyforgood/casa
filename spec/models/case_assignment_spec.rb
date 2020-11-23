@@ -1,14 +1,16 @@
 require "rails_helper"
 
 RSpec.describe CaseAssignment do
-  let(:casa_case_1) { create(:casa_case) }
-  let(:volunteer_1) { create(:volunteer) }
-  let(:inactive) { create(:volunteer, :inactive) }
-  let(:supervisor) { create(:supervisor) }
-  let(:casa_case_2) { create(:casa_case) }
-  let(:volunteer_2) { create(:volunteer) }
+  let(:casa_org_1) { create(:casa_org) }
+  let(:casa_case_1) { create(:casa_case, casa_org: casa_org_1) }
+  let(:volunteer_1) { create(:volunteer, casa_org: casa_org_1) }
+  let(:inactive) { create(:volunteer, :inactive, casa_org: casa_org_1) }
+  let(:supervisor) { create(:supervisor, casa_org: casa_org_1) }
+  let(:casa_case_2) { create(:casa_case, casa_org: casa_org_1) }
+  let(:volunteer_2) { create(:volunteer, casa_org: casa_org_1) }
+  let(:casa_org_2) { create(:casa_org) }
 
-  it "should only allow active volunteers to be assigned" do
+  it "only allow active volunteers to be assigned" do
     expect(casa_case_1.case_assignments.new(volunteer: volunteer_1)).to be_valid
     casa_case_1.reload
 
@@ -34,5 +36,21 @@ RSpec.describe CaseAssignment do
 
     expect(casa_case_1.reload.volunteers).to eq([volunteer_1])
     expect(casa_case_2.reload.volunteers).to eq([volunteer_1])
+  end
+
+  it "requires case and volunteer belong to the same organization" do
+    case_assignment = casa_case_1.case_assignments.new(volunteer: volunteer_1)
+    expect { volunteer_1.update(casa_org: casa_org_2) }.to change(case_assignment, :valid?).to false
+  end
+
+  describe ".is_active" do
+    it "only includes active case assignments" do
+      casa_case = create(:casa_case)
+      case_assignments = 2.times.map { create(:case_assignment, casa_case: casa_case, volunteer: create(:volunteer, casa_org: casa_case.casa_org)) }
+      expect(CaseAssignment.is_active).to eq case_assignments
+
+      case_assignments.first.update(is_active: false)
+      expect(CaseAssignment.is_active).to eq [case_assignments.last]
+    end
   end
 end

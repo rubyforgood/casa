@@ -1,14 +1,15 @@
 require "rails_helper"
 
 RSpec.describe CaseImporter do
-  let(:casa_org_id) { import_user.casa_org.id }
   subject(:case_importer) { CaseImporter.new(import_file_path, casa_org_id) }
+
+  let(:casa_org_id) { import_user.casa_org.id }
   let!(:import_user) { create(:casa_admin) }
   let(:import_file_path) { Rails.root.join("spec", "fixtures", "casa_cases.csv") }
 
-  before(:each) do
+  before do
     allow(case_importer).to receive(:email_addresses_to_users) do |_clazz, comma_separated_emails|
-      create_list(:volunteer, comma_separated_emails.split(",").size)
+      create_list(:volunteer, comma_separated_emails.split(",").size, casa_org_id: casa_org_id)
     end
   end
 
@@ -52,9 +53,11 @@ RSpec.describe CaseImporter do
 
     context "when the importer has already run once" do
       before { case_importer.import_cases }
+
       it "does not duplicate casa case files from csv files" do
         expect { case_importer.import_cases }.to change(CasaCase, :count).by(0)
       end
+
       it "returns an error message when there are cases not imported" do
         alert = case_importer.import_cases
         expect(alert[:type]).to eq(:error)

@@ -23,7 +23,10 @@ RSpec.describe Volunteer, type: :model do
     end
 
     it "sets all of a volunteer's case assignments to inactive" do
-      case_contacts = create_list(:case_assignment, 3, volunteer: volunteer)
+      case_contacts =
+        3.times.map {
+          create(:case_assignment, casa_case: create(:casa_case, casa_org: volunteer.casa_org), volunteer: volunteer)
+        }
 
       volunteer.deactivate
 
@@ -74,12 +77,13 @@ RSpec.describe Volunteer, type: :model do
 
   describe "#made_contact_with_all_cases_in_days?" do
     let(:volunteer) { create(:volunteer) }
-    let(:casa_case) { create(:casa_case) }
-    let(:create_case_contact) {
-      ->(occurred_at, contact_made) {
+    let(:casa_case) { create(:casa_case, casa_org: volunteer.casa_org) }
+    let(:create_case_contact) do
+      lambda { |occurred_at, contact_made|
         create(:case_contact, casa_case: casa_case, creator: volunteer, occurred_at: occurred_at, contact_made: contact_made)
       }
-    }
+    end
+
     before do
       create(:case_assignment, casa_case: casa_case, volunteer: volunteer, is_active: true)
     end
@@ -107,7 +111,7 @@ RSpec.describe Volunteer, type: :model do
 
     context "when volunteer has not made recent contact in just one case" do
       it "returns false" do
-        casa_case2 = create(:casa_case)
+        casa_case2 = create(:casa_case, casa_org: volunteer.casa_org)
         create(:case_assignment, casa_case: casa_case2, volunteer: volunteer, is_active: true)
         create(:case_contact, casa_case: casa_case2, creator: volunteer, occurred_at: Date.current - 60.days, contact_made: true)
         create_case_contact.call(Date.current, true)
@@ -152,6 +156,35 @@ RSpec.describe Volunteer, type: :model do
 
   describe "#role" do
     subject(:volunteer) { create :volunteer }
+
     it { expect(volunteer.role).to eq "Volunteer" }
+  end
+
+  describe "#with_no_supervisor" do
+    subject { Volunteer.with_no_supervisor(casa_org) }
+
+    let(:casa_org) { create(:casa_org) }
+
+    context "no volunteers" do
+      it "returns none" do
+        expect(subject).to eq []
+      end
+    end
+
+    context "volunteers" do
+      let!(:unassigned1) { create(:volunteer, display_name: "aaa", casa_org: casa_org) }
+      let!(:unassigned2) { create(:volunteer, display_name: "bbb", casa_org: casa_org) }
+      let!(:unassigned2_different_org) { create(:volunteer, display_name: "ccc") }
+      let!(:assigned1) { create(:volunteer, display_name: "ddd", casa_org: casa_org) }
+      let!(:assignment1) { create(:supervisor_volunteer, volunteer: assigned1) }
+      let!(:assigned2_different_org) { assignment1.volunteer }
+      let!(:unassigned_inactive_volunteer) { create(:volunteer, display_name: "eee", casa_org: casa_org, active: false) }
+      let!(:previously_assigned) { create(:volunteer, display_name: "fff", casa_org: casa_org) }
+      let!(:inactive_assignment) { create(:supervisor_volunteer, volunteer: previously_assigned, is_active: false) }
+
+      it "returns unassigned volunteers" do
+        expect(subject.map(&:display_name).sort).to eq ["aaa", "bbb", "fff"]
+      end
+    end
   end
 end

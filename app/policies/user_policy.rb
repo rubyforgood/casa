@@ -14,9 +14,7 @@ class UserPolicy
     user.casa_admin? || user.supervisor?
   end
 
-  def activate?
-    @user.casa_admin? || @user.supervisor?
-  end
+  alias_method :activate?, :unassign_case?
 
   def deactivate?
     activate?

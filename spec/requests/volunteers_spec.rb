@@ -36,8 +36,9 @@ RSpec.describe "/volunteers", type: :request do
     before do
       sign_in admin
     end
+
     context "with valid params" do
-      let(:params) {
+      let(:params) do
         {
           volunteer: {
             display_name: "Example",
@@ -45,14 +46,15 @@ RSpec.describe "/volunteers", type: :request do
             casa_org_id: admin.casa_org_id
           }
         }
-      }
+      end
+
       it "creates a new volunteer" do
         post volunteers_url, params: params
         expect(response).to have_http_status(:redirect)
         volunteer = Volunteer.last
         expect(volunteer.email).to eq("volunteer1@example.com")
         expect(volunteer.display_name).to eq("Example")
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to volunteers_path
       end
 
       it "sends an account_setup email" do
@@ -61,8 +63,9 @@ RSpec.describe "/volunteers", type: :request do
         }.to change { ActionMailer::Base.deliveries.count }.by(1)
       end
     end
+
     context "with invalid parameters" do
-      let(:params) {
+      let(:params) do
         {
           volunteer: {
             display_name: "",
@@ -70,7 +73,8 @@ RSpec.describe "/volunteers", type: :request do
             casa_org_id: admin.casa_org_id
           }
         }
-      }
+      end
+
       it "does not create a new volunteer" do
         expect {
           post volunteers_url, params: params

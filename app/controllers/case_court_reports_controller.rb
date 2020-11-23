@@ -7,14 +7,15 @@ class CaseCourtReportsController < ApplicationController
   # GET /case_court_reports
   def index
     @assigned_cases = CasaCase.actively_assigned_to(current_user)
-                              .select(:id, :case_number, :transition_aged_youth)
+      .select(:id, :case_number, :transition_aged_youth)
+    @non_transition_aged_youth_cases = @assigned_cases&.reject(&:transition_aged_youth)&.map(&:case_number)
   end
 
   # GET /case_court_reports/:id
   def show
     unless @casa_case
       flash[:alert] = "Report #{params[:id]} is not found."
-      redirect_to case_court_reports_path and return
+      redirect_to(case_court_reports_path) and return # rubocop:disable Style/AndOr
     end
 
     respond_to do |format|
@@ -32,13 +33,13 @@ class CaseCourtReportsController < ApplicationController
     respond_to do |format|
       format.json do
         if casa_case
-          render json: { link: case_court_report_path(casa_case.case_number, format: "docx"), status: :ok }
+          render json: {link: case_court_report_path(casa_case.case_number, format: "docx"), status: :ok}
         else
           flash[:alert] = "Report #{params[:case_number]} is not found."
-          error_messages = render_to_string partial: 'layouts/flash_messages.html.erb', layout: false, locals: flash
+          error_messages = render_to_string partial: "layouts/flash_messages.html.erb", layout: false, locals: flash
           flash.discard
 
-          render json: { link: "", status: :not_found, error_messages: error_messages }, status: :not_found
+          render json: {link: "", status: :not_found, error_messages: error_messages}, status: :not_found
         end
       end
     end
@@ -67,7 +68,7 @@ class CaseCourtReportsController < ApplicationController
   end
 
   def report_type(casa_case)
-    casa_case.has_transitioned? ? 'transition' : 'non_transition'
+    casa_case.has_transitioned? ? "transition" : "non_transition"
   end
 
   def path_to_template(type)
@@ -80,7 +81,7 @@ class CaseCourtReportsController < ApplicationController
       t.write(data)
       t.rewind
       t.close
-      send_data File.open(t.path, 'rb').read, type: :docx, disposition: 'attachment', status: :ok
+      send_data File.open(t.path, "rb").read, type: :docx, disposition: "attachment", status: :ok
     end
   end
 end

@@ -3,12 +3,14 @@
 <div class="row">
   <div class="col-sm-12 form-header">
     <h1><%= @casa_case.decorate.transition_aged_youth_only_icon %> CASA Case Details</h1>
-    <%- if policy(:case_contact).new? %>
+    <%- if policy(:case_contact).new? & @casa_case.active? %>
       <%= link_to "New Case Contact",
                   new_case_contact_path(case_contact: {casa_case_id: @casa_case.id}),
                   class: "btn btn-primary" %>
     <%- end %>
-    <%= link_to 'Edit Case Details', edit_casa_case_path(@casa_case), class: "btn btn-primary" %>
+    <% if @casa_case.active? %>
+      <%= link_to 'Edit Case Details', edit_casa_case_path(@casa_case), class: "btn btn-primary" %>
+    <% end %>
     <% if @casa_case.has_transitioned? %>
       <%= link_to 'Emancipation', casa_case_emancipation_path(@casa_case), class: "btn btn-primary" %>
     <% end%>
@@ -17,8 +19,19 @@
 
 <div class="card card-container">
   <div class="card-body">
+    <% if !@casa_case.active %>
+      <%= render "inactive_case", casa_case: @casa_case %>
+    <% end %>
     <p>
     <h6><strong>Case number:</strong> <%= @casa_case.case_number %></h6>
+    </p>
+
+    <p>
+    <h6><strong>Hearing Type:</strong> <%= @casa_case.hearing_type_name %></h6>
+    </p>
+
+    <p>
+    <h6><strong>Judge:</strong> <%= @casa_case.judge_name %></h6>
     </p>
 
     <p>
@@ -35,17 +48,25 @@
     </p>
 
     <p>
-    <h6><strong>Court Report Submission:</strong> <%= @casa_case.decorate.court_report_submission %>
+    <h6><strong>Court Report Status:</strong> <%= @casa_case.decorate.court_report_submission %></h6>
     </p>
+
+    <% if @casa_case.court_report_submitted_at %>
+      <p><h6><strong>Court Report Submitted Date:</strong> <%= @casa_case.decorate.court_report_submitted_date %></h6></p>
+    <% end %>
 
     <div>
       <h6><strong>Assigned Volunteers:</strong></h6>
-      <% policy_scope(@casa_case.volunteers).each_with_index do |volunteer, index| %>
-        <p><%= link_to "#{volunteer.decorate.name} ", edit_volunteer_path(volunteer) %></p>
+      <% policy_scope(@casa_case.assigned_volunteers).each_with_index do |volunteer, index| %>
+        <% if current_user.volunteer? %>
+          <p><%= volunteer.decorate.name %></p>
+        <% else %>
+          <p><%= link_to "#{volunteer.decorate.name} ", edit_volunteer_path(volunteer) %></p>
+        <% end %>
       <% end %>
       <br>
 
-      <table class="table table-bordered table-striped table-sm" id="case_contacts">
+      <table class="table table-bordered table-striped table-sm case-contacts-table" id="case_contacts">
         <thead>
         <tr>
           <th>Date</th>
@@ -56,6 +77,7 @@
           <th>Miles Driven</th>
           <th>Want reimbursement?</th>
           <th>Created by</th>
+          <th>Notes</th>
           <th>Actions</th>
         </tr>
         </thead>

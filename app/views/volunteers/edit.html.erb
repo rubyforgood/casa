@@ -82,14 +82,16 @@
             <td><%= link_to assignment.casa_case.case_number, casa_case_path(assignment.casa_case) %></td>
             <td><%= assignment.casa_case.decorate.transition_aged_youth_icon %></td>
             <td>
-              <% if @volunteer.active? %>
+              <% if @volunteer.active? && assignment.casa_case.active? %>
                 Volunteer is <span class="badge badge-success text-uppercase display-1">Active</span>
+              <% elsif @volunteer.active? %>
+                Case was deactivated on: <%= assignment.casa_case.updated_at.strftime("%m-%d-%Y") %>
               <% else %>
                 Deactivated
               <% end %>
             </td>
             <td>
-              <% if @volunteer.active? %>
+              <% if @volunteer.active? && assignment.casa_case.active? %>
                 <%- if Pundit.policy(current_user, @volunteer).unassign_case? %>
                   <%= button_to 'Unassign Case',
                                 case_assignment_path(assignment, volunteer_id: @volunteer.id),
