@@ -52,7 +52,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "supervisors" do
-    describe "#volunteers_serving_transistion_aged_youth" do
+    describe "#volunteers_serving_transition_aged_youth" do
       it "returns the number of transition aged youth on a supervisor" do
         casa_org = create(:casa_org)
         casa_cases = [
@@ -65,7 +65,7 @@ RSpec.describe User, type: :model do
           volunteer = create(:volunteer, supervisor: supervisor, casa_org: casa_org)
           volunteer.casa_cases << casa_case
         end
-        expect(supervisor.volunteers_serving_transistion_aged_youth).to eq(2)
+        expect(supervisor.volunteers_serving_transition_aged_youth).to eq(2)
       end
     end
 
