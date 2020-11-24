@@ -17,7 +17,7 @@ class CasaCasePolicy
     def resolve
       case @user
       when CasaAdmin, Supervisor
-        scope
+        scope.where(casa_org: @user.casa_org)
       when Volunteer
         scope.actively_assigned_to(user)
       else
