@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 2020_10_22_034445) do
-=======
 ActiveRecord::Schema.define(version: 2020_11_23_112651) do
->>>>>>> upstream/main
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -261,12 +257,9 @@ ActiveRecord::Schema.define(version: 2020_11_23_112651) do
   add_foreign_key "case_assignments", "users", column: "volunteer_id"
   add_foreign_key "case_contacts", "casa_cases"
   add_foreign_key "case_contacts", "users", column: "creator_id"
-<<<<<<< HEAD
   add_foreign_key "emancipation_options", "emancipation_categories"
-=======
   add_foreign_key "judges", "casa_orgs"
   add_foreign_key "past_court_dates", "casa_cases"
->>>>>>> upstream/main
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"
   add_foreign_key "supervisor_volunteers", "users", column: "volunteer_id"
   add_foreign_key "users", "casa_orgs"
