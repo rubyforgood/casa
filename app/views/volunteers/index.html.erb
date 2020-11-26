@@ -54,12 +54,16 @@
       </button>
       <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
         <li>
-          <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Active" checked>
-            Active</a>
+          <a class="small" data-value="option1" tabIndex="-1">
+            <input type="checkbox" data-value="Active" checked>
+            Active
+          </a>
         </li>
         <li>
-          <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Inactive">
-            Inactive</a>
+          <a class="small" data-value="option1" tabIndex="-1">
+            <input type="checkbox" data-value="Inactive">
+            Inactive
+          </a>
         </li>
       </div>
     </div>
@@ -69,9 +73,14 @@
       </button>
       <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton">
         <li>
-          <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Yes 🐛🦋" checked>Yes</a>
+          <a class="small" data-value="option1" tabIndex="-1">
+            <input type="checkbox" data-value="Yes 🐛🦋" checked>Yes
+          </a>
         </li>
-        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No" checked>No</a>
+        <li>
+          <a class="small" data-value="option1" tabIndex="-1">
+            <input type="checkbox" data-value="No" checked>No
+          </a>
         </li>
       </div>
     </div>
@@ -98,7 +107,7 @@
                 <div class="form-check">
                   <%= check_box_tag "pick-#{column}",
                                     "1",
-                                    [1, 6, 7].exclude?(index),
+                                    nil,
                                     class: "form-check-input toggle-visibility",
                                     data: {column: index} %>
                   <%= label_tag "pick-#{column}", column.titleize, class: "form-check-label" %>
