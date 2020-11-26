@@ -17,8 +17,4 @@ class VolunteerPolicy < UserPolicy
   def create?
     user.casa_admin?
   end
-
-  def edit_name?(viewed_user)
-    user.casa_admin? || viewed_user == user
-  end
 end
