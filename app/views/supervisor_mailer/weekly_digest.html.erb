@@ -25,7 +25,7 @@
             <br>
             <%= "Number of unsuccesful case contacts made this week: #{unsuccessful_contacts} " %>
             <br>
-            <% recent_contact =  casa_case.decorate.case_contacts_latest %>
+            <% recent_contact = casa_case.decorate.case_contacts_latest %>
             <%= "Most recent contact attempted:" %>
             <br>
             <%= " - Date: #{recent_contact&.occurred_at&.strftime("%B %e, %Y")}" %>

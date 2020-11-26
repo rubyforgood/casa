@@ -25,48 +25,48 @@
         <div class="field form-group">
           <label><strong>Assigned To:</strong></label>
           <%= f.collection_select(
-            :supervisor_ids,
-            Supervisor.where(casa_org: current_user.casa_org),
-            :id, :display_name,
-            { include_hidden: false, prompt: "-Select Supervisors-" },
-            { class: "form-control", multiple: true }
-          ) %>
+                  :supervisor_ids,
+                  Supervisor.where(casa_org: current_user.casa_org),
+                  :id, :display_name,
+                  {include_hidden: false, prompt: "-Select Supervisors-"},
+                  {class: "form-control", multiple: true}
+              ) %>
         </div>
 
         <div class="field form-group">
           <label><strong>Volunteers</strong></label>
           <%= f.collection_select(
-            :creator_ids,
-            Volunteer.where(casa_org: current_user.casa_org),
-            :id,
-            :display_name,
-            { include_hidden: false, prompt: "-Select Volunteers-" },
-            { class: "form-control", multiple: true }
-          ) %>
+                  :creator_ids,
+                  Volunteer.where(casa_org: current_user.casa_org),
+                  :id,
+                  :display_name,
+                  {include_hidden: false, prompt: "-Select Volunteers-"},
+                  {class: "form-control", multiple: true}
+              ) %>
         </div>
 
         <div class="field form-group">
           <label><strong>Contact Type:</strong></label>
           <%= f.collection_select(
-            :contact_type_ids,
-            ContactType.for_organization(current_user.casa_org),
-            :id,
-            :name,
-            { include_hidden: false, prompt: "-Select Contact Types-" },
-            { class: "form-control", multiple: true }
-          ) %>
+                  :contact_type_ids,
+                  ContactType.for_organization(current_user.casa_org),
+                  :id,
+                  :name,
+                  {include_hidden: false, prompt: "-Select Contact Types-"},
+                  {class: "form-control", multiple: true}
+              ) %>
         </div>
 
         <div class="field form-group">
           <label><strong>Contact Type Group:</strong></label>
           <%= f.collection_select(
-            :contact_type_group_ids,
-            ContactTypeGroup.for_organization(current_user.casa_org),
-            :id,
-            :name,
-            { include_hidden: false, prompt: "-Select Contact Type Groups-" },
-            { class: "form-control", multiple: true }
-          ) %>
+                  :contact_type_group_ids,
+                  ContactTypeGroup.for_organization(current_user.casa_org),
+                  :id,
+                  :name,
+                  {include_hidden: false, prompt: "-Select Contact Type Groups-"},
+                  {class: "form-control", multiple: true}
+              ) %>
         </div>
 
         <div class="field form-group">
@@ -100,7 +100,7 @@
         </div>
       <% end %>
 
-      <%= f.submit "Download Report", class: "btn btn-primary", data: { disable_with: false } %>
+      <%= f.submit "Download Report", class: "btn btn-primary", data: {disable_with: false} %>
     <% end %>
 
   </div>

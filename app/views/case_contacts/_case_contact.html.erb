@@ -3,19 +3,19 @@
   <td>
     <span class="mobile-label">Duration</span>
     <%= contact.decorate.duration_minutes %>
-    </td>
+  </td>
   <td>
     <span class="mobile-label">Contact Made?</span>
     <%= contact.decorate.contact_made %>
-    </td>
+  </td>
   <td>
     <span class="mobile-label">Contact Medium</span>
     <%= contact.decorate.medium_type_icon %>
-    </td>
+  </td>
   <td>
     <span class="mobile-label">Type</span>
     <%= contact.decorate.contact_types %>
-    </td>
+  </td>
   <td>
     <span class="mobile-label">Miles Driven</span>
     <%= contact.decorate.miles_traveled %>
@@ -74,19 +74,19 @@
 
 <script type="text/javascript">
 
-  function moreText(event) {
-    event.preventDefault();
-    const table_cell = event.target.closest('td');
+  function moreText (event) {
+    event.preventDefault()
+    const table_cell = event.target.closest('td')
 
-    table_cell.querySelectorAll('.full-notes')[0].style.display = 'block';
-    table_cell.querySelectorAll('.limited-notes')[0].style.display = 'none';
+    table_cell.querySelectorAll('.full-notes')[0].style.display = 'block'
+    table_cell.querySelectorAll('.limited-notes')[0].style.display = 'none'
   }
 
-  function lessText(event) {
-    event.preventDefault();
-    const table_cell = event.target.closest('td');
+  function lessText (event) {
+    event.preventDefault()
+    const table_cell = event.target.closest('td')
 
-    table_cell.querySelectorAll('.full-notes')[0].style.display = 'none';
-    table_cell.querySelectorAll('.limited-notes')[0].style.display = 'block';
+    table_cell.querySelectorAll('.full-notes')[0].style.display = 'none'
+    table_cell.querySelectorAll('.limited-notes')[0].style.display = 'block'
   }
 </script>
