@@ -148,6 +148,7 @@
             <%= link_to(volunteer.display_name, edit_volunteer_path(volunteer)) %>
             <% if !volunteer.made_contact_with_all_cases_in_days? %>
               🕐
+              <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="Has at least one case with no contact in 14 days"></i>
             <% end %>
           </td>
           <td><%= volunteer.email %></td>
@@ -156,15 +157,17 @@
               <%= link_to(volunteer.supervisor.display_name, edit_supervisor_path(volunteer.supervisor)) %>
             <%- end %>
           </td>
-          <td class=" status-column "><%= volunteer.decorate.status %></td>
-          <td><%= volunteer.decorate&.assigned_to_transition_aged_youth? %></td>
-          <td><%= safe_join(volunteer&.casa_cases&.map { |c| link_to(c.case_number, c) }, ", ") %></td>
-          <td>
-            <%= link_to_if volunteer&.most_recent_contact.present?,
-                           volunteer.decorate.last_contact_made,
-                           volunteer&.most_recent_contact&.casa_case %>
+          <td class=" status-column ">
+            <%= volunteer.decorate.status %>
           </td>
-          <td><%= volunteer&.recent_contacts_made %></td>
+          <td><%= volunteer.decorate.assigned_to_transition_aged_youth? %></td>
+          <td><%= safe_join(volunteer.casa_cases.map { |c| link_to(c.case_number, c) }, ", ") %></td>
+          <td>
+            <%= link_to_if has_recent_contact?,
+                           volunteer.decorate.last_contact_made,
+                           most_recent_case %>
+          </td>
+          <td><%= volunteer.recent_contacts_made %></td>
           <td><%= link_to 'Edit', edit_volunteer_path(volunteer) %></td>
         </tr>
       <% end %>

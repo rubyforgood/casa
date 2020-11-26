@@ -24,6 +24,6 @@ RSpec.describe "volunteers" do
   end
 
   context "links" do
-    it { is_expected.to have_link(volunteer.decorate.name) }
+    it { is_expected.to have_link(volunteer.display_name) }
   end
 end

@@ -18,14 +18,4 @@ RSpec.describe UserDecorator do
       end
     end
   end
-
-  describe "#name" do
-    context "when user has a name" do
-      it "returns the name" do
-        user = build(:user, display_name: "User Name")
-
-        expect(user.decorate.name).to eq user.display_name
-      end
-    end
-  end
 end

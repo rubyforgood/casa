@@ -62,6 +62,14 @@ class VolunteersController < ApplicationController
     end
   end
 
+  def has_recent_contact?
+    @volunteer.most_recent_contact.present?
+  end
+
+  def most_recent_case
+    @volunteer.most_recent_contact&.casa_case
+  end
+
   private
 
   def set_volunteer
