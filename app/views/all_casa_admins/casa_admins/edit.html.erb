@@ -28,7 +28,7 @@
             </div>
           <% else %>
             <div class="alert alert-danger">
-              Admin was deactivated on: <%= @casa_admin.updated_at.strftime("%m-%d-%Y") %>
+              Admin was deactivated on: <%= @casa_admin.updated_at.strftime(DateFormat::MM_DD_YYYY) %>
             </div>
             <% if @casa_admin.active == false %>
 

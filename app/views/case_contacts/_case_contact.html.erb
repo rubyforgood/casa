@@ -1,5 +1,5 @@
 <tr>
-  <td data-sort="<%= contact.occurred_at.strftime("%Y%m%d%H%M%s") %>"><%= contact.occurred_at.strftime('%B %e, %Y') %></td>
+  <td data-sort="<%= contact.occurred_at.strftime(DateFormat::CONTACT_OCCURRED_AT) %>"><%= contact.occurred_at.strftime(DateFormat::FULL) %></td>
   <td>
     <span class="mobile-label">Duration</span>
     <%= contact.decorate.duration_minutes %>

@@ -6,10 +6,10 @@ require "sablon"
 class CaseCourtReport
   attr_reader :report_path, :context, :template
 
-  DATE_FORMATS = {
-    long_date: "%B %d, %Y",
+  DATE_FORMATS = { # TODO move to DateFormat
+    long_date: DateFormat::FULL,
     short_date: "%-m/%d",
-    youth_dob: "%B %Y"
+    youth_dob: DateFormat::YOUTH_DATE_OF_BIRTH
   }.freeze
 
   def initialize(args = {})

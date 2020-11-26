@@ -20,7 +20,15 @@ class UserDecorator < Draper::Decorator
     if object.most_recent_contact.nil?
       "None ❌"
     else
-      object.most_recent_contact.occurred_at.strftime("%B %-e, %Y")
+      object.most_recent_contact.occurred_at.strftime(DateFormat::FULL)
     end
+  end
+
+  def formatted_created_at
+    object.created_at.strftime('%m/%d/%Y ') # TODO use DateFormat::MM_DD_YYYY instead
+  end
+
+  def formatted_updated_at
+    object.updated_at.strftime(DateFormat::MM_DD_YYYY)
   end
 end

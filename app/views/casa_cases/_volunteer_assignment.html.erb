@@ -33,10 +33,10 @@
                     </span>
                 <% end %>
               </td>
-              <td data-test="assignment-start"><%= assignment.created_at.strftime("%B %e, %Y") %></td>
+              <td data-test="assignment-start"><%= assignment.created_at.strftime(DateFormat::FULL) %></td>
               <td data-test="assignment-end">
                 <% unless assignment.is_active? %>
-                  <%= assignment.updated_at.strftime("%B %e, %Y") %>
+                  <%= assignment.updated_at.strftime(DateFormat::FULL) %>
                 <% end %>
               </td>
               <td data-test="action">

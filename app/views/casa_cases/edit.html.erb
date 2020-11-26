@@ -13,7 +13,7 @@
     <% if @casa_case.past_court_dates.size > 0 %>
       <ul>
         <% @casa_case.past_court_dates.each do |pcd| %>
-          <p><%= pcd.date.strftime("%B %e, %Y") %></p>
+          <p><%= pcd.date.strftime(DateFormat::FULL) %></p>
         <% end %>
       </ul>
     <% else %>
