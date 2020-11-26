@@ -20,7 +20,11 @@
       <li><strong>Do not</strong> change any of the values in the first line of the example csv file.</li>
       <li>Then click the "Import Supervisors CSV" button to import your supervisors.</li>
     </ul>
-    <%= f.file_field :file, id: 'supervisor-file', accept: 'text/csv', class: 'form-control-file', style: "margin: auto;" %>
+    <%= f.file_field :file,
+                     id: 'supervisor-file',
+                     accept: 'text/csv',
+                     class: 'form-control-file',
+                     style: "margin: auto;" %>
     </div>
 
     <%= button_tag id: "supervisor-import-button", class: "btn btn-md btn-success pull-right",

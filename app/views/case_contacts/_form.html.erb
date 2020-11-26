@@ -31,11 +31,13 @@
             <h5> <%= group.name %> </h5>
             <% group.contact_types.each_with_index do |contact_type, index| %>
               <div class="form-check">
-                <%= check_box_tag "case_contact[case_contact_contact_type_attributes][][contact_type_id]",
-                                  contact_type.id,
-                                  @case_contact.case_contact_contact_type.map(&:contact_type_id).include?(contact_type.id),
-                                  id: "case_contact_contact_types_#{index}",
-                                  class: ["form-check-input", "case-contact-contact-type"] %>
+                <%=
+                  check_box_tag "case_contact[case_contact_contact_type_attributes][][contact_type_id]",
+                                contact_type.id,
+                                @case_contact.decorate.show_contact_type?(contact_type.id),
+                                id: "case_contact_contact_types_#{index}",
+                                class: ["form-check-input", "case-contact-contact-type"]
+                %>
                 <label class="form-check-label" for="case_contact_contact_types_<%= index %>">
                   <%= contact_type.name %>
                 </label>
