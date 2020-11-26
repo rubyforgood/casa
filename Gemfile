@@ -17,6 +17,7 @@ gem "paper_trail" # tracking changes
 gem "pg", ">= 0.18", "< 2.0" # Use postgresql as the database for Active Record
 gem "puma", "~> 5.0" # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
+gem "rack-attack" # for blocking & throttling abusive requests
 gem "skylight" # automated performance testing https://www.skylight.io/
 gem "webpacker", "~> 5.2" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem "image_processing", "~> 1.12" # Set of higher-level helper methods for image processing.

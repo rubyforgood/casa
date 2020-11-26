@@ -17,7 +17,6 @@ end
 #  invitation_token       :string
 #  invitations_count      :integer          default(0)
 #  invited_by_type        :string
-#  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
 #  type                   :string

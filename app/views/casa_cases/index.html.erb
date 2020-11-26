@@ -60,13 +60,15 @@
       </div>
     </div>
     <div class="dropdown pull-left mr-2">
-      <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Casa Case Prefix
-      </button>
-      <div class="dropdown-menu case-number-prefix-options" aria-labelledby="dropdownMenuButton">
-        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="CINA" checked>CINA</a></li>
-        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="TPR" checked>TPR</a></li>
-      </div>
+      <% unless current_user.volunteer? %>
+        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Casa Case Prefix
+        </button>
+      <% end %>
+        <div class="dropdown-menu case-number-prefix-options" aria-labelledby="dropdownMenuButton">
+          <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="CINA" checked>CINA</a></li>
+          <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="TPR" checked>TPR</a></li>
+        </div>
     </div>
   </div>
 </div>

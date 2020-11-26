@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe ApplicationHelper, type: :helper do
   describe "#page_header" do
-    it "links to the user dashboard if user logged in" do
+    it "displays the header when user is logged in" do
       current_organization = build_stubbed(:casa_org)
       user = build_stubbed(:user, casa_org: current_organization)
 
@@ -10,9 +10,7 @@ RSpec.describe ApplicationHelper, type: :helper do
       allow(helper).to receive(:current_user).and_return(user)
       allow(helper).to receive(:current_organization).and_return(current_organization)
 
-      dashboard_link = helper.link_to(current_organization.display_name, root_path)
-
-      expect(helper.page_header).to eq(dashboard_link)
+      expect(helper.page_header).to eq(current_organization.display_name)
     end
 
     it "displays the header when user is not logged in" do

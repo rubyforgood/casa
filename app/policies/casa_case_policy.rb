@@ -26,7 +26,7 @@ class CasaCasePolicy
     end
   end
 
-  def update_case_number?
+  def is_admin?
     user.is_a?(CasaAdmin)
   end
 
@@ -34,23 +34,7 @@ class CasaCasePolicy
     user.is_a?(Supervisor)
   end
 
-  def update_case_status?
-    user.is_a?(CasaAdmin)
-  end
-
-  def update_court_date?
-    user.casa_admin? || user.supervisor?
-  end
-
-  def update_hearing_type?
-    user.casa_admin? || user.supervisor?
-  end
-
-  def update_judge?
-    user.casa_admin? || user.supervisor?
-  end
-
-  def update_court_report_due_date?
+  def admin_or_supervisor?
     user.casa_admin? || user.supervisor?
   end
 
@@ -61,6 +45,13 @@ class CasaCasePolicy
   def assign_volunteers?
     is_in_same_org? && is_supervisor_or_casa_admin?
   end
+
+  alias_method :update_case_number?, :is_admin?
+  alias_method :update_case_status?, :is_admin?
+  alias_method :update_court_date?, :admin_or_supervisor?
+  alias_method :update_hearing_type?, :admin_or_supervisor?
+  alias_method :update_judge?, :admin_or_supervisor?
+  alias_method :update_court_report_due_date?, :admin_or_supervisor?
 
   def permitted_attributes
     common_attrs = [
@@ -79,39 +70,26 @@ class CasaCasePolicy
     end
   end
 
-  def show?
+  def same_org_supervisor_admin_or_assigned?
     is_in_same_org? && (
       is_supervisor_or_casa_admin? || is_volunteer_actively_assigned_to_case?
     )
   end
 
-  def edit?
-    is_in_same_org? && (
-      is_supervisor_or_casa_admin? || is_volunteer_actively_assigned_to_case?
-    )
-  end
-
-  def new?
-    is_in_same_org? && is_supervisor_or_casa_admin?
-  end
-
-  def create?
-    is_in_same_org? && is_supervisor_or_casa_admin?
-  end
-
-  def update?
-    is_in_same_org? && (
-      is_supervisor_or_casa_admin? || is_volunteer_actively_assigned_to_case?
-    )
-  end
-
-  def destroy?
+  def same_org_supervisor_admin?
     is_in_same_org? && is_supervisor_or_casa_admin?
   end
 
   def index?
     user.casa_admin? || user.supervisor? || user.volunteer?
   end
+
+  alias_method :show?, :same_org_supervisor_admin_or_assigned?
+  alias_method :edit?, :same_org_supervisor_admin_or_assigned?
+  alias_method :update?, :same_org_supervisor_admin_or_assigned?
+  alias_method :new?, :same_org_supervisor_admin?
+  alias_method :create?, :same_org_supervisor_admin?
+  alias_method :destroy?, :same_org_supervisor_admin?
 
   private
 

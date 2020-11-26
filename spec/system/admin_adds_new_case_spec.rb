@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "admin adds a new case", type: :system do
-  let(:admin) { create(:casa_admin) }
+  let(:casa_org) { create(:casa_org) }
+  let(:admin) { create(:casa_admin, casa_org: casa_org) }
   let(:case_number) { "12345" }
   let!(:next_year) { (Date.today.year + 1).to_s }
 
@@ -61,8 +62,8 @@ RSpec.describe "admin adds a new case", type: :system do
     end
   end
 
-  context "when the case number already exists" do
-    let!(:casa_case) { create(:casa_case, case_number: case_number) }
+  context "when the case number already exists in the organization" do
+    let!(:casa_case) { create(:casa_case, case_number: case_number, casa_org: casa_org) }
 
     it "does not create a new case" do
       fill_in "Case number", with: case_number

@@ -66,7 +66,7 @@ class User < ApplicationRecord
     case_contacts.where(contact_made: true).order(:occurred_at).last
   end
 
-  def volunteers_serving_transistion_aged_youth
+  def volunteers_serving_transition_aged_youth
     volunteers.includes(:casa_cases)
       .where(casa_cases: {transition_aged_youth: true}).size
   end
@@ -152,7 +152,6 @@ end
 #  invitation_token       :string
 #  invitations_count      :integer          default(0)
 #  invited_by_type        :string
-#  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
 #  type                   :string

@@ -8,7 +8,7 @@ RSpec.describe CasaCase do
   it { is_expected.to belong_to(:hearing_type).optional }
   it { is_expected.to belong_to(:judge).optional }
   it { is_expected.to validate_presence_of(:case_number) }
-  it { is_expected.to validate_uniqueness_of(:case_number).case_insensitive }
+  it { is_expected.to validate_uniqueness_of(:case_number).scoped_to(:casa_org_id).case_insensitive }
   it { is_expected.to have_many(:volunteers).through(:case_assignments) }
 
   describe ".ordered" do
@@ -189,7 +189,7 @@ RSpec.describe CasaCase do
         casa_case = create(:casa_case, court_date: "2020-09-13 02:11:58", court_report_status: :submitted)
         casa_case.clear_court_dates
 
-        expect(casa_case.court_report_submitted).to be false
+        expect(casa_case.court_report_status).to eq "not_submitted"
       end
     end
   end
