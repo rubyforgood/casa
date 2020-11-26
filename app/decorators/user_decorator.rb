@@ -7,12 +7,6 @@ class UserDecorator < Draper::Decorator
     "Inactive"
   end
 
-  def name
-    return object.email if object.display_name.blank?
-
-    object.display_name
-  end
-
   # If all of a volunteers cases are not transition youth eligible, then
   # we return "No", otherwise they have at least one transition youth eligible case
   # and we return "Yes"

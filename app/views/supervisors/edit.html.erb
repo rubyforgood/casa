@@ -50,7 +50,7 @@
         <tbody>
         <% @supervisor.volunteers.each do |volunteer| %>
           <tr>
-            <td><%= link_to volunteer.decorate.name, edit_volunteer_path(volunteer) %></td>
+            <td><%= link_to volunteer.display_name, edit_volunteer_path(volunteer) %></td>
             <td><%= volunteer.email %></td>
             <td>
               <% if volunteer.supervised_by?(@supervisor) %>
@@ -77,7 +77,7 @@
         <label for='supervisor_volunteer_volunteer_id'>Select a Volunteer</label>
         <select name='supervisor_volunteer[volunteer_id]' class='form-control select2'>
           <% @available_volunteers.each do |volunteer| %>
-            <option value="<%= volunteer.id %>"><%= volunteer.decorate.name %></option>
+            <option value="<%= volunteer.id %>"><%= volunteer.display_name %></option>
           <% end %>
         </select>
       </div>

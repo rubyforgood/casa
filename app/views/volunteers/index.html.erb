@@ -35,14 +35,14 @@
               <% if policy(User).edit_name?(supervisor) %>
                 <input
                   type="checkbox"
-                  data-value="<%= supervisor.name %>"
+                  data-value="<%= supervisor.display_name %>"
                   checked>
               <% else %>
                 <input
                   type="checkbox"
-                  data-value="<%= supervisor.name %>">
+                  data-value="<%= supervisor.display_name %>">
               <% end %>
-              <%= supervisor.name %>
+              <%= supervisor.display_name %>
             </a>
           </li>
         <% end %>
@@ -136,7 +136,7 @@
       <% @volunteers.each do |volunteer| %>
         <tr>
           <td data-search="<%= volunteer.past_names %>|<%= volunteer.display_name %>">
-            <%= link_to(volunteer.decorate.name, edit_volunteer_path(volunteer)) %>
+            <%= link_to(volunteer.display_name, edit_volunteer_path(volunteer)) %>
             <% if !volunteer.made_contact_with_all_cases_in_days? %>
               🕐
             <% end %>
@@ -144,7 +144,7 @@
           <td><%= volunteer.email %></td>
           <td class=" supervisor-column ">
             <%- if volunteer.has_supervisor? %>
-              <%= link_to(volunteer.supervisor.decorate.name, edit_supervisor_path(volunteer.supervisor)) %>
+              <%= link_to(volunteer.supervisor.display_name, edit_supervisor_path(volunteer.supervisor)) %>
             <%- end %>
           </td>
           <td class=" status-column "><%= volunteer.decorate.status %></td>

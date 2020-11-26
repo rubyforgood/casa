@@ -21,7 +21,7 @@
           <% @casa_case.case_assignments.each do |assignment| %>
             <tr>
               <td data-test="volunteer-name">
-                <%= link_to assignment.volunteer.decorate.name, edit_volunteer_path(assignment.volunteer) %>
+                <%= link_to assignment.volunteer.display_name, edit_volunteer_path(assignment.volunteer) %>
               </td>
               <td data-test="volunteer-email"><%= assignment&.volunteer&.email %></td>
               <td data-test="assigned">
@@ -74,7 +74,7 @@
         <label for='case_assignment_casa_case_id'>Select a Volunteer</label>
         <select id='case_assignment_casa_case_id' name='case_assignment[volunteer_id]' class='form-control select2'>
           <% Volunteer.active.order(:display_name).each do |volunteer| %>
-            <option value="<%= volunteer.id %>"><%= volunteer.decorate.name %></option>
+            <option value="<%= volunteer.id %>"><%= volunteer.display_name %></option>
           <% end %>
         </select>
       </div>
