@@ -28,6 +28,7 @@ RSpec.configure do |config|
   config.include SessionHelper, type: :request
   config.include Organizational, type: :view
   config.include CssHelpers
+  config.include DatatableHelper, type: :datatable
   config.after do
     Warden.test_reset!
   end
@@ -44,6 +45,10 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
 
   config.infer_spec_type_from_file_location!
+
+  config.define_derived_metadata(file_path: Regexp.new("/spec/datatables/")) do |metadata|
+    metadata[:type] = :datatable
+  end
 
   config.example_status_persistence_file_path = "#{::Rails.root}/tmp/persistent_examples.txt"
 

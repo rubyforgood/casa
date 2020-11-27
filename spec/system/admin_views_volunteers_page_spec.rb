@@ -64,28 +64,34 @@ RSpec.describe "admin views Volunteers page", type: :system do
   it "can filter volunteers" do
     assigned_volunteers = create_list(:volunteer, 3, :with_assigned_supervisor, casa_org: organization)
     inactive_volunteers = create_list(:volunteer, 2, :inactive, casa_org: organization)
-    unassigned_volunteers = create_list(:volunteer, 1)
+    unassigned_volunteers = create_list(:volunteer, 1, casa_org: organization)
 
     sign_in admin
 
     visit volunteers_path
     expect(page).to have_selector(".volunteer-filters")
 
-    # by default, only active users are shown
+    # by default, only active, assigned users are shown
     expect(page.all("table#volunteers tbody tr").count).to eq assigned_volunteers.count
+    assigned_volunteers.each do |assigned_volunteer|
+      expect(page).to have_text assigned_volunteer.decorate.name
+    end
 
     click_on "Supervisor"
     find(:css, "#unassigned-vol-filter").set(true)
-
+    unassigned_volunteers.each do |unassigned_volunteer|
+      expect(page).to have_text unassigned_volunteer.decorate.name
+    end
     expect(page.all("table#volunteers tbody tr").count).to eq unassigned_volunteers.count
 
     click_on "Status"
-    find(:css, 'input[data-value="Active"]').set(false)
-
+    find(:css, 'input[data-value="true"]').set(false)
     expect(page).to have_text("No matching records found")
 
-    find(:css, 'input[data-value="Inactive"]').set(true)
-
+    find(:css, 'input[data-value="false"]').set(true)
+    inactive_volunteers.each do |inactive_volunteer|
+      expect(page).to have_text inactive_volunteer.decorate.name
+    end
     expect(page.all("table#volunteers tbody tr").count).to eq inactive_volunteers.count
   end
 
@@ -121,7 +127,7 @@ RSpec.describe "admin views Volunteers page", type: :system do
       visit volunteers_path
       click_on "Supervisor"
       find(:css, "#unassigned-vol-filter").set(true)
-      supervisor_cell = page.find(".supervisor-column")
+      supervisor_cell = page.find("tbody .supervisor-column")
 
       expect(supervisor_cell.text).to eq ""
     end
@@ -133,20 +139,39 @@ RSpec.describe "admin views Volunteers page", type: :system do
       sign_in admin
 
       visit volunteers_path
-      supervisor_cell = page.find(".supervisor-column")
+      supervisor_cell = page.find("tbody .supervisor-column")
 
       expect(supervisor_cell.text).to eq name
     end
 
-    it "is blank when volunteer's supervisor is inactive" do
-      create(:volunteer, :with_inactive_supervisor, casa_org: organization)
+    it "is blank when volunteer's supervisor assignment is inactive" do
+      volunteer = create(:volunteer, :with_inactive_supervisor_assignment, casa_org: organization)
       sign_in admin
 
       visit volunteers_path
       click_on "Supervisor"
-      find(:css, "#unassigned-vol-filter").set(true)
-      supervisor_cell = page.find(".supervisor-column")
+      expect(page).not_to have_text volunteer.decorate.name
 
+      find(:css, "#unassigned-vol-filter").set(true)
+      expect(page).to have_text volunteer.decorate.name
+      expect(page.all("table#volunteers tbody tr").count).to eq 1
+      supervisor_cell = page.find("tbody .supervisor-column")
+      expect(supervisor_cell.text).to eq ""
+    end
+
+    it "is blank when volunteer's supervisor is inactive" do
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+      volunteer.supervisor.update active: false
+      sign_in admin
+
+      visit volunteers_path
+      click_on "Supervisor"
+      expect(page).not_to have_text volunteer.decorate.name
+
+      find(:css, "#unassigned-vol-filter").set(true)
+      expect(page).to have_text volunteer.decorate.name
+      expect(page.all("table#volunteers tbody tr").count).to eq 1
+      supervisor_cell = page.find("tbody .supervisor-column")
       expect(supervisor_cell.text).to eq ""
     end
   end

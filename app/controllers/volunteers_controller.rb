@@ -4,7 +4,8 @@ class VolunteersController < ApplicationController
   before_action :authenticate_user!, :must_be_admin_or_supervisor
   before_action :set_volunteer, except: %i[index new create datatable]
 
-  def index; end
+  def index
+  end
 
   def datatable
     volunteers = policy_scope current_organization.volunteers

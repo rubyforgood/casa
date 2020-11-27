@@ -22,8 +22,4 @@ RSpec.describe "volunteers" do
 
     it { is_expected.to have_selector("a", text: "New Volunteer") }
   end
-
-  context "links" do
-    it { is_expected.to have_link(volunteer.decorate.name) }
-  end
 end
