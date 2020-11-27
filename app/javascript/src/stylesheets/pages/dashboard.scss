@@ -1,5 +1,4 @@
-.dashboard, .all_casa_admins-dashboard  {
-
+.dashboard, .all_casa_admins-dashboard {
   .container {
     @media (max-width: 1200px) {
       max-width: 95%;
@@ -30,7 +29,7 @@
   .button {
     border: 1px black solid;
     padding: 10px;
-    background-color: #00447C;
+    background-color: #00447c;
   }
 
   .button > a {
