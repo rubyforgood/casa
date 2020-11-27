@@ -11,7 +11,10 @@ RSpec.describe Rack::Attack do
   before do
     allow(Rails).to receive(:cache).and_return(memory_store)
     Rails.cache.clear
+    travel_to Time.current
   end
+
+  after { travel_back }
 
   def app
     Rails.application
