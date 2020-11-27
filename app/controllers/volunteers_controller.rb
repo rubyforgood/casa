@@ -9,8 +9,8 @@ class VolunteersController < ApplicationController
     @volunteers = policy_scope(
       current_organization.volunteers.includes(:versions, :supervisor, :supervisor_volunteer, :casa_cases, case_assignments: [:casa_case]).references(:supervisor, :casa_cases)
     ).decorate
-    @has_recent_contact = @volunteer.most_recent_contact.present?
-    @most_recent_case = @volunteer.most_recent_contact&.casa_case
+    @has_recent_contact = @volunteer&.most_recent_contact&.present?
+    @most_recent_case = @volunteer&.most_recent_contact&.casa_case
   end
 
   def new
@@ -63,7 +63,6 @@ class VolunteersController < ApplicationController
       render :edit
     end
   end
-
 
   private
 

@@ -42,7 +42,7 @@
           <% end %>
         <% else %>
           <div class="alert alert-danger">
-            Volunteer was deactivated on: <%= @volunteer.formatted_updated_at %>
+            Volunteer was deactivated on: <%= @volunteer.decorate.formatted_updated_at %>
           </div>
           <% if policy(@volunteer).activate? %>
             <%= link_to "Activate volunteer",

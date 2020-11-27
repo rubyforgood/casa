@@ -23,7 +23,7 @@ RSpec.describe "Seeds" do
   describe "test development DB" do
     before do
       Rails.application.load_tasks
-      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("development"))
+      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("test"))
     end
 
     it "successfully populates all necessary tables" do
