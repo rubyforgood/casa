@@ -67,7 +67,6 @@ class VolunteersController < ApplicationController
   private
 
   def set_volunteer
-    # @volunteer = authorize User.find(params[:id]) # TODO fix this
     @volunteer = Volunteer.find(params[:id])
   end
 

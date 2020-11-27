@@ -16,8 +16,6 @@ module CaseContactPopulator
       youth: "Youth"
     }
 
-    # TODO write a TEST for this
-    # TODO make this more performant while still respecting casa_org association- maybe a hash of group name to org to contact type?
     CaseContact.find_each do |case_contact|
       casa_org = case_contact.casa_case.casa_org
       case_contact.contact_types&.each do |contact_type|

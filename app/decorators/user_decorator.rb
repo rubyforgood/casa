@@ -25,7 +25,7 @@ class UserDecorator < Draper::Decorator
   end
 
   def formatted_created_at
-    object.created_at.strftime("%m/%d/%Y ") # TODO use DateFormat::MM_DD_YYYY instead
+    object.created_at.strftime(DateFormat::MM_DD_YYYY)
   end
 
   def formatted_updated_at

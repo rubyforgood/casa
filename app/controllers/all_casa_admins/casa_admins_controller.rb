@@ -11,7 +11,6 @@ class AllCasaAdmins::CasaAdminsController < AllCasaAdminsController
     @casa_admin.password = SecureRandom.hex(10)
 
     if @casa_admin.save
-      # TODO: Invite?
       redirect_to all_casa_admins_casa_org_path(@casa_org), notice: "CASA Admin was successfully created."
     else
       render :new

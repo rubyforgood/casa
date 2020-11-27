@@ -6,7 +6,7 @@ require "sablon"
 class CaseCourtReport
   attr_reader :report_path, :context, :template
 
-  DATE_FORMATS = { # TODO move to DateFormat
+  DATE_FORMATS = {
     long_date: DateFormat::FULL,
     short_date: "%-m/%d",
     youth_dob: DateFormat::YOUTH_DATE_OF_BIRTH
