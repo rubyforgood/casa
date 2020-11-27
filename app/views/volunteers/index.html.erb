@@ -163,9 +163,9 @@
           <td><%= volunteer.decorate.assigned_to_transition_aged_youth? %></td>
           <td><%= safe_join(volunteer.casa_cases.map { |c| link_to(c.case_number, c) }, ", ") %></td>
           <td>
-            <%= link_to_if has_recent_contact?,
+            <%= link_to_if @has_recent_contact,
                            volunteer.decorate.last_contact_made,
-                           most_recent_case %>
+                           @most_recent_case %>
           </td>
           <td><%= volunteer.recent_contacts_made %></td>
           <td><%= link_to 'Edit', edit_volunteer_path(volunteer) %></td>
