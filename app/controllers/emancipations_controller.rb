@@ -42,6 +42,11 @@ class EmancipationsController < ApplicationController
       return
     end
 
+    if !current_case.has_transitioned?
+      render json: { error: "The current case is not marked as transitioning" }
+      return
+    end
+
     begin
       case params[:option_action]
       when "add"
@@ -66,6 +71,7 @@ class EmancipationsController < ApplicationController
     end
   end
 
+  # Render a json error for json endpoints
   def user_not_authorized (exception)
     if exception.backtrace[1] =~ /save'\z/
       render json: { error: "Sorry, you are not authorized to perform this action. Did the session expire?" }
