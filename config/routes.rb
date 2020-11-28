@@ -92,7 +92,6 @@ Rails.application.routes.draw do
     end
   end
 
-  # TODO: Remove, if possible. Prefer to use specific role routes.
   resources :users, only: [] do
     collection do
       get :edit

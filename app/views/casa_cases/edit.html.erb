@@ -10,15 +10,15 @@
 <div class="card card-container">
   <div class="card-body">
     <h6><strong>Past court dates:</strong></h6>
-      <% if @casa_case.past_court_dates.size > 0 %>
-        <ul>
-          <% @casa_case.past_court_dates.each do |pcd| %>
-            <p><%= pcd.date.strftime("%B %e, %Y") %></p>
-          <% end %>
-        </ul>
-      <% else %>
-        No past court dates
-      <% end %>
+    <% if @casa_case.past_court_dates.size > 0 %>
+      <ul>
+        <% @casa_case.past_court_dates.each do |pcd| %>
+          <p><%= pcd.date.strftime(DateFormat::FULL) %></p>
+        <% end %>
+      </ul>
+    <% else %>
+      No past court dates
+    <% end %>
   </div>
 </div>
 

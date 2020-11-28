@@ -44,7 +44,7 @@ RSpec.describe "admin edits case", type: :system do
     sleep 10
     click_on "Yes, deactivate"
     expect(page).to have_text("Case #{casa_case.case_number} has been deactivated")
-    expect(page).to have_text("Case was deactivated on: #{casa_case.updated_at.strftime("%m-%d-%Y")}")
+    expect(page).to have_text("Case was deactivated on: #{casa_case.updated_at.strftime(DateFormat::MM_DD_YYYY)}")
     expect(page).to have_text("Reactivate CASA Case")
     expect(page).to_not have_text("Court Date")
     expect(page).to_not have_text("Court Report Due Date")

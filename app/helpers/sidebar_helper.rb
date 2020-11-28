@@ -5,6 +5,7 @@ module SidebarHelper
 
   def active_class(link_path)
     controller_name = link_path.split("/").second
+    # TODO fix warning:  warning: Passing the keyword argument as the last hash parameter is deprecated
     current_page?(controller: controller_name, action: action_name) ? "active" : ""
   rescue ActionController::UrlGenerationError
     ""

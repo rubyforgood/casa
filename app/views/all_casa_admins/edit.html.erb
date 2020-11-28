@@ -16,23 +16,23 @@
           Change Password
         </button>
       </div>
+    <% end %>
+    <br>
+    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <%= form_for(@user, as: :all_casa_admin, url: {action: "update_password"}) do |f| %>
+        <div class="field form-group">
+          <%= f.label :password, "Password" %><br>
+          <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
+        </div>
+        <div class="field form-group">
+          <%= f.label :password_confirmation, "Password Confirmation" %><br>
+          <%= f.password_field :password_confirmation, class: "form-control" %>
+        </div>
+        <div class="action_container">
+          <%= f.submit "Update Password", class: "btn btn-danger" %>
+        </div>
       <% end %>
-      <br>
-      <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-        <%= form_for(@user, as: :all_casa_admin, url: { action: "update_password" } ) do |f| %>
-          <div class="field form-group">
-            <%= f.label :password, "Password" %><br>
-            <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
-          </div>
-          <div class="field form-group">
-            <%= f.label :password_confirmation, "Password Confirmation" %><br>
-            <%= f.password_field :password_confirmation, class: "form-control" %>
-          </div>
-          <div class="action_container">
-            <%= f.submit "Update Password", class: "btn btn-danger" %>
-          </div>
-        <% end %>
-      </div>
-      <br>
+    </div>
+    <br>
   </div>
 </div>

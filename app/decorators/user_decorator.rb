@@ -7,12 +7,6 @@ class UserDecorator < Draper::Decorator
     "Inactive"
   end
 
-  def name
-    return object.email if object.display_name.blank?
-
-    object.display_name
-  end
-
   # If all of a volunteers cases are not transition youth eligible, then
   # we return "No", otherwise they have at least one transition youth eligible case
   # and we return "Yes"
@@ -26,7 +20,15 @@ class UserDecorator < Draper::Decorator
     if object.most_recent_contact.nil?
       "None ❌"
     else
-      object.most_recent_contact.occurred_at.strftime("%B %-e, %Y")
+      object.most_recent_contact.occurred_at.strftime(DateFormat::FULL)
     end
+  end
+
+  def formatted_created_at
+    object.created_at.strftime(DateFormat::MM_DD_YYYY)
+  end
+
+  def formatted_updated_at
+    object.updated_at.strftime(DateFormat::MM_DD_YYYY)
   end
 end

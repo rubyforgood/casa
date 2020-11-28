@@ -83,7 +83,7 @@ RSpec.describe "supervisor edits case", type: :system do
     casa_case.deactivate
     visit edit_casa_case_path(casa_case)
 
-    expect(page).to have_text("Case was deactivated on: #{casa_case.updated_at.strftime("%m-%d-%Y")}")
+    expect(page).to have_text("Case was deactivated on: #{casa_case.updated_at.strftime(DateFormat::MM_DD_YYYY)}")
     expect(page).not_to have_text("Court Date")
     expect(page).not_to have_text("Court Report Due Date")
     expect(page).not_to have_text("Day")

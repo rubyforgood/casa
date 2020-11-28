@@ -75,7 +75,7 @@ RSpec.describe "Admin: Editing Volunteers", type: :system do
       sign_in admin
 
       visit edit_volunteer_path(volunteer)
-      expect(page).to have_text "Case was deactivated on: #{deactivated_casa_case.updated_at.strftime("%m-%d-%Y")}"
+      expect(page).to have_text "Case was deactivated on: #{deactivated_casa_case.updated_at.strftime(DateFormat::MM_DD_YYYY)}"
     end
   end
 end

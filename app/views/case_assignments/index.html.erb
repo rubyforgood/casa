@@ -1,37 +1,37 @@
 <%= link_to "Back", root_path %>
 
-<h1>Edit Volunteer Assignments for <%= @volunteer.name %></h1>
+<h1>Edit Volunteer Assignments for <%= @volunteer.display_name %></h1>
 
 <br>
 
 <% if @volunteer.casa_cases %>
   <table class='table case-list' id='casa_cases'>
     <thead>
-      <tr>
-        <th>Case Number</th>
-        <th>Transition Aged Youth</th>
-        <th>Actions</th>
-      </tr>
+    <tr>
+      <th>Case Number</th>
+      <th>Transition Aged Youth</th>
+      <th>Actions</th>
+    </tr>
     </thead>
     <tbody>
-      <% @volunteer.case_assignments.each do |assignment| %>
-        <tr>
-          <td>
-            <span class="mobile-label">Case Number</span>
-            <%= assignment.casa_case.case_number %>
-          </td>
-          <td>
-            <span class="mobile-label">Transition Aged Youth</span>
-            <%= assignment.casa_case.decorate.transition_aged_youth_icon %>
-          </td>
-          <td>
-            <%= button_to 'Unassign Case',
-                volunteer_case_assignment_path(@volunteer, assignment),
-                method: :delete,
-                class: "btn btn-danger" %>
-          </td>
-        </tr>
-      <% end %>
+    <% @volunteer.case_assignments.each do |assignment| %>
+      <tr>
+        <td>
+          <span class="mobile-label">Case Number</span>
+          <%= assignment.casa_case.case_number %>
+        </td>
+        <td>
+          <span class="mobile-label">Transition Aged Youth</span>
+          <%= assignment.casa_case.decorate.transition_aged_youth_icon %>
+        </td>
+        <td>
+          <%= button_to 'Unassign Case',
+                        volunteer_case_assignment_path(@volunteer, assignment),
+                        method: :delete,
+                        class: "btn btn-danger" %>
+        </td>
+      </tr>
+    <% end %>
     </tbody>
   </table>
 <% end %>

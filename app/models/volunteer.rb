@@ -1,16 +1,25 @@
 # not a database model -- used for display in tables
 # volunteer is a user role and is controlled by User model
 class Volunteer < User
-  TABLE_COLUMNS = %w[
-    name
-    email
-    supervisor
-    status
-    assigned_to_transition_aged_youth
-    case_number
-    last_contact_made
-    contact_made_in_past_60_days
-    actions
+  NAME_COLUMN = "name"
+  EMAIL_COLUMN = "email"
+  SUPERVISOR_COLUMN = "supervisor"
+  STATUS_COLUMN = "status"
+  ASSIGNED_TO_TRANSITION_AGED_YOUTH_COLUMN = "assigned_to_transition_aged_youth"
+  CASE_NUMBER_COLUMN = "case_number"
+  LAST_CONTACT_MADE_COLUMN = "last_contact_made"
+  CONTACT_MADE_IN_PAST_60_DAYS_COLUMN = "contact_made_in_past_60_days"
+  ACTIONS_COLUMN = "actions"
+  TABLE_COLUMNS = [
+    NAME_COLUMN,
+    EMAIL_COLUMN,
+    SUPERVISOR_COLUMN,
+    STATUS_COLUMN,
+    ASSIGNED_TO_TRANSITION_AGED_YOUTH_COLUMN,
+    CASE_NUMBER_COLUMN,
+    LAST_CONTACT_MADE_COLUMN,
+    CONTACT_MADE_IN_PAST_60_DAYS_COLUMN,
+    ACTIONS_COLUMN
   ].freeze
 
   scope :with_no_supervisor, lambda { |org|
@@ -51,10 +60,8 @@ class Volunteer < User
     self.supervisor == supervisor
   end
 
-  # false if volunteer has any case with no contact in the past 30 days
   def made_contact_with_all_cases_in_days?(num_days = 14)
-    # should be 14!
-    # this should do the same thing as no_contact_for_two_weeks but for a volunteer
+    # TODO this should do the same thing as no_contact_for_two_weeks but for a volunteer
     total_cases_count = casa_cases.count
     return true if total_cases_count.zero?
     current_contact_cases_count = cases_where_contact_made_in_days(num_days).count
@@ -68,7 +75,7 @@ class Volunteer < User
       .joins(:case_contacts)
       .where(case_contacts: {contact_made: true})
       .where("case_contacts.occurred_at > ?", Date.current - num_days.days)
-    # this should respect current vs past cases
+    # TODO this should respect current vs past cases
   end
 end
 

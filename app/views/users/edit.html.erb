@@ -5,54 +5,54 @@
     <%= form_for @user, as: :user, url: users_path do |form| %>
       <%= render "/shared/error_messages", resource: @user %>
 
-    <div class="field form-group">
-      <%= form.label :email %>
-      <%= form.text_field :email, class: "form-control", disabled: !current_user.casa_admin? %>
-    </div>
+      <div class="field form-group">
+        <%= form.label :email %>
+        <%= form.text_field :email, class: "form-control", disabled: !current_user.casa_admin? %>
+      </div>
 
-    <div class="field form-group">
-      <%= form.label :display_name %>
-      <%= form.text_field :display_name, class: "form-control" %>
-    </div>
+      <div class="field form-group">
+        <%= form.label :display_name %>
+        <%= form.text_field :display_name, class: "form-control" %>
+      </div>
 
-    <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
+      <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
 
-    <div class="actions">
-      <%= form.submit "Update Profile", class: "btn btn-primary mb-3" %>
-      <button class="btn btn-warning accordion mb-3" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-        Change Password
-      </button>
+      <div class="actions">
+        <%= form.submit "Update Profile", class: "btn btn-primary mb-3" %>
+        <button class="btn btn-warning accordion mb-3" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Change Password
+        </button>
 
-      <% if policy(CasaAdmin).see_deactivate_option? %>
-        <% if @active_casa_admins.length > 1 %>
-          <%= link_to "Deactivate",
-            deactivate_casa_admin_path(current_user),
-            method: :patch,
-            class: "btn btn-outline-danger mb-3",
-            data: { confirm: t("forms.casa_admin.mark_inactive_warning") } %>
-        <% else %>
-          <%= link_to "Deactivate",
-            "#",
-            class: "btn btn-outline-danger mb-3",
-            data: { confirm: "Contact your administrator at Ruby For Good to deactivate this account." } %>
+        <% if policy(CasaAdmin).see_deactivate_option? %>
+          <% if @active_casa_admins.length > 1 %>
+            <%= link_to "Deactivate",
+                        deactivate_casa_admin_path(current_user),
+                        method: :patch,
+                        class: "btn btn-outline-danger mb-3",
+                        data: {confirm: t("forms.casa_admin.mark_inactive_warning")} %>
+          <% else %>
+            <%= link_to "Deactivate",
+                        "#",
+                        class: "btn btn-outline-danger mb-3",
+                        data: {confirm: "Contact your administrator at Ruby For Good to deactivate this account."} %>
+          <% end %>
         <% end %>
-      <% end %>
-    </div>
+      </div>
     <% end %>
     <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
       <br>
-      <%= form_for(@user, as: :user, url: { action: "update_password" } ) do |f| %>
-      <div class="field form-group">
-        <%= f.label :password, "Password" %><br>
-        <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
-      </div>
-      <div class="field form-group">
-        <%= f.label :password_confirmation, "Password Confirmation" %><br>
-        <%= f.password_field :password_confirmation, class: "form-control" %>
-      </div>
-      <div class="action_container">
-        <%= f.submit "Update Password", class: "btn btn-danger" %>
-      </div>
+      <%= form_for(@user, as: :user, url: {action: "update_password"}) do |f| %>
+        <div class="field form-group">
+          <%= f.label :password, "Password" %><br>
+          <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
+        </div>
+        <div class="field form-group">
+          <%= f.label :password_confirmation, "Password Confirmation" %><br>
+          <%= f.password_field :password_confirmation, class: "form-control" %>
+        </div>
+        <div class="action_container">
+          <%= f.submit "Update Password", class: "btn btn-danger" %>
+        </div>
       <% end %>
     </div>
   </div>
