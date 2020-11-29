@@ -29,7 +29,7 @@
             No supervisor assignment
           </a>
         </li>
-        <% Supervisor.decorate.each do |supervisor| %>
+        <% current_organization.supervisors.each do |supervisor| %>
           <li>
             <a class="small" data-value="option1" tabIndex="-1">
               <% if policy(User).edit_name?(supervisor) %>
