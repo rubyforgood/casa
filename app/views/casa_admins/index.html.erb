@@ -9,23 +9,23 @@
   <div class="card-body">
     <table class="table table-striped table-bordered" id="admins">
       <thead>
-        <tr>
-          <th>Admin Email</th>
-          <th>Actions</th>
-        </tr>
+      <tr>
+        <th>Admin Email</th>
+        <th>Actions</th>
+      </tr>
       </thead>
 
       <tbody>
-        <% @admins.each do |admin| %>
-          <tr id="admin-<%= admin.id %>">
-            <th scope="row">
-              <%= admin.email %>
-            </th>
-            <td>
-              <%= link_to "Edit", edit_casa_admin_path(admin) %>
-            </td>
-          </tr>
-        <% end %>
+      <% @admins.each do |admin| %>
+        <tr id="admin-<%= admin.id %>">
+          <th scope="row">
+            <%= admin.email %>
+          </th>
+          <td>
+            <%= link_to "Edit", edit_casa_admin_path(admin) %>
+          </td>
+        </tr>
+      <% end %>
       </tbody>
     </table>
   </div>

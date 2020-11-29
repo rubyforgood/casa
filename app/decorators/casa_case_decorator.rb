@@ -18,7 +18,7 @@ class CasaCaseDecorator < Draper::Decorator
   end
 
   def court_report_submitted_date
-    object.court_report_submitted_at&.strftime("%B%e, %Y")
+    object.court_report_submitted_at&.strftime(DateFormat::FULL)
   end
 
   def case_contacts_ordered_by_occurred_at
@@ -49,5 +49,9 @@ class CasaCaseDecorator < Draper::Decorator
 
   def inactive_class
     !object.active ? "table-secondary" : ""
+  end
+
+  def formatted_updated_at
+    object.updated_at.strftime(DateFormat::MM_DD_YYYY)
   end
 end

@@ -14,23 +14,23 @@
     <i class="fa fa-file-csv" aria-hidden="true"></i>
   </h4>
   <%= form_with(url: imports_path, local: :true) do |f| %>
-  <%= f.hidden_field :import_type, value: "volunteer" %>
-  <ul>
-    <li>Click the choose file button and navigate to the saved file and select it.</li>
-    <li><strong>Do not</strong> change any of the values in the first line of the example csv file.</li>
-    <li>Then click the "Import Volunteers CSV" button to import your volunteers.</li>
-  </ul>
-  <%= f.file_field :file, id: 'volunteer-file', accept: 'text/csv', class: 'form-control-file', style: "margin: auto;" %>
-</div>
+    <%= f.hidden_field :import_type, value: "volunteer" %>
+    <ul>
+      <li>Click the choose file button and navigate to the saved file and select it.</li>
+      <li><strong>Do not</strong> change any of the values in the first line of the example csv file.</li>
+      <li>Then click the "Import Volunteers CSV" button to import your volunteers.</li>
+    </ul>
+    <%= f.file_field :file, id: 'volunteer-file', accept: 'text/csv', class: 'form-control-file', style: "margin: auto;" %>
+    </div>
 
-<%= button_tag id: "volunteer-import-button", class: "btn btn-md btn-success pull-right",
-      disabled: true, data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Importing File"} do %>
-  <i class="fa fa-upload"></i> Import Volunteers CSV
-<% end %>
+    <%= button_tag id: "volunteer-import-button", class: "btn btn-md btn-success pull-right",
+                   disabled: true, data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Importing File"} do %>
+      <i class="fa fa-upload"></i> Import Volunteers CSV
+    <% end %>
 
-<script type="text/javascript">
-  document.getElementById('volunteer-file').addEventListener('change', function(event) {
-    document.getElementById('volunteer-import-button').disabled = (event.target.value == "");
-  });
-</script>
-<% end %>
+    <script type="text/javascript">
+      document.getElementById('volunteer-file').addEventListener('change', function (event) {
+        document.getElementById('volunteer-import-button').disabled = (event.target.value == '')
+      })
+    </script>
+  <% end %>

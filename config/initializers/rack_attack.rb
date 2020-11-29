@@ -1,8 +1,4 @@
 class Rack::Attack
-  # Docker specs are really slow, so use test configuration to modify throttle
-  # login period.
-  THROTTLE_LOGIN_PERIOD = Rails.configuration.respond_to?(:throttle_login_period) ? Rails.configuration.throttle_login_period : 20.seconds
-
   ### Configure Cache ###
 
   # If you don't want to use Rails.cache (Rack::Attack's default), then
@@ -48,7 +44,7 @@ class Rack::Attack
   # Throttle POST requests to /xxxx/sign_in by IP address
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:logins/ip:#{req.ip}"
-  throttle("logins/ip", limit: 5, period: THROTTLE_LOGIN_PERIOD) do |req|
+  throttle("logins/ip", limit: 5, period: 20.seconds) do |req|
     if req.path =~ /sign_in/ && req.post?
       req.ip
     end
@@ -62,7 +58,7 @@ class Rack::Attack
   # throttle logins for another user and force their login requests to be
   # denied, but that's not very common and shouldn't happen to you. (Knock
   # on wood!)
-  throttle("logins/email", limit: 5, period: THROTTLE_LOGIN_PERIOD) do |req|
+  throttle("logins/email", limit: 5, period: 20.seconds) do |req|
     if req.path =~ /sign_in/ && req.post?
       # return the email if present, nil otherwise
       req.params.dig("user", "email").presence ||

@@ -8,57 +8,57 @@
       <div class="table-responsive">
         <table class='table case-list'>
           <thead>
-            <tr>
-              <th>Volunteer Name</th>
-              <th>Volunteer Email</th>
-              <th>Status</th>
-              <th>Start Date</th>
-              <th>End Date</th>
-              <th>Actions</th>
-            </tr>
+          <tr>
+            <th>Volunteer Name</th>
+            <th>Volunteer Email</th>
+            <th>Status</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Actions</th>
+          </tr>
           </thead>
           <tbody>
-            <% @casa_case.case_assignments.each do |assignment| %>
-              <tr>
-                <td data-test="volunteer-name">
-                  <%= link_to assignment.volunteer.decorate.name, edit_volunteer_path(assignment.volunteer) %>
-                </td>
-                <td data-test="volunteer-email"><%= assignment&.volunteer&.email %></td>
-                <td data-test="assigned">
-                  <% if assignment.is_active? %>
-                    <span class='badge badge-success text-uppercase'>Assigned</span>
-                  <% else %>
+          <% @casa_case.case_assignments.each do |assignment| %>
+            <tr>
+              <td data-test="volunteer-name">
+                <%= link_to assignment.volunteer.display_name, edit_volunteer_path(assignment.volunteer) %>
+              </td>
+              <td data-test="volunteer-email"><%= assignment&.volunteer&.email %></td>
+              <td data-test="assigned">
+                <% if assignment.is_active? %>
+                  <span class='badge badge-success text-uppercase'>Assigned</span>
+                <% else %>
                     <span class="badge badge-danger text-uppercase">
                       <%= assignment.volunteer.active? ? "Unassigned" : "Deactivated volunteer" %>
                     </span>
-                  <% end %>
-                </td>
-                <td data-test="assignment-start"><%= assignment.created_at.strftime("%B %e, %Y") %></td>
-                <td data-test="assignment-end">
-                  <% unless assignment.is_active? %>
-                    <%= assignment.updated_at.strftime("%B %e, %Y") %>
-                  <% end %>
-                </td>
-                <td data-test="action">
-                  <% if policy(assignment).unassign? %>
-                    <%= button_to 'Unassign Volunteer',
-                      unassign_case_assignment_path(assignment),
-                      method: :patch,
-                      class: "btn btn-outline-danger text-wrap" %>
-                  <% elsif !assignment.volunteer.active? && policy(assignment.volunteer).activate? %>
-                    <%= link_to "Activate Volunteer",
-                      activate_volunteer_path(assignment.volunteer,
-                        redirect_to_path: 'casa_case',
-                        casa_case_id: @casa_case.id
-                      ),
-                      method: :patch,
-                      class: "btn btn-outline-success" %>
-                  <% else %>
-                    None
-                  <% end %>
-                </td>
-              </tr>
-            <% end %>
+                <% end %>
+              </td>
+              <td data-test="assignment-start"><%= assignment.created_at.strftime(DateFormat::FULL) %></td>
+              <td data-test="assignment-end">
+                <% unless assignment.is_active? %>
+                  <%= assignment.updated_at.strftime(DateFormat::FULL) %>
+                <% end %>
+              </td>
+              <td data-test="action">
+                <% if policy(assignment).unassign? %>
+                  <%= button_to 'Unassign Volunteer',
+                                unassign_case_assignment_path(assignment),
+                                method: :patch,
+                                class: "btn btn-outline-danger text-wrap" %>
+                <% elsif !assignment.volunteer.active? && policy(assignment.volunteer).activate? %>
+                  <%= link_to "Activate Volunteer",
+                              activate_volunteer_path(assignment.volunteer,
+                                                      redirect_to_path: 'casa_case',
+                                                      casa_case_id: @casa_case.id
+                              ),
+                              method: :patch,
+                              class: "btn btn-outline-success" %>
+                <% else %>
+                  None
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
           </tbody>
         </table>
       </div>
@@ -74,7 +74,7 @@
         <label for='case_assignment_casa_case_id'>Select a Volunteer</label>
         <select id='case_assignment_casa_case_id' name='case_assignment[volunteer_id]' class='form-control select2'>
           <% Volunteer.active.order(:display_name).each do |volunteer| %>
-            <option value="<%= volunteer.id %>"><%= volunteer.decorate.name %></option>
+            <option value="<%= volunteer.id %>"><%= volunteer.display_name %></option>
           <% end %>
         </select>
       </div>

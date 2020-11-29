@@ -81,4 +81,8 @@ class CaseContactDecorator < Draper::Decorator
   def full_notes
     object.notes
   end
+
+  def show_contact_type?(contact_type_id)
+    object.case_contact_contact_type.map(&:contact_type_id).include?(contact_type_id)
+  end
 end

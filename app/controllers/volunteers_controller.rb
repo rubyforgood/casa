@@ -4,8 +4,7 @@ class VolunteersController < ApplicationController
   before_action :authenticate_user!, :must_be_admin_or_supervisor
   before_action :set_volunteer, except: %i[index new create datatable]
 
-  def index
-  end
+  def index; end
 
   def datatable
     volunteers = policy_scope current_organization.volunteers
@@ -68,7 +67,6 @@ class VolunteersController < ApplicationController
   private
 
   def set_volunteer
-    # @volunteer = authorize User.find(params[:id]) # TODO fix this
     @volunteer = Volunteer.find(params[:id])
   end
 

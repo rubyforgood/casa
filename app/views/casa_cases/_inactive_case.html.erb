@@ -1,7 +1,7 @@
-  <div class="alert alert-danger">
-    <p>Case was deactivated on: <%= @casa_case.updated_at.strftime("%m-%d-%Y") %>
+<div class="alert alert-danger">
+  <p>Case was deactivated on: <%= @casa_case.updated_at.strftime(DateFormat::MM_DD_YYYY) %>
     <%= link_to 'Reactivate CASA Case',
                 reactivate_casa_case_path(@casa_case),
                 method: :patch,
                 class: "btn btn-primary pull-right" if Pundit.policy(current_user, @casa_case).update_case_status? %></p>
-  </div>
+</div>

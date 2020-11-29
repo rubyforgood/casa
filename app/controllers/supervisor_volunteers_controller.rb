@@ -16,7 +16,7 @@ class SupervisorVolunteersController < ApplicationController
     supervisor = volunteer.supervisor
     supervisor_volunteer.is_active = false
     supervisor_volunteer.save!
-    flash_message = "#{volunteer.decorate.name} was unassigned from #{supervisor.decorate.name}."
+    flash_message = "#{volunteer.display_name} was unassigned from #{supervisor.display_name}."
 
     redirect_to after_action_path(supervisor), notice: flash_message
   end
