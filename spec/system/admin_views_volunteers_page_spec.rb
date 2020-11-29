@@ -175,4 +175,16 @@ RSpec.describe "admin views Volunteers page", type: :system do
       expect(supervisor_cell.text).to eq ""
     end
   end
+
+  context "when timed out" do
+    it "prompts login" do
+      sign_in admin
+      visit volunteers_path
+      click_on "Supervisor"
+      allow_any_instance_of(CasaAdmin).to receive(:timedout?).and_return true
+      find(:css, "#unassigned-vol-filter").set(true)
+      expect(page).to have_text "You need to sign in before continuing."
+      expect(current_path).to eq new_user_session_path
+    end
+  end
 end

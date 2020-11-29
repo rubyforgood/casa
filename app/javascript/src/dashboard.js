@@ -71,47 +71,109 @@ $('document').ready(() => {
     }
   )
 
+  const handleAjaxError = e => {
+    if (e.status === 401) {
+      location.reload();
+    } else {
+      console.log(e);
+      if (e.responseJSON && e.responseJSON.error) {
+        alert(e.responseJSON.error);
+      } else if (e.response.statusText) {
+        alert(`Unable to complete your request: ${e.response.statusText}`);
+      } else {
+        alert("Unable to complete your request.");
+      }
+    }
+  };
+
   // Enable all data tables on dashboard but only filter on volunteers table
+  const editSupervisorPath = id => `/supervisors/${id}/edit`;
+  const editVolunteerPath = id => `/volunteers/${id}/edit`;
+  const casaCasePath = id => `/casa_cases/${id}`;
   var volunteersTable = $('table#volunteers').DataTable({
     autoWidth: false,
     stateSave: false,
     columns: [
       {
-        data: "display_name"
+        name: "display_name",
+        render: (data, type, row, meta) => {
+          return `
+            <a href="${editVolunteerPath(row.id)}">
+              ${row.display_name || row.email}
+              ${row.made_contact_with_all_cases_in_14_days === 'false' ? '🕐' : ''}
+            </a>
+          `;
+        }
       },
       {
-        data: "email",
+        name: "email",
+        render: (data, type, row, meta) => row.email,
         visible: false
       },
       {
         className: "supervisor-column",
-        data: "supervisor_name",
+        name: "supervisor_name",
+        render: (data, type, row, meta) => {
+          if (!row.supervisor.id) return "";
+
+          return `
+            <a href="${editSupervisorPath(row.supervisor.id)}">
+              ${row.supervisor.name}
+            </a>
+          `;
+        }
       },
       {
-        data: "active",
+        name: "active",
+        render: (data, type, row, meta) => row.active === "true" ? "Active" : "Inactive",
         searchable: false,
       },
       {
-        data: "has_transition_aged_youth_cases",
+        name: "has_transition_aged_youth_cases",
+        render: (data, type, row, meta) => row.has_transition_aged_youth_cases === "true" ? "Yes 🐛🦋" : "No",
         searchable: false
       },
       {
-        data: "case_numbers",
+        name: "casa_cases",
+        render: (data, type, row, meta) => {
+          const links = row.casa_cases.map(casaCase => {
+            return `<a href="${casaCasePath(casaCase.id)}">${casaCase.case_number}</a>`;
+          });
+
+          return links.join(", ");
+        },
         orderable: false
       },
       {
-        data: "most_recent_contact_occurred_at",
+        name: "most_recent_contact_occurred_at",
+        render: (data, type, row, meta) => {
+          if (!row.most_recent_contact.case_id) return "None ❌";
+
+          return `
+            <a href="${casaCasePath(row.most_recent_contact.case_id)}">
+              ${row.most_recent_contact.occurred_at}
+            </a>
+          `;
+        },
         searchable: false,
         visible: false
       },
       {
-        data: "contacts_made_in_past_60_days",
+        name: "contacts_made_in_past_60_days",
+        render: (data, type, row, meta) => row.contacts_made_in_past_60_days,
         searchable: false,
         visible: false
       },
       {
-        data: "actions",
+        name: "actions",
         orderable: false,
+        render: (data, type, row, meta) => {
+          return `
+            <a href="${editVolunteerPath(row.id)}">
+              Edit
+            </a>
+          `
+        },
         searchable: false
       }
     ],
@@ -138,6 +200,7 @@ $('document').ready(() => {
           }
         });
       },
+      error: handleAjaxError,
       dataType: 'json'
     }
   })

@@ -8,7 +8,7 @@ module DatatableHelper
 
     {
       additional_filters: additional_filters,
-      columns: {"0" => {data: order_by}},
+      columns: {"0" => {name: order_by}},
       length: per_page,
       order: {"0" => {column: "0", dir: order_direction}},
       search: {value: search_term},

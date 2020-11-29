@@ -29,10 +29,6 @@ RSpec.describe "VolunteerDatatable" do
     )
   end
 
-  def values(attr)
-    subject[:data].map { |d| d[attr] }
-  end
-
   before do
     supervisors.each do |supervisor|
       supervisor.update display_name: Faker::Name.unique.name
@@ -49,16 +45,33 @@ RSpec.describe "VolunteerDatatable" do
   end
 
   describe "order by" do
+    let(:values) { subject[:data] }
+
+    let(:check_attr_equality) do
+      lambda { |model, idx|
+        expect(values[idx][:id]).to eq model.id.to_s
+      }
+    end
+
+    let(:check_asc_order) do
+      lambda {
+        sorted_models.each_with_index(&check_attr_equality)
+      }
+    end
+
+    let(:check_desc_order) do
+      lambda {
+        sorted_models.reverse.each_with_index(&check_attr_equality)
+      }
+    end
+
     describe "display_name" do
       let(:order_by) { "display_name" }
-      let(:sorted_display_names) { assigned_volunteers.pluck(:display_name).sort.map { |n| escaped n } }
-      let(:name_values) { values :display_name }
+      let(:sorted_models) { assigned_volunteers.order :display_name }
 
       context "when ascending" do
         it "is successful" do
-          sorted_display_names.each_with_index do |name, idx|
-            expect(name_values[idx]).to include name
-          end
+          check_asc_order.call
         end
       end
 
@@ -66,20 +79,18 @@ RSpec.describe "VolunteerDatatable" do
         let(:order_direction) { "desc" }
 
         it "is succesful" do
-          sorted_display_names.reverse.each_with_index do |name, idx|
-            expect(name_values[idx]).to include name
-          end
+          check_desc_order.call
         end
       end
     end
 
     describe "email" do
       let(:order_by) { "email" }
-      let(:sorted_emails) { assigned_volunteers.pluck(:email).sort }
+      let(:sorted_models) { assigned_volunteers.order :email }
 
       context "when ascending" do
         it "is successful" do
-          expect(values(:email)).to eq sorted_emails
+          check_asc_order.call
         end
       end
 
@@ -87,38 +98,34 @@ RSpec.describe "VolunteerDatatable" do
         let(:order_direction) { "desc" }
 
         it "is successful" do
-          expect(values(:email)).to eq sorted_emails.reverse
+          check_desc_order.call
         end
       end
     end
 
     describe "supervisor_name" do
       let(:order_by) { "supervisor_name" }
-      let(:sorted_supervisor_names) { assigned_volunteers.map(&:supervisor).map { |s| escaped s.decorate.name }.sort }
-      let(:name_values) { values :supervisor_name }
+      let(:sorted_models) { assigned_volunteers.order(:id).sort_by { |v| v.supervisor.display_name } }
 
       context "when ascending" do
         it "is successful" do
-          sorted_supervisor_names.each_with_index do |name, idx|
-            expect(name_values[idx]).to include name
-          end
+          check_asc_order.call
         end
       end
 
       context "when descending" do
-        let(:sort_direction) { "desc" }
+        let(:order_direction) { "desc" }
+        let(:sorted_models) { assigned_volunteers.order(id: :desc).sort_by { |v| v.supervisor.display_name } }
 
         it "is successful" do
-          sorted_supervisor_names.each_with_index do |name, idx|
-            expect(name_values[idx]).to include name
-          end
+          check_desc_order.call
         end
       end
     end
 
     describe "active" do
       let(:order_by) { "active" }
-      let(:sorted_values) { assigned_volunteers.map { |v| v.active? ? "Active" : "Inactive" }.sort }
+      let(:sorted_models) { assigned_volunteers.order :active, :id }
 
       before do
         supervisors.each { |s| s.volunteers.first.update active: false }
@@ -126,49 +133,50 @@ RSpec.describe "VolunteerDatatable" do
 
       context "when ascending" do
         it "is successful" do
-          expect(values(:active)).to eq sorted_values.reverse
+          check_asc_order.call
         end
       end
 
       context "when descending" do
         let(:order_direction) { "desc" }
+        let(:sorted_models) { assigned_volunteers.order :active, id: :desc }
 
         it "is successful" do
-          expect(values(:active)).to eq sorted_values
+          check_desc_order.call
         end
       end
     end
 
     describe "has_transition_aged_youth_cases" do
       let(:order_by) { "has_transition_aged_youth_cases" }
-      let(:sorted_values) { assigned_volunteers.map { |v| v.casa_cases.where(transition_aged_youth: true).exists? ? "Yes" : "No" }.sort }
-      let(:tay_values) { values :has_transition_aged_youth_cases }
+      let(:transition_aged_youth_bool_to_int) do
+        lambda { |volunteer|
+          volunteer.casa_cases.exists?(transition_aged_youth: true) ? 1 : 0
+        }
+      end
+      let(:sorted_models) { assigned_volunteers.order(:id).sort_by(&transition_aged_youth_bool_to_int) }
 
       context "when ascending" do
         it "is successful" do
-          sorted_values.each_with_index do |value, idx|
-            expect(tay_values[idx]).to include value
-          end
+          check_asc_order.call
         end
       end
 
       context "when descending" do
         let(:order_direction) { "desc" }
+        let(:sorted_models) { assigned_volunteers.order(id: :desc).sort_by(&transition_aged_youth_bool_to_int) }
 
         it "is successful" do
-          sorted_values.reverse.each_with_index do |value, idx|
-            expect(tay_values[idx]).to include value
-          end
+          check_desc_order.call
         end
       end
     end
 
     describe "most_recent_contact_occurred_at" do
       let(:order_by) { "most_recent_contact_occurred_at" }
-      let(:sorted_values) do
-        assigned_volunteers.map { |v| v.case_contacts.map(&:occurred_at).max }.sort.map { |oa| oa.strftime("%B %-e, %Y") }
+      let(:sorted_models) do
+        assigned_volunteers.order(:id).sort_by { |v| v.case_contacts.maximum :occurred_at }
       end
-      let(:last_contact_values) { values :most_recent_contact_occurred_at }
 
       before do
         CasaCase.all.each_with_index { |cc, idx| cc.case_contacts << create(:case_contact, contact_made: true, creator: cc.volunteers.first, occurred_at: idx.days.ago) }
@@ -176,9 +184,7 @@ RSpec.describe "VolunteerDatatable" do
 
       context "when ascending" do
         it "is successful" do
-          sorted_values.each_with_index do |value, idx|
-            expect(last_contact_values[idx]).to include value
-          end
+          check_asc_order.call
         end
       end
 
@@ -186,9 +192,7 @@ RSpec.describe "VolunteerDatatable" do
         let(:order_direction) { "desc" }
 
         it "is successful" do
-          sorted_values.reverse.each_with_index do |value, idx|
-            expect(last_contact_values[idx]).to include value
-          end
+          check_desc_order.call
         end
       end
     end
@@ -199,6 +203,12 @@ RSpec.describe "VolunteerDatatable" do
       let(:casa_case1) { volunteer1.casa_cases.first }
       let(:volunteer2) { assigned_volunteers.second }
       let(:casa_case2) { volunteer2.casa_cases.first }
+      let(:sorted_models) do
+        assigned_volunteers
+          .order(:id)
+          .sort_by { |v| v.case_contacts.where(occurred_at: 60.days.ago..Time.current).count }
+          .sort_by { |v| v.case_contacts.exists?(occurred_at: 60.days.ago..Time.current) ? 0 : 1 }
+      end
 
       before do
         4.times do |i|
@@ -212,15 +222,21 @@ RSpec.describe "VolunteerDatatable" do
 
       context "when ascending" do
         it "is successful" do
-          expect(values(:contacts_made_in_past_60_days)).to eq ["2", "3", "", "", "", ""]
+          check_asc_order.call
         end
       end
 
       context "when descending" do
         let(:order_direction) { "desc" }
+        let(:sorted_models) do
+          assigned_volunteers
+            .order(id: :desc)
+            .sort_by { |v| v.case_contacts.where(occurred_at: 60.days.ago..Time.current).count }
+            .sort_by { |v| v.case_contacts.exists?(occurred_at: 60.days.ago..Time.current) ? 0 : 1 }
+        end
 
         it "is successful" do
-          expect(values(:contacts_made_in_past_60_days)).to eq ["", "", "", "", "3", "2"]
+          check_desc_order.call
         end
       end
     end
@@ -244,9 +260,8 @@ RSpec.describe "VolunteerDatatable" do
 
     describe "display_name" do
       it "is successful" do
-        display_names = values :display_name
-        expect(display_names.length).to eq 1
-        expect(display_names.first).to include escaped volunteer.display_name
+        expect(subject[:data].length).to eq 1
+        expect(subject[:data].first[:id]).to eq volunteer.id.to_s
       end
     end
 
@@ -254,9 +269,8 @@ RSpec.describe "VolunteerDatatable" do
       let(:search_term) { volunteer.email }
 
       it "is successful" do
-        emails = values :email
-        expect(emails.length).to eq 1
-        expect(emails.first).to eq volunteer.email
+        expect(subject[:data].length).to eq 1
+        expect(subject[:data].first[:id]).to eq volunteer.id.to_s
       end
     end
 
@@ -266,20 +280,22 @@ RSpec.describe "VolunteerDatatable" do
       let(:volunteers) { supervisor.volunteers }
 
       it "is successful" do
-        supervisor_names = values :supervisor_name
-        expect(supervisor_names.length).to eq volunteers.count
-        expect(supervisor_names).to all include supervisor.display_name
+        expect(subject[:data].length).to eq volunteers.count
+        expect(subject[:data].map { |d| d[:id] }.sort).to eq volunteers.map { |v| v.id.to_s }.sort
       end
     end
 
     describe "case_numbers" do
-      let(:case_number) { volunteer.casa_cases.first.case_number }
+      let(:casa_case) { volunteer.casa_cases.first }
+      let(:case_number) { casa_case.case_number }
       let(:search_term) { case_number }
 
+      # Sometimes the default case number is a substring of other case numbers
+      before { casa_case.update case_number: Random.hex }
+
       it "is successful" do
-        case_numbers = values :case_numbers
-        expect(case_numbers.length).to eq 1
-        expect(case_numbers.first).to include case_number
+        expect(subject[:data].length).to eq 1
+        expect(subject[:data].first[:id]).to eq volunteer.id.to_s
       end
     end
   end

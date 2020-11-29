@@ -1,19 +1,29 @@
 class VolunteerDatatable < ApplicationDatatable
+  ORDERABLE_FIELDS = %w[
+    active
+    contacts_made_in_past_60_days
+    display_name
+    email
+    has_transition_aged_youth_cases
+    most_recent_contact_occurred_at
+    supervisor_name
+  ]
+
   private
 
   def data
-    records.map(&:decorate).map do |record|
-      volunteer = record.decorate.datatable
+    records.map(&:decorate).map do |volunteer|
       {
-        display_name: volunteer.link_to_edit,
-        email: volunteer.email,
-        supervisor_name: volunteer.link_to_edit_supervisor,
-        active: volunteer.status,
-        has_transition_aged_youth_cases: volunteer.assigned_to_transition_aged_youth?,
-        case_numbers: volunteer.list_links_to_case_numbers,
-        most_recent_contact_occurred_at: volunteer.link_to_last_contact_made,
+        active: volunteer.active,
+        casa_cases: volunteer.casa_cases.map { |cc| {id: cc.id, case_number: cc.case_number} },
         contacts_made_in_past_60_days: volunteer.contacts_made_in_past_60_days,
-        actions: volunteer.link_to_edit("Edit")
+        display_name: volunteer.display_name,
+        email: volunteer.email,
+        has_transition_aged_youth_cases: volunteer.has_transition_aged_youth_cases?,
+        id: volunteer.id,
+        made_contact_with_all_cases_in_14_days: volunteer.made_contact_with_all_cases_in_14_days?,
+        most_recent_contact: {case_id: volunteer.most_recent_contact_case_id, occurred_at: volunteer.most_recent_contact_occurred_at.try(:strftime, "%B %-e, %Y")},
+        supervisor: {id: volunteer.supervisor_id, name: volunteer.supervisor_name}
       }
     end
   end
@@ -55,6 +65,7 @@ class VolunteerDatatable < ApplicationDatatable
         SQL
       )
       .order(order_clause)
+      .order(:id)
       .includes(:casa_cases, :cases_where_contact_made_in_14_days)
   end
 
@@ -96,12 +107,7 @@ class VolunteerDatatable < ApplicationDatatable
   end
 
   def order_clause
-    @order_clause ||=
-      if order_by.present?
-        "#{order_by} #{order_direction}"
-      else
-        "COAELSCE(users.display_name, users.email) ASC"
-      end
+    @order_clause ||= build_order_clause || Arel.sql("COALESCE(users.display_name, users.email) ASC")
   end
 
   def supervisor_filter

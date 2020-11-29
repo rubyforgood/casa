@@ -17,8 +17,12 @@ class ApplicationDatatable
   private
 
   def sanitize(data)
-    data.map do |record|
-      record.transform_values! { |value| ERB::Util.html_escape value }
+    if data.is_a? Array
+      data.map { |datum| sanitize datum }
+    elsif data.is_a? Hash
+      data.transform_values! { |value| sanitize value }
+    else
+      ERB::Util.html_escape data
     end
   end
 
@@ -41,8 +45,16 @@ class ApplicationDatatable
     @search_term ||= params[:search][:value]
   end
 
+  def build_order_clause
+    Arel.sql "#{order_by} #{order_direction}" if order_by.present?
+  end
+
   def order_by
-    @order_by ||= params[:columns][order_column_index][:data]
+    @order_by ||=
+      lambda {
+        order_by = params[:columns][order_column_index][:name]
+        order_by if self.class::ORDERABLE_FIELDS.include? order_by.try :downcase
+      }.call
   end
 
   def order_column_index
@@ -50,7 +62,8 @@ class ApplicationDatatable
   end
 
   def order_direction
-    params[:order]["0"][:dir] || "ASC"
+    order_direction = params[:order]["0"][:dir] || "ASC"
+    %w[asc desc].include?(order_direction.downcase) ? order_direction : "ASC"
   end
 
   def limit
