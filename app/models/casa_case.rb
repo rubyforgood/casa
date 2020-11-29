@@ -15,6 +15,8 @@ class CasaCase < ApplicationRecord
   has_many :active_case_assignments, -> { is_active }, class_name: "CaseAssignment"
   has_many :assigned_volunteers, -> { active }, through: :active_case_assignments, source: :volunteer, class_name: "Volunteer"
   has_many :case_contacts, dependent: :destroy
+  has_many :casa_cases_emancipation_options
+  has_many :emancipation_options, through: :casa_cases_emancipation_options, dependent: :destroy
   has_many :past_court_dates, dependent: :destroy
   validates :case_number, uniqueness: {scope: :casa_org_id, case_sensitive: false}, presence: true
   belongs_to :hearing_type, optional: true
@@ -25,7 +27,6 @@ class CasaCase < ApplicationRecord
   has_many :contact_types, through: :casa_case_contact_types, source: :contact_type
   accepts_nested_attributes_for :casa_case_contact_types
 
-  has_and_belongs_to_many :emancipation_options
   enum court_report_status: {not_submitted: 0, submitted: 1, in_review: 2, completed: 3}, _prefix: :court_report
 
   scope :ordered, -> { order(updated_at: :desc) }

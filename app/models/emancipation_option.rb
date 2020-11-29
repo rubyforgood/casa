@@ -1,6 +1,7 @@
 class EmancipationOption < ApplicationRecord
   belongs_to :emancipation_category
-  has_and_belongs_to_many :casa_cases
+  has_many :casa_cases_emancipation_options
+  has_many :casa_cases, through: :casa_cases_emancipation_options, dependent: :destroy
 
   validates :name, presence: true
 
