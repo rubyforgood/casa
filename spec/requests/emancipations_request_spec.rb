@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "/casa_case/:id/emancipation", type: :request do
   let(:organization) { create(:casa_org) }
   let(:organization_different) { create(:casa_org) }
-  let(:casa_case) { create(:casa_case, casa_org: organization) }
+  let(:casa_case) { create(:casa_case, casa_org: organization, transition_aged_youth: true) }
 
   describe "GET /show" do
     before { sign_in user }
