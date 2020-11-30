@@ -164,7 +164,9 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
       let(:mutex_option_b) { create(:emancipation_option, emancipation_category_id: mutually_exclusive_category.id, name: "B") }
 
       let(:user) { create(:volunteer, casa_org: organization) }
+      let(:non_transitioning_casa_case) { create(:casa_case, casa_org: organization, transition_aged_youth: false) }
       let!(:case_assignment) { create(:case_assignment, volunteer: user, casa_case: casa_case) }
+      let!(:case_assignment_non_transitioning_case) { create(:case_assignment, volunteer: user, casa_case: non_transitioning_casa_case) }
 
       it "sends an error when a required parameter is missing" do
         post casa_case_emancipation_path(casa_case) + "/save", params: { option_id: option_a.id }
@@ -174,6 +176,12 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
         post casa_case_emancipation_path(casa_case) + "/save", params: { option_action: "add" }
         expect(JSON.parse(response.body)).to have_key("error")
         expect(JSON.parse(response.body)["error"]).to match(/Missing param/)
+      end
+
+      it "sends an error when attempting to perform an action on a case that is not tranitioning" do
+        post casa_case_emancipation_path(non_transitioning_casa_case) + "/save", params: { option_action: "add", option_id: option_a.id }
+        expect(JSON.parse(response.body)).to have_key("error")
+        expect(JSON.parse(response.body)["error"]).to match(/not marked as transitioning/)
       end
 
       it "associates an emancipation option with a case when passed \"add\" and the option id" do
