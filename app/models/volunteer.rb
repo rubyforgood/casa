@@ -21,7 +21,7 @@ class Volunteer < User
     CONTACT_MADE_IN_PAST_60_DAYS_COLUMN,
     ACTIONS_COLUMN
   ].freeze
-  CONTACT_MADE_IN_DAYS_NUM = 14.freeze
+  CONTACT_MADE_IN_DAYS_NUM = 14
 
   scope :with_no_supervisor, lambda { |org|
     joins("left join supervisor_volunteers "\
@@ -75,7 +75,7 @@ class Volunteer < User
   def cases_where_contact_made_in_days(num_days = CONTACT_MADE_IN_DAYS_NUM)
     casa_cases
       .joins(:case_contacts)
-      .where(case_contacts: { contact_made: true, occurred_at: 14.days.ago.to_date.. })
+      .where(case_contacts: {contact_made: true, occurred_at: 14.days.ago.to_date..})
     # TODO this should respect current vs past cases
   end
 end
