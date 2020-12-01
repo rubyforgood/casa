@@ -21,6 +21,7 @@ class Volunteer < User
     CONTACT_MADE_IN_PAST_60_DAYS_COLUMN,
     ACTIONS_COLUMN
   ].freeze
+  CONTACT_MADE_IN_DAYS_NUM = 14.freeze
 
   scope :with_no_supervisor, lambda { |org|
     joins("left join supervisor_volunteers "\
@@ -30,8 +31,6 @@ class Volunteer < User
       .in_organization(org)
       .where(supervisor_volunteers: {id: nil})
   }
-
-  has_many :cases_where_contact_made_in_14_days, -> { joins(:case_contacts) }, through: :case_assignments
 
   # Activates this volunteer.
   def activate
@@ -63,12 +62,21 @@ class Volunteer < User
   end
 
   # false if volunteer has any case with no contact in the past 30 days
-  def made_contact_with_all_cases_in_14_days?
+  def made_contact_with_all_cases_in_days?(num_days = CONTACT_MADE_IN_DAYS_NUM)
     # TODO this should do the same thing as no_contact_for_two_weeks but for a volunteer
     total_cases_count = casa_cases.size
     return true if total_cases_count.zero?
-    current_contact_cases_count = cases_where_contact_made_in_14_days.size
+    current_contact_cases_count = cases_where_contact_made_in_days(num_days).count
     current_contact_cases_count == total_cases_count
+  end
+
+  private
+
+  def cases_where_contact_made_in_days(num_days = CONTACT_MADE_IN_DAYS_NUM)
+    casa_cases
+      .joins(:case_contacts)
+      .where(case_contacts: { contact_made: true, occurred_at: 14.days.ago.to_date.. })
+    # TODO this should respect current vs past cases
   end
 end
 

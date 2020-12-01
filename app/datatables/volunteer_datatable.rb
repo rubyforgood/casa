@@ -21,7 +21,7 @@ class VolunteerDatatable < ApplicationDatatable
         email: volunteer.email,
         has_transition_aged_youth_cases: volunteer.has_transition_aged_youth_cases?,
         id: volunteer.id,
-        made_contact_with_all_cases_in_14_days: volunteer.made_contact_with_all_cases_in_14_days?,
+        made_contact_with_all_cases_in_days: volunteer.made_contact_with_all_cases_in_days?,
         most_recent_contact: {case_id: volunteer.most_recent_contact_case_id, occurred_at: volunteer.most_recent_contact_occurred_at.try(:strftime, "%B %-e, %Y")},
         supervisor: {id: volunteer.supervisor_id, name: volunteer.supervisor_name}
       }
@@ -66,7 +66,7 @@ class VolunteerDatatable < ApplicationDatatable
       )
       .order(order_clause)
       .order(:id)
-      .includes(:casa_cases, :cases_where_contact_made_in_14_days)
+      .includes(:casa_cases)
   end
 
   def transition_aged_youth_cases_subquery
