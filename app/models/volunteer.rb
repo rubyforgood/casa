@@ -8,7 +8,8 @@ class Volunteer < User
   ASSIGNED_TO_TRANSITION_AGED_YOUTH_COLUMN = "assigned_to_transition_aged_youth"
   CASE_NUMBER_COLUMN = "case_number"
   LAST_CONTACT_MADE_COLUMN = "last_contact_made"
-  CONTACT_MADE_IN_PAST_60_DAYS_COLUMN = "contact_made_in_past_60_days"
+  CONTACT_MADE_IN_PAST_DAYS_NUM = 60
+  CONTACT_MADE_IN_PAST_DAYS_COLUMN = "contact_made_in_past_#{CONTACT_MADE_IN_PAST_DAYS_NUM}_days".freeze
   ACTIONS_COLUMN = "actions"
   TABLE_COLUMNS = [
     NAME_COLUMN,
@@ -18,7 +19,7 @@ class Volunteer < User
     ASSIGNED_TO_TRANSITION_AGED_YOUTH_COLUMN,
     CASE_NUMBER_COLUMN,
     LAST_CONTACT_MADE_COLUMN,
-    CONTACT_MADE_IN_PAST_60_DAYS_COLUMN,
+    CONTACT_MADE_IN_PAST_DAYS_COLUMN,
     ACTIONS_COLUMN
   ].freeze
   CONTACT_MADE_IN_DAYS_NUM = 14

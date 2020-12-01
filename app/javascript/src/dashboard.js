@@ -162,8 +162,8 @@ $('document').ready(() => {
         visible: false
       },
       {
-        name: "contacts_made_in_past_60_days",
-        render: (data, type, row, meta) => row.contacts_made_in_past_60_days,
+        name: "contacts_made_in_past_days",
+        render: (data, type, row, meta) => row.contacts_made_in_past_days,
         searchable: false,
         visible: false
       },

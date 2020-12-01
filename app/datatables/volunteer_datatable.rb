@@ -1,7 +1,7 @@
 class VolunteerDatatable < ApplicationDatatable
   ORDERABLE_FIELDS = %w[
     active
-    contacts_made_in_past_60_days
+    contacts_made_in_past_days
     display_name
     email
     has_transition_aged_youth_cases
@@ -16,7 +16,7 @@ class VolunteerDatatable < ApplicationDatatable
       {
         active: volunteer.active,
         casa_cases: volunteer.casa_cases.map { |cc| {id: cc.id, case_number: cc.case_number} },
-        contacts_made_in_past_60_days: volunteer.contacts_made_in_past_60_days,
+        contacts_made_in_past_days: volunteer.contacts_made_in_past_days,
         display_name: volunteer.display_name,
         email: volunteer.email,
         has_transition_aged_youth_cases: volunteer.has_transition_aged_youth_cases?,
@@ -46,7 +46,7 @@ class VolunteerDatatable < ApplicationDatatable
           transition_aged_youth_cases.volunteer_id IS NOT NULL AS has_transition_aged_youth_cases,
           most_recent_contacts.casa_case_id AS most_recent_contact_case_id,
           most_recent_contacts.occurred_at AS most_recent_contact_occurred_at,
-          contacts_made_in_past_60_days.contact_count AS contacts_made_in_past_60_days
+          contacts_made_in_past_days.contact_count AS contacts_made_in_past_days
         SQL
       )
       .joins(
@@ -60,8 +60,8 @@ class VolunteerDatatable < ApplicationDatatable
             #{most_recent_contacts_subquery}
           ) most_recent_contacts ON most_recent_contacts.creator_id = users.id AND most_recent_contacts.contact_index = 1
           LEFT JOIN (
-            #{contacts_made_in_past_60_days_subquery}
-          ) contacts_made_in_past_60_days ON contacts_made_in_past_60_days.creator_id = users.id
+            #{contacts_made_in_past_days_subquery}
+          ) contacts_made_in_past_days ON contacts_made_in_past_days.creator_id = users.id
         SQL
       )
       .order(order_clause)
@@ -92,8 +92,8 @@ class VolunteerDatatable < ApplicationDatatable
         .to_sql
   end
 
-  def contacts_made_in_past_60_days_subquery
-    @contacts_made_in_past_60_days_subquery ||=
+  def contacts_made_in_past_days_subquery
+    @contacts_made_in_past_days_subquery ||=
       CaseContact
         .select(
           <<-SQL
@@ -101,7 +101,7 @@ class VolunteerDatatable < ApplicationDatatable
           COUNT(*) AS contact_count
           SQL
         )
-        .where(contact_made: true, occurred_at: 60.days.ago..Date.today)
+        .where(contact_made: true, occurred_at: Volunteer::CONTACT_MADE_IN_PAST_DAYS_NUM.days.ago.to_date..)
         .group(:creator_id)
         .to_sql
   end

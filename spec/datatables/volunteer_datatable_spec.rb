@@ -197,8 +197,8 @@ RSpec.describe "VolunteerDatatable" do
       end
     end
 
-    describe "contacts_made_in_past_60_days" do
-      let(:order_by) { "contacts_made_in_past_60_days" }
+    describe "contacts_made_in_past_days" do
+      let(:order_by) { "contacts_made_in_past_days" }
       let(:volunteer1) { assigned_volunteers.first }
       let(:casa_case1) { volunteer1.casa_cases.first }
       let(:volunteer2) { assigned_volunteers.second }
@@ -206,8 +206,8 @@ RSpec.describe "VolunteerDatatable" do
       let(:sorted_models) do
         assigned_volunteers
           .order(:id)
-          .sort_by { |v| v.case_contacts.where(occurred_at: 60.days.ago..Time.current).count }
-          .sort_by { |v| v.case_contacts.exists?(occurred_at: 60.days.ago..Time.current) ? 0 : 1 }
+          .sort_by { |v| v.case_contacts.where(occurred_at: 60.days.ago.to_date..).count }
+          .sort_by { |v| v.case_contacts.exists?(occurred_at: 60.days.ago.to_date..) ? 0 : 1 }
       end
 
       before do
@@ -231,8 +231,8 @@ RSpec.describe "VolunteerDatatable" do
         let(:sorted_models) do
           assigned_volunteers
             .order(id: :desc)
-            .sort_by { |v| v.case_contacts.where(occurred_at: 60.days.ago..Time.current).count }
-            .sort_by { |v| v.case_contacts.exists?(occurred_at: 60.days.ago..Time.current) ? 0 : 1 }
+            .sort_by { |v| v.case_contacts.where(occurred_at: 60.days.ago.to_date..).count }
+            .sort_by { |v| v.case_contacts.exists?(occurred_at: 60.days.ago.to_date..) ? 0 : 1 }
         end
 
         it "is successful" do
