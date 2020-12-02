@@ -3,9 +3,9 @@ require "rails_helper"
 RSpec.describe Volunteer, type: :model do
   describe ".email_court_report_reminder" do
     let!(:casa_org) { create(:casa_org) }
-    let!(:casa_case1) { create(:casa_case, casa_org: casa_org, court_report_due_date: Date.today + 7.days) }
-    let!(:casa_case2) { create(:casa_case, casa_org: casa_org, court_report_due_date: Date.today + 8.days) }
-    let!(:casa_case3) { create(:casa_case, casa_org: casa_org, court_report_due_date: Date.today + 7.days, court_report_submitted_at: Time.current) }
+    let!(:casa_case1) { create(:casa_case, casa_org: casa_org, court_report_due_date: Date.current + 7.days) }
+    let!(:casa_case2) { create(:casa_case, casa_org: casa_org, court_report_due_date: Date.current + 8.days) }
+    let!(:casa_case3) { create(:casa_case, casa_org: casa_org, court_report_due_date: Date.current + 7.days, court_report_submitted_at: Time.current) }
     let!(:case_assignment1) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case1) }
     let!(:case_assignment2) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case2) }
     let!(:case_assignment3) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case3) }
@@ -13,8 +13,10 @@ RSpec.describe Volunteer, type: :model do
     let!(:v2) { create(:volunteer, casa_org: casa_org, active: false) }
     let!(:v3) { create(:volunteer, casa_org: casa_org) }
 
+    before { stub_const("COURT_REPORT_SUBMISSION_REMINDER", 7.days) }
+
     it "sends one mailer" do
-      expect(VolunteerMailer).to receive(:court_report_reminder).with(v1, Date.today+7.days)
+      expect(VolunteerMailer).to receive(:court_report_reminder).with(v1, Date.current+7.days)
       described_class.email_court_report_reminder
     end
   end
