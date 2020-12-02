@@ -35,11 +35,11 @@ class Volunteer < User
   }
 
   def self.email_court_report_reminder
-    includes(:case_assignments).where(active: true).where.not(case_assignments: nil).find_each do |volunteer|
+    active.includes(:case_assignments).where.not(case_assignments: nil).find_each do |volunteer|
       volunteer.case_assignments.each do |case_assignment|
         current_case = case_assignment.casa_case
-        if (current_case.court_report_due_date == Date.current + COURT_REPORT_SUBMISSION_REMINDER) && !current_case.court_report_submitted_at
-          report_due_date = current_case.court_report_due_date
+        report_due_date = current_case.court_report_due_date
+        if (report_due_date == Date.current + COURT_REPORT_SUBMISSION_REMINDER) && current_case.court_report_not_submitted?
           VolunteerMailer.court_report_reminder(volunteer, report_due_date)
         end
       end
