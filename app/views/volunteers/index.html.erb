@@ -24,12 +24,12 @@
             <input
               id="unassigned-vol-filter"
               type="checkbox"
-              data-value="No supervisor assignment"
+              data-value=""
               unchecked>
             No supervisor assignment
           </a>
         </li>
-        <% Supervisor.decorate.each do |supervisor| %>
+        <% current_organization.supervisors.each do |supervisor| %>
           <li>
             <a class="small" data-value="option1" tabIndex="-1">
               <% if policy(User).edit_name?(supervisor) %>
@@ -55,13 +55,13 @@
       <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
         <li>
           <a class="small" data-value="option1" tabIndex="-1">
-            <input type="checkbox" data-value="Active" checked>
+            <input type="checkbox" data-value="true" checked>
             Active
           </a>
         </li>
         <li>
           <a class="small" data-value="option1" tabIndex="-1">
-            <input type="checkbox" data-value="Inactive">
+            <input type="checkbox" data-value="false">
             Inactive
           </a>
         </li>
@@ -74,12 +74,12 @@
       <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton">
         <li>
           <a class="small" data-value="option1" tabIndex="-1">
-            <input type="checkbox" data-value="Yes 🐛🦋" checked>Yes
+            <input type="checkbox" data-value="true" checked>Yes
           </a>
         </li>
         <li>
           <a class="small" data-value="option1" tabIndex="-1">
-            <input type="checkbox" data-value="No" checked>No
+            <input type="checkbox" data-value="false" checked>No
           </a>
         </li>
       </div>
@@ -126,7 +126,10 @@
 
 <div class="card card-container">
   <div class="card-body">
-    <table class="table table-striped table-bordered" id="volunteers">
+    <table
+      class="table table-striped table-bordered"
+      id="volunteers"
+      data-source="<%= datatable_volunteers_path format: :json %>">
       <thead>
       <tr>
         <th>Name</th>
@@ -142,35 +145,6 @@
       </thead>
 
       <tbody>
-      <% @volunteers.each do |volunteer| %>
-        <tr>
-          <td data-search="<%= volunteer.past_names %>|<%= volunteer.display_name %>">
-            <%= link_to(volunteer.display_name, edit_volunteer_path(volunteer)) %>
-            <% if !volunteer.made_contact_with_all_cases_in_days? %>
-              🕐
-              <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="Has at least one case with no contact in 14 days"></i>
-            <% end %>
-          </td>
-          <td><%= volunteer.email %></td>
-          <td class=" supervisor-column ">
-            <%- if volunteer.has_supervisor? %>
-              <%= link_to(volunteer.supervisor.display_name, edit_supervisor_path(volunteer.supervisor)) %>
-            <%- end %>
-          </td>
-          <td class=" status-column ">
-            <%= volunteer.decorate.status %>
-          </td>
-          <td><%= volunteer.decorate.assigned_to_transition_aged_youth? %></td>
-          <td><%= safe_join(volunteer.casa_cases.map { |c| link_to(c.case_number, c) }, ", ") %></td>
-          <td>
-            <%= link_to_if @has_recent_contact,
-                           volunteer.decorate.last_contact_made,
-                           @most_recent_case %>
-          </td>
-          <td><%= volunteer.recent_contacts_made %></td>
-          <td><%= link_to 'Edit', edit_volunteer_path(volunteer) %></td>
-        </tr>
-      <% end %>
       </tbody>
     </table>
   </div>

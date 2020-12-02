@@ -8,7 +8,8 @@ class Volunteer < User
   ASSIGNED_TO_TRANSITION_AGED_YOUTH_COLUMN = "assigned_to_transition_aged_youth"
   CASE_NUMBER_COLUMN = "case_number"
   LAST_CONTACT_MADE_COLUMN = "last_contact_made"
-  CONTACT_MADE_IN_PAST_60_DAYS_COLUMN = "contact_made_in_past_60_days"
+  CONTACT_MADE_IN_PAST_DAYS_NUM = 60
+  CONTACT_MADE_IN_PAST_DAYS_COLUMN = "contact_made_in_past_#{CONTACT_MADE_IN_PAST_DAYS_NUM}_days".freeze
   ACTIONS_COLUMN = "actions"
   TABLE_COLUMNS = [
     NAME_COLUMN,
@@ -18,9 +19,10 @@ class Volunteer < User
     ASSIGNED_TO_TRANSITION_AGED_YOUTH_COLUMN,
     CASE_NUMBER_COLUMN,
     LAST_CONTACT_MADE_COLUMN,
-    CONTACT_MADE_IN_PAST_60_DAYS_COLUMN,
+    CONTACT_MADE_IN_PAST_DAYS_COLUMN,
     ACTIONS_COLUMN
   ].freeze
+  CONTACT_MADE_IN_DAYS_NUM = 14
 
   scope :with_no_supervisor, lambda { |org|
     joins("left join supervisor_volunteers "\
@@ -60,9 +62,10 @@ class Volunteer < User
     self.supervisor == supervisor
   end
 
-  def made_contact_with_all_cases_in_days?(num_days = 14)
+  # false if volunteer has any case with no contact in the past 30 days
+  def made_contact_with_all_cases_in_days?(num_days = CONTACT_MADE_IN_DAYS_NUM)
     # TODO this should do the same thing as no_contact_for_two_weeks but for a volunteer
-    total_cases_count = casa_cases.count
+    total_cases_count = casa_cases.size
     return true if total_cases_count.zero?
     current_contact_cases_count = cases_where_contact_made_in_days(num_days).count
     current_contact_cases_count == total_cases_count
@@ -70,11 +73,10 @@ class Volunteer < User
 
   private
 
-  def cases_where_contact_made_in_days(num_days = 14)
+  def cases_where_contact_made_in_days(num_days = CONTACT_MADE_IN_DAYS_NUM)
     casa_cases
       .joins(:case_contacts)
-      .where(case_contacts: {contact_made: true})
-      .where("case_contacts.occurred_at > ?", Date.current - num_days.days)
+      .where(case_contacts: {contact_made: true, occurred_at: 14.days.ago.to_date..})
     # TODO this should respect current vs past cases
   end
 end

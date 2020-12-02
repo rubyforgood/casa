@@ -13,6 +13,28 @@ RSpec.describe "/volunteers", type: :request do
     end
   end
 
+  describe "POST /datatable" do
+    let(:data) { {recordsTotal: 51, recordsFiltered: 10, data: 10.times.map { {} }} }
+
+    before do
+      allow(VolunteerDatatable).to receive(:new).and_return double "datatable", as_json: data
+    end
+
+    it "is successful" do
+      sign_in admin
+
+      post datatable_volunteers_path
+      expect(response).to be_successful
+    end
+
+    it "renders json data" do
+      sign_in admin
+
+      post datatable_volunteers_path
+      expect(response.body).to eq data.to_json
+    end
+  end
+
   describe "GET /new" do
     it "renders a successful response only for admin user" do
       sign_in admin

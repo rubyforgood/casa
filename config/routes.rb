@@ -4,6 +4,10 @@ Rails.application.routes.draw do
   devise_for :all_casa_admins, path: "all_casa_admins", controllers: {sessions: "all_casa_admins/sessions"}
   devise_for :users, controllers: {sessions: "users/sessions"}
 
+  concern :with_datatable do
+    post "datatable", on: :collection
+  end
+
   authenticated :all_casa_admin do
     root to: "all_casa_admins/dashboard#show", as: :authenticated_all_casa_admin_root
   end
@@ -60,7 +64,7 @@ Rails.application.routes.draw do
       patch :unassign
     end
   end
-  resources :volunteers, except: %i[destroy] do
+  resources :volunteers, except: %i[destroy], concerns: %i[with_datatable] do
     member do
       patch :activate
       patch :deactivate

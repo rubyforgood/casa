@@ -2,15 +2,16 @@ class VolunteersController < ApplicationController
   # Uses authenticate_user to redirect if no user is signed in
   # and must_be_admin_or_supervisor to check user's role is appropriate
   before_action :authenticate_user!, :must_be_admin_or_supervisor
-  before_action :set_volunteer, except: [:index, :new, :create]
+  before_action :set_volunteer, except: %i[index new create datatable]
 
   def index
-    # Return all active/inactive volunteers, inactive will be filtered by default
-    @volunteers = policy_scope(
-      current_organization.volunteers.includes(:versions, :supervisor, :supervisor_volunteer, :casa_cases, case_assignments: [:casa_case]).references(:supervisor, :casa_cases)
-    ).decorate
-    @has_recent_contact = @volunteer&.most_recent_contact&.present?
-    @most_recent_case = @volunteer&.most_recent_contact&.casa_case
+  end
+
+  def datatable
+    volunteers = policy_scope current_organization.volunteers
+    datatable = VolunteerDatatable.new volunteers, params
+
+    render json: datatable
   end
 
   def new

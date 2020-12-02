@@ -38,5 +38,11 @@ FactoryBot.define do
         create(:supervisor_volunteer, :inactive, volunteer: user)
       end
     end
+
+    trait :with_inactive_supervisor_assignment do
+      after(:create) do |user, _|
+        create(:supervisor_volunteer, :inactive, volunteer: user)
+      end
+    end
   end
 end
