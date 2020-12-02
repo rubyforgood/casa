@@ -1,5 +1,3 @@
-require_relative "../validators/court_report_validator"
-
 class CasaCase < ApplicationRecord
   TABLE_COLUMNS = %w[
     case_number
