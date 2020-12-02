@@ -1,6 +1,24 @@
 require "rails_helper"
 
 RSpec.describe Volunteer, type: :model do
+  describe ".email_court_report_reminder" do
+    let!(:casa_org) { create(:casa_org) }
+    let!(:casa_case1) { create(:casa_case, casa_org: casa_org, court_report_due_date: Date.today + 7.days) }
+    let!(:casa_case2) { create(:casa_case, casa_org: casa_org, court_report_due_date: Date.today + 8.days) }
+    let!(:casa_case3) { create(:casa_case, casa_org: casa_org, court_report_due_date: Date.today + 7.days, court_report_submitted_at: Time.current) }
+    let!(:case_assignment1) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case1) }
+    let!(:case_assignment2) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case2) }
+    let!(:case_assignment3) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case3) }
+    let!(:v1) { create(:volunteer, casa_org: casa_org, case_assignments: [case_assignment1, case_assignment2, case_assignment3]) }
+    let!(:v2) { create(:volunteer, casa_org: casa_org, active: false) }
+    let!(:v3) { create(:volunteer, casa_org: casa_org) }
+
+    it "sends one mailer" do
+      expect(VolunteerMailer).to receive(:court_report_reminder).with(v1, Date.today+7.days)
+      described_class.email_court_report_reminder
+    end
+  end
+
   describe "#activate" do
     let(:volunteer) { create(:volunteer, :inactive) }
 

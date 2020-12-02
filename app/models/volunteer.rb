@@ -33,6 +33,18 @@ class Volunteer < User
       .where(supervisor_volunteers: {id: nil})
   }
 
+  def self.email_court_report_reminder
+    includes(:case_assignments).where(active: true).where.not(case_assignments: nil).find_each do |volunteer|
+      volunteer.case_assignments.each do |case_assignment|
+        current_case = case_assignment.casa_case
+        if (current_case.court_report_due_date == Date.today + 7.days) && !current_case.court_report_submitted_at
+          report_due_date = current_case.court_report_due_date
+          VolunteerMailer.court_report_reminder(volunteer, report_due_date)
+        end
+      end
+    end
+  end
+
   # Activates this volunteer.
   def activate
     update(active: true)
