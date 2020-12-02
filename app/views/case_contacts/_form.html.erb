@@ -2,7 +2,7 @@
   <%= render "/shared/error_messages", resource: case_contact %>
 
   <div class="field casa-case form-group">
-     <% if casa_cases.length > 1 %>
+    <% if casa_cases.length > 1 %>
       <h2><label for="case_contact_casa_case">Select all relevant CASA cases</label></h2>
     <% else %>
       <h2><label for="case_contact_casa_case">CASA case</label></h2>
@@ -10,11 +10,11 @@
     <% casa_cases.each_with_index do |casa_case, index| %>
       <div class="form-check">
         <%= check_box_tag "case_contact[casa_case_id][]",
-          casa_case.id,
-          @selected_cases.include?(casa_case),
-          id: "case_contact_casa_case_id_#{index}",
-          class: ["form-check-input", "casa-case-id"],
-          disabled: case_contact.persisted? %>
+                          casa_case.id,
+                          @selected_cases.include?(casa_case),
+                          id: "case_contact_casa_case_id_#{index}",
+                          class: ["form-check-input", "casa-case-id"],
+                          disabled: case_contact.persisted? %>
         <label class="form-check-label" for="case_contact_casa_case_id_<%= index %>">
           <%= casa_case.case_number %>
         </label>
@@ -26,16 +26,18 @@
     <h2 id="contact-type-label"><%= form.label :contact_types %></h2>
     <table>
       <tr>
-        <% @current_organization_groups.each do | group | %>
+        <% @current_organization_groups.each do |group| %>
           <td style="display:inline-block; vertical-align:top; padding-right:50px; padding-bottom:20px">
             <h5> <%= group.name %> </h5>
             <% group.contact_types.each_with_index do |contact_type, index| %>
               <div class="form-check">
-                <%= check_box_tag "case_contact[case_contact_contact_type_attributes][][contact_type_id]",
-                  contact_type.id,
-                  @case_contact.case_contact_contact_type.map(&:contact_type_id).include?(contact_type.id),
-                  id: "case_contact_contact_types_#{index}",
-                  class: ["form-check-input", "case-contact-contact-type"] %>
+                <%=
+                  check_box_tag "case_contact[case_contact_contact_type_attributes][][contact_type_id]",
+                                contact_type.id,
+                                @case_contact.decorate.show_contact_type?(contact_type.id),
+                                id: "case_contact_contact_types_#{index}",
+                                class: ["form-check-input", "case-contact-contact-type"]
+                %>
                 <label class="form-check-label" for="case_contact_contact_types_<%= index %>">
                   <%= contact_type.name %>
                 </label>
@@ -59,10 +61,10 @@
   <div class="field contact-medium form-group">
     <h2><%= form.label :medium_type, "Contact medium" %></h2>
     <%= form.select :medium_type,
-      options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type),
-      { prompt: "Please Select One" },
-      class: "custom-select col-sm-12 col-md-4",
-      required: true %>
+                    options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type),
+                    {prompt: "Please Select One"},
+                    class: "custom-select col-sm-12 col-md-4",
+                    required: true %>
   </div>
 
   <div class="field duration-minutes form-group">
@@ -74,50 +76,50 @@
           <div>0</div>
           <div class="slider col">
             <%= form.range_field :duration_hours,
-              class: "custom-range slide",
-              id: "case-contact-duration-hours",
-              min: 0,
-              max: 23,
-              value: duration_hours(case_contact) %>
+                                 class: "custom-range slide",
+                                 id: "case-contact-duration-hours",
+                                 min: 0,
+                                 max: 23,
+                                 value: duration_hours(case_contact) %>
           </div>
           <div>23</div>
         </div>
         <div class="row range-value">
           <%= form.text_field :duration_hours,
-            id: "casa-contact-duration-hours-display",
-            value: duration_hours(case_contact),
-            required: true %> &nbsp; <span> hour(s)</span>
-          </div>
+                              id: "casa-contact-duration-hours-display",
+                              value: duration_hours(case_contact),
+                              required: true %> &nbsp; <span> hour(s)</span>
         </div>
       </fieldset>
     </div>
+  </div>
 
-    <div class="row slider-row">
-      <fieldset class="col-sm-12 col-md-6">
-        <legend>Minutes</legend>
-        <div class="row slide-container">
-          <div>0</div>
-          <div class="slider col">
-            <%= form.range_field :duration_minutes,
-              class: "custom-range slide",
-              id: "case-contact-duration-minutes",
-              min: 0,
-              max: 59,
-              step:15,
-              value: duration_minutes(case_contact) %>
-          </div>
-          <div>59</div>
+  <div class="row slider-row">
+    <fieldset class="col-sm-12 col-md-6">
+      <legend>Minutes</legend>
+      <div class="row slide-container">
+        <div>0</div>
+        <div class="slider col">
+          <%= form.range_field :duration_minutes,
+                               class: "custom-range slide",
+                               id: "case-contact-duration-minutes",
+                               min: 0,
+                               max: 59,
+                               step: 15,
+                               value: duration_minutes(case_contact) %>
         </div>
-        <div class="row range-value">
-          <%= form.text_field :duration_minutes,
-            class: "",
-            id: "casa-contact-duration-minutes-display",
-            value: duration_minutes(case_contact),
-            required: true %> &nbsp; <span> minute(s)</span>
-          </div>
-        </div>
-      </fieldset>
-    </div>
+        <div>59</div>
+      </div>
+      <div class="row range-value">
+        <%= form.text_field :duration_minutes,
+                            class: "",
+                            id: "casa-contact-duration-minutes-display",
+                            value: duration_minutes(case_contact),
+                            required: true %> &nbsp; <span> minute(s)</span>
+      </div>
+    </fieldset>
+  </div>
+  </div>
   </div>
 
   <div class="field occurred-at form-group">
@@ -125,7 +127,7 @@
     <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
     <%= form.text_field :occurred_at,
                         value: occurred_at.to_date,
-                        data:{ provide: "datepicker", date_format: "yyyy/mm/dd" },
+                        data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
                         class: "form-control" %>
   </div>
 
@@ -137,14 +139,14 @@
   <div class="field want-driving-reimbursement form-group">
     <h2><%= form.label :want_driving_reimbursement %></h2>
     <%= form.select :want_driving_reimbursement,
-      options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement),
-      {},
-      class: "custom-select" %>
+                    options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement),
+                    {},
+                    class: "custom-select" %>
   </div>
 
   <div class="field notes form-group">
     <h2><%= form.label :notes %></h2>
-    <%= form.text_area :notes, :rows=>5, placeholder: t("forms.case_contact.notes_placeholder"), class: "form-control" %>
+    <%= form.text_area :notes, :rows => 5, placeholder: t("forms.case_contact.notes_placeholder"), class: "form-control" %>
   </div>
 
   <div class="actions">

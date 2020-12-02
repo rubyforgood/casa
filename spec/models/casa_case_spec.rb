@@ -278,4 +278,31 @@ RSpec.describe CasaCase do
       expect(casa_case.reload.assigned_volunteers).to eq [volunteer2]
     end
   end
+
+  describe "report submission" do
+    # Creating a case whith a status other than not_submitted and a nil submission date
+    it "rejects cases with a court report status, but no submission date" do
+      casa_org = create(:casa_org)
+      bad_case = create(:casa_case, casa_org: casa_org)
+      bad_case.court_report_status = :in_review
+      bad_case.court_report_submitted_at = nil
+      bad_case.valid?
+
+      expect(bad_case.errors[:court_report_status]).to include(
+        "Court report submission date can't be nil if status is anything but not_submitted."
+      )
+    end
+
+    it "rejects cases with a submission date, but no status" do
+      casa_org = create(:casa_org)
+      bad_case = create(:casa_case, casa_org: casa_org)
+      bad_case.court_report_status = :not_submitted
+      bad_case.court_report_submitted_at = DateTime.now
+      bad_case.valid?
+
+      expect(bad_case.errors[:court_report_submitted_at]).to include(
+        "Submission date must be nil if court report status is not submitted."
+      )
+    end
+  end
 end

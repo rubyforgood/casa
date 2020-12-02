@@ -67,6 +67,9 @@ class CasaCase < ApplicationRecord
   delegate :name, to: :hearing_type, prefix: true, allow_nil: true
   delegate :name, to: :judge, prefix: true, allow_nil: true
 
+  # Validation to check timestamp and submission status of a case
+  validates_with CourtReportValidator, fields: [:court_report_status, :court_report_submitted_at]
+
   def court_report_status=(value)
     super
     if court_report_not_submitted?

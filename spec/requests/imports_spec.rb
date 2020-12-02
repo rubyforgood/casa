@@ -99,7 +99,6 @@ RSpec.describe "/imports", type: :request do
 
       expect(response).to redirect_to(imports_url(import_type: "supervisor"))
     end
-    # TODO: Dominique to make test for importing csv for multiple supervisors for 1 volunteer
 
     it "creates supervisors and assigns the volunteer if not already assigned" do
       sign_in casa_admin
@@ -178,4 +177,3 @@ RSpec.describe "/imports", type: :request do
     end
   end
 end
-# TODO: dominique test for message success/fail

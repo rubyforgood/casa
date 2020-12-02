@@ -11,7 +11,7 @@
         <%= form.label :email %>
         <%= form.email_field :email, class: "form-control" %>
       </div>
-         <% if @casa_admin.persisted? %>
+      <% if @casa_admin.persisted? %>
         <div class="field form-group">
           <% if @casa_admin.active? %>
             Admin is <span class="badge badge-success text-uppercase display-1">Active</span>
@@ -20,24 +20,24 @@
 
             <div class="actions">
               <%= link_to "Deactivate",
-              deactivate_all_casa_admins_casa_org_casa_admin_path,
-              method: :patch,
-              class: "btn btn-outline-danger",
-              data: { confirm: t("forms.casa_admin.mark_inactive_warning") } %>
+                          deactivate_all_casa_admins_casa_org_casa_admin_path,
+                          method: :patch,
+                          class: "btn btn-outline-danger",
+                          data: {confirm: t("forms.casa_admin.mark_inactive_warning")} %>
               <%= form.submit "Update Profile", class: "btn btn-primary" %>
             </div>
           <% else %>
             <div class="alert alert-danger">
-              Admin was deactivated on: <%= @casa_admin.updated_at.strftime("%m-%d-%Y") %>
+              Admin was deactivated on: <%= @casa_admin.updated_at.strftime(DateFormat::MM_DD_YYYY) %>
             </div>
             <% if @casa_admin.active == false %>
 
               <div class="actions">
                 <%= link_to "Activate",
-                          activate_all_casa_admins_casa_org_casa_admin_path,
-                          method: :patch,
-                          class: "btn btn-outline-success" %>
-                  <%= form.submit "Update Profile", class: "btn btn-primary" %>
+                            activate_all_casa_admins_casa_org_casa_admin_path,
+                            method: :patch,
+                            class: "btn btn-outline-success" %>
+                <%= form.submit "Update Profile", class: "btn btn-primary" %>
               </div>
             <% end %>
           <% end %>

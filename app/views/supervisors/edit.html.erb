@@ -35,36 +35,36 @@
 
 <h1 class="pt-5">Manage Volunteers</h1>
 
-  <div class="card card-container">
-    <div class="card-body">
+<div class="card card-container">
+  <div class="card-body">
     <% if @supervisor.volunteers.any? %>
       <h3>Assigned Volunteers</h3>
       <table class='table volunteer-list'>
         <thead>
-          <tr>
-            <th>Volunteer Name</th>
-            <th>Volunteer Email</th>
-            <th>Unassign</th>
-          </tr>
+        <tr>
+          <th>Volunteer Name</th>
+          <th>Volunteer Email</th>
+          <th>Unassign</th>
+        </tr>
         </thead>
         <tbody>
-          <% @supervisor.volunteers.each do |volunteer| %>
-            <tr>
-              <td><%= link_to volunteer.decorate.name, edit_volunteer_path(volunteer) %></td>
-              <td><%= volunteer.email %></td>
-              <td>
-                <% if volunteer.supervised_by?(@supervisor) %>
-                  <%= button_to 'Unassign',
-                    unassign_supervisor_volunteer_path(volunteer),
-                    method: :patch,
-                    class: "btn btn-danger" %>
-                <% else %>
-                  Unassigned
-                <% end %>
+        <% @supervisor.volunteers.each do |volunteer| %>
+          <tr>
+            <td><%= link_to volunteer.display_name, edit_volunteer_path(volunteer) %></td>
+            <td><%= volunteer.email %></td>
+            <td>
+              <% if volunteer.supervised_by?(@supervisor) %>
+                <%= button_to 'Unassign',
+                              unassign_supervisor_volunteer_path(volunteer),
+                              method: :patch,
+                              class: "btn btn-danger" %>
+              <% else %>
+                Unassigned
+              <% end %>
 
-              </td>
-            </tr>
-          <% end %>
+            </td>
+          </tr>
+        <% end %>
         </tbody>
       </table>
     <% end %>
@@ -77,7 +77,7 @@
         <label for='supervisor_volunteer_volunteer_id'>Select a Volunteer</label>
         <select name='supervisor_volunteer[volunteer_id]' class='form-control select2'>
           <% @available_volunteers.each do |volunteer| %>
-            <option value="<%= volunteer.id %>"><%= volunteer.decorate.name %></option>
+            <option value="<%= volunteer.id %>"><%= volunteer.display_name %></option>
           <% end %>
         </select>
       </div>

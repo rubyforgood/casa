@@ -7,26 +7,26 @@
 
 <table class="table table-striped table-bordered">
   <thead>
-    <tr>
-      <th>Name</th>
-      <th>Active?</th>
-      <th>Actions</th>
-    </tr>
+  <tr>
+    <th>Name</th>
+    <th>Active?</th>
+    <th>Actions</th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @judges.each do |judge| %>
-      <tr id="judge-<%= judge.id %>">
-        <td scope="row">
-          <%= judge.name %>
-        </td>
-        <td scope="row">
-          <%= judge.active ? "Yes" : "No" %>
-        </td>
-        <td>
-          <%= link_to "Edit", edit_judge_path(judge) %>
-        </td>
-      </tr>
-    <% end %>
+  <% @judges.each do |judge| %>
+    <tr id="judge-<%= judge.id %>">
+      <td scope="row">
+        <%= judge.name %>
+      </td>
+      <td scope="row">
+        <%= judge.active ? "Yes" : "No" %>
+      </td>
+      <td>
+        <%= link_to "Edit", edit_judge_path(judge) %>
+      </td>
+    </tr>
+  <% end %>
   </tbody>
 </table>

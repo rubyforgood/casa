@@ -1,17 +1,29 @@
 # not a database model -- used for display in tables
 # volunteer is a user role and is controlled by User model
 class Volunteer < User
-  TABLE_COLUMNS = %w[
-    name
-    email
-    supervisor
-    status
-    assigned_to_transition_aged_youth
-    case_number
-    last_contact_made
-    contact_made_in_past_60_days
-    actions
+  NAME_COLUMN = "name"
+  EMAIL_COLUMN = "email"
+  SUPERVISOR_COLUMN = "supervisor"
+  STATUS_COLUMN = "status"
+  ASSIGNED_TO_TRANSITION_AGED_YOUTH_COLUMN = "assigned_to_transition_aged_youth"
+  CASE_NUMBER_COLUMN = "case_number"
+  LAST_CONTACT_MADE_COLUMN = "last_contact_made"
+  CONTACT_MADE_IN_PAST_DAYS_NUM = 60
+  CONTACT_MADE_IN_PAST_DAYS_COLUMN = "contact_made_in_past_#{CONTACT_MADE_IN_PAST_DAYS_NUM}_days".freeze
+  ACTIONS_COLUMN = "actions"
+  TABLE_COLUMNS = [
+    NAME_COLUMN,
+    EMAIL_COLUMN,
+    SUPERVISOR_COLUMN,
+    STATUS_COLUMN,
+    ASSIGNED_TO_TRANSITION_AGED_YOUTH_COLUMN,
+    CASE_NUMBER_COLUMN,
+    LAST_CONTACT_MADE_COLUMN,
+    CONTACT_MADE_IN_PAST_DAYS_COLUMN,
+    ACTIONS_COLUMN
   ].freeze
+  CONTACT_MADE_IN_DAYS_NUM = 14
+  COURT_REPORT_SUBMISSION_REMINDER = 7.days
 
   scope :with_no_supervisor, lambda { |org|
     joins("left join supervisor_volunteers "\
@@ -21,6 +33,18 @@ class Volunteer < User
       .in_organization(org)
       .where(supervisor_volunteers: {id: nil})
   }
+
+  def self.email_court_report_reminder
+    active.includes(:case_assignments).where.not(case_assignments: nil).find_each do |volunteer|
+      volunteer.case_assignments.each do |case_assignment|
+        current_case = case_assignment.casa_case
+        report_due_date = current_case.court_report_due_date
+        if (report_due_date == Date.current + COURT_REPORT_SUBMISSION_REMINDER) && current_case.court_report_not_submitted?
+          VolunteerMailer.court_report_reminder(volunteer, report_due_date)
+        end
+      end
+    end
+  end
 
   # Activates this volunteer.
   def activate
@@ -52,10 +76,9 @@ class Volunteer < User
   end
 
   # false if volunteer has any case with no contact in the past 30 days
-  def made_contact_with_all_cases_in_days?(num_days = 14)
-    # should be 14!
-    # this should do the same thing as no_contact_for_two_weeks but for a volunteer
-    total_cases_count = casa_cases.count
+  def made_contact_with_all_cases_in_days?(num_days = CONTACT_MADE_IN_DAYS_NUM)
+    # TODO this should do the same thing as no_contact_for_two_weeks but for a volunteer
+    total_cases_count = casa_cases.size
     return true if total_cases_count.zero?
     current_contact_cases_count = cases_where_contact_made_in_days(num_days).count
     current_contact_cases_count == total_cases_count
@@ -63,12 +86,11 @@ class Volunteer < User
 
   private
 
-  def cases_where_contact_made_in_days(num_days = 14)
+  def cases_where_contact_made_in_days(num_days = CONTACT_MADE_IN_DAYS_NUM)
     casa_cases
       .joins(:case_contacts)
-      .where(case_contacts: {contact_made: true})
-      .where("case_contacts.occurred_at > ?", Date.current - num_days.days)
-    # this should respect current vs past cases
+      .where(case_contacts: {contact_made: true, occurred_at: 14.days.ago.to_date..})
+    # TODO this should respect current vs past cases
   end
 end
 

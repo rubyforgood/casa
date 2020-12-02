@@ -26,7 +26,7 @@
         <input
           class="form-control"
           type="text"
-          placeholder="<%= @volunteer.created_at.strftime('%m/%d/%Y ') %>"
+          placeholder="<%= @volunteer.decorate.formatted_created_at %>"
           readonly>
       </div>
 
@@ -42,7 +42,7 @@
           <% end %>
         <% else %>
           <div class="alert alert-danger">
-            Volunteer was deactivated on: <%= @volunteer.updated_at.strftime("%m-%d-%Y") %>
+            Volunteer was deactivated on: <%= @volunteer.decorate.formatted_updated_at %>
           </div>
           <% if policy(@volunteer).activate? %>
             <%= link_to "Activate volunteer",
@@ -64,7 +64,7 @@
 
 <div class="card card-container">
   <div class="card-body">
-    <% if @volunteer.casa_cases.size > 0 %>
+    <% if @volunteer.casa_cases.count > 0 %>
       <br>
       <h3>Assigned Cases</h3>
       <table class='table case-list'>
@@ -85,7 +85,7 @@
               <% if @volunteer.active? && assignment.casa_case.active? %>
                 Volunteer is <span class="badge badge-success text-uppercase display-1">Active</span>
               <% elsif @volunteer.active? %>
-                Case was deactivated on: <%= assignment.casa_case.updated_at.strftime("%m-%d-%Y") %>
+                Case was deactivated on: <%= assignment.casa_case.updated_at.strftime(DateFormat::MM_DD_YYYY) %>
               <% else %>
                 Deactivated
               <% end %>
