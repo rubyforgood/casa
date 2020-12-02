@@ -240,7 +240,8 @@ RSpec.describe CasaCase do
       bad_case.valid?
 
       expect(bad_case.errors[:court_report_status]).to include(
-        "Court report submission date can't be nil if status is anything but not_submitted.")
+        "Court report submission date can't be nil if status is anything but not_submitted."
+      )
     end
 
     it "rejects cases with a submission date, but no status" do
@@ -251,7 +252,8 @@ RSpec.describe CasaCase do
       bad_case.valid?
 
       expect(bad_case.errors[:court_report_submitted_at]).to include(
-        "Submission date must be nil if court report status is not submitted.")
+        "Submission date must be nil if court report status is not submitted."
+      )
     end
   end
 end
