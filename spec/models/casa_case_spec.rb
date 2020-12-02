@@ -4,8 +4,9 @@ RSpec.describe CasaCase do
   subject { build(:casa_case) }
 
   it { is_expected.to have_many(:case_assignments) }
-  it { is_expected.to have_and_belong_to_many(:emancipation_options) }
   it { is_expected.to belong_to(:casa_org) }
+  it { is_expected.to have_many(:casa_cases_emancipation_options) }
+  it { is_expected.to have_many(:emancipation_options).through(:casa_cases_emancipation_options) }
   it { is_expected.to belong_to(:hearing_type).optional }
   it { is_expected.to belong_to(:judge).optional }
   it { is_expected.to validate_presence_of(:case_number) }
