@@ -51,7 +51,8 @@ RSpec.describe "layout/sidebar", type: :view do
   end
 
   context "when logged in as a volunteer" do
-    let(:user) { build_stubbed :volunteer }
+    let(:organization) { create(:casa_org) }
+    let(:user) { create(:volunteer, casa_org: organization) }
 
     it "renders the correct Role name on the sidebar" do
       sign_in user
@@ -66,7 +67,6 @@ RSpec.describe "layout/sidebar", type: :view do
 
       render partial: "layouts/sidebar"
 
-      expect(rendered).to have_link("Emancipation Checklist", href: "/emancipation_checklists/0")
       expect(rendered).to have_link("My Cases", href: "/casa_cases")
       expect(rendered).to have_link("Case Contacts", href: "/case_contacts")
       expect(rendered).to have_link("Generate Court Report", href: "/case_court_reports")
@@ -74,6 +74,35 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to_not have_link("Volunteers", href: "/volunteers")
       expect(rendered).to_not have_link("Supervisors", href: "/supervisors")
       expect(rendered).to_not have_link("Admins", href: "/casa_admins")
+    end
+
+    context "when the volunteer does not have a transitioning case" do
+      it "does not renders emancipation checklist(s)" do
+        sign_in user
+
+        # 0 Cases
+        render partial: "layouts/sidebar"
+        expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
+
+        # 1 Non transitioning case
+        casa_case = create(:casa_case, casa_org: organization, transition_aged_youth: false)
+        create(:case_assignment, volunteer: user, casa_case: casa_case)
+
+        render partial: "layouts/sidebar"
+        expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
+      end
+    end
+
+    context "when the volunteer has a transitioning case" do
+      let(:casa_case) { create(:casa_case, casa_org: organization, transition_aged_youth: true) }
+      let!(:case_assignment) { create(:case_assignment, volunteer: user, casa_case: casa_case) }
+
+      it "renders emancipation checklist(s)" do
+        sign_in user
+
+        render partial: "layouts/sidebar"
+        expect(rendered).to have_link("Emancipation Checklist", href: "/emancipation_checklists")
+      end
     end
   end
 
@@ -100,7 +129,7 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Admins", href: "/casa_admins")
       expect(rendered).to have_link("Report a site issue", href: "https://rubyforgood.typeform.com/to/iXY4BubB")
       expect(rendered).to_not have_link("Generate Court Reports", href: "/case_court_reports")
-      expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists/0")
+      expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
     end
   end
 end
