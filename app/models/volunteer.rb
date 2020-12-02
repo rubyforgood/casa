@@ -23,6 +23,7 @@ class Volunteer < User
     ACTIONS_COLUMN
   ].freeze
   CONTACT_MADE_IN_DAYS_NUM = 14
+  COURT_REPORT_SUBMISSION_REMINDER = 7.days
 
   scope :with_no_supervisor, lambda { |org|
     joins("left join supervisor_volunteers "\
@@ -32,6 +33,18 @@ class Volunteer < User
       .in_organization(org)
       .where(supervisor_volunteers: {id: nil})
   }
+
+  def self.email_court_report_reminder
+    active.includes(:case_assignments).where.not(case_assignments: nil).find_each do |volunteer|
+      volunteer.case_assignments.each do |case_assignment|
+        current_case = case_assignment.casa_case
+        report_due_date = current_case.court_report_due_date
+        if (report_due_date == Date.current + COURT_REPORT_SUBMISSION_REMINDER) && current_case.court_report_not_submitted?
+          VolunteerMailer.court_report_reminder(volunteer, report_due_date)
+        end
+      end
+    end
+  end
 
   # Activates this volunteer.
   def activate
