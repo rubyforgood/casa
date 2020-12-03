@@ -194,6 +194,10 @@ See `db/seeds` for seed data. Test data includes the below
 1. casa_admin1@example.com / 123456 https://\<URL\>.herokuapp.com/
 1. allcasaadmin@example.com / 123456 https://\<URL\>.herokuapp.com/all_casa_admins/sign_in
 
+In the emails listed above, the number `1` corresponds to a `casa_org_id`. To log in to a different `casa_org`'s instance, change the `casa_org_id` number in the email, and add a hyphen and numerical value to the end. 
+
+Example: To log into CASA Org 2's instance, use the following email: casa_admin2-1@example.com. In this example, the number `2` corresponds to the `casa_org`, and the number `1` corresponds to the user. 
+
 ### QA environment
 
 When pull requests are merged, the code auto-deploys to QA (because of a heroku setting)
