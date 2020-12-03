@@ -7,12 +7,6 @@ RSpec.describe EmancipationOption, type: :model do
   it { is_expected.to validate_presence_of(:name) }
 
   context "When creating a new option" do
-    it "creates a new option in the database when passed valid parameters" do
-      expect {
-        create(:emancipation_option)
-      }.to change { EmancipationOption.count }
-    end
-
     context "duplicate name entries" do
       duplicate_option_name = "test option"
       let(:duplicate_category) { create(:emancipation_category) }
