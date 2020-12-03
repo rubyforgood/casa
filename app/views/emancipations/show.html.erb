@@ -11,7 +11,7 @@
         This page requires javascript to work
       </p>
     </noscript>
-  </div> 
+  </div>
 </div>
 
 <div class="card card-container">
@@ -32,7 +32,7 @@
       <% else %>
         <h6><strong> <%= category[:category].name %> </strong></h6>
         <% category[:options].each do |option| %>
-          <input type="checkbox" id="O<%= option.id %>" class="emancipation-check-box" value="<%= option.id %>" <%= @current_case.contains_emancipation_option?(option.id) ? 'checked' : nil %> >
+          <input type="checkbox" id="O<%= option.id %>" class="emancipation-check-box" value="<%= option.id %>" <%= @current_case.contains_emancipation_option?(option.id) ? 'checked' : nil %>>
           <label for="O<%= option.id %>"><%= option.name %></label>
           <br>
         <% end %>
