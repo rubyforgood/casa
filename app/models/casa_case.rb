@@ -15,8 +15,8 @@ class CasaCase < ApplicationRecord
   has_many :active_case_assignments, -> { is_active }, class_name: "CaseAssignment"
   has_many :assigned_volunteers, -> { active }, through: :active_case_assignments, source: :volunteer, class_name: "Volunteer"
   has_many :case_contacts, dependent: :destroy
-  has_many :casa_cases_emancipation_options
-  has_many :emancipation_options, through: :casa_cases_emancipation_options, dependent: :destroy
+  has_many :casa_cases_emancipation_options, dependent: :destroy
+  has_many :emancipation_options, through: :casa_cases_emancipation_options
   has_many :past_court_dates, dependent: :destroy
   validates :case_number, uniqueness: {scope: :casa_org_id, case_sensitive: false}, presence: true
   belongs_to :hearing_type, optional: true
