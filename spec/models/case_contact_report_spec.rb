@@ -31,18 +31,18 @@ RSpec.describe CaseContactReport, type: :model do
   end
 
   describe "filter behavior" do
-    context 'when result is empty' do
-      it 'returns only headers if result is empty' do
+    context "when result is empty" do
+      it "returns only headers if result is empty" do
         report = CaseContactReport.new(
           {
-            "start_date"=> 1.days.ago,
-            "end_date"=> 1.days.ago,
-            "contact_made"=>true,
-            "has_transitioned"=>true,
-            "want_driving_reimbursement"=>true,
-            "contact_type_ids"=>["4"],
-            "contact_type_group_ids"=>["2", "3"],
-            "supervisor_ids"=>["2"]
+            "start_date" => 1.days.ago,
+            "end_date" => 1.days.ago,
+            "contact_made" => true,
+            "has_transitioned" => true,
+            "want_driving_reimbursement" => true,
+            "contact_type_ids" => ["4"],
+            "contact_type_group_ids" => ["2", "3"],
+            "supervisor_ids" => ["2"]
           }
         )
         contacts = report.case_contacts
@@ -54,7 +54,7 @@ RSpec.describe CaseContactReport, type: :model do
       end
     end
 
-    context 'when result is not empty' do
+    context "when result is not empty" do
       describe "occured at range filter" do
         it "uses date range if provided" do
           create(:case_contact, {occurred_at: 20.days.ago})
