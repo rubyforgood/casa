@@ -78,10 +78,13 @@ $('document').ready(() => {
       console.log(e);
       if (e.responseJSON && e.responseJSON.error) {
         alert(e.responseJSON.error);
-      } else if (e.response.statusText) {
-        alert(`Unable to complete your request: ${e.response.statusText}`);
       } else {
-        alert("Unable to complete your request.");
+        const responseErrorMessage = e.response.statusText
+          ? `\n${e.response.statusText}\n`
+          : '';
+
+        alert(`Sorry, try that again?\n${responseErrorMessage}\nIf you're seeing a problem, please fill out the Report A Site Issue
+        link to the bottom left near your email address.`)
       }
     }
   };
@@ -100,11 +103,11 @@ $('document').ready(() => {
           return `
             <a href="${editVolunteerPath(row.id)}">
               ${row.display_name || row.email}
-              ${row.made_contact_with_all_cases_in_days === 'false'
-                ? `🕐 <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="Has at least one case with no contact in 14 days"></i>`
-                : ''
-              }
             </a>
+            ${row.made_contact_with_all_cases_in_days === 'false'
+              ? `🕐 <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="Has at least one case with no contact in 14 days"></i>`
+              : ''
+            }
           `;
         }
       },
@@ -117,13 +120,13 @@ $('document').ready(() => {
         className: "supervisor-column",
         name: "supervisor_name",
         render: (data, type, row, meta) => {
-          if (!row.supervisor.id) return "";
-
-          return `
-            <a href="${editSupervisorPath(row.supervisor.id)}">
-              ${row.supervisor.name}
-            </a>
-          `;
+          return row.supervisor.id
+            ? `
+              <a href="${editSupervisorPath(row.supervisor.id)}">
+                ${row.supervisor.name}
+              </a>
+            `
+            : '';
         }
       },
       {
@@ -150,13 +153,13 @@ $('document').ready(() => {
       {
         name: "most_recent_contact_occurred_at",
         render: (data, type, row, meta) => {
-          if (!row.most_recent_contact.case_id) return "None ❌";
-
-          return `
-            <a href="${casaCasePath(row.most_recent_contact.case_id)}">
-              ${row.most_recent_contact.occurred_at}
-            </a>
-          `;
+          return row.most_recent_contact.case_id
+            ? `
+              <a href="${casaCasePath(row.most_recent_contact.case_id)}">
+                ${row.most_recent_contact.occurred_at}
+              </a>
+            `
+            : "None ❌";
         },
         searchable: false,
         visible: false
@@ -205,6 +208,9 @@ $('document').ready(() => {
       },
       error: handleAjaxError,
       dataType: 'json'
+    },
+    drawCallback: function (settings) {
+      $('[data-toggle=tooltip]').tooltip();
     }
   })
 

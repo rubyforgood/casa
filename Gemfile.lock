@@ -104,6 +104,10 @@ GEM
     crass (1.0.6)
     cypress-on-rails (1.8.0)
       rack
+    database_cleaner (1.8.5)
+    database_cleaner-active_record (1.8.0)
+      activerecord
+      database_cleaner (~> 1.8.0)
     devise (4.7.3)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -345,6 +349,7 @@ DEPENDENCIES
   capybara (>= 2.15)
   capybara-screenshot
   cypress-on-rails (~> 1.0)
+  database_cleaner-active_record (~> 1.8.0)
   devise
   devise_invitable
   draper

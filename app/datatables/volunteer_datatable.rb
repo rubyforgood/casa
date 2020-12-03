@@ -12,9 +12,9 @@ class VolunteerDatatable < ApplicationDatatable
   private
 
   def data
-    records.map(&:decorate).map do |volunteer|
+    records.map do |volunteer|
       {
-        active: volunteer.active,
+        active: volunteer.active?,
         casa_cases: volunteer.casa_cases.map { |cc| {id: cc.id, case_number: cc.case_number} },
         contacts_made_in_past_days: volunteer.contacts_made_in_past_days,
         display_name: volunteer.display_name,
@@ -22,7 +22,10 @@ class VolunteerDatatable < ApplicationDatatable
         has_transition_aged_youth_cases: volunteer.has_transition_aged_youth_cases?,
         id: volunteer.id,
         made_contact_with_all_cases_in_days: volunteer.made_contact_with_all_cases_in_days?,
-        most_recent_contact: {case_id: volunteer.most_recent_contact_case_id, occurred_at: volunteer.most_recent_contact_occurred_at.try(:strftime, "%B %-e, %Y")},
+        most_recent_contact: {
+          case_id: volunteer.most_recent_contact_case_id,
+          occurred_at: volunteer.most_recent_contact_occurred_at.try(:strftime, DateFormat::FULL)
+        },
         supervisor: {id: volunteer.supervisor_id, name: volunteer.supervisor_name}
       }
     end
@@ -149,14 +152,17 @@ class VolunteerDatatable < ApplicationDatatable
       lambda {
         return "TRUE" if search_term.blank?
 
-        clause_string =
-          "users.display_name ILIKE ?" \
-          " OR users.email ILIKE ?" \
-          " OR supervisors.display_name ILIKE ?" \
-          " OR supervisors.email ILIKE ?" \
-          " OR users.id IN (#{casa_case_number_filter_subquery})"
+        ilike_fields = %w[
+          users.display_name
+          users.email
+          supervisors.display_name
+          supervisors.email
+        ]
+        ilike_clauses = ilike_fields.map { |field| "#{field} ILIKE ?" }.join(" OR ")
+        casa_case_number_clause = "users.id IN (#{casa_case_number_filter_subquery})"
+        full_clause = "#{ilike_clauses} OR #{casa_case_number_clause}"
 
-        [clause_string, 4.times.map { "%#{search_term}%" }].flatten
+        [full_clause, ilike_fields.count.times.map { "%#{search_term}%" }].flatten
       }.call
   end
 
