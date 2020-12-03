@@ -184,7 +184,7 @@ GEM
       byebug (~> 11.0)
       pry (~> 0.13.0)
     public_suffix (4.0.6)
-    puma (5.0.4)
+    puma (5.1.0)
       nio4r (~> 2.0)
     pundit (2.1.0)
       activesupport (>= 3.0.0)
@@ -359,7 +359,7 @@ DEPENDENCIES
   pg (>= 0.18, < 2.0)
   pry
   pry-byebug
-  puma (~> 5.0)
+  puma (~> 5.1)
   pundit
   rack-attack
   rails (~> 6.0.3)
