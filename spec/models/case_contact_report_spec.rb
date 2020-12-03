@@ -31,58 +31,83 @@ RSpec.describe CaseContactReport, type: :model do
   end
 
   describe "filter behavior" do
-    describe "occured at range filter" do
-      it "uses date range if provided" do
-        create(:case_contact, {occurred_at: 20.days.ago})
-        create(:case_contact, {occurred_at: 100.days.ago})
-        report = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago})
+    context 'when result is empty' do
+      it 'returns only headers if result is empty' do
+        report = CaseContactReport.new(
+          {
+            "start_date"=> 1.days.ago,
+            "end_date"=> 1.days.ago,
+            "contact_made"=>true,
+            "has_transitioned"=>true,
+            "want_driving_reimbursement"=>true,
+            "contact_type_ids"=>["4"],
+            "contact_type_group_ids"=>["2", "3"],
+            "supervisor_ids"=>["2"]
+          }
+        )
         contacts = report.case_contacts
-        expect(contacts.length).to eq(1)
+
+        expect(report.to_csv).to eq(
+          "Internal Contact Number,Duration Minutes,Contact Types,Contact Made,Contact Medium,Occurred At,Added To System At,Miles Driven,Wants Driving Reimbursement,Casa Case Number,Creator Email,Creator Name,Supervisor Name,Case Contact Notes\n"
+        )
+        expect(contacts.length).to eq(0)
       end
+    end
 
-      it "returns all date ranges if not provided" do
-        create(:case_contact, {occurred_at: 20.days.ago})
-        create(:case_contact, {occurred_at: 100.days.ago})
-        report = CaseContactReport.new({})
-        contacts = report.case_contacts
-        expect(contacts.length).to eq(2)
-      end
+    context 'when result is not empty' do
+      describe "occured at range filter" do
+        it "uses date range if provided" do
+          create(:case_contact, {occurred_at: 20.days.ago})
+          create(:case_contact, {occurred_at: 100.days.ago})
+          report = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago})
+          contacts = report.case_contacts
+          expect(contacts.length).to eq(1)
+        end
 
-      it "returns only the volunteer" do
-        volunteer = create(:volunteer)
-        create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
-        create(:case_contact, {occurred_at: 100.days.ago})
-        report = CaseContactReport.new({creator_ids: [volunteer.id]})
-        contacts = report.case_contacts
-        expect(contacts.length).to eq(1)
-      end
+        it "returns all date ranges if not provided" do
+          create(:case_contact, {occurred_at: 20.days.ago})
+          create(:case_contact, {occurred_at: 100.days.ago})
+          report = CaseContactReport.new({})
+          contacts = report.case_contacts
+          expect(contacts.length).to eq(2)
+        end
 
-      it "returns only the volunteer with date range" do
-        volunteer = create(:volunteer)
-        create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
-        create(:case_contact, {occurred_at: 100.days.ago, creator_id: volunteer.id})
+        it "returns only the volunteer" do
+          volunteer = create(:volunteer)
+          create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
+          create(:case_contact, {occurred_at: 100.days.ago})
+          report = CaseContactReport.new({creator_ids: [volunteer.id]})
+          contacts = report.case_contacts
+          expect(contacts.length).to eq(1)
+        end
 
-        create(:case_contact, {occurred_at: 100.days.ago})
-        report = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, creator_ids: [volunteer.id]})
-        contacts = report.case_contacts
-        expect(contacts.length).to eq(1)
-      end
+        it "returns only the volunteer with date range" do
+          volunteer = create(:volunteer)
+          create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
+          create(:case_contact, {occurred_at: 100.days.ago, creator_id: volunteer.id})
 
-      it "returns only the volunteer with the specified supervisors" do
-        casa_org = create(:casa_org)
-        supervisor = create(:supervisor, casa_org: casa_org)
-        volunteer = create(:volunteer, casa_org: casa_org)
-        volunteer2 = create(:volunteer, casa_org: casa_org)
-        create(:supervisor_volunteer, volunteer: volunteer, supervisor: supervisor)
+          create(:case_contact, {occurred_at: 100.days.ago})
+          report = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, creator_ids: [volunteer.id]})
+          contacts = report.case_contacts
+          expect(contacts.length).to eq(1)
+        end
 
-        contact = create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
-        create(:case_contact, {occurred_at: 100.days.ago, creator_id: volunteer2.id})
+        it "returns only the volunteer with the specified supervisors" do
+          casa_org = create(:casa_org)
+          supervisor = create(:supervisor, casa_org: casa_org)
+          volunteer = create(:volunteer, casa_org: casa_org)
+          volunteer2 = create(:volunteer, casa_org: casa_org)
+          create(:supervisor_volunteer, volunteer: volunteer, supervisor: supervisor)
 
-        create(:case_contact, {occurred_at: 100.days.ago})
-        report = CaseContactReport.new({supervisor_ids: [supervisor.id]})
-        contacts = report.case_contacts
-        expect(contacts.length).to eq(1)
-        expect(contacts).to eq([contact])
+          contact = create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
+          create(:case_contact, {occurred_at: 100.days.ago, creator_id: volunteer2.id})
+
+          create(:case_contact, {occurred_at: 100.days.ago})
+          report = CaseContactReport.new({supervisor_ids: [supervisor.id]})
+          contacts = report.case_contacts
+          expect(contacts.length).to eq(1)
+          expect(contacts).to eq([contact])
+        end
       end
     end
 
