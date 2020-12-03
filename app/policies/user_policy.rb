@@ -42,10 +42,12 @@ class UserPolicy
 
     def resolve
       case user
-      when CasaAdmin || Supervisor # scope.in_casa_administered_by(user)
+      when CasaAdmin # scope.in_casa_administered_by(user)
         scope.all
       when Volunteer
         scope.where(id: user.id)
+      when Supervisor
+        scope.all
       else
         raise "unrecognized role #{@user.type}"
       end
@@ -53,10 +55,12 @@ class UserPolicy
 
     def edit?
       case user
-      when CasaAdmin || Supervisor # scope.in_casa_administered_by(user)
+      when CasaAdmin # scope.in_casa_administered_by(user)
         scope.all
       when Volunteer
         scope.where(id: user.id)
+      when Supervisor
+        scope.all
       else
         raise "unrecognized role #{@user.type}"
       end
