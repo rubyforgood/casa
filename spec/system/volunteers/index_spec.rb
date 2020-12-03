@@ -75,13 +75,13 @@ RSpec.describe "volunteers/index", type: :system do
       # by default, only active users are shown
       expect(page.all("table#volunteers tbody tr").count).to eq assigned_volunteers.count
       assigned_volunteers.each do |assigned_volunteer|
-        expect(page).to have_text assigned_volunteer.decorate.name
+        expect(page).to have_text assigned_volunteer.display_name
       end
 
       click_on "Supervisor"
       find(:css, "#unassigned-vol-filter").set(true)
       unassigned_volunteers.each do |unassigned_volunteer|
-        expect(page).to have_text unassigned_volunteer.decorate.name
+        expect(page).to have_text unassigned_volunteer.display_name
       end
       expect(page.all("table#volunteers tbody tr").count).to eq unassigned_volunteers.count
 
@@ -91,7 +91,7 @@ RSpec.describe "volunteers/index", type: :system do
 
       find(:css, 'input[data-value="false"]').set(true)
       inactive_volunteers.each do |inactive_volunteer|
-        expect(page).to have_text inactive_volunteer.decorate.name
+        expect(page).to have_text inactive_volunteer.display_name
       end
       expect(page.all("table#volunteers tbody tr").count).to eq inactive_volunteers.count
     end
@@ -196,7 +196,7 @@ RSpec.describe "volunteers/index", type: :system do
 
       find(:css, 'input[data-value="false"]').set(true)
       inactive_volunteers.each do |inactive_volunteer|
-        expect(page).to have_text inactive_volunteer.decorate.name
+        expect(page).to have_text inactive_volunteer.display_name
       end
       expect(page.all("table#volunteers tbody tr").count).to eq inactive_volunteers.count
     end
