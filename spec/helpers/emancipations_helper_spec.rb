@@ -11,5 +11,28 @@ require "rails_helper"
 #   end
 # end
 RSpec.describe EmancipationsHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:casa_case) { create(:casa_case, transition_aged_youth: true) }
+  let(:emancipation_option) { create(:emancipation_option) }
+
+  describe "#emancipation_select_option_selected" do
+    it "returns \"selected\" when passed an associated casa case and emancipation option id" do
+      create(:casa_cases_emancipation_option, casa_case_id: casa_case.id, emancipation_option_id: emancipation_option.id)
+      expect(helper.emancipation_select_option_selected(casa_case, emancipation_option.id)).to eq("selected")
+    end
+
+    it "returns nil when passed an unassociated casa case and emancipation option id" do
+      expect(helper.emancipation_select_option_selected(casa_case, emancipation_option.id)).to eq(nil)
+    end
+  end
+
+  describe "#emancipation_checkbox_option_checked" do
+    it "returns \"checked\" when passed an associated casa case and emancipation option id" do
+      create(:casa_cases_emancipation_option, casa_case_id: casa_case.id, emancipation_option_id: emancipation_option.id)
+      expect(helper.emancipation_checkbox_option_checked(casa_case, emancipation_option.id)).to eq("checked")
+    end
+
+    it "returns nil when passed an unassociated casa case and emancipation option id" do
+      expect(helper.emancipation_checkbox_option_checked(casa_case, emancipation_option.id)).to eq(nil)
+    end
+  end
 end
