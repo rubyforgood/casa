@@ -3,9 +3,9 @@ require "rails_helper"
 RSpec.describe CasaCase do
   subject { build(:casa_case) }
 
-  it { is_expected.to have_many(:case_assignments) }
+  it { is_expected.to have_many(:case_assignments).dependent(:destroy) }
   it { is_expected.to belong_to(:casa_org) }
-  it { is_expected.to have_many(:casa_cases_emancipation_options) }
+  it { is_expected.to have_many(:casa_cases_emancipation_options).dependent(:destroy) }
   it { is_expected.to have_many(:emancipation_options).through(:casa_cases_emancipation_options) }
   it { is_expected.to belong_to(:hearing_type).optional }
   it { is_expected.to belong_to(:judge).optional }
