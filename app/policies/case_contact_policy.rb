@@ -36,12 +36,10 @@ class CaseContactPolicy
 
     def resolve
       case @user
-      when CasaAdmin # scope.in_casa_administered_by(@user)
+      when CasaAdmin, Supervisor # scope.in_casa_administered_by(@user)
         scope.all
       when Volunteer
         scope.where(casa_case: CasaCase.actively_assigned_to(@user), creator: @user)
-      when Supervisor
-        scope.all
       else
         raise "unrecognized user type #{@user.type}"
       end
