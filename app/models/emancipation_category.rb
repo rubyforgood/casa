@@ -1,7 +1,7 @@
 class EmancipationCategory < ApplicationRecord
   has_many :emancipation_options
   validates :name, presence: true
-  validates :mutually_exclusive, inclusion: { in: [ true, false ] }
+  validates :mutually_exclusive, inclusion: {in: [true, false]}
 
   def add_option(option_name)
     EmancipationOption.create(emancipation_category_id: self[:id], name: option_name)

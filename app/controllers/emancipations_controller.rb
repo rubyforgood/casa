@@ -8,29 +8,29 @@ class EmancipationsController < ApplicationController
   def show
     @current_case = CasaCase.find(params[:casa_case_id])
     authorize @current_case
-    @emancipation_form_data = EmancipationCategory.all.map { |category| {:category => category, :options => EmancipationOption.category_options(category.id)} }
+    @emancipation_form_data = EmancipationCategory.all.map { |category| {category: category, options: EmancipationOption.category_options(category.id)} }
   end
 
   # POST /casa_cases/:casa_case_id/emancipation/save
   def save
     if !params.key?("casa_case_id")
-      render json: { error: "Missing param casa_case_id" }
+      render json: {error: "Missing param casa_case_id"}
       return
     elsif !/\A\d+\z/.match(params[:casa_case_id])
-      render json: { error: "Param casa_case_id must be a positive integer" }
+      render json: {error: "Param casa_case_id must be a positive integer"}
       return
     end
 
-    if !params.key?("option_action")
-      render json: { error: "Missing param option_action" }
+    unless params.key?("option_action")
+      render json: {error: "Missing param option_action"}
       return
     end
 
     if !params.key?("option_id")
-      render json: { error: "Missing param option_id" }
+      render json: {error: "Missing param option_id"}
       return
     elsif !/\A\d+\z/.match(params[:option_id])
-      render json: { error: "Param option_id must be a positive integer" }
+      render json: {error: "Param option_id must be a positive integer"}
       return
     end
 
@@ -38,12 +38,12 @@ class EmancipationsController < ApplicationController
       current_case = CasaCase.find(params[:casa_case_id])
       authorize current_case, :update_emancipation_option?
     rescue ActiveRecord::RecordNotFound
-      render json: { error: "Could not find case from id given by casa_case_id" }
+      render json: {error: "Could not find case from id given by casa_case_id"}
       return
     end
 
-    if !current_case.has_transitioned?
-      render json: { error: "The current case is not marked as transitioning" }
+    unless current_case.has_transitioned?
+      render json: {error: "The current case is not marked as transitioning"}
       return
     end
 
@@ -60,21 +60,21 @@ class EmancipationsController < ApplicationController
         current_case.add_emancipation_option(params[:option_id])
         render json: "success".to_json
       else
-        render json: { error: "Param option_action did not contain a supported action" }
+        render json: {error: "Param option_action did not contain a supported action"}
       end
     rescue ActiveRecord::RecordNotFound
-      render json: { error: "Could not find option from id given by param option_id" }
+      render json: {error: "Could not find option from id given by param option_id"}
     rescue ActiveRecord::RecordNotUnique
-      render json: { error: "Option already added to case" }
-    rescue StandardError => error
-      render json: { error: error.message }
+      render json: {error: "Option already added to case"}
+    rescue => error
+      render json: {error: error.message}
     end
   end
 
   # Render a json error for json endpoints
-  def user_not_authorized (exception)
-    if exception.backtrace[1] =~ /save'\z/
-      render json: { error: "Sorry, you are not authorized to perform this action. Did the session expire?" }
+  def user_not_authorized(exception)
+    if exception.backtrace[1].end_with?("save'")
+      render json: {error: "Sorry, you are not authorized to perform this action. Did the session expire?"}
     else
       flash[:error] = "Sorry, you are not authorized to perform this action."
       redirect_to(request.referrer || root_path)

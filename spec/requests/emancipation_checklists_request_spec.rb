@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "/emancipation_checklists", type: :request do
   let(:organization) { create(:casa_org) }
@@ -25,7 +25,7 @@ RSpec.describe "/emancipation_checklists", type: :request do
           expect(response).to be_successful
         end
       end
-      
+
       context "when viewing the page with more than one transitioning cases" do
         let(:casa_case_a) { create(:casa_case, casa_org: organization, transition_aged_youth: true) }
         let(:casa_case_b) { create(:casa_case, casa_org: organization, transition_aged_youth: true) }
