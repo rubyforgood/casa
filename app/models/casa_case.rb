@@ -99,19 +99,13 @@ class CasaCase < ApplicationRecord
   end
 
   def contains_emancipation_option?(option_id)
-    begin
-      emancipation_options.find(option_id)
-    rescue ActiveRecord::RecordNotFound
-      return false
-    end
-
-    true
+    emancipation_options.find_by(id: option_id).present?
   end
 
   def add_emancipation_option(option_id)
-    option_category_id = EmancipationOption.find(option_id).emancipation_category_id
+    option_category = EmancipationOption.find(option_id).emancipation_category
 
-    if !(EmancipationCategory.find(option_category_id).mutually_exclusive && EmancipationOption.options_with_category_and_case(option_category_id, self[:id]).any?)
+    if !(option_category.mutually_exclusive && EmancipationOption.options_with_category_and_case(option_category, id).any?)
       emancipation_options << EmancipationOption.find(option_id)
     else
       raise "Attempted adding multiple options belonging to a mutually exclusive category"

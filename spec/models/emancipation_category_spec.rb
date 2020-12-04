@@ -26,7 +26,7 @@ RSpec.describe EmancipationCategory, type: :model do
     it "should call EmancipationOption.create" do
       option_name = "test option"
 
-      expect(EmancipationOption).to receive(:create).with(emancipation_category_id: emancipation_category.id, name: option_name)
+      expect(emancipation_category.emancipation_options).to receive(:create).with(name: option_name)
       emancipation_category.add_option(option_name)
     end
   end
