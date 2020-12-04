@@ -25,14 +25,21 @@
           <select id="C<%= category[:category].id %>" class="emancipation-select">
             <option value="">empty</option>
             <% category[:options].each do |option| %>
-              <option value="<%= option.id %>" <%= emancipation_select_option_selected(@current_case, option.id) %>><%= option.name %></option>
+              <option value="<%= option.id %>" <%= emancipation_select_option_selected(@current_case, option.id) %>>
+                <%= option.name %>
+              </option>
             <% end %>
           </select>
         <h6>
       <% else %>
         <h6><strong> <%= category[:category].name %> </strong></h6>
         <% category[:options].each do |option| %>
-          <input type="checkbox" id="O<%= option.id %>" class="emancipation-check-box" value="<%= option.id %>" <%= emancipation_checkbox_option_checked(@current_case, option.id) %>>
+          <input
+            type="checkbox"
+            id="O<%= option.id %>"
+            class="emancipation-check-box"
+            value="<%= option.id %>"
+            <%= emancipation_checkbox_option_checked(@current_case, option.id) %>>
           <label for="O<%= option.id %>"><%= option.name %></label>
           <br>
         <% end %>
