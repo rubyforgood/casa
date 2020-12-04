@@ -17,14 +17,14 @@
 <div class="card card-container">
   <div class="card-body">
     <% @emancipation_form_data.each do |category| %>
-      <% if category[:category].mutually_exclusive %>
+      <% if category.mutually_exclusive %>
         <h6>
-          <label for="C<%= category[:category].id %>">
-            <strong> <%= category[:category].name %> </strong>
+          <label for="C<%= category.id %>">
+            <strong> <%= category.name %> </strong>
           </label>
-          <select id="C<%= category[:category].id %>" class="emancipation-select">
+          <select id="C<%= category.id %>" class="emancipation-select">
             <option value="">empty</option>
-            <% category[:options].each do |option| %>
+            <% category.emancipation_options.each do |option| %>
               <option value="<%= option.id %>" <%= emancipation_select_option_selected(@current_case, option.id) %>>
                 <%= option.name %>
               </option>
@@ -32,8 +32,8 @@
           </select>
         <h6>
       <% else %>
-        <h6><strong> <%= category[:category].name %> </strong></h6>
-        <% category[:options].each do |option| %>
+        <h6><strong> <%= category.name %> </strong></h6>
+        <% category.emancipation_options.each do |option| %>
           <input
             type="checkbox"
             id="O<%= option.id %>"

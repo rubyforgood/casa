@@ -8,7 +8,7 @@ class EmancipationsController < ApplicationController
   def show
     @current_case = CasaCase.find(params[:casa_case_id])
     authorize @current_case
-    @emancipation_form_data = EmancipationCategory.all.map { |category| {category: category, options: EmancipationOption.category_options(category.id)} }
+    @emancipation_form_data = EmancipationCategory.all
   end
 
   # POST /casa_cases/:casa_case_id/emancipation/save
