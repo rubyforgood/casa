@@ -7,12 +7,6 @@ class UserDecorator < Draper::Decorator
     "Inactive"
   end
 
-  def name
-    return object.email if object.display_name.blank?
-
-    object.display_name
-  end
-
   def formatted_created_at
     object.created_at.strftime(DateFormat::MM_DD_YYYY)
   end

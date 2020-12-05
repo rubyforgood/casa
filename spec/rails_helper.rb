@@ -46,6 +46,7 @@ RSpec.configure do |config|
 
   config.infer_spec_type_from_file_location!
 
+  # Auto detect datatable type specs
   config.define_derived_metadata(file_path: Regexp.new("/spec/datatables/")) do |metadata|
     metadata[:type] = :datatable
   end

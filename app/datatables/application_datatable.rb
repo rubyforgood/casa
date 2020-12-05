@@ -1,6 +1,8 @@
 class ApplicationDatatable
   attr_reader :base_relation, :params
 
+  DEFAULT_PER_PAGE = 10
+
   def initialize(base_relation, params)
     @base_relation = base_relation
     @params = params
@@ -53,21 +55,25 @@ class ApplicationDatatable
     @order_by ||=
       lambda {
         order_by = params[:columns][order_column_index][:name]
-        order_by if self.class::ORDERABLE_FIELDS.include? order_by.try :downcase
+        order_by if self.class::ORDERABLE_FIELDS.include?(order_by.try(:downcase))
       }.call
   end
 
   def order_column_index
-    params[:order]["0"][:column]
+    order_params[:column]
+  end
+
+  def order_params
+    @order_params ||= params[:order]["0"]
   end
 
   def order_direction
-    order_direction = params[:order]["0"][:dir] || "ASC"
+    order_direction = order_params[:dir] || "ASC"
     %w[asc desc].include?(order_direction.downcase) ? order_direction : "ASC"
   end
 
   def limit
-    (params[:length] || 10).to_i
+    (params[:length] || DEFAULT_PER_PAGE).to_i
   end
 
   def offset

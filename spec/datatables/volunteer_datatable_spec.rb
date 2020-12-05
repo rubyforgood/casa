@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "VolunteerDatatable" do
-  let(:org) { create :casa_org }
-  let(:supervisors) { create_list :supervisor, 3, casa_org: org }
+  let(:org) { CasaOrg.first }
+  let(:supervisors) { Supervisor.all }
   let(:assigned_volunteers) { Volunteer.joins(:supervisor) }
   let(:subject) { described_class.new(org.volunteers, params).as_json }
 
@@ -29,7 +29,13 @@ RSpec.describe "VolunteerDatatable" do
     )
   end
 
-  before do
+  before :all do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.start
+
+    org = create :casa_org
+    supervisors = create_list :supervisor, 3, casa_org: org
+
     supervisors.each do |supervisor|
       supervisor.update display_name: Faker::Name.unique.name
       volunteers = create_list :volunteer, 2, casa_org: org, supervisor: supervisor
@@ -42,6 +48,10 @@ RSpec.describe "VolunteerDatatable" do
     end
 
     create_list :volunteer, 2, casa_org: org
+  end
+
+  after :all do
+    DatabaseCleaner.clean
   end
 
   describe "order by" do
