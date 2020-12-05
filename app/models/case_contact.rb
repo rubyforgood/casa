@@ -1,4 +1,5 @@
 class CaseContact < ApplicationRecord
+  include ByOrganizationScope
   attr_accessor :duration_hours
 
   validate :contact_made_chosen

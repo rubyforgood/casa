@@ -9,7 +9,7 @@ RSpec.describe UserPolicy::Scope do
 
       scope = described_class.new(admin, User)
 
-      expect(scope.resolve).to contain_exactly(admin, user1, user2)
+      expect(scope.resolve).to contain_exactly(admin)
     end
 
     it "returns the user when user is volunteer" do

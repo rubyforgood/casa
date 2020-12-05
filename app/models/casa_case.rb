@@ -1,4 +1,6 @@
 class CasaCase < ApplicationRecord
+  include ByOrganizationScope
+
   TABLE_COLUMNS = %w[
     case_number
     hearing_type_name

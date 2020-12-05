@@ -39,7 +39,7 @@ class UserPolicy
     def resolve
       case user
       when CasaAdmin, Supervisor # scope.in_casa_administered_by(user)
-        scope.where(casa_org: @user.casa_org)
+        scope.by_organization(@user.casa_org)
       when Volunteer
         scope.where(id: user.id)
       else
