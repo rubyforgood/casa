@@ -15,6 +15,8 @@ class CasaCase < ApplicationRecord
   has_many :active_case_assignments, -> { is_active }, class_name: "CaseAssignment"
   has_many :assigned_volunteers, -> { active }, through: :active_case_assignments, source: :volunteer, class_name: "Volunteer"
   has_many :case_contacts, dependent: :destroy
+  has_many :casa_cases_emancipation_options, dependent: :destroy
+  has_many :emancipation_options, through: :casa_cases_emancipation_options
   has_many :past_court_dates, dependent: :destroy
   validates :case_number, uniqueness: {scope: :casa_org_id, case_sensitive: false}, presence: true
   belongs_to :hearing_type, optional: true
@@ -45,7 +47,6 @@ class CasaCase < ApplicationRecord
       .where(case_assignments: {id: nil})
       .order(:case_number)
   }
-
   scope :should_transition, -> {
     where(transition_aged_youth: false)
       .where("birth_month_year_youth <= ?", 14.years.ago)
@@ -95,6 +96,24 @@ class CasaCase < ApplicationRecord
 
   def has_transitioned?
     transition_aged_youth
+  end
+
+  def contains_emancipation_option?(option_id)
+    emancipation_options.find_by(id: option_id).present?
+  end
+
+  def add_emancipation_option(option_id)
+    option_category = EmancipationOption.find(option_id).emancipation_category
+
+    if !(option_category.mutually_exclusive && EmancipationOption.options_with_category_and_case(option_category, id).any?)
+      emancipation_options << EmancipationOption.find(option_id)
+    else
+      raise "Attempted adding multiple options belonging to a mutually exclusive category"
+    end
+  end
+
+  def remove_emancipation_option(option_id)
+    emancipation_options.destroy(EmancipationOption.find(option_id))
   end
 
   def update_cleaning_contact_types(args)

@@ -3,8 +3,10 @@ require "rails_helper"
 RSpec.describe CasaCase do
   subject { build(:casa_case) }
 
-  it { is_expected.to have_many(:case_assignments) }
+  it { is_expected.to have_many(:case_assignments).dependent(:destroy) }
   it { is_expected.to belong_to(:casa_org) }
+  it { is_expected.to have_many(:casa_cases_emancipation_options).dependent(:destroy) }
+  it { is_expected.to have_many(:emancipation_options).through(:casa_cases_emancipation_options) }
   it { is_expected.to belong_to(:hearing_type).optional }
   it { is_expected.to belong_to(:judge).optional }
   it { is_expected.to validate_presence_of(:case_number) }
@@ -148,6 +150,53 @@ RSpec.describe CasaCase do
         casa_case.volunteers << volunteer2
         expect(described_class.available_for_volunteer(volunteer)).to eq [casa_case2, casa_case3, casa_case1]
       end
+    end
+  end
+
+  context "#contains_emancipation_option?" do
+    let(:casa_case) { create(:casa_case) }
+    let(:emancipation_option) { create(:emancipation_option) }
+
+    it "returns true when passed the id of an emancipation option associated with the case" do
+      casa_case.emancipation_options << emancipation_option
+      expect(casa_case.contains_emancipation_option?(emancipation_option.id)).to eq(true)
+    end
+
+    it "returns false when passed the id of an emancipation option not associated with the case" do
+      expect(casa_case.contains_emancipation_option?(emancipation_option.id)).to eq(false)
+    end
+  end
+
+  context "#add_emancipation_option" do
+    let(:casa_case) { create(:casa_case) }
+    let(:emancipation_category) { create(:emancipation_category, mutually_exclusive: true) }
+    let(:emancipation_option_a) { create(:emancipation_option, emancipation_category: emancipation_category) }
+    let(:emancipation_option_b) { create(:emancipation_option, emancipation_category: emancipation_category, name: "Not the same name as option A to satisfy unique contraints") }
+
+    it "associates an emacipation option with the case when passed the id of the option" do
+      expect {
+        casa_case.add_emancipation_option(emancipation_option_a.id)
+      }.to change { casa_case.emancipation_options.count }.from(0).to(1)
+    end
+
+    it "raises an error when attempting to add multiple options belonging to a mutually exclusive category" do
+      expect {
+        casa_case.add_emancipation_option(emancipation_option_a.id)
+        casa_case.add_emancipation_option(emancipation_option_b.id)
+      }.to raise_error("Attempted adding multiple options belonging to a mutually exclusive category")
+    end
+  end
+
+  context "#remove_emancipation_option" do
+    let(:casa_case) { create(:casa_case) }
+    let(:emancipation_option) { create(:emancipation_option) }
+
+    it "dissociates an emancipation option with the case when passed the id of the option" do
+      casa_case.emancipation_options << emancipation_option
+
+      expect {
+        casa_case.remove_emancipation_option(emancipation_option.id)
+      }.to change { casa_case.emancipation_options.count }.from(1).to(0)
     end
   end
 
