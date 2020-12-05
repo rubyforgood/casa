@@ -10,7 +10,6 @@ module Accessible
   def check_user
     if current_all_casa_admin
       flash.clear
-      # if you have rails_admin. You can redirect anywhere really
       redirect_to(authenticated_all_casa_admin_root_path) and return # rubocop:disable Style/AndOr
     elsif current_user
       flash.clear
