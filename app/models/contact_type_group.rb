@@ -1,4 +1,5 @@
 class ContactTypeGroup < ApplicationRecord
+  has_paper_trail
   belongs_to :casa_org
   has_many :contact_types
 

@@ -3,7 +3,7 @@ class SupervisorVolunteer < ApplicationRecord
   has_paper_trail
   belongs_to :volunteer, class_name: "User"
   belongs_to :supervisor, class_name: "User"
-  validates :supervisor_id, uniqueness: {scope: :volunteer_id} # only 1 row allowed per supervisor-volunteer pair
+  validates :supervisor_id, uniqueness: {scope: :volunteer_id}
   validates :volunteer_id, uniqueness: {scope: :is_active}, if: :is_active?
   validate :ensure_supervisor_and_volunteer_belong_to_same_casa_org, if: -> { supervisor.present? && volunteer.present? }
 
