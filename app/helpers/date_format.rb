@@ -1,4 +1,5 @@
 module DateFormat
+  # TODO move to il8n date format style
   MM_DD_YYYY = "%m-%d-%Y"
   CONTACT_OCCURRED_AT = "%Y%m%d%H%M%s"
   FULL = "%B %-d, %Y" # no leading 0

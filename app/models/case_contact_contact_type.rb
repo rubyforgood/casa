@@ -1,6 +1,7 @@
 class CaseContactContactType < ApplicationRecord
-  belongs_to :case_contact, class_name: "CaseContact"
-  belongs_to :contact_type, class_name: "ContactType"
+  has_paper_trail
+  belongs_to :case_contact
+  belongs_to :contact_type
 end
 
 # == Schema Information

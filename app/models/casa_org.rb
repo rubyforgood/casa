@@ -1,4 +1,5 @@
 class CasaOrg < ApplicationRecord
+  has_paper_trail
   validates :name, presence: true, uniqueness: true
 
   has_many :users, dependent: :destroy
