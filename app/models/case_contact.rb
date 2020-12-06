@@ -29,6 +29,9 @@ class CaseContact < ApplicationRecord
   scope :creators, ->(creator_ids = nil) {
     where(creator_id: creator_ids) if creator_ids.present?
   }
+  scope :casa_org, ->(casa_org_id = nil) {
+    joins(:casa_case).where(casa_cases: {casa_org_id: casa_org_id}) if casa_org_id.present?
+  }
   scope :occurred_between, ->(start_date = nil, end_date = nil) {
     where("occurred_at BETWEEN ? AND ?", start_date, end_date) if start_date.present? && end_date.present?
   }
