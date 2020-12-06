@@ -31,6 +31,29 @@ RSpec.describe CaseContactReport, type: :model do
   end
 
   describe "filter behavior" do
+    describe "casa organization" do
+      it "includes case contacts from current org" do
+        casa_org = create(:casa_org)
+        casa_case = create(:casa_case, casa_org: casa_org)
+        case_contact = create(:case_contact, casa_case: casa_case)
+
+        report = CaseContactReport.new(casa_org_id: casa_org.id)
+
+        expect(report.case_contacts).to contain_exactly(case_contact)
+      end
+
+      it "excludes case contacts from other orgs" do
+        casa_org = create(:casa_org)
+        other_casa_org = create(:casa_org)
+        casa_case = create(:casa_case, casa_org: other_casa_org)
+        create(:case_contact, casa_case: casa_case)
+
+        report = CaseContactReport.new(casa_org_id: casa_org.id)
+
+        expect(report.case_contacts).to be_empty
+      end
+    end
+
     context "when result is empty" do
       it "returns only headers if result is empty" do
         report = CaseContactReport.new(

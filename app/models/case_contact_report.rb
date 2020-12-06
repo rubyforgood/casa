@@ -9,6 +9,7 @@ class CaseContactReport
     CaseContact
       .supervisors(args[:supervisor_ids])
       .creators(args[:creator_ids])
+      .casa_org(args[:casa_org_id])
       .occurred_between(args[:start_date], args[:end_date])
       .contact_made(args[:contact_made])
       .has_transitioned(args[:has_transitioned])
