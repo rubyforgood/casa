@@ -16,12 +16,12 @@
         <div class="field form-group">
           <%= form.label :hearing_type_id %>
           <%= form.collection_select(
-            :hearing_type_id,
-            HearingType.active.for_organization(current_organization),
-            :id, :name,
-            { include_hidden: false, prompt: "-Select Hearing Type-" },
-            { class: "form-control" }
-          ) %>
+                  :hearing_type_id,
+                  HearingType.active.for_organization(current_organization),
+                  :id, :name,
+                  {include_hidden: false, prompt: "-Select Hearing Type-"},
+                  {class: "form-control"}
+              ) %>
         </div>
       <% end %>
 
@@ -30,12 +30,12 @@
           <div class="field form-group">
             <%= form.label :judge_id %>
             <%= form.collection_select(
-              :judge_id,
-              Judge.for_organization(current_organization),
-              :id, :name,
-              { include_hidden: false, prompt: "-Select Judge-" },
-              { class: "form-control" }
-            ) %>
+                    :judge_id,
+                    Judge.for_organization(current_organization),
+                    :id, :name,
+                    {include_hidden: false, prompt: "-Select Judge-"},
+                    {class: "form-control"}
+                ) %>
           </div>
         <% end %>
       <% end %>
@@ -147,8 +147,8 @@
                           reload: true,
                           success: "Yes, deactivate",
                           fail: "No, go back"
-                      }  if Pundit.policy(current_user, casa_case).update_case_status? && casa_case.persisted? %>
-          <% else %>
+                      } if Pundit.policy(current_user, casa_case).update_case_status? && casa_case.persisted? %>
+        <% else %>
           <%= link_to 'Reactivate CASA Case',
                       reactivate_casa_case_path(casa_case),
                       method: :patch,

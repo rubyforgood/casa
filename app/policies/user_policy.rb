@@ -28,6 +28,10 @@ class UserPolicy
     update_supervisor_email?
   end
 
+  def edit_name?(viewed_user)
+    user.casa_admin? || viewed_user == user
+  end
+
   class Scope
     attr_reader :user, :scope
 

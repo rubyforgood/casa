@@ -1,7 +1,7 @@
 class UserParameters < SimpleDelegator
   def initialize(params, key = :user)
     params =
-      params.require(key).permit( # TODO BUG - admin create volunteer is broken
+      params.require(key).permit(
         :email,
         :casa_org_id,
         :display_name,

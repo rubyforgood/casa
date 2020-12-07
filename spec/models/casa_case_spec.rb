@@ -3,8 +3,10 @@ require "rails_helper"
 RSpec.describe CasaCase do
   subject { build(:casa_case) }
 
-  it { is_expected.to have_many(:case_assignments) }
+  it { is_expected.to have_many(:case_assignments).dependent(:destroy) }
   it { is_expected.to belong_to(:casa_org) }
+  it { is_expected.to have_many(:casa_cases_emancipation_options).dependent(:destroy) }
+  it { is_expected.to have_many(:emancipation_options).through(:casa_cases_emancipation_options) }
   it { is_expected.to belong_to(:hearing_type).optional }
   it { is_expected.to belong_to(:judge).optional }
   it { is_expected.to validate_presence_of(:case_number) }
@@ -151,6 +153,53 @@ RSpec.describe CasaCase do
     end
   end
 
+  context "#contains_emancipation_option?" do
+    let(:casa_case) { create(:casa_case) }
+    let(:emancipation_option) { create(:emancipation_option) }
+
+    it "returns true when passed the id of an emancipation option associated with the case" do
+      casa_case.emancipation_options << emancipation_option
+      expect(casa_case.contains_emancipation_option?(emancipation_option.id)).to eq(true)
+    end
+
+    it "returns false when passed the id of an emancipation option not associated with the case" do
+      expect(casa_case.contains_emancipation_option?(emancipation_option.id)).to eq(false)
+    end
+  end
+
+  context "#add_emancipation_option" do
+    let(:casa_case) { create(:casa_case) }
+    let(:emancipation_category) { create(:emancipation_category, mutually_exclusive: true) }
+    let(:emancipation_option_a) { create(:emancipation_option, emancipation_category: emancipation_category) }
+    let(:emancipation_option_b) { create(:emancipation_option, emancipation_category: emancipation_category, name: "Not the same name as option A to satisfy unique contraints") }
+
+    it "associates an emacipation option with the case when passed the id of the option" do
+      expect {
+        casa_case.add_emancipation_option(emancipation_option_a.id)
+      }.to change { casa_case.emancipation_options.count }.from(0).to(1)
+    end
+
+    it "raises an error when attempting to add multiple options belonging to a mutually exclusive category" do
+      expect {
+        casa_case.add_emancipation_option(emancipation_option_a.id)
+        casa_case.add_emancipation_option(emancipation_option_b.id)
+      }.to raise_error("Attempted adding multiple options belonging to a mutually exclusive category")
+    end
+  end
+
+  context "#remove_emancipation_option" do
+    let(:casa_case) { create(:casa_case) }
+    let(:emancipation_option) { create(:emancipation_option) }
+
+    it "dissociates an emancipation option with the case when passed the id of the option" do
+      casa_case.emancipation_options << emancipation_option
+
+      expect {
+        casa_case.remove_emancipation_option(emancipation_option.id)
+      }.to change { casa_case.emancipation_options.count }.from(1).to(0)
+    end
+  end
+
   describe "#update_cleaning_contact_types" do
     it "cleans up contact types before saving" do
       group = create(:contact_type_group)
@@ -216,17 +265,44 @@ RSpec.describe CasaCase do
     let!(:case_assignment2) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer2) }
 
     it "only includes volunteers through active assignments" do
-      expect(casa_case.assigned_volunteers).to eq [volunteer1, volunteer2]
+      expect(casa_case.assigned_volunteers.order(:id)).to eq [volunteer1, volunteer2].sort_by(&:id)
 
       case_assignment1.update(is_active: false)
       expect(casa_case.reload.assigned_volunteers).to eq [volunteer2]
     end
 
     it "only includes active volunteers" do
-      expect(casa_case.assigned_volunteers).to eq [volunteer1, volunteer2]
+      expect(casa_case.assigned_volunteers.order(:id)).to eq [volunteer1, volunteer2].sort_by(&:id)
 
       volunteer1.update(active: false)
       expect(casa_case.reload.assigned_volunteers).to eq [volunteer2]
+    end
+  end
+
+  describe "report submission" do
+    # Creating a case whith a status other than not_submitted and a nil submission date
+    it "rejects cases with a court report status, but no submission date" do
+      casa_org = create(:casa_org)
+      bad_case = create(:casa_case, casa_org: casa_org)
+      bad_case.court_report_status = :in_review
+      bad_case.court_report_submitted_at = nil
+      bad_case.valid?
+
+      expect(bad_case.errors[:court_report_status]).to include(
+        "Court report submission date can't be nil if status is anything but not_submitted."
+      )
+    end
+
+    it "rejects cases with a submission date, but no status" do
+      casa_org = create(:casa_org)
+      bad_case = create(:casa_case, casa_org: casa_org)
+      bad_case.court_report_status = :not_submitted
+      bad_case.court_report_submitted_at = DateTime.now
+      bad_case.valid?
+
+      expect(bad_case.errors[:court_report_submitted_at]).to include(
+        "Submission date must be nil if court report status is not submitted."
+      )
     end
   end
 end

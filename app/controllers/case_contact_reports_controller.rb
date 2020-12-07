@@ -18,12 +18,18 @@ class CaseContactReportsController < ApplicationController
   private
 
   def report_params
-    parameters = params.require(:report).permit(:start_date, :end_date,
-      :contact_made, :has_transitioned, :want_driving_reimbursement,
-      {contact_type_ids: []},
-      {contact_type_group_ids: []},
-      {creator_ids: []},
-      {supervisor_ids: []})
+    parameters = params.require(:report).permit(
+      :start_date,
+      :end_date,
+      :contact_made,
+      :has_transitioned,
+      :want_driving_reimbursement,
+      contact_type_ids: [],
+      contact_type_group_ids: [],
+      casa_org_id: current_organization.id,
+      creator_ids: [],
+      supervisor_ids: []
+    )
     convert_radio_options_to_boolean(parameters)
     parameters
   end

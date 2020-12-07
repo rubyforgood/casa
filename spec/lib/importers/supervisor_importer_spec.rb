@@ -61,8 +61,6 @@ RSpec.describe SupervisorImporter do
       alert = SupervisorImporter.new(import_supervisor_path, import_user.casa_org.id).import_supervisors
 
       expect(alert[:type]).to eq(:error)
-      # expect(alert[:message]).to include("You successfully imported 1 supervisors. The following supervisors were not imported: volunteer1@example.net was not assigned to supervisor s6@example.com on row #2")
-      # TODO bring back this functionality
     end
   end
 

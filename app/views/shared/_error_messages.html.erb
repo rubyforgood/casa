@@ -1,6 +1,7 @@
 <% if resource.errors.any? %>
   <div id="error_explanation" class="alert alert-danger">
-    <h6><%= pluralize(resource.errors.count, "error") %> prohibited this <%= resource.model_name.human %> from being saved:</h6>
+    <h6><%= pluralize(resource.errors.count, "error") %> prohibited this <%= resource.model_name.human %> from being
+      saved:</h6>
 
     <ul>
       <% resource.errors.full_messages.each do |message| %>

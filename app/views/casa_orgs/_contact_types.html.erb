@@ -7,30 +7,30 @@
 
 <table class="table table-striped table-bordered">
   <thead>
-    <tr>
-      <th>Name</th>
-      <th>Group</th>
-      <th>Active?</th>
-      <th>Actions</th>
-    </tr>
+  <tr>
+    <th>Name</th>
+    <th>Group</th>
+    <th>Active?</th>
+    <th>Actions</th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @contact_types.each do |contact_type| %>
-      <tr id="contact_type-<%= contact_type.id %>">
-        <td scope="row">
-          <%= contact_type.name %>
-        </td>
-        <td scope="row">
-          <%= contact_type.contact_type_group.name %>
-        </td>
-        <td scope="row">
-          <%= contact_type.active? ? "Yes" : "No" %>
-        </td>
-        <td>
-          <%= link_to "Edit", edit_contact_type_path(contact_type) %>
-        </td>
-      </tr>
-    <% end %>
+  <% @contact_types.each do |contact_type| %>
+    <tr id="contact_type-<%= contact_type.id %>">
+      <td scope="row">
+        <%= contact_type.name %>
+      </td>
+      <td scope="row">
+        <%= contact_type.contact_type_group.name %>
+      </td>
+      <td scope="row">
+        <%= contact_type.active? ? "Yes" : "No" %>
+      </td>
+      <td>
+        <%= link_to "Edit", edit_contact_type_path(contact_type) %>
+      </td>
+    </tr>
+  <% end %>
   </tbody>
 </table>

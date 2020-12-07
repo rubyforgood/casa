@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/all_casa_admins/casa_orgs/:casa_org_id/casa_admins" do
+RSpec.describe "All-Casa Admin" do
   let(:all_casa_admin) { create(:all_casa_admin) }
   let(:casa_org) { create(:casa_org) }
 
@@ -79,4 +79,3 @@ RSpec.describe "/all_casa_admins/casa_orgs/:casa_org_id/casa_admins" do
     end
   end
 end
-# TODO: test admin creation as an all_casa_admin

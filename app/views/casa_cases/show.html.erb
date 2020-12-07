@@ -11,6 +11,9 @@
     <% if @casa_case.active? %>
       <%= link_to 'Edit Case Details', edit_casa_case_path(@casa_case), class: "btn btn-primary" %>
     <% end %>
+    <% if @casa_case.has_transitioned? %>
+      <%= link_to 'Emancipation', casa_case_emancipation_path(@casa_case), class: "btn btn-primary" %>
+    <% end %>
   </div>
 </div>
 
@@ -48,17 +51,18 @@
     <h6><strong>Court Report Status:</strong> <%= @casa_case.decorate.court_report_submission %></h6>
     </p>
 
-    <% if @casa_case.court_report_submitted_at %>
-      <p><h6><strong>Court Report Submitted Date:</strong> <%= @casa_case.decorate.court_report_submitted_date %></h6></p>
+    <% unless @casa_case.court_report_not_submitted? %>
+      <p>
+      <h6><strong>Court Report Submitted Date:</strong> <%= @casa_case.decorate.court_report_submitted_date %></h6></p>
     <% end %>
 
     <div>
       <h6><strong>Assigned Volunteers:</strong></h6>
       <% policy_scope(@casa_case.assigned_volunteers).each_with_index do |volunteer, index| %>
         <% if current_user.volunteer? %>
-          <p><%= volunteer.decorate.name %></p>
+          <p><%= volunteer.display_name %></p>
         <% else %>
-          <p><%= link_to "#{volunteer.decorate.name} ", edit_volunteer_path(volunteer) %></p>
+          <p><%= link_to "#{volunteer.display_name} ", edit_volunteer_path(volunteer) %></p>
         <% end %>
       <% end %>
       <br>

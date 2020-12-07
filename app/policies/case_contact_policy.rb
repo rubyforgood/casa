@@ -37,7 +37,7 @@ class CaseContactPolicy
     def resolve
       case @user
       when CasaAdmin, Supervisor # scope.in_casa_administered_by(@user)
-        scope.by_organization(@user.casa_org)
+        scope.all
       when Volunteer
         scope.where(casa_case: CasaCase.actively_assigned_to(@user), creator: @user)
       else

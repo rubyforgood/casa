@@ -4,7 +4,8 @@
   <div class="card-body">
     <h5 class="card-title"><strong>Generate Court Report</strong></h5>
     <p class="card-text">
-      The Court Report is pre-filled with information for your case. You can select among currently active cases assigned to you. The document is in Microsoft Word format (.docx).
+      The Court Report is pre-filled with information for your case. You can select among currently active cases
+      assigned to you. The document is in Microsoft Word format (.docx).
     </p>
 
     <hr>
@@ -16,33 +17,33 @@
         <%= select_tag :case_number,
                        options_for_select(
                            select_options,
-                           { disabled: @non_transition_aged_youth_cases }
+                           {disabled: @non_transition_aged_youth_cases}
                        ),
-                      prompt: "Select a case to generate report",
-                      include_blank: false,
-                      id: "case-selection",
-                      class: "custom-select" %>
+                       prompt: "Select a case to generate report",
+                       include_blank: false,
+                       id: "case-selection",
+                       class: "custom-select" %>
 
         <p class="small">
           * Reporting for non transition aged youth cases is coming soon!
         </p>
       </div>
       <div class="form-group">
-        <%= button_tag "Generate Report",type: :submit,
-            data: {
-              button_name: "Generate Report",
-              disable_with: "Court report generating. Do not refresh or leave this page..."
-            },
-            id: "btnGenerateReport",
-            class: "btn btn-primary" %>
+        <%= button_tag "Generate Report", type: :submit,
+                       data: {
+                           button_name: "Generate Report",
+                           disable_with: "Court report generating. Do not refresh or leave this page..."
+                       },
+                       id: "btnGenerateReport",
+                       class: "btn btn-primary" %>
         <!--
           Link to report is set to empty by default.
           Download link will be created once the report is generated.
         -->
         <%= link_to "Download Court Report",
-            "#",
-            id: "btnDownloadReport",
-            class: "btn btn-outline-primary mt-3 mt-sm-0 d-none" %>
+                    "#",
+                    id: "btnDownloadReport",
+                    class: "btn btn-outline-primary mt-3 mt-sm-0 d-none" %>
       </div>
     <% end %>
 
@@ -50,100 +51,100 @@
 </div>
 
 <script>
-const ELEMENTS = {
-  "caseSelect": "#case-selection",
-  "downloadBtn": "#btnDownloadReport",
-  "generateBtn": "#btnGenerateReport"
-}
-const showBtn = el => el.classList.remove("d-none");
-const hideBtn = el => el.classList.add("d-none");
-const setBtnText = (el, text) => el.innerText = text;
-const setBtnHref = (el, href) => el.href = href;
-const disableBtn = (el) => {
-  el.disabled = true;
-  el.classList.add('disabled');
-  el.setAttribute("aria-disabled", true);
-}
-const enableBtn = (el) => {
-  el.disabled = false;
-  el.classList.remove('disabled');
-  el.removeAttribute("aria-disabled");
-}
-const resetGenerateBtn = (btn) => {
-  // btn is enabled and has name "Generate Report"
-  enableBtn(btn);
-  setBtnText(btn, btn.dataset.buttonName);
-}
-const resetDownloadBtn = (btn) => {
-  // btn is hidden, and no download link is present
-  hideBtn(btn);
-  setBtnHref(btn, "#");
-}
-const showAlert = (html) => {
-  const alertEl = new DOMParser().parseFromString(html, 'text/html').body.firstElementChild;
-  document.querySelector(".header-flash").replaceWith(alertEl);
-}
-
-const handleGenerateReport = (e) => {
-  e.preventDefault();
-
-  const formData = Object.fromEntries(new FormData(e.target.form));
-
-  if (formData.case_number.length === 0) return;
-
-  const generateBtn = e.target;
-  disableBtn(generateBtn);
-  setBtnText(generateBtn, generateBtn.dataset.disableWith);
-
-  <%# This will show "/case_court_reports/generate"  %>
-  const url = "<%= generate_case_court_reports_path %>"
-  const options = {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(formData)
+  const ELEMENTS = {
+    'caseSelect': '#case-selection',
+    'downloadBtn': '#btnDownloadReport',
+    'generateBtn': '#btnGenerateReport'
   }
-  fetch(url, options)
-    .then(response => response.json())
-    .then(data => {
-      if (data.status !== "ok") {
-        showAlert(data.error_messages);
-        resetGenerateBtn(generateBtn);
-        return;
-      }
-      // when receiving a link to report, show 'Download Court Report' btn and show the link in the button
-      const downloadBtn = generateBtn.form.querySelector(ELEMENTS.downloadBtn);
-      showBtn(downloadBtn);
-      setBtnHref(downloadBtn, data.link);
-    })
-    .catch((error) => {
-      console.error('Debugging info, error:', error);
-    });
-}
+  const showBtn = el => el.classList.remove('d-none')
+  const hideBtn = el => el.classList.add('d-none')
+  const setBtnText = (el, text) => el.innerText = text
+  const setBtnHref = (el, href) => el.href = href
+  const disableBtn = (el) => {
+    el.disabled = true
+    el.classList.add('disabled')
+    el.setAttribute('aria-disabled', true)
+  }
+  const enableBtn = (el) => {
+    el.disabled = false
+    el.classList.remove('disabled')
+    el.removeAttribute('aria-disabled')
+  }
+  const resetGenerateBtn = (btn) => {
+    // btn is enabled and has name "Generate Report"
+    enableBtn(btn)
+    setBtnText(btn, btn.dataset.buttonName)
+  }
+  const resetDownloadBtn = (btn) => {
+    // btn is hidden, and no download link is present
+    hideBtn(btn)
+    setBtnHref(btn, '#')
+  }
+  const showAlert = (html) => {
+    const alertEl = new DOMParser().parseFromString(html, 'text/html').body.firstElementChild
+    document.querySelector('.header-flash').replaceWith(alertEl)
+  }
 
-const handleSelect = (e) => {
-  const selectEl = e.target;
-  const generateBtn = selectEl.form.querySelector(ELEMENTS.generateBtn);
-  const downloadBtn = selectEl.form.querySelector(ELEMENTS.downloadBtn);
+  const handleGenerateReport = (e) => {
+    e.preventDefault()
 
-  // when selecting a case, reset buttons to initial state
-  resetGenerateBtn(generateBtn)
-  resetDownloadBtn(downloadBtn)
-}
+    const formData = Object.fromEntries(new FormData(e.target.form))
 
-const bindElements = () => {
-  const caseSelectEl = document.querySelector(ELEMENTS.caseSelect);
-  const generateReportEl = document.querySelector(ELEMENTS.generateBtn);
+    if (formData.case_number.length === 0) return
 
-  if (caseSelectEl)
-    caseSelectEl.addEventListener('change', handleSelect);
-  if (generateReportEl)
-    generateReportEl.addEventListener('click', handleGenerateReport);
-}
+    const generateBtn = e.target
+    disableBtn(generateBtn)
+    setBtnText(generateBtn, generateBtn.dataset.disableWith)
 
-window.onload = function() {
-  bindElements();
-}
+    <%# This will show "/case_court_reports/generate"  %>
+    const url = "<%= generate_case_court_reports_path %>"
+    const options = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    }
+    fetch(url, options)
+      .then(response => response.json())
+      .then(data => {
+        if (data.status !== 'ok') {
+          showAlert(data.error_messages)
+          resetGenerateBtn(generateBtn)
+          return
+        }
+        // when receiving a link to report, show 'Download Court Report' btn and show the link in the button
+        const downloadBtn = generateBtn.form.querySelector(ELEMENTS.downloadBtn)
+        showBtn(downloadBtn)
+        setBtnHref(downloadBtn, data.link)
+      })
+      .catch((error) => {
+        console.error('Debugging info, error:', error)
+      })
+  }
+
+  const handleSelect = (e) => {
+    const selectEl = e.target
+    const generateBtn = selectEl.form.querySelector(ELEMENTS.generateBtn)
+    const downloadBtn = selectEl.form.querySelector(ELEMENTS.downloadBtn)
+
+    // when selecting a case, reset buttons to initial state
+    resetGenerateBtn(generateBtn)
+    resetDownloadBtn(downloadBtn)
+  }
+
+  const bindElements = () => {
+    const caseSelectEl = document.querySelector(ELEMENTS.caseSelect)
+    const generateReportEl = document.querySelector(ELEMENTS.generateBtn)
+
+    if (caseSelectEl)
+      caseSelectEl.addEventListener('change', handleSelect)
+    if (generateReportEl)
+      generateReportEl.addEventListener('click', handleGenerateReport)
+  }
+
+  window.onload = function () {
+    bindElements()
+  }
 </script>

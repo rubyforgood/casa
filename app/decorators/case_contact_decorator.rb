@@ -1,11 +1,6 @@
 class CaseContactDecorator < Draper::Decorator
   delegate_all
 
-  # Returns the contact duration in one of the following formats
-  # - `N` minutes
-  # - `N` hours `M` minutes
-  # - `N` hours
-
   NOTES_WORD_LIMIT = 100
 
   def duration_minutes
@@ -80,5 +75,9 @@ class CaseContactDecorator < Draper::Decorator
 
   def full_notes
     object.notes
+  end
+
+  def show_contact_type?(contact_type_id)
+    object.case_contact_contact_type.map(&:contact_type_id).include?(contact_type_id)
   end
 end

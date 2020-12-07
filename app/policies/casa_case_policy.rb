@@ -42,6 +42,12 @@ class CasaCasePolicy
     user.casa_admin?
   end
 
+  def update_emancipation_option?
+    is_in_same_org? && (
+      is_supervisor_or_casa_admin? || is_volunteer_actively_assigned_to_case?
+    )
+  end
+
   def assign_volunteers?
     is_in_same_org? && is_supervisor_or_casa_admin?
   end

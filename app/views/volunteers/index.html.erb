@@ -18,35 +18,35 @@
       <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Supervisor
       </button>
-        <ul class="dropdown-menu supervisor-options" style="min-width: 15rem;">
+      <ul class="dropdown-menu supervisor-options" style="min-width: 15rem;">
+        <li>
+          <a class="small" data-value="option1" tabIndex="-1">
+            <input
+              id="unassigned-vol-filter"
+              type="checkbox"
+              data-value=""
+              unchecked>
+            No supervisor assignment
+          </a>
+        </li>
+        <% current_organization.supervisors.each do |supervisor| %>
           <li>
             <a class="small" data-value="option1" tabIndex="-1">
-              <input
-                id="unassigned-vol-filter"
-                type="checkbox"
-                data-value="No supervisor assignment"
-                unchecked>
-              No supervisor assignment
+              <% if policy(User).edit_name?(supervisor) %>
+                <input
+                  type="checkbox"
+                  data-value="<%= supervisor.display_name %>"
+                  checked>
+              <% else %>
+                <input
+                  type="checkbox"
+                  data-value="<%= supervisor.display_name %>">
+              <% end %>
+              <%= supervisor.display_name %>
             </a>
           </li>
-          <% Supervisor.decorate.each do |supervisor| %>
-            <li>
-              <a class="small" data-value="option1" tabIndex="-1">
-              <% if !current_user.supervisor? || supervisor == current_user %>
-                <input
-                  type="checkbox"
-                  data-value="<%= supervisor.name %>"
-                  checked>
-                <% else %>
-                <input
-                  type="checkbox"
-                  data-value="<%= supervisor.name %>">
-                <% end %>
-                <%= supervisor.name %>
-              </a>
-            </li>
-          <% end %>
-        </ul>
+        <% end %>
+      </ul>
     </div>
     <div class="dropdown pull-left mr-2">
       <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -54,12 +54,16 @@
       </button>
       <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
         <li>
-          <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Active" checked>
-          Active</a>
+          <a class="small" data-value="option1" tabIndex="-1">
+            <input type="checkbox" data-value="true" checked>
+            Active
+          </a>
         </li>
         <li>
-          <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Inactive">
-          Inactive</a>
+          <a class="small" data-value="option1" tabIndex="-1">
+            <input type="checkbox" data-value="false">
+            Inactive
+          </a>
         </li>
       </div>
     </div>
@@ -68,8 +72,16 @@
         Assigned to Transition Aged Youth
       </button>
       <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton">
-        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Yes 🐛🦋" checked>Yes</a></li>
-        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No" checked>No</a></li>
+        <li>
+          <a class="small" data-value="option1" tabIndex="-1">
+            <input type="checkbox" data-value="true" checked>Yes
+          </a>
+        </li>
+        <li>
+          <a class="small" data-value="option1" tabIndex="-1">
+            <input type="checkbox" data-value="false" checked>No
+          </a>
+        </li>
       </div>
     </div>
   </div>
@@ -94,10 +106,10 @@
               <div class="col-sm-12">
                 <div class="form-check">
                   <%= check_box_tag "pick-#{column}",
-                    "1",
-                    [1,6,7].exclude?(index),
-                    class: "form-check-input toggle-visibility",
-                    data: { column: index } %>
+                                    "1",
+                                    nil,
+                                    class: "form-check-input toggle-visibility",
+                                    data: {column: index} %>
                   <%= label_tag "pick-#{column}", column.titleize, class: "form-check-label" %>
                 </div>
               </div>
@@ -114,7 +126,10 @@
 
 <div class="card card-container">
   <div class="card-body">
-    <table class="table table-striped table-bordered" id="volunteers">
+    <table
+      class="table table-striped table-bordered"
+      id="volunteers"
+      data-source="<%= datatable_volunteers_path format: :json %>">
       <thead>
       <tr>
         <th>Name</th>
@@ -130,32 +145,6 @@
       </thead>
 
       <tbody>
-      <% @volunteers.each do |volunteer| %>
-        <tr>
-          <td data-search="<%= volunteer.past_names %>|<%= volunteer.display_name %>">
-              <%= link_to(volunteer.decorate.name, edit_volunteer_path(volunteer)) %>
-              <% if !volunteer.made_contact_with_all_cases_in_days? %>
-                🕐
-              <% end %>
-          </td>
-          <td><%= volunteer.email %></td>
-          <td class=" supervisor-column ">
-            <%- if volunteer.has_supervisor? %>
-              <%= link_to(volunteer.supervisor.decorate.name, edit_supervisor_path(volunteer.supervisor)) %>
-            <%- end %>
-          </td>
-          <td class=" status-column "><%= volunteer.decorate.status %></td>
-          <td><%= volunteer.decorate&.assigned_to_transition_aged_youth? %></td>
-          <td><%= safe_join(volunteer&.casa_cases&.map { |c| link_to(c.case_number, c) }, ", ") %></td>
-          <td>
-            <%= link_to_if volunteer&.most_recent_contact.present?,
-              volunteer.decorate.last_contact_made,
-              volunteer&.most_recent_contact&.casa_case %>
-          </td>
-          <td><%= volunteer&.recent_contacts_made %></td>
-          <td><%= link_to 'Edit', edit_volunteer_path(volunteer) %></td>
-        </tr>
-      <% end %>
       </tbody>
     </table>
   </div>

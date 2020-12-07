@@ -2,11 +2,11 @@
   <div class="sidebar-heading text-center">
     <% if all_casa_admin_signed_in? || !current_organization.logo.attached? %>
       <%= image_pack_tag("media/src/images/default-logo.png",
-          alt: "CASA Logo",
-          class: "d-inline-block align-text-bottom") %>
+                         alt: "CASA Logo",
+                         class: "d-inline-block align-text-bottom") %>
     <% else %>
       <%= image_tag(current_organization.logo.variant(resize_to_limit: [200, 100]),
-          alt: current_organization.logo_alt_text || "CASA Logo") %>
+                    alt: current_organization.logo_alt_text || "CASA Logo") %>
     <% end %>
   </div>
   <div class="sidebar-container">
@@ -19,12 +19,8 @@
           <% if current_user.volunteer? %>
             <%= menu_item(label: "Case Contacts", path: case_contacts_path) %>
           <% end %>
-
-          <%#<% if current_user.casa_case&.emancipation_checklist  %>
-          <%#<%= menu_item(label: "Emancipation Checklist", path: emancipation_checklist_path) %>
-          <%# <% end %>
-          <% if policy(:application).see_emancipation_checklist? %>
-            <%= menu_item(label: "Emancipation Checklist", path: emancipation_checklist_path(0)) %>
+          <% if current_user.serving_transition_aged_youth? %>
+            <%= menu_item(label: "Emancipation Checklist(s)", path: emancipation_checklists_path) %>
           <% end %>
           <%= menu_item(label: "Admins", path: casa_admins_path, visible: policy(CasaAdmin).index?) %>
         <% end %>
@@ -45,7 +41,7 @@
         <% if user_signed_in? %>
           <%= link_to "Edit Profile", edit_users_path, class: "list-group-item" %>
           <% if policy(:application).see_court_reports_page? %>
-            <%= link_to  "Generate Court Reports", case_court_reports_path, class: "list-group-item" %>
+            <%= link_to "Generate Court Reports", case_court_reports_path, class: "list-group-item" %>
           <% end %>
           <% if policy(:application).see_reports_page? %>
             <%= link_to "Generate Reports", reports_path, class: "list-group-item" %>
@@ -59,7 +55,7 @@
           <%= link_to "Report a site issue",
                       "https://rubyforgood.typeform.com/to/iXY4BubB",
                       class: "list-group-item",
-                      target:"_blank" %>
+                      target: "_blank" %>
           <li class="list-group-item">
             <%= current_user.email %>
           </li>

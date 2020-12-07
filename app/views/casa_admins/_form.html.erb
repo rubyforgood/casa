@@ -21,13 +21,13 @@
           <% if casa_admin.active? %>
             Admin is <span class="badge badge-success text-uppercase display-1">Active</span>
             <%= link_to "Deactivate",
-              deactivate_casa_admin_path(casa_admin),
-              method: :patch,
-              class: "btn btn-outline-danger",
-              data: { confirm: t("forms.casa_admin.mark_inactive_warning") } %>
+                        deactivate_casa_admin_path(casa_admin),
+                        method: :patch,
+                        class: "btn btn-outline-danger",
+                        data: {confirm: t("forms.casa_admin.mark_inactive_warning")} %>
           <% else %>
             <div class="alert alert-danger">
-              Admin was deactivated on: <%= casa_admin.updated_at.strftime("%m-%d-%Y") %>
+              Admin was deactivated on: <%= casa_admin.updated_at.strftime(DateFormat::MM_DD_YYYY) %>
             </div>
             <% if policy(casa_admin).activate? %>
               <%= link_to "Activate Admin",

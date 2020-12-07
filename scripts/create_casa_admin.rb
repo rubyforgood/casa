@@ -14,7 +14,7 @@ def create_admin(casa_org, new_admin_email)
   ca.invite! # sends devise email
 end
 
-new_admin_email = "" # TODO get from params
+new_admin_email = ""
 casa_org_name = "Prince George CASA"
 casa_org = CasaOrg.find_by(name: casa_org_name)
 

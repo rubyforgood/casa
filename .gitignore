@@ -52,3 +52,4 @@ cypress/videos/*
 # produced by tests (?)
 *.csv
 
+.*.swp

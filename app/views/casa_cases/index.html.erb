@@ -37,8 +37,10 @@
         Assigned to Volunteer
       </button>
       <div class="dropdown-menu assigned-to-volunteer-options" aria-labelledby="dropdownMenuButton">
-        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Yes" checked>Yes</a></li>
-        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No" checked>No</a></li>
+        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Yes" checked>Yes</a>
+        </li>
+        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No" checked>No</a>
+        </li>
       </div>
     </div>
     <div class="dropdown pull-left mr-2">
@@ -46,8 +48,10 @@
         Assigned to more than 1 Volunteer
       </button>
       <div class="dropdown-menu more-than-one-volunteer-options" aria-labelledby="dropdownMenuButton">
-        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Yes" checked>Yes</a></li>
-        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No" checked>No</a></li>
+        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Yes" checked>Yes</a>
+        </li>
+        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No" checked>No</a>
+        </li>
       </div>
     </div>
     <div class="dropdown pull-left mr-2">
@@ -55,17 +59,25 @@
         Assigned to Transition Aged Youth
       </button>
       <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton">
-        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Yes 🐛🦋" checked>Yes</a></li>
-        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No" checked>No</a></li>
+        <li>
+          <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Yes 🐛🦋" checked>Yes</a>
+        </li>
+        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No" checked>No</a>
+        </li>
       </div>
     </div>
     <div class="dropdown pull-left mr-2">
-      <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Casa Case Prefix
-      </button>
+      <% unless current_user.volunteer? %>
+        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Casa Case Prefix
+        </button>
+      <% end %>
       <div class="dropdown-menu case-number-prefix-options" aria-labelledby="dropdownMenuButton">
-        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="CINA" checked>CINA</a></li>
-        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="TPR" checked>TPR</a></li>
+        <li>
+          <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="CINA" checked>CINA</a>
+        </li>
+        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="TPR" checked>TPR</a>
+        </li>
       </div>
     </div>
   </div>
@@ -93,7 +105,7 @@
                                     "1",
                                     false,
                                     class: "form-check-input toggle-visibility",
-                                    data: { column: index } %>
+                                    data: {column: index} %>
                   <%= label_tag "pick-#{column}", column.titleize, class: "form-check-label" %>
                 </div>
               </div>
@@ -139,10 +151,10 @@
               <% else %>
                 <%= safe_join(casa_case.assigned_volunteers.map { |vol|
                   link_to(vol.display_name, edit_volunteer_path(vol)) },
-                  ", ") %>
+                              ", ") %>
               <% end %>
             <% else %>
-              Case was deactivated on: <%= casa_case.updated_at.strftime("%m-%d-%Y") %>
+              Case was deactivated on: <%= casa_case.updated_at.strftime(DateFormat::MM_DD_YYYY) %>
             <% end %>
           </td>
           <td><%= link_to 'Detail View', casa_case_path(casa_case) %></td>

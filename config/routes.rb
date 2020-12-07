@@ -4,6 +4,10 @@ Rails.application.routes.draw do
   devise_for :all_casa_admins, path: "all_casa_admins", controllers: {sessions: "all_casa_admins/sessions"}
   devise_for :users, controllers: {sessions: "users/sessions"}
 
+  concern :with_datatable do
+    post "datatable", on: :collection
+  end
+
   authenticated :all_casa_admin do
     root to: "all_casa_admins/dashboard#show", as: :authenticated_all_casa_admin_root
   end
@@ -21,6 +25,11 @@ Rails.application.routes.draw do
   end
 
   resources :casa_cases do
+    resource :emancipation do
+      member do
+        post "save"
+      end
+    end
     member do
       patch :deactivate
       patch :reactivate
@@ -51,16 +60,15 @@ Rails.application.routes.draw do
   resources :contact_type_groups, only: %i[new create edit update]
   resources :contact_types, only: %i[new create edit update]
   resources :hearing_types, only: %i[new create edit update]
-  resources :emancipation_checklists, only: %i[show]
+  resources :emancipation_checklists, only: %i[index]
   resources :judges, only: %i[new create edit update]
-
   resources :supervisors, except: %i[destroy]
   resources :supervisor_volunteers, only: %i[create] do
     member do
       patch :unassign
     end
   end
-  resources :volunteers, except: %i[destroy] do
+  resources :volunteers, except: %i[destroy], concerns: %i[with_datatable] do
     member do
       patch :activate
       patch :deactivate
@@ -92,7 +100,6 @@ Rails.application.routes.draw do
     end
   end
 
-  # TODO: Remove, if possible. Prefer to use specific role routes.
   resources :users, only: [] do
     collection do
       get :edit

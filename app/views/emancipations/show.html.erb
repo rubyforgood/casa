@@ -1,0 +1,58 @@
+<div class="row">
+  <div class="col-sm-12 dashboard-table-header">
+    <h3>
+      Emancipation Checklist
+    </h3>
+    <noscript>
+      <h3 class="noscript">
+        Javascript is disabled
+      </h3>
+      <p class="noscript">
+        This page requires javascript to work
+      </p>
+    </noscript>
+  </div>
+</div>
+
+<div class="card card-container">
+  <div class="card-body">
+    <% @emancipation_form_data.each do |category| %>
+      <% if category.mutually_exclusive %>
+        <h6>
+          <label for="C<%= category.id %>">
+            <strong> <%= category.name %> </strong>
+          </label>
+          <select id="C<%= category.id %>" class="emancipation-select">
+            <option value="">empty</option>
+            <% category.emancipation_options.each do |option| %>
+              <option value="<%= option.id %>" <%= emancipation_select_option_selected(@current_case, option.id) %>>
+                <%= option.name %>
+              </option>
+            <% end %>
+          </select>
+        <h6>
+      <% else %>
+        <h6><strong> <%= category.name %> </strong></h6>
+        <% category.emancipation_options.each do |option| %>
+          <input
+            type="checkbox"
+            id="O<%= option.id %>"
+            class="emancipation-check-box"
+            value="<%= option.id %>"
+            <%= emancipation_checkbox_option_checked(@current_case, option.id) %>>
+          <label for="O<%= option.id %>"><%= option.name %></label>
+          <br>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<div id="async-notifications">
+  <div id="async-waiting-indicator" style="display: none">
+    Saving <div class="load-spinner"></div>
+  </div>
+  <div id="async-success-indicator" style="display: none">
+    Saved
+  </div>
+</div>

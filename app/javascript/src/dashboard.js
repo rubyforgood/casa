@@ -12,51 +12,6 @@ var defineCaseContactsTable = function () {
 $('document').ready(() => {
   $.fn.dataTable.ext.search.push(
     function (settings, data, dataIndex) {
-      if (settings.nTable.id !== 'volunteers') {
-        return true
-      }
-      var supervisorArray = []
-
-      if ($('#unassigned-vol-filter').is(':checked')) {
-        supervisorArray = ['']
-      }
-
-      var statusArray = []
-      var assignedToTransitionYouthArray = []
-
-      $('.supervisor-options').find('input[type="checkbox"]').each(function () {
-        if ($(this).is(':checked')) {
-          supervisorArray.push($(this).data('value'))
-        }
-      })
-
-      $('.status-options').find('input[type="checkbox"]').each(function () {
-        if ($(this).is(':checked')) {
-          statusArray.push($(this).data('value'))
-        }
-      })
-
-      $('.transition-youth-options').find('input[type="checkbox"]').each(function () {
-        if ($(this).is(':checked')) {
-          assignedToTransitionYouthArray.push($(this).data('value'))
-        }
-      })
-
-      var supervisor = data[2]
-      var status = data[3]
-      var assignedToTransitionYouth = data[4]
-
-      if (supervisorArray.includes(supervisor) &&
-        statusArray.includes(status) &&
-        assignedToTransitionYouthArray.includes(assignedToTransitionYouth)) {
-        return true
-      }
-      return false
-    }
-  )
-
-  $.fn.dataTable.ext.search.push(
-    function (settings, data, dataIndex) {
       if (settings.nTable.id !== 'casa-cases') {
         return true
       }
@@ -116,24 +71,147 @@ $('document').ready(() => {
     }
   )
 
+  const handleAjaxError = e => {
+    if (e.status === 401) {
+      location.reload();
+    } else {
+      console.log(e);
+      if (e.responseJSON && e.responseJSON.error) {
+        alert(e.responseJSON.error);
+      } else {
+        const responseErrorMessage = e.response.statusText
+          ? `\n${e.response.statusText}\n`
+          : '';
+
+        alert(`Sorry, try that again?\n${responseErrorMessage}\nIf you're seeing a problem, please fill out the Report A Site Issue
+        link to the bottom left near your email address.`)
+      }
+    }
+  };
+
   // Enable all data tables on dashboard but only filter on volunteers table
+  const editSupervisorPath = id => `/supervisors/${id}/edit`;
+  const editVolunteerPath = id => `/volunteers/${id}/edit`;
+  const casaCasePath = id => `/casa_cases/${id}`;
   var volunteersTable = $('table#volunteers').DataTable({
     autoWidth: false,
     stateSave: false,
-    columnDefs: [
+    columns: [
       {
-        targets: [1],
+        name: "display_name",
+        render: (data, type, row, meta) => {
+          return `
+            <a href="${editVolunteerPath(row.id)}">
+              ${row.display_name || row.email}
+            </a>
+            ${row.made_contact_with_all_cases_in_days === 'false'
+              ? `🕐 <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="Has at least one case with no contact in 14 days"></i>`
+              : ''
+            }
+          `;
+        }
+      },
+      {
+        name: "email",
+        render: (data, type, row, meta) => row.email,
         visible: false
       },
       {
-        targets: [6],
+        className: "supervisor-column",
+        name: "supervisor_name",
+        render: (data, type, row, meta) => {
+          return row.supervisor.id
+            ? `
+              <a href="${editSupervisorPath(row.supervisor.id)}">
+                ${row.supervisor.name}
+              </a>
+            `
+            : '';
+        }
+      },
+      {
+        name: "active",
+        render: (data, type, row, meta) => row.active === "true" ? "Active" : "Inactive",
+        searchable: false,
+      },
+      {
+        name: "has_transition_aged_youth_cases",
+        render: (data, type, row, meta) => row.has_transition_aged_youth_cases === "true" ? "Yes 🐛🦋" : "No",
+        searchable: false
+      },
+      {
+        name: "casa_cases",
+        render: (data, type, row, meta) => {
+          const links = row.casa_cases.map(casaCase => {
+            return `<a href="${casaCasePath(casaCase.id)}">${casaCase.case_number}</a>`;
+          });
+
+          return links.join(", ");
+        },
+        orderable: false
+      },
+      {
+        name: "most_recent_contact_occurred_at",
+        render: (data, type, row, meta) => {
+          return row.most_recent_contact.case_id
+            ? `
+              <a href="${casaCasePath(row.most_recent_contact.case_id)}">
+                ${row.most_recent_contact.occurred_at}
+              </a>
+            `
+            : "None ❌";
+        },
+        searchable: false,
         visible: false
       },
       {
-        targets: [7],
+        name: "contacts_made_in_past_days",
+        render: (data, type, row, meta) => row.contacts_made_in_past_days,
+        searchable: false,
         visible: false
+      },
+      {
+        name: "actions",
+        orderable: false,
+        render: (data, type, row, meta) => {
+          return `
+            <a href="${editVolunteerPath(row.id)}">
+              Edit
+            </a>
+          `
+        },
+        searchable: false
       }
-    ]
+    ],
+    processing: true,
+    serverSide: true,
+    ajax: {
+      url: $('table#volunteers').data('source'),
+      type: "POST",
+      data: function (d) {
+        const supervisorOptions = $(".supervisor-options input:checked");
+        const supervisorFilter = Array.from(supervisorOptions).map(option => option.dataset.value);
+
+        const statusOptions = $(".status-options input:checked");
+        const statusFilter = Array.from(statusOptions).map(option => JSON.parse(option.dataset.value));
+
+        const transitionYouthOptions = $(".transition-youth-options input:checked");
+        const transitionYouthFilter = Array.from(transitionYouthOptions).map(option => JSON.parse(option.dataset.value));
+
+        return $.extend({}, d, {
+          additional_filters: {
+            supervisor: supervisorFilter,
+            active: statusFilter,
+            transition_aged_youth: transitionYouthFilter
+          }
+        });
+      },
+      error: handleAjaxError,
+      dataType: 'json'
+    },
+    drawCallback: function (settings) {
+      $('[data-toggle=tooltip]').tooltip();
+    }
   })
 
   // Because the table saves state, we have to check/uncheck modal inputs based on what

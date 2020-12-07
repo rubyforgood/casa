@@ -98,3 +98,5 @@ class SeederMain
 end
 
 SeederMain.new.seed
+
+load(Rails.root.join("db", "seeds", "emancipation_data.rb"))
