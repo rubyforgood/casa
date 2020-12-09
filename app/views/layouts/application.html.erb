@@ -23,6 +23,16 @@
   <% end %>
 </head>
 <body class="<%= body_class %>">
+  <noscript>
+    <div style="color: #b71c1c; position:fixed; left: 50%; transform: translateX(-50%); background: #eee; padding: 0 1em;">
+      <h2>
+        Please enable javascript
+      </h2>
+      <p>
+        This app requires javascript to work
+      </p>
+    </div>
+  </noscript>
 <% if logged_in? %>
   <%= render 'layouts/mobile_navbar' %>
   <%= render 'layouts/sidebar' %>
