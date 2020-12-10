@@ -1,5 +1,7 @@
 class CaseContact < ApplicationRecord
+  include ByOrganizationScope
   has_paper_trail
+
   attr_accessor :duration_hours
 
   validate :contact_made_chosen

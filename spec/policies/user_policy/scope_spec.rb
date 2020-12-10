@@ -4,12 +4,10 @@ RSpec.describe UserPolicy::Scope do
   describe "#resolve" do
     it "returns all Users when user is admin" do
       admin = create(:casa_admin)
-      user1 = create(:volunteer)
-      user2 = create(:supervisor)
 
       scope = described_class.new(admin, User)
 
-      expect(scope.resolve).to contain_exactly(admin, user1, user2)
+      expect(scope.resolve).to contain_exactly(admin)
     end
 
     it "returns the user when user is volunteer" do

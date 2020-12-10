@@ -42,8 +42,8 @@ class UserPolicy
 
     def resolve
       case user
-      when CasaAdmin, Supervisor # TODO scope.in_casa_administered_by(user)
-        scope.all
+      when CasaAdmin, Supervisor # scope.in_casa_administered_by(user)
+        scope.by_organization(@user.casa_org)
       when Volunteer
         scope.where(id: user.id)
       else
@@ -51,15 +51,6 @@ class UserPolicy
       end
     end
 
-    def edit?
-      case user
-      when CasaAdmin, Supervisor # TODO scope.in_casa_administered_by(user)
-        scope.all
-      when Volunteer
-        scope.where(id: user.id)
-      else
-        raise "unrecognized role #{@user.type}"
-      end
-    end
+    alias_method :edit?, :resolve
   end
 end

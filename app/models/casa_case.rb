@@ -1,5 +1,7 @@
 class CasaCase < ApplicationRecord
+  include ByOrganizationScope
   has_paper_trail
+
   TABLE_COLUMNS = %w[
     case_number
     hearing_type_name
