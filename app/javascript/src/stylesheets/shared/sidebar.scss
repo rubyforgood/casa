@@ -45,7 +45,7 @@
   flex-direction: column;
   justify-content: space-between;
   height: calc(100vh - 144px);
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .sidebar-wrapper .sidebar-menu {
