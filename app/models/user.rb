@@ -12,13 +12,13 @@ class User < ApplicationRecord
 
   belongs_to :casa_org
 
-  has_many :case_assignments, foreign_key: "volunteer_id", dependent: :destroy
+  has_many :case_assignments, foreign_key: "volunteer_id", dependent: :destroy # TODO destroy is wrong
   has_many :casa_cases, through: :case_assignments
   has_many :case_contacts, foreign_key: "creator_id"
 
   has_many :supervisor_volunteers, foreign_key: "supervisor_id"
   has_many :volunteers, -> { includes(:supervisor_volunteer).order(:display_name) },
-    through: :supervisor_volunteers
+    through: :supervisor_volunteers # OK - does check active in line 23
 
   has_one :supervisor_volunteer, -> {
     where(is_active: true)
@@ -54,7 +54,7 @@ class User < ApplicationRecord
 
   # all contacts this user has with this casa case
   def case_contacts_for(casa_case_id)
-    found_casa_case = casa_cases.find { |cc| cc.id == casa_case_id }
+    found_casa_case = casa_cases.find { |cc| cc.id == casa_case_id } # TODO filter for active?
     found_casa_case.case_contacts.filter { |contact| contact.creator_id == id }
   end
 
@@ -68,7 +68,7 @@ class User < ApplicationRecord
 
   def volunteers_serving_transition_aged_youth
     volunteers.includes(:casa_cases)
-      .where(casa_cases: {transition_aged_youth: true}).size
+      .where(casa_cases: {transition_aged_youth: true}).size # TODO filter for active?
   end
 
   def no_contact_for_two_weeks
@@ -121,7 +121,7 @@ class User < ApplicationRecord
   end
 
   def serving_transition_aged_youth?
-    casa_cases.where(transition_aged_youth: true).any?
+    casa_cases.where(transition_aged_youth: true).any? # TODO filter for active?
   end
 
   def admin_self_deactivated?
