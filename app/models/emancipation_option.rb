@@ -3,7 +3,7 @@ class EmancipationOption < ApplicationRecord
   has_many :casa_cases_emancipation_options, dependent: :destroy
   has_many :casa_cases, through: :casa_cases_emancipation_options
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: {scope: :emancipation_category_id}
 
   scope :category_options, ->(emancipation_category_id) {
     where(emancipation_category_id: emancipation_category_id)

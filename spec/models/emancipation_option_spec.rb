@@ -6,6 +6,12 @@ RSpec.describe EmancipationOption, type: :model do
   it { is_expected.to have_many(:casa_cases).through(:casa_cases_emancipation_options) }
   it { is_expected.to validate_presence_of(:name) }
 
+  it "is unique across emancipation_category, name" do
+    eo = create(:emancipation_option)
+    eo_new = build(:emancipation_option, emancipation_category: eo.emancipation_category, name: eo.name)
+    expect(eo_new.valid?).to be false
+  end
+
   context "When creating a new option" do
     context "duplicate name entries" do
       duplicate_option_name = "test option"
