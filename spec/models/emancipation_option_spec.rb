@@ -12,12 +12,10 @@ RSpec.describe EmancipationOption, type: :model do
       let(:duplicate_category) { create(:emancipation_category) }
       let(:non_duplicate_category) { create(:emancipation_category, name: "Not the same name as the other category to satisfy unique contraints") }
 
-      it "raises an exception for entries with the same name and category" do
-        duplicate_option_name = "test option"
-        expect {
-          create(:emancipation_option, emancipation_category: duplicate_category, name: duplicate_option_name)
-          create(:emancipation_option, emancipation_category: duplicate_category, name: duplicate_option_name)
-        }.to raise_error(ActiveRecord::RecordNotUnique)
+      it "is unique across emancipation_category, name" do
+        eo = create(:emancipation_option)
+        eo_new = build(:emancipation_option, emancipation_category: eo.emancipation_category, name: eo.name)
+        expect(eo_new.valid?).to be false
       end
 
       it "creates two new entries given different categories and same names" do
