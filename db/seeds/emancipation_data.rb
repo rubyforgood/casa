@@ -1,5 +1,5 @@
 # Emancipation Checklist Form Data
-category_housing = EmancipationCategory.where(name: "Youth has housing.").first_or_create(mutually_exclusive: true)
+category_housing = EmancipationCategory.where(name: "Youth has housing.").first_or_create(mutually_exclusive: false)
 category_housing.add_option("With friend")
 category_housing.add_option("With relative")
 category_housing.add_option("With former foster parent")
