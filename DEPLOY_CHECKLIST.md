@@ -1,6 +1,4 @@
-# Deployment Checklist
-
-### Must be followed for any manual deployment
+# Prod Deployment Checklist
 
 1. Announce deploy in slack `#casa`: "I am about to deploy [staging|prod]". 
  * If you have any problems (need to rerun a deploy, need to run code in rails console) post to a slack thread about it.
