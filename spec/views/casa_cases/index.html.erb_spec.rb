@@ -13,14 +13,6 @@ RSpec.describe "casa_cases/index", type: :system do
       sign_in admin
     end
 
-    after(:each) do
-      # customize based on which type of logs you want displayed
-      log_types = page.driver.browser.manage.logs.available_types
-      log_types.each do |t|
-        puts t.to_s + ": " + page.driver.browser.manage.logs.get(t).join("\n")
-      end
-    end
-
     it "Displays the Cases title" do
       visit casa_cases_path
       expect(page).to have_text("Cases")
