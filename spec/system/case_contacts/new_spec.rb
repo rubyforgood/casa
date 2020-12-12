@@ -238,7 +238,7 @@ RSpec.describe "case_contacts/new", type: :system do
     end
 
     context "with invalid inputs" do
-      xit "re-renders the form with errors, but preserving all previously entered selections" do
+      it "re-renders the form with errors, but preserving all previously entered selections" do
         volunteer = create(:volunteer, :with_casa_cases)
         volunteer_casa_case_one = volunteer.casa_cases.first
         future_date = 2.days.from_now
