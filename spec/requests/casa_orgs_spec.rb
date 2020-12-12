@@ -33,6 +33,14 @@ RSpec.describe "CasaOrgs", type: :request do
           }.to change(ActiveStorage::Attachment, :count).by(1)
         end
 
+        it "doesn't revert logo to default if non logo details are updated" do
+          casa_org.update(logo: logo)
+
+          expect {
+            patch casa_org_url(casa_org), params: {casa_org: valid_attributes}
+          }.not_to change(ActiveStorage::Attachment, :count)
+        end
+
         it "redirects to the casa_org" do
           patch casa_org_url(casa_org), params: {casa_org: valid_attributes}
           casa_org.reload
