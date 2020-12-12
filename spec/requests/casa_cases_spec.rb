@@ -19,6 +19,29 @@ RSpec.describe "/casa_cases", type: :request do
         get casa_cases_url
         expect(response).to be_successful
       end
+
+      it "shows all my organization's cases" do
+        volunteer_1 = create(:volunteer, casa_org: user.casa_org)
+        volunteer_2 = create(:volunteer, casa_org: user.casa_org)
+        create(:case_assignment, volunteer: volunteer_1)
+        create(:case_assignment, volunteer: volunteer_2)
+
+        get casa_cases_url
+
+        expect(response.body).to include(volunteer_1.casa_cases.first.case_number)
+        expect(response.body).to include(volunteer_2.casa_cases.first.case_number)
+      end
+
+      it "doesn't show other organizations' cases" do
+        my_case_assignment = create(:case_assignment, casa_org: user.casa_org)
+        different_org = create(:casa_org)
+        not_my_case_assignment = create(:case_assignment, casa_org: different_org)
+
+        get casa_cases_url
+
+        expect(response.body).to include(my_case_assignment.casa_case.case_number)
+        expect(response.body).not_to include(not_my_case_assignment.casa_case.case_number)
+      end
     end
 
     describe "GET /show" do

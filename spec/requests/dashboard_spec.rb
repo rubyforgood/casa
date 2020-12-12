@@ -2,11 +2,11 @@ require "rails_helper"
 
 RSpec.describe "/dashboard", type: :request do
   let(:organization) { create(:casa_org) }
-  let(:volunteer) { create(:volunteer, casa_org: organization) }
-  let(:admin) { create(:casa_admin, casa_org: organization) }
 
   context "as a volunteer" do
+    let(:volunteer) { create(:volunteer, casa_org: organization) }
     before do
+      create(:case_assignment, volunteer: volunteer)
       sign_in volunteer
     end
 
@@ -17,13 +17,39 @@ RSpec.describe "/dashboard", type: :request do
         expect(response).to redirect_to(casa_cases_path)
       end
 
-      it "shows my cases"
-      it "doesn't show other volunteers' cases"
-      it "doesn't show other organizations' cases"
+      it "shows my cases" do
+        get root_url
+        follow_redirect!
+
+        expect(response.body).to include(volunteer.casa_cases.first.case_number)
+      end
+
+      it "doesn't show other volunteers' cases" do
+        not_logged_in_volunteer = create(:volunteer)
+        create(:case_assignment, volunteer: not_logged_in_volunteer)
+
+        get root_url
+        follow_redirect!
+
+        expect(response.body).to include(volunteer.casa_cases.first.case_number)
+        expect(response.body).not_to include(not_logged_in_volunteer.casa_cases.first.case_number)
+      end
+
+      it "doesn't show other organizations' cases" do
+        different_org = create(:casa_org)
+        not_my_case_assignment = create(:case_assignment, casa_org: different_org)
+
+        get root_url
+        follow_redirect!
+
+        expect(response.body).to include(volunteer.casa_cases.first.case_number)
+        expect(response.body).not_to include(not_my_case_assignment.casa_case.case_number)
+      end
     end
   end
 
   context "as an admin" do
+    let(:admin) { create(:casa_admin, casa_org: organization) }
     before do
       sign_in admin
     end
@@ -34,9 +60,6 @@ RSpec.describe "/dashboard", type: :request do
 
         expect(response).to redirect_to(supervisors_path)
       end
-
-      it "shows all my organization's cases"
-      it "doesn't show other organizations' cases"
     end
   end
 end
