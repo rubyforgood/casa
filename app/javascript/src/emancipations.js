@@ -3,7 +3,7 @@ $('document').ready(() => {
     autoWidth: false,
     searching: false,
     stateSave: false,
-    "columnDefs": [
+    columnDefs: [
       { orderable: false, targets: 1 }
     ],
     language: {
@@ -11,4 +11,3 @@ $('document').ready(() => {
     }
   })
 })
-

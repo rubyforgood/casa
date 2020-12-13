@@ -7,7 +7,7 @@ const emancipationPage = {
 // Shows an error notification
 //  @param    {string | Error}  error The error to be displayed
 //  @throws   {TypeError}  for a parameter of the incorrect type
-function notifyError(error) {
+function notifyError (error) {
   if (error instanceof Error) {
     error = error.message
   }
@@ -20,7 +20,7 @@ function notifyError(error) {
   <div class="async-failure-indicator">
     Error: ${error}
     <button class="btn btn-danger btn-sm">×</button>
-  </div>`).find('.async-failure-indicator button').click( function () {
+  </div>`).find('.async-failure-indicator button').click(function () {
     $(this).parent().remove()
   })
 }
@@ -47,7 +47,7 @@ function resolveAsyncOperation (error) {
     <div class="async-failure-indicator">
       Error: ${error}
       <button class="btn btn-danger btn-sm">×</button>
-    </div>`).find('.async-failure-indicator button').click( function () {
+    </div>`).find('.async-failure-indicator button').click(function () {
       $(this).parent().remove()
     })
   } else {
@@ -86,10 +86,10 @@ function waitForAsyncOperation () {
 //  @returns  {array} a jQuery jqXHR object. See https://api.jquery.com/jQuery.ajax/#jqXHR
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {RangeError} if optionId is negative
-function changeOptions(optionAction, optionId){
+function changeOptions (optionAction, optionId) {
   // Input check
   if (typeof optionId === 'string') {
-    let optionIdAsNum = parseInt(optionId)
+    const optionIdAsNum = parseInt(optionId)
 
     if (!optionIdAsNum) {
       throw new TypeError('Param optionId is not an integer')
@@ -97,7 +97,7 @@ function changeOptions(optionAction, optionId){
       throw new RangeError('Param optionId cannot be negative')
     }
   } else {
-    if(!Number.isInteger(optionId)) {
+    if (!Number.isInteger(optionId)) {
       throw new TypeError('Param optionId is not an integer')
     } else if (optionId < 0) {
       throw new RangeError('Param optionId cannot be negative')
@@ -113,7 +113,7 @@ function changeOptions(optionAction, optionId){
   }).done(function (response, textStatus) {
     if (response.error) {
       resolveAsyncOperation(response.error)
-    } else if (response === 'success'){
+    } else if (response === 'success') {
       resolveAsyncOperation()
     } else {
       resolveAsyncOperation('Unknown response')
@@ -129,14 +129,14 @@ $('document').ready(() => {
   emancipationPage.asyncSuccessIndicator = emancipationPage.notifications.find('#async-success-indicator')
   emancipationPage.asyncWaitIndicator = emancipationPage.notifications.find('#async-waiting-indicator')
 
-  emancipationPage.emancipationSelects.each(function() {
-    let thisSelect = $(this)
+  emancipationPage.emancipationSelects.each(function () {
+    const thisSelect = $(this)
 
     thisSelect.data('prev', thisSelect.val())
   })
 
-  emancipationPage.emancipationSelects.change(function(data) {
-    let thisSelect = $(this)
+  emancipationPage.emancipationSelects.change(function (data) {
+    const thisSelect = $(this)
 
     if (thisSelect.val()) {
       changeOptions('set', thisSelect.val())
@@ -144,11 +144,11 @@ $('document').ready(() => {
       changeOptions('delete', thisSelect.data().prev)
     }
 
-    thisSelect.data('prev', thisSelect.val());
+    thisSelect.data('prev', thisSelect.val())
   })
 
-  $('.emancipation-check-box').change(function() {
-    let thisCheckBox = $(this)
+  $('.emancipation-check-box').change(function () {
+    const thisCheckBox = $(this)
 
     if (thisCheckBox.prop('checked')) {
       changeOptions('add', thisCheckBox.val())
