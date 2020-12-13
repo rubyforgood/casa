@@ -73,52 +73,52 @@ $('document').ready(() => {
 
   const handleAjaxError = e => {
     if (e.status === 401) {
-      location.reload();
+      location.reload()
     } else {
-      console.log(e);
+      console.log(e)
       if (e.responseJSON && e.responseJSON.error) {
-        alert(e.responseJSON.error);
+        alert(e.responseJSON.error)
       } else {
         const responseErrorMessage = e.response.statusText
           ? `\n${e.response.statusText}\n`
-          : '';
+          : ''
 
         alert(`Sorry, try that again?\n${responseErrorMessage}\nIf you're seeing a problem, please fill out the Report A Site Issue
         link to the bottom left near your email address.`)
       }
     }
-  };
+  }
 
   // Enable all data tables on dashboard but only filter on volunteers table
-  const editSupervisorPath = id => `/supervisors/${id}/edit`;
-  const editVolunteerPath = id => `/volunteers/${id}/edit`;
-  const casaCasePath = id => `/casa_cases/${id}`;
+  const editSupervisorPath = id => `/supervisors/${id}/edit`
+  const editVolunteerPath = id => `/volunteers/${id}/edit`
+  const casaCasePath = id => `/casa_cases/${id}`
   var volunteersTable = $('table#volunteers').DataTable({
     autoWidth: false,
     stateSave: false,
     columns: [
       {
-        name: "display_name",
+        name: 'display_name',
         render: (data, type, row, meta) => {
           return `
             <a href="${editVolunteerPath(row.id)}">
               ${row.display_name || row.email}
             </a>
             ${row.made_contact_with_all_cases_in_days === 'false'
-              ? `🕐 <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="Has at least one case with no contact in 14 days"></i>`
+              ? '🕐 <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="Has at least one case with no contact in 14 days"></i>'
               : ''
             }
-          `;
+          `
         }
       },
       {
-        name: "email",
+        name: 'email',
         render: (data, type, row, meta) => row.email,
         visible: false
       },
       {
-        className: "supervisor-column",
-        name: "supervisor_name",
+        className: 'supervisor-column',
+        name: 'supervisor_name',
         render: (data, type, row, meta) => {
           return row.supervisor.id
             ? `
@@ -126,32 +126,32 @@ $('document').ready(() => {
                 ${row.supervisor.name}
               </a>
             `
-            : '';
+            : ''
         }
       },
       {
-        name: "active",
-        render: (data, type, row, meta) => row.active === "true" ? "Active" : "Inactive",
-        searchable: false,
-      },
-      {
-        name: "has_transition_aged_youth_cases",
-        render: (data, type, row, meta) => row.has_transition_aged_youth_cases === "true" ? "Yes 🐛🦋" : "No",
+        name: 'active',
+        render: (data, type, row, meta) => row.active === 'true' ? 'Active' : 'Inactive',
         searchable: false
       },
       {
-        name: "casa_cases",
+        name: 'has_transition_aged_youth_cases',
+        render: (data, type, row, meta) => row.has_transition_aged_youth_cases === 'true' ? 'Yes 🐛🦋' : 'No',
+        searchable: false
+      },
+      {
+        name: 'casa_cases',
         render: (data, type, row, meta) => {
           const links = row.casa_cases.map(casaCase => {
-            return `<a href="${casaCasePath(casaCase.id)}">${casaCase.case_number}</a>`;
-          });
+            return `<a href="${casaCasePath(casaCase.id)}">${casaCase.case_number}</a>`
+          })
 
-          return links.join(", ");
+          return links.join(', ')
         },
         orderable: false
       },
       {
-        name: "most_recent_contact_occurred_at",
+        name: 'most_recent_contact_occurred_at',
         render: (data, type, row, meta) => {
           return row.most_recent_contact.case_id
             ? `
@@ -159,19 +159,19 @@ $('document').ready(() => {
                 ${row.most_recent_contact.occurred_at}
               </a>
             `
-            : "None ❌";
+            : 'None ❌'
         },
         searchable: false,
         visible: false
       },
       {
-        name: "contacts_made_in_past_days",
+        name: 'contacts_made_in_past_days',
         render: (data, type, row, meta) => row.contacts_made_in_past_days,
         searchable: false,
         visible: false
       },
       {
-        name: "actions",
+        name: 'actions',
         orderable: false,
         render: (data, type, row, meta) => {
           return `
@@ -187,16 +187,16 @@ $('document').ready(() => {
     serverSide: true,
     ajax: {
       url: $('table#volunteers').data('source'),
-      type: "POST",
+      type: 'POST',
       data: function (d) {
-        const supervisorOptions = $(".supervisor-options input:checked");
-        const supervisorFilter = Array.from(supervisorOptions).map(option => option.dataset.value);
+        const supervisorOptions = $('.supervisor-options input:checked')
+        const supervisorFilter = Array.from(supervisorOptions).map(option => option.dataset.value)
 
-        const statusOptions = $(".status-options input:checked");
-        const statusFilter = Array.from(statusOptions).map(option => JSON.parse(option.dataset.value));
+        const statusOptions = $('.status-options input:checked')
+        const statusFilter = Array.from(statusOptions).map(option => JSON.parse(option.dataset.value))
 
-        const transitionYouthOptions = $(".transition-youth-options input:checked");
-        const transitionYouthFilter = Array.from(transitionYouthOptions).map(option => JSON.parse(option.dataset.value));
+        const transitionYouthOptions = $('.transition-youth-options input:checked')
+        const transitionYouthFilter = Array.from(transitionYouthOptions).map(option => JSON.parse(option.dataset.value))
 
         return $.extend({}, d, {
           additional_filters: {
@@ -204,13 +204,13 @@ $('document').ready(() => {
             active: statusFilter,
             transition_aged_youth: transitionYouthFilter
           }
-        });
+        })
       },
       error: handleAjaxError,
       dataType: 'json'
     },
     drawCallback: function (settings) {
-      $('[data-toggle=tooltip]').tooltip();
+      $('[data-toggle=tooltip]').tooltip()
     }
   })
 
