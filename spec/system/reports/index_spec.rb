@@ -19,7 +19,7 @@ RSpec.describe "reports/index", type: :system do
   end
 
   shared_examples "can view page" do
-    it "downloads report" do
+    it "downloads report", js: true do
       expect(page).to have_text("Case Contacts Report") &
         have_field("report_start_date", with: 6.months.ago.to_date) &
         have_field("report_end_date", with: Date.today.to_date)

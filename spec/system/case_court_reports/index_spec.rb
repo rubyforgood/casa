@@ -16,13 +16,13 @@ RSpec.describe "case_court_reports/index", type: :system do
       expect(page).to have_selector "#btnGenerateReport", **options
     end
 
-    it "does not see 'Download Court Report' button, which is hidden" do
+    it "does not see 'Download Court Report' button, which is hidden", js: true do
       options = {text: "Download Court Report", visible: :hidden}
 
       expect(page).to have_selector "#btnDownloadReport", **options
     end
 
-    it "shows a select element with default selection 'Select a case to generate report'" do
+    it "shows a select element with default selection 'Select a case to generate report'", js: true do
       expected_text = "Select a case to generate report"
 
       expect(page).to have_selector "#case-selection option[value]", text: expected_text
@@ -61,11 +61,11 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
 
     context "'Generate Report' button" do
-      it "does not become disabled" do
+      it "does not become disabled", js: true do
         expect(page).not_to have_selector "#btnGenerateReport[disabled]"
       end
 
-      it "does not have label changed to 'Court report generating. Do not refresh or leave this page'" do
+      it "does not have label changed to 'Court report generating. Do not refresh or leave this page'", js: true do
         options = {text: "Court report generating. Do not refresh or leave this page"}
 
         expect(page).not_to have_selector "#btnGenerateReport[disabled]", **options
@@ -73,13 +73,13 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
 
     context "'Download Court Report' button" do
-      it "does not become visible" do
+      it "does not become visible", js: true do
         options = {text: "Download Court Report", visible: :hidden}
 
         expect(page).to have_selector "#btnDownloadReport", **options
       end
 
-      it "does not change href value from '#'" do
+      it "does not change href value from '#'", js: true do
         options = {id: "btnDownloadReport", visible: :hidden, href: "#"}
 
         expect(page).to have_link "Download Court Report", **options
@@ -98,16 +98,16 @@ RSpec.describe "case_court_reports/index", type: :system do
       click_button "Generate Report"
     end
 
-    it "has transition case option selected" do
+    it "has transition case option selected", js: true do
       expect(page).to have_select "case-selection", selected: transition_option_text
     end
 
     context "'Generate Report' button" do
-      it "becomes disabled" do
+      it "becomes disabled", js: true do
         expect(page).to have_selector "#btnGenerateReport[disabled]"
       end
 
-      it "has label changed to 'Court report generating. Do not refresh or leave this page'" do
+      it "has label changed to 'Court report generating. Do not refresh or leave this page'", js: true do
         options = {text: "Court report generating. Do not refresh or leave this page"}
 
         expect(page).to have_selector "#btnGenerateReport[disabled]", **options
@@ -115,13 +115,13 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
 
     context "'Download Court Report' button" do
-      it "becomes visible" do
+      it "becomes visible", js: true do
         options = {text: "Download Court Report", visible: :visible}
 
         expect(page).to have_selector "#btnDownloadReport", **options
       end
 
-      it "changes href value from '#' to a link with .docx format" do
+      it "changes href value from '#' to a link with .docx format", js: true do
         download_link = "/case_court_reports/#{case_number}.docx"
 
         options = {id: "btnDownloadReport", visible: :visible, href: download_link}
