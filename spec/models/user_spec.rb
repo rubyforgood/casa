@@ -132,6 +132,27 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "#actively_assigned_and_active_cases" do
+    let(:casa_org) { create(:casa_org) }
+    let(:user) { create(:volunteer, casa_org: casa_org) }
+    !let(:active_case_assignment_with_active_case) do
+      create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org), volunteer: user)
+    end
+    !let(:active_case_assignment_with_inactive_case) do
+      create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org, active: false), volunteer: user)
+    end
+    !let(:inactive_case_assignment_with_active_case) do
+      create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org), is_active: false, volunteer: user)
+    end
+    !let(:inactive_case_assignment_with_inactive_case) do
+      create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org, active: false), is_active:false, volunteer: user)
+    end
+
+    it "only returns the user's active cases with active case assignments" do
+      expect(user.actively_assigned_and_active_cases).to match_array([active_case_assignment_with_active_case.casa_case])
+    end
+  end
+
   describe "#serving_transition_aged_youth?" do
     let(:casa_org) { create(:casa_org) }
     let(:user) { create(:volunteer, casa_org: casa_org) }

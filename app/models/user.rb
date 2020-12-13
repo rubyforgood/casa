@@ -53,6 +53,10 @@ class User < ApplicationRecord
     end
   end
 
+  def actively_assigned_and_active_cases
+    casa_cases.active.merge(CaseAssignment.is_active)
+  end
+
   # all contacts this user has with this casa case
   def case_contacts_for(casa_case_id)
     found_casa_case = casa_cases.find { |cc| cc.id == casa_case_id } # TODO filter for active?
