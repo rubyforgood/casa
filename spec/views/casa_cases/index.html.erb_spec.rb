@@ -39,7 +39,7 @@ RSpec.describe "casa_cases/index", type: :system do
       expect(page).to have_selector("th", text: "Actions")
     end
 
-    it "Filters active/inactive casa_cases" do
+    it "Filters active/inactive casa_cases", js: true do
       active_case = create(:casa_case, active: true, casa_org: organization)
       active_case1 = create(:casa_case, active: true, casa_org: organization)
       inactive_case = create(:casa_case, active: false, casa_org: organization)

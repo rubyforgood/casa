@@ -37,7 +37,7 @@ RSpec.describe "volunteers/edit", type: :system do
     end
   end
 
-  it "saves the user as inactive, but only if the admin confirms" do
+  it "saves the user as inactive, but only if the admin confirms", js: true do
     sign_in admin
     visit edit_volunteer_path(volunteer)
 

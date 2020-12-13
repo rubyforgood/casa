@@ -31,7 +31,7 @@ RSpec.describe "dashboard/show", type: :system do
     expect(page).to have_no_link("Bob Loblaw")
   end
 
-  it "displays 'No active cases' when they don't have any assignments" do
+  it "displays 'No active cases' when they don't have any assignments", js: true do
     visit root_path
     expect(page).to have_text("My Cases")
     expect(page).to have_text("No active cases")

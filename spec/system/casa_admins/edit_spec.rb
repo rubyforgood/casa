@@ -39,7 +39,7 @@ RSpec.describe "casa_admins/edit", type: :system do
     end
   end
 
-  it "can successfully deactivate" do
+  it "can successfully deactivate", js: true do
     another = create(:casa_admin)
     visit edit_casa_admin_path(another)
 
