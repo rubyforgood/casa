@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :user do
-    casa_org { create(:casa_org) }
+    casa_org { CasaOrg.first || create(:casa_org) }
     sequence(:email) { |n| "email#{n}@example.com" }
     sequence(:display_name) { |n| "User #{n}" }
     password { "123456" }

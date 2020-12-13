@@ -201,7 +201,8 @@ RSpec.describe Volunteer, type: :model do
     context "volunteers" do
       let!(:unassigned1) { create(:volunteer, display_name: "aaa", casa_org: casa_org) }
       let!(:unassigned2) { create(:volunteer, display_name: "bbb", casa_org: casa_org) }
-      let!(:unassigned2_different_org) { create(:volunteer, display_name: "ccc") }
+      let!(:different_org) { create(:casa_org) }
+      let!(:unassigned2_different_org) { create(:volunteer, display_name: "ccc", casa_org: different_org) }
       let!(:assigned1) { create(:volunteer, display_name: "ddd", casa_org: casa_org) }
       let!(:assignment1) { create(:supervisor_volunteer, volunteer: assigned1) }
       let!(:assigned2_different_org) { assignment1.volunteer }
