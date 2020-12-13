@@ -13,7 +13,6 @@ class CasaOrgsController < ApplicationController
   def update
     respond_to do |format|
       if @casa_org.update(casa_org_update_params)
-        @casa_org.logo.attach(casa_org_update_params[:logo])
         format.html { redirect_to edit_casa_org_path, notice: "CASA organization was successfully updated." }
         format.json { render :show, status: :ok, location: @casa_org }
       else
