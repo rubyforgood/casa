@@ -242,11 +242,14 @@ RSpec.describe "VolunteerDatatable" do
           assigned_volunteers
             .order(id: :desc)
             .sort_by { |v| v.case_contacts.where(occurred_at: 60.days.ago.to_date..).count }
-            .sort_by { |v| v.case_contacts.exists?(occurred_at: 60.days.ago.to_date..) ? 0 : 1 }
         end
 
         it "is successful" do
           check_desc_order.call
+        end
+
+        it "should move blanks to the end" do
+          expect(values[0][:contacts_made_in_past_days]).not_to be_blank
         end
       end
     end

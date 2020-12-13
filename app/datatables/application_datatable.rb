@@ -48,7 +48,7 @@ class ApplicationDatatable
   end
 
   def build_order_clause
-    Arel.sql "#{order_by} #{order_direction}" if order_by.present?
+    Arel.sql "#{order_by} #{order_direction} NULLS LAST" if order_by.present?
   end
 
   def order_by
