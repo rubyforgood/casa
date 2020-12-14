@@ -33,7 +33,8 @@ RSpec.describe "volunteers/index", type: :system do
 
         visit volunteers_path
 
-        expect(page).to have_xpath("//img[@src = '/packs-test/media/src/images/default-logo-c9048fc43854499e952e4b62a505bf35.png' and @alt='CASA Logo']")
+        expect(page.find("#casa-logo")["src"]).to match "default-logo"
+        expect(page.find("#casa-logo")["alt"]).to have_content "CASA Logo"
       end
     end
 
@@ -164,8 +165,8 @@ RSpec.describe "volunteers/index", type: :system do
         visit volunteers_path
         click_on "Supervisor"
         allow_any_instance_of(User).to receive(:timedout?).and_return true
-        find(:css, "#unassigned-vol-filter").set(true)
-        expect(page).to have_text "You need to sign in before continuing."
+        visit volunteers_path
+        expect(page).to have_text "sign in again to continue"
         expect(current_path).to eq new_user_session_path
       end
     end
@@ -248,8 +249,8 @@ RSpec.describe "volunteers/index", type: :system do
         visit volunteers_path
         click_on "Supervisor"
         allow_any_instance_of(User).to receive(:timedout?).and_return true
-        find(:css, "#unassigned-vol-filter").set(true)
-        expect(page).to have_text "You need to sign in before continuing."
+        visit volunteers_path
+        expect(page).to have_text "sign in again to continue"
         expect(current_path).to eq new_user_session_path
       end
     end
