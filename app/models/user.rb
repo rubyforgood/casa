@@ -61,8 +61,8 @@ class User < ApplicationRecord
   def case_contacts_for(casa_case_id)
     found_casa_case = actively_assigned_and_active_cases.find { |cc| cc.id == casa_case_id }
 
-    if found_casa_case == nil
-      raise ActiveRecord::RecordNotFound.new "Could not find case with id: #{ casa_case_id } belonging to this user"
+    if found_casa_case.nil?
+      raise ActiveRecord::RecordNotFound.new "Could not find case with id: #{casa_case_id} belonging to this user"
     end
 
     found_casa_case.case_contacts.filter { |contact| contact.creator_id == id }
