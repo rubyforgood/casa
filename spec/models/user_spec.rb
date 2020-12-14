@@ -46,6 +46,19 @@ RSpec.describe User, type: :model do
       result = other_volunteer.case_contacts_for(sample_casa_case_id)
       expect(result.length).to eq(1)
     end
+
+    it "does not return case_contacts neither unassigned cases or inactive cases" do
+      inactive_case_assignment = create(:case_assignment, casa_case: create(:casa_case, casa_org: volunteer.casa_org), is_active: false, volunteer: volunteer)
+      case_assignment_to_inactve_case = create(:case_assignment, casa_case: create(:casa_case, active: false, casa_org: volunteer.casa_org), volunteer: volunteer)
+
+      expect {
+        volunteer.case_contacts_for(inactive_case_assignment.casa_case.id)
+      }.to raise_error(ActiveRecord::RecordNotFound)
+
+      expect {
+        volunteer.case_contacts_for(case_assignment_to_inactve_case.casa_case.id)
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
   end
 
   describe "supervisors" do
