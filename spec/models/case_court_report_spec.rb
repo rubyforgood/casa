@@ -55,6 +55,9 @@ RSpec.describe CaseCourtReport, type: :model do
         report.generate!
 
         expect(File.exist?(path_to_report)).to eq true
+
+        # clean up after testing
+        File.delete(path_to_report) if File.exist?(path_to_report)
       end
     end
   end
