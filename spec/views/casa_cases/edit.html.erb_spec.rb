@@ -34,4 +34,10 @@ RSpec.describe "casa_cases/edit" do
       expect(rendered).to include(CGI.escapeHTML("Youth's Birth Month & Year"))
     end
   end
+
+  context "when assigning a new volunteer" do
+    let(:user) { build_stubbed(:casa_admin, casa_org: organization) }
+
+    it "does not have an option to select a volunteer that is already assigned to the casa case"
+  end
 end

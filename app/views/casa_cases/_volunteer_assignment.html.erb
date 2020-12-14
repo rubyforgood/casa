@@ -74,7 +74,7 @@
         <label for='case_assignment_casa_case_id'>Select a Volunteer</label>
         <select id='case_assignment_casa_case_id' name='case_assignment[volunteer_id]' class='form-control select2'>
           <% Volunteer.active.order(:display_name).each do |volunteer| %>
-            <option value="<%= volunteer.id %>"><%= volunteer.display_name %></option>
+            <%= render_eligible_volunteers(volunteer) %>
           <% end %>
         </select>
       </div>
