@@ -6,7 +6,7 @@ RSpec.describe "volunteers/index", type: :system do
 
   context "when admin" do
     context "when no logo_url" do
-      it "can see volunteers and navigate to their cases" do
+      it "can see volunteers and navigate to their cases", js: true do
         volunteer = create(:volunteer, :with_assigned_supervisor, display_name: "User 1", email: "casa@example.com", casa_org: organization)
         volunteer.casa_cases << create(:casa_case, casa_org: organization)
         volunteer.casa_cases << create(:casa_case, casa_org: organization)
@@ -37,7 +37,7 @@ RSpec.describe "volunteers/index", type: :system do
       end
     end
 
-    it "can show/hide columns on volunteers table" do
+    it "can show/hide columns on volunteers table", js: true do
       sign_in admin
 
       visit volunteers_path
@@ -62,7 +62,7 @@ RSpec.describe "volunteers/index", type: :system do
       expect(page).not_to have_text("Last Contact Made")
     end
 
-    it "can filter volunteers" do
+    it "can filter volunteers", js: true do
       assigned_volunteers = create_list(:volunteer, 3, :with_assigned_supervisor, casa_org: organization)
       inactive_volunteers = create_list(:volunteer, 2, :inactive, casa_org: organization)
       unassigned_volunteers = create_list(:volunteer, 1, casa_org: organization)
@@ -96,7 +96,7 @@ RSpec.describe "volunteers/index", type: :system do
       expect(page.all("table#volunteers tbody tr").count).to eq inactive_volunteers.count
     end
 
-    it "can go to the volunteer edit page from the volunteer list" do
+    it "can go to the volunteer edit page from the volunteer list", js: true do
       create(:volunteer, :with_assigned_supervisor, casa_org: organization)
       sign_in admin
 
@@ -121,7 +121,7 @@ RSpec.describe "volunteers/index", type: :system do
     end
 
     describe "supervisor column of volunteers table" do
-      it "is blank when volunteer has no supervisor" do
+      it "is blank when volunteer has no supervisor", js: true do
         create(:volunteer, casa_org: organization)
         sign_in admin
 
@@ -133,7 +133,7 @@ RSpec.describe "volunteers/index", type: :system do
         expect(supervisor_cell.text).to eq ""
       end
 
-      it "displays supervisor's name when volunteer has supervisor" do
+      it "displays supervisor's name when volunteer has supervisor", js: true do
         name = "Superduper Visor"
         supervisor = create(:supervisor, display_name: name, casa_org: organization)
         create(:volunteer, supervisor: supervisor, casa_org: organization)
@@ -145,7 +145,7 @@ RSpec.describe "volunteers/index", type: :system do
         expect(supervisor_cell.text).to eq name
       end
 
-      it "is blank when volunteer's supervisor is inactive" do
+      it "is blank when volunteer's supervisor is inactive", js: true do
         create(:volunteer, :with_inactive_supervisor, casa_org: organization)
         sign_in admin
 
@@ -159,7 +159,7 @@ RSpec.describe "volunteers/index", type: :system do
     end
 
     context "when timed out" do
-      it "prompts login" do
+      it "prompts login", js: true do
         sign_in admin
         visit volunteers_path
         click_on "Supervisor"
@@ -175,7 +175,7 @@ RSpec.describe "volunteers/index", type: :system do
     let(:supervisor) { create(:supervisor, casa_org: organization) }
     let(:input_field) { "div#volunteers_filter input" }
 
-    it "can filter volunteers" do
+    it "can filter volunteers", js: true do
       active_volunteers = create_list(:volunteer, 3, :with_assigned_supervisor, casa_org: organization)
       active_volunteers[2].supervisor = supervisor
 
@@ -201,7 +201,7 @@ RSpec.describe "volunteers/index", type: :system do
       expect(page.all("table#volunteers tbody tr").count).to eq inactive_volunteers.count
     end
 
-    it "can show/hide columns on volunteers table" do
+    it "can show/hide columns on volunteers table", js: true do
       sign_in supervisor
 
       visit volunteers_path
@@ -229,7 +229,7 @@ RSpec.describe "volunteers/index", type: :system do
     context "with volunteers" do
       let(:supervisor) { create(:supervisor, :with_volunteers) }
 
-      it "Search history is clean after navigating away from volunteers view" do
+      it "Search history is clean after navigating away from volunteers view", js: true do
         sign_in supervisor
         visit volunteers_path
 
@@ -243,7 +243,7 @@ RSpec.describe "volunteers/index", type: :system do
     end
 
     context "when timed out" do
-      it "prompts login" do
+      it "prompts login", js: true do
         sign_in supervisor
         visit volunteers_path
         click_on "Supervisor"

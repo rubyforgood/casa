@@ -25,7 +25,7 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "case_contact_occurred_at", with: "04/04/2020"
     end
 
-    it "is successful" do
+    it "is successful", js: true do
       fill_in "case-contact-duration-hours", with: "1"
       fill_in "case-contact-duration-minutes", with: "45"
 
@@ -46,7 +46,7 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(page).to_not have_text("Hidden")
     end
 
-    it "should display full text in table if notes are less than 100 characters" do
+    it "should display full text in table if notes are less than 100 characters", js: true do
       fill_in "case-contact-duration-hours", with: "1"
       fill_in "case-contact-duration-minutes", with: "45"
 
@@ -64,7 +64,7 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(page).not_to have_text("Read more")
     end
 
-    it "should allow expanding or hiding if notes are more than 100 characters" do
+    it "should allow expanding or hiding if notes are more than 100 characters", js: true do
       fill_in "case-contact-duration-hours", with: "1"
       fill_in "case-contact-duration-minutes", with: "45"
 
@@ -111,7 +111,7 @@ RSpec.describe "case_contacts/new", type: :system do
     let!(:grp_with_hidden) { create(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization) }
     let!(:hidden_type) { create(:contact_type, name: "Hidden", active: false, contact_type_group: grp_with_hidden) }
 
-    it "is successful" do
+    it "is successful", js: true do
       volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first
       create_contact_types(volunteer_casa_case_one.casa_org)
@@ -148,7 +148,7 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(CaseContact.first.duration_minutes).to eq 105
     end
 
-    it "submits the form when no note was added" do
+    it "submits the form when no note was added", js: true do
       volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first
       create_contact_types(volunteer_casa_case_one.casa_org)
@@ -177,7 +177,7 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(CaseContact.first.notes).to eq ""
     end
 
-    it "submits the form when note is added and confirmed" do
+    it "submits the form when note is added and confirmed", js: true do
       volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first
       create_contact_types(volunteer_casa_case_one.casa_org)
@@ -238,7 +238,7 @@ RSpec.describe "case_contacts/new", type: :system do
     end
 
     context "with invalid inputs" do
-      xit "re-renders the form with errors, but preserving all previously entered selections" do
+      it "re-renders the form with errors, but preserving all previously entered selections", js: true do
         volunteer = create(:volunteer, :with_casa_cases)
         volunteer_casa_case_one = volunteer.casa_cases.first
         future_date = 2.days.from_now
@@ -284,7 +284,7 @@ RSpec.describe "case_contacts/new", type: :system do
     end
 
     context "with contact made not checked" do
-      it "does not re-render form, preserves all previously entered selections" do
+      it "does not re-render form, preserves all previously entered selections", js: true do
         volunteer = create(:volunteer, :with_casa_cases)
         volunteer_casa_case_one = volunteer.casa_cases.first
         future_date = 2.days.from_now

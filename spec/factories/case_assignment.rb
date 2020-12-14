@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :case_assignment do
     transient do
-      casa_org { create(:casa_org) }
+      casa_org { CasaOrg.first || create(:casa_org) }
     end
 
     is_active { true }

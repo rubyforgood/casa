@@ -36,19 +36,4 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = :random
-
-  config.before(:each, type: :system) do
-    if ENV["DOCKER"]
-      driven_by :selenium_chrome_headless_in_container
-      Capybara.server_host = "0.0.0.0"
-      Capybara.server_port = 4000
-      Capybara.app_host = "http://web:4000"
-    else
-      driven_by :selenium_chrome_headless
-    end
-  end
-
-  config.before(:each, type: :system, js: false) do
-    driven_by :rack_test
-  end
 end

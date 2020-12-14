@@ -109,12 +109,11 @@ RSpec.describe "/imports", type: :request do
       expect(Supervisor.count).to eq(0)
 
       expect {
-        post imports_url, {
+        post imports_url,
           params: {
             import_type: "supervisor",
             file: fixture_file_upload(supervisor_volunteers_file)
           }
-        }
       }.to change(Supervisor, :count).by(2)
 
       expect(Supervisor.find_by(email: "s5@example.com").volunteers.size).to eq(1)

@@ -22,7 +22,7 @@ RSpec.describe "casa_orgs/edit", type: :system do
     expect(page).to have_text(hearing_type.name)
   end
 
-  it "has hearing types table" do
+  it "has hearing types table", js: true do
     scroll_to(page.find("table#hearing-types", visible: false))
     expect(page).to have_table(
       id: "hearing-types",

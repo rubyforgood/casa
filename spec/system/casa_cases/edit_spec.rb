@@ -36,11 +36,10 @@ RSpec.describe "casa_cases/edit", type: :system do
       expect(page).not_to have_text("Deactivate Case")
     end
 
-    it "deactivates a case" do
+    it "deactivates a case", js: true do
       visit edit_casa_case_path(casa_case)
 
       click_on "Deactivate CASA Case"
-      sleep 10
       click_on "Yes, deactivate"
       expect(page).to have_text("Case #{casa_case.case_number} has been deactivated")
       expect(page).to have_text("Case was deactivated on: #{casa_case.updated_at.strftime(DateFormat::MM_DD_YYYY)}")
@@ -52,10 +51,9 @@ RSpec.describe "casa_cases/edit", type: :system do
       expect(page).to_not have_text("Year")
     end
 
-    it "reactivates a case" do
+    it "reactivates a case", js: true do
       visit edit_casa_case_path(casa_case)
       click_on "Deactivate CASA Case"
-      sleep 10
       click_on "Yes, deactivate"
       click_on "Reactivate CASA Case"
 
@@ -202,7 +200,7 @@ RSpec.describe "casa_cases/edit", type: :system do
       after { travel_back }
 
       context "when a volunteer is assigned to a case" do
-        it "marks the volunteer as assigned and shows the start date of the assignment" do
+        it "marks the volunteer as assigned and shows the start date of the assignment", js: true do
           expect(casa_case.case_assignments.count).to eq 1
 
           unassign_button = page.find("input.btn-outline-danger")
@@ -222,7 +220,7 @@ RSpec.describe "casa_cases/edit", type: :system do
       end
 
       context "when a volunteer is unassigned from a case" do
-        it "marks the volunteer as unassigned and shows assignment start/end dates" do
+        it "marks the volunteer as unassigned and shows assignment start/end dates", js: true do
           unassign_button = page.find("input.btn-outline-danger")
           expect(unassign_button.value).to eq "Unassign Volunteer"
 
@@ -244,7 +242,7 @@ RSpec.describe "casa_cases/edit", type: :system do
       context "when supervisor other than volunteer's supervisor" do
         before { volunteer.update(supervisor: create(:supervisor)) }
 
-        it "unassigns volunteer" do
+        it "unassigns volunteer", js: true do
           unassign_button = page.find("input.btn-outline-danger")
           expect(unassign_button.value).to eq "Unassign Volunteer"
 

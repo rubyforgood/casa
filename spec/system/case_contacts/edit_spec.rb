@@ -6,7 +6,7 @@ RSpec.describe "case_contacts/edit", type: :system do
   let!(:case_contact) { create(:case_contact, duration_minutes: 105, casa_case: casa_case) }
 
   context "when admin" do
-    it "admin successfully edits case contact" do
+    it "admin successfully edits case contact", js: true do
       admin = create(:casa_admin, casa_org: organization)
       sign_in admin
 
@@ -29,7 +29,7 @@ RSpec.describe "case_contacts/edit", type: :system do
     let(:volunteer) { create(:volunteer, casa_org: organization) }
     let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
 
-    it "is successful" do
+    it "is successful", js: true do
       case_contact = create(:case_contact, duration_minutes: 105, casa_case: casa_case, creator: volunteer)
       sign_in volunteer
       visit edit_case_contact_path(case_contact)

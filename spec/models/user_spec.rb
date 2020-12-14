@@ -18,37 +18,47 @@ RSpec.describe User, type: :model do
     expect(user.valid?).to be false
   end
 
-  it "returns all case_contacts associated with this user and the casa case id supplied" do
-    volunteer = create(:volunteer, :with_casa_cases)
+  describe "#case_contacts_for" do
+    let(:volunteer) { create(:volunteer, :with_casa_cases) }
+    let(:case_of_interest) { volunteer.casa_cases.first }
+    let!(:contact_a) { create(:case_contact, creator: volunteer, casa_case: case_of_interest) }
+    let!(:contact_b) { create(:case_contact, creator: volunteer, casa_case: volunteer.casa_cases.second) }
 
-    case_of_interest = volunteer.casa_cases.first
-    create(:case_contact, creator: volunteer, casa_case: case_of_interest)
-    create(:case_contact, creator: volunteer, casa_case: volunteer.casa_cases.second)
+    it "returns all case_contacts associated with this user and the casa case id supplied" do
+      sample_casa_case_id = case_of_interest.id
 
-    sample_casa_case_id = case_of_interest.id
+      result = volunteer.case_contacts_for(sample_casa_case_id)
 
-    result = volunteer.case_contacts_for(sample_casa_case_id)
+      expect(result.length).to eq(1)
+    end
 
-    expect(result.length).to eq(1)
-  end
+    it "does not return case_contacts associated with another volunteer user" do
+      other_volunteer = create(:volunteer, :with_casa_cases, casa_org: volunteer.casa_org)
 
-  it "does not return case_contacts associated with another volunteer user" do
-    volunteer = create(:volunteer, :with_casa_cases)
-    other_volunteer = create(:volunteer, :with_casa_cases, casa_org: volunteer.casa_org)
+      create(:case_assignment, casa_case: case_of_interest, volunteer: other_volunteer)
+      create(:case_contact, creator: other_volunteer, casa_case: case_of_interest)
+      create(:case_contact)
 
-    case_of_interest = volunteer.casa_cases.first
-    create(:case_contact, creator: volunteer, casa_case: case_of_interest)
-    create(:case_contact, creator: volunteer, casa_case: volunteer.casa_cases.second)
-    create(:case_assignment, casa_case: case_of_interest, volunteer: other_volunteer)
-    create(:case_contact, creator: other_volunteer, casa_case: case_of_interest)
-    create(:case_contact)
+      sample_casa_case_id = case_of_interest.id
 
-    sample_casa_case_id = case_of_interest.id
+      result = volunteer.case_contacts_for(sample_casa_case_id)
+      expect(result.length).to eq(1)
+      result = other_volunteer.case_contacts_for(sample_casa_case_id)
+      expect(result.length).to eq(1)
+    end
 
-    result = volunteer.case_contacts_for(sample_casa_case_id)
-    expect(result.length).to eq(1)
-    result = other_volunteer.case_contacts_for(sample_casa_case_id)
-    expect(result.length).to eq(1)
+    it "does not return case_contacts neither unassigned cases or inactive cases" do
+      inactive_case_assignment = create(:case_assignment, casa_case: create(:casa_case, casa_org: volunteer.casa_org), is_active: false, volunteer: volunteer)
+      case_assignment_to_inactve_case = create(:case_assignment, casa_case: create(:casa_case, active: false, casa_org: volunteer.casa_org), volunteer: volunteer)
+
+      expect {
+        volunteer.case_contacts_for(inactive_case_assignment.casa_case.id)
+      }.to raise_error(ActiveRecord::RecordNotFound)
+
+      expect {
+        volunteer.case_contacts_for(case_assignment_to_inactve_case.casa_case.id)
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
   end
 
   describe "supervisors" do
@@ -129,6 +139,27 @@ RSpec.describe User, type: :model do
 
       user = create(:supervisor)
       expect(user).to be_active_for_authentication
+    end
+  end
+
+  describe "#actively_assigned_and_active_cases" do
+    let(:casa_org) { create(:casa_org) }
+    let(:user) { create(:volunteer, casa_org: casa_org) }
+    let!(:active_case_assignment_with_active_case) do
+      create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org), volunteer: user)
+    end
+    let!(:active_case_assignment_with_inactive_case) do
+      create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org, active: false), volunteer: user)
+    end
+    let!(:inactive_case_assignment_with_active_case) do
+      create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org), is_active: false, volunteer: user)
+    end
+    let!(:inactive_case_assignment_with_inactive_case) do
+      create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org, active: false), is_active: false, volunteer: user)
+    end
+
+    it "only returns the user's active cases with active case assignments" do
+      expect(user.actively_assigned_and_active_cases).to match_array([active_case_assignment_with_active_case.casa_case])
     end
   end
 

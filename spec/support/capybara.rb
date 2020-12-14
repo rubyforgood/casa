@@ -26,3 +26,20 @@ Capybara.register_driver :selenium_chrome_headless do |app|
       args: %w[--headless --disable-gpu --disable-site-isolation-trials --window-size=1280,900]
     )
 end
+
+RSpec.configure do |config|
+  config.before(:each, type: :system) do
+    driven_by :rack_test
+  end
+
+  config.before(:each, type: :system, js: true) do
+    if ENV["DOCKER"]
+      driven_by :selenium_chrome_headless_in_container
+      Capybara.server_host = "0.0.0.0"
+      Capybara.server_port = 4000
+      Capybara.app_host = "http://web:4000"
+    else
+      driven_by :selenium_chrome_headless
+    end
+  end
+end
