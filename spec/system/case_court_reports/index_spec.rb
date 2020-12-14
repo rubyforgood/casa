@@ -29,7 +29,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       expect(page).to have_select "case-selection", selected: expected_text
     end
 
-    it "shows 3 options: 2 assigned case + 1 prompt text" do
+    it "shows n+1 options in total, e.g 3 options <- 2 assigned cases + 1 prompt text" do
       expected_number_of_options = casa_cases.size + 1
 
       expect(page).to have_selector "#case-selection option", count: expected_number_of_options
@@ -87,19 +87,38 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
   end
 
-  context "when selecting transition case, volunteer can generate and download a report" do
+  context "'Case Number' dropdown list" do
+    let(:transitioned_case_number) { casa_cases.find(&:has_transitioned?).case_number.to_s }
+    let(:transitioned_option_text) { "#{transitioned_case_number} - transition" }
+    let(:non_transitioned_case_number) { casa_cases.reject(&:has_transitioned?).first.case_number.to_s }
+    let(:non_transitioned_option_text) { "#{non_transitioned_case_number} - non-transition" }
+
+    it "has transition case option selected" do
+      page.select transitioned_option_text, from: "case-selection"
+
+      click_button "Generate Report"
+
+      expect(page).to have_select "case-selection", selected: transitioned_option_text
+    end
+
+    it "has non-transitioned case option selected" do
+      page.select non_transitioned_option_text, from: "case-selection"
+
+      click_button "Generate Report"
+
+      expect(page).to have_select "case-selection", selected: non_transitioned_option_text
+    end
+  end
+
+  context "when selecting a case, volunteer can generate and download a report" do
     let(:case_number) { casa_cases.find(&:has_transitioned?).case_number.to_s }
-    let(:transition_option_text) { "#{case_number} - transition" }
+    let(:option_text) { "#{case_number} - transition" }
 
     before do
       # to find the select element, use either 'name' or 'id' attribute
       # in this case, id = "case-selection", name = "case_number"
-      page.select transition_option_text, from: "case-selection"
+      page.select option_text, from: "case-selection"
       click_button "Generate Report"
-    end
-
-    it "has transition case option selected" do
-      expect(page).to have_select "case-selection", selected: transition_option_text
     end
 
     context "'Generate Report' button" do
