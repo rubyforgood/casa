@@ -162,7 +162,7 @@ $('document').ready(() => {
             : 'None ❌'
         },
         searchable: false,
-        visible: false
+        visible: true
       },
       {
         name: 'contacts_made_in_past_days',

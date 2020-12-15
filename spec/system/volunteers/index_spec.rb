@@ -38,6 +38,15 @@ RSpec.describe "volunteers/index", type: :system do
       end
     end
 
+    it "displays last contact made by default", js: true do
+      volunteer = create(:volunteer, :with_assigned_supervisor, display_name: "User 1", email: "casa@example.com", casa_org: organization)
+      sign_in admin
+
+      visit volunteers_path
+
+      expect(page).to have_content(:visible, "Last Contact Made")
+    end
+
     it "can show/hide columns on volunteers table", js: true do
       sign_in admin
 
