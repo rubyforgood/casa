@@ -11,21 +11,22 @@ RSpec.describe "case_court_reports/index", type: :system do
 
   context "when first arriving to 'Generate Court Report' page, by default" do
     it "sees 'Generate Report' button" do
-      options = {text: "Generate Report"}
+      options = {text: "Generate Report", visible: true}
 
       expect(page).to have_selector "#btnGenerateReport", **options
     end
 
-    it "does not see 'Download Court Report' button, which is hidden" do
-      options = {text: "Download Court Report", visible: :hidden}
+    it "has 'Download Court Report' button with Bootstrap class '.d-none'" do
+      options = {text: "Download Court Report", class: ['d-none']}
 
       expect(page).to have_selector "#btnDownloadReport", **options
     end
 
     it "shows a select element with default selection 'Select a case to generate report'" do
       expected_text = "Select a case to generate report"
+      find("#case-selection").click.first('option', text: expected_text).select_option
 
-      expect(page).to have_selector "#case-selection option[value]", text: expected_text
+      expect(page).to have_selector "#case-selection option:first-of-type", text: expected_text
       expect(page).to have_select "case-selection", selected: expected_text
     end
 
