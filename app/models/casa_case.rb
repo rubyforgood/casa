@@ -47,7 +47,7 @@ class CasaCase < ApplicationRecord
   scope :not_assigned, ->(casa_org) {
     where(casa_org_id: casa_org.id)
       .left_outer_joins(:case_assignments)
-      .where(case_assignments: {id: nil})
+      .where("case_assignments.id IS NULL OR NOT case_assignments.is_active")
       .order(:case_number)
   }
   scope :should_transition, -> {

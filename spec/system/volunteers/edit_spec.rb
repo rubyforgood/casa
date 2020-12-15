@@ -130,6 +130,41 @@ RSpec.describe "volunteers/edit", type: :system do
     end
   end
 
+  context "with previously assigned cases" do
+    let(:casa_org) { create(:casa_org) }
+    let!(:supervisor) { create(:casa_admin, casa_org: casa_org) }
+    let!(:volunteer) { create(:volunteer, casa_org: casa_org, display_name: "AAA") }
+    let!(:casa_case_1) { create(:casa_case, casa_org: casa_org, case_number: "CINA1") }
+    let!(:casa_case_2) { create(:casa_case, casa_org: casa_org, case_number: "CINA2") }
+
+    it "shows the unassign button for assigned cases and not for unassigned cases" do
+      sign_in supervisor
+
+      assignment1 = volunteer.case_assignments.create(casa_case: casa_case_1, is_active: true)
+      assignment2 = volunteer.case_assignments.create(casa_case: casa_case_2, is_active: false)
+
+      visit edit_volunteer_path(volunteer)
+
+      within("#case_assignment_#{assignment1.id}") do
+        expect(page).to have_text(casa_case_1.case_number)
+        expect(page).to have_button("Unassign Case")
+      end
+
+      within("#case_assignment_#{assignment2.id}") do
+        expect(page).to have_text(casa_case_2.case_number)
+        expect(page).not_to have_button("Unassign Case")
+      end
+
+      select casa_case_2.case_number, from: "Select a Case"
+      click_on "Assign Case"
+
+      within("#case_assignment_#{assignment2.id}") do
+        expect(page).to have_text(casa_case_2.case_number)
+        expect(page).to have_button("Unassign Case")
+      end
+    end
+  end
+
   describe "inactive case visibility" do
     let!(:active_casa_case) { create(:casa_case, casa_org: organization, case_number: "ACTIVE") }
     let!(:inactive_casa_case) { create(:casa_case, casa_org: organization, active: false, case_number: "INACTIVE") }
