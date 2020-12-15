@@ -49,7 +49,7 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
   end
 
-  context "when choosing the prompt option (value is empty) and click on 'Generate Report' button, nothing should happen" do
+  context "when choosing the prompt option (value is empty) and click on 'Generate Report' button, nothing should happen", js: true do
     let(:option_text) { "Select a case to generate report" }
 
     before do
@@ -61,7 +61,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       click_button "Generate Report"
     end
 
-    context "'Generate Report' button" do
+    describe "'Generate Report' button" do
       it "does not become disabled" do
         expect(page).not_to have_selector "#btnGenerateReport[disabled]"
       end
@@ -73,7 +73,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       end
     end
 
-    context "'Download Court Report' button" do
+    describe "'Download Court Report' button" do
       it "does not become visible" do
         options = {text: "Download Court Report", visible: :hidden}
 
@@ -88,7 +88,7 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
   end
 
-  context "'Case Number' dropdown list" do
+  describe "'Case Number' dropdown list", js: true do
     let(:transitioned_case_number) { casa_cases.find(&:has_transitioned?).case_number.to_s }
     let(:transitioned_option_text) { "#{transitioned_case_number} - transition" }
     let(:non_transitioned_case_number) { casa_cases.reject(&:has_transitioned?).first.case_number.to_s }
@@ -111,7 +111,7 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
   end
 
-  context "when selecting a case, volunteer can generate and download a report" do
+  context "when selecting a case, volunteer can generate and download a report", js: true do
     let(:case_number) { casa_cases.find(&:has_transitioned?).case_number.to_s }
     let(:option_text) { "#{case_number} - transition" }
 
@@ -122,7 +122,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       click_button "Generate Report"
     end
 
-    context "'Generate Report' button" do
+    describe "'Generate Report' button" do
       it "becomes disabled" do
         expect(page).to have_selector "#btnGenerateReport[disabled]"
       end
@@ -134,7 +134,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       end
     end
 
-    context "'Download Court Report' button" do
+    describe "'Download Court Report' button" do
       it "becomes visible" do
         options = {text: "Download Court Report", visible: :visible}
 
