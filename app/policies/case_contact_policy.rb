@@ -1,11 +1,4 @@
-class CaseContactPolicy
-  attr_reader :user, :record
-
-  def initialize(user, record)
-    @user = user
-    @record = record
-  end
-
+class CaseContactPolicy < ApplicationPolicy
   def new?
     # Everyone is allowed to create a case_contact
     true

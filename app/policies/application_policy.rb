@@ -1,8 +1,9 @@
 class ApplicationPolicy
-  attr_reader :user
+  attr_reader :user, :record
 
-  def initialize(user, _application)
+  def initialize(user, record)
     @user = user
+    @record = record
   end
 
   def see_reports_page?
