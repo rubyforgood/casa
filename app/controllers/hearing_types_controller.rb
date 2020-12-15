@@ -1,12 +1,14 @@
 class HearingTypesController < ApplicationController
-  before_action :authenticate_user!, :must_be_admin
   before_action :set_hearing_type, except: [:new, :create]
+  after_action :verify_authorized
 
   def new
+    authorize HearingType
     @hearing_type = HearingType.new
   end
 
   def create
+    authorize HearingType
     @hearing_type = HearingType.new(hearing_type_params)
 
     respond_to do |format|
@@ -19,9 +21,11 @@ class HearingTypesController < ApplicationController
   end
 
   def edit
+    authorize @hearing_type
   end
 
   def update
+    authorize @hearing_type
     if @hearing_type.update(hearing_type_params)
       redirect_to edit_casa_org_path(current_organization), notice: "Hearing Type was successfully updated."
     else
