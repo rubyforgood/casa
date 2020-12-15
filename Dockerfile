@@ -18,7 +18,7 @@ COPY package*.json yarn.lock $RAILS_ROOT
 RUN yarn install --check-files
 
 COPY Gemfile* $RAILS_ROOT
-RUN bundle config --global frozen 1 && bundle install
+RUN bundle install
 
 COPY . .
 
