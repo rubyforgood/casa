@@ -1,6 +1,6 @@
 class EmancipationsController < ApplicationController
-  before_action :authenticate_user!
   before_action :require_organization!
+  after_action :verify_authorized
 
   # GET /casa_cases/:casa_case_id/emancipation
   def show
@@ -11,6 +11,7 @@ class EmancipationsController < ApplicationController
 
   # POST /casa_cases/:casa_case_id/emancipation/save
   def save
+    authorize CasaCase, :save_emancipation?
     if !params.key?("casa_case_id")
       render json: {error: "Missing param casa_case_id"}
       return

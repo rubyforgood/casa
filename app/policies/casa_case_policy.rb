@@ -76,6 +76,7 @@ class CasaCasePolicy < ApplicationPolicy
   end
 
   alias_method :show?, :same_org_supervisor_admin_or_assigned?
+  alias_method :save_emancipation?, :index?
   alias_method :edit?, :same_org_supervisor_admin_or_assigned?
   alias_method :update?, :same_org_supervisor_admin_or_assigned?
   alias_method :new?, :same_org_supervisor_admin?
