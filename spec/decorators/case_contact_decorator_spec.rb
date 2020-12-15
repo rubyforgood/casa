@@ -21,10 +21,10 @@ RSpec.describe CaseContactDecorator do
 
   describe "#contact_made" do
     context "when contact_made is false" do
-      it "returns No" do
+      it "returns No Contact Made" do
         case_contact = create(:case_contact, contact_made: false)
 
-        expect(case_contact.decorate.contact_made).to eq "No ❌"
+        expect(case_contact.decorate.contact_made).to eq "No Contact Made"
       end
     end
 
@@ -32,7 +32,7 @@ RSpec.describe CaseContactDecorator do
       it "returns Yes" do
         case_contact = create(:case_contact, contact_made: true)
 
-        expect(case_contact.decorate.contact_made).to eq "Yes ✅"
+        expect(case_contact.decorate.contact_made).to be_nil
       end
     end
   end
@@ -48,7 +48,7 @@ RSpec.describe CaseContactDecorator do
     context "when the contact_types is an empty array" do
       let(:contact_types) { [] }
 
-      it { is_expected.to eql("") }
+      it { is_expected.to eql("No contact type specified") }
     end
 
     context "when the contact_types is an array with three or more values" do
@@ -89,6 +89,49 @@ RSpec.describe CaseContactDecorator do
         case_contact = create(:case_contact, medium_type: "in-person")
 
         expect(case_contact.decorate.medium_type).to eq "In Person"
+      end
+    end
+  end
+
+  describe "#subheading" do
+    context "when all information is available" do
+      it "returns a properly formatted string" do
+        case_contact = create(:case_contact, occurred_at: "2020-12-01", duration_minutes: 99, contact_made: false, miles_driven: 100, want_driving_reimbursement: true)
+
+        expect(case_contact.decorate.subheading).to eq(
+          "December 1, 2020 | 1 hour 39 minutes | No Contact Made | 100 miles driven | Reimbursement"
+        )
+      end
+    end
+
+    context "when some information is missing" do
+      it "returns a properly formatted string without extra pipes" do
+        case_contact = create(:case_contact, occurred_at: "2020-12-01", duration_minutes: 99, contact_made: true, miles_driven: 100, want_driving_reimbursement: true)
+
+        expect(case_contact.decorate.subheading).to eq(
+          "December 1, 2020 | 1 hour 39 minutes | 100 miles driven | Reimbursement"
+        )
+      end
+    end
+  end
+
+  describe "#notes" do
+    context "when notes exceed NOTES_WORD_LIMIT" do
+      it "truncates the notes" do
+        note = "A" * 500
+        expected_note = "A" * 97
+
+        case_contact = create(:case_contact, notes: note)
+
+        expect(case_contact.decorate.notes).to eq("<p>#{expected_note}...</p>")
+      end
+
+      it "does NOT truncate when less than NOTES_WORD_LIMIT" do
+        note = "A" * 50
+
+        case_contact = create(:case_contact, notes: note)
+
+        expect(case_contact.decorate.notes).to eq("<p>#{note}</p>")
       end
     end
   end

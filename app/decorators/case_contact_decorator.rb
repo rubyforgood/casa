@@ -23,25 +23,41 @@ class CaseContactDecorator < Draper::Decorator
   end
 
   def miles_traveled
-    object.miles_driven.zero? ? "" : object.miles_driven
+    object.miles_driven.zero? ? nil : "#{object.miles_driven} miles driven"
   end
 
   def reimbursement
-    object.want_driving_reimbursement ? "Yes 🟢" : "No"
+    object.want_driving_reimbursement ? "Reimbursement" : nil
   end
 
   def contact_made
-    object.contact_made ? "Yes ✅" : "No ❌"
+    object.contact_made ? nil : "No Contact Made"
   end
 
   def report_contact_made
     object.contact_made
   end
 
+  def subheading
+    [
+      object.occurred_at.strftime(DateFormat::FULL), duration_minutes, contact_made, miles_traveled, reimbursement
+    ].compact.join(" | ")
+  end
+
+  def notes
+    if object.notes && object.notes.length > CaseContactDecorator::NOTES_WORD_LIMIT
+      helpers.content_tag(:p, limited_notes)
+    else
+      helpers.simple_format(full_notes)
+    end
+  end
+
   def contact_types
-    object.contact_types
-      &.map { |ct| ct.name }
-      &.to_sentence(last_word_connector: ", and ") || ""
+    if object.contact_types.any?
+      object.contact_types&.map { |ct| ct.name }&.to_sentence(last_word_connector: ", and ")
+    else
+      "No contact type specified"
+    end
   end
 
   def report_contact_types
@@ -63,7 +79,7 @@ class CaseContactDecorator < Draper::Decorator
     when CaseContact::VOICE_ONLY
       "📞 #{object.medium_type}"
     when CaseContact::LETTER
-      "✉️ #{object.medium_type}️"
+    "✉️ #{object.medium_type}️"
     else
       object.medium_type
     end
