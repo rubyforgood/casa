@@ -1,16 +1,17 @@
 class CasaOrgsController < ApplicationController
-  before_action :authenticate_user!, :must_be_admin
   before_action :set_casa_org, only: %i[edit update]
   before_action :set_contact_type_data, only: %i[edit update]
   before_action :set_hearing_types, only: %i[edit update]
   before_action :set_judges, only: %i[edit update]
-  before_action :must_be_admin
   before_action :require_organization!
+  after_action :verify_authorized
 
   def edit
+    authorize @casa_org
   end
 
   def update
+    authorize @casa_org
     respond_to do |format|
       if @casa_org.update(casa_org_update_params)
         format.html { redirect_to edit_casa_org_path, notice: "CASA organization was successfully updated." }
