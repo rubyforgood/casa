@@ -212,4 +212,26 @@ RSpec.describe CaseContact, type: :model do
       end
     end
   end
+
+  describe "#contact_groups_with_types" do
+    it "returns the groups with their associated case types" do
+      group1 = create(:contact_type_group, name: "Family")
+      group2 = create(:contact_type_group, name: "Health")
+      contact_type1 = create(:contact_type, contact_type_group: group1, name: "Parent")
+      contact_type2 = create(:contact_type, contact_type_group: group2, name: "Medical Professional")
+      contact_type3 = create(:contact_type, contact_type_group: group2, name: "Other Therapist")
+      case_contact_types = [contact_type1, contact_type2, contact_type3]
+      case_contact = create(:case_contact)
+      case_contact.contact_types = case_contact_types
+
+      groups_with_types = case_contact.contact_groups_with_types
+
+      expect(groups_with_types).to eql(
+        {
+          "Family" => ["Parent"],
+          "Health" => ["Medical Professional", "Other Therapist"]
+        }
+      )
+    end
+  end
 end

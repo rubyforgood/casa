@@ -23,49 +23,66 @@ class CaseContactDecorator < Draper::Decorator
   end
 
   def miles_traveled
-    object.miles_driven.zero? ? "" : object.miles_driven
+    object.miles_driven.zero? ? nil : "#{object.miles_driven} miles driven"
   end
 
   def reimbursement
-    object.want_driving_reimbursement ? "Yes 🟢" : "No"
+    object.want_driving_reimbursement ? "Reimbursement" : nil
   end
 
   def contact_made
-    object.contact_made ? "Yes ✅" : "No ❌"
+    object.contact_made ? nil : "No Contact Made"
   end
 
   def report_contact_made
     object.contact_made
   end
 
+  def subheading
+    [
+      contact_type_list,
+      object.occurred_at.strftime(DateFormat::FULL),
+      duration_minutes,
+      contact_made,
+      miles_traveled,
+      reimbursement
+    ].compact.join(" | ")
+  end
+
+  def notes
+    if object.notes && object.notes.length > CaseContactDecorator::NOTES_WORD_LIMIT
+      helpers.content_tag(:p, limited_notes)
+    else
+      helpers.simple_format(full_notes)
+    end
+  end
+
   def contact_types
-    object.contact_types
-      &.map { |ct| ct.name }
-      &.to_sentence(last_word_connector: ", and ") || ""
+    if object.contact_types.any?
+      object.contact_types&.map { |ct| ct.name }&.to_sentence(last_word_connector: ", and ")
+    else
+      "No contact type specified"
+    end
   end
 
   def report_contact_types
     object.contact_types&.map { |ct| ct.name }&.join("|")
   end
 
-  def medium_type
-    object.medium_type.blank? ? "Unknown" : object.medium_type.titleize
-  end
-
-  def medium_type_icon
+  def medium_icon_classes
     case object.medium_type
     when CaseContact::IN_PERSON
-      "👥 #{object.medium_type}"
+      "fas fa-users"
     when CaseContact::TEXT_EMAIL
-      "🔤 #{object.medium_type}"
+      "fas fa-envelope"
     when CaseContact::VIDEO
-      "▶ #{object.medium_type}️"
+      "fas fa-video"
     when CaseContact::VOICE_ONLY
-      "📞 #{object.medium_type}"
+      "fas fa-phone-square-alt"
     when CaseContact::LETTER
-      "✉️ #{object.medium_type}️"
+      "fas fa-file-alt"
     else
-      object.medium_type
+      "fas fa-question"
     end
   end
 
@@ -79,5 +96,13 @@ class CaseContactDecorator < Draper::Decorator
 
   def show_contact_type?(contact_type_id)
     object.case_contact_contact_type.map(&:contact_type_id).include?(contact_type_id)
+  end
+
+  private
+
+  def contact_type_list
+    object.contact_groups_with_types.map { |key, value|
+      "#{key}: #{value.join(", ")}"
+    }.join(" / ")
   end
 end

@@ -21,10 +21,10 @@ RSpec.describe CaseContactDecorator do
 
   describe "#contact_made" do
     context "when contact_made is false" do
-      it "returns No" do
+      it "returns No Contact Made" do
         case_contact = create(:case_contact, contact_made: false)
 
-        expect(case_contact.decorate.contact_made).to eq "No ❌"
+        expect(case_contact.decorate.contact_made).to eq "No Contact Made"
       end
     end
 
@@ -32,7 +32,7 @@ RSpec.describe CaseContactDecorator do
       it "returns Yes" do
         case_contact = create(:case_contact, contact_made: true)
 
-        expect(case_contact.decorate.contact_made).to eq "Yes ✅"
+        expect(case_contact.decorate.contact_made).to be_nil
       end
     end
   end
@@ -48,7 +48,7 @@ RSpec.describe CaseContactDecorator do
     context "when the contact_types is an empty array" do
       let(:contact_types) { [] }
 
-      it { is_expected.to eql("") }
+      it { is_expected.to eql("No contact type specified") }
     end
 
     context "when the contact_types is an array with three or more values" do
@@ -75,20 +75,80 @@ RSpec.describe CaseContactDecorator do
     end
   end
 
-  describe "#medium_type" do
-    context "when medium_type is nil" do
-      it "returns Unknown" do
-        case_contact = build(:case_contact, medium_type: nil)
+  describe "#medium_icon_classes" do
+    context "when medium type is in-person" do
+      it "returns the proper font-awesome classes" do
+        case_contact = create(:case_contact, medium_type: "in-person").decorate
 
-        expect(case_contact.decorate.medium_type).to eq "Unknown"
+        expect(case_contact.medium_icon_classes).to eql("fas fa-users")
       end
     end
 
-    context "when medium_type is not nil" do
-      it "returns the titleized medium_type" do
-        case_contact = create(:case_contact, medium_type: "in-person")
+    context "when medium type is text/email" do
+      it "returns the proper font-awesome classes" do
+        case_contact = create(:case_contact, medium_type: "text/email").decorate
 
-        expect(case_contact.decorate.medium_type).to eq "In Person"
+        expect(case_contact.medium_icon_classes).to eql("fas fa-envelope")
+      end
+    end
+
+    context "when medium type is video" do
+      it "returns the proper font-awesome classes" do
+        case_contact = create(:case_contact, medium_type: "video").decorate
+
+        expect(case_contact.medium_icon_classes).to eql("fas fa-video")
+      end
+    end
+
+    context "when medium type is voice-only" do
+      it "returns the proper font-awesome classes" do
+        case_contact = create(:case_contact, medium_type: "voice-only").decorate
+
+        expect(case_contact.medium_icon_classes).to eql("fas fa-phone-square-alt")
+      end
+    end
+
+    context "when medium type is letter" do
+      it "returns the proper font-awesome classes" do
+        case_contact = create(:case_contact, medium_type: "letter").decorate
+
+        expect(case_contact.medium_icon_classes).to eql("fas fa-file-alt")
+      end
+    end
+
+    context "when medium type is anything else" do
+      it "returns the proper font-awesome classes" do
+        case_contact = create(:case_contact, medium_type: "foo").decorate
+
+        expect(case_contact.medium_icon_classes).to eql("fas fa-question")
+      end
+    end
+  end
+
+  describe "#subheading" do
+    context "when all information is available" do
+      it "returns a properly formatted string" do
+        contact_group = create(:contact_type_group, name: "Group X")
+        contact_type = create(:contact_type, contact_type_group: contact_group, name: "Type X")
+        case_contact = create(:case_contact, occurred_at: "2020-12-01", duration_minutes: 99, contact_made: false, miles_driven: 100, want_driving_reimbursement: true)
+        case_contact.contact_types = [contact_type]
+
+        expect(case_contact.decorate.subheading).to eq(
+          "Group X: Type X | December 1, 2020 | 1 hour 39 minutes | No Contact Made | 100 miles driven | Reimbursement"
+        )
+      end
+    end
+
+    context "when some information is missing" do
+      it "returns a properly formatted string without extra pipes" do
+        contact_group = create(:contact_type_group, name: "Group X")
+        contact_type = create(:contact_type, contact_type_group: contact_group, name: "Type X")
+        case_contact = create(:case_contact, occurred_at: "2020-12-01", duration_minutes: 99, contact_made: true, miles_driven: 100, want_driving_reimbursement: true)
+        case_contact.contact_types = [contact_type]
+
+        expect(case_contact.decorate.subheading).to eq(
+          "Group X: Type X | December 1, 2020 | 1 hour 39 minutes | 100 miles driven | Reimbursement"
+        )
       end
     end
   end
