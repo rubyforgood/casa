@@ -186,8 +186,7 @@ RSpec.describe "casa_cases/edit", type: :system do
       let(:supervisor1) { create(:supervisor, casa_org: organization) }
       let!(:volunteer) { create(:volunteer, supervisor: supervisor1, casa_org: organization) }
 
-      before do
-        travel_to Time.zone.local(2020, 8, 29, 4, 5, 6)
+      def sign_in_and_assign_volunteer
         sign_in supervisor1
         visit casa_case_path(casa_case.id)
         click_on "Edit Case Details"
@@ -197,10 +196,15 @@ RSpec.describe "casa_cases/edit", type: :system do
         click_on "Assign Volunteer"
       end
 
+      before do
+        travel_to Time.zone.local(2020, 8, 29, 4, 5, 6)
+      end
+
       after { travel_back }
 
       context "when a volunteer is assigned to a case" do
         it "marks the volunteer as assigned and shows the start date of the assignment", js: true do
+          sign_in_and_assign_volunteer
           expect(casa_case.case_assignments.count).to eq 1
 
           unassign_button = page.find("input.btn-outline-danger")
@@ -211,6 +215,7 @@ RSpec.describe "casa_cases/edit", type: :system do
         end
 
         it "shows an assignment start date and no assignment end date" do
+          sign_in_and_assign_volunteer
           assignment_start = page.find("td[data-test=assignment-start]").text
           assignment_end = page.find("td[data-test=assignment-end]").text
 
@@ -221,6 +226,7 @@ RSpec.describe "casa_cases/edit", type: :system do
 
       context "when a volunteer is unassigned from a case" do
         it "marks the volunteer as unassigned and shows assignment start/end dates", js: true do
+          sign_in_and_assign_volunteer
           unassign_button = page.find("input.btn-outline-danger")
           expect(unassign_button.value).to eq "Unassign Volunteer"
 
@@ -243,6 +249,7 @@ RSpec.describe "casa_cases/edit", type: :system do
         before { volunteer.update(supervisor: create(:supervisor)) }
 
         it "unassigns volunteer", js: true do
+          sign_in_and_assign_volunteer
           unassign_button = page.find("input.btn-outline-danger")
           expect(unassign_button.value).to eq "Unassign Volunteer"
 
@@ -256,6 +263,8 @@ RSpec.describe "casa_cases/edit", type: :system do
       it "when can assign only active volunteer to a case" do
         create(:volunteer, casa_org: organization)
         create(:volunteer, :inactive, casa_org: organization)
+
+        sign_in_and_assign_volunteer
 
         expect(find("select[name='case_assignment[volunteer_id]']").all("option").count).to eq 1
       end
