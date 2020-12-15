@@ -126,6 +126,14 @@ RSpec.describe "volunteers/edit", type: :system do
         expect(page).to have_text(casa_case_2.case_number)
         expect(page).not_to have_button("Unassign Case")
       end
+
+      select casa_case_2.case_number, from: "Select a Case"
+      click_on "Assign Case"
+
+      within("#case_assignment_#{assignment2.id}") do
+        expect(page).to have_text(casa_case_2.case_number)
+        expect(page).to have_button("Unassign Case")
+      end
     end
   end
 
