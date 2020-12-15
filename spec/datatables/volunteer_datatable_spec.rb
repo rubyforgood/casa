@@ -253,7 +253,7 @@ RSpec.describe "VolunteerDatatable" do
         end
 
         it "is successful" do
-          expect(values.map { |h| h[:contacts_made_in_past_days] }).to eq ["", "", "", "", "3", "2"]
+          expect(values.map { |h| h[:contacts_made_in_past_days] }).to eq ["3", "2", "", "", "", ""]
         end
 
         it "should move blanks to the end" do
