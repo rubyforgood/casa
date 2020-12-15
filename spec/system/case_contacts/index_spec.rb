@@ -12,7 +12,7 @@ RSpec.describe "case_contacts/index", type: :system do
     visit case_contacts_path
   end
 
-  it "can see case creator in table" do
+  it "can see case creator in card" do
     expect(page).to have_text("Bob Loblaw")
   end
 

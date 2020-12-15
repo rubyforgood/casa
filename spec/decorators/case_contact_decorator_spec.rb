@@ -75,20 +75,52 @@ RSpec.describe CaseContactDecorator do
     end
   end
 
-  describe "#medium_type" do
-    context "when medium_type is nil" do
-      it "returns Unknown" do
-        case_contact = build(:case_contact, medium_type: nil)
+  describe "#medium_icon_classes" do
+    context "when medium type is in-person" do
+      it "returns the proper font-awesome classes" do
+        case_contact = create(:case_contact, medium_type: "in-person").decorate
 
-        expect(case_contact.decorate.medium_type).to eq "Unknown"
+        expect(case_contact.medium_icon_classes).to eql("fas fa-users")
       end
     end
 
-    context "when medium_type is not nil" do
-      it "returns the titleized medium_type" do
-        case_contact = create(:case_contact, medium_type: "in-person")
+    context "when medium type is text/email" do
+      it "returns the proper font-awesome classes" do
+        case_contact = create(:case_contact, medium_type: "text/email").decorate
 
-        expect(case_contact.decorate.medium_type).to eq "In Person"
+        expect(case_contact.medium_icon_classes).to eql("fas fa-envelope")
+      end
+    end
+
+    context "when medium type is video" do
+      it "returns the proper font-awesome classes" do
+        case_contact = create(:case_contact, medium_type: "video").decorate
+
+        expect(case_contact.medium_icon_classes).to eql("fas fa-video")
+      end
+    end
+
+    context "when medium type is voice-only" do
+      it "returns the proper font-awesome classes" do
+        case_contact = create(:case_contact, medium_type: "voice-only").decorate
+
+        expect(case_contact.medium_icon_classes).to eql("fas fa-phone-square-alt")
+      end
+    end
+
+    context "when medium type is letter" do
+      it "returns the proper font-awesome classes" do
+        case_contact = create(:case_contact, medium_type: "letter").decorate
+
+        expect(case_contact.medium_icon_classes).to eql("fas fa-file-alt")
+      end
+    end
+
+    context "when medium type is anything else" do
+      it "returns the proper font-awesome classes" do
+        case_contact = create(:case_contact, medium_type: "foo").decorate
+
+        expect(case_contact.medium_icon_classes).to eql("fas fa-question")
       end
     end
   end
@@ -111,27 +143,6 @@ RSpec.describe CaseContactDecorator do
         expect(case_contact.decorate.subheading).to eq(
           "December 1, 2020 | 1 hour 39 minutes | 100 miles driven | Reimbursement"
         )
-      end
-    end
-  end
-
-  describe "#notes" do
-    context "when notes exceed NOTES_WORD_LIMIT" do
-      it "truncates the notes" do
-        note = "A" * 500
-        expected_note = "A" * 97
-
-        case_contact = create(:case_contact, notes: note)
-
-        expect(case_contact.decorate.notes).to eq("<p>#{expected_note}...</p>")
-      end
-
-      it "does NOT truncate when less than NOTES_WORD_LIMIT" do
-        note = "A" * 50
-
-        case_contact = create(:case_contact, notes: note)
-
-        expect(case_contact.decorate.notes).to eq("<p>#{note}</p>")
       end
     end
   end
