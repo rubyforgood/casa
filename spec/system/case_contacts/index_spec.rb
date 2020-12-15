@@ -19,4 +19,10 @@ RSpec.describe "case_contacts/index", type: :system do
   it "can navigate to edit volunteer page" do
     expect(page).to have_no_link("Bob Loblaw")
   end
+
+  it "displays the contact type groups" do
+    within('.card-title') do
+      expect(page).to have_text(case_contact.contact_groups_with_types.keys.first)
+    end
+  end
 end

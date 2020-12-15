@@ -128,20 +128,26 @@ RSpec.describe CaseContactDecorator do
   describe "#subheading" do
     context "when all information is available" do
       it "returns a properly formatted string" do
+        contact_group = create(:contact_type_group, name: 'Group X')
+        contact_type = create(:contact_type, contact_type_group: contact_group, name: 'Type X')
         case_contact = create(:case_contact, occurred_at: "2020-12-01", duration_minutes: 99, contact_made: false, miles_driven: 100, want_driving_reimbursement: true)
+        case_contact.contact_types = [contact_type]
 
         expect(case_contact.decorate.subheading).to eq(
-          "December 1, 2020 | 1 hour 39 minutes | No Contact Made | 100 miles driven | Reimbursement"
+          "Group X: Type X | December 1, 2020 | 1 hour 39 minutes | No Contact Made | 100 miles driven | Reimbursement"
         )
       end
     end
 
     context "when some information is missing" do
       it "returns a properly formatted string without extra pipes" do
+        contact_group = create(:contact_type_group, name: 'Group X')
+        contact_type = create(:contact_type, contact_type_group: contact_group, name: 'Type X')
         case_contact = create(:case_contact, occurred_at: "2020-12-01", duration_minutes: 99, contact_made: true, miles_driven: 100, want_driving_reimbursement: true)
+        case_contact.contact_types = [contact_type]
 
         expect(case_contact.decorate.subheading).to eq(
-          "December 1, 2020 | 1 hour 39 minutes | 100 miles driven | Reimbursement"
+          "Group X: Type X | December 1, 2020 | 1 hour 39 minutes | 100 miles driven | Reimbursement"
         )
       end
     end

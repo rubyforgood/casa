@@ -6,26 +6,8 @@
           <i class="mt-1 mr-3 text-primary <%= contact.decorate.medium_icon_classes %>"></i>
           <div class="media-body">
             <h5 class="mt-0 card-title">
-              <strong class="text-primary"><%= contact.decorate.contact_types %></strong>
+              <strong class="text-primary"><%= contact.contact_groups_with_types.keys.join(', ') %></strong>
             </h5>
-            <h6 class="card-subtitle mb-2 text-primary">
-              Created by: 
-              <% if policy(contact).edit? %>
-                <% if current_user.volunteer? %>
-                  <%= contact.creator&.display_name %>
-                <% else %>
-                  <% if contact.creator&.supervisor? %>
-                    <%= link_to contact.creator&.display_name, edit_supervisor_path(current_user) %>
-                  <% elsif contact.creator&.casa_admin? %>
-                    <%= link_to contact.creator&.display_name, edit_users_path %>
-                  <% else %>
-                    <%= link_to contact.creator&.display_name, edit_volunteer_path(contact.creator) %>
-                  <% end %>
-                <% end %>
-              <% else %>
-                <%= contact.creator&.display_name %>
-              <% end %>
-            </h6>
             <h6 class="card-subtitle mb-2 text-muted">
               <%= contact.decorate.subheading %>
             </h6>
@@ -59,22 +41,42 @@
       </div>
     </div>
   </div>
+  <div>
+    <h6 class="card-subtitle mb-2 text-primary float-right mr-2">
+      Created by:
+      <% if policy(contact).edit? %>
+        <% if current_user.volunteer? %>
+          <%= contact.creator&.display_name %>
+        <% else %>
+          <% if contact.creator&.supervisor? %>
+            <%= link_to contact.creator&.display_name, edit_supervisor_path(current_user) %>
+          <% elsif contact.creator&.casa_admin? %>
+            <%= link_to contact.creator&.display_name, edit_users_path %>
+          <% else %>
+            <%= link_to contact.creator&.display_name, edit_volunteer_path(contact.creator) %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <%= contact.creator&.display_name %>
+      <% end %>
+    </h6>
+  </div>
 </div>
 
 <script type="text/javascript">
-  function moreText (event) {
-    event.preventDefault()
-    const table_cell = event.target.closest('.card-text')
+function moreText (event) {
+  event.preventDefault()
+  const table_cell = event.target.closest('.card-text')
 
-    table_cell.querySelectorAll('.full-notes')[0].style.display = 'block'
-    table_cell.querySelectorAll('.limited-notes')[0].style.display = 'none'
-  }
+  table_cell.querySelectorAll('.full-notes')[0].style.display = 'block'
+  table_cell.querySelectorAll('.limited-notes')[0].style.display = 'none'
+}
 
-  function lessText (event) {
-    event.preventDefault()
-    const table_cell = event.target.closest('.card-text')
+function lessText (event) {
+  event.preventDefault()
+  const table_cell = event.target.closest('.card-text')
 
-    table_cell.querySelectorAll('.full-notes')[0].style.display = 'none'
-    table_cell.querySelectorAll('.limited-notes')[0].style.display = 'block'
-  }
+  table_cell.querySelectorAll('.full-notes')[0].style.display = 'none'
+  table_cell.querySelectorAll('.limited-notes')[0].style.display = 'block'
+}
 </script>
