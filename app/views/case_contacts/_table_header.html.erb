@@ -1,31 +1,20 @@
 <header id="case-contacts-header" class="flex center">
-  <% if !selected_case.transition_aged_youth %>
-    <img alt="Transition aged youth (over 14)" src="/butterfly.svg" class="youth-icon butterfly">
-  <% else %>
-    <img alt="Non transition aged youth (under 14)" src="/caterpillar.svg" class="youth-icon caterpillar">
-  <% end %>
-    
+  <span id="case-youth-icon">
+    <% if !selected_case.transition_aged_youth %>
+      <img alt="Transition aged youth (over 14)" src="/butterfly.svg" class="youth-icon butterfly">
+    <% else %>
+      <img alt="Non transition aged youth (under 14)" src="/caterpillar.svg" class="youth-icon caterpillar">
+    <% end %>
+  </span>
+
   <label for="select-case-number" class="visually-hidden">Select case number</label>
   <select id="select-case-number">
     <% casa_cases.each do |casa_case| %>
-      <option value="<%= casa_case.case_number %>"><%= casa_case.case_number %></option>
+      <option value="<%= casa_case.case_number %>" data-id="<%= casa_case.id %>">
+        <%= casa_case.case_number %>
+      </option>
     <% end %>
   </select>
-
-  <p>
-    Next Court Date:<br/>
-    <%= selected_case.court_date || '-' %>
-  </p>
-
-  <p>
-    Court Report Due:<br/>
-    <%= selected_case.court_report_due_date || '-' %>
-  </p>
-
-  <p>
-    Court report status:<br/>
-    <%= selected_case.court_report_status.humanize || '-' %>
-  </p>
 
   <p>
     <label for="case-contact-filter">Filter by:</label>

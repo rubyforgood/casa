@@ -1,13 +1,41 @@
 <h1>My Case Contacts</h1>
 
 <main class="case-contacts-wrapper">
-  <%= render partial: 'table_header', locals: { casa_cases: @casa_cases, selected_case: @casa_cases[0] } %>
+  <%= render partial: 'table_header', locals: { casa_cases: @casa_cases, selected_case: @selected_case } %>
+  <article id="primary-case-contact-item" class="case-contact-item">
+    <header class="flex top">
+      <p>
+        Next Court Date:<br/>
+        <span id="case-court-date">
+          <%= @selected_case.court_date || '-' %>
+        </span>
+      </p>
 
-  <% if @casa_cases[0].case_contacts %>
-    <% @casa_cases[0].case_contacts.each do |case_contact| %>
-      <%= render partial: 'table_article', locals: { case_contact: case_contact } %>
+      <p>
+        Court Report Due:<br/>
+        <span id="case-court-report-due-date">
+          <%= @selected_case.court_report_due_date || '-' %>
+        </span>
+      </p>
+
+      <p>
+        Court report status:<br/>
+        <span id="case-court-report-status">
+          <%= @selected_case.court_report_status.humanize || '-' %>
+        </span>
+      </p>
+    </header>
+  </article>
+
+  <section id='case-contacts'>
+    <% if @casa_cases[0].case_contacts %>
+      <% @casa_cases[0].case_contacts.each do |case_contact| %>
+        <%= render partial: 'table_article', locals: { case_contact: case_contact } %>
+      <% end %>
+    <% else %>
+      <p>This case has no contacts.<p>
     <% end %>
-  <% else %>
-    <p>This case has no contacts.<p>
-  <% end %>
+  </section>
 </main>
+
+<%= javascript_pack_tag('case_contacts/table') %>

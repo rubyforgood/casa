@@ -3,10 +3,10 @@
     <section>
       <h2><%= case_contact.medium_type.humanize %></h2>
       <p>
-        Foster Parent | 
-        <%= case_contact.occurred_at.strftime('%B %e, %Y') %> | 
-        <%= case_contact.duration_minutes %> minutes | 
-        <%= case_contact.miles_driven %> miles driven | 
+        Foster Parent |
+        <%= case_contact.occurred_at.strftime('%B %e, %Y') %> |
+        <%= case_contact.duration_minutes %> minutes |
+        <%= case_contact.miles_driven %> miles driven |
         Reimbursement: <%= case_contact.want_driving_reimbursement ? "Yes" : "No" %>
       </p>
     </section>

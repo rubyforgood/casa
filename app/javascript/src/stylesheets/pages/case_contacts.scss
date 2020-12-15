@@ -80,6 +80,11 @@ legend {
   }
 }
 
+#primary-case-contact-item{
+  background: $info;
+  color: white;
+}
+
 .read-more-link {
   text-decoration: underline;
 }
@@ -107,14 +112,18 @@ legend {
   }
 }
 
+#select-case-number {
+  margin-right: 20px;
+}
+
 @media only screen and (max-width: 1280px) {
   h1 {
     margin-bottom: 4rem;
   }
-  #case-contacts-header #select-case-number,
+
   .youth-icon {
     position: absolute;
-    margin-top: -10rem;
+    margin-top: -1rem;
     color: $primary;
   }
 
