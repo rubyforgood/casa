@@ -8,7 +8,6 @@ class CaseCourtReportsController < ApplicationController
   def index
     @assigned_cases = CasaCase.actively_assigned_to(current_user)
       .select(:id, :case_number, :transition_aged_youth)
-    @non_transition_aged_youth_cases = @assigned_cases&.reject(&:transition_aged_youth)&.map(&:case_number)
   end
 
   # GET /case_court_reports/:id
@@ -75,12 +74,15 @@ class CaseCourtReportsController < ApplicationController
     "app/documents/templates/report_template_#{type}.docx"
   end
 
+  # Use Tempfile Utility Class to generate a temporary file from the Word template into memory
   def send_report(data)
     Tempfile.create do |t|
       t.binmode
       t.write(data)
       t.rewind
       t.close
+
+      # `rb` = read-binary mode
       send_data File.open(t.path, "rb").read, type: :docx, disposition: "attachment", status: :ok
     end
   end
