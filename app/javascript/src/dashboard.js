@@ -104,9 +104,6 @@ $('document').ready(() => {
             <a href="${editVolunteerPath(row.id)}">
               ${row.display_name || row.email}
             </a>
-            ${row.made_contact_with_all_cases_in_days === 'false'
-              ? '🕐 <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="Has at least one case with no contact in 14 days"></i>'
-              : ''
             }
           `
         }

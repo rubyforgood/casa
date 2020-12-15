@@ -39,7 +39,8 @@ RSpec.describe "volunteers/index", type: :system do
     end
 
     it "displays last contact made by default", js: true do
-      volunteer = create(:volunteer, :with_assigned_supervisor, display_name: "User 1", email: "casa@example.com", casa_org: organization)
+      create(:volunteer, :with_assigned_supervisor, display_name: "User 1", email: "casa@example.com", casa_org: organization)
+
       sign_in admin
 
       visit volunteers_path
