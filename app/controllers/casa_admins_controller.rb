@@ -1,16 +1,19 @@
 class CasaAdminsController < ApplicationController
-  before_action :authenticate_user!, :must_be_admin
   before_action :set_admin, except: [:index, :new, :create]
   before_action :require_organization!
+  after_action :verify_authorized
 
   def index
+    authorize CasaAdmin
     @admins = policy_scope(current_organization.casa_admins)
   end
 
   def edit
+    authorize @casa_admin
   end
 
   def update
+    authorize @casa_admin
     if @casa_admin.update(update_casa_admin_params)
       redirect_to casa_admins_path, notice: "Admin was successfully updated."
     else
@@ -19,11 +22,13 @@ class CasaAdminsController < ApplicationController
   end
 
   def new
+    authorize CasaAdmin
     @casa_admin = CasaAdmin.new
   end
 
   def create
     @casa_admin = CasaAdmin.new(create_casa_admin_params)
+    authorize @casa_admin
 
     if @casa_admin.save
       @casa_admin.invite!
@@ -34,6 +39,7 @@ class CasaAdminsController < ApplicationController
   end
 
   def activate
+    authorize @casa_admin
     if @casa_admin.activate
       CasaAdminMailer.account_setup(@casa_admin).deliver
 

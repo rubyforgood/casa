@@ -1,5 +1,5 @@
 class CasaAdminPolicy < UserPolicy
-  def index?
+  def activate?
     is_admin?
   end
 
