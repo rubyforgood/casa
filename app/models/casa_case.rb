@@ -148,6 +148,10 @@ class CasaCase < ApplicationRecord
     update(active: true)
   end
 
+  def unassigned_volunteers
+    Volunteer.active.where.not(id: assigned_volunteers).order(:display_name)
+  end
+
   private
 
   def validate_date(day, month, year)

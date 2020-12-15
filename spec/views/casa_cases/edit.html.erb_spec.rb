@@ -38,6 +38,17 @@ RSpec.describe "casa_cases/edit" do
   context "when assigning a new volunteer" do
     let(:user) { build_stubbed(:casa_admin, casa_org: organization) }
 
-    it "does not have an option to select a volunteer that is already assigned to the casa case"
+    it "does not have an option to select a volunteer that is already assigned to the casa case" do
+      casa_case = create(:casa_case, casa_org: organization)
+      assign :casa_case, casa_case
+      assigned_volunteer = create(:volunteer)
+      create(:case_assignment, volunteer: assigned_volunteer, casa_case: casa_case)
+      unassigned_volunteer = create(:volunteer)
+
+      render template: "casa_cases/edit"
+
+      expect(rendered).to have_select("case_assignment_casa_case_id",
+        options: [unassigned_volunteer.display_name])
+    end
   end
 end
