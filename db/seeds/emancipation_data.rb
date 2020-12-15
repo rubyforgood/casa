@@ -17,18 +17,21 @@ category_budget = EmancipationCategory.where(name: "Youth has completed a budget
 category_budget.add_option("Completed budget")
 
 category_employment = EmancipationCategory.where(name: "Youth is employed.").first_or_create(mutually_exclusive: true)
+category_employment.add_option("Not employed")
 category_employment.add_option("Part-time job")
 category_employment.add_option("Full-time job")
 category_employment.add_option("Apprenticeship or paid internship")
 category_employment.add_option("Self-employed")
 
 category_continuing_education = EmancipationCategory.where(name: "Youth is attending an educational or vocational program.").first_or_create(mutually_exclusive: true)
+category_continuing_education.add_option("Not attending")
 category_continuing_education.add_option("High school")
 category_continuing_education.add_option("Post-secondary/college")
 category_continuing_education.add_option("Vocational")
 category_continuing_education.add_option("GED program")
 
 category_high_school_diploma = EmancipationCategory.where(name: "Youth has a high school diploma or equivalency.").first_or_create(mutually_exclusive: true)
+category_high_school_diploma.add_option("No")
 category_high_school_diploma.add_option("Traditional")
 category_high_school_diploma.add_option("Out of school program")
 category_high_school_diploma.add_option("GED")
