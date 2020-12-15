@@ -1,6 +1,6 @@
 class EmancipationChecklistsController < ApplicationController
-  before_action :authenticate_user!
   before_action :require_organization!
+  after_action :verify_authorized
 
   def index
     authorize :application, :see_emancipation_checklist?
