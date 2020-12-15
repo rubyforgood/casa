@@ -17,14 +17,14 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
 
     it "has 'Download Court Report' button with Bootstrap class '.d-none'" do
-      options = {text: "Download Court Report", class: ['d-none']}
+      options = {text: "Download Court Report", class: ["d-none"]}
 
       expect(page).to have_selector "#btnDownloadReport", **options
     end
 
     it "shows a select element with default selection 'Select a case to generate report'" do
       expected_text = "Select a case to generate report"
-      find("#case-selection").click.first('option', text: expected_text).select_option
+      find("#case-selection").click.first("option", text: expected_text).select_option
 
       expect(page).to have_selector "#case-selection option:first-of-type", text: expected_text
       expect(page).to have_select "case-selection", selected: expected_text
