@@ -10,7 +10,7 @@
 
     <hr>
 
-    <%= form_with do |form| %>
+    <%= form_with url: "#", local: false do |form| %>
       <div class="field form-group">
         <%= label_tag :case_number, "Case Number:" %>
         <% select_options = @assigned_cases.map { |casa_case| casa_case.decorate.court_report_select_option } %>
