@@ -120,7 +120,7 @@ RSpec.describe "VolunteerDatatable" do
       context "when ascending" do
         it "is successful" do
           sorted_models.each_with_index do |model, idx|
-            expect(values[idx][:supervisor][:name]).to eq model.supervisor.display_name
+            expect(CGI.unescapeHTML(values[idx][:supervisor][:name])).to eq model.supervisor.display_name
           end
         end
       end
@@ -131,7 +131,7 @@ RSpec.describe "VolunteerDatatable" do
 
         it "is successful" do
           sorted_models.reverse.each_with_index do |model, idx|
-            expect(values[idx][:supervisor][:name]).to eq model.supervisor.display_name
+            expect(CGI.unescapeHTML(values[idx][:supervisor][:name])).to eq model.supervisor.display_name
           end
         end
       end
