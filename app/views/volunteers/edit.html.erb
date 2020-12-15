@@ -141,8 +141,6 @@
                       method: :patch,
                       class: "btn btn-danger" %>
     <% else %>
-        <h5>Currently Unassigned to a Supervisor</h5> 
-        <br>
         <h3>Assign a Supervisor</h3>
         <%= form_for SupervisorVolunteer.new, url: supervisor_volunteers_path(volunteer_id: @volunteer.id) do |form| %>
 

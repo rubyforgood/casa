@@ -3,18 +3,12 @@ class SupervisorVolunteersController < ApplicationController
   before_action :must_be_admin_or_supervisor, only: :unassign
 
   def create
-    puts '------------------------------------------------'
-    puts '------------------------------------------------'
-    puts supervisor_volunteer_parent.display_name
-    puts supervisor_volunteer_params
-    puts '------------------------------------------------'
-    puts '------------------------------------------------'
-
     supervisor_volunteer = supervisor_volunteer_parent.supervisor_volunteers.find_or_create_by!(supervisor_volunteer_params)
     supervisor_volunteer.is_active = true unless supervisor_volunteer&.is_active?
     supervisor_volunteer.save
+    flash_message = "#{Volunteer.find(params[:volunteer_id]).display_name} was assigned to #{supervisor_volunteer_parent.display_name}"
 
-    redirect_to after_action_path(supervisor_volunteer_parent)
+    redirect_to after_action_path(supervisor_volunteer_parent), notice: flash_message
   end
 
   def unassign
@@ -46,7 +40,7 @@ class SupervisorVolunteersController < ApplicationController
     if params[:supervisor_id]
       Supervisor.find(params[:supervisor_id])
     else
-      Volunteer.find(params[:volunteer_id])
+      Supervisor.find(supervisor_volunteer_params[:supervisor_id])
     end
   end
 end
