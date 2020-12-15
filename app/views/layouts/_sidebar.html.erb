@@ -2,6 +2,7 @@
   <div class="sidebar-heading text-center">
     <% if all_casa_admin_signed_in? || !current_organization.logo.attached? %>
       <%= image_pack_tag("media/src/images/default-logo.png",
+                         id: "casa-logo",
                          alt: "CASA Logo",
                          class: "d-inline-block align-text-bottom") %>
     <% else %>
