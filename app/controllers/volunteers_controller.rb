@@ -31,6 +31,7 @@ class VolunteersController < ApplicationController
   end
 
   def edit
+    @supervisors = policy_scope current_organization.supervisors
   end
 
   def update
