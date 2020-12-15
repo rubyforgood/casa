@@ -28,6 +28,10 @@ table.table {
   span.mobile-label { display: none; }
 }
 
+#dropdownMenuButton {
+  margin: 6px 0;
+}
+
 @media only screen and (max-width: 1024px) {
 
   .login-header {
