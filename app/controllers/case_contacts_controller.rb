@@ -15,6 +15,7 @@ class CaseContactsController < ApplicationController
 
   def table
     @casa_cases = policy_scope(current_organization.casa_cases)
+    @selected_case = @casa_cases.first
     # @case_contact = current_organization.case_contacts.find(params[:id])
     render :table
   end

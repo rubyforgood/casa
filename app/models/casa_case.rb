@@ -123,6 +123,17 @@ class CasaCase < ApplicationRecord
     update(active: true)
   end
 
+  def with_contacts
+    {
+      case_number: case_number,
+      transition_aged_youth: transition_aged_youth,
+      court_date: court_date,
+      court_report_due_date: court_report_due_date,
+      court_report_status: court_report_status,
+      case_contacts: case_contact_items
+    }
+  end
+
   private
 
   def validate_date(day, month, year)
@@ -143,6 +154,18 @@ class CasaCase < ApplicationRecord
   rescue Date::Error
     errors.messages[date_field_name.to_sym] << "was not a valid date."
     args
+  end
+
+  def case_contact_items
+    case_contacts.map do |contact|
+      {
+        medium_type: contact.medium_type.humanize,
+        occurred_at: contact.occurred_at.strftime('%B %e, %Y'),
+        duration_minutes: contact.duration_minutes,
+        miles_driven: contact.miles_driven,
+        want_driving_reimbursement: contact.want_driving_reimbursement ? "Yes" : "No"
+      }
+    end
   end
 end
 

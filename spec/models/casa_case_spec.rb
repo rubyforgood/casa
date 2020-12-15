@@ -229,4 +229,29 @@ RSpec.describe CasaCase do
       expect(casa_case.reload.assigned_volunteers).to eq [volunteer2]
     end
   end
+
+  describe "#with_contacts" do
+    it "includes some basic case and contact attributes" do
+      casa_case = create(:casa_case)
+      contact1 = create(:case_contact, casa_case: casa_case, want_driving_reimbursement: false)
+      expected_result = {
+        case_number: casa_case.case_number,
+        transition_aged_youth: casa_case.transition_aged_youth,
+        court_date: casa_case.court_date,
+        court_report_due_date: casa_case.court_report_due_date,
+        court_report_status: casa_case.court_report_status,
+        case_contacts: [
+          {
+            medium_type: contact1.medium_type.humanize,
+            occurred_at: contact1.occurred_at.strftime('%B %e, %Y'),
+            duration_minutes: contact1.duration_minutes,
+            miles_driven: contact1.miles_driven,
+            want_driving_reimbursement: 'No'
+          }
+        ]
+      }
+
+      expect(casa_case.with_contacts).to eq(expected_result)
+    end
+  end
 end

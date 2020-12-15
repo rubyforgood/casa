@@ -14,7 +14,10 @@ class CasaCasesController < ApplicationController
   # GET /casa_cases/1
   # GET /casa_cases/1.json
   def show
-    authorize @casa_case
+    respond_to do |format|
+      authorize @casa_case
+      format.json { render json: @casa_case.with_contacts }
+    end
   end
 
   # GET /casa_cases/new
