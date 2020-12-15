@@ -87,7 +87,6 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   it "shows the admin the option to assign an unassigned volunteer to a different supervisor" do
-    supervisor = create(:supervisor, display_name: "Haka Haka")
     volunteer = create(:volunteer)
 
     sign_in admin
