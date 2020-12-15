@@ -5,7 +5,7 @@ class CaseAssignmentsController < ApplicationController
 
   def create
     case_assignments = case_assignment_parent.case_assignments
-    existing_case_assignment = case_assignments.where(volunteer_id: case_assignment_params[:volunteer_id], is_active: false).first
+    existing_case_assignment = case_assignments.where(volunteer_id: params[:volunteer_id], is_active: false).first
 
     if existing_case_assignment.present?
       if existing_case_assignment.update(is_active: true)
