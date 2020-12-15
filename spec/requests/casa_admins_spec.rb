@@ -27,7 +27,7 @@ RSpec.describe "/casa_admins", type: :request do
       it "cannot access a casa admin edit page" do
         get edit_casa_admin_path(create(:casa_admin))
 
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
   end
@@ -81,7 +81,7 @@ RSpec.describe "/casa_admins", type: :request do
           }
         }
 
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
   end
@@ -189,7 +189,7 @@ RSpec.describe "/casa_admins", type: :request do
       it "cannot update a casa admin user" do
         patch deactivate_casa_admin_path(create(:casa_admin))
 
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to new_user_session_path
       end
     end
   end

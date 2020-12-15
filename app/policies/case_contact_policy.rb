@@ -1,22 +1,19 @@
 class CaseContactPolicy < ApplicationPolicy
-  def new?
-    true
+  def is_creator_or_casa_admin?
+    is_admin? || is_creator?
   end
 
-  def _is_creator_or_casa_admin?
-    is_admin? || _is_creator?
+  def is_creator_or_supervisor_or_casa_admin?
+    is_admin? || is_creator? || is_creator_supervisor?
   end
 
-  def _is_creator_or_supervisor_or_casa_admin?
-    is_admin? || _is_creator? || _is_creator_supervisor?
-  end
-
-  alias_method :index?, :_is_creator_or_casa_admin?
-  alias_method :show?, :_is_creator_or_casa_admin?
-  alias_method :create?, :_is_creator_or_casa_admin?
-  alias_method :destroy?, :_is_creator_or_casa_admin?
-  alias_method :update?, :_is_creator_or_supervisor_or_casa_admin?
-  alias_method :edit?, :_is_creator_or_supervisor_or_casa_admin?
+  alias_method :index?, :admin_or_supervisor_or_volunteer?
+  alias_method :new?, :admin_or_supervisor_or_volunteer?
+  alias_method :show?, :is_creator_or_casa_admin?
+  alias_method :create?, :is_creator_or_casa_admin?
+  alias_method :destroy?, :is_creator_or_casa_admin?
+  alias_method :update?, :is_creator_or_supervisor_or_casa_admin?
+  alias_method :edit?, :is_creator_or_supervisor_or_casa_admin?
 
   class Scope
     attr_reader :user, :scope
@@ -40,11 +37,11 @@ class CaseContactPolicy < ApplicationPolicy
 
   private
 
-  def _is_creator_supervisor?
+  def is_creator_supervisor?
     record.creator&.supervisor == user
   end
 
-  def _is_creator?
+  def is_creator?
     record.creator == user
   end
 end
