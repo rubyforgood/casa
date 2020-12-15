@@ -39,7 +39,7 @@ class SupervisorVolunteersController < ApplicationController
     if params[:supervisor_id]
       Supervisor.find(params[:supervisor_id])
     else
-      Volunteer.find(params[:volunteer_id])
+      Supervisor.find(supervisor_volunteer_params[:supervisor_id])
     end
   end
 end

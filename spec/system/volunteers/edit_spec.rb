@@ -22,6 +22,7 @@ RSpec.describe "volunteers/edit", type: :system do
 
     context "with invalid data" do
       it "shows error message for duplicate email" do
+        volunteer.supervisor = create(:supervisor)
         fill_in "volunteer_email", with: admin.email
         fill_in "volunteer_display_name", with: "Mickey Mouse"
         click_on "Submit"
@@ -29,6 +30,7 @@ RSpec.describe "volunteers/edit", type: :system do
       end
 
       it "shows error message for empty fields" do
+        volunteer.supervisor = create(:supervisor)
         fill_in "volunteer_email", with: ""
         fill_in "volunteer_display_name", with: ""
         click_on "Submit"
@@ -67,6 +69,32 @@ RSpec.describe "volunteers/edit", type: :system do
     expect(page).not_to have_text("Volunteer was deactivated on")
 
     expect(inactive_volunteer.reload).to be_active
+  end
+
+  it "allows the admin to unassign a volunteer from a supervisor" do
+    supervisor = create(:supervisor, display_name: "Haka Haka")
+    volunteer = create(:volunteer, display_name: "Bolu Bolu", supervisor: supervisor)
+
+    sign_in admin
+
+    visit edit_volunteer_path(volunteer)
+
+    expect(page).to have_content("Current Supervisor: Haka Haka")
+
+    click_on "Unassign from Supervisor"
+
+    expect(page).to have_content("Bolu Bolu was unassigned from Haka Haka")
+  end
+
+  it "shows the admin the option to assign an unassigned volunteer to a different supervisor" do
+    volunteer = create(:volunteer)
+
+    sign_in admin
+
+    visit edit_volunteer_path(volunteer)
+
+    expect(page).to have_content("Select a Supervisor")
+    expect(page).to have_content("Assign a Supervisor")
   end
 
   context "with a deactivated case" do
