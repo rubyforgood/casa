@@ -6,9 +6,8 @@ class SupervisorVolunteersController < ApplicationController
     supervisor_volunteer = supervisor_volunteer_parent.supervisor_volunteers.find_or_create_by!(supervisor_volunteer_params)
     supervisor_volunteer.is_active = true unless supervisor_volunteer&.is_active?
     supervisor_volunteer.save
-    flash_message = "#{Volunteer.find(params[:volunteer_id]).display_name} was assigned to #{supervisor_volunteer_parent.display_name}"
 
-    redirect_to after_action_path(supervisor_volunteer_parent), notice: flash_message
+    redirect_to after_action_path(supervisor_volunteer_parent)
   end
 
   def unassign
