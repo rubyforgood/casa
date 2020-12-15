@@ -77,7 +77,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
       end
     end
 
-    context "when passing the supervisor_id as the supervisor_volunteer_params" do 
+    context "when passing the supervisor_id as the supervisor_volunteer_params" do
       let!(:association) do
         create(
           :supervisor_volunteer,
@@ -87,9 +87,9 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         )
       end
 
-      it "will still set the association as active" do 
+      it "will still set the association as active" do
         valid_parameters = {
-          supervisor_volunteer: {supervisor_id: supervisor.id}, 
+          supervisor_volunteer: {supervisor_id: supervisor.id},
           volunteer_id: volunteer.id
         }
         sign_in(admin)

@@ -71,33 +71,33 @@ RSpec.describe "volunteers/edit", type: :system do
     expect(inactive_volunteer.reload).to be_active
   end
 
-  it "allows the admin to unassign a volunteer from a supervisor" do 
+  it "allows the admin to unassign a volunteer from a supervisor" do
     supervisor = create(:supervisor, display_name: "Haka Haka")
     volunteer = create(:volunteer, display_name: "Bolu Bolu", supervisor: supervisor)
 
     sign_in admin
-    
+
     visit edit_volunteer_path(volunteer)
 
-    expect(page).to have_content('Current Supervisor: Haka Haka')
-    
+    expect(page).to have_content("Current Supervisor: Haka Haka")
+
     click_on "Unassign from Supervisor"
 
     expect(page).to have_content("Bolu Bolu was unassigned from Haka Haka")
   end
 
-  it "shows the admin the option to assign an unassigned volunteer to a different supervisor" do 
+  it "shows the admin the option to assign an unassigned volunteer to a different supervisor" do
     supervisor = create(:supervisor, display_name: "Haka Haka")
     volunteer = create(:volunteer)
 
-    sign_in admin 
+    sign_in admin
 
     visit edit_volunteer_path(volunteer)
 
-    expect(page).to have_content('Select a Supervisor')
-    expect(page).to have_content('Assign a Supervisor')
-  end 
-  
+    expect(page).to have_content("Select a Supervisor")
+    expect(page).to have_content("Assign a Supervisor")
+  end
+
   context "with a deactivated case" do
     it "displays inactive message" do
       deactivated_casa_case = create(:casa_case, active: false, casa_org: volunteer.casa_org, volunteers: [volunteer])
