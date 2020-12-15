@@ -16,7 +16,7 @@ RSpec.describe CasaOrgPolicy do
       is_expected.to_not permit(supervisor)
     end
 
-    it "does not permit supervisor" do
+    it "does not permit volunteer" do
       is_expected.to_not permit(volunteer)
     end
   end

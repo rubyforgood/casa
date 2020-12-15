@@ -12,6 +12,14 @@ class CaseAssignmentPolicy < ApplicationPolicy
     end
   end
 
+  def create?
+    admin_or_supervisor?
+  end
+
+  def destroy?
+    admin_or_supervisor?
+  end
+
   def unassign?
     record.is_active? && admin_or_supervisor?
   end
