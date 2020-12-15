@@ -128,8 +128,8 @@ RSpec.describe CaseContactDecorator do
   describe "#subheading" do
     context "when all information is available" do
       it "returns a properly formatted string" do
-        contact_group = create(:contact_type_group, name: 'Group X')
-        contact_type = create(:contact_type, contact_type_group: contact_group, name: 'Type X')
+        contact_group = create(:contact_type_group, name: "Group X")
+        contact_type = create(:contact_type, contact_type_group: contact_group, name: "Type X")
         case_contact = create(:case_contact, occurred_at: "2020-12-01", duration_minutes: 99, contact_made: false, miles_driven: 100, want_driving_reimbursement: true)
         case_contact.contact_types = [contact_type]
 
@@ -141,8 +141,8 @@ RSpec.describe CaseContactDecorator do
 
     context "when some information is missing" do
       it "returns a properly formatted string without extra pipes" do
-        contact_group = create(:contact_type_group, name: 'Group X')
-        contact_type = create(:contact_type, contact_type_group: contact_group, name: 'Type X')
+        contact_group = create(:contact_type_group, name: "Group X")
+        contact_type = create(:contact_type, contact_type_group: contact_group, name: "Type X")
         case_contact = create(:case_contact, occurred_at: "2020-12-01", duration_minutes: 99, contact_made: true, miles_driven: 100, want_driving_reimbursement: true)
         case_contact.contact_types = [contact_type]
 

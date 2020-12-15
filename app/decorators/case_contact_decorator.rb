@@ -101,9 +101,8 @@ class CaseContactDecorator < Draper::Decorator
   private
 
   def contact_type_list
-    object.contact_groups_with_types.map do |key, value|
-      "#{key}: #{value.join(', ')}"
-    end.join(" / ")
+    object.contact_groups_with_types.map { |key, value|
+      "#{key}: #{value.join(", ")}"
+    }.join(" / ")
   end
-
 end
