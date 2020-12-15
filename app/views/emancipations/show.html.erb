@@ -15,7 +15,7 @@
             <strong> <%= category.name %> </strong>
           </label>
           <select id="C<%= category.id %>" class="emancipation-select">
-            <option value="">empty</option>
+            <option value="" disabled selected>Select One</option>
             <% category.emancipation_options.each do |option| %>
               <option value="<%= option.id %>" <%= emancipation_select_option_selected(@current_case, option.id) %>>
                 <%= option.name %>
