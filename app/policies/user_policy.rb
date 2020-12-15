@@ -1,10 +1,10 @@
 class UserPolicy < ApplicationPolicy
   def update_volunteer_email?
-    user.casa_admin?
+    is_admin?
   end
 
   def unassign_case?
-    user.casa_admin? || user.supervisor?
+    admin_or_supervisor?
   end
 
   alias_method :activate?, :unassign_case?
@@ -14,7 +14,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update_supervisor_email?
-    user.casa_admin? || record == user
+    is_admin? || record == user
   end
 
   def update_supervisor_name?
@@ -22,7 +22,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def edit_name?(viewed_user)
-    user.casa_admin? || viewed_user == user
+    is_admin? || viewed_user == user
   end
 
   class Scope

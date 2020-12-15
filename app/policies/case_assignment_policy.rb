@@ -13,6 +13,6 @@ class CaseAssignmentPolicy < ApplicationPolicy
   end
 
   def unassign?
-    record.is_active? && (user.supervisor? || user.casa_admin?)
+    record.is_active? && admin_or_supervisor?
   end
 end

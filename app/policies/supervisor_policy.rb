@@ -1,9 +1,9 @@
 class SupervisorPolicy < UserPolicy
   def index?
-    user.casa_admin? || user.supervisor?
+    admin_or_supervisor?
   end
 
   def create?
-    user.casa_admin?
+    is_admin?
   end
 end

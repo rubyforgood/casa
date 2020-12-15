@@ -1,6 +1,6 @@
 class CasaAdminPolicy < UserPolicy
   def index?
-    user.casa_admin?
+    is_admin?
   end
 
   def deactivate?
@@ -8,7 +8,7 @@ class CasaAdminPolicy < UserPolicy
   end
 
   def see_deactivate_option?
-    user.casa_admin? && user.active?
+    is_admin? && user.active?
   end
 
   private

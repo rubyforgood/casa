@@ -1,15 +1,14 @@
 class CaseContactPolicy < ApplicationPolicy
   def new?
-    # Everyone is allowed to create a case_contact
     true
   end
 
   def _is_creator_or_casa_admin?
-    _is_admin? || _is_creator?
+    is_admin? || _is_creator?
   end
 
   def _is_creator_or_supervisor_or_casa_admin?
-    _is_admin? || _is_creator? || _is_creator_supervisor?
+    is_admin? || _is_creator? || _is_creator_supervisor?
   end
 
   alias_method :index?, :_is_creator_or_casa_admin?
@@ -40,10 +39,6 @@ class CaseContactPolicy < ApplicationPolicy
   end
 
   private
-
-  def _is_admin?
-    user.casa_admin?
-  end
 
   def _is_creator_supervisor?
     record.creator&.supervisor == user
