@@ -53,8 +53,9 @@ RSpec.describe "/case_contact_reports", type: :request do
       context "with supervisor_ids filter" do
         it "renders csv with only the volunteer" do
           volunteer = create(:volunteer)
-          contact = create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
-          create(:case_contact, {occurred_at: 100.days.ago})
+          casa_case = create(:casa_case, casa_org: volunteer.casa_org)
+          contact = create(:case_contact, creator_id: volunteer.id, casa_case: casa_case)
+          create(:case_contact, creator_id: user.id, casa_case: casa_case)
 
           get case_contact_reports_url(format: :csv), params: {report: {creator_ids: [volunteer.id]}}
 
@@ -77,6 +78,16 @@ RSpec.describe "/case_contact_reports", type: :request do
     context "as casa_admin" do
       it_behaves_like "can view reports" do
         let(:user) { create(:casa_admin) }
+      end
+
+      let(:user) { create(:casa_admin) }
+      it "passes in casa_org_id to CaseContractReport" do
+        allow(CaseContactReport).to receive(:new).and_return([])
+
+        get case_contact_reports_url(format: :csv), params: {report: {creator_ids: [user.id]}}
+
+        expect(CaseContactReport).to have_received(:new)
+          .with(hash_including(casa_org_id: user.casa_org_id))
       end
     end
   end

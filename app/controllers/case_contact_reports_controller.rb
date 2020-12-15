@@ -26,10 +26,9 @@ class CaseContactReportsController < ApplicationController
       :want_driving_reimbursement,
       contact_type_ids: [],
       contact_type_group_ids: [],
-      casa_org_id: current_organization.id,
       creator_ids: [],
       supervisor_ids: []
-    )
+    ).merge(casa_org_id: current_organization.id)
     convert_radio_options_to_boolean(parameters)
     parameters
   end
