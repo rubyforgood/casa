@@ -162,41 +162,6 @@ RSpec.describe Volunteer, type: :model do
     end
   end
 
-  describe "#cases_where_contact_made_in_days" do
-    let(:volunteer) { create(:volunteer) }
-    let(:casa_case_a) { create(:casa_case, casa_org: volunteer.casa_org) }
-    let!(:case_assignment_a) { create(:case_assignment, casa_case: casa_case_a, volunteer: volunteer) }
-
-    let(:create_case_contact) do
-      lambda { |contact_case, occurred_at, contact_made|
-        create(:case_contact, casa_case: contact_case, creator: volunteer, occurred_at: occurred_at, contact_made: contact_made)
-      }
-    end
-
-    context "when filtering cases based on their most recent contact dates" do
-      let(:casa_case_b) { create(:casa_case, casa_org: volunteer.casa_org) }
-      let!(:case_assignment_b) { create(:case_assignment, casa_case: casa_case_b, volunteer: volunteer) }
-
-      it "returns cases where a case contact was contacted within the specified number of days"
-      it "does not return cases where none of the contacts were contacted within the specified number of days"
-    end
-
-    context "when filtering for inactive and unassigned cases" do
-      let(:casa_case_inactive) { create(:casa_case, casa_org: volunteer.casa_org, active: false) }
-      let(:casa_case_unassigned) { create(:casa_case, casa_org: volunteer.casa_org) }
-      let!(:case_assignment_inactive) { create(:case_assignment, casa_case: casa_case_inactive, volunteer: volunteer) }
-      let!(:case_assignment_unassigned) { create(:case_assignment, casa_case: casa_case_unassigned, volunteer: volunteer, is_active: false) }
-
-      it "does not return inactive cases nor cases linked with inactive case assignments" do
-        create_case_contact.call(casa_case_a, Date.current, true)
-        create_case_contact.call(casa_case_inactive, Date.current, true)
-        create_case_contact.call(casa_case_unassigned, Date.current, true)
-
-        expect(volunteer.send(:cases_where_contact_made_in_days)).to match_array([casa_case_a])
-      end
-    end
-  end
-
   describe "#supervised_by?" do
     it "is supervised by the currently active supervisor" do
       supervisor = create :supervisor
