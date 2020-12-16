@@ -1,12 +1,14 @@
 class JudgesController < ApplicationController
-  before_action :authenticate_user!, :must_be_admin
   before_action :set_judge, except: [:new, :create]
+  after_action :verify_authorized
 
   def new
+    authorize Judge
     @judge = Judge.new
   end
 
   def create
+    authorize Judge
     @judge = Judge.new(judge_params)
 
     respond_to do |format|
@@ -19,9 +21,11 @@ class JudgesController < ApplicationController
   end
 
   def edit
+    authorize @judge
   end
 
   def update
+    authorize @judge
     if @judge.update(judge_params)
       redirect_to edit_casa_org_path(current_organization), notice: "Judge was successfully updated."
     else

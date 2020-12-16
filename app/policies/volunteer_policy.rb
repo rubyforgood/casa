@@ -1,20 +1,13 @@
 class VolunteerPolicy < UserPolicy
-  attr_reader :user, :record
-
-  def initialize(user, record)
-    @user = user
-    @record = record
-  end
-
   def index?
-    user.casa_admin? || user.supervisor?
+    admin_or_supervisor?
   end
 
-  def new?
-    create?
-  end
-
-  def create?
-    user.casa_admin?
-  end
+  alias_method :datatable?, :index?
+  alias_method :new?, :index?
+  alias_method :create?, :index?
+  alias_method :edit?, :index?
+  alias_method :update?, :index?
+  alias_method :activate?, :index?
+  alias_method :deactivate?, :index?
 end

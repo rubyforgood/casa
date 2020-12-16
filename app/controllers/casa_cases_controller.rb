@@ -1,12 +1,13 @@
 class CasaCasesController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_casa_case, only: %i[show edit update destroy deactivate reactivate]
   before_action :set_contact_types, only: %i[new edit update create]
   before_action :require_organization!
+  after_action :verify_authorized
 
   # GET /casa_cases
   # GET /casa_cases.json
   def index
+    authorize CasaCase
     org_cases = current_user.casa_org.casa_cases.includes(:assigned_volunteers)
     @casa_cases = policy_scope(org_cases).includes([:hearing_type, :judge])
   end
@@ -32,6 +33,7 @@ class CasaCasesController < ApplicationController
   # POST /casa_cases.json
   def create
     @casa_case = CasaCase.new(casa_case_params.merge(casa_org: current_organization))
+    authorize @casa_case
 
     respond_to do |format|
       if @casa_case.save
@@ -47,6 +49,7 @@ class CasaCasesController < ApplicationController
   # PATCH/PUT /casa_cases/1
   # PATCH/PUT /casa_cases/1.json
   def update
+    authorize @casa_case
     respond_to do |format|
       if @casa_case.update_cleaning_contact_types(casa_case_update_params)
         format.html { redirect_to edit_casa_case_path, notice: "CASA case was successfully updated." }
@@ -83,6 +86,7 @@ class CasaCasesController < ApplicationController
   # DELETE /casa_cases/1
   # DELETE /casa_cases/1.json
   def destroy
+    authorize @casa_case
     @casa_case.destroy
     respond_to do |format|
       format.html { redirect_to casa_cases_url, notice: "CASA case was successfully destroyed." }

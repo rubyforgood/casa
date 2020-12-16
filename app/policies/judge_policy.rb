@@ -1,0 +1,2 @@
+class JudgePolicy < ApplicationPolicy
+end

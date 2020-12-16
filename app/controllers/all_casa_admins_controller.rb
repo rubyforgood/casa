@@ -1,4 +1,5 @@
 class AllCasaAdminsController < ApplicationController
+  skip_before_action :authenticate_user!
   before_action :authenticate_all_casa_admin!
 
   def edit

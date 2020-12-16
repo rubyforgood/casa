@@ -1,7 +1,7 @@
 require "csv"
 
 class CaseContactReportsController < ApplicationController
-  before_action :authenticate_user!
+  after_action :verify_authorized
 
   def index
     authorize :application, :see_reports_page?

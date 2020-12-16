@@ -293,7 +293,7 @@ RSpec.describe "/casa_cases", type: :request do
         get new_casa_case_url
 
         expect(response).not_to be_successful
-        expect(flash[:error]).to match(/you are not authorized/)
+        expect(flash[:notice]).to match(/you are not authorized/)
       end
     end
 

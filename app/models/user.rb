@@ -44,15 +44,6 @@ class User < ApplicationRecord
     is_a?(Volunteer)
   end
 
-  def policy_class
-    case type
-    when Volunteer
-      VolunteerPolicy
-    else
-      UserPolicy
-    end
-  end
-
   def actively_assigned_and_active_cases
     casa_cases.active.merge(CaseAssignment.is_active)
   end

@@ -1,9 +1,9 @@
 class CaseAssignmentsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :must_be_admin_or_supervisor # admins and supervisors can create/delete ALL case assignments
   before_action :load_case_assignment, only: %i[destroy unassign]
+  after_action :verify_authorized
 
   def create
+    authorize CaseAssignment
     case_assignments = case_assignment_parent.case_assignments
     existing_case_assignment = if params[:volunteer_id]
       case_assignments.where(casa_case_id: case_assignment_params[:casa_case_id], is_active: false).first
@@ -32,6 +32,7 @@ class CaseAssignmentsController < ApplicationController
   end
 
   def destroy
+    authorize @case_assignment
     @case_assignment.destroy
 
     redirect_to after_action_path(case_assignment_parent)

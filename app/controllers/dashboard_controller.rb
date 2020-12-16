@@ -1,8 +1,9 @@
 class DashboardController < ApplicationController
-  before_action :authenticate_user!
   before_action :require_organization!
+  after_action :verify_authorized
 
   def show
+    authorize :dashboard
     if current_user.volunteer?
       redirect_to casa_cases_path
     elsif current_user.supervisor?

@@ -243,7 +243,7 @@ RSpec.describe CasaCasePolicy do
     end
   end
 
-  permissions :index? do
+  permissions :index?, :save_emancipation? do
     it "allows casa_admins" do
       is_expected.to permit(casa_admin)
     end

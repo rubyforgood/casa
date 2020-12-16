@@ -1,11 +1,4 @@
-class CaseAssignmentPolicy
-  attr_reader :user, :record
-
-  def initialize(user, record)
-    @user = user
-    @record = record
-  end
-
+class CaseAssignmentPolicy < ApplicationPolicy
   class Scope
     attr_reader :user, :scope
 
@@ -19,7 +12,15 @@ class CaseAssignmentPolicy
     end
   end
 
+  def create?
+    admin_or_supervisor?
+  end
+
+  def destroy?
+    admin_or_supervisor?
+  end
+
   def unassign?
-    record.is_active? && (user.supervisor? || user.casa_admin?)
+    record.is_active? && admin_or_supervisor?
   end
 end

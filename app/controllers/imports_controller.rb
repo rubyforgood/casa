@@ -1,16 +1,16 @@
 class ImportsController < ApplicationController
   include ActionView::Helpers::UrlHelper
-
-  before_action :authenticate_user!
-  before_action :must_be_admin
+  after_action :verify_authorized
 
   def index
+    authorize :import
     @import_type = params.fetch(:import_type, "volunteer")
     @import_error = session[:import_error]
     session[:import_error] = nil
   end
 
   def create
+    authorize :import
     import = import_from_csv(params[:import_type], params[:file], current_user.casa_org_id)
     message = import[:message]
 
@@ -32,6 +32,7 @@ class ImportsController < ApplicationController
   end
 
   def download_failed
+    authorize :import
     data = session[:exported_rows]
     session[:exported_rows] = nil
     send_data data, format: :csv, filename: "failed_rows.csv"

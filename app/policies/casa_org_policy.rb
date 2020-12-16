@@ -1,1 +1,2 @@
-class CasaOrgPolicy; end
+class CasaOrgPolicy < ApplicationPolicy
+end

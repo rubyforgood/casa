@@ -1,11 +1,4 @@
-class DashboardPolicy
-  attr_reader :user, :dashboard
-
-  def initialize(user, dashboard)
-    @user = user
-    @dashboard = dashboard
-  end
-
+class DashboardPolicy < Struct.new(:user, :dashboard)
   def all_allowed
     true
   end
