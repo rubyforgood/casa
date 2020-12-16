@@ -87,10 +87,9 @@ class Volunteer < User
   private
 
   def cases_where_contact_made_in_days(num_days = CONTACT_MADE_IN_DAYS_NUM)
-    casa_cases
+    actively_assigned_and_active_cases
       .joins(:case_contacts)
       .where(case_contacts: {contact_made: true, occurred_at: num_days.days.ago.to_date..})
-    # TODO this should respect current vs past cases
   end
 end
 
