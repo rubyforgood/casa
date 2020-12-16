@@ -13,8 +13,8 @@ RSpec.describe Rack::Attack do
     Rails.cache.clear
   end
 
-  around do
-    freeze_time
+  around do |example|
+    freeze_time(&example)
   end
 
   def app
