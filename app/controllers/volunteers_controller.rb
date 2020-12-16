@@ -32,12 +32,12 @@ class VolunteersController < ApplicationController
   end
 
   def edit
-    authorize @volunteer, policy_class: VolunteerPolicy
+    authorize @volunteer
     @supervisors = policy_scope current_organization.supervisors
   end
 
   def update
-    authorize @volunteer, policy_class: VolunteerPolicy
+    authorize @volunteer
     if @volunteer.update(update_volunteer_params)
       redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was successfully updated."
     else
@@ -46,7 +46,7 @@ class VolunteersController < ApplicationController
   end
 
   def activate
-    authorize @volunteer, policy_class: VolunteerPolicy
+    authorize @volunteer
     if @volunteer.activate
       VolunteerMailer.account_setup(@volunteer).deliver
 
@@ -61,7 +61,7 @@ class VolunteersController < ApplicationController
   end
 
   def deactivate
-    authorize @volunteer, policy_class: VolunteerPolicy
+    authorize @volunteer
     if @volunteer.deactivate
       VolunteerMailer.deactivation(@volunteer).deliver
 

@@ -28,11 +28,11 @@ class SupervisorsController < ApplicationController
   end
 
   def edit
-    authorize @supervisor, policy_class: SupervisorPolicy
+    authorize @supervisor
   end
 
   def update
-    authorize @supervisor, policy_class: SupervisorPolicy
+    authorize @supervisor
     if @supervisor.update(update_supervisor_params)
       redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was successfully updated."
     else

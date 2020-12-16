@@ -130,7 +130,7 @@ RSpec.describe "/casa_admins", type: :request do
   end
 
   describe "PATCH /casa_admins/:id/deactivate" do
-    let(:casa_admin) { create(:casa_admin, active: false) }
+    let(:casa_admin) { create(:casa_admin, active: true) }
 
     context "logged in as admin user" do
       it "can successfully deactivate a casa admin user" do

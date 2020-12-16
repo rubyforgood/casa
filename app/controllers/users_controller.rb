@@ -3,13 +3,13 @@ class UsersController < ApplicationController
 
   def edit
     @user = current_user
-    authorize @user
+    authorize @user, policy_class: UserPolicy
     @active_casa_admins = CasaAdmin.in_organization(current_organization).active
   end
 
   def update
     @user = current_user
-    authorize @user
+    authorize @user, policy_class: UserPolicy
 
     if @user.update(user_params)
       flash[:success] = "Profile was successfully updated."
@@ -22,7 +22,8 @@ class UsersController < ApplicationController
 
   def update_password
     @user = current_user
-    authorize @user
+    authorize @user, policy_class: UserPolicy
+
     if @user.update(password_params)
       bypass_sign_in(@user)
       flash[:success] = "Password was successfully updated."
