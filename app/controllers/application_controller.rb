@@ -19,20 +19,6 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def must_be_admin
-    return if current_user&.casa_admin?
-
-    flash[:notice] = t("default", scope: "pundit")
-    redirect_to root_url
-  end
-
-  def must_be_admin_or_supervisor
-    return if current_user&.casa_admin? || current_user&.supervisor?
-
-    flash[:notice] = t("default", scope: "pundit")
-    redirect_to root_url
-  end
-
   def not_authorized
     flash[:notice] = t("default", scope: "pundit")
     redirect_to(request.referrer || root_url)
