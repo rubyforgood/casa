@@ -1,4 +1,8 @@
 class UserPolicy < ApplicationPolicy
+  def edit?
+    admin_or_supervisor_or_volunteer?
+  end
+
   def update_volunteer_email?
     is_admin?
   end
@@ -24,6 +28,9 @@ class UserPolicy < ApplicationPolicy
   def edit_name?(viewed_user)
     is_admin? || viewed_user == user
   end
+
+  alias_method :update?, :edit?
+  alias_method :update_password?, :edit?
 
   class Scope
     attr_reader :user, :scope

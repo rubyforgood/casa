@@ -9,11 +9,11 @@ class CasaAdminsController < ApplicationController
   end
 
   def edit
-    authorize @casa_admin
+    authorize @casa_admin, policy_class: CasaAdminPolicy
   end
 
   def update
-    authorize @casa_admin
+    authorize @casa_admin, policy_class: CasaAdminPolicy
     if @casa_admin.update(update_casa_admin_params)
       redirect_to casa_admins_path, notice: "Admin was successfully updated."
     else
