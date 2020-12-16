@@ -112,9 +112,9 @@ RSpec.describe Volunteer, type: :model do
 
   describe "#made_contact_with_all_cases_in_days?" do
     let(:volunteer) { create(:volunteer) }
+    let(:casa_case) { create(:casa_case, casa_org: volunteer.casa_org) }
 
     context "when a volunteer is assigned to an active case" do
-      let(:casa_case) { create(:casa_case, casa_org: volunteer.casa_org) }
       let(:create_case_contact) do
         lambda { |occurred_at, contact_made|
           create(:case_contact, casa_case: casa_case, creator: volunteer, occurred_at: occurred_at, contact_made: contact_made)
@@ -149,7 +149,7 @@ RSpec.describe Volunteer, type: :model do
       context "when volunteer has not made recent contact in just one case" do
         it "returns false" do
           casa_case2 = create(:casa_case, casa_org: volunteer.casa_org)
-          create(:case_assignment, casa_case: casa_case2, volunteer: volunteer, is_active: true)
+          create(:case_assignment, casa_case: casa_case2, volunteer: volunteer)
           create(:case_contact, casa_case: casa_case2, creator: volunteer, occurred_at: Date.current - 60.days, contact_made: true)
           create_case_contact.call(Date.current, true)
           expect(volunteer.made_contact_with_all_cases_in_days?).to eq(false)
@@ -159,6 +159,25 @@ RSpec.describe Volunteer, type: :model do
 
     context "when volunteer has no case assignments" do
       it "returns true" do
+        expect(volunteer.made_contact_with_all_cases_in_days?).to eq(true)
+      end
+    end
+
+    context "when a volunteer has only an inactive case where contact was not made recently" do
+      it "returns true" do
+        inactive_case = create(:casa_case, casa_org: volunteer.casa_org, active: false)
+        create(:case_assignment, casa_case: inactive_case, volunteer: volunteer)
+        create(:case_contact, casa_case: inactive_case, creator: volunteer, occurred_at: Date.current - 60.days, contact_made: true)
+
+        expect(volunteer.made_contact_with_all_cases_in_days?).to eq(true)
+      end
+    end
+
+    context "when a volunteer has only an unassigned case where contact was not made recently" do
+      it "returns true" do
+        create(:case_assignment, casa_case: casa_case, volunteer: volunteer, is_active: false)
+        create(:case_contact, casa_case: casa_case, creator: volunteer, occurred_at: Date.current - 60.days, contact_made: true)
+
         expect(volunteer.made_contact_with_all_cases_in_days?).to eq(true)
       end
     end
