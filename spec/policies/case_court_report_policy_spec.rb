@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CaseCourtReportsPolicy do
+RSpec.describe CaseCourtReportPolicy do
   subject { described_class }
 
   let(:casa_admin) { build_stubbed(:casa_admin) }
