@@ -1,3 +1,2 @@
 class JudgePolicy < ApplicationPolicy
-
 end
