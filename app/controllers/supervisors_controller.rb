@@ -1,23 +1,22 @@
 # frozen_string_literal: true
 
 class SupervisorsController < ApplicationController
-  # Uses authenticate_user to redirect if no user is signed in
-  # and must_be_admin_or_supervisor to check user's role is appropriate
-  before_action :authenticate_user!
-  before_action :must_be_admin_or_supervisor
-  before_action :must_be_admin, only: [:new, :create]
   before_action :available_volunteers, only: [:edit, :update]
   before_action :set_supervisor, only: [:edit, :update]
+  after_action :verify_authorized
 
   def index
+    authorize Supervisor
     @supervisors = policy_scope(current_organization.supervisors)
   end
 
   def new
+    authorize Supervisor
     @supervisor = Supervisor.new
   end
 
   def create
+    authorize Supervisor
     @supervisor = Supervisor.new(supervisor_params.merge(supervisor_values))
 
     if @supervisor.save
@@ -29,18 +28,15 @@ class SupervisorsController < ApplicationController
   end
 
   def edit
-    redirect_to root_url unless can_view_update_page?
+    authorize @supervisor, policy_class: SupervisorPolicy
   end
 
   def update
-    if can_update_fields?
-      if @supervisor.update(update_supervisor_params)
-        redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was successfully updated."
-      else
-        render :edit
-      end
+    authorize @supervisor, policy_class: SupervisorPolicy
+    if @supervisor.update(update_supervisor_params)
+      redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was successfully updated."
     else
-      redirect_to root_url
+      render :edit
     end
   end
 
@@ -60,15 +56,6 @@ class SupervisorsController < ApplicationController
 
   def supervisor_params
     params.require(:supervisor).permit(:display_name, :email, :active, volunteer_ids: [], supervisor_volunteer_ids: [])
-  end
-
-  def can_view_update_page?
-    # supervisor must be able to view edit supervisor page so they can change volunteer assignments
-    current_user.supervisor? || current_user.casa_admin?
-  end
-
-  def can_update_fields?
-    current_user == @supervisor || current_user.casa_admin?
   end
 
   def update_supervisor_params
