@@ -78,10 +78,10 @@ class Volunteer < User
   # false if volunteer has any case with no contact in the past 30 days
   def made_contact_with_all_cases_in_days?(num_days = CONTACT_MADE_IN_DAYS_NUM)
     # TODO this should do the same thing as no_contact_for_two_weeks but for a volunteer
-    total_cases_count = casa_cases.size
-    return true if total_cases_count.zero?
+    total_active_case_count = actively_assigned_and_active_cases.size
+    return true if total_active_case_count.zero?
     current_contact_cases_count = cases_where_contact_made_in_days(num_days).count
-    current_contact_cases_count == total_cases_count
+    current_contact_cases_count == total_active_case_count
   end
 
   private
