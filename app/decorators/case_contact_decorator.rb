@@ -41,7 +41,6 @@ class CaseContactDecorator < Draper::Decorator
   def subheading
     [
       object.occurred_at.strftime(DateFormat::FULL),
-      contact_type_list,
       duration_minutes,
       contact_made,
       miles_traveled,
@@ -96,13 +95,5 @@ class CaseContactDecorator < Draper::Decorator
 
   def show_contact_type?(contact_type_id)
     object.case_contact_contact_type.map(&:contact_type_id).include?(contact_type_id)
-  end
-
-  private
-
-  def contact_type_list
-    object.contact_groups_with_types.map { |key, value|
-      "#{key}: #{value.join(", ")}"
-    }.join(" / ")
   end
 end
