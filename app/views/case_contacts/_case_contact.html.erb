@@ -9,6 +9,8 @@
               <strong class="text-primary"><%= contact.contact_groups_with_types.keys.join(', ') %></strong>
             </h5>
             <h6 class="card-subtitle mb-2 text-muted">
+              <%= contact.decorate.contact_types %>
+              <br>
               <%= contact.decorate.subheading %>
             </h6>
             <div class="card-text">

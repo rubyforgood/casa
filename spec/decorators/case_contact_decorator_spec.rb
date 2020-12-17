@@ -134,7 +134,7 @@ RSpec.describe CaseContactDecorator do
         case_contact.contact_types = [contact_type]
 
         expect(case_contact.decorate.subheading).to eq(
-          "December 1, 2020 | Group X: Type X | 1 hour 39 minutes | No Contact Made | 100 miles driven | Reimbursement"
+          "December 1, 2020 | 1 hour 39 minutes | No Contact Made | 100 miles driven | Reimbursement"
         )
       end
     end
@@ -147,7 +147,7 @@ RSpec.describe CaseContactDecorator do
         case_contact.contact_types = [contact_type]
 
         expect(case_contact.decorate.subheading).to eq(
-          "December 1, 2020 | Group X: Type X | 1 hour 39 minutes | 100 miles driven | Reimbursement"
+          "December 1, 2020 | 1 hour 39 minutes | 100 miles driven | Reimbursement"
         )
       end
     end
