@@ -40,8 +40,8 @@ class CaseContactDecorator < Draper::Decorator
 
   def subheading
     [
-      contact_type_list,
       object.occurred_at.strftime(DateFormat::FULL),
+      contact_type_list,
       duration_minutes,
       contact_made,
       miles_traveled,
