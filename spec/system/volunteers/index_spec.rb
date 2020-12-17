@@ -24,8 +24,14 @@ RSpec.describe "volunteers/index", type: :system do
         end
 
         expect(page).to have_text("CASA Case Details")
-        expect(page).to have_text("Miles Driven")
-        expect(page).to have_text("Want reimbursement?")
+        expect(page).to have_text("Case number: #{casa_case.case_number}")
+        expect(page).to have_text("Hearing Type:")
+        expect(page).to have_text("Judge:")
+        expect(page).to have_text("Transition Aged Youth: No")
+        expect(page).to have_text("Next Court Date:")
+        expect(page).to have_text("Court Report Due Date:")
+        expect(page).to have_text("Court Report Status: Not submitted")
+        expect(page).to have_text("Assigned Volunteers:")
       end
 
       it "displays default logo" do
