@@ -181,5 +181,21 @@ RSpec.describe User, type: :model do
         expect(user).not_to be_serving_transition_aged_youth
       end
     end
+
+    context "when the user's only transition-aged-youth case is inactive" do
+      it "is false" do
+        create(:case_assignment, casa_case: create(:casa_case, casa_org: user.casa_org, active: false, transition_aged_youth: true), volunteer: user)
+
+        expect(user).not_to be_serving_transition_aged_youth
+      end
+    end
+
+    context "when the user is unassigned from a transition-aged-youth case" do
+      it "is false" do
+        create(:case_assignment, casa_case: create(:casa_case, casa_org: user.casa_org, transition_aged_youth: true), volunteer: user, is_active: false)
+
+        expect(user).not_to be_serving_transition_aged_youth
+      end
+    end
   end
 end
