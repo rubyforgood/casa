@@ -122,7 +122,7 @@ class User < ApplicationRecord
   end
 
   def serving_transition_aged_youth?
-    casa_cases.where(transition_aged_youth: true).any? # TODO filter for active?
+    actively_assigned_and_active_cases.where(transition_aged_youth: true).any?
   end
 
   def admin_self_deactivated?
