@@ -164,18 +164,14 @@ RSpec.describe User, type: :model do
   end
 
   describe "#serving_transition_aged_youth?" do
-    let(:casa_org) { create(:casa_org) }
-    let(:user) { create(:volunteer, casa_org: casa_org) }
-    let(:case_assignment_with_a_transition_aged_youth) do
-      create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org, transition_aged_youth: true), volunteer: user)
-    end
+    let(:user) { create(:volunteer) }
     let!(:case_assignment_without_transition_aged_youth) do
-      create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org, transition_aged_youth: false), volunteer: user)
+      create(:case_assignment, casa_case: create(:casa_case, casa_org: user.casa_org, transition_aged_youth: false), volunteer: user)
     end
 
     context "when the user has a transition-aged-youth case" do
       it "is true" do
-        case_assignment_with_a_transition_aged_youth.inspect
+        create(:case_assignment, casa_case: create(:casa_case, casa_org: user.casa_org, transition_aged_youth: true), volunteer: user)
         expect(user).to be_serving_transition_aged_youth
       end
     end
