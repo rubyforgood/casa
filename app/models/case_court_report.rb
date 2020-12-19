@@ -6,12 +6,6 @@ require "sablon"
 class CaseCourtReport
   attr_reader :report_path, :context, :template
 
-  DATE_FORMATS = {
-    long_date: DateFormat::FULL,
-    short_date: "%-m/%d",
-    youth_dob: DateFormat::YOUTH_DATE_OF_BIRTH
-  }.freeze
-
   def initialize(args = {})
     @casa_case = CasaCase.find(args[:case_id])
     @volunteer = Volunteer.find(args[:volunteer_id])
@@ -35,19 +29,19 @@ class CaseCourtReport
 
   def prepare_context
     {
-      created_date: Date.today.strftime(DATE_FORMATS[:long_date]),
+      created_date: I18n.l(Date.today, format: :full, default: nil),
       casa_case: prepare_case_details,
       case_contacts: prepare_case_contacts,
       volunteer: {
         name: @volunteer.display_name,
         supervisor_name: @volunteer.supervisor.display_name,
-        assignment_date: @casa_case.case_assignments.find_by(volunteer: @volunteer).created_at&.strftime(DATE_FORMATS[:long_date])
+        assignment_date: I18n.l(@casa_case.case_assignments.find_by(volunteer: @volunteer).created_at, format: :long_date, default: nil)
       }
     }
   end
 
   def format_date_contact_attempt(case_contact)
-    case_contact.occurred_at.strftime(DATE_FORMATS[:short_date])
+    I18n.l(case_contact.occurred_at, format: :short_date, default: nil)
       .concat(case_contact.contact_made ? "" : "*")
   end
 
@@ -84,9 +78,9 @@ class CaseCourtReport
 
   def prepare_case_details
     {
-      court_date: @casa_case.court_date&.strftime(DATE_FORMATS[:long_date]),
+      court_date: I18n.l(@casa_case.court_date, format: :full, default: nil),
       case_number: @casa_case.case_number,
-      dob: @casa_case.birth_month_year_youth&.strftime(DATE_FORMATS[:youth_dob])
+      dob: I18n.l(@casa_case.birth_month_year_youth, format: :youth_date_of_birth, default: nil)
     }
   end
 end

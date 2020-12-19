@@ -38,7 +38,7 @@ class CaseContactReport
       contact_types: case_contact&.report_contact_types,
       contact_made: case_contact&.report_contact_made,
       contact_medium: case_contact&.medium_type,
-      occurred_at: case_contact&.occurred_at&.strftime(DateFormat::FULL),
+      occurred_at: I18n.l(case_contact&.occurred_at, format: :full, default: nil),
       added_to_system_at: case_contact&.created_at,
       miles_driven: case_contact&.miles_driven,
       wants_driving_reimbursement: case_contact&.want_driving_reimbursement,

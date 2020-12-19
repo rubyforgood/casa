@@ -18,7 +18,7 @@ class CasaCaseDecorator < Draper::Decorator
   end
 
   def court_report_submitted_date
-    object.court_report_submitted_at&.strftime(DateFormat::FULL)
+    l object.court_report_submitted_at, format: :full, default: nil
   end
 
   def case_contacts_ordered_by_occurred_at
@@ -52,6 +52,6 @@ class CasaCaseDecorator < Draper::Decorator
   end
 
   def formatted_updated_at
-    object.updated_at.strftime(DateFormat::MM_DD_YYYY)
+    l object.updated_at, format: :mm_dd_yyyy, default: nil
   end
 end

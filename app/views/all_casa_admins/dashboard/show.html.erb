@@ -18,7 +18,7 @@
       <% @organizations.each do |organization| %>
         <tr>
           <td><%= link_to organization.name, all_casa_admins_casa_org_path(organization) %></td>
-          <td><%= organization.created_at.strftime(DateFormat::FULL) %></td>
+          <td><%= I18n.l(organization.created_at, format: :full, default: nil) %></td>
         </tr>
       <% end %>
       </tbody>

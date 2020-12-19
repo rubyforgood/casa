@@ -42,7 +42,7 @@ RSpec.describe "casa_cases/edit", type: :system do
       click_on "Deactivate CASA Case"
       click_on "Yes, deactivate"
       expect(page).to have_text("Case #{casa_case.case_number} has been deactivated")
-      expect(page).to have_text("Case was deactivated on: #{casa_case.updated_at.strftime(DateFormat::MM_DD_YYYY)}")
+      expect(page).to have_text("Case was deactivated on: #{I18n.l(casa_case.updated_at, format: :mm_dd_yyyy, default: nil)}")
       expect(page).to have_text("Reactivate CASA Case")
       expect(page).to_not have_text("Court Date")
       expect(page).to_not have_text("Court Report Due Date")
@@ -150,7 +150,7 @@ RSpec.describe "casa_cases/edit", type: :system do
       casa_case.deactivate
       visit edit_casa_case_path(casa_case)
 
-      expect(page).to have_text("Case was deactivated on: #{casa_case.updated_at.strftime(DateFormat::MM_DD_YYYY)}")
+      expect(page).to have_text("Case was deactivated on: #{I18n.l(casa_case.updated_at, format: :mm_dd_yyyy, default: nil)}")
       expect(page).not_to have_text("Court Date")
       expect(page).not_to have_text("Court Report Due Date")
       expect(page).not_to have_text("Day")

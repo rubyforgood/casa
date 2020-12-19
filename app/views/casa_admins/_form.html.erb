@@ -27,7 +27,7 @@
                         data: {confirm: t("forms.casa_admin.mark_inactive_warning")} %>
           <% else %>
             <div class="alert alert-danger">
-              Admin was deactivated on: <%= casa_admin.updated_at.strftime(DateFormat::MM_DD_YYYY) %>
+              Admin was deactivated on: <%= I18n.l(casa_admin.updated_at, format: :mm_dd_yyyy, default: nil) %>
             </div>
             <% if policy(casa_admin).activate? %>
               <%= link_to "Activate Admin",

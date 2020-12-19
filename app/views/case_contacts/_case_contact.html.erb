@@ -1,6 +1,6 @@
 <tr>
-  <td data-sort="<%= contact.occurred_at.strftime(DateFormat::CONTACT_OCCURRED_AT) %>">
-    <%= contact.occurred_at.strftime(DateFormat::FULL) %>
+  <td data-sort="<%= I18n.l(contact.occurred_at, format: :contact_occurred_at, default: nil) %>">
+    <%= I18n.l(contact.occurred_at, format: :full, default: nil) %>
   </td>
   <td>
     <span class="mobile-label">Duration</span>

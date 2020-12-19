@@ -28,7 +28,7 @@
             <% recent_contact = casa_case.decorate.case_contacts_latest %>
             <%= "Most recent contact attempted:" %>
             <br>
-            <%= " - Date: #{recent_contact&.occurred_at&.strftime(DateFormat::FULL)}" %>
+            <%= " - Date: #{I18n.l(recent_contact&.occurred_at, format: :full, default: nil)}" %>
             <br>
             <%= " - Type: #{recent_contact&.decorate.contact_types}" %>
             <br>
