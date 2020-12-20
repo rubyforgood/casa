@@ -28,7 +28,7 @@
             </div>
           <% else %>
             <div class="alert alert-danger">
-              Admin was deactivated on: <%= I18n.l(@casa_admin.updated_at, format: :mm_dd_yyyy, default: nil) %>
+              Admin was deactivated on: <%= I18n.l(@casa_admin.updated_at, format: :standard, default: nil) %>
             </div>
             <% if @casa_admin.active == false %>
 

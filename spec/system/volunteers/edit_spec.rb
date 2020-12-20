@@ -103,7 +103,7 @@ RSpec.describe "volunteers/edit", type: :system do
       sign_in admin
 
       visit edit_volunteer_path(volunteer)
-      expect(page).to have_text "Case was deactivated on: #{I18n.l(deactivated_casa_case.updated_at, format: :mm_dd_yyyy, default: nil)}"
+      expect(page).to have_text "Case was deactivated on: #{I18n.l(deactivated_casa_case.updated_at, format: :standard, default: nil)}"
     end
   end
 

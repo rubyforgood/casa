@@ -52,6 +52,6 @@ class CasaCaseDecorator < Draper::Decorator
   end
 
   def formatted_updated_at
-    l object.updated_at, format: :mm_dd_yyyy, default: nil
+    l object.updated_at, format: :standard, default: nil
   end
 end
