@@ -1,8 +1,8 @@
 class SupervisorVolunteersController < ApplicationController
-  before_action :authenticate_user!
-  before_action :must_be_admin_or_supervisor, only: :unassign
+  after_action :verify_authorized
 
   def create
+    authorize :supervisor_volunteer
     supervisor_volunteer = supervisor_volunteer_parent.supervisor_volunteers.find_or_create_by!(supervisor_volunteer_params)
     supervisor_volunteer.is_active = true unless supervisor_volunteer&.is_active?
     supervisor_volunteer.save
@@ -11,6 +11,7 @@ class SupervisorVolunteersController < ApplicationController
   end
 
   def unassign
+    authorize :supervisor_volunteer
     volunteer = Volunteer.find(params[:id])
     supervisor_volunteer = volunteer.supervisor_volunteer
     supervisor = volunteer.supervisor
@@ -39,7 +40,7 @@ class SupervisorVolunteersController < ApplicationController
     if params[:supervisor_id]
       Supervisor.find(params[:supervisor_id])
     else
-      Volunteer.find(params[:volunteer_id])
+      Supervisor.find(supervisor_volunteer_params[:supervisor_id])
     end
   end
 end

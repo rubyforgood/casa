@@ -22,6 +22,7 @@ RSpec.describe "volunteers/edit", type: :system do
 
     context "with invalid data" do
       it "shows error message for duplicate email" do
+        volunteer.supervisor = create(:supervisor)
         fill_in "volunteer_email", with: admin.email
         fill_in "volunteer_display_name", with: "Mickey Mouse"
         click_on "Submit"
@@ -29,6 +30,7 @@ RSpec.describe "volunteers/edit", type: :system do
       end
 
       it "shows error message for empty fields" do
+        volunteer.supervisor = create(:supervisor)
         fill_in "volunteer_email", with: ""
         fill_in "volunteer_display_name", with: ""
         click_on "Submit"
@@ -69,6 +71,32 @@ RSpec.describe "volunteers/edit", type: :system do
     expect(inactive_volunteer.reload).to be_active
   end
 
+  it "allows the admin to unassign a volunteer from a supervisor" do
+    supervisor = create(:supervisor, display_name: "Haka Haka")
+    volunteer = create(:volunteer, display_name: "Bolu Bolu", supervisor: supervisor)
+
+    sign_in admin
+
+    visit edit_volunteer_path(volunteer)
+
+    expect(page).to have_content("Current Supervisor: Haka Haka")
+
+    click_on "Unassign from Supervisor"
+
+    expect(page).to have_content("Bolu Bolu was unassigned from Haka Haka")
+  end
+
+  it "shows the admin the option to assign an unassigned volunteer to a different supervisor" do
+    volunteer = create(:volunteer)
+
+    sign_in admin
+
+    visit edit_volunteer_path(volunteer)
+
+    expect(page).to have_content("Select a Supervisor")
+    expect(page).to have_content("Assign a Supervisor")
+  end
+
   context "with a deactivated case" do
     it "displays inactive message" do
       deactivated_casa_case = create(:casa_case, active: false, casa_org: volunteer.casa_org, volunteers: [volunteer])
@@ -99,6 +127,41 @@ RSpec.describe "volunteers/edit", type: :system do
       click_on "Assign Case"
       expect(page).to have_text("Volunteer assigned to case")
       expect(page).to have_text(casa_case_2.case_number)
+    end
+  end
+
+  context "with previously assigned cases" do
+    let(:casa_org) { create(:casa_org) }
+    let!(:supervisor) { create(:casa_admin, casa_org: casa_org) }
+    let!(:volunteer) { create(:volunteer, casa_org: casa_org, display_name: "AAA") }
+    let!(:casa_case_1) { create(:casa_case, casa_org: casa_org, case_number: "CINA1") }
+    let!(:casa_case_2) { create(:casa_case, casa_org: casa_org, case_number: "CINA2") }
+
+    it "shows the unassign button for assigned cases and not for unassigned cases" do
+      sign_in supervisor
+
+      assignment1 = volunteer.case_assignments.create(casa_case: casa_case_1, is_active: true)
+      assignment2 = volunteer.case_assignments.create(casa_case: casa_case_2, is_active: false)
+
+      visit edit_volunteer_path(volunteer)
+
+      within("#case_assignment_#{assignment1.id}") do
+        expect(page).to have_text(casa_case_1.case_number)
+        expect(page).to have_button("Unassign Case")
+      end
+
+      within("#case_assignment_#{assignment2.id}") do
+        expect(page).to have_text(casa_case_2.case_number)
+        expect(page).not_to have_button("Unassign Case")
+      end
+
+      select casa_case_2.case_number, from: "Select a Case"
+      click_on "Assign Case"
+
+      within("#case_assignment_#{assignment2.id}") do
+        expect(page).to have_text(casa_case_2.case_number)
+        expect(page).to have_button("Unassign Case")
+      end
     end
   end
 

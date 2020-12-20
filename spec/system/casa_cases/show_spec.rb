@@ -37,4 +37,12 @@ RSpec.describe "casa_cases/show", type: :system do
       expect(page).to have_link(href: "/supervisors/#{user.id}/edit")
     end
   end
+
+  context "when volunteer" do
+    let(:user) { volunteer }
+
+    it "sees link to emancipation" do
+      expect(page).to have_content(casa_case.case_number)
+    end
+  end
 end

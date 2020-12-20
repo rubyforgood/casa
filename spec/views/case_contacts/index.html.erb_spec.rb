@@ -19,9 +19,4 @@ RSpec.describe "case_contacts/index" do
   it "Has a New Case Contact button" do
     expect(rendered).to have_link("New Case Contact", href: new_case_contact_path)
   end
-
-  it "Displays case contact table titles" do
-    expect(rendered).to have_selector("th", text: "Contact Made")
-    expect(rendered).to have_selector("th", text: "Miles Driven")
-  end
 end

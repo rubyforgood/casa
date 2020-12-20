@@ -10,23 +10,17 @@
 
     <hr>
 
-    <%= form_with do |form| %>
+    <%= form_with url: "#", local: false do |form| %>
       <div class="field form-group">
         <%= label_tag :case_number, "Case Number:" %>
         <% select_options = @assigned_cases.map { |casa_case| casa_case.decorate.court_report_select_option } %>
         <%= select_tag :case_number,
-                       options_for_select(
-                           select_options,
-                           {disabled: @non_transition_aged_youth_cases}
-                       ),
+                       options_for_select(select_options),
                        prompt: "Select a case to generate report",
                        include_blank: false,
                        id: "case-selection",
                        class: "custom-select" %>
 
-        <p class="small">
-          * Reporting for non transition aged youth cases is coming soon!
-        </p>
       </div>
       <div class="form-group">
         <%= button_tag "Generate Report", type: :submit,

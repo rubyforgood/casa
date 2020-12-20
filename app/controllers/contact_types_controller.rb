@@ -1,13 +1,15 @@
 class ContactTypesController < ApplicationController
-  before_action :authenticate_user!, :must_be_admin
   before_action :set_group_options, only: [:new, :edit, :update]
   before_action :set_contact_type, except: [:new, :create]
+  after_action :verify_authorized
 
   def new
+    authorize ContactType
     @contact_type = ContactType.new
   end
 
   def create
+    authorize ContactType
     @contact_type = ContactType.new(contact_type_params)
 
     respond_to do |format|
@@ -20,9 +22,11 @@ class ContactTypesController < ApplicationController
   end
 
   def edit
+    authorize @contact_type
   end
 
   def update
+    authorize @contact_type
     if @contact_type.update(contact_type_params)
       redirect_to edit_casa_org_path(current_organization), notice: "Contact Type was successfully updated."
     else

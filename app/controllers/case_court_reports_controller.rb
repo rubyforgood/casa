@@ -1,18 +1,19 @@
 # frozen_string_literal: true
 
 class CaseCourtReportsController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_casa_case, only: %i[show]
+  after_action :verify_authorized
 
   # GET /case_court_reports
   def index
+    authorize CaseCourtReport
     @assigned_cases = CasaCase.actively_assigned_to(current_user)
       .select(:id, :case_number, :transition_aged_youth)
-    @non_transition_aged_youth_cases = @assigned_cases&.reject(&:transition_aged_youth)&.map(&:case_number)
   end
 
   # GET /case_court_reports/:id
   def show
+    authorize CaseCourtReport
     unless @casa_case
       flash[:alert] = "Report #{params[:id]} is not found."
       redirect_to(case_court_reports_path) and return # rubocop:disable Style/AndOr
@@ -28,6 +29,7 @@ class CaseCourtReportsController < ApplicationController
 
   # POST /case_court_reports
   def generate
+    authorize CaseCourtReport
     casa_case = CasaCase.find_by(case_params)
 
     respond_to do |format|
@@ -75,12 +77,15 @@ class CaseCourtReportsController < ApplicationController
     "app/documents/templates/report_template_#{type}.docx"
   end
 
+  # Use Tempfile Utility Class to generate a temporary file from the Word template into memory
   def send_report(data)
     Tempfile.create do |t|
       t.binmode
       t.write(data)
       t.rewind
       t.close
+
+      # `rb` = read-binary mode
       send_data File.open(t.path, "rb").read, type: :docx, disposition: "attachment", status: :ok
     end
   end

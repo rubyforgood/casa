@@ -77,7 +77,7 @@ RSpec.describe "layout/sidebar", type: :view do
     end
 
     context "when the volunteer does not have a transitioning case" do
-      it "does not renders emancipation checklist(s)" do
+      it "does not render emancipation checklist(s)" do
         sign_in user
 
         # 0 Cases
@@ -87,6 +87,21 @@ RSpec.describe "layout/sidebar", type: :view do
         # 1 Non transitioning case
         casa_case = create(:casa_case, casa_org: organization, transition_aged_youth: false)
         create(:case_assignment, volunteer: user, casa_case: casa_case)
+
+        render partial: "layouts/sidebar"
+        expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
+      end
+    end
+
+    context "when the user has only inactive or unassigned transiting cases" do
+      it "does not render emancipation checklist(s)" do
+        sign_in user
+
+        inactive_case = create(:casa_case, casa_org: organization, transition_aged_youth: true, active: false)
+        create(:case_assignment, volunteer: user, casa_case: inactive_case)
+
+        unassigned_case = create(:casa_case, casa_org: organization, transition_aged_youth: true)
+        create(:case_assignment, volunteer: user, casa_case: unassigned_case, is_active: false)
 
         render partial: "layouts/sidebar"
         expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")

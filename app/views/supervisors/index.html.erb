@@ -24,16 +24,25 @@
       <% @supervisors.each do |supervisor| %>
         <tr>
           <td id="name-<%= supervisor.id %>">
+            <span class="mobile-label">Supervisor Name</span>
             <%= link_to(supervisor.display_name, edit_supervisor_path(supervisor)) %>
           </td>
-          <td id="volunteer-assignments-<%= supervisor.id %>"> <%= supervisor.volunteers.size %></td>
+          <td id="volunteer-assignments-<%= supervisor.id %>">
+            <span class="mobile-label">Volunteer Assignments</span>
+            <%= supervisor.volunteers.size %>
+          </td>
           <td id="serving-transition-aged-youth-<%= supervisor.id %>">
+            <span class="mobile-label">Serving Transition Aged Youth</span>
             <%= supervisor.volunteers_serving_transition_aged_youth %>
           </td>
           <td id="no-contact-<%= supervisor.id %>">
+            <span class="mobile-label">No Contact (14 days)</span>
             <%= supervisor.no_contact_for_two_weeks %>
           </td>
-          <td><%= link_to 'Edit', edit_supervisor_path(supervisor) %></td>
+          <td>
+            <span class="mobile-label">Actions</span>
+            <%= link_to 'Edit', edit_supervisor_path(supervisor) %>
+          </td>
         </tr>
       <% end %>
       </tbody>

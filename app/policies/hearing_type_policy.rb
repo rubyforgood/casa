@@ -1,0 +1,2 @@
+class HearingTypePolicy < ApplicationPolicy
+end

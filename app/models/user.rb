@@ -44,15 +44,6 @@ class User < ApplicationRecord
     is_a?(Volunteer)
   end
 
-  def policy_class
-    case type
-    when Volunteer
-      VolunteerPolicy
-    else
-      UserPolicy
-    end
-  end
-
   def actively_assigned_and_active_cases
     casa_cases.active.merge(CaseAssignment.is_active)
   end
@@ -131,7 +122,7 @@ class User < ApplicationRecord
   end
 
   def serving_transition_aged_youth?
-    casa_cases.where(transition_aged_youth: true).any? # TODO filter for active?
+    actively_assigned_and_active_cases.where(transition_aged_youth: true).any?
   end
 
   def admin_self_deactivated?

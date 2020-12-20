@@ -132,6 +132,8 @@ RSpec.describe "/volunteers", type: :request do
       let!(:other_volunteer) { create(:volunteer) }
 
       it "does not update the volunteer" do
+        volunteer.supervisor = create(:supervisor)
+
         patch volunteer_path(volunteer), params: {
           volunteer: {email: other_volunteer.email, display_name: "New Name"}
         }

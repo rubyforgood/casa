@@ -115,20 +115,24 @@ RSpec.describe "VolunteerDatatable" do
 
     describe "supervisor_name" do
       let(:order_by) { "supervisor_name" }
-      let(:sorted_models) { assigned_volunteers.order(:id).sort_by { |v| v.supervisor.display_name } }
+      let(:sorted_models) { assigned_volunteers.sort_by { |v| v.supervisor.display_name } }
 
       context "when ascending" do
         it "is successful" do
-          check_asc_order.call
+          sorted_models.each_with_index do |model, idx|
+            expect(CGI.unescapeHTML(values[idx][:supervisor][:name])).to eq model.supervisor.display_name
+          end
         end
       end
 
       context "when descending" do
         let(:order_direction) { "desc" }
-        let(:sorted_models) { assigned_volunteers.order(id: :desc).sort_by { |v| v.supervisor.display_name } }
+        let(:sorted_models) { assigned_volunteers.sort_by { |v| v.supervisor.display_name } }
 
         it "is successful" do
-          check_desc_order.call
+          sorted_models.reverse.each_with_index do |model, idx|
+            expect(CGI.unescapeHTML(values[idx][:supervisor][:name])).to eq model.supervisor.display_name
+          end
         end
       end
     end
@@ -164,20 +168,24 @@ RSpec.describe "VolunteerDatatable" do
           volunteer.casa_cases.exists?(transition_aged_youth: true) ? 1 : 0
         }
       end
-      let(:sorted_models) { assigned_volunteers.order(:id).sort_by(&transition_aged_youth_bool_to_int) }
+      let(:sorted_models) { assigned_volunteers.sort_by(&transition_aged_youth_bool_to_int) }
 
       context "when ascending" do
         it "is successful" do
-          check_asc_order.call
+          sorted_models.each_with_index do |model, idx|
+            expect(values[idx][:has_transition_aged_youth_cases]).to eq model.casa_cases.exists?(transition_aged_youth: true).to_s
+          end
         end
       end
 
       context "when descending" do
         let(:order_direction) { "desc" }
-        let(:sorted_models) { assigned_volunteers.order(id: :desc).sort_by(&transition_aged_youth_bool_to_int) }
+        let(:sorted_models) { assigned_volunteers.sort_by(&transition_aged_youth_bool_to_int) }
 
         it "is successful" do
-          check_desc_order.call
+          sorted_models.reverse.each_with_index do |model, idx|
+            expect(values[idx][:has_transition_aged_youth_cases]).to eq model.casa_cases.exists?(transition_aged_youth: true).to_s
+          end
         end
       end
     end
@@ -232,7 +240,7 @@ RSpec.describe "VolunteerDatatable" do
 
       context "when ascending" do
         it "is successful" do
-          check_asc_order.call
+          expect(values.map { |h| h[:contacts_made_in_past_days] }).to eq ["2", "3", "", "", "", ""]
         end
       end
 
@@ -245,7 +253,7 @@ RSpec.describe "VolunteerDatatable" do
         end
 
         it "is successful" do
-          check_desc_order.call
+          expect(values.map { |h| h[:contacts_made_in_past_days] }).to eq ["3", "2", "", "", "", ""]
         end
 
         it "should move blanks to the end" do

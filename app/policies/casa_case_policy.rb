@@ -1,11 +1,4 @@
-class CasaCasePolicy
-  attr_reader :user, :record
-
-  def initialize(user, record)
-    @user = user
-    @record = record
-  end
-
+class CasaCasePolicy < ApplicationPolicy
   class Scope
     attr_reader :user, :scope
 
@@ -26,30 +19,22 @@ class CasaCasePolicy
     end
   end
 
-  def is_admin?
-    user.is_a?(CasaAdmin)
-  end
-
   def update_contact_types?
-    user.is_a?(Supervisor)
-  end
-
-  def admin_or_supervisor?
-    user.casa_admin? || user.supervisor?
+    is_supervisor?
   end
 
   def update_birth_month_year_youth?
-    user.casa_admin?
+    is_admin?
   end
 
   def update_emancipation_option?
     is_in_same_org? && (
-      is_supervisor_or_casa_admin? || is_volunteer_actively_assigned_to_case?
+      admin_or_supervisor? || is_volunteer_actively_assigned_to_case?
     )
   end
 
   def assign_volunteers?
-    is_in_same_org? && is_supervisor_or_casa_admin?
+    is_in_same_org? && admin_or_supervisor?
   end
 
   alias_method :update_case_number?, :is_admin?
@@ -78,19 +63,20 @@ class CasaCasePolicy
 
   def same_org_supervisor_admin_or_assigned?
     is_in_same_org? && (
-      is_supervisor_or_casa_admin? || is_volunteer_actively_assigned_to_case?
+      admin_or_supervisor? || is_volunteer_actively_assigned_to_case?
     )
   end
 
   def same_org_supervisor_admin?
-    is_in_same_org? && is_supervisor_or_casa_admin?
+    is_in_same_org? && admin_or_supervisor?
   end
 
   def index?
-    user.casa_admin? || user.supervisor? || user.volunteer?
+    admin_or_supervisor_or_volunteer?
   end
 
   alias_method :show?, :same_org_supervisor_admin_or_assigned?
+  alias_method :save_emancipation?, :index?
   alias_method :edit?, :same_org_supervisor_admin_or_assigned?
   alias_method :update?, :same_org_supervisor_admin_or_assigned?
   alias_method :new?, :same_org_supervisor_admin?
@@ -102,10 +88,6 @@ class CasaCasePolicy
   def is_in_same_org?
     # on new? checks, record is nil, on index policy_scope, record is :casa_case
     record.nil? || record == :casa_case || user.casa_org_id == record.casa_org_id
-  end
-
-  def is_supervisor_or_casa_admin?
-    user.is_a?(CasaAdmin) || user.is_a?(Supervisor)
   end
 
   def is_volunteer_actively_assigned_to_case?

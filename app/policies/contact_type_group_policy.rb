@@ -1,0 +1,2 @@
+class ContactTypeGroupPolicy < ApplicationPolicy
+end

@@ -31,7 +31,23 @@ RSpec.describe SupervisorPolicy do
     end
   end
 
-  permissions :index? do
+  permissions :update? do
+    it "allows casa_admins" do
+      is_expected.to permit(casa_admin)
+    end
+
+    it "allows supervisors to update themselves" do
+      is_expected.to permit(supervisor, supervisor)
+    end
+
+    it "does not allow supervisors to update other supervisors" do
+      another_supervisor = build_stubbed(:supervisor)
+
+      is_expected.not_to permit(supervisor, another_supervisor)
+    end
+  end
+
+  permissions :index?, :edit? do
     context "when user is an admin" do
       it "has access to the supervisors index action" do
         is_expected.to permit(casa_admin, Supervisor)
@@ -51,7 +67,7 @@ RSpec.describe SupervisorPolicy do
     end
   end
 
-  permissions :create? do
+  permissions :create?, :new? do
     it "allows admins to create supervisors" do
       is_expected.to permit(casa_admin, Supervisor)
     end

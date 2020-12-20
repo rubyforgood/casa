@@ -69,6 +69,32 @@ RSpec.describe CasaCase do
     end
   end
 
+  describe ".not_assigned" do
+    it "only returns cases NOT actively assigned to ANY volunteer" do
+      current_user = create(:volunteer)
+
+      never_assigned_case = create(:casa_case, casa_org: current_user.casa_org)
+
+      inactive_case = create(:casa_case, casa_org: current_user.casa_org)
+      create(:case_assignment, casa_case: inactive_case, volunteer: current_user, is_active: false)
+      active_cases = create_list(:casa_case, 2, casa_org: current_user.casa_org)
+      active_cases.each do |casa_case|
+        create(:case_assignment, casa_case: casa_case, volunteer: current_user, is_active: true)
+      end
+
+      other_user = create(:volunteer)
+      other_active_case = create(:casa_case, casa_org: other_user.casa_org)
+      other_inactive_case = create(:casa_case, casa_org: other_user.casa_org)
+      create(:case_assignment, casa_case: other_active_case, volunteer: other_user, is_active: true)
+      create(
+        :case_assignment,
+        casa_case: other_inactive_case, volunteer: other_user, is_active: false
+      )
+
+      expect(described_class.not_assigned(current_user.casa_org)).to contain_exactly(never_assigned_case, inactive_case, other_inactive_case)
+    end
+  end
+
   describe "#court_report_status=" do
     let(:casa_case) { build(:casa_case) }
     subject { casa_case.court_report_status = court_report_status }

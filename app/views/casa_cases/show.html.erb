@@ -67,27 +67,11 @@
       <% end %>
       <br>
 
-      <table class="table table-bordered table-striped table-sm" id="case_contacts">
-        <thead>
-        <tr>
-          <th>Date</th>
-          <th>Duration</th>
-          <th>Contact Made</th>
-          <th>Contact Medium</th>
-          <th>Type</th>
-          <th>Miles Driven</th>
-          <th>Want reimbursement?</th>
-          <th>Created by</th>
-          <th>Notes</th>
-          <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
+      <div>
         <% @casa_case.decorate.case_contacts_ordered_by_occurred_at.each do |contact| %>
           <%= render "case_contacts/case_contact", contact: contact %>
         <% end %>
-        </tbody>
-      </table>
+      </div>
     </div>
   </div>
 </div>

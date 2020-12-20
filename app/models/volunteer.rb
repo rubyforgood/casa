@@ -36,7 +36,7 @@ class Volunteer < User
 
   def self.email_court_report_reminder
     active.includes(:case_assignments).where.not(case_assignments: nil).find_each do |volunteer|
-      volunteer.case_assignments.each do |case_assignment|
+      volunteer.case_assignments.is_active.each do |case_assignment|
         current_case = case_assignment.casa_case
         report_due_date = current_case.court_report_due_date
         if (report_due_date == Date.current + COURT_REPORT_SUBMISSION_REMINDER) && current_case.court_report_not_submitted?
@@ -78,19 +78,18 @@ class Volunteer < User
   # false if volunteer has any case with no contact in the past 30 days
   def made_contact_with_all_cases_in_days?(num_days = CONTACT_MADE_IN_DAYS_NUM)
     # TODO this should do the same thing as no_contact_for_two_weeks but for a volunteer
-    total_cases_count = casa_cases.size
-    return true if total_cases_count.zero?
+    total_active_case_count = actively_assigned_and_active_cases.size
+    return true if total_active_case_count.zero?
     current_contact_cases_count = cases_where_contact_made_in_days(num_days).count
-    current_contact_cases_count == total_cases_count
+    current_contact_cases_count == total_active_case_count
   end
 
   private
 
   def cases_where_contact_made_in_days(num_days = CONTACT_MADE_IN_DAYS_NUM)
-    casa_cases
+    actively_assigned_and_active_cases
       .joins(:case_contacts)
       .where(case_contacts: {contact_made: true, occurred_at: num_days.days.ago.to_date..})
-    # TODO this should respect current vs past cases
   end
 end
 

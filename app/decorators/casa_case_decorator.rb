@@ -22,7 +22,7 @@ class CasaCaseDecorator < Draper::Decorator
   end
 
   def case_contacts_ordered_by_occurred_at
-    object.case_contacts.sort_by(&:occurred_at)
+    object.case_contacts.order(occurred_at: :desc)
   end
 
   def case_contacts_latest

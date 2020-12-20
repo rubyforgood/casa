@@ -1,13 +1,13 @@
 class VolunteersController < ApplicationController
-  # Uses authenticate_user to redirect if no user is signed in
-  # and must_be_admin_or_supervisor to check user's role is appropriate
-  before_action :authenticate_user!, :must_be_admin_or_supervisor
   before_action :set_volunteer, except: %i[index new create datatable]
+  after_action :verify_authorized
 
   def index
+    authorize Volunteer
   end
 
   def datatable
+    authorize Volunteer
     volunteers = policy_scope current_organization.volunteers
     datatable = VolunteerDatatable.new volunteers, params
 
@@ -15,11 +15,12 @@ class VolunteersController < ApplicationController
   end
 
   def new
-    authorize :volunteer
+    authorize Volunteer
     @volunteer = Volunteer.new
   end
 
   def create
+    authorize Volunteer
     @volunteer = Volunteer.new(create_volunteer_params)
 
     if @volunteer.save
@@ -31,9 +32,12 @@ class VolunteersController < ApplicationController
   end
 
   def edit
+    authorize @volunteer
+    @supervisors = policy_scope current_organization.supervisors
   end
 
   def update
+    authorize @volunteer
     if @volunteer.update(update_volunteer_params)
       redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was successfully updated."
     else
@@ -42,6 +46,7 @@ class VolunteersController < ApplicationController
   end
 
   def activate
+    authorize @volunteer
     if @volunteer.activate
       VolunteerMailer.account_setup(@volunteer).deliver
 
@@ -56,6 +61,7 @@ class VolunteersController < ApplicationController
   end
 
   def deactivate
+    authorize @volunteer
     if @volunteer.deactivate
       VolunteerMailer.deactivation(@volunteer).deliver
 
