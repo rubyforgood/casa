@@ -5,7 +5,10 @@ class ContactTypeGroup < ApplicationRecord
 
   validates :name, presence: true, uniqueness: {scope: :casa_org_id}
 
-  scope :for_organization, ->(org) { where(casa_org: org) }
+  scope :for_organization, ->(org) {
+    where(casa_org: org)
+      .order(:name)
+  }
 end
 
 # == Schema Information
