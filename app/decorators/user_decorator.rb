@@ -8,10 +8,10 @@ class UserDecorator < Draper::Decorator
   end
 
   def formatted_created_at
-    object.created_at.strftime(DateFormat::MM_DD_YYYY)
+    I18n.l(object.created_at, format: :standard, default: nil)
   end
 
   def formatted_updated_at
-    object.updated_at.strftime(DateFormat::MM_DD_YYYY)
+    I18n.l(object.updated_at, format: :standard, default: nil)
   end
 end

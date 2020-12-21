@@ -40,7 +40,7 @@ class CaseContactDecorator < Draper::Decorator
 
   def subheading
     [
-      object.occurred_at.strftime(DateFormat::FULL),
+      I18n.l(object.occurred_at, format: :full, default: nil),
       duration_minutes,
       contact_made,
       miles_traveled,

@@ -43,4 +43,12 @@ RSpec.describe CasaCaseDecorator do
       it { is_expected.to be_nil }
     end
   end
+
+  describe "#formatted_updated_at" do
+    subject { casa_case.decorate.formatted_updated_at }
+    let(:updated_at_time) { Time.parse("Wed Dec 9 12:51:20 2020") }
+    let(:casa_case) { build(:casa_case, updated_at: updated_at_time) }
+
+    it { is_expected.to eq "12-09-2020" }
+  end
 end

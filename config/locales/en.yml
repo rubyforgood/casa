@@ -52,3 +52,8 @@ en:
   time:
     formats:
       day_and_date: "%A, %v"
+      standard: "%m-%d-%Y"
+      contact_occurred_at: "%Y%m%d%H%M%s"
+      full: "%B %-d, %Y"
+      youth_date_of_birth: "%B %Y"
+      short_date: "%-m/%d"

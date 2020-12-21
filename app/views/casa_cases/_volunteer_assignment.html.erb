@@ -33,10 +33,10 @@
                     </span>
                 <% end %>
               </td>
-              <td data-test="assignment-start"><%= assignment.created_at.strftime(DateFormat::FULL) %></td>
+              <td data-test="assignment-start"><%= I18n.l(assignment.created_at, format: :full, default: nil) %></td>
               <td data-test="assignment-end">
                 <% unless assignment.is_active? %>
-                  <%= assignment.updated_at.strftime(DateFormat::FULL) %>
+                  <%= I18n.l(assignment.updated_at, format: :full, default: nil) %>
                 <% end %>
               </td>
               <td data-test="action">

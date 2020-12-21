@@ -24,7 +24,7 @@ class VolunteerDatatable < ApplicationDatatable
         made_contact_with_all_cases_in_days: volunteer.made_contact_with_all_cases_in_days?,
         most_recent_contact: {
           case_id: volunteer.most_recent_contact_case_id,
-          occurred_at: volunteer.most_recent_contact_occurred_at.try(:strftime, DateFormat::FULL)
+          occurred_at: I18n.l(volunteer.most_recent_contact_occurred_at, format: :full, default: nil)
         },
         supervisor: {id: volunteer.supervisor_id, name: volunteer.supervisor_name}
       }
