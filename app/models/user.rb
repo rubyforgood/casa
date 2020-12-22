@@ -69,7 +69,7 @@ class User < ApplicationRecord
 
   def volunteers_serving_transition_aged_youth
     volunteers.includes(case_assignments: :casa_case)
-      .where(case_assignments: {is_active: true}, 
+      .where(case_assignments: {is_active: true},
              casa_cases: {active: true, transition_aged_youth: true}).size
   end
 
