@@ -170,7 +170,7 @@ class CasaCase < ApplicationRecord
     args[date_field_name.to_sym] = validate_date(day, month, year)
     args
   rescue Date::Error
-    errors.messages[date_field_name.to_sym] << "was not a valid date."
+    errors.add(date_field_name.to_sym, "was not a valid date.")
     args
   end
 end
