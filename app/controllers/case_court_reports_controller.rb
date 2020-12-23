@@ -38,7 +38,7 @@ class CaseCourtReportsController < ApplicationController
           render json: {link: case_court_report_path(casa_case.case_number, format: "docx"), status: :ok}
         else
           flash[:alert] = "Report #{params[:case_number]} is not found."
-          error_messages = render_to_string partial: "layouts/flash_messages.html.erb", layout: false, locals: flash
+          error_messages = render_to_string partial: "layouts/flash_messages", formats: :html, layout: false, locals: flash
           flash.discard
 
           render json: {link: "", status: :not_found, error_messages: error_messages}, status: :not_found

@@ -1,3 +1,7 @@
+def upload_file(file)
+  Rack::Test::UploadedFile.new(file)
+end
+
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 

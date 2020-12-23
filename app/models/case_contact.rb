@@ -82,11 +82,11 @@ class CaseContact < ApplicationRecord
   def reimbursement_only_when_miles_driven
     return if miles_driven&.positive? || !want_driving_reimbursement
 
-    errors[:base] << "Must enter miles driven to receive driving reimbursement."
+    errors.add(:base, "Must enter miles driven to receive driving reimbursement.")
   end
 
   def contact_made_chosen
-    errors[:base] << "Must enter whether the contact was made." if contact_made.nil?
+    errors.add(:base, "Must enter whether the contact was made.") if contact_made.nil?
     !contact_made.nil?
   end
 
@@ -98,7 +98,7 @@ class CaseContact < ApplicationRecord
   def check_if_allow_edit
     return if created_in_current_quarter?
 
-    errors[:base] << "cannot edit case contacts created before the current quarter"
+    errors.add(:base, message: "cannot edit case contacts created before the current quarter")
   end
 
   def supervisor_id

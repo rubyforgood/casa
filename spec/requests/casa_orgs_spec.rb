@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "CasaOrgs", type: :request do
   let(:casa_org) { create(:casa_org) }
   let(:valid_attributes) { {name: "name", display_name: "display_name", address: "address"} }
-  let(:logo) { fixture_file_upload("#{Rails.root}/spec/fixtures/company_logo.png", "image/png") }
+  let(:logo) { upload_file("#{Rails.root}/spec/fixtures/company_logo.png") }
   let(:invalid_attributes) { {name: nil} }
   let(:casa_case) { create(:casa_case, casa_org: casa_org) }
 

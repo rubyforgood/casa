@@ -30,7 +30,7 @@ RSpec.describe "/imports", type: :request do
 
       post imports_url, params: {
         import_type: "volunteer",
-        file: fixture_file_upload(supervisor_file)
+        file: upload_file(supervisor_file)
       }
 
       expect(request.session[:import_error]).to include("Expected", VolunteerImporter::IMPORT_HEADER.join(","))
@@ -42,7 +42,7 @@ RSpec.describe "/imports", type: :request do
 
       post imports_url, params: {
         import_type: "supervisor",
-        file: fixture_file_upload(volunteer_file)
+        file: upload_file(volunteer_file)
       }
 
       expect(request.session[:import_error]).to include("Expected", SupervisorImporter::IMPORT_HEADER.join(","))
@@ -54,7 +54,7 @@ RSpec.describe "/imports", type: :request do
 
       post imports_url, params: {
         import_type: "casa_case",
-        file: fixture_file_upload(supervisor_file)
+        file: upload_file(supervisor_file)
       }
 
       expect(request.session[:import_error]).to include("Expected", CaseImporter::IMPORT_HEADER.join(","))
@@ -70,7 +70,7 @@ RSpec.describe "/imports", type: :request do
         post imports_url,
           params: {
             import_type: "volunteer",
-            file: fixture_file_upload(volunteer_file)
+            file: upload_file(volunteer_file)
           }
       }.to change(Volunteer, :count).by(3)
 
@@ -89,7 +89,7 @@ RSpec.describe "/imports", type: :request do
         post imports_url,
           params: {
             import_type: "supervisor",
-            file: fixture_file_upload(supervisor_file)
+            file: upload_file(supervisor_file)
           }
       }.to change(Supervisor, :count).by(3)
 
@@ -112,7 +112,7 @@ RSpec.describe "/imports", type: :request do
         post imports_url,
           params: {
             import_type: "supervisor",
-            file: fixture_file_upload(supervisor_volunteers_file)
+            file: upload_file(supervisor_volunteers_file)
           }
       }.to change(Supervisor, :count).by(2)
 
@@ -131,7 +131,7 @@ RSpec.describe "/imports", type: :request do
         post imports_url,
           params: {
             import_type: "casa_case",
-            file: fixture_file_upload(case_file)
+            file: upload_file(case_file)
           }
       }.to change(CasaCase, :count).by(3)
 
@@ -147,7 +147,7 @@ RSpec.describe "/imports", type: :request do
         post imports_url,
           params: {
             import_type: "casa_case",
-            file: fixture_file_upload(existing_case_file)
+            file: upload_file(existing_case_file)
           }
       }.to change(CasaCase, :count).by(0)
 
@@ -166,7 +166,7 @@ RSpec.describe "/imports", type: :request do
         post imports_url,
           params: {
             import_type: "casa_case",
-            file: fixture_file_upload(existing_case_file)
+            file: upload_file(existing_case_file)
           }
       }.to change(CasaCase, :count).by(0)
 
