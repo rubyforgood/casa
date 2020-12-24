@@ -1,0 +1,36 @@
+#!/bin/sh
+# Updates your fork by rebasing your latest commits on top of changes from official casa
+# Usage:
+#   update
+#     updates main and the current branch
+#   update <branch name>
+#     updates main and the specified branch
+
+echo "INFO: Attempting to update local repo"
+
+# Please set this to the name of your remote the points to official casa before using
+UPSTREAM_REMOTE="actual_casa"
+
+if [ $# -lt 1 ]; then 
+  branch_to_update="$(git branch --show-current)"
+else
+  branch_to_update=$1
+fi
+
+if test -z "$(git branch --list ${branch_to_update})"; then
+  echo "ERROR: Could not find branch $branch_to_update"
+  exit 1
+fi
+
+echo "INFO: Fetching updates from upsteam"
+git fetch $UPSTREAM_REMOTE
+
+echo "INFO: Updating main"
+git checkout main
+git merge --ff-only $UPSTREAM_REMOTE/main
+
+if test $branch_to_update != "main"; then
+  echo "INFO: Updating $branch_to_update"
+  git checkout $1
+  git rebase -r $UPSTREAM_REMOTE/main
+fi

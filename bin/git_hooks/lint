@@ -1,0 +1,77 @@
+#!/bin/sh
+# Lints files on the current branch
+# Usage:
+#   lint <options>
+#     --staged
+#       lints the files staged for commit
+#     --unpushed
+#       lints files in commits not yet pushed to origin
+#     --all (default)
+#       lints all the files in the directory 
+
+echo "INFO: Attempting to lint"
+
+repo_root=$(git rev-parse --show-toplevel)
+current_branch="$(git branch --show-current)"
+
+if [ $# -lt 1 ]; then 
+  diff_policy="--all"
+else
+  diff_policy=$1
+fi
+
+case $diff_policy in
+  --all)
+    changed_file_list="a.rb\nb.erb"
+    ;;
+
+  --staged)
+    changed_file_list=$(git diff --name-only --cached)
+    ;;
+
+  --unpushed)
+    changed_file_list=$(git diff --name-only origin/${current_branch}..HEAD)
+    ;;
+
+  *)
+    echo "ERROR: unknown option $diff_policy"
+    exit 1
+    ;;
+esac
+
+rb_changed_count=$(echo "$changed_file_list" | grep -c ".rb$")
+erb_changed_count=$(echo "$changed_file_list" | grep -c ".erb$")
+
+if test $rb_changed_count -gt 0; then
+  echo "INFO: Found modified .rb files. Linting via standardrb"
+
+  if ! [ -x "$(command -v standardrb)" ]; then
+      echo "WARNING: Command standardrb could not be found. Attempting bundle exec standardrb instead"
+      if ! [ -x "$(command -v bundle)" ]; then
+        echo "WARNING: Command bundle could not be found"
+        exit 1
+      else
+        bundle exec standardrb --fix
+      fi
+  else 
+    standardrb --fix
+  fi
+fi
+
+if test $erb_changed_count -gt 0; then
+  echo "INFO: Found modified .erb files. Linting via reblint"
+
+  cd $repo_root/app
+
+  if ! [ -x "$(command -v erblint)" ]; then
+      echo "WARNING: Command erblint could not be found. Attempting bundle exec standardrb instead"
+      if ! [ -x "$(command -v bundle)" ]; then
+        echo "WARNING: Command bundle could not be found"
+        exit 1
+      else
+        bundle exec erblint --lint-all --autocorrect
+      fi
+  else 
+    erblint --lint-all --autocorrect
+  fi
+fi
