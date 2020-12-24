@@ -3,22 +3,15 @@
 # Usage:
 #   update
 #     updates main and the current branch
-#   update <branch name>
-#     updates main and the specified branch
 
 echo "INFO: Attempting to update local repo"
 
 # Please set this to the name of your remote the points to official casa before using
 UPSTREAM_REMOTE="actual_casa"
+BRANCH_TO_UPDATE="$(git branch --show-current)"
 
-if [ $# -lt 1 ]; then 
-  branch_to_update="$(git branch --show-current)"
-else
-  branch_to_update=$1
-fi
-
-if test -z "$(git branch --list ${branch_to_update})"; then
-  echo "ERROR: Could not find branch $branch_to_update"
+if test -z "$(git branch --list ${BRANCH_TO_UPDATE})"; then
+  echo "ERROR: Could not find branch $BRANCH_TO_UPDATE"
   exit 1
 fi
 
@@ -29,8 +22,8 @@ echo "INFO: Updating main"
 git checkout main
 git merge --ff-only $UPSTREAM_REMOTE/main
 
-if test $branch_to_update != "main"; then
-  echo "INFO: Updating $branch_to_update"
+if test $BRANCH_TO_UPDATE != "main"; then
+  echo "INFO: Updating $BRANCH_TO_UPDATE"
   git checkout $1
   git rebase -r $UPSTREAM_REMOTE/main
 fi
