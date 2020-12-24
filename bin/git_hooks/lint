@@ -3,18 +3,18 @@
 # Usage:
 #   lint <options>
 #     --staged
-#       lints the files staged for commit
+#       lints if the files staged for commit contain lintable files
 #     --unpushed
-#       lints files in commits not yet pushed to origin
+#       lints files changed by commits not yet pushed to origin
 #     --all (default)
-#       lints all the files in the directory 
+#       lints all files in the repo
 
 echo "INFO: Attempting to lint"
 
-repo_root=$(git rev-parse --show-toplevel)
+repo_root="$(git rev-parse --show-toplevel)"
 current_branch="$(git branch --show-current)"
 
-if [ $# -lt 1 ]; then 
+if [ $# -lt 1 ]; then
   diff_policy="--all"
 else
   diff_policy=$1
@@ -53,7 +53,7 @@ if test $rb_changed_count -gt 0; then
       else
         bundle exec standardrb --fix
       fi
-  else 
+    else
     standardrb --fix
   fi
 fi
@@ -71,7 +71,7 @@ if test $erb_changed_count -gt 0; then
       else
         bundle exec erblint --lint-all --autocorrect
       fi
-  else 
+    else
     erblint --lint-all --autocorrect
   fi
 fi
