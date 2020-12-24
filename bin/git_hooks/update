@@ -24,6 +24,6 @@ git merge --ff-only $UPSTREAM_REMOTE/main
 
 if test $BRANCH_TO_UPDATE != "main"; then
   echo "INFO: Updating $BRANCH_TO_UPDATE"
-  git checkout $1
+  git checkout $BRANCH_TO_UPDATE
   git rebase -r $UPSTREAM_REMOTE/main
 fi
