@@ -104,7 +104,6 @@ $('document').ready(() => {
             <a href="${editVolunteerPath(row.id)}">
               ${row.display_name || row.email}
             </a>
-            }
           `
         }
       },

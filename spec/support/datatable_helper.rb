@@ -20,6 +20,7 @@ module DatatableHelper
     class_name = self.class.name.split("::")[2]
     class_name.constantize
   rescue NameError
+    # TODO warning log to bugsnag here ?
   end
 
   def escaped(value)
