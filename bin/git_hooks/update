@@ -1,13 +1,18 @@
 #!/bin/sh
-# Updates your fork by rebasing your latest commits on top of changes from official casa
+# Updates the `main` and current branch by rebasing your commits on top of changes from the official casa repo
 # Usage:
-#   update
-#     updates main and the current branch
+#   update <remote name>
+#     <remote name>
+#       The name of the remote pointing to the official casa repo
 
 echo "INFO: Attempting to update local repo"
 
-# Please set this to the name of your remote the points to official casa before using
-UPSTREAM_REMOTE="actual_casa"
+if [ $# -lt 1 ]; then
+  echo "ERROR: Missing require arg <remote name>"
+  exit 1
+fi
+
+UPSTREAM_REMOTE=$1
 BRANCH_TO_UPDATE="$(git branch --show-current)"
 
 if test -z "$(git branch --list ${BRANCH_TO_UPDATE})"; then
