@@ -42,8 +42,12 @@ esac
 rb_changed_count=$(echo "$changed_file_list" | grep -c ".rb$")
 erb_changed_count=$(echo "$changed_file_list" | grep -c ".erb$")
 
+lint_time=$(date +%s)
+
 if test $rb_changed_count -gt 0; then
   echo "INFO: Found modified .rb files. Linting via standardrb"
+
+  cd $repo_root/app
 
   if ! [ -x "$(command -v standardrb)" ]; then
       echo "WARNING: Command standardrb could not be found. Attempting bundle exec standardrb instead"
@@ -75,3 +79,13 @@ if test $erb_changed_count -gt 0; then
     erblint --lint-all --autocorrect
   fi
 fi
+
+cd $repo_root
+for file in $(git diff --name-only); do
+  last_modified_time=$(date -r $file +%s)
+  if [ $last_modified_time -ge $lint_time ] ; then
+    echo "INFO: Some files were linted. Please preserve the changes before continuing."
+    echo "  Run git diff to view linter changes."
+    exit 1
+  fi
+done
