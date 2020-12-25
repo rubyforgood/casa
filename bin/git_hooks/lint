@@ -47,7 +47,7 @@ lint_time=$(date +%s)
 if test $rb_changed_count -gt 0; then
   echo "INFO: Found modified .rb files. Linting via standardrb"
 
-  cd $repo_root/app
+  cd $repo_root
 
   if ! [ -x "$(command -v standardrb)" ]; then
       echo "WARNING: Command standardrb could not be found. Attempting bundle exec standardrb instead"
