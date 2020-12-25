@@ -8,7 +8,7 @@
 echo "INFO: Attempting to update local repo"
 
 if [ $# -lt 1 ]; then
-  echo "ERROR: Missing require arg <remote name>"
+  echo "ERROR: Missing required arg <remote name>"
   exit 1
 fi
 

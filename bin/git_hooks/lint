@@ -45,7 +45,7 @@ erb_changed_count=$(echo "$changed_file_list" | grep -c ".erb$")
 lint_time=$(date +%s)
 
 if test $rb_changed_count -gt 0; then
-  echo "INFO: Found modified .rb files. Linting via standardrb"
+  echo "INFO: Linting via standardrb"
 
   cd $repo_root
 
@@ -63,7 +63,7 @@ if test $rb_changed_count -gt 0; then
 fi
 
 if test $erb_changed_count -gt 0; then
-  echo "INFO: Found modified .erb files. Linting via reblint"
+  echo "INFO: Linting via erblint"
 
   cd $repo_root/app
 
