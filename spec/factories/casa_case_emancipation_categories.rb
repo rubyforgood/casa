@@ -1,0 +1,6 @@
+FactoryBot.define do
+  factory :casa_case_emancipation_category do
+    casa_case { nil }
+    emancipation_category { nil }
+  end
+end

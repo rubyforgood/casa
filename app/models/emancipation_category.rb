@@ -1,4 +1,6 @@
 class EmancipationCategory < ApplicationRecord
+  has_many :casa_cases_emancipation_categories, dependent: :destroy
+  has_many :casa_cases, through: :casa_cases_emancipation_categories
   has_many :emancipation_options
   validates :name, presence: true
   validates :mutually_exclusive, inclusion: {in: [true, false]}
