@@ -5,6 +5,8 @@ RSpec.describe CasaCase do
 
   it { is_expected.to have_many(:case_assignments).dependent(:destroy) }
   it { is_expected.to belong_to(:casa_org) }
+  it { is_expected.to have_many(:casa_case_emancipation_categories).dependent(:destroy) }
+  it { is_expected.to have_many(:emancipation_categories).through(:casa_case_emancipation_categories) }
   it { is_expected.to have_many(:casa_cases_emancipation_options).dependent(:destroy) }
   it { is_expected.to have_many(:emancipation_options).through(:casa_cases_emancipation_options) }
   it { is_expected.to belong_to(:hearing_type).optional }
