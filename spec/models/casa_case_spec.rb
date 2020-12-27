@@ -181,20 +181,6 @@ RSpec.describe CasaCase do
     end
   end
 
-  context "#contains_emancipation_option?" do
-    let(:casa_case) { create(:casa_case) }
-    let(:emancipation_option) { create(:emancipation_option) }
-
-    it "returns true when passed the id of an emancipation option associated with the case" do
-      casa_case.emancipation_options << emancipation_option
-      expect(casa_case.contains_emancipation_option?(emancipation_option.id)).to eq(true)
-    end
-
-    it "returns false when passed the id of an emancipation option not associated with the case" do
-      expect(casa_case.contains_emancipation_option?(emancipation_option.id)).to eq(false)
-    end
-  end
-
   context "#add_emancipation_option" do
     let(:casa_case) { create(:casa_case) }
     let(:emancipation_category) { create(:emancipation_category, mutually_exclusive: true) }

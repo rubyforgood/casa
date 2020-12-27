@@ -103,10 +103,6 @@ class CasaCase < ApplicationRecord
     transition_aged_youth
   end
 
-  def contains_emancipation_option?(option_id)
-    emancipation_options.find_by(id: option_id).present?
-  end
-
   def add_emancipation_category(category_id)
     emancipation_categories << EmancipationCategory.find(category_id)
   end

@@ -17,7 +17,7 @@
           <select id="C<%= category.id %>" class="emancipation-select">
             <option value="" disabled selected>Select One</option>
             <% category.emancipation_options.each do |option| %>
-              <option value="<%= option.id %>" <%= emancipation_select_option_selected(@current_case, option.id) %>>
+              <option value="<%= option.id %>" <%= emancipation_select_option_selected(@current_case, option) %>>
                 <%= option.name %>
               </option>
             <% end %>
@@ -31,7 +31,7 @@
             id="O<%= option.id %>"
             class="emancipation-check-box"
             value="<%= option.id %>"
-            <%= emancipation_checkbox_option_checked(@current_case, option.id) %>>
+            <%= emancipation_checkbox_option_checked(@current_case, option) %>>
           <label for="O<%= option.id %>"><%= option.name %></label>
           <br>
         <% end %>
