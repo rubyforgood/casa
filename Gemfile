@@ -32,7 +32,7 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "pry"
   gem "pry-byebug"
-  gem "rspec-rails", "~> 4.0.1"
+  gem "rspec-rails", "~> 4.0.2"
   gem "shoulda-matchers"
   gem "standard", "~> 0.10.2" # linter https://github.com/testdouble/standard
   gem "cypress-on-rails", "~> 1.0"
