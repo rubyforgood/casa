@@ -79,28 +79,28 @@ function waitForAsyncOperation () {
 
 // Adds or deletes an option from the current casa case
 //  @param    {string}            optionAction
-//    'add'     to add an option to the case
-//    'delete'  to remove an option from the case
-//    'set'     to set the option for a mutually exclusive category
-//  @param    {integer | string}  optionId The id of the emancipation option to add or delete
+//    'add_option'     to add an option to the case
+//    'delete_option'  to remove an option from the case
+//    'set_option'     to set the option for a mutually exclusive category
+//  @param    {integer | string}  checkItemId The id of either an emancipation option or an emancipation category to perform an action on
 //  @returns  {array} a jQuery jqXHR object. See https://api.jquery.com/jQuery.ajax/#jqXHR
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {RangeError} if optionId is negative
-function changeOptions (optionAction, optionId) {
+function saveCheckState (action, checkItemId) {
   // Input check
-  if (typeof optionId === 'string') {
-    const optionIdAsNum = parseInt(optionId)
+  if (typeof checkItemId === 'string') {
+    const checkItemIdAsNum = parseInt(checkItemId)
 
-    if (!optionIdAsNum) {
-      throw new TypeError('Param optionId is not an integer')
-    } else if (optionIdAsNum < 0) {
-      throw new RangeError('Param optionId cannot be negative')
+    if (!checkItemIdAsNum) {
+      throw new TypeError('Param checkItemId is not an integer')
+    } else if (checkItemIdAsNum < 0) {
+      throw new RangeError('Param checkItemId cannot be negative')
     }
   } else {
-    if (!Number.isInteger(optionId)) {
-      throw new TypeError('Param optionId is not an integer')
-    } else if (optionId < 0) {
-      throw new RangeError('Param optionId cannot be negative')
+    if (!Number.isInteger(checkItemId)) {
+      throw new TypeError('Param checkItemId is not an integer')
+    } else if (checkItemId < 0) {
+      throw new RangeError('Param checkItemId cannot be negative')
     }
   }
 
@@ -108,8 +108,8 @@ function changeOptions (optionAction, optionId) {
 
   // Post request
   return $.post(emancipationPage.savePath, {
-    option_action: optionAction,
-    option_id: optionId
+    check_item_action: action,
+    check_item_id: checkItemId
   }).done(function (response, textStatus) {
     if (response.error) {
       resolveAsyncOperation(response.error)
@@ -139,9 +139,9 @@ $('document').ready(() => {
     const thisSelect = $(this)
 
     if (thisSelect.val()) {
-      changeOptions('set', thisSelect.val())
+      saveCheckState('set_option', thisSelect.val())
     } else {
-      changeOptions('delete', thisSelect.data().prev)
+      saveCheckState('delete_option', thisSelect.data().prev)
     }
 
     thisSelect.data('prev', thisSelect.val())
@@ -151,9 +151,9 @@ $('document').ready(() => {
     const thisCheckBox = $(this)
 
     if (thisCheckBox.prop('checked')) {
-      changeOptions('add', thisCheckBox.val())
+      saveCheckState('add_option', thisCheckBox.val())
     } else {
-      changeOptions('delete', thisCheckBox.val())
+      saveCheckState('delete_option', thisCheckBox.val())
     }
   })
 })
