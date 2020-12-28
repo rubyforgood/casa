@@ -1,0 +1,20 @@
+#!/bin/sh
+# Installs dependencies if any are missing
+# Usage:
+#   update-dependencies
+#     no arguments
+
+echo "INFO: Checking dependency status"
+
+if ! [ -x "$(command -v bundle)" ]; then
+  echo "ERROR: Command bundle could not be found"
+  exit 1
+fi
+
+if ! bundle check; then
+  echo "INFO: Updating dependencies"
+  bundle install
+else
+  echo "INFO: Dependencies up to date"
+fi
+

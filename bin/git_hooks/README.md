@@ -1,5 +1,9 @@
 This folder contains helper scripts for git hooks.
 
+### `update-dependences`  
+Installs dependencies if any are missing  
+Usage: `update-dependencies`  
+  
 ### `update-branch`
 Updates the `main` and current branch by rebasing your commits on top of changes from the official casa repo  
 This script assumes no commits were made directly to main  
