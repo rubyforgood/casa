@@ -39,7 +39,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
         it "renders an unauthorized error" do
           get casa_case_emancipation_path(casa_case)
           expect(response).to_not be_successful
-          expect(flash[:error]).to match(/you are not authorized/)
+          expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
         end
       end
     end
@@ -50,7 +50,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
         it "renders an unauthorized error" do
           get casa_case_emancipation_path(casa_case)
           expect(response).to_not be_successful
-          expect(flash[:error]).to match(/you are not authorized/)
+          expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
         end
       end
 
@@ -59,7 +59,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
         it "renders an unauthorized error" do
           get casa_case_emancipation_path(casa_case)
           expect(response).to_not be_successful
-          expect(flash[:error]).to match(/you are not authorized/)
+          expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
         end
       end
 
@@ -68,7 +68,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
         it "renders an unauthorized error" do
           get casa_case_emancipation_path(casa_case)
           expect(response).to_not be_successful
-          expect(flash[:error]).to match(/you are not authorized/)
+          expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
         end
       end
     end
