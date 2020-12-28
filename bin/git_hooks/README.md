@@ -1,9 +1,13 @@
 This folder contains helper scripts for git hooks.
 
-### `update`
+### `update-dependences`  
+Installs dependencies if any are missing  
+Usage: `update-dependencies`  
+  
+### `update-branch`
 Updates the `main` and current branch by rebasing your commits on top of changes from the official casa repo  
 This script assumes no commits were made directly to main  
-Usage: `update <remote name>`  
+Usage: `update-branch <remote name>`  
  + `<remote name>` is the name of the remote pointing to the official casa repo
 
 ### `lint`  
@@ -17,5 +21,5 @@ Usage: `lint <diff policy>`
 ## Example Hook(pre-push)
     #!/bin/sh
   
-    ./bin/git_hooks/update actual_casa
+    ./bin/git_hooks/update-branch actual_casa
     ./bin/git_hooks/lint --unpushed

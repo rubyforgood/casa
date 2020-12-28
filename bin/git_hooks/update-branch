@@ -1,7 +1,7 @@
 #!/bin/sh
 # Updates the `main` and current branch by rebasing your commits on top of changes from the official casa repo
 # Usage:
-#   update <remote name>
+#   update-branch <remote name>
 #     <remote name>
 #       The name of the remote pointing to the official casa repo
 
