@@ -128,13 +128,18 @@ $('document').ready(() => {
   emancipationPage.asyncSuccessIndicator = emancipationPage.notifications.find('#async-success-indicator')
   emancipationPage.asyncWaitIndicator = emancipationPage.notifications.find('#async-waiting-indicator')
 
+  $('.emancipation-category').click(function () {
+    categoryCheckbox = $(this).find('input[type="checkbox"]')
+    categoryCheckbox.prop('checked', !categoryCheckbox.is(':checked'))
+  })
+
   $('.emancipation-radio-button').change(function (data) {
     const thisRadioButton = $(this)
 
     saveCheckState('set_option', thisRadioButton.val())
   })
 
-  $('.emancipation-check-box').change(function () {
+  $('.emancipation-option-check-box').change(function () {
     const thisCheckBox = $(this)
 
     if (thisCheckBox.prop('checked')) {

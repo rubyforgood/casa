@@ -46,3 +46,26 @@
     }
   }
 }
+
+.emancipation-category {
+  border-bottom: 2px solid #bfe3ff;
+  padding: .5em;
+
+  label {
+    margin: 0
+  }
+}
+
+.emancipation-category:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+
+  input, label{
+    cursor: pointer
+  }
+}
+
+.category-options {
+  margin-left: 2em;
+  margin-bottom: 1em;
+}
