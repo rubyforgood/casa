@@ -19,7 +19,9 @@
             <%= emancipation_category_checkbox_checked?(@current_case, category) %>>
           <label for="C<%= category.id %>"><%= category.name %></label>
         </h6>
-        <div class="category-options">
+        <div
+          class="category-options"
+          style="<%= emancipation_category_collapse_hidden?(@current_case, category) %>">
           <% category.emancipation_options.each do |option| %>
             <% if category.mutually_exclusive %>
               <input

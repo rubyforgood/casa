@@ -26,6 +26,19 @@ RSpec.describe EmancipationsHelper, type: :helper do
     end
   end
 
+  describe "#emancipation_category_collapse_hidden" do
+    let(:emancipation_category) { create(:emancipation_category, name: "another unique name") }
+
+    it "returns nil when passed an associated casa case and emancipation category" do
+      create(:casa_case_emancipation_category, casa_case_id: casa_case.id, emancipation_category_id: emancipation_category.id)
+      expect(helper.emancipation_category_collapse_hidden?(casa_case, emancipation_category)).to eq(nil)
+    end
+
+    it "returns \"display: none;\" when passed an unassociated casa case and emancipation category" do
+      expect(helper.emancipation_category_collapse_hidden?(casa_case, emancipation_category)).to eq("display: none;")
+    end
+  end
+
   describe "#emancipation_option_checkbox_checked" do
     let(:emancipation_option) { create(:emancipation_option) }
 
