@@ -129,8 +129,12 @@ $('document').ready(() => {
   emancipationPage.asyncWaitIndicator = emancipationPage.notifications.find('#async-waiting-indicator')
 
   $('.emancipation-category').click(function () {
-    categoryCheckbox = $(this).find('input[type="checkbox"]')
-    categoryCheckbox.prop('checked', !categoryCheckbox.is(':checked'))
+    category = $(this)
+    categoryCheckbox = category.find('input[type="checkbox"]')
+    categoryCheckboxChecked = categoryCheckbox.is(':checked')
+
+    categoryCheckbox.prop('checked', !categoryCheckboxChecked)
+    categoryCheckboxChecked ? category.siblings('.category-options').hide() : category.siblings('.category-options').show()
   })
 
   $('.emancipation-radio-button').change(function (data) {

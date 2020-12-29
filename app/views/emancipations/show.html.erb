@@ -9,38 +9,40 @@
 <div class="card card-container">
   <div class="card-body">
     <% @emancipation_form_data.each do |category| %>
-      <h6 class="emancipation-category no-select">
-        <input
-          type="checkbox"
-          id="C<%= category.id %>"
-          class="emancipation-category-check-box"
-          value="<%= category.id %>"
-          <%= emancipation_category_checkbox_checked?(@current_case, category) %>>
-        <label for="C<%= category.id %>"><%= category.name %></label>
-      </h6>
-      <div class="category-options">
-        <% category.emancipation_options.each do |option| %>
-          <% if category.mutually_exclusive %>
-            <input
-              type="radio"
-              id="O<%= option.id %>"
-              class="emancipation-radio-button"
-              name="C<%= category.id %>"
-              value="<%= option.id %>"
-              <%= emancipation_option_checkbox_checked?(@current_case, option) %>>
-            <label for="O<%= option.id %>"><%= option.name %></label>
-            <br>
-          <% else %>
-            <input
-              type="checkbox"
-              id="O<%= option.id %>"
-              class="emancipation-option-check-box"
-              value="<%= option.id %>"
-              <%= emancipation_option_checkbox_checked?(@current_case, option) %>>
-            <label for="O<%= option.id %>"><%= option.name %></label>
-            <br>
+      <div>
+        <h6 class="emancipation-category no-select">
+          <input
+            type="checkbox"
+            id="C<%= category.id %>"
+            class="emancipation-category-check-box"
+            value="<%= category.id %>"
+            <%= emancipation_category_checkbox_checked?(@current_case, category) %>>
+          <label for="C<%= category.id %>"><%= category.name %></label>
+        </h6>
+        <div class="category-options">
+          <% category.emancipation_options.each do |option| %>
+            <% if category.mutually_exclusive %>
+              <input
+                type="radio"
+                id="O<%= option.id %>"
+                class="emancipation-radio-button"
+                name="C<%= category.id %>"
+                value="<%= option.id %>"
+                <%= emancipation_option_checkbox_checked?(@current_case, option) %>>
+              <label for="O<%= option.id %>"><%= option.name %></label>
+              <br>
+            <% else %>
+              <input
+                type="checkbox"
+                id="O<%= option.id %>"
+                class="emancipation-option-check-box"
+                value="<%= option.id %>"
+                <%= emancipation_option_checkbox_checked?(@current_case, option) %>>
+              <label for="O<%= option.id %>"><%= option.name %></label>
+              <br>
+            <% end %>
           <% end %>
-        <% end %>
+        </div>
       </div>
     <% end %>
   </div>
