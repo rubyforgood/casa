@@ -48,24 +48,24 @@ class EmancipationsController < ApplicationController
 
     begin
       case params[:check_item_action]
-      when "add_category"
-        current_case.add_emancipation_category(params[:check_item_id])
-        render json: "success".to_json
-      when "add_option"
-        current_case.add_emancipation_option(params[:check_item_id])
-        render json: "success".to_json
-      when "delete_category"
-        current_case.remove_emancipation_category(params[:check_item_id])
-        render json: "success".to_json
-      when "delete_option"
-        current_case.remove_emancipation_option(params[:check_item_id])
-        render json: "success".to_json
-      when "set_option"
-        current_case.emancipation_options.delete(EmancipationOption.category_options(EmancipationOption.find(params[:check_item_id]).emancipation_category_id))
-        current_case.add_emancipation_option(params[:check_item_id])
-        render json: "success".to_json
-      else
-        render json: {error: "Param check_item_action did not contain a supported action"}
+        when "add_category"
+          current_case.add_emancipation_category(params[:check_item_id])
+          render json: "success".to_json
+        when "add_option"
+          current_case.add_emancipation_option(params[:check_item_id])
+          render json: "success".to_json
+        when "delete_category"
+          current_case.remove_emancipation_category(params[:check_item_id])
+          render json: "success".to_json
+        when "delete_option"
+          current_case.remove_emancipation_option(params[:check_item_id])
+          render json: "success".to_json
+        when "set_option"
+          current_case.emancipation_options.delete(EmancipationOption.category_options(EmancipationOption.find(params[:check_item_id]).emancipation_category_id))
+          current_case.add_emancipation_option(params[:check_item_id])
+          render json: "success".to_json
+        else
+          render json: {error: "Param check_item_action did not contain a supported action"}
       end
     rescue ActiveRecord::RecordNotFound
       render json: {error: "Could not find option from id given by param check_item_id"}
