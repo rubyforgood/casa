@@ -184,10 +184,30 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
         expect(JSON.parse(response.body)["error"]).to match(/not marked as transitioning/)
       end
 
+      it "associates an emancipation category with a case when passed \"add\" and the category id" do
+        expect {
+          post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_category", check_item_id: mutually_exclusive_category.id}
+        }.to change { casa_case.emancipation_categories.count }.from(0).to(1)
+
+        expect(response.header["Content-Type"]).to match(/application\/json/)
+        expect(JSON.parse(response.body)).to eq "success"
+      end
+
       it "associates an emancipation option with a case when passed \"add\" and the option id" do
         expect {
           post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
         }.to change { casa_case.emancipation_options.count }.from(0).to(1)
+
+        expect(response.header["Content-Type"]).to match(/application\/json/)
+        expect(JSON.parse(response.body)).to eq "success"
+      end
+
+      it "removes an emancipation category from a case when passed \"delete\" and the category id" do
+        casa_case.emancipation_categories << mutually_exclusive_category
+
+        expect {
+          post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "delete_category", check_item_id: mutually_exclusive_category.id}
+        }.to change { casa_case.emancipation_categories.count }.from(1).to(0)
 
         expect(response.header["Content-Type"]).to match(/application\/json/)
         expect(JSON.parse(response.body)).to eq "success"

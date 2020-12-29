@@ -48,8 +48,14 @@ class EmancipationsController < ApplicationController
 
     begin
       case params[:check_item_action]
+      when "add_category"
+        current_case.add_emancipation_category(params[:check_item_id])
+        render json: "success".to_json
       when "add_option"
         current_case.add_emancipation_option(params[:check_item_id])
+        render json: "success".to_json
+      when "delete_category"
+        current_case.remove_emancipation_category(params[:check_item_id])
         render json: "success".to_json
       when "delete_option"
         current_case.remove_emancipation_option(params[:check_item_id])
