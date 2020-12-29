@@ -47,6 +47,11 @@
   }
 }
 
+.category-options {
+  margin-left: 2em;
+  margin-bottom: 1em;
+}
+
 .emancipation-category {
   border-bottom: 2px solid #bfe3ff;
   padding: .5em;
@@ -65,7 +70,12 @@
   }
 }
 
-.category-options {
-  margin-left: 2em;
-  margin-bottom: 1em;
+.no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
 }
