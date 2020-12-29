@@ -124,27 +124,14 @@ function saveCheckState (action, checkItemId) {
 }
 
 $('document').ready(() => {
-  emancipationPage.emancipationSelects = $('.emancipation-select')
   emancipationPage.notifications = $('#async-notifications')
   emancipationPage.asyncSuccessIndicator = emancipationPage.notifications.find('#async-success-indicator')
   emancipationPage.asyncWaitIndicator = emancipationPage.notifications.find('#async-waiting-indicator')
 
-  emancipationPage.emancipationSelects.each(function () {
-    const thisSelect = $(this)
+  $('.emancipation-radio-button').change(function (data) {
+    const thisRadioButton = $(this)
 
-    thisSelect.data('prev', thisSelect.val())
-  })
-
-  emancipationPage.emancipationSelects.change(function (data) {
-    const thisSelect = $(this)
-
-    if (thisSelect.val()) {
-      saveCheckState('set_option', thisSelect.val())
-    } else {
-      saveCheckState('delete_option', thisSelect.data().prev)
-    }
-
-    thisSelect.data('prev', thisSelect.val())
+    saveCheckState('set_option', thisRadioButton.val())
   })
 
   $('.emancipation-check-box').change(function () {

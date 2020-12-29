@@ -10,19 +10,17 @@
   <div class="card-body">
     <% @emancipation_form_data.each do |category| %>
       <% if category.mutually_exclusive %>
-        <h6>
-          <label for="C<%= category.id %>">
-            <strong> <%= category.name %> </strong>
-          </label>
-          <select id="C<%= category.id %>" class="emancipation-select">
-            <option value="" disabled selected>Select One</option>
-            <% category.emancipation_options.each do |option| %>
-              <option value="<%= option.id %>" <%= emancipation_option_select_selected?(@current_case, option) %>>
-                <%= option.name %>
-              </option>
-            <% end %>
-          </select>
-        <h6>
+        <h6><strong> <%= category.name %> </strong></h6>
+          <% category.emancipation_options.each do |option| %>
+            <input
+              type="radio"
+              id="O<%= option.id %>"
+              class="emancipation-radio-button"
+              name="C<%= category.id %>"
+              value="<%= option.id %>"
+              <%= emancipation_option_checkbox_checked?(@current_case, option) %>>
+            <label for="O<%= option.id %>"><%= option.name %></label><br>
+          <% end %>
       <% else %>
         <h6><strong> <%= category.name %> </strong></h6>
         <% category.emancipation_options.each do |option| %>
