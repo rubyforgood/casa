@@ -134,6 +134,7 @@ class DbPopulator
 
   def create_cases(casa_org, options, prefix)
     volunteers = Volunteer.where(active: true).to_a
+    ContactTypePopulator.populate
     options.case_count.times do
       new_casa_case = CasaCase.create!(
         casa_org_id: casa_org.id,

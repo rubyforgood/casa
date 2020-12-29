@@ -1,25 +1,9 @@
 module CaseContactPopulator
   def self.populate
-    code_to_name_mapping = {
-      attorney: "Attorney",
-      bio_parent: "Bio Parent",
-      court: "Court",
-      dss_worker: "DSS Worker",
-      foster_parent: "Foster Parent",
-      medical_professional: "Medical Professional",
-      other_family: "Other Family",
-      other_support_worker: "Other Support Worker",
-      school: "School",
-      social_worker: "Social Worker",
-      supervisor: "Supervisor",
-      therapist: "Therapist",
-      youth: "Youth"
-    }
-
     CaseContact.find_each do |case_contact|
       casa_org = case_contact.casa_case.casa_org
       case_contact.contact_types&.each do |contact_type|
-        ct_name = code_to_name_mapping[contact_type.to_sym]
+        ct_name = contact_type.name;
         cts_by_name = ContactType.where(name: ct_name)
         ct = cts_by_name.find { |ct| ct.contact_type_group.casa_org == casa_org }
         unless ct
