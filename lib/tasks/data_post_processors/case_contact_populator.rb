@@ -3,7 +3,7 @@ module CaseContactPopulator
     CaseContact.find_each do |case_contact|
       casa_org = case_contact.casa_case.casa_org
       case_contact.contact_types&.each do |contact_type|
-        ct_name = contact_type.name;
+        ct_name = contact_type.name
         cts_by_name = ContactType.where(name: ct_name)
         ct = cts_by_name.find { |ct| ct.contact_type_group.casa_org == casa_org }
         unless ct
