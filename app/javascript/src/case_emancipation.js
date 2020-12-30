@@ -134,7 +134,14 @@ $('document').ready(() => {
     categoryCheckboxChecked = categoryCheckbox.is(':checked')
 
     categoryCheckbox.prop('checked', !categoryCheckboxChecked)
-    categoryCheckboxChecked ? category.siblings('.category-options').hide() : category.siblings('.category-options').show()
+
+    if (categoryCheckboxChecked) {
+      category.siblings('.category-options').hide()
+      saveCheckState('delete_category', categoryCheckbox.val())
+    } else {
+      category.siblings('.category-options').show()
+      saveCheckState('add_category', categoryCheckbox.val())
+    }
   })
 
   $('.emancipation-radio-button').change(function (data) {
