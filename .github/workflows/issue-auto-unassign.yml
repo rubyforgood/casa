@@ -1,0 +1,17 @@
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '0 0 * * *'
+
+jobs:
+  unassign_issues:
+    runs-on: ubuntu-latest
+    name: Unassign issues
+    steps:
+      - name: Unassign issues
+        uses: bjthompson805/unassign-issues@v1
+        id: unassign-issues
+        with:
+          token: ${{secrets.GITHUB_TOKEN}}
+          unassign_inactive_in_hours: 168 # 7 days
+          warning_inactive_in_hours: 120 # 5 days
