@@ -131,15 +131,18 @@ $('document').ready(() => {
   $('.emancipation-category').click(function () {
     category = $(this)
     categoryCheckbox = category.find('input[type="checkbox"]')
+    categoryCollapseIcon = category.find('span')
     categoryCheckboxChecked = categoryCheckbox.is(':checked')
 
     categoryCheckbox.prop('checked', !categoryCheckboxChecked)
 
     if (categoryCheckboxChecked) {
       category.siblings('.category-options').hide()
+      categoryCollapseIcon.text('+')
       saveCheckState('delete_category', categoryCheckbox.val())
     } else {
       category.siblings('.category-options').show()
+      categoryCollapseIcon.text('−')
       saveCheckState('add_category', categoryCheckbox.val())
     }
   })
