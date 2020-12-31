@@ -110,15 +110,19 @@ function saveCheckState (action, checkItemId) {
   return $.post(emancipationPage.savePath, {
     check_item_action: action,
     check_item_id: checkItemId
-  }).done(function (response, textStatus) {
+  })
+  .then(function (response, textStatus, jqXHR) {
     if (response.error) {
-      resolveAsyncOperation(response.error)
+      return $.Deferred().reject(jqXHR, textStatus, response.error);
     } else if (response === 'success') {
       resolveAsyncOperation()
     } else {
       resolveAsyncOperation('Unknown response')
     }
-  }).fail(function (jqXHR, textStatus, error) {
+
+    return response
+  })
+  .fail(function (jqXHR, textStatus, error) {
     resolveAsyncOperation(error)
   })
 }
@@ -137,32 +141,37 @@ $('document').ready(() => {
     if (!category.data("disabled")) {
       category.data("disabled", true)
       category.addClass("disabled")
-      categoryCheckbox.prop('checked', !categoryCheckboxChecked)
       categoryCheckbox.prop("disabled", "disabled")
 
+      let saveAction,
+          collapseIcon,
+          doneCallback
+
       if (categoryCheckboxChecked) {
-        saveCheckState('delete_category', categoryCheckbox.val())
-        .done(function () {
+        collapseIcon = '+'
+        doneCallback = () => {
           category.siblings('.category-options').hide()
-          categoryCollapseIcon.text('+')
-        })
-        .always(function () {
-          category.data("disabled", false)
-          category.removeClass("disabled")
-          categoryCheckbox.prop("disabled", false)
-        })
+        }
+        saveAction = 'delete_category'
       } else {
-        saveCheckState('add_category', categoryCheckbox.val())
-        .done(function () {
+        collapseIcon = '−'
+        doneCallback = () => {
           category.siblings('.category-options').show()
-          categoryCollapseIcon.text('−')
-        })
-        .always(function () {
-          category.data("disabled", false)
-          category.removeClass("disabled")
-          categoryCheckbox.prop("disabled", false)
-        })
+        }
+        saveAction = 'add_category'
       }
+
+      saveCheckState(saveAction, categoryCheckbox.val())
+      .done(function () {
+        doneCallback()
+        categoryCheckbox.prop('checked', !categoryCheckboxChecked)
+        categoryCollapseIcon.text(collapseIcon)
+      })
+      .always(function () {
+        category.data("disabled", false)
+        category.removeClass("disabled")
+        categoryCheckbox.prop("disabled", false)
+      })
     }
   })
 
