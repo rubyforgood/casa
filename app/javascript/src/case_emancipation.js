@@ -134,16 +134,35 @@ $('document').ready(() => {
     categoryCollapseIcon = category.find('span')
     categoryCheckboxChecked = categoryCheckbox.is(':checked')
 
-    categoryCheckbox.prop('checked', !categoryCheckboxChecked)
+    if (!category.data("disabled")) {
+      category.data("disabled", true)
+      category.addClass("disabled")
+      categoryCheckbox.prop('checked', !categoryCheckboxChecked)
+      categoryCheckbox.prop("disabled", "disabled")
 
-    if (categoryCheckboxChecked) {
-      category.siblings('.category-options').hide()
-      categoryCollapseIcon.text('+')
-      saveCheckState('delete_category', categoryCheckbox.val())
-    } else {
-      category.siblings('.category-options').show()
-      categoryCollapseIcon.text('−')
-      saveCheckState('add_category', categoryCheckbox.val())
+      if (categoryCheckboxChecked) {
+        saveCheckState('delete_category', categoryCheckbox.val())
+        .done(function () {
+          category.siblings('.category-options').hide()
+          categoryCollapseIcon.text('+')
+        })
+        .always(function () {
+          category.data("disabled", false)
+          category.removeClass("disabled")
+          categoryCheckbox.prop("disabled", false)
+        })
+      } else {
+        saveCheckState('add_category', categoryCheckbox.val())
+        .done(function () {
+          category.siblings('.category-options').show()
+          categoryCollapseIcon.text('−')
+        })
+        .always(function () {
+          category.data("disabled", false)
+          category.removeClass("disabled")
+          categoryCheckbox.prop("disabled", false)
+        })
+      }
     }
   })
 

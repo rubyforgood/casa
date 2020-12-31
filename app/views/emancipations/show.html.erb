@@ -13,11 +13,10 @@
         <h6 class="emancipation-category no-select">
           <input
             type="checkbox"
-            id="C<%= category.id %>"
             class="emancipation-category-check-box"
             value="<%= category.id %>"
             <%= emancipation_category_checkbox_checked(@current_case, category) %>>
-          <label for="C<%= category.id %>"><%= category.name %></label>
+          <label><%= category.name %></label>
           <span><%= emancipation_category_collapse_icon(@current_case, category) %></span>
         </h6>
         <div

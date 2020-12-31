@@ -56,6 +56,10 @@
   border-bottom: 2px solid #bfe3ff;
   padding: .5em;
 
+  input[type="checkbox"] {
+    pointer-events: none;
+  }
+
   label {
     margin: 0
   }
@@ -72,9 +76,21 @@
   background-color: #f5f5f5;
   cursor: pointer;
 
-  input, label{
+  input[type="checkbox"], label{
     cursor: pointer
   }
+}
+
+.emancipation-category.disabled {
+  cursor: default;
+
+  span, label{
+    color: #757575;
+  }
+}
+
+.emancipation-category.disabled:hover{
+  background-color: unset;
 }
 
 .no-select {
