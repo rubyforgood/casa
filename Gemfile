@@ -8,6 +8,7 @@ gem "rails", "~> 6.1.0"
 
 gem "after_party" # post-deployment tasks
 gem "amazing_print" # easier console reading
+gem 'azure-storage'
 gem "devise" # for authentication
 gem "devise_invitable"
 gem "draper" # adds decorators for cleaner presentation logic
