@@ -164,7 +164,11 @@ $('document').ready(() => {
         }).each(function() {
           let checkbox = $(this)
 
+          checkbox.prop('checked', false)
           saveCheckState('delete_option', checkbox.val())
+          .fail(function() {
+            checkbox.prop('checked', false)
+          })
           notify('Unchecked ' + checkbox.next().text(), 'info')
         })
 
@@ -199,15 +203,25 @@ $('document').ready(() => {
     const thisRadioButton = $(this)
 
     saveCheckState('set_option', thisRadioButton.val())
+    .fail(function() {
+      thisRadioButton.prop('checked', false)
+    })
   })
 
   $('.emancipation-option-check-box').change(function () {
     const thisCheckBox = $(this)
 
-    if (thisCheckBox.prop('checked')) {
-      saveCheckState('add_option', thisCheckBox.val())
+    let originallyChecked = thisCheckBox.prop('checked')
+    let asyncCall
+
+    if (originallyChecked) {
+      asyncCall = saveCheckState('add_option', thisCheckBox.val())
     } else {
-      saveCheckState('delete_option', thisCheckBox.val())
+      asyncCall = saveCheckState('delete_option', thisCheckBox.val())
     }
+
+    asyncCall.fail(function() {
+      thisCheckBox.prop('checked', originallyChecked)
+    })
   })
 })

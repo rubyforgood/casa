@@ -31,8 +31,6 @@
                 name="C<%= category.id %>"
                 value="<%= option.id %>"
                 <%= emancipation_option_checkbox_checked(@current_case, option) %>>
-              <label for="O<%= option.id %>"><%= option.name %></label>
-              <br>
             <% else %>
               <input
                 type="checkbox"
@@ -40,9 +38,9 @@
                 class="emancipation-option-check-box"
                 value="<%= option.id %>"
                 <%= emancipation_option_checkbox_checked(@current_case, option) %>>
-              <label for="O<%= option.id %>"><%= option.name %></label>
-              <br>
             <% end %>
+            <label for="O<%= option.id %>"><%= option.name %></label>
+            <br>
           <% end %>
         </div>
       </div>
