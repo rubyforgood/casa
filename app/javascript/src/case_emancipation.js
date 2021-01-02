@@ -5,28 +5,47 @@ const emancipationPage = {
 }
 
 // Shows an error notification
-//  @param    {string | Error}  error The error to be displayed
+//  @param    {string}  message The message to be displayed
+//  @param    {string}  level One of the following logging levels
+//    "error"  Shows a red notification
+//    "info"   Shows a green notification
 //  @throws   {TypeError}  for a parameter of the incorrect type
-function notifyError (error) {
-  if (error instanceof Error) {
-    error = error.message
+//  @throws   {RangeError} for unsupported logging levels
+function notify (message, level) {
+  if (typeof message !== 'string') {
+    throw new TypeError('Param message must be a string')
   }
 
-  if (typeof error !== 'string') {
-    throw new TypeError('Param error is neither a string or Error object')
-  }
+  switch (level) {
+    case 'error':
+      emancipationPage.notifications.append(`
+        <div class="async-failure-indicator">
+          Error: ${message}
+          <button class="btn btn-danger btn-sm">×</button>
+        </div>`)
+      .find('.async-failure-indicator button').click(function () {
+        $(this).parent().remove()
+      })
+      break;
+   case 'info':
+      emancipationPage.notifications.append(`
+        <div class="async-success-indicator">
+          ${message}
+          <button class="btn btn-success btn-sm">×</button>
+        </div>`)
+      .find('.async-success-indicator button').click(function () {
+        $(this).parent().remove()
+      })
 
-  emancipationPage.notifications.append(`
-  <div class="async-failure-indicator">
-    Error: ${error}
-    <button class="btn btn-danger btn-sm">×</button>
-  </div>`).find('.async-failure-indicator button').click(function () {
-    $(this).parent().remove()
-  })
+      break;
+  default:
+      throw new RangeError('Unsupported option for param level')
+      break;
+  }
 }
 
 // Called when an async operation completes. May show notifications describing how the operation completed
-//  @param    {string | Error=}  error The error to be displayed if there was an error
+//  @param    {string | Error=}  error The error to be displayed(optional)
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {Error}      for trying to resolve more async operations than the amount currently awaiting
 function resolveAsyncOperation (error) {
@@ -39,17 +58,7 @@ function resolveAsyncOperation (error) {
   }
 
   if (error) {
-    if (typeof error !== 'string') {
-      throw new TypeError('Param error is not a string')
-    }
-
-    emancipationPage.notifications.append(`
-    <div class="async-failure-indicator">
-      Error: ${error}
-      <button class="btn btn-danger btn-sm">×</button>
-    </div>`).find('.async-failure-indicator button').click(function () {
-      $(this).parent().remove()
-    })
+    notify(error, 'error')
   } else {
     emancipationPage.saveOperationSuccessful = true
   }
@@ -137,6 +146,7 @@ $('document').ready(() => {
     categoryCheckbox = category.find('input[type="checkbox"]')
     categoryCollapseIcon = category.find('span')
     categoryCheckboxChecked = categoryCheckbox.is(':checked')
+    categoryOptionsContainer = category.siblings('.category-options')
 
     if (!category.data("disabled")) {
       category.data("disabled", true)
@@ -148,15 +158,25 @@ $('document').ready(() => {
           doneCallback
 
       if (categoryCheckboxChecked) {
+        // Uncheck all category options
+        categoryOptionsContainer.children().filter(function () {
+          return $(this).prop('checked')
+        }).each(function() {
+          let checkbox = $(this)
+
+          saveCheckState('delete_option', checkbox.val())
+          notify('Unchecked ' + checkbox.next().text(), 'info')
+        })
+
         collapseIcon = '+'
         doneCallback = () => {
-          category.siblings('.category-options').hide()
+          categoryOptionsContainer.hide()
         }
         saveAction = 'delete_category'
       } else {
         collapseIcon = '−'
         doneCallback = () => {
-          category.siblings('.category-options').show()
+          categoryOptionsContainer.show()
         }
         saveAction = 'add_category'
       }
