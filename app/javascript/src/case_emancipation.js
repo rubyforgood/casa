@@ -87,10 +87,12 @@ function waitForAsyncOperation () {
 }
 
 // Adds or deletes an option from the current casa case
-//  @param    {string}            optionAction
-//    'add_option'     to add an option to the case
-//    'delete_option'  to remove an option from the case
-//    'set_option'     to set the option for a mutually exclusive category
+//  @param    {string}  action One of the following:
+//    'add_category'    to add a category to the case
+//    'add_option'      to add an option to the case
+//    'delete_category' to remove a category from the case
+//    'delete_option'   to remove an option from the case
+//    'set_option'      to set the option for a mutually exclusive category
 //  @param    {integer | string}  checkItemId The id of either an emancipation option or an emancipation category to perform an action on
 //  @returns  {array} a jQuery jqXHR object. See https://api.jquery.com/jQuery.ajax/#jqXHR
 //  @throws   {TypeError}  for a parameter of the incorrect type
