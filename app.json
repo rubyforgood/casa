@@ -1,0 +1,30 @@
+{
+  "name": "CASA",
+  "addons": [
+    "papertrail:choklad",
+    "scheduler:standard",
+    {
+      "plan": "heroku-postgresql",
+      "options": {
+        "version": "12.5"
+      }
+    }
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/ruby"
+    }
+  ],
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+  "scripts": {
+    "postdeploy": "bundle exec rake db:schema:load db:seed"
+  },
+  {
+    "stack": "heroku-18"
+  }
+}
