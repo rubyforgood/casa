@@ -22,7 +22,7 @@ local:
 #   bucket: your_own_bucket
 
 # Use rails credentials:edit to set the Azure Storage secret (as azure_storage:storage_access_key)
-azure:
+microsoft:
   service: AzureStorage
   storage_account_name: <%= ENV['STORAGE_ACCOUNT_NAME'] %>
   storage_access_key: <%= ENV['STORAGE_ACCESS_KEY'] %>
