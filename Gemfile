@@ -7,6 +7,7 @@ ruby "2.7.2"
 gem "rails", "~> 6.1.0"
 
 gem "after_party" # post-deployment tasks
+gem "azure-storage"
 gem "amazing_print" # easier console reading
 gem "devise" # for authentication
 gem "devise_invitable"
@@ -25,7 +26,6 @@ gem "image_processing", "~> 1.12" # Set of higher-level helper methods for image
 gem "bootsnap", ">= 1.4.2", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "bugsnag" # tracking errors in prod
 gem "sablon" # Word document templating tool for Case Court Reports
-gem "azure-storage-blob", require: false
 
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
