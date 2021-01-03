@@ -14,7 +14,7 @@
               <%= contact.decorate.subheading %>
             </h6>
             <div class="card-text">
-              <% if contact.notes && contact.notes.length > CaseContactDecorator::NOTES_WORD_LIMIT %>
+              <% if contact.notes && contact.notes.length > CaseContactDecorator::NOTES_CHARACTER_LIMIT %>
                 <div class="limited-notes" style="display: block;">
                   <%= simple_format(contact.decorate.limited_notes) %>
                   <span><a role="button" href="#" onClick="moreText(event)">Read more</a></span>

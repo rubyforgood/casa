@@ -1,7 +1,7 @@
 class CaseContactDecorator < Draper::Decorator
   delegate_all
 
-  NOTES_WORD_LIMIT = 100
+  NOTES_CHARACTER_LIMIT = 100
 
   def duration_minutes
     minutes = object.duration_minutes
@@ -48,8 +48,8 @@ class CaseContactDecorator < Draper::Decorator
     ].compact.join(" | ")
   end
 
-  def notes
-    if object.notes && object.notes.length > CaseContactDecorator::NOTES_WORD_LIMIT
+  def paragraph_notes
+    if object.notes && object.notes.length > CaseContactDecorator::NOTES_CHARACTER_LIMIT
       helpers.content_tag(:p, limited_notes)
     else
       helpers.simple_format(full_notes)
@@ -86,7 +86,7 @@ class CaseContactDecorator < Draper::Decorator
   end
 
   def limited_notes
-    object.notes.truncate(NOTES_WORD_LIMIT)
+    object.notes.truncate(NOTES_CHARACTER_LIMIT)
   end
 
   def full_notes
