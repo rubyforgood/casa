@@ -5,6 +5,19 @@ class CaseContactReport
     @case_contacts = filtered_case_contacts(args)
   end
 
+  def to_csv
+    CSV.generate(headers: true) do |csv|
+      csv << full_data(nil).keys.map(&:to_s).map(&:titleize)
+      if @case_contacts.present?
+        @case_contacts.includes(:casa_case, :creator).decorate.each do |case_contact|
+          csv << full_data(case_contact).values
+        end
+      end
+    end
+  end
+
+  private
+
   def filtered_case_contacts(args)
     CaseContact
       .supervisors(args[:supervisor_ids])
@@ -16,17 +29,6 @@ class CaseContactReport
       .want_driving_reimbursement(args[:want_driving_reimbursement])
       .contact_type(args[:contact_type])
       .contact_type_groups(args[:contact_type_group_ids])
-  end
-
-  def to_csv
-    CSV.generate(headers: true) do |csv|
-      csv << full_data(nil).keys.map(&:to_s).map(&:titleize)
-      if @case_contacts.present?
-        @case_contacts.includes(:casa_case, :creator).decorate.each do |case_contact|
-          csv << full_data(case_contact).values
-        end
-      end
-    end
   end
 
   def full_data(case_contact)
