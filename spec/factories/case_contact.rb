@@ -11,11 +11,11 @@ FactoryBot.define do
     want_driving_reimbursement { false }
 
     trait :multi_line_note do
-      note { "line1\nline2\nline3" }
+      notes { "line1\nline2\nline3" }
     end
 
     trait :long_note do
-      note { "1234567890 " * 11 } # longer than NOTES_CHARACTER_LIMIT
+      notes { "1234567890 " * 11 } # longer than NOTES_CHARACTER_LIMIT
     end
 
     trait :miles_driven_no_reimbursement do

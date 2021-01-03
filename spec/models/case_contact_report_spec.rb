@@ -30,6 +30,18 @@ RSpec.describe CaseContactReport, type: :model do
     end
   end
 
+  describe "CSV body serialization" do
+    let!(:long_case_contact) { create(:case_contact, :long_note) }
+    let!(:multi_line_case_contact) { create(:case_contact, :multi_line_note, casa_case: long_case_contact.casa_case) }
+
+    subject { CaseContactReport.new(casa_org_id: long_case_contact.casa_case.casa_org.id).to_csv }
+
+    it "includes entire note" do
+      expect(subject).to include(long_case_contact.notes)
+      expect(subject).to include(multi_line_case_contact.notes)
+    end
+  end
+
   describe "filter behavior" do
     describe "casa organization" do
       it "includes case contacts from current org" do
