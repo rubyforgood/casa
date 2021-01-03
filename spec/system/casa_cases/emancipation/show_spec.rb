@@ -18,9 +18,5 @@ RSpec.describe "casa_cases/show", type: :system do
     it "sees title" do
       expect(page).to have_content("Emancipation Checklist")
     end
-
-    it "sees that 'Select One' is chosen" do
-      expect(page).to have_content("Select One")
-    end
   end
 end

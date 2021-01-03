@@ -5,6 +5,8 @@ RSpec.describe CasaCase do
 
   it { is_expected.to have_many(:case_assignments).dependent(:destroy) }
   it { is_expected.to belong_to(:casa_org) }
+  it { is_expected.to have_many(:casa_case_emancipation_categories).dependent(:destroy) }
+  it { is_expected.to have_many(:emancipation_categories).through(:casa_case_emancipation_categories) }
   it { is_expected.to have_many(:casa_cases_emancipation_options).dependent(:destroy) }
   it { is_expected.to have_many(:emancipation_options).through(:casa_cases_emancipation_options) }
   it { is_expected.to belong_to(:hearing_type).optional }
@@ -179,17 +181,14 @@ RSpec.describe CasaCase do
     end
   end
 
-  context "#contains_emancipation_option?" do
+  context "#add_emancipation_category" do
     let(:casa_case) { create(:casa_case) }
-    let(:emancipation_option) { create(:emancipation_option) }
+    let(:emancipation_category) { create(:emancipation_category) }
 
-    it "returns true when passed the id of an emancipation option associated with the case" do
-      casa_case.emancipation_options << emancipation_option
-      expect(casa_case.contains_emancipation_option?(emancipation_option.id)).to eq(true)
-    end
-
-    it "returns false when passed the id of an emancipation option not associated with the case" do
-      expect(casa_case.contains_emancipation_option?(emancipation_option.id)).to eq(false)
+    it "associates an emacipation category with the case when passed the id of the category" do
+      expect {
+        casa_case.add_emancipation_category(emancipation_category.id)
+      }.to change { casa_case.emancipation_categories.count }.from(0).to(1)
     end
   end
 
@@ -210,6 +209,19 @@ RSpec.describe CasaCase do
         casa_case.add_emancipation_option(emancipation_option_a.id)
         casa_case.add_emancipation_option(emancipation_option_b.id)
       }.to raise_error("Attempted adding multiple options belonging to a mutually exclusive category")
+    end
+  end
+
+  context "#remove_emancipation_category" do
+    let(:casa_case) { create(:casa_case) }
+    let(:emancipation_category) { create(:emancipation_category) }
+
+    it "dissociates an emancipation category with the case when passed the id of the category" do
+      casa_case.emancipation_categories << emancipation_category
+
+      expect {
+        casa_case.remove_emancipation_category(emancipation_category.id)
+      }.to change { casa_case.emancipation_categories.count }.from(1).to(0)
     end
   end
 

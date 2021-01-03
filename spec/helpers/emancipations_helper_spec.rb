@@ -12,27 +12,56 @@ require "rails_helper"
 # end
 RSpec.describe EmancipationsHelper, type: :helper do
   let(:casa_case) { create(:casa_case, transition_aged_youth: true) }
-  let(:emancipation_option) { create(:emancipation_option) }
 
-  describe "#emancipation_select_option_selected" do
-    it "returns \"selected\" when passed an associated casa case and emancipation option id" do
-      create(:casa_cases_emancipation_option, casa_case_id: casa_case.id, emancipation_option_id: emancipation_option.id)
-      expect(helper.emancipation_select_option_selected(casa_case, emancipation_option.id)).to eq("selected")
+  describe "#emancipation_category_checkbox_checked" do
+    let(:emancipation_category) { create(:emancipation_category, name: "unique name") }
+
+    it "returns \"checked\" when passed an associated casa case and emancipation category" do
+      create(:casa_case_emancipation_category, casa_case_id: casa_case.id, emancipation_category_id: emancipation_category.id)
+      expect(helper.emancipation_category_checkbox_checked(casa_case, emancipation_category)).to eq("checked")
     end
 
-    it "returns nil when passed an unassociated casa case and emancipation option id" do
-      expect(helper.emancipation_select_option_selected(casa_case, emancipation_option.id)).to eq(nil)
+    it "returns nil when passed an unassociated casa case and emancipation category" do
+      expect(helper.emancipation_category_checkbox_checked(casa_case, emancipation_category)).to eq(nil)
     end
   end
 
-  describe "#emancipation_checkbox_option_checked" do
-    it "returns \"checked\" when passed an associated casa case and emancipation option id" do
+  describe "#emancipation_category_collapse_hidden" do
+    let(:emancipation_category) { create(:emancipation_category, name: "another unique name") }
+
+    it "returns nil when passed an associated casa case and emancipation category" do
+      create(:casa_case_emancipation_category, casa_case_id: casa_case.id, emancipation_category_id: emancipation_category.id)
+      expect(helper.emancipation_category_collapse_hidden(casa_case, emancipation_category)).to eq(nil)
+    end
+
+    it "returns \"display: none;\" when passed an unassociated casa case and emancipation category" do
+      expect(helper.emancipation_category_collapse_hidden(casa_case, emancipation_category)).to eq("display: none;")
+    end
+  end
+
+  describe "#emancipation_category_collapse_icon" do
+    let(:emancipation_category) { create(:emancipation_category, name: "another unique name") }
+
+    it "returns nil when passed an associated casa case and emancipation category" do
+      create(:casa_case_emancipation_category, casa_case_id: casa_case.id, emancipation_category_id: emancipation_category.id)
+      expect(helper.emancipation_category_collapse_icon(casa_case, emancipation_category)).to eq("−")
+    end
+
+    it "returns \"display: none;\" when passed an unassociated casa case and emancipation category" do
+      expect(helper.emancipation_category_collapse_icon(casa_case, emancipation_category)).to eq("+")
+    end
+  end
+
+  describe "#emancipation_option_checkbox_checked" do
+    let(:emancipation_option) { create(:emancipation_option) }
+
+    it "returns \"checked\" when passed an associated casa case and emancipation option" do
       create(:casa_cases_emancipation_option, casa_case_id: casa_case.id, emancipation_option_id: emancipation_option.id)
-      expect(helper.emancipation_checkbox_option_checked(casa_case, emancipation_option.id)).to eq("checked")
+      expect(helper.emancipation_option_checkbox_checked(casa_case, emancipation_option)).to eq("checked")
     end
 
     it "returns nil when passed an unassociated casa case and emancipation option id" do
-      expect(helper.emancipation_checkbox_option_checked(casa_case, emancipation_option.id)).to eq(nil)
+      expect(helper.emancipation_option_checkbox_checked(casa_case, emancipation_option)).to eq(nil)
     end
   end
 end

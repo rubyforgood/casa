@@ -9,33 +9,41 @@
 <div class="card card-container">
   <div class="card-body">
     <% @emancipation_form_data.each do |category| %>
-      <% if category.mutually_exclusive %>
-        <h6>
-          <label for="C<%= category.id %>">
-            <strong> <%= category.name %> </strong>
-          </label>
-          <select id="C<%= category.id %>" class="emancipation-select">
-            <option value="" disabled selected>Select One</option>
-            <% category.emancipation_options.each do |option| %>
-              <option value="<%= option.id %>" <%= emancipation_select_option_selected(@current_case, option.id) %>>
-                <%= option.name %>
-              </option>
-            <% end %>
-          </select>
-        <h6>
-      <% else %>
-        <h6><strong> <%= category.name %> </strong></h6>
-        <% category.emancipation_options.each do |option| %>
+      <div>
+        <h6 class="emancipation-category no-select">
           <input
             type="checkbox"
-            id="O<%= option.id %>"
-            class="emancipation-check-box"
-            value="<%= option.id %>"
-            <%= emancipation_checkbox_option_checked(@current_case, option.id) %>>
-          <label for="O<%= option.id %>"><%= option.name %></label>
-          <br>
-        <% end %>
-      <% end %>
+            class="emancipation-category-check-box"
+            value="<%= category.id %>"
+            <%= emancipation_category_checkbox_checked(@current_case, category) %>>
+          <label><%= category.name %></label>
+          <span><%= emancipation_category_collapse_icon(@current_case, category) %></span>
+        </h6>
+        <div
+          class="category-options"
+          style="<%= emancipation_category_collapse_hidden(@current_case, category) %>">
+          <% category.emancipation_options.each do |option| %>
+            <% if category.mutually_exclusive %>
+              <input
+                type="radio"
+                id="O<%= option.id %>"
+                class="emancipation-radio-button"
+                name="C<%= category.id %>"
+                value="<%= option.id %>"
+                <%= emancipation_option_checkbox_checked(@current_case, option) %>>
+            <% else %>
+              <input
+                type="checkbox"
+                id="O<%= option.id %>"
+                class="emancipation-option-check-box"
+                value="<%= option.id %>"
+                <%= emancipation_option_checkbox_checked(@current_case, option) %>>
+            <% end %>
+            <label for="O<%= option.id %>"><%= option.name %></label>
+            <br>
+          <% end %>
+        </div>
+      </div>
     <% end %>
   </div>
 </div>
@@ -44,7 +52,7 @@
   <div id="async-waiting-indicator" style="display: none">
     Saving <div class="load-spinner"></div>
   </div>
-  <div id="async-success-indicator" style="display: none">
+  <div id="async-success-indicator" class="async-success-indicator" style="display: none">
     Saved
   </div>
 </div>
