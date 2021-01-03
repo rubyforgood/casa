@@ -5,28 +5,47 @@ const emancipationPage = {
 }
 
 // Shows an error notification
-//  @param    {string | Error}  error The error to be displayed
+//  @param    {string}  message The message to be displayed
+//  @param    {string}  level One of the following logging levels
+//    "error"  Shows a red notification
+//    "info"   Shows a green notification
 //  @throws   {TypeError}  for a parameter of the incorrect type
-function notifyError (error) {
-  if (error instanceof Error) {
-    error = error.message
+//  @throws   {RangeError} for unsupported logging levels
+function notify (message, level) {
+  if (typeof message !== 'string') {
+    throw new TypeError('Param message must be a string')
   }
 
-  if (typeof error !== 'string') {
-    throw new TypeError('Param error is neither a string or Error object')
-  }
+  switch (level) {
+    case 'error':
+      emancipationPage.notifications.append(`
+        <div class="async-failure-indicator">
+          Error: ${message}
+          <button class="btn btn-danger btn-sm">×</button>
+        </div>`)
+      .find('.async-failure-indicator button').click(function () {
+        $(this).parent().remove()
+      })
+      break;
+   case 'info':
+      emancipationPage.notifications.append(`
+        <div class="async-success-indicator">
+          ${message}
+          <button class="btn btn-success btn-sm">×</button>
+        </div>`)
+      .find('.async-success-indicator button').click(function () {
+        $(this).parent().remove()
+      })
 
-  emancipationPage.notifications.append(`
-  <div class="async-failure-indicator">
-    Error: ${error}
-    <button class="btn btn-danger btn-sm">×</button>
-  </div>`).find('.async-failure-indicator button').click(function () {
-    $(this).parent().remove()
-  })
+      break;
+  default:
+      throw new RangeError('Unsupported option for param level')
+      break;
+  }
 }
 
 // Called when an async operation completes. May show notifications describing how the operation completed
-//  @param    {string | Error=}  error The error to be displayed if there was an error
+//  @param    {string | Error=}  error The error to be displayed(optional)
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {Error}      for trying to resolve more async operations than the amount currently awaiting
 function resolveAsyncOperation (error) {
@@ -39,17 +58,7 @@ function resolveAsyncOperation (error) {
   }
 
   if (error) {
-    if (typeof error !== 'string') {
-      throw new TypeError('Param error is not a string')
-    }
-
-    emancipationPage.notifications.append(`
-    <div class="async-failure-indicator">
-      Error: ${error}
-      <button class="btn btn-danger btn-sm">×</button>
-    </div>`).find('.async-failure-indicator button').click(function () {
-      $(this).parent().remove()
-    })
+    notify(error, 'error')
   } else {
     emancipationPage.saveOperationSuccessful = true
   }
@@ -78,29 +87,31 @@ function waitForAsyncOperation () {
 }
 
 // Adds or deletes an option from the current casa case
-//  @param    {string}            optionAction
-//    'add'     to add an option to the case
-//    'delete'  to remove an option from the case
-//    'set'     to set the option for a mutually exclusive category
-//  @param    {integer | string}  optionId The id of the emancipation option to add or delete
+//  @param    {string}  action One of the following:
+//    'add_category'    to add a category to the case
+//    'add_option'      to add an option to the case
+//    'delete_category' to remove a category from the case
+//    'delete_option'   to remove an option from the case
+//    'set_option'      to set the option for a mutually exclusive category
+//  @param    {integer | string}  checkItemId The id of either an emancipation option or an emancipation category to perform an action on
 //  @returns  {array} a jQuery jqXHR object. See https://api.jquery.com/jQuery.ajax/#jqXHR
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {RangeError} if optionId is negative
-function changeOptions (optionAction, optionId) {
+function saveCheckState (action, checkItemId) {
   // Input check
-  if (typeof optionId === 'string') {
-    const optionIdAsNum = parseInt(optionId)
+  if (typeof checkItemId === 'string') {
+    const checkItemIdAsNum = parseInt(checkItemId)
 
-    if (!optionIdAsNum) {
-      throw new TypeError('Param optionId is not an integer')
-    } else if (optionIdAsNum < 0) {
-      throw new RangeError('Param optionId cannot be negative')
+    if (!checkItemIdAsNum) {
+      throw new TypeError('Param checkItemId is not an integer')
+    } else if (checkItemIdAsNum < 0) {
+      throw new RangeError('Param checkItemId cannot be negative')
     }
   } else {
-    if (!Number.isInteger(optionId)) {
-      throw new TypeError('Param optionId is not an integer')
-    } else if (optionId < 0) {
-      throw new RangeError('Param optionId cannot be negative')
+    if (!Number.isInteger(checkItemId)) {
+      throw new TypeError('Param checkItemId is not an integer')
+    } else if (checkItemId < 0) {
+      throw new RangeError('Param checkItemId cannot be negative')
     }
   }
 
@@ -108,52 +119,111 @@ function changeOptions (optionAction, optionId) {
 
   // Post request
   return $.post(emancipationPage.savePath, {
-    option_action: optionAction,
-    option_id: optionId
-  }).done(function (response, textStatus) {
+    check_item_action: action,
+    check_item_id: checkItemId
+  })
+  .then(function (response, textStatus, jqXHR) {
     if (response.error) {
-      resolveAsyncOperation(response.error)
+      return $.Deferred().reject(jqXHR, textStatus, response.error);
     } else if (response === 'success') {
       resolveAsyncOperation()
     } else {
       resolveAsyncOperation('Unknown response')
     }
-  }).fail(function (jqXHR, textStatus, error) {
+
+    return response
+  })
+  .fail(function (jqXHR, textStatus, error) {
     resolveAsyncOperation(error)
   })
 }
 
 $('document').ready(() => {
-  emancipationPage.emancipationSelects = $('.emancipation-select')
   emancipationPage.notifications = $('#async-notifications')
   emancipationPage.asyncSuccessIndicator = emancipationPage.notifications.find('#async-success-indicator')
   emancipationPage.asyncWaitIndicator = emancipationPage.notifications.find('#async-waiting-indicator')
 
-  emancipationPage.emancipationSelects.each(function () {
-    const thisSelect = $(this)
+  $('.emancipation-category').click(function () {
+    category = $(this)
+    categoryCheckbox = category.find('input[type="checkbox"]')
+    categoryCollapseIcon = category.find('span')
+    categoryCheckboxChecked = categoryCheckbox.is(':checked')
+    categoryOptionsContainer = category.siblings('.category-options')
 
-    thisSelect.data('prev', thisSelect.val())
-  })
+    if (!category.data("disabled")) {
+      category.data("disabled", true)
+      category.addClass("disabled")
+      categoryCheckbox.prop("disabled", "disabled")
 
-  emancipationPage.emancipationSelects.change(function (data) {
-    const thisSelect = $(this)
+      let saveAction,
+          collapseIcon,
+          doneCallback
 
-    if (thisSelect.val()) {
-      changeOptions('set', thisSelect.val())
-    } else {
-      changeOptions('delete', thisSelect.data().prev)
+      if (categoryCheckboxChecked) {
+        // Uncheck all category options
+        categoryOptionsContainer.children().filter(function () {
+          return $(this).prop('checked')
+        }).each(function() {
+          let checkbox = $(this)
+
+          checkbox.prop('checked', false)
+          saveCheckState('delete_option', checkbox.val())
+          .fail(function() {
+            checkbox.prop('checked', false)
+          })
+          notify('Unchecked ' + checkbox.next().text(), 'info')
+        })
+
+        collapseIcon = '+'
+        doneCallback = () => {
+          categoryOptionsContainer.hide()
+        }
+        saveAction = 'delete_category'
+      } else {
+        collapseIcon = '−'
+        doneCallback = () => {
+          categoryOptionsContainer.show()
+        }
+        saveAction = 'add_category'
+      }
+
+      saveCheckState(saveAction, categoryCheckbox.val())
+      .done(function () {
+        doneCallback()
+        categoryCheckbox.prop('checked', !categoryCheckboxChecked)
+        categoryCollapseIcon.text(collapseIcon)
+      })
+      .always(function () {
+        category.data("disabled", false)
+        category.removeClass("disabled")
+        categoryCheckbox.prop("disabled", false)
+      })
     }
-
-    thisSelect.data('prev', thisSelect.val())
   })
 
-  $('.emancipation-check-box').change(function () {
+  $('.emancipation-radio-button').change(function (data) {
+    const thisRadioButton = $(this)
+
+    saveCheckState('set_option', thisRadioButton.val())
+    .fail(function() {
+      thisRadioButton.prop('checked', false)
+    })
+  })
+
+  $('.emancipation-option-check-box').change(function () {
     const thisCheckBox = $(this)
 
-    if (thisCheckBox.prop('checked')) {
-      changeOptions('add', thisCheckBox.val())
+    let originallyChecked = thisCheckBox.prop('checked')
+    let asyncCall
+
+    if (originallyChecked) {
+      asyncCall = saveCheckState('add_option', thisCheckBox.val())
     } else {
-      changeOptions('delete', thisCheckBox.val())
+      asyncCall = saveCheckState('delete_option', thisCheckBox.val())
     }
+
+    asyncCall.fail(function() {
+      thisCheckBox.prop('checked', originallyChecked)
+    })
   })
 })

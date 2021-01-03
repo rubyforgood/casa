@@ -327,6 +327,40 @@ RSpec.describe "case_contacts/new", type: :system do
       end
     end
 
+    context "with no contact types set for the volunteer's cases" do
+      it "renders all of the org's contact types", js: true do
+        org = create(:casa_org)
+        create_contact_types(org)
+        volunteer = create(:volunteer, :with_casa_cases, casa_org: org)
+
+        sign_in volunteer
+
+        visit new_case_contact_path
+
+        expect(page).to have_field("Attorney")
+        expect(page).to have_field("School")
+        expect(page).to have_field("Therapist")
+      end
+    end
+
+    context "with specific contact types allowed for the volunteer's cases" do
+      it "only renders contact types that are allowed for the volunteer's cases", js: true do
+        org = create(:casa_org)
+        contact_type_group = create_contact_types(org)
+        volunteer = create(:volunteer, :with_casa_cases, casa_org: org)
+        contact_types_for_cases = contact_type_group.contact_types.reject { |ct| ct.name == "Attorney" }
+        assign_contact_types_to_cases(volunteer.casa_cases, contact_types_for_cases)
+
+        sign_in volunteer
+
+        visit new_case_contact_path
+
+        expect(page).not_to have_field("Attorney")
+        expect(page).to have_field("School")
+        expect(page).to have_field("Therapist")
+      end
+    end
+
     private
 
     def create_contact_types(org)
@@ -334,6 +368,13 @@ RSpec.describe "case_contacts/new", type: :system do
         create(:contact_type, contact_type_group: group, name: "Attorney")
         create(:contact_type, contact_type_group: group, name: "School")
         create(:contact_type, contact_type_group: group, name: "Therapist")
+      end
+    end
+
+    def assign_contact_types_to_cases(cases, contact_types)
+      cases.each do |c|
+        c.contact_types = contact_types
+        c.save
       end
     end
   end

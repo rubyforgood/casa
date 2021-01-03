@@ -29,7 +29,10 @@
         <% @current_organization_groups.each do |group| %>
           <td style="display:inline-block; vertical-align:top; padding-right:50px; padding-bottom:20px">
             <h5> <%= group.name %> </h5>
-            <% group.contact_types.each_with_index do |contact_type, index| %>
+            <% group.contact_types.filter do |ct|
+                @selected_case_contact_types.blank? ||
+                    @selected_case_contact_types.include?(ct)
+              end.each_with_index do |contact_type, index| %>
               <div class="form-check">
                 <%=
                   check_box_tag "case_contact[case_contact_contact_type_attributes][][contact_type_id]",

@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe EmancipationCategory, type: :model do
+  it { is_expected.to have_many(:casa_case_emancipation_categories).dependent(:destroy) }
+  it { is_expected.to have_many(:casa_cases).through(:casa_case_emancipation_categories) }
   it { is_expected.to have_many(:emancipation_options) }
   it { is_expected.to validate_presence_of(:name) }
 

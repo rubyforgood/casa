@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_22_125442) do
+ActiveRecord::Schema.define(version: 2020_12_26_024029) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,15 @@ ActiveRecord::Schema.define(version: 2020_12_22_125442) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["casa_case_id"], name: "index_casa_case_contact_types_on_casa_case_id"
     t.index ["contact_type_id"], name: "index_casa_case_contact_types_on_contact_type_id"
+  end
+
+  create_table "casa_case_emancipation_categories", force: :cascade do |t|
+    t.bigint "casa_case_id", null: false
+    t.bigint "emancipation_category_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["casa_case_id"], name: "index_casa_case_emancipation_categories_on_casa_case_id"
+    t.index ["emancipation_category_id"], name: "index_case_emancipation_categories_on_emancipation_category_id"
   end
 
   create_table "casa_cases", force: :cascade do |t|
@@ -257,6 +266,8 @@ ActiveRecord::Schema.define(version: 2020_12_22_125442) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "casa_case_emancipation_categories", "casa_cases"
+  add_foreign_key "casa_case_emancipation_categories", "emancipation_categories"
   add_foreign_key "casa_cases", "casa_orgs"
   add_foreign_key "casa_cases_emancipation_options", "casa_cases"
   add_foreign_key "casa_cases_emancipation_options", "emancipation_options"
