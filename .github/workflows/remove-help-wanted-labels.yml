@@ -13,5 +13,5 @@ jobs:
         id: remove-help-wanted-labels
         with:
           token: ${{secrets.GITHUB_TOKEN}}
-          label_to_add: 'Help Wanted'
+          label_to_remove: 'Help Wanted'
           column_id: '8461148'
