@@ -45,6 +45,6 @@ module CasaOrgPopulatorPresets
       "qa" => CasaOrgPopulatorPresets.large_dataset_options,
       "staging" => CasaOrgPopulatorPresets.large_dataset_options,
       "test" => CasaOrgPopulatorPresets.small_dataset_options
-    }[Rails.env]
+    }[ENV["APP_ENVIRONMENT"] || Rails.env]
   end
 end
