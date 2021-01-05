@@ -33,6 +33,7 @@
       <div>
         <% if Pundit.policy(current_user, contact).update? %>
           <% if contact.created_in_current_quarter? %>
+            <span class="btn btn-danger">Follow up</span>
             <%= link_to edit_case_contact_path(contact), class: 'btn btn-outline-primary' do %>
               <strong>Edit</strong>
             <% end %>
