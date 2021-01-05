@@ -33,7 +33,16 @@
       <div>
         <% if Pundit.policy(current_user, contact).update? %>
           <% if contact.created_in_current_quarter? %>
-            <span class="btn btn-danger">Follow up</span>
+            <% if contact.followup_created_at %>
+              <i class="fas fa-exclamation-triangle text-danger fa-lg"></i>
+              <%= button_to case_contact_followups_path, params: { contact_id: contact.id }, method: "post", class: "btn btn-success" do %>
+                Resolve
+              <% end %>
+            <% else %>
+              <%= button_to case_contact_followups_path, params: { contact_id: contact.id }, method: "post", class: "btn btn-danger" do %>
+                Follow up
+              <% end %>
+            <% end %>
             <%= link_to edit_case_contact_path(contact), class: 'btn btn-outline-primary' do %>
               <strong>Edit</strong>
             <% end %>
