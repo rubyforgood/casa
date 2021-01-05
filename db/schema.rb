@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_05_012059) do
+ActiveRecord::Schema.define(version: 2021_01_05_155534) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -189,6 +189,16 @@ ActiveRecord::Schema.define(version: 2021_01_05_012059) do
     t.index ["emancipation_category_id"], name: "index_emancipation_options_on_emancipation_category_id"
   end
 
+  create_table "followups", force: :cascade do |t|
+    t.bigint "case_contact_id"
+    t.bigint "creator_id"
+    t.integer "status", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["case_contact_id"], name: "index_followups_on_case_contact_id"
+    t.index ["creator_id"], name: "index_followups_on_creator_id"
+  end
+
   create_table "hearing_types", force: :cascade do |t|
     t.bigint "casa_org_id", null: false
     t.string "name", null: false
@@ -278,6 +288,7 @@ ActiveRecord::Schema.define(version: 2021_01_05_012059) do
   add_foreign_key "case_contacts", "casa_cases"
   add_foreign_key "case_contacts", "users", column: "creator_id"
   add_foreign_key "emancipation_options", "emancipation_categories"
+  add_foreign_key "followups", "users", column: "creator_id"
   add_foreign_key "judges", "casa_orgs"
   add_foreign_key "past_court_dates", "casa_cases"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"

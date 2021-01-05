@@ -33,13 +33,15 @@
       <div>
         <% if Pundit.policy(current_user, contact).update? %>
           <% if contact.created_in_current_quarter? %>
-            <% if contact.followup_created_at %>
-              <i class="fas fa-exclamation-triangle text-danger fa-lg"></i>
-              <%= button_to case_contact_followups_path, params: { contact_id: contact.id }, method: "post", class: "btn btn-success" do %>
-                Resolve
+            <% if contact.followup %>
+              <% if contact.followup.requested? %>
+                <i class="fas fa-exclamation-triangle text-danger fa-lg"></i>
+                <%= button_to followups_path(contact_id: contact.id), class: "btn btn-success" do %>
+                  Resolve
+                <% end %>
               <% end %>
             <% else %>
-              <%= button_to case_contact_followups_path, params: { contact_id: contact.id }, method: "post", class: "btn btn-danger" do %>
+              <%= link_to followups_path(contact_id: contact.id), method: "post", class: "btn btn-danger" do %>
                 Follow up
               <% end %>
             <% end %>

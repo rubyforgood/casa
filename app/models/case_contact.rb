@@ -18,6 +18,7 @@ class CaseContact < ApplicationRecord
     where(is_active: true)
   }, primary_key: :creator_id, foreign_key: :volunteer_id
   has_one :supervisor, through: :creator
+  has_one :followup
 
   belongs_to :casa_case
 
