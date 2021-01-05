@@ -3,7 +3,7 @@ class FollowupsController < ApplicationController
     case_contact = CaseContact.find(params[:contact_id])
     followup = case_contact.followup
     if followup
-      followup.update(status: :resolved)
+      followup.resolved!
     else
       case_contact.create_followup(creator: current_user, status: :requested)
     end
