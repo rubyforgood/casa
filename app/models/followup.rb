@@ -2,7 +2,7 @@ class Followup < ApplicationRecord
   belongs_to :case_contact
   belongs_to :creator, class_name: "User"
 
-  enum status: { requested: 0, resolved: 1 }
+  enum status: {requested: 0, resolved: 1}
 end
 
 # == Schema Information

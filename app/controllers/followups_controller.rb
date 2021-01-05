@@ -1,6 +1,5 @@
 class FollowupsController < ApplicationController
   def create
-    p params
     case_contact = CaseContact.find(params[:contact_id])
     followup = case_contact.followup
     if followup
