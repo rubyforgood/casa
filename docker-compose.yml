@@ -1,11 +1,11 @@
-version: '3'
+version: "3"
 
 services:
   web:
     build: .
     ports:
-      - '3000:3000'
-      - '4000:4000'
+      - "3000:3000"
+      - "4000:4000"
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -17,20 +17,20 @@ services:
     tty: true
 
   database:
-    image: postgres:12.3
+    image: postgres:12.5
     env_file:
       - config/docker.env
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
-      - '5435:5432'
+      - "5435:5432"
 
   selenium_chrome:
     image: selenium/standalone-chrome-debug
     logging:
       driver: none
     ports:
-      - '5900:5900'
+      - "5900:5900"
 
 volumes:
   db_data:
