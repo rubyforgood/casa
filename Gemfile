@@ -57,7 +57,7 @@ group :test do
   gem "rake"
   gem "rails-controller-testing"
   gem "selenium-webdriver"
-  gem "simplecov", "~> 0.21.0", require: false # 0.17.1 pinned as a workaround for https://github.com/codeclimate/test-reporter/issues/418
+  gem "simplecov", "~> 0.21.1", require: false # 0.17.1 pinned as a workaround for https://github.com/codeclimate/test-reporter/issues/418
   gem "webdrivers", require: false # Easy installation and use of web drivers to run system tests with browsers; do not initially require as causes conflict with Docker setup
 end
 
