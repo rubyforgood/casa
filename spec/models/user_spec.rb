@@ -10,6 +10,8 @@ RSpec.describe User, type: :model do
   it { is_expected.to have_many(:supervisor_volunteers) }
   it { is_expected.to have_many(:volunteers).through(:supervisor_volunteers) }
 
+  it { is_expected.to have_many(:followups).with_foreign_key(:creator_id) }
+
   it { is_expected.to have_one(:supervisor_volunteer) }
   it { is_expected.to have_one(:supervisor).through(:supervisor_volunteer) }
 

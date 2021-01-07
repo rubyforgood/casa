@@ -30,11 +30,23 @@
           </div>
         </div>
       </div>
-      <div>
+      <div class="d-flex align-items-baseline flex-column flex-md-row-reverse">
         <% if Pundit.policy(current_user, contact).update? %>
           <% if contact.created_in_current_quarter? %>
             <%= link_to edit_case_contact_path(contact), class: 'btn btn-outline-primary' do %>
               <strong>Edit</strong>
+            <% end %>
+            <% if contact.followup %>
+              <% if contact.followup.requested? %>
+                <%= button_to followups_path(contact_id: contact.id), class: "btn btn-success" do %>
+                  Resolve
+                <% end %>
+                <i class="fas fa-exclamation-triangle text-danger fa-lg"></i>
+              <% end %>
+            <% else %>
+              <%= link_to followups_path(contact_id: contact.id), method: "post", class: "btn btn-danger" do %>
+                Follow up
+              <% end %>
             <% end %>
           <% else %>
             <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="This case contact was created in a previous quarter and is therefore no longer editable"></i>

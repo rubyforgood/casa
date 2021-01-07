@@ -8,21 +8,43 @@ RSpec.describe "case_contacts/case_contact" do
     allow(view).to receive(:current_user).and_return(user)
   end
 
-  it "shows edit button when occured_at is before the last day of the month in the quarter that the case contact was created" do
-    case_contact = create(:case_contact)
-    assign :case_contact, case_contact
-    assign :casa_cases, [case_contact.casa_case]
+  context "occured_at is before the last day of the month in the quarter that the case contact was created" do
+    let(:case_contact) { create(:case_contact) }
 
-    render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
-    expect(rendered).to have_link(nil, href: "/case_contacts/#{case_contact.id}/edit")
+    it "shows edit button" do
+      assign :case_contact, case_contact
+      assign :casa_cases, [case_contact.casa_case]
+
+      render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
+      expect(rendered).to have_link(nil, href: "/case_contacts/#{case_contact.id}/edit")
+    end
+
+    it "shows follow up button" do
+      assign :case_contact, case_contact
+      assign :casa_cases, [case_contact.casa_case]
+
+      render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
+      expect(rendered).to have_text("Follow up")
+    end
   end
 
-  it "does not show edit button when occured_at is after the last day of the month in the quarter that the case contact was created" do
-    case_contact = create(:case_contact, occurred_at: Time.zone.now - 1.year)
-    assign :case_contact, case_contact
-    assign :casa_cases, [case_contact.casa_case]
+  context "occured_at is after the last day of the month in the quarter that the case contact was created" do
+    let(:case_contact) { create(:case_contact, occurred_at: Time.zone.now - 1.year) }
 
-    render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
-    expect(rendered).to have_no_link(nil, href: "/case_contacts/#{case_contact.id}/edit")
+    it "does not show edit button" do
+      assign :case_contact, case_contact
+      assign :casa_cases, [case_contact.casa_case]
+
+      render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
+      expect(rendered).to have_no_link(nil, href: "/case_contacts/#{case_contact.id}/edit")
+    end
+
+    it "does not show follow up button" do
+      assign :case_contact, case_contact
+      assign :casa_cases, [case_contact.casa_case]
+
+      render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
+      expect(rendered).to_not have_text("Follow up")
+    end
   end
 end
