@@ -31,4 +31,5 @@ jobs:
       run: gem install erb_lint
 
     - name: ERB lint
-      run: erblint --lint-all --autocorrect
+      run: echo "TODO re-enable when https://github.com/Shopify/erb-lint/issues/197 is fixed"
+#      run: erblint --lint-all --autocorrect
