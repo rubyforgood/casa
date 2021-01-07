@@ -7,6 +7,9 @@ end
 #
 # Table name: casa_cases_emancipation_options
 #
+#  id                     :bigint           not null, primary key
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
 #  casa_case_id           :bigint           not null
 #  emancipation_option_id :bigint           not null
 #

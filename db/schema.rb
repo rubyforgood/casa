@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_05_155534) do
-
+ActiveRecord::Schema.define(version: 2021_01_07_181908) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -92,9 +91,11 @@ ActiveRecord::Schema.define(version: 2021_01_05_155534) do
     t.index ["judge_id"], name: "index_casa_cases_on_judge_id"
   end
 
-  create_table "casa_cases_emancipation_options", id: false, force: :cascade do |t|
+  create_table "casa_cases_emancipation_options", force: :cascade do |t|
     t.bigint "casa_case_id", null: false
     t.bigint "emancipation_option_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["casa_case_id", "emancipation_option_id"], name: "index_cases_options_on_case_id_and_option_id", unique: true
   end
 
