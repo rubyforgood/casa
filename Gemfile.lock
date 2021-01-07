@@ -96,7 +96,7 @@ GEM
     bootsnap (1.5.1-java)
       msgpack (~> 1.0)
     brakeman (4.10.1)
-    bugsnag (6.18.0)
+    bugsnag (6.19.0)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
     bullet (6.1.2)
