@@ -126,7 +126,6 @@ end
 #  id                         :bigint           not null, primary key
 #  contact_made               :boolean          default(FALSE)
 #  duration_minutes           :integer          not null
-#  followup_created_at        :datetime
 #  medium_type                :string
 #  miles_driven               :integer          default(0), not null
 #  notes                      :string
