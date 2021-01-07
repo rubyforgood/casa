@@ -45,6 +45,7 @@ class DbPopulator
 
     create_users(casa_org, options, prefix)
     create_cases(casa_org, options, prefix)
+    create_hearing_types(casa_org)
     casa_org
   end
 
@@ -147,6 +148,34 @@ class DbPopulator
       random_case_contact_count.times do
         create_case_contact(new_casa_case, prefix)
       end
+    end
+  end
+
+  def create_hearing_types(casa_org)
+    active_hearing_type_names = [
+      "emergency hearing",
+      "trial on the merits",
+      "scheduling conference",
+      "uncontested hearing",
+      "pendente lite hearing",
+      "pretrial conference",
+    ]
+    inactive_hearing_type_names = [
+      "deprecated hearing",
+    ]
+    active_hearing_type_names.each do | hearing_type_name |
+      HearingType.create!(
+        casa_org_id: casa_org.id,
+        name: hearing_type_name,
+        active: true
+      )
+    end
+    inactive_hearing_type_names.each do | hearing_type_name |
+      HearingType.create!(
+        casa_org_id: casa_org.id,
+        name: hearing_type_name,
+        active: false
+      )
     end
   end
 end
