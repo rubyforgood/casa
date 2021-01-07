@@ -158,19 +158,19 @@ class DbPopulator
       "scheduling conference",
       "uncontested hearing",
       "pendente lite hearing",
-      "pretrial conference",
+      "pretrial conference"
     ]
     inactive_hearing_type_names = [
-      "deprecated hearing",
+      "deprecated hearing"
     ]
-    active_hearing_type_names.each do | hearing_type_name |
+    active_hearing_type_names.each do |hearing_type_name|
       HearingType.create!(
         casa_org_id: casa_org.id,
         name: hearing_type_name,
         active: true
       )
     end
-    inactive_hearing_type_names.each do | hearing_type_name |
+    inactive_hearing_type_names.each do |hearing_type_name|
       HearingType.create!(
         casa_org_id: casa_org.id,
         name: hearing_type_name,
