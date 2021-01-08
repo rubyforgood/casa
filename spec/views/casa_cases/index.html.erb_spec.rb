@@ -64,7 +64,8 @@ RSpec.describe "casa_cases/index", type: :system do
 
     it "Only displays cases belonging to user's org" do
       org_cases = create_list :casa_case, 3, active: true, casa_org: organization
-      other_org_cases = create_list :casa_case, 3, active: true
+      new_org = create :casa_org
+      other_org_cases = create_list :casa_case, 3, active: true, casa_org: new_org
 
       visit casa_cases_path
 

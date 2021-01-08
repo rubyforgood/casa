@@ -3,7 +3,7 @@ FactoryBot.define do
     sequence(:case_number) { |n| "CINA-#{n}" }
     transition_aged_youth { false }
     birth_month_year_youth { 16.years.ago }
-    casa_org
+    casa_org { CasaOrg.first || create(:casa_org) }
     hearing_type
     judge
     court_report_status { :not_submitted }

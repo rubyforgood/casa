@@ -7,7 +7,8 @@ RSpec.describe CasaCasePolicy::Scope do
     it "returns all CasaCases when user is admin" do
       user = create(:casa_admin, casa_org: organization)
       all_casa_cases = create_list(:casa_case, 2, casa_org: organization)
-      create_list(:casa_case, 2)
+      new_org = create(:casa_org)
+      create_list(:casa_case, 2, casa_org: new_org)
 
       scope = described_class.new(user, organization.casa_cases)
 

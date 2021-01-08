@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :contact_type_group do
-    association :casa_org
+    casa_org { CasaOrg.first || create(:casa_org) }
     sequence(:name) { |n| "Group #{n}" }
   end
 end
