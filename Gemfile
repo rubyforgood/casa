@@ -4,7 +4,7 @@ source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "2.7.2"
-gem "rails", "~> 6.1.0"
+gem "rails", "~> 6.1.1"
 
 gem "after_party" # post-deployment tasks
 gem "amazing_print" # easier console reading
