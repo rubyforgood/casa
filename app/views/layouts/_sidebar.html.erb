@@ -7,7 +7,7 @@
                          class: "d-inline-block align-text-bottom") %>
     <% else %>
       <%= image_tag(current_organization.logo.variant(resize_to_limit: [200, 100]),
-                    alt: current_organization.logo_alt_text || "CASA Logo") %>
+                    alt: "CASA Logo") %>
     <% end %>
   </div>
   <div class="sidebar-container">
