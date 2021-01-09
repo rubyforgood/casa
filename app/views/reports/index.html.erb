@@ -28,8 +28,8 @@
                   :supervisor_ids,
                   Supervisor.where(casa_org: current_user.casa_org),
                   :id, :display_name,
-                  {include_hidden: false, prompt: "-Select Supervisors-"},
-                  {class: "form-control", multiple: true}
+                  {include_hidden: false},
+                  {class: "form-control select2", data: {placeholder: "-Select Supervisors-"}, multiple: true}
               ) %>
         </div>
 
@@ -40,8 +40,8 @@
                   Volunteer.where(casa_org: current_user.casa_org),
                   :id,
                   :display_name,
-                  {include_hidden: false, prompt: "-Select Volunteers-"},
-                  {class: "form-control", multiple: true}
+                  {include_hidden: false},
+                  {class: "form-control select2", data: {placeholder: "-Select Volunteers-"}, multiple: true}
               ) %>
         </div>
 
@@ -52,8 +52,8 @@
                   ContactType.for_organization(current_user.casa_org),
                   :id,
                   :name,
-                  {include_hidden: false, prompt: "-Select Contact Types-"},
-                  {class: "form-control", multiple: true}
+                  {include_hidden: false},
+                  {class: "form-control select2", data: {placeholder: "-Select Contact Types-"}, multiple: true}
               ) %>
         </div>
 
@@ -64,8 +64,8 @@
                   ContactTypeGroup.for_organization(current_user.casa_org),
                   :id,
                   :name,
-                  {include_hidden: false, prompt: "-Select Contact Type Groups-"},
-                  {class: "form-control", multiple: true}
+                  {include_hidden: false},
+                  {class: "form-control select2", data: {placeholder: "-Select Contact Type Groups-"}, multiple: true}
               ) %>
         </div>
 
