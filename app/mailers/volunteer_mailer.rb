@@ -1,6 +1,4 @@
 class VolunteerMailer < ApplicationMailer
-  default from: "CASA Admin <no-reply@casa-r4g-staging.herokuapp.com>"
-
   def deactivation(user)
     @user = user
     mail(to: @user.email, subject: "Your account has been deactivated")
