@@ -7,7 +7,7 @@ namespace :after_party do
     # (Okay to run on dev too - will just duplicate seed data)
     casa_org = CasaOrg.find_or_create_by!(name: "Prince George CASA")
 
-    logo = casa_org.casa_org_logo || casa_org.build_casa_org_logo
+    logo = casa_org.logo || casa_org.build_casa_org_logo
     logo.update!(
       url: "media/src/images/logo.png",
       alt_text: "CASA Logo",

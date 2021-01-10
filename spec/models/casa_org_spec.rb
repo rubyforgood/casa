@@ -9,14 +9,6 @@ RSpec.describe CasaOrg, type: :model do
     expect(new_org.valid?).to be false
   end
 
-  describe "#logo_url" do
-    it "returns casa_org_logo url field" do
-      logo = create(:casa_org_logo, url: "foo.com")
-      org = logo.casa_org
-      expect(org.logo_url).to eq "foo.com"
-    end
-  end
-
   describe "Attachment" do
     it "is valid" do
       subject.logo.attach(io: File.open("#{Rails.root}/spec/fixtures/company_logo.png"),
