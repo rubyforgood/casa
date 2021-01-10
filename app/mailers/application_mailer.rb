@@ -1,4 +1,7 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "from@example.com"
+  address = Mail::Address.new "no-reply@#{ENV["DOMAIN"] || "example.com"}"
+  address.display_name = "CASA Admin"
+
+  default from: address.format
   layout "mailer"
 end

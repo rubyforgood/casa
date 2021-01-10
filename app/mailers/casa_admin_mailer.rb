@@ -1,6 +1,4 @@
 class CasaAdminMailer < ApplicationMailer
-  default from: "CASA Admin <no-reply@casa-r4g-staging.herokuapp.com>"
-
   def deactivation(user)
     @user = user
     @casa_organization = CasaOrg.find(@user.casa_org_id)
