@@ -34,7 +34,7 @@ class DbPopulator
     casa_org = CasaOrg.find_or_create_by!(name: options.org_name) { |org|
       org.name = options.org_name
       org.display_name = options.org_name
-      org.casa_org_logo = logo
+      org.logo = logo
       org.address = Faker::Address.full_address
       org.footer_links = [
         ["https://example.org/contact/", "Contact Us"],
@@ -110,7 +110,7 @@ class DbPopulator
   end
 
   def logo
-    @logo ||= CasaOrgLogo.new(url: "media/src/images/logo.png", alt_text: "CASA Logo", size: "70x38")
+    @logo
   end
 
   def note_generator(note_length)
