@@ -1,5 +1,8 @@
 class FollowupsController < ApplicationController
+  after_action :verify_authorized
+
   def create
+    authorize Followup
     case_contact = CaseContact.find(params[:case_contact_id])
 
     followup = case_contact.followup
