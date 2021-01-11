@@ -13,7 +13,7 @@ namespace :after_party do
       alt_text: "CASA Logo",
       size: "70x38"
     )
-    
+
     casa_org.update!(display_name: "CASA / Prince George's County, MD",
                      address: "6811 Kenilworth Avenue, Suite 402 Riverdale, MD 20737",
                      footer_links: [

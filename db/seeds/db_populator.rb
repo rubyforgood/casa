@@ -10,6 +10,7 @@ class DbPopulator
   PREFIX_OPTIONS = ("A".ord.."Z".ord).to_a.map(&:chr)
 
   attr_reader :rng
+  attr_reader :logo
 
   # Public Methods
 
@@ -107,10 +108,6 @@ class DbPopulator
 
   def likely_contact_durations
     @likely_contact_durations ||= [15, 30, 60, 75, 4 * 60, 6 * 60]
-  end
-
-  def logo
-    @logo
   end
 
   def note_generator(note_length)
