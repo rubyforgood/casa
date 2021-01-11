@@ -11,7 +11,7 @@ RSpec.describe "/followups", type: :request do
           sign_in admin
 
           expect {
-            post followups_path, params: {contact_id: contact.id}
+            post case_contact_followups_path(contact)
           }.to change(Followup, :count).by(1)
         end
       end
@@ -22,7 +22,7 @@ RSpec.describe "/followups", type: :request do
         it "advances the followup to the :resolved status" do
           sign_in admin
 
-          post followups_path, params: {contact_id: contact.id}
+          post case_contact_followups_path(contact)
           expect(followup.reload.status).to eq("resolved")
         end
       end
@@ -32,7 +32,7 @@ RSpec.describe "/followups", type: :request do
       it "does not create a new Followup" do
         sign_in admin
 
-        expect { post followups_path, params: {contact_id: "nonsense"} }.to change(
+        expect { post case_contact_followups_path(44444) }.to change(
           Followup,
           :count
         ).by(0)
@@ -41,7 +41,7 @@ RSpec.describe "/followups", type: :request do
       it "redirects to the casa case index view" do
         sign_in admin
 
-        post followups_path, params: {contact_id: "nonsense"}
+        post case_contact_followups_path(444444)
         expect(response).to redirect_to "/casa_cases"
       end
     end
