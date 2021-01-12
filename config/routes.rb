@@ -43,8 +43,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :case_contacts, except: %i[show]
-  resources :followups, only: %i[create]
+  resources :case_contacts, except: %i[show] do
+    resources :followups, only: %i[create]
+  end
   resources :reports, only: %i[index]
   resources :case_court_reports, only: %i[index show] do
     collection do

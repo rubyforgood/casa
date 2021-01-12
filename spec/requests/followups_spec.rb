@@ -11,7 +11,7 @@ RSpec.describe "/followups", type: :request do
           sign_in admin
 
           expect {
-            post followups_path, params: {contact_id: contact.id}
+            post case_contact_followups_path(contact)
           }.to change(Followup, :count).by(1)
         end
       end
@@ -22,27 +22,19 @@ RSpec.describe "/followups", type: :request do
         it "advances the followup to the :resolved status" do
           sign_in admin
 
-          post followups_path, params: {contact_id: contact.id}
+          post case_contact_followups_path(contact)
           expect(followup.reload.status).to eq("resolved")
         end
       end
     end
 
-    context "with invalid parameters" do
-      it "does not create a new Followup" do
+    context "with invalid case_contact" do
+      it "raises ActiveRecord::RecordNotFound" do
         sign_in admin
 
-        expect { post followups_path, params: {contact_id: "nonsense"} }.to change(
-          Followup,
-          :count
-        ).by(0)
-      end
-
-      it "redirects to the casa case index view" do
-        sign_in admin
-
-        post followups_path, params: {contact_id: "nonsense"}
-        expect(response).to redirect_to "/casa_cases"
+        expect {
+          post case_contact_followups_path(444444)
+        }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
