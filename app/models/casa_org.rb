@@ -5,7 +5,6 @@ class CasaOrg < ApplicationRecord
   has_many :users, dependent: :destroy
   has_many :casa_cases, dependent: :destroy
   has_many :contact_type_groups, dependent: :destroy
-  has_one :casa_org_logo, dependent: :destroy
   has_many :hearing_types, dependent: :destroy
   has_one_attached :logo
 
