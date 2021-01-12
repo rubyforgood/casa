@@ -23,7 +23,7 @@ class SeederMain
   end
 
   def seed
-    # PaperTrail.disable # don't create rows in the versions table during seed
+    PaperTrail.enabled = false # don't create rows in the versions table during seed
     log "NOTE: seed does not delete anything anymore! You have to run rake db:seed:replant to truncate and re-seed"
     log "Creating the objects in the database..."
     db_populator.create_all_casa_admin("allcasaadmin@example.com")
@@ -32,7 +32,7 @@ class SeederMain
     db_populator.create_org(CasaOrgPopulatorPresets.minimal_dataset_options)
 
     post_process_data
-
+    PaperTrail::Version.delete_all
     report_object_counts
     log "\nDone.\n\n"
   end
@@ -84,6 +84,7 @@ class SeederMain
     active_record_classes.each do |klass|
       log "%5d  %s" % [klass.count, klass.name]
     end
+    log "%5d  %s" % [PaperTrail::Version.count, PaperTrail::Version.name]
   end
 
   def log(message)
