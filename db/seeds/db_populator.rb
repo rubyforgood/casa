@@ -10,7 +10,6 @@ class DbPopulator
   PREFIX_OPTIONS = ("A".ord.."Z".ord).to_a.map(&:chr)
 
   attr_reader :rng
-  attr_reader :logo
 
   # Public Methods
 
@@ -35,7 +34,6 @@ class DbPopulator
     casa_org = CasaOrg.find_or_create_by!(name: options.org_name) { |org|
       org.name = options.org_name
       org.display_name = options.org_name
-      org.logo = logo
       org.address = Faker::Address.full_address
       org.footer_links = [
         ["https://example.org/contact/", "Contact Us"],
