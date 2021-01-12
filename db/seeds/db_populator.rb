@@ -21,7 +21,9 @@ class DbPopulator
   end
 
   def create_all_casa_admin(email = "allcasaadmin@example.com")
-    AllCasaAdmin.create!(email: email, password: SEED_PASSWORD, password_confirmation: SEED_PASSWORD)
+    unless AllCasaAdmin.find_by(email: email)
+      AllCasaAdmin.create!(email: email, password: SEED_PASSWORD, password_confirmation: SEED_PASSWORD)
+    end
   end
 
   # See CasaOrgPopulatorPresets for the content of the options hash.
@@ -63,19 +65,22 @@ class DbPopulator
 
     create_users_of_type = ->(klass, count) do
       (1..count).each do |n|
+        current_email = email.call(klass, n)
         attributes = {
           casa_org: casa_org,
-          email: email.call(klass, n),
-          display_name: "#{prefix} #{Faker::Name.name}",
+          email: current_email,
           password: SEED_PASSWORD,
           password_confirmation: SEED_PASSWORD,
+          display_name: "#{prefix} #{Faker::Name.name}",
           active: true
         }
         # Approximately 1 out of 30 volunteers should be set to inactive.
         if klass == Volunteer && rng.rand(30) == 0
           attributes[:active] = false
         end
-        klass.create!(attributes)
+        unless klass.find_by(email: current_email)
+          klass.create!(attributes)
+        end
       end
     end
 
@@ -132,13 +137,16 @@ class DbPopulator
     volunteers = Volunteer.where(active: true).to_a
     ContactTypePopulator.populate
     options.case_count.times do
-      new_casa_case = CasaCase.create!(
-        casa_org_id: casa_org.id,
-        case_number: "#{generate_case_number} #{prefix}",
-        transition_aged_youth: random_true_false
-      )
+      case_number = "#{generate_case_number} #{prefix}"
+      unless (new_casa_case = CasaCase.find_by(case_number: case_number))
+        new_casa_case = CasaCase.find_or_create_by!(
+          casa_org_id: casa_org.id,
+          case_number: case_number,
+          transition_aged_youth: random_true_false
+        )
+      end
       casa_org_volunteers = volunteers.select { |volunteer| volunteer.casa_org_id == casa_org.id }
-      CaseAssignment.create!(casa_case: new_casa_case, volunteer: casa_org_volunteers.sample(random: rng))
+      CaseAssignment.find_or_create_by!(casa_case: new_casa_case, volunteer: casa_org_volunteers.sample(random: rng))
 
       random_case_contact_count.times do
         create_case_contact(new_casa_case, prefix)
@@ -159,14 +167,14 @@ class DbPopulator
       "deprecated hearing"
     ]
     active_hearing_type_names.each do |hearing_type_name|
-      HearingType.create!(
+      HearingType.find_or_create_by!(
         casa_org_id: casa_org.id,
         name: hearing_type_name,
         active: true
       )
     end
     inactive_hearing_type_names.each do |hearing_type_name|
-      HearingType.create!(
+      HearingType.find_or_create_by!(
         casa_org_id: casa_org.id,
         name: hearing_type_name,
         active: false

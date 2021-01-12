@@ -23,9 +23,8 @@ class SeederMain
   end
 
   def seed
-    log "Erasing all objects from the database..."
-    destroy_all
-
+    PaperTrail.enabled = false # don't create rows in the versions table during seed
+    log "NOTE: seed does not delete anything anymore! You have to run rake db:seed:replant to truncate and re-seed"
     log "Creating the objects in the database..."
     db_populator.create_all_casa_admin("allcasaadmin@example.com")
     db_populator.create_all_casa_admin("all_casa_admin1@example.com")
@@ -33,7 +32,7 @@ class SeederMain
     db_populator.create_org(CasaOrgPopulatorPresets.minimal_dataset_options)
 
     post_process_data
-
+    PaperTrail::Version.delete_all
     report_object_counts
     log "\nDone.\n\n"
   end
@@ -58,19 +57,10 @@ class SeederMain
     ]
   end
 
-  def destroy_all
-    # Order is important here; CaseContact must be destroyed before the User that created it.
-    # The User is destroyed as a result of destroying the CasaOrg.
-    [SupervisorVolunteer, CaseContact, CasaOrg, AllCasaAdmin, ContactTypeGroup, ContactType].each { |klass| klass.destroy_all }
-    non_empty_classes = active_record_classes.select { |klass| klass.count > 0 }
-    if non_empty_classes.any?
-      raise "destroy_all did not result in the following classes being empty: #{non_empty_classes.join(", ")}"
-    end
-  end
-
   def post_process_data
     ContactTypePopulator.populate
     CaseContactPopulator.populate
+    # PaperTrail::Versions.delete_all # not needed for seed, and it takes up a lot of heroku rows we don't care to pay for
   end
 
   def get_seed_specification
@@ -94,6 +84,7 @@ class SeederMain
     active_record_classes.each do |klass|
       log "%5d  %s" % [klass.count, klass.name]
     end
+    log "%5d  %s" % [PaperTrail::Version.count, PaperTrail::Version.name]
   end
 
   def log(message)

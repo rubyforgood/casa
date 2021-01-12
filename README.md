@@ -113,7 +113,7 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 
 **Running the development server**
 
-1. `bin/rails db:seed` load sample data into the database
+1. `bin/rails db:seed:replant` to delete all existing data and load sample data into the database
 1. `bin/rails server` run server
 
 **Cleaning up before you commit**
@@ -218,6 +218,8 @@ https://casa-r4g-staging.herokuapp.com/
 We have real users in production!
 
 If you represent a CASA organization which wants to use this, please contact us! polly@rubyforgood.org
+
+See https://github.com/rubyforgood/casa/wiki for deploy & SRE notes
 
 ### Deployment
 [Follow this Deployment Checklist](./DEPLOY_CHECKLIST.md)
