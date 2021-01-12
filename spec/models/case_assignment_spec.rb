@@ -38,6 +38,13 @@ RSpec.describe CaseAssignment do
     expect(casa_case_2.reload.volunteers).to eq([volunteer_1])
   end
 
+  it "does not allow a volunteer to be double assigned" do
+    expect {
+      volunteer_1.casa_cases << casa_case_1
+      volunteer_1.casa_cases << casa_case_1
+    }.to raise_error(ActiveRecord::RecordInvalid)
+  end
+
   it "requires case and volunteer belong to the same organization" do
     case_assignment = casa_case_1.case_assignments.new(volunteer: volunteer_1)
     expect { volunteer_1.update(casa_org: casa_org_2) }.to change(case_assignment, :valid?).to false

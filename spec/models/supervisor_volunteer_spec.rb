@@ -18,6 +18,13 @@ RSpec.describe SupervisorVolunteer do
     expect { supervisor_2.volunteers << volunteer_1 }.to raise_error(StandardError)
   end
 
+  it "does not allow a volunteer to be double assigned" do
+    expect {
+      supervisor_1.volunteers << volunteer_1
+      supervisor_1.volunteers << volunteer_1
+    }.to raise_error(ActiveRecord::RecordInvalid)
+  end
+
   it "requires supervisor and volunteer belong to same casa_org" do
     supervisor_volunteer = supervisor_1.supervisor_volunteers.new(volunteer: volunteer_1)
     expect { volunteer_1.update(casa_org: casa_org_2) }.to change(supervisor_volunteer, :valid?).to(false)
