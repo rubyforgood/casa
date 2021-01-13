@@ -18,7 +18,7 @@ class CaseContact < ApplicationRecord
     where(is_active: true)
   }, primary_key: :creator_id, foreign_key: :volunteer_id
   has_one :supervisor, through: :creator
-  has_one :followup
+  has_many :followups
 
   belongs_to :casa_case
 
@@ -116,6 +116,10 @@ class CaseContact < ApplicationRecord
       hash[contact_type.contact_type_group.name] << contact_type.name
     end
     hash
+  end
+
+  def requested_followup
+    followups.requested.first
   end
 end
 

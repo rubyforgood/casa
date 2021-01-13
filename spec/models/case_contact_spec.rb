@@ -234,4 +234,22 @@ RSpec.describe CaseContact, type: :model do
       )
     end
   end
+
+  describe "#requested_followup" do
+    context "no followup exists in requested status" do
+      it "returns nil" do
+        case_contact = create(:case_contact)
+        expect(case_contact.requested_followup).to be_nil
+      end
+    end
+
+    context "a followup exists in requested status" do
+      it "returns nil" do
+        case_contact = create(:case_contact)
+        followup = create(:followup, case_contact: case_contact)
+
+        expect(case_contact.requested_followup).to eq(followup)
+      end
+    end
+  end
 end
