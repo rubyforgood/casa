@@ -44,7 +44,9 @@ Rails.application.routes.draw do
   end
 
   resources :case_contacts, except: %i[show] do
-    resources :followups, only: %i[create]
+    resources :followups, only: %i[create], controller: "case_contacts/followups", shallow: true do
+      patch :resolve, on: :member
+    end
   end
   resources :reports, only: %i[index]
   resources :case_court_reports, only: %i[index show] do

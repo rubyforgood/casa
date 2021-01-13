@@ -7,7 +7,7 @@ RSpec.describe FollowupPolicy do
   let(:volunteer) { build_stubbed(:volunteer) }
   let(:supervisor) { build_stubbed(:supervisor) }
 
-  permissions :create? do
+  permissions :create?, :resolve? do
     it "allows casa_admins" do
       is_expected.to permit(casa_admin)
     end

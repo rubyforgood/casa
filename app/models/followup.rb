@@ -3,6 +3,21 @@ class Followup < ApplicationRecord
   belongs_to :creator, class_name: "User"
 
   enum status: {requested: 0, resolved: 1}
+
+  validate :uniqueness_of_requested
+
+  def uniqueness_of_requested
+    return if resolved?
+    return if existing_requested_followup?
+
+    errors.add(:base, "Only 1 Followup can be in requested status.")
+  end
+
+  private
+
+  def existing_requested_followup?
+    Followup.where(status: :requested, case_contact: case_contact).count == 0
+  end
 end
 
 # == Schema Information
