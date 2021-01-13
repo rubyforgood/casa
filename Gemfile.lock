@@ -142,7 +142,7 @@ GEM
       activemodel-serializers-xml (>= 1.0)
       activesupport (>= 5.0)
       request_store (>= 1.0)
-    erb_lint (0.0.36)
+    erb_lint (0.0.37)
       activesupport
       better_html (~> 1.0.7)
       html_tokenizer
