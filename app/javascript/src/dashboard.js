@@ -9,6 +9,17 @@ var defineCaseContactsTable = function () {
   )
 }
 
+var defineSupervisorsDataTable = function () {
+  $('table#supervisors').DataTable(
+    {
+      autoWidth: false,
+      scrollX: true,
+      searching: false,
+      order: [[0, 'desc']]
+    }
+  )
+}
+
 $('document').ready(() => {
   $.fn.dataTable.ext.search.push(
     function (settings, data, dataIndex) {
@@ -239,6 +250,8 @@ $('document').ready(() => {
 
   defineCaseContactsTable()
 
+  defineSupervisorsDataTable()
+
   function filterOutUnassignedVolunteers (checked) {
     $('.supervisor-options').find('input[type="checkbox"]').not('#unassigned-vol-filter').each(function () {
       this.checked = checked
@@ -274,4 +287,4 @@ $('document').ready(() => {
   })
 })
 
-export { defineCaseContactsTable }
+export { defineCaseContactsTable, defineSupervisorsDataTable }
