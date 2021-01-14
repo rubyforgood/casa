@@ -57,3 +57,11 @@ en:
       full: "%B %-d, %Y"
       youth_date_of_birth: "%B %Y"
       short_date: "%-m/%d"
+  page:
+    #new: I am not sure if the file name should be add?
+      judge: #Should this be Plural as the directory name is plural. Should the
+        title: "New Judge"
+  page:
+    judge:
+      #edit:
+        title: "Edit Judge
