@@ -24,7 +24,7 @@ RSpec.describe "case_contacts/case_contact" do
       assign :casa_cases, [case_contact.casa_case]
 
       render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
-      expect(rendered).to have_text("Follow up")
+      expect(rendered).to have_button("Follow up")
     end
   end
 
