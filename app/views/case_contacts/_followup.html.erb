@@ -8,5 +8,5 @@
     <% end %>
   </div>
 <% else %>
-  <%= link_to 'Follow up', case_contact_followups_path(contact), method: "post", class: "btn btn-danger" %>
+  <%= button_to "Follow up", case_contact_followups_path(contact), method: "post", class: "btn btn-danger" %>
 <% end %>
