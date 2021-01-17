@@ -4,9 +4,9 @@ RSpec.describe "followups/resolve", type: :system do
   let(:admin) { create(:casa_admin) }
   let(:supervisor) { create(:supervisor) }
   let(:volunteer) { create(:volunteer) }
-  let(:case_contact) { create(:case_contact, creator: volunteer) }
 
-  context 'logged in as admin, followup created by volunteer' do
+  context "logged in as admin, followup created by volunteer" do
+    let(:case_contact) { create(:case_contact, creator: volunteer) }
     let!(:followup) { create(:followup, creator: volunteer, case_contact: case_contact) }
 
     it "changes status of followup to resolved" do
@@ -18,9 +18,21 @@ RSpec.describe "followups/resolve", type: :system do
       expect(case_contact.followups.count).to eq(1)
       expect(case_contact.followups.first.resolved?).to be_truthy
     end
+
+    it "removes followup icon and button changes back to 'Follow up'" do
+      sign_in admin
+      visit casa_case_path(case_contact.casa_case)
+      expect(page).to have_css("i.fa-exclamation-circle")
+
+      click_button "Resolve"
+
+      expect(page).not_to have_css("i.fa-exclamation-circle")
+      expect(page).to have_button("Follow up")
+    end
   end
 
-  context 'logged in as supervisor, followup created by volunteer' do
+  context "logged in as supervisor, followup created by volunteer" do
+    let(:case_contact) { create(:case_contact, creator: supervisor) }
     let!(:followup) { create(:followup, creator: volunteer, case_contact: case_contact) }
 
     it "changes status of followup to resolved" do
@@ -34,7 +46,8 @@ RSpec.describe "followups/resolve", type: :system do
     end
   end
 
-  context 'logged in as volunteer, followup created by admin' do
+  context "logged in as volunteer, followup created by admin" do
+    let(:case_contact) { create(:case_contact, creator: volunteer) }
     let!(:followup) { create(:followup, creator: admin, case_contact: case_contact) }
 
     it "changes status of followup to resolved" do
