@@ -57,9 +57,23 @@ en:
       full: "%B %-d, %Y"
       youth_date_of_birth: "%B %Y"
       short_date: "%-m/%d"
+#------------ this will be removed just a to help with visuals
+  activerecord:
+    models:
+      judge:
+         one: Judge
+         other: Judges
+    attributes:
+      judge:
+        name: Name
+  new_record: "New %{model}"
+  #create_record: "Create %{model}"
+  edit_record: "Edit %{model}"
+  #update_record: "Update %{model}"
+  destroy_record: "Delete %{model}"
   page:
     judge:
       title: "New Judge"
   page:
     judge:
-      title: "Edit Judge
+      title: "Edit Judge"
