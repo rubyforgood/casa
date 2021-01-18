@@ -49,6 +49,10 @@ en:
     meta:
       title: CASA Volunteer Tracking
       description: Volunteer activity tracking for CASA volunteers, supervisors, and administrators.
+   #judge:
+     #new_title: "New Judge"
+   #judge:
+     #edit_title: "Edit Judge"
   time:
     formats:
       day_and_date: "%A, %v"
@@ -66,9 +70,9 @@ en:
       judge:
         name: Name
   new_record: "New %{model}"
-  #create_record: "Create %{model}"
+ #create_record: "Create %{model}"
   edit_record: "Edit %{model}"
-  #update_record: "Update %{model}"
+ #update_record: "Update %{model}"
   destroy_record: "Delete %{model}"
   page:
     judge:
