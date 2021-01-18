@@ -57,12 +57,11 @@ en:
       full: "%B %-d, %Y"
       youth_date_of_birth: "%B %Y"
       short_date: "%-m/%d"
-#------------ this will be removed just a to help with visuals
   activerecord:
     models:
       judge:
-         one: Judge
-         other: Judges
+        one: Judge
+        other: Judges
     attributes:
       judge:
         name: Name
@@ -73,7 +72,7 @@ en:
   destroy_record: "Delete %{model}"
   page:
     judge:
-      title: "New Judge"
+      new_title: "New Judge"
   page:
     judge:
-      title: "Edit Judge"
+      edit_title: "Edit Judge"
