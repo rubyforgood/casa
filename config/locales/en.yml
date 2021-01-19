@@ -51,7 +51,7 @@ en:
       description: Volunteer activity tracking for CASA volunteers, supervisors, and administrators.
    #judge: -------------------------- to be removed?
      #new_title: "New Judge" -------- to be removed?
-   #judge: ------ --------------------to be removed?
+   #judge: ---------------------------to be removed?
      #edit_title: "Edit Judge" ------ to be removed?
    #judges: ---- Should this be 'judge,' not 'judges' as pluralizing here might add confusion?
      #new:
