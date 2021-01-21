@@ -49,16 +49,11 @@ en:
     meta:
       title: CASA Volunteer Tracking
       description: Volunteer activity tracking for CASA volunteers, supervisors, and administrators.
-   #judge: -------------------------- to be removed?
-     #new_title: "New Judge" -------- to be removed?
-   #judge: ---------------------------to be removed?
-     #edit_title: "Edit Judge" ------ to be removed?
-   #judges: ---- Should this be 'judge,' not 'judges' as pluralizing here might add confusion?
-     #new:
-       #title: 'New Judge'
-     #edit:
-       #title: 'Edit Judge'
-    time:
+    judge:
+      new:
+        title: New Judge
+      edit:
+        title: Edit Judge
     formats:
       day_and_date: "%A, %v"
       standard: "%m-%d-%Y"
@@ -66,21 +61,3 @@ en:
       full: "%B %-d, %Y"
       youth_date_of_birth: "%B %Y"
       short_date: "%-m/%d"
-  activerecord:
-    models:
-      judge:
-        one: Judge
-    attributes:
-      judge:
-        name: Name
-  new_record: "New %{model}"
- #create_record: "Create %{model}"
-  edit_record: "Edit %{model}"
- #update_record: "Update %{model}"
-  destroy_record: "Delete %{model}"
-  page:  #------------------------to be removed?
-    judge: #----------------------to be removed?
-      new_title: "New Judge" #----to be removed?
-  page:  #------------------------to be removed?
-    judge: #----------------------to be removed?
-      edit_title: "Edit Judge" #--to be removed?
