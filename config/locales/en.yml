@@ -54,6 +54,7 @@ en:
         title: New Judge
       edit:
         title: Edit Judge
+  time:
     formats:
       day_and_date: "%A, %v"
       standard: "%m-%d-%Y"
