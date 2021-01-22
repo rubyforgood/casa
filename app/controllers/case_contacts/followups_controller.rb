@@ -11,11 +11,21 @@ class CaseContacts::FollowupsController < ApplicationController
   end
 
   def resolve
-    followup = Followup.find(params[:id])
-    authorize followup
+    @followup = Followup.find(params[:id])
+    authorize @followup
 
-    followup.resolved!
+    @followup.resolved!
+    create_notification
 
-    redirect_to casa_case_path(followup.case_contact.casa_case)
+    redirect_to casa_case_path(@followup.case_contact.casa_case)
+  end
+
+  private
+
+  def create_notification
+    return if current_user == @followup.creator
+    FollowupResolvedNotification
+      .with(followup: @followup)
+      .deliver(@followup.creator)
   end
 end
