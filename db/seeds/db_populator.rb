@@ -30,7 +30,6 @@ class DbPopulator
   def create_org(options_hash)
     options = OpenStruct.new(options_hash)
     @casa_org_counter += 1
-    prefix = "org#{@casa_org_counter}#{PREFIX_OPTIONS[rng.rand(0..PREFIX_OPTIONS.length)] * 2}"
 
     options.org_name ||= "CASA Organization ##{@casa_org_counter}"
     casa_org = CasaOrg.find_or_create_by!(name: options.org_name) { |org|
@@ -44,8 +43,8 @@ class DbPopulator
       ]
     }
 
-    create_users(casa_org, options, prefix)
-    create_cases(casa_org, options, prefix)
+    create_users(casa_org, options)
+    create_cases(casa_org, options)
     create_hearing_types(casa_org)
     casa_org
   end
@@ -54,7 +53,7 @@ class DbPopulator
 
   # Creates 3 users, 1 each for [Volunteer, Supervisor, CasaAdmin].
   # For org's after the first one created, adds an org number to the email address so that they will be globally unique
-  def create_users(casa_org, options, prefix)
+  def create_users(casa_org, options)
     # Generate email address; for orgs only after first org, and org number would be added, e.g.:
     # Org #1: volunteer1@example.com
     # Org #2: volunteer2-1@example.com
@@ -71,7 +70,7 @@ class DbPopulator
           email: current_email,
           password: SEED_PASSWORD,
           password_confirmation: SEED_PASSWORD,
-          display_name: "#{prefix} #{Faker::Name.name}",
+          display_name: Faker::Name.name,
           active: true
         }
         # Approximately 1 out of 30 volunteers should be set to inactive.
@@ -113,12 +112,14 @@ class DbPopulator
     @likely_contact_durations ||= [15, 30, 60, 75, 4 * 60, 6 * 60]
   end
 
-  def note_generator(note_length)
-    available_chars = [("a".."z"), ("A".."Z"), (1..9), [" "] * WORD_LENGTH_TUNING, ["\n" * LINE_BREAK_TUNING]].map(&:to_a).flatten.map(&:to_s)
-    (0...note_length).map { available_chars[rng.rand(available_chars.length)] }.join
+  def note_generator
+    paragraph_count = Random.rand(6)
+    (0..paragraph_count).map { |index|
+      Faker::Lorem.paragraph(sentence_count: 5, supplemental: true, random_sentences_to_add: 20)
+    }.join("\n\n")
   end
 
-  def create_case_contact(casa_case, prefix)
+  def create_case_contact(casa_case)
     CaseContact.create!(
       casa_case: casa_case,
       creator: casa_case.volunteers.sample(random: rng),
@@ -129,15 +130,15 @@ class DbPopulator
       miles_driven: rng.rand(5..40),
       want_driving_reimbursement: random_true_false,
       contact_made: random_true_false,
-      notes: "#{prefix} #{note_generator(rng.rand(0..4000))}"
+      notes: note_generator
     )
   end
 
-  def create_cases(casa_org, options, prefix)
+  def create_cases(casa_org, options)
     volunteers = Volunteer.where(active: true).to_a
     ContactTypePopulator.populate
     options.case_count.times do
-      case_number = "#{generate_case_number} #{prefix}"
+      case_number = generate_case_number
       unless (new_casa_case = CasaCase.find_by(case_number: case_number))
         new_casa_case = CasaCase.find_or_create_by!(
           casa_org_id: casa_org.id,
@@ -149,7 +150,7 @@ class DbPopulator
       CaseAssignment.find_or_create_by!(casa_case: new_casa_case, volunteer: casa_org_volunteers.sample(random: rng))
 
       random_case_contact_count.times do
-        create_case_contact(new_casa_case, prefix)
+        create_case_contact(new_casa_case)
       end
     end
   end
