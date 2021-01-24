@@ -77,6 +77,7 @@ class CaseContactsController < ApplicationController
   # GET /case_contacts/1/edit
   def edit
     authorize @case_contact
+    current_user.notifications.unread.where(id: params[:notification_id]).mark_as_read!
     @casa_cases = [@case_contact.casa_case]
     @selected_cases = @casa_cases
     @current_organization_groups = current_organization.contact_type_groups

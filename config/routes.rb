@@ -66,6 +66,7 @@ Rails.application.routes.draw do
   resources :hearing_types, only: %i[new create edit update]
   resources :emancipation_checklists, only: %i[index]
   resources :judges, only: %i[new create edit update]
+  resources :notifications, only: :index
   resources :supervisors, except: %i[destroy]
   resources :supervisor_volunteers, only: %i[create] do
     member do
