@@ -147,4 +147,27 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
     end
   end
+
+  context "notifications" do
+    let(:user) { build_stubbed :volunteer }
+
+    it "displays badge when user has notifications" do
+      sign_in user
+      build_stubbed(:notification)
+      allow(user).to receive_message_chain(:notifications, :unread).and_return([:notification])
+
+      render partial: "layouts/sidebar"
+
+      expect(rendered).to have_css("span.badge")
+    end
+
+    it "displays no badge when user has no unread notifications" do
+      sign_in user
+      allow(user).to receive_message_chain(:notifications, :unread).and_return([])
+
+      render partial: "layouts/sidebar"
+
+      expect(rendered).not_to have_css("span.badge")
+    end
+  end
 end

@@ -87,5 +87,24 @@ RSpec.describe "/followups", type: :request do
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
+
+    context "notifications" do
+      context "supervisor/admin creates followup" do
+        let(:volunteer_2) { create(:volunteer) }
+        let(:unassigned_volunteer) { create(:volunteer) }
+
+        it "should create a notification for all assigned volunteers" do
+          casa_case = contact.casa_case
+          casa_case.assigned_volunteers = [volunteer, volunteer_2]
+          sign_in admin
+
+          post case_contact_followups_path(contact)
+
+          expect(volunteer.notifications.count).to eq(1)
+          expect(volunteer_2.notifications.count).to eq(1)
+          expect(unassigned_volunteer.notifications.count).to eq(0)
+        end
+      end
+    end
   end
 end
