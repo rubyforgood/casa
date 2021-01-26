@@ -17,6 +17,10 @@ class FollowupNotification < Noticed::Base
 
   # Define helper methods to make rendering easier.
   #
+  def title
+    t(".title")
+  end
+
   def message
     t(".message", created_by_name: params[:created_by_name])
   end
