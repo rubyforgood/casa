@@ -9,19 +9,16 @@ let(:volunteer){create(:volunteer, :with_casa_cases, casa_org: organization)}
     allow(controller).to receive(:current_user).and_return(volunteer)
   end
 
-  it "raises add_category error message" do  #when "add_category"
+  it "raises add_category error message" do
     test_case_category = create(:casa_case_emancipation_category)
     post :save, params:{casa_case_id: '1'}
     expect(response.body).to eq({"error": "Missing param check_item_action"}.to_json)
-    test_case_category.add_emancipation_category()
   end
 
   it"raises add_option error message" do
-    #test_case_category = CasaCaseCasaCase.new
-    # test_case_category.add_emancipation_option(params[:1])
-    # test_case_category.add_emancipation_option(params[:2])
-    # test_case_category.add_emancipation_option(params[:3])
-    # expect{ test_case_category.add_emancipation_option(params[:4]) }.to raise("Param check_item_action did not contain a supported action")
+    test_case_category = create(:casa_case_emancipation_category)
+    post :save, params: {casa_case_id: '-1'}
+    expect(response.body).to eq({"error": "Param casa_case_id must be a positive integer"}.to_json)
   end
 
   it"raises delete_category error message" do
