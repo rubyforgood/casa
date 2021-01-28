@@ -14,7 +14,7 @@
         <div class="d-flex-shrink-0"><%= notification_icon(notification) %></div>
         <div class="ml-2 flex-grow-1">
           <div class="d-flex justify-content-between">
-            <h5 class="mb-1">Followup resolved</h5>
+            <h5 class="mb-1"><%= notification.to_notification.title %></h5>
             <small><%= time_ago_in_words(notification.updated_at) %> ago</small>
           </div>
           <p class="mb-1"><%= notification.to_notification.message %></p>
