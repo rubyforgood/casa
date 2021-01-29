@@ -1,6 +1,10 @@
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg)
+  }
+  100% {
+    transform: rotate(360deg)
+  }
 }
 
 #async-notifications {
@@ -16,17 +20,17 @@
     margin: .25em;
     margin-left: auto;
     margin-right: 0;
-    padding: .5em;
+    padding: .5em
   }
 
   .async-failure-indicator {
     background-color: #b71c1c;
-    color: white;
+    color: white
   }
   
   .async-success-indicator {
     background-color: #28a745;
-    color: white;
+    color: white
   }
 
   #async-waiting-indicator {
@@ -42,7 +46,7 @@
       height: 1em;
       margin: 0;
       padding: 0;
-      width: 1em;
+      width: 1em
     }
   }
 }
@@ -57,7 +61,7 @@
   padding: .5em;
 
   input[type="checkbox"] {
-    pointer-events: none;
+    pointer-events: none
   }
 
   label {
@@ -68,7 +72,7 @@
     color: #00447c;
     float: right;
     font-weight: bold;
-    font-size: 18pt;
+    font-size: 18pt
   }
 }
 
@@ -85,12 +89,12 @@
   cursor: default;
 
   span, label{
-    color: #757575;
+    color: #757575
   }
 }
 
 .emancipation-category.disabled:hover{
-  background-color: unset;
+  background-color: unset
 }
 
 .no-select {
