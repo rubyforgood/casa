@@ -6,7 +6,7 @@ module CssHelpers
     attribute_strings.each_with_object({}) do |string, style_hash|
       first_colon_position = string.index(":")
       key = string[0...first_colon_position].strip
-      value = string[(first_colon_position + 1)..-1].strip
+      value = string[(first_colon_position + 1)..].strip
       style_hash[key] = value
     end
   end
