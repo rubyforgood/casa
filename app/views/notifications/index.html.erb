@@ -8,8 +8,7 @@
   <% @notifications.each do | notification | %>
     <a
       href="<%= notification.to_notification.url %>"
-      class="<%= notification_row_class(notification) %> list-group-item list-group-item-action flex-column align-items-start"
-      >
+      class="<%= notification_row_class(notification) %> list-group-item list-group-item-action flex-column align-items-start">
       <div class="d-flex flex-row">
         <div class="d-flex-shrink-0"><%= notification_icon(notification) %></div>
         <div class="ml-2 flex-grow-1">

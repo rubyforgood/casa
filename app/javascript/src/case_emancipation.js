@@ -23,24 +23,24 @@ function notify (message, level) {
           Error: ${message}
           <button class="btn btn-danger btn-sm">×</button>
         </div>`)
-      .find('.async-failure-indicator button').click(function () {
-        $(this).parent().remove()
-      })
-      break;
-   case 'info':
+        .find('.async-failure-indicator button').click(function () {
+          $(this).parent().remove()
+        })
+      break
+    case 'info':
       emancipationPage.notifications.append(`
         <div class="async-success-indicator">
           ${message}
           <button class="btn btn-success btn-sm">×</button>
         </div>`)
-      .find('.async-success-indicator button').click(function () {
-        $(this).parent().remove()
-      })
+        .find('.async-success-indicator button').click(function () {
+          $(this).parent().remove()
+        })
 
-      break;
-  default:
+      break
+    default:
       throw new RangeError('Unsupported option for param level')
-      break;
+      break
   }
 }
 
@@ -122,20 +122,20 @@ function saveCheckState (action, checkItemId) {
     check_item_action: action,
     check_item_id: checkItemId
   })
-  .then(function (response, textStatus, jqXHR) {
-    if (response.error) {
-      return $.Deferred().reject(jqXHR, textStatus, response.error);
-    } else if (response === 'success') {
-      resolveAsyncOperation()
-    } else {
-      resolveAsyncOperation('Unknown response')
-    }
+    .then(function (response, textStatus, jqXHR) {
+      if (response.error) {
+        return $.Deferred().reject(jqXHR, textStatus, response.error)
+      } else if (response === 'success') {
+        resolveAsyncOperation()
+      } else {
+        resolveAsyncOperation('Unknown response')
+      }
 
-    return response
-  })
-  .fail(function (jqXHR, textStatus, error) {
-    resolveAsyncOperation(error)
-  })
+      return response
+    })
+    .fail(function (jqXHR, textStatus, error) {
+      resolveAsyncOperation(error)
+    })
 }
 
 $('document').ready(() => {
@@ -150,27 +150,27 @@ $('document').ready(() => {
     categoryCheckboxChecked = categoryCheckbox.is(':checked')
     categoryOptionsContainer = category.siblings('.category-options')
 
-    if (!category.data("disabled")) {
-      category.data("disabled", true)
-      category.addClass("disabled")
-      categoryCheckbox.prop("disabled", "disabled")
+    if (!category.data('disabled')) {
+      category.data('disabled', true)
+      category.addClass('disabled')
+      categoryCheckbox.prop('disabled', 'disabled')
 
       let saveAction,
-          collapseIcon,
-          doneCallback
+        collapseIcon,
+        doneCallback
 
       if (categoryCheckboxChecked) {
         // Uncheck all category options
         categoryOptionsContainer.children().filter(function () {
           return $(this).prop('checked')
-        }).each(function() {
-          let checkbox = $(this)
+        }).each(function () {
+          const checkbox = $(this)
 
           checkbox.prop('checked', false)
           saveCheckState('delete_option', checkbox.val())
-          .fail(function() {
-            checkbox.prop('checked', false)
-          })
+            .fail(function () {
+              checkbox.prop('checked', false)
+            })
           notify('Unchecked ' + checkbox.next().text(), 'info')
         })
 
@@ -188,16 +188,16 @@ $('document').ready(() => {
       }
 
       saveCheckState(saveAction, categoryCheckbox.val())
-      .done(function () {
-        doneCallback()
-        categoryCheckbox.prop('checked', !categoryCheckboxChecked)
-        categoryCollapseIcon.text(collapseIcon)
-      })
-      .always(function () {
-        category.data("disabled", false)
-        category.removeClass("disabled")
-        categoryCheckbox.prop("disabled", false)
-      })
+        .done(function () {
+          doneCallback()
+          categoryCheckbox.prop('checked', !categoryCheckboxChecked)
+          categoryCollapseIcon.text(collapseIcon)
+        })
+        .always(function () {
+          category.data('disabled', false)
+          category.removeClass('disabled')
+          categoryCheckbox.prop('disabled', false)
+        })
     }
   })
 
@@ -205,15 +205,15 @@ $('document').ready(() => {
     const thisRadioButton = $(this)
 
     saveCheckState('set_option', thisRadioButton.val())
-    .fail(function() {
-      thisRadioButton.prop('checked', false)
-    })
+      .fail(function () {
+        thisRadioButton.prop('checked', false)
+      })
   })
 
   $('.emancipation-option-check-box').change(function () {
     const thisCheckBox = $(this)
 
-    let originallyChecked = thisCheckBox.prop('checked')
+    const originallyChecked = thisCheckBox.prop('checked')
     let asyncCall
 
     if (originallyChecked) {
@@ -222,7 +222,7 @@ $('document').ready(() => {
       asyncCall = saveCheckState('delete_option', thisCheckBox.val())
     }
 
-    asyncCall.fail(function() {
+    asyncCall.fail(function () {
       thisCheckBox.prop('checked', originallyChecked)
     })
   })
