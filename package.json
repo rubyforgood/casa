@@ -28,7 +28,7 @@
   "devDependencies": {
     "cypress": "^4.12.1",
     "jest": "^26.4.2",
-    "standard": "^14.3.4",
+    "standard": "^16.0.3",
     "start-server-and-test": "^1.11.5",
     "webpack-dev-server": "^3.11.2"
   },
