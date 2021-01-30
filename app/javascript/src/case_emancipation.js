@@ -144,11 +144,11 @@ $('document').ready(() => {
   emancipationPage.asyncWaitIndicator = emancipationPage.notifications.find('#async-waiting-indicator')
 
   $('.emancipation-category').click(function () {
-    category = $(this)
-    categoryCheckbox = category.find('input[type="checkbox"]')
-    categoryCollapseIcon = category.find('span')
-    categoryCheckboxChecked = categoryCheckbox.is(':checked')
-    categoryOptionsContainer = category.siblings('.category-options')
+    let category = $(this)
+    let categoryCheckbox = category.find('input[type="checkbox"]')
+    let categoryCollapseIcon = category.find('span')
+    let categoryCheckboxChecked = categoryCheckbox.is(':checked')
+    let categoryOptionsContainer = category.siblings('.category-options')
 
     if (!category.data('disabled')) {
       category.data('disabled', true)
@@ -201,13 +201,30 @@ $('document').ready(() => {
     }
   })
 
-  $('.emancipation-radio-button').change(function (data) {
-    const thisRadioButton = $(this)
+  $('.check-item').click(function() {
+    const checkComponent = $(this)
 
-    saveCheckState('set_option', thisRadioButton.val())
-      .fail(function () {
-        thisRadioButton.prop('checked', false)
-      })
+    if (!checkComponent.data("disabled")) {
+      const checkElement = $(this).find('input')
+
+      if (!(checkElement.attr('type') === 'radio' && checkElement.prop('checked'))) {
+        checkComponent.data("disabled", true)
+        checkComponent.addClass("disabled")
+        checkElement.prop("disabled", "disabled")
+
+        if (checkElement.attr('type') === 'radio') {
+          saveCheckState('set_option', checkElement.val())
+          .done(function() {
+            checkComponent.data("disabled", false)
+            checkComponent.removeClass("disabled")
+            checkElement.prop('checked', true)
+            checkElement.prop("disabled", false)
+          })
+        } else {// Expecting type=checkbox
+
+        }
+      }
+    }
   })
 
   $('.emancipation-option-check-box').change(function () {

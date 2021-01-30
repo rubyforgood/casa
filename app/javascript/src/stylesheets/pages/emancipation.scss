@@ -54,6 +54,14 @@
 .category-options {
   margin-left: 2em;
   margin-bottom: 1em;
+
+  input[type="checkbox"], input[type="radio"] {
+    pointer-events: none
+  }
+}
+
+.category-options.disabled {
+
 }
 
 .emancipation-category {
