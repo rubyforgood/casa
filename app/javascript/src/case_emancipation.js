@@ -221,26 +221,23 @@ $('document').ready(() => {
             checkElement.prop("disabled", false)
           })
         } else {// Expecting type=checkbox
+          let originallyChecked = checkElement.prop('checked')
+          let asyncCall
 
+          if (!originallyChecked) {
+            asyncCall = saveCheckState('add_option', checkElement.val())
+          } else {
+            asyncCall = saveCheckState('delete_option', checkElement.val())
+          }
+
+          asyncCall.done(function() {
+            checkComponent.data("disabled", false)
+            checkComponent.removeClass("disabled")
+            checkElement.prop('checked', !originallyChecked)
+            checkElement.prop("disabled", false)
+          })
         }
       }
     }
-  })
-
-  $('.emancipation-option-check-box').change(function () {
-    const thisCheckBox = $(this)
-
-    const originallyChecked = thisCheckBox.prop('checked')
-    let asyncCall
-
-    if (originallyChecked) {
-      asyncCall = saveCheckState('add_option', thisCheckBox.val())
-    } else {
-      asyncCall = saveCheckState('delete_option', thisCheckBox.val())
-    }
-
-    asyncCall.fail(function () {
-      thisCheckBox.prop('checked', originallyChecked)
-    })
   })
 })
