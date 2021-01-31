@@ -60,8 +60,12 @@
   }
 }
 
-.category-options.disabled {
+.check-item.disabled {
+  cursor: default;
 
+  label {
+    color: #757575
+  }
 }
 
 .emancipation-category {
