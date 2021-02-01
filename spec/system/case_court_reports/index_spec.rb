@@ -112,8 +112,8 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   context "when selecting a case, volunteer can generate and download a report", js: true do
-    let(:case_number) { casa_cases.find(&:has_transitioned?).case_number.to_s }
-    let(:option_text) { "#{case_number} - transition" }
+    let(:casa_case) { casa_cases.find(&:has_transitioned?) }
+    let(:option_text) { "#{casa_case.case_number} - transition" }
 
     before do
       # to find the select element, use either 'name' or 'id' attribute
@@ -142,11 +142,69 @@ RSpec.describe "case_court_reports/index", type: :system do
       end
 
       it "changes href value from '#' to a link with .docx format" do
-        download_link = "/case_court_reports/#{case_number}.docx"
+        download_link = "/case_court_reports/#{casa_case.case_number}.docx"
 
         options = {id: "btnDownloadReport", visible: :visible, href: download_link}
 
         expect(page).to have_link "Download Court Report", **options
+      end
+    end
+
+    describe "when court report status is not 'submitted'" do
+      before do
+        expect(page).to have_link "Download Court Report"
+        casa_case.update!(court_report_status: :in_review)
+      end
+
+      it "does not allow supervisors to download already generated report from case details page" do
+        supervisor = create(:supervisor, casa_org: volunteer.casa_org)
+
+        sign_out volunteer
+        sign_in supervisor
+
+        visit casa_case_path(casa_case.id)
+
+        expect(page).not_to have_link("Click to download")
+      end
+
+      it "does not allow admins to download already generated report from case details page" do
+        casa_admin = create(:casa_admin)
+
+        sign_out volunteer
+        sign_in casa_admin
+
+        visit casa_case_path(casa_case.id)
+
+        expect(page).not_to have_link("Click to download")
+      end
+    end
+
+    describe "when court report status is 'submitted'" do
+      before do
+        expect(page).to have_link "Download Court Report"
+        casa_case.update!(court_report_status: :submitted)
+      end
+
+      it "allows supervisors to download already generated report from case details page" do
+        supervisor = create(:supervisor, casa_org: volunteer.casa_org)
+
+        sign_out volunteer
+        sign_in supervisor
+
+        visit casa_case_path(casa_case.id)
+
+        expect(page).to have_link("Click to download")
+      end
+
+      it "allows admins to download already generated report from case details page" do
+        casa_admin = create(:casa_admin)
+
+        sign_out volunteer
+        sign_in casa_admin
+
+        visit casa_case_path(casa_case.id)
+
+        expect(page).to have_link("Click to download")
       end
     end
   end

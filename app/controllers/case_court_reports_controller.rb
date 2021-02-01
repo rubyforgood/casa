@@ -14,15 +14,16 @@ class CaseCourtReportsController < ApplicationController
   # GET /case_court_reports/:id
   def show
     authorize CaseCourtReport
-    unless @casa_case
+    if !@casa_case || !@casa_case.court_report.attached?
       flash[:alert] = "Report #{params[:id]} is not found."
       redirect_to(case_court_reports_path) and return # rubocop:disable Style/AndOr
     end
 
     respond_to do |format|
       format.docx do
-        report_data = generate_report_to_string(@casa_case)
-        send_report(report_data)
+        @casa_case.court_report.open do |file|
+          send_data File.open(file.path), type: :docx, disposition: "attachment", status: :ok
+        end
       end
     end
   end
@@ -31,10 +32,12 @@ class CaseCourtReportsController < ApplicationController
   def generate
     authorize CaseCourtReport
     casa_case = CasaCase.find_by(case_params)
-
     respond_to do |format|
       format.json do
         if casa_case
+          report_data = generate_report_to_string(casa_case)
+          save_report(report_data, casa_case)
+
           render json: {link: case_court_report_path(casa_case.case_number, format: "docx"), status: :ok}
         else
           flash[:alert] = "Report #{params[:case_number]} is not found."
@@ -69,24 +72,21 @@ class CaseCourtReportsController < ApplicationController
     court_report.generate_to_string
   end
 
+  def save_report(report_data, casa_case)
+    Tempfile.create do |t|
+      t.binmode.write(report_data)
+      t.rewind
+      casa_case.court_report.attach(
+        io: File.open(t.path), filename: "#{casa_case.case_number}.docx"
+      )
+    end
+  end
+
   def report_type(casa_case)
     casa_case.has_transitioned? ? "transition" : "non_transition"
   end
 
   def path_to_template(type)
     "app/documents/templates/report_template_#{type}.docx"
-  end
-
-  # Use Tempfile Utility Class to generate a temporary file from the Word template into memory
-  def send_report(data)
-    Tempfile.create do |t|
-      t.binmode
-      t.write(data)
-      t.rewind
-      t.close
-
-      # `rb` = read-binary mode
-      send_data File.open(t.path, "rb").read, type: :docx, disposition: "attachment", status: :ok
-    end
   end
 end
