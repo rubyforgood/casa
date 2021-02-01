@@ -159,11 +159,12 @@ $('document').ready(() => {
         doneCallback
 
       if (categoryCheckboxChecked) {
+          console.log(categoryOptionsContainer.children())
         // Uncheck all category options
         categoryOptionsContainer.children().filter(function () {
-          return $(this).prop('checked')
+          return $(this).find('input').prop('checked')
         }).each(function () {
-          const checkbox = $(this)
+          const checkbox = $(this).find('input')
 
           checkbox.prop('checked', false)
           notify('Unchecked ' + checkbox.next().text(), 'info')
