@@ -159,20 +159,19 @@ $('document').ready(() => {
         doneCallback
 
       if (categoryCheckboxChecked) {
-          console.log(categoryOptionsContainer.children())
-        // Uncheck all category options
-        categoryOptionsContainer.children().filter(function () {
-          return $(this).find('input').prop('checked')
-        }).each(function () {
-          const checkbox = $(this).find('input')
-
-          checkbox.prop('checked', false)
-          notify('Unchecked ' + checkbox.next().text(), 'info')
-        })
-
         collapseIcon = '+'
         doneCallback = () => {
           categoryOptionsContainer.hide()
+
+          // Uncheck all category options
+          categoryOptionsContainer.children().filter(function () {
+            return $(this).find('input').prop('checked')
+          }).each(function () {
+            const checkbox = $(this).find('input')
+
+            checkbox.prop('checked', false)
+            notify('Unchecked ' + checkbox.next().text(), 'info')
+          })
         }
         saveAction = 'delete_category'
       } else {
