@@ -167,10 +167,6 @@ $('document').ready(() => {
           const checkbox = $(this)
 
           checkbox.prop('checked', false)
-          saveCheckState('delete_option', checkbox.val())
-            .fail(function () {
-              checkbox.prop('checked', false)
-            })
           notify('Unchecked ' + checkbox.next().text(), 'info')
         })
 
@@ -203,41 +199,60 @@ $('document').ready(() => {
 
   $('.check-item').click(function() {
     const checkComponent = $(this)
+    const checkElement = checkComponent.find('input')
 
-    if (!checkComponent.data("disabled")) {
-      const checkElement = $(this).find('input')
+    if (checkComponent.data("disabled")) {
+      return
+    }
 
-      if (!(checkElement.attr('type') === 'radio' && checkElement.prop('checked'))) {
-        checkComponent.data("disabled", true)
-        checkComponent.addClass("disabled")
-        checkElement.prop("disabled", "disabled")
-
-        if (checkElement.attr('type') === 'radio') {
-          saveCheckState('set_option', checkElement.val())
-          .done(function() {
-            checkComponent.data("disabled", false)
-            checkComponent.removeClass("disabled")
-            checkElement.prop('checked', true)
-            checkElement.prop("disabled", false)
-          })
-        } else {// Expecting type=checkbox
-          let originallyChecked = checkElement.prop('checked')
-          let asyncCall
-
-          if (!originallyChecked) {
-            asyncCall = saveCheckState('add_option', checkElement.val())
-          } else {
-            asyncCall = saveCheckState('delete_option', checkElement.val())
-          }
-
-          asyncCall.done(function() {
-            checkComponent.data("disabled", false)
-            checkComponent.removeClass("disabled")
-            checkElement.prop('checked', !originallyChecked)
-            checkElement.prop("disabled", false)
-          })
-        }
+    if (checkElement.attr('type') === 'radio') {
+      if (checkElement.prop('checked')) {
+        return
       }
+
+      const radioButtons = checkComponent.parent().children()
+
+      radioButtons.each(function () {
+        const radioComponent = $(this)
+        const radioInput = radioComponent.find('input')
+
+        radioComponent.data("disabled", true)
+        radioComponent.addClass("disabled")
+        radioInput.prop("disabled", "disabled")
+      })
+
+      saveCheckState('set_option', checkElement.val())
+      .done(function() {
+        checkElement.prop('checked', true)
+        radioButtons.each(function () {
+          const radioComponent = $(this)
+          const radioInput = radioComponent.find('input')
+
+          radioComponent.data("disabled", false)
+          radioComponent.removeClass("disabled")
+          radioInput.prop("disabled", false)
+        })
+      })
+    } else {// Expecting type=checkbox
+      checkComponent.data("disabled", true)
+      checkComponent.addClass("disabled")
+      checkElement.prop("disabled", "disabled")
+
+      let originallyChecked = checkElement.prop('checked')
+      let asyncCall
+
+      if (!originallyChecked) {
+        asyncCall = saveCheckState('add_option', checkElement.val())
+      } else {
+        asyncCall = saveCheckState('delete_option', checkElement.val())
+      }
+
+      asyncCall.done(function() {
+        checkComponent.data("disabled", false)
+        checkComponent.removeClass("disabled")
+        checkElement.prop('checked', !originallyChecked)
+        checkElement.prop("disabled", false)
+      })
     }
   })
 })
