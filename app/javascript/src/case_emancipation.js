@@ -40,7 +40,6 @@ function notify (message, level) {
       break
     default:
       throw new RangeError('Unsupported option for param level')
-      break
   }
 }
 
@@ -144,11 +143,11 @@ $('document').ready(() => {
   emancipationPage.asyncWaitIndicator = emancipationPage.notifications.find('#async-waiting-indicator')
 
   $('.emancipation-category').click(function () {
-    let category = $(this)
-    let categoryCheckbox = category.find('input[type="checkbox"]')
-    let categoryCollapseIcon = category.find('span')
-    let categoryCheckboxChecked = categoryCheckbox.is(':checked')
-    let categoryOptionsContainer = category.siblings('.category-options')
+    const category = $(this)
+    const categoryCheckbox = category.find('input[type="checkbox"]')
+    const categoryCollapseIcon = category.find('span')
+    const categoryCheckboxChecked = categoryCheckbox.is(':checked')
+    const categoryOptionsContainer = category.siblings('.category-options')
 
     if (!category.data('disabled')) {
       category.data('disabled', true)
@@ -197,11 +196,11 @@ $('document').ready(() => {
     }
   })
 
-  $('.check-item').click(function() {
+  $('.check-item').click(function () {
     const checkComponent = $(this)
     const checkElement = checkComponent.find('input')
 
-    if (checkComponent.data("disabled")) {
+    if (checkComponent.data('disabled')) {
       return
     }
 
@@ -216,29 +215,29 @@ $('document').ready(() => {
         const radioComponent = $(this)
         const radioInput = radioComponent.find('input')
 
-        radioComponent.data("disabled", true)
-        radioComponent.addClass("disabled")
-        radioInput.prop("disabled", "disabled")
+        radioComponent.data('disabled', true)
+        radioComponent.addClass('disabled')
+        radioInput.prop('disabled', 'disabled')
       })
 
       saveCheckState('set_option', checkElement.val())
-      .done(function() {
-        checkElement.prop('checked', true)
-        radioButtons.each(function () {
-          const radioComponent = $(this)
-          const radioInput = radioComponent.find('input')
+        .done(function () {
+          checkElement.prop('checked', true)
+          radioButtons.each(function () {
+            const radioComponent = $(this)
+            const radioInput = radioComponent.find('input')
 
-          radioComponent.data("disabled", false)
-          radioComponent.removeClass("disabled")
-          radioInput.prop("disabled", false)
+            radioComponent.data('disabled', false)
+            radioComponent.removeClass('disabled')
+            radioInput.prop('disabled', false)
+          })
         })
-      })
-    } else {// Expecting type=checkbox
-      checkComponent.data("disabled", true)
-      checkComponent.addClass("disabled")
-      checkElement.prop("disabled", "disabled")
+    } else { // Expecting type=checkbox
+      checkComponent.data('disabled', true)
+      checkComponent.addClass('disabled')
+      checkElement.prop('disabled', 'disabled')
 
-      let originallyChecked = checkElement.prop('checked')
+      const originallyChecked = checkElement.prop('checked')
       let asyncCall
 
       if (!originallyChecked) {
@@ -247,11 +246,11 @@ $('document').ready(() => {
         asyncCall = saveCheckState('delete_option', checkElement.val())
       }
 
-      asyncCall.done(function() {
-        checkComponent.data("disabled", false)
-        checkComponent.removeClass("disabled")
+      asyncCall.done(function () {
+        checkComponent.data('disabled', false)
+        checkComponent.removeClass('disabled')
         checkElement.prop('checked', !originallyChecked)
-        checkElement.prop("disabled", false)
+        checkElement.prop('disabled', false)
       })
     }
   })
