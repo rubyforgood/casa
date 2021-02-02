@@ -19,6 +19,7 @@ RSpec.describe "notifications/index", type: :system do
 
       notification_message = "#{volunteer.display_name} resolved a follow up. Click to see more."
       expect(page).to have_text(notification_message)
+      expect(page).to have_text("Followup resolved")
     end
   end
 
@@ -35,6 +36,7 @@ RSpec.describe "notifications/index", type: :system do
 
       notification_message = "#{admin.display_name} has flagged a Case Contact that needs follow up. Click to see more."
       expect(page).to have_text(notification_message)
+      expect(page).to have_text("New followup")
     end
   end
 end

@@ -13,7 +13,7 @@ var defineSupervisorsDataTable = function () {
   $('table#supervisors').DataTable(
     {
       columnDefs: [
-        { orderable: false, targets: 4 },
+        { orderable: false, targets: 4 }
       ],
       autoWidth: false,
       searching: false,

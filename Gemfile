@@ -17,7 +17,7 @@ gem "jbuilder", "~> 2.11" # Build JSON APIs with ease. Read more: https://github
 gem "noticed" # Notifications
 gem "paper_trail" # tracking changes
 gem "pg", ">= 0.18", "< 2.0" # Use postgresql as the database for Active Record
-gem "puma", "~> 5.1" # Use Puma as the app server
+gem "puma", "~> 5.2" # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "rack-attack" # for blocking & throttling abusive requests
 gem "skylight" # automated performance testing https://www.skylight.io/
@@ -36,7 +36,7 @@ group :development, :test do
   gem "pry-byebug"
   gem "rspec-rails", "~> 4.0.2"
   gem "shoulda-matchers"
-  gem "standard", "~> 0.11.0" # linter https://github.com/testdouble/standard
+  gem "standard", "~> 0.12.0" # linter https://github.com/testdouble/standard
   gem "cypress-on-rails", "~> 1.0"
 end
 
