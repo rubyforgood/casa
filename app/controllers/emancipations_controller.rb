@@ -1,6 +1,12 @@
 class EmancipationsController < ApplicationController
   before_action :require_organization!
   after_action :verify_authorized
+  ADD_CATEGORY = "add_category"
+  ADD_OPTION = "add_option"
+  DELETE_CATEGORY = "delete_category"
+  DELETE_OPTION = "delete_option"
+  SET_OPTION = "set_option"
+  CHECK_ITEM_ACTIONS = [ADD_CATEGORY, ADD_OPTION, DELETE_CATEGORY, DELETE_OPTION, SET_OPTION].freeze
 
   # GET /casa_cases/:casa_case_id/emancipation
   def show
@@ -12,26 +18,7 @@ class EmancipationsController < ApplicationController
   # POST /casa_cases/:casa_case_id/emancipation/save
   def save
     authorize CasaCase, :save_emancipation?
-    if !params.key?("casa_case_id")
-      render json: {error: "Missing param casa_case_id"}
-      return
-    elsif !/\A\d+\z/.match(params[:casa_case_id])
-      render json: {error: "Param casa_case_id must be a positive integer"}
-      return
-    end
-
-    unless params.key?("check_item_action")
-      render json: {error: "Missing param check_item_action"}
-      return
-    end
-
-    if !params.key?("check_item_id")
-      render json: {error: "Missing param check_item_id"}
-      return
-    elsif !/\A\d+\z/.match(params[:check_item_id])
-      render json: {error: "Param check_item_id must be a positive integer"}
-      return
-    end
+    params.permit(:casa_case_id, :check_item_action)
 
     begin
       current_case = CasaCase.find(params[:casa_case_id])
@@ -45,34 +32,34 @@ class EmancipationsController < ApplicationController
       render json: {error: "The current case is not marked as transitioning"}
       return
     end
-
+    check_item_action = params[:check_item_action]
     begin
-      case params[:check_item_action]
-        when "add_category"
+      case check_item_action
+        when ADD_CATEGORY
           current_case.add_emancipation_category(params[:check_item_id])
-          render json: "success".to_json
-        when "add_option"
+          render json: "success".to_json # TODO use {status: success} instead - update UI tomatch
+        when ADD_OPTION
           current_case.add_emancipation_option(params[:check_item_id])
           render json: "success".to_json
-        when "delete_category"
+        when DELETE_CATEGORY
           current_case.remove_emancipation_category(params[:check_item_id])
           current_case.emancipation_options.delete(EmancipationOption.category_options(params[:check_item_id]))
           render json: "success".to_json
-        when "delete_option"
+        when DELETE_OPTION
           current_case.remove_emancipation_option(params[:check_item_id])
           render json: "success".to_json
-        when "set_option"
+        when SET_OPTION
           current_case.emancipation_options.delete(EmancipationOption.category_options(EmancipationOption.find(params[:check_item_id]).emancipation_category_id))
           current_case.add_emancipation_option(params[:check_item_id])
           render json: "success".to_json
         else
-          render json: {error: "Param check_item_action did not contain a supported action"}
+          render json: {error: "Check item action: #{check_item_action} is not a supported action"}
       end
     rescue ActiveRecord::RecordNotFound
       render json: {error: "Could not find option from id given by param check_item_id"}
     rescue ActiveRecord::RecordNotUnique
       render json: {error: "Option already added to case"}
-    rescue => error
+    rescue => error # TODO catch only specific errors?
       render json: {error: error.message}
     end
   end
