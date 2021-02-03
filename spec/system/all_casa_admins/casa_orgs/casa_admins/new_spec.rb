@@ -37,5 +37,7 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     fill_in "Display name", with: "Freddy Valid"
     click_button "Submit"
     expect(page).to have_content "Email has already been taken"
+
+    expect(CasaAdmin.find_by(email: "valid@example.com").invitation_created_at).not_to be_nil
   end
 end
