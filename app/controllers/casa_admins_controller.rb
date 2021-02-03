@@ -32,7 +32,7 @@ class CasaAdminsController < ApplicationController
 
     if @casa_admin.save
       @casa_admin.invite!
-      redirect_to casa_admins_path, notice: "New Admin created."
+      redirect_to casa_admins_path, notice: "New admin created successfully"
     else
       render new_casa_admin_path
     end
