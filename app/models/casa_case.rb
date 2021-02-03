@@ -23,6 +23,8 @@ class CasaCase < ApplicationRecord
   has_many :casa_cases_emancipation_options, dependent: :destroy
   has_many :emancipation_options, through: :casa_cases_emancipation_options
   has_many :past_court_dates, dependent: :destroy
+  has_one_attached :court_report
+
   validates :case_number, uniqueness: {scope: :casa_org_id, case_sensitive: false}, presence: true
   belongs_to :hearing_type, optional: true
   belongs_to :judge, optional: true

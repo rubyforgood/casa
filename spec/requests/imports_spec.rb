@@ -33,7 +33,7 @@ RSpec.describe "/imports", type: :request do
         file: upload_file(supervisor_file)
       }
 
-      expect(request.session[:import_error]).to include("Expected", VolunteerImporter::IMPORT_HEADER.join(","))
+      expect(request.session[:import_error]).to include("Expected", VolunteerImporter::IMPORT_HEADER.join(", "))
       expect(response).to redirect_to(imports_url(import_type: "volunteer"))
     end
 
@@ -45,7 +45,7 @@ RSpec.describe "/imports", type: :request do
         file: upload_file(volunteer_file)
       }
 
-      expect(request.session[:import_error]).to include("Expected", SupervisorImporter::IMPORT_HEADER.join(","))
+      expect(request.session[:import_error]).to include("Expected", SupervisorImporter::IMPORT_HEADER.join(", "))
       expect(response).to redirect_to(imports_url(import_type: "supervisor"))
     end
 
@@ -57,7 +57,7 @@ RSpec.describe "/imports", type: :request do
         file: upload_file(supervisor_file)
       }
 
-      expect(request.session[:import_error]).to include("Expected", CaseImporter::IMPORT_HEADER.join(","))
+      expect(request.session[:import_error]).to include("Expected", CaseImporter::IMPORT_HEADER.join(", "))
       expect(response).to redirect_to(imports_url(import_type: "casa_case"))
     end
 

@@ -22,6 +22,10 @@ class CasaOrg < ApplicationRecord
     Volunteer.in_organization(self)
   end
 
+  def cases
+    CasaCase.where(casa_org_id: id)
+  end
+
   def case_contacts
     CaseContact.where(
       casa_case_id: CasaCase.where(casa_org_id: id)
