@@ -28,5 +28,11 @@ RSpec.describe "casa_admins/new", type: :system do
     click_button "Submit"
     expect(page).to have_content "New admin created successfully"
     expect(page).to have_content "valid@example.com"
+
+    click_on "New Admin"
+    fill_in "Email", with: "valid@example.com"
+    fill_in "Display Name", with: "Freddy Valid"
+    click_button "Submit"
+    expect(page).to have_content "Email has already been taken"
   end
 end

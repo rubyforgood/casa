@@ -15,7 +15,7 @@ class CasaAdminsController < ApplicationController
   def update
     authorize @casa_admin
     if @casa_admin.update(update_casa_admin_params)
-      redirect_to casa_admins_path, notice: "Admin was successfully updated."
+      redirect_to casa_admins_path, notice: "New admin created successfully"
     else
       render :edit
     end
