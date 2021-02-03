@@ -45,9 +45,9 @@
         "Number of inactive volunteers" => selected_organization
           .volunteers.where(active: false).count,
         "Number of active cases" => selected_organization
-          .cases.where(active: true).count,
+          .casa_cases.where(active: true).count,
         "Number of inactive cases" => selected_organization
-          .cases.where(active: false).count,
+          .casa_cases.where(active: false).count,
       }.each do |item_description, item_value|%>
         <li class="list-group-item">
           <strong><%=item_description%>:</strong>
