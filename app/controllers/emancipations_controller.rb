@@ -56,6 +56,7 @@ class EmancipationsController < ApplicationController
           render json: "success".to_json
         when "delete_category"
           current_case.remove_emancipation_category(params[:check_item_id])
+          current_case.emancipation_options.delete(EmancipationOption.category_options(params[:check_item_id]))
           render json: "success".to_json
         when "delete_option"
           current_case.remove_emancipation_option(params[:check_item_id])
