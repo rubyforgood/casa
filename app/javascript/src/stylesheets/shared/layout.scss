@@ -14,18 +14,29 @@ label {
   font-weight: 900;
 }
 
-.fa-car, .fa-question-circle {
+.fa-car,
+.fa-question-circle {
   color: $primary;
 }
 
 .card.card-container {
-  box-shadow: 0 4px 12px 5px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px 5px rgba(0, 0, 0, 0.08);
 }
 
+.casa-case-button {
+  margin: 0 0 12px 0;
+}
+
+
 /* ASSUMPTION: default screen size is desktop view (> 1024px) */
+
+
 /* As 'mobile-label' class is mobile only, not display them on desktop view */
+
 table.table {
-  span.mobile-label { display: none; }
+  span.mobile-label {
+    display: none;
+  }
 }
 
 #dropdownMenuButton {
@@ -33,35 +44,30 @@ table.table {
 }
 
 @media only screen and (max-width: 1024px) {
-
   .login-header {
     font-size: 0.75em !important;
   }
-
   .content {
     padding: 3rem 0;
     margin-left: 0;
   }
-
   .card-body {
     padding: 0.5rem;
   }
-
   table.table {
     thead {
       display: none;
     }
-
     tr {
       display: table;
       width: 100%;
       border-bottom: 1px solid #efefef;
-      > * {
+      >* {
         display: block;
       }
     }
-
-    th, td {
+    th,
+    td {
       border-top: none;
       font-size: 1.25rem;
       span.mobile-label {
