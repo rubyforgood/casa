@@ -14,8 +14,7 @@ RSpec.describe "followups/resolve", type: :system do
     expect(case_contact.followups.count).to eq(1)
     expect(case_contact.followups.first.resolved?).to be_truthy
   end
-  
-  
+
   context "logged in as admin, followup created by volunteer" do
     let(:case_contact) { create(:case_contact, creator: volunteer) }
     let!(:followup) { create(:followup, creator: volunteer, case_contact: case_contact) }
