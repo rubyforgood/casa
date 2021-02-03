@@ -2,18 +2,40 @@ require "rails_helper"
 
 RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
   let(:all_casa_admin) { create(:all_casa_admin, email: "theexample@example.com") }
-  let(:organization) { create(:casa_org) }
+  let(:organization) { create(:casa_org, name: "Cool CASA") }
+  let(:path) { all_casa_admins_casa_org_path(id: organization.id) }
 
-  before do
+  it "validates and creates new admin" do
+    visit path
+    expect(page).to have_content "You need to sign in before continuing."
+
     sign_in all_casa_admin
-    visit new_all_casa_admins_casa_org_casa_admin_path(casa_org_id: organization.id)
-  end
+    visit path
+    expect(page).to have_content "Administrators"
+    click_on "New CASA Admin"
+    expect(page).to have_content "New CASA Admin for Cool CASA"
 
-  it "allows an admin to create new casa_admins" do
-    fill_in "Email", with: "admin1@example.com"
-    fill_in "Display name", with: "Example Admin"
-    click_on "Submit"
+    click_button "Submit"
+    expect(page).to have_content "2 errors prohibited this Casa admin from being saved:"
+    expect(page).to have_content "Email can't be blank"
+    expect(page).to have_content "Display name can't be blank"
 
-    expect(page).to have_text("CASA Admin was successfully created.")
+    fill_in "Email", with: "invalid email"
+    fill_in "Display name", with: "Freddy"
+    click_button "Submit"
+    expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
+    expect(page).to have_content "Email is invalid"
+
+    fill_in "Email", with: "valid@example.com"
+    fill_in "Display name", with: "Freddy Valid"
+    click_button "Submit"
+    expect(page).to have_content "New admin created successfully"
+    expect(page).to have_content "valid@example.com"
+
+    click_on "New CASA Admin"
+    fill_in "Email", with: "valid@example.com"
+    fill_in "Display name", with: "Freddy Valid"
+    click_button "Submit"
+    expect(page).to have_content "Email has already been taken"
   end
 end
