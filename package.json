@@ -9,7 +9,7 @@
     "lint:fix": "standard --fix"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.14.0",
+    "@fortawesome/fontawesome-free": "^5.15.2",
     "@rails/actioncable": "^6.1.1",
     "@rails/activestorage": "^6.1.1",
     "@rails/ujs": "^6.0.0",
@@ -21,7 +21,7 @@
     "jquery": "^3.5.0",
     "popper.js": "^1.16.1",
     "select2": "^4.0.13",
-    "sweetalert2": "^9.10.11",
+    "sweetalert2": "^10.14.0",
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",
