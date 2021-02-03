@@ -44,8 +44,6 @@ RSpec.describe "followups/resolve", type: :system do
   end
 
   context "logged in as supervisor, followup created by volunteer" do
-
-
     let(:case_contact) { create(:case_contact, creator: supervisor) }
     let!(:followup) { create(:followup, creator: volunteer, case_contact: case_contact) }
 
