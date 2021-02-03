@@ -40,14 +40,10 @@
       <%{
         "Number of admins" => selected_organization.casa_admins.count,
         "Number of supervisors" => selected_organization.supervisors.count,
-        "Number of active volunteers" => selected_organization
-          .volunteers.where(active: true).count,
-        "Number of inactive volunteers" => selected_organization
-          .volunteers.where(active: false).count,
-        "Number of active cases" => selected_organization
-          .casa_cases.where(active: true).count,
-        "Number of inactive cases" => selected_organization
-          .casa_cases.where(active: false).count,
+        "Number of active volunteers" => selected_organization.volunteers.active.count,
+        "Number of inactive volunteers" => selected_organization.volunteers.inactive.count,
+        "Number of active cases" => selected_organization.casa_cases.active.count,
+        "Number of inactive cases" => selected_organization.casa_cases.inactive.count,
       }.each do |item_description, item_value|%>
         <li class="list-group-item">
           <strong><%=item_description%>:</strong>
