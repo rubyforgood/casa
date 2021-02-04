@@ -22,7 +22,8 @@ class CaseCourtReportsController < ApplicationController
     respond_to do |format|
       format.docx do
         @casa_case.court_report.open do |file|
-          send_data File.open(file.path), type: :docx, disposition: "attachment", status: :ok
+          # TODO test this .read being present, we've broken it twice now
+          send_data File.open(file.path).read, type: :docx, disposition: "attachment", status: :ok
         end
       end
     end
@@ -65,7 +66,7 @@ class CaseCourtReportsController < ApplicationController
 
     type = report_type(casa_case)
     court_report = CaseCourtReport.new(
-      volunteer_id: current_user.id,
+      volunteer_id: current_user.id, # ??? not a volunteer ? linda
       case_id: casa_case.id,
       path_to_template: path_to_template(type)
     )

@@ -17,6 +17,7 @@ class CaseCourtReport
     @report_path = args[:path_to_report]
   end
 
+  # TODO is this used?
   def generate!
     @template.render_to_file(@report_path, @context)
   end
@@ -46,9 +47,8 @@ class CaseCourtReport
   end
 
   def prepare_case_contacts
-    interviewees = CaseContactContactType.includes(:case_contact, :contact_type).where("case_contacts.casa_case_id": @casa_case.id)
-    interviewees = interviewees.where("occurred_at > ?", @casa_case.court_date) if @casa_case.court_date
-
+    cccts = CaseContactContactType.includes(:case_contact, :contact_type).where("case_contacts.casa_case_id": @casa_case.id)
+    interviewees = filter_out_old_case_contacts(cccts)
     return [] unless interviewees.size.positive?
 
     contact_dates_as_hash = aggregate_contact_dates(interviewees)
@@ -58,6 +58,15 @@ class CaseCourtReport
         type: type,
         dates: dates.join(", ")
       }
+    end
+  end
+
+  def filter_out_old_case_contacts(interviewees)
+    most_recent_court_date = @casa_case.past_court_dates.order(:date).last&.date
+    if most_recent_court_date
+      interviewees.where("occurred_at > ?", most_recent_court_date)
+    else
+      interviewees
     end
   end
 

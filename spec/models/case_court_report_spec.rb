@@ -18,6 +18,30 @@ RSpec.describe CaseCourtReport, type: :model do
       )
     end
 
+    describe "with court date in the furure" do
+      let!(:far_past_case_contact) { create :case_contact, occurred_at: 5.days.ago, casa_case_id: casa_case_with_contacts.id }
+
+      before do
+        casa_case_with_contacts.update!(court_date: 1.day.from_now)
+      end
+
+      describe "without past court date" do
+        it "has all case contacts ever created for the youth" do
+          expect(report.context[:case_contacts].length).to eq(5)
+        end
+      end
+
+      describe "with past court date" do
+        # TODO make a factory for PastCourtDate
+        let!(:past_court_date) { PastCourtDate.create!(date: 2.days.ago, casa_case_id: casa_case_with_contacts.id) }
+
+        it "has all case contacts created since the previous court date" do
+          expect(casa_case_with_contacts.past_court_dates.length).to eq(1)
+          expect(report.context[:case_contacts].length).to eq(4)
+        end
+      end
+    end
+
     describe "has valid @path_to_template" do
       it "is existing" do
         path = report.template.instance_variable_get(:@path)
