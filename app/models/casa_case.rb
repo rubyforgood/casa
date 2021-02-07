@@ -7,10 +7,14 @@ class CasaCase < ApplicationRecord
     hearing_type_name
     judge_name
     status
-    transition_aged_youth_icon
+    transition_aged_youth
     assigned_to
     actions
   ].freeze
+
+  TRANSITION_AGE_YOUTH_ICON = "🦋".freeze
+  NON_TRANSITION_AGE_YOUTH_ICON = "🐛".freeze
+
   has_paper_trail
 
   has_many :case_assignments, dependent: :destroy
