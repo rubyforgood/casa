@@ -3,9 +3,9 @@ require "sablon"
 
 RSpec.describe CaseCourtReport, type: :model do
   let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
-  let(:casa_case_without_contacts) { volunteer.casa_cases.second }
 
   describe "when receiving valid case, volunteer, and path_to_template" do
+    let(:casa_case_without_contacts) { volunteer.casa_cases.second }
     let(:casa_case_with_contacts) { volunteer.casa_cases.first }
     let(:path_to_template) { "app/documents/templates/report_template_transition.docx" }
     let(:path_to_report) { "tmp/test_report.docx" }
@@ -18,7 +18,15 @@ RSpec.describe CaseCourtReport, type: :model do
       )
     end
 
-    describe "with court date in the furure" do
+    describe "With volunteer without supervisor" do
+      let(:volunteer) { create(:volunteer, :with_cases_and_contacts) }
+
+      it "has supervisor name placeholder" do
+        expect(report.context[:volunteer][:supervisor_name]).to eq("")
+      end
+    end
+
+    describe "with court date in the future" do
       let!(:far_past_case_contact) { create :case_contact, occurred_at: 5.days.ago, casa_case_id: casa_case_with_contacts.id }
 
       before do

@@ -35,7 +35,7 @@ class CaseCourtReport
       case_contacts: prepare_case_contacts,
       volunteer: {
         name: @volunteer.display_name,
-        supervisor_name: @volunteer.supervisor.display_name,
+        supervisor_name: @volunteer.supervisor&.display_name || "",
         assignment_date: I18n.l(@casa_case.case_assignments.find_by(volunteer: @volunteer).created_at, format: :long_date, default: nil)
       }
     }
