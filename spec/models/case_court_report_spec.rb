@@ -22,7 +22,7 @@ RSpec.describe CaseCourtReport, type: :model do
       let(:volunteer) { create(:volunteer, :with_cases_and_contacts) }
 
       it "has supervisor name placeholder" do
-        expect(report.context[:volunteer][:supervisor_name]).to eq("No supervisor assigned")
+        expect(report.context[:volunteer][:supervisor_name]).to eq("")
       end
     end
 
