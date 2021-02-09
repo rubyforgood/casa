@@ -204,12 +204,10 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
 
       it "removes an emancipation category from a case when passed \"delete_category\" and the category id" do
         casa_case.emancipation_categories << mutually_exclusive_category
-        casa_case.emancipation_options << mutex_option_a
-        casa_case.emancipation_options << mutex_option_b
 
         expect {
           post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "delete_category", check_item_id: mutually_exclusive_category.id}
-        }.to change { casa_case.emancipation_options.count }.from(2).to(0)
+        }.to change { casa_case.emancipation_categories.count }.from(1).to(0)
 
         expect(response.header["Content-Type"]).to match(/application\/json/)
         expect(JSON.parse(response.body)).to eq "success"
@@ -217,10 +215,12 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
 
       it "removes all emancipation category options from a case when passed \"delete_category\" and the category id" do
         casa_case.emancipation_categories << mutually_exclusive_category
+        casa_case.emancipation_options << mutex_option_a
+        casa_case.emancipation_options << mutex_option_b
 
         expect {
           post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "delete_category", check_item_id: mutually_exclusive_category.id}
-        }.to change { casa_case.emancipation_categories.count }.from(1).to(0)
+        }.to change { casa_case.emancipation_options.count }.from(2).to(0)
 
         expect(response.header["Content-Type"]).to match(/application\/json/)
         expect(JSON.parse(response.body)).to eq "success"
