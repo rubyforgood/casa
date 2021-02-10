@@ -12,7 +12,7 @@
     "@fortawesome/fontawesome-free": "^5.15.2",
     "@rails/actioncable": "^6.1.1",
     "@rails/activestorage": "^6.1.1",
-    "@rails/ujs": "^6.1.1",
+    "@rails/ujs": "^6.1.2",
     "@rails/webpacker": "4.2.2",
     "bootstrap": "4.6.0",
     "bootstrap-datepicker": "^1.9.0",
