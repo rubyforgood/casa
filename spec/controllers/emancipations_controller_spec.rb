@@ -13,8 +13,7 @@ let(:test_case_category) {create(:casa_case_emancipation_category)}
   it "raises Missing param casa_case_id error message" do
     post :save, params:{casa_case_id: 'string'}
     expect(response.body).to eq({"error": "Param casa_case_id must be a positive integer"}.to_json)
-    #expect(response.body).to eq({"error": "Missing param casa_case_id"}.to_json)
-  end #is this test moot?
+  end
 
   it "raises add_option error message" do
     post :save, params:{casa_case_id: '-1'}
