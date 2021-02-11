@@ -1,7 +1,20 @@
 class PastCourtDate < ApplicationRecord
   belongs_to :casa_case
-end
 
+  # get reports associated with the case this belongs to before this court date but after the court date before this one
+  def associated_reports
+    prev = self.casa_case.past_court_dates.where("date < ?", self.date).order(:date).last
+    if prev
+      self.casa_case.court_reports.where("created_at > ?", prev.date).where("created_at < ?", self.date)
+    else
+      self.casa_case.court_reports.where("created_at < ?", self.date)
+    end
+  end
+
+  def latest_associated_report
+    self.associated_reports.order(:created_at).last
+  end
+end
 # == Schema Information
 #
 # Table name: past_court_dates
