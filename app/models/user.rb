@@ -31,6 +31,8 @@ class User < ApplicationRecord
 
   scope :active, -> { where(active: true) }
 
+  scope :inactive, -> { where(active: false) }
+
   scope :in_organization, lambda { |org|
     where(casa_org_id: org.id)
   }

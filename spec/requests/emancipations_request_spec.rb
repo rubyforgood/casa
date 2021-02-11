@@ -171,11 +171,11 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
       it "sends an error when a required parameter is missing" do
         post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_id: option_a.id}
         expect(JSON.parse(response.body)).to have_key("error")
-        expect(JSON.parse(response.body)["error"]).to match(/Missing param/)
+        expect(JSON.parse(response.body)["error"]).to eq("Check item action:  is not a supported action")
 
         post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option"}
         expect(JSON.parse(response.body)).to have_key("error")
-        expect(JSON.parse(response.body)["error"]).to match(/Missing param/)
+        expect(JSON.parse(response.body)["error"]).to eq("Could not find option from id given by param check_item_id")
       end
 
       it "sends an error when attempting to perform an action on a case that is not tranitioning" do

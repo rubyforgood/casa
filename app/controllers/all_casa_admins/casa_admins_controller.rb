@@ -6,13 +6,12 @@ class AllCasaAdmins::CasaAdminsController < AllCasaAdminsController
   end
 
   def create
-    @casa_admin = CasaAdmin.new(casa_admin_params)
-    @casa_admin.casa_org = @casa_org
-    @casa_admin.password = SecureRandom.hex(10)
-
-    if @casa_admin.save
-      redirect_to all_casa_admins_casa_org_path(@casa_org), notice: "CASA Admin was successfully created."
-    else
+    service = ::CreateCasaAdminService.new(@casa_org, params)
+    @casa_admin = service.build
+    begin
+      service.create!
+      redirect_to all_casa_admins_casa_org_path(@casa_org), notice: "New admin created successfully"
+    rescue ActiveRecord::RecordInvalid
       render :new
     end
   end
@@ -24,7 +23,7 @@ class AllCasaAdmins::CasaAdminsController < AllCasaAdminsController
   def update
     @casa_admin = CasaAdmin.find(params[:id])
     if @casa_admin.update(all_casa_admin_params)
-      redirect_to edit_all_casa_admins_casa_org_casa_admin_path, notice: "Admin was successfully updated."
+      redirect_to edit_all_casa_admins_casa_org_casa_admin_path, notice: "New admin created successfully"
     else
       render :edit
     end
@@ -56,9 +55,5 @@ class AllCasaAdmins::CasaAdminsController < AllCasaAdminsController
 
   def set_casa_org
     @casa_org = CasaOrg.find(params[:casa_org_id])
-  end
-
-  def casa_admin_params
-    params.require(:casa_admin).permit(:email, :display_name)
   end
 end

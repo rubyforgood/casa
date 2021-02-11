@@ -145,7 +145,7 @@ $('document').ready(() => {
       },
       {
         name: 'has_transition_aged_youth_cases',
-        render: (data, type, row, meta) => row.has_transition_aged_youth_cases === 'true' ? 'Yes 🐛🦋' : 'No',
+        render: (data, type, row, meta) => row.has_transition_aged_youth_cases === 'true' ? 'Yes 🦋' : 'No 🐛',
         searchable: false
       },
       {

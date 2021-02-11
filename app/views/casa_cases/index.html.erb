@@ -60,9 +60,9 @@
       </button>
       <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton">
         <li>
-          <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Yes 🐛🦋" checked>Yes</a>
+          <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Yes 🦋" checked>Yes</a>
         </li>
-        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No" checked>No</a>
+        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No 🐛" checked>No</a>
         </li>
       </div>
     </div>
@@ -76,7 +76,11 @@
         <li>
           <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="CINA" checked>CINA</a>
         </li>
-        <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="TPR" checked>TPR</a>
+        <li>
+          <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="TPR" checked>TPR</a>
+        </li>
+        <li>
+          <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="" checked>none</a>
         </li>
       </div>
     </div>
@@ -142,7 +146,7 @@
           <td><%= casa_case.hearing_type_name %></td>
           <td><%= casa_case.judge_name %></td>
           <td><%= casa_case.decorate.status %></td>
-          <td><%= casa_case.decorate.transition_aged_youth_icon %></td>
+          <td><%= casa_case.decorate.transition_aged_youth %></td>
           <td>
             <% if casa_case.active? %>
               <% if current_user.volunteer? %>
