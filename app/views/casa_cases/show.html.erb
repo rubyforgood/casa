@@ -52,8 +52,8 @@
     </p>
 
     <% unless @casa_case.court_report_not_submitted? %>
-      <% if @casa_case.court_report_submitted? && @casa_case.court_report.attached? %>
-        <%= link_to 'Click to download', rails_blob_path(@casa_case.court_report, disposition: 'attachment') %>
+      <% if @casa_case.court_report_submitted? && @casa_case.court_reports.attached? %>
+        <%= link_to 'Click to download', rails_blob_path(@casa_case.latest_court_report, disposition: 'attachment') %>
       <% end %>
       <p>
         <h6><strong>Court Report Submitted Date:</strong> <%= @casa_case.decorate.court_report_submitted_date %></h6>
