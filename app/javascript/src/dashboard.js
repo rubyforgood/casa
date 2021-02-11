@@ -12,8 +12,10 @@ var defineCaseContactsTable = function () {
 var defineSupervisorsDataTable = function () {
   $('table#supervisors').DataTable(
     {
+      columnDefs: [
+        { orderable: false, targets: 4 }
+      ],
       autoWidth: false,
-      scrollX: true,
       searching: false,
       order: [[0, 'desc']]
     }

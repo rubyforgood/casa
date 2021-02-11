@@ -23,6 +23,11 @@ RSpec.describe "/case_court_reports", type: :request do
       let(:casa_case) { volunteer.casa_cases.first }
 
       before do
+        Tempfile.create do |t|
+          casa_case.court_report.attach(
+            io: File.open(t.path), filename: "#{casa_case.case_number}.docx"
+          )
+        end
         get case_court_report_path(casa_case.case_number, format: "docx")
       end
 
