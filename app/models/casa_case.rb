@@ -82,7 +82,7 @@ class CasaCase < ApplicationRecord
   validates_with CourtReportValidator, fields: [:court_report_status, :court_report_submitted_at]
 
   def latest_court_report
-    self.court_reports.last
+    self.court_reports.order("created_at").last
   end
 
   def court_report_status=(value)
