@@ -79,9 +79,14 @@ RSpec.describe "casa_cases/index", type: :system do
       sign_in volunteer
     end
 
-    it "Hides casa case prefix filter" do
+    it "Hides all casa case Filter by" do
       visit casa_cases_path
+      expect(page).to_not have_selector("button", text: "Status")
+      expect(page).to_not have_selector("button", text: "Assigned to Volunteer")
+      expect(page).to_not have_selector("button", text: "Assigned to more than 1 Volunteer")
+      expect(page).to_not have_selector("button", text: "Assigned to Transition Aged Youth")
       expect(page).to_not have_selector("button", text: "Casa Case Prefix")
+      expect(page).to_not have_selector(".casa-case-filters")
     end
   end
 end
