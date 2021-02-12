@@ -1,4 +1,5 @@
 require "rails_helper"
+require "stringio"
 
 RSpec.describe "casa_cases/edit", type: :system do
   context "when admin" do
@@ -300,7 +301,38 @@ RSpec.describe "casa_cases/edit", type: :system do
     let(:casa_case) { create(:casa_case, casa_org: volunteer.casa_org) }
     let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
 
+    let!(:court_dates) do
+      [10,30,31,90].map { |n| create(:past_court_date, casa_case: casa_case, date: n.days.ago) }
+    end
+
+    let!(:reports) do
+      [5,11,23,44,91].map do |n|
+        report = CaseCourtReport.new(
+          volunteer_id: volunteer.id, # ??? not a volunteer ? linda
+          case_id: casa_case.id,
+          path_to_template: "app/documents/templates/report_template_transition.docx"
+        )
+        casa_case.court_reports.attach(io: StringIO.new(report.generate_to_string), filename: "report#{n}.docx")
+        attached_report = casa_case.latest_court_report
+        attached_report.created_at = n.days.ago
+        attached_report.save!
+        attached_report
+      end
+    end
+
     before { sign_in volunteer }
+
+    it "views attached court reports" do
+      visit edit_casa_case_path(casa_case)
+
+      # test court dates with reports get the correct ones
+      [[0, 1], [2, 3], [3, 4]].each do |di, ri|
+        expect(page).to have_link(I18n.l(court_dates[di].date, format: :full, default: nil),  href: rails_blob_path(reports[ri], disposition: 'attachment'))
+      end
+      # and that the one with no report doesn't get one
+      expect(page).not_to have_link(I18n.l(court_dates[1].date, format: :full, default: nil))
+      expect(page).to have_text(I18n.l(court_dates[1].date, format: :full, default: nil))
+    end
 
     it "clicks back button after editing case" do
       visit edit_casa_case_path(casa_case)
