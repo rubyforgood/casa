@@ -302,11 +302,11 @@ RSpec.describe "casa_cases/edit", type: :system do
     let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
 
     let!(:court_dates) do
-      [10,30,31,90].map { |n| create(:past_court_date, casa_case: casa_case, date: n.days.ago) }
+      [10, 30, 31, 90].map { |n| create(:past_court_date, casa_case: casa_case, date: n.days.ago) }
     end
 
     let!(:reports) do
-      [5,11,23,44,91].map do |n|
+      [5, 11, 23, 44, 91].map do |n|
         report = CaseCourtReport.new(
           volunteer_id: volunteer.id,
           case_id: casa_case.id,
@@ -327,7 +327,7 @@ RSpec.describe "casa_cases/edit", type: :system do
 
       # test court dates with reports get the correct ones
       [[0, 1], [2, 3], [3, 4]].each do |di, ri|
-        expect(page).to have_link(I18n.l(court_dates[di].date, format: :full, default: nil),  href: rails_blob_path(reports[ri], disposition: 'attachment'))
+        expect(page).to have_link(I18n.l(court_dates[di].date, format: :full, default: nil), href: rails_blob_path(reports[ri], disposition: "attachment"))
       end
       # and that the one with no report doesn't get one
       expect(page).not_to have_link(I18n.l(court_dates[1].date, format: :full, default: nil))
