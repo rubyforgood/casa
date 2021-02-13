@@ -19,7 +19,7 @@ RSpec.describe "layout/sidebar", type: :view do
 
       render partial: "layouts/sidebar"
 
-      expect(rendered).to have_xpath("//img[@src = '/packs-test/media/src/images/default-logo-c9048fc43854499e952e4b62a505bf35.png' and @alt='CASA Logo']")
+      expect(rendered).to have_xpath("//img[contains(@src,'default-logo') and @alt='CASA Logo']")
     end
   end
 
