@@ -320,8 +320,7 @@ RSpec.describe CasaCase do
   describe "report submission" do
     # Creating a case whith a status other than not_submitted and a nil submission date
     it "rejects cases with a court report status, but no submission date" do
-      casa_org = create(:casa_org)
-      bad_case = create(:casa_case, casa_org: casa_org)
+      bad_case = create(:casa_case)
       bad_case.court_report_status = :in_review
       bad_case.court_report_submitted_at = nil
       bad_case.valid?
@@ -332,8 +331,7 @@ RSpec.describe CasaCase do
     end
 
     it "rejects cases with a submission date, but no status" do
-      casa_org = create(:casa_org)
-      bad_case = create(:casa_case, casa_org: casa_org)
+      bad_case = create(:casa_case)
       bad_case.court_report_status = :not_submitted
       bad_case.court_report_submitted_at = DateTime.now
       bad_case.valid?
