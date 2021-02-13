@@ -14,7 +14,9 @@
   </div>
 </div>
 
-<%= render 'filter_my_cases'%>
+<% if current_user.casa_admin? || current_user.supervisor?%>
+  <%= render 'filter'%>
+<% end %>
 <br>
 
 <div class="modal fade" id="visibleColumns" tabindex="-1" role="dialog" aria-labelledby="visibleColumnsLabel" aria-hidden="true">
