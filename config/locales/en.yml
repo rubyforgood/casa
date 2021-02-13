@@ -54,6 +54,9 @@ en:
         title: New Judge
       edit:
         title: Edit Judge
+    casa_case:
+      new:
+        title: New Case Contact
   time:
     formats:
       day_and_date: "%A, %v"

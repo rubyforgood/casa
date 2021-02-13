@@ -17,6 +17,6 @@ RSpec.describe "case_contacts/index" do
   end
 
   it "Has a New Case Contact button" do
-    expect(rendered).to have_link("New Case Contact", href: new_case_contact_path)
+    expect(rendered).to have_link(t("page.casa_case.new.title"), href: new_case_contact_path)
   end
 end
