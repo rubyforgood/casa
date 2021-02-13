@@ -24,7 +24,7 @@ RSpec.describe "/case_court_reports", type: :request do
 
       before do
         Tempfile.create do |t|
-          casa_case.court_report.attach(
+          casa_case.court_reports.attach(
             io: File.open(t.path), filename: "#{casa_case.case_number}.docx"
           )
         end

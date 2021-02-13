@@ -27,7 +27,7 @@ class CasaCase < ApplicationRecord
   has_many :casa_cases_emancipation_options, dependent: :destroy
   has_many :emancipation_options, through: :casa_cases_emancipation_options
   has_many :past_court_dates, dependent: :destroy
-  has_one_attached :court_report
+  has_many_attached :court_reports
 
   validates :case_number, uniqueness: {scope: :casa_org_id, case_sensitive: false}, presence: true
   belongs_to :hearing_type, optional: true
@@ -80,6 +80,10 @@ class CasaCase < ApplicationRecord
 
   # Validation to check timestamp and submission status of a case
   validates_with CourtReportValidator, fields: [:court_report_status, :court_report_submitted_at]
+
+  def latest_court_report
+    court_reports.order("created_at").last
+  end
 
   def court_report_status=(value)
     super
