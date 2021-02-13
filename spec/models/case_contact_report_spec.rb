@@ -147,28 +147,24 @@ RSpec.describe CaseContactReport, type: :model do
     end
 
     describe "case contact behavior" do
-      it "returns only the case contacts with where contact was made" do
+      before(:each) do
         create(:case_contact, {contact_made: true})
         create(:case_contact, {contact_made: false})
+      end
 
+      it "returns only the case contacts with where contact was made" do
         report = CaseContactReport.new({contact_made: true})
         contacts = report.case_contacts
         expect(contacts.length).to eq(1)
       end
 
       it "returns only the case contacts with where contact was NOT made" do
-        create(:case_contact, {contact_made: true})
-        create(:case_contact, {contact_made: false})
-
         report = CaseContactReport.new({contact_made: false})
         contacts = report.case_contacts
         expect(contacts.length).to eq(1)
       end
 
       it "returns only the case contacts with where contact was made or NOT made" do
-        create(:case_contact, {contact_made: true})
-        create(:case_contact, {contact_made: false})
-
         report = CaseContactReport.new({contact_made: [true, false]})
         contacts = report.case_contacts
         expect(contacts.length).to eq(2)
@@ -176,31 +172,27 @@ RSpec.describe CaseContactReport, type: :model do
     end
 
     describe "has transitioned behavior" do
-      it "returns only case contacts the youth has transitioned" do
-        case_case_1 = create(:casa_case, transition_aged_youth: false)
-        case_case_2 = create(:casa_case, transition_aged_youth: true)
+      let(:case_case_1) { create(:casa_case, transition_aged_youth: false) }
+      let(:case_case_2) { create(:casa_case, transition_aged_youth: true) }
+
+      before(:each) do
         create(:case_contact, {casa_case: case_case_1})
         create(:case_contact, {casa_case: case_case_2})
+      end
+
+      it "returns only case contacts the youth has transitioned" do
         report = CaseContactReport.new({has_transitioned: false})
         contacts = report.case_contacts
         expect(contacts.length).to eq(1)
       end
 
       it "returns only case contacts the youth has transitioned" do
-        case_case_1 = create(:casa_case, transition_aged_youth: false)
-        case_case_2 = create(:casa_case, transition_aged_youth: true)
-        create(:case_contact, {casa_case: case_case_1})
-        create(:case_contact, {casa_case: case_case_2})
         report = CaseContactReport.new({has_transitioned: true})
         contacts = report.case_contacts
         expect(contacts.length).to eq(1)
       end
 
       it "returns case contacts with both youth has transitioned and youth has not transitioned" do
-        case_case_1 = create(:casa_case, transition_aged_youth: false)
-        case_case_2 = create(:casa_case, transition_aged_youth: true)
-        create(:case_contact, {casa_case: case_case_1})
-        create(:case_contact, {casa_case: case_case_2})
         report = CaseContactReport.new({has_transitioned: ""})
         contacts = report.case_contacts
         expect(contacts.length).to eq(2)
@@ -208,31 +200,24 @@ RSpec.describe CaseContactReport, type: :model do
     end
 
     describe "wanting driving reimbursement functionality" do
-      it "returns only contacts that want reimbursement" do
-        # want_driving_reimbursement
+      before(:each) do
         create(:case_contact, {miles_driven: 50, want_driving_reimbursement: true})
         create(:case_contact, {miles_driven: 50, want_driving_reimbursement: false})
+      end
 
+      it "returns only contacts that want reimbursement" do
         report = CaseContactReport.new({want_driving_reimbursement: true})
         contacts = report.case_contacts
         expect(contacts.length).to eq(1)
       end
 
       it "returns only contacts that DO NOT want reimbursement" do
-        # want_driving_reimbursement
-        create(:case_contact, {miles_driven: 50, want_driving_reimbursement: true})
-        create(:case_contact, {miles_driven: 50, want_driving_reimbursement: false})
-
         report = CaseContactReport.new({want_driving_reimbursement: false})
         contacts = report.case_contacts
         expect(contacts.length).to eq(1)
       end
 
       it "returns contacts that both want reimbursement and do not want reimbursement" do
-        # want_driving_reimbursement
-        create(:case_contact, {miles_driven: 50, want_driving_reimbursement: true})
-        create(:case_contact, {miles_driven: 50, want_driving_reimbursement: false})
-
         report = CaseContactReport.new({want_driving_reimbursement: ""})
         contacts = report.case_contacts
         expect(contacts.length).to eq(2)
