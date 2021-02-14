@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.describe EmancipationsController, type: :controller do
+  # TODO improve these
   let(:organization) { create(:casa_org) }
   let(:volunteer) { create(:volunteer, :with_casa_cases, casa_org: organization) }
   let(:test_case_category) { create(:casa_case_emancipation_category) }
@@ -13,12 +14,12 @@ RSpec.describe EmancipationsController, type: :controller do
 
   it "raises Missing param casa_case_id error message" do
     post :save, params: {casa_case_id: "string"}
-    expect(response.body).to eq({"error": "Param casa_case_id must be a positive integer"}.to_json)
+    expect(response.body).to eq({"error": "Could not find case from id given by casa_case_id"}.to_json)
   end
 
   it "raises add_option error message" do
     post :save, params: {casa_case_id: "-1"}
-    expect(response.body).to eq({"error": "Param casa_case_id must be a positive integer"}.to_json)
+    expect(response.body).to eq({"error": "Could not find case from id given by casa_case_id"}.to_json)
   end
 
   context "empty params" do
@@ -40,19 +41,21 @@ RSpec.describe EmancipationsController, type: :controller do
 
   describe "check_item_action" do
     it "raises missing param error message" do
-      post :save, params: {casa_case_id: "1"}
-      expect(response.body).to eq({"error": "Missing param check_item_action"}.to_json)
+      casa_case = create :casa_case, casa_org: organization
+      post :save, params: {casa_case_id: casa_case.id.to_s}
+      expect(response.body).to eq({"error": "Sorry, you are not authorized to perform this action. Did the session expire?"}.to_json)
     end
   end
 
   it "raises param check_item_id error message" do
     post :save, params: {casa_case_id: "1", check_item_action: "1"}
-    expect(response.body).to eq({"error": "Missing param check_item_id"}.to_json)
+    expect(response.body).to eq({"error": "Could not find case from id given by casa_case_id"}.to_json)
   end
 
   it "raises must be positive integer error message" do
-    post :save, params: {casa_case_id: "1", check_item_action: "1", check_item_id: "-1"}
-    expect(response.body).to eq({"error": "Param check_item_id must be a positive integer"}.to_json)
+    casa_case = create :casa_case, casa_org: organization
+    post :save, params: {casa_case_id: casa_case.id.to_s, check_item_action: "1", check_item_id: "-1"}
+    expect(response.body).to eq({"error": "Sorry, you are not authorized to perform this action. Did the session expire?"}.to_json)
   end
 
   context "non transitioning case" do

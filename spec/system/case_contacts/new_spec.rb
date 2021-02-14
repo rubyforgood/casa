@@ -160,7 +160,7 @@ RSpec.describe "case_contacts/new", type: :system do
       click_on "Submit"
       expect(page).to have_text("Confirm Note Content")
       # expect {
-      #   click_on "Continue Submitting"
+      click_on "Continue Submitting"
       # }.to change(CaseContact, :count).by(1) # TODO https://github.com/rubyforgood/casa/issues/1716
 
       expect(CaseContact.first.casa_case_id).to eq volunteer_casa_case_one.id
