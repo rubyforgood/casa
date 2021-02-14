@@ -84,9 +84,10 @@ RSpec.describe "/case_contacts", type: :request do
     end
 
     describe "PATCH /update" do
+      let(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
+
       context "with valid parameters" do
         it "updates the requested case_contact and redirects to the root path" do
-          case_contact = create(:case_contact, creator: volunteer, casa_case: casa_case)
           contact_type = create(:contact_type, name: "Attorney")
 
           patch case_contact_url(case_contact), params: {
@@ -107,7 +108,8 @@ RSpec.describe "/case_contacts", type: :request do
         it "does not allow update of case contacts created by other volunteers" do
           contact_type = create(:contact_type, name: "Attorney")
           contact_type2 = create(:contact_type, name: "Therapist")
-          case_contact = create(:case_contact, creator: volunteer, casa_case: casa_case, contact_types: [contact_type])
+
+          case_contact.contact_types << contact_type
 
           patch case_contact_url(case_contact), params: {
             case_contact: {
@@ -123,7 +125,6 @@ RSpec.describe "/case_contacts", type: :request do
 
       context "with invalid parameters" do
         it "renders a successful response (i.e. to display the edit template)" do
-          case_contact = create(:case_contact, creator: volunteer, casa_case: casa_case)
           patch case_contact_url(case_contact), params: {case_contact: invalid_attributes}
           expect(response).to be_successful
         end
@@ -133,6 +134,7 @@ RSpec.describe "/case_contacts", type: :request do
     describe "DELETE /destroy" do
       it "destroys the requested case_contact" do
         case_contact = create(:case_contact, creator: volunteer, casa_case: casa_case)
+
         expect {
           delete case_contact_url(case_contact)
         }.to change(CaseContact, :count).by(-1)
@@ -140,6 +142,7 @@ RSpec.describe "/case_contacts", type: :request do
 
       it "redirects to the case_contacts list" do
         case_contact = create(:case_contact, creator: volunteer, casa_case: casa_case)
+
         delete case_contact_url(case_contact)
         expect(response).to redirect_to(case_contacts_url)
       end
