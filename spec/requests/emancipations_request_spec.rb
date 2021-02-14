@@ -8,67 +8,79 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
   describe "GET /show" do
     before { sign_in user }
 
-    context "when members and the associated casa case belong to the same org" do
+    context "when accessing the route" do
       context "as an admin" do
         let(:user) { create(:casa_admin, casa_org: organization) }
-        it "renders a successful response" do
-          get casa_case_emancipation_path(casa_case)
-          expect(response).to be_successful
+
+        context "when the user and case belong to the same org" do
+          it "renders a successful response" do
+            get casa_case_emancipation_path(casa_case)
+            expect(response).to be_successful
+          end
+        end
+
+        context "when the user and case belong to defferent orgs" do
+          it "renders an unauthorized error" do
+            user.casa_org = organization_different
+
+            get casa_case_emancipation_path(casa_case)
+            expect(response).to_not be_successful
+            expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+          end
         end
       end
 
       context "as a supervisor" do
         let(:user) { create(:supervisor, casa_org: organization) }
-        it "renders a successful response" do
-          get casa_case_emancipation_path(casa_case)
-          expect(response).to be_successful
-        end
-      end
 
-      context "as a volunteer assigned to the associated case" do
-        let(:user) { create(:volunteer, casa_org: organization) }
-        let!(:case_assignment) { create(:case_assignment, volunteer: user, casa_case: casa_case) }
-        it "renders a successful response" do
-          get casa_case_emancipation_path(casa_case)
-          expect(response).to be_successful
+        context "when the user and case belong to the same org" do
+          it "renders a successful response" do
+            get casa_case_emancipation_path(casa_case)
+            expect(response).to be_successful
+          end
         end
-      end
 
-      context "as a volunteer not assigned to the associated case" do
-        let(:user) { create(:volunteer, casa_org: organization) }
-        it "renders an unauthorized error" do
-          get casa_case_emancipation_path(casa_case)
-          expect(response).to_not be_successful
-          expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
-        end
-      end
-    end
+        context "when the user and case belong to defferent orgs" do
+          it "renders an unauthorized error" do
+            user.casa_org = organization_different
 
-    context "when members and the associated casa case belong to different orgs" do
-      context "as an admin" do
-        let(:user) { create(:casa_admin, casa_org: organization_different) }
-        it "renders an unauthorized error" do
-          get casa_case_emancipation_path(casa_case)
-          expect(response).to_not be_successful
-          expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
-        end
-      end
-
-      context "as a supervisor" do
-        let(:user) { create(:supervisor, casa_org: organization_different) }
-        it "renders an unauthorized error" do
-          get casa_case_emancipation_path(casa_case)
-          expect(response).to_not be_successful
-          expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+            get casa_case_emancipation_path(casa_case)
+            expect(response).to_not be_successful
+            expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+          end
         end
       end
 
       context "as a volunteer" do
-        let(:user) { create(:volunteer, casa_org: organization_different) }
-        it "renders an unauthorized error" do
-          get casa_case_emancipation_path(casa_case)
-          expect(response).to_not be_successful
-          expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        let(:user) { create(:volunteer, casa_org: organization) }
+
+        context "when not assigned to the associated case" do
+          it "renders an unauthorized error" do
+            get casa_case_emancipation_path(casa_case)
+            expect(response).to_not be_successful
+            expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+          end
+        end
+
+        context "when assigned to the associated case" do
+          let!(:case_assignment) { create(:case_assignment, volunteer: user, casa_case: casa_case) }
+
+          context "when the user and case belong to different orgs" do
+            it "renders an unauthorized error" do
+              user.casa_org = organization_different
+
+              get casa_case_emancipation_path(casa_case)
+              expect(response).to_not be_successful
+              expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+            end
+          end
+
+          context "when the user and case belong the same org" do
+            it "renders a successful response" do
+              get casa_case_emancipation_path(casa_case)
+              expect(response).to be_successful
+            end
+          end
         end
       end
     end
@@ -81,9 +93,10 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
     let(:option_a) { create(:emancipation_option, emancipation_category_id: category.id, name: "A") }
 
     context "when accessing the route" do
-      context "when members and the associated casa case belong to the same org" do
-        context "as an admin" do
-          let(:user) { create(:casa_admin, casa_org: organization) }
+      context "as an admin" do
+        let(:user) { create(:casa_admin, casa_org: organization) }
+
+        context "when the user and case belong to the same org" do
           it "allows the admin to make changes" do
             post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
             expect(response.header["Content-Type"]).to match(/application\/json/)
@@ -91,28 +104,10 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
           end
         end
 
-        context "as a supervisor" do
-          let(:user) { create(:supervisor, casa_org: organization) }
-          it "allows the supervisor to make changes" do
-            post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
-            expect(response.header["Content-Type"]).to match(/application\/json/)
-            expect(JSON.parse(response.body)).to eq "success"
-          end
-        end
-
-        context "as a volunteer assigned to the associated case" do
-          let(:user) { create(:volunteer, casa_org: organization) }
-          let!(:case_assignment) { create(:case_assignment, volunteer: user, casa_case: casa_case) }
-          it "allows the volunteer to make changes" do
-            post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
-            expect(response.header["Content-Type"]).to match(/application\/json/)
-            expect(JSON.parse(response.body)).to eq "success"
-          end
-        end
-
-        context "as a volunteer not assigned to the associated case" do
-          let(:user) { create(:volunteer, casa_org: organization) }
+        context "when the user and case belong to different orgs" do
           it "sends an unauthorized error" do
+            user.casa_org = organization_different
+
             post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
             expect(response.header["Content-Type"]).to match(/application\/json/)
             expect(response.body).to_not be_nil
@@ -122,9 +117,34 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
         end
       end
 
-      context "when members and the associated casa case belong to different orgs" do
-        context "as an admin" do
-          let(:user) { create(:casa_admin, casa_org: organization_different) }
+      context "as a supervisor" do
+        let(:user) { create(:supervisor, casa_org: organization) }
+
+        context "when the user and case belong to the same org" do
+          it "allows the supervisor to make changes" do
+            post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
+            expect(response.header["Content-Type"]).to match(/application\/json/)
+            expect(JSON.parse(response.body)).to eq "success"
+          end
+        end
+
+        context "when the user and case belong to different orgs" do
+          it "sends an unauthorized error" do
+            user.casa_org = organization_different
+
+            post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
+            expect(response.header["Content-Type"]).to match(/application\/json/)
+            expect(response.body).to_not be_nil
+            expect(JSON.parse(response.body)).to have_key("error")
+            expect(JSON.parse(response.body)["error"]).to match(/you are not authorized/)
+          end
+        end
+      end
+
+      context "as a volunteer" do
+        let(:user) { create(:volunteer, casa_org: organization) }
+
+        context "as a volunteer not assigned to the associated case" do
           it "sends an unauthorized error" do
             post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
             expect(response.header["Content-Type"]).to match(/application\/json/)
@@ -134,25 +154,27 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
           end
         end
 
-        context "as a supervisor" do
-          let(:user) { create(:supervisor, casa_org: organization_different) }
-          it "sends an unauthorized error" do
-            post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
-            expect(response.header["Content-Type"]).to match(/application\/json/)
-            expect(response.body).to_not be_nil
-            expect(JSON.parse(response.body)).to have_key("error")
-            expect(JSON.parse(response.body)["error"]).to match(/you are not authorized/)
-          end
-        end
+        context "as a volunteer assigned to the associated case" do
+          let!(:case_assignment) { create(:case_assignment, volunteer: user, casa_case: casa_case) }
 
-        context "as a volunteer" do
-          let(:user) { create(:volunteer, casa_org: organization_different) }
-          it "sends an unauthorized error" do
-            post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
-            expect(response.header["Content-Type"]).to match(/application\/json/)
-            expect(response.body).to_not be_nil
-            expect(JSON.parse(response.body)).to have_key("error")
-            expect(JSON.parse(response.body)["error"]).to match(/you are not authorized/)
+          context "when the user and case belong to the same org" do
+            it "allows the volunteer to make changes" do
+              post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
+              expect(response.header["Content-Type"]).to match(/application\/json/)
+              expect(JSON.parse(response.body)).to eq "success"
+            end
+          end
+
+          context "when the user and case belong to different orgs" do
+            it "sends an unauthorized error" do
+              user.casa_org = organization_different
+
+              post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
+              expect(response.header["Content-Type"]).to match(/application\/json/)
+              expect(response.body).to_not be_nil
+              expect(JSON.parse(response.body)).to have_key("error")
+              expect(JSON.parse(response.body)["error"]).to match(/you are not authorized/)
+            end
           end
         end
       end
