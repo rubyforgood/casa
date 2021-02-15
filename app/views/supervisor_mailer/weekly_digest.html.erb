@@ -46,6 +46,10 @@
           <% else %>
             No contact attempts were logged for this week.
           <% end %>
+          <% if case_assignment.decorate.unassigned_in_past_week? %>
+            <br>
+            This case was unassigned from <%= volunteer.display_name %> on <%= case_assignment.updated_at.to_date.to_s(:long_ordinal) %>
+          <% end %>
         </td>
       </tr>
     <% end %>
