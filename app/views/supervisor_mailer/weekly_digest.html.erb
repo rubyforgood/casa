@@ -31,7 +31,7 @@
               <br>
               <%= "Number of unsuccesful case contacts made this week: #{unsuccessful_contacts} " %>
               <br>
-              <% recent_contact = casa_case.decorate.case_contacts_latest %>
+              <% recent_contact = recently_unassigned ? casa_case.decorate.case_contacts_latest_before(case_assignment.updated_at) : casa_case.decorate.case_contacts_latest %>
               <%= "Most recent contact attempted:" %>
               <br>
               <%= " - Date: #{I18n.l(recent_contact&.occurred_at, format: :full, default: nil)}" %>

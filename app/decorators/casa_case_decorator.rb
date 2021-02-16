@@ -29,6 +29,10 @@ class CasaCaseDecorator < Draper::Decorator
     object.case_contacts.max_by(&:occurred_at)
   end
 
+  def case_contacts_latest_before(date)
+    object.case_contacts.where("occurred_at < ?", date).max_by(&:occurred_at)
+  end
+
   def successful_contacts_this_week
     this_week = Date.today - 7.days..Date.today
     object.case_contacts.where(occurred_at: this_week).where(contact_made: true).count
