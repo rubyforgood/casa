@@ -76,7 +76,7 @@ RSpec.describe "/volunteers", type: :request do
         volunteer = Volunteer.last
         expect(volunteer.email).to eq("volunteer1@example.com")
         expect(volunteer.display_name).to eq("Example")
-        expect(response).to redirect_to volunteers_path
+        expect(response).to redirect_to edit_volunteer_path(volunteer)
       end
 
       it "sends an account_setup email" do
