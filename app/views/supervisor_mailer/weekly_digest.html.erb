@@ -24,12 +24,12 @@
           <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
             <b><%= "Summary for #{volunteer.display_name} Case #{casa_case.case_number}" %></b>
             <br>
-            <% successful_contacts = casa_case.decorate.successful_contacts_this_week %>
-            <% unsuccessful_contacts = casa_case.decorate.unsuccessful_contacts_this_week %>
+            <% successful_contacts = recently_unassigned ? casa_case.decorate.successful_contacts_this_week_before(case_assignment.updated_at) : casa_case.decorate.successful_contacts_this_week %>
+            <% unsuccessful_contacts = recently_unassigned ? casa_case.decorate.unsuccessful_contacts_this_week_before(case_assignment.updated_at) : casa_case.decorate.unsuccessful_contacts_this_week %>
             <% if successful_contacts + unsuccessful_contacts > 0 %>
-              <%= "Number of succesful case contacts made this week: #{successful_contacts}" %>
+              <%= "Number of successful case contacts made this week: #{successful_contacts}" %>
               <br>
-              <%= "Number of unsuccesful case contacts made this week: #{unsuccessful_contacts} " %>
+              <%= "Number of unsuccessful case contacts made this week: #{unsuccessful_contacts} " %>
               <br>
               <% recent_contact = recently_unassigned ? casa_case.decorate.case_contacts_latest_before(case_assignment.updated_at) : casa_case.decorate.case_contacts_latest %>
               <%= "Most recent contact attempted:" %>
@@ -51,7 +51,9 @@
             <% if recently_unassigned %>
               <br>
               This case was unassigned from <%= volunteer.display_name %> on <%= case_assignment.updated_at.to_date.to_s(:long_ordinal) %>
-              The above activity only describes the portion of the week when the case was still assigned to <% volunteer.display_name %>
+            <% if successful_contacts + unsuccessful_contacts > 0 %>
+                The above activity only describes the portion of the week when the case was still assigned to <% volunteer.display_name %>
+              <% end %>
             <% end %>
           </td>
         </tr>
