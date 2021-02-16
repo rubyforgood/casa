@@ -40,7 +40,7 @@
                     @case_contact.decorate.show_contact_type?(contact_type.id),
                     id: dom_id(contact_type, :case_contact),
                     class: ["form-check-input", "case-contact-contact-type"]
-                  %>
+                %>
                 <label class="form-check-label" for="<%= dom_id(contact_type, :case_contact) %>">
                   <%= contact_type.name %>
                 </label>
