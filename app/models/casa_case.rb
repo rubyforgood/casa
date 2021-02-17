@@ -113,7 +113,7 @@ class CasaCase < ApplicationRecord
     transition_aged_youth
   end
 
-  def has_judge?
+  def has_judge_name?
     judge_name
   end
 
