@@ -56,8 +56,8 @@
             <% if recently_unassigned %>
               <br>
               This case was unassigned from <%= volunteer.display_name %> on <%= case_assignment.updated_at.to_date.to_s(:long_ordinal) %>
-            <% if successful_contacts + unsuccessful_contacts > 0 %>
-                The above activity only describes the portion of the week when the case was still assigned to <% volunteer.display_name %>
+              <% if successful_contacts + unsuccessful_contacts > 0 %>
+                The above activity only describes the part of the week when the case was still assigned to <% volunteer.display_name %>
               <% end %>
             <% end %>
           </td>
