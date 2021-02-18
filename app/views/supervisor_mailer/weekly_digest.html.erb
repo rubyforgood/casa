@@ -12,6 +12,12 @@
   </tr>
   <% @supervisor.volunteers.each do |volunteer| %>
 
+    <%= "Inactive Cases for #{volunteer.display_name}"%>
+    <% @casa_case.inactive_this_week(volunteer).each do |case_assignment| %>
+      <% inactive_case = case_assignment.casa_case %>
+      <% case_number = inactive_case.case_number %>
+      <%= "Case Number: #{case_number} was marked inactive" %>
+    <% end %>
     <% volunteer.case_assignments_with_cases.each do |case_assignment| %>
       <% casa_case = case_assignment.casa_case %>
       <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; text-align: left;">

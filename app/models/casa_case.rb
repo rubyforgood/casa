@@ -121,6 +121,10 @@ class CasaCase < ApplicationRecord
     hearing_type
   end
 
+  def inactive_this_week(volunteer_id)
+
+  end
+
   def add_emancipation_category(category_id)
     emancipation_categories << EmancipationCategory.find(category_id)
   end
@@ -177,6 +181,11 @@ class CasaCase < ApplicationRecord
   end
 
   private
+
+  def inactive_this_week(volunteer_id)
+    this_week = Date.today - 7.days..Date.today
+    object.casa_case.where(updated_at: this_week).where(is_active: false).where(volunteer_id: volunteer_id)
+  end
 
   def validate_date(day, month, year)
     raise Date::Error if day.blank? || month.blank? || year.blank?
