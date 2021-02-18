@@ -41,6 +41,12 @@ RSpec.describe "all_casa_admins/casa_orgs/show", type: :view do
           number: 11,
           active: false,
           description: "inactive case"
+        },
+        {
+          type: :case_contact,
+          number: 8,
+          active: true,
+          description: "active case"
         }
       ]
     }
