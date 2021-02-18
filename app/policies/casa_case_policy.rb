@@ -20,7 +20,7 @@ class CasaCasePolicy < ApplicationPolicy
   end
 
   def update_contact_types?
-    is_supervisor?
+    is_supervisor? || is_admin?
   end
 
   def update_birth_month_year_youth?
