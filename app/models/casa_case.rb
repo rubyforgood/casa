@@ -113,6 +113,14 @@ class CasaCase < ApplicationRecord
     transition_aged_youth
   end
 
+  def has_judge_name?
+    judge_name
+  end
+
+  def has_hearing_type?
+    hearing_type
+  end
+
   def add_emancipation_category(category_id)
     emancipation_categories << EmancipationCategory.find(category_id)
   end
