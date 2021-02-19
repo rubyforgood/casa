@@ -14,7 +14,13 @@ class CaseImporter < FileImporter
 
     import_results = import do |row|
       casa_case_params = row.to_hash.slice(:case_number, :transition_aged_youth, :birth_month_year_youth)
-      casa_case = CasaCase.find_by(casa_case_params)
+
+      if !(casa_case_params.key?(:case_number))
+        failures << "ERROR: The row \n  #{row}\n  does not contain a case number"
+        break
+      end
+
+      casa_case = CasaCase.find_by(case_number: casa_case_params[:case_number], casa_org_id: org_id)
       volunteers = email_addresses_to_users(Volunteer, String(row[:case_assignment]))
 
       if casa_case # Case exists try to update it

@@ -35,7 +35,7 @@ RSpec.describe CaseImporter do
 
     it "returns a success message with the number of cases imported" do
       alert = case_importer.import_cases
-      puts alert[:message]
+
       expect(alert[:type]).to eq(:success)
       expect(alert[:message]).to eq("You successfully imported 3 casa_cases.")
     end
