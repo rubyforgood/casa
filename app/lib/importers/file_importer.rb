@@ -87,6 +87,17 @@ class FileImporter
     messages.join(" ")
   end
 
+
+  def record_outdated?(record, new_data)
+    new_data.each do |key, value|
+      if record[key] != value
+        return true
+      end
+    end
+
+    return false
+  end
+
   def success?
     !failed? && !@file_no_rows
   end
