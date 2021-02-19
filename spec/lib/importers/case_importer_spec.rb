@@ -33,6 +33,14 @@ RSpec.describe CaseImporter do
       expect(CasaCase.find_by(case_number: "CINA-01-4349").volunteers.size).to eq(0)
     end
 
+    context "when updating records" do
+      let!(:existing_case) { create(:casa_case, case_number: "CINA-01-4347") }
+
+      it "assigns new volunteers to the case" do
+        expect { case_importer.import_cases }.to change(existing_case.volunteers, :count).by(1)
+      end
+    end
+
     it "returns a success message with the number of cases imported" do
       alert = case_importer.import_cases
 
