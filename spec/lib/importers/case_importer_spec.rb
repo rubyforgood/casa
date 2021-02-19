@@ -35,6 +35,7 @@ RSpec.describe CaseImporter do
 
     it "returns a success message with the number of cases imported" do
       alert = case_importer.import_cases
+      puts alert[:message]
       expect(alert[:type]).to eq(:success)
       expect(alert[:message]).to eq("You successfully imported 3 casa_cases.")
     end
@@ -56,12 +57,6 @@ RSpec.describe CaseImporter do
 
       it "does not duplicate casa case files from csv files" do
         expect { case_importer.import_cases }.to change(CasaCase, :count).by(0)
-      end
-
-      it "returns an error message when there are cases not imported" do
-        alert = case_importer.import_cases
-        expect(alert[:type]).to eq(:error)
-        expect(alert[:message]).to include("Not all rows were imported.")
       end
     end
   end

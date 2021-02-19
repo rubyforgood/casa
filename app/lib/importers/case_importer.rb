@@ -10,49 +10,47 @@ class CaseImporter < FileImporter
   end
 
   def import_cases
-    import do |row|
-      result = create_casa_case(row)
-      casa_case = result[:casa_case]
-      if casa_case
-        case_number = casa_case.case_number
-        failures = []
-        if result[:existing]
-          failures << if result[:deactivated]
-            "Case #{case_number} already exists, but is inactive. Reactivate the CASA case instead."
-          else
-            "Case #{case_number} already exists"
-          end
-        end
-        volunteers = email_addresses_to_users(Volunteer, String(row[:case_assignment]))
-        volunteers.each do |volunteer|
-          if volunteer.casa_cases.exists?(casa_case.id)
-            failures << "Volunteer #{volunteer.email} already assigned to #{case_number}"
-          else
-            casa_case.volunteers << volunteer
-          end
-        rescue => error
-          failures << error.to_s
+    failures = []
+
+    import_results = import do |row|
+      casa_case_params = row.to_hash.slice(:case_number, :transition_aged_youth, :birth_month_year_youth)
+      casa_case = CasaCase.find_by(casa_case_params)
+      volunteers = email_addresses_to_users(Volunteer, String(row[:case_assignment]))
+
+      if casa_case # Case exists try to update it
+        if !(casa_case.active)
+          failures << "Case #{case_number} already exists, but is inactive. Reactivate the CASA case instead."
         end
 
-        raise failures.join("\n") unless failures.empty?
+        case_number = casa_case.case_number
+      else # Case doesn't exist try to create a new case
+        casa_case = create_casa_case(casa_case_params)
+      end
+
+      volunteers.each do |volunteer|
+        if !(volunteer.casa_cases.exists?(casa_case.id))
+          casa_case.volunteers << volunteer
+        end
+      rescue => error
+        failures << error.to_s
       end
     end
+
+    raise failures.join("\n") unless failures.empty?
+
+    return import_results
   end
 
   private
 
-  def create_casa_case(row_data)
-    casa_case_params = row_data.to_hash.slice(:case_number, :transition_aged_youth, :birth_month_year_youth)
-    casa_case = CasaCase.find_by(casa_case_params)
-
-    return {casa_case: casa_case, existing: true, deactivated: true} if casa_case.present? && !casa_case.active
-
-    return {casa_case: casa_case, existing: true, deactivated: false} if casa_case.present?
-
-    casa_case = CasaCase.new(casa_case_params)
+  def create_casa_case(case_params)
+    casa_case = CasaCase.new(case_params)
     casa_case.casa_org_id = org_id
     casa_case.save!
 
-    {casa_case: casa_case, existing: false}
+    return casa_case
+  end
+
+  def update_casa_case(casa_case, case_params)
   end
 end
