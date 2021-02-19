@@ -57,7 +57,9 @@ class CaseImporter < FileImporter
   end
 
   def update_casa_case(casa_case, case_params, volunteer_assignment_list)
-    casa_case.update(case_params)
+    if record_outdated?(casa_case, case_params)
+      casa_case.update(case_params)
+    end
 
     volunteer_assignment_list.each do |volunteer|
       # Expecting an array of length 0 or 1
