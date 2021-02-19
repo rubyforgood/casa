@@ -17,25 +17,22 @@ class CaseImporter < FileImporter
 
       if !(casa_case_params.key?(:case_number))
         failures << "ERROR: The row \n  #{row}\n  does not contain a case number"
-        break
+        next
       end
 
       casa_case = CasaCase.find_by(case_number: casa_case_params[:case_number], casa_org_id: org_id)
-      volunteers = email_addresses_to_users(Volunteer, String(row[:case_assignment]))
+      volunteer_assignment_list = email_addresses_to_users(Volunteer, String(row[:case_assignment]))
 
-      if casa_case # Case exists try to update it
-        if !(casa_case.active)
-          failures << "Case #{case_number} already exists, but is inactive. Reactivate the CASA case instead."
-        end
+      begin
+        if casa_case # Case exists try to update it
+          if !(casa_case.active)
+            failures << "Case #{casa_case.case_number} already exists, but is inactive. Reactivate the CASA case instead."
+            next
+          end
 
-        case_number = casa_case.case_number
-      else # Case doesn't exist try to create a new case
-        casa_case = create_casa_case(casa_case_params)
-      end
-
-      volunteers.each do |volunteer|
-        if !(volunteer.casa_cases.exists?(casa_case.id))
-          casa_case.volunteers << volunteer
+          update_casa_case(casa_case, casa_case_params, volunteer_assignment_list)
+        else # Case doesn't exist try to create a new case
+          casa_case = create_casa_case(casa_case_params, volunteer_assignment_list)
         end
       rescue => error
         failures << error.to_s
@@ -49,14 +46,17 @@ class CaseImporter < FileImporter
 
   private
 
-  def create_casa_case(case_params)
+  def create_casa_case(case_params, volunteer_assignment_list)
     casa_case = CasaCase.new(case_params)
     casa_case.casa_org_id = org_id
     casa_case.save!
 
+    casa_case.volunteers << volunteer_assignment_list
+
     return casa_case
   end
 
-  def update_casa_case(casa_case, case_params)
+  def update_casa_case(casa_case, case_params, volunteer_assignment_list)
+    casa_case.update(case_params)
   end
 end
