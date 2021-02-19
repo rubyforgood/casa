@@ -13,7 +13,7 @@ class CaseImporter < FileImporter
     failures = []
 
     import_results = import do |row|
-      casa_case_params = row.to_hash.slice(:case_number, :transition_aged_youth, :birth_month_year_youth)
+      casa_case_params = row.to_hash.slice(:case_number, :transition_aged_youth, :birth_month_year_youth).compact
 
       if !(casa_case_params.key?(:case_number))
         failures << "ERROR: The row \n  #{row}\n  does not contain a case number"
