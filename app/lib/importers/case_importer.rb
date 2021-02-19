@@ -25,7 +25,7 @@ class CaseImporter < FileImporter
 
       begin
         if casa_case # Case exists try to update it
-          if !(casa_case.active)
+          unless (casa_case.active)
             failures << "Case #{casa_case.case_number} already exists, but is inactive. Reactivate the CASA case instead."
             next
           end
@@ -58,5 +58,16 @@ class CaseImporter < FileImporter
 
   def update_casa_case(casa_case, case_params, volunteer_assignment_list)
     casa_case.update(case_params)
+
+    volunteer_assignment_list.each do |volunteer|
+      # Expecting an array of length 0 or 1
+      assignment = casa_case.case_assignments.where(volunteer: volunteer)
+
+      if assignment.empty?
+        casa_case.volunteers << volunteer
+      elsif !(assignment[0].is_active)
+        assignment[0].update(is_active: true)
+      end
+    end
   end
 end
