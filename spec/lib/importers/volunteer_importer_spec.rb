@@ -26,12 +26,6 @@ RSpec.describe VolunteerImporter do
       expect { volunteer_importer.call }.to change(User, :count).by(0)
     end
 
-    it "returns an error message when there are volunteers not imported" do
-      alert = VolunteerImporter.import_volunteers(import_file_path, import_user.casa_org.id)
-      expect(alert[:type]).to eq(:error)
-      expect(alert[:message]).to include("Not all rows were imported.")
-    end
-
     specify "static and instance methods have identical results" do
       VolunteerImporter.new(import_file_path, casa_org_id).import_volunteers
       data_using_instance = Volunteer.pluck(:email).sort
