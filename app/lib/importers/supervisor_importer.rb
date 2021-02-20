@@ -10,13 +10,35 @@ class SupervisorImporter < FileImporter
   end
 
   def import_supervisors
+    failures = []
+
     import do |row|
-      result = create_user_record(Supervisor, row)
-      supervisor = result[:user]
-      if supervisor
-        failures = []
-        failures << "Supervisor #{supervisor.email} already exists" if result[:existing]
-        email_addresses_to_users(Volunteer, String(row[:supervisor_volunteers])).each do |volunteer|
+      supervisor_params = row.to_hash.slice(:display_name, :email).compact
+
+      if !(supervisor_params.key?(:email))
+        failures << "ERROR: The row \n  #{row}\n  does not contain an email address"
+        next
+      end
+
+      begin
+        supervisor = Supervisor.find_by(email: supervisor_params[:email])
+        volunteer_assignment_list = email_addresses_to_users(Volunteer, String(row[:supervisor_volunteers]))
+
+        puts "#{volunteer_assignment_list.count} #{String(row[:supervisor_volunteers]).split(",").count}"
+        puts "#{volunteer_assignment_list} vs #{String(row[:supervisor_volunteers]).split(",")}"
+
+        if volunteer_assignment_list.count != String(row[:supervisor_volunteers]).split(",").count
+          failures << "ERROR: The row \n  #{row}\n  contains unimported volunteers"
+          next
+        end
+
+        if supervisor # Supervisor exists try to update it
+          update_supervisor(supervisor, supervisor_params, volunteer_assignment_list)
+        else # Supervisor doesn't exist try to create a new supervisor
+          supervisor = create_user_record(Supervisor, supervisor_params)
+        end
+
+        volunteer_assignment_list.each do |volunteer|
           if volunteer.supervisor
             next if volunteer.supervisor == supervisor
 
@@ -24,12 +46,18 @@ class SupervisorImporter < FileImporter
           else
             supervisor.volunteers << volunteer
           end
-        rescue => error
-          failures << error.to_s
         end
+      rescue => error
+        failures << error.to_s
       end
 
       raise failures.join("\n") unless failures.empty?
+    end
+  end
+
+  def update_supervisor(supervisor, supervisor_params, volunteer_assignment_list)
+    if record_outdated?(supervisor, supervisor_params)
+      supervisor.update(supervisor_params)
     end
   end
 end

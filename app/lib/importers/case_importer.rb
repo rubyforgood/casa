@@ -32,7 +32,7 @@ class CaseImporter < FileImporter
 
           update_casa_case(casa_case, casa_case_params, volunteer_assignment_list)
         else # Case doesn't exist try to create a new case
-          casa_case = create_casa_case(casa_case_params, volunteer_assignment_list)
+          create_casa_case(casa_case_params, volunteer_assignment_list)
         end
       rescue => error
         failures << error.to_s
