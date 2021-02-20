@@ -1,6 +1,6 @@
 class CasaCasesController < ApplicationController
   before_action :set_casa_case, only: %i[show edit update destroy deactivate reactivate]
-  before_action :set_contact_types, only: %i[new edit update create]
+  before_action :set_contact_types, only: %i[new edit update create deactivate]
   before_action :require_organization!
   after_action :verify_authorized
 
