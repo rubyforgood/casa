@@ -49,7 +49,7 @@ class FileImporter
     user.save!
     user.invite!
 
-    return user
+    user
   end
 
   def email_addresses_to_users(clazz, comma_separated_emails)
@@ -84,16 +84,15 @@ class FileImporter
     messages.join(" ")
   end
 
-
   def record_outdated?(record, new_data)
     new_data.each do |key, value|
       # The parser keeps boolean values as strings
-      if record[key] != value || (record[key].in?([true, false]) && record[key] ? value == "FALSE" : value == "TRUE")
+      if record[key] != value || (value == (record[key].in?([true, false]) && record[key] ? "FALSE" : "TRUE"))
         return true
       end
     end
 
-    return false
+    false
   end
 
   def success?

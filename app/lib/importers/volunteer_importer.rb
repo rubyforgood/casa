@@ -15,7 +15,7 @@ class VolunteerImporter < FileImporter
     import do |row|
       volunteer_params = row.to_hash.slice(:display_name, :email).compact
 
-      if !(volunteer_params.key?(:email))
+      if !volunteer_params.key?(:email)
         failures << "ERROR: The row \n  #{row}\n  does not contain an email address"
         next
       end

@@ -15,7 +15,7 @@ class SupervisorImporter < FileImporter
     import do |row|
       supervisor_params = row.to_hash.slice(:display_name, :email).compact
 
-      if !(supervisor_params.key?(:email))
+      if !supervisor_params.key?(:email)
         failures << "ERROR: The row \n  #{row}\n  does not contain an email address"
         next
       end
