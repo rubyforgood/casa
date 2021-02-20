@@ -10,14 +10,7 @@
       Here's a summary of what happened with your volunteers this last week.
     </td>
   </tr>
-  <% @supervisor.volunteers.each do |volunteer| %>
-
-    <%= "Inactive Cases for #{volunteer.display_name}"%>
-    <% @casa_case.inactive_this_week(volunteer).each do |case_assignment| %>
-      <% inactive_case = case_assignment.casa_case %>
-      <% case_number = inactive_case.case_number %>
-      <%= "Case Number: #{case_number} was marked inactive" %>
-    <% end %>
+    <% @supervisor.volunteers.each do |volunteer| %>
     <% volunteer.case_assignments_with_cases.each do |case_assignment| %>
       <% casa_case = case_assignment.casa_case %>
       <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; text-align: left;">
@@ -45,11 +38,31 @@
             <%= " - Medium Type: #{recent_contact&.medium_type}" %>
             <br>
             <%= " - Notes: #{recent_contact&.notes}" %>
+            <br>
           <% else %>
             No contact attempts were logged for this week.
+            <br>
           <% end %>
         </td>
       </tr>
     <% end %>
   <% end %>
+  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+    <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 18px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+      <b>Additional Notes:</b>
+      <br>
+    </td>
+  </tr>
+  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+    <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+      <% @supervisor.volunteers.each do |volunteer| %>
+        <% inactive_cases = CaseAssignment.inactive_this_week(volunteer.id)%>
+        <% inactive_cases.each do |case_assignment| %>
+          <% inactive_case_number = case_assignment.casa_case.case_number %>
+          <%= "#{volunteer.display_name} Case #{inactive_case_number} marked inactive this week." %>
+          <br>
+    </td>
+  </tr>
 </table>
+<% end %>
+<% end %>
