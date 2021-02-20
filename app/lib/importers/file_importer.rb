@@ -88,7 +88,7 @@ class FileImporter
   def record_outdated?(record, new_data)
     new_data.each do |key, value|
       # The parser keeps boolean values as strings
-      if record[key] != value && !record[key].in?([true, false]) && record[key] ? value == "FALSE" : value == "TRUE"
+      if record[key] != value || (record[key].in?([true, false]) && record[key] ? value == "FALSE" : value == "TRUE")
         return true
       end
     end
