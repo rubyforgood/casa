@@ -26,7 +26,7 @@ class CaseImporter < FileImporter
       begin
         if casa_case # Case exists try to update it
           unless casa_case.active
-            failures << "Case #{casa_case.case_number} already exists, but is inactive. Reactivate the CASA case instead."
+            raise "Case #{casa_case.case_number} already exists, but is inactive. Reactivate the CASA case instead."
             next
           end
 
@@ -37,9 +37,9 @@ class CaseImporter < FileImporter
       rescue => error
         failures << error.to_s
       end
-    }
 
-    raise failures.join("\n") unless failures.empty?
+      raise failures.join("\n") unless failures.empty?
+    }
 
     import_results
   end
