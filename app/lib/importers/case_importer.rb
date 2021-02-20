@@ -12,7 +12,7 @@ class CaseImporter < FileImporter
   def import_cases
     failures = []
 
-    import_results = import { |row|
+    import { |row|
       casa_case_params = row.to_hash.slice(:case_number, :transition_aged_youth, :birth_month_year_youth).compact
 
       if !casa_case_params.key?(:case_number)
@@ -27,7 +27,6 @@ class CaseImporter < FileImporter
         if casa_case # Case exists try to update it
           unless casa_case.active
             raise "Case #{casa_case.case_number} already exists, but is inactive. Reactivate the CASA case instead."
-            next
           end
 
           update_casa_case(casa_case, casa_case_params, volunteer_assignment_list)
@@ -40,8 +39,6 @@ class CaseImporter < FileImporter
 
       raise failures.join("\n") unless failures.empty?
     }
-
-    import_results
   end
 
   private
