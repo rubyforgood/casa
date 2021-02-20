@@ -33,8 +33,17 @@ RSpec.describe CaseImporter do
       expect(CasaCase.find_by(case_number: "CINA-01-4349").volunteers.size).to eq(0)
     end
 
+    context "when updating records" do
+      let!(:existing_case) { create(:casa_case, case_number: "CINA-01-4347") }
+
+      it "assigns new volunteers to the case" do
+        expect { case_importer.import_cases }.to change(existing_case.volunteers, :count).by(1)
+      end
+    end
+
     it "returns a success message with the number of cases imported" do
       alert = case_importer.import_cases
+
       expect(alert[:type]).to eq(:success)
       expect(alert[:message]).to eq("You successfully imported 3 casa_cases.")
     end
@@ -56,12 +65,6 @@ RSpec.describe CaseImporter do
 
       it "does not duplicate casa case files from csv files" do
         expect { case_importer.import_cases }.to change(CasaCase, :count).by(0)
-      end
-
-      it "returns an error message when there are cases not imported" do
-        alert = case_importer.import_cases
-        expect(alert[:type]).to eq(:error)
-        expect(alert[:message]).to include("Not all rows were imported.")
       end
     end
   end
