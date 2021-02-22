@@ -110,7 +110,7 @@ class CasaCase < ApplicationRecord
   end
 
   def in_transition_age?
-    birth_month_year_youth <= 14.years.ago
+    birth_month_year_youth.nil? ? false : birth_month_year_youth <= 14.years.ago
   end
 
   def has_transitioned?
