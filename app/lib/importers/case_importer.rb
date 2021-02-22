@@ -50,7 +50,7 @@ class CaseImporter < FileImporter
     return {casa_case: casa_case, existing: true, deactivated: false} if casa_case.present?
 
     casa_case = CasaCase.new(casa_case_params)
-		casa_case.transition_aged_youth = casa_case.in_transition_age?
+    casa_case.transition_aged_youth = casa_case.in_transition_age?
     casa_case.casa_org_id = org_id
     casa_case.save!
 
