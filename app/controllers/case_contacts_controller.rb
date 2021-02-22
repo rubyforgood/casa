@@ -1,12 +1,9 @@
-# CaseContactsController with default actions
 class CaseContactsController < ApplicationController
   before_action :set_case_contact, only: %i[edit update destroy]
   before_action :set_contact_types, only: %i[new edit update create]
   before_action :require_organization!
   after_action :verify_authorized
 
-  # GET /case_contacts
-  # GET /case_contacts.json
   def index
     authorize CaseContact
     org_cases = CasaOrg.includes(:casa_cases).references(:casa_cases).find_by(id: current_user.casa_org_id).casa_cases
@@ -14,7 +11,6 @@ class CaseContactsController < ApplicationController
     @case_contacts = policy_scope(current_organization.case_contacts).decorate
   end
 
-  # GET /case_contacts/new
   def new
     authorize CaseContact
     @casa_cases = policy_scope(current_organization.casa_cases)
@@ -74,7 +70,6 @@ class CaseContactsController < ApplicationController
     end
   end
 
-  # GET /case_contacts/1/edit
   def edit
     authorize @case_contact
     current_user.notifications.unread.where(id: params[:notification_id]).mark_as_read!
@@ -83,8 +78,6 @@ class CaseContactsController < ApplicationController
     @current_organization_groups = current_organization.contact_type_groups
   end
 
-  # PATCH/PUT /case_contacts/1
-  # PATCH/PUT /case_contacts/1.json
   def update
     authorize @case_contact
     @casa_cases = [@case_contact.casa_case]
@@ -99,19 +92,6 @@ class CaseContactsController < ApplicationController
         format.html { render :edit }
         format.json { render json: @case_contact.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE /case_contacts/1
-  # DELETE /case_contacts/1.json
-  def destroy
-    authorize @case_contact
-    @case_contact.destroy
-    respond_to do |format|
-      format.html do
-        redirect_to case_contacts_url, notice: "Case contact was successfully destroyed."
-      end
-      format.json { head :no_content }
     end
   end
 

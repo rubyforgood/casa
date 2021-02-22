@@ -8,14 +8,12 @@ class EmancipationsController < ApplicationController
   SET_OPTION = "set_option"
   CHECK_ITEM_ACTIONS = [ADD_CATEGORY, ADD_OPTION, DELETE_CATEGORY, DELETE_OPTION, SET_OPTION].freeze
 
-  # GET /casa_cases/:casa_case_id/emancipation
   def show
     @current_case = CasaCase.find(params[:casa_case_id])
     authorize @current_case
     @emancipation_form_data = EmancipationCategory.all
   end
 
-  # POST /casa_cases/:casa_case_id/emancipation/save
   def save
     authorize CasaCase, :save_emancipation?
     params.permit(:casa_case_id, :check_item_action)
@@ -37,7 +35,7 @@ class EmancipationsController < ApplicationController
       case check_item_action
         when ADD_CATEGORY
           current_case.add_emancipation_category(params[:check_item_id])
-          render json: "success".to_json # TODO use {status: success} instead - update UI tomatch
+          render json: "success".to_json # TODO use {status: success} instead - update UI to match
         when ADD_OPTION
           current_case.add_emancipation_option(params[:check_item_id])
           render json: "success".to_json
