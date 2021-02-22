@@ -20,10 +20,12 @@ RSpec.describe "emancipation/show", type: :view do
 
   it "has a link to return to case from emancipation" do
     sign_in admin
-    render template: "emancipation/show"
+    render template: "emancipations/show"
 
-    # casa_case_emancipation_path(casa_case.id)
+    # old:
+    # expect(rendered).to have_link(:casa_case.id, "/casa_cases/#{:casa_case.id}")
 
-    expect(page).to have_link(:casa_case.id, "/casa_cases/#{:casa_case.id}")
+
+    expect(rendered).to have_link(:casa_case.case_number, "/casa_cases/#{:casa_case.id}")
   end
 end
