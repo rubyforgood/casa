@@ -31,6 +31,7 @@ class CaseAssignmentsController < ApplicationController
     redirect_to after_action_path(case_assignment_parent)
   end
 
+  # TODO don't delete this, just deactivate it
   def destroy
     authorize @case_assignment
     @case_assignment.destroy
