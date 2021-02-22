@@ -8,54 +8,21 @@
     <% if policy(:dashboard).see_volunteers_section? %>
       <%= link_to "New Case", new_casa_case_path, class: "btn btn-primary" %>
     <% end %>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#visibleColumns">
-      Pick displayed columns
-    </button>
+    <% if policy(CasaCase).can_see_filters? %>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#visibleColumns">
+        Pick displayed columns
+      </button>
+    <% end %>
   </div>
 </div>
 
-<%= render 'filter' %>
-<br>
-
-<div class="modal fade" id="visibleColumns" tabindex="-1" role="dialog" aria-labelledby="visibleColumnsLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="visibleColumnsLabel">Pick Displayed Columns</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div>
-          Select columns:
-
-          <% CasaCase::TABLE_COLUMNS.each_with_index do |column, index| %>
-            <div class="row">
-              <div class="col-sm-12">
-                <div class="form-check">
-                  <%= check_box_tag "pick-#{column}",
-                                    "1",
-                                    false,
-                                    class: "form-check-input toggle-visibility",
-                                    data: {column: index} %>
-                  <%= label_tag "pick-#{column}", column.titleize, class: "form-check-label" %>
-                </div>
-              </div>
-            </div>
-          <% end %>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+<% if policy(CasaCase).can_see_filters? %>
+  <%= render 'filter' %>
+<% end %>
 
 <div class="card card-container">
   <div class="card-body">
-    <table class="table table-striped table-bordered case-list" id="casa-cases">
+    <table class="table table-striped table-bordered case-list" id="<%= @casa_cases_filter_id %>">
       <thead>
       <tr>
         <th>Case Number</th>

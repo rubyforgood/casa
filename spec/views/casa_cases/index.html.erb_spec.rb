@@ -8,28 +8,16 @@ RSpec.describe "casa_cases/index", type: :system do
   let(:volunteer) { create :volunteer, casa_org: organization }
   let(:admin) { create(:casa_admin, casa_org: organization) }
 
-  context "when signed in as an admin" do
+  context "logged in as admin" do
     before do
       sign_in admin
+      visit casa_cases_path
     end
 
-    it "Displays the Cases title" do
-      visit casa_cases_path
+    it "has content" do
       expect(page).to have_text("Cases")
-    end
-
-    it "Has a New Case Contact button" do
-      visit casa_cases_path
       expect(page).to have_link("New Case", href: new_casa_case_path)
-    end
-
-    it "Displays casa case prefix filter" do
-      visit casa_cases_path
       expect(page).to have_selector("button", text: "Casa Case Prefix")
-    end
-
-    it "Displays Casa Cases table titles" do
-      visit casa_cases_path
       expect(page).to have_selector("th", text: "Case Number")
       expect(page).to have_selector("th", text: "Hearing Type")
       expect(page).to have_selector("th", text: "Judge")
@@ -39,7 +27,7 @@ RSpec.describe "casa_cases/index", type: :system do
       expect(page).to have_selector("th", text: "Actions")
     end
 
-    it "Filters active/inactive casa_cases", js: true do
+    it "filters active/inactive", js: true do
       active_case = create(:casa_case, active: true, casa_org: organization)
       active_case1 = create(:casa_case, active: true, casa_org: organization)
       inactive_case = create(:casa_case, active: false, casa_org: organization)
@@ -74,18 +62,18 @@ RSpec.describe "casa_cases/index", type: :system do
     end
   end
 
-  context "when signed in as a volunteer" do
+  context "logged in as volunteer" do
     before do
       sign_in volunteer
+      visit casa_cases_path
     end
 
-    xit "Hides all casa case Filter by" do
-      visit casa_cases_path
-      expect(page).to_not have_selector("button", text: "Status")
-      expect(page).to_not have_selector("button", text: "Assigned to Volunteer")
-      expect(page).to_not have_selector("button", text: "Assigned to more than 1 Volunteer")
-      expect(page).to_not have_selector("button", text: "Assigned to Transition Aged Youth")
-      expect(page).to_not have_selector("button", text: "Casa Case Prefix")
+    it "hides filters" do
+      expect(page).to_not have_text("Assigned to Volunteer")
+      expect(page).to_not have_text("Assigned to more than 1 Volunteer")
+      expect(page).to_not have_text("Assigned to Transition Aged Youth")
+      expect(page).to_not have_text("Casa Case Prefix")
+      expect(page).to_not have_text("Select columns")
       expect(page).to_not have_selector(".casa-case-filters")
     end
   end
