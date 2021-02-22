@@ -1,12 +1,12 @@
 class CaseImporter < FileImporter
-  IMPORT_HEADER = ["case_number", "transition_aged_youth", "case_assignment", "birth_month_year_youth"]
+  IMPORT_HEADER = ["case_number", "case_assignment", "birth_month_year_youth"]
 
   def self.import_cases(csv_filespec, org_id)
     new(csv_filespec, org_id).import_cases
   end
 
   def initialize(csv_filespec, org_id)
-    super(csv_filespec, org_id, "casa_cases", ["case_number", "transition_aged_youth", "case_assignment", "birth_month_year_youth"])
+    super(csv_filespec, org_id, "casa_cases", ["case_number", "case_assignment", "birth_month_year_youth"])
   end
 
   def import_cases
@@ -42,7 +42,7 @@ class CaseImporter < FileImporter
   private
 
   def create_casa_case(row_data)
-    casa_case_params = row_data.to_hash.slice(:case_number, :transition_aged_youth, :birth_month_year_youth)
+    casa_case_params = row_data.to_hash.slice(:case_number, :birth_month_year_youth)
     casa_case = CasaCase.find_by(casa_case_params)
 
     return {casa_case: casa_case, existing: true, deactivated: true} if casa_case.present? && !casa_case.active
@@ -50,6 +50,7 @@ class CaseImporter < FileImporter
     return {casa_case: casa_case, existing: true, deactivated: false} if casa_case.present?
 
     casa_case = CasaCase.new(casa_case_params)
+		casa_case.transition_aged_youth = casa_case.in_transition_age?
     casa_case.casa_org_id = org_id
     casa_case.save!
 
