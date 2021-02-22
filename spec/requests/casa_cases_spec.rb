@@ -177,28 +177,6 @@ RSpec.describe "/casa_cases", type: :request do
       end
     end
 
-    describe "DELETE /destroy" do
-      it "destroys the requested casa_case" do
-        another_case = create(:casa_case, casa_org: organization)
-        expect {
-          delete casa_case_url(another_case)
-          expect(response).to redirect_to(casa_cases_url)
-        }.to change(CasaCase, :count).by(-1)
-      end
-
-      it "redirects to the casa_cases list" do
-        delete casa_case_url(casa_case)
-        expect(response).to redirect_to(casa_cases_url)
-      end
-
-      it "fails across organizations" do
-        other_org = create(:casa_org)
-        other_casa_case = create(:casa_case, casa_org: other_org)
-        delete casa_case_url(other_casa_case)
-        expect(response).to be_not_found
-      end
-    end
-
     describe "PATCH /casa_cases/:id/deactivate" do
       let(:casa_case) { create(:casa_case, :active, casa_org: organization, case_number: "111") }
       let(:params) { {id: casa_case.id} }

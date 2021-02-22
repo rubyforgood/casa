@@ -4,14 +4,12 @@ class CaseCourtReportsController < ApplicationController
   before_action :set_casa_case, only: %i[show]
   after_action :verify_authorized
 
-  # GET /case_court_reports
   def index
     authorize CaseCourtReport
     @assigned_cases = CasaCase.actively_assigned_to(current_user)
       .select(:id, :case_number, :transition_aged_youth)
   end
 
-  # GET /case_court_reports/:id
   def show
     authorize CaseCourtReport
     if !@casa_case || !@casa_case.court_reports.attached?
@@ -29,7 +27,6 @@ class CaseCourtReportsController < ApplicationController
     end
   end
 
-  # POST /case_court_reports
   def generate
     authorize CaseCourtReport
     casa_case = CasaCase.find_by(case_params)

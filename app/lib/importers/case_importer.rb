@@ -10,50 +10,64 @@ class CaseImporter < FileImporter
   end
 
   def import_cases
-    import do |row|
-      result = create_casa_case(row)
-      casa_case = result[:casa_case]
-      if casa_case
-        case_number = casa_case.case_number
-        failures = []
-        if result[:existing]
-          failures << if result[:deactivated]
-            "Case #{case_number} already exists, but is inactive. Reactivate the CASA case instead."
-          else
-            "Case #{case_number} already exists"
-          end
-        end
-        volunteers = email_addresses_to_users(Volunteer, String(row[:case_assignment]))
-        volunteers.each do |volunteer|
-          if volunteer.casa_cases.exists?(casa_case.id)
-            failures << "Volunteer #{volunteer.email} already assigned to #{case_number}"
-          else
-            casa_case.volunteers << volunteer
-          end
-        rescue => error
-          failures << error.to_s
-        end
+    failures = []
 
-        raise failures.join("\n") unless failures.empty?
+    import { |row|
+      casa_case_params = row.to_hash.slice(:case_number, :transition_aged_youth, :birth_month_year_youth).compact
+
+      if !casa_case_params.key?(:case_number)
+        failures << "ERROR: The row \n  #{row}\n  does not contain a case number"
+        next
       end
-    end
+
+      casa_case = CasaCase.find_by(case_number: casa_case_params[:case_number], casa_org_id: org_id)
+      volunteer_assignment_list = email_addresses_to_users(Volunteer, String(row[:case_assignment]))
+
+      begin
+        if casa_case # Case exists try to update it
+          unless casa_case.active
+            raise "Case #{casa_case.case_number} already exists, but is inactive. Reactivate the CASA case instead."
+          end
+
+          update_casa_case(casa_case, casa_case_params, volunteer_assignment_list)
+        else # Case doesn't exist try to create a new case
+          create_casa_case(casa_case_params, volunteer_assignment_list)
+        end
+      rescue => error
+        failures << error.to_s
+      end
+
+      raise failures.join("\n") unless failures.empty?
+    }
   end
 
   private
 
-  def create_casa_case(row_data)
-    casa_case_params = row_data.to_hash.slice(:case_number, :birth_month_year_youth)
-    casa_case = CasaCase.find_by(casa_case_params)
-
-    return {casa_case: casa_case, existing: true, deactivated: true} if casa_case.present? && !casa_case.active
-
-    return {casa_case: casa_case, existing: true, deactivated: false} if casa_case.present?
-
-    casa_case = CasaCase.new(casa_case_params)
+  def create_casa_case(case_params, volunteer_assignment_list)
+    casa_case = CasaCase.new(case_params)
     casa_case.transition_aged_youth = casa_case.in_transition_age?
     casa_case.casa_org_id = org_id
     casa_case.save!
 
-    {casa_case: casa_case, existing: false}
+    casa_case.volunteers << volunteer_assignment_list
+
+    casa_case
+  end
+
+  def update_casa_case(casa_case, case_params, volunteer_assignment_list)
+    if record_outdated?(casa_case, case_params)
+      casa_case.update(case_params)
+    end
+
+    volunteer_assignment_list.each do |volunteer|
+      # Expecting an array of length 0 or 1
+      assignment = casa_case.case_assignments.where(volunteer: volunteer)
+
+      if assignment.empty?
+        casa_case.volunteers << volunteer
+      elsif !assignment[0].is_active
+        assignment[0].update(is_active: true)
+      end
+    end
   end
 end
