@@ -109,6 +109,10 @@ class CasaCase < ApplicationRecord
       .order(:case_number)
   end
 
+  def in_transition_age?
+    birth_month_year_youth.nil? ? false : birth_month_year_youth <= 14.years.ago
+  end
+
   def has_transitioned?
     transition_aged_youth
   end

@@ -1,12 +1,12 @@
 class CaseImporter < FileImporter
-  IMPORT_HEADER = ["case_number", "transition_aged_youth", "case_assignment", "birth_month_year_youth"]
+  IMPORT_HEADER = ["case_number", "case_assignment", "birth_month_year_youth"]
 
   def self.import_cases(csv_filespec, org_id)
     new(csv_filespec, org_id).import_cases
   end
 
   def initialize(csv_filespec, org_id)
-    super(csv_filespec, org_id, "casa_cases", ["case_number", "transition_aged_youth", "case_assignment", "birth_month_year_youth"])
+    super(csv_filespec, org_id, "casa_cases", ["case_number", "case_assignment", "birth_month_year_youth"])
   end
 
   def import_cases
@@ -45,6 +45,7 @@ class CaseImporter < FileImporter
 
   def create_casa_case(case_params, volunteer_assignment_list)
     casa_case = CasaCase.new(case_params)
+    casa_case.transition_aged_youth = casa_case.in_transition_age?
     casa_case.casa_org_id = org_id
     casa_case.save!
 
