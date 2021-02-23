@@ -44,9 +44,9 @@
         "Number of inactive volunteers" => selected_organization.volunteers.inactive.count,
         "Number of active cases" => selected_organization.casa_cases.active.count,
         "Number of inactive cases" => selected_organization.casa_cases.inactive.count,
-        "1 Number of all case contacts including inactive 75" => selected_organization.case_contacts.count,
-        "2 Number of active supervisor to volunteer assignments 47" => selected_organization.supervisor_volunteers.active.count, #this is correct
-        "3 Number of active case assingments 73" => selected_organization.case_assignments.active.count
+        "Number of all case contacts including inactive" => selected_organization.case_assignments.active.count,
+        "Number of active supervisor to volunteer assignments" => selected_organization.supervisor_volunteers.active.count, #this is correct
+        "Number of active case assingments" => selected_organization.case_assignments.active.count
       }.each do |item_description, item_value| %>
         <li class="list-group-item">
           <strong><%= item_description %>:</strong>
