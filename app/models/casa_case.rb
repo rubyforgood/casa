@@ -7,10 +7,14 @@ class CasaCase < ApplicationRecord
     hearing_type_name
     judge_name
     status
-    transition_aged_youth_icon
+    transition_aged_youth
     assigned_to
     actions
   ].freeze
+
+  TRANSITION_AGE_YOUTH_ICON = "🦋".freeze
+  NON_TRANSITION_AGE_YOUTH_ICON = "🐛".freeze
+
   has_paper_trail
 
   has_many :case_assignments, dependent: :destroy
@@ -23,6 +27,8 @@ class CasaCase < ApplicationRecord
   has_many :casa_cases_emancipation_options, dependent: :destroy
   has_many :emancipation_options, through: :casa_cases_emancipation_options
   has_many :past_court_dates, dependent: :destroy
+  has_many_attached :court_reports
+
   validates :case_number, uniqueness: {scope: :casa_org_id, case_sensitive: false}, presence: true
   belongs_to :hearing_type, optional: true
   belongs_to :judge, optional: true
@@ -75,6 +81,10 @@ class CasaCase < ApplicationRecord
   # Validation to check timestamp and submission status of a case
   validates_with CourtReportValidator, fields: [:court_report_status, :court_report_submitted_at]
 
+  def latest_court_report
+    court_reports.order("created_at").last
+  end
+
   def court_report_status=(value)
     super
     if court_report_not_submitted?
@@ -99,8 +109,20 @@ class CasaCase < ApplicationRecord
       .order(:case_number)
   end
 
+  def in_transition_age?
+    birth_month_year_youth.nil? ? false : birth_month_year_youth <= 14.years.ago
+  end
+
   def has_transitioned?
     transition_aged_youth
+  end
+
+  def has_judge_name?
+    judge_name
+  end
+
+  def has_hearing_type?
+    hearing_type
   end
 
   def add_emancipation_category(category_id)

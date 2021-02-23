@@ -15,7 +15,7 @@ class CasaAdminsController < ApplicationController
   def update
     authorize @casa_admin
     if @casa_admin.update(update_casa_admin_params)
-      redirect_to casa_admins_path, notice: "Admin was successfully updated."
+      redirect_to casa_admins_path, notice: "New admin created successfully"
     else
       render :edit
     end
@@ -27,13 +27,13 @@ class CasaAdminsController < ApplicationController
   end
 
   def create
-    @casa_admin = CasaAdmin.new(create_casa_admin_params)
+    service = ::CreateCasaAdminService.new(current_organization, params)
+    @casa_admin = service.build
     authorize @casa_admin
-
-    if @casa_admin.save
-      @casa_admin.invite!
-      redirect_to casa_admins_path, notice: "New Admin created."
-    else
+    begin
+      service.create!
+      redirect_to casa_admins_path, notice: "New admin created successfully"
+    rescue ActiveRecord::RecordInvalid
       render new_casa_admin_path
     end
   end
@@ -78,12 +78,5 @@ class CasaAdminsController < ApplicationController
 
   def update_casa_admin_params
     CasaAdminParameters.new(params).with_only(:email, :display_name)
-  end
-
-  def create_casa_admin_params
-    CasaAdminParameters.new(params)
-      .with_password(SecureRandom.hex(10))
-      .with_organization(current_organization)
-      .without(:active, :type)
   end
 end

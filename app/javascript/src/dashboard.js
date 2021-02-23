@@ -13,7 +13,7 @@ var defineSupervisorsDataTable = function () {
   $('table#supervisors').DataTable(
     {
       columnDefs: [
-        { orderable: false, targets: 4 },
+        { orderable: false, targets: 4 }
       ],
       autoWidth: false,
       searching: false,
@@ -145,7 +145,7 @@ $('document').ready(() => {
       },
       {
         name: 'has_transition_aged_youth_cases',
-        render: (data, type, row, meta) => row.has_transition_aged_youth_cases === 'true' ? 'Yes 🐛🦋' : 'No',
+        render: (data, type, row, meta) => row.has_transition_aged_youth_cases === 'true' ? 'Yes 🦋' : 'No 🐛',
         searchable: false
       },
       {

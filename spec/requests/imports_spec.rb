@@ -137,24 +137,7 @@ RSpec.describe "/imports", type: :request do
 
       expect(response).to redirect_to(imports_url(import_type: "casa_case"))
     end
-    it "produces an error when a case already exists in cases CSV imports" do
-      sign_in casa_admin
-      create(:casa_case, case_number: "CINA-00-0000", transition_aged_youth: "true", birth_month_year_youth: nil)
 
-      expect(CasaCase.count).to eq(1)
-
-      expect {
-        post imports_url,
-          params: {
-            import_type: "casa_case",
-            file: upload_file(existing_case_file)
-          }
-      }.to change(CasaCase, :count).by(0)
-
-      expect(request.session[:import_error]).to include("Not all rows were imported.")
-      expect(request.session[:exported_rows]).to include("Case CINA-00-0000 already exists")
-      expect(response).to redirect_to(imports_url(import_type: "casa_case"))
-    end
     it "produces an error when a deactivated case already exists in cases CSV imports" do
       sign_in casa_admin
 

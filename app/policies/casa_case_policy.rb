@@ -9,18 +9,18 @@ class CasaCasePolicy < ApplicationPolicy
 
     def resolve
       case @user
-      when CasaAdmin, Supervisor
-        scope.by_organization(@user.casa_org)
-      when Volunteer
-        scope.actively_assigned_to(user)
-      else
-        raise "unrecognized user type #{@user.type}"
+        when CasaAdmin, Supervisor
+          scope.by_organization(@user.casa_org)
+        when Volunteer
+          scope.actively_assigned_to(user)
+        else
+          raise "unrecognized user type #{@user.type}"
       end
     end
   end
 
   def update_contact_types?
-    is_supervisor?
+    is_supervisor? || is_admin?
   end
 
   def update_birth_month_year_youth?
@@ -29,12 +29,16 @@ class CasaCasePolicy < ApplicationPolicy
 
   def update_emancipation_option?
     is_in_same_org? && (
-      admin_or_supervisor? || is_volunteer_actively_assigned_to_case?
-    )
+    admin_or_supervisor? || is_volunteer_actively_assigned_to_case?
+  )
   end
 
   def assign_volunteers?
     is_in_same_org? && admin_or_supervisor?
+  end
+
+  def can_see_filters?
+    is_supervisor? || is_admin?
   end
 
   alias_method :update_case_number?, :is_admin?
@@ -52,19 +56,19 @@ class CasaCasePolicy < ApplicationPolicy
     ]
 
     case @user
-    when CasaAdmin
-      common_attrs.concat(%i[case_number birth_month_year_youth court_date court_report_due_date hearing_type_id judge_id])
-    when Supervisor
-      common_attrs.concat(%i[court_date court_report_due_date hearing_type_id judge_id])
-    else
-      common_attrs
+      when CasaAdmin
+        common_attrs.concat(%i[case_number birth_month_year_youth court_date court_report_due_date hearing_type_id judge_id])
+      when Supervisor
+        common_attrs.concat(%i[court_date court_report_due_date hearing_type_id judge_id])
+      else
+        common_attrs
     end
   end
 
   def same_org_supervisor_admin_or_assigned?
     is_in_same_org? && (
-      admin_or_supervisor? || is_volunteer_actively_assigned_to_case?
-    )
+    admin_or_supervisor? || is_volunteer_actively_assigned_to_case?
+  )
   end
 
   def same_org_supervisor_admin?

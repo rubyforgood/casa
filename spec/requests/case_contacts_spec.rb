@@ -24,104 +24,111 @@ RSpec.describe "/case_contacts", type: :request do
     }
   end
 
-  before { sign_in volunteer }
+  context "logged in as admin" do
+    let(:admin) { create(:casa_admin) }
+    before { sign_in admin }
 
-  describe "POST /create" do
-    context "with valid parameters" do
-      it "does create two new CaseContacts" do
-        expect {
-          post case_contacts_url, params: {case_contact: valid_attributes}
-        }.to change(CaseContact, :count).by(2)
-      end
-    end
+    describe "GET /edit" do
+      it "should mark notification as read" do
+        case_contact = create(:case_contact)
+        followup = create(:followup, case_contact: case_contact, creator: admin)
+        FollowupResolvedNotification
+          .with(followup: followup, created_by_name: volunteer.display_name)
+          .deliver(followup.creator)
 
-    context "with invalid parameters" do
-      it "does not create a new CaseContact" do
-        expect { post case_contacts_url, params: {case_contact: invalid_attributes} }.to change(
-          CaseContact,
-          :count
-        ).by(0)
-      end
+        get edit_case_contact_url(case_contact, notification_id: admin.notifications.first.id)
 
-      it "renders a successful response (i.e. to display the new template)" do
-        post case_contacts_url, params: {case_contact: invalid_attributes}
-        expect(response).to be_successful
-      end
-    end
-
-    context "with no cases selected" do
-      it "presents the user with a relevant error message" do
-        expect {
-          post case_contacts_url, params: {
-            case_contact: valid_attributes.merge(casa_case_id: [])
-          }
-        }.to change(CaseContact, :count).by(0)
-
-        expect(response).to be_successful
-        expect(flash[:alert]).to be_present
+        expect(admin.notifications.unread).to eq([])
       end
     end
   end
 
-  describe "PATCH /update" do
-    context "with valid parameters" do
-      it "updates the requested case_contact and redirects to the root path" do
-        case_contact = create(:case_contact, creator: volunteer, casa_case: casa_case)
-        contact_type = create(:contact_type, name: "Attorney")
+  context "logged in as volunteer" do
+    before { sign_in volunteer }
 
-        patch case_contact_url(case_contact), params: {
-          case_contact: {
-            case_contact_contact_type_attributes: [{contact_type_id: contact_type.id}],
-            duration_minutes: 60
+    describe "POST /create" do
+      context "with valid parameters" do
+        it "does create two new CaseContacts" do
+          expect {
+            post case_contacts_url, params: {case_contact: valid_attributes}
+          }.to change(CaseContact, :count).by(2)
+        end
+      end
+
+      context "with invalid parameters" do
+        it "does not create a new CaseContact" do
+          expect { post case_contacts_url, params: {case_contact: invalid_attributes} }.to change(
+            CaseContact,
+            :count
+          ).by(0)
+        end
+
+        it "renders a successful response (i.e. to display the new template)" do
+          post case_contacts_url, params: {case_contact: invalid_attributes}
+          expect(response).to be_successful
+        end
+      end
+
+      context "with no cases selected" do
+        it "presents the user with a relevant error message" do
+          expect {
+            post case_contacts_url, params: {
+              case_contact: valid_attributes.merge(casa_case_id: [])
+            }
+          }.to change(CaseContact, :count).by(0)
+
+          expect(response).to be_successful
+          expect(flash[:alert]).to be_present
+        end
+      end
+    end
+
+    describe "PATCH /update" do
+      let(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
+
+      context "with valid parameters" do
+        it "updates the requested case_contact and redirects to the root path" do
+          contact_type = create(:contact_type, name: "Attorney")
+
+          patch case_contact_url(case_contact), params: {
+            case_contact: {
+              case_contact_contact_type_attributes: [{contact_type_id: contact_type.id}],
+              duration_minutes: 60
+            }
           }
-        }
-        expect(response).to redirect_to(casa_case_path(case_contact.casa_case_id))
+          expect(response).to redirect_to(casa_case_path(case_contact.casa_case_id))
 
-        expect(case_contact.reload.contact_types.first.name).to eq "Attorney"
+          expect(case_contact.reload.contact_types.first.name).to eq "Attorney"
+        end
       end
-    end
 
-    context "as another volunteer" do
-      before { sign_in other_volunteer }
+      context "as another volunteer" do
+        before { sign_in other_volunteer }
 
-      it "does not allow update of case contacts created by other volunteers" do
-        contact_type = create(:contact_type, name: "Attorney")
-        contact_type2 = create(:contact_type, name: "Therapist")
-        case_contact = create(:case_contact, creator: volunteer, casa_case: casa_case, contact_types: [contact_type])
+        it "does not allow update of case contacts created by other volunteers" do
+          contact_type = create(:contact_type, name: "Attorney")
+          contact_type2 = create(:contact_type, name: "Therapist")
 
-        patch case_contact_url(case_contact), params: {
-          case_contact: {
-            contact_types: [contact_type2]
+          case_contact.contact_types << contact_type
+
+          patch case_contact_url(case_contact), params: {
+            case_contact: {
+              contact_types: [contact_type2]
+            }
           }
-        }
-        expect(response).to redirect_to(root_path)
+          expect(response).to redirect_to(root_path)
 
-        case_contact.reload
-        expect(case_contact.contact_types.first.name).to eq("Attorney")
+          case_contact.reload
+          expect(case_contact.contact_types.first.name).to eq("Attorney")
+        end
       end
-    end
 
-    context "with invalid parameters" do
-      it "renders a successful response (i.e. to display the edit template)" do
-        case_contact = create(:case_contact, creator: volunteer, casa_case: casa_case)
-        patch case_contact_url(case_contact), params: {case_contact: invalid_attributes}
-        expect(response).to be_successful
+      context "with invalid parameters" do
+        it "renders a successful response (i.e. to display the edit template)" do
+          patch case_contact_url(case_contact), params: {case_contact: invalid_attributes}
+          expect(response).to be_successful
+        end
       end
-    end
-  end
-
-  describe "DELETE /destroy" do
-    it "destroys the requested case_contact" do
-      case_contact = create(:case_contact, creator: volunteer, casa_case: casa_case)
-      expect {
-        delete case_contact_url(case_contact)
-      }.to change(CaseContact, :count).by(-1)
-    end
-
-    it "redirects to the case_contacts list" do
-      case_contact = create(:case_contact, creator: volunteer, casa_case: casa_case)
-      delete case_contact_url(case_contact)
-      expect(response).to redirect_to(case_contacts_url)
     end
   end
 end

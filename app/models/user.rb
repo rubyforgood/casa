@@ -22,12 +22,16 @@ class User < ApplicationRecord
     through: :supervisor_volunteers # OK - does check active in line 23
   has_many :followups, foreign_key: "creator_id"
 
+  has_many :notifications, as: :recipient
+
   has_one :supervisor_volunteer, -> {
     where(is_active: true)
   }, foreign_key: "volunteer_id", dependent: :destroy
   has_one :supervisor, through: :supervisor_volunteer
 
   scope :active, -> { where(active: true) }
+
+  scope :inactive, -> { where(active: false) }
 
   scope :in_organization, lambda { |org|
     where(casa_org_id: org.id)

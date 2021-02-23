@@ -14,6 +14,7 @@
     <div class="sidebar-menu">
       <div class="list-group list-group-flush">
         <% if user_signed_in? %>
+          <%= menu_item(label: inbox_label, path: notifications_path) %>
           <%= menu_item(label: "Supervisors", path: supervisors_path, visible: policy(Supervisor).index?) %>
           <%= menu_item(label: "Volunteers", path: volunteers_path, visible: policy(Volunteer).index?) %>
           <%= menu_item(label: cases_index_title, path: casa_cases_path) %>
