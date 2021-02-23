@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_17_185614) do
+ActiveRecord::Schema.define(version: 2021_02_23_133248) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -143,6 +143,12 @@ ActiveRecord::Schema.define(version: 2021_01_17_185614) do
     t.index ["casa_case_id"], name: "index_case_contacts_on_casa_case_id"
     t.index ["creator_id"], name: "index_case_contacts_on_creator_id"
     t.check_constraint "(miles_driven IS NOT NULL) OR (NOT want_driving_reimbursement)", name: "want_driving_reimbursement_only_when_miles_driven"
+  end
+
+  create_table "case_court_mandates", force: :cascade do |t|
+    t.string "mandate_text"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "contact_type_groups", force: :cascade do |t|
