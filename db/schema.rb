@@ -147,8 +147,10 @@ ActiveRecord::Schema.define(version: 2021_02_23_133248) do
 
   create_table "case_court_mandates", force: :cascade do |t|
     t.string "mandate_text"
+    t.bigint "casa_case_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["casa_case_id"], name: "index_case_court_mandates_on_casa_case_id"
   end
 
   create_table "contact_type_groups", force: :cascade do |t|
@@ -295,6 +297,7 @@ ActiveRecord::Schema.define(version: 2021_02_23_133248) do
   add_foreign_key "case_assignments", "users", column: "volunteer_id"
   add_foreign_key "case_contacts", "casa_cases"
   add_foreign_key "case_contacts", "users", column: "creator_id"
+  add_foreign_key "case_court_mandates", "casa_cases"
   add_foreign_key "emancipation_options", "emancipation_categories"
   add_foreign_key "followups", "users", column: "creator_id"
   add_foreign_key "judges", "casa_orgs"
