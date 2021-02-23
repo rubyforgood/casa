@@ -42,23 +42,23 @@ RSpec.describe "all_casa_admins/casa_orgs/show", type: :view do
           active: false,
           description: "inactive case"
         },
-        # {
-        #    type: :case_contact,
-        #    number: 1,
-        #    active: true,
-        #    description: "all case contacts including inactive"
-        #  },
-        #  {
-        #     type: :supervisor_volunteer,
-        #     number: 2,
-        #     active: true,
-        #     description: "supervisor to volunteer assignment"
-        #   },
+        {
+           type: :case_contact,
+           number: 1,
+           active: true,
+           description: "all case contacts including inactive"
+         },
+         {
+            type: :supervisor_volunteer,
+            number: 2,
+            active: true,
+            description: "supervisor to volunteer assignment"
+          },
           {
              type: :case_assignment,
              number: 3,
              active: true,
-             description: "active case assingment"
+             description: "all case contacts including inactive"
            }
       ]
     }

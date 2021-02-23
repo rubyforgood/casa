@@ -20,7 +20,6 @@ class CaseContact < ApplicationRecord
   has_one :supervisor, through: :creator
   has_many :followups
 
-  #belongs_to :casa_org # LOOK HERE ERIN
   belongs_to :casa_case
 
   has_many :case_contact_contact_type
