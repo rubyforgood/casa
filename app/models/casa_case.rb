@@ -27,7 +27,6 @@ class CasaCase < ApplicationRecord
   has_many :casa_cases_emancipation_options, dependent: :destroy
   has_many :emancipation_options, through: :casa_cases_emancipation_options
   has_many :past_court_dates, dependent: :destroy
-  has_many :case_court_mandates, dependent: :destroy
   has_many_attached :court_reports
 
   validates :case_number, uniqueness: {scope: :casa_org_id, case_sensitive: false}, presence: true
@@ -38,6 +37,9 @@ class CasaCase < ApplicationRecord
   has_many :casa_case_contact_types
   has_many :contact_types, through: :casa_case_contact_types, source: :contact_type
   accepts_nested_attributes_for :casa_case_contact_types
+
+  has_many :case_court_mandates, dependent: :destroy
+  accepts_nested_attributes_for :case_court_mandates
 
   enum court_report_status: {not_submitted: 0, submitted: 1, in_review: 2, completed: 3}, _prefix: :court_report
 

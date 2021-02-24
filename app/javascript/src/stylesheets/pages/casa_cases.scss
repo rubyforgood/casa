@@ -19,4 +19,33 @@ body.casa_cases {
     width: 130px;
     padding-bottom: 15px;
   }
+
+  .court-mandates {
+    textarea, .add-court-mandate {
+      width: 500px;
+    }
+
+    .add-court-mandate {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 10px;
+
+      #add-mandate-button {
+        background-color: #{$primary};
+        color: white;
+
+        font-size: 1.25em;
+
+        padding: 0.25em 1.5em;
+        border-radius: 10px;
+        border: none;
+
+        :hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
 }
+
