@@ -42,6 +42,21 @@
           <% else %>
             No contact attempts were logged for this week.
           <% end %>
+          <% # include a notice if their assignment status recently changed. %>
+          <% if case_assignment.updated_at > 7.days.ago %>
+            <br>
+            This volunteer was
+            <% if case_assignment.is_active %>
+              assigned to
+            <% else %>
+              <% if case_assignment.created_at > 7.days.ago %>
+                <% # handle case where they were assigned, then unassigned in the same week %>
+                assigned to this case on <%= I18n.l(case_assignment.created_at) %> and
+              <% end %>
+              unassigned from
+            <% end %>  
+            this case on <%= I18n.l(case_assignment.updated_at) %>
+          <% end %>
         </td>
       </tr>
     <% end %>
