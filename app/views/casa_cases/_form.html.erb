@@ -115,21 +115,22 @@
                         CasaCase.court_report_statuses&.map { |status| [status.first.humanize, status.first] } %>
       </div>
 
-      <div class="field form-group court-mandates">
-        <%= form.label :case_court_mandates, "Court Mandates" %>
-        <br>
-        <div id="mandates-list-container">
-          <%= form.fields_for :case_court_mandates do |ff| %>
-            <%= ff.text_area :mandate_text %>
-          <% end %>
+      <% if casa_case.persisted? %>
+        <div class="field form-group court-mandates">
+          <%= form.label :case_court_mandates, "Court Mandates" %>
+          <div id="mandates-list-container">
+            <%= form.fields_for :case_court_mandates do |ff| %>
+              <%= ff.text_area :mandate_text %>
+            <% end %>
+          </div>
+          <div class="add-court-mandate">
+            <span id="add-mandate-button">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+            </span>
+            <strong>Add a court mandate</strong>
+          </div>
         </div>
-        <div class="add-court-mandate">
-          <span id="add-mandate-button">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-          </span>
-          <strong>Add a court mandate</strong>
-        </div>
-      </div>
+      <% end %>
 
       <% if Pundit.policy(current_user, casa_case).update_contact_types? %>
         <div id="contact-type-form" class="field contact-type form-group">

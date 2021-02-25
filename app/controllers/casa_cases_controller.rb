@@ -92,8 +92,7 @@ class CasaCasesController < ApplicationController
       :court_date,
       :court_report_due_date,
       :hearing_type_id,
-      :judge_id,
-      case_court_mandates_attributes: %i[mandate_text]
+      :judge_id
     )
   end
 
