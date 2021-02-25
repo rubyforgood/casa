@@ -34,6 +34,8 @@ See also our [contributing guide](./doc/CONTRIBUTING.md) 💖
 - oversee volunteer activity
 - generate reports on volunteer activity
 
+Read about the [product sense](doc/productsense.md) that guides our approach to this work.
+
 **How CASA works:**
 
 - Foster Youth (or case worker associated with Foster Youth) requests a CASA Volunteer.
@@ -168,6 +170,7 @@ There is a `doc` directory at the top level that includes:
 * [CYPRESS.md](doc/CYPRESS.md)
 * [DOCKER.md](doc/DOCKER.md)
 * [LINUX_SETUP.md](doc/LINUX_SETUP.md)
+* [productsense.md](doc/productsense.md)(for team leads & product interested contributors)
 * [SECURITY.md](doc/SECURITY.md)
 
 ### Common issues
