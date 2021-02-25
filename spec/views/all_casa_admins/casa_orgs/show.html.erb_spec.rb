@@ -67,7 +67,11 @@ RSpec.describe "all_casa_admins/casa_orgs/show", type: :view do
       # seed the organization
       org_info.each do |group|
         group[:number].times do
-          create group[:type], casa_org: organization, active: group[:active]
+          if group[:type] == :case_assignment
+            create group[:type], casa_org: organization, is_active: group[:active]
+          else
+            create group[:type], casa_org: organization, active: group[:active]
+          end
         end
       end
       allow(view).to receive(:selected_organization).and_return(organization)
