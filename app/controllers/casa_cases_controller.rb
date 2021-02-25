@@ -1,4 +1,5 @@
 class CasaCasesController < ApplicationController
+  include Pagy::Backend
   before_action :set_casa_case, only: %i[show edit update destroy deactivate reactivate]
   before_action :set_contact_types, only: %i[new edit update create deactivate]
   before_action :require_organization!
@@ -6,9 +7,11 @@ class CasaCasesController < ApplicationController
 
   def index
     authorize CasaCase
-    org_cases = current_user.casa_org.casa_cases.includes(:assigned_volunteers)
-    @casa_cases = policy_scope(org_cases).includes([:hearing_type, :judge])
-    @casa_cases_filter_id = policy(CasaCase).can_see_filters? ? "casa-cases" : ""
+    # @pagy, @records = pagy(Product.some_scope)
+    # @casa_cases_filter_id = policy(CasaCase).can_see_filters? ? "casa-cases" : ""
+    @casa_cases_filter_id = ""
+
+    @pagy, @casa_cases = pagy(policy_scope(current_user.casa_org.casa_cases))
   end
 
   def show
