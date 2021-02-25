@@ -8,6 +8,7 @@ RSpec.describe "/casa_cases", type: :request do
   let(:invalid_attributes) { {case_number: nil} }
   let(:casa_case) { create(:casa_case, casa_org: organization, case_number: "111") }
   let(:mandate_texts) { ["New Mandate Text One", "New Mandate Text Two"] }
+  let(:mandates_attributes) { { "0" => { mandate_text: mandate_texts[0] }, "1" => { mandate_text: mandate_texts[1] } } }
 
   before { sign_in user }
 
@@ -139,11 +140,7 @@ RSpec.describe "/casa_cases", type: :request do
         context "with case_court_mandates_attributes being passed as a parameter" do
           let(:invalid_params) do
             attributes = valid_attributes
-            attributes[:case_court_mandates_attributes] = {
-              '0' => {
-                mandate_text: "Mandate Text"
-              }
-            }
+            attributes[:case_court_mandates_attributes] = mandates_attributes
             { casa_case: attributes }
           end
 
@@ -159,7 +156,7 @@ RSpec.describe "/casa_cases", type: :request do
               :count
             )
           end
-  
+
           it "renders a successful response (i.e. to display the 'new' template)" do
             post casa_cases_url, params: {casa_case: invalid_params}
             expect(response).to be_successful
@@ -174,15 +171,7 @@ RSpec.describe "/casa_cases", type: :request do
           case_number: "12345",
           hearing_type_id: hearing_type.id,
           judge_id: judge.id,
-
-          case_court_mandates_attributes: {
-            "0" => {
-                mandate_text: mandate_texts[0],
-            },
-            "1" => {
-                mandate_text: mandate_texts[1],
-            }
-          }
+          case_court_mandates_attributes: mandates_attributes
         }
       }
 
@@ -230,8 +219,8 @@ RSpec.describe "/casa_cases", type: :request do
             patch casa_case_url(casa_case), params: { casa_case: new_attributes }
             casa_case.reload
 
-            mandates_updated[:case_court_mandates_attributes]['0'][:id] = casa_case.case_court_mandates[0].id
-            mandates_updated[:case_court_mandates_attributes]['1'][:id] = casa_case.case_court_mandates[1].id
+            mandates_updated[:case_court_mandates_attributes]["0"][:id] = casa_case.case_court_mandates[0].id
+            mandates_updated[:case_court_mandates_attributes]["1"][:id] = casa_case.case_court_mandates[1].id
           end
 
           it "does not update the first mandate" do
@@ -377,7 +366,8 @@ RSpec.describe "/casa_cases", type: :request do
           case_number: "12345",
           court_report_status: :submitted,
           hearing_type_id: hearing_type.id,
-          judge_id: judge.id
+          judge_id: judge.id,
+          case_court_mandates_attributes: mandates_attributes
         }
       }
 
@@ -391,6 +381,7 @@ RSpec.describe "/casa_cases", type: :request do
           expect(casa_case.case_number).to eq "111"
           expect(casa_case.hearing_type).to_not eq hearing_type
           expect(casa_case.judge).to_not eq judge
+          expect(casa_case.case_court_mandates.size).to be 0
         end
 
         it "redirects to the casa_case" do
@@ -473,14 +464,18 @@ RSpec.describe "/casa_cases", type: :request do
     end
 
     describe "PATCH /update" do
-      let(:new_attributes) { {case_number: "12345", court_report_status: :completed} }
+      let(:new_attributes) { { case_number: "12345", court_report_status: :completed, case_court_mandates_attributes: mandates_attributes } }
 
       context "with valid parameters" do
         it "updates fields (except case_number)" do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes}
           casa_case.reload
+
           expect(casa_case.case_number).to eq "111"
           expect(casa_case.court_report_completed?).to be true
+
+          expect(casa_case.case_court_mandates[0].mandate_text).to eq mandate_texts[0]
+          expect(casa_case.case_court_mandates[1].mandate_text).to eq mandate_texts[1]
         end
 
         it "redirects to the casa_case" do
