@@ -29,13 +29,13 @@ body.casa_cases {
     textarea, .add-court-mandate {
       width: 500px;
     }
+  }
 
-    .add-court-mandate {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      gap: 10px;
-    }
+  .add-court-mandate-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
   }
 
   #add-mandate-button {

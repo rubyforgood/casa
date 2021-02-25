@@ -47,20 +47,22 @@ class CasaCasePolicy < ApplicationPolicy
   alias_method :update_hearing_type?, :admin_or_supervisor?
   alias_method :update_judge?, :admin_or_supervisor?
   alias_method :update_court_report_due_date?, :admin_or_supervisor?
+  alias_method :update_court_mandates?, :admin_or_supervisor?
 
   def permitted_attributes
     common_attrs = [
       :court_report_submitted,
       :court_report_status,
-      casa_case_contact_types_attributes: [:contact_type_id],
-      case_court_mandates_attributes: %i[mandate_text id]
+      casa_case_contact_types_attributes: [:contact_type_id]
     ]
 
     case @user
       when CasaAdmin
         common_attrs.concat(%i[case_number birth_month_year_youth court_date court_report_due_date hearing_type_id judge_id])
+        common_attrs << { case_court_mandates_attributes: %i[mandate_text id] }
       when Supervisor
         common_attrs.concat(%i[court_date court_report_due_date hearing_type_id judge_id])
+        common_attrs << { case_court_mandates_attributes: %i[mandate_text id] }
       else
         common_attrs
     end
