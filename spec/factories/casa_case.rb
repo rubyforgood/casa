@@ -7,7 +7,7 @@ FactoryBot.define do
     hearing_type
     judge
     court_report_status { :not_submitted }
-    case_court_mandates { [build(:case_court_mandate)] }
+    case_court_mandates { [] }
 
     trait :with_case_assignments do
       after(:create) do |casa_case, _|
