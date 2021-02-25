@@ -53,7 +53,7 @@ class CasaCasePolicy < ApplicationPolicy
       :court_report_submitted,
       :court_report_status,
       casa_case_contact_types_attributes: [:contact_type_id],
-      case_court_mandates_attributes: %i[mandate_text]
+      case_court_mandates_attributes: %i[mandate_text id]
     ]
 
     case @user
