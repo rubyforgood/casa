@@ -3,7 +3,7 @@ class CaseAssignment < ApplicationRecord
 
   belongs_to :casa_case
   belongs_to :volunteer, class_name: "User", inverse_of: "case_assignments"
-  belongs_to :casa_org
+  #belongs_to :casa_org
 
   validates :casa_case_id, uniqueness: {scope: :volunteer_id} # only 1 row allowed per case-volunteer pair
   validates :volunteer, presence: true
@@ -11,6 +11,7 @@ class CaseAssignment < ApplicationRecord
   validate :casa_case_and_volunteer_must_belong_to_same_casa_org, if: -> { casa_case.present? && volunteer.present? }
 
   scope :is_active, -> { where(is_active: true) }
+  scope :active, -> { where(is_active: true) }
 
   private
 

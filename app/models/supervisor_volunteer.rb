@@ -9,7 +9,15 @@ class SupervisorVolunteer < ApplicationRecord
   validate :ensure_supervisor_and_volunteer_belong_to_same_casa_org, if: -> { supervisor.present? && volunteer.present? }
 
   def is_active?
+    active == true
+  end
+
+  def is_active?
     is_active == true
+  end
+
+  def active=(x)
+    is_active = x
   end
 
   private
