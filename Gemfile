@@ -23,6 +23,7 @@ gem "rack-attack" # for blocking & throttling abusive requests
 gem "skylight" # automated performance testing https://www.skylight.io/
 gem "webpacker", "~> 5.2" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem "image_processing", "~> 1.12" # Set of higher-level helper methods for image processing.
+gem "pagy"
 
 gem "bootsnap", ">= 1.4.2", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "bugsnag" # tracking errors in prod
@@ -37,10 +38,12 @@ group :development, :test do
   gem "rspec-rails", "~> 4.0.2"
   gem "shoulda-matchers"
   gem "standard", "~> 0.12.0" # linter https://github.com/testdouble/standard
+  gem 'pry-remote'
   gem "cypress-on-rails", "~> 1.0"
 end
 
 group :development do
+  gem 'pry-rails'
   gem "annotate" # for adding db field listings to models as comments
   gem "erb_lint", require: false
   gem "letter_opener" # Opens emails in new tab for easier testing

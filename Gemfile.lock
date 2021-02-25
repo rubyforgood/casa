@@ -232,6 +232,7 @@ GEM
       http (>= 4.0.0)
       rails (>= 6.0.0)
     orm_adapter (0.5.0)
+    pagy (3.11.0)
     paper_trail (11.1.0)
       activerecord (>= 5.2)
       request_store (~> 1.1)
@@ -251,6 +252,11 @@ GEM
     pry-byebug (3.9.0)
       byebug (~> 11.0)
       pry (~> 0.13.0)
+    pry-rails (0.3.9)
+      pry (>= 0.10.4)
+    pry-remote (0.1.8)
+      pry (~> 0.9)
+      slop (~> 3.0)
     public_suffix (4.0.6)
     puma (5.2.0)
       nio4r (~> 2.0)
@@ -364,6 +370,7 @@ GEM
       skylight-core (= 4.3.2)
     skylight-core (4.3.2)
       activesupport (>= 4.2.0)
+    slop (3.6.0)
     smart_properties (1.15.0)
     spoon (0.0.6)
       ffi
@@ -451,10 +458,13 @@ DEPENDENCIES
   letter_opener
   listen (>= 3.0.5, < 3.5)
   noticed
+  pagy
   paper_trail
   pg (>= 0.18, < 2.0)
   pry
   pry-byebug
+  pry-rails
+  pry-remote
   puma (~> 5.2)
   pundit
   rack-attack

@@ -5,12 +5,22 @@ class CaseContactsController < ApplicationController
   before_action :require_organization!
   after_action :verify_authorized
 
+  include Pagy::Backend
+  require 'pry-remote'
+
   # GET /case_contacts
   # GET /case_contacts.json
   def index
     authorize CaseContact
     org_cases = CasaOrg.includes(:casa_cases).references(:casa_cases).find_by(id: current_user.casa_org_id).casa_cases
     @casa_cases = policy_scope(org_cases)
+    @casa_cases.each do |casa_case| 
+      @pagy_c, @contacts = pagy_array(casa_case.case_contacts)
+    end
+    binding.pry
+    @pagy, @casa_cases_contact = pagy(@casa_cases.first.case_contacts)
+    # binding.pry
+    
     @case_contacts = policy_scope(current_organization.case_contacts).decorate
   end
 

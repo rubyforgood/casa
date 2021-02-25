@@ -4,12 +4,13 @@ class CasaCasesController < ApplicationController
   before_action :require_organization!
   after_action :verify_authorized
 
+  include Pagy::Backend
   # GET /casa_cases
   # GET /casa_cases.json
   def index
     authorize CasaCase
     org_cases = current_user.casa_org.casa_cases.includes(:assigned_volunteers)
-    @casa_cases = policy_scope(org_cases).includes([:hearing_type, :judge])
+    @pagy_casa_cases, @casa_cases = pagy(policy_scope(org_cases).includes([:hearing_type, :judge]))
   end
 
   # GET /casa_cases/1

@@ -9,6 +9,7 @@
   <div class="card card-container">
     <div class="card-body">
       <h3><%= casa_case.case_number %></h3>
+      <%== pagy_nav(@pagy_c)%>
       <% casa_case.decorate.case_contacts_ordered_by_occurred_at.each do |contact| %>
         <%= render "case_contacts/case_contact", contact: contact %>
       <% end %>
