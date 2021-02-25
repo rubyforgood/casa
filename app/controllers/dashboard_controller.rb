@@ -8,7 +8,7 @@ class DashboardController < ApplicationController
       redirect_to casa_cases_path
     elsif current_user.supervisor?
       redirect_to volunteers_path
-    else # casa admin
+    elsif current_user.casa_admin?
       redirect_to supervisors_path
     end
   end

@@ -4,7 +4,7 @@ class CaseContactPolicy < ApplicationPolicy
   end
 
   def is_creator_or_supervisor_or_casa_admin?
-    is_admin? || is_creator? || is_creator_supervisor?
+    is_creator? || admin_or_supervisor?
   end
 
   alias_method :index?, :admin_or_supervisor_or_volunteer?
@@ -36,10 +36,6 @@ class CaseContactPolicy < ApplicationPolicy
   end
 
   private
-
-  def is_creator_supervisor?
-    record.creator&.supervisor == user
-  end
 
   def is_creator?
     record.creator == user

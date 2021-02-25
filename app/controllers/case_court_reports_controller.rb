@@ -4,24 +4,22 @@ class CaseCourtReportsController < ApplicationController
   before_action :set_casa_case, only: %i[show]
   after_action :verify_authorized
 
-  # GET /case_court_reports
   def index
     authorize CaseCourtReport
     @assigned_cases = CasaCase.actively_assigned_to(current_user)
       .select(:id, :case_number, :transition_aged_youth)
   end
 
-  # GET /case_court_reports/:id
   def show
     authorize CaseCourtReport
-    if !@casa_case || !@casa_case.court_report.attached?
+    if !@casa_case || !@casa_case.court_reports.attached?
       flash[:alert] = "Report #{params[:id]} is not found."
       redirect_to(case_court_reports_path) and return # rubocop:disable Style/AndOr
     end
 
     respond_to do |format|
       format.docx do
-        @casa_case.court_report.open do |file|
+        @casa_case.latest_court_report.open do |file|
           # TODO test this .read being present, we've broken it twice now
           send_data File.open(file.path).read, type: :docx, disposition: "attachment", status: :ok
         end
@@ -29,7 +27,6 @@ class CaseCourtReportsController < ApplicationController
     end
   end
 
-  # POST /case_court_reports
   def generate
     authorize CaseCourtReport
     casa_case = CasaCase.find_by(case_params)
@@ -77,7 +74,7 @@ class CaseCourtReportsController < ApplicationController
     Tempfile.create do |t|
       t.binmode.write(report_data)
       t.rewind
-      casa_case.court_report.attach(
+      casa_case.court_reports.attach(
         io: File.open(t.path), filename: "#{casa_case.case_number}.docx"
       )
     end

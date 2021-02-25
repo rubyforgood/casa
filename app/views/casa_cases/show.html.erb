@@ -4,7 +4,7 @@
   <div class="col-sm-12 form-header">
     <h1><%= @casa_case.decorate.transition_aged_youth_icon %> CASA Case Details</h1>
     <%- if policy(:case_contact).new? & @casa_case.active? %>
-      <%= link_to "New Case Contact",
+      <%= link_to t("page.casa_case.new.title"),
                   new_case_contact_path(case_contact: {casa_case_id: @casa_case.id}),
                   class: "btn btn-primary casa-case-button" %>
     <%- end %>
@@ -25,14 +25,17 @@
     <p>
     <h6><strong>Case number:</strong> <%= @casa_case.case_number %></h6>
     </p>
+    <% if @casa_case.has_hearing_type? %>
+      <p>
+        <h6><strong>Hearing Type:</strong> <%= @casa_case.hearing_type_name %></h6>
+      </p>
+    <% end %>
 
-    <p>
-    <h6><strong>Hearing Type:</strong> <%= @casa_case.hearing_type_name %></h6>
-    </p>
-
-    <p>
-    <h6><strong>Judge:</strong> <%= @casa_case.judge_name %></h6>
-    </p>
+    <% if @casa_case.has_judge_name? %>
+      <p>
+        <h6><strong>Judge:</strong> <%= @casa_case.judge_name %></h6>
+      </p>
+    <% end %>
 
     <p>
     <h6><strong>Transition Aged Youth:</strong> <%= @casa_case.decorate.transition_aged_youth %></h6>
@@ -52,8 +55,8 @@
     </p>
 
     <% unless @casa_case.court_report_not_submitted? %>
-      <% if @casa_case.court_report_submitted? && @casa_case.court_report.attached? %>
-        <%= link_to 'Click to download', rails_blob_path(@casa_case.court_report, disposition: 'attachment') %>
+      <% if @casa_case.court_report_submitted? && @casa_case.court_reports.attached? %>
+        <%= link_to 'Click to download', rails_blob_path(@casa_case.latest_court_report, disposition: 'attachment') %>
       <% end %>
       <p>
         <h6><strong>Court Report Submitted Date:</strong> <%= @casa_case.decorate.court_report_submitted_date %></h6>

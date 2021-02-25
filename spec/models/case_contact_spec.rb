@@ -149,12 +149,13 @@ RSpec.describe CaseContact, type: :model do
     end
 
     describe ".has_transitioned" do
+      let(:casa_case_1) { create(:casa_case, transition_aged_youth: true) }
+      let(:casa_case_2) { create(:casa_case, transition_aged_youth: false) }
+
       context "with both option" do
         it "returns case contacts filtered by contact made option" do
-          case_case_1 = create(:casa_case, transition_aged_youth: true)
-          case_case_2 = create(:casa_case, transition_aged_youth: false)
-          case_contact_1 = create(:case_contact, {casa_case: case_case_1})
-          case_contact_2 = create(:case_contact, {casa_case: case_case_2})
+          case_contact_1 = create(:case_contact, {casa_case: casa_case_1})
+          case_contact_2 = create(:case_contact, {casa_case: casa_case_2})
 
           expect(CaseContact.has_transitioned("")).to match_array([case_contact_1, case_contact_2])
         end
@@ -162,10 +163,8 @@ RSpec.describe CaseContact, type: :model do
 
       context "with yes option" do
         it "returns case contacts filtered by contact made option" do
-          case_case_1 = create(:casa_case, transition_aged_youth: true)
-          case_case_2 = create(:casa_case, transition_aged_youth: false)
-          case_contact = create(:case_contact, {casa_case: case_case_1})
-          create(:case_contact, {casa_case: case_case_2})
+          case_contact = create(:case_contact, {casa_case: casa_case_1})
+          create(:case_contact, {casa_case: casa_case_2})
 
           expect(CaseContact.has_transitioned(true)).to match_array([case_contact])
         end
@@ -173,10 +172,8 @@ RSpec.describe CaseContact, type: :model do
 
       context "with no option" do
         it "returns case contacts filtered by contact made option" do
-          case_case_1 = create(:casa_case, transition_aged_youth: true)
-          case_case_2 = create(:casa_case, transition_aged_youth: false)
-          create(:case_contact, {casa_case: case_case_1})
-          case_contact = create(:case_contact, {casa_case: case_case_2})
+          create(:case_contact, {casa_case: casa_case_1})
+          case_contact = create(:case_contact, {casa_case: casa_case_2})
 
           expect(CaseContact.has_transitioned(false)).to match_array([case_contact])
         end

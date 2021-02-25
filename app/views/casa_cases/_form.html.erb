@@ -12,6 +12,25 @@
         <% end %>
       </div>
 
+      <h2><%= form.label :court_details %></h2>
+
+      <% if policy(casa_case).update_birth_month_year_youth? %>
+        <div class="field form-group">
+          <%= form.label :birth_month_year_youth, "Youth's Birth Month & Year" %>
+          <br>
+          <span class="datetime-year-month">
+            <%= form.date_select :birth_month_year_youth,
+                                 {
+                                     order: [:month, :year],
+                                     start_year: Date.current.year,
+                                     end_year: 1989,
+                                     prompt: {month: 'Month', year: 'Year'},
+                                     discard_day: true
+                                 }, class: "select2 date-input" %>
+          </span>
+        </div>
+      <% end %>
+
       <% if policy(casa_case).update_hearing_type? %>
         <div class="field form-group">
           <%= form.label :hearing_type_id %>
@@ -82,23 +101,6 @@
         <% end %>
       </div>
 
-      <% if policy(casa_case).update_birth_month_year_youth? %>
-        <div class="field form-group">
-          <%= form.label :birth_month_year_youth, "Youth's Birth Month & Year" %>
-          <br>
-          <span class="datetime-year-month">
-            <%= form.date_select :birth_month_year_youth,
-                                 {
-                                     order: [:month, :year],
-                                     start_year: Date.current.year,
-                                     end_year: 1989,
-                                     prompt: {month: 'Month', year: 'Year'},
-                                     discard_day: true
-                                 }, class: "select2 date-input" %>
-          </span>
-        </div>
-      <% end %>
-
       <% if casa_case.new_record? %>
         <%# Only show the field when creating, but not when updating %>
         <div class="field form-group">
@@ -116,7 +118,6 @@
       <% if Pundit.policy(current_user, casa_case).update_contact_types? %>
         <div id="contact-type-form" class="field contact-type form-group">
           <h2 id="contact-type-label"><%= form.label :contact_types %></h2>
-
           <% @contact_types.each_with_index do |contact_type, index| %>
             <div class="form-check">
               <%= check_box_tag "casa_case[casa_case_contact_types_attributes][][contact_type_id]",

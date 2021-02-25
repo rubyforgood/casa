@@ -156,19 +156,18 @@ RSpec.describe User, type: :model do
   end
 
   describe "#actively_assigned_and_active_cases" do
-    let(:casa_org) { create(:casa_org) }
-    let(:user) { create(:volunteer, casa_org: casa_org) }
+    let(:user) { create(:volunteer) }
     let!(:active_case_assignment_with_active_case) do
-      create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org), volunteer: user)
+      create(:case_assignment, casa_case: create(:casa_case, casa_org: user.casa_org), volunteer: user)
     end
     let!(:active_case_assignment_with_inactive_case) do
-      create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org, active: false), volunteer: user)
+      create(:case_assignment, casa_case: create(:casa_case, casa_org: user.casa_org, active: false), volunteer: user)
     end
     let!(:inactive_case_assignment_with_active_case) do
-      create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org), is_active: false, volunteer: user)
+      create(:case_assignment, casa_case: create(:casa_case, casa_org: user.casa_org), is_active: false, volunteer: user)
     end
     let!(:inactive_case_assignment_with_inactive_case) do
-      create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org, active: false), is_active: false, volunteer: user)
+      create(:case_assignment, casa_case: create(:casa_case, casa_org: user.casa_org, active: false), is_active: false, volunteer: user)
     end
 
     it "only returns the user's active cases with active case assignments" do

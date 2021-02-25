@@ -47,25 +47,8 @@ RSpec.describe CaseContactPolicy do
       is_expected.to permit(casa_admin, case_contact)
     end
 
-    context "when supervisor" do
-      let(:case_contact) { create(:case_contact, creator: supervisor) }
-
-      it "allows if is creator" do
-        is_expected.to permit(supervisor, case_contact)
-      end
-
-      it "does not allow if is not the creator" do
-        is_expected.to_not permit(supervisor, create(:case_contact, creator: create(:supervisor)))
-      end
-
-      it "allows if is supervisor of the creator" do
-        is_expected.to permit(supervisor, create(:case_contact, creator: create(:volunteer, supervisor: supervisor)))
-      end
-
-      it "does not allow if is not supervisor of the creator" do
-        is_expected.to_not permit(create(:supervisor),
-          create(:case_contact, creator: create(:volunteer, supervisor: create(:supervisor))))
-      end
+    it "allows supervisors" do
+      is_expected.to permit(supervisor, case_contact)
     end
 
     context "when volunteer is assigned" do
@@ -98,29 +81,12 @@ RSpec.describe CaseContactPolicy do
       is_expected.to permit(casa_admin, case_contact)
     end
 
-    it "does not allow volunteers" do
-      is_expected.not_to permit(volunteer, case_contact)
+    it "allows supervisors" do
+      is_expected.to permit(supervisor, case_contact)
     end
 
-    context "when supervisor" do
-      it "allows if is creator" do
-        supervisor = create(:supervisor)
-        is_expected.to permit(supervisor, create(:case_contact, creator: supervisor))
-      end
-
-      it "does not allow if is not the creator" do
-        is_expected.to_not permit(create(:supervisor), create(:case_contact, creator: create(:supervisor)))
-      end
-
-      it "allows if is supervisor of the creator" do
-        supervisor = create(:supervisor)
-        is_expected.to permit(supervisor, create(:case_contact, creator: create(:volunteer, supervisor: supervisor)))
-      end
-
-      it "does not allow if is not supervisor of the creator" do
-        is_expected.to_not permit(create(:supervisor),
-          create(:case_contact, creator: create(:volunteer, supervisor: create(:supervisor))))
-      end
+    it "does not allow volunteers" do
+      is_expected.not_to permit(volunteer, case_contact)
     end
   end
 

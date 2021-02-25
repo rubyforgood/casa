@@ -13,7 +13,14 @@
     <% if @casa_case.past_court_dates.size > 0 %>
       <ul>
         <% @casa_case.past_court_dates.each do |pcd| %>
-          <p><%= I18n.l(pcd.date, format: :full, default: nil) %></p>
+          <p>
+            <% if report = pcd.latest_associated_report %>
+              <%= link_to I18n.l(pcd.date, format: :full, default: nil),
+rails_blob_path(report, disposition: 'attachment') %>
+            <% else %>
+              <%= I18n.l(pcd.date, format: :full, default: nil) %>
+            <% end %>
+          </p>
         <% end %>
       </ul>
     <% else %>

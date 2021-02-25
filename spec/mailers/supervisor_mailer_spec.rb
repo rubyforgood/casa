@@ -1,67 +1,65 @@
 require "rails_helper"
 
-RSpec.describe SupervisorMailer, :type => :mailer do
-  describe "notify" do
-    let(:supervisor) { create :supervisor }
+RSpec.describe SupervisorMailer, type: :mailer do
+  describe ".weekly_digest" do
+    let(:supervisor) { build(:supervisor) }
+    let(:volunteer) { build(:volunteer, casa_org: supervisor.casa_org, supervisor: supervisor) }
+    let(:casa_case) { build(:casa_case, casa_org: supervisor.casa_org) }
 
-    let(:volunteer1) { create :volunteer, :with_casa_cases }
-    let(:volunteer2) { create :volunteer, :with_casa_cases }
-
-    let(:case1) { create :casa_case }
-    let(:case2) { create :casa_case }
-
-    let(:date1) { 3.days.ago }
-    let(:date2) { 2.days.ago }
-
-    let(:assignment1) { volunteer1.case_assignments_with_cases[0] }
-    let(:assignment2) { volunteer1.case_assignments_with_cases[1] }
-    let(:assignment3) { volunteer2.case_assignments_with_cases[0] }
-    let(:assignment4) { volunteer2.case_assignments_with_cases[1] }
-
-    let(:assignments) { [assignment1, assignment2, assignment3, assignment4] }
-    
     let(:mail) { SupervisorMailer.weekly_digest(supervisor) }
 
-    before do
-      # munge the case assignment data so it looks like some of the activity occured earlier than it did
-      # assigned before this week
-      assignment1.updated_at = 20.days.ago
-      assignment1.created_at = 20.days.ago
-      # unassigned this week, but originally assigned earlier
-      assignment2.updated_at = date1
-      assignment2.created_at = 20.days.ago
-      assignment2.is_active = false
-      # assigned this week
-      assignment3.updated_at = date1
-      assignment3.created_at = date1
-      # assigned this week, then unassigned later this week
-      assignment4.updated_at = date2
-      assignment4.created_at = date1
-      assignment4.is_active = false
+    context "when a supervisor has volunteer assigned to a casa case" do
+      let!(:case_assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer) }
 
-      assignments.each { |assignment| assignment.save! }
+      it "shows a summary for a volunteer assigned to the supervisor" do
+        expect(mail.body.encoded).to match("Summary for #{volunteer.display_name}")
+      end
 
-      # assign supervisor
-      [volunteer1, volunteer2].each do |volunteer|
-        volunteer.supervisor = supervisor
-        volunteer.save!
+      it "does not show a case contact that did not occurr in the week" do
+        create(:case_contact, casa_case: casa_case, occurred_at: Date.today - 8.days)
+        expect(mail.body.encoded).to_not match("Most recent contact attempted:")
+      end
+
+      it "shows the latest case contact that occurred in the week" do
+        most_recent_contact = create(:case_contact, casa_case: casa_case, occurred_at: Date.today - 1.days, notes: "AAAAAAAAAAAAAAAAAAAAAAAA")
+        other_contact = create(:case_contact, casa_case: casa_case, occurred_at: Date.today - 3.days, notes: "BBBBBBBBBBBBBBBBBBBB")
+
+        expect(mail.body.encoded).to match("Notes: #{most_recent_contact.notes}")
+        expect(mail.body.encoded).to_not match("Notes: #{other_contact.notes}")
       end
     end
 
-    it "describes recent assignments" do
-      inter = "</b> No contact attempts were logged for this week\. This volunteer was"
-      # flatten whitespace and remove <br> tags from generated page
-      # so that text matching is easier and more reliable
-      mail_body_flat_ws = mail.body.encoded.gsub(/<br>/, ' ')
-      mail_body_flat_ws = mail_body_flat_ws.gsub(/\s+/, ' ')
-      # should not mention assignment
-      expect(mail_body_flat_ws).not_to match /Summary for #{volunteer1.display_name} Case #{assignment1.casa_case.case_number}#{inter} assigned to this case/m
-      # should mention removal but not assignment
-      expect(mail_body_flat_ws).to match /Summary for #{volunteer1.display_name} Case #{assignment2.casa_case.case_number}#{inter} unassigned from this case on #{Regexp.escape(I18n.l(date1))}/m
-      # should mention assignment
-      expect(mail_body_flat_ws).to match /Summary for #{volunteer2.display_name} Case #{assignment3.casa_case.case_number}#{inter} assigned to this case on #{Regexp.escape(I18n.l(date1))}/m
-      # should mention assignment and removal
-      expect(mail_body_flat_ws).to match /Summary for #{volunteer2.display_name} Case #{assignment4.casa_case.case_number}#{inter} assigned to this case on #{Regexp.escape(I18n.l(date1))} and unassigned from\s+this case on #{Regexp.escape(I18n.l(date2))}/m
+    context "when a supervisor has a volunteer who is unassigned from a casa case during the week" do
+      let!(:case_assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer, is_active: false, updated_at: Date.today - 2.days) }
+
+      it "shows a summary for a volunteer recently unassigned from the supervisor" do
+        expect(mail.body.encoded).to match("Summary for #{volunteer.display_name}")
+      end
+
+      it "shows a disclaimer for a volunteer recently unassigned from the supervisor" do
+        expect(mail.body.encoded).to match("This case was unassigned from #{volunteer.display_name}")
+      end
+
+      it "does not show a case contact that occurred past the unassignment date in the week" do
+        contact_past_unassignment = create(:case_contact, casa_case: casa_case, occurred_at: Date.today - 1.days, notes: "AAAAAAAAAAAAAAAAAAAAAAAA")
+
+        expect(mail.body.encoded).to_not match("Notes: #{contact_past_unassignment.notes}")
+      end
+
+      it "shows the latest case contact that occurred in the week before the unassignment date" do
+        contact_past_unassignment = create(:case_contact, casa_case: casa_case, occurred_at: Date.today - 1.days, notes: "AAAAAAAAAAAAAAAAAAAAAAAA")
+        most_recent_contact_before_unassignment = create(:case_contact, casa_case: casa_case, occurred_at: Date.today - 3.days, notes: "BBBBBBBBBBBBBBBBBB")
+        older_contact = create(:case_contact, casa_case: casa_case, occurred_at: Date.today - 4.days, notes: "CCCCCCCCCCCCCCCCCCCC")
+
+        expect(mail.body.encoded).to match("Notes: #{most_recent_contact_before_unassignment.notes}")
+        expect(mail.body.encoded).to_not match("Notes: #{contact_past_unassignment.notes}")
+        expect(mail.body.encoded).to_not match("Notes: #{older_contact.notes}")
+      end
+    end
+
+    it "does not show a summary for a volunteer unassigned from the supervisor before the week" do
+      create(:case_assignment, casa_case: casa_case, volunteer: volunteer, is_active: false, updated_at: Date.today - 8.days)
+      expect(mail.body.encoded).to_not match("Summary for #{volunteer.display_name}")
     end
   end
 end

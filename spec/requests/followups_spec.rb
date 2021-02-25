@@ -93,15 +93,16 @@ RSpec.describe "/followups", type: :request do
         let(:volunteer_2) { create(:volunteer) }
         let(:unassigned_volunteer) { create(:volunteer) }
 
-        it "should create a notification for all assigned volunteers" do
-          casa_case = contact.casa_case
+        it "should only create a notification for the user that created the case_contact" do
+          contact_created_by_volunteer = create(:case_contact, creator: volunteer)
+          casa_case = contact_created_by_volunteer.casa_case
           casa_case.assigned_volunteers = [volunteer, volunteer_2]
           sign_in admin
 
-          post case_contact_followups_path(contact)
+          post case_contact_followups_path(contact_created_by_volunteer)
 
           expect(volunteer.notifications.count).to eq(1)
-          expect(volunteer_2.notifications.count).to eq(1)
+          expect(volunteer_2.notifications.count).to eq(0)
           expect(unassigned_volunteer.notifications.count).to eq(0)
         end
       end

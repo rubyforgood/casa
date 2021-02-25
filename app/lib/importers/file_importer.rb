@@ -43,24 +43,18 @@ class FileImporter
 
   private
 
-  def failed?
-    !failed_imports.blank?
+  def create_user_record(user_class, user_params)
+    user = user_class.new(user_params)
+    user.casa_org_id, user.password = org_id, SecureRandom.hex(10)
+    user.save!
+    user.invite!
+
+    user
   end
 
-  def success?
-    !failed? && !@file_no_rows
-  end
-
-  def message
-    messages = []
-    messages << "You successfully imported #{@number_imported} #{@type_label}." if @number_imported > 0
-    messages << ERR_NO_ROWS if @file_no_rows
-    messages << ERR_NOT_ALL_IMPORTED if failed?
-    messages.join(" ")
-  end
-
-  def status
-    success? ? :success : :error
+  def email_addresses_to_users(clazz, comma_separated_emails)
+    emails = comma_separated_emails.split(",").map!(&:strip)
+    clazz.where(email: [emails]).distinct.order(:email).to_a
   end
 
   def export_failed_imports
@@ -78,20 +72,34 @@ class FileImporter
     end
   end
 
-  def email_addresses_to_users(clazz, comma_separated_emails)
-    emails = comma_separated_emails.split(",").map!(&:strip)
-    clazz.where(email: [emails]).distinct.order(:email).to_a
+  def failed?
+    !failed_imports.blank?
   end
 
-  def create_user_record(user_class, row_data)
-    user_params = row_data.to_hash.slice(:display_name, :email)
-    user = user_class.find_by(user_params)
-    return {user: user, existing: true} if user.present?
+  def message
+    messages = []
+    messages << "You successfully imported #{@number_imported} #{@type_label}." if @number_imported > 0
+    messages << ERR_NO_ROWS if @file_no_rows
+    messages << ERR_NOT_ALL_IMPORTED if failed?
+    messages.join(" ")
+  end
 
-    user = user_class.new(user_params)
-    user.casa_org_id, user.password = org_id, SecureRandom.hex(10)
-    user.save!
-    user.invite!
-    {user: user, existing: false}
+  def record_outdated?(record, new_data)
+    new_data.each do |key, value|
+      # The parser keeps boolean values as strings
+      if record[key] != value || (value == (record[key].in?([true, false]) && record[key] ? "FALSE" : "TRUE"))
+        return true
+      end
+    end
+
+    false
+  end
+
+  def success?
+    !failed? && !@file_no_rows
+  end
+
+  def status
+    success? ? :success : :error
   end
 end
