@@ -131,7 +131,7 @@
               </button>
               <strong>Add a court mandate</strong>
             </div>
-          <% else%>
+          <% else %>
             <div id="mandate-list-container">
               <% @casa_case.case_court_mandates.each do |mandate| %>
                 <textarea disabled><%= mandate.mandate_text %></textarea>

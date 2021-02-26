@@ -59,10 +59,10 @@ class CasaCasePolicy < ApplicationPolicy
     case @user
       when CasaAdmin
         common_attrs.concat(%i[case_number birth_month_year_youth court_date court_report_due_date hearing_type_id judge_id])
-        common_attrs << { case_court_mandates_attributes: %i[mandate_text id] }
+        common_attrs << {case_court_mandates_attributes: %i[mandate_text id]}
       when Supervisor
         common_attrs.concat(%i[court_date court_report_due_date hearing_type_id judge_id])
-        common_attrs << { case_court_mandates_attributes: %i[mandate_text id] }
+        common_attrs << {case_court_mandates_attributes: %i[mandate_text id]}
       else
         common_attrs
     end
