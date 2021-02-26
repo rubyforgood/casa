@@ -7,7 +7,7 @@ RSpec.describe "/casa_cases", type: :request do
   let(:valid_attributes) { {case_number: "1234", transition_aged_youth: true, casa_org_id: organization.id, hearing_type_id: hearing_type.id, judge_id: judge.id} }
   let(:invalid_attributes) { {case_number: nil} }
   let(:casa_case) { create(:casa_case, casa_org: organization, case_number: "111") }
-  let(:mandate_texts) { ["New Mandate Text One", "New Mandate Text Two"] }
+  let(:mandate_texts) { ["1-New Mandate Text One", "0-New Mandate Text Two"] }
   let(:mandates_attributes) { { "0" => { mandate_text: mandate_texts[0] }, "1" => { mandate_text: mandate_texts[1] } } }
 
   before { sign_in user }
