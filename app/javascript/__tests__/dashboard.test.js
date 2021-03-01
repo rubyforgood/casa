@@ -3,14 +3,14 @@
 import { defineCaseContactsTable } from '../src/dashboard'
 
 require('jest')
-var $ = require('jquery')
-var _ = require('lodash')
+const $ = require('jquery')
+const _ = require('lodash')
 global.$ = $
 
 describe('dashboard.js', () => {
   describe('DataTable tests', () => {
     function initializeDocumentWithTable (id, numberOfRows = 1, classes = '') {
-      var mockTable = `<table id=${id} class=${classes}>` +
+      let mockTable = `<table id=${id} class=${classes}>` +
                       '<thead>' +
                       '<tr> <th>Column1</th> <th>Column2</th> <th>Column3</th> </tr>' +
                       '</thead> <tbody>'

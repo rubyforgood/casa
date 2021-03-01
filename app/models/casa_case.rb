@@ -38,6 +38,9 @@ class CasaCase < ApplicationRecord
   has_many :contact_types, through: :casa_case_contact_types, source: :contact_type
   accepts_nested_attributes_for :casa_case_contact_types
 
+  has_many :case_court_mandates, -> { order "id asc" }, dependent: :destroy
+  accepts_nested_attributes_for :case_court_mandates, reject_if: :all_blank
+
   enum court_report_status: {not_submitted: 0, submitted: 1, in_review: 2, completed: 3}, _prefix: :court_report
 
   scope :ordered, -> { order(updated_at: :desc) }
