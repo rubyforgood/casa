@@ -303,6 +303,33 @@ RSpec.describe "casa_cases/edit", type: :system do
         expect(page).to have_text(volunteer_2.display_name)
       end
     end
+
+    context "deleting court mandates", js: true do
+      let(:casa_case) { create(:casa_case) }
+      let(:mandate) { build(:case_court_mandate) }
+
+      before do
+        casa_case.case_court_mandates << mandate
+      end
+
+      it "can delete a court mandate" do
+        visit edit_casa_case_path(casa_case.id)
+
+        expect(page).to have_text(mandate.mandate_text)
+
+        find("i.fa-minus").click
+        expect(page).to have_text("Are you sure you want to remove this court mandate? Doing so will delete all records \
+of it unless it was included in a previous court report.")
+
+        click_on "Delete"
+        expect(page).to have_text("Court mandate has been removed.")
+        click_on "OK"
+        expect(page).to_not have_text(mandate.mandate_text)
+
+        click_on "Update CASA Case"
+        expect(page).to_not have_text(mandate.mandate_text)
+      end
+    end
   end
 
   context "when volunteer" do

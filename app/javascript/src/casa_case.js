@@ -10,11 +10,12 @@ id="casa_case_case_court_mandates_attributes_1_mandate_text">\
   $(list).children(':last').trigger('focus')
 }
 
-function remove_mandate_with_confirmation() {
+function remove_mandate_with_confirmation () {
   Swal.fire({
     icon: 'warning',
     title: 'Delete mandate?',
-    text: 'Are you sure you want to remove this court mandate? Doing so will delete all records of it unless it was included in a previous court report.',
+    text: 'Are you sure you want to remove this court mandate? Doing so will \
+delete all records of it unless it was included in a previous court report.',
 
     showCloseButton: true,
     showCancelButton: true,
@@ -32,35 +33,38 @@ function remove_mandate_with_confirmation() {
   })
 }
 
-function remove_mandate_action(ctx) {
-  id = get_mandate_id(ctx)
+function remove_mandate_action (ctx) {
+  id_element = get_mandate_id_element(ctx)
+  id = id_element.val()
 
   $.ajax({
     url: `/case_court_mandates/${id}`,
-    method: "delete",
+    method: 'delete',
     success: () => {
       remove_mandate_entry(ctx)
+      id_element.remove() // Remove form element since this mandate has been deleted
+
       Swal.fire({
         icon: 'success',
         text: 'Court mandate has been removed.',
-        showCloseButton: true,
+        showCloseButton: true
       })
     },
     error: () => {
       Swal.fire({
         icon: 'error',
         text: 'Something went wrong when attempting to delete this court mandate.',
-        showCloseButton: true,
+        showCloseButton: true
       })
     }
   })
 }
 
-function get_mandate_id(ctx) {
-  return ctx.parent().next('input[type="hidden"]').val()
+function get_mandate_id_element (ctx) {
+  return ctx.parent().next('input[type="hidden"]')
 }
 
-function remove_mandate_entry(ctx) {
+function remove_mandate_entry (ctx) {
   ctx.parent().remove()
 }
 
