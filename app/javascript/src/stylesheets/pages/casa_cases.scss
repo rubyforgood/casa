@@ -38,19 +38,37 @@ body.casa_cases {
     gap: 10px;
   }
 
-  #add-mandate-button {
-    background-color: #{$primary};
+  #add-mandate-button, .remove-mandate-button {
     color: white;
+    border: none;
 
     font-size: 1.25em;
-
-    padding: 0.25em 1.5em;
-    border-radius: 10px;
-    border: none;
 
     :hover {
       cursor: pointer;
     }
+  }
+
+  .court-mandate-entry {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    .remove-mandate-button {
+      background-color: #{$red};
+
+      border-radius: 100%;
+
+      max-width: 30px;
+      max-height: 30px;
+    }
+  }
+
+  #add-mandate-button {
+    background-color: #{$primary};
+
+    padding: 0.25em 1.5em;
+    border-radius: 10px;
   }
 }
 
