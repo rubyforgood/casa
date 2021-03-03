@@ -122,7 +122,12 @@
           <% if policy(casa_case).update_court_mandates? %>
             <div id="mandates-list-container">
               <%= form.fields_for :case_court_mandates do |ff| %>
-                <%= ff.text_area :mandate_text %>
+                <div class="court-mandate-entry">
+                  <%= ff.text_area :mandate_text %>
+                  <button type="button" class="remove-mandate-button">
+                    <i class="fa fa-minus" aria-hidden="true"></i>
+                  </button>
+                </div>
               <% end %>
             </div>
             <div class="add-court-mandate-container">
