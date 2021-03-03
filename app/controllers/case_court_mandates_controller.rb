@@ -8,6 +8,8 @@ class CaseCourtMandatesController < ApplicationController
     @case_court_mandate.destroy
   end
 
+  private
+
   def set_case_court_mandate
     @case_court_mandate = CaseCourtMandate.find(params[:id])
   rescue ActiveRecord::RecordNotFound

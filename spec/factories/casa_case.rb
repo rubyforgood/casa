@@ -19,6 +19,13 @@ FactoryBot.define do
       end
     end
 
+    trait :with_one_court_mandate do
+      after(:create) do |casa_case|
+        casa_case.case_court_mandates << build(:case_court_mandate)
+        casa_case.save
+      end
+    end
+
     trait :active do
       active { true }
     end
