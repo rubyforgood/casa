@@ -34,14 +34,14 @@ delete all records of it unless it was included in a previous court report.',
 }
 
 function remove_mandate_action (ctx) {
-  id_element = get_mandate_id_element(ctx)
+  id_element = ctx.parent().next('input[type="hidden"]')
   id = id_element.val()
 
   $.ajax({
     url: `/case_court_mandates/${id}`,
     method: 'delete',
     success: () => {
-      remove_mandate_entry(ctx)
+      ctx.parent().remove()
       id_element.remove() // Remove form element since this mandate has been deleted
 
       Swal.fire({
@@ -58,14 +58,6 @@ function remove_mandate_action (ctx) {
       })
     }
   })
-}
-
-function get_mandate_id_element (ctx) {
-  return ctx.parent().next('input[type="hidden"]')
-}
-
-function remove_mandate_entry (ctx) {
-  ctx.parent().remove()
 }
 
 $('document').ready(() => {
