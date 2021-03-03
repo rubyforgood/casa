@@ -13,7 +13,7 @@ id="casa_case_case_court_mandates_attributes_1_mandate_text">\
 function remove_mandate_with_confirmation () {
   Swal.fire({
     icon: 'warning',
-    title: 'Delete mandate?',
+    title: 'Delete court mandate?',
     text: 'Are you sure you want to remove this court mandate? Doing so will \
 delete all records of it unless it was included in a previous court report.',
 
