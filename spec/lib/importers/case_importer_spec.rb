@@ -44,7 +44,7 @@ RSpec.describe CaseImporter do
         expect { 
           case_importer.import_cases
           existing_case.reload
-        }.to change(existing_case, :birth_month_year_youth)
+        }.to change(existing_case, :birth_month_year_youth).to(Date.new(2000,2,1))
       end
     end
 
