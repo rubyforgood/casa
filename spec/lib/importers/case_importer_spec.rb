@@ -34,10 +34,17 @@ RSpec.describe CaseImporter do
     end
 
     context "when updating records" do
-      let!(:existing_case) { create(:casa_case, case_number: "CINA-01-4347") }
+      let!(:existing_case) { create(:casa_case, case_number: "CINA-01-4348") }
 
       it "assigns new volunteers to the case" do
-        expect { case_importer.import_cases }.to change(existing_case.volunteers, :count).by(1)
+        expect { case_importer.import_cases }.to change(existing_case.volunteers, :count).by(2)
+      end
+
+      it "updates outdated case fields" do
+        expect { 
+          case_importer.import_cases
+          existing_case.reload
+        }.to change(existing_case, :birth_month_year_youth)
       end
     end
 
