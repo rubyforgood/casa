@@ -64,6 +64,23 @@ RSpec.describe SupervisorImporter do
     end
   end
 
+  context "when updating supervisors" do
+    let!(:existing_supervisor) { create(:supervisor, display_name: "#", email: "supervisor2@example.net") }
+
+    it "assignes unassigned volunteers" do
+      expect {
+        supervisor_importer.import_supervisors
+      }.to change(existing_supervisor.volunteers, :count).by(2)
+    end
+
+    it "updates oudated fields" do
+      expect {
+        supervisor_importer.import_supervisors
+        existing_supervisor.reload
+      }.to change(existing_supervisor, :display_name).to("Supervisor Two")
+    end
+  end
+
   specify "static and instance methods have identical results" do
     SupervisorImporter.new(import_file_path, casa_org_id).import_supervisors
     data_using_instance = Supervisor.pluck(:email).sort
