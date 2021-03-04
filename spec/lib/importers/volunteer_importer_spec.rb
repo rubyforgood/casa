@@ -38,4 +38,15 @@ RSpec.describe VolunteerImporter do
       expect(data_using_static).to_not be_empty
     end
   end
+
+  context "when updating volunteers" do
+    let!(:existing_volunteer) { create(:volunteer, display_name: "&&&&&", email: "volunteer1@example.net") }
+    
+    it "updates outdated volunteer fields" do
+      expect { 
+        volunteer_importer.call
+        existing_volunteer.reload
+      }.to change(existing_volunteer, :display_name).to("Volunteer One")
+    end
+  end
 end
