@@ -41,10 +41,10 @@ RSpec.describe CaseImporter do
       end
 
       it "updates outdated case fields" do
-        expect { 
+        expect {
           case_importer.import_cases
           existing_case.reload
-        }.to change(existing_case, :birth_month_year_youth).to(Date.new(2000,2,1))
+        }.to change(existing_case, :birth_month_year_youth).to(Date.new(2000, 2, 1))
       end
     end
 
