@@ -73,7 +73,7 @@ RSpec.describe SupervisorImporter do
       }.to change(existing_supervisor.volunteers, :count).by(2)
     end
 
-    it "updates oudated fields" do
+    it "updates outdated supervisor fields" do
       expect {
         supervisor_importer.import_supervisors
         existing_supervisor.reload
