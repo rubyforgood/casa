@@ -116,7 +116,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
 
         expect {
           patch unassign_supervisor_volunteer_path(volunteer)
-        }.not_to change(supervisor.volunteers, :count)
+        }.to change(supervisor.volunteers, :count)
 
         association.reload
         expect(association.is_active?).to be(false)
@@ -130,7 +130,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
 
         expect {
           patch unassign_supervisor_volunteer_path(volunteer)
-        }.not_to change(supervisor.volunteers, :count)
+        }.to change(supervisor.volunteers, :count)
 
         association.reload
 
