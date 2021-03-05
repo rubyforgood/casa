@@ -13,7 +13,7 @@ RSpec.describe "volunteers/edit", type: :view do
 
     render template: "volunteers/edit"
 
-    expect(rendered).to_not have_field('volunteer_email', readonly: true)
+    expect(rendered).to_not have_field("volunteer_email", readonly: true)
   end
 
   it "allows a supervisor to edit a volunteers email address" do
@@ -28,7 +28,7 @@ RSpec.describe "volunteers/edit", type: :view do
 
     render template: "volunteers/edit"
 
-    expect(rendered).to_not have_field('volunteer_email', readonly: true)
+    expect(rendered).to_not have_field("volunteer_email", readonly: true)
   end
 
   it "does not allow a supervisor to edit a volunteers email address" do
@@ -43,6 +43,6 @@ RSpec.describe "volunteers/edit", type: :view do
 
     render template: "volunteers/edit"
 
-    expect(rendered).to_not have_field('volunteer_email', readonly: true)
+    expect(rendered).to_not have_field("volunteer_email", readonly: true)
   end
 end
