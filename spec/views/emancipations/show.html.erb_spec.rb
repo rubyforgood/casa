@@ -8,7 +8,6 @@ RSpec.describe "emancipation/show", type: :view do
   let(:casa_case) { create(:casa_case) }
   let(:emancipation_form_data) { [create(:emancipation_category)] }
 
-
   before do
     assign :current_case, casa_case
     assign :emancipation_form_data, emancipation_form_data
@@ -24,7 +23,6 @@ RSpec.describe "emancipation/show", type: :view do
 
     # old:
     # expect(rendered).to have_link(:casa_case.id, "/casa_cases/#{:casa_case.id}")
-
 
     expect(rendered).to have_link(:casa_case.case_number, "/casa_cases/#{:casa_case.id}")
   end
