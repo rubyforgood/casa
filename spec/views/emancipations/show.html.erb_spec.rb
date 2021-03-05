@@ -11,19 +11,11 @@ RSpec.describe "emancipation/show", type: :view do
   before do
     assign :current_case, casa_case
     assign :emancipation_form_data, emancipation_form_data
-
-    # enable_pundit(view, user)
-    # allow(view).to receive(:current_user).and_return(user)
-    # allow(view).to receive(:current_organization).and_return(user.casa_org)
   end
 
   it "has a link to return to case from emancipation" do
     sign_in admin
     render template: "emancipations/show"
-
-    # old:
-    # expect(rendered).to have_link(:casa_case.id, "/casa_cases/#{:casa_case.id}")
-
-    expect(rendered).to have_link(:casa_case.case_number, "/casa_cases/#{:casa_case.id}")
+    expect(rendered).to have_link(casa_case.case_number, href: "/casa_cases/#{casa_case.id}")
   end
 end
