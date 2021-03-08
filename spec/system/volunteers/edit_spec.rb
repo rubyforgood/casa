@@ -140,8 +140,8 @@ RSpec.describe "volunteers/edit", type: :system do
     it "shows the unassign button for assigned cases and not for unassigned cases" do
       sign_in supervisor
 
-      assignment1 = volunteer.case_assignments.create(casa_case: casa_case_1, is_active: true)
-      assignment2 = volunteer.case_assignments.create(casa_case: casa_case_2, is_active: false)
+      assignment1 = volunteer.case_assignments.create(casa_case: casa_case_1, active: true)
+      assignment2 = volunteer.case_assignments.create(casa_case: casa_case_2, active: false)
 
       visit edit_volunteer_path(volunteer)
 

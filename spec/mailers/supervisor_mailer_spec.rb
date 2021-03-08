@@ -30,7 +30,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
     end
 
     context "when a supervisor has a volunteer who is unassigned from a casa case during the week" do
-      let!(:case_assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer, is_active: false, updated_at: Date.today - 2.days) }
+      let!(:case_assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false, updated_at: Date.today - 2.days) }
 
       it "shows a summary for a volunteer recently unassigned from the supervisor" do
         expect(mail.body.encoded).to match("Summary for #{volunteer.display_name}")
@@ -58,7 +58,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
     end
 
     it "does not show a summary for a volunteer unassigned from the supervisor before the week" do
-      create(:case_assignment, casa_case: casa_case, volunteer: volunteer, is_active: false, updated_at: Date.today - 8.days)
+      create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false, updated_at: Date.today - 8.days)
       expect(mail.body.encoded).to_not match("Summary for #{volunteer.display_name}")
     end
   end

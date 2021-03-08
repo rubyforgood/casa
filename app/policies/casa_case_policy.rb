@@ -98,6 +98,6 @@ class CasaCasePolicy < ApplicationPolicy
   end
 
   def is_volunteer_actively_assigned_to_case?
-    record.case_assignments.exists?(volunteer_id: user.id, is_active: true)
+    record.case_assignments.exists?(volunteer_id: user.id, active: true)
   end
 end

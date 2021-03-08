@@ -9,14 +9,14 @@ RSpec.describe "/case_assignments", type: :request do
   describe "POST /create" do
     context "when the volunteer has been previously assigned to the casa_case" do
       it "reassigns the volunteer to the casa_case" do
-        create(:case_assignment, is_active: false, volunteer: volunteer, casa_case: casa_case)
+        create(:case_assignment, active: false, volunteer: volunteer, casa_case: casa_case)
 
         sign_in admin
 
         expect {
           post case_assignments_url(casa_case_id: casa_case.id),
             params: {case_assignment: {volunteer_id: volunteer.id}}
-        }.to change { casa_case.case_assignments.first.is_active }.from(false).to(true)
+        }.to change { casa_case.case_assignments.first.active }.from(false).to(true)
 
         expect(response).to redirect_to edit_casa_case_path(casa_case)
       end
@@ -130,7 +130,7 @@ RSpec.describe "/case_assignments", type: :request do
 
         expect {
           patch unassign_case_assignment_url(assignment, redirect_to_path: "volunteer")
-        }.to change { assignment.reload.is_active? }.to(false)
+        }.to change { assignment.reload.active? }.to(false)
 
         expect(response).to redirect_to edit_volunteer_path(volunteer)
       end
@@ -144,7 +144,7 @@ RSpec.describe "/case_assignments", type: :request do
 
         expect {
           patch unassign_case_assignment_url(assignment)
-        }.to change { assignment.reload.is_active? }.to(false)
+        }.to change { assignment.reload.active? }.to(false)
 
         expect(response).to redirect_to edit_casa_case_path(casa_case)
       end
@@ -158,7 +158,7 @@ RSpec.describe "/case_assignments", type: :request do
 
         expect {
           patch unassign_case_assignment_url(assignment)
-        }.not_to change { assignment.reload.is_active? }
+        }.not_to change { assignment.reload.active? }
 
         expect(response).to be_not_found
       end

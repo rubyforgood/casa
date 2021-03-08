@@ -101,7 +101,7 @@ RSpec.describe "layout/sidebar", type: :view do
         create(:case_assignment, volunteer: user, casa_case: inactive_case)
 
         unassigned_case = create(:casa_case, casa_org: organization, transition_aged_youth: true)
-        create(:case_assignment, volunteer: user, casa_case: unassigned_case, is_active: false)
+        create(:case_assignment, volunteer: user, casa_case: unassigned_case, active: false)
 
         render partial: "layouts/sidebar"
         expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
