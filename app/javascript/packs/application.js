@@ -29,6 +29,7 @@ require('src/select')
 require('src/dashboard')
 require('src/sidebar')
 require('src/sessions')
+require('src/readMore')
 
 // Uncomment to copy all static images under ../images to the output folder and
 // reference them with the image_pack_tag or asset_pack_path helpers in views.
