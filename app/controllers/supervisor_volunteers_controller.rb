@@ -5,9 +5,12 @@ class SupervisorVolunteersController < ApplicationController
     authorize :supervisor_volunteer
     supervisor_volunteer = supervisor_volunteer_parent.supervisor_volunteers.find_or_create_by!(supervisor_volunteer_params)
     supervisor_volunteer.is_active = true unless supervisor_volunteer&.is_active?
+    volunteer = supervisor_volunteer.volunteer
+    supervisor = supervisor_volunteer.supervisor
     supervisor_volunteer.save
+    flash_message = "#{volunteer.display_name} successfully assigned to #{supervisor.display_name}."
 
-    redirect_to after_action_path(supervisor_volunteer_parent)
+    redirect_to edit_volunteer_path(volunteer), notice: flash_message
   end
 
   def unassign
