@@ -118,7 +118,6 @@
       <% if Pundit.policy(current_user, casa_case).update_contact_types? %>
         <div id="contact-type-form" class="field contact-type form-group">
           <h2 id="contact-type-label"><%= form.label :contact_types %></h2>
-
           <% @contact_types.each_with_index do |contact_type, index| %>
             <div class="form-check">
               <%= check_box_tag "casa_case[casa_case_contact_types_attributes][][contact_type_id]",

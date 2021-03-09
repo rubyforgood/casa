@@ -5,6 +5,7 @@ RSpec.describe "casa_cases/edit" do
 
   before do
     enable_pundit(view, user)
+    assign :contact_types, []
     allow(view).to receive(:current_user).and_return(user)
     allow(view).to receive(:current_organization).and_return(user.casa_org)
   end

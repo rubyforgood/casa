@@ -79,7 +79,7 @@ RSpec.describe "casa_cases/index", type: :system do
       sign_in volunteer
     end
 
-    it "Hides all casa case Filter by" do
+    xit "Hides all casa case Filter by" do
       visit casa_cases_path
       expect(page).to_not have_selector("button", text: "Status")
       expect(page).to_not have_selector("button", text: "Assigned to Volunteer")
