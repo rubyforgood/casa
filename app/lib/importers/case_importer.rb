@@ -65,8 +65,8 @@ class CaseImporter < FileImporter
 
       if assignment.empty?
         casa_case.volunteers << volunteer
-      elsif !assignment[0].is_active
-        assignment[0].update(is_active: true)
+      elsif !assignment[0].active
+        assignment[0].update(active: true)
       end
     end
   end

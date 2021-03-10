@@ -91,7 +91,7 @@
               <% end %>
             </td>
             <td>
-              <% if @volunteer.active? && assignment.is_active && assignment.casa_case.active? %>
+              <% if @volunteer.active? && assignment.active && assignment.casa_case.active? %>
                 <%- if Pundit.policy(current_user, @volunteer).unassign_case? %>
                   <%= button_to 'Unassign Case',
                                 unassign_case_assignment_path(assignment, volunteer_id: @volunteer.id),

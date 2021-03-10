@@ -19,7 +19,7 @@ class CasaCase < ApplicationRecord
 
   has_many :case_assignments, dependent: :destroy
   has_many(:volunteers, through: :case_assignments, source: :volunteer, class_name: "User")
-  has_many :active_case_assignments, -> { is_active }, class_name: "CaseAssignment"
+  has_many :active_case_assignments, -> { active }, class_name: "CaseAssignment"
   has_many :assigned_volunteers, -> { active }, through: :active_case_assignments, source: :volunteer, class_name: "Volunteer"
   has_many :case_contacts, dependent: :destroy
   has_many :casa_case_emancipation_categories, dependent: :destroy
@@ -46,19 +46,19 @@ class CasaCase < ApplicationRecord
   scope :ordered, -> { order(updated_at: :desc) }
   scope :actively_assigned_to, ->(volunteer) {
     joins(:case_assignments).where(
-      case_assignments: {volunteer: volunteer, is_active: true}
+      case_assignments: {volunteer: volunteer, active: true}
     )
   }
   scope :actively_assigned_excluding_volunteer, ->(volunteer) {
     joins(:case_assignments)
-      .where(case_assignments: {is_active: true})
+      .where(case_assignments: {active: true})
       .where.not(case_assignments: {volunteer: volunteer})
       .order(:case_number)
   }
   scope :not_assigned, ->(casa_org) {
     where(casa_org_id: casa_org.id)
       .left_outer_joins(:case_assignments)
-      .where("case_assignments.id IS NULL OR NOT case_assignments.is_active")
+      .where("case_assignments.id IS NULL OR NOT case_assignments.active")
       .order(:case_number)
   }
   scope :should_transition, -> {
@@ -172,7 +172,7 @@ class CasaCase < ApplicationRecord
 
   def deactivate
     update(active: false)
-    case_assignments.map { |ca| ca.update(is_active: false) }
+    case_assignments.map { |ca| ca.update(active: false) }
   end
 
   def reactivate

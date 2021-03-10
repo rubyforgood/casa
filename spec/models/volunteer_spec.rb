@@ -15,7 +15,7 @@ RSpec.describe Volunteer, type: :model do
     let(:case_assignment1) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case1) }
     let(:case_assignment2) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case2) }
     let(:case_assignment3) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case3) }
-    let(:case_assignment_unassigned) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case4, is_active: false) }
+    let(:case_assignment_unassigned) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case4, active: false) }
     let!(:v1) { create(:volunteer, casa_org: casa_org, case_assignments: [case_assignment1, case_assignment2, case_assignment3]) }
     let!(:v2) { create(:volunteer, casa_org: casa_org, active: false) }
     let!(:v3) { create(:volunteer, casa_org: casa_org) }
@@ -66,7 +66,7 @@ RSpec.describe Volunteer, type: :model do
       volunteer.deactivate
 
       case_contacts.each { |c| c.reload }
-      expect(case_contacts).to all(satisfy { |c| !c.is_active })
+      expect(case_contacts).to all(satisfy { |c| !c.active })
     end
   end
 
@@ -175,7 +175,7 @@ RSpec.describe Volunteer, type: :model do
 
     context "when a volunteer has only an unassigned case where contact was not made recently" do
       it "returns true" do
-        create(:case_assignment, casa_case: casa_case, volunteer: volunteer, is_active: false)
+        create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false)
         create(:case_contact, casa_case: casa_case, creator: volunteer, occurred_at: Date.current - 60.days, contact_made: true)
 
         expect(volunteer.made_contact_with_all_cases_in_days?).to eq(true)
