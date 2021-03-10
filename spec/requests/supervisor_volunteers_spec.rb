@@ -16,7 +16,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         sign_in(admin)
 
         expect {
-          post supervisor_volunteers_url, params: valid_parameters, headers: { HTTP_REFERER: edit_volunteer_path(volunteer).to_s }
+          post supervisor_volunteers_url, params: valid_parameters, headers: {HTTP_REFERER: edit_volunteer_path(volunteer).to_s}
         }.to change(SupervisorVolunteer, :count).by(1)
         expect(response).to redirect_to edit_volunteer_path(volunteer)
       end
@@ -40,7 +40,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         sign_in(admin)
 
         expect {
-          post supervisor_volunteers_url, params: valid_parameters, headers: { HTTP_REFERER: edit_volunteer_path(volunteer).to_s }
+          post supervisor_volunteers_url, params: valid_parameters, headers: {HTTP_REFERER: edit_volunteer_path(volunteer).to_s}
         }.not_to change(SupervisorVolunteer, :count)
         expect(response).to redirect_to edit_volunteer_path(volunteer)
 
@@ -68,7 +68,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         sign_in(admin)
 
         expect {
-          post supervisor_volunteers_url, params: valid_parameters, headers: { HTTP_REFERER: edit_volunteer_path(volunteer).to_s }
+          post supervisor_volunteers_url, params: valid_parameters, headers: {HTTP_REFERER: edit_volunteer_path(volunteer).to_s}
         }.to change(SupervisorVolunteer, :count).by(1)
         expect(response).to redirect_to edit_volunteer_path(volunteer)
 
@@ -95,7 +95,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         sign_in(admin)
 
         expect {
-          post supervisor_volunteers_url, params: valid_parameters, headers: { HTTP_REFERER: edit_volunteer_path(volunteer).to_s }
+          post supervisor_volunteers_url, params: valid_parameters, headers: {HTTP_REFERER: edit_volunteer_path(volunteer).to_s}
         }.not_to change(SupervisorVolunteer, :count)
         expect(response).to redirect_to edit_volunteer_path(volunteer)
 
@@ -115,7 +115,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         sign_in admin
 
         expect {
-          patch unassign_supervisor_volunteer_path(volunteer), headers: { HTTP_REFERER: edit_volunteer_path(volunteer).to_s }
+          patch unassign_supervisor_volunteer_path(volunteer), headers: {HTTP_REFERER: edit_volunteer_path(volunteer).to_s}
         }.not_to change(supervisor.volunteers, :count)
 
         association.reload
@@ -129,7 +129,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         sign_in supervisor
 
         expect {
-          patch unassign_supervisor_volunteer_path(volunteer), headers: { HTTP_REFERER: edit_volunteer_path(volunteer).to_s }
+          patch unassign_supervisor_volunteer_path(volunteer), headers: {HTTP_REFERER: edit_volunteer_path(volunteer).to_s}
         }.not_to change(supervisor.volunteers, :count)
 
         association.reload
