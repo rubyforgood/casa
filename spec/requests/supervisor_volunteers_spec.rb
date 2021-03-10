@@ -7,7 +7,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
   let!(:volunteer) { create(:volunteer, casa_org: casa_org) }
 
   context "POST /create" do
-    context "when no pre-existing association between supervisr and volunteer exists" do
+    context "when no pre-existing association between supervisor and volunteer exists" do
       it "creates a new supervisor_volunteers association" do
         valid_parameters = {
           supervisor_volunteer: {volunteer_id: volunteer.id},
@@ -16,9 +16,10 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         sign_in(admin)
 
         expect {
-          post supervisor_volunteers_url, params: valid_parameters
+          post supervisor_volunteers_url, params: valid_parameters, headers: { HTTP_REFERER: "#{edit_volunteer_path(volunteer)}"  }
         }.to change(SupervisorVolunteer, :count).by(1)
-        expect(response).to redirect_to edit_supervisor_path(supervisor)
+        expect(response).to redirect_to edit_volunteer_path(volunteer)
+
       end
     end
 
@@ -40,9 +41,9 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         sign_in(admin)
 
         expect {
-          post supervisor_volunteers_url, params: valid_parameters
+          post supervisor_volunteers_url, params: valid_parameters, headers: { "HTTP_REFERER" => "#{edit_volunteer_path(volunteer)}"  }
         }.not_to change(SupervisorVolunteer, :count)
-        expect(response).to redirect_to edit_supervisor_path(supervisor)
+        expect(response).to redirect_to edit_volunteer_path(volunteer)
 
         association.reload
         expect(association.is_active?).to be(true)
@@ -68,9 +69,9 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         sign_in(admin)
 
         expect {
-          post supervisor_volunteers_url, params: valid_parameters
+          post supervisor_volunteers_url, params: valid_parameters, headers: { "HTTP_REFERER" => "#{edit_volunteer_path(volunteer)}"  }
         }.to change(SupervisorVolunteer, :count).by(1)
-        expect(response).to redirect_to edit_supervisor_path(supervisor)
+        expect(response).to redirect_to edit_volunteer_path(volunteer)
 
         expect(previous_association.reload.is_active?).to be(false)
         expect(SupervisorVolunteer.where(supervisor: supervisor, volunteer: volunteer).exists?).to be(true)
@@ -95,9 +96,9 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         sign_in(admin)
 
         expect {
-          post supervisor_volunteers_url, params: valid_parameters
+          post supervisor_volunteers_url, params: valid_parameters, headers: { "HTTP_REFERER" => "#{edit_volunteer_path(volunteer)}"  }
         }.not_to change(SupervisorVolunteer, :count)
-        expect(response).to redirect_to edit_supervisor_path(supervisor)
+        expect(response).to redirect_to edit_volunteer_path(volunteer)
 
         association.reload
         expect(association.is_active?).to be(true)
@@ -115,12 +116,12 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         sign_in admin
 
         expect {
-          patch unassign_supervisor_volunteer_path(volunteer)
+          patch unassign_supervisor_volunteer_path(volunteer), headers: { "HTTP_REFERER" => "#{edit_volunteer_path(volunteer)}"  }
         }.not_to change(supervisor.volunteers, :count)
 
         association.reload
         expect(association.is_active?).to be(false)
-        expect(response).to redirect_to edit_supervisor_path(supervisor)
+        expect(response).to redirect_to edit_volunteer_path(volunteer)
       end
     end
 
@@ -129,13 +130,13 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         sign_in supervisor
 
         expect {
-          patch unassign_supervisor_volunteer_path(volunteer)
+          patch unassign_supervisor_volunteer_path(volunteer), headers: { "HTTP_REFERER" => "#{edit_volunteer_path(volunteer)}"  }
         }.not_to change(supervisor.volunteers, :count)
 
         association.reload
 
         expect(association.is_active?).to be(false)
-        expect(response).to redirect_to edit_supervisor_path(supervisor)
+        expect(response).to redirect_to edit_volunteer_path(volunteer)
       end
     end
 

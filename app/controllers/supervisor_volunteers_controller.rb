@@ -10,7 +10,7 @@ class SupervisorVolunteersController < ApplicationController
     supervisor_volunteer.save
     flash_message = "#{volunteer.display_name} successfully assigned to #{supervisor.display_name}."
 
-    redirect_to edit_volunteer_path(volunteer), notice: flash_message
+    redirect_to request.referrer, notice: flash_message
   end
 
   def unassign
@@ -22,21 +22,13 @@ class SupervisorVolunteersController < ApplicationController
     supervisor_volunteer.save!
     flash_message = "#{volunteer.display_name} was unassigned from #{supervisor.display_name}."
 
-    redirect_to after_action_path(supervisor), notice: flash_message
+    redirect_to request.referrer, notice: flash_message
   end
 
   private
 
   def supervisor_volunteer_params
     params.require(:supervisor_volunteer).permit(:supervisor_id, :volunteer_id)
-  end
-
-  def after_action_path(resource)
-    if resource.supervisor?
-      edit_supervisor_path(resource)
-    else
-      edit_volunteer_path(resource)
-    end
   end
 
   def supervisor_volunteer_parent
