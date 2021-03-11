@@ -21,6 +21,6 @@ class CaseAssignmentPolicy < ApplicationPolicy
   end
 
   def unassign?
-    record.is_active? && admin_or_supervisor?
+    record.active? && admin_or_supervisor?
   end
 end

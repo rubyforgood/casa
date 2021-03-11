@@ -1,5 +1,5 @@
 /* global $ */
-var defineCaseContactsTable = function () {
+const defineCaseContactsTable = function () {
   $('table#case_contacts').DataTable(
     {
       scrollX: true,
@@ -9,7 +9,7 @@ var defineCaseContactsTable = function () {
   )
 }
 
-var defineSupervisorsDataTable = function () {
+const defineSupervisorsDataTable = function () {
   $('table#supervisors').DataTable(
     {
       columnDefs: [
@@ -29,11 +29,11 @@ $('document').ready(() => {
         return true
       }
 
-      var statusArray = []
-      var assignedToVolunteerArray = []
-      var assignedToMoreThanOneVolunteerArray = []
-      var assignedToTransitionYouthArray = []
-      var caseNumberPrefixArray = []
+      const statusArray = []
+      const assignedToVolunteerArray = []
+      const assignedToMoreThanOneVolunteerArray = []
+      const assignedToTransitionYouthArray = []
+      const caseNumberPrefixArray = []
 
       $('.status-options').find('input[type="checkbox"]').each(function () {
         if ($(this).is(':checked')) {
@@ -65,12 +65,12 @@ $('document').ready(() => {
         }
       })
 
-      var status = data[3]
-      var assignedToVolunteer = (data[5] !== '' && data[5].split(',').length >= 1) ? 'Yes' : 'No'
-      var assignedToMoreThanOneVolunteer = (data[5] !== '' && data[5].split(',').length > 1) ? 'Yes' : 'No'
-      var assignedToTransitionYouth = data[4]
-      var regex = /^(CINA|TPR)/g
-      var caseNumberPrefix = data[0].match(regex) ? data[0].match(regex)[0] : ''
+      const status = data[3]
+      const assignedToVolunteer = (data[5] !== '' && data[5].split(',').length >= 1) ? 'Yes' : 'No'
+      const assignedToMoreThanOneVolunteer = (data[5] !== '' && data[5].split(',').length > 1) ? 'Yes' : 'No'
+      const assignedToTransitionYouth = data[4]
+      const regex = /^(CINA|TPR)/g
+      const caseNumberPrefix = data[0].match(regex) ? data[0].match(regex)[0] : ''
 
       if (statusArray.includes(status) &&
         assignedToVolunteerArray.includes(assignedToVolunteer) &&
@@ -106,7 +106,7 @@ $('document').ready(() => {
   const editSupervisorPath = id => `/supervisors/${id}/edit`
   const editVolunteerPath = id => `/volunteers/${id}/edit`
   const casaCasePath = id => `/casa_cases/${id}`
-  var volunteersTable = $('table#volunteers').DataTable({
+  const volunteersTable = $('table#volunteers').DataTable({
     autoWidth: false,
     stateSave: false,
     columns: [
@@ -226,12 +226,12 @@ $('document').ready(() => {
   // Because the table saves state, we have to check/uncheck modal inputs based on what
   // columns are visible
   volunteersTable.columns().every(function (index) {
-    var columnVisible = this.visible()
+    const columnVisible = this.visible()
 
     if (columnVisible) { $('#visibleColumns input[data-column="' + index + '"]').prop('checked', true) } else { $('#visibleColumns input[data-column="' + index + '"]').prop('checked', false) }
   })
 
-  var casaCasesTable = $('table#casa-cases').DataTable({
+  const casaCasesTable = $('table#casa-cases').DataTable({
     autoWidth: false,
     stateSave: false,
     columnDefs: [],
@@ -241,7 +241,7 @@ $('document').ready(() => {
   })
 
   casaCasesTable.columns().every(function (index) {
-    var columnVisible = this.visible()
+    const columnVisible = this.visible()
 
     if (columnVisible) {
       $('#visibleColumns input[data-column="' + index + '"]').prop('checked', true)
@@ -279,11 +279,11 @@ $('document').ready(() => {
 
   $('input.toggle-visibility').on('click', function (e) {
     // Get the column API object and toggle the visibility
-    var column = volunteersTable.column($(this).attr('data-column'))
+    const column = volunteersTable.column($(this).attr('data-column'))
     column.visible(!column.visible())
     volunteersTable.columns.adjust().draw()
 
-    var caseColumn = casaCasesTable.column($(this).attr('data-column'))
+    const caseColumn = casaCasesTable.column($(this).attr('data-column'))
     caseColumn.visible(!caseColumn.visible())
     casaCasesTable.columns.adjust().draw()
   })

@@ -11,7 +11,8 @@ class CaseAssignment < ApplicationRecord
   validate :casa_case_and_volunteer_must_belong_to_same_casa_org, if: -> { casa_case.present? && volunteer.present? }
 
   scope :is_active, -> { where(is_active: true) }
-  scope :active, -> { where(is_active: true) }
+  scope :active, -> { where(active: true) }
+
 
   private
 
@@ -31,7 +32,7 @@ end
 # Table name: case_assignments
 #
 #  id           :bigint           not null, primary key
-#  is_active    :boolean          default(TRUE), not null
+#  active       :boolean          default(TRUE), not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  casa_case_id :bigint           not null

@@ -6,13 +6,13 @@ class CaseAssignmentsController < ApplicationController
     authorize CaseAssignment
     case_assignments = case_assignment_parent.case_assignments
     existing_case_assignment = if params[:volunteer_id]
-      case_assignments.where(casa_case_id: case_assignment_params[:casa_case_id], is_active: false).first
+      case_assignments.where(casa_case_id: case_assignment_params[:casa_case_id], active: false).first
     else
-      case_assignments.where(volunteer_id: case_assignment_params[:volunteer_id], is_active: false).first
+      case_assignments.where(volunteer_id: case_assignment_params[:volunteer_id], active: false).first
     end
 
     if existing_case_assignment.present?
-      if existing_case_assignment.update(is_active: true)
+      if existing_case_assignment.update(active: true)
         flash.notice = "Volunteer reassigned to case"
       else
         errors = existing_case_assignment.errors.full_messages.join(". ")
@@ -31,6 +31,7 @@ class CaseAssignmentsController < ApplicationController
     redirect_to after_action_path(case_assignment_parent)
   end
 
+  # TODO don't delete this, just deactivate it
   def destroy
     authorize @case_assignment
     @case_assignment.destroy
@@ -44,7 +45,7 @@ class CaseAssignmentsController < ApplicationController
     volunteer = @case_assignment.volunteer
     flash_message = "Volunteer was unassigned from Case #{casa_case.case_number}."
 
-    if @case_assignment.update(is_active: false)
+    if @case_assignment.update(active: false)
       if params[:redirect_to_path] == "volunteer"
         redirect_to edit_volunteer_path(volunteer), notice: flash_message
       else

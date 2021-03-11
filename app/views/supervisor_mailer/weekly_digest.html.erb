@@ -7,47 +7,64 @@
   </tr>
   <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; margin: 0;">
     <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-    <% if @supervisor.volunteers.length == 0 %>
-      You have no volunteers with assigned cases at the moment. When you do, you will see their status here.
-    <% else %>
-      Here's a summary of what happened with your volunteers this last week.
-    <% end %>
+      <% if @supervisor.volunteers.length == 0 %>
+        You have no volunteers with assigned cases at the moment. When you do, you will see their status here.
+      <% else %>
+        Here's a summary of what happened with your volunteers this last week.
+      <% end %>
     </td>
   </tr>
   <% @supervisor.volunteers.each do |volunteer| %>
-
     <% volunteer.case_assignments_with_cases.each do |case_assignment| %>
-      <% casa_case = case_assignment.casa_case %>
-      <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; text-align: left;">
-        <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-          <b><%= "Summary for #{volunteer.display_name} Case #{casa_case.case_number}" %></b>
-          <br>
-          <% successful_contacts = casa_case.decorate.successful_contacts_this_week %>
-          <% unsuccessful_contacts = casa_case.decorate.unsuccessful_contacts_this_week %>
-          <% if successful_contacts + unsuccessful_contacts > 0 %>
-            <%= "Number of succesful case contacts made this week: #{successful_contacts}" %>
+      <% recently_unassigned = case_assignment.decorate.unassigned_in_past_week? %>
+      <% if case_assignment.active || recently_unassigned %>
+        <% casa_case = case_assignment.casa_case %>
+        <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; text-align: left;">
+          <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+            <b><%= "Summary for #{volunteer.display_name} Case #{casa_case.case_number}" %></b>
             <br>
-            <%= "Number of unsuccesful case contacts made this week: #{unsuccessful_contacts} " %>
-            <br>
-            <% recent_contact = casa_case.decorate.case_contacts_latest %>
-            <%= "Most recent contact attempted:" %>
-            <br>
-            <%= " - Date: #{I18n.l(recent_contact&.occurred_at, format: :full, default: nil)}" %>
-            <br>
-            <%= " - Type: #{recent_contact&.decorate.contact_types}" %>
-            <br>
-            <%= " - Duration: #{recent_contact&.duration_minutes}" %>
-            <br>
-            <%= " - Contact Made: #{recent_contact&.contact_made}" %>
-            <br>
-            <%= " - Medium Type: #{recent_contact&.medium_type}" %>
-            <br>
-            <%= " - Notes: #{recent_contact&.notes}" %>
-          <% else %>
-            No contact attempts were logged for this week.
-          <% end %>
-        </td>
-      </tr>
+            <% successful_contacts = recently_unassigned ?
+                casa_case.decorate.successful_contacts_this_week_before(case_assignment.updated_at) :
+                casa_case.decorate.successful_contacts_this_week %>
+            <% unsuccessful_contacts = recently_unassigned ?
+                casa_case.decorate.unsuccessful_contacts_this_week_before(case_assignment.updated_at) :
+                casa_case.decorate.unsuccessful_contacts_this_week %>
+            <% if successful_contacts + unsuccessful_contacts > 0 %>
+              <%= "Number of successful case contacts made this week: #{successful_contacts}" %>
+              <br>
+              <%= "Number of unsuccessful case contacts made this week: #{unsuccessful_contacts} " %>
+              <br>
+              <% recent_contact = recently_unassigned ?
+                  casa_case.decorate.case_contacts_latest_before(case_assignment.updated_at) :
+                  casa_case.decorate.case_contacts_latest %>
+              <%= "Most recent contact attempted:" %>
+              <br>
+              <%= " - Date: #{I18n.l(recent_contact&.occurred_at, format: :full, default: nil)}" %>
+              <br>
+              <%= " - Type: #{recent_contact&.decorate.contact_types}" %>
+              <br>
+              <%= " - Duration: #{recent_contact&.duration_minutes}" %>
+              <br>
+              <%= " - Contact Made: #{recent_contact&.contact_made}" %>
+              <br>
+              <%= " - Medium Type: #{recent_contact&.medium_type}" %>
+              <br>
+              <%= " - Notes: #{recent_contact&.notes}" %>
+            <% else %>
+              No contact attempts were logged for this week.
+            <% end %>
+            <% if recently_unassigned %>
+              <br>
+              This case was unassigned from <%= volunteer.display_name %> on
+              <%= case_assignment.updated_at.to_date.to_s(:long_ordinal) %>
+              <% if successful_contacts + unsuccessful_contacts > 0 %>
+                The above activity only describes the part of the week when the case was still assigned to
+                <% volunteer.display_name %>
+              <% end %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
     <% end %>
   <% end %>
 </table>

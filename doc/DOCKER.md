@@ -155,7 +155,7 @@ On Ubuntu-based Linux, the VNC client application "Vinagre" (aka "Remote Desktop
 is commonly used, and can be installed with `sudo apt install vinagre`.
 
 You can open the VNC client application and configure it directly, but in both operating systems
-it's probably easier to click on [vnc://localhost:5900](vnc://localhost:5900) 
+it's probably easier to click on [vnc://localhost:5900](vnc://localhost:5900)
 (or paste that into your browser's address bar) and let the browser launch the VNC client with
  the appropriate parameters for you.
 

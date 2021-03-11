@@ -25,7 +25,7 @@
               </td>
               <td data-test="volunteer-email"><%= assignment&.volunteer&.email %></td>
               <td data-test="assigned">
-                <% if assignment.is_active? %>
+                <% if assignment.active? %>
                   <span class='badge badge-success text-uppercase'>Assigned</span>
                 <% else %>
                     <span class="badge badge-danger text-uppercase">
@@ -35,7 +35,7 @@
               </td>
               <td data-test="assignment-start"><%= I18n.l(assignment.created_at, format: :full, default: nil) %></td>
               <td data-test="assignment-end">
-                <% unless assignment.is_active? %>
+                <% unless assignment.active? %>
                   <%= I18n.l(assignment.updated_at, format: :full, default: nil) %>
                 <% end %>
               </td>

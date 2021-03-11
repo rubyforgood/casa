@@ -9,12 +9,12 @@ class CasaCasePolicy < ApplicationPolicy
 
     def resolve
       case @user
-      when CasaAdmin, Supervisor
-        scope.by_organization(@user.casa_org)
-      when Volunteer
-        scope.actively_assigned_to(user)
-      else
-        raise "unrecognized user type #{@user.type}"
+        when CasaAdmin, Supervisor
+          scope.by_organization(@user.casa_org)
+        when Volunteer
+          scope.actively_assigned_to(user)
+        else
+          raise "unrecognized user type #{@user.type}"
       end
     end
   end
@@ -29,12 +29,16 @@ class CasaCasePolicy < ApplicationPolicy
 
   def update_emancipation_option?
     is_in_same_org? && (
-      admin_or_supervisor? || is_volunteer_actively_assigned_to_case?
-    )
+    admin_or_supervisor? || is_volunteer_actively_assigned_to_case?
+  )
   end
 
   def assign_volunteers?
     is_in_same_org? && admin_or_supervisor?
+  end
+
+  def can_see_filters?
+    is_supervisor? || is_admin?
   end
 
   alias_method :update_case_number?, :is_admin?
@@ -43,6 +47,7 @@ class CasaCasePolicy < ApplicationPolicy
   alias_method :update_hearing_type?, :admin_or_supervisor?
   alias_method :update_judge?, :admin_or_supervisor?
   alias_method :update_court_report_due_date?, :admin_or_supervisor?
+  alias_method :update_court_mandates?, :admin_or_supervisor?
 
   def permitted_attributes
     common_attrs = [
@@ -52,19 +57,21 @@ class CasaCasePolicy < ApplicationPolicy
     ]
 
     case @user
-    when CasaAdmin
-      common_attrs.concat(%i[case_number birth_month_year_youth court_date court_report_due_date hearing_type_id judge_id])
-    when Supervisor
-      common_attrs.concat(%i[court_date court_report_due_date hearing_type_id judge_id])
-    else
-      common_attrs
+      when CasaAdmin
+        common_attrs.concat(%i[case_number birth_month_year_youth court_date court_report_due_date hearing_type_id judge_id])
+        common_attrs << {case_court_mandates_attributes: %i[mandate_text id]}
+      when Supervisor
+        common_attrs.concat(%i[court_date court_report_due_date hearing_type_id judge_id])
+        common_attrs << {case_court_mandates_attributes: %i[mandate_text id]}
+      else
+        common_attrs
     end
   end
 
   def same_org_supervisor_admin_or_assigned?
     is_in_same_org? && (
-      admin_or_supervisor? || is_volunteer_actively_assigned_to_case?
-    )
+    admin_or_supervisor? || is_volunteer_actively_assigned_to_case?
+  )
   end
 
   def same_org_supervisor_admin?
@@ -91,6 +98,6 @@ class CasaCasePolicy < ApplicationPolicy
   end
 
   def is_volunteer_actively_assigned_to_case?
-    record.case_assignments.exists?(volunteer_id: user.id, is_active: true)
+    record.case_assignments.exists?(volunteer_id: user.id, active: true)
   end
 end

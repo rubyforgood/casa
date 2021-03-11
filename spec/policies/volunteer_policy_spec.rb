@@ -36,7 +36,7 @@ RSpec.describe VolunteerPolicy do
 
     context "when user is a supervisor" do
       it "does not permit" do
-        is_expected.not_to permit(supervisor)
+        is_expected.to permit(supervisor)
       end
     end
 

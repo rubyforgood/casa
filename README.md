@@ -2,11 +2,14 @@
 
 ![rspec](https://github.com/rubyforgood/casa/workflows/rspec/badge.svg)
 ![cypress](https://github.com/rubyforgood/casa/workflows/cypress/badge.svg)
-[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=rubyforgood/casa)](https://dependabot.com)
+![erb lint](https://github.com/rubyforgood/casa/actions/workflows/erb_lint.yml/badge.svg)
+![standardrb lint](https://github.com/rubyforgood/casa/actions/workflows/ruby_lint.yml/badge.svg)
+![brakeman](https://github.com/rubyforgood/casa/workflows/brakeman/badge.svg)
+
 [![Maintainability](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/maintainability)](https://codeclimate.com/github/rubyforgood/casa/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/test_coverage)](https://codeclimate.com/github/rubyforgood/casa/test_coverage)
 [![View performance data on Skylight](https://badges.skylight.io/status/tFh7xrs3Qnaf.svg?token=1C-Q7p8jEFlG7t69Yl5DaJwa-ipWI8gLw9wLJf53xmQ)](https://www.skylight.io/app/applications/tFh7xrs3Qnaf)
-[![Known Vulnerabilities](https://snyk.io/test/github/rubyforgood/casa/badge.svg)](https://snyk.io/test/github/rubyforgood/casa)
+[![Snyk Vulnerabilities](https://snyk.io/test/github/rubyforgood/casa/badge.svg)](https://snyk.io/test/github/rubyforgood/casa)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/rubyforgood/casa.svg)](http://isitmaintained.com/project/rubyforgood/casa "Average time to resolve an issue")
 
 CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunteer sworn into a county-level juvenile dependency court system to advocate on behalf of a youth in the corresponding county's foster care system. CASA is also the namesake role of the national organization, CASA, which exists to cultivate and supervise volunteers carrying out this work – with county level chapters (operating relatively independently of each other) across the country.
@@ -30,6 +33,8 @@ See also our [contributing guide](./doc/CONTRIBUTING.md) 💖
 - provide volunteers with a portal for logging activity
 - oversee volunteer activity
 - generate reports on volunteer activity
+
+Read about the [product sense](doc/productsense.md) that guides our approach to this work.
 
 **How CASA works:**
 
@@ -89,6 +94,7 @@ You need Ruby, bundler, node.js, yarn, postgres, and chromedriver.
   - On a Mac, you can use [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database if you have an older version of postgres, or use [Postgres.app](https://postgresapp.com/).
   - If you're on Ubuntu/WSL, use `sudo apt-get install libpq-dev` so the gem can install. [Use the Postgres repo for Ubuntu or WSL to get the server and client tools](https://www.postgresql.org/download/linux/ubuntu/).
   - If you're on Fedora/Cent Os use `sudo dnf install libpq-devel`. [If you prefer choose package of libpq-devel via rpm](https://pkgs.org/download/libpq-devel)
+  - If you're on Windows, use the official [installer](https://www.postgresql.org/download/windows/) and accept all defaults.  Alternatively, a [Chocolatey](https://chocolatey.org/packages/postgresql) package is available with `choco install postgresql`.
 
 **Chromedriver**
 
@@ -165,6 +171,7 @@ There is a `doc` directory at the top level that includes:
 * [CYPRESS.md](doc/CYPRESS.md)
 * [DOCKER.md](doc/DOCKER.md)
 * [LINUX_SETUP.md](doc/LINUX_SETUP.md)
+* [productsense.md](doc/productsense.md)(for team leads & product interested contributors)
 * [SECURITY.md](doc/SECURITY.md)
 
 ### Common issues
