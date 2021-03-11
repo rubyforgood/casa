@@ -1,6 +1,7 @@
 class AllCasaAdmins::CasaOrgsController < AllCasaAdminsController
   def show
     @casa_org = CasaOrg.find(params[:id])
+    @casa_org_metrics = AllCasaAdmins::CasaOrgMetrics.new(@casa_org).metrics
   end
 
   def new

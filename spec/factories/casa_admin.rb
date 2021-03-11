@@ -19,5 +19,9 @@ FactoryBot.define do
         create(:case_contact, :wants_reimbursement, creator: user, casa_case: user.casa_cases.first, contact_made: true)
       end
     end
+
+    trait :inactive do
+      active { false }
+    end
   end
 end
