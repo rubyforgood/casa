@@ -7,11 +7,11 @@ module SessionHelper
     sign_in(Volunteer.first || create(:volunteer))
   end
 
-  def sign_in_as_supervisor
+  def sign_in_as_supervisor # TODO use this more
     sign_in(Supervisor.first || create(:supervisor))
   end
 
-  def sign_in_as_all_casa_admin
+  def sign_in_as_all_casa_admin # TODO use this more
     sign_in(AllCasaAdmin.first || create(:all_casa_admin))
   end
 end

@@ -19,29 +19,29 @@ RSpec.configure do |config|
 
   # This will output records as they are created. Handy for debugging but very
   # noisy.
-  # config.before(:each) do
-  #   ActiveSupport::Notifications.subscribe("factory_bot.run_factory") do |name, start, finish, id, payload|
-  #     $stderr.puts "FactoryBot: #{payload[:strategy]}(:#{payload[:name]})"
-  #   end
-  # end
+  config.before(:each) do
+    ActiveSupport::Notifications.subscribe("factory_bot.run_factory") do |name, start, finish, id, payload|
+      $stderr.puts "FactoryBot: #{payload[:strategy]}(:#{payload[:name]})"
+    end
+  end
 
   # This will output total database records being created. Commented out to
   # keep the spec output clean.
-  #
-  # factory_bot_results = {}
-  # config.before(:suite) do
-  #   ActiveSupport::Notifications.subscribe("factory_bot.run_factory") do |name, start, finish, id, payload|
-  #     factory_name = payload[:name]
-  #     strategy_name = payload[:strategy]
-  #     factory_bot_results[factory_name] ||= {}
-  #     factory_bot_results[factory_name][:total] ||= 0
-  #     factory_bot_results[factory_name][:total] += 1
-  #     factory_bot_results[factory_name][strategy_name] ||= 0
-  #     factory_bot_results[factory_name][strategy_name] += 1
-  #   end
-  # end
-  #
-  # config.after(:suite) do
-  #   p factory_bot_results
-  # end
+
+  factory_bot_results = {}
+  config.before(:suite) do
+    ActiveSupport::Notifications.subscribe("factory_bot.run_factory") do |name, start, finish, id, payload|
+      factory_name = payload[:name]
+      strategy_name = payload[:strategy]
+      factory_bot_results[factory_name] ||= {}
+      factory_bot_results[factory_name][:total] ||= 0
+      factory_bot_results[factory_name][:total] += 1
+      factory_bot_results[factory_name][strategy_name] ||= 0
+      factory_bot_results[factory_name][strategy_name] += 1
+    end
+  end
+
+  config.after(:suite) do
+    p factory_bot_results
+  end
 end
