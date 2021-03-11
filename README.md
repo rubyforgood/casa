@@ -16,23 +16,25 @@ CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunte
 
 ## Welcome contributors!
 
-We are very happy to have you. If you have problems or questions, the fastest way to an answer is in slack https://rubyforgood.herokuapp.com/ #casa channel
+We are very happy to have you! CASA and Ruby for Good are committed to welcoming new contrinbutors of all skill levels. We have plenty of tiny, small, and medium issues. 
 
-ALL open issues on the issue board https://github.com/rubyforgood/casa/projects/1 are fair game **unless** they are already assigned to a contributor. Assign an issue to yourself or comment on it "I am working on this issue".
+We highly recommend that you join us in slack https://rubyforgood.herokuapp.com/ #casa channel to ask questions quickly and hear about office hours (currently Wednesday 6-8pm Pacific), stakeholder news, and upcoming new issues.
 
-PRs which are not for an issue but which improve the codebase by adding a test or improving the code are also welcome!
+Issues on the issue board https://github.com/rubyforgood/casa/projects/1 in the TODO column are fair game. To claim an issue, comment on it "I am working on this issue".
 
-A maintainer will be keeping an eye on issues and merging PRs at least once a day. Some PRs may be rejected if they make non-useful readme changes or similar changes. We want to merge your PRs! :)
+Pull requests which are not for an issue but which improve the codebase by adding a test or improving the code are also welcome! Feel free to make github issues when you notice issues. A maintainer will be keeping an eye on issues and PRs every day or three. 
 
 See also our [contributing guide](./doc/CONTRIBUTING.md) 💖
 
 ### About this project
 
-**PG CASA (Prince George's County CASA in Maryland) seeks a volunteer management system to:**
+CASA is a national organization with many regional chapters. We currenly work with Prince George's County CASA in Maryland and Montgomery CASA Maryland
 
-- provide volunteers with a portal for logging activity
-- oversee volunteer activity
-- generate reports on volunteer activity
+This system provides value by:
+
+- providing volunteers with a portal for logging activity
+- allow supervisors to oversee volunteer activity
+- generate reports on volunteer activity for admins to use in grant proposals
 
 Read about the [product sense](doc/productsense.md) that guides our approach to this work.
 
