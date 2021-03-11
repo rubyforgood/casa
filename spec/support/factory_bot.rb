@@ -12,7 +12,7 @@ RSpec.configure do |config|
       execution_time_in_seconds = finish - start
 
       if execution_time_in_seconds >= 0.5
-        warn "Slow factory: #{payload[:name]} using strategy #{payload[:strategy]}"
+        warn "Slow factory: #{payload[:name]} takes #{execution_time_in_seconds} seconds using strategy #{payload[:strategy]}"
       end
     end
   end
