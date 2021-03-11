@@ -156,8 +156,6 @@ GEM
     factory_bot_rails (6.1.0)
       factory_bot (~> 6.1.0)
       railties (>= 5.0.0)
-    factory_trace (0.4.1)
-      factory_bot (>= 4.0)
     faker (2.16.0)
       i18n (>= 1.6, < 2)
     faraday (1.3.0)
@@ -445,7 +443,6 @@ DEPENDENCIES
   draper
   erb_lint
   factory_bot_rails
-  factory_trace
   faker
   image_processing (~> 1.12)
   jbuilder (~> 2.11)
