@@ -27,7 +27,6 @@ RSpec.configure do |config|
   config.include SessionHelper, type: :view
   config.include SessionHelper, type: :request
   config.include Organizational, type: :view
-  config.include CssHelpers
   config.include DatatableHelper, type: :datatable
   config.after do
     Warden.test_reset!
