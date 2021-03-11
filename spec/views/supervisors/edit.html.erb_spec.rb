@@ -12,6 +12,7 @@ RSpec.describe "supervisors/edit", type: :view do
     volunteer = create :volunteer, supervisor: supervisor
 
     assign :supervisor, supervisor
+    assign :all_volunteers_ever_assigned, [volunteer]
     assign :available_volunteers, []
 
     render template: "supervisors/edit"
@@ -27,6 +28,7 @@ RSpec.describe "supervisors/edit", type: :view do
     create :supervisor_volunteer, :inactive, supervisor: supervisor, volunteer: volunteer
 
     assign :supervisor, supervisor
+    assign :all_volunteers_ever_assigned, [volunteer]
     assign :available_volunteers, []
 
     render template: "supervisors/edit"

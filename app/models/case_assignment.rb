@@ -3,13 +3,21 @@ class CaseAssignment < ApplicationRecord
 
   belongs_to :casa_case
   belongs_to :volunteer, class_name: "User", inverse_of: "case_assignments"
+  #belongs_to :casa_org
 
   validates :casa_case_id, uniqueness: {scope: :volunteer_id} # only 1 row allowed per case-volunteer pair
   validates :volunteer, presence: true
   validate :assignee_must_be_volunteer
   validate :casa_case_and_volunteer_must_belong_to_same_casa_org, if: -> { casa_case.present? && volunteer.present? }
 
+  scope :is_active, -> { where(is_active: true) }
   scope :active, -> { where(active: true) }
+
+
+  def self.inactive_this_week(volunteer_id)
+    this_week = Date.today - 7.days..Date.today
+    where(updated_at: this_week).where(is_active: false).where(volunteer_id: volunteer_id)
+  end
 
   private
 

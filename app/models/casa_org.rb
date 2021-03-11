@@ -6,6 +6,8 @@ class CasaOrg < ApplicationRecord
   has_many :casa_cases, dependent: :destroy
   has_many :contact_type_groups, dependent: :destroy
   has_many :hearing_types, dependent: :destroy
+  has_many :supervisor_volunteers, through: :users, source: :volunteers
+  has_many :case_assignments, through: :users, source: :casa_cases
   has_one_attached :logo
 
   delegate :url, :alt_text, :size, to: :casa_org_logo, prefix: :logo, allow_nil: true

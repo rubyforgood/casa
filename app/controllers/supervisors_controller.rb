@@ -3,6 +3,7 @@
 class SupervisorsController < ApplicationController
   before_action :available_volunteers, only: [:edit, :update]
   before_action :set_supervisor, only: [:edit, :update]
+  before_action :all_volunteers_ever_assigned, only: [:edit, :update]
   after_action :verify_authorized
 
   def index
@@ -44,6 +45,10 @@ class SupervisorsController < ApplicationController
 
   def set_supervisor
     @supervisor = Supervisor.find(params[:id])
+  end
+
+  def all_volunteers_ever_assigned
+    @all_volunteers_ever_assigned = @supervisor.volunteers_ever_assigned
   end
 
   def available_volunteers

@@ -17,9 +17,6 @@ class User < ApplicationRecord
   has_many :casa_cases, through: :case_assignments
   has_many :case_contacts, foreign_key: "creator_id"
 
-  has_many :supervisor_volunteers, foreign_key: "supervisor_id"
-  has_many :volunteers, -> { includes(:supervisor_volunteer).order(:display_name) },
-    through: :supervisor_volunteers # OK - does check active in line 23
   has_many :followups, foreign_key: "creator_id"
 
   has_many :notifications, as: :recipient
