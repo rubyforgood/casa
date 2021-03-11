@@ -25,5 +25,9 @@ FactoryBot.define do
         create_list(:supervisor_volunteer, 2, supervisor: user)
       end
     end
+
+    trait :inactive do
+      active { false }
+    end
   end
 end

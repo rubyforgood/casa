@@ -13,5 +13,9 @@ FactoryBot.define do
     volunteer do
       create(:volunteer, casa_org: @overrides[:casa_case].try(:casa_org) || casa_org)
     end
+
+    trait :inactive do
+      active { false }
+    end
   end
 end
