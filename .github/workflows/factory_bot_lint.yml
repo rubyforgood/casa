@@ -1,0 +1,61 @@
+name: rspec
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - 'bin/*'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - 'bin/*'
+
+jobs:
+  rspec:
+
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:12.3
+        env:
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get -yqq install libpq-dev
+
+      - name: factory_bot:lint
+        env:
+          POSTGRES_HOST: localhost
+          DATABASE_HOST: localhost
+          POSTGRES_USER: postgres
+          CASA_DATABASE_PASSWORD: password
+          POSTGRES_PASSWORD: password
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_PORT: 5432
+          PGHOST: localhost
+          PGUSER: postgres
+          RAILS_ENV: test
+        run: bundle exec rake factory_bot:lint

@@ -32,5 +32,3 @@ jobs:
     - name: lint
       run: bundle exec standardrb
 
-    - name: factory_bot:lint
-      run: bundle exec rake factory_bot:lint
