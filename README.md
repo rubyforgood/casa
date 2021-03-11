@@ -127,6 +127,7 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 1. `bundle exec standardrb --fix` auto-fix Ruby linting issues [more linter info](https://github.com/testdouble/standard)
 1. `bundle exec erblint --lint-all --autocorrect` [ERB linter](https://github.com/Shopify/erb-lint)
 1. `yarn lint:fix` to run the [JS linter](https://standardjs.com/index.html) and fix isses
+1. `FB_TRACE_FILE=log/factory_trace.txt rspec` if you have been editing factories and want to find unused factories and traits
 
 If you have any troubles running tests, check out the files in `.github/workflow/` which is what makes the CI build run.
 

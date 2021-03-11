@@ -32,6 +32,7 @@ group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
   gem "byebug", platforms: %i[mri mingw x64_mingw] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "factory_bot_rails"
+  gem "factory_trace" # find unused factory_bot factories and traits
   gem "pry"
   gem "pry-byebug"
   gem "rspec-rails", "~> 5.0.0"
