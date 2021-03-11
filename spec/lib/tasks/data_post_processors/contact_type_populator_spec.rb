@@ -4,10 +4,11 @@ RSpec.describe "populates each existing organization with contact groups and typ
   before do
     Rake::Task.clear
     Casa::Application.load_tasks
-    ContactTypePopulator.populate
   end
 
   it "creates the expected contact groups and contact types for each existing organization" do
+    ContactTypePopulator.populate
+
     CasaOrg.all.each do |org|
       casa_group = org.contact_type_groups.find_by(name: "CASA")
       expect(casa_group).to be
