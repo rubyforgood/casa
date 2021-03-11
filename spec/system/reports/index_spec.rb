@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "reports/index", type: :system do
+RSpec.describe "reports", type: :system do
   let!(:admin) { create(:casa_admin) }
   let!(:case_contact) { create(:case_contact) }
 
@@ -9,7 +9,7 @@ RSpec.describe "reports/index", type: :system do
     visit reports_path
   end
 
-  context "when volunteer" do
+  context "volunteer user" do
     let(:user) { create(:volunteer) }
 
     it "redirects to root" do
@@ -28,13 +28,13 @@ RSpec.describe "reports/index", type: :system do
     end
   end
 
-  context "when supervisor" do
+  context "supervisor user" do
     it_behaves_like "can view page" do
       let(:user) { create(:supervisor) }
     end
   end
 
-  context "when casa_admin" do
+  context "casa_admin user" do
     it_behaves_like "can view page" do
       let(:user) { create(:casa_admin) }
     end

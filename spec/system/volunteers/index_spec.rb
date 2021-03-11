@@ -1,10 +1,10 @@
 require "rails_helper"
 
-RSpec.describe "volunteers/index", type: :system do
+RSpec.describe "view all volunteers", type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
 
-  context "when admin" do
+  context "admin user" do
     context "when no logo_url" do
       it "can see volunteers and navigate to their cases", js: true do
         volunteer = create(:volunteer, :with_assigned_supervisor, display_name: "User 1", email: "casa@example.com", casa_org: organization)
@@ -188,7 +188,7 @@ RSpec.describe "volunteers/index", type: :system do
     end
   end
 
-  context "when supervisor" do
+  context "supervisor user" do
     let(:supervisor) { create(:supervisor, casa_org: organization) }
     let(:input_field) { "div#volunteers_filter input" }
 

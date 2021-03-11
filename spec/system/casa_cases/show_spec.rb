@@ -29,7 +29,7 @@ RSpec.describe "casa_cases/show", type: :system do
     end
   end
 
-  context "when supervisor" do
+  context "supervisor user" do
     let(:user) { create(:supervisor, casa_org: organization) }
     let!(:case_contact) { create(:case_contact, creator: user, casa_case: casa_case) }
 
@@ -38,7 +38,7 @@ RSpec.describe "casa_cases/show", type: :system do
     end
   end
 
-  context "when volunteer" do
+  context "volunteer user" do
     let(:user) { volunteer }
 
     it "sees link to emancipation" do
