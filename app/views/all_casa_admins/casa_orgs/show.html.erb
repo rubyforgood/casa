@@ -45,7 +45,8 @@
         "Number of active cases" => selected_organization.casa_cases.active.count,
         "Number of inactive cases" => selected_organization.casa_cases.inactive.count,
         "Number of all case contacts including inactives" => selected_organization.case_assignments.count,
-        "Number of active supervisor to volunteer assignments" => selected_organization.volunteers.map(&:supervisor).count,
+        "Number of active supervisor to volunteer assignments" =>
+              selected_organization.volunteers.map(&:supervisor).count,
         "Number of active case assignments" => selected_organization.case_assignments.active.count
       }.each do |item_description, item_value| %>
         <li class="list-group-item">
