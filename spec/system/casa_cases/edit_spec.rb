@@ -73,7 +73,7 @@ RSpec.describe "casa_cases/edit", type: :system do
     end
   end
 
-  context "when supervisor" do
+  context "supervisor user" do
     let(:casa_org) { create(:casa_org) }
     let(:supervisor) { create(:supervisor, casa_org: casa_org) }
     let(:casa_case) { create(:casa_case, casa_org: casa_org) }
@@ -328,7 +328,7 @@ of it unless it was included in a previous court report.")
     end
   end
 
-  context "when volunteer" do
+  context "volunteer user" do
     let(:volunteer) { create(:volunteer) }
     let(:casa_case) { create(:casa_case, casa_org: volunteer.casa_org) }
     let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }

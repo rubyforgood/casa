@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CaseAssignment do
+RSpec.describe CaseAssignment, type: :model do
   let(:casa_org_1) { create(:casa_org) }
   let(:casa_case_1) { create(:casa_case, casa_org: casa_org_1) }
   let(:volunteer_1) { create(:volunteer, casa_org: casa_org_1) }

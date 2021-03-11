@@ -25,7 +25,7 @@ RSpec.describe "case_contacts/edit", type: :system do
     end
   end
 
-  context "when volunteer" do
+  context "volunteer user" do
     let(:volunteer) { create(:volunteer, casa_org: organization) }
     let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
 

@@ -12,11 +12,12 @@ RSpec.describe "casa_cases/show", type: :system do
     visit casa_case_emancipation_path(casa_case.id)
   end
 
-  context "when volunteer" do
+  context "volunteer user" do
     let(:user) { volunteer }
 
     it "sees title" do
       expect(page).to have_content("Emancipation Checklist")
+      # TODO more asserts here - checking and unchecking items
     end
   end
 end

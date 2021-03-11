@@ -126,7 +126,7 @@ RSpec.describe "case_contacts/new", type: :system do
     end
   end
 
-  context "when volunteer" do
+  context "volunteer user" do
     let(:organization) { create(:casa_org) }
     let!(:empty) { create(:contact_type_group, name: "Empty", casa_org: organization) }
     let!(:grp_with_hidden) { create(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization) }

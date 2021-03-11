@@ -31,3 +31,4 @@ jobs:
 
     - name: lint
       run: bundle exec standardrb
+

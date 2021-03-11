@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :emancipation_category do
-    name { "MyString" }
+    sequence(:name) { |n| "Emancipation category #{n}" }
     mutually_exclusive { false }
   end
 end

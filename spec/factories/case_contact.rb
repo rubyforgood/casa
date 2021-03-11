@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :case_contact do
     association :creator, factory: :user
-    association :casa_case
+    casa_case
 
     contact_types { [create(:contact_type)] }
     duration_minutes { 60 }

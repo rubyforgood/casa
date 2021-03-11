@@ -6,7 +6,7 @@ RSpec.describe "users/edit", type: :system do
   let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
   let(:supervisor) { create(:supervisor) }
 
-  context "when volunteer" do
+  context "volunteer user" do
     before do
       sign_in volunteer
       visit edit_users_path
@@ -40,7 +40,7 @@ RSpec.describe "users/edit", type: :system do
     end
   end
 
-  context "when supervisor" do
+  context "supervisor user" do
     before do
       sign_in supervisor
       visit edit_users_path

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Followup do
+RSpec.describe Followup, type: :model do
   subject { build(:followup) }
 
   it { is_expected.to belong_to(:case_contact) }
