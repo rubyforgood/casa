@@ -58,4 +58,7 @@ jobs:
           PGHOST: localhost
           PGUSER: postgres
           RAILS_ENV: test
-        run: bundle exec rake factory_bot:lint
+        run: |
+          bundle exec rake db:create
+          bundle exec rake db:schema:load
+          bundle exec rake factory_bot:lint
