@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "casa_cases/index", type: :system do
-  # subject { render template: "casa_cases/index" }
+  # TODO combine with other casa cases index system spec
   let(:user) { build_stubbed :casa_admin }
 
   let(:organization) { create(:casa_org) }
