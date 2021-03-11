@@ -36,7 +36,7 @@ class Volunteer < User
 
   def self.email_court_report_reminder
     active.includes(:case_assignments).where.not(case_assignments: nil).find_each do |volunteer|
-      volunteer.case_assignments.is_active.each do |case_assignment|
+      volunteer.case_assignments.active.each do |case_assignment|
         current_case = case_assignment.casa_case
         report_due_date = current_case.court_report_due_date
         if (report_due_date == Date.current + COURT_REPORT_SUBMISSION_REMINDER) && current_case.court_report_not_submitted?
@@ -56,7 +56,7 @@ class Volunteer < User
     transaction do
       updated = update(active: false)
       if updated
-        case_assignments.update_all(is_active: false)
+        case_assignments.update_all(active: false)
       end
 
       updated

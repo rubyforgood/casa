@@ -1,5 +1,5 @@
 $('document').ready(() => {
-  var emancipationsTable = $('table#all-case-emancipations').DataTable({
+  const emancipationsTable = $('table#all-case-emancipations').DataTable({
     autoWidth: false,
     searching: false,
     stateSave: false,

@@ -4,7 +4,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update_volunteer_email?
-    is_admin?
+    admin_or_supervisor?
   end
 
   def unassign_case?

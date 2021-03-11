@@ -13,6 +13,7 @@ RSpec.describe CasaCase do
   it { is_expected.to belong_to(:judge).optional }
   it { is_expected.to validate_presence_of(:case_number) }
   it { is_expected.to validate_uniqueness_of(:case_number).scoped_to(:casa_org_id).case_insensitive }
+  it { is_expected.to have_many(:case_court_mandates).dependent(:destroy) }
   it { is_expected.to have_many(:volunteers).through(:case_assignments) }
 
   describe ".ordered" do
@@ -52,19 +53,19 @@ RSpec.describe CasaCase do
     it "only returns cases actively assigned to a volunteer" do
       current_user = create(:volunteer)
       inactive_case = create(:casa_case, casa_org: current_user.casa_org)
-      create(:case_assignment, casa_case: inactive_case, volunteer: current_user, is_active: false)
+      create(:case_assignment, casa_case: inactive_case, volunteer: current_user, active: false)
       active_cases = create_list(:casa_case, 2, casa_org: current_user.casa_org)
       active_cases.each do |casa_case|
-        create(:case_assignment, casa_case: casa_case, volunteer: current_user, is_active: true)
+        create(:case_assignment, casa_case: casa_case, volunteer: current_user, active: true)
       end
 
       other_user = create(:volunteer)
       other_active_case = create(:casa_case, casa_org: other_user.casa_org)
       other_inactive_case = create(:casa_case, casa_org: other_user.casa_org)
-      create(:case_assignment, casa_case: other_active_case, volunteer: other_user, is_active: true)
+      create(:case_assignment, casa_case: other_active_case, volunteer: other_user, active: true)
       create(
         :case_assignment,
-        casa_case: other_inactive_case, volunteer: other_user, is_active: false
+        casa_case: other_inactive_case, volunteer: other_user, active: false
       )
 
       assert_equal active_cases.map(&:case_number).sort, described_class.actively_assigned_to(current_user).map(&:case_number).sort
@@ -78,19 +79,19 @@ RSpec.describe CasaCase do
       never_assigned_case = create(:casa_case, casa_org: current_user.casa_org)
 
       inactive_case = create(:casa_case, casa_org: current_user.casa_org)
-      create(:case_assignment, casa_case: inactive_case, volunteer: current_user, is_active: false)
+      create(:case_assignment, casa_case: inactive_case, volunteer: current_user, active: false)
       active_cases = create_list(:casa_case, 2, casa_org: current_user.casa_org)
       active_cases.each do |casa_case|
-        create(:case_assignment, casa_case: casa_case, volunteer: current_user, is_active: true)
+        create(:case_assignment, casa_case: casa_case, volunteer: current_user, active: true)
       end
 
       other_user = create(:volunteer)
       other_active_case = create(:casa_case, casa_org: other_user.casa_org)
       other_inactive_case = create(:casa_case, casa_org: other_user.casa_org)
-      create(:case_assignment, casa_case: other_active_case, volunteer: other_user, is_active: true)
+      create(:case_assignment, casa_case: other_active_case, volunteer: other_user, active: true)
       create(
         :case_assignment,
-        casa_case: other_inactive_case, volunteer: other_user, is_active: false
+        casa_case: other_inactive_case, volunteer: other_user, active: false
       )
 
       expect(described_class.not_assigned(current_user.casa_org)).to contain_exactly(never_assigned_case, inactive_case, other_inactive_case)
@@ -289,7 +290,7 @@ RSpec.describe CasaCase do
 
       expect(casa_case.active_case_assignments).to eq case_assignments
 
-      case_assignments.first.update(is_active: false)
+      case_assignments.first.update(active: false)
       expect(casa_case.reload.active_case_assignments).to eq [case_assignments.last]
     end
   end
@@ -305,7 +306,7 @@ RSpec.describe CasaCase do
     it "only includes volunteers through active assignments" do
       expect(casa_case.assigned_volunteers.order(:id)).to eq [volunteer1, volunteer2].sort_by(&:id)
 
-      case_assignment1.update(is_active: false)
+      case_assignment1.update(active: false)
       expect(casa_case.reload.assigned_volunteers).to eq [volunteer2]
     end
 

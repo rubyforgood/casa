@@ -21,12 +21,16 @@ RSpec.describe "casa_cases/edit", type: :system do
       expect(casa_case).not_to be_court_report_submitted
     end
 
-    it "edits case" do
+    it "edits case", js: true do
       visit casa_case_path(casa_case.id)
       click_on "Edit Case Details"
       expect(page).to have_select("Hearing type")
       expect(page).to have_select("Judge")
       select "Submitted", from: "casa_case_court_report_status"
+
+      page.find("#add-mandate-button").click
+      find("#mandates-list-container").first("textarea").send_keys("Court Mandate Text One")
+
       click_on "Update CASA Case"
       expect(page).to have_text("Submitted")
       expect(page).to have_text("Court Date")
@@ -34,6 +38,7 @@ RSpec.describe "casa_cases/edit", type: :system do
       expect(page).to have_text("Day")
       expect(page).to have_text("Month")
       expect(page).to have_text("Year")
+      expect(page).to have_text("Court Mandate Text One")
       expect(page).not_to have_text("Deactivate Case")
     end
 
@@ -81,7 +86,7 @@ RSpec.describe "casa_cases/edit", type: :system do
       sign_in supervisor
     end
 
-    it "edits case" do
+    it "edits case", js: true do
       visit casa_case_path(casa_case)
       expect(page).to have_text("Court Report Status: Not submitted")
       visit edit_casa_case_path(casa_case)
@@ -95,6 +100,9 @@ RSpec.describe "casa_cases/edit", type: :system do
       select "September", from: "casa_case_court_report_due_date_2i"
       select next_year, from: "casa_case_court_report_due_date_1i"
 
+      page.find("#add-mandate-button").click
+      find("#mandates-list-container").first("textarea").send_keys("Court Mandate Text One")
+
       click_on "Update CASA Case"
       has_checked_field? "Youth"
       has_no_checked_field? "Supervisor"
@@ -106,6 +114,7 @@ RSpec.describe "casa_cases/edit", type: :system do
       expect(page).to have_text("Year")
       expect(page).to have_text("November")
       expect(page).to have_text("September")
+      expect(page).to have_text("Court Mandate Text One")
 
       visit casa_case_path(casa_case)
 
@@ -294,6 +303,29 @@ RSpec.describe "casa_cases/edit", type: :system do
         expect(page).to have_text(volunteer_2.display_name)
       end
     end
+
+    context "deleting court mandates", js: true do
+      let(:casa_case) { create(:casa_case, :with_one_court_mandate) }
+      let(:mandate_text) { casa_case.case_court_mandates.first.mandate_text }
+
+      it "can delete a court mandate" do
+        visit edit_casa_case_path(casa_case.id)
+
+        expect(page).to have_text(mandate_text)
+
+        find("i.fa-minus").click
+        expect(page).to have_text("Are you sure you want to remove this court mandate? Doing so will delete all records \
+of it unless it was included in a previous court report.")
+
+        click_on "Delete"
+        expect(page).to have_text("Court mandate has been removed.")
+        click_on "OK"
+        expect(page).to_not have_text(mandate_text)
+
+        click_on "Update CASA Case"
+        expect(page).to_not have_text(mandate_text)
+      end
+    end
   end
 
   context "when volunteer" do
@@ -361,6 +393,8 @@ RSpec.describe "casa_cases/edit", type: :system do
       expect(page).not_to have_text("Month")
       expect(page).not_to have_text("Year")
       expect(page).not_to have_text("Deactivate Case")
+
+      expect(page).not_to have_css("#add-mandate-button")
 
       visit casa_case_path(casa_case)
       expect(page).to have_text("Court Report Status: Submitted")
