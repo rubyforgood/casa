@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-if ENV['RAILS_ENV'] == 'test'
+if ENV['RAILS_ENV'] == 'test' && ENV['RUN_SIMPLECOV'] == 'true'
   require 'simplecov'
   SimpleCov.start 'rails'
   puts 'required simplecov'

@@ -130,22 +130,5 @@ RSpec.describe "/case_contacts", type: :request do
         end
       end
     end
-
-    describe "DELETE /destroy" do
-      it "destroys the requested case_contact" do
-        case_contact = create(:case_contact, creator: volunteer, casa_case: casa_case)
-
-        expect {
-          delete case_contact_url(case_contact)
-        }.to change(CaseContact, :count).by(-1)
-      end
-
-      it "redirects to the case_contacts list" do
-        case_contact = create(:case_contact, creator: volunteer, casa_case: casa_case)
-
-        delete case_contact_url(case_contact)
-        expect(response).to redirect_to(case_contacts_url)
-      end
-    end
   end
 end

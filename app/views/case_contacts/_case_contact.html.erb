@@ -13,15 +13,15 @@
               <br>
               <%= contact.decorate.subheading %>
             </h6>
-            <div class="card-text">
+            <div class="card-text js-read-more-text-wrapper">
               <% if contact.notes && contact.notes.length > CaseContactDecorator::NOTES_CHARACTER_LIMIT %>
-                <div class="limited-notes" style="display: block;">
+                <div class="js-truncated-text" style="display: block;">
                   <%= simple_format(contact.decorate.limited_notes) %>
-                  <span><a role="button" href="#" onClick="moreText(event)">Read more</a></span>
+                  <span><a role="button" href="#" class="js-read-more">Read more</a></span>
                 </div>
-                <div class="full-notes" style="display: none;">
+                <div class="js-full-text" style="display: none;">
                   <%= simple_format(contact.decorate.full_notes) %>
-                  <span><a role="button" href="#" onClick="lessText(event)">Hide</a></span>
+                  <span><a role="button" href="#" class="js-read-less">Hide</a></span>
                 </div>
               <% else %>
                 <%= simple_format(contact.decorate.full_notes) %>
@@ -69,21 +69,3 @@
     </h6>
   </div>
 </div>
-
-<script type="text/javascript">
-function moreText (event) {
-  event.preventDefault()
-  const table_cell = event.target.closest('.card-text')
-
-  table_cell.querySelectorAll('.full-notes')[0].style.display = 'block'
-  table_cell.querySelectorAll('.limited-notes')[0].style.display = 'none'
-}
-
-function lessText (event) {
-  event.preventDefault()
-  const table_cell = event.target.closest('.card-text')
-
-  table_cell.querySelectorAll('.full-notes')[0].style.display = 'none'
-  table_cell.querySelectorAll('.limited-notes')[0].style.display = 'block'
-}
-</script>

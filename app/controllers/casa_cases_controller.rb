@@ -4,33 +4,26 @@ class CasaCasesController < ApplicationController
   before_action :require_organization!
   after_action :verify_authorized
 
-  # GET /casa_cases
-  # GET /casa_cases.json
   def index
     authorize CasaCase
     org_cases = current_user.casa_org.casa_cases.includes(:assigned_volunteers)
     @casa_cases = policy_scope(org_cases).includes([:hearing_type, :judge])
+    @casa_cases_filter_id = policy(CasaCase).can_see_filters? ? "casa-cases" : ""
   end
 
-  # GET /casa_cases/1
-  # GET /casa_cases/1.json
   def show
     authorize @casa_case
   end
 
-  # GET /casa_cases/new
   def new
     @casa_case = CasaCase.new(casa_org: current_organization)
     authorize @casa_case
   end
 
-  # GET /casa_cases/1/edit
   def edit
     authorize @casa_case
   end
 
-  # POST /casa_cases
-  # POST /casa_cases.json
   def create
     @casa_case = CasaCase.new(casa_case_params.merge(casa_org: current_organization))
     authorize @casa_case
@@ -46,8 +39,6 @@ class CasaCasesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /casa_cases/1
-  # PATCH/PUT /casa_cases/1.json
   def update
     authorize @casa_case
     respond_to do |format|
@@ -80,17 +71,6 @@ class CasaCasesController < ApplicationController
       redirect_to edit_casa_case_path(@casa_case), notice: flash_message
     else
       render :edit
-    end
-  end
-
-  # DELETE /casa_cases/1
-  # DELETE /casa_cases/1.json
-  def destroy
-    authorize @casa_case
-    @casa_case.destroy
-    respond_to do |format|
-      format.html { redirect_to casa_cases_url, notice: "CASA case was successfully destroyed." }
-      format.json { head :no_content }
     end
   end
 

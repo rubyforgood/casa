@@ -9,7 +9,7 @@ RSpec.describe CaseAssignmentPolicy do
   let(:casa_case) { create(:casa_case, casa_org: organization) }
   let(:volunteer) { create(:volunteer, casa_org: organization) }
   let(:case_assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer) }
-  let(:case_assignment_inactive) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer, is_active: false) }
+  let(:case_assignment_inactive) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
   let(:casa_admin) { create(:casa_admin, casa_org: organization) }
 

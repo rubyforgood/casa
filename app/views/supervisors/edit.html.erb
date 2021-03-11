@@ -37,7 +37,7 @@
 
 <div class="card card-container">
   <div class="card-body">
-    <% if @supervisor.volunteers.any? %>
+    <% if @all_volunteers_ever_assigned.any? %>
       <h3>Assigned Volunteers</h3>
       <table class='table volunteer-list'>
         <thead>
@@ -48,7 +48,7 @@
         </tr>
         </thead>
         <tbody>
-        <% @supervisor.volunteers.each do |volunteer| %>
+        <% @all_volunteers_ever_assigned.each do |volunteer| %>
           <tr>
             <td><%= link_to volunteer.display_name, edit_volunteer_path(volunteer) %></td>
             <td><%= volunteer.email %></td>

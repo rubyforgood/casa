@@ -17,9 +17,6 @@ class User < ApplicationRecord
   has_many :casa_cases, through: :case_assignments
   has_many :case_contacts, foreign_key: "creator_id"
 
-  has_many :supervisor_volunteers, -> { where(is_active: true) }, foreign_key: "supervisor_id"
-  has_many :volunteers, -> { includes(:supervisor_volunteer).order(:display_name) },
-           through: :supervisor_volunteers# where(is_active: true) # TODO fix - this includes unassigned volunteers and it should not
   has_many :followups, foreign_key: "creator_id"
 
   has_many :notifications, as: :recipient
@@ -50,7 +47,7 @@ class User < ApplicationRecord
   end
 
   def actively_assigned_and_active_cases
-    casa_cases.active.merge(CaseAssignment.is_active)
+    casa_cases.active.merge(CaseAssignment.active)
   end
 
   # all contacts this user has with this casa case
@@ -74,7 +71,7 @@ class User < ApplicationRecord
 
   def volunteers_serving_transition_aged_youth # Wrong? Linda/Shen/Joshua - unassigned / inactive volunteers
     volunteers.includes(case_assignments: :casa_case)
-      .where(case_assignments: {is_active: true},
+      .where(case_assignments: {active: true},
              casa_cases: {active: true, transition_aged_youth: true}).size
   end
 
@@ -90,7 +87,7 @@ class User < ApplicationRecord
       .group("users.id, supervisor_volunteers_users.id, case_assignments.id")
       .where(active: true)
       .where(supervisor_volunteers: {is_active: true})
-      .where(case_assignments: {is_active: true})
+      .where(case_assignments: {active: true})
       .length
   end
 

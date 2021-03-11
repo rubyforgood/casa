@@ -23,11 +23,13 @@ require('select2/dist/css/select2')
 
 require('src/case_contact')
 require('src/case_emancipation')
+require('src/casa_case')
 require('src/emancipations')
 require('src/select')
 require('src/dashboard')
 require('src/sidebar')
 require('src/sessions')
+require('src/readMore')
 
 // Uncomment to copy all static images under ../images to the output folder and
 // reference them with the image_pack_tag or asset_pack_path helpers in views.

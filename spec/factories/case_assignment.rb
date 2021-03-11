@@ -4,7 +4,7 @@ FactoryBot.define do
       casa_org { CasaOrg.first || create(:casa_org) }
     end
 
-    is_active { true }
+    active { true }
 
     casa_case do
       create(:casa_case, casa_org: @overrides[:volunteer].try(:casa_org) || casa_org)

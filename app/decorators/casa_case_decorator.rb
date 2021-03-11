@@ -29,14 +29,28 @@ class CasaCaseDecorator < Draper::Decorator
     object.case_contacts.max_by(&:occurred_at)
   end
 
+  def case_contacts_latest_before(date)
+    object.case_contacts.where("occurred_at < ?", date).max_by(&:occurred_at)
+  end
+
   def successful_contacts_this_week
     this_week = Date.today - 7.days..Date.today
     object.case_contacts.where(occurred_at: this_week).where(contact_made: true).count
   end
 
+  def successful_contacts_this_week_before(date)
+    this_week_before_date = Date.today - 7.days..date
+    object.case_contacts.where(occurred_at: this_week_before_date).where(contact_made: true).count
+  end
+
   def unsuccessful_contacts_this_week
     this_week = Date.today - 7.days..Date.today
     object.case_contacts.where(occurred_at: this_week).where(contact_made: false).count
+  end
+
+  def unsuccessful_contacts_this_week_before(date)
+    this_week_before_date = Date.today - 7.days..date
+    object.case_contacts.where(occurred_at: this_week_before_date).where(contact_made: false).count
   end
 
   def court_report_select_option
