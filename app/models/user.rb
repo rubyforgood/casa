@@ -69,7 +69,8 @@ class User < ApplicationRecord
     case_contacts.where(contact_made: true).order(:occurred_at).last
   end
 
-  def volunteers_serving_transition_aged_youth # Wrong? Linda/Shen/Joshua - unassigned / inactive volunteers
+  # Wrong? Linda/Shen/Joshua - unassigned / inactive volunteers
+  def volunteers_serving_transition_aged_youth
     volunteers.includes(case_assignments: :casa_case)
       .where(case_assignments: {active: true},
              casa_cases: {active: true, transition_aged_youth: true}).size

@@ -12,7 +12,6 @@ class CaseAssignment < ApplicationRecord
   scope :is_active, -> { where(is_active: true) }
   scope :active, -> { where(active: true) }
 
-
   def self.inactive_this_week(volunteer_id)
     this_week = Date.today - 7.days..Date.today
     where(updated_at: this_week).where(is_active: false).where(volunteer_id: volunteer_id)

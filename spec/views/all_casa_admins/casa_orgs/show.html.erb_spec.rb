@@ -69,7 +69,7 @@ RSpec.describe "all_casa_admins/casa_orgs/show", type: :view do
         group[:number].times do
           if group[:type] == :case_assignment
             create group[:type], is_active: group[:active], volunteer: (create :volunteer, casa_org: organization)
-          elsif (group[:type] == :supervisor_volunteer)
+          elsif group[:type] == :supervisor_volunteer
             create :supervisor_volunteer, is_active: group[:active], volunteer: (create :volunteer, casa_org: organization), supervisor: (create :supervisor, casa_org: organization)
           else
             create group[:type], active: group[:active]
