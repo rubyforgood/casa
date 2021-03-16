@@ -45,4 +45,19 @@ RSpec.describe "volunteers/edit", type: :view do
 
     expect(rendered).to_not have_field("volunteer_email", readonly: true)
   end
+
+  it "resend invitation" do
+    supervisor = build_stubbed :supervisor
+    enable_pundit(view, supervisor)
+    allow(view).to receive(:current_user).and_return(supervisor)
+
+    volunteer = create :volunteer
+
+    assign :volunteer, volunteer
+    assign :supervisors, []
+
+    render template: "volunteers/edit"
+
+    expect(rendered).to have_content("Resend Invitation")
+  end
 end

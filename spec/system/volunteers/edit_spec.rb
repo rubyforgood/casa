@@ -179,4 +179,21 @@ RSpec.describe "volunteers/edit", type: :system do
       expect(page).not_to have_content(inactive_casa_case.case_number)
     end
   end
+
+  describe "resend invite" do
+    let(:supervisor) { create(:supervisor, casa_org: organization) }
+
+    it "allows an admin resend invitation to a volunteer" do
+      volunteer = create(:volunteer, casa_org_id: organization.id)
+          
+      sign_in supervisor
+
+      visit edit_volunteer_path(volunteer)
+
+      click_on "Resend Invitation"
+
+      expect(page).to have_content("Resend Invitation")
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+    end
+  end
 end
