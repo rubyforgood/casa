@@ -185,7 +185,7 @@ RSpec.describe "volunteers/edit", type: :system do
 
     it "allows an admin resend invitation to a volunteer" do
       volunteer = create(:volunteer, casa_org_id: organization.id)
-          
+
       sign_in supervisor
 
       visit edit_volunteer_path(volunteer)
