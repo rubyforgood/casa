@@ -74,18 +74,17 @@ window.onload = function () {
   }
 
   function validateOccurredAt () {
-    debugger
-      const msg = 'Case Contact Occurrences cannot be in the future.'
-      const today = new Date()
-      today.setHours(0,0,0,0)
+    const msg = 'Case Contact Occurrences cannot be in the future.'
+    const today = new Date()
+    today.setHours(0,0,0,0)
 
-      let caseDate = new Date(caseOccurredAt.value)
-      caseDate.setDate(caseDate.getDate())
-      caseDate.setHours(0,0,0,0)
+    let caseDate = new Date(caseOccurredAt.value)
+    caseDate.setDate(caseDate.getDate())
+    caseDate.setHours(0,0,0,0)
 
-      if (caseDate > today) {
-        alert(msg)
-      } 
+    if (caseDate > today) {
+      alert(msg)
+    } 
   }
 
   function validateNoteContent (e) {
