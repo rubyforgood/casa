@@ -36,7 +36,7 @@ class CasaOrgsController < ApplicationController
   end
 
   def set_contact_type_data
-    @contact_type_groups = @casa_org.contact_type_groups
+    @contact_type_groups = @casa_org.contact_type_groups.order(:name)
     @contact_types = ContactType.for_organization(@casa_org)
   end
 
