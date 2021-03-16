@@ -43,6 +43,6 @@ RSpec.configure do |config|
 
   config.after(:suite) do
     puts "How many objects did factory_bot create? (probably too many- let's tune some factories...)"
-    p factory_bot_results
+    pp factory_bot_results
   end
 end
