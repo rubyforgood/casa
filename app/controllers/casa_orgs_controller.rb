@@ -37,7 +37,7 @@ class CasaOrgsController < ApplicationController
 
   def set_contact_type_data
     @contact_type_groups = @casa_org.contact_type_groups.order(:name)
-    @contact_types = ContactType.for_organization(@casa_org)
+    @contact_types = ContactType.for_organization(@casa_org).order(:name)
   end
 
   def set_hearing_types
