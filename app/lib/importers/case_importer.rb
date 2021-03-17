@@ -10,35 +10,26 @@ class CaseImporter < FileImporter
   end
 
   def import_cases
-    failures = []
-
-    import { |row|
+    import do |row|
       casa_case_params = row.to_hash.slice(:case_number, :transition_aged_youth, :birth_month_year_youth).compact
 
-      if !casa_case_params.key?(:case_number)
-        failures << "ERROR: The row \n  #{row}\n  does not contain a case number"
-        next
+      unless casa_case_params.key?(:case_number)
+        raise "Row does not contain a case number."
       end
 
       casa_case = CasaCase.find_by(case_number: casa_case_params[:case_number], casa_org_id: org_id)
       volunteer_assignment_list = email_addresses_to_users(Volunteer, String(row[:case_assignment]))
 
-      begin
-        if casa_case # Case exists try to update it
-          unless casa_case.active
-            raise "Case #{casa_case.case_number} already exists, but is inactive. Reactivate the CASA case instead."
-          end
-
-          update_casa_case(casa_case, casa_case_params, volunteer_assignment_list)
-        else # Case doesn't exist try to create a new case
-          create_casa_case(casa_case_params, volunteer_assignment_list)
+      if casa_case # Case exists try to update it
+        unless casa_case.active
+          raise "Case #{casa_case.case_number} already exists, but is inactive. Reactivate the CASA case instead."
         end
-      rescue => error
-        failures << error.to_s
-      end
 
-      raise failures.join("\n") unless failures.empty?
-    }
+        update_casa_case(casa_case, casa_case_params, volunteer_assignment_list)
+      else # Case doesn't exist try to create a new case
+        create_casa_case(casa_case_params, volunteer_assignment_list)
+      end
+    end
   end
 
   private
