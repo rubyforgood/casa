@@ -49,4 +49,16 @@ RSpec.describe VolunteerImporter do
       }.to change(existing_volunteer, :display_name).to("Volunteer One")
     end
   end
+
+  context "when row doesn't have e-mail address" do
+    let(:import_file_path) { Rails.root.join("spec", "fixtures", "volunteers_without_email.csv") }
+
+    it "returns an error message" do
+      alert = volunteer_importer.call
+
+      expect(alert[:type]).to eq(:error)
+      expect(alert[:message]).to eq("You successfully imported 1 volunteers. Not all rows were imported.")
+      expect(alert[:exported_rows]).to include("Row does not contain an e-mail address.")
+    end
+  end
 end
