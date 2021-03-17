@@ -10,4 +10,5 @@ class VolunteerPolicy < UserPolicy
   alias_method :update?, :index?
   alias_method :activate?, :index?
   alias_method :deactivate?, :index?
+  alias_method :resend_invitation?, :index?
 end
