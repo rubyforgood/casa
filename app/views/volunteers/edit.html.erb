@@ -51,7 +51,9 @@
                         class: "btn btn-outline-success" %>
           <% end %>
         <% end %>
-        <% if current_user.supervisor? && @volunteer.invitation_accepted_at == nil%>
+        <% if (current_user.supervisor? || 
+              current_user.casa_admin?) && 
+              @volunteer.invitation_accepted_at == nil %>
         <%= link_to "Resend Invitation",
                     resend_invitation_volunteer_path(@volunteer),
                     method: :patch,
