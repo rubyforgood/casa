@@ -45,4 +45,13 @@ RSpec.describe "volunteers/edit", type: :view do
 
     expect(rendered).to_not have_field("volunteer_email", readonly: true)
   end
+
+  it "shows the datetime of when the user/volunteer accepted there invitation" do
+    expect(view).to have_text("#{@volunteer.display_name}, has yet to accepted their invitation")
+  end
+
+  it "shows the datetime of when the reset password was sent" do
+    expect(view).to have_text(when the password was reset)
+  end
+
 end
