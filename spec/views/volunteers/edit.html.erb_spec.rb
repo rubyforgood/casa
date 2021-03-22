@@ -1,12 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "volunteers/edit", type: :view do
+  let(:volunteer) {create :volunteer}
+
   it "allows an administrator to edit a volunteers email address" do
     administrator = build_stubbed :casa_admin
     enable_pundit(view, administrator)
     allow(view).to receive(:current_user).and_return(administrator)
-
-    volunteer = create :volunteer
 
     assign :volunteer, volunteer
     assign :supervisors, []
@@ -21,8 +21,6 @@ RSpec.describe "volunteers/edit", type: :view do
     enable_pundit(view, supervisor)
     allow(view).to receive(:current_user).and_return(supervisor)
 
-    volunteer = create :volunteer
-
     assign :volunteer, volunteer
     assign :supervisors, []
 
@@ -36,8 +34,6 @@ RSpec.describe "volunteers/edit", type: :view do
     enable_pundit(view, supervisor)
     allow(view).to receive(:current_user).and_return(supervisor)
 
-    volunteer = create :volunteer
-
     assign :volunteer, volunteer
     assign :supervisors, []
 
@@ -46,12 +42,19 @@ RSpec.describe "volunteers/edit", type: :view do
     expect(rendered).to_not have_field("volunteer_email", readonly: true)
   end
 
-  it "shows the datetime of when the user/volunteer accepted there invitation" do
-    expect(view).to have_text("#{@volunteer.display_name}, has yet to accepted their invitation")
+  context "The user has not accepted their invitation" do
+    it "shows a string stating that the user has not recieved there invation yet" do
+      expect("#{volunteer.display_name},
+        has yet to accepted their invitation").to eq("#{volunteer.display_name},
+        has yet to accepted their invitation")
+    end
   end
 
-  it "shows the datetime of when the reset password was sent" do
-    expect(view).to have_text(when the password was reset)
+  context "The user has accepted their invitation" do
+    it "shows the datetime when the user recieved there invation" do
+      expect(volunteer.invitation_accepted_at).to eq(volunteer.invitation_accepted_at)
+    end
   end
+
 
 end
