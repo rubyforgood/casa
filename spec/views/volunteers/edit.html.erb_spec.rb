@@ -56,5 +56,16 @@ RSpec.describe "volunteers/edit", type: :view do
     end
   end
 
+  context " the user has not requested to reset their password" do
+    it "shows no string at all" do
+      expect(volunteer.reset_password_sent_at).to eq(nil)
+    end
+  end
+
+  context " the user has requested to reset their password" do
+    it "shows the datetime when the user recieved there invation" do
+      expect(volunteer.reset_password_sent_at).to eq(volunteer.reset_password_sent_at)
+    end
+  end
 
 end
