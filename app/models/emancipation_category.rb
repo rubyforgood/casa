@@ -6,7 +6,11 @@ class EmancipationCategory < ApplicationRecord
   validates :mutually_exclusive, inclusion: {in: [true, false]}
 
   def add_option(option_name)
-    emancipation_options.create(name: option_name)
+    emancipation_options.where(name: option_name).first_or_create
+  end
+
+  def delete_option(option_name)
+    emancipation_options.find_by(name: option_name)&.destroy
   end
 end
 
