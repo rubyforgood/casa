@@ -117,7 +117,7 @@ GEM
     concurrent-ruby (1.1.8)
     connection_pool (2.2.3)
     crass (1.0.6)
-    cypress-on-rails (1.9.0)
+    cypress-on-rails (1.9.1)
       rack
     database_cleaner-active_record (2.0.0)
       activerecord (>= 5.a)
