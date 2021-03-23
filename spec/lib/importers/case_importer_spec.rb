@@ -74,5 +74,17 @@ RSpec.describe CaseImporter do
         expect { case_importer.import_cases }.to change(CasaCase, :count).by(0)
       end
     end
+
+    context "when there's no case number" do
+      let(:import_file_path) { Rails.root.join("spec", "fixtures", "casa_cases_without_case_number.csv") }
+
+      it "returns an error message if row does not contain a case number" do
+        alert = case_importer.import_cases
+
+        expect(alert[:type]).to eq(:error)
+        expect(alert[:message]).to eq("You successfully imported 1 casa_cases. Not all rows were imported.")
+        expect(alert[:exported_rows]).to include("Row does not contain a case number.")
+      end
+    end
   end
 end

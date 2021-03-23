@@ -71,6 +71,14 @@ class VolunteersController < ApplicationController
     end
   end
 
+  def resend_invitation
+    authorize @volunteer
+    @volunteer = Volunteer.find(params[:id])
+    @volunteer.invite!
+
+    redirect_to edit_volunteer_path(@volunteer), notice: "Invitation sent"
+  end
+
   private
 
   def set_volunteer

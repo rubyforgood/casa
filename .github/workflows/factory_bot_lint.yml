@@ -1,4 +1,4 @@
-name: rspec
+name: factory bot lint
 
 on:
   push:
@@ -17,8 +17,7 @@ on:
       - 'bin/*'
 
 jobs:
-  rspec:
-
+  lint:
     runs-on: ubuntu-latest
 
     services:
