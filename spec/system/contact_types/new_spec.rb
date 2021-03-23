@@ -12,9 +12,9 @@ RSpec.describe "contact_types/new", type: :system do
     visit new_contact_type_path(contact_type)
   end
 
-  it 'errors with invalid name' do
-    fill_in 'Name', with: ''
-    click_on 'Submit'
+  it "errors with invalid name" do
+    fill_in "Name", with: ""
+    click_on "Submit"
 
     expect(page).to have_text("Name can't be blank")
   end
