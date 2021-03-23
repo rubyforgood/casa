@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "volunteers/edit", type: :view do
-  let(:volunteer) {create :volunteer}
+  let(:volunteer) { create :volunteer }
 
   it "allows an administrator to edit a volunteers email address" do
     administrator = build_stubbed :casa_admin
@@ -67,5 +67,4 @@ RSpec.describe "volunteers/edit", type: :view do
       expect(volunteer.reset_password_sent_at).to eq(volunteer.reset_password_sent_at)
     end
   end
-
 end

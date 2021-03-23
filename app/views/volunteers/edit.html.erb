@@ -63,9 +63,9 @@
         <% if @volunteer.reset_password_sent_at == !nil %>
           <%= @volunteer.reset_password_sent_at %>
         <% end %>
-<%# to be removed, the below is for debuging purposes  %>
-          <%= @volunteer.active %>
-          <%= @volunteer.id %>
+<!--- to be removed, the below is for debuging purposes  ---->
+          <%= @volunteer.active %><br>
+          <%= @volunteer.id %><br>
           <%= @volunteer.type %>
       </div><br>
 
