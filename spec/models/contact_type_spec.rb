@@ -1,19 +1,11 @@
 require "rails_helper"
 
 RSpec.describe ContactType, type: :model do
-  # let(:casa_org) { create(:casa_org) }
-  # let(:contact_type_group) { create(:contact_type_group, {name: "Test1", casa_org_id: casa_org.id}) }
   let(:contact_type) { create(:contact_type, name: "Name") }
 
   describe "#create" do
     it "does have a name" do
-      # contact_type = create(:contact_type, name: nil)
-      # create_contact_type = -> { create(:contact_type, name: nil) }
-      # create_contact_type.call
-      # expect(create_contact_type.call).to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Name can't be blank")
-      # expect(contact_type.errors.message[:name]).to eq["Name can't be blank"]
       is_expected.to validate_presence_of(:name)
-      # expect(contact_type).to_not be_valid
     end
   end
 
@@ -26,7 +18,6 @@ RSpec.describe ContactType, type: :model do
 
     it "can't update to an invalid name" do
       contact_type.name = nil
-      # expect(contact_type.errors.messages[:name]).to eq(["Name can't be blank"])
       expect { contact_type.save! }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Name can't be blank")
     end
 
@@ -34,7 +25,6 @@ RSpec.describe ContactType, type: :model do
       new_group = create(:contact_type_group, name: "New contact group")
       contact_type.contact_type_group_id = new_group.id
       expect(contact_type.contact_type_group.name).to eq("New contact group")
-      # expect {contact_type.save!}.to  raise_error(ActiveRecord::RecordInvalid, "Validation failed: Name can't be blank")
     end
 
     it "can deactivate contact type " do
