@@ -1,4 +1,6 @@
 class CasaOrg < ApplicationRecord
+  CASA_DEFAULT_LOGO = Rails.root.join("public", "logo.jpeg")
+
   has_paper_trail
   validates :name, presence: true, uniqueness: true
 
@@ -27,6 +29,14 @@ class CasaOrg < ApplicationRecord
     CaseContact.where(
       casa_case_id: CasaCase.where(casa_org_id: id)
     )
+  end
+
+  def org_logo
+    if logo.attached?
+      ActiveStorage::Blob.service.path_for(logo.key)
+    else
+      CASA_DEFAULT_LOGO
+    end
   end
 end
 

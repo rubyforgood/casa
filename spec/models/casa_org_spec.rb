@@ -11,9 +11,13 @@ RSpec.describe CasaOrg, type: :model do
 
   describe "Attachment" do
     it "is valid" do
-      subject.logo.attach(io: File.open("#{Rails.root}/spec/fixtures/company_logo.png"),
-                          filename: "company_logo.png", content_type: "logo/png")
-      expect(subject.logo).to be_attached
+      aggregate_failures do
+        expect(subject.org_logo).to eq(Pathname.new("#{Rails.root}/public/logo.jpeg"))
+        subject.logo.attach(io: File.open("#{Rails.root}/spec/fixtures/company_logo.png"),
+                            filename: "company_logo.png", content_type: "logo/png")
+        expect(subject.logo).to be_attached
+        expect(subject.org_logo).to_not eq(Pathname.new("#{Rails.root}/public/logo.jpeg"))
+      end
     end
   end
 end
