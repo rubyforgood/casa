@@ -183,9 +183,7 @@ RSpec.describe "volunteers/edit", type: :system do
   describe "resend invite" do
     let(:supervisor) { create(:supervisor, casa_org: organization) }
 
-    it "allows an admin resend invitation to a volunteer" do
-      volunteer = create(:volunteer, casa_org_id: organization.id)
-
+    it "allows a supervisor resend invitation to a volunteer" do
       sign_in supervisor
 
       visit edit_volunteer_path(volunteer)
@@ -195,5 +193,16 @@ RSpec.describe "volunteers/edit", type: :system do
       expect(page).to have_content("Resend Invitation")
       expect(ActionMailer::Base.deliveries.count).to eq(1)
     end
+  end
+
+  it "allows an administrator resend invitation to a volunteer" do
+    sign_in admin
+
+    visit edit_volunteer_path(volunteer)
+
+    click_on "Resend Invitation"
+
+    expect(page).to have_content("Resend Invitation")
+    expect(ActionMailer::Base.deliveries.count).to eq(1)
   end
 end
