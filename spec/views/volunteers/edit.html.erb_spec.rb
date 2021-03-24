@@ -83,15 +83,16 @@ RSpec.describe "volunteers/edit", type: :view do
     expect(rendered).to have_content("Resend Invitation")
   end
 
-  it "allows a supervisor resend invitation to a volunteer" do
-    enable_pundit(view, supervisor)
-    allow(view).to receive(:current_user).and_return(supervisor)
+    it "allows a supervisor resend invitation to a volunteer" do
+      enable_pundit(view, supervisor)
+      allow(view).to receive(:current_user).and_return(supervisor)
 
-    assign :volunteer, volunteer
-    assign :supervisors, []
+      assign :volunteer, volunteer
+      assign :supervisors, []
 
-    render template: "volunteers/edit"
+      render template: "volunteers/edit"
 
-    expect(rendered).to have_content("Resend Invitation")
-  end
-end #this is going to be removed I am having linter issues
+      expect(rendered).to have_content("Resend Invitation")
+    end
+  end 
+end
