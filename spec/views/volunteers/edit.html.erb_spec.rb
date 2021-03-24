@@ -94,4 +94,4 @@ RSpec.describe "volunteers/edit", type: :view do
 
     expect(rendered).to have_content("Resend Invitation")
   end
-end
+end #this is going to be removed I am having linter issues
