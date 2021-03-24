@@ -45,8 +45,8 @@ RSpec.describe "volunteers/edit", type: :view do
   context "The user has not accepted their invitation" do
     it "shows a string stating that the user has not recieved there invation yet" do
       expect("#{volunteer.display_name},
-        has yet to accepted their invitation").to eq("#{volunteer.display_name},
-        has yet to accepted their invitation")
+        has yet to accept their invitation").to eq("#{volunteer.display_name},
+        has yet to accept their invitation")
     end
   end
 

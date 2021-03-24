@@ -55,7 +55,7 @@
 
       <div class="container">
         <% if @volunteer.invitation_accepted_at == nil %>
-          <%= "#{@volunteer.display_name}, has yet to accepted their invitation" %>
+          <%= "#{@volunteer.display_name}, has yet to accept their invitation" %>
         <% else %>
           <%= @volunteer.invitation_accepted_at %>
         <% end %><br>
@@ -63,10 +63,6 @@
         <% if @volunteer.reset_password_sent_at == !nil %>
           <%= @volunteer.reset_password_sent_at %>
         <% end %>
-<!--- to be removed, the below is for debuging purposes  ---->
-          <%= @volunteer.active %><br>
-          <%= @volunteer.id %><br>
-          <%= @volunteer.type %>
       </div><br>
 
       <div class="actions">
