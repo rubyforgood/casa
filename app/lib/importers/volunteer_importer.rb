@@ -10,29 +10,20 @@ class VolunteerImporter < FileImporter
   end
 
   def import_volunteers
-    failures = []
-
     import do |row|
       volunteer_params = row.to_hash.slice(:display_name, :email).compact
 
-      if !volunteer_params.key?(:email)
-        failures << "ERROR: The row \n  #{row}\n  does not contain an email address"
-        next
+      unless volunteer_params.key?(:email)
+        raise "Row does not contain an e-mail address."
       end
 
-      begin
-        volunteer = Volunteer.find_by(email: volunteer_params[:email])
+      volunteer = Volunteer.find_by(email: volunteer_params[:email])
 
-        if volunteer # Volunteer exists try to update it
-          update_volunteer(volunteer, volunteer_params)
-        else # Volunteer doesn't exist try to create a new supervisor
-          create_user_record(Volunteer, volunteer_params)
-        end
-      rescue => error
-        failures << error.to_s
+      if volunteer # Volunteer exists try to update it
+        update_volunteer(volunteer, volunteer_params)
+      else # Volunteer doesn't exist try to create a new supervisor
+        create_user_record(Volunteer, volunteer_params)
       end
-
-      raise failures.join("\n") unless failures.empty?
     end
   end
 

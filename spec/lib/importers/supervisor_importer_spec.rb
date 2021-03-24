@@ -81,6 +81,18 @@ RSpec.describe SupervisorImporter do
     end
   end
 
+  context "when row doesn't have e-mail address" do
+    let(:import_file_path) { Rails.root.join("spec", "fixtures", "supervisors_without_email.csv") }
+
+    it "returns an error message" do
+      alert = supervisor_importer.import_supervisors
+
+      expect(alert[:type]).to eq(:error)
+      expect(alert[:message]).to eq("You successfully imported 1 supervisors. Not all rows were imported.")
+      expect(alert[:exported_rows]).to include("Row does not contain e-mail address.")
+    end
+  end
+
   specify "static and instance methods have identical results" do
     SupervisorImporter.new(import_file_path, casa_org_id).import_supervisors
     data_using_instance = Supervisor.pluck(:email).sort
