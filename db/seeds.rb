@@ -97,3 +97,4 @@ end
 SeederMain.new.seed
 
 load(Rails.root.join("db", "seeds", "emancipation_data.rb"))
+load(Rails.root.join("db", "seeds", "emancipation_options_prune.rb"))
