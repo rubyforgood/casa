@@ -1,5 +1,4 @@
 class ContactTypesController < ApplicationController
-  before_action :set_group_options, only: [:new, :edit, :update]
   before_action :set_contact_type, except: [:new, :create]
   after_action :verify_authorized
 
@@ -35,10 +34,6 @@ class ContactTypesController < ApplicationController
   end
 
   private
-
-  def set_group_options
-    @group_options = ContactTypeGroup.for_organization(current_organization).collect { |group| [group.name, group.id] }
-  end
 
   def set_contact_type
     @contact_type = ContactType.find(params[:id])
