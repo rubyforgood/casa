@@ -277,8 +277,15 @@ RSpec.describe "case_contacts/new", type: :system do
         fill_in "case-contact-duration-hours", with: "1"
         fill_in "case-contact-duration-minutes", with: "45"
         # Future date: invalid
-        fill_in "Occurred at", with: future_date.strftime("%Y/%m/%d")
-        fill_in "Miles driven", with: "30"
+
+        alert_msg = page.accept_alert do
+          fill_in "Occurred at", with: future_date.strftime("%Y/%m/%d\n")
+        end
+        expect(alert_msg).to eq("Case Contact Occurrences cannot be in the future.") # js validation
+
+        fill_in "Occurred at", with: 2.days.ago.strftime("%Y/%m/%d\n")
+
+        fill_in "Miles driven", with: "0"
         select "Yes", from: "Want driving reimbursement"
         fill_in "Notes", with: "Hello world"
 
@@ -288,7 +295,7 @@ RSpec.describe "case_contacts/new", type: :system do
           click_on "Continue Submitting"
         }.not_to change(CaseContact, :count)
 
-        expect(page).to have_text("Occurred at cannot be in the future")
+        expect(page).to have_text("Must enter miles driven to receive driving reimbursement.") # rails validation
         expect(page).to have_checked_field(volunteer_casa_case_one.case_number)
         expect(page).to have_unchecked_field("Attorney")
         expect(page).to have_checked_field("School")
@@ -297,8 +304,8 @@ RSpec.describe "case_contacts/new", type: :system do
         expect(page).to have_select("Contact medium", selected: "In Person")
         expect(page).to have_field("case-contact-duration-hours", with: "1")
         expect(page).to have_field("case-contact-duration-minutes", with: "45")
-        expect(page).to have_field("Occurred at", with: future_date.strftime("%Y-%m-%d"))
-        expect(page).to have_field("Miles driven", with: "30")
+        expect(page).to have_field("Occurred at", with: 2.days.ago.strftime("%Y-%m-%d"))
+        expect(page).to have_field("Miles driven", with: "0")
         expect(page).to have_select("Want driving reimbursement", selected: "Yes")
         expect(page).to have_field("Notes", with: "Hello world")
       end
@@ -308,7 +315,6 @@ RSpec.describe "case_contacts/new", type: :system do
       it "does not re-render form, preserves all previously entered selections", js: true do
         volunteer = create(:volunteer, :with_casa_cases)
         volunteer_casa_case_one = volunteer.casa_cases.first
-        future_date = 2.days.from_now
         create_contact_types(volunteer_casa_case_one.casa_org)
 
         sign_in volunteer
@@ -322,8 +328,8 @@ RSpec.describe "case_contacts/new", type: :system do
         fill_in "case-contact-duration-hours", with: "1"
         fill_in "case-contact-duration-minutes", with: "45"
         # Future date: invalid
-        fill_in "Occurred at", with: future_date.strftime("%Y-%m-%d")
-        fill_in "Miles driven", with: "30"
+        fill_in "Occurred at", with: 2.days.ago.strftime("%Y-%m-%d")
+        fill_in "Miles driven", with: "0"
         select "Yes", from: "Want driving reimbursement"
         fill_in "Notes", with: "Hello world"
 
@@ -331,7 +337,7 @@ RSpec.describe "case_contacts/new", type: :system do
           click_on "Submit"
         }.not_to change(CaseContact, :count)
 
-        expect(page).not_to have_text("Occurred at cannot be in the future")
+        expect(page).not_to have_text("Must enter miles driven to receive driving reimbursement.")
         expect(page).to have_checked_field(volunteer_casa_case_one.case_number)
         expect(page).to have_unchecked_field("Attorney")
         expect(page).to have_checked_field("School")
@@ -341,8 +347,8 @@ RSpec.describe "case_contacts/new", type: :system do
         expect(page).to have_select("Contact medium", selected: "In Person")
         expect(page).to have_field("case-contact-duration-hours", with: "1")
         expect(page).to have_field("case-contact-duration-minutes", with: "45")
-        expect(page).to have_field("Occurred at", with: future_date.strftime("%Y/%m/%d"))
-        expect(page).to have_field("Miles driven", with: "30")
+        expect(page).to have_field("Occurred at", with: 2.days.ago.strftime("%Y/%m/%d"))
+        expect(page).to have_field("Miles driven", with: "0")
         expect(page).to have_select("Want driving reimbursement", selected: "Yes")
         expect(page).to have_field("Notes", with: "Hello world")
       end
