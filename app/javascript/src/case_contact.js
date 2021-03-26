@@ -7,6 +7,7 @@ window.onload = function () {
   const durationHourDisplay = document.getElementById('casa-contact-duration-hours-display')
   const durationMinutes = document.getElementById('case-contact-duration-minutes')
   const durationMinuteDisplay = document.getElementById('casa-contact-duration-minutes-display')
+  const caseOccurredAt = document.getElementById('case_contact_occurred_at')
   const caseContactSubmit = document.getElementById('case-contact-submit')
 
   milesDriven.onchange = function () {
@@ -17,6 +18,9 @@ window.onload = function () {
     }
   }
 
+  caseOccurredAt.onchange = function() {
+    validateOccurredAt()
+  }
   durationHours.onchange = function () {
     if (durationHourDisplay.value !== durationHours.value) {
       durationHourDisplay.value = durationHours.value
@@ -67,6 +71,20 @@ window.onload = function () {
     } else {
       durationMinutes.setCustomValidity('')
     }
+  }
+
+  function validateOccurredAt () {
+    const msg = 'Case Contact Occurrences cannot be in the future.'
+    const today = new Date()
+    today.setHours(0,0,0,0)
+
+    let caseDate = new Date(caseOccurredAt.value)
+    caseDate.setDate(caseDate.getDate())
+    caseDate.setHours(0,0,0,0)
+
+    if (caseDate > today) {
+      alert(msg)
+    } 
   }
 
   function validateNoteContent (e) {
