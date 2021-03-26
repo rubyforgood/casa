@@ -24,11 +24,30 @@ RSpec.describe EmancipationCategory, type: :model do
       EmancipationOption.category_options(emancipation_category.id).destroy_all
     end
 
-    it "should call EmancipationOption.create" do
+    it "should create an option" do
       option_name = "test option"
 
-      expect(emancipation_category.emancipation_options).to receive(:create).with(name: option_name)
+      expect {
+        emancipation_category.add_option(option_name)
+      }.to change(EmancipationOption, :count).by(1)
+    end
+  end
+
+  context "#delete_option" do
+    let(:emancipation_category) { create(:emancipation_category) }
+
+    after(:each) do
+      EmancipationOption.category_options(emancipation_category.id).destroy_all
+    end
+
+    it "should delete an existing option" do
+      option_name = "test option"
+
       emancipation_category.add_option(option_name)
+
+      expect {
+        emancipation_category.delete_option(option_name)
+      }.to change(EmancipationOption, :count).by(-1)
     end
   end
 end

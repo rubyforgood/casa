@@ -13,25 +13,21 @@ category_income.add_option("SSI")
 category_income.add_option("SSDI")
 category_income.add_option("Inheritance/survivors benefits")
 
-category_budget = EmancipationCategory.where(name: "Youth has completed a budget.").first_or_create(mutually_exclusive: false)
-category_budget.add_option("Completed budget")
+EmancipationCategory.where(name: "Youth has completed a budget.").first_or_create(mutually_exclusive: false)
 
 category_employment = EmancipationCategory.where(name: "Youth is employed.").first_or_create(mutually_exclusive: true)
-category_employment.add_option("Not employed")
 category_employment.add_option("Part-time job")
 category_employment.add_option("Full-time job")
 category_employment.add_option("Apprenticeship or paid internship")
 category_employment.add_option("Self-employed")
 
 category_continuing_education = EmancipationCategory.where(name: "Youth is attending an educational or vocational program.").first_or_create(mutually_exclusive: true)
-category_continuing_education.add_option("Not attending")
 category_continuing_education.add_option("High school")
 category_continuing_education.add_option("Post-secondary/college")
 category_continuing_education.add_option("Vocational")
 category_continuing_education.add_option("GED program")
 
 category_high_school_diploma = EmancipationCategory.where(name: "Youth has a high school diploma or equivalency.").first_or_create(mutually_exclusive: true)
-category_high_school_diploma.add_option("No")
 category_high_school_diploma.add_option("Traditional")
 category_high_school_diploma.add_option("Out of school program")
 category_high_school_diploma.add_option("GED")
@@ -43,8 +39,7 @@ category_medical_insurance.add_option("Knows how to continue insurance coverage"
 category_medical_insurance.add_option("Knows that dental insurance ends at age 21")
 category_medical_insurance.add_option("Has plan for dental care")
 
-category_allies = EmancipationCategory.where(name: "Youth can identify permanent family and/or adult connections.").first_or_create(mutually_exclusive: false)
-category_allies.add_option("Has connections")
+EmancipationCategory.where(name: "Youth can identify permanent family and/or adult connections.").first_or_create(mutually_exclusive: false)
 
 category_community = EmancipationCategory.where(name: "Youth is accessing community activities.").first_or_create(mutually_exclusive: false)
 category_community.add_option("Arts activities (e.g., singing, dancing, theater)")
@@ -72,8 +67,7 @@ category_adult_criminal_cases = EmancipationCategory.where(name: "Youth has been
 category_adult_criminal_cases.add_option("All adult criminal cases have been resolved.")
 category_adult_criminal_cases.add_option("All eligible adult criminal records have been expunged.")
 
-category_civil_cases = EmancipationCategory.where(name: "Youth has been or is involved in civil or family cases.").first_or_create(mutually_exclusive: false)
-category_civil_cases.add_option("All civil or family cases have been resolved.")
+EmancipationCategory.where(name: "Youth has been or is involved in civil or family cases.").first_or_create(mutually_exclusive: false)
 
 category_bank_account = EmancipationCategory.where(name: "Youth has a bank account in good standing.").first_or_create(mutually_exclusive: false)
 category_bank_account.add_option("Checking")
@@ -83,8 +77,5 @@ category_credit = EmancipationCategory.where(name: "Youth has obtained a copy of
 category_credit.add_option("An adult has reviewed the credit report with Youth.")
 category_credit.add_option("Issues or concerns")
 
-category_values = EmancipationCategory.where(name: "Youth can identify his/her/their core values.").first_or_create(mutually_exclusive: false)
-category_values.add_option("Identified values")
-
-category_assessment = EmancipationCategory.where(name: "Youth has completed the Ansell Casey Assessment.").first_or_create(mutually_exclusive: false)
-category_assessment.add_option("Threshold for self-sufficiency was met.")
+EmancipationCategory.where(name: "Youth can identify his/her/their core values.").first_or_create(mutually_exclusive: false)
+EmancipationCategory.where(name: "Youth has completed the Ansell Casey Assessment.").first_or_create(mutually_exclusive: false)

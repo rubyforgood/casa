@@ -18,7 +18,9 @@
             value="<%= category.id %>"
             <%= emancipation_category_checkbox_checked(@current_case, category) %>>
           <label><%= category.name %></label>
-          <span><%= emancipation_category_collapse_icon(@current_case, category) %></span>
+          <% if category.emancipation_options.count > 0 %>
+            <span><%= emancipation_category_collapse_icon(@current_case, category) %></span>
+          <% end %>
         </h6>
         <div
           class="category-options"
