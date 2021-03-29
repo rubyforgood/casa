@@ -21,7 +21,7 @@
     "jquery": "^3.6.0",
     "popper.js": "^1.16.1",
     "select2": "^4.0.13",
-    "sweetalert2": "^10.15.6",
+    "sweetalert2": "^10.15.7",
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",
