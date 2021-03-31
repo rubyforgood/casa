@@ -17,6 +17,12 @@
 
       <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
 
+      <div class="field form-group">
+        <%= form.label "Last logged in at" %>
+        <%= form.text_field :last_sign_in_at, class: "form-control", disabled: true, value: current_user.decorate.formatted_last_sign_in_at %>
+      </div>
+
+      </br>
       <div class="actions">
         <%= form.submit "Update Profile", class: "btn btn-primary mb-3" %>
         <button class="btn btn-warning accordion mb-3" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">

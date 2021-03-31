@@ -42,6 +42,36 @@ RSpec.describe "volunteers/edit", type: :view do
     expect(rendered).to_not have_field("volunteer_email", readonly: true)
   end
 
+  describe "does not allow" do
+    let(:volunteer) { create :volunteer }
+    let(:supervisor) { build_stubbed :supervisor }
+    let(:admin) { build_stubbed :casa_admin }
+
+    it "a supervisor to edit a volunteers last sign in" do
+      enable_pundit(view, supervisor)
+      allow(view).to receive(:current_user).and_return(supervisor)
+
+      assign :volunteer, volunteer
+      assign :supervisors, []
+
+      render template: "volunteers/edit"
+
+      expect(rendered).to have_field("volunteer_last_sign_in_at", disabled: true)
+    end
+
+    it "an admin to edit a volunteers last sign in" do
+      enable_pundit(view, supervisor)
+      allow(view).to receive(:current_user).and_return(admin)
+
+      assign :volunteer, volunteer
+      assign :supervisors, []
+
+      render template: "volunteers/edit"
+
+      expect(rendered).to have_field("volunteer_last_sign_in_at", disabled: true)
+    end
+  end
+
   context "The user has not accepted their invitation" do
     it "shows a string stating that the user has not recieved there invation yet" do
       expect("#{volunteer.display_name},

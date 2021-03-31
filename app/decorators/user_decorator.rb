@@ -14,4 +14,8 @@ class UserDecorator < Draper::Decorator
   def formatted_updated_at
     I18n.l(object.updated_at, format: :standard, default: nil)
   end
+
+  def formatted_last_sign_in_at
+    I18n.l(object.last_sign_in_at, format: :standard, default: nil)
+  end
 end

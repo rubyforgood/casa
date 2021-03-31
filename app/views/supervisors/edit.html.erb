@@ -24,6 +24,11 @@
         <% end %>
       </div>
 
+      <div class="field form-group">
+        <%= form.label "Last logged in at" %>
+        <%= form.text_field :last_sign_in_at, class: "form-control", disabled: true, value: @supervisor.decorate.formatted_last_sign_in_at %>
+      </div>
+
       <div class="actions">
         <% if policy(@supervisor).update_supervisor_email? || policy(@supervisor).update_supervisor_name? %>
           <%= form.submit "Submit", class: "btn btn-primary" %>

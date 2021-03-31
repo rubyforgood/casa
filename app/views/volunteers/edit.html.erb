@@ -31,6 +31,11 @@
       </div>
 
       <div class="field form-group">
+        <%= form.label "Last logged in at" %>
+        <%= form.text_field :last_sign_in_at, class: "form-control", disabled: true, value: @volunteer.decorate.formatted_last_sign_in_at %>
+      </div>
+
+      <div class="field form-group">
         <% if @volunteer.active? %>
           Volunteer is <span class="badge badge-success text-uppercase display-1">Active</span>
           <% if policy(@volunteer).deactivate? %>

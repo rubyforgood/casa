@@ -16,6 +16,11 @@
         <%= form.text_field :display_name, class: "form-control" %>
       </div>
 
+      <div class="field form-group">
+        <%= form.label "Last logged in at" %>
+        <%= form.text_field :last_sign_in_at, class: "form-control", disabled: true, value: casa_admin.decorate.formatted_last_sign_in_at %>
+      </div>
+
       <% if casa_admin.persisted? %>
         <div class="field form-group">
           <% if casa_admin.active? %>

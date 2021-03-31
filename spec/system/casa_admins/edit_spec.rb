@@ -56,4 +56,10 @@ RSpec.describe "casa_admins/edit", type: :system do
     expect(page).to have_text("Admin was deactivated.")
     expect(another.reload.active).to be_falsey
   end
+
+  it "is not able to edit last sign in" do
+    visit edit_casa_admin_path(admin)
+
+    expect(page).to have_field("casa_admin_last_sign_in_at", disabled: true)
+  end
 end
