@@ -16,6 +16,14 @@ class CasaCasesController < ApplicationController
   # GET /casa_cases/1.json
   def show
     authorize @casa_case
+    respond_to do |format|
+      format.html {}
+      format.csv do
+        case_contacts = @casa_case.decorate.case_contacts_ordered_by_occurred_at.decorate
+        csv = CaseContactsExportCsvService.new(case_contacts).perform
+        send_data csv, filename: "volunteer-#{current_user.id}-case-contacts-#{Time.zone.now.to_i}.csv"
+      end
+    end
   end
 
   # GET /casa_cases/new
