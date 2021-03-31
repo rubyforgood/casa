@@ -32,7 +32,7 @@ end
 #  last_sign_in_ip        :string
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
-#  sign_in_count          :integer
+#  sign_in_count          :integer          default(0), not null
 #  type                   :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null

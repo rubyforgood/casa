@@ -267,7 +267,7 @@ ActiveRecord::Schema.define(version: 2021_03_30_182538) do
     t.integer "invitations_count", default: 0
     t.string "type"
     t.boolean "active", default: true
-    t.integer "sign_in_count"
+    t.integer "sign_in_count", default: 0, null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
