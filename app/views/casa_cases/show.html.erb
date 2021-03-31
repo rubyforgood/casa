@@ -74,6 +74,10 @@
       <% end %>
       <br>
 
+      <div class="text-right mb-2">
+        <%= link_to "Download All", casa_case_path(params[:id], format: :csv) , class: "btn btn-success" %>
+      </div>
+
       <div>
         <% @casa_case.decorate.case_contacts_ordered_by_occurred_at.each do |contact| %>
           <%= render "case_contacts/case_contact", contact: contact %>
