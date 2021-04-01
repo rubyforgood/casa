@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_01_161710) do
+ActiveRecord::Schema.define(version: 2021_04_01_182359) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -152,6 +152,7 @@ ActiveRecord::Schema.define(version: 2021_04_01_161710) do
     t.bigint "casa_case_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "implementation_status"
     t.index ["casa_case_id"], name: "index_case_court_mandates_on_casa_case_id"
   end
 

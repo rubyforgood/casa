@@ -2,12 +2,30 @@ function add_court_mandate_input () {
   const list = '#mandates-list-container'
   const index = $(`${list} textarea`).length
 
+  const entry_class = 'court-mandate-entry'
+  const entry_html = `<div class="${entry_class}"></div>`
+
   const textarea_html = `<textarea name="casa_case[case_court_mandates_attributes][${index}][mandate_text]"\
-id="casa_case_case_court_mandates_attributes_1_mandate_text">\
+id="casa_case_case_court_mandates_attributes_${index}_mandate_text">\
 </textarea>`
 
-  $(list).append(textarea_html)
-  $(list).children(':last').trigger('focus')
+  const select_options = `<option value="">Set Implementation Status</option>\
+<option value="not_implemented">Not implemented</option>\
+<option value="partially_implemented">Partially implemented</option>\
+<option value="implemented">Implemented</option>`
+
+  const select_html = `<select class="select-implementation-status"\
+name="casa_case[case_court_mandates_attributes][${index}][implementation_status]"\
+id="casa_case_case_court_mandates_attributes_${index}_implementation_status">\
+${select_options}\
+</select>`
+
+  $(list).append(entry_html)
+  let last_entry = $(list).children(':last')
+
+  $(last_entry).append(textarea_html)
+  $(last_entry).append(select_html)
+  $(last_entry).children(':first').trigger('focus')
 }
 
 function remove_mandate_with_confirmation () {

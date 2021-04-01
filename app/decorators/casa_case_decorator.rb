@@ -61,6 +61,12 @@ class CasaCaseDecorator < Draper::Decorator
     ]
   end
 
+  def court_mandate_select_options
+    CaseCourtMandate.implementation_statuses.map do |status|
+      [status[0].humanize, status[0]]
+    end
+  end
+
   def inactive_class
     !object.active ? "table-secondary" : ""
   end
