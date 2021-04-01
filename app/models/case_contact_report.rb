@@ -6,7 +6,7 @@ class CaseContactReport
   end
 
   def to_csv
-    case_contacts_for_csv = @case_contacts.includes(:creator).decorate
+    case_contacts_for_csv = @case_contacts
     CaseContactsExportCsvService.new(case_contacts_for_csv).perform
   end
 

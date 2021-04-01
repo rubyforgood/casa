@@ -16,7 +16,7 @@ class CasaCasesController < ApplicationController
     respond_to do |format|
       format.html {}
       format.csv do
-        case_contacts = @casa_case.decorate.case_contacts_ordered_by_occurred_at.decorate
+        case_contacts = @casa_case.decorate.case_contacts_ordered_by_occurred_at
         csv = CaseContactsExportCsvService.new(case_contacts).perform
         send_data csv, filename: "volunteer-#{current_user.id}-case-contacts-#{Time.zone.now.to_i}.csv"
       end
