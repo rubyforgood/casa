@@ -1,7 +1,7 @@
 class CaseCourtMandate < ApplicationRecord
   belongs_to :casa_case
 
-  validates :mandate_text, :implementation_status, presence: true
+  validates :mandate_text, presence: true
 
   enum implementation_status: { not_implemented: 1, partially_implemented: 2, implemented: 3 }
 end

@@ -103,6 +103,10 @@ RSpec.describe "casa_cases/edit", type: :system do
       page.find("#add-mandate-button").click
       find("#mandates-list-container").first("textarea").send_keys("Court Mandate Text One")
 
+      select "Partially implemented", from: "casa_case[case_court_mandates_attributes][0][implementation_status]"
+
+      expect(page).to have_text("Set Implementation Status")
+
       click_on "Update CASA Case"
       has_checked_field? "Youth"
       has_no_checked_field? "Supervisor"
@@ -115,6 +119,7 @@ RSpec.describe "casa_cases/edit", type: :system do
       expect(page).to have_text("November")
       expect(page).to have_text("September")
       expect(page).to have_text("Court Mandate Text One")
+      expect(page).to have_text("Partially implemented")
 
       visit casa_case_path(casa_case)
 
