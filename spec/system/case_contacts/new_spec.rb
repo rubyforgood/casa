@@ -139,7 +139,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
       sign_in volunteer
 
-      visit new_case_contact_path
+      visit new_case_contact_path(volunteer_casa_case_one.id)
 
       check volunteer_casa_case_one.case_number
       check "School"
@@ -159,14 +159,16 @@ RSpec.describe "case_contacts/new", type: :system do
 
       click_on "Submit"
       expect(page).to have_text("Confirm Note Content")
-      # expect {
-      click_on "Continue Submitting"
-      # }.to change(CaseContact, :count).by(1) # TODO https://github.com/rubyforgood/casa/issues/1716
+      expect {
+        click_on "Continue Submitting"
+      }.to change(CaseContact, :count).by(1)
 
-      expect(CaseContact.first.casa_case_id).to eq volunteer_casa_case_one.id
-      expect(CaseContact.first.contact_types.map(&:name)).to include "School"
-      expect(CaseContact.first.contact_types.map(&:name)).to include "Therapist"
-      expect(CaseContact.first.duration_minutes).to eq 105
+      expect(volunteer_casa_case_one.case_contacts.length).to eq(1)
+      case_contact = volunteer_casa_case_one.case_contacts.first
+      expect(case_contact.casa_case_id).to eq volunteer_casa_case_one.id
+      expect(case_contact.contact_types.map(&:name)).to include "School"
+      expect(case_contact.contact_types.map(&:name)).to include "Therapist"
+      expect(case_contact.duration_minutes).to eq 105
     end
 
     it "submits the form when no note was added", js: true do
