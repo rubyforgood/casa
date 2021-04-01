@@ -95,6 +95,23 @@ class CaseContactsController < ApplicationController
     end
   end
 
+  def destroy
+    authorize CasaAdmin
+
+    @case_contact.destroy
+    flash[:notice] = "Contact is successfully deleted."
+    redirect_to request.referer
+  end
+
+  def restore
+    authorize CasaAdmin
+
+    case_contact = authorize(current_organization.case_contacts.with_deleted.find(params[:id]))
+    case_contact.restore(recrusive: true)
+    flash[:notice] = "Contact is successfully restored."
+    redirect_to request.referer
+  end
+
   private
 
   def set_case_contact

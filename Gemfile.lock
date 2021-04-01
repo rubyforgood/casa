@@ -239,6 +239,8 @@ GEM
       activerecord (>= 5.2)
       request_store (~> 1.1)
     parallel (1.20.1)
+    paranoia (2.4.3)
+      activerecord (>= 4.0, < 6.2)
     parser (3.0.0.0)
       ast (~> 2.4.1)
     pg (1.2.3)
@@ -454,6 +456,7 @@ DEPENDENCIES
   lograge
   noticed
   paper_trail
+  paranoia (~> 2.2)
   pg (>= 0.18, < 2.0)
   pry
   pry-byebug

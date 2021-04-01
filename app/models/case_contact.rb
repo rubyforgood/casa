@@ -1,6 +1,7 @@
 class CaseContact < ApplicationRecord
   include ByOrganizationScope
   has_paper_trail
+  acts_as_paranoid
 
   attr_accessor :duration_hours
 
@@ -58,6 +59,9 @@ class CaseContact < ApplicationRecord
         .where(contact_type_groups: {id: contact_type_group_ids})
         .group(:id)
     end
+  }
+  scope :grab_all, ->(current_user) {
+    with_deleted if current_user.is_a?(CasaAdmin)
   }
 
   IN_PERSON = "in-person".freeze
@@ -129,6 +133,7 @@ end
 #
 #  id                         :bigint           not null, primary key
 #  contact_made               :boolean          default(FALSE)
+#  deleted_at                 :datetime
 #  duration_minutes           :integer          not null
 #  medium_type                :string
 #  miles_driven               :integer          default(0), not null
@@ -144,6 +149,7 @@ end
 #
 #  index_case_contacts_on_casa_case_id  (casa_case_id)
 #  index_case_contacts_on_creator_id    (creator_id)
+#  index_case_contacts_on_deleted_at    (deleted_at)
 #
 # Foreign Keys
 #
