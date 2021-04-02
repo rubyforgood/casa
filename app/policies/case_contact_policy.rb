@@ -14,6 +14,7 @@ class CaseContactPolicy < ApplicationPolicy
   alias_method :destroy?, :is_creator_or_casa_admin?
   alias_method :update?, :is_creator_or_supervisor_or_casa_admin?
   alias_method :edit?, :is_creator_or_supervisor_or_casa_admin?
+  alias_method :restore?, :is_admin?
 
   class Scope
     attr_reader :user, :scope

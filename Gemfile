@@ -28,6 +28,7 @@ gem "lograge" # log less so heroku papertrail quits rate limiting our logs
 gem "bootsnap", ">= 1.4.2", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "bugsnag" # tracking errors in prod
 gem "sablon" # Word document templating tool for Case Court Reports
+gem "paranoia", "~> 2.2" # For soft-deleting purpose
 
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
