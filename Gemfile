@@ -29,6 +29,7 @@ gem "bootsnap", ">= 1.4.2", require: false # Reduces boot times through caching;
 gem "bugsnag" # tracking errors in prod
 gem "sablon" # Word document templating tool for Case Court Reports
 gem "paranoia", "~> 2.2" # For soft-deleting purpose
+gem "request_store"
 
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries

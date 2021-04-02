@@ -79,9 +79,7 @@
       </div>
 
       <div>
-        <% @casa_case.decorate.case_contacts_ordered_by_occurred_at.grab_all(current_user).each do |contact| %>
-          <%= render "case_contacts/case_contact", contact: contact %>
-        <% end %>
+          <%= render partial: "case_contacts/case_contact", collection: @casa_case.decorate.case_contacts_ordered_by_occurred_at.grab_all(current_user), as: :contact %>
       </div>
     </div>
   </div>
