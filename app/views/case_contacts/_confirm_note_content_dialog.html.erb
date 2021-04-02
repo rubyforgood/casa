@@ -2,22 +2,21 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        Confirm Note Content
+        <%= t(".header") %>
       </div>
       <div class="modal-body">
-        Please double check your notes to ensure they don't contain any identifying details about your youth or anyone
-        else.
+        <%= t(".body") %>
         <p>
-        <h6>Note</h6>
+        <h6><%= t(".note") %></h6>
         <div id="note-content"></div>
         </p>
       </div>
 
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" id="modal-case-contact-cancel">
-          Go Back to Form
+          <%= t("button.go_back_to_form") %>%
         </button>
-        <%= form.submit "Continue Submitting", class: "btn btn-primary", id: "modal-case-contact-submit" %>
+        <%= form.submit t("button.continue_submitting"), class: "btn btn-primary", id: "modal-case-contact-submit" %>
       </div>
     </div>
   </div>
