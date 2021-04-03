@@ -4,7 +4,7 @@
   <div class="col-sm-12 form-header">
     <h1><%= @casa_case.decorate.transition_aged_youth_icon %> CASA Case Details</h1>
     <%- if policy(:case_contact).new? & @casa_case.active? %>
-      <%= link_to t("page.casa_case.new.title"),
+      <%= link_to t(".new_contact"),
                   new_case_contact_path(case_contact: {casa_case_id: @casa_case.id}),
                   class: "btn btn-primary casa-case-button" %>
     <%- end %>

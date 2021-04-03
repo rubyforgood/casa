@@ -1,0 +1,25 @@
+en:
+  case_contacts:
+    index:
+      title: Case Contacts
+      new: New Case Contact
+    edit:
+      title: Editing Case Contact
+    new:
+      title: New Case Contact
+    case_contact:
+      deleted_text: "[DELETE] "
+      read_more: Read more
+      hide: Hide
+      created_by: Created by
+    form:
+      plural_label: Select all relevant CASA cases
+      singular_label: CASA case
+      prompt_select_one: Please Select One
+    confirm_note_content_dialog:
+      header: Confirm Note Content
+      body: Please double check your notes to ensure they don't contain any identifying details about your youth or anyone else.
+      note: Note
+  casa_cases:
+    show:
+      new_contact: New Case Contact

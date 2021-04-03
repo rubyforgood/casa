@@ -54,9 +54,6 @@ en:
         title: New Judge
       edit:
         title: Edit Judge
-    casa_case:
-      new:
-        title: New Case Contact
   time:
     formats:
       day_and_date: "%A, %v"
@@ -72,3 +69,13 @@ en:
     followup_notification:
       title: "New followup"
       message: "%{created_by_name} has flagged a Case Contact that needs follow up. Click to see more."
+  button:
+    delete: Delete
+    undelete: undelete
+    edit: Edit
+    back: Back
+    submit: Submit
+    resolve: Resolve
+    follow_up: Follow up
+    go_back_to_form: Go Back to Form
+    continue_submitting: Continue Submitting

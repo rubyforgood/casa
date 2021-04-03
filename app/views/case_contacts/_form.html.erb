@@ -3,9 +3,9 @@
 
   <div class="field casa-case form-group">
     <% if casa_cases.length > 1 %>
-      <h2><label for="case_contact_casa_case">Select all relevant CASA cases</label></h2>
+      <h2><label for="case_contact_casa_case"><%= t(".plural_label") %></label></h2>
     <% else %>
-      <h2><label for="case_contact_casa_case">CASA case</label></h2>
+      <h2><label for="case_contact_casa_case"><%= t(".singular_label") %></label></h2>
     <% end %>
     <% casa_cases.each_with_index do |casa_case, index| %>
       <div class="form-check">
@@ -53,7 +53,7 @@
   </div>
 
   <div class="field contact-type form-group">
-    <h2><%= form.label "Contact Made" %></h2>
+    <h2><%= form.label :contact_made %></h2>
     <%= form.radio_button(:contact_made, true, checked: case_contact.contact_made, required: true) %>
     <%= form.label "Yes", for: "case_contact_contact_made_true" %>
     <br>
@@ -65,7 +65,7 @@
     <h2><%= form.label :medium_type, "Contact medium" %></h2>
     <%= form.select :medium_type,
                     options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type),
-                    {prompt: "Please Select One"},
+                    {prompt: t(".prompt_select_one")},
                     class: "custom-select col-sm-12 col-md-4",
                     required: true %>
   </div>
@@ -153,7 +153,7 @@
   </div>
 
   <div class="actions">
-    <%= form.submit "Submit", class: "btn btn-primary", id: "case-contact-submit", "data-target": "#confirm-submit" %>
+    <%= form.submit t("button.submit"), class: "btn btn-primary", id: "case-contact-submit", "data-target": "#confirm-submit" %>
     <%= return_to_dashboard_button %>
   </div>
   <%= render 'confirm_note_content_dialog', form: form %>

@@ -4,9 +4,9 @@
   </div>
   <div class="col-sm-5">
     <%= button_to resolve_followup_path(followup), method: :patch, class: "btn btn-success" do %>
-      Resolve
+      <%= t("button.resolve") %>
     <% end %>
   </div>
 <% else %>
-  <%= button_to "Follow up", case_contact_followups_path(contact), method: "post", class: "btn btn-danger" %>
+  <%= button_to t("button.follow_up"), case_contact_followups_path(contact), method: "post", class: "btn btn-danger" %>
 <% end %>

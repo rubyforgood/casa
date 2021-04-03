@@ -7,7 +7,8 @@
           <div class="media-body">
             <h5 class="mt-0 card-title">
               <strong class="text-primary">
-                <%= "[DELETED] " if policy(contact).restore? && contact.deleted? %>
+              <%= link_to(t("button.undelete"), restore_case_contact_path(contact.id), method: :post, class: "btn btn-info") if contact.deleted? %>
+                <%= t('.deleted_text') if policy(contact).restore? && contact.deleted? %>
                 <%= contact.contact_groups_with_types.keys.join(', ') %>
               </strong>
               <%= link_to("undelete", restore_case_contact_path(contact.id), method: :post, class: "btn btn-info") if policy(contact).restore? && contact.deleted? %>
@@ -21,11 +22,11 @@
               <% if contact.notes && contact.notes.length > CaseContactDecorator::NOTES_CHARACTER_LIMIT %>
                 <div class="js-truncated-text" style="display: block;">
                   <%= simple_format(contact.decorate.limited_notes) %>
-                  <span><a role="button" href="#" class="js-read-more">Read more</a></span>
+                  <span><a role="button" href="#" class="js-read-more"><%= t(".read_more") %></a></span>
                 </div>
                 <div class="js-full-text" style="display: none;">
                   <%= simple_format(contact.decorate.full_notes) %>
-                  <span><a role="button" href="#" class="js-read-less">Hide</a></span>
+                  <span><a role="button" href="#" class="js-read-less"><%= t(".hide") %></a></span>
                 </div>
               <% else %>
                 <%= simple_format(contact.decorate.full_notes) %>
@@ -35,7 +36,7 @@
         </div>
       </div>
       <div class="align-self-end">
-        <%= link_to("Delete", case_contact_path(contact.id), method: :delete, class: "btn btn-danger pull-right") if policy(current_user).destroy? && !contact.deleted? %>
+        <%= link_to(t("button.delete"), case_contact_path(contact.id), method: :delete, class: "btn btn-danger pull-right") if policy(current_user).destroy? && !contact.deleted? %>
       </div>
       <div class="row">
         <% if Pundit.policy(current_user, contact).update? %>
@@ -45,7 +46,7 @@
 
             <div class="col-sm-5">
               <%= link_to edit_case_contact_path(contact), class: 'btn btn-outline-primary' do %>
-                <strong>Edit</strong>
+                <strong><%= t("button.edit") %></strong>
               <% end %>
             </div>
           <% else %>
@@ -57,7 +58,7 @@
   </div>
   <div>
     <h6 class="card-subtitle mb-2 text-primary float-right mr-2">
-      Created by:
+      <%= t(".created_by") %>:
       <% if policy(contact).edit? %>
         <% if current_user.volunteer? %>
           <%= contact.creator&.display_name %>
