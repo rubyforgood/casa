@@ -2,9 +2,7 @@ class UserDecorator < Draper::Decorator
   delegate_all
 
   def status
-    return "Active" if object.active
-
-    "Inactive"
+    object.active ? "Active" : "Inactive"
   end
 
   def formatted_created_at
