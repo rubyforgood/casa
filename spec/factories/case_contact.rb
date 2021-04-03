@@ -9,6 +9,7 @@ FactoryBot.define do
     contact_made { false }
     medium_type { CaseContact::CONTACT_MEDIUMS.first }
     want_driving_reimbursement { false }
+    deleted_at { nil }
 
     trait :multi_line_note do
       notes { "line1\nline2\nline3" }
