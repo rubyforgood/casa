@@ -79,3 +79,15 @@ en:
     follow_up: Follow up
     go_back_to_form: Go Back to Form
     continue_submitting: Continue Submitting
+    close: Close
+    detail_view: Detail View
+  common:
+    yes_text: "Yes"
+    no_text: "No"
+    active: Active
+    inactive: Inactive
+    status: Status
+    day: Day
+    month: Month
+    year: Year
+    none: None

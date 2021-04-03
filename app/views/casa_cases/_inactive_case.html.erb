@@ -1,7 +1,7 @@
 <div class="alert alert-danger">
-  <p>Case was deactivated on: <%= I18n.l(@casa_case.updated_at, format: :standard, default: nil) %>
-    <%= link_to 'Reactivate CASA Case',
+  <p><%= t(".notice") %>: <%= I18n.l(@casa_case.updated_at, format: :standard, default: nil) %>
+    <%= link_to(t("casa_cases.form.button.reactivate"),
                 reactivate_casa_case_path(@casa_case),
                 method: :patch,
-                class: "btn btn-primary pull-right" if Pundit.policy(current_user, @casa_case).update_case_status? %></p>
+                class: "btn btn-primary pull-right") if Pundit.policy(current_user, @casa_case).update_case_status? %></p>
 </div>
