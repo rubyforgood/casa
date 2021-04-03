@@ -7,10 +7,10 @@
           <div class="media-body">
             <h5 class="mt-0 card-title">
               <strong class="text-primary">
-                <%= "[DELETED] " if contact.deleted? %>
+                <%= "[DELETED] " if policy(contact).restore? && contact.deleted? %>
                 <%= contact.contact_groups_with_types.keys.join(', ') %>
               </strong>
-              <%= link_to("undelete", restore_case_contact_path(contact.id), method: :post, class: "btn btn-info") if contact.deleted? %>
+              <%= link_to("undelete", restore_case_contact_path(contact.id), method: :post, class: "btn btn-info") if policy(contact).restore? && contact.deleted? %>
             </h5>
             <h6 class="card-subtitle mb-2 text-muted">
               <%= contact.decorate.contact_types %>
@@ -35,7 +35,7 @@
         </div>
       </div>
       <div class="align-self-end">
-        <%= link_to("Delete", case_contact_path(contact.id), method: :delete, class: "btn btn-danger pull-right") unless contact.deleted? %>
+        <%= link_to("Delete", case_contact_path(contact.id), method: :delete, class: "btn btn-danger pull-right") if policy(current_user).destroy? && !contact.deleted? %>
       </div>
       <div class="row">
         <% if Pundit.policy(current_user, contact).update? %>
