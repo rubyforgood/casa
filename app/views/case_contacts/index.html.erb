@@ -5,13 +5,12 @@
   </div>
 </div>
 
-<% @casa_cases.each do |casa_case| %>
+
+<% @presenter.case_contacts.each do |casa_case_id, data| %>
   <div class="card card-container">
     <div class="card-body">
-      <h3><%= "#{casa_case.decorate.transition_aged_youth_icon} #{casa_case.case_number}" %></h3>
-      <% casa_case.decorate.case_contacts_ordered_by_occurred_at.grab_all(current_user).each do |contact| %>
-        <%= render "case_contacts/case_contact", contact: contact %>
-      <% end %>
+      <h3><%= @presenter.display_case_number(casa_case_id) %></h3>
+      <%= render partial: "case_contacts/case_contact", collection: data, as: :contact %>
     </div>
   </div>
 <% end %>

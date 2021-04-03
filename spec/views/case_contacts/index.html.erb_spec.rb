@@ -5,10 +5,9 @@ RSpec.describe "case_contacts/index", type: :view do
 
   before do
     enable_pundit(view, user)
-    allow(view).to receive(:current_user).and_return(user)
-    case_contact = create(:case_contact)
-    assign :case_contact, case_contact
-    assign :casa_cases, [case_contact.casa_case]
+    allow(RequestStore).to receive(:read).with(:current_user).and_return(user)
+    allow(RequestStore).to receive(:read).with(:current_organization).and_return(user.casa_org)
+    assign(:presenter, CaseContactPresenter.new)
     render template: "case_contacts/index"
   end
 
