@@ -8,7 +8,7 @@
           <%= form.label :case_number %>
           <%= form.text_field :case_number, class: "form-control" %>
         <% else %>
-          <label for="casa_case_case_number">Case number: <%= casa_case.case_number %></label>
+          <label for="casa_case_case_number">Case number: <%= link_to(casa_case.case_number, casa_case) %></label>
         <% end %>
       </div>
 
