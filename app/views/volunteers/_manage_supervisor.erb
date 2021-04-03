@@ -5,8 +5,12 @@
     <div class="card-body">
       <br>
       <% if @volunteer.has_supervisor? %>
-        <h5><span class="font-weight-bold">Current Supervisor:</span> <%= @volunteer.supervisor.display_name %> </h5>
-
+        <h5>
+          <span class="font-weight-bold">
+            Current Supervisor:
+          </span>
+          <%= link_to(@volunteer.supervisor.display_name, edit_supervisor_path(@volunteer.supervisor.id)) %>
+        </h5>
         <br>
         <%= button_to 'Unassign from Supervisor',
                       unassign_supervisor_volunteer_path(@volunteer),
