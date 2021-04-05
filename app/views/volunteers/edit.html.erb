@@ -21,63 +21,11 @@
         <%= form.text_field :display_name, class: "form-control" %>
       </div>
 
-      <div class="field form-group">
-        <%= form.label "Start Date" %>
-        <input
-          class="form-control"
-          type="text"
-          placeholder="<%= @volunteer.decorate.formatted_created_at %>"
-          readonly>
-      </div>
+      <%= render "/shared/invite_login", resource: @volunteer %>
 
-      <div class="field form-group">
-        <%= form.label "Last logged in at" %>
-        <%= form.text_field :last_sign_in_at, class: "form-control", disabled: true, value: @volunteer.decorate.formatted_last_sign_in_at %>
-      </div>
-
-      <div class="field form-group">
-        <% if @volunteer.active? %>
-          Volunteer is <span class="badge badge-success text-uppercase display-1">Active</span>
-          <% if policy(@volunteer).deactivate? %>
-            <%= link_to "Deactivate volunteer",
-                        deactivate_volunteer_path(@volunteer),
-                        method: :patch,
-                        class: "btn btn-outline-danger",
-                        data: {confirm: t("forms.volunteer.mark_inactive_warning")} %>
-          <% end %>
-        <% else %>
-          <div class="alert alert-danger">
-            Volunteer was deactivated on: <%= @volunteer.decorate.formatted_updated_at %>
-          </div>
-          <% if policy(@volunteer).activate? %>
-            <%= link_to "Activate volunteer",
-                        activate_volunteer_path(@volunteer),
-                        method: :patch,
-                        class: "btn btn-outline-success" %>
-          <% end %>
-        <% end %>
-        <% if (current_user.supervisor? ||
-            current_user.casa_admin?) &&
-            @volunteer.invitation_accepted_at == nil %>
-          <%= link_to "Resend Invitation",
-                      resend_invitation_volunteer_path(@volunteer),
-                      method: :patch,
-                      class: "btn btn-outline-danger" %>
-        <% end %>
-      </div>
-
-      <div class="container">
-        <% if @volunteer.invitation_accepted_at == nil %>
-          <%= "#{@volunteer.display_name}, has yet to accept their invitation" %>
-        <% else %>
-          <%= @volunteer.invitation_accepted_at %>
-        <% end %><br>
-
-        <% if @volunteer.reset_password_sent_at == !nil %>
-          <%= @volunteer.reset_password_sent_at %>
-        <% end %>
-      </div>
-      <br>
+      <p>
+        <%= render "manage_active", user: @volunteer %>
+      </p>
 
       <div class="actions">
         <%= form.submit "Submit", class: "btn btn-primary" %>
