@@ -46,14 +46,18 @@ RSpec.describe "supervisors/edit", type: :system do
       expect(page).to have_text("There are no active, unassigned volunteers available")
     end
 
-    it "can go to the supervisor edit page and see last sign in" do
+    it "can go to the supervisor edit page and see invite and login info" do
       supervisor = create :supervisor, casa_org: organization
 
       sign_in user
 
       visit edit_supervisor_path(supervisor)
 
-      expect(page).to have_field("supervisor_last_sign_in_at", disabled: true)
+      expect(page).to have_text "Added to system "
+      expect(page).to have_text "Invitation email sent never"
+      expect(page).to have_text "Last logged in"
+      expect(page).to have_text "Invitation accepted never"
+      expect(page).to have_text "Password reset last sent never"
     end
 
     context "when entering valid information" do
@@ -107,10 +111,6 @@ RSpec.describe "supervisors/edit", type: :system do
       it "does not have a submit button" do
         expect(page).not_to have_selector(:link_or_button, "Submit")
       end
-
-      it "sees last sign in" do
-        expect(page).to have_field("supervisor_last_sign_in_at", disabled: true)
-      end
     end
 
     context "when editing own page" do
@@ -123,8 +123,12 @@ RSpec.describe "supervisors/edit", type: :system do
         expect(page).to have_selector(:link_or_button, "Submit")
       end
 
-      it "sees last sign in" do
-        expect(page).to have_field("supervisor_last_sign_in_at", disabled: true)
+      it "sees last invite and login info" do
+        expect(page).to have_text "Added to system "
+        expect(page).to have_text "Invitation email sent never"
+        expect(page).to have_text "Last logged in"
+        expect(page).to have_text "Invitation accepted never"
+        expect(page).to have_text "Password reset last sent never"
       end
 
       context "when no volunteers exist" do
