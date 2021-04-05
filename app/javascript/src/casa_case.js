@@ -1,29 +1,13 @@
 function add_court_mandate_input () {
   const list = '#mandates-list-container'
   const index = $(`${list} textarea`).length
+  const html = court_mandate_html(index)
 
-  const entry_html = `<div class="court-mandate-entry"></div>`
-
-  const textarea_html = `<textarea name="casa_case[case_court_mandates_attributes][${index}][mandate_text]"\
-                         id="casa_case_case_court_mandates_attributes_${index}_mandate_text">\
-                         </textarea>`
-
-  const select_options = `<option value="">Set Implementation Status</option>\
-                          <option value="not_implemented">Not implemented</option>\
-                          <option value="partially_implemented">Partially implemented</option>\
-                          <option value="implemented">Implemented</option>`
-
-  const select_html = `<select class="select-implementation-status"\
-                       name="casa_case[case_court_mandates_attributes][${index}][implementation_status]"\
-                       id="casa_case_case_court_mandates_attributes_${index}_implementation_status">\
-                       ${select_options}\
-                       </select>`
-
-  $(list).append(entry_html)
+  $(list).append(html.entry)
   let last_entry = $(list).children(':last')
 
-  $(last_entry).append(textarea_html)
-  $(last_entry).append(select_html)
+  $(last_entry).append(html.textarea)
+  $(last_entry).append(html.select)
   $(last_entry).children(':first').trigger('focus')
 }
 
@@ -75,6 +59,25 @@ function remove_mandate_action (ctx) {
       })
     }
   })
+}
+
+function court_mandate_html(index) {
+  const select_options = `<option value="">Set Implementation Status</option>\
+                          <option value="not_implemented">Not implemented</option>\
+                          <option value="partially_implemented">Partially implemented</option>\
+                          <option value="implemented">Implemented</option>`
+  return {
+    entry:    `<div class="court-mandate-entry"></div>`,
+
+    textarea: `<textarea name="casa_case[case_court_mandates_attributes][${index}][mandate_text]"\
+                 id="casa_case_case_court_mandates_attributes_${index}_mandate_text"></textarea>`,
+
+    select:   `<select class="select-implementation-status"\
+                 name="casa_case[case_court_mandates_attributes][${index}][implementation_status]"\
+                 id="casa_case_case_court_mandates_attributes_${index}_implementation_status">\
+                 ${select_options}\
+               </select>`
+  }
 }
 
 $('document').ready(() => {
