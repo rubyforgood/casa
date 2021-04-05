@@ -137,3 +137,15 @@ en:
       heading:
         admin_email: Admin Email
         actions: Actions
+  case_assignments:
+    index:
+      title: Edit Volunteer Assignments for
+      heading:
+        case_number: Case Number
+        transition_aged_youth: Transition Aged Youth
+        actions: Actions
+      button:
+        unassign: Unassign Case
+        assign: Assign Case
+      assign_new: Assign a New Case
+      select_case: Select a Case
