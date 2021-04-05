@@ -182,3 +182,9 @@ en:
       link:
         checkList: Checklist
         details: Details
+  emancipations:
+    show:
+      title: Emancipation Checklist
+      state:
+        saving: Saving
+        saved: Saved
