@@ -87,12 +87,13 @@ body.casa_cases {
     .court-mandate-entry {
       display: grid;
       grid-template-columns: minmax(100px, 100%) 1fr;
+      gap: 2px;
 
       .implementation-status {
         grid-row: 2;
       }
 
-      margin: 0 1em 64px 1em;
+      margin: 1em 1em 2em 1em;
     }
   }
 }
