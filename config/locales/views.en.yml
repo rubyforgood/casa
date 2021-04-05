@@ -173,3 +173,12 @@ en:
       title: New Contact Type
     edit:
       title: Edit Contact Type
+  emancipation:
+    index:
+      title: Transitioning Case(s)
+      heading:
+        case_number: Case Number
+        checklist: Checklist
+      link:
+        checkList: Checklist
+        details: Details
