@@ -5,13 +5,22 @@ RSpec.describe "casa_cases/edit", type: :system do
   context "when admin" do
     let(:organization) { create(:casa_org) }
     let(:admin) { create(:casa_admin, casa_org: organization) }
-    let(:casa_case) { create(:casa_case, casa_org: organization) }
+    let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: organization) }
     let!(:judge) { create(:judge, casa_org: organization) }
     let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
     let!(:school) { create(:contact_type, name: "School", contact_type_group: contact_type_group) }
     let!(:therapist) { create(:contact_type, name: "Therapist", contact_type_group: contact_type_group) }
 
     before { sign_in admin }
+
+    it "shows court mandates" do
+      visit edit_casa_case_path(casa_case)
+
+      court_mandate = casa_case.case_court_mandates.first
+
+      expect(page).to have_text(court_mandate.mandate_text)
+      expect(page).to have_text(court_mandate.implementation_status.humanize)
+    end
 
     it "clicks back button after editing case" do
       visit edit_casa_case_path(casa_case)
@@ -76,7 +85,7 @@ RSpec.describe "casa_cases/edit", type: :system do
   context "supervisor user" do
     let(:casa_org) { create(:casa_org) }
     let(:supervisor) { create(:supervisor, casa_org: casa_org) }
-    let(:casa_case) { create(:casa_case, casa_org: casa_org) }
+    let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: casa_org) }
     let!(:contact_type_group) { create(:contact_type_group, casa_org: casa_org) }
     let!(:contact_type_1) { create(:contact_type, name: "Youth", contact_type_group: contact_type_group) }
     let!(:contact_type_2) { create(:contact_type, name: "Supervisor", contact_type_group: contact_type_group) }
@@ -103,6 +112,10 @@ RSpec.describe "casa_cases/edit", type: :system do
       page.find("#add-mandate-button").click
       find("#mandates-list-container").first("textarea").send_keys("Court Mandate Text One")
 
+      select "Partially implemented", from: "casa_case[case_court_mandates_attributes][0][implementation_status]"
+
+      expect(page).to have_text("Set Implementation Status")
+
       click_on "Update CASA Case"
       has_checked_field? "Youth"
       has_no_checked_field? "Supervisor"
@@ -115,6 +128,7 @@ RSpec.describe "casa_cases/edit", type: :system do
       expect(page).to have_text("November")
       expect(page).to have_text("September")
       expect(page).to have_text("Court Mandate Text One")
+      expect(page).to have_text("Partially implemented")
 
       visit casa_case_path(casa_case)
 
@@ -168,6 +182,15 @@ RSpec.describe "casa_cases/edit", type: :system do
       expect(page).not_to have_text("Year")
       expect(page).not_to have_text("Reactivate Case")
       expect(page).not_to have_text("Update Casa Case")
+    end
+
+    it "shows court mandates" do
+      visit edit_casa_case_path(casa_case)
+
+      court_mandate = casa_case.case_court_mandates.first
+
+      expect(page).to have_text(court_mandate.mandate_text)
+      expect(page).to have_text(court_mandate.implementation_status.humanize)
     end
 
     context "When a Casa instance has no judge names added" do
@@ -330,7 +353,7 @@ of it unless it was included in a previous court report.")
 
   context "volunteer user" do
     let(:volunteer) { create(:volunteer) }
-    let(:casa_case) { create(:casa_case, casa_org: volunteer.casa_org) }
+    let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: volunteer.casa_org) }
     let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
 
     let!(:court_dates) do
@@ -364,6 +387,15 @@ of it unless it was included in a previous court report.")
       # and that the one with no report doesn't get one
       expect(page).not_to have_link(I18n.l(court_dates[1].date, format: :full, default: nil))
       expect(page).to have_text(I18n.l(court_dates[1].date, format: :full, default: nil))
+    end
+
+    it "shows court mandates" do
+      visit edit_casa_case_path(casa_case)
+
+      court_mandate = casa_case.case_court_mandates.first
+
+      expect(page).to have_text(court_mandate.mandate_text)
+      expect(page).to have_text(court_mandate.implementation_status.humanize)
     end
 
     it "clicks back button after editing case" do
