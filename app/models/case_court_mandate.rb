@@ -3,7 +3,7 @@ class CaseCourtMandate < ApplicationRecord
 
   validates :mandate_text, presence: true
 
-  enum implementation_status: { not_implemented: 1, partially_implemented: 2, implemented: 3 }
+  enum implementation_status: {not_implemented: 1, partially_implemented: 2, implemented: 3}
 end
 
 # == Schema Information
