@@ -148,10 +148,13 @@
               <% @casa_case.case_court_mandates.each do |mandate| %>
                 <div class="court-mandate-entry">
                   <textarea disabled><%= mandate.mandate_text %></textarea>
-                  <p class="implementation-status">
-                    <strong>Status:</strong>
-                    <%= mandate.implementation_status.humanize %>
-                  </p>
+
+                  <% if mandate.implementation_status %>
+                    <p class="implementation-status">
+                      <strong>Status:</strong>
+                      <%= mandate.implementation_status.humanize %>
+                    </p>
+                  <% end %>
                 </div>
               <% end %>
             </div>
