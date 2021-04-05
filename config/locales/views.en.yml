@@ -149,3 +149,17 @@ en:
         assign: Assign Case
       assign_new: Assign a New Case
       select_case: Select a Case
+  case_court_reports:
+    index:
+      title: Report Categories
+      generate_report: Generate Court Report
+      description: "The Court Report is pre-filled with information for your case. You can select among currently active cases
+      assigned to you. The document is in Microsoft Word format (.docx)."
+      label:
+        case_number: "Case Number:"
+      prompt:
+        select_case_number: Select a case to generate report
+      button:
+        generate: Generate Report
+        download: Download Court Report
+      disable_with: Court report generating. Do not refresh or leave this page...
