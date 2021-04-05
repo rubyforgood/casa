@@ -1,5 +1,5 @@
-<%= link_to "Back", casa_cases_path %>
-<h1>Editing CASA Case</h1>
+<%= link_to t("button.back"), casa_cases_path %>
+<h1><%= t(".title") %></h1>
 
 <% if @casa_case.active %>
   <%= render 'form', casa_case: @casa_case %>
@@ -9,7 +9,7 @@
 
 <div class="card card-container">
   <div class="card-body">
-    <h6><strong>Past court dates:</strong></h6>
+    <h6><strong><%= t(".past_court_dates") %>:</strong></h6>
     <% if @casa_case.past_court_dates.size > 0 %>
       <ul>
         <% @casa_case.past_court_dates.each do |pcd| %>
@@ -24,7 +24,7 @@ rails_blob_path(report, disposition: 'attachment') %>
         <% end %>
       </ul>
     <% else %>
-      No past court dates
+      <%= t(".no_past_court_dates") %>
     <% end %>
   </div>
 </div>
