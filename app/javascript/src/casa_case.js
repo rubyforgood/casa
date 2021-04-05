@@ -72,7 +72,7 @@ function court_mandate_html(index) {
     textarea: `<textarea name="casa_case[case_court_mandates_attributes][${index}][mandate_text]"\
                  id="casa_case_case_court_mandates_attributes_${index}_mandate_text"></textarea>`,
 
-    select:   `<select class="select-implementation-status"\
+    select:   `<select class="implementation-status"\
                  name="casa_case[case_court_mandates_attributes][${index}][implementation_status]"\
                  id="casa_case_case_court_mandates_attributes_${index}_implementation_status">\
                  ${select_options}\

@@ -129,7 +129,7 @@
                     ff.select :implementation_status,
                       @casa_case.decorate.court_mandate_select_options,
                       {include_blank: 'Set Implementation Status', selected: ff.object.implementation_status},
-                      {class: 'select-implementation-status'}
+                      {class: 'implementation-status'}
                   %>
                   <button type="button" class="remove-mandate-button">
                     <i class="fa fa-minus" aria-hidden="true"></i>
@@ -148,7 +148,10 @@
               <% @casa_case.case_court_mandates.each do |mandate| %>
                 <div class="court-mandate-entry">
                   <textarea disabled><%= mandate.mandate_text %></textarea>
-                  <p><strong><%= mandate.implementation_status.humanize %></strong></p>
+                  <p class="implementation-status">
+                    <strong>Status:</strong>
+                    <%= mandate.implementation_status.humanize %>
+                  </p>
                 </div>
               <% end %>
             </div>
