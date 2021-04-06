@@ -113,3 +113,27 @@ en:
         new: New Case
     new:
       title: New CASA Case
+  casa_admins:
+    form:
+      button:
+        activate: Activate Admin
+        deactivate: Deactivate
+      label:
+        display_name: Display Name
+      prompt:
+        mark_inactive_warning: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"
+    edit:
+      title: Edit Casa Admin
+    new:
+      title: Create New Casa Admin
+    index:
+      title: Admins
+      active: Active
+      active_text: Admin is
+      deactive_text: Admin was deactivated on
+      button:
+        new: New Admin
+        edit: Edit
+      heading:
+        admin_email: Admin Email
+        actions: Actions
