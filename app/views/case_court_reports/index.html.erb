@@ -1,32 +1,31 @@
-<h1>Report Categories</h1>
+<h1><%= t(".title") %></h1>
 
 <div class="card card-container">
   <div class="card-body">
-    <h5 class="card-title"><strong>Generate Court Report</strong></h5>
+    <h5 class="card-title"><strong><%= t(".generate_report") %></strong></h5>
     <p class="card-text">
-      The Court Report is pre-filled with information for your case. You can select among currently active cases
-      assigned to you. The document is in Microsoft Word format (.docx).
+      <%= t(".description") %>
     </p>
 
     <hr>
 
     <%= form_with url: "#", local: false do |form| %>
       <div class="field form-group">
-        <%= label_tag :case_number, "Case Number:" %>
+        <%= label_tag :case_number, t(".label.case_number") %>
         <% select_options = @assigned_cases.map { |casa_case| casa_case.decorate.court_report_select_option } %>
         <%= select_tag :case_number,
                        options_for_select(select_options),
-                       prompt: "Select a case to generate report",
+                       prompt: t(".prompt.select_case_number"),
                        include_blank: false,
                        id: "case-selection",
                        class: "custom-select" %>
 
       </div>
       <div class="form-group">
-        <%= button_tag "Generate Report", type: :submit,
+        <%= button_tag t(".button.generate"), type: :submit,
                        data: {
-                           button_name: "Generate Report",
-                           disable_with: "Court report generating. Do not refresh or leave this page..."
+                           button_name: t(".button.generate"),
+                           disable_with: t(".disable_with")
                        },
                        id: "btnGenerateReport",
                        class: "btn btn-primary" %>
@@ -34,7 +33,7 @@
           Link to report is set to empty by default.
           Download link will be created once the report is generated.
         -->
-        <%= link_to "Download Court Report",
+        <%= link_to t(".button.download"),
                     "#",
                     id: "btnDownloadReport",
                     class: "btn btn-outline-primary mt-3 mt-sm-0 d-none" %>
