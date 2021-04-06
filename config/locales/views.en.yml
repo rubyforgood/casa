@@ -168,3 +168,8 @@ en:
       title: New Contact Type Group
     edit:
       title: Edit Contact Type Group
+  contact_types:
+    new:
+      title: New Contact Type
+    edit:
+      title: Edit Contact Type
