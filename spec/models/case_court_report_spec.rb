@@ -7,7 +7,7 @@ RSpec.describe CaseCourtReport, type: :model do
   describe "when receiving valid case, volunteer, and path_to_template" do
     let(:casa_case_without_contacts) { volunteer.casa_cases.second }
     let(:casa_case_with_contacts) { volunteer.casa_cases.first }
-    let(:path_to_template) { "app/documents/templates/report_template_transition.docx" }
+    let(:path_to_template) { "app/documents/templates/report_template.docx" }
     let(:path_to_report) { "tmp/test_report.docx" }
     let(:report) do
       CaseCourtReport.new(
