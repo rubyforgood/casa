@@ -235,3 +235,55 @@ en:
       title: Edit Hearing Type
     new:
       title: New Hearing Type
+  imports:
+    cases:
+      button:
+        download: Download and reference example Case CSV file
+        import: Import Cases CSV
+      upload_title: Upload your CSV file
+      instruction:
+        click: Click the choose file button and navigate to the saved file and select it.
+        do_not: Do not
+        change_values: change any of the values in the first line of the example csv file.
+        import: Then click the "Import Cases CSV" button to import your cases.
+      disable_with: Importing File
+    csv_error_modal:
+      title: CSV Import Error
+      button:
+        ok: OK
+    supervisors:
+      button:
+        download: Download and reference example Supervisor CSV file
+        import: Import Supervisors CSV
+      upload_title: Upload your CSV file
+      instruction:
+        click: Click the choose file button and navigate to the saved file and select it.
+        do_not: Do not
+        change_values: change any of the values in the first line of the example csv file.
+        import: Then click the "Import Supervisors CSV" button to import your supervisors.
+      disable_with: Importing File
+    volunteers:
+      button:
+        download: Download and reference example Volunteer CSV file
+        import: Import Volunteers CSV
+      upload_title: Upload your CSV file
+      instruction:
+        click: Click the choose file button and navigate to the saved file and select it.
+        do_not: Do not
+        change_values: change any of the values in the first line of the example csv file.
+        import: Then click the "Import Volunteers CSV" button to import your volunteers.
+      disable_with: Importing File
+    index:
+      title: Import Categories
+      system_imports_title: System Imports
+      instruction:
+        title: You should import files in the following order
+        volunteers: Volunteers
+        supervisors: Supervisors
+        cases: Cases
+      button:
+        import_volunteers: Import Volunteers
+        import_supervisors: Import Supervisors
+        import_cases: Import Cases
+      link:
+        return_to_dashboard: Return To Dashboard
