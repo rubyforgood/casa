@@ -230,3 +230,8 @@ en:
       title: Editing CASA Organization
       manage_contact_types_title: Manage Contact Types
       manage_court_details_title: Manage Court Details
+  hearing_types:
+    edit:
+      title: Edit Hearing Type
+    new:
+      title: New Hearing Type
