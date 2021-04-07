@@ -1,11 +1,11 @@
 <footer>
   <p class="copyright">© <%= default_page_header %></p>
   <span class="default-footer">
-    <%= "Built by " %><a href="https://rubyforgood.org/" class="rfglink">Ruby For Good</a>
+    <%= t(".built_by") %> <a href="https://rubyforgood.org/" class="rfglink"><%= t(".ruby_for_good") %></a>
     <a href="https://rubyforgood.org/" class="rfglink" target="_blank">
       <%= image_pack_tag("media/src/images/rfglogo.png", class: "rfglogo") %>
     </a>
-    <%= link_to "Report a site issue", "https://rubyforgood.typeform.com/to/iXY4BubB", class: "rfglink" %>
+    <%= link_to t(".link.report_site_issue"), "https://rubyforgood.typeform.com/to/iXY4BubB", class: "rfglink" %>
   </span>
 
   <div class="footer-logos">
