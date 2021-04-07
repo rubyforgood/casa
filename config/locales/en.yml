@@ -49,9 +49,6 @@ en:
     meta:
       title: CASA Volunteer Tracking
       description: Volunteer activity tracking for CASA volunteers, supervisors, and administrators.
-    judge:
-      edit:
-        title: Edit Judge
   time:
     formats:
       day_and_date: "%A, %v"
