@@ -50,8 +50,6 @@ en:
       title: CASA Volunteer Tracking
       description: Volunteer activity tracking for CASA volunteers, supervisors, and administrators.
     judge:
-      new:
-        title: New Judge
       edit:
         title: Edit Judge
   time:
