@@ -48,7 +48,7 @@ class SupervisorsController < ApplicationController
 
       redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was activated."
     else
-      render :edit
+      render :edit, notice: "Supervisor could not be activated."
     end
   end
 
@@ -59,7 +59,7 @@ class SupervisorsController < ApplicationController
 
       redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was deactivated."
     else
-      render :edit
+      render :edit, notice: "Supervisor could not be deactivated."
     end
   end
 
