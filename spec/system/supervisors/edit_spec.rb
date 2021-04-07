@@ -60,7 +60,7 @@ RSpec.describe "supervisors/edit", type: :system do
       expect(page).to have_text "Password reset last sent never"
     end
 
-    it "can go to supervisor edit page and deactivate him", js: true do
+    it "can deactivate a supervisor", js: true do
       supervisor = create :supervisor, casa_org: organization
 
       sign_in user

@@ -11,7 +11,7 @@ class Supervisor < User
     update(active: true)
   end
 
-  # Deactivates supervisor and unassign all volunteers from him.
+  # Deactivates supervisor and unassign all volunteers.
   def deactivate
     transaction do
       updated = update(active: false)
