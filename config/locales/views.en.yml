@@ -287,3 +287,8 @@ en:
         import_cases: Import Cases
       link:
         return_to_dashboard: Return To Dashboard
+  judges:
+    edit:
+      title: Edit Judge
+    new:
+      title: New Judge
