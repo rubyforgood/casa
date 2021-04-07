@@ -188,3 +188,45 @@ en:
       state:
         saving: Saving
         saved: Saved
+  casa_orgs:
+    contact_type_groups:
+      title: Contact Type Groups
+      button:
+        new: New Group
+        edit: Edit
+      heading:
+        name: Name
+        active: Active?
+        actions: Actions
+    contact_types:
+      title: Contact Types
+      button:
+        new: New Contact Type
+        edit: Edit
+      heading:
+        name: Name
+        group: Group
+        active: Active?
+        actions: Actions
+    hearing_types:
+      title: Hearing Types
+      button:
+        new: New Hearing Type
+        edit: Edit
+      heading:
+        name: Name
+        active: Active?
+        actions: Actions
+    judges:
+      title: Judge
+      button:
+        new: New Judge
+        edit: Edit
+      heading:
+        name: Name
+        active: Active?
+        actions: Actions
+    edit:
+      title: Editing CASA Organization
+      manage_contact_types_title: Manage Contact Types
+      manage_court_details_title: Manage Court Details
