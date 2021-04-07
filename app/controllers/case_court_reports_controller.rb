@@ -61,11 +61,10 @@ class CaseCourtReportsController < ApplicationController
   def generate_report_to_string(casa_case)
     return unless casa_case
 
-    type = report_type(casa_case)
     court_report = CaseCourtReport.new(
       volunteer_id: current_user.id, # ??? not a volunteer ? linda
       case_id: casa_case.id,
-      path_to_template: path_to_template(type)
+      path_to_template: "app/documents/templates/report_template.docx"
     )
     court_report.generate_to_string
   end
@@ -78,13 +77,5 @@ class CaseCourtReportsController < ApplicationController
         io: File.open(t.path), filename: "#{casa_case.case_number}.docx"
       )
     end
-  end
-
-  def report_type(casa_case)
-    casa_case.has_transitioned? ? "transition" : "non_transition"
-  end
-
-  def path_to_template(type)
-    "app/documents/templates/report_template_#{type}.docx"
   end
 end
