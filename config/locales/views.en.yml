@@ -292,3 +292,41 @@ en:
       title: Edit Judge
     new:
       title: New Judge
+  layouts:
+    mobile_navbar:
+      button:
+        menu: Menu
+    sidebar:
+      image:
+        alt:
+          logo: CASA Logo
+      menu_item:
+        supervisors: Supervisors
+        volunteers: Volunteers
+        case_contacts: Case Contacts
+        emancipation_checklists: Emancipation Checklist(s)
+        admins: Admins
+      footer:
+        location: Location
+        role: Role
+      link:
+        edit_profile: Edit Profile
+        generate_court_reports: Generate Court Reports
+        generate_reports: Generate Reports
+        system_imports: System Imports
+        edit_organization: Edit Organization
+        report_site_issue: Report a site issue
+    application:
+      javascript_instrucion:
+        enable: Please enable javascript
+        require: This app requires javascript to work
+    login_header:
+      image:
+        logo:
+          alt: CASA Logo
+    footers:
+      not_logged_in:
+        built_by: Built by
+        ruby_for_good: Ruby For Good
+        link:
+          report_site_issue: Report a site issue
