@@ -14,7 +14,7 @@
       <% end %>
     </td>
   </tr>
-  <% @supervisor.volunteers_ever_assigned.each do |volunteer| %>
+  <% @supervisor.volunteers_ever_assigned.active.each do |volunteer| %>
     <% volunteer.case_assignments_with_cases.each do |case_assignment| %>
       <% recently_unassigned = case_assignment.decorate.unassigned_in_past_week? %>
       <% if case_assignment.active || recently_unassigned %>
