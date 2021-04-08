@@ -86,5 +86,10 @@ RSpec.describe "supervisors/index", type: :system do
     it "by no-contact count", js: true do
       verify_numeric_sort("No Contact (14 days)")
     end
+
+    # it "by volunteers-not-assigned-to-supervisors count", js: true do
+    #   verify_numeric_sort("volunteers not assigned to supervisors")
+    # end
+    # placeholder test
   end
 end
