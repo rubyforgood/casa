@@ -5,6 +5,23 @@ class Supervisor < User
 
   has_many :volunteers, -> { includes(:supervisor_volunteer).order(:display_name) }, through: :active_supervisor_volunteers
   has_many :volunteers_ever_assigned, -> { includes(:supervisor_volunteer).order(:display_name) }, through: :supervisor_volunteers, source: :volunteer
+
+  # Activates supervisor.
+  def activate
+    update(active: true)
+  end
+
+  # Deactivates supervisor and unassign all volunteers.
+  def deactivate
+    transaction do
+      updated = update(active: false)
+      if updated
+        supervisor_volunteers.update_all(is_active: false)
+      end
+
+      updated
+    end
+  end
 end
 
 # == Schema Information
