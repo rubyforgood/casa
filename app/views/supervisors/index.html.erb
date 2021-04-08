@@ -66,3 +66,9 @@
       </thead>
   </table>
 </div>
+
+
+
+      <% @volunteer.with_no_supervisor(current_user.casa_org).each do |volunteer| %>
+        <%= volunteer.display_name %>
+      <% end %>
