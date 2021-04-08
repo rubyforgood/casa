@@ -34,6 +34,7 @@ gem "request_store"
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
   gem "byebug", platforms: %i[mri mingw x64_mingw] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem "erb_lint", require: false
   gem "factory_bot_rails"
   gem "pry"
   gem "pry-byebug"
@@ -45,7 +46,6 @@ end
 
 group :development do
   gem "annotate" # for adding db field listings to models as comments
-  gem "erb_lint", require: false
   gem "letter_opener" # Opens emails in new tab for easier testing
   gem "listen", ">= 3.0.5", "< 3.6"
   gem "spring" # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
