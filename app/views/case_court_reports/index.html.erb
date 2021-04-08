@@ -100,7 +100,9 @@
       body: JSON.stringify(formData)
     }
     fetch(url, options)
-      .then(response => response.json())
+      .then(response => {
+        return response.json()
+      })
       .then(data => {
         if (data.status !== 'ok') {
           showAlert(data.error_messages)
