@@ -11,8 +11,6 @@ class CasaOrg < ApplicationRecord
   has_many :case_assignments, through: :users, source: :casa_cases
   has_one_attached :logo
 
-  delegate :url, :alt_text, :size, to: :casa_org_logo, prefix: :logo, allow_nil: true
-
   def casa_admins
     CasaAdmin.in_organization(self)
   end
