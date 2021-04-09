@@ -38,14 +38,15 @@ class CaseCourtReportsController < ApplicationController
 
           render json: {link: case_court_report_path(casa_case.case_number, format: "docx"), status: :ok}
         else
-          flash[:alert] = "Report #{params[:case_number]} is not found."
-          error_messages = render_to_string partial: "layouts/flash_messages", formats: :html, layout: false, locals: flash
-          flash.discard
+          error_messages = generate_error(t(".error.report_not_found", case_number: params[:case_number]))
 
           render json: {link: "", status: :not_found, error_messages: error_messages}, status: :not_found
         end
       end
     end
+  rescue Zip::Error
+    error_messages = generate_error(t(".error.template_not_found"))
+    render json: {status: :not_found, error_messages: error_messages}, status: :not_found
   end
 
   private
@@ -77,5 +78,13 @@ class CaseCourtReportsController < ApplicationController
         io: File.open(t.path), filename: "#{casa_case.case_number}.docx"
       )
     end
+  end
+
+  def generate_error(message)
+    flash[:alert] = message
+    error_messages = render_to_string partial: "layouts/flash_messages", formats: :html, layout: false, locals: flash
+    flash.discard
+
+    error_messages
   end
 end
