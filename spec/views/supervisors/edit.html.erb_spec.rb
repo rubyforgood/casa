@@ -36,4 +36,44 @@ RSpec.describe "supervisors/edit", type: :view do
     expect(rendered).to_not include(unassign_supervisor_volunteer_path(volunteer))
     expect(rendered).to include("Unassigned")
   end
+
+  describe "invite and login info" do
+    let(:volunteer) { create :volunteer }
+    let(:supervisor) { build_stubbed :supervisor }
+    let(:admin) { build_stubbed :casa_admin }
+
+    it "shows for a supervisor editig a supervisor" do
+      enable_pundit(view, supervisor)
+      allow(view).to receive(:current_user).and_return(supervisor)
+
+      assign :supervisor, supervisor
+      assign :all_volunteers_ever_assigned, [volunteer]
+      assign :available_volunteers, []
+
+      render template: "supervisors/edit"
+
+      expect(rendered).to have_text("Added to system ")
+      expect(rendered).to have_text("Invitation email sent \n  never")
+      expect(rendered).to have_text("Last logged in")
+      expect(rendered).to have_text("Invitation accepted \n  never")
+      expect(rendered).to have_text("Password reset last sent \n  never")
+    end
+
+    it "shows for an admin editing a supervisor" do
+      enable_pundit(view, supervisor)
+      allow(view).to receive(:current_user).and_return(admin)
+
+      assign :supervisor, supervisor
+      assign :all_volunteers_ever_assigned, [volunteer]
+      assign :available_volunteers, []
+
+      render template: "supervisors/edit"
+
+      expect(rendered).to have_text("Added to system ")
+      expect(rendered).to have_text("Invitation email sent \n  never")
+      expect(rendered).to have_text("Last logged in")
+      expect(rendered).to have_text("Invitation accepted \n  never")
+      expect(rendered).to have_text("Password reset last sent \n  never")
+    end
+  end
 end

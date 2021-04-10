@@ -16,6 +16,16 @@ RSpec.describe CasaCase, type: :model do
   it { is_expected.to have_many(:case_court_mandates).dependent(:destroy) }
   it { is_expected.to have_many(:volunteers).through(:case_assignments) }
 
+  describe ".unassigned_volunteers" do
+    it "only shows volunteers for the current volunteers organization" do
+      casa_case = create(:casa_case)
+      volunteer_same_org = create(:volunteer, casa_org: casa_case.casa_org)
+      volunteer_different_org = create(:volunteer, casa_org: create(:casa_org))
+      expect(casa_case.unassigned_volunteers).to include(volunteer_same_org)
+      expect(casa_case.unassigned_volunteers).not_to include(volunteer_different_org)
+    end
+  end
+
   describe ".ordered" do
     it "orders the casa cases by updated at date" do
       very_old_casa_case = create(:casa_case, updated_at: 5.days.ago)

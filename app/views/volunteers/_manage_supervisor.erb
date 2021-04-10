@@ -1,0 +1,37 @@
+<div>
+  <h1 class="pt-5">Manage Supervisor</h1>
+
+  <div class="card card-container">
+    <div class="card-body">
+      <br>
+      <% if @volunteer.has_supervisor? %>
+        <h5>
+          <span class="font-weight-bold">
+            Current Supervisor:
+          </span>
+          <%= link_to(@volunteer.supervisor.display_name, edit_supervisor_path(@volunteer.supervisor.id)) %>
+        </h5>
+        <br>
+        <%= button_to 'Unassign from Supervisor',
+                      unassign_supervisor_volunteer_path(@volunteer),
+                      method: :patch,
+                      class: "btn btn-danger" %>
+      <% else %>
+        <h3>Assign a Supervisor</h3>
+        <%= form_for SupervisorVolunteer.new, url: supervisor_volunteers_path(volunteer_id: @volunteer.id) do |form| %>
+
+          <div class='form-group'>
+            <label for='supervisor_volunteer_supervisor_id'>Select a Supervisor</label>
+            <select name='supervisor_volunteer[supervisor_id]' class='form-control select2'>
+              <% @supervisors.each do |supervisor| %>
+                <option value="<%= supervisor.id %>"><%= supervisor.display_name %></option>
+              <% end %>
+            </select>
+          </div>
+          <%= form.hidden_field :volunteer_id, :value => @volunteer.id %>
+          <%= form.submit 'Assign Supervisor', class: 'btn btn-primary' %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

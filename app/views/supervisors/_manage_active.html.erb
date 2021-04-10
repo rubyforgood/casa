@@ -1,0 +1,24 @@
+<div class="field form-group">
+  <% if user.active? %>
+    Supervisor is <span class="badge badge-success text-uppercase display-1">Active</span>
+    <% if current_user.casa_admin? %>
+      <% if policy(user).deactivate? %>
+        <%= link_to "Deactivate supervisor",
+                    deactivate_supervisor_path(user),
+                    method: :patch,
+                    class: "btn btn-outline-danger",
+                    data: {confirm: t("forms.supervisor.mark_inactive_warning")} %>
+      <% end %>
+    <% end %>
+  <% else %>
+    <div class="alert alert-danger">
+      Supervisor was deactivated on: <%= user.decorate.formatted_updated_at %>
+    </div>
+    <% if policy(user).activate? %>
+      <%= link_to "Activate supervisor",
+                  activate_supervisor_path(user),
+                  method: :patch,
+                  class: "btn btn-outline-success" %>
+  <% end %>
+<% end %>
+</div>

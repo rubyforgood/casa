@@ -56,4 +56,14 @@ RSpec.describe "casa_admins/edit", type: :system do
     expect(page).to have_text("Admin was deactivated.")
     expect(another.reload.active).to be_falsey
   end
+
+  it "is not able to edit last sign in" do
+    visit edit_casa_admin_path(admin)
+
+    expect(page).to have_text "Added to system "
+    expect(page).to have_text "Invitation email sent never"
+    expect(page).to have_text "Last logged in"
+    expect(page).to have_text "Invitation accepted never"
+    expect(page).to have_text "Password reset last sent never"
+  end
 end

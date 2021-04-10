@@ -1,6 +1,6 @@
-<%= link_to "Back", root_path %>
+<%= link_to t("button.back"), root_path %>
 
-<h1>Edit Volunteer Assignments for <%= @volunteer.display_name %></h1>
+<h1><%= "#{t(".title")} #{@volunteer.display_name}" %></h1>
 
 <br>
 
@@ -8,24 +8,24 @@
   <table class='table case-list' id='casa_cases'>
     <thead>
     <tr>
-      <th>Case Number</th>
-      <th>Transition Aged Youth</th>
-      <th>Actions</th>
+      <th><%= t(".heading.case_number") %></th>
+      <th><%= t(".heading.transition_aged_youth") %></th>
+      <th><%= t(".heading.actions") %></th>
     </tr>
     </thead>
     <tbody>
     <% @volunteer.case_assignments.each do |assignment| %>
       <tr>
         <td>
-          <span class="mobile-label">Case Number</span>
+          <span class="mobile-label"><%= t(".heading.case_number") %></span>
           <%= assignment.casa_case.case_number %>
         </td>
         <td>
-          <span class="mobile-label">Transition Aged Youth</span>
+          <span class="mobile-label"><%= t(".heading.transition_aged_youth") %></span>
           <%= assignment.casa_case.decorate.transition_aged_youth %>
         </td>
         <td>
-          <%= button_to 'Unassign Case',
+          <%= button_to t(".button.unassign"),
                         volunteer_case_assignment_path(@volunteer, assignment),
                         method: :delete,
                         class: "btn btn-danger" %>
@@ -40,12 +40,12 @@
 
 <div class="row">
   <div class="col-sm-6">
-    <h3>Assign a New Case</h3>
+    <h3><%= t(".assign_new") %></h3>
 
     <%= form_for CaseAssignment.new, url: volunteer_case_assignments_path do |form| %>
 
       <div class='form-group'>
-        <label for="case_assignment_casa_case_id">Select a Case</label>
+        <label for="case_assignment_casa_case_id"><%= t(".select_case") %></label>
         <select id="is-this-used-anywhere" class='form-control select2'>
           <% CasaCase.all.each do |casa_case| %>
             <option value="<%= casa_case.id %>"><%= casa_case.case_number %></option>
@@ -53,7 +53,7 @@
         </select>
       </div>
 
-      <%= form.submit 'Assign Case', class: 'btn btn-primary' %>
+      <%= form.submit t(".button.assign"), class: 'btn btn-primary' %>
     <% end %>
   </div>
 </div>

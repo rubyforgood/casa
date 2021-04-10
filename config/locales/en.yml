@@ -43,20 +43,14 @@ en:
       mark_inactive_warning: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"
     case_contact:
       notes_placeholder: "Please refer to individuals by their roles instead of by their names. Ex: My supervisor joined me for a call with the social worker to discuss my youth."
+    supervisor:
+      mark_inactive_warning: "WARNING: Marking a supervisor inactive will make them unable to login. They will receive an email saying their account has been marked inactive. Are you sure you want to do this?"
     volunteer:
       mark_inactive_warning: "WARNING: Marking a volunteer inactive will make them unable to login. They will receive an email saying their account has been marked inactive. Are you sure you want to do this?"
   page:
     meta:
       title: CASA Volunteer Tracking
       description: Volunteer activity tracking for CASA volunteers, supervisors, and administrators.
-    judge:
-      new:
-        title: New Judge
-      edit:
-        title: Edit Judge
-    casa_case:
-      new:
-        title: New Case Contact
   time:
     formats:
       day_and_date: "%A, %v"
@@ -72,3 +66,25 @@ en:
     followup_notification:
       title: "New followup"
       message: "%{created_by_name} has flagged a Case Contact that needs follow up. Click to see more."
+  button:
+    delete: Delete
+    undelete: undelete
+    edit: Edit
+    back: Back
+    submit: Submit
+    resolve: Resolve
+    follow_up: Follow up
+    go_back_to_form: Go Back to Form
+    continue_submitting: Continue Submitting
+    close: Close
+    detail_view: Detail View
+  common:
+    yes_text: "Yes"
+    no_text: "No"
+    active: Active
+    inactive: Inactive
+    status: Status
+    day: Day
+    month: Month
+    year: Year
+    none: None

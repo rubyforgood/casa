@@ -1,17 +1,15 @@
 <div class="row">
   <div class="col-sm-12 dashboard-table-header">
-    <h1>Case Contacts</h1>
-    <%= link_to t("page.casa_case.new.title"), new_case_contact_path, class: "btn btn-primary" %>
+    <h1><%= t(".title") %></h1>
+    <%= link_to t(".new"), new_case_contact_path, class: "btn btn-primary" %>
   </div>
 </div>
 
-<% @casa_cases.each do |casa_case| %>
+<% @presenter.case_contacts.each do |casa_case_id, data| %>
   <div class="card card-container">
     <div class="card-body">
-      <h3><%= "#{casa_case.decorate.transition_aged_youth_icon} #{casa_case.case_number}" %></h3>
-      <% casa_case.decorate.case_contacts_ordered_by_occurred_at.each do |contact| %>
-        <%= render "case_contacts/case_contact", contact: contact %>
-      <% end %>
+      <h3><%= @presenter.display_case_number(casa_case_id) %></h3>
+      <%= render partial: "case_contacts/case_contact", collection: data, as: :contact %>
     </div>
   </div>
 <% end %>

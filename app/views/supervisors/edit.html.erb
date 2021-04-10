@@ -24,6 +24,14 @@
         <% end %>
       </div>
 
+      <p>
+        <%= render "/shared/invite_login", resource: @supervisor %>
+      </p>
+
+      <p>
+        <%= render "manage_active", user: @supervisor %>
+      </p>
+
       <div class="actions">
         <% if policy(@supervisor).update_supervisor_email? || policy(@supervisor).update_supervisor_name? %>
           <%= form.submit "Submit", class: "btn btn-primary" %>

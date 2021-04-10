@@ -21,57 +21,11 @@
         <%= form.text_field :display_name, class: "form-control" %>
       </div>
 
-      <div class="field form-group">
-        <%= form.label "Start Date" %>
-        <input
-          class="form-control"
-          type="text"
-          placeholder="<%= @volunteer.decorate.formatted_created_at %>"
-          readonly>
-      </div>
+      <%= render "/shared/invite_login", resource: @volunteer %>
 
-      <div class="field form-group">
-        <% if @volunteer.active? %>
-          Volunteer is <span class="badge badge-success text-uppercase display-1">Active</span>
-          <% if policy(@volunteer).deactivate? %>
-            <%= link_to "Deactivate volunteer",
-                        deactivate_volunteer_path(@volunteer),
-                        method: :patch,
-                        class: "btn btn-outline-danger",
-                        data: {confirm: t("forms.volunteer.mark_inactive_warning")} %>
-          <% end %>
-        <% else %>
-          <div class="alert alert-danger">
-            Volunteer was deactivated on: <%= @volunteer.decorate.formatted_updated_at %>
-          </div>
-          <% if policy(@volunteer).activate? %>
-            <%= link_to "Activate volunteer",
-                        activate_volunteer_path(@volunteer),
-                        method: :patch,
-                        class: "btn btn-outline-success" %>
-          <% end %>
-        <% end %>
-        <% if (current_user.supervisor? ||
-              current_user.casa_admin?) &&
-              @volunteer.invitation_accepted_at == nil %>
-        <%= link_to "Resend Invitation",
-                    resend_invitation_volunteer_path(@volunteer),
-                    method: :patch,
-                    class: "btn btn-outline-danger" %>
-        <% end %>
-      </div>
-
-      <div class="container">
-        <% if @volunteer.invitation_accepted_at == nil %>
-          <%= "#{@volunteer.display_name}, has yet to accept their invitation" %>
-        <% else %>
-          <%= @volunteer.invitation_accepted_at %>
-        <% end %><br>
-
-        <% if @volunteer.reset_password_sent_at == !nil %>
-          <%= @volunteer.reset_password_sent_at %>
-        <% end %>
-      </div><br>
+      <p>
+        <%= render "manage_active", user: @volunteer %>
+      </p>
 
       <div class="actions">
         <%= form.submit "Submit", class: "btn btn-primary" %>
@@ -80,101 +34,6 @@
   </div>
 </div>
 
-<h1 class="pt-5">Manage Cases</h1>
+<%= render 'manage_cases' %>
 
-<div class="card card-container">
-  <div class="card-body">
-    <% if @volunteer.casa_cases.count > 0 %>
-      <br>
-      <h3>Assigned Cases</h3>
-      <table class='table case-list'>
-        <thead>
-        <tr>
-          <th>Case Number</th>
-          <th>Transition Aged Youth</th>
-          <th>Assignment status</th>
-          <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% @volunteer.case_assignments_with_cases.each do |assignment| %>
-          <tr id="<%= dom_id(assignment) %>">
-            <td><%= link_to assignment.casa_case.case_number, casa_case_path(assignment.casa_case) %></td>
-            <td><%= assignment.casa_case.decorate.transition_aged_youth %></td>
-            <td>
-              <% if @volunteer.active? && assignment.casa_case.active? %>
-                Volunteer is <span class="badge badge-success text-uppercase display-1">Active</span>
-              <% elsif @volunteer.active? %>
-                Case was deactivated on: <%= I18n.l(assignment.casa_case.updated_at, format: :standard, default: nil) %>
-              <% else %>
-                Deactivated
-              <% end %>
-            </td>
-            <td>
-              <% if @volunteer.active? && assignment.active && assignment.casa_case.active? %>
-                <%- if Pundit.policy(current_user, @volunteer).unassign_case? %>
-                  <%= button_to 'Unassign Case',
-                                unassign_case_assignment_path(assignment, volunteer_id: @volunteer.id),
-                                method: :patch,
-                                class: "btn btn-danger" %>
-                <%- end %>
-              <% else %>
-                None
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
-        </tbody>
-      </table>
-    <% end %>
-
-    <% if @volunteer.active? %>
-      <br>
-
-      <h3>Assign a New Case</h3>
-
-      <%= form_for CaseAssignment.new, url: case_assignments_path(volunteer_id: @volunteer.id) do |form| %>
-
-        <div class='form-group'>
-          <label for='case_assignment_casa_case_id'>Select a Case</label>
-          <%= form.select :casa_case_id, grouped_options_for_assigning_case(@volunteer), {},
-                          {class: "form-control select2"} %>
-        </div>
-
-        <%= form.submit 'Assign Case', class: 'btn btn-primary' %>
-      <% end %>
-    <% end %>
-  </div>
-</div>
-
-<h1 class="pt-5">Manage Supervisor</h1>
-
-<div class="card card-container">
-  <div class="card-body">
-    <br>
-    <% if @volunteer.has_supervisor? %>
-        <h5> <span class="font-weight-bold">Current Supervisor:</span> <%= @volunteer.supervisor.display_name %> <h5>
-
-        <br>
-        <%= button_to 'Unassign from Supervisor',
-                      unassign_supervisor_volunteer_path(@volunteer),
-                      method: :patch,
-                      class: "btn btn-danger" %>
-    <% else %>
-        <h3>Assign a Supervisor</h3>
-        <%= form_for SupervisorVolunteer.new, url: supervisor_volunteers_path(volunteer_id: @volunteer.id) do |form| %>
-
-          <div class='form-group'>
-            <label for='supervisor_volunteer_supervisor_id'>Select a Supervisor</label>
-            <select name='supervisor_volunteer[supervisor_id]' class='form-control select2'>
-              <% @supervisors.each do |supervisor| %>
-                <option value="<%= supervisor.id %>"><%= supervisor.display_name %></option>
-              <% end %>
-            </select>
-          </div>
-          <%= form.hidden_field :volunteer_id, :value => @volunteer.id %>
-          <%= form.submit 'Assign Supervisor', class: 'btn btn-primary' %>
-        <% end %>
-    <% end %>
-  </div>
-</div>
+<%= render 'manage_supervisor' %>

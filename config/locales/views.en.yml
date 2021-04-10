@@ -1,0 +1,332 @@
+en:
+  case_contacts:
+    index:
+      title: Case Contacts
+      new: New Case Contact
+    edit:
+      title: Editing Case Contact
+    new:
+      title: New Case Contact
+    case_contact:
+      deleted_text: "[DELETE] "
+      read_more: Read more
+      hide: Hide
+      created_by: Created by
+    form:
+      plural_label: Select all relevant CASA cases
+      singular_label: CASA case
+      prompt_select_one: Please Select One
+    confirm_note_content_dialog:
+      header: Confirm Note Content
+      body: Please double check your notes to ensure they don't contain any identifying details about your youth or anyone else.
+      note: Note
+  casa_cases:
+    show:
+      title: CASA Case Details
+      label:
+        case_number: Case number
+        hearing_type: Hearing Type
+        judge: Judge
+        transition_aged_youth: Transition Aged Youth
+        next_court_date: Next Court Date
+        court_report_due_date: Court Report Due Date
+        court_report_status: Court Report Status
+        court_report_submitted_date: Court Report Submitted Date
+        assigned_volunteers: Assigned Volunteers
+      button:
+        new_contact: New Case Contact
+        edit_case: Edit Case Details
+        emancipation: Emancipation
+        click_to_download: Click to download
+        download_all: Download All
+    shared:
+      filter_by: Filter by
+      assigned_single: Assigned to Volunteer
+      assigned_multiple: Assigned to more than 1 Volunteer
+      assigned_transition_aged_youth: Assigned to Transition Aged Youth
+      casa_case_prefix: Casa Case Prefix
+      prefix_options:
+        cina: CINA
+        tpr: TPR
+        none: none
+    filter:
+      pick_displayed_columns: Pick Displayed Columns
+      select_columns: Select columns
+    form:
+      button:
+        update: Update CASA Case
+        create: Create CASA Case
+        deactivate: Deactivate CASA Case
+        reactivate: Reactivate CASA Case
+      prompt:
+        deactivate:
+          success: Yes, deactivate
+          fail: No, go back
+          confirm_swal: Deactivating a CASA Case will unassign any volunteers currently assigned to this case.
+        select_hearing_type: -Select Hearing Type-
+        select_judge: -Select Judge-
+      youth_birth_month_year: "Youth's Birth Month & Year"
+      add_court_mandate: Add a court mandate
+      next_court_date: Next Court Date
+      court_report_due_date: Court Report Due Date
+      court_mandates: Court Mandates
+    inactive_case:
+      notice: Case was deactivated on
+    volunteer_assignment:
+      title: Manage Volunteers
+      assigned_volunteers: Assigned Volunteers
+      assigned: Assigned
+      unassigned: Unassigned
+      deactivated_volunteer: Deactivated volunteer
+      assign_new: Assign a New Volunteer
+      select_volunteer: Select a Volunteer
+      heading:
+        volunteer_name: Volunteer Name
+        volunteer_email: Volunteer Email
+        status: Status
+        start_date: Start Date
+        end_date: End Date
+        actions: Actions
+      button:
+        assign: Assign Volunteer
+        unassign: Unassign Volunteer
+        activate: Activate Volunteer
+    edit:
+      title: Editing CASA Case
+      past_court_dates: Past court dates
+      no_past_court_dates: No past court dates
+    index:
+      pick_displayed_columns: Pick displayed columns
+      own_case: My <%= "Case".pluralize(%{count}) %>
+      own_cases: My Cases
+      case: <%= "Case".pluralize(%{count}) %>
+      cases: Cases
+      heading:
+        case_number: Case Number
+        hearing_type: Hearing Type
+        judge: Judge
+        status: Status
+        transition_aged_youth: Transition Aged Youth
+        assigned_to: Assigned To
+        actions: Actions
+      button:
+        new: New Case
+    new:
+      title: New CASA Case
+  casa_admins:
+    form:
+      button:
+        activate: Activate Admin
+        deactivate: Deactivate
+      label:
+        display_name: Display Name
+      prompt:
+        mark_inactive_warning: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"
+    edit:
+      title: Edit Casa Admin
+    new:
+      title: Create New Casa Admin
+    index:
+      title: Admins
+      active: Active
+      active_text: Admin is
+      deactive_text: Admin was deactivated on
+      button:
+        new: New Admin
+        edit: Edit
+      heading:
+        admin_email: Admin Email
+        actions: Actions
+  case_assignments:
+    index:
+      title: Edit Volunteer Assignments for
+      heading:
+        case_number: Case Number
+        transition_aged_youth: Transition Aged Youth
+        actions: Actions
+      button:
+        unassign: Unassign Case
+        assign: Assign Case
+      assign_new: Assign a New Case
+      select_case: Select a Case
+  case_court_reports:
+    index:
+      title: Report Categories
+      generate_report: Generate Court Report
+      description: "The Court Report is pre-filled with information for your case. You can select among currently active cases
+      assigned to you. The document is in Microsoft Word format (.docx)."
+      label:
+        case_number: "Case Number:"
+      prompt:
+        select_case_number: Select a case to generate report
+      button:
+        generate: Generate Report
+        download: Download Court Report
+      disable_with: Court report generating. Do not refresh or leave this page...
+  contact_type_groups:
+    new:
+      title: New Contact Type Group
+    edit:
+      title: Edit Contact Type Group
+  contact_types:
+    new:
+      title: New Contact Type
+    edit:
+      title: Edit Contact Type
+  emancipation:
+    index:
+      title: Transitioning Case(s)
+      heading:
+        case_number: Case Number
+        checklist: Checklist
+      link:
+        checkList: Checklist
+        details: Details
+  emancipations:
+    show:
+      title: Emancipation Checklist
+      state:
+        saving: Saving
+        saved: Saved
+  casa_orgs:
+    contact_type_groups:
+      title: Contact Type Groups
+      button:
+        new: New Group
+        edit: Edit
+      heading:
+        name: Name
+        active: Active?
+        actions: Actions
+    contact_types:
+      title: Contact Types
+      button:
+        new: New Contact Type
+        edit: Edit
+      heading:
+        name: Name
+        group: Group
+        active: Active?
+        actions: Actions
+    hearing_types:
+      title: Hearing Types
+      button:
+        new: New Hearing Type
+        edit: Edit
+      heading:
+        name: Name
+        active: Active?
+        actions: Actions
+    judges:
+      title: Judge
+      button:
+        new: New Judge
+        edit: Edit
+      heading:
+        name: Name
+        active: Active?
+        actions: Actions
+    edit:
+      title: Editing CASA Organization
+      manage_contact_types_title: Manage Contact Types
+      manage_court_details_title: Manage Court Details
+  hearing_types:
+    edit:
+      title: Edit Hearing Type
+    new:
+      title: New Hearing Type
+  imports:
+    cases:
+      button:
+        download: Download and reference example Case CSV file
+        import: Import Cases CSV
+      upload_title: Upload your CSV file
+      instruction:
+        click: Click the choose file button and navigate to the saved file and select it.
+        do_not: Do not
+        change_values: change any of the values in the first line of the example csv file.
+        import: Then click the "Import Cases CSV" button to import your cases.
+      disable_with: Importing File
+    csv_error_modal:
+      title: CSV Import Error
+      button:
+        ok: OK
+    supervisors:
+      button:
+        download: Download and reference example Supervisor CSV file
+        import: Import Supervisors CSV
+      upload_title: Upload your CSV file
+      instruction:
+        click: Click the choose file button and navigate to the saved file and select it.
+        do_not: Do not
+        change_values: change any of the values in the first line of the example csv file.
+        import: Then click the "Import Supervisors CSV" button to import your supervisors.
+      disable_with: Importing File
+    volunteers:
+      button:
+        download: Download and reference example Volunteer CSV file
+        import: Import Volunteers CSV
+      upload_title: Upload your CSV file
+      instruction:
+        click: Click the choose file button and navigate to the saved file and select it.
+        do_not: Do not
+        change_values: change any of the values in the first line of the example csv file.
+        import: Then click the "Import Volunteers CSV" button to import your volunteers.
+      disable_with: Importing File
+    index:
+      title: Import Categories
+      system_imports_title: System Imports
+      instruction:
+        title: You should import files in the following order
+        volunteers: Volunteers
+        supervisors: Supervisors
+        cases: Cases
+      button:
+        import_volunteers: Import Volunteers
+        import_supervisors: Import Supervisors
+        import_cases: Import Cases
+      link:
+        return_to_dashboard: Return To Dashboard
+  judges:
+    edit:
+      title: Edit Judge
+    new:
+      title: New Judge
+  layouts:
+    mobile_navbar:
+      button:
+        menu: Menu
+    sidebar:
+      image:
+        alt:
+          logo: CASA Logo
+      menu_item:
+        supervisors: Supervisors
+        volunteers: Volunteers
+        case_contacts: Case Contacts
+        emancipation_checklists: Emancipation Checklist(s)
+        admins: Admins
+      footer:
+        location: Location
+        role: Role
+      link:
+        edit_profile: Edit Profile
+        generate_court_reports: Generate Court Reports
+        generate_reports: Generate Reports
+        system_imports: System Imports
+        edit_organization: Edit Organization
+        report_site_issue: Report a site issue
+    application:
+      javascript_instrucion:
+        enable: Please enable javascript
+        require: This app requires javascript to work
+    login_header:
+      image:
+        logo:
+          alt: CASA Logo
+    footers:
+      not_logged_in:
+        built_by: Built by
+        ruby_for_good: Ruby For Good
+        link:
+          report_site_issue: Report a site issue

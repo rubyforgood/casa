@@ -1,0 +1,24 @@
+<meta itemprop="name" content="Confirm Email" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+<table width="100%" cellpadding="0" cellspacing="0" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+    <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+      A <%= @supervisor.casa_org.display_name %>’s County supervisor console account has been created for you. This console is
+      for logging the time you spend and actions you take on your CASA case. You can log activity with your CASA youth,
+      their family members, their foster family or placement, the DSS worker, your Case Supervisor and others associated
+      with your CASA case (such as teachers and therapists).
+    </td>
+  </tr>
+  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+    <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+      Your console account is associated with this email. If this is not the correct email to use, please stop here and
+      contact your Administrator to change the email address. If you are ready to get started, please set your
+      password. This is the first step to accessing your new supervisor account.
+    </td>
+  </tr>
+  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+    <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+      <a href="<%= "#{edit_password_url(@supervisor, reset_password_token: @token)}" %>" target="_blank" class="btn-primary" itemprop="url" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #348eda; margin: 0; border-color: #348eda; border-style: solid; border-width: 10px 20px;">Set
+        Your Password</a>
+    </td>
+  </tr>
+</table>
