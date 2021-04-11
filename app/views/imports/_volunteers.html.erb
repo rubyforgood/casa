@@ -2,7 +2,7 @@
   <h4>
     1.
     <%= link_to "/volunteers.csv", format: :csv, download: "volunteers.csv" do %>
-      Download and reference example Volunteer CSV file
+      <%= t(".button.download") %>
       <i class="fa fa-file-download"></i>
     <% end %>
   </h4>
@@ -10,22 +10,22 @@
 
 <div class="mb-3">
   <h4>
-    2. Upload your CSV file
+    2. <%= t(".upload_title") %>
     <i class="fa fa-file-csv" aria-hidden="true"></i>
   </h4>
   <%= form_with(url: imports_path, local: :true) do |f| %>
     <%= f.hidden_field :import_type, value: "volunteer" %>
     <ul>
-      <li>Click the choose file button and navigate to the saved file and select it.</li>
-      <li><strong>Do not</strong> change any of the values in the first line of the example csv file.</li>
-      <li>Then click the "Import Volunteers CSV" button to import your volunteers.</li>
+      <li><%= t(".instruction.click") %></li>
+      <li><strong><%= t(".instruction.do_not") %></strong> <%= t(".instruction.change_values") %></li>
+      <li><%= t(".instruction.import") %></li>
     </ul>
     <%= f.file_field :file, id: 'volunteer-file', accept: 'text/csv', class: 'form-control-file', style: "margin: auto;" %>
     </div>
 
     <%= button_tag id: "volunteer-import-button", class: "btn btn-md btn-success pull-right",
-                   disabled: true, data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Importing File"} do %>
-      <i class="fa fa-upload"></i> Import Volunteers CSV
+                   disabled: true, data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> #{t(".disable_with")}"} do %>
+      <i class="fa fa-upload"></i> <%= t(".button.import") %>
     <% end %>
 
     <script type="text/javascript">

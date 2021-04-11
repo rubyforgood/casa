@@ -42,30 +42,24 @@ RSpec.describe "volunteers/edit", type: :view do
     expect(rendered).to_not have_field("volunteer_email", readonly: true)
   end
 
-  context "The user has not accepted their invitation" do
-    it "shows a string stating that the user has not recieved there invation yet" do
-      expect("#{volunteer.display_name},
-        has yet to accept their invitation").to eq("#{volunteer.display_name},
-        has yet to accept their invitation")
-    end
-  end
+  it "shows invite and login info" do
+    supervisor = build_stubbed :supervisor
+    enable_pundit(view, supervisor)
+    allow(view).to receive(:current_user).and_return(supervisor)
 
-  context "The user has accepted their invitation" do
-    it "shows the datetime when the user recieved there invation" do
-      expect(volunteer.invitation_accepted_at).to eq(volunteer.invitation_accepted_at)
-    end
-  end
+    assign :volunteer, volunteer
+    assign :supervisors, []
 
-  context " the user has not requested to reset their password" do
-    it "shows no string at all" do
-      expect(volunteer.reset_password_sent_at).to eq(nil)
-    end
+    render template: "volunteers/edit"
+
+    expect(rendered).to have_text("Added to system ")
+    expect(rendered).to have_text("Invitation email sent \n  never")
+    expect(rendered).to have_text("Last logged in")
+    expect(rendered).to have_text("Invitation accepted \n  never")
+    expect(rendered).to have_text("Password reset last sent \n  never")
   end
 
   context " the user has requested to reset their password" do
-    it "shows the datetime when the user recieved there invation" do
-      expect(volunteer.reset_password_sent_at).to eq(volunteer.reset_password_sent_at)
-    end
     describe "shows resend invitation "
     let(:volunteer) { create :volunteer }
     let(:supervisor) { build_stubbed :supervisor }
@@ -83,7 +77,7 @@ RSpec.describe "volunteers/edit", type: :view do
       expect(rendered).to have_content("Resend Invitation")
     end
 
-    it "allows a supervisor resend invitation to a volunteer" do
+    it "allows a supervisor to resend invitation to a volunteer" do
       enable_pundit(view, supervisor)
       allow(view).to receive(:current_user).and_return(supervisor)
 

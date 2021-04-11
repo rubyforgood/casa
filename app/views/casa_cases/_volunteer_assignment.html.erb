@@ -1,20 +1,20 @@
-<h1 class="pt-5">Manage Volunteers</h1>
+<h1 class="pt-5"><%= t(".title") %></h1>
 
 <div class="card card-container">
   <div class="card-body">
     <% if @casa_case.volunteers.present? %>
       <br>
-      <h3>Assigned Volunteers</h3>
+      <h3><%= t(".assigned_volunteers") %></h3>
       <div class="table-responsive">
         <table class='table case-list'>
           <thead>
           <tr>
-            <th>Volunteer Name</th>
-            <th>Volunteer Email</th>
-            <th>Status</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Actions</th>
+            <th><%= t(".heading.volunteer_name") %></th>
+            <th><%= t(".heading.volunteer_email") %></th>
+            <th><%= t(".heading.status") %></th>
+            <th><%= t(".heading.start_date") %></th>
+            <th><%= t(".heading.end_date") %></th>
+            <th><%= t(".heading.actions") %></th>
           </tr>
           </thead>
           <tbody>
@@ -26,10 +26,10 @@
               <td data-test="volunteer-email"><%= assignment&.volunteer&.email %></td>
               <td data-test="assigned">
                 <% if assignment.active? %>
-                  <span class='badge badge-success text-uppercase'>Assigned</span>
+                  <span class='badge badge-success text-uppercase'><%= t(".assigned") %></span>
                 <% else %>
                     <span class="badge badge-danger text-uppercase">
-                      <%= assignment.volunteer.active? ? "Unassigned" : "Deactivated volunteer" %>
+                      <%= assignment.volunteer.active? ? t(".unassigned") : t(".deactivated_volunteer") %>
                     </span>
                 <% end %>
               </td>
@@ -41,12 +41,12 @@
               </td>
               <td data-test="action">
                 <% if policy(assignment).unassign? %>
-                  <%= button_to 'Unassign Volunteer',
+                  <%= button_to(t(".button.unassign"),
                                 unassign_case_assignment_path(assignment),
                                 method: :patch,
-                                class: "btn btn-outline-danger text-wrap" %>
+                                class: "btn btn-outline-danger text-wrap") %>
                 <% elsif !assignment.volunteer.active? && policy(assignment.volunteer).activate? %>
-                  <%= link_to "Activate Volunteer",
+                  <%= link_to t(".button.activate"),
                               activate_volunteer_path(assignment.volunteer,
                                                       redirect_to_path: 'casa_case',
                                                       casa_case_id: @casa_case.id
@@ -54,7 +54,7 @@
                               method: :patch,
                               class: "btn btn-outline-success" %>
                 <% else %>
-                  None
+                  <%= t("common.none") %>
                 <% end %>
               </td>
             </tr>
@@ -66,12 +66,12 @@
 
     <br>
 
-    <h3>Assign a New Volunteer</h3>
+    <h3><%= t(".assign_new") %></h3>
 
     <%= form_for CaseAssignment.new, url: case_assignments_path(casa_case_id: @casa_case.id) do |form| %>
 
       <div class='form-group'>
-        <label for='case_assignment_casa_case_id'>Select a Volunteer</label>
+        <label for='case_assignment_casa_case_id'><%= t(".select_volunteer") %></label>
         <select id='case_assignment_casa_case_id' name='case_assignment[volunteer_id]' class='form-control select2'>
           <% @casa_case.unassigned_volunteers.each do |volunteer| %>
             <option value="<%= volunteer.id %>"><%= volunteer.display_name %></option>
@@ -79,7 +79,7 @@
         </select>
       </div>
 
-      <%= form.submit 'Assign Volunteer', class: 'btn btn-secondary' %>
+      <%= form.submit t(".button.assign"), class: 'btn btn-secondary' %>
     <% end %>
   </div>
 </div>

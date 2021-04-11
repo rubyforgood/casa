@@ -59,10 +59,10 @@ class CasaCasePolicy < ApplicationPolicy
     case @user
       when CasaAdmin
         common_attrs.concat(%i[case_number birth_month_year_youth court_date court_report_due_date hearing_type_id judge_id])
-        common_attrs << {case_court_mandates_attributes: %i[mandate_text id]}
+        common_attrs << case_court_mandates_attributes
       when Supervisor
         common_attrs.concat(%i[court_date court_report_due_date hearing_type_id judge_id])
-        common_attrs << {case_court_mandates_attributes: %i[mandate_text id]}
+        common_attrs << case_court_mandates_attributes
       else
         common_attrs
     end
@@ -99,5 +99,9 @@ class CasaCasePolicy < ApplicationPolicy
 
   def is_volunteer_actively_assigned_to_case?
     record.case_assignments.exists?(volunteer_id: user.id, active: true)
+  end
+
+  def case_court_mandates_attributes
+    {case_court_mandates_attributes: %i[mandate_text implementation_status id]}
   end
 end

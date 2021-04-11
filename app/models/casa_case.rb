@@ -180,7 +180,8 @@ class CasaCase < ApplicationRecord
   end
 
   def unassigned_volunteers
-    Volunteer.active.where.not(id: assigned_volunteers).order(:display_name)
+    # binding.pry
+    Volunteer.active.where.not(id: assigned_volunteers).order(:display_name).in_organization(casa_org)
   end
 
   private

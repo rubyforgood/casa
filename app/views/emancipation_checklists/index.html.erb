@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-sm-12 dashboard-table-header">
-    <h1>Transitioning Case(s)</h1>
+    <h1><%= t(".title") %></h1>
   </div>
 </div>
 
@@ -9,15 +9,15 @@
     <table class="table table-striped table-bordered case-list" id="all-case-emancipations">
       <thead>
       <tr>
-        <th>Case Number</th>
-        <th>Checklist</th>
+        <th><%= t(".heading.case_number") %></th>
+        <th><%= t(".heading.checklist") %></th>
       </tr>
       </thead>
       <tbody>
       <% @casa_transitioning_cases.each do |casa_case| %>
         <tr class="<%= casa_case.decorate.inactive_class %>">
-          <td><%= link_to(casa_case.case_number, casa_case, title: "Details") %></td>
-          <td><%= link_to "Checklist", casa_case_emancipation_path(casa_case) %></td>
+          <td><%= link_to(casa_case.case_number, casa_case, title: t(".link.details")) %></td>
+          <td><%= link_to t(".link.checklist"), casa_case_emancipation_path(casa_case) %></td>
         </tr>
       <% end %>
       </tbody>

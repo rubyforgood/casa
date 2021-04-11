@@ -38,14 +38,15 @@ class CaseCourtReportsController < ApplicationController
 
           render json: {link: case_court_report_path(casa_case.case_number, format: "docx"), status: :ok}
         else
-          flash[:alert] = "Report #{params[:case_number]} is not found."
-          error_messages = render_to_string partial: "layouts/flash_messages", formats: :html, layout: false, locals: flash
-          flash.discard
+          error_messages = generate_error(t(".error.report_not_found", case_number: params[:case_number]))
 
           render json: {link: "", status: :not_found, error_messages: error_messages}, status: :not_found
         end
       end
     end
+  rescue Zip::Error
+    error_messages = generate_error(t(".error.template_not_found"))
+    render json: {status: :not_found, error_messages: error_messages}, status: :not_found
   end
 
   private
@@ -61,11 +62,10 @@ class CaseCourtReportsController < ApplicationController
   def generate_report_to_string(casa_case)
     return unless casa_case
 
-    type = report_type(casa_case)
     court_report = CaseCourtReport.new(
       volunteer_id: current_user.id, # ??? not a volunteer ? linda
       case_id: casa_case.id,
-      path_to_template: path_to_template(type)
+      path_to_template: "app/documents/templates/report_template.docx"
     )
     court_report.generate_to_string
   end
@@ -80,11 +80,11 @@ class CaseCourtReportsController < ApplicationController
     end
   end
 
-  def report_type(casa_case)
-    casa_case.has_transitioned? ? "transition" : "non_transition"
-  end
+  def generate_error(message)
+    flash[:alert] = message
+    error_messages = render_to_string partial: "layouts/flash_messages", formats: :html, layout: false, locals: flash
+    flash.discard
 
-  def path_to_template(type)
-    "app/documents/templates/report_template_#{type}.docx"
+    error_messages
   end
 end

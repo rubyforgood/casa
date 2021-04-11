@@ -2,7 +2,7 @@
 
 class SupervisorsController < ApplicationController
   before_action :available_volunteers, only: [:edit, :update]
-  before_action :set_supervisor, only: [:edit, :update]
+  before_action :set_supervisor, only: [:edit, :update, :activate, :deactivate]
   before_action :all_volunteers_ever_assigned, only: [:edit, :update]
   after_action :verify_authorized
 
@@ -38,6 +38,28 @@ class SupervisorsController < ApplicationController
       redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was successfully updated."
     else
       render :edit
+    end
+  end
+
+  def activate
+    authorize @supervisor
+    if @supervisor.activate
+      SupervisorMailer.account_setup(@supervisor).deliver
+
+      redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was activated."
+    else
+      render :edit, notice: "Supervisor could not be activated."
+    end
+  end
+
+  def deactivate
+    authorize @supervisor
+    if @supervisor.deactivate
+      SupervisorMailer.deactivation(@supervisor).deliver
+
+      redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was deactivated."
+    else
+      render :edit, notice: "Supervisor could not be deactivated."
     end
   end
 

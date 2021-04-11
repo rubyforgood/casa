@@ -17,6 +17,9 @@
 
       <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
 
+      <%= render "/shared/invite_login", resource: current_user %>
+
+      <br>
       <div class="actions">
         <%= form.submit "Update Profile", class: "btn btn-primary mb-3" %>
         <button class="btn btn-warning accordion mb-3" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">

@@ -15,7 +15,7 @@ RSpec.describe "casa_cases/new", type: :system do
   end
 
   context "when all fields are filled" do
-    it "is successful" do
+    it "is successful", js: true do
       travel_to Time.zone.local(2020, 12, 1) do
         next_year = (Date.today.year + 1).to_s
         fill_in "Case number", with: case_number

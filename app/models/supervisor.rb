@@ -5,6 +5,23 @@ class Supervisor < User
 
   has_many :volunteers, -> { includes(:supervisor_volunteer).order(:display_name) }, through: :active_supervisor_volunteers
   has_many :volunteers_ever_assigned, -> { includes(:supervisor_volunteer).order(:display_name) }, through: :supervisor_volunteers, source: :volunteer
+
+  # Activates supervisor.
+  def activate
+    update(active: true)
+  end
+
+  # Deactivates supervisor and unassign all volunteers.
+  def deactivate
+    transaction do
+      updated = update(active: false)
+      if updated
+        supervisor_volunteers.update_all(is_active: false)
+      end
+
+      updated
+    end
+  end
 end
 
 # == Schema Information
@@ -13,6 +30,8 @@ end
 #
 #  id                     :bigint           not null, primary key
 #  active                 :boolean          default(TRUE)
+#  current_sign_in_at     :datetime
+#  current_sign_in_ip     :string
 #  display_name           :string           default("")
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
@@ -23,8 +42,11 @@ end
 #  invitation_token       :string
 #  invitations_count      :integer          default(0)
 #  invited_by_type        :string
+#  last_sign_in_at        :datetime
+#  last_sign_in_ip        :string
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
+#  sign_in_count          :integer          default(0), not null
 #  type                   :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
