@@ -32,7 +32,7 @@ class CasaOrgsController < ApplicationController
   end
 
   def casa_org_update_params
-    params.require(:casa_org).permit(:name, :display_name, :address, :logo)
+    params.require(:casa_org).permit(:name, :display_name, :address, :logo, :court_report_template)
   end
 
   def set_contact_type_data
