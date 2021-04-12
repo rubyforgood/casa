@@ -57,19 +57,23 @@
   </div>
 </div>
 
-<div class="card-body">
-    <table class="table table-striped table-bordered supervisors-list" id="supervisors">
-      <thead>
-      <tr>
-        <th>volunteers not assigned to supervisors</th>
-      </tr>
-      </thead>
-  </table>
-</div>
-<% @supervisors.each do |volunteer| %>
-  <%= volunteer.display_name %>
-<% end %>
 
-<% @available_volunteers.each do |volunteer| %>
-  <%= volunteer.display_name %>
-<% end %>
+
+<table class="table">
+    <thead>
+      <tr>
+        <th>Volunteers not assigned to supervisors</th>
+      </tr>
+    </thead>
+      <tbody>
+        <td>
+          <% if @available_volunteers.count <= 0 %>
+            <%= "currently no volunteers are unassigned"%>
+          <% else %>
+            <% @available_volunteers.each do |volunteer| %><br>
+              <%= volunteer.display_name %>
+            <% end %>
+          <% end %>
+          </td>
+      </<tbody>
+</table>
