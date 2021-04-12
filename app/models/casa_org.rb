@@ -33,7 +33,7 @@ class CasaOrg < ApplicationRecord
 
   def org_logo
     if logo.attached?
-      ActiveStorage::Blob.service.path_for(logo.key)
+      Rails.application.routes.url_helpers.rails_blob_path(logo, only_path: true)
     else
       CASA_DEFAULT_LOGO
     end

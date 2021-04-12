@@ -41,6 +41,7 @@ class DbPopulator
         ["https://example.org/subscribe-to-newsletter/", "Subscribe to newsletter"],
         ["https://www.example.org/give/givefrm.asp?CID=4450", "Donate"]
       ]
+      org.logo.attach(io: File.open(CasaOrg::CASA_DEFAULT_LOGO), filename: CasaOrg::CASA_DEFAULT_LOGO.basename.to_s)
     }
 
     create_users(casa_org, options)
