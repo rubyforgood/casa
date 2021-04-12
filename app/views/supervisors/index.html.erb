@@ -66,13 +66,10 @@
       </thead>
   </table>
 </div>
+<% @supervisors.each do |volunteer| %>
+  <%= volunteer.display_name %>
+<% end %>
 
-
-
-      <%# <% @volunteer.with_no_supervisor.each do |volunteer| %>
-        <%= volunteer.display_name %>
-      <% end %> %>
-
-      <% @volunteer.with_no_supervisor(current_user.casa_org).each do |volunteer| %>
-        <%= volunteer.display_name %>
-      <% end %>
+<% @available_volunteers.each do |volunteer| %>
+  <%= volunteer.display_name %>
+<% end %>
