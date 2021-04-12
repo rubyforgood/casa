@@ -14,9 +14,9 @@ RSpec.describe CasaOrg, type: :model do
       aggregate_failures do
         expect(subject.org_logo).to eq(Pathname.new("#{Rails.root}/public/logo.jpeg"))
         subject.logo.attach(io: File.open("#{Rails.root}/spec/fixtures/company_logo.png"),
-                            filename: "company_logo.png", content_type: "logo/png")
-        expect(subject.logo).to be_attached
-        expect(subject.org_logo).to_not eq(Pathname.new("#{Rails.root}/public/logo.jpeg"))
+                            filename: "company_logo.png", content_type: "image/png")
+        expect(subject.logo).to be_an_instance_of(ActiveStorage::Attached::One)
+        expect(subject.org_logo).to eq("/rails/active_storage/blobs/redirect/#{subject.logo.signed_id}/#{subject.logo.filename}")
       end
     end
   end
