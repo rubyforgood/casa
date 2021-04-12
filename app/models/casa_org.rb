@@ -1,4 +1,5 @@
 class CasaOrg < ApplicationRecord
+  CASA_DEFAULT_COURT_REPORT = File.new(Rails.root.join("app", "documents", "templates", "default_report_template.docx"), "r")
   CASA_DEFAULT_LOGO = Rails.root.join("public", "logo.jpeg")
 
   has_paper_trail
@@ -38,11 +39,11 @@ class CasaOrg < ApplicationRecord
     end
   end
 
-  def org_court_report_template
+  def open_org_court_report_template(&block)
     if court_report_template.attached?
-      ActiveStorage::Blob.service.path_for(court_report_template.key)
+      court_report_template.open &block
     else
-      CASA_DEFAULT_COURT_REPORT
+      yield CASA_DEFAULT_COURT_REPORT
     end
   end
 end
