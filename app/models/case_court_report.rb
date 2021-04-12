@@ -17,11 +17,6 @@ class CaseCourtReport
     @report_path = args[:path_to_report]
   end
 
-  # TODO is this used?
-  def generate!
-    @template.render_to_file(@report_path, @context)
-  end
-
   def generate_to_string
     @template.render_to_string(@context)
   end
