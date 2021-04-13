@@ -1,4 +1,4 @@
-<%= link_to "Back", supervisors_path %>
+<%= link_to t("button.back"), supervisors_path %>
 <h1>Editing Supervisor</h1>
 
 <div class="card card-container">
@@ -34,7 +34,7 @@
 
       <div class="actions">
         <% if policy(@supervisor).update_supervisor_email? || policy(@supervisor).update_supervisor_name? %>
-          <%= form.submit "Submit", class: "btn btn-primary" %>
+          <%= form.submit t("button.submit"), class: "btn btn-primary" %>
         <% end %>
       </div>
     <% end %>
