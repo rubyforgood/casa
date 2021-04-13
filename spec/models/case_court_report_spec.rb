@@ -7,7 +7,7 @@ RSpec.describe CaseCourtReport, type: :model do
   describe "when receiving valid case, volunteer, and path_to_template" do
     let(:casa_case_without_contacts) { volunteer.casa_cases.second }
     let(:casa_case_with_contacts) { volunteer.casa_cases.first }
-    let(:path_to_template) { "app/documents/templates/report_template.docx" }
+    let(:path_to_template) { "app/documents/templates/default_report_template.docx" }
     let(:path_to_report) { "tmp/test_report.docx" }
     let(:report) do
       CaseCourtReport.new(
@@ -50,15 +50,6 @@ RSpec.describe CaseCourtReport, type: :model do
       end
     end
 
-    describe "has valid @path_to_template" do
-      it "is existing" do
-        path = report.template.instance_variable_get(:@path)
-
-        expect(File.exist?(path_to_template)).to eq true
-        expect(File.exist?(path)).to eq true
-      end
-    end
-
     describe "has valid @context" do
       subject { report.context }
 
@@ -81,15 +72,6 @@ RSpec.describe CaseCourtReport, type: :model do
 
         expect(report_as_data).not_to be_nil
         expect(report_as_data).to be_instance_of String
-      end
-
-      it "successfully generates to file" do
-        report.generate!
-
-        expect(File.exist?(path_to_report)).to eq true
-
-        # clean up after testing
-        File.delete(path_to_report) if File.exist?(path_to_report)
       end
     end
   end
