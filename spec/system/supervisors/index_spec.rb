@@ -89,7 +89,7 @@ RSpec.describe "supervisors/index", type: :system do
 
     it "will not show a list of volunteers not assigned to supervisors if the
     list is greater then 0" do
-      expect(page).to have_text("currently no volunteers are unassigned")
+      expect(page).to have_text("Currently no volunteers are unassigned")
     end
   end
 end
