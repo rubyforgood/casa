@@ -58,7 +58,7 @@ RSpec.describe CaseCourtReport, type: :model do
 
       it "has the following keys [:created_date, :casa_case, :case_contacts, :volunteer]" do
         expected = %i[created_date casa_case case_contacts volunteer]
-        expect(subject.keys).to eq expected
+        expect(subject.keys).to include(*expected)
       end
 
       it "must have Case Contacts as type Array" do
