@@ -10,7 +10,7 @@ class CaseCourtReport
     @casa_case = CasaCase.find(args[:case_id])
     @volunteer = Volunteer.find(args[:volunteer_id])
 
-    @context = prepare_context
+    @context = prepare_context(args[:path_to_template].end_with?("default_report_template.docx"))
     @template = Sablon.template(args[:path_to_template])
 
     # optional
@@ -18,16 +18,18 @@ class CaseCourtReport
   end
 
   def generate_to_string
+    puts @context
     @template.render_to_string(@context)
   end
 
   private
 
-  def prepare_context
+  def prepare_context(is_default_template)
     {
       created_date: I18n.l(Date.today, format: :full, default: nil),
       casa_case: prepare_case_details,
       case_contacts: prepare_case_contacts,
+      org_address: (@volunteer.casa_org.address if is_default_template),
       volunteer: {
         name: @volunteer.display_name,
         supervisor_name: @volunteer.supervisor&.display_name || "",
