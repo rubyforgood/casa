@@ -87,9 +87,9 @@ RSpec.describe "supervisors/index", type: :system do
       verify_numeric_sort("No Contact (14 days)")
     end
 
-    # it "by volunteers-not-assigned-to-supervisors count", js: true do
-    #   verify_numeric_sort("volunteers not assigned to supervisors")
-    # end
-    # placeholder test
+    it "will not show a list of volunteers not assigned to supervisors if the
+    list is greater then 0" do
+      expect(page).to have_text("currently no volunteers are unassigned")
+    end
   end
 end
