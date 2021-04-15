@@ -68,7 +68,7 @@ class CaseCourtReport
       }
     end
 
-    return case_mandate_data
+    case_mandate_data
   end
 
   def filter_out_old_case_contacts(interviewees)
