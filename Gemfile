@@ -40,7 +40,7 @@ group :development, :test do
   gem "pry-byebug"
   gem "rspec-rails", "~> 5.0.1"
   gem "shoulda-matchers"
-  gem "standard", "~> 1.0.4" # linter https://github.com/testdouble/standard
+  gem "standard", "~> 1.0.5" # linter https://github.com/testdouble/standard
   gem "cypress-on-rails", "~> 1.10"
 end
 
