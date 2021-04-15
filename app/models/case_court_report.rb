@@ -18,7 +18,6 @@ class CaseCourtReport
   end
 
   def generate_to_string
-    puts @context
     @template.render_to_string(@context)
   end
 
@@ -69,7 +68,7 @@ class CaseCourtReport
       }
     end
 
-    case_mandate_data
+    return case_mandate_data
   end
 
   def filter_out_old_case_contacts(interviewees)
