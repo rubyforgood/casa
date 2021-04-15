@@ -62,12 +62,15 @@ class CaseCourtReportsController < ApplicationController
   def generate_report_to_string(casa_case)
     return unless casa_case
 
-    court_report = CaseCourtReport.new(
-      volunteer_id: current_user.id, # ??? not a volunteer ? linda
-      case_id: casa_case.id,
-      path_to_template: "app/documents/templates/report_template.docx"
-    )
-    court_report.generate_to_string
+    casa_case.casa_org.open_org_court_report_template do |template_docx_file|
+      court_report = CaseCourtReport.new(
+        volunteer_id: current_user.id, # ??? not a volunteer ? linda
+        case_id: casa_case.id,
+        path_to_template: template_docx_file.to_path
+      )
+
+      return court_report.generate_to_string
+    end
   end
 
   def save_report(report_data, casa_case)

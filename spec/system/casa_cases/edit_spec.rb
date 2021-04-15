@@ -365,7 +365,7 @@ of it unless it was included in a previous court report.")
         report = CaseCourtReport.new(
           volunteer_id: volunteer.id,
           case_id: casa_case.id,
-          path_to_template: "app/documents/templates/report_template.docx"
+          path_to_template: "app/documents/templates/default_report_template.docx"
         )
         casa_case.court_reports.attach(io: StringIO.new(report.generate_to_string), filename: "report#{n}.docx")
         attached_report = casa_case.latest_court_report
