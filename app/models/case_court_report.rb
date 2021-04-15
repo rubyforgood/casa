@@ -29,6 +29,7 @@ class CaseCourtReport
       created_date: I18n.l(Date.today, format: :full, default: nil),
       casa_case: prepare_case_details,
       case_contacts: prepare_case_contacts,
+      case_mandates: prepare_case_mandates,
       org_address: (@volunteer.casa_org.address if is_default_template),
       volunteer: {
         name: @volunteer.display_name,
@@ -56,6 +57,19 @@ class CaseCourtReport
         dates: dates.join(", ")
       }
     end
+  end
+
+  def prepare_case_mandates
+    case_mandate_data = []
+
+    @casa_case.case_court_mandates.each do |case_mandate|
+      case_mandate_data << {
+        order: case_mandate.mandate_text,
+        status: case_mandate.implementation_status
+      }
+    end
+
+    return case_mandate_data
   end
 
   def filter_out_old_case_contacts(interviewees)
