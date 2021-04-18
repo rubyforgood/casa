@@ -53,6 +53,7 @@ class CasaCase < ApplicationRecord
     joins(:case_assignments)
       .where(case_assignments: {active: true})
       .where.not(case_assignments: {volunteer: volunteer})
+      .where(casa_org: volunteer.casa_org)
       .order(:case_number)
   }
   scope :not_assigned, ->(casa_org) {
