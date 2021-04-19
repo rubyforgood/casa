@@ -1,3 +1,4 @@
+require 'open-uri'
 require "rails_helper"
 
 RSpec.describe "/case_court_reports", type: :request do
@@ -96,6 +97,25 @@ RSpec.describe "/case_court_reports", type: :request do
 
         expect(body_hash["link"].length).to be > 0
         expect(body_hash["link"]).to end_with("#{casa_case.case_number}.docx")
+      end
+
+      context "when a custom template is not set" do
+        it "uses the default template" do
+          get JSON.parse(response.body)["link"]
+
+          Tempfile.create("court_report.zip", "tmp") do |file|
+            file << response.body
+
+            Zip::File.open(file.path) do |docx_extracted|
+              expect(docx_extracted.find_entry("word/header3.xml").get_input_stream.read.force_encoding('UTF-8')).to include("YOUR CASA ORG’S NUMBER")
+            end
+          end
+        end
+      end
+
+      context "when a custom template is set" do
+        it "uses the custom template" do
+        end
       end
     end
 
