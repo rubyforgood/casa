@@ -1,4 +1,3 @@
-require 'open-uri'
 require "rails_helper"
 
 RSpec.describe "/case_court_reports", type: :request do
