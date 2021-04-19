@@ -106,7 +106,7 @@ RSpec.describe "/case_court_reports", type: :request do
             file << response.body
 
             Zip::File.open(file.path) do |docx_extracted|
-              expect(docx_extracted.find_entry("word/header3.xml").get_input_stream.read.force_encoding('UTF-8')).to include("YOUR CASA ORG’S NUMBER")
+              expect(docx_extracted.find_entry("word/header3.xml").get_input_stream.read.force_encoding("UTF-8")).to include("YOUR CASA ORG’S NUMBER")
             end
           end
         end
