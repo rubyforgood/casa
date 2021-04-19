@@ -88,3 +88,6 @@ en:
     month: Month
     year: Year
     none: None
+  date:
+    formats:
+      full: "%B %-d, %Y"

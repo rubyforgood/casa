@@ -64,6 +64,10 @@ RSpec.describe CaseCourtReport, type: :model do
       it "must have Case Contacts as type Array" do
         expect(subject[:case_contacts]).to be_instance_of Array
       end
+
+      it "created_date is not nil" do
+        expect(subject[:created_date]).to_not be(nil)
+      end
     end
 
     describe "when generating report" do
