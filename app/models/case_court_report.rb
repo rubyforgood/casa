@@ -12,9 +12,6 @@ class CaseCourtReport
 
     @context = prepare_context(args[:path_to_template].end_with?("default_report_template.docx"))
     @template = Sablon.template(args[:path_to_template])
-
-    # optional
-    @report_path = args[:path_to_report]
   end
 
   def generate_to_string
