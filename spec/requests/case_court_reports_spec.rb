@@ -66,11 +66,7 @@ RSpec.describe "/case_court_reports", type: :request do
   describe "POST /case_court_reports" do
     context "when no custom template is set" do
       before do
-        post generate_case_court_reports_path,
-          params: {
-            "case_court_report": {"case_number": casa_case.case_number.to_s}
-          },
-          headers: {"ACCEPT": "application/json"}
+        request_generate_court_report
       end
 
       context "when a valid / existing case is sent" do
@@ -153,12 +149,9 @@ RSpec.describe "/case_court_reports", type: :request do
       before do
         volunteer.casa_org.court_report_template.attach(io: File.new(Rails.root.join("app", "documents", "templates", "montgomery_report_template.docx")), filename: "montgomery_report_template.docx")
 
-        post generate_case_court_reports_path,
-          params: {
-            "case_court_report": {"case_number": casa_case.case_number.to_s}
-          },
-          headers: {"ACCEPT": "application/json"}
+        request_generate_court_report
       end
+
       it "uses the custom template" do
         get JSON.parse(response.body)["link"]
 
@@ -171,5 +164,15 @@ RSpec.describe "/case_court_reports", type: :request do
         end
       end
     end
+  end
+
+  private
+
+  def request_generate_court_report
+    post generate_case_court_reports_path,
+      params: {
+        "case_court_report": {"case_number": casa_case.case_number.to_s}
+      },
+      headers: {"ACCEPT": "application/json"}
   end
 end
