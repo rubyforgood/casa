@@ -20,13 +20,11 @@ class DbPopulator
     @case_number_sequence = 1000
   end
 
-  def create_all_casa_admin(email = "allcasaadmin@example.com")
-    unless AllCasaAdmin.find_by(email: email)
-      AllCasaAdmin.create!(email: email, password: SEED_PASSWORD, password_confirmation: SEED_PASSWORD)
-    end
+  def create_all_casa_admin(email)
+    return if AllCasaAdmin.find_by(email: email)
+    AllCasaAdmin.create!(email: email, password: SEED_PASSWORD, password_confirmation: SEED_PASSWORD)
   end
 
-  # See CasaOrgPopulatorPresets for the content of the options hash.
   def create_org(options_hash)
     options = OpenStruct.new(options_hash)
     @casa_org_counter += 1
@@ -109,6 +107,11 @@ class DbPopulator
     @random_case_contact_counts.sample(random: rng)
   end
 
+  def random_court_mandate_count
+    @random_court_mandate_counts ||= [0, 3, 5, 10]
+    @random_court_mandate_counts.sample(random: rng)
+  end
+
   def likely_contact_durations
     @likely_contact_durations ||= [15, 30, 60, 75, 4 * 60, 6 * 60]
   end
@@ -135,8 +138,23 @@ class DbPopulator
     )
   end
 
+  def mandate_choices
+    [
+      "Limited guardianship of the children for medical and educational purposes to [name] shall be rescinded;",
+      "The children shall remain children in need of assistance (cina), under the jurisdiction of the juvenile court, and shall remain committed to the department of health and human services/child welfare services, for continued placement on a trial home visit with [NAME]",
+      "The youth shall continue to participate in educational tutoring, under the direction of the department;",
+      "The youth shall continue to participate in family therapy with [name], under the direction of the department;",
+      "The permanency plan for all the children of reunification is reaffirmed;",
+      "Visitation between the youth and the father shall be unsupervised, minimum once weekly, in the community or at his home, and may include overnights when he has the appropriate space for the children to sleep, under the direction of the department;",
+      "Youth shall continue to participate in individual therapy, under the direction of the department;",
+      "The youth shall continue to maintain stable employment;",
+      "The youth shall maintain appropriate housing while working towards obtaining housing that can accommodate all of the children being reunified, and make home available for inspection, under the direction of the department;",
+      "The youth shall participate in case management services, under the direction of the department;",
+      "The youth shall participate in mental health treatment and medication management, under the direction of the department;"
+    ]
+  end
+
   def create_cases(casa_org, options)
-    volunteers = Volunteer.where(active: true).to_a
     ContactTypePopulator.populate
     options.case_count.times do
       case_number = generate_case_number
@@ -147,11 +165,19 @@ class DbPopulator
           transition_aged_youth: random_true_false
         )
       end
-      casa_org_volunteers = volunteers.select { |volunteer| volunteer.casa_org_id == casa_org.id }
-      CaseAssignment.find_or_create_by!(casa_case: new_casa_case, volunteer: casa_org_volunteers.sample(random: rng))
+      volunteer = casa_org.volunteers.sample(random: rng) || casa_org.volunteers.first
+      CaseAssignment.find_or_create_by!(casa_case: new_casa_case, volunteer: volunteer)
 
       random_case_contact_count.times do
         create_case_contact(new_casa_case)
+      end
+
+      random_court_mandate_count.times do
+        CaseCourtMandate.create!(
+          casa_case_id: new_casa_case.id,
+          mandate_text: mandate_choices.sample(random: rng),
+          implementation_status: CaseCourtMandate::IMPLEMENTATION_STATUSES.values.sample(random: rng)
+        )
       end
     end
   end
