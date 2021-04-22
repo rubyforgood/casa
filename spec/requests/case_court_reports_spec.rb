@@ -96,15 +96,7 @@ RSpec.describe "/case_court_reports", type: :request do
         end
 
         it "uses the default template" do
-          get JSON.parse(response.body)["link"]
-
-          Tempfile.create("court_report.zip", "tmp") do |file|
-            file << response.body
-
-            Zip::File.open(file.path) do |docx_extracted|
-              expect(docx_extracted.find_entry("word/header3.xml").get_input_stream.read.force_encoding("UTF-8")).to include("YOUR CASA ORG’S NUMBER")
-            end
-          end
+          expect(find_in_docx(JSON.parse(response.body)["link"], "word/header3.xml")).to include("YOUR CASA ORG’S NUMBER")
         end
       end
 
@@ -153,15 +145,7 @@ RSpec.describe "/case_court_reports", type: :request do
       end
 
       it "uses the custom template" do
-        get JSON.parse(response.body)["link"]
-
-        Tempfile.create("court_report.zip", "tmp") do |file|
-          file << response.body
-
-          Zip::File.open(file.path) do |docx_extracted|
-            expect(docx_extracted.find_entry("word/header2.xml").get_input_stream.read.force_encoding("UTF-8")).to include("Voices for Children Montgomery")
-          end
-        end
+        expect(find_in_docx(JSON.parse(response.body)["link"], "word/header2.xml")).to include("Voices for Children Montgomery")
       end
     end
   end
