@@ -1,4 +1,4 @@
-# CASA Project & Organization Overview
+# CASA Project and Organization Overview
 
 ![rspec](https://github.com/rubyforgood/casa/workflows/rspec/badge.svg)
 ![cypress](https://github.com/rubyforgood/casa/workflows/cypress/badge.svg)
