@@ -1,9 +1,9 @@
 class CaseCourtMandate < ApplicationRecord
+  IMPLEMENTATION_STATUSES = {not_implemented: 1, partially_implemented: 2, implemented: 3}
   belongs_to :casa_case
 
   validates :mandate_text, presence: true
-
-  enum implementation_status: {not_implemented: 1, partially_implemented: 2, implemented: 3}
+  enum implementation_status: IMPLEMENTATION_STATUSES
 end
 
 # == Schema Information
