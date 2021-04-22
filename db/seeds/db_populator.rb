@@ -20,13 +20,11 @@ class DbPopulator
     @case_number_sequence = 1000
   end
 
-  def create_all_casa_admin(email = "allcasaadmin@example.com")
-    unless AllCasaAdmin.find_by(email: email)
-      AllCasaAdmin.create!(email: email, password: SEED_PASSWORD, password_confirmation: SEED_PASSWORD)
-    end
+  def create_all_casa_admin(email)
+    return if AllCasaAdmin.find_by(email: email)
+    AllCasaAdmin.create!(email: email, password: SEED_PASSWORD, password_confirmation: SEED_PASSWORD)
   end
 
-  # See CasaOrgPopulatorPresets for the content of the options hash.
   def create_org(options_hash)
     options = OpenStruct.new(options_hash)
     @casa_org_counter += 1

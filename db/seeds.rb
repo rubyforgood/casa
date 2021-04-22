@@ -98,4 +98,8 @@ end
 SeederMain.new.seed
 
 load(Rails.root.join("db", "seeds", "emancipation_data.rb"))
-load(Rails.root.join("db", "seeds", "emancipation_options_prune.rb"))
+begin
+  load(Rails.root.join("db", "seeds", "emancipation_options_prune.rb"))
+rescue => e
+  puts "Caught error during db seed emancipation_options_prune, continuing. Message: #{e}"
+end
