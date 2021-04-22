@@ -96,7 +96,9 @@ RSpec.describe "/case_court_reports", type: :request do
         end
 
         it "uses the default template" do
-          expect(find_in_docx(JSON.parse(response.body)["link"], "word/header3.xml")).to include("YOUR CASA ORG’S NUMBER")
+          get JSON.parse(response.body)["link"]
+
+          expect(get_docx_subfile_contents(response.body, "word/header3.xml")).to include("YOUR CASA ORG’S NUMBER")
         end
       end
 
@@ -145,7 +147,9 @@ RSpec.describe "/case_court_reports", type: :request do
       end
 
       it "uses the custom template" do
-        expect(find_in_docx(JSON.parse(response.body)["link"], "word/header2.xml")).to include("Voices for Children Montgomery")
+        get JSON.parse(response.body)["link"]
+
+        expect(get_docx_subfile_contents(response.body, "word/header2.xml")).to include("Voices for Children Montgomery")
       end
     end
   end
