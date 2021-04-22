@@ -155,7 +155,6 @@ class DbPopulator
   end
 
   def create_cases(casa_org, options)
-    volunteers = Volunteer.where(active: true).to_a
     ContactTypePopulator.populate
     options.case_count.times do
       case_number = generate_case_number
@@ -166,8 +165,8 @@ class DbPopulator
           transition_aged_youth: random_true_false
         )
       end
-      casa_org_volunteers = volunteers.select { |volunteer| volunteer.casa_org_id == casa_org.id }
-      CaseAssignment.find_or_create_by!(casa_case: new_casa_case, volunteer: casa_org_volunteers.sample(random: rng))
+      volunteer = casa_org.volunteers.sample(random: rng) || casa_org.volunteers.first
+      CaseAssignment.find_or_create_by!(casa_case: new_casa_case, volunteer: volunteer)
 
       random_case_contact_count.times do
         create_case_contact(new_casa_case)
