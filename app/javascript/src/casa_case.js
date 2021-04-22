@@ -4,7 +4,7 @@ function add_court_mandate_input () {
   const html = court_mandate_html(index)
 
   $(list).append(html.entry)
-  let last_entry = $(list).children(':last')
+  const last_entry = $(list).children(':last')
 
   $(last_entry).append(html.textarea)
   $(last_entry).append(html.select)
@@ -61,18 +61,18 @@ function remove_mandate_action (ctx) {
   })
 }
 
-function court_mandate_html(index) {
-  const select_options = `<option value="">Set Implementation Status</option>\
+function court_mandate_html (index) {
+  const select_options = '<option value="">Set Implementation Status</option>\
                           <option value="not_implemented">Not implemented</option>\
                           <option value="partially_implemented">Partially implemented</option>\
-                          <option value="implemented">Implemented</option>`
+                          <option value="implemented">Implemented</option>'
   return {
-    entry:    `<div class="court-mandate-entry"></div>`,
+    entry: '<div class="court-mandate-entry"></div>',
 
     textarea: `<textarea name="casa_case[case_court_mandates_attributes][${index}][mandate_text]"\
                  id="casa_case_case_court_mandates_attributes_${index}_mandate_text"></textarea>`,
 
-    select:   `<select class="implementation-status"\
+    select: `<select class="implementation-status"\
                  name="casa_case[case_court_mandates_attributes][${index}][implementation_status]"\
                  id="casa_case_case_court_mandates_attributes_${index}_implementation_status">\
                  ${select_options}\

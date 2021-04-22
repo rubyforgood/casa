@@ -18,7 +18,7 @@ window.onload = function () {
     }
   }
 
-  caseOccurredAt.onchange = function() {
+  caseOccurredAt.onchange = function () {
     validateOccurredAt()
   }
   durationHours.onchange = function () {
@@ -76,15 +76,15 @@ window.onload = function () {
   function validateOccurredAt () {
     const msg = 'Case Contact Occurrences cannot be in the future.'
     const today = new Date()
-    today.setHours(0,0,0,0)
+    today.setHours(0, 0, 0, 0)
 
-    let caseDate = new Date(caseOccurredAt.value)
+    const caseDate = new Date(caseOccurredAt.value)
     caseDate.setDate(caseDate.getDate())
-    caseDate.setHours(0,0,0,0)
+    caseDate.setHours(0, 0, 0, 0)
 
     if (caseDate > today) {
       alert(msg)
-    } 
+    }
   }
 
   function validateNoteContent (e) {
