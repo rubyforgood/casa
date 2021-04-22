@@ -152,7 +152,7 @@ class DbPopulator
       "The youth shall continue to maintain stable employment;",
       "The youth shall maintain appropriate housing while working towards obtaining housing that can accommodate all of the children being reunified, and make home available for inspection, under the direction of the department;",
       "The youth shall participate in case management services, under the direction of the department;",
-      "The youth shall participate in mental health treatment and medication management, under the direction of the department;",
+      "The youth shall participate in mental health treatment and medication management, under the direction of the department;"
     ]
   end
 
