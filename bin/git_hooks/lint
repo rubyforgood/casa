@@ -30,7 +30,7 @@ case $diff_policy in
     ;;
 
   --unpushed)
-    if [ -z "$(git ls-remote --heads origin add_git_hooks)" ]; then
+    if [ -z "$(git ls-remote --heads origin ${current_branch})" ]; then
       changed_file_list=$(git diff --name-only HEAD~$(git cherry -v main ${current_branch} | wc -l) HEAD)
     else
       changed_file_list=$(git diff --name-only origin/${current_branch}..HEAD)
