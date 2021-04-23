@@ -83,3 +83,5 @@ for file in $(git diff --name-only); do
     exit 1
   fi
 done
+
+echo "INFO: No files were linted"
