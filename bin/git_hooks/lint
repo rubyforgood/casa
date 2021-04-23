@@ -30,7 +30,7 @@ case $diff_policy in
     ;;
 
   --unpushed)
-    if [ -z "$(git ls-remote --heads origin add_git_hooks)" ]; then
+    if [ -z "$(git ls-remote --heads origin ${current_branch})" ]; then
       changed_file_list=$(git diff --name-only HEAD~$(git cherry -v main ${current_branch} | wc -l) HEAD)
     else
       changed_file_list=$(git diff --name-only origin/${current_branch}..HEAD)
@@ -53,16 +53,11 @@ if test $rb_changed_count -gt 0; then
 
   cd $repo_root
 
-  if ! [ -x "$(command -v standardrb)" ]; then
-      echo "WARNING: Command standardrb could not be found. Attempting bundle exec standardrb instead"
-      if ! [ -x "$(command -v bundle)" ]; then
-        echo "WARNING: Command bundle could not be found"
-        exit 1
-      else
-        bundle exec standardrb --fix
-      fi
-    else
-    standardrb --fix
+  if ! [ -x "$(command -v bundle)" ]; then
+    echo "ERROR: Command bundle could not be found"
+    exit 1
+  else
+    bundle exec standardrb --fix
   fi
 fi
 
@@ -71,16 +66,11 @@ if test $erb_changed_count -gt 0; then
 
   cd $repo_root/app
 
-  if ! [ -x "$(command -v erblint)" ]; then
-      echo "WARNING: Command erblint could not be found. Attempting bundle exec standardrb instead"
-      if ! [ -x "$(command -v bundle)" ]; then
-        echo "WARNING: Command bundle could not be found"
-        exit 1
-      else
-        bundle exec erblint --lint-all --autocorrect
-      fi
-    else
-    erblint --lint-all --autocorrect
+  if ! [ -x "$(command -v bundle)" ]; then
+    echo "WARNING: Command bundle could not be found"
+    exit 1
+  else
+    bundle exec erblint --lint-all --autocorrect
   fi
 fi
 
@@ -93,3 +83,5 @@ for file in $(git diff --name-only); do
     exit 1
   fi
 done
+
+echo "INFO: No files were linted"
