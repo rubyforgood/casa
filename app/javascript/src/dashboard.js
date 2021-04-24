@@ -69,18 +69,11 @@ $('document').ready(() => {
       const assignedToVolunteer = (data[5] !== '' && data[5].split(',').length >= 1) ? 'Yes' : 'No'
       const assignedToMoreThanOneVolunteer = (data[5] !== '' && data[5].split(',').length > 1) ? 'Yes' : 'No'
       const assignedToTransitionYouth = data[4]
-      const regex = /^(CINA|TPR)/g
-      const caseNumberPrefix = data[0].match(regex) ? data[0].match(regex)[0] : ''
 
-      if (statusArray.includes(status) &&
+      return statusArray.includes(status) &&
         assignedToVolunteerArray.includes(assignedToVolunteer) &&
         assignedToMoreThanOneVolunteerArray.includes(assignedToMoreThanOneVolunteer) &&
-        assignedToTransitionYouthArray.includes(assignedToTransitionYouth) &&
-        caseNumberPrefixArray.includes(caseNumberPrefix)
-      ) {
-        return true
-      }
-      return false
+        assignedToTransitionYouthArray.includes(assignedToTransitionYouth)
     }
   )
 

@@ -9,7 +9,7 @@ RSpec.describe "casa_cases/index", type: :system do
   let!(:no_prefix) { create(:casa_case, active: true, casa_org: organization, case_number: "123-12-123") }
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: cina) }
 
-  scenario "filterable and linkable" do
+  scenario "filterable and linkable", :js do
     sign_in admin
     visit casa_cases_path
 
