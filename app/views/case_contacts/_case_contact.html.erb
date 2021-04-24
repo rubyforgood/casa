@@ -11,7 +11,7 @@
                 <%= contact.contact_groups_with_types.keys.join(', ') %>
               </strong>
               <%= link_to(t("button.undelete"), restore_case_contact_path(contact.id), method: :post,
-class: "btn btn-info") if policy(contact).restore? && contact.deleted? %>
+                          class: "btn btn-info") if policy(contact).restore? && contact.deleted? %>
             </h5>
             <h6 class="card-subtitle mb-2 text-muted">
               <%= contact.decorate.contact_types %>
@@ -37,14 +37,12 @@ class: "btn btn-info") if policy(contact).restore? && contact.deleted? %>
       </div>
       <div class="align-self-end">
         <%= link_to(t("button.delete"), case_contact_path(contact.id), method: :delete,
-class: "btn btn-danger pull-right") if policy(current_user).destroy? && !contact.deleted? %>
+                    class: "btn btn-danger pull-right") if policy(current_user).destroy? && !contact.deleted? %>
       </div>
       <div class="row">
         <% if Pundit.policy(current_user, contact).update? %>
-          <% if contact.created_in_current_quarter? %>
-
+          <% if contact.quarter_editable? %>
             <%= render "case_contacts/followup", contact: contact, followup: contact.requested_followup %>
-
             <div class="col-sm-5">
               <%= link_to edit_case_contact_path(contact), class: 'btn btn-outline-primary' do %>
                 <strong><%= t("button.edit") %></strong>
