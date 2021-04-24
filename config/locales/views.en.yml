@@ -271,7 +271,8 @@ en:
         click: Click the choose file button and navigate to the saved file and select it.
         do_not: Do not
         change_values: change any of the values in the first line of the example csv file.
-        import: Then click the "Import Volunteers CSV" button to import your volunteers.
+        import: Then click the "Import Volunteers CSV" button to import your volunteers. 
+        note: This will email the new volunteers asking them to log in! 
       disable_with: Importing File
     index:
       title: Import Categories
