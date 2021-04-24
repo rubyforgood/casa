@@ -95,15 +95,15 @@ class CaseContact < ApplicationRecord
     !contact_made.nil?
   end
 
-  def created_in_current_quarter?
-    today = Time.zone.now
-    occurred_at.end_of_quarter > today
+  def quarter_editable?
+    # case contacts should no longer be editable after the current quarter plus a grace period
+    Time.zone.now < occurred_at.end_of_quarter + 30.days
   end
 
   def check_if_allow_edit
-    return if created_in_current_quarter?
+    return if quarter_editable?
 
-    errors.add(:base, message: "cannot edit case contacts created before the current quarter")
+    errors.add(:base, message: "cannot edit case contacts created before the current quarter plus 30 days")
   end
 
   def supervisor_id
