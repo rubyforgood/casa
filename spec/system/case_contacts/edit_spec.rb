@@ -47,7 +47,7 @@ RSpec.describe "case_contacts/edit", type: :system do
     end
 
     context "when the case contact occurred last quarter" do
-      let!(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 94.days.ago) }
+      let!(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 5.months.ago) }
 
       before do
         sign_in volunteer
