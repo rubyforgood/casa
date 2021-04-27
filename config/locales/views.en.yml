@@ -32,6 +32,7 @@ en:
         court_report_due_date: Court Report Due Date
         court_report_status: Court Report Status
         court_report_submitted_date: Court Report Submitted Date
+        court_mandates: Court Mandates
         assigned_volunteers: Assigned Volunteers
       button:
         new_contact: New Case Contact
