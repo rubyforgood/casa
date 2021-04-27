@@ -18,11 +18,10 @@
     <ul>
       <li><%= t(".instruction.click") %></li>
       <li><strong><%= t(".instruction.do_not") %></strong> <%= t(".instruction.change_values") %></li>
-      <li><%= t(".instruction.import") %></li>
+      <li><%= t(".instruction.import") %> <strong><%=t(".instruction.note") %></strong></li>
     </ul>
     <%= f.file_field :file, id: 'volunteer-file', accept: 'text/csv', class: 'form-control-file', style: "margin: auto;" %>
     </div>
-
     <%= button_tag id: "volunteer-import-button", class: "btn btn-md btn-success pull-right",
                    disabled: true, data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> #{t(".disable_with")}"} do %>
       <i class="fa fa-upload"></i> <%= t(".button.import") %>
