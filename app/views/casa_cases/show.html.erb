@@ -75,6 +75,13 @@
       </p>
     <% end %>
 
+    <% if @casa_case.case_court_mandates.exists? %>
+      <h6><strong><%= t(".court_mandates") %>:</strong></h6>
+      <% @casa_case.case_court_mandates.each do |court_mandate| %>
+          <p><%= court_mandate.mandate_text %>, <%= court_mandate.implementation_status.split('_').map(&:capitalize).join(' ') %></p>
+      <% end %>
+    <% end %>
+
     <div>
       <h6><strong><%= t(".assigned_volunteers") %>:</strong></h6>
       <% policy_scope(@casa_case.assigned_volunteers).each_with_index do |volunteer, index| %>

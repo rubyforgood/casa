@@ -11,7 +11,7 @@ RSpec.describe "case_contacts/case_contact", type: :view do
       allow(view).to receive(:current_user).and_return(admin)
     end
 
-    context "occured_at is before the last day of the month in the quarter that the case contact was created" do
+    context "occurred_at is before the last day of the month in the quarter that the case contact was created" do
       let(:case_contact) { create(:case_contact) }
       let(:case_contact2) { create(:case_contact, deleted_at: Time.current) }
 
