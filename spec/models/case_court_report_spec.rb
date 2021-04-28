@@ -40,8 +40,7 @@ RSpec.describe CaseCourtReport, type: :model do
       end
 
       describe "with past court date" do
-        # TODO make a factory for PastCourtDate
-        let!(:past_court_date) { PastCourtDate.create!(date: 2.days.ago, casa_case_id: casa_case_with_contacts.id) }
+        let!(:past_court_date) { create(:past_court_date, date: 2.days.ago, casa_case_id: casa_case_with_contacts.id) }
 
         it "has all case contacts created since the previous court date" do
           expect(casa_case_with_contacts.past_court_dates.length).to eq(1)
