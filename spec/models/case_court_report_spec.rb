@@ -69,12 +69,56 @@ RSpec.describe CaseCourtReport, type: :model do
       end
     end
 
-    describe "when generating a report" do
-      it "successfully generates to memory as a String instance" do
-        report_as_data = report.generate_to_string
+    context "when the casa case is transitioning" do
+      describe "the default generated report" do
+        # the current date
+        # A casa case with
+        #  - case number
+        #  - Date of birth
+        #  - is Transitioning
+        # Case Contacts with
+        #  - contact name
+        #  - contact type
+        #  - date of contact
+        # A case contact type name
+        # case mandates with 
+        #  - order text
+        #  - mandate status
+        # A volunteer
+        #  - name
+        #  - date assigned to case
+        # The volunteer's supervisor's name
+        # The casa org's address in the header
+        # hearing date?
+        #  report_as_data = report.generate_to_string
 
-        expect(report_as_data).not_to be_nil
-        expect(report_as_data).to be_instance_of String
+        it "contains the current date" do
+        end
+
+        it "contains the casa org's address" do
+        end
+
+        it "contains the casa case court date" do
+        end
+
+        it "contains the casa case date of birth" do
+        end
+
+        it "does not display helper text" do
+        end
+
+        it "contains all case contact names, types, and dates" do
+        end
+
+        it "contains all case court mandate orders and statuses" do
+        end
+
+        it "contains the name and date of assignment for the volunteer assigned to the case" do
+        end
+
+        after(:all) {
+          #remove_instance_variable(:@var)
+        }
       end
     end
   end
