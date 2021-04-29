@@ -4,7 +4,7 @@ RSpec.describe "casa_cases/show", type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:volunteer) { create(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
-  let(:casa_case) { create(:casa_case, casa_org: organization, case_number: "CINA-1") }
+  let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: organization, case_number: "CINA-1") }
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
   let!(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
 
@@ -27,6 +27,11 @@ RSpec.describe "casa_cases/show", type: :system do
     it "sees link to profile page" do
       expect(page).to have_link(href: "/users/edit")
     end
+
+    it "can see court mandates" do
+      expect(page).to have_content("Court Mandates")
+      expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
+    end
   end
 
   context "supervisor user" do
@@ -36,6 +41,11 @@ RSpec.describe "casa_cases/show", type: :system do
     it "sees link to own edit page" do
       expect(page).to have_link(href: "/supervisors/#{user.id}/edit")
     end
+
+    it "can see court mandates" do
+      expect(page).to have_content("Court Mandates")
+      expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
+    end
   end
 
   context "volunteer user" do
@@ -43,6 +53,11 @@ RSpec.describe "casa_cases/show", type: :system do
 
     it "sees link to emancipation" do
       expect(page).to have_content(casa_case.case_number)
+    end
+
+    it "can see court mandates" do
+      expect(page).to have_content("Court Mandates")
+      expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
     end
   end
 end
