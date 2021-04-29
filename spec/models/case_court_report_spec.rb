@@ -7,8 +7,8 @@ RSpec.describe CaseCourtReport, type: :model do
   describe "when receiving valid case, volunteer, and path_to_template" do
     let(:casa_case_without_contacts) { volunteer.casa_cases.second }
     let(:casa_case_with_contacts) { volunteer.casa_cases.first }
-    let(:path_to_template) { "app/documents/templates/default_report_template.docx" }
-    let(:path_to_report) { "tmp/test_report.docx" }
+    let(:path_to_template) { Rails.root.join("app", "documents", "templates", "default_report_template.docx").to_s }
+    let(:path_to_report) { Rails.root.join("tmp", "test_report.docx").to_s }
     let(:report) do
       CaseCourtReport.new(
         case_id: casa_case_with_contacts.id,
@@ -69,7 +69,7 @@ RSpec.describe CaseCourtReport, type: :model do
       end
     end
 
-    describe "when generating report" do
+    describe "when generating a report" do
       it "successfully generates to memory as a String instance" do
         report_as_data = report.generate_to_string
 
