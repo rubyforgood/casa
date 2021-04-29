@@ -81,7 +81,7 @@ RSpec.describe CaseCourtReport, type: :model do
         #  - contact type
         #  - date of contact
         # A case contact type name
-        # case mandates with 
+        # case mandates with
         #  - order text
         #  - mandate status
         # A volunteer
@@ -117,7 +117,7 @@ RSpec.describe CaseCourtReport, type: :model do
         end
 
         after(:all) {
-          #remove_instance_variable(:@var)
+          # remove_instance_variable(:@var)
         }
       end
     end
