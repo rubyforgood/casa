@@ -62,12 +62,12 @@
 <table class="table">
     <thead>
       <tr>
-        <th>Volunteers not assigned to supervisors</th>
+        <th>Unassigned volunteers:</th>
       </tr>
     </thead>
       <tbody>
         <td>
-          <% if @available_volunteers.count <= 0 %>
+          <% if @available_volunteers.count == 0 %>
             <%= "Currently no volunteers are unassigned"%>
           <% else %>
             <%  @available_volunteers.active.each do |volunteer| %><br>

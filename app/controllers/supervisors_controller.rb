@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SupervisorsController < ApplicationController
-  before_action :available_volunteers, only: [:edit, :update]
+  before_action :available_volunteers, only: [:edit, :update, :index]
   before_action :set_supervisor, only: [:edit, :update]
   before_action :all_volunteers_ever_assigned, only: [:edit, :update]
   after_action :verify_authorized
@@ -9,7 +9,6 @@ class SupervisorsController < ApplicationController
   def index
     authorize Supervisor
     @supervisors = policy_scope(current_organization.supervisors)
-    available_volunteers
   end
 
   def new

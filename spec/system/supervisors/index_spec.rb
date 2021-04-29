@@ -87,6 +87,11 @@ RSpec.describe "supervisors/index", type: :system do
       verify_numeric_sort("No Contact (14 days)")
     end
 
+    it "will show a list of unassigned volunteers:,  if a unassigned volunteer exsits" do
+      @user1 = Volunteer.with_no_supervisor(display_name: "Tony Ruiz")
+      expect(page).to have_text("Tony Ruiz")
+    end
+
     it "will not show a list of volunteers not assigned to supervisors if the
     list is greater then 0" do
       expect(page).to have_text("Currently no volunteers are unassigned")
