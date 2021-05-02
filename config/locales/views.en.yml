@@ -165,7 +165,6 @@ en:
       button:
         generate: Generate Report
         download: Download Court Report
-      disable_with: Court report generating. Do not refresh or leave this page...
   contact_type_groups:
     new:
       title: New Contact Type Group

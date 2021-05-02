@@ -24,11 +24,11 @@
       <div class="form-group">
         <%= button_tag t(".button.generate"), type: :submit,
                        data: {
-                           button_name: t(".button.generate"),
-                           disable_with: t(".disable_with")
+                           button_name: t(".button.generate")
                        },
                        id: "btnGenerateReport",
                        class: "btn btn-primary" %>
+        <i id="spinner" class='fas fa-spin d-none'>⏳</i>
         <!--
           Link to report is set to empty by default.
           Download link will be created once the report is generated.
@@ -47,11 +47,11 @@
   const ELEMENTS = {
     'caseSelect': '#case-selection',
     'downloadBtn': '#btnDownloadReport',
-    'generateBtn': '#btnGenerateReport'
+    'generateBtn': '#btnGenerateReport',
+    'spinner': '#spinner'
   }
   const showBtn = el => el.classList.remove('d-none')
   const hideBtn = el => el.classList.add('d-none')
-  const setBtnText = (el, text) => el.innerText = text
   const setBtnHref = (el, href) => el.href = href
   const disableBtn = (el) => {
     el.disabled = true
@@ -62,11 +62,6 @@
     el.disabled = false
     el.classList.remove('disabled')
     el.removeAttribute('aria-disabled')
-  }
-  const resetGenerateBtn = (btn) => {
-    // btn is enabled and has name "Generate Report"
-    enableBtn(btn)
-    setBtnText(btn, btn.dataset.buttonName)
   }
   const resetDownloadBtn = (btn) => {
     // btn is hidden, and no download link is present
@@ -87,7 +82,6 @@
 
     const generateBtn = e.target
     disableBtn(generateBtn)
-    setBtnText(generateBtn, generateBtn.dataset.disableWith)
 
     <%# This will show "/case_court_reports/generate"  %>
     const url = "<%= generate_case_court_reports_path %>"
@@ -99,6 +93,8 @@
       },
       body: JSON.stringify(formData)
     }
+    hideBtn(generateBtn)
+    showBtn(spinner)
     fetch(url, options)
       .then(response => {
         return response.json()
@@ -106,11 +102,14 @@
       .then(data => {
         if (data.status !== 'ok') {
           showAlert(data.error_messages)
-          resetGenerateBtn(generateBtn)
+          enableBtn(generateBtn)
+          showBtn(generateBtn)
+          hideBtn(spinner)
           return
         }
         // when receiving a link to report, show 'Download Court Report' btn and show the link in the button
         const downloadBtn = generateBtn.form.querySelector(ELEMENTS.downloadBtn)
+        hideBtn(spinner)
         showBtn(downloadBtn)
         setBtnHref(downloadBtn, data.link)
       })
@@ -125,7 +124,8 @@
     const downloadBtn = selectEl.form.querySelector(ELEMENTS.downloadBtn)
 
     // when selecting a case, reset buttons to initial state
-    resetGenerateBtn(generateBtn)
+    enableBtn(generateBtn)
+    showBtn(generateBtn)
     resetDownloadBtn(downloadBtn)
   }
 

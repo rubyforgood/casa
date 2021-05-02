@@ -65,12 +65,6 @@ RSpec.describe "case_court_reports/index", type: :system do
       it "does not become disabled" do
         expect(page).not_to have_selector "#btnGenerateReport[disabled]"
       end
-
-      it "does not have label changed to 'Court report generating. Do not refresh or leave this page'" do
-        options = {text: "Court report generating. Do not refresh or leave this page"}
-
-        expect(page).not_to have_selector "#btnGenerateReport[disabled]", **options
-      end
     end
 
     describe "'Download Court Report' button" do
@@ -84,6 +78,14 @@ RSpec.describe "case_court_reports/index", type: :system do
         options = {id: "btnDownloadReport", visible: :hidden, href: "#"}
 
         expect(page).to have_link "Download Court Report", **options
+      end
+    end
+
+    describe "Spinner" do
+      it "does not become visible" do
+        options = {visible: :hidden}
+
+        expect(page).to have_selector "#spinner", **options
       end
     end
   end
@@ -123,12 +125,8 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
 
     describe "'Generate Report' button" do
-      it "becomes disabled" do
-        expect(page).to have_selector "#btnGenerateReport[disabled]"
-      end
-
-      it "has label changed to 'Court report generating. Do not refresh or leave this page'" do
-        options = {text: "Court report generating. Do not refresh or leave this page"}
+      it "has been hidden and disabled" do
+        options = {visible: :hidden}
 
         expect(page).to have_selector "#btnGenerateReport[disabled]", **options
       end
@@ -147,6 +145,14 @@ RSpec.describe "case_court_reports/index", type: :system do
         options = {id: "btnDownloadReport", visible: :visible, href: download_link}
 
         expect(page).to have_link "Download Court Report", **options
+      end
+    end
+
+    describe "Spinner" do
+      it "becomes visible" do
+        options = {visible: :visible}
+
+        expect(page).to have_selector "#spinner", **options
       end
     end
 
