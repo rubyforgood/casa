@@ -22,6 +22,11 @@ class Supervisor < User
       updated
     end
   end
+
+  def recently_unassigned_volunteers
+    unassigned_supervisor_volunteers.joins(:volunteer).includes(:volunteer)
+      .where(updated_at: 1.week.ago..Time.zone.now).map(&:volunteer)
+  end
 end
 
 # == Schema Information
