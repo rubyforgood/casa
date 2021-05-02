@@ -108,7 +108,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :all_casa_admins, only: [] do
+  resources :all_casa_admins, only: [:new, :create] do
     collection do
       get :edit
       patch :update

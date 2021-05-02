@@ -2,8 +2,23 @@ class AllCasaAdminsController < ApplicationController
   skip_before_action :authenticate_user!
   before_action :authenticate_all_casa_admin!
 
+  def new
+    @all_casa_admin = AllCasaAdmin.new
+  end
+
   def edit
     @user = current_all_casa_admin
+  end
+
+  def create
+    service = ::CreateAllCasaAdminService.new(params)
+    @all_casa_admin = service.build
+    begin
+      service.create!
+      redirect_to authenticated_all_casa_admin_root_path, notice: "New All CASA admin created successfully"
+    rescue ActiveRecord::RecordInvalid
+      render :new
+    end
   end
 
   def update
