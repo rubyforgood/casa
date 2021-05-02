@@ -36,10 +36,6 @@ RSpec.describe "case_court_reports/index", type: :view do
       expect(rendered).to have_selector("button[@type='submit']", text: "Generate Report", id: "btnGenerateReport")
     end
 
-    it "has a 'Download Court Report' button" do
-      expect(rendered).to have_link("Download Court Report", id: "btnDownloadReport", href: "#")
-    end
-
     it "has a 'Spinner' button" do
       expect(rendered).to have_selector("i#spinner")
     end

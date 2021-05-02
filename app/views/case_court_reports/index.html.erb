@@ -29,14 +29,6 @@
                        id: "btnGenerateReport",
                        class: "btn btn-primary" %>
         <i id="spinner" class='fas fa-spin d-none'>⏳</i>
-        <!--
-          Link to report is set to empty by default.
-          Download link will be created once the report is generated.
-        -->
-        <%= link_to t(".button.download"),
-                    "#",
-                    id: "btnDownloadReport",
-                    class: "btn btn-outline-primary mt-3 mt-sm-0 d-none" %>
       </div>
     <% end %>
 
@@ -52,7 +44,6 @@
   }
   const showBtn = el => el.classList.remove('d-none')
   const hideBtn = el => el.classList.add('d-none')
-  const setBtnHref = (el, href) => el.href = href
   const disableBtn = (el) => {
     el.disabled = true
     el.classList.add('disabled')
@@ -62,11 +53,6 @@
     el.disabled = false
     el.classList.remove('disabled')
     el.removeAttribute('aria-disabled')
-  }
-  const resetDownloadBtn = (btn) => {
-    // btn is hidden, and no download link is present
-    hideBtn(btn)
-    setBtnHref(btn, '#')
   }
   const showAlert = (html) => {
     const alertEl = new DOMParser().parseFromString(html, 'text/html').body.firstElementChild
@@ -110,8 +96,7 @@
         // when receiving a link to report, show 'Download Court Report' btn and show the link in the button
         const downloadBtn = generateBtn.form.querySelector(ELEMENTS.downloadBtn)
         hideBtn(spinner)
-        showBtn(downloadBtn)
-        setBtnHref(downloadBtn, data.link)
+        window.open(data.link, "_blank")
       })
       .catch((error) => {
         console.error('Debugging info, error:', error)
@@ -126,7 +111,6 @@
     // when selecting a case, reset buttons to initial state
     enableBtn(generateBtn)
     showBtn(generateBtn)
-    resetDownloadBtn(downloadBtn)
   }
 
   const bindElements = () => {
