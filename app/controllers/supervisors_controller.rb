@@ -3,7 +3,8 @@
 class SupervisorsController < ApplicationController
   before_action :available_volunteers, only: [:edit, :update]
   before_action :set_supervisor, only: [:edit, :update, :activate, :deactivate]
-  before_action :all_volunteers_ever_assigned, only: [:edit, :update]
+  before_action :all_volunteers_ever_assigned, only: [:update]
+  before_action :supervisor_has_unassigned_volunteers, only: [:edit]
   after_action :verify_authorized
 
   def index
@@ -30,6 +31,9 @@ class SupervisorsController < ApplicationController
 
   def edit
     authorize @supervisor
+    if params[:include_unassigned] == "true"
+      all_volunteers_ever_assigned
+    end
   end
 
   def update
@@ -71,6 +75,10 @@ class SupervisorsController < ApplicationController
 
   def all_volunteers_ever_assigned
     @all_volunteers_ever_assigned = @supervisor.volunteers_ever_assigned
+  end
+
+  def supervisor_has_unassigned_volunteers
+    @supervisor_has_unassigned_volunteers = @supervisor.volunteers_ever_assigned.count > @supervisor.volunteers.count
   end
 
   def available_volunteers

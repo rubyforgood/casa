@@ -45,8 +45,16 @@
 
 <div class="card card-container">
   <div class="card-body">
-    <% if @all_volunteers_ever_assigned.any? %>
-      <h3>Assigned Volunteers</h3>
+    <% if (@all_volunteers_ever_assigned || @supervisor.volunteers).any? %>
+      <h3 class="pull-left">Assigned Volunteers</h3>
+      <% if @supervisor_has_unassigned_volunteers %>
+        <% button_text = @all_volunteers_ever_assigned.nil? ? "Include unassigned" : "Hide unassigned" %>
+        <%= button_to button_text,
+                      edit_supervisor_path(@supervisor),
+                      params: { include_unassigned: @all_volunteers_ever_assigned.nil? },
+                      method: :get,
+                      class: "btn btn-outline-primary pull-right" %>
+      <% end %>
       <table class='table volunteer-list'>
         <thead>
         <tr>
@@ -56,7 +64,7 @@
         </tr>
         </thead>
         <tbody>
-        <% @all_volunteers_ever_assigned.each do |volunteer| %>
+        <% (@all_volunteers_ever_assigned || @supervisor.volunteers).each do |volunteer| %>
           <tr>
             <td><%= link_to volunteer.display_name, edit_volunteer_path(volunteer) %></td>
             <td><%= volunteer.email %></td>
