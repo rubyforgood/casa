@@ -57,6 +57,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
     it { expect(rendered).to have_text("No contact attempts were logged for this week.") }
   end
 
+
   context "when a volunteer has been reassigned to a new supervisor" do
     before(:each) do
       supervisor.volunteers << volunteer
@@ -75,6 +76,39 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
     let(:other_supervisor) { create(:supervisor) }
 
     it { expect(rendered).not_to have_text(volunteer.display_name) }
+
+  context "when a volunteer has been unassigned" do
+    before(:each) do
+      supervisor.volunteers << volunteer
+      sign_in supervisor
+      volunteer.supervisor_volunteer.update(is_active: false)
+
+      new_supervisor.volunteers << volunteer
+      volunteer.supervisor_volunteer.update(is_active: true)
+      assign :supervisor, supervisor
+
+      render template: "supervisor_mailer/weekly_digest"
+    end
+
+    let(:new_supervisor) { create(:supervisor) }
+
+    it { expect(rendered).to have_text("The following volunteers have been unassigned from you") }
+    it { expect(rendered).to have_text("- #{volunteer.display_name}") }
+  end
+
+  context "when a volunteer unassigned and has not been assigned to a new supervisor" do
+    before(:each) do
+      supervisor.volunteers << volunteer
+      sign_in supervisor
+      assign :supervisor, supervisor
+      volunteer.supervisor_volunteer.update(is_active: false)
+      render template: "supervisor_mailer/weekly_digest"
+    end
+
+    it { expect(rendered).to have_text("The following volunteers have been unassigned from you") }
+    it { expect(rendered).to have_text("- #{volunteer.display_name}") }
+    it { expect(rendered).to have_text("(not assigned to a new supervisor)") }
+
   end
 
   # TODO: Add more cases here
