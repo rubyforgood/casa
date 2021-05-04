@@ -2,7 +2,7 @@
 
 class SupervisorsController < ApplicationController
   before_action :available_volunteers, only: [:edit, :update, :index]
-  before_action :set_supervisor, only: [:edit, :update]
+  before_action :set_supervisor, only: [:edit, :update, :activate, :deactivate]
   before_action :all_volunteers_ever_assigned, only: [:edit, :update]
   after_action :verify_authorized
 
