@@ -72,20 +72,16 @@ RSpec.describe CaseCourtReport, type: :model do
     describe "the default generated report" do
       let(:document_data){
         {
-          case_number: "1234567890987654321",
+          case_number: "A-CASA-CASE-NUMBER-12345",
           org_address: "596 Unique Avenue Seattle, Washington",
           supervisor_name: "A very unique supervisor name",
           volunteer_name: "An unmistakably unique volunteer name"
         }
       }
 
-      let(:supervisor){ create(:supervisor, display_name: document_data[:supervisor_name]) }
-      let(:casa_case){ create(:casa_case, case_number: document_data[:case_number]) }
-
       # the current date
       # A casa case with
       #  - Date of birth
-      #  - is Transitioning
       # Case Contacts with
       #  - contact name
       #  - contact type
@@ -97,36 +93,31 @@ RSpec.describe CaseCourtReport, type: :model do
       # A volunteer
       #  - date assigned to case
       # hearing date?
-      #  report_as_data = report.generate_to_string
 
       context "when passed all displayable information" do
         before(:each) {
           casa_case_with_contacts.casa_org.update_attribute(:address, document_data[:org_address])
+          casa_case_with_contacts.update_attribute(:case_number, document_data[:case_number])
+          volunteer.update_attribute(:display_name, document_data[:volunteer_name])
+          volunteer.supervisor.update_attribute(:display_name, document_data[:supervisor_name])
         }
 
         it "displays all the information" do
           report_as_raw_docx = report.generate_to_string
           report_top_header = get_docx_subfile_contents(report_as_raw_docx, "word/header3.xml")
           report_body = get_docx_subfile_contents(report_as_raw_docx, "word/document.xml")
-          
 
           expect(report_top_header).to include(document_data[:org_address])
+          expect(report_body).to include(document_data[:case_number])
+          expect(report_body).to include(document_data[:supervisor_name])
+          expect(report_body).to include(document_data[:volunteer_name])
         end
-      end
-
-      it "contains the current date" do
-      end
-
-      it "contains the casa org's address" do
       end
 
       it "contains the casa case court date" do
       end
 
       it "contains the casa case date of birth" do
-      end
-
-      it "does not display helper text" do
       end
 
       it "contains all case contact names, types, and dates" do
