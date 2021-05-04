@@ -69,56 +69,73 @@ RSpec.describe CaseCourtReport, type: :model do
       end
     end
 
-    context "when the casa case is transitioning" do
-      describe "the default generated report" do
-        # the current date
-        # A casa case with
-        #  - case number
-        #  - Date of birth
-        #  - is Transitioning
-        # Case Contacts with
-        #  - contact name
-        #  - contact type
-        #  - date of contact
-        # A case contact type name
-        # case mandates with
-        #  - order text
-        #  - mandate status
-        # A volunteer
-        #  - name
-        #  - date assigned to case
-        # The volunteer's supervisor's name
-        # The casa org's address in the header
-        # hearing date?
-        #  report_as_data = report.generate_to_string
-
-        it "contains the current date" do
-        end
-
-        it "contains the casa org's address" do
-        end
-
-        it "contains the casa case court date" do
-        end
-
-        it "contains the casa case date of birth" do
-        end
-
-        it "does not display helper text" do
-        end
-
-        it "contains all case contact names, types, and dates" do
-        end
-
-        it "contains all case court mandate orders and statuses" do
-        end
-
-        it "contains the name and date of assignment for the volunteer assigned to the case" do
-        end
-
-        after(:all) {
-          # remove_instance_variable(:@var)
+    describe "the default generated report" do
+      let(:document_data){
+        {
+          case_number: "1234567890987654321",
+          org_address: "596 Unique Avenue Seattle, Washington",
+          supervisor_name: "A very unique supervisor name",
+          volunteer_name: "An unmistakably unique volunteer name"
         }
+      }
+
+      let(:supervisor){ create(:supervisor, display_name: document_data[:supervisor_name]) }
+      let(:casa_case){ create(:casa_case, case_number: document_data[:case_number]) }
+
+      # the current date
+      # A casa case with
+      #  - Date of birth
+      #  - is Transitioning
+      # Case Contacts with
+      #  - contact name
+      #  - contact type
+      #  - date of contact
+      # A case contact type name
+      # case mandates with
+      #  - order text
+      #  - mandate status
+      # A volunteer
+      #  - date assigned to case
+      # hearing date?
+      #  report_as_data = report.generate_to_string
+
+      context "when passed all displayable information" do
+        before(:each) {
+          casa_case_with_contacts.casa_org.update_attribute(:address, document_data[:org_address])
+        }
+
+        it "displays all the information" do
+          report_as_raw_docx = report.generate_to_string
+          report_top_header = get_docx_subfile_contents(report_as_raw_docx, "word/header3.xml")
+          report_body = get_docx_subfile_contents(report_as_raw_docx, "word/document.xml")
+          
+
+          expect(report_top_header).to include(document_data[:org_address])
+        end
+      end
+
+      it "contains the current date" do
+      end
+
+      it "contains the casa org's address" do
+      end
+
+      it "contains the casa case court date" do
+      end
+
+      it "contains the casa case date of birth" do
+      end
+
+      it "does not display helper text" do
+      end
+
+      it "contains all case contact names, types, and dates" do
+      end
+
+      it "contains all case court mandate orders and statuses" do
+      end
+
+      it "contains the name and date of assignment for the volunteer assigned to the case" do
       end
     end
   end
