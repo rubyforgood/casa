@@ -100,6 +100,11 @@ RSpec.describe "supervisors/index", type: :system do
         expect(page).to have_text("Tony Ruiz")
         expect(page).not_to have_text("Currently no volunteer are unassigned")
       end
+
+      it "will confirm that the link url is correct" do
+        click_on("Tony Ruiz")
+        expect(page).to have_current_path("/volunteers/#{Volunteer.ids.first}/edit")
+      end
     end
 
     context "without unassigned volunteers" do
