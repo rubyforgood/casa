@@ -87,6 +87,30 @@ RSpec.describe "supervisors/index", type: :system do
       verify_numeric_sort("No Contact (14 days)")
     end
 
-#this is a test    
+    context "with unassigned volunteers" do
+      let!(:unassigned_volunteer) { create(:volunteer, casa_org: organization, display_name: "Tony Ruiz") }
+
+      before do
+        sign_in user
+        visit supervisors_path
+      end
+
+      it "will show a list of unassigned volunteers" do
+        expect(page).to have_text("Unassigned volunteers:")
+        expect(page).to have_text("Tony Ruiz")
+        expect(page).not_to have_text("Currently no volunteer are unassigned")
+      end
+    end
+
+    context "without unassigned volunteers" do
+      before do
+        sign_in user
+        visit supervisors_path
+      end
+
+      it "will not show a list of volunteers not assigned to supervisors" do
+        expect(page).to have_text("Currently no volunteers are unassigned")
+      end
+    end
   end
 end
