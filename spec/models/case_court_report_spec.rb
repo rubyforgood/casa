@@ -70,18 +70,18 @@ RSpec.describe CaseCourtReport, type: :model do
     end
 
     describe "the default generated report" do
-      let(:document_data){
+      let(:document_data) {
         {
+          case_birthday: 12.years.ago,
+          case_hearing_date: 2.weeks.from_now,
           case_number: "A-CASA-CASE-NUMBER-12345",
           org_address: "596 Unique Avenue Seattle, Washington",
           supervisor_name: "A very unique supervisor name",
+          volunteer_case_assignment_date: 2.months.ago,
           volunteer_name: "An unmistakably unique volunteer name"
         }
       }
 
-      # the current date
-      # A casa case with
-      #  - Date of birth
       # Case Contacts with
       #  - contact name
       #  - contact type
@@ -90,14 +90,14 @@ RSpec.describe CaseCourtReport, type: :model do
       # case mandates with
       #  - order text
       #  - mandate status
-      # A volunteer
-      #  - date assigned to case
-      # hearing date?
 
       context "when passed all displayable information" do
         before(:each) {
           casa_case_with_contacts.casa_org.update_attribute(:address, document_data[:org_address])
+          casa_case_with_contacts.update_attribute(:birth_month_year_youth, document_data[:case_birthday])
           casa_case_with_contacts.update_attribute(:case_number, document_data[:case_number])
+          casa_case_with_contacts.update_attribute(:court_date, document_data[:case_hearing_date])
+          CaseAssignment.find_by(casa_case_id: casa_case_with_contacts.id, volunteer_id: volunteer.id).update_attribute(:created_at, document_data[:volunteer_case_assignment_date])
           volunteer.update_attribute(:display_name, document_data[:volunteer_name])
           volunteer.supervisor.update_attribute(:display_name, document_data[:supervisor_name])
         }
@@ -108,25 +108,19 @@ RSpec.describe CaseCourtReport, type: :model do
           report_body = get_docx_subfile_contents(report_as_raw_docx, "word/document.xml")
 
           expect(report_top_header).to include(document_data[:org_address])
+          expect(report_body).to include(Date.today.strftime("%B %-d, %Y"))
+          expect(report_body).to include(document_data[:volunteer_case_assignment_date].strftime("%B %-d, %Y"))
           expect(report_body).to include(document_data[:case_number])
           expect(report_body).to include(document_data[:supervisor_name])
           expect(report_body).to include(document_data[:volunteer_name])
+          expect(report_body).to include(document_data[:case_hearing_date].strftime("%B %-d, %Y"))
         end
-      end
-
-      it "contains the casa case court date" do
-      end
-
-      it "contains the casa case date of birth" do
       end
 
       it "contains all case contact names, types, and dates" do
       end
 
       it "contains all case court mandate orders and statuses" do
-      end
-
-      it "contains the name and date of assignment for the volunteer assigned to the case" do
       end
     end
   end
