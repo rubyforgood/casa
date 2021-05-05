@@ -70,33 +70,35 @@ RSpec.describe CaseCourtReport, type: :model do
     end
 
     describe "the default generated report" do
-      let(:document_data) {
-        {
-          case_birthday: 12.years.ago,
-          case_hearing_date: 2.weeks.from_now,
-          case_number: "A-CASA-CASE-NUMBER-12345",
-          org_address: "596 Unique Avenue Seattle, Washington",
-          supervisor_name: "A very unique supervisor name",
-          volunteer_case_assignment_date: 2.months.ago,
-          volunteer_name: "An unmistakably unique volunteer name"
-        }
-      }
-
       # Case Contacts with
       #  - contact name
       #  - contact type
       #  - date of contact
       # A case contact type name
-      # case mandates with
-      #  - order text
-      #  - mandate status
 
       context "when passed all displayable information" do
+        let(:document_data) {
+          {
+            case_birthday: 12.years.ago,
+            case_hearing_date: 2.weeks.from_now,
+            case_number: "A-CASA-CASE-NUMBER-12345",
+            mandate_text: "This text shall not be strikingly similar to other text in the document",
+            org_address: "596 Unique Avenue Seattle, Washington",
+            supervisor_name: "A very unique supervisor name",
+            volunteer_case_assignment_date: 2.months.ago,
+            volunteer_name: "An unmistakably unique volunteer name"
+          }
+        }
+
+        let(:court_mandate) { create(:case_court_mandate, implementation_status: :partially_implemented) }
+
         before(:each) {
           casa_case_with_contacts.casa_org.update_attribute(:address, document_data[:org_address])
           casa_case_with_contacts.update_attribute(:birth_month_year_youth, document_data[:case_birthday])
           casa_case_with_contacts.update_attribute(:case_number, document_data[:case_number])
           casa_case_with_contacts.update_attribute(:court_date, document_data[:case_hearing_date])
+          casa_case_with_contacts.case_court_mandates << court_mandate
+          court_mandate.update_attribute(:mandate_text, document_data[:mandate_text])
           CaseAssignment.find_by(casa_case_id: casa_case_with_contacts.id, volunteer_id: volunteer.id).update_attribute(:created_at, document_data[:volunteer_case_assignment_date])
           volunteer.update_attribute(:display_name, document_data[:volunteer_name])
           volunteer.supervisor.update_attribute(:display_name, document_data[:supervisor_name])
@@ -109,18 +111,17 @@ RSpec.describe CaseCourtReport, type: :model do
 
           expect(report_top_header).to include(document_data[:org_address])
           expect(report_body).to include(Date.today.strftime("%B %-d, %Y"))
-          expect(report_body).to include(document_data[:volunteer_case_assignment_date].strftime("%B %-d, %Y"))
-          expect(report_body).to include(document_data[:case_number])
-          expect(report_body).to include(document_data[:supervisor_name])
-          expect(report_body).to include(document_data[:volunteer_name])
           expect(report_body).to include(document_data[:case_hearing_date].strftime("%B %-d, %Y"))
+          expect(report_body).to include(document_data[:case_number])
+          expect(report_body).to include(document_data[:mandate_text])
+          expect(report_body).to include("partially_implemented")
+          expect(report_body).to include(document_data[:volunteer_name])
+          expect(report_body).to include(document_data[:volunteer_case_assignment_date].strftime("%B %-d, %Y"))
+          expect(report_body).to include(document_data[:supervisor_name])
         end
       end
 
       it "contains all case contact names, types, and dates" do
-      end
-
-      it "contains all case court mandate orders and statuses" do
       end
     end
   end
