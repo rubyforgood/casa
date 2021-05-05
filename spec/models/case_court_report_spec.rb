@@ -70,16 +70,12 @@ RSpec.describe CaseCourtReport, type: :model do
     end
 
     describe "the default generated report" do
-      # Case Contacts with
-      #  - contact name
-      #  - contact type
-      #  - date of contact
-      # A case contact type name
-
       context "when passed all displayable information" do
         let(:document_data) {
           {
             case_birthday: 12.years.ago,
+            case_contact_time: 3.days.ago,
+            case_contact_type: "Unique Case Contact Type",
             case_hearing_date: 2.weeks.from_now,
             case_number: "A-CASA-CASE-NUMBER-12345",
             mandate_text: "This text shall not be strikingly similar to other text in the document",
@@ -90,6 +86,8 @@ RSpec.describe CaseCourtReport, type: :model do
           }
         }
 
+        let(:contact_type) { create(:contact_type, name: document_data[:case_contact_type]) }
+        let(:case_contact) { create(:case_contact, contact_made: false, occurred_at: document_data[:case_contact_time]) }
         let(:court_mandate) { create(:case_court_mandate, implementation_status: :partially_implemented) }
 
         before(:each) {
@@ -97,6 +95,8 @@ RSpec.describe CaseCourtReport, type: :model do
           casa_case_with_contacts.update_attribute(:birth_month_year_youth, document_data[:case_birthday])
           casa_case_with_contacts.update_attribute(:case_number, document_data[:case_number])
           casa_case_with_contacts.update_attribute(:court_date, document_data[:case_hearing_date])
+          case_contact.contact_types << contact_type
+          casa_case_with_contacts.case_contacts << case_contact
           casa_case_with_contacts.case_court_mandates << court_mandate
           court_mandate.update_attribute(:mandate_text, document_data[:mandate_text])
           CaseAssignment.find_by(casa_case_id: casa_case_with_contacts.id, volunteer_id: volunteer.id).update_attribute(:created_at, document_data[:volunteer_case_assignment_date])
@@ -113,15 +113,14 @@ RSpec.describe CaseCourtReport, type: :model do
           expect(report_body).to include(Date.today.strftime("%B %-d, %Y"))
           expect(report_body).to include(document_data[:case_hearing_date].strftime("%B %-d, %Y"))
           expect(report_body).to include(document_data[:case_number])
+          expect(report_body).to include(document_data[:case_contact_type])
+          expect(report_body).to include("#{document_data[:case_contact_time].strftime("%-m/%d")}*")
           expect(report_body).to include(document_data[:mandate_text])
-          expect(report_body).to include("partially_implemented")
+          expect(report_body).to include("partially_implemented") # Mandate Status
           expect(report_body).to include(document_data[:volunteer_name])
           expect(report_body).to include(document_data[:volunteer_case_assignment_date].strftime("%B %-d, %Y"))
           expect(report_body).to include(document_data[:supervisor_name])
         end
-      end
-
-      it "contains all case contact names, types, and dates" do
       end
     end
   end
