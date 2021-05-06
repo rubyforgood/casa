@@ -74,7 +74,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
 
     let(:other_supervisor) { create(:supervisor) }
 
-    it { expect(rendered).not_to have_text(volunteer.display_name) }
+    xit { expect(rendered).not_to have_text(volunteer.display_name) }
   end
 
   context "when a volunteer has been unassigned" do
