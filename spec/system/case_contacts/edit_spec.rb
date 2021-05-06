@@ -23,6 +23,14 @@ RSpec.describe "case_contacts/edit", type: :system do
       expect(case_contact.medium_type).to eq "letter"
       expect(case_contact.contact_made).to eq true
     end
+
+    it "fails across organizations" do
+      admin = create(:casa_admin, casa_org: create(:casa_org))
+      sign_in admin
+
+      visit edit_case_contact_path(case_contact)
+      expect(current_path).to eq supervisors_path
+    end
   end
 
   context "volunteer user" do
