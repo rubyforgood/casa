@@ -6,8 +6,9 @@ RSpec.describe "case_contacts/edit", type: :system do
   let!(:case_contact) { create(:case_contact, duration_minutes: 105, casa_case: casa_case) }
 
   context "when admin" do
+    let(:admin) { create(:casa_admin, casa_org: organization) }
+
     it "admin successfully edits case contact", js: true do
-      admin = create(:casa_admin, casa_org: organization)
       sign_in admin
 
       visit edit_case_contact_path(case_contact)
@@ -22,6 +23,18 @@ RSpec.describe "case_contacts/edit", type: :system do
       expect(case_contact.duration_minutes).to eq 105
       expect(case_contact.medium_type).to eq "letter"
       expect(case_contact.contact_made).to eq true
+    end
+
+    context "is part of a different organization" do
+      let(:other_organization) { create(:casa_org) }
+      let(:admin) { create(:casa_admin, casa_org: other_organization) }
+
+      it "fails across organizations" do
+        sign_in admin
+
+        visit edit_case_contact_path(case_contact)
+        expect(current_path).to eq supervisors_path
+      end
     end
   end
 

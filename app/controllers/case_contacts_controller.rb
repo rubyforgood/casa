@@ -113,7 +113,11 @@ class CaseContactsController < ApplicationController
   private
 
   def set_case_contact
-    @case_contact = authorize(current_organization.case_contacts.find(params[:id]))
+    if current_organization.case_contacts.exists?(params[:id])
+      @case_contact = authorize(current_organization.case_contacts.find(params[:id]))
+    else
+      redirect_to authenticated_user_root_path
+    end
   end
 
   def set_contact_types
