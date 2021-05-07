@@ -197,6 +197,36 @@ RSpec.describe "supervisors/edit", type: :system do
           expect(page).to have_text("There are no active, unassigned volunteers available.")
         end
       end
+
+      context "when there are assigned volunteers" do
+        let(:supervisor) { create(:supervisor, :with_volunteers, casa_org: organization) }
+
+        it "shows assigned volunteers" do
+          visit edit_supervisor_path(supervisor)
+
+          expect(page).to have_text "Assigned Volunteers"
+          expect(page).to_not have_button("Include unassigned")
+          supervisor.volunteers.each do |volunteer|
+            expect(page).to have_text volunteer.email
+          end
+        end
+
+        context "when there are previously unassigned volunteers" do
+          let!(:unassigned_volunteer) { create(:supervisor_volunteer, :inactive, supervisor: supervisor).volunteer }
+
+          it "does not show them by default" do
+            visit edit_supervisor_path(supervisor)
+
+            expect(page).to_not have_text unassigned_volunteer.email
+            expect(page).to have_button("Include unassigned")
+
+            click_on "Include unassigned"
+
+            expect(page).to have_button("Hide unassigned")
+            expect(page).to have_text unassigned_volunteer.email
+          end
+        end
+      end
     end
   end
 end
