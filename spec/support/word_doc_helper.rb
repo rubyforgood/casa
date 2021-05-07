@@ -10,7 +10,7 @@ module WordDocHelper
   #
   def get_docx_subfile_contents(docx, path)
     Tempfile.create("court_report.zip", "tmp") do |file|
-      file << docx
+      file << docx.force_encoding("UTF-8")
 
       Zip::File.open(file.path) do |docx_extracted|
         return docx_extracted.find_entry(path).get_input_stream.read.force_encoding("UTF-8")
