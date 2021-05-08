@@ -132,6 +132,7 @@ en:
       title: Admins
       active: Active
       active_text: Admin is
+      deactivated: Deactivated
       deactive_text: Admin was deactivated on
       button:
         new: New Admin
@@ -274,7 +275,7 @@ en:
         do_not: Do not
         change_values: change any of the values in the first line of the example csv file.
         import: Then click the "Import Volunteers CSV" button to import your volunteers.
-        note: This will email the new volunteers asking them to log in! 
+        note: This will email the new volunteers asking them to log in!
       disable_with: Importing File
     index:
       title: Import Categories

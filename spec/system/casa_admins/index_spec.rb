@@ -22,4 +22,16 @@ RSpec.describe "casa_admins/index", type: :system do
       expect(page).to have_no_content(volunteer.email)
     end
   end
+
+  it "displays a deactivated tag for inactive admins" do
+    inactive_admin = create(:casa_admin, :inactive, casa_org: organization)
+
+    sign_in admin
+    visit casa_admins_path
+
+    within "#admins" do
+      expect(page).to have_content(inactive_admin.email)
+      expect(page).to have_content("Deactivated")
+    end
+  end
 end
