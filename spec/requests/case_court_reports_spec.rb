@@ -159,8 +159,8 @@ RSpec.describe "/case_court_reports", type: :request do
   def request_generate_court_report
     post generate_case_court_reports_path,
       params: {
-        "case_court_report": {"case_number": casa_case.case_number.to_s}
+        case_court_report: {case_number: casa_case.case_number.to_s}
       },
-      headers: {"ACCEPT": "application/json"}
+      headers: {ACCEPT: "application/json"}
   end
 end

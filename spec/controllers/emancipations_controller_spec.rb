@@ -14,12 +14,12 @@ RSpec.describe EmancipationsController, type: :controller do
 
   it "raises Missing param casa_case_id error message" do
     post :save, params: {casa_case_id: "string"}
-    expect(response.body).to eq({"error": "Could not find case from id given by casa_case_id"}.to_json)
+    expect(response.body).to eq({error: "Could not find case from id given by casa_case_id"}.to_json)
   end
 
   it "raises add_option error message" do
     post :save, params: {casa_case_id: "-1"}
-    expect(response.body).to eq({"error": "Could not find case from id given by casa_case_id"}.to_json)
+    expect(response.body).to eq({error: "Could not find case from id given by casa_case_id"}.to_json)
   end
 
   context "empty params" do
@@ -35,7 +35,7 @@ RSpec.describe EmancipationsController, type: :controller do
 
     it "errors for unfindable casa case" do
       subject
-      expect(response.body).to eq({"error": "Could not find case from id given by casa_case_id"}.to_json)
+      expect(response.body).to eq({error: "Could not find case from id given by casa_case_id"}.to_json)
     end
   end
 
@@ -43,19 +43,19 @@ RSpec.describe EmancipationsController, type: :controller do
     it "raises missing param error message" do
       casa_case = create :casa_case, casa_org: organization
       post :save, params: {casa_case_id: casa_case.id.to_s}
-      expect(response.body).to eq({"error": "Sorry, you are not authorized to perform this action. Did the session expire?"}.to_json)
+      expect(response.body).to eq({error: "Sorry, you are not authorized to perform this action. Did the session expire?"}.to_json)
     end
   end
 
   it "raises param check_item_id error message" do
     post :save, params: {casa_case_id: "1", check_item_action: "1"}
-    expect(response.body).to eq({"error": "Could not find case from id given by casa_case_id"}.to_json)
+    expect(response.body).to eq({error: "Could not find case from id given by casa_case_id"}.to_json)
   end
 
   it "raises must be positive integer error message" do
     casa_case = create :casa_case, casa_org: organization
     post :save, params: {casa_case_id: casa_case.id.to_s, check_item_action: "1", check_item_id: "-1"}
-    expect(response.body).to eq({"error": "Sorry, you are not authorized to perform this action. Did the session expire?"}.to_json)
+    expect(response.body).to eq({error: "Sorry, you are not authorized to perform this action. Did the session expire?"}.to_json)
   end
 
   context "non transitioning case" do
@@ -63,7 +63,7 @@ RSpec.describe EmancipationsController, type: :controller do
 
     it "errors for unfindable check item" do
       subject
-      expect(response.body).to eq({"error": "The current case is not marked as transitioning"}.to_json)
+      expect(response.body).to eq({error: "The current case is not marked as transitioning"}.to_json)
     end
   end
 
@@ -79,7 +79,7 @@ RSpec.describe EmancipationsController, type: :controller do
 
       it "errors for unfindable check item" do
         subject
-        expect(response.body).to eq({"error": "Check item action:  is not a supported action"}.to_json)
+        expect(response.body).to eq({error: "Check item action:  is not a supported action"}.to_json)
       end
     end
 
@@ -87,7 +87,7 @@ RSpec.describe EmancipationsController, type: :controller do
       let(:params) { {casa_case_id: casa_case.id, check_item_action: "add_category", check_item_id: "-1"} }
       it "succeeds" do
         subject
-        expect(response.body).to eq({"error": "Could not find option from id given by param check_item_id"}.to_json)
+        expect(response.body).to eq({error: "Could not find option from id given by param check_item_id"}.to_json)
       end
     end
   end
