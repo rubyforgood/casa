@@ -20,6 +20,11 @@
         <tr id="admin-<%= admin.id %>">
           <th scope="row">
             <%= admin.email %>
+            <% unless admin.active? %>
+              <span class="badge badge-danger display-1 text-uppercase">
+                <%= t(".deactivated") %>
+              </span>
+            <% end %>
           </th>
           <td>
             <%= link_to t(".button.edit"), edit_casa_admin_path(admin) %>
