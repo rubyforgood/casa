@@ -20,7 +20,7 @@
     "bootstrap-select": "^1.13.18",
     "datatables.net-dt": "^1.10.24",
     "jquery": "^3.6.0",
-    "node-sass": "^5.0.0",
+    "node-sass": "^6.0.0",
     "popper.js": "^1.16.1",
     "select2": "^4.0.13",
     "sweetalert2": "^10.16.7",
