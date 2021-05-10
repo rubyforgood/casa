@@ -119,7 +119,7 @@ GEM
     crass (1.0.6)
     cypress-on-rails (1.10.1)
       rack
-    database_cleaner-active_record (2.0.0)
+    database_cleaner-active_record (2.0.1)
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
@@ -442,7 +442,7 @@ DEPENDENCIES
   capybara (>= 2.15)
   capybara-screenshot
   cypress-on-rails (~> 1.10)
-  database_cleaner-active_record (~> 2.0.0)
+  database_cleaner-active_record (~> 2.0.1)
   devise
   devise_invitable
   draper

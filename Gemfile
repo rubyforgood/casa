@@ -58,7 +58,7 @@ group :test do
   gem "brakeman" # security inspection
   gem "capybara", ">= 2.15"
   gem "capybara-screenshot"
-  gem "database_cleaner-active_record", "~> 2.0.0"
+  gem "database_cleaner-active_record", "~> 2.0.1"
   gem "rake"
   gem "rails-controller-testing"
   gem "selenium-webdriver"
