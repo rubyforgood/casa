@@ -223,6 +223,7 @@ RSpec.describe "supervisors/edit", type: :system do
             click_on "Include unassigned"
 
             expect(page).to have_button("Hide unassigned")
+            expect(page).to have_text("All Volunteers")
             expect(page).to have_text unassigned_volunteer.email
           end
         end
