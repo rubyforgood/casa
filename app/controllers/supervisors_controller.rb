@@ -34,6 +34,7 @@ class SupervisorsController < ApplicationController
     if params[:include_unassigned] == "true"
       all_volunteers_ever_assigned
     end
+    @unassigned_volunteer_count ||= 0
   end
 
   def update
@@ -74,6 +75,7 @@ class SupervisorsController < ApplicationController
   end
 
   def all_volunteers_ever_assigned
+    @unassigned_volunteer_count = @supervisor.volunteers_ever_assigned.count - @supervisor.volunteers.count
     @all_volunteers_ever_assigned = @supervisor.volunteers_ever_assigned
   end
 
