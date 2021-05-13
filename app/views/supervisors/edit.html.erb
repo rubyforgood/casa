@@ -45,7 +45,7 @@
 
 <div class="card card-container">
   <div class="card-body">
-    <% if (@all_volunteers_ever_assigned || @supervisor.volunteers).any? %>
+    <% if @supervisor_has_unassigned_volunteers || @supervisor.volunteers.any? %>
       <h3 class="pull-left"><%= t(".volunteer_title", count: @unassigned_volunteer_count) %></h3>
       <% if @supervisor_has_unassigned_volunteers %>
         <% button_text = @all_volunteers_ever_assigned.nil? ? t(".include_unassigned") : t(".hide_unassigned") %>

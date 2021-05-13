@@ -28,6 +28,7 @@ RSpec.describe "supervisors/edit", type: :view do
     create :supervisor_volunteer, :inactive, supervisor: supervisor, volunteer: volunteer
 
     assign :supervisor, supervisor
+    assign :supervisor_has_unassigned_volunteers, true
     assign :all_volunteers_ever_assigned, [volunteer]
     assign :available_volunteers, []
 
