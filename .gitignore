@@ -43,6 +43,7 @@ config/credentials.yml.enc
 vendor/bundle/
 .generators
 
+cypress/downloads/*
 cypress/screenshots/*
 cypress/videos/*
 
