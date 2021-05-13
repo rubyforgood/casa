@@ -143,6 +143,8 @@ We are using [Letter Opener](https://github.com/ryanb/letter_opener) in
 development to receive mail. All emails sent in development should open in a
 new tab in the browser.
 
+To see local email previews, check out http://localhost:3000/rails/mailers
+
 **Post-deployment tasks**
 
 We are using [After Party](https://github.com/theSteveMitchell/after_party) to
