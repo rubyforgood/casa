@@ -7,6 +7,7 @@ RSpec.describe "supervisors/index", type: :view do
     enable_pundit(view, user)
     allow(view).to receive(:current_user).and_return(user)
     assign :supervisors, []
+    assign :available_volunteers, []
     sign_in user
   end
 
