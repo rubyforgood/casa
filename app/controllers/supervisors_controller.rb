@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class SupervisorsController < ApplicationController
-  before_action :available_volunteers, only: [:edit, :update]
+  before_action :available_volunteers, only: [:edit, :update, :index]
   before_action :set_supervisor, only: [:edit, :update, :activate, :deactivate]
   before_action :all_volunteers_ever_assigned, only: [:update]
   before_action :supervisor_has_unassigned_volunteers, only: [:edit]
+
   after_action :verify_authorized
 
   def index
