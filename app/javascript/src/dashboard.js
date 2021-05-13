@@ -1,4 +1,7 @@
 /* global $ */
+/* global location */
+/* global alert */
+
 const defineCaseContactsTable = function () {
   $('table#case_contacts').DataTable(
     {
@@ -221,7 +224,13 @@ $('document').ready(() => {
   volunteersTable.columns().every(function (index) {
     const columnVisible = this.visible()
 
-    if (columnVisible) { $('#visibleColumns input[data-column="' + index + '"]').prop('checked', true) } else { $('#visibleColumns input[data-column="' + index + '"]').prop('checked', false) }
+    if (columnVisible) {
+      $('#visibleColumns input[data-column="' + index + '"]').prop('checked', true)
+    } else {
+      $('#visibleColumns input[data-column="' + index + '"]').prop('checked', false)
+    }
+
+    return true
   })
 
   const casaCasesTable = $('table#casa-cases').DataTable({
@@ -241,6 +250,8 @@ $('document').ready(() => {
     } else {
       $('#visibleColumns input[data-column="' + index + '"]').prop('checked', false)
     }
+
+    return true
   })
 
   defineCaseContactsTable()

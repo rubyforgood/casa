@@ -1,3 +1,5 @@
+/* eslint-env jquery */
+
 const emancipationPage = {
   saveOperationSuccessful: false,
   savePath: window.location.pathname + '/save',

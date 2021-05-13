@@ -1,23 +1,27 @@
-function add_court_mandate_input () {
+/* eslint-env jquery */
+
+import Swal from 'sweetalert2'
+
+function addCourtMandateInput () {
   const list = '#mandates-list-container'
   const index = $(`${list} textarea`).length
-  const html = court_mandate_html(index)
+  const html = courtMandateHtml(index)
 
   $(list).append(html.entry)
-  const last_entry = $(list).children(':last')
+  const lastEntry = $(list).children(':last')
 
-  $(last_entry).append(html.textarea)
-  $(last_entry).append(html.select)
-  $(last_entry).children(':first').trigger('focus')
+  $(lastEntry).append(html.textarea)
+  $(lastEntry).append(html.select)
+  $(lastEntry).children(':first').trigger('focus')
 }
 
-function remove_mandate_with_confirmation () {
+function removeMandateWithConfirmation () {
+  const text = 'Are you sure you want to remove this court mandate? Doing so will ' +
+               'delete all records of it unless it was included in a previous court report.'
   Swal.fire({
     icon: 'warning',
     title: 'Delete court mandate?',
-    text: 'Are you sure you want to remove this court mandate? Doing so will \
-delete all records of it unless it was included in a previous court report.',
-
+    text: text,
     showCloseButton: true,
     showCancelButton: true,
     focusConfirm: false,
@@ -29,21 +33,21 @@ delete all records of it unless it was included in a previous court report.',
     cancelButtonText: 'Go back'
   }).then((result) => {
     if (result.isConfirmed) {
-      remove_mandate_action($(this))
+      removeMandateAction($(this))
     }
   })
 }
 
-function remove_mandate_action (ctx) {
-  id_element = ctx.parent().next('input[type="hidden"]')
-  id = id_element.val()
+function removeMandateAction (ctx) {
+  const idElement = ctx.parent().next('input[type="hidden"]')
+  const id = idElement.val()
 
   $.ajax({
     url: `/case_court_mandates/${id}`,
     method: 'delete',
     success: () => {
       ctx.parent().remove()
-      id_element.remove() // Remove form element since this mandate has been deleted
+      idElement.remove() // Remove form element since this mandate has been deleted
 
       Swal.fire({
         icon: 'success',
@@ -61,11 +65,11 @@ function remove_mandate_action (ctx) {
   })
 }
 
-function court_mandate_html (index) {
-  const select_options = '<option value="">Set Implementation Status</option>\
-                          <option value="not_implemented">Not implemented</option>\
-                          <option value="partially_implemented">Partially implemented</option>\
-                          <option value="implemented">Implemented</option>'
+function courtMandateHtml (index) {
+  const selectOptions = '<option value="">Set Implementation Status</option>' +
+                        '<option value="not_implemented">Not implemented</option>' +
+                        '<option value="partially_implemented">Partially implemented</option>' +
+                        '<option value="implemented">Implemented</option>'
   return {
     entry: '<div class="court-mandate-entry"></div>',
 
@@ -75,12 +79,12 @@ function court_mandate_html (index) {
     select: `<select class="implementation-status"\
                  name="casa_case[case_court_mandates_attributes][${index}][implementation_status]"\
                  id="casa_case_case_court_mandates_attributes_${index}_implementation_status">\
-                 ${select_options}\
+                 ${selectOptions}\
                </select>`
   }
 }
 
 $('document').ready(() => {
-  $('button#add-mandate-button').on('click', add_court_mandate_input)
-  $('button.remove-mandate-button').on('click', remove_mandate_with_confirmation)
+  $('button#add-mandate-button').on('click', addCourtMandateInput)
+  $('button.remove-mandate-button').on('click', removeMandateWithConfirmation)
 })
