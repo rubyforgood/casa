@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "case_contacts/index", type: :system do
+RSpec.describe "case_contacts/index", :disable_bullet, type: :system do
   let(:organization) { create(:casa_org) }
   let(:volunteer) { create(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
   let(:casa_case) { create(:casa_case, casa_org: organization, case_number: "CINA-1") }

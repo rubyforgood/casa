@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "sessions/new", type: :system do
+RSpec.describe "sessions/new", :disable_bullet, type: :system do
   context "when guest" do
     it "renders sign in page with no flash messages" do
       visit "/"

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "layouts/application", type: :view do
+RSpec.describe "layouts/application", :disable_bullet, type: :view do
   subject { rendered }
 
   let(:title) { "CASA Volunteer Tracking" }

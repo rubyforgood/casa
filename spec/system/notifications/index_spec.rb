@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "notifications/index", type: :system do
+RSpec.describe "notifications/index", :disable_bullet, type: :system do
   let(:admin) { create(:casa_admin) }
   let(:volunteer) { create(:volunteer) }
   let(:case_contact) { create(:case_contact, creator: volunteer) }

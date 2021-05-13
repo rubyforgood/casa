@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "layout/sidebar", type: :view do
+RSpec.describe "layout/sidebar", :disable_bullet, type: :view do
   before do
     enable_pundit(view, user)
     allow(view).to receive(:current_user).and_return(user)

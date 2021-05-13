@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
+RSpec.describe "supervisor_mailer/weekly_digest", :disable_bullet, type: :view do
   let(:organization) { create(:casa_org) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
   let(:volunteer) { create(:volunteer, casa_org: organization) }

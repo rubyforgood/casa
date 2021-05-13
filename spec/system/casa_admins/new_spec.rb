@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "casa_admins/new", type: :system do
+RSpec.describe "casa_admins/new", :disable_bullet, type: :system do
   let(:admin) { create :casa_admin }
 
   it "validates and creates new admin" do

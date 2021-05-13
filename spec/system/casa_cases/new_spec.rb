@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "casa_cases/new", type: :system do
+RSpec.describe "casa_cases/new", :disable_bullet, type: :system do
   let(:casa_org) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: casa_org) }
   let(:case_number) { "12345" }

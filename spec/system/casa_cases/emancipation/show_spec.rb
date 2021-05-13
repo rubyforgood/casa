@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "casa_cases/show", type: :system do
+RSpec.describe "casa_cases/show", :disable_bullet, type: :system do
   let(:organization) { create(:casa_org) }
   let(:volunteer) { create(:volunteer, casa_org: organization) }
   let(:casa_case) { create(:casa_case, casa_org: organization, transition_aged_youth: true) }

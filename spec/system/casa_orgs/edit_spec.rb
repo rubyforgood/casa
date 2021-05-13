@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "casa_orgs/edit", type: :system do
+RSpec.describe "casa_orgs/edit", :disable_bullet, type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
   let!(:contact_type_group) { create(:contact_type_group, casa_org: organization, name: "Contact type group 1") }

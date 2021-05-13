@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "supervisors/index", type: :view do
+RSpec.describe "supervisors/index", :disable_bullet, type: :view do
   let(:user) {}
 
   before do

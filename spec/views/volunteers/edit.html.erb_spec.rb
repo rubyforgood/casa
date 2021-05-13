@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "volunteers/edit", type: :view do
+RSpec.describe "volunteers/edit", :disable_bullet, type: :view do
   let(:volunteer) { create :volunteer }
 
   it "allows an administrator to edit a volunteers email address" do

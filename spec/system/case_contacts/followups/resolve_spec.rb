@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "followups/resolve", type: :system do
+RSpec.describe "followups/resolve", :disable_bullet, type: :system do
   let(:admin) { create(:casa_admin) }
   let(:case_contact) { create(:case_contact) }
   let(:volunteer) { create(:volunteer) }

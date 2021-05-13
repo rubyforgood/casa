@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "casa_cases/index", type: :system do
+RSpec.describe "casa_cases/index", :disable_bullet, type: :system do
   # TODO combine with other casa cases index system spec
   let(:user) { build_stubbed :casa_admin }
 

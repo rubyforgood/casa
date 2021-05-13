@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "all_casa_admin/dashboard/show", type: :system do
+RSpec.describe "all_casa_admin/dashboard/show", :disable_bullet, type: :system do
   let(:all_casa_admin) { create(:all_casa_admin) }
   let(:volunteer) { create(:volunteer) }
   let!(:organization) { create(:casa_org) }
