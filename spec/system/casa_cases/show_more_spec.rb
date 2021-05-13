@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "casa_cases/show", type: :system do
+RSpec.describe "casa_cases/show", :disable_bullet, type: :system do
   let(:user) { build_stubbed :casa_admin }
 
   let(:organization) { create(:casa_org) }

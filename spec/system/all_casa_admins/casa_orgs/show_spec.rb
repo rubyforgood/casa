@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "all_casa_admins/casa_orgs/show", type: :system do
+RSpec.describe "all_casa_admins/casa_orgs/show", :disable_bullet, type: :system do
   let(:all_casa_admin) { create(:all_casa_admin, email: "theexample@example.com") }
   let(:organization) { create(:casa_org) }
 

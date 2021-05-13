@@ -1,7 +1,7 @@
 require "rails_helper"
 require "stringio"
 
-RSpec.describe "casa_cases/edit", type: :system do
+RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
   context "when admin" do
     let(:organization) { create(:casa_org) }
     let(:admin) { create(:casa_admin, casa_org: organization) }

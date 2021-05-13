@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "case_contacts/new", type: :system do
+RSpec.describe "case_contacts/new", :disable_bullet, type: :system do
   context "when admin" do
     let(:organization) { create(:casa_org) }
     let(:admin) { create(:casa_admin, casa_org: organization) }

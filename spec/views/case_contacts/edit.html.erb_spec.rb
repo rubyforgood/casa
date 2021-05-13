@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "case_contacts/edit", type: :view do
+RSpec.describe "case_contacts/edit", :disable_bullet, type: :view do
   before do
     user = build_stubbed(:volunteer)
     allow(view).to receive(:current_user).and_return(user)

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "casa_admins/edit", type: :system do
+RSpec.describe "casa_admins/edit", :disable_bullet, type: :system do
   let(:admin) { create :casa_admin }
 
   before { sign_in admin }

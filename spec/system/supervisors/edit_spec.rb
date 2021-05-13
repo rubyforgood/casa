@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "supervisors/edit", type: :system do
+RSpec.describe "supervisors/edit", :disable_bullet, type: :system do
   let(:organization) { create(:casa_org) }
 
   context "logged in as an admin" do

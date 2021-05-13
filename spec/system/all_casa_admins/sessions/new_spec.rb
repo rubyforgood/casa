@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "all_casa_admins/sessions/new", type: :system do
+RSpec.describe "all_casa_admins/sessions/new", :disable_bullet, type: :system do
   let(:all_casa_admin) { create(:all_casa_admin) }
   let(:volunteer) { create(:volunteer) }
 

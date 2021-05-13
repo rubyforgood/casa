@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "reports", type: :system do
+RSpec.describe "reports", :disable_bullet, type: :system do
   let!(:admin) { create(:casa_admin) }
   let!(:case_contact) { create(:case_contact) }
 

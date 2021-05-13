@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "supervisors/new", type: :view do
+RSpec.describe "supervisors/new", :disable_bullet, type: :view do
   subject { render template: "supervisors/new" }
 
   before do

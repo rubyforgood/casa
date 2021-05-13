@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "judges/new", type: :system do
+RSpec.describe "judges/new", :disable_bullet, type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
 

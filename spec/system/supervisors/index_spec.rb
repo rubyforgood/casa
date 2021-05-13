@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "supervisors/index", type: :system do
+RSpec.describe "supervisors/index", :disable_bullet, type: :system do
   let(:organization) { create(:casa_org) }
   let(:user) { create(:supervisor, casa_org: organization) }
 

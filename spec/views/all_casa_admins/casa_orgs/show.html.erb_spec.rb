@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "all_casa_admins/casa_orgs/show", type: :view do
+RSpec.describe "all_casa_admins/casa_orgs/show", :disable_bullet, type: :view do
   context "All casa admin organization dashboard" do
     let(:organization) { create :casa_org }
     let(:user) { create(:all_casa_admin) }

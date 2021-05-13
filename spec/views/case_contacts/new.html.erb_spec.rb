@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "case_contacts/new", type: :view do
+RSpec.describe "case_contacts/new", :disable_bullet, type: :view do
   subject { render template: "case_contacts/new" }
 
   before do
