@@ -1,4 +1,4 @@
-# CASA Project & Organization Overview
+# CASA Project and Organization Overview
 
 ![rspec](https://github.com/rubyforgood/casa/workflows/rspec/badge.svg)
 ![cypress](https://github.com/rubyforgood/casa/workflows/cypress/badge.svg)
@@ -6,8 +6,8 @@
 ![standardrb lint](https://github.com/rubyforgood/casa/actions/workflows/ruby_lint.yml/badge.svg)
 ![brakeman](https://github.com/rubyforgood/casa/workflows/brakeman/badge.svg)
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/maintainability)](https://codeclimate.com/github/rubyforgood/casa/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/test_coverage)](https://codeclimate.com/github/rubyforgood/casa/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/maintainability)](https://codeclimate.com/github/rubyforgood/casa/trends/technical_debt)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/test_coverage)](https://codeclimate.com/github/rubyforgood/casa/trends/test_coverage_total)
 [![View performance data on Skylight](https://badges.skylight.io/status/tFh7xrs3Qnaf.svg?token=1C-Q7p8jEFlG7t69Yl5DaJwa-ipWI8gLw9wLJf53xmQ)](https://www.skylight.io/app/applications/tFh7xrs3Qnaf)
 [![Snyk Vulnerabilities](https://snyk.io/test/github/rubyforgood/casa/badge.svg)](https://snyk.io/test/github/rubyforgood/casa)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/rubyforgood/casa.svg)](http://isitmaintained.com/project/rubyforgood/casa "Average time to resolve an issue")
@@ -142,6 +142,8 @@ If additional work arises from your commit that is outside the scope of the issu
 We are using [Letter Opener](https://github.com/ryanb/letter_opener) in
 development to receive mail. All emails sent in development should open in a
 new tab in the browser.
+
+To see local email previews, check out http://localhost:3000/rails/mailers
 
 **Post-deployment tasks**
 

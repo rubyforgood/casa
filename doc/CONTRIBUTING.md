@@ -52,4 +52,4 @@ If you are wondering how to keep your fork in sync with the main [repo], follow 
 [code of conduct]: https://github.com/rubyforgood/code-of-conduct
 [issues]: https://github.com/rubyforgood/casa/issues?q=is%3Aopen+is%3Aissue+label%3A%22Status%3A+Available%22
 [repo]: https://github.com/rubyforgood/casa
-[setup]: https://github.com/rubyforgood/casa#setup-to-develop 
+[setup]: https://github.com/rubyforgood/casa#developing-

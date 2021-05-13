@@ -5,12 +5,48 @@ RSpec.describe "/all_casa_admins", type: :request do
 
   before(:each) { sign_in admin }
 
+  describe "GET /new" do
+    context "with a all_casa_admin signed in" do
+      it "renders a successful response" do
+        get new_all_casa_admin_path
+
+        expect(response).to be_successful
+      end
+    end
+  end
+
   describe "GET /edit" do
     context "with a all_casa_admin signed in" do
       it "renders a successful response" do
         get edit_all_casa_admins_path
 
         expect(response).to be_successful
+      end
+    end
+  end
+
+  describe "POST /create" do
+    context "with valid parameters" do
+      it "creates a new All CASA admin" do
+        expect {
+          post all_casa_admins_path, params: {
+            all_casa_admin: {
+              email: "admin1@example.com"
+            }
+          }
+        }.to change(AllCasaAdmin, :count).by(1)
+      end
+    end
+
+    context "with invalid parameters" do
+      it "renders new page" do
+        post all_casa_admins_path, params: {
+          all_casa_admin: {
+            email: ""
+          }
+        }
+        expect(response).to be_successful
+        expect(response).to render_template "all_casa_admins/new"
       end
     end
   end

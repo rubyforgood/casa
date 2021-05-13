@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
   before_action :authenticate_user!
+  before_action :set_current_user
+  before_action :set_current_organization
   before_action :set_paper_trail_whodunnit
 
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
@@ -18,6 +20,14 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def set_current_user
+    RequestStore.store[:current_user] = current_user
+  end
+
+  def set_current_organization
+    RequestStore.store[:current_organization] = current_organization
+  end
 
   def not_authorized
     flash[:notice] = t("default", scope: "pundit")

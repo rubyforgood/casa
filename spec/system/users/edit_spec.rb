@@ -38,10 +38,6 @@ RSpec.describe "users/edit", type: :system do
     it "is not able to update the email if user is a volunteer" do
       expect(page).to have_field("Email", disabled: true)
     end
-
-    it "is not able to edit last sign in" do
-      expect(page).to have_field("user_last_sign_in_at", disabled: true)
-    end
   end
 
   context "supervisor user" do
@@ -52,10 +48,6 @@ RSpec.describe "users/edit", type: :system do
 
     it "is not able to update the email if user is a supervisor" do
       expect(page).to have_field("Email", disabled: true)
-    end
-
-    it "is not able to edit last sign in" do
-      expect(page).to have_field("user_last_sign_in_at", disabled: true)
     end
   end
 
@@ -78,10 +70,6 @@ RSpec.describe "users/edit", type: :system do
       expect(page).to have_text("Profile was successfully updated.")
       expect(page).to have_text("new_admin@example.com")
       assert_equal "new_admin@example.com", admin.reload.email
-    end
-
-    it "is not able to edit last sign in" do
-      expect(page).to have_field("user_last_sign_in_at", disabled: true)
     end
   end
 end

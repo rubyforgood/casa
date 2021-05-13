@@ -28,6 +28,7 @@ RSpec.describe "supervisors/edit", type: :view do
     create :supervisor_volunteer, :inactive, supervisor: supervisor, volunteer: volunteer
 
     assign :supervisor, supervisor
+    assign :supervisor_has_unassigned_volunteers, true
     assign :all_volunteers_ever_assigned, [volunteer]
     assign :available_volunteers, []
 
@@ -37,12 +38,12 @@ RSpec.describe "supervisors/edit", type: :view do
     expect(rendered).to include("Unassigned")
   end
 
-  describe "does not allow" do
+  describe "invite and login info" do
     let(:volunteer) { create :volunteer }
     let(:supervisor) { build_stubbed :supervisor }
     let(:admin) { build_stubbed :casa_admin }
 
-    it "a supervisor to edit a supervisor last sign in" do
+    it "shows for a supervisor editig a supervisor" do
       enable_pundit(view, supervisor)
       allow(view).to receive(:current_user).and_return(supervisor)
 
@@ -52,10 +53,14 @@ RSpec.describe "supervisors/edit", type: :view do
 
       render template: "supervisors/edit"
 
-      expect(rendered).to have_field("supervisor_last_sign_in_at", disabled: true)
+      expect(rendered).to have_text("Added to system ")
+      expect(rendered).to have_text("Invitation email sent \n  never")
+      expect(rendered).to have_text("Last logged in")
+      expect(rendered).to have_text("Invitation accepted \n  never")
+      expect(rendered).to have_text("Password reset last sent \n  never")
     end
 
-    it "an admin to edit a supervisor last sign in" do
+    it "shows for an admin editing a supervisor" do
       enable_pundit(view, supervisor)
       allow(view).to receive(:current_user).and_return(admin)
 
@@ -65,7 +70,11 @@ RSpec.describe "supervisors/edit", type: :view do
 
       render template: "supervisors/edit"
 
-      expect(rendered).to have_field("supervisor_last_sign_in_at", disabled: true)
+      expect(rendered).to have_text("Added to system ")
+      expect(rendered).to have_text("Invitation email sent \n  never")
+      expect(rendered).to have_text("Last logged in")
+      expect(rendered).to have_text("Invitation accepted \n  never")
+      expect(rendered).to have_text("Password reset last sent \n  never")
     end
   end
 end

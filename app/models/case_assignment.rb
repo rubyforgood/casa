@@ -20,7 +20,7 @@ class CaseAssignment < ApplicationRecord
   private
 
   def assignee_must_be_volunteer
-    errors.add(:volunteer, "Case assignee must be a volunteer") unless volunteer.is_a?(Volunteer) && volunteer.active?
+    errors.add(:volunteer, "Case assignee must be an active volunteer") unless volunteer.is_a?(Volunteer) && volunteer.active?
   end
 
   def casa_case_and_volunteer_must_belong_to_same_casa_org

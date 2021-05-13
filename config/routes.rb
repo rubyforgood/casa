@@ -44,6 +44,9 @@ Rails.application.routes.draw do
   end
 
   resources :case_contacts, except: %i[show] do
+    member do
+      post :restore
+    end
     resources :followups, only: %i[create], controller: "case_contacts/followups", shallow: true do
       patch :resolve, on: :member
     end
@@ -67,7 +70,13 @@ Rails.application.routes.draw do
   resources :emancipation_checklists, only: %i[index]
   resources :judges, only: %i[new create edit update]
   resources :notifications, only: :index
-  resources :supervisors, except: %i[destroy]
+
+  resources :supervisors, except: %i[destroy] do
+    member do
+      patch :activate
+      patch :deactivate
+    end
+  end
   resources :supervisor_volunteers, only: %i[create] do
     member do
       patch :unassign
@@ -99,7 +108,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :all_casa_admins, only: [] do
+  resources :all_casa_admins, only: [:new, :create] do
     collection do
       get :edit
       patch :update

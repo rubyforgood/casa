@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-sm-12 dashboard-table-header">
     <h3>
-      Emancipation Checklist
+      <%= t(".title") %>
     </h3>
       <%= link_to @current_case.case_number, casa_case_path(@current_case) %>
   </div>
@@ -54,9 +54,9 @@
 
 <div id="async-notifications">
   <div id="async-waiting-indicator" style="display: none">
-    Saving <div class="load-spinner"></div>
+    <%= t(".state.saving") %> <div class="load-spinner"></div>
   </div>
   <div id="async-success-indicator" class="async-success-indicator" style="display: none">
-    Saved
+    <%= t(".state.saved") %>
   </div>
 </div>

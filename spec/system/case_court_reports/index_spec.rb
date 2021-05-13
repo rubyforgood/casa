@@ -16,12 +16,6 @@ RSpec.describe "case_court_reports/index", type: :system do
       expect(page).to have_selector "#btnGenerateReport", **options
     end
 
-    it "has 'Download Court Report' button with Bootstrap class '.d-none'" do
-      options = {text: "Download Court Report", class: ["d-none"]}
-
-      expect(page).to have_selector "#btnDownloadReport", **options
-    end
-
     it "shows a select element with default selection 'Select a case to generate report'" do
       expected_text = "Select a case to generate report"
       find("#case-selection").click.first("option", text: expected_text).select_option
@@ -65,25 +59,13 @@ RSpec.describe "case_court_reports/index", type: :system do
       it "does not become disabled" do
         expect(page).not_to have_selector "#btnGenerateReport[disabled]"
       end
-
-      it "does not have label changed to 'Court report generating. Do not refresh or leave this page'" do
-        options = {text: "Court report generating. Do not refresh or leave this page"}
-
-        expect(page).not_to have_selector "#btnGenerateReport[disabled]", **options
-      end
     end
 
-    describe "'Download Court Report' button" do
+    describe "Spinner" do
       it "does not become visible" do
-        options = {text: "Download Court Report", visible: :hidden}
+        options = {visible: :hidden}
 
-        expect(page).to have_selector "#btnDownloadReport", **options
-      end
-
-      it "does not change href value from '#'" do
-        options = {id: "btnDownloadReport", visible: :hidden, href: "#"}
-
-        expect(page).to have_link "Download Court Report", **options
+        expect(page).to have_selector "#spinner", **options
       end
     end
   end
@@ -111,7 +93,7 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
   end
 
-  context "when selecting a case, volunteer can generate and download a report", js: true do
+  context "when generating a report, volunteer sees waiting page", js: true do
     let(:casa_case) { casa_cases.find(&:has_transitioned?) }
     let(:option_text) { "#{casa_case.case_number} - transition" }
 
@@ -123,36 +105,37 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
 
     describe "'Generate Report' button" do
-      it "becomes disabled" do
-        expect(page).to have_selector "#btnGenerateReport[disabled]"
-      end
-
-      it "has label changed to 'Court report generating. Do not refresh or leave this page'" do
-        options = {text: "Court report generating. Do not refresh or leave this page"}
+      it "has been hidden and disabled" do
+        options = {visible: :hidden}
 
         expect(page).to have_selector "#btnGenerateReport[disabled]", **options
       end
     end
 
-    describe "'Download Court Report' button" do
+    describe "Spinner" do
       it "becomes visible" do
-        options = {text: "Download Court Report", visible: :visible}
+        options = {visible: :visible}
 
-        expect(page).to have_selector "#btnDownloadReport", **options
+        expect(page).to have_selector "#spinner", **options
       end
+    end
+  end
 
-      it "changes href value from '#' to a link with .docx format" do
-        download_link = "/case_court_reports/#{casa_case.case_number}.docx"
+  context "when selecting a case, volunteer can generate and download a report", js: true do
+    let(:casa_case) { casa_cases.find(&:has_transitioned?) }
+    let(:option_text) { "#{casa_case.case_number} - transition" }
 
-        options = {id: "btnDownloadReport", visible: :visible, href: download_link}
-
-        expect(page).to have_link "Download Court Report", **options
+    before do
+      # to find the select element, use either 'name' or 'id' attribute
+      # in this case, id = "case-selection", name = "case_number"
+      page.select option_text, from: "case-selection"
+      @download_window = window_opened_by do
+        click_button "Generate Report"
       end
     end
 
     describe "when court report status is not 'submitted'" do
       before do
-        expect(page).to have_link "Download Court Report"
         casa_case.update!(court_report_status: :in_review)
       end
 
@@ -181,7 +164,6 @@ RSpec.describe "case_court_reports/index", type: :system do
 
     describe "when court report status is 'submitted'" do
       before do
-        expect(page).to have_link "Download Court Report"
         casa_case.update!(court_report_status: :submitted)
       end
 

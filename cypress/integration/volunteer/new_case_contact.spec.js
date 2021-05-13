@@ -7,6 +7,6 @@ context("Logging into cypress as a volunteer", () => {
     cy.get("#toggle-sidebar-js").click();
     cy.get('[href="/case_contacts"]').click();
     cy.get(".col-sm-12 > .btn").click();
-    cy.contains("New Case Contact").should("exist");  //$.i18n("page.casa_case.new.title")
+    cy.contains("New Case Contact").should("exist");  //$.i18n(".new_contact")
   });
 });

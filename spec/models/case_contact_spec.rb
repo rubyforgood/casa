@@ -72,14 +72,19 @@ RSpec.describe CaseContact, type: :model do
 
   it "can be updated when occured_at is before the last day of the month in the quarter that the case contact was created" do
     case_contact = create(:case_contact)
-    case_contact.update(occurred_at: Time.zone.now)
+    case_contact.update!(occurred_at: Time.zone.now)
     expect(case_contact).to be_valid
   end
 
-  it "can't be updated when occured_at is after the last day of the month in the quarter that the case contact was created" do
-    case_contact = create(:case_contact, occurred_at: Time.zone.now - 1.year)
+  it "can't be updated when occurred_at is after the last day of the month in the quarter that the case contact was created" do
+    case_contact = create(:case_contact)
+    case_contact.update(occurred_at: Time.zone.now - 1.year)
     expect(case_contact).to_not be_valid
-    expect(case_contact.errors[:base]).to eq(["cannot edit case contacts created before the current quarter"])
+    expect(case_contact.errors[:base]).to eq(["cannot edit case contacts created before the current quarter plus 30 days"])
+  end
+
+  it "can be updated for 30 days after end of quarter" do
+    expect(build(:case_contact, occurred_at: Time.zone.now - 4.months + 1.day)).to be_valid
   end
 
   describe "#update_cleaning_contact_types" do
@@ -95,7 +100,7 @@ RSpec.describe CaseContact, type: :model do
 
       case_contact.update_cleaning_contact_types({case_contact_contact_type_attributes: [{contact_type_id: type2.id}]})
 
-      expect(case_contact.case_contact_contact_type.count).to be 1
+      expect(case_contact.case_contact_contact_type.count).to eq 1
       expect(case_contact.contact_types.reload).to match_array([type2])
     end
   end

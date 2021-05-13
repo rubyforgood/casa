@@ -6,9 +6,7 @@ class CaseContactsController < ApplicationController
 
   def index
     authorize CaseContact
-    org_cases = CasaOrg.includes(:casa_cases).references(:casa_cases).find_by(id: current_user.casa_org_id).casa_cases
-    @casa_cases = policy_scope(org_cases)
-    @case_contacts = policy_scope(current_organization.case_contacts).decorate
+    @presenter = CaseContactPresenter.new
   end
 
   def new
@@ -95,10 +93,31 @@ class CaseContactsController < ApplicationController
     end
   end
 
+  def destroy
+    authorize CasaAdmin
+
+    @case_contact.destroy
+    flash[:notice] = "Contact is successfully deleted."
+    redirect_to request.referer
+  end
+
+  def restore
+    authorize CasaAdmin
+
+    case_contact = authorize(current_organization.case_contacts.with_deleted.find(params[:id]))
+    case_contact.restore(recrusive: true)
+    flash[:notice] = "Contact is successfully restored."
+    redirect_to request.referer
+  end
+
   private
 
   def set_case_contact
-    @case_contact = authorize(current_organization.case_contacts.find(params[:id]))
+    if current_organization.case_contacts.exists?(params[:id])
+      @case_contact = authorize(current_organization.case_contacts.find(params[:id]))
+    else
+      redirect_to authenticated_user_root_path
+    end
   end
 
   def set_contact_types

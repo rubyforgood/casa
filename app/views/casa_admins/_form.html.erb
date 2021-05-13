@@ -1,4 +1,4 @@
-<%= link_to "Back", casa_admins_path %>
+<%= link_to t("button.back"), casa_admins_path %>
 <h1><%= title %></h1>
 
 <div class="card card-container">
@@ -12,30 +12,27 @@
       </div>
 
       <div class="field form-group">
-        <%= form.label :display_name, "Display Name" %>
+        <%= form.label :display_name, t(".label.display_name") %>
         <%= form.text_field :display_name, class: "form-control" %>
       </div>
 
-      <div class="field form-group">
-        <%= form.label "Last logged in at" %>
-        <%= form.text_field :last_sign_in_at, class: "form-control", disabled: true, value: casa_admin.decorate.formatted_last_sign_in_at %>
-      </div>
+      <%= render "/shared/invite_login", resource: casa_admin %>
 
       <% if casa_admin.persisted? %>
         <div class="field form-group">
           <% if casa_admin.active? %>
-            Admin is <span class="badge badge-success text-uppercase display-1">Active</span>
-            <%= link_to "Deactivate",
+            <%= t(".active_text") %> <span class="badge badge-success text-uppercase display-1"><%= t(".active") %></span>
+            <%= link_to t(".button.deactivate"),
                         deactivate_casa_admin_path(casa_admin),
                         method: :patch,
                         class: "btn btn-outline-danger",
-                        data: {confirm: t("forms.casa_admin.mark_inactive_warning")} %>
+                        data: {confirm: t(".prompt.mark_inactive_warning")} %>
           <% else %>
             <div class="alert alert-danger">
-              Admin was deactivated on: <%= I18n.l(casa_admin.updated_at, format: :standard, default: nil) %>
+              <%= t(".deactive_text") %>: <%= I18n.l(casa_admin.updated_at, format: :standard, default: nil) %>
             </div>
             <% if policy(casa_admin).activate? %>
-              <%= link_to "Activate Admin",
+              <%= link_to t(".button.activate"),
                           activate_casa_admin_path(casa_admin),
                           method: :patch,
                           class: "btn btn-outline-success" %>
@@ -45,7 +42,7 @@
       <% end %>
 
       <div class="actions">
-        <%= form.submit "Submit", class: "btn btn-primary" %>
+        <%= form.submit t("button.submit"), class: "btn btn-primary" %>
         <%= return_to_dashboard_button %>
       </div>
     <% end %>

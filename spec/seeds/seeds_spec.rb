@@ -15,7 +15,8 @@ def empty_ar_classes
     SupervisorVolunteer,
     User,
     HearingType,
-    Volunteer
+    Volunteer,
+    CaseCourtMandate
   ]
   ar_classes.select { |klass| klass.count == 0 }.map(&:name)
 end

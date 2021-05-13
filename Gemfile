@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "2.7.2"
+ruby "3.0.1"
 gem "rails", "~> 6.1.3"
 
 gem "after_party" # post-deployment tasks
@@ -17,36 +17,39 @@ gem "jbuilder", "~> 2.11" # Build JSON APIs with ease. Read more: https://github
 gem "noticed" # Notifications
 gem "paper_trail" # tracking changes
 gem "pg", ">= 0.18", "< 2.0" # Use postgresql as the database for Active Record
-gem "puma", "~> 5.2" # Use Puma as the app server
+gem "puma", "~> 5.3" # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "rack-attack" # for blocking & throttling abusive requests
 gem "skylight" # automated performance testing https://www.skylight.io/
-gem "webpacker", "~> 5.2" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
+gem "webpacker", "~> 5.3" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem "image_processing", "~> 1.12" # Set of higher-level helper methods for image processing.
 gem "lograge" # log less so heroku papertrail quits rate limiting our logs
 
 gem "bootsnap", ">= 1.4.2", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "bugsnag" # tracking errors in prod
 gem "sablon" # Word document templating tool for Case Court Reports
+gem "paranoia", "~> 2.2" # For soft-deleting purpose
+gem "request_store"
 
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
   gem "byebug", platforms: %i[mri mingw x64_mingw] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem "erb_lint", require: false
   gem "factory_bot_rails"
   gem "pry"
   gem "pry-byebug"
   gem "rspec-rails", "~> 5.0.1"
   gem "shoulda-matchers"
-  gem "standard", "~> 1.0.4" # linter https://github.com/testdouble/standard
-  gem "cypress-on-rails", "~> 1.9"
+  gem "standard", "~> 1.1.1" # linter https://github.com/testdouble/standard
+  gem "cypress-on-rails", "~> 1.10"
 end
 
 group :development do
   gem "annotate" # for adding db field listings to models as comments
-  gem "erb_lint", require: false
   gem "letter_opener" # Opens emails in new tab for easier testing
   gem "listen", ">= 3.0.5", "< 3.6"
   gem "spring" # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem "spring-commands-rspec"
   gem "spring-watcher-listen", "~> 2.0.0"
   gem "web-console", ">= 3.3.0" # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
 end
@@ -55,7 +58,7 @@ group :test do
   gem "brakeman" # security inspection
   gem "capybara", ">= 2.15"
   gem "capybara-screenshot"
-  gem "database_cleaner-active_record", "~> 2.0.0"
+  gem "database_cleaner-active_record", "~> 2.0.1"
   gem "rake"
   gem "rails-controller-testing"
   gem "selenium-webdriver"

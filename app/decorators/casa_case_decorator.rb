@@ -18,7 +18,7 @@ class CasaCaseDecorator < Draper::Decorator
   end
 
   def court_report_submitted_date
-    l object.court_report_submitted_at, format: :full, default: nil
+    I18n.l(object.court_report_submitted_at, format: :full, default: nil)
   end
 
   def case_contacts_ordered_by_occurred_at
@@ -61,11 +61,17 @@ class CasaCaseDecorator < Draper::Decorator
     ]
   end
 
+  def court_mandate_select_options
+    CaseCourtMandate.implementation_statuses.map do |status|
+      [status[0].humanize, status[0]]
+    end
+  end
+
   def inactive_class
     !object.active ? "table-secondary" : ""
   end
 
   def formatted_updated_at
-    l object.updated_at, format: :standard, default: nil
+    I18n.l(object.updated_at, format: :standard, default: nil)
   end
 end

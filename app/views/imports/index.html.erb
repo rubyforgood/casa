@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-sm-12">
-    <h1>Import Categories</h1>
+    <h1><%= t(".title") %></h1>
   </div>
 </div>
 <br>
@@ -8,14 +8,14 @@
   <div class="col-sm-12">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title"><strong>System Imports</strong></h5>
+        <h5 class="card-title"><strong><%= t(".system_imports_title") %></strong></h5>
         <p class="card-text">
-          You should import files in the following order:
-        <ol>
-          <li>Volunteers</li>
-          <li>Supervisors</li>
-          <li>Cases</li>
-        </ol>
+          <%= t(".instruction.title") %>:
+          <ol>
+            <li><%= t(".instruction.volunteers") %></li>
+            <li><%= t(".instruction.supervisors") %></li>
+            <li><%= t(".instruction.cases") %></li>
+          </ol>
         </p>
         <div>
           <ul class="nav nav-tabs nav-justified" role="tablist">
@@ -30,7 +30,7 @@
                               ].compact,
                               data: {toggle: "tab"},
                               aria: {controls: "volunteer", selected: (@import_type == "volunteer")} do %>
-                Import Volunteers
+                <%= t(".button.import_volunteers") %>
               <%- end %>
             </li>
             <li class="nav-item">
@@ -44,7 +44,7 @@
                               ].compact,
                               data: {toggle: "tab"},
                               aria: {controls: "supervisor", selected: (@import_type == "supervisor")} do %>
-                Import Supervisors
+              <%= t(".button.import_supervisors") %>
               <%- end %>
             </li>
             <li class="nav-item">
@@ -58,7 +58,7 @@
                               ].compact,
                               data: {toggle: "tab"},
                               aria: {controls: "casa-case", selected: (@import_type == "casa_case")} do %>
-                Import Cases
+                <%= t(".button.import_cases") %>
               <%- end %>
             </li>
           </ul>
@@ -107,7 +107,7 @@
         <br>
       </div>
     </div>
-    <%= link_to 'Return to Dashboard', root_path, class: 'btn btn-info' %>
+    <%= link_to t(".link.return_to_dashboard"), root_path, class: 'btn btn-info' %>
   </div>
   <%= render "csv_error_modal", {import_error: @import_error} if @import_error %>
 </div>
