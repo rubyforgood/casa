@@ -165,7 +165,6 @@ en:
       button:
         generate: Generate Report
         download: Download Court Report
-      disable_with: Court report generating. Do not refresh or leave this page...
   contact_type_groups:
     new:
       title: New Contact Type Group
@@ -334,3 +333,21 @@ en:
         ruby_for_good: Ruby For Good
         link:
           report_site_issue: Report a site issue
+  supervisors:
+    edit:
+      title: Editing Supervisor
+      assign_a_volunteer: Assign a Volunteer
+      assign_volunteer: Assign Volunteer
+      hide_unassigned: Hide unassigned
+      include_unassigned: Include unassigned
+      manage_volunteers: Manage Volunteers
+      no_volunteers_available: There are no active, unassigned volunteers available.
+      select_a_volunteer: Select a Volunteer
+      unassign: Unassign
+      unassigned: Unassigned
+      volunteer_email: Volunteer Email
+      volunteer_name: Volunteer Name
+      volunteer_title:
+        zero: Assigned Volunteers
+        one: All Volunteers
+        other: All Volunteers
