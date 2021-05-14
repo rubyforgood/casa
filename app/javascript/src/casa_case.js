@@ -1,4 +1,7 @@
 /* eslint-env jquery */
+/* global FormData */
+/* global DOMParser */
+/* global spinner */
 
 import Swal from 'sweetalert2'
 
@@ -84,24 +87,24 @@ function courtMandateHtml (index) {
   }
 }
 
-function showBtn(el) { el.classList.remove('d-none') }
-function hideBtn(el) { el.classList.add('d-none') }
-function disableBtn(el) {
+function showBtn (el) { el.classList.remove('d-none') }
+function hideBtn (el) { el.classList.add('d-none') }
+function disableBtn (el) {
   el.disabled = true
   el.classList.add('disabled')
   el.setAttribute('aria-disabled', true)
 }
-function enableBtn(el) {
+function enableBtn (el) {
   el.disabled = false
   el.classList.remove('disabled')
   el.removeAttribute('aria-disabled')
 }
-function showAlert(html) {
+function showAlert (html) {
   const alertEl = new DOMParser().parseFromString(html, 'text/html').body.firstElementChild
   document.querySelector('.header-flash').replaceWith(alertEl)
 }
 
-function handleGenerateReport(e) {
+function handleGenerateReport (e) {
   e.preventDefault()
 
   const formData = Object.fromEntries(new FormData(e.currentTarget.form))
@@ -115,14 +118,14 @@ function handleGenerateReport(e) {
   const options = {
     method: 'POST',
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify(formData)
   }
   hideBtn(generateBtn)
   showBtn(spinner)
-  fetch(url, options)
+  window.fetch(url, options)
     .then(response => {
       return response.json()
     })
@@ -135,17 +138,16 @@ function handleGenerateReport(e) {
         return
       }
       hideBtn(spinner)
-      window.open(data.link, "_blank")
+      window.open(data.link, '_blank')
     })
     .catch((error) => {
       console.error('Debugging info, error:', error)
     })
 }
 
-
 $('document').ready(() => {
   $('button#add-mandate-button').on('click', addCourtMandateInput)
   $('button.remove-mandate-button').on('click', removeMandateWithConfirmation)
 
-  $("#btnGenerateReport").on("click", handleGenerateReport)
+  $('#btnGenerateReport').on('click', handleGenerateReport)
 })

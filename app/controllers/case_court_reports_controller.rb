@@ -60,10 +60,10 @@ class CaseCourtReportsController < ApplicationController
 
   def assigned_cases
     @assigned_cases = if current_user.volunteer?
-                        CasaCase.actively_assigned_to(current_user)
-                      else
-                        current_user.casa_org.casa_cases.active
-                      end
+      CasaCase.actively_assigned_to(current_user)
+    else
+      current_user.casa_org.casa_cases.active
+    end
   end
 
   def generate_report_to_string(casa_case)
