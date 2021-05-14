@@ -1,0 +1,32 @@
+name: yarn lint
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - 'bin/*'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - 'bin/*'
+
+jobs:
+  yarn_lint:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2.3.4
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - run: yarn
+      - run: yarn test
