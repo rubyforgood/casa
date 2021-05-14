@@ -13,6 +13,31 @@ RSpec.describe "/case_court_reports", :disable_bullet, type: :request do
       it "can view 'Generate Court Report' page" do
         get case_court_reports_path
         expect(response).to be_successful
+        expect(assigns(:assigned_cases)).to_not be_empty
+      end
+    end
+
+    context "as a supervisor" do
+      let(:supervisor) { volunteer.supervisor }
+
+      before do
+        sign_in supervisor
+      end
+
+      it "can view the 'Generate Court Report' page" do
+        get case_court_reports_path
+        expect(response).to be_successful
+        expect(assigns(:assigned_cases)).to_not be_empty
+      end
+
+      context "with no cases in the organization" do
+        let(:supervisor) { create(:supervisor, casa_org: create(:casa_org)) }
+
+        it "can view 'Generate Court Report page" do
+          get case_court_reports_path
+          expect(response).to be_successful
+          expect(assigns(:assigned_cases)).to be_empty
+        end
       end
     end
   end
@@ -150,6 +175,17 @@ RSpec.describe "/case_court_reports", :disable_bullet, type: :request do
         get JSON.parse(response.body)["link"]
 
         expect(get_docx_subfile_contents(response.body, "word/header2.xml")).to include("Voices for Children Montgomery")
+      end
+
+      context "as a supervisor" do
+        let(:supervisor) { volunteer.supervisor }
+
+        it "generates the report" do
+          sign_in supervisor
+
+          get JSON.parse(response.body)["link"]
+          expect(get_docx_subfile_contents(response.body, "word/header2.xml")).to include("Voices for Children Montgomery")
+        end
       end
     end
   end

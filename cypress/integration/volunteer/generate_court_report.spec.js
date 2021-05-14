@@ -8,10 +8,16 @@ context("Logging into cypress as a volunteer", () => {
   it("should generate a court report", () => {
     cy.get("#toggle-sidebar-js").click();
     cy.contains("Generate Court Reports").click();
-    cy.get("#case-selection").select("CINA-18-1003 - non-transition");
-    cy.contains("Generate Report").click();
+    // Pick the first option from the case selection dropdown
+    cy.get('#case-selection')
+      .find('option').then(elements => {
+        const option = elements[1].getAttribute('value');
+        cy.get('#case-selection').select(option);
 
-    const downloadsFolder = Cypress.config("downloadsFolder");
-    cy.readFile(path.join(downloadsFolder, "CINA-18-1003.docx")).should("exist");
+        cy.contains("Generate Report").click();
+
+        const downloadsFolder = Cypress.config("downloadsFolder");
+        cy.readFile(path.join(downloadsFolder, `${option}.docx`)).should("exist");
+      });
   });
 });

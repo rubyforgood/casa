@@ -40,6 +40,7 @@ en:
         emancipation: Emancipation
         click_to_download: Click to download
         download_all: Download All
+        generate_court_report: Generate Report
     shared:
       filter_by: Filter by
       assigned_single: Assigned to Volunteer

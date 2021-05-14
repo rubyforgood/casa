@@ -16,6 +16,16 @@
         casa_case_emancipation_path(@casa_case),
         class: "btn btn-primary casa-case-button") %>
     <% end %>
+    <% if current_user.supervisor? || current_user.casa_admin? %>
+      <%= form_with url: generate_case_court_reports_path, local: false, class: "d-inline" do |form| %>
+        <%= form.hidden_field :case_number, value: @casa_case.case_number %>
+        <%= button_tag t(".button.generate_report"), type: :submit,
+            data: { button_name: t(".button.generate_report") },
+            id: "btnGenerateReport",
+            class: "btn btn-success pull-right" %>
+        <i id="spinner" class='fas fa-spin d-none pull-right'>⏳</i>
+      <% end %>
+    <% end %>
   </div>
 </div>
 

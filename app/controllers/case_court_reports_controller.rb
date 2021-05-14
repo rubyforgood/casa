@@ -6,8 +6,7 @@ class CaseCourtReportsController < ApplicationController
 
   def index
     authorize CaseCourtReport
-    @assigned_cases = CasaCase.actively_assigned_to(current_user)
-      .select(:id, :case_number, :transition_aged_youth)
+    assigned_cases.select(:id, :case_number, :transition_aged_youth)
   end
 
   def show
@@ -59,12 +58,20 @@ class CaseCourtReportsController < ApplicationController
     @casa_case = CasaCase.find_by(case_number: params[:id])
   end
 
+  def assigned_cases
+    @assigned_cases = if current_user.volunteer?
+      CasaCase.actively_assigned_to(current_user)
+    else
+      current_user.casa_org.casa_cases.active
+    end
+  end
+
   def generate_report_to_string(casa_case)
     return unless casa_case
 
     casa_case.casa_org.open_org_court_report_template do |template_docx_file|
       court_report = CaseCourtReport.new(
-        volunteer_id: current_user.id, # ??? not a volunteer ? linda
+        volunteer_id: current_user.volunteer? ? current_user.id : casa_case.assigned_volunteers.first.id,
         case_id: casa_case.id,
         path_to_template: template_docx_file.to_path
       )

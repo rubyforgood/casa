@@ -9,7 +9,7 @@
 
     <hr>
 
-    <%= form_with url: "#", local: false do |form| %>
+    <%= form_with url: generate_case_court_reports_path, local: false do |form| %>
       <div class="field form-group">
         <%= label_tag :case_number, t(".label.case_number") %>
         <% select_options = @assigned_cases.map { |casa_case| casa_case.decorate.court_report_select_option } %>
@@ -38,75 +38,18 @@
 <script>
   const ELEMENTS = {
     'caseSelect': '#case-selection',
-    'downloadBtn': '#btnDownloadReport',
     'generateBtn': '#btnGenerateReport',
-    'spinner': '#spinner'
   }
   const showBtn = el => el.classList.remove('d-none')
-  const hideBtn = el => el.classList.add('d-none')
-  const disableBtn = (el) => {
-    el.disabled = true
-    el.classList.add('disabled')
-    el.setAttribute('aria-disabled', true)
-  }
   const enableBtn = (el) => {
     el.disabled = false
     el.classList.remove('disabled')
     el.removeAttribute('aria-disabled')
   }
-  const showAlert = (html) => {
-    const alertEl = new DOMParser().parseFromString(html, 'text/html').body.firstElementChild
-    document.querySelector('.header-flash').replaceWith(alertEl)
-  }
-
-  const handleGenerateReport = (e) => {
-    e.preventDefault()
-
-    const formData = Object.fromEntries(new FormData(e.target.form))
-
-    if (formData.case_number.length === 0) return
-
-    const generateBtn = e.target
-    disableBtn(generateBtn)
-
-    <%# This will show "/case_court_reports/generate"  %>
-    const url = "<%= generate_case_court_reports_path %>"
-    const options = {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData)
-    }
-    hideBtn(generateBtn)
-    showBtn(spinner)
-    fetch(url, options)
-      .then(response => {
-        return response.json()
-      })
-      .then(data => {
-        if (data.status !== 'ok') {
-          showAlert(data.error_messages)
-          enableBtn(generateBtn)
-          showBtn(generateBtn)
-          hideBtn(spinner)
-          return
-        }
-        // when receiving a link to report, show 'Download Court Report' btn and show the link in the button
-        const downloadBtn = generateBtn.form.querySelector(ELEMENTS.downloadBtn)
-        hideBtn(spinner)
-        window.open(data.link, "_blank")
-      })
-      .catch((error) => {
-        console.error('Debugging info, error:', error)
-      })
-  }
 
   const handleSelect = (e) => {
     const selectEl = e.target
     const generateBtn = selectEl.form.querySelector(ELEMENTS.generateBtn)
-    const downloadBtn = selectEl.form.querySelector(ELEMENTS.downloadBtn)
 
     // when selecting a case, reset buttons to initial state
     enableBtn(generateBtn)
@@ -115,12 +58,9 @@
 
   const bindElements = () => {
     const caseSelectEl = document.querySelector(ELEMENTS.caseSelect)
-    const generateReportEl = document.querySelector(ELEMENTS.generateBtn)
 
     if (caseSelectEl)
       caseSelectEl.addEventListener('change', handleSelect)
-    if (generateReportEl)
-      generateReportEl.addEventListener('click', handleGenerateReport)
   }
 
   window.onload = function () {
