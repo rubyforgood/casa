@@ -40,12 +40,12 @@ RSpec.describe ApplicationPolicy do
       expect(subject).to permit(create(:volunteer))
     end
 
-    it "does not allow casa_admins" do
-      expect(subject).not_to permit(create(:casa_admin))
+    it "allows casa_admins" do
+      expect(subject).to permit(create(:casa_admin))
     end
 
-    it "does not allow supervisors" do
-      expect(subject).not_to permit(create(:supervisor))
+    it "allows supervisors" do
+      expect(subject).to permit(create(:supervisor))
     end
   end
 

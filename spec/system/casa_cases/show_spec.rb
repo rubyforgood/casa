@@ -46,6 +46,28 @@ RSpec.describe "casa_cases/show", :disable_bullet, type: :system do
       expect(page).to have_content("Court Mandates")
       expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
     end
+
+    context "when generating a report, supervisor sees waiting page", js: true do
+      before do
+        click_button "Generate Report"
+      end
+
+      describe "'Generate Report' button" do
+        it "has been hidden and disabled" do
+          options = {visible: :hidden}
+
+          expect(page).to have_selector "#btnGenerateReport[disabled]", **options
+        end
+      end
+
+      describe "Spinner" do
+        it "becomes visible" do
+          options = {visible: :visible}
+
+          expect(page).to have_selector "#spinner", **options
+        end
+      end
+    end
   end
 
   context "volunteer user" do
@@ -58,6 +80,10 @@ RSpec.describe "casa_cases/show", :disable_bullet, type: :system do
     it "can see court mandates" do
       expect(page).to have_content("Court Mandates")
       expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
+    end
+
+    it "cannot see Generate Report button" do
+      expect(page).to_not have_button("Generate Report")
     end
   end
 end

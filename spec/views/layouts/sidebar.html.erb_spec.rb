@@ -45,7 +45,7 @@ RSpec.describe "layout/sidebar", :disable_bullet, type: :view do
       expect(rendered).to_not have_link("Case Contacts", href: "/case_contacts")
       expect(rendered).to have_link("Report a site issue", href: "https://rubyforgood.typeform.com/to/iXY4BubB")
       expect(rendered).to_not have_link("Admins", href: "/casa_admins")
-      expect(rendered).to_not have_link("Generate Court Reports", href: "/case_court_reports")
+      expect(rendered).to have_link("Generate Court Reports", href: "/case_court_reports")
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists/0")
     end
   end
@@ -143,7 +143,7 @@ RSpec.describe "layout/sidebar", :disable_bullet, type: :view do
       expect(rendered).to have_link("Supervisors", href: "/supervisors")
       expect(rendered).to have_link("Admins", href: "/casa_admins")
       expect(rendered).to have_link("Report a site issue", href: "https://rubyforgood.typeform.com/to/iXY4BubB")
-      expect(rendered).to_not have_link("Generate Court Reports", href: "/case_court_reports")
+      expect(rendered).to have_link("Generate Court Reports", href: "/case_court_reports")
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
     end
   end

@@ -84,7 +84,68 @@ function courtMandateHtml (index) {
   }
 }
 
+function showBtn(el) { el.classList.remove('d-none') }
+function hideBtn(el) { el.classList.add('d-none') }
+function disableBtn(el) {
+  el.disabled = true
+  el.classList.add('disabled')
+  el.setAttribute('aria-disabled', true)
+}
+function enableBtn(el) {
+  el.disabled = false
+  el.classList.remove('disabled')
+  el.removeAttribute('aria-disabled')
+}
+function showAlert(html) {
+  const alertEl = new DOMParser().parseFromString(html, 'text/html').body.firstElementChild
+  document.querySelector('.header-flash').replaceWith(alertEl)
+}
+
+function handleGenerateReport(e) {
+  e.preventDefault()
+
+  const formData = Object.fromEntries(new FormData(e.currentTarget.form))
+
+  if (formData.case_number.length === 0) return
+
+  const generateBtn = e.currentTarget
+  disableBtn(generateBtn)
+
+  const url = e.currentTarget.form.action
+  const options = {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData)
+  }
+  hideBtn(generateBtn)
+  showBtn(spinner)
+  fetch(url, options)
+    .then(response => {
+      return response.json()
+    })
+    .then(data => {
+      if (data.status !== 'ok') {
+        showAlert(data.error_messages)
+        enableBtn(generateBtn)
+        showBtn(generateBtn)
+        hideBtn(spinner)
+        return
+      }
+      hideBtn(spinner)
+      window.open(data.link, "_blank")
+    })
+    .catch((error) => {
+      console.error('Debugging info, error:', error)
+    })
+}
+
+
 $('document').ready(() => {
   $('button#add-mandate-button').on('click', addCourtMandateInput)
   $('button.remove-mandate-button').on('click', removeMandateWithConfirmation)
+
+  $("#btnGenerateReport").on("click", handleGenerateReport)
 })

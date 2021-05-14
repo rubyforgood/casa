@@ -63,7 +63,7 @@ class ApplicationPolicy
   end
 
   def see_court_reports_page?
-    is_volunteer?
+    is_volunteer? || is_supervisor? || is_admin?
   end
 
   alias_method :modify_organization?, :is_admin?
