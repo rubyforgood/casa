@@ -73,10 +73,6 @@
                                  },
                                  class: "select2 date-input" %>
           </span>
-        <% else %>
-          <label for="court_date">
-            <%= t(".next_court_date") %>: <%= I18n.l(@casa_case.court_date, format: :day_and_date, default: '') %>
-          </label>
         <% end %>
       </div>
 
@@ -94,11 +90,6 @@
                                  },
                                  class: "select2 date-input" %>
           </span>
-        <% else %>
-          <label for="court_report_due_date">
-            <%= t(".court_report_due_date") %>:
-            &nbsp;<%= I18n.l(@casa_case.court_report_due_date, format: :day_and_date, default: '') %>
-          </label>
         <% end %>
       </div>
 
