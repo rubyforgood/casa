@@ -419,8 +419,6 @@ of it unless it was included in a previous court report.")
       select "Submitted", from: "casa_case_court_report_status"
       click_on "Update CASA Case"
 
-      expect(page).to have_text("Court Date")
-      expect(page).to have_text("Court Report Due Date")
       expect(page).not_to have_text("Day")
       expect(page).not_to have_text("Month")
       expect(page).not_to have_text("Year")
