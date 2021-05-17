@@ -34,4 +34,12 @@ FactoryBot.define do
       active { false }
     end
   end
+
+  trait :with_case_contacts do
+    after(:create) do |casa_case|
+      3.times do
+        create(:case_contact, casa_case_id: casa_case.id)
+      end
+    end
+  end
 end
