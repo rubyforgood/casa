@@ -1,10 +1,12 @@
 require "rails_helper"
 
 RSpec.describe CaseContactDecorator do
+  let(:case_contact) { build(:case_contact) }
+
   describe "#duration_minutes" do
     context "when duration_minutes is less than 60" do
       it "returns only minutes" do
-        case_contact = create(:case_contact, duration_minutes: 30)
+        case_contact.update_attribute(:duration_minutes, 30)
 
         expect(case_contact.decorate.duration_minutes).to eq "30 minutes"
       end
@@ -12,7 +14,7 @@ RSpec.describe CaseContactDecorator do
 
     context "when duration_minutes is greater than 60" do
       it "returns minutes and hours" do
-        case_contact = create(:case_contact, duration_minutes: 135)
+        case_contact.update_attribute(:duration_minutes, 135)
 
         expect(case_contact.decorate.duration_minutes).to eq "2 hours 15 minutes"
       end
@@ -22,7 +24,7 @@ RSpec.describe CaseContactDecorator do
   describe "#contact_made" do
     context "when contact_made is false" do
       it "returns No Contact Made" do
-        case_contact = create(:case_contact, contact_made: false)
+        case_contact.update_attribute(:contact_made, false)
 
         expect(case_contact.decorate.contact_made).to eq "No Contact Made"
       end
@@ -30,7 +32,7 @@ RSpec.describe CaseContactDecorator do
 
     context "when contact_made is true" do
       it "returns Yes" do
-        case_contact = create(:case_contact, contact_made: true)
+        case_contact.update_attribute(:contact_made, true)
 
         expect(case_contact.decorate.contact_made).to be_nil
       end
@@ -78,59 +80,60 @@ RSpec.describe CaseContactDecorator do
   describe "#medium_icon_classes" do
     context "when medium type is in-person" do
       it "returns the proper font-awesome classes" do
-        case_contact = create(:case_contact, medium_type: "in-person").decorate
+        case_contact.update_attribute(:medium_type, "in-person")
 
-        expect(case_contact.medium_icon_classes).to eql("fas fa-users")
+        expect(case_contact.decorate.medium_icon_classes).to eql("fas fa-users")
       end
     end
 
     context "when medium type is text/email" do
       it "returns the proper font-awesome classes" do
-        case_contact = create(:case_contact, medium_type: "text/email").decorate
+        case_contact.update_attribute(:medium_type, "text/email")
 
-        expect(case_contact.medium_icon_classes).to eql("fas fa-envelope")
+        expect(case_contact.decorate.medium_icon_classes).to eql("fas fa-envelope")
       end
     end
 
     context "when medium type is video" do
       it "returns the proper font-awesome classes" do
-        case_contact = create(:case_contact, medium_type: "video").decorate
+        case_contact.update_attribute(:medium_type, "video")
 
-        expect(case_contact.medium_icon_classes).to eql("fas fa-video")
+        expect(case_contact.decorate.medium_icon_classes).to eql("fas fa-video")
       end
     end
 
     context "when medium type is voice-only" do
       it "returns the proper font-awesome classes" do
-        case_contact = create(:case_contact, medium_type: "voice-only").decorate
+        case_contact.update_attribute(:medium_type, "voice-only")
 
-        expect(case_contact.medium_icon_classes).to eql("fas fa-phone-square-alt")
+        expect(case_contact.decorate.medium_icon_classes).to eql("fas fa-phone-square-alt")
       end
     end
 
     context "when medium type is letter" do
       it "returns the proper font-awesome classes" do
-        case_contact = create(:case_contact, medium_type: "letter").decorate
+        case_contact.update_attribute(:medium_type, "letter")
 
-        expect(case_contact.medium_icon_classes).to eql("fas fa-file-alt")
+        expect(case_contact.decorate.medium_icon_classes).to eql("fas fa-file-alt")
       end
     end
 
     context "when medium type is anything else" do
       it "returns the proper font-awesome classes" do
-        case_contact = create(:case_contact, medium_type: "foo").decorate
+        case_contact.update_attribute(:medium_type, "foo")
 
-        expect(case_contact.medium_icon_classes).to eql("fas fa-question")
+        expect(case_contact.decorate.medium_icon_classes).to eql("fas fa-question")
       end
     end
   end
 
   describe "#subheading" do
+    let(:contact_group) { build(:contact_type_group, name: "Group X") }
+    let(:contact_type) { build(:contact_type, contact_type_group: contact_group, name: "Type X") }
+
     context "when all information is available" do
       it "returns a properly formatted string" do
-        contact_group = create(:contact_type_group, name: "Group X")
-        contact_type = create(:contact_type, contact_type_group: contact_group, name: "Type X")
-        case_contact = create(:case_contact, occurred_at: "2020-12-01", duration_minutes: 99, contact_made: false, miles_driven: 100, want_driving_reimbursement: true)
+        case_contact.update(occurred_at: "2020-12-01", duration_minutes: 99, contact_made: false, miles_driven: 100, want_driving_reimbursement: true)
         case_contact.contact_types = [contact_type]
 
         expect(case_contact.decorate.subheading).to eq(
@@ -141,9 +144,7 @@ RSpec.describe CaseContactDecorator do
 
     context "when some information is missing" do
       it "returns a properly formatted string without extra pipes" do
-        contact_group = create(:contact_type_group, name: "Group X")
-        contact_type = create(:contact_type, contact_type_group: contact_group, name: "Type X")
-        case_contact = create(:case_contact, occurred_at: "2020-12-01", duration_minutes: 99, contact_made: true, miles_driven: 100, want_driving_reimbursement: true)
+        case_contact.update(occurred_at: "2020-12-01", duration_minutes: 99, contact_made: true, miles_driven: 100, want_driving_reimbursement: true)
         case_contact.contact_types = [contact_type]
 
         expect(case_contact.decorate.subheading).to eq(
