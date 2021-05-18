@@ -4,8 +4,8 @@ class DashboardController < ApplicationController
 
   def show
     authorize :dashboard
-    if volunteer_with_only_one_active_case?(current_user)
-      redirect_to casa_case_path(current_user.casa_cases.first)
+    if volunteer_with_only_one_active_case?
+      redirect_to casa_case_path(current_user.casa_cases.active.first)
     elsif current_user.volunteer?
       redirect_to casa_cases_path
     elsif current_user.supervisor?
@@ -17,7 +17,7 @@ class DashboardController < ApplicationController
 
   private
 
-  def volunteer_with_only_one_active_case?(current_user)
+  def volunteer_with_only_one_active_case?
     current_user.volunteer? && current_user.casa_cases.active.count == 1
   end
 end
