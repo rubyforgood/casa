@@ -18,8 +18,13 @@ Usage: `lint <diff policy>`
    - `--unpushed` lints files changed by commits not yet pushed to origin if they are lintable
    - `--all` (default) lints all files in the repo  
    
-## Example Hook(pre-push)
+## Example Hooks
+### pre-push
     #!/bin/sh
   
     ./bin/git_hooks/update-branch actual_casa
     ./bin/git_hooks/lint --unpushed
+### post-merge, pre-push  
+    #!/bin/sh
+
+    ./bin/git_hooks/update-dependencies
