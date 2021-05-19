@@ -1,18 +1,20 @@
 require "rails_helper"
 
 RSpec.describe SupervisorImporter do
-  let!(:import_user) { create(:casa_admin) }
+  let!(:import_user) { build(:casa_admin) }
   let(:casa_org_id) { import_user.casa_org.id }
 
   # Use of the static method SupervisorImporter.import_volunteers functions identically to SupervisorImporter.new(...).import_volunteers
   # but is preferred.
-  let(:import_file_path) { Rails.root.join("spec", "fixtures", "supervisors.csv") }
+  let(:supervisor_import_data_path) { Rails.root.join("spec", "fixtures", "supervisors.csv") }
 
   let(:supervisor_importer) do
-    importer = SupervisorImporter.new(import_file_path, casa_org_id)
+    importer = SupervisorImporter.new(supervisor_import_data_path, casa_org_id)
+
     allow(importer).to receive(:email_addresses_to_users) do |_clazz, supervisor_volunteers|
       create_list(:volunteer, supervisor_volunteers.split(",").size, casa_org: import_user.casa_org)
     end
+
     importer
   end
 
@@ -37,17 +39,7 @@ RSpec.describe SupervisorImporter do
     end
 
     it "returns an error message when there are volunteers not imported" do
-      alert = SupervisorImporter.new(import_file_path, import_user.casa_org.id).import_supervisors
-      expect(alert[:type]).to eq(:error)
-      expect(alert[:message]).to include("Not all rows were imported.")
-
-      import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
-      VolunteerImporter.new(import_file_path, import_user.casa_org.id).import_volunteers
-
-      import_supervisor_path = Rails.root.join("spec", "fixtures", "supervisors.csv")
-      SupervisorImporter.new(import_supervisor_path, import_user.casa_org.id).import_supervisors
-
-      alert = SupervisorImporter.new(import_file_path, import_user.casa_org.id).import_supervisors
+      alert = SupervisorImporter.new(supervisor_import_data_path, import_user.casa_org.id).import_supervisors
       expect(alert[:type]).to eq(:error)
       expect(alert[:message]).to include("Not all rows were imported.")
     end
@@ -79,7 +71,7 @@ RSpec.describe SupervisorImporter do
   end
 
   context "when row doesn't have e-mail address" do
-    let(:import_file_path) { Rails.root.join("spec", "fixtures", "supervisors_without_email.csv") }
+    let(:supervisor_import_data_path) { Rails.root.join("spec", "fixtures", "supervisors_without_email.csv") }
 
     it "returns an error message" do
       alert = supervisor_importer.import_supervisors
@@ -91,11 +83,11 @@ RSpec.describe SupervisorImporter do
   end
 
   specify "static and instance methods have identical results" do
-    SupervisorImporter.new(import_file_path, casa_org_id).import_supervisors
+    SupervisorImporter.new(supervisor_import_data_path, casa_org_id).import_supervisors
     data_using_instance = Supervisor.pluck(:email).sort
 
     Supervisor.delete_all
-    SupervisorImporter.import_supervisors(import_file_path, casa_org_id)
+    SupervisorImporter.import_supervisors(supervisor_import_data_path, casa_org_id)
     data_using_static = Supervisor.pluck(:email).sort
 
     expect(data_using_static).to eq(data_using_instance)
