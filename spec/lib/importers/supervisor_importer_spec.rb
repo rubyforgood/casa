@@ -38,25 +38,23 @@ RSpec.describe SupervisorImporter do
       expect { supervisor_importer.import_supervisors }.to change(Supervisor, :count).by(0)
     end
 
-    it "returns an error message when there are volunteers not imported" do
-      alert = SupervisorImporter.new(supervisor_import_data_path, import_user.casa_org.id).import_supervisors
-      expect(alert[:type]).to eq(:error)
-      expect(alert[:message]).to include("Not all rows were imported.")
-    end
+    context "when any volunteer could not be assigned to the supervisor during the import" do
+      let!(:existing_volunteer) { create(:volunteer, email: "volunteer1@example.net") }
+      let(:supervisor_import_data_path) { Rails.root.join("spec", "fixtures", "supervisor_volunteers.csv") }
 
-    it "returns an error message when there are only some volunteers not imported" do
-      create(:volunteer, email: "volunteer1@example.net")
-      import_supervisor_path = Rails.root.join("spec", "fixtures", "supervisor_volunteers.csv")
-      alert = SupervisorImporter.new(import_supervisor_path, import_user.casa_org.id).import_supervisors
+      it "returns an error message" do
+        alert = SupervisorImporter.new(supervisor_import_data_path, casa_org_id).import_supervisors
 
-      expect(alert[:type]).to eq(:error)
+        expect(alert[:type]).to eq(:error)
+        expect(alert[:message]).to include("Not all rows were imported.")
+      end
     end
   end
 
   context "when updating supervisors" do
     let!(:existing_supervisor) { create(:supervisor, display_name: "#", email: "supervisor2@example.net") }
 
-    it "assignes unassigned volunteers" do
+    it "assigns unassigned volunteers" do
       expect {
         supervisor_importer.import_supervisors
       }.to change(existing_supervisor.volunteers, :count).by(2)
