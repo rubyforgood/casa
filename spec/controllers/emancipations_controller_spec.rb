@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe EmancipationsController, type: :controller do
-  # TODO improve these
   let(:organization) { create(:casa_org) }
   let(:volunteer) { create(:volunteer, :with_casa_cases, casa_org: organization) }
   let(:test_case_category) { create(:casa_case_emancipation_category) }
