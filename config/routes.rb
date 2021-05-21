@@ -30,6 +30,9 @@ Rails.application.routes.draw do
         post "save"
       end
     end
+
+    resources :past_court_dates, only: %i[show]
+
     member do
       patch :deactivate
       patch :reactivate

@@ -1,8 +1,11 @@
 class CaseCourtMandate < ApplicationRecord
   IMPLEMENTATION_STATUSES = {not_implemented: 1, partially_implemented: 2, implemented: 3}
+
   belongs_to :casa_case
+  belongs_to :past_court_date
 
   validates :mandate_text, presence: true
+
   enum implementation_status: IMPLEMENTATION_STATUSES
 end
 
@@ -16,10 +19,12 @@ end
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  casa_case_id          :bigint           not null
+#  past_court_date_id    :bigint
 #
 # Indexes
 #
-#  index_case_court_mandates_on_casa_case_id  (casa_case_id)
+#  index_case_court_mandates_on_casa_case_id        (casa_case_id)
+#  index_case_court_mandates_on_past_court_date_id  (past_court_date_id)
 #
 # Foreign Keys
 #
