@@ -41,6 +41,7 @@ en:
         click_to_download: Click to download
         download_all: Download All
         generate_court_report: Generate Report
+        send_reminder: Send Reminder
     shared:
       filter_by: Filter by
       assigned_single: Assigned to Volunteer
@@ -352,3 +353,6 @@ en:
         zero: Assigned Volunteers
         one: All Volunteers
         other: All Volunteers
+  volunteers:
+    edit:
+      send_reminder: Send reminder

@@ -1,7 +1,17 @@
 <%= link_to 'Back', volunteers_path %>
 
-<h1>Editing Volunteer</h1>
-
+<div class="row">
+  <div class="col-sm-12 form-header">
+    <h1>Editing Volunteer</h1>
+    <% if current_user.supervisor? ||
+        current_user.casa_admin? %>
+      <%= link_to t(".send_reminder"),
+                  reminder_volunteer_path(@volunteer),
+                  method: :patch,
+                  class: "btn btn-primary casa-case-button" %>
+    <% end %>
+  </div>
+</div>
 <div class="card card-container">
   <div class="card-body">
     <%= form_for @volunteer, url: volunteer_path(@volunteer) do |form| %>
