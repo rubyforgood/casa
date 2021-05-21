@@ -8,7 +8,9 @@
       <%= link_to t(".send_reminder"),
                   reminder_volunteer_path(@volunteer),
                   method: :patch,
-                  class: "btn btn-primary casa-case-button" %>
+                  class: "btn btn-primary casa-case-button",
+                  data_toggle: "tooltip",
+                  title: "#{t(".tooltip")}" %>
     <% end %>
   </div>
 </div>
@@ -47,3 +49,9 @@
 <%= render 'manage_cases' %>
 
 <%= render 'manage_supervisor' %>
+
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
