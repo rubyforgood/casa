@@ -1,4 +1,56 @@
 <%= link_to t("button.back"), edit_casa_case_path(@casa_case) %>
 
-<h1>PastCourtDates#show</h1>
-<p>Find me in app/views/past_court_dates/show.html.erb</p>
+<h1><%= t(".title") %></h1>
+<h2><%= @past_court_date.decorate.formatted_date %></h2>
+
+<div class="card card-container">
+  <div class="card-body">
+    <p>
+      <h6><strong><%= t(".label.case_number") %>:</strong> <%= @casa_case.case_number %></h6>
+    </p>
+    <p>
+      <h6>
+        <strong><%= t(".label.judge") %>:</strong>
+        <%= @past_court_date.judge&.name || t(".label.none") %>
+      </h6>
+    </p>
+    <p>
+      <h6>
+        <strong><%= t(".label.hearing_type") %>:</strong>
+        <%= @past_court_date.hearing_type&.name || t(".label.none") %>
+      </h6>
+    </p>
+
+    <% if @past_court_date.case_court_mandates.any? %>
+      <p>
+        <h6>
+          <strong><%= t(".label.court_mandates") %>:</strong>
+        </h6>
+      </p>
+
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <th><%= t(".label.casa_case_court_mandate.mandate_text") %></th>
+            <th class="text-center"><%= t(".label.casa_case_court_mandate.implementation_status") %></th>
+          </thead>
+          <tbody>
+            <% @past_court_date.case_court_mandates.each do |court_mandate| %>
+              <tr>
+                <td><%= court_mandate.mandate_text %></td>
+                <td class="text-center"><%= court_mandate.implementation_status.humanize %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <p>
+        <h6>
+          <strong><%= t(".label.court_mandates") %>:</strong>
+          There are no court mandates associated with this past court date.
+        </h6>
+      </p>
+    <% end %>
+  </div>
+</div>

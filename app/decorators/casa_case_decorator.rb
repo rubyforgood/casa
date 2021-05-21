@@ -74,8 +74,4 @@ class CasaCaseDecorator < Draper::Decorator
   def formatted_updated_at
     I18n.l(object.updated_at, format: :standard, default: nil)
   end
-
-  def past_court_date_formatted(past_court_date)
-    I18n.l(past_court_date.date, format: :full, default: nil)
-  end
 end

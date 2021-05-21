@@ -18,6 +18,10 @@ class PastCourtDate < ApplicationRecord
   def latest_associated_report
     associated_reports.order(:created_at).last
   end
+
+  def additional_info?
+    case_court_mandates.any? || hearing_type || judge
+  end
 end
 # == Schema Information
 #

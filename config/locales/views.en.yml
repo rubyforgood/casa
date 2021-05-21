@@ -118,6 +118,12 @@ en:
         new: New Case
     new:
       title: New CASA Case
+  past_court_dates:
+    show:
+      title: Past Court Date
+      label:
+        casa_case_court_mandate:
+          mandate_text: Court Mandate Text
   casa_admins:
     form:
       button:
