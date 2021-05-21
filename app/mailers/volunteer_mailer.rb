@@ -21,6 +21,7 @@ class VolunteerMailer < ApplicationMailer
 
   def case_contacts_reminder(user)
     @user = user
+    @casa_organization = user.casa_org
     mail(to: @user.email, subject: "Reminder to input case contacts")
   end
 end

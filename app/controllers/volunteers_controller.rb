@@ -82,7 +82,7 @@ class VolunteersController < ApplicationController
   def reminder
     authorize @volunteer
     @volunteer = Volunteer.find(params[:id])
-    VolunteerMailer.reminder(@volunteer).deliver
+    VolunteerMailer.case_contacts_reminder(@volunteer).deliver
 
     redirect_to edit_volunteer_path(@volunteer), notice: "Reminder sent to volunteer."
   end
