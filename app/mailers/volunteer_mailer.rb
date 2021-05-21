@@ -18,4 +18,9 @@ class VolunteerMailer < ApplicationMailer
     @court_report_due_date = court_report_due_date
     mail(to: @user.email, subject: "Your court report is due on: #{court_report_due_date}")
   end
+
+  def case_contacts_reminder(user)
+    @user = user
+    mail(to: @user.email, subject: "Reminder to input case contacts")
+  end
 end
