@@ -56,3 +56,22 @@
     </table>
   </div>
 </div>
+
+<table class="table">
+    <thead>
+      <tr>
+        <th>Unassigned volunteers:</th>
+      </tr>
+    </thead>
+      <tbody>
+        <td>
+          <% if @available_volunteers.count == 0 %>
+            <%= "Currently no volunteers are unassigned" %>
+          <% else %>
+            <% @available_volunteers.active.each do |volunteer| %><br>
+              <%= link_to volunteer.display_name, edit_volunteer_path(volunteer) %>
+            <% end %>
+          <% end %>
+          </td>
+      </<tbody>
+</table>

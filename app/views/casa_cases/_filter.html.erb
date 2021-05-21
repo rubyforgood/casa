@@ -1,76 +1,87 @@
 <div>
   <div class="row casa-case-filters">
     <div class="col-sm-12">
-      <h4 class="pull-left mr-2">Filter by:</h4>
+      <h4 class="pull-left mr-2"><%= t("casa_cases.shared.filter_by") %>:</h4>
       <div class="dropdown pull-left mr-2">
         <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Status
+          <%= t("common.status") %>
         </button>
         <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
           <li>
             <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Active" checked>
-              Active</a>
+              <%= t("common.active") %>
+            </a>
           </li>
           <li>
             <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Inactive">
-              Inactive</a>
+              <%= t("common.inactive") %>
+            </a>
           </li>
         </div>
       </div>
       <div class="dropdown pull-left mr-2">
         <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Assigned to Volunteer
+          <%= t("casa_cases.shared.assigned_single") %>
         </button>
         <div class="dropdown-menu assigned-to-volunteer-options" aria-labelledby="dropdownMenuButton">
           <li>
-            <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Yes" checked>Yes</a>
+            <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Yes" checked>
+              <%= t("common.yes_text") %>
+            </a>
           </li>
-          <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No" checked>No</a>
+          <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No" checked>
+            <%= t("common.no_text") %>
+          </a>
           </li>
         </div>
       </div>
       <div class="dropdown pull-left mr-2">
         <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Assigned to more than 1 Volunteer
+          <%= t("casa_cases.shared.assigned_multiple") %>
         </button>
         <div class="dropdown-menu more-than-one-volunteer-options" aria-labelledby="dropdownMenuButton">
           <li>
-            <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Yes" checked>Yes</a>
+            <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Yes" checked>
+              <%= t("common.yes_text") %>
+            </a>
           </li>
-          <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No" checked>No</a>
+          <li><a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No" checked>
+            <%= t("common.no_text") %>
+          </a>
           </li>
         </div>
       </div>
       <div class="dropdown pull-left mr-2">
         <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Assigned to Transition Aged Youth
+          <%= t("casa_cases.shared.assigned_transition_aged_youth") %>
         </button>
         <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton">
           <li>
-            <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="Yes 🦋" checked>Yes</a>
+            <a class="small" data-value="option1" tabIndex="-1">
+              <input type="checkbox" data-value="Yes 🦋" checked><%= t("common.yes_text") %>
+            </a>
           </li>
           <li>
-            <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No 🐛" checked>No</a>
+            <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No 🐛" checked>
+              <%= t("common.no_text") %>
+            </a>
           </li>
         </div>
       </div>
       <div class="dropdown pull-left mr-2">
         <% unless current_user.volunteer? %>
           <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Casa Case Prefix
+            <%= t("casa_cases.shared.casa_case_prefix") %>
           </button>
         <% end %>
         <div class="dropdown-menu case-number-prefix-options" aria-labelledby="dropdownMenuButton">
-          <li>
-            <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="CINA" checked>CINA</a>
-          </li>
-          <li>
-            <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="TPR" checked>TPR</a>
-          </li>
-          <li>
-            <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="" checked>none</a>
-          </li>
-        </div>
+          <% t("casa_cases.shared.prefix_options").each do |_, option| %>
+            <li>
+              <a class="small" data-value="option1" tabIndex="-1">
+                <input type="checkbox" data-value="<%= option %>" checked><%= option %>
+              </a>
+            </li>
+          <% end %>
       </div>
     </div>
   </div>
@@ -79,14 +90,16 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="visibleColumnsLabel">Pick Displayed Columns</h5>
+          <h5 class="modal-title" id="visibleColumnsLabel">
+            <%= t(".pick_displayed_columns") %>
+          </h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
           <div>
-            Select columns:
+            <%= t(".select_columns") %>:
 
             <% CasaCase::TABLE_COLUMNS.each_with_index do |column, index| %>
               <div class="row">
@@ -105,7 +118,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal"><%= t("button.close") %></button>
         </div>
       </div>
     </div>

@@ -1,10 +1,10 @@
 require "rails_helper"
 
-RSpec.describe "casa_cases/show", type: :system do
+RSpec.describe "casa_cases/show", :disable_bullet, type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:volunteer) { create(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
-  let(:casa_case) { create(:casa_case, casa_org: organization, case_number: "CINA-1") }
+  let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: organization, case_number: "CINA-1") }
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
   let!(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
 
@@ -27,6 +27,11 @@ RSpec.describe "casa_cases/show", type: :system do
     it "sees link to profile page" do
       expect(page).to have_link(href: "/users/edit")
     end
+
+    it "can see court mandates" do
+      expect(page).to have_content("Court Mandates")
+      expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
+    end
   end
 
   context "supervisor user" do
@@ -36,6 +41,33 @@ RSpec.describe "casa_cases/show", type: :system do
     it "sees link to own edit page" do
       expect(page).to have_link(href: "/supervisors/#{user.id}/edit")
     end
+
+    it "can see court mandates" do
+      expect(page).to have_content("Court Mandates")
+      expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
+    end
+
+    context "when generating a report, supervisor sees waiting page", js: true do
+      before do
+        click_button "Generate Report"
+      end
+
+      describe "'Generate Report' button" do
+        it "has been hidden and disabled" do
+          options = {visible: :hidden}
+
+          expect(page).to have_selector "#btnGenerateReport[disabled]", **options
+        end
+      end
+
+      describe "Spinner" do
+        it "becomes visible" do
+          options = {visible: :visible}
+
+          expect(page).to have_selector "#spinner", **options
+        end
+      end
+    end
   end
 
   context "volunteer user" do
@@ -43,6 +75,15 @@ RSpec.describe "casa_cases/show", type: :system do
 
     it "sees link to emancipation" do
       expect(page).to have_content(casa_case.case_number)
+    end
+
+    it "can see court mandates" do
+      expect(page).to have_content("Court Mandates")
+      expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
+    end
+
+    it "cannot see Generate Report button" do
+      expect(page).to_not have_button("Generate Report")
     end
   end
 end

@@ -14,7 +14,7 @@
       <% end %>
     </td>
   </tr>
-  <% @supervisor.volunteers_ever_assigned.each do |volunteer| %>
+  <% @supervisor.volunteers_ever_assigned.where("supervisor_volunteers.is_active = ?", true).active.each do |volunteer| %>
     <% volunteer.case_assignments_with_cases.each do |case_assignment| %>
       <% recently_unassigned = case_assignment.decorate.unassigned_in_past_week? %>
       <% if case_assignment.active || recently_unassigned %>
@@ -67,6 +67,24 @@
       <% end %>
     <% end %>
   <% end %>
+
+  <% if @supervisor.recently_unassigned_volunteers.any? %>
+    <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; text-align: left;">
+      <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+        <b><%= "The following volunteers have been unassigned from you:" %></b>
+        <br>
+
+        <% @supervisor.recently_unassigned_volunteers.each  do |volunteer| %>
+          - <%= volunteer.display_name %>
+
+          <% unless volunteer.has_supervisor? %>
+            (not assigned to a new supervisor)
+          <% end %>
+          <br>
+        <% end %>
+    </tr>
+  <% end %>
+
   <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
     <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 18px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
       <b>Additional Notes:</b>

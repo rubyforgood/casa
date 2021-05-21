@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/casa_cases", type: :request do
+RSpec.describe "/casa_cases", :disable_bullet, type: :request do
   let(:organization) { create(:casa_org) }
   let(:hearing_type) { create(:hearing_type) }
   let(:judge) { create(:judge) }
@@ -8,7 +8,13 @@ RSpec.describe "/casa_cases", type: :request do
   let(:invalid_attributes) { {case_number: nil} }
   let(:casa_case) { create(:casa_case, casa_org: organization, case_number: "111") }
   let(:mandate_texts) { ["1-New Mandate Text One", "0-New Mandate Text Two"] }
-  let(:mandates_attributes) { {"0" => {mandate_text: mandate_texts[0]}, "1" => {mandate_text: mandate_texts[1]}} }
+  let(:implementation_statuses) { ["not_implemented", nil] }
+  let(:mandates_attributes) do
+    {
+      "0" => {mandate_text: mandate_texts[0], implementation_status: implementation_statuses[0]},
+      "1" => {mandate_text: mandate_texts[1], implementation_status: implementation_statuses[1]}
+    }
+  end
 
   before { sign_in user }
 
@@ -182,7 +188,9 @@ RSpec.describe "/casa_cases", type: :request do
           expect(casa_case.hearing_type).to eq hearing_type
           expect(casa_case.judge).to eq judge
           expect(casa_case.case_court_mandates[0].mandate_text).to eq mandate_texts[0]
+          expect(casa_case.case_court_mandates[0].implementation_status).to eq implementation_statuses[0]
           expect(casa_case.case_court_mandates[1].mandate_text).to eq mandate_texts[1]
+          expect(casa_case.case_court_mandates[1].implementation_status).to eq implementation_statuses[1]
         end
 
         it "redirects to the casa_case" do
@@ -205,7 +213,8 @@ RSpec.describe "/casa_cases", type: :request do
             {
               case_court_mandates_attributes: {
                 "0" => {
-                  mandate_text: "New Mandate Text One Updated"
+                  mandate_text: "New Mandate Text One Updated",
+                  implementation_status: :not_implemented
                 },
                 "1" => {
                   mandate_text: ""
@@ -474,7 +483,10 @@ RSpec.describe "/casa_cases", type: :request do
           expect(casa_case.court_report_completed?).to be true
 
           expect(casa_case.case_court_mandates[0].mandate_text).to eq mandate_texts[0]
+          expect(casa_case.case_court_mandates[0].implementation_status).to eq implementation_statuses[0]
+
           expect(casa_case.case_court_mandates[1].mandate_text).to eq mandate_texts[1]
+          expect(casa_case.case_court_mandates[1].implementation_status).to eq implementation_statuses[1]
         end
 
         it "redirects to the casa_case" do

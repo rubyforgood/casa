@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "hearing_types/new", type: :system do
+RSpec.describe "hearing_types/new", :disable_bullet, type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
   let(:hearing_type) { create(:hearing_type, casa_org: organization, name: "Spec Test Hearing Type") }

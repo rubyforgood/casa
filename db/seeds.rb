@@ -24,7 +24,7 @@ class SeederMain
 
   def seed
     PaperTrail.enabled = false # don't create rows in the versions table during seed
-    log "NOTE: seed does not delete anything anymore! You have to run rake db:seed:replant to truncate and re-seed"
+    log "NOTE: CASA seed does not delete anything anymore! Run rake db:seed:replant to delete everything and re-seed"
     log "Creating the objects in the database..."
     db_populator.create_all_casa_admin("allcasaadmin@example.com")
     db_populator.create_all_casa_admin("all_casa_admin1@example.com")
@@ -53,7 +53,8 @@ class SeederMain
       CaseAssignment,
       ContactType,
       ContactTypeGroup,
-      CaseContact
+      CaseContact,
+      CaseCourtMandate
     ]
   end
 
@@ -97,4 +98,8 @@ end
 SeederMain.new.seed
 
 load(Rails.root.join("db", "seeds", "emancipation_data.rb"))
-load(Rails.root.join("db", "seeds", "emancipation_options_prune.rb"))
+begin
+  load(Rails.root.join("db", "seeds", "emancipation_options_prune.rb"))
+rescue => e
+  puts "Caught error during db seed emancipation_options_prune, continuing. Message: #{e}"
+end

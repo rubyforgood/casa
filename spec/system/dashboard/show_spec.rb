@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "dashboard/show", type: :system do
+RSpec.describe "dashboard/show", :disable_bullet, type: :system do
   let(:volunteer) { create(:volunteer, display_name: "Bob Loblaw") }
   context "volunteer user" do
     before do

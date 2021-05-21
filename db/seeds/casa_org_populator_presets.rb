@@ -41,7 +41,7 @@ module CasaOrgPopulatorPresets
 
   def for_environment
     {
-      "development" => CasaOrgPopulatorPresets.medium_dataset_options,
+      "development" => CasaOrgPopulatorPresets.small_dataset_options,
       "qa" => CasaOrgPopulatorPresets.large_dataset_options,
       "staging" => CasaOrgPopulatorPresets.large_dataset_options,
       "test" => CasaOrgPopulatorPresets.small_dataset_options

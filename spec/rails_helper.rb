@@ -16,18 +16,22 @@ rescue ActiveRecord::PendingMigrationError => e
   puts e.to_s.strip
   exit 1
 end
+
 RSpec.configure do |config|
   config.include ActiveSupport::Testing::TimeHelpers
+  config.include DatatableHelper, type: :datatable
+  config.include Devise::Test::ControllerHelpers, type: :view
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Devise::Test::IntegrationHelpers, type: :system
-  config.include Devise::Test::ControllerHelpers, type: :view
-  config.include PunditHelper, type: :view
-  config.include Warden::Test::Helpers
   config.include Organizational, type: :helper
+  config.include Organizational, type: :view
+  config.include PunditHelper, type: :view
   config.include SessionHelper, type: :view
   config.include SessionHelper, type: :request
-  config.include Organizational, type: :view
-  config.include DatatableHelper, type: :datatable
+  config.include Warden::Test::Helpers
+  config.include WordDocHelper, type: :model
+  config.include WordDocHelper, type: :request
+
   config.after do
     Warden.test_reset!
   end
@@ -55,4 +59,14 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
 
   config.disable_monkey_patching!
+
+  if ENV["SKIP_BULLET"]
+    Bullet.enable = false
+  end
+
+  config.around :each, :disable_bullet do |example|
+    Bullet.raise = false
+    example.run
+    Bullet.raise = true
+  end
 end

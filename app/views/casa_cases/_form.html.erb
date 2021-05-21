@@ -8,7 +8,7 @@
           <%= form.label :case_number %>
           <%= form.text_field :case_number, class: "form-control" %>
         <% else %>
-          <label for="casa_case_case_number">Case number: <%= casa_case.case_number %></label>
+          <label for="casa_case_case_number">Case number: <%= link_to(casa_case.case_number, casa_case) %></label>
         <% end %>
       </div>
 
@@ -16,7 +16,7 @@
 
       <% if policy(casa_case).update_birth_month_year_youth? %>
         <div class="field form-group">
-          <%= form.label :birth_month_year_youth, "Youth's Birth Month & Year" %>
+          <%= form.label :birth_month_year_youth, t(".youth_birth_month_year") %>
           <br>
           <span class="datetime-year-month">
             <%= form.date_select :birth_month_year_youth,
@@ -24,7 +24,7 @@
                                      order: [:month, :year],
                                      start_year: Date.current.year,
                                      end_year: 1989,
-                                     prompt: {month: 'Month', year: 'Year'},
+                                     prompt: {month: t("common.month"), year: t("common.year")},
                                      discard_day: true
                                  }, class: "select2 date-input" %>
           </span>
@@ -38,7 +38,7 @@
                   :hearing_type_id,
                   HearingType.active.for_organization(current_organization),
                   :id, :name,
-                  {include_hidden: false, prompt: "-Select Hearing Type-"},
+                  {include_hidden: false, prompt: t(".prompt.select_hearing_type")},
                   {class: "form-control"}
               ) %>
         </div>
@@ -52,7 +52,7 @@
                     :judge_id,
                     Judge.for_organization(current_organization),
                     :id, :name,
-                    {include_hidden: false, prompt: "-Select Judge-"},
+                    {include_hidden: false, prompt: t(".prompt.select_judge")},
                     {class: "form-control"}
                 ) %>
           </div>
@@ -61,7 +61,7 @@
 
       <div class="field form-group">
         <% if policy(casa_case).update_court_date? %>
-          <%= form.label :court_date, "Next Court Date" %>
+          <%= form.label :court_date, t(".next_court_date") %>
           <br>
           <span class="datetime-year-month">
             <%= form.date_select :court_date,
@@ -69,20 +69,16 @@
                                      order: [:day, :month, :year],
                                      start_year: Date.current.year + 3,
                                      end_year: 2000,
-                                     prompt: {day: 'Day', month: 'Month', year: 'Year'}
+                                     prompt: {day: t("common.day"), month: t("common.month"), year: t("common.year")}
                                  },
                                  class: "select2 date-input" %>
           </span>
-        <% else %>
-          <label for="court_date">
-            Next Court Date: <%= l @casa_case.court_date, format: :day_and_date, default: '' %>
-          </label>
         <% end %>
       </div>
 
       <div class="field form-group">
         <% if policy(casa_case).update_court_report_due_date? %>
-          <%= form.label :court_report_due_date, "Court Report Due Date" %>
+          <%= form.label :court_report_due_date, t(".court_report_due_date") %>
           <br>
           <span class="datetime-year-month">
             <%= form.date_select :court_report_due_date,
@@ -94,10 +90,6 @@
                                  },
                                  class: "select2 date-input" %>
           </span>
-        <% else %>
-          <label for="court_report_due_date">
-            Court Report Due Date: <%= l @casa_case.court_report_due_date, format: :day_and_date, default: '' %>
-          </label>
         <% end %>
       </div>
 
@@ -117,13 +109,19 @@
 
       <% if casa_case.persisted? %>
         <div class="field form-group court-mandates">
-          <%= form.label :case_court_mandates, "Court Mandates" %>
+          <%= form.label :case_court_mandates, "#{t(".court_mandates")} - #{t(".court_mandate_privacy_warning")}" %>
 
           <% if policy(casa_case).update_court_mandates? %>
             <div id="mandates-list-container">
               <%= form.fields_for :case_court_mandates do |ff| %>
                 <div class="court-mandate-entry">
                   <%= ff.text_area :mandate_text %>
+                  <%=
+                    ff.select :implementation_status,
+                      @casa_case.decorate.court_mandate_select_options,
+                      {include_blank: 'Set Implementation Status', selected: ff.object.implementation_status},
+                      {class: 'implementation-status'}
+                  %>
                   <button type="button" class="remove-mandate-button">
                     <i class="fa fa-minus" aria-hidden="true"></i>
                   </button>
@@ -134,12 +132,21 @@
               <button type="button" id="add-mandate-button">
                 <i class="fa fa-plus" aria-hidden="true"></i>
               </button>
-              <strong>Add a court mandate</strong>
+              <strong><%= t(".add_court_mandate") %></strong>
             </div>
           <% else %>
             <div id="mandate-list-container">
               <% @casa_case.case_court_mandates.each do |mandate| %>
-                <textarea disabled><%= mandate.mandate_text %></textarea>
+                <div class="court-mandate-entry">
+                  <textarea disabled><%= mandate.mandate_text %></textarea>
+
+                  <% if mandate.implementation_status %>
+                    <p class="implementation-status">
+                      <strong>Status:</strong>
+                      <%= mandate.implementation_status.humanize %>
+                    </p>
+                  <% end %>
+                </div>
               <% end %>
             </div>
           <% end %>
@@ -168,23 +175,22 @@
 
       <div class="actions">
         <% if casa_case.active %>
-          <%= form.submit casa_case.persisted? ? 'Update CASA Case' : 'Create CASA Case', class: "btn btn-primary" %>
-          <%= link_to 'Deactivate CASA Case',
+          <%= form.submit casa_case.persisted? ? t(".button.update") : t(".button.create"), class: "btn btn-primary" %>
+          <%= link_to(t(".button.deactivate"),
                       deactivate_casa_case_path(casa_case),
                       method: :patch,
                       class: "btn btn-outline-danger pull-right",
                       data: {
-                          confirm_swal:
-                              "Deactivating a CASA Case will unassign any volunteers currently assigned to this case.",
+                          confirm_swal: t(".prompt.deactivate.confirm_swal"),
                           reload: true,
-                          success: "Yes, deactivate",
-                          fail: "No, go back"
-                      } if Pundit.policy(current_user, casa_case).update_case_status? && casa_case.persisted? %>
+                          success: t(".prompt.deactivate.success"),
+                          fail: t(".prompt.deactivate.fail")
+                      }) if Pundit.policy(current_user, casa_case).update_case_status? && casa_case.persisted? %>
         <% else %>
-          <%= link_to 'Reactivate CASA Case',
+          <%= link_to(t(".button.reactivate"),
                       reactivate_casa_case_path(casa_case),
                       method: :patch,
-                      class: "btn btn-primary" if Pundit.policy(current_user, casa_case).update_case_status? %>
+                      class: "btn btn-primary") if Pundit.policy(current_user, casa_case).update_case_status? %>
         <% end %>
       </div>
     <% end %>

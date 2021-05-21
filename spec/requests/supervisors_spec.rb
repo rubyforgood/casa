@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "/supervisors", type: :request do
+RSpec.describe "/supervisors", :disable_bullet, type: :request do
   let(:admin) { create(:casa_admin) }
   let(:supervisor) { create(:supervisor) }
 
@@ -51,6 +51,24 @@ RSpec.describe "/supervisors", type: :request do
       get edit_supervisor_url(supervisor)
 
       expect(response).to be_successful
+    end
+
+    it "returns volunteers ever assigned if include_unassigned param is present" do
+      sign_in admin
+
+      get edit_supervisor_url(supervisor), params: {include_unassigned: true}
+
+      expect(response).to be_successful
+      expect(assigns(:all_volunteers_ever_assigned)).to_not be_nil
+    end
+
+    it "returns no volunteers ever assigned if include_unassigned param is false" do
+      sign_in admin
+
+      get edit_supervisor_url(supervisor), params: {include_unassigned: false}
+
+      expect(response).to be_successful
+      expect(assigns(:all_volunteers_ever_assigned)).to be_nil
     end
   end
 

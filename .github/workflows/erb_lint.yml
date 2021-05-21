@@ -22,13 +22,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2.3.4
 
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
-
-    - name: install gem erb_lint
-      run: gem install erb_lint
+      with:
+        bundler-cache: true
 
     - name: ERB lint
-      run: erblint --lint-all --autocorrect
+      run: bundle exec erblint --lint-all --autocorrect

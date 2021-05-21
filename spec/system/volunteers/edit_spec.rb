@@ -1,9 +1,19 @@
 require "rails_helper"
 
-RSpec.describe "volunteers/edit", type: :system do
+RSpec.describe "volunteers/edit", :disable_bullet, type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
   let(:volunteer) { create(:volunteer, casa_org_id: organization.id) }
+
+  it "shows invite and login info" do
+    sign_in admin
+    visit edit_volunteer_path(volunteer)
+    expect(page).to have_text "Added to system "
+    expect(page).to have_text "Invitation email sent never"
+    expect(page).to have_text "Last logged in"
+    expect(page).to have_text "Invitation accepted never"
+    expect(page).to have_text "Password reset last sent never"
+  end
 
   describe "updating volunteer personal data" do
     before do

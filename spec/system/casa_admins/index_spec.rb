@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "casa_admins/index", type: :system do
+RSpec.describe "casa_admins/index", :disable_bullet, type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
 
@@ -20,6 +20,18 @@ RSpec.describe "casa_admins/index", type: :system do
       expect(page).to have_no_content(different_org_admin.email)
       expect(page).to have_no_content(supervisor.email)
       expect(page).to have_no_content(volunteer.email)
+    end
+  end
+
+  it "displays a deactivated tag for inactive admins" do
+    inactive_admin = create(:casa_admin, :inactive, casa_org: organization)
+
+    sign_in admin
+    visit casa_admins_path
+
+    within "#admins" do
+      expect(page).to have_content(inactive_admin.email)
+      expect(page).to have_content("Deactivated")
     end
   end
 end

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "casa_cases/edit", type: :view do
+RSpec.describe "casa_cases/edit", :disable_bullet, type: :view do
   let(:organization) { create(:casa_org) }
 
   before do

@@ -35,7 +35,7 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.3.4
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -74,6 +74,7 @@ jobs:
           POSTGRES_PASSWORD: password
           POSTGRES_HOST_AUTH_METHOD: trust
           POSTGRES_PORT: 5432
+          SKIP_BULLET: true
         run: |
           RAILS_ENV=test bundle exec rails server -b 0.0.0.0 -p 4040 -d
           RAILS_ENV=test bundle exec rake db:migrate

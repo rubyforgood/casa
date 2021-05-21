@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "casa_cases/index", type: :system do
+RSpec.describe "casa_cases/index", :disable_bullet, type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:volunteer) { create(:volunteer, display_name: "Cool Volunteer", casa_org: organization) }
@@ -9,7 +9,7 @@ RSpec.describe "casa_cases/index", type: :system do
   let!(:no_prefix) { create(:casa_case, active: true, casa_org: organization, case_number: "123-12-123") }
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: cina) }
 
-  scenario "filterable and linkable" do
+  scenario "filterable and linkable", :js do
     sign_in admin
     visit casa_cases_path
 

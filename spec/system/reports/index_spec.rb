@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "reports", type: :system do
+RSpec.describe "reports", :disable_bullet, type: :system do
   let!(:admin) { create(:casa_admin) }
   let!(:case_contact) { create(:case_contact) }
 
@@ -20,9 +20,9 @@ RSpec.describe "reports", type: :system do
 
   shared_examples "can view page" do
     it "downloads report", js: true do
-      expect(page).to have_text("Case Contacts Report") &
-        have_field("report_start_date", with: 6.months.ago.to_date) &
-        have_field("report_end_date", with: Date.today.to_date)
+      expect(page).to have_text("Case Contacts Report")
+      expect(page).to have_field("report_start_date", with: 6.months.ago.to_date)
+      expect(page).to have_field("report_end_date", with: Date.today.to_date)
       click_on "Download Report"
       expect(page).to have_button "Download Report"
     end

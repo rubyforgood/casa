@@ -1,4 +1,5 @@
 class CasaOrg < ApplicationRecord
+  CASA_DEFAULT_COURT_REPORT = File.new(Rails.root.join("app", "documents", "templates", "default_report_template.docx"), "r")
   CASA_DEFAULT_LOGO = Rails.root.join("public", "logo.jpeg")
 
   has_paper_trail
@@ -10,8 +11,7 @@ class CasaOrg < ApplicationRecord
   has_many :hearing_types, dependent: :destroy
   has_many :case_assignments, through: :users, source: :casa_cases
   has_one_attached :logo
-
-  delegate :url, :alt_text, :size, to: :casa_org_logo, prefix: :logo, allow_nil: true
+  has_one_attached :court_report_template
 
   def casa_admins
     CasaAdmin.in_organization(self)
@@ -33,9 +33,17 @@ class CasaOrg < ApplicationRecord
 
   def org_logo
     if logo.attached?
-      ActiveStorage::Blob.service.path_for(logo.key)
+      Rails.application.routes.url_helpers.rails_blob_path(logo, only_path: true)
     else
       CASA_DEFAULT_LOGO
+    end
+  end
+
+  def open_org_court_report_template(&block)
+    if court_report_template.attached?
+      court_report_template.open(&block)
+    else
+      yield CASA_DEFAULT_COURT_REPORT
     end
   end
 end

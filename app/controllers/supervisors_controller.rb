@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 class SupervisorsController < ApplicationController
-  before_action :available_volunteers, only: [:edit, :update]
-  before_action :set_supervisor, only: [:edit, :update]
-  before_action :all_volunteers_ever_assigned, only: [:edit, :update]
+  before_action :available_volunteers, only: [:edit, :update, :index]
+  before_action :set_supervisor, only: [:edit, :update, :activate, :deactivate]
+  before_action :all_volunteers_ever_assigned, only: [:update]
+  before_action :supervisor_has_unassigned_volunteers, only: [:edit]
+
   after_action :verify_authorized
 
   def index
@@ -30,6 +32,10 @@ class SupervisorsController < ApplicationController
 
   def edit
     authorize @supervisor
+    if params[:include_unassigned] == "true"
+      all_volunteers_ever_assigned
+    end
+    @unassigned_volunteer_count ||= 0
   end
 
   def update
@@ -41,6 +47,28 @@ class SupervisorsController < ApplicationController
     end
   end
 
+  def activate
+    authorize @supervisor
+    if @supervisor.activate
+      SupervisorMailer.account_setup(@supervisor).deliver
+
+      redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was activated."
+    else
+      render :edit, notice: "Supervisor could not be activated."
+    end
+  end
+
+  def deactivate
+    authorize @supervisor
+    if @supervisor.deactivate
+      SupervisorMailer.deactivation(@supervisor).deliver
+
+      redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was deactivated."
+    else
+      render :edit, notice: "Supervisor could not be deactivated."
+    end
+  end
+
   private
 
   def set_supervisor
@@ -48,7 +76,12 @@ class SupervisorsController < ApplicationController
   end
 
   def all_volunteers_ever_assigned
+    @unassigned_volunteer_count = @supervisor.volunteers_ever_assigned.count - @supervisor.volunteers.count
     @all_volunteers_ever_assigned = @supervisor.volunteers_ever_assigned
+  end
+
+  def supervisor_has_unassigned_volunteers
+    @supervisor_has_unassigned_volunteers = @supervisor.volunteers_ever_assigned.count > @supervisor.volunteers.count
   end
 
   def available_volunteers

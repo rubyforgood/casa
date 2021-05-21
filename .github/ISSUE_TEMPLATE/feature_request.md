@@ -1,18 +1,21 @@
-**What type of user is this for? volunteer/supervisor/admin/all**
-
+**What type(s) of user does this feature affect?**
+ - volunteers?
+ - supervisors?
+ - admins?
+ - all casa admins?
 
 **Description**
 
 
-**Screenshots of current behavior, if any**
+**Screenshots of current behavior, if any**  
+You can paste images on the clipboard here
 
-_QA Login Details:_
-url: https://casa-qa.herokuapp.com/
-password for all users: 123456
+_QA Login Details:_  
+[Link to QA site](https://casa-qa.herokuapp.com/)  
 
-Log in using any of the below emails, depending on the account type you'd like to log in as.
-- volunteer1@example.com
-- supervisor1@example.com
-- casa_admin1@example.com
+Login Emails: 
+- volunteer1@example.com  view site as a volunteer
+- supervisor1@example.com view site as a supervisor
+- casa_admin1@example.com view site as an admin
 
-
+password for all users: 123456  

@@ -17,4 +17,3 @@ if ! bundle check; then
 else
   echo "INFO: Dependencies up to date"
 fi
-

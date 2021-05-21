@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "supervisors/new", type: :system do
+RSpec.describe "supervisors/new", :disable_bullet, type: :system do
   context "when admin" do
     let(:admin) { create(:casa_admin) }
 

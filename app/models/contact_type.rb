@@ -2,7 +2,8 @@ class ContactType < ApplicationRecord
   has_paper_trail
   belongs_to :contact_type_group
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: {scope: :contact_type_group_id,
+                                                message: "should be unique per contact type group"}
 
   scope :for_organization, ->(org) {
     joins(:contact_type_group)

@@ -1,6 +1,7 @@
 class CaseContact < ApplicationRecord
   include ByOrganizationScope
   has_paper_trail
+  acts_as_paranoid
 
   attr_accessor :duration_hours
 
@@ -59,6 +60,9 @@ class CaseContact < ApplicationRecord
         .group(:id)
     end
   }
+  scope :grab_all, ->(current_user) {
+    with_deleted if current_user.is_a?(CasaAdmin)
+  }
 
   IN_PERSON = "in-person".freeze
   TEXT_EMAIL = "text/email".freeze
@@ -91,15 +95,15 @@ class CaseContact < ApplicationRecord
     !contact_made.nil?
   end
 
-  def created_in_current_quarter?
-    today = Time.zone.now
-    occurred_at.end_of_quarter > today
+  def quarter_editable?
+    # case contacts should no longer be editable after the current quarter plus a grace period
+    Time.zone.now < occurred_at.end_of_quarter + 30.days
   end
 
   def check_if_allow_edit
-    return if created_in_current_quarter?
+    return if quarter_editable?
 
-    errors.add(:base, message: "cannot edit case contacts created before the current quarter")
+    errors.add(:base, message: "cannot edit case contacts created before the current quarter plus 30 days")
   end
 
   def supervisor_id
@@ -129,6 +133,7 @@ end
 #
 #  id                         :bigint           not null, primary key
 #  contact_made               :boolean          default(FALSE)
+#  deleted_at                 :datetime
 #  duration_minutes           :integer          not null
 #  medium_type                :string
 #  miles_driven               :integer          default(0), not null
@@ -144,6 +149,7 @@ end
 #
 #  index_case_contacts_on_casa_case_id  (casa_case_id)
 #  index_case_contacts_on_creator_id    (creator_id)
+#  index_case_contacts_on_deleted_at    (deleted_at)
 #
 # Foreign Keys
 #

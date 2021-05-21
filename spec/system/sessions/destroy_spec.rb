@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "sessions/destroy", type: :system do
+RSpec.describe "sessions/destroy", :disable_bullet, type: :system do
   context "when a user is timed out" do
     let(:user) { create(:casa_admin) }
 

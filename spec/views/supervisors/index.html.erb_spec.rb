@@ -1,12 +1,13 @@
 require "rails_helper"
 
-RSpec.describe "supervisors/index", type: :view do
+RSpec.describe "supervisors/index", :disable_bullet, type: :view do
   let(:user) {}
 
   before do
     enable_pundit(view, user)
     allow(view).to receive(:current_user).and_return(user)
     assign :supervisors, []
+    assign :available_volunteers, []
     sign_in user
   end
 

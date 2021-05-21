@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "case_contact_reports/index", type: :system do
+RSpec.describe "case_contact_reports/index", :disable_bullet, type: :system do
   let(:admin) { create(:casa_admin) }
 
   it "filters report by date and selected contact type", js: true do

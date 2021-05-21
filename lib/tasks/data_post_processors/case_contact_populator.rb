@@ -9,7 +9,7 @@ module CaseContactPopulator
         unless ct
           if cts_by_name.any?
             ctg_name = cts_by_name.first.contact_type_group.name
-            org_ctg = ContactTypeGroup.where(casa_org: casa_org, name: ctg_name)
+            org_ctg = ContactTypeGroup.find_by(casa_org: casa_org, name: ctg_name)
             if org_ctg
               ContactType.find_or_create_by!(contact_type_group: org_ctg, name: ct_name)
             else

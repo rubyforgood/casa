@@ -7,8 +7,8 @@ RSpec.describe CaseCourtReport, type: :model do
   describe "when receiving valid case, volunteer, and path_to_template" do
     let(:casa_case_without_contacts) { volunteer.casa_cases.second }
     let(:casa_case_with_contacts) { volunteer.casa_cases.first }
-    let(:path_to_template) { "app/documents/templates/report_template_transition.docx" }
-    let(:path_to_report) { "tmp/test_report.docx" }
+    let(:path_to_template) { Rails.root.join("app", "documents", "templates", "default_report_template.docx").to_s }
+    let(:path_to_report) { Rails.root.join("tmp", "test_report.docx").to_s }
     let(:report) do
       CaseCourtReport.new(
         case_id: casa_case_with_contacts.id,
@@ -40,22 +40,12 @@ RSpec.describe CaseCourtReport, type: :model do
       end
 
       describe "with past court date" do
-        # TODO make a factory for PastCourtDate
-        let!(:past_court_date) { PastCourtDate.create!(date: 2.days.ago, casa_case_id: casa_case_with_contacts.id) }
+        let!(:past_court_date) { create(:past_court_date, date: 2.days.ago, casa_case_id: casa_case_with_contacts.id) }
 
         it "has all case contacts created since the previous court date" do
           expect(casa_case_with_contacts.past_court_dates.length).to eq(1)
           expect(report.context[:case_contacts].length).to eq(4)
         end
-      end
-    end
-
-    describe "has valid @path_to_template" do
-      it "is existing" do
-        path = report.template.instance_variable_get(:@path)
-
-        expect(File.exist?(path_to_template)).to eq true
-        expect(File.exist?(path)).to eq true
       end
     end
 
@@ -67,29 +57,70 @@ RSpec.describe CaseCourtReport, type: :model do
 
       it "has the following keys [:created_date, :casa_case, :case_contacts, :volunteer]" do
         expected = %i[created_date casa_case case_contacts volunteer]
-        expect(subject.keys).to eq expected
+        expect(subject.keys).to include(*expected)
       end
 
       it "must have Case Contacts as type Array" do
         expect(subject[:case_contacts]).to be_instance_of Array
       end
+
+      it "created_date is not nil" do
+        expect(subject[:created_date]).to_not be(nil)
+      end
     end
 
-    describe "when generating report" do
-      it "successfully generates to memory as a String instance" do
-        report_as_data = report.generate_to_string
+    describe "the default generated report" do
+      context "when passed all displayable information" do
+        let(:document_data) {
+          {
+            case_birthday: 12.years.ago,
+            case_contact_time: 3.days.ago,
+            case_contact_type: "Unique Case Contact Type",
+            case_hearing_date: 2.weeks.from_now,
+            case_number: "A-CASA-CASE-NUMBER-12345",
+            mandate_text: "This text shall not be strikingly similar to other text in the document",
+            org_address: "596 Unique Avenue Seattle, Washington",
+            supervisor_name: "A very unique supervisor name",
+            volunteer_case_assignment_date: 2.months.ago,
+            volunteer_name: "An unmistakably unique volunteer name"
+          }
+        }
 
-        expect(report_as_data).not_to be_nil
-        expect(report_as_data).to be_instance_of String
-      end
+        let(:contact_type) { create(:contact_type, name: document_data[:case_contact_type]) }
+        let(:case_contact) { create(:case_contact, contact_made: false, occurred_at: document_data[:case_contact_time]) }
+        let(:court_mandate) { create(:case_court_mandate, implementation_status: :partially_implemented) }
 
-      it "successfully generates to file" do
-        report.generate!
+        before(:each) {
+          casa_case_with_contacts.casa_org.update_attribute(:address, document_data[:org_address])
+          casa_case_with_contacts.update_attribute(:birth_month_year_youth, document_data[:case_birthday])
+          casa_case_with_contacts.update_attribute(:case_number, document_data[:case_number])
+          casa_case_with_contacts.update_attribute(:court_date, document_data[:case_hearing_date])
+          case_contact.contact_types << contact_type
+          casa_case_with_contacts.case_contacts << case_contact
+          casa_case_with_contacts.case_court_mandates << court_mandate
+          court_mandate.update_attribute(:mandate_text, document_data[:mandate_text])
+          CaseAssignment.find_by(casa_case_id: casa_case_with_contacts.id, volunteer_id: volunteer.id).update_attribute(:created_at, document_data[:volunteer_case_assignment_date])
+          volunteer.update_attribute(:display_name, document_data[:volunteer_name])
+          volunteer.supervisor.update_attribute(:display_name, document_data[:supervisor_name])
+        }
 
-        expect(File.exist?(path_to_report)).to eq true
+        it "displays all the information" do
+          report_as_raw_docx = report.generate_to_string
+          report_top_header = get_docx_subfile_contents(report_as_raw_docx, "word/header3.xml")
+          report_body = get_docx_subfile_contents(report_as_raw_docx, "word/document.xml")
 
-        # clean up after testing
-        File.delete(path_to_report) if File.exist?(path_to_report)
+          expect(report_top_header).to include(document_data[:org_address])
+          expect(report_body).to include(Date.today.strftime("%B %-d, %Y"))
+          expect(report_body).to include(document_data[:case_hearing_date].strftime("%B %-d, %Y"))
+          expect(report_body).to include(document_data[:case_number])
+          expect(report_body).to include(document_data[:case_contact_type])
+          expect(report_body).to include("#{document_data[:case_contact_time].strftime("%-m/%d")}*")
+          expect(report_body).to include(document_data[:mandate_text])
+          expect(report_body).to include("partially_implemented") # Mandate Status
+          expect(report_body).to include(document_data[:volunteer_name])
+          expect(report_body).to include(document_data[:volunteer_case_assignment_date].strftime("%B %-d, %Y"))
+          expect(report_body).to include(document_data[:supervisor_name])
+        end
       end
     end
   end
