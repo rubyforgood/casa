@@ -39,7 +39,7 @@
         <%= link_to(t("button.delete"), case_contact_path(contact.id), method: :delete,
                     class: "btn btn-danger pull-right") if policy(current_user).destroy? && !contact.deleted? %>
       </div>
-      <div class="row">
+      <div class="row justify-content-between">
         <% if Pundit.policy(current_user, contact).update? %>
           <% if contact.quarter_editable? %>
             <%= render "case_contacts/followup", contact: contact, followup: contact.requested_followup %>
