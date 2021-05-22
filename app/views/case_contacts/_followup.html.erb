@@ -1,12 +1,14 @@
 <% if followup %>
-  <div class="col-sm-2 pt-2">
+  <div class="col col-sm-2 pt-2">
     <i class="fas fa-lg <%= followup_icon(followup.creator) %>"></i>
   </div>
-  <div class="col-sm-5">
+  <div class="col col-sm-6">
     <%= button_to resolve_followup_path(followup), method: :patch, class: "btn btn-success" do %>
       <%= t("button.resolve") %>
     <% end %>
   </div>
 <% else %>
-  <%= button_to t("button.follow_up"), case_contact_followups_path(contact), method: "post", class: "btn btn-danger" %>
+  <div class="col col-sm-8 pl-0">
+    <%= button_to t("button.follow_up"), case_contact_followups_path(contact), method: "post", class: "btn btn-danger" %>
+  </div>
 <% end %>

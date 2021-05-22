@@ -39,17 +39,17 @@
         <%= link_to(t("button.delete"), case_contact_path(contact.id), method: :delete,
                     class: "btn btn-danger pull-right") if policy(current_user).destroy? && !contact.deleted? %>
       </div>
-      <div class="row">
+      <div class="row justify-content-start">
         <% if Pundit.policy(current_user, contact).update? %>
           <% if contact.quarter_editable? %>
             <%= render "case_contacts/followup", contact: contact, followup: contact.requested_followup %>
-            <div class="col-sm-5">
+            <div class="col col-sm-4" style="right: 10px;">
               <%= link_to edit_case_contact_path(contact), class: 'btn btn-outline-primary' do %>
                 <strong><%= t("button.edit") %></strong>
               <% end %>
             </div>
           <% else %>
-            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="This case contact was created in a previous quarter and is therefore no longer editable"></i>
+            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="This case contact was created in a previous quarter and is therefore no longer editable."></i>
           <% end %>
         <% end %>
       </div>
