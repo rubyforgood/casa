@@ -32,4 +32,13 @@ RSpec.describe VolunteerMailer, type: :mailer do
       expect(mail.body.encoded).to match("next court report is due on #{report_due_date}")
     end
   end
+
+  describe ".case_contacts_reminder" do
+    let(:mail) { VolunteerMailer.case_contacts_reminder(volunteer) }
+
+    it "sends an email reminding volunteer" do
+      expect(mail.body.encoded).to match("Hello #{volunteer.display_name}")
+      expect(mail.body.encoded).to match("as a reminder")
+    end
+  end
 end

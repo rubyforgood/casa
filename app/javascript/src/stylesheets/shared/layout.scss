@@ -19,6 +19,12 @@ label {
   color: $primary;
 }
 
+div.row div.col-sm-12.form-header h1 {
+  display: inline-block;
+  margin-right: 15px;
+  vertical-align: middle;
+}
+
 .card.card-container {
   box-shadow: 0 4px 12px 5px rgba(0, 0, 0, 0.08);
 }

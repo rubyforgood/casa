@@ -215,4 +215,32 @@ RSpec.describe "volunteers/edit", :disable_bullet, type: :system do
     expect(page).to have_content("Resend Invitation")
     expect(ActionMailer::Base.deliveries.count).to eq(1)
   end
+
+  describe "send reminder as a supervisor" do
+    let(:supervisor) { create(:supervisor, casa_org: organization) }
+
+    it "allows a supervisor resend invitation to a volunteer" do
+      sign_in supervisor
+
+      visit edit_volunteer_path(volunteer)
+
+      expect(page).to have_link("Send reminder")
+
+      click_on "Send reminder"
+
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+    end
+  end
+
+  it "send reminder as an admin" do
+    sign_in admin
+
+    visit edit_volunteer_path(volunteer)
+
+    expect(page).to have_link("Send reminder")
+
+    click_on "Send reminder"
+
+    expect(ActionMailer::Base.deliveries.count).to eq(1)
+  end
 end

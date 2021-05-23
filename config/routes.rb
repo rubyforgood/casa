@@ -87,6 +87,7 @@ Rails.application.routes.draw do
       patch :activate
       patch :deactivate
       patch :resend_invitation
+      patch :reminder
     end
   end
   resources :case_assignments, only: %i[create destroy] do

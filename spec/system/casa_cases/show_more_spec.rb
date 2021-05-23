@@ -5,6 +5,7 @@ RSpec.describe "casa_cases/show", :disable_bullet, type: :system do
 
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
+  let(:supervisor) { create(:supervisor, casa_org: organization) }
   let(:volunteer) { create :volunteer, display_name: "Andy Dwyer", casa_org: organization }
   let!(:case_assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer) }
   let(:casa_case) { create(:casa_case, casa_org: organization) }
@@ -20,6 +21,30 @@ RSpec.describe "casa_cases/show", :disable_bullet, type: :system do
       click_on "Andy Dwyer"
 
       expect(page).to have_text("Editing Volunteer")
+    end
+
+    it "sends reminder to volunteer" do
+      sign_in admin
+      visit casa_case_path(casa_case.id)
+
+      expect(page).to have_link("Send Reminder")
+
+      click_on "Send Reminder"
+
+      expect(page).to have_text("Reminder sent to volunteer")
+    end
+  end
+
+  context "user is a supervisor" do
+    it "sends reminder to volunteer" do
+      sign_in supervisor
+      visit casa_case_path(casa_case.id)
+
+      expect(page).to have_link("Send Reminder")
+
+      click_on "Send Reminder"
+
+      expect(page).to have_text("Reminder sent to volunteer")
     end
   end
 

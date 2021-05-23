@@ -79,6 +79,14 @@ class VolunteersController < ApplicationController
     redirect_to edit_volunteer_path(@volunteer), notice: "Invitation sent"
   end
 
+  def reminder
+    authorize @volunteer
+    @volunteer = Volunteer.find(params[:id])
+    VolunteerMailer.case_contacts_reminder(@volunteer).deliver
+
+    redirect_to edit_volunteer_path(@volunteer), notice: "Reminder sent to volunteer."
+  end
+
   private
 
   def set_volunteer
