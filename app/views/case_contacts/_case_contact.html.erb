@@ -36,10 +36,6 @@
         </div>
       </div>
       <div class="row justify-content-between">
-        <div class="col-sm-4">
-          <%= link_to(t("button.delete"), case_contact_path(contact.id), method: :delete,
-                    class: "btn btn-danger pull-right") if policy(current_user).destroy? && !contact.deleted? %>
-        </div>
         <% if Pundit.policy(current_user, contact).update? %>
           <% if contact.quarter_editable? %>
             <%= render "case_contacts/followup", contact: contact, followup: contact.requested_followup %>
@@ -52,6 +48,10 @@
             <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="This case contact was created in a previous quarter and is therefore no longer editable."></i>
           <% end %>
         <% end %>
+      </div>
+      <div class="row justify-content-between">
+        <%= link_to(t("button.delete"), case_contact_path(contact.id), method: :delete,
+                  class: "btn btn-danger") if policy(current_user).destroy? && !contact.deleted? %>
       </div>
     </div>
   </div>
