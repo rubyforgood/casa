@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-body">
-    <div class="d-flex justify-content-between">
-      <div class="w-100">
+    <div class="row d-flex justify-content-between no-gutters">
+      <div class="col-8">
         <div class="media">
           <i class="mt-1 mr-3 text-primary <%= contact.decorate.medium_icon_classes %>"></i>
           <div class="media-body">
@@ -35,11 +35,11 @@
           </div>
         </div>
       </div>
-      <div class="align-self-end">
+      <div class="row justify-content-between">
         <%= link_to(t("button.delete"), case_contact_path(contact.id), method: :delete,
-                    class: "btn btn-danger pull-right") if policy(current_user).destroy? && !contact.deleted? %>
+                  class: "btn btn-danger") if policy(current_user).destroy? && !contact.deleted? %>
       </div>
-      <div class="row">
+      <div class="row justify-content-between">
         <% if Pundit.policy(current_user, contact).update? %>
           <% if contact.quarter_editable? %>
             <%= render "case_contacts/followup", contact: contact, followup: contact.requested_followup %>
@@ -49,10 +49,11 @@
               <% end %>
             </div>
           <% else %>
-            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="This case contact was created in a previous quarter and is therefore no longer editable"></i>
+            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" title="This case contact was created in a previous quarter and is therefore no longer editable."></i>
           <% end %>
         <% end %>
       </div>
+
     </div>
   </div>
   <div>
