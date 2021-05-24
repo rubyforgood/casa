@@ -36,10 +36,6 @@
         </div>
       </div>
       <div class="row justify-content-between">
-        <%= link_to(t("button.delete"), case_contact_path(contact.id), method: :delete,
-                  class: "btn btn-danger") if policy(current_user).destroy? && !contact.deleted? %>
-      </div>
-      <div class="row justify-content-between">
         <% if Pundit.policy(current_user, contact).update? %>
           <% if contact.quarter_editable? %>
             <%= render "case_contacts/followup", contact: contact, followup: contact.requested_followup %>
@@ -53,7 +49,12 @@
           <% end %>
         <% end %>
       </div>
-
+      <div class="row pl-3">
+        <div class="col">
+          <%= link_to(t("button.delete"), case_contact_path(contact.id), method: :delete,
+                class: "btn btn-danger") if policy(current_user).destroy? && !contact.deleted? %>
+        </div>
+      </div>
     </div>
   </div>
   <div>
