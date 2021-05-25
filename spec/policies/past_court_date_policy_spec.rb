@@ -7,10 +7,10 @@ RSpec.describe PastCourtDatePolicy do
   let(:different_organization) { create(:casa_org) }
 
   let(:past_court_date) { create(:past_court_date, casa_case: casa_case) }
-  let(:casa_case) { create(:casa_case,  casa_org: organization) }
+  let(:casa_case) { create(:casa_case, casa_org: organization) }
 
   let(:casa_admin) { create(:casa_admin, casa_org: organization) }
-  let(:volunteer)  { create(:volunteer,  casa_org: organization) }
+  let(:volunteer) { create(:volunteer, casa_org: organization) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
 
   permissions :show? do
@@ -21,7 +21,7 @@ RSpec.describe PastCourtDatePolicy do
     end
 
     context "when a supervisor does not belong to the same org as the case" do
-      let(:casa_case)  { create(:casa_case, casa_org: different_organization) }
+      let(:casa_case) { create(:casa_case, casa_org: different_organization) }
 
       it { expect(subject).not_to permit(supervisor, past_court_date) }
     end

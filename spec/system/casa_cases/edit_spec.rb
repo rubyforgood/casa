@@ -2,7 +2,6 @@ require "rails_helper"
 require "stringio"
 
 RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
-
   shared_examples_for "shows past court dates links" do
     let(:past_court_date_with_details) do
       create(:past_court_date, :with_court_details, casa_case: casa_case, date: Time.zone.yesterday)
@@ -12,7 +11,7 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
       create(:past_court_date, casa_case: casa_case, date: Time.zone.today)
     end
 
-    let!(:formatted_date_with_details)    { I18n.l(past_court_date_with_details.date,    format: :full, default: nil) }
+    let!(:formatted_date_with_details) { I18n.l(past_court_date_with_details.date, format: :full, default: nil) }
     let!(:formatted_date_without_details) { I18n.l(past_court_date_without_details.date, format: :full, default: nil) }
 
     it "shows court mandates" do
@@ -21,7 +20,7 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
       expect(page).to have_text(formatted_date_with_details)
       expect(page).to have_link(formatted_date_with_details)
 
-      expect(page).to     have_text(formatted_date_without_details)
+      expect(page).to have_text(formatted_date_without_details)
       expect(page).not_to have_link(formatted_date_without_details)
     end
   end

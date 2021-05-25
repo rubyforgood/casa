@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "past_court_dates/show", type: :view do
   shared_examples_for "a past court date with all court details" do

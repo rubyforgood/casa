@@ -22,5 +22,4 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
       it { expect(response).to redirect_to new_user_session_path }
     end
   end
-
 end
