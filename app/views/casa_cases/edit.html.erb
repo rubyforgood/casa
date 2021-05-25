@@ -23,7 +23,7 @@
 
             <% if report = pcd.latest_associated_report %>
               <%= link_to rails_blob_path(report, disposition: 'attachment') do %>
-                (<%= t(".label.latest_associated_report") %>)
+                (<%= t(".label.attached_report") %>)
               <% end %>
             <% end %>
           </p>

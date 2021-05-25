@@ -34,6 +34,7 @@ en:
         court_report_submitted_date: Court Report Submitted Date
         court_mandates: Court Mandates
         assigned_volunteers: Assigned Volunteers
+        attached_report: Attached Report
       button:
         new_contact: New Case Contact
         edit_case: Edit Case Details
@@ -122,8 +123,15 @@ en:
     show:
       title: Past Court Date
       label:
+        case_number: Case Number
+        judge: Judge
+        hearing_type: Hearing Type
+        none: None
+        case_court_mandates: Court Mandates
+        no_case_court_mandates: There are no court mandates associated with this past court date.
         casa_case_court_mandate:
           mandate_text: Court Mandate Text
+          implementation_status: Implementation Status
   casa_admins:
     form:
       button:

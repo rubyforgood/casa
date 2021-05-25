@@ -24,7 +24,7 @@
     <% if @past_court_date.case_court_mandates.any? %>
       <p>
         <h6>
-          <strong><%= t(".label.court_mandates") %>:</strong>
+          <strong><%= t(".label.case_court_mandates") %>:</strong>
         </h6>
       </p>
 
@@ -47,8 +47,8 @@
     <% else %>
       <p>
         <h6>
-          <strong><%= t(".label.court_mandates") %>:</strong>
-          There are no court mandates associated with this past court date.
+          <strong><%= t(".label.case_court_mandates") %>:</strong>
+          <%= t(".label.no_case_court_mandates") %>
         </h6>
       </p>
     <% end %>
