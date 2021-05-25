@@ -2,7 +2,7 @@ class CaseCourtMandate < ApplicationRecord
   IMPLEMENTATION_STATUSES = {not_implemented: 1, partially_implemented: 2, implemented: 3}
 
   belongs_to :casa_case
-  belongs_to :past_court_date
+  belongs_to :past_court_date, optional: true
 
   validates :mandate_text, presence: true
 
