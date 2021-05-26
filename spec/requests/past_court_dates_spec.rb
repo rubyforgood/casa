@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request do
+RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", :disable_bullet, type: :request do
   describe "GET /show" do
     subject(:show) { get casa_case_past_court_date_path(casa_case, past_court_date) }
 
