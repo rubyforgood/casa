@@ -13,7 +13,7 @@
 ruby:
 - "**/*.rb"
 
-ERB Templates:
+erb:
 - "**/*.erb"
 
 javascript:
