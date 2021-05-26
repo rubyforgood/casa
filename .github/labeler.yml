@@ -13,6 +13,9 @@
 ruby:
 - "**/*.rb"
 
+erb:
+- "**/*.erb"
+
 javascript:
 - "**/*.js"
 - "package*.json"
