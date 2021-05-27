@@ -54,7 +54,7 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 
 - Foster Youth = _CasaCase_
 - CASA Volunteer = _Volunteer_
-- Case Supervisor = _Case Supervisor_
+- Case Supervisor = _Case Supervisor or Supe_
 - CASA Administrator = _Superadmin_
 
 **Project Considerations**
