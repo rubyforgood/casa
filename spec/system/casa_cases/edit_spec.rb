@@ -2,6 +2,29 @@ require "rails_helper"
 require "stringio"
 
 RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
+  shared_examples_for "shows past court dates links" do
+    let(:past_court_date_with_details) do
+      create(:past_court_date, :with_court_details, casa_case: casa_case, date: Time.zone.yesterday)
+    end
+
+    let(:past_court_date_without_details) do
+      create(:past_court_date, casa_case: casa_case, date: Time.zone.today)
+    end
+
+    let!(:formatted_date_with_details) { I18n.l(past_court_date_with_details.date, format: :full, default: nil) }
+    let!(:formatted_date_without_details) { I18n.l(past_court_date_without_details.date, format: :full, default: nil) }
+
+    it "shows court mandates" do
+      visit edit_casa_case_path(casa_case)
+
+      expect(page).to have_text(formatted_date_with_details)
+      expect(page).to have_link(formatted_date_with_details)
+
+      expect(page).to have_text(formatted_date_without_details)
+      expect(page).not_to have_link(formatted_date_without_details)
+    end
+  end
+
   context "when admin" do
     let(:organization) { create(:casa_org) }
     let(:admin) { create(:casa_admin, casa_org: organization) }
@@ -12,6 +35,8 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
     let!(:therapist) { create(:contact_type, name: "Therapist", contact_type_group: contact_type_group) }
 
     before { sign_in admin }
+
+    it_behaves_like "shows past court dates links"
 
     it "shows court mandates" do
       visit edit_casa_case_path(casa_case)
@@ -91,9 +116,9 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
     let!(:contact_type_2) { create(:contact_type, name: "Supervisor", contact_type_group: contact_type_group) }
     let!(:next_year) { (Date.today.year + 1).to_s }
 
-    before do
-      sign_in supervisor
-    end
+    before { sign_in supervisor }
+
+    it_behaves_like "shows past court dates links"
 
     it "edits case", js: true do
       visit casa_case_path(casa_case)
@@ -377,13 +402,17 @@ of it unless it was included in a previous court report.")
 
     before { sign_in volunteer }
 
+    it_behaves_like "shows past court dates links"
+
     it "views attached court reports" do
       visit edit_casa_case_path(casa_case)
 
       # test court dates with reports get the correct ones
       [[0, 1], [2, 3], [3, 4]].each do |di, ri|
-        expect(page).to have_link(I18n.l(court_dates[di].date, format: :full, default: nil), href: rails_blob_path(reports[ri], disposition: "attachment"))
+        expect(page).to have_link("(Attached Report)", href: rails_blob_path(reports[ri], disposition: "attachment"))
+        expect(page).not_to have_link(I18n.l(court_dates[di].date, format: :full, default: nil))
       end
+
       # and that the one with no report doesn't get one
       expect(page).not_to have_link(I18n.l(court_dates[1].date, format: :full, default: nil))
       expect(page).to have_text(I18n.l(court_dates[1].date, format: :full, default: nil))
