@@ -46,6 +46,9 @@ class CaseCourtReportsController < ApplicationController
   rescue Zip::Error
     error_messages = generate_error(t(".error.template_not_found"))
     render json: {status: :not_found, error_messages: error_messages}, status: :not_found
+  rescue StandardError => e
+    error_messages = generate_error(e.to_s)
+    render json: {status: :unprocessable_entity, error_messages: error_messages}, status: :unprocessable_entity
   end
 
   private
