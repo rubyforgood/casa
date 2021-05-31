@@ -52,5 +52,8 @@
         </h6>
       </p>
     <% end %>
+
+    <%= link_to t(".label.download_report_docx"), casa_case_past_court_date_path(@casa_case, @past_court_date, format: :docx),
+      class: "btn btn-primary" %>
   </div>
 </div>
