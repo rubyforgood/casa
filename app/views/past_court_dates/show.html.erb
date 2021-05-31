@@ -38,7 +38,7 @@
             <% @past_court_date.case_court_mandates.each do |court_mandate| %>
               <tr>
                 <td><%= court_mandate.mandate_text %></td>
-                <td class="text-center"><%= court_mandate.implementation_status.humanize %></td>
+                <td class="text-center"><%= court_mandate.implementation_status&.humanize %></td>
               </tr>
             <% end %>
           </tbody>
