@@ -165,7 +165,14 @@ class DbPopulator
           transition_aged_youth: false
         )
       end
-      volunteer = casa_org.volunteers.active.sample(random: rng) || casa_org.volunteers.active.first
+      volunteer = casa_org.volunteers.active.sample(random: rng) ||
+        casa_org.volunteers.active.first ||
+        Volunteer.create!(
+          casa_org: casa_org,
+          email: "#{SecureRandom.hex(10)}@example.com",
+          password: SEED_PASSWORD,
+          display_name: "active volunteer"
+        )
       CaseAssignment.find_or_create_by!(casa_case: new_casa_case, volunteer: volunteer)
 
       random_case_contact_count.times do
