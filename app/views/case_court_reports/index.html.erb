@@ -14,11 +14,11 @@
         <%= label_tag :case_number, t(".label.case_number") %>
         <% select_options = @assigned_cases.map { |casa_case| casa_case.decorate.court_report_select_option } %>
         <%= select_tag :case_number,
-                        options_for_select(select_options),
-                        prompt: t(".prompt.select_case_number"),
-                        include_blank: false,
-                        id: "case-selection",
-                        class: "custom-select select2" %>
+                       options_for_select(select_options),
+                       prompt: t(".prompt.select_case_number"),
+                       include_blank: false,
+                       id: "case-selection",
+                       class: "custom-select select2" %>
 
       </div>
       <div class="form-group">
