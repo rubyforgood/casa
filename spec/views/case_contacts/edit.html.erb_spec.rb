@@ -7,8 +7,8 @@ RSpec.describe "case_contacts/edit", :disable_bullet, type: :view do
   end
 
   it "is listing all the contact methods from the model" do
-    case_contact = create(:case_contact)
-    contact_type = create(:contact_type, name: "In Person")
+    case_contact = build_stubbed(:case_contact)
+    contact_type = build_stubbed(:contact_type, name: "In Person")
     assign :case_contact, case_contact
     assign :casa_cases, [case_contact.casa_case]
     assign :selected_cases, [case_contact.casa_case]
@@ -20,9 +20,9 @@ RSpec.describe "case_contacts/edit", :disable_bullet, type: :view do
   end
 
   it "displays occurred time in the occurred at form field" do
-    case_contact = create(:case_contact)
+    case_contact = build_stubbed(:case_contact)
     case_contact.occurred_at = Time.zone.now - (3600 * 24)
-    contact_type = create(:contact_type, name: "In Person")
+    contact_type = build_stubbed(:contact_type, name: "In Person")
     assign :case_contact, case_contact
     assign :casa_cases, [case_contact.casa_case]
     assign :selected_cases, [case_contact.casa_case]
