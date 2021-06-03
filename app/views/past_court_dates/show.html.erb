@@ -38,7 +38,7 @@
             <% @past_court_date.case_court_mandates.each do |court_mandate| %>
               <tr>
                 <td><%= court_mandate.mandate_text %></td>
-                <td class="text-center"><%= court_mandate.implementation_status.humanize %></td>
+                <td class="text-center"><%= court_mandate.implementation_status&.humanize %></td>
               </tr>
             <% end %>
           </tbody>
@@ -52,5 +52,9 @@
         </h6>
       </p>
     <% end %>
+
+    <%= link_to t(".label.download_report_docx"),
+      casa_case_past_court_date_path(@casa_case, @past_court_date, format: :docx),
+      class: "btn btn-primary" %>
   </div>
 </div>

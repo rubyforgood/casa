@@ -132,6 +132,7 @@ en:
         casa_case_court_mandate:
           mandate_text: Court Mandate Text
           implementation_status: Implementation Status
+        download_report_docx: Download Report (.docx)
   casa_admins:
     form:
       button:
