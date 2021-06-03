@@ -61,7 +61,7 @@
   <div class="col-sm-12 dashboard-table-header">
     <div class="card card-container">
       <div class="card-body">
-        <% if @available_volunteers.active.any? %>
+        <% if @available_volunteers.any? %>
           <table class="table table-striped table-bordered" id="unassigned-volunteers">
             <thead>
             <th></th>
@@ -69,7 +69,7 @@
             <th>Assigned to Case(s)</th>
             </thead>
             <tbody>
-            <% @available_volunteers.active.each_with_index do |volunteer, index| %>
+            <% @available_volunteers.each_with_index do |volunteer, index| %>
               <tr>
                 <td>
                   <%= index + 1 %>
