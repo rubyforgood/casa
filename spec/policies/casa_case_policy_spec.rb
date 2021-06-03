@@ -114,8 +114,6 @@ RSpec.describe CasaCasePolicy do
     end
 
     context "when a supervisor does not belong to the same org as the case" do
-
-
       it "does not allow the supervisor" do
         supervisor = create(:supervisor, casa_org: organization)
         casa_case = create(:casa_case, casa_org: different_organization)
