@@ -96,14 +96,15 @@ RSpec.describe "supervisors/index", :disable_bullet, type: :system do
       end
 
       it "will show a list of unassigned volunteers" do
-        expect(page).to have_text("Unassigned volunteers:")
+        expect(page).to have_text("Active volunteers not assigned to supervisors")
+        expect(page).to have_text("Assigned to Case(s)")
         expect(page).to have_text("Tony Ruiz")
-        expect(page).not_to have_text("Currently no volunteer are unassigned")
+        expect(page).not_to have_text("There are no unassigned volunteers")
       end
 
-      it "will confirm that the link url is correct" do
+      it "links to edit page of volunteer" do
         click_on("Tony Ruiz")
-        expect(page).to have_current_path("/volunteers/#{Volunteer.ids.first}/edit")
+        expect(page).to have_current_path("/volunteers/#{Volunteer.find_by(display_name: "Tony Ruiz").id}/edit")
       end
     end
 
@@ -114,7 +115,9 @@ RSpec.describe "supervisors/index", :disable_bullet, type: :system do
       end
 
       it "will not show a list of volunteers not assigned to supervisors" do
-        expect(page).to have_text("Currently no volunteers are unassigned")
+        expect(page).to have_text("There are no active volunteers without supervisors to display here")
+        expect(page).not_to have_text("Active volunteers not assigned to supervisors")
+        expect(page).not_to have_text("Assigned to Case(s)")
       end
     end
   end

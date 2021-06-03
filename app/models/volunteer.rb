@@ -32,6 +32,7 @@ class Volunteer < User
       .active
       .in_organization(org)
       .where(supervisor_volunteers: {id: nil})
+      .active
   }
 
   def self.email_court_report_reminder
