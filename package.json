@@ -29,7 +29,7 @@
   "version": "0.1.0",
   "devDependencies": {
     "cypress": "^7.4.0",
-    "jest": "^27.0.3",
+    "jest": "^27.0.4",
     "standard": "^16.0.3",
     "start-server-and-test": "^1.12.3",
     "webpack-dev-server": "^3.11.2"
