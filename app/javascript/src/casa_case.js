@@ -123,7 +123,6 @@ function handleGenerateReport (e) {
     },
     body: JSON.stringify(formData)
   }
-  hideBtn(generateBtn)
   showBtn(spinner)
   window.fetch(url, options)
     .then(response => {
@@ -133,11 +132,11 @@ function handleGenerateReport (e) {
       if (data.status !== 'ok') {
         showAlert(data.error_messages)
         enableBtn(generateBtn)
-        showBtn(generateBtn)
         hideBtn(spinner)
         return
       }
       hideBtn(spinner)
+      enableBtn(generateBtn)
       window.open(data.link, '_blank')
     })
     .catch((error) => {
