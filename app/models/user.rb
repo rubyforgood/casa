@@ -14,6 +14,7 @@ class User < ApplicationRecord
   belongs_to :casa_org
 
   has_many :case_assignments, foreign_key: "volunteer_id", dependent: :destroy # TODO destroy is wrong
+  has_many :casa_cases, -> { where(case_assignments: {active: true}) }, through: :case_assignments
 
   has_many :case_contacts, foreign_key: "creator_id"
 
