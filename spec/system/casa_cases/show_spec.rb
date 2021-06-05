@@ -53,8 +53,8 @@ RSpec.describe "casa_cases/show", :disable_bullet, type: :system do
       end
 
       describe "'Generate Report' button" do
-        it "has been hidden and disabled" do
-          options = {visible: :hidden}
+        it "has been disabled" do
+          options = {visible: :visible}
 
           expect(page).to have_selector "#btnGenerateReport[disabled]", **options
         end
