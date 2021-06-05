@@ -34,6 +34,7 @@ class Volunteer < User
       .where(supervisor_volunteers: {id: nil})
       .active
   }
+  has_many :casa_cases, -> { where(case_assignments: {active: true}) }, through: :case_assignments
 
   def self.email_court_report_reminder
     active.includes(:case_assignments).where.not(case_assignments: nil).find_each do |volunteer|
