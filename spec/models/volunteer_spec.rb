@@ -246,4 +246,18 @@ RSpec.describe Volunteer, type: :model do
       end
     end
   end
+
+  describe "#casa_cases" do
+    let(:volunteer) { create :volunteer }
+    let!(:ca1) { create :case_assignment, volunteer: volunteer, active: true }
+    let!(:ca2) { create :case_assignment, volunteer: volunteer, active: false }
+    let!(:ca3) { create :case_assignment, volunteer: create(:volunteer), active: true }
+    let!(:ca4) { create :case_assignment, casa_case: create(:casa_case, active: false), active: true }
+    let!(:ca5) { create :case_assignment, casa_case: create(:casa_case, active: false), active: false }
+
+    it "returns only active and actively assigned casa cases" do
+      expect(volunteer.casa_cases.count).to eq(1)
+      expect(volunteer.casa_cases).to eq([ca1.casa_case])
+    end
+  end
 end
