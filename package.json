@@ -31,7 +31,7 @@
     "cypress": "^7.4.0",
     "jest": "^27.0.3",
     "standard": "^16.0.3",
-    "start-server-and-test": "^1.12.3",
+    "start-server-and-test": "^1.12.5",
     "webpack-dev-server": "^3.11.2"
   },
   "standard": {
