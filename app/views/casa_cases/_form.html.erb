@@ -52,7 +52,7 @@
                     :judge_id,
                     Judge.for_organization(current_organization),
                     :id, :name,
-                    {include_hidden: false, prompt: t(".prompt.select_judge")},
+                    {include_hidden: false, include_blank: t(".prompt.select_judge")},
                     {class: "form-control"}
                 ) %>
           </div>
