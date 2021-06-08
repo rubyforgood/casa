@@ -162,6 +162,48 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
       expect(page).to have_text("8-SEP-#{next_year}")
     end
 
+    context "with an available judge" do
+      let!(:judge) { create(:judge, casa_org: casa_org) }
+
+      it "is able to assign a judge to the case when there is no assigned judge", js: true do
+        casa_case.update(judge: nil)
+
+        visit edit_casa_case_path(casa_case)
+
+        expect(page).to have_select("Judge", selected: "-Select Judge-")
+        select judge.name, from: "casa_case_judge_id"
+
+        click_on "Update CASA Case"
+
+        expect(page).to have_select("Judge", selected: judge.name)
+        expect(casa_case.reload.judge).to eq judge
+      end
+
+      it "is able to assign another judge to the case", js: true do
+        visit edit_casa_case_path(casa_case)
+
+        expect(page).to have_select("Judge", selected: casa_case.judge.name)
+        select judge.name, from: "casa_case_judge_id"
+
+        click_on "Update CASA Case"
+
+        expect(page).to have_select("Judge", selected: judge.name)
+        expect(casa_case.reload.judge).to eq judge
+      end
+
+      it "is able to unassign a judge from the case", js: true do
+        visit edit_casa_case_path(casa_case)
+
+        expect(page).to have_select("Judge", selected: casa_case.judge.name)
+        select "-Select Judge-", from: "casa_case_judge_id"
+
+        click_on "Update CASA Case"
+
+        expect(page).to have_select("Judge", selected: "-Select Judge-")
+        expect(casa_case.reload.judge).to be_nil
+      end
+    end
+
     it "will return error message if date fields are not fully selected" do
       visit casa_case_path(casa_case)
       expect(page).to have_text("Court Report Status: Not submitted")
