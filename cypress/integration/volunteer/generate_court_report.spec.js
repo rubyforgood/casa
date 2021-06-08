@@ -12,7 +12,7 @@ context("Logging into cypress as a volunteer", () => {
     cy.get('#case-selection')
       .find('option').then(elements => {
         const option = elements[1].getAttribute('value');
-        cy.get('#case-selection').select(option);
+        cy.get('#case-selection').select(option, {force: true});
 
         cy.contains("Generate Report").click();
 

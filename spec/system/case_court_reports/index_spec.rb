@@ -41,6 +41,13 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
 
       expect(page).to have_selector "#case-selection option", text: expected_text
     end
+
+    it "adds data-lookup attribute for searching by volunteer name" do
+      casa_cases.each do |casa_case|
+        lookup = casa_case.assigned_volunteers.map(&:display_name).join(",")
+        expect(page).to have_selector "#case-selection option[data-lookup='#{lookup}']"
+      end
+    end
   end
 
   context "when choosing the prompt option (value is empty) and click on 'Generate Report' button, nothing should happen", js: true do
