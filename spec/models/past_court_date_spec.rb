@@ -10,8 +10,49 @@ RSpec.describe PastCourtDate, type: :model do
   describe "methods" do
     let(:past_court_date) { build_stubbed(:past_court_date) }
 
-    pending "#associated_reports"
-    pending "#latest_associated_report"
+    describe "reports methods" do
+      let(:past_court_date) { create(:past_court_date, casa_case: casa_case) }
+
+      let(:volunteer) { create(:volunteer) }
+      let(:casa_case) { create(:casa_case, casa_org: volunteer.casa_org) }
+      let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
+
+      let!(:reports) do
+        [10, 30, 60].map do |n|
+          report = CaseCourtReport.new(
+            volunteer_id: volunteer.id,
+            case_id: casa_case.id,
+            path_to_template: "app/documents/templates/default_report_template.docx"
+          )
+          casa_case.court_reports.attach(io: StringIO.new(report.generate_to_string), filename: "report#{n}.docx")
+          attached_report = casa_case.latest_court_report
+          attached_report.created_at = n.days.ago
+
+          attached_report.save!
+          attached_report
+        end
+      end
+
+      describe "#associated_reports" do
+        subject(:associated_reports) { past_court_date.associated_reports }
+
+        context "without other court dates" do
+          it { is_expected.to eq reports }
+        end
+
+        context "with a previous court date" do
+          let!(:other_past_court_date) { create(:past_court_date, casa_case: casa_case, date: 40.days.ago) }
+
+          it { is_expected.to eq [reports[0], reports[1]] }
+        end
+      end
+
+      describe "#latest_associated_report" do
+        subject(:latest_associated_report) { past_court_date.latest_associated_report }
+
+        it { is_expected.to eq past_court_date.associated_reports.order(:created_at).last }
+      end
+    end
 
     describe "#additional_info?" do
       subject(:additional_info?) { past_court_date.additional_info? }
