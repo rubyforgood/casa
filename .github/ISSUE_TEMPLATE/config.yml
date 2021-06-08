@@ -14,4 +14,5 @@ contact_links:
     url: https://github.com/rubyforgood/casa/issues/new?template=chore.md&projects=rubyforgood/casa/1
   - name: Problem Validation
     about: 🔨Describe a stakeholder's issue✨
-    url: https://github.com/rubyforgood/casa/issues/new?template=chore.md&projects=rubyforgood/casa/1
+    url: https://github.com/rubyforgood/casa/issues/new?template=problem_validation.md&projects=rubyforgood/casa/1
+

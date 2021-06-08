@@ -57,7 +57,10 @@ class CasaCaseDecorator < Draper::Decorator
     [
       "#{object.case_number} - #{object.has_transitioned? ? "transition" : "non-transition"}",
       object.case_number,
-      {"data-transitioned": object.has_transitioned?}
+      {
+        "data-transitioned": object.has_transitioned?,
+        "data-lookup": object.assigned_volunteers.map(&:display_name).join(",")
+      }
     ]
   end
 
