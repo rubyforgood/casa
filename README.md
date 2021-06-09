@@ -64,11 +64,11 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 **Project Considerations**
 
 - PG CASA is operating under a very tight budget. Right now, they manually input volunteer data into [a volunteer management software built specifically for CASA](http://www.simplyoptima.com/), but upgrading their account for multiple user licenses to allow volunteers to self-log activity data is beyond their budget. Hence why we are building as lightweight a solution as possible that can sustain itself with Ruby for Good's support.
-- While the scope of this platform's use is currently only for PG County CASA, we are building with a mind toward multitenancy so this platform could prospectively be used by CASA chapters across the country. We consider PG CASA an early beta tester of this platform.
+- While the scope of this platform's use is currently for PG County CASA and Montgomery county CASA, we are building with a mind toward multitenancy so this platform could prospectively be used by other CASA chapters across the country. We consider PG CASA an early beta tester of this platform.
 
 **More information:**
 
-Learn more about PG CASA [here](https://pgcasa.org/).
+Learn more about PG CASA [here](https://pgcasa.org/) and about Montgomery CASA [here](https://casaspeaks4kids.com)
 
 You can read the complete [role description of a CASA volunteer](https://pgcasa.org/volunteer-description/) in Prince George's County as well.
 
