@@ -28,7 +28,7 @@
   },
   "version": "0.1.0",
   "devDependencies": {
-    "cypress": "^7.4.0",
+    "cypress": "^7.5.0",
     "jest": "^27.0.4",
     "standard": "^16.0.3",
     "start-server-and-test": "^1.12.5",
