@@ -1,20 +1,29 @@
 class SupervisorMailer < ApplicationMailer
   def deactivation(supervisor)
-    @supervisor = supervisor
+    @category = __callee__
+    @user = supervisor
     @casa_organization = supervisor.casa_org
-    mail(to: @supervisor.email, subject: "Your account has been deactivated")
+    @subject = "Your account has been deactivated"
+    
+    mail(to: @user.email, subject: @subject)
   end
 
   def account_setup(supervisor)
-    @supervisor = supervisor
+    @category = __callee__
+    @user = supervisor
     @casa_organization = supervisor.casa_org
-    @token = @supervisor.generate_password_reset_token
-    mail(to: @supervisor.email, subject: "Create a password and set up your account")
+    @subject = "Create a password & set up your account"
+    @token = @user.generate_password_reset_token
+
+    mail(to: @user.email, subject: @subject)
   end
 
   def weekly_digest(supervisor)
-    @supervisor = supervisor
+    @category = __callee__
+    @user = supervisor
     @casa_organization = supervisor.casa_org
-    mail(to: @supervisor.email, subject: "Weekly summary of volunteers' activities for the week of #{Date.today - 7.days}")
+    @subject = "Weekly summary of volunteers' activities for the week of #{Date.today - 7.days}"
+
+    mail(to: @user.email, subject: @subject)
   end
 end
