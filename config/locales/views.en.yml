@@ -98,7 +98,7 @@ en:
         unassign: Unassign Volunteer
         activate: Activate Volunteer
     edit:
-      title: Editing CASA Case
+      title: Editing %{case_number}
       past_court_dates: Past court dates
       no_past_court_dates: No past court dates
     index:
