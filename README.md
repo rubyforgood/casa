@@ -18,6 +18,29 @@
 
 CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunteer sworn into a county-level juvenile dependency court system to advocate on behalf of a youth in the corresponding county's foster care system. CASA is also the namesake role of the national organization, CASA, which exists to cultivate and supervise volunteers carrying out this work – with county level chapters (operating relatively independently of each other) across the country.
 
+<!-- toc -->
+
+- [Welcome contributors!](#welcome-contributors)
+  * [About this project](#about-this-project)
+- [Developing! ✨🛠✨](#developing-%E2%9C%A8%F0%9F%9B%A0%E2%9C%A8)
+  * [Installing Tools](#installing-tools)
+  * [Running the app](#running-the-app)
+  * [Other Documentation](#other-documentation)
+  * [Common issues](#common-issues)
+  * [Ubuntu and WSL](#ubuntu-and-wsl)
+- [Non-development environments](#non-development-environments)
+  * [QA environment](#qa-environment)
+  * [Staging](#staging)
+  * [Production](#production)
+  * [Deployment](#deployment)
+  * [Error tracking](#error-tracking)
+  * [Email](#email)
+  * [Hosting](#hosting)
+- [Communication and Collaboration](#communication-and-collaboration)
+  * [History](#history)
+
+<!-- tocstop -->
+
 ## Welcome contributors!
 
 We are very happy to have you! CASA and Ruby for Good are committed to welcoming new contrinbutors of all skill levels. We have plenty of tiny, small, and medium issues. 
