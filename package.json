@@ -6,7 +6,8 @@
     "test": "standard && jest",
     "test:e2e": "cypress open",
     "lint": "standard",
-    "lint:fix": "standard --fix"
+    "lint:fix": "standard --fix",
+		"toc": "markdown-toc -i README.md"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",
@@ -30,6 +31,7 @@
   "devDependencies": {
     "cypress": "^7.5.0",
     "jest": "^27.0.4",
+    "markdown-toc": "^1.2.0",
     "standard": "^16.0.3",
     "start-server-and-test": "^1.12.5",
     "webpack-dev-server": "^3.11.2"
