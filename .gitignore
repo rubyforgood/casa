@@ -54,3 +54,8 @@ cypress/videos/*
 *.csv
 
 .*.swp
+
+# Used for local developmen on Nix systems
+.direnv/
+.envrc
+default.nix
