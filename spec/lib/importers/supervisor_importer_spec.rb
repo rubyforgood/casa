@@ -50,7 +50,7 @@ RSpec.describe SupervisorImporter do
       end
 
       context "because the volunteer has already been assigned to a supervisor" do
-        let!(:supervisor_volunteer) { create(:supervisor_volunteer, volunteer: existing_volunteer)}
+        let!(:supervisor_volunteer) { create(:supervisor_volunteer, volunteer: existing_volunteer) }
 
         it "returns an error message" do
           alert = SupervisorImporter.new(supervisor_import_data_path, casa_org_id).import_supervisors
