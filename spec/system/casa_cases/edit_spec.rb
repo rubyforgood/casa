@@ -403,7 +403,7 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
 
         expect(page).to have_text(mandate_text)
 
-        find("i.fa-minus").click
+        find("button.remove-mandate-button").click
         expect(page).to have_text("Are you sure you want to remove this court mandate? Doing so will delete all records \
 of it unless it was included in a previous court report.")
 
