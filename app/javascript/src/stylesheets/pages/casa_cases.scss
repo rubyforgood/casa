@@ -42,7 +42,7 @@ body.casa_cases {
     gap: 10px;
   }
 
-  #add-mandate-button, .remove-mandate-button {
+  #add-mandate-button, {
     color: white;
     border: none;
 
@@ -58,15 +58,6 @@ body.casa_cases {
 
     padding: 0.25em 1.5em;
     border-radius: 10px;
-  }
-
-  .remove-mandate-button {
-    background-color: #{$red};
-
-    border-radius: 100%;
-
-    max-width: 30px;
-    max-height: 30px;
   }
 
   .court-mandate-entry {
