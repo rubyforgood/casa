@@ -3,6 +3,16 @@ en:
     index:
       title: Case Contacts
       new: New Case Contact
+      filter:
+        title: Filters
+        submit: Filter
+        reset: Reset filters
+        display_all: Display all
+        contact_types: Contact types
+        other: Other filters
+        contact_date: Date of contact
+        start_date: Starting from
+        end_date: Ending at
     edit:
       title: Editing Case Contact
     new:

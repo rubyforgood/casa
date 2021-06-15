@@ -40,17 +40,34 @@ class CaseContact < ApplicationRecord
   scope :occurred_between, ->(start_date = nil, end_date = nil) {
     where("occurred_at BETWEEN ? AND ?", start_date, end_date) if start_date.present? && end_date.present?
   }
+  scope :occurred_starting_at, ->(start_date = nil) {
+    where("occurred_at >= ?", start_date) if start_date.present?
+  }
+  scope :occurred_ending_at, ->(end_date = nil) {
+    where("occurred_at <= ?", end_date) if end_date.present?
+  }
   scope :contact_made, ->(contact_made = nil) {
-    where(contact_made: contact_made) if contact_made == true || contact_made == false
+    where(contact_made: contact_made) if contact_made.to_s.match(/true|false/)
   }
   scope :has_transitioned, ->(has_transitioned = nil) {
-    joins(:casa_case).where(casa_cases: {transition_aged_youth: has_transitioned}) if has_transitioned == true || has_transitioned == false
+    if has_transitioned.to_s.match(/true|false/)
+      joins(:casa_case).where(casa_cases: {transition_aged_youth: has_transitioned})
+    end
   }
   scope :want_driving_reimbursement, ->(want_driving_reimbursement = nil) {
-    where(want_driving_reimbursement: want_driving_reimbursement) if want_driving_reimbursement == true || want_driving_reimbursement == false
+    if want_driving_reimbursement.to_s.match(/true|false/)
+      where(want_driving_reimbursement: want_driving_reimbursement)
+    end
   }
   scope :contact_type, ->(contact_type_ids = nil) {
     includes(:contact_types).where("contact_types.id": [contact_type_ids]) if contact_type_ids.present?
+  }
+  scope :contact_types, ->(contact_type_id_list = nil) {
+    contact_type_id_list.reject! { |id| id.blank? }
+
+    return if contact_type_id_list.blank?
+
+    includes(:contact_types).where("contact_types.id": contact_type_id_list)
   }
   scope :contact_type_groups, ->(contact_type_group_ids = nil) {
     # to handle case when passing ids == [''] && ids == nil
@@ -63,6 +80,21 @@ class CaseContact < ApplicationRecord
   scope :grab_all, ->(current_user) {
     with_deleted if current_user.is_a?(CasaAdmin)
   }
+
+  scope :contact_medium, -> (medium_type) {
+    where(medium_type: medium_type)
+  }
+
+  filterrific(
+    available_filters: [
+      :occurred_starting_at,
+      :occurred_ending_at,
+      :contact_types,
+      :contact_made,
+      :contact_medium,
+      :want_driving_reimbursement
+    ]
+  )
 
   IN_PERSON = "in-person".freeze
   TEXT_EMAIL = "text/email".freeze

@@ -6,7 +6,25 @@ class CaseContactsController < ApplicationController
 
   def index
     authorize CaseContact
-    @presenter = CaseContactPresenter.new
+
+    @current_organization_groups = current_organization.contact_type_groups
+                                                       .joins(:contact_types)
+                                                       .where(contact_types: {active: true})
+                                                       .uniq
+
+    all_contacts = policy_scope(
+      current_organization.case_contacts.grab_all(current_user)
+                                        .includes(:creator, contact_types: :contact_type_group)
+    )
+
+    @filterrific = initialize_filterrific(
+      all_contacts,
+      params[:filterrific]
+    ) || return
+
+    case_contacts = @filterrific.find.group_by(&:casa_case_id)
+
+    @presenter = CaseContactPresenter.new(case_contacts)
   end
 
   def new
