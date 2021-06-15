@@ -1,0 +1,23 @@
+<label><%= t(".past_court_dates") %>:</label>
+<% if casa_case.past_court_dates.size > 0 %>
+  <ul>
+    <% casa_case.past_court_dates.each do |pcd| %>
+      <p>
+        <% if pcd.additional_info? %>
+          <%= link_to pcd.decorate.formatted_date,
+              casa_case_past_court_date_path(casa_case, pcd) %>
+        <% else %>
+          <%= pcd.decorate.formatted_date %>
+        <% end %>
+
+        <% if report = pcd.latest_associated_report %>
+          <%= link_to rails_blob_path(report, disposition: 'attachment') do %>
+            (<%= t(".label.attached_report") %>)
+          <% end %>
+        <% end %>
+      </p>
+    <% end %>
+  </ul>
+<% else %>
+  <%= t(".no_past_court_dates") %>
+<% end %>

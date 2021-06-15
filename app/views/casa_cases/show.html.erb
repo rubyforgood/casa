@@ -92,6 +92,8 @@
       <% end %>
     <% end %>
 
+    <%= render "past_court_dates", casa_case: @casa_case %>
+
     <div>
       <h6><strong><%= t(".assigned_volunteers") %>:</strong></h6>
       <% policy_scope(@casa_case.assigned_volunteers).each_with_index do |volunteer, index| %>

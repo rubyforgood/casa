@@ -16,6 +16,8 @@ RSpec.describe "casa_cases/show", :disable_bullet, type: :system do
   context "when admin" do
     let(:user) { admin }
 
+    it_behaves_like "shows past court dates links"
+
     it "can see case creator in table" do
       expect(page).to have_text("Bob Loblaw")
     end
