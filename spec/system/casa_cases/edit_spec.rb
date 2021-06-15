@@ -2,29 +2,6 @@ require "rails_helper"
 require "stringio"
 
 RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
-  shared_examples_for "shows past court dates links" do
-    let(:past_court_date_with_details) do
-      create(:past_court_date, :with_court_details, casa_case: casa_case, date: Time.zone.yesterday)
-    end
-
-    let(:past_court_date_without_details) do
-      create(:past_court_date, casa_case: casa_case, date: Time.zone.today)
-    end
-
-    let!(:formatted_date_with_details) { I18n.l(past_court_date_with_details.date, format: :full, default: nil) }
-    let!(:formatted_date_without_details) { I18n.l(past_court_date_without_details.date, format: :full, default: nil) }
-
-    it "shows court mandates" do
-      visit edit_casa_case_path(casa_case)
-
-      expect(page).to have_text(formatted_date_with_details)
-      expect(page).to have_link(formatted_date_with_details)
-
-      expect(page).to have_text(formatted_date_without_details)
-      expect(page).not_to have_link(formatted_date_without_details)
-    end
-  end
-
   context "when admin" do
     let(:organization) { create(:casa_org) }
     let(:admin) { create(:casa_admin, casa_org: organization) }
@@ -65,7 +42,9 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
       page.find("#add-mandate-button").click
       find("#mandates-list-container").first("textarea").send_keys("Court Mandate Text One")
 
-      click_on "Update CASA Case"
+      within ".top-page-actions" do
+        click_on "Update CASA Case"
+      end
       expect(page).to have_text("Submitted")
       expect(page).to have_text("Court Date")
       expect(page).to have_text("Court Report Due Date")
@@ -141,7 +120,9 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
 
       expect(page).to have_text("Set Implementation Status")
 
-      click_on "Update CASA Case"
+      within ".actions" do
+        click_on "Update CASA Case"
+      end
       has_checked_field? "Youth"
       has_no_checked_field? "Supervisor"
 
@@ -173,7 +154,9 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
         expect(page).to have_select("Judge", selected: "-Select Judge-")
         select judge.name, from: "casa_case_judge_id"
 
-        click_on "Update CASA Case"
+        within ".actions" do
+          click_on "Update CASA Case"
+        end
 
         expect(page).to have_select("Judge", selected: judge.name)
         expect(casa_case.reload.judge).to eq judge
@@ -185,7 +168,9 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
         expect(page).to have_select("Judge", selected: casa_case.judge.name)
         select judge.name, from: "casa_case_judge_id"
 
-        click_on "Update CASA Case"
+        within ".actions" do
+          click_on "Update CASA Case"
+        end
 
         expect(page).to have_select("Judge", selected: judge.name)
         expect(casa_case.reload.judge).to eq judge
@@ -197,7 +182,9 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
         expect(page).to have_select("Judge", selected: casa_case.judge.name)
         select "-Select Judge-", from: "casa_case_judge_id"
 
-        click_on "Update CASA Case"
+        within ".actions" do
+          click_on "Update CASA Case"
+        end
 
         expect(page).to have_select("Judge", selected: "-Select Judge-")
         expect(casa_case.reload.judge).to be_nil
@@ -212,7 +199,9 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
       select "November", from: "casa_case_court_date_2i"
       select "April", from: "casa_case_court_report_due_date_2i"
 
-      click_on "Update CASA Case"
+      within ".actions" do
+        click_on "Update CASA Case"
+      end
 
       expect(page).to have_text("Court date was not a valid date.")
       expect(page).to have_text("Court report due date was not a valid date.")
@@ -231,7 +220,9 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
       select "April", from: "casa_case_court_report_due_date_2i"
       select next_year, from: "casa_case_court_report_due_date_1i"
 
-      click_on "Update CASA Case"
+      within ".actions" do
+        click_on "Update CASA Case"
+      end
 
       expect(page).to have_text("Court date was not a valid date.")
       expect(page).to have_text("Court report due date was not a valid date.")
@@ -412,7 +403,9 @@ of it unless it was included in a previous court report.")
         click_on "OK"
         expect(page).to_not have_text(mandate_text)
 
-        click_on "Update CASA Case"
+        within ".actions" do
+          click_on "Update CASA Case"
+        end
         expect(page).to_not have_text(mandate_text)
       end
     end
@@ -476,7 +469,9 @@ of it unless it was included in a previous court report.")
       expect(page).to_not have_select("Judge")
 
       select "Submitted", from: "casa_case_court_report_status"
-      click_on "Update CASA Case"
+      within ".actions" do
+        click_on "Update CASA Case"
+      end
 
       click_on "Back"
 
@@ -488,7 +483,9 @@ of it unless it was included in a previous court report.")
       expect(page).to have_text("Court Report Status: Not submitted")
       visit edit_casa_case_path(casa_case)
       select "Submitted", from: "casa_case_court_report_status"
-      click_on "Update CASA Case"
+      within ".actions" do
+        click_on "Update CASA Case"
+      end
 
       expect(page).not_to have_text("Day")
       expect(page).not_to have_text("Month")

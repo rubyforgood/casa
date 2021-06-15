@@ -32,7 +32,9 @@ RSpec.describe "casa_cases/new", :disable_bullet, type: :system do
 
         select "Submitted", from: "casa_case_court_report_status"
 
-        click_on "Create CASA Case"
+        within ".top-page-actions" do
+          click_on "Create CASA Case"
+        end
 
         expect(page.body).to have_content(case_number)
         expect(page).to have_content("CASA case was successfully created.")
@@ -46,7 +48,9 @@ RSpec.describe "casa_cases/new", :disable_bullet, type: :system do
   context "when non-mandatory fields are not filled" do
     it "is successful" do
       fill_in "Case number", with: case_number
-      click_on "Create CASA Case"
+      within ".actions" do
+        click_on "Create CASA Case"
+      end
 
       expect(page.body).to have_content(case_number)
       expect(page).to have_content("CASA case was successfully created.")
@@ -58,7 +62,9 @@ RSpec.describe "casa_cases/new", :disable_bullet, type: :system do
 
   context "when the case number field is not filled" do
     it "does not create a new case" do
-      click_on "Create CASA Case"
+      within ".actions" do
+        click_on "Create CASA Case"
+      end
 
       expect(page).to have_current_path(casa_cases_path, ignore_query: true)
       expect(page).to have_content("Case number can't be blank")
@@ -70,7 +76,9 @@ RSpec.describe "casa_cases/new", :disable_bullet, type: :system do
 
     it "does not create a new case" do
       fill_in "Case number", with: case_number
-      click_on "Create CASA Case"
+      within ".actions" do
+        click_on "Create CASA Case"
+      end
 
       expect(page).to have_current_path(casa_cases_path, ignore_query: true)
       expect(page).to have_content("Case number has already been taken")
