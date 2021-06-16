@@ -5,6 +5,7 @@ en:
       new: New Case Contact
       filter:
         title: Filters
+        show_hide: Show / Hide
         submit: Filter
         reset: Reset filters
         display_all: Display all

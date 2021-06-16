@@ -7,10 +7,21 @@
 
 <%= form_for_filterrific @filterrific do |f| %>
   <div class="card my-4">
-    <div class="card-header">
-      <h3><%= t(".filter.title") %></h3>
+    <div class="card-header d-flex justify-content-between align-items-end">
+      <h3 class="d-inline"><%= t(".filter.title") %></h3>
+      <button href="#"
+              class="btn btn-lg btn-link"
+              type="button"
+              data-toggle="collapse"
+              data-target="#filter-card-body"
+              aria-expanded="<%= params[:filterrific].present? %>>"
+              aria-controls="filter-card-body">
+        <%= t(".filter.show_hide") %>
+      </button>
     </div>
-    <div class="card-body">
+
+    <% collapse_class = params[:filterrific] ? "" : "collapse" %>
+    <div class="card-body <%= collapse_class %>" id="filter-card-body">
       <div class="row mb-4">
         <div class="col-12">
           <h3><label><%= t(".filter.contact_date") %></label></h3>
