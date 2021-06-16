@@ -2,10 +2,10 @@
   <div class="col-sm-12 dashboard-table-header">
     <h1>Volunteers</h1>
     <% if policy(Volunteer).new? %>
-      <%= link_to "New Volunteer", new_volunteer_path, class: "btn btn-primary mb-2 mb-md-0" %>
+      <%= link_to t(".button.new"), new_volunteer_path, class: "btn btn-primary mb-2 mb-md-0" %>
     <% end %>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#visibleColumns">
-      Pick displayed columns
+      <%= t(".pick_displayed_columns") %>
     </button>
   </div>
 </div>
@@ -132,15 +132,15 @@
       data-source="<%= datatable_volunteers_path format: :json %>">
       <thead>
       <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Supervisor</th>
-        <th>Status</th>
-        <th>Assigned To Transition Aged Youth</th>
-        <th>Case Number(s)</th>
-        <th>Last Contact Made</th>
-        <th>Contacts Made in Past 60 Days</th>
-        <th>Actions</th>
+        <th><%= t(".heading.name") %></th>
+        <th><%= t(".heading.e_mail") %></th>
+        <th><%= t(".heading.supervisor") %></th>
+        <th><%= t(".heading.status") %></th>
+        <th><%= t(".heading.assigned_transition_aged_youth") %></th>
+        <th><%= t(".heading.case_number") %></th>
+        <th><%= t(".heading.last_contact_made") %></th>
+        <th><%= t(".heading.contacts") %></th>
+        <th><%= t(".heading.actions") %></th>
       </tr>
       </thead>
 
