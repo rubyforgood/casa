@@ -13,6 +13,8 @@ en:
         contact_date: Date of contact
         start_date: Starting from
         end_date: Ending at
+      no_contacts_found: No case contacts have been found.
+      no_contacts_present: You have no case contacts for this case. Please click New Case Contact button above to create a case contact for your youth!
     edit:
       title: Editing Case Contact
     new:

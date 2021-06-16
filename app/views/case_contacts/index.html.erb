@@ -102,11 +102,11 @@
     </div>
   </div>
 <% end %>
+
 <% unless @presenter.case_contacts.any? %>
   <div class="card card-container">
     <div class="card-body">
-      You have no case contacts for this case. Please click New Case Contact button above to create a case contact for
-      your youth!
+      <%= params[:filterrific] ? t('.no_contacts_found') : t('.no_contacts_present') %>
     </div>
   </div>
 <% end %>
