@@ -1,0 +1,9 @@
+noscript div {
+  color: #b71c1c;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #eee;
+  padding: 0 1em;
+  z-index: 99;
+}
