@@ -12,14 +12,10 @@ class CasaOrgsController < ApplicationController
 
   def update
     authorize @casa_org
-    respond_to do |format|
-      if @casa_org.update(casa_org_update_params)
-        format.html { redirect_to edit_casa_org_path, notice: "CASA organization was successfully updated." }
-        format.json { render :show, status: :ok, location: @casa_org }
-      else
-        format.html { render :edit }
-        format.json { render json: @casa_org.errors, status: :unprocessable_entity }
-      end
+    if @casa_org.update(casa_org_update_params)
+      redirect_to edit_casa_org_path, notice: "CASA organization was successfully updated."
+    else
+      render :edit
     end
   end
 

@@ -82,14 +82,10 @@ class CaseContactsController < ApplicationController
     @selected_cases = @casa_cases
     @current_organization_groups = current_organization.contact_type_groups
 
-    respond_to do |format|
-      if @case_contact.update_cleaning_contact_types(update_case_contact_params)
-        format.html { redirect_to casa_case_path(@case_contact.casa_case), notice: "Case contact was successfully updated." }
-        format.json { render :show, status: :ok, location: @case_contact }
-      else
-        format.html { render :edit }
-        format.json { render json: @case_contact.errors, status: :unprocessable_entity }
-      end
+    if @case_contact.update_cleaning_contact_types(update_case_contact_params)
+      redirect_to casa_case_path(@case_contact.casa_case), notice: "Case contact was successfully updated."
+    else
+      render :edit
     end
   end
 
