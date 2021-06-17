@@ -50,7 +50,7 @@ class CasaCasesController < ApplicationController
   def update
     authorize @casa_case
     respond_to do |format|
-      if @casa_case.update_cleaning_contact_types(casa_case_update_params)
+      if @casa_case.update_cleaning_contact_types(casa_case_update_params) # todo
         format.html { redirect_to edit_casa_case_path, notice: "CASA case was successfully updated." }
         format.json { render :show, status: :ok, location: @casa_case }
       else
