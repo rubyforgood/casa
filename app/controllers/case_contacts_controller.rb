@@ -19,7 +19,10 @@ class CaseContactsController < ApplicationController
 
     @filterrific = initialize_filterrific(
       all_contacts,
-      params[:filterrific]
+      params[:filterrific],
+      select_options: {
+        sorted_by: CaseContact.options_for_sorted_by
+      }
     ) || return
 
     case_contacts = @filterrific.find.group_by(&:casa_case_id)

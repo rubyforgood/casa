@@ -85,8 +85,28 @@ class CaseContact < ApplicationRecord
     where(medium_type: medium_type)
   }
 
+  scope :sorted_by, -> (sort_option) {
+    direction = /desc$/.match?(sort_option) ? "desc" : "asc"
+
+    case sort_option.to_s
+    when /^occurred_at/
+      order(occurred_at: direction)
+    when /^contact_type/
+      joins(:contact_types).order(name: direction)
+    when /^medium_type/
+      order(medium_type: direction)
+    when /^want_driving_reimbursement/
+      order(want_driving_reimbursement: direction)
+    when /^contact_made/
+      order(contact_made: direction)
+    else
+      raise(ArgumentError, "Invalid sort option: #{sort_option.inspect}")
+    end
+  }
+
   filterrific(
     available_filters: [
+      :sorted_by,
       :occurred_starting_at,
       :occurred_ending_at,
       :contact_types,
@@ -156,6 +176,29 @@ class CaseContact < ApplicationRecord
 
   def requested_followup
     followups.requested.first
+  end
+
+  def self.options_for_sorted_by
+    sorted_by_params.map do |option|
+      [I18n.t("models.case_contact.options_for_sorted_by.#{option}"), option]
+    end
+  end
+
+  private
+
+  def self.sorted_by_params
+    %i[
+        occurred_at_asc
+        occurred_at_desc
+        contact_type_asc
+        contact_type_desc
+        medium_type_asc
+        medium_type_desc
+        want_driving_reimbursement_asc
+        want_driving_reimbursement_desc
+        contact_made_asc
+        contact_made_desc
+      ]
   end
 end
 

@@ -67,7 +67,7 @@
         </div>
       </div>
 
-      <div class="row align-items-end">
+      <div class="row mb-4 align-items-end">
         <div class="col-12">
           <h3><label><%= t(".filter.other") %></label></h3>
         </div>
@@ -90,6 +90,13 @@
           <%= f.select(:contact_made, @presenter.boolean_select_options,
                                       {include_blank: t(".filter.display_all")},
                                       {class: "form-control"}) %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.label :sorted_by %>
+          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: "form-control"}) %>
         </div>
       </div>
 
