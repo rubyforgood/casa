@@ -82,7 +82,7 @@ class CaseContact < ApplicationRecord
   }
 
   scope :contact_medium, -> (medium_type) {
-    where(medium_type: medium_type)
+    where(medium_type: medium_type) if medium_type.present?
   }
 
   scope :sorted_by, -> (sort_option) {
@@ -109,7 +109,7 @@ class CaseContact < ApplicationRecord
       :sorted_by,
       :occurred_starting_at,
       :occurred_ending_at,
-      :contact_types,
+      :contact_type,
       :contact_made,
       :contact_medium,
       :want_driving_reimbursement
