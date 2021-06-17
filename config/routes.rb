@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  match "/.well-known/assetlinks.json", to: redirect("/assetlinks.json"), via: :get
-
   devise_for :all_casa_admins, path: "all_casa_admins", controllers: {sessions: "all_casa_admins/sessions"}
   devise_for :users, controllers: {sessions: "users/sessions"}
 
@@ -26,6 +24,7 @@ Rails.application.routes.draw do
     root to: "all_casa_admins/sessions#new", as: :unauthenticated_all_casa_root
   end
 
+  get "/.well-known/assetlinks.json", to: "android_app_associations#index"
   resources :casa_cases do
     resource :emancipation do
       member do
