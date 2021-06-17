@@ -1,8 +1,8 @@
 require "rails_helper"
 require "stringio"
 
-RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
-  context "when admin" do
+RSpec.describe "Edit CASA Case", :disable_bullet, type: :system do
+  context "logged in as admin" do
     let(:organization) { create(:casa_org) }
     let(:admin) { create(:casa_admin, casa_org: organization) }
     let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: organization) }
@@ -86,7 +86,7 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
     end
   end
 
-  context "supervisor user" do
+  context "logged in as supervisor" do
     let(:casa_org) { create(:casa_org) }
     let(:supervisor) { create(:supervisor, casa_org: casa_org) }
     let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: casa_org) }
@@ -411,7 +411,7 @@ of it unless it was included in a previous court report.")
     end
   end
 
-  context "volunteer user" do
+  context "logged in as volunteer" do
     let(:volunteer) { create(:volunteer) }
     let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: volunteer.casa_org) }
     let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
