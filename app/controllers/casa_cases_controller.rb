@@ -36,27 +36,19 @@ class CasaCasesController < ApplicationController
     @casa_case = CasaCase.new(casa_case_params.merge(casa_org: current_organization))
     authorize @casa_case
 
-    respond_to do |format|
-      if @casa_case.save
-        format.html { redirect_to @casa_case, notice: "CASA case was successfully created." }
-        format.json { render :show, status: :created, location: @casa_case }
-      else
-        format.html { render :new }
-        format.json { render json: @casa_case.errors, status: :unprocessable_entity }
-      end
+    if @casa_case.save
+      redirect_to @casa_case, notice: "CASA case was successfully created."
+    else
+      render :new
     end
   end
 
   def update
     authorize @casa_case
-    respond_to do |format|
-      if @casa_case.update_cleaning_contact_types(casa_case_update_params)
-        format.html { redirect_to edit_casa_case_path, notice: "CASA case was successfully updated." }
-        format.json { render :show, status: :ok, location: @casa_case }
-      else
-        format.html { render :edit }
-        format.json { render json: @casa_case.errors, status: :unprocessable_entity }
-      end
+    if @casa_case.update_cleaning_contact_types(casa_case_update_params)
+      redirect_to edit_casa_case_path, notice: "CASA case was successfully updated."
+    else
+      render :edit
     end
   end
 

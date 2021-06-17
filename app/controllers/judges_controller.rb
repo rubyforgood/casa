@@ -11,12 +11,10 @@ class JudgesController < ApplicationController
     authorize Judge
     @judge = Judge.new(judge_params)
 
-    respond_to do |format|
-      if @judge.save
-        format.html { redirect_to edit_casa_org_path(current_organization), notice: "Judge was successfully created." }
-      else
-        format.html { render :new }
-      end
+    if @judge.save
+      redirect_to edit_casa_org_path(current_organization), notice: "Judge was successfully created."
+    else
+      render :new
     end
   end
 
