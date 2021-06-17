@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
-  let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
+  let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
   let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
 
   before do
@@ -16,8 +16,8 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
       expect(page).to have_selector "#btnGenerateReport", **options
     end
 
-    it "shows a select element with default selection 'Select a case to generate report'" do
-      expected_text = "Select a case to generate report"
+    it "shows a select element with default selection 'Search by volunteer name or case number'" do
+      expected_text = "Search by volunteer name or case number"
       find("#case-selection").click.first("option", text: expected_text).select_option
 
       expect(page).to have_selector "#case-selection option:first-of-type", text: expected_text
@@ -51,14 +51,14 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
   end
 
   context "when choosing the prompt option (value is empty) and click on 'Generate Report' button, nothing should happen", js: true do
-    let(:option_text) { "Select a case to generate report" }
+    let(:option_text) { "Search by volunteer name or case number" }
 
     before do
       # to find the select element, use either 'name' or 'id' attribute
       # in this case, id = "case-selection", name = "case_number"
-      page.select "Select a case to generate report", from: "case-selection"
+      page.select "Search by volunteer name or case number", from: "case-selection"
       # the above will have the same effect as the below
-      # find("#case-selection").select "Select a case to generate report"
+      # find("#case-selection").select "Search by volunteer name or case number"
       click_button "Generate Report"
     end
 
@@ -79,9 +79,9 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
 
   describe "'Case Number' dropdown list", js: true do
     let(:transitioned_case_number) { casa_cases.find(&:has_transitioned?).case_number.to_s }
-    let(:transitioned_option_text) { "#{transitioned_case_number} - transition" }
+    let(:transitioned_option_text) { "#{transitioned_case_number} - transition Name Last" }
     let(:non_transitioned_case_number) { casa_cases.reject(&:has_transitioned?).first.case_number.to_s }
-    let(:non_transitioned_option_text) { "#{non_transitioned_case_number} - non-transition" }
+    let(:non_transitioned_option_text) { "#{non_transitioned_case_number} - non-transition Name Last" }
 
     it "has transition case option selected" do
       page.select transitioned_option_text, from: "case-selection"
