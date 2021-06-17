@@ -11,11 +11,13 @@ class PastCourtDatesController < ApplicationController
     respond_to do |format|
       format.html {}
       format.docx do
-        send_data @past_court_date.generate_report,
+        send_data(
+          @past_court_date.generate_report,
           type: :docx,
           filename: "#{@past_court_date.display_name}.docx",
           disposition: "attachment",
           status: :ok
+        )
       end
     end
   end
