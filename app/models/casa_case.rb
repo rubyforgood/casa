@@ -1,5 +1,7 @@
 class CasaCase < ApplicationRecord
   include ByOrganizationScope
+  include DateHelper
+
   has_paper_trail
 
   TABLE_COLUMNS = %w[
@@ -152,8 +154,8 @@ class CasaCase < ApplicationRecord
   end
 
   def update_cleaning_contact_types(args)
-    args = parse_date("court_date", args)
-    args = parse_date("court_report_due_date", args)
+    args = parse_date(errors, "court_date", args)
+    args = parse_date(errors, "court_report_due_date", args)
 
     return false unless errors.messages.empty?
 
