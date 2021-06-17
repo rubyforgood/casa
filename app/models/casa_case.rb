@@ -158,6 +158,16 @@ class CasaCase < ApplicationRecord
     return false unless errors.messages.empty?
 
     transaction do
+      # if court_report_due_date && court_report_due_date < Date.today
+      #   new_past_court_date = PastCourtDate.new(
+      #     date: court_report_due_date,
+      #     casa_case_id: casa_case.id,
+      #     case_court_mandates: casa_case.case_court_mandates,
+      #     hearing_type_id: casa_case.hearing_type_id,
+      #     judge_id: casa_case.judge_id
+      #   )
+      #   casa_case.past_court_dates << new_past_court_date
+      # end
       casa_case_contact_types.destroy_all
       update(args)
     end
@@ -181,30 +191,11 @@ class CasaCase < ApplicationRecord
   end
 
   def unassigned_volunteers
-    # binding.pry
     Volunteer.active.where.not(id: assigned_volunteers).order(:display_name).in_organization(casa_org)
   end
 
-  private
-
-  def validate_date(day, month, year)
-    raise Date::Error if day.blank? || month.blank? || year.blank?
-
-    Date.parse("#{day}-#{month}-#{year}")
-  end
-
-  def parse_date(date_field_name, args)
-    day = args.delete("#{date_field_name}(3i)")
-    month = args.delete("#{date_field_name}(2i)")
-    year = args.delete("#{date_field_name}(1i)")
-
-    return args if day.blank? && month.blank? && year.blank?
-
-    args[date_field_name.to_sym] = validate_date(day, month, year)
-    args
-  rescue Date::Error
-    errors.add(date_field_name.to_sym, "was not a valid date.")
-    args
+  def has_contact_type?(contact_type)
+    casa_case_contact_types.map(&:contact_type_id).include?(contact_type.id)
   end
 end
 
