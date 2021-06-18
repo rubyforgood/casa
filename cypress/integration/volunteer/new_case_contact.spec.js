@@ -36,6 +36,6 @@ context("Logging into cypress as a volunteer", () => {
     cy.get(".modal-header").contains("Confirm Note Content"); // 'Double check your notes' dialog
     cy.contains("Continue Submitting").click();
     cy.contains("Case contact was successfully created.").should("exist");
-    cy.get(".js-read-more-text-wrapper").first().contains(note);
+    cy.contains(note).should("exist")
   });
 });
