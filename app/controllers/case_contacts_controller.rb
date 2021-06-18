@@ -8,9 +8,9 @@ class CaseContactsController < ApplicationController
     authorize CaseContact
 
     @current_organization_groups = current_organization.contact_type_groups
-                                                       .joins(:contact_types)
-                                                       .where(contact_types: {active: true})
-                                                       .uniq
+      .joins(:contact_types)
+      .where(contact_types: {active: true})
+      .uniq
 
     all_contacts = policy_scope(
       current_organization.case_contacts.grab_all(current_user)

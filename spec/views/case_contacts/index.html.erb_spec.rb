@@ -6,7 +6,7 @@ RSpec.describe "case_contacts/index", :disable_bullet, type: :view do
 
   let(:filterrific_param_set) do
     param_set = Filterrific::ParamSet.new(case_contacts, {})
-    param_set.select_options = { sorted_by: CaseContact.options_for_sorted_by }
+    param_set.select_options = {sorted_by: CaseContact.options_for_sorted_by}
 
     param_set
   end
@@ -22,7 +22,7 @@ RSpec.describe "case_contacts/index", :disable_bullet, type: :view do
     enable_pundit(view, user)
 
     # Allow filterrific to fetch the correct controller name
-    allow_any_instance_of(ActionView::TestCase::TestController).to receive(:controller_name).and_return('case_contacts')
+    allow_any_instance_of(ActionView::TestCase::TestController).to receive(:controller_name).and_return("case_contacts")
 
     allow(RequestStore).to receive(:read).with(:current_user).and_return(user)
     allow(RequestStore).to receive(:read).with(:current_organization).and_return(user.casa_org)

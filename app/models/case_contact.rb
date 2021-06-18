@@ -47,15 +47,15 @@ class CaseContact < ApplicationRecord
     where("occurred_at <= ?", end_date) if end_date.present?
   }
   scope :contact_made, ->(contact_made = nil) {
-    where(contact_made: contact_made) if contact_made.to_s.match(/true|false/)
+    where(contact_made: contact_made) if /true|false/.match?(contact_made.to_s)
   }
   scope :has_transitioned, ->(has_transitioned = nil) {
-    if has_transitioned.to_s.match(/true|false/)
+    if /true|false/.match?(has_transitioned.to_s)
       joins(:casa_case).where(casa_cases: {transition_aged_youth: has_transitioned})
     end
   }
   scope :want_driving_reimbursement, ->(want_driving_reimbursement = nil) {
-    if want_driving_reimbursement.to_s.match(/true|false/)
+    if /true|false/.match?(want_driving_reimbursement.to_s)
       where(want_driving_reimbursement: want_driving_reimbursement)
     end
   }
@@ -81,11 +81,11 @@ class CaseContact < ApplicationRecord
     with_deleted if current_user.is_a?(CasaAdmin)
   }
 
-  scope :contact_medium, -> (medium_type) {
+  scope :contact_medium, ->(medium_type) {
     where(medium_type: medium_type) if medium_type.present?
   }
 
-  scope :sorted_by, -> (sort_option) {
+  scope :sorted_by, ->(sort_option) {
     direction = /desc$/.match?(sort_option) ? "desc" : "asc"
 
     case sort_option.to_s
@@ -184,21 +184,19 @@ class CaseContact < ApplicationRecord
     end
   end
 
-  private
-
-  def self.sorted_by_params
+  private_class_method def self.sorted_by_params
     %i[
-        occurred_at_asc
-        occurred_at_desc
-        contact_type_asc
-        contact_type_desc
-        medium_type_asc
-        medium_type_desc
-        want_driving_reimbursement_asc
-        want_driving_reimbursement_desc
-        contact_made_asc
-        contact_made_desc
-      ]
+      occurred_at_asc
+      occurred_at_desc
+      contact_type_asc
+      contact_type_desc
+      medium_type_asc
+      medium_type_desc
+      want_driving_reimbursement_asc
+      want_driving_reimbursement_desc
+      contact_made_asc
+      contact_made_desc
+    ]
   end
 end
 

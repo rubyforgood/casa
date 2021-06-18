@@ -4,7 +4,7 @@ en:
       title: Case Contacts
       new: New Case Contact
       filter:
-        title: Filters
+        title: Filter by
         show_hide: Show / Hide
         submit: Filter
         reset: Reset filters

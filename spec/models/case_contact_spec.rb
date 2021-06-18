@@ -405,7 +405,7 @@ RSpec.describe CaseContact, type: :model do
           let!(:case_contacts) do
             [
               create(:case_contact, contact_made: true),
-              create(:case_contact, contact_made: false),
+              create(:case_contact, contact_made: false)
             ]
           end
 
