@@ -46,7 +46,7 @@
             <%= link_to t(".link.generate_court_reports"), case_court_reports_path, class: "list-group-item" %>
           <% end %>
           <% if policy(:application).see_reports_page? %>
-            <%= link_to t(".link.generate_reports"), reports_path, class: "list-group-item" %>
+            <%= link_to t(".link.export_data"), reports_path, class: "list-group-item" %>
           <% end %>
           <% if policy(:application).see_import_page? %>
             <%= link_to t(".link.system_imports"), imports_path, class: "list-group-item" %>
