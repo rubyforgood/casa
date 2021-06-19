@@ -5,8 +5,14 @@
     font-size: 14px;
     margin: 0;
   }
+  .account-setup table {
+    width: 100%;
+  }
   .account-setup td {
     padding: 0 0 20px;
+    border-spacing: 0;
+    border-collapse: separate;
+    vertical-align: top;
   }
   .account-setup a {
     color: #FFF;
@@ -25,22 +31,22 @@
   }
 </style>
 <meta itemprop="name" content="Confirm Email">
-<table class="account-setup" width="100%" cellpadding="0" cellspacing="0">
+<table class="account-setup">
   <tr>
-    <td class="content-block" valign="top">
+    <td class="content-block">
       A <%= @casa_organization.display_name %>’s County Admin account has been created for you. Your console account is
       associated with this email. If this is not the correct email to use, please stop here and contact an administrator
       at PG CASA.
     </td>
   </tr>
   <tr>
-    <td class="content-block" valign="top">
+    <td class="content-block">
       If you are ready to get started, please set your password. This is the first step to accessing your new volunteer
       account.
     </td>
   </tr>
   <tr>
-    <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler" valign="top">
+    <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
       <a href="<%= "#{edit_password_url(@user, reset_password_token: @token)}" %>" target="_blank" class="btn-primary" itemprop="url">
         Set Your Password
       </a>
