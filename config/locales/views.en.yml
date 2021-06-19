@@ -333,7 +333,7 @@ en:
       link:
         edit_profile: Edit Profile
         generate_court_reports: Generate Court Reports
-        generate_reports: Generate Reports
+        export_data: Export Data
         system_imports: System Imports
         edit_organization: Edit Organization
         report_site_issue: Report a site issue
