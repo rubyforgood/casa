@@ -79,9 +79,9 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
 
   describe "'Case Number' dropdown list", js: true do
     let(:transitioned_case_number) { casa_cases.find(&:has_transitioned?).case_number.to_s }
-    let(:transitioned_option_text) { "#{transitioned_case_number} - transition Name Last" }
+    let(:transitioned_option_text) { "#{transitioned_case_number} - transition(assigned to Name Last)" }
     let(:non_transitioned_case_number) { casa_cases.reject(&:has_transitioned?).first.case_number.to_s }
-    let(:non_transitioned_option_text) { "#{non_transitioned_case_number} - non-transition Name Last" }
+    let(:non_transitioned_option_text) { "#{non_transitioned_case_number} - non-transition(assigned to Name Last)" }
 
     it "has transition case option selected" do
       page.select transitioned_option_text, from: "case-selection"
