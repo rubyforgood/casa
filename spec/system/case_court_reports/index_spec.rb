@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
   let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
+  let(:supervisor) { volunteer.supervisor }
   let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
 
   before do
@@ -16,8 +17,10 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
       expect(page).to have_selector "#btnGenerateReport", **options
     end
 
-    it "shows a select element with default selection 'Search by volunteer name or case number'" do
-      expected_text = "Search by volunteer name or case number"
+    it { expect(page).not_to have_selector ".select2" }
+
+    it "shows a select element with default selection 'Select case number'" do
+      expected_text = "Select case number"
       find("#case-selection").click.first("option", text: expected_text).select_option
 
       expect(page).to have_selector "#case-selection option:first-of-type", text: expected_text
@@ -51,14 +54,14 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
   end
 
   context "when choosing the prompt option (value is empty) and click on 'Generate Report' button, nothing should happen", js: true do
-    let(:option_text) { "Search by volunteer name or case number" }
+    let(:option_text) { "Select case number" }
 
     before do
       # to find the select element, use either 'name' or 'id' attribute
       # in this case, id = "case-selection", name = "case_number"
-      page.select "Search by volunteer name or case number", from: "case-selection"
+      page.select "Select case number", from: "case-selection"
       # the above will have the same effect as the below
-      # find("#case-selection").select "Search by volunteer name or case number"
+      # find("#case-selection").select "Select case number"
       click_button "Generate Report"
     end
 
@@ -136,6 +139,7 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
       # to find the select element, use either 'name' or 'id' attribute
       # in this case, id = "case-selection", name = "case_number"
       page.select option_text, from: "case-selection"
+
       @download_window = window_opened_by do
         click_button "Generate Report"
       end
@@ -194,6 +198,31 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
         visit casa_case_path(casa_case.id)
 
         expect(page).to have_link("Click to download")
+      end
+    end
+  end
+
+  describe "as a supervisor" do
+    before do
+      sign_in supervisor
+      visit case_court_reports_path
+    end
+
+    it { expect(page).to have_selector ".select2" }
+    it { expect(page).to have_text "Search by volunteer name or case number" }
+
+    context "when searching for cases" do
+      let(:casa_case) { volunteer.casa_cases.first }
+      let(:search_term) { casa_case.case_number[-3..] }
+
+      it "selects the correct case", js: true do
+        page.find("span.select2").click
+        page.find(".select2-search__field").click
+
+        send_keys(search_term)
+        send_keys :enter
+
+        expect(find(".select2-selection__rendered").text).to match /^#{casa_case.case_number}/
       end
     end
   end

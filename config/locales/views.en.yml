@@ -179,7 +179,8 @@ en:
       label:
         case_number: "Case Number:"
       prompt:
-        select_case_number: Search by volunteer name or case number
+        select_case_number: Select case number
+        search_case_number: Search by volunteer name or case number
       button:
         generate: Generate Report
         download: Download Court Report
