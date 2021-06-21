@@ -1,12 +1,10 @@
 class CaseContactPresenter < BasePresenter
-  attr_accessor :case_contacts
+  attr_reader :case_contacts
+  attr_reader :casa_cases
 
   def initialize(case_contacts)
     @case_contacts = case_contacts
-  end
-
-  def casa_cases
-    @casa_cases ||= policy_scope(org_cases).group_by(&:id).transform_values(&:first)
+    @casa_cases = policy_scope(org_cases).group_by(&:id).transform_values(&:first)
   end
 
   def display_case_number(casa_case_id)

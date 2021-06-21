@@ -451,7 +451,7 @@ DEPENDENCIES
   erb_lint
   factory_bot_rails
   faker
-  filterrific (~> 5.2.1)
+  filterrific
   image_processing (~> 1.12)
   jbuilder (~> 2.11)
   letter_opener
