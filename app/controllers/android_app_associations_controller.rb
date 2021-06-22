@@ -2,6 +2,17 @@ class AndroidAppAssociationsController < ApplicationController
   skip_before_action :authenticate_user!
 
   def index
-    render file: Rails.root.join("public", "assetlinks.json")
+    android_asset_link_data = [
+      {
+        relation: ["delegate_permission/common.handle_all_urls"],
+        target: {
+          namespace: "android_app",
+          package_name: "com.example.rubyforgoodcasa",
+          sha256_cert_fingerprints: [ENV["ANDROID_CERTIFICATE_FINGERPRINT"]]
+        }
+      }
+    ]
+
+    render json: android_asset_link_data.to_json
   end
 end

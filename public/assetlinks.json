@@ -1,5 +1,0 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target" : { "namespace": "android_app", "package_name": "com.example.rubyforgoodcasa",
-               "sha256_cert_fingerprints": ["CC:92:56:F9:DE:F0:A1:AD:9F:B0:C1:45:12:C7:77:31:F5:76:36:23:9C:95:E0:B5:2B:D8:C6:E8:BF:30:ED:70"] }
-}]
