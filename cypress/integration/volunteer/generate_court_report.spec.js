@@ -8,10 +8,12 @@ context("Logging into cypress as a volunteer", () => {
   it("should generate a court report", () => {
     cy.get("#toggle-sidebar-js").click();
     cy.contains("Generate Court Reports").click();
-    // Pick the first option from the case selection dropdown
-    cy.get('#case-selection')
-      .find('option').then(elements => {
-        const option = elements[1].getAttribute('value');
+
+    // Pick the first non-blank option from the case selection dropdown
+    cy.get("#case-selection option")
+      .eq(2)
+      .then(element => {
+        const option = element.val()
         cy.get('#case-selection').select(option, {force: true});
 
         cy.contains("Generate Report").click();
