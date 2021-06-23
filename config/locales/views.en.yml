@@ -3,6 +3,19 @@ en:
     index:
       title: Case Contacts
       new: New Case Contact
+      filter:
+        title: Filter by
+        show_hide: Show / Hide
+        submit: Filter
+        reset: Reset filters
+        display_all: Display all
+        contact_types: Contact types
+        other: Other filters
+        contact_date: Date of contact
+        start_date: Starting from
+        end_date: Ending at
+      no_contacts_found: No case contacts have been found.
+      no_contacts_present: You have no case contacts for this case. Please click New Case Contact button above to create a case contact for your youth!
     edit:
       title: Editing Case Contact
     new:
