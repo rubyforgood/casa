@@ -5,7 +5,7 @@ RSpec.describe "AndroidAppAssociations", type: :request do
     it "renders a json file" do
       get "/.well-known/assetlinks.json"
 
-      expect(response.header['Content-Type']).to include("application/json")
+      expect(response.header["Content-Type"]).to include("application/json")
     end
   end
 end
