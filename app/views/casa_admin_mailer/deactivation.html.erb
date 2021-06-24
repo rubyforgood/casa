@@ -1,17 +1,45 @@
-<meta itemprop="name" content="Confirm Email" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-<table width="100%" cellpadding="0" cellspacing="0" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-    <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+<style>
+  #table {
+    width: 100%;
+    border-spacing: 0;
+    font-family: Helvetica,Arial,sans-serif;
+    box-sizing: border-box;
+    font-size: 120px;
+    margin: 0;
+  }
+
+    #table tbody tr {
+    font-family: Helvetica,Arial,sans-serif;
+    box-sizing: border-box;
+    font-size: 14px;
+    margin: 0;
+  }
+  
+  .content-block {
+    font-family: Helvetica,Arial,sans-serif;
+    box-sizing: border-box;
+    font-size: 14px;
+    vertical-align: top;
+    margin: 0;
+    padding: 0 0 20px;
+  }
+
+</style>
+
+<meta itemprop="name" content="Confirm Email">
+<table id="table">
+  <tr id="tr">
+    <td class="content-block">
       Hello <%= @user.display_name %>,
     </td>
   </tr>
-  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-    <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+  <tr id="tr">
+    <td class="content-block">
       Your <%= @casa_organization.display_name %>’s Admin account has been deactivated.
     </td>
   </tr>
-  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-    <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+  <tr id="tr">
+    <td class="content-block">
       If you have any questions, please contact a <%= @casa_organization.display_name %> administrator for assistance.
     </td>
   </tr>
