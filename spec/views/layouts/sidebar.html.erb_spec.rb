@@ -49,6 +49,15 @@ RSpec.describe "layout/sidebar", :disable_bullet, type: :view do
       expect(rendered).to have_link("Export Data", href: "/reports")
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists/0")
     end
+
+    it "renders display name and email" do
+      sign_in user
+
+      render partial: "layouts/sidebar"
+
+      expect(rendered).to match user.display_name
+      expect(rendered).to match user.email
+    end
   end
 
   context "when logged in as a volunteer" do
@@ -76,6 +85,15 @@ RSpec.describe "layout/sidebar", :disable_bullet, type: :view do
       expect(rendered).to_not have_link("Volunteers", href: "/volunteers")
       expect(rendered).to_not have_link("Supervisors", href: "/supervisors")
       expect(rendered).to_not have_link("Admins", href: "/casa_admins")
+    end
+
+    it "renders display name and email" do
+      sign_in user
+
+      render partial: "layouts/sidebar"
+
+      expect(rendered).to match user.display_name
+      expect(rendered).to match user.email
     end
 
     context "when the volunteer does not have a transitioning case" do
@@ -148,6 +166,15 @@ RSpec.describe "layout/sidebar", :disable_bullet, type: :view do
       expect(rendered).to have_link("Generate Court Reports", href: "/case_court_reports")
       expect(rendered).to have_link("Export Data", href: "/reports")
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
+    end
+
+    it "renders display name and email" do
+      sign_in user
+
+      render partial: "layouts/sidebar"
+
+      expect(rendered).to match user.display_name
+      expect(rendered).to match user.email
     end
   end
 
