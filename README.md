@@ -51,7 +51,7 @@ Issues on the issue board https://github.com/rubyforgood/casa/projects/1 in the 
 
 Pull requests which are not for an issue but which improve the codebase by adding a test or improving the code are also welcome! Feel free to make github issues when you notice issues. A maintainer will be keeping an eye on issues and PRs every day or three. 
 
-See also our [contributing guide](./doc/CONTRIBUTING.md) 💖
+See also our [contributing guide](./doc/CONTRIBUTING.md) 💖 ✨ 
 
 ### About this project
 
