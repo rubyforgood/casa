@@ -7,5 +7,3 @@ class CasaAdminMailerPreview < ActionMailer::Preview
     CasaAdminMailer.deactivation(CasaAdmin.last)
   end
 end
-
-
