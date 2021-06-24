@@ -59,6 +59,7 @@
                       class: "list-group-item",
                       target: "_blank" %>
           <li class="list-group-item">
+            <%= current_user.display_name %>
             <%= current_user.email %>
           </li>
         <% end %>
