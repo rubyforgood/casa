@@ -419,7 +419,7 @@ of it unless it was included in a previous court report.")
         visit edit_casa_case_path(casa_case.id)
 
         expect(page).to have_select("Hearing type",
-          selected: I18n.t('casa_cases.form.prompt.select_hearing_type'))
+          selected: I18n.t("casa_cases.form.prompt.select_hearing_type"))
         select hearing_type.name, from: "casa_case_hearing_type_id"
 
         within ".actions" do
@@ -452,7 +452,7 @@ of it unless it was included in a previous court report.")
 
         expect(page).to have_select("Hearing type",
           selected: casa_case.hearing_type.name)
-        select(I18n.t('casa_cases.form.prompt.select_hearing_type'),
+        select(I18n.t("casa_cases.form.prompt.select_hearing_type"),
           from: "casa_case_hearing_type_id")
 
         within ".actions" do
@@ -460,7 +460,7 @@ of it unless it was included in a previous court report.")
         end
 
         expect(page).to have_select("Hearing type",
-          selected: I18n.t('casa_cases.form.prompt.select_hearing_type'))
+          selected: I18n.t("casa_cases.form.prompt.select_hearing_type"))
         expect(casa_case.reload.hearing_type).to be_nil
       end
     end
