@@ -387,3 +387,28 @@ en:
     edit:
       send_reminder: Send reminder
       tooltip: Sends to volunteer a reminder email to input case contacts
+    index:
+      volunteers: Volunteers
+      filter: Filter by
+      pick_displayed_columns: Pick displayed columns
+      supervisor: Supervisor
+      no_supervisor: No supervisor assignment
+      status: Status
+      active: Active
+      inactive: Inactive
+      transition_aged_youth: Assigned to Transition Aged Youth
+      yes: Yes
+      no: No
+      select_columns: Select columns
+      heading:
+        name: Name
+        e_mail: Email
+        supervisor: Supervisor
+        status: Status
+        assigned_transition_aged_youth: Assigned To Transition Aged Youth
+        case_number: Case Number(s)
+        last_contact_made: Last Contact Made
+        contacts: Contacts Made in Past 60 Days</th>
+        actions: Actions
+      button:
+        new: New Volunteer
