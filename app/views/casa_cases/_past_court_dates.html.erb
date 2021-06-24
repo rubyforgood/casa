@@ -1,4 +1,6 @@
 <label><%= t(".past_court_dates") %>:</label>
+<%= link_to("View all #{casa_case.past_court_dates.size} Past Court Dates", casa_case_past_court_dates_path(casa_case)) %>
+<br>
 <% if casa_case.past_court_dates.size > 0 %>
   <ul>
     <% casa_case.past_court_dates.each do |pcd| %>
