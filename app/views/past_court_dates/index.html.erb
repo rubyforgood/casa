@@ -1,0 +1,11 @@
+<%= link_to t("button.back"), :back %>
+
+<div class="card card-container">
+  <div class="card-body">
+    <% @past_court_dates.each do |past_court_date| %>
+      Date: <%= past_court_date.date %>
+      Hearing type: <%= past_court_date.hearing_type.name %>
+      Judge: <%= past_court_date.judge.name %>
+    <% end %>
+  </div>
+</div>
