@@ -409,6 +409,61 @@ of it unless it was included in a previous court report.")
         expect(page).to_not have_text(mandate_text)
       end
     end
+
+    context "with an available hearing type", js: true do
+      let!(:hearing_type) { create(:hearing_type, casa_org: casa_org) }
+
+      it "is able to assign a hearing type when there is none assigned" do
+        casa_case.update(hearing_type: nil)
+
+        visit edit_casa_case_path(casa_case.id)
+
+        expect(page).to have_select("Hearing type",
+          selected: I18n.t('casa_cases.form.prompt.select_hearing_type'))
+        select hearing_type.name, from: "casa_case_hearing_type_id"
+
+        within ".actions" do
+          click_on "Update CASA Case"
+        end
+
+        expect(page).to have_select("Hearing type", selected: hearing_type.name)
+        expect(casa_case.reload.hearing_type).to eq hearing_type
+      end
+
+      it "is able to assign another hearing type to the case" do
+        visit edit_casa_case_path(casa_case.id)
+
+        case_hearing = casa_case.hearing_type
+        expect(page).to have_select("Hearing type", selected: case_hearing.name)
+        select hearing_type.name, from: "casa_case_hearing_type_id"
+
+        within ".actions" do
+          click_on "Update CASA Case"
+        end
+
+        expect(page).to have_select("Hearing type", selected: hearing_type.name)
+        expect(casa_case.reload.hearing_type).to eq hearing_type
+      end
+
+      it "is able to unassign a hearing type from the case" do
+        expect(casa_case.hearing_type).not_to be_nil
+
+        visit edit_casa_case_path(casa_case.id)
+
+        expect(page).to have_select("Hearing type",
+          selected: casa_case.hearing_type.name)
+        select(I18n.t('casa_cases.form.prompt.select_hearing_type'),
+          from: "casa_case_hearing_type_id")
+
+        within ".actions" do
+          click_on "Update CASA Case"
+        end
+
+        expect(page).to have_select("Hearing type",
+          selected: I18n.t('casa_cases.form.prompt.select_hearing_type'))
+        expect(casa_case.reload.hearing_type).to be_nil
+      end
+    end
   end
 
   context "logged in as volunteer" do

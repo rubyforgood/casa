@@ -42,7 +42,7 @@
                   :hearing_type_id,
                   HearingType.active.for_organization(current_organization),
                   :id, :name,
-                  {include_hidden: false, prompt: t(".prompt.select_hearing_type")},
+                  {include_hidden: false, include_blank: t(".prompt.select_hearing_type")},
                   {class: "form-control"}
               ) %>
         </div>
