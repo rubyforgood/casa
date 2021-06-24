@@ -55,8 +55,9 @@ class CasaCaseDecorator < Draper::Decorator
 
   def court_report_select_option
     volunteer_names = object.assigned_volunteers.map(&:display_name).join(",")
+
     [
-      "#{object.case_number} - #{object.has_transitioned? ? "transition" : "non-transition"} #{volunteer_names}",
+      "#{object.case_number} - #{object.has_transitioned? ? "transition" : "non-transition"}(assigned to #{volunteer_names.length > 0 ? volunteer_names : "no one"})",
       object.case_number,
       {
         "data-transitioned": object.has_transitioned?,
