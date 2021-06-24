@@ -5,7 +5,7 @@ class CaseContacts::FollowupsController < ApplicationController
     authorize Followup
     case_contact = CaseContact.find(params[:case_contact_id])
 
-    case_contact.followups.create(creator: current_user, status: :requested)
+    case_contact.followups.create(creator: current_user, status: :requested, note: params[:note])
     FollowupNotification
       .with(followup: case_contact.requested_followup, created_by_name: current_user.display_name)
       .deliver(case_contact.creator)
