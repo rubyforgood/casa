@@ -65,7 +65,9 @@ en:
       message: "%{created_by_name} resolved a follow up. Click to see more."
     followup_notification:
       title: "New followup"
-      message: "%{created_by_name} has flagged a Case Contact that needs follow up. Click to see more."
+      message: "%{created_by_name} has flagged a Case Contact that needs follow up."
+      note: "Note: \"%{note}\""
+      more_info: "Click to see more."
   button:
     delete: Delete
     undelete: undelete
