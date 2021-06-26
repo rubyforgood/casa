@@ -18,7 +18,6 @@ end
 #  category     :string
 #  mailer_type  :string
 #  sent_address :string
-#  subject      :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  casa_org_id  :bigint           not null

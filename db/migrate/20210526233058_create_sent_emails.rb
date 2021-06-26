@@ -6,7 +6,6 @@ class CreateSentEmails < ActiveRecord::Migration[6.1]
       t.string :mailer_type
       t.string :category
       t.string :sent_address
-      t.string :subject
 
       t.timestamps
     end

@@ -258,7 +258,6 @@ ActiveRecord::Schema.define(version: 2021_06_24_125750) do
     t.string "mailer_type"
     t.string "category"
     t.string "sent_address"
-    t.string "subject"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["casa_org_id"], name: "index_sent_emails_on_casa_org_id"
