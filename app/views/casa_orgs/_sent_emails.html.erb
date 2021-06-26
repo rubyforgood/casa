@@ -10,6 +10,7 @@
     <th><%= t(".heading.mailer_type") %></th>
     <th><%= t(".heading.category") %></th>
     <th><%= t(".heading.sent_address") %></th>
+    <th><%= t(".heading.created_at") %></th>
   </tr>
   </thead>
 
@@ -23,7 +24,10 @@
         <%= sent_email.category %>
       </td>
       <td>
-        <%= sent_email.sent_address %>
+        <%= sent_email.sent_to.display_name %> &lt;<%= sent_email.sent_address %>&gt;
+      </td>
+      <td>
+        <%= sent_email.created_at.strftime("%l:%M%P %d %b %Y") %>
       </td>
     </tr>
   <% end %>

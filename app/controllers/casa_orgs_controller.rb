@@ -46,6 +46,6 @@ class CasaOrgsController < ApplicationController
   end
 
   def set_sent_emails
-    @sent_emails = SentEmail.for_organization(@casa_org)
+    @sent_emails = SentEmail.for_organization(@casa_org).order("created_at DESC").limit(10)
   end
 end

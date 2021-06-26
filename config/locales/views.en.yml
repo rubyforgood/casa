@@ -265,7 +265,8 @@ en:
       heading:
         mailer_type: Mailer Type
         category: Category
-        sent_address: Sent Address
+        sent_address: Recipient
+        created_at: Time Sent
     edit:
       title: Editing CASA Organization
       manage_contact_types_title: Manage Contact Types
