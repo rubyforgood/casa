@@ -9711,10 +9711,10 @@ svgo@^1.0.0:
     unquote "~1.1.1"
     util.promisify "~1.0.0"
 
-sweetalert2@^11.0.17:
-  version "11.0.17"
-  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-11.0.17.tgz#250b18745acf15344121070d78bcb50d62a21432"
-  integrity sha512-oaCGCNjMU648bDg5+/mdStfFNG9sYEejeEZQY8JpAakUM0pLflB3neNyArAZGcWNUQX1y/jOeRdzcNE05Una4A==
+sweetalert2@^11.0.18:
+  version "11.0.18"
+  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-11.0.18.tgz#9547859cc1a79815d5d02a6e0d1a3d44da3f8dc1"
+  integrity sha512-sF6huRQqqRGz7p9F8XFKSICl5hOiXjjpmnwAO8vlyJKAyMNZb2fvdok11JIGQjqcqVMIag/VLNWF4eEsIKQKGw==
 
 symbol-tree@^3.2.4:
   version "3.2.4"
