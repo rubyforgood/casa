@@ -1,5 +1,5 @@
 <style>
-  #table {
+  td.card-content {
     width: 100%;
     border-spacing: 0;
     font-family: Helvetica,Arial,sans-serif;
@@ -8,7 +8,7 @@
     margin: 0;
   }
 
-    #table tbody tr {
+  td.card-content tbody tr {
     font-family: Helvetica,Arial,sans-serif;
     box-sizing: border-box;
     font-size: 14px;
@@ -27,18 +27,18 @@
 </style>
 
 <meta itemprop="name" content="Confirm Email">
-<table id="table">
-  <tr id="tr">
+<table>
+  <tr>
     <td class="content-block">
       Hello <%= @user.display_name %>,
     </td>
   </tr>
-  <tr id="tr">
+  <tr>
     <td class="content-block">
       Your <%= @casa_organization.display_name %>’s Admin account has been deactivated.
     </td>
   </tr>
-  <tr id="tr">
+  <tr>
     <td class="content-block">
       If you have any questions, please contact a <%= @casa_organization.display_name %> administrator for assistance.
     </td>
