@@ -25,6 +25,7 @@ end
 # Table name: followups
 #
 #  id              :bigint           not null, primary key
+#  note            :text
 #  status          :integer          default("requested")
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null

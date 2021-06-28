@@ -1,10 +1,11 @@
 # CASA Project and Organization Overview
 
-![rspec](https://github.com/rubyforgood/casa/workflows/rspec/badge.svg)
-![cypress](https://github.com/rubyforgood/casa/workflows/cypress/badge.svg)
-![erb lint](https://github.com/rubyforgood/casa/actions/workflows/erb_lint.yml/badge.svg)
-![standardrb lint](https://github.com/rubyforgood/casa/actions/workflows/ruby_lint.yml/badge.svg)
-![brakeman](https://github.com/rubyforgood/casa/workflows/brakeman/badge.svg)
+[![rspec](https://github.com/rubyforgood/casa/workflows/rspec/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/rspec.yml)
+[![cypress](https://github.com/rubyforgood/casa/workflows/cypress/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/cypress.yml)
+[![erb lint](https://github.com/rubyforgood/casa/actions/workflows/erb_lint.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/erb_lint.yml)
+[![standardrb lint](https://github.com/rubyforgood/casa/actions/workflows/ruby_lint.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/ruby_lint.yml)
+[![brakeman](https://github.com/rubyforgood/casa/workflows/brakeman/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/security.yml)
+[![yarn lint](https://github.com/rubyforgood/casa/actions/workflows/yarn_lint.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/yarn_lint.yml)
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/maintainability)](https://codeclimate.com/github/rubyforgood/casa/trends/technical_debt)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/test_coverage)](https://codeclimate.com/github/rubyforgood/casa/trends/test_coverage_total)
@@ -43,15 +44,15 @@ CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunte
 
 ## Welcome contributors!
 
-We are very happy to have you! CASA and Ruby for Good are committed to welcoming new contrinbutors of all skill levels. We have plenty of tiny, small, and medium issues. 
+We are very happy to have you! CASA and Ruby for Good are committed to welcoming new contrinbutors of all skill levels. We have plenty of tiny, small, and medium issues.
 
 We highly recommend that you join us in slack https://rubyforgood.herokuapp.com/ #casa channel to ask questions quickly and hear about office hours (currently Wednesday 6-8pm Pacific), stakeholder news, and upcoming new issues.
 
 Issues on the issue board https://github.com/rubyforgood/casa/projects/1 in the TODO column are fair game. To claim an issue, comment on it "I am working on this issue".
 
-Pull requests which are not for an issue but which improve the codebase by adding a test or improving the code are also welcome! Feel free to make github issues when you notice issues. A maintainer will be keeping an eye on issues and PRs every day or three. 
+Pull requests which are not for an issue but which improve the codebase by adding a test or improving the code are also welcome! Feel free to make github issues when you notice issues. A maintainer will be keeping an eye on issues and PRs every day or three.
 
-See also our [contributing guide](./doc/CONTRIBUTING.md) 💖
+See also our [contributing guide](./doc/CONTRIBUTING.md) 💖 ✨
 
 ### About this project
 
@@ -234,9 +235,9 @@ See `db/seeds` for seed data. Test data includes the below
 1. casa_admin2-1@example.com / 123456 https://\<URL\>.herokuapp.com/ (for second tenant)
 1. allcasaadmin@example.com / 123456 https://\<URL\>.herokuapp.com/all_casa_admins/sign_in
 
-In the emails listed above, the number `1` corresponds to a `casa_org_id`. To log in to a different `casa_org`'s instance, change the `casa_org_id` number in the email, and add a hyphen and numerical value to the end. 
+In the emails listed above, the number `1` corresponds to a `casa_org_id`. To log in to a different `casa_org`'s instance, change the `casa_org_id` number in the email, and add a hyphen and numerical value to the end.
 
-Example: To log into CASA Org 2's instance, use the following email: casa_admin2-1@example.com. In this example, the number `2` corresponds to the `casa_org`, and the number `1` corresponds to the user. 
+Example: To log into CASA Org 2's instance, use the following email: casa_admin2-1@example.com. In this example, the number `2` corresponds to the `casa_org`, and the number `1` corresponds to the user.
 
 ### QA environment
 
@@ -244,7 +245,7 @@ When pull requests are merged, the code auto-deploys to QA (because of a heroku 
 
 https://casa-qa.herokuapp.com/
 
-If you would like to help run quality assurance, please check out the _Merged to QA_ section of our project board. For each ticket in this column, log into the QA environment to confirm whether or not this change has indeed been made and is working as intended. If yes, please add the label: _working-in-qa_ to the ticket. If it is not, please add the label: _not-working-in-qa_ to the ticket. If you discover bugs in this process, please file an issue for it, add the label: _bug_, and add it to the _To do_ column. ***This is a great task for PM contributors looking to familiarize themselves with the application and project board. 
+If you would like to help run quality assurance, please check out the _Merged to QA_ section of our project board. For each ticket in this column, log into the QA environment to confirm whether or not this change has indeed been made and is working as intended. If yes, please add the label: _working-in-qa_ to the ticket. If it is not, please add the label: _not-working-in-qa_ to the ticket. If you discover bugs in this process, please file an issue for it, add the label: _bug_, and add it to the _To do_ column. ***This is a great task for PM contributors looking to familiarize themselves with the application and project board.
 
 ### Staging
 
