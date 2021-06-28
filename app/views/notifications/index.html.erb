@@ -16,7 +16,9 @@
             <h5 class="mb-1"><%= notification.to_notification.title %></h5>
             <small><%= time_ago_in_words(notification.updated_at) %> ago</small>
           </div>
-          <p class="mb-1"><%= notification.to_notification.message %></p>
+          <div class="my-1">
+            <%= simple_format notification.to_notification.message %>
+          </div>
         </div>
       </div>
     </a>
