@@ -63,7 +63,7 @@ RSpec.describe "/followups", :disable_bullet, type: :request do
 
       context "no followup exists yet" do
         context "when a note is provided" do
-          let(:params) { { note: "Hello, world!" } }
+          let(:params) { {note: "Hello, world!"} }
 
           it "creates a followup" do
             expect { create_request }.to change(Followup, :count).by(1)
@@ -77,7 +77,7 @@ RSpec.describe "/followups", :disable_bullet, type: :request do
         end
 
         context "when a note is not provided" do
-          let(:params) { { note: nil } }
+          let(:params) { {note: nil} }
 
           it "creates a followup" do
             expect { create_request }.to change(Followup, :count).by(1)

@@ -6,7 +6,7 @@ RSpec.describe "notifications/index", :disable_bullet, type: :system do
   let(:case_contact) { create(:case_contact, creator: volunteer) }
   let(:casa_case) { case_contact.casa_case }
 
-  before { casa_case.assigned_volunteers << volunteer}
+  before { casa_case.assigned_volunteers << volunteer }
 
   context "FollowupResolvedNotification" do
     let(:notification_message) { "#{volunteer.display_name} resolved a follow up. Click to see more." }
