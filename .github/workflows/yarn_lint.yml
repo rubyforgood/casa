@@ -7,14 +7,14 @@ on:
     paths-ignore:
       - 'docs/**'
       - '*.md'
-      - 'bin/*'
+      - 'bin/**'
   pull_request:
     branches:
       - main
     paths-ignore:
       - 'docs/**'
       - '*.md'
-      - 'bin/*'
+      - 'bin/**'
 
 jobs:
   yarn_lint:
