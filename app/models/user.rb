@@ -72,9 +72,11 @@ class User < ApplicationRecord
 
   # Wrong? Linda/Shen/Joshua - unassigned / inactive volunteers
   def volunteers_serving_transition_aged_youth
-    volunteers.includes(case_assignments: :casa_case)
-      .where(case_assignments: {active: true},
-             casa_cases: {active: true, transition_aged_youth: true}).size
+    volunteers.includes(
+      case_assignments: :casa_case
+    ).where(
+      case_assignments: {active: true}, casa_cases: {active: true, transition_aged_youth: true}
+    ).size
   end
 
   def no_contact_for_two_weeks
