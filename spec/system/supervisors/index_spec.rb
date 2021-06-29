@@ -48,17 +48,18 @@ RSpec.describe "supervisors/index", :disable_bullet, type: :system do
     let!(:last_supervisor) { create(:supervisor, display_name: "Last Supervisor", casa_org: organization) }
 
     before(:each) do
-      9.times do
-        volunteer = FactoryBot.create(:volunteer, :with_casa_cases)
-        volunteer.supervisor = first_supervisor
-        volunteer.save
-      end
+      # Stub our `@supervisors` collection so we've got control over column values for sorting.
+      allow_any_instance_of(SupervisorPolicy::Scope).to receive(:resolve).and_return(
+        [first_supervisor, last_supervisor]
+      )
 
-      11.times do
-        volunteer = FactoryBot.create(:volunteer, :with_casa_cases)
-        volunteer.supervisor = last_supervisor
-        volunteer.save
-      end
+      allow(first_supervisor).to receive(:volunteers).and_return(Array.new(9))
+      allow(first_supervisor).to receive(:volunteers_serving_transition_aged_youth).and_return(9)
+      allow(first_supervisor).to receive(:no_contact_for_two_weeks).and_return(9)
+
+      allow(last_supervisor).to receive(:volunteers).and_return(Array.new(11))
+      allow(last_supervisor).to receive(:volunteers_serving_transition_aged_youth).and_return(11)
+      allow(last_supervisor).to receive(:no_contact_for_two_weeks).and_return(11)
 
       sign_in user
       visit supervisors_path
