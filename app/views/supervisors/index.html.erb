@@ -28,10 +28,10 @@
             <%= link_to(supervisor.display_name, edit_supervisor_path(supervisor)) %>
           </td>
 
-          <% total_volunteers = supervisor.volunteers.size %>
-          <td id="volunteer-assignments-<%= supervisor.id %>" data-order="<%= total_volunteers %>">
+          <% active_volunteers = supervisor.volunteers.active.size %>
+          <td id="volunteer-assignments-<%= supervisor.id %>" data-order="<%= active_volunteers %>">
             <span class="mobile-label">Volunteer Assignments</span>
-            <%= total_volunteers %>
+            <%= active_volunteers %>
           </td>
 
           <% transition_volunteers = supervisor.volunteers_serving_transition_aged_youth %>
