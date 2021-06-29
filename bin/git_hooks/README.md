@@ -1,5 +1,5 @@
 This folder contains helper scripts for git hooks.
-
+test
 ### `update-dependences`  
 Installs dependencies if any are missing  
 Usage: `update-dependencies`  
