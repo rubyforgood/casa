@@ -31,7 +31,7 @@
   "version": "0.1.0",
   "devDependencies": {
     "cypress": "^7.6.0",
-    "jest": "^27.0.5",
+    "jest": "^27.0.6",
     "markdown-toc": "^1.2.0",
     "standard": "^16.0.3",
     "start-server-and-test": "^1.12.5",
