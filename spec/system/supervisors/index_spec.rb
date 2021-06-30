@@ -53,11 +53,11 @@ RSpec.describe "supervisors/index", :disable_bullet, type: :system do
         [first_supervisor, last_supervisor]
       )
 
-      allow(first_supervisor).to receive(:active).and_return(9)
+      allow(first_supervisor).to receive(:active_volunteers).and_return(9)
       allow(first_supervisor).to receive(:volunteers_serving_transition_aged_youth).and_return(9)
       allow(first_supervisor).to receive(:no_contact_for_two_weeks).and_return(9)
 
-      allow(last_supervisor).to receive(:active).and_return(11)
+      allow(last_supervisor).to receive(:active_volunteers).and_return(11)
       allow(last_supervisor).to receive(:volunteers_serving_transition_aged_youth).and_return(11)
       allow(last_supervisor).to receive(:no_contact_for_two_weeks).and_return(11)
 
