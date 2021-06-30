@@ -53,11 +53,11 @@ RSpec.describe "supervisors/index", :disable_bullet, type: :system do
         [first_supervisor, last_supervisor]
       )
 
-      allow(first_supervisor).to receive(:volunteers).and_return(Array.new(9))
+      allow(first_supervisor).to receive(:active_volunteers).and_return(9)
       allow(first_supervisor).to receive(:volunteers_serving_transition_aged_youth).and_return(9)
       allow(first_supervisor).to receive(:no_contact_for_two_weeks).and_return(9)
 
-      allow(last_supervisor).to receive(:volunteers).and_return(Array.new(11))
+      allow(last_supervisor).to receive(:active_volunteers).and_return(11)
       allow(last_supervisor).to receive(:volunteers_serving_transition_aged_youth).and_return(11)
       allow(last_supervisor).to receive(:no_contact_for_two_weeks).and_return(11)
 
@@ -118,6 +118,25 @@ RSpec.describe "supervisors/index", :disable_bullet, type: :system do
         expect(page).to have_text("There are no active volunteers without supervisors to display here")
         expect(page).not_to have_text("Active volunteers not assigned to supervisors")
         expect(page).not_to have_text("Assigned to Case(s)")
+      end
+    end
+  end
+
+  context "with inactive volunteers assigned" do
+    before do
+      volunteer = create(:volunteer, :with_casa_cases, casa_org: organization)
+      FactoryBot.create(:supervisor_volunteer, supervisor: user, volunteer: volunteer)
+
+      inactive_volunteer = create(:volunteer, :inactive, casa_org: organization)
+      FactoryBot.create(:supervisor_volunteer, supervisor: user, volunteer: inactive_volunteer)
+
+      sign_in user
+      visit supervisors_path
+    end
+
+    it "count only active volunteers" do
+      within "td#volunteer-assignments-#{user.id}" do
+        expect(page).to have_content("1")
       end
     end
   end
