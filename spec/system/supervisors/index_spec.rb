@@ -121,4 +121,23 @@ RSpec.describe "supervisors/index", :disable_bullet, type: :system do
       end
     end
   end
+
+  context "with inactive volunteers assigned" do
+    before do
+      volunteer = create(:volunteer, :with_casa_cases, casa_org: organization)
+      FactoryBot.create(:supervisor_volunteer, supervisor: user, volunteer: volunteer)
+
+      inactive_volunteer = create(:volunteer, :inactive, casa_org: organization)
+      FactoryBot.create(:supervisor_volunteer, supervisor: user, volunteer: inactive_volunteer)
+
+      sign_in user
+      visit supervisors_path
+    end
+
+    it "count only active volunteers" do
+      within "td#volunteer-assignments-#{user.id}" do
+        expect(page).to have_content("1")
+      end
+    end
+  end
 end
