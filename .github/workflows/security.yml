@@ -5,16 +5,16 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'docs/**'
-      - '*.md'
-      - 'bin/*'
+      - 'doc/**'
+      - '**.md'
+      - 'bin/**'
   pull_request:
     branches:
       - main
     paths-ignore:
-      - 'docs/**'
-      - '*.md'
-      - 'bin/*'
+      - 'doc/**'
+      - '**.md'
+      - 'bin/**'
 
 jobs:
   brakeman:
