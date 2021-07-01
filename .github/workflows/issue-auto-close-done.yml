@@ -2,7 +2,7 @@ name: 'Close issue when Done'
 
 on:
   project_card:
-    types: [created, edited, moved]
+    types: [moved]
 
 jobs:
   set-state:
