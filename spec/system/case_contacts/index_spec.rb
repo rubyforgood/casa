@@ -39,11 +39,9 @@ RSpec.describe "case_contacts/index", :disable_bullet, js: true, type: :system d
       describe "by date of contact" do
         it "only shows the contacts with the correct date" do
           travel_to Date.new(2021, 1, 2) do
-            case_contacts = [
-                create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.yesterday - 1),
-                create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.yesterday),
-                create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.today)
-            ]
+            create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.yesterday - 1)
+            create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.yesterday)
+            create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.today)
 
             sign_in volunteer
             visit case_contacts_path
