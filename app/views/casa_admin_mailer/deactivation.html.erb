@@ -1,45 +1,17 @@
-<style>
-  td.card-content {
-    width: 100%;
-    border-spacing: 0;
-    font-family: Helvetica,Arial,sans-serif;
-    box-sizing: border-box;
-    font-size: 120px;
-    margin: 0;
-  }
-
-  td.card-content tbody tr {
-    font-family: Helvetica,Arial,sans-serif;
-    box-sizing: border-box;
-    font-size: 14px;
-    margin: 0;
-  }
-  
-  .content-block {
-    font-family: Helvetica,Arial,sans-serif;
-    box-sizing: border-box;
-    font-size: 14px;
-    vertical-align: top;
-    margin: 0;
-    padding: 0 0 20px;
-  }
-
-</style>
-
 <meta itemprop="name" content="Confirm Email">
-<table>
-  <tr>
-    <td class="content-block">
+<table style="border-spacing: 0; box-sizing: border-box; font-family: Helvetica,Arial,sans-serif; margin: 0;">
+  <tr style="box-sizing: border-box;">
+    <td class="content-block" style="box-sizing: border-box; vertical-align: top; padding: 0 0 20px;">
       Hello <%= @user.display_name %>,
     </td>
   </tr>
-  <tr>
-    <td class="content-block">
+  <tr style="box-sizing: border-box;">
+    <td class="content-block" style="box-sizing: border-box; vertical-align: top; padding: 0 0 20px;">
       Your <%= @casa_organization.display_name %>’s Admin account has been deactivated.
     </td>
   </tr>
-  <tr>
-    <td class="content-block">
+  <tr style="box-sizing: border-box;">
+    <td class="content-block" style="box-sizing: border-box; vertical-align: top; padding: 0 0 20px;">
       If you have any questions, please contact a <%= @casa_organization.display_name %> administrator for assistance.
     </td>
   </tr>
