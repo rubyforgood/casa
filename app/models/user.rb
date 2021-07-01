@@ -21,7 +21,7 @@ class User < ApplicationRecord
   has_many :followups, foreign_key: "creator_id"
 
   has_many :notifications, as: :recipient
-  has_many :sent_emails, inverse_of: "sent_to", dependent: :destroy
+  has_many :sent_emails, dependent: :destroy
 
   has_one :supervisor_volunteer, -> {
     where(is_active: true)

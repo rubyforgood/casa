@@ -1,5 +1,5 @@
 class SentEmail < ApplicationRecord
-  belongs_to :sent_to, class_name: "User", foreign_key: "user_id"
+  belongs_to :user
   belongs_to :casa_org
 
   validates :mailer_type, presence: true
