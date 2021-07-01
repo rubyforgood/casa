@@ -14,8 +14,8 @@ Usage: `update-branch <remote name>`
 Lints files on the current branch  
 Usage: `lint <diff policy>`  
  + `<diff policy>`(optional) can be one of the the following
-   - `--staged` lints if the files staged for commit contain lintable files
-   - `--unpushed` lints files changed by commits not yet pushed to origin if they are lintable
+   - `--staged` lints the files staged for commit
+   - `--unpushed` lints files changed by commits not yet pushed to origin
    - `--all` (default) lints all files in the repo  
    
 ## Example Hooks
