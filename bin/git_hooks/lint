@@ -57,7 +57,7 @@ if test $rb_changed_count -gt 0; then
     echo "ERROR: Command bundle could not be found"
     exit 1
   else
-    bundle exec standardrb --fix
+    bundle exec standardrb --fix || exit 1
   fi
 fi
 
@@ -70,7 +70,7 @@ if test $erb_changed_count -gt 0; then
     echo "WARNING: Command bundle could not be found"
     exit 1
   else
-    bundle exec erblint --lint-all --autocorrect
+    bundle exec erblint --lint-all --autocorrect || exit 1
   fi
 fi
 
