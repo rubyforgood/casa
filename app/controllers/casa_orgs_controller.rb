@@ -3,6 +3,7 @@ class CasaOrgsController < ApplicationController
   before_action :set_contact_type_data, only: %i[edit update]
   before_action :set_hearing_types, only: %i[edit update]
   before_action :set_judges, only: %i[edit update]
+  before_action :set_sent_emails, only: %i[edit update]
   before_action :require_organization!
   after_action :verify_authorized
 
@@ -42,5 +43,9 @@ class CasaOrgsController < ApplicationController
 
   def set_judges
     @judges = Judge.for_organization(@casa_org)
+  end
+
+  def set_sent_emails
+    @sent_emails = SentEmail.for_organization(@casa_org).order("created_at DESC").limit(10)
   end
 end

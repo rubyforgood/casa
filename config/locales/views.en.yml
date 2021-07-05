@@ -260,6 +260,13 @@ en:
         name: Name
         active: Active?
         actions: Actions
+    sent_emails:
+      title: Sent Emails
+      heading:
+        mailer_type: Mailer Type
+        category: Category
+        sent_address: Recipient
+        created_at: Time Sent
     edit:
       title: Editing CASA Organization
       manage_contact_types_title: Manage Contact Types

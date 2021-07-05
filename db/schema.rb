@@ -252,6 +252,18 @@ ActiveRecord::Schema.define(version: 2021_06_24_125750) do
     t.index ["judge_id"], name: "index_past_court_dates_on_judge_id"
   end
 
+  create_table "sent_emails", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "casa_org_id", null: false
+    t.string "mailer_type"
+    t.string "category"
+    t.string "sent_address"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["casa_org_id"], name: "index_sent_emails_on_casa_org_id"
+    t.index ["user_id"], name: "index_sent_emails_on_user_id"
+  end
+
   create_table "supervisor_volunteers", force: :cascade do |t|
     t.bigint "supervisor_id", null: false
     t.bigint "volunteer_id", null: false
@@ -325,6 +337,8 @@ ActiveRecord::Schema.define(version: 2021_06_24_125750) do
   add_foreign_key "followups", "users", column: "creator_id"
   add_foreign_key "judges", "casa_orgs"
   add_foreign_key "past_court_dates", "casa_cases"
+  add_foreign_key "sent_emails", "casa_orgs"
+  add_foreign_key "sent_emails", "users"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"
   add_foreign_key "supervisor_volunteers", "users", column: "volunteer_id"
   add_foreign_key "users", "casa_orgs"

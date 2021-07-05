@@ -30,6 +30,7 @@ RSpec.describe VolunteerImporter do
       VolunteerImporter.new(import_file_path, casa_org_id).import_volunteers
       data_using_instance = Volunteer.pluck(:email).sort
 
+      SentEmail.delete_all
       Volunteer.delete_all
       VolunteerImporter.import_volunteers(import_file_path, casa_org_id)
       data_using_static = Volunteer.pluck(:email).sort
