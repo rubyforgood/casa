@@ -4,7 +4,7 @@
   </div>
 </div>
 
-<table class="table table-striped table-bordered">
+<table class="table table-striped table-bordered" id="sent-emails">
   <thead>
   <tr>
     <th><%= t(".heading.mailer_type") %></th>
@@ -24,7 +24,7 @@
         <%= sent_email.category %>
       </td>
       <td>
-        <%= sent_email.sent_to.display_name %> &lt;<%= sent_email.sent_address %>&gt;
+        <%= sent_email.user.display_name %> &lt;<%= sent_email.sent_address %>&gt;
       </td>
       <td>
         <%= sent_email.created_at.strftime("%l:%M%P %d %b %Y") %>
