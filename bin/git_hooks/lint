@@ -9,7 +9,13 @@
 #     --all (default)
 #       lints all files in the repo
 
-echo "INFO: Attempting to lint"
+NC="\033[0m" # No Color
+ERROR="\033[0;31mERROR:${NC}" # Red
+WARNING="\033[0;93mWARNING:${NC}" # Bright yellow
+INFO="\033[0;96mINFO:${NC}" # Bright cyan
+OK="\033[0;92mOK${NC}" # Bright Green
+
+echo "${INFO} Attempting to lint"
 
 repo_root="$(git rev-parse --show-toplevel)"
 current_branch="$(git branch --show-current)"
@@ -38,7 +44,7 @@ case $diff_policy in
     ;;
 
   *)
-    echo "ERROR: unknown option $diff_policy"
+    echo "${ERROR} unknown option $diff_policy"
     exit 1
     ;;
 esac
@@ -49,28 +55,36 @@ erb_changed_count=$(echo "$changed_file_list" | grep -c ".erb$")
 lint_time=$(date +%s)
 
 if test $rb_changed_count -gt 0; then
-  echo "INFO: Linting via standardrb"
+  echo "${INFO} Linting via standardrb"
 
   cd $repo_root
 
   if ! [ -x "$(command -v bundle)" ]; then
-    echo "ERROR: Command bundle could not be found"
+    echo "${ERROR} Command bundle could not be found"
     exit 1
   else
-    bundle exec standardrb --fix
+    if ! bundle exec standardrb --fix ; then 
+      echo "${ERROR} Standard linting failed, could not fix 1 or more issues"
+      echo "  See above output for more details"
+      exit 1
+    fi
   fi
 fi
 
 if test $erb_changed_count -gt 0; then
-  echo "INFO: Linting via erblint"
+  echo "${INFO} Linting via erblint"
 
   cd $repo_root/app
 
   if ! [ -x "$(command -v bundle)" ]; then
-    echo "WARNING: Command bundle could not be found"
+    echo "${ERROR} Command bundle could not be found"
     exit 1
   else
-    bundle exec erblint --lint-all --autocorrect
+    if ! bundle exec erblint --lint-all --autocorrect ; then 
+      echo "${ERROR} ERB Lint linting failed, could not fix 1 or more issues"
+      echo "  See above output for more details"
+      exit 1
+    fi
   fi
 fi
 
@@ -78,10 +92,10 @@ cd $repo_root
 for file in $(git diff --name-only); do
   last_modified_time=$(date -r $file +%s)
   if [ $last_modified_time -ge $lint_time ] ; then
-    echo "INFO: Some files were linted. Please preserve the changes before continuing."
+    echo "${WARNING} Some files were linted. Please preserve the changes before continuing."
     echo "  Run git diff to view linter changes."
     exit 1
   fi
 done
 
-echo "INFO: No files were linted"
+echo "${OK} No files were linted"
