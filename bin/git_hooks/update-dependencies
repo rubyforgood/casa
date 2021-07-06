@@ -4,16 +4,19 @@
 #   update-dependencies
 #     no arguments
 
-echo "INFO: Checking dependency status"
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+. "$REPO_ROOT/bin/git_hooks/logger"
+
+log info "Checking dependency status"
 
 if ! [ -x "$(command -v bundle)" ]; then
-  echo "ERROR: Command bundle could not be found"
+  log error "Command bundle could not be found"
   exit 1
 fi
 
 if ! bundle check; then
-  echo "INFO: Updating dependencies"
+  log info "Updating dependencies"
   bundle install
 else
-  echo "INFO: Dependencies up to date"
+  log info "Dependencies up to date"
 fi
