@@ -5,10 +5,13 @@
 #     <remote name>
 #       The name of the remote pointing to the official casa repo
 
-echo "INFO: Attempting to update local repo"
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+. "$REPO_ROOT/bin/git_hooks/logger"
+
+log info "Attempting to update local repo"
 
 if [ $# -lt 1 ]; then
-  echo "ERROR: Missing required arg <remote name>"
+  log error "Missing required arg <remote name>"
   exit 1
 fi
 
@@ -16,19 +19,19 @@ UPSTREAM_REMOTE=$1
 BRANCH_TO_UPDATE="$(git branch --show-current)"
 
 if test -z "$(git branch --list ${BRANCH_TO_UPDATE})"; then
-  echo "ERROR: Could not find branch $BRANCH_TO_UPDATE"
+  log error "Could not find branch $BRANCH_TO_UPDATE"
   exit 1
 fi
 
-echo "INFO: Fetching updates from upsteam"
+log info "Fetching updates from upsteam"
 git fetch $UPSTREAM_REMOTE
 
-echo "INFO: Updating main"
+log info "Updating main"
 git checkout main
 git merge --ff-only $UPSTREAM_REMOTE/main
 
 if test $BRANCH_TO_UPDATE != "main"; then
-  echo "INFO: Updating $BRANCH_TO_UPDATE"
+  log info "Updating $BRANCH_TO_UPDATE"
   git checkout $BRANCH_TO_UPDATE
   git rebase -r $UPSTREAM_REMOTE/main
 fi
