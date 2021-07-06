@@ -14,7 +14,6 @@ REPO_ROOT="$(git rev-parse --show-toplevel)"
 
 log info "Attempting to lint"
 
-repo_root="$(git rev-parse --show-toplevel)"
 current_branch="$(git branch --show-current)"
 
 if [ $# -lt 1 ]; then
@@ -54,7 +53,7 @@ lint_time=$(date +%s)
 if test $rb_changed_count -gt 0; then
   log info "Linting via standardrb"
 
-  cd $repo_root
+  cd $REPO_ROOT
 
   if ! [ -x "$(command -v bundle)" ]; then
     log error "Command bundle could not be found"
@@ -70,7 +69,7 @@ fi
 if test $erb_changed_count -gt 0; then
   log info "Linting via erblint"
 
-  cd $repo_root/app
+  cd $REPO_ROOT/app
 
   if ! [ -x "$(command -v bundle)" ]; then
     log error "Command bundle could not be found"
@@ -83,7 +82,7 @@ if test $erb_changed_count -gt 0; then
   fi
 fi
 
-cd $repo_root
+cd $REPO_ROOT
 for file in $(git diff --name-only); do
   last_modified_time=$(date -r $file +%s)
   if [ $last_modified_time -ge $lint_time ] ; then
