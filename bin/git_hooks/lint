@@ -92,4 +92,4 @@ for file in $(git diff --name-only); do
   fi
 done
 
-echo "No files were linted"
+log success "No files were linted"
