@@ -18,5 +18,5 @@ if ! bundle check; then
   log info "Updating dependencies"
   bundle install
 else
-  log info "Dependencies up to date"
+  log success "Dependencies up to date"
 fi
