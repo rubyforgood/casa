@@ -41,5 +41,8 @@
     "ignore": [
       "cypress"
     ]
+  },
+  "engines": {
+    "node": ">=0.12"
   }
 }
