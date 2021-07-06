@@ -5,12 +5,8 @@
 #     <remote name>
 #       The name of the remote pointing to the official casa repo
 
-#SCRIPT_DIR="$(dirname "$0")"
-#. "$SCRIPT_DIR/logger"
-
-DIR="${BASH_SOURCE%/*}"
-if [ ! -d "$DIR" ]; then DIR="$PWD"; fi
-. "$DIR/logger"
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+. "$REPO_ROOT/bin/git_hooks/logger"
 
 log info "Attempting to update local repo"
 

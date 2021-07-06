@@ -9,6 +9,9 @@
 #     --all (default)
 #       lints all files in the repo
 
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+. "$REPO_ROOT/bin/git_hooks/logger"
+
 NC="\033[0m" # No Color
 ERROR="\033[0;31mERROR:${NC}" # Red
 WARNING="\033[0;93mWARNING:${NC}" # Bright yellow
