@@ -23,13 +23,13 @@ log () {
   
   case $1 in
     info)
-      echo "${cyan}INFO: $2 ${normal}"
+      printf "${cyan}INFO: $2 ${normal}\n"
     ;;
     warn)
-      echo "${yellow}WARNING: $2 ${normal}"
+      printf "${yellow}WARNING: $2 ${normal}\n"
     ;;
     error)
-      echo "${red}ERROR: $2 ${normal}"
+      printf "${red}ERROR: $2 ${normal}\n"
     ;;
     *)
       echo "${red}ERROR: Unrecognized log level: $1 ${normal}"
