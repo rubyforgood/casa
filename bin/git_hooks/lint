@@ -9,8 +9,8 @@
 #     --all (default)
 #       lints all files in the repo
 
-REPO_ROOT="$(git rev-parse --show-toplevel)"
-. "$REPO_ROOT/bin/git_hooks/logger"
+repo_root="$(git rev-parse --show-toplevel)"
+. "$repo_root/bin/git_hooks/logger"
 
 log info "Attempting to lint"
 
@@ -53,7 +53,7 @@ lint_time=$(date +%s)
 if test $rb_changed_count -gt 0; then
   log info "Linting via standardrb"
 
-  cd $REPO_ROOT
+  cd $repo_root
 
   if ! [ -x "$(command -v bundle)" ]; then
     log error "Command bundle could not be found"
@@ -69,7 +69,7 @@ fi
 if test $erb_changed_count -gt 0; then
   log info "Linting via erblint"
 
-  cd $REPO_ROOT/app
+  cd $repo_root/app
 
   if ! [ -x "$(command -v bundle)" ]; then
     log error "Command bundle could not be found"
@@ -82,7 +82,7 @@ if test $erb_changed_count -gt 0; then
   fi
 fi
 
-cd $REPO_ROOT
+cd $repo_root
 for file in $(git diff --name-only); do
   last_modified_time=$(date -r $file +%s)
   if [ $last_modified_time -ge $lint_time ] ; then
