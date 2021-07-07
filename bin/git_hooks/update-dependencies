@@ -4,8 +4,8 @@
 #   update-dependencies
 #     no arguments
 
-REPO_ROOT="$(git rev-parse --show-toplevel)"
-. "$REPO_ROOT/bin/git_hooks/logger"
+repo_root="$(git rev-parse --show-toplevel)"
+. "$repo_root/bin/git_hooks/logger"
 
 log info "Checking dependency status"
 
