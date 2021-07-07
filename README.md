@@ -23,7 +23,7 @@ CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunte
 
 - [Welcome contributors!](#welcome-contributors)
   * [About this project](#about-this-project)
-- [Developing! ✨🛠✨](#developing-%E2%9C%A8%F0%9F%9B%A0%E2%9C%A8)
+- [Developing! ✨🛠✨](#developing-)
   * [Installing Tools](#installing-tools)
   * [Running the app](#running-the-app)
   * [Other Documentation](#other-documentation)
