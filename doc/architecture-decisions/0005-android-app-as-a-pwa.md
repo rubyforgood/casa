@@ -1,0 +1,12 @@
+# 1. The android app is a [PWA](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps) running in a [TWA](https://developer.chrome.com/docs/android/trusted-web-activity/overview/)
+
+Date: 2021-07-07
+
+## Context
+
+Building a [progressive web app(PWA)](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps) is a very quick way to convert a website into a mobile app for android.
+PWAs can support offline mode and push notifications. 
+
+## Consequences
+More javascript support for service workers to support offline mode.  
+[Maintaining a key for app signing](https://github.com/rubyforgood/casa-android/wiki/How-to-manage-app-signing)
