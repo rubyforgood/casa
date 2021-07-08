@@ -225,65 +225,6 @@ There is a `doc` directory at the top level that includes:
 
 You'll probably hit a problem where ruby-version reads `ruby-2.7.2` but the install available to you is called `2.7.2`. If you do, install [rbenv-alias](https://github.com/tpope/rbenv-aliases) and create an alias between the two.
 
-## Non-development environments
-
-See `db/seeds` for seed data. Test data includes the below
-
-1. volunteer1@example.com / 123456 https://\<URL\>.herokuapp.com/
-1. supervisor1@example.com / 123456 https://\<URL\>.herokuapp.com/
-1. casa_admin1@example.com / 123456 https://\<URL\>.herokuapp.com/
-1. casa_admin2-1@example.com / 123456 https://\<URL\>.herokuapp.com/ (for second tenant)
-1. allcasaadmin@example.com / 123456 https://\<URL\>.herokuapp.com/all_casa_admins/sign_in
-
-In the emails listed above, the number `1` corresponds to a `casa_org_id`. To log in to a different `casa_org`'s instance, change the `casa_org_id` number in the email, and add a hyphen and numerical value to the end.
-
-Example: To log into CASA Org 2's instance, use the following email: casa_admin2-1@example.com. In this example, the number `2` corresponds to the `casa_org`, and the number `1` corresponds to the user.
-
-### QA environment
-
-When pull requests are merged, the code auto-deploys to QA (because of a heroku setting)
-
-https://casa-qa.herokuapp.com/
-
-If you would like to help run quality assurance, please check out the _Merged to QA_ section of our project board. For each ticket in this column, log into the QA environment to confirm whether or not this change has indeed been made and is working as intended. If yes, please add the label: _working-in-qa_ to the ticket. If it is not, please add the label: _not-working-in-qa_ to the ticket. If you discover bugs in this process, please file an issue for it, add the label: _bug_, and add it to the _To do_ column. ***This is a great task for PM contributors looking to familiarize themselves with the application and project board.
-
-### Staging
-
-Deploy to Staging is manual. Training of new users is done in staging.
-
-https://casa-r4g-staging.herokuapp.com/
-
-### Production
-
-We have real users in production!
-
-If you represent a CASA organization which wants to use this, please contact us! polly@rubyforgood.org
-
-See https://github.com/rubyforgood/casa/wiki for deploy & SRE notes
-
-### Deployment
-[Follow this Deployment Checklist](./DEPLOY_CHECKLIST.md)
-
-### Error tracking
-
-We are currently using https://app.bugsnag.com/ to track errors in staging. Errors post to slack at #casa-bots.
-
-### Email
-
-This app sends email for user signup and deactivation. We use https://www.sendinblue.com/ because we get 300 free emails a day, which is more than we expect to need.
-
-Sendinblue has historically sometimes been very slow (6 hours) in delivering email, but sometimes it delivers within a minute or two. Be wary.
-
-You log into sendinblue via the "log in with google" option. Sean has the credentials for this and hopefully we never need to change them.
-
-We are not using Mailgun because they limited us to only 5 recipients without a paid plan. We looked at using Sendgrid but our account is currently locked for unknown reasons.
-
-Preview all emails at http://localhost:3000/rails/mailers/volunteer_mailer as configured by `volunteer_mailer_preview.rb`
-
-### Hosting
-
-Namecheap, Heroku
-
 ## Communication and Collaboration
 
 Most conversation happens in the #casa channel of the Ruby For Good slack. Get access here: https://rubyforgood.herokuapp.com/
