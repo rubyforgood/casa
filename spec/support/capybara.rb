@@ -3,6 +3,7 @@ require "capybara/rspec"
 require "capybara-screenshot/rspec"
 require "selenium/webdriver"
 
+# not used unless you swap it out for selenium_chrome_headless_in_container to watch tests running in docker
 Capybara.register_driver :selenium_chrome_in_container do |app|
   Capybara::Selenium::Driver.new app,
     browser: :remote,
