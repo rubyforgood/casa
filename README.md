@@ -44,7 +44,7 @@ CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunte
 
 ## Welcome contributors!
 
-We are very happy to have you! CASA and Ruby for Good are committed to welcoming new contrinbutors of all skill levels. We have plenty of tiny, small, and medium issues.
+We are very happy to have you! CASA and Ruby for Good are committed to welcoming new contrinbutors of all skill levels.
 
 We highly recommend that you join us in slack https://rubyforgood.herokuapp.com/ #casa channel to ask questions quickly and hear about office hours (currently Wednesday 6-8pm Pacific), stakeholder news, and upcoming new issues.
 
