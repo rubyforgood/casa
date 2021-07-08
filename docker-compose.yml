@@ -26,7 +26,7 @@ services:
       - "5435:5432"
 
   selenium_chrome:
-    image: selenium/standalone-chrome
+    image: selenium/standalone-chrome:4
     logging:
       driver: none
     ports:
