@@ -15,6 +15,14 @@ RSpec.describe "past_court_dates/show", type: :view do
       expect(rendered).to include(case_court_mandate.implementation_status.humanize)
     end
 
+    context "when judge's name has escaped characters" do
+      let(:past_court_date) { create(:past_court_date, :with_court_details, judge: create(:judge, name: "/-'<>#&")) }
+
+      it "correctly displays judge's name" do
+        expect(rendered).to include(ERB::Util.html_escape(past_court_date.judge.name))
+      end
+    end
+
     it "displays the download button for .docx" do
       expect(rendered).to include "Download Report (.docx)"
       expect(rendered).to include "/casa_cases/#{past_court_date.casa_case.id}/past_court_dates/#{past_court_date.id}.docx"
