@@ -12,7 +12,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
       let!(:case_assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer) }
 
       it "shows a summary for a volunteer assigned to the supervisor" do
-        expect(mail.body.encoded).to match("Summary for #{volunteer.display_name}")
+        expect(mail.body.encoded).to match("Summary for <a href=\"#{edit_volunteer_url(volunteer)}\">#{volunteer.display_name}</a>")
       end
 
       it "does not show a case contact that did not occurr in the week" do
@@ -33,7 +33,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
       let!(:case_assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false, updated_at: Date.today - 2.days) }
 
       it "shows a summary for a volunteer recently unassigned from the supervisor" do
-        expect(mail.body.encoded).to match("Summary for #{volunteer.display_name}")
+        expect(mail.body.encoded).to match("Summary for <a href=\"#{edit_volunteer_url(volunteer)}\">#{volunteer.display_name}</a>")
       end
 
       it "shows a disclaimer for a volunteer recently unassigned from the supervisor" do
