@@ -100,7 +100,7 @@ You need Ruby, bundler, node.js, yarn, postgres, and Chrome.
 **Ruby**
 
 1. Install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
-1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`. Right now that's Ruby 2.7.2
+1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`. Right now that's Ruby 3.0.1
 1. `gem install bundler`
 
 **node.js**
