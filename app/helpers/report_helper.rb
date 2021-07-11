@@ -1,5 +1,5 @@
 module ReportHelper
   def boolean_choices
-    [["Both", ""], ["Yes", true], ["No", false]]
+    [[I18n.t(".common.both_text"), ""], [I18n.t(".common.yes_text"), true], [I18n.t(".common.no_text"), false]]
   end
 end

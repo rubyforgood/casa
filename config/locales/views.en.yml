@@ -419,3 +419,22 @@ en:
         actions: Actions
       button:
         new: New Volunteer
+  reports:
+    index:
+      page_title: Export Data
+      reports_subhead: Case Contacts Report
+      reports_description: This CSV is a listing of all fields for the case contacts of all volunteers. Select the start and end date.
+      start_date_label: "Starting From:"
+      end_date_label: "Ending At:"
+      assigned_to_label: "Assigned To:"
+      select_supervisors_placeholder: -Select Supervisors-
+      volunteers_label: Volunteers
+      select_volunteers_placeholder: -Select Volunteers-
+      contact_type_label: "Contact Type:"
+      select_contact_types_placeholder: -Select Contact Types-
+      contact_type_group_label: "Contact Type Group:"
+      select_contact_type_groups_placeholder: -Select Contact Type Groups-
+      driving_reimbursement_label: "Want Driving Reimbursement:"
+      contact_made_label: "Contact Made:"
+      transition_aged_label: "Transition Aged Youth:"
+      download_report_button: Download Report

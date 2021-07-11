@@ -21,7 +21,7 @@ RSpec.describe "case_contact_reports/index", :disable_bullet, type: :system do
     fill_in "report_start_date", with: 30.days.ago.to_date.strftime("%m/%d/%Y")
     fill_in "report_end_date", with: 10.days.ago.to_date.strftime("%m/%d/%Y")
     select court.name, from: "report_contact_type_ids"
-    click_button "Download Report"
+    click_button I18n.t("reports.index.download_report_button")
     wait_for_download
 
     expect(download_content).to include(contact1.notes)
