@@ -95,7 +95,7 @@ using Docker. For non-Docker installations, follow the instructions below.
 
 ### Installing Tools
 
-You need Ruby, bundler, node.js, yarn, postgres, and chromedriver.
+You need Ruby, bundler, node.js, yarn, postgres, and Chrome.
 
 **Ruby**
 
@@ -118,9 +118,15 @@ You need Ruby, bundler, node.js, yarn, postgres, and chromedriver.
   - If you're on Fedora/Cent Os use `sudo dnf install libpq-devel`. [If you prefer choose package of libpq-devel via rpm](https://pkgs.org/download/libpq-devel)
   - If you're on Windows, use the official [installer](https://www.postgresql.org/download/windows/) and accept all defaults.  Alternatively, a [Chocolatey](https://chocolatey.org/packages/postgresql) package is available with `choco install postgresql`.
 
-**Chromedriver**
+**Chrome Browser**
 
-1. If you use the Chrome browser, that is enough. If not, install the current stable release of [chromedriver](https://chromedriver.chromium.org/) for your operating system so the browser-based Ruby feature/integration tests can run. Installing `chromium-browser` is enough, even in WSL.
+1. The Spec tests uses Chrome Browser and Chromedriver for some of the tests. A current version of chromedriver will be installed when `bundle install` is run. TO install Chrome, see [Chrome Install](https://support.google.com/chrome/answer/95346?hl=en&ref_topic=7439538).
+
+From MacOS:    
+`brew install google-chrome`
+
+
+Another option is to install the Chromium browser for your operating system so the browser-based Ruby feature/integration tests can run. Installing `chromium-browser` is enough, even in WSL (Windows subsystem for Linux)
 
 ### Running the app
 
