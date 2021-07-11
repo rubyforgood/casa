@@ -40,15 +40,15 @@ We are very happy to have you! CASA and Ruby for Good are committed to welcoming
 
 We highly recommend that you join us in slack https://rubyforgood.herokuapp.com/ #casa channel to ask questions quickly and hear about office hours (currently Wednesday 6-8pm Pacific), stakeholder news, and upcoming new issues.
 
-Issues on the issue board https://github.com/rubyforgood/casa/projects/1 in the TODO column are fair game. To claim an issue, comment on it "I am working on this issue".
+Issues on the issue board https://github.com/rubyforgood/casa/projects/1 in the TODO column are fair game. An issue can be claimed by commenting on it.
 
-Pull requests which are not for an issue but which improve the codebase by adding a test or improving the code are also welcome! Feel free to make github issues when you notice issues. A maintainer will be keeping an eye on issues and PRs every day or three.
+Pull requests which are not for an issue but which improve the codebase are also welcome! Feel free to make github issues for bugs and improvements. A maintainer will be keeping an eye on issues and PRs every day or three.
 
 See also our [contributing guide](./doc/CONTRIBUTING.md) 💖 ✨
 
 ### About this project
 
-CASA is a national organization with many regional chapters. We currenly work with Prince George's County CASA in Maryland and Montgomery CASA Maryland
+CASA is a national organization with many regional chapters. We currenly work with [Prince George's County CASA in Maryland](https://pgcasa.org/) and [Montgomery CASA Maryland](https://casaspeaks4kids.com)
 
 This system provides value by:
 
@@ -60,22 +60,11 @@ Read about the [product sense](doc/productsense.md) that guides our approach to 
 
 **How CASA works:**
 
-- Foster Youth (or case worker associated with Foster Youth) requests a CASA Volunteer.
-- CASA chapter pairs Youth with Volunteer.
-- Volunteer spends significant time getting to know and supporting the youth, including at court appearances.
-- Case Supervisor oversees CASA Volunteer paired with Foster Youth and monitors, tracks, and advises on all related activities.
-- At PG CASA, the minimum volunteer commitment is one year (this varies by CASA chapter, in San Francisco the minimum commitment is ~ two years). Many CASA volunteers remain in a Youth's life well beyond their youth. The lifecycle of a volunteer is very long, so there's a lot of activity for chapters to track!
-
-**Why?**
-
-Many adults circulate in and out of a Foster Youth's life, but very few of them (if any) remain. CASA volunteers are by design, unpaid, unbiased, and consistent adult figures for Foster Youth who are not bound to support them by fiscal or legal requirements.
-
-**Project Terminology**
-
-- Foster Youth = _CasaCase_
-- CASA Volunteer = _Volunteer_
-- Case Supervisor = _Case Supervisor or Supe_
-- CASA Administrator = _Superadmin_
+- A foster youth is represented as a **CASA case**.
+- The **CASA case** is assigned to a **volunteer**.
+- The **volunteer** records their efforts spent on the CASA case as **case contacts**.
+- **Supervisors** oversee CASA **volunteers** by monitoring, tracking, and advising them on **CASA case** activities.
+- At PG CASA, the minimum volunteer commitment is one year (this varies by CASA chapter, in San Francisco the minimum commitment is ~ two years).  A volunteer's  lifecycle is very long, so there's a lot of activity for chapters to organize.
 
 **Project Considerations**
 
@@ -84,9 +73,7 @@ Many adults circulate in and out of a Foster Youth's life, but very few of them 
 
 **More information:**
 
-Learn more about PG CASA [here](https://pgcasa.org/) and about Montgomery CASA [here](https://casaspeaks4kids.com)
-
-You can read the complete [role description of a CASA volunteer](https://pgcasa.org/volunteer-description/) in Prince George's County as well.
+The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer-description/) in Prince George's County.
 
 ## Developing! ✨🛠✨
 
