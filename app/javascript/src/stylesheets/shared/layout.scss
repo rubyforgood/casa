@@ -25,6 +25,10 @@ div.row div.col-sm-12.form-header h1 {
   vertical-align: middle;
 }
 
+div.row:nth-child(4) {
+  margin-top: 2rem;
+}
+
 .card.card-container {
   box-shadow: 0 4px 12px 5px rgba(0, 0, 0, 0.08);
 }
