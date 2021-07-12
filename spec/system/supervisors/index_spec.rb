@@ -46,7 +46,7 @@ RSpec.describe "supervisors/index", :disable_bullet, type: :system do
 
   describe "supervisor table" do
     let!(:first_supervisor) { create(:supervisor, display_name: "First Supervisor", casa_org: organization) }
-    let!(:last_supervisor)  { create(:supervisor, display_name: "Last Supervisor",  casa_org: organization) }
+    let!(:last_supervisor) { create(:supervisor, display_name: "Last Supervisor", casa_org: organization) }
 
     before(:each) do
       # Stub our `@supervisors` collection so we've got control over column values for sorting.
@@ -68,7 +68,7 @@ RSpec.describe "supervisors/index", :disable_bullet, type: :system do
 
     context "when sorting supervisors" do
       let(:expected_first_ordered_value) { "11" }
-      let(:expected_last_ordered_value)  { "9" }
+      let(:expected_last_ordered_value) { "9" }
 
       it "by supervisor name", js: true do
         expect(page).to have_selector("th.sorting_desc", text: "Supervisor Name")
