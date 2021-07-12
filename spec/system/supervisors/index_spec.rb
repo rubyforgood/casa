@@ -139,17 +139,23 @@ RSpec.describe "supervisors/index", :disable_bullet, type: :system do
 
   context "with inactive volunteers assigned" do
     let!(:active_volunteer) do
-      volunteer = create(:volunteer, :with_casa_cases, casa_org: organization)
-      FactoryBot.create(:supervisor_volunteer, supervisor: supervisor_user, volunteer: volunteer)
-
-      volunteer
+      create(
+        :volunteer,
+        :with_casa_cases,
+        :with_assigned_supervisor,
+        supervisor: supervisor_user,
+        casa_org: organization
+      )
     end
 
     let!(:inactive_volunteer) do
-      volunteer = create(:volunteer, :inactive, casa_org: organization)
-      FactoryBot.create(:supervisor_volunteer, supervisor: supervisor_user, volunteer: volunteer)
-
-      volunteer
+      create(
+        :volunteer,
+        :inactive,
+        :with_assigned_supervisor,
+        supervisor: supervisor_user,
+        casa_org: organization
+      )
     end
 
     before do
