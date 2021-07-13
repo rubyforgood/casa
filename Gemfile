@@ -64,7 +64,7 @@ group :test do
   gem "rails-controller-testing"
   gem "selenium-webdriver", "4.0.0.beta4" # temporarily locking to a beta version until 4.x comes out - to fix docker tests https://github.com/SeleniumHQ/selenium/issues/9001
   gem "simplecov", "~> 0.21.2", require: false # 0.17.1 pinned as a workaround for https://github.com/codeclimate/test-reporter/issues/418
-  gem "webdrivers" # Easy installation and use of web drivers to run system tests with browsers; do not initially require as causes conflict with Docker setup
+  gem "webdrivers" # easy installation and use of web drivers to run system tests with browsers
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

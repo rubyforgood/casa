@@ -17,8 +17,7 @@ module DownloadHelpers
 
   def wait_for_download
     Timeout.timeout(TIMEOUT) do
-      sleep 20 until downloaded?
-      # sleep 0.1 until downloaded?
+      sleep 0.1 until downloaded?
     end
   end
 
@@ -27,7 +26,6 @@ module DownloadHelpers
   end
 
   def downloading?
-    p downloads
     downloads.grep(/\.crdownload$/).any?
   end
 
