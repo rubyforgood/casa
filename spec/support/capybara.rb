@@ -3,22 +3,25 @@ require "capybara/rspec"
 require "capybara-screenshot/rspec"
 require "selenium/webdriver"
 
+# not used unless you swap it out for selenium_chrome_headless_in_container to watch tests running in docker
 Capybara.register_driver :selenium_chrome_in_container do |app|
   Capybara::Selenium::Driver.new app,
     browser: :remote,
-    url: "http://selenium_chrome:4444/wd/hub",
-    desired_capabilities: :chrome
+    url: "http://selenium_chrome:4444",
+    capabilities: [:chrome]
 end
 
+# used in docker
 Capybara.register_driver :selenium_chrome_headless_in_container do |app|
   Capybara::Selenium::Driver.new app,
     browser: :remote,
-    url: "http://selenium_chrome:4444/wd/hub",
-    desired_capabilities: Selenium::WebDriver::Remote::Capabilities.chrome(
-      chromeOptions: {args: %w[headless disable-gpu --window-size=1280,900]}
-    )
+    url: "http://selenium_chrome:4444",
+    capabilities: [Selenium::WebDriver::Remote::Capabilities.chrome(
+      "goog:chromeOptions" => {"args" => %w[headless disable-gpu window-size=1280,900]}
+    )]
 end
 
+# used without docker
 Capybara.register_driver :selenium_chrome_headless do |app|
   browser_options = ::Selenium::WebDriver::Chrome::Options.new.tap do |opts|
     opts.args << "--headless"
