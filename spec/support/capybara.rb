@@ -11,6 +11,7 @@ Capybara.register_driver :selenium_chrome_in_container do |app|
     capabilities: [:chrome]
 end
 
+# used in docker
 Capybara.register_driver :selenium_chrome_headless_in_container do |app|
   Capybara::Selenium::Driver.new app,
     browser: :remote,
@@ -20,6 +21,7 @@ Capybara.register_driver :selenium_chrome_headless_in_container do |app|
     )]
 end
 
+# used without docker
 Capybara.register_driver :selenium_chrome_headless do |app|
   browser_options = ::Selenium::WebDriver::Chrome::Options.new.tap do |opts|
     opts.args << "--headless"
