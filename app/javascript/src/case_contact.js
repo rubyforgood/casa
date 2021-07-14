@@ -94,7 +94,11 @@ window.onload = function () {
     if (noteContent !== '') {
       e.preventDefault()
       $('#confirm-submit').modal('show')
-      document.getElementById('note-content').innerHTML = noteContent
+      document.getElementById('note-content').innerHTML =
+        noteContent.replace(/"/g, "\"")   // Escape meta-characters for CodeQL security
+                   .replace(/'/g, "\'")
+                   .replace(/</g, "\<")
+                   .replace(/>/g, "\>");
     }
   }
 

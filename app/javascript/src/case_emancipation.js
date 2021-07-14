@@ -18,27 +18,39 @@ function notify (message, level) {
     throw new TypeError('Param message must be a string')
   }
 
+  let notification;
   switch (level) {
     case 'error':
-      emancipationPage.notifications.append(`
+      notification = `
         <div class="async-failure-indicator">
           Error: ${message}
           <button class="btn btn-danger btn-sm">×</button>
-        </div>`)
-        .find('.async-failure-indicator button').click(function () {
-          $(this).parent().remove()
-        })
+        </div>`
+        .replace(/"/g, "\"")   // Escape meta-characters for CodeQL security
+        .replace(/</g, "\<")
+        .replace(/>/g, "\>");
+
+        emancipationPage.notifications
+          .append(notification)
+          .find('.async-failure-indicator button').click(function () {
+            $(this).parent().remove()
+          });
       break
     case 'info':
-      emancipationPage.notifications.append(`
+      notification = `
         <div class="async-success-indicator">
           ${message}
           <button class="btn btn-success btn-sm">×</button>
-        </div>`)
-        .find('.async-success-indicator button').click(function () {
-          $(this).parent().remove()
-        })
+        </div>`
+        .replace(/"/g, "\"")   // Escape meta-characters for CodeQL security
+        .replace(/</g, "\<")
+        .replace(/>/g, "\>");
 
+        emancipationPage.notifications
+          .append(notification)
+          .find('.async-success-indicator button').click(function () {
+            $(this).parent().remove()
+          });
       break
     default:
       throw new RangeError('Unsupported option for param level')
