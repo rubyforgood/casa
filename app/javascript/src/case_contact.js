@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-escape */
+
 import Swal from 'sweetalert2'
 
 /* global alert $ */
@@ -95,10 +97,10 @@ window.onload = function () {
       e.preventDefault()
       $('#confirm-submit').modal('show')
       document.getElementById('note-content').innerHTML =
-        noteContent.replace(/"/g, "\"")   // Escape meta-characters for CodeQL security
-                   .replace(/'/g, "\'")
-                   .replace(/</g, "\<")
-                   .replace(/>/g, "\>");
+        noteContent.replace(/"/g, '"') // Escape meta-characters for CodeQL security
+          .replace(/'/g, "\'")
+          .replace(/</g, '\<')
+          .replace(/>/g, '\>')
     }
   }
 

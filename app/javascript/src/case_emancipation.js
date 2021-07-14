@@ -1,4 +1,5 @@
 /* eslint-env jquery */
+/* eslint-disable no-useless-escape */
 
 const emancipationPage = {
   saveOperationSuccessful: false,
@@ -18,7 +19,7 @@ function notify (message, level) {
     throw new TypeError('Param message must be a string')
   }
 
-  let notification;
+  let notification
   switch (level) {
     case 'error':
       notification = `
@@ -26,15 +27,15 @@ function notify (message, level) {
           Error: ${message}
           <button class="btn btn-danger btn-sm">×</button>
         </div>`
-        .replace(/"/g, "\"")   // Escape meta-characters for CodeQL security
-        .replace(/</g, "\<")
-        .replace(/>/g, "\>");
+        .replace(/"/g, '"') // Escape meta-characters for CodeQL security
+        .replace(/</g, '\<')
+        .replace(/>/g, '\>')
 
-        emancipationPage.notifications
-          .append(notification)
-          .find('.async-failure-indicator button').click(function () {
-            $(this).parent().remove()
-          });
+      emancipationPage.notifications
+        .append(notification)
+        .find('.async-failure-indicator button').click(function () {
+          $(this).parent().remove()
+        })
       break
     case 'info':
       notification = `
@@ -42,15 +43,15 @@ function notify (message, level) {
           ${message}
           <button class="btn btn-success btn-sm">×</button>
         </div>`
-        .replace(/"/g, "\"")   // Escape meta-characters for CodeQL security
-        .replace(/</g, "\<")
-        .replace(/>/g, "\>");
+        .replace(/"/g, '"') // Escape meta-characters for CodeQL security
+        .replace(/</g, '\<')
+        .replace(/>/g, '\>')
 
-        emancipationPage.notifications
-          .append(notification)
-          .find('.async-success-indicator button').click(function () {
-            $(this).parent().remove()
-          });
+      emancipationPage.notifications
+        .append(notification)
+        .find('.async-success-indicator button').click(function () {
+          $(this).parent().remove()
+        })
       break
     default:
       throw new RangeError('Unsupported option for param level')
