@@ -172,7 +172,9 @@ $('document').ready(() => {
             const checkbox = $(this).find('input')
 
             checkbox.prop('checked', false)
-            notify('Unchecked ' + checkbox.next().text(), 'info')
+
+            const checkboxText = checkbox.next().prop('textContent')
+            notify('Unchecked ' + checkboxText, 'info')
           })
         }
         saveAction = 'delete_category'
