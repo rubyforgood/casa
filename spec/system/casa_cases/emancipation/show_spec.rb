@@ -22,10 +22,10 @@ RSpec.describe "casa_cases/show", :disable_bullet, type: :system do
       expect(page).to have_content(emancipation_category.name)
       expect(page).to_not have_content(emancipation_option.name)
 
-      find(".emancipation-category").click  # Open list of options for this category
+      find(".emancipation-category").click # Open list of options for this category
       expect(page).to have_content(emancipation_option.name) # Make sure list of options is showing
-      find(".check-item").click             # Select the first option
-      find(".emancipation-category").click  # Close the list of options for this category
+      find(".check-item").click # Select the first option
+      find(".emancipation-category").click # Close the list of options for this category
 
       expect(page).to have_css(".async-success-indicator", text: "Unchecked #{emancipation_option.name}")
 
