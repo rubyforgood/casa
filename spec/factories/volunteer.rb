@@ -24,20 +24,18 @@ FactoryBot.define do
     end
 
     trait :with_assigned_supervisor do
-      after(:create) do |user, _|
-        create(:supervisor_volunteer, volunteer: user)
+      transient { supervisor { create(:supervisor) } }
+
+      after(:create) do |user, evaluator|
+        create(:supervisor_volunteer, volunteer: user, supervisor: evaluator.supervisor)
       end
     end
 
     trait :with_inactive_supervisor do
-      after(:create) do |user, _|
-        create(:supervisor_volunteer, :inactive, volunteer: user)
-      end
-    end
+      transient { supervisor { create(:supervisor) } }
 
-    trait :with_inactive_supervisor_assignment do
-      after(:create) do |user, _|
-        create(:supervisor_volunteer, :inactive, volunteer: user)
+      after(:create) do |user, evaluator|
+        create(:supervisor_volunteer, :inactive, volunteer: user, supervisor: evaluator.supervisor)
       end
     end
   end
