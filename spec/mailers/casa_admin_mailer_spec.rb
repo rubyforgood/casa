@@ -20,7 +20,7 @@ RSpec.describe CasaAdminMailer, type: :mailer do
     end
   end
 
-  describe ".accunt_setup for an all casa admin" do
+  describe ".invitation_instructions for an all casa admin" do
     let!(:all_casa_admin) { create(:all_casa_admin) }
     let!(:mail) { all_casa_admin.invite! }
 
