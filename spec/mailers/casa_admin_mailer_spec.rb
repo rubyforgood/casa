@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe CasaAdminMailer, type: :mailer do
   let(:casa_admin) { create(:casa_admin) }
 
-  describe ".account_setup" do
+  describe ".account_setup for an admin " do
     let(:mail) { CasaAdminMailer.account_setup(casa_admin) }
 
     it "sends an email saying the account has been created" do
@@ -17,6 +17,17 @@ RSpec.describe CasaAdminMailer, type: :mailer do
       expect(mail.body.encoded.squish).to match("Set Your Password")
       expect(casa_admin.reset_password_token).to_not be_nil
       expect(casa_admin.reset_password_sent_at).to_not be_nil
+    end
+  end
+
+  describe ".invitation_instructions for an all casa admin" do
+    let!(:all_casa_admin) { create(:all_casa_admin) }
+    let!(:mail) { all_casa_admin.invite! }
+
+    it "informs the correct expiration date" do
+      expiration_date = all_casa_admin.invitation_due_at.strftime("%B %d, %Y %I:%M %p")
+
+      expect(mail.body.encoded).to match("This invitation will be due in #{expiration_date}")
     end
   end
 end
