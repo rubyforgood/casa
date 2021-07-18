@@ -39,11 +39,6 @@
         If you are ready to get started, please set your password. This is the first step to accessing your new account.
       </td>
     </tr>
-    <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-      <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-        <%= t 'devise.mailer.invitation_instructions.accept_until',due_date: l(@resource.invitation_due_at, format: :'devise.mailer.invitation_instructions.accept_until_format') %>
-      </td>
-    </tr>
   <% end %>
   <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
     <td
@@ -56,4 +51,11 @@
       <p><%= link_to "Set your password", accept_invitation_url(@resource, invitation_token: @token) %></p>
     </td>
   </tr>
+  <% unless @resource.is_a?(User) %>
+    <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+      <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+        This invitation will expire on <%= I18n.l(@resource.invitation_due_at, format: :full, default: nil) %>(one week).
+      </td>
+    </tr>
+  <% end %>
 </table>
