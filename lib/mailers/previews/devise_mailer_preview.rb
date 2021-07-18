@@ -5,7 +5,7 @@ class DeviseMailerPreview < ActionMailer::Preview
     Devise::Mailer.reset_password_instructions(User.first, "faketoken")
   end
 
-  def all_casa_admin_invitation_instructions
+  def invitation_instructions_as_all_casa_admin
     all_casa_admin_invitation_sent_at = AllCasaAdmin.first.invitation_sent_at
 
     # Temporarily set :invitation_sent_at to guarantee the preview works
