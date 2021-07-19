@@ -18,11 +18,17 @@ function notify (message, level) {
     throw new TypeError('Param message must be a string')
   }
 
+  const escapedMessage = message.replace(/&/g, '&amp;')
+    .replace(/>/g, '&gt;')
+    .replace(/</g, '&lt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+
   switch (level) {
     case 'error':
       emancipationPage.notifications.append(`
         <div class="async-failure-indicator">
-          Error: ${message}
+          Error: ${escapedMessage}
           <button class="btn btn-danger btn-sm">×</button>
         </div>`)
         .find('.async-failure-indicator button').click(function () {
@@ -32,7 +38,7 @@ function notify (message, level) {
     case 'info':
       emancipationPage.notifications.append(`
         <div class="async-success-indicator">
-          ${message}
+          ${escapedMessage}
           <button class="btn btn-success btn-sm">×</button>
         </div>`)
         .find('.async-success-indicator button').click(function () {
@@ -172,9 +178,7 @@ $('document').ready(() => {
             const checkbox = $(this).find('input')
 
             checkbox.prop('checked', false)
-
-            const checkboxText = checkbox.next().prop('textContent')
-            notify('Unchecked ' + checkboxText, 'info')
+            notify('Unchecked ' + checkbox.next().text(), 'info')
           })
         }
         saveAction = 'delete_category'
