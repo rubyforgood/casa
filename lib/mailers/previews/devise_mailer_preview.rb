@@ -15,5 +15,27 @@ class DeviseMailerPreview < ActionMailer::Preview
 
     preview
   end
+
+  def invitation_instructions_as_casa_admin
+    casa_admin_invitation_sent_at = CasaAdmin.first.invitation_sent_at
+
+    # Temporarily set :invitation_sent_at to guarantee the preview works
+    CasaAdmin.first.update_attribute(:invitation_sent_at, Date.today)
+    preview = Devise::Mailer.invitation_instructions(CasaAdmin.first, "faketoken")
+    CasaAdmin.first.update_attribute(:invitation_sent_at, casa_admin_invitation_sent_at)
+
+    preview
+  end
+
+  def invitation_instructions_as_supervisor
+    supervisor_invitation_sent_at = Supervisor.first.invitation_sent_at
+
+    # Temporarily set :invitation_sent_at to guarantee the preview works
+    Supervisor.first.update_attribute(:invitation_sent_at, Date.today)
+    preview = Devise::Mailer.invitation_instructions(Supervisor.first, "faketoken")
+    Supervisor.first.update_attribute(:invitation_sent_at, supervisor_invitation_sent_at)
+
+    preview
+  end
 end
 # :nocov:

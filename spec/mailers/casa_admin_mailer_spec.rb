@@ -27,7 +27,20 @@ RSpec.describe CasaAdminMailer, type: :mailer do
     it "informs the correct expiration date" do
       expiration_date = I18n.l(all_casa_admin.invitation_due_at, format: :full, default: nil)
 
-      expect(mail.body.encoded).to include("This invitation will expire on #{expiration_date}(one week).")
+      email_body = mail.html_part.body.to_s.squish
+      expect(email_body).to include("This invitation will expire on #{expiration_date} (one week).")
+    end
+  end
+
+  describe ".invitation_instructions for a casa admin" do
+    let!(:casa_admin) { create(:casa_admin) }
+    let!(:mail) { casa_admin.invite! }
+
+    it "informs the correct expiration date" do
+      expiration_date = I18n.l(casa_admin.invitation_due_at, format: :full, default: nil)
+
+      email_body = mail.html_part.body.to_s.squish
+      expect(email_body).to include("This invitation will expire on #{expiration_date} (two weeks).")
     end
   end
 end
