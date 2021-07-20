@@ -95,7 +95,7 @@ RSpec.describe "case_contacts/index", :disable_bullet, js: true, type: :system d
         end
 
         it "displays an information tooltip about the archived contacts" do
-          tooltip = find('.fa-question-circle')
+          tooltip = find(".fa-question-circle")
           page.driver.browser.action.move_to(tooltip.native).perform
 
           expect(page).to have_content("Archived contacts can't be edited. Case contacts are archived after the end of each quarter.")
