@@ -62,4 +62,15 @@ RSpec.describe SupervisorMailer, type: :mailer do
       expect(mail.body.encoded).to_not match("Summary for #{volunteer.display_name}")
     end
   end
+
+  describe ".invitation_instructions for a supervisor" do
+    let(:supervisor) { create(:supervisor) }
+    let(:mail) { supervisor.invite! }
+    let(:expiration_date) { I18n.l(supervisor.invitation_due_at, format: :full, default: nil) }
+
+    it "informs the correct expiration date" do
+      email_body = mail.html_part.body.to_s.squish
+      expect(email_body).to include("This invitation will expire on #{expiration_date} (two weeks).")
+    end
+  end
 end
