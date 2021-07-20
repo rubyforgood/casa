@@ -1,6 +1,9 @@
 require "rails_helper"
+require "action_view"
 
 RSpec.describe "case_contacts/new", :disable_bullet, type: :system do
+  include ActionView::Helpers::SanitizeHelper
+
   context "when admin" do
     let(:organization) { create(:casa_org) }
     let(:admin) { create(:casa_admin, casa_org: organization) }
@@ -101,6 +104,26 @@ RSpec.describe "case_contacts/new", :disable_bullet, type: :system do
         expect {
           click_on "Submit"
         }.not_to change(CaseContact, :count)
+      end
+    end
+
+    context "with HTML in notes" do
+      it "renders HTML correctly on the index page", js: true do
+        note_content = "<h1>Hello world</h1>"
+
+        fill_in "case-contact-duration-hours", with: "1"
+        fill_in "case-contact-duration-minutes", with: "45"
+        fill_in "Notes", with: note_content
+        click_on "Submit"
+
+        expect(page).to have_text("Confirm Note Content")
+        expect(page).to have_text(note_content)
+        expect {
+          click_on "Continue Submitting"
+        }.to change(CaseContact, :count).by(1)
+
+        expected_text = strip_tags(note_content)
+        expect(page).to have_css("h1", text: expected_text)
       end
     end
   end

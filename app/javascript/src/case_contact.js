@@ -94,7 +94,12 @@ window.onload = function () {
     if (noteContent !== '') {
       e.preventDefault()
       $('#confirm-submit').modal('show')
-      document.getElementById('note-content').innerHTML = noteContent
+      const escapedNoteContent = noteContent.replace(/&/g, '&amp;')
+        .replace(/>/g, '&gt;')
+        .replace(/</g, '&lt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;')
+      document.getElementById('note-content').innerHTML = escapedNoteContent
     }
   }
 
