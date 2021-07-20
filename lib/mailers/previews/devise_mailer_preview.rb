@@ -6,36 +6,32 @@ class DeviseMailerPreview < ActionMailer::Preview
   end
 
   def invitation_instructions_as_all_casa_admin
-    all_casa_admin_invitation_sent_at = AllCasaAdmin.first.invitation_sent_at
-
-    # Temporarily set :invitation_sent_at to guarantee the preview works
-    AllCasaAdmin.first.update_attribute(:invitation_sent_at, Date.today)
-    preview = Devise::Mailer.invitation_instructions(AllCasaAdmin.first, "faketoken")
-    AllCasaAdmin.first.update_attribute(:invitation_sent_at, all_casa_admin_invitation_sent_at)
-
-    preview
+    all_casa_admin = AllCasaAdmin.first
+    update_invitation_sent_at(all_casa_admin)
+    preview(all_casa_admin)
   end
 
   def invitation_instructions_as_casa_admin
-    casa_admin_invitation_sent_at = CasaAdmin.first.invitation_sent_at
-
-    # Temporarily set :invitation_sent_at to guarantee the preview works
-    CasaAdmin.first.update_attribute(:invitation_sent_at, Date.today)
-    preview = Devise::Mailer.invitation_instructions(CasaAdmin.first, "faketoken")
-    CasaAdmin.first.update_attribute(:invitation_sent_at, casa_admin_invitation_sent_at)
-
-    preview
+    casa_admin = CasaAdmin.first
+    update_invitation_sent_at(casa_admin)
+    preview(casa_admin)
   end
 
   def invitation_instructions_as_supervisor
-    supervisor_invitation_sent_at = Supervisor.first.invitation_sent_at
+    supervisor = Supervisor.first
+    update_invitation_sent_at(supervisor)
+    preview(supervisor)
+  end
 
-    # Temporarily set :invitation_sent_at to guarantee the preview works
-    Supervisor.first.update_attribute(:invitation_sent_at, Date.today)
-    preview = Devise::Mailer.invitation_instructions(Supervisor.first, "faketoken")
-    Supervisor.first.update_attribute(:invitation_sent_at, supervisor_invitation_sent_at)
+  private
 
-    preview
+  def update_invitation_sent_at(model)
+    # Set :invitation_sent_at to guarantee the preview works
+    model.update_attribute(:invitation_sent_at, Date.today)
+  end
+
+  def preview(model)
+    Devise::Mailer.invitation_instructions(model, "faketoken")
   end
 end
 # :nocov:
