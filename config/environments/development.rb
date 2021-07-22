@@ -44,8 +44,8 @@ Rails.application.configure do
   config.autoload_paths += [config.action_mailer.preview_path]
 
   routes.append do
-    get '/rails/mailers'         => "rails/mailers#index"
-    get '/rails/mailers/*path'   => "rails/mailers#preview"
+    get "/rails/mailers" => "rails/mailers#index"
+    get "/rails/mailers/*path" => "rails/mailers#preview"
   end
 
   # Print deprecation notices to the Rails logger.
