@@ -2,6 +2,14 @@
 
 <div class="card card-container">
   <div class="card-body">
+    <%= form_with url: mileage_reports_path(format: :csv), method: :get, local: true do |f| %>
+      <%= f.submit t(".download_mileage_report_button"), class: "btn btn-primary", data: {disable_with: "Downloading mileage report"} %>
+    <% end %>
+  </div>
+</div>
+
+<div class="card card-container">
+  <div class="card-body">
     <h5 class="card-title"><strong><%= t(".reports_subhead") %></strong></h5>
     <p class="card-text">
       <%= t(".reports_description") %>
