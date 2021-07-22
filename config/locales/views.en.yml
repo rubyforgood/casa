@@ -33,6 +33,8 @@ en:
       header: Confirm Note Content
       body: Please double check your notes to ensure they don't contain any identifying details about your youth or anyone else.
       note: Note
+    quarter_not_editable: Archived contacts can't be edited. Case contacts are archived after the end of each quarter.
+    archived: (Archived)
   casa_cases:
     show:
       title: CASA Case Details
