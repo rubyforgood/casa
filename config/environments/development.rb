@@ -41,6 +41,13 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.show_previews = true
 
+  config.autoload_paths += [config.action_mailer.preview_path]
+
+  routes.append do
+    get '/rails/mailers'         => "rails/mailers#index"
+    get '/rails/mailers/*path'   => "rails/mailers#preview"
+  end
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
