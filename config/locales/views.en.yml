@@ -423,7 +423,7 @@ en:
         new: New Volunteer
   reports:
     index:
-      page_title: Export Data
+      export_page_title: Export Data
       reports_subhead: Case Contacts Report
       reports_description: This CSV is a listing of all fields for the case contacts of all volunteers. Select the start and end date.
       start_date_label: "Starting From:"
