@@ -44,6 +44,7 @@ Rails.application.routes.draw do
     member do
       patch :deactivate
       patch :activate
+      patch :resend_invitation
     end
   end
 
