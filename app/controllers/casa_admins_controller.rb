@@ -66,7 +66,6 @@ class CasaAdminsController < ApplicationController
 
   def resend_invitation
     authorize @casa_admin
-    @casa_admin = CasaAdmin.find(params[:id])
     @casa_admin.invite!
 
     redirect_to edit_casa_admin_path(@casa_admin), notice: "Invitation sent"

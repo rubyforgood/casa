@@ -71,7 +71,6 @@ class SupervisorsController < ApplicationController
 
   def resend_invitation
     authorize @supervisor
-    @supervisor = Supervisor.find(params[:id])
     @supervisor.invite!
 
     redirect_to edit_supervisor_path(@supervisor), notice: "Invitation sent"
