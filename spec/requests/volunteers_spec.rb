@@ -196,4 +196,19 @@ RSpec.describe "/volunteers", :disable_bullet, type: :request do
       }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
   end
+
+  describe "PATCH /resend_invitation" do
+    before { sign_in admin }
+    it "resends an invitation email" do
+      expect(volunteer.invitation_created_at.present?).to eq(false)
+
+      patch resend_invitation_volunteer_path(volunteer)
+      volunteer.reload
+
+      expect(volunteer.invitation_created_at.present?).to eq(true)
+      expect(Devise.mailer.deliveries.count).to eq(1)
+      expect(Devise.mailer.deliveries.first.subject).to eq(I18n.t("devise.mailer.invitation_instructions.subject"))
+      expect(response).to redirect_to(edit_volunteer_path(volunteer))
+    end
+  end
 end
