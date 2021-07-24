@@ -31,7 +31,8 @@ class DeviseMailerPreview < ActionMailer::Preview
   end
 
   private
-
+  # Unused email types
+  
   def update_invitation_sent_at(model)
     # Set :invitation_sent_at to guarantee the preview works
     model.update_attribute(:invitation_sent_at, Date.today)
