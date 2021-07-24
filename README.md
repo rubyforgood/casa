@@ -77,7 +77,7 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 
 ## Developing! ✨🛠✨
 
-### Installing Project Dependencies  
+### Installation
 #### General Setup Instructions  
 **Ruby**  
 1. Install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
@@ -107,15 +107,19 @@ From MacOS:
 
 Another option is to install the Chromium browser for your operating system so the browser-based Ruby feature/integration tests can run. Installing `chromium-browser` is enough, even in WSL (Windows subsystem for Linux)
 
-### Running the app
-
+**Downloading the Project**  
 (*on a Mac or Linux machine*)
-
 1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine. You should create a fork in GitHub if you don't have permission to commit directly to this repo, though. See [our contributing guide](doc/CONTRIBUTING.md) for more detailed instructions.
+
+**Installing Packages**  
 1. `cd casa/`
-1. `bundle install` to install all the Ruby dependencies.
-1. `yarn install` to install all the Javascript dependencies.
-1. `bin/rails db:setup` requires running local postgres, with a role created for whatever user you're running rails as
+1. `bundle install` install ruby dependencies.
+1. `yarn install` install javascript dependencies.
+
+**Database Setup**
+1. `bin/rails db:setup` create schema
+    requires running local postgres, with a role created for whatever user you're running rails as
+1. `bin/rails db:seed:replant` generates test data (can be rerun to regenerate test data)
 
 #### Platform Specific Installation Instructions
  - [Docker](doc/DOCKER.md)
@@ -124,17 +128,14 @@ Another option is to install the Chromium browser for your operating system so t
  - Windows(Help Wanted)
  - Windows Subsystem for Linux(WSL) (Help Wanted)
 
-**Running Tests**
+### Running the App / Verifying Installation
+1. `bin/rails server` or `bin/rails s` to start the local webserver
 
+**Running Tests**
 1. `bin/rails spec` to run the Ruby test suite
 1. `yarn test` to run the Javascript test suite
 
 Test coverage is run by simplecov on all builds and aggregated by CodeClimate
-
-**Running the development server**
-
-1. `bin/rails db:seed:replant` to delete all existing data and load sample data into the database
-1. `bin/rails server` run server
 
 **Cleaning up before you commit**
 
@@ -161,15 +162,12 @@ To see local email previews, check out http://localhost:3000/rails/mailers
 
 We are using [After Party](https://github.com/theSteveMitchell/after_party) to
 run post-deployment tasks. These tasks may include one-time necessary updates to the
-database. Run the tasks manually by:
-
+database. Run the tasks manually by:  
 ```
 bundle exec rake after_party:run
 ```
 
-
-Alternatively, every time you pull the main branch, run:
-
+Alternatively, every time you pull the main branch, run:  
 ```
 bin/update
 ```
@@ -180,7 +178,6 @@ the after party post-deployment tasks.
 ### Other Documentation
 
 There is a `doc` directory at the top level that includes:
-
 * an `architecture-decisions` directory containing important architectural decisions and entity relationship diagrams of various models
   (see the article [Architectural Decision Records](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) describing this approach).
 * [Code of Conduct](doc/code-of-conduct.md)
