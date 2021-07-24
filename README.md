@@ -77,27 +77,19 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 
 ## Developing! ✨🛠✨
 
-See [DOCKER.md](doc/DOCKER.md) for instructions on setting up your environment
-using Docker. For non-Docker installations, follow the instructions below.
-
-### Installing Tools
-
-You need Ruby, bundler, node.js, yarn, postgres, and Chrome.
-
-**Ruby**
-
+### Installing Project Dependencies  
+#### General Setup Instructions  
+**Ruby**  
 1. Install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
 1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`. Right now that's Ruby 3.0.1
 1. `gem install bundler`
 
-**node.js**
-
+**node.js**  
 1. (Recommended) Install [nvm](https://github.com/nvm-sh/nvm#installing-and-updating), which is a **n**ode **v**ersion **m**anager.
 1. Install a current LTS version of Node. 12.16.2 works.
 1. Install [yarn](https://classic.yarnpkg.com/en/docs/install). On Ubuntu, [make sure you install it from the official Yarn repo instead of cmdtest](https://classic.yarnpkg.com/en/docs/install/#debian-stable).
 
-**PostgreSQL ("postgres")**
-
+**PostgreSQL ("postgres")**  
 1. Make sure that postgres is installed.
 
   - On a Mac, you can use [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database if you have an older version of postgres, or use [Postgres.app](https://postgresapp.com/).
@@ -124,6 +116,13 @@ Another option is to install the Chromium browser for your operating system so t
 1. `bundle install` to install all the Ruby dependencies.
 1. `yarn install` to install all the Javascript dependencies.
 1. `bin/rails db:setup` requires running local postgres, with a role created for whatever user you're running rails as
+
+#### Platform Specific Installation Instructions
+ - [Docker](doc/DOCKER.md)
+ - Linux(Help Wanted)
+ - Mac(Help Wanted)
+ - Windows(Help Wanted)
+ - Windows Subsystem for Linux(WSL) (Help Wanted)
 
 **Running Tests**
 
