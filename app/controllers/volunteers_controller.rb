@@ -74,9 +74,13 @@ class VolunteersController < ApplicationController
   def resend_invitation
     authorize @volunteer
     @volunteer = Volunteer.find(params[:id])
-    @volunteer.invite!(current_user)
+    if @volunteer.invitation_accepted_at == nil
+      @volunteer.invite!(current_user)
 
-    redirect_to edit_volunteer_path(@volunteer), notice: "Invitation sent"
+      redirect_to edit_volunteer_path(@volunteer), notice: "Invitation sent"
+    else
+      redirect_to edit_volunteer_path(@volunteer), notice: "User already accepted invitation"
+    end
   end
 
   def reminder

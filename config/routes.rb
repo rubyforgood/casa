@@ -90,7 +90,7 @@ Rails.application.routes.draw do
     member do
       patch :activate
       patch :deactivate
-      patch :resend_invitation
+      get :resend_invitation
       patch :reminder
     end
   end
