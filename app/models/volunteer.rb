@@ -1,6 +1,8 @@
 # not a database model -- used for display in tables
 # volunteer is a user role and is controlled by User model
 class Volunteer < User
+  devise :invitable, invite_for: 1.year
+
   NAME_COLUMN = "name"
   EMAIL_COLUMN = "email"
   SUPERVISOR_COLUMN = "supervisor"
