@@ -193,4 +193,21 @@ RSpec.describe "/casa_admins", :disable_bullet, type: :request do
       end
     end
   end
+
+  describe "PATCH /resend_invitation" do
+    let(:casa_admin) { create(:casa_admin, active: true) }
+
+    before { sign_in_as_admin }
+    it "resends an invitation email" do
+      expect(casa_admin.invitation_created_at.present?).to eq(false)
+
+      patch resend_invitation_casa_admin_path(casa_admin)
+      casa_admin.reload
+
+      expect(casa_admin.invitation_created_at.present?).to eq(true)
+      expect(Devise.mailer.deliveries.count).to eq(1)
+      expect(Devise.mailer.deliveries.first.subject).to eq(I18n.t("devise.mailer.invitation_instructions.subject"))
+      expect(response).to redirect_to(edit_casa_admin_path(casa_admin))
+    end
+  end
 end

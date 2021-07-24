@@ -2,7 +2,7 @@
 
 class SupervisorsController < ApplicationController
   before_action :available_volunteers, only: [:edit, :update, :index]
-  before_action :set_supervisor, only: [:edit, :update, :activate, :deactivate]
+  before_action :set_supervisor, only: [:edit, :update, :activate, :deactivate, :resend_invitation]
   before_action :all_volunteers_ever_assigned, only: [:update]
   before_action :supervisor_has_unassigned_volunteers, only: [:edit]
 
@@ -67,6 +67,13 @@ class SupervisorsController < ApplicationController
     else
       render :edit, notice: "Supervisor could not be deactivated."
     end
+  end
+
+  def resend_invitation
+    authorize @supervisor
+    @supervisor.invite!
+
+    redirect_to edit_supervisor_path(@supervisor), notice: "Invitation sent"
   end
 
   private

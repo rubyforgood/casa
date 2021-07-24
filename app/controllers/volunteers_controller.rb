@@ -73,7 +73,6 @@ class VolunteersController < ApplicationController
 
   def resend_invitation
     authorize @volunteer
-    @volunteer = Volunteer.find(params[:id])
     @volunteer.invite!
 
     redirect_to edit_volunteer_path(@volunteer), notice: "Invitation sent"
@@ -81,7 +80,6 @@ class VolunteersController < ApplicationController
 
   def reminder
     authorize @volunteer
-    @volunteer = Volunteer.find(params[:id])
     VolunteerMailer.case_contacts_reminder(@volunteer).deliver
 
     redirect_to edit_volunteer_path(@volunteer), notice: "Reminder sent to volunteer."
