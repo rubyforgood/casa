@@ -24,7 +24,7 @@ class VolunteersController < ApplicationController
     @volunteer = Volunteer.new(create_volunteer_params)
 
     if @volunteer.save
-      @volunteer.invite!
+      @volunteer.invite!(current_user)
       redirect_to edit_volunteer_path(@volunteer)
     else
       render :new
@@ -74,7 +74,7 @@ class VolunteersController < ApplicationController
   def resend_invitation
     authorize @volunteer
     @volunteer = Volunteer.find(params[:id])
-    @volunteer.invite!
+    @volunteer.invite!(current_user)
 
     redirect_to edit_volunteer_path(@volunteer), notice: "Invitation sent"
   end
