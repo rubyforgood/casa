@@ -132,9 +132,10 @@ Another option is to install the Chromium browser for your operating system so t
 1. `bin/rails server` or `bin/rails s` to start the local webserver
 
 **Running Tests**
-1. `bin/rails spec` to run the Ruby test suite
-1. `yarn test` to run the Javascript test suite
-
+`bin/rails spec` to run the Ruby test suite  
+`yarn test` to run the Javascript test suite  
+  
+If you have trouble running tests, check out CI scripts in [`.github/workflows/`](.github/workflows/) for sample commands.  
 Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 
 **Cleaning up before you commit**
@@ -143,8 +144,6 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 1. `bundle exec erblint --lint-all --autocorrect` [ERB linter](https://github.com/Shopify/erb-lint)
 1. `yarn lint:fix` to run the [JS linter](https://standardjs.com/index.html) and fix isses
 1. `rake factory_bot:lint` if you have been editing factories and want to find factories and traits which produce invalid objects
-
-If you have any troubles running tests, check out the files in `.github/workflow/` which is what makes the CI build run.
 
 If additional work arises from your commit that is outside the scope of the issue it resolves, please open a new issue and either:
 - assign it to yourself if you'd like to take it on
