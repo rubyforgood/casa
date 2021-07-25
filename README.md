@@ -22,15 +22,17 @@ CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunte
 <!-- toc -->
 
 - [Welcome contributors!](#welcome-contributors)
-  * [About this project](#about-this-project)
+  - [About this project](#about-this-project)
 - [Developing! ✨🛠✨](#developing-)
-  * [Installing Tools](#installing-tools)
-  * [Running the app](#running-the-app)
-  * [Other Documentation](#other-documentation)
-  * [Common issues](#common-issues)
-  * [Ubuntu and WSL](#ubuntu-and-wsl)
+  - [Installation](#installation)
+    - [General Setup Instructions](#general-setup-instructions)
+    - [Platform Specific Installation Instructions](#platform-specific-installation-instructions)
+      - [Ubuntu and WSL](#ubuntu-and-wsl)
+  - [Running the App / Verifying Installation](#running-the-app--verifying-installation)
+- [Other Documentation](#other-documentation)
+    - [Common issues](#common-issues)
 - [Communication and Collaboration](#communication-and-collaboration)
-  * [History](#history)
+- [History](#history)
 
 <!-- tocstop -->
 
