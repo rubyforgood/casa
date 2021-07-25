@@ -75,10 +75,9 @@ Read about the [product sense](doc/productsense.md) that guides our approach to 
 
 The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer-description/) in Prince George's County.
 
-## Developing! ✨🛠✨
-
-### Installation
-#### General Setup Instructions  
+# Developing! ✨🛠✨
+## Installation
+### General Setup Instructions  
 **Ruby**  
 1. Install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
 1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`. Right now that's Ruby 3.0.1
@@ -104,7 +103,6 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 From MacOS:    
 `brew install google-chrome`
 
-
 Another option is to install the Chromium browser for your operating system so the browser-based Ruby feature/integration tests can run. Installing `chromium-browser` is enough, even in WSL (Windows subsystem for Linux)
 
 **Downloading the Project**  
@@ -121,14 +119,26 @@ Another option is to install the Chromium browser for your operating system so t
     requires running local postgres, with a role created for whatever user you're running rails as
 1. `bin/rails db:seed:replant` generates test data (can be rerun to regenerate test data)
 
-#### Platform Specific Installation Instructions
+### Platform Specific Installation Instructions
  - [Docker](doc/DOCKER.md)
  - Linux(Help Wanted)
  - Mac(Help Wanted)
  - Windows(Help Wanted)
  - Windows Subsystem for Linux(WSL) (Help Wanted)
 
-### Running the App / Verifying Installation
+#### Ubuntu and WSL
+
+1. If you are on Ubuntu in Windows Subsystem for Linux (WSL) and `rbenv install` indicates that the Ruby version is unavailable, you might be using Ubuntu's default install of `ruby-build`, which only comes with old installs of Ruby (ending before 2.6.) You should uninstall rvm and ruby-build's apt packages (`apt remove rvm ruby-build`) and install them with Git like this:
+
+- `git clone https://github.com/rbenv/rbenv.git ~/.rbenv`
+- `echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc`
+- `echo 'eval "$(rbenv init -)"' >> ~/.bashrc`
+- `exec $SHELL`
+- `git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build`
+
+You'll probably hit a problem where ruby-version reads `ruby-2.7.2` but the install available to you is called `2.7.2`. If you do, install [rbenv-alias](https://github.com/tpope/rbenv-aliases) and create an alias between the two.
+
+## Running the App / Verifying Installation
 1. `bin/rails server` or `bin/rails s` to start the local webserver
 
 **Running Tests**
@@ -174,7 +184,7 @@ bin/update
 which will run any database migrations, update gems and yarn packages, and run
 the after party post-deployment tasks.
 
-### Other Documentation
+# Other Documentation
 
 There is a `doc` directory at the top level that includes:
 * an `architecture-decisions` directory containing important architectural decisions and entity relationship diagrams of various models
@@ -193,19 +203,7 @@ There is a `doc` directory at the top level that includes:
 1. There is currently no option for a user to sign up and create an account through the UI. This is intentional. If you want to log in, use a pre-seeded user account and its credentials.
 1. If you are on windows and see the error "Requirements support for mingw is not implemented yet" then use https://rubyinstaller.org/ instead
 
-### Ubuntu and WSL
-
-1. If you are on Ubuntu in Windows Subsystem for Linux (WSL) and `rbenv install` indicates that the Ruby version is unavailable, you might be using Ubuntu's default install of `ruby-build`, which only comes with old installs of Ruby (ending before 2.6.) You should uninstall rvm and ruby-build's apt packages (`apt remove rvm ruby-build`) and install them with Git like this:
-
-- `git clone https://github.com/rbenv/rbenv.git ~/.rbenv`
-- `echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc`
-- `echo 'eval "$(rbenv init -)"' >> ~/.bashrc`
-- `exec $SHELL`
-- `git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build`
-
-You'll probably hit a problem where ruby-version reads `ruby-2.7.2` but the install available to you is called `2.7.2`. If you do, install [rbenv-alias](https://github.com/tpope/rbenv-aliases) and create an alias between the two.
-
-## Communication and Collaboration
+# Communication and Collaboration
 
 Most conversation happens in the #casa channel of the Ruby For Good slack. Get access here: https://rubyforgood.herokuapp.com/
 
@@ -217,6 +215,6 @@ We have a weekly stakeholder call with PG CASA staff on Wednesday at 8:30am Paci
 
 Join info for all public meetings is posted in the rubyforgood slack in the #casa channel
 
-### History
+# History
 
 First CASA supervisor training: 12 August 2020 🎉
