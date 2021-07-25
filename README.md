@@ -183,8 +183,9 @@ bin/update
 which will run any database migrations, update gems and yarn packages, and run
 the after party post-deployment tasks.
 
-# Other Documentation
-
+# Other Documentation  
+Check out [the wiki](https://github.com/rubyforgood/casa/wiki)  
+  
 There is a `doc` directory at the top level that includes:
 * an `architecture-decisions` directory containing important architectural decisions and entity relationship diagrams of various models
   (see the article [Architectural Decision Records](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) describing this approach).
