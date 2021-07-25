@@ -140,6 +140,12 @@ Another option is to install the Chromium browser for your operating system so t
 
 You'll probably hit a problem where ruby-version reads `ruby-2.7.2` but the install available to you is called `2.7.2`. If you do, install [rbenv-alias](https://github.com/tpope/rbenv-aliases) and create an alias between the two.
 
+### Common issues
+
+1. If your rails/rake commands hang forever instead of running, try: `rails app:update:bin`
+1. There is currently no option for a user to sign up and create an account through the UI. This is intentional. If you want to log in, use a pre-seeded user account and its credentials.
+1. If you are on windows and see the error "Requirements support for mingw is not implemented yet" then use https://rubyinstaller.org/ instead
+
 ## Running the App / Verifying Installation
 1. `bin/rails server` or `bin/rails s` to start the local webserver
 
@@ -190,18 +196,10 @@ There is a `doc` directory at the top level that includes:
 * an `architecture-decisions` directory containing important architectural decisions and entity relationship diagrams of various models
   (see the article [Architectural Decision Records](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) describing this approach).
 * [Code of Conduct](doc/code-of-conduct.md)
-* [CONTRIBUTING.md](doc/CONTRIBUTING.md)
 * [CYPRESS.md](doc/CYPRESS.md)
-* [DOCKER.md](doc/DOCKER.md)
 * [LINUX_SETUP.md](doc/LINUX_SETUP.md)
 * [productsense.md](doc/productsense.md)(for team leads & product interested contributors)
 * [SECURITY.md](doc/SECURITY.md)
-
-### Common issues
-
-1. If your rails/rake commands hang forever instead of running, try: `rails app:update:bin`
-1. There is currently no option for a user to sign up and create an account through the UI. This is intentional. If you want to log in, use a pre-seeded user account and its credentials.
-1. If you are on windows and see the error "Requirements support for mingw is not implemented yet" then use https://rubyinstaller.org/ instead
 
 # Communication and Collaboration
 
