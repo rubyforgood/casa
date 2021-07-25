@@ -26,8 +26,7 @@ class Supervisor < User
   end
 
   def pending_volunteers
-    Volunteer.where(invited_by_id: id, invitation_accepted_at: nil)
-             .where.not(invitation_created_at: nil)
+    Volunteer.where(invited_by_id: id, invitation_accepted_at: nil).where.not(invitation_created_at: nil)
   end
 
   def recently_unassigned_volunteers
