@@ -148,16 +148,13 @@ You'll probably hit a problem where ruby-version reads `ruby-2.7.2` but the inst
 If you have trouble running tests, check out CI scripts in [`.github/workflows/`](.github/workflows/) for sample commands.  
 Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 
-**Cleaning up before you commit**
-
+**Cleaning up before you pull request**  
 1. `bundle exec standardrb --fix` auto-fix Ruby linting issues [more linter info](https://github.com/testdouble/standard)
 1. `bundle exec erblint --lint-all --autocorrect` [ERB linter](https://github.com/Shopify/erb-lint)
 1. `yarn lint:fix` to run the [JS linter](https://standardjs.com/index.html) and fix isses
 1. `rake factory_bot:lint` if you have been editing factories and want to find factories and traits which produce invalid objects
 
-If additional work arises from your commit that is outside the scope of the issue it resolves, please open a new issue and either:
-- assign it to yourself if you'd like to take it on
-- or add it to the to-do column without an assignee so someone else can pick up this new issue.
+If additional work arises from your pull request that is outside the scope of the issue it resolves, please open a new issue.
 
 **Local email**
 
