@@ -123,7 +123,7 @@ Another option is to install the Chromium browser for your operating system so t
 
 ### Platform Specific Installation Instructions
  - [Docker](doc/DOCKER.md)
- - Linux(Help Wanted)
+ - [Linux](doc/LINUX_SETUP.md)
  - Mac(Help Wanted)
  - Windows(Help Wanted)
  - Windows Subsystem for Linux(WSL) (Help Wanted)
@@ -197,7 +197,6 @@ There is a `doc` directory at the top level that includes:
   (see the article [Architectural Decision Records](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) describing this approach).
 * [Code of Conduct](doc/code-of-conduct.md)
 * [CYPRESS.md](doc/CYPRESS.md)
-* [LINUX_SETUP.md](doc/LINUX_SETUP.md)
 * [productsense.md](doc/productsense.md)(for team leads & product interested contributors)
 * [SECURITY.md](doc/SECURITY.md)
 
