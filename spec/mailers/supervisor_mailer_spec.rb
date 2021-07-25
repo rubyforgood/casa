@@ -73,6 +73,13 @@ RSpec.describe SupervisorMailer, type: :mailer do
       it "has a button to re-invite volunteer" do
         expect(mail.body.encoded).to match("<a href=\"#{resend_invitation_volunteer_url(volunteer2)}\">")
       end
+
+      it "do not shows a summary of pending volunteers if the volunteer already accepted" do
+        volunteer2.invitation_accepted_at = DateTime.current
+        volunteer2.save
+
+        expect(mail.body.encoded).to_not match(volunteer2.display_name.to_s)
+      end
     end
   end
 
