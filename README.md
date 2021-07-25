@@ -149,10 +149,15 @@ You'll probably hit a problem where ruby-version reads `ruby-2.7.2` but the inst
 ## Running the App / Verifying Installation
 1. `bin/rails server` or `bin/rails s` to start the local webserver
 
-**Running Tests**
-`bin/rails spec` to run the Ruby test suite  
-`yarn test` to run the Javascript test suite  
-  
+**Running Tests**  
+ - run the ruby test suite `bin/rails spec`  
+ - run the javascript test suite `yarn test`   
+ - run cypress tests  
+
+       bundle exec rails server -b 0.0.0.0 -p 4040
+       npm run test:cypress --exit-code 0
+
+
 If you have trouble running tests, check out CI scripts in [`.github/workflows/`](.github/workflows/) for sample commands.  
 Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 
