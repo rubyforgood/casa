@@ -91,9 +91,7 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 1. Install [yarn](https://classic.yarnpkg.com/en/docs/install). On Ubuntu, [make sure you install it from the official Yarn repo instead of cmdtest](https://classic.yarnpkg.com/en/docs/install/#debian-stable).
 
 **PostgreSQL ("postgres")**  
-1. Make sure that postgres is installed.
-
-  - On a Mac, you can use [brew install postgres](https://wiki.postgresql.org/wiki/Homebrew) OR brew postgresql-upgrade-database if you have an older version of postgres, or use [Postgres.app](https://postgresapp.com/).
+1. Make sure that postgres is installed.  
   - If you're on Ubuntu/WSL, use `sudo apt-get install libpq-dev` so the gem can install. [Use the Postgres repo for Ubuntu or WSL to get the server and client tools](https://www.postgresql.org/download/linux/ubuntu/).
   - If you're on Fedora/Cent Os use `sudo dnf install libpq-devel`. [If you prefer choose package of libpq-devel via rpm](https://pkgs.org/download/libpq-devel)
   - If you're on Windows, use the official [installer](https://www.postgresql.org/download/windows/) and accept all defaults.  Alternatively, a [Chocolatey](https://chocolatey.org/packages/postgresql) package is available with `choco install postgresql`.
@@ -101,9 +99,6 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 **Chrome Browser**
 
 1. The Spec tests uses Chrome Browser and Chromedriver for some of the tests. A current version of chromedriver will be installed when `bundle install` is run. TO install Chrome, see [Chrome Install](https://support.google.com/chrome/answer/95346?hl=en&ref_topic=7439538).
-
-From MacOS:    
-`brew install google-chrome`
 
 Another option is to install the Chromium browser for your operating system so the browser-based Ruby feature/integration tests can run. Installing `chromium-browser` is enough, even in WSL (Windows subsystem for Linux)
 
@@ -124,7 +119,7 @@ Another option is to install the Chromium browser for your operating system so t
 ### Platform Specific Installation Instructions
  - [Docker](doc/DOCKER.md)
  - [Linux](doc/LINUX_SETUP.md)
- - Mac(Help Wanted)
+ - [Mac(Help Wanted)](doc/MAC_SETUP.md)
  - Windows(Help Wanted)
  - Windows Subsystem for Linux(WSL) (Help Wanted)
 
