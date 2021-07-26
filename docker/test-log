@@ -13,9 +13,9 @@ echo 'END: docker-compose run web rails db:migrate'
 echo '--------------------------------------------'
 
 echo '-----------------------------------------'
-echo 'BEGIN: docker-compose exec web rspec spec'
+echo 'BEGIN: docker-compose run web rspec spec'
 echo '-----------------------------------------'
-docker-compose exec web rspec spec
+docker-compose run web rspec spec
 echo '---------------------------------------'
-echo 'END: docker-compose exec web rspec spec'
+echo 'END: docker-compose run web rspec spec'
 echo '---------------------------------------'
