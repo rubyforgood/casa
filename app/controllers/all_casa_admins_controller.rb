@@ -11,7 +11,7 @@ class AllCasaAdminsController < ApplicationController
   end
 
   def create
-    service = ::CreateAllCasaAdminService.new(params)
+    service = ::CreateAllCasaAdminService.new(params, current_user)
     @all_casa_admin = service.build
     begin
       service.create!

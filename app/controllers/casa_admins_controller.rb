@@ -27,7 +27,7 @@ class CasaAdminsController < ApplicationController
   end
 
   def create
-    service = ::CreateCasaAdminService.new(current_organization, params)
+    service = ::CreateCasaAdminService.new(current_organization, params, current_user)
     @casa_admin = service.build
     authorize @casa_admin
     begin
