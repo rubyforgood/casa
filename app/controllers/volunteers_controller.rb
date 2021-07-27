@@ -76,7 +76,6 @@ class VolunteersController < ApplicationController
     @volunteer = Volunteer.find(params[:id])
     if @volunteer.invitation_accepted_at.nil?
       @volunteer.invite!(current_user)
-
       redirect_to edit_volunteer_path(@volunteer), notice: "Invitation sent"
     else
       redirect_to edit_volunteer_path(@volunteer), notice: "User already accepted invitation"
@@ -85,7 +84,6 @@ class VolunteersController < ApplicationController
 
   def reminder
     authorize @volunteer
-    @volunteer = Volunteer.find(params[:id])
     VolunteerMailer.case_contacts_reminder(@volunteer).deliver
 
     redirect_to edit_volunteer_path(@volunteer), notice: "Reminder sent to volunteer."

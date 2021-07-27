@@ -157,4 +157,19 @@ RSpec.describe "/supervisors", :disable_bullet, type: :request do
       expect(Devise.mailer.deliveries.first.text_part.body.to_s).to include("This is the first step to accessing your new Supervisor account.")
     end
   end
+
+  describe "PATCH /resend_invitation" do
+    before { sign_in admin }
+    it "resends an invitation email" do
+      expect(supervisor.invitation_created_at.present?).to eq(false)
+
+      patch resend_invitation_supervisor_path(supervisor)
+      supervisor.reload
+
+      expect(supervisor.invitation_created_at.present?).to eq(true)
+      expect(Devise.mailer.deliveries.count).to eq(1)
+      expect(Devise.mailer.deliveries.first.subject).to eq(I18n.t("devise.mailer.invitation_instructions.subject"))
+      expect(response).to redirect_to(edit_supervisor_path(supervisor))
+    end
+  end
 end

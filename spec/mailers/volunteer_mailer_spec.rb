@@ -41,4 +41,14 @@ RSpec.describe VolunteerMailer, type: :mailer do
       expect(mail.body.encoded).to match("as a reminder")
     end
   end
+
+  describe ".invitation_instructions for a volunteer" do
+    let(:mail) { volunteer.invite! }
+    let(:expiration_date) { I18n.l(volunteer.invitation_due_at, format: :full, default: nil) }
+
+    it "informs the correct expiration date" do
+      email_body = mail.html_part.body.to_s.squish
+      expect(email_body).to include("This invitation will expire on #{expiration_date} (one year).")
+    end
+  end
 end

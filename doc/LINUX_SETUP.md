@@ -8,9 +8,8 @@ on either a physical system or a Vagrant virtual machine. You may want to do thi
 * to test the software
 
 
-## Using a Vagrant Virtual Machine (VM)
-
-If you will not be using a Vagrant VM, feel free to skip this section.
+## [Optional] Using a Vagrant Virtual Machine(VM)
+### [skip](#linux-development-environment-installation)
 
 #### Installing Virtual Box and Vagrant
 

@@ -51,12 +51,16 @@
       <p><%= link_to "Set your password", accept_invitation_url(@resource, invitation_token: @token) %></p>
     </td>
   </tr>
-  <% if @resource.is_a?(Supervisor) || @resource.is_a?(CasaAdmin) || @resource.is_a?(AllCasaAdmin) %>
-    <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-      <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-        This invitation will expire on <%= I18n.l(@resource.invitation_due_at, format: :full, default: nil) %>
-        <%= @resource.is_a?(AllCasaAdmin) ? '(one week)' : '(two weeks)' %>.
-      </td>
-    </tr>
-  <% end %>
+  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+    <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+      This invitation will expire on <%= I18n.l(@resource.invitation_due_at, format: :full, default: nil) %>
+      <% if @resource.is_a?(AllCasaAdmin) %>
+        (one week).
+      <% elsif @resource.is_a?(Supervisor) || @resource.is_a?(CasaAdmin) %>
+        (two weeks).
+      <% elsif @resource.is_a?(Volunteer) %>
+        (one year).
+      <% end %>
+    </td>
+  </tr>
 </table>

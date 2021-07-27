@@ -260,4 +260,19 @@ RSpec.describe Volunteer, type: :model do
       expect(volunteer.casa_cases).to eq([ca1.casa_case])
     end
   end
+
+  describe "invitation expiration" do
+    let(:volunteer) { create :volunteer }
+    let!(:mail) { volunteer.invite! }
+    let(:expiration_date) { I18n.l(volunteer.invitation_due_at, format: :full, default: nil) }
+    let(:one_year) { I18n.l(1.year.from_now, format: :full, default: nil) }
+
+    it { expect(expiration_date).to eq one_year }
+    it "expires invitation token after one year" do
+      travel_to 1.year.from_now
+
+      user = User.accept_invitation!(invitation_token: volunteer.invitation_token)
+      expect(user.errors.full_messages).to include("Invitation token is invalid")
+    end
+  end
 end

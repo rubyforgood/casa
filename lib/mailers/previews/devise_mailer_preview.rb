@@ -24,7 +24,15 @@ class DeviseMailerPreview < ActionMailer::Preview
     preview(supervisor)
   end
 
+  def invitation_instructions_as_volunteer
+    volunteer = Volunteer.first
+    update_invitation_sent_at(volunteer)
+    preview(volunteer)
+  end
+
   private
+
+  # Unused email types
 
   def update_invitation_sent_at(model)
     # Set :invitation_sent_at to guarantee the preview works
