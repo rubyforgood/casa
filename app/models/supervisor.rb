@@ -25,6 +25,10 @@ class Supervisor < User
     end
   end
 
+  def pending_volunteers
+    Volunteer.where(invited_by_id: id, invitation_accepted_at: nil).where.not(invitation_created_at: nil)
+  end
+
   def recently_unassigned_volunteers
     unassigned_supervisor_volunteers.joins(:volunteer).includes(:volunteer)
       .where(updated_at: 1.week.ago..Time.zone.now).map(&:volunteer)
