@@ -11,6 +11,6 @@ class CreateAllCasaAdminService
 
   def create!
     @all_casa_admin.save!
-    @all_casa_admin.invite!
+    @all_casa_admin.invite!(current_user)
   end
 end

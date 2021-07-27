@@ -61,6 +61,28 @@ RSpec.describe SupervisorMailer, type: :mailer do
       create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false, updated_at: Date.today - 8.days)
       expect(mail.body.encoded).to_not match("Summary for #{volunteer.display_name}")
     end
+
+    context "when a supervisor has pending volunteer to accepts invitation" do
+      let(:volunteer2) { create(:volunteer) }
+      before do
+        volunteer2.invite!(supervisor)
+      end
+
+      it "shows a summary of pending volunteers" do
+        expect(mail.body.encoded).to match(volunteer2.display_name.to_s)
+      end
+
+      it "has a button to re-invite volunteer" do
+        expect(mail.body.encoded).to match("<a href=\"#{resend_invitation_volunteer_url(volunteer2)}\">")
+      end
+
+      it "do not shows a summary of pending volunteers if the volunteer already accepted" do
+        volunteer2.invitation_accepted_at = DateTime.current
+        volunteer2.save
+
+        expect(mail.body.encoded).to_not match(volunteer2.display_name.to_s)
+      end
+    end
   end
 
   describe ".invitation_instructions for a supervisor" do
