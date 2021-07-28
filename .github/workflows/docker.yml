@@ -33,4 +33,4 @@ jobs:
       - name: docker UP
         run: docker-compose up -d
       - name: Test
-        run: docker-compose exec web bundle exec rspec spec
+        run: docker-compose exec -T web bundle exec rspec spec
