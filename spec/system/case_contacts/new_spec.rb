@@ -117,11 +117,11 @@ RSpec.describe "case_contacts/new", :disable_bullet, type: :system do
         click_on "Submit"
 
         expect(page).to have_text("Confirm Note Content")
-        expect(page).to have_text(note_content)
+        hello_line = page.body.split("\n").select { |x| x.include?("Hello") }
+        expect(hello_line).to eq(["        <div id=\"note-content\">&lt;h1&gt;Hello world&lt;/h1&gt;</div>"])
         expect {
           click_on "Continue Submitting"
         }.to change(CaseContact, :count).by(1)
-
         expected_text = strip_tags(note_content)
         expect(page).to have_css("h1", text: expected_text)
       end
