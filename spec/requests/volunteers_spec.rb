@@ -197,7 +197,7 @@ RSpec.describe "/volunteers", :disable_bullet, type: :request do
     end
   end
 
-  describe "GET /resend_invitation" do
+  describe "PATCH /resend_invitation" do
     before { sign_in admin }
     it "resends an invitation email" do
       expect(volunteer.invitation_created_at.present?).to eq(false)

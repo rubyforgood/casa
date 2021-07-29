@@ -118,11 +118,13 @@
 
   <% @supervisor.pending_volunteers.each do |volunteer| %>
     <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; display: flex; justify-content: flex-start;">
-      <td style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin-right: 30px; padding: 0 0 20px; text-transform: capitalize;" valign="top"
-        <%= volunteer.display_name %>>
-      <td>
-        <button> <%= link_to "Re-invite", resend_invitation_volunteer_url(volunteer) %></button>
+      <td style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin-right: 30px; padding: 0 0 20px; text-transform: capitalize;" valign="top"; >
+        <%= volunteer.display_name %>  
       </td>
+      <td>  
+        <button> <%= link_to "Re-invite", resend_invitation_volunteer_url(volunteer) %></button>
+      </td>  
   </tr>
   <% end %>
 </table>
+
