@@ -15,7 +15,7 @@ end
 Capybara.register_driver :selenium_chrome_headless_in_container do |app|
   Capybara::Selenium::Driver.new app,
     browser: :remote,
-    url: "http://selenium_chrome:4444",
+    url: "http://selenium_chrome:4444/wd/hub",
     capabilities: [Selenium::WebDriver::Remote::Capabilities.chrome(
       "goog:chromeOptions" => {"args" => %w[headless disable-gpu window-size=1280,900]}
     )]
