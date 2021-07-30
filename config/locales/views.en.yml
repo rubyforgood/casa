@@ -115,7 +115,7 @@ en:
         unassign: Unassign Volunteer
         activate: Activate Volunteer
     edit:
-      title: Editing %{case_number}
+      title: Editing
     index:
       pick_displayed_columns: Pick displayed columns
       own_case: My <%= "Case".pluralize(%{count}) %>
