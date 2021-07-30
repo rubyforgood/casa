@@ -30,4 +30,4 @@ jobs:
         bundler-cache: true
 
     - name: ERB lint
-      run: bundle exec erblint --lint-all --autocorrect
+      run: bundle exec erblint --lint-all
