@@ -1,5 +1,10 @@
 def upload_file(file)
-  Rack::Test::UploadedFile.new(file)
+  content = File.open(file).read
+  tempfile = Tempfile.open
+  tempfile.write content
+  tempfile.rewind
+
+  Rack::Test::UploadedFile.new(tempfile)
 end
 
 RSpec.configure do |config|
