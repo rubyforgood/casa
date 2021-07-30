@@ -30,7 +30,7 @@
   },
   "version": "0.1.0",
   "devDependencies": {
-    "cypress": "^8.0.0",
+    "cypress": "^8.1.0",
     "jest": "^27.0.6",
     "markdown-toc": "^1.2.0",
     "standard": "^16.0.3",
