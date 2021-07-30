@@ -73,7 +73,7 @@ class VolunteerDatatable < ApplicationDatatable
   end
 
   def sanitize_sql(sql)
-    ActiveRecord::Base::sanitize_sql(sql)
+    ActiveRecord::Base.sanitize_sql(sql)
   end
 
   def transition_aged_youth_cases_subquery
