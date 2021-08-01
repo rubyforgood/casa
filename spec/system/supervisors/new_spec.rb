@@ -17,6 +17,21 @@ RSpec.describe "supervisors/new", :disable_bullet, type: :system do
         click_on "Create Supervisor"
       }.to change(User, :count).by(1)
     end
+
+    it "sends invitation email to the new supervisor" do
+      sign_in admin
+      visit new_supervisor_path
+
+      fill_in "Email", with: "new_supervisor_email2@example.com"
+      fill_in "Display Name", with: "New Supervisor Display Name 2"
+
+      click_on "Create Supervisor"
+
+      last_email = ActionMailer::Base.deliveries.last
+      expect(last_email.to).to eq ["new_supervisor_email2@example.com"]
+      expect(last_email.subject).to have_text "CASA Console invitation instructions"
+      expect(last_email.html_part.body.encoded).to have_text "your new Supervisor account."
+    end
   end
 
   context "volunteer user" do

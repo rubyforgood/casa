@@ -57,6 +57,19 @@ RSpec.describe "casa_admins/edit", :disable_bullet, type: :system do
     expect(another.reload.active).to be_falsey
   end
 
+  it "can resend invitation to a another admin", js: true do
+    another = create(:casa_admin)
+    visit edit_casa_admin_path(another)
+
+    click_on "Resend Invitation"
+
+    expect(page).to have_content("Invitation sent")
+
+    deliveries = ActionMailer::Base.deliveries
+    expect(deliveries.count).to eq(1)
+    expect(deliveries.last.subject).to have_text "CASA Console invitation instructions"
+  end
+
   it "is not able to edit last sign in" do
     visit edit_casa_admin_path(admin)
 

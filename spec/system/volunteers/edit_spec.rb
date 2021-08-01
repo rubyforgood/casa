@@ -193,33 +193,39 @@ RSpec.describe "volunteers/edit", :disable_bullet, type: :system do
   describe "resend invite" do
     let(:supervisor) { create(:supervisor, casa_org: organization) }
 
-    it "allows a supervisor resend invitation to a volunteer" do
+    it "allows a supervisor resend invitation to a volunteer", js: true do
       sign_in supervisor
 
       visit edit_volunteer_path(volunteer)
 
       click_on "Resend Invitation"
 
-      expect(page).to have_content("Resend Invitation")
-      expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(page).to have_content("Invitation sent")
+
+      deliveries = ActionMailer::Base.deliveries
+      expect(deliveries.count).to eq(1)
+      expect(deliveries.last.subject).to have_text "CASA Console invitation instructions"
     end
   end
 
-  it "allows an administrator resend invitation to a volunteer" do
+  it "allows an administrator resend invitation to a volunteer", js: true do
     sign_in admin
 
     visit edit_volunteer_path(volunteer)
 
     click_on "Resend Invitation"
 
-    expect(page).to have_content("Resend Invitation")
-    expect(ActionMailer::Base.deliveries.count).to eq(1)
+    expect(page).to have_content("Invitation sent")
+
+    deliveries = ActionMailer::Base.deliveries
+    expect(deliveries.count).to eq(1)
+    expect(deliveries.last.subject).to have_text "CASA Console invitation instructions"
   end
 
   describe "send reminder as a supervisor" do
     let(:supervisor) { create(:supervisor, casa_org: organization) }
 
-    it "allows a supervisor resend invitation to a volunteer" do
+    it "allows a supervisor to send case contact reminder to a volunteer" do
       sign_in supervisor
 
       visit edit_volunteer_path(volunteer)
