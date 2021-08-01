@@ -4,6 +4,8 @@ require "sablon"
 
 class PastCourtDate < ApplicationRecord
   belongs_to :casa_case
+  validates :casa_case_id, presence: true
+  validates :date, presence: true
 
   has_many :case_court_mandates
   belongs_to :hearing_type, optional: true
