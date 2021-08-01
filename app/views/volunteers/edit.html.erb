@@ -24,7 +24,7 @@
         <% if policy(:volunteer).update_volunteer_email? %>
           <%= form.text_field :email, class: "form-control" %>
         <% else %>
-          <input class="form-control" type="text" placeholder="<%= @volunteer.email %>" readonly>
+          <input class="form-control" type="text" placeholder="<%= @volunteer.email %>" autocomplete="off" readonly>
         <% end %>
       </div>
 
