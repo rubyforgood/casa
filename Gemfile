@@ -17,7 +17,7 @@ gem "jbuilder", "~> 2.11" # Build JSON APIs with ease. Read more: https://github
 gem "noticed" # Notifications
 gem "paper_trail" # tracking changes
 gem "pg", ">= 0.18", "< 2.0" # Use postgresql as the database for Active Record
-gem "puma", "~> 5.3" # Use Puma as the app server
+gem "puma", "~> 5.4" # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "rack-attack" # for blocking & throttling abusive requests
 gem "skylight" # automated performance testing https://www.skylight.io/
