@@ -44,6 +44,45 @@ RSpec.describe CaseContactsController, type: :controller do
     end
   end
 
+  describe 'POST #create' do
+    context 'with valid params' do
+      let(:params) { build(:case_contact).attributes }
+
+      it 'assigns @case_contact' do
+        post :create, params: { case_contact: params }, format: :js
+        expect(assigns(:case_contact)).to be_an_instance_of(CaseContact)
+      end
+
+      # it 'creates a new case contact for each selected case' do
+      # end
+      # 
+      # it 'renders the create template' do
+      #   post :create, params: { case_contact: params }, format: :js
+      #   expect(response).to redirect_to casa_case_path(CaseContact.last.casa_case)
+      # end
+    end
+
+    context 'with invalid params' do
+      let(:params) { build(:case_contact).attributes }
+
+      it 'assigns @case_contact' do
+        post :create, params: { case_contact: params }, format: :js
+        expect(assigns(:case_contact)).to be_an_instance_of(CaseContact)
+      end
+
+      it 'does not create a new case contact' do
+        expect {
+          post :create, params: { case_contact: params }, format: :js
+        }.not_to change(CaseContact, :count)
+      end
+
+      it 'renders the create template' do
+        post :create, params: { case_contact: params }, format: :js
+        expect(response).to render_template('new')
+      end
+    end
+  end
+
   describe "DELETE destroy" do
     let(:case_contact) { create(:case_contact, creator: volunteer) }
 
