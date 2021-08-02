@@ -8,8 +8,8 @@ RSpec.describe "view all volunteers", :disable_bullet, type: :system do
     context "when no logo_url" do
       it "can see volunteers and navigate to their cases", js: true do
         volunteer = create(:volunteer, :with_assigned_supervisor, display_name: "User 1", email: "casa@example.com", casa_org: organization)
-        volunteer.casa_cases << create(:casa_case, casa_org: organization)
-        volunteer.casa_cases << create(:casa_case, casa_org: organization)
+        volunteer.casa_cases << create(:casa_case, casa_org: organization, birth_month_year_youth: 14.years.ago)
+        volunteer.casa_cases << create(:casa_case, casa_org: organization, birth_month_year_youth: 14.years.ago)
         casa_case = volunteer.casa_cases[0]
 
         sign_in admin
@@ -27,7 +27,7 @@ RSpec.describe "view all volunteers", :disable_bullet, type: :system do
         expect(page).to have_text("Case number: #{casa_case.case_number}")
         expect(page).to have_text("Hearing Type:")
         expect(page).to have_text("Judge:")
-        expect(page).to have_text("Transition Aged Youth: No")
+        expect(page).to have_text("Transition Aged Youth: Yes")
         expect(page).to have_text("Next Court Date:")
         expect(page).to have_text("Court Report Due Date:")
         expect(page).to have_text("Court Report Status: Not submitted")
