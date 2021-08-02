@@ -26,4 +26,20 @@ RSpec.describe Supervisor, type: :model do
       expect(user.errors.full_messages).to include("Invitation token is invalid")
     end
   end
+
+  describe "pending volunteers" do
+    let(:volunteer) { create(:volunteer) }
+    let(:assign_volunteer) { create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer) }
+
+    it "returns volunteers invited by the supervisor" do
+      volunteer.invite!(supervisor)
+      expect(supervisor.pending_volunteers).to eq([volunteer])
+    end
+
+    it "returns volunteers invited by others but assigned to supervisor" do
+      volunteer.invite!
+      assign_volunteer
+      expect(supervisor.pending_volunteers).to eq([volunteer])
+    end
+  end
 end
