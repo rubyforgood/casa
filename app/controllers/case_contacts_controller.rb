@@ -73,7 +73,7 @@ class CaseContactsController < ApplicationController
     }
 
     if case_contacts.all?(&:persisted?)
-      redirect_to casa_case_path(CaseContact.last.casa_case), notice: "Case contact was successfully created."
+      redirect_to casa_case_path(CaseContact.last.casa_case), notice: "#{t("create_#{rand(1..5)}", scope: "case_contact")}"
     else
       @case_contact = case_contacts.first
       @casa_cases = [@case_contact.casa_case]
@@ -96,7 +96,7 @@ class CaseContactsController < ApplicationController
     @current_organization_groups = current_organization.contact_type_groups
 
     if @case_contact.update_cleaning_contact_types(update_case_contact_params)
-      redirect_to casa_case_path(@case_contact.casa_case), notice: "Case contact was successfully updated."
+      redirect_to casa_case_path(@case_contact.casa_case), notice: t("update", scope: "case_contact")
     else
       render :edit
     end
@@ -159,5 +159,15 @@ class CaseContactsController < ApplicationController
       current_organization.case_contacts.grab_all(current_user)
                                         .includes(:creator, contact_types: :contact_type_group)
     )
+  end
+
+  def random_thank_you_message
+    [
+      'Thanks for all you do!',
+      'Thank you for your hard work!',
+      'Thank you for a job well done!',
+      'Thank you for volunteering!',
+      'Thanks for being a great volunteer!'
+    ].sample
   end
 end

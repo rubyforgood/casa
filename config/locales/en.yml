@@ -94,3 +94,10 @@ en:
   date:
     formats:
       full: "%B %-d, %Y"
+  case_contact:
+    create_1: Case contact was successfully created. Thanks for all you do!
+    create_2: Case contact was successfully created. Thank you for your hard work!
+    create_3: Case contact was successfully created. Thank you for a job well done!
+    create_4: Case contact was successfully created. Thank you for volunteering!
+    create_5: Case contact was successfully created. Thanks for being a great volunteer!
+    update: Case contact was successfully updated.
