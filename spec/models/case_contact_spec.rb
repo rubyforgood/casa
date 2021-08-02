@@ -1,10 +1,8 @@
 require "rails_helper"
 
 RSpec.describe CaseContact, type: :model do
-  context "validations" do
-    it { is_expected.to validate_numericality_of(:miles_driven).is_less_than 10_000 }
-    it { is_expected.to validate_numericality_of(:miles_driven).is_greater_than_or_equal_to 0 }
-  end
+  it { is_expected.to validate_numericality_of(:miles_driven).is_less_than 10_000 }
+  it { is_expected.to validate_numericality_of(:miles_driven).is_greater_than_or_equal_to 0 }
 
   it "belongs to a creator" do
     case_contact = build(:case_contact, creator: nil)
