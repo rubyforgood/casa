@@ -8,7 +8,7 @@ class CaseCourtReport
 
   def initialize(args = {})
     @casa_case = CasaCase.find(args[:case_id])
-    @volunteer = Volunteer.find(args[:volunteer_id])
+    @volunteer = Volunteer.find(args[:volunteer_id]) if args[:volunteer_id]
 
     @context = prepare_context(args[:path_to_template].end_with?("default_report_template.docx"))
     @template = Sablon.template(args[:path_to_template])
@@ -26,12 +26,8 @@ class CaseCourtReport
       casa_case: prepare_case_details,
       case_contacts: prepare_case_contacts,
       case_mandates: prepare_case_mandates,
-      org_address: (@volunteer.casa_org.address if is_default_template),
-      volunteer: {
-        name: @volunteer.display_name,
-        supervisor_name: @volunteer.supervisor&.display_name || "",
-        assignment_date: I18n.l(@casa_case.case_assignments.find_by(volunteer: @volunteer).created_at, format: :full, default: nil)
-      }
+      org_address: org_address(is_default_template),
+      volunteer: volunteer_info
     }
   end
 
@@ -99,5 +95,19 @@ class CaseCourtReport
       dob: I18n.l(@casa_case.birth_month_year_youth, format: :youth_date_of_birth, default: nil),
       is_transitioning: @casa_case.in_transition_age?
     }
+  end
+
+  def volunteer_info
+    if @volunteer
+      {
+        name: @volunteer.display_name,
+        supervisor_name: @volunteer.supervisor&.display_name || "",
+        assignment_date: I18n.l(@casa_case.case_assignments.find_by(volunteer: @volunteer).created_at, format: :full, default: nil)
+      }
+    end
+  end
+
+  def org_address(is_default_template)
+    @volunteer.casa_org.address if @volunteer && is_default_template
   end
 end
