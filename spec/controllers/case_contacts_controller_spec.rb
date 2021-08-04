@@ -104,7 +104,10 @@ RSpec.describe CaseContactsController, type: :controller do
               "Case contact was successfully created. Thank you for your hard work!",
               "Case contact was successfully created. Thank you for a job well done!",
               "Case contact was successfully created. Thank you for volunteering!",
-              "Case contact was successfully created. Thanks for being a great volunteer!"
+              "Case contact was successfully created. Thanks for being a great volunteer!",
+              "Case contact was successfully created. One of the greatest gifts you can give is your time!",
+              "Case contact was successfully created. Those who can do, do. Those who can do more, volunteer",
+              "Case contact was successfully created. Volunteers do not necessarily have the time, they just have the heart."  
             ]
           ).to include(flash[:notice])
         end
