@@ -44,7 +44,7 @@ class CaseCourtReport
     contact_dates_as_hash = aggregate_contact_dates(interviewees)
     contact_dates_as_hash.map do |type, dates|
       {
-        name: "Firstname Lastname",
+        name: "Names of persons involved starting with the child's name",
         type: type,
         dates: dates.join(", ")
       }
@@ -89,12 +89,18 @@ class CaseCourtReport
   end
 
   def prepare_case_details
-    {
+    x = {
       court_date: I18n.l(@casa_case.court_date, format: :full, default: nil),
       case_number: @casa_case.case_number,
       dob: I18n.l(@casa_case.birth_month_year_youth, format: :youth_date_of_birth, default: nil),
       is_transitioning: @casa_case.in_transition_age?
     }
+
+    puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    puts x
+    puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
+    x
   end
 
   def volunteer_info
