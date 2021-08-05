@@ -89,18 +89,12 @@ class CaseCourtReport
   end
 
   def prepare_case_details
-    x = {
+    {
       court_date: I18n.l(@casa_case.court_date, format: :full, default: nil),
       case_number: @casa_case.case_number,
       dob: I18n.l(@casa_case.birth_month_year_youth, format: :youth_date_of_birth, default: nil),
       is_transitioning: @casa_case.in_transition_age?
     }
-
-    puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-    puts x
-    puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-
-    x
   end
 
   def volunteer_info
