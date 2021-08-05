@@ -55,7 +55,7 @@ RSpec.describe "case_contact_reports/index", :disable_bullet, type: :system do
   it "downloads mileage report" do
     sign_in admin
 
-    case_contact_with_mileage = create(:case_contact, :wants_reimbursement)
+    create(:case_contact, :wants_reimbursement)
     case_contact_without_mileage = create(:case_contact)
     volunteer_without_mileage = case_contact_without_mileage.creator
 
