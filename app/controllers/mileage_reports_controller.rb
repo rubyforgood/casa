@@ -5,12 +5,12 @@ class MileageReportsController < ApplicationController
 
   def index
     authorize :application, :see_reports_page?
-    # case_contact_report = CaseContactReport.new(report_params)
+    mileage_report = MileageReport.new(current_organization.id)
 
     respond_to do |format|
       format.csv do
-        send_data "a, b",
-          filename: "hello.csv"
+        send_data mileage_report.to_csv,
+          filename: "mileage-report-#{Time.zone.now.to_i}.csv"
       end
     end
   end
