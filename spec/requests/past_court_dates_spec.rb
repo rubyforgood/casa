@@ -86,7 +86,6 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", :disable_bullet
     let(:past_court_date) { PastCourtDate.last }
 
     context "with valid parameters" do
-
       it "creates a new PastCourtDate" do
         expect do
           post casa_case_past_court_dates_path(casa_case), params: {past_court_date: valid_attributes}
