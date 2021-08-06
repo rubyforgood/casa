@@ -51,4 +51,18 @@ RSpec.describe "case_contact_reports/index", :disable_bullet, type: :system do
     expect(download_content).to include(contact1.notes)
     expect(download_content).not_to include(excluded_by_contact_type_group.notes)
   end
+
+  it "downloads mileage report", js: true do
+    sign_in admin
+
+    case_contact_with_mileage = create(:case_contact, want_driving_reimbursement: true, miles_driven: 10)
+    case_contact_without_mileage = create(:case_contact)
+
+    visit reports_path
+    click_button "Mileage Report"
+    wait_for_download
+
+    expect(download_content).to include(case_contact_with_mileage.creator.display_name)
+    expect(download_content).not_to include(case_contact_without_mileage.creator.display_name)
+  end
 end
