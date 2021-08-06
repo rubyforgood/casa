@@ -71,5 +71,28 @@ RSpec.describe "users/edit", :disable_bullet, type: :system do
       expect(page).to have_text("new_admin@example.com")
       assert_equal "new_admin@example.com", admin.reload.email
     end
+
+    it "displays password errors messages when admin is unable to set a password" do
+      click_on "Change Password"
+
+      fill_in "Password", with: "123"
+      fill_in "Password Confirmation", with: "1234"
+
+      click_on "Update Password"
+
+      expect(page).to have_text("Password confirmation doesn't match Password")
+      expect(page).to have_text("Password is too short (minimum is 6 characters)")
+    end
+
+    it "display sucesscfull message when admin update password" do
+      click_on "Change Password"
+
+      fill_in "Password", with: "1234567"
+      fill_in "Password Confirmation", with: "1234567"
+
+      click_on "Update Password"
+
+      expect(page).to have_text("Password was successfully updated.")
+    end
   end
 end
