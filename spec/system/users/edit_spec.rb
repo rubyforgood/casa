@@ -84,7 +84,7 @@ RSpec.describe "users/edit", :disable_bullet, type: :system do
       expect(page).to have_text("Password is too short (minimum is 6 characters)")
     end
 
-    it "display sucesscfull message when admin update password" do
+    it "display success message when admin update password" do
       click_on "Change Password"
 
       fill_in "Password", with: "1234567"
