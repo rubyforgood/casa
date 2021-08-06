@@ -21,12 +21,14 @@ class CaseCourtReport
   private
 
   def prepare_context(is_default_template)
+    case_past_court_dates = @casa_case.past_court_dates
+
     {
       created_date: I18n.l(Date.today, format: :full, default: nil),
       casa_case: prepare_case_details,
       case_contacts: prepare_case_contacts,
       case_mandates: prepare_case_mandates,
-      latest_hearing_date: I18n.l(@casa_case.past_court_dates.where(date: PastCourtDate.select("MAX(date)"))[0].date, format: :full, default: nil),
+      latest_hearing_date: case_past_court_dates.any? ? I18n.l(case_past_court_dates.where(date: case_past_court_dates.select("MAX(date)"))[0].date, format: :full, default: nil) : "___<LATEST HEARING DATE>____",
       org_address: org_address(is_default_template),
       volunteer: volunteer_info
     }
