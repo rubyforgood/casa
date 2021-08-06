@@ -1,7 +1,14 @@
 <%= link_to t("button.back"), edit_casa_case_path(@casa_case) %>
 
-<h1><%= t(".title") %></h1>
-<h2><%= @past_court_date.decorate.formatted_date %></h2>
+<div class="row">
+  <div class="col-sm-12 form-header">
+    <h1><%= t(".title") %></h1>
+    <%= link_to t(".button.edit_past_court_date"),
+        edit_casa_case_past_court_date_path(@casa_case, @past_court_date),
+        class: "btn btn-primary casa-case-button pull-right" %>
+  </div>
+</div>
+<h2 class="d-inline-block"><%= @past_court_date.decorate.formatted_date %></h2>
 
 <div class="card card-container">
   <div class="card-body">

@@ -11,6 +11,8 @@ class PastCourtDate < ApplicationRecord
   belongs_to :hearing_type, optional: true
   belongs_to :judge, optional: true
 
+  accepts_nested_attributes_for :case_court_mandates, reject_if: :all_blank
+
   DOCX_TEMPLATE_PATH = Rails.root.join("app", "documents", "templates", "default_past_court_date_template.docx")
 
   # get reports associated with the case this belongs to before this court date but after the court date before this one

@@ -500,11 +500,11 @@ of it unless it was included in a previous court report.")
       # test court dates with reports get the correct ones
       [[0, 1], [2, 3], [3, 4]].each do |di, ri|
         expect(page).to have_link("(Attached Report)", href: rails_blob_path(reports[ri], disposition: "attachment"))
-        expect(page).not_to have_link(I18n.l(court_dates[di].date, format: :full, default: nil))
+        expect(page).to have_link(I18n.l(court_dates[di].date, format: :full, default: nil))
       end
 
-      # and that the one with no report doesn't get one
-      expect(page).not_to have_link(I18n.l(court_dates[1].date, format: :full, default: nil))
+      # and that the one with no report still gets one
+      expect(page).to have_link(I18n.l(court_dates[1].date, format: :full, default: nil))
       expect(page).to have_text(I18n.l(court_dates[1].date, format: :full, default: nil))
     end
 

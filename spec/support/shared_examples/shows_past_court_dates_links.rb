@@ -17,6 +17,6 @@ shared_examples_for "shows past court dates links" do
     expect(page).to have_link(formatted_date_with_details)
 
     expect(page).to have_text(formatted_date_without_details)
-    expect(page).not_to have_link(formatted_date_without_details)
+    expect(page).to have_link(formatted_date_without_details)
   end
 end
