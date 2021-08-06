@@ -162,7 +162,8 @@ class DbPopulator
         new_casa_case = CasaCase.find_or_create_by!(
           casa_org_id: casa_org.id,
           case_number: case_number,
-          transition_aged_youth: false
+          transition_aged_youth: false,
+          birth_month_year_youth: ((Date.today - 1.year)..(Date.today + 1.year)).to_a.sample
         )
       end
       volunteer = casa_org.volunteers.active.sample(random: rng) ||
