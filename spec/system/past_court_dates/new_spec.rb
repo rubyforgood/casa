@@ -56,15 +56,4 @@ RSpec.describe "past_court_dates/new", :disable_bullet, type: :system do
       expect(page).to have_content("Date can't be blank")
     end
   end
-
-  context "when the case number field is not filled" do
-    it "does not create a new case" do
-      within ".actions" do
-        click_on "Create CASA Case"
-      end
-
-      expect(page).to have_current_path(casa_cases_path, ignore_query: true)
-      expect(page).to have_content("Case number can't be blank")
-    end
-  end
 end
