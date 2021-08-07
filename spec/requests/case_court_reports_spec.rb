@@ -174,7 +174,7 @@ RSpec.describe "/case_court_reports", :disable_bullet, type: :request do
       it "uses the custom template" do
         get JSON.parse(response.body)["link"]
 
-        expect(get_docx_subfile_contents(response.body, "word/header2.xml")).to include("Voices for Children Montgomery")
+        expect(get_docx_subfile_contents(response.body, "word/document.xml")).to include("Did you forget to enter your court orders?")
       end
 
       context "as a supervisor" do
