@@ -116,7 +116,7 @@ RSpec.describe CaseCourtReport, type: :model do
           expect(report_body).to include(document_data[:case_contact_type])
           expect(report_body).to include("#{document_data[:case_contact_time].strftime("%-m/%d")}*")
           expect(report_body).to include(document_data[:mandate_text])
-          expect(report_body).to include("partially_implemented") # Mandate Status
+          expect(report_body).to include("Partially implemented") # Mandate Status
           expect(report_body).to include(document_data[:volunteer_name])
           expect(report_body).to include(document_data[:volunteer_case_assignment_date].strftime("%B %-d, %Y"))
           expect(report_body).to include(document_data[:supervisor_name])
@@ -174,7 +174,7 @@ RSpec.describe CaseCourtReport, type: :model do
           expect(report_body).to include(document_data[:case_contact_type])
           expect(report_body).to include("#{document_data[:case_contact_time].strftime("%-m/%d")}*")
           expect(report_body).to include(document_data[:mandate_text])
-          expect(report_body).to include("partially_implemented") # Mandate Status
+          expect(report_body).to include("Partially implemented") # Mandate Status
         end
       end
     end
