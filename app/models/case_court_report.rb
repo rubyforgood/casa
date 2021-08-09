@@ -57,7 +57,7 @@ class CaseCourtReport
     @casa_case.case_court_mandates.each do |case_mandate|
       case_mandate_data << {
         order: case_mandate.mandate_text,
-        status: case_mandate.implementation_status
+        status: case_mandate.implementation_status.humanize
       }
     end
 
