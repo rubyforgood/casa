@@ -55,7 +55,7 @@ RSpec.describe CaseCourtReport, type: :model do
       it { is_expected.not_to be_empty }
       it { is_expected.to be_instance_of Hash }
 
-      it "has the following keys [:created_date, :casa_case, :case_contacts, :volunteer]" do
+      it "has the following keys [:created_date, :casa_case, :case_contacts, :latest_hearing_date, :org_address, :volunteer]" do
         expected = %i[created_date casa_case case_contacts volunteer]
         expect(subject.keys).to include(*expected)
       end
