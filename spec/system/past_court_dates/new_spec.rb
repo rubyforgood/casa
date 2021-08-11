@@ -14,7 +14,7 @@ RSpec.describe "past_court_dates/new", :disable_bullet, type: :system do
     click_on "Cases"
     click_on casa_case.case_number
     click_on "Edit Case Details"
-    find(".add-past-court-date-container .btn-primary").click
+    find(".past-court-dates.add-container .btn-primary").click
   end
 
   context "when all fields are filled" do

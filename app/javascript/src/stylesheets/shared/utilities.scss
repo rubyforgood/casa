@@ -10,3 +10,24 @@
   display: flex;
   align-items: center;
 }
+
+.add-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+
+  .add-button {
+    color: white;
+    border: none;
+    background-color: #{$primary};
+
+    padding: 0.25em 1.5em;
+    border-radius: 10px;
+    font-size: 1.25em;
+
+    :hover {
+      cursor: pointer;
+    }
+  }
+}
