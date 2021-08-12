@@ -47,7 +47,7 @@ class CaseCourtReport
     contact_dates_as_hash = aggregate_contact_dates(interviewees)
     contact_dates_as_hash.map do |type, dates|
       {
-        name: "Names of persons involved starting with the child's name",
+        name: "Names of persons involved, starting with the child's name",
         type: type,
         dates: dates.join(", ")
       }
