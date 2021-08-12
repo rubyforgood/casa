@@ -112,8 +112,4 @@ class VolunteersController < ApplicationController
       .new(params)
       .without_active
   end
-
-  # def reminder_params
-  #   params.require(:volunteer).permit(:with_cc)
-  # end
 end
