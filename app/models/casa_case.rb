@@ -143,6 +143,10 @@ class CasaCase < ApplicationRecord
     court_reports.order("created_at").last
   end
 
+  def latest_past_court_date
+    past_court_dates.any? ? past_court_dates.select("MAX(date)"))[0] : nil
+  end
+
   def has_contact_type?(contact_type)
     casa_case_contact_types.map(&:contact_type_id).include?(contact_type.id)
   end
