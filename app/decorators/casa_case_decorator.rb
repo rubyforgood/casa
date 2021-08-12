@@ -40,12 +40,12 @@ class CasaCaseDecorator < Draper::Decorator
     end
   end
 
-  def inactive_class
-    !object.active ? "table-secondary" : ""
-  end
-
   def formatted_updated_at
     I18n.l(object.updated_at, format: :standard, default: nil)
+  end
+
+  def inactive_class
+    !object.active ? "table-secondary" : ""
   end
 
   def status
