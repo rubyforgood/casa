@@ -71,8 +71,8 @@ RSpec.describe "case_contacts/edit", :disable_bullet, type: :system do
         expect(page).not_to have_link "Edit", href: edit_case_contact_path(case_contact)
       end
 
-      it "contact has tooltip" do
-        expect(page).to have_css("i.fa-question-circle")
+      it "contact has hint with card information" do
+        expect(page).to have_css("small.card-title__hint")
       end
     end
   end
