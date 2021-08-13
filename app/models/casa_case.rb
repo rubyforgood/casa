@@ -101,7 +101,7 @@ class CasaCase < ApplicationRecord
     end
   end
 
-  def available_for_volunteer(volunteer)
+  def self.available_for_volunteer(volunteer)
     ids = connection.select_values(%{
       SELECT casa_cases.id
       FROM casa_cases
