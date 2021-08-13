@@ -263,7 +263,7 @@ GEM
       nio4r (~> 2.0)
     puma (5.4.0-java)
       nio4r (~> 2.0)
-    pundit (2.1.0)
+    pundit (2.1.1)
       activesupport (>= 3.0.0)
     racc (1.5.2)
     racc (1.5.2-java)
