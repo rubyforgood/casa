@@ -284,6 +284,20 @@ RSpec.describe CasaCase, type: :model do
     end
   end
 
+  describe "#latest_past_court_date" do
+    let(:casa_case) { create(:casa_case) }
+
+    it "returns the latest past court date" do
+      latest_past_court_date = create(:past_court_date, date: 3.months.ago)
+
+      casa_case.past_court_dates << create(:past_court_date, date: 9.months.ago)
+      casa_case.past_court_dates << latest_past_court_date
+      casa_case.past_court_dates << create(:past_court_date, date: 15.months.ago)
+
+      expect(casa_case.latest_past_court_date).to eq(latest_past_court_date)
+    end
+  end
+
   context "#remove_emancipation_category" do
     let(:casa_case) { create(:casa_case) }
     let(:emancipation_category) { create(:emancipation_category) }
