@@ -51,7 +51,7 @@ RSpec.configure do |config|
     config.include DownloadHelpers
     clear_downloads
     if ENV["DOCKER"]
-      driven_by :selenium_chrome_in_container
+      driven_by :selenium_chrome_headless_in_container
       Capybara.server_host = "0.0.0.0"
       Capybara.server_port = 4000
       Capybara.app_host = "http://web:4000"
