@@ -22,17 +22,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2.3.4
-      - name: Build
-        run: docker-compose build
-      - name: bundle install
-        run: docker-compose run web bundle install
-      - name: db:reset
-        run: docker-compose run web rails db:reset
       - name: docker UP
         run: docker-compose up -d
-      - name: docker PS
-        run: docker ps
-      - name: docker inspect
-        run: docker inspect casa_selenium_chrome_1
       - name: Test
         run: docker-compose exec -T web bundle exec rspec spec
