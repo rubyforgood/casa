@@ -10,7 +10,7 @@
     "toc": "markdown-toc -i README.md"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.3",
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "@rails/actioncable": "^6.1.4",
     "@rails/activestorage": "^6.1.4",
     "@rails/ujs": "^6.1.4",
@@ -25,12 +25,12 @@
     "node-sass": "^6.0.1",
     "popper.js": "^1.16.1",
     "select2": "^4.0.13",
-    "sweetalert2": "^11.0.20",
+    "sweetalert2": "^11.1.2",
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",
   "devDependencies": {
-    "cypress": "^8.1.0",
+    "cypress": "^8.2.0",
     "jest": "^27.0.6",
     "markdown-toc": "^1.2.0",
     "standard": "^16.0.3",

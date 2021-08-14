@@ -116,7 +116,6 @@ RSpec.describe "/case_court_reports", :disable_bullet, type: :request do
         it "contains a link ending with .DOCX extension" do
           body_hash = JSON.parse(response.body)
 
-          expect(body_hash["link"].length).to be > 0
           expect(body_hash["link"]).to end_with("#{casa_case.case_number}.docx")
         end
 
@@ -125,6 +124,17 @@ RSpec.describe "/case_court_reports", :disable_bullet, type: :request do
 
           expect(get_docx_subfile_contents(response.body, "word/header3.xml")).to include("YOUR CASA ORG’S NUMBER")
         end
+
+        # TODO admin and supervisor tests instruction in wrong order
+        # context "as a supervisor" do
+        #  let(:supervisor) { volunteer.supervisor }
+        #
+        #  it "generates the report" do
+        #    sign_in supervisor
+
+        #    expect(JSON.parse(response.body)["link"]).to end_with("#{casa_case.case_number}.docx")
+        #  end
+        # end
       end
 
       context "when an INVALID / non-existing case is sent" do
@@ -174,18 +184,7 @@ RSpec.describe "/case_court_reports", :disable_bullet, type: :request do
       it "uses the custom template" do
         get JSON.parse(response.body)["link"]
 
-        expect(get_docx_subfile_contents(response.body, "word/header2.xml")).to include("Voices for Children Montgomery")
-      end
-
-      context "as a supervisor" do
-        let(:supervisor) { volunteer.supervisor }
-
-        it "generates the report" do
-          sign_in supervisor
-
-          get JSON.parse(response.body)["link"]
-          expect(get_docx_subfile_contents(response.body, "word/header2.xml")).to include("Voices for Children Montgomery")
-        end
+        expect(get_docx_subfile_contents(response.body, "word/document.xml")).to include("Did you forget to enter your court orders?")
       end
     end
   end

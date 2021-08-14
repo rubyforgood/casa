@@ -29,6 +29,7 @@ class UsersController < ApplicationController
       flash[:success] = "Password was successfully updated."
       redirect_to edit_users_path
     else
+      @active_casa_admins = CasaAdmin.in_organization(current_organization).active
       render "edit"
     end
   end

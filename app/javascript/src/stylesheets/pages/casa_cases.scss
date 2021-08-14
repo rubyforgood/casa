@@ -35,31 +35,6 @@ body.casa_cases {
     }
   }
 
-  .add-court-mandate-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 10px;
-  }
-
-  #add-mandate-button, {
-    color: white;
-    border: none;
-
-    font-size: 1.25em;
-
-    :hover {
-      cursor: pointer;
-    }
-  }
-
-  #add-mandate-button {
-    background-color: #{$primary};
-
-    padding: 0.25em 1.5em;
-    border-radius: 10px;
-  }
-
   .court-mandate-entry {
     display: flex;
     gap: 8px;
@@ -90,5 +65,11 @@ body.casa_cases {
 
       margin: 1em 1em 2em 1em;
     }
+  }
+}
+
+body.casa_cases-show {
+  .past-court-dates.add-container {
+    display: none;
   }
 }

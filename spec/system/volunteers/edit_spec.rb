@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "volunteers/edit", :disable_bullet, type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
-  let(:volunteer) { create(:volunteer, casa_org_id: organization.id) }
+  let(:volunteer) { create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id) }
 
   it "shows invite and login info" do
     sign_in admin
@@ -230,7 +230,7 @@ RSpec.describe "volunteers/edit", :disable_bullet, type: :system do
 
       visit edit_volunteer_path(volunteer)
 
-      expect(page).to have_link("Send reminder")
+      expect(page).to have_button("Send reminder")
 
       click_on "Send reminder"
 
@@ -243,7 +243,7 @@ RSpec.describe "volunteers/edit", :disable_bullet, type: :system do
 
     visit edit_volunteer_path(volunteer)
 
-    expect(page).to have_link("Send reminder")
+    expect(page).to have_button("Send reminder")
 
     click_on "Send reminder"
 

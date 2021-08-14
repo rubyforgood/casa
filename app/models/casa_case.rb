@@ -87,18 +87,18 @@ class CasaCase < ApplicationRecord
   # Validation to check timestamp and submission status of a case
   validates_with CourtReportValidator, fields: [:court_report_status, :court_report_submitted_at]
 
-  def latest_court_report
-    court_reports.order("created_at").last
+  def add_emancipation_category(category_id)
+    emancipation_categories << EmancipationCategory.find(category_id)
   end
 
-  def court_report_status=(value)
-    super
-    if court_report_not_submitted?
-      self.court_report_submitted_at = nil
+  def add_emancipation_option(option_id)
+    option_category = EmancipationOption.find(option_id).emancipation_category
+
+    if !(option_category.mutually_exclusive && EmancipationOption.options_with_category_and_case(option_category, id).any?)
+      emancipation_options << EmancipationOption.find(option_id)
     else
-      self.court_report_submitted_at ||= Time.current
+      raise "Attempted adding multiple options belonging to a mutually exclusive category"
     end
-    court_report_status
   end
 
   def self.available_for_volunteer(volunteer)
@@ -115,34 +115,52 @@ class CasaCase < ApplicationRecord
       .order(:case_number)
   end
 
+  def clear_court_dates
+    if court_date && court_date < Time.current
+      update(
+        court_date: nil,
+        court_report_due_date: nil,
+        court_report_status: :not_submitted
+      )
+    end
+  end
+
+  def court_report_status=(value)
+    super
+    if court_report_not_submitted?
+      self.court_report_submitted_at = nil
+    else
+      self.court_report_submitted_at ||= Time.current
+    end
+    court_report_status
+  end
+
   def in_transition_age?
     birth_month_year_youth.nil? ? false : birth_month_year_youth <= 14.years.ago
   end
 
-  def has_transitioned?
-    transition_aged_youth
+  def latest_court_report
+    court_reports.order("created_at").last
   end
 
-  def has_judge_name?
-    judge_name
+  def latest_past_court_date
+    past_court_dates.any? ? past_court_dates.where(date: past_court_dates.select("MAX(date)"))[0] : nil
+  end
+
+  def has_contact_type?(contact_type)
+    casa_case_contact_types.map(&:contact_type_id).include?(contact_type.id)
   end
 
   def has_hearing_type?
     hearing_type
   end
 
-  def add_emancipation_category(category_id)
-    emancipation_categories << EmancipationCategory.find(category_id)
+  def has_judge_name?
+    judge_name
   end
 
-  def add_emancipation_option(option_id)
-    option_category = EmancipationOption.find(option_id).emancipation_category
-
-    if !(option_category.mutually_exclusive && EmancipationOption.options_with_category_and_case(option_category, id).any?)
-      emancipation_options << EmancipationOption.find(option_id)
-    else
-      raise "Attempted adding multiple options belonging to a mutually exclusive category"
-    end
+  def has_transitioned?
+    transition_aged_youth
   end
 
   def remove_emancipation_category(category_id)
@@ -175,16 +193,6 @@ class CasaCase < ApplicationRecord
     end
   end
 
-  def clear_court_dates
-    if court_date && court_date < Time.current
-      update(
-        court_date: nil,
-        court_report_due_date: nil,
-        court_report_status: :not_submitted
-      )
-    end
-  end
-
   def deactivate
     update(active: false)
     case_assignments.map { |ca| ca.update(active: false) }
@@ -196,10 +204,6 @@ class CasaCase < ApplicationRecord
 
   def unassigned_volunteers
     Volunteer.active.where.not(id: assigned_volunteers).order(:display_name).in_organization(casa_org)
-  end
-
-  def has_contact_type?(contact_type)
-    casa_case_contact_types.map(&:contact_type_id).include?(contact_type.id)
   end
 end
 

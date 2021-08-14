@@ -87,6 +87,7 @@ en:
         select_judge: -Select Judge-
       youth_birth_month_year: "Youth's Birth Month & Year"
       add_court_mandate: Add a court mandate
+      add_past_court_date: Add a past court date
       next_court_date: Next Court Date
       court_report_due_date: Court Report Due Date
       court_mandates: Court Mandates
@@ -135,7 +136,21 @@ en:
     new:
       title: New CASA Case
   past_court_dates:
+    edit:
+      title: Editing Past Court Date
+    form:
+      button:
+        add_court_mandate: Add a court mandate
+        create: Create
+        update: Update
+      label:
+        court_mandates:
+          Court Mandates - Please check that you didn't enter any youth names
+    new:
+      title: New Past Court Date
     show:
+      button:
+        edit_past_court_date: Edit
       title: Past Court Date
       label:
         case_number: Case Number
@@ -423,7 +438,7 @@ en:
         new: New Volunteer
   reports:
     index:
-      page_title: Export Data
+      export_page_title: Export Data
       reports_subhead: Case Contacts Report
       reports_description: This CSV is a listing of all fields for the case contacts of all volunteers. Select the start and end date.
       start_date_label: "Starting From:"
@@ -440,3 +455,4 @@ en:
       contact_made_label: "Contact Made:"
       transition_aged_label: "Transition Aged Youth:"
       download_report_button: Download Report
+      download_mileage_report_button: Mileage Report
