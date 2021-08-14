@@ -19,10 +19,6 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
-    container:
-      image: selenium/standalone-chrome-debug
-      volumes:
-        - ${{ github.workspace }}/tmp/downloads:/home/seluser/Downloads
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2.3.4
@@ -34,5 +30,9 @@ jobs:
         run: docker-compose run web rails db:reset
       - name: docker UP
         run: docker-compose up -d
+      - name: docker PS
+        run: docker ps
+      - name: docker inspect
+        run: docker inspect casa_selenium_chrome_1
       - name: Test
         run: docker-compose exec -T web bundle exec rspec spec
