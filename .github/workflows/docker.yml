@@ -19,6 +19,10 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    container:
+      image: selenium/standalone-chrome-debug
+      volumes:
+        - ${{ github.workspace }}/tmp/downloads:/home/seluser/Downloads
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2.3.4
