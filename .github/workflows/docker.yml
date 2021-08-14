@@ -26,10 +26,6 @@ jobs:
         uses: docker/setup-buildx-action@v1
       - name: Build
         run: docker-compose build
-      - name: bundle install
-        run: docker-compose run web bundle install
-      - name: db:reset
-        run: docker-compose run web rails db:reset
       - name: docker UP
         run: docker-compose up -d
       - name: Test
