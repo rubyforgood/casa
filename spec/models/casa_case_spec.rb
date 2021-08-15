@@ -87,32 +87,6 @@ RSpec.describe CasaCase, type: :model do
     end
   end
 
-  describe ".available_for_volunteer" do
-    let(:casa_org) { create(:casa_org) }
-    let!(:casa_case1) { create(:casa_case, :with_case_assignments, case_number: "foo", casa_org: casa_org) }
-    let!(:casa_case2) { create(:casa_case, :with_case_assignments, case_number: "bar", casa_org: casa_org) }
-    let!(:casa_case3) { create(:casa_case, case_number: "baz", casa_org: casa_org) }
-    let!(:casa_case4) { create(:casa_case, casa_org: create(:casa_org)) }
-    let(:volunteer) { create(:volunteer, casa_org: casa_org) }
-
-    context "when volunteer has no case assignments" do
-      it "returns all cases in volunteer's organization" do
-        expect(described_class.available_for_volunteer(volunteer)).to eq [casa_case2, casa_case3, casa_case1]
-      end
-    end
-
-    context "when volunteer has case assignments" do
-      let(:volunteer2) { create(:volunteer, casa_org: casa_org) }
-      let(:casa_case) { create(:casa_case, casa_org: casa_org) }
-
-      it "returns cases to which volunteer is not assigned in same org" do
-        casa_case.volunteers << volunteer
-        casa_case.volunteers << volunteer2
-        expect(described_class.available_for_volunteer(volunteer)).to eq [casa_case2, casa_case3, casa_case1]
-      end
-    end
-  end
-
   describe ".should_transition" do
     it "returns only youth who should have transitioned but have not" do
       not_transitioned_13_yo = create(:casa_case,
