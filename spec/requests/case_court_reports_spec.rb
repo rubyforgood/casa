@@ -163,6 +163,28 @@ RSpec.describe "/case_court_reports", :disable_bullet, type: :request do
 
           expect(get_docx_subfile_contents(response.body, "word/header3.xml")).to include("YOUR CASA ORG’S NUMBER")
         end
+
+        context "as a supervisor" do
+          let(:supervisor) { volunteer.supervisor }
+
+          it "generates the report" do
+            sign_in supervisor
+            request_generate_court_report
+
+            expect(JSON.parse(response.body)["link"]).to end_with(".docx")
+          end
+        end
+
+        context "as an admin" do
+          let(:admin) { volunteer.casa_org.casa_admins.first || create(:casa_admin, casa_org: volunteer.casa_org) }
+
+          it "generates the report" do
+            sign_in admin
+            request_generate_court_report
+
+            expect(JSON.parse(response.body)["link"]).to end_with(".docx")
+          end
+        end
       end
 
       context "when a custom template is set" do
