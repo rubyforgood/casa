@@ -13,12 +13,13 @@ class CasaCasesController < ApplicationController
 
   def show
     authorize @casa_case
+
     respond_to do |format|
       format.html {}
       format.csv do
         case_contacts = @casa_case.decorate.case_contacts_ordered_by_occurred_at
         csv = CaseContactsExportCsvService.new(case_contacts).perform
-        send_data csv, filename: "volunteer-#{current_user.id}-case-contacts-#{Time.zone.now.to_i}.csv"
+        send_data csv, filename: case_contact_csv_name(case_contacts)
       end
     end
   end
@@ -103,5 +104,12 @@ class CasaCasesController < ApplicationController
 
   def set_contact_types
     @contact_types = ContactType.for_organization(current_organization)
+  end
+
+  def case_contact_csv_name(case_contacts)
+    casa_case_number = case_contacts&.first&.casa_case&.case_number
+    current_date = Time.now.strftime("%Y-%m-%d")
+
+    "#{casa_case_number.nil? ? "" : casa_case_number + "-"}case-contacts-#{current_date}.csv"
   end
 end
