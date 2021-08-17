@@ -14,8 +14,7 @@ label {
   font-weight: 900;
 }
 
-.fa-car,
-.fa-question-circle {
+.fa-car {
   color: $primary;
 }
 
@@ -37,6 +36,12 @@ div.row:nth-child(4) {
   margin: 0 0 12px 0;
 }
 
+.card-title {
+  &__hint {
+    font-size: 11px;
+    font-style: italic;
+  }
+}
 
 /* ASSUMPTION: default screen size is desktop view (> 1024px) */
 
