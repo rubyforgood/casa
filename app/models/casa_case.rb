@@ -101,20 +101,6 @@ class CasaCase < ApplicationRecord
     end
   end
 
-  def self.available_for_volunteer(volunteer)
-    ids = connection.select_values(%{
-      SELECT casa_cases.id
-      FROM casa_cases
-      WHERE id NOT IN (SELECT ca.casa_case_id
-                      FROM case_assignments ca
-                      WHERE ca.volunteer_id = #{volunteer.id}
-                      GROUP BY ca.casa_case_id)
-      GROUP BY casa_cases.id;
-    })
-    where(id: ids, casa_org: volunteer.casa_org)
-      .order(:case_number)
-  end
-
   def clear_court_dates
     if court_date && court_date < Time.current
       update(
