@@ -9,14 +9,26 @@ RSpec.describe CasaCasesController, type: :controller do
       before do
         allow(controller).to receive(:authenticate_user!).and_return(true)
         allow(controller).to receive(:current_user).and_return(volunteer)
-      end
-
-      it "should export csv successfully" do
-        case_id = volunteer.casa_cases.first.id
 
         get :show, params: {id: case_id, format: :csv}
-        expect(response).to have_http_status(:ok)
-        # TODO: add more test cases to cover the amount of data that's exported
+      end
+
+      context "when exporting a csv" do
+        let(:case_id) { volunteer.casa_cases.first.id }
+        let(:current_time) { Time.now.strftime("%Y-%m-%d") }
+        let(:casa_case_number) { volunteer.casa_cases.first.case_number }
+
+        it "generates a csv" do
+          expect(response).to have_http_status(:ok)
+          expect(response.headers["Content-Type"]).to include "text/csv"
+          expect(response.headers["Content-Disposition"]).to include "#{casa_case_number}-case-contacts-#{current_time}"
+        end
+
+        it "adds the correct headers to the csv" do
+          csv_headers = ["Internal Contact Number", "Duration Minutes", "Contact Types", "Contact Made", "Contact Medium", "Occurred At", "Added To System At", "Miles Driven", "Wants Driving Reimbursement", "Casa Case Number", "Creator Email", "Creator Name", "Supervisor Name", "Case Contact Notes"]
+
+          csv_headers.each { |header| expect(response.body).to include header }
+        end
       end
     end
   end
