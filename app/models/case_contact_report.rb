@@ -29,8 +29,6 @@ class CaseContactReport
   def filtered_columns(args)
     if args[:filtered_csv_cols].present?
       args[:filtered_csv_cols].select { |_key, value| value == "true" }.keys.map(&:to_sym)
-    else
-      CaseContactsExportCsvService.DATA_COLUMNS.keys
     end
   end
 end

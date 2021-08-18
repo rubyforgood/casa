@@ -3,8 +3,8 @@ require "csv"
 class CaseContactsExportCsvService
   attr_reader :case_contacts, :filtered_columns
 
-  def initialize(case_contacts, filtered_columns)
-    @filtered_columns = filtered_columns
+  def initialize(case_contacts, filtered_columns = nil)
+    @filtered_columns = filtered_columns || CaseContactsExportCsvService.DATA_COLUMNS.keys
 
     @case_contacts = case_contacts.preload({creator: :supervisor}, :contact_types, :casa_case)
   end
