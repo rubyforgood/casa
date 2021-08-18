@@ -130,7 +130,7 @@ class CasaCase < ApplicationRecord
   end
 
   def latest_past_court_date
-    past_court_dates.any? ? past_court_dates.where(date: past_court_dates.select("MAX(date)"))[0] : nil
+    past_court_dates.order("date").last
   end
 
   def has_contact_type?(contact_type)
