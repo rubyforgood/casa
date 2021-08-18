@@ -172,6 +172,8 @@ en:
         display_name: Display Name
       prompt:
         mark_inactive_warning: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"
+      active_text: Admin is
+      deactive_text: Admin was deactivated on
     edit:
       title: Edit Casa Admin
     new:
