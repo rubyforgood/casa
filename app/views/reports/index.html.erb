@@ -113,6 +113,11 @@ multiple: true}
         </div>
       <% end %>
 
+      <%= render 'filter', form: f %>
+      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#filterColumns">
+        <%= t(".filter_cols") %>
+      </button>
+
       <%= f.submit t(".download_report_button"), class: "btn btn-primary", data: {disable_with: false} %>
     <% end %>
 
