@@ -1,26 +1,26 @@
 require "csv"
 
 class CaseContactsExportCsvService
-  attr_reader :case_contacts
+  attr_reader :case_contacts, :filtered_columns
 
-  def initialize(case_contacts)
+  def initialize(case_contacts, filtered_columns = nil)
+    @filtered_columns = filtered_columns || CaseContactsExportCsvService.DATA_COLUMNS.keys
+
     @case_contacts = case_contacts.preload({creator: :supervisor}, :contact_types, :casa_case)
   end
 
   def perform
     CSV.generate(headers: true) do |csv|
-      csv << full_data.keys.map(&:to_s).map(&:titleize)
+      csv << filtered_columns.map(&:to_s).map(&:titleize)
       if case_contacts.present?
         case_contacts.decorate.each do |case_contact|
-          csv << full_data(case_contact).values
+          csv << CaseContactsExportCsvService.DATA_COLUMNS(case_contact).slice(*filtered_columns).values
         end
       end
     end
   end
 
-  private
-
-  def full_data(case_contact = nil)
+  def self.DATA_COLUMNS(case_contact = nil)
     # Note: these header labels are for stakeholders and do not match the
     # Rails DB names in all cases, e.g. added_to_system_at header is case_contact.created_at
     {

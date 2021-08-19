@@ -334,5 +334,29 @@ RSpec.describe CaseContactReport, type: :model do
         end
       end
     end
+
+    context "when columns are filtered" do
+      let(:args) do
+        {
+          filtered_csv_cols: {
+            internal_contact_number: "true",
+            duration_minutes: "true",
+            contact_types: "false"
+          }
+        }
+      end
+
+      it "returns a report with only the selected columns" do
+        create(:case_contact)
+        csv = described_class.new(args).to_csv
+        parsed_csv = CSV.parse(csv)
+
+        expect(parsed_csv.length).to eq(2)
+        expect(parsed_csv[0]).to eq([
+          "Internal Contact Number",
+          "Duration Minutes"
+        ])
+      end
+    end
   end
 end
