@@ -198,7 +198,7 @@ GEM
       addressable (~> 2.7)
     letter_opener (1.7.0)
       launchy (~> 2.2)
-    listen (3.6.0)
+    listen (3.7.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     lograge (0.11.2)
@@ -456,7 +456,7 @@ DEPENDENCIES
   image_processing (~> 1.12)
   jbuilder (~> 2.11)
   letter_opener
-  listen (>= 3.0.5, < 3.7)
+  listen (>= 3.0.5, < 3.8)
   lograge
   noticed
   paper_trail
