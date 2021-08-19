@@ -1,6 +1,6 @@
 This folder contains helper scripts for Git hooks.
 
-To create a hook, make a file inside the directory `/.git/hooks` with the name of the hook you want to set up. Do not use a file extension.
+To create a hook, make a file inside the directory `.git/hooks/` with the name of the hook you want to set up. Do not use a file extension.
 For example, if you want to set up a pre-commit hook, the file should be called `pre-commit`, or if you want a pre-push hook, it should be called `pre-push`.
 
 Once you've created that file, put the appropriate she-bang on the first line:
