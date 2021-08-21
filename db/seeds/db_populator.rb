@@ -178,10 +178,10 @@ class DbPopulator
           )
         end
 
-      volunteer = casa_org.volunteers.active.sample(random: rng) ||
-        casa_org.volunteers.active.first ||
+      volunteer = new_casa_case.casa_org.volunteers.active.sample(random: rng) ||
+        new_casa_case.casa_org.volunteers.active.first ||
         Volunteer.create!(
-          casa_org: casa_org,
+          casa_org: new_casa_case.casa_org,
           email: "#{SecureRandom.hex(10)}@example.com",
           password: SEED_PASSWORD,
           display_name: "active volunteer"
