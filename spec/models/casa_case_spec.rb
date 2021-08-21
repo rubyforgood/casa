@@ -16,6 +16,24 @@ RSpec.describe CasaCase, type: :model do
   it { is_expected.to have_many(:case_court_mandates).dependent(:destroy) }
   it { is_expected.to have_many(:volunteers).through(:case_assignments) }
 
+  describe "scopes" do
+    describe ".due_date_passed" do
+      subject { described_class.due_date_passed }
+
+      context "when casa_case is present" do
+        let(:casa_case) { create(:casa_case, court_date: Time.current - 3.days) }
+
+        it { is_expected.to include(casa_case) }
+      end
+
+      context "when casa_case is not present" do
+        let(:casa_case) { create(:casa_case, court_date: Time.current + 3.days) }
+
+        it { is_expected.not_to include(casa_case) }
+      end
+    end
+  end
+
   describe ".unassigned_volunteers" do
     it "only shows volunteers for the current volunteers organization" do
       casa_case = create(:casa_case)
