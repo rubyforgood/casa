@@ -31,4 +31,4 @@ jobs:
       - name: db:reset
         run: docker-compose exec -T web rails db:reset
       - name: Test
-        run: docker-compose exec -T web bundle exec rspec spec/system/reports/export_data_spec.rb
+        run: docker-compose exec -T web bundle exec rspec spec
