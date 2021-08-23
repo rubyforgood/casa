@@ -31,6 +31,12 @@ RSpec.describe CasaCase, type: :model do
 
         it { is_expected.not_to include(casa_case) }
       end
+
+      context "when casa_case is current" do
+        let(:casa_case) { create(:casa_case, court_date: Time.current) }
+
+        it { is_expected.not_to include(casa_case) }
+      end
     end
   end
 
@@ -122,27 +128,6 @@ RSpec.describe CasaCase, type: :model do
         expect(cases.include?(not_transitioned_14_yo)).to eq true
         expect(cases.include?(not_transitioned_13_yo)).to eq false
         expect(cases.include?(transitioned_14_yo)).to eq false
-      end
-    end
-  end
-
-  describe ".due_date_passed" do
-    it "returns only youth who should have transitioned but have not" do
-      due_date_past = create(:casa_case,
-        court_date: 20.day.ago)
-
-      due_date_current = create(:casa_case,
-        court_date: Date.current)
-
-      due_date_future = create(:casa_case,
-        court_date: 7.days.since(Date.current))
-
-      cases = CasaCase.due_date_passed
-      aggregate_failures do
-        expect(cases.length).to eq 2
-        expect(cases.include?(due_date_past)).to eq true
-        expect(cases.include?(due_date_current)).to eq true
-        expect(cases.include?(due_date_future)).to eq false
       end
     end
   end
