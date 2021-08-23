@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "past_court_dates/edit", :disable_bullet, type: :view do
+RSpec.describe "past_court_dates/edit", type: :view do
   subject { render template: "past_court_dates/edit" }
 
   let(:organization) { create(:casa_org) }

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
+RSpec.describe "case_court_reports/index", type: :system do
   let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
   let(:supervisor) { volunteer.supervisor }
   let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }

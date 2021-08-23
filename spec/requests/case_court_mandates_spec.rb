@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/case_court_mandates", :disable_bullet, type: :request do
+RSpec.describe "/case_court_mandates", type: :request do
   subject(:delete_request) { delete case_court_mandate_url(case_court_mandate) }
   let(:case_court_mandate) { build(:case_court_mandate) }
 

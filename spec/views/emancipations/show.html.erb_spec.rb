@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "emancipation/show", :disable_bullet, type: :view do
+RSpec.describe "emancipation/show", type: :view do
   subject { render template: "emancipation/show" }
 
   let(:organization) { build_stubbed(:casa_org) }

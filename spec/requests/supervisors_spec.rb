@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "/supervisors", :disable_bullet, type: :request do
+RSpec.describe "/supervisors", type: :request do
   let(:admin) { create(:casa_admin) }
   let(:supervisor) { create(:supervisor) }
 

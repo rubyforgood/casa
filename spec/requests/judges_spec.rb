@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/judges", :disable_bullet, type: :request do
+RSpec.describe "/judges", type: :request do
   describe "GET /judges/new" do
     context "logged in as admin user" do
       it "can successfully access a judge create page" do

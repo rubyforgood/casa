@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "all_casa_admins/new", :disable_bullet, type: :system do
+RSpec.describe "all_casa_admins/new", type: :system do
   let(:all_casa_admin) { create(:all_casa_admin, email: "theexample@example.com") }
   let(:path) { authenticated_all_casa_admin_root_path }
 
