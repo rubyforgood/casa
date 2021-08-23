@@ -462,3 +462,6 @@ en:
     filter:
       filter_exported_columns: Filter Exported Columns
       select_columns: "Select columns:"
+  notifications:
+    index:
+      no_notifications: You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.

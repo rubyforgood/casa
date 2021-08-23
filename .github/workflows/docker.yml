@@ -22,6 +22,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2.3.4
+      - name: Create downloads folder
+        run: |
+          mkdir -p tmp/downloads
+          chmod 777 tmp tmp/downloads
       - name: docker UP
         run: docker-compose up -d
       - name: db:reset
