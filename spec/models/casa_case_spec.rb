@@ -108,6 +108,27 @@ RSpec.describe CasaCase, type: :model do
     end
   end
 
+  describe ".due_date_passed" do
+    it "returns only youth who should have transitioned but have not" do
+      due_date_past = create(:casa_case,
+        court_date: 20.day.ago)
+
+      due_date_current = create(:casa_case,
+        court_date: Date.current)
+
+      due_date_future = create(:casa_case,
+        court_date: 7.days.since(Date.current))
+
+      cases = CasaCase.due_date_passed
+      aggregate_failures do
+        expect(cases.length).to eq 2
+        expect(cases.include?(due_date_past)).to eq true
+        expect(cases.include?(due_date_current)).to eq true
+        expect(cases.include?(due_date_future)).to eq false
+      end
+    end
+  end
+
   describe "#active_case_assignments" do
     it "only includes active assignments" do
       casa_org = create(:casa_org)
