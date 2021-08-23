@@ -36,6 +36,7 @@ yarn-debug.log*
 
 .rails_routes*
 .vscode
+.rubocop.yml
 
 coverage/
 .idea/

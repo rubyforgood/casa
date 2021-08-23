@@ -1,4 +1,4 @@
-class VolunteerMailer < ApplicationMailer
+class VolunteerMailer < UserMailer
   def deactivation(user)
     @user = user
     @casa_organization = user.casa_org
