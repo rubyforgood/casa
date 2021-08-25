@@ -110,7 +110,9 @@ sudo apt install -y curl git git-gui htop hub libpq-dev net-tools nodejs npm ope
 
 ```
 # Install NVM and Node JS
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+#   you can use wget or curl
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 . ./.bashrc
 nvm install 13.7.0
 ```
