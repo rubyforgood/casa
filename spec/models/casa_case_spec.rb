@@ -31,6 +31,12 @@ RSpec.describe CasaCase, type: :model do
 
         it { is_expected.not_to include(casa_case) }
       end
+
+      context "when casa_case is current" do
+        let(:casa_case) { create(:casa_case, court_date: Time.current) }
+
+        it { is_expected.not_to include(casa_case) }
+      end
     end
   end
 
