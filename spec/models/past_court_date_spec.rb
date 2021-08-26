@@ -112,7 +112,7 @@ RSpec.describe PastCourtDate, type: :model do
     subject { past_court_date.display_name }
     it "contains case number and date" do
       travel_to Time.zone.local(2020, 1, 2)
-      expect(subject).to eq("AAA123123 - Past Court Date - 2020-01-01")
+      expect(subject).to eq("AAA123123 - Past Court Date - 2019-12-26")
     end
   end
 end
