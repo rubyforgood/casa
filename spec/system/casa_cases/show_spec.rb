@@ -7,6 +7,8 @@ RSpec.describe "casa_cases/show", type: :system do
   let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: organization, case_number: "CINA-1") }
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
   let!(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
+  let!(:newest_pcd) { create(:past_court_date, date: DateTime.current - 5.days, casa_case: casa_case) }
+  let!(:oldest_pcd) { create(:past_court_date, date: DateTime.current - 10.days, casa_case: casa_case) }
 
   before do
     sign_in user

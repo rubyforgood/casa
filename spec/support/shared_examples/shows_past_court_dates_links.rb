@@ -19,4 +19,9 @@ shared_examples_for "shows past court dates links" do
     expect(page).to have_text(formatted_date_without_details)
     expect(page).to have_link(formatted_date_without_details)
   end
+
+  it "past court dates are ordered" do
+    expect(page).to have_content((DateTime.current - 10.days).strftime("%B %-d, %Y").to_s)
+    expect(page.body).to match /#{oldest_pcd.date.strftime('%B %-d, %Y')}.*#{newest_pcd.date.strftime('%B %-d, %Y')}/m
+  end
 end
