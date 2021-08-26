@@ -1,12 +1,12 @@
 module ContactTypePopulator
   BASIC_CONTACT_TYPES = {
-    "CASA": ["Youth", "Supervisor"],
-    "Family": ["Parent", "Other Family", "Sibling", "Grandparent", "Aunt Uncle or Cousin", "Fictive Kin"],
-    "Placement": ["Foster Parent", "Caregiver Family", "Therapeutic Agency Worker"],
+    CASA: ["Youth", "Supervisor"],
+    Family: ["Parent", "Other Family", "Sibling", "Grandparent", "Aunt Uncle or Cousin", "Fictive Kin"],
+    Placement: ["Foster Parent", "Caregiver Family", "Therapeutic Agency Worker"],
     "Social Services": ["Social Worker"],
-    "Legal": ["Court", "Attorney"],
-    "Health": ["Medical Professional", "Mental Health Therapist", "Other Therapist", "Psychiatric Practitioner"],
-    "Education": ["School", "Guidance Counselor", "Teacher", "IEP Team"],
+    Legal: ["Court", "Attorney"],
+    Health: ["Medical Professional", "Mental Health Therapist", "Other Therapist", "Psychiatric Practitioner"],
+    Education: ["School", "Guidance Counselor", "Teacher", "IEP Team"]
   }.freeze
 
   def self.populate
