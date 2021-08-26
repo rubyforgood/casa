@@ -217,7 +217,7 @@ RSpec.describe "/volunteers", type: :request do
 
     it "doesn't send an deactivation email" do
       expect {
-        patch deactivate_supervisor_path(volunteer)
+        patch deactivate_volunteer_path(volunteer)
       }.to_not change { ActionMailer::Base.deliveries.count }
     end
   end
