@@ -61,8 +61,6 @@ class SupervisorsController < ApplicationController
   def deactivate
     authorize @supervisor
     if @supervisor.deactivate
-      SupervisorMailer.deactivation(@supervisor).deliver
-
       redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was deactivated."
     else
       render :edit, notice: "Supervisor could not be deactivated."

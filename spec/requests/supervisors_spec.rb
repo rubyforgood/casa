@@ -158,6 +158,40 @@ RSpec.describe "/supervisors", type: :request do
     end
   end
 
+  describe "PATCH /activate" do
+    let(:inactive_supervisor) { create(:supervisor, :inactive) }
+
+    before { sign_in admin }
+
+    it "activates an inactive supervisor" do
+      patch activate_supervisor_path(inactive_supervisor)
+
+      inactive_supervisor.reload
+      expect(inactive_supervisor.active).to be true
+    end
+
+    it "sends an activation mail" do
+      expect { patch activate_supervisor_path(inactive_supervisor) }.to change { ActionMailer::Base.deliveries.count }.by(1)
+    end
+  end
+
+  describe "PATCH /deactivate" do
+    before { sign_in admin }
+
+    it "deactivates an active supervisor" do
+      patch deactivate_supervisor_path(supervisor)
+
+      supervisor.reload
+      expect(supervisor.active).to be false
+    end
+
+    it "doesn't send an deactivation email" do
+      expect {
+        patch deactivate_supervisor_path(supervisor)
+      }.to_not change { ActionMailer::Base.deliveries.count }
+    end
+  end
+
   describe "PATCH /resend_invitation" do
     before { sign_in admin }
     it "resends an invitation email" do
