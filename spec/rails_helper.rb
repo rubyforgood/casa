@@ -64,7 +64,7 @@ RSpec.configure do |config|
     Bullet.enable = false
   end
 
-  config.around :each do |example|
+  config.around :each, :disable_bullet do |example|
     Bullet.raise = false
     example.run
     Bullet.raise = true
