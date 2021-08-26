@@ -46,11 +46,15 @@
       <br>
       <%= form_for(@user, as: :user, url: {action: "update_password"}) do |f| %>
         <div class="field form-group">
-          <%= f.label :password, "Password" %><br>
+          <%= f.label :current_password, "Current Password" %><br>
+          <%= f.password_field :current_password, autocomplete: "off", class: "form-control" %>
+        </div>
+        <div class="field form-group">
+          <%= f.label :password, "New Password" %><br>
           <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
         </div>
         <div class="field form-group">
-          <%= f.label :password_confirmation, "Password Confirmation" %><br>
+          <%= f.label :password_confirmation, "New Password Confirmation" %><br>
           <%= f.password_field :password_confirmation, class: "form-control" %>
         </div>
         <div class="action_container">
