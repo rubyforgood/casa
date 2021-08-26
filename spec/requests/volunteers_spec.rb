@@ -159,6 +159,9 @@ RSpec.describe "/volunteers", type: :request do
 
   describe "PATCH /activate" do
     let(:volunteer) { create(:volunteer, :inactive) }
+    let(:organization) { create(:casa_org) }
+    let(:volunteer_with_cases) { create(:volunteer, :with_cases_and_contacts, casa_org: organization) }
+    let(:case_id) { volunteer_with_cases.casa_cases.first.id }
 
     it "activates an inactive volunteer" do
       sign_in admin
@@ -175,6 +178,30 @@ RSpec.describe "/volunteers", type: :request do
       expect {
         patch activate_volunteer_path(volunteer)
       }.to change { ActionMailer::Base.deliveries.count }.by(1)
+    end
+
+    context "activated volunteer without cases" do
+      it "shows a flash messages indicating the volunteer has been activated and sent an email" do
+        sign_in admin
+
+        patch activate_volunteer_path(volunteer)
+
+        expect(response).to redirect_to(edit_volunteer_path(volunteer))
+        follow_redirect!
+        expect(flash[:notice]).to match(/Volunteer was activated. They have been sent an email./)
+      end
+    end
+
+    context "activated volunteer with cases" do
+      it "shows a flash messages indicating the volunteer has been activated and sent an email" do
+        sign_in admin
+
+        patch activate_volunteer_path(id: volunteer_with_cases, redirect_to_path: "casa_case", casa_case_id: case_id)
+
+        expect(response).to redirect_to(edit_casa_case_path(case_id))
+        follow_redirect!
+        expect(flash[:notice]).to match(/Volunteer was activated. They have been sent an email./)
+      end
     end
   end
 
