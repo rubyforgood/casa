@@ -44,6 +44,14 @@ RSpec.describe "casa_cases/show", type: :system do
       expect(page).to have_link(href: "/supervisors/#{user.id}/edit")
     end
 
+    context "case contact by another supervisor" do
+      let(:other_supervisor) { create(:supervisor, casa_org: organization) }
+      let!(:case_contact) { create(:case_contact, creator: other_supervisor, casa_case: casa_case) }
+      it "sees link to other supervisor" do
+        expect(page).to have_link(href: "/supervisors/#{other_supervisor.id}/edit")
+      end
+    end
+
     it "can see court mandates" do
       expect(page).to have_content("Court Mandates")
       expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
