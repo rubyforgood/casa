@@ -10,7 +10,7 @@ module ContactTypePopulator
   }.freeze
 
   def self.populate
-    CasaOrg.all.each do |org|
+    CasaOrg.all.each do |casa_org|
       BASIC_CONTACT_TYPES.each do |contact_group_name, contact_type_names|
         group = ContactTypeGroup.find_or_create_by!(casa_org: casa_org, name: contact_group_name)
         contact_type_names.each do |type_name|
