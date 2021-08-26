@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "case_contacts/index", :disable_bullet, js: true, type: :system do
+RSpec.describe "case_contacts/index", js: true, type: :system do
   let(:volunteer) { create(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
   let(:organization) { create(:casa_org) }
 

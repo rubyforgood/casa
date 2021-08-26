@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "past_court_dates/new", :disable_bullet, type: :view do
+RSpec.describe "past_court_dates/new", type: :view do
   subject { render template: "past_court_dates/new" }
 
   before do

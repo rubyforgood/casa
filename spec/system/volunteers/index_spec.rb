@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "view all volunteers", :disable_bullet, type: :system do
+RSpec.describe "view all volunteers", type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
 

@@ -1,7 +1,7 @@
 require "rails_helper"
 require "action_view"
 
-RSpec.describe "case_contacts/new", :disable_bullet, type: :system do
+RSpec.describe "case_contacts/new", type: :system do
   include ActionView::Helpers::SanitizeHelper
 
   context "when admin" do

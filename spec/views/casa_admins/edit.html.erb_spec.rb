@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "casa_admins/edit", :disable_bullet, type: :view do
+RSpec.describe "casa_admins/edit", type: :view do
   let(:admin) { build_stubbed :casa_admin }
 
   it "shows invite and login info" do

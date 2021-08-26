@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "CasaOrgs", :disable_bullet, type: :request do
+RSpec.describe "CasaOrgs", type: :request do
   let(:casa_org) { create(:casa_org) }
   let(:valid_attributes) { {name: "name", display_name: "display_name", address: "address"} }
   let(:logo) { upload_file("#{Rails.root}/spec/fixtures/company_logo.png") }

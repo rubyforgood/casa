@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/all_casa_admins", :disable_bullet, type: :request do
+RSpec.describe "/all_casa_admins", type: :request do
   let(:admin) { create(:all_casa_admin) }
 
   before(:each) { sign_in admin }

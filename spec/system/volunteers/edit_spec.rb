@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "volunteers/edit", :disable_bullet, type: :system do
+RSpec.describe "volunteers/edit", type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
   let(:volunteer) { create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id) }

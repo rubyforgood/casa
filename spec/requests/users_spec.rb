@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/users", :disable_bullet, type: :request do
+RSpec.describe "/users", type: :request do
   describe "GET /edit" do
     context "with a volunteer signed in" do
       it "renders a successful response" do

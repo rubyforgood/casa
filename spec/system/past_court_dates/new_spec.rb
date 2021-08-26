@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "past_court_dates/new", :disable_bullet, type: :system do
+RSpec.describe "past_court_dates/new", type: :system do
   let(:casa_org) { create(:casa_org) }
   let!(:casa_case) { create(:casa_case, casa_org: casa_org) }
   let!(:judge) { create(:judge) }
