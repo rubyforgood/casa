@@ -63,8 +63,6 @@ class VolunteersController < ApplicationController
   def deactivate
     authorize @volunteer
     if @volunteer.deactivate
-      VolunteerMailer.deactivation(@volunteer).deliver
-
       redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was deactivated."
     else
       render :edit

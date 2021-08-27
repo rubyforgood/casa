@@ -215,12 +215,10 @@ RSpec.describe "/volunteers", type: :request do
       expect(volunteer.active).to eq(false)
     end
 
-    it "sends an activation email" do
-      sign_in admin
-
+    it "doesn't send an deactivation email" do
       expect {
         patch deactivate_volunteer_path(volunteer)
-      }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      }.to_not change { ActionMailer::Base.deliveries.count }
     end
   end
 

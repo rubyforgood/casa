@@ -4,15 +4,6 @@ RSpec.describe VolunteerMailer, type: :mailer do
   let(:volunteer) { create(:volunteer) }
   let(:volunteer_with_supervisor) { create(:volunteer, :with_assigned_supervisor) }
 
-  describe ".deactivation" do
-    let(:mail) { VolunteerMailer.deactivation(volunteer) }
-
-    it "sends an email saying the account has been deactivated" do
-      expect(mail.body.encoded).to match("Hello #{volunteer.display_name}")
-      expect(mail.body.encoded).to match("has been deactivated")
-    end
-  end
-
   describe ".account_setup" do
     let(:mail) { VolunteerMailer.account_setup(volunteer) }
 
