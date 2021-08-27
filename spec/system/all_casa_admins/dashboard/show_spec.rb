@@ -29,7 +29,6 @@ RSpec.describe "all_casa_admin/dashboard/show", type: :system do
 
       expect(page).to have_text "Administrators"
       expect(page).to have_text "New CASA Admin"
-      expect(page).to have_text "Back"
       expect(page).to_not have_text vol.email
       expect(page).to_not have_text sup.email
       expect(page).to have_text ca1.email

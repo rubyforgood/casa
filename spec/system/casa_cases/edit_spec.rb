@@ -24,14 +24,6 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text(court_mandate.implementation_status.humanize)
     end
 
-    it "clicks back button after editing case" do
-      visit edit_casa_case_path(casa_case)
-      select "Submitted", from: "casa_case_court_report_status"
-      click_on "Back"
-      visit edit_casa_case_path(casa_case)
-      expect(casa_case).not_to be_court_report_submitted
-    end
-
     it "edits case", js: true do
       visit casa_case_path(casa_case.id)
       click_on "Edit Case Details"
@@ -515,22 +507,6 @@ of it unless it was included in a previous court report.")
 
       expect(page).to have_text(court_mandate.mandate_text)
       expect(page).to have_text(court_mandate.implementation_status.humanize)
-    end
-
-    it "clicks back button after editing case" do
-      visit edit_casa_case_path(casa_case)
-
-      expect(page).to_not have_select("Hearing type")
-      expect(page).to_not have_select("Judge")
-
-      select "Submitted", from: "casa_case_court_report_status"
-      within ".actions" do
-        click_on "Update CASA Case"
-      end
-
-      click_on "Back"
-
-      expect(page).to have_text("My Case")
     end
 
     it "edits case" do
