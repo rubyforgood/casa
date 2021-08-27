@@ -126,13 +126,7 @@ sudo apt update && sudo apt install --no-install-recommends yarn
 
 ```
 # Install and configure rbenv
-sudo apt install rbenv
-rbenv init
-
-# Close and reopen your terminal window
-
-# Validate the install
-curl -fsSL https://github.com/rbenv/rbenv-installer/raw/main/bin/rbenv-doctor | bash
+temporarily unavailable
 ```
 If you would like RVM instead of rbenv
 ```
