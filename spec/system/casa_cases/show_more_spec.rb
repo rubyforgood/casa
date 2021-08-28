@@ -27,11 +27,13 @@ RSpec.describe "casa_cases/show", type: :system do
       sign_in admin
       visit casa_case_path(casa_case.id)
 
-      expect(page).to have_link("Send Reminder")
+      expect(page).to have_button("Send Reminder")
+      expect(page).to have_text("Send CC to Supervisor and Admin")
 
       click_on "Send Reminder"
 
       expect(page).to have_text("Reminder sent to volunteer")
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
     end
   end
 
@@ -40,11 +42,13 @@ RSpec.describe "casa_cases/show", type: :system do
       sign_in supervisor
       visit casa_case_path(casa_case.id)
 
-      expect(page).to have_link("Send Reminder")
+      expect(page).to have_button("Send Reminder")
+      expect(page).to have_text(/^Send CC to Supervisor$/)
 
       click_on "Send Reminder"
 
       expect(page).to have_text("Reminder sent to volunteer")
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
     end
   end
 
