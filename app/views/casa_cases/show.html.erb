@@ -95,18 +95,18 @@
 
     <div>
       <h6><strong><%= t(".assigned_volunteers") %>:</strong></h6>
-      <% policy_scope(@casa_case.assigned_volunteers).each_with_index do |volunteer, index| %>
+      <% policy_scope(@casa_case.assigned_volunteers).each do |volunteer| %>
         <% if current_user.volunteer? %>
           <p><%= volunteer.display_name %></p>
         <% else %>
-          <p><%= link_to "#{volunteer.display_name} ", edit_volunteer_path(volunteer) %>
-            <%= link_to t(".send_reminder"),
-                        reminder_volunteer_path(volunteer),
-                        method: :patch,
-                        id: "reminder_button",
-                        class: "btn btn-primary casa-case-button",
-                        data_toggle: "tooltip",
-                        title: "#{t(".tooltip")}" %></p>
+          <%= form_tag reminder_volunteer_path(volunteer),
+                  method: :patch, id: "cc-check" do %>
+            <p><%= link_to "#{volunteer.display_name} ", edit_volunteer_path(volunteer) %>
+              <%= volunteer.decorate.send_reminder_button %>
+              <%= check_box_tag 'with_cc', 1 %>
+              <%= volunteer.decorate.cc_reminder_text %>
+            </p>
+          <% end %>
         <% end %>
       <% end %>
       <br>
