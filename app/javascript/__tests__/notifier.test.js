@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 require('jest')
+const $ = require('jquery')
 
 test('notify should display a green notification when passed a message and level=\'info\'', () => {
   document.body.innerHTML =
@@ -13,10 +14,11 @@ test('notify should display a green notification when passed a message and level
       </div>
     </div>`
 
-  require('../src/case_contact')
+  require('../src/case_emancipation')
 
   expect(() => {
-    window.onload()
+    $(() => {
+    })
   }).not.toThrow()
 })
 
