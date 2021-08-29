@@ -1,17 +1,19 @@
 const $ = require('jquery')
 
 module.exports = class Notifier {
+
+  //  @param {object} notificationsElement The notification DOM element as a jQuery object
   constructor (notificationsElement) {
     this.notificationsElement = notificationsElement
   }
 
   // Adds notification messages to the notification element
-  //  @param    {string}  message The message to be displayed
-  //  @param    {string}  level One of the following logging levels
+  //  @param  {string} message The message to be displayed
+  //  @param  {string} level One of the following logging levels
   //    "error"  Shows a red notification
   //    "info"   Shows a green notification
-  //  @throws   {TypeError}  for a parameter of the incorrect type
-  //  @throws   {RangeError} for unsupported logging levels
+  //  @throws {TypeError}  for a parameter of the incorrect type
+  //  @throws {RangeError} for unsupported logging levels
   notify (message, level) {
     if (typeof message !== 'string') {
       throw new TypeError('Param message must be a string')
