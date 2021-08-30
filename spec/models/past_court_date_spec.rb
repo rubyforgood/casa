@@ -29,6 +29,20 @@ RSpec.describe PastCourtDate, type: :model do
     end
   end
 
+  describe ".ordered_ascending" do
+    subject { described_class.ordered_ascending }
+
+    it "orders the casa cases by updated at date" do
+      very_old_pcd = create(:past_court_date, date: 10.days.ago)
+      old_pcd = create(:past_court_date, date: 5.day.ago)
+      recent_pcd = create(:past_court_date, date: 1.day.ago)
+
+      ordered_pcds = described_class.ordered_ascending
+
+      expect(ordered_pcds.map(&:id)).to eq [very_old_pcd.id, old_pcd.id, recent_pcd.id]
+    end
+  end
+
   describe "reports" do
     let!(:reports) do
       [10, 30, 60].map do |days_ago|
