@@ -44,6 +44,97 @@ RSpec.describe CaseContactsController, type: :controller do
     end
   end
 
+  describe "POST #create" do
+    context "with valid params" do
+      let(:params) { build(:case_contact).attributes }
+
+      it "assigns @case_contact" do
+        post :create, params: {case_contact: params}, format: :js
+        expect(assigns(:case_contact)).to be_an_instance_of(CaseContact)
+      end
+
+      it "assigns @casa_cases" do
+        post :create, params: {case_contact: params}, format: :js
+        expect(assigns(:casa_cases)).to eq(volunteer.casa_cases)
+      end
+
+      it "assigns @current_organization_groups" do
+        post :create, params: {case_contact: params}, format: :js
+        expect(assigns(:current_organization_groups)).to eq(organization.contact_type_groups)
+      end
+
+      context "when a casa case was not selected" do
+        it "does not create a new case contact" do
+          expect {
+            post :create, params: {case_contact: params}, format: :js
+          }.not_to change(CaseContact, :count)
+        end
+
+        it "renders the new template" do
+          post :create, params: {case_contact: params}, format: :js
+          expect(flash[:alert]).to eq("At least one case must be selected")
+          expect(response).to render_template("new")
+        end
+      end
+
+      context "when a casa case is selected" do
+        let(:params) { build(:case_contact).attributes.merge("casa_case_id" => [volunteer.casa_cases.first.id.to_s]) }
+
+        it "assigns @selected_cases" do
+          post :create, params: {case_contact: params}, format: :js
+          expect(assigns(:selected_cases)).to eq(CasaCase.where(id: volunteer.casa_cases.first.id))
+        end
+
+        it "creates a new case contact for each selected case" do
+          post :create, params: {case_contact: params}, format: :js
+          expect(CaseContact.last.casa_case_id).to eq volunteer.casa_cases.pluck(:id).first
+        end
+
+        it "renders the casa case show template" do
+          post :create, params: {case_contact: params}, format: :js
+          expect(flash[:notice]).to include("Case contact was successfully created.")
+          expect(response).to redirect_to casa_case_path(CaseContact.last.casa_case)
+        end
+
+        it "renders a random thank you message" do
+          post :create, params: {case_contact: params}, format: :js
+          expect(
+            [
+              "Case contact was successfully created. Thanks for all you do!",
+              "Case contact was successfully created. Thank you for your hard work!",
+              "Case contact was successfully created. Thank you for a job well done!",
+              "Case contact was successfully created. Thank you for volunteering!",
+              "Case contact was successfully created. Thanks for being a great volunteer!",
+              "Case contact was successfully created. One of the greatest gifts you can give is your time!",
+              "Case contact was successfully created. Those who can do, do. Those who can do more, volunteer",
+              "Case contact was successfully created. Volunteers do not necessarily have the time, they just have the heart."
+            ]
+          ).to include(flash[:notice])
+        end
+      end
+    end
+
+    context "with invalid params" do
+      let(:params) { build(:case_contact).attributes }
+
+      it "assigns @case_contact" do
+        post :create, params: {case_contact: params}, format: :js
+        expect(assigns(:case_contact)).to be_an_instance_of(CaseContact)
+      end
+
+      it "does not create a new case contact" do
+        expect {
+          post :create, params: {case_contact: params}, format: :js
+        }.not_to change(CaseContact, :count)
+      end
+
+      it "renders the new template" do
+        post :create, params: {case_contact: params}, format: :js
+        expect(response).to render_template("new")
+      end
+    end
+  end
+
   describe "DELETE destroy" do
     let(:case_contact) { create(:case_contact, creator: volunteer) }
 
