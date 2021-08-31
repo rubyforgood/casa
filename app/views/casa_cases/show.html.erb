@@ -10,10 +10,13 @@
       <%= link_to t(".button.edit_case"), edit_casa_case_path(@casa_case), class: "btn btn-primary casa-case-button" %>
     <% end %>
     <% if @casa_case.has_transitioned? %>
-      <%= link_to(
-              t(".button.emancipation"),
-              casa_case_emancipation_path(@casa_case),
-              class: "btn btn-primary casa-case-button") %>
+      <%= link_to(casa_case_emancipation_path(@casa_case),
+              class: "btn btn-primary casa-case-button") do  %>
+        <%= t(".button.emancipation") %>
+        <span class="badge badge-light">
+          <%= @casa_case.decorate.emancipation_checklist_count %>
+        </span>
+      <% end %>
     <% end %>
     <% if current_user.supervisor? || current_user.casa_admin? %>
       <%= form_with url: generate_case_court_reports_path, local: false, class: "d-inline" do |form| %>
