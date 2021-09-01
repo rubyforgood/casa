@@ -114,7 +114,9 @@ sudo apt install -y curl git git-gui htop hub libpq-dev net-tools nodejs npm ope
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 . ./.bashrc
-nvm install 13.7.0
+nvm install v12
+# Update npm
+npm i -g npm
 ```
 
 ```
