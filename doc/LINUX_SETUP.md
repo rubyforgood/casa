@@ -126,8 +126,14 @@ sudo apt update && sudo apt install --no-install-recommends yarn
 
 ```
 # Install and configure rbenv
-temporarily unavailable
+sudo apt install rbenv
+rbenv init
+
+#   setup rbenv install command
+mkdir -p "$(rbenv root)"/plugins
+git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 ```
+
 If you would like RVM instead of rbenv
 ```
 # Install RVM (Part 1)
