@@ -61,6 +61,8 @@ RSpec.describe EmancipationsController, type: :controller do
     let(:params) { {casa_case_id: volunteer.casa_cases.first.id} }
 
     it "errors for unfindable check item" do
+      volunteer.casa_cases.first.update_attribute(:birth_month_year_youth, 8.years.ago)
+
       subject
       expect(response.body).to eq({error: "The current case is not marked as transitioning"}.to_json)
     end
