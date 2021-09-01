@@ -11,7 +11,7 @@
     <% end %>
     <% if @casa_case.has_transitioned? %>
       <%= link_to(casa_case_emancipation_path(@casa_case),
-              class: "btn btn-primary casa-case-button") do  %>
+              class: "btn btn-primary casa-case-button") do %>
         <%= t(".button.emancipation") %>
         <span class="badge badge-light">
           <%= @casa_case.decorate.emancipation_checklist_count %>
