@@ -30,6 +30,7 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
   end
 
   before do
+    travel_to Date.new(2021, 1, 1)
     sign_in admin
   end
 
