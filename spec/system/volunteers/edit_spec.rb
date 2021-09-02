@@ -231,7 +231,7 @@ RSpec.describe "volunteers/edit", type: :system do
       visit edit_volunteer_path(volunteer)
 
       expect(page).to have_button("Send reminder")
-      expect(page).to have_text(/^Send CC to Supervisor$/)
+      expect(page).to have_text(/Send CC to Supervisor$/)
 
       click_on "Send reminder"
 
