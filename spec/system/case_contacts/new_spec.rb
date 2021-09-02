@@ -16,6 +16,7 @@ RSpec.describe "case_contacts/new", type: :system do
     let!(:therapist) { create(:contact_type, name: "Therapist", contact_type_group: contact_type_group) }
 
     before do
+      travel_to Date.new(2021, 1, 1)
       sign_in admin
 
       visit casa_case_path(casa_case.id)
@@ -118,7 +119,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
         expect(page).to have_text("Confirm Note Content")
         hello_line = page.body.split("\n").select { |x| x.include?("Hello") }
-        expect(hello_line).to eq(["        <div id=\"note-content\">&lt;h1&gt;Hello world&lt;/h1&gt;</div>"])
+        expect(hello_line).to eq(["        <div id=\"note-content\"><h1>Hello world</h1></div>"])
         expect {
           click_on "Continue Submitting"
         }.to change(CaseContact, :count).by(1)
@@ -134,6 +135,7 @@ RSpec.describe "case_contacts/new", type: :system do
     let(:casa_case) { create(:casa_case, casa_org: organization) }
 
     before do
+      travel_to Date.new(2021, 1, 1)
       sign_in admin
     end
 

@@ -45,6 +45,7 @@ RSpec.describe "view all volunteers", type: :system do
     end
 
     it "displays last contact made by default", js: true do
+      travel_to Date.new(2021, 1, 1)
       create(:volunteer, :with_assigned_supervisor, display_name: "User 1", email: "casa@example.com", casa_org: organization)
 
       sign_in admin
@@ -219,6 +220,7 @@ RSpec.describe "view all volunteers", type: :system do
     end
 
     it "can show/hide columns on volunteers table", js: true do
+      travel_to Dave.new(2021, 1, 1)
       sign_in supervisor
 
       visit volunteers_path

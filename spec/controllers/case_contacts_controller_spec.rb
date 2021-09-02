@@ -18,6 +18,7 @@ RSpec.describe CaseContactsController, type: :controller do
   end
 
   before do
+    travel_to Date.new(2021, 1, 1)
     allow(controller).to receive(:authenticate_user!).and_return(true)
     allow(controller).to receive(:current_user).and_return(volunteer)
   end
