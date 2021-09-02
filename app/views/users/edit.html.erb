@@ -1,10 +1,8 @@
 <h1>Edit Profile</h1>
-
+<%= render "/shared/error_messages", resource: @user %>
 <div class="card card-container">
   <div class="card-body">
     <%= form_for @user, as: :user, url: users_path do |form| %>
-      <%= render "/shared/error_messages", resource: @user %>
-
       <div class="field form-group">
         <%= form.label :email %>
         <%= form.text_field :email, class: "form-control", disabled: !current_user.casa_admin? %>
