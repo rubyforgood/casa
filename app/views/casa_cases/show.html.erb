@@ -101,10 +101,9 @@
         <% else %>
           <%= form_tag reminder_volunteer_path(volunteer),
                   method: :patch, id: "cc-check" do %>
-            <p><%= link_to "#{volunteer.display_name} ", edit_volunteer_path(volunteer) %>
-              <%= volunteer.decorate.send_reminder_button %>
-              <%= check_box_tag 'with_cc', 1 %>
-              <%= volunteer.decorate.cc_reminder_text %>
+            <p>
+              <%= link_to "#{volunteer.display_name} ", edit_volunteer_path(volunteer) %>
+              <%= render "volunteers/send_reminder_button", volunteer: volunteer %>
             </p>
           <% end %>
         <% end %>

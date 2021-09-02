@@ -57,8 +57,6 @@ en:
         click_to_download: Click to download
         download_all: Download All
         generate_court_report: Generate Report
-      send_reminder: Send Reminder
-      tooltip: Sends to volunteer a reminder email to input case contacts
     shared:
       filter_by: Filter by
       assigned_single: Assigned to Volunteer
@@ -410,9 +408,6 @@ en:
         one: All Volunteers
         other: All Volunteers
   volunteers:
-    edit:
-      send_reminder: Send reminder
-      tooltip: Sends to volunteer a reminder email to input case contacts
     index:
       volunteers: Volunteers
       filter: Filter by
@@ -438,6 +433,9 @@ en:
         actions: Actions
       button:
         new: New Volunteer
+    send_reminder_button:
+      send_reminder: Send Reminder
+      tooltip: Sends to volunteer a reminder email to input case contacts
   reports:
     index:
       export_page_title: Export Data
