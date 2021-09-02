@@ -19,7 +19,7 @@ class UsersController < ApplicationController
 
   def update_password
     unless valid_user_password
-      @user.errors.add(:base, 'Current password is incorrect')
+      @user.errors.add(:base, "Current password is incorrect")
       return render "edit"
     end
 
