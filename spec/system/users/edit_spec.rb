@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "users/edit", :disable_bullet, type: :system do
   let(:organization) { create(:casa_org) }
   let(:volunteer) { create(:volunteer) }
-  let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
+  let(:admin) { create(:casa_admin) }
   let(:supervisor) { create(:supervisor) }
 
   context "volunteer user" do
