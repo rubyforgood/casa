@@ -18,6 +18,10 @@ RSpec.describe PastCourtDate, type: :model do
   it { is_expected.to belong_to(:hearing_type).optional }
   it { is_expected.to belong_to(:judge).optional }
 
+  before do
+    travel_to Date.new(2021, 1, 1)
+  end
+
   describe "date_must_be_past" do
     it "ensures that the date is in the past" do
       past_court_date = build(:past_court_date, casa_case: casa_case, date: Date.today)
