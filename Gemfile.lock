@@ -464,7 +464,7 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   spring-watcher-listen
-  standard (~> 1.3.0)
+  standard
   tzinfo-data
   web-console
   webdrivers

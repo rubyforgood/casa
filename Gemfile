@@ -41,7 +41,7 @@ group :development, :test do
   gem "pry-byebug"
   gem "rspec-rails"
   gem "shoulda-matchers"
-  gem "standard", "~> 1.3.0" # linter https://github.com/testdouble/standard
+  gem "standard" # linter https://github.com/testdouble/standard
   gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 end
 
