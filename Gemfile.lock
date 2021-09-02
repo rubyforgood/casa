@@ -455,7 +455,7 @@ DEPENDENCIES
   rails-controller-testing
   rake
   request_store
-  rspec-rails (~> 5.0.2)
+  rspec-rails
   sablon
   selenium-webdriver (= 4.0.0.beta4)
   shoulda-matchers
