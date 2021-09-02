@@ -355,7 +355,7 @@ GEM
     sablon (0.3.2)
       nokogiri (>= 1.8.5)
       rubyzip (>= 1.1.1)
-    selenium-webdriver (4.0.0.beta4)
+    selenium-webdriver (4.0.0.rc1)
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2)
       rubyzip (>= 1.2.2)
@@ -473,7 +473,7 @@ DEPENDENCIES
   request_store
   rspec-rails (~> 5.0.2)
   sablon
-  selenium-webdriver (= 4.0.0.beta4)
+  selenium-webdriver (= 4.0.0.rc1)
   shoulda-matchers
   simplecov (~> 0.21.2)
   skylight
