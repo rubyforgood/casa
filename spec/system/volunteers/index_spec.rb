@@ -220,6 +220,7 @@ RSpec.describe "view all volunteers", type: :system do
     end
 
     it "can show/hide columns on volunteers table", js: true do
+      travel_to Dave.new(2021, 1, 1)
       sign_in supervisor
 
       visit volunteers_path
