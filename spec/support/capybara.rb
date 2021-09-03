@@ -30,16 +30,18 @@ end
 
 # used without docker
 Capybara.register_driver :selenium_chrome_headless do |app|
-  browser_options = ::Selenium::WebDriver::Chrome::Options.new.tap do |opts|
-    opts.args << "--headless"
-    opts.args << "--disable-gpu"
-    opts.args << "--disable-site-isolation-trials"
-    opts.args << "--window-size=1280,900"
-  end
-  browser_options.add_preference(:download, prompt_for_download: false, default_directory: DownloadHelpers::PATH.to_s)
-
-  browser_options.add_preference(:browser, set_download_behavior: {behavior: "allow"})
-  Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
+  Capybara::Selenium::Driver.new app,
+    browser: :chrome,
+    capabilities: [Selenium::WebDriver::Remote::Capabilities.chrome(
+      "goog:chromeOptions" => {
+        "args" => %w[headless disable-gpu disable-site-isolation-trials window-size=1280,900],
+        "prefs" => {
+          "download.prompt_for_download" => false,
+          "download.default_directory" => DownloadHelpers::PATH.to_s,
+          "browser.set_download_behavior" => {"behavior" => "allow"}
+        }
+      }
+    )]
 end
 
 RSpec.configure do |config|
