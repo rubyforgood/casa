@@ -100,16 +100,7 @@ RSpec.describe CaseContactsController, type: :controller do
         it "renders a random thank you message" do
           post :create, params: {case_contact: params}, format: :js
           expect(
-            [
-              "Case contact was successfully created. Thanks for all you do!",
-              "Case contact was successfully created. Thank you for your hard work!",
-              "Case contact was successfully created. Thank you for a job well done!",
-              "Case contact was successfully created. Thank you for volunteering!",
-              "Case contact was successfully created. Thanks for being a great volunteer!",
-              "Case contact was successfully created. One of the greatest gifts you can give is your time!",
-              "Case contact was successfully created. Those who can do, do. Those who can do more, volunteer",
-              "Case contact was successfully created. Volunteers do not necessarily have the time, they just have the heart."
-            ]
+            (1..8).map { |n| "#{I18n.t("create", scope: "case_contact")} #{I18n.t("thank_you_#{n}", scope: "case_contact")}" }
           ).to include(flash[:notice])
         end
       end
