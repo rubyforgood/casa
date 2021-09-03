@@ -2,8 +2,12 @@
 
 require('jest')
 const $ = require('jquery')
+const Notifier = require('../src/async_notifier.js')
 
-test('notify should display a green notification when passed a message and level=\'info\'', () => {
+let asyncNotificationsElement
+let notifier
+
+beforeEach(() => {
   document.body.innerHTML =
     `<div id="async-notifications">
       <div id="async-waiting-indicator" style="display: none">
@@ -14,10 +18,14 @@ test('notify should display a green notification when passed a message and level
       </div>
     </div>`
 
-  require('../src/case_emancipation')
+  asyncNotificationsElement = $('#async-notifications')
+  notifier = new Notifier(asyncNotificationsElement)
+});
 
+test('notify should display a green notification when passed a message and level=\'info\'', () => {
   expect(() => {
     $(() => {
+      
     })
   }).not.toThrow()
 })
