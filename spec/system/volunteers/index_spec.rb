@@ -222,7 +222,7 @@ RSpec.describe "view all volunteers", type: :system do
     end
 
     it "can show/hide columns on volunteers table", js: true do
-      travel_to Dave.new(2021, 1, 1)
+      travel_to Date.new(2021, 1, 1)
       sign_in supervisor
 
       visit volunteers_path
@@ -243,8 +243,10 @@ RSpec.describe "view all volunteers", type: :system do
 
       expect(page).to have_text("Name")
       expect(page).to have_text("Status")
-      expect(page).not_to have_text("Contact Made In Past 60 Days")
-      expect(page).not_to have_text("Last Contact Made")
+      within("#volunteers") do
+        expect(page).to have_no_text("Contact Made In Past 60 Days")
+        expect(page).to have_no_text("Last Contact Made")
+      end
     end
 
     context "with volunteers" do
