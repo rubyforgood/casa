@@ -116,13 +116,14 @@ RSpec.describe "case_contacts/new", type: :system do
         fill_in "case-contact-duration-minutes", with: "45"
         fill_in "Notes", with: note_content
         click_on "Submit"
-
+        
         expect(page).to have_text("Confirm Note Content")
-        hello_line = page.body.split("\n").select { |x| x.include?("Hello") }
-        expect(hello_line).to eq(["        <div id=\"note-content\"><h1>Hello world</h1></div>"])
         expect {
           click_on "Continue Submitting"
         }.to change(CaseContact, :count).by(1)
+        
+        hello_line = page.body.split("\n").select { |x| x.include?("Hello") }
+        expect(hello_line.first.include?(note_content)).to be true
         expected_text = strip_tags(note_content)
         expect(page).to have_css("h1", text: expected_text)
       end

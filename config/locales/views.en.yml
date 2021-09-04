@@ -429,7 +429,7 @@ en:
         assigned_transition_aged_youth: Assigned To Transition Aged Youth
         case_number: Case Number(s)
         last_contact_made: Last Contact Made
-        contacts: Contacts Made in Past 60 Days</th>
+        contacts: Contacts Made in Past 60 Days
         actions: Actions
       button:
         new: New Volunteer
