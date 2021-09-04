@@ -11,8 +11,20 @@ body.casa_cases {
     }
   }
 
+  #cc-check {
+    p {
+      display: flex;
+      align-items: center;
+    }
+
+    #with_cc {
+      margin-right: 5px;
+    }
+  }
+
   #reminder_button {
     margin-left: 30px;
+    margin-bottom: 0;
   }
 
   .case-contact-list {
