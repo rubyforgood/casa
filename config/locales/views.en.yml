@@ -436,6 +436,8 @@ en:
     send_reminder_button:
       send_reminder: Send Reminder
       tooltip: Sends to volunteer a reminder email to input case contacts
+      admin_checkbox_text: "Send CC to Supervisor and Admin"
+      supervisor_checkbox_text: "Send CC to Supervisor"
   reports:
     index:
       export_page_title: Export Data
