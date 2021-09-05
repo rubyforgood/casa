@@ -18,16 +18,29 @@ beforeEach(() => {
       </div>
     </div>`
 
-  asyncNotificationsElement = $('#async-notifications')
-  notifier = new Notifier(asyncNotificationsElement)
-});
+  $(() => {
+    asyncNotificationsElement = $('#async-notifications')
+    notifier = new Notifier(asyncNotificationsElement)
+  })
+})
 
-test('notify should display a green notification when passed a message and level=\'info\'', () => {
-  expect(() => {
-    $(() => {
-      
-    })
-  }).not.toThrow()
+test('notify should display a green notification when passed a message and level=\'info\'', done => {
+  const notificationMessage = '\'Y$deH[|%ROii]jy'
+
+  $(() => {
+    notifier.notify(notificationMessage, 'info')
+
+    try {
+      const successMessages = asyncNotificationsElement.find('.async-success-indicator')
+
+      // Notifications contain the "Saved" message and the new message
+      expect(successMessages.length).toBe(2)
+      expect(asyncNotificationsElement.find('.async-success-indicator')[1].innerHTML).toContain(notificationMessage)
+      done()
+    } catch (error) {
+      done(error)
+    }
+  })
 })
 
 test('notify should display a red notification when passed a message and level=\'error\'', () => {

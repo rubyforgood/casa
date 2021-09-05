@@ -1,7 +1,6 @@
 const $ = require('jquery')
 
 module.exports = class Notifier {
-
   //  @param {object} notificationsElement The notification DOM element as a jQuery object
   constructor (notificationsElement) {
     this.notificationsElement = notificationsElement
