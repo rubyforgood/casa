@@ -35,7 +35,7 @@ test('notify should display a green notification when passed a message and level
 
       // Notifications contain the "Saved" message and the new message
       expect(successMessages.length).toBe(2)
-      expect(asyncNotificationsElement.find('.async-success-indicator')[1].innerHTML).toContain(notificationMessage)
+      expect(successMessages[1].innerHTML).toContain(notificationMessage)
       done()
     } catch (error) {
       done(error)
@@ -43,7 +43,22 @@ test('notify should display a green notification when passed a message and level
   })
 })
 
-test('notify should display a red notification when passed a message and level=\'error\'', () => {
+test('notify should display a red notification when passed a message and level=\'error\'', done => {
+  const notificationMessage = '\\+!h0bbH"yN7dx9.'
+
+  $(() => {
+    notifier.notify(notificationMessage, 'error')
+
+    try {
+      const failureMessages = asyncNotificationsElement.find('.async-failure-indicator')
+
+      expect(failureMessages.length).toBe(1)
+      expect(failureMessages[0].innerHTML).toContain(notificationMessage)
+      done()
+    } catch (error) {
+      done(error)
+    }
+  })
 })
 
 test('notify should throw a RangeError when passed an unsupported message level', () => {
