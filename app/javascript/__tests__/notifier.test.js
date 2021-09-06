@@ -1,7 +1,6 @@
 /* eslint-env jest */
 
 require('jest')
-const $ = require('jquery')
 const Notifier = require('../src/async_notifier.js')
 
 let asyncNotificationsElement
