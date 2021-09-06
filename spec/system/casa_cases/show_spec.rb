@@ -4,9 +4,13 @@ RSpec.describe "casa_cases/show", type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:volunteer) { create(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
-  let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: organization, case_number: "CINA-1") }
+  let(:casa_case) {
+    create(:casa_case, :with_one_court_mandate, casa_org: organization,
+    case_number: "CINA-1", transition_aged_youth: true)
+  }
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
   let!(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
+  let!(:emancipation_categories) { create_list(:emancipation_category, 3) }
 
   before do
     sign_in user
@@ -84,7 +88,7 @@ RSpec.describe "casa_cases/show", type: :system do
     let(:user) { volunteer }
 
     it "sees link to emancipation" do
-      expect(page).to have_content(casa_case.case_number)
+      expect(page).to have_link("Emancipation 0 / #{emancipation_categories.size}")
     end
 
     it "can see court mandates" do
