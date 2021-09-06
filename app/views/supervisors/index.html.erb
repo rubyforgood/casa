@@ -6,6 +6,46 @@
     <% end %>
   </div>
 </div>
+<hr>
+
+<div class="row supervisor-filters">
+  <div class="col-sm-12">
+    <h4 class="pull-left mr-2"><%= t(".filter") %></h4>
+    <div class="dropdown pull-left mr-2">
+      <button
+        class="btn btn-secondary dropdown-toggle show"
+        type="button"
+        id="dropdownMenuButton"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <%= t(".status") %>
+      </button>
+      <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
+        <li>
+          <a class="small" data-value="option1" tabIndex="-1">
+            <input type="checkbox" data-value="true" checked>
+            <%= t(".active") %>
+          </a>
+        </li>
+        <li>
+          <a class="small" data-value="option1" tabIndex="-1">
+            <input type="checkbox" data-value="false">
+            <%= t(".inactive") %>
+          </a>
+        </li>
+        <li>
+          <a class="small" data-value="option1" tabIndex="-1">
+            <input type="checkbox" data-value="false">
+            <%= t(".both") %>
+          </a>
+        </li>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
 
 <div class="card card-container">
   <div class="card-body">

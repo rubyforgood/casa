@@ -390,6 +390,11 @@ en:
         link:
           report_site_issue: Report a site issue
   supervisors:
+    index:
+      filter: Filter by
+      active: Active
+      inactive: Inactive
+      both: Both
     edit:
       title: Editing Supervisor
       assign_a_volunteer: Assign a Volunteer
