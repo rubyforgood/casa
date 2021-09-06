@@ -61,6 +61,35 @@ test('notify should display a red notification when passed a message and level=\
   })
 })
 
+test('notify should append a dismissable message to the async-notifications widget', done => {
+  $(() => {
+    notifier.notify('', 'error')
+    notifier.notify('', 'info')
+
+    try {
+      let failureMessages = asyncNotificationsElement.find('.async-failure-indicator')
+      let successMessages = asyncNotificationsElement.find('.async-success-indicator')
+
+      expect(failureMessages.length).toBe(1)
+      expect(successMessages.length).toBe(2)
+
+      failureMessages.children('button').click()
+      failureMessages = asyncNotificationsElement.find('.async-failure-indicator')
+
+      expect(failureMessages.length).toBe(0)
+
+      $(successMessages[1]).children('button').click()
+      successMessages = asyncNotificationsElement.find('.async-success-indicator')
+
+      expect(successMessages.length).toBe(1)
+
+      done()
+    } catch (error) {
+      done(error)
+    }
+  })
+})
+
 test('notify should throw a RangeError when passed an unsupported message level', done => {
   $(() => {
     try {
