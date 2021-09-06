@@ -54,8 +54,8 @@ RSpec.describe ContactType, type: :model do
   describe ".alphabetically scope" do
     subject { described_class.alphabetically }
 
-    let!(:contact_type1) { create(:contact_type, name: "Family") }
-    let!(:contact_type2) { create(:contact_type, name: "Placement") }
+    let!(:contact_type1) { create(:contact_type, name: "Aunt Uncle or Cousin") }
+    let!(:contact_type2) { create(:contact_type, name: "Parent") }
 
     it "orders alphabetically", :aggregate_failures do
       expect(subject.first).to eq(contact_type1)
