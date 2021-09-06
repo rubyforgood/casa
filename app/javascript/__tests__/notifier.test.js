@@ -61,8 +61,30 @@ test('notify should display a red notification when passed a message and level=\
   })
 })
 
-test('notify should throw a RangeError when passed an unsupported message level', () => {
+test('notify should throw a RangeError when passed an unsupported message level', done => {
+  $(() => {
+    try {
+      expect(() => {
+        notifier.notify('message', 'unsupported level')
+      }).toThrow(RangeError)
+
+      done()
+    } catch (error) {
+      done(error)
+    }
+  })
 })
 
-test('notify should throw a TypeError when param message is not a string', () => {
+test('notify should throw a TypeError when param message is not a string', done => {
+  $(() => {
+    try {
+      expect(() => {
+        notifier.notify(6, 'info')
+      }).toThrow(TypeError)
+
+      done()
+    } catch (error) {
+      done(error)
+    }
+  })
 })
