@@ -56,9 +56,9 @@ RSpec.describe CaseContactDecorator do
     context "when the contact_types is an array with three or more values" do
       let(:contact_types) do
         [
-          build(:contact_type, name: "School"),
-          build(:contact_type, name: "Therapist"),
-          build(:contact_type, name: "Bio Parent")
+          build_stubbed(:contact_type, name: "School"),
+          build_stubbed(:contact_type, name: "Therapist"),
+          build_stubbed(:contact_type, name: "Bio Parent")
         ]
       end
 
@@ -68,8 +68,8 @@ RSpec.describe CaseContactDecorator do
     context "when the contact types is an array with less than three values" do
       let(:contact_types) do
         [
-          build(:contact_type, name: "School"),
-          build(:contact_type, name: "Therapist")
+          build_stubbed(:contact_type, name: "School"),
+          build_stubbed(:contact_type, name: "Therapist")
         ]
       end
 
@@ -128,8 +128,8 @@ RSpec.describe CaseContactDecorator do
   end
 
   describe "#subheading" do
-    let(:contact_group) { build(:contact_type_group, name: "Group X") }
-    let(:contact_type) { build(:contact_type, contact_type_group: contact_group, name: "Type X") }
+    let(:contact_group) { build_stubbed(:contact_type_group, name: "Group X") }
+    let(:contact_type) { build_stubbed(:contact_type, contact_type_group: contact_group, name: "Type X") }
 
     context "when all information is available" do
       it "returns a properly formatted string" do

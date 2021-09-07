@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe CaseContactsController, type: :controller do
-  let(:organization) { create(:casa_org) }
+  let(:organization) { build(:casa_org) }
   let(:volunteer) { create(:volunteer, :with_casa_cases, casa_org: organization) }
   let(:admin) { create(:casa_admin) }
   let(:supervisor) { create(:supervisor) }
   let(:case_id) { volunteer.casa_cases.first.id }
+  let(:params) { {case_contact: {casa_case_id: case_id}} }
   let!(:contact_type_group_one) do
     create(:contact_type_group, casa_org: organization).tap do |group|
       create(:contact_type, contact_type_group: group, name: "Attorney")
@@ -32,14 +33,14 @@ RSpec.describe CaseContactsController, type: :controller do
       end
 
       it "only assigns that contact types groups to @current_organization_groups" do
-        get :new, params: {case_contact: {casa_case_id: case_id}}
+        get :new, params: params 
         expect(assigns(:current_organization_groups)).to eq([contact_type_group_one])
       end
     end
 
     context "when the case does not have specific contact types assigned" do
       it "assigns all the organizations contact type groups to @current_organization_groups" do
-        get :new, params: {case_contact: {casa_case_id: case_id}}
+        get :new, params: params
         expect(assigns(:current_organization_groups)).to eq([contact_type_group_one, contact_type_group_two])
       end
 
