@@ -42,6 +42,27 @@ RSpec.describe CaseContactsController, type: :controller do
         get :new, params: {case_contact: {casa_case_id: case_id}}
         expect(assigns(:current_organization_groups)).to eq([contact_type_group_one, contact_type_group_two])
       end
+
+      it "calls contact_types_alphabetically" do
+        allow(controller).to receive(:current_organization).and_return(organization)
+        allow(organization).to receive_message_chain(
+          :contact_type_groups,
+          :joins,
+          :where,
+          :alphabetically,
+          :uniq
+        )
+
+        expect(organization).to receive_message_chain(
+          :contact_type_groups,
+          :joins,
+          :where,
+          :alphabetically,
+          :uniq
+        )
+
+        get :new, params: {case_contact: {casa_case_id: case_id}}
+      end
     end
   end
 

@@ -50,4 +50,16 @@ RSpec.describe ContactType, type: :model do
       expect(described_class.for_organization(casa_org_2)).to eq([record_2])
     end
   end
+
+  describe ".alphabetically scope" do
+    subject { described_class.alphabetically }
+
+    let!(:contact_type1) { create(:contact_type, name: "Aunt Uncle or Cousin") }
+    let!(:contact_type2) { create(:contact_type, name: "Parent") }
+
+    it "orders alphabetically", :aggregate_failures do
+      expect(subject.first).to eq(contact_type1)
+      expect(subject.last).to eq(contact_type2)
+    end
+  end
 end

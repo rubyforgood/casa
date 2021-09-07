@@ -9,6 +9,8 @@ class ContactTypeGroup < ApplicationRecord
     where(casa_org: org)
       .order(:name)
   }
+
+  scope :alphabetically, -> { order(:name) }
 end
 
 # == Schema Information
