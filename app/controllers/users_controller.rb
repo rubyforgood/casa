@@ -33,6 +33,10 @@ class UsersController < ApplicationController
 
   private
 
+  def set_active_casa_admins
+    @active_casa_admins = CasaAdmin.in_organization(current_organization).active
+  end
+
   def authorize_user_with_policy
     authorize @user, policy_class: UserPolicy
   end
