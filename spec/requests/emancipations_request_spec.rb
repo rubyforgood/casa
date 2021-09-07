@@ -1,9 +1,9 @@
 require "rails_helper"
 
-RSpec.describe "/casa_case/:id/emancipation", :disable_bullet, type: :request do
+RSpec.describe "/casa_case/:id/emancipation", type: :request do
   let(:organization) { create(:casa_org) }
   let(:organization_different) { create(:casa_org) }
-  let(:casa_case) { create(:casa_case, casa_org: organization, transition_aged_youth: true) }
+  let(:casa_case) { create(:casa_case, casa_org: organization, birth_month_year_youth: 15.years.ago) }
 
   describe "GET /show" do
     before { sign_in user }
@@ -186,7 +186,7 @@ RSpec.describe "/casa_case/:id/emancipation", :disable_bullet, type: :request do
       let(:mutex_option_b) { create(:emancipation_option, emancipation_category_id: mutually_exclusive_category.id, name: "B") }
 
       let(:user) { create(:volunteer, casa_org: organization) }
-      let(:non_transitioning_casa_case) { create(:casa_case, casa_org: organization, transition_aged_youth: false) }
+      let(:non_transitioning_casa_case) { create(:casa_case, casa_org: organization, birth_month_year_youth: 8.years.ago) }
       let!(:case_assignment) { create(:case_assignment, volunteer: user, casa_case: casa_case) }
       let!(:case_assignment_non_transitioning_case) { create(:case_assignment, volunteer: user, casa_case: non_transitioning_casa_case) }
 

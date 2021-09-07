@@ -23,4 +23,12 @@
       </div>
     </a>
   <% end %>
+
+  <% if @notifications.empty? %>
+    <div class="card card-container my-4 border-warning">
+      <div class="card-body">
+        <%= t(".no_notifications") %>
+      </div>
+    </div>
+  <% end %>
 </div>

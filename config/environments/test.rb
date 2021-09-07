@@ -24,7 +24,7 @@ Rails.application.configure do
   # Show full error reports and disable caching.
   config.consider_all_requests_local = true
   config.action_controller.perform_caching = false
-  config.cache_store = :null_store
+  # config.cache_store = :null_store
 
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false
@@ -57,6 +57,6 @@ Rails.application.configure do
     Bullet.console = true
     Bullet.bullet_logger = true
     Bullet.rails_logger = true
-    # Bullet.raise = true # TODO https://github.com/rubyforgood/casa/issues/519
+    # Bullet.raise = true # TODO https://github.com/rubyforgood/casa/issues/2441
   end
 end

@@ -1,54 +1,11 @@
 /* eslint-env jquery */
 
+const Notifier = require('./async_notifier')
+
 const emancipationPage = {
   saveOperationSuccessful: false,
   savePath: window.location.pathname + '/save',
   waitingSaveOperationCount: 0
-}
-
-// Shows an error notification
-//  @param    {string}  message The message to be displayed
-//  @param    {string}  level One of the following logging levels
-//    "error"  Shows a red notification
-//    "info"   Shows a green notification
-//  @throws   {TypeError}  for a parameter of the incorrect type
-//  @throws   {RangeError} for unsupported logging levels
-function notify (message, level) {
-  if (typeof message !== 'string') {
-    throw new TypeError('Param message must be a string')
-  }
-
-  const escapedMessage = message.replace(/&/g, '&amp;')
-    .replace(/>/g, '&gt;')
-    .replace(/</g, '&lt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;')
-
-  switch (level) {
-    case 'error':
-      emancipationPage.notifications.append(`
-        <div class="async-failure-indicator">
-          Error: ${escapedMessage}
-          <button class="btn btn-danger btn-sm">×</button>
-        </div>`)
-        .find('.async-failure-indicator button').click(function () {
-          $(this).parent().remove()
-        })
-      break
-    case 'info':
-      emancipationPage.notifications.append(`
-        <div class="async-success-indicator">
-          ${escapedMessage}
-          <button class="btn btn-success btn-sm">×</button>
-        </div>`)
-        .find('.async-success-indicator button').click(function () {
-          $(this).parent().remove()
-        })
-
-      break
-    default:
-      throw new RangeError('Unsupported option for param level')
-  }
 }
 
 // Called when an async operation completes. May show notifications describing how the operation completed
@@ -65,7 +22,7 @@ function resolveAsyncOperation (error) {
   }
 
   if (error) {
-    notify(error, 'error')
+    emancipationPage.notifier.notify(error, 'error')
   } else {
     emancipationPage.saveOperationSuccessful = true
   }
@@ -146,9 +103,10 @@ function saveCheckState (action, checkItemId) {
 }
 
 $('document').ready(() => {
-  emancipationPage.notifications = $('#async-notifications')
-  emancipationPage.asyncSuccessIndicator = emancipationPage.notifications.find('#async-success-indicator')
-  emancipationPage.asyncWaitIndicator = emancipationPage.notifications.find('#async-waiting-indicator')
+  const asyncNotificationsElement = $('#async-notifications')
+  emancipationPage.notifier = new Notifier(asyncNotificationsElement)
+  emancipationPage.asyncSuccessIndicator = asyncNotificationsElement.find('#async-success-indicator')
+  emancipationPage.asyncWaitIndicator = asyncNotificationsElement.find('#async-waiting-indicator')
 
   $('.emancipation-category').click(function () {
     const category = $(this)
@@ -178,7 +136,7 @@ $('document').ready(() => {
             const checkbox = $(this).find('input')
 
             checkbox.prop('checked', false)
-            notify('Unchecked ' + checkbox.next().text(), 'info')
+            emancipationPage.notifier.notify('Unchecked ' + checkbox.next().text(), 'info')
           })
         }
         saveAction = 'delete_category'

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/case_contacts", :disable_bullet, type: :request do
+RSpec.describe "/case_contacts", type: :request do
   let(:organization) { create(:casa_org) }
   let(:volunteer) { create(:volunteer, casa_org: organization) }
   let(:other_volunteer) { create(:volunteer, casa_org: organization) }

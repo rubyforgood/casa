@@ -5,13 +5,25 @@ require "sablon"
 class PastCourtDate < ApplicationRecord
   belongs_to :casa_case
   validates :casa_case_id, presence: true
-  validates :date, presence: true
+  validate :date_must_be_past
 
   has_many :case_court_mandates
   belongs_to :hearing_type, optional: true
   belongs_to :judge, optional: true
 
+  accepts_nested_attributes_for :case_court_mandates, reject_if: :all_blank
+
+  scope :ordered_ascending, -> { order("date asc") }
+
   DOCX_TEMPLATE_PATH = Rails.root.join("app", "documents", "templates", "default_past_court_date_template.docx")
+
+  def date_must_be_past
+    if date.nil?
+      errors.add(:date, "can't be blank")
+    elsif date >= Date.today
+      errors.add(:date, "must be in the past")
+    end
+  end
 
   # get reports associated with the case this belongs to before this court date but after the court date before this one
   def associated_reports

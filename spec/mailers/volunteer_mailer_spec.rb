@@ -2,15 +2,7 @@ require "rails_helper"
 
 RSpec.describe VolunteerMailer, type: :mailer do
   let(:volunteer) { create(:volunteer) }
-
-  describe ".deactivation" do
-    let(:mail) { VolunteerMailer.deactivation(volunteer) }
-
-    it "sends an email saying the account has been deactivated" do
-      expect(mail.body.encoded).to match("Hello #{volunteer.display_name}")
-      expect(mail.body.encoded).to match("has been deactivated")
-    end
-  end
+  let(:volunteer_with_supervisor) { create(:volunteer, :with_assigned_supervisor) }
 
   describe ".account_setup" do
     let(:mail) { VolunteerMailer.account_setup(volunteer) }
@@ -34,11 +26,17 @@ RSpec.describe VolunteerMailer, type: :mailer do
   end
 
   describe ".case_contacts_reminder" do
-    let(:mail) { VolunteerMailer.case_contacts_reminder(volunteer) }
+    let(:mail) { VolunteerMailer.case_contacts_reminder(volunteer, false) }
+    let(:mail_with_cc) { VolunteerMailer.case_contacts_reminder(volunteer_with_supervisor, true) }
 
     it "sends an email reminding volunteer" do
       expect(mail.body.encoded).to match("Hello #{volunteer.display_name}")
       expect(mail.body.encoded).to match("as a reminder")
+      expect(mail.cc).to be_nil
+    end
+
+    it "sends a cc to supervisor" do
+      expect(mail_with_cc.cc).to include(volunteer_with_supervisor.supervisor.email.to_s)
     end
   end
 

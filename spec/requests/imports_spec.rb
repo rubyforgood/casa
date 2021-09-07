@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/imports", :disable_bullet, type: :request do
+RSpec.describe "/imports", type: :request do
   let(:volunteer_file) { Rails.root.join("spec", "fixtures", "volunteers.csv") }
   let(:supervisor_file) { Rails.root.join("spec", "fixtures", "supervisors.csv") }
   let(:case_file) { Rails.root.join("spec", "fixtures", "casa_cases.csv") }

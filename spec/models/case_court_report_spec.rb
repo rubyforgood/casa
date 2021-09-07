@@ -55,7 +55,7 @@ RSpec.describe CaseCourtReport, type: :model do
       it { is_expected.not_to be_empty }
       it { is_expected.to be_instance_of Hash }
 
-      it "has the following keys [:created_date, :casa_case, :case_contacts, :volunteer]" do
+      it "has the following keys [:created_date, :casa_case, :case_contacts, :latest_hearing_date, :org_address, :volunteer]" do
         expected = %i[created_date casa_case case_contacts volunteer]
         expect(subject.keys).to include(*expected)
       end
@@ -66,6 +66,18 @@ RSpec.describe CaseCourtReport, type: :model do
 
       it "created_date is not nil" do
         expect(subject[:created_date]).to_not be(nil)
+      end
+
+      context "when the case has multiple past court dates" do
+        before do
+          casa_case_with_contacts.past_court_dates << create(:past_court_date, date: 9.months.ago)
+          casa_case_with_contacts.past_court_dates << create(:past_court_date, date: 3.months.ago)
+          casa_case_with_contacts.past_court_dates << create(:past_court_date, date: 15.months.ago)
+        end
+
+        it "sets latest_hearing_date as the latest past court date" do
+          expect(subject[:latest_hearing_date]).to eq(I18n.l(3.months.ago, format: :full, default: nil))
+        end
       end
     end
 
@@ -116,7 +128,7 @@ RSpec.describe CaseCourtReport, type: :model do
           expect(report_body).to include(document_data[:case_contact_type])
           expect(report_body).to include("#{document_data[:case_contact_time].strftime("%-m/%d")}*")
           expect(report_body).to include(document_data[:mandate_text])
-          expect(report_body).to include("partially_implemented") # Mandate Status
+          expect(report_body).to include("Partially implemented") # Mandate Status
           expect(report_body).to include(document_data[:volunteer_name])
           expect(report_body).to include(document_data[:volunteer_case_assignment_date].strftime("%B %-d, %Y"))
           expect(report_body).to include(document_data[:supervisor_name])
@@ -174,7 +186,7 @@ RSpec.describe CaseCourtReport, type: :model do
           expect(report_body).to include(document_data[:case_contact_type])
           expect(report_body).to include("#{document_data[:case_contact_time].strftime("%-m/%d")}*")
           expect(report_body).to include(document_data[:mandate_text])
-          expect(report_body).to include("partially_implemented") # Mandate Status
+          expect(report_body).to include("Partially implemented") # Mandate Status
         end
       end
     end

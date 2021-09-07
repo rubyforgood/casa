@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/hearing_types", :disable_bullet, type: :request do
+RSpec.describe "/hearing_types", type: :request do
   describe "GET /hearing_types/new" do
     context "when logged in as admin user" do
       it "allows access to hearing type create page" do

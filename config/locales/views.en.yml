@@ -57,8 +57,6 @@ en:
         click_to_download: Click to download
         download_all: Download All
         generate_court_report: Generate Report
-      send_reminder: Send Reminder
-      tooltip: Sends to volunteer a reminder email to input case contacts
     shared:
       filter_by: Filter by
       assigned_single: Assigned to Volunteer
@@ -87,6 +85,7 @@ en:
         select_judge: -Select Judge-
       youth_birth_month_year: "Youth's Birth Month & Year"
       add_court_mandate: Add a court mandate
+      add_past_court_date: Add a past court date
       next_court_date: Next Court Date
       court_report_due_date: Court Report Due Date
       court_mandates: Court Mandates
@@ -135,7 +134,21 @@ en:
     new:
       title: New CASA Case
   past_court_dates:
+    edit:
+      title: Editing Past Court Date
+    form:
+      button:
+        add_court_mandate: Add a court mandate
+        create: Create
+        update: Update
+      label:
+        court_mandates:
+          Court Mandates - Please check that you didn't enter any youth names
+    new:
+      title: New Past Court Date
     show:
+      button:
+        edit_past_court_date: Edit
       title: Past Court Date
       label:
         case_number: Case Number
@@ -157,6 +170,8 @@ en:
         display_name: Display Name
       prompt:
         mark_inactive_warning: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"
+      active_text: Admin is
+      deactive_text: Admin was deactivated on
     edit:
       title: Edit Casa Admin
     new:
@@ -393,9 +408,6 @@ en:
         one: All Volunteers
         other: All Volunteers
   volunteers:
-    edit:
-      send_reminder: Send reminder
-      tooltip: Sends to volunteer a reminder email to input case contacts
     index:
       volunteers: Volunteers
       filter: Filter by
@@ -417,13 +429,18 @@ en:
         assigned_transition_aged_youth: Assigned To Transition Aged Youth
         case_number: Case Number(s)
         last_contact_made: Last Contact Made
-        contacts: Contacts Made in Past 60 Days</th>
+        contacts: Contacts Made in Past 60 Days
         actions: Actions
       button:
         new: New Volunteer
+    send_reminder_button:
+      send_reminder: Send Reminder
+      tooltip: Remind volunteer to input case contacts
+      admin_checkbox_text: Send CC to Supervisor and Admin
+      supervisor_checkbox_text: Send CC to Supervisor
   reports:
     index:
-      page_title: Export Data
+      export_page_title: Export Data
       reports_subhead: Case Contacts Report
       reports_description: This CSV is a listing of all fields for the case contacts of all volunteers. Select the start and end date.
       start_date_label: "Starting From:"
@@ -440,3 +457,11 @@ en:
       contact_made_label: "Contact Made:"
       transition_aged_label: "Transition Aged Youth:"
       download_report_button: Download Report
+      download_mileage_report_button: Mileage Report
+      filter_cols: Filter Columns
+    filter:
+      filter_exported_columns: Filter Exported Columns
+      select_columns: "Select columns:"
+  notifications:
+    index:
+      no_notifications: You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.

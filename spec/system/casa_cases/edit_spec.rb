@@ -1,7 +1,7 @@
 require "rails_helper"
 require "stringio"
 
-RSpec.describe "Edit CASA Case", :disable_bullet, type: :system do
+RSpec.describe "Edit CASA Case", type: :system do
   context "logged in as admin" do
     let(:organization) { create(:casa_org) }
     let(:admin) { create(:casa_admin, casa_org: organization) }
@@ -22,14 +22,6 @@ RSpec.describe "Edit CASA Case", :disable_bullet, type: :system do
 
       expect(page).to have_text(court_mandate.mandate_text)
       expect(page).to have_text(court_mandate.implementation_status.humanize)
-    end
-
-    it "clicks back button after editing case" do
-      visit edit_casa_case_path(casa_case)
-      select "Submitted", from: "casa_case_court_report_status"
-      click_on "Back"
-      visit edit_casa_case_path(casa_case)
-      expect(casa_case).not_to be_court_report_submitted
     end
 
     it "edits case", js: true do
@@ -500,11 +492,11 @@ of it unless it was included in a previous court report.")
       # test court dates with reports get the correct ones
       [[0, 1], [2, 3], [3, 4]].each do |di, ri|
         expect(page).to have_link("(Attached Report)", href: rails_blob_path(reports[ri], disposition: "attachment"))
-        expect(page).not_to have_link(I18n.l(court_dates[di].date, format: :full, default: nil))
+        expect(page).to have_link(I18n.l(court_dates[di].date, format: :full, default: nil))
       end
 
-      # and that the one with no report doesn't get one
-      expect(page).not_to have_link(I18n.l(court_dates[1].date, format: :full, default: nil))
+      # and that the one with no report still gets one
+      expect(page).to have_link(I18n.l(court_dates[1].date, format: :full, default: nil))
       expect(page).to have_text(I18n.l(court_dates[1].date, format: :full, default: nil))
     end
 
@@ -515,22 +507,6 @@ of it unless it was included in a previous court report.")
 
       expect(page).to have_text(court_mandate.mandate_text)
       expect(page).to have_text(court_mandate.implementation_status.humanize)
-    end
-
-    it "clicks back button after editing case" do
-      visit edit_casa_case_path(casa_case)
-
-      expect(page).to_not have_select("Hearing type")
-      expect(page).to_not have_select("Judge")
-
-      select "Submitted", from: "casa_case_court_report_status"
-      within ".actions" do
-        click_on "Update CASA Case"
-      end
-
-      click_on "Back"
-
-      expect(page).to have_text("My Case")
     end
 
     it "edits case" do

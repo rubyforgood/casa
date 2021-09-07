@@ -62,7 +62,7 @@ class CaseContactsController < ApplicationController
 
     @selected_cases = @casa_cases.where(id: params.dig(:case_contact, :casa_case_id))
     if @selected_cases.empty?
-      flash[:alert] = "At least one case must be selected"
+      flash[:alert] = t("case_min_validation", scope: "case_contact")
       render :new
       return
     end
@@ -73,7 +73,7 @@ class CaseContactsController < ApplicationController
     }
 
     if case_contacts.all?(&:persisted?)
-      redirect_to casa_case_path(CaseContact.last.casa_case), notice: "Case contact was successfully created."
+      redirect_to casa_case_path(CaseContact.last.casa_case), notice: create_notice
     else
       @case_contact = case_contacts.first
       @casa_cases = [@case_contact.casa_case]
@@ -96,7 +96,7 @@ class CaseContactsController < ApplicationController
     @current_organization_groups = current_organization.contact_type_groups
 
     if @case_contact.update_cleaning_contact_types(update_case_contact_params)
-      redirect_to casa_case_path(@case_contact.casa_case), notice: "Case contact was successfully updated."
+      redirect_to casa_case_path(@case_contact.casa_case), notice: t("update", scope: "case_contact")
     else
       render :edit
     end
@@ -106,7 +106,7 @@ class CaseContactsController < ApplicationController
     authorize CasaAdmin
 
     @case_contact.destroy
-    flash[:notice] = "Contact is successfully deleted."
+    flash[:notice] = t("destroy", scope: "case_contact")
     redirect_to request.referer
   end
 
@@ -115,7 +115,7 @@ class CaseContactsController < ApplicationController
 
     case_contact = authorize(current_organization.case_contacts.with_deleted.find(params[:id]))
     case_contact.restore(recrusive: true)
-    flash[:notice] = "Contact is successfully restored."
+    flash[:notice] = t("restore", scope: "case_contact")
     redirect_to request.referer
   end
 
@@ -159,5 +159,9 @@ class CaseContactsController < ApplicationController
       current_organization.case_contacts.grab_all(current_user)
                                         .includes(:creator, contact_types: :contact_type_group)
     )
+  end
+
+  def create_notice
+    "#{t("create", scope: "case_contact")} #{t("thank_you_#{rand(1..8)}", scope: "case_contact")}"
   end
 end

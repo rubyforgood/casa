@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/casa_admins", :disable_bullet, type: :request do
+RSpec.describe "/casa_admins", type: :request do
   describe "GET /casa_admins/:id/edit" do
     context "logged in as admin user" do
       it "can successfully access a casa admin edit page" do

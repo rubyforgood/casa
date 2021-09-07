@@ -130,8 +130,8 @@
                 </div>
               <% end %>
             </div>
-            <div class="add-court-mandate-container">
-              <button type="button" id="add-mandate-button">
+            <div class="add-container">
+              <button type="button" class="add-button" id="add-mandate-button">
                 <i class="fa fa-plus" aria-hidden="true"></i>
               </button>
               <strong><%= t(".add_court_mandate") %></strong>
@@ -154,7 +154,7 @@
           <% end %>
         </div>
 
-        <div class="field form-group">
+        <div class="field form-group past-court-dates">
           <%= render "past_court_dates", casa_case: @casa_case %>
         </div>
       <% end %>

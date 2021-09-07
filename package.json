@@ -10,34 +10,38 @@
     "toc": "markdown-toc -i README.md"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.3",
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "@rails/actioncable": "^6.1.4",
     "@rails/activestorage": "^6.1.4",
     "@rails/ujs": "^6.1.4",
-    "@rails/webpacker": "5.4.0",
+    "@rails/webpacker": "5.4.2",
     "bindings": "^1.5.0",
     "bootstrap": "4.6.0",
     "bootstrap-datepicker": "^1.9.0",
     "bootstrap-select": "^1.13.18",
-    "datatables.net-dt": "^1.10.25",
+    "datatables.net-dt": "^1.11.1",
     "faker": "^5.5.3",
     "jquery": "^3.6.0",
     "node-sass": "^6.0.1",
     "popper.js": "^1.16.1",
     "select2": "^4.0.13",
-    "sweetalert2": "^11.0.20",
+    "sweetalert2": "^11.1.4",
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",
   "devDependencies": {
-    "cypress": "^8.1.0",
-    "jest": "^27.0.6",
+    "cypress": "^8.3.0",
+    "jest": "^27.1.0",
     "markdown-toc": "^1.2.0",
     "standard": "^16.0.3",
-    "start-server-and-test": "^1.13.1",
-    "webpack-dev-server": "^3.11.2"
+    "start-server-and-test": "^1.14.0",
+    "webpack-dev-server": "^4.1.0"
   },
   "standard": {
+    "globals": [
+      "$",
+      "jQuery"
+    ],
     "ignore": [
       "cypress"
     ]

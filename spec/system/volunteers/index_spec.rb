@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "view all volunteers", :disable_bullet, type: :system do
+RSpec.describe "view all volunteers", type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
 
@@ -45,6 +45,7 @@ RSpec.describe "view all volunteers", :disable_bullet, type: :system do
     end
 
     it "displays last contact made by default", js: true do
+      travel_to Date.new(2021, 1, 1)
       create(:volunteer, :with_assigned_supervisor, display_name: "User 1", email: "casa@example.com", casa_org: organization)
 
       sign_in admin
@@ -75,8 +76,10 @@ RSpec.describe "view all volunteers", :disable_bullet, type: :system do
 
       expect(page).to have_text("Name")
       expect(page).to have_text("Status")
-      expect(page).not_to have_text("Contact Made In Past 60 Days")
-      expect(page).not_to have_text("Last Contact Made")
+      within("#volunteers") do
+        expect(page).to have_no_text("Contact Made In Past 60 Days")
+        expect(page).to have_no_text("Last Contact Made")
+      end
     end
 
     it "can filter volunteers", js: true do
@@ -219,6 +222,7 @@ RSpec.describe "view all volunteers", :disable_bullet, type: :system do
     end
 
     it "can show/hide columns on volunteers table", js: true do
+      travel_to Date.new(2021, 1, 1)
       sign_in supervisor
 
       visit volunteers_path
@@ -239,8 +243,10 @@ RSpec.describe "view all volunteers", :disable_bullet, type: :system do
 
       expect(page).to have_text("Name")
       expect(page).to have_text("Status")
-      expect(page).not_to have_text("Contact Made In Past 60 Days")
-      expect(page).not_to have_text("Last Contact Made")
+      within("#volunteers") do
+        expect(page).to have_no_text("Contact Made In Past 60 Days")
+        expect(page).to have_no_text("Last Contact Made")
+      end
     end
 
     context "with volunteers" do

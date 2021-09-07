@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/contact_types", :disable_bullet, type: :request do
+RSpec.describe "/contact_types", type: :request do
   let(:group) { create(:contact_type_group) }
 
   describe "GET /contact_types/new" do

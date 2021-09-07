@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/reports", :disable_bullet, type: :request do
+RSpec.describe "/reports", type: :request do
   describe "GET #index" do
     subject do
       get reports_url

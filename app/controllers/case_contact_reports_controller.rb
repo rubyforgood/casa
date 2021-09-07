@@ -27,7 +27,8 @@ class CaseContactReportsController < ApplicationController
       contact_type_ids: [],
       contact_type_group_ids: [],
       creator_ids: [],
-      supervisor_ids: []
+      supervisor_ids: [],
+      filtered_csv_cols: {}
     ).merge(casa_org_id: current_organization.id)
     convert_radio_options_to_boolean(parameters)
     parameters

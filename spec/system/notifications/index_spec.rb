@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "notifications/index", :disable_bullet, type: :system do
+RSpec.describe "notifications/index", type: :system do
   let(:admin) { create(:casa_admin) }
   let(:volunteer) { create(:volunteer) }
   let(:case_contact) { create(:case_contact, creator: volunteer) }
@@ -23,6 +23,7 @@ RSpec.describe "notifications/index", :disable_bullet, type: :system do
 
       expect(page).to have_text(notification_message)
       expect(page).to have_text("Followup resolved")
+      expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
     end
   end
 
@@ -57,6 +58,7 @@ RSpec.describe "notifications/index", :disable_bullet, type: :system do
         expect(page).to have_text(notification_message_heading)
         expect(page).to have_text(note)
         expect(page).to have_text(notification_message_more_info)
+        expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
         expect(page).to have_text("New followup")
       end
     end
@@ -75,8 +77,18 @@ RSpec.describe "notifications/index", :disable_bullet, type: :system do
         visit notifications_path
 
         expect(page).to have_text(inline_notification_message)
+        expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
         expect(page).to have_text("New followup")
       end
+    end
+  end
+
+  context "when there are no notifications" do
+    it "displays a message to the user" do
+      sign_in volunteer
+      visit notifications_path
+
+      expect(page).to have_text(I18n.t(".notifications.index.no_notifications"))
     end
   end
 end

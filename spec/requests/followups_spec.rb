@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/followups", :disable_bullet, type: :request do
+RSpec.describe "/followups", type: :request do
   let(:admin) { create(:casa_admin) }
   let(:volunteer) { create(:volunteer) }
   let(:contact) { create(:case_contact) }

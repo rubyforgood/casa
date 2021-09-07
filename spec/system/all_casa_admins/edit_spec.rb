@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "all_casa_admin_edit_spec", :disable_bullet, type: :system do
+RSpec.describe "all_casa_admin_edit_spec", type: :system do
   let(:admin) { create(:all_casa_admin) }
 
   before do
@@ -21,6 +21,22 @@ RSpec.describe "all_casa_admin_edit_spec", :disable_bullet, type: :system do
       fill_in "all_casa_admin_password_confirmation", with: "newpassword"
       click_on "Update Password"
       expect(page).to have_text "successfully updated"
+    end
+
+    it "notifies password changed by email", :aggregate_failures do
+      click_on "Change Password"
+
+      fill_in "Password", with: "1234567"
+      fill_in "Password Confirmation", with: "1234567"
+
+      click_on "Update Password"
+
+      page.has_content?("Password was successfully updated.")
+
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
+      expect(ActionMailer::Base.deliveries.first.body.encoded)
+        .to match("Your CASA password has been changed.")
     end
   end
 

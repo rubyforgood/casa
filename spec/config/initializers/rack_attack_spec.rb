@@ -9,12 +9,15 @@ RSpec.describe Rack::Attack do
   let(:cache) { Rails.cache }
 
   before do
+    ActionController::Base.perform_caching = true
     allow(Rails).to receive(:cache).and_return(memory_store)
     Rails.cache.clear
+    freeze_time
   end
 
-  around do |example|
-    freeze_time(&example)
+  after do
+    travel_back
+    ActionController::Base.perform_caching = false
   end
 
   def app

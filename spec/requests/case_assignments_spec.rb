@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/case_assignments", :disable_bullet, type: :request do
+RSpec.describe "/case_assignments", type: :request do
   let(:casa_org) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: casa_org) }
   let(:volunteer) { create(:volunteer, casa_org: casa_org) }

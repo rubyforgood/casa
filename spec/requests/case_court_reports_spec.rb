@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/case_court_reports", :disable_bullet, type: :request do
+RSpec.describe "/case_court_reports", type: :request do
   let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
 
   before do
@@ -89,20 +89,56 @@ RSpec.describe "/case_court_reports", :disable_bullet, type: :request do
 
   # case_court_reports#generate
   describe "POST /case_court_reports" do
-    context "when no custom template is set" do
+    context "when an INVALID / non-existing case is sent" do
+      let(:casa_case) { build_stubbed(:casa_case) }
+
       before do
         request_generate_court_report
       end
 
-      context "when a valid / existing case is sent" do
+      it "sends response as a JSON string" do
+        expect(response.content_type).to eq("application/json; charset=utf-8")
+        expect(JSON.parse(response.body)).to be_instance_of Hash
+      end
+
+      it "has keys ['link','status','error_messages'] in JSON string" do
+        body_hash = JSON.parse(response.body)
+
+        expect(body_hash).to have_key "link"
+        expect(body_hash).to have_key "status"
+        expect(body_hash).to have_key "error_messages"
+      end
+
+      it "sends response with status :not_found" do
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "contains a empty link" do
+        body_hash = JSON.parse(response.body)
+
+        expect(body_hash["link"].length).to be 0
+      end
+
+      it "contains error messages with words 'not found'" do
+        body_hash = JSON.parse(response.body)
+
+        expect(body_hash["error_messages"].length).to be > 0
+        expect(body_hash["error_messages"]).to match(/not found/)
+      end
+    end
+
+    context "when a valid / existing case is sent" do
+      context "when no custom template is set" do
         let(:casa_case) { volunteer.casa_cases.first }
 
         it "sends response as a JSON string" do
+          request_generate_court_report
           expect(response.content_type).to eq("application/json; charset=utf-8")
           expect(JSON.parse(response.body)).to be_instance_of Hash
         end
 
         it "has keys ['link', 'status'] in JSON string" do
+          request_generate_court_report
           body_hash = JSON.parse(response.body)
 
           expect(body_hash).to have_key "link"
@@ -110,81 +146,60 @@ RSpec.describe "/case_court_reports", :disable_bullet, type: :request do
         end
 
         it "sends response with status :ok" do
+          request_generate_court_report
           expect(response).to have_http_status(:ok)
         end
 
         it "contains a link ending with .DOCX extension" do
+          request_generate_court_report
           body_hash = JSON.parse(response.body)
 
-          expect(body_hash["link"].length).to be > 0
-          expect(body_hash["link"]).to end_with("#{casa_case.case_number}.docx")
+          expect(body_hash["link"]).to end_with(".docx")
         end
 
         it "uses the default template" do
+          request_generate_court_report
           get JSON.parse(response.body)["link"]
 
           expect(get_docx_subfile_contents(response.body, "word/header3.xml")).to include("YOUR CASA ORG’S NUMBER")
         end
-      end
 
-      context "when an INVALID / non-existing case is sent" do
-        let(:casa_case) { build_stubbed(:casa_case) }
+        context "as a supervisor" do
+          let(:supervisor) { volunteer.supervisor }
 
-        it "sends response as a JSON string" do
-          expect(response.content_type).to eq("application/json; charset=utf-8")
-          expect(JSON.parse(response.body)).to be_instance_of Hash
+          it "generates the report" do
+            sign_in supervisor
+            request_generate_court_report
+
+            expect(JSON.parse(response.body)["link"]).to end_with(".docx")
+          end
         end
 
-        it "has keys ['link','status','error_messages'] in JSON string" do
-          body_hash = JSON.parse(response.body)
+        context "as an admin" do
+          let(:admin) { volunteer.casa_org.casa_admins.first || create(:casa_admin, casa_org: volunteer.casa_org) }
 
-          expect(body_hash).to have_key "link"
-          expect(body_hash).to have_key "status"
-          expect(body_hash).to have_key "error_messages"
-        end
+          it "generates the report" do
+            sign_in admin
+            request_generate_court_report
 
-        it "sends response with status :not_found" do
-          expect(response).to have_http_status(:not_found)
-        end
-
-        it "contains a empty link" do
-          body_hash = JSON.parse(response.body)
-
-          expect(body_hash["link"].length).to be 0
-        end
-
-        it "contains error messages with words 'not found'" do
-          body_hash = JSON.parse(response.body)
-
-          expect(body_hash["error_messages"].length).to be > 0
-          expect(body_hash["error_messages"]).to match(/not found/)
+            expect(JSON.parse(response.body)["link"]).to end_with(".docx")
+          end
         end
       end
-    end
 
-    context "when a custom template is set" do
-      let(:casa_case) { volunteer.casa_cases.first }
+      context "when a custom template is set" do
+        let(:casa_case) { volunteer.casa_cases.first }
 
-      before do
-        volunteer.casa_org.court_report_template.attach(io: File.new(Rails.root.join("app", "documents", "templates", "montgomery_report_template.docx")), filename: "montgomery_report_template.docx")
+        before do
+          volunteer.casa_org.court_report_template.attach(io: File.new(Rails.root.join("app", "documents", "templates", "montgomery_report_template.docx")), filename: "montgomery_report_template.docx")
 
-        request_generate_court_report
-      end
+          request_generate_court_report
+        end
 
-      it "uses the custom template" do
-        get JSON.parse(response.body)["link"]
-
-        expect(get_docx_subfile_contents(response.body, "word/header2.xml")).to include("Voices for Children Montgomery")
-      end
-
-      context "as a supervisor" do
-        let(:supervisor) { volunteer.supervisor }
-
-        it "generates the report" do
-          sign_in supervisor
-
+        it "uses the custom template" do
           get JSON.parse(response.body)["link"]
-          expect(get_docx_subfile_contents(response.body, "word/header2.xml")).to include("Voices for Children Montgomery")
+
+          expect(get_docx_subfile_contents(response.body, "word/document.xml")).to include("Did you forget to enter your court orders?")
         end
       end
     end

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "all_casa_admin/dashboard/show", :disable_bullet, type: :system do
+RSpec.describe "all_casa_admin/dashboard/show", type: :system do
   let(:all_casa_admin) { create(:all_casa_admin) }
   let(:volunteer) { create(:volunteer) }
   let!(:organization) { create(:casa_org) }
@@ -29,7 +29,6 @@ RSpec.describe "all_casa_admin/dashboard/show", :disable_bullet, type: :system d
 
       expect(page).to have_text "Administrators"
       expect(page).to have_text "New CASA Admin"
-      expect(page).to have_text "Back"
       expect(page).to_not have_text vol.email
       expect(page).to_not have_text sup.email
       expect(page).to have_text ca1.email

@@ -110,18 +110,38 @@ sudo apt install -y curl git git-gui htop hub libpq-dev net-tools nodejs npm ope
 
 ```
 # Install NVM and Node JS
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+#   you can use wget or curl
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 . ./.bashrc
-nvm install 13.7.0
+nvm install v12
+# Update npm
+npm i -g npm
 ```
 
 ```
 # Install Yarn
+npm i -g yarn
+# OR
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 sudo apt update && sudo apt install --no-install-recommends yarn
 ```
 
+```
+# Install and configure rbenv
+sudo apt install rbenv
+rbenv init
+#   Restart your terminal
+
+#   setup rbenv install command
+mkdir -p "$(rbenv root)"/plugins
+git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
+
+rbenv install 3.0.2
+```
+
+If you would like RVM instead of rbenv
 ```
 # Install RVM (Part 1)
 gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
@@ -129,9 +149,9 @@ gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703
 \curl -sSL https://get.rvm.io | bash
 . ./.bashrc
 rvm get head
-rvm install 3.0.1
-rvm alias create ruby 3.0.1
-rvm alias create default ruby-3.0.1
+rvm install 3.0.2
+rvm alias create ruby 3.0.2
+rvm alias create default ruby-3.0.2
 ```
 
 ```# Download the Chrome browser (for RSpec testing):

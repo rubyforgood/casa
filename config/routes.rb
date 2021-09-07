@@ -32,7 +32,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :past_court_dates, only: %i[show]
+    resources :past_court_dates, only: %i[create edit new show update]
 
     member do
       patch :deactivate
@@ -68,6 +68,7 @@ Rails.application.routes.draw do
     end
   end
   resources :case_contact_reports, only: %i[index]
+  resources :mileage_reports, only: %i[index]
   resources :casa_orgs, only: %i[edit update]
   resources :contact_type_groups, only: %i[new create edit update]
   resources :contact_types, only: %i[new create edit update]

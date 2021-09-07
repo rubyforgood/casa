@@ -1,10 +1,10 @@
 class UsersController < ApplicationController
   before_action :get_user
   before_action :authorize_user_with_policy
+  before_action :set_active_casa_admins
   after_action :verify_authorized
 
   def edit
-    @active_casa_admins = CasaAdmin.in_organization(current_organization).active
   end
 
   def update
@@ -12,7 +12,6 @@ class UsersController < ApplicationController
       flash[:success] = "Profile was successfully updated."
       redirect_to edit_users_path
     else
-      @active_casa_admins = CasaAdmin.in_organization(current_organization).active
       render :edit
     end
   end
