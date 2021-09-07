@@ -47,6 +47,7 @@ class CaseContactsController < ApplicationController
           .contact_type_groups
           .joins(:contact_types)
           .where(contact_types: {active: true})
+          .alphabetically
           .uniq
       end
   end
