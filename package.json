@@ -19,7 +19,7 @@
     "bootstrap": "4.6.0",
     "bootstrap-datepicker": "^1.9.0",
     "bootstrap-select": "^1.13.18",
-    "datatables.net-dt": "^1.10.25",
+    "datatables.net-dt": "^1.11.1",
     "faker": "^5.5.3",
     "jquery": "^3.6.0",
     "node-sass": "^6.0.1",
