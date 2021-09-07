@@ -7,7 +7,7 @@ RSpec.describe CasaCasesEmancipationOption, type: :model do
   it "does not allow adding the same category twice to a case" do
     expect {
       casa_case = create(:casa_case)
-      emancipation_option = create(:emancipation_option)
+      emancipation_option = build(:emancipation_option)
 
       casa_case.emancipation_options << emancipation_option
       casa_case.emancipation_options << emancipation_option
