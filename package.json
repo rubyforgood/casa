@@ -38,6 +38,10 @@
     "webpack-dev-server": "^4.1.0"
   },
   "standard": {
+    "globals": [
+      "$",
+      "jQuery"
+    ],
     "ignore": [
       "cypress"
     ]

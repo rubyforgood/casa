@@ -1,7 +1,6 @@
 /* eslint-env jest */
 
 require('jest')
-const $ = require('jquery')
 const Notifier = require('../src/async_notifier.js')
 
 let asyncNotificationsElement
@@ -18,16 +17,16 @@ beforeEach(() => {
       </div>
     </div>`
 
-  $(() => {
+  $(document).ready(() => {
     asyncNotificationsElement = $('#async-notifications')
     notifier = new Notifier(asyncNotificationsElement)
   })
 })
 
-test('notify should display a green notification when passed a message and level=\'info\'', done => {
+test('notify should display a green notification when passed a message and level=\'info\'', (done) => {
   const notificationMessage = '\'Y$deH[|%ROii]jy'
 
-  $(() => {
+  $(document).ready(() => {
     notifier.notify(notificationMessage, 'info')
 
     try {
@@ -43,10 +42,10 @@ test('notify should display a green notification when passed a message and level
   })
 })
 
-test('notify should display a red notification when passed a message and level=\'error\'', done => {
+test('notify should display a red notification when passed a message and level=\'error\'', (done) => {
   const notificationMessage = '\\+!h0bbH"yN7dx9.'
 
-  $(() => {
+  $(document).ready(() => {
     notifier.notify(notificationMessage, 'error')
 
     try {
@@ -61,8 +60,8 @@ test('notify should display a red notification when passed a message and level=\
   })
 })
 
-test('notify should append a dismissable message to the async-notifications widget', done => {
-  $(() => {
+test('notify should append a dismissable message to the async-notifications widget', (done) => {
+  $(document).ready(() => {
     notifier.notify('', 'error')
     notifier.notify('', 'info')
 
@@ -90,8 +89,8 @@ test('notify should append a dismissable message to the async-notifications widg
   })
 })
 
-test('notify should throw a RangeError when passed an unsupported message level', done => {
-  $(() => {
+test('notify should throw a RangeError when passed an unsupported message level', (done) => {
+  $(document).ready(() => {
     try {
       expect(() => {
         notifier.notify('message', 'unsupported level')
@@ -104,8 +103,8 @@ test('notify should throw a RangeError when passed an unsupported message level'
   })
 })
 
-test('notify should throw a TypeError when param message is not a string', done => {
-  $(() => {
+test('notify should throw a TypeError when param message is not a string', (done) => {
+  $(document).ready(() => {
     try {
       expect(() => {
         notifier.notify(6, 'info')
