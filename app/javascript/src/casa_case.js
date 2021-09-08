@@ -24,11 +24,11 @@ function addCourtMandateInput () {
 }
 
 function removeMandateWithConfirmation () {
-  const text = 'Are you sure you want to remove this court mandate? Doing so will ' +
+  const text = 'Are you sure you want to remove this court order? Doing so will ' +
                'delete all records of it unless it was included in a previous court report.'
   Swal.fire({
     icon: 'warning',
-    title: 'Delete court mandate?',
+    title: 'Delete court order?',
     text: text,
     showCloseButton: true,
     showCancelButton: true,
@@ -59,14 +59,14 @@ function removeMandateAction (ctx) {
 
       Swal.fire({
         icon: 'success',
-        text: 'Court mandate has been removed.',
+        text: 'Court order has been removed.',
         showCloseButton: true
       })
     },
     error: () => {
       Swal.fire({
         icon: 'error',
-        text: 'Something went wrong when attempting to delete this court mandate.',
+        text: 'Something went wrong when attempting to delete this court order.',
         showCloseButton: true
       })
     }
