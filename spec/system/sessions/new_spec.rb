@@ -26,8 +26,6 @@ RSpec.describe "sessions/new", type: :system do
       end
 
       it "allows #{user_type} to click email link" do
-        user = create(user_type.to_sym)
-
         visit "/"
         expect(page).to have_text "Want to add your CASA? Email: jcasa@rubyforgood.org"
         expect(page).to have_link("jcasa@rubyforgood.org", href: "mailto:jcasa@rubyforgood.org")
