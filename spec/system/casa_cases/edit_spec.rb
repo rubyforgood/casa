@@ -61,7 +61,8 @@ RSpec.describe "Edit CASA Case", type: :system do
       click_on "Deactivate CASA Case"
       click_on "Yes, deactivate"
       expect(page).to have_text("Case #{casa_case.case_number} has been deactivated")
-      expect(page).to have_text("Case was deactivated on: #{I18n.l(casa_case.updated_at, format: :standard, default: nil)}")
+      expect(page).to have_text("Case was deactivated on: #{I18n.l(casa_case.updated_at, format: :standard,
+                                                                                         default: nil)}")
       expect(page).to have_text("Reactivate CASA Case")
       expect(page).to_not have_text("Court Date")
       expect(page).to_not have_text("Court Report Due Date")
@@ -232,7 +233,8 @@ RSpec.describe "Edit CASA Case", type: :system do
       casa_case.deactivate
       visit edit_casa_case_path(casa_case)
 
-      expect(page).to have_text("Case was deactivated on: #{I18n.l(casa_case.updated_at, format: :standard, default: nil)}")
+      expect(page).to have_text("Case was deactivated on: #{I18n.l(casa_case.updated_at, format: :standard,
+                                                                                         default: nil)}")
       expect(page).not_to have_text("Court Date")
       expect(page).not_to have_text("Court Report Due Date")
       expect(page).not_to have_text("Day")
@@ -520,8 +522,8 @@ of it unless it was included in a previous court report.")
     it "clicks back button after editing case" do
       visit edit_casa_case_path(casa_case)
 
-      expect(page).to_not have_select("Hearing type")
-      expect(page).to_not have_select("Judge")
+      expect(page).to have_select("Hearing type")
+      expect(page).to have_select("Judge")
 
       select "Submitted", from: "casa_case_court_report_status"
       within ".actions" do
@@ -542,12 +544,12 @@ of it unless it was included in a previous court report.")
         click_on "Update CASA Case"
       end
 
-      expect(page).not_to have_text("Day")
-      expect(page).not_to have_text("Month")
-      expect(page).not_to have_text("Year")
+      expect(page).to have_text("Day")
+      expect(page).to have_text("Month")
+      expect(page).to have_text("Year")
       expect(page).not_to have_text("Deactivate Case")
 
-      expect(page).not_to have_css("#add-mandate-button")
+      expect(page).to have_css("#add-mandate-button")
 
       visit casa_case_path(casa_case)
       expect(page).to have_text("Court Report Status: Submitted")

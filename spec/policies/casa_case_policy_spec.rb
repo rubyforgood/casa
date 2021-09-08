@@ -41,7 +41,27 @@ RSpec.describe CasaCasePolicy do
 
     context "when user is a volunteer" do
       it "does not allow update" do
-        is_expected.not_to permit(volunteer, casa_case)
+        is_expected.to permit(volunteer, casa_case)
+      end
+    end
+  end
+
+  permissions :update_hearing_type?, :update_judge?, :update_court_mandates? do
+    context "when user is an admin" do
+      it "allow update" do
+        is_expected.to permit(casa_admin, casa_case)
+      end
+    end
+
+    context "when user is a supervisor" do
+      it "allow update" do
+        is_expected.to permit(supervisor, casa_case)
+      end
+    end
+
+    context "when user is a volunteer" do
+      it "does not allow update" do
+        is_expected.to permit(volunteer, casa_case)
       end
     end
   end
