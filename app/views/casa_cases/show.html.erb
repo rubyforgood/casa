@@ -1,17 +1,17 @@
 <div class="row">
   <div class="col-sm-12 form-header">
-    <h1><%= @casa_case.decorate.transition_aged_youth_icon %> <%= t(".title") %></h1>
+    <h1 class="pull-left"><%= @casa_case.decorate.transition_aged_youth_icon %> <%= t(".title") %></h1>
     <%- if policy(:case_contact).new? & @casa_case.active? %>
       <%= link_to(t(".button.new_contact"),
                   new_case_contact_path(case_contact: {casa_case_id: @casa_case.id}),
-                  class: "btn btn-primary casa-case-button") %>
+                  class: "btn btn-primary pull-left casa-case-button") %>
     <%- end %>
     <% if @casa_case.active? %>
-      <%= link_to t(".button.edit_case"), edit_casa_case_path(@casa_case), class: "btn btn-primary casa-case-button" %>
+      <%= link_to t(".button.edit_case"), edit_casa_case_path(@casa_case), class: "btn btn-primary pull-left casa-case-button" %>
     <% end %>
     <% if @casa_case.has_transitioned? %>
       <%= link_to(casa_case_emancipation_path(@casa_case),
-              class: "btn btn-primary casa-case-button") do %>
+              class: "btn btn-primary pull-left casa-case-button") do %>
         <%= t(".button.emancipation") %>
         <span class="badge badge-light">
           <%= @casa_case.decorate.emancipation_checklist_count %>
@@ -24,7 +24,7 @@
         <%= button_tag t(".button.generate_report"), type: :submit,
                        data: {button_name: t(".button.generate_report")},
                        id: "btnGenerateReport",
-                       class: "btn btn-success pull-right" %>
+                       class: "btn btn-success pull-right casa-case-generate-button" %>
         <i id="spinner" class='fas fa-spin d-none pull-right'>⏳</i>
       <% end %>
     <% end %>
