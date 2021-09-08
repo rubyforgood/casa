@@ -7,7 +7,8 @@
                   class: "btn btn-primary pull-left casa-case-button") %>
     <%- end %>
     <% if @casa_case.active? %>
-      <%= link_to t(".button.edit_case"), edit_casa_case_path(@casa_case), class: "btn btn-primary pull-left casa-case-button" %>
+      <%= link_to t(".button.edit_case"), edit_casa_case_path(@casa_case),
+              class: "btn btn-primary pull-left casa-case-button" %>
     <% end %>
     <% if @casa_case.has_transitioned? %>
       <%= link_to(casa_case_emancipation_path(@casa_case),
