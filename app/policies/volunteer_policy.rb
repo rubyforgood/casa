@@ -1,4 +1,22 @@
 class VolunteerPolicy < UserPolicy
+  class Scope
+    attr_reader :user, :scope
+
+    def initialize(user, scope)
+      @user = user
+      @scope = scope
+    end
+
+    def resolve
+      case user
+      when CasaAdmin, Supervisor, Volunteer
+        scope.by_organization(@user.casa_org)
+      else
+        raise "unrecognized role #{@user.type}"
+      end
+    end
+  end
+
   def index?
     admin_or_supervisor?
   end

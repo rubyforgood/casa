@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.0.1"
+ruby "3.0.2"
 gem "rails", "~> 6.1.4"
 
 gem "after_party" # post-deployment tasks
@@ -41,7 +41,7 @@ group :development, :test do
   gem "pry-byebug"
   gem "rspec-rails", "~> 5.0.2"
   gem "shoulda-matchers"
-  gem "standard", "~> 1.2.0" # linter https://github.com/testdouble/standard
+  gem "standard", "~> 1.3.0" # linter https://github.com/testdouble/standard
   gem "cypress-on-rails", "~> 1.11"
 end
 
@@ -62,7 +62,7 @@ group :test do
   gem "database_cleaner-active_record", "~> 2.0.1"
   gem "rake"
   gem "rails-controller-testing"
-  gem "selenium-webdriver", "4.0.0.beta4" # temporarily locking to a beta version until 4.x comes out - to fix docker tests https://github.com/SeleniumHQ/selenium/issues/9001
+  gem "selenium-webdriver", "4.0.0.rc1" # temporarily locking to a beta version until 4.x comes out - to fix docker tests https://github.com/SeleniumHQ/selenium/issues/9001
   gem "simplecov", "~> 0.21.2", require: false # 0.17.1 pinned as a workaround for https://github.com/codeclimate/test-reporter/issues/418
   gem "webdrivers" # easy installation and use of web drivers to run system tests with browsers
 end

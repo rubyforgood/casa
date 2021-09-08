@@ -148,7 +148,7 @@ async function fireSwalFollowupAlert () {
 
   return await Swal.fire({
     input: 'textarea',
-    inputLabel: inputLabel,
+    title: inputLabel,
     inputPlaceholder: 'Type your note here...',
     inputAttributes: { 'aria-label': 'Type your note here' },
 

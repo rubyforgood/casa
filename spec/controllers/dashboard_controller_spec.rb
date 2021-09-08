@@ -24,8 +24,8 @@ RSpec.describe DashboardController, type: :controller do
       context "with one active case" do
         let!(:case_assignment) { create :case_assignment, volunteer: volunteer, casa_case: active_case }
 
-        it "goes to case" do
-          is_expected.to redirect_to(casa_case_url(active_case.id))
+        it "goes to new case contact page" do
+          is_expected.to redirect_to(new_case_contact_path)
         end
       end
 
@@ -33,8 +33,8 @@ RSpec.describe DashboardController, type: :controller do
         let!(:inactive_case_assignment) { create :case_assignment, volunteer: volunteer, casa_case: inactive_case }
         let!(:case_assignment) { create :case_assignment, volunteer: volunteer, casa_case: active_case }
 
-        it "goes to active case" do
-          expect(subject).to redirect_to(casa_case_url(active_case.id))
+        it "goes to new case contact page" do
+          expect(subject).to redirect_to(new_case_contact_path)
         end
       end
 

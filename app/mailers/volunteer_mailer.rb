@@ -1,10 +1,4 @@
 class VolunteerMailer < UserMailer
-  def deactivation(user)
-    @user = user
-    @casa_organization = user.casa_org
-    mail(to: @user.email, subject: "Your account has been deactivated")
-  end
-
   def account_setup(user)
     @user = user
     @casa_organization = user.casa_org

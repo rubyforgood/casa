@@ -18,6 +18,7 @@ RSpec.describe CaseContactsController, type: :controller do
   end
 
   before do
+    travel_to Date.new(2021, 1, 1)
     allow(controller).to receive(:authenticate_user!).and_return(true)
     allow(controller).to receive(:current_user).and_return(volunteer)
   end
@@ -40,6 +41,109 @@ RSpec.describe CaseContactsController, type: :controller do
       it "assigns all the organizations contact type groups to @current_organization_groups" do
         get :new, params: {case_contact: {casa_case_id: case_id}}
         expect(assigns(:current_organization_groups)).to eq([contact_type_group_one, contact_type_group_two])
+      end
+
+      it "calls contact_types_alphabetically" do
+        allow(controller).to receive(:current_organization).and_return(organization)
+        allow(organization).to receive_message_chain(
+          :contact_type_groups,
+          :joins,
+          :where,
+          :alphabetically,
+          :uniq
+        )
+
+        expect(organization).to receive_message_chain(
+          :contact_type_groups,
+          :joins,
+          :where,
+          :alphabetically,
+          :uniq
+        )
+
+        get :new, params: {case_contact: {casa_case_id: case_id}}
+      end
+    end
+  end
+
+  describe "POST #create" do
+    context "with valid params" do
+      let(:params) { build(:case_contact).attributes }
+
+      it "assigns @case_contact" do
+        post :create, params: {case_contact: params}, format: :js
+        expect(assigns(:case_contact)).to be_an_instance_of(CaseContact)
+      end
+
+      it "assigns @casa_cases" do
+        post :create, params: {case_contact: params}, format: :js
+        expect(assigns(:casa_cases)).to eq(volunteer.casa_cases)
+      end
+
+      it "assigns @current_organization_groups" do
+        post :create, params: {case_contact: params}, format: :js
+        expect(assigns(:current_organization_groups)).to eq(organization.contact_type_groups)
+      end
+
+      context "when a casa case was not selected" do
+        it "does not create a new case contact" do
+          expect {
+            post :create, params: {case_contact: params}, format: :js
+          }.not_to change(CaseContact, :count)
+        end
+
+        it "renders the new template" do
+          post :create, params: {case_contact: params}, format: :js
+          expect(flash[:alert]).to eq("At least one case must be selected")
+          expect(response).to render_template("new")
+        end
+      end
+
+      context "when a casa case is selected" do
+        let(:params) { build(:case_contact).attributes.merge("casa_case_id" => [volunteer.casa_cases.first.id.to_s]) }
+
+        it "assigns @selected_cases" do
+          post :create, params: {case_contact: params}, format: :js
+          expect(assigns(:selected_cases)).to eq(CasaCase.where(id: volunteer.casa_cases.first.id))
+        end
+
+        it "creates a new case contact for each selected case" do
+          post :create, params: {case_contact: params}, format: :js
+          expect(CaseContact.last.casa_case_id).to eq volunteer.casa_cases.pluck(:id).first
+        end
+
+        it "renders the casa case show template" do
+          post :create, params: {case_contact: params}, format: :js
+          expect(flash[:notice]).to include("Case contact was successfully created.")
+          expect(response).to redirect_to casa_case_path(CaseContact.last.casa_case)
+        end
+
+        it "renders a random thank you message" do
+          post :create, params: {case_contact: params}, format: :js
+          expect(
+            (1..8).map { |n| "#{I18n.t("create", scope: "case_contact")} #{I18n.t("thank_you_#{n}", scope: "case_contact")}" }
+          ).to include(flash[:notice])
+        end
+      end
+    end
+
+    context "with invalid params" do
+      let(:params) { build(:case_contact).attributes }
+
+      it "assigns @case_contact" do
+        post :create, params: {case_contact: params}, format: :js
+        expect(assigns(:case_contact)).to be_an_instance_of(CaseContact)
+      end
+
+      it "does not create a new case contact" do
+        expect {
+          post :create, params: {case_contact: params}, format: :js
+        }.not_to change(CaseContact, :count)
+      end
+
+      it "renders the new template" do
+        post :create, params: {case_contact: params}, format: :js
+        expect(response).to render_template("new")
       end
     end
   end

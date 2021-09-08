@@ -1,10 +1,4 @@
 class SupervisorMailer < UserMailer
-  def deactivation(supervisor)
-    @supervisor = supervisor
-    @casa_organization = supervisor.casa_org
-    mail(to: @supervisor.email, subject: "Your account has been deactivated")
-  end
-
   def account_setup(supervisor)
     @supervisor = supervisor
     @casa_organization = supervisor.casa_org

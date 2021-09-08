@@ -79,4 +79,8 @@ class CasaCaseDecorator < Draper::Decorator
     this_week_before_date = Date.today - 7.days..date
     object.case_contacts.where(occurred_at: this_week_before_date).where(contact_made: false).count
   end
+
+  def emancipation_checklist_count
+    "#{object.casa_case_emancipation_categories.count} / #{EmancipationCategory.count}"
+  end
 end

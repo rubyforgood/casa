@@ -16,6 +16,7 @@ RSpec.describe "case_contacts/new", type: :system do
     let!(:therapist) { create(:contact_type, name: "Therapist", contact_type_group: contact_type_group) }
 
     before do
+      travel_to Date.new(2021, 1, 1)
       sign_in admin
 
       visit casa_case_path(casa_case.id)
@@ -117,11 +118,12 @@ RSpec.describe "case_contacts/new", type: :system do
         click_on "Submit"
 
         expect(page).to have_text("Confirm Note Content")
-        hello_line = page.body.split("\n").select { |x| x.include?("Hello") }
-        expect(hello_line).to eq(["        <div id=\"note-content\">&lt;h1&gt;Hello world&lt;/h1&gt;</div>"])
         expect {
           click_on "Continue Submitting"
         }.to change(CaseContact, :count).by(1)
+
+        hello_line = page.body.split("\n").select { |x| x.include?("Hello") }
+        expect(hello_line.first.include?(note_content)).to be true
         expected_text = strip_tags(note_content)
         expect(page).to have_css("h1", text: expected_text)
       end
@@ -134,6 +136,7 @@ RSpec.describe "case_contacts/new", type: :system do
     let(:casa_case) { create(:casa_case, casa_org: organization) }
 
     before do
+      travel_to Date.new(2021, 1, 1)
       sign_in admin
     end
 
@@ -146,6 +149,26 @@ RSpec.describe "case_contacts/new", type: :system do
       visit new_case_contact_path(casa_case.id)
 
       expect { check "Parent" }.not_to raise_error
+    end
+
+    it "shows the contact type groups, and their contact type alphabetically", :aggregate_failures do
+      group_1 = create(:contact_type_group, name: "Placement", casa_org: organization)
+      group_2 = create(:contact_type_group, name: "Education", casa_org: organization)
+      create(:contact_type, name: "School", contact_type_group: group_1)
+      create(:contact_type, name: "Sports", contact_type_group: group_1)
+      create(:contact_type, name: "Caregiver Family", contact_type_group: group_2)
+      create(:contact_type, name: "Foster Parent", contact_type_group: group_2)
+
+      visit(new_case_contact_path(casa_case.id))
+
+      expect(index_of("Education")).to be < index_of("Placement")
+      expect(index_of("School")).to be < index_of("Sports")
+      expect(index_of("Caregiver Family")).to be < index_of("Foster Parent")
+      expect(index_of("School")).to be > index_of("Caregiver Family")
+    end
+
+    def index_of(text)
+      page.text.index(text)
     end
   end
 
