@@ -163,7 +163,9 @@ sudo apt-get -y install google-chrome-stable
 
 ```
 # Add user to Postgres:
-sudo -u postgres psql -c "create user vagrant with createdb"
+sudo -u postgres psql -c "CREATE USER $USER WITH CREATEDB"
+# Using a VM
+sudo -u postgres psql -c "CREATE USER vagrant WITH CREATEDB"
 ```
 
 #### Creating an SSH Key Pair
