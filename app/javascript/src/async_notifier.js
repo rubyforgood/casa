@@ -6,13 +6,17 @@ module.exports = class Notifier {
     this.loadingToast = notificationsElement.find('#async-waiting-indicator')
     this.notificationsElement = notificationsElement
     this.savedToast = notificationsElement.find('#async-success-indicator')
+    this.waitingSaveOperationCount = 0
   }
-  hideLoadingToast() {
+
+  hideLoadingToast () {
     this.loadingToast.hide()
   }
-  hideSavedToast() {
+
+  hideSavedToast () {
     this.savedToast.hide()
   }
+
   // Adds notification messages to the notification element
   //  @param  {string} message The message to be displayed
   //  @param  {string} level One of the following logging levels
@@ -57,6 +61,22 @@ module.exports = class Notifier {
       default:
         throw new RangeError('Unsupported option for param level')
     }
+  }
+
+  // Increases the count of asynchronous operations to wait for and shows the loading toast
+  startAsyncOperation () {
+    this.waitingSaveOperationCount++
+    this.loadingToast.show()
+  }
+
+  // Decrease the count of asynchronous operations to wait for and shows the saved toast for 2 seconds
+  stopAsyncOperation () {
+    this.waitingSaveOperationCount--
+    this.showSavedToast()
+
+    setTimeout(() => {
+      this.hideSavedToast()
+    }, 2000)
   }
 
   // Shows the toast indicating an async operation is in progress

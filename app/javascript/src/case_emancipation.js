@@ -33,21 +33,11 @@ function resolveAsyncOperation (error) {
     emancipationPage.notifier.hideLoadingToast()
 
     if (emancipationPage.saveOperationSuccessful) {
-      emancipationPage.notifier.showSavedToast()
-
-      setTimeout(function () {
-        emancipationPage.notifier.hideSavedToast()
-      }, 2000)
+      emancipationPage.notifier.stopAsyncOperation()
     }
 
     emancipationPage.saveOperationSuccessful = false
   }
-}
-
-// Shows the saving notification
-function waitForAsyncOperation () {
-  emancipationPage.waitingSaveOperationCount++
-  emancipationPage.notifier.showLoadingToast()
 }
 
 // Adds or deletes an option from the current casa case
@@ -79,7 +69,8 @@ function saveCheckState (action, checkItemId) {
     }
   }
 
-  waitForAsyncOperation()
+  emancipationPage.notifier.startAsyncOperation()
+  emancipationPage.waitingSaveOperationCount++
 
   // Post request
   return $.post(emancipationPage.savePath, {
