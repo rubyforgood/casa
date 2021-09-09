@@ -3,7 +3,9 @@ const $ = require('jquery')
 module.exports = class Notifier {
   //  @param {object} notificationsElement The notification DOM element as a jQuery object
   constructor (notificationsElement) {
+    this.loadingToast = notificationsElement.find('#async-waiting-indicator')
     this.notificationsElement = notificationsElement
+    this.savedToast = notificationsElement.find('#async-success-indicator')
   }
 
   // Adds notification messages to the notification element
@@ -49,5 +51,15 @@ module.exports = class Notifier {
       default:
         throw new RangeError('Unsupported option for param level')
     }
+  }
+
+  // Shows the toast indicating an async operation is in progress
+  showLoadingToast () {
+    this.loadingToast.show()
+  }
+
+  // Shows the toast indicating an async operation has completed
+  showSavedToast () {
+    this.savedToast.show()
   }
 }

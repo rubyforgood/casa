@@ -33,7 +33,7 @@ function resolveAsyncOperation (error) {
     emancipationPage.asyncWaitIndicator.hide()
 
     if (emancipationPage.saveOperationSuccessful) {
-      emancipationPage.asyncSuccessIndicator.show()
+      emancipationPage.notifier.showSavedToast()
 
       setTimeout(function () {
         emancipationPage.asyncSuccessIndicator.hide()
@@ -47,7 +47,7 @@ function resolveAsyncOperation (error) {
 // Shows the saving notification
 function waitForAsyncOperation () {
   emancipationPage.waitingSaveOperationCount++
-  emancipationPage.asyncWaitIndicator.show()
+  emancipationPage.notifier.showLoadingToast()
 }
 
 // Adds or deletes an option from the current casa case
