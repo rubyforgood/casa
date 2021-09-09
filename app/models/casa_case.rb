@@ -189,7 +189,8 @@ class CasaCase < ApplicationRecord
   end
 
   def unassigned_volunteers
-    Volunteer.active.where.not(id: assigned_volunteers).order(:display_name).in_organization(casa_org)
+    volunteers_unassigned_to_case = Volunteer.active.where.not(id: assigned_volunteers).in_organization(casa_org)
+    volunteers_unassigned_to_case.with_no_assigned_cases + volunteers_unassigned_to_case.with_assigned_cases
   end
 end
 

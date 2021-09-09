@@ -247,6 +247,28 @@ RSpec.describe Volunteer, type: :model do
     end
   end
 
+  describe "#with_assigned_cases" do
+    let!(:volunteers) { create_list(:volunteer, 3) }
+    let!(:volunteer_with_cases) { create_list(:volunteer, 3, :with_casa_cases) }
+
+    subject { Volunteer.with_assigned_cases }
+
+    it "returns only volunteers assigned to active casa cases" do
+      expect(subject).to match_array(volunteer_with_cases)
+    end
+  end
+
+  describe "#with_no_assigned_cases" do
+    let!(:volunteers) { create_list(:volunteer, 3) }
+    let!(:volunteer_with_cases) { create_list(:volunteer, 3, :with_casa_cases) }
+
+    subject { Volunteer.with_no_assigned_cases }
+
+    it "returns only volunteers with no assigned active casa cases" do
+      expect(subject).to match_array(volunteers)
+    end
+  end
+
   describe "#casa_cases" do
     let(:volunteer) { create :volunteer }
     let!(:ca1) { create :case_assignment, volunteer: volunteer, active: true }
