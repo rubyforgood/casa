@@ -109,7 +109,7 @@ Another option is to install the Chromium browser for your operating system so t
 **Installing Packages**  
 1. `cd casa/`
 1. `bundle install` install ruby dependencies.
-1. `yarn install` install javascript dependencies.
+1. `yarn` install javascript dependencies.
 
 **Database Setup**
 1. `bin/rails db:setup` create schema
