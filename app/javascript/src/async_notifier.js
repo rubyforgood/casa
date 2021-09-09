@@ -7,7 +7,12 @@ module.exports = class Notifier {
     this.notificationsElement = notificationsElement
     this.savedToast = notificationsElement.find('#async-success-indicator')
   }
-
+  hideLoadingToast() {
+    this.loadingToast.hide()
+  }
+  hideSavedToast() {
+    this.savedToast.hide()
+  }
   // Adds notification messages to the notification element
   //  @param  {string} message The message to be displayed
   //  @param  {string} level One of the following logging levels
@@ -15,6 +20,7 @@ module.exports = class Notifier {
   //    "info"   Shows a green notification
   //  @throws {TypeError}  for a parameter of the incorrect type
   //  @throws {RangeError} for unsupported logging levels
+
   notify (message, level) {
     if (typeof message !== 'string') {
       throw new TypeError('Param message must be a string')
