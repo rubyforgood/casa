@@ -82,6 +82,24 @@ RSpec.describe SupervisorMailer, type: :mailer do
 
         expect(mail.body.encoded).to_not match(volunteer2.display_name.to_s)
       end
+
+      it "does not display 'There are no pending volunteers' message when there are pending volunteers" do
+        expect(mail.body.encoded).to_not match("There are no pending volunteers.")
+      end
+    end
+
+    it "displays no pending volunteers message when there are no pending volunteers" do
+      expect(mail.body.encoded).to match("There are no pending volunteers.")
+    end
+
+    it "does not display 'There are no additional notes' message when there are additional notes" do
+      # this_week = Date.today - 7.days..Date.today
+      create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false, updated_at: Date.today - 8.days)
+      expect(mail.body.encoded).to_not match("There are no additional notes.")
+    end
+
+    it "displays no additional notes messsage when there are no additional notes" do
+      expect(mail.body.encoded).to match("There are no additional notes.")
     end
   end
 
