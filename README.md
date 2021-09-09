@@ -140,6 +140,7 @@ You'll probably hit a problem where ruby-version reads `ruby-2.7.2` but the inst
 1. If your rails/rake commands hang forever instead of running, try: `rails app:update:bin`
 1. There is currently no option for a user to sign up and create an account through the UI. This is intentional. If you want to log in, use a pre-seeded user account and its credentials.
 1. If you are on windows and see the error "Requirements support for mingw is not implemented yet" then use https://rubyinstaller.org/ instead
+1. Install imagemagick to see images locally. Instructions: https://imagemagick.org/script/download.php
 
 ## Running the App / Verifying Installation
 1. `bin/rails server` or `bin/rails s` to start the local webserver
