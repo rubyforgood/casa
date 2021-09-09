@@ -116,7 +116,7 @@ test('notify should throw a TypeError when param message is not a string', (done
   })
 })
 
-test('showLoadingToast makes loading toast visible', (done) => {
+test('showLoadingToast makes the loading toast visible', (done) => {
   $(document).ready(() => {
     const loadingToast = $('#async-waiting-indicator')
     try {
@@ -130,7 +130,7 @@ test('showLoadingToast makes loading toast visible', (done) => {
   })
 })
 
-test('showSavedToast makes saved toast visible', (done) => {
+test('showSavedToast makes the saved toast visible', (done) => {
   $(document).ready(() => {
     const savedToast = $('#async-success-indicator')
     try {
@@ -143,4 +143,3 @@ test('showSavedToast makes saved toast visible', (done) => {
     }
   })
 })
-
