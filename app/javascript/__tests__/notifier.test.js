@@ -7,8 +7,7 @@ let asyncNotificationsElement
 let notifier
 
 beforeEach(() => {
-  document.body.innerHTML =
-    `<div id="async-notifications">
+  document.body.innerHTML = `<div id="async-notifications">
       <div id="async-waiting-indicator" style="display: none">
         Saving <div class="load-spinner"></div>
       </div>
@@ -23,8 +22,8 @@ beforeEach(() => {
   })
 })
 
-test('notify should display a green notification when passed a message and level=\'info\'', (done) => {
-  const notificationMessage = '\'Y$deH[|%ROii]jy'
+test("notify should display a green notification when passed a message and level='info'", (done) => {
+  const notificationMessage = "'Y$deH[|%ROii]jy"
 
   $(document).ready(() => {
     notifier.notify(notificationMessage, 'info')
@@ -42,7 +41,7 @@ test('notify should display a green notification when passed a message and level
   })
 })
 
-test('notify should display a red notification when passed a message and level=\'error\'', (done) => {
+test("notify should display a red notification when passed a message and level='error'", (done) => {
   const notificationMessage = '\\+!h0bbH"yN7dx9.'
 
   $(document).ready(() => {
@@ -116,3 +115,32 @@ test('notify should throw a TypeError when param message is not a string', (done
     }
   })
 })
+
+test('showLoadingToast makes loading toast visible', (done) => {
+  $(document).ready(() => {
+    const loadingToast = $('#async-waiting-indicator')
+    try {
+      expect(loadingToast.css('display')).toBe('none')
+      notifier.showLoadingToast()
+      expect(loadingToast.attr('style')).toBe('')
+      done()
+    } catch (error) {
+      done(error)
+    }
+  })
+})
+
+test('showSavedToast makes saved toast visible', (done) => {
+  $(document).ready(() => {
+    const savedToast = $('#async-success-indicator')
+    try {
+      expect(savedToast.css('display')).toBe('none')
+      notifier.showSavedToast()
+      expect(savedToast.attr('style')).toBe('')
+      done()
+    } catch (error) {
+      done(error)
+    }
+  })
+})
+
