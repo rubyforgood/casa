@@ -518,12 +518,12 @@ of it unless it was included in a previous court report.")
         click_on "Update CASA Case"
       end
 
-      expect(page).not_to have_text("Day")
-      expect(page).not_to have_text("Month")
-      expect(page).not_to have_text("Year")
+      expect(page).to have_text("Day")
+      expect(page).to have_text("Month")
+      expect(page).to have_text("Year")
       expect(page).not_to have_text("Deactivate Case")
 
-      expect(page).not_to have_css("#add-mandate-button")
+      expect(page).to have_css("#add-mandate-button")
 
       visit casa_case_path(casa_case)
       expect(page).to have_text("Court Report Status: Submitted")
