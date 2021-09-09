@@ -30,13 +30,13 @@ function resolveAsyncOperation (error) {
   emancipationPage.waitingSaveOperationCount--
 
   if (emancipationPage.waitingSaveOperationCount === 0) {
-    emancipationPage.asyncWaitIndicator.hide()
+    emancipationPage.notifier.hideLoadingToast()
 
     if (emancipationPage.saveOperationSuccessful) {
       emancipationPage.notifier.showSavedToast()
 
       setTimeout(function () {
-        emancipationPage.asyncSuccessIndicator.hide()
+        emancipationPage.notifier.hideSavedToast()
       }, 2000)
     }
 
