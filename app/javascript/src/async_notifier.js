@@ -6,7 +6,7 @@ module.exports = class Notifier {
     this.loadingToast = notificationsElement.find('#async-waiting-indicator')
     this.notificationsElement = notificationsElement
     this.savedToast = notificationsElement.find('#async-success-indicator')
-    this.waitingSaveOperationCount = 0
+    this.savedToastTimeouts = []
   }
 
   hideLoadingToast () {
@@ -65,18 +65,21 @@ module.exports = class Notifier {
 
   // Increases the count of asynchronous operations to wait for and shows the loading toast
   startAsyncOperation () {
-    this.waitingSaveOperationCount++
     this.loadingToast.show()
   }
 
   // Decrease the count of asynchronous operations to wait for and shows the saved toast for 2 seconds
   stopAsyncOperation () {
-    this.waitingSaveOperationCount--
     this.showSavedToast()
 
-    setTimeout(() => {
+    this.savedToastTimeouts.forEach((timeoutID) => {
+      clearTimeout(timeoutID)
+    })
+
+    this.savedToastTimeouts.push(setTimeout(() => {
       this.hideSavedToast()
-    }, 2000)
+      this.savedToastTimeouts.shift()
+    }, 2000))
   }
 
   // Shows the toast indicating an async operation is in progress
