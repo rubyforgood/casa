@@ -22,8 +22,9 @@ function resolveAsyncOperation (error) {
   }
 
   if (error) {
-    emancipationPage.notifier.notify(error, 'error')
+    emancipationPage.notifier.stopAsyncOperation(error)
   } else {
+    emancipationPage.notifier.stopAsyncOperation()
     emancipationPage.saveOperationSuccessful = true
   }
 
@@ -31,10 +32,6 @@ function resolveAsyncOperation (error) {
 
   if (emancipationPage.waitingSaveOperationCount === 0) {
     emancipationPage.notifier.hideLoadingToast()
-
-    if (emancipationPage.saveOperationSuccessful) {
-      emancipationPage.notifier.stopAsyncOperation()
-    }
 
     emancipationPage.saveOperationSuccessful = false
   }
