@@ -115,17 +115,3 @@ test('notify should throw a TypeError when param message is not a string', (done
     }
   })
 })
-
-test('showLoadingToast makes the loading toast visible', (done) => {
-  $(document).ready(() => {
-    const loadingToast = $('#async-waiting-indicator')
-    try {
-      expect(loadingToast.css('display')).toBe('none')
-      notifier.showLoadingToast()
-      expect(loadingToast.attr('style')).toBe('')
-      done()
-    } catch (error) {
-      done(error)
-    }
-  })
-})

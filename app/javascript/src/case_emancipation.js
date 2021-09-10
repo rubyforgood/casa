@@ -3,9 +3,7 @@
 const Notifier = require('./async_notifier')
 
 const emancipationPage = {
-  saveOperationSuccessful: false,
-  savePath: window.location.pathname + '/save',
-  waitingSaveOperationCount: 0
+  savePath: window.location.pathname + '/save'
 }
 
 // Called when an async operation completes. May show notifications describing how the operation completed
@@ -13,28 +11,11 @@ const emancipationPage = {
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {Error}      for trying to resolve more async operations than the amount currently awaiting
 function resolveAsyncOperation (error) {
-  if (emancipationPage.waitingSaveOperationCount < 1) {
-    throw new Error('Attempted to resolve an async operation when awaiting none')
-  }
-
   if (error instanceof Error) {
     error = error.message
   }
 
-  if (error) {
-    emancipationPage.notifier.stopAsyncOperation(error)
-  } else {
-    emancipationPage.notifier.stopAsyncOperation()
-    emancipationPage.saveOperationSuccessful = true
-  }
-
-  emancipationPage.waitingSaveOperationCount--
-
-  if (emancipationPage.waitingSaveOperationCount === 0) {
-    emancipationPage.notifier.hideLoadingToast()
-
-    emancipationPage.saveOperationSuccessful = false
-  }
+  emancipationPage.notifier.stopAsyncOperation(error)
 }
 
 // Adds or deletes an option from the current casa case
@@ -67,7 +48,6 @@ function saveCheckState (action, checkItemId) {
   }
 
   emancipationPage.notifier.startAsyncOperation()
-  emancipationPage.waitingSaveOperationCount++
 
   // Post request
   return $.post(emancipationPage.savePath, {
@@ -93,8 +73,6 @@ function saveCheckState (action, checkItemId) {
 $('document').ready(() => {
   const asyncNotificationsElement = $('#async-notifications')
   emancipationPage.notifier = new Notifier(asyncNotificationsElement)
-  emancipationPage.asyncSuccessIndicator = asyncNotificationsElement.find('#async-success-indicator')
-  emancipationPage.asyncWaitIndicator = asyncNotificationsElement.find('#async-waiting-indicator')
 
   $('.emancipation-category').click(function () {
     const category = $(this)
