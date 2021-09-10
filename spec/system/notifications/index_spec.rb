@@ -81,6 +81,34 @@ RSpec.describe "notifications/index", type: :system do
         expect(page).to have_text("New followup")
       end
     end
+
+    context "when admin changes its name" do
+      let(:created_by_name) { 'Foo bar' }
+      let(:new_notification_message) { I18n.t("notifications.followup_notification.message", created_by_name: created_by_name) }
+
+      before do
+        click_button "Follow up"
+        click_button "Confirm"
+      end
+
+      it "lists followup notifications showing admin current name" do
+        # Wait until page reloads
+        expect(page).to have_content "Resolve"
+
+        visit edit_users_path
+        fill_in "Display name", with: created_by_name
+        click_on "Update Profile"
+        expect(page).to have_content "Profile was successfully updated"
+
+        sign_in volunteer
+        visit notifications_path
+
+        expect(page).to have_text(new_notification_message)
+        expect(page).not_to have_text(inline_notification_message)
+        expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
+        expect(page).to have_text("New followup")
+      end
+    end
   end
 
   context "when there are no notifications" do

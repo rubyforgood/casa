@@ -7,7 +7,7 @@ class CaseContacts::FollowupsController < ApplicationController
 
     case_contact.followups.create(creator: current_user, status: :requested, note: params[:note])
     FollowupNotification
-      .with(followup: case_contact.requested_followup, created_by_name: current_user.display_name)
+      .with(followup: case_contact.requested_followup, created_by: current_user)
       .deliver(case_contact.creator)
 
     redirect_to casa_case_path(case_contact.casa_case)
