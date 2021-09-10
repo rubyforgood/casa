@@ -13,10 +13,6 @@ module.exports = class Notifier {
     this.loadingToast.hide()
   }
 
-  hideSavedToast () {
-    this.savedToast.hide()
-  }
-
   // Adds notification messages to the notification element
   //  @param  {string} message The message to be displayed
   //  @param  {string} level One of the following logging levels
@@ -63,21 +59,21 @@ module.exports = class Notifier {
     }
   }
 
-  // Increases the count of asynchronous operations to wait for and shows the loading toast
+  // Shows the loading toast
   startAsyncOperation () {
     this.loadingToast.show()
   }
 
-  // Decrease the count of asynchronous operations to wait for and shows the saved toast for 2 seconds
+  // Shows the saved toast for 2 seconds
   stopAsyncOperation () {
-    this.showSavedToast()
+    this.savedToast.show()
 
     this.savedToastTimeouts.forEach((timeoutID) => {
       clearTimeout(timeoutID)
     })
 
     this.savedToastTimeouts.push(setTimeout(() => {
-      this.hideSavedToast()
+      this.savedToast.hide()
       this.savedToastTimeouts.shift()
     }, 2000))
   }
@@ -85,10 +81,5 @@ module.exports = class Notifier {
   // Shows the toast indicating an async operation is in progress
   showLoadingToast () {
     this.loadingToast.show()
-  }
-
-  // Shows the toast indicating an async operation has completed
-  showSavedToast () {
-    this.savedToast.show()
   }
 }

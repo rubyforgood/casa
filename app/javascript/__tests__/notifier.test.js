@@ -129,17 +129,3 @@ test('showLoadingToast makes the loading toast visible', (done) => {
     }
   })
 })
-
-test('showSavedToast makes the saved toast visible', (done) => {
-  $(document).ready(() => {
-    const savedToast = $('#async-success-indicator')
-    try {
-      expect(savedToast.css('display')).toBe('none')
-      notifier.showSavedToast()
-      expect(savedToast.attr('style')).toBe('')
-      done()
-    } catch (error) {
-      done(error)
-    }
-  })
-})
