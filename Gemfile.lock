@@ -438,7 +438,7 @@ DEPENDENCIES
   faker
   filterrific
   image_processing (~> 1.12)
-  jbuilder (~> 2.11)
+  jbuilder
   letter_opener
   listen (>= 3.0.5, < 3.8)
   lograge
