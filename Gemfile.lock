@@ -421,7 +421,7 @@ DEPENDENCIES
   amazing_print
   annotate
   azure-storage-blob
-  bootsnap (>= 1.4.2)
+  bootsnap
   brakeman
   bugsnag
   bullet

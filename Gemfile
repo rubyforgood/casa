@@ -26,7 +26,7 @@ gem "image_processing", "~> 1.12" # Set of higher-level helper methods for image
 gem "lograge" # log less so heroku papertrail quits rate limiting our logs
 gem "filterrific" # filtering and sorting of models
 
-gem "bootsnap", ">= 1.4.2", require: false # Reduces boot times through caching; required in config/boot.rb
+gem "bootsnap", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "bugsnag" # tracking errors in prod
 gem "sablon" # Word document templating tool for Case Court Reports
 gem "paranoia", "~> 2.2" # For soft-deleting purpose
