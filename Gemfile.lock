@@ -448,7 +448,7 @@ DEPENDENCIES
   pg
   pry
   pry-byebug
-  puma (~> 5.4)
+  puma
   pundit
   rack-attack
   rails (~> 6.1.4)
