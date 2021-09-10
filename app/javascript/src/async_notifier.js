@@ -63,12 +63,21 @@ module.exports = class Notifier {
   // Shows the loading toast
   startAsyncOperation () {
     this.loadingToast.show()
+    this.waitingSaveOperationCount++
   }
 
   // Shows the saved toast for 2 seconds
   //  @param {string=}  error The error to be displayed(optional)
   stopAsyncOperation (errorMsg) {
+    if (this.waitingSaveOperationCount < 1) {
+      throw new Error('Attempted to resolve an async operation when awaiting none')
+    }
+
     this.waitingSaveOperationCount--
+
+    if (this.waitingSaveOperationCount === 0) {
+      this.hideLoadingToast()
+    }
 
     if (!errorMsg) {
       this.savedToast.show()
@@ -88,10 +97,5 @@ module.exports = class Notifier {
 
       this.notify(errorMsg, 'error')
     }
-  }
-
-  // Shows the toast indicating an async operation is in progress
-  showLoadingToast () {
-    this.loadingToast.show()
   }
 }
