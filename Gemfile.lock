@@ -445,7 +445,7 @@ DEPENDENCIES
   noticed
   paper_trail
   paranoia (~> 2.2)
-  pg (>= 0.18, < 2.0)
+  pg
   pry
   pry-byebug
   puma (~> 5.4)
