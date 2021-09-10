@@ -10,10 +10,6 @@ module.exports = class Notifier {
     this.waitingSaveOperationCount = 0
   }
 
-  hideLoadingToast () {
-    this.loadingToast.hide()
-  }
-
   // Adds notification messages to the notification element
   //  @param  {string} message The message to be displayed
   //  @param  {string} level One of the following logging levels
@@ -76,7 +72,7 @@ module.exports = class Notifier {
     this.waitingSaveOperationCount--
 
     if (this.waitingSaveOperationCount === 0) {
-      this.hideLoadingToast()
+      this.loadingToast.hide()
     }
 
     if (!errorMsg) {
