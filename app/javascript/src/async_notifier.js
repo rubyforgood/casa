@@ -7,6 +7,7 @@ module.exports = class Notifier {
     this.notificationsElement = notificationsElement
     this.savedToast = notificationsElement.find('#async-success-indicator')
     this.savedToastTimeouts = []
+    this.waitingSaveOperationCount = 0
   }
 
   hideLoadingToast () {
@@ -65,17 +66,28 @@ module.exports = class Notifier {
   }
 
   // Shows the saved toast for 2 seconds
-  stopAsyncOperation () {
-    this.savedToast.show()
+  //  @param {string=}  error The error to be displayed(optional)
+  stopAsyncOperation (errorMsg) {
+    this.waitingSaveOperationCount--
 
-    this.savedToastTimeouts.forEach((timeoutID) => {
-      clearTimeout(timeoutID)
-    })
+    if (!errorMsg) {
+      this.savedToast.show()
 
-    this.savedToastTimeouts.push(setTimeout(() => {
-      this.savedToast.hide()
-      this.savedToastTimeouts.shift()
-    }, 2000))
+      this.savedToastTimeouts.forEach((timeoutID) => {
+        clearTimeout(timeoutID)
+      })
+
+      this.savedToastTimeouts.push(setTimeout(() => {
+        this.savedToast.hide()
+        this.savedToastTimeouts.shift()
+      }, 2000))
+    } else {
+      if (!(typeof errorMsg === 'string' || errorMsg instanceof String)) {
+        throw new TypeError('Param errorMsg must be a string')
+      }
+
+      this.notify(errorMsg, 'error')
+    }
   }
 
   // Shows the toast indicating an async operation is in progress
