@@ -444,7 +444,7 @@ DEPENDENCIES
   lograge
   noticed
   paper_trail
-  paranoia (~> 2.2)
+  paranoia
   pg
   pry
   pry-byebug

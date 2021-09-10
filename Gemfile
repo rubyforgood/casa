@@ -29,7 +29,7 @@ gem "filterrific" # filtering and sorting of models
 gem "bootsnap", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "bugsnag" # tracking errors in prod
 gem "sablon" # Word document templating tool for Case Court Reports
-gem "paranoia", "~> 2.2" # For soft-deleting purpose
+gem "paranoia" # For soft-deleting purpose
 gem "request_store"
 
 group :development, :test do
