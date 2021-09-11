@@ -349,6 +349,8 @@ GEM
     sablon (0.3.2)
       nokogiri (>= 1.8.5)
       rubyzip (>= 1.1.1)
+    scout_apm (4.1.2)
+      parser
     selenium-webdriver (4.0.0.rc1)
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2)
@@ -362,8 +364,6 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.3)
-    skylight (5.1.1)
-      activesupport (>= 5.2.0)
     smart_properties (1.16.2)
     spring (2.1.1)
     spring-commands-rspec (1.0.4)
@@ -457,10 +457,10 @@ DEPENDENCIES
   request_store
   rspec-rails (~> 5.0.2)
   sablon
+  scout_apm (~> 4.1)
   selenium-webdriver (= 4.0.0.rc1)
   shoulda-matchers
   simplecov (~> 0.21.2)
-  skylight
   spring
   spring-commands-rspec
   spring-watcher-listen (~> 2.0.0)
