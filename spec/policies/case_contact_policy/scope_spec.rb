@@ -23,8 +23,8 @@ RSpec.describe CaseContactPolicy::Scope do
 
         relevant_contacts =
           create_list(:case_contact, 2, casa_case: relevant_case, creator: current_user)
-          build(:case_contact, casa_case: relevant_case, creator: other_user)
-          create_irrelevant_contacts(current_user, other_user)
+        build(:case_contact, casa_case: relevant_case, creator: other_user)
+        create_irrelevant_contacts(current_user, other_user)
 
         scope = described_class.new(current_user, CaseContact)
         aggregate_failures do

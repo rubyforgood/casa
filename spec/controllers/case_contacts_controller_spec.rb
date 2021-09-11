@@ -33,7 +33,7 @@ RSpec.describe CaseContactsController, type: :controller do
       end
 
       it "only assigns that contact types groups to @current_organization_groups" do
-        get :new, params: params 
+        get :new, params: params
         expect(assigns(:current_organization_groups)).to eq([contact_type_group_one])
       end
     end
