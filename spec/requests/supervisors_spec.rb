@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "/supervisors", type: :request do
-  let(:admin) { create(:casa_admin) }
+  let(:admin) { build(:casa_admin) }
   let(:supervisor) { create(:supervisor) }
 
   let(:update_supervisor_params) do
@@ -46,7 +46,7 @@ RSpec.describe "/supervisors", type: :request do
     end
 
     it "other supervisor can view the edit supervisor page" do
-      sign_in create(:supervisor)
+      sign_in build(:supervisor)
 
       get edit_supervisor_url(supervisor)
 

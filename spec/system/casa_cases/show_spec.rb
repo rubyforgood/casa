@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "casa_cases/show", type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
-  let(:volunteer) { create(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
+  let(:volunteer) { build(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
   let(:casa_case) {
     create(:casa_case, :with_one_court_mandate, casa_org: organization,
     case_number: "CINA-1", transition_aged_youth: true)

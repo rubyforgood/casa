@@ -4,7 +4,7 @@ RSpec.describe "/users", type: :request do
   describe "GET /edit" do
     context "with a volunteer signed in" do
       it "renders a successful response" do
-        sign_in create(:volunteer)
+        sign_in build(:volunteer)
 
         get edit_users_path
 
@@ -14,7 +14,7 @@ RSpec.describe "/users", type: :request do
 
     context "with an admin signed in" do
       it "renders a successful response" do
-        sign_in create(:casa_admin)
+        sign_in build(:casa_admin)
 
         get edit_users_path
 
@@ -25,7 +25,7 @@ RSpec.describe "/users", type: :request do
 
   describe "PATCH /update" do
     it "updates the user" do
-      volunteer = create(:volunteer)
+      volunteer = build(:volunteer)
       sign_in volunteer
 
       patch users_path, params: {user: {display_name: "New Name"}}

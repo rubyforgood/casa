@@ -173,7 +173,7 @@ RSpec.describe "supervisors/edit", type: :system do
     end
 
     context "when editing other supervisor" do
-      let(:user) { create(:supervisor, casa_org: organization) }
+      let(:user) { build(:supervisor, casa_org: organization) }
       let(:supervisor) { create(:supervisor, casa_org: organization) }
 
       it "sees red message when there are no active volunteers" do

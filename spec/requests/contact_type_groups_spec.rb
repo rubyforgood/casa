@@ -38,7 +38,7 @@ RSpec.describe "/contact_type_groups", type: :request do
     context "logged in as admin user" do
       it "can successfully create a contact type group" do
         casa_org = build(:casa_org)
-        sign_in build_stubbed(:casa_admin, casa_org: casa_org)
+        sign_in build(:casa_admin, casa_org: casa_org)
 
         expect {
           post contact_type_groups_path, params: params

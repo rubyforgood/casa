@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "casa_cases/new", type: :system do
-  let(:casa_org) { create(:casa_org) }
+  let(:casa_org) { build(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: casa_org) }
   let(:case_number) { "12345" }
   let!(:next_year) { (Date.today.year + 1).to_s }

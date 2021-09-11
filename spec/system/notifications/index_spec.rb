@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "notifications/index", type: :system do
   let(:admin) { create(:casa_admin) }
-  let(:volunteer) { create(:volunteer) }
+  let(:volunteer) { build(:volunteer) }
   let(:case_contact) { create(:case_contact, creator: volunteer) }
   let(:casa_case) { case_contact.casa_case }
 
