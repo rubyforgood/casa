@@ -1,5 +1,4 @@
 /* eslint-env jquery */
-
 const Notifier = require('./async_notifier')
 
 const emancipationPage = {
