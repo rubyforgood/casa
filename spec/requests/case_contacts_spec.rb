@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "/case_contacts", type: :request do
-  let(:organization) { create(:casa_org) }
+  let(:organization) { build(:casa_org) }
   let(:volunteer) { create(:volunteer, casa_org: organization) }
-  let(:other_volunteer) { create(:volunteer, casa_org: organization) }
-  let(:casa_case) { create(:casa_case, casa_org: organization) }
+  let(:other_volunteer) { build(:volunteer, casa_org: organization) }
+  let(:casa_case) { build(:casa_case, casa_org: organization) }
 
   let(:valid_attributes) do
     attributes_for(:case_contact, casa_case: casa_case).merge(
@@ -19,18 +19,18 @@ RSpec.describe "/case_contacts", type: :request do
   let(:invalid_attributes) do
     {
       creator: nil,
-      casa_case_id: [create(:casa_case, volunteers: [volunteer], casa_org: organization).id],
+      casa_case_id: [build_stubbed(:casa_case, volunteers: [volunteer], casa_org: organization).id],
       occurred_at: Time.zone.now
     }
   end
 
   context "logged in as admin" do
-    let(:admin) { create(:casa_admin) }
+    let(:admin) { build(:casa_admin) }
     before { sign_in admin }
 
     describe "GET /edit" do
       it "should mark notification as read" do
-        case_contact = create(:case_contact)
+        case_contact = build(:case_contact)
         followup = create(:followup, case_contact: case_contact, creator: admin)
         FollowupResolvedNotification
           .with(followup: followup, created_by_name: volunteer.display_name)
@@ -107,7 +107,7 @@ RSpec.describe "/case_contacts", type: :request do
 
         it "does not allow update of case contacts created by other volunteers" do
           contact_type = create(:contact_type, name: "Attorney")
-          contact_type2 = create(:contact_type, name: "Therapist")
+          contact_type2 = build_stubbed(:contact_type, name: "Therapist")
 
           case_contact.contact_types << contact_type
 

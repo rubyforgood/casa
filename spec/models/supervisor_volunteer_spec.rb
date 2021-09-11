@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe SupervisorVolunteer do
-  let(:casa_org_1) { create(:casa_org) }
-  let(:casa_org_2) { create(:casa_org) }
-  let(:volunteer_1) { create(:volunteer, casa_org: casa_org_1) }
+  let(:casa_org_1) { build(:casa_org) }
+  let(:casa_org_2) { build(:casa_org) }
+  let(:volunteer_1) { build(:volunteer, casa_org: casa_org_1) }
   let(:supervisor_1) { create(:supervisor, casa_org: casa_org_1) }
   let(:supervisor_2) { create(:supervisor, casa_org: casa_org_1) }
 
