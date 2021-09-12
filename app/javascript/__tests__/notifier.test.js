@@ -136,3 +136,20 @@ describe('startAsyncOperation', () => {
     })
   })
 })
+
+describe('stopAsyncOperation', () => {
+  test('stopAsyncOperation should display the saved toast for 2 seconds when not passed an error', (done) => {
+  })
+
+  test('stopAsyncOperation should display the saved toast for 2 seconds after the last call in a quick succession of calls when not passed an error', (done) => {
+  })
+
+  test('stopAsyncOperation should display a red notification when passed an error', (done) => {
+  })
+
+  test('stopAsyncOperation should hide the loading toast when there are no more async operations to wait on', (done) => {
+  })
+
+  test('stopAsyncOperation should throw an error and display it in a red notification when trying to stop an async operation when it\'s sexpecting to resolve none', (done) => {
+  })
+})
