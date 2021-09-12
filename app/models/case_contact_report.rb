@@ -19,7 +19,6 @@ class CaseContactReport
       .casa_org(args[:casa_org_id])
       .occurred_between(args[:start_date], args[:end_date])
       .contact_made(args[:contact_made])
-      .has_transitioned(args[:has_transitioned])
       .want_driving_reimbursement(args[:want_driving_reimbursement])
       .contact_type(args[:contact_type_ids])
       .contact_type_groups(args[:contact_type_group_ids])

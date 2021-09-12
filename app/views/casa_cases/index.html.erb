@@ -29,7 +29,6 @@
         <th><%= t(".heading.hearing_type") %></th>
         <th><%= t(".heading.judge") %></th>
         <th><%= t(".heading.status") %></th>
-        <th><%= t(".heading.transition_aged_youth") %></th>
         <th><%= t(".heading.assigned_to") %></th>
         <th><%= t(".heading.actions") %></th>
         <th></th>
@@ -42,7 +41,6 @@
           <td><%= casa_case.hearing_type_name %></td>
           <td><%= casa_case.judge_name %></td>
           <td><%= casa_case.decorate.status %></td>
-          <td><%= casa_case.decorate.transition_aged_youth %></td>
           <td>
             <% if casa_case.active? %>
               <% if current_user.volunteer? %>

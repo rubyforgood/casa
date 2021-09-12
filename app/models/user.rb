@@ -69,13 +69,6 @@ class User < ApplicationRecord
     case_contacts.where(contact_made: true).order(:occurred_at).last
   end
 
-  # Wrong? Linda/Shen/Joshua - unassigned / inactive volunteers
-  def volunteers_serving_transition_aged_youth
-    volunteers.includes(case_assignments: :casa_case)
-      .where(case_assignments: {active: true},
-             casa_cases: {active: true, transition_aged_youth: true}).size
-  end
-
   def no_contact_for_two_weeks
     # Get ACTIVE volunteers that have ACTIVE supervisor assignments with at least one ACTIVE case
     # 1st condition: Volunteer has not created a contact AT ALL within the past 14 days
@@ -123,10 +116,6 @@ class User < ApplicationRecord
     else
       super
     end
-  end
-
-  def serving_transition_aged_youth?
-    actively_assigned_and_active_cases.where(transition_aged_youth: true).any?
   end
 
   def admin_self_deactivated?

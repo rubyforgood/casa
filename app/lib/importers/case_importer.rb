@@ -11,7 +11,7 @@ class CaseImporter < FileImporter
 
   def import_cases
     import do |row|
-      casa_case_params = row.to_hash.slice(:case_number, :transition_aged_youth, :birth_month_year_youth).compact
+      casa_case_params = row.to_hash.slice(:case_number, :birth_month_year_youth).compact
 
       unless casa_case_params.key?(:case_number)
         raise "Row does not contain a case number."
@@ -36,7 +36,6 @@ class CaseImporter < FileImporter
 
   def create_casa_case(case_params, volunteer_assignment_list)
     casa_case = CasaCase.new(case_params)
-    casa_case.transition_aged_youth = casa_case.in_transition_age?
     casa_case.casa_org_id = org_id
     casa_case.save!
 

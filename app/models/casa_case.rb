@@ -7,7 +7,6 @@ class CasaCase < ApplicationRecord
     hearing_type_name
     judge_name
     status
-    transition_aged_youth
     assigned_to
     actions
   ].freeze
@@ -63,8 +62,7 @@ class CasaCase < ApplicationRecord
       .order(:case_number)
   }
   scope :should_transition, -> {
-    where(transition_aged_youth: false)
-      .where("birth_month_year_youth <= ?", 14.years.ago)
+    where("birth_month_year_youth <= ?", 14.years.ago)
   }
 
   scope :due_date_passed, -> {
@@ -84,6 +82,9 @@ class CasaCase < ApplicationRecord
 
   # Validation to check timestamp and submission status of a case
   validates_with CourtReportValidator, fields: [:court_report_status, :court_report_submitted_at]
+
+  # Ignore deleted column
+  self.ignored_columns = %w[transition_aged_youth]
 
   def latest_court_report
     court_reports.order("created_at").last
@@ -115,10 +116,6 @@ class CasaCase < ApplicationRecord
 
   def in_transition_age?
     birth_month_year_youth.nil? ? false : birth_month_year_youth <= 14.years.ago
-  end
-
-  def has_transitioned?
-    transition_aged_youth
   end
 
   def has_judge_name?
@@ -220,7 +217,6 @@ end
 #  court_report_due_date     :datetime
 #  court_report_status       :integer          default("not_submitted")
 #  court_report_submitted_at :datetime
-#  transition_aged_youth     :boolean          default(FALSE), not null
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  casa_org_id               :bigint           not null

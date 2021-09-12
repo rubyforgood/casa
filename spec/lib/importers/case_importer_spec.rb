@@ -17,11 +17,6 @@ RSpec.describe CaseImporter do
     it "imports cases and associates volunteers with them" do
       expect { case_importer.import_cases }.to change(CasaCase, :count).by(3)
 
-      # correctly imports true/false transition_aged_youth
-      expect(CasaCase.find_by(case_number: "CINA-01-4347").transition_aged_youth).to be_falsey # birth_month_year_youth is nil
-      expect(CasaCase.find_by(case_number: "CINA-01-4348").transition_aged_youth).to be_truthy
-      expect(CasaCase.find_by(case_number: "CINA-01-4349").transition_aged_youth).to be_falsey
-
       # correctly imports birth_month_year_youth
       expect(CasaCase.find_by(case_number: "CINA-01-4347").birth_month_year_youth).to be_nil
       expect(CasaCase.find_by(case_number: "CINA-01-4348").birth_month_year_youth&.strftime("%Y-%m-%d")).to eql "2000-02-01"

@@ -71,18 +71,8 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
   end
 
   describe "'Case Number' dropdown list", js: true do
-    let(:transitioned_case_number) { casa_cases.find(&:has_transitioned?).case_number.to_s }
-    let(:transitioned_option_text) { "#{transitioned_case_number} - transition" }
-    let(:non_transitioned_case_number) { casa_cases.reject(&:has_transitioned?).first.case_number.to_s }
+    let(:non_transitioned_case_number) { casa_cases.first.case_number.to_s }
     let(:non_transitioned_option_text) { "#{non_transitioned_case_number} - non-transition" }
-
-    it "has transition case option selected" do
-      page.select transitioned_option_text, from: "case-selection"
-
-      click_button "Generate Report"
-
-      expect(page).to have_select "case-selection", selected: transitioned_option_text
-    end
 
     it "has non-transitioned case option selected" do
       page.select non_transitioned_option_text, from: "case-selection"
@@ -94,8 +84,8 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
   end
 
   context "when generating a report, volunteer sees waiting page", js: true do
-    let(:casa_case) { casa_cases.find(&:has_transitioned?) }
-    let(:option_text) { "#{casa_case.case_number} - transition" }
+    let(:casa_case) { casa_cases }
+    let(:option_text) { casa_case.case_number }
 
     before do
       # to find the select element, use either 'name' or 'id' attribute
@@ -122,8 +112,8 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
   end
 
   context "when selecting a case, volunteer can generate and download a report", js: true do
-    let(:casa_case) { casa_cases.find(&:has_transitioned?) }
-    let(:option_text) { "#{casa_case.case_number} - transition" }
+    let(:casa_case) { casa_cases }
+    let(:option_text) { casa_case.case_number }
 
     before do
       # to find the select element, use either 'name' or 'id' attribute

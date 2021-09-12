@@ -10,7 +10,7 @@ class CaseContactPresenter < BasePresenter
   end
 
   def display_case_number(casa_case_id)
-    "#{casa_cases[casa_case_id].decorate.transition_aged_youth_icon} #{casa_cases[casa_case_id].case_number}"
+    casa_cases[casa_case_id].case_number.to_s
   end
 
   private

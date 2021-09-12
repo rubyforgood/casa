@@ -5,14 +5,6 @@ class CasaCaseDecorator < Draper::Decorator
     object.active ? "Active" : "Inactive"
   end
 
-  def transition_aged_youth
-    object.transition_aged_youth ? "Yes #{CasaCase::TRANSITION_AGE_YOUTH_ICON}" : "No #{CasaCase::NON_TRANSITION_AGE_YOUTH_ICON}"
-  end
-
-  def transition_aged_youth_icon
-    object.transition_aged_youth ? CasaCase::TRANSITION_AGE_YOUTH_ICON : CasaCase::NON_TRANSITION_AGE_YOUTH_ICON
-  end
-
   def court_report_submission
     object.court_report_status.humanize
   end
@@ -55,9 +47,7 @@ class CasaCaseDecorator < Draper::Decorator
 
   def court_report_select_option
     [
-      "#{object.case_number} - #{object.has_transitioned? ? "transition" : "non-transition"}",
-      object.case_number,
-      {"data-transitioned": object.has_transitioned?}
+      object.case_number
     ]
   end
 

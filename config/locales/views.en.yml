@@ -27,7 +27,6 @@ en:
         case_number: Case number
         hearing_type: Hearing Type
         judge: Judge
-        transition_aged_youth: Transition Aged Youth
         next_court_date: Next Court Date
         court_report_due_date: Court Report Due Date
         court_report_status: Court Report Status
@@ -48,7 +47,6 @@ en:
       filter_by: Filter by
       assigned_single: Assigned to Volunteer
       assigned_multiple: Assigned to more than 1 Volunteer
-      assigned_transition_aged_youth: Assigned to Transition Aged Youth
       casa_case_prefix: Casa Case Prefix
       prefix_options:
         cina: CINA
@@ -112,7 +110,6 @@ en:
         hearing_type: Hearing Type
         judge: Judge
         status: Status
-        transition_aged_youth: Transition Aged Youth
         assigned_to: Assigned To
         actions: Actions
       button:
@@ -162,7 +159,6 @@ en:
       title: Edit Volunteer Assignments for
       heading:
         case_number: Case Number
-        transition_aged_youth: Transition Aged Youth
         actions: Actions
       button:
         unassign: Unassign Case

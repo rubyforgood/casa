@@ -88,16 +88,6 @@
             </div>
           <% end %>
         </div>
-
-        <div class="field form-group">
-          <label><strong>Transition Aged Youth:</strong></label>
-          <%= f.collection_radio_buttons :has_transitioned, boolean_choices, :last, :first do |b| %>
-            <div class="form-check">
-              <%= b.radio_button(class: "form-check-input") %>
-              <%= b.label(class: "form-check-label") %>
-            </div>
-          <% end %>
-        </div>
       <% end %>
 
       <%= f.submit "Download Report", class: "btn btn-primary", data: {disable_with: false} %>

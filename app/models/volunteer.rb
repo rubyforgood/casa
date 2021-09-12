@@ -5,7 +5,6 @@ class Volunteer < User
   EMAIL_COLUMN = "email"
   SUPERVISOR_COLUMN = "supervisor"
   STATUS_COLUMN = "status"
-  ASSIGNED_TO_TRANSITION_AGED_YOUTH_COLUMN = "assigned_to_transition_aged_youth"
   CASE_NUMBER_COLUMN = "case_number"
   LAST_CONTACT_MADE_COLUMN = "last_contact_made"
   CONTACT_MADE_IN_PAST_DAYS_NUM = 60
@@ -16,7 +15,6 @@ class Volunteer < User
     EMAIL_COLUMN,
     SUPERVISOR_COLUMN,
     STATUS_COLUMN,
-    ASSIGNED_TO_TRANSITION_AGED_YOUTH_COLUMN,
     CASE_NUMBER_COLUMN,
     LAST_CONTACT_MADE_COLUMN,
     CONTACT_MADE_IN_PAST_DAYS_COLUMN,

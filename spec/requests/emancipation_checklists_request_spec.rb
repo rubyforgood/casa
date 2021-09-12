@@ -8,7 +8,7 @@ RSpec.describe "/emancipation_checklists", :disable_bullet, type: :request do
       let(:volunteer) { create(:volunteer) }
 
       context "when viewing the page with exactly one transitioning case" do
-        let(:casa_case) { create(:casa_case, casa_org: volunteer.casa_org, transition_aged_youth: true) }
+        let(:casa_case) { create(:casa_case, casa_org: volunteer.casa_org) }
         let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
 
         it "redirects to the emancipation checklist page for that case" do
@@ -25,8 +25,8 @@ RSpec.describe "/emancipation_checklists", :disable_bullet, type: :request do
       end
 
       context "when viewing the page with more than one transitioning cases" do
-        let(:casa_case_a) { create(:casa_case, casa_org: volunteer.casa_org, transition_aged_youth: true) }
-        let(:casa_case_b) { create(:casa_case, casa_org: volunteer.casa_org, transition_aged_youth: true) }
+        let(:casa_case_a) { create(:casa_case, casa_org: volunteer.casa_org) }
+        let(:casa_case_b) { create(:casa_case, casa_org: volunteer.casa_org) }
         let!(:case_assignment_a) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case_a) }
         let!(:case_assignment_b) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case_b) }
 

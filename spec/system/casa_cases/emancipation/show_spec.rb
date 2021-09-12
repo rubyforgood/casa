@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "casa_cases/show", :disable_bullet, type: :system do
   let(:organization) { create(:casa_org) }
   let(:volunteer) { create(:volunteer, casa_org: organization) }
-  let(:casa_case) { create(:casa_case, casa_org: organization, transition_aged_youth: true) }
+  let(:casa_case) { create(:casa_case, casa_org: organization) }
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
   let!(:emancipation_category) { create(:emancipation_category, mutually_exclusive: true) }
 

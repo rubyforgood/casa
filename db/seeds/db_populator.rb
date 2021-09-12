@@ -161,8 +161,7 @@ class DbPopulator
       unless (new_casa_case = CasaCase.find_by(case_number: case_number))
         new_casa_case = CasaCase.find_or_create_by!(
           casa_org_id: casa_org.id,
-          case_number: case_number,
-          transition_aged_youth: false
+          case_number: case_number
         )
       end
       volunteer = casa_org.volunteers.active.sample(random: rng) || casa_org.volunteers.active.first

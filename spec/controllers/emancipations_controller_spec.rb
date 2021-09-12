@@ -69,10 +69,6 @@ RSpec.describe EmancipationsController, type: :controller do
   context "transition ages youth case" do
     let(:casa_case) { volunteer.casa_cases.first }
 
-    before do
-      casa_case.update!(transition_aged_youth: true)
-    end
-
     context "with unfindable check item" do
       let(:params) { {casa_case_id: casa_case.id} }
 

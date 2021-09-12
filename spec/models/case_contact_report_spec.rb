@@ -73,7 +73,6 @@ RSpec.describe CaseContactReport, type: :model do
             "start_date" => 1.days.ago,
             "end_date" => 1.days.ago,
             "contact_made" => true,
-            "has_transitioned" => true,
             "want_driving_reimbursement" => true,
             "contact_type_ids" => ["4"],
             "contact_type_group_ids" => ["2", "3"],
@@ -166,34 +165,6 @@ RSpec.describe CaseContactReport, type: :model do
 
       it "returns only the case contacts with where contact was made or NOT made" do
         report = CaseContactReport.new({contact_made: [true, false]})
-        contacts = report.case_contacts
-        expect(contacts.length).to eq(2)
-      end
-    end
-
-    describe "has transitioned behavior" do
-      let(:case_case_1) { create(:casa_case, transition_aged_youth: false) }
-      let(:case_case_2) { create(:casa_case, transition_aged_youth: true) }
-
-      before(:each) do
-        create(:case_contact, {casa_case: case_case_1})
-        create(:case_contact, {casa_case: case_case_2})
-      end
-
-      it "returns only case contacts the youth has transitioned" do
-        report = CaseContactReport.new({has_transitioned: false})
-        contacts = report.case_contacts
-        expect(contacts.length).to eq(1)
-      end
-
-      it "returns only case contacts the youth has transitioned" do
-        report = CaseContactReport.new({has_transitioned: true})
-        contacts = report.case_contacts
-        expect(contacts.length).to eq(1)
-      end
-
-      it "returns case contacts with both youth has transitioned and youth has not transitioned" do
-        report = CaseContactReport.new({has_transitioned: ""})
         contacts = report.case_contacts
         expect(contacts.length).to eq(2)
       end
@@ -310,8 +281,8 @@ RSpec.describe CaseContactReport, type: :model do
         court = create(:contact_type, name: "Court")
         school = create(:contact_type, name: "School")
         therapist = create(:contact_type, name: "Therapist")
-        untransitioned_casa_case = create(:casa_case, transition_aged_youth: false)
-        transitioned_casa_case = create(:casa_case, transition_aged_youth: true)
+        untransitioned_casa_case = create(:casa_case)
+        transitioned_casa_case = create(:casa_case)
         contact1 = create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, contact_types: [court])
         create(:case_contact, occurred_at: 40.days.ago, casa_case: transitioned_casa_case, contact_types: [court])
         create(:case_contact, occurred_at: 20.days.ago, casa_case: untransitioned_casa_case, contact_types: [court])
@@ -320,15 +291,15 @@ RSpec.describe CaseContactReport, type: :model do
         contact6 = create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, contact_types: [therapist])
 
         aggregate_failures do
-          report_1 = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, has_transitioned: true, contact_type_ids: [court.id]})
+          report_1 = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, contact_type_ids: [court.id]})
           expect(report_1.case_contacts.length).to eq(2)
           expect((report_1.case_contacts - [contact1, contact5]).empty?).to eq(true)
 
-          report_2 = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, has_transitioned: true, contact_type_ids: [school.id]})
+          report_2 = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, contact_type_ids: [school.id]})
           expect(report_2.case_contacts.length).to eq(2)
           expect((report_2.case_contacts - [contact4, contact5]).empty?).to eq(true)
 
-          report_3 = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, has_transitioned: true, contact_type_ids: [therapist.id]})
+          report_3 = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, contact_type_ids: [therapist.id]})
           expect(report_3.case_contacts.length).to eq(1)
           expect(report_3.case_contacts.include?(contact6)).to eq(true)
         end

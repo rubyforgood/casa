@@ -21,9 +21,6 @@
           <% if current_user.volunteer? %>
             <%= menu_item(label: t(".menu_item.case_contacts"), path: case_contacts_path) %>
           <% end %>
-          <% if current_user.serving_transition_aged_youth? %>
-            <%= menu_item(label: t(".menu_item.emancipation_checklists"), path: emancipation_checklists_path) %>
-          <% end %>
           <%= menu_item(label: t(".menu_item.admins"), path: casa_admins_path, visible: policy(CasaAdmin).index?) %>
         <% end %>
       </div>

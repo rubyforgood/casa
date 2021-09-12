@@ -22,7 +22,6 @@ class CaseContactReportsController < ApplicationController
       :start_date,
       :end_date,
       :contact_made,
-      :has_transitioned,
       :want_driving_reimbursement,
       contact_type_ids: [],
       contact_type_group_ids: [],
@@ -35,7 +34,6 @@ class CaseContactReportsController < ApplicationController
 
   def convert_radio_options_to_boolean(parameters)
     parameters[:contact_made] = string_to_boolean(parameters[:contact_made])
-    parameters[:has_transitioned] = string_to_boolean(parameters[:has_transitioned])
     parameters[:want_driving_reimbursement] = string_to_boolean(parameters[:want_driving_reimbursement])
   end
 

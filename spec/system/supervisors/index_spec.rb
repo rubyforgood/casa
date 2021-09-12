@@ -54,11 +54,9 @@ RSpec.describe "supervisors/index", :disable_bullet, type: :system do
       )
 
       allow(first_supervisor).to receive(:volunteers).and_return(Array.new(9))
-      allow(first_supervisor).to receive(:volunteers_serving_transition_aged_youth).and_return(9)
       allow(first_supervisor).to receive(:no_contact_for_two_weeks).and_return(9)
 
       allow(last_supervisor).to receive(:volunteers).and_return(Array.new(11))
-      allow(last_supervisor).to receive(:volunteers_serving_transition_aged_youth).and_return(11)
       allow(last_supervisor).to receive(:no_contact_for_two_weeks).and_return(11)
 
       sign_in user

@@ -2,7 +2,6 @@
 
 <div class="row">
   <div class="col-sm-12 form-header">
-    <h1><%= @casa_case.decorate.transition_aged_youth_icon %> <%= t(".title") %></h1>
     <%- if policy(:case_contact).new? & @casa_case.active? %>
       <%= link_to(t(".button.new_contact"),
                   new_case_contact_path(case_contact: {casa_case_id: @casa_case.id}),
@@ -10,11 +9,6 @@
     <%- end %>
     <% if @casa_case.active? %>
       <%= link_to t(".button.edit_case"), edit_casa_case_path(@casa_case), class: "btn btn-primary casa-case-button" %>
-    <% end %>
-    <% if @casa_case.has_transitioned? %>
-      <%= link_to(t(".button.emancipation"),
-        casa_case_emancipation_path(@casa_case),
-        class: "btn btn-primary casa-case-button") %>
     <% end %>
     <% if current_user.supervisor? || current_user.casa_admin? %>
       <%= form_with url: generate_case_court_reports_path, local: false, class: "d-inline" do |form| %>
@@ -48,10 +42,6 @@
         <h6><strong><%= t(".label.judge") %>:</strong> <%= @casa_case.judge_name %></h6>
       </p>
     <% end %>
-
-    <p>
-    <h6><strong><%= t(".label.transition_aged_youth") %>:</strong> <%= @casa_case.decorate.transition_aged_youth %></h6>
-    </p>
 
     <p>
     <h6>

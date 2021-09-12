@@ -9,7 +9,6 @@
     <thead>
     <tr>
       <th><%= t(".heading.case_number") %></th>
-      <th><%= t(".heading.transition_aged_youth") %></th>
       <th><%= t(".heading.actions") %></th>
     </tr>
     </thead>
@@ -19,10 +18,6 @@
         <td>
           <span class="mobile-label"><%= t(".heading.case_number") %></span>
           <%= assignment.casa_case.case_number %>
-        </td>
-        <td>
-          <span class="mobile-label"><%= t(".heading.transition_aged_youth") %></span>
-          <%= assignment.casa_case.decorate.transition_aged_youth %>
         </td>
         <td>
           <%= button_to t(".button.unassign"),

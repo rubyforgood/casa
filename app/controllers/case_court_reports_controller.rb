@@ -6,7 +6,7 @@ class CaseCourtReportsController < ApplicationController
 
   def index
     authorize CaseCourtReport
-    assigned_cases.select(:id, :case_number, :transition_aged_youth)
+    assigned_cases.select(:id, :case_number)
   end
 
   def show

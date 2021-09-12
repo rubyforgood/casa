@@ -27,9 +27,6 @@ RSpec.describe "casa_cases/new", :disable_bullet, type: :system do
         select "April", from: "casa_case_court_report_due_date_2i"
         select next_year, from: "casa_case_court_report_due_date_1i"
 
-        check "Transition aged youth"
-        has_checked_field? "Transition aged youth"
-
         select "Submitted", from: "casa_case_court_report_status"
 
         click_on "Create CASA Case"
@@ -38,7 +35,6 @@ RSpec.describe "casa_cases/new", :disable_bullet, type: :system do
         expect(page).to have_content("CASA case was successfully created.")
         expect(page).to have_content("Next Court Date: Wednesday, 3-MAR-2021") # accurate for frozen time
         expect(page).to have_content("Court Report Due Date: Thursday, 1-APR-2021") # accurate for frozen time
-        expect(page).to have_content("Transition Aged Youth: Yes")
       end
     end
   end
@@ -52,7 +48,6 @@ RSpec.describe "casa_cases/new", :disable_bullet, type: :system do
       expect(page).to have_content("CASA case was successfully created.")
       expect(page).to have_content("Next Court Date:")
       expect(page).to have_content("Court Report Due Date:")
-      expect(page).to have_content("Transition Aged Youth: No")
     end
   end
 

@@ -56,12 +56,6 @@ $('document').ready(() => {
         }
       })
 
-      $('.transition-youth-options').find('input[type="checkbox"]').each(function () {
-        if ($(this).is(':checked')) {
-          assignedToTransitionYouthArray.push($(this).data('value'))
-        }
-      })
-
       $('.case-number-prefix-options').find('input[type="checkbox"]').each(function () {
         if ($(this).is(':checked')) {
           caseNumberPrefixArray.push($(this).data('value'))
@@ -140,11 +134,6 @@ $('document').ready(() => {
         searchable: false
       },
       {
-        name: 'has_transition_aged_youth_cases',
-        render: (data, type, row, meta) => row.has_transition_aged_youth_cases === 'true' ? 'Yes 🦋' : 'No 🐛',
-        searchable: false
-      },
-      {
         name: 'casa_cases',
         render: (data, type, row, meta) => {
           const links = row.casa_cases.map(casaCase => {
@@ -200,14 +189,10 @@ $('document').ready(() => {
         const statusOptions = $('.status-options input:checked')
         const statusFilter = Array.from(statusOptions).map(option => JSON.parse(option.dataset.value))
 
-        const transitionYouthOptions = $('.transition-youth-options input:checked')
-        const transitionYouthFilter = Array.from(transitionYouthOptions).map(option => JSON.parse(option.dataset.value))
-
         return $.extend({}, d, {
           additional_filters: {
             supervisor: supervisorFilter,
-            active: statusFilter,
-            transition_aged_youth: transitionYouthFilter
+            active: statusFilter
           }
         })
       },

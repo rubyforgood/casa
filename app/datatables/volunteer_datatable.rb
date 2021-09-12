@@ -4,7 +4,6 @@ class VolunteerDatatable < ApplicationDatatable
     contacts_made_in_past_days
     display_name
     email
-    has_transition_aged_youth_cases
     most_recent_contact_occurred_at
     supervisor_name
   ]
@@ -19,7 +18,6 @@ class VolunteerDatatable < ApplicationDatatable
         contacts_made_in_past_days: volunteer.contacts_made_in_past_days,
         display_name: volunteer.display_name,
         email: volunteer.email,
-        has_transition_aged_youth_cases: volunteer.has_transition_aged_youth_cases?,
         id: volunteer.id,
         made_contact_with_all_cases_in_days: volunteer.made_contact_with_all_cases_in_days?,
         most_recent_contact: {
@@ -35,7 +33,6 @@ class VolunteerDatatable < ApplicationDatatable
     raw_records
       .where(supervisor_filter)
       .where(active_filter)
-      .where(transition_aged_youth_filter)
       .where(search_filter)
   end
 
@@ -46,7 +43,6 @@ class VolunteerDatatable < ApplicationDatatable
           users.*,
           COALESCE(supervisors.display_name, supervisors.email) AS supervisor_name,
           supervisors.id AS supervisor_id,
-          transition_aged_youth_cases.volunteer_id IS NOT NULL AS has_transition_aged_youth_cases,
           most_recent_contacts.casa_case_id AS most_recent_contact_case_id,
           most_recent_contacts.occurred_at AS most_recent_contact_occurred_at,
           contacts_made_in_past_days.contact_count AS contacts_made_in_past_days
@@ -56,9 +52,6 @@ class VolunteerDatatable < ApplicationDatatable
         <<-SQL
           LEFT JOIN supervisor_volunteers ON supervisor_volunteers.volunteer_id = users.id AND supervisor_volunteers.is_active
           LEFT JOIN users supervisors ON supervisors.id = supervisor_volunteers.supervisor_id AND supervisors.active
-          LEFT JOIN (
-            #{transition_aged_youth_cases_subquery}
-          ) transition_aged_youth_cases ON transition_aged_youth_cases.volunteer_id = users.id
           LEFT JOIN (
             #{most_recent_contacts_subquery}
           ) most_recent_contacts ON most_recent_contacts.creator_id = users.id AND most_recent_contacts.contact_index = 1
@@ -70,16 +63,6 @@ class VolunteerDatatable < ApplicationDatatable
       .order(order_clause)
       .order(:id)
       .includes(:casa_cases)
-  end
-
-  def transition_aged_youth_cases_subquery
-    @transition_aged_youth_cases_subquery ||=
-      CaseAssignment
-        .select(:volunteer_id)
-        .joins(:casa_case)
-        .where(casa_cases: {transition_aged_youth: true})
-        .group(:volunteer_id)
-        .to_sql
   end
 
   def most_recent_contacts_subquery
@@ -132,17 +115,6 @@ class VolunteerDatatable < ApplicationDatatable
 
         bool_filter filter do
           ["users.active = ?", filter[0]]
-        end
-      }.call
-  end
-
-  def transition_aged_youth_filter
-    @transition_aged_youth_filter ||=
-      lambda {
-        filter = additional_filters[:transition_aged_youth]
-
-        bool_filter filter do
-          "transition_aged_youth_cases.volunteer_id IS #{filter[0] == "true" ? "NOT" : nil} NULL"
         end
       }.call
   end

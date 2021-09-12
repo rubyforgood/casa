@@ -9,8 +9,7 @@ RSpec.describe "VolunteerDatatable" do
   let(:additional_filters) do
     {
       active: %w[false true],
-      supervisor: supervisors.map(&:display_name),
-      transition_aged_youth: %w[false true]
+      supervisor: supervisors.map(&:display_name)
     }
   end
   let(:order_by) { "display_name" }
@@ -42,8 +41,8 @@ RSpec.describe "VolunteerDatatable" do
 
       volunteers.each_with_index do |volunteer, idx|
         volunteer.update display_name: Faker::Name.unique.name, email: Faker::Internet.unique.email
-        volunteer.casa_cases << create(:casa_case, casa_org: org, transition_aged_youth: false)
-        volunteer.casa_cases << create(:casa_case, casa_org: org, transition_aged_youth: idx == 1)
+        volunteer.casa_cases << create(:casa_case, casa_org: org)
+        volunteer.casa_cases << create(:casa_case, casa_org: org)
       end
     end
 
@@ -157,35 +156,6 @@ RSpec.describe "VolunteerDatatable" do
 
         it "is successful" do
           check_desc_order.call
-        end
-      end
-    end
-
-    describe "has_transition_aged_youth_cases" do
-      let(:order_by) { "has_transition_aged_youth_cases" }
-      let(:transition_aged_youth_bool_to_int) do
-        lambda { |volunteer|
-          volunteer.casa_cases.exists?(transition_aged_youth: true) ? 1 : 0
-        }
-      end
-      let(:sorted_models) { assigned_volunteers.sort_by(&transition_aged_youth_bool_to_int) }
-
-      context "when ascending" do
-        it "is successful" do
-          sorted_models.each_with_index do |model, idx|
-            expect(values[idx][:has_transition_aged_youth_cases]).to eq model.casa_cases.exists?(transition_aged_youth: true).to_s
-          end
-        end
-      end
-
-      context "when descending" do
-        let(:order_direction) { "desc" }
-        let(:sorted_models) { assigned_volunteers.sort_by(&transition_aged_youth_bool_to_int) }
-
-        it "is successful" do
-          sorted_models.reverse.each_with_index do |model, idx|
-            expect(values[idx][:has_transition_aged_youth_cases]).to eq model.casa_cases.exists?(transition_aged_youth: true).to_s
-          end
         end
       end
     end
@@ -381,44 +351,6 @@ RSpec.describe "VolunteerDatatable" do
 
       context "when no selection" do
         before { additional_filters[:active] = [] }
-
-        it "is successful" do
-          expect(subject[:recordsTotal]).to eq Volunteer.count
-          expect(subject[:recordsFiltered]).to be_zero
-        end
-      end
-    end
-
-    describe "transition_aged_youth" do
-      context "when yes" do
-        before { additional_filters[:transition_aged_youth] = %w[true] }
-
-        it "is successful" do
-          expect(subject[:recordsTotal]).to eq Volunteer.count
-          expect(subject[:recordsFiltered]).to eq assigned_volunteers.joins(:casa_cases).where(casa_cases: {transition_aged_youth: true}).count
-        end
-      end
-
-      context "when no" do
-        before { additional_filters[:transition_aged_youth] = %w[false] }
-
-        it "is successful" do
-          expect(subject[:recordsTotal]).to eq Volunteer.count
-          expect(subject[:recordsFiltered]).to eq assigned_volunteers.where.not(id: CaseAssignment.select(:volunteer_id).joins(:casa_case).where(casa_cases: {transition_aged_youth: true})).count
-        end
-      end
-
-      context "when both" do
-        before { additional_filters[:transition_aged_youth] = %w[false true] }
-
-        it "is successful" do
-          expect(subject[:recordsTotal]).to eq Volunteer.count
-          expect(subject[:recordsFiltered]).to eq assigned_volunteers.count
-        end
-      end
-
-      context "when no selection" do
-        before { additional_filters[:transition_aged_youth] = [] }
 
         it "is successful" do
           expect(subject[:recordsTotal]).to eq Volunteer.count

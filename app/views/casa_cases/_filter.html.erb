@@ -52,23 +52,6 @@
         </div>
       </div>
       <div class="dropdown pull-left mr-2">
-        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <%= t("casa_cases.shared.assigned_transition_aged_youth") %>
-        </button>
-        <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton">
-          <li>
-            <a class="small" data-value="option1" tabIndex="-1">
-              <input type="checkbox" data-value="Yes 🦋" checked><%= t("common.yes_text") %>
-            </a>
-          </li>
-          <li>
-            <a class="small" data-value="option1" tabIndex="-1"><input type="checkbox" data-value="No 🐛" checked>
-              <%= t("common.no_text") %>
-            </a>
-          </li>
-        </div>
-      </div>
-      <div class="dropdown pull-left mr-2">
         <% unless current_user.volunteer? %>
           <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <%= t("casa_cases.shared.casa_case_prefix") %>
