@@ -63,7 +63,8 @@ module.exports = class Notifier {
   }
 
   // Shows the saved toast for 2 seconds
-  //  @param {string=}  error The error to be displayed(optional)
+  //  @param  {string=}  error The error to be displayed(optional)
+  //  @throws {Error}    for trying to resolve more async operations than the amount currently awaiting
   stopAsyncOperation (errorMsg) {
     if (this.waitingSaveOperationCount < 1) {
       throw new Error('Attempted to resolve an async operation when awaiting none')
