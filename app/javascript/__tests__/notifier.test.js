@@ -118,19 +118,21 @@ describe('notify', () => {
   })
 })
 
-test('startAsyncOperation should display the loading toast', (done) => {
-  $(document).ready(() => {
-    const loadingToast = $('#async-waiting-indicator')
+describe('startAsyncOperation', () => {
+  test('startAsyncOperation should display the loading toast', (done) => {
+    $(document).ready(() => {
+      const loadingToast = $('#async-waiting-indicator')
 
-    try {
-      expect(loadingToast.css('display')).toBe('none')
+      try {
+        expect(loadingToast.css('display')).toBe('none')
 
-      notifier.startAsyncOperation()
-      expect(loadingToast.attr('style')).toEqual(expect.not.stringContaining('display: none'))
+        notifier.startAsyncOperation()
+        expect(loadingToast.attr('style')).toEqual(expect.not.stringContaining('display: none'))
 
-      done()
-    } catch (error) {
-      done(error)
-    }
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
   })
 })
