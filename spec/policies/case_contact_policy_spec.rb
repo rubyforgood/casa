@@ -3,10 +3,10 @@ require "rails_helper"
 RSpec.describe CaseContactPolicy do
   subject { described_class }
 
-  let(:casa_admin) { create(:casa_admin) }
-  let(:case_contact) { create(:case_contact) }
-  let(:volunteer) { create(:volunteer) }
-  let(:supervisor) { create(:supervisor) }
+  let(:casa_admin) { build(:casa_admin) }
+  let(:case_contact) { build(:case_contact) }
+  let(:volunteer) { build(:volunteer) }
+  let(:supervisor) { build(:supervisor) }
 
   permissions :index? do
     it "allows casa_admins" do
@@ -28,7 +28,7 @@ RSpec.describe CaseContactPolicy do
     end
 
     context "when volunteer is the creator" do
-      let(:case_contact) { create(:case_contact, creator: volunteer) }
+      let(:case_contact) { build_stubbed(:case_contact, creator: volunteer) }
 
       it "allows the volunteer" do
         is_expected.to permit(volunteer, case_contact)
@@ -53,7 +53,7 @@ RSpec.describe CaseContactPolicy do
 
     context "when volunteer is assigned" do
       it "allows the volunteer" do
-        case_contact = create(:case_contact, creator: volunteer)
+        case_contact = build_stubbed(:case_contact, creator: volunteer)
 
         is_expected.to permit(volunteer, case_contact)
       end

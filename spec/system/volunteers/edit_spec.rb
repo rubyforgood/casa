@@ -32,7 +32,7 @@ RSpec.describe "volunteers/edit", type: :system do
 
     context "with invalid data" do
       it "shows error message for duplicate email" do
-        volunteer.supervisor = create(:supervisor)
+        volunteer.supervisor = build(:supervisor)
         fill_in "volunteer_email", with: admin.email
         fill_in "volunteer_display_name", with: "Mickey Mouse"
         click_on "Submit"
@@ -67,7 +67,7 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   it "allows an admin to reactivate a volunteer" do
-    inactive_volunteer = create(:volunteer, casa_org_id: organization.id)
+    inactive_volunteer = build(:volunteer, casa_org_id: organization.id)
     inactive_volunteer.deactivate
 
     sign_in admin
@@ -82,7 +82,7 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   it "allows the admin to unassign a volunteer from a supervisor" do
-    supervisor = create(:supervisor, display_name: "Haka Haka")
+    supervisor = build(:supervisor, display_name: "Haka Haka")
     volunteer = create(:volunteer, display_name: "Bolu Bolu", supervisor: supervisor)
 
     sign_in admin
@@ -118,7 +118,7 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   context "when volunteer is assigned to multiple cases" do
-    let(:casa_org) { create(:casa_org) }
+    let(:casa_org) { build(:casa_org) }
     let!(:supervisor) { create(:casa_admin, casa_org: casa_org) }
     let!(:volunteer) { create(:volunteer, casa_org: casa_org, display_name: "AAA") }
     let!(:casa_case_1) { create(:casa_case, casa_org: casa_org, case_number: "CINA1") }
@@ -141,11 +141,11 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   context "with previously assigned cases" do
-    let(:casa_org) { create(:casa_org) }
+    let(:casa_org) { build(:casa_org) }
     let!(:supervisor) { create(:casa_admin, casa_org: casa_org) }
     let!(:volunteer) { create(:volunteer, casa_org: casa_org, display_name: "AAA") }
-    let!(:casa_case_1) { create(:casa_case, casa_org: casa_org, case_number: "CINA1") }
-    let!(:casa_case_2) { create(:casa_case, casa_org: casa_org, case_number: "CINA2") }
+    let!(:casa_case_1) { build(:casa_case, casa_org: casa_org, case_number: "CINA1") }
+    let!(:casa_case_2) { build(:casa_case, casa_org: casa_org, case_number: "CINA2") }
 
     it "shows the unassign button for assigned cases and not for unassigned cases" do
       sign_in supervisor
@@ -179,7 +179,7 @@ RSpec.describe "volunteers/edit", type: :system do
     let!(:active_casa_case) { create(:casa_case, casa_org: organization, case_number: "ACTIVE") }
     let!(:inactive_casa_case) { create(:casa_case, casa_org: organization, active: false, case_number: "INACTIVE") }
     let!(:volunteer) { create(:volunteer, display_name: "Awesome Volunteer", casa_org: organization) }
-    let(:supervisor) { create(:casa_admin, casa_org: organization) }
+    let(:supervisor) { build(:casa_admin, casa_org: organization) }
 
     it "supervisor does not have inactive cases as an option to assign to a volunteer" do
       sign_in supervisor

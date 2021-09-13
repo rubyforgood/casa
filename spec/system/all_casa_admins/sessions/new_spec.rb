@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "all_casa_admins/sessions/new", type: :system do
   let(:all_casa_admin) { create(:all_casa_admin) }
-  let(:volunteer) { create(:volunteer) }
+  let(:volunteer) { build_stubbed(:volunteer) }
 
   context "when authenticated user" do
     before { sign_in all_casa_admin }

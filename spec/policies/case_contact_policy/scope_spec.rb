@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe CaseContactPolicy::Scope do
   describe "#resolve" do
     it "returns all CaseContacts when user is admin" do
-      user = create(:casa_admin)
+      user = build(:casa_admin)
       all_case_contacts = create_list(:case_contact, 2)
 
       scope = described_class.new(user, CaseContact)
@@ -13,7 +13,7 @@ RSpec.describe CaseContactPolicy::Scope do
 
     context "when user is volunteer" do
       it "returns all of the case contacts of the volunteer" do
-        current_user = create(:volunteer)
+        current_user = build(:volunteer)
         relevant_case = create(:casa_case)
         other_user = create(:volunteer)
 
@@ -23,7 +23,7 @@ RSpec.describe CaseContactPolicy::Scope do
 
         relevant_contacts =
           create_list(:case_contact, 2, casa_case: relevant_case, creator: current_user)
-        create(:case_contact, casa_case: relevant_case, creator: other_user)
+        build(:case_contact, casa_case: relevant_case, creator: other_user)
         create_irrelevant_contacts(current_user, other_user)
 
         scope = described_class.new(current_user, CaseContact)
@@ -36,10 +36,10 @@ RSpec.describe CaseContactPolicy::Scope do
     end
 
     def create_irrelevant_contacts(current_user, other_user)
-      irrelevant_case = create(:casa_case)
+      irrelevant_case = build(:casa_case)
 
       create_list(:case_contact, 2, casa_case: irrelevant_case, creator: current_user)
-      create(:case_contact, casa_case: irrelevant_case, creator: other_user)
+      build(:case_contact, casa_case: irrelevant_case, creator: other_user)
     end
   end
 end

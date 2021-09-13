@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "reports", type: :system do
-  let!(:admin) { create(:casa_admin) }
-  let!(:case_contact) { create(:case_contact) }
+  let!(:admin) { build(:casa_admin) }
+  let!(:case_contact) { build(:case_contact) }
 
   before do
     sign_in user
@@ -10,7 +10,7 @@ RSpec.describe "reports", type: :system do
   end
 
   context "volunteer user" do
-    let(:user) { create(:volunteer) }
+    let(:user) { build(:volunteer) }
 
     it "redirects to root" do
       expect(page).to_not have_text I18n.t("reports.index.reports_subhead")

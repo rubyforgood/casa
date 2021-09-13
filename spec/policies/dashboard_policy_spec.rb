@@ -3,10 +3,10 @@ require "rails_helper"
 RSpec.describe DashboardPolicy do
   subject { described_class }
 
-  let(:user) { create(:user) }
-  let(:casa_admin) { create(:casa_admin) }
-  let(:supervisor) { create(:supervisor) }
-  let(:volunteer) { create(:volunteer) }
+  let(:user) { build(:user) }
+  let(:casa_admin) { build(:casa_admin) }
+  let(:supervisor) { build(:supervisor) }
+  let(:volunteer) { build(:volunteer) }
 
   permissions :show? do
     it "permits user to show" do
@@ -27,7 +27,7 @@ RSpec.describe DashboardPolicy do
   permissions :create_cases_section? do
     context "when user is a volunteer with casa_cases" do
       it "permits user to see cases section" do
-        volunteer.casa_cases << create(:casa_case, casa_org: volunteer.casa_org)
+        volunteer.casa_cases << build_stubbed(:casa_case, casa_org: volunteer.casa_org)
         expect(Pundit.policy(volunteer, :dashboard).create_case_contacts?).to eq true
       end
     end

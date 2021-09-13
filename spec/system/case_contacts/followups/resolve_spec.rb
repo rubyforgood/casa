@@ -2,9 +2,9 @@ require "rails_helper"
 
 RSpec.describe "followups/resolve", type: :system do
   let(:admin) { create(:casa_admin) }
-  let(:case_contact) { create(:case_contact) }
-  let(:volunteer) { create(:volunteer) }
-  let(:supervisor) { create(:supervisor) }
+  let(:case_contact) { build(:case_contact) }
+  let(:volunteer) { build(:volunteer) }
+  let(:supervisor) { build(:supervisor) }
   let!(:followup) { create(:followup, case_contact: case_contact) }
 
   it "changes status of followup to resolved" do
@@ -18,7 +18,7 @@ RSpec.describe "followups/resolve", type: :system do
   end
 
   context "logged in as admin, followup created by volunteer" do
-    let(:case_contact) { create(:case_contact, creator: volunteer) }
+    let(:case_contact) { build(:case_contact, creator: volunteer) }
     let!(:followup) { create(:followup, creator: volunteer, case_contact: case_contact) }
 
     it "changes status of followup to resolved" do
@@ -44,7 +44,7 @@ RSpec.describe "followups/resolve", type: :system do
   end
 
   context "logged in as supervisor, followup created by volunteer" do
-    let(:case_contact) { create(:case_contact, creator: supervisor) }
+    let(:case_contact) { build(:case_contact, creator: supervisor) }
     let!(:followup) { create(:followup, creator: volunteer, case_contact: case_contact) }
 
     it "changes status of followup to resolved" do
@@ -59,8 +59,8 @@ RSpec.describe "followups/resolve", type: :system do
   end
 
   context "logged in as volunteer, followup created by admin" do
-    let(:case_contact) { create(:case_contact, creator: volunteer) }
-    let(:volunteer) { create(:volunteer) }
+    let(:case_contact) { build(:case_contact, creator: volunteer) }
+    let(:volunteer) { build(:volunteer) }
     let!(:followup) { create(:followup, creator: admin, case_contact: case_contact) }
 
     before do

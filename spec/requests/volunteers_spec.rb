@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "/volunteers", type: :request do
-  let(:admin) { create(:casa_admin) }
+  let(:admin) { build(:casa_admin) }
   let(:volunteer) { create(:volunteer) }
 
   describe "GET /index" do
@@ -132,7 +132,7 @@ RSpec.describe "/volunteers", type: :request do
       let!(:other_volunteer) { create(:volunteer) }
 
       it "does not update the volunteer" do
-        volunteer.supervisor = create(:supervisor)
+        volunteer.supervisor = build(:supervisor)
 
         patch volunteer_path(volunteer), params: {
           volunteer: {email: other_volunteer.email, display_name: "New Name"}

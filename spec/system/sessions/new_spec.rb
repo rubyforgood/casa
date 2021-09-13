@@ -33,7 +33,7 @@ RSpec.describe "sessions/new", type: :system do
     end
 
     it "does not allow AllCasaAdmin to sign in" do
-      user = create(:all_casa_admin)
+      user = build_stubbed(:all_casa_admin)
 
       visit "/"
       expect(page).to have_text "Log in"
