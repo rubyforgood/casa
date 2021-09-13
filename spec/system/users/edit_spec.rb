@@ -52,7 +52,8 @@ RSpec.describe "users/edit", type: :system do
     it "notifies password changed by email", :aggregate_failures do
       click_on "Change Password"
 
-      fill_in "Password", with: "1234567"
+      fill_in "Current Password", with: "123456"
+      fill_in "New Password", with: "1234567"
       fill_in "Password Confirmation", with: "1234567"
 
       click_on "Update Password"
@@ -79,7 +80,8 @@ RSpec.describe "users/edit", type: :system do
     it "notifies password changed by email", :aggregate_failures do
       click_on "Change Password"
 
-      fill_in "Password", with: "1234567"
+      fill_in "Current Password", with: "123456"
+      fill_in "New Password", with: "1234567"
       fill_in "Password Confirmation", with: "1234567"
 
       click_on "Update Password"
@@ -121,7 +123,8 @@ RSpec.describe "users/edit", type: :system do
     it "displays password errors messages when admin is unable to set a password" do
       click_on "Change Password"
 
-      fill_in "Password", with: "123"
+      fill_in "Current Password", with: "123456"
+      fill_in "New Password", with: "123"
       fill_in "Password Confirmation", with: "1234"
 
       click_on "Update Password"
@@ -133,7 +136,8 @@ RSpec.describe "users/edit", type: :system do
     it "display success message when admin update password" do
       click_on "Change Password"
 
-      fill_in "Password", with: "1234567"
+      fill_in "Current Password", with: "123456"
+      fill_in "New Password", with: "1234567"
       fill_in "Password Confirmation", with: "1234567"
 
       click_on "Update Password"
@@ -144,7 +148,8 @@ RSpec.describe "users/edit", type: :system do
     it "notifies password changed by email", :aggregate_failures do
       click_on "Change Password"
 
-      fill_in "Password", with: "1234567"
+      fill_in "Current Password", with: "123456"
+      fill_in "New Password", with: "1234567"
       fill_in "Password Confirmation", with: "1234567"
 
       click_on "Update Password"
