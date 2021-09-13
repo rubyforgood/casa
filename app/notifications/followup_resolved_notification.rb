@@ -13,7 +13,7 @@ class FollowupResolvedNotification < Noticed::Base
 
   # Add required params
   #
-  param :followup, :created_by_name
+  param :followup, :created_by
 
   # Define helper methods to make rendering easier.
   #
@@ -22,10 +22,20 @@ class FollowupResolvedNotification < Noticed::Base
   end
 
   def message
-    t(".message", created_by_name: params[:created_by_name])
+    t(".message", created_by_name: created_by_name)
   end
 
   def url
     edit_case_contact_path(params[:followup][:case_contact_id], notification_id: record.id)
+  end
+
+  private
+
+  def created_by_name
+    if params.key?(:created_by)
+      params[:created_by][:display_name]
+    else # keep backward compatibility with older notifications
+      params[:created_by_name]
+    end
   end
 end

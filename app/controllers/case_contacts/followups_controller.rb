@@ -28,7 +28,7 @@ class CaseContacts::FollowupsController < ApplicationController
   def create_notification
     return if current_user == @followup.creator
     FollowupResolvedNotification
-      .with(followup: @followup, created_by_name: current_user.display_name)
+      .with(followup: @followup, created_by: current_user)
       .deliver(@followup.creator)
   end
 end
