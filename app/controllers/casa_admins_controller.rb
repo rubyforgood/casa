@@ -27,7 +27,7 @@ class CasaAdminsController < ApplicationController
   end
 
   def create
-    service = ::CreateCasaAdminService.new(current_organization, params)
+    service = ::CreateCasaAdminService.new(current_organization, params, current_user)
     @casa_admin = service.build
     authorize @casa_admin
     begin
@@ -62,6 +62,13 @@ class CasaAdminsController < ApplicationController
     end
   rescue Errno::ECONNREFUSED => error
     redirect_to_casa_admin_edition_page(error)
+  end
+
+  def resend_invitation
+    authorize @casa_admin
+    @casa_admin.invite!
+
+    redirect_to edit_casa_admin_path(@casa_admin), notice: "Invitation sent"
   end
 
   private

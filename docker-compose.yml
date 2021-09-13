@@ -3,6 +3,7 @@ version: "3"
 services:
   web:
     build: .
+    command: bundle exec rails s -b 0.0.0.0
     ports:
       - "3000:3000"
       - "4000:4000"
@@ -31,6 +32,8 @@ services:
       driver: none
     ports:
       - "5900:5900"
+    volumes:
+      - ./tmp/downloads:/home/seluser/Downloads
 
 volumes:
   db_data:

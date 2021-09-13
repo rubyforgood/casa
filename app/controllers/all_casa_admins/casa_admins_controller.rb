@@ -6,7 +6,7 @@ class AllCasaAdmins::CasaAdminsController < AllCasaAdminsController
   end
 
   def create
-    service = ::CreateCasaAdminService.new(@casa_org, params)
+    service = ::CreateCasaAdminService.new(@casa_org, params, current_user)
     @casa_admin = service.build
     begin
       service.create!

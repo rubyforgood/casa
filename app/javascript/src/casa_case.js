@@ -7,23 +7,28 @@ import Swal from 'sweetalert2'
 
 function addCourtMandateInput () {
   const list = '#mandates-list-container'
+  const ref = $(list).data('ref') || 'casa_case'
+  const casaCaseId = $(list).data('casa-case-id')
   const index = $(`${list} textarea`).length
-  const html = courtMandateHtml(index)
+  const html = courtMandateHtml(index, ref, casaCaseId)
 
   $(list).append(html.entry)
   const lastEntry = $(list).children(':last')
 
   $(lastEntry).append(html.textarea)
   $(lastEntry).append(html.select)
+  if (casaCaseId) {
+    $(lastEntry).append(html.hidden)
+  }
   $(lastEntry).children(':first').trigger('focus')
 }
 
 function removeMandateWithConfirmation () {
-  const text = 'Are you sure you want to remove this court mandate? Doing so will ' +
+  const text = 'Are you sure you want to remove this court order? Doing so will ' +
                'delete all records of it unless it was included in a previous court report.'
   Swal.fire({
     icon: 'warning',
-    title: 'Delete court mandate?',
+    title: 'Delete court order?',
     text: text,
     showCloseButton: true,
     showCancelButton: true,
@@ -54,21 +59,21 @@ function removeMandateAction (ctx) {
 
       Swal.fire({
         icon: 'success',
-        text: 'Court mandate has been removed.',
+        text: 'Court order has been removed.',
         showCloseButton: true
       })
     },
     error: () => {
       Swal.fire({
         icon: 'error',
-        text: 'Something went wrong when attempting to delete this court mandate.',
+        text: 'Something went wrong when attempting to delete this court order.',
         showCloseButton: true
       })
     }
   })
 }
 
-function courtMandateHtml (index) {
+function courtMandateHtml (index, ref, casaCaseId) {
   const selectOptions = '<option value="">Set Implementation Status</option>' +
                         '<option value="not_implemented">Not implemented</option>' +
                         '<option value="partially_implemented">Partially implemented</option>' +
@@ -76,14 +81,16 @@ function courtMandateHtml (index) {
   return {
     entry: '<div class="court-mandate-entry"></div>',
 
-    textarea: `<textarea name="casa_case[case_court_mandates_attributes][${index}][mandate_text]"\
+    textarea: `<textarea name="${ref}[case_court_mandates_attributes][${index}][mandate_text]"\
                  id="casa_case_case_court_mandates_attributes_${index}_mandate_text"></textarea>`,
 
     select: `<select class="implementation-status"\
-                 name="casa_case[case_court_mandates_attributes][${index}][implementation_status]"\
+                 name="${ref}[case_court_mandates_attributes][${index}][implementation_status]"\
                  id="casa_case_case_court_mandates_attributes_${index}_implementation_status">\
                  ${selectOptions}\
-               </select>`
+               </select>`,
+    hidden: `<textarea class="d-none" name="${ref}[case_court_mandates_attributes][${index}][casa_case_id]"\
+              id="casa_case_case_court_mandates_attributes_${index}_casa_case_id">${casaCaseId}</textarea>`
   }
 }
 
@@ -123,7 +130,6 @@ function handleGenerateReport (e) {
     },
     body: JSON.stringify(formData)
   }
-  hideBtn(generateBtn)
   showBtn(spinner)
   window.fetch(url, options)
     .then(response => {
@@ -133,11 +139,11 @@ function handleGenerateReport (e) {
       if (data.status !== 'ok') {
         showAlert(data.error_messages)
         enableBtn(generateBtn)
-        showBtn(generateBtn)
         hideBtn(spinner)
         return
       }
       hideBtn(spinner)
+      enableBtn(generateBtn)
       window.open(data.link, '_blank')
     })
     .catch((error) => {

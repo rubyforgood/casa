@@ -5,16 +5,31 @@ RSpec.describe "past_court_dates/show", type: :view do
     let(:past_court_date) { create(:past_court_date, :with_court_details) }
     let(:case_court_mandate) { past_court_date.case_court_mandates.first }
 
-    it "displays all court details" do
-      render template: "past_court_dates/show"
+    before { render template: "past_court_dates/show" }
 
-      expect(rendered).to include(past_court_date.judge.name)
+    it "displays all court details" do
+      expect(rendered).to include("/casa_cases/#{past_court_date.casa_case.id}")
+      expect(rendered).to include(ERB::Util.html_escape(past_court_date.judge.name))
       expect(rendered).to include(past_court_date.hearing_type.name)
 
       expect(rendered).to include(case_court_mandate.mandate_text)
       expect(rendered).to include(case_court_mandate.implementation_status.humanize)
     end
+
+    context "when judge's name has escaped characters" do
+      let(:past_court_date) { create(:past_court_date, :with_court_details, judge: create(:judge, name: "/-'<>#&")) }
+
+      it "correctly displays judge's name" do
+        expect(rendered).to include(ERB::Util.html_escape(past_court_date.judge.name))
+      end
+    end
+
+    it "displays the download button for .docx" do
+      expect(rendered).to include "Download Report (.docx)"
+      expect(rendered).to include "/casa_cases/#{past_court_date.casa_case.id}/past_court_dates/#{past_court_date.id}.docx"
+    end
   end
+
   shared_examples_for "a past court date with no court details" do
     let(:past_court_date) { create(:past_court_date) }
 
@@ -25,7 +40,7 @@ RSpec.describe "past_court_dates/show", type: :view do
       expect(rendered).to include("Hearing Type")
       expect(rendered).to include("None")
 
-      expect(rendered).to include("There are no court mandates associated with this past court date.")
+      expect(rendered).to include("There are no court orders associated with this past court date.")
     end
   end
 

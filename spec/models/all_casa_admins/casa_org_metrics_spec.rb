@@ -45,12 +45,12 @@ RSpec.describe AllCasaAdmins::CasaOrgMetrics, type: :model do
       it "shows stats" do
         expect(subject).to eq(
           {
-            "Number of active case assignments" => 2,
+            "Number of active case assignments" => 1,
             "Number of active cases" => 3,
             "Number of active supervisor to volunteer assignments" => 6,
             "Number of active volunteers" => 5,
             "Number of admins" => 2,
-            "Number of all case contacts including inactives" => 2,
+            "Number of all case contacts including inactives" => 1,
             "Number of inactive cases" => 1,
             "Number of inactive volunteers" => 1,
             "Number of supervisors" => 4

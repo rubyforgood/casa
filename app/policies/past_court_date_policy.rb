@@ -1,7 +1,13 @@
 class PastCourtDatePolicy < ApplicationPolicy
-  def show?
+  def allowed_to_edit_casa_case?
     casa_case_policy.edit?
   end
+
+  alias_method :show?, :allowed_to_edit_casa_case?
+  alias_method :edit?, :allowed_to_edit_casa_case?
+  alias_method :update?, :allowed_to_edit_casa_case?
+  alias_method :new?, :allowed_to_edit_casa_case?
+  alias_method :create?, :allowed_to_edit_casa_case?
 
   private
 

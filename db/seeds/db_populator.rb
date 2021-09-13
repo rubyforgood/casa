@@ -14,10 +14,11 @@ class DbPopulator
   # Public Methods
 
   # Pass an instance of Random for Faker and Ruby `rand` and sample` calls.
-  def initialize(random_instance)
+  def initialize(random_instance, case_fourteen_years_old: false)
     @rng = random_instance
     @casa_org_counter = 0
     @case_number_sequence = 1000
+    @case_fourteen_years_old = case_fourteen_years_old
   end
 
   def create_all_casa_admin(email)
@@ -158,13 +159,30 @@ class DbPopulator
     ContactTypePopulator.populate
     options.case_count.times do
       case_number = generate_case_number
-      unless (new_casa_case = CasaCase.find_by(case_number: case_number))
-        new_casa_case = CasaCase.find_or_create_by!(
-          casa_org_id: casa_org.id,
-          case_number: case_number
+      new_casa_case = CasaCase.find_by(case_number: case_number)
+      new_casa_case ||=
+        if @case_fourteen_years_old
+          CasaCase.find_or_create_by!(
+            casa_org_id: casa_org.id,
+            case_number: case_number,
+            birth_month_year_youth: ((Date.today - 18.years)..(Date.today - 14.years)).to_a.sample
+          )
+        else
+          CasaCase.find_or_create_by!(
+            casa_org_id: casa_org.id,
+            case_number: case_number,
+            birth_month_year_youth: ((Date.today - 18.year)..(Date.today - 4.year)).to_a.sample
+          )
+        end
+
+      volunteer = new_casa_case.casa_org.volunteers.active.sample(random: rng) ||
+        new_casa_case.casa_org.volunteers.active.first ||
+        Volunteer.create!(
+          casa_org: new_casa_case.casa_org,
+          email: "#{SecureRandom.hex(10)}@example.com",
+          password: SEED_PASSWORD,
+          display_name: "active volunteer"
         )
-      end
-      volunteer = casa_org.volunteers.active.sample(random: rng) || casa_org.volunteers.active.first
       CaseAssignment.find_or_create_by!(casa_case: new_casa_case, volunteer: volunteer)
 
       random_case_contact_count.times do

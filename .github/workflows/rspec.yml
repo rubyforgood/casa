@@ -5,16 +5,16 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'docs/**'
-      - '*.md'
-      - 'bin/*'
+      - 'doc/**'
+      - '**.md'
+      - 'bin/**'
   pull_request:
     branches:
       - main
     paths-ignore:
-      - 'docs/**'
-      - '*.md'
-      - 'bin/*'
+      - 'doc/**'
+      - '**.md'
+      - 'bin/**'
 
 jobs:
   rspec:
@@ -56,7 +56,6 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
           POSTGRES_PORT: 5432
         run: |
-          bundle exec skylight disable_dev_warning
           yarn
           bundle exec rake db:create
           bundle exec rake db:schema:load

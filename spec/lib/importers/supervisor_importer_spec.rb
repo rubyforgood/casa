@@ -48,6 +48,17 @@ RSpec.describe SupervisorImporter do
         expect(alert[:type]).to eq(:error)
         expect(alert[:message]).to include("Not all rows were imported.")
       end
+
+      context "because the volunteer has already been assigned to a supervisor" do
+        let!(:supervisor_volunteer) { create(:supervisor_volunteer, volunteer: existing_volunteer) }
+
+        it "returns an error message" do
+          alert = SupervisorImporter.new(supervisor_import_data_path, casa_org_id).import_supervisors
+
+          expect(alert[:type]).to eq(:error)
+          expect(alert[:exported_rows]).to include("Volunteer #{existing_volunteer.email} already has a supervisor")
+        end
+      end
     end
   end
 
@@ -84,6 +95,7 @@ RSpec.describe SupervisorImporter do
     SupervisorImporter.new(supervisor_import_data_path, casa_org_id).import_supervisors
     data_using_instance = Supervisor.pluck(:email).sort
 
+    SentEmail.delete_all
     Supervisor.delete_all
     SupervisorImporter.import_supervisors(supervisor_import_data_path, casa_org_id)
     data_using_static = Supervisor.pluck(:email).sort

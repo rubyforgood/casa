@@ -1,0 +1,15 @@
+name: 'Close issue when Done'
+
+on:
+  project_card:
+    types: [moved]
+
+jobs:
+  set-state:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: dessant/issue-states@v2
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          open-issue-columns: ''
+          closed-issue-columns: 'Done'

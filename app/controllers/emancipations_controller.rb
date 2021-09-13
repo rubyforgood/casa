@@ -26,6 +26,11 @@ class EmancipationsController < ApplicationController
       return
     end
 
+    unless current_case.in_transition_age?
+      render json: {error: "The current case is not marked as transitioning"}
+      return
+    end
+    
     check_item_action = params[:check_item_action]
     begin
       case check_item_action

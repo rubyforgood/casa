@@ -9,6 +9,11 @@
   </div>
 <% else %>
   <div class="col-sm-4">
-    <%= button_to t("button.follow_up"), case_contact_followups_path(contact), method: "post", class: "btn btn-danger" %>
+    <button type="button"
+            class="btn btn-danger followup-button"
+            id="followup-button-<%= contact.id %>">
+
+      <%= t("button.follow_up") %>
+    </button>
   </div>
 <% end %>

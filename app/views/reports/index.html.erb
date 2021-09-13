@@ -1,76 +1,89 @@
-<h1>Report Categories</h1>
+<h1><%= t(".export_page_title") %></h1>
+
+<div class="card card-container my-4">
+  <div class="card-body">
+    <%= form_with url: mileage_reports_path(format: :csv), method: :get, local: true do |f| %>
+      <%= f.submit t(".download_mileage_report_button"), class: "btn btn-primary",
+        data: {disable_with: "Downloading mileage report"} %>
+    <% end %>
+  </div>
+</div>
 
 <div class="card card-container">
   <div class="card-body">
-    <h5 class="card-title"><strong>Case Contacts Report</strong></h5>
+    <h5 class="card-title"><strong><%= t(".reports_subhead") %></strong></h5>
     <p class="card-text">
-      This CSV is a listing of all fields for the case contacts of all volunteers. Select the start
-      and end date.
+      <%= t(".reports_description") %>
     </p>
 
     <hr>
 
     <%= form_with url: case_contact_reports_path(format: :csv), scope: 'report', method: :get, local: true do |f| %>
       <div class="field form-group">
-        <label><strong>Starting From:</strong></label>
+        <label><strong><%= t(".start_date_label") %></strong></label>
         <%= f.date_field :start_date, class: "form-control", value: 6.months.ago.to_date %>
       </div>
 
       <div class="field form-group">
-        <label><strong>Ending At:</strong></label>
+        <label><strong><%= t(".end_date_label") %></strong></label>
         <%= f.date_field :end_date, class: "form-control", value: Date.today.to_date %>
       </div>
 
       <% if current_user&.casa_admin? || current_user&.supervisor? %>
         <div class="field form-group">
-          <label><strong>Assigned To:</strong></label>
+          <label><strong><%= t(".assigned_to_label") %></strong></label>
           <%= f.collection_select(
                   :supervisor_ids,
                   Supervisor.where(casa_org: current_user.casa_org),
                   :id, :display_name,
                   {include_hidden: false},
-                  {class: "form-control select2", data: {placeholder: "-Select Supervisors-"}, multiple: true}
+                  {class: "form-control select2",
+                   data: {placeholder: t(".select_supervisors_placeholder")},
+                   multiple: true}
               ) %>
         </div>
 
         <div class="field form-group">
-          <label><strong>Volunteers</strong></label>
+          <label><strong><%= t(".volunteers_label") %></strong></label>
           <%= f.collection_select(
                   :creator_ids,
                   Volunteer.where(casa_org: current_user.casa_org),
                   :id,
                   :display_name,
                   {include_hidden: false},
-                  {class: "form-control select2", data: {placeholder: "-Select Volunteers-"}, multiple: true}
+                  {class: "form-control select2", data: {placeholder: t(".select_volunteers_placeholder")},
+multiple: true}
               ) %>
         </div>
 
         <div class="field form-group">
-          <label><strong>Contact Type:</strong></label>
+          <label><strong><%= t(".contact_type_label") %></strong></label>
           <%= f.collection_select(
                   :contact_type_ids,
                   ContactType.for_organization(current_user.casa_org),
                   :id,
                   :name,
                   {include_hidden: false},
-                  {class: "form-control select2", data: {placeholder: "-Select Contact Types-"}, multiple: true}
+                  {class: "form-control select2", data: {placeholder: t(".select_contact_types_placeholder")},
+multiple: true}
               ) %>
         </div>
 
         <div class="field form-group">
-          <label><strong>Contact Type Group:</strong></label>
+          <label><strong><%= t(".contact_type_group_label") %></strong></label>
           <%= f.collection_select(
                   :contact_type_group_ids,
                   ContactTypeGroup.for_organization(current_user.casa_org),
                   :id,
                   :name,
                   {include_hidden: false},
-                  {class: "form-control select2", data: {placeholder: "-Select Contact Type Groups-"}, multiple: true}
+                  {class: "form-control select2", data: {placeholder: t(".select_contact_type_groups_placeholder")},
+multiple: true}
               ) %>
         </div>
 
         <div class="field form-group">
-          <label><strong>Want Driving Reimbursement:</strong></label>
+          <label><strong><%= t(".driving_reimbursement_label") %></strong></label>
           <%= f.collection_radio_buttons :want_driving_reimbursement, boolean_choices, :last, :first do |b| %>
             <div class="form-check">
               <%= b.radio_button(class: "form-check-input") %>
@@ -80,7 +93,7 @@
         </div>
 
         <div class="field form-group">
-          <label><strong>Contact Made:</strong></label>
+          <label><strong><%= t(".contact_made_label") %></strong></label>
           <%= f.collection_radio_buttons :contact_made, boolean_choices, :last, :first do |b| %>
             <div class="form-check">
               <%= b.radio_button(class: "form-check-input") %>
@@ -90,7 +103,12 @@
         </div>
       <% end %>
 
-      <%= f.submit "Download Report", class: "btn btn-primary", data: {disable_with: false} %>
+      <%= render 'filter', form: f %>
+      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#filterColumns">
+        <%= t(".filter_cols") %>
+      </button>
+
+      <%= f.submit t(".download_report_button"), class: "btn btn-primary", data: {disable_with: false} %>
     <% end %>
 
   </div>

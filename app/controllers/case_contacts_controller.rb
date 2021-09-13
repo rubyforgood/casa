@@ -6,7 +6,20 @@ class CaseContactsController < ApplicationController
 
   def index
     authorize CaseContact
-    @presenter = CaseContactPresenter.new
+
+    @current_organization_groups = current_organization_groups
+
+    @filterrific = initialize_filterrific(
+      all_case_contacts,
+      params[:filterrific],
+      select_options: {
+        sorted_by: CaseContact.options_for_sorted_by
+      }
+    ) || return
+
+    case_contacts = @filterrific.find.group_by(&:casa_case_id)
+
+    @presenter = CaseContactPresenter.new(case_contacts)
   end
 
   def new
@@ -34,6 +47,7 @@ class CaseContactsController < ApplicationController
           .contact_type_groups
           .joins(:contact_types)
           .where(contact_types: {active: true})
+          .alphabetically
           .uniq
       end
   end
@@ -49,7 +63,7 @@ class CaseContactsController < ApplicationController
 
     @selected_cases = @casa_cases.where(id: params.dig(:case_contact, :casa_case_id))
     if @selected_cases.empty?
-      flash[:alert] = "At least one case must be selected"
+      flash[:alert] = t("case_min_validation", scope: "case_contact")
       render :new
       return
     end
@@ -60,7 +74,7 @@ class CaseContactsController < ApplicationController
     }
 
     if case_contacts.all?(&:persisted?)
-      redirect_to casa_case_path(CaseContact.last.casa_case), notice: "Case contact was successfully created."
+      redirect_to casa_case_path(CaseContact.last.casa_case), notice: create_notice
     else
       @case_contact = case_contacts.first
       @casa_cases = [@case_contact.casa_case]
@@ -82,14 +96,10 @@ class CaseContactsController < ApplicationController
     @selected_cases = @casa_cases
     @current_organization_groups = current_organization.contact_type_groups
 
-    respond_to do |format|
-      if @case_contact.update_cleaning_contact_types(update_case_contact_params)
-        format.html { redirect_to casa_case_path(@case_contact.casa_case), notice: "Case contact was successfully updated." }
-        format.json { render :show, status: :ok, location: @case_contact }
-      else
-        format.html { render :edit }
-        format.json { render json: @case_contact.errors, status: :unprocessable_entity }
-      end
+    if @case_contact.update_cleaning_contact_types(update_case_contact_params)
+      redirect_to casa_case_path(@case_contact.casa_case), notice: t("update", scope: "case_contact")
+    else
+      render :edit
     end
   end
 
@@ -97,7 +107,7 @@ class CaseContactsController < ApplicationController
     authorize CasaAdmin
 
     @case_contact.destroy
-    flash[:notice] = "Contact is successfully deleted."
+    flash[:notice] = t("destroy", scope: "case_contact")
     redirect_to request.referer
   end
 
@@ -106,7 +116,7 @@ class CaseContactsController < ApplicationController
 
     case_contact = authorize(current_organization.case_contacts.with_deleted.find(params[:id]))
     case_contact.restore(recrusive: true)
-    flash[:notice] = "Contact is successfully restored."
+    flash[:notice] = t("restore", scope: "case_contact")
     redirect_to request.referer
   end
 
@@ -136,5 +146,23 @@ class CaseContactsController < ApplicationController
     CaseContactParameters
       .new(params)
       .with_converted_duration_minutes(params[:case_contact][:duration_hours].to_i)
+  end
+
+  def current_organization_groups
+    current_organization.contact_type_groups
+      .joins(:contact_types)
+      .where(contact_types: {active: true})
+      .uniq
+  end
+
+  def all_case_contacts
+    policy_scope(
+      current_organization.case_contacts.grab_all(current_user)
+                                        .includes(:creator, contact_types: :contact_type_group)
+    )
+  end
+
+  def create_notice
+    "#{t("create", scope: "case_contact")} #{t("thank_you_#{rand(1..8)}", scope: "case_contact")}"
   end
 end

@@ -1,6 +1,7 @@
 class CreateAllCasaAdminService
-  def initialize(params)
+  def initialize(params, current_user)
     @params = params
+    @current_user = current_user
   end
 
   def build
@@ -11,6 +12,6 @@ class CreateAllCasaAdminService
 
   def create!
     @all_casa_admin.save!
-    @all_casa_admin.invite!
+    @all_casa_admin.invite!(@current_user)
   end
 end

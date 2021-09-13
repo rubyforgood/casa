@@ -1,12 +1,12 @@
 require "rails_helper"
 
-RSpec.describe "emancipation/show", :disable_bullet, type: :view do
+RSpec.describe "emancipation/show", type: :view do
   subject { render template: "emancipation/show" }
 
-  let(:organization) { create(:casa_org) }
-  let(:admin) { create(:casa_admin, casa_org: organization) }
-  let(:casa_case) { create(:casa_case) }
-  let(:emancipation_form_data) { [create(:emancipation_category)] }
+  let(:organization) { build_stubbed(:casa_org) }
+  let(:admin) { build_stubbed(:casa_admin, casa_org: organization) }
+  let(:casa_case) { build_stubbed(:casa_case) }
+  let(:emancipation_form_data) { [build_stubbed(:emancipation_category)] }
 
   before do
     assign :current_case, casa_case

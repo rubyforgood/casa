@@ -1,31 +1,8 @@
 require "rails_helper"
 require "stringio"
 
-RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
-  shared_examples_for "shows past court dates links" do
-    let(:past_court_date_with_details) do
-      create(:past_court_date, :with_court_details, casa_case: casa_case, date: Time.zone.yesterday)
-    end
-
-    let(:past_court_date_without_details) do
-      create(:past_court_date, casa_case: casa_case, date: Time.zone.today)
-    end
-
-    let!(:formatted_date_with_details) { I18n.l(past_court_date_with_details.date, format: :full, default: nil) }
-    let!(:formatted_date_without_details) { I18n.l(past_court_date_without_details.date, format: :full, default: nil) }
-
-    it "shows court mandates" do
-      visit edit_casa_case_path(casa_case)
-
-      expect(page).to have_text(formatted_date_with_details)
-      expect(page).to have_link(formatted_date_with_details)
-
-      expect(page).to have_text(formatted_date_without_details)
-      expect(page).not_to have_link(formatted_date_without_details)
-    end
-  end
-
-  context "when admin" do
+RSpec.describe "Edit CASA Case", type: :system do
+  context "logged in as admin" do
     let(:organization) { create(:casa_org) }
     let(:admin) { create(:casa_admin, casa_org: organization) }
     let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: organization) }
@@ -47,14 +24,6 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
       expect(page).to have_text(court_mandate.implementation_status.humanize)
     end
 
-    it "clicks back button after editing case" do
-      visit edit_casa_case_path(casa_case)
-      select "Submitted", from: "casa_case_court_report_status"
-      click_on "Back"
-      visit edit_casa_case_path(casa_case)
-      expect(casa_case).not_to be_court_report_submitted
-    end
-
     it "edits case", js: true do
       visit casa_case_path(casa_case.id)
       click_on "Edit Case Details"
@@ -65,7 +34,9 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
       page.find("#add-mandate-button").click
       find("#mandates-list-container").first("textarea").send_keys("Court Mandate Text One")
 
-      click_on "Update CASA Case"
+      within ".top-page-actions" do
+        click_on "Update CASA Case"
+      end
       expect(page).to have_text("Submitted")
       expect(page).to have_text("Court Date")
       expect(page).to have_text("Court Report Due Date")
@@ -107,7 +78,7 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
     end
   end
 
-  context "supervisor user" do
+  context "logged in as supervisor" do
     let(:casa_org) { create(:casa_org) }
     let(:supervisor) { create(:supervisor, casa_org: casa_org) }
     let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: casa_org) }
@@ -141,7 +112,9 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
 
       expect(page).to have_text("Set Implementation Status")
 
-      click_on "Update CASA Case"
+      within ".actions" do
+        click_on "Update CASA Case"
+      end
       has_checked_field? "Youth"
       has_no_checked_field? "Supervisor"
 
@@ -162,6 +135,54 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
       expect(page).to have_text("8-SEP-#{next_year}")
     end
 
+    context "with an available judge" do
+      let!(:judge) { create(:judge, casa_org: casa_org) }
+
+      it "is able to assign a judge to the case when there is no assigned judge", js: true do
+        casa_case.update(judge: nil)
+
+        visit edit_casa_case_path(casa_case)
+
+        expect(page).to have_select("Judge", selected: "-Select Judge-")
+        select judge.name, from: "casa_case_judge_id"
+
+        within ".actions" do
+          click_on "Update CASA Case"
+        end
+
+        expect(page).to have_select("Judge", selected: judge.name)
+        expect(casa_case.reload.judge).to eq judge
+      end
+
+      it "is able to assign another judge to the case", js: true do
+        visit edit_casa_case_path(casa_case)
+
+        expect(page).to have_select("Judge", selected: casa_case.judge.name)
+        select judge.name, from: "casa_case_judge_id"
+
+        within ".actions" do
+          click_on "Update CASA Case"
+        end
+
+        expect(page).to have_select("Judge", selected: judge.name)
+        expect(casa_case.reload.judge).to eq judge
+      end
+
+      it "is able to unassign a judge from the case", js: true do
+        visit edit_casa_case_path(casa_case)
+
+        expect(page).to have_select("Judge", selected: casa_case.judge.name)
+        select "-Select Judge-", from: "casa_case_judge_id"
+
+        within ".actions" do
+          click_on "Update CASA Case"
+        end
+
+        expect(page).to have_select("Judge", selected: "-Select Judge-")
+        expect(casa_case.reload.judge).to be_nil
+      end
+    end
+
     it "will return error message if date fields are not fully selected" do
       visit casa_case_path(casa_case)
       expect(page).to have_text("Court Report Status: Not submitted")
@@ -170,7 +191,9 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
       select "November", from: "casa_case_court_date_2i"
       select "April", from: "casa_case_court_report_due_date_2i"
 
-      click_on "Update CASA Case"
+      within ".actions" do
+        click_on "Update CASA Case"
+      end
 
       expect(page).to have_text("Court date was not a valid date.")
       expect(page).to have_text("Court report due date was not a valid date.")
@@ -189,7 +212,9 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
       select "April", from: "casa_case_court_report_due_date_2i"
       select next_year, from: "casa_case_court_report_due_date_1i"
 
-      click_on "Update CASA Case"
+      within ".actions" do
+        click_on "Update CASA Case"
+      end
 
       expect(page).to have_text("Court date was not a valid date.")
       expect(page).to have_text("Court report due date was not a valid date.")
@@ -361,22 +386,79 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :system do
 
         expect(page).to have_text(mandate_text)
 
-        find("i.fa-minus").click
-        expect(page).to have_text("Are you sure you want to remove this court mandate? Doing so will delete all records \
+        find("button.remove-mandate-button").click
+        expect(page).to have_text("Are you sure you want to remove this court order? Doing so will delete all records \
 of it unless it was included in a previous court report.")
 
-        click_on "Delete"
-        expect(page).to have_text("Court mandate has been removed.")
+        find("button.swal2-confirm").click
+        expect(page).to have_text("Court order has been removed.")
         click_on "OK"
         expect(page).to_not have_text(mandate_text)
 
-        click_on "Update CASA Case"
+        within ".actions" do
+          click_on "Update CASA Case"
+        end
         expect(page).to_not have_text(mandate_text)
+      end
+    end
+
+    context "with an available hearing type", js: true do
+      let!(:hearing_type) { create(:hearing_type, casa_org: casa_org) }
+
+      it "is able to assign a hearing type when there is none assigned" do
+        casa_case.update(hearing_type: nil)
+
+        visit edit_casa_case_path(casa_case.id)
+
+        expect(page).to have_select("Hearing type",
+          selected: I18n.t("casa_cases.form.prompt.select_hearing_type"))
+        select hearing_type.name, from: "casa_case_hearing_type_id"
+
+        within ".actions" do
+          click_on "Update CASA Case"
+        end
+
+        expect(page).to have_select("Hearing type", selected: hearing_type.name)
+        expect(casa_case.reload.hearing_type).to eq hearing_type
+      end
+
+      it "is able to assign another hearing type to the case" do
+        visit edit_casa_case_path(casa_case.id)
+
+        case_hearing = casa_case.hearing_type
+        expect(page).to have_select("Hearing type", selected: case_hearing.name)
+        select hearing_type.name, from: "casa_case_hearing_type_id"
+
+        within ".actions" do
+          click_on "Update CASA Case"
+        end
+
+        expect(page).to have_select("Hearing type", selected: hearing_type.name)
+        expect(casa_case.reload.hearing_type).to eq hearing_type
+      end
+
+      it "is able to unassign a hearing type from the case" do
+        expect(casa_case.hearing_type).not_to be_nil
+
+        visit edit_casa_case_path(casa_case.id)
+
+        expect(page).to have_select("Hearing type",
+          selected: casa_case.hearing_type.name)
+        select(I18n.t("casa_cases.form.prompt.select_hearing_type"),
+          from: "casa_case_hearing_type_id")
+
+        within ".actions" do
+          click_on "Update CASA Case"
+        end
+
+        expect(page).to have_select("Hearing type",
+          selected: I18n.t("casa_cases.form.prompt.select_hearing_type"))
+        expect(casa_case.reload.hearing_type).to be_nil
       end
     end
   end
 
-  context "volunteer user" do
+  context "logged in as volunteer" do
     let(:volunteer) { create(:volunteer) }
     let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: volunteer.casa_org) }
     let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
@@ -410,11 +492,11 @@ of it unless it was included in a previous court report.")
       # test court dates with reports get the correct ones
       [[0, 1], [2, 3], [3, 4]].each do |di, ri|
         expect(page).to have_link("(Attached Report)", href: rails_blob_path(reports[ri], disposition: "attachment"))
-        expect(page).not_to have_link(I18n.l(court_dates[di].date, format: :full, default: nil))
+        expect(page).to have_link(I18n.l(court_dates[di].date, format: :full, default: nil))
       end
 
-      # and that the one with no report doesn't get one
-      expect(page).not_to have_link(I18n.l(court_dates[1].date, format: :full, default: nil))
+      # and that the one with no report still gets one
+      expect(page).to have_link(I18n.l(court_dates[1].date, format: :full, default: nil))
       expect(page).to have_text(I18n.l(court_dates[1].date, format: :full, default: nil))
     end
 
@@ -427,26 +509,14 @@ of it unless it was included in a previous court report.")
       expect(page).to have_text(court_mandate.implementation_status.humanize)
     end
 
-    it "clicks back button after editing case" do
-      visit edit_casa_case_path(casa_case)
-
-      expect(page).to_not have_select("Hearing type")
-      expect(page).to_not have_select("Judge")
-
-      select "Submitted", from: "casa_case_court_report_status"
-      click_on "Update CASA Case"
-
-      click_on "Back"
-
-      expect(page).to have_text("My Case")
-    end
-
     it "edits case" do
       visit casa_case_path(casa_case)
       expect(page).to have_text("Court Report Status: Not submitted")
       visit edit_casa_case_path(casa_case)
       select "Submitted", from: "casa_case_court_report_status"
-      click_on "Update CASA Case"
+      within ".actions" do
+        click_on "Update CASA Case"
+      end
 
       expect(page).not_to have_text("Day")
       expect(page).not_to have_text("Month")

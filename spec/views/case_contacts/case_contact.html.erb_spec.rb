@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "case_contacts/case_contact", :disable_bullet, type: :view do
+RSpec.describe "case_contacts/case_contact", type: :view do
   let(:admin) { build_stubbed(:casa_admin) }
   let(:volunteer) { build_stubbed(:volunteer) }
   let(:supervisor) { build_stubbed(:supervisor) }
@@ -12,8 +12,8 @@ RSpec.describe "case_contacts/case_contact", :disable_bullet, type: :view do
     end
 
     context "occurred_at is before the last day of the month in the quarter that the case contact was created" do
-      let(:case_contact) { create(:case_contact) }
-      let(:case_contact2) { create(:case_contact, deleted_at: Time.current) }
+      let(:case_contact) { build_stubbed(:case_contact) }
+      let(:case_contact2) { build_stubbed(:case_contact, deleted_at: Time.current) }
 
       it "shows edit button" do
         assign :case_contact, case_contact
@@ -33,7 +33,7 @@ RSpec.describe "case_contacts/case_contact", :disable_bullet, type: :view do
     end
 
     context "occured_at is after the last day of the month in the quarter that the case contact was created" do
-      let(:case_contact) { create(:case_contact, occurred_at: Time.zone.now - 1.year) }
+      let(:case_contact) { build_stubbed(:case_contact, occurred_at: Time.zone.now - 1.year) }
 
       it "does not show edit button" do
         assign :case_contact, case_contact
@@ -54,8 +54,8 @@ RSpec.describe "case_contacts/case_contact", :disable_bullet, type: :view do
   end
 
   describe "delete and undelete buttons" do
-    let(:case_contact) { create(:case_contact) }
-    let(:case_contact2) { create(:case_contact, deleted_at: Time.current) }
+    let(:case_contact) { build_stubbed(:case_contact) }
+    let(:case_contact2) { build_stubbed(:case_contact, deleted_at: Time.current) }
 
     context "when logged in as admin" do
       before do

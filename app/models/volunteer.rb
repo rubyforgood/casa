@@ -1,6 +1,8 @@
 # not a database model -- used for display in tables
 # volunteer is a user role and is controlled by User model
 class Volunteer < User
+  devise :invitable, invite_for: 1.year
+
   NAME_COLUMN = "name"
   EMAIL_COLUMN = "email"
   SUPERVISOR_COLUMN = "supervisor"
@@ -30,7 +32,24 @@ class Volunteer < User
       .active
       .in_organization(org)
       .where(supervisor_volunteers: {id: nil})
+      .active
   }
+
+  scope :with_assigned_cases, -> {
+    joins(:case_assignments)
+      .where("case_assignments.active is true")
+      .distinct
+      .order(:display_name)
+  }
+
+  scope :with_no_assigned_cases, -> {
+                                   joins("left join case_assignments "\
+                                         "on case_assignments.volunteer_id = users.id "\
+                                         "and case_assignments.active")
+                                     .where("case_assignments.volunteer_id is NULL")
+                                     .distinct
+                                     .order(:display_name)
+                                 }
 
   def self.email_court_report_reminder
     active.includes(:case_assignments).where.not(case_assignments: nil).find_each do |volunteer|

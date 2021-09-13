@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/followups", :disable_bullet, type: :request do
+RSpec.describe "/followups", type: :request do
   let(:admin) { create(:casa_admin) }
   let(:volunteer) { create(:volunteer) }
   let(:contact) { create(:case_contact) }
@@ -55,25 +55,62 @@ RSpec.describe "/followups", :disable_bullet, type: :request do
 
   describe "POST /create" do
     context "with valid parameters" do
-      context "no followup exists yet" do
-        it "creates a followup" do
-          sign_in admin
+      subject(:create_request) do
+        post case_contact_followups_path(contact), params: params
+      end
 
-          expect {
-            post case_contact_followups_path(contact)
-          }.to change(Followup, :count).by(1)
+      before { sign_in admin }
+
+      context "no followup exists yet" do
+        context "when a note is provided" do
+          let(:params) { {note: "Hello, world!"} }
+
+          it "creates a followup" do
+            expect { create_request }.to change(Followup, :count).by(1)
+          end
+
+          it "contains a note" do
+            create_request
+
+            expect(Followup.last.note).to eq "Hello, world!"
+          end
+        end
+
+        context "when a note is not provided" do
+          let(:params) { {note: nil} }
+
+          it "creates a followup" do
+            expect { create_request }.to change(Followup, :count).by(1)
+          end
+
+          it "does not contain a note" do
+            create_request
+
+            expect(Followup.last.note).to be_nil
+          end
+        end
+
+        context "when no params are provided" do
+          let(:params) { {} }
+
+          it "creates a followup" do
+            expect { create_request }.to change(Followup, :count).by(1)
+          end
+
+          it "does not contain a note" do
+            create_request
+
+            expect(Followup.last.note).to be_nil
+          end
         end
       end
 
       context "followup exists and is in :requested status" do
         let!(:followup) { create(:followup, case_contact: contact) }
+        let(:params) { {} }
 
         it "should not create another followup" do
-          sign_in admin
-
-          expect {
-            post case_contact_followups_path(contact)
-          }.not_to change(Followup, :count)
+          expect { create_request }.not_to change(Followup, :count)
         end
       end
     end

@@ -3,6 +3,7 @@ class CasaOrgsController < ApplicationController
   before_action :set_contact_type_data, only: %i[edit update]
   before_action :set_hearing_types, only: %i[edit update]
   before_action :set_judges, only: %i[edit update]
+  before_action :set_sent_emails, only: %i[edit update]
   before_action :require_organization!
   after_action :verify_authorized
 
@@ -12,14 +13,10 @@ class CasaOrgsController < ApplicationController
 
   def update
     authorize @casa_org
-    respond_to do |format|
-      if @casa_org.update(casa_org_update_params)
-        format.html { redirect_to edit_casa_org_path, notice: "CASA organization was successfully updated." }
-        format.json { render :show, status: :ok, location: @casa_org }
-      else
-        format.html { render :edit }
-        format.json { render json: @casa_org.errors, status: :unprocessable_entity }
-      end
+    if @casa_org.update(casa_org_update_params)
+      redirect_to edit_casa_org_path, notice: "CASA organization was successfully updated."
+    else
+      render :edit
     end
   end
 
@@ -46,5 +43,9 @@ class CasaOrgsController < ApplicationController
 
   def set_judges
     @judges = Judge.for_organization(@casa_org)
+  end
+
+  def set_sent_emails
+    @sent_emails = SentEmail.for_organization(@casa_org).order("created_at DESC").limit(10)
   end
 end

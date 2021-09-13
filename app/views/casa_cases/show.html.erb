@@ -1,24 +1,22 @@
-<%= link_to(t("button.back"), casa_cases_path) %>
-
 <div class="row">
   <div class="col-sm-12 form-header">
     <%- if policy(:case_contact).new? & @casa_case.active? %>
       <%= link_to(t(".button.new_contact"),
                   new_case_contact_path(case_contact: {casa_case_id: @casa_case.id}),
-                  class: "btn btn-primary casa-case-button") %>
+                  class: "btn btn-primary pull-left casa-case-button") %>
     <%- end %>
     <% if @casa_case.active? %>
-      <%= link_to t(".button.edit_case"), edit_casa_case_path(@casa_case), class: "btn btn-primary casa-case-button" %>
+      <%= link_to t(".button.edit_case"), edit_casa_case_path(@casa_case),
+              class: "btn btn-primary pull-left casa-case-button" %>
     <% end %>
     <% if current_user.supervisor? || current_user.casa_admin? %>
       <%= form_with url: generate_case_court_reports_path, local: false, class: "d-inline" do |form| %>
         <%= form.hidden_field :case_number, value: @casa_case.case_number %>
         <%= button_tag t(".button.generate_report"), type: :submit,
-            data: { button_name: t(".button.generate_report") },
-            id: "btnGenerateReport",
-            class: "btn btn-success pull-right" %>
+                       data: {button_name: t(".button.generate_report")},
+                       id: "btnGenerateReport",
+                       class: "btn btn-success pull-right mb-2" %>
         <i id="spinner" class='fas fa-spin d-none pull-right'>⏳</i>
-      <% end %>
     <% end %>
   </div>
 </div>
@@ -33,13 +31,13 @@
     </p>
     <% if @casa_case.has_hearing_type? %>
       <p>
-        <h6><strong><%= t(".label.hearing_type") %>:</strong> <%= @casa_case.hearing_type_name %></h6>
+      <h6><strong><%= t(".label.hearing_type") %>:</strong> <%= @casa_case.hearing_type_name %></h6>
       </p>
     <% end %>
 
     <% if @casa_case.has_judge_name? %>
       <p>
-        <h6><strong><%= t(".label.judge") %>:</strong> <%= @casa_case.judge_name %></h6>
+      <h6><strong><%= t(".label.judge") %>:</strong> <%= @casa_case.judge_name %></h6>
       </p>
     <% end %>
 
@@ -66,57 +64,52 @@
     <% unless @casa_case.court_report_not_submitted? %>
       <% if @casa_case.court_report_submitted? && @casa_case.court_reports.attached? %>
         <%= link_to(t(".button.click_to_download"),
-          rails_blob_path(@casa_case.latest_court_report, disposition: 'attachment')) %>
+                    rails_blob_path(@casa_case.latest_court_report, disposition: 'attachment')) %>
       <% end %>
       <p>
-        <h6>
-          <strong><%= t(".label.court_report_submitted_date") %>:</strong>
-          <%= @casa_case.decorate.court_report_submitted_date %></h6>
+      <h6>
+        <strong><%= t(".label.court_report_submitted_date") %>:</strong>
+        <%= @casa_case.decorate.court_report_submitted_date %></h6>
       </p>
     <% end %>
 
     <% if @casa_case.case_court_mandates.exists? %>
-      <h6><strong><%= t(".court_mandates") %>:</strong></h6>
+      <h6><strong><%= t(".label.court_mandates") %>:</strong></h6>
       <% @casa_case.case_court_mandates.each do |court_mandate| %>
-          <p><%= court_mandate.mandate_text %>, <%= court_mandate.implementation_status&.humanize %></p>
+        <p><%= court_mandate.mandate_text %>, <%= court_mandate.implementation_status&.humanize %></p>
       <% end %>
     <% end %>
 
+    <%= render "past_court_dates", casa_case: @casa_case %>
+
     <div>
       <h6><strong><%= t(".assigned_volunteers") %>:</strong></h6>
-      <% policy_scope(@casa_case.assigned_volunteers).each_with_index do |volunteer, index| %>
+      <% policy_scope(@casa_case.assigned_volunteers).each do |volunteer| %>
         <% if current_user.volunteer? %>
           <p><%= volunteer.display_name %></p>
         <% else %>
-          <p><%= link_to "#{volunteer.display_name} ", edit_volunteer_path(volunteer) %>
-                <%= link_to t(".send_reminder"),
-                            reminder_volunteer_path(volunteer),
-                            method: :patch,
-                            id: "reminder_button",
-                            class: "btn btn-primary casa-case-button",
-                            data_toggle: "tooltip",
-                            title: "#{t(".tooltip")}" %></p>
+          <%= form_tag reminder_volunteer_path(volunteer),
+                  method: :patch, id: "cc-check" do %>
+            <p>
+              <%= link_to "#{volunteer.display_name} ", edit_volunteer_path(volunteer) %>
+              <%= render "volunteers/send_reminder_button", volunteer: volunteer %>
+            </p>
+          <% end %>
         <% end %>
       <% end %>
       <br>
 
       <% if @casa_case.case_contacts.present? %>
         <div class="text-right mb-2">
-          <%= link_to t(".button.download_all"), casa_case_path(params[:id], format: :csv) , class: "btn btn-success" %>
+          <%= link_to t(".button.download_all"), casa_case_path(params[:id], format: :csv), class: "btn btn-success" %>
         </div>
       <% end %>
 
       <div>
-          <%= render(partial: "case_contacts/case_contact",
-            collection: @casa_case.decorate.case_contacts_ordered_by_occurred_at.grab_all(current_user),
-            as: :contact) %>
+        <%= render(partial: "case_contacts/case_contact",
+                   collection: @casa_case.decorate.case_contacts_ordered_by_occurred_at.grab_all(current_user),
+                   as: :contact) %>
       </div>
     </div>
   </div>
 </div>
-
-<script>
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
-</script>

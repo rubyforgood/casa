@@ -1,5 +1,8 @@
 ### Impacted User Types
-ex: admins and supervisors
+ - volunteers?
+ - supervisors?
+ - admins?
+ - all casa admins?
 
 ### Environment
 ex: staging, desktop web, Safari
@@ -17,4 +20,3 @@ ex:
 2. - Click on "Generate Reports" in the left sidebar menu.
 3. - Filter by a volunteer who has logged at least one case contact.
 4. - Click "Generate report" at the bottom of the page.
-

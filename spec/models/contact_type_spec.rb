@@ -36,4 +36,30 @@ RSpec.describe ContactType, type: :model do
       expect(contact_type.active?).to be_falsey
     end
   end
+
+  describe "for_organization" do
+    let!(:casa_org_1) { create(:casa_org) }
+    let!(:casa_org_2) { create(:casa_org) }
+    let!(:contact_type_group_record_1) { create(:contact_type_group, casa_org: casa_org_1) }
+    let!(:contact_type_group_record_2) { create(:contact_type_group, casa_org: casa_org_2) }
+    let!(:record_1) { create(:contact_type, contact_type_group: contact_type_group_record_1) }
+    let!(:record_2) { create(:contact_type, contact_type_group: contact_type_group_record_2) }
+
+    it "returns only reords matching the specified organization" do
+      expect(described_class.for_organization(casa_org_1)).to eq([record_1])
+      expect(described_class.for_organization(casa_org_2)).to eq([record_2])
+    end
+  end
+
+  describe ".alphabetically scope" do
+    subject { described_class.alphabetically }
+
+    let!(:contact_type1) { create(:contact_type, name: "Aunt Uncle or Cousin") }
+    let!(:contact_type2) { create(:contact_type, name: "Parent") }
+
+    it "orders alphabetically", :aggregate_failures do
+      expect(subject.first).to eq(contact_type1)
+      expect(subject.last).to eq(contact_type2)
+    end
+  end
 end

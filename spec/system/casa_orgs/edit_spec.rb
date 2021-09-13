@@ -1,12 +1,13 @@
 require "rails_helper"
 
-RSpec.describe "casa_orgs/edit", :disable_bullet, type: :system do
+RSpec.describe "casa_orgs/edit", type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
   let!(:contact_type_group) { create(:contact_type_group, casa_org: organization, name: "Contact type group 1") }
   let!(:contact_type) { create(:contact_type, name: "Contact type 1") }
   let!(:hearing_type) { create(:hearing_type, casa_org: organization, name: "Spec Test Hearing Type") }
   let!(:judge) { create(:judge, casa_org: organization, name: "Joey Tom") }
+  let!(:sent_email) { create(:sent_email, casa_org: organization, user: admin) }
 
   before do
     sign_in admin
@@ -69,5 +70,26 @@ RSpec.describe "casa_orgs/edit", :disable_bullet, type: :system do
 
   it "has judge content" do
     expect(page).to have_text(judge.name)
+  end
+
+  it "has sent email content" do
+    expect(page).to have_text(sent_email.sent_address)
+  end
+
+  it "has sent emails table", js: true do
+    travel_to DateTime.new(2021, 1, 2, 12, 30, 0) do
+      create(:sent_email, casa_org: organization, user: admin)
+    end
+
+    visit edit_casa_org_path(organization)
+
+    scroll_to(page.find("table#sent-emails", visible: false))
+    expect(page).to have_table(
+      id: "sent-emails",
+      with_rows:
+      [
+        ["Spec Test Mailer Type", "Spec Test Mail Action Category", admin.email, "12:30pm 02 Jan 2021"]
+      ]
+    )
   end
 end

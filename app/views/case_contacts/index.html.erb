@@ -5,6 +5,113 @@
   </div>
 </div>
 
+<%= form_for_filterrific @filterrific do |f| %>
+  <div class="card my-4">
+    <div class="card-header d-flex justify-content-between align-items-end">
+      <h3 class="d-inline"><%= t(".filter.title") %></h3>
+      <button href="#"
+              class="btn btn-lg btn-link"
+              type="button"
+              data-toggle="collapse"
+              data-target="#filter-card-body"
+              aria-expanded="<%= params[:filterrific].present? %>>"
+              aria-controls="filter-card-body">
+        <%= t(".filter.show_hide") %>
+      </button>
+    </div>
+
+    <% collapse_class = params[:filterrific] ? "" : "collapse" %>
+    <div class="card-body <%= collapse_class %>" id="filter-card-body">
+      <div class="row mb-4">
+        <div class="col-12">
+          <h3><label><%= t(".filter.contact_date") %></label></h3>
+        </div>
+        <div class="col-sm-6">
+          <%= f.label t(".filter.start_date"), for: :occurred_starting_at %>
+          <%= f.text_field(:occurred_starting_at, data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
+                                                  class: "form-control") %>
+        </div>
+        <div class="col-sm-6">
+          <%= f.label t(".filter.end_date"), for: :occurred_until %>
+          <%= f.text_field(:occurred_ending_at, data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
+                                                  class: "form-control") %>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-12">
+          <h3><label><%= t(".filter.contact_types") %></label></h3>
+
+          <div id="contact-type-form" class="field contact-type form-group">
+            <div class="row">
+              <% @current_organization_groups.each do |group| %>
+                <div class="col-md-4 justify-content-start mb-4">
+                  <h5> <%= group.name %> </h5>
+                  <% group.contact_types.each do |contact_type| %>
+                    <div class="form-check">
+                      <%=
+                        f.check_box :contact_type,
+                          {multiple: true, class: "form-check-input case-contact-contact-type"},
+                          contact_type.id,
+                          nil
+                      %>
+                      <label class="form-check-label" for="filterrific_contact_type_<%= contact_type.id %>">
+                        <%= contact_type.name %>
+                      </label>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-4 align-items-end">
+        <div class="col-12">
+          <h3><label><%= t(".filter.other") %></label></h3>
+        </div>
+
+        <div class="col-md-6">
+          <%= f.label :contact_medium %>
+          <%= f.select(:contact_medium, options_from_collection_for_select(contact_mediums, "value", "label"),
+                                        {include_blank: t(".filter.display_all")},
+                                        {class: "form-control"}) %>
+        </div>
+        <div class="col-md-3">
+          <%= f.label :want_driving_reimbursement %>
+          <%= f.select(:want_driving_reimbursement, @presenter.boolean_select_options,
+                                                    {include_blank: t(".filter.display_all")},
+                                                    {class: "form-control"}) %>
+        </div>
+
+        <div class="col-md-3">
+          <%= f.label :contact_made %>
+          <%= f.select(:contact_made, @presenter.boolean_select_options,
+                                      {include_blank: t(".filter.display_all")},
+                                      {class: "form-control"}) %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.label :sorted_by %>
+          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: "form-control"}) %>
+        </div>
+      </div>
+
+      <div class="mt-4 btn-group">
+        <%= f.submit(t(".filter.submit"), class: "btn btn-primary") %>
+        <%= link_to(
+          t(".filter.reset"),
+          reset_filterrific_url,
+          class: "btn btn-outline-primary"
+        ) %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
 <% @presenter.case_contacts.each do |casa_case_id, data| %>
   <div class="card card-container">
     <div class="card-body">
@@ -13,11 +120,11 @@
     </div>
   </div>
 <% end %>
+
 <% unless @presenter.case_contacts.any? %>
   <div class="card card-container">
     <div class="card-body">
-      You have no case contacts for this case. Please click New Case Contact button above to create a case contact for
-      your youth!
+      <%= params[:filterrific] ? t('.no_contacts_found') : t('.no_contacts_present') %>
     </div>
   </div>
 <% end %>

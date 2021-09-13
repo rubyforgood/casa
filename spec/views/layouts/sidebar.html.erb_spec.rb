@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "layout/sidebar", :disable_bullet, type: :view do
+RSpec.describe "layout/sidebar", type: :view do
   before do
     enable_pundit(view, user)
     allow(view).to receive(:current_user).and_return(user)
@@ -46,7 +46,17 @@ RSpec.describe "layout/sidebar", :disable_bullet, type: :view do
       expect(rendered).to have_link("Report a site issue", href: "https://rubyforgood.typeform.com/to/iXY4BubB")
       expect(rendered).to_not have_link("Admins", href: "/casa_admins")
       expect(rendered).to have_link("Generate Court Reports", href: "/case_court_reports")
+      expect(rendered).to have_link("Export Data", href: "/reports")
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists/0")
+    end
+
+    it "renders display name and email" do
+      sign_in user
+
+      render partial: "layouts/sidebar"
+
+      expect(rendered).to match user.display_name
+      expect(rendered).to match user.email
     end
   end
 
@@ -71,9 +81,19 @@ RSpec.describe "layout/sidebar", :disable_bullet, type: :view do
       expect(rendered).to have_link("Case Contacts", href: "/case_contacts")
       expect(rendered).to have_link("Generate Court Report", href: "/case_court_reports")
       expect(rendered).to have_link("Report a site issue", href: "https://rubyforgood.typeform.com/to/iXY4BubB")
+      expect(rendered).to_not have_link("Export Data", href: "/reports")
       expect(rendered).to_not have_link("Volunteers", href: "/volunteers")
       expect(rendered).to_not have_link("Supervisors", href: "/supervisors")
       expect(rendered).to_not have_link("Admins", href: "/casa_admins")
+    end
+
+    it "renders display name and email" do
+      sign_in user
+
+      render partial: "layouts/sidebar"
+
+      expect(rendered).to match user.display_name
+      expect(rendered).to match user.email
     end
 
     context "when the volunteer does not have a transitioning case" do
@@ -142,9 +162,21 @@ RSpec.describe "layout/sidebar", :disable_bullet, type: :view do
       expect(rendered).to_not have_link("Case Contacts", href: "/case_contacts")
       expect(rendered).to have_link("Supervisors", href: "/supervisors")
       expect(rendered).to have_link("Admins", href: "/casa_admins")
+      expect(rendered).to have_link("System Imports", href: "/imports")
+      expect(rendered).to have_link("Edit Organization", href: "/casa_orgs/#{user.casa_org.id}/edit")
       expect(rendered).to have_link("Report a site issue", href: "https://rubyforgood.typeform.com/to/iXY4BubB")
       expect(rendered).to have_link("Generate Court Reports", href: "/case_court_reports")
+      expect(rendered).to have_link("Export Data", href: "/reports")
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
+    end
+
+    it "renders display name and email" do
+      sign_in user
+
+      render partial: "layouts/sidebar"
+
+      expect(rendered).to match user.display_name
+      expect(rendered).to match user.email
     end
   end
 

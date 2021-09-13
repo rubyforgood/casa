@@ -5,16 +5,16 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'docs/**'
-      - '*.md'
-      - 'bin/*'
+      - 'doc/**'
+      - '**.md'
+      - 'bin/**'
   pull_request:
     branches:
       - main
     paths-ignore:
-      - 'docs/**'
-      - '*.md'
-      - 'bin/*'
+      - 'doc/**'
+      - '**.md'
+      - 'bin/**'
 
 jobs:
   yarn_lint:
@@ -24,9 +24,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2.3.4
 
-      - uses: actions/setup-node@v2.1.5
+      - uses: actions/setup-node@v2.4.0
         with:
-          node-version: 14.x
+          node-version: 12.x
 
       - run: yarn
       - run: yarn test

@@ -26,9 +26,13 @@ class UsersController < ApplicationController
 
     if @user.update(password_params)
       bypass_sign_in(@user)
+
+      UserMailer.password_changed_reminder(@user).deliver
       flash[:success] = "Password was successfully updated."
+
       redirect_to edit_users_path
     else
+      @active_casa_admins = CasaAdmin.in_organization(current_organization).active
       render "edit"
     end
   end

@@ -36,6 +36,7 @@ yarn-debug.log*
 
 .rails_routes*
 .vscode
+.rubocop.yml
 
 coverage/
 .idea/
@@ -54,3 +55,10 @@ cypress/videos/*
 *.csv
 
 .*.swp
+
+# Used for local developmen on Nix systems
+.direnv/
+.envrc
+default.nix
+
+npm-debug.log

@@ -3,6 +3,19 @@ en:
     index:
       title: Case Contacts
       new: New Case Contact
+      filter:
+        title: Filter by
+        show_hide: Show / Hide
+        submit: Filter
+        reset: Reset filters
+        display_all: Display all
+        contact_types: Contact types
+        other: Other filters
+        contact_date: Date of contact
+        start_date: Starting from
+        end_date: Ending at
+      no_contacts_found: No case contacts have been found.
+      no_contacts_present: You have no case contacts for this case. Please click New Case Contact button above to create a case contact for your youth!
     edit:
       title: Editing Case Contact
     new:
@@ -20,6 +33,8 @@ en:
       header: Confirm Note Content
       body: Please double check your notes to ensure they don't contain any identifying details about your youth or anyone else.
       note: Note
+    quarter_not_editable: Archived contacts can't be edited. Case contacts are archived after the end of each quarter.
+    archived: (Archived)
   casa_cases:
     show:
       title: CASA Case Details
@@ -31,7 +46,7 @@ en:
         court_report_due_date: Court Report Due Date
         court_report_status: Court Report Status
         court_report_submitted_date: Court Report Submitted Date
-        court_mandates: Court Mandates
+        court_mandates: Court Orders
         assigned_volunteers: Assigned Volunteers
         attached_report: Attached Report
       button:
@@ -41,8 +56,6 @@ en:
         click_to_download: Click to download
         download_all: Download All
         generate_court_report: Generate Report
-      send_reminder: Send Reminder
-      tooltip: Sends to volunteer a reminder email to input case contacts
     shared:
       filter_by: Filter by
       assigned_single: Assigned to Volunteer
@@ -69,13 +82,16 @@ en:
         select_hearing_type: -Select Hearing Type-
         select_judge: -Select Judge-
       youth_birth_month_year: "Youth's Birth Month & Year"
-      add_court_mandate: Add a court mandate
+      add_court_mandate: Add a court order
+      add_past_court_date: Add a past court date
       next_court_date: Next Court Date
       court_report_due_date: Court Report Due Date
-      court_mandates: Court Mandates
+      court_mandates: Court Orders
       court_mandate_privacy_warning: Please check that you didn't enter any youth names
     inactive_case:
       notice: Case was deactivated on
+    no_past_court_dates: No past court dates
+    past_court_dates: Past court dates
     volunteer_assignment:
       title: Manage Volunteers
       assigned_volunteers: Assigned Volunteers
@@ -96,9 +112,7 @@ en:
         unassign: Unassign Volunteer
         activate: Activate Volunteer
     edit:
-      title: Editing CASA Case
-      past_court_dates: Past court dates
-      no_past_court_dates: No past court dates
+      title: Editing
     index:
       pick_displayed_columns: Pick displayed columns
       own_case: My <%= "Case".pluralize(%{count}) %>
@@ -117,18 +131,33 @@ en:
     new:
       title: New CASA Case
   past_court_dates:
+    edit:
+      title: Editing Past Court Date
+    form:
+      button:
+        add_court_mandate: Add a court order
+        create: Create
+        update: Update
+      label:
+        court_mandates:
+          Court Orders - Please check that you didn't enter any youth names
+    new:
+      title: New Past Court Date
     show:
+      button:
+        edit_past_court_date: Edit
       title: Past Court Date
       label:
         case_number: Case Number
         judge: Judge
         hearing_type: Hearing Type
         none: None
-        case_court_mandates: Court Mandates
-        no_case_court_mandates: There are no court mandates associated with this past court date.
+        case_court_mandates: Court Orders
+        no_case_court_mandates: There are no court orders associated with this past court date.
         casa_case_court_mandate:
-          mandate_text: Court Mandate Text
+          mandate_text: Court Order Text
           implementation_status: Implementation Status
+        download_report_docx: Download Report (.docx)
   casa_admins:
     form:
       button:
@@ -138,6 +167,8 @@ en:
         display_name: Display Name
       prompt:
         mark_inactive_warning: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"
+      active_text: Admin is
+      deactive_text: Admin was deactivated on
     edit:
       title: Edit Casa Admin
     new:
@@ -174,7 +205,8 @@ en:
       label:
         case_number: "Case Number:"
       prompt:
-        select_case_number: Select a case to generate report
+        select_case_number: Select case number
+        search_case_number: Search by volunteer name or case number
       button:
         generate: Generate Report
         download: Download Court Report
@@ -241,6 +273,13 @@ en:
         name: Name
         active: Active?
         actions: Actions
+    sent_emails:
+      title: Sent Emails
+      heading:
+        mailer_type: Mailer Type
+        category: Category
+        sent_address: Recipient
+        created_at: Time Sent
     edit:
       title: Editing CASA Organization
       manage_contact_types_title: Manage Contact Types
@@ -328,7 +367,7 @@ en:
       link:
         edit_profile: Edit Profile
         generate_court_reports: Generate Court Reports
-        generate_reports: Generate Reports
+        export_data: Export Data
         system_imports: System Imports
         edit_organization: Edit Organization
         report_site_issue: Report a site issue
@@ -365,6 +404,60 @@ en:
         one: All Volunteers
         other: All Volunteers
   volunteers:
-    edit:
-      send_reminder: Send reminder
-      tooltip: Sends to volunteer a reminder email to input case contacts
+    index:
+      volunteers: Volunteers
+      filter: Filter by
+      pick_displayed_columns: Pick displayed columns
+      supervisor: Supervisor
+      no_supervisor: No supervisor assignment
+      status: Status
+      active: Active
+      inactive: Inactive
+      transition_aged_youth: Assigned to Transition Aged Youth
+      yes: Yes
+      no: No
+      select_columns: Select columns
+      heading:
+        name: Name
+        e_mail: Email
+        supervisor: Supervisor
+        status: Status
+        assigned_transition_aged_youth: Assigned To Transition Aged Youth
+        case_number: Case Number(s)
+        last_contact_made: Last Contact Made
+        contacts: Contacts Made in Past 60 Days
+        actions: Actions
+      button:
+        new: New Volunteer
+    send_reminder_button:
+      send_reminder: Send Reminder
+      tooltip: Remind volunteer to input case contacts
+      admin_checkbox_text: Send CC to Supervisor and Admin
+      supervisor_checkbox_text: Send CC to Supervisor
+  reports:
+    index:
+      export_page_title: Export Data
+      reports_subhead: Case Contacts Report
+      reports_description: This CSV is a listing of all fields for the case contacts of all volunteers. Select the start and end date.
+      start_date_label: "Starting From:"
+      end_date_label: "Ending At:"
+      assigned_to_label: "Assigned To:"
+      select_supervisors_placeholder: -Select Supervisors-
+      volunteers_label: Volunteers
+      select_volunteers_placeholder: -Select Volunteers-
+      contact_type_label: "Contact Type:"
+      select_contact_types_placeholder: -Select Contact Types-
+      contact_type_group_label: "Contact Type Group:"
+      select_contact_type_groups_placeholder: -Select Contact Type Groups-
+      driving_reimbursement_label: "Want Driving Reimbursement:"
+      contact_made_label: "Contact Made:"
+      transition_aged_label: "Transition Aged Youth:"
+      download_report_button: Download Report
+      download_mileage_report_button: Mileage Report
+      filter_cols: Filter Columns
+    filter:
+      filter_exported_columns: Filter Exported Columns
+      select_columns: "Select columns:"
+  notifications:
+    index:
+      no_notifications: You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.

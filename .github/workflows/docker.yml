@@ -1,0 +1,34 @@
+name: docker
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'doc/**'
+      - '**.md'
+      - 'bin/**'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'doc/**'
+      - '**.md'
+      - 'bin/**'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2.3.4
+      - name: Create downloads folder
+        run: |
+          mkdir -p tmp/downloads
+          chmod 777 tmp tmp/downloads
+      - name: docker UP
+        run: docker-compose up -d
+      - name: db:reset
+        run: docker-compose exec -T web rails db:reset
+      - name: Test
+        run: docker-compose exec -T web bundle exec rspec spec

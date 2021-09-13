@@ -1,39 +1,10 @@
-<%= link_to t("button.back"), casa_case_path(@casa_case) %>
-<h1><%= t(".title") %></h1>
+<h1><%= t(".title") %>&nbsp;<%= link_to(@casa_case.case_number, @casa_case) %></h1>
 
 <% if @casa_case.active %>
   <%= render 'form', casa_case: @casa_case %>
 <% else %>
   <%= render 'inactive_case', casa_case: @casa_case %>
 <% end %>
-
-<div class="card card-container">
-  <div class="card-body">
-    <h6><strong><%= t(".past_court_dates") %>:</strong></h6>
-    <% if @casa_case.past_court_dates.size > 0 %>
-      <ul>
-        <% @casa_case.past_court_dates.each do |pcd| %>
-          <p>
-            <% if pcd.additional_info? %>
-              <%= link_to pcd.decorate.formatted_date,
-                  casa_case_past_court_date_path(@casa_case, pcd) %>
-            <% else %>
-              <%= pcd.decorate.formatted_date %>
-            <% end %>
-
-            <% if report = pcd.latest_associated_report %>
-              <%= link_to rails_blob_path(report, disposition: 'attachment') do %>
-                (<%= t(".label.attached_report") %>)
-              <% end %>
-            <% end %>
-          </p>
-        <% end %>
-      </ul>
-    <% else %>
-      <%= t(".no_past_court_dates") %>
-    <% end %>
-  </div>
-</div>
 
 <% if Pundit.policy(current_user, @casa_case).assign_volunteers? %>
   <%= render "volunteer_assignment" %>

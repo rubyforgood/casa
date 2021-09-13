@@ -3,8 +3,8 @@ FactoryBot.define do
     sequence(:case_number) { |n| "CINA-#{n}" }
     birth_month_year_youth { 16.years.ago }
     casa_org { CasaOrg.first || create(:casa_org) }
-    hearing_type
-    judge
+    hearing_type # TODO make optional  move to traits
+    judge # TODO make optional move to traits
     court_report_status { :not_submitted }
     case_court_mandates { [] }
 

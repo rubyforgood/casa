@@ -67,7 +67,7 @@ RSpec.describe SupervisorPolicy do
     end
   end
 
-  permissions :create?, :new? do
+  permissions :create?, :new?, :resend_invitation?, :activate?, :deactivate? do
     it "allows admins to create supervisors" do
       is_expected.to permit(casa_admin, Supervisor)
     end

@@ -13,12 +13,13 @@ class CasaCasesController < ApplicationController
 
   def show
     authorize @casa_case
+
     respond_to do |format|
       format.html {}
       format.csv do
         case_contacts = @casa_case.decorate.case_contacts_ordered_by_occurred_at
         csv = CaseContactsExportCsvService.new(case_contacts).perform
-        send_data csv, filename: "volunteer-#{current_user.id}-case-contacts-#{Time.zone.now.to_i}.csv"
+        send_data csv, filename: case_contact_csv_name(case_contacts)
       end
     end
   end
@@ -36,27 +37,19 @@ class CasaCasesController < ApplicationController
     @casa_case = CasaCase.new(casa_case_params.merge(casa_org: current_organization))
     authorize @casa_case
 
-    respond_to do |format|
-      if @casa_case.save
-        format.html { redirect_to @casa_case, notice: "CASA case was successfully created." }
-        format.json { render :show, status: :created, location: @casa_case }
-      else
-        format.html { render :new }
-        format.json { render json: @casa_case.errors, status: :unprocessable_entity }
-      end
+    if @casa_case.save
+      redirect_to @casa_case, notice: "CASA case was successfully created."
+    else
+      render :new
     end
   end
 
   def update
     authorize @casa_case
-    respond_to do |format|
-      if @casa_case.update_cleaning_contact_types(casa_case_update_params)
-        format.html { redirect_to edit_casa_case_path, notice: "CASA case was successfully updated." }
-        format.json { render :show, status: :ok, location: @casa_case }
-      else
-        format.html { render :edit }
-        format.json { render json: @casa_case.errors, status: :unprocessable_entity }
-      end
+    if @casa_case.update_cleaning_contact_types(casa_case_update_params)
+      redirect_to edit_casa_case_path, notice: "CASA case was successfully updated."
+    else
+      render :edit
     end
   end
 
@@ -110,5 +103,12 @@ class CasaCasesController < ApplicationController
 
   def set_contact_types
     @contact_types = ContactType.for_organization(current_organization)
+  end
+
+  def case_contact_csv_name(case_contacts)
+    casa_case_number = case_contacts&.first&.casa_case&.case_number
+    current_date = Time.now.strftime("%Y-%m-%d")
+
+    "#{casa_case_number.nil? ? "" : casa_case_number + "-"}case-contacts-#{current_date}.csv"
   end
 end

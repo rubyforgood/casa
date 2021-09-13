@@ -3,8 +3,8 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.0.1"
-gem "rails", "~> 6.1.3"
+ruby "3.0.2"
+gem "rails", "~> 6.1.4"
 
 gem "after_party" # post-deployment tasks
 gem "amazing_print" # easier console reading
@@ -17,13 +17,13 @@ gem "jbuilder", "~> 2.11" # Build JSON APIs with ease. Read more: https://github
 gem "noticed" # Notifications
 gem "paper_trail" # tracking changes
 gem "pg", ">= 0.18", "< 2.0" # Use postgresql as the database for Active Record
-gem "puma", "~> 5.3" # Use Puma as the app server
+gem "puma", "~> 5.4" # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "rack-attack" # for blocking & throttling abusive requests
-gem "skylight" # automated performance testing https://www.skylight.io/
 gem "webpacker", "~> 5.4" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem "image_processing", "~> 1.12" # Set of higher-level helper methods for image processing.
 gem "lograge" # log less so heroku papertrail quits rate limiting our logs
+gem "filterrific" # filtering and sorting of models
 
 gem "bootsnap", ">= 1.4.2", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "bugsnag" # tracking errors in prod
@@ -38,16 +38,16 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "pry"
   gem "pry-byebug"
-  gem "rspec-rails", "~> 5.0.1"
+  gem "rspec-rails", "~> 5.0.2"
   gem "shoulda-matchers"
-  gem "standard", "~> 1.1.1" # linter https://github.com/testdouble/standard
-  gem "cypress-on-rails", "~> 1.10"
+  gem "standard", "~> 1.3.0" # linter https://github.com/testdouble/standard
+  gem "cypress-on-rails", "~> 1.11"
 end
 
 group :development do
   gem "annotate" # for adding db field listings to models as comments
   gem "letter_opener" # Opens emails in new tab for easier testing
-  gem "listen", ">= 3.0.5", "< 3.6"
+  gem "listen", ">= 3.0.5", "< 3.8"
   gem "spring" # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring-commands-rspec"
   gem "spring-watcher-listen", "~> 2.0.0"
@@ -61,10 +61,12 @@ group :test do
   gem "database_cleaner-active_record", "~> 2.0.1"
   gem "rake"
   gem "rails-controller-testing"
-  gem "selenium-webdriver"
+  gem "selenium-webdriver", "4.0.0.rc1" # temporarily locking to a beta version until 4.x comes out - to fix docker tests https://github.com/SeleniumHQ/selenium/issues/9001
   gem "simplecov", "~> 0.21.2", require: false # 0.17.1 pinned as a workaround for https://github.com/codeclimate/test-reporter/issues/418
-  gem "webdrivers", require: false # Easy installation and use of web drivers to run system tests with browsers; do not initially require as causes conflict with Docker setup
+  gem "webdrivers" # easy installation and use of web drivers to run system tests with browsers
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
+
+gem "scout_apm", "~> 4.1"

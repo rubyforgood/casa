@@ -1,12 +1,18 @@
-<%= link_to t("button.back"), edit_casa_case_path(@casa_case) %>
-
-<h1><%= t(".title") %></h1>
-<h2><%= @past_court_date.decorate.formatted_date %></h2>
+<div class="row">
+  <div class="col-sm-12 form-header">
+    <h1><%= t(".title") %></h1>
+    <%= link_to t(".button.edit_past_court_date"),
+        edit_casa_case_past_court_date_path(@casa_case, @past_court_date),
+        class: "btn btn-primary casa-case-button pull-right" %>
+  </div>
+</div>
+<h2 class="d-inline-block"><%= @past_court_date.decorate.formatted_date %></h2>
 
 <div class="card card-container">
   <div class="card-body">
     <p>
-      <h6><strong><%= t(".label.case_number") %>:</strong> <%= @casa_case.case_number %></h6>
+      <h6><strong><%= t(".label.case_number") %>:</strong> <%= link_to "#{@casa_case.case_number}",
+casa_case_path(@casa_case) %></h6>
     </p>
     <p>
       <h6>
@@ -38,7 +44,7 @@
             <% @past_court_date.case_court_mandates.each do |court_mandate| %>
               <tr>
                 <td><%= court_mandate.mandate_text %></td>
-                <td class="text-center"><%= court_mandate.implementation_status.humanize %></td>
+                <td class="text-center"><%= court_mandate.implementation_status&.humanize %></td>
               </tr>
             <% end %>
           </tbody>
@@ -52,5 +58,9 @@
         </h6>
       </p>
     <% end %>
+
+    <%= link_to t(".label.download_report_docx"),
+      casa_case_past_court_date_path(@casa_case, @past_court_date, format: :docx),
+      class: "btn btn-primary" %>
   </div>
 </div>

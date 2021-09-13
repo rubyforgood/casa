@@ -12,7 +12,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
       let!(:case_assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer) }
 
       it "shows a summary for a volunteer assigned to the supervisor" do
-        expect(mail.body.encoded).to match("Summary for #{volunteer.display_name}")
+        expect(mail.body.encoded).to match("Summary for <a href=\"#{edit_volunteer_url(volunteer)}\">#{volunteer.display_name}</a>")
       end
 
       it "does not show a case contact that did not occurr in the week" do
@@ -33,7 +33,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
       let!(:case_assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false, updated_at: Date.today - 2.days) }
 
       it "shows a summary for a volunteer recently unassigned from the supervisor" do
-        expect(mail.body.encoded).to match("Summary for #{volunteer.display_name}")
+        expect(mail.body.encoded).to match("Summary for <a href=\"#{edit_volunteer_url(volunteer)}\">#{volunteer.display_name}</a>")
       end
 
       it "shows a disclaimer for a volunteer recently unassigned from the supervisor" do
@@ -60,6 +60,39 @@ RSpec.describe SupervisorMailer, type: :mailer do
     it "does not show a summary for a volunteer unassigned from the supervisor before the week" do
       create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false, updated_at: Date.today - 8.days)
       expect(mail.body.encoded).to_not match("Summary for #{volunteer.display_name}")
+    end
+
+    context "when a supervisor has pending volunteer to accepts invitation" do
+      let(:volunteer2) { create(:volunteer) }
+      before do
+        volunteer2.invite!(supervisor)
+      end
+
+      it "shows a summary of pending volunteers" do
+        expect(mail.body.encoded).to match(volunteer2.display_name.to_s)
+      end
+
+      it "has a button to re-invite volunteer" do
+        expect(mail.body.encoded).to match("<a href=\"#{resend_invitation_volunteer_url(volunteer2)}\">")
+      end
+
+      it "do not shows a summary of pending volunteers if the volunteer already accepted" do
+        volunteer2.invitation_accepted_at = DateTime.current
+        volunteer2.save
+
+        expect(mail.body.encoded).to_not match(volunteer2.display_name.to_s)
+      end
+    end
+  end
+
+  describe ".invitation_instructions for a supervisor" do
+    let(:supervisor) { create(:supervisor) }
+    let(:mail) { supervisor.invite! }
+    let(:expiration_date) { I18n.l(supervisor.invitation_due_at, format: :full, default: nil) }
+
+    it "informs the correct expiration date" do
+      email_body = mail.html_part.body.to_s.squish
+      expect(email_body).to include("This invitation will expire on #{expiration_date} (two weeks).")
     end
   end
 end

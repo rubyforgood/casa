@@ -14,12 +14,14 @@ class User < ApplicationRecord
   belongs_to :casa_org
 
   has_many :case_assignments, foreign_key: "volunteer_id", dependent: :destroy # TODO destroy is wrong
-  has_many :casa_cases, through: :case_assignments
+  has_many :casa_cases, -> { where(case_assignments: {active: true}) }, through: :case_assignments
+
   has_many :case_contacts, foreign_key: "creator_id"
 
   has_many :followups, foreign_key: "creator_id"
 
   has_many :notifications, as: :recipient
+  has_many :sent_emails, dependent: :destroy
 
   has_one :supervisor_volunteer, -> {
     where(is_active: true)
@@ -48,6 +50,10 @@ class User < ApplicationRecord
 
   def actively_assigned_and_active_cases
     casa_cases.active.merge(CaseAssignment.active)
+  end
+
+  def active_volunteers
+    volunteers.active.size
   end
 
   # all contacts this user has with this casa case

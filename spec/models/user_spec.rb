@@ -6,6 +6,7 @@ RSpec.describe User, type: :model do
   it { is_expected.to have_many(:case_assignments) }
   it { is_expected.to have_many(:casa_cases).through(:case_assignments) }
   it { is_expected.to have_many(:case_contacts) }
+  it { is_expected.to have_many(:sent_emails) }
 
   it { is_expected.to have_many(:followups).with_foreign_key(:creator_id) }
 

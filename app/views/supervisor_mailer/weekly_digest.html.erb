@@ -1,4 +1,5 @@
 <meta itemprop="name" content="Weekly Volunteer Activity Summary Email" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+<style>/* Email styles need to be inline */</style>
 <table width="100%" cellpadding="0" cellspacing="0" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
   <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
     <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 18px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
@@ -21,7 +22,10 @@
         <% casa_case = case_assignment.casa_case %>
         <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; text-align: left;">
           <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-            <b><%= "Summary for #{volunteer.display_name} Case #{casa_case.case_number}" %></b>
+            <b>
+              Summary for <%= link_to volunteer.display_name, edit_volunteer_url(volunteer) %>
+              Case <%= link_to casa_case.case_number, casa_case_url(casa_case) %>
+            </b>
             <br>
             <% successful_contacts = recently_unassigned ?
                 casa_case.decorate.successful_contacts_this_week_before(case_assignment.updated_at) :
@@ -91,16 +95,35 @@
       <br>
     </td>
   </tr>
+
   <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
       <% @supervisor.volunteers.each do |volunteer| %>
         <% inactive_cases = CaseAssignment.inactive_this_week(volunteer.id) %>
-        <% inactive_cases.each do |case_assignment| %>
-          <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-          <% inactive_case_number = case_assignment.casa_case.case_number %>
-          <%= "#{volunteer.display_name} Case #{inactive_case_number} marked inactive this week." %>
-          <br>
+          <% inactive_cases.each do |case_assignment| %>
+            <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+            <% inactive_case_number = case_assignment.casa_case.case_number %>
+            <%= "#{volunteer.display_name} Case #{inactive_case_number} marked inactive this week." %>
+            <br>
     </td>
   </tr>
+<% end %>
+<% end %>
+
+  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+    <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 18px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+      <b>Pending Volunteers:</b>
+      <br>
+    </td>
+  </tr>
+
+  <% @supervisor.pending_volunteers.each do |volunteer| %>
+    <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; display: flex; justify-content: flex-start;">
+      <td style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin-right: 30px; padding: 0 0 20px; text-transform: capitalize;" valign="top">
+        <%= volunteer.display_name %>
+      </td>
+      <td>
+        <button> <%= link_to "Re-invite", resend_invitation_volunteer_url(volunteer) %></button>
+      </td>
+  </tr>
+  <% end %>
 </table>
-<% end %>
-<% end %>

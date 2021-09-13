@@ -8,7 +8,7 @@ class CaseCourtReport
 
   def initialize(args = {})
     @casa_case = CasaCase.find(args[:case_id])
-    @volunteer = Volunteer.find(args[:volunteer_id])
+    @volunteer = Volunteer.find(args[:volunteer_id]) if args[:volunteer_id]
 
     @context = prepare_context(args[:path_to_template].end_with?("default_report_template.docx"))
     @template = Sablon.template(args[:path_to_template])
@@ -21,17 +21,16 @@ class CaseCourtReport
   private
 
   def prepare_context(is_default_template)
+    latest_hearing_date = @casa_case.latest_past_court_date
+
     {
       created_date: I18n.l(Date.today, format: :full, default: nil),
       casa_case: prepare_case_details,
       case_contacts: prepare_case_contacts,
       case_mandates: prepare_case_mandates,
-      org_address: (@volunteer.casa_org.address if is_default_template),
-      volunteer: {
-        name: @volunteer.display_name,
-        supervisor_name: @volunteer.supervisor&.display_name || "",
-        assignment_date: I18n.l(@casa_case.case_assignments.find_by(volunteer: @volunteer).created_at, format: :full, default: nil)
-      }
+      latest_hearing_date: latest_hearing_date.nil? ? "___<LATEST HEARING DATE>____" : I18n.l(latest_hearing_date.date, format: :full, default: nil),
+      org_address: org_address(is_default_template),
+      volunteer: volunteer_info
     }
   end
 
@@ -48,7 +47,7 @@ class CaseCourtReport
     contact_dates_as_hash = aggregate_contact_dates(interviewees)
     contact_dates_as_hash.map do |type, dates|
       {
-        name: "Firstname Lastname",
+        name: "Names of persons involved, starting with the child's name",
         type: type,
         dates: dates.join(", ")
       }
@@ -61,7 +60,7 @@ class CaseCourtReport
     @casa_case.case_court_mandates.each do |case_mandate|
       case_mandate_data << {
         order: case_mandate.mandate_text,
-        status: case_mandate.implementation_status
+        status: case_mandate.implementation_status.humanize
       }
     end
 
@@ -99,5 +98,19 @@ class CaseCourtReport
       dob: I18n.l(@casa_case.birth_month_year_youth, format: :youth_date_of_birth, default: nil),
       is_transitioning: @casa_case.in_transition_age?
     }
+  end
+
+  def volunteer_info
+    if @volunteer
+      {
+        name: @volunteer.display_name,
+        supervisor_name: @volunteer.supervisor&.display_name || "",
+        assignment_date: I18n.l(@casa_case.case_assignments.find_by(volunteer: @volunteer).created_at, format: :full, default: nil)
+      }
+    end
+  end
+
+  def org_address(is_default_template)
+    @volunteer.casa_org.address if @volunteer && is_default_template
   end
 end

@@ -1,13 +1,14 @@
 class CaseContactReport
-  attr_reader :case_contacts
+  attr_reader :case_contacts, :columns
 
   def initialize(args = {})
+    @columns = filtered_columns(args)
     @case_contacts = filtered_case_contacts(args)
   end
 
   def to_csv
     case_contacts_for_csv = @case_contacts
-    CaseContactsExportCsvService.new(case_contacts_for_csv).perform
+    CaseContactsExportCsvService.new(case_contacts_for_csv, columns).perform
   end
 
   private
@@ -22,5 +23,11 @@ class CaseContactReport
       .want_driving_reimbursement(args[:want_driving_reimbursement])
       .contact_type(args[:contact_type_ids])
       .contact_type_groups(args[:contact_type_group_ids])
+  end
+
+  def filtered_columns(args)
+    if args[:filtered_csv_cols].present?
+      args[:filtered_csv_cols].select { |_key, value| value == "true" }.keys.map(&:to_sym)
+    end
   end
 end

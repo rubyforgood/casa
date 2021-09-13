@@ -3,26 +3,6 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "4b2945ea4382a70e65ccddd904a86cffd17b25ae0267921456bb811ff613c811",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/datatables/volunteer_datatable.rb",
-      "line": 59,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "base_relation.select(\"          users.*,\\n          COALESCE(supervisors.display_name, supervisors.email) AS supervisor_name,\\n          supervisors.id AS supervisor_id,\\n          transition_aged_youth_cases.volunteer_id IS NOT NULL AS has_transition_aged_youth_cases,\\n          most_recent_contacts.casa_case_id AS most_recent_contact_case_id,\\n          most_recent_contacts.occurred_at AS most_recent_contact_occurred_at,\\n          contacts_made_in_past_days.contact_count AS contacts_made_in_past_days\\n\").joins(\"          LEFT JOIN supervisor_volunteers ON supervisor_volunteers.volunteer_id = users.id AND supervisor_volunteers.is_active\\n          LEFT JOIN users supervisors ON supervisors.id = supervisor_volunteers.supervisor_id AND supervisors.active\\n          LEFT JOIN (\\n            #{transition_aged_youth_cases_subquery}\\n          ) transition_aged_youth_cases ON transition_aged_youth_cases.volunteer_id = users.id\\n          LEFT JOIN (\\n            #{most_recent_contacts_subquery}\\n          ) most_recent_contacts ON most_recent_contacts.creator_id = users.id AND most_recent_contacts.contact_index = 1\\n          LEFT JOIN (\\n            #{contacts_made_in_past_days_subquery}\\n          ) contacts_made_in_past_days ON contacts_made_in_past_days.creator_id = users.id\\n\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "VolunteerDatatable",
-        "method": "raw_records"
-      },
-      "user_input": "transition_aged_youth_cases_subquery",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
       "fingerprint": "5fae6e11b98f7e10ae752aa4cca2b9980df787064ca741d94f15f53d8441aa3c",
       "check_name": "SQL",
       "message": "Possible SQL injection",

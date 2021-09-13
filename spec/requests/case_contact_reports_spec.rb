@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/case_contact_reports", :disable_bullet, type: :request do
+RSpec.describe "/case_contact_reports", type: :request do
   let!(:case_contact) { create(:case_contact) }
 
   before do

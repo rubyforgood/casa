@@ -2,15 +2,7 @@ require "rails_helper"
 
 RSpec.describe VolunteerMailer, type: :mailer do
   let(:volunteer) { create(:volunteer) }
-
-  describe ".deactivation" do
-    let(:mail) { VolunteerMailer.deactivation(volunteer) }
-
-    it "sends an email saying the account has been deactivated" do
-      expect(mail.body.encoded).to match("Hello #{volunteer.display_name}")
-      expect(mail.body.encoded).to match("has been deactivated")
-    end
-  end
+  let(:volunteer_with_supervisor) { create(:volunteer, :with_assigned_supervisor) }
 
   describe ".account_setup" do
     let(:mail) { VolunteerMailer.account_setup(volunteer) }
@@ -34,11 +26,27 @@ RSpec.describe VolunteerMailer, type: :mailer do
   end
 
   describe ".case_contacts_reminder" do
-    let(:mail) { VolunteerMailer.case_contacts_reminder(volunteer) }
+    let(:mail) { VolunteerMailer.case_contacts_reminder(volunteer, false) }
+    let(:mail_with_cc) { VolunteerMailer.case_contacts_reminder(volunteer_with_supervisor, true) }
 
     it "sends an email reminding volunteer" do
       expect(mail.body.encoded).to match("Hello #{volunteer.display_name}")
       expect(mail.body.encoded).to match("as a reminder")
+      expect(mail.cc).to be_nil
+    end
+
+    it "sends a cc to supervisor" do
+      expect(mail_with_cc.cc).to include(volunteer_with_supervisor.supervisor.email.to_s)
+    end
+  end
+
+  describe ".invitation_instructions for a volunteer" do
+    let(:mail) { volunteer.invite! }
+    let(:expiration_date) { I18n.l(volunteer.invitation_due_at, format: :full, default: nil) }
+
+    it "informs the correct expiration date" do
+      email_body = mail.html_part.body.to_s.squish
+      expect(email_body).to include("This invitation will expire on #{expiration_date} (one year).")
     end
   end
 end

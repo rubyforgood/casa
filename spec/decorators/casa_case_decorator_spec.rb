@@ -51,4 +51,18 @@ RSpec.describe CasaCaseDecorator do
 
     it { is_expected.to eq "12-09-2020" }
   end
+
+  describe "#emancipation_checklist_count" do
+    it "returns a fraction indicating how many emancipation categories have been fulfilled" do
+      casa_case = build(:casa_case)
+
+      expect(casa_case).to(
+        receive(:casa_case_emancipation_categories).and_return(
+          double(:categories, count: 2)
+        )
+      )
+      expect(EmancipationCategory).to receive(:count).and_return(5)
+      expect(casa_case.decorate.emancipation_checklist_count).to eq "2 / 5"
+    end
+  end
 end

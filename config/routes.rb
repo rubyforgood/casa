@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     root to: "all_casa_admins/sessions#new", as: :unauthenticated_all_casa_root
   end
 
+  get "/.well-known/assetlinks.json", to: "android_app_associations#index"
   resources :casa_cases do
     resource :emancipation do
       member do
@@ -31,7 +32,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :past_court_dates, only: %i[show]
+    resources :past_court_dates, only: %i[create edit new show update]
 
     member do
       patch :deactivate
@@ -43,6 +44,7 @@ Rails.application.routes.draw do
     member do
       patch :deactivate
       patch :activate
+      patch :resend_invitation
     end
   end
 
@@ -66,6 +68,7 @@ Rails.application.routes.draw do
     end
   end
   resources :case_contact_reports, only: %i[index]
+  resources :mileage_reports, only: %i[index]
   resources :casa_orgs, only: %i[edit update]
   resources :contact_type_groups, only: %i[new create edit update]
   resources :contact_types, only: %i[new create edit update]
@@ -78,6 +81,7 @@ Rails.application.routes.draw do
     member do
       patch :activate
       patch :deactivate
+      patch :resend_invitation
     end
   end
   resources :supervisor_volunteers, only: %i[create] do
@@ -89,7 +93,7 @@ Rails.application.routes.draw do
     member do
       patch :activate
       patch :deactivate
-      patch :resend_invitation
+      get :resend_invitation
       patch :reminder
     end
   end

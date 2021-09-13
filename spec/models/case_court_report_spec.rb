@@ -2,13 +2,13 @@ require "rails_helper"
 require "sablon"
 
 RSpec.describe CaseCourtReport, type: :model do
-  let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
+  let(:path_to_template) { Rails.root.join("app", "documents", "templates", "default_report_template.docx").to_s }
+  let(:path_to_report) { Rails.root.join("tmp", "test_report.docx").to_s }
 
   describe "when receiving valid case, volunteer, and path_to_template" do
-    let(:casa_case_without_contacts) { volunteer.casa_cases.second }
+    let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
     let(:casa_case_with_contacts) { volunteer.casa_cases.first }
-    let(:path_to_template) { Rails.root.join("app", "documents", "templates", "default_report_template.docx").to_s }
-    let(:path_to_report) { Rails.root.join("tmp", "test_report.docx").to_s }
+    let(:casa_case_without_contacts) { volunteer.casa_cases.second }
     let(:report) do
       CaseCourtReport.new(
         case_id: casa_case_with_contacts.id,
@@ -55,7 +55,7 @@ RSpec.describe CaseCourtReport, type: :model do
       it { is_expected.not_to be_empty }
       it { is_expected.to be_instance_of Hash }
 
-      it "has the following keys [:created_date, :casa_case, :case_contacts, :volunteer]" do
+      it "has the following keys [:created_date, :casa_case, :case_contacts, :latest_hearing_date, :org_address, :volunteer]" do
         expected = %i[created_date casa_case case_contacts volunteer]
         expect(subject.keys).to include(*expected)
       end
@@ -67,11 +67,23 @@ RSpec.describe CaseCourtReport, type: :model do
       it "created_date is not nil" do
         expect(subject[:created_date]).to_not be(nil)
       end
+
+      context "when the case has multiple past court dates" do
+        before do
+          casa_case_with_contacts.past_court_dates << create(:past_court_date, date: 9.months.ago)
+          casa_case_with_contacts.past_court_dates << create(:past_court_date, date: 3.months.ago)
+          casa_case_with_contacts.past_court_dates << create(:past_court_date, date: 15.months.ago)
+        end
+
+        it "sets latest_hearing_date as the latest past court date" do
+          expect(subject[:latest_hearing_date]).to eq(I18n.l(3.months.ago, format: :full, default: nil))
+        end
+      end
     end
 
     describe "the default generated report" do
       context "when passed all displayable information" do
-        let(:document_data) {
+        let(:document_data) do
           {
             case_birthday: 12.years.ago,
             case_contact_time: 3.days.ago,
@@ -84,13 +96,13 @@ RSpec.describe CaseCourtReport, type: :model do
             volunteer_case_assignment_date: 2.months.ago,
             volunteer_name: "An unmistakably unique volunteer name"
           }
-        }
+        end
 
         let(:contact_type) { create(:contact_type, name: document_data[:case_contact_type]) }
         let(:case_contact) { create(:case_contact, contact_made: false, occurred_at: document_data[:case_contact_time]) }
         let(:court_mandate) { create(:case_court_mandate, implementation_status: :partially_implemented) }
 
-        before(:each) {
+        before(:each) do
           casa_case_with_contacts.casa_org.update_attribute(:address, document_data[:org_address])
           casa_case_with_contacts.update_attribute(:birth_month_year_youth, document_data[:case_birthday])
           casa_case_with_contacts.update_attribute(:case_number, document_data[:case_number])
@@ -102,7 +114,7 @@ RSpec.describe CaseCourtReport, type: :model do
           CaseAssignment.find_by(casa_case_id: casa_case_with_contacts.id, volunteer_id: volunteer.id).update_attribute(:created_at, document_data[:volunteer_case_assignment_date])
           volunteer.update_attribute(:display_name, document_data[:volunteer_name])
           volunteer.supervisor.update_attribute(:display_name, document_data[:supervisor_name])
-        }
+        end
 
         it "displays all the information" do
           report_as_raw_docx = report.generate_to_string
@@ -116,16 +128,72 @@ RSpec.describe CaseCourtReport, type: :model do
           expect(report_body).to include(document_data[:case_contact_type])
           expect(report_body).to include("#{document_data[:case_contact_time].strftime("%-m/%d")}*")
           expect(report_body).to include(document_data[:mandate_text])
-          expect(report_body).to include("partially_implemented") # Mandate Status
+          expect(report_body).to include("Partially implemented") # Mandate Status
           expect(report_body).to include(document_data[:volunteer_name])
           expect(report_body).to include(document_data[:volunteer_case_assignment_date].strftime("%B %-d, %Y"))
           expect(report_body).to include(document_data[:supervisor_name])
+        end
+      end
+
+      context "when missing a volunteer" do
+        let(:report) do
+          CaseCourtReport.new(
+            case_id: casa_case.id,
+            volunteer_id: nil,
+            path_to_template: path_to_template,
+            path_to_report: path_to_report
+          )
+        end
+
+        let(:document_data) do
+          {
+            case_birthday: 12.years.ago,
+            case_contact_time: 3.days.ago,
+            case_contact_type: "Unique Case Contact Type",
+            case_hearing_date: 2.weeks.from_now,
+            case_number: "A-CASA-CASE-NUMBER-12345",
+            mandate_text: "This text shall not be strikingly similar to other text in the document",
+            org_address: nil,
+            supervisor_name: nil,
+            volunteer_case_assignment_date: 2.months.ago,
+            volunteer_name: nil
+          }
+        end
+
+        let(:casa_case) { create(:casa_case) }
+        let(:contact_type) { create(:contact_type, name: document_data[:case_contact_type]) }
+        let(:case_contact) { create(:case_contact, contact_made: false, occurred_at: document_data[:case_contact_time]) }
+        let(:court_mandate) { create(:case_court_mandate, implementation_status: :partially_implemented) }
+
+        before(:each) do
+          casa_case.casa_org.update_attribute(:address, document_data[:org_address])
+          casa_case.update_attribute(:birth_month_year_youth, document_data[:case_birthday])
+          casa_case.update_attribute(:case_number, document_data[:case_number])
+          casa_case.update_attribute(:court_date, document_data[:case_hearing_date])
+          case_contact.contact_types << contact_type
+          casa_case.case_contacts << case_contact
+          casa_case.case_court_mandates << court_mandate
+          court_mandate.update_attribute(:mandate_text, document_data[:mandate_text])
+        end
+
+        it "display all expected information" do
+          report_as_raw_docx = report.generate_to_string
+          report_body = get_docx_subfile_contents(report_as_raw_docx, "word/document.xml")
+
+          expect(report_body).to include(Date.today.strftime("%B %-d, %Y"))
+          expect(report_body).to include(document_data[:case_hearing_date].strftime("%B %-d, %Y"))
+          expect(report_body).to include(document_data[:case_number])
+          expect(report_body).to include(document_data[:case_contact_type])
+          expect(report_body).to include("#{document_data[:case_contact_time].strftime("%-m/%d")}*")
+          expect(report_body).to include(document_data[:mandate_text])
+          expect(report_body).to include("Partially implemented") # Mandate Status
         end
       end
     end
   end
 
   describe "when receiving INVALID path_to_template" do
+    let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
     let(:casa_case_with_contacts) { volunteer.casa_cases.first }
     let(:nonexistent_path) { "app/documents/templates/nonexisitent_report_template.docx" }
 

@@ -24,7 +24,7 @@ class VolunteersController < ApplicationController
     @volunteer = Volunteer.new(create_volunteer_params)
 
     if @volunteer.save
-      @volunteer.invite!
+      @volunteer.invite!(current_user)
       redirect_to edit_volunteer_path(@volunteer)
     else
       render :new
@@ -51,9 +51,9 @@ class VolunteersController < ApplicationController
       VolunteerMailer.account_setup(@volunteer).deliver
 
       if (params[:redirect_to_path] == "casa_case") && (casa_case = CasaCase.find(params[:casa_case_id]))
-        redirect_to edit_casa_case_path(casa_case), notice: "Volunteer was activated."
+        redirect_to edit_casa_case_path(casa_case), notice: "Volunteer was activated. They have been sent an email."
       else
-        redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was activated."
+        redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was activated. They have been sent an email."
       end
     else
       render :edit
@@ -63,8 +63,6 @@ class VolunteersController < ApplicationController
   def deactivate
     authorize @volunteer
     if @volunteer.deactivate
-      VolunteerMailer.deactivation(@volunteer).deliver
-
       redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was deactivated."
     else
       render :edit
@@ -74,15 +72,18 @@ class VolunteersController < ApplicationController
   def resend_invitation
     authorize @volunteer
     @volunteer = Volunteer.find(params[:id])
-    @volunteer.invite!
-
-    redirect_to edit_volunteer_path(@volunteer), notice: "Invitation sent"
+    if @volunteer.invitation_accepted_at.nil?
+      @volunteer.invite!(current_user)
+      redirect_to edit_volunteer_path(@volunteer), notice: "Invitation sent"
+    else
+      redirect_to edit_volunteer_path(@volunteer), notice: "User already accepted invitation"
+    end
   end
 
   def reminder
     authorize @volunteer
-    @volunteer = Volunteer.find(params[:id])
-    VolunteerMailer.case_contacts_reminder(@volunteer).deliver
+    with_cc = params[:with_cc].present?
+    VolunteerMailer.case_contacts_reminder(@volunteer, with_cc).deliver
 
     redirect_to edit_volunteer_path(@volunteer), notice: "Reminder sent to volunteer."
   end

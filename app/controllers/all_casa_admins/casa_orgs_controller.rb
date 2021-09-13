@@ -11,12 +11,10 @@ class AllCasaAdmins::CasaOrgsController < AllCasaAdminsController
   def create
     @casa_org = CasaOrg.new(casa_org_params)
 
-    respond_to do |format|
-      if @casa_org.save
-        format.html { redirect_to all_casa_admins_casa_org_path(@casa_org), notice: "CASA Organization was successfully created." }
-      else
-        format.html { render :new }
-      end
+    if @casa_org.save
+      redirect_to all_casa_admins_casa_org_path(@casa_org), notice: "CASA Organization was successfully created."
+    else
+      render :new
     end
   end
 

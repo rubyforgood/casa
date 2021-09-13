@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "casa_cases/edit", :disable_bullet, type: :view do
+RSpec.describe "casa_cases/edit", type: :view do
   let(:organization) { create(:casa_org) }
 
   before do
@@ -12,9 +12,19 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :view do
 
   context "when accessed by a volunteer" do
     let(:user) { build_stubbed(:volunteer, casa_org: organization) }
+    let(:casa_case) { create(:casa_case, casa_org: organization) }
+
+    it "does not allow editing the case number" do
+      assign :casa_case, casa_case
+
+      render template: "casa_cases/edit"
+
+      expect(rendered).to have_link(casa_case.case_number, href: "/casa_cases/#{casa_case.id}")
+      expect(rendered).to_not have_selector("input[value='#{casa_case.case_number}']")
+    end
 
     it "does not include volunteer assignment" do
-      assign :casa_case, create(:casa_case, casa_org: organization)
+      assign :casa_case, casa_case
 
       render template: "casa_cases/edit"
 
@@ -25,9 +35,19 @@ RSpec.describe "casa_cases/edit", :disable_bullet, type: :view do
 
   context "when accessed by an admin" do
     let(:user) { build_stubbed(:casa_admin, casa_org: organization) }
+    let(:casa_case) { create(:casa_case, casa_org: organization) }
+
+    it "includes an editable case number" do
+      assign :casa_case, casa_case
+
+      render template: "casa_cases/edit"
+
+      expect(rendered).to have_link(casa_case.case_number, href: "/casa_cases/#{casa_case.id}")
+      expect(rendered).to have_selector("input[value='#{casa_case.case_number}']")
+    end
 
     it "includes volunteer assignment" do
-      assign :casa_case, create(:casa_case, casa_org: organization)
+      assign :casa_case, casa_case
 
       render template: "casa_cases/edit"
 

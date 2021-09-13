@@ -27,9 +27,9 @@
     <table>
       <tr>
         <% @current_organization_groups.each do |group| %>
-          <td style="display:inline-block; vertical-align:top; padding-right:50px; padding-bottom:20px">
+          <td class="align-top d-inline-block pr-5 pb-4">
             <h5> <%= group.name %> </h5>
-            <% group.contact_types.filter do |ct|
+            <% group.contact_types.alphabetically.filter do |ct|
                 @selected_case_contact_types.blank? ||
                     @selected_case_contact_types.include?(ct)
               end.each do |contact_type| %>

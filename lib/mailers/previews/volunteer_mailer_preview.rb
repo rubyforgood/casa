@@ -2,15 +2,24 @@
 # :nocov:
 class VolunteerMailerPreview < ActionMailer::Preview
   def deactivation
-    VolunteerMailer.deactivation(User.last)
+    user = User.find_by(id: params[:id]) || User.last
+    VolunteerMailer.deactivation(user)
   end
 
   def account_setup
-    VolunteerMailer.account_setup(User.last)
+    user = User.find_by(id: params[:id]) || User.last
+    VolunteerMailer.account_setup(user)
   end
 
   def court_report_reminder
-    VolunteerMailer.court_report_reminder(User.last, Date.today)
+    user = User.find_by(id: params[:id]) || User.last
+    VolunteerMailer.court_report_reminder(user, Date.today)
+  end
+
+  def case_contacts_reminder
+    user = User.find_by(id: params[:id]) || User.last
+    user.supervisor = User.find_by(id: params[:id]) || User.first
+    VolunteerMailer.case_contacts_reminder(user, true)
   end
 end
 # :nocov:

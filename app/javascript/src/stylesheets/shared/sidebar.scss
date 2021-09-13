@@ -4,7 +4,9 @@
 
 .sidebar-wrapper {
   background: rgba(0,0,0,0.25);
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
   position: fixed;
   width: 320px;
   overflow: auto;
@@ -44,7 +46,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: calc(100vh - 144px);
+  height: 100vh;
   overflow-y: auto;
 }
 

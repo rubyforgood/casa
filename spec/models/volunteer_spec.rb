@@ -230,18 +230,71 @@ RSpec.describe Volunteer, type: :model do
     context "volunteers" do
       let!(:unassigned1) { create(:volunteer, display_name: "aaa", casa_org: casa_org) }
       let!(:unassigned2) { create(:volunteer, display_name: "bbb", casa_org: casa_org) }
+      let!(:unassigned_inactive) { create(:volunteer, display_name: "unassigned inactive", casa_org: casa_org, active: false) }
       let!(:different_org) { create(:casa_org) }
       let!(:unassigned2_different_org) { create(:volunteer, display_name: "ccc", casa_org: different_org) }
       let!(:assigned1) { create(:volunteer, display_name: "ddd", casa_org: casa_org) }
-      let!(:assignment1) { create(:supervisor_volunteer, volunteer: assigned1) }
+      let!(:supervisor) { create(:supervisor, display_name: "supe", casa_org: casa_org) }
+      let!(:assignment1) { create(:supervisor_volunteer, volunteer: assigned1, supervisor: supervisor) }
       let!(:assigned2_different_org) { assignment1.volunteer }
       let!(:unassigned_inactive_volunteer) { create(:volunteer, display_name: "eee", casa_org: casa_org, active: false) }
       let!(:previously_assigned) { create(:volunteer, display_name: "fff", casa_org: casa_org) }
-      let!(:inactive_assignment) { create(:supervisor_volunteer, volunteer: previously_assigned, is_active: false) }
+      let!(:inactive_assignment) { create(:supervisor_volunteer, volunteer: previously_assigned, is_active: false, supervisor: supervisor) }
 
       it "returns unassigned volunteers" do
         expect(subject.map(&:display_name).sort).to eq ["aaa", "bbb", "fff"]
       end
+    end
+  end
+
+  describe "#with_assigned_cases" do
+    let!(:volunteers) { create_list(:volunteer, 3) }
+    let!(:volunteer_with_cases) { create_list(:volunteer, 3, :with_casa_cases) }
+
+    subject { Volunteer.with_assigned_cases }
+
+    it "returns only volunteers assigned to active casa cases" do
+      expect(subject).to match_array(volunteer_with_cases)
+    end
+  end
+
+  describe "#with_no_assigned_cases" do
+    let!(:volunteers) { create_list(:volunteer, 3) }
+    let!(:volunteer_with_cases) { create_list(:volunteer, 3, :with_casa_cases) }
+
+    subject { Volunteer.with_no_assigned_cases }
+
+    it "returns only volunteers with no assigned active casa cases" do
+      expect(subject).to match_array(volunteers)
+    end
+  end
+
+  describe "#casa_cases" do
+    let(:volunteer) { create :volunteer }
+    let!(:ca1) { create :case_assignment, volunteer: volunteer, active: true }
+    let!(:ca2) { create :case_assignment, volunteer: volunteer, active: false }
+    let!(:ca3) { create :case_assignment, volunteer: create(:volunteer), active: true }
+    let!(:ca4) { create :case_assignment, casa_case: create(:casa_case, active: false), active: true }
+    let!(:ca5) { create :case_assignment, casa_case: create(:casa_case, active: false), active: false }
+
+    it "returns only active and actively assigned casa cases" do
+      expect(volunteer.casa_cases.count).to eq(1)
+      expect(volunteer.casa_cases).to eq([ca1.casa_case])
+    end
+  end
+
+  describe "invitation expiration" do
+    let(:volunteer) { create :volunteer }
+    let!(:mail) { volunteer.invite! }
+    let(:expiration_date) { I18n.l(volunteer.invitation_due_at, format: :full, default: nil) }
+    let(:one_year) { I18n.l(1.year.from_now, format: :full, default: nil) }
+
+    it { expect(expiration_date).to eq one_year }
+    it "expires invitation token after one year" do
+      travel_to 1.year.from_now
+
+      user = User.accept_invitation!(invitation_token: volunteer.invitation_token)
+      expect(user.errors.full_messages).to include("Invitation token is invalid")
     end
   end
 end

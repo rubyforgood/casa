@@ -3,14 +3,18 @@
     <%= form_with(model: casa_case, local: true) do |form| %>
       <%= render "/shared/error_messages", resource: casa_case %>
 
-      <div class="field form-group">
-        <% if casa_case.new_record? || policy(casa_case).update_case_number? %>
+      <% if casa_case.active %>
+        <div class="top-page-actions pull-right">
+          <%= form.submit casa_case.persisted? ? t(".button.update") : t(".button.create"), class: "btn btn-primary" %>
+        </div>
+      <% end %>
+
+      <% if casa_case.new_record? || policy(casa_case).update_case_number? %>
+        <div class="field form-group">
           <%= form.label :case_number %>
-          <%= form.text_field :case_number, class: "form-control" %>
-        <% else %>
-          <label for="casa_case_case_number">Case number: <%= link_to(casa_case.case_number, casa_case) %></label>
-        <% end %>
-      </div>
+          <%= form.text_field :case_number, class: "form-control w-25" %>
+        </div>
+      <% end %>
 
       <h2><%= form.label :court_details %></h2>
 
@@ -38,7 +42,7 @@
                   :hearing_type_id,
                   HearingType.active.for_organization(current_organization),
                   :id, :name,
-                  {include_hidden: false, prompt: t(".prompt.select_hearing_type")},
+                  {include_hidden: false, include_blank: t(".prompt.select_hearing_type")},
                   {class: "form-control"}
               ) %>
         </div>
@@ -52,7 +56,7 @@
                     :judge_id,
                     Judge.for_organization(current_organization),
                     :id, :name,
-                    {include_hidden: false, prompt: t(".prompt.select_judge")},
+                    {include_hidden: false, include_blank: t(".prompt.select_judge")},
                     {class: "form-control"}
                 ) %>
           </div>
@@ -61,7 +65,7 @@
 
       <div class="field form-group">
         <% if policy(casa_case).update_court_date? %>
-          <%= form.label :court_date, t(".next_court_date") %>
+          <%= form.label :court_date, "Add Court Date (past or future)" %>
           <br>
           <span class="datetime-year-month">
             <%= form.date_select :court_date,
@@ -110,18 +114,16 @@
                   <%= ff.text_area :mandate_text %>
                   <%=
                     ff.select :implementation_status,
-                      @casa_case.decorate.court_mandate_select_options,
-                      {include_blank: 'Set Implementation Status', selected: ff.object.implementation_status},
-                      {class: 'implementation-status'}
+                              @casa_case.decorate.court_mandate_select_options,
+                              {include_blank: 'Set Implementation Status', selected: ff.object.implementation_status},
+                              {class: 'implementation-status'}
                   %>
-                  <button type="button" class="remove-mandate-button">
-                    <i class="fa fa-minus" aria-hidden="true"></i>
-                  </button>
+                  <button type="button" class="remove-mandate-button btn btn-danger"><%= t("button.delete") %></button>
                 </div>
               <% end %>
             </div>
-            <div class="add-court-mandate-container">
-              <button type="button" id="add-mandate-button">
+            <div class="add-container">
+              <button type="button" class="add-button" id="add-mandate-button">
                 <i class="fa fa-plus" aria-hidden="true"></i>
               </button>
               <strong><%= t(".add_court_mandate") %></strong>
@@ -143,6 +145,10 @@
             </div>
           <% end %>
         </div>
+
+        <div class="field form-group past-court-dates">
+          <%= render "past_court_dates", casa_case: @casa_case %>
+        </div>
       <% end %>
 
       <% if Pundit.policy(current_user, casa_case).update_contact_types? %>
@@ -152,7 +158,7 @@
             <div class="form-check">
               <%= check_box_tag "casa_case[casa_case_contact_types_attributes][][contact_type_id]",
                                 contact_type.id,
-                                @casa_case.casa_case_contact_types.map(&:contact_type_id).include?(contact_type.id),
+                                @casa_case.has_contact_type?(contact_type),
                                 id: "casa_case_contact_types_#{index}",
                                 class: ["form-check-input", "casa-case-contact-type"] %>
               <label class="form-check-label" for="casa_case_contact_types_<%= index %>">

@@ -11,12 +11,10 @@ class HearingTypesController < ApplicationController
     authorize HearingType
     @hearing_type = HearingType.new(hearing_type_params)
 
-    respond_to do |format|
-      if @hearing_type.save
-        format.html { redirect_to edit_casa_org_path(current_organization), notice: "Hearing Type was successfully created." }
-      else
-        format.html { render :new }
-      end
+    if @hearing_type.save
+      redirect_to edit_casa_org_path(current_organization), notice: "Hearing Type was successfully created."
+    else
+      render :new
     end
   end
 

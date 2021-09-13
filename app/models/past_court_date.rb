@@ -1,9 +1,29 @@
+# frozen_string_literal: true
+
+require "sablon"
+
 class PastCourtDate < ApplicationRecord
   belongs_to :casa_case
+  validates :casa_case_id, presence: true
+  validate :date_must_be_past
 
   has_many :case_court_mandates
   belongs_to :hearing_type, optional: true
   belongs_to :judge, optional: true
+
+  accepts_nested_attributes_for :case_court_mandates, reject_if: :all_blank
+
+  scope :ordered_ascending, -> { order("date asc") }
+
+  DOCX_TEMPLATE_PATH = Rails.root.join("app", "documents", "templates", "default_past_court_date_template.docx")
+
+  def date_must_be_past
+    if date.nil?
+      errors.add(:date, "can't be blank")
+    elsif date >= Date.today
+      errors.add(:date, "must be in the past")
+    end
+  end
 
   # get reports associated with the case this belongs to before this court date but after the court date before this one
   def associated_reports
@@ -21,6 +41,37 @@ class PastCourtDate < ApplicationRecord
 
   def additional_info?
     case_court_mandates.any? || hearing_type || judge
+  end
+
+  def generate_report
+    template = Sablon.template(File.expand_path(DOCX_TEMPLATE_PATH))
+
+    template.render_to_string(context_hash)
+  end
+
+  def display_name
+    "#{casa_case.case_number} - Past Court Date - #{I18n.l(date.to_date)}"
+  end
+
+  private
+
+  def context_hash
+    {
+      court_date: date,
+      case_number: casa_case.case_number,
+      judge_name: judge&.name || "None",
+      hearing_type_name: hearing_type&.name || "None",
+      case_court_mandates: case_court_mandates_context_hash
+    }
+  end
+
+  def case_court_mandates_context_hash
+    case_court_mandates.map do |mandate|
+      {
+        text: mandate.mandate_text,
+        implementation_status: mandate.implementation_status&.humanize
+      }
+    end
   end
 end
 # == Schema Information

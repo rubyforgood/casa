@@ -20,6 +20,10 @@ class SupervisorPolicy < UserPolicy
     is_admin?
   end
 
+  def resend_invitation?
+    is_admin?
+  end
+
   alias_method :create?, :new?
   alias_method :edit?, :index?
 end

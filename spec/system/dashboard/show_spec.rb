@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "dashboard/show", :disable_bullet, type: :system do
+RSpec.describe "dashboard/show", type: :system do
   let(:volunteer) { create(:volunteer, display_name: "Bob Loblaw") }
   context "volunteer user" do
     before do
@@ -14,7 +14,7 @@ RSpec.describe "dashboard/show", :disable_bullet, type: :system do
       create(:case_assignment, volunteer: volunteer, casa_case: casa_case_1)
       create(:case_assignment, volunteer: volunteer, casa_case: casa_case_2)
 
-      visit root_path
+      visit casa_cases_path
       expect(page).to have_text("My Cases")
       expect(page).to have_text(casa_case_1.case_number)
       expect(page).to have_text(casa_case_2.case_number)
@@ -25,16 +25,19 @@ RSpec.describe "dashboard/show", :disable_bullet, type: :system do
       casa_case = create(:casa_case, active: true, casa_org: volunteer.casa_org, case_number: "CINA-1")
       create(:case_assignment, volunteer: volunteer, casa_case: casa_case)
 
-      visit root_path
+      visit casa_cases_path
 
       expect(page).to have_text("Bob Loblaw")
       expect(page).to have_no_link("Bob Loblaw")
+      expect(page).to have_css("td", text: "Bob Loblaw")
+      expect(page).to have_link("Detail View", href: casa_case_path(casa_case.id))
     end
 
     it "displays 'No active cases' when they don't have any assignments", js: true do
-      visit root_path
+      visit casa_cases_path
       expect(page).to have_text("My Cases")
-      expect(page).not_to have_text("Bob Loblaw")
+      expect(page).not_to have_css("td", text: "Bob Loblaw")
+      expect(page).not_to have_text("Detail View")
     end
   end
 end

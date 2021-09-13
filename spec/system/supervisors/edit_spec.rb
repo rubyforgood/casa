@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "supervisors/edit", :disable_bullet, type: :system do
+RSpec.describe "supervisors/edit", type: :system do
   let(:organization) { create(:casa_org) }
 
   context "logged in as an admin" do
@@ -91,6 +91,22 @@ RSpec.describe "supervisors/edit", :disable_bullet, type: :system do
       expect(page).not_to have_text("Supervisor was deactivated on")
 
       expect(inactive_supervisor.reload).to be_active
+    end
+
+    it "can resend invitation to a supervisor", js: true do
+      supervisor = create :supervisor, casa_org: organization
+
+      sign_in user
+
+      visit edit_supervisor_path(supervisor)
+
+      click_on "Resend Invitation"
+
+      expect(page).to have_content("Invitation sent")
+
+      deliveries = ActionMailer::Base.deliveries
+      expect(deliveries.count).to eq(1)
+      expect(deliveries.last.subject).to have_text "CASA Console invitation instructions"
     end
 
     context "logged in as a supervisor" do

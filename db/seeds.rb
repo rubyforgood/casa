@@ -30,6 +30,10 @@ class SeederMain
     db_populator.create_all_casa_admin("all_casa_admin1@example.com")
     db_populator.create_org(CasaOrgPopulatorPresets.for_environment.merge({org_name: "Prince George CASA"}))
     db_populator.create_org(CasaOrgPopulatorPresets.minimal_dataset_options)
+    2.times do
+      DbPopulator.new(rng, case_fourteen_years_old: true)
+        .create_org(CasaOrgPopulatorPresets.minimal_dataset_options)
+    end
 
     post_process_data
     PaperTrail::Version.delete_all

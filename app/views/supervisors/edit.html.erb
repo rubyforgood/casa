@@ -1,4 +1,3 @@
-<%= link_to t("button.back"), supervisors_path %>
 <h1><%= t(".title") %></h1>
 
 <div class="card card-container">
@@ -11,7 +10,7 @@
         <% if policy(@supervisor).update_supervisor_email? %>
           <%= form.text_field :email, class: "form-control" %>
         <% else %>
-          <input class="form-control" type="text" placeholder="<%= @supervisor.email %>" readonly>
+          <input class="form-control" type="text" placeholder="<%= @supervisor.email %>" autocomplete="off" readonly>
         <% end %>
       </div>
 
@@ -20,7 +19,7 @@
         <% if policy(@supervisor).update_supervisor_name? %>
           <%= form.text_field :display_name, class: "form-control" %>
         <% else %>
-          <input class="form-control" type="text" placeholder="<%= @supervisor.display_name %>" readonly>
+          <input class="form-control" type="text" placeholder="<%= @supervisor.display_name %>" autocomplete="off" readonly>
         <% end %>
       </div>
 

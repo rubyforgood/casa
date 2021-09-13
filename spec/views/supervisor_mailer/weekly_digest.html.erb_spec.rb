@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "supervisor_mailer/weekly_digest", :disable_bullet, type: :view do
+RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
   let(:organization) { create(:casa_org) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
   let(:volunteer) { create(:volunteer, casa_org: organization) }
@@ -21,7 +21,8 @@ RSpec.describe "supervisor_mailer/weekly_digest", :disable_bullet, type: :view d
     end
 
     it { expect(rendered).to have_text("Here's a summary of what happened with your volunteers this last week.") }
-    it { expect(rendered).to have_text(volunteer.display_name) }
+    it { expect(rendered).to have_link(volunteer.display_name) }
+    it { expect(rendered).to have_link(casa_case.case_number) }
     it { expect(rendered).not_to have_text(inactive_volunteer.display_name) }
     it { expect(rendered).to have_text("Number of unsuccessful case contacts made this week: 2") }
     it { expect(rendered).to have_text("Number of successful case contacts made this week: 1") }

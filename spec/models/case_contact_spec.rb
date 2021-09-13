@@ -1,10 +1,8 @@
 require "rails_helper"
 
 RSpec.describe CaseContact, type: :model do
-  context "validations" do
-    it { is_expected.to validate_numericality_of(:miles_driven).is_less_than 10_000 }
-    it { is_expected.to validate_numericality_of(:miles_driven).is_greater_than_or_equal_to 0 }
-  end
+  it { is_expected.to validate_numericality_of(:miles_driven).is_less_than 10_000 }
+  it { is_expected.to validate_numericality_of(:miles_driven).is_greater_than_or_equal_to 0 }
 
   it "belongs to a creator" do
     case_contact = build(:case_contact, creator: nil)
@@ -106,22 +104,65 @@ RSpec.describe CaseContact, type: :model do
   end
 
   describe "scopes" do
-    describe ".contact_type" do
-      it "returns case contacts filtered by contact type id" do
-        group = create(:contact_type_group)
-        youth_type = create(:contact_type, name: "Youth", contact_type_group: group)
-        supervisor_type = create(:contact_type, name: "Supervisor", contact_type_group: group)
-        parent_type = create(:contact_type, name: "Parent", contact_type_group: group)
+    describe "date related scopes" do
+      let!(:case_contacts) do
+        [
+          create(:case_contact, occurred_at: Time.zone.yesterday - 1),
+          create(:case_contact, occurred_at: Time.zone.yesterday),
+          create(:case_contact, occurred_at: Time.zone.today)
+        ]
+      end
 
-        case_contacts_to_match = [
+      let(:date) { Time.zone.yesterday }
+
+      describe ".occurred_starting_at" do
+        subject(:occurred_starting_at) { described_class.occurred_starting_at(date) }
+
+        context "with specified date" do
+          it { is_expected.to eq [case_contacts.second, case_contacts.third] }
+        end
+
+        context "with no specified date" do
+          let(:date) { nil }
+
+          it { is_expected.to eq case_contacts }
+        end
+      end
+
+      describe ".occurred_ending_at" do
+        subject(:occurred_ending_at) { described_class.occurred_ending_at(date) }
+
+        context "with specified date" do
+          it { is_expected.to eq [case_contacts.first, case_contacts.second] }
+        end
+
+        context "with no specified date" do
+          let(:date) { nil }
+
+          it { is_expected.to eq case_contacts }
+        end
+      end
+    end
+
+    describe ".contact_type" do
+      subject(:contact_type) { described_class.contact_type([youth_type.id, supervisor_type.id]) }
+
+      let(:group) { create(:contact_type_group) }
+      let(:youth_type) { create(:contact_type, name: "Youth", contact_type_group: group) }
+      let(:supervisor_type) { create(:contact_type, name: "Supervisor", contact_type_group: group) }
+      let(:parent_type) { create(:contact_type, name: "Parent", contact_type_group: group) }
+
+      let!(:case_contacts_to_match) do
+        [
           create(:case_contact, contact_types: [youth_type, supervisor_type]),
           create(:case_contact, contact_types: [supervisor_type]),
           create(:case_contact, contact_types: [youth_type, parent_type])
         ]
-        create(:case_contact, contact_types: [parent_type])
-
-        expect(CaseContact.contact_type([youth_type.id, supervisor_type.id])).to match_array(case_contacts_to_match)
       end
+
+      let!(:other_case_contact) { create(:case_contact, contact_types: [parent_type]) }
+
+      it { is_expected.to match_array(case_contacts_to_match) }
     end
 
     describe ".contact_made" do
@@ -178,6 +219,173 @@ RSpec.describe CaseContact, type: :model do
           case_contact = create(:case_contact, {miles_driven: 50, want_driving_reimbursement: false})
 
           expect(CaseContact.want_driving_reimbursement(false)).to match_array([case_contact])
+        end
+      end
+    end
+
+    describe ".contact_medium" do
+      subject(:contact_medium) { described_class.contact_medium(medium_type) }
+
+      let!(:case_contacts) do
+        [
+          create(:case_contact, medium_type: "in-person"),
+          create(:case_contact, medium_type: "letter")
+        ]
+      end
+
+      describe "with specified medium parameter" do
+        let(:medium_type) { "in-person" }
+
+        it { is_expected.to contain_exactly case_contacts.first }
+      end
+
+      describe "without specified medium parameter" do
+        let(:medium_type) { nil }
+
+        it { is_expected.to eq case_contacts }
+      end
+    end
+
+    describe ".sorted_by" do
+      subject(:sorted_by) { described_class.sorted_by(sort_option) }
+
+      context "without sort option" do
+        let(:sort_option) { nil }
+
+        it { expect { sorted_by }.to raise_error(ArgumentError, "Invalid sort option: nil") }
+      end
+
+      context "with invalid sort option" do
+        let(:sort_option) { "1254645" }
+
+        it { expect { sorted_by }.to raise_error(ArgumentError, "Invalid sort option: \"1254645\"") }
+      end
+
+      context "with valid sort option" do
+        context "with occurred_at option" do
+          let(:sort_option) { "occurred_at_#{direction}" }
+
+          let!(:case_contacts) do
+            [
+              create(:case_contact, occurred_at: Time.zone.today - 3),
+              create(:case_contact, occurred_at: Time.zone.today - 1),
+              create(:case_contact, occurred_at: Time.zone.today - 2)
+            ]
+          end
+
+          context "when sorting by ascending order" do
+            let(:direction) { "asc" }
+
+            it { is_expected.to match_array [case_contacts[0], case_contacts[2], case_contacts[1]] }
+          end
+
+          context "when sorting by descending order" do
+            let(:direction) { "desc" }
+
+            it { is_expected.to match_array [case_contacts[1], case_contacts[2], case_contacts[0]] }
+          end
+        end
+
+        context "with contact_type option" do
+          let(:sort_option) { "contact_type_#{direction}" }
+
+          let(:group) { create(:contact_type_group) }
+
+          let(:contact_types) do
+            [
+              create(:contact_type, name: "Supervisor", contact_type_group: group),
+              create(:contact_type, name: "Parent", contact_type_group: group),
+              create(:contact_type, name: "Youth", contact_type_group: group)
+            ]
+          end
+
+          let!(:case_contacts) do
+            contact_types.map do |contact_type|
+              create(:case_contact, contact_types: [contact_type])
+            end
+          end
+
+          context "when sorting by ascending order" do
+            let(:direction) { "asc" }
+
+            it { is_expected.to match_array [case_contacts[1], case_contacts[0], case_contacts[2]] }
+          end
+
+          context "when sorting by descending order" do
+            let(:direction) { "desc" }
+
+            it { is_expected.to match_array [case_contacts[2], case_contacts[0], case_contacts[1]] }
+          end
+        end
+
+        context "with medium_type option" do
+          let(:sort_option) { "contact_type_#{direction}" }
+
+          let!(:case_contacts) do
+            [
+              create(:case_contact, medium_type: "in-person"),
+              create(:case_contact, medium_type: "text/email"),
+              create(:case_contact, medium_type: "letter")
+            ]
+          end
+
+          context "when sorting by ascending order" do
+            let(:direction) { "asc" }
+
+            it { is_expected.to match_array [case_contacts[0], case_contacts[2], case_contacts[1]] }
+          end
+
+          context "when sorting by descending order" do
+            let(:direction) { "desc" }
+
+            it { is_expected.to match_array [case_contacts[1], case_contacts[2], case_contacts[0]] }
+          end
+        end
+
+        context "with want_driving_reimbursement option" do
+          let(:sort_option) { "want_driving_reimbursement_#{direction}" }
+
+          let!(:case_contacts) do
+            [
+              create(:case_contact, miles_driven: 1, want_driving_reimbursement: true),
+              create(:case_contact, miles_driven: 1, want_driving_reimbursement: false)
+            ]
+          end
+
+          context "when sorting by ascending order" do
+            let(:direction) { "asc" }
+
+            it { is_expected.to match_array [case_contacts[0], case_contacts[1]] }
+          end
+
+          context "when sorting by descending order" do
+            let(:direction) { "desc" }
+
+            it { is_expected.to match_array [case_contacts[1], case_contacts[0]] }
+          end
+        end
+
+        context "with contact_made option" do
+          let(:sort_option) { "contact_made_#{direction}" }
+
+          let!(:case_contacts) do
+            [
+              create(:case_contact, contact_made: true),
+              create(:case_contact, contact_made: false)
+            ]
+          end
+
+          context "when sorting by ascending order" do
+            let(:direction) { "asc" }
+
+            it { is_expected.to match_array [case_contacts[1], case_contacts[0]] }
+          end
+
+          context "when sorting by descending order" do
+            let(:direction) { "desc" }
+
+            it { is_expected.to match_array [case_contacts[0], case_contacts[1]] }
+          end
         end
       end
     end

@@ -1,5 +1,7 @@
 class CasaCase < ApplicationRecord
   include ByOrganizationScope
+  include DateHelper
+
   has_paper_trail
 
   TABLE_COLUMNS = %w[
@@ -90,42 +92,6 @@ class CasaCase < ApplicationRecord
     court_reports.order("created_at").last
   end
 
-  def court_report_status=(value)
-    super
-    if court_report_not_submitted?
-      self.court_report_submitted_at = nil
-    else
-      self.court_report_submitted_at ||= Time.current
-    end
-    court_report_status
-  end
-
-  def self.available_for_volunteer(volunteer)
-    ids = connection.select_values(%{
-      SELECT casa_cases.id
-      FROM casa_cases
-      WHERE id NOT IN (SELECT ca.casa_case_id
-                      FROM case_assignments ca
-                      WHERE ca.volunteer_id = #{volunteer.id}
-                      GROUP BY ca.casa_case_id)
-      GROUP BY casa_cases.id;
-    })
-    where(id: ids, casa_org: volunteer.casa_org)
-      .order(:case_number)
-  end
-
-  def in_transition_age?
-    birth_month_year_youth.nil? ? false : birth_month_year_youth <= 14.years.ago
-  end
-
-  def has_judge_name?
-    judge_name
-  end
-
-  def has_hearing_type?
-    hearing_type
-  end
-
   def add_emancipation_category(category_id)
     emancipation_categories << EmancipationCategory.find(category_id)
   end
@@ -140,6 +106,58 @@ class CasaCase < ApplicationRecord
     end
   end
 
+  def clear_court_dates
+    if court_date && court_date < Time.current
+      update(
+        court_date: nil,
+        court_report_due_date: nil,
+        court_report_status: :not_submitted
+      )
+    end
+  end
+
+  def court_report_status=(value)
+    super
+    if court_report_not_submitted?
+      self.court_report_submitted_at = nil
+    else
+      self.court_report_submitted_at ||= Time.current
+    end
+    court_report_status
+  end
+
+  def in_transition_age?
+    birth_month_year_youth.nil? ? false : birth_month_year_youth <= 14.years.ago
+  end
+
+  def has_judge_name?
+    judge_name
+  end
+  
+  def latest_court_report
+    court_reports.order("created_at").last
+  end
+
+  def latest_past_court_date
+    past_court_dates.order("date").last
+  end
+
+  def has_contact_type?(contact_type)
+    casa_case_contact_types.map(&:contact_type_id).include?(contact_type.id)
+  end
+
+  def has_hearing_type?
+    hearing_type
+  end
+
+  def has_judge_name?
+    judge_name
+  end
+
+  def has_transitioned?
+    transition_aged_youth
+  end
+
   def remove_emancipation_category(category_id)
     emancipation_categories.destroy(EmancipationCategory.find(category_id))
   end
@@ -149,22 +167,24 @@ class CasaCase < ApplicationRecord
   end
 
   def update_cleaning_contact_types(args)
-    args = parse_date("court_date", args)
-    args = parse_date("court_report_due_date", args)
+    args = parse_date(errors, "court_date", args)
+    args = parse_date(errors, "court_report_due_date", args)
 
     return false unless errors.messages.empty?
 
     transaction do
+      # if court_report_due_date && court_report_due_date < Date.today
+      #   new_past_court_date = PastCourtDate.new(
+      #     date: court_report_due_date,
+      #     casa_case_id: casa_case.id,
+      #     case_court_mandates: casa_case.case_court_mandates,
+      #     hearing_type_id: casa_case.hearing_type_id,
+      #     judge_id: casa_case.judge_id
+      #   )
+      #   casa_case.past_court_dates << new_past_court_date
+      # end
       casa_case_contact_types.destroy_all
       update(args)
-    end
-  end
-
-  def clear_court_dates
-    if court_date && court_date < Time.current
-      update(court_date: nil,
-             court_report_due_date: nil,
-             court_report_status: :not_submitted)
     end
   end
 
@@ -178,30 +198,8 @@ class CasaCase < ApplicationRecord
   end
 
   def unassigned_volunteers
-    # binding.pry
-    Volunteer.active.where.not(id: assigned_volunteers).order(:display_name).in_organization(casa_org)
-  end
-
-  private
-
-  def validate_date(day, month, year)
-    raise Date::Error if day.blank? || month.blank? || year.blank?
-
-    Date.parse("#{day}-#{month}-#{year}")
-  end
-
-  def parse_date(date_field_name, args)
-    day = args.delete("#{date_field_name}(3i)")
-    month = args.delete("#{date_field_name}(2i)")
-    year = args.delete("#{date_field_name}(1i)")
-
-    return args if day.blank? && month.blank? && year.blank?
-
-    args[date_field_name.to_sym] = validate_date(day, month, year)
-    args
-  rescue Date::Error
-    errors.add(date_field_name.to_sym, "was not a valid date.")
-    args
+    volunteers_unassigned_to_case = Volunteer.active.where.not(id: assigned_volunteers).in_organization(casa_org)
+    volunteers_unassigned_to_case.with_no_assigned_cases + volunteers_unassigned_to_case.with_assigned_cases
   end
 end
 

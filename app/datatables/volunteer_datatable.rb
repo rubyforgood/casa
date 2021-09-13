@@ -53,16 +53,20 @@ class VolunteerDatatable < ApplicationDatatable
           LEFT JOIN supervisor_volunteers ON supervisor_volunteers.volunteer_id = users.id AND supervisor_volunteers.is_active
           LEFT JOIN users supervisors ON supervisors.id = supervisor_volunteers.supervisor_id AND supervisors.active
           LEFT JOIN (
-            #{most_recent_contacts_subquery}
+            #{sanitize_sql(most_recent_contacts_subquery)}
           ) most_recent_contacts ON most_recent_contacts.creator_id = users.id AND most_recent_contacts.contact_index = 1
           LEFT JOIN (
-            #{contacts_made_in_past_days_subquery}
+            #{sanitize_sql(contacts_made_in_past_days_subquery)}
           ) contacts_made_in_past_days ON contacts_made_in_past_days.creator_id = users.id
         SQL
       )
       .order(order_clause)
       .order(:id)
       .includes(:casa_cases)
+  end
+
+  def sanitize_sql(sql)
+    ActiveRecord::Base.sanitize_sql(sql)
   end
 
   def most_recent_contacts_subquery

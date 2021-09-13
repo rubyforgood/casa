@@ -1,4 +1,18 @@
-This folder contains helper scripts for git hooks.
+This folder contains helper scripts for Git hooks.
+
+To create a hook, make a file inside the directory `.git/hooks/` with the name of the hook you want to set up. Do not use a file extension.
+For example, if you want to set up a pre-commit hook, the file should be called `pre-commit`, or if you want a pre-push hook, it should be called `pre-push`.
+
+Once you've created that file, put the appropriate she-bang on the first line:
+```bash
+#!/bin/sh
+```
+followed by the script you want to run and any arguments or flags for that script.
+
+See [Example Hooks](#example-hooks) below for how you might want to set these up.
+You can read more about Git hooks [here](https://git-scm.com/docs/githooks).
+
+## Hook Scripts
 
 ### `update-dependences`  
 Installs dependencies if any are missing  
@@ -14,8 +28,8 @@ Usage: `update-branch <remote name>`
 Lints files on the current branch  
 Usage: `lint <diff policy>`  
  + `<diff policy>`(optional) can be one of the the following
-   - `--staged` lints if the files staged for commit contain lintable files
-   - `--unpushed` lints files changed by commits not yet pushed to origin if they are lintable
+   - `--staged` lints the files staged for commit
+   - `--unpushed` lints files changed by commits not yet pushed to origin
    - `--all` (default) lints all files in the repo  
    
 ## Example Hooks

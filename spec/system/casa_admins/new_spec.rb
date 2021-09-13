@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "casa_admins/new", :disable_bullet, type: :system do
+RSpec.describe "casa_admins/new", type: :system do
   let(:admin) { create :casa_admin }
 
   it "validates and creates new admin" do
@@ -28,6 +28,11 @@ RSpec.describe "casa_admins/new", :disable_bullet, type: :system do
     click_button "Submit"
     expect(page).to have_content "New admin created successfully"
     expect(page).to have_content "valid@example.com"
+
+    last_email = ActionMailer::Base.deliveries.last
+    expect(last_email.to).to eq ["valid@example.com"]
+    expect(last_email.subject).to have_text "CASA Console invitation instructions"
+    expect(last_email.html_part.body.encoded).to have_text "your new CasaAdmin account."
 
     click_on "New Admin"
     fill_in "Email", with: "valid@example.com"

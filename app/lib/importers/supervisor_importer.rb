@@ -34,7 +34,7 @@ class SupervisorImporter < FileImporter
         if volunteer.supervisor
           next if volunteer.supervisor == supervisor
 
-          failures << "Volunteer #{volunteer.email} already has a supervisor"
+          raise "Volunteer #{volunteer.email} already has a supervisor"
         else
           supervisor.volunteers << volunteer
         end

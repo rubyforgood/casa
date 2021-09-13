@@ -5,16 +5,16 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'docs/**'
-      - '*.md'
-      - 'bin/*'
+      - 'doc/**'
+      - '**.md'
+      - 'bin/**'
   pull_request:
     branches:
       - main
     paths-ignore:
-      - 'docs/**'
-      - '*.md'
-      - 'bin/*'
+      - 'doc/**'
+      - '**.md'
+      - 'bin/**'
 
 jobs:
   erb_lint:
@@ -30,4 +30,4 @@ jobs:
         bundler-cache: true
 
     - name: ERB lint
-      run: bundle exec erblint --lint-all --autocorrect
+      run: bundle exec erblint --lint-all

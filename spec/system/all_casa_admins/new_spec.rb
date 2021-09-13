@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "all_casa_admins/new", :disable_bullet, type: :system do
+RSpec.describe "all_casa_admins/new", type: :system do
   let(:all_casa_admin) { create(:all_casa_admin, email: "theexample@example.com") }
   let(:path) { authenticated_all_casa_admin_root_path }
 
@@ -30,5 +30,23 @@ RSpec.describe "all_casa_admins/new", :disable_bullet, type: :system do
     expect(page).to have_content "Email has already been taken"
 
     expect(AllCasaAdmin.find_by(email: "valid@example.com").invitation_created_at).not_to be_nil
+  end
+
+  describe "invitation should be" do
+    it "valid within expiration period" do
+      all_casa_admin = AllCasaAdmin.invite!(email: "valid@email.com")
+
+      travel 2.days
+
+      expect(all_casa_admin.valid_invitation?).to be true
+    end
+
+    it "invalid when past expiration date" do
+      all_casa_admin = AllCasaAdmin.invite!(email: "valid@email.com")
+
+      travel 8.days
+
+      expect(all_casa_admin.valid_invitation?).to be false
+    end
   end
 end

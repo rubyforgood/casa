@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2021_09_12_170402) do
+=======
+ActiveRecord::Schema.define(version: 2021_06_24_125750) do
+>>>>>>> b9f6ca24e40dd421b368f98520f188f49744314f
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -206,6 +210,7 @@ ActiveRecord::Schema.define(version: 2021_09_12_170402) do
     t.integer "status", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "note"
     t.index ["case_contact_id"], name: "index_followups_on_case_contact_id"
     t.index ["creator_id"], name: "index_followups_on_creator_id"
   end
@@ -248,6 +253,18 @@ ActiveRecord::Schema.define(version: 2021_09_12_170402) do
     t.index ["casa_case_id"], name: "index_past_court_dates_on_casa_case_id"
     t.index ["hearing_type_id"], name: "index_past_court_dates_on_hearing_type_id"
     t.index ["judge_id"], name: "index_past_court_dates_on_judge_id"
+  end
+
+  create_table "sent_emails", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "casa_org_id", null: false
+    t.string "mailer_type"
+    t.string "category"
+    t.string "sent_address"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["casa_org_id"], name: "index_sent_emails_on_casa_org_id"
+    t.index ["user_id"], name: "index_sent_emails_on_user_id"
   end
 
   create_table "supervisor_volunteers", force: :cascade do |t|
@@ -323,6 +340,8 @@ ActiveRecord::Schema.define(version: 2021_09_12_170402) do
   add_foreign_key "followups", "users", column: "creator_id"
   add_foreign_key "judges", "casa_orgs"
   add_foreign_key "past_court_dates", "casa_cases"
+  add_foreign_key "sent_emails", "casa_orgs"
+  add_foreign_key "sent_emails", "users"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"
   add_foreign_key "supervisor_volunteers", "users", column: "volunteer_id"
   add_foreign_key "users", "casa_orgs"

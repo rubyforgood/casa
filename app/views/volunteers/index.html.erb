@@ -1,11 +1,11 @@
 <div class="row">
   <div class="col-sm-12 dashboard-table-header">
-    <h1>Volunteers</h1>
+    <h1><%= t(".volunteers") %></h1>
     <% if policy(Volunteer).new? %>
-      <%= link_to "New Volunteer", new_volunteer_path, class: "btn btn-primary mb-2 mb-md-0" %>
+      <%= link_to t(".button.new"), new_volunteer_path, class: "btn btn-primary mb-2 mb-md-0" %>
     <% end %>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#visibleColumns">
-      Pick displayed columns
+      <%= t(".pick_displayed_columns") %>
     </button>
   </div>
 </div>
@@ -13,12 +13,12 @@
 
 <div class="row volunteer-filters">
   <div class="col-sm-12">
-    <h4 class="pull-left mr-2">Filter by:</h4>
+    <h4 class="pull-left mr-2"><%= t(".filter") %></h4>
     <div class="dropdown pull-left mr-2">
       <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Supervisor
+        <%= t(".supervisor") %>
       </button>
-      <ul class="dropdown-menu supervisor-options" style="min-width: 15rem;">
+      <ul class="dropdown-menu supervisor-options">
         <li>
           <a class="small" data-value="option1" tabIndex="-1">
             <input
@@ -26,7 +26,7 @@
               type="checkbox"
               data-value=""
               unchecked>
-            No supervisor assignment
+              <%= t(".no_supervisor") %>
           </a>
         </li>
         <% current_organization.supervisors.each do |supervisor| %>
@@ -50,26 +50,26 @@
     </div>
     <div class="dropdown pull-left mr-2">
       <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Status
+        <%= t(".status") %>
       </button>
       <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
         <li>
           <a class="small" data-value="option1" tabIndex="-1">
             <input type="checkbox" data-value="true" checked>
-            Active
+            <%= t(".active") %>
           </a>
         </li>
         <li>
           <a class="small" data-value="option1" tabIndex="-1">
             <input type="checkbox" data-value="false">
-            Inactive
+            <%= t(".inactive") %>
           </a>
         </li>
       </div>
     </div>
     <div class="dropdown pull-left mr-2">
       <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Assigned to Transition Aged Youth
+      <%= t(".transition_aged_youth") %>
       </button>
     </div>
   </div>
@@ -80,14 +80,14 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="visibleColumnsLabel">Pick Displayed Columns</h5>
+        <h5 class="modal-title" id="visibleColumnsLabel"><%= t(".pick_displayed_columns") %></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <div>
-          Select columns:
+          <%= t(".select_columns") %>:
 
           <% Volunteer::TABLE_COLUMNS.each_with_index do |column, index| %>
             <div class="row">
@@ -106,7 +106,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"><%= t("button.close") %></button>
       </div>
     </div>
   </div>
@@ -120,15 +120,15 @@
       data-source="<%= datatable_volunteers_path format: :json %>">
       <thead>
       <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Supervisor</th>
-        <th>Status</th>
-        <th>Assigned To Transition Aged Youth</th>
-        <th>Case Number(s)</th>
-        <th>Last Contact Made</th>
-        <th>Contacts Made in Past 60 Days</th>
-        <th>Actions</th>
+        <th><%= t(".heading.name") %></th>
+        <th><%= t(".heading.e_mail") %></th>
+        <th><%= t(".heading.supervisor") %></th>
+        <th><%= t(".heading.status") %></th>
+        <th><%= t(".heading.assigned_transition_aged_youth") %></th>
+        <th><%= t(".heading.case_number") %></th>
+        <th><%= t(".heading.last_contact_made") %></th>
+        <th><%= t(".heading.contacts") %></th>
+        <th><%= t(".heading.actions") %></th>
       </tr>
       </thead>
 

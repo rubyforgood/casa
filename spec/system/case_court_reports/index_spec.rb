@@ -1,7 +1,8 @@
 require "rails_helper"
 
-RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
-  let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
+RSpec.describe "case_court_reports/index", type: :system do
+  let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
+  let(:supervisor) { volunteer.supervisor }
   let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
 
   before do
@@ -16,8 +17,10 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
       expect(page).to have_selector "#btnGenerateReport", **options
     end
 
-    it "shows a select element with default selection 'Select a case to generate report'" do
-      expected_text = "Select a case to generate report"
+    it { expect(page).not_to have_selector ".select2" }
+
+    it "shows a select element with default selection 'Select case number'" do
+      expected_text = "Select case number"
       find("#case-selection").click.first("option", text: expected_text).select_option
 
       expect(page).to have_selector "#case-selection option:first-of-type", text: expected_text
@@ -41,17 +44,24 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
 
       expect(page).to have_selector "#case-selection option", text: expected_text
     end
+
+    it "adds data-lookup attribute for searching by volunteer name" do
+      casa_cases.each do |casa_case|
+        lookup = casa_case.assigned_volunteers.map(&:display_name).join(",")
+        expect(page).to have_selector "#case-selection option[data-lookup='#{lookup}']"
+      end
+    end
   end
 
   context "when choosing the prompt option (value is empty) and click on 'Generate Report' button, nothing should happen", js: true do
-    let(:option_text) { "Select a case to generate report" }
+    let(:option_text) { "Select case number" }
 
     before do
       # to find the select element, use either 'name' or 'id' attribute
       # in this case, id = "case-selection", name = "case_number"
-      page.select "Select a case to generate report", from: "case-selection"
+      page.select "Select case number", from: "case-selection"
       # the above will have the same effect as the below
-      # find("#case-selection").select "Select a case to generate report"
+      # find("#case-selection").select "Select case number"
       click_button "Generate Report"
     end
 
@@ -72,7 +82,7 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
 
   describe "'Case Number' dropdown list", js: true do
     let(:non_transitioned_case_number) { casa_cases.first.case_number.to_s }
-    let(:non_transitioned_option_text) { "#{non_transitioned_case_number} - non-transition" }
+    let(:non_transitioned_option_text) { "#{non_transitioned_case_number} - non-transition(assigned to Name Last)" }
 
     it "has non-transitioned case option selected" do
       page.select non_transitioned_option_text, from: "case-selection"
@@ -95,8 +105,8 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
     end
 
     describe "'Generate Report' button" do
-      it "has been hidden and disabled" do
-        options = {visible: :hidden}
+      it "has been disabled" do
+        options = {visible: :visible}
 
         expect(page).to have_selector "#btnGenerateReport[disabled]", **options
       end
@@ -119,6 +129,7 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
       # to find the select element, use either 'name' or 'id' attribute
       # in this case, id = "case-selection", name = "case_number"
       page.select option_text, from: "case-selection"
+
       @download_window = window_opened_by do
         click_button "Generate Report"
       end
@@ -177,6 +188,31 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
         visit casa_case_path(casa_case.id)
 
         expect(page).to have_link("Click to download")
+      end
+    end
+  end
+
+  describe "as a supervisor" do
+    before do
+      sign_in supervisor
+      visit case_court_reports_path
+    end
+
+    it { expect(page).to have_selector ".select2" }
+    it { expect(page).to have_text "Search by volunteer name or case number" }
+
+    context "when searching for cases" do
+      let(:casa_case) { volunteer.casa_cases.first }
+      let(:search_term) { casa_case.case_number[-3..] }
+
+      it "selects the correct case", js: true do
+        page.find("span.select2").click
+        page.find(".select2-search__field").click
+
+        send_keys(search_term)
+        send_keys :enter
+
+        expect(find(".select2-selection__rendered").text).to match /^#{casa_case.case_number}/
       end
     end
   end

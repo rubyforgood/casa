@@ -3,14 +3,8 @@
 <div class="row">
   <div class="col-sm-12 form-header">
     <h1>Editing Volunteer</h1>
-    <% if current_user.supervisor? ||
-        current_user.casa_admin? %>
-      <%= link_to t(".send_reminder"),
-                  reminder_volunteer_path(@volunteer),
-                  method: :patch,
-                  class: "btn btn-primary casa-case-button",
-                  data_toggle: "tooltip",
-                  title: "#{t(".tooltip")}" %>
+    <%= form_tag reminder_volunteer_path(@volunteer), method: :patch, id: "cc-check" do %>
+      <%= render "send_reminder_button", volunteer: @volunteer %>
     <% end %>
   </div>
 </div>
@@ -24,7 +18,7 @@
         <% if policy(:volunteer).update_volunteer_email? %>
           <%= form.text_field :email, class: "form-control" %>
         <% else %>
-          <input class="form-control" type="text" placeholder="<%= @volunteer.email %>" readonly>
+          <input class="form-control" type="text" placeholder="<%= @volunteer.email %>" autocomplete="off" readonly>
         <% end %>
       </div>
 
@@ -49,9 +43,3 @@
 <%= render 'manage_cases' %>
 
 <%= render 'manage_supervisor' %>
-
-<script>
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
-</script>

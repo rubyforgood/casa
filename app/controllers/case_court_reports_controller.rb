@@ -46,6 +46,9 @@ class CaseCourtReportsController < ApplicationController
   rescue Zip::Error
     error_messages = generate_error(t(".error.template_not_found"))
     render json: {status: :not_found, error_messages: error_messages}, status: :not_found
+  rescue => e
+    error_messages = generate_error(e.to_s)
+    render json: {status: :unprocessable_entity, error_messages: error_messages}, status: :unprocessable_entity
   end
 
   private
@@ -71,7 +74,7 @@ class CaseCourtReportsController < ApplicationController
 
     casa_case.casa_org.open_org_court_report_template do |template_docx_file|
       court_report = CaseCourtReport.new(
-        volunteer_id: current_user.volunteer? ? current_user.id : casa_case.assigned_volunteers.first.id,
+        volunteer_id: current_user.volunteer? ? current_user.id : casa_case.assigned_volunteers.first&.id,
         case_id: casa_case.id,
         path_to_template: template_docx_file.to_path
       )

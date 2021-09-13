@@ -1,10 +1,10 @@
 require "rails_helper"
 
-RSpec.describe "case_contacts/new", :disable_bullet, type: :view do
+RSpec.describe "case_contacts/new", type: :view do
   subject { render template: "case_contacts/new" }
 
   before do
-    case_contact = create(:case_contact)
+    case_contact = build_stubbed(:case_contact)
     assign :case_contact, case_contact
     assign :casa_cases, [case_contact.casa_case]
     assign :selected_cases, [case_contact.casa_case]
