@@ -152,6 +152,7 @@ describe('stopAsyncOperation', () => {
         }, 2000)
 
         notifier.stopAsyncOperation()
+        expect(savedToast.attr('style')).toEqual(expect.not.stringContaining('display: none'))
       } catch (error) {
         done(error)
       }
@@ -159,7 +160,35 @@ describe('stopAsyncOperation', () => {
   })
 
   test('stopAsyncOperation should display the saved toast for 2 seconds after the last call in a quick succession of calls when not passed an error', (done) => {
-    done()
+    $(document).ready(() => {
+      const savedToast = $('#async-success-indicator')
+
+      try {
+        notifier.startAsyncOperation()
+        notifier.startAsyncOperation()
+        notifier.startAsyncOperation()
+        expect(savedToast.css('display')).toBe('none')
+
+        setTimeout(() => {
+          expect(savedToast.attr('style')).toEqual(expect.not.stringContaining('display: none'))
+          done()
+        }, 4000)
+
+        notifier.stopAsyncOperation()
+        expect(savedToast.attr('style')).toEqual(expect.not.stringContaining('display: none'))
+
+        // call stopAsyncOperation before the previous stopAsyncOperation call dismisses the saved Toast
+        setTimeout(() => {
+          notifier.stopAsyncOperation()
+        }, 1000)
+
+        setTimeout(() => {
+          notifier.stopAsyncOperation()
+        }, 2000)
+      } catch (error) {
+        done(error)
+      }
+    })
   })
 
   test('stopAsyncOperation should display a red notification when passed an error', (done) => {
