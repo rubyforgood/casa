@@ -27,7 +27,10 @@ class UsersController < ApplicationController
     end
 
     bypass_sign_in(@user)
+
+    UserMailer.password_changed_reminder(@user).deliver
     flash[:success] = "Password was successfully updated."
+
     redirect_to edit_users_path
   end
 
