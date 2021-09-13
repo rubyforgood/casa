@@ -83,7 +83,7 @@ RSpec.describe "notifications/index", type: :system do
     end
 
     context "when admin changes its name" do
-      let(:created_by_name) { 'Foo bar' }
+      let(:created_by_name) { "Foo bar" }
       let(:new_notification_message) { I18n.t("notifications.followup_notification.message", created_by_name: created_by_name) }
 
       before do
