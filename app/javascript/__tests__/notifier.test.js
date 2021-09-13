@@ -139,17 +139,38 @@ describe('startAsyncOperation', () => {
 
 describe('stopAsyncOperation', () => {
   test('stopAsyncOperation should display the saved toast for 2 seconds when not passed an error', (done) => {
+    $(document).ready(() => {
+      const savedToast = $('#async-success-indicator')
+
+      try {
+        notifier.startAsyncOperation()
+        expect(savedToast.css('display')).toBe('none')
+
+        setTimeout(() => {
+          expect(savedToast.attr('style')).toEqual(expect.not.stringContaining('display: none'))
+          done()
+        }, 2000)
+
+        notifier.stopAsyncOperation()
+      } catch (error) {
+        done(error)
+      }
+    })
   })
 
   test('stopAsyncOperation should display the saved toast for 2 seconds after the last call in a quick succession of calls when not passed an error', (done) => {
+    done()
   })
 
   test('stopAsyncOperation should display a red notification when passed an error', (done) => {
+    done()
   })
 
   test('stopAsyncOperation should hide the loading toast when there are no more async operations to wait on', (done) => {
+    done()
   })
 
   test('stopAsyncOperation should throw an error and display it in a red notification when trying to stop an async operation when it\'s sexpecting to resolve none', (done) => {
+    done()
   })
 })
