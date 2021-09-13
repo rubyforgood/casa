@@ -163,7 +163,9 @@ sudo apt-get -y install google-chrome-stable
 
 ```
 # Add user to Postgres:
-sudo -u postgres psql -c "create user vagrant with createdb"
+sudo -u postgres psql -c "CREATE USER $USER WITH CREATEDB"
+# If you are using a VM
+sudo -u postgres psql -c "CREATE USER vagrant WITH CREATEDB"
 ```
 
 #### Creating an SSH Key Pair
@@ -215,6 +217,9 @@ Now to set up the gems, JavaScript libraries, and data base:
 cd casa
 bin/rails db:setup
 bin/update
+yarn
+# webpacker one time setup
+bundle exec rails webpacker:compile
 ```
 
 (`bin/update` is a very useful script that should be run after each `git pull` and can be used whenever you want to make sure your setup is up to date with respect to code and configuration changes.)

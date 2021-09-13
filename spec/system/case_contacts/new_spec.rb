@@ -150,6 +150,26 @@ RSpec.describe "case_contacts/new", type: :system do
 
       expect { check "Parent" }.not_to raise_error
     end
+
+    it "shows the contact type groups, and their contact type alphabetically", :aggregate_failures do
+      group_1 = create(:contact_type_group, name: "Placement", casa_org: organization)
+      group_2 = create(:contact_type_group, name: "Education", casa_org: organization)
+      create(:contact_type, name: "School", contact_type_group: group_1)
+      create(:contact_type, name: "Sports", contact_type_group: group_1)
+      create(:contact_type, name: "Caregiver Family", contact_type_group: group_2)
+      create(:contact_type, name: "Foster Parent", contact_type_group: group_2)
+
+      visit(new_case_contact_path(casa_case.id))
+
+      expect(index_of("Education")).to be < index_of("Placement")
+      expect(index_of("School")).to be < index_of("Sports")
+      expect(index_of("Caregiver Family")).to be < index_of("Foster Parent")
+      expect(index_of("School")).to be > index_of("Caregiver Family")
+    end
+
+    def index_of(text)
+      page.text.index(text)
+    end
   end
 
   context "volunteer user" do

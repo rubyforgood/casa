@@ -35,7 +35,7 @@ RSpec.describe "casa_cases/show", type: :system do
     end
 
     it "can see court mandates" do
-      expect(page).to have_content("Court Mandates")
+      expect(page).to have_content("Court Orders")
       expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
     end
   end
@@ -57,7 +57,7 @@ RSpec.describe "casa_cases/show", type: :system do
     end
 
     it "can see court mandates" do
-      expect(page).to have_content("Court Mandates")
+      expect(page).to have_content("Court Orders")
       expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
     end
 
@@ -92,12 +92,8 @@ RSpec.describe "casa_cases/show", type: :system do
     end
 
     it "can see court mandates" do
-      expect(page).to have_content("Court Mandates")
+      expect(page).to have_content("Court Orders")
       expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
-    end
-
-    it "cannot see Generate Report button" do
-      expect(page).to_not have_button("Generate Report")
     end
   end
 end

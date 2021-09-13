@@ -19,7 +19,7 @@
     "bootstrap": "4.6.0",
     "bootstrap-datepicker": "^1.9.0",
     "bootstrap-select": "^1.13.18",
-    "datatables.net-dt": "^1.11.1",
+    "datatables.net-dt": "^1.11.2",
     "faker": "^5.5.3",
     "jquery": "^3.6.0",
     "node-sass": "^6.0.1",
@@ -31,11 +31,11 @@
   "version": "0.1.0",
   "devDependencies": {
     "cypress": "^8.3.0",
-    "jest": "^27.1.0",
+    "jest": "^27.1.1",
     "markdown-toc": "^1.2.0",
     "standard": "^16.0.3",
     "start-server-and-test": "^1.14.0",
-    "webpack-dev-server": "^4.1.0"
+    "webpack-dev-server": "^4.1.1"
   },
   "standard": {
     "globals": [

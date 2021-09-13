@@ -1,32 +1,31 @@
 <div class="row">
   <div class="col-sm-12 form-header">
-    <h1><%= @casa_case.decorate.transition_aged_youth_icon %> <%= t(".title") %></h1>
+    <h1 class="pull-left"><%= @casa_case.decorate.transition_aged_youth_icon %> <%= t(".title") %></h1>
     <%- if policy(:case_contact).new? & @casa_case.active? %>
       <%= link_to(t(".button.new_contact"),
                   new_case_contact_path(case_contact: {casa_case_id: @casa_case.id}),
-                  class: "btn btn-primary casa-case-button") %>
+                  class: "btn btn-primary pull-left casa-case-button") %>
     <%- end %>
     <% if @casa_case.active? %>
-      <%= link_to t(".button.edit_case"), edit_casa_case_path(@casa_case), class: "btn btn-primary casa-case-button" %>
+      <%= link_to t(".button.edit_case"), edit_casa_case_path(@casa_case),
+              class: "btn btn-primary pull-left casa-case-button" %>
     <% end %>
     <% if @casa_case.has_transitioned? %>
       <%= link_to(casa_case_emancipation_path(@casa_case),
-              class: "btn btn-primary casa-case-button") do %>
+              class: "btn btn-primary pull-left casa-case-button") do %>
         <%= t(".button.emancipation") %>
         <span class="badge badge-light">
           <%= @casa_case.decorate.emancipation_checklist_count %>
         </span>
       <% end %>
     <% end %>
-    <% if current_user.supervisor? || current_user.casa_admin? %>
       <%= form_with url: generate_case_court_reports_path, local: false, class: "d-inline" do |form| %>
         <%= form.hidden_field :case_number, value: @casa_case.case_number %>
         <%= button_tag t(".button.generate_report"), type: :submit,
                        data: {button_name: t(".button.generate_report")},
                        id: "btnGenerateReport",
-                       class: "btn btn-success pull-right" %>
+                       class: "btn btn-success pull-right mb-2" %>
         <i id="spinner" class='fas fa-spin d-none pull-right'>⏳</i>
-      <% end %>
     <% end %>
   </div>
 </div>
@@ -88,7 +87,7 @@
     <% end %>
 
     <% if @casa_case.case_court_mandates.exists? %>
-      <h6><strong><%= t(".court_mandates") %>:</strong></h6>
+      <h6><strong><%= t(".label.court_mandates") %>:</strong></h6>
       <% @casa_case.case_court_mandates.each do |court_mandate| %>
         <p><%= court_mandate.mandate_text %>, <%= court_mandate.implementation_status&.humanize %></p>
       <% end %>

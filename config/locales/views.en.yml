@@ -47,7 +47,7 @@ en:
         court_report_due_date: Court Report Due Date
         court_report_status: Court Report Status
         court_report_submitted_date: Court Report Submitted Date
-        court_mandates: Court Mandates
+        court_mandates: Court Orders
         assigned_volunteers: Assigned Volunteers
         attached_report: Attached Report
       button:
@@ -84,11 +84,11 @@ en:
         select_hearing_type: -Select Hearing Type-
         select_judge: -Select Judge-
       youth_birth_month_year: "Youth's Birth Month & Year"
-      add_court_mandate: Add a court mandate
+      add_court_mandate: Add a court order
       add_past_court_date: Add a past court date
       next_court_date: Next Court Date
       court_report_due_date: Court Report Due Date
-      court_mandates: Court Mandates
+      court_mandates: Court Orders
       court_mandate_privacy_warning: Please check that you didn't enter any youth names
     inactive_case:
       notice: Case was deactivated on
@@ -138,12 +138,12 @@ en:
       title: Editing Past Court Date
     form:
       button:
-        add_court_mandate: Add a court mandate
+        add_court_mandate: Add a court order
         create: Create
         update: Update
       label:
         court_mandates:
-          Court Mandates - Please check that you didn't enter any youth names
+          Court Orders - Please check that you didn't enter any youth names
     new:
       title: New Past Court Date
     show:
@@ -155,10 +155,10 @@ en:
         judge: Judge
         hearing_type: Hearing Type
         none: None
-        case_court_mandates: Court Mandates
-        no_case_court_mandates: There are no court mandates associated with this past court date.
+        case_court_mandates: Court Orders
+        no_case_court_mandates: There are no court orders associated with this past court date.
         casa_case_court_mandate:
-          mandate_text: Court Mandate Text
+          mandate_text: Court Order Text
           implementation_status: Implementation Status
         download_report_docx: Download Report (.docx)
   casa_admins:

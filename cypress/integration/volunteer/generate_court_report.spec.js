@@ -12,9 +12,9 @@ context("Logging into cypress as a volunteer", () => {
     // Pick the first non-blank option from the case selection dropdown
     cy.get("#case-selection option")
       .eq(1)
-      .then(element => {
-        const option = element.val()
-        cy.get('#case-selection').select(option, {force: true});
+      .then((element) => {
+        const option = element.val();
+        cy.get("#case-selection").select(option, { force: true });
 
         cy.contains("Generate Report").click();
 

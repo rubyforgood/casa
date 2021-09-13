@@ -13,23 +13,22 @@ gem "devise" # for authentication
 gem "devise_invitable"
 gem "draper" # adds decorators for cleaner presentation logic
 gem "faker" # creates realistic seed data, valuable for staging and demos
-gem "jbuilder", "~> 2.11" # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem "jbuilder" # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "noticed" # Notifications
 gem "paper_trail" # tracking changes
-gem "pg", ">= 0.18", "< 2.0" # Use postgresql as the database for Active Record
-gem "puma", "~> 5.4" # Use Puma as the app server
+gem "pg" # Use postgresql as the database for Active Record
+gem "puma" # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "rack-attack" # for blocking & throttling abusive requests
-gem "skylight" # automated performance testing https://www.skylight.io/
 gem "webpacker", "~> 5.4" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem "image_processing", "~> 1.12" # Set of higher-level helper methods for image processing.
 gem "lograge" # log less so heroku papertrail quits rate limiting our logs
 gem "filterrific" # filtering and sorting of models
 
-gem "bootsnap", ">= 1.4.2", require: false # Reduces boot times through caching; required in config/boot.rb
+gem "bootsnap", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "bugsnag" # tracking errors in prod
 gem "sablon" # Word document templating tool for Case Court Reports
-gem "paranoia", "~> 2.2" # For soft-deleting purpose
+gem "paranoia" # For soft-deleting purpose
 gem "request_store"
 
 group :development, :test do
@@ -69,3 +68,5 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
+
+gem "scout_apm", "~> 4.1"

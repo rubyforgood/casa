@@ -387,11 +387,11 @@ RSpec.describe "Edit CASA Case", type: :system do
         expect(page).to have_text(mandate_text)
 
         find("button.remove-mandate-button").click
-        expect(page).to have_text("Are you sure you want to remove this court mandate? Doing so will delete all records \
+        expect(page).to have_text("Are you sure you want to remove this court order? Doing so will delete all records \
 of it unless it was included in a previous court report.")
 
         find("button.swal2-confirm").click
-        expect(page).to have_text("Court mandate has been removed.")
+        expect(page).to have_text("Court order has been removed.")
         click_on "OK"
         expect(page).to_not have_text(mandate_text)
 

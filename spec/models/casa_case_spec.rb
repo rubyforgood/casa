@@ -35,12 +35,19 @@ RSpec.describe CasaCase, type: :model do
   end
 
   describe ".unassigned_volunteers" do
+    let!(:casa_case) { create(:casa_case) }
+    let!(:volunteer_same_org) { create(:volunteer, display_name: "Yelena Belova", casa_org: casa_case.casa_org) }
+    let!(:volunteer_same_org_1_with_cases) { create(:volunteer, :with_casa_cases, display_name: "Natasha Romanoff", casa_org: casa_case.casa_org) }
+    let!(:volunteer_same_org_2_with_cases) { create(:volunteer, :with_casa_cases, display_name: "Melina Vostokoff", casa_org: casa_case.casa_org) }
+    let!(:volunteer_different_org) { create(:volunteer, casa_org: create(:casa_org)) }
+
     it "only shows volunteers for the current volunteers organization" do
-      casa_case = create(:casa_case)
-      volunteer_same_org = create(:volunteer, casa_org: casa_case.casa_org)
-      volunteer_different_org = create(:volunteer, casa_org: create(:casa_org))
       expect(casa_case.unassigned_volunteers).to include(volunteer_same_org)
       expect(casa_case.unassigned_volunteers).not_to include(volunteer_different_org)
+    end
+
+    it "sorts volunteers by display name with no cases to the top" do
+      expect(casa_case.unassigned_volunteers).to contain_exactly(volunteer_same_org, volunteer_same_org_2_with_cases, volunteer_same_org_1_with_cases)
     end
   end
 
