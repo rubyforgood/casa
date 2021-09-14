@@ -27,9 +27,9 @@ describe('notify', () => {
     const notificationMessage = "'Y$deH[|%ROii]jy"
 
     $(document).ready(() => {
-      notifier.notify(notificationMessage, 'info')
-
       try {
+        notifier.notify(notificationMessage, 'info')
+
         const successMessages = asyncNotificationsElement.find('.async-success-indicator')
 
         // Notifications contain the "Saved" message and the new message
@@ -46,9 +46,9 @@ describe('notify', () => {
     const notificationMessage = '\\+!h0bbH"yN7dx9.'
 
     $(document).ready(() => {
-      notifier.notify(notificationMessage, 'error')
-
       try {
+        notifier.notify(notificationMessage, 'error')
+
         const failureMessages = asyncNotificationsElement.find('.async-failure-indicator')
 
         expect(failureMessages.length).toBe(1)
@@ -62,10 +62,10 @@ describe('notify', () => {
 
   test('notify should append a dismissable message to the async-notifications widget', (done) => {
     $(document).ready(() => {
-      notifier.notify('', 'error')
-      notifier.notify('', 'info')
-
       try {
+        notifier.notify('', 'error')
+        notifier.notify('', 'info')
+
         let failureMessages = asyncNotificationsElement.find('.async-failure-indicator')
         let successMessages = asyncNotificationsElement.find('.async-success-indicator')
 
@@ -192,7 +192,22 @@ describe('stopAsyncOperation', () => {
   })
 
   test('stopAsyncOperation should display a red notification when passed an error', (done) => {
-    done()
+    const errorMessage = 'hxDEe@no$~Bl%m^]'
+
+    $(document).ready(() => {
+      try {
+        notifier.startAsyncOperation()
+        notifier.stopAsyncOperation(errorMessage)
+
+        const failureMessages = asyncNotificationsElement.find('.async-failure-indicator')
+
+        expect(failureMessages.length).toBe(1)
+        expect(failureMessages[0].innerHTML).toContain(errorMessage)
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
   })
 
   test('stopAsyncOperation should hide the loading toast when there are no more async operations to wait on', (done) => {
