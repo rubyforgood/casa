@@ -33,7 +33,7 @@ RSpec.describe "/case_contacts", type: :request do
         case_contact = build(:case_contact)
         followup = create(:followup, case_contact: case_contact, creator: admin)
         FollowupResolvedNotification
-          .with(followup: followup, created_by_name: volunteer.display_name)
+          .with(followup: followup, created_by: volunteer)
           .deliver(followup.creator)
 
         get edit_case_contact_url(case_contact, notification_id: admin.notifications.first.id)

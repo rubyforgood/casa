@@ -12,18 +12,39 @@ RSpec.describe "notifications/index", type: :system do
     let(:notification_message) { "#{volunteer.display_name} resolved a follow up. Click to see more." }
     let!(:followup) { create(:followup, creator: admin, case_contact: case_contact) }
 
-    it "lists my notifications" do
+    before do
       sign_in volunteer
 
       visit case_contacts_path
       click_button "Resolve"
+    end
 
+    it "lists my notifications" do
       sign_in admin
       visit notifications_path
 
       expect(page).to have_text(notification_message)
       expect(page).to have_text("Followup resolved")
       expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
+    end
+
+    context "when volunteer changes its name" do
+      let(:created_by_name) { "Foo bar" }
+      let(:new_notification_message) { I18n.t("notifications.followup_resolved_notification.message", created_by_name: created_by_name) }
+
+      it "lists notifications showing it's current name" do
+        visit edit_users_path
+        fill_in "Display name", with: created_by_name
+        click_on "Update Profile"
+        expect(page).to have_content "Profile was successfully updated"
+
+        sign_in admin
+        visit notifications_path
+
+        expect(page).to have_text(new_notification_message)
+        expect(page).not_to have_text(notification_message)
+        expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
+      end
     end
   end
 
@@ -77,6 +98,34 @@ RSpec.describe "notifications/index", type: :system do
         visit notifications_path
 
         expect(page).to have_text(inline_notification_message)
+        expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
+        expect(page).to have_text("New followup")
+      end
+    end
+
+    context "when admin changes its name" do
+      let(:created_by_name) { "Foo bar" }
+      let(:new_notification_message) { I18n.t("notifications.followup_notification.message", created_by_name: created_by_name) }
+
+      before do
+        click_button "Follow up"
+        click_button "Confirm"
+      end
+
+      it "lists followup notifications showing admin current name" do
+        # Wait until page reloads
+        expect(page).to have_content "Resolve"
+
+        visit edit_users_path
+        fill_in "Display name", with: created_by_name
+        click_on "Update Profile"
+        expect(page).to have_content "Profile was successfully updated"
+
+        sign_in volunteer
+        visit notifications_path
+
+        expect(page).to have_text(new_notification_message)
+        expect(page).not_to have_text(inline_notification_message)
         expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
         expect(page).to have_text("New followup")
       end
