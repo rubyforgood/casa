@@ -67,7 +67,9 @@ module.exports = class Notifier {
   //  @throws {Error}    for trying to resolve more async operations than the amount currently awaiting
   stopAsyncOperation (errorMsg) {
     if (this.waitingSaveOperationCount < 1) {
-      throw new Error('Attempted to resolve an async operation when awaiting none')
+      const resolveNonexistantOperationError = 'Attempted to resolve an async operation when awaiting none'
+      this.notify(resolveNonexistantOperationError, 'error')
+      throw new Error(resolveNonexistantOperationError)
     }
 
     this.waitingSaveOperationCount--
