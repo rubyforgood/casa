@@ -29,24 +29,22 @@
               <%= t(".no_supervisor") %>
           </a>
         </li>
-        <% current_organization.supervisors.each do |supervisor| %>
-          <% if supervisor.active == true %>
-            <li>
-              <a class="small" data-value="option1" tabIndex="-1">
-                <% if policy(User).edit_name?(supervisor) %>
-                  <input
-                    type="checkbox"
-                    data-value="<%= supervisor.display_name %>"
-                    checked>
-                <% else %>
-                  <input
-                    type="checkbox"
-                    data-value="<%= supervisor.display_name %>">
-                <% end %>
-                <%= supervisor.display_name %>
-              </a>
-            </li>
-          <% end %>
+        <% current_organization.supervisors.where(active: true).each do |supervisor| %>
+          <li>
+            <a class="small" data-value="option1" tabIndex="-1">
+              <% if policy(User).edit_name?(supervisor) %>
+                <input
+                  type="checkbox"
+                  data-value="<%= supervisor.display_name %>"
+                  checked>
+              <% else %>
+                <input
+                  type="checkbox"
+                  data-value="<%= supervisor.display_name %>">
+              <% end %>
+              <%= supervisor.display_name %>
+            </a>
+          </li>
         <% end %>
       </ul>
     </div>
