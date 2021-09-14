@@ -1,26 +1,5 @@
 {
-  "ignored_warnings": [
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "5fae6e11b98f7e10ae752aa4cca2b9980df787064ca741d94f15f53d8441aa3c",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/datatables/application_datatable.rb",
-      "line": 51,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Arel.sql(\"#{order_by} #{order_direction} NULLS LAST\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "ApplicationDatatable",
-        "method": "build_order_clause"
-      },
-      "user_input": "order_by",
-      "confidence": "Medium",
-      "note": ""
-    }
-  ],
+  "ignored_warnings": [],
   "updated": "2021-01-29 19:20:30 -0800",
   "brakeman_version": "5.0.0"
 }
