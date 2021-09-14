@@ -387,9 +387,9 @@ RSpec.describe "/casa_cases", type: :request do
 
           # Not permitted
           expect(casa_case.case_number).to eq "111"
-          expect(casa_case.hearing_type).to_not eq hearing_type
-          expect(casa_case.judge).to_not eq judge
-          expect(casa_case.case_court_mandates.size).to be 0
+          expect(casa_case.hearing_type).to eq hearing_type
+          expect(casa_case.judge).to eq judge
+          expect(casa_case.case_court_mandates.size).to be 2
         end
 
         it "redirects to the casa_case" do
