@@ -39,6 +39,7 @@ RSpec.describe "/users", type: :request do
       patch update_password_users_path(user),
         params: {
           user: {
+            current_password: "123456",
             password: "new_pass",
             password_confirmation: "new_pass"
           }
