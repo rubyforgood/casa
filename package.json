@@ -35,7 +35,7 @@
     "markdown-toc": "^1.2.0",
     "standard": "^16.0.3",
     "start-server-and-test": "^1.14.0",
-    "webpack-dev-server": "^4.1.1"
+    "webpack-dev-server": "^4.2.0"
   },
   "standard": {
     "globals": [
