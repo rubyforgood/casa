@@ -211,10 +211,37 @@ describe('stopAsyncOperation', () => {
   })
 
   test('stopAsyncOperation should hide the loading toast when there are no more async operations to wait on', (done) => {
-    done()
+    $(document).ready(() => {
+      const loadingToast = $('#async-waiting-indicator')
+
+      try {
+        notifier.startAsyncOperation()
+        notifier.startAsyncOperation()
+        expect(loadingToast.attr('style')).toEqual(expect.not.stringContaining('display: none'))
+
+        notifier.stopAsyncOperation()
+        notifier.stopAsyncOperation()
+
+        expect(loadingToast.css('display')).toBe('none')
+
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
   })
 
   test('stopAsyncOperation should throw an error and display it in a red notification when trying to stop an async operation when it\'s sexpecting to resolve none', (done) => {
-    done()
+    $(document).ready(() => {
+      try {
+        expect(() => {
+          notifier.stopAsyncOperation()
+        }).toThrow()
+
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
   })
 })
