@@ -98,6 +98,10 @@ class DbPopulator
     "CINA-#{yy}-#{@case_number_sequence}"
   end
 
+  def generate_court_date
+    ((Date.today + 1.month)..(Date.today + 5.months)).to_a.sample
+  end
+
   def random_true_false
     @true_false_array ||= [true, false]
     @true_false_array.sample(random: rng)
@@ -106,6 +110,11 @@ class DbPopulator
   def random_case_contact_count
     @random_case_contact_counts ||= [0, 1, 2, 2, 2, 3, 3, 3, 11, 11, 11]
     @random_case_contact_counts.sample(random: rng)
+  end
+
+  def random_past_court_date_count
+    @random_past_court_date_counts ||= [0, 2, 3, 4, 5]
+    @random_past_court_date_counts.sample(random: rng)
   end
 
   def random_court_mandate_count
@@ -157,8 +166,10 @@ class DbPopulator
 
   def create_cases(casa_org, options)
     ContactTypePopulator.populate
-    options.case_count.times do
+    options.case_count.times do |index|
       case_number = generate_case_number
+      court_date = generate_court_date
+      court_report_submitted = index.even?
 
       new_casa_case = CasaCase.find_by(case_number: case_number)
       new_casa_case ||=
@@ -166,6 +177,10 @@ class DbPopulator
           CasaCase.find_or_create_by!(
             casa_org_id: casa_org.id,
             case_number: case_number,
+            court_date: court_date,
+            court_report_due_date: court_date + 1.month,
+            court_report_submitted_at: court_report_submitted ? Date.today : nil,
+            court_report_status: court_report_submitted ? :submitted : :not_submitted,
             transition_aged_youth: false,
             birth_month_year_youth: ((Date.today - 18.years)..(Date.today - 14.years)).to_a.sample
           )
@@ -173,6 +188,10 @@ class DbPopulator
           CasaCase.find_or_create_by!(
             casa_org_id: casa_org.id,
             case_number: case_number,
+            court_date: court_date,
+            court_report_due_date: court_date + 1.month,
+            court_report_submitted_at: court_report_submitted ? Date.today : nil,
+            court_report_status: court_report_submitted ? :submitted : :not_submitted,
             transition_aged_youth: false,
             birth_month_year_youth: ((Date.today - 18.year)..(Date.today - 4.year)).to_a.sample
           )
@@ -197,6 +216,13 @@ class DbPopulator
           casa_case_id: new_casa_case.id,
           mandate_text: mandate_choices.sample(random: rng),
           implementation_status: CaseCourtMandate::IMPLEMENTATION_STATUSES.values.sample(random: rng)
+        )
+      end
+
+      random_past_court_date_count.times do |index|
+        PastCourtDate.create!(
+          casa_case_id: new_casa_case.id,
+          date: Date.today - (index + 1).weeks
         )
       end
     end
