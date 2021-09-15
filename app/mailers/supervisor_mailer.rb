@@ -1,10 +1,4 @@
-class SupervisorMailer < ApplicationMailer
-  def deactivation(supervisor)
-    @supervisor = supervisor
-    @casa_organization = supervisor.casa_org
-    mail(to: @supervisor.email, subject: "Your account has been deactivated")
-  end
-
+class SupervisorMailer < UserMailer
   def account_setup(supervisor)
     @supervisor = supervisor
     @casa_organization = supervisor.casa_org
@@ -17,7 +11,10 @@ class SupervisorMailer < ApplicationMailer
     @casa_organization = supervisor.casa_org
     @inactive_messages = inactive_messages(supervisor)
     @show_notes = @inactive_messages.none?
-    mail(to: @supervisor.email, subject: "Weekly summary of volunteers' activities for the week of #{Date.today - 7.days}")
+    mail(
+      to: @supervisor.email,
+      subject: "Weekly summary of volunteers' activities for the week of #{Date.today - 7.days}"
+    )
   end
 
   def inactive_messages(supervisor) 

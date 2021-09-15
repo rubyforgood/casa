@@ -8,6 +8,7 @@ RSpec.describe "past_court_dates/show", type: :view do
     before { render template: "past_court_dates/show" }
 
     it "displays all court details" do
+      expect(rendered).to include("/casa_cases/#{past_court_date.casa_case.id}")
       expect(rendered).to include(ERB::Util.html_escape(past_court_date.judge.name))
       expect(rendered).to include(past_court_date.hearing_type.name)
 
@@ -39,7 +40,7 @@ RSpec.describe "past_court_dates/show", type: :view do
       expect(rendered).to include("Hearing Type")
       expect(rendered).to include("None")
 
-      expect(rendered).to include("There are no court mandates associated with this past court date.")
+      expect(rendered).to include("There are no court orders associated with this past court date.")
     end
   end
 

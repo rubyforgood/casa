@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "layout/sidebar", :disable_bullet, type: :view do
+RSpec.describe "layout/sidebar", type: :view do
   before do
     enable_pundit(view, user)
     allow(view).to receive(:current_user).and_return(user)
@@ -61,7 +61,7 @@ RSpec.describe "layout/sidebar", :disable_bullet, type: :view do
   end
 
   context "when logged in as a volunteer" do
-    let(:organization) { create(:casa_org) }
+    let(:organization) { build(:casa_org) }
     let(:user) { create(:volunteer, casa_org: organization) }
 
     it "renders the correct Role name on the sidebar" do
@@ -105,8 +105,8 @@ RSpec.describe "layout/sidebar", :disable_bullet, type: :view do
         expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
 
         # 1 Non transitioning case
-        casa_case = create(:casa_case, casa_org: organization, transition_aged_youth: false)
-        create(:case_assignment, volunteer: user, casa_case: casa_case)
+        casa_case = build_stubbed(:casa_case, casa_org: organization, transition_aged_youth: false)
+        build_stubbed(:case_assignment, volunteer: user, casa_case: casa_case)
 
         render partial: "layouts/sidebar"
         expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
@@ -117,11 +117,11 @@ RSpec.describe "layout/sidebar", :disable_bullet, type: :view do
       it "does not render emancipation checklist(s)" do
         sign_in user
 
-        inactive_case = create(:casa_case, casa_org: organization, transition_aged_youth: true, active: false)
-        create(:case_assignment, volunteer: user, casa_case: inactive_case)
+        inactive_case = build_stubbed(:casa_case, casa_org: organization, transition_aged_youth: true, active: false)
+        build_stubbed(:case_assignment, volunteer: user, casa_case: inactive_case)
 
-        unassigned_case = create(:casa_case, casa_org: organization, transition_aged_youth: true)
-        create(:case_assignment, volunteer: user, casa_case: unassigned_case, active: false)
+        unassigned_case = build_stubbed(:casa_case, casa_org: organization, transition_aged_youth: true)
+        build_stubbed(:case_assignment, volunteer: user, casa_case: unassigned_case, active: false)
 
         render partial: "layouts/sidebar"
         expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
@@ -181,7 +181,7 @@ RSpec.describe "layout/sidebar", :disable_bullet, type: :view do
   end
 
   context "notifications" do
-    let(:user) { build_stubbed :volunteer }
+    let(:user) { build_stubbed(:volunteer) }
 
     it "displays badge when user has notifications" do
       sign_in user

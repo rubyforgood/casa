@@ -5,7 +5,7 @@ class DashboardController < ApplicationController
   def show
     authorize :dashboard
     if volunteer_with_only_one_active_case?
-      redirect_to casa_case_path(current_user.casa_cases.active.first)
+      redirect_to new_case_contact_path
     elsif current_user.volunteer?
       redirect_to casa_cases_path
     elsif current_user.supervisor?

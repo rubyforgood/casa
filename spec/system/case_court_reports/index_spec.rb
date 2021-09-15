@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
+RSpec.describe "case_court_reports/index", type: :system do
   let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
   let(:supervisor) { volunteer.supervisor }
   let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
@@ -151,7 +151,7 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
       end
 
       it "does not allow supervisors to download already generated report from case details page" do
-        supervisor = create(:supervisor, casa_org: volunteer.casa_org)
+        supervisor = build(:supervisor, casa_org: volunteer.casa_org)
 
         sign_out volunteer
         sign_in supervisor
@@ -162,7 +162,7 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
       end
 
       it "does not allow admins to download already generated report from case details page" do
-        casa_admin = create(:casa_admin)
+        casa_admin = build(:casa_admin)
 
         sign_out volunteer
         sign_in casa_admin
@@ -179,7 +179,7 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
       end
 
       it "allows supervisors to download already generated report from case details page" do
-        supervisor = create(:supervisor, casa_org: volunteer.casa_org)
+        supervisor = build(:supervisor, casa_org: volunteer.casa_org)
 
         sign_out volunteer
         sign_in supervisor
@@ -190,7 +190,7 @@ RSpec.describe "case_court_reports/index", :disable_bullet, type: :system do
       end
 
       it "allows admins to download already generated report from case details page" do
-        casa_admin = create(:casa_admin)
+        casa_admin = build(:casa_admin)
 
         sign_out volunteer
         sign_in casa_admin

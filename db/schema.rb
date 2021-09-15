@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_24_125750) do
+ActiveRecord::Schema.define(version: 2021_09_13_142024) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -286,7 +286,7 @@ ActiveRecord::Schema.define(version: 2021_06_24_125750) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "casa_org_id", null: false
-    t.string "display_name", default: ""
+    t.string "display_name", default: "", null: false
     t.string "invitation_token"
     t.datetime "invitation_created_at"
     t.datetime "invitation_sent_at"

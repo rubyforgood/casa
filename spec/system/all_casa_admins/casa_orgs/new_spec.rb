@@ -1,9 +1,9 @@
 require "rails_helper"
 
-RSpec.describe "all_casa_admins/casa_orgs/new", :disable_bullet, type: :system do
+RSpec.describe "all_casa_admins/casa_orgs/new", type: :system do
   context "as an all casa admin" do
     let(:all_casa_admin) { create(:all_casa_admin, email: "theexample@example.com") }
-    let(:organization) { create(:casa_org) }
+    let(:organization) { build(:casa_org) }
 
     before do
       sign_in all_casa_admin
@@ -43,7 +43,7 @@ RSpec.describe "all_casa_admins/casa_orgs/new", :disable_bullet, type: :system d
   end
 
   context "as any other user" do
-    let(:organization) { create(:casa_org) }
+    let(:organization) { build(:casa_org) }
     let(:casa_admin) { create(:casa_admin, casa_org: organization) }
 
     before { sign_in casa_admin }

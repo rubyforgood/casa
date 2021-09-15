@@ -1,21 +1,22 @@
 require "rails_helper"
 require "action_view"
 
-RSpec.describe "case_contacts/new", :disable_bullet, type: :system do
+RSpec.describe "case_contacts/new", type: :system do
   include ActionView::Helpers::SanitizeHelper
 
   context "when admin" do
-    let(:organization) { create(:casa_org) }
+    let(:organization) { build(:casa_org) }
     let(:admin) { create(:casa_admin, casa_org: organization) }
     let(:casa_case) { create(:casa_case, casa_org: organization) }
-    let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
-    let!(:empty) { create(:contact_type_group, name: "Empty", casa_org: organization) }
-    let!(:grp_with_hidden) { create(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization) }
+    let(:contact_type_group) { build(:contact_type_group, casa_org: organization) }
+    let!(:empty) { build(:contact_type_group, name: "Empty", casa_org: organization) }
+    let!(:grp_with_hidden) { build(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization) }
     let!(:hidden_type) { create(:contact_type, name: "Hidden", active: false, contact_type_group: grp_with_hidden) }
     let!(:school) { create(:contact_type, name: "School", contact_type_group: contact_type_group) }
     let!(:therapist) { create(:contact_type, name: "Therapist", contact_type_group: contact_type_group) }
 
     before do
+      travel_to Date.new(2021, 1, 1)
       sign_in admin
 
       visit casa_case_path(casa_case.id)
@@ -117,11 +118,12 @@ RSpec.describe "case_contacts/new", :disable_bullet, type: :system do
         click_on "Submit"
 
         expect(page).to have_text("Confirm Note Content")
-        hello_line = page.body.split("\n").select { |x| x.include?("Hello") }
-        expect(hello_line).to eq(["        <div id=\"note-content\">&lt;h1&gt;Hello world&lt;/h1&gt;</div>"])
         expect {
           click_on "Continue Submitting"
         }.to change(CaseContact, :count).by(1)
+
+        hello_line = page.body.split("\n").select { |x| x.include?("Hello") }
+        expect(hello_line.first.include?(note_content)).to be true
         expected_text = strip_tags(note_content)
         expect(page).to have_css("h1", text: expected_text)
       end
@@ -129,31 +131,52 @@ RSpec.describe "case_contacts/new", :disable_bullet, type: :system do
   end
 
   context "mutliple contact type groups" do
-    let(:organization) { create(:casa_org) }
-    let(:admin) { create(:casa_admin, casa_org: organization) }
-    let(:casa_case) { create(:casa_case, casa_org: organization) }
+    let(:organization) { build(:casa_org) }
+    let(:admin) { build(:casa_admin, casa_org: organization) }
+    let(:casa_case) { build(:casa_case, casa_org: organization) }
 
     before do
+      travel_to Date.new(2021, 1, 1)
       sign_in admin
     end
 
     it "should check the correct box when clicking the label" do
-      group_1 = create(:contact_type_group, casa_org: organization)
+      group_1 = build_stubbed(:contact_type_group, casa_org: organization)
       create(:contact_type, name: "School", contact_type_group: group_1)
-      group_2 = create(:contact_type_group, casa_org: organization)
+      group_2 = build(:contact_type_group, casa_org: organization)
       create(:contact_type, name: "Parent", contact_type_group: group_2)
 
       visit new_case_contact_path(casa_case.id)
 
       expect { check "Parent" }.not_to raise_error
     end
+
+    it "shows the contact type groups, and their contact type alphabetically", :aggregate_failures do
+      group_1 = create(:contact_type_group, name: "Placement", casa_org: organization)
+      group_2 = create(:contact_type_group, name: "Education", casa_org: organization)
+      create(:contact_type, name: "School", contact_type_group: group_1)
+      create(:contact_type, name: "Sports", contact_type_group: group_1)
+      create(:contact_type, name: "Caregiver Family", contact_type_group: group_2)
+      create(:contact_type, name: "Foster Parent", contact_type_group: group_2)
+
+      visit(new_case_contact_path(casa_case.id))
+
+      expect(index_of("Education")).to be < index_of("Placement")
+      expect(index_of("School")).to be < index_of("Sports")
+      expect(index_of("Caregiver Family")).to be < index_of("Foster Parent")
+      expect(index_of("School")).to be > index_of("Caregiver Family")
+    end
+
+    def index_of(text)
+      page.text.index(text)
+    end
   end
 
   context "volunteer user" do
-    let(:organization) { create(:casa_org) }
-    let!(:empty) { create(:contact_type_group, name: "Empty", casa_org: organization) }
-    let!(:grp_with_hidden) { create(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization) }
-    let!(:hidden_type) { create(:contact_type, name: "Hidden", active: false, contact_type_group: grp_with_hidden) }
+    let(:organization) { build(:casa_org) }
+    let!(:empty) { build(:contact_type_group, name: "Empty", casa_org: organization) }
+    let!(:grp_with_hidden) { build(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization) }
+    let!(:hidden_type) { build(:contact_type, name: "Hidden", active: false, contact_type_group: grp_with_hidden) }
 
     it "is successful", js: true do
       volunteer = create(:volunteer, :with_casa_cases)
@@ -381,9 +404,9 @@ RSpec.describe "case_contacts/new", :disable_bullet, type: :system do
 
     context "with no contact types set for the volunteer's cases" do
       it "renders all of the org's contact types", js: true do
-        org = create(:casa_org)
+        org = build(:casa_org)
         create_contact_types(org)
-        volunteer = create(:volunteer, :with_casa_cases, casa_org: org)
+        volunteer = build(:volunteer, :with_casa_cases, casa_org: org)
 
         sign_in volunteer
 
@@ -397,7 +420,7 @@ RSpec.describe "case_contacts/new", :disable_bullet, type: :system do
 
     context "with specific contact types allowed for the volunteer's cases" do
       it "only renders contact types that are allowed for the volunteer's cases", js: true do
-        org = create(:casa_org)
+        org = build(:casa_org)
         contact_type_group = create_contact_types(org)
         volunteer = create(:volunteer, :with_casa_cases, casa_org: org)
         contact_types_for_cases = contact_type_group.contact_types.reject { |ct| ct.name == "Attorney" }

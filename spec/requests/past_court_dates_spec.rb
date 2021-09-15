@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", :disable_bullet, type: :request do
+RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request do
   let(:admin) { create(:casa_admin) }
   let(:casa_case) { past_court_date.casa_case }
   let(:past_court_date) { create(:past_court_date) }
@@ -30,6 +30,7 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", :disable_bullet
   end
 
   before do
+    travel_to Date.new(2021, 1, 1)
     sign_in admin
   end
 

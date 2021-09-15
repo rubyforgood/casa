@@ -2,24 +2,24 @@ require "rails_helper"
 
 RSpec.describe Volunteer, type: :model do
   describe ".email_court_report_reminder" do
-    let!(:casa_org) { create(:casa_org) }
+    let!(:casa_org) { build(:casa_org) }
 
     # Should send email for this case
     let!(:casa_case1) { create(:casa_case, casa_org: casa_org, court_report_due_date: Date.current + 7.days) }
 
     # Should NOT send emails for these two cases
-    let!(:casa_case2) { create(:casa_case, casa_org: casa_org, court_report_due_date: Date.current + 8.days) }
-    let!(:casa_case3) { create(:casa_case, casa_org: casa_org, court_report_due_date: Date.current + 7.days, court_report_submitted_at: Time.current, court_report_status: :submitted) }
-    let!(:casa_case4) { create(:casa_case, casa_org: casa_org, court_report_due_date: Date.current + 7.days) }
+    let!(:casa_case2) { build(:casa_case, casa_org: casa_org, court_report_due_date: Date.current + 8.days) }
+    let!(:casa_case3) { build(:casa_case, casa_org: casa_org, court_report_due_date: Date.current + 7.days, court_report_submitted_at: Time.current, court_report_status: :submitted) }
+    let!(:casa_case4) { build(:casa_case, casa_org: casa_org, court_report_due_date: Date.current + 7.days) }
 
     let(:case_assignment1) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case1) }
     let(:case_assignment2) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case2) }
     let(:case_assignment3) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case3) }
     let(:case_assignment_unassigned) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case4, active: false) }
     let!(:v1) { create(:volunteer, casa_org: casa_org, case_assignments: [case_assignment1, case_assignment2, case_assignment3]) }
-    let!(:v2) { create(:volunteer, casa_org: casa_org, active: false) }
-    let!(:v3) { create(:volunteer, casa_org: casa_org) }
-    let!(:v4) { create(:volunteer, casa_org: casa_org, case_assignments: [case_assignment_unassigned]) }
+    let!(:v2) { build_stubbed(:volunteer, casa_org: casa_org, active: false) }
+    let!(:v3) { build_stubbed(:volunteer, casa_org: casa_org) }
+    let!(:v4) { build_stubbed(:volunteer, casa_org: casa_org, case_assignments: [case_assignment_unassigned]) }
 
     before { stub_const("Volunteer::COURT_REPORT_SUBMISSION_REMINDER", 7.days) }
 
@@ -37,7 +37,7 @@ RSpec.describe Volunteer, type: :model do
   end
 
   describe "#activate" do
-    let(:volunteer) { create(:volunteer, :inactive) }
+    let(:volunteer) { build(:volunteer, :inactive) }
 
     it "activates the volunteer" do
       volunteer.activate
@@ -48,7 +48,7 @@ RSpec.describe Volunteer, type: :model do
   end
 
   describe "#deactivate" do
-    let(:volunteer) { create(:volunteer) }
+    let(:volunteer) { build(:volunteer) }
 
     it "deactivates the volunteer" do
       volunteer.deactivate
@@ -60,7 +60,7 @@ RSpec.describe Volunteer, type: :model do
     it "sets all of a volunteer's case assignments to inactive" do
       case_contacts =
         3.times.map {
-          create(:case_assignment, casa_case: create(:casa_case, casa_org: volunteer.casa_org), volunteer: volunteer)
+          create(:case_assignment, casa_case: build(:casa_case, casa_org: volunteer.casa_org), volunteer: volunteer)
         }
 
       volunteer.deactivate
@@ -72,7 +72,7 @@ RSpec.describe Volunteer, type: :model do
 
   describe "#display_name" do
     it "allows user to input dangerous values" do
-      volunteer = create(:volunteer)
+      volunteer = build(:volunteer)
       UserInputHelpers::DANGEROUS_STRINGS.each do |dangerous_string|
         volunteer.update_attribute(:display_name, dangerous_string)
         volunteer.reload
@@ -84,7 +84,7 @@ RSpec.describe Volunteer, type: :model do
 
   describe "#has_supervisor?" do
     context "when no supervisor_volunteer record" do
-      let(:volunteer) { create(:volunteer) }
+      let(:volunteer) { build_stubbed(:volunteer) }
 
       it "returns false" do
         expect(volunteer.has_supervisor?).to be false
@@ -101,7 +101,7 @@ RSpec.describe Volunteer, type: :model do
     end
 
     context "when inactive supervisor_volunteer record" do
-      let(:sv) { create(:supervisor_volunteer, is_active: false) }
+      let(:sv) { build_stubbed(:supervisor_volunteer, is_active: false) }
       let(:volunteer) { sv.volunteer }
 
       it "returns false" do
@@ -111,8 +111,8 @@ RSpec.describe Volunteer, type: :model do
   end
 
   describe "#made_contact_with_all_cases_in_days?" do
-    let(:volunteer) { create(:volunteer) }
-    let(:casa_case) { create(:casa_case, casa_org: volunteer.casa_org) }
+    let(:volunteer) { build(:volunteer) }
+    let(:casa_case) { build(:casa_case, casa_org: volunteer.casa_org) }
 
     context "when a volunteer is assigned to an active case" do
       let(:create_case_contact) do
@@ -148,7 +148,7 @@ RSpec.describe Volunteer, type: :model do
 
       context "when volunteer has not made recent contact in just one case" do
         it "returns false" do
-          casa_case2 = create(:casa_case, casa_org: volunteer.casa_org)
+          casa_case2 = build(:casa_case, casa_org: volunteer.casa_org)
           create(:case_assignment, casa_case: casa_case2, volunteer: volunteer)
           create(:case_contact, casa_case: casa_case2, creator: volunteer, occurred_at: Date.current - 60.days, contact_made: true)
           create_case_contact.call(Date.current, true)
@@ -165,9 +165,9 @@ RSpec.describe Volunteer, type: :model do
 
     context "when a volunteer has only an inactive case where contact was not made recently" do
       it "returns true" do
-        inactive_case = create(:casa_case, casa_org: volunteer.casa_org, active: false)
-        create(:case_assignment, casa_case: inactive_case, volunteer: volunteer)
-        create(:case_contact, casa_case: inactive_case, creator: volunteer, occurred_at: Date.current - 60.days, contact_made: true)
+        inactive_case = build_stubbed(:casa_case, casa_org: volunteer.casa_org, active: false)
+        build_stubbed(:case_assignment, casa_case: inactive_case, volunteer: volunteer)
+        build_stubbed(:case_contact, casa_case: inactive_case, creator: volunteer, occurred_at: Date.current - 60.days, contact_made: true)
 
         expect(volunteer.made_contact_with_all_cases_in_days?).to eq(true)
       end
@@ -175,8 +175,8 @@ RSpec.describe Volunteer, type: :model do
 
     context "when a volunteer has only an unassigned case where contact was not made recently" do
       it "returns true" do
-        create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false)
-        create(:case_contact, casa_case: casa_case, creator: volunteer, occurred_at: Date.current - 60.days, contact_made: true)
+        build_stubbed(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false)
+        build_stubbed(:case_contact, casa_case: casa_case, creator: volunteer, occurred_at: Date.current - 60.days, contact_made: true)
 
         expect(volunteer.made_contact_with_all_cases_in_days?).to eq(true)
       end
@@ -185,23 +185,23 @@ RSpec.describe Volunteer, type: :model do
 
   describe "#supervised_by?" do
     it "is supervised by the currently active supervisor" do
-      supervisor = create :supervisor
-      volunteer = create :volunteer, supervisor: supervisor
+      supervisor = build_stubbed :supervisor
+      volunteer = build_stubbed :volunteer, supervisor: supervisor
 
       expect(volunteer).to be_supervised_by(supervisor)
     end
 
     it "is not supervised by supervisors that have never supervised the volunteer before" do
-      supervisor = create :supervisor
-      volunteer = create :volunteer
+      supervisor = build_stubbed :supervisor
+      volunteer = build_stubbed :volunteer
 
       expect(volunteer).to_not be_supervised_by(supervisor)
     end
 
     it "is not supervised by supervisor that had the volunteer unassinged" do
-      old_supervisor = create :supervisor
-      new_supervisor = create :supervisor
-      volunteer = create :volunteer, supervisor: old_supervisor
+      old_supervisor = build :supervisor
+      new_supervisor = build :supervisor
+      volunteer = build :volunteer, supervisor: old_supervisor
 
       volunteer.update supervisor: new_supervisor
 
@@ -211,7 +211,7 @@ RSpec.describe Volunteer, type: :model do
   end
 
   describe "#role" do
-    subject(:volunteer) { create :volunteer }
+    subject(:volunteer) { build_stubbed :volunteer }
 
     it { expect(volunteer.role).to eq "Volunteer" }
   end
@@ -219,7 +219,7 @@ RSpec.describe Volunteer, type: :model do
   describe "#with_no_supervisor" do
     subject { Volunteer.with_no_supervisor(casa_org) }
 
-    let(:casa_org) { create(:casa_org) }
+    let(:casa_org) { build(:casa_org) }
 
     context "no volunteers" do
       it "returns none" do
@@ -231,19 +231,41 @@ RSpec.describe Volunteer, type: :model do
       let!(:unassigned1) { create(:volunteer, display_name: "aaa", casa_org: casa_org) }
       let!(:unassigned2) { create(:volunteer, display_name: "bbb", casa_org: casa_org) }
       let!(:unassigned_inactive) { create(:volunteer, display_name: "unassigned inactive", casa_org: casa_org, active: false) }
-      let!(:different_org) { create(:casa_org) }
-      let!(:unassigned2_different_org) { create(:volunteer, display_name: "ccc", casa_org: different_org) }
-      let!(:assigned1) { create(:volunteer, display_name: "ddd", casa_org: casa_org) }
+      let!(:different_org) { build(:casa_org) }
+      let!(:unassigned2_different_org) { build(:volunteer, display_name: "ccc", casa_org: different_org) }
+      let!(:assigned1) { build(:volunteer, display_name: "ddd", casa_org: casa_org) }
       let!(:supervisor) { create(:supervisor, display_name: "supe", casa_org: casa_org) }
       let!(:assignment1) { create(:supervisor_volunteer, volunteer: assigned1, supervisor: supervisor) }
       let!(:assigned2_different_org) { assignment1.volunteer }
-      let!(:unassigned_inactive_volunteer) { create(:volunteer, display_name: "eee", casa_org: casa_org, active: false) }
+      let!(:unassigned_inactive_volunteer) { build(:volunteer, display_name: "eee", casa_org: casa_org, active: false) }
       let!(:previously_assigned) { create(:volunteer, display_name: "fff", casa_org: casa_org) }
-      let!(:inactive_assignment) { create(:supervisor_volunteer, volunteer: previously_assigned, is_active: false, supervisor: supervisor) }
+      let!(:inactive_assignment) { build(:supervisor_volunteer, volunteer: previously_assigned, is_active: false, supervisor: supervisor) }
 
       it "returns unassigned volunteers" do
         expect(subject.map(&:display_name).sort).to eq ["aaa", "bbb", "fff"]
       end
+    end
+  end
+
+  describe "#with_assigned_cases" do
+    let!(:volunteers) { create_list(:volunteer, 3) }
+    let!(:volunteer_with_cases) { create_list(:volunteer, 3, :with_casa_cases) }
+
+    subject { Volunteer.with_assigned_cases }
+
+    it "returns only volunteers assigned to active casa cases" do
+      expect(subject).to match_array(volunteer_with_cases)
+    end
+  end
+
+  describe "#with_no_assigned_cases" do
+    let!(:volunteers) { create_list(:volunteer, 3) }
+    let!(:volunteer_with_cases) { create_list(:volunteer, 3, :with_casa_cases) }
+
+    subject { Volunteer.with_no_assigned_cases }
+
+    it "returns only volunteers with no assigned active casa cases" do
+      expect(subject).to match_array(volunteers)
     end
   end
 

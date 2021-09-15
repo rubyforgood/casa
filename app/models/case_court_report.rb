@@ -21,11 +21,14 @@ class CaseCourtReport
   private
 
   def prepare_context(is_default_template)
+    latest_hearing_date = @casa_case.latest_past_court_date
+
     {
       created_date: I18n.l(Date.today, format: :full, default: nil),
       casa_case: prepare_case_details,
       case_contacts: prepare_case_contacts,
       case_mandates: prepare_case_mandates,
+      latest_hearing_date: latest_hearing_date.nil? ? "___<LATEST HEARING DATE>____" : I18n.l(latest_hearing_date.date, format: :full, default: nil),
       org_address: org_address(is_default_template),
       volunteer: volunteer_info
     }
@@ -44,7 +47,7 @@ class CaseCourtReport
     contact_dates_as_hash = aggregate_contact_dates(interviewees)
     contact_dates_as_hash.map do |type, dates|
       {
-        name: "Firstname Lastname",
+        name: "Names of persons involved, starting with the child's name",
         type: type,
         dates: dates.join(", ")
       }

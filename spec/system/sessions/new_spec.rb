@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "sessions/new", :disable_bullet, type: :system do
+RSpec.describe "sessions/new", type: :system do
   context "when guest" do
     it "renders sign in page with no flash messages" do
       visit "/"
@@ -24,10 +24,16 @@ RSpec.describe "sessions/new", :disable_bullet, type: :system do
 
         expect(page).to have_text user.email
       end
+
+      it "allows #{user_type} to click email link" do
+        visit "/"
+        expect(page).to have_text "Want to add your CASA? Email: casa@rubyforgood.org"
+        expect(page).to have_link("casa@rubyforgood.org", href: "mailto:casa@rubyforgood.org")
+      end
     end
 
     it "does not allow AllCasaAdmin to sign in" do
-      user = create(:all_casa_admin)
+      user = build_stubbed(:all_casa_admin)
 
       visit "/"
       expect(page).to have_text "Log in"

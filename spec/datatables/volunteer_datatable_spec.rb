@@ -33,7 +33,7 @@ RSpec.describe "VolunteerDatatable" do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.start
 
-    org = create :casa_org
+    org = build(:casa_org)
     supervisors = create_list :supervisor, 3, casa_org: org
 
     supervisors.each do |supervisor|
@@ -42,8 +42,8 @@ RSpec.describe "VolunteerDatatable" do
 
       volunteers.each_with_index do |volunteer, idx|
         volunteer.update display_name: Faker::Name.unique.name, email: Faker::Internet.unique.email
-        volunteer.casa_cases << create(:casa_case, casa_org: org, transition_aged_youth: false)
-        volunteer.casa_cases << create(:casa_case, casa_org: org, transition_aged_youth: idx == 1)
+        volunteer.casa_cases << build(:casa_case, casa_org: org, transition_aged_youth: false)
+        volunteer.casa_cases << build(:casa_case, casa_org: org, transition_aged_youth: idx == 1)
       end
     end
 
@@ -197,7 +197,7 @@ RSpec.describe "VolunteerDatatable" do
       end
 
       before do
-        CasaCase.all.each_with_index { |cc, idx| cc.case_contacts << create(:case_contact, contact_made: true, creator: cc.volunteers.first, occurred_at: idx.days.ago) }
+        CasaCase.all.each_with_index { |cc, idx| cc.case_contacts << build(:case_contact, contact_made: true, creator: cc.volunteers.first, occurred_at: idx.days.ago) }
       end
 
       context "when ascending" do
@@ -230,11 +230,11 @@ RSpec.describe "VolunteerDatatable" do
 
       before do
         4.times do |i|
-          create :case_contact, contact_made: true, casa_case: casa_case1, creator: volunteer1, occurred_at: (19 * (i + 1)).days.ago
+          create(:case_contact, contact_made: true, casa_case: casa_case1, creator: volunteer1, occurred_at: (19 * (i + 1)).days.ago)
         end
 
         3.times do |i|
-          create :case_contact, contact_made: true, casa_case: casa_case2, creator: volunteer2, occurred_at: (29 * (i + 1)).days.ago
+          create(:case_contact, contact_made: true, casa_case: casa_case2, creator: volunteer2, occurred_at: (29 * (i + 1)).days.ago)
         end
       end
 

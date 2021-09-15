@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "casa_cases/new", :disable_bullet, type: :view do
+RSpec.describe "casa_cases/new", type: :view do
   subject { render template: "casa_cases/new" }
 
   before do
@@ -19,7 +19,6 @@ RSpec.describe "casa_cases/new", :disable_bullet, type: :view do
       sign_in user
     end
 
-    it { is_expected.to have_selector("a", text: "Back") }
     it { is_expected.to include(CGI.escapeHTML("Youth's Birth Month & Year")) }
   end
 
@@ -30,7 +29,6 @@ RSpec.describe "casa_cases/new", :disable_bullet, type: :view do
       sign_in user
     end
 
-    it { is_expected.to have_selector("a", text: "Back") }
     it { is_expected.not_to include(CGI.escapeHTML("Youth's Birth Month & Year")) }
     it { is_expected.to have_selector("label", text: "Contact types") }
   end

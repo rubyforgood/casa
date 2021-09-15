@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe SupervisorImporter do
-  let!(:import_user) { build(:casa_admin) }
+  let!(:import_user) { build_stubbed(:casa_admin) }
   let(:casa_org_id) { import_user.casa_org.id }
 
   # Use of the static method SupervisorImporter.import_volunteers functions identically to SupervisorImporter.new(...).import_volunteers
@@ -39,7 +39,7 @@ RSpec.describe SupervisorImporter do
     end
 
     context "when any volunteer could not be assigned to the supervisor during the import" do
-      let!(:existing_volunteer) { create(:volunteer, email: "volunteer1@example.net") }
+      let!(:existing_volunteer) { build(:volunteer, email: "volunteer1@example.net") }
       let(:supervisor_import_data_path) { Rails.root.join("spec", "fixtures", "supervisor_volunteers.csv") }
 
       it "returns an error message" do

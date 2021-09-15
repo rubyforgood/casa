@@ -3,9 +3,9 @@ require "rails_helper"
 RSpec.describe SupervisorPolicy do
   subject { described_class }
 
-  let(:casa_admin) { create(:casa_admin) }
-  let(:supervisor) { create(:supervisor) }
-  let(:volunteer) { create(:volunteer) }
+  let(:casa_admin) { build(:casa_admin) }
+  let(:supervisor) { build(:supervisor) }
+  let(:volunteer) { build(:volunteer) }
 
   permissions :update_supervisor_email? do
     context "when user is an admin or is the record" do
@@ -19,7 +19,7 @@ RSpec.describe SupervisorPolicy do
     end
 
     context "when user is not an admin or the record" do
-      let(:second_supervisor) { create(:supervisor) }
+      let(:second_supervisor) { build_stubbed(:supervisor) }
 
       it "does not permit the other supervisor user to update volunteer email" do
         is_expected.to_not permit(supervisor, second_supervisor)

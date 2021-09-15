@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe "/casa_cases", :disable_bullet, type: :request do
-  let(:organization) { create(:casa_org) }
+RSpec.describe "/casa_cases", type: :request do
+  let(:organization) { build(:casa_org) }
   let(:hearing_type) { create(:hearing_type) }
   let(:judge) { create(:judge) }
   let(:valid_attributes) { {case_number: "1234", transition_aged_youth: true, casa_org_id: organization.id, hearing_type_id: hearing_type.id, judge_id: judge.id} }
@@ -41,9 +41,9 @@ RSpec.describe "/casa_cases", :disable_bullet, type: :request do
       end
 
       it "doesn't show other organizations' cases" do
-        my_case_assignment = create(:case_assignment, casa_org: user.casa_org)
-        different_org = create(:casa_org)
-        not_my_case_assignment = create(:case_assignment, casa_org: different_org)
+        my_case_assignment = build(:case_assignment, casa_org: user.casa_org)
+        different_org = build(:casa_org)
+        not_my_case_assignment = build_stubbed(:case_assignment, casa_org: different_org)
 
         get casa_cases_url
 
@@ -59,7 +59,7 @@ RSpec.describe "/casa_cases", :disable_bullet, type: :request do
       end
 
       it "fails across organizations" do
-        other_org = create(:casa_org)
+        other_org = build(:casa_org)
         other_case = create(:casa_case, casa_org: other_org)
 
         get casa_case_url(other_case)
@@ -81,7 +81,7 @@ RSpec.describe "/casa_cases", :disable_bullet, type: :request do
       end
 
       it "fails across organizations" do
-        other_org = create(:casa_org)
+        other_org = build(:casa_org)
         other_case = create(:casa_case, casa_org: other_org)
 
         get edit_casa_case_url(other_case)
@@ -114,7 +114,7 @@ RSpec.describe "/casa_cases", :disable_bullet, type: :request do
       end
 
       it "only creates cases within user's organizations" do
-        other_org = create(:casa_org)
+        other_org = build(:casa_org)
         attributes = {
           case_number: "1234",
           transition_aged_youth: true,
@@ -246,7 +246,7 @@ RSpec.describe "/casa_cases", :disable_bullet, type: :request do
       end
 
       it "does not update across organizations" do
-        other_org = create(:casa_org)
+        other_org = build(:casa_org)
         other_casa_case = create(:casa_case, case_number: "abc", casa_org: other_org)
 
         expect { patch casa_case_url(other_casa_case), params: {casa_case: new_attributes} }.not_to(
@@ -277,7 +277,7 @@ RSpec.describe "/casa_cases", :disable_bullet, type: :request do
       end
 
       it "fails across organizations" do
-        other_org = create(:casa_org)
+        other_org = build(:casa_org)
         other_casa_case = create(:casa_case, casa_org: other_org)
 
         patch deactivate_casa_case_path(other_casa_case), params: params
@@ -360,7 +360,7 @@ RSpec.describe "/casa_cases", :disable_bullet, type: :request do
       end
 
       it "fails across organizations" do
-        other_org = create(:casa_org)
+        other_org = build(:casa_org)
         other_case = create(:casa_case, casa_org: other_org)
 
         get edit_casa_case_url(other_case)
@@ -387,9 +387,9 @@ RSpec.describe "/casa_cases", :disable_bullet, type: :request do
 
           # Not permitted
           expect(casa_case.case_number).to eq "111"
-          expect(casa_case.hearing_type).to_not eq hearing_type
-          expect(casa_case.judge).to_not eq judge
-          expect(casa_case.case_court_mandates.size).to be 0
+          expect(casa_case.hearing_type).to eq hearing_type
+          expect(casa_case.judge).to eq judge
+          expect(casa_case.case_court_mandates.size).to be 2
         end
 
         it "redirects to the casa_case" do
@@ -399,7 +399,7 @@ RSpec.describe "/casa_cases", :disable_bullet, type: :request do
       end
 
       it "does not update across organizations" do
-        other_org = create(:casa_org)
+        other_org = build(:casa_org)
         other_casa_case = create(:casa_case, case_number: "abc", casa_org: other_org)
 
         expect { patch casa_case_url(other_casa_case), params: {casa_case: new_attributes} }.not_to(
@@ -410,8 +410,8 @@ RSpec.describe "/casa_cases", :disable_bullet, type: :request do
 
     describe "GET /index" do
       it "shows only cases assigned to user" do
-        mine = create(:casa_case, casa_org: organization, case_number: SecureRandom.hex(32))
-        other = create(:casa_case, casa_org: organization, case_number: SecureRandom.hex(32))
+        mine = build(:casa_case, casa_org: organization, case_number: SecureRandom.hex(32))
+        other = build(:casa_case, casa_org: organization, case_number: SecureRandom.hex(32))
 
         user.casa_cases << mine
 
@@ -424,7 +424,7 @@ RSpec.describe "/casa_cases", :disable_bullet, type: :request do
     end
 
     describe "PATCH /casa_cases/:id/deactivate" do
-      let(:casa_case) { create(:casa_case, :active, casa_org: organization, case_number: "111") }
+      let(:casa_case) { build(:casa_case, :active, casa_org: organization, case_number: "111") }
       let(:params) { {id: casa_case.id} }
 
       it "does not deactivate the requested casa_case" do
@@ -435,7 +435,7 @@ RSpec.describe "/casa_cases", :disable_bullet, type: :request do
     end
 
     describe "PATCH /casa_cases/:id/reactivate" do
-      let(:casa_case) { create(:casa_case, :inactive, casa_org: organization, case_number: "111") }
+      let(:casa_case) { build(:casa_case, :inactive, casa_org: organization, case_number: "111") }
       let(:params) { {id: casa_case.id} }
 
       it "does not deactivate the requested casa_case" do
@@ -463,7 +463,7 @@ RSpec.describe "/casa_cases", :disable_bullet, type: :request do
       end
 
       it "fails across organizations" do
-        other_org = create(:casa_org)
+        other_org = build(:casa_org)
         other_case = create(:casa_case, casa_org: other_org)
 
         get edit_casa_case_url(other_case)
@@ -496,7 +496,7 @@ RSpec.describe "/casa_cases", :disable_bullet, type: :request do
       end
 
       it "does not update across organizations" do
-        other_org = create(:casa_org)
+        other_org = build(:casa_org)
         other_casa_case = create(:casa_case, case_number: "abc", casa_org: other_org)
 
         expect { patch casa_case_url(other_casa_case), params: {casa_case: new_attributes} }.not_to(
@@ -507,7 +507,7 @@ RSpec.describe "/casa_cases", :disable_bullet, type: :request do
 
     describe "GET /index" do
       it "renders a successful response" do
-        create(:casa_case)
+        build_stubbed(:casa_case)
         get casa_cases_url
         expect(response).to be_successful
       end

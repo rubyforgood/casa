@@ -18,6 +18,10 @@ RSpec.describe PastCourtDate, type: :model do
   it { is_expected.to belong_to(:hearing_type).optional }
   it { is_expected.to belong_to(:judge).optional }
 
+  before do
+    travel_to Date.new(2021, 1, 1)
+  end
+
   describe "date_must_be_past" do
     it "ensures that the date is in the past" do
       past_court_date = build(:past_court_date, casa_case: casa_case, date: Date.today)
@@ -26,6 +30,20 @@ RSpec.describe PastCourtDate, type: :model do
 
       past_court_date = build(:past_court_date, casa_case: casa_case, date: Date.yesterday)
       expect(past_court_date.valid?).to eq true
+    end
+  end
+
+  describe ".ordered_ascending" do
+    subject { described_class.ordered_ascending }
+
+    it "orders the casa cases by updated at date" do
+      very_old_pcd = create(:past_court_date, date: 10.days.ago)
+      old_pcd = create(:past_court_date, date: 5.day.ago)
+      recent_pcd = create(:past_court_date, date: 1.day.ago)
+
+      ordered_pcds = described_class.ordered_ascending
+
+      expect(ordered_pcds.map(&:id)).to eq [very_old_pcd.id, old_pcd.id, recent_pcd.id]
     end
   end
 
@@ -112,7 +130,7 @@ RSpec.describe PastCourtDate, type: :model do
     subject { past_court_date.display_name }
     it "contains case number and date" do
       travel_to Time.zone.local(2020, 1, 2)
-      expect(subject).to eq("AAA123123 - Past Court Date - 2020-01-01")
+      expect(subject).to eq("AAA123123 - Past Court Date - 2019-12-26")
     end
   end
 end

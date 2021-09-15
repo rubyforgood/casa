@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "supervisors/new", :disable_bullet, type: :system do
+RSpec.describe "supervisors/new", type: :system do
   context "when admin" do
     let(:admin) { create(:casa_admin) }
 
@@ -35,7 +35,7 @@ RSpec.describe "supervisors/new", :disable_bullet, type: :system do
   end
 
   context "volunteer user" do
-    let(:volunteer) { create(:volunteer) }
+    let(:volunteer) { build(:volunteer) }
 
     before { sign_in volunteer }
 

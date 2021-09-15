@@ -1,10 +1,10 @@
 require "rails_helper"
 
-RSpec.describe "casa_cases/index", :disable_bullet, type: :system do
-  let(:organization) { create(:casa_org) }
-  let(:admin) { create(:casa_admin, casa_org: organization) }
-  let(:volunteer) { create(:volunteer, display_name: "Cool Volunteer", casa_org: organization) }
-  let(:cina) { create(:casa_case, active: true, casa_org: organization, case_number: "CINA-1") }
+RSpec.describe "casa_cases/index", type: :system do
+  let(:organization) { build(:casa_org) }
+  let(:admin) { build(:casa_admin, casa_org: organization) }
+  let(:volunteer) { build(:volunteer, display_name: "Cool Volunteer", casa_org: organization) }
+  let(:cina) { build(:casa_case, active: true, casa_org: organization, case_number: "CINA-1") }
   let!(:tpr) { create(:casa_case, active: true, casa_org: organization, case_number: "TPR-100") }
   let!(:no_prefix) { create(:casa_case, active: true, casa_org: organization, case_number: "123-12-123") }
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: cina) }

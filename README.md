@@ -12,11 +12,6 @@
 [![Snyk Vulnerabilities](https://snyk.io/test/github/rubyforgood/casa/badge.svg)](https://snyk.io/test/github/rubyforgood/casa)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/rubyforgood/casa.svg)](http://isitmaintained.com/project/rubyforgood/casa "Average time to resolve an issue")
 
-[![View performance data on Skylight](https://badges.skylight.io/status/tFh7xrs3Qnaf.svg?token=1C-Q7p8jEFlG7t69Yl5DaJwa-ipWI8gLw9wLJf53xmQ)](https://www.skylight.io/app/applications/tFh7xrs3Qnaf)
-[![View performance data on Skylight](https://badges.skylight.io/problem/tFh7xrs3Qnaf.svg?token=1C-Q7p8jEFlG7t69Yl5DaJwa-ipWI8gLw9wLJf53xmQ)](https://www.skylight.io/app/applications/tFh7xrs3Qnaf)
-[![View performance data on Skylight](https://badges.skylight.io/typical/tFh7xrs3Qnaf.svg?token=1C-Q7p8jEFlG7t69Yl5DaJwa-ipWI8gLw9wLJf53xmQ)](https://www.skylight.io/app/applications/tFh7xrs3Qnaf)
-[![View performance data on Skylight](https://badges.skylight.io/rpm/tFh7xrs3Qnaf.svg?token=1C-Q7p8jEFlG7t69Yl5DaJwa-ipWI8gLw9wLJf53xmQ)](https://www.skylight.io/app/applications/tFh7xrs3Qnaf)
-
 CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunteer sworn into a county-level juvenile dependency court system to advocate on behalf of a youth in the corresponding county's foster care system. CASA is also the namesake role of the national organization, CASA, which exists to cultivate and supervise volunteers carrying out this work – with county level chapters (operating relatively independently of each other) across the country.
 
 <!-- toc -->
@@ -82,7 +77,7 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 ### General Setup Instructions  
 **Ruby**  
 1. Install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
-1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`. Right now that's Ruby 3.0.1
+1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`. Right now that's Ruby 3.0.2
 1. `gem install bundler`
 
 **node.js**  
@@ -109,12 +104,15 @@ Another option is to install the Chromium browser for your operating system so t
 **Installing Packages**  
 1. `cd casa/`
 1. `bundle install` install ruby dependencies.
-1. `yarn install` install javascript dependencies.
+1. `yarn` install javascript dependencies.
 
 **Database Setup**
 1. `bin/rails db:setup` create schema
     requires running local postgres, with a role created for whatever user you're running rails as
 1. `bin/rails db:seed:replant` generates test data (can be rerun to regenerate test data)
+
+**Webpacker One Time Setup**  
+`bundle exec rails webpacker:compile`
 
 ### Platform Specific Installation Instructions
  - [Docker](doc/DOCKER.md)
@@ -140,6 +138,7 @@ You'll probably hit a problem where ruby-version reads `ruby-2.7.2` but the inst
 1. If your rails/rake commands hang forever instead of running, try: `rails app:update:bin`
 1. There is currently no option for a user to sign up and create an account through the UI. This is intentional. If you want to log in, use a pre-seeded user account and its credentials.
 1. If you are on windows and see the error "Requirements support for mingw is not implemented yet" then use https://rubyinstaller.org/ instead
+1. Install imagemagick to see images locally. Instructions: https://imagemagick.org/script/download.php
 
 ## Running the App / Verifying Installation
 1. `bin/rails server` or `bin/rails s` to start the local webserver

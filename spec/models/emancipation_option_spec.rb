@@ -20,8 +20,8 @@ RSpec.describe EmancipationOption, type: :model do
 
       it "creates two new entries given different categories and same names" do
         expect {
-          create(:emancipation_option, emancipation_category_id: non_duplicate_category.id, name: duplicate_option_name)
-          create(:emancipation_option, emancipation_category_id: duplicate_category.id, name: duplicate_option_name)
+          build_stubbed(:emancipation_option, emancipation_category_id: non_duplicate_category.id, name: duplicate_option_name)
+          build_stubbed(:emancipation_option, emancipation_category_id: duplicate_category.id, name: duplicate_option_name)
         }.to_not raise_error
       end
     end
@@ -46,10 +46,10 @@ RSpec.describe EmancipationOption, type: :model do
     let(:case_b) { create(:casa_case) }
     let(:category_a) { create(:emancipation_category, name: "A") }
     let(:category_b) { create(:emancipation_category, name: "B") }
-    let(:option_a) { create(:emancipation_option, emancipation_category_id: category_a.id, name: "A") }
-    let(:option_b) { create(:emancipation_option, emancipation_category_id: category_a.id, name: "B") }
-    let(:option_c) { create(:emancipation_option, emancipation_category_id: category_a.id, name: "C") }
-    let(:option_d) { create(:emancipation_option, emancipation_category_id: category_b.id, name: "D") }
+    let(:option_a) { build(:emancipation_option, emancipation_category_id: category_a.id, name: "A") }
+    let(:option_b) { build(:emancipation_option, emancipation_category_id: category_a.id, name: "B") }
+    let(:option_c) { build(:emancipation_option, emancipation_category_id: category_a.id, name: "C") }
+    let(:option_d) { build(:emancipation_option, emancipation_category_id: category_b.id, name: "D") }
 
     it "contains exactly the options belonging to the category and case passed to it" do
       case_a.emancipation_options += [option_a, option_b]
