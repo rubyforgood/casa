@@ -5,19 +5,19 @@ RSpec.describe CaseContact, type: :model do
   it { is_expected.to validate_numericality_of(:miles_driven).is_greater_than_or_equal_to 0 }
 
   it "belongs to a creator" do
-    case_contact = build(:case_contact, creator: nil)
+    case_contact = build_stubbed(:case_contact, creator: nil)
     expect(case_contact).to_not be_valid
     expect(case_contact.errors[:creator]).to eq(["must exist"])
   end
 
   it "belongs to a casa case" do
-    case_contact = build(:case_contact, casa_case: nil)
+    case_contact = build_stubbed(:case_contact, casa_case: nil)
     expect(case_contact).to_not be_valid
     expect(case_contact.errors[:casa_case]).to eq(["must exist"])
   end
 
   it "defaults miles_driven to zero" do
-    case_contact = create(:case_contact)
+    case_contact = build_stubbed(:case_contact)
     expect(case_contact.miles_driven).to eq 0
   end
 
@@ -28,54 +28,54 @@ RSpec.describe CaseContact, type: :model do
   end
 
   it "validates duration_minutes is only numeric values" do
-    case_contact = build(:case_contact, duration_minutes: nil)
+    case_contact = build_stubbed(:case_contact, duration_minutes: nil)
     expect(case_contact).to_not be_valid
     expect(case_contact.errors[:duration_minutes]).to eq(["Minimum case contact duration should be 15 minutes."])
   end
 
   it "validates duration_minutes cannot be less than 15 minutes." do
-    case_contact = build(:case_contact, duration_minutes: 10)
+    case_contact = build_stubbed(:case_contact, duration_minutes: 10)
     expect(case_contact).to_not be_valid
     expect(case_contact.errors[:duration_minutes]).to eq(["Minimum case contact duration should be 15 minutes."])
   end
 
   it "verifies occurred at is not in the future" do
-    case_contact = build(:case_contact, occurred_at: Time.now + 1.week)
+    case_contact = build_stubbed(:case_contact, occurred_at: Time.now + 1.week)
     expect(case_contact).to_not be_valid
     expect(case_contact.errors[:occurred_at]).to eq(["cannot be in the future"])
   end
 
   it "validates want_driving_reimbursement can be true when miles_driven is  positive" do
-    case_contact = build(:case_contact, want_driving_reimbursement: true, miles_driven: 1)
+    case_contact = build_stubbed(:case_contact, want_driving_reimbursement: true, miles_driven: 1)
     expect(case_contact).to be_valid
   end
 
   it "validates want_driving_reimbursement cannot be true when miles_driven is nil" do
-    case_contact = build(:case_contact, want_driving_reimbursement: true, miles_driven: nil)
+    case_contact = build_stubbed(:case_contact, want_driving_reimbursement: true, miles_driven: nil)
     expect(case_contact).not_to be_valid
     expect(case_contact.errors[:base]).to eq(["Must enter miles driven to receive driving reimbursement."])
   end
 
   it "validates want_driving_reimbursement cannot be true when miles_driven is not positive" do
-    case_contact = build(:case_contact, want_driving_reimbursement: true, miles_driven: 0)
+    case_contact = build_stubbed(:case_contact, want_driving_reimbursement: true, miles_driven: 0)
     expect(case_contact).not_to be_valid
     expect(case_contact.errors[:base]).to eq(["Must enter miles driven to receive driving reimbursement."])
   end
 
   it "validates that contact_made cannot be null" do
-    case_contact = build(:case_contact, contact_made: nil)
+    case_contact = build_stubbed(:case_contact, contact_made: nil)
     expect(case_contact).not_to be_valid
     expect(case_contact.errors[:base]).to eq(["Must enter whether the contact was made."])
   end
 
   it "can be updated when occured_at is before the last day of the month in the quarter that the case contact was created" do
-    case_contact = create(:case_contact)
+    case_contact = build(:case_contact)
     case_contact.update!(occurred_at: Time.zone.now)
     expect(case_contact).to be_valid
   end
 
   it "can't be updated when occurred_at is after the last day of the month in the quarter that the case contact was created" do
-    case_contact = create(:case_contact)
+    case_contact = build(:case_contact)
     case_contact.update(occurred_at: Time.zone.now - 1.year)
     expect(case_contact).to_not be_valid
     expect(case_contact.errors[:base]).to eq(["cannot edit case contacts created before the current quarter plus 30 days"])
@@ -87,8 +87,8 @@ RSpec.describe CaseContact, type: :model do
 
   describe "#update_cleaning_contact_types" do
     it "cleans up contact types before saving" do
-      group = create(:contact_type_group)
-      type1 = create(:contact_type, contact_type_group: group)
+      group = build_stubbed(:contact_type_group)
+      type1 = build(:contact_type, contact_type_group: group)
       type2 = create(:contact_type, contact_type_group: group)
 
       case_contact = create(:case_contact, contact_types: [type1])
@@ -147,10 +147,10 @@ RSpec.describe CaseContact, type: :model do
     describe ".contact_type" do
       subject(:contact_type) { described_class.contact_type([youth_type.id, supervisor_type.id]) }
 
-      let(:group) { create(:contact_type_group) }
-      let(:youth_type) { create(:contact_type, name: "Youth", contact_type_group: group) }
-      let(:supervisor_type) { create(:contact_type, name: "Supervisor", contact_type_group: group) }
-      let(:parent_type) { create(:contact_type, name: "Parent", contact_type_group: group) }
+      let(:group) { build(:contact_type_group) }
+      let(:youth_type) { build(:contact_type, name: "Youth", contact_type_group: group) }
+      let(:supervisor_type) { build(:contact_type, name: "Supervisor", contact_type_group: group) }
+      let(:parent_type) { build(:contact_type, name: "Parent", contact_type_group: group) }
 
       let!(:case_contacts_to_match) do
         [
@@ -160,7 +160,7 @@ RSpec.describe CaseContact, type: :model do
         ]
       end
 
-      let!(:other_case_contact) { create(:case_contact, contact_types: [parent_type]) }
+      let!(:other_case_contact) { build_stubbed(:case_contact, contact_types: [parent_type]) }
 
       it { is_expected.to match_array(case_contacts_to_match) }
     end
@@ -178,7 +178,7 @@ RSpec.describe CaseContact, type: :model do
       context "with yes option" do
         it "returns case contacts filtered by contact made option" do
           case_contact = create(:case_contact, contact_made: true)
-          create(:case_contact, contact_made: false)
+          build_stubbed(:case_contact, contact_made: false)
 
           expect(CaseContact.contact_made(true)).to match_array([case_contact])
         end
@@ -187,7 +187,7 @@ RSpec.describe CaseContact, type: :model do
       context "with no option" do
         it "returns case contacts filtered by contact made option" do
           case_contact = create(:case_contact, contact_made: false)
-          create(:case_contact, contact_made: true)
+          build_stubbed(:case_contact, contact_made: true)
 
           expect(CaseContact.contact_made(false)).to match_array([case_contact])
         end
@@ -239,7 +239,7 @@ RSpec.describe CaseContact, type: :model do
       context "with yes option" do
         it "returns case contacts filtered by contact made option" do
           case_contact = create(:case_contact, {miles_driven: 50, want_driving_reimbursement: true})
-          create(:case_contact, {miles_driven: 50, want_driving_reimbursement: false})
+          build_stubbed(:case_contact, {miles_driven: 50, want_driving_reimbursement: false})
 
           expect(CaseContact.want_driving_reimbursement(true)).to match_array([case_contact])
         end
@@ -247,7 +247,7 @@ RSpec.describe CaseContact, type: :model do
 
       context "with no option" do
         it "returns case contacts filtered by contact made option" do
-          create(:case_contact, {miles_driven: 50, want_driving_reimbursement: true})
+          build_stubbed(:case_contact, {miles_driven: 50, want_driving_reimbursement: true})
           case_contact = create(:case_contact, {miles_driven: 50, want_driving_reimbursement: false})
 
           expect(CaseContact.want_driving_reimbursement(false)).to match_array([case_contact])
@@ -425,13 +425,13 @@ RSpec.describe CaseContact, type: :model do
 
   describe "#contact_groups_with_types" do
     it "returns the groups with their associated case types" do
-      group1 = create(:contact_type_group, name: "Family")
-      group2 = create(:contact_type_group, name: "Health")
-      contact_type1 = create(:contact_type, contact_type_group: group1, name: "Parent")
-      contact_type2 = create(:contact_type, contact_type_group: group2, name: "Medical Professional")
-      contact_type3 = create(:contact_type, contact_type_group: group2, name: "Other Therapist")
+      group1 = build_stubbed(:contact_type_group, name: "Family")
+      group2 = build_stubbed(:contact_type_group, name: "Health")
+      contact_type1 = build_stubbed(:contact_type, contact_type_group: group1, name: "Parent")
+      contact_type2 = build_stubbed(:contact_type, contact_type_group: group2, name: "Medical Professional")
+      contact_type3 = build_stubbed(:contact_type, contact_type_group: group2, name: "Other Therapist")
       case_contact_types = [contact_type1, contact_type2, contact_type3]
-      case_contact = create(:case_contact)
+      case_contact = build_stubbed(:case_contact)
       case_contact.contact_types = case_contact_types
 
       groups_with_types = case_contact.contact_groups_with_types
@@ -448,14 +448,14 @@ RSpec.describe CaseContact, type: :model do
   describe "#requested_followup" do
     context "no followup exists in requested status" do
       it "returns nil" do
-        case_contact = create(:case_contact)
+        case_contact = build_stubbed(:case_contact)
         expect(case_contact.requested_followup).to be_nil
       end
     end
 
     context "a followup exists in requested status" do
       it "returns nil" do
-        case_contact = create(:case_contact)
+        case_contact = build_stubbed(:case_contact)
         followup = create(:followup, case_contact: case_contact)
 
         expect(case_contact.requested_followup).to eq(followup)

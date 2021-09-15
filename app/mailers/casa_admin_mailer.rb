@@ -1,4 +1,4 @@
-class CasaAdminMailer < ApplicationMailer
+class CasaAdminMailer < UserMailer
   def deactivation(user)
     @user = user
     @casa_organization = CasaOrg.find(@user.casa_org_id)

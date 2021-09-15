@@ -1,11 +1,11 @@
 require "rails_helper"
 
-RSpec.describe "case_contacts/index", :disable_bullet, js: true, type: :system do
-  let(:volunteer) { create(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
+RSpec.describe "case_contacts/index", js: true, type: :system do
+  let(:volunteer) { build(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
   let(:organization) { create(:casa_org) }
 
   context "with case contacts" do
-    let(:casa_case) { create(:casa_case, casa_org: organization, case_number: "CINA-1") }
+    let(:casa_case) { build(:casa_case, casa_org: organization, case_number: "CINA-1") }
     let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
 
     context "without filter" do
@@ -94,10 +94,7 @@ RSpec.describe "case_contacts/index", :disable_bullet, js: true, type: :system d
           end
         end
 
-        it "displays an information tooltip about the archived contacts" do
-          tooltip = find(".fa-question-circle")
-          page.driver.browser.action.move_to(tooltip.native).perform
-
+        it "displays an information hint about the archived contacts" do
           expect(page).to have_content("Archived contacts can't be edited. Case contacts are archived after the end of each quarter.")
         end
       end

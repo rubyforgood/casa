@@ -13,6 +13,8 @@ class PastCourtDate < ApplicationRecord
 
   accepts_nested_attributes_for :case_court_mandates, reject_if: :all_blank
 
+  scope :ordered_ascending, -> { order("date asc") }
+
   DOCX_TEMPLATE_PATH = Rails.root.join("app", "documents", "templates", "default_past_court_date_template.docx")
 
   def date_must_be_past

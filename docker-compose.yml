@@ -32,6 +32,8 @@ services:
       driver: none
     ports:
       - "5900:5900"
+    volumes:
+      - ./tmp/downloads:/home/seluser/Downloads
 
 volumes:
   db_data:

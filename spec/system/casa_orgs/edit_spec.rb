@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.describe "casa_orgs/edit", :disable_bullet, type: :system do
-  let(:organization) { create(:casa_org) }
-  let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
+RSpec.describe "casa_orgs/edit", type: :system do
+  let(:organization) { build(:casa_org) }
+  let(:admin) { build(:casa_admin, casa_org_id: organization.id) }
   let!(:contact_type_group) { create(:contact_type_group, casa_org: organization, name: "Contact type group 1") }
   let!(:contact_type) { create(:contact_type, name: "Contact type 1") }
   let!(:hearing_type) { create(:hearing_type, casa_org: organization, name: "Spec Test Hearing Type") }

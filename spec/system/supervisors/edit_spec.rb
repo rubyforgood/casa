@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "supervisors/edit", :disable_bullet, type: :system do
+RSpec.describe "supervisors/edit", type: :system do
   let(:organization) { create(:casa_org) }
 
   context "logged in as an admin" do
@@ -173,7 +173,7 @@ RSpec.describe "supervisors/edit", :disable_bullet, type: :system do
     end
 
     context "when editing other supervisor" do
-      let(:user) { create(:supervisor, casa_org: organization) }
+      let(:user) { build(:supervisor, casa_org: organization) }
       let(:supervisor) { create(:supervisor, casa_org: organization) }
 
       it "sees red message when there are no active volunteers" do

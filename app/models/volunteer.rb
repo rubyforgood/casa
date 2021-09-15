@@ -37,6 +37,22 @@ class Volunteer < User
       .active
   }
 
+  scope :with_assigned_cases, -> {
+    joins(:case_assignments)
+      .where("case_assignments.active is true")
+      .distinct
+      .order(:display_name)
+  }
+
+  scope :with_no_assigned_cases, -> {
+                                   joins("left join case_assignments "\
+                                         "on case_assignments.volunteer_id = users.id "\
+                                         "and case_assignments.active")
+                                     .where("case_assignments.volunteer_id is NULL")
+                                     .distinct
+                                     .order(:display_name)
+                                 }
+
   def self.email_court_report_reminder
     active.includes(:case_assignments).where.not(case_assignments: nil).find_each do |volunteer|
       volunteer.case_assignments.active.each do |case_assignment|
@@ -104,7 +120,7 @@ end
 #  active                 :boolean          default(TRUE)
 #  current_sign_in_at     :datetime
 #  current_sign_in_ip     :string
-#  display_name           :string           default("")
+#  display_name           :string           default(""), not null
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  invitation_accepted_at :datetime

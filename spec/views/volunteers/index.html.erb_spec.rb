@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "volunteers", :disable_bullet, type: :view do
+RSpec.describe "volunteers", type: :view do
   subject { render template: "volunteers/index" }
 
   let(:user) { build_stubbed :volunteer }
@@ -22,5 +22,25 @@ RSpec.describe "volunteers", :disable_bullet, type: :view do
     let(:user) { build_stubbed :casa_admin }
 
     it { is_expected.to have_selector("a", text: "New Volunteer") }
+  end
+
+  describe "supervisor's dropdown" do
+    let!(:supervisor_volunteer) { create(:supervisor_volunteer, volunteer: volunteer, supervisor: supervisor) }
+
+    context "when the supervisor is active" do
+      let(:supervisor) { build(:supervisor) }
+
+      it "shows up in the supervisor dropdown" do
+        expect(subject).to include(supervisor.display_name)
+      end
+    end
+
+    context "when the supervisor is not active" do
+      let(:supervisor) { build(:supervisor, active: false) }
+
+      it "doesn't show up in the dropdown" do
+        expect(subject).not_to include(supervisor.display_name)
+      end
+    end
   end
 end

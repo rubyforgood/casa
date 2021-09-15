@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe "imports/index", :disable_bullet, type: :system do
-  let(:volunteer) { create(:volunteer) }
+RSpec.describe "imports/index", type: :system do
+  let(:volunteer) { build(:volunteer) }
 
   context "as a volunteer" do
     before { sign_in volunteer }

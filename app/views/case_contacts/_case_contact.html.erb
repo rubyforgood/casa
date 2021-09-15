@@ -16,11 +16,10 @@
               <%= link_to(t("button.undelete"), restore_case_contact_path(contact.id), method: :post,
                           class: "btn btn-info") if policy(contact).restore? && contact.deleted? %>
               <% unless contact.quarter_editable? %>
-                <i
-                  class="fa fa-question-circle"
-                  aria-hidden="true"
-                  data-toggle="tooltip"
-                  title="<%= t("case_contacts.quarter_not_editable") %>"></i>
+                <br>
+                <small aria-hidden="true" class="card-title__hint text-muted">
+                  <%= t("case_contacts.quarter_not_editable") %>
+                </small>
               <% end %>
             </h5>
             <h6 class="card-subtitle mb-2 text-muted">
@@ -73,7 +72,7 @@
           <%= contact.creator&.display_name %>
         <% else %>
           <% if contact.creator&.supervisor? %>
-            <%= link_to contact.creator&.display_name, edit_supervisor_path(current_user) %>
+            <%= link_to contact.creator&.display_name, edit_supervisor_path(contact.creator) %>
           <% elsif contact.creator&.casa_admin? %>
             <%= link_to contact.creator&.display_name, edit_users_path %>
           <% else %>

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "dashboard/show", :disable_bullet, type: :system do
+RSpec.describe "dashboard/show", type: :system do
   let(:volunteer) { create(:volunteer, display_name: "Bob Loblaw") }
   context "volunteer user" do
     before do
@@ -8,9 +8,9 @@ RSpec.describe "dashboard/show", :disable_bullet, type: :system do
     end
 
     it "sees all their casa cases" do
-      casa_case_1 = create(:casa_case, active: true, casa_org: volunteer.casa_org, case_number: "CINA-1")
-      casa_case_2 = create(:casa_case, active: true, casa_org: volunteer.casa_org, case_number: "CINA-2")
-      casa_case_3 = create(:casa_case, active: true, casa_org: volunteer.casa_org, case_number: "CINA-3")
+      casa_case_1 = build(:casa_case, active: true, casa_org: volunteer.casa_org, case_number: "CINA-1")
+      casa_case_2 = build(:casa_case, active: true, casa_org: volunteer.casa_org, case_number: "CINA-2")
+      casa_case_3 = build(:casa_case, active: true, casa_org: volunteer.casa_org, case_number: "CINA-3")
       create(:case_assignment, volunteer: volunteer, casa_case: casa_case_1)
       create(:case_assignment, volunteer: volunteer, casa_case: casa_case_2)
 
@@ -22,7 +22,7 @@ RSpec.describe "dashboard/show", :disable_bullet, type: :system do
     end
 
     it "sees volunteer names in Cases table as plain text" do
-      casa_case = create(:casa_case, active: true, casa_org: volunteer.casa_org, case_number: "CINA-1")
+      casa_case = build(:casa_case, active: true, casa_org: volunteer.casa_org, case_number: "CINA-1")
       create(:case_assignment, volunteer: volunteer, casa_case: casa_case)
 
       visit casa_cases_path

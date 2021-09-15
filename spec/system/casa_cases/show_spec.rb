@@ -1,12 +1,16 @@
 require "rails_helper"
 
-RSpec.describe "casa_cases/show", :disable_bullet, type: :system do
+RSpec.describe "casa_cases/show", type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
-  let(:volunteer) { create(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
-  let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: organization, case_number: "CINA-1") }
+  let(:volunteer) { build(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
+  let(:casa_case) {
+    create(:casa_case, :with_one_court_mandate, casa_org: organization,
+    case_number: "CINA-1", transition_aged_youth: true)
+  }
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
   let!(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
+  let!(:emancipation_categories) { create_list(:emancipation_category, 3) }
 
   before do
     sign_in user
@@ -31,7 +35,7 @@ RSpec.describe "casa_cases/show", :disable_bullet, type: :system do
     end
 
     it "can see court mandates" do
-      expect(page).to have_content("Court Mandates")
+      expect(page).to have_content("Court Orders")
       expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
     end
   end
@@ -44,8 +48,16 @@ RSpec.describe "casa_cases/show", :disable_bullet, type: :system do
       expect(page).to have_link(href: "/supervisors/#{user.id}/edit")
     end
 
+    context "case contact by another supervisor" do
+      let(:other_supervisor) { create(:supervisor, casa_org: organization) }
+      let!(:case_contact) { create(:case_contact, creator: other_supervisor, casa_case: casa_case) }
+      it "sees link to other supervisor" do
+        expect(page).to have_link(href: "/supervisors/#{other_supervisor.id}/edit")
+      end
+    end
+
     it "can see court mandates" do
-      expect(page).to have_content("Court Mandates")
+      expect(page).to have_content("Court Orders")
       expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
     end
 
@@ -76,16 +88,12 @@ RSpec.describe "casa_cases/show", :disable_bullet, type: :system do
     let(:user) { volunteer }
 
     it "sees link to emancipation" do
-      expect(page).to have_content(casa_case.case_number)
+      expect(page).to have_link("Emancipation 0 / #{emancipation_categories.size}")
     end
 
     it "can see court mandates" do
-      expect(page).to have_content("Court Mandates")
+      expect(page).to have_content("Court Orders")
       expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
-    end
-
-    it "cannot see Generate Report button" do
-      expect(page).to_not have_button("Generate Report")
     end
   end
 end

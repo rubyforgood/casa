@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/case_court_mandates", :disable_bullet, type: :request do
+RSpec.describe "/case_court_mandates", type: :request do
   subject(:delete_request) { delete case_court_mandate_url(case_court_mandate) }
   let(:case_court_mandate) { build(:case_court_mandate) }
 
@@ -11,7 +11,7 @@ RSpec.describe "/case_court_mandates", :disable_bullet, type: :request do
   end
 
   describe "as an admin" do
-    let(:user) { create(:casa_admin) }
+    let(:user) { build(:casa_admin) }
 
     describe "DELETE /destroy" do
       it "renders a successful response" do
@@ -26,7 +26,7 @@ RSpec.describe "/case_court_mandates", :disable_bullet, type: :request do
   end
 
   describe "as a supervisor" do
-    let(:user) { create(:supervisor) }
+    let(:user) { build(:supervisor) }
 
     describe "DELETE /destroy" do
       it "renders a successful response" do
@@ -41,7 +41,7 @@ RSpec.describe "/case_court_mandates", :disable_bullet, type: :request do
   end
 
   describe "as a volunteer" do
-    let(:user) { create(:volunteer) }
+    let(:user) { build(:volunteer) }
 
     describe "DELETE /destroy" do
       it "renders a successful response" do

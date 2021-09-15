@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.describe "case_contacts/edit", :disable_bullet, type: :system do
-  let(:organization) { create(:casa_org) }
-  let(:casa_case) { create(:casa_case, casa_org: organization) }
+RSpec.describe "case_contacts/edit", type: :system do
+  let(:organization) { build(:casa_org) }
+  let(:casa_case) { build(:casa_case, casa_org: organization) }
   let!(:case_contact) { create(:case_contact, duration_minutes: 105, casa_case: casa_case) }
 
   context "when admin" do
@@ -26,7 +26,7 @@ RSpec.describe "case_contacts/edit", :disable_bullet, type: :system do
     end
 
     context "is part of a different organization" do
-      let(:other_organization) { create(:casa_org) }
+      let(:other_organization) { build(:casa_org) }
       let(:admin) { create(:casa_admin, casa_org: other_organization) }
 
       it "fails across organizations" do
@@ -71,8 +71,8 @@ RSpec.describe "case_contacts/edit", :disable_bullet, type: :system do
         expect(page).not_to have_link "Edit", href: edit_case_contact_path(case_contact)
       end
 
-      it "contact has tooltip" do
-        expect(page).to have_css("i.fa-question-circle")
+      it "contact has hint with card information" do
+        expect(page).to have_css("small.card-title__hint")
       end
     end
   end

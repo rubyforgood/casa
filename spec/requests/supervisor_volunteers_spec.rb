@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.describe "/supervisor_volunteers", :disable_bullet, type: :request do
-  let!(:admin) { create(:casa_admin) }
-  let!(:casa_org) { create(:casa_org) }
+RSpec.describe "/supervisor_volunteers", type: :request do
+  let!(:admin) { build(:casa_admin) }
+  let!(:casa_org) { build(:casa_org) }
   let!(:supervisor) { create(:supervisor, casa_org: casa_org) }
   let!(:volunteer) { create(:volunteer, casa_org: casa_org) }
 
@@ -50,7 +50,7 @@ RSpec.describe "/supervisor_volunteers", :disable_bullet, type: :request do
     end
 
     context "when an inactive association between the volunteer and a different supervisor exists" do
-      let!(:other_supervisor) { create(:supervisor, casa_org: casa_org) }
+      let!(:other_supervisor) { build(:supervisor, casa_org: casa_org) }
       let!(:previous_association) do
         create(
           :supervisor_volunteer,

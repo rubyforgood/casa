@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "all_casa_admin/dashboard/show", :disable_bullet, type: :system do
+RSpec.describe "all_casa_admin/dashboard/show", type: :system do
   let(:all_casa_admin) { create(:all_casa_admin) }
   let(:volunteer) { create(:volunteer) }
   let!(:organization) { create(:casa_org) }
@@ -17,8 +17,8 @@ RSpec.describe "all_casa_admin/dashboard/show", :disable_bullet, type: :system d
     it "lets admin navigate to an organization and see casa_admins" do
       ca1 = create(:casa_admin, casa_org: organization)
       ca2 = create(:casa_admin, casa_org: organization)
-      vol = create(:volunteer, casa_org: organization)
-      sup = create(:supervisor, casa_org: organization)
+      vol = build_stubbed(:volunteer, casa_org: organization)
+      sup = build_stubbed(:supervisor, casa_org: organization)
 
       visit "/"
 
@@ -29,7 +29,6 @@ RSpec.describe "all_casa_admin/dashboard/show", :disable_bullet, type: :system d
 
       expect(page).to have_text "Administrators"
       expect(page).to have_text "New CASA Admin"
-      expect(page).to have_text "Back"
       expect(page).to_not have_text vol.email
       expect(page).to_not have_text sup.email
       expect(page).to have_text ca1.email

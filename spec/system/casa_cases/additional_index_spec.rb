@@ -1,11 +1,11 @@
 require "rails_helper"
 
-RSpec.describe "casa_cases/index", :disable_bullet, type: :system do
+RSpec.describe "casa_cases/index", type: :system do
   # TODO combine with other casa cases index system spec
   let(:user) { build_stubbed :casa_admin }
 
   let(:organization) { create(:casa_org) }
-  let(:volunteer) { create :volunteer, casa_org: organization }
+  let(:volunteer) { build :volunteer, casa_org: organization }
   let(:admin) { create(:casa_admin, casa_org: organization) }
 
   context "logged in as admin" do
@@ -28,9 +28,9 @@ RSpec.describe "casa_cases/index", :disable_bullet, type: :system do
     end
 
     it "filters active/inactive", js: true do
-      active_case = create(:casa_case, active: true, casa_org: organization)
-      active_case1 = create(:casa_case, active: true, casa_org: organization)
-      inactive_case = create(:casa_case, active: false, casa_org: organization)
+      active_case = build(:casa_case, active: true, casa_org: organization)
+      active_case1 = build(:casa_case, active: true, casa_org: organization)
+      inactive_case = build(:casa_case, active: false, casa_org: organization)
 
       create(:case_assignment, volunteer: volunteer, casa_case: active_case)
       create(:case_assignment, volunteer: volunteer, casa_case: active_case1)

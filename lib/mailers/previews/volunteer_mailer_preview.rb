@@ -18,7 +18,8 @@ class VolunteerMailerPreview < ActionMailer::Preview
 
   def case_contacts_reminder
     user = User.find_by(id: params[:id]) || User.last
-    VolunteerMailer.case_contacts_reminder(user)
+    user.supervisor = User.find_by(id: params[:id]) || User.first
+    VolunteerMailer.case_contacts_reminder(user, true)
   end
 end
 # :nocov:

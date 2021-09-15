@@ -3,7 +3,7 @@
 # FollowupNotification.with(followup: @followup).deliver_later(current_user)
 # FollowupNotification.with(followup: @followup).deliver(current_user)
 
-class FollowupNotification < Noticed::Base
+class FollowupNotification < BaseNotification
   # Add your delivery methods
   #
   deliver_by :database
@@ -13,14 +13,10 @@ class FollowupNotification < Noticed::Base
 
   # Add required params
   #
-  param :followup, :created_by_name
+  param :followup, :created_by
 
   # Define helper methods to make rendering easier.
   #
-  def title
-    t(".title")
-  end
-
   def message
     note = params[:followup][:note]
 
@@ -46,6 +42,6 @@ class FollowupNotification < Noticed::Base
   end
 
   def message_heading
-    t(".message", created_by_name: params[:created_by_name])
+    t(".message", created_by_name: created_by_name)
   end
 end
