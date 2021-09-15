@@ -17,7 +17,7 @@ class SupervisorMailer < UserMailer
     )
   end
 
-  def inactive_messages(supervisor) 
+  def inactive_messages(supervisor)
     supervisor.volunteers.map do |volunteer|
       inactive_cases = CaseAssignment.inactive_this_week(volunteer.id)
       inactive_cases.map do |case_assignment|
