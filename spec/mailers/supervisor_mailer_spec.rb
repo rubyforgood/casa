@@ -93,7 +93,6 @@ RSpec.describe SupervisorMailer, type: :mailer do
     end
 
     it "does not display 'There are no additional notes' message when there are additional notes" do
-      # this_week = Date.today - 7.days..Date.today
       create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false, updated_at: Date.today - 8.days)
       expect(mail.body.encoded).to_not match("There are no additional notes.")
     end

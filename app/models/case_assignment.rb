@@ -13,7 +13,7 @@ class CaseAssignment < ApplicationRecord
   scope :active, -> { where(active: true) }
 
   def self.inactive_this_week(volunteer_id)
-    where("updated_at > ?",1.week.ago).where(active: false).where(volunteer_id: volunteer_id)
+    where("updated_at > ?", 1.week.ago).where(active: false).where(volunteer_id: volunteer_id)
   end
 
   private

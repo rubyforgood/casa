@@ -24,8 +24,8 @@ class SupervisorMailer < ApplicationMailer
     supervisor.volunteers.map do |volunteer|
       inactive_cases = CaseAssignment.inactive_this_week(volunteer.id)
       inactive_cases.map do |case_assignment|
-          inactive_case_number = case_assignment.casa_case.case_number
-          "#{volunteer.display_name} Case #{inactive_case_number} marked inactive this week."
+        inactive_case_number = case_assignment.casa_case.case_number
+        "#{volunteer.display_name} Case #{inactive_case_number} marked inactive this week."
       end
     end.flatten
   end
