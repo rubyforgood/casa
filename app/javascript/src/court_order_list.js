@@ -9,9 +9,8 @@ module.exports = class CourtOrderList {
   // Adds a row containing a text field to write the court order and a dropdown to specify the order status
   addCourtOrder () {
   }
-  
+
   // Removes a row of elements representing a single court order
   removeCourtOrder () {
   }
 }
-
