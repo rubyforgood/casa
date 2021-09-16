@@ -116,7 +116,7 @@
           <%= form.label :case_court_mandates, "#{t(".court_mandates")} - #{t(".court_mandate_privacy_warning")}" %>
 
           <% if policy(casa_case).update_court_mandates? %>
-            <div id="mandates-list-container">
+            <div id="court-orders-list-container">
               <%= form.fields_for :case_court_mandates do |ff| %>
                 <div class="court-mandate-entry">
                   <%= ff.text_area :mandate_text %>

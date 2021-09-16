@@ -6,7 +6,7 @@
 import Swal from 'sweetalert2'
 
 function addCourtMandateInput () {
-  const list = '#mandates-list-container'
+  const list = '#court-orders-list-container'
   const ref = $(list).data('ref') || 'casa_case'
   const casaCaseId = $(list).data('casa-case-id')
   const index = $(`${list} textarea`).length
