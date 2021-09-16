@@ -9,6 +9,7 @@ module.exports = class CourtOrderList {
   }
 
   // Removes a row of elements representing a single court order
-  removeCourtOrder () {
+  // @param {number} index The index of the court order to remove
+  removeCourtOrder (index) {
   }
 }
