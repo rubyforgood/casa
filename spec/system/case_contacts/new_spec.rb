@@ -5,18 +5,17 @@ RSpec.describe "case_contacts/new", type: :system do
   include ActionView::Helpers::SanitizeHelper
 
   context "when admin" do
-    it "is successful", js: true do
+    it "does not display empty or hidden contact type groups; can create CaseContact", js: true do
       organization = build(:casa_org)
       admin = create(:casa_admin, casa_org: organization)
       casa_case = create(:casa_case, casa_org: organization)
       contact_type_group = build(:contact_type_group, casa_org: organization)
-      empty = build(:contact_type_group, name: "Empty", casa_org: organization)
+      build(:contact_type_group, name: "Empty", casa_org: organization)
       grp_with_hidden = build(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization)
-      hidden_type = create(:contact_type, name: "Hidden", active: false, contact_type_group: grp_with_hidden)
+      create(:contact_type, name: "Hidden", active: false, contact_type_group: grp_with_hidden)
       school = create(:contact_type, name: "School", contact_type_group: contact_type_group)
       therapist = create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
 
-      travel_to Date.new(2021, 1, 1)
       sign_in admin
 
       visit casa_case_path(casa_case.id)
@@ -52,12 +51,8 @@ RSpec.describe "case_contacts/new", type: :system do
       admin = create(:casa_admin, casa_org: organization)
       casa_case = create(:casa_case, casa_org: organization)
       contact_type_group = build(:contact_type_group, casa_org: organization)
-      empty = build(:contact_type_group, name: "Empty", casa_org: organization)
-      grp_with_hidden = build(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization)
-      hidden_type = create(:contact_type, name: "Hidden", active: false, contact_type_group: grp_with_hidden)
-      school = create(:contact_type, name: "School", contact_type_group: contact_type_group)
-      therapist = create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
-      travel_to Date.new(2021, 1, 1)
+      create(:contact_type, name: "School", contact_type_group: contact_type_group)
+      create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
       sign_in admin
 
       visit casa_case_path(casa_case.id)
@@ -90,9 +85,9 @@ RSpec.describe "case_contacts/new", type: :system do
       admin = create(:casa_admin, casa_org: organization)
       casa_case = create(:casa_case, casa_org: organization)
       contact_type_group = build(:contact_type_group, casa_org: organization)
-      school = create(:contact_type, name: "School", contact_type_group: contact_type_group)
-      therapist = create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
-      travel_to Date.new(2021, 1, 1)
+      create(:contact_type, name: "School", contact_type_group: contact_type_group)
+      create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
+
       sign_in admin
 
       visit casa_case_path(casa_case.id)
@@ -137,9 +132,9 @@ RSpec.describe "case_contacts/new", type: :system do
         admin = create(:casa_admin, casa_org: organization)
         casa_case = create(:casa_case, casa_org: organization)
         contact_type_group = build(:contact_type_group, casa_org: organization)
-        school = create(:contact_type, name: "School", contact_type_group: contact_type_group)
-        therapist = create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
-        travel_to Date.new(2021, 1, 1)
+        create(:contact_type, name: "School", contact_type_group: contact_type_group)
+        create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
+
         sign_in admin
 
         visit casa_case_path(casa_case.id)
@@ -165,9 +160,9 @@ RSpec.describe "case_contacts/new", type: :system do
         admin = create(:casa_admin, casa_org: organization)
         casa_case = create(:casa_case, casa_org: organization)
         contact_type_group = build(:contact_type_group, casa_org: organization)
-        school = create(:contact_type, name: "School", contact_type_group: contact_type_group)
-        therapist = create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
-        travel_to Date.new(2021, 1, 1)
+        create(:contact_type, name: "School", contact_type_group: contact_type_group)
+        create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
+
         sign_in admin
 
         visit casa_case_path(casa_case.id)
@@ -208,7 +203,6 @@ RSpec.describe "case_contacts/new", type: :system do
       group_2 = build(:contact_type_group, casa_org: organization)
       create(:contact_type, name: "Parent", contact_type_group: group_2)
 
-      travel_to Date.new(2021, 1, 1)
       sign_in admin
       visit new_case_contact_path(casa_case.id)
 
@@ -226,7 +220,6 @@ RSpec.describe "case_contacts/new", type: :system do
       create(:contact_type, name: "Caregiver Family", contact_type_group: group_2)
       create(:contact_type, name: "Foster Parent", contact_type_group: group_2)
 
-      travel_to Date.new(2021, 1, 1)
       sign_in admin
       visit(new_case_contact_path(casa_case.id))
 
@@ -244,9 +237,9 @@ RSpec.describe "case_contacts/new", type: :system do
   context "volunteer user" do
     it "is successful", js: true do
       organization = build(:casa_org)
-      empty = build(:contact_type_group, name: "Empty", casa_org: organization)
+      build(:contact_type_group, name: "Empty", casa_org: organization)
       grp_with_hidden = build(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization)
-      hidden_type = build(:contact_type, name: "Hidden", active: false, contact_type_group: grp_with_hidden)
+      build(:contact_type, name: "Hidden", active: false, contact_type_group: grp_with_hidden)
       volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first
       create_contact_types(volunteer_casa_case_one.casa_org)
@@ -286,7 +279,6 @@ RSpec.describe "case_contacts/new", type: :system do
     end
 
     it "submits the form when no note was added", js: true do
-      organization = build(:casa_org)
       volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first
       create_contact_types(volunteer_casa_case_one.casa_org)
@@ -316,7 +308,6 @@ RSpec.describe "case_contacts/new", type: :system do
     end
 
     it "submits the form when note is added and confirmed", js: true do
-      organization = build(:casa_org)
       volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first
       create_contact_types(volunteer_casa_case_one.casa_org)
@@ -348,7 +339,6 @@ RSpec.describe "case_contacts/new", type: :system do
     end
 
     it "does not submit the form when note is added but not confirmed" do
-      organization = build(:casa_org)
       volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first
       create_contact_types(volunteer_casa_case_one.casa_org)
@@ -379,7 +369,6 @@ RSpec.describe "case_contacts/new", type: :system do
 
     context "with invalid inputs" do
       it "re-renders the form with errors, but preserving all previously entered selections", js: true do
-        organization = build(:casa_org)
         volunteer = create(:volunteer, :with_casa_cases)
         volunteer_casa_case_one = volunteer.casa_cases.first
         future_date = 2.days.from_now
@@ -433,7 +422,6 @@ RSpec.describe "case_contacts/new", type: :system do
 
     context "with contact made not checked" do
       it "does not re-render form, preserves all previously entered selections", js: true do
-        organization = build(:casa_org)
         volunteer = create(:volunteer, :with_casa_cases)
         volunteer_casa_case_one = volunteer.casa_cases.first
         create_contact_types(volunteer_casa_case_one.casa_org)
