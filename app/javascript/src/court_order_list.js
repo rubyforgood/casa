@@ -1,5 +1,3 @@
-const $ = require('jquery')
-
 module.exports = class CourtOrderList {
   // @param {object} courtOrdersWidget The div containing the list of court orders
   constructor (courtOrdersWidget) {
