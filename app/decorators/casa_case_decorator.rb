@@ -62,14 +62,6 @@ class CasaCaseDecorator < Draper::Decorator
     object.case_contacts.where(occurred_at: this_week_before_date).where(contact_made: true).count
   end
 
-  def transition_aged_youth
-    object.in_transition_age? || object.transition_aged_youth ? "Yes #{CasaCase::TRANSITION_AGE_YOUTH_ICON}" : "No #{CasaCase::NON_TRANSITION_AGE_YOUTH_ICON}"
-  end
-
-  def transition_aged_youth_icon
-    object.in_transition_age? || object.transition_aged_youth ? CasaCase::TRANSITION_AGE_YOUTH_ICON : CasaCase::NON_TRANSITION_AGE_YOUTH_ICON
-  end
-
   def unsuccessful_contacts_this_week
     this_week = Date.today - 7.days..Date.today
     object.case_contacts.where(occurred_at: this_week).where(contact_made: false).count
@@ -78,26 +70,6 @@ class CasaCaseDecorator < Draper::Decorator
   def unsuccessful_contacts_this_week_before(date)
     this_week_before_date = Date.today - 7.days..date
     object.case_contacts.where(occurred_at: this_week_before_date).where(contact_made: false).count
-  end
-
-  def court_report_select_option
-    [
-      object.case_number
-    ]
-  end
-
-  def court_mandate_select_options
-    CaseCourtMandate.implementation_statuses.map do |status|
-      [status[0].humanize, status[0]]
-    end
-  end
-
-  def inactive_class
-    !object.active ? "table-secondary" : ""
-  end
-
-  def formatted_updated_at
-    I18n.l(object.updated_at, format: :standard, default: nil)
   end
 
   def emancipation_checklist_count

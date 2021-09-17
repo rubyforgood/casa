@@ -88,10 +88,6 @@ class CasaCase < ApplicationRecord
   # Ignore deleted column
   self.ignored_columns = %w[transition_aged_youth]
 
-  def latest_court_report
-    court_reports.order("created_at").last
-  end
-
   def add_emancipation_category(category_id)
     emancipation_categories << EmancipationCategory.find(category_id)
   end
@@ -128,10 +124,6 @@ class CasaCase < ApplicationRecord
 
   def in_transition_age?
     birth_month_year_youth.nil? ? false : birth_month_year_youth <= 14.years.ago
-  end
-
-  def has_judge_name?
-    judge_name
   end
 
   def latest_court_report
