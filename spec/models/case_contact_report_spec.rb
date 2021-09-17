@@ -282,7 +282,7 @@ RSpec.describe CaseContactReport, type: :model do
         school = create(:contact_type, name: "School")
         therapist = create(:contact_type, name: "Therapist")
         casa_case = create(:casa_case)
-   
+
         contact1 = create(:case_contact, occurred_at: 20.days.ago, casa_case: casa_case, contact_types: [court])
         build_stubbed(:case_contact, occurred_at: 40.days.ago, casa_case: casa_case, contact_types: [court])
         contact4 = create(:case_contact, occurred_at: 20.days.ago, casa_case: casa_case, contact_types: [school])

@@ -133,7 +133,7 @@ class CasaCase < ApplicationRecord
   def has_judge_name?
     judge_name
   end
-  
+
   def latest_court_report
     court_reports.order("created_at").last
   end

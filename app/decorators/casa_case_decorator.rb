@@ -99,7 +99,7 @@ class CasaCaseDecorator < Draper::Decorator
   def formatted_updated_at
     I18n.l(object.updated_at, format: :standard, default: nil)
   end
-  
+
   def emancipation_checklist_count
     "#{object.casa_case_emancipation_categories.count} / #{EmancipationCategory.count}"
   end
