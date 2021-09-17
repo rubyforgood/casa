@@ -32,7 +32,7 @@ RSpec.describe "VolunteerDatatable" do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.start
 
-    org = create :casa_org
+    org = build(:casa_org)
     supervisors = create_list :supervisor, 3, casa_org: org
 
     supervisors.each do |supervisor|
@@ -167,7 +167,7 @@ RSpec.describe "VolunteerDatatable" do
       end
 
       before do
-        CasaCase.all.each_with_index { |cc, idx| cc.case_contacts << create(:case_contact, contact_made: true, creator: cc.volunteers.first, occurred_at: idx.days.ago) }
+        CasaCase.all.each_with_index { |cc, idx| cc.case_contacts << build(:case_contact, contact_made: true, creator: cc.volunteers.first, occurred_at: idx.days.ago) }
       end
 
       context "when ascending" do
@@ -200,11 +200,11 @@ RSpec.describe "VolunteerDatatable" do
 
       before do
         4.times do |i|
-          create :case_contact, contact_made: true, casa_case: casa_case1, creator: volunteer1, occurred_at: (19 * (i + 1)).days.ago
+          create(:case_contact, contact_made: true, casa_case: casa_case1, creator: volunteer1, occurred_at: (19 * (i + 1)).days.ago)
         end
 
         3.times do |i|
-          create :case_contact, contact_made: true, casa_case: casa_case2, creator: volunteer2, occurred_at: (29 * (i + 1)).days.ago
+          create(:case_contact, contact_made: true, casa_case: casa_case2, creator: volunteer2, occurred_at: (29 * (i + 1)).days.ago)
         end
       end
 

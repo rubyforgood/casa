@@ -34,13 +34,13 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
 
     it "shows transition stamp for transitioned case" do
-      expected_text = "#{casa_cases.second.case_number} - transition"
+      expected_text = "#{casa_cases.second.case_number}"
 
       expect(page).to have_selector "#case-selection option", text: expected_text
     end
 
     it "shows non-transition stamp for non-transitioned case" do
-      expected_text = "#{casa_cases.first.case_number} - non-transition"
+      expected_text = "#{casa_cases.first.case_number}"
 
       expect(page).to have_selector "#case-selection option", text: expected_text
     end
@@ -81,20 +81,20 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   describe "'Case Number' dropdown list", js: true do
-    let(:non_transitioned_case_number) { casa_cases.first.case_number.to_s }
-    let(:non_transitioned_option_text) { "#{non_transitioned_case_number} - non-transition(assigned to Name Last)" }
+    let(:case_number) { casa_cases.first.case_number.to_s }
+    let(:option_text) { "#{case_number} - (assigned to Name Last)" }
 
-    it "has non-transitioned case option selected" do
-      page.select non_transitioned_option_text, from: "case-selection"
+    it "has case option selected" do
+      page.select option_text, from: "case-selection"
 
       click_button "Generate Report"
 
-      expect(page).to have_select "case-selection", selected: non_transitioned_option_text
+      expect(page).to have_select "case-selection", selected: option_text
     end
   end
 
   context "when generating a report, volunteer sees waiting page", js: true do
-    let(:casa_case) { casa_cases }
+    let(:casa_case) { casa_cases.first }
     let(:option_text) { casa_case.case_number }
 
     before do
@@ -122,7 +122,7 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   context "when selecting a case, volunteer can generate and download a report", js: true do
-    let(:casa_case) { casa_cases }
+    let(:casa_case) { casa_cases.first }
     let(:option_text) { casa_case.case_number }
 
     before do
@@ -141,7 +141,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       end
 
       it "does not allow supervisors to download already generated report from case details page" do
-        supervisor = create(:supervisor, casa_org: volunteer.casa_org)
+        supervisor = build(:supervisor, casa_org: volunteer.casa_org)
 
         sign_out volunteer
         sign_in supervisor
@@ -152,7 +152,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       end
 
       it "does not allow admins to download already generated report from case details page" do
-        casa_admin = create(:casa_admin)
+        casa_admin = build(:casa_admin)
 
         sign_out volunteer
         sign_in casa_admin
@@ -169,7 +169,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       end
 
       it "allows supervisors to download already generated report from case details page" do
-        supervisor = create(:supervisor, casa_org: volunteer.casa_org)
+        supervisor = build(:supervisor, casa_org: volunteer.casa_org)
 
         sign_out volunteer
         sign_in supervisor
@@ -180,7 +180,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       end
 
       it "allows admins to download already generated report from case details page" do
-        casa_admin = create(:casa_admin)
+        casa_admin = build(:casa_admin)
 
         sign_out volunteer
         sign_in casa_admin

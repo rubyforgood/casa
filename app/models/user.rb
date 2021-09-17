@@ -144,7 +144,7 @@ end
 #  active                 :boolean          default(TRUE)
 #  current_sign_in_at     :datetime
 #  current_sign_in_ip     :string
-#  display_name           :string           default("")
+#  display_name           :string           default(""), not null
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  invitation_accepted_at :datetime

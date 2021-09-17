@@ -12,7 +12,7 @@ RSpec.describe "supervisors/index", type: :system do
     end
   end
 
-  let(:organization) { create(:casa_org) }
+  let(:organization) { build(:casa_org) }
   let(:supervisor_user) { create(:supervisor, casa_org: organization) }
 
   before { sign_in supervisor_user }

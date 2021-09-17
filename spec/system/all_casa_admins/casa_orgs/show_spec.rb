@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "all_casa_admins/casa_orgs/show", type: :system do
-  let(:all_casa_admin) { create(:all_casa_admin, email: "theexample@example.com") }
+  let(:all_casa_admin) { build_stubbed(:all_casa_admin, email: "theexample@example.com") }
   let(:organization) { create(:casa_org) }
 
   before do

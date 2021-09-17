@@ -29,7 +29,7 @@
               <%= t(".no_supervisor") %>
           </a>
         </li>
-        <% current_organization.supervisors.each do |supervisor| %>
+        <% current_organization.supervisors.where(active: true).each do |supervisor| %>
           <li>
             <a class="small" data-value="option1" tabIndex="-1">
               <% if policy(User).edit_name?(supervisor) %>

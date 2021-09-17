@@ -6,7 +6,7 @@ RSpec.describe "/imports", type: :request do
   let(:case_file) { Rails.root.join("spec", "fixtures", "casa_cases.csv") }
   let(:existing_case_file) { Rails.root.join("spec", "fixtures", "existing_casa_case.csv") }
   let(:supervisor_volunteers_file) { Rails.root.join("spec", "fixtures", "supervisor_volunteers.csv") }
-  let(:casa_admin) { create(:casa_admin) }
+  let(:casa_admin) { build(:casa_admin) }
 
   describe "GET /index" do
     it "renders an unsuccessful response when the user is not an admin" do

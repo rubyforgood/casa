@@ -3,13 +3,13 @@ require "stringio"
 
 RSpec.describe "Edit CASA Case", type: :system do
   context "logged in as admin" do
-    let(:organization) { create(:casa_org) }
+    let(:organization) { build(:casa_org) }
     let(:admin) { create(:casa_admin, casa_org: organization) }
     let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: organization) }
-    let!(:judge) { create(:judge, casa_org: organization) }
-    let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
-    let!(:school) { create(:contact_type, name: "School", contact_type_group: contact_type_group) }
-    let!(:therapist) { create(:contact_type, name: "Therapist", contact_type_group: contact_type_group) }
+    let!(:judge) { build(:judge, casa_org: organization) }
+    let(:contact_type_group) { build(:contact_type_group, casa_org: organization) }
+    let!(:school) { build(:contact_type, name: "School", contact_type_group: contact_type_group) }
+    let!(:therapist) { build(:contact_type, name: "Therapist", contact_type_group: contact_type_group) }
 
     before { sign_in admin }
 
@@ -79,12 +79,12 @@ RSpec.describe "Edit CASA Case", type: :system do
   end
 
   context "logged in as supervisor" do
-    let(:casa_org) { create(:casa_org) }
+    let(:casa_org) { build(:casa_org) }
     let(:supervisor) { create(:supervisor, casa_org: casa_org) }
     let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: casa_org) }
-    let!(:contact_type_group) { create(:contact_type_group, casa_org: casa_org) }
+    let!(:contact_type_group) { build(:contact_type_group, casa_org: casa_org) }
     let!(:contact_type_1) { create(:contact_type, name: "Youth", contact_type_group: contact_type_group) }
-    let!(:contact_type_2) { create(:contact_type, name: "Supervisor", contact_type_group: contact_type_group) }
+    let!(:contact_type_2) { build(:contact_type, name: "Supervisor", contact_type_group: contact_type_group) }
     let!(:next_year) { (Date.today.year + 1).to_s }
 
     before { sign_in supervisor }
@@ -264,9 +264,9 @@ RSpec.describe "Edit CASA Case", type: :system do
     end
 
     describe "assign and unassign a volunteer to a case" do
-      let(:organization) { create(:casa_org) }
+      let(:organization) { build(:casa_org) }
       let(:casa_case) { create(:casa_case, casa_org: organization) }
-      let(:supervisor1) { create(:supervisor, casa_org: organization) }
+      let(:supervisor1) { build(:supervisor, casa_org: organization) }
       let!(:volunteer) { create(:volunteer, supervisor: supervisor1, casa_org: organization) }
 
       def sign_in_and_assign_volunteer
@@ -329,7 +329,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       end
 
       context "when supervisor other than volunteer's supervisor" do
-        before { volunteer.update(supervisor: create(:supervisor)) }
+        before { volunteer.update(supervisor: build(:supervisor)) }
 
         it "unassigns volunteer", js: true do
           sign_in_and_assign_volunteer
@@ -345,7 +345,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       it "when can assign only active volunteer to a case" do
         create(:volunteer, casa_org: organization)
-        create(:volunteer, :inactive, casa_org: organization)
+        build_stubbed(:volunteer, :inactive, casa_org: organization)
 
         sign_in_and_assign_volunteer
 
@@ -354,7 +354,7 @@ RSpec.describe "Edit CASA Case", type: :system do
     end
 
     describe "case assigned to multiple volunteers" do
-      let(:organization) { create(:casa_org) }
+      let(:organization) { build(:casa_org) }
       let(:supervisor) { create(:casa_admin, casa_org: organization) }
       let(:casa_case) { create(:casa_case, casa_org: organization) }
 
@@ -459,7 +459,7 @@ of it unless it was included in a previous court report.")
   end
 
   context "logged in as volunteer" do
-    let(:volunteer) { create(:volunteer) }
+    let(:volunteer) { build(:volunteer) }
     let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: volunteer.casa_org) }
     let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
 
@@ -518,12 +518,12 @@ of it unless it was included in a previous court report.")
         click_on "Update CASA Case"
       end
 
-      expect(page).not_to have_text("Day")
-      expect(page).not_to have_text("Month")
-      expect(page).not_to have_text("Year")
+      expect(page).to have_text("Day")
+      expect(page).to have_text("Month")
+      expect(page).to have_text("Year")
       expect(page).not_to have_text("Deactivate Case")
 
-      expect(page).not_to have_css("#add-mandate-button")
+      expect(page).to have_css("#add-mandate-button")
 
       visit casa_case_path(casa_case)
       expect(page).to have_text("Court Report Status: Submitted")

@@ -5,7 +5,7 @@ RSpec.describe "/emancipation_checklists", type: :request do
     before { sign_in volunteer }
 
     context "when viewing the page as a volunteer" do
-      let(:volunteer) { create(:volunteer) }
+      let(:volunteer) { build(:volunteer) }
 
       context "when viewing the page with exactly one transitioning case" do
         let(:casa_case) { create(:casa_case, casa_org: volunteer.casa_org) }

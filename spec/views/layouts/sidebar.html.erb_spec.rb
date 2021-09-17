@@ -61,7 +61,7 @@ RSpec.describe "layout/sidebar", type: :view do
   end
 
   context "when logged in as a volunteer" do
-    let(:organization) { create(:casa_org) }
+    let(:organization) { build(:casa_org) }
     let(:user) { create(:volunteer, casa_org: organization) }
 
     it "renders the correct Role name on the sidebar" do
@@ -94,50 +94,6 @@ RSpec.describe "layout/sidebar", type: :view do
 
       expect(rendered).to match user.display_name
       expect(rendered).to match user.email
-    end
-
-    context "when the volunteer does not have a transitioning case" do
-      it "does not render emancipation checklist(s)" do
-        sign_in user
-
-        # 0 Cases
-        render partial: "layouts/sidebar"
-        expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
-
-        # 1 Non transitioning case
-        casa_case = create(:casa_case, casa_org: organization)
-        create(:case_assignment, volunteer: user, casa_case: casa_case)
-
-        render partial: "layouts/sidebar"
-        expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
-      end
-    end
-
-    context "when the user has only inactive or unassigned transiting cases" do
-      it "does not render emancipation checklist(s)" do
-        sign_in user
-
-        inactive_case = create(:casa_case, casa_org: organization, active: false)
-        create(:case_assignment, volunteer: user, casa_case: inactive_case)
-
-        unassigned_case = create(:casa_case, casa_org: organization)
-        create(:case_assignment, volunteer: user, casa_case: unassigned_case, active: false)
-
-        render partial: "layouts/sidebar"
-        expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
-      end
-    end
-
-    context "when the volunteer has a transitioning case" do
-      let(:casa_case) { create(:casa_case, casa_org: organization) }
-      let!(:case_assignment) { create(:case_assignment, volunteer: user, casa_case: casa_case) }
-
-      it "renders emancipation checklist(s)" do
-        sign_in user
-
-        render partial: "layouts/sidebar"
-        expect(rendered).to have_link("Emancipation Checklist", href: "/emancipation_checklists")
-      end
     end
   end
 
@@ -181,7 +137,7 @@ RSpec.describe "layout/sidebar", type: :view do
   end
 
   context "notifications" do
-    let(:user) { build_stubbed :volunteer }
+    let(:user) { build_stubbed(:volunteer) }
 
     it "displays badge when user has notifications" do
       sign_in user

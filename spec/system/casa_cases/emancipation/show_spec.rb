@@ -5,7 +5,7 @@ RSpec.describe "casa_cases/show", type: :system do
   let(:volunteer) { create(:volunteer, casa_org: organization) }
   let(:casa_case) { create(:casa_case, casa_org: organization) }
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
-  let!(:emancipation_category) { create(:emancipation_category, mutually_exclusive: true) }
+  let!(:emancipation_category) { build(:emancipation_category, mutually_exclusive: true) }
   let!(:emancipation_option) { create(:emancipation_option, emancipation_category: emancipation_category) }
 
   before do

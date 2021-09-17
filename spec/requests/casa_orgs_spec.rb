@@ -1,11 +1,11 @@
 require "rails_helper"
 
 RSpec.describe "CasaOrgs", type: :request do
-  let(:casa_org) { create(:casa_org) }
+  let(:casa_org) { build(:casa_org) }
   let(:valid_attributes) { {name: "name", display_name: "display_name", address: "address"} }
   let(:logo) { upload_file("#{Rails.root}/spec/fixtures/company_logo.png") }
   let(:invalid_attributes) { {name: nil} }
-  let(:casa_case) { create(:casa_case, casa_org: casa_org) }
+  let(:casa_case) { build_stubbed(:casa_case, casa_org: casa_org) }
 
   describe "as an admin" do
     before { sign_in create(:casa_admin, casa_org: casa_org) }

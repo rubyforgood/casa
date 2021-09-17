@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe FileImporter do
-  let!(:import_user) { create(:casa_admin) }
+  let!(:import_user) { build_stubbed(:casa_admin) }
   let(:import_file_path) { Rails.root.join("spec", "fixtures", "generic.csv") }
   let(:file_importer) { FileImporter.new(import_file_path, import_user.casa_org.id, "something", ["header"]) }
 

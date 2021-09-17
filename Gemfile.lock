@@ -400,7 +400,7 @@ GEM
       nokogiri (~> 1.6)
       rubyzip (>= 1.3.0)
       selenium-webdriver (>= 3.0, < 4.0)
-    webpacker (5.4.2)
+    webpacker (5.4.3)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
@@ -421,7 +421,7 @@ DEPENDENCIES
   amazing_print
   annotate
   azure-storage-blob
-  bootsnap (>= 1.4.2)
+  bootsnap
   brakeman
   bugsnag
   bullet
@@ -438,17 +438,17 @@ DEPENDENCIES
   faker
   filterrific
   image_processing (~> 1.12)
-  jbuilder (~> 2.11)
+  jbuilder
   letter_opener
   listen (>= 3.0.5, < 3.8)
   lograge
   noticed
   paper_trail
-  paranoia (~> 2.2)
-  pg (>= 0.18, < 2.0)
+  paranoia
+  pg
   pry
   pry-byebug
-  puma (~> 5.4)
+  puma
   pundit
   rack-attack
   rails (~> 6.1.4)

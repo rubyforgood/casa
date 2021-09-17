@@ -45,8 +45,8 @@ RSpec.describe CaseContactReport, type: :model do
   describe "filter behavior" do
     describe "casa organization" do
       it "includes case contacts from current org" do
-        casa_org = create(:casa_org)
-        casa_case = create(:casa_case, casa_org: casa_org)
+        casa_org = build(:casa_org)
+        casa_case = build(:casa_case, casa_org: casa_org)
         case_contact = create(:case_contact, casa_case: casa_case)
 
         report = CaseContactReport.new(casa_org_id: casa_org.id)
@@ -56,9 +56,9 @@ RSpec.describe CaseContactReport, type: :model do
 
       it "excludes case contacts from other orgs" do
         casa_org = create(:casa_org)
-        other_casa_org = create(:casa_org)
-        casa_case = create(:casa_case, casa_org: other_casa_org)
-        create(:case_contact, casa_case: casa_case)
+        other_casa_org = build(:casa_org)
+        casa_case = build(:casa_case, casa_org: other_casa_org)
+        build(:case_contact, casa_case: casa_case)
 
         report = CaseContactReport.new(casa_org_id: casa_org.id)
 
@@ -92,7 +92,7 @@ RSpec.describe CaseContactReport, type: :model do
       describe "occured at range filter" do
         it "uses date range if provided" do
           create(:case_contact, {occurred_at: 20.days.ago})
-          create(:case_contact, {occurred_at: 100.days.ago})
+          build(:case_contact, {occurred_at: 100.days.ago})
           report = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago})
           contacts = report.case_contacts
           expect(contacts.length).to eq(1)
@@ -109,7 +109,7 @@ RSpec.describe CaseContactReport, type: :model do
         it "returns only the volunteer" do
           volunteer = create(:volunteer)
           create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
-          create(:case_contact, {occurred_at: 100.days.ago})
+          build(:case_contact, {occurred_at: 100.days.ago})
           report = CaseContactReport.new({creator_ids: [volunteer.id]})
           contacts = report.case_contacts
           expect(contacts.length).to eq(1)
@@ -120,23 +120,23 @@ RSpec.describe CaseContactReport, type: :model do
           create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
           create(:case_contact, {occurred_at: 100.days.ago, creator_id: volunteer.id})
 
-          create(:case_contact, {occurred_at: 100.days.ago})
+          build(:case_contact, {occurred_at: 100.days.ago})
           report = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, creator_ids: [volunteer.id]})
           contacts = report.case_contacts
           expect(contacts.length).to eq(1)
         end
 
         it "returns only the volunteer with the specified supervisors" do
-          casa_org = create(:casa_org)
+          casa_org = build(:casa_org)
           supervisor = create(:supervisor, casa_org: casa_org)
-          volunteer = create(:volunteer, casa_org: casa_org)
+          volunteer = build(:volunteer, casa_org: casa_org)
           volunteer2 = create(:volunteer, casa_org: casa_org)
           create(:supervisor_volunteer, volunteer: volunteer, supervisor: supervisor)
 
           contact = create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id})
-          create(:case_contact, {occurred_at: 100.days.ago, creator_id: volunteer2.id})
+          build_stubbed(:case_contact, {occurred_at: 100.days.ago, creator_id: volunteer2.id})
 
-          create(:case_contact, {occurred_at: 100.days.ago})
+          build_stubbed(:case_contact, {occurred_at: 100.days.ago})
           report = CaseContactReport.new({supervisor_ids: [supervisor.id]})
           contacts = report.case_contacts
           expect(contacts.length).to eq(1)
@@ -197,17 +197,17 @@ RSpec.describe CaseContactReport, type: :model do
 
     describe "contact type filter functionality" do
       it "returns only the case contacts that include the case contact" do
-        casa_org = create(:casa_org)
+        casa_org = build(:casa_org)
         supervisor = create(:supervisor, casa_org: casa_org)
-        volunteer = create(:volunteer, casa_org: casa_org)
+        volunteer = build(:volunteer, casa_org: casa_org)
         volunteer2 = create(:volunteer, casa_org: casa_org)
-        court = create(:contact_type, name: "Court")
-        school = create(:contact_type, name: "School")
+        court = build(:contact_type, name: "Court")
+        school = build_stubbed(:contact_type, name: "School")
         create(:supervisor_volunteer, volunteer: volunteer, supervisor: supervisor)
 
         contact = create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id, contact_types: [court]})
-        create(:case_contact, {occurred_at: 100.days.ago, creator_id: volunteer2.id, contact_types: [school]})
-        create(:case_contact, {occurred_at: 100.days.ago})
+        build_stubbed(:case_contact, {occurred_at: 100.days.ago, creator_id: volunteer2.id, contact_types: [school]})
+        build_stubbed(:case_contact, {occurred_at: 100.days.ago})
         report = CaseContactReport.new({contact_type_ids: [court.id]})
         contacts = report.case_contacts
         expect(contacts.length).to eq(1)
@@ -217,16 +217,16 @@ RSpec.describe CaseContactReport, type: :model do
 
     describe "contact type group filter functionality" do
       before do
-        casa_org = create(:casa_org)
+        casa_org = build(:casa_org)
         supervisor = create(:supervisor, casa_org: casa_org)
-        volunteer = create(:volunteer, casa_org: casa_org)
+        volunteer = build(:volunteer, casa_org: casa_org)
         volunteer2 = create(:volunteer, casa_org: casa_org)
         create(:supervisor_volunteer, volunteer: volunteer, supervisor: supervisor)
 
-        @contact_type_group = create(:contact_type_group, name: "Legal")
-        legal_court = create(:contact_type, name: "Court", contact_type_group: @contact_type_group)
-        legal_attorney = create(:contact_type, name: "Attorney", contact_type_group: @contact_type_group)
-        placement_school = create(:contact_type, name: "School", contact_type_group: create(:contact_type_group, name: "Placement"))
+        @contact_type_group = build(:contact_type_group, name: "Legal")
+        legal_court = build_stubbed(:contact_type, name: "Court", contact_type_group: @contact_type_group)
+        legal_attorney = build(:contact_type, name: "Attorney", contact_type_group: @contact_type_group)
+        placement_school = build_stubbed(:contact_type, name: "School", contact_type_group: build(:contact_type_group, name: "Placement"))
 
         @expected_contact = create(:case_contact, {occurred_at: 20.days.ago, creator_id: volunteer.id, contact_types: [legal_court, legal_attorney]})
         create(:case_contact, {occurred_at: 100.days.ago, creator_id: volunteer2.id, contact_types: [placement_school]})
@@ -281,14 +281,13 @@ RSpec.describe CaseContactReport, type: :model do
         court = create(:contact_type, name: "Court")
         school = create(:contact_type, name: "School")
         therapist = create(:contact_type, name: "Therapist")
-        untransitioned_casa_case = create(:casa_case)
-        transitioned_casa_case = create(:casa_case)
-        contact1 = create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, contact_types: [court])
-        create(:case_contact, occurred_at: 40.days.ago, casa_case: transitioned_casa_case, contact_types: [court])
-        create(:case_contact, occurred_at: 20.days.ago, casa_case: untransitioned_casa_case, contact_types: [court])
-        contact4 = create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, contact_types: [school])
-        contact5 = create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, contact_types: [court, school])
-        contact6 = create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, contact_types: [therapist])
+        casa_case = create(:casa_case)
+   
+        contact1 = create(:case_contact, occurred_at: 20.days.ago, casa_case: casa_case, contact_types: [court])
+        build_stubbed(:case_contact, occurred_at: 40.days.ago, casa_case: casa_case, contact_types: [court])
+        contact4 = create(:case_contact, occurred_at: 20.days.ago, casa_case: casa_case, contact_types: [school])
+        contact5 = create(:case_contact, occurred_at: 20.days.ago, casa_case: casa_case, contact_types: [court, school])
+        contact6 = create(:case_contact, occurred_at: 20.days.ago, casa_case: casa_case, contact_types: [therapist])
 
         aggregate_failures do
           report_1 = CaseContactReport.new({start_date: 30.days.ago, end_date: 10.days.ago, contact_type_ids: [court.id]})

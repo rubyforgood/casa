@@ -17,8 +17,8 @@ RSpec.describe "all_casa_admin/dashboard/show", type: :system do
     it "lets admin navigate to an organization and see casa_admins" do
       ca1 = create(:casa_admin, casa_org: organization)
       ca2 = create(:casa_admin, casa_org: organization)
-      vol = create(:volunteer, casa_org: organization)
-      sup = create(:supervisor, casa_org: organization)
+      vol = build_stubbed(:volunteer, casa_org: organization)
+      sup = build_stubbed(:supervisor, casa_org: organization)
 
       visit "/"
 

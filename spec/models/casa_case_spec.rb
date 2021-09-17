@@ -65,17 +65,17 @@ RSpec.describe CasaCase, type: :model do
 
   describe ".actively_assigned_to" do
     it "only returns cases actively assigned to a volunteer" do
-      current_user = create(:volunteer)
-      inactive_case = create(:casa_case, casa_org: current_user.casa_org)
-      create(:case_assignment, casa_case: inactive_case, volunteer: current_user, active: false)
+      current_user = build(:volunteer)
+      inactive_case = build(:casa_case, casa_org: current_user.casa_org)
+      build_stubbed(:case_assignment, casa_case: inactive_case, volunteer: current_user, active: false)
       active_cases = create_list(:casa_case, 2, casa_org: current_user.casa_org)
       active_cases.each do |casa_case|
         create(:case_assignment, casa_case: casa_case, volunteer: current_user, active: true)
       end
 
-      other_user = create(:volunteer)
-      other_active_case = create(:casa_case, casa_org: other_user.casa_org)
-      other_inactive_case = create(:casa_case, casa_org: other_user.casa_org)
+      other_user = build(:volunteer)
+      other_active_case = build(:casa_case, casa_org: other_user.casa_org)
+      other_inactive_case = build(:casa_case, casa_org: other_user.casa_org)
       create(:case_assignment, casa_case: other_active_case, volunteer: other_user, active: true)
       create(
         :case_assignment,
@@ -112,27 +112,6 @@ RSpec.describe CasaCase, type: :model do
     end
   end
 
-  describe ".should_transition" do
-    it "returns only youth who should have transitioned but have not" do
-      not_transitioned_13_yo = create(:casa_case,
-        birth_month_year_youth: Date.current - 13.years,
-        transition_aged_youth: false)
-      transitioned_14_yo = create(:casa_case,
-        birth_month_year_youth: Date.current - 14.years,
-        transition_aged_youth: true)
-      not_transitioned_14_yo = create(:casa_case,
-        birth_month_year_youth: Date.current - 14.years,
-        transition_aged_youth: false)
-      cases = CasaCase.should_transition
-      aggregate_failures do
-        expect(cases.length).to eq 1
-        expect(cases.include?(not_transitioned_14_yo)).to eq true
-        expect(cases.include?(not_transitioned_13_yo)).to eq false
-        expect(cases.include?(transitioned_14_yo)).to eq false
-      end
-    end
-  end
-
   describe "#active_case_assignments" do
     it "only includes active assignments" do
       casa_org = create(:casa_org)
@@ -159,7 +138,7 @@ RSpec.describe CasaCase, type: :model do
 
   context "#add_emancipation_option" do
     let(:casa_case) { create(:casa_case) }
-    let(:emancipation_category) { create(:emancipation_category, mutually_exclusive: true) }
+    let(:emancipation_category) { build(:emancipation_category, mutually_exclusive: true) }
     let(:emancipation_option_a) { create(:emancipation_option, emancipation_category: emancipation_category) }
     let(:emancipation_option_b) { create(:emancipation_option, emancipation_category: emancipation_category, name: "Not the same name as option A to satisfy unique contraints") }
 
@@ -179,9 +158,9 @@ RSpec.describe CasaCase, type: :model do
 
   describe "#assigned_volunteers" do
     let(:casa_org) { create(:casa_org) }
-    let(:casa_case) { create(:casa_case, casa_org: casa_org) }
-    let(:volunteer1) { create(:volunteer, casa_org: casa_org) }
-    let(:volunteer2) { create(:volunteer, casa_org: casa_org) }
+    let(:casa_case) { build(:casa_case, casa_org: casa_org) }
+    let(:volunteer1) { build(:volunteer, casa_org: casa_org) }
+    let(:volunteer2) { build(:volunteer, casa_org: casa_org) }
     let!(:case_assignment1) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer1) }
     let!(:case_assignment2) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer2) }
 
@@ -203,21 +182,21 @@ RSpec.describe CasaCase, type: :model do
   describe "#clear_court_dates" do
     context "when court date has passed" do
       it "clears court date" do
-        casa_case = create(:casa_case, court_date: "2020-09-13 02:11:58")
+        casa_case = build(:casa_case, court_date: "2020-09-13 02:11:58")
         casa_case.clear_court_dates
 
         expect(casa_case.court_date).to be nil
       end
 
       it "clears report due date" do
-        casa_case = create(:casa_case, court_date: "2020-09-13 02:11:58", court_report_due_date: "2020-09-13 02:11:58")
+        casa_case = build(:casa_case, court_date: "2020-09-13 02:11:58", court_report_due_date: "2020-09-13 02:11:58")
         casa_case.clear_court_dates
 
         expect(casa_case.court_report_due_date).to be nil
       end
 
       it "sets court report as unsubmitted" do
-        casa_case = create(:casa_case, court_date: "2020-09-13 02:11:58", court_report_status: :submitted)
+        casa_case = build(:casa_case, court_date: "2020-09-13 02:11:58", court_report_status: :submitted)
         casa_case.clear_court_dates
 
         expect(casa_case.court_report_status).to eq "not_submitted"
@@ -299,7 +278,7 @@ RSpec.describe CasaCase, type: :model do
 
   context "#remove_emancipation_category" do
     let(:casa_case) { create(:casa_case) }
-    let(:emancipation_category) { create(:emancipation_category) }
+    let(:emancipation_category) { build(:emancipation_category) }
 
     it "dissociates an emancipation category with the case when passed the id of the category" do
       casa_case.emancipation_categories << emancipation_category
@@ -312,7 +291,7 @@ RSpec.describe CasaCase, type: :model do
 
   context "#remove_emancipation_option" do
     let(:casa_case) { create(:casa_case) }
-    let(:emancipation_option) { create(:emancipation_option) }
+    let(:emancipation_option) { build(:emancipation_option) }
 
     it "dissociates an emancipation option with the case when passed the id of the option" do
       casa_case.emancipation_options << emancipation_option
@@ -325,8 +304,8 @@ RSpec.describe CasaCase, type: :model do
 
   describe "#update_cleaning_contact_types" do
     it "cleans up contact types before saving" do
-      group = create(:contact_type_group)
-      type1 = create(:contact_type, contact_type_group: group)
+      group = build(:contact_type_group)
+      type1 = build(:contact_type, contact_type_group: group)
       type2 = create(:contact_type, contact_type_group: group)
 
       casa_case = create(:casa_case, contact_types: [type1])
@@ -342,9 +321,9 @@ RSpec.describe CasaCase, type: :model do
   end
 
   describe "report submission" do
+    let(:bad_case) { build(:casa_case) }
     # Creating a case whith a status other than not_submitted and a nil submission date
     it "rejects cases with a court report status, but no submission date" do
-      bad_case = create(:casa_case)
       bad_case.court_report_status = :in_review
       bad_case.court_report_submitted_at = nil
       bad_case.valid?
@@ -355,7 +334,6 @@ RSpec.describe CasaCase, type: :model do
     end
 
     it "rejects cases with a submission date, but no status" do
-      bad_case = create(:casa_case)
       bad_case.court_report_status = :not_submitted
       bad_case.court_report_submitted_at = DateTime.now
       bad_case.valid?

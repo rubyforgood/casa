@@ -1,46 +1,59 @@
 class UsersController < ApplicationController
+  before_action :get_user
+  before_action :authorize_user_with_policy
+  before_action :set_active_casa_admins
   after_action :verify_authorized
 
   def edit
-    @user = current_user
-    authorize @user, policy_class: UserPolicy
-    @active_casa_admins = CasaAdmin.in_organization(current_organization).active
   end
 
   def update
-    @user = current_user
-    authorize @user, policy_class: UserPolicy
-
     if @user.update(user_params)
       flash[:success] = "Profile was successfully updated."
       redirect_to edit_users_path
     else
-      @active_casa_admins = CasaAdmin.in_organization(current_organization).active
       render :edit
     end
   end
 
   def update_password
-    @user = current_user
-    authorize @user, policy_class: UserPolicy
-
-    if @user.update(password_params)
-      bypass_sign_in(@user)
-
-      UserMailer.password_changed_reminder(@user).deliver
-      flash[:success] = "Password was successfully updated."
-
-      redirect_to edit_users_path
-    else
-      @active_casa_admins = CasaAdmin.in_organization(current_organization).active
-      render "edit"
+    unless valid_user_password
+      @user.errors.add(:base, "Current password is incorrect")
+      return render "edit"
     end
+
+    unless update_user_password
+      return render "edit"
+    end
+
+    bypass_sign_in(@user)
+
+    UserMailer.password_changed_reminder(@user).deliver
+    flash[:success] = "Password was successfully updated."
+
+    redirect_to edit_users_path
   end
 
   private
 
+  def set_active_casa_admins
+    @active_casa_admins = CasaAdmin.in_organization(current_organization).active
+  end
+
+  def authorize_user_with_policy
+    authorize @user, policy_class: UserPolicy
+  end
+
+  def get_user
+    @user = current_user
+  end
+
   def password_params
-    params.require(:user).permit(:password, :password_confirmation)
+    params.require(:user).permit(:current_password, :password, :password_confirmation)
+  end
+
+  def update_user_password
+    @user.update({password: password_params[:password], password_confirmation: password_params[:password_confirmation]})
   end
 
   def user_params
@@ -49,5 +62,9 @@ class UsersController < ApplicationController
     else
       params.require(:user).permit(:display_name)
     end
+  end
+
+  def valid_user_password
+    @user.valid_password?(password_params[:current_password])
   end
 end

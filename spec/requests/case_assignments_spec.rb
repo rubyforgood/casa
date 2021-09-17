@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "/case_assignments", type: :request do
-  let(:casa_org) { create(:casa_org) }
-  let(:admin) { create(:casa_admin, casa_org: casa_org) }
+  let(:casa_org) { build(:casa_org) }
+  let(:admin) { build(:casa_admin, casa_org: casa_org) }
   let(:volunteer) { create(:volunteer, casa_org: casa_org) }
   let(:casa_case) { create(:casa_case, casa_org: casa_org) }
 
@@ -50,7 +50,7 @@ RSpec.describe "/case_assignments", type: :request do
 
     context "when the case belongs to another organization" do
       it "does not create a case assignment" do
-        other_org = create(:casa_org)
+        other_org = build(:casa_org)
         other_casa_case = create(:casa_case, casa_org: other_org)
 
         sign_in admin
@@ -63,8 +63,8 @@ RSpec.describe "/case_assignments", type: :request do
 
     context "when the volunteer belongs to another organization" do
       it "does not create a case assignment" do
-        other_org = create(:casa_org)
-        other_volunteer = create(:volunteer, casa_org: other_org)
+        other_org = build_stubbed(:casa_org)
+        other_volunteer = build_stubbed(:volunteer, casa_org: other_org)
 
         sign_in admin
         expect {
@@ -106,7 +106,7 @@ RSpec.describe "/case_assignments", type: :request do
 
     context "when the case belongs to another organization" do
       it "does not destroy the case assignment" do
-        other_org = create(:casa_org)
+        other_org = build(:casa_org)
         other_casa_case = create(:casa_case, casa_org: other_org)
         assignment = create(:case_assignment, casa_case: other_casa_case)
 

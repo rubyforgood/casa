@@ -4,7 +4,7 @@ RSpec.describe CaseImporter do
   subject(:case_importer) { CaseImporter.new(import_file_path, casa_org_id) }
 
   let(:casa_org_id) { import_user.casa_org.id }
-  let!(:import_user) { create(:casa_admin) }
+  let!(:import_user) { build(:casa_admin) }
   let(:import_file_path) { Rails.root.join("spec", "fixtures", "casa_cases.csv") }
 
   before do
