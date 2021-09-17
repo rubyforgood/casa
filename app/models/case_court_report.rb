@@ -88,7 +88,15 @@ class CaseCourtReport
       contact_dates[contact_type] = [date_with_format]
     end
 
-    contact_dates
+    sort_dates(contact_dates)
+  end
+
+  def sort_dates(contact_dates)
+    contact_dates.each_value do |dates|
+      next if dates.size <= 1
+
+      dates.sort! { |first_date, second_date| first_date.delete("*") <=> second_date.delete("*") }
+    end
   end
 
   def prepare_case_details
