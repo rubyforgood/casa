@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "test:cypress": "$(npm bin)/cypress run",
-    "test": "standard && jest",
+    "test": "jest",
     "test:e2e": "cypress open",
     "lint": "standard",
     "lint:fix": "standard --fix",
