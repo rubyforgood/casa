@@ -33,9 +33,9 @@ RSpec.describe "reports", type: :system do
       expect(page.find("input[placeholder=\'#{I18n.t("reports.index.select_contact_type_groups_placeholder")}\']")).to be_present
       expect(page).to have_text I18n.t("reports.index.driving_reimbursement_label")
       expect(page).to have_text I18n.t("reports.index.contact_made_label")
-      expect(page).to have_field(I18n.t("common.both_text"), count: 3)
-      expect(page).to have_field(I18n.t("common.yes_text"), count: 3)
-      expect(page).to have_field(I18n.t("common.no_text"), count: 3)
+      expect(page).to have_field(I18n.t("common.both_text"), count: 2)
+      expect(page).to have_field(I18n.t("common.yes_text"), count: 2)
+      expect(page).to have_field(I18n.t("common.no_text"), count: 2)
     end
 
     it "downloads report", js: true do

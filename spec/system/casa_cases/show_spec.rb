@@ -87,10 +87,6 @@ RSpec.describe "casa_cases/show", type: :system do
   context "volunteer user" do
     let(:user) { volunteer }
 
-    it "sees link to emancipation" do
-      expect(page).to have_link("Emancipation 0 / #{emancipation_categories.size}")
-    end
-
     it "can see court mandates" do
       expect(page).to have_content("Court Orders")
       expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)

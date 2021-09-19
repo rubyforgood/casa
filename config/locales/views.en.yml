@@ -413,7 +413,6 @@ en:
       status: Status
       active: Active
       inactive: Inactive
-      transition_aged_youth: Assigned to Transition Aged Youth
       yes: Yes
       no: No
       select_columns: Select columns
@@ -422,7 +421,6 @@ en:
         e_mail: Email
         supervisor: Supervisor
         status: Status
-        assigned_transition_aged_youth: Assigned To Transition Aged Youth
         case_number: Case Number(s)
         last_contact_made: Last Contact Made
         contacts: Contacts Made in Past 60 Days

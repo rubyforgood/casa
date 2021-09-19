@@ -146,10 +146,6 @@ class CasaCase < ApplicationRecord
     judge_name
   end
 
-  def has_transitioned?
-    transition_aged_youth
-  end
-
   def remove_emancipation_category(category_id)
     emancipation_categories.destroy(EmancipationCategory.find(category_id))
   end
