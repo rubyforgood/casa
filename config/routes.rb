@@ -77,7 +77,7 @@ Rails.application.routes.draw do
   resources :judges, only: %i[new create edit update]
   resources :notifications, only: :index
 
-  resources :supervisors, except: %i[destroy] do
+  resources :supervisors, except: %i[destroy], concerns: %i[with_datatable] do
     member do
       patch :activate
       patch :deactivate
