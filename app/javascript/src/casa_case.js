@@ -6,21 +6,39 @@
 import Swal from 'sweetalert2'
 
 function addCourtMandateInput () {
-  const list = '#court-orders-list-container'
-  const ref = $(list).data('ref') || 'casa_case'
-  const casaCaseId = $(list).data('casa-case-id')
-  const index = $(`${list} textarea`).length
-  const html = courtMandateHtml(index, ref, casaCaseId)
+  const ordersList = $('#court-orders-list-container')
+  const ref = ordersList.data('ref') || 'casa_case'
+  const casaCaseId = ordersList.data('casa-case-id')
+  console.log(casaCaseId)
+  const index = ordersList.find('textarea').length
 
-  $(list).append(html.entry)
-  const lastEntry = $(list).children(':last')
+  const courtOrderRow = $(`\
+  <div class="court-mandate-entry">\
+    <textarea
+      name="${ref}[case_court_mandates_attributes][${index}][mandate_text]"\
+      id="casa_case_case_court_mandates_attributes_${index}_mandate_text"></textarea>
+    <select\
+    class="implementation-status"\
+    name="${ref}[case_court_mandates_attributes][${index}][implementation_status]"\
+    id="casa_case_case_court_mandates_attributes_${index}_implementation_status">\
+      <option value="">Set Implementation Status</option>
+      <option value="not_implemented">Not implemented</option>
+      <option value="partially_implemented">Partially implemented</option>
+      <option value="implemented">Implemented</option>
+    </select>
+  </div>`)
 
-  $(lastEntry).append(html.textarea)
-  $(lastEntry).append(html.select)
+  ordersList.append(courtOrderRow)
+
   if (casaCaseId) {
-    $(lastEntry).append(html.hidden)
+    courtOrderRow.append(`\
+    <textarea\
+      class="d-none"\
+      name="${ref}[case_court_mandates_attributes][${index}][casa_case_id]"\
+      id="casa_case_case_court_mandates_attributes_${index}_casa_case_id">${casaCaseId}</textarea>`)
   }
-  $(lastEntry).children(':first').trigger('focus')
+
+  courtOrderRow.children(':first').trigger('focus')
 }
 
 function removeMandateWithConfirmation () {
@@ -71,27 +89,6 @@ function removeMandateAction (ctx) {
       })
     }
   })
-}
-
-function courtMandateHtml (index, ref, casaCaseId) {
-  const selectOptions = '<option value="">Set Implementation Status</option>' +
-                        '<option value="not_implemented">Not implemented</option>' +
-                        '<option value="partially_implemented">Partially implemented</option>' +
-                        '<option value="implemented">Implemented</option>'
-  return {
-    entry: '<div class="court-mandate-entry"></div>',
-
-    textarea: `<textarea name="${ref}[case_court_mandates_attributes][${index}][mandate_text]"\
-                 id="casa_case_case_court_mandates_attributes_${index}_mandate_text"></textarea>`,
-
-    select: `<select class="implementation-status"\
-                 name="${ref}[case_court_mandates_attributes][${index}][implementation_status]"\
-                 id="casa_case_case_court_mandates_attributes_${index}_implementation_status">\
-                 ${selectOptions}\
-               </select>`,
-    hidden: `<textarea class="d-none" name="${ref}[case_court_mandates_attributes][${index}][casa_case_id]"\
-              id="casa_case_case_court_mandates_attributes_${index}_casa_case_id">${casaCaseId}</textarea>`
-  }
 }
 
 function showBtn (el) { el.classList.remove('d-none') }
