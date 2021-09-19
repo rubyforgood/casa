@@ -49,7 +49,11 @@
 
 <div class="card card-container">
   <div class="card-body">
-    <table class="table table-striped table-bordered supervisors-list" id="supervisors">
+    <table
+      class="table table-striped table-bordered supervisors-list"
+      id="supervisors"
+      data-source="<%= datatable_supervisors_path format: :json %>">
+    >
       <thead>
       <tr>
         <th>Supervisor Name</th>

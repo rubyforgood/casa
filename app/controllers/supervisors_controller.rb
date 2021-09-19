@@ -74,6 +74,14 @@ class SupervisorsController < ApplicationController
     redirect_to edit_supervisor_path(@supervisor), notice: "Invitation sent"
   end
 
+  def datatable
+    authorize Supervisor
+    supervisors = policy_scope current_organization.supervisors
+    # datatable = SupervisorDatatable.new(supervisors, params)
+
+    # render json: datatable
+  end
+
   private
 
   def set_supervisor
