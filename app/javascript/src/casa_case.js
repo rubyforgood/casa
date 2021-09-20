@@ -7,19 +7,16 @@ import Swal from 'sweetalert2'
 
 function addCourtMandateInput () {
   const ordersList = $('#court-orders-list-container')
-  const ref = ordersList.data('ref') || 'casa_case'
-  const casaCaseId = ordersList.data('casa-case-id')
-  console.log(casaCaseId)
   const index = ordersList.find('textarea').length
 
   const courtOrderRow = $(`\
   <div class="court-mandate-entry">\
     <textarea
-      name="${ref}[case_court_mandates_attributes][${index}][mandate_text]"\
+      name="casa_case[case_court_mandates_attributes][${index}][mandate_text]"\
       id="casa_case_case_court_mandates_attributes_${index}_mandate_text"></textarea>
     <select\
     class="implementation-status"\
-    name="${ref}[case_court_mandates_attributes][${index}][implementation_status]"\
+    name="casa_case[case_court_mandates_attributes][${index}][implementation_status]"\
     id="casa_case_case_court_mandates_attributes_${index}_implementation_status">\
       <option value="">Set Implementation Status</option>
       <option value="not_implemented">Not implemented</option>
@@ -29,15 +26,6 @@ function addCourtMandateInput () {
   </div>`)
 
   ordersList.append(courtOrderRow)
-
-  if (casaCaseId) {
-    courtOrderRow.append(`\
-    <textarea\
-      class="d-none"\
-      name="${ref}[case_court_mandates_attributes][${index}][casa_case_id]"\
-      id="casa_case_case_court_mandates_attributes_${index}_casa_case_id">${casaCaseId}</textarea>`)
-  }
-
   courtOrderRow.children(':first').trigger('focus')
 }
 
