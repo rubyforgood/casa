@@ -37,7 +37,13 @@ class CaseContactsContactDates
     contact_dates.each_value do |dates|
       next if dates.size <= 1
 
+      # TODO fix - this will break on 1/01 vs 12/01
       dates.sort! { |first_date, second_date| first_date.delete("*") <=> second_date.delete("*") }
     end
+  end
+
+  def format_date_contact_attempt(case_contact)
+    I18n.l(case_contact.occurred_at, format: :short_date, default: nil)
+      .concat(case_contact.contact_made ? "" : "*")
   end
 end

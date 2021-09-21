@@ -34,11 +34,6 @@ class CaseCourtReport
     }
   end
 
-  def format_date_contact_attempt(case_contact)
-    I18n.l(case_contact.occurred_at, format: :short_date, default: nil)
-      .concat(case_contact.contact_made ? "" : "*")
-  end
-
   def prepare_case_contacts
     cccts = CaseContactContactType.includes(:case_contact, :contact_type).where("case_contacts.casa_case_id": @casa_case.id)
     interviewees = filter_out_old_case_contacts(cccts)
