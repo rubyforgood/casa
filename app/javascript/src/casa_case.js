@@ -4,30 +4,8 @@
 /* global spinner */
 
 import Swal from 'sweetalert2'
-
-function addCourtMandateInput () {
-  const ordersList = $('#court-orders-list-container')
-  const index = ordersList.find('textarea').length
-
-  const courtOrderRow = $(`\
-  <div class="court-mandate-entry">\
-    <textarea
-      name="casa_case[case_court_mandates_attributes][${index}][mandate_text]"\
-      id="casa_case_case_court_mandates_attributes_${index}_mandate_text"></textarea>
-    <select\
-    class="implementation-status"\
-    name="casa_case[case_court_mandates_attributes][${index}][implementation_status]"\
-    id="casa_case_case_court_mandates_attributes_${index}_implementation_status">\
-      <option value="">Set Implementation Status</option>
-      <option value="not_implemented">Not implemented</option>
-      <option value="partially_implemented">Partially implemented</option>
-      <option value="implemented">Implemented</option>
-    </select>
-  </div>`)
-
-  ordersList.append(courtOrderRow)
-  courtOrderRow.children(':first').trigger('focus')
-}
+const CourtOrderList = require('./court_order_list.js')
+let courtOrders
 
 function removeMandateWithConfirmation () {
   const text = 'Are you sure you want to remove this court order? Doing so will ' +
@@ -137,7 +115,10 @@ function handleGenerateReport (e) {
 }
 
 $('document').ready(() => {
-  $('button#add-mandate-button').on('click', addCourtMandateInput)
+  courtOrders = new CourtOrderList($('#court-orders-list-container'))
+  $('button#add-mandate-button').on('click', () => {
+    courtOrders.addCourtOrder()
+  })
   $('button.remove-mandate-button').on('click', removeMandateWithConfirmation)
 
   $('#btnGenerateReport').on('click', handleGenerateReport)
