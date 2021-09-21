@@ -4,7 +4,7 @@ class CaseContactsContactDates
   end
 
   def contact_dates_details
-    contact_type_names = @case_contact_contact_type.map(&:contact_type).map(&:name).uniq#.sort # TODO sort after refactor
+    contact_type_names = @case_contact_contact_type.map(&:contact_type).map(&:name).uniq # .sort # TODO sort after refactor
     contact_type_names.map do |contact_type_name|
       {
         name: "Names of persons involved, starting with the child's name",
