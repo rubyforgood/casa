@@ -5,7 +5,7 @@
 [![erb lint](https://github.com/rubyforgood/casa/actions/workflows/erb_lint.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/erb_lint.yml)
 [![standardrb lint](https://github.com/rubyforgood/casa/actions/workflows/ruby_lint.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/ruby_lint.yml)
 [![brakeman](https://github.com/rubyforgood/casa/workflows/brakeman/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/security.yml)
-[![yarn lint](https://github.com/rubyforgood/casa/actions/workflows/yarn_lint.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/yarn_lint.yml)
+[![yarn lint](https://github.com/rubyforgood/casa/actions/workflows/yarn_lint_and_test.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/yarn_lint_and_test.yml)
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/maintainability)](https://codeclimate.com/github/rubyforgood/casa/trends/technical_debt)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/test_coverage)](https://codeclimate.com/github/rubyforgood/casa/trends/test_coverage_total)
