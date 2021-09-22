@@ -428,9 +428,9 @@ en:
         status: Status
         assigned_transition_aged_youth: Assigned To Transition Aged Youth
         case_number: Case Number(s)
-        last_contact_made: Last Contact Made
         contacts: Contacts Made in Past 60 Days
         actions: Actions
+        last_attempted_contact:  Last Attempted Contact
       button:
         new: New Volunteer
     send_reminder_button:
