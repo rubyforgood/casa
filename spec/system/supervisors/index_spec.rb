@@ -56,11 +56,11 @@ RSpec.describe "supervisors/index", type: :system do
 
       allow(first_supervisor).to receive(:active_volunteers).and_return(9)
       allow(first_supervisor).to receive(:volunteers_serving_transition_aged_youth).and_return(9)
-      allow(first_supervisor).to receive(:no_contact_for_two_weeks).and_return(9)
+      allow(first_supervisor).to receive(:no_attempt_for_two_weeks).and_return(9)
 
       allow(last_supervisor).to receive(:active_volunteers).and_return(11)
       allow(last_supervisor).to receive(:volunteers_serving_transition_aged_youth).and_return(11)
-      allow(last_supervisor).to receive(:no_contact_for_two_weeks).and_return(11)
+      allow(last_supervisor).to receive(:no_attempt_for_two_weeks).and_return(11)
 
       sign_in supervisor_user
       visit supervisors_path
@@ -93,7 +93,7 @@ RSpec.describe "supervisors/index", type: :system do
       end
 
       describe "by no-contact count", js: true do
-        let(:column_to_sort) { "No Contact (14 days)" }
+        let(:column_to_sort) { "No Attempt (14 days)" }
 
         it_behaves_like "functioning sort buttons"
       end

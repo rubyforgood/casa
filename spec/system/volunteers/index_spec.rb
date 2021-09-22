@@ -52,7 +52,7 @@ RSpec.describe "view all volunteers", type: :system do
 
       visit volunteers_path
 
-      expect(page).to have_content(:visible, "Last Contact Made")
+      expect(page).to have_content(:visible, "Last Attempted Contact")
     end
 
     it "can show/hide columns on volunteers table", js: true do
