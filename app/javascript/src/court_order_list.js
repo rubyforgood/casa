@@ -28,7 +28,12 @@ module.exports = class CourtOrderList {
   }
 
   // Removes a row of elements representing a single court order
-  // @param {number} index The index of the court order to remove
-  removeCourtOrder (index) {
+  // and removes the accompanying hidden input containing the order id
+  //   @param {object} order              The jQuery object representing the court order div to remove
+  //   @param {object} orderHiddenIdInput The jQuery object representing the hidden court order id input
+  removeCourtOrder (order, orderHiddenIdInput) {
+    //const index = order.index()
+    order.remove()
+    orderHiddenIdInput.remove()
   }
 }

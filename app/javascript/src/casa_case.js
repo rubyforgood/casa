@@ -25,22 +25,19 @@ function removeMandateWithConfirmation () {
     cancelButtonText: 'Go back'
   }).then((result) => {
     if (result.isConfirmed) {
-      removeMandateAction($(this))
+      removeMandateAction($(this).parent())
     }
   })
 }
 
-function removeMandateAction (ctx) {
-  const idElement = ctx.parent().next('input[type="hidden"]')
-  const id = idElement.val()
+function removeMandateAction (order) {
+  const orderHiddenIdInput = order.next('input[type="hidden"]')
 
   $.ajax({
-    url: `/case_court_orders/${id}`,
+    url: `/case_court_mandates/${orderHiddenIdInput.val()}`,
     method: 'delete',
     success: () => {
-      ctx.parent().remove()
-      idElement.remove() // Remove form element since this mandate has been deleted
-
+      courtOrders.removeCourtOrder(order, orderHiddenIdInput)
       Swal.fire({
         icon: 'success',
         text: 'Court order has been removed.',
