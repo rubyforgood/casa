@@ -84,15 +84,13 @@ class User < ApplicationRecord
     ).size
   end
 
-  def no_contact_for_two_weeks
+  def no_attempt_for_two_weeks
     # Get ACTIVE volunteers that have ACTIVE supervisor assignments with at least one ACTIVE case
     # 1st condition: Volunteer has not created a contact AT ALL within the past 14 days
-    # 2nd condition: Volunteer has ONLY created contacts in which contact_made = false within the past 14 days
 
     volunteers
       .includes(:case_assignments)
       .joins("LEFT JOIN case_contacts cc on cc.creator_id = users.id AND cc.occurred_at > (CURRENT_DATE - INTERVAL '14 days')")
-      .having("SUM(CASE WHEN cc.contact_made IS NULL THEN 1 WHEN cc.contact_made = false THEN 1 ELSE 0 END) = COUNT(users.id)")
       .group("users.id, supervisor_volunteers_users.id, case_assignments.id")
       .where(active: true)
       .where(supervisor_volunteers: {is_active: true})

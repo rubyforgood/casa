@@ -15,7 +15,7 @@
         <th>Supervisor Name</th>
         <th>Volunteer Assignments</th>
         <th>Serving Transition Aged Youth</th>
-        <th>No Contact (14 days)</th>
+        <th>No Attempt (14 days)</th>
         <th>Actions</th>
       </tr>
       </thead>
@@ -40,10 +40,10 @@
             <%= transition_volunteers %>
           </td>
 
-          <% no_contact_volunteers = supervisor.no_contact_for_two_weeks %>
-          <td id="no-contact-<%= supervisor.id %>" data-order="<%= no_contact_volunteers %>">
-            <span class="mobile-label">No Contact (14 days)</span>
-            <%= no_contact_volunteers %>
+          <% no_attempt_volunteers = supervisor.no_attempt_for_two_weeks %>
+          <td id="no-attempt-<%= supervisor.id %>" data-order="<%= no_attempt_volunteers %>">
+            <span class="mobile-label">No Attempt (14 days)</span>
+            <%= no_attempt_volunteers %>
           </td>
 
           <td>
