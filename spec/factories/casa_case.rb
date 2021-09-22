@@ -42,12 +42,4 @@ FactoryBot.define do
       end
     end
   end
-
-  trait :with_past_court_dates do
-    after(:create) do |casa_case|
-      3.times do
-        create(:past_court_date, casa_case_id: casa_case.id)
-      end
-    end
-  end
 end
