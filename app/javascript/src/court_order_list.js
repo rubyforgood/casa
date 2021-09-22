@@ -32,8 +32,24 @@ module.exports = class CourtOrderList {
   //   @param {object} order              The jQuery object representing the court order div to remove
   //   @param {object} orderHiddenIdInput The jQuery object representing the hidden court order id input
   removeCourtOrder (order, orderHiddenIdInput) {
-    // const index = order.index()
+    const index = order.index()
+
     order.remove()
     orderHiddenIdInput.remove()
+
+    this.courtOrdersWidget.find(`.court-mandate-entry:nth-child(n+${index})`).each(function () {
+      const courtMandateEntry = $(this)
+      const courtMandateEntrySelect = courtMandateEntry.find('select')
+      const courtMandateEntryTextArea = courtMandateEntry.find('textarea')
+
+      console.log(courtMandateEntrySelect.attr('name'))
+      console.log(courtMandateEntryTextArea.attr('name'))
+    })
+
+    this.courtOrdersWidget.find(`input[type="hidden"]:nth-child(n+${index + 1})`).each(function () {
+      const courtMandateId = $(this)
+
+      console.log(courtMandateId.attr('id'))
+    })
   }
 }
