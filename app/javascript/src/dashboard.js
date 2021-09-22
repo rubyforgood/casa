@@ -72,11 +72,13 @@ $('document').ready(() => {
       const assignedToVolunteer = (data[5] !== '' && data[5].split(',').length >= 1) ? 'Yes' : 'No'
       const assignedToMoreThanOneVolunteer = (data[5] !== '' && data[5].split(',').length > 1) ? 'Yes' : 'No'
       const assignedToTransitionYouth = data[4]
+      const caseNumberPrefix = data[0].split('-')[0];
 
       return statusArray.includes(status) &&
         assignedToVolunteerArray.includes(assignedToVolunteer) &&
         assignedToMoreThanOneVolunteerArray.includes(assignedToMoreThanOneVolunteer) &&
-        assignedToTransitionYouthArray.includes(assignedToTransitionYouth)
+        assignedToTransitionYouthArray.includes(assignedToTransitionYouth) &&
+        caseNumberPrefixArray.includes(caseNumberPrefix)
     }
   )
 
