@@ -156,12 +156,12 @@ $('document').ready(() => {
         orderable: false
       },
       {
-        name: 'most_recent_contact_occurred_at',
+        name: 'most_recent_attempt_occurred_at',
         render: (data, type, row, meta) => {
-          return row.most_recent_contact.case_id
+          return row.most_recent_attempt.case_id
             ? `
-              <a href="${casaCasePath(row.most_recent_contact.case_id)}">
-                ${row.most_recent_contact.occurred_at}
+              <a href="${casaCasePath(row.most_recent_attempt.case_id)}">
+                ${row.most_recent_attempt.occurred_at}
               </a>
             `
             : 'None ❌'
