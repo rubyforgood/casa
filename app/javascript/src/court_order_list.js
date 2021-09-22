@@ -32,7 +32,7 @@ module.exports = class CourtOrderList {
   //   @param {object} order              The jQuery object representing the court order div to remove
   //   @param {object} orderHiddenIdInput The jQuery object representing the hidden court order id input
   removeCourtOrder (order, orderHiddenIdInput) {
-    //const index = order.index()
+    // const index = order.index()
     order.remove()
     orderHiddenIdInput.remove()
   }
