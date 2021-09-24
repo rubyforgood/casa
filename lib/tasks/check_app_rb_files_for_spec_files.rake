@@ -39,10 +39,12 @@ task check_app_rb_files_for_spec_files: :environment do
   total_size = app_files.size
   percent_missing = (100 * (missing_spec_files.size.to_f) / app_files.size)
   if missing_spec_files.any?
-    puts "\n#{missing_size} of #{total_size} app files (#{percent_missing.round(1)})% did not have a corresponding spec file:\n\n"
-    puts missing_spec_files
-    false
-  else
-    true
+    abort <<~ERROR_TXT
+
+    #{missing_size} of #{total_size} app files (#{percent_missing.round(1)}%) did not have a corresponding spec file:
+
+    #{missing_spec_files.join("\n")}
+
+    ERROR_TXT
   end
 end
