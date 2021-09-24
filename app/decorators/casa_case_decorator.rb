@@ -22,7 +22,7 @@ class CasaCaseDecorator < Draper::Decorator
   end
 
   def court_report_select_option
-    volunteer_names = object.assigned_volunteers.map(&:display_name).join(",")
+    volunteer_names = object.assigned_volunteers.map(&:display_name).join(", ")
 
     [
       "#{object.case_number} (assigned to #{volunteer_names.length > 0 ? volunteer_names : "no one"})",

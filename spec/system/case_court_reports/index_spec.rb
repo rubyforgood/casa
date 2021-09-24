@@ -34,15 +34,11 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
 
     it "shows transition stamp for transitioned case" do
-      expected_text = casa_cases.second.case_number.to_s
-
-      expect(page).to have_selector "#case-selection option", text: expected_text
+      expect(page).to have_selector "#case-selection option", text: "#{casa_cases.second.case_number}"
     end
 
     it "shows non-transition stamp for non-transitioned case" do
-      expected_text = casa_cases.first.case_number.to_s
-
-      expect(page).to have_selector "#case-selection option", text: expected_text
+      expect(page).to have_selector "#case-selection option", text: "#{casa_cases.first.case_number}"
     end
 
     it "adds data-lookup attribute for searching by volunteer name" do

@@ -6,7 +6,12 @@ class CaseCourtReportsController < ApplicationController
 
   def index
     authorize CaseCourtReport
-    assigned_cases.select(:id, :case_number)
+    @assigned_cases = if current_user.volunteer?
+      CasaCase.actively_assigned_to(current_user)
+    else
+      current_user.casa_org.casa_cases.active
+    end
+    @select_options = @assigned_cases.sort_by(&:case_number).map { |casa_case| casa_case.decorate.court_report_select_option }
   end
 
   def show
@@ -59,14 +64,6 @@ class CaseCourtReportsController < ApplicationController
 
   def set_casa_case
     @casa_case = CasaCase.find_by(case_number: params[:id])
-  end
-
-  def assigned_cases
-    @assigned_cases = if current_user.volunteer?
-      CasaCase.actively_assigned_to(current_user)
-    else
-      current_user.casa_org.casa_cases.active
-    end
   end
 
   def generate_report_to_string(casa_case)
