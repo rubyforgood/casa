@@ -16,11 +16,11 @@ module EmancipationsHelper
   end
 
   def emancipation_category_checkbox_checked_download(casa_case, emancipation_category)
-    case_contains_category?(casa_case, emancipation_category) ? "☑" : "☐"
+    case_contains_category?(casa_case, emancipation_category) ? "🗹" : "☐"
   end
 
   def emancipation_option_checkbox_checked_download(casa_case, emancipation_option)
-    casa_case.emancipation_options.include?(emancipation_option) ? "☑" : "☐"
+    casa_case.emancipation_options.include?(emancipation_option) ? "🗹" : "☐"
   end
 
   def emancipation_option_radio_checked_download(casa_case, emancipation_option)
