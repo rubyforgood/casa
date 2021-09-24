@@ -8,7 +8,7 @@ RSpec.describe EmancipationChecklistDownloadHtml do
       ec1 = create(:emancipation_category, name: "Youth has housing", emancipation_options: [ec1_option_a, ec1_option_b])
 
       ec2 = create(:emancipation_category, name: "Youth has completed a budget")
-      ec3 = create(:emancipation_category, name: "Youth is employed")
+      create(:emancipation_category, name: "Youth is employed")
 
       current_case = create(:casa_case, emancipation_categories: [ec1, ec2], emancipation_options: [ec1_option_a])
       emancipation_form_data = EmancipationCategory.all

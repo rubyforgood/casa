@@ -5,7 +5,7 @@ RSpec.describe "emancipations/show", type: :system do
     org = create(:casa_org)
     casa_case = create(:casa_case, casa_org: org, transition_aged_youth: true)
     volunteer = create(:volunteer, casa_org: org)
-    case_assignment = create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: true)
+    create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: true)
 
     sign_in volunteer
     visit casa_case_emancipation_path(casa_case)

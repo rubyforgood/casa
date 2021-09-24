@@ -11,12 +11,12 @@ class EmancipationChecklistDownloadHtml
       assigns: {
         current_case: @current_case,
         emancipation_form_data: @emancipation_form_data
-      },
+      }
     ).squish
 
-    html_body = html_body.gsub('<!-- BEGIN app/views/emancipations/download.html.erb -->', "")
-    html_body = html_body.gsub('<!-- END app/views/emancipations/download.html.erb -->', "")
+    html_body = html_body.gsub("<!-- BEGIN app/views/emancipations/download.html.erb -->", "")
+    html_body = html_body.gsub("<!-- END app/views/emancipations/download.html.erb -->", "")
 
-    html_body.gsub('> <', '><')
+    html_body.gsub("> <", "><")
   end
 end
