@@ -10,6 +10,7 @@ RSpec.describe "past_court_dates/edit", type: :system do
     sign_in admin
     visit root_path
     click_on "Cases"
+    expect(page).to have_text casa_case.case_number
     click_on casa_case.case_number
     click_on "Edit Case Details"
     click_on past_court_date.date.strftime("%B %-d, %Y")

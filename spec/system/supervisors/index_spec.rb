@@ -54,12 +54,10 @@ RSpec.describe "supervisors/index", type: :system do
         [first_supervisor, last_supervisor]
       )
 
-      allow(first_supervisor).to receive(:volunteers_serving_transition_aged_youth).and_return(9)
       allow(first_supervisor).to receive(:no_attempt_for_two_weeks).and_return(9)
       allow(first_supervisor).to receive(:volunteers).and_return(Array.new(9))
 
       allow(last_supervisor).to receive(:active_volunteers).and_return(11)
-      allow(last_supervisor).to receive(:volunteers_serving_transition_aged_youth).and_return(11)
       allow(last_supervisor).to receive(:no_attempt_for_two_weeks).and_return(11)
 
       sign_in supervisor_user

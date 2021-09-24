@@ -62,34 +62,6 @@ RSpec.describe User, type: :model do
   end
 
   describe "supervisors" do
-    describe "#volunteers_serving_transition_aged_youth" do
-      let(:casa_org) { build(:casa_org) }
-      let(:supervisor) { build(:supervisor, casa_org: casa_org) }
-
-      it "returns the number of transition aged youth on a supervisor" do
-        casa_cases = [
-          build(:casa_case, casa_org: casa_org, transition_aged_youth: true),
-          build(:casa_case, casa_org: casa_org, transition_aged_youth: true),
-          create(:casa_case, casa_org: casa_org, transition_aged_youth: false)
-        ]
-
-        casa_cases.each do |casa_case|
-          volunteer = create(:volunteer, supervisor: supervisor, casa_org: casa_org)
-          volunteer.casa_cases << casa_case
-        end
-
-        expect(supervisor.volunteers_serving_transition_aged_youth).to eq(2)
-      end
-
-      it "ignores volunteers' inactive and unassgined cases" do
-        volunteer = create(:volunteer, supervisor: supervisor, casa_org: casa_org)
-        build_stubbed(:case_assignment, casa_case: build_stubbed(:casa_case, casa_org: casa_org, active: false, transition_aged_youth: true), volunteer: volunteer)
-        build_stubbed(:case_assignment, casa_case: build_stubbed(:casa_case, casa_org: casa_org, transition_aged_youth: true), active: false, volunteer: volunteer)
-
-        expect(supervisor.volunteers_serving_transition_aged_youth).to eq(0)
-      end
-    end
-
     describe "#no_attempt_for_two_weeks" do
       let(:supervisor) { create(:supervisor) }
 

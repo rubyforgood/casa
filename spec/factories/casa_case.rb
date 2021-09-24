@@ -6,6 +6,14 @@ FactoryBot.define do
     court_report_status { :not_submitted }
     case_court_mandates { [] }
 
+    trait :transition_aged_youth do
+      birth_month_year_youth { 16.years.ago }
+    end
+
+    trait :not_transition_aged_youth do
+      birth_month_year_youth { 16.years.ago }
+    end
+
     trait :with_judge do
       judge
     end
