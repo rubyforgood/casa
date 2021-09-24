@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "VolunteerDatatable" do
+RSpec.describe VolunteerDatatable do
   let(:org) { CasaOrg.first }
   let(:supervisors) { Supervisor.all }
   let(:assigned_volunteers) { Volunteer.joins(:supervisor) }
@@ -58,7 +58,7 @@ RSpec.describe "VolunteerDatatable" do
 
     let(:check_attr_equality) do
       lambda { |model, idx|
-        expect(values[idx][:id]).to eq model.id.to_s
+        expect(values[idx][:id]).to eq(model.id.to_s), "actual: #{values[idx][:id]}, expected: #{model.id}  #{subject.ai}"
       }
     end
 
@@ -161,7 +161,7 @@ RSpec.describe "VolunteerDatatable" do
     end
 
     describe "most_recent_contact_occurred_at" do
-      let(:order_by) { "most_recent_contact_occurred_at" }
+      let(:order_by) { "most_recent_attempt_occurred_at" }
       let(:sorted_models) do
         assigned_volunteers.order(:id).sort_by { |v| v.case_contacts.maximum :occurred_at }
       end
@@ -172,6 +172,7 @@ RSpec.describe "VolunteerDatatable" do
 
       context "when ascending" do
         it "is successful" do
+          # sorted_models.map(&:id)
           check_asc_order.call
         end
       end

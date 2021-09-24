@@ -43,7 +43,6 @@ class VolunteerDatatable < ApplicationDatatable
           users.*,
           COALESCE(supervisors.display_name, supervisors.email) AS supervisor_name,
           supervisors.id AS supervisor_id,
-          transition_aged_youth_cases.volunteer_id IS NOT NULL AS has_transition_aged_youth_cases,
           most_recent_attempts.casa_case_id AS most_recent_attempt_case_id,
           most_recent_attempts.occurred_at AS most_recent_attempt_occurred_at,
           contacts_made_in_past_days.contact_count AS contacts_made_in_past_days
