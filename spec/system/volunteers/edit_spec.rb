@@ -236,6 +236,22 @@ RSpec.describe "volunteers/edit", type: :system do
       click_on "Send Reminder"
 
       expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.first.cc).to be_empty
+    end
+
+    it "allows a supervisor to send case contact reminder to a volunteer with cc" do
+      sign_in supervisor
+
+      visit edit_volunteer_path(volunteer)
+
+      expect(page).to have_button("Send Reminder")
+      expect(page).to have_text(/Send CC to Supervisor$/)
+
+      check "with_cc" 
+      click_on "Send Reminder"
+
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.first.cc).to include(volunteer.supervisor.email)
     end
   end
 
@@ -250,5 +266,21 @@ RSpec.describe "volunteers/edit", type: :system do
     click_on "Send Reminder"
 
     expect(ActionMailer::Base.deliveries.count).to eq(1)
+  end
+
+  it "send reminder as an admin with cc" do
+    sign_in admin
+
+    visit edit_volunteer_path(volunteer)
+
+    expect(page).to have_button("Send Reminder")
+    expect(page).to have_text("Send CC to Supervisor and Admin")
+
+    check "with_cc"
+    click_on "Send Reminder"
+
+    expect(ActionMailer::Base.deliveries.count).to eq(1)
+    expect(ActionMailer::Base.deliveries.first.cc).to include(volunteer.supervisor.email)
+    expect(ActionMailer::Base.deliveries.first.cc).to include(admin.email)
   end
 end
