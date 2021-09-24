@@ -19,7 +19,7 @@ class EmancipationsController < ApplicationController
         template_filename = File.join("app", "documents", "templates", "emancipation_checklist_template.docx")
         @template = Sablon.template(File.expand_path(template_filename))
 
-        html_body = EmancipationChecklistDownloadHtml.new.call
+        html_body = EmancipationChecklistDownloadHtml.new(@current_case, @emancipation_form_data).call
 
         context = {
           emancipation_checklist: Sablon.content(:html, html_body)
