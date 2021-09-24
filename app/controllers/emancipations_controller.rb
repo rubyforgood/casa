@@ -21,9 +21,6 @@ class EmancipationsController < ApplicationController
 
         html_body = EmancipationChecklistDownloadHtml.new(@current_case, @emancipation_form_data).call
 
-        html_body = html_body.gsub('<!-- BEGIN app/views/emancipations/download.html.erb -->', "")
-        html_body = html_body.gsub('<!-- END app/views/emancipations/download.html.erb -->', "")
-
         context = {
           case_number: @current_case.case_number,
           emancipation_checklist: Sablon.content(:html, html_body)
