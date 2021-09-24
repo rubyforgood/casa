@@ -8,7 +8,7 @@ class Volunteer < User
   SUPERVISOR_COLUMN = "supervisor"
   STATUS_COLUMN = "status"
   CASE_NUMBER_COLUMN = "case_number"
-  LAST_CONTACT_MADE_COLUMN = "last_contact_made"
+  LAST_ATTEMPTED_CONTACT_COLUMN = "last_attempted_contact"
   CONTACT_MADE_IN_PAST_DAYS_NUM = 60
   CONTACT_MADE_IN_PAST_DAYS_COLUMN = "contact_made_in_past_#{CONTACT_MADE_IN_PAST_DAYS_NUM}_days".freeze
   ACTIONS_COLUMN = "actions"
@@ -18,7 +18,7 @@ class Volunteer < User
     SUPERVISOR_COLUMN,
     STATUS_COLUMN,
     CASE_NUMBER_COLUMN,
-    LAST_CONTACT_MADE_COLUMN,
+    LAST_ATTEMPTED_CONTACT_COLUMN,
     CONTACT_MADE_IN_PAST_DAYS_COLUMN,
     ACTIONS_COLUMN
   ].freeze

@@ -6,6 +6,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
   let(:volunteer) { create(:volunteer, casa_org: organization) }
   let(:casa_case) { create(:casa_case, casa_org: organization) }
   let(:inactive_volunteer) { create(:volunteer, :with_casa_cases, casa_org: organization) }
+  let(:supervisor_mailer) { SupervisorMailer.new }
 
   context "when there are successful and unsuccessful contacts" do
     before(:each) do
@@ -17,6 +18,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
       @case_contact = create :case_contact, creator: volunteer, casa_case: casa_case, contact_made: true, occurred_at: Time.current - 6.days
       assign :supervisor, supervisor
       sign_in supervisor
+      @inactive_messages = supervisor_mailer.inactive_messages(supervisor)
       render template: "supervisor_mailer/weekly_digest"
     end
 
@@ -38,6 +40,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
     before(:each) do
       sign_in supervisor
       assign :supervisor, supervisor
+      @inactive_messages = supervisor_mailer.inactive_messages(supervisor)
       render template: "supervisor_mailer/weekly_digest"
     end
 
@@ -52,6 +55,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
       volunteer.casa_cases << casa_case
       sign_in supervisor
       assign :supervisor, supervisor
+      @inactive_messages = supervisor_mailer.inactive_messages(supervisor)
       render template: "supervisor_mailer/weekly_digest"
     end
 
@@ -87,6 +91,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
       new_supervisor.volunteers << volunteer
       volunteer.supervisor_volunteer.update(is_active: true)
       assign :supervisor, supervisor
+      @inactive_messages = supervisor_mailer.inactive_messages(supervisor)
 
       render template: "supervisor_mailer/weekly_digest"
     end
@@ -103,6 +108,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
       sign_in supervisor
       assign :supervisor, supervisor
       volunteer.supervisor_volunteer.update(is_active: false)
+      @inactive_messages = supervisor_mailer.inactive_messages(supervisor)
       render template: "supervisor_mailer/weekly_digest"
     end
 

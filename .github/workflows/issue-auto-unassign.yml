@@ -9,7 +9,7 @@ jobs:
     name: Unassign issues
     steps:
       - name: Unassign issues
-        uses: bjthompson805/unassign-issues@v1
+        uses: rubyforgood/unassign-issues@v1
         id: unassign_issues
         with:
           token: ${{secrets.GITHUB_TOKEN}}

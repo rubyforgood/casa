@@ -41,8 +41,8 @@ RSpec.describe "VolunteerDatatable" do
 
       volunteers.each_with_index do |volunteer, idx|
         volunteer.update display_name: Faker::Name.unique.name, email: Faker::Internet.unique.email
-        volunteer.casa_cases << create(:casa_case, casa_org: org)
-        volunteer.casa_cases << create(:casa_case, casa_org: org)
+        volunteer.casa_cases << build(:casa_case, casa_org: org, transition_aged_youth: false)
+        volunteer.casa_cases << build(:casa_case, casa_org: org, transition_aged_youth: idx == 1)
       end
     end
 

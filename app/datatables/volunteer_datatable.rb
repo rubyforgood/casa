@@ -4,7 +4,7 @@ class VolunteerDatatable < ApplicationDatatable
     contacts_made_in_past_days
     display_name
     email
-    most_recent_contact_occurred_at
+    most_recent_attempt_occurred_at
     supervisor_name
   ]
 
@@ -20,9 +20,9 @@ class VolunteerDatatable < ApplicationDatatable
         email: volunteer.email,
         id: volunteer.id,
         made_contact_with_all_cases_in_days: volunteer.made_contact_with_all_cases_in_days?,
-        most_recent_contact: {
-          case_id: volunteer.most_recent_contact_case_id,
-          occurred_at: I18n.l(volunteer.most_recent_contact_occurred_at, format: :full, default: nil)
+        most_recent_attempt: {
+          case_id: volunteer.most_recent_attempt_case_id,
+          occurred_at: I18n.l(volunteer.most_recent_attempt_occurred_at, format: :full, default: nil)
         },
         supervisor: {id: volunteer.supervisor_id, name: volunteer.supervisor_name}
       }
@@ -43,8 +43,9 @@ class VolunteerDatatable < ApplicationDatatable
           users.*,
           COALESCE(supervisors.display_name, supervisors.email) AS supervisor_name,
           supervisors.id AS supervisor_id,
-          most_recent_contacts.casa_case_id AS most_recent_contact_case_id,
-          most_recent_contacts.occurred_at AS most_recent_contact_occurred_at,
+          transition_aged_youth_cases.volunteer_id IS NOT NULL AS has_transition_aged_youth_cases,
+          most_recent_attempts.casa_case_id AS most_recent_attempt_case_id,
+          most_recent_attempts.occurred_at AS most_recent_attempt_occurred_at,
           contacts_made_in_past_days.contact_count AS contacts_made_in_past_days
         SQL
       )
@@ -53,8 +54,8 @@ class VolunteerDatatable < ApplicationDatatable
           LEFT JOIN supervisor_volunteers ON supervisor_volunteers.volunteer_id = users.id AND supervisor_volunteers.is_active
           LEFT JOIN users supervisors ON supervisors.id = supervisor_volunteers.supervisor_id AND supervisors.active
           LEFT JOIN (
-            #{sanitize_sql(most_recent_contacts_subquery)}
-          ) most_recent_contacts ON most_recent_contacts.creator_id = users.id AND most_recent_contacts.contact_index = 1
+            #{sanitize_sql(most_recent_attempts_subquery)}
+          ) most_recent_attempts ON most_recent_attempts.creator_id = users.id AND most_recent_attempts.contact_index = 1
           LEFT JOIN (
             #{sanitize_sql(contacts_made_in_past_days_subquery)}
           ) contacts_made_in_past_days ON contacts_made_in_past_days.creator_id = users.id
@@ -69,8 +70,8 @@ class VolunteerDatatable < ApplicationDatatable
     ActiveRecord::Base.sanitize_sql(sql)
   end
 
-  def most_recent_contacts_subquery
-    @most_recent_contacts_subquery ||=
+  def most_recent_attempts_subquery
+    @most_recent_attempts_subquery ||=
       CaseContact
         .select(
           <<-SQL
@@ -78,7 +79,6 @@ class VolunteerDatatable < ApplicationDatatable
           ROW_NUMBER() OVER(PARTITION BY creator_id ORDER BY occurred_at DESC NULLS LAST) AS contact_index
           SQL
         )
-        .where(contact_made: true)
         .to_sql
   end
 
