@@ -1,5 +1,19 @@
+require 'amazing_print'
+
 desc "Check app rb files to verify that there are corresponding spec files."
 task check_app_rb_files_for_spec_files: :environment do
+
+  # File containing app filespecs that should not be flagged as errors for not having spec files.
+  # Lines beginning with '#' are ignored.
+  DENY_FILESPEC = File.join(Rails.root, '.app_files_not_needing_spec_files')
+  DASHED_LINE = '-' * 80
+
+  # Transform the object into the object's AmazingPrint representation.
+  # `ai` alone will included color ANSI sequences in the output.
+  # If those color sequences need to be omitted, pass `plain: true` to `ai`.
+  def amazing_printize(object)
+    object.ai
+  end
 
   # @return absolute filespec of a Rails project's top level directory.
   def top_level_dir(name)
@@ -9,7 +23,7 @@ task check_app_rb_files_for_spec_files: :environment do
   # @return .rb files in a directory tree, relative to the passed directory
   def ruby_files(dir)
     absolutes = Dir[File.join(dir, '**', '*.rb')]
-    absolutes.map { |fspec| fspec.sub(dir + '/', '') }
+    absolutes.map { |fspec| fspec.sub(dir + '/', '') }.sort
   end
 
   # @return the absolute path of the project's app directory.
@@ -34,17 +48,60 @@ task check_app_rb_files_for_spec_files: :environment do
     end
   end
 
-  missing_spec_files = (app_files - spec_files).sort
-  missing_size = missing_spec_files.size
-  total_size = app_files.size
-  percent_missing = (100 * (missing_spec_files.size.to_f) / app_files.size)
-  if missing_spec_files.any?
-    abort <<~ERROR_TXT
+  def ignore_files
+    return @ignore_files if @ignore_files
+    file_lines = File.readlines(DENY_FILESPEC).map(&:chomp)
+    @ignore_files =  file_lines.reject { |line|  /\s*#/.match(line) }  # exclude comment lines
+  end
 
-    #{missing_size} of #{total_size} app files (#{percent_missing.round(1)}%) did not have a corresponding spec file:
+  # puts "Ignore files: \n #{ignore_files.join("\n")}"
+  def missing_spec_files
+    @missing_spec_files ||= app_files - spec_files
+  end
 
-    #{missing_spec_files.join("\n")}
+  def missing_and_not_denied_spec_files
+    @missing_and_not_denied_spec_files ||= missing_spec_files - ignore_files
+  end
+
+  def missing_but_denied_files
+    @missing_but_denied_files ||= missing_spec_files & ignore_files
+  end
+
+  def output_missing_but_denied
+    percent = (100 * (missing_but_denied_files.size.to_f) / app_files.size)
+    puts <<~TEXT
+
+    #{DASHED_LINE}
+    #{missing_but_denied_files.size} of #{app_files.size} app files (#{percent.round(1)}%) did not have a corresponding spec file
+    but were listed in the deny file (#{DENY_FILESPEC}):
+      
+    #{amazing_printize(missing_but_denied_files)}
+    TEXT
+  end
+
+  def output_missing_and_not_denied
+    percent = (100 * (missing_and_not_denied_spec_files.size.to_f) / app_files.size)
+    puts <<~ERROR_TXT
+
+    #{DASHED_LINE}
+    #{missing_and_not_denied_spec_files.size} of #{app_files.size} app files (#{percent.round(1)}%) did not have a corresponding spec file
+    and are not in the deny list:
+
+    #{amazing_printize(missing_and_not_denied_spec_files)}
 
     ERROR_TXT
   end
+
+  if missing_and_not_denied_spec_files.any?
+    output_missing_and_not_denied
+    output_missing_but_denied
+    abort
+  end
+
+  if missing_but_denied_files.any?
+    output_missing_but_denied
+  end
+
 end
+
+
