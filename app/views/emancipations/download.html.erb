@@ -1,0 +1,18 @@
+<h3>
+  <%= t(".title") %>
+</h3>
+<%= link_to @current_case.case_number, casa_case_path(@current_case) %>
+
+<% @emancipation_form_data.each do |category| %>
+  <div>
+    <%= category.name %>
+    <% category.emancipation_options.each do |option| %>
+      <% if category.mutually_exclusive %>
+        <%# Should be circles for radio buttons %>
+      <% else %>
+        <%# Should be squares for checkboxes %>
+      <% end %>
+      <%= option.name %>
+    <% end %>
+  </div>
+<% end %>
