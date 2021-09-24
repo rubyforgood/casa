@@ -12,6 +12,6 @@ class EmancipationChecklistDownloadHtml
         current_case: @current_case,
         emancipation_form_data: @emancipation_form_data
       },
-    )
+    ).squish
   end
 end
