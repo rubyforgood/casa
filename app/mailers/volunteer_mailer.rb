@@ -16,7 +16,7 @@ class VolunteerMailer < UserMailer
   def case_contacts_reminder(user, with_cc)
     @user = user
     @casa_organization = user.casa_org
-    if with_cc
+    if with_cc && user.supervisor
       mail(to: @user.email, cc: @user.supervisor.email, subject: "Reminder to input case contacts")
     else
       mail(to: @user.email, subject: "Reminder to input case contacts")

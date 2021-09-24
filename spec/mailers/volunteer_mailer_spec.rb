@@ -28,6 +28,7 @@ RSpec.describe VolunteerMailer, type: :mailer do
   describe ".case_contacts_reminder" do
     let(:mail) { VolunteerMailer.case_contacts_reminder(volunteer, false) }
     let(:mail_with_cc) { VolunteerMailer.case_contacts_reminder(volunteer_with_supervisor, true) }
+    let(:mail_with_cc_no_supervisor) { VolunteerMailer.case_contacts_reminder(volunteer, true) }
 
     it "sends an email reminding volunteer" do
       expect(mail.body.encoded).to match("Hello #{volunteer.display_name}")
@@ -37,6 +38,12 @@ RSpec.describe VolunteerMailer, type: :mailer do
 
     it "sends a cc to supervisor" do
       expect(mail_with_cc.cc).to include(volunteer_with_supervisor.supervisor.email.to_s)
+    end
+
+    it "does not fail with cc selected and no supervisor" do
+      expect(mail_with_cc_no_supervisor.body.encoded).to match("Hello #{volunteer.display_name}")
+      expect(mail_with_cc_no_supervisor.body.encoded).to match("as a reminder")
+      expect(mail_with_cc_no_supervisor.cc).to be_nil
     end
   end
 
