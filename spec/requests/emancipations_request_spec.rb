@@ -17,9 +17,14 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
             get casa_case_emancipation_path(casa_case)
             expect(response).to be_successful
           end
+
+          it "renders a successful response for docx format" do
+            get casa_case_emancipation_path(casa_case, format: :docx)
+            expect(response).to be_successful
+          end
         end
 
-        context "when the user and case belong to defferent orgs" do
+        context "when the user and case belong to different orgs" do
           it "renders an unauthorized error" do
             user.casa_org = organization_different
 
