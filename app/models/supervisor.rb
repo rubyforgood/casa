@@ -35,6 +35,10 @@ class Supervisor < User
     unassigned_supervisor_volunteers.joins(:volunteer).includes(:volunteer)
       .where(updated_at: 1.week.ago..Time.zone.now).map(&:volunteer)
   end
+
+  def transition_volunteers
+    volunteers.active.preload("casa_case").select { |v| v.casa_case.in_transition_age? }
+  end
 end
 
 # == Schema Information

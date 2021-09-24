@@ -34,6 +34,7 @@
             <%= active_volunteers %>
           </td>
 
+          <% transition_volunteers = supervisor.transition_volunteers %>
           <td id="serving-transition-aged-youth-<%= supervisor.id %>" data-order="<%= transition_volunteers %>">
             <span class="mobile-label">Serving Transition Aged Youth</span>
             <%= transition_volunteers %>
