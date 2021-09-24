@@ -5,8 +5,8 @@ RSpec.describe "users/edit", type: :system do
   let(:volunteer) do
     create(
       :volunteer,
-      last_sign_in_at: '2020-01-01 00:00:00',
-      current_sign_in_at: '2020-01-02 00:00:00'
+      last_sign_in_at: "2020-01-01 00:00:00",
+      current_sign_in_at: "2020-01-02 00:00:00"
     )
   end
   let(:admin) { create(:casa_admin) }
@@ -78,7 +78,7 @@ RSpec.describe "users/edit", type: :system do
 
     it "displays current sign in date" do
       formatted_current_sign_in_at = I18n.l(volunteer.current_sign_in_at, format: :full, default: nil)
-      formatted_last_sign_in_at =  I18n.l(volunteer.last_sign_in_at, format: :full, default: nil)
+      formatted_last_sign_in_at = I18n.l(volunteer.last_sign_in_at, format: :full, default: nil)
       expect(page).to have_text("Last logged in #{formatted_current_sign_in_at}")
       expect(page).not_to have_text("Last logged in #{formatted_last_sign_in_at}")
     end
