@@ -97,19 +97,22 @@
 
     <div>
       <h6><strong><%= t(".assigned_volunteers") %>:</strong></h6>
+      <div class="container">
       <% policy_scope(@casa_case.assigned_volunteers).each do |volunteer| %>
+        <div class="row mb-3">
         <% if current_user.volunteer? %>
-          <p><%= volunteer.display_name %></p>
+            <div class="col-12"><%= volunteer.display_name %></div>
         <% else %>
-          <%= form_tag reminder_volunteer_path(volunteer),
-                  method: :patch, id: "cc-check" do %>
-            <p>
+            <div class="col-2">
               <%= link_to "#{volunteer.display_name} ", edit_volunteer_path(volunteer) %>
-              <%= render "volunteers/send_reminder_button", volunteer: volunteer %>
-            </p>
-          <% end %>
+            </div>
+            <div class="col-10">
+              <%= render "volunteers/volunteer_reminder_form", volunteer: volunteer %>
+            </div>
         <% end %>
+        </div>
       <% end %>
+      </div>
       <br>
 
       <% if @casa_case.case_contacts.present? %>
