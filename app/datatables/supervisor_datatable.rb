@@ -14,7 +14,7 @@ class SupervisorDatatable < ApplicationDatatable
         active: supervisor.active?,
         display_name: supervisor.display_name,
         email: supervisor.email,
-        volunteer_assignments: supervisor.volunteers,
+        volunteer_assignments: supervisor.volunteers.count,
         transitions_volunteers: supervisor.volunteers_serving_transition_aged_youth,
         no_attempt_for_two_weeks: supervisor.no_attempt_for_two_weeks
       }

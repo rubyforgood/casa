@@ -18,10 +18,7 @@
         id="dropdownMenuButton"
         data-toggle="dropdown"
         aria-haspopup="true"
-        aria-expanded="false"
-      >
-        <%= t(".status") %>
-      </button>
+        aria-expanded="false"><%= t(".status") %></button>
       <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
         <li>
           <a class="small" data-value="option1" tabIndex="-1">
@@ -33,12 +30,6 @@
           <a class="small" data-value="option1" tabIndex="-1">
             <input type="checkbox" data-value="false">
             <%= t(".inactive") %>
-          </a>
-        </li>
-        <li>
-          <a class="small" data-value="option1" tabIndex="-1">
-            <input type="checkbox" data-value="false">
-            <%= t(".both") %>
           </a>
         </li>
       </div>
@@ -53,7 +44,6 @@
       class="table table-striped table-bordered supervisors-list"
       id="supervisors"
       data-source="<%= datatable_supervisors_path format: :json %>">
-    >
       <thead>
       <tr>
         <th>Supervisor Name</th>
