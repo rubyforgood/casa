@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request do
+RSpec.describe "/casa_org/:casa_org_slug/casa_cases/:casa_case_slug/past_court_dates/:id", type: :request do
   let(:admin) { create(:casa_admin) }
   let(:casa_case) { past_court_date.casa_case }
   let(:past_court_date) { create(:past_court_date) }
@@ -35,7 +35,7 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
   end
 
   describe "GET /show" do
-    subject(:show) { get casa_case_past_court_date_path(casa_case, past_court_date) }
+    subject(:show) { get casa_org_casa_case_past_court_date_path(casa_case.casa_org, casa_case, past_court_date) }
 
     before { show }
 
@@ -52,7 +52,7 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
     end
 
     context "when request format is word document" do
-      subject(:show) { get casa_case_past_court_date_path(casa_case, past_court_date), headers: headers }
+      subject(:show) { get casa_org_casa_case_past_court_date_path(casa_case.casa_org, casa_case, past_court_date), headers: headers }
 
       let(:headers) { {accept: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"} }
 
@@ -62,14 +62,14 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
 
   describe "GET /new" do
     it "renders a successful response" do
-      get new_casa_case_past_court_date_path(casa_case)
+      get new_casa_org_casa_case_past_court_date_path(casa_case.casa_org, casa_case)
       expect(response).to be_successful
     end
   end
 
   describe "GET /edit" do
     it "render a successful response" do
-      get edit_casa_case_past_court_date_path(casa_case, past_court_date)
+      get edit_casa_org_casa_case_past_court_date_path(casa_case.casa_org, casa_case, past_court_date)
       expect(response).to be_successful
     end
 
@@ -89,17 +89,17 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
     context "with valid parameters" do
       it "creates a new PastCourtDate" do
         expect do
-          post casa_case_past_court_dates_path(casa_case), params: {past_court_date: valid_attributes}
+          post casa_org_casa_case_past_court_dates_path(casa_case.casa_org, casa_case), params: {past_court_date: valid_attributes}
         end.to change(PastCourtDate, :count).by(1)
       end
 
       it "redirects to the casa_case" do
-        post casa_case_past_court_dates_path(casa_case), params: {past_court_date: valid_attributes}
-        expect(response).to redirect_to(casa_case_past_court_date_path(casa_case, past_court_date))
+        post casa_org_casa_case_past_court_dates_path(casa_case.casa_org, casa_case), params: {past_court_date: valid_attributes}
+        expect(response).to redirect_to(casa_org_casa_case_past_court_date_path(casa_case.casa_org, casa_case, past_court_date))
       end
 
       it "sets fields correctly" do
-        post casa_case_past_court_dates_path(casa_case), params: {past_court_date: valid_attributes}
+        post casa_org_casa_case_past_court_dates_path(casa_case.casa_org, casa_case), params: {past_court_date: valid_attributes}
 
         expect(past_court_date.casa_case).to eq casa_case
         expect(past_court_date.date).to eq Date.yesterday
@@ -116,12 +116,12 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
 
         it "Creates a new CaseCourtMandate" do
           expect do
-            post casa_case_past_court_dates_path(casa_case), params: {past_court_date: valid_params}
+            post casa_org_casa_case_past_court_dates_path(casa_case.casa_org, casa_case), params: {past_court_date: valid_params}
           end.to change(CaseCourtMandate, :count).by(2)
         end
 
         it "sets fields correctly" do
-          post casa_case_past_court_dates_path(casa_case), params: {past_court_date: valid_params}
+          post casa_org_casa_case_past_court_dates_path(casa_case.casa_org, casa_case), params: {past_court_date: valid_params}
 
           expect(past_court_date.case_court_mandates.count).to eq 2
           expect(past_court_date.case_court_mandates[0].mandate_text).to eq mandate_texts[0]
@@ -136,12 +136,12 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
       context "with invalid parameters" do
         it "does not create a new PastCourtDate" do
           expect do
-            post casa_case_past_court_dates_path(casa_case), params: {past_court_date: invalid_attributes}
+            post casa_org_casa_case_past_court_dates_path(casa_case.casa_org, casa_case), params: {past_court_date: invalid_attributes}
           end.to change(PastCourtDate, :count).by(0)
         end
 
         it "renders a successful response (i.e. to display the 'new' template)" do
-          post casa_case_past_court_dates_path(casa_case), params: {past_court_date: invalid_attributes}
+          post casa_org_casa_case_past_court_dates_path(casa_case.casa_org, casa_case), params: {past_court_date: invalid_attributes}
           expect(response).to be_successful
           expect(assigns[:past_court_date].errors.full_messages).to eq ["Date can't be blank"]
         end
@@ -161,7 +161,7 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
 
     context "with valid parameters" do
       it "updates the requested past_court_date" do
-        patch casa_case_past_court_date_path(casa_case, past_court_date), params: {past_court_date: new_attributes}
+        patch casa_org_casa_case_past_court_date_path(casa_case.casa_org, casa_case, past_court_date), params: {past_court_date: new_attributes}
         past_court_date.reload
         expect(past_court_date.date).to eq 1.week.ago.to_date
         expect(past_court_date.hearing_type).to eq hearing_type
@@ -173,15 +173,15 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
       end
 
       it "redirects to the past_court_date" do
-        patch casa_case_past_court_date_path(casa_case, past_court_date), params: {past_court_date: new_attributes}
+        patch casa_org_casa_case_past_court_date_path(casa_case.casa_org, casa_case, past_court_date), params: {past_court_date: new_attributes}
 
-        expect(response).to redirect_to casa_case_past_court_date_path(casa_case, past_court_date)
+        expect(response).to redirect_to casa_org_casa_case_past_court_date_path(casa_case.casa_org, casa_case, past_court_date)
       end
     end
 
     context "with invalid parameters" do
       it "renders a successful response displaying the edit template" do
-        patch casa_case_past_court_date_path(casa_case, past_court_date), params: {past_court_date: invalid_attributes}
+        patch casa_org_casa_case_past_court_date_path(casa_case.casa_org, casa_case, past_court_date), params: {past_court_date: invalid_attributes}
 
         expect(response).to be_successful
         expect(assigns[:past_court_date].errors.full_messages).to eq ["Date can't be blank"]
@@ -205,7 +205,7 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
         end
 
         before do
-          patch casa_case_past_court_date_path(casa_case, past_court_date), params: {past_court_date: new_attributes}
+          patch casa_org_casa_case_past_court_date_path(casa_case.casa_org, casa_case, past_court_date), params: {past_court_date: new_attributes}
           past_court_date.reload
 
           mandates_updated[:case_court_mandates_attributes]["0"][:id] = past_court_date.case_court_mandates[0].id
@@ -214,7 +214,7 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
 
         it "does not update the first mandate" do
           expect do
-            patch casa_case_past_court_date_path(casa_case, past_court_date), params: {past_court_date: mandates_updated}
+            patch casa_org_casa_case_past_court_date_path(casa_case.casa_org, casa_case, past_court_date), params: {past_court_date: mandates_updated}
           end.not_to(
             change { past_court_date.reload.case_court_mandates[0].mandate_text }
           )
@@ -222,7 +222,7 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
 
         it "does not update the second mandate" do
           expect do
-            patch casa_case_past_court_date_path(casa_case, past_court_date), params: {past_court_date: mandates_updated}
+            patch casa_org_casa_case_past_court_date_path(casa_case.casa_org, casa_case, past_court_date), params: {past_court_date: mandates_updated}
           end.not_to(
             change { past_court_date.reload.case_court_mandates[1].mandate_text }
           )

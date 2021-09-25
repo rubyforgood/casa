@@ -34,7 +34,7 @@ class PastCourtDatesController < ApplicationController
     authorize @past_court_date
 
     if @past_court_date.save
-      redirect_to casa_case_past_court_date_path(@casa_case, @past_court_date), notice: "Past court date was successfully created."
+      redirect_to casa_org_casa_case_past_court_date_path(current_organization, @casa_case, @past_court_date), notice: "Past court date was successfully created."
     else
       render :new
     end
@@ -43,7 +43,7 @@ class PastCourtDatesController < ApplicationController
   def update
     authorize @past_court_date
     if @past_court_date.update(past_court_dates_params)
-      redirect_to casa_case_past_court_date_path(@casa_case, @past_court_date), notice: "Past court date was successfully updated."
+      redirect_to casa_org_casa_case_past_court_date_path(current_organization, @casa_case, @past_court_date), notice: "Past court date was successfully updated."
     else
       render :edit
     end
@@ -52,7 +52,7 @@ class PastCourtDatesController < ApplicationController
   private
 
   def set_casa_case
-    @casa_case = current_organization.casa_cases.find(params[:casa_case_id])
+    @casa_case = current_organization.casa_cases.find_by!(slug: params[:casa_case_slug])
   end
 
   def set_past_court_date

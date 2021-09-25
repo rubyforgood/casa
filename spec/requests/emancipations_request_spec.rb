@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/casa_case/:id/emancipation", type: :request do
+RSpec.describe "/casa_org/:casa_org_slug/casa_case/:slug/emancipation", type: :request do
   let(:organization) { build(:casa_org) }
   let(:organization_different) { create(:casa_org) }
   let(:casa_case) { create(:casa_case, casa_org: organization, birth_month_year_youth: 15.years.ago) }
@@ -14,12 +14,12 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
 
         context "when the user and case belong to the same org" do
           it "renders a successful response" do
-            get casa_case_emancipation_path(casa_case)
+            get casa_org_casa_case_emancipation_path(organization, casa_case)
             expect(response).to be_successful
           end
 
           it "renders a successful response for docx format" do
-            get casa_case_emancipation_path(casa_case, format: :docx)
+            get casa_org_casa_case_emancipation_path(organization, casa_case, format: :docx)
             expect(response).to be_successful
           end
         end
@@ -28,7 +28,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
           it "renders an unauthorized error" do
             user.casa_org = organization_different
 
-            get casa_case_emancipation_path(casa_case)
+            get casa_org_casa_case_emancipation_path(organization, casa_case)
             expect(response).to_not be_successful
             expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
           end
@@ -40,16 +40,16 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
 
         context "when the user and case belong to the same org" do
           it "renders a successful response" do
-            get casa_case_emancipation_path(casa_case)
+            get casa_org_casa_case_emancipation_path(organization, casa_case)
             expect(response).to be_successful
           end
         end
 
-        context "when the user and case belong to defferent orgs" do
+        context "when the user and case belong to different orgs" do
           it "renders an unauthorized error" do
             user.casa_org = organization_different
 
-            get casa_case_emancipation_path(casa_case)
+            get casa_org_casa_case_emancipation_path(organization, casa_case)
             expect(response).to_not be_successful
             expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
           end
@@ -61,7 +61,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
 
         context "when not assigned to the associated case" do
           it "renders an unauthorized error" do
-            get casa_case_emancipation_path(casa_case)
+            get casa_org_casa_case_emancipation_path(organization, casa_case)
             expect(response).to_not be_successful
             expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
           end
@@ -74,7 +74,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
             it "renders an unauthorized error" do
               user.casa_org = organization_different
 
-              get casa_case_emancipation_path(casa_case)
+              get casa_org_casa_case_emancipation_path(organization, casa_case)
               expect(response).to_not be_successful
               expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
             end
@@ -82,7 +82,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
 
           context "when the user and case belong the same org" do
             it "renders a successful response" do
-              get casa_case_emancipation_path(casa_case)
+              get casa_org_casa_case_emancipation_path(organization, casa_case)
               expect(response).to be_successful
             end
           end
@@ -103,7 +103,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
 
         context "when the user and case belong to the same org" do
           it "allows the admin to make changes" do
-            post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
+            post save_casa_org_casa_case_emancipation_path(organization, casa_case), params: {check_item_action: "add_option", check_item_id: option_a.id}
             expect(response.header["Content-Type"]).to match(/application\/json/)
             expect(JSON.parse(response.body)).to eq "success"
           end
@@ -113,7 +113,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
           it "sends an unauthorized error" do
             user.casa_org = organization_different
 
-            post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
+            post save_casa_org_casa_case_emancipation_path(organization, casa_case), params: {check_item_action: "add_option", check_item_id: option_a.id}
             expect(response.header["Content-Type"]).to match(/application\/json/)
             expect(response.body).to_not be_nil
             expect(JSON.parse(response.body)).to have_key("error")
@@ -127,7 +127,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
 
         context "when the user and case belong to the same org" do
           it "allows the supervisor to make changes" do
-            post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
+            post save_casa_org_casa_case_emancipation_path(organization, casa_case), params: {check_item_action: "add_option", check_item_id: option_a.id}
             expect(response.header["Content-Type"]).to match(/application\/json/)
             expect(JSON.parse(response.body)).to eq "success"
           end
@@ -137,7 +137,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
           it "sends an unauthorized error" do
             user.casa_org = organization_different
 
-            post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
+            post save_casa_org_casa_case_emancipation_path(organization, casa_case), params: {check_item_action: "add_option", check_item_id: option_a.id}
             expect(response.header["Content-Type"]).to match(/application\/json/)
             expect(response.body).to_not be_nil
             expect(JSON.parse(response.body)).to have_key("error")
@@ -151,7 +151,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
 
         context "as a volunteer not assigned to the associated case" do
           it "sends an unauthorized error" do
-            post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
+            post save_casa_org_casa_case_emancipation_path(organization, casa_case), params: {check_item_action: "add_option", check_item_id: option_a.id}
             expect(response.header["Content-Type"]).to match(/application\/json/)
             expect(response.body).to_not be_nil
             expect(JSON.parse(response.body)).to have_key("error")
@@ -164,7 +164,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
 
           context "when the user and case belong to the same org" do
             it "allows the volunteer to make changes" do
-              post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
+              post save_casa_org_casa_case_emancipation_path(organization, casa_case), params: {check_item_action: "add_option", check_item_id: option_a.id}
               expect(response.header["Content-Type"]).to match(/application\/json/)
               expect(JSON.parse(response.body)).to eq "success"
             end
@@ -174,7 +174,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
             it "sends an unauthorized error" do
               user.casa_org = organization_different
 
-              post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
+              post save_casa_org_casa_case_emancipation_path(organization, casa_case), params: {check_item_action: "add_option", check_item_id: option_a.id}
               expect(response.header["Content-Type"]).to match(/application\/json/)
               expect(response.body).to_not be_nil
               expect(JSON.parse(response.body)).to have_key("error")
@@ -196,24 +196,24 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
       let!(:case_assignment_non_transitioning_case) { create(:case_assignment, volunteer: user, casa_case: non_transitioning_casa_case) }
 
       it "sends an error when a required parameter is missing" do
-        post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_id: option_a.id}
+        post save_casa_org_casa_case_emancipation_path(organization, casa_case), params: {check_item_id: option_a.id}
         expect(JSON.parse(response.body)).to have_key("error")
         expect(JSON.parse(response.body)["error"]).to eq("Check item action:  is not a supported action")
 
-        post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option"}
+        post save_casa_org_casa_case_emancipation_path(organization, casa_case), params: {check_item_action: "add_option"}
         expect(JSON.parse(response.body)).to have_key("error")
         expect(JSON.parse(response.body)["error"]).to eq("Could not find option from id given by param check_item_id")
       end
 
       it "sends an error when attempting to perform an action on a case that is not transitioning" do
-        post casa_case_emancipation_path(non_transitioning_casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
+        post save_casa_org_casa_case_emancipation_path(organization, non_transitioning_casa_case), params: {check_item_action: "add_option", check_item_id: option_a.id}
         expect(JSON.parse(response.body)).to have_key("error")
         expect(JSON.parse(response.body)["error"]).to match(/not marked as transitioning/)
       end
 
       it "associates an emancipation category with a case when passed \"add_category\" and the category id" do
         expect {
-          post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_category", check_item_id: mutually_exclusive_category.id}
+          post save_casa_org_casa_case_emancipation_path(organization, casa_case), params: {check_item_action: "add_category", check_item_id: mutually_exclusive_category.id}
         }.to change { casa_case.emancipation_categories.count }.from(0).to(1)
 
         expect(response.header["Content-Type"]).to match(/application\/json/)
@@ -222,7 +222,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
 
       it "associates an emancipation option with a case when passed \"add_option\" and the option id" do
         expect {
-          post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
+          post save_casa_org_casa_case_emancipation_path(organization, casa_case), params: {check_item_action: "add_option", check_item_id: option_a.id}
         }.to change { casa_case.emancipation_options.count }.from(0).to(1)
 
         expect(response.header["Content-Type"]).to match(/application\/json/)
@@ -233,7 +233,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
         casa_case.emancipation_categories << mutually_exclusive_category
 
         expect {
-          post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "delete_category", check_item_id: mutually_exclusive_category.id}
+          post save_casa_org_casa_case_emancipation_path(organization, casa_case), params: {check_item_action: "delete_category", check_item_id: mutually_exclusive_category.id}
         }.to change { casa_case.emancipation_categories.count }.from(1).to(0)
 
         expect(response.header["Content-Type"]).to match(/application\/json/)
@@ -246,7 +246,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
         casa_case.emancipation_options << mutex_option_b
 
         expect {
-          post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "delete_category", check_item_id: mutually_exclusive_category.id}
+          post save_casa_org_casa_case_emancipation_path(organization, casa_case), params: {check_item_action: "delete_category", check_item_id: mutually_exclusive_category.id}
         }.to change { casa_case.emancipation_options.count }.from(2).to(0)
 
         expect(response.header["Content-Type"]).to match(/application\/json/)
@@ -257,7 +257,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
         casa_case.emancipation_options << option_a
 
         expect {
-          post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "delete_option", check_item_id: option_a.id}
+          post save_casa_org_casa_case_emancipation_path(organization, casa_case), params: {check_item_action: "delete_option", check_item_id: option_a.id}
         }.to change { casa_case.emancipation_options.count }.from(1).to(0)
 
         expect(response.header["Content-Type"]).to match(/application\/json/)
@@ -267,7 +267,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
       it "removes all emancipation options from the case belonging to the same category before adding the new option when passed \"set_option\" and the option id" do
         casa_case.emancipation_options << mutex_option_a
 
-        post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "set_option", check_item_id: mutex_option_b.id}
+        post save_casa_org_casa_case_emancipation_path(organization, casa_case), params: {check_item_action: "set_option", check_item_id: mutex_option_b.id}
 
         expect(response.header["Content-Type"]).to match(/application\/json/)
         expect(JSON.parse(response.body)).to eq "success"
@@ -280,7 +280,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
         casa_case.emancipation_options << mutex_option_a
         casa_case.emancipation_options << option_a
 
-        post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "set_option", check_item_id: mutex_option_b.id}
+        post save_casa_org_casa_case_emancipation_path(organization, casa_case), params: {check_item_action: "set_option", check_item_id: mutex_option_b.id}
 
         expect(response.header["Content-Type"]).to match(/application\/json/)
         expect(JSON.parse(response.body)).to eq "success"

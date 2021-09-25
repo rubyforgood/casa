@@ -71,6 +71,14 @@ Rails.application.routes.draw do
   resources :mileage_reports, only: %i[index]
   resources :casa_orgs, param: :slug, only: %i[edit update] do
     resources :casa_cases, param: :slug do
+      resource :emancipation do
+        member do
+          post "save"
+        end
+      end
+
+      resources :past_court_dates, only: %i[create edit new show update]
+
       member do
         patch :deactivate
         patch :reactivate
