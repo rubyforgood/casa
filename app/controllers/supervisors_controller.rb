@@ -77,9 +77,9 @@ class SupervisorsController < ApplicationController
   def datatable
     authorize Supervisor
     supervisors = policy_scope current_organization.supervisors
-    # datatable = SupervisorDatatable.new(supervisors, params)
+    datatable = SupervisorDatatable.new(supervisors, params)
 
-    # render json: datatable
+    render json: datatable
   end
 
   private
