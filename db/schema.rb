@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
+ActiveRecord::Schema.define(version: 2021_09_25_140028) do
+=======
 ActiveRecord::Schema.define(version: 2021_10_12_180102) do
+>>>>>>> main
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,10 +98,12 @@ ActiveRecord::Schema.define(version: 2021_10_12_180102) do
     t.bigint "judge_id"
     t.datetime "court_report_submitted_at"
     t.integer "court_report_status", default: 0
+    t.string "slug"
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
     t.index ["case_number", "casa_org_id"], name: "index_casa_cases_on_case_number_and_casa_org_id", unique: true
     t.index ["hearing_type_id"], name: "index_casa_cases_on_hearing_type_id"
     t.index ["judge_id"], name: "index_casa_cases_on_judge_id"
+    t.index ["slug"], name: "index_casa_cases_on_slug"
   end
 
   create_table "casa_cases_emancipation_options", force: :cascade do |t|
@@ -115,7 +121,12 @@ ActiveRecord::Schema.define(version: 2021_10_12_180102) do
     t.string "display_name"
     t.string "address"
     t.string "footer_links", default: [], array: true
+<<<<<<< HEAD
+    t.string "slug"
+    t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
+=======
     t.boolean "show_driving_reimbursement", default: true
+>>>>>>> main
   end
 
   create_table "case_assignments", force: :cascade do |t|
