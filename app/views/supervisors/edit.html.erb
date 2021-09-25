@@ -59,6 +59,7 @@
         <tr>
           <th><%= t(".volunteer_name") %></th>
           <th><%= t(".volunteer_email") %></th>
+          <th><%= t(".currently_assigned_to") %></th>
           <th><%= t(".unassign") %></th>
         </tr>
         </thead>
@@ -67,6 +68,13 @@
           <tr>
             <td><%= link_to volunteer.display_name, edit_volunteer_path(volunteer) %></td>
             <td><%= volunteer.email %></td>
+            <td>
+              <% if volunteer.has_supervisor? %>
+                <%= volunteer.supervisor.display_name %>
+              <% else %>
+                <%= "No One" %>
+              <% end %>
+            </td>
             <td>
               <% if volunteer.supervised_by?(@supervisor) %>
                 <%= button_to t(".unassign"),
