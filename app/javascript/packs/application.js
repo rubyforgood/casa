@@ -29,7 +29,6 @@ require('src/emancipations')
 require('src/select')
 require('src/dashboard')
 require('src/sidebar')
-require('src/sessions')
 require('src/readMore')
 require('src/tooltip')
 
