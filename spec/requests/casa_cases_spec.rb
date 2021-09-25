@@ -34,7 +34,7 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
         create(:case_assignment, volunteer: volunteer_1)
         create(:case_assignment, volunteer: volunteer_2)
 
-        get casa_cases_url
+        get casa_org_casa_cases_url organization
 
         expect(response.body).to include(volunteer_1.casa_cases.first.case_number)
         expect(response.body).to include(volunteer_2.casa_cases.first.case_number)
@@ -45,7 +45,7 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
         different_org = build(:casa_org)
         not_my_case_assignment = build_stubbed(:case_assignment, casa_org: different_org)
 
-        get casa_cases_url
+        get casa_org_casa_cases_url organization
 
         expect(response.body).to include(my_case_assignment.casa_case.case_number)
         expect(response.body).not_to include(not_my_case_assignment.casa_case.case_number)
@@ -54,7 +54,7 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
 
     describe "GET /show" do
       it "renders a successful response" do
-        get casa_case_url(casa_case)
+        get casa_org_casa_case_url(organization, casa_case)
         expect(response).to be_successful
       end
 
@@ -62,21 +62,21 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
         other_org = build(:casa_org)
         other_case = create(:casa_case, casa_org: other_org)
 
-        get casa_case_url(other_case)
+        get casa_org_casa_case_url(other_org, other_case)
         expect(response).to be_not_found
       end
     end
 
     describe "GET /new" do
       it "renders a successful response" do
-        get new_casa_case_url
+        get new_casa_org_casa_case_url organization
         expect(response).to be_successful
       end
     end
 
     describe "GET /edit" do
       it "render a successful response" do
-        get edit_casa_case_url(casa_case)
+        get edit_casa_org_casa_case_url(organization, casa_case)
         expect(response).to be_successful
       end
 
@@ -84,7 +84,7 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
         other_org = build(:casa_org)
         other_case = create(:casa_case, casa_org: other_org)
 
-        get edit_casa_case_url(other_case)
+        get edit_casa_org_casa_case_url(other_org, other_case)
         expect(response).to be_not_found
       end
     end
@@ -92,19 +92,19 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
     describe "POST /create" do
       context "with valid parameters" do
         it "creates a new CasaCase" do
-          expect { post casa_cases_url, params: {casa_case: valid_attributes} }.to change(
+          expect { post casa_org_casa_cases_url organization, params: {casa_case: valid_attributes} }.to change(
             CasaCase,
             :count
           ).by(1)
         end
 
         it "redirects to the created casa_case" do
-          post casa_cases_url, params: {casa_case: valid_attributes}
-          expect(response).to redirect_to(casa_case_url(CasaCase.last))
+          post casa_org_casa_cases_url organization, params: {casa_case: valid_attributes}
+          expect(response).to redirect_to(casa_org_casa_case_url(organization, CasaCase.last))
         end
 
         it "sets fields correctly" do
-          post casa_cases_url, params: {casa_case: valid_attributes}
+          post casa_org_casa_cases_url organization, params: {casa_case: valid_attributes}
           casa_case = CasaCase.last
           expect(casa_case.casa_org).to eq organization
           expect(casa_case.transition_aged_youth).to be true
@@ -123,7 +123,7 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
           judge_id: judge.id
         }
 
-        expect { post casa_cases_url, params: {casa_case: attributes} }.to(
+        expect { post casa_org_casa_cases_url organization, params: {casa_case: attributes} }.to(
           change { [organization.casa_cases.count, other_org.casa_cases.count] }.from([0, 0]).to([1, 0])
         )
       end
@@ -131,14 +131,14 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
       describe "invalid request" do
         context "with invalid parameters" do
           it "does not create a new CasaCase" do
-            expect { post casa_cases_url, params: {casa_case: invalid_attributes} }.to change(
+            expect { post casa_org_casa_cases_url organization, params: {casa_case: invalid_attributes} }.to change(
               CasaCase,
               :count
             ).by(0)
           end
 
           it "renders a successful response (i.e. to display the 'new' template)" do
-            post casa_cases_url, params: {casa_case: invalid_attributes}
+            post casa_org_casa_cases_url organization, params: {casa_case: invalid_attributes}
             expect(response).to be_successful
           end
         end
@@ -151,19 +151,19 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
           end
 
           it "Creates a new CasaCase, but no CaseCourtMandate" do
-            expect { post casa_cases_url, params: invalid_params }.to change(
+            expect { post casa_org_casa_cases_url organization, params: invalid_params }.to change(
               CasaCase,
               :count
             ).by(1)
 
-            expect { post casa_cases_url, params: invalid_params }.not_to change(
+            expect { post casa_org_casa_cases_url organization, params: invalid_params }.not_to change(
               CaseCourtMandate,
               :count
             )
           end
 
           it "renders a successful response (i.e. to display the 'new' template)" do
-            post casa_cases_url, params: {casa_case: invalid_params}
+            post casa_org_casa_cases_url organization, params: {casa_case: invalid_params}
             expect(response).to be_successful
           end
         end
@@ -182,7 +182,7 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
 
       context "with valid parameters" do
         it "updates the requested casa_case" do
-          patch casa_case_url(casa_case), params: {casa_case: new_attributes}
+          patch casa_org_casa_case_url(organization, casa_case), params: {casa_case: new_attributes}
           casa_case.reload
           expect(casa_case.case_number).to eq "12345"
           expect(casa_case.hearing_type).to eq hearing_type
@@ -194,15 +194,15 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
         end
 
         it "redirects to the casa_case" do
-          patch casa_case_url(casa_case), params: {casa_case: new_attributes}
+          patch casa_org_casa_case_url(organization, casa_case), params: {casa_case: new_attributes}
           casa_case.reload
-          expect(response).to redirect_to(edit_casa_case_path)
+          expect(response).to redirect_to(edit_casa_org_casa_case_path(organization))
         end
       end
 
       context "with invalid parameters" do
         it "renders a successful response displaying the edit template" do
-          patch casa_case_url(casa_case), params: {casa_case: invalid_attributes}
+          patch casa_org_casa_case_url(organization, casa_case), params: {casa_case: invalid_attributes}
           expect(response).to be_successful
         end
       end
@@ -224,7 +224,7 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
           end
 
           before do
-            patch casa_case_url(casa_case), params: {casa_case: new_attributes}
+            patch casa_org_casa_case_url(organization, casa_case), params: {casa_case: new_attributes}
             casa_case.reload
 
             mandates_updated[:case_court_mandates_attributes]["0"][:id] = casa_case.case_court_mandates[0].id
@@ -232,13 +232,13 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
           end
 
           it "does not update the first mandate" do
-            expect { patch casa_case_url(casa_case), params: {casa_case: mandates_updated} }.not_to(
+            expect { patch casa_org_casa_case_url(organization, casa_case), params: {casa_case: mandates_updated} }.not_to(
               change { casa_case.reload.case_court_mandates[0].mandate_text }
             )
           end
 
           it "does not update the second mandate" do
-            expect { patch casa_case_url(casa_case), params: {casa_case: mandates_updated} }.not_to(
+            expect { patch casa_org_casa_case_url(organization, casa_case), params: {casa_case: mandates_updated} }.not_to(
               change { casa_case.reload.case_court_mandates[1].mandate_text }
             )
           end
@@ -249,7 +249,7 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
         other_org = build(:casa_org)
         other_casa_case = create(:casa_case, case_number: "abc", casa_org: other_org)
 
-        expect { patch casa_case_url(other_casa_case), params: {casa_case: new_attributes} }.not_to(
+        expect { patch casa_org_casa_case_url(other_casa_case, other_org), params: {casa_case: new_attributes} }.not_to(
           change { other_casa_case.reload.case_number }
         )
       end
@@ -260,19 +260,19 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
       let(:params) { {id: casa_case.id} }
 
       it "deactivates the requested casa_case" do
-        patch deactivate_casa_case_path(casa_case), params: params
+        patch deactivate_casa_org_casa_case_path(organization, casa_case), params: params
         casa_case.reload
         expect(casa_case.active).to eq false
       end
 
       it "redirects to the casa_case" do
-        patch deactivate_casa_case_path(casa_case), params: params
+        patch deactivate_casa_org_casa_case_path(organization, casa_case), params: params
         casa_case.reload
-        expect(response).to redirect_to(edit_casa_case_path)
+        expect(response).to redirect_to(edit_casa_org_casa_case_path(organization, casa_case))
       end
 
       it "flashes success message" do
-        patch deactivate_casa_case_path(casa_case), params: params
+        patch deactivate_casa_org_casa_case_path(organization, casa_case), params: params
         expect(flash[:notice]).to include("Case #{casa_case.case_number} has been deactivated.")
       end
 
@@ -299,22 +299,22 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
 
     describe "PATCH /casa_cases/:id/reactivate" do
       let(:casa_case) { create(:casa_case, :inactive, casa_org: organization, case_number: "111") }
-      let(:params) { {id: casa_case.id} }
+      let(:params) { {slug: casa_case.to_param} }
 
       it "reactivates the requested casa_case" do
-        patch reactivate_casa_case_path(casa_case), params: params
+        patch reactivate_casa_org_casa_case_path(organization, casa_case), params: params
         casa_case.reload
         expect(casa_case.active).to eq true
       end
 
       it "redirects to the casa_case" do
-        patch reactivate_casa_case_path(casa_case), params: params
+        patch reactivate_casa_org_casa_case_path(organization, casa_case), params: params
         casa_case.reload
-        expect(response).to redirect_to(edit_casa_case_path)
+        expect(response).to redirect_to(edit_casa_org_casa_case_path(organization, casa_case))
       end
 
       it "flashes success message" do
-        patch reactivate_casa_case_path(casa_case), params: params
+        patch reactivate_casa_org_casa_case_path(organization, casa_case), params: params
         expect(flash[:notice]).to include("Case #{casa_case.case_number} has been reactivated.")
       end
 
@@ -322,7 +322,7 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
         other_org = create(:casa_org)
         other_casa_case = create(:casa_case, casa_org: other_org)
 
-        patch reactivate_casa_case_path(other_casa_case), params: params
+        patch reactivate_casa_org_casa_case_path(other_org, other_casa_case), params: params
         expect(response).to be_not_found
       end
 
@@ -346,7 +346,7 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
 
     describe "GET /new" do
       it "denies access and redirects elsewhere" do
-        get new_casa_case_url
+        get new_casa_org_casa_case_url organization
 
         expect(response).not_to be_successful
         expect(flash[:notice]).to match(/you are not authorized/)
@@ -355,7 +355,7 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
 
     describe "GET /edit" do
       it "render a successful response" do
-        get edit_casa_case_url(casa_case)
+        get edit_casa_org_casa_case_url(organization, casa_case)
         expect(response).to be_successful
       end
 
@@ -363,7 +363,7 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
         other_org = build(:casa_org)
         other_case = create(:casa_case, casa_org: other_org)
 
-        get edit_casa_case_url(other_case)
+        get edit_casa_org_casa_case_url(other_org, other_case)
         expect(response).to be_not_found
       end
     end
@@ -381,7 +381,7 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
 
       context "with valid parameters" do
         it "updates permitted fields" do
-          patch casa_case_url(casa_case), params: {casa_case: new_attributes}
+          patch casa_org_casa_case_url(organization, casa_case), params: {casa_case: new_attributes}
           casa_case.reload
           expect(casa_case.court_report_submitted?).to be_truthy
 
@@ -393,8 +393,8 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
         end
 
         it "redirects to the casa_case" do
-          patch casa_case_url(casa_case), params: {casa_case: new_attributes}
-          expect(response).to redirect_to(edit_casa_case_path(casa_case))
+          patch casa_org_casa_case_url(organization, casa_case), params: {casa_case: new_attributes}
+          expect(response).to redirect_to(edit_casa_org_casa_case_path(organization))
         end
       end
 
@@ -402,7 +402,7 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
         other_org = build(:casa_org)
         other_casa_case = create(:casa_case, case_number: "abc", casa_org: other_org)
 
-        expect { patch casa_case_url(other_casa_case), params: {casa_case: new_attributes} }.not_to(
+        expect { patch casa_org_casa_case_url(other_casa_case, other_org), params: {casa_case: new_attributes} }.not_to(
           change { other_casa_case.reload.attributes }
         )
       end
@@ -415,7 +415,7 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
 
         user.casa_cases << mine
 
-        get casa_cases_url
+        get casa_org_casa_cases_url organization
 
         expect(response).to be_successful
         expect(response.body).to include(mine.case_number)
@@ -451,14 +451,14 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
 
     describe "GET /new" do
       it "renders a successful response" do
-        get new_casa_case_url
+        get new_casa_org_casa_case_url organization
         expect(response).to be_successful
       end
     end
 
     describe "GET /edit" do
       it "render a successful response" do
-        get edit_casa_case_url(casa_case)
+        get edit_casa_org_casa_case_url(organization, casa_case)
         expect(response).to be_successful
       end
 
@@ -466,7 +466,7 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
         other_org = build(:casa_org)
         other_case = create(:casa_case, casa_org: other_org)
 
-        get edit_casa_case_url(other_case)
+        get edit_casa_org_casa_case_url(other_org, other_case)
         expect(response).to be_not_found
       end
     end
@@ -476,7 +476,7 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
 
       context "with valid parameters" do
         it "updates fields (except case_number)" do
-          patch casa_case_url(casa_case), params: {casa_case: new_attributes}
+          patch casa_org_casa_case_url(organization, casa_case), params: {casa_case: new_attributes}
           casa_case.reload
 
           expect(casa_case.case_number).to eq "111"
@@ -490,8 +490,8 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
         end
 
         it "redirects to the casa_case" do
-          patch casa_case_url(casa_case), params: {casa_case: new_attributes}
-          expect(response).to redirect_to(edit_casa_case_path(casa_case))
+          patch casa_org_casa_case_url(organization, casa_case), params: {casa_case: new_attributes}
+          expect(response).to redirect_to(edit_casa_org_casa_case_path(organization))
         end
       end
 
@@ -499,7 +499,7 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
         other_org = build(:casa_org)
         other_casa_case = create(:casa_case, case_number: "abc", casa_org: other_org)
 
-        expect { patch casa_case_url(other_casa_case), params: {casa_case: new_attributes} }.not_to(
+        expect { patch casa_org_casa_case_url(other_casa_case, other_org), params: {casa_case: new_attributes} }.not_to(
           change { other_casa_case.reload.attributes }
         )
       end
@@ -508,7 +508,7 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
     describe "GET /index" do
       it "renders a successful response" do
         build_stubbed(:casa_case)
-        get casa_cases_url
+        get casa_org_casa_cases_url organization
         expect(response).to be_successful
       end
     end
