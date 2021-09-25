@@ -1,5 +1,7 @@
 FactoryBot.define do
   factory :supervisor, class: "Supervisor", parent: :user do
+    display_name { Faker::Name.unique.name }
+
     trait :with_casa_cases do
       after(:create) do |user, _|
         create_list(:case_assignment, 2, volunteer: user)
