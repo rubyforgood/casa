@@ -9,7 +9,7 @@ class EmancipationsController < ApplicationController
   CHECK_ITEM_ACTIONS = [ADD_CATEGORY, ADD_OPTION, DELETE_CATEGORY, DELETE_OPTION, SET_OPTION].freeze
 
   def show
-    @current_case = CasaCase.find(params[:casa_case_id])
+    @current_case = CasaCase.find_by!(slug: params[:casa_case_slug])
     authorize @current_case
     @emancipation_form_data = EmancipationCategory.all
 
@@ -33,10 +33,10 @@ class EmancipationsController < ApplicationController
 
   def save
     authorize CasaCase, :save_emancipation?
-    params.permit(:casa_case_id, :check_item_action)
+    params.permit(:casa_case_slug, :check_item_action)
 
     begin
-      current_case = CasaCase.find(params[:casa_case_id])
+      current_case = CasaCase.find_by!(slug: params[:casa_case_slug])
       authorize current_case, :update_emancipation_option?
     rescue ActiveRecord::RecordNotFound
       render json: {error: "Could not find case from id given by casa_case_id"}
