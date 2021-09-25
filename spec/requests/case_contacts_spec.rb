@@ -96,7 +96,7 @@ RSpec.describe "/case_contacts", type: :request do
               duration_minutes: 60
             }
           }
-          expect(response).to redirect_to(casa_case_path(case_contact.casa_case_id))
+          expect(response).to redirect_to(casa_org_casa_case_path(organization, case_contact.casa_case.slug))
 
           expect(case_contact.reload.contact_types.first.name).to eq "Attorney"
         end

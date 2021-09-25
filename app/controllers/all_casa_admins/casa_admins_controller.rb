@@ -54,6 +54,6 @@ class AllCasaAdmins::CasaAdminsController < AllCasaAdminsController
   private
 
   def set_casa_org
-    @casa_org = CasaOrg.find(params[:casa_org_id])
+    @casa_org = CasaOrg.find_by!(params[:slug])
   end
 end

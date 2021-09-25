@@ -74,7 +74,7 @@ class CaseContactsController < ApplicationController
     }
 
     if case_contacts.all?(&:persisted?)
-      redirect_to casa_case_path(CaseContact.last.casa_case), notice: create_notice
+      redirect_to casa_org_casa_case_path(current_organization, CaseContact.last.casa_case), notice: create_notice
     else
       @case_contact = case_contacts.first
       @casa_cases = [@case_contact.casa_case]
@@ -97,7 +97,7 @@ class CaseContactsController < ApplicationController
     @current_organization_groups = current_organization.contact_type_groups
 
     if @case_contact.update_cleaning_contact_types(update_case_contact_params)
-      redirect_to casa_case_path(@case_contact.casa_case), notice: t("update", scope: "case_contact")
+      redirect_to casa_org_casa_case_path(current_organization, @case_contact.casa_case), notice: t("update", scope: "case_contact")
     else
       render :edit
     end
