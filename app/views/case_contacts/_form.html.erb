@@ -150,11 +150,13 @@
   <div class="field notes form-group">
     <h2><%= form.label :notes %></h2>
     <%= form.text_area :notes, :rows => 5, placeholder: t("forms.case_contact.notes_placeholder"), class: "form-control" %>
+    <div id="case-contact-draft-alerts"></div>
   </div>
 
   <div class="actions">
     <%= form.submit t("button.submit"), class: "btn btn-primary", id: "case-contact-submit",
 "data-target": "#confirm-submit" %>
+    <%= link_to "Save", "#", class: "btn btn-primary", id: "case-contact-save" %>
     <%= return_to_dashboard_button %>
   </div>
   <%= render 'confirm_note_content_dialog', form: form %>
