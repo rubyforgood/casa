@@ -41,6 +41,7 @@ class SupervisorDatatable < ApplicationDatatable
   end
 
   def order_clause
-    @order_clause ||= build_order_clause || Arel.sql("COALESCE(users.display_name, users.email) ASC")
+    @order_clause ||=
+      build_order_clause || Arel.sql("COALESCE(users.display_name, users.email) #{order_direction}")
   end
 end
