@@ -1,12 +1,16 @@
 <% if resource.errors.any? %>
-  <div id="error_explanation" class="alert alert-danger">
-    <h6><%= pluralize(resource.errors.count, "error") %> prohibited this <%= resource.model_name.human %> from being
-      saved:</h6>
-
-    <ul>
-      <% resource.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-    </ul>
-  </div>
+  <% full_error_messages = resource.errors.full_messages %>
+  <% if full_error_messages.join(' ').include? 'Password' %>
+    <% error_messages_heading = "prohibited this password change from being saved:" %>
+  <% else %>
+    <% error_messages_heading = "prohibited this #{resource.model_name.human} from beingsaved:" %>
+  <% end %>
+    <div id="error_explanation" class="alert alert-danger">
+      <h6><%= pluralize(resource.errors.count, "error") %> <%= error_messages_heading %> </h6>
+      <ul>
+        <% full_error_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
 <% end %>
