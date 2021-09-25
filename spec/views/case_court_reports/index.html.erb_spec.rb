@@ -7,7 +7,7 @@ RSpec.describe "case_court_reports/index", type: :view do
 
     before do
       allow(view).to receive(:current_user).and_return(user)
-      assign :assigned_cases, active_assigned_cases
+      assign :select_options, []
       render
     end
 
@@ -24,8 +24,17 @@ RSpec.describe "case_court_reports/index", type: :view do
       expect(rendered).to have_selector("form", count: 1)
     end
 
-    it "has a dropdown select with shows 2 options" do
-      expect(rendered).to have_selector("select#case-selection option", count: 3)
+    context "with data" do
+      before do
+        assign :select_options, [
+          ["CINA-13 (assigned to User 7)", "CINA-13", {"data-lookup": "User 7"}]
+        ]
+        render
+      end
+
+      it "has a dropdown select with shows 2 options" do
+        expect(rendered).to have_selector("select#case-selection option", count: 3)
+      end
     end
 
     it "has a drowndown select element for CASA case" do

@@ -42,4 +42,20 @@ RSpec.describe Supervisor, type: :model do
       expect(supervisor.pending_volunteers).to eq([volunteer])
     end
   end
+
+  describe "#transition_volunteers" do
+    it "is empty" do
+      expect(supervisor.transition_volunteers).to eq([])
+    end
+
+    context "with transition aged volunteers" do
+      it "has volunteers" do
+        volunteer_assigned_to_transition_aged_youth = create(:volunteer, supervisor: supervisor)
+        casa_case = create(:casa_case, :transition_aged_youth, casa_org: volunteer_assigned_to_transition_aged_youth.casa_org)
+        create(:case_assignment, volunteer: volunteer_assigned_to_transition_aged_youth, casa_case: casa_case)
+
+        expect(supervisor.transition_volunteers).to eq([volunteer_assigned_to_transition_aged_youth])
+      end
+    end
+  end
 end

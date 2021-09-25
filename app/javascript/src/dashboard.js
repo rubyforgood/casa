@@ -35,7 +35,6 @@ $('document').ready(() => {
       const statusArray = []
       const assignedToVolunteerArray = []
       const assignedToMoreThanOneVolunteerArray = []
-      const assignedToTransitionYouthArray = []
       const caseNumberPrefixArray = []
 
       $('.status-options').find('input[type="checkbox"]').each(function () {
@@ -65,12 +64,10 @@ $('document').ready(() => {
       const status = data[3]
       const assignedToVolunteer = (data[5] !== '' && data[5].split(',').length >= 1) ? 'Yes' : 'No'
       const assignedToMoreThanOneVolunteer = (data[5] !== '' && data[5].split(',').length > 1) ? 'Yes' : 'No'
-      const assignedToTransitionYouth = data[4]
 
       return statusArray.includes(status) &&
         assignedToVolunteerArray.includes(assignedToVolunteer) &&
-        assignedToMoreThanOneVolunteerArray.includes(assignedToMoreThanOneVolunteer) &&
-        assignedToTransitionYouthArray.includes(assignedToTransitionYouth)
+        assignedToMoreThanOneVolunteerArray.includes(assignedToMoreThanOneVolunteer)
     }
   )
 

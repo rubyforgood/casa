@@ -5,11 +5,11 @@ RSpec.describe "Edit CASA Case", type: :system do
   context "logged in as admin" do
     let(:organization) { build(:casa_org) }
     let(:admin) { create(:casa_admin, casa_org: organization) }
-    let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: organization) }
-    let!(:judge) { build(:judge, casa_org: organization) }
-    let(:contact_type_group) { build(:contact_type_group, casa_org: organization) }
-    let!(:school) { build(:contact_type, name: "School", contact_type_group: contact_type_group) }
-    let!(:therapist) { build(:contact_type, name: "Therapist", contact_type_group: contact_type_group) }
+    let(:casa_case) { create(:casa_case, :with_one_court_mandate, :with_judge, casa_org: organization) }
+    let!(:judge) { create(:judge, casa_org: organization) }
+    let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
+    let!(:school) { create(:contact_type, name: "School", contact_type_group: contact_type_group) }
+    let!(:therapist) { create(:contact_type, name: "Therapist", contact_type_group: contact_type_group) }
 
     before { sign_in admin }
 
@@ -154,10 +154,12 @@ RSpec.describe "Edit CASA Case", type: :system do
         expect(casa_case.reload.judge).to eq judge
       end
 
+      # TODO combine some of these tests into one big multi-part system test
       it "is able to assign another judge to the case", js: true do
+        casa_case.update!(judge: build(:judge, casa_org: casa_case.casa_org, name: "Some Other Judge"))
         visit edit_casa_case_path(casa_case)
 
-        expect(page).to have_select("Judge", selected: casa_case.judge.name)
+        expect(page).to have_select("Judge", selected: "Some Other Judge")
         select judge.name, from: "casa_case_judge_id"
 
         within ".actions" do
@@ -169,6 +171,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       end
 
       it "is able to unassign a judge from the case", js: true do
+        casa_case.update!(judge: judge)
         visit edit_casa_case_path(casa_case)
 
         expect(page).to have_select("Judge", selected: casa_case.judge.name)
@@ -423,10 +426,12 @@ of it unless it was included in a previous court report.")
       end
 
       it "is able to assign another hearing type to the case" do
+        casa_case.update!(hearing_type: build(:hearing_type, casa_org: casa_case.casa_org))
+        expect(casa_case.hearing_type).not_to be_nil
+
         visit edit_casa_case_path(casa_case.id)
 
-        case_hearing = casa_case.hearing_type
-        expect(page).to have_select("Hearing type", selected: case_hearing.name)
+        expect(page).to have_select("Hearing type", selected: casa_case.hearing_type.name)
         select hearing_type.name, from: "casa_case_hearing_type_id"
 
         within ".actions" do
@@ -438,7 +443,8 @@ of it unless it was included in a previous court report.")
       end
 
       it "is able to unassign a hearing type from the case" do
-        expect(casa_case.hearing_type).not_to be_nil
+        casa_case.update!(hearing_type: hearing_type)
+        expect(casa_case.reload.hearing_type).not_to be_nil
 
         visit edit_casa_case_path(casa_case.id)
 

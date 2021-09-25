@@ -37,7 +37,11 @@ class Supervisor < User
   end
 
   def transition_volunteers
-    volunteers.active.preload("casa_case").select { |v| v.casa_case.in_transition_age? }
+    volunteers.active.preload(case_assignments: :casa_case).select { |v| v.casa_cases.any? { |cc| cc.in_transition_age? } }
+  end
+
+  def active_volunteers
+    volunteers.active.size
   end
 end
 

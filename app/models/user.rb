@@ -52,10 +52,6 @@ class User < ApplicationRecord
     casa_cases.active.merge(CaseAssignment.active)
   end
 
-  def active_volunteers
-    volunteers.active.size
-  end
-
   # all contacts this user has with this casa case
   def case_contacts_for(casa_case_id)
     found_casa_case = actively_assigned_and_active_cases.find { |cc| cc.id == casa_case_id }
@@ -71,8 +67,13 @@ class User < ApplicationRecord
     case_contacts.where(contact_made: true, occurred_at: days_counter.days.ago..Date.today).size
   end
 
+  # TODO remove, unused?
   def most_recent_contact
     case_contacts.where(contact_made: true).order(:occurred_at).last
+  end
+
+  def most_recent_attempt
+    case_contacts.order(:occurred_at).last
   end
 
   def no_attempt_for_two_weeks
