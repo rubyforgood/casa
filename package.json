@@ -24,6 +24,7 @@
     "jquery": "^3.6.0",
     "node-sass": "^6.0.1",
     "popper.js": "^1.16.1",
+    "rails-erb-loader": "^5.5.2",
     "select2": "^4.0.13",
     "sweetalert2": "^11.1.6",
     "turbolinks": "^5.2.0"
