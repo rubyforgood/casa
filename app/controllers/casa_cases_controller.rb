@@ -21,10 +21,6 @@ class CasaCasesController < ApplicationController
         csv = CaseContactsExportCsvService.new(case_contacts).perform
         send_data csv, filename: case_contact_csv_name(case_contacts)
       end
-      format.xlsx do
-        filename = @casa_case.case_number + "-case-contacts-" + Time.now.strftime("%Y-%m-%d") + ".xlsx"
-        response.headers["Content-Disposition"] = "attachment; filename=#{filename}"
-      end
     end
   end
 
@@ -43,9 +39,10 @@ class CasaCasesController < ApplicationController
 
     if @casa_case.save
       respond_to do |format|
-        format.html { redirect_to @casa_case, notice: "CASA case was successfully created." }
+        redirect_to casa_org_casa_case_path(current_organization, @casa_case), notice: "CASA case was successfully created."
         format.json { render json: @casa_case, status: :created }
       end
+      redirect_to casa_org_casa_case_path(current_organization, @casa_case), notice: "CASA case was successfully created."
     else
       respond_to do |format|
         format.html { render :new }
@@ -59,6 +56,7 @@ class CasaCasesController < ApplicationController
     original_attributes = @casa_case.full_attributes_hash
 
     if @casa_case.update_cleaning_contact_types(casa_case_update_params)
+<<<<<<< HEAD
       updated_attributes = @casa_case.full_attributes_hash
       changed_attributes_list = html_formatted_list(changed_attributes_messages(original_attributes, updated_attributes))
 
@@ -66,6 +64,9 @@ class CasaCasesController < ApplicationController
         format.html { redirect_to edit_casa_case_path, notice: "CASA case was successfully updated.#{changed_attributes_list}" }
         format.json { render json: @casa_case, status: :ok }
       end
+=======
+      redirect_to edit_casa_org_casa_case_path(current_organization, @casa_case), notice: "CASA case was successfully updated."
+>>>>>>> cd1e92be... Creating new CASA routes for casa cases nested under orgs. Updating tests
     else
       respond_to do |format|
         format.html { render :edit }
@@ -78,6 +79,7 @@ class CasaCasesController < ApplicationController
     authorize @casa_case, :update_case_status?
 
     if @casa_case.deactivate
+<<<<<<< HEAD
       respond_to do |format|
         format.html do
           flash_message = "Case #{@casa_case.case_number} has been deactivated."
@@ -88,6 +90,10 @@ class CasaCasesController < ApplicationController
           render json: "Case #{@casa_case.case_number} has been deactivated.", status: :ok
         end
       end
+=======
+      flash_message = "Case #{@casa_case.case_number} has been deactivated."
+      redirect_to edit_casa_org_casa_case_path(current_organization, @casa_case), notice: flash_message
+>>>>>>> cd1e92be... Creating new CASA routes for casa cases nested under orgs. Updating tests
     else
       respond_to do |format|
         format.html { render :edit }
@@ -100,6 +106,7 @@ class CasaCasesController < ApplicationController
     authorize @casa_case, :update_case_status?
 
     if @casa_case.reactivate
+<<<<<<< HEAD
       respond_to do |format|
         format.html do
           flash_message = "Case #{@casa_case.case_number} has been reactivated."
@@ -110,6 +117,10 @@ class CasaCasesController < ApplicationController
           render json: "Case #{@casa_case.case_number} has been reactivated.", status: :ok
         end
       end
+=======
+      flash_message = "Case #{@casa_case.case_number} has been reactivated."
+      redirect_to edit_casa_org_casa_case_path(current_organization, @casa_case), notice: flash_message
+>>>>>>> cd1e92be... Creating new CASA routes for casa cases nested under orgs. Updating tests
     else
       respond_to do |format|
         format.html { render :edit }
@@ -122,7 +133,7 @@ class CasaCasesController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_casa_case
-    @casa_case = current_organization.casa_cases.find(params[:id])
+    @casa_case = current_organization.casa_cases.find_by!(slug: params[:slug])
   rescue ActiveRecord::RecordNotFound
     head :not_found
   end

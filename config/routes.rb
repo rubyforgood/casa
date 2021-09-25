@@ -75,8 +75,19 @@ Rails.application.routes.draw do
   end
   resources :case_contact_reports, only: %i[index]
   resources :mileage_reports, only: %i[index]
+<<<<<<< HEAD
   resources :mileage_rates, only: %i[index new create edit update]
   resources :casa_orgs, only: %i[edit update]
+=======
+  resources :casa_orgs, param: :slug, only: %i[edit update] do
+    resources :casa_cases, param: :slug do
+      member do
+        patch :deactivate
+        patch :reactivate
+      end
+    end
+  end
+>>>>>>> cd1e92be... Creating new CASA routes for casa cases nested under orgs. Updating tests
   resources :contact_type_groups, only: %i[new create edit update]
   resources :contact_types, only: %i[new create edit update]
   resources :hearing_types, only: %i[new create edit update]
