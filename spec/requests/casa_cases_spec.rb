@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/casa_cases", type: :request do
+RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
   let(:organization) { build(:casa_org) }
   let(:hearing_type) { create(:hearing_type) }
   let(:judge) { create(:judge) }
@@ -24,7 +24,7 @@ RSpec.describe "/casa_cases", type: :request do
     describe "GET /index" do
       it "renders a successful response" do
         create(:casa_case)
-        get casa_cases_url
+        get casa_org_casa_cases_url organization
         expect(response).to be_successful
       end
 
