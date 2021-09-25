@@ -14,7 +14,7 @@ RSpec.describe "SupervisorDatatable" do
 
     describe "active" do
       context "when active" do
-        let(:additional_filters) { { active: %w[true] } }
+        let(:additional_filters) { {active: %w[true]} }
 
         it "brings only active supervisors", :aggregate_failures do
           expect(subject[:recordsTotal]).to eq(2)
@@ -25,7 +25,7 @@ RSpec.describe "SupervisorDatatable" do
       end
 
       context "when inactive" do
-        let(:additional_filters) { { active: %w[false] } }
+        let(:additional_filters) { {active: %w[false]} }
 
         it "brings only inactive supervisors", :aggregate_failures do
           expect(subject[:recordsTotal]).to eq(2)
@@ -36,7 +36,7 @@ RSpec.describe "SupervisorDatatable" do
       end
 
       context "when both" do
-        let(:additional_filters) { { active: %w[false true] } }
+        let(:additional_filters) { {active: %w[false true]} }
 
         it "brings only all supervisors", :aggregate_failures do
           expect(subject[:recordsTotal]).to eq(2)
@@ -47,7 +47,7 @@ RSpec.describe "SupervisorDatatable" do
       end
 
       context "when no selection" do
-        let(:additional_filters) { { active: [] } }
+        let(:additional_filters) { {active: []} }
 
         it "brings nothing", :aggregate_failures do
           expect(subject[:recordsTotal]).to eq(2)

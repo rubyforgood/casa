@@ -12,19 +12,6 @@ const defineCaseContactsTable = function () {
   )
 }
 
-const defineSupervisorsDataTable = function () {
-  $('table#supervisors').DataTable(
-    {
-      columnDefs: [
-        { orderable: false, targets: 4 }
-      ],
-      autoWidth: false,
-      searching: false,
-      order: [[0, 'desc']]
-    }
-  )
-}
-
 $('document').ready(() => {
   $.fn.dataTable.ext.search.push(
     function (settings, data, dataIndex) {
@@ -219,6 +206,66 @@ $('document').ready(() => {
     }
   })
 
+  const supervisorsTable = $('table#supervisors').DataTable({
+    autoWidth: false,
+    stateSave: false,
+    columns: [
+      {
+        name: 'display_name',
+        render: (data, type, row, meta) => {
+          return `
+            <a href="${editSupervisorPath(row.id)}">
+              ${row.display_name || row.email}
+            </a>
+          `
+        }
+      },
+      {
+        name: 'volunteer_assignments',
+        render: (data, type, row, meta) => row.volunteer_assignments
+      },
+      {
+        name: 'transitions_volunteers',
+        render: (data, type, row, meta) => row.transitions_volunteers
+      },
+      {
+        name: 'no_attempt_for_two_weeks',
+        render: (data, type, row, meta) => row.no_attempt_for_two_weeks
+      },
+      {
+        name: 'actions',
+        orderable: false,
+        render: (data, type, row, meta) => {
+          return `
+            <a href="${editSupervisorPath(row.id)}">
+              Edit
+            </a>
+          `
+        },
+        searchable: false
+      }
+    ],
+    processing: true,
+    serverSide: true,
+    ajax: {
+      url: $('table#supervisors').data('source'),
+      type: 'POST',
+      data: function (d) {
+        const statusOptions = $('.status-options input:checked')
+        const statusFilter = Array.from(statusOptions).map((option) =>
+          JSON.parse(option.dataset.value)
+        )
+
+        return $.extend({}, d, { additional_filters: { active: statusFilter } })
+      },
+      error: handleAjaxError,
+      dataType: 'json'
+    },
+    drawCallback: function (settings) {
+      $('[data-toggle=tooltip]').tooltip()
+    }
+  })
+
   // Because the table saves state, we have to check/uncheck modal inputs based on what
   // columns are visible
   volunteersTable.columns().every(function (index) {
@@ -256,8 +303,6 @@ $('document').ready(() => {
 
   defineCaseContactsTable()
 
-  defineSupervisorsDataTable()
-
   function filterOutUnassignedVolunteers (checked) {
     $('.supervisor-options').find('input[type="checkbox"]').not('#unassigned-vol-filter').each(function () {
       this.checked = checked
@@ -277,6 +322,10 @@ $('document').ready(() => {
     volunteersTable.draw()
   })
 
+  $('.supervisor-filters input[type="checkbox"]').on('click', function () {
+    supervisorsTable.draw()
+  })
+
   $('.casa-case-filters input[type="checkbox"]').on('click', function () {
     casaCasesTable.draw()
   })
@@ -293,4 +342,4 @@ $('document').ready(() => {
   })
 })
 
-export { defineCaseContactsTable, defineSupervisorsDataTable }
+export { defineCaseContactsTable }
