@@ -50,14 +50,13 @@ module.exports = class CourtOrderList {
     orderHiddenIdInput.remove()
 
     // Decrement indicies of all siblings after deleted element
-    this.courtOrdersWidget.find(`.court-mandate-entry:nth-child(n+${index})`).each(function (originalSiblingIndex) {
+    this.courtOrdersWidget.find(`.court-mandate-entry:nth-child(n+${2 * index})`).each(function (originalSiblingIndex) {
       const courtMandateSibling = $(this)
       const courtMandateSiblingSelect = courtMandateSibling.find('select')
       const courtMandateSiblingTextArea = courtMandateSibling.find('textarea')
-      const captureIndexLabelWithoutIndexPattern = new RegExp(`(^.*)${originalSiblingIndex + index + 1}(.*$)`)
 
-      console.log(courtMandateSiblingSelect.attr('name').match(captureIndexLabelWithoutIndexPattern))
-      console.log(courtMandateSiblingTextArea.attr('name').match(captureIndexLabelWithoutIndexPattern))
+      courtMandateSiblingSelect.attr('name', replaceNumberWithDecrement(courtMandateSiblingSelect.attr('name'), originalSiblingIndex + index + 1))
+      courtMandateSiblingTextArea.attr('name', replaceNumberWithDecrement(courtMandateSiblingTextArea.attr('name'), originalSiblingIndex + index + 1))
     })
 
     this.courtOrdersWidget.find(`input[type="hidden"]:nth-child(n+${2 * (index + 1)})`).each(function (originalSiblingIndex) {
