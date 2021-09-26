@@ -1,3 +1,14 @@
+// Replaces a number in a string with its value -1
+//   @param  {string} str The string containing the number to replace
+//   @param  {number} num The number to replace
+//   @return {string} The new string with the number decremented
+function replaceNumberWithDecrement (str, num) {
+  const captureStringWithoutNumPattern = new RegExp(`(^.*)${num}(.*$)`)
+  const stringWithoutNum = str.match(captureStringWithoutNumPattern)
+
+  return stringWithoutNum[1] + (num - 1) + stringWithoutNum[2]
+}
+
 module.exports = class CourtOrderList {
   // @param {object} courtOrdersWidget The div containing the list of court orders
   constructor (courtOrdersWidget) {
@@ -32,24 +43,27 @@ module.exports = class CourtOrderList {
   //   @param {object} order              The jQuery object representing the court order div to remove
   //   @param {object} orderHiddenIdInput The jQuery object representing the hidden court order id input
   removeCourtOrder (order, orderHiddenIdInput) {
-    const index = order.index()
+    // Index relative to the other court orders excluding hidden inputs
+    const index = order.index() / 2
 
     order.remove()
     orderHiddenIdInput.remove()
 
-    this.courtOrdersWidget.find(`.court-mandate-entry:nth-child(n+${index})`).each(function () {
-      const courtMandateEntry = $(this)
-      const courtMandateEntrySelect = courtMandateEntry.find('select')
-      const courtMandateEntryTextArea = courtMandateEntry.find('textarea')
+    // Decrement indicies of all siblings after deleted element
+    this.courtOrdersWidget.find(`.court-mandate-entry:nth-child(n+${index})`).each(function (originalSiblingIndex) {
+      const courtMandateSibling = $(this)
+      const courtMandateSiblingSelect = courtMandateSibling.find('select')
+      const courtMandateSiblingTextArea = courtMandateSibling.find('textarea')
+      const captureIndexLabelWithoutIndexPattern = new RegExp(`(^.*)${originalSiblingIndex + index + 1}(.*$)`)
 
-      console.log(courtMandateEntrySelect.attr('name'))
-      console.log(courtMandateEntryTextArea.attr('name'))
+      console.log(courtMandateSiblingSelect.attr('name').match(captureIndexLabelWithoutIndexPattern))
+      console.log(courtMandateSiblingTextArea.attr('name').match(captureIndexLabelWithoutIndexPattern))
     })
 
-    this.courtOrdersWidget.find(`input[type="hidden"]:nth-child(n+${index + 1})`).each(function () {
-      const courtMandateId = $(this)
+    this.courtOrdersWidget.find(`input[type="hidden"]:nth-child(n+${2 * (index + 1)})`).each(function (originalSiblingIndex) {
+      const courtMandateSiblingId = $(this)
 
-      console.log(courtMandateId.attr('id'))
+      courtMandateSiblingId.attr('id', replaceNumberWithDecrement(courtMandateSiblingId.attr('id'), originalSiblingIndex + index + 1))
     })
   }
 }
