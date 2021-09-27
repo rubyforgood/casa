@@ -35,6 +35,16 @@ describe('addCourtOrder', () => {
       }
     })
   })
+
+  test('addCourtOrder should add elements with attribute values containing the correct indices', (done) => {
+    $(document).ready(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+  })
 })
 
 describe('removeCourtOrder', () => {
