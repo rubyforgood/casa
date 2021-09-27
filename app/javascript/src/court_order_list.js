@@ -55,7 +55,9 @@ module.exports = class CourtOrderList {
       const courtMandateSiblingSelect = courtMandateSibling.find('select')
       const courtMandateSiblingTextArea = courtMandateSibling.find('textarea')
 
+      courtMandateSiblingSelect.attr('id', replaceNumberWithDecrement(courtMandateSiblingSelect.attr('id'), originalSiblingIndex + index + 1))
       courtMandateSiblingSelect.attr('name', replaceNumberWithDecrement(courtMandateSiblingSelect.attr('name'), originalSiblingIndex + index + 1))
+      courtMandateSiblingTextArea.attr('id', replaceNumberWithDecrement(courtMandateSiblingTextArea.attr('id'), originalSiblingIndex + index + 1))
       courtMandateSiblingTextArea.attr('name', replaceNumberWithDecrement(courtMandateSiblingTextArea.attr('name'), originalSiblingIndex + index + 1))
     })
 
