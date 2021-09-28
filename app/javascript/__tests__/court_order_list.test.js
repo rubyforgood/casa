@@ -39,6 +39,28 @@ describe('addCourtOrder', () => {
   test('addCourtOrder should add elements with attribute values containing the correct indices', (done) => {
     $(document).ready(() => {
       try {
+        const courtOrderCount = 5
+
+        for (let i = 0; i < courtOrderCount; i++) {
+          courtOrderList.addCourtOrder()
+        }
+
+        courtOrderListElement.children('div').each(function (index) {
+          const courtOrderInputs = $(this)
+
+          const textArea = courtOrderInputs.find('textarea')
+          expect($(textArea).attr('id')).toBe(`casa_case_case_court_mandates_attributes_${index}_mandate_text`)
+          expect($(textArea).attr('name')).toBe(`casa_case[case_court_mandates_attributes][${index}][mandate_text]`)
+
+          const select = courtOrderInputs.find('select')
+          expect($(select).attr('id')).toBe(`casa_case_case_court_mandates_attributes_${index}_implementation_status`)
+          expect($(select).attr('name')).toBe(`casa_case[case_court_mandates_attributes][${index}][implementation_status]`)
+        })
+
+        courtOrderListElement.children('input').each(function (index) {
+          expect($(this).attr('id')).toBe(`casa_case_case_court_mandates_attributes_${index}_id`)
+        })
+
         done()
       } catch (error) {
         done(error)
