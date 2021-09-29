@@ -65,6 +65,7 @@ module.exports = class CourtOrderList {
       const courtMandateSiblingId = $(this)
 
       courtMandateSiblingId.attr('id', replaceNumberWithDecrement(courtMandateSiblingId.attr('id'), originalSiblingIndex + index + 1))
+      courtMandateSiblingId.attr('name', replaceNumberWithDecrement(courtMandateSiblingId.attr('name'), originalSiblingIndex + index + 1))
     })
   }
 }
