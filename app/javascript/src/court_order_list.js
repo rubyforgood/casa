@@ -17,7 +17,7 @@ module.exports = class CourtOrderList {
 
   // Adds a row containing a text field to write the court order and a dropdown to specify the order status
   addCourtOrder () {
-    const index = this.courtOrdersWidget.find('.court-mandate-entry').length
+    const index = this.courtOrdersWidget.children('.court-mandate-entry').length
     const courtOrderRow = $(`\
     <div class="court-mandate-entry">\
       <textarea
@@ -50,10 +50,10 @@ module.exports = class CourtOrderList {
     orderHiddenIdInput.remove()
 
     // Decrement indicies of all siblings after deleted element
-    this.courtOrdersWidget.find(`.court-mandate-entry:nth-child(n+${2 * index})`).each(function (originalSiblingIndex) {
+    this.courtOrdersWidget.children(`.court-mandate-entry:nth-child(n+${2 * index})`).each(function (originalSiblingIndex) {
       const courtMandateSibling = $(this)
-      const courtMandateSiblingSelect = courtMandateSibling.find('select')
-      const courtMandateSiblingTextArea = courtMandateSibling.find('textarea')
+      const courtMandateSiblingSelect = courtMandateSibling.children('select')
+      const courtMandateSiblingTextArea = courtMandateSibling.children('textarea')
 
       courtMandateSiblingSelect.attr('id', replaceNumberWithDecrement(courtMandateSiblingSelect.attr('id'), originalSiblingIndex + index + 1))
       courtMandateSiblingSelect.attr('name', replaceNumberWithDecrement(courtMandateSiblingSelect.attr('name'), originalSiblingIndex + index + 1))
@@ -61,7 +61,7 @@ module.exports = class CourtOrderList {
       courtMandateSiblingTextArea.attr('name', replaceNumberWithDecrement(courtMandateSiblingTextArea.attr('name'), originalSiblingIndex + index + 1))
     })
 
-    this.courtOrdersWidget.find(`input[type="hidden"]:nth-child(n+${2 * (index + 1)})`).each(function (originalSiblingIndex) {
+    this.courtOrdersWidget.children(`input[type="hidden"]:nth-child(n+${2 * (index + 1)})`).each(function (originalSiblingIndex) {
       const courtMandateSiblingId = $(this)
 
       courtMandateSiblingId.attr('id', replaceNumberWithDecrement(courtMandateSiblingId.attr('id'), originalSiblingIndex + index + 1))
