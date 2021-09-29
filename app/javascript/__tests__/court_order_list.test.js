@@ -70,4 +70,89 @@ describe('addCourtOrder', () => {
 })
 
 describe('removeCourtOrder', () => {
+  const courtOrdersText = ['Ycs(ya$5r^/9QIQG', ')Tf/_T0a%h1q\'N:[', '\\VvOfNZ(xZ~:1Hj?', '"(N=D,s4Q"QcH?F+', '!N0&amp;!J31#LX+d$,k']
+
+  beforeEach(() => {
+    $(document).ready(() => {
+      courtOrderListElement.append($(`\
+        <div class="court-mandate-entry">\
+          <textarea name="casa_case[case_court_mandates_attributes][0][mandate_text]" id="casa_case_case_court_mandates_attributes_0_mandate_text">${courtOrdersText[0]}</textarea>\
+          <select class="implementation-status" name="casa_case[case_court_mandates_attributes][0][implementation_status]" id="casa_case_case_court_mandates_attributes_0_implementation_status">\
+            <option value="">Set Implementation Status</option>\
+            <option value="not_implemented">Not implemented</option>
+            <option value="partially_implemented">Partially implemented</option>\
+            <option value="implemented">Implemented</option>
+          </select>\
+          <button type="button" class="remove-mandate-button btn btn-danger">Delete</button>\
+        </div>\
+        <input type="hidden" value="202" name="casa_case[case_court_mandates_attributes][0][id]" id="casa_case_case_court_mandates_attributes_0_id">\
+        <div class="court-mandate-entry">\
+          <textarea name="casa_case[case_court_mandates_attributes][1][mandate_text]" id="casa_case_case_court_mandates_attributes_1_mandate_text">${courtOrdersText[1]}</textarea>\
+          <select class="implementation-status" name="casa_case[case_court_mandates_attributes][1][implementation_status]" id="casa_case_case_court_mandates_attributes_1_implementation_status">\
+            <option value="">Set Implementation Status</option>\
+            <option value="not_implemented">Not implemented</option>\
+            <option value="partially_implemented">Partially implemented</option>\
+            <option value="implemented">Implemented</option></select>\
+          <button type="button" class="remove-mandate-button btn btn-danger">Delete</button>\
+        </div>\
+        <input type="hidden" value="203" name="casa_case[case_court_mandates_attributes][1][id]" id="casa_case_case_court_mandates_attributes_1_id">\
+        <div class="court-mandate-entry">\
+          <textarea name="casa_case[case_court_mandates_attributes][2][mandate_text]" id="casa_case_case_court_mandates_attributes_2_mandate_text">${courtOrdersText[2]}</textarea>\
+          <select class="implementation-status" name="casa_case[case_court_mandates_attributes][2][implementation_status]" id="casa_case_case_court_mandates_attributes_2_implementation_status">\
+            <option value="">Set Implementation Status</option>\
+            <option value="not_implemented">Not implemented</option>\
+            <option value="partially_implemented">Partially implemented</option>\
+            <option value="implemented">Implemented</option>\
+          </select>\
+          <button type="button" class="remove-mandate-button btn btn-danger">Delete</button>\
+        </div>\
+        <input type="hidden" value="204" name="casa_case[case_court_mandates_attributes][2][id]" id="casa_case_case_court_mandates_attributes_2_id">\
+        <div class="court-mandate-entry">\
+          <textarea name="casa_case[case_court_mandates_attributes][3][mandate_text]" id="casa_case_case_court_mandates_attributes_3_mandate_text">${courtOrdersText[3]}</textarea>\
+          <select class="implementation-status" name="casa_case[case_court_mandates_attributes][3][implementation_status]" id="casa_case_case_court_mandates_attributes_3_implementation_status">\
+            <option value="">Set Implementation Status</option>\
+            <option value="not_implemented">Not implemented</option>\
+            <option value="partially_implemented">Partially implemented</option>\
+            <option value="implemented">Implemented</option>\
+          </select>\
+          <button type="button" class="remove-mandate-button btn btn-danger">Delete</button>\
+        </div>\
+        <input type="hidden" value="205" name="casa_case[case_court_mandates_attributes][3][id]" id="casa_case_case_court_mandates_attributes_3_id">\
+        <div class="court-mandate-entry">\
+          <textarea name="casa_case[case_court_mandates_attributes][4][mandate_text]" id="casa_case_case_court_mandates_attributes_4_mandate_text">${courtOrdersText[4]}</textarea>\
+          <select class="implementation-status" name="casa_case[case_court_mandates_attributes][4][implementation_status]" id="casa_case_case_court_mandates_attributes_4_implementation_status">\
+            <option value="">Set Implementation Status</option>\
+            <option value="not_implemented">Not implemented</option>\
+            <option value="partially_implemented">Partially implemented</option>\
+            <option value="implemented">Implemented</option>\
+          </select>\
+          <button type="button" class="remove-mandate-button btn btn-danger">Delete</button>\
+        </div>\
+        <input type="hidden" value="206" name="casa_case[case_court_mandates_attributes][4][id]" id="casa_case_case_court_mandates_attributes_4_id">\
+      `))
+    })
+  })
+
+  test('removeCourtOrder should remove the elements passed to it', (done) => {
+    $(document).ready(() => {
+      try {
+        expect(courtOrderListElement.children().length).toBe(10)
+        expect($('#casa_case_case_court_mandates_attributes_4_mandate_text').length).toBe(1)
+        expect($('#casa_case_case_court_mandates_attributes_4_implementation_status').length).toBe(1)
+        expect($('#casa_case_case_court_mandates_attributes_4_id').length).toBe(1)
+        expect(document.body.innerHTML).toEqual(expect.stringContaining(courtOrdersText[4]))
+
+        courtOrderList.removeCourtOrder($('.court-mandate-entry').eq(4), $('#casa_case_case_court_mandates_attributes_4_id'))
+
+        expect(courtOrderListElement.children().length).toBe(8)
+        expect($('#casa_case_case_court_mandates_attributes_4_mandate_text').length).toBe(0)
+        expect($('#casa_case_case_court_mandates_attributes_4_implementation_status').length).toBe(0)
+        expect($('#casa_case_case_court_mandates_attributes_4_id').length).toBe(0)
+        expect(document.body.innerHTML).toEqual(expect.not.stringContaining(courtOrdersText[4]))
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
 })
