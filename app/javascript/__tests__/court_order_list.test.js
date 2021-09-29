@@ -155,4 +155,63 @@ describe('removeCourtOrder', () => {
       }
     })
   })
+
+  test('removeCourtOrder should shift the indicies of all the elements after the elements it removes', (done) => {
+    $(document).ready(() => {
+      try {
+        let inputs = courtOrderListElement.children('input')
+        let textareas = courtOrderListElement.find('textarea')
+        let selects = courtOrderListElement.find('select')
+
+        expect(inputs.length).toBe(5)
+        inputs.each(function (index) {
+          expect($(this).attr('id')).toBe(`casa_case_case_court_mandates_attributes_${index}_id`)
+          expect($(this).attr('name')).toBe(`casa_case[case_court_mandates_attributes][${index}][id]`)
+        })
+
+        expect(textareas.length).toBe(5)
+        textareas.each(function (index) {
+          expect($(this).html()).toBe(courtOrdersText[index])
+          expect($(this).attr('id')).toBe(`casa_case_case_court_mandates_attributes_${index}_mandate_text`)
+          expect($(this).attr('name')).toBe(`casa_case[case_court_mandates_attributes][${index}][mandate_text]`)
+        })
+
+        expect(selects.length).toBe(5)
+        selects.each(function (index) {
+          expect($(this).attr('id')).toBe(`casa_case_case_court_mandates_attributes_${index}_implementation_status`)
+          expect($(this).attr('name')).toBe(`casa_case[case_court_mandates_attributes][${index}][implementation_status]`)
+        })
+
+        courtOrderList.removeCourtOrder($('.court-mandate-entry').eq(0), $('#casa_case_case_court_mandates_attributes_0_id'))
+
+        expect(document.body.innerHTML).toEqual(expect.not.stringContaining(courtOrdersText[0]))
+
+        inputs = courtOrderListElement.children('input')
+        textareas = courtOrderListElement.find('textarea')
+        selects = courtOrderListElement.find('select')
+
+        expect(inputs.length).toBe(4)
+        inputs.each(function (index) {
+          expect($(this).attr('id')).toBe(`casa_case_case_court_mandates_attributes_${index}_id`)
+          expect($(this).attr('name')).toBe(`casa_case[case_court_mandates_attributes][${index}][id]`)
+        })
+
+        expect(textareas.length).toBe(4)
+        textareas.each(function (index) {
+          expect($(this).html()).toBe(courtOrdersText[index + 1])
+          expect($(this).attr('id')).toBe(`casa_case_case_court_mandates_attributes_${index}_mandate_text`)
+          expect($(this).attr('name')).toBe(`casa_case[case_court_mandates_attributes][${index}][mandate_text]`)
+        })
+
+        expect(selects.length).toBe(4)
+        selects.each(function (index) {
+          expect($(this).attr('id')).toBe(`casa_case_case_court_mandates_attributes_${index}_implementation_status`)
+          expect($(this).attr('name')).toBe(`casa_case[case_court_mandates_attributes][${index}][implementation_status]`)
+        })
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
 })
