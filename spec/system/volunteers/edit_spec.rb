@@ -225,9 +225,11 @@ RSpec.describe "volunteers/edit", type: :system do
   describe "send reminder as a supervisor" do
     let(:supervisor) { create(:supervisor, casa_org: organization) }
 
-    it "allows a supervisor to send case contact reminder to a volunteer" do
+    before(:each) do
       sign_in supervisor
+    end
 
+    it "emails the volunteer" do
       visit edit_volunteer_path(volunteer)
 
       expect(page).to have_button("Send Reminder")
@@ -236,19 +238,53 @@ RSpec.describe "volunteers/edit", type: :system do
       click_on "Send Reminder"
 
       expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.first.cc).to be_empty
+    end
+
+    it "emails volunteer and cc's the supervisor" do
+      visit edit_volunteer_path(volunteer)
+
+      check "with_cc"
+      click_on "Send Reminder"
+
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.first.cc).to include(volunteer.supervisor.email)
+    end
+
+    it "emails the volunteer without a supervisor" do
+      volunteer_without_supervisor = create(:volunteer)
+      visit edit_volunteer_path(volunteer_without_supervisor)
+
+      check "with_cc"
+      click_on "Send Reminder"
+
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.first.cc).to be_empty
     end
   end
 
-  it "send reminder as an admin" do
-    sign_in admin
+  describe "send reminder as admin" do
+    before(:each) do
+      sign_in admin
+      visit edit_volunteer_path(volunteer)
+    end
 
-    visit edit_volunteer_path(volunteer)
+    it "emails the volunteer" do
+      expect(page).to have_button("Send Reminder")
+      expect(page).to have_text("Send CC to Supervisor and Admin")
 
-    expect(page).to have_button("Send Reminder")
-    expect(page).to have_text("Send CC to Supervisor and Admin")
+      click_on "Send Reminder"
 
-    click_on "Send Reminder"
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+    end
 
-    expect(ActionMailer::Base.deliveries.count).to eq(1)
+    it "emails the volunteer and cc's their supervisor and admin" do
+      check "with_cc"
+      click_on "Send Reminder"
+
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.first.cc).to include(volunteer.supervisor.email)
+      expect(ActionMailer::Base.deliveries.first.cc).to include(admin.email)
+    end
   end
 end
