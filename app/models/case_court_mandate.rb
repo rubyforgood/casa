@@ -7,6 +7,17 @@ class CaseCourtMandate < ApplicationRecord
   validates :mandate_text, presence: true
 
   enum implementation_status: IMPLEMENTATION_STATUSES
+
+  def implementation_status_symbol
+    case implementation_status
+    when 'implemented'
+      '✅'.freeze
+    when 'partially_implemented'
+      '🕗'.freeze
+    else
+      '❌'.freeze
+    end
+  end
 end
 
 # == Schema Information
