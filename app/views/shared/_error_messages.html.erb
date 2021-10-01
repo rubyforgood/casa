@@ -1,6 +1,6 @@
 <% if resource.errors.any? %>
   <% full_error_messages = resource.errors.full_messages %>
-  <% if full_error_messages.join(' ').include? "Password" %>
+  <% if full_error_messages.join(' ').downcase.include? "password" %>
     <% error_messages_heading = "prohibited this password change from being saved:" %>
   <% else %>
     <% error_messages_heading = "prohibited this #{resource.model_name.human} from being saved:" %>

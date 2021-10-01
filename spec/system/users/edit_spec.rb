@@ -26,7 +26,7 @@ RSpec.describe "users/edit", type: :system do
       fill_in "New Password Confirmation", with: "1234567"
 
       click_on "Update Password"
-      expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
+      expect(page).to have_content "1 error prohibited this password change from being saved:"
       expect(page).to have_text("Current password is incorrect")
     end
 
