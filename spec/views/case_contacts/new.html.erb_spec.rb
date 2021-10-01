@@ -21,6 +21,5 @@ RSpec.describe "case_contacts/new", type: :view do
 
     it { is_expected.to have_field("Occurred at", with: current_time) }
     it { is_expected.to have_selector("textarea", id: "case_contact_notes") }
-
   end
 end

@@ -12,5 +12,4 @@ RSpec.describe "volunteers/new", type: :view do
       sign_in_as_admin
     end
   end
-
 end
