@@ -16,7 +16,7 @@ context("Logging into cypress as a volunteer", () => {
     cy.get("#case_contact_contact_made_true").check();  // 'Contact made'
     cy.get("#case_contact_medium_type").select("In Person");
     cy.get("#casa-contact-duration-minutes-display").type('15');
-    cy.get("#casa-contact-miles-driven").type('1');
+    cy.get("#casa-contact-miles-driven").type(1);
     cy.contains("Submit").click();
     cy.contains("Case contact was successfully created.").should("exist");
   });
@@ -29,7 +29,7 @@ context("Logging into cypress as a volunteer", () => {
     cy.get("#case_contact_contact_made_false").check(); // 'No contact made'
     cy.get("#case_contact_medium_type").select("Letter");
     cy.get("#casa-contact-duration-minutes-display").type('15');
-    cy.get("#casa-contact-miles-driven").type('1');
+    cy.get("#casa-contact-miles-driven").type(1);
 
     const note = faker.lorem.sentence();
     cy.get("#case_contact_notes").type(note);
