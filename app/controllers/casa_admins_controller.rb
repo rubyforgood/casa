@@ -43,7 +43,7 @@ class CasaAdminsController < ApplicationController
     if @casa_admin.activate
       CasaAdminMailer.account_setup(@casa_admin).deliver
 
-      redirect_to edit_casa_admin_path(@casa_admin), notice: "Admin was activated. They have been sent an email."
+      redirect_to edit_casa_admin_path(@casa_admin), notice: "Admin was activated."
     else
       render :edit
     end

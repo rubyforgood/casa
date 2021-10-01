@@ -52,7 +52,7 @@ class SupervisorsController < ApplicationController
     if @supervisor.activate
       SupervisorMailer.account_setup(@supervisor).deliver
 
-      redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was activated. They have been sent an email."
+      redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was activated."
     else
       render :edit, notice: "Supervisor could not be activated."
     end
