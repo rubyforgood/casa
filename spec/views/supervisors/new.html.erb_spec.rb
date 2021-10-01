@@ -11,6 +11,5 @@ RSpec.describe "supervisors/new", type: :view do
     before do
       sign_in_as_admin
     end
-
   end
 end
