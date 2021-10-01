@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "case_contacts/edit", type: :system do
   let(:organization) { build(:casa_org) }
   let(:casa_case) { build(:casa_case, casa_org: organization) }
-  let!(:case_contact) { create(:case_contact, duration_minutes: 105, casa_case: casa_case) }
+  let!(:case_contact) { create(:case_contact, duration_minutes: 105, miles_driven: 1, casa_case: casa_case) }
 
   context "when admin" do
     let(:admin) { create(:casa_admin, casa_org: organization) }
@@ -43,7 +43,7 @@ RSpec.describe "case_contacts/edit", type: :system do
     let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
 
     it "is successful", js: true do
-      case_contact = create(:case_contact, duration_minutes: 105, casa_case: casa_case, creator: volunteer)
+      case_contact = create(:case_contact, duration_minutes: 105, miles_driven: 1, casa_case: casa_case, creator: volunteer)
       sign_in volunteer
       visit edit_case_contact_path(case_contact)
 
@@ -60,7 +60,7 @@ RSpec.describe "case_contacts/edit", type: :system do
     end
 
     context "when the case contact occurred last quarter" do
-      let!(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 5.months.ago) }
+      let!(:case_contact) { create(:case_contact, creator: volunteer, miles_driven: 1, casa_case: casa_case, occurred_at: 5.months.ago) }
 
       before do
         sign_in volunteer
