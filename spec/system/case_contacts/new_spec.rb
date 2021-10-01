@@ -278,6 +278,39 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(case_contact.duration_minutes).to eq 105
     end
 
+    it "autosaves notes", js: true do
+      volunteer = create(:volunteer, :with_casa_cases)
+      volunteer_casa_case_one = volunteer.casa_cases.first
+      create_contact_types(volunteer_casa_case_one.casa_org)
+
+      sign_in volunteer
+
+      visit new_case_contact_path(volunteer_casa_case_one.id)
+
+      check volunteer_casa_case_one.case_number
+      check "School"
+      check "Therapist"
+      choose "Yes"
+      select "In Person", from: "Contact medium"
+      fill_in "case-contact-duration-hours", with: "1"
+      fill_in "case-contact-duration-minutes", with: "45"
+      fill_in "Occurred at", with: "04/04/2020"
+      fill_in "Miles driven", with: "30"
+      select "Yes", from: "Want driving reimbursement"
+      fill_in "Notes", with: "Hello world"
+
+      # Allow 5 seconds for the Notes to be saved in localstorage
+      sleep 5
+
+      click_on "Log out"
+
+      sign_in volunteer
+
+      visit new_case_contact_path
+
+      expect(page).to have_field("Notes", with: "Hello world")
+    end
+
     it "submits the form when no note was added", js: true do
       volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first

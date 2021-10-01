@@ -68,15 +68,18 @@ $('document').ready(() => {
         }
       })
 
+      const possibleCaseNumberPrefixes = ['CINA', 'TPR']
       const status = data[3]
       const assignedToVolunteer = (data[5] !== '' && data[5].split(',').length >= 1) ? 'Yes' : 'No'
       const assignedToMoreThanOneVolunteer = (data[5] !== '' && data[5].split(',').length > 1) ? 'Yes' : 'No'
       const assignedToTransitionYouth = data[4]
+      const caseNumberPrefix = possibleCaseNumberPrefixes.includes(data[0].split('-')[0]) ? data[0].split('-')[0] : 'None'
 
       return statusArray.includes(status) &&
         assignedToVolunteerArray.includes(assignedToVolunteer) &&
         assignedToMoreThanOneVolunteerArray.includes(assignedToMoreThanOneVolunteer) &&
-        assignedToTransitionYouthArray.includes(assignedToTransitionYouth)
+        assignedToTransitionYouthArray.includes(assignedToTransitionYouth) &&
+        caseNumberPrefixArray.includes(caseNumberPrefix)
     }
   )
 
