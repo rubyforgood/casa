@@ -530,6 +530,30 @@ RSpec.describe "case_contacts/new", type: :system do
       end
     end
 
+    context "UTC day is ahead of current timezone day" do
+      before do
+        travel_to Time.zone.parse("2021-9-30 18:00:00 -0600")
+      end
+
+      after do
+        travel_back
+      end
+
+      it "populates the Occurred At date in the local time zone" do
+        org = build(:casa_org)
+        contact_type_group = create_contact_types(org)
+        volunteer = create(:volunteer, :with_casa_cases, casa_org: org)
+        contact_types_for_cases = contact_type_group.contact_types.reject { |ct| ct.name == "Attorney" }
+        assign_contact_types_to_cases(volunteer.casa_cases, contact_types_for_cases)
+
+        sign_in volunteer
+
+        visit new_case_contact_path
+
+        expect(page).to have_field("case_contact_occurred_at", with: "2021-09-30")
+      end
+    end
+
     private
 
     def create_contact_types(org)

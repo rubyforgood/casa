@@ -127,7 +127,7 @@
 
   <div class="field occurred-at form-group">
     <h2><%= form.label :occurred_at %></h2>
-    <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
+    <% occurred_at = @case_contact.occurred_at || Time.now %>
     <%= form.text_field :occurred_at,
                         value: occurred_at.to_date,
                         data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
