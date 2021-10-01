@@ -207,7 +207,7 @@ RSpec.describe CaseCourtReport, type: :model do
     end
   end
 
-  fdescribe "when court mandates has different implementation statuses" do
+  describe "when court mandates has different implementation statuses" do
     let(:casa_case) { create(:casa_case, case_number: 'Sample-Case-12345') }
     let(:court_mandate_implemented) { create(:case_court_mandate, casa_case: casa_case, mandate_text: 'This order is implemented already', implementation_status: :implemented) }
     let(:court_mandate_not_implemented) { create(:case_court_mandate, casa_case: casa_case, mandate_text: 'This order is not implemented yet', implementation_status: :not_implemented) }
