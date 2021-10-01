@@ -37,6 +37,7 @@ RSpec.describe "casa_cases/show", type: :system do
     it "can see court mandates" do
       expect(page).to have_content("Court Orders")
       expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
+      expect(page).to have_content(casa_case.case_court_mandates[0].implementation_status_symbol)
     end
   end
 
@@ -59,6 +60,7 @@ RSpec.describe "casa_cases/show", type: :system do
     it "can see court mandates" do
       expect(page).to have_content("Court Orders")
       expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
+      expect(page).to have_content(casa_case.case_court_mandates[0].implementation_status_symbol)
     end
 
     context "when generating a report, supervisor sees waiting page", js: true do
@@ -94,6 +96,7 @@ RSpec.describe "casa_cases/show", type: :system do
     it "can see court mandates" do
       expect(page).to have_content("Court Orders")
       expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
+      expect(page).to have_content(casa_case.case_court_mandates[0].implementation_status_symbol)
     end
   end
 end
