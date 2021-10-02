@@ -1,4 +1,4 @@
-class CaseCourtMandate < ApplicationRecord
+class CaseCourtOrder < ApplicationRecord
   IMPLEMENTATION_STATUSES = {not_implemented: 1, partially_implemented: 2, implemented: 3}
 
   belongs_to :casa_case
@@ -11,7 +11,7 @@ end
 
 # == Schema Information
 #
-# Table name: case_court_mandates
+# Table name: case_court_orders
 #
 #  id                    :bigint           not null, primary key
 #  implementation_status :integer
@@ -23,8 +23,8 @@ end
 #
 # Indexes
 #
-#  index_case_court_mandates_on_casa_case_id        (casa_case_id)
-#  index_case_court_mandates_on_past_court_date_id  (past_court_date_id)
+#  index_case_court_orders_on_casa_case_id        (casa_case_id)
+#  index_case_court_orders_on_past_court_date_id  (past_court_date_id)
 #
 # Foreign Keys
 #
