@@ -15,6 +15,10 @@ module DownloadHelpers
     File.read(download)
   end
 
+  def download_file_name
+    File.basename(download)
+  end
+
   def wait_for_download
     Timeout.timeout(TIMEOUT) do
       sleep 0.1 until downloaded?
