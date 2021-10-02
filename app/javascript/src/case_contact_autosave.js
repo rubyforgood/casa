@@ -24,7 +24,9 @@ $('document').ready(() => {
     document.onload = populateForm() // populate the form when the document is loaded
 
     form.onsubmit = event => {
-      window.localStorage.removeItem(formId)
+      if (document.querySelector('.header-flash').textContent.includes('successfully created')) {
+        window.localStorage.removeItem(formId)
+      }
     }
   }
 })
