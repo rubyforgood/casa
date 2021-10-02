@@ -1,13 +1,13 @@
 require "rails_helper"
 
-RSpec.describe "/case_court_mandates", type: :request do
-  subject(:delete_request) { delete case_court_mandate_url(case_court_mandate) }
-  let(:case_court_mandate) { build(:case_court_mandate) }
+RSpec.describe "/case_court_orders", type: :request do
+  subject(:delete_request) { delete case_court_order_url(case_court_order) }
+  let(:case_court_order) { build(:case_court_order) }
 
   before do
     sign_in user
     casa_case = create(:casa_case)
-    casa_case.case_court_mandates << case_court_mandate
+    casa_case.case_court_orders << case_court_order
   end
 
   describe "as an admin" do
@@ -19,8 +19,8 @@ RSpec.describe "/case_court_mandates", type: :request do
         expect(response).to be_successful
       end
 
-      it "deletes the court mandate" do
-        expect { delete_request }.to change(CaseCourtMandate, :count).from(1).to(0)
+      it "deletes the court order" do
+        expect { delete_request }.to change(CaseCourtorder, :count).from(1).to(0)
       end
     end
   end
@@ -34,8 +34,8 @@ RSpec.describe "/case_court_mandates", type: :request do
         expect(response).to be_successful
       end
 
-      it "deletes the court mandate" do
-        expect { delete_request }.to change(CaseCourtMandate, :count).from(1).to(0)
+      it "deletes the court order" do
+        expect { delete_request }.to change(CaseCourtorder, :count).from(1).to(0)
       end
     end
   end
@@ -50,8 +50,8 @@ RSpec.describe "/case_court_mandates", type: :request do
         expect(response.status).to be(302)
       end
 
-      it "deletes the court mandate" do
-        expect { delete_request }.to_not change(CaseCourtMandate, :count)
+      it "deletes the court order" do
+        expect { delete_request }.to_not change(CaseCourtorder, :count)
       end
     end
   end

@@ -5,7 +5,7 @@ RSpec.describe "casa_cases/show", type: :system do
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:volunteer) { build(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
   let(:casa_case) {
-    create(:casa_case, :with_one_court_mandate, casa_org: organization,
+    create(:casa_case, :with_one_court_order, casa_org: organization,
     case_number: "CINA-1", transition_aged_youth: true)
   }
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
@@ -34,9 +34,9 @@ RSpec.describe "casa_cases/show", type: :system do
       expect(page).to have_link(href: "/users/edit")
     end
 
-    it "can see court mandates" do
-      expect(page).to have_content("Court Orders")
-      expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
+    it "can see court orders" do
+      expect(page).to have_content("Court Mandates")
+      expect(page).to have_content(casa_case.case_court_orders[0].mandate_text)
     end
   end
 
@@ -56,9 +56,9 @@ RSpec.describe "casa_cases/show", type: :system do
       end
     end
 
-    it "can see court mandates" do
-      expect(page).to have_content("Court Orders")
-      expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
+    it "can see court orders" do
+      expect(page).to have_content("Court Mandates")
+      expect(page).to have_content(casa_case.case_court_orders[0].mandate_text)
     end
 
     context "when generating a report, supervisor sees waiting page", js: true do
@@ -91,9 +91,9 @@ RSpec.describe "casa_cases/show", type: :system do
       expect(page).to have_link("Emancipation 0 / #{emancipation_categories.size}")
     end
 
-    it "can see court mandates" do
-      expect(page).to have_content("Court Orders")
-      expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
+    it "can see court orders" do
+      expect(page).to have_content("Court Mandates")
+      expect(page).to have_content(casa_case.case_court_orders[0].mandate_text)
     end
   end
 end

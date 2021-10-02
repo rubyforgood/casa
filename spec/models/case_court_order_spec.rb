@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe CaseCourtMandate, type: :model do
-  subject { build(:case_court_mandate) }
+RSpec.describe CaseCourtOrder, type: :model do
+  subject { build(:case_court_order) }
 
   it { is_expected.to belong_to(:casa_case) }
 

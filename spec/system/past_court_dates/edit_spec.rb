@@ -17,10 +17,10 @@ RSpec.describe "past_court_dates/edit", type: :system do
   end
 
   it "shows court mandates" do
-    court_mandate = past_court_date.case_court_mandates.first
+    court_order = past_court_date.case_court_orders.first
 
-    expect(page).to have_text(court_mandate.mandate_text)
-    expect(page).to have_text(court_mandate.implementation_status.humanize)
+    expect(page).to have_text(court_order.mandate_text)
+    expect(page).to have_text(court_order.implementation_status.humanize)
   end
 
   it "edits past court date", js: true do
