@@ -86,19 +86,14 @@ RSpec.describe "casa_cases/new", type: :system do
   end
 
   context "contact types" do
-    let!(:casa_case) do
-      create(:casa_case, :with_contact_types, case_number: case_number, casa_org: casa_org)
-    end
-    let(:contact_types) { ContactType.for_organization(casa_org) }
+    let(:contact_type_group) { create(:contact_type_group, casa_org: casa_org) }
+    let!(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
 
     it "are shown in groups" do
       visit new_casa_case_path
 
-      expect(contact_types.count).to eq 3
-      contact_types.each do |contact_type|
-        expect(page).to have_content(contact_type.name)
-        expect(page).to have_content(contact_type.contact_type_group.name)
-      end
+      expect(page).to have_content(contact_type.name)
+      expect(page).to have_content(contact_type_group.name)
     end
   end
 end
