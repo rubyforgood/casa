@@ -10,12 +10,12 @@ class CaseCourtMandate < ApplicationRecord
 
   def implementation_status_symbol
     case implementation_status
-    when 'implemented'
-      '✅'.freeze
-    when 'partially_implemented'
-      '🕗'.freeze
+    when "implemented"
+      "✅".freeze
+    when "partially_implemented"
+      "🕗".freeze
     else
-      '❌'.freeze
+      "❌".freeze
     end
   end
 end

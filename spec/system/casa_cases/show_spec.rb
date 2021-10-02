@@ -110,7 +110,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
       expect(page).to have_content("Court Orders")
       expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
-      expect(page).to have_content('✅')
+      expect(page).to have_content("✅")
     end
 
     it "when not implemented" do
@@ -120,7 +120,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
       expect(page).to have_content("Court Orders")
       expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
-      expect(page).to have_content('❌')
+      expect(page).to have_content("❌")
     end
 
     it "when partiall implemented" do
@@ -130,7 +130,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
       expect(page).to have_content("Court Orders")
       expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
-      expect(page).to have_content('🕗')
+      expect(page).to have_content("🕗")
     end
 
     it "when not specified" do
@@ -140,7 +140,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
       expect(page).to have_content("Court Orders")
       expect(page).to have_content(casa_case.case_court_mandates[0].mandate_text)
-      expect(page).to have_content('❌')
+      expect(page).to have_content("❌")
     end
   end
 end
