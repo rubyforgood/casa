@@ -103,7 +103,7 @@ Rails.application.routes.draw do
       patch :unassign
     end
   end
-  resources :case_court_mandates, only: %i[destroy]
+  resources :case_court_orders, only: %i[destroy]
 
   namespace :all_casa_admins do
     resources :casa_orgs, only: [:new, :create, :show] do
