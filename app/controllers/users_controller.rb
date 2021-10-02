@@ -71,7 +71,7 @@ class UsersController < ApplicationController
   end
 
   def set_custom_error_heading
-    @custom_error_header = 'password change'
+    @custom_error_header = "password change"
   end
 
   def reset_custom_error_heading
