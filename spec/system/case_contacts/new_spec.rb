@@ -317,13 +317,10 @@ RSpec.describe "case_contacts/new", type: :system do
 
       visit new_case_contact_path
 
-      check "Parent"
-      check "Sibling"
       choose "Yes"
       select "In Person", from: "Contact medium"
       fill_in "case-contact-duration-hours", with: "1"
       fill_in "case-contact-duration-minutes", with: "45"
-      fill_in "Occurred at", with: "04/04/2020"
       fill_in "Miles driven", with: "30"
       select "Yes", from: "Want driving reimbursement"
       fill_in "Notes", with: "Hello world"
@@ -331,7 +328,7 @@ RSpec.describe "case_contacts/new", type: :system do
       # Allow 5 seconds for the Notes to be saved in localstorage
       sleep 5
       click_on "Submit"
-
+      click_on "Continue Submitting"
       expect(page).to have_text("At least one case must be selected")
 
       visit new_case_contact_path
