@@ -164,7 +164,7 @@
             form: form,
             model: casa_case,
             contact_type_groups: @contact_types.map(&:contact_type_group).sort_by(&:name).uniq,
-            selected_case_contact_types: casa_case.contact_types,
+            selected_case_contact_types: [],
             checkbox_tag_name: "casa_case[casa_case_contact_types_attributes][][contact_type_id]" %>
       <% end %>
 
