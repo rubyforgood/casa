@@ -401,6 +401,7 @@ en:
       unassigned: Unassigned
       volunteer_email: Volunteer Email
       volunteer_name: Volunteer Name
+      currently_assigned_to: Currently Assigned To
       volunteer_title:
         zero: Assigned Volunteers
         one: All Volunteers
