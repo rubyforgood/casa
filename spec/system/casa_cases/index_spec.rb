@@ -22,7 +22,6 @@ RSpec.describe "casa_cases/index", type: :system do
     click_on "Status"
     click_on "Assigned to Volunteer"
     click_on "Assigned to more than 1 Volunteer"
-    click_on "Assigned to Transition Aged Youth"
     click_on "Casa Case Prefix"
   end
 end

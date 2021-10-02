@@ -78,7 +78,7 @@ RSpec.describe "case_court_reports/index", type: :system do
 
   describe "'Case Number' dropdown list", js: true do
     let(:case_number) { casa_cases.first.case_number.to_s }
-    let(:option_text) { "#{case_number} - (assigned to Name Last)" }
+    let(:option_text) { "#{case_number} (assigned to Name Last)" }
 
     it "has case option selected" do
       page.select option_text, from: "case-selection"
