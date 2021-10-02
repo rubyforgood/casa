@@ -23,7 +23,8 @@ class ApplicationController < ActionController::Base
 
   def json_response(obj:, status:)
     return unless api?
-    return render json: obj.errors.full_messages, status: status if status == :unprocessable_entity
+
+    obj = obj.errors.full_messages if status == :unprocessable_entity
 
     render json: obj, status: status
   end
@@ -44,6 +45,6 @@ class ApplicationController < ActionController::Base
   end
 
   def api?
-    params[:api]&.to_boolean
+    params.fetch(:api, "false").downcase == "true"
   end
 end
