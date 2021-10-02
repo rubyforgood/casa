@@ -344,8 +344,6 @@ en:
         import_volunteers: Import Volunteers
         import_supervisors: Import Supervisors
         import_cases: Import Cases
-      link:
-        return_to_dashboard: Return To Dashboard
   judges:
     edit:
       title: Edit Judge
