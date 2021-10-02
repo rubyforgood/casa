@@ -7,11 +7,11 @@ class PastCourtDate < ApplicationRecord
   validates :casa_case_id, presence: true
   validate :date_must_be_past
 
-  has_many :case_court_mandates
+  has_many :case_court_orders
   belongs_to :hearing_type, optional: true
   belongs_to :judge, optional: true
 
-  accepts_nested_attributes_for :case_court_mandates, reject_if: :all_blank
+  accepts_nested_attributes_for :case_court_orders, reject_if: :all_blank
 
   scope :ordered_ascending, -> { order("date asc") }
 
@@ -40,7 +40,7 @@ class PastCourtDate < ApplicationRecord
   end
 
   def additional_info?
-    case_court_mandates.any? || hearing_type || judge
+    case_court_orders.any? || hearing_type || judge
   end
 
   def generate_report
@@ -61,15 +61,15 @@ class PastCourtDate < ApplicationRecord
       case_number: casa_case.case_number,
       judge_name: judge&.name || "None",
       hearing_type_name: hearing_type&.name || "None",
-      case_court_mandates: case_court_mandates_context_hash
+      case_court_orders: case_court_orders_context_hash
     }
   end
 
-  def case_court_mandates_context_hash
-    case_court_mandates.map do |mandate|
+  def case_court_orders_context_hash
+    case_court_orders.map do |order|
       {
-        text: mandate.mandate_text,
-        implementation_status: mandate.implementation_status&.humanize
+        text: order.mandate_text,
+        implementation_status: order.implementation_status&.humanize
       }
     end
   end

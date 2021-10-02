@@ -40,8 +40,8 @@ class CasaCase < ApplicationRecord
   has_many :contact_types, through: :casa_case_contact_types, source: :contact_type
   accepts_nested_attributes_for :casa_case_contact_types
 
-  has_many :case_court_mandates, -> { order "id asc" }, dependent: :destroy
-  accepts_nested_attributes_for :case_court_mandates, reject_if: :all_blank
+  has_many :case_court_orders, -> { order "id asc" }, dependent: :destroy
+  accepts_nested_attributes_for :case_court_orders, reject_if: :all_blank
 
   enum court_report_status: {not_submitted: 0, submitted: 1, in_review: 2, completed: 3}, _prefix: :court_report
 
@@ -168,7 +168,7 @@ class CasaCase < ApplicationRecord
       #   new_past_court_date = PastCourtDate.new(
       #     date: court_report_due_date,
       #     casa_case_id: casa_case.id,
-      #     case_court_mandates: casa_case.case_court_mandates,
+      #     case_court_orders: casa_case.case_court_orders,
       #     hearing_type_id: casa_case.hearing_type_id,
       #     judge_id: casa_case.judge_id
       #   )
