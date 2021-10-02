@@ -78,6 +78,7 @@ RSpec.describe "supervisors/index", type: :system do
         let(:column_to_sort) { "Volunteer Assignments" }
 
         # TODO: uncomment this line when sort by Volunteer Assignments is available
+        # Issue: https://github.com/rubyforgood/casa/issues/2683
         # it_behaves_like "functioning sort buttons"
       end
 
@@ -85,6 +86,7 @@ RSpec.describe "supervisors/index", type: :system do
         let(:column_to_sort) { "Serving Transition Aged Youth" }
 
         # TODO: uncomment this line when sort by Serving Transition Aged Youth is available
+        # Issue: https://github.com/rubyforgood/casa/issues/2683
         # it_behaves_like "functioning sort buttons"
       end
 
@@ -92,6 +94,7 @@ RSpec.describe "supervisors/index", type: :system do
         let(:column_to_sort) { "No Attempt (14 days)" }
 
         # TODO: uncomment this line when sort by No Attempt (14 days) is available
+        # Issue: https://github.com/rubyforgood/casa/issues/2683
         # it_behaves_like "functioning sort buttons"
       end
     end
