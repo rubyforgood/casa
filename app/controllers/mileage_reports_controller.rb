@@ -10,7 +10,7 @@ class MileageReportsController < ApplicationController
     respond_to do |format|
       format.csv do
         send_data mileage_report.to_csv,
-          filename: "mileage-report-#{Time.zone.now.to_i}.csv"
+          filename: "mileage-report-#{Time.current.strftime("%Y-%m-%d")}.csv"
       end
     end
   end
