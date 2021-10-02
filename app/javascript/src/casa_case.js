@@ -157,7 +157,7 @@ $('document').ready(() => {
 
   $('#btnGenerateReport').on('click', handleGenerateReport)
 
-  $('.court-mandates textarea').each(function() {
+  $('.court-mandates textarea').each(function () {
     $(this).height($(this).prop('scrollHeight'))
   })
 })
