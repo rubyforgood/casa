@@ -51,7 +51,7 @@ task check_app_rb_files_for_spec_files: :environment do
   def ignore_files
     return @ignore_files if @ignore_files
     file_lines = File.readlines(DENY_FILESPEC).map(&:chomp)
-    @ignore_files =  file_lines.reject { |line|  /\s*#/.match(line) }  # exclude comment lines
+    @ignore_files = file_lines.reject { |line| /\s*#/.match(line) }  # exclude comment lines
   end
 
   # puts "Ignore files: \n #{ignore_files.join("\n")}"
@@ -71,11 +71,11 @@ task check_app_rb_files_for_spec_files: :environment do
     percent = (100 * (missing_but_denied_files.size.to_f) / app_files.size)
     puts <<~TEXT
 
-    #{DASHED_LINE}
-    #{missing_but_denied_files.size} of #{app_files.size} app files (#{percent.round(1)}%) did not have a corresponding spec file
-    but were listed in the deny file (#{DENY_FILESPEC}):
-      
-    #{amazing_printize(missing_but_denied_files)}
+      #{DASHED_LINE}
+      #{missing_but_denied_files.size} of #{app_files.size} app files (#{percent.round(1)}%) did not have a corresponding spec file
+      but were listed in the deny file (#{DENY_FILESPEC}):
+
+      #{amazing_printize(missing_but_denied_files)}
     TEXT
   end
 
@@ -83,11 +83,11 @@ task check_app_rb_files_for_spec_files: :environment do
     percent = (100 * (missing_and_not_denied_spec_files.size.to_f) / app_files.size)
     puts <<~ERROR_TXT
 
-    #{DASHED_LINE}
-    #{missing_and_not_denied_spec_files.size} of #{app_files.size} app files (#{percent.round(1)}%) did not have a corresponding spec file
-    and are not in the deny list:
+      #{DASHED_LINE}
+      #{missing_and_not_denied_spec_files.size} of #{app_files.size} app files (#{percent.round(1)}%) did not have a corresponding spec file
+      and are not in the deny list:
 
-    #{amazing_printize(missing_and_not_denied_spec_files)}
+      #{amazing_printize(missing_and_not_denied_spec_files)}
 
     ERROR_TXT
   end
