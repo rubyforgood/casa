@@ -83,4 +83,8 @@ class CasaCaseDecorator < Draper::Decorator
   def emancipation_checklist_count
     "#{object.casa_case_emancipation_categories.count} / #{EmancipationCategory.count}"
   end
+
+  def show_contact_type?(contact_type_id)
+    object.casa_case_contact_types.map(&:contact_type_id).include?(contact_type_id)
+  end
 end
