@@ -165,7 +165,7 @@ RSpec.describe "/supervisors", type: :request do
 
     it "activates an inactive supervisor" do
       patch activate_supervisor_path(inactive_supervisor)
-
+      expect(flash[:notice]).to eq("Supervisor was activated. They have been sent an email.")
       inactive_supervisor.reload
       expect(inactive_supervisor.active).to be true
     end

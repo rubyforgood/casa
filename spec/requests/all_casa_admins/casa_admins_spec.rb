@@ -93,7 +93,7 @@ RSpec.describe "All-Casa Admin" do
         patch activate_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin)
 
         expect(response).to redirect_to edit_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin)
-        expect(flash[:notice]).to eq("Admin was activated.")
+        expect(flash[:notice]).to eq("Admin was activated. They have been sent an email.")
         expect(casa_admin.reload.active).to eq(true)
       end
 
