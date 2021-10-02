@@ -77,5 +77,4 @@ class UsersController < ApplicationController
   def reset_custom_error_heading
     @custom_error_header = nil
   end
-
 end
