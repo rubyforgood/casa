@@ -311,6 +311,32 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(page).to have_field("Notes", with: "Hello world")
     end
 
+    it "delete local storage notes after successfuly submited", js: true do
+      volunteer = create(:volunteer)
+      sign_in volunteer
+
+      visit new_case_contact_path
+
+      check "School"
+      check "Therapist"
+      choose "Yes"
+      select "In Person", from: "Contact medium"
+      fill_in "case-contact-duration-hours", with: "1"
+      fill_in "case-contact-duration-minutes", with: "45"
+      fill_in "Occurred at", with: "04/04/2020"
+      fill_in "Miles driven", with: "30"
+      select "Yes", from: "Want driving reimbursement"
+      fill_in "Notes", with: "Hello world"
+
+      # Allow 5 seconds for the Notes to be saved in localstorage
+      sleep 5
+      click_on "Submit"
+
+      visit new_case_contact_path
+
+      expect(page).to have_field("Notes", with: "Hello world")
+    end
+
     it "submits the form when no note was added", js: true do
       volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first
