@@ -19,6 +19,18 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  protected
+
+  def json_response(obj:, status:)
+    return render json: obj.errors.full_messages, status: status if status == :unprocessable_entity
+
+    render json: obj, status: status
+  end
+
+  def api?
+    params[:api]&.to_boolean
+  end
+
   private
 
   def set_current_user
