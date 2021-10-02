@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "past_court_dates/show", type: :view do
   shared_examples_for "a past court date with all court details" do
     let(:past_court_date) { create(:past_court_date, :with_court_details) }
-    let(:case_court_mandate) { past_court_date.case_court_mandates.first }
+    let(:case_court_order) { past_court_date.case_court_orders.first }
 
     before { render template: "past_court_dates/show" }
 
@@ -12,8 +12,8 @@ RSpec.describe "past_court_dates/show", type: :view do
       expect(rendered).to include(ERB::Util.html_escape(past_court_date.judge.name))
       expect(rendered).to include(past_court_date.hearing_type.name)
 
-      expect(rendered).to include(case_court_mandate.mandate_text)
-      expect(rendered).to include(case_court_mandate.implementation_status.humanize)
+      expect(rendered).to include(case_court_order.mandate_text)
+      expect(rendered).to include(case_court_order.implementation_status.humanize)
     end
 
     context "when judge's name has escaped characters" do
