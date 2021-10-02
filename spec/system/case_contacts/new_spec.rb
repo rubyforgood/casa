@@ -317,8 +317,8 @@ RSpec.describe "case_contacts/new", type: :system do
 
       visit new_case_contact_path
 
-      check "School"
-      check "Therapist"
+      check "Parent"
+      check "Sibling"
       choose "Yes"
       select "In Person", from: "Contact medium"
       fill_in "case-contact-duration-hours", with: "1"
