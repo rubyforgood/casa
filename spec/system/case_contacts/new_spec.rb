@@ -332,6 +332,8 @@ RSpec.describe "case_contacts/new", type: :system do
       sleep 5
       click_on "Submit"
 
+      expect(page).to have_text("At least one case must be selected")
+
       visit new_case_contact_path
 
       expect(page).to have_field("Notes", with: "Hello world")
