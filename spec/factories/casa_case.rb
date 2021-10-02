@@ -42,4 +42,14 @@ FactoryBot.define do
       end
     end
   end
+
+  trait :with_contact_types do
+    after(:create) do |casa_case|
+      3.times do
+        group = create(:contact_type_group, casa_org: casa_case.casa_org)
+        contact_type = create(:contact_type, contact_type_group: group)
+        casa_case.contact_types << contact_type
+      end
+    end
+  end
 end
