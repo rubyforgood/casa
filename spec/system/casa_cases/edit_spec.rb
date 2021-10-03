@@ -6,10 +6,8 @@ RSpec.describe "Edit CASA Case", type: :system do
     let(:organization) { build(:casa_org) }
     let(:admin) { create(:casa_admin, casa_org: organization) }
     let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: organization) }
-    let!(:judge) { build(:judge, casa_org: organization) }
-    let(:contact_type_group) { build(:contact_type_group, casa_org: organization) }
-    let!(:school) { build(:contact_type, name: "School", contact_type_group: contact_type_group) }
-    let!(:therapist) { build(:contact_type, name: "Therapist", contact_type_group: contact_type_group) }
+    let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
+    let!(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
 
     before { sign_in admin }
 
@@ -30,6 +28,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_select("Hearing type")
       expect(page).to have_select("Judge")
       select "Submitted", from: "casa_case_court_report_status"
+      check contact_type.name
 
       page.find("#add-mandate-button").click
       find("#mandates-list-container").first("textarea").send_keys("Court Mandate Text One")
@@ -45,6 +44,9 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Year")
       expect(page).to have_text("Court Mandate Text One")
       expect(page).not_to have_text("Deactivate Case")
+
+      expect(casa_case.contact_types).to eq [contact_type]
+      has_checked_field? contact_type.name
     end
 
     it "deactivates a case", js: true do
