@@ -115,14 +115,14 @@
         <div class="field form-group court-mandates">
           <%= form.label :case_court_mandates, "#{t(".court_mandates")} - #{t(".court_mandate_privacy_warning")}" %>
 
-          <% if policy(casa_case).update_court_mandates? %>
+          <% if policy(casa_case).update_court_orders? %>
             <div id="mandates-list-container">
-              <%= form.fields_for :case_court_mandates do |ff| %>
+              <%= form.fields_for :case_court_orders do |ff| %>
                 <div class="court-mandate-entry">
                   <%= ff.text_area :mandate_text %>
                   <%=
                     ff.select :implementation_status,
-                              @casa_case.decorate.court_mandate_select_options,
+                              @casa_case.decorate.court_order_select_options,
                               {include_blank: 'Set Implementation Status', selected: ff.object.implementation_status},
                               {class: 'implementation-status'}
                   %>
@@ -138,14 +138,14 @@
             </div>
           <% else %>
             <div id="mandate-list-container">
-              <% @casa_case.case_court_mandates.each do |mandate| %>
+              <% @casa_case.case_court_orders.each do |order| %>
                 <div class="court-mandate-entry">
-                  <textarea disabled><%= mandate.mandate_text %></textarea>
+                  <textarea disabled><%= order.mandate_text %></textarea>
 
-                  <% if mandate.implementation_status %>
+                  <% if order.implementation_status %>
                     <p class="implementation-status">
                       <strong>Status:</strong>
-                      <%= mandate.implementation_status.humanize %>
+                      <%= order.implementation_status.humanize %>
                     </p>
                   <% end %>
                 </div>

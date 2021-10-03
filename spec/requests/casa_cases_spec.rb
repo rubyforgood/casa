@@ -246,13 +246,13 @@ RSpec.describe "/casa_cases", type: :request do
             orders_updated[:case_court_orders_attributes]["1"][:id] = casa_case.case_court_orders[1].id
           end
 
-          it "does not update the first order" do
+          it "does not update the first court order" do
             expect { patch casa_case_url(casa_case), params: {casa_case: orders_updated} }.not_to(
               change { casa_case.reload.case_court_orders[0].mandate_text }
             )
           end
 
-          it "does not update the second order" do
+          it "does not update the second court order" do
             expect { patch casa_case_url(casa_case), params: {casa_case: orders_updated} }.not_to(
               change { casa_case.reload.case_court_orders[1].mandate_text }
             )
@@ -398,6 +398,7 @@ RSpec.describe "/casa_cases", type: :request do
         it "updates permitted fields" do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes}
           casa_case.reload
+
           expect(casa_case.court_report_submitted?).to be_truthy
 
           # Not permitted
