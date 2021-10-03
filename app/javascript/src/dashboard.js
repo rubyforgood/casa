@@ -166,7 +166,7 @@ $('document').ready(() => {
             <a href="${casaCasePath(casaCase.id)}">${casaCase.case_number}</a>
             `
           })
-          var caseNumbers = `
+          const caseNumbers = `
             <span class="mobile-label">Case Number(s)</span>
             ${links.join(', ')}
           `
@@ -284,7 +284,7 @@ $('document').ready(() => {
 
   defineSupervisorsDataTable()
 
-  function filterOutUnassignedVolunteers(checked) {
+  function filterOutUnassignedVolunteers (checked) {
     $('.supervisor-options').find('input[type="checkbox"]').not('#unassigned-vol-filter').each(function () {
       this.checked = checked
     })
