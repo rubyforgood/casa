@@ -45,6 +45,15 @@ body.casa_cases {
     textarea, .add-court-mandate {
       width: 500px;
     }
+
+    .implementation-status {
+      align-self: flex-start;
+      min-height: 38px;
+    }
+
+    .remove-mandate-button {
+      align-self: flex-start;
+    }
   }
 
   .court-mandate-entry {
