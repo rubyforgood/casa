@@ -27,7 +27,7 @@ class CaseCourtReport
       created_date: I18n.l(Date.today, format: :full, default: nil),
       casa_case: prepare_case_details,
       case_contacts: prepare_case_contacts,
-      case_orders: prepare_case_orders,
+      case_mandates: prepare_case_orders,
       latest_hearing_date: latest_hearing_date.nil? ? "___<LATEST HEARING DATE>____" : I18n.l(latest_hearing_date.date, format: :full, default: nil),
       org_address: org_address(is_default_template),
       volunteer: volunteer_info
