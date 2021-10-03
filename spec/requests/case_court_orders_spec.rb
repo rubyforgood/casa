@@ -20,7 +20,7 @@ RSpec.describe "/case_court_orders", type: :request do
       end
 
       it "deletes the court order" do
-        expect { delete_request }.to change(CaseCourtorder, :count).from(1).to(0)
+        expect { delete_request }.to change(CaseCourtOrder, :count).from(1).to(0)
       end
     end
   end
@@ -35,7 +35,7 @@ RSpec.describe "/case_court_orders", type: :request do
       end
 
       it "deletes the court order" do
-        expect { delete_request }.to change(CaseCourtorder, :count).from(1).to(0)
+        expect { delete_request }.to change(CaseCourtOrder, :count).from(1).to(0)
       end
     end
   end
@@ -51,7 +51,7 @@ RSpec.describe "/case_court_orders", type: :request do
       end
 
       it "deletes the court order" do
-        expect { delete_request }.to_not change(CaseCourtorder, :count)
+        expect { delete_request }.to_not change(CaseCourtOrder, :count)
       end
     end
   end

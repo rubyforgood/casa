@@ -30,9 +30,8 @@ RSpec.describe "past_court_dates/new", type: :system do
       select hearing_type.name, from: "Hearing type"
 
       find("#add-mandate-button").click
-
-      fill_in "casa_case_case_court_mandates_attributes_0_mandate_text", with: mandate_text
-      select "Partially implemented", from: "casa_case_case_court_mandates_attributes_0_implementation_status"
+      fill_in "casa_case_case_court_orders_attributes_0_mandate_text", with: mandate_text
+      select "Partially implemented", from: "casa_case_case_court_orders_attributes_0_implementation_status"
 
       within ".top-page-actions" do
         click_on "Create"

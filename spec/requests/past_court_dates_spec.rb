@@ -168,7 +168,7 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
         expect(past_court_date.judge).to eq judge
         expect(past_court_date.case_court_orders[0].mandate_text).to eq mandate_texts[0]
         expect(past_court_date.case_court_orders[0].implementation_status).to eq implementation_statuses[0]
-        expect(past_court_date.case_court_mandates[1].mandate_text).to eq mandate_texts[1]
+        expect(past_court_date.case_court_orders[1].mandate_text).to eq mandate_texts[1]
         expect(past_court_date.case_court_orders[1].implementation_status).to eq implementation_statuses[1]
       end
 

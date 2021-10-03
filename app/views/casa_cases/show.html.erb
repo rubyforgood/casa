@@ -86,9 +86,9 @@
       </p>
     <% end %>
 
-    <% if @casa_case.case_court_mandates.exists? %>
+    <% if @casa_case.case_court_orders.exists? %>
       <h6><strong><%= t(".label.court_mandates") %>:</strong></h6>
-      <% @casa_case.case_court_mandates.each do |court_mandate| %>
+      <% @casa_case.case_court_orders.each do |court_mandate| %>
         <p><%= court_mandate.mandate_text %>, <%= court_mandate.implementation_status&.humanize %></p>
       <% end %>
     <% end %>
