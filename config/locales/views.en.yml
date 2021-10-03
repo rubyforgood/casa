@@ -88,8 +88,6 @@ en:
       add_past_court_date: Add a past court date
       next_court_date: Next Court Date
       court_report_due_date: Court Report Due Date
-      court_mandates: Court Orders
-      court_mandate_privacy_warning: Please check that you didn't enter any youth names
     inactive_case:
       notice: Case was deactivated on
     no_past_court_dates: No past court dates

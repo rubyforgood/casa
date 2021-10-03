@@ -113,7 +113,7 @@
 
       <% if casa_case.persisted? %>
         <div class="field form-group court-mandates">
-          <%= form.label :case_court_mandates, "#{t(".court_mandates")} - #{t(".court_mandate_privacy_warning")}" %>
+        <%= form.label :case_court_mandates, "#{t(".label.court_mandates")}" %>
 
           <% if policy(casa_case).update_court_mandates? %>
             <div id="court-orders-list-container">
