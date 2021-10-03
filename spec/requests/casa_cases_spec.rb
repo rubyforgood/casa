@@ -112,8 +112,8 @@ RSpec.describe "/casa_cases", type: :request do
           expect(casa_case.judge).to eq judge
         end
 
-        it "also respond to json when api: true is passed", :aggregate_failures do
-          post casa_cases_url, params: {casa_case: valid_attributes, api: true}
+        it "also respond to json", :aggregate_failures do
+          post casa_cases_url(format: :json), params: {casa_case: valid_attributes}
 
           expect(response.content_type).to eq("application/json; charset=utf-8")
           expect(response).to have_http_status(:created)
@@ -149,8 +149,8 @@ RSpec.describe "/casa_cases", type: :request do
             expect(response).to be_successful
           end
 
-          it "also respond to json when api: true is passed", :aggregate_failures do
-            post casa_cases_url, params: {casa_case: invalid_attributes, api: true}
+          it "also respond to json", :aggregate_failures do
+            post casa_cases_url(format: :json), params: {casa_case: invalid_attributes}
 
             expect(response.content_type).to eq("application/json; charset=utf-8")
             expect(response).to have_http_status(:unprocessable_entity)

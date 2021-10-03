@@ -19,16 +19,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  protected
-
-  def json_response(obj:, status:)
-    return unless api?
-
-    obj = obj.errors.full_messages if status == :unprocessable_entity
-
-    render json: obj, status: status
-  end
-
   private
 
   def set_current_user
@@ -42,9 +32,5 @@ class ApplicationController < ActionController::Base
   def not_authorized
     flash[:notice] = t("default", scope: "pundit")
     redirect_to(request.referrer || root_url)
-  end
-
-  def api?
-    params.fetch(:api, "false").downcase == "true"
   end
 end

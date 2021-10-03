@@ -38,13 +38,15 @@ class CasaCasesController < ApplicationController
     authorize @casa_case
 
     if @casa_case.save
-      json_response(obj: @casa_case, status: :created)
-
-      redirect_to @casa_case, notice: "CASA case was successfully created." unless performed?
+      respond_to do |format|
+        format.html { redirect_to @casa_case, notice: "CASA case was successfully created." }
+        format.json { render json: @casa_case, status: :created }
+      end
     else
-      json_response(obj: @casa_case, status: :unprocessable_entity)
-
-      render :new unless performed?
+      respond_to do |format|
+        format.html { render :new }
+        format.json { render json: @casa_case.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   end
 
