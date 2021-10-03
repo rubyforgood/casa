@@ -166,11 +166,11 @@ $('document').ready(() => {
             <a href="${casaCasePath(casaCase.id)}">${casaCase.case_number}</a>
             `
           })
-          var case_numbers = `
+          var caseNumbers = `
             <span class="mobile-label">Case Number(s)</span>
             ${links.join(', ')}
           `
-          return case_numbers
+          return caseNumbers
         },
         orderable: false
       },
