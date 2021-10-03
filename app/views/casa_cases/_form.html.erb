@@ -123,7 +123,7 @@
                   <%=
                     ff.select :implementation_status,
                               @casa_case.decorate.court_mandate_select_options,
-                              {include_blank: 'Set Implementation Status', selected: ff.object.implementation_status},
+                              {include_blank: 'Set Implementation Status'},
                               {class: 'implementation-status'}
                   %>
                   <button type="button" class="remove-mandate-button btn btn-danger"><%= t("button.delete") %></button>
