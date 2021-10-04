@@ -46,8 +46,8 @@
             ) %>
       </div>
       <div class="field form-group court-mandates">
-        <%= form.label :case_court_mandates, "#{t(".label.court_mandates")}" %>
-        <div id="mandates-list-container" data-ref="past_court_date" data-casa-case-id="<%= casa_case.id %>">
+        <%= form.label :case_court_orders, "#{t(".label.court_orders")}" %>
+        <div id="mandates-list-container" data-ref="past_court_date">
           <%= form.fields_for :case_court_orders do |ff| %>
             <div class="court-mandate-entry">
               <%= ff.text_area :text %>
