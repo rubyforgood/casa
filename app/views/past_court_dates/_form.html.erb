@@ -46,21 +46,7 @@
             ) %>
       </div>
       <div class="field form-group court-mandates">
-        <div id="court-orders-list-container" data-ref="past_court_date">
-          <%= form.fields_for :case_court_orders do |ff| %>
-            <div class="court-mandate-entry">
-                          {class: 'implementation-status'}
-              %>
-              <button type="button" class="remove-mandate-button btn btn-danger"><%= t("button.delete") %></button>
-            </div>
-          <% end %>
-        </div>
-        <div class="add-container">
-          <button type="button" class="add-button" id="add-mandate-button">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-          </button>
-          <strong><%= t("global.add_court_order") %></strong>
-        </div>
+        <%= render partial: "shared/court_order_list", locals: {casa_case: casa_case, form: form} %>
       </div>
     <% end %>
   </div>

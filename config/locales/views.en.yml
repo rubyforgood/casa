@@ -13,9 +13,6 @@ en:
         reactivate: Reactivate CASA Case
         update: Update CASA Case
       court_report_due_date: Court Report Due Date
-      label:
-        court_orders:
-          Court Orders - Please check that you didn't enter any youth names
       next_court_date: Next Court Date
       prompt:
         deactivate:
@@ -262,6 +259,7 @@ en:
       title: Emancipation Checklist
   global:
     add_court_order: Add a court order
+    court_orders: Court Orders - Please check that you didn't enter any youth names
   hearing_types:
     edit:
       title: Edit Hearing Type
@@ -371,9 +369,6 @@ en:
       button:
         create: Create
         update: Update
-      label:
-        court_orders:
-          Court Orders - Please check that you didn't enter any youth names
     new:
       title: New Past Court Date
     show:
