@@ -115,27 +115,7 @@
         <div class="field form-group court-mandates">
 
           <% if policy(casa_case).update_court_mandates? %>
-            <%= form.label :case_court_mandates, "#{t(".label.court_orders")}" %>
-            <div id="court-orders-list-container">
-              <%= form.fields_for :case_court_mandates do |ff| %>
-                <div class="court-mandate-entry">
-                  <%= ff.text_area :mandate_text %>
-                  <%=
-                    ff.select :implementation_status,
-                              @casa_case.decorate.court_mandate_select_options,
-                              {include_blank: 'Set Implementation Status'},
-                              {class: 'implementation-status'}
-                  %>
-                  <button type="button" class="remove-mandate-button btn btn-danger"><%= t("button.delete") %></button>
-                </div>
-              <% end %>
-            </div>
-            <div class="add-container">
-              <button type="button" class="add-button" id="add-mandate-button">
-                <i class="fa fa-plus" aria-hidden="true"></i>
-              </button>
-              <strong><%= t("global.add_court_order") %></strong>
-            </div>
+            <%= render partial: "shared/court_order_list", locals: {casa_case: @casa_case, form: form} %>
           <% else %>
             <%= form.label :case_court_mandates, "#{t(".label.court_orders")}" %>
             <div id="mandate-list-container">
