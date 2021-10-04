@@ -383,7 +383,7 @@ en:
         casa_case_court_mandate:
           implementation_status: Implementation Status
           mandate_text: Court Order Text
-        case_court_mandates: Court Orders
+        case_court_orders: Court Orders
         case_number: Case Number
         download_report_docx: Download Report (.docx)
         hearing_type: Hearing Type
