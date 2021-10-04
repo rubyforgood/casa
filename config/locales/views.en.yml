@@ -375,7 +375,7 @@ en:
       button:
         edit_past_court_date: Edit
       label:
-        casa_case_court_mandate:
+        casa_case_court_order:
           implementation_status: Implementation Status
           court_order_text: Court Order Text
         case_court_orders: Court Orders
