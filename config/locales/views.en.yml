@@ -1,139 +1,368 @@
 en:
-  case_contacts:
-    index:
-      title: Case Contacts
-      new: New Case Contact
-      filter:
-        title: Filter by
-        show_hide: Show / Hide
-        submit: Filter
-        reset: Reset filters
-        display_all: Display all
-        contact_types: Contact types
-        other: Other filters
-        contact_date: Date of contact
-        start_date: Starting from
-        end_date: Ending at
-      no_contacts_found: No case contacts have been found.
-      no_contacts_present: You have no case contacts for this case. Please click New Case Contact button above to create a case contact for your youth!
-    edit:
-      title: Editing Case Contact
-    new:
-      title: New Case Contact
-    case_contact:
-      deleted_text: "[DELETE] "
-      read_more: Read more
-      hide: Hide
-      created_by: Created by
-    form:
-      plural_label: Select all relevant CASA cases
-      singular_label: CASA case
-      prompt_select_one: Please Select One
-    confirm_note_content_dialog:
-      header: Confirm Note Content
-      body: Please double check your notes to ensure they don't contain any identifying details about your youth or anyone else.
-      note: Note
-    quarter_not_editable: Archived contacts can't be edited. Case contacts are archived after the end of each quarter.
-    archived: (Archived)
   casa_cases:
-    show:
-      title: CASA Case Details
-      label:
-        case_number: Case number
-        hearing_type: Hearing Type
-        judge: Judge
-        transition_aged_youth: Transition Aged Youth
-        next_court_date: Next Court Date
-        court_report_due_date: Court Report Due Date
-        court_report_status: Court Report Status
-        court_report_submitted_date: Court Report Submitted Date
-        court_mandates: Court Orders
-        assigned_volunteers: Assigned Volunteers
-        attached_report: Attached Report
-      button:
-        new_contact: New Case Contact
-        edit_case: Edit Case Details
-        emancipation: Emancipation
-        click_to_download: Click to download
-        download_all: Download All
-        generate_court_report: Generate Report
-    shared:
-      filter_by: Filter by
-      assigned_single: Assigned to Volunteer
-      assigned_multiple: Assigned to more than 1 Volunteer
-      assigned_transition_aged_youth: Assigned to Transition Aged Youth
-      casa_case_prefix: Casa Case Prefix
-      prefix_options:
-        cina: CINA
-        tpr: TPR
-        none: None
+    edit:
+      title: Editing
     filter:
       pick_displayed_columns: Pick Displayed Columns
       select_columns: Select columns
     form:
+      add_court_mandate: Add a court order
+      add_past_court_date: Add a past court date
       button:
-        update: Update CASA Case
         create: Create CASA Case
         deactivate: Deactivate CASA Case
         reactivate: Reactivate CASA Case
+        update: Update CASA Case
+      court_report_due_date: Court Report Due Date
       label:
         court_orders:
           Court Orders - Please check that you didn't enter any youth names
+      next_court_date: Next Court Date
       prompt:
         deactivate:
-          success: Yes, deactivate
-          fail: No, go back
           confirm_swal: Deactivating a CASA Case will unassign any volunteers currently assigned to this case.
+          fail: No, go back
+          success: Yes, deactivate
         select_hearing_type: -Select Hearing Type-
         select_judge: -Select Judge-
       youth_birth_month_year: "Youth's Birth Month & Year"
-      add_court_mandate: Add a court order
-      add_past_court_date: Add a past court date
-      next_court_date: Next Court Date
-      court_report_due_date: Court Report Due Date
     inactive_case:
       notice: Case was deactivated on
-    no_past_court_dates: No past court dates
-    past_court_dates: Past court dates
-    volunteer_assignment:
-      title: Manage Volunteers
-      assigned_volunteers: Assigned Volunteers
-      assigned: Assigned
-      unassigned: Unassigned
-      deactivated_volunteer: Deactivated volunteer
-      assign_new: Assign a New Volunteer
-      select_volunteer: Select a Volunteer
-      heading:
-        volunteer_name: Volunteer Name
-        volunteer_email: Volunteer Email
-        status: Status
-        start_date: Start Date
-        end_date: End Date
-        actions: Actions
-      button:
-        assign: Assign Volunteer
-        unassign: Unassign Volunteer
-        activate: Activate Volunteer
-    edit:
-      title: Editing
     index:
-      pick_displayed_columns: Pick displayed columns
-      own_case: My <%= "Case".pluralize(%{count}) %>
-      own_cases: My Cases
+      button:
+        new: New Case
       case: <%= "Case".pluralize(%{count}) %>
       cases: Cases
       heading:
+        actions: Actions
+        assigned_to: Assigned To
         case_number: Case Number
         hearing_type: Hearing Type
         judge: Judge
         status: Status
         transition_aged_youth: Transition Aged Youth
-        assigned_to: Assigned To
-        actions: Actions
-      button:
-        new: New Case
+      own_case: My <%= "Case".pluralize(%{count}) %>
+      own_cases: My Cases
+      pick_displayed_columns: Pick displayed columns
     new:
       title: New CASA Case
+    no_past_court_dates: No past court dates
+    past_court_dates: Past court dates
+    shared:
+      assigned_multiple: Assigned to more than 1 Volunteer
+      assigned_single: Assigned to Volunteer
+      assigned_transition_aged_youth: Assigned to Transition Aged Youth
+      casa_case_prefix: Casa Case Prefix
+      filter_by: Filter by
+      prefix_options:
+        cina: CINA
+        none: None
+        tpr: TPR
+    show:
+      label:
+        assigned_volunteers: Assigned Volunteers
+        attached_report: Attached Report
+        case_number: Case number
+        court_mandates: Court Orders
+        court_report_due_date: Court Report Due Date
+        court_report_status: Court Report Status
+        court_report_submitted_date: Court Report Submitted Date
+        hearing_type: Hearing Type
+        judge: Judge
+        next_court_date: Next Court Date
+        transition_aged_youth: Transition Aged Youth
+      button:
+        click_to_download: Click to download
+        download_all: Download All
+        edit_case: Edit Case Details
+        emancipation: Emancipation
+        generate_court_report: Generate Report
+        new_contact: New Case Contact
+      title: CASA Case Details
+    volunteer_assignment:
+      assign_new: Assign a New Volunteer
+      assigned_volunteers: Assigned Volunteers
+      assigned: Assigned
+      button:
+        activate: Activate Volunteer
+        assign: Assign Volunteer
+        unassign: Unassign Volunteer
+      deactivated_volunteer: Deactivated volunteer
+      heading:
+        actions: Actions
+        end_date: End Date
+        start_date: Start Date
+        status: Status
+        volunteer_email: Volunteer Email
+        volunteer_name: Volunteer Name
+      select_volunteer: Select a Volunteer
+      title: Manage Volunteers
+      unassigned: Unassigned
+  casa_admins:
+    edit:
+      title: Edit Casa Admin
+    form:
+      active_text: Admin is
+      button:
+        activate: Activate Admin
+        deactivate: Deactivate
+      deactive_text: Admin was deactivated on
+      label:
+        display_name: Display Name
+      prompt:
+        mark_inactive_warning: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"
+    new:
+      title: Create New Casa Admin
+    index:
+      active: Active
+      active_text: Admin is
+      button:
+        edit: Edit
+        new: New Admin
+      deactivated: Deactivated
+      deactive_text: Admin was deactivated on
+      heading:
+        actions: Actions
+        admin_email: Admin Email
+      title: Admins
+  case_assignments:
+    index:
+      assign_new: Assign a New Case
+      button:
+        assign: Assign Case
+        unassign: Unassign Case
+      heading:
+        actions: Actions
+        case_number: Case Number
+        transition_aged_youth: Transition Aged Youth
+      select_case: Select a Case
+      title: Edit Volunteer Assignments for
+  case_contacts:
+    archived: (Archived)
+    index:
+      filter:
+        contact_date: Date of contact
+        contact_types: Contact types
+        display_all: Display all
+        end_date: Ending at
+        other: Other filters
+        reset: Reset filters
+        show_hide: Show / Hide
+        start_date: Starting from
+        submit: Filter
+        title: Filter by
+      new: New Case Contact
+      no_contacts_found: No case contacts have been found.
+      no_contacts_present: You have no case contacts for this case. Please click New Case Contact button above to create a case contact for your youth!
+      title: Case Contacts
+    case_contact:
+      created_by: Created by
+      deleted_text: "[DELETE] "
+      hide: Hide
+      read_more: Read more
+    confirm_note_content_dialog:
+      body: Please double check your notes to ensure they don't contain any identifying details about your youth or anyone else.
+      header: Confirm Note Content
+      note: Note
+    edit:
+      title: Editing Case Contact
+    form:
+      plural_label: Select all relevant CASA cases
+      prompt_select_one: Please Select One
+      singular_label: CASA case
+    new:
+      title: New Case Contact
+    quarter_not_editable: Archived contacts can't be edited. Case contacts are archived after the end of each quarter.
+  casa_orgs:
+    contact_type_groups:
+      button:
+        edit: Edit
+        new: New Group
+      heading:
+        actions: Actions
+        active: Active?
+        name: Name
+      title: Contact Type Groups
+    contact_types:
+      button:
+        edit: Edit
+        new: New Contact Type
+      heading:
+        actions: Actions
+        active: Active?
+        group: Group
+        name: Name
+      title: Contact Types
+    hearing_types:
+      button:
+        edit: Edit
+        new: New Hearing Type
+      heading:
+        actions: Actions
+        active: Active?
+        name: Name
+      title: Hearing Types
+    judges:
+      button:
+        edit: Edit
+        new: New Judge
+      heading:
+        actions: Actions
+        active: Active?
+        name: Name
+      title: Judge
+    sent_emails:
+      heading:
+        category: Category
+        created_at: Time Sent
+        mailer_type: Mailer Type
+        sent_address: Recipient
+      title: Sent Emails
+    edit:
+      manage_court_details_title: Manage Court Details
+      manage_contact_types_title: Manage Contact Types
+      title: Editing CASA Organization
+  case_court_reports:
+    index:
+      button:
+        download: Download Court Report
+        generate: Generate Report
+      description: "The Court Report is pre-filled with information for your case. You can select among currently active cases
+      assigned to you. The document is in Microsoft Word format (.docx)."
+      generate_report: Generate Court Report
+      label:
+        case_number: "Case Number:"
+      prompt:
+        search_case_number: Search by volunteer name or case number
+        select_case_number: Select case number
+      title: Report Categories
+  contact_type_groups:
+    new:
+      title: New Contact Type Group
+    edit:
+      title: Edit Contact Type Group
+  contact_types:
+    new:
+      title: New Contact Type
+    edit:
+      title: Edit Contact Type
+  emancipation:
+    index:
+      heading:
+        case_number: Case Number
+        checklist: Checklist
+      link:
+        checkList: Checklist
+        details: Details
+      title: Transitioning Case(s)
+  emancipations:
+    show:
+      state:
+        saved: Saved
+        saving: Saving
+      title: Emancipation Checklist
+  hearing_types:
+    edit:
+      title: Edit Hearing Type
+    new:
+      title: New Hearing Type
+  imports:
+    cases:
+      button:
+        download: Download and reference example Case CSV file
+        import: Import Cases CSV
+      disable_with: Importing File
+      instruction:
+        change_values: change any of the values in the first line of the example csv file.
+        click: Click the choose file button and navigate to the saved file and select it.
+        do_not: Do not
+        import: Then click the "Import Cases CSV" button to import your cases.
+      upload_title: Upload your CSV file
+    csv_error_modal:
+      button:
+        ok: OK
+      title: CSV Import Error
+    index:
+      button:
+        import_cases: Import Cases
+        import_supervisors: Import Supervisors
+        import_volunteers: Import Volunteers
+      instruction:
+        cases: Cases
+        supervisors: Supervisors
+        title: You should import files in the following order
+        volunteers: Volunteers
+      system_imports_title: System Imports
+      title: Import Categories
+    supervisors:
+      button:
+        download: Download and reference example Supervisor CSV file
+        import: Import Supervisors CSV
+      disable_with: Importing File
+      instruction:
+        change_values: change any of the values in the first line of the example csv file.
+        click: Click the choose file button and navigate to the saved file and select it.
+        do_not: Do not
+        import: Then click the "Import Supervisors CSV" button to import your supervisors.
+      upload_title: Upload your CSV file
+    volunteers:
+      button:
+        download: Download and reference example Volunteer CSV file
+        import: Import Volunteers CSV
+      disable_with: Importing File
+      instruction:
+        change_values: change any of the values in the first line of the example csv file.
+        click: Click the choose file button and navigate to the saved file and select it.
+        do_not: Do not
+        import: Then click the "Import Volunteers CSV" button to import your volunteers.
+        note: This will email the new volunteers asking them to log in!
+      upload_title: Upload your CSV file
+  judges:
+    edit:
+      title: Edit Judge
+    new:
+      title: New Judge
+  layouts:
+    application:
+      javascript_instrucion:
+        enable: Please enable javascript
+        require: This app requires javascript to work
+    footers:
+      not_logged_in:
+        built_by: Built by
+        link:
+          report_site_issue: Report a site issue
+        ruby_for_good: Ruby For Good
+    login_header:
+      image:
+        logo:
+          alt: CASA Logo
+    mobile_navbar:
+      button:
+        menu: Menu
+    sidebar:
+      footer:
+        location: Location
+        role: Role
+      image:
+        alt:
+          logo: CASA Logo
+      link:
+        edit_organization: Edit Organization
+        edit_profile: Edit Profile
+        export_data: Export Data
+        generate_court_reports: Generate Court Reports
+        report_site_issue: Report a site issue
+        system_imports: System Imports
+      menu_item:
+        admins: Admins
+        case_contacts: Case Contacts
+        emancipation_checklists: Emancipation Checklist(s)
+        supervisors: Supervisors
+        volunteers: Volunteers
+  notifications:
+    index:
+      no_notifications: You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.
   past_court_dates:
     edit:
       title: Editing Past Court Date
@@ -150,318 +379,89 @@ en:
     show:
       button:
         edit_past_court_date: Edit
-      title: Past Court Date
       label:
-        case_number: Case Number
-        judge: Judge
-        hearing_type: Hearing Type
-        none: None
-        case_court_mandates: Court Orders
-        no_case_court_mandates: There are no court orders associated with this past court date.
         casa_case_court_mandate:
-          mandate_text: Court Order Text
           implementation_status: Implementation Status
+          mandate_text: Court Order Text
+        case_court_mandates: Court Orders
+        case_number: Case Number
         download_report_docx: Download Report (.docx)
-  casa_admins:
-    form:
-      button:
-        activate: Activate Admin
-        deactivate: Deactivate
-      label:
-        display_name: Display Name
-      prompt:
-        mark_inactive_warning: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"
-      active_text: Admin is
-      deactive_text: Admin was deactivated on
-    edit:
-      title: Edit Casa Admin
-    new:
-      title: Create New Casa Admin
+        hearing_type: Hearing Type
+        judge: Judge
+        none: None
+        no_case_court_mandates: There are no court orders associated with this past court date.
+      title: Past Court Date
+  reports:
     index:
-      title: Admins
-      active: Active
-      active_text: Admin is
-      deactivated: Deactivated
-      deactive_text: Admin was deactivated on
-      button:
-        new: New Admin
-        edit: Edit
-      heading:
-        admin_email: Admin Email
-        actions: Actions
-  case_assignments:
-    index:
-      title: Edit Volunteer Assignments for
-      heading:
-        case_number: Case Number
-        transition_aged_youth: Transition Aged Youth
-        actions: Actions
-      button:
-        unassign: Unassign Case
-        assign: Assign Case
-      assign_new: Assign a New Case
-      select_case: Select a Case
-  case_court_reports:
-    index:
-      title: Report Categories
-      generate_report: Generate Court Report
-      description: "The Court Report is pre-filled with information for your case. You can select among currently active cases
-      assigned to you. The document is in Microsoft Word format (.docx)."
-      label:
-        case_number: "Case Number:"
-      prompt:
-        select_case_number: Select case number
-        search_case_number: Search by volunteer name or case number
-      button:
-        generate: Generate Report
-        download: Download Court Report
-  contact_type_groups:
-    new:
-      title: New Contact Type Group
-    edit:
-      title: Edit Contact Type Group
-  contact_types:
-    new:
-      title: New Contact Type
-    edit:
-      title: Edit Contact Type
-  emancipation:
-    index:
-      title: Transitioning Case(s)
-      heading:
-        case_number: Case Number
-        checklist: Checklist
-      link:
-        checkList: Checklist
-        details: Details
-  emancipations:
-    show:
-      title: Emancipation Checklist
-      state:
-        saving: Saving
-        saved: Saved
-  casa_orgs:
-    contact_type_groups:
-      title: Contact Type Groups
-      button:
-        new: New Group
-        edit: Edit
-      heading:
-        name: Name
-        active: Active?
-        actions: Actions
-    contact_types:
-      title: Contact Types
-      button:
-        new: New Contact Type
-        edit: Edit
-      heading:
-        name: Name
-        group: Group
-        active: Active?
-        actions: Actions
-    hearing_types:
-      title: Hearing Types
-      button:
-        new: New Hearing Type
-        edit: Edit
-      heading:
-        name: Name
-        active: Active?
-        actions: Actions
-    judges:
-      title: Judge
-      button:
-        new: New Judge
-        edit: Edit
-      heading:
-        name: Name
-        active: Active?
-        actions: Actions
-    sent_emails:
-      title: Sent Emails
-      heading:
-        mailer_type: Mailer Type
-        category: Category
-        sent_address: Recipient
-        created_at: Time Sent
-    edit:
-      title: Editing CASA Organization
-      manage_contact_types_title: Manage Contact Types
-      manage_court_details_title: Manage Court Details
-  hearing_types:
-    edit:
-      title: Edit Hearing Type
-    new:
-      title: New Hearing Type
-  imports:
-    cases:
-      button:
-        download: Download and reference example Case CSV file
-        import: Import Cases CSV
-      upload_title: Upload your CSV file
-      instruction:
-        click: Click the choose file button and navigate to the saved file and select it.
-        do_not: Do not
-        change_values: change any of the values in the first line of the example csv file.
-        import: Then click the "Import Cases CSV" button to import your cases.
-      disable_with: Importing File
-    csv_error_modal:
-      title: CSV Import Error
-      button:
-        ok: OK
-    supervisors:
-      button:
-        download: Download and reference example Supervisor CSV file
-        import: Import Supervisors CSV
-      upload_title: Upload your CSV file
-      instruction:
-        click: Click the choose file button and navigate to the saved file and select it.
-        do_not: Do not
-        change_values: change any of the values in the first line of the example csv file.
-        import: Then click the "Import Supervisors CSV" button to import your supervisors.
-      disable_with: Importing File
-    volunteers:
-      button:
-        download: Download and reference example Volunteer CSV file
-        import: Import Volunteers CSV
-      upload_title: Upload your CSV file
-      instruction:
-        click: Click the choose file button and navigate to the saved file and select it.
-        do_not: Do not
-        change_values: change any of the values in the first line of the example csv file.
-        import: Then click the "Import Volunteers CSV" button to import your volunteers.
-        note: This will email the new volunteers asking them to log in!
-      disable_with: Importing File
-    index:
-      title: Import Categories
-      system_imports_title: System Imports
-      instruction:
-        title: You should import files in the following order
-        volunteers: Volunteers
-        supervisors: Supervisors
-        cases: Cases
-      button:
-        import_volunteers: Import Volunteers
-        import_supervisors: Import Supervisors
-        import_cases: Import Cases
-  judges:
-    edit:
-      title: Edit Judge
-    new:
-      title: New Judge
-  layouts:
-    mobile_navbar:
-      button:
-        menu: Menu
-    sidebar:
-      image:
-        alt:
-          logo: CASA Logo
-      menu_item:
-        supervisors: Supervisors
-        volunteers: Volunteers
-        case_contacts: Case Contacts
-        emancipation_checklists: Emancipation Checklist(s)
-        admins: Admins
-      footer:
-        location: Location
-        role: Role
-      link:
-        edit_profile: Edit Profile
-        generate_court_reports: Generate Court Reports
-        export_data: Export Data
-        system_imports: System Imports
-        edit_organization: Edit Organization
-        report_site_issue: Report a site issue
-    application:
-      javascript_instrucion:
-        enable: Please enable javascript
-        require: This app requires javascript to work
-    login_header:
-      image:
-        logo:
-          alt: CASA Logo
-    footers:
-      not_logged_in:
-        built_by: Built by
-        ruby_for_good: Ruby For Good
-        link:
-          report_site_issue: Report a site issue
+      assigned_to_label: "Assigned To:"
+      contact_made_label: "Contact Made:"
+      contact_type_group_label: "Contact Type Group:"
+      contact_type_label: "Contact Type:"
+      download_mileage_report_button: Mileage Report
+      download_report_button: Download Report
+      driving_reimbursement_label: "Want Driving Reimbursement:"
+      end_date_label: "Ending At:"
+      export_page_title: Export Data
+      filter_cols: Filter Columns
+      reports_subhead: Case Contacts Report
+      reports_description: This CSV is a listing of all fields for the case contacts of all volunteers. Select the start and end date.
+      select_contact_type_groups_placeholder: -Select Contact Type Groups-
+      select_contact_types_placeholder: -Select Contact Types-
+      select_supervisors_placeholder: -Select Supervisors-
+      select_volunteers_placeholder: -Select Volunteers-
+      start_date_label: "Starting From:"
+      transition_aged_label: "Transition Aged Youth:"
+      volunteers_label: Volunteers
+    filter:
+      filter_exported_columns: Filter Exported Columns
+      select_columns: "Select columns:"
   supervisors:
     edit:
-      title: Editing Supervisor
       assign_a_volunteer: Assign a Volunteer
       assign_volunteer: Assign Volunteer
+      currently_assigned_to: Currently Assigned To
       hide_unassigned: Hide unassigned
       include_unassigned: Include unassigned
       manage_volunteers: Manage Volunteers
       no_volunteers_available: There are no active, unassigned volunteers available.
       select_a_volunteer: Select a Volunteer
+      title: Editing Supervisor
       unassign: Unassign
       unassigned: Unassigned
       volunteer_email: Volunteer Email
       volunteer_name: Volunteer Name
-      currently_assigned_to: Currently Assigned To
       volunteer_title:
-        zero: Assigned Volunteers
         one: All Volunteers
         other: All Volunteers
+        zero: Assigned Volunteers
   volunteers:
     index:
-      volunteers: Volunteers
-      filter: Filter by
-      pick_displayed_columns: Pick displayed columns
-      supervisor: Supervisor
-      no_supervisor: No supervisor assignment
-      status: Status
       active: Active
-      inactive: Inactive
-      transition_aged_youth: Assigned to Transition Aged Youth
-      yes: Yes
-      no: No
-      select_columns: Select columns
+      button:
+        new: New Volunteer
+      filter: Filter by
       heading:
-        name: Name
-        e_mail: Email
-        supervisor: Supervisor
-        status: Status
+        actions: Actions
         assigned_transition_aged_youth: Assigned To Transition Aged Youth
         case_number: Case Number(s)
         contacts: Contacts Made in Past 60 Days
-        actions: Actions
+        e_mail: Email
         last_attempted_contact:  Last Attempted Contact
-      button:
-        new: New Volunteer
+        name: Name
+        supervisor: Supervisor
+        status: Status
+      inactive: Inactive
+      pick_displayed_columns: Pick displayed columns
+      no_supervisor: No supervisor assignment
+      no: No
+      select_columns: Select columns
+      supervisor: Supervisor
+      status: Status
+      transition_aged_youth: Assigned to Transition Aged Youth
+      volunteers: Volunteers
+      yes: Yes
     send_reminder_button:
-      send_reminder: Send Reminder
-      tooltip: Remind volunteer to input case contacts
       admin_checkbox_text: Send CC to Supervisor and Admin
+      send_reminder: Send Reminder
       supervisor_checkbox_text: Send CC to Supervisor
-  reports:
-    index:
-      export_page_title: Export Data
-      reports_subhead: Case Contacts Report
-      reports_description: This CSV is a listing of all fields for the case contacts of all volunteers. Select the start and end date.
-      start_date_label: "Starting From:"
-      end_date_label: "Ending At:"
-      assigned_to_label: "Assigned To:"
-      select_supervisors_placeholder: -Select Supervisors-
-      volunteers_label: Volunteers
-      select_volunteers_placeholder: -Select Volunteers-
-      contact_type_label: "Contact Type:"
-      select_contact_types_placeholder: -Select Contact Types-
-      contact_type_group_label: "Contact Type Group:"
-      select_contact_type_groups_placeholder: -Select Contact Type Groups-
-      driving_reimbursement_label: "Want Driving Reimbursement:"
-      contact_made_label: "Contact Made:"
-      transition_aged_label: "Transition Aged Youth:"
-      download_report_button: Download Report
-      download_mileage_report_button: Mileage Report
-      filter_cols: Filter Columns
-    filter:
-      filter_exported_columns: Filter Exported Columns
-      select_columns: "Select columns:"
-  notifications:
-    index:
-      no_notifications: You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.
+      tooltip: Remind volunteer to input case contacts
