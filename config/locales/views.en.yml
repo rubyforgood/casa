@@ -6,7 +6,6 @@ en:
       pick_displayed_columns: Pick Displayed Columns
       select_columns: Select columns
     form:
-      add_court_mandate: Add a court order
       add_past_court_date: Add a past court date
       button:
         create: Create CASA Case
@@ -63,7 +62,7 @@ en:
         assigned_volunteers: Assigned Volunteers
         attached_report: Attached Report
         case_number: Case number
-        court_mandates: Court Orders
+        court_orders: Court Orders
         court_report_due_date: Court Report Due Date
         court_report_status: Court Report Status
         court_report_submitted_date: Court Report Submitted Date
@@ -261,6 +260,8 @@ en:
         saved: Saved
         saving: Saving
       title: Emancipation Checklist
+  global:
+    add_court_order: Add a court order
   hearing_types:
     edit:
       title: Edit Hearing Type
@@ -368,7 +369,6 @@ en:
       title: Editing Past Court Date
     form:
       button:
-        add_court_mandate: Add a court order
         create: Create
         update: Update
       label:

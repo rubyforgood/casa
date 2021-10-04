@@ -134,10 +134,10 @@
               <button type="button" class="add-button" id="add-mandate-button">
                 <i class="fa fa-plus" aria-hidden="true"></i>
               </button>
-              <strong><%= t(".add_court_mandate") %></strong>
+              <strong><%= t("global.add_court_order") %></strong>
             </div>
           <% else %>
-            <%= form.label :case_court_mandates, "#{t(".label.court_mandates")}" %>
+            <%= form.label :case_court_mandates, "#{t(".label.court_orders")}" %>
             <div id="mandate-list-container">
               <% @casa_case.case_court_mandates.each do |mandate| %>
                 <div class="court-mandate-entry">
