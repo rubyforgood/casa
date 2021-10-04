@@ -76,6 +76,9 @@ en:
         create: Create CASA Case
         deactivate: Deactivate CASA Case
         reactivate: Reactivate CASA Case
+      label:
+        court_orders:
+          Court Orders - Please check that you didn't enter any youth names
       prompt:
         deactivate:
           success: Yes, deactivate
@@ -140,7 +143,7 @@ en:
         create: Create
         update: Update
       label:
-        court_mandates:
+        court_orders:
           Court Orders - Please check that you didn't enter any youth names
     new:
       title: New Past Court Date

@@ -113,9 +113,9 @@
 
       <% if casa_case.persisted? %>
         <div class="field form-group court-mandates">
-        <%= form.label :case_court_mandates, "#{t(".label.court_mandates")}" %>
 
           <% if policy(casa_case).update_court_mandates? %>
+            <%= form.label :case_court_mandates, "#{t(".label.court_orders")}" %>
             <div id="court-orders-list-container">
               <%= form.fields_for :case_court_mandates do |ff| %>
                 <div class="court-mandate-entry">
@@ -137,6 +137,7 @@
               <strong><%= t(".add_court_mandate") %></strong>
             </div>
           <% else %>
+            <%= form.label :case_court_mandates, "#{t(".label.court_mandates")}" %>
             <div id="mandate-list-container">
               <% @casa_case.case_court_mandates.each do |mandate| %>
                 <div class="court-mandate-entry">
