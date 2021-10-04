@@ -30,7 +30,7 @@ casa_case_path(@casa_case) %></h6>
     <% if @past_court_date.case_court_orders.any? %>
       <p>
         <h6>
-          <strong><%= t(".label.case_court_mandates") %>:</strong>
+          <strong><%= t(".label.case_court_orders") %>:</strong>
         </h6>
       </p>
 
@@ -53,7 +53,7 @@ casa_case_path(@casa_case) %></h6>
     <% else %>
       <p>
         <h6>
-          <strong><%= t(".label.case_court_mandates") %>:</strong>
+          <strong><%= t(".label.case_court_orders") %>:</strong>
           <%= t(".label.no_case_court_mandates") %>
         </h6>
       </p>
