@@ -1,0 +1,23 @@
+wb = xlsx_package.workbook
+case_contacts = @casa_case.decorate.case_contacts_ordered_by_occurred_at
+wb.add_worksheet(name: "RENAME") do |sheet|
+  sheet.add_row ['Duration Minutes']
+  case_contacts.each do |case_contact|
+    sheet.add_row [
+      case_contact.id,
+      case_contact.duration_minutes,
+      # contact types
+      case_contact.contact_made,
+      case_contact.medium_type,
+      case_contact.occurred_at,
+      case_contact.created_at,
+      case_contact.miles_driven,
+      case_contact.want_driving_reimbursement,
+      @casa_case.case_number,
+      case_contact.creator.email,
+      case_contact.creator.display_name,
+      # case supervisor
+      case_contact.notes
+    ]
+  end
+end
