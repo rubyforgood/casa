@@ -181,7 +181,7 @@ class DbPopulator
             court_report_due_date: court_date + 1.month,
             court_report_submitted_at: court_report_submitted ? Date.today : nil,
             court_report_status: court_report_submitted ? :submitted : :not_submitted,
-            transition_aged_youth: false,
+            transition_aged_youth: true,
             birth_month_year_youth: ((Date.today - 18.years)..(Date.today - 14.years)).to_a.sample
           )
         else
