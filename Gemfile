@@ -9,8 +9,8 @@ gem "rails", "~> 6.1.4"
 gem "after_party" # post-deployment tasks
 gem "amazing_print" # easier console reading
 gem "azure-storage-blob", require: false
-gem 'caxlsx', '~> 3.0'
-gem 'caxlsx_rails', '~> 0.6.2'
+gem "caxlsx", "~> 3.0"
+gem "caxlsx_rails", "~> 0.6.2"
 gem "devise" # for authentication
 gem "devise_invitable"
 gem "draper" # adds decorators for cleaner presentation logic
