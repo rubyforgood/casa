@@ -22,7 +22,7 @@ class CasaCasesController < ApplicationController
         send_data csv, filename: case_contact_csv_name(case_contacts)
       end
       format.xlsx do
-        response.headers['Content-Disposition'] = "attachment; filename=#{@casa_case.case_number + '-case-contacts-' + Time.now.strftime("%Y-%m-%d")} + '.xlsx"
+        response.headers['Content-Disposition'] = "attachment; filename=#{@casa_case.case_number + '-case-contacts-' + Time.now.strftime("%Y-%m-%d") + '.xlsx'}"
       end
     end
   end
