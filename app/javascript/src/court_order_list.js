@@ -15,7 +15,7 @@ module.exports = class CourtOrderList {
     const path = window.location.pathname
 
     this.courtOrdersWidget = courtOrdersWidget
-    this.resourceName = path.match(/([a-z_]+)s\/\d+(\/edit)?$/)[1]
+    this.resourceName = path.match(/([a-z_]+)s\/(\d+(\/edit)?|new)$/)[1]
 
     // Certain paths require an additional hidden input containing the casa case id to save court orders
     if (this.resourceName !== 'casa_case') {
