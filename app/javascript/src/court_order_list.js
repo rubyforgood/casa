@@ -12,21 +12,31 @@ function replaceNumberWithDecrement (str, num) {
 module.exports = class CourtOrderList {
   // @param {object} courtOrdersWidget The div containing the list of court orders
   constructor (courtOrdersWidget) {
+    const path = window.location.pathname
+
     this.courtOrdersWidget = courtOrdersWidget
+    this.resourceName = path.match(/([a-z_]+)s\/\d+(\/edit)?$/)[1]
+
+    // Certain routes require an additional hidden input containing the casa case id to save court orders
+    if (this.resourceName !== 'casa_case') {
+      this.casaCaseId = path.match(/^\/casa_cases\/(\d+)/)[1]
+    }
   }
 
   // Adds a row containing a text field to write the court order and a dropdown to specify the order status
   addCourtOrder () {
-    const index = this.courtOrdersWidget.children('.court-mandate-entry').length
+    const courtOrdersWidget = this.courtOrdersWidget
+    const index = courtOrdersWidget.children('.court-mandate-entry').length
+    const resourceName = this.resourceName
     const courtOrderRow = $(`\
     <div class="court-mandate-entry">\
       <textarea
-        name="casa_case[case_court_mandates_attributes][${index}][mandate_text]"\
-        id="casa_case_case_court_mandates_attributes_${index}_mandate_text"></textarea>
+        name="${resourceName}[case_court_mandates_attributes][${index}][mandate_text]"\
+        id="${resourceName}_case_court_mandates_attributes_${index}_mandate_text"></textarea>
       <select\
       class="implementation-status"\
-      name="casa_case[case_court_mandates_attributes][${index}][implementation_status]"\
-      id="casa_case_case_court_mandates_attributes_${index}_implementation_status">\
+      name="${resourceName}[case_court_mandates_attributes][${index}][implementation_status]"\
+      id="${resourceName}_case_court_mandates_attributes_${index}_implementation_status">\
         <option value="">Set Implementation Status</option>
         <option value="not_implemented">Not implemented</option>
         <option value="partially_implemented">Partially implemented</option>
@@ -34,7 +44,13 @@ module.exports = class CourtOrderList {
       </select>
     </div>`)
 
-    this.courtOrdersWidget.append(courtOrderRow)
+    courtOrdersWidget.append(courtOrderRow)
+    if (this.casaCaseId) {
+      const casaCaseIdHiddenInput = `<input type="hidden" id="${resourceName}_case_court_mandates_attributes_${index}_casa_case_id" name="${resourceName}[case_court_mandates_attributes][${index}][casa_case_id]" value="${this.casaCaseId}">`
+
+      courtOrdersWidget.append(casaCaseIdHiddenInput)
+    }
+
     courtOrderRow.children('textarea').trigger('focus')
   }
 
