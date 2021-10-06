@@ -31,7 +31,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       check contact_type.name
 
       page.find("#add-mandate-button").click
-      find("#mandates-list-container").first("textarea").send_keys("Court Mandate Text One")
+      find("#court-orders-list-container").first("textarea").send_keys("Court Mandate Text One")
 
       within ".top-page-actions" do
         click_on "Update CASA Case"
@@ -108,7 +108,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       select next_year, from: "casa_case_court_report_due_date_1i"
 
       page.find("#add-mandate-button").click
-      find("#mandates-list-container").first("textarea").send_keys("Court Mandate Text One")
+      find("#court-orders-list-container").first("textarea").send_keys("Court Mandate Text One")
 
       select "Partially implemented", from: "casa_case[case_court_orders_attributes][0][implementation_status]"
 
