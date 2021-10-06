@@ -17,7 +17,7 @@ module.exports = class CourtOrderList {
     this.courtOrdersWidget = courtOrdersWidget
     this.resourceName = path.match(/([a-z_]+)s\/\d+(\/edit)?$/)[1]
 
-    // Certain routes require an additional hidden input containing the casa case id to save court orders
+    // Certain paths require an additional hidden input containing the casa case id to save court orders
     if (this.resourceName !== 'casa_case') {
       this.casaCaseId = path.match(/^\/casa_cases\/(\d+)/)[1]
     }
