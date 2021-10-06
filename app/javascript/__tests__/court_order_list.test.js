@@ -6,7 +6,13 @@ const CourtOrderList = require('../src/court_order_list.js')
 let courtOrderListElement
 let courtOrderList
 
+delete window.location
+window.location = { reload: jest.fn() }
+
 beforeEach(() => {
+  // jest doesn't support window.location like a browser but URL is pretty close
+  // see https://stackoverflow.com/a/60697570
+  window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/2151')
   document.body.innerHTML = '<div id="court-orders-list-container"></div>'
 
   $(document).ready(() => {
