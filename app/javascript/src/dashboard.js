@@ -108,6 +108,7 @@ $('document').ready(() => {
   const volunteersTable = $('table#volunteers').DataTable({
     autoWidth: false,
     stateSave: false,
+    order: [[6, 'desc']],
     columns: [
       {
         name: 'display_name',
