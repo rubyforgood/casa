@@ -93,7 +93,7 @@ GEM
     bootsnap (1.9.1)
       msgpack (~> 1.0)
     brakeman (5.1.1)
-    bugsnag (6.23.0)
+    bugsnag (6.24.0)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
     bullet (6.1.5)
