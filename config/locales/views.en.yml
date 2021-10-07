@@ -293,6 +293,8 @@ en:
         supervisors: Supervisors
         title: You should import files in the following order
         volunteers: Volunteers
+      link:
+        return_to_dashboard: Return To Dashboard
       system_imports_title: System Imports
       title: Import Categories
     supervisors:
