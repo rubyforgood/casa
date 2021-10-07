@@ -31,5 +31,25 @@ RSpec.describe CasaCasesController, type: :controller do
         end
       end
     end
+    context "when logged in as volunteer it exports xlsx file" do
+      before do
+        allow(controller).to receive(:authenticate_user!).and_return(true)
+        allow(controller).to receive(:current_user).and_return(volunteer)
+
+        get :show, params: {id: case_id, format: :xlsx}
+      end
+
+      context "when exporting a xlsx" do
+        let(:case_id) { volunteer.casa_cases.first.id }
+        let(:current_time) { Time.now.strftime("%Y-%m-%d") }
+        let(:casa_case_number) { volunteer.casa_cases.first.case_number }
+
+        it "generates a xlsx file" do
+          expect(response).to have_http_status(:ok)
+          expect(response.headers["Content-Type"]).to include "application/vnd.openxmlformats"
+          expect(response.headers["Content-Disposition"]).to include "#{casa_case_number}-case-contacts-#{current_time}"
+        end
+      end
+    end
   end
 end

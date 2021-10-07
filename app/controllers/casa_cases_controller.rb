@@ -21,6 +21,10 @@ class CasaCasesController < ApplicationController
         csv = CaseContactsExportCsvService.new(case_contacts).perform
         send_data csv, filename: case_contact_csv_name(case_contacts)
       end
+      format.xlsx do
+        filename = @casa_case.case_number + "-case-contacts-" + Time.now.strftime("%Y-%m-%d") + ".xlsx"
+        response.headers["Content-Disposition"] = "attachment; filename=#{filename}"
+      end
     end
   end
 

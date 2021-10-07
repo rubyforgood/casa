@@ -117,7 +117,7 @@
 
       <% if @casa_case.case_contacts.present? %>
         <div class="text-right mb-2">
-          <%= link_to t(".button.download_all"), casa_case_path(params[:id], format: :csv), class: "btn btn-success" %>
+          <%= link_to t(".button.download_all"), casa_case_path(params[:id], format: :xlsx), class: "btn btn-success" %>
         </div>
       <% end %>
 
