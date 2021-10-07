@@ -72,7 +72,7 @@ en:
         download_all: Download All
         edit_case: Edit Case Details
         emancipation: Emancipation
-        generate_court_report: Generate Report
+        generate_report: Generate Report
         new_contact: New Case Contact
       title: CASA Case Details
     volunteer_assignment:
