@@ -100,6 +100,7 @@ en:
     edit:
       title: Edit Casa Admin
     form:
+      active: Active
       active_text: Admin is
       button:
         activate: Activate Admin
