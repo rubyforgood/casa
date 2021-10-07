@@ -67,21 +67,21 @@ module.exports = class CourtOrderList {
 
     // Decrement indicies of all siblings after deleted element
     this.courtOrdersWidget.children(`.court-mandate-entry:nth-child(n+${2 * index})`).each(function (originalSiblingIndex) {
-      const courtMandateSibling = $(this)
-      const courtMandateSiblingSelect = courtMandateSibling.children('select')
-      const courtMandateSiblingTextArea = courtMandateSibling.children('textarea')
+      const courtOrderSibling = $(this)
+      const courtOrderSiblingSelect = courtOrderSibling.children('select')
+      const courtOrderSiblingTextArea = courtOrderSibling.children('textarea')
 
-      courtMandateSiblingSelect.attr('id', replaceNumberWithDecrement(courtMandateSiblingSelect.attr('id'), originalSiblingIndex + index + 1))
-      courtMandateSiblingSelect.attr('name', replaceNumberWithDecrement(courtMandateSiblingSelect.attr('name'), originalSiblingIndex + index + 1))
-      courtMandateSiblingTextArea.attr('id', replaceNumberWithDecrement(courtMandateSiblingTextArea.attr('id'), originalSiblingIndex + index + 1))
-      courtMandateSiblingTextArea.attr('name', replaceNumberWithDecrement(courtMandateSiblingTextArea.attr('name'), originalSiblingIndex + index + 1))
+      courtOrderSiblingSelect.attr('id', replaceNumberWithDecrement(courtOrderSiblingSelect.attr('id'), originalSiblingIndex + index + 1))
+      courtOrderSiblingSelect.attr('name', replaceNumberWithDecrement(courtOrderSiblingSelect.attr('name'), originalSiblingIndex + index + 1))
+      courtOrderSiblingTextArea.attr('id', replaceNumberWithDecrement(courtOrderSiblingTextArea.attr('id'), originalSiblingIndex + index + 1))
+      courtOrderSiblingTextArea.attr('name', replaceNumberWithDecrement(courtOrderSiblingTextArea.attr('name'), originalSiblingIndex + index + 1))
     })
 
     this.courtOrdersWidget.children(`input[type="hidden"]:nth-child(n+${2 * (index + 1)})`).each(function (originalSiblingIndex) {
-      const courtMandateSiblingId = $(this)
+      const courtOrderSiblingId = $(this)
 
-      courtMandateSiblingId.attr('id', replaceNumberWithDecrement(courtMandateSiblingId.attr('id'), originalSiblingIndex + index + 1))
-      courtMandateSiblingId.attr('name', replaceNumberWithDecrement(courtMandateSiblingId.attr('name'), originalSiblingIndex + index + 1))
+      courtOrderSiblingId.attr('id', replaceNumberWithDecrement(courtOrderSiblingId.attr('id'), originalSiblingIndex + index + 1))
+      courtOrderSiblingId.attr('name', replaceNumberWithDecrement(courtOrderSiblingId.attr('name'), originalSiblingIndex + index + 1))
     })
   }
 }
