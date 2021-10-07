@@ -116,13 +116,15 @@
     <%= form.number_field :miles_driven, class: "form-control", required: true, min: "0", max: 10000 %>
   </div>
 
-  <div class="field want-driving-reimbursement form-group">
-    <h2><%= form.label :want_driving_reimbursement %></h2>
-    <%= form.select :want_driving_reimbursement,
-                    options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement),
-                    {},
-                    class: "custom-select" %>
-  </div>
+  <% if current_organization.show_driving_reimbursement %>
+    <div class="field want-driving-reimbursement form-group">
+      <h2><%= form.label :want_driving_reimbursement %></h2>
+      <%= form.select :want_driving_reimbursement,
+                      options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement),
+                      {},
+                      class: "custom-select" %>
+    </div>
+  <% end %>
 
   <div class="field notes form-group">
     <h2><%= form.label :notes %></h2>
