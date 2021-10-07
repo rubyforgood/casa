@@ -43,7 +43,8 @@ en:
     new:
       title: New CASA Case
     no_past_court_dates: No past court dates
-    past_court_dates: Past court dates
+    past_court_dates:
+      past_court_dates: Past court dates
     shared:
       assigned_multiple: Assigned to more than 1 Volunteer
       assigned_single: Assigned to Volunteer
