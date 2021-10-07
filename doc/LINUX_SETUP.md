@@ -1,6 +1,6 @@
 # Setting Up the Application on Linux
 
-This document will provide information about getting the application up and running on Linux, 
+This document will provide information about getting the application up and running on Linux,
 on either a physical system or a Vagrant virtual machine. You may want to do this for the following reasons:
 
 * to do software development
@@ -22,14 +22,14 @@ sudo apt install virtualbox vagrant
 #### Initialize the Vagrant VM Control Directory
 
 Create a new directory for the Vagrant VM, `cd` into it, then generate the Vagrantfile config file:
- 
+
 ```
 vagrant init bento/ubuntu-20.04
 ```
 
 #### Accessing the VM from the Host OS
 
-To access a server running on the Vagrant VM from a browser on the host machine, 
+To access a server running on the Vagrant VM from a browser on the host machine,
 you will need to assign the VM an IP address in the `Vagrantfile`.
 Edit that file, uncomment out the following line, and change the IP address to whatever address you want:
 
@@ -48,7 +48,7 @@ vagrant ssh
 ```
 
 Skip the rest of this section for now and do the general Linux installation. Be sure `vagrant ssh`
-has brought you to your VM's prompt though, because otherwise you will be modifying 
+has brought you to your VM's prompt though, because otherwise you will be modifying
 your host operating system and not the VM!
 
 #### Your SSH Keys
@@ -86,7 +86,7 @@ in one will be updated on the other. Simply add a line to the `Vagrantfile` like
 ...where the first directory spec is the host machine's project root and the second is the Vagrant VM project root.
 
 Another approach is to use an editor on your host OS that is capable of editing files over SSH.
-VS Code does this nicely, and you can start looking into this 
+VS Code does this nicely, and you can start looking into this
 [here](https://code.visualstudio.com/docs/remote/ssh-tutorial). The IP address will be the one specified
 in the Vagrant file, and the user id and password are both `vagrant`.
 
@@ -94,7 +94,7 @@ in the Vagrant file, and the user id and password are both `vagrant`.
 
 The commands below can be run all at once by copying and pasting them all into a file and running the file as a script
 (e.g. `bash -x script_name`).
- 
+
 If you copy and paste directly from this page to your command line, we recommend you do so one section (or even one line) at a time.
 
 The commands below include a section for installing [rvm](https://rvm.io/),
@@ -102,7 +102,7 @@ but feel free to substitute your own favorite Ruby version manager such as [rben
 
 ```
 # Install packages available from the main Linux repos & upgrade the Vagrant image if necessary
-# 
+#
 sudo apt update
 sudo apt upgrade -y
 sudo apt install -y curl git git-gui htop hub libpq-dev net-tools nodejs npm openssh-server postgresql-12 vim zsh
@@ -114,7 +114,7 @@ sudo apt install -y curl git git-gui htop hub libpq-dev net-tools nodejs npm ope
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 . ./.bashrc
-nvm install v12
+nvm install lts/fermium
 # Update npm
 npm i -g npm
 ```
@@ -173,7 +173,7 @@ sudo -u postgres psql -c "CREATE USER vagrant WITH CREATEDB"
 (If you are using a Vagrant VM and want to use your host OS key pair, go back up to the Vagrant
 instructions to see how to do that.)
 
-If you do not already have an SSH key pair, you can create it with the defaults with this 
+If you do not already have an SSH key pair, you can create it with the defaults with this
 (see [this article](https://stackoverflow.com/questions/43235179/how-to-execute-ssh-keygen-without-prompt#:~:text=If%20you%20don't%20want,flag%20%2Df%20to%20the%20command.&text=This%20way%20user%20will%20not,file(s)%20already%20exist.&text=leave%20out%20the%20%3E%2Fdev%2F,you%20want%20to%20print%20output.)
 for more information about this command):
 
@@ -196,7 +196,7 @@ Skip this step if your public SSH key is already registered with your Github acc
 
 (If your host is a Vagrant VM, `vagrant ssh` into it if you are not already there.)
 
-`cd` to the directory under which you would like to install the CASA software 
+`cd` to the directory under which you would like to install the CASA software
 (if the home directory, and you are not already there, `cd` alone will work). Then:
 
 ```
@@ -230,7 +230,7 @@ Run the tests and/or the server!:
 bin/rails spec               # run the tests
 
 bin/rails server             # run the server only for localhost clients
-# or 
+# or
 bin/rails server -b 0.0.0.0  # run the server for any network-connected clients
 ```
 
