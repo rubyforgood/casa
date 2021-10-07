@@ -6,7 +6,6 @@ en:
       pick_displayed_columns: Pick Displayed Columns
       select_columns: Select columns
     form:
-      add_past_court_date: Add a past court date
       button:
         create: Create CASA Case
         deactivate: Deactivate CASA Case
@@ -44,6 +43,7 @@ en:
       title: New CASA Case
     no_past_court_dates: No past court dates
     past_court_dates:
+      add_past_court_date: Add a past court date
       past_court_dates: Past court dates
     shared:
       assigned_multiple: Assigned to more than 1 Volunteer
