@@ -5,16 +5,8 @@ RSpec.describe "Edit CASA Case", type: :system do
   context "logged in as admin" do
     let(:organization) { build(:casa_org) }
     let(:admin) { create(:casa_admin, casa_org: organization) }
-    let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: organization) }
     let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
     let!(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
-
-    before { sign_in admin }
-
-    it_behaves_like "shows past court dates links"
-
-    it "shows court orders" do
-      visit edit_casa_case_path(casa_case)
 
       court_order = casa_case.case_court_orders.first
 
