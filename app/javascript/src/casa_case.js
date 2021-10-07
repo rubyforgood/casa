@@ -120,14 +120,13 @@ $('document').ready(() => {
     $('button#add-mandate-button').on('click', () => {
       courtOrders.addCourtOrder()
     })
-    
+
     $('button.remove-mandate-button').on('click', removeMandateWithConfirmation)
 
     $('.court-mandates textarea').each(function () {
       $(this).height($(this).prop('scrollHeight'))
     })
   }
-
 
   $('#btnGenerateReport').on('click', handleGenerateReport)
 })
