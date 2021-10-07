@@ -207,21 +207,21 @@ RSpec.describe CaseCourtReport, type: :model do
     end
   end
 
-  describe "when court mandates has different implementation statuses" do
+  describe "when court orders has different implementation statuses" do
     let(:casa_case) { create(:casa_case, case_number: "Sample-Case-12345") }
-    let(:court_mandate_implemented) { create(:case_court_mandate, casa_case: casa_case, mandate_text: "This order is implemented already", implementation_status: :implemented) }
-    let(:court_mandate_not_implemented) { create(:case_court_mandate, casa_case: casa_case, mandate_text: "This order is not implemented yet", implementation_status: :not_implemented) }
-    let(:court_mandate_partially_implemented) { create(:case_court_mandate, casa_case: casa_case, mandate_text: "This order is partially implemented", implementation_status: :partially_implemented) }
-    let(:court_mandate_not_specified) { create(:case_court_mandate, casa_case: casa_case, mandate_text: "This order does not have any implementation status", implementation_status: nil) }
+    let(:court_order_implemented) { create(:case_court_order, casa_case: casa_case, mandate_text: "This order is implemented already", implementation_status: :implemented) }
+    let(:court_order_not_implemented) { create(:case_court_order, casa_case: casa_case, mandate_text: "This order is not implemented yet", implementation_status: :not_implemented) }
+    let(:court_order_partially_implemented) { create(:case_court_order, casa_case: casa_case, mandate_text: "This order is partially implemented", implementation_status: :partially_implemented) }
+    let(:court_order_not_specified) { create(:case_court_order, casa_case: casa_case, mandate_text: "This order does not have any implementation status", implementation_status: nil) }
 
     before(:each) do
-      casa_case.case_court_mandates << court_mandate_implemented
-      casa_case.case_court_mandates << court_mandate_not_implemented
-      casa_case.case_court_mandates << court_mandate_partially_implemented
-      casa_case.case_court_mandates << court_mandate_not_specified
+      casa_case.case_court_orders << court_order_implemented
+      casa_case.case_court_orders << court_order_not_implemented
+      casa_case.case_court_orders << court_order_partially_implemented
+      casa_case.case_court_orders << court_order_not_specified
     end
 
-    it "should have all the court mandates" do
+    it "should have all the court orders" do
       case_report = CaseCourtReport.new(
         case_id: casa_case.id,
         path_to_template: path_to_template,
@@ -231,16 +231,16 @@ RSpec.describe CaseCourtReport, type: :model do
 
       expect(case_report_body).to include(casa_case.case_number)
 
-      expect(case_report_body).to include(court_mandate_implemented.mandate_text)
+      expect(case_report_body).to include(court_order_implemented.mandate_text)
       expect(case_report_body).to include("Implemented")
 
-      expect(case_report_body).to include(court_mandate_not_implemented.mandate_text)
+      expect(case_report_body).to include(court_order_not_implemented.mandate_text)
       expect(case_report_body).to include("Not implemented")
 
-      expect(case_report_body).to include(court_mandate_partially_implemented.mandate_text)
+      expect(case_report_body).to include(court_order_partially_implemented.mandate_text)
       expect(case_report_body).to include("Partially implemented")
 
-      expect(case_report_body).to include(court_mandate_partially_implemented.mandate_text)
+      expect(case_report_body).to include(court_order_partially_implemented.mandate_text)
       expect(case_report_body).to include("Not specified")
     end
   end
