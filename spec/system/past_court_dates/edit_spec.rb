@@ -28,7 +28,7 @@ RSpec.describe "past_court_dates/edit", type: :system do
     expect(page).to have_select("Judge")
 
     page.find("#add-mandate-button").click
-    find("#mandates-list-container").first("textarea").send_keys("Court Mandate Text One")
+    find("#court-orders-list-container").first("textarea").send_keys("Court Mandate Text One")
 
     within ".top-page-actions" do
       click_on "Update"
