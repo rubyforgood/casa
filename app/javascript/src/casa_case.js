@@ -112,15 +112,22 @@ function handleGenerateReport (e) {
 }
 
 $('document').ready(() => {
-  courtOrders = new CourtOrderList($('#court-orders-list-container'))
-  $('button#add-mandate-button').on('click', () => {
-    courtOrders.addCourtOrder()
-  })
-  $('button.remove-mandate-button').on('click', removeMandateWithConfirmation)
+  const courtOrdersListContainer = $('#court-orders-list-container')
+
+  if (courtOrdersListContainer.length) {
+    courtOrders = new CourtOrderList(courtOrdersListContainer)
+
+    $('button#add-mandate-button').on('click', () => {
+      courtOrders.addCourtOrder()
+    })
+    
+    $('button.remove-mandate-button').on('click', removeMandateWithConfirmation)
+
+    $('.court-mandates textarea').each(function () {
+      $(this).height($(this).prop('scrollHeight'))
+    })
+  }
+
 
   $('#btnGenerateReport').on('click', handleGenerateReport)
-
-  $('.court-mandates textarea').each(function () {
-    $(this).height($(this).prop('scrollHeight'))
-  })
 })
