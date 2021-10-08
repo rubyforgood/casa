@@ -21,6 +21,16 @@ beforeEach(() => {
   })
 })
 
+describe('CourtOrderList constructor', () => {
+  test('the constructor should be able to extract the rescource name from the url', (done) => {
+
+  })
+
+  test('the constructor should be able to extract the casa case id from the url', (done) => {
+
+  })
+})
+
 describe('addCourtOrder', () => {
   test('addCourtOrder should add a textarea and dropdown in a div with class "court-mandate-entry" as a child of #court-orders-list-container', (done) => {
     $(document).ready(() => {
