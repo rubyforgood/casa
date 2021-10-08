@@ -63,7 +63,6 @@ describe('addCourtOrder', () => {
           expect($(select).attr('id')).toBe(`casa_case_case_court_mandates_attributes_${index}_implementation_status`)
           expect($(select).attr('name')).toBe(`casa_case[case_court_mandates_attributes][${index}][implementation_status]`)
 
-
           const hiddenInput = courtOrderInputs.find('input[type="hidden"]')
           expect($(hiddenInput).attr('id')).toBe(`casa_case_case_court_mandates_attributes_${index}_casa_case_id`)
           expect($(hiddenInput).attr('name')).toBe(`casa_case[case_court_mandates_attributes][${index}][casa_case_id]`)
