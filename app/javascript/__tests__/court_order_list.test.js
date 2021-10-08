@@ -54,7 +54,7 @@ describe('CourtOrderList constructor', () => {
         window.location = new URL(`https://casa-qa.herokuapp.com/casa_cases/${casaCaseId2}/past_court_dates/3`)
         courtOrderList = new CourtOrderList(courtOrderListElement)
 
-        expect(courtOrderList.casaCaseId).to(casaCaseId2)
+        expect(courtOrderList.casaCaseId).toBe(casaCaseId2)
         done()
       } catch (error) {
         done(error)
