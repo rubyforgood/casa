@@ -35,6 +35,7 @@ describe('addCourtOrder', () => {
         expect(appendedCourtOrder.attr('class')).toContain('court-mandate-entry')
         expect(appendedCourtOrder.find('textarea').length).toBe(1)
         expect(appendedCourtOrder.find('select').length).toBe(1)
+        expect(appendedCourtOrder.find('input[type="hidden"]').length).toBe(1)
         done()
       } catch (error) {
         done(error)
@@ -61,6 +62,11 @@ describe('addCourtOrder', () => {
           const select = courtOrderInputs.find('select')
           expect($(select).attr('id')).toBe(`casa_case_case_court_mandates_attributes_${index}_implementation_status`)
           expect($(select).attr('name')).toBe(`casa_case[case_court_mandates_attributes][${index}][implementation_status]`)
+
+
+          const hiddenInput = courtOrderInputs.find('input[type="hidden"]')
+          expect($(hiddenInput).attr('id')).toBe(`casa_case_case_court_mandates_attributes_${index}_casa_case_id`)
+          expect($(hiddenInput).attr('name')).toBe(`casa_case[case_court_mandates_attributes][${index}][casa_case_id]`)
         })
 
         courtOrderListElement.children('input').each(function (index) {
