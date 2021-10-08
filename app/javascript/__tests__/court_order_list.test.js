@@ -23,11 +23,43 @@ beforeEach(() => {
 
 describe('CourtOrderList constructor', () => {
   test('the constructor should be able to extract the rescource name from the url', (done) => {
+    $(document).ready(() => {
+      try {
+        window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/2151')
+        courtOrderList = new CourtOrderList(courtOrderListElement)
 
+        expect(courtOrderList.resourceName).toBe('casa_case')
+
+        window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/2151/past_court_dates/3')
+        courtOrderList = new CourtOrderList(courtOrderListElement)
+
+        expect(courtOrderList.resourceName).toBe('past_court_date')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
   })
 
   test('the constructor should be able to extract the casa case id from the url', (done) => {
+    $(document).ready(() => {
+      try {
+        const casaCaseId1 = '2151'
+        const casaCaseId2 = '1988'
+        window.location = new URL(`https://casa-qa.herokuapp.com/casa_cases/${casaCaseId1}`)
+        courtOrderList = new CourtOrderList(courtOrderListElement)
 
+        expect(courtOrderList.casaCaseId).toBe(casaCaseId1)
+
+        window.location = new URL(`https://casa-qa.herokuapp.com/casa_cases/${casaCaseId2}/past_court_dates/3`)
+        courtOrderList = new CourtOrderList(courtOrderListElement)
+
+        expect(courtOrderList.casaCaseId).to(casaCaseId2)
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
   })
 })
 
