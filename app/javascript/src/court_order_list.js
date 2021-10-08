@@ -16,11 +16,7 @@ module.exports = class CourtOrderList {
 
     this.courtOrdersWidget = courtOrdersWidget
     this.resourceName = path.match(/([a-z_]+)s\/(\d+(\/edit)?|new)$/)[1]
-
-    // Certain paths require an additional hidden input containing the casa case id to save court orders
-    if (this.resourceName !== 'casa_case') {
-      this.casaCaseId = path.match(/^\/casa_cases\/(\d+)/)[1]
-    }
+    this.casaCaseId = path.match(/^\/casa_cases\/(\d+)/)[1]
   }
 
   // Adds a row containing a text field to write the court order and a dropdown to specify the order status
@@ -42,15 +38,14 @@ module.exports = class CourtOrderList {
         <option value="partially_implemented">Partially implemented</option>
         <option value="implemented">Implemented</option>
       </select>
+      <input
+        type="hidden"
+        id="${resourceName}_case_court_mandates_attributes_${index}_casa_case_id"
+        name="${resourceName}[case_court_mandates_attributes][${index}][casa_case_id]"
+        value="${this.casaCaseId}">
     </div>`)
 
     courtOrdersWidget.append(courtOrderRow)
-    if (this.casaCaseId) {
-      const casaCaseIdHiddenInput = `<input type="hidden" id="${resourceName}_case_court_mandates_attributes_${index}_casa_case_id" name="${resourceName}[case_court_mandates_attributes][${index}][casa_case_id]" value="${this.casaCaseId}">`
-
-      courtOrdersWidget.append(casaCaseIdHiddenInput)
-    }
-
     courtOrderRow.children('textarea').trigger('focus')
   }
 
