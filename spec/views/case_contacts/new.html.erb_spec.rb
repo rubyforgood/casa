@@ -13,14 +13,16 @@ RSpec.describe "case_contacts/new", type: :view do
   end
 
   context "while signed-in as a volunteer" do
+    let(:casa_org) { CasaOrg.first }
+
     before do
       sign_in_as_volunteer
+      allow(view).to receive(:current_organization).and_return(casa_org)
     end
 
     let(:current_time) { Time.zone.now.strftime("%Y-%m-%d") }
 
     it { is_expected.to have_field("Occurred at", with: current_time) }
     it { is_expected.to have_selector("textarea", id: "case_contact_notes") }
-    it { is_expected.to have_selector("a", text: "Return to Dashboard") }
   end
 end

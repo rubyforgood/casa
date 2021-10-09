@@ -26,18 +26,18 @@ RSpec.describe VolunteerMailer, type: :mailer do
   end
 
   describe ".case_contacts_reminder" do
-    let(:mail) { VolunteerMailer.case_contacts_reminder(volunteer, false) }
-    let(:mail_with_cc) { VolunteerMailer.case_contacts_reminder(volunteer_with_supervisor, true) }
-
     it "sends an email reminding volunteer" do
+      mail = VolunteerMailer.case_contacts_reminder(volunteer, [])
       expect(mail.body.encoded).to match("Hello #{volunteer.display_name}")
       expect(mail.body.encoded).to match("as a reminder")
       expect(mail.body.encoded).to include(case_contacts_url.to_s)
       expect(mail.cc).to be_empty
     end
 
-    it "sends a cc to supervisor" do
-      expect(mail_with_cc.cc).to include(volunteer_with_supervisor.supervisor.email.to_s)
+    it "sends and cc's recipients" do
+      cc_recipients = %w[supervisor@example.com admin@example.com]
+      mail = VolunteerMailer.case_contacts_reminder(volunteer, cc_recipients)
+      expect(mail.cc).to match_array(cc_recipients)
     end
   end
 

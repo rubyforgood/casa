@@ -278,6 +278,64 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(case_contact.duration_minutes).to eq 105
     end
 
+    it "autosaves notes", js: true do
+      volunteer = create(:volunteer, :with_casa_cases)
+      volunteer_casa_case_one = volunteer.casa_cases.first
+      create_contact_types(volunteer_casa_case_one.casa_org)
+
+      sign_in volunteer
+
+      visit new_case_contact_path(volunteer_casa_case_one.id)
+
+      check volunteer_casa_case_one.case_number
+      check "School"
+      check "Therapist"
+      choose "Yes"
+      select "In Person", from: "Contact medium"
+      fill_in "case-contact-duration-hours", with: "1"
+      fill_in "case-contact-duration-minutes", with: "45"
+      fill_in "Occurred at", with: "04/04/2020"
+      fill_in "Miles driven", with: "30"
+      select "Yes", from: "Want driving reimbursement"
+      fill_in "Notes", with: "Hello world"
+
+      # Allow 5 seconds for the Notes to be saved in localstorage
+      sleep 5
+
+      click_on "Log out"
+
+      sign_in volunteer
+
+      visit new_case_contact_path
+
+      expect(page).to have_field("Notes", with: "Hello world")
+    end
+
+    it "delete local storage notes after successfuly submited", js: true do
+      volunteer = create(:volunteer)
+      sign_in volunteer
+
+      visit new_case_contact_path
+
+      choose "Yes"
+      select "In Person", from: "Contact medium"
+      fill_in "case-contact-duration-hours", with: "1"
+      fill_in "case-contact-duration-minutes", with: "45"
+      fill_in "Miles driven", with: "30"
+      select "Yes", from: "Want driving reimbursement"
+      fill_in "Notes", with: "Hello world"
+
+      # Allow 5 seconds for the Notes to be saved in localstorage
+      sleep 5
+      click_on "Submit"
+      click_on "Continue Submitting"
+      expect(page).to have_text("At least one case must be selected")
+
+      visit new_case_contact_path
+
+      expect(page).to have_field("Notes", with: "Hello world")
+    end
+
     it "submits the form when no note was added", js: true do
       volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first
@@ -494,6 +552,22 @@ RSpec.describe "case_contacts/new", type: :system do
         expect(page).not_to have_field("Attorney")
         expect(page).to have_field("School")
         expect(page).to have_field("Therapist")
+      end
+    end
+
+    context "when driving reimbursement is hidden by the CASA org" do
+      it "does not show for case_contacts" do
+        org = build(:casa_org, show_driving_reimbursement: false)
+        contact_type_group = create_contact_types(org)
+        volunteer = create(:volunteer, :with_casa_cases, casa_org: org)
+        contact_types_for_cases = contact_type_group.contact_types.reject { |ct| ct.name == "Attorney" }
+        assign_contact_types_to_cases(volunteer.casa_cases, contact_types_for_cases)
+
+        sign_in volunteer
+
+        visit new_case_contact_path
+
+        expect(page).not_to have_field("Want driving reimbursement")
       end
     end
 

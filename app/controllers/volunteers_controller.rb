@@ -83,7 +83,15 @@ class VolunteersController < ApplicationController
   def reminder
     authorize @volunteer
     with_cc = params[:with_cc].present?
-    VolunteerMailer.case_contacts_reminder(@volunteer, with_cc).deliver
+
+    cc_recipients = []
+    if with_cc
+      if current_user.casa_admin?
+        cc_recipients.append(current_user.email)
+      end
+      cc_recipients.append(@volunteer.supervisor.email) if @volunteer.supervisor
+    end
+    VolunteerMailer.case_contacts_reminder(@volunteer, cc_recipients).deliver
 
     redirect_to edit_volunteer_path(@volunteer), notice: "Reminder sent to volunteer."
   end

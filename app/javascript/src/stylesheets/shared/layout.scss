@@ -1,5 +1,5 @@
 body {
-  background-color: #F4F7FA;
+  background-color: #f4f7fa;
   min-width: 320px;
 }
 
@@ -14,6 +14,10 @@ label {
   font-weight: 900;
 }
 
+.unbold {
+  font-weight: 100;
+}
+
 .fa-car {
   color: $primary;
 }
@@ -24,7 +28,7 @@ div.row div.col-sm-12.form-header h1 {
   vertical-align: middle;
 }
 
-div.row:nth-child(4) {
+div.row.volunteer-filters {
   margin-top: 2rem;
 }
 
@@ -44,7 +48,6 @@ div.row:nth-child(4) {
 }
 
 /* ASSUMPTION: default screen size is desktop view (> 1024px) */
-
 
 /* As 'mobile-label' class is mobile only, not display them on desktop view */
 
@@ -77,7 +80,7 @@ table.table {
       display: table;
       width: 100%;
       border-bottom: 1px solid #efefef;
-      >* {
+      > * {
         display: block;
       }
     }

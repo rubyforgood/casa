@@ -2,7 +2,13 @@ require "rails_helper"
 
 RSpec.describe "users/edit", type: :system do
   let(:organization) { create(:casa_org) }
-  let(:volunteer) { create(:volunteer) }
+  let(:volunteer) do
+    create(
+      :volunteer,
+      last_sign_in_at: "2020-01-01 00:00:00",
+      current_sign_in_at: "2020-01-02 00:00:00"
+    )
+  end
   let(:admin) { create(:casa_admin) }
   let(:supervisor) { create(:supervisor) }
 
@@ -20,7 +26,7 @@ RSpec.describe "users/edit", type: :system do
       fill_in "New Password Confirmation", with: "1234567"
 
       click_on "Update Password"
-
+      expect(page).to have_content "1 error prohibited this password change from being saved:"
       expect(page).to have_text("Current password is incorrect")
     end
 
@@ -32,7 +38,7 @@ RSpec.describe "users/edit", type: :system do
       fill_in "New Password Confirmation", with: "1234"
 
       click_on "Update Password"
-
+      expect(page).to have_content "2 errors prohibited this password change from being saved:"
       expect(page).to have_text("Password confirmation doesn't match Password")
       expect(page).to have_text("Password is too short (minimum is 6 characters)")
     end
@@ -68,6 +74,13 @@ RSpec.describe "users/edit", type: :system do
 
     it "is not able to update the email if user is a volunteer" do
       expect(page).to have_field("Email", disabled: true)
+    end
+
+    it "displays current sign in date" do
+      formatted_current_sign_in_at = I18n.l(volunteer.current_sign_in_at, format: :full, default: nil)
+      formatted_last_sign_in_at = I18n.l(volunteer.last_sign_in_at, format: :full, default: nil)
+      expect(page).to have_text("Last logged in #{formatted_current_sign_in_at}")
+      expect(page).not_to have_text("Last logged in #{formatted_last_sign_in_at}")
     end
   end
 
@@ -128,7 +141,7 @@ RSpec.describe "users/edit", type: :system do
       fill_in "Password Confirmation", with: "1234"
 
       click_on "Update Password"
-
+      expect(page).to have_content "2 errors prohibited this password change from being saved:"
       expect(page).to have_text("Password confirmation doesn't match Password")
       expect(page).to have_text("Password is too short (minimum is 6 characters)")
     end

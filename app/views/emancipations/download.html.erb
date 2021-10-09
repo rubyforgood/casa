@@ -1,0 +1,29 @@
+<table>
+  <% @emancipation_form_data.each do |category| %>
+    <tr>
+      <td><%= emancipation_category_checkbox_checked_download(@current_case, category) %></td>
+      <td><%= category.name %></td>
+    </tr>
+    <% if category.emancipation_options.any? %>
+      <tr>
+        <td></td>
+        <td>
+          <table>
+            <% category.emancipation_options.each do |option| %>
+              <tr>
+                <td>
+                  <% if category.mutually_exclusive? %>
+                    <%= emancipation_option_radio_checked_download(@current_case, option) %>
+                  <% else %>
+                    <%= emancipation_option_checkbox_checked_download(@current_case, option) %>
+                  <% end %>
+                </td>
+                <td><%= option.name %></td>
+              </tr>
+            <% end %>
+          </table>
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+</table>

@@ -1,6 +1,8 @@
 class AllCasaAdminsController < ApplicationController
   skip_before_action :authenticate_user!
   before_action :authenticate_all_casa_admin!
+  before_action :set_custom_error_heading, only: [:update_password]
+  after_action :reset_custom_error_heading, only: [:update_password]
 
   def new
     @all_casa_admin = AllCasaAdmin.new
@@ -56,5 +58,13 @@ class AllCasaAdminsController < ApplicationController
 
   def password_params
     params.require(:all_casa_admin).permit(:password, :password_confirmation)
+  end
+
+  def set_custom_error_heading
+    @custom_error_header = "password change"
+  end
+
+  def reset_custom_error_heading
+    @custom_error_header = nil
   end
 end

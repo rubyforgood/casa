@@ -21,6 +21,10 @@ class CasaCasesController < ApplicationController
         csv = CaseContactsExportCsvService.new(case_contacts).perform
         send_data csv, filename: case_contact_csv_name(case_contacts)
       end
+      format.xlsx do
+        filename = @casa_case.case_number + "-case-contacts-" + Time.now.strftime("%Y-%m-%d") + ".xlsx"
+        response.headers["Content-Disposition"] = "attachment; filename=#{filename}"
+      end
     end
   end
 
@@ -38,9 +42,15 @@ class CasaCasesController < ApplicationController
     authorize @casa_case
 
     if @casa_case.save
-      redirect_to @casa_case, notice: "CASA case was successfully created."
+      respond_to do |format|
+        format.html { redirect_to @casa_case, notice: "CASA case was successfully created." }
+        format.json { render json: @casa_case, status: :created }
+      end
     else
-      render :new
+      respond_to do |format|
+        format.html { render :new }
+        format.json { render json: @casa_case.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   end
 

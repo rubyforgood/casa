@@ -206,4 +206,42 @@ RSpec.describe CaseCourtReport, type: :model do
       expect { bad_report.generate_to_string }.to raise_error(Zip::Error)
     end
   end
+
+  describe "when court mandates has different implementation statuses" do
+    let(:casa_case) { create(:casa_case, case_number: "Sample-Case-12345") }
+    let(:court_mandate_implemented) { create(:case_court_mandate, casa_case: casa_case, mandate_text: "This order is implemented already", implementation_status: :implemented) }
+    let(:court_mandate_not_implemented) { create(:case_court_mandate, casa_case: casa_case, mandate_text: "This order is not implemented yet", implementation_status: :not_implemented) }
+    let(:court_mandate_partially_implemented) { create(:case_court_mandate, casa_case: casa_case, mandate_text: "This order is partially implemented", implementation_status: :partially_implemented) }
+    let(:court_mandate_not_specified) { create(:case_court_mandate, casa_case: casa_case, mandate_text: "This order does not have any implementation status", implementation_status: nil) }
+
+    before(:each) do
+      casa_case.case_court_mandates << court_mandate_implemented
+      casa_case.case_court_mandates << court_mandate_not_implemented
+      casa_case.case_court_mandates << court_mandate_partially_implemented
+      casa_case.case_court_mandates << court_mandate_not_specified
+    end
+
+    it "should have all the court mandates" do
+      case_report = CaseCourtReport.new(
+        case_id: casa_case.id,
+        path_to_template: path_to_template,
+        path_to_report: path_to_report
+      )
+      case_report_body = get_docx_subfile_contents(case_report.generate_to_string, "word/document.xml")
+
+      expect(case_report_body).to include(casa_case.case_number)
+
+      expect(case_report_body).to include(court_mandate_implemented.mandate_text)
+      expect(case_report_body).to include("Implemented")
+
+      expect(case_report_body).to include(court_mandate_not_implemented.mandate_text)
+      expect(case_report_body).to include("Not implemented")
+
+      expect(case_report_body).to include(court_mandate_partially_implemented.mandate_text)
+      expect(case_report_body).to include("Partially implemented")
+
+      expect(case_report_body).to include(court_mandate_partially_implemented.mandate_text)
+      expect(case_report_body).to include("Not specified")
+    end
+  end
 end

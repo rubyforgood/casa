@@ -156,4 +156,8 @@ $('document').ready(() => {
   $('button.remove-mandate-button').on('click', removeMandateWithConfirmation)
 
   $('#btnGenerateReport').on('click', handleGenerateReport)
+
+  $('.court-mandates textarea').each(function () {
+    $(this).height($(this).prop('scrollHeight'))
+  })
 })
