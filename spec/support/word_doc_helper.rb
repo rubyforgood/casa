@@ -17,4 +17,30 @@ module WordDocHelper
       end
     end
   end
+
+  # Get the text contents of an XML file in the word document as a string, useful for checking inclusion
+  #
+  # This isn't fully fool-proof. DOCX does weird stuff with splitting up strings <w:p>lik</w:p><w:p>e this</w:p>
+  # so some words may show up separated. If that's happening you can pass `true` for the :collapse argument
+  # and it will render the above "likethis". This should satisfy sufficiently unique strings in test data.
+  #
+  # @example
+  #
+  #   get_docx_contents_as_string(docx_file_data)
+  #
+  # @param [String] docx The contents of the docx file
+  # @param [Boolean] collapse Whether or not the contents should be fully condensed
+  # @return [String] The contents with all XML markup removed
+  #
+  def get_docx_contents_as_string(docx, collapse: false)
+    Tempfile.create('court_report.zip', 'tmp') do |file|
+      file << docx.force_encoding('UTF-8')
+
+      xml_document = Zip::File.open(file.path) do |docx_extracted|
+        docx_extracted.find_entry('word/document.xml').get_input_stream.read.force_encoding('UTF-8')
+      end
+      separate_with = collapse ? '' : "\n"
+      document = xml_document.gsub(/<[^>]*>+/, "\n").gsub(/\n+/, separate_with)
+    end
+  end
 end

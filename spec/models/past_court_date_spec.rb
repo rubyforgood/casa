@@ -12,11 +12,17 @@ RSpec.describe PastCourtDate, type: :model do
   let(:path_to_report) { Rails.root.join("tmp", "test_report.docx").to_s }
 
   it { is_expected.to belong_to(:casa_case) }
-  it { is_expected.to validate_presence_of(:casa_case_id) }
   it { is_expected.to validate_presence_of(:date) }
   it { is_expected.to have_many(:case_court_mandates) }
   it { is_expected.to belong_to(:hearing_type).optional }
   it { is_expected.to belong_to(:judge).optional }
+
+  it "is invalid without a casa_case" do
+    past_court_date = build(:past_court_date, casa_case: nil)
+    expect do
+      past_court_date.casa_case = casa_case
+    end.to change{past_court_date.valid?}.from(false).to(true)
+  end
 
   before do
     travel_to Date.new(2021, 1, 1)

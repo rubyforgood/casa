@@ -57,6 +57,29 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
       let(:headers) { {accept: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"} }
 
       it { expect(response).to be_successful }
+
+      context "when a judge is attached" do
+        let!(:past_court_date) {
+          create(:past_court_date, date: Date.yesterday, judge: judge)
+        }
+        it "includes the judge's name in the document" do
+          show
+          document = get_docx_contents_as_string(response.body, collapse: true)
+          expect(document).to include(judge.name)
+        end
+      end
+
+      context "without a judge" do
+        let!(:past_court_date) {
+          create(:past_court_date, date: Date.yesterday, judge: nil)
+        }
+        it "includes the judge's name in the document" do
+          show
+          document = get_docx_contents_as_string(response.body, collapse: true)
+          expect(document).not_to include(judge.name)
+          expect(document.downcase).to include("judge: none")
+        end
+      end
     end
   end
 
