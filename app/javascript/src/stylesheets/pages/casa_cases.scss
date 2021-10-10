@@ -67,7 +67,7 @@ body.casa_cases {
   }
 }
 
-@media only screen and (max-width: 640px) {
+@media only screen and (max-width: $small) {
   body.casa_cases {
     .court-mandates {
       textarea, .add-court-mandate {
