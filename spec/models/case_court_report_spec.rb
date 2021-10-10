@@ -100,7 +100,7 @@ RSpec.describe CaseCourtReport, type: :model do
 
         let(:contact_type) { create(:contact_type, name: document_data[:case_contact_type]) }
         let(:case_contact) { create(:case_contact, contact_made: false, occurred_at: document_data[:case_contact_time]) }
-        let(:court_mandate) { create(:case_court_mandate, implementation_status: :partially_implemented) }
+        let(:court_order) { create(:case_court_order, implementation_status: :partially_implemented) }
 
         before(:each) do
           casa_case_with_contacts.casa_org.update_attribute(:address, document_data[:org_address])
@@ -109,8 +109,8 @@ RSpec.describe CaseCourtReport, type: :model do
           casa_case_with_contacts.update_attribute(:court_date, document_data[:case_hearing_date])
           case_contact.contact_types << contact_type
           casa_case_with_contacts.case_contacts << case_contact
-          casa_case_with_contacts.case_court_mandates << court_mandate
-          court_mandate.update_attribute(:mandate_text, document_data[:mandate_text])
+          casa_case_with_contacts.case_court_orders << court_order
+          court_order.update_attribute(:mandate_text, document_data[:mandate_text])
           CaseAssignment.find_by(casa_case_id: casa_case_with_contacts.id, volunteer_id: volunteer.id).update_attribute(:created_at, document_data[:volunteer_case_assignment_date])
           volunteer.update_attribute(:display_name, document_data[:volunteer_name])
           volunteer.supervisor.update_attribute(:display_name, document_data[:supervisor_name])
@@ -128,7 +128,7 @@ RSpec.describe CaseCourtReport, type: :model do
           expect(report_body).to include(document_data[:case_contact_type])
           expect(report_body).to include("#{document_data[:case_contact_time].strftime("%-m/%d")}*")
           expect(report_body).to include(document_data[:mandate_text])
-          expect(report_body).to include("Partially implemented") # Mandate Status
+          expect(report_body).to include("Partially implemented") # Order Status
           expect(report_body).to include(document_data[:volunteer_name])
           expect(report_body).to include(document_data[:volunteer_case_assignment_date].strftime("%B %-d, %Y"))
           expect(report_body).to include(document_data[:supervisor_name])
@@ -163,7 +163,7 @@ RSpec.describe CaseCourtReport, type: :model do
         let(:casa_case) { create(:casa_case) }
         let(:contact_type) { create(:contact_type, name: document_data[:case_contact_type]) }
         let(:case_contact) { create(:case_contact, contact_made: false, occurred_at: document_data[:case_contact_time]) }
-        let(:court_mandate) { create(:case_court_mandate, implementation_status: :partially_implemented) }
+        let(:court_order) { create(:case_court_order, implementation_status: :partially_implemented) }
 
         before(:each) do
           casa_case.casa_org.update_attribute(:address, document_data[:org_address])
@@ -172,8 +172,8 @@ RSpec.describe CaseCourtReport, type: :model do
           casa_case.update_attribute(:court_date, document_data[:case_hearing_date])
           case_contact.contact_types << contact_type
           casa_case.case_contacts << case_contact
-          casa_case.case_court_mandates << court_mandate
-          court_mandate.update_attribute(:mandate_text, document_data[:mandate_text])
+          casa_case.case_court_orders << court_order
+          court_order.update_attribute(:mandate_text, document_data[:mandate_text])
         end
 
         it "display all expected information" do
@@ -186,7 +186,7 @@ RSpec.describe CaseCourtReport, type: :model do
           expect(report_body).to include(document_data[:case_contact_type])
           expect(report_body).to include("#{document_data[:case_contact_time].strftime("%-m/%d")}*")
           expect(report_body).to include(document_data[:mandate_text])
-          expect(report_body).to include("Partially implemented") # Mandate Status
+          expect(report_body).to include("Partially implemented") # Order Status
         end
       end
     end
@@ -207,21 +207,21 @@ RSpec.describe CaseCourtReport, type: :model do
     end
   end
 
-  describe "when court mandates has different implementation statuses" do
+  describe "when court orders has different implementation statuses" do
     let(:casa_case) { create(:casa_case, case_number: "Sample-Case-12345") }
-    let(:court_mandate_implemented) { create(:case_court_mandate, casa_case: casa_case, mandate_text: "This order is implemented already", implementation_status: :implemented) }
-    let(:court_mandate_not_implemented) { create(:case_court_mandate, casa_case: casa_case, mandate_text: "This order is not implemented yet", implementation_status: :not_implemented) }
-    let(:court_mandate_partially_implemented) { create(:case_court_mandate, casa_case: casa_case, mandate_text: "This order is partially implemented", implementation_status: :partially_implemented) }
-    let(:court_mandate_not_specified) { create(:case_court_mandate, casa_case: casa_case, mandate_text: "This order does not have any implementation status", implementation_status: nil) }
+    let(:court_order_implemented) { create(:case_court_order, casa_case: casa_case, mandate_text: "This order is implemented already", implementation_status: :implemented) }
+    let(:court_order_not_implemented) { create(:case_court_order, casa_case: casa_case, mandate_text: "This order is not implemented yet", implementation_status: :not_implemented) }
+    let(:court_order_partially_implemented) { create(:case_court_order, casa_case: casa_case, mandate_text: "This order is partially implemented", implementation_status: :partially_implemented) }
+    let(:court_order_not_specified) { create(:case_court_order, casa_case: casa_case, mandate_text: "This order does not have any implementation status", implementation_status: nil) }
 
     before(:each) do
-      casa_case.case_court_mandates << court_mandate_implemented
-      casa_case.case_court_mandates << court_mandate_not_implemented
-      casa_case.case_court_mandates << court_mandate_partially_implemented
-      casa_case.case_court_mandates << court_mandate_not_specified
+      casa_case.case_court_orders << court_order_implemented
+      casa_case.case_court_orders << court_order_not_implemented
+      casa_case.case_court_orders << court_order_partially_implemented
+      casa_case.case_court_orders << court_order_not_specified
     end
 
-    it "should have all the court mandates" do
+    it "should have all the court orders" do
       case_report = CaseCourtReport.new(
         case_id: casa_case.id,
         path_to_template: path_to_template,
@@ -231,16 +231,16 @@ RSpec.describe CaseCourtReport, type: :model do
 
       expect(case_report_body).to include(casa_case.case_number)
 
-      expect(case_report_body).to include(court_mandate_implemented.mandate_text)
+      expect(case_report_body).to include(court_order_implemented.mandate_text)
       expect(case_report_body).to include("Implemented")
 
-      expect(case_report_body).to include(court_mandate_not_implemented.mandate_text)
+      expect(case_report_body).to include(court_order_not_implemented.mandate_text)
       expect(case_report_body).to include("Not implemented")
 
-      expect(case_report_body).to include(court_mandate_partially_implemented.mandate_text)
+      expect(case_report_body).to include(court_order_partially_implemented.mandate_text)
       expect(case_report_body).to include("Partially implemented")
 
-      expect(case_report_body).to include(court_mandate_partially_implemented.mandate_text)
+      expect(case_report_body).to include(court_order_partially_implemented.mandate_text)
       expect(case_report_body).to include("Not specified")
     end
   end

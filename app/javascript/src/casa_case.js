@@ -51,7 +51,7 @@ function removeMandateAction (ctx) {
   const id = idElement.val()
 
   $.ajax({
-    url: `/case_court_mandates/${id}`,
+    url: `/case_court_orders/${id}`,
     method: 'delete',
     success: () => {
       ctx.parent().remove()
@@ -81,16 +81,16 @@ function courtMandateHtml (index, ref, casaCaseId) {
   return {
     entry: '<div class="court-mandate-entry"></div>',
 
-    textarea: `<textarea name="${ref}[case_court_mandates_attributes][${index}][mandate_text]"\
-                 id="casa_case_case_court_mandates_attributes_${index}_mandate_text"></textarea>`,
+    textarea: `<textarea name="${ref}[case_court_orders_attributes][${index}][mandate_text]"\
+                 id="casa_case_case_court_orders_attributes_${index}_mandate_text"></textarea>`,
 
     select: `<select class="implementation-status"\
-                 name="${ref}[case_court_mandates_attributes][${index}][implementation_status]"\
-                 id="casa_case_case_court_mandates_attributes_${index}_implementation_status">\
+                 name="${ref}[case_court_orders_attributes][${index}][implementation_status]"\
+                 id="casa_case_case_court_orders_attributes_${index}_implementation_status">\
                  ${selectOptions}\
                </select>`,
-    hidden: `<textarea class="d-none" name="${ref}[case_court_mandates_attributes][${index}][casa_case_id]"\
-              id="casa_case_case_court_mandates_attributes_${index}_casa_case_id">${casaCaseId}</textarea>`
+    hidden: `<textarea class="d-none" name="${ref}[case_court_orders_attributes][${index}][casa_case_id]"\
+              id="casa_case_case_court_orders_attributes_${index}_casa_case_id">${casaCaseId}</textarea>`
   }
 }
 

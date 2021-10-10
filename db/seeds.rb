@@ -59,7 +59,7 @@ class SeederMain
       ContactType,
       ContactTypeGroup,
       CaseContact,
-      CaseCourtMandate
+      CaseCourtOrder
     ]
   end
 

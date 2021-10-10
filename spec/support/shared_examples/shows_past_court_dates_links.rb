@@ -18,7 +18,7 @@ shared_examples_for "shows past court dates links" do
   let!(:formatted_date_with_details) { I18n.l(past_court_date_with_details.date, format: :full, default: nil) }
   let!(:formatted_date_without_details) { I18n.l(past_court_date_without_details.date, format: :full, default: nil) }
 
-  it "shows court mandates" do
+  it "shows court orders" do
     visit edit_casa_case_path(casa_case)
 
     expect(page).to have_text(formatted_date_with_details)

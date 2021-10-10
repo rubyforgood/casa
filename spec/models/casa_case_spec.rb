@@ -13,7 +13,7 @@ RSpec.describe CasaCase, type: :model do
   it { is_expected.to belong_to(:judge).optional }
   it { is_expected.to validate_presence_of(:case_number) }
   it { is_expected.to validate_uniqueness_of(:case_number).scoped_to(:casa_org_id).case_insensitive }
-  it { is_expected.to have_many(:case_court_mandates).dependent(:destroy) }
+  it { is_expected.to have_many(:case_court_orders).dependent(:destroy) }
   it { is_expected.to have_many(:volunteers).through(:case_assignments) }
 
   describe "scopes" do
