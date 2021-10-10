@@ -9,7 +9,7 @@ jobs:
     name: Remove help wanted labels
     steps:
       - name: Remove help wanted labels
-        uses: bjthompson805/remove-label-from-cards@v1
+        uses: rubyforgood/remove-label-from-cards@v1
         id: remove-help-wanted-labels
         with:
           token: ${{secrets.GITHUB_TOKEN}}

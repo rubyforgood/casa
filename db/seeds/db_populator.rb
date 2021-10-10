@@ -164,6 +164,10 @@ class DbPopulator
     ]
   end
 
+  def transition_aged_youth?(birth_month_year_youth)
+    (Date.today - birth_month_year_youth).days.in_years > 14
+  end
+
   def create_cases(casa_org, options)
     ContactTypePopulator.populate
     options.case_count.times do |index|
@@ -172,6 +176,7 @@ class DbPopulator
       court_report_submitted = index.even?
 
       new_casa_case = CasaCase.find_by(case_number: case_number)
+      birth_month_year_youth = ((Date.today - 18.year)..(Date.today - 14.year)).to_a.sample
       new_casa_case ||=
         if @case_fourteen_years_old
           CasaCase.find_or_create_by!(
@@ -184,6 +189,8 @@ class DbPopulator
             birth_month_year_youth: ((Date.today - 18.years)..(Date.today - 14.years)).to_a.sample
           )
         else
+
+          birth_month_year_youth = ((Date.today - 18.year)..(Date.today - 1.year)).to_a.sample
           CasaCase.find_or_create_by!(
             casa_org_id: casa_org.id,
             case_number: case_number,
@@ -191,7 +198,7 @@ class DbPopulator
             court_report_due_date: court_date + 1.month,
             court_report_submitted_at: court_report_submitted ? Date.today : nil,
             court_report_status: court_report_submitted ? :submitted : :not_submitted,
-            birth_month_year_youth: ((Date.today - 18.year)..(Date.today - 4.year)).to_a.sample
+            birth_month_year_youth: birth_month_year_youth
           )
         end
 

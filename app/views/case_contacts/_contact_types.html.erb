@@ -1,0 +1,29 @@
+<div id="contact-type-form" class="field contact-type form-group">
+  <h2 id="contact-type-label"><%= form.label :contact_types %></h2>
+  <table>
+    <tr>
+      <% contact_type_groups.each do |group| %>
+        <td class="align-top d-inline-block pr-5 pb-4">
+          <h5> <%= group.name %> </h5>
+          <% group.contact_types.alphabetically.filter do |ct|
+              selected_case_contact_types.blank? ||
+                  selected_case_contact_types.include?(ct)
+            end.each do |contact_type| %>
+            <div class="form-check">
+              <%=
+                check_box_tag checkbox_tag_name,
+                  contact_type.id,
+                  model.decorate.show_contact_type?(contact_type.id),
+                  id: dom_id(contact_type, :case_contact),
+                  class: ["form-check-input", "case-contact-contact-type"]
+              %>
+              <label class="form-check-label" for="<%= dom_id(contact_type, :case_contact) %>">
+                <%= contact_type.name %>
+              </label>
+            </div>
+          <% end %>
+        </td>
+      <% end %>
+    </tr>
+  </table>
+</div>

@@ -134,10 +134,6 @@ class CasaCase < ApplicationRecord
     past_court_dates.order("date").last
   end
 
-  def has_contact_type?(contact_type)
-    casa_case_contact_types.map(&:contact_type_id).include?(contact_type.id)
-  end
-
   def has_hearing_type?
     hearing_type
   end

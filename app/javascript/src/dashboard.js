@@ -62,15 +62,18 @@ $('document').ready(() => {
         }
       })
 
+      const possibleCaseNumberPrefixes = ['CINA', 'TPR']
       const status = data[3]
       const assignedToVolunteer = (data[5] !== '' && data[5].split(',').length >= 1) ? 'Yes' : 'No'
       const assignedToMoreThanOneVolunteer = (data[5] !== '' && data[5].split(',').length > 1) ? 'Yes' : 'No'
       const assignedToTransitionYouth = data[4]
+      const caseNumberPrefix = possibleCaseNumberPrefixes.includes(data[0].split('-')[0]) ? data[0].split('-')[0] : 'None'
 
       return statusArray.includes(status) &&
         assignedToVolunteerArray.includes(assignedToVolunteer) &&
         assignedToMoreThanOneVolunteerArray.includes(assignedToMoreThanOneVolunteer) &&
-        assignedToTransitionYouthArray.includes(assignedToTransitionYouth)
+        assignedToTransitionYouthArray.includes(assignedToTransitionYouth) &&
+        caseNumberPrefixArray.includes(caseNumberPrefix)
     }
   )
 
@@ -99,11 +102,13 @@ $('document').ready(() => {
   const volunteersTable = $('table#volunteers').DataTable({
     autoWidth: false,
     stateSave: false,
+    order: [[6, 'desc']],
     columns: [
       {
         name: 'display_name',
         render: (data, type, row, meta) => {
           return `
+            <span class="mobile-label">Name</span>
             <a href="${editVolunteerPath(row.id)}">
               ${row.display_name || row.email}
             </a>
@@ -121,6 +126,7 @@ $('document').ready(() => {
         render: (data, type, row, meta) => {
           return row.supervisor.id
             ? `
+            <span class="mobile-label">Supervisor</span>
               <a href="${editSupervisorPath(row.supervisor.id)}">
                 ${row.supervisor.name}
               </a>
@@ -130,27 +136,47 @@ $('document').ready(() => {
       },
       {
         name: 'active',
-        render: (data, type, row, meta) => row.active === 'true' ? 'Active' : 'Inactive',
+        render: (data, type, row, meta) => {
+          return `
+            <span class="mobile-label">Status</span>
+            ${row.active === 'true' ? 'Active' : 'Inactive'}
+          `
+        },
+        searchable: false
+      },
+      {
+        name: 'has_transition_aged_youth_cases',
+        render: (data, type, row, meta) => {
+          return `
+          <span class="mobile-label">Assigned to Transitioned Aged Youth</span>
+          ${row.has_transition_aged_youth_cases === 'true' ? 'Yes 🦋' : 'No 🐛'}`
+        },
         searchable: false
       },
       {
         name: 'casa_cases',
         render: (data, type, row, meta) => {
           const links = row.casa_cases.map(casaCase => {
-            return `<a href="${casaCasePath(casaCase.id)}">${casaCase.case_number}</a>`
+            return `
+            <a href="${casaCasePath(casaCase.id)}">${casaCase.case_number}</a>
+            `
           })
-
-          return links.join(', ')
+          const caseNumbers = `
+            <span class="mobile-label">Case Number(s)</span>
+            ${links.join(', ')}
+          `
+          return caseNumbers
         },
         orderable: false
       },
       {
-        name: 'most_recent_contact_occurred_at',
+        name: 'most_recent_attempt_occurred_at',
         render: (data, type, row, meta) => {
-          return row.most_recent_contact.case_id
+          return row.most_recent_attempt.case_id
             ? `
-              <a href="${casaCasePath(row.most_recent_contact.case_id)}">
-                ${row.most_recent_contact.occurred_at}
+              <span class="mobile-label">Last Attempted Contact</span>
+              <a href="${casaCasePath(row.most_recent_attempt.case_id)}">
+                ${row.most_recent_attempt.occurred_at}
               </a>
             `
             : 'None ❌'
@@ -160,7 +186,12 @@ $('document').ready(() => {
       },
       {
         name: 'contacts_made_in_past_days',
-        render: (data, type, row, meta) => row.contacts_made_in_past_days,
+        render: (data, type, row, meta) => {
+          return `
+          <span class="mobile-label">Contacts</span>
+          ${row.contacts_made_in_past_days}
+          `
+        },
         searchable: false,
         visible: false
       },
@@ -169,6 +200,7 @@ $('document').ready(() => {
         orderable: false,
         render: (data, type, row, meta) => {
           return `
+          <span class="mobile-label">Actions</span>
             <a href="${editVolunteerPath(row.id)}">
               Edit
             </a>

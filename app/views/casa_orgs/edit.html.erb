@@ -24,6 +24,10 @@
         <%= form.label :court_report_template %>
         <%= form.file_field :court_report_template, class: "form-control" %>
       </div>
+      <div class="field form-group">
+        <%= form.check_box :show_driving_reimbursement %>
+        <%= form.label :show_driving_reimbursement %>
+      </div>
       <div class="actions">
         <%= form.submit t("button.submit"), class: "btn btn-primary" %>
       </div>

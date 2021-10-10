@@ -80,19 +80,6 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
   end
 
-  describe "'Case Number' dropdown list", js: true do
-    let(:case_number) { casa_cases.first.case_number.to_s }
-    let(:option_text) { "#{case_number} - (assigned to Name Last)" }
-
-    it "has case option selected" do
-      page.select option_text, from: "case-selection"
-
-      click_button "Generate Report"
-
-      expect(page).to have_select "case-selection", selected: option_text
-    end
-  end
-
   context "when generating a report, volunteer sees waiting page", js: true do
     let(:casa_case) { casa_cases.first }
     let(:option_text) { casa_case.case_number }

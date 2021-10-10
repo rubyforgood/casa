@@ -4,6 +4,10 @@
       <%= t(".title") %>
     </h3>
       <%= link_to @current_case.case_number, casa_case_path(@current_case) %>
+      <span style="float:right" class="mb-2">
+        <%= link_to "Download Checklist", casa_case_emancipation_path(@current_case, format: :docx),
+class: "btn btn-primary" %>
+      </span>
   </div>
 </div>
 

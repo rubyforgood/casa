@@ -34,24 +34,12 @@ class CaseCourtReport
     }
   end
 
-  def format_date_contact_attempt(case_contact)
-    I18n.l(case_contact.occurred_at, format: :short_date, default: nil)
-      .concat(case_contact.contact_made ? "" : "*")
-  end
-
   def prepare_case_contacts
     cccts = CaseContactContactType.includes(:case_contact, :contact_type).where("case_contacts.casa_case_id": @casa_case.id)
     interviewees = filter_out_old_case_contacts(cccts)
     return [] unless interviewees.size.positive?
 
-    contact_dates_as_hash = aggregate_contact_dates(interviewees)
-    contact_dates_as_hash.map do |type, dates|
-      {
-        name: "Names of persons involved, starting with the child's name",
-        type: type,
-        dates: dates.join(", ")
-      }
-    end
+    CaseContactsContactDates.new(interviewees).contact_dates_details
   end
 
   def prepare_case_mandates
@@ -60,7 +48,7 @@ class CaseCourtReport
     @casa_case.case_court_mandates.each do |case_mandate|
       case_mandate_data << {
         order: case_mandate.mandate_text,
-        status: case_mandate.implementation_status.humanize
+        status: case_mandate.implementation_status&.humanize
       }
     end
 
@@ -74,21 +62,6 @@ class CaseCourtReport
     else
       interviewees
     end
-  end
-
-  def aggregate_contact_dates(people)
-    contact_dates = Hash.new([])
-
-    people.each do |person|
-      contact_type = person.contact_type.name
-      date_with_format = format_date_contact_attempt(person.case_contact)
-
-      contact_dates[contact_type] << (date_with_format) && next if contact_dates.key?(contact_type)
-
-      contact_dates[contact_type] = [date_with_format]
-    end
-
-    contact_dates
   end
 
   def prepare_case_details

@@ -110,6 +110,13 @@ RSpec.describe "/casa_cases", type: :request do
           expect(casa_case.hearing_type).to eq hearing_type
           expect(casa_case.judge).to eq judge
         end
+
+        it "also respond to json", :aggregate_failures do
+          post casa_cases_url(format: :json), params: {casa_case: valid_attributes}
+
+          expect(response.content_type).to eq("application/json; charset=utf-8")
+          expect(response).to have_http_status(:created)
+        end
       end
 
       it "only creates cases within user's organizations" do
@@ -138,6 +145,14 @@ RSpec.describe "/casa_cases", type: :request do
           it "renders a successful response (i.e. to display the 'new' template)" do
             post casa_cases_url, params: {casa_case: invalid_attributes}
             expect(response).to be_successful
+          end
+
+          it "also respond to json", :aggregate_failures do
+            post casa_cases_url(format: :json), params: {casa_case: invalid_attributes}
+
+            expect(response.content_type).to eq("application/json; charset=utf-8")
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response.body).to eq(["Case number can't be blank"].to_json)
           end
         end
 

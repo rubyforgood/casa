@@ -1,11 +1,6 @@
 # Preview all emails at http://localhost:3000/rails/mailers/volunteer_mailer
 # :nocov:
 class VolunteerMailerPreview < ActionMailer::Preview
-  def deactivation
-    user = User.find_by(id: params[:id]) || User.last
-    VolunteerMailer.deactivation(user)
-  end
-
   def account_setup
     user = User.find_by(id: params[:id]) || User.last
     VolunteerMailer.account_setup(user)

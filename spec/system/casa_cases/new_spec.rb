@@ -79,4 +79,16 @@ RSpec.describe "casa_cases/new", type: :system do
       expect(page).to have_content("Case number has already been taken")
     end
   end
+
+  context "contact types" do
+    let(:contact_type_group) { create(:contact_type_group, casa_org: casa_org) }
+    let!(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
+
+    it "are shown in groups" do
+      visit new_casa_case_path
+
+      expect(page).to have_content(contact_type.name)
+      expect(page).to have_content(contact_type_group.name)
+    end
+  end
 end

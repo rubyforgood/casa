@@ -160,8 +160,8 @@ RSpec.describe "VolunteerDatatable" do
       end
     end
 
-    describe "most_recent_contact_occurred_at" do
-      let(:order_by) { "most_recent_contact_occurred_at" }
+    describe "most_recent_attempt_occurred_at" do
+      let(:order_by) { "most_recent_attempt_occurred_at" }
       let(:sorted_models) do
         assigned_volunteers.order(:id).sort_by { |v| v.case_contacts.maximum :occurred_at }
       end

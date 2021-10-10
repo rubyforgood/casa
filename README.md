@@ -5,7 +5,7 @@
 [![erb lint](https://github.com/rubyforgood/casa/actions/workflows/erb_lint.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/erb_lint.yml)
 [![standardrb lint](https://github.com/rubyforgood/casa/actions/workflows/ruby_lint.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/ruby_lint.yml)
 [![brakeman](https://github.com/rubyforgood/casa/workflows/brakeman/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/security.yml)
-[![yarn lint](https://github.com/rubyforgood/casa/actions/workflows/yarn_lint.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/yarn_lint.yml)
+[![yarn lint](https://github.com/rubyforgood/casa/actions/workflows/yarn_lint_and_test.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/yarn_lint_and_test.yml)
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/maintainability)](https://codeclimate.com/github/rubyforgood/casa/trends/technical_debt)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/test_coverage)](https://codeclimate.com/github/rubyforgood/casa/trends/test_coverage_total)
@@ -74,19 +74,19 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 
 # Developing! ✨🛠✨
 ## Installation
-### General Setup Instructions  
-**Ruby**  
+### General Setup Instructions
+**Ruby**
 1. Install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
 1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`. Right now that's Ruby 3.0.2
 1. `gem install bundler`
 
-**node.js**  
+**node.js**
 1. (Recommended) Install [nvm](https://github.com/nvm-sh/nvm#installing-and-updating), which is a **n**ode **v**ersion **m**anager.
-1. Install a current LTS version of Node. 12.16.2 works.
+1. Install a current LTS version of Node. lts/fermium works.
 1. Install [yarn](https://classic.yarnpkg.com/en/docs/install). On Ubuntu, [make sure you install it from the official Yarn repo instead of cmdtest](https://classic.yarnpkg.com/en/docs/install/#debian-stable).
 
-**PostgreSQL ("postgres")**  
-1. Make sure that postgres is installed.  
+**PostgreSQL ("postgres")**
+1. Make sure that postgres is installed.
   - If you're on Ubuntu/WSL, use `sudo apt-get install libpq-dev` so the gem can install. [Use the Postgres repo for Ubuntu or WSL to get the server and client tools](https://www.postgresql.org/download/linux/ubuntu/).
   - If you're on Fedora/Cent Os use `sudo dnf install libpq-devel`. [If you prefer choose package of libpq-devel via rpm](https://pkgs.org/download/libpq-devel)
   - If you're on Windows, use the official [installer](https://www.postgresql.org/download/windows/) and accept all defaults.  Alternatively, a [Chocolatey](https://chocolatey.org/packages/postgresql) package is available with `choco install postgresql`.
@@ -97,11 +97,11 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 
 Another option is to install the Chromium browser for your operating system so the browser-based Ruby feature/integration tests can run. Installing `chromium-browser` is enough, even in WSL (Windows subsystem for Linux)
 
-**Downloading the Project**  
+**Downloading the Project**
 (*on a Mac or Linux machine*)
 1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine. You should create a fork in GitHub if you don't have permission to commit directly to this repo, though. See [our contributing guide](doc/CONTRIBUTING.md) for more detailed instructions.
 
-**Installing Packages**  
+**Installing Packages**
 1. `cd casa/`
 1. `bundle install` install ruby dependencies.
 1. `yarn` install javascript dependencies.
@@ -111,7 +111,7 @@ Another option is to install the Chromium browser for your operating system so t
     requires running local postgres, with a role created for whatever user you're running rails as
 1. `bin/rails db:seed:replant` generates test data (can be rerun to regenerate test data)
 
-**Webpacker One Time Setup**  
+**Webpacker One Time Setup**
 `bundle exec rails webpacker:compile`
 
 ### Platform Specific Installation Instructions
@@ -143,19 +143,19 @@ You'll probably hit a problem where ruby-version reads `ruby-2.7.2` but the inst
 ## Running the App / Verifying Installation
 1. `bin/rails server` or `bin/rails s` to start the local webserver
 
-**Running Tests**  
- - run the ruby test suite `bin/rails spec`  
- - run the javascript test suite `yarn test`   
- - run cypress tests  
+**Running Tests**
+ - run the ruby test suite `bin/rails spec`
+ - run the javascript test suite `yarn test`
+ - run cypress tests
 
        bundle exec rails server -b 0.0.0.0 -p 4040
        npm run test:cypress --exit-code 0
 
 
-If you have trouble running tests, check out CI scripts in [`.github/workflows/`](.github/workflows/) for sample commands.  
+If you have trouble running tests, check out CI scripts in [`.github/workflows/`](.github/workflows/) for sample commands.
 Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 
-**Cleaning up before you pull request**  
+**Cleaning up before you pull request**
 1. `bundle exec standardrb --fix` auto-fix Ruby linting issues [more linter info](https://github.com/testdouble/standard)
 1. `bundle exec erblint --lint-all --autocorrect` [ERB linter](https://github.com/Shopify/erb-lint)
 1. `yarn lint:fix` to run the [JS linter](https://standardjs.com/index.html) and fix isses
@@ -175,12 +175,12 @@ To see local email previews, check out http://localhost:3000/rails/mailers
 
 We are using [After Party](https://github.com/theSteveMitchell/after_party) to
 run post-deployment tasks. These tasks may include one-time necessary updates to the
-database. Run the tasks manually by:  
+database. Run the tasks manually by:
 ```
 bundle exec rake after_party:run
 ```
 
-Alternatively, every time you pull the main branch, run:  
+Alternatively, every time you pull the main branch, run:
 ```
 bin/update
 ```
@@ -188,9 +188,9 @@ bin/update
 which will run any database migrations, update gems and yarn packages, and run
 the after party post-deployment tasks.
 
-# Other Documentation  
-Check out [the wiki](https://github.com/rubyforgood/casa/wiki)  
-  
+# Other Documentation
+Check out [the wiki](https://github.com/rubyforgood/casa/wiki)
+
 There is a `doc` directory at the top level that includes:
 * an `architecture-decisions` directory containing important architectural decisions and entity relationship diagrams of various models
   (see the article [Architectural Decision Records](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) describing this approach).
@@ -205,12 +205,12 @@ Most conversation happens in the #casa channel of the Ruby For Good slack. Get a
 
 You can also open an issue or comment on an issue on github and a maintainer will reply to you.
 
-We have a weekly team office hours / hangout on Wednesday 6-8pm Pacific time where we do pair/mob programming and talk about issues. Please stop by!
+We have a weekly team office hours / hangout on Wednesday 6-8pm Pacific time where we do pair/mob programming and talk about issues. Please stop by! (Zoom link in slack)
 
-We have a weekly stakeholder call with PG CASA staff on Wednesday at 8:30am Pacific time where we show off progress and discuss launch plans. Feel free to join!
+We have a weekly stakeholder call with CASA stakeholders on Wednesday at 8:30am Pacific time where we show off progress and discuss launch plans. Feel free to join! (Zoom link in slack)
 
 Join info for all public meetings is posted in the rubyforgood slack in the #casa channel
 
-# History
+# Feedback
 
-First CASA supervisor training: 12 August 2020 🎉
+We are very interested in your feedback! Please give us some :) https://forms.gle/1D5ACNgTs2u9gSdh9

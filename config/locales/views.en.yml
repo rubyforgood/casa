@@ -64,7 +64,7 @@ en:
       prefix_options:
         cina: CINA
         tpr: TPR
-        none: none
+        none: None
     filter:
       pick_displayed_columns: Pick Displayed Columns
       select_columns: Select columns
@@ -340,8 +340,6 @@ en:
         import_volunteers: Import Volunteers
         import_supervisors: Import Supervisors
         import_cases: Import Cases
-      link:
-        return_to_dashboard: Return To Dashboard
   judges:
     edit:
       title: Edit Judge
@@ -399,6 +397,7 @@ en:
       unassigned: Unassigned
       volunteer_email: Volunteer Email
       volunteer_name: Volunteer Name
+      currently_assigned_to: Currently Assigned To
       volunteer_title:
         zero: Assigned Volunteers
         one: All Volunteers
@@ -422,9 +421,9 @@ en:
         supervisor: Supervisor
         status: Status
         case_number: Case Number(s)
-        last_contact_made: Last Contact Made
         contacts: Contacts Made in Past 60 Days
         actions: Actions
+        last_attempted_contact:  Last Attempted Contact
       button:
         new: New Volunteer
     send_reminder_button:

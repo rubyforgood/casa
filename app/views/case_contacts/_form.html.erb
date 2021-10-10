@@ -22,35 +22,12 @@
     <% end %>
   </div>
 
-  <div id="contact-type-form" class="field contact-type form-group">
-    <h2 id="contact-type-label"><%= form.label :contact_types %></h2>
-    <table>
-      <tr>
-        <% @current_organization_groups.each do |group| %>
-          <td class="align-top d-inline-block pr-5 pb-4">
-            <h5> <%= group.name %> </h5>
-            <% group.contact_types.alphabetically.filter do |ct|
-                @selected_case_contact_types.blank? ||
-                    @selected_case_contact_types.include?(ct)
-              end.each do |contact_type| %>
-              <div class="form-check">
-                <%=
-                  check_box_tag "case_contact[case_contact_contact_type_attributes][][contact_type_id]",
-                    contact_type.id,
-                    @case_contact.decorate.show_contact_type?(contact_type.id),
-                    id: dom_id(contact_type, :case_contact),
-                    class: ["form-check-input", "case-contact-contact-type"]
-                %>
-                <label class="form-check-label" for="<%= dom_id(contact_type, :case_contact) %>">
-                  <%= contact_type.name %>
-                </label>
-              </div>
-            <% end %>
-          </td>
-        <% end %>
-      </tr>
-    </table>
-  </div>
+  <%= render "contact_types",
+      form: form,
+      model: @case_contact,
+      contact_type_groups:  @current_organization_groups,
+      selected_case_contact_types: @selected_case_contact_types,
+      checkbox_tag_name: "case_contact[case_contact_contact_type_attributes][][contact_type_id]" %>
 
   <div class="field contact-type form-group">
     <h2><%= form.label :contact_made %></h2>
@@ -139,13 +116,15 @@
     <%= form.number_field :miles_driven, class: "form-control", required: true, min: "0", max: 10000 %>
   </div>
 
-  <div class="field want-driving-reimbursement form-group">
-    <h2><%= form.label :want_driving_reimbursement %></h2>
-    <%= form.select :want_driving_reimbursement,
-                    options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement),
-                    {},
-                    class: "custom-select" %>
-  </div>
+  <% if current_organization.show_driving_reimbursement %>
+    <div class="field want-driving-reimbursement form-group">
+      <h2><%= form.label :want_driving_reimbursement %></h2>
+      <%= form.select :want_driving_reimbursement,
+                      options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement),
+                      {},
+                      class: "custom-select" %>
+    </div>
+  <% end %>
 
   <div class="field notes form-group">
     <h2><%= form.label :notes %></h2>
@@ -155,7 +134,6 @@
   <div class="actions">
     <%= form.submit t("button.submit"), class: "btn btn-primary", id: "case-contact-submit",
 "data-target": "#confirm-submit" %>
-    <%= return_to_dashboard_button %>
   </div>
   <%= render 'confirm_note_content_dialog', form: form %>
 <% end %>

@@ -13,13 +13,9 @@ class VolunteerMailer < UserMailer
     mail(to: @user.email, subject: "Your court report is due on: #{court_report_due_date}")
   end
 
-  def case_contacts_reminder(user, with_cc)
+  def case_contacts_reminder(user, cc_recipients)
     @user = user
     @casa_organization = user.casa_org
-    if with_cc
-      mail(to: @user.email, cc: @user.supervisor.email, subject: "Reminder to input case contacts")
-    else
-      mail(to: @user.email, subject: "Reminder to input case contacts")
-    end
+    mail(to: @user.email, cc: cc_recipients, subject: "Reminder to input case contacts")
   end
 end

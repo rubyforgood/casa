@@ -1,5 +1,6 @@
 <div class="row">
   <div class="col-sm-12 form-header">
+    <h1 class="pull-left"><%= t(".title") %></h1>
     <%- if policy(:case_contact).new? & @casa_case.active? %>
       <%= link_to(t(".button.new_contact"),
                   new_case_contact_path(case_contact: {casa_case_id: @casa_case.id}),
@@ -77,7 +78,7 @@
     <% if @casa_case.case_court_mandates.exists? %>
       <h6><strong><%= t(".label.court_mandates") %>:</strong></h6>
       <% @casa_case.case_court_mandates.each do |court_mandate| %>
-        <p><%= court_mandate.mandate_text %>, <%= court_mandate.implementation_status&.humanize %></p>
+        <p><%= court_mandate.implementation_status_symbol %> <%= court_mandate.mandate_text %></p>
       <% end %>
     <% end %>
 
@@ -85,24 +86,27 @@
 
     <div>
       <h6><strong><%= t(".assigned_volunteers") %>:</strong></h6>
+      <div class="container">
       <% policy_scope(@casa_case.assigned_volunteers).each do |volunteer| %>
+        <div class="row mb-3">
         <% if current_user.volunteer? %>
-          <p><%= volunteer.display_name %></p>
+            <div class="col-12"><%= volunteer.display_name %></div>
         <% else %>
-          <%= form_tag reminder_volunteer_path(volunteer),
-                  method: :patch, id: "cc-check" do %>
-            <p>
+            <div class="col-2">
               <%= link_to "#{volunteer.display_name} ", edit_volunteer_path(volunteer) %>
-              <%= render "volunteers/send_reminder_button", volunteer: volunteer %>
-            </p>
-          <% end %>
+            </div>
+            <div class="col-10">
+              <%= render "volunteers/volunteer_reminder_form", volunteer: volunteer %>
+            </div>
         <% end %>
+        </div>
       <% end %>
+      </div>
       <br>
 
       <% if @casa_case.case_contacts.present? %>
         <div class="text-right mb-2">
-          <%= link_to t(".button.download_all"), casa_case_path(params[:id], format: :csv), class: "btn btn-success" %>
+          <%= link_to t(".button.download_all"), casa_case_path(params[:id], format: :xlsx), class: "btn btn-success" %>
         </div>
       <% end %>
 

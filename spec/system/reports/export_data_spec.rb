@@ -62,6 +62,7 @@ RSpec.describe "case_contact_reports/index", type: :system do
     click_button "Mileage Report"
     wait_for_download
 
+    expect(download_file_name).to match(/mileage-report-\d{4}-\d{2}-\d{2}.csv/)
     expect(download_content).to include(case_contact_with_mileage.creator.display_name)
     expect(download_content).not_to include(case_contact_without_mileage.creator.display_name)
   end

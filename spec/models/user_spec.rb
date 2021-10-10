@@ -62,27 +62,27 @@ RSpec.describe User, type: :model do
   end
 
   describe "supervisors" do
-    describe "#no_contact_for_two_weeks" do
+    describe "#no_attempt_for_two_weeks" do
       let(:supervisor) { create(:supervisor) }
 
-      it "returns zero for a volunteer that has successfully made contact in at least one contact_case within the last 2 weeks" do
+      it "returns one for a volunteer that has attempted contact in at least one contact_case within the last 2 weeks" do
         volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
 
         case_of_interest_1 = volunteer_1.casa_cases.first
         build_stubbed(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: false, occurred_at: 1.week.ago)
-        expect(supervisor.no_contact_for_two_weeks).to eq(1)
+        expect(supervisor.no_attempt_for_two_weeks).to eq(1)
         create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, occurred_at: 1.week.ago)
-        expect(supervisor.no_contact_for_two_weeks).to eq(0)
+        expect(supervisor.no_attempt_for_two_weeks).to eq(1)
       end
 
       it "returns one for a volunteer that has not made any contact_cases within the last 2 weeks" do
         create(:volunteer, :with_casa_cases, supervisor: supervisor)
-        expect(supervisor.no_contact_for_two_weeks).to eq(1)
+        expect(supervisor.no_attempt_for_two_weeks).to eq(1)
       end
 
       it "returns zero for a volunteer that is not assigned to any casa cases" do
         build_stubbed(:volunteer, supervisor: supervisor)
-        expect(supervisor.no_contact_for_two_weeks).to eq(0)
+        expect(supervisor.no_attempt_for_two_weeks).to eq(0)
       end
 
       it "returns one for a volunteer that has successfully made contact in at least one contact_case with occurred_at after 2 weeks" do
@@ -91,7 +91,7 @@ RSpec.describe User, type: :model do
         case_of_interest_1 = volunteer_1.casa_cases.first
 
         build_stubbed(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, occurred_at: 3.weeks.ago)
-        expect(supervisor.no_contact_for_two_weeks).to eq(1)
+        expect(supervisor.no_attempt_for_two_weeks).to eq(1)
       end
 
       it "returns zero for a volunteer that has no active casa case assignments" do
@@ -104,7 +104,7 @@ RSpec.describe User, type: :model do
         case_assignment_1.update!(active: false)
         case_assignment_2.update!(active: false)
 
-        expect(supervisor.no_contact_for_two_weeks).to eq(0)
+        expect(supervisor.no_attempt_for_two_weeks).to eq(0)
       end
     end
   end
