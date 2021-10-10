@@ -30,6 +30,7 @@ RSpec.describe VolunteerMailer, type: :mailer do
       mail = VolunteerMailer.case_contacts_reminder(volunteer, [])
       expect(mail.body.encoded).to match("Hello #{volunteer.display_name}")
       expect(mail.body.encoded).to match("as a reminder")
+      expect(mail.body.encoded).to include(case_contacts_url.to_s)
       expect(mail.cc).to be_empty
     end
 
