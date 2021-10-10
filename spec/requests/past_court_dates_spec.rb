@@ -58,6 +58,12 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
 
       it { expect(response).to be_successful }
 
+      it "displays the court date" do
+        show
+        document = get_docx_contents_as_string(response.body, collapse: true)
+        expect(document).to include(past_court_date.date.to_s)
+      end
+
       context "when a judge is attached" do
         let!(:past_court_date) {
           create(:past_court_date, date: Date.yesterday, judge: judge)
