@@ -73,11 +73,34 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
         let!(:past_court_date) {
           create(:past_court_date, date: Date.yesterday, judge: nil)
         }
-        it "includes the judge's name in the document" do
+        it "includes None for the judge's name in the document" do
           show
           document = get_docx_contents_as_string(response.body, collapse: true)
           expect(document).not_to include(judge.name)
           expect(document.downcase).to include("judge: none")
+        end
+      end
+
+      context "with a hearing type" do
+        let!(:past_court_date) {
+          create(:past_court_date, date: Date.yesterday, hearing_type: hearing_type)
+        }
+        it "includes the hearing type in the document" do
+          show
+          document = get_docx_contents_as_string(response.body, collapse: true)
+          expect(document).to include(hearing_type.name)
+        end
+      end
+
+      context "without a hearing type" do
+        let!(:past_court_date) {
+          create(:past_court_date, date: Date.yesterday, hearing_type: nil)
+        }
+        it "includes None for the hearing type in the document" do
+          show
+          document = get_docx_contents_as_string(response.body, collapse: true)
+          expect(document).not_to include(hearing_type.name)
+          expect(document.downcase).to include("hearing type: none")
         end
       end
     end
