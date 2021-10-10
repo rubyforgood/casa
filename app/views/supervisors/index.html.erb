@@ -4,6 +4,12 @@
     <% if policy(Supervisor).create? %>
       <%= link_to "New Supervisor", new_supervisor_path, class: "btn btn-primary mb-2 mb-md-0" %>
     <% end %>
+
+    <% if @show_all %>
+      <%= link_to "Hide deactivated", supervisors_path, class: "btn btn-light mb-2 mb-md-0" %>
+    <% else %>
+      <%= link_to "Show deactivated", supervisors_path(all: "true"), class: "btn btn-light mb-2 mb-md-0" %>
+    <% end %>
   </div>
 </div>
 
