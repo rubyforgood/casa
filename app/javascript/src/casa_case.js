@@ -4,24 +4,8 @@
 /* global spinner */
 
 import Swal from 'sweetalert2'
-
-function addCourtMandateInput () {
-  const list = '#mandates-list-container'
-  const ref = $(list).data('ref') || 'casa_case'
-  const casaCaseId = $(list).data('casa-case-id')
-  const index = $(`${list} textarea`).length
-  const html = courtMandateHtml(index, ref, casaCaseId)
-
-  $(list).append(html.entry)
-  const lastEntry = $(list).children(':last')
-
-  $(lastEntry).append(html.textarea)
-  $(lastEntry).append(html.select)
-  if (casaCaseId) {
-    $(lastEntry).append(html.hidden)
-  }
-  $(lastEntry).children(':first').trigger('focus')
-}
+const CourtOrderList = require('./court_order_list.js')
+let courtOrders
 
 function removeMandateWithConfirmation () {
   const text = 'Are you sure you want to remove this court order? Doing so will ' +
@@ -41,22 +25,19 @@ function removeMandateWithConfirmation () {
     cancelButtonText: 'Go back'
   }).then((result) => {
     if (result.isConfirmed) {
-      removeMandateAction($(this))
+      removeMandateAction($(this).parent())
     }
   })
 }
 
-function removeMandateAction (ctx) {
-  const idElement = ctx.parent().next('input[type="hidden"]')
-  const id = idElement.val()
+function removeMandateAction (order) {
+  const orderHiddenIdInput = order.next('input[type="hidden"]')
 
   $.ajax({
-    url: `/case_court_orders/${id}`,
+    url: `/case_court_orders/${orderHiddenIdInput.val()}`,
     method: 'delete',
     success: () => {
-      ctx.parent().remove()
-      idElement.remove() // Remove form element since this mandate has been deleted
-
+      courtOrders.removeCourtOrder(order, orderHiddenIdInput)
       Swal.fire({
         icon: 'success',
         text: 'Court order has been removed.',
@@ -71,27 +52,6 @@ function removeMandateAction (ctx) {
       })
     }
   })
-}
-
-function courtMandateHtml (index, ref, casaCaseId) {
-  const selectOptions = '<option value="">Set Implementation Status</option>' +
-                        '<option value="not_implemented">Not implemented</option>' +
-                        '<option value="partially_implemented">Partially implemented</option>' +
-                        '<option value="implemented">Implemented</option>'
-  return {
-    entry: '<div class="court-mandate-entry"></div>',
-
-    textarea: `<textarea name="${ref}[case_court_orders_attributes][${index}][mandate_text]"\
-                 id="casa_case_case_court_orders_attributes_${index}_mandate_text"></textarea>`,
-
-    select: `<select class="implementation-status"\
-                 name="${ref}[case_court_orders_attributes][${index}][implementation_status]"\
-                 id="casa_case_case_court_orders_attributes_${index}_implementation_status">\
-                 ${selectOptions}\
-               </select>`,
-    hidden: `<textarea class="d-none" name="${ref}[case_court_orders_attributes][${index}][casa_case_id]"\
-              id="casa_case_case_court_orders_attributes_${index}_casa_case_id">${casaCaseId}</textarea>`
-  }
 }
 
 function showBtn (el) { el.classList.remove('d-none') }
@@ -152,12 +112,21 @@ function handleGenerateReport (e) {
 }
 
 $('document').ready(() => {
-  $('button#add-mandate-button').on('click', addCourtMandateInput)
-  $('button.remove-mandate-button').on('click', removeMandateWithConfirmation)
+  const courtOrdersListContainer = $('#court-orders-list-container')
+
+  if (courtOrdersListContainer.length) {
+    courtOrders = new CourtOrderList(courtOrdersListContainer)
+
+    $('button#add-mandate-button').on('click', () => {
+      courtOrders.addCourtOrder()
+    })
+
+    $('button.remove-mandate-button').on('click', removeMandateWithConfirmation)
+
+    $('.court-mandates textarea').each(function () {
+      $(this).height($(this).prop('scrollHeight'))
+    })
+  }
 
   $('#btnGenerateReport').on('click', handleGenerateReport)
-
-  $('.court-mandates textarea').each(function () {
-    $(this).height($(this).prop('scrollHeight'))
-  })
 })
