@@ -34,7 +34,7 @@ function removeMandateAction (order) {
   const orderHiddenIdInput = order.next('input[type="hidden"]')
 
   $.ajax({
-    url: `/case_court_mandates/${orderHiddenIdInput.val()}`,
+    url: `/case_court_orders/${orderHiddenIdInput.val()}`,
     method: 'delete',
     success: () => {
       courtOrders.removeCourtOrder(order, orderHiddenIdInput)
