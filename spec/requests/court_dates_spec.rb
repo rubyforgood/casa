@@ -57,57 +57,57 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
       let(:headers) { {accept: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"} }
 
       it { expect(response).to be_successful }
-    end
 
-    it "displays the court date" do
-      show
-      document = get_docx_contents_as_string(response.body, collapse: true)
-      expect(document).to include(past_court_date.date.to_s)
-    end
-
-    context "when a judge is attached" do
-      let!(:court_date) {
-        create(:court_date, date: Date.yesterday, judge: judge)
-      }
-      it "includes the judge's name in the document" do
+      it "displays the court date" do
         show
         document = get_docx_contents_as_string(response.body, collapse: true)
-        expect(document).to include(judge.name)
+        expect(document).to include(court_date.date.to_s)
       end
-    end
 
-    context "without a judge" do
-      let!(:court_date) {
-        create(:court_date, date: Date.yesterday, judge: nil)
-      }
-      it "includes None for the judge's name in the document" do
-        show
-        document = get_docx_contents_as_string(response.body, collapse: true)
-        expect(document).not_to include(judge.name)
-        expect(document.downcase).to include("judge: none")
+      context "when a judge is attached" do
+        let!(:court_date) {
+          create(:court_date, date: Date.yesterday, judge: judge)
+        }
+        it "includes the judge's name in the document" do
+          show
+          document = get_docx_contents_as_string(response.body, collapse: true)
+          expect(document).to include(judge.name)
+        end
       end
-    end
 
-    context "with a hearing type" do
-      let!(:court_date) {
-        create(:court_date, date: Date.yesterday, hearing_type: hearing_type)
-      }
-      it "includes the hearing type in the document" do
-        show
-        document = get_docx_contents_as_string(response.body, collapse: true)
-        expect(document).to include(hearing_type.name)
+      context "without a judge" do
+        let!(:court_date) {
+          create(:court_date, date: Date.yesterday, judge: nil)
+        }
+        it "includes None for the judge's name in the document" do
+          show
+          document = get_docx_contents_as_string(response.body, collapse: true)
+          expect(document).not_to include(judge.name)
+          expect(document.downcase).to include("judge: none")
+        end
       end
-    end
 
-    context "without a hearing type" do
-      let!(:court_date) {
-        create(:court_date, date: Date.yesterday, hearing_type: nil)
-      }
-      it "includes None for the hearing type in the document" do
-        show
-        document = get_docx_contents_as_string(response.body, collapse: true)
-        expect(document).not_to include(hearing_type.name)
-        expect(document.downcase).to include("hearing type: none")
+      context "with a hearing type" do
+        let!(:court_date) {
+          create(:court_date, date: Date.yesterday, hearing_type: hearing_type)
+        }
+        it "includes the hearing type in the document" do
+          show
+          document = get_docx_contents_as_string(response.body, collapse: true)
+          expect(document).to include(hearing_type.name)
+        end
+      end
+
+      context "without a hearing type" do
+        let!(:court_date) {
+          create(:court_date, date: Date.yesterday, hearing_type: nil)
+        }
+        it "includes None for the hearing type in the document" do
+          show
+          document = get_docx_contents_as_string(response.body, collapse: true)
+          expect(document).not_to include(hearing_type.name)
+          expect(document.downcase).to include("hearing type: none")
+        end
       end
     end
   end
