@@ -102,6 +102,6 @@ class CasaCasePolicy < ApplicationPolicy
   end
 
   def case_court_orders_attributes
-    {case_court_orders_attributes: %i[mandate_text implementation_status id]}
+    {case_court_orders_attributes: %i[text implementation_status id]}
   end
 end
