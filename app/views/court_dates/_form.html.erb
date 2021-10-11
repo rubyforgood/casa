@@ -1,10 +1,10 @@
 <div class="card card-container">
   <div class="card-body">
-    <%= form_with(model: past_court_date, url: [casa_case, past_court_date], local: true) do |form| %>
-      <%= render "/shared/error_messages", resource: past_court_date %>
+    <%= form_with(model: court_date, url: [casa_case, court_date], local: true) do |form| %>
+      <%= render "/shared/error_messages", resource: court_date %>
 
       <div class="top-page-actions pull-right">
-        <%= form.submit past_court_date.persisted? ? t(".button.update") : t(".button.create"), class: "btn btn-primary" %>
+        <%= form.submit court_date.persisted? ? t(".button.update") : t(".button.create"), class: "btn btn-primary" %>
       </div>
 
       <p>

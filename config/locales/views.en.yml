@@ -42,7 +42,7 @@ en:
     new:
       title: New CASA Case
     no_past_court_dates: No past court dates
-    past_court_dates:
+    court_dates:
       add_past_court_date: Add a past court date
       past_court_dates: Past court dates
     shared:
@@ -367,7 +367,7 @@ en:
   notifications:
     index:
       no_notifications: You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.
-  past_court_dates:
+  court_dates:
     edit:
       title: Editing Past Court Date
     form:

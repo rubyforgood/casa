@@ -1,4 +1,4 @@
-class PastCourtDateDecorator < Draper::Decorator
+class CourtDateDecorator < Draper::Decorator
   delegate_all
 
   def formatted_date

@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe PastCourtDate, type: :model do
-  subject(:past_court_date) { create(:past_court_date, casa_case: casa_case) }
+RSpec.describe CourtDate, type: :model do
+  subject(:court_date) { create(:court_date, casa_case: casa_case) }
 
   let(:casa_case) { create(:casa_case, case_number: "AAA123123") }
   let(:volunteer) { create(:volunteer, casa_org: casa_case.casa_org) }
@@ -18,10 +18,10 @@ RSpec.describe PastCourtDate, type: :model do
   it { is_expected.to belong_to(:judge).optional }
 
   it "is invalid without a casa_case" do
-    past_court_date = build(:past_court_date, casa_case: nil)
+    court_date = build(:court_date, casa_case: nil)
     expect do
-      past_court_date.casa_case = casa_case
-    end.to change { past_court_date.valid? }.from(false).to(true)
+      court_date.casa_case = casa_case
+    end.to change { court_date.valid? }.from(false).to(true)
   end
 
   before do
@@ -30,12 +30,12 @@ RSpec.describe PastCourtDate, type: :model do
 
   describe "date_must_be_past" do
     it "ensures that the date is in the past" do
-      past_court_date = build(:past_court_date, casa_case: casa_case, date: Date.today)
-      expect(past_court_date.valid?).to eq false
-      expect(past_court_date.errors.full_messages).to eq ["Date must be in the past"]
+      court_date = build(:court_date, casa_case: casa_case, date: Date.today)
+      expect(court_date.valid?).to eq false
+      expect(court_date.errors.full_messages).to eq ["Date must be in the past"]
 
-      past_court_date = build(:past_court_date, casa_case: casa_case, date: Date.yesterday)
-      expect(past_court_date.valid?).to eq true
+      court_date = build(:court_date, casa_case: casa_case, date: Date.yesterday)
+      expect(court_date.valid?).to eq true
     end
   end
 
@@ -43,9 +43,9 @@ RSpec.describe PastCourtDate, type: :model do
     subject { described_class.ordered_ascending }
 
     it "orders the casa cases by updated at date" do
-      very_old_pcd = create(:past_court_date, date: 10.days.ago)
-      old_pcd = create(:past_court_date, date: 5.day.ago)
-      recent_pcd = create(:past_court_date, date: 1.day.ago)
+      very_old_pcd = create(:court_date, date: 10.days.ago)
+      old_pcd = create(:court_date, date: 5.day.ago)
+      recent_pcd = create(:court_date, date: 1.day.ago)
 
       ordered_pcds = described_class.ordered_ascending
 
@@ -73,14 +73,14 @@ RSpec.describe PastCourtDate, type: :model do
     let(:sixty_days_ago_report) { reports[2] }
 
     describe "#associated_reports" do
-      subject(:associated_reports) { past_court_date.associated_reports }
+      subject(:associated_reports) { court_date.associated_reports }
 
       context "without other court dates" do
         it { is_expected.to eq [ten_days_ago_report, thirty_days_ago_report, sixty_days_ago_report] }
       end
 
       context "with a previous court date" do
-        let!(:other_past_court_date) { create(:past_court_date, casa_case: casa_case, date: 40.days.ago) }
+        let!(:other_court_date) { create(:court_date, casa_case: casa_case, date: 40.days.ago) }
 
         it { is_expected.to eq [ten_days_ago_report, thirty_days_ago_report] }
       end
@@ -94,10 +94,10 @@ RSpec.describe PastCourtDate, type: :model do
   end
 
   describe "#additional_info?" do
-    subject(:additional_info) { past_court_date.additional_info? }
+    subject(:additional_info) { court_date.additional_info? }
     context "with orders" do
       it "returns true" do
-        create(:case_court_order, casa_case: casa_case, past_court_date: past_court_date)
+        create(:case_court_order, casa_case: casa_case, court_date: court_date)
         expect(subject).to be_truthy
       end
     end
@@ -105,7 +105,7 @@ RSpec.describe PastCourtDate, type: :model do
     context "with hearing type" do
       it "returns true" do
         hearing_type = create(:hearing_type)
-        past_court_date.update!(hearing_type_id: hearing_type.id)
+        court_date.update!(hearing_type_id: hearing_type.id)
         expect(subject).to be_truthy
       end
     end
@@ -113,7 +113,7 @@ RSpec.describe PastCourtDate, type: :model do
     context "with judge" do
       it "returns true" do
         judge = create(:judge)
-        past_court_date.update!(judge_id: judge.id)
+        court_date.update!(judge_id: judge.id)
         expect(subject).to be_truthy
       end
     end
@@ -126,14 +126,14 @@ RSpec.describe PastCourtDate, type: :model do
   end
 
   describe "#generate_report" do
-    subject { past_court_date.generate_report }
+    subject { court_date.generate_report }
 
     # TODO write a better test for this
     it { is_expected.not_to be_nil }
   end
 
   describe "#display_name" do
-    subject { past_court_date.display_name }
+    subject { court_date.display_name }
     it "contains case number and date" do
       travel_to Time.zone.local(2020, 1, 2)
       expect(subject).to eq("AAA123123 - Past Court Date - 2019-12-26")

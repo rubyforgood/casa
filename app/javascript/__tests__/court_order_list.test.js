@@ -30,10 +30,10 @@ describe('CourtOrderList constructor', () => {
 
         expect(courtOrderList.resourceName).toBe('casa_case')
 
-        window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/2151/past_court_dates/3')
+        window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/2151/court_dates/3')
         courtOrderList = new CourtOrderList(courtOrderListElement)
 
-        expect(courtOrderList.resourceName).toBe('past_court_date')
+        expect(courtOrderList.resourceName).toBe('court_date')
         done()
       } catch (error) {
         done(error)
@@ -51,7 +51,7 @@ describe('CourtOrderList constructor', () => {
 
         expect(courtOrderList.casaCaseId).toBe(casaCaseId1)
 
-        window.location = new URL(`https://casa-qa.herokuapp.com/casa_cases/${casaCaseId2}/past_court_dates/3`)
+        window.location = new URL(`https://casa-qa.herokuapp.com/casa_cases/${casaCaseId2}/court_dates/3`)
         courtOrderList = new CourtOrderList(courtOrderListElement)
 
         expect(courtOrderList.casaCaseId).toBe(casaCaseId2)

@@ -1,11 +1,11 @@
 require "rails_helper"
 
-RSpec.describe "past_court_dates/new", type: :view do
-  subject { render template: "past_court_dates/new" }
+RSpec.describe "court_dates/new", type: :view do
+  subject { render template: "court_dates/new" }
 
   before do
     assign :casa_case, casa_case
-    assign :past_court_date, PastCourtDate.new
+    assign :court_date, CourtDate.new
 
     allow(view).to receive(:current_organization).and_return(user.casa_org)
   end

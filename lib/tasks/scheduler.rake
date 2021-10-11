@@ -10,7 +10,7 @@ task clear_passed_dates: :environment do
   puts "Checking case due dates..."
 
   CasaCase.due_date_passed.each do |cc|
-    PastCourtDate.create!(
+    CourtDate.create!(
       date: cc.court_date,
       casa_case_id: cc.id,
       case_court_orders: cc.case_court_orders,

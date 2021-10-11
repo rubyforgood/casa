@@ -28,7 +28,7 @@ class CasaCase < ApplicationRecord
   has_many :emancipation_categories, through: :casa_case_emancipation_categories
   has_many :casa_cases_emancipation_options, dependent: :destroy
   has_many :emancipation_options, through: :casa_cases_emancipation_options
-  has_many :past_court_dates, dependent: :destroy
+  has_many :court_dates, dependent: :destroy
   has_many_attached :court_reports
 
   validates :case_number, uniqueness: {scope: :casa_org_id, case_sensitive: false}, presence: true
@@ -129,8 +129,8 @@ class CasaCase < ApplicationRecord
     court_reports.order("created_at").last
   end
 
-  def latest_past_court_date
-    past_court_dates.order("date").last
+  def latest_court_date
+    court_dates.order("date").last
   end
 
   def has_hearing_type?
@@ -160,16 +160,6 @@ class CasaCase < ApplicationRecord
     return false unless errors.messages.empty?
 
     transaction do
-      # if court_report_due_date && court_report_due_date < Date.today
-      #   new_past_court_date = PastCourtDate.new(
-      #     date: court_report_due_date,
-      #     casa_case_id: casa_case.id,
-      #     case_court_orders: casa_case.case_court_orders,
-      #     hearing_type_id: casa_case.hearing_type_id,
-      #     judge_id: casa_case.judge_id
-      #   )
-      #   casa_case.past_court_dates << new_past_court_date
-      # end
       casa_case_contact_types.destroy_all
       update(args)
     end

@@ -2,11 +2,11 @@
   <div class="col-sm-12 form-header">
     <h1><%= t(".title") %></h1>
     <%= link_to t(".button.edit_past_court_date"),
-        edit_casa_case_past_court_date_path(@casa_case, @past_court_date),
+        edit_casa_case_court_date_path(@casa_case, @court_date),
         class: "btn btn-primary casa-case-button pull-right" %>
   </div>
 </div>
-<h2 class="d-inline-block"><%= @past_court_date.decorate.formatted_date %></h2>
+<h2 class="d-inline-block"><%= @court_date.decorate.formatted_date %></h2>
 
 <div class="card card-container">
   <div class="card-body">
@@ -17,17 +17,17 @@ casa_case_path(@casa_case) %></h6>
     <p>
       <h6>
         <strong><%= t(".label.judge") %>:</strong>
-        <%= @past_court_date.judge&.name || t(".label.none") %>
+        <%= @court_date.judge&.name || t(".label.none") %>
       </h6>
     </p>
     <p>
       <h6>
         <strong><%= t(".label.hearing_type") %>:</strong>
-        <%= @past_court_date.hearing_type&.name || t(".label.none") %>
+        <%= @court_date.hearing_type&.name || t(".label.none") %>
       </h6>
     </p>
 
-    <% if @past_court_date.case_court_orders.any? %>
+    <% if @court_date.case_court_orders.any? %>
       <p>
         <h6>
           <strong><%= t(".label.case_court_orders") %>:</strong>
@@ -41,7 +41,7 @@ casa_case_path(@casa_case) %></h6>
             <th class="text-center"><%= t(".label.casa_case_court_order.implementation_status") %></th>
           </thead>
           <tbody>
-            <% @past_court_date.case_court_orders.each do |court_order| %>
+            <% @court_date.case_court_orders.each do |court_order| %>
               <tr>
                 <td><%= court_order.text %></td>
                 <td class="text-center"><%= court_order.implementation_status&.humanize %></td>
@@ -60,7 +60,7 @@ casa_case_path(@casa_case) %></h6>
     <% end %>
 
     <%= link_to t(".label.download_report_docx"),
-      casa_case_past_court_date_path(@casa_case, @past_court_date, format: :docx),
+      casa_case_court_date_path(@casa_case, @court_date, format: :docx),
       class: "btn btn-primary" %>
   </div>
 </div>

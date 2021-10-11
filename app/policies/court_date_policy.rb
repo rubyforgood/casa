@@ -1,4 +1,4 @@
-class PastCourtDatePolicy < ApplicationPolicy
+class CourtDatePolicy < ApplicationPolicy
   def allowed_to_edit_casa_case?
     casa_case_policy.edit?
   end

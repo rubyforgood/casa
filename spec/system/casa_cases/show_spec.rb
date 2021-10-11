@@ -20,7 +20,7 @@ RSpec.describe "casa_cases/show", type: :system do
   context "when admin" do
     let(:user) { admin }
 
-    it_behaves_like "shows past court dates links"
+    it_behaves_like "shows court dates links"
 
     it "can see case creator in table" do
       expect(page).to have_text("Bob Loblaw")

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "past_court_dates/new", type: :system do
+RSpec.describe "court_dates/new", type: :system do
   let(:casa_org) { create(:casa_org) }
   let!(:casa_case) { create(:casa_case, casa_org: casa_org) }
   let!(:judge) { create(:judge) }
@@ -22,17 +22,17 @@ RSpec.describe "past_court_dates/new", type: :system do
     it "is successful", js: true do
       expect(page.body).to have_content(casa_case.case_number)
 
-      select "3", from: "past_court_date_date_3i"
-      select "March", from: "past_court_date_date_2i"
-      select "2020", from: "past_court_date_date_1i"
+      select "3", from: "court_date_date_3i"
+      select "March", from: "court_date_date_2i"
+      select "2020", from: "court_date_date_1i"
 
       select judge.name, from: "Judge"
       select hearing_type.name, from: "Hearing type"
 
       find("#add-mandate-button").click
 
-      fill_in "past_court_date_case_court_orders_attributes_0_text", with: text
-      select "Partially implemented", from: "past_court_date_case_court_orders_attributes_0_implementation_status"
+      fill_in "court_date_case_court_orders_attributes_0_text", with: text
+      select "Partially implemented", from: "court_date_case_court_orders_attributes_0_implementation_status"
 
       within ".top-page-actions" do
         click_on "Create"
@@ -48,12 +48,12 @@ RSpec.describe "past_court_dates/new", type: :system do
   end
 
   context "when non-mandatory fields are not filled" do
-    it "does not create a new past_court_date" do
+    it "does not create a new court_date" do
       within ".top-page-actions" do
         click_on "Create"
       end
 
-      expect(page).to have_current_path(casa_case_past_court_dates_path(casa_case), ignore_query: true)
+      expect(page).to have_current_path(casa_case_court_dates_path(casa_case), ignore_query: true)
       expect(page).to have_content("Date can't be blank")
     end
   end
