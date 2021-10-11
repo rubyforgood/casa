@@ -21,7 +21,7 @@ RSpec.describe PastCourtDate, type: :model do
     past_court_date = build(:past_court_date, casa_case: nil)
     expect do
       past_court_date.casa_case = casa_case
-    end.to change{past_court_date.valid?}.from(false).to(true)
+    end.to change { past_court_date.valid? }.from(false).to(true)
   end
 
   before do

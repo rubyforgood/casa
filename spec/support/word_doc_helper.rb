@@ -33,14 +33,14 @@ module WordDocHelper
   # @return [String] The contents with all XML markup removed
   #
   def get_docx_contents_as_string(docx, collapse: false)
-    Tempfile.create('court_report.zip', 'tmp') do |file|
-      file << docx.force_encoding('UTF-8')
+    Tempfile.create("court_report.zip", "tmp") do |file|
+      file << docx.force_encoding("UTF-8")
 
       xml_document = Zip::File.open(file.path) do |docx_extracted|
-        docx_extracted.find_entry('word/document.xml').get_input_stream.read.force_encoding('UTF-8')
+        docx_extracted.find_entry("word/document.xml").get_input_stream.read.force_encoding("UTF-8")
       end
-      separate_with = collapse ? '' : "\n"
-      document = xml_document.gsub(/<[^>]*>+/, "\n").gsub(/\n+/, separate_with)
+      separate_with = collapse ? "" : "\n"
+      xml_document.gsub(/<[^>]*>+/, "\n").gsub(/\n+/, separate_with)
     end
   end
 end
