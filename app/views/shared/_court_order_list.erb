@@ -5,7 +5,7 @@
         <%= ff.text_area :text %>
         <%=
         ff.select :implementation_status,
-                    casa_case.decorate.court_mandate_select_options,
+                    casa_case.decorate.court_order_select_options,
                     {include_blank: 'Set Implementation Status'},
                     {class: 'implementation-status'}
         %>
