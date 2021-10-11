@@ -64,7 +64,7 @@ class PastCourtDatesController < ApplicationController
       :date,
       :hearing_type_id,
       :judge_id,
-      {case_court_orders_attributes: %i[mandate_text implementation_status id casa_case_id]}
+      {case_court_orders_attributes: %i[text implementation_status id casa_case_id]}
     )
   end
 end
