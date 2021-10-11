@@ -111,7 +111,7 @@
 }
 
 // Media Queries
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: $mobile) {
   .sidebar-wrapper {
     display: none;
     width: 100%;
