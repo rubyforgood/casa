@@ -114,7 +114,7 @@
       <% if casa_case.persisted? %>
         <div class="field form-group court-mandates">
           <% if policy(casa_case).update_court_orders? %>
-            <%= render partial: "shared/court_order_list", locals: {casa_case: @casa_case, form: form} %>\
+            <%= render partial: "shared/court_order_list", locals: {casa_case: @casa_case, form: form} %>
           <% else %>
             <%= form.label :case_court_mandates, "#{t(".label.court_orders")}" %>
             <div id="mandate-list-container">
