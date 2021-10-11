@@ -99,7 +99,7 @@ describe('addCourtOrder', () => {
 
           const textArea = courtOrderInputs.find('textarea')
           expect($(textArea).attr('id')).toBe(`casa_case_case_court_orders_attributes_${index}_text`)
-          expect($(textArea).attr('name')).toBe(`casa_case[case_court_orders_attributes][${index}][mandate_text]`)
+          expect($(textArea).attr('name')).toBe(`casa_case[case_court_orders_attributes][${index}][text]`)
 
           const select = courtOrderInputs.find('select')
           expect($(select).attr('id')).toBe(`casa_case_case_court_orders_attributes_${index}_implementation_status`)
