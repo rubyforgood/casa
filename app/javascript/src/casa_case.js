@@ -81,8 +81,8 @@ function courtMandateHtml (index, ref, casaCaseId) {
   return {
     entry: '<div class="court-mandate-entry"></div>',
 
-    textarea: `<textarea name="${ref}[case_court_orders_attributes][${index}][mandate_text]"\
-                 id="casa_case_case_court_orders_attributes_${index}_mandate_text"></textarea>`,
+    textarea: `<textarea name="${ref}[case_court_orders_attributes][${index}][text]"\
+                 id="casa_case_case_court_orders_attributes_${index}_text"></textarea>`,
 
     select: `<select class="implementation-status"\
                  name="${ref}[case_court_orders_attributes][${index}][implementation_status]"\
