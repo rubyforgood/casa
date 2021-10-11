@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_13_142024) do
+ActiveRecord::Schema.define(version: 2021_10_07_144114) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(version: 2021_09_13_142024) do
     t.string "display_name"
     t.string "address"
     t.string "footer_links", default: [], array: true
+    t.boolean "show_driving_reimbursement", default: true
   end
 
   create_table "case_assignments", force: :cascade do |t|
@@ -155,15 +156,15 @@ ActiveRecord::Schema.define(version: 2021_09_13_142024) do
     t.check_constraint "(miles_driven IS NOT NULL) OR (NOT want_driving_reimbursement)", name: "want_driving_reimbursement_only_when_miles_driven"
   end
 
-  create_table "case_court_mandates", force: :cascade do |t|
+  create_table "case_court_orders", force: :cascade do |t|
     t.string "mandate_text"
     t.bigint "casa_case_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "implementation_status"
     t.bigint "past_court_date_id"
-    t.index ["casa_case_id"], name: "index_case_court_mandates_on_casa_case_id"
-    t.index ["past_court_date_id"], name: "index_case_court_mandates_on_past_court_date_id"
+    t.index ["casa_case_id"], name: "index_case_court_orders_on_casa_case_id"
+    t.index ["past_court_date_id"], name: "index_case_court_orders_on_past_court_date_id"
   end
 
   create_table "contact_type_groups", force: :cascade do |t|
@@ -332,7 +333,7 @@ ActiveRecord::Schema.define(version: 2021_09_13_142024) do
   add_foreign_key "case_assignments", "users", column: "volunteer_id"
   add_foreign_key "case_contacts", "casa_cases"
   add_foreign_key "case_contacts", "users", column: "creator_id"
-  add_foreign_key "case_court_mandates", "casa_cases"
+  add_foreign_key "case_court_orders", "casa_cases"
   add_foreign_key "emancipation_options", "emancipation_categories"
   add_foreign_key "followups", "users", column: "creator_id"
   add_foreign_key "judges", "casa_orgs"

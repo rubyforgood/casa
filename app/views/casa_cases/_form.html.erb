@@ -113,20 +113,19 @@
 
       <% if casa_case.persisted? %>
         <div class="field form-group court-mandates">
-
-          <% if policy(casa_case).update_court_mandates? %>
-            <%= render partial: "shared/court_order_list", locals: {casa_case: @casa_case, form: form} %>
+          <% if policy(casa_case).update_court_orders? %>
+            <%= render partial: "shared/court_order_list", locals: {casa_case: @casa_case, form: form} %>\
           <% else %>
             <%= form.label :case_court_mandates, "#{t(".label.court_orders")}" %>
             <div id="mandate-list-container">
-              <% @casa_case.case_court_mandates.each do |mandate| %>
+              <% @casa_case.case_court_orders.each do |order| %>
                 <div class="court-mandate-entry">
-                  <textarea disabled><%= mandate.mandate_text %></textarea>
+                  <textarea disabled><%= order.mandate_text %></textarea>
 
-                  <% if mandate.implementation_status %>
+                  <% if order.implementation_status %>
                     <p class="implementation-status">
                       <strong>Status:</strong>
-                      <%= mandate.implementation_status.humanize %>
+                      <%= order.implementation_status.humanize %>
                     </p>
                   <% end %>
                 </div>

@@ -34,8 +34,8 @@ class CasaCaseDecorator < Draper::Decorator
     ]
   end
 
-  def court_mandate_select_options
-    CaseCourtMandate.implementation_statuses.map do |status|
+  def court_order_select_options
+    CaseCourtOrder.implementation_statuses.map do |status|
       [status[0].humanize, status[0]]
     end
   end

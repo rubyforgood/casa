@@ -14,7 +14,7 @@ RSpec.describe PastCourtDate, type: :model do
   it { is_expected.to belong_to(:casa_case) }
   it { is_expected.to validate_presence_of(:casa_case_id) }
   it { is_expected.to validate_presence_of(:date) }
-  it { is_expected.to have_many(:case_court_mandates) }
+  it { is_expected.to have_many(:case_court_orders) }
   it { is_expected.to belong_to(:hearing_type).optional }
   it { is_expected.to belong_to(:judge).optional }
 
@@ -89,9 +89,9 @@ RSpec.describe PastCourtDate, type: :model do
 
   describe "#additional_info?" do
     subject(:additional_info) { past_court_date.additional_info? }
-    context "with mandates" do
+    context "with orders" do
       it "returns true" do
-        create(:case_court_mandate, casa_case: casa_case, past_court_date: past_court_date)
+        create(:case_court_order, casa_case: casa_case, past_court_date: past_court_date)
         expect(subject).to be_truthy
       end
     end

@@ -13,7 +13,7 @@ task clear_passed_dates: :environment do
     PastCourtDate.create!(
       date: cc.court_date,
       casa_case_id: cc.id,
-      case_court_mandates: cc.case_court_mandates,
+      case_court_orders: cc.case_court_orders,
       hearing_type_id: cc.hearing_type_id,
       judge_id: cc.judge_id
     )

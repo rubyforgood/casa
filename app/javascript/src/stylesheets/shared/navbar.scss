@@ -22,7 +22,7 @@
   width: 40px;
 }
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: $mobile) {
   .navbar.mobile {
     display: flex;
     position: sticky;
