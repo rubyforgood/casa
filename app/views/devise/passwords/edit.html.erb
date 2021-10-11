@@ -22,7 +22,8 @@ class: "form-control", required: true %>
             autofocus: true,
             autocomplete: "new-password",
             class: "form-control",
-            required: true %>
+            required: true,
+            minlength: 6 %>
         </div>
 
         <div class="field form-group">
@@ -30,7 +31,8 @@ class: "form-control", required: true %>
           <%= f.password_field :password_confirmation,
             autocomplete: "new-password",
             class: "form-control",
-            required: true %>
+            required: true,
+            minlength: 6 %>
         </div>
 
         <div class="actions">
