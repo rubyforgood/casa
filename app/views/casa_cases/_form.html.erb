@@ -119,7 +119,7 @@
             <div id="mandates-list-container">
               <%= form.fields_for :case_court_orders do |ff| %>
                 <div class="court-mandate-entry">
-                  <%= ff.text_area :mandate_text %>
+                  <%= ff.text_area :text %>
                   <%=
                     ff.select :implementation_status,
                               @casa_case.decorate.court_order_select_options,
@@ -140,7 +140,7 @@
             <div id="mandate-list-container">
               <% @casa_case.case_court_orders.each do |order| %>
                 <div class="court-mandate-entry">
-                  <textarea disabled><%= order.mandate_text %></textarea>
+                  <textarea disabled><%= order.text %></textarea>
 
                   <% if order.implementation_status %>
                     <p class="implementation-status">

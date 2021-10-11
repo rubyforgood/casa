@@ -50,7 +50,7 @@
         <div id="mandates-list-container" data-ref="past_court_date" data-casa-case-id="<%= casa_case.id %>">
           <%= form.fields_for :case_court_orders do |ff| %>
             <div class="court-mandate-entry">
-              <%= ff.text_area :mandate_text %>
+              <%= ff.text_area :text %>
               <%=
                 ff.select :implementation_status,
                           casa_case.decorate.court_order_select_options,
