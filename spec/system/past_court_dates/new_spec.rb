@@ -6,7 +6,7 @@ RSpec.describe "past_court_dates/new", type: :system do
   let!(:judge) { create(:judge) }
   let!(:hearing_type) { create(:hearing_type) }
   let(:admin) { create(:casa_admin, casa_org: casa_org) }
-  let(:mandate_text) { Faker::Lorem.paragraph(sentence_count: 2) }
+  let(:text) { Faker::Lorem.paragraph(sentence_count: 2) }
 
   before do
     travel_to Date.new(2021, 1, 1)
@@ -30,7 +30,7 @@ RSpec.describe "past_court_dates/new", type: :system do
       select hearing_type.name, from: "Hearing type"
 
       find("#add-mandate-button").click
-      fill_in "casa_case_case_court_orders_attributes_0_mandate_text", with: mandate_text
+      fill_in "casa_case_case_court_orders_attributes_0_text", with: text
       select "Partially implemented", from: "casa_case_case_court_orders_attributes_0_implementation_status"
 
       within ".top-page-actions" do
@@ -41,7 +41,7 @@ RSpec.describe "past_court_dates/new", type: :system do
       expect(page).to have_content("Past court date was successfully created.")
       expect(page).to have_content(judge.name)
       expect(page).to have_content(hearing_type.name)
-      expect(page).to have_content(mandate_text)
+      expect(page).to have_content(text)
       expect(page).to have_content("Partially implemented")
     end
   end

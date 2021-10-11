@@ -13,12 +13,12 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
       judge_id: judge.id
     }
   end
-  let(:mandate_texts) { ["1-New Order Text One", "0-New Order Text Two"] }
+  let(:texts) { ["1-New Order Text One", "0-New Order Text Two"] }
   let(:implementation_statuses) { ["not_implemented", nil] }
   let(:orders_attributes) do
     {
-      "0" => {mandate_text: mandate_texts[0], implementation_status: implementation_statuses[0], casa_case_id: casa_case.id},
-      "1" => {mandate_text: mandate_texts[1], implementation_status: implementation_statuses[1], casa_case_id: casa_case.id}
+      "0" => {text: texts[0], implementation_status: implementation_statuses[0], casa_case_id: casa_case.id},
+      "1" => {text: texts[1], implementation_status: implementation_statuses[1], casa_case_id: casa_case.id}
     }
   end
   let(:invalid_attributes) do
@@ -124,9 +124,9 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
           post casa_case_past_court_dates_path(casa_case), params: {past_court_date: valid_params}
 
           expect(past_court_date.case_court_orders.count).to eq 2
-          expect(past_court_date.case_court_orders[0].mandate_text).to eq mandate_texts[0]
+          expect(past_court_date.case_court_orders[0].text).to eq texts[0]
           expect(past_court_date.case_court_orders[0].implementation_status).to eq implementation_statuses[0]
-          expect(past_court_date.case_court_orders[1].mandate_text).to eq mandate_texts[1]
+          expect(past_court_date.case_court_orders[1].text).to eq texts[1]
           expect(past_court_date.case_court_orders[1].implementation_status).to eq implementation_statuses[1]
         end
       end
@@ -166,9 +166,9 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
         expect(past_court_date.date).to eq 1.week.ago.to_date
         expect(past_court_date.hearing_type).to eq hearing_type
         expect(past_court_date.judge).to eq judge
-        expect(past_court_date.case_court_orders[0].mandate_text).to eq mandate_texts[0]
+        expect(past_court_date.case_court_orders[0].text).to eq texts[0]
         expect(past_court_date.case_court_orders[0].implementation_status).to eq implementation_statuses[0]
-        expect(past_court_date.case_court_orders[1].mandate_text).to eq mandate_texts[1]
+        expect(past_court_date.case_court_orders[1].text).to eq texts[1]
         expect(past_court_date.case_court_orders[1].implementation_status).to eq implementation_statuses[1]
       end
 
@@ -194,11 +194,11 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
           {
             case_court_orders_attributes: {
               "0" => {
-                mandate_text: "New Order Text One Updated",
+                text: "New Order Text One Updated",
                 implementation_status: :not_implemented
               },
               "1" => {
-                mandate_text: ""
+                text: ""
               }
             }
           }
@@ -216,7 +216,7 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
           expect do
             patch casa_case_past_court_date_path(casa_case, past_court_date), params: {past_court_date: orders_updated}
           end.not_to(
-            change { past_court_date.reload.case_court_orders[0].mandate_text }
+            change { past_court_date.reload.case_court_orders[0].text }
           )
         end
 
@@ -224,7 +224,7 @@ RSpec.describe "/casa_cases/:casa_case_id/past_court_dates/:id", type: :request 
           expect do
             patch casa_case_past_court_date_path(casa_case, past_court_date), params: {past_court_date: orders_updated}
           end.not_to(
-            change { past_court_date.reload.case_court_orders[1].mandate_text }
+            change { past_court_date.reload.case_court_orders[1].text }
           )
         end
       end

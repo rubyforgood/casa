@@ -18,7 +18,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       court_order = casa_case.case_court_orders.first
 
-      expect(page).to have_text(court_order.mandate_text)
+      expect(page).to have_text(court_order.text)
       expect(page).to have_text(court_order.implementation_status.humanize)
     end
 
@@ -241,7 +241,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       court_order = casa_case.case_court_orders.first
 
-      expect(page).to have_text(court_order.mandate_text)
+      expect(page).to have_text(court_order.text)
       expect(page).to have_text(court_order.implementation_status.humanize)
     end
 
@@ -381,12 +381,12 @@ RSpec.describe "Edit CASA Case", type: :system do
 
     context "deleting court orders", js: true do
       let(:casa_case) { create(:casa_case, :with_one_court_order) }
-      let(:mandate_text) { casa_case.case_court_orders.first.mandate_text }
+      let(:text) { casa_case.case_court_orders.first.text }
 
       it "can delete a court order" do
         visit edit_casa_case_path(casa_case.id)
 
-        expect(page).to have_text(mandate_text)
+        expect(page).to have_text(text)
 
         find("button.remove-mandate-button").click
         expect(page).to have_text("Are you sure you want to remove this court order? Doing so will delete all records \
@@ -395,12 +395,12 @@ of it unless it was included in a previous court report.")
         find("button.swal2-confirm").click
         expect(page).to have_text("Court order has been removed.")
         click_on "OK"
-        expect(page).to_not have_text(mandate_text)
+        expect(page).to_not have_text(text)
 
         within ".actions" do
           click_on "Update CASA Case"
         end
-        expect(page).to_not have_text(mandate_text)
+        expect(page).to_not have_text(text)
       end
     end
 
@@ -507,7 +507,7 @@ of it unless it was included in a previous court report.")
 
       court_order = casa_case.case_court_orders.first
 
-      expect(page).to have_text(court_order.mandate_text)
+      expect(page).to have_text(court_order.text)
       expect(page).to have_text(court_order.implementation_status.humanize)
     end
 

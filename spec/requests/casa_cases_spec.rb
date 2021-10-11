@@ -7,12 +7,12 @@ RSpec.describe "/casa_cases", type: :request do
   let(:valid_attributes) { {case_number: "1234", transition_aged_youth: true, casa_org_id: organization.id, hearing_type_id: hearing_type.id, judge_id: judge.id} }
   let(:invalid_attributes) { {case_number: nil} }
   let(:casa_case) { create(:casa_case, casa_org: organization, case_number: "111") }
-  let(:mandate_texts) { ["1-New Mandate Text One", "0-New Mandate Text Two"] }
+  let(:texts) { ["1-New Mandate Text One", "0-New Mandate Text Two"] }
   let(:implementation_statuses) { ["not_implemented", nil] }
   let(:orders_attributes) do
     {
-      "0" => {mandate_text: mandate_texts[0], implementation_status: implementation_statuses[0]},
-      "1" => {mandate_text: mandate_texts[1], implementation_status: implementation_statuses[1]}
+      "0" => {text: texts[0], implementation_status: implementation_statuses[0]},
+      "1" => {text: texts[1], implementation_status: implementation_statuses[1]}
     }
   end
 
@@ -202,9 +202,9 @@ RSpec.describe "/casa_cases", type: :request do
           expect(casa_case.case_number).to eq "12345"
           expect(casa_case.hearing_type).to eq hearing_type
           expect(casa_case.judge).to eq judge
-          expect(casa_case.case_court_orders[0].mandate_text).to eq mandate_texts[0]
+          expect(casa_case.case_court_orders[0].text).to eq texts[0]
           expect(casa_case.case_court_orders[0].implementation_status).to eq implementation_statuses[0]
-          expect(casa_case.case_court_orders[1].mandate_text).to eq mandate_texts[1]
+          expect(casa_case.case_court_orders[1].text).to eq texts[1]
           expect(casa_case.case_court_orders[1].implementation_status).to eq implementation_statuses[1]
         end
 
@@ -228,11 +228,11 @@ RSpec.describe "/casa_cases", type: :request do
             {
               case_court_orders_attributes: {
                 "0" => {
-                  mandate_text: "New Mandate Text One Updated",
+                  text: "New Mandate Text One Updated",
                   implementation_status: :not_implemented
                 },
                 "1" => {
-                  mandate_text: ""
+                  text: ""
                 }
               }
             }
@@ -248,13 +248,13 @@ RSpec.describe "/casa_cases", type: :request do
 
           it "does not update the first court order" do
             expect { patch casa_case_url(casa_case), params: {casa_case: orders_updated} }.not_to(
-              change { casa_case.reload.case_court_orders[0].mandate_text }
+              change { casa_case.reload.case_court_orders[0].text }
             )
           end
 
           it "does not update the second court order" do
             expect { patch casa_case_url(casa_case), params: {casa_case: orders_updated} }.not_to(
-              change { casa_case.reload.case_court_orders[1].mandate_text }
+              change { casa_case.reload.case_court_orders[1].text }
             )
           end
         end
@@ -498,10 +498,10 @@ RSpec.describe "/casa_cases", type: :request do
           expect(casa_case.case_number).to eq "111"
           expect(casa_case.court_report_completed?).to be true
 
-          expect(casa_case.case_court_orders[0].mandate_text).to eq mandate_texts[0]
+          expect(casa_case.case_court_orders[0].text).to eq texts[0]
           expect(casa_case.case_court_orders[0].implementation_status).to eq implementation_statuses[0]
 
-          expect(casa_case.case_court_orders[1].mandate_text).to eq mandate_texts[1]
+          expect(casa_case.case_court_orders[1].text).to eq texts[1]
           expect(casa_case.case_court_orders[1].implementation_status).to eq implementation_statuses[1]
         end
 
