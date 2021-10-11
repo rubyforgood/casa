@@ -19,7 +19,7 @@ RSpec.describe "past_court_dates/edit", type: :system do
   it "shows court mandates" do
     court_order = past_court_date.case_court_orders.first
 
-    expect(page).to have_text(court_order.mandate_text)
+    expect(page).to have_text(court_order.text)
     expect(page).to have_text(court_order.implementation_status.humanize)
   end
 

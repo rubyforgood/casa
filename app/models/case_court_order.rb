@@ -4,7 +4,7 @@ class CaseCourtOrder < ApplicationRecord
   belongs_to :casa_case
   belongs_to :past_court_date, optional: true
 
-  validates :mandate_text, presence: true
+  validates :text, presence: true
 
   enum implementation_status: IMPLEMENTATION_STATUSES
 
@@ -26,7 +26,7 @@ end
 #
 #  id                    :bigint           not null, primary key
 #  implementation_status :integer
-#  mandate_text          :string
+#  text                  :string
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  casa_case_id          :bigint           not null

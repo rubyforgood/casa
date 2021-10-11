@@ -120,7 +120,7 @@
             <div id="mandate-list-container">
               <% @casa_case.case_court_orders.each do |order| %>
                 <div class="court-mandate-entry">
-                  <textarea disabled><%= order.mandate_text %></textarea>
+                  <textarea disabled><%= order.text %></textarea>
 
                   <% if order.implementation_status %>
                     <p class="implementation-status">

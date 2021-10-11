@@ -221,7 +221,7 @@ class DbPopulator
       random_court_order_count.times do
         CaseCourtOrder.create!(
           casa_case_id: new_casa_case.id,
-          mandate_text: order_choices.sample(random: rng),
+          text: order_choices.sample(random: rng),
           implementation_status: CaseCourtOrder::IMPLEMENTATION_STATUSES.values.sample(random: rng)
         )
       end

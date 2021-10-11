@@ -67,7 +67,7 @@ class PastCourtDate < ApplicationRecord
   def case_court_orders_context_hash
     case_court_orders.map do |order|
       {
-        text: order.mandate_text,
+        text: order.text,
         implementation_status: order.implementation_status&.humanize
       }
     end

@@ -41,10 +41,10 @@ casa_case_path(@casa_case) %></h6>
             <th class="text-center"><%= t(".label.casa_case_court_order.implementation_status") %></th>
           </thead>
           <tbody>
-            <% @past_court_date.case_court_orders.each do |court_mandate| %>
+            <% @past_court_date.case_court_orders.each do |court_order| %>
               <tr>
-                <td><%= court_mandate.mandate_text %></td>
-                <td class="text-center"><%= court_mandate.implementation_status&.humanize %></td>
+                <td><%= court_order.text %></td>
+                <td class="text-center"><%= court_order.implementation_status&.humanize %></td>
               </tr>
             <% end %>
           </tbody>

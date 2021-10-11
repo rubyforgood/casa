@@ -1,8 +1,8 @@
-<%= form.label :case_court_mandates, "#{t("global.court_orders")}" %>
+<%= form.label :case_court_orders, "#{t("global.court_orders")}" %>
 <div id="court-orders-list-container">
     <%= form.fields_for :case_court_orders do |ff| %>
     <div class="court-mandate-entry">
-        <%= ff.text_area :mandate_text %>
+        <%= ff.text_area :text %>
         <%=
         ff.select :implementation_status,
                     casa_case.decorate.court_order_select_options,

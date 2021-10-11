@@ -26,7 +26,7 @@ RSpec.describe "past_court_dates/edit", type: :view do
 
   it { is_expected.to have_select("past_court_date_judge_id", selected: past_court_date.judge.name) }
   it { is_expected.to have_select("past_court_date_hearing_type_id", selected: past_court_date.hearing_type.name) }
-  it { is_expected.to have_selector("textarea", text: court_order.mandate_text) }
+  it { is_expected.to have_selector("textarea", text: court_order.text) }
   it { is_expected.to have_select(implementation_status_name, selected: implementation_status) }
   it { is_expected.to have_selector(".btn-primary") }
 end

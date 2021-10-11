@@ -27,7 +27,7 @@ class CaseCourtReport
       created_date: I18n.l(Date.today, format: :full, default: nil),
       casa_case: prepare_case_details,
       case_contacts: prepare_case_contacts,
-      case_mandates: prepare_case_orders,
+      case_court_orders: prepare_case_orders,
       latest_hearing_date: latest_hearing_date.nil? ? "___<LATEST HEARING DATE>____" : I18n.l(latest_hearing_date.date, format: :full, default: nil),
       org_address: org_address(is_default_template),
       volunteer: volunteer_info
@@ -47,7 +47,7 @@ class CaseCourtReport
 
     @casa_case.case_court_orders.each do |case_order|
       case_order_data << {
-        order: case_order.mandate_text,
+        order: case_order.text,
         status: case_order.implementation_status&.humanize
       }
     end

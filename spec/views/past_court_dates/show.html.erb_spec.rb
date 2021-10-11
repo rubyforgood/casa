@@ -12,7 +12,7 @@ RSpec.describe "past_court_dates/show", type: :view do
       expect(rendered).to include(ERB::Util.html_escape(past_court_date.judge.name))
       expect(rendered).to include(past_court_date.hearing_type.name)
 
-      expect(rendered).to include(case_court_order.mandate_text)
+      expect(rendered).to include(case_court_order.text)
       expect(rendered).to include(case_court_order.implementation_status.humanize)
     end
 
