@@ -9,6 +9,7 @@ class CaseCourtReport
   def initialize(args = {})
     @casa_case = CasaCase.find(args[:case_id])
     @volunteer = Volunteer.find(args[:volunteer_id]) if args[:volunteer_id]
+    @time_zone = args[:time_zone]
 
     @context = prepare_context(args[:path_to_template].end_with?("default_report_template.docx"))
     @template = Sablon.template(args[:path_to_template])
