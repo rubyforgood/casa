@@ -63,7 +63,7 @@ RSpec.describe "notifications/index", type: :system do
 
     context "when followup has a note" do
       before do
-        click_button "Resolve Reminder"
+        click_button "Make Reminder"
         find(".swal2-textarea").set(note)
 
         click_button "Confirm"
