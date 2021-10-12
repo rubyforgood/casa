@@ -17,7 +17,7 @@
           default_checked = true
          else
           default_checked = false
-         end %>
+      end %>
       <% contact_type_groups.each do |group| %>
         <td class="align-top d-inline-block pr-5 pb-4">
           <h5> <%= group.name %> </h5>
@@ -58,7 +58,6 @@
     var contact_type_boxes = document.getElementsByName("casa_case[casa_case_contact_types_attributes][][contact_type_id]")
       for (checkbox of contact_type_boxes){
          checkbox.checked = false
-         console.log("hi")
       }
 
   }
