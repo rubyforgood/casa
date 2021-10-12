@@ -133,6 +133,14 @@ class CasaCase < ApplicationRecord
     court_dates.order("date").last
   end
 
+  def next_court_date
+    court_dates.where("date >= ?", Date.today).order(:date).first
+  end
+
+  def most_recent_past_court_date
+    court_dates.where("date < ?", Date.today).order(:date).first
+  end
+
   def has_hearing_type?
     hearing_type
   end
