@@ -130,3 +130,8 @@ $('document').ready(() => {
 
   $('#btnGenerateReport').on('click', handleGenerateReport)
 })
+
+export {
+  enableBtn,
+  disableBtn
+}
