@@ -31,7 +31,6 @@
   "version": "0.1.0",
   "devDependencies": {
     "@webpack-cli/serve": "^1.6.0",
-    "canvas": "^2.8.0",
     "cypress": "^8.5.0",
     "jest": "^27.2.5",
     "markdown-toc": "^1.2.0",
