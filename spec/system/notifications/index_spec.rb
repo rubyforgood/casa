@@ -16,7 +16,7 @@ RSpec.describe "notifications/index", type: :system do
       sign_in volunteer
 
       visit case_contacts_path
-      click_button "Resolve"
+      click_button "Resolve Reminder"
     end
 
     it "lists my notifications" do
@@ -63,7 +63,7 @@ RSpec.describe "notifications/index", type: :system do
 
     context "when followup has a note" do
       before do
-        click_button "Follow up"
+        click_button "Resolve Reminder"
         find(".swal2-textarea").set(note)
 
         click_button "Confirm"
@@ -71,7 +71,7 @@ RSpec.describe "notifications/index", type: :system do
 
       it "lists followup notifications, showing their note" do
         # Wait until page reloads
-        expect(page).to have_content "Resolve"
+        expect(page).to have_content "Resolve Reminder"
 
         sign_in volunteer
         visit notifications_path
@@ -86,13 +86,13 @@ RSpec.describe "notifications/index", type: :system do
 
     context "when followup doesn't have a note" do
       before do
-        click_button "Follow up"
+        click_button "Make Reminder"
         click_button "Confirm"
       end
 
       it "lists followup notifications, showing the information in a single line when there are no notes" do
         # Wait until page reloads
-        expect(page).to have_content "Resolve"
+        expect(page).to have_content "Resolve Reminder"
 
         sign_in volunteer
         visit notifications_path
@@ -108,13 +108,13 @@ RSpec.describe "notifications/index", type: :system do
       let(:new_notification_message) { I18n.t("notifications.followup_notification.message", created_by_name: created_by_name) }
 
       before do
-        click_button "Follow up"
+        click_button "Make Reminder"
         click_button "Confirm"
       end
 
       it "lists followup notifications showing admin current name" do
         # Wait until page reloads
-        expect(page).to have_content "Resolve"
+        expect(page).to have_content "Resolve Reminder"
 
         visit edit_users_path
         fill_in "Display name", with: created_by_name
