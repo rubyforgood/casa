@@ -104,6 +104,7 @@ $('document').ready(() => {
   // Enable all data tables on dashboard but only filter on volunteers table
   const editSupervisorPath = id => `/supervisors/${id}/edit`
   const editVolunteerPath = id => `/volunteers/${id}/edit`
+  const impersonateVolunteerPath = id => `/volunteers/${id}/impersonate`
   const casaCasePath = id => `/casa_cases/${id}`
   const volunteersTable = $('table#volunteers').DataTable({
     autoWidth: false,
@@ -209,6 +210,9 @@ $('document').ready(() => {
           <span class="mobile-label">Actions</span>
             <a href="${editVolunteerPath(row.id)}">
               Edit
+            </a>
+            <a href="${impersonateVolunteerPath(row.id)}">
+              Impersonate
             </a>
           `
         },
