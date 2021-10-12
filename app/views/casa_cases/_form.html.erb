@@ -171,6 +171,24 @@ id: "submit-casa-case" %>
                       class: "btn btn-primary") if Pundit.policy(current_user, casa_case).update_case_status? %>
         <% end %>
       </div>
+
+      <script type="text/javascript">
+        submit_case_button = document.getElementById("submit-casa-case")
+        submit_case_button.addEventListener("click", function(){
+          checkboxes = document.getElementsByName("casa_case[casa_case_contact_types_attributes][][contact_type_id]")
+
+          checkboxes_array = Array.from(checkboxes)
+          checks_num = checkboxes_array.filter(function(box){
+            return box.checked
+          })
+
+          if (checks_num.length == 0) {
+            alert("You must select at least one contact type")
+            event.preventDefault();
+          }
+        })
+      </script>
+
     <% end %>
   </div>
 </div>
