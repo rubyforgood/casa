@@ -49,11 +49,11 @@
         </div>
         <div class="field form-group">
           <%= f.label :password, "New Password" %><br>
-          <%= f.password_field :password, autocomplete: "off", class: "form-control", minlength: 6 %>
+          <%= f.password_field :password, autocomplete: "off", class: "form-control password-new", minlength: 6 %>
         </div>
         <div class="field form-group">
           <%= f.label :password_confirmation, "New Password Confirmation" %><br>
-          <%= f.password_field :password_confirmation, class: "form-control", minlength: 6 %>
+          <%= f.password_field :password_confirmation, class: "form-control password-confirmation", minlength: 6 %>
         </div>
         <div class="action_container">
           <%= f.submit "Update Password", class: "btn btn-danger" %>
@@ -62,3 +62,32 @@
     </div>
   </div>
 </div>
+
+<script>
+  function addConfirmationEventListeners() {
+    const password = document.getElementsByClassName("password-new")
+    const confirmation = document.getElementsByClassName("password-confirmation")
+
+    if(confirmation.length === 0 || password.length === 0){
+      console.error("Unable to find password confirmation field", { confirmation })
+    }else{
+      console.log({confirmation})
+      confirmation[0].addEventListener("keyup", function(){
+        checkConfirmationEqual(password, confirmation)
+      })
+    }
+  }
+
+  function checkConfirmationEqual(password, confirmation){
+    const passwordText = password[0].value
+    const confirmationText = confirmation[0].value
+    console.log({ passwordText, confirmationText})
+    if (passwordText === confirmationText){
+      console.log("EQUAL")
+    }else{
+      console.log("UNEQUAL")
+    }
+  }
+
+  addConfirmationEventListeners()
+</script>
