@@ -1,5 +1,3 @@
-const button = document.getElementsByClassName("submit-password")[0]
-
 function disableBtn (el) {
   el.disabled = true
   el.classList.add('disabled')
@@ -12,27 +10,18 @@ function enableBtn (el) {
   el.removeAttribute('aria-disabled')
 }
 
-function addConfirmationEventListeners() {
-  const password = document.getElementsByClassName("password-new")
-  const confirmation = document.getElementsByClassName("password-confirmation")
+$('document').ready(() => {
+    $('.password-confirmation').on('blur', () => {
+      const button = document.getElementsByClassName("submit-password")[0]
+      const password = document.getElementsByClassName("password-new")
+      const confirmation = document.getElementsByClassName("password-confirmation")
+      const passwordText = password[0].value
+      const confirmationText = confirmation[0].value
 
-  disableBtn(button)
-
-  if(confirmation.length === 0 || password.length === 0){
-    console.error("Unable to find password confirmation field", { confirmation })
-  }else{
-    confirmation[0].addEventListener("keyup", function(){
-      checkConfirmationEqual(password, confirmation)
+      if (passwordText === confirmationText){
+        enableBtn(button)
+      }else{
+        disableBtn(button)
+      }
     })
-  }
-}
-
-function checkConfirmationEqual(password, confirmation){
-  const passwordText = password[0].value
-  const confirmationText = confirmation[0].value
-  if (passwordText === confirmationText){
-    enableBtn(button)
-  }else{
-    disableBtn(button)
-  }
-}
+})
