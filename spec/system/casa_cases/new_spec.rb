@@ -19,9 +19,6 @@ RSpec.describe "casa_cases/new", type: :system do
       travel_to Time.zone.local(2020, 12, 1) do
         next_year = (Date.today.year + 1).to_s
         fill_in "Case number", with: case_number
-        select "3", from: "casa_case_court_date_3i"
-        select "March", from: "casa_case_court_date_2i"
-        select next_year, from: "casa_case_court_date_1i"
 
         select "1", from: "casa_case_court_report_due_date_3i"
         select "April", from: "casa_case_court_report_due_date_2i"
@@ -38,7 +35,6 @@ RSpec.describe "casa_cases/new", type: :system do
 
         expect(page.body).to have_content(case_number)
         expect(page).to have_content("CASA case was successfully created.")
-        expect(page).to have_content("Next Court Date: Wednesday, 3-MAR-2021") # accurate for frozen time
         expect(page).to have_content("Court Report Due Date: Thursday, 1-APR-2021") # accurate for frozen time
         expect(page).to have_content("Transition Aged Youth: Yes")
       end
