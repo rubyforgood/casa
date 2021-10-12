@@ -25,7 +25,7 @@ controllers/imports_controller.rb
 controllers/judges_controller.rb
 controllers/mileage_reports_controller.rb
 controllers/notifications_controller.rb
-controllers/past_court_dates_controller.rb
+controllers/court_dates_controller.rb
 controllers/reports_controller.rb
 controllers/supervisor_volunteers_controller.rb
 controllers/supervisors_controller.rb
@@ -35,7 +35,7 @@ controllers/volunteers_controller.rb
 datatables/application_datatable.rb
 decorators/application_decorator.rb
 decorators/case_assignment_decorator.rb
-decorators/past_court_date_decorator.rb
+decorators/court_date_decorator.rb
 helpers/all_casa_admins/casa_orgs_helper.rb
 helpers/contact_types_helper.rb
 helpers/date_helper.rb

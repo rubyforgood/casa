@@ -21,7 +21,7 @@ class CaseCourtReport
   private
 
   def prepare_context(is_default_template)
-    latest_hearing_date = @casa_case.latest_past_court_date
+    latest_hearing_date = @casa_case.latest_court_date
 
     {
       created_date: I18n.l(Date.today, format: :full, default: nil),
@@ -56,7 +56,7 @@ class CaseCourtReport
   end
 
   def filter_out_old_case_contacts(interviewees)
-    most_recent_court_date = @casa_case.past_court_dates.order(:date).last&.date
+    most_recent_court_date = @casa_case.court_dates.order(:date).last&.date
     if most_recent_court_date
       interviewees.where("occurred_at > ?", most_recent_court_date)
     else

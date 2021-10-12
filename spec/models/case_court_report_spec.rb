@@ -40,10 +40,10 @@ RSpec.describe CaseCourtReport, type: :model do
       end
 
       describe "with past court date" do
-        let!(:past_court_date) { create(:past_court_date, date: 2.days.ago, casa_case_id: casa_case_with_contacts.id) }
+        let!(:court_date) { create(:court_date, date: 2.days.ago, casa_case_id: casa_case_with_contacts.id) }
 
         it "has all case contacts created since the previous court date" do
-          expect(casa_case_with_contacts.past_court_dates.length).to eq(1)
+          expect(casa_case_with_contacts.court_dates.length).to eq(1)
           expect(report.context[:case_contacts].length).to eq(4)
         end
       end
@@ -70,9 +70,9 @@ RSpec.describe CaseCourtReport, type: :model do
 
       context "when the case has multiple past court dates" do
         before do
-          casa_case_with_contacts.past_court_dates << create(:past_court_date, date: 9.months.ago)
-          casa_case_with_contacts.past_court_dates << create(:past_court_date, date: 3.months.ago)
-          casa_case_with_contacts.past_court_dates << create(:past_court_date, date: 15.months.ago)
+          casa_case_with_contacts.court_dates << create(:court_date, date: 9.months.ago)
+          casa_case_with_contacts.court_dates << create(:court_date, date: 3.months.ago)
+          casa_case_with_contacts.court_dates << create(:court_date, date: 15.months.ago)
         end
 
         it "sets latest_hearing_date as the latest past court date" do

@@ -1,40 +1,40 @@
 require "rails_helper"
 
-RSpec.describe "past_court_dates/show", type: :view do
+RSpec.describe "court_dates/show", type: :view do
   shared_examples_for "a past court date with all court details" do
-    let(:past_court_date) { create(:past_court_date, :with_court_details) }
-    let(:case_court_order) { past_court_date.case_court_orders.first }
+    let(:court_date) { create(:court_date, :with_court_details) }
+    let(:case_court_order) { court_date.case_court_orders.first }
 
-    before { render template: "past_court_dates/show" }
+    before { render template: "court_dates/show" }
 
     it "displays all court details" do
-      expect(rendered).to include("/casa_cases/#{past_court_date.casa_case.id}")
-      expect(rendered).to include(ERB::Util.html_escape(past_court_date.judge.name))
-      expect(rendered).to include(past_court_date.hearing_type.name)
+      expect(rendered).to include("/casa_cases/#{court_date.casa_case.id}")
+      expect(rendered).to include(ERB::Util.html_escape(court_date.judge.name))
+      expect(rendered).to include(court_date.hearing_type.name)
 
       expect(rendered).to include(case_court_order.text)
       expect(rendered).to include(case_court_order.implementation_status.humanize)
     end
 
     context "when judge's name has escaped characters" do
-      let(:past_court_date) { create(:past_court_date, :with_court_details, judge: create(:judge, name: "/-'<>#&")) }
+      let(:court_date) { create(:court_date, :with_court_details, judge: create(:judge, name: "/-'<>#&")) }
 
       it "correctly displays judge's name" do
-        expect(rendered).to include(ERB::Util.html_escape(past_court_date.judge.name))
+        expect(rendered).to include(ERB::Util.html_escape(court_date.judge.name))
       end
     end
 
     it "displays the download button for .docx" do
       expect(rendered).to include "Download Report (.docx)"
-      expect(rendered).to include "/casa_cases/#{past_court_date.casa_case.id}/past_court_dates/#{past_court_date.id}.docx"
+      expect(rendered).to include "/casa_cases/#{court_date.casa_case.id}/court_dates/#{court_date.id}.docx"
     end
   end
 
   shared_examples_for "a past court date with no court details" do
-    let(:past_court_date) { create(:past_court_date) }
+    let(:court_date) { create(:court_date) }
 
     it "displays all court details" do
-      render template: "past_court_dates/show"
+      render template: "court_dates/show"
 
       expect(rendered).to include("Judge:")
       expect(rendered).to include("Hearing Type")
@@ -50,8 +50,8 @@ RSpec.describe "past_court_dates/show", type: :view do
   before do
     enable_pundit(view, user)
 
-    assign :casa_case, past_court_date.casa_case
-    assign :past_court_date, past_court_date
+    assign :casa_case, court_date.casa_case
+    assign :court_date, court_date
 
     allow(view).to receive(:current_user).and_return(user)
     allow(view).to receive(:current_organization).and_return(user.casa_org)

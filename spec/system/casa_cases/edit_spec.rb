@@ -11,7 +11,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
     before { sign_in admin }
 
-    it_behaves_like "shows past court dates links"
+    it_behaves_like "shows court dates links"
 
     it "shows court orders" do
       visit edit_casa_case_path(casa_case)
@@ -91,7 +91,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
     before { sign_in supervisor }
 
-    it_behaves_like "shows past court dates links"
+    it_behaves_like "shows court dates links"
 
     it "edits case", js: true do
       visit casa_case_path(casa_case)
@@ -466,7 +466,7 @@ of it unless it was included in a previous court report.")
     let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
 
     let!(:court_dates) do
-      [10, 30, 31, 90].map { |n| create(:past_court_date, casa_case: casa_case, date: n.days.ago) }
+      [10, 30, 31, 90].map { |n| create(:court_date, casa_case: casa_case, date: n.days.ago) }
     end
 
     let!(:reports) do
@@ -486,7 +486,7 @@ of it unless it was included in a previous court report.")
 
     before { sign_in volunteer }
 
-    it_behaves_like "shows past court dates links"
+    it_behaves_like "shows court dates links"
 
     it "views attached court reports" do
       visit edit_casa_case_path(casa_case)

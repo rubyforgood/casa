@@ -2,7 +2,7 @@
 
 require "sablon"
 
-class PastCourtDate < ApplicationRecord
+class CourtDate < ApplicationRecord
   belongs_to :casa_case
   validate :date_must_be_past
 
@@ -26,7 +26,7 @@ class PastCourtDate < ApplicationRecord
 
   # get reports associated with the case this belongs to before this court date but after the court date before this one
   def associated_reports
-    prev = casa_case.past_court_dates.where("date < ?", date).order(:date).last
+    prev = casa_case.court_dates.where("date < ?", date).order(:date).last
     if prev
       casa_case.court_reports.where("created_at > ?", prev.date).where("created_at < ?", date)
     else
@@ -75,7 +75,7 @@ class PastCourtDate < ApplicationRecord
 end
 # == Schema Information
 #
-# Table name: past_court_dates
+# Table name: court_dates
 #
 #  id              :bigint           not null, primary key
 #  date            :datetime         not null
@@ -87,9 +87,9 @@ end
 #
 # Indexes
 #
-#  index_past_court_dates_on_casa_case_id     (casa_case_id)
-#  index_past_court_dates_on_hearing_type_id  (hearing_type_id)
-#  index_past_court_dates_on_judge_id         (judge_id)
+#  index_court_dates_on_casa_case_id     (casa_case_id)
+#  index_court_dates_on_hearing_type_id  (hearing_type_id)
+#  index_court_dates_on_judge_id         (judge_id)
 #
 # Foreign Keys
 #
