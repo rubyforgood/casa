@@ -1,40 +1,42 @@
-require('jest')
+/* eslint-env jest */
 
 import {
   showBtn,
   hideBtn,
   disableBtn,
   enableBtn
-} from "../src/casa_case"
+} from '../src/casa_case'
+
+require('jest')
 
 let button
 
 beforeEach(() => {
   document.body.innerHTML =
-    `<button id="test-button">Disable Reports</button>`
-  button = document.getElementById("test-button")
+    '<button id="test-button">Disable Reports</button>'
+  button = document.getElementById('test-button')
 })
 
-describe("casa_case generate report button applies correct classes and attributes", () => {
-  test("show button", () => {
+describe('casa_case generate report button applies correct classes and attributes', () => {
+  test('show button', () => {
     button.classList.add('d-none')
     showBtn(button)
     expect(button.classList.contains('d-none')).toBe(false)
   })
 
-  test("hide button", () => {
+  test('hide button', () => {
     hideBtn(button)
     expect(button.classList.contains('d-none')).toBe(true)
   })
 
-  test("disable button", () => {
+  test('disable button', () => {
     disableBtn(button)
     expect(button.classList.contains('disabled')).toBe(true)
     expect(button.hasAttribute('aria-disabled')).toBe(true)
     expect(button.disabled).toBe(true)
   })
 
-  test("enable button", () => {
+  test('enable button', () => {
     button.disabled = true
     button.classList.add('disabled')
     button.setAttribute('aria-disabled', true)
@@ -44,4 +46,3 @@ describe("casa_case generate report button applies correct classes and attribute
     expect(button.disabled).toBe(false)
   })
 })
-
