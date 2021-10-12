@@ -37,6 +37,7 @@ class CasaCase < ApplicationRecord
   belongs_to :casa_org
 
   has_many :casa_case_contact_types
+  validates :casa_case_contact_types, presence: true
   has_many :contact_types, through: :casa_case_contact_types, source: :contact_type
   accepts_nested_attributes_for :casa_case_contact_types
 

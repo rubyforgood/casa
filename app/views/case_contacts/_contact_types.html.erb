@@ -2,6 +2,22 @@
   <h2 id="contact-type-label"><%= form.label :contact_types %></h2>
   <table>
     <tr>
+      <div class="row">
+        <div class="col-sm-6 col-md-2">
+          <a class="btn btn-outline-info" onClick="checkContactTypes()">Check All</a>
+        </div>
+        <div class="col-sm-6 col-md-2">
+          <a class="btn btn-outline-info" onClick="uncheckContactTypes()">Uncheck All</a>
+        </div>
+
+      </div>
+    </tr>
+    <tr>
+      <% if @casa_case.contact_types.length == 0
+          default_checked = true
+         else
+          default_checked = false
+         end %>
       <% contact_type_groups.each do |group| %>
         <td class="align-top d-inline-block pr-5 pb-4">
           <h5> <%= group.name %> </h5>
@@ -14,6 +30,7 @@
                 check_box_tag checkbox_tag_name,
                   contact_type.id,
                   model.decorate.show_contact_type?(contact_type.id),
+                  checked: default_checked,
                   id: dom_id(contact_type, :case_contact),
                   class: ["form-check-input", "case-contact-contact-type"]
               %>
@@ -27,3 +44,22 @@
     </tr>
   </table>
 </div>
+
+<script type="text/javascript">
+  function checkContactTypes(){
+    var contact_type_boxes = document.getElementsByName("casa_case[casa_case_contact_types_attributes][][contact_type_id]")
+      for (checkbox of contact_type_boxes){
+        checkbox.checked = true
+      }
+
+  }
+
+  function uncheckContactTypes(){
+    var contact_type_boxes = document.getElementsByName("casa_case[casa_case_contact_types_attributes][][contact_type_id]")
+      for (checkbox of contact_type_boxes){
+         checkbox.checked = false
+         console.log("hi")
+      }
+
+  }
+</script>
