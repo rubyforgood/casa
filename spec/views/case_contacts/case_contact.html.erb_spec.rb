@@ -5,7 +5,7 @@ RSpec.describe "case_contacts/case_contact", type: :view do
   let(:volunteer) { build_stubbed(:volunteer) }
   let(:supervisor) { build_stubbed(:supervisor) }
 
-  describe "edit and follow up buttons" do
+  describe "edit and make reminder buttons" do
     before do
       enable_pundit(view, admin)
       allow(view).to receive(:current_user).and_return(admin)
@@ -23,12 +23,12 @@ RSpec.describe "case_contacts/case_contact", type: :view do
         expect(rendered).to have_link(nil, href: "/case_contacts/#{case_contact.id}/edit")
       end
 
-      it "shows follow up button" do
+      it "shows make reminder button" do
         assign :case_contact, case_contact
         assign :casa_cases, [case_contact.casa_case]
 
         render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
-        expect(rendered).to have_button("Follow up")
+        expect(rendered).to have_button("Make Reminder")
       end
     end
 
@@ -43,12 +43,12 @@ RSpec.describe "case_contacts/case_contact", type: :view do
         expect(rendered).to have_no_link(nil, href: "/case_contacts/#{case_contact.id}/edit")
       end
 
-      it "does not show follow up button" do
+      it "does not show make reminder button" do
         assign :case_contact, case_contact
         assign :casa_cases, [case_contact.casa_case]
 
         render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
-        expect(rendered).to_not have_text("Follow up")
+        expect(rendered).to_not have_text("Make Reminder")
       end
     end
   end

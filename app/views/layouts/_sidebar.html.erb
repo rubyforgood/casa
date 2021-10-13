@@ -69,6 +69,12 @@
           </li>
           <%= link_to t(".link.edit_profile"), edit_all_casa_admins_path, class: "list-group-item" %>
         <% end %>
+        <% if current_user != true_user %>
+          <%= link_to stop_impersonating_volunteers_path, method: :post, class: "list-group-item" do %>
+              You (<%= true_user.display_name %>) are signed in as <%= current_user.display_name %>.
+              Click here to stop impersonating.
+          <% end %>
+        <% end %>
         <%= session_link %>
       </div>
     </div>
