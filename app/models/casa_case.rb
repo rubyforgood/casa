@@ -69,10 +69,6 @@ class CasaCase < ApplicationRecord
       .where("birth_month_year_youth <= ?", 14.years.ago)
   }
 
-  scope :due_date_passed, -> {
-    where("court_date < ?", Time.current)
-  }
-
   scope :active, -> {
     where(active: true)
   }
@@ -101,16 +97,6 @@ class CasaCase < ApplicationRecord
     end
   end
 
-  def clear_court_dates
-    if court_date && court_date < Time.current
-      update(
-        court_date: nil,
-        court_report_due_date: nil,
-        court_report_status: :not_submitted
-      )
-    end
-  end
-
   def court_report_status=(value)
     super
     if court_report_not_submitted?
@@ -129,16 +115,12 @@ class CasaCase < ApplicationRecord
     court_reports.order("created_at").last
   end
 
-  def latest_court_date
-    court_dates.order("date").last
-  end
-
   def next_court_date
     court_dates.where("date >= ?", Date.today).order(:date).first
   end
 
   def most_recent_past_court_date
-    court_dates.where("date < ?", Date.today).order(:date).first
+    court_dates.where("date < ?", Date.today).order(:date).last
   end
 
   def has_hearing_type?
@@ -162,7 +144,6 @@ class CasaCase < ApplicationRecord
   end
 
   def update_cleaning_contact_types(args)
-    args = parse_date(errors, "court_date", args)
     args = parse_date(errors, "court_report_due_date", args)
 
     return false unless errors.messages.empty?

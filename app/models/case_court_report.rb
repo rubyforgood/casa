@@ -21,7 +21,7 @@ class CaseCourtReport
   private
 
   def prepare_context(is_default_template)
-    latest_hearing_date = @casa_case.latest_court_date
+    latest_hearing_date = @casa_case.most_recent_past_court_date
 
     {
       created_date: I18n.l(Date.today, format: :full, default: nil),
