@@ -3,7 +3,7 @@
   <table>
     <%
       default_checked = false
-      if @casa_case && current_user.role != "Volunteer"
+      if @casa_case && !current_user.volunteer?
           if @casa_case.contact_types.length == 0
             default_checked = true
           end
@@ -48,7 +48,7 @@
   </table>
 </div>
 
-<% if @casa_case && current_user.role != "Volunteer" %>
+<% if @casa_case && !current_user.volunteer? %>
   <script type="text/javascript">
     function checkContactTypes(){
       var contact_type_boxes = document.getElementsByName("casa_case[casa_case_contact_types_attributes][][contact_type_id]")
@@ -64,18 +64,19 @@
 
     submit_case_button = document.getElementById("submit-casa-case")
 
-    submit_case_button.addEventListener("click", function(){
-      checkboxes = document.getElementsByName("casa_case[casa_case_contact_types_attributes][][contact_type_id]")
-      console.log("SUBMIT BUTTON CLICKED")
-      checkboxes_array = Array.from(checkboxes)
-      checks_num = checkboxes_array.filter(function(box){
-        return box.checked
-      })
+    if(submit_case_button){
+      submit_case_button.addEventListener("click", function(){
+        checkboxes = document.getElementsByName("casa_case[casa_case_contact_types_attributes][][contact_type_id]")
+        console.log("SUBMIT BUTTON CLICKED")
+        checkboxes_array = Array.from(checkboxes)
+        checks_num = checkboxes_array.filter(function(box){
+          return box.checked
+        })
 
-      if (checks_num.length == 0) {
-        alert("You must select at least one contact type")
-        event.preventDefault();
-      }
-    })
+        if (checks_num.length == 0) {
+          alert("You must select at least one contact type")
+          event.preventDefault();
+        }
+    })}
   </script>
 <% end %>

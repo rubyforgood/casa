@@ -5,7 +5,7 @@ RSpec.describe "casa_cases/new", type: :view do
 
   before do
     assign :casa_case, CasaCase.new
-    assign :contact_types, []
+    assign :contact_types, [ContactType.first]
 
     enable_pundit(view, user)
     allow(view).to receive(:current_user).and_return(user)

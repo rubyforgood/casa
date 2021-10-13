@@ -179,7 +179,7 @@ class DbPopulator
       birth_month_year_youth = ((Date.today - 18.year)..(Date.today - 14.year)).to_a.sample
       new_casa_case ||=
         if @case_fourteen_years_old
-          casa_case = CasaCase.new(
+          casa_case_14 = CasaCase.new(
             casa_org_id: casa_org.id,
             case_number: case_number,
             court_date: court_date,
@@ -189,9 +189,9 @@ class DbPopulator
             transition_aged_youth: transition_aged_youth?(birth_month_year_youth),
             birth_month_year_youth: ((Date.today - 18.years)..(Date.today - 14.years)).to_a.sample
           )
-          casa_case.contact_types = ContactType.all.sample(2, random: rng)
-          casa_case.save
-          casa_case
+          casa_case_14.contact_types = ContactType.all.sample(2, random: rng)
+          casa_case_14.save
+          casa_case_14
         else
 
           birth_month_year_youth = ((Date.today - 18.year)..(Date.today - 1.year)).to_a.sample

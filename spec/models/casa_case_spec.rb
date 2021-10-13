@@ -15,7 +15,8 @@ RSpec.describe CasaCase, type: :model do
   it { is_expected.to validate_uniqueness_of(:case_number).scoped_to(:casa_org_id).case_insensitive }
   it { is_expected.to have_many(:case_court_orders).dependent(:destroy) }
   it { is_expected.to have_many(:volunteers).through(:case_assignments) }
-  it { is_expected.to have_many(:contact_types).through(:contacts)}
+  it { is_expected.to have_many(:case_contacts) }
+  it { is_expected.to have_many(:contact_types).through(:casa_case_contact_types)}
 
   describe "scopes" do
     describe ".due_date_passed" do
