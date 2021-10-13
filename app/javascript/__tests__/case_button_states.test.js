@@ -19,14 +19,20 @@ beforeEach(() => {
 
 describe('casa_case generate report button applies correct classes and attributes', () => {
   test('show button', () => {
-    button.classList.add('d-none')
-    showBtn(button)
-    expect(button.classList.contains('d-none')).toBe(false)
+    $(document).ready( () => {
+      button.classList.add('d-none')
+      showBtn(button)
+      expect(button.classList.contains('d-none')).toBe(false)
+      expect($(button).is(":visible")).toBe(true)
+    })
   })
 
   test('hide button', () => {
-    hideBtn(button)
-    expect(button.classList.contains('d-none')).toBe(true)
+    $(document).ready( () => {
+      hideBtn(button)
+      expect(button.classList.contains('d-none')).toBe(true)
+      expect($(button).is(":visible")).toBe(false)
+    })
   })
 
   test('disable button', () => {
