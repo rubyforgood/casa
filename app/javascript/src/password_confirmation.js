@@ -17,7 +17,6 @@ const CONFIRMATION_FIELD_CLASS = 'password-confirmation'
 function checkPasswordsAndDisplayPopup (button, password, confirmation, enablePopup = false) {
   const passwordText = password.value
   const confirmationText = confirmation.value
-  console.log({passwordText, confirmationText})
   if (passwordText === confirmationText && passwordText.length > 0) {
     enableBtn(button)
   } else {
