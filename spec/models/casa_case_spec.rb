@@ -16,6 +16,26 @@ RSpec.describe CasaCase, type: :model do
   it { is_expected.to have_many(:case_court_orders).dependent(:destroy) }
   it { is_expected.to have_many(:volunteers).through(:case_assignments) }
 
+  describe "scopes" do
+    describe ".due_date_passed" do
+      subject { described_class.due_date_passed }
+
+      context "when casa_case is present" do
+        let!(:court_date) { create(:court_date, date: Time.current - 3.days) }
+        let(:casa_case) { court_date.casa_case }
+
+        it { is_expected.to include(casa_case) }
+      end
+
+      context "when casa_case is not present" do
+        let!(:court_date) { create(:court_date, date: Time.current + 3.days) }
+        let(:casa_case) { court_date.casa_case }
+
+        it { is_expected.not_to include(casa_case) }
+      end
+    end
+  end
+
   describe ".unassigned_volunteers" do
     let!(:casa_case) { create(:casa_case) }
     let!(:volunteer_same_org) { create(:volunteer, display_name: "Yelena Belova", casa_org: casa_case.casa_org) }
@@ -179,6 +199,24 @@ RSpec.describe CasaCase, type: :model do
 
       volunteer1.update(active: false)
       expect(casa_case.reload.assigned_volunteers).to eq [volunteer2]
+    end
+  end
+
+  describe "#clear_court_dates" do
+    context "when court date has passed" do
+      it "clears report due date" do
+        casa_case = build(:casa_case, court_report_due_date: "2020-09-13 02:11:58")
+        casa_case.clear_court_dates
+
+        expect(casa_case.court_report_due_date).to be nil
+      end
+
+      it "sets court report as unsubmitted" do
+        casa_case = build(:casa_case, court_report_status: :submitted)
+        casa_case.clear_court_dates
+
+        expect(casa_case.court_report_status).to eq "not_submitted"
+      end
     end
   end
 
