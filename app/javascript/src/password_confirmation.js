@@ -19,7 +19,7 @@ function checkPasswordsAndDisplayPopup (button, password, confirmation, enablePo
   const confirmationText = confirmation.value
   if (passwordText === confirmationText && passwordText.length > 0) {
     enableBtn(button)
-  } else if(passwordText === confirmationText && passwordText.length === 0){
+  } else if (passwordText === confirmationText && passwordText.length === 0) {
     disableBtn(button)
   } else {
     if (enablePopup) {
