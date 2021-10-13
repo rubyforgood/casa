@@ -184,6 +184,22 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
       end
     end
 
+    context "for a future court date" do
+      let(:valid_attributes) do
+        {
+          date: 10.days.from_now,
+          hearing_type_id: hearing_type.id,
+          judge_id: judge.id
+        }
+      end
+
+      it "creates a new CourtDate" do
+        expect do
+          post casa_case_court_dates_path(casa_case), params: {court_date: valid_attributes}
+        end.to change(CourtDate, :count).by(1)
+      end
+    end
+
     describe "invalid request" do
       context "with invalid parameters" do
         it "does not create a new CourtDate" do

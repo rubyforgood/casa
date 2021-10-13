@@ -28,17 +28,6 @@ RSpec.describe CourtDate, type: :model do
     travel_to Date.new(2021, 1, 1)
   end
 
-  describe "date_must_be_past" do
-    it "ensures that the date is in the past" do
-      court_date = build(:court_date, casa_case: casa_case, date: Date.today)
-      expect(court_date.valid?).to eq false
-      expect(court_date.errors.full_messages).to eq ["Date must be in the past"]
-
-      court_date = build(:court_date, casa_case: casa_case, date: Date.yesterday)
-      expect(court_date.valid?).to eq true
-    end
-  end
-
   describe ".ordered_ascending" do
     subject { described_class.ordered_ascending }
 
