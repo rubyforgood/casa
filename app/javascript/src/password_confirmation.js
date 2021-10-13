@@ -8,6 +8,10 @@ const SUBMIT_BUTTON_CLASS = 'submit-password'
 const PASSWORD_FIELD_CLASS = 'password-new'
 const CONFIRMATION_FIELD_CLASS = 'password-confirmation'
 
+function disableButtonWhenEmptyString (str, button) {
+  str.length === 0 ? disableBtn(button) : enableBtn(button)
+}
+
 // Checks if the password is equivalent to confirmation and has at least 1 character. If not,
 // it will disable the button.
 //  @param    {HTMLElement}  button - submit button for the form field
@@ -17,10 +21,9 @@ const CONFIRMATION_FIELD_CLASS = 'password-confirmation'
 function checkPasswordsAndDisplayPopup (button, password, confirmation, enablePopup = false) {
   const passwordText = password.value
   const confirmationText = confirmation.value
-  if (passwordText === confirmationText && passwordText.length > 0) {
-    enableBtn(button)
-  } else if (passwordText === confirmationText && passwordText.length === 0) {
-    disableBtn(button)
+
+  if (passwordText === confirmationText) {
+    disableButtonWhenEmptyString(passwordText, button)
   } else {
     if (enablePopup) {
       Swal.fire({
