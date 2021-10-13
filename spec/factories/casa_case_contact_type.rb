@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :casa_case_contact_type do
-    case_case
+    casa_case
     contact_type
   end
 end
