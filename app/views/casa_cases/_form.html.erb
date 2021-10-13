@@ -152,7 +152,8 @@
 
       <div class="actions">
         <% if casa_case.active %>
-          <%= form.submit casa_case.persisted? ? t(".button.update") : t(".button.create"), class: "btn btn-primary", id: "submit-casa-case" %>
+          <%= form.submit casa_case.persisted? ? t(".button.update") : t(".button.create"), class: "btn btn-primary",
+                                                                                            id: "submit-casa-case" %>
           <%= link_to(t(".button.deactivate"),
                       deactivate_casa_case_path(casa_case),
                       method: :patch,
@@ -170,7 +171,6 @@
                       class: "btn btn-primary") if Pundit.policy(current_user, casa_case).update_case_status? %>
         <% end %>
       </div>
-
 
     <% end %>
   </div>
