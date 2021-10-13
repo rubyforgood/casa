@@ -2,7 +2,6 @@ $('document').ready(() => {
   const formId = 'casa-contact-form'
 
   if ($('.case_contacts-new').length > 0) {
-    const form = document.querySelector(`#${formId}`)
     const caseNotes = document.querySelector('#case_contact_notes')
 
     const populateForm = () => {
