@@ -69,6 +69,11 @@ class CasaCase < ApplicationRecord
       .where("birth_month_year_youth <= ?", 14.years.ago)
   }
 
+  scope :due_date_passed, -> {
+    # No more future court dates
+    where.not(id: CourtDate.where("date >= ?", Date.today).pluck(:casa_case_id))
+  }
+
   scope :active, -> {
     where(active: true)
   }
@@ -94,6 +99,15 @@ class CasaCase < ApplicationRecord
       emancipation_options << EmancipationOption.find(option_id)
     else
       raise "Attempted adding multiple options belonging to a mutually exclusive category"
+    end
+  end
+
+  def clear_court_dates
+    if next_court_date.nil?
+      update(
+        court_report_due_date: nil,
+        court_report_status: :not_submitted
+      )
     end
   end
 

@@ -12,7 +12,7 @@ RSpec.describe ChangeCasaCasesCourtDateToReference, type: :migration do
   describe "#up" do
     context "when there are casa cases with court dates" do
       before do
-        5.times { |index| create(:casa_case, court_date: index.days.from_now) }
+        5.times { |index| create(:casa_case, :with_one_court_order, court_date: index.days.from_now) }
       end
 
       it "creates a court date for each casa case" do
@@ -24,6 +24,7 @@ RSpec.describe ChangeCasaCasesCourtDateToReference, type: :migration do
           expect(court_date.date).to eq casa_case.court_date
           expect(court_date.hearing_type).to eq casa_case.hearing_type
           expect(court_date.judge).to eq casa_case.judge
+          expect(court_date.case_court_orders).to eq casa_case.case_court_orders
         end
       end
     end
