@@ -9,7 +9,9 @@ context("Logging into cypress as a volunteer", () => {
     cy.contains("Change Password").click();
     cy.contains("Current Password").should("exist");
     cy.contains("New Password").should("exist");
+    cy.get(".password-new").type("123456")
     cy.contains("New Password Confirmation").should("exist");
+    cy.get(".password-confirmation").type("123456")
     cy.contains("Update Profile").click();
     cy.contains("Profile was successfully updated.").should("exist");
   });
