@@ -26,6 +26,8 @@
                        id: "case-selection",
                        class: "custom-select #{select2_class}" %>
 
+        <%= form.hidden_field :time_zone, id: "user-time-zone" %>
+
       </div>
       <div class="form-group">
         <%= button_tag t(".button.generate"), type: :submit,
@@ -33,7 +35,8 @@
                            button_name: t(".button.generate")
                        },
                        id: "btnGenerateReport",
-                       class: "btn btn-primary" %>
+                       class: "btn btn-primary",
+                       onclick: "setTimeZone()" %>
         <i id="spinner" class='fas fa-spin d-none'>⏳</i>
       </div>
     <% end %>
@@ -67,6 +70,11 @@
 
     if (caseSelectEl)
       caseSelectEl.addEventListener('change', handleSelect)
+  }
+
+  const setTimeZone = () => {
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    document.getElementById("user-time-zone").value = timeZone
   }
 
   window.onload = function () {

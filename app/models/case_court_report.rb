@@ -9,6 +9,7 @@ class CaseCourtReport
   def initialize(args = {})
     @casa_case = CasaCase.find(args[:case_id])
     @volunteer = Volunteer.find(args[:volunteer_id]) if args[:volunteer_id]
+    @time_zone = args[:time_zone]
 
     @context = prepare_context(args[:path_to_template].end_with?("default_report_template.docx"))
     @template = Sablon.template(args[:path_to_template])
@@ -24,7 +25,7 @@ class CaseCourtReport
     latest_hearing_date = @casa_case.latest_court_date
 
     {
-      created_date: I18n.l(Date.today, format: :full, default: nil),
+      created_date: I18n.l(Time.now.in_time_zone(@time_zone).to_date, format: :full, default: nil),
       casa_case: prepare_case_details,
       case_contacts: prepare_case_contacts,
       case_court_orders: prepare_case_orders,
