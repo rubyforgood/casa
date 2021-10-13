@@ -1,8 +1,5 @@
 require "rails_helper"
 
-
-#We should log if no match
-
 RSpec.shared_examples 'compares opening and closing tags' do
     it "validates html tags" do
         file_content = File.read(file_path)
