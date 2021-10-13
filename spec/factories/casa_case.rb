@@ -8,7 +8,7 @@ FactoryBot.define do
     judge # TODO make optional move to traits
     court_report_status { :not_submitted }
     case_court_orders { [] }
-    self.contact_types { [create(:contact_type)] }
+    contact_types { [create(:contact_type)] }
 
     #
     # # after (:build) do |casa_case|
