@@ -15,8 +15,8 @@ const CONFIRMATION_FIELD_CLASS = 'password-confirmation'
 //  @param    {HTMLElement}  confirmation - text input form field
 //  @param    {boolean}  enablePopup - display popup when field is not in focus
 function checkPasswordsAndDisplayPopup (button, password, confirmation, enablePopup = false) {
-  const passwordText = password[0].value
-  const confirmationText = confirmation[0].value
+  const passwordText = password.value
+  const confirmationText = confirmation.value
   if (passwordText === confirmationText && passwordText > 0) {
     enableBtn(button)
   } else {
@@ -34,8 +34,8 @@ function checkPasswordsAndDisplayPopup (button, password, confirmation, enablePo
 $('document').ready(() => {
   if ($(`.${SUBMIT_BUTTON_CLASS}`)) {
     const button = $(`.${SUBMIT_BUTTON_CLASS}`)[0]
-    const password = $(`.${PASSWORD_FIELD_CLASS}`)
-    const confirmation = $(`.${CONFIRMATION_FIELD_CLASS}`)
+    const password = $(`.${PASSWORD_FIELD_CLASS}`)[0]
+    const confirmation = $(`.${CONFIRMATION_FIELD_CLASS}`)[0]
 
     disableBtn(button)
 
