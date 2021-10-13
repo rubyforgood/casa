@@ -132,6 +132,8 @@ $('document').ready(() => {
 })
 
 export {
-  enableBtn,
-  disableBtn
+  showBtn,
+  hideBtn,
+  disableBtn,
+  enableBtn
 }

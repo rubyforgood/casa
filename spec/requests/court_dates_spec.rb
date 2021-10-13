@@ -109,6 +109,30 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
           expect(document.downcase).to include("hearing type: none")
         end
       end
+
+      context "with a court order" do
+        let!(:court_date) {
+          create(:court_date, :with_court_order)
+        }
+        it "includes court order info" do
+          show
+          document = get_docx_contents_as_string(response.body, collapse: true)
+          expect(document).to include("Court Orders:")
+          expect(document).to include(court_date.case_court_orders.first.text)
+          expect(document).to include(court_date.case_court_orders.first.implementation_status.humanize)
+        end
+      end
+
+      context "without a court order" do
+        let!(:court_date) {
+          create(:court_date)
+        }
+        it "does not include court orders section" do
+          show
+          document = get_docx_contents_as_string(response.body, collapse: true)
+          expect(document).not_to include("Court Orders:")
+        end
+      end
     end
   end
 
@@ -181,6 +205,22 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
           expect(court_date.case_court_orders[1].text).to eq texts[1]
           expect(court_date.case_court_orders[1].implementation_status).to eq implementation_statuses[1]
         end
+      end
+    end
+
+    context "for a future court date" do
+      let(:valid_attributes) do
+        {
+          date: 10.days.from_now,
+          hearing_type_id: hearing_type.id,
+          judge_id: judge.id
+        }
+      end
+
+      it "creates a new CourtDate" do
+        expect do
+          post casa_case_court_dates_path(casa_case), params: {court_date: valid_attributes}
+        end.to change(CourtDate, :count).by(1)
       end
     end
 

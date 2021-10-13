@@ -41,10 +41,10 @@ en:
       pick_displayed_columns: Pick displayed columns
     new:
       title: New CASA Case
-    no_past_court_dates: No past court dates
+    no_court_dates: No court dates
     court_dates:
-      add_past_court_date: Add a past court date
-      past_court_dates: Past court dates
+      add_court_date: Add a court date
+      court_dates: Court dates
     shared:
       assigned_multiple: Assigned to more than 1 Volunteer
       assigned_single: Assigned to Volunteer
@@ -369,16 +369,16 @@ en:
       no_notifications: You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.
   court_dates:
     edit:
-      title: Editing Past Court Date
+      title: Editing Court Date
     form:
       button:
         create: Create
         update: Update
     new:
-      title: New Past Court Date
+      title: New Court Date
     show:
       button:
-        edit_past_court_date: Edit
+        edit_court_date: Edit
       label:
         casa_case_court_order:
           implementation_status: Implementation Status
@@ -389,8 +389,8 @@ en:
         hearing_type: Hearing Type
         judge: Judge
         none: None
-        no_case_court_mandates: There are no court orders associated with this past court date.
-      title: Past Court Date
+        no_case_court_mandates: There are no court orders associated with this court date.
+      title: Court Date
   reports:
     index:
       assigned_to_label: "Assigned To:"

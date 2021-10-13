@@ -30,7 +30,7 @@ RSpec.describe CaseCourtReport, type: :model do
       let!(:far_past_case_contact) { create :case_contact, occurred_at: 5.days.ago, casa_case_id: casa_case_with_contacts.id }
 
       before do
-        casa_case_with_contacts.update!(court_date: 1.day.from_now)
+        create(:court_date, casa_case: casa_case_with_contacts, date: 1.day.from_now)
       end
 
       describe "without past court date" do
@@ -43,7 +43,7 @@ RSpec.describe CaseCourtReport, type: :model do
         let!(:court_date) { create(:court_date, date: 2.days.ago, casa_case_id: casa_case_with_contacts.id) }
 
         it "has all case contacts created since the previous court date" do
-          expect(casa_case_with_contacts.court_dates.length).to eq(1)
+          expect(casa_case_with_contacts.court_dates.length).to eq(2)
           expect(report.context[:case_contacts].length).to eq(4)
         end
       end
@@ -106,7 +106,7 @@ RSpec.describe CaseCourtReport, type: :model do
           casa_case_with_contacts.casa_org.update_attribute(:address, document_data[:org_address])
           casa_case_with_contacts.update_attribute(:birth_month_year_youth, document_data[:case_birthday])
           casa_case_with_contacts.update_attribute(:case_number, document_data[:case_number])
-          casa_case_with_contacts.update_attribute(:court_date, document_data[:case_hearing_date])
+          create(:court_date, casa_case: casa_case_with_contacts, date: document_data[:case_hearing_date])
           case_contact.contact_types << contact_type
           casa_case_with_contacts.case_contacts << case_contact
           casa_case_with_contacts.case_court_orders << court_order
@@ -169,7 +169,7 @@ RSpec.describe CaseCourtReport, type: :model do
           casa_case.casa_org.update_attribute(:address, document_data[:org_address])
           casa_case.update_attribute(:birth_month_year_youth, document_data[:case_birthday])
           casa_case.update_attribute(:case_number, document_data[:case_number])
-          casa_case.update_attribute(:court_date, document_data[:case_hearing_date])
+          create(:court_date, casa_case: casa_case, date: document_data[:case_hearing_date])
           case_contact.contact_types << contact_type
           casa_case.case_contacts << case_contact
           casa_case.case_court_orders << court_order

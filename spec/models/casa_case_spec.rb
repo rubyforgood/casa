@@ -21,13 +21,15 @@ RSpec.describe CasaCase, type: :model do
       subject { described_class.due_date_passed }
 
       context "when casa_case is present" do
-        let(:casa_case) { create(:casa_case, court_date: Time.current - 3.days) }
+        let!(:court_date) { create(:court_date, date: Time.current - 3.days) }
+        let(:casa_case) { court_date.casa_case }
 
         it { is_expected.to include(casa_case) }
       end
 
       context "when casa_case is not present" do
-        let(:casa_case) { create(:casa_case, court_date: Time.current + 3.days) }
+        let!(:court_date) { create(:court_date, date: Time.current + 3.days) }
+        let(:casa_case) { court_date.casa_case }
 
         it { is_expected.not_to include(casa_case) }
       end
@@ -202,22 +204,15 @@ RSpec.describe CasaCase, type: :model do
 
   describe "#clear_court_dates" do
     context "when court date has passed" do
-      it "clears court date" do
-        casa_case = build(:casa_case, court_date: "2020-09-13 02:11:58")
-        casa_case.clear_court_dates
-
-        expect(casa_case.court_date).to be nil
-      end
-
       it "clears report due date" do
-        casa_case = build(:casa_case, court_date: "2020-09-13 02:11:58", court_report_due_date: "2020-09-13 02:11:58")
+        casa_case = build(:casa_case, court_report_due_date: "2020-09-13 02:11:58")
         casa_case.clear_court_dates
 
         expect(casa_case.court_report_due_date).to be nil
       end
 
       it "sets court report as unsubmitted" do
-        casa_case = build(:casa_case, court_date: "2020-09-13 02:11:58", court_report_status: :submitted)
+        casa_case = build(:casa_case, court_report_status: :submitted)
         casa_case.clear_court_dates
 
         expect(casa_case.court_report_status).to eq "not_submitted"
@@ -283,17 +278,17 @@ RSpec.describe CasaCase, type: :model do
     end
   end
 
-  describe "#latest_court_date" do
+  describe "#most_recent_past_court_date" do
     let(:casa_case) { create(:casa_case) }
 
     it "returns the latest past court date" do
-      latest_court_date = create(:court_date, date: 3.months.ago)
+      most_recent_past_court_date = create(:court_date, date: 3.months.ago)
 
       casa_case.court_dates << create(:court_date, date: 9.months.ago)
-      casa_case.court_dates << latest_court_date
+      casa_case.court_dates << most_recent_past_court_date
       casa_case.court_dates << create(:court_date, date: 15.months.ago)
 
-      expect(casa_case.latest_court_date).to eq(latest_court_date)
+      expect(casa_case.most_recent_past_court_date).to eq(most_recent_past_court_date)
     end
   end
 

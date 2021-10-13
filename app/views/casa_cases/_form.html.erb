@@ -64,23 +64,6 @@
       <% end %>
 
       <div class="field form-group">
-        <% if policy(casa_case).update_court_date? %>
-          <%= form.label :court_date, "Add Court Date (past or future)" %>
-          <br>
-          <span class="datetime-year-month">
-            <%= form.date_select :court_date,
-                                 {
-                                     order: [:day, :month, :year],
-                                     start_year: Date.current.year + 3,
-                                     end_year: 2000,
-                                     prompt: {day: t("common.day"), month: t("common.month"), year: t("common.year")}
-                                 },
-                                 class: "select2 date-input" %>
-          </span>
-        <% end %>
-      </div>
-
-      <div class="field form-group">
         <% if policy(casa_case).update_court_report_due_date? %>
           <%= form.label :court_report_due_date, t(".court_report_due_date") %>
           <br>
