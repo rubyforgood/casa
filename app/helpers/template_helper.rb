@@ -32,11 +32,6 @@ module TemplateHelper
         
         opening_tags = sanitize_opening_tags(opening_tags)
         closing_tags = sanitize_closing_tags(closing_tags)
-
-        puts opening_tags.sort
-        puts closing_tags.sort
-        puts opening_tags.count 
-        puts closing_tags.count
         
         opening_tags.sort == closing_tags.sort
     end
