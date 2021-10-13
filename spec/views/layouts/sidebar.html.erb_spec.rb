@@ -1,9 +1,16 @@
 require "rails_helper"
 
 RSpec.describe "layout/sidebar", type: :view do
+  module PretenderContext
+    def true_user; end
+  end
+
   before do
+    view.class.include PretenderContext
+
     enable_pundit(view, user)
     allow(view).to receive(:current_user).and_return(user)
+    allow(view).to receive(:true_user).and_return(user)
     allow(view).to receive(:user_signed_in?).and_return(true)
     allow(view).to receive(:current_role).and_return(user.role)
     allow(view).to receive(:current_organization).and_return(user.casa_org)
