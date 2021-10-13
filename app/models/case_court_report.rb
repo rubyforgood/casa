@@ -22,7 +22,7 @@ class CaseCourtReport
   private
 
   def prepare_context(is_default_template)
-    latest_hearing_date = @casa_case.latest_court_date
+    latest_hearing_date = @casa_case.most_recent_past_court_date
 
     {
       created_date: I18n.l(Time.now.in_time_zone(@time_zone).to_date, format: :full, default: nil),
@@ -57,7 +57,7 @@ class CaseCourtReport
   end
 
   def filter_out_old_case_contacts(interviewees)
-    most_recent_court_date = @casa_case.court_dates.order(:date).last&.date
+    most_recent_court_date = @casa_case.most_recent_past_court_date&.date
     if most_recent_court_date
       interviewees.where("occurred_at > ?", most_recent_court_date)
     else
@@ -67,7 +67,7 @@ class CaseCourtReport
 
   def prepare_case_details
     {
-      court_date: I18n.l(@casa_case.court_date, format: :full, default: nil),
+      court_date: I18n.l(@casa_case.next_court_date&.date, format: :full, default: nil),
       case_number: @casa_case.case_number,
       dob: I18n.l(@casa_case.birth_month_year_youth, format: :youth_date_of_birth, default: nil),
       is_transitioning: @casa_case.in_transition_age?

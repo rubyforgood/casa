@@ -99,9 +99,6 @@ RSpec.describe "Edit CASA Case", type: :system do
       visit edit_casa_case_path(casa_case)
       select "Submitted", from: "casa_case_court_report_status"
       check "Youth"
-      select "4", from: "casa_case_court_date_3i"
-      select "November", from: "casa_case_court_date_2i"
-      select next_year, from: "casa_case_court_date_1i"
 
       select "8", from: "casa_case_court_report_due_date_3i"
       select "September", from: "casa_case_court_report_due_date_2i"
@@ -133,7 +130,6 @@ RSpec.describe "Edit CASA Case", type: :system do
       visit casa_case_path(casa_case)
 
       expect(page).to have_text("Court Report Status: Submitted")
-      expect(page).to have_text("4-NOV-#{next_year}")
       expect(page).to have_text("8-SEP-#{next_year}")
     end
 
@@ -190,14 +186,12 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Court Report Status: Not submitted")
       visit edit_casa_case_path(casa_case)
 
-      select "November", from: "casa_case_court_date_2i"
       select "April", from: "casa_case_court_report_due_date_2i"
 
       within ".actions" do
         click_on "Update CASA Case"
       end
 
-      expect(page).to have_text("Court date was not a valid date.")
       expect(page).to have_text("Court report due date was not a valid date.")
     end
 
@@ -205,10 +199,6 @@ RSpec.describe "Edit CASA Case", type: :system do
       visit casa_case_path(casa_case)
       expect(page).to have_text("Court Report Status: Not submitted")
       visit edit_casa_case_path(casa_case)
-
-      select "31", from: "casa_case_court_date_3i"
-      select "April", from: "casa_case_court_date_2i"
-      select next_year, from: "casa_case_court_date_1i"
 
       select "31", from: "casa_case_court_report_due_date_3i"
       select "April", from: "casa_case_court_report_due_date_2i"
@@ -218,7 +208,6 @@ RSpec.describe "Edit CASA Case", type: :system do
         click_on "Update CASA Case"
       end
 
-      expect(page).to have_text("Court date was not a valid date.")
       expect(page).to have_text("Court report due date was not a valid date.")
     end
 

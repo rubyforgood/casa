@@ -41,7 +41,7 @@ class CourtDate < ApplicationRecord
   end
 
   def display_name
-    "#{casa_case.case_number} - Past Court Date - #{I18n.l(date.to_date)}"
+    "#{casa_case.case_number} - Court Date - #{I18n.l(date.to_date)}"
   end
 
   private
