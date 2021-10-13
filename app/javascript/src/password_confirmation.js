@@ -9,7 +9,7 @@ const PASSWORD_FIELD_CLASS = 'password-new'
 const CONFIRMATION_FIELD_CLASS = 'password-confirmation'
 
 // Checks if the password is equivalent to confirmation and has at least 1 character. If not,
-// it will disable the button
+// it will disable the button.
 //  @param    {HTMLElement}  button - submit button for the form field
 //  @param    {HTMLElement}  password - text input form field
 //  @param    {HTMLElement}  confirmation - text input form field
@@ -31,6 +31,8 @@ function checkPasswordsAndDisplayPopup (button, password, confirmation, enablePo
   }
 }
 
+// Expects the class name constants above are applied to the correct fields. See
+// `app/views/users/edit.html.erb` for usage
 $('document').ready(() => {
   if ($(`.${SUBMIT_BUTTON_CLASS}`)) {
     const button = $(`.${SUBMIT_BUTTON_CLASS}`)[0]
