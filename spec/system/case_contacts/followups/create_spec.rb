@@ -10,7 +10,7 @@ RSpec.describe "followups/create", type: :system, js: true do
       sign_in admin
       visit casa_case_path(case_contact.casa_case)
 
-      click_button "Follow up"
+      click_button "Make Reminder"
     end
 
     it "displays correct prompt" do
@@ -23,7 +23,7 @@ RSpec.describe "followups/create", type: :system, js: true do
 
         click_button "Confirm"
 
-        expect(page).to have_button("Resolve")
+        expect(page).to have_button("Resolve Reminder")
 
         case_contact.followups.reload
 
@@ -34,7 +34,7 @@ RSpec.describe "followups/create", type: :system, js: true do
       it "creates a followup without a note when the note textarea is empty" do
         click_button "Confirm"
 
-        expect(page).to have_button("Resolve")
+        expect(page).to have_button("Resolve Reminder")
 
         case_contact.followups.reload
 

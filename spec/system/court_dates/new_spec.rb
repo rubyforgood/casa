@@ -39,7 +39,7 @@ RSpec.describe "court_dates/new", type: :system do
       end
 
       expect(page.body).to have_content(casa_case.case_number)
-      expect(page).to have_content("Past court date was successfully created.")
+      expect(page).to have_content("Court date was successfully created.")
       expect(page).to have_content(judge.name)
       expect(page).to have_content(hearing_type.name)
       expect(page).to have_content(text)

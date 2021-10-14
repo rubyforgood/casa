@@ -90,11 +90,13 @@ Rails.application.routes.draw do
     end
   end
   resources :volunteers, except: %i[destroy], concerns: %i[with_datatable] do
+    post :stop_impersonating, on: :collection
     member do
       patch :activate
       patch :deactivate
       get :resend_invitation
       patch :reminder
+      get :impersonate
     end
   end
   resources :case_assignments, only: %i[create destroy] do

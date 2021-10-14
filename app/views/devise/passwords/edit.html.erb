@@ -21,7 +21,7 @@ class: "form-control", required: true %>
           <%= f.password_field :password,
             autofocus: true,
             autocomplete: "new-password",
-            class: "form-control",
+            class: "form-control password-new",
             required: true,
             minlength: 6 %>
         </div>
@@ -30,13 +30,13 @@ class: "form-control", required: true %>
           <%= f.label :password_confirmation, "Confirm new password" %><br>
           <%= f.password_field :password_confirmation,
             autocomplete: "new-password",
-            class: "form-control",
+            class: "form-control password-confirmation",
             required: true,
             minlength: 6 %>
         </div>
 
         <div class="actions">
-          <%= f.submit "Change my password", class: "btn btn-primary" %>
+          <%= f.submit "Change my password", class: "btn btn-primary submit-password" %>
         </div>
       <% end %>
     </div>

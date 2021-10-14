@@ -1,8 +1,7 @@
-
 $('document').ready(() => {
+  const formId = 'casa-contact-form'
+
   if ($('.case_contacts-new').length > 0) {
-    const formId = 'casa-contact-form'
-    const form = document.querySelector(`#${formId}`)
     const caseNotes = document.querySelector('#case_contact_notes')
 
     const populateForm = () => {
@@ -22,11 +21,11 @@ $('document').ready(() => {
 
     document.onload = autoSave()
     document.onload = populateForm() // populate the form when the document is loaded
+  }
 
-    form.onsubmit = event => {
-      if (document.querySelector('.header-flash').textContent.includes('successfully created')) {
-        window.localStorage.removeItem(formId)
-      }
+  if (/\/casa_cases\/\d+$/.test(window.location.pathname)) {
+    if ($('.header-flash').text().includes('Case contact was successfully created.')) {
+      window.localStorage.removeItem(formId)
     }
   }
 })
