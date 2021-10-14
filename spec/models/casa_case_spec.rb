@@ -1,4 +1,5 @@
 require "rails_helper"
+include DateHelper
 
 RSpec.describe CasaCase, type: :model do
   subject { build(:casa_case) }
@@ -121,10 +122,10 @@ RSpec.describe CasaCase, type: :model do
         birth_month_year_youth: Date.current - 13.years,
         transition_aged_youth: false)
       transitioned_14_yo = build(:casa_case,
-        birth_month_year_youth: Date.current - 14.years,
+        birth_month_year_youth: pre_transition_aged_youth_age,
         transition_aged_youth: true)
       not_transitioned_14_yo = create(:casa_case,
-        birth_month_year_youth: Date.current - 14.years,
+        birth_month_year_youth: pre_transition_aged_youth_age,
         transition_aged_youth: false)
       cases = CasaCase.should_transition
       aggregate_failures do
