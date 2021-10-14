@@ -4,8 +4,8 @@ RSpec.describe "/casa_cases", type: :request do
   let(:organization) { build(:casa_org) }
   let(:hearing_type) { create(:hearing_type) }
   let(:judge) { create(:judge) }
-  let(:valid_attributes) { {case_number: "1234", transition_aged_youth: true, casa_org_id: organization.id, hearing_type_id: hearing_type.id, judge_id: judge.id} }
-  let(:invalid_attributes) { {case_number: nil} }
+  let(:valid_attributes) { {case_number: "1234", transition_aged_youth: true, birth_month_year_youth: Date.current - 14.years, casa_org_id: organization.id, hearing_type_id: hearing_type.id, judge_id: judge.id} }
+  let(:invalid_attributes) { {case_number: nil, birth_month_year_youth: nil} }
   let(:casa_case) { create(:casa_case, casa_org: organization, case_number: "111") }
   let(:texts) { ["1-New Mandate Text One", "0-New Mandate Text Two"] }
   let(:implementation_statuses) { ["not_implemented", nil] }
@@ -125,6 +125,7 @@ RSpec.describe "/casa_cases", type: :request do
         attributes = {
           case_number: "1234",
           transition_aged_youth: true,
+          birth_month_year_youth: Date.current - 14.years,
           casa_org_id: other_org.id,
           hearing_type_id: hearing_type.id,
           judge_id: judge.id
@@ -154,7 +155,7 @@ RSpec.describe "/casa_cases", type: :request do
 
             expect(response.content_type).to eq("application/json; charset=utf-8")
             expect(response).to have_http_status(:unprocessable_entity)
-            expect(response.body).to eq(["Case number can't be blank"].to_json)
+            expect(response.body).to eq(["Case number can't be blank", "Birth month year youth can't be blank"].to_json)
           end
         end
 
