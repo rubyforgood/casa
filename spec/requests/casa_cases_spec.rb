@@ -1,7 +1,7 @@
 require "rails_helper"
-include DateHelper
 
 RSpec.describe "/casa_cases", type: :request do
+  include DateHelper
   let(:organization) { build(:casa_org) }
   let(:hearing_type) { create(:hearing_type) }
   let(:judge) { create(:judge) }
