@@ -28,7 +28,7 @@ class UsersController < ApplicationController
       return render "edit"
     end
 
-    bypass_sign_in(@user)
+    bypass_sign_in(@user) if @user == true_user
 
     UserMailer.password_changed_reminder(@user).deliver
     flash[:success] = "Password was successfully updated."
