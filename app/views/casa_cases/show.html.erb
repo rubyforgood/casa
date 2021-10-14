@@ -57,7 +57,7 @@
     <p>
     <h6>
       <strong><%= t(".label.next_court_date") %>:</strong>
-      <%= I18n.l(@casa_case.court_date, format: :day_and_date, default: '') %>
+      <%= I18n.l(@casa_case.next_court_date&.date, format: :day_and_date, default: '') %>
     </h6>
     </p>
 

@@ -28,6 +28,7 @@ RSpec.configure do |config|
   config.include PunditHelper, type: :view
   config.include SessionHelper, type: :view
   config.include SessionHelper, type: :request
+  config.include TemplateHelper
   config.include Warden::Test::Helpers
   config.include WordDocHelper, type: :model
   config.include WordDocHelper, type: :request
