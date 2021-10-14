@@ -1,9 +1,9 @@
+  // TODO - fix flakey spec ref: https://github.com/rubyforgood/casa/issues/2550#issuecomment-943474980
 context.skip("Logging into cypress as a volunteer", () => {
   before(() => {
     cy.visit("0.0.0.0:4040");
     cy.loginAsVolunteer();
   });
-  // TODO - fix flakey spec ref: https://github.com/rubyforgood/casa/issues/2550#issuecomment-943474980
   it("should edit the profile", () => {
     cy.get("#toggle-sidebar-js").click();
     cy.contains("Edit Profile").click();
