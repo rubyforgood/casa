@@ -39,6 +39,7 @@ decorators/court_date_decorator.rb
 helpers/all_casa_admins/casa_orgs_helper.rb
 helpers/contact_types_helper.rb
 helpers/date_helper.rb
+helpers/template_helper.rb
 jobs/application_job.rb
 mailers/application_mailer.rb
 models/application_record.rb

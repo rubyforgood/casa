@@ -1,6 +1,6 @@
 class VolunteersController < ApplicationController
-  before_action :set_volunteer, except: %i[index new create datatable]
-  after_action :verify_authorized
+  before_action :set_volunteer, except: %i[index new create datatable stop_impersonating]
+  after_action :verify_authorized, except: %i[stop_impersonating]
 
   def index
     authorize Volunteer
@@ -94,6 +94,17 @@ class VolunteersController < ApplicationController
     VolunteerMailer.case_contacts_reminder(@volunteer, cc_recipients).deliver
 
     redirect_to edit_volunteer_path(@volunteer), notice: "Reminder sent to volunteer."
+  end
+
+  def impersonate
+    authorize @volunteer
+    impersonate_user(@volunteer)
+    redirect_to root_path
+  end
+
+  def stop_impersonating
+    stop_impersonating_user
+    redirect_to root_path
   end
 
   private

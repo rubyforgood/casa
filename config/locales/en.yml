@@ -74,8 +74,8 @@ en:
     edit: Edit
     back: Back
     submit: Submit
-    resolve: Resolve
-    follow_up: Follow up
+    resolve: Resolve Reminder
+    follow_up: Make Reminder
     go_back_to_form: Go Back to Form
     continue_submitting: Continue Submitting
     close: Close

@@ -21,6 +21,14 @@ class VolunteerPolicy < UserPolicy
     admin_or_supervisor?
   end
 
+  def impersonate?
+    admin_or_supervisor?
+  end
+
+  def stop_impersonating?
+    admin_or_supervisor_or_volunteer?
+  end
+
   alias_method :datatable?, :index?
   alias_method :new?, :index?
   alias_method :create?, :index?
