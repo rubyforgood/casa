@@ -62,6 +62,7 @@ Rails.application.routes.draw do
       post :generate
     end
   end
+  resources :reimbursements, only: %i[index]
   resources :imports, only: %i[index create] do
     collection do
       get :download_failed
