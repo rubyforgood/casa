@@ -41,8 +41,15 @@ RSpec.describe "casa_cases/show", type: :system do
       expect(page).to have_content(casa_case.case_court_orders[0].implementation_status_symbol)
     end
 
-    it "can see next court date" do
-      expect(page).to have_content("Next Court Date: #{I18n.l(future_court_date.date, format: :day_and_date)}")
+    it "can see next court date", js: true do
+      if casa_case.court_date
+        expect(page).to have_content("Next Court Date: #{I18n.l(future_court_date.date, format: :day_and_date, default: "")}")
+      end
+    end
+
+    it "can see Add to Calendar buttons", js: true do
+      expect(page).to have_content("Add Court Report Due Date to Calendar")
+      expect(page).to have_content("Add Next Court Date to Calendar")
     end
   end
 
