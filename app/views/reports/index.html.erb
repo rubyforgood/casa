@@ -21,12 +21,15 @@
     <%= form_with url: case_contact_reports_path(format: :csv), scope: 'report', method: :get, local: true do |f| %>
       <div class="field form-group">
         <label><strong><%= t(".start_date_label") %></strong></label>
-        <%= f.date_field :start_date, class: "form-control", value: 6.months.ago.to_date %>
+        <%= f.label :start_date, "Starting From: " %></h2>
+        <%= f.text_field :start_date, value: 6.months.ago.to_date,  data:{ provide: "datepicker", date_format: "yyyy/mm/dd" }, class: "form-control" %>
       </div>
 
       <div class="field form-group">
         <label><strong><%= t(".end_date_label") %></strong></label>
-        <%= f.date_field :end_date, class: "form-control", value: Date.today.to_date %>
+        <%= f.label :end_date, "Ending At: " %></h2>
+        <%= f.text_field :end_date, value: 6.months.ago.to_date,  data:{ provide: "datepicker", date_format: "yyyy/mm/dd" }, class: "form-control" %>
+
       </div>
 
       <% if current_user&.casa_admin? || current_user&.supervisor? %>
