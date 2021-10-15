@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe ReimbursementsController, type: :controller do
-let(:admin) { create(:casa_admin) }
+  let(:admin) { create(:casa_admin) }
 
   before do
     allow(controller).to receive(:authenticate_user!).and_return(:admin)
