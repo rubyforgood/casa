@@ -205,6 +205,38 @@ RSpec.describe "/case_court_reports", type: :request do
     end
   end
 
+  describe "SHOW /case_court_reports" do
+    context "when user timezone" do
+      let(:casa_case) { volunteer.casa_cases.first }
+      let(:server_time) { Time.zone.parse("2020-12-31 23:00:00") }
+      let(:user_different_timezone) do
+        ActiveSupport::TimeZone["Tokyo"].at(server_time)
+      end
+      let(:user_equal_timezone) do
+        ActiveSupport::TimeZone[Time.zone.name].at(server_time)
+      end
+
+      before do
+        travel_to server_time
+        request_generate_court_report
+      end
+
+      it "is equal to server" do
+        get JSON.parse(response.body)["link"]
+        document = get_docx_contents_as_string(response.body, collapse: true)
+        expect(document).to include(I18n.l(user_equal_timezone, format: :full, default: nil))
+      end
+
+      it "is different than server" do
+        pending "this needs to be implemented"
+
+        get JSON.parse(response.body)["link"]
+        document = get_docx_contents_as_string(response.body, collapse: true)
+        expect(document).to include(I18n.l(user_different_timezone, format: :full, default: nil))
+      end
+    end
+  end
+
   private
 
   def request_generate_court_report
