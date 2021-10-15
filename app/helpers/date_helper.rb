@@ -18,8 +18,4 @@ module DateHelper
     errors.add(date_field_name.to_sym, "was not a valid date.")
     args
   end
-
-  def pre_transition_aged_youth_age
-    Date.current - 14.years
-  end
 end

@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe CasaCase, type: :model do
-  include DateHelper
   subject { build(:casa_case) }
 
   it { is_expected.to have_many(:case_assignments).dependent(:destroy) }

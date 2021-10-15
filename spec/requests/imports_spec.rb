@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "/imports", type: :request do
-  include DateHelper
   let(:volunteer_file) { Rails.root.join("spec", "fixtures", "volunteers.csv") }
   let(:supervisor_file) { Rails.root.join("spec", "fixtures", "supervisors.csv") }
   let(:case_file) { Rails.root.join("spec", "fixtures", "casa_cases.csv") }

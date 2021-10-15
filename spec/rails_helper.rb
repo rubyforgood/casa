@@ -70,4 +70,8 @@ RSpec.configure do |config|
     example.run
     Bullet.raise = true
   end
+
+  def pre_transition_aged_youth_age
+    Date.current - 14.years
+  end
 end
