@@ -21,8 +21,8 @@ RSpec.describe "reports", type: :system do
   shared_examples "can view page" do
     it "renders form elements", js: true do
       expect(page).to have_text I18n.t("reports.index.reports_subhead")
-      expect(page).to have_field("report_start_date", with: 6.months.ago.to_date)
-      expect(page).to have_field("report_end_date", with: Date.today.to_date)
+      expect(page).to have_text I18n.l(6.months.ago.to_date, format: :day_and_date, default: '')
+      expect(page).to have_text I18n.l(Date.today.to_date, format: :day_and_date, default: '')
       expect(page).to have_text I18n.t("reports.index.assigned_to_label")
       expect(page.find("input[placeholder=\'#{I18n.t("reports.index.select_contact_types_placeholder")}\']")).to be_present
       expect(page).to have_text I18n.t("reports.index.volunteers_label")

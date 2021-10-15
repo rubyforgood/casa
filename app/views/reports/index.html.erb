@@ -23,7 +23,7 @@
         <label><strong><%= t(".start_date_label") %></strong></label>
         <%= f.text_field :start_date, value: 6.months.ago.to_date,
                                       data:{ provide: "datepicker",
-                                      date_format: "yyyy-mm-dd" },
+                                      date_format: "D, d, M, yyyy" },
                                       class: "form-control" %>
       </div>
 
@@ -31,7 +31,7 @@
         <label><strong><%= t(".end_date_label") %></strong></label>
         <%= f.text_field :end_date, value: 6.months.ago.to_date,
                                     data:{ provide: "datepicker",
-                                    date_format: "yyyy-mm-dd" },
+                                    date_format: "D, d, M, yyyy" },
                                     class: "form-control" %>
       </div>
 
