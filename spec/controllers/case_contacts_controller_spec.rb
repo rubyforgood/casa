@@ -109,8 +109,14 @@ RSpec.describe CaseContactsController, type: :controller do
         end
 
         it "creates a new case contact for each selected case" do
+          starter_counts = volunteer.casa_cases.map { |cc| cc.case_contacts.count }
+
+          expect(starter_counts).to eq([0, 0])
+
           post :create, params: {case_contact: params}, format: :js
-          expect(CaseContact.last.casa_case_id).to eq volunteer.casa_cases.pluck(:id).first
+          after_counts = volunteer.casa_cases.map { |cc| cc.case_contacts.count }
+
+          expect(after_counts).to eq([1, 0])
         end
 
         it "renders the casa case show template" do
