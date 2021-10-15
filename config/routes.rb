@@ -24,6 +24,8 @@ Rails.application.routes.draw do
     root to: "all_casa_admins/sessions#new", as: :unauthenticated_all_casa_root
   end
 
+  resources :health, only: %i[index]
+
   get "/.well-known/assetlinks.json", to: "android_app_associations#index"
   resources :casa_cases do
     resource :emancipation do
