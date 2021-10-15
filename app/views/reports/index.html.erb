@@ -22,13 +22,19 @@
       <div class="field form-group">
         <label><strong><%= t(".start_date_label") %></strong></label>
         <%= f.label :start_date, "Starting From: " %></h2>
-        <%= f.text_field :start_date, value: 6.months.ago.to_date,  data:{ provide: "datepicker", date_format: "yyyy/mm/dd" }, class: "form-control" %>
+        <%= f.text_field :start_date, value: 6.months.ago.to_date,
+                                      data:{ provide: "datepicker",
+                                      date_format: "yyyy/mm/dd" },
+                                      class: "form-control" %>
       </div>
 
       <div class="field form-group">
         <label><strong><%= t(".end_date_label") %></strong></label>
         <%= f.label :end_date, "Ending At: " %></h2>
-        <%= f.text_field :end_date, value: 6.months.ago.to_date,  data:{ provide: "datepicker", date_format: "yyyy/mm/dd" }, class: "form-control" %>
+        <%= f.text_field :end_date, value: 6.months.ago.to_date,
+                                    data:{ provide: "datepicker",
+                                    date_format: "yyyy/mm/dd" },
+                                    class: "form-control" %>
 
       </div>
 
