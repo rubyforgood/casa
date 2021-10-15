@@ -46,5 +46,4 @@ RSpec.describe ApplicationHelper, type: :helper do
 
     it { is_expected.to eql('<meta property="og:title" content="Website Title">') }
   end
-
 end
