@@ -112,6 +112,17 @@ RSpec.describe "/users", type: :request do
 
           subject
         end
+
+        it "bypasses sign in if the current user is the true user" do
+          expect_any_instance_of(UsersController).to receive(:bypass_sign_in).with(user)
+          subject
+        end
+
+        it "does not bypass sign in when the current user is not the true user" do
+          allow_any_instance_of(UsersController).to receive(:true_user).and_return(User.new)
+          expect_any_instance_of(UsersController).to_not receive(:bypass_sign_in).with(user)
+          subject
+        end
       end
 
       context "when failure" do
@@ -157,6 +168,17 @@ RSpec.describe "/users", type: :request do
           allow(UserMailer).to receive(:password_changed_reminder).with(user).and_return(mailer)
           expect(mailer).to receive(:deliver)
 
+          subject
+        end
+
+        it "bypasses sign in if the current user is the true user" do
+          expect_any_instance_of(UsersController).to receive(:bypass_sign_in).with(user)
+          subject
+        end
+
+        it "does not bypass sign in when the current user is not the true user" do
+          allow_any_instance_of(UsersController).to receive(:true_user).and_return(User.new)
+          expect_any_instance_of(UsersController).to_not receive(:bypass_sign_in).with(user)
           subject
         end
       end
