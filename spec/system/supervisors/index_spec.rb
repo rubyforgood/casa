@@ -47,6 +47,8 @@ RSpec.describe "supervisors/index", type: :system do
   describe "supervisor table" do
     let!(:first_supervisor) { create(:supervisor, display_name: "First Supervisor", casa_org: organization) }
     let!(:last_supervisor) { create(:supervisor, display_name: "Last Supervisor", casa_org: organization) }
+    let!(:active_volunteers_for_first_supervisor) { create_list(:volunteer, 2, supervisor: first_supervisor, casa_org: organization) }
+    let!(:active_volunteers_for_last_supervisor) { create_list(:volunteer, 5, supervisor: last_supervisor, casa_org: organization) }
 
     before(:each) do
       # Stub our `@supervisors` collection so we've got control over column values for sorting.
@@ -54,13 +56,17 @@ RSpec.describe "supervisors/index", type: :system do
         Supervisor.where.not(display_name: supervisor_user.display_name).order(display_name: :asc)
       )
 
-      allow(first_supervisor).to receive(:active_volunteers).and_return(9)
-      allow(first_supervisor).to receive(:volunteers_serving_transition_aged_youth).and_return(9)
-      allow(first_supervisor).to receive(:no_attempt_for_two_weeks).and_return(9)
+      active_volunteers_for_first_supervisor.map { |av|
+        casa_case = create(:casa_case, transition_aged_youth: true, casa_org: av.casa_org)
+        create(:case_contact, contact_made: false, occurred_at: 1.week.ago, casa_case_id: casa_case.id)
+        create(:case_assignment, casa_case: casa_case, volunteer: av)
+      }
 
-      allow(last_supervisor).to receive(:active_volunteers).and_return(11)
-      allow(last_supervisor).to receive(:volunteers_serving_transition_aged_youth).and_return(11)
-      allow(last_supervisor).to receive(:no_attempt_for_two_weeks).and_return(11)
+      active_volunteers_for_last_supervisor.map { |av|
+        casa_case = create(:casa_case, transition_aged_youth: true, casa_org: av.casa_org)
+        create(:case_contact, contact_made: false, occurred_at: 1.week.ago, casa_case_id: casa_case.id)
+        create(:case_assignment, casa_case: casa_case, volunteer: av)
+      }
 
       sign_in supervisor_user
       visit supervisors_path
@@ -90,8 +96,8 @@ RSpec.describe "supervisors/index", type: :system do
     end
 
     context "when sorting supervisors" do
-      let(:expected_first_ordered_value) { "11" }
-      let(:expected_last_ordered_value) { "9" }
+      let(:expected_first_ordered_value) { "5" }
+      let(:expected_last_ordered_value) { "2" }
 
       it "by supervisor name", js: true do
         expect(page).to have_selector("th.sorting_desc", text: "Supervisor Name")
