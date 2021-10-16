@@ -51,7 +51,7 @@ RSpec.describe "supervisors/index", type: :system do
     before(:each) do
       # Stub our `@supervisors` collection so we've got control over column values for sorting.
       allow_any_instance_of(SupervisorPolicy::Scope).to receive(:resolve).and_return(
-        [first_supervisor, last_supervisor]
+        Supervisor.where.not(display_name: supervisor_user.display_name).order(display_name: :asc)
       )
 
       allow(first_supervisor).to receive(:active_volunteers).and_return(9)
@@ -64,6 +64,29 @@ RSpec.describe "supervisors/index", type: :system do
 
       sign_in supervisor_user
       visit supervisors_path
+    end
+
+    context "with active and deactivated supervisors" do
+      let!(:deacticated_supervisor) {
+        create(:supervisor, :inactive, display_name: "Deactivated supervisor", casa_org: organization)
+      }
+
+      it "shows deactivated supervisor on show button click", js: true do
+        expect(page).to have_selector("table#supervisors > tbody > tr td:nth-child(1)", count: 2)
+        expect(page).not_to have_text("Deactivated supervisor")
+
+        find("h1 + a", text: "Show deactivated").click
+
+        expect(page).to have_selector("table#supervisors > tbody > tr td:nth-child(1)", count: 3)
+        expect(page).to have_text("Deactivated supervisor")
+        expect(page).to have_selector("h1 + a", text: "Hide deactivated")
+
+        find("h1 + a", text: "Hide deactivated").click
+
+        expect(page).to have_selector("table#supervisors > tbody > tr td:nth-child(1)", count: 2)
+        expect(page).not_to have_text("Deactivated supervisor")
+        expect(page).to have_selector("h1 + a", text: "Show deactivated")
+      end
     end
 
     context "when sorting supervisors" do
