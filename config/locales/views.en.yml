@@ -356,6 +356,7 @@ en:
         edit_profile: Edit Profile
         export_data: Export Data
         generate_court_reports: Generate Court Reports
+        reimbursement_queue: Reimbursement Queue
         report_site_issue: Report a site issue
         system_imports: System Imports
       menu_item:
