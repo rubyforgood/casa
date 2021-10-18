@@ -236,4 +236,36 @@ RSpec.describe "/volunteers", type: :request do
       expect(response).to redirect_to(edit_volunteer_path(volunteer))
     end
   end
+
+  describe "GET /impersonate" do
+    let!(:other_volunteer) { create(:volunteer) }
+    let!(:supervisor) { create(:supervisor) }
+
+    it "can impersonate a volunteer as an admin" do
+      sign_in admin
+
+      get impersonate_volunteer_path(volunteer)
+      expect(response).to redirect_to(root_path)
+      expect(controller.current_user).to eq(volunteer)
+    end
+
+    it "can impersonate a volunteer as a supervisor" do
+      sign_in supervisor
+
+      get impersonate_volunteer_path(volunteer)
+      expect(response).to redirect_to(root_path)
+      expect(controller.current_user).to eq(volunteer)
+    end
+
+    it "can not impersonate as a volunteer" do
+      sign_in volunteer
+
+      get impersonate_volunteer_path(other_volunteer)
+      expect(response).to redirect_to(root_path)
+      expect(controller.current_user).to eq(volunteer)
+
+      follow_redirect!
+      expect(flash[:notice]).to match(/Sorry, you are not authorized to perform this action./)
+    end
+  end
 end

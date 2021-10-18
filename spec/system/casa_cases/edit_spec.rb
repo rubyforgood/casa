@@ -5,21 +5,21 @@ RSpec.describe "Edit CASA Case", type: :system do
   context "logged in as admin" do
     let(:organization) { build(:casa_org) }
     let(:admin) { create(:casa_admin, casa_org: organization) }
-    let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: organization) }
+    let(:casa_case) { create(:casa_case, :with_one_court_order, casa_org: organization) }
     let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
     let!(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
 
     before { sign_in admin }
 
-    it_behaves_like "shows past court dates links"
+    it_behaves_like "shows court dates links"
 
-    it "shows court mandates" do
+    it "shows court orders" do
       visit edit_casa_case_path(casa_case)
 
-      court_mandate = casa_case.case_court_mandates.first
+      court_order = casa_case.case_court_orders.first
 
-      expect(page).to have_text(court_mandate.mandate_text)
-      expect(page).to have_text(court_mandate.implementation_status.humanize)
+      expect(page).to have_text(court_order.text)
+      expect(page).to have_text(court_order.implementation_status.humanize)
     end
 
     it "edits case", js: true do
@@ -31,7 +31,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       check contact_type.name
 
       page.find("#add-mandate-button").click
-      find("#mandates-list-container").first("textarea").send_keys("Court Mandate Text One")
+      find("#court-orders-list-container").first("textarea").send_keys("Court Mandate Text One")
 
       within ".top-page-actions" do
         click_on "Update CASA Case"
@@ -83,7 +83,7 @@ RSpec.describe "Edit CASA Case", type: :system do
   context "logged in as supervisor" do
     let(:casa_org) { build(:casa_org) }
     let(:supervisor) { create(:supervisor, casa_org: casa_org) }
-    let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: casa_org) }
+    let(:casa_case) { create(:casa_case, :with_one_court_order, casa_org: casa_org) }
     let!(:contact_type_group) { build(:contact_type_group, casa_org: casa_org) }
     let!(:contact_type_1) { create(:contact_type, name: "Youth", contact_type_group: contact_type_group) }
     let!(:contact_type_2) { build(:contact_type, name: "Supervisor", contact_type_group: contact_type_group) }
@@ -91,7 +91,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
     before { sign_in supervisor }
 
-    it_behaves_like "shows past court dates links"
+    it_behaves_like "shows court dates links"
 
     it "edits case", js: true do
       visit casa_case_path(casa_case)
@@ -99,18 +99,15 @@ RSpec.describe "Edit CASA Case", type: :system do
       visit edit_casa_case_path(casa_case)
       select "Submitted", from: "casa_case_court_report_status"
       check "Youth"
-      select "4", from: "casa_case_court_date_3i"
-      select "November", from: "casa_case_court_date_2i"
-      select next_year, from: "casa_case_court_date_1i"
 
       select "8", from: "casa_case_court_report_due_date_3i"
       select "September", from: "casa_case_court_report_due_date_2i"
       select next_year, from: "casa_case_court_report_due_date_1i"
 
       page.find("#add-mandate-button").click
-      find("#mandates-list-container").first("textarea").send_keys("Court Mandate Text One")
+      find("#court-orders-list-container").first("textarea").send_keys("Court Mandate Text One")
 
-      select "Partially implemented", from: "casa_case[case_court_mandates_attributes][0][implementation_status]"
+      select "Partially implemented", from: "casa_case[case_court_orders_attributes][0][implementation_status]"
 
       expect(page).to have_text("Set Implementation Status")
 
@@ -133,7 +130,6 @@ RSpec.describe "Edit CASA Case", type: :system do
       visit casa_case_path(casa_case)
 
       expect(page).to have_text("Court Report Status: Submitted")
-      expect(page).to have_text("4-NOV-#{next_year}")
       expect(page).to have_text("8-SEP-#{next_year}")
     end
 
@@ -190,14 +186,12 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Court Report Status: Not submitted")
       visit edit_casa_case_path(casa_case)
 
-      select "November", from: "casa_case_court_date_2i"
       select "April", from: "casa_case_court_report_due_date_2i"
 
       within ".actions" do
         click_on "Update CASA Case"
       end
 
-      expect(page).to have_text("Court date was not a valid date.")
       expect(page).to have_text("Court report due date was not a valid date.")
     end
 
@@ -205,10 +199,6 @@ RSpec.describe "Edit CASA Case", type: :system do
       visit casa_case_path(casa_case)
       expect(page).to have_text("Court Report Status: Not submitted")
       visit edit_casa_case_path(casa_case)
-
-      select "31", from: "casa_case_court_date_3i"
-      select "April", from: "casa_case_court_date_2i"
-      select next_year, from: "casa_case_court_date_1i"
 
       select "31", from: "casa_case_court_report_due_date_3i"
       select "April", from: "casa_case_court_report_due_date_2i"
@@ -218,7 +208,6 @@ RSpec.describe "Edit CASA Case", type: :system do
         click_on "Update CASA Case"
       end
 
-      expect(page).to have_text("Court date was not a valid date.")
       expect(page).to have_text("Court report due date was not a valid date.")
     end
 
@@ -236,13 +225,13 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).not_to have_text("Update Casa Case")
     end
 
-    it "shows court mandates" do
+    it "shows court orders" do
       visit edit_casa_case_path(casa_case)
 
-      court_mandate = casa_case.case_court_mandates.first
+      court_order = casa_case.case_court_orders.first
 
-      expect(page).to have_text(court_mandate.mandate_text)
-      expect(page).to have_text(court_mandate.implementation_status.humanize)
+      expect(page).to have_text(court_order.text)
+      expect(page).to have_text(court_order.implementation_status.humanize)
     end
 
     context "When a Casa instance has no judge names added" do
@@ -379,14 +368,14 @@ RSpec.describe "Edit CASA Case", type: :system do
       end
     end
 
-    context "deleting court mandates", js: true do
-      let(:casa_case) { create(:casa_case, :with_one_court_mandate) }
-      let(:mandate_text) { casa_case.case_court_mandates.first.mandate_text }
+    context "deleting court orders", js: true do
+      let(:casa_case) { create(:casa_case, :with_one_court_order) }
+      let(:text) { casa_case.case_court_orders.first.text }
 
-      it "can delete a court mandate" do
+      it "can delete a court order" do
         visit edit_casa_case_path(casa_case.id)
 
-        expect(page).to have_text(mandate_text)
+        expect(page).to have_text(text)
 
         find("button.remove-mandate-button").click
         expect(page).to have_text("Are you sure you want to remove this court order? Doing so will delete all records \
@@ -395,12 +384,12 @@ of it unless it was included in a previous court report.")
         find("button.swal2-confirm").click
         expect(page).to have_text("Court order has been removed.")
         click_on "OK"
-        expect(page).to_not have_text(mandate_text)
+        expect(page).to_not have_text(text)
 
         within ".actions" do
           click_on "Update CASA Case"
         end
-        expect(page).to_not have_text(mandate_text)
+        expect(page).to_not have_text(text)
       end
     end
 
@@ -462,11 +451,11 @@ of it unless it was included in a previous court report.")
 
   context "logged in as volunteer" do
     let(:volunteer) { build(:volunteer) }
-    let(:casa_case) { create(:casa_case, :with_one_court_mandate, casa_org: volunteer.casa_org) }
+    let(:casa_case) { create(:casa_case, :with_one_court_order, casa_org: volunteer.casa_org) }
     let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
 
     let!(:court_dates) do
-      [10, 30, 31, 90].map { |n| create(:past_court_date, casa_case: casa_case, date: n.days.ago) }
+      [10, 30, 31, 90].map { |n| create(:court_date, casa_case: casa_case, date: n.days.ago) }
     end
 
     let!(:reports) do
@@ -486,7 +475,7 @@ of it unless it was included in a previous court report.")
 
     before { sign_in volunteer }
 
-    it_behaves_like "shows past court dates links"
+    it_behaves_like "shows court dates links"
 
     it "views attached court reports" do
       visit edit_casa_case_path(casa_case)
@@ -502,13 +491,13 @@ of it unless it was included in a previous court report.")
       expect(page).to have_text(I18n.l(court_dates[1].date, format: :full, default: nil))
     end
 
-    it "shows court mandates" do
+    it "shows court orders" do
       visit edit_casa_case_path(casa_case)
 
-      court_mandate = casa_case.case_court_mandates.first
+      court_order = casa_case.case_court_orders.first
 
-      expect(page).to have_text(court_mandate.mandate_text)
-      expect(page).to have_text(court_mandate.implementation_status.humanize)
+      expect(page).to have_text(court_order.text)
+      expect(page).to have_text(court_order.implementation_status.humanize)
     end
 
     it "edits case" do

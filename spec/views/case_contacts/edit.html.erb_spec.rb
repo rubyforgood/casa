@@ -3,7 +3,9 @@ require "rails_helper"
 RSpec.describe "case_contacts/edit", type: :view do
   before do
     user = build_stubbed(:volunteer)
+    casa_org = user.casa_org
     allow(view).to receive(:current_user).and_return(user)
+    allow(view).to receive(:current_organization).and_return(casa_org)
   end
 
   it "is listing all the contact methods from the model" do

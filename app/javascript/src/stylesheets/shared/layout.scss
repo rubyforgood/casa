@@ -51,9 +51,11 @@ div.row.volunteer-filters {
 
 /* As 'mobile-label' class is mobile only, not display them on desktop view */
 
-table.table {
-  span.mobile-label {
-    display: none;
+@media only screen and (min-width: $mobile) {
+  table.table {
+    span.mobile-label {
+      display: none;
+    }
   }
 }
 
@@ -61,7 +63,7 @@ table.table {
   margin: 6px 0;
 }
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: $mobile) {
   .login-header {
     font-size: 0.75em !important;
   }

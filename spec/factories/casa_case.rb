@@ -7,7 +7,7 @@ FactoryBot.define do
     hearing_type # TODO make optional  move to traits
     judge # TODO make optional move to traits
     court_report_status { :not_submitted }
-    case_court_mandates { [] }
+    case_court_orders { [] }
 
     trait :with_case_assignments do
       after(:create) do |casa_case, _|
@@ -19,9 +19,9 @@ FactoryBot.define do
       end
     end
 
-    trait :with_one_court_mandate do
+    trait :with_one_court_order do
       after(:create) do |casa_case|
-        casa_case.case_court_mandates << build(:case_court_mandate)
+        casa_case.case_court_orders << build(:case_court_order)
         casa_case.save
       end
     end

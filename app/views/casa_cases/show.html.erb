@@ -58,6 +58,8 @@
     <h6>
       <strong><%= t(".label.next_court_date") %>:</strong>
       <%= I18n.l(@casa_case.court_date, format: :day_and_date, default: '') %>
+      <%= render "calendar_button", date:  I18n.l(@casa_case.court_date,
+                                    format: :day_and_date, default: ''), title: "Next Court Date" %>
     </h6>
     </p>
 
@@ -65,6 +67,8 @@
     <h6>
       <strong><%= t(".label.court_report_due_date") %>:</strong>
       <%= I18n.l(@casa_case.court_report_due_date, format: :day_and_date, default: '') %>
+      <%= render "calendar_button", date: I18n.l(@casa_case.court_report_due_date,
+                                    format: :day_and_date, default: ''), title: "Court Report Due Date" %>
     </h6>
     </p>
 
@@ -86,14 +90,14 @@
       </p>
     <% end %>
 
-    <% if @casa_case.case_court_mandates.exists? %>
-      <h6><strong><%= t(".label.court_mandates") %>:</strong></h6>
-      <% @casa_case.case_court_mandates.each do |court_mandate| %>
-        <p><%= court_mandate.implementation_status_symbol %> <%= court_mandate.mandate_text %></p>
+    <% if @casa_case.case_court_orders.exists? %>
+      <h6><strong><%= t(".label.court_orders") %>:</strong></h6>
+      <% @casa_case.case_court_orders.each do |court_order| %>
+        <p><%= court_order.implementation_status_symbol %> <%= court_order.text %></p>
       <% end %>
     <% end %>
 
-    <%= render "past_court_dates", casa_case: @casa_case %>
+    <%= render "court_dates", casa_case: @casa_case %>
 
     <div>
       <h6><strong><%= t(".assigned_volunteers") %>:</strong></h6>

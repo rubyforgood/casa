@@ -112,14 +112,14 @@ class DbPopulator
     @random_case_contact_counts.sample(random: rng)
   end
 
-  def random_past_court_date_count
-    @random_past_court_date_counts ||= [0, 2, 3, 4, 5]
-    @random_past_court_date_counts.sample(random: rng)
+  def random_court_date_count
+    @random_court_date_counts ||= [0, 2, 3, 4, 5]
+    @random_court_date_counts.sample(random: rng)
   end
 
-  def random_court_mandate_count
-    @random_court_mandate_counts ||= [0, 3, 5, 10]
-    @random_court_mandate_counts.sample(random: rng)
+  def random_court_order_count
+    @random_court_order_counts ||= [0, 3, 5, 10]
+    @random_court_order_counts.sample(random: rng)
   end
 
   def likely_contact_durations
@@ -148,7 +148,7 @@ class DbPopulator
     )
   end
 
-  def mandate_choices
+  def order_choices
     [
       "Limited guardianship of the children for medical and educational purposes to [name] shall be rescinded;",
       "The children shall remain children in need of assistance (cina), under the jurisdiction of the juvenile court, and shall remain committed to the department of health and human services/child welfare services, for continued placement on a trial home visit with [NAME]",
@@ -218,16 +218,16 @@ class DbPopulator
         create_case_contact(new_casa_case)
       end
 
-      random_court_mandate_count.times do
-        CaseCourtMandate.create!(
+      random_court_order_count.times do
+        CaseCourtOrder.create!(
           casa_case_id: new_casa_case.id,
-          mandate_text: mandate_choices.sample(random: rng),
-          implementation_status: CaseCourtMandate::IMPLEMENTATION_STATUSES.values.sample(random: rng)
+          text: order_choices.sample(random: rng),
+          implementation_status: CaseCourtOrder::IMPLEMENTATION_STATUSES.values.sample(random: rng)
         )
       end
 
-      random_past_court_date_count.times do |index|
-        PastCourtDate.create!(
+      random_court_date_count.times do |index|
+        CourtDate.create!(
           casa_case_id: new_casa_case.id,
           date: Date.today - (index + 1).weeks
         )

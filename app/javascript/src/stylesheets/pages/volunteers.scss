@@ -1,0 +1,18 @@
+body.volunteers {
+  @media only screen and (max-width: $mobile) {
+    table#volunteers {
+      tbody tr {
+        padding-bottom: 2.5rem;
+        border-bottom: none;
+
+        td {
+          border-left: none;
+          border-right: none;
+        }
+        td:last-child {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+}

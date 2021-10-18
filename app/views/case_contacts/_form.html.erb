@@ -65,8 +65,9 @@
           <div>23</div>
         </div>
         <div class="row range-value">
-          <%= form.text_field :duration_hours,
+          <%= form.number_field :duration_hours,
                               id: "casa-contact-duration-hours-display",
+                              min: 0,
                               value: duration_hours(case_contact),
                               required: true %> &nbsp; <span> hour(s)</span>
         </div>
@@ -91,11 +92,11 @@
         <div>59</div>
       </div>
       <div class="row range-value">
-        <%= form.text_field :duration_minutes,
-                            class: "",
-                            id: "casa-contact-duration-minutes-display",
-                            value: duration_minutes(case_contact),
-                            required: true %> &nbsp; <span> minute(s)</span>
+        <%= form.number_field :duration_minutes,
+                              id: "casa-contact-duration-minutes-display",
+                              min: 0,
+                              value: duration_minutes(case_contact),
+                              required: true %> &nbsp; <span> minute(s)</span>
       </div>
     </fieldset>
   </div>
@@ -116,13 +117,15 @@
     <%= form.number_field :miles_driven, class: "form-control", required: true, min: "0", max: 10000 %>
   </div>
 
-  <div class="field want-driving-reimbursement form-group">
-    <h2><%= form.label :want_driving_reimbursement %></h2>
-    <%= form.select :want_driving_reimbursement,
-                    options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement),
-                    {},
-                    class: "custom-select" %>
-  </div>
+  <% if current_organization.show_driving_reimbursement %>
+    <div class="field want-driving-reimbursement form-group">
+      <h2><%= form.label :want_driving_reimbursement %></h2>
+      <%= form.select :want_driving_reimbursement,
+                      options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement),
+                      {},
+                      class: "custom-select" %>
+    </div>
+  <% end %>
 
   <div class="field notes form-group">
     <h2><%= form.label :notes %></h2>

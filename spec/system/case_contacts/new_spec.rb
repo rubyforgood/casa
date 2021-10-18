@@ -555,6 +555,22 @@ RSpec.describe "case_contacts/new", type: :system do
       end
     end
 
+    context "when driving reimbursement is hidden by the CASA org" do
+      it "does not show for case_contacts" do
+        org = build(:casa_org, show_driving_reimbursement: false)
+        contact_type_group = create_contact_types(org)
+        volunteer = create(:volunteer, :with_casa_cases, casa_org: org)
+        contact_types_for_cases = contact_type_group.contact_types.reject { |ct| ct.name == "Attorney" }
+        assign_contact_types_to_cases(volunteer.casa_cases, contact_types_for_cases)
+
+        sign_in volunteer
+
+        visit new_case_contact_path
+
+        expect(page).not_to have_field("Want driving reimbursement")
+      end
+    end
+
     private
 
     def create_contact_types(org)

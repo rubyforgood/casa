@@ -28,6 +28,7 @@ RSpec.configure do |config|
   config.include PunditHelper, type: :view
   config.include SessionHelper, type: :view
   config.include SessionHelper, type: :request
+  config.include TemplateHelper
   config.include Warden::Test::Helpers
   config.include WordDocHelper, type: :model
   config.include WordDocHelper, type: :request
@@ -68,5 +69,9 @@ RSpec.configure do |config|
     Bullet.raise = false
     example.run
     Bullet.raise = true
+  end
+
+  def pre_transition_aged_youth_age
+    Date.current - 14.years
   end
 end

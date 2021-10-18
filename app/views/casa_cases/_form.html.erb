@@ -64,23 +64,6 @@
       <% end %>
 
       <div class="field form-group">
-        <% if policy(casa_case).update_court_date? %>
-          <%= form.label :court_date, "Add Court Date (past or future)" %>
-          <br>
-          <span class="datetime-year-month">
-            <%= form.date_select :court_date,
-                                 {
-                                     order: [:day, :month, :year],
-                                     start_year: Date.current.year + 3,
-                                     end_year: 2000,
-                                     prompt: {day: t("common.day"), month: t("common.month"), year: t("common.year")}
-                                 },
-                                 class: "select2 date-input" %>
-          </span>
-        <% end %>
-      </div>
-
-      <div class="field form-group">
         <% if policy(casa_case).update_court_report_due_date? %>
           <%= form.label :court_report_due_date, t(".court_report_due_date") %>
           <br>
@@ -113,39 +96,19 @@
 
       <% if casa_case.persisted? %>
         <div class="field form-group court-mandates">
-          <%= form.label :case_court_mandates, "#{t(".court_mandates")} - #{t(".court_mandate_privacy_warning")}" %>
-
-          <% if policy(casa_case).update_court_mandates? %>
-            <div id="mandates-list-container">
-              <%= form.fields_for :case_court_mandates do |ff| %>
-                <div class="court-mandate-entry">
-                  <%= ff.text_area :mandate_text %>
-                  <%=
-                    ff.select :implementation_status,
-                              @casa_case.decorate.court_mandate_select_options,
-                              {include_blank: 'Set Implementation Status', selected: ff.object.implementation_status},
-                              {class: 'implementation-status'}
-                  %>
-                  <button type="button" class="remove-mandate-button btn btn-danger"><%= t("button.delete") %></button>
-                </div>
-              <% end %>
-            </div>
-            <div class="add-container">
-              <button type="button" class="add-button" id="add-mandate-button">
-                <i class="fa fa-plus" aria-hidden="true"></i>
-              </button>
-              <strong><%= t(".add_court_mandate") %></strong>
-            </div>
+          <% if policy(casa_case).update_court_orders? %>
+            <%= render partial: "shared/court_order_list", locals: {casa_case: @casa_case, form: form} %>
           <% else %>
+            <%= form.label :case_court_mandates, "#{t(".label.court_orders")}" %>
             <div id="mandate-list-container">
-              <% @casa_case.case_court_mandates.each do |mandate| %>
+              <% @casa_case.case_court_orders.each do |order| %>
                 <div class="court-mandate-entry">
-                  <textarea disabled><%= mandate.mandate_text %></textarea>
+                  <textarea disabled><%= order.text %></textarea>
 
-                  <% if mandate.implementation_status %>
+                  <% if order.implementation_status %>
                     <p class="implementation-status">
                       <strong>Status:</strong>
-                      <%= mandate.implementation_status.humanize %>
+                      <%= order.implementation_status.humanize %>
                     </p>
                   <% end %>
                 </div>
@@ -155,7 +118,7 @@
         </div>
 
         <div class="field form-group past-court-dates">
-          <%= render "past_court_dates", casa_case: @casa_case %>
+          <%= render "court_dates", casa_case: @casa_case %>
         </div>
       <% end %>
 

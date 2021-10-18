@@ -1,5 +1,5 @@
 # This configuration file is used for Scout APM.
-# Environment variables can also be used to configure Scout. See our help docs at https://docs.scoutapm.com#environment-variables for more information.
+# https://scoutapm.com/docs/ruby/configuration
 common: &defaults
 
   # key: Your Organization key for Scout APM. Found on the settings screen.
@@ -26,6 +26,7 @@ production:
 development:
   <<: *defaults
   monitor: false
+  dev_trace: true
 
 test:
   <<: *defaults
@@ -33,3 +34,4 @@ test:
 
 staging:
   <<: *defaults
+  dev_trace: true

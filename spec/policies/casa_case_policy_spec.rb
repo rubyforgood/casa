@@ -46,7 +46,7 @@ RSpec.describe CasaCasePolicy do
     end
   end
 
-  permissions :update_hearing_type?, :update_judge?, :update_court_mandates? do
+  permissions :update_hearing_type?, :update_judge?, :update_court_orders? do
     context "when user is an admin" do
       it "allows to update" do
         is_expected.to permit(casa_admin, casa_case)

@@ -27,7 +27,7 @@
     background-color: #b71c1c;
     color: white
   }
-  
+
   .async-success-indicator {
     background-color: #28a745;
     color: white
@@ -39,7 +39,7 @@
 
     .load-spinner {
       animation: spin 1.5s linear infinite;
-      border: .25em solid #f3f3f3; 
+      border: .25em solid #f3f3f3;
       border-top: .25em solid #3498db;
       border-radius: 50%;
       display: inline-block;
@@ -68,6 +68,13 @@
   }
 }
 
+.check-item {
+  label {
+    width: 80%;
+    vertical-align: middle;
+  }
+}
+
 .emancipation-category {
   border-bottom: 2px solid #bfe3ff;
   padding: .5em;
@@ -77,7 +84,9 @@
   }
 
   label {
-    margin: 0
+    margin: 0;
+    width: 80%;
+    vertical-align: middle;
   }
 
   span {

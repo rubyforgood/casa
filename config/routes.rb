@@ -24,6 +24,8 @@ Rails.application.routes.draw do
     root to: "all_casa_admins/sessions#new", as: :unauthenticated_all_casa_root
   end
 
+  resources :health, only: %i[index]
+
   get "/.well-known/assetlinks.json", to: "android_app_associations#index"
   resources :casa_cases do
     resource :emancipation do
@@ -32,7 +34,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :past_court_dates, only: %i[create edit new show update]
+    resources :court_dates, only: %i[create edit new show update]
 
     member do
       patch :deactivate
@@ -62,6 +64,7 @@ Rails.application.routes.draw do
       post :generate
     end
   end
+  resources :reimbursements, only: %i[index]
   resources :imports, only: %i[index create] do
     collection do
       get :download_failed
@@ -77,7 +80,7 @@ Rails.application.routes.draw do
   resources :judges, only: %i[new create edit update]
   resources :notifications, only: :index
 
-  resources :supervisors, except: %i[destroy] do
+  resources :supervisors, except: %i[destroy], concerns: %i[with_datatable] do
     member do
       patch :activate
       patch :deactivate
@@ -90,11 +93,13 @@ Rails.application.routes.draw do
     end
   end
   resources :volunteers, except: %i[destroy], concerns: %i[with_datatable] do
+    post :stop_impersonating, on: :collection
     member do
       patch :activate
       patch :deactivate
       get :resend_invitation
       patch :reminder
+      get :impersonate
     end
   end
   resources :case_assignments, only: %i[create destroy] do
@@ -103,7 +108,7 @@ Rails.application.routes.draw do
       patch :unassign
     end
   end
-  resources :case_court_mandates, only: %i[destroy]
+  resources :case_court_orders, only: %i[destroy]
 
   namespace :all_casa_admins do
     resources :casa_orgs, only: [:new, :create, :show] do

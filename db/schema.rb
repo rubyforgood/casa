@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_13_142024) do
+ActiveRecord::Schema.define(version: 2021_10_12_180102) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(version: 2021_09_13_142024) do
     t.string "display_name"
     t.string "address"
     t.string "footer_links", default: [], array: true
+    t.boolean "show_driving_reimbursement", default: true
   end
 
   create_table "case_assignments", force: :cascade do |t|
@@ -155,15 +156,15 @@ ActiveRecord::Schema.define(version: 2021_09_13_142024) do
     t.check_constraint "(miles_driven IS NOT NULL) OR (NOT want_driving_reimbursement)", name: "want_driving_reimbursement_only_when_miles_driven"
   end
 
-  create_table "case_court_mandates", force: :cascade do |t|
-    t.string "mandate_text"
+  create_table "case_court_orders", force: :cascade do |t|
     t.bigint "casa_case_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "implementation_status"
-    t.bigint "past_court_date_id"
-    t.index ["casa_case_id"], name: "index_case_court_mandates_on_casa_case_id"
-    t.index ["past_court_date_id"], name: "index_case_court_mandates_on_past_court_date_id"
+    t.bigint "court_date_id"
+    t.string "text"
+    t.index ["casa_case_id"], name: "index_case_court_orders_on_casa_case_id"
+    t.index ["court_date_id"], name: "index_case_court_orders_on_court_date_id"
   end
 
   create_table "contact_type_groups", force: :cascade do |t|
@@ -182,6 +183,18 @@ ActiveRecord::Schema.define(version: 2021_09_13_142024) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "active", default: true
     t.index ["contact_type_group_id"], name: "index_contact_types_on_contact_type_group_id"
+  end
+
+  create_table "court_dates", force: :cascade do |t|
+    t.datetime "date", null: false
+    t.bigint "casa_case_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "hearing_type_id"
+    t.bigint "judge_id"
+    t.index ["casa_case_id"], name: "index_court_dates_on_casa_case_id"
+    t.index ["hearing_type_id"], name: "index_court_dates_on_hearing_type_id"
+    t.index ["judge_id"], name: "index_court_dates_on_judge_id"
   end
 
   create_table "emancipation_categories", force: :cascade do |t|
@@ -238,18 +251,6 @@ ActiveRecord::Schema.define(version: 2021_09_13_142024) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["read_at"], name: "index_notifications_on_read_at"
     t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient"
-  end
-
-  create_table "past_court_dates", force: :cascade do |t|
-    t.datetime "date", null: false
-    t.bigint "casa_case_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.bigint "hearing_type_id"
-    t.bigint "judge_id"
-    t.index ["casa_case_id"], name: "index_past_court_dates_on_casa_case_id"
-    t.index ["hearing_type_id"], name: "index_past_court_dates_on_hearing_type_id"
-    t.index ["judge_id"], name: "index_past_court_dates_on_judge_id"
   end
 
   create_table "sent_emails", force: :cascade do |t|
@@ -332,11 +333,11 @@ ActiveRecord::Schema.define(version: 2021_09_13_142024) do
   add_foreign_key "case_assignments", "users", column: "volunteer_id"
   add_foreign_key "case_contacts", "casa_cases"
   add_foreign_key "case_contacts", "users", column: "creator_id"
-  add_foreign_key "case_court_mandates", "casa_cases"
+  add_foreign_key "case_court_orders", "casa_cases"
+  add_foreign_key "court_dates", "casa_cases"
   add_foreign_key "emancipation_options", "emancipation_categories"
   add_foreign_key "followups", "users", column: "creator_id"
   add_foreign_key "judges", "casa_orgs"
-  add_foreign_key "past_court_dates", "casa_cases"
   add_foreign_key "sent_emails", "casa_orgs"
   add_foreign_key "sent_emails", "users"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"

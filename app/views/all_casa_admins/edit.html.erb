@@ -22,11 +22,11 @@
       <%= form_for(@user, as: :all_casa_admin, url: {action: "update_password"}) do |f| %>
         <div class="field form-group">
           <%= f.label :password, "Password" %><br>
-          <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
+          <%= f.password_field :password, autocomplete: "off", class: "form-control", minlength: 6 %>
         </div>
         <div class="field form-group">
           <%= f.label :password_confirmation, "Password Confirmation" %><br>
-          <%= f.password_field :password_confirmation, class: "form-control" %>
+          <%= f.password_field :password_confirmation, class: "form-control", minlength: 6 %>
         </div>
         <div class="action_container">
           <%= f.submit "Update Password", class: "btn btn-danger" %>
