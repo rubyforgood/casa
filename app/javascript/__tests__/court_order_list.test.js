@@ -29,11 +29,25 @@ describe('CourtOrderList constructor', () => {
         courtOrderList = new CourtOrderList(courtOrderListElement)
 
         expect(courtOrderList.resourceName).toBe('casa_case')
+        expect(courtOrderList.casaCaseId).toBe('2151')
+
+        window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/2151/court_dates/new')
+        courtOrderList = new CourtOrderList(courtOrderListElement)
+
+        expect(courtOrderList.resourceName).toBe('court_date')
+        expect(courtOrderList.casaCaseId).toBe('2151')
 
         window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/2151/court_dates/3')
         courtOrderList = new CourtOrderList(courtOrderListElement)
 
         expect(courtOrderList.resourceName).toBe('court_date')
+        expect(courtOrderList.casaCaseId).toBe('2151')
+
+        window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/2151/court_dates/3/edit')
+        courtOrderList = new CourtOrderList(courtOrderListElement)
+
+        expect(courtOrderList.resourceName).toBe('court_date')
+        expect(courtOrderList.casaCaseId).toBe('2151')
         done()
       } catch (error) {
         done(error)
