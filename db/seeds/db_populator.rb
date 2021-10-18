@@ -164,10 +164,6 @@ class DbPopulator
     ]
   end
 
-  def transition_aged_youth?(birth_month_year_youth)
-    (Date.today - birth_month_year_youth).days.in_years > 14
-  end
-
   def create_cases(casa_org, options)
     ContactTypePopulator.populate
     options.case_count.times do |index|
@@ -186,7 +182,7 @@ class DbPopulator
             court_report_due_date: court_date + 1.month,
             court_report_submitted_at: court_report_submitted ? Date.today : nil,
             court_report_status: court_report_submitted ? :submitted : :not_submitted,
-            birth_month_year_youth: ((Date.today - 18.years)..(Date.today - 14.years)).to_a.sample
+            birth_month_year_youth: birth_month_year_youth
           )
         else
 
