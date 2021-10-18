@@ -417,6 +417,11 @@ en:
       filter_exported_columns: Filter Exported Columns
       select_columns: "Select columns:"
   supervisors:
+    index:
+      filter: Filter by
+      active: Active
+      inactive: Inactive
+      both: Both
     edit:
       assign_a_volunteer: Assign a Volunteer
       assign_volunteer: Assign Volunteer
