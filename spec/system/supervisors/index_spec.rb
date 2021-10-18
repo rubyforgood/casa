@@ -13,7 +13,7 @@ RSpec.describe "supervisors/index", type: :system do
   end
 
   let(:organization) { build(:casa_org) }
-  let(:supervisor_user) { create(:supervisor, casa_org: organization) }
+  let(:supervisor_user) { create(:supervisor, casa_org: organization, display_name: "Logged Supervisor") }
 
   before { sign_in supervisor_user }
 
@@ -99,32 +99,37 @@ RSpec.describe "supervisors/index", type: :system do
       let(:expected_first_ordered_value) { "5" }
       let(:expected_last_ordered_value) { "2" }
 
-      it "by supervisor name", js: true do
-        expect(page).to have_selector("th.sorting_desc", text: "Supervisor Name")
-        expect(page).to have_selector("tr:nth-child(1)", text: "Last Supervisor")
+      it "by supervisor name", :aggregate_failures, js: true do
+        expect(page).to have_selector("th.sorting_asc", text: "Supervisor Name")
+        expect(page).to have_selector("tr:nth-child(1)", text: "First Supervisor")
 
         find("th", text: "Supervisor Name").click
 
-        expect(page).to have_selector("th.sorting_asc", text: "Supervisor Name")
-        expect(page).to have_selector("tr:nth-child(1)", text: "First Supervisor")
+        expect(page).to have_selector("tr:nth-child(1)", text: "Logged Supervisor")
       end
 
       describe "by volunteer count", js: true do
         let(:column_to_sort) { "Volunteer Assignments" }
 
-        it_behaves_like "functioning sort buttons"
+        # TODO: uncomment this line when sort by Volunteer Assignments is available
+        # Issue: https://github.com/rubyforgood/casa/issues/2683
+        # it_behaves_like "functioning sort buttons"
       end
 
       describe "by transition-aged youth", js: true do
         let(:column_to_sort) { "Serving Transition Aged Youth" }
 
-        it_behaves_like "functioning sort buttons"
+        # TODO: uncomment this line when sort by Serving Transition Aged Youth is available
+        # Issue: https://github.com/rubyforgood/casa/issues/2683
+        # it_behaves_like "functioning sort buttons"
       end
 
       describe "by no-contact count", js: true do
         let(:column_to_sort) { "No Attempt (14 days)" }
 
-        it_behaves_like "functioning sort buttons"
+        # TODO: uncomment this line when sort by No Attempt (14 days) is available
+        # Issue: https://github.com/rubyforgood/casa/issues/2683
+        # it_behaves_like "functioning sort buttons"
       end
     end
 
@@ -162,6 +167,87 @@ RSpec.describe "supervisors/index", type: :system do
 
         expect(page).not_to have_text("Active volunteers not assigned to supervisors")
         expect(page).not_to have_text("Assigned to Case(s)")
+      end
+    end
+  end
+
+  describe "supervisor table filters" do
+    let(:supervisor_user) { create(:supervisor, casa_org: organization) }
+
+    before do
+      sign_in supervisor_user
+      visit supervisors_path
+    end
+
+    describe "status", js: true do
+      let!(:active_supervisor) do
+        create(:supervisor, display_name: "Active Supervisor", casa_org: organization, active: true)
+      end
+
+      let!(:inactive_supervisor) do
+        create(:supervisor, display_name: "Inactive Supervisor", casa_org: organization, active: false)
+      end
+
+      context "when only active checked" do
+        it "filters the supervisors correctly", :aggregate_failures do
+          within(:css, ".supervisor-filters") do
+            find(:button, text: "Status").click
+            find(:css, ".active").set(false)
+            find(:css, ".active").set(true)
+            find(:css, ".inactive").set(false)
+          end
+
+          within("table#supervisors") do
+            expect(page).to have_content("Active Supervisor")
+            expect(page).not_to have_content("Inactive Supervisor")
+          end
+        end
+      end
+
+      context "when only inactive checked" do
+        it "filters the supervisors correctly", :aggregate_failures do
+          within(:css, ".supervisor-filters") do
+            find(:button, text: "Status").click
+            find(:css, ".active").set(false)
+            find(:css, ".inactive").set(true)
+          end
+
+          within("table#supervisors") do
+            expect(page).not_to have_content("Active Supervisor")
+            expect(page).to have_content("Inactive Supervisor")
+          end
+        end
+      end
+
+      context "when both checked" do
+        it "filters the supervisors correctly", :aggregate_failures do
+          within(:css, ".supervisor-filters") do
+            find(:button, text: "Status").click
+            find(:css, ".active").set(false)
+            find(:css, ".active").set(true)
+            find(:css, ".inactive").set(true)
+          end
+
+          within("table#supervisors") do
+            expect(page).to have_content("Active Supervisor")
+            expect(page).to have_content("Inactive Supervisor")
+          end
+        end
+      end
+
+      context "when none is checked" do
+        it "filters the supervisors correctly", :aggregate_failures do
+          within(:css, ".supervisor-filters") do
+            find(:button, text: "Status").click
+            find(:css, ".active").set(false)
+            find(:css, ".inactive").set(false)
+          end
+
+          within("table#supervisors") do
+            expect(page).not_to have_content("Active Supervisor")
+            expect(page).not_to have_content("Inactive Supervisor")
+          end
+        end
       end
     end
   end
