@@ -6,7 +6,7 @@ RSpec.describe "casa_cases/show", type: :system do
   let(:volunteer) { build(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
   let(:casa_case) {
     create(:casa_case, :with_one_court_order, casa_org: organization,
-    case_number: "CINA-1", transition_aged_youth: true)
+    case_number: "CINA-1", transition_aged_youth: true, court_report_due_date: 1.month.from_now)
   }
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
   let!(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
@@ -50,6 +50,18 @@ RSpec.describe "casa_cases/show", type: :system do
     it "can see Add to Calendar buttons", js: true do
       expect(page).to have_content("Add Court Report Due Date to Calendar")
       expect(page).to have_content("Add Next Court Date to Calendar")
+    end
+
+    context "when there is no future court date or court report due date" do
+      before do
+        casa_case = create(:casa_case, casa_org: organization)
+        visit casa_case_path(casa_case.id)
+      end
+
+      it "can not see Add to Calendar buttons", js: true do
+        expect(page).not_to have_content("Add Court Report Due Date to Calendar")
+        expect(page).not_to have_content("Add Next Court Date to Calendar")
+      end
     end
   end
 
