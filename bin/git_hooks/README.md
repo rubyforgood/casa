@@ -14,10 +14,6 @@ You can read more about Git hooks [here](https://git-scm.com/docs/githooks).
 
 ## Hook Scripts
 
-### `migrate-all`  
-Runs all migrations if any are found to be down
-Usage: `./migrate-all`  
-
 ### `lint`  
 Lints files on the current branch  
 Usage: `./lint <diff policy>`  
@@ -25,6 +21,10 @@ Usage: `./lint <diff policy>`
    - `--staged` lints the files staged for commit
    - `--unpushed` lints files changed by commits not yet pushed to origin
    - `--all` (default) lints all files in the repo  
+
+### `migrate-all`  
+Runs all migrations if any are found to be down
+Usage: `./migrate-all`  
 
 ### `update-dependences`  
 Installs dependencies if any are missing  
