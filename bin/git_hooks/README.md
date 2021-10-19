@@ -23,7 +23,7 @@ Usage: `./lint <diff policy>`
    - `--all` (default) lints all files in the repo  
 
 ### `migrate-all`  
-Runs all migrations if any are found to be down
+Runs all migrations if any are found to be down  
 Usage: `./migrate-all`  
 
 ### `update-dependences`  
