@@ -45,5 +45,5 @@ Usage: `./update-branch <remote name>`
 ### post-merge, pre-push  
     #!/bin/sh
 
-    ./bin/git_hooks/update-dependencies
     ./bin/git_hooks/migrate-all
+    ./bin/git_hooks/update-dependencies
