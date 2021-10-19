@@ -21,6 +21,7 @@ controllers/contact_type_groups_controller.rb
 controllers/contact_types_controller.rb
 controllers/emancipation_checklists_controller.rb
 controllers/hearing_types_controller.rb
+controllers/health_controller.rb
 controllers/imports_controller.rb
 controllers/judges_controller.rb
 controllers/mileage_reports_controller.rb
