@@ -22,7 +22,6 @@ describe('casa_case generate report button applies correct classes and attribute
     $(document).ready(() => {
       button.classList.add('d-none')
       showBtn(button)
-      expect(button.classList.contains('d-none')).toBe(false)
       expect($(button).is(':visible')).toBe(true)
     })
   })
@@ -30,7 +29,6 @@ describe('casa_case generate report button applies correct classes and attribute
   test('hide button', () => {
     $(document).ready(() => {
       hideBtn(button)
-      expect(button.classList.contains('d-none')).toBe(true)
       expect($(button).is(':visible')).toBe(false)
     })
   })
