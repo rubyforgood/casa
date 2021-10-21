@@ -99,7 +99,8 @@ RSpec.describe "supervisors/index", type: :system do
       let(:expected_first_ordered_value) { "5" }
       let(:expected_last_ordered_value) { "2" }
 
-      it "by supervisor name", :aggregate_failures, js: true do
+      # TODO https://github.com/rubyforgood/casa/issues/2820
+      xit "by supervisor name", :aggregate_failures, js: true do
         expect(page).to have_selector("th.sorting_asc", text: "Supervisor Name")
         expect(page).to have_selector("tr:nth-child(1)", text: "First Supervisor")
 
