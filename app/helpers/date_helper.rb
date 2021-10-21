@@ -1,4 +1,7 @@
 module DateHelper
+  JQUERY_MONTH_DAY_YEAR_FORMAT = "MM d, yyyy"
+  RUBY_MONTH_DAY_YEAR_FORMAT = "%B %d, %Y"
+
   def validate_date(day, month, year)
     raise Date::Error if day.blank? || month.blank? || year.blank?
 
