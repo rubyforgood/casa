@@ -12,7 +12,7 @@ const handleReportFormSubmit = (event) => {
   const buttonText = event.target.value
 
   event.target.disabled = 'disabled'
-  event.target.value = 'Downloading mileage report'
+  event.target.value = event.target.dataset.disableWith
   event.target.form.submit()
 
   setTimeout(() => {
