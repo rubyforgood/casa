@@ -1,5 +1,5 @@
 namespace :after_party do
-  desc 'Deployment task: Generate slugs for existing records so they can be accessed with their new slug based routes'
+  desc "Deployment task: Generate slugs for existing records so they can be accessed with their new slug based routes"
   task populate_slugs_for_orgs_and_cases: :environment do
     puts "Running deploy task 'populate_slugs_for_orgs_and_cases'"
 

@@ -362,9 +362,9 @@ RSpec.describe CasaCase, type: :model do
   end
 
   describe "slug" do
-    let(:casa_case) { create(:casa_case, case_number: 'CINA-21-1234') }
+    let(:casa_case) { create(:casa_case, case_number: "CINA-21-1234") }
     it "should be parameterized from the case number" do
-      expect(casa_case.slug).to eq 'CINA-21-1234'
+      expect(casa_case.slug).to eq "CINA-21-1234"
     end
   end
 end
