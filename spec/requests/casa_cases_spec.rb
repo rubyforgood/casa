@@ -166,24 +166,14 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
             {casa_case: attributes}
           end
 
-<<<<<<< HEAD
-          it "Creates a new CasaCase, but no CaseCourtMandate" do
-            expect { post casa_org_casa_cases_url organization, params: invalid_params }.to change(
-=======
           it "Creates a new CasaCase, but no CaseCourtOrder" do
             expect { post casa_cases_url, params: invalid_params }.to change(
->>>>>>> main
               CasaCase,
               :count
             ).by(1)
 
-<<<<<<< HEAD
             expect { post casa_org_casa_cases_url organization, params: invalid_params }.not_to change(
-              CaseCourtMandate,
-=======
-            expect { post casa_cases_url, params: invalid_params }.not_to change(
               CaseCourtOrder,
->>>>>>> main
               :count
             )
           end
@@ -257,17 +247,6 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
             orders_updated[:case_court_orders_attributes]["1"][:id] = casa_case.case_court_orders[1].id
           end
 
-<<<<<<< HEAD
-          it "does not update the first mandate" do
-            expect { patch casa_org_casa_case_url(organization, casa_case), params: {casa_case: mandates_updated} }.not_to(
-              change { casa_case.reload.case_court_mandates[0].mandate_text }
-            )
-          end
-
-          it "does not update the second mandate" do
-            expect { patch casa_org_casa_case_url(organization, casa_case), params: {casa_case: mandates_updated} }.not_to(
-              change { casa_case.reload.case_court_mandates[1].mandate_text }
-=======
           it "does not update the first court order" do
             expect { patch casa_case_url(casa_case), params: {casa_case: orders_updated} }.not_to(
               change { casa_case.reload.case_court_orders[0].text }
@@ -277,7 +256,6 @@ RSpec.describe "/casa_orgs/:casa_org_id/casa_cases", type: :request do
           it "does not update the second court order" do
             expect { patch casa_case_url(casa_case), params: {casa_case: orders_updated} }.not_to(
               change { casa_case.reload.case_court_orders[1].text }
->>>>>>> main
             )
           end
         end

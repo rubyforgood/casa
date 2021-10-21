@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 2021_09_25_140028) do
-=======
 ActiveRecord::Schema.define(version: 2021_10_12_180102) do
->>>>>>> main
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,12 +117,9 @@ ActiveRecord::Schema.define(version: 2021_10_12_180102) do
     t.string "display_name"
     t.string "address"
     t.string "footer_links", default: [], array: true
-<<<<<<< HEAD
+    t.boolean "show_driving_reimbursement", default: true
     t.string "slug"
     t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
-=======
-    t.boolean "show_driving_reimbursement", default: true
->>>>>>> main
   end
 
   create_table "case_assignments", force: :cascade do |t|
@@ -324,7 +317,8 @@ ActiveRecord::Schema.define(version: 2021_10_12_180102) do
   end
 
   create_table "versions", force: :cascade do |t|
-    t.string "item_type", null: false
+    t.string "item_type"
+    t.string "{:null=>false}"
     t.bigint "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"
