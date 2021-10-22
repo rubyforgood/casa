@@ -32,7 +32,10 @@ RSpec.describe "layout/sidebar", type: :view do
   end
 
   context "when logged in as a supervisor" do
-    let(:user) { build_stubbed :supervisor }
+    let(:user) do
+      build_stubbed :supervisor, display_name: "Supervisor's name",
+        email: "supervisor&email@test.com"
+    end
 
     it "renders the correct Role name on the sidebar" do
       sign_in user
@@ -63,14 +66,21 @@ RSpec.describe "layout/sidebar", type: :view do
 
       render partial: "layouts/sidebar"
 
-      expect(rendered).to match user.display_name
-      expect(rendered).to match user.email
+      expect(rendered).to match CGI.escapeHTML user.display_name
+      expect(rendered).to match CGI.escapeHTML user.email
     end
   end
 
   context "when logged in as a volunteer" do
     let(:organization) { build(:casa_org) }
-    let(:user) { create(:volunteer, casa_org: organization) }
+
+    let(:user) do
+      create(
+        :volunteer,
+        casa_org: organization,
+        display_name: "Volunteer's name%"
+      )
+    end
 
     it "renders the correct Role name on the sidebar" do
       sign_in user
@@ -100,8 +110,8 @@ RSpec.describe "layout/sidebar", type: :view do
 
       render partial: "layouts/sidebar"
 
-      expect(rendered).to match user.display_name
-      expect(rendered).to match user.email
+      expect(rendered).to match CGI.escapeHTML user.display_name
+      expect(rendered).to match CGI.escapeHTML user.email
     end
 
     context "when the volunteer does not have a transitioning case" do
@@ -150,7 +160,7 @@ RSpec.describe "layout/sidebar", type: :view do
   end
 
   context "when logged in as a casa admin" do
-    let(:user) { build_stubbed :casa_admin }
+    let(:user) { build_stubbed :casa_admin, display_name: "Superviso's another n&ame" }
 
     it "renders the correct Role name on the sidebar" do
       sign_in user
@@ -183,8 +193,8 @@ RSpec.describe "layout/sidebar", type: :view do
 
       render partial: "layouts/sidebar"
 
-      expect(rendered).to match user.display_name
-      expect(rendered).to match user.email
+      expect(rendered).to match CGI.escapeHTML user.display_name
+      expect(rendered).to match CGI.escapeHTML user.email
     end
   end
 
