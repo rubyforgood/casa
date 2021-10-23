@@ -3,8 +3,11 @@ class ReimbursementsController < ApplicationController
   end
 
   def index
-    @reimbursements = CaseContact.where(
-      want_driving_reimbursement: true
-    ).where("case_contacts.created_at > ?", 1.year.ago)
+    @status = params[:status] == "complete" ? true : false
+    @reimbursements =
+      CaseContact
+      .want_driving_reimbursement(true)
+      .created_max_ago(1.year.ago)
+      .filter_by_reimbursement_status(@status)
   end
 end

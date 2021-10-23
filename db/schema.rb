@@ -154,6 +154,7 @@ ActiveRecord::Schema.define(version: 2021_10_29_033530) do
     t.boolean "want_driving_reimbursement", default: false
     t.string "notes"
     t.datetime "deleted_at"
+    t.boolean "reimbursement_complete", default: false
     t.index ["casa_case_id"], name: "index_case_contacts_on_casa_case_id"
     t.index ["creator_id"], name: "index_case_contacts_on_creator_id"
     t.index ["deleted_at"], name: "index_case_contacts_on_deleted_at"

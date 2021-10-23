@@ -27,6 +27,7 @@
           </td>
 
           <td id="contact-types-<%= reimbursement.id %>">
+          <%= contact_types_list(reimbursement) %>
           </td>
 
           <td id="date-added-<%= reimbursement.id %>">
@@ -37,11 +38,10 @@
           </td>
 
           <td id="description-<%= reimbursement.id %>">
-          <%= reimbursement.notes %>
           </td>
 
           <td id="amount-<%= reimbursement.id %>">
-            $<%= reimbursement.miles_driven %>
+            <%= reimbursement.miles_driven %>
           </td>
 
           <td>
