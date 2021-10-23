@@ -77,7 +77,7 @@ RSpec.describe "supervisors/index", type: :system do
         create(:supervisor, :inactive, display_name: "Deactivated supervisor", casa_org: organization)
       }
 
-      it "shows deactivated supervisor on show button click", js: true do
+      it "shows deactivated supervisor on show button click" do
         expect(page).to have_selector("table#supervisors > tbody > tr td:nth-child(1)", count: 2)
         expect(page).not_to have_text("Deactivated supervisor")
 
@@ -192,10 +192,10 @@ RSpec.describe "supervisors/index", type: :system do
       context "when only active checked" do
         it "filters the supervisors correctly", :aggregate_failures do
           within(:css, ".supervisor-filters") do
-            find(:button, text: "Status").click
-            find(:css, ".active").set(false)
+            click_on "Status"
             find(:css, ".active").set(true)
             find(:css, ".inactive").set(false)
+            click_on "Status"
           end
 
           within("table#supervisors") do
@@ -208,9 +208,10 @@ RSpec.describe "supervisors/index", type: :system do
       context "when only inactive checked" do
         it "filters the supervisors correctly", :aggregate_failures do
           within(:css, ".supervisor-filters") do
-            find(:button, text: "Status").click
+            click_on "Status"
             find(:css, ".active").set(false)
             find(:css, ".inactive").set(true)
+            click_on "Status"
           end
 
           within("table#supervisors") do
@@ -223,10 +224,10 @@ RSpec.describe "supervisors/index", type: :system do
       context "when both checked" do
         it "filters the supervisors correctly", :aggregate_failures do
           within(:css, ".supervisor-filters") do
-            find(:button, text: "Status").click
-            find(:css, ".active").set(false)
+            click_on "Status"
             find(:css, ".active").set(true)
             find(:css, ".inactive").set(true)
+            click_on "Status"
           end
 
           within("table#supervisors") do
@@ -239,9 +240,10 @@ RSpec.describe "supervisors/index", type: :system do
       context "when none is checked" do
         it "filters the supervisors correctly", :aggregate_failures do
           within(:css, ".supervisor-filters") do
-            find(:button, text: "Status").click
+            click_on "Status"
             find(:css, ".active").set(false)
             find(:css, ".inactive").set(false)
+            click_on "Status"
           end
 
           within("table#supervisors") do
