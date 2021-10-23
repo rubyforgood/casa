@@ -5,7 +5,8 @@
     <%= link_to "Needs Review", reimbursements_path, class: "nav-link #{active_if(params[:status].blank?)}" %>
   </li>
   <li class="nav-item">
-    <%= link_to "Reimbursement Complete", reimbursements_path(status: "complete"), class: "nav-link #{active_if(params[:status])}" %>
+    <%= link_to "Reimbursement Complete", reimbursements_path(status: "complete"),
+class: "nav-link #{active_if(params[:status])}" %>
   </li>
 <%= render "table" %>
 </ul>

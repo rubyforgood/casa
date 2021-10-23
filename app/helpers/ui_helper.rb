@@ -20,8 +20,8 @@ module UiHelper
 
   def contact_types_list(reimbursement)
     reimbursement
-    .contact_groups_with_types
-    .map{|cg, types_arr| "#{cg} (#{types_arr.join(', ')})"}
-    .join(', ')
+      .contact_groups_with_types
+      .map { |cg, types_arr| "#{cg} (#{types_arr.join(", ")})" }
+      .join(", ")
   end
 end

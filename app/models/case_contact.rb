@@ -88,7 +88,7 @@ class CaseContact < ApplicationRecord
     where(medium_type: medium_type) if medium_type.present?
   }
 
-  scope :filter_by_reimbursement_status, -> (boolean) { where reimbursement_complete: boolean}
+  scope :filter_by_reimbursement_status, ->(boolean) { where reimbursement_complete: boolean }
 
   scope :sorted_by, ->(sort_option) {
     direction = /desc$/.match?(sort_option) ? "desc" : "asc"
