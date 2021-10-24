@@ -27,6 +27,7 @@ class User < ApplicationRecord
     where(is_active: true)
   }, foreign_key: "volunteer_id", dependent: :destroy
   has_one :supervisor, through: :supervisor_volunteer
+  has_one :preference_set, dependent: :destroy
 
   scope :active, -> { where(active: true) }
 
