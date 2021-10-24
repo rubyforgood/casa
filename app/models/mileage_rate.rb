@@ -1,6 +1,11 @@
 class MileageRate < ApplicationRecord
   belongs_to :user
 
+  validates :effective_date,
+    :amount,
+    :user_id,
+    presence: true,
+    allow_blank: false
   validates :effective_date, uniqueness: {scope: :is_active}, if: :is_active?
 end
 
