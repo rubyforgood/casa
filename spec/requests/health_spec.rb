@@ -4,7 +4,7 @@ RSpec.describe "Health", type: :request do
   describe "GET /health" do
     before do
       Casa::Application.load_tasks
-      Rake::Task['after_party:store_deploy_time'].invoke
+      Rake::Task["after_party:store_deploy_time"].invoke
       get "/health"
     end
 
