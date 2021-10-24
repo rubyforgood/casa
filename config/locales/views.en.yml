@@ -359,6 +359,7 @@ en:
         reimbursement_queue: Reimbursement Queue
         report_site_issue: Report a site issue
         system_imports: System Imports
+        mileage_rate: Mileage Rate
       menu_item:
         admins: Admins
         case_contacts: Case Contacts

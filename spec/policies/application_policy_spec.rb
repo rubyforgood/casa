@@ -62,4 +62,18 @@ RSpec.describe ApplicationPolicy do
       expect(subject).not_to permit(create(:supervisor))
     end
   end
+
+  permissions :see_mileage_rate? do
+    it "does not allow volunters" do
+      is_expected.not_to permit(volunteer)
+    end
+
+    it "does not allow supervisors" do
+      is_expected.not_to permit(supervisor)
+    end
+
+    it "allow casa_admins" do
+      is_expected.to permit(casa_admin)
+    end
+  end
 end
