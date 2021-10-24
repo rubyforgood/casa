@@ -362,7 +362,7 @@ GEM
       rubyzip (>= 1.1.1)
     scout_apm (4.1.2)
       parser
-    selenium-webdriver (4.0.0)
+    selenium-webdriver (4.0.3)
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2)
@@ -474,7 +474,7 @@ DEPENDENCIES
   rspec-rails (~> 5.0.2)
   sablon
   scout_apm (~> 4.1)
-  selenium-webdriver (= 4.0.0)
+  selenium-webdriver (= 4.0.3)
   shoulda-matchers
   simplecov (~> 0.21.2)
   spring
