@@ -91,4 +91,58 @@ RSpec.describe "/mileage_rates", type: :request do
       end
     end
   end
+
+  describe "PATCH /update" do
+    let(:mileage_rate) { create(:mileage_rate, amount: 10.11, effective_date: DateTime.parse("01-01-2021")) }
+
+    before { sign_in admin }
+
+    context "with valid params" do
+      it "updates the mileage_rate" do
+        patch mileage_rate_path(mileage_rate), params: {
+          mileage_rate: {
+            amount: "22.87"
+          }
+        }
+        expect(response).to have_http_status(:redirect)
+
+        mileage_rate.reload
+        expect(mileage_rate.amount).to eq 22.87
+      end
+    end
+
+    context "with invalid parameters" do
+      let(:params) do
+        {
+          mileage_rate: {
+            amount: ""
+          }
+        }
+      end
+
+      it "does not update a mileage rate" do
+        patch mileage_rate_path(mileage_rate), params: params
+
+        expect(response).to have_http_status(:success)
+
+        mileage_rate.reload
+        expect(mileage_rate.amount).to eq(10.11)
+      end
+    end
+
+    context "when updating the mileage rate effective date and already exists one" do
+      let(:another_mileage_rate) { create(:mileage_rate) }
+      let(:params) do
+        {
+          mileage_rate: {
+            effective_date: DateTime.parse("01-01-2021")
+          }
+        }
+      end
+
+      it "does not update a mileage rate" do
+        expect { patch mileage_rate_path(another_mileage_rate), params: params }.not_to change { another_mileage_rate }
+      end
+    end
+  end
 end

@@ -1,5 +1,6 @@
 class MileageRatesController < ApplicationController
   after_action :verify_authorized
+  before_action :set_mileage_rate, only: %i[edit update]
 
   def index
     authorize :application, :see_mileage_rate?
@@ -13,7 +14,7 @@ class MileageRatesController < ApplicationController
 
   def create
     authorize CasaAdmin
-    @mileage_rate = MileageRate.new(create_mileage_rate_params)
+    @mileage_rate = MileageRate.new(mileage_rate_params)
 
     if @mileage_rate.save
       redirect_to mileage_rates_path
@@ -22,9 +23,27 @@ class MileageRatesController < ApplicationController
     end
   end
 
+  def edit
+    authorize CasaAdmin
+  end
+
+  def update
+    authorize CasaAdmin
+
+    if @mileage_rate.update(mileage_rate_params)
+      redirect_to mileage_rates_path
+    else
+      render :edit
+    end
+  end
+
   private
 
-  def create_mileage_rate_params
+  def mileage_rate_params
     params.require(:mileage_rate).permit(:effective_date, :amount, :is_active, :user_id)
+  end
+
+  def set_mileage_rate
+    @mileage_rate = MileageRate.find(params[:id])
   end
 end
