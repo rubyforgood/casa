@@ -10,6 +10,7 @@ class CasaAdminPolicy < UserPolicy
   alias_method :activate?, :index?
   alias_method :resend_invitation?, :index?
   alias_method :restore?, :is_admin?
+  alias_method :datatable?, :index?
 
   def deactivate?
     see_deactivate_option? && CasaAdmin.in_organization(current_organization).active.size > 1

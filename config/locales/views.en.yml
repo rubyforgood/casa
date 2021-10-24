@@ -472,3 +472,16 @@ en:
       send_reminder: Send Reminder
       supervisor_checkbox_text: Send CC to Supervisor
       tooltip: Remind volunteer to input case contacts
+  mileage_rates:
+    index:
+      mileage_rates: Mileage Rates
+      button:
+        new: New Mileage Rate
+      pick_displayed_columns: Pick displayed columns
+      heading:
+        amount: Amount
+        effective_date: Effective Date
+        status: Status
+        created_by: Created By
+        created_at: Created At
+        actions: Actions

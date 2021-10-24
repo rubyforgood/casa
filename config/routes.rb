@@ -72,7 +72,7 @@ Rails.application.routes.draw do
   end
   resources :case_contact_reports, only: %i[index]
   resources :mileage_reports, only: %i[index]
-  resources :mileage_rates, only: %i[index new create]
+  resources :mileage_rates, only: %i[index new create edit update]
   resources :casa_orgs, only: %i[edit update]
   resources :contact_type_groups, only: %i[new create edit update]
   resources :contact_types, only: %i[new create edit update]
