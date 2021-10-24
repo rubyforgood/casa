@@ -189,9 +189,10 @@ class CasaCase < ApplicationRecord
     self.slug = case_number.parameterize preserve_case: true
   end
 
-  def to_param
-    slug
-  end
+  # def to_param
+  #   id
+  #   # slug # TODO use slug eventually for routes
+  # end
 end
 
 # == Schema Information
