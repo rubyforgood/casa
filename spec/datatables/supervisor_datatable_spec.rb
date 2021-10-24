@@ -37,12 +37,13 @@ RSpec.describe "SupervisorDatatable" do
 
       context "when both" do
         let(:additional_filters) { {active: %w[false true]} }
+        let!(:inactive_supervisor) { create(:supervisor, casa_org: org, active: true, display_name: "Neil O'Reilly") }
 
         it "brings only all supervisors", :aggregate_failures do
           expect(subject[:recordsTotal]).to eq(2)
           expect(subject[:recordsFiltered]).to eq(2)
-          expect(subject[:data].map { |d| d[:display_name] }).to include(active_supervisor.display_name)
-          expect(subject[:data].map { |d| d[:display_name] }).to include(inactive_supervisor.display_name)
+          expect(subject[:data].map { |d| d[:display_name] }).to include(CGI.escapeHTML(active_supervisor.display_name))
+          expect(subject[:data].map { |d| d[:display_name] }).to include(CGI.escapeHTML(inactive_supervisor.display_name))
         end
       end
 
