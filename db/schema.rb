@@ -94,10 +94,12 @@ ActiveRecord::Schema.define(version: 2021_10_12_180102) do
     t.bigint "judge_id"
     t.datetime "court_report_submitted_at"
     t.integer "court_report_status", default: 0
+    t.string "slug"
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
     t.index ["case_number", "casa_org_id"], name: "index_casa_cases_on_case_number_and_casa_org_id", unique: true
     t.index ["hearing_type_id"], name: "index_casa_cases_on_hearing_type_id"
     t.index ["judge_id"], name: "index_casa_cases_on_judge_id"
+    t.index ["slug"], name: "index_casa_cases_on_slug"
   end
 
   create_table "casa_cases_emancipation_options", force: :cascade do |t|
@@ -116,6 +118,8 @@ ActiveRecord::Schema.define(version: 2021_10_12_180102) do
     t.string "address"
     t.string "footer_links", default: [], array: true
     t.boolean "show_driving_reimbursement", default: true
+    t.string "slug"
+    t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 
   create_table "case_assignments", force: :cascade do |t|
@@ -313,7 +317,8 @@ ActiveRecord::Schema.define(version: 2021_10_12_180102) do
   end
 
   create_table "versions", force: :cascade do |t|
-    t.string "item_type", null: false
+    t.string "item_type"
+    t.string "{:null=>false}"
     t.bigint "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"
