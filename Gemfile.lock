@@ -130,6 +130,14 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
+    delayed_job (4.1.9)
+      activesupport (>= 3.0, < 6.2)
+    delayed_job_active_record (4.1.6)
+      activerecord (>= 3.0, < 6.2)
+      delayed_job (>= 3.0, < 5)
+    delayed_job_recurring (0.3.9)
+      delayed_job (>= 3.0)
+      delayed_job_active_record
     devise (4.8.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -445,6 +453,8 @@ DEPENDENCIES
   caxlsx_rails (~> 0.6.2)
   cypress-on-rails (~> 1.11)
   database_cleaner-active_record (~> 2.0.1)
+  delayed_job_active_record
+  delayed_job_recurring
   devise
   devise_invitable
   draper

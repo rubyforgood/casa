@@ -9,30 +9,31 @@ gem "rails", "~> 6.1.4"
 gem "after_party" # post-deployment tasks
 gem "amazing_print" # easier console reading
 gem "azure-storage-blob", require: false
+gem "bootsnap", require: false # Reduces boot times through caching; required in config/boot.rb
+gem "bugsnag" # tracking errors in prod
 gem "caxlsx", "~> 3.0"
 gem "caxlsx_rails", "~> 0.6.2"
+gem "delayed_job_active_record" # for jobs
+gem "delayed_job_recurring" # for recurring jobs
 gem "devise" # for authentication
 gem "devise_invitable"
 gem "draper" # adds decorators for cleaner presentation logic
 gem "faker" # creates realistic seed data, valuable for staging and demos
+gem "filterrific" # filtering and sorting of models
+gem "image_processing", "~> 1.12" # Set of higher-level helper methods for image processing.
 gem "jbuilder" # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem "lograge" # log less so heroku papertrail quits rate limiting our logs
 gem "noticed" # Notifications
 gem "paper_trail" # tracking changes
+gem "paranoia" # For soft-deleting purpose
 gem "pg" # Use postgresql as the database for Active Record
+gem "pretender"
 gem "puma" # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "rack-attack" # for blocking & throttling abusive requests
-gem "webpacker", "~> 5.4" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem "image_processing", "~> 1.12" # Set of higher-level helper methods for image processing.
-gem "lograge" # log less so heroku papertrail quits rate limiting our logs
-gem "filterrific" # filtering and sorting of models
-
-gem "bootsnap", require: false # Reduces boot times through caching; required in config/boot.rb
-gem "bugsnag" # tracking errors in prod
-gem "sablon" # Word document templating tool for Case Court Reports
-gem "paranoia" # For soft-deleting purpose
 gem "request_store"
-gem "pretender"
+gem "sablon" # Word document templating tool for Case Court Reports
+gem "webpacker", "~> 5.4" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
