@@ -21,6 +21,16 @@ ex:
 3. - Filter by a volunteer who has logged at least one case contact.
 4. - Click "Generate report" at the bottom of the page.
 
+### QA Login Details:
+[Link to QA site](https://casa-qa.herokuapp.com/)  
+
+Login Emails: 
+- volunteer1@example.com  view site as a volunteer
+- supervisor1@example.com view site as a supervisor
+- casa_admin1@example.com view site as an admin
+
+password for all users: 123456  
+
 ### Questions? Join Slack!
 
 We highly recommend that you join us in slack https://rubyforgood.herokuapp.com/ #casa channel to ask questions quickly and hear about office hours (currently Wednesday 6-8pm Pacific), stakeholder news, and upcoming new issues.
