@@ -30,7 +30,9 @@
             <td><%= I18n.l(mileage_rate.effective_date, format: :full, default: :nil) %></td>
             <td><%= number_to_currency(mileage_rate.amount) %></td>
             <td><%= mileage_rate.is_active? ? 'Active' : 'Inactive' %></td>
-            <td><a href=<%= edit_mileage_rate_path(mileage_rate) %>>Edit</a></td>
+            <td>
+              <%= link_to t(".button.edit"), edit_mileage_rate_path(mileage_rate) %>
+            </td>
           </tr>
 
           <% end %>

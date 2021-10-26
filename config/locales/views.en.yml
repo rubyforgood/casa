@@ -477,6 +477,7 @@ en:
       mileage_rates: Mileage Rates
       button:
         new: New Mileage Rate
+        edit: Edit
       pick_displayed_columns: Pick displayed columns
       heading:
         amount: Amount
