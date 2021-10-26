@@ -195,10 +195,10 @@ $('document').ready(() => {
         render: (data, type, row, meta) => {
           return `
           <span class="mobile-label">Actions</span>
-            <a href="${editVolunteerPath(row.id)}">
+            <a href="${editVolunteerPath(row.id)}" class="btn btn-primary">
               Edit
             </a>
-            <a href="${impersonateVolunteerPath(row.id)}">
+            <a href="${impersonateVolunteerPath(row.id)}" class="btn btn-secondary">
               Impersonate
             </a>
           `
