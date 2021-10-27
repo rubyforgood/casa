@@ -10,7 +10,6 @@ const emancipationPage = {
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {Error}      for trying to resolve more async operations than the amount currently awaiting
 function resolveAsyncOperation (error) {
-
   if (error instanceof Error) {
     error = error.message
   }
