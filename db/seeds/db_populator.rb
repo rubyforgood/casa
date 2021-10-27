@@ -112,9 +112,14 @@ class DbPopulator
     @random_case_contact_counts.sample(random: rng)
   end
 
-  def random_court_date_count
-    @random_court_date_counts ||= [0, 2, 3, 4, 5]
-    @random_court_date_counts.sample(random: rng)
+  def random_past_court_date_count
+    @random_past_court_date_counts ||= [0, 2, 3, 4, 5]
+    @random_past_court_date_counts.sample(random: rng)
+  end
+
+  def random_future_court_date_count
+    @random_future_court_date_counts ||= [0, 1]
+    @random_future_court_date_counts.sample(random: rng)
   end
 
   def random_court_order_count
@@ -226,7 +231,14 @@ class DbPopulator
         )
       end
 
-      random_court_date_count.times do |index|
+      random_future_court_date_count.times do |index|
+        CourtDate.create!(
+          casa_case_id: new_casa_case.id,
+          date: Date.today + 5.weeks
+        )
+      end
+
+      random_past_court_date_count.times do |index|
         CourtDate.create!(
           casa_case_id: new_casa_case.id,
           date: Date.today - (index + 1).weeks
