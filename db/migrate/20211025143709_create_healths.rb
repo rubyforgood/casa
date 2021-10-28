@@ -7,6 +7,6 @@ class CreateHealths < ActiveRecord::Migration[6.1]
       t.timestamps
     end
 
-    add_index(:healths, :singleton_guard, :unique => true)
+    add_index(:healths, :singleton_guard, unique: true)
   end
 end
