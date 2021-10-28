@@ -46,5 +46,5 @@ Usage: `./update-branch <remote name>`
     #!/bin/sh
 
     ./bin/git_hooks/update-dependencies
-    # migrate-all has to come after update dependencies because it relies on bundle
+    # migrate-all has to come after update-dependencies because it relies on bundle
     ./bin/git_hooks/migrate-all
