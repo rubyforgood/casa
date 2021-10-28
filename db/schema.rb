@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_12_180102) do
+ActiveRecord::Schema.define(version: 2021_10_25_143709) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -227,6 +227,14 @@ ActiveRecord::Schema.define(version: 2021_10_12_180102) do
     t.text "note"
     t.index ["case_contact_id"], name: "index_followups_on_case_contact_id"
     t.index ["creator_id"], name: "index_followups_on_creator_id"
+  end
+
+  create_table "healths", force: :cascade do |t|
+    t.datetime "latest_deploy_time"
+    t.integer "singleton_guard"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["singleton_guard"], name: "index_healths_on_singleton_guard", unique: true
   end
 
   create_table "hearing_types", force: :cascade do |t|
