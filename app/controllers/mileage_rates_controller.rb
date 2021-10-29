@@ -4,7 +4,7 @@ class MileageRatesController < ApplicationController
 
   def index
     authorize :application, :see_mileage_rate?
-    @mileage_rates = MileageRate.all
+    @mileage_rates = MileageRate.all # TODO make these specific to casa orgs
   end
 
   def new

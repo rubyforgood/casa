@@ -66,7 +66,7 @@ class ApplicationPolicy
     is_volunteer? || is_supervisor? || is_admin?
   end
 
-  def see_mileage_rate?
+  def see_mileage_rate? # TODO make these specific to casa orgs
     is_admin?
   end
 
