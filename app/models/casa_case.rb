@@ -172,10 +172,8 @@ class CasaCase < ApplicationRecord
   end
 
   def deactivate
-    transaction do
-      update(active: false)
-      case_assignments.find_each { |ca| ca.update(active: false) }
-    end
+    update(active: false)
+    case_assignments.map { |ca| ca.update(active: false) }
   end
 
   def reactivate
