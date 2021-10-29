@@ -78,10 +78,21 @@ class CasaCasesController < ApplicationController
     authorize @casa_case, :update_case_status?
 
     if @casa_case.deactivate
-      flash_message = "Case #{@casa_case.case_number} has been deactivated."
-      redirect_to edit_casa_case_path(@casa_case), notice: flash_message
+      respond_to do |format|
+        format.html do
+          flash_message = "Case #{@casa_case.case_number} has been deactivated."
+          redirect_to edit_casa_case_path(@casa_case), notice: flash_message
+        end
+
+        format.json do
+          render json: "Case #{@casa_case.case_number} has been deactivated.", status: :ok
+        end
+      end
     else
-      render :edit
+      respond_to do |format|
+        format.html { render :edit }
+        format.json { render json: @casa_case.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   end
 

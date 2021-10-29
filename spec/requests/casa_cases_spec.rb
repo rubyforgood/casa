@@ -221,7 +221,7 @@ RSpec.describe "/casa_cases", type: :request do
           expect(flash[:notice]).to eq("CASA case was successfully updated.<ul><li>Changed Case number</li><li>Changed Hearing type</li><li>Changed Judge</li><li>2 Court orders added or updated</li></ul>")
         end
 
-        it 'also respond as json', :aggregate_failures do
+        it "also respond as json", :aggregate_failures do
           patch casa_case_url(casa_case, format: :json), params: {casa_case: new_attributes}
 
           expect(response.content_type).to eq("application/json; charset=utf-8")
@@ -236,7 +236,7 @@ RSpec.describe "/casa_cases", type: :request do
           expect(response).to be_successful
         end
 
-        it 'also respond as json', :aggregate_failures do
+        it "also respond as json", :aggregate_failures do
           patch casa_case_url(casa_case, format: :json), params: {casa_case: invalid_attributes}
 
           expect(response.content_type).to eq("application/json; charset=utf-8")
@@ -322,6 +322,14 @@ RSpec.describe "/casa_cases", type: :request do
         expect(response).to be_not_found
       end
 
+      it "also respond as json", :aggregate_failures do
+        patch deactivate_casa_case_path(casa_case, format: :json), params: params
+
+        expect(response.content_type).to eq("application/json; charset=utf-8")
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to match("Case #{casa_case.case_number} has been deactivated.")
+      end
+
       context "when deactivation fails" do
         before do
           allow_any_instance_of(CasaCase).to receive(:deactivate).and_return(false)
@@ -331,6 +339,14 @@ RSpec.describe "/casa_cases", type: :request do
           patch deactivate_casa_case_path(casa_case), params: params
           casa_case.reload
           expect(casa_case.active).to eq true
+        end
+
+        it "also respond as json", :aggregate_failures do
+          patch deactivate_casa_case_path(casa_case, format: :json), params: params
+
+          expect(response.content_type).to eq("application/json; charset=utf-8")
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response.body).to match([].to_json)
         end
       end
     end
@@ -436,7 +452,7 @@ RSpec.describe "/casa_cases", type: :request do
           expect(response).to redirect_to(edit_casa_case_path(casa_case))
         end
 
-        it 'also respond as json', :aggregate_failures do
+        it "also respond as json", :aggregate_failures do
           patch casa_case_url(casa_case, format: :json), params: {casa_case: new_attributes}
 
           expect(response.content_type).to eq("application/json; charset=utf-8")
@@ -541,7 +557,7 @@ RSpec.describe "/casa_cases", type: :request do
           expect(response).to redirect_to(edit_casa_case_path(casa_case))
         end
 
-        it 'also respond as json', :aggregate_failures do
+        it "also respond as json", :aggregate_failures do
           patch casa_case_url(casa_case, format: :json), params: {casa_case: new_attributes}
 
           expect(response.content_type).to eq("application/json; charset=utf-8")
