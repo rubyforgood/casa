@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_25_143709) do
+ActiveRecord::Schema.define(version: 2021_10_24_011923) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -253,6 +253,16 @@ ActiveRecord::Schema.define(version: 2021_10_25_143709) do
     t.index ["casa_org_id"], name: "index_judges_on_casa_org_id"
   end
 
+  create_table "mileage_rates", force: :cascade do |t|
+    t.decimal "amount"
+    t.date "effective_date"
+    t.boolean "is_active", default: true
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_mileage_rates_on_user_id"
+  end
+
   create_table "notifications", force: :cascade do |t|
     t.string "recipient_type", null: false
     t.bigint "recipient_id", null: false
@@ -358,6 +368,7 @@ ActiveRecord::Schema.define(version: 2021_10_25_143709) do
   add_foreign_key "emancipation_options", "emancipation_categories"
   add_foreign_key "followups", "users", column: "creator_id"
   add_foreign_key "judges", "casa_orgs"
+  add_foreign_key "mileage_rates", "users"
   add_foreign_key "preference_sets", "users"
   add_foreign_key "sent_emails", "casa_orgs"
   add_foreign_key "sent_emails", "users"

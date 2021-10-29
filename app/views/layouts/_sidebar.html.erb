@@ -54,6 +54,9 @@
           <% if policy(:application).see_import_page? %>
             <%= link_to t(".link.system_imports"), imports_path, class: "list-group-item" %>
           <% end %>
+          <% if policy(:application).see_mileage_rate? %>
+            <%= link_to t(".link.mileage_rate"), mileage_rates_path, class: "list-group-item" %>
+          <% end %>
           <% if policy(:application).modify_organization? %>
             <%= link_to t(".link.edit_organization"), edit_casa_org_path(current_organization), class: "list-group-item" %>
           <% end %>

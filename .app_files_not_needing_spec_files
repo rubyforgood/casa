@@ -33,6 +33,7 @@ controllers/supervisors_controller.rb
 controllers/users/sessions_controller.rb
 controllers/users_controller.rb
 controllers/volunteers_controller.rb
+controllers/mileage_rates_controller.rb
 datatables/application_datatable.rb
 decorators/application_decorator.rb
 decorators/case_assignment_decorator.rb

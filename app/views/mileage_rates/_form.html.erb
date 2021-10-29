@@ -1,0 +1,27 @@
+<%= form_for @mileage_rate, url: form_url, id: :new_mileage_rate do |form| %>
+  <%= render "/shared/error_messages", resource: mileage_rate %>
+
+  <div class="field form-group">
+    <%= form.label :effective_date %>
+    <%= form.text_field :effective_date, value: effective_date_parser(mileage_rate.effective_date),
+                                      data: { provide: "datepicker",
+                                      date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
+                                      class: "form-control" %>
+  </div>
+
+  <div class="field form-group">
+    <%= form.label :amount %>
+    <%= form.number_field :amount, required: true, placeholder: '0,0', min: 0, step: 0.01, class: "form-control" %>
+  </div>
+
+  <div class="field form-group">
+    <%= form.label :is_active, 'Is active?' %>
+    <%= form.check_box :is_active %>
+  </div>
+
+  <%= form.hidden_field :user_id %>
+
+  <div class="actions">
+    <%= form.submit "Save Mileage Rate", class: "btn btn-primary" %>
+  </div>
+<% end %>
