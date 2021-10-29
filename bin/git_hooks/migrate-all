@@ -17,4 +17,6 @@ if bundle exec rails db:migrate:status | grep "  down"; then
   log info "Down migrations found. Migrating..."
 
   bundle exec rails db:migrate
+else
+  log success "No down migrations found"
 fi
