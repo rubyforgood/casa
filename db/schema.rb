@@ -265,6 +265,14 @@ ActiveRecord::Schema.define(version: 2021_10_25_143709) do
     t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient"
   end
 
+  create_table "preference_sets", force: :cascade do |t|
+    t.bigint "user_id"
+    t.jsonb "case_volunteer_columns", default: "{}", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_preference_sets_on_user_id"
+  end
+
   create_table "sent_emails", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "casa_org_id", null: false
@@ -325,8 +333,7 @@ ActiveRecord::Schema.define(version: 2021_10_25_143709) do
   end
 
   create_table "versions", force: :cascade do |t|
-    t.string "item_type"
-    t.string "{:null=>false}"
+    t.string "item_type", null: false
     t.bigint "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"
@@ -351,6 +358,7 @@ ActiveRecord::Schema.define(version: 2021_10_25_143709) do
   add_foreign_key "emancipation_options", "emancipation_categories"
   add_foreign_key "followups", "users", column: "creator_id"
   add_foreign_key "judges", "casa_orgs"
+  add_foreign_key "preference_sets", "users"
   add_foreign_key "sent_emails", "casa_orgs"
   add_foreign_key "sent_emails", "users"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"
