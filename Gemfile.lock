@@ -395,6 +395,8 @@ GEM
       rubocop (= 1.20.0)
       rubocop-performance (= 1.11.5)
     thor (1.1.0)
+    traceroute (0.8.1)
+      rails (>= 3.0.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
@@ -483,6 +485,7 @@ DEPENDENCIES
   spring-commands-rspec
   spring-watcher-listen (~> 2.0.0)
   standard (~> 1.3.0)
+  traceroute
   tzinfo-data
   web-console (>= 3.3.0)
   webdrivers
