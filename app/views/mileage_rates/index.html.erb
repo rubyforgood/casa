@@ -25,7 +25,7 @@
       <tbody>
         <% @mileage_rates.each do |mileage_rate| %>
           <tr>
-            <td><%= mileage_rate.user.display_name %></td>
+            <td><%= mileage_rate.casa_org.display_name %></td>
             <td><%= I18n.l(mileage_rate.created_at, format: :full, default: :nil) %></td>
             <td><%= I18n.l(mileage_rate.effective_date, format: :full, default: :nil) %></td>
             <td><%= number_to_currency(mileage_rate.amount) %></td>

@@ -3,9 +3,25 @@ require "rails_helper"
 RSpec.describe MileageRate, type: :model do
   subject { build(:mileage_rate) }
 
-  it { is_expected.to belong_to(:user) }
-  it { is_expected.to validate_uniqueness_of(:effective_date).scoped_to(:is_active) }
+  it { is_expected.to belong_to(:casa_org) }
   it { is_expected.to validate_presence_of(:effective_date) }
-  it { is_expected.to validate_presence_of(:user_id) }
+  it { is_expected.to validate_presence_of(:casa_org) }
   it { is_expected.to validate_presence_of(:amount) }
+
+  context "#effective_date" do
+    it "is unique within is_active and casa_org" do
+      effective_date = Date.new(2020, 1, 1)
+      casa_org = create(:casa_org)
+      create(:mileage_rate, effective_date: effective_date, is_active: true, casa_org: casa_org)
+      expect do
+        create(:mileage_rate, effective_date: effective_date, is_active: true, casa_org: create(:casa_org))
+      end.not_to raise_error
+      expect do
+        create(:mileage_rate, effective_date: effective_date, is_active: false, casa_org: casa_org)
+      end.not_to raise_error
+      expect do
+        create(:mileage_rate, effective_date: effective_date, is_active: true, casa_org: casa_org)
+      end.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Effective date has already been taken")
+    end
+  end
 end
