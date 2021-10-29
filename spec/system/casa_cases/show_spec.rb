@@ -47,7 +47,7 @@ RSpec.describe "casa_cases/show", type: :system do
       end
     end
 
-    it "can see Add to Calendar buttons", js: true do
+    xit "can see Add to Calendar buttons", js: true do # this is broken by us exceeding our license for the calendar button
       expect(page).to have_content("Add Court Report Due Date for #{casa_case.case_number} to Calendar")
       expect(page).to have_content("Add Next Court Date for #{casa_case.case_number} to Calendar")
     end
