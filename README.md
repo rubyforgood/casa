@@ -45,7 +45,7 @@ See also our [contributing guide](./doc/CONTRIBUTING.md) 💖 ✨
 
 ### About this project
 
-CASA is a national organization with many regional chapters. We currenly work with [Prince George's County CASA in Maryland](https://pgcasa.org/) and [Montgomery CASA Maryland](https://casaspeaks4kids.com)
+CASA is a national organization with many regional chapters. We currenly work with [Prince George's County CASA in Maryland](https://pgcasa.org/), [Montgomery CASA Maryland](https://casaspeaks4kids.com), and [Howard County Maryland](https://marylandcasa.org/programs/howard-county/)
 
 This system provides value by:
 
