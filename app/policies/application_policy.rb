@@ -67,7 +67,7 @@ class ApplicationPolicy
   end
 
   def see_mileage_rate?
-    is_admin?# && matches_casa_org? # TODO do this *in* is_admin - what might that break?
+    is_admin? # && matches_casa_org? # TODO do this *in* is_admin - what might that break?
   end
 
   def matches_casa_org?

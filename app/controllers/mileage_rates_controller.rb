@@ -14,8 +14,7 @@ class MileageRatesController < ApplicationController
 
   def create
     authorize CasaAdmin
-    @mileage_rate = MileageRate.new(mileage_rate_params)
-
+    @mileage_rate = MileageRate.new(mileage_rate_params.merge(casa_org: current_organization))
     if @mileage_rate.save
       redirect_to mileage_rates_path
     else
@@ -40,7 +39,7 @@ class MileageRatesController < ApplicationController
   private
 
   def mileage_rate_params
-    params.require(:mileage_rate).permit(:effective_date, :amount, :is_active, :user_id)
+    params.require(:mileage_rate).permit(:effective_date, :amount, :is_active)
   end
 
   def set_mileage_rate
