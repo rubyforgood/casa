@@ -7,6 +7,7 @@ class MileageRate < ApplicationRecord
   validates :effective_date, uniqueness: {scope: [:is_active, :casa_org]}, if: :is_active?
   validates :amount, presence: true, allow_blank: false
   validates :casa_org, presence: true, allow_blank: false
+  scope :for_organization, ->(org) { where(casa_org: org) }
 end
 
 # == Schema Information

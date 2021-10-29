@@ -2,6 +2,14 @@ require "rails_helper"
 
 RSpec.describe CasaOrg, type: :model do
   it { is_expected.to validate_presence_of(:name) }
+  it { is_expected.to have_many(:users).dependent(:destroy) }
+  it { is_expected.to have_many(:casa_cases).dependent(:destroy) }
+  it { is_expected.to have_many(:contact_type_groups).dependent(:destroy) }
+  it { is_expected.to have_many(:hearing_types).dependent(:destroy) }
+  it { is_expected.to have_many(:mileage_rates).dependent(:destroy) }
+  it { is_expected.to have_many(:case_assignments).through(:users) }
+  it { is_expected.to have_one_attached(:logo) }
+  it { is_expected.to have_one_attached(:court_report_template) }
 
   it "has unique name" do
     org = create(:casa_org)

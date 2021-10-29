@@ -8,6 +8,18 @@ RSpec.describe MileageRate, type: :model do
   it { is_expected.to validate_presence_of(:casa_org) }
   it { is_expected.to validate_presence_of(:amount) }
 
+  describe "for_organization" do
+    let!(:casa_org_1) { create(:casa_org) }
+    let!(:casa_org_2) { create(:casa_org) }
+    let!(:record_1) { create(:mileage_rate, casa_org: casa_org_1) }
+    let!(:record_2) { create(:mileage_rate, casa_org: casa_org_2) }
+
+    it "returns only reords matching the specified organization" do
+      expect(described_class.for_organization(casa_org_1)).to eq([record_1])
+      expect(described_class.for_organization(casa_org_2)).to eq([record_2])
+    end
+  end
+
   context "#effective_date" do
     it "is unique within is_active and casa_org" do
       effective_date = Date.new(2020, 1, 1)

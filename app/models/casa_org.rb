@@ -11,6 +11,7 @@ class CasaOrg < ApplicationRecord
   has_many :casa_cases, dependent: :destroy
   has_many :contact_type_groups, dependent: :destroy
   has_many :hearing_types, dependent: :destroy
+  has_many :mileage_rates, dependent: :destroy
   has_many :case_assignments, through: :users, source: :casa_cases
   has_one_attached :logo
   has_one_attached :court_report_template

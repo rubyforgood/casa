@@ -4,12 +4,12 @@ class MileageRatesController < ApplicationController
 
   def index
     authorize :application, :see_mileage_rate?
-    @mileage_rates = MileageRate.all # TODO make these specific to casa orgs
+    @mileage_rates = MileageRate.where(casa_org: current_organization)
   end
 
   def new
     authorize CasaAdmin
-    @mileage_rate = MileageRate.new(user_id: current_user.id)
+    @mileage_rate = current_organization.mileage_rates.build
   end
 
   def create
