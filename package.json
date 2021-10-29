@@ -16,7 +16,7 @@
     "@rails/ujs": "^6.1.4",
     "@rails/webpacker": "5.4.3",
     "bindings": "^1.5.0",
-    "bootstrap": "4.6.0",
+    "bootstrap": "4.6.1",
     "bootstrap-datepicker": "^1.9.0",
     "bootstrap-select": "^1.13.18",
     "datatables.net-dt": "^1.11.3",
