@@ -57,12 +57,20 @@ class CasaCasesController < ApplicationController
   def update
     authorize @casa_case
     original_attributes = @casa_case.full_attributes_hash
+
     if @casa_case.update_cleaning_contact_types(casa_case_update_params)
       updated_attributes = @casa_case.full_attributes_hash
       changed_attributes_list = html_formatted_list(changed_attributes_messages(original_attributes, updated_attributes))
-      redirect_to edit_casa_case_path, notice: "CASA case was successfully updated.#{changed_attributes_list}"
+
+      respond_to do |format|
+        format.html { redirect_to edit_casa_case_path, notice: "CASA case was successfully updated.#{changed_attributes_list}" }
+        format.json { render json: @casa_case, status: :ok }
+      end
     else
-      render :edit
+      respond_to do |format|
+        format.html { render :edit }
+        format.json { render json: @casa_case.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   end
 

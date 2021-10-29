@@ -112,11 +112,12 @@ RSpec.describe "/casa_cases", type: :request do
           expect(casa_case.judge).to eq judge
         end
 
-        it "also respond to json", :aggregate_failures do
+        it "also respond as json", :aggregate_failures do
           post casa_cases_url(format: :json), params: {casa_case: valid_attributes}
 
           expect(response.content_type).to eq("application/json; charset=utf-8")
           expect(response).to have_http_status(:created)
+          expect(response.body).to match(valid_attributes[:case_number].to_json)
         end
       end
 
@@ -219,12 +220,28 @@ RSpec.describe "/casa_cases", type: :request do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes}
           expect(flash[:notice]).to eq("CASA case was successfully updated.<ul><li>Changed Case number</li><li>Changed Hearing type</li><li>Changed Judge</li><li>2 Court orders added or updated</li></ul>")
         end
+
+        it 'also respond as json', :aggregate_failures do
+          patch casa_case_url(casa_case, format: :json), params: {casa_case: new_attributes}
+
+          expect(response.content_type).to eq("application/json; charset=utf-8")
+          expect(response).to have_http_status(:ok)
+          expect(response.body).to match(new_attributes[:case_number].to_json)
+        end
       end
 
       context "with invalid parameters" do
         it "renders a successful response displaying the edit template" do
           patch casa_case_url(casa_case), params: {casa_case: invalid_attributes}
           expect(response).to be_successful
+        end
+
+        it 'also respond as json', :aggregate_failures do
+          patch casa_case_url(casa_case, format: :json), params: {casa_case: invalid_attributes}
+
+          expect(response.content_type).to eq("application/json; charset=utf-8")
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response.body).to match(["Case number can't be blank"].to_json)
         end
       end
 
@@ -418,6 +435,14 @@ RSpec.describe "/casa_cases", type: :request do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes}
           expect(response).to redirect_to(edit_casa_case_path(casa_case))
         end
+
+        it 'also respond as json', :aggregate_failures do
+          patch casa_case_url(casa_case, format: :json), params: {casa_case: new_attributes}
+
+          expect(response.content_type).to eq("application/json; charset=utf-8")
+          expect(response).to have_http_status(:ok)
+          expect(response.body).not_to match(new_attributes[:case_number].to_json)
+        end
       end
 
       it "does not update across organizations" do
@@ -514,6 +539,14 @@ RSpec.describe "/casa_cases", type: :request do
         it "redirects to the casa_case" do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes}
           expect(response).to redirect_to(edit_casa_case_path(casa_case))
+        end
+
+        it 'also respond as json', :aggregate_failures do
+          patch casa_case_url(casa_case, format: :json), params: {casa_case: new_attributes}
+
+          expect(response.content_type).to eq("application/json; charset=utf-8")
+          expect(response).to have_http_status(:ok)
+          expect(response.body).not_to match(new_attributes[:case_number].to_json)
         end
       end
 
