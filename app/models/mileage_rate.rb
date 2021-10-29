@@ -4,7 +4,7 @@ class MileageRate < ApplicationRecord
   belongs_to :casa_org
 
   validates :effective_date, presence: true, allow_blank: false
-  validates :effective_date, uniqueness: {scope: [:is_active, :casa_org]}, if: :is_active?
+  validates :effective_date, uniqueness: {scope: [:is_active, :casa_org], message: "must not have duplicate active dates"}, if: :is_active?
   validates :amount, presence: true, allow_blank: false
   validates :casa_org, presence: true, allow_blank: false
   scope :for_organization, ->(org) { where(casa_org: org) }
