@@ -54,7 +54,7 @@ RSpec.describe CaseAssignment, type: :model do
     it "only includes active case assignments" do
       casa_case = build(:casa_case)
       case_assignments = 2.times.map { create(:case_assignment, casa_case: casa_case, volunteer: build(:volunteer, casa_org: casa_case.casa_org)) }
-      expect(CaseAssignment.active).to eq case_assignments
+      expect(CaseAssignment.active).to match_array(case_assignments)
 
       case_assignments.first.update(active: false)
       expect(CaseAssignment.active).to eq [case_assignments.last]
