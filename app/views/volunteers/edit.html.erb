@@ -5,6 +5,10 @@
     <h1>Editing Volunteer</h1>
     <%= render "volunteer_reminder_form", volunteer: @volunteer %>
   </div>
+  <div class="col-sm-12 form-header">
+    <%= link_to "Impersonate", impersonate_volunteer_path(@volunteer),
+      class: "btn btn-primary casa-case-button" %>
+  </div>
 </div>
 <div class="card card-container">
   <div class="card-body">

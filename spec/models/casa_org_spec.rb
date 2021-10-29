@@ -22,4 +22,11 @@ RSpec.describe CasaOrg, type: :model do
       end
     end
   end
+
+  context "when creating an organization" do
+    let(:org) { create(:casa_org, name: "Prince George CASA") }
+    it "has a slug based on the name" do
+      expect(org.slug).to eq "prince-george-casa"
+    end
+  end
 end

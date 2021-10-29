@@ -94,10 +94,12 @@ ActiveRecord::Schema.define(version: 2021_10_24_011923) do
     t.bigint "judge_id"
     t.datetime "court_report_submitted_at"
     t.integer "court_report_status", default: 0
+    t.string "slug"
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
     t.index ["case_number", "casa_org_id"], name: "index_casa_cases_on_case_number_and_casa_org_id", unique: true
     t.index ["hearing_type_id"], name: "index_casa_cases_on_hearing_type_id"
     t.index ["judge_id"], name: "index_casa_cases_on_judge_id"
+    t.index ["slug"], name: "index_casa_cases_on_slug"
   end
 
   create_table "casa_cases_emancipation_options", force: :cascade do |t|
@@ -116,6 +118,8 @@ ActiveRecord::Schema.define(version: 2021_10_24_011923) do
     t.string "address"
     t.string "footer_links", default: [], array: true
     t.boolean "show_driving_reimbursement", default: true
+    t.string "slug"
+    t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 
   create_table "case_assignments", force: :cascade do |t|
@@ -225,6 +229,14 @@ ActiveRecord::Schema.define(version: 2021_10_24_011923) do
     t.index ["creator_id"], name: "index_followups_on_creator_id"
   end
 
+  create_table "healths", force: :cascade do |t|
+    t.datetime "latest_deploy_time"
+    t.integer "singleton_guard"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["singleton_guard"], name: "index_healths_on_singleton_guard", unique: true
+  end
+
   create_table "hearing_types", force: :cascade do |t|
     t.bigint "casa_org_id", null: false
     t.string "name", null: false
@@ -261,6 +273,14 @@ ActiveRecord::Schema.define(version: 2021_10_24_011923) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["read_at"], name: "index_notifications_on_read_at"
     t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient"
+  end
+
+  create_table "preference_sets", force: :cascade do |t|
+    t.bigint "user_id"
+    t.jsonb "case_volunteer_columns", default: "{}", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_preference_sets_on_user_id"
   end
 
   create_table "sent_emails", force: :cascade do |t|
@@ -349,6 +369,7 @@ ActiveRecord::Schema.define(version: 2021_10_24_011923) do
   add_foreign_key "followups", "users", column: "creator_id"
   add_foreign_key "judges", "casa_orgs"
   add_foreign_key "mileage_rates", "users"
+  add_foreign_key "preference_sets", "users"
   add_foreign_key "sent_emails", "casa_orgs"
   add_foreign_key "sent_emails", "users"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"

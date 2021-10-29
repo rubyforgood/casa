@@ -19,6 +19,8 @@ class CasaCase < ApplicationRecord
 
   has_paper_trail
 
+  before_create :set_slug
+
   has_many :case_assignments, dependent: :destroy
   has_many(:volunteers, through: :case_assignments, source: :volunteer, class_name: "User")
   has_many :active_case_assignments, -> { active }, class_name: "CaseAssignment"
@@ -182,6 +184,15 @@ class CasaCase < ApplicationRecord
     volunteers_unassigned_to_case = Volunteer.active.where.not(id: assigned_volunteers).in_organization(casa_org)
     volunteers_unassigned_to_case.with_no_assigned_cases + volunteers_unassigned_to_case.with_assigned_cases
   end
+
+  def set_slug
+    self.slug = case_number.parameterize preserve_case: true
+  end
+
+  # def to_param
+  #   id
+  #   # slug # TODO use slug eventually for routes
+  # end
 end
 
 # == Schema Information
@@ -196,6 +207,7 @@ end
 #  court_report_due_date     :datetime
 #  court_report_status       :integer          default("not_submitted")
 #  court_report_submitted_at :datetime
+#  slug                      :string
 #  transition_aged_youth     :boolean          default(FALSE), not null
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
@@ -209,6 +221,7 @@ end
 #  index_casa_cases_on_case_number_and_casa_org_id  (case_number,casa_org_id) UNIQUE
 #  index_casa_cases_on_hearing_type_id              (hearing_type_id)
 #  index_casa_cases_on_judge_id                     (judge_id)
+#  index_casa_cases_on_slug                         (slug)
 #
 # Foreign Keys
 #

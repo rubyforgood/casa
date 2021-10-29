@@ -59,7 +59,8 @@
       <strong><%= t(".label.next_court_date") %>:</strong>
       <%= I18n.l(@casa_case.next_court_date&.date, format: :day_and_date, default: '') %>
       <%= render "calendar_button", date:  I18n.l(@casa_case.next_court_date&.date,
-                                    format: :day_and_date, default: ''), title: "Next Court Date" %>
+                                                  format: :day_and_date, default: ''),
+                                                  title: "Next Court Date for [#{@casa_case.case_number}]" %>
     </h6>
     </p>
 
@@ -68,7 +69,8 @@
       <strong><%= t(".label.court_report_due_date") %>:</strong>
       <%= I18n.l(@casa_case.court_report_due_date, format: :day_and_date, default: '') %>
       <%= render "calendar_button", date: I18n.l(@casa_case.court_report_due_date,
-                                    format: :day_and_date, default: ''), title: "Court Report Due Date" %>
+                                                 format: :day_and_date, default: ''),
+                                                 title: "Court Report Due Date for [#{@casa_case.case_number}]" %>
     </h6>
     </p>
 
