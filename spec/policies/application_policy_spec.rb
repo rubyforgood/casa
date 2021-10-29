@@ -3,9 +3,10 @@ require "rails_helper"
 RSpec.describe ApplicationPolicy do
   subject { described_class }
 
-  let(:casa_admin) { build_stubbed(:casa_admin) }
-  let(:supervisor) { build_stubbed(:supervisor) }
-  let(:volunteer) { build_stubbed(:volunteer) }
+  let(:casa_org) { build_stubbed(:casa_org) }
+  let(:casa_admin) { build_stubbed(:casa_admin, casa_org: casa_org) }
+  let(:supervisor) { build_stubbed(:supervisor, casa_org: casa_org) }
+  let(:volunteer) { build_stubbed(:volunteer, casa_org: casa_org) }
 
   permissions :see_reports_page? do
     it "allows casa_admins" do
@@ -72,7 +73,7 @@ RSpec.describe ApplicationPolicy do
       is_expected.not_to permit(supervisor)
     end
 
-    it "allow casa_admins" do
+    it "allow casa_admins for same org" do
       is_expected.to permit(casa_admin)
     end
   end

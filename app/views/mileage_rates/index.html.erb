@@ -14,8 +14,6 @@
       id="mileage_rates">
       <thead>
       <tr>
-        <th><%= t(".heading.created_by") %></th>
-        <th><%= t(".heading.created_at") %></th>
         <th><%= t(".heading.effective_date") %></th>
         <th><%= t(".heading.amount") %></th>
         <th><%= t(".heading.status") %></th>
@@ -25,11 +23,9 @@
       <tbody>
         <% @mileage_rates.each do |mileage_rate| %>
           <tr>
-            <td><%= mileage_rate.user.display_name %></td>
-            <td><%= I18n.l(mileage_rate.created_at, format: :full, default: :nil) %></td>
             <td><%= I18n.l(mileage_rate.effective_date, format: :full, default: :nil) %></td>
             <td><%= number_to_currency(mileage_rate.amount) %></td>
-            <td><%= mileage_rate.is_active? ? 'Active' : 'Inactive' %></td>
+            <td><%= mileage_rate.is_active? ? 'Yes' : 'No' %></td>
             <td>
               <%= link_to t(".button.edit"), edit_mileage_rate_path(mileage_rate) %>
             </td>

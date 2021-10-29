@@ -11,15 +11,13 @@
 
   <div class="field form-group">
     <%= form.label :amount %>
-    <%= form.number_field :amount, required: true, placeholder: '0,0', min: 0, step: 0.01, class: "form-control" %>
+    <%= form.number_field :amount, required: true, placeholder: '0.0', min: 0, step: 0.01, class: "form-control" %>
   </div>
 
   <div class="field form-group">
-    <%= form.label :is_active, 'Is active?' %>
+    <%= form.label :is_active, 'Currently active?' %>
     <%= form.check_box :is_active %>
   </div>
-
-  <%= form.hidden_field :user_id %>
 
   <div class="actions">
     <%= form.submit "Save Mileage Rate", class: "btn btn-primary" %>

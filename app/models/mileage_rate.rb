@@ -1,12 +1,13 @@
 class MileageRate < ApplicationRecord
-  belongs_to :user
+  self.ignored_columns = [:user_id] # mileage rates are per casa, not per user
 
-  validates :effective_date,
-    :amount,
-    :user_id,
-    presence: true,
-    allow_blank: false
-  validates :effective_date, uniqueness: {scope: :is_active}, if: :is_active?
+  belongs_to :casa_org
+
+  validates :effective_date, presence: true, allow_blank: false
+  validates :effective_date, uniqueness: {scope: [:is_active, :casa_org], message: "must not have duplicate active dates"}, if: :is_active?
+  validates :amount, presence: true, allow_blank: false
+  validates :casa_org, presence: true, allow_blank: false
+  scope :for_organization, ->(org) { where(casa_org: org) }
 end
 
 # == Schema Information
@@ -19,11 +20,12 @@ end
 #  is_active      :boolean          default(TRUE)
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
-#  user_id        :bigint           not null
+#  casa_org_id    :bigint           not null
 #
 # Indexes
 #
-#  index_mileage_rates_on_user_id  (user_id)
+#  index_mileage_rates_on_casa_org_id  (casa_org_id)
+#  index_mileage_rates_on_user_id      (user_id)
 #
 # Foreign Keys
 #

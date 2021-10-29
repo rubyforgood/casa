@@ -359,7 +359,7 @@ en:
         reimbursement_queue: Reimbursement Queue
         report_site_issue: Report a site issue
         system_imports: System Imports
-        mileage_rate: Mileage Rate
+        mileage_rate: Mileage Rates
       menu_item:
         admins: Admins
         case_contacts: Case Contacts
@@ -484,7 +484,7 @@ en:
       heading:
         amount: Amount
         effective_date: Effective Date
-        status: Status
+        status: Active?
         created_by: Created By
         created_at: Created At
         actions: Actions
