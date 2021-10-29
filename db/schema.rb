@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_26_014614) do
+ActiveRecord::Schema.define(version: 2021_10_25_143709) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -117,8 +117,8 @@ ActiveRecord::Schema.define(version: 2021_10_26_014614) do
     t.string "display_name"
     t.string "address"
     t.string "footer_links", default: [], array: true
-    t.boolean "show_driving_reimbursement", default: true
     t.string "slug"
+    t.boolean "show_driving_reimbursement", default: true
     t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 
@@ -199,21 +199,6 @@ ActiveRecord::Schema.define(version: 2021_10_26_014614) do
     t.index ["casa_case_id"], name: "index_court_dates_on_casa_case_id"
     t.index ["hearing_type_id"], name: "index_court_dates_on_hearing_type_id"
     t.index ["judge_id"], name: "index_court_dates_on_judge_id"
-  end
-
-  create_table "delayed_jobs", force: :cascade do |t|
-    t.integer "priority", default: 0, null: false
-    t.integer "attempts", default: 0, null: false
-    t.text "handler", null: false
-    t.text "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
-    t.string "locked_by"
-    t.string "queue"
-    t.datetime "created_at", precision: 6
-    t.datetime "updated_at", precision: 6
-    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
   create_table "emancipation_categories", force: :cascade do |t|
