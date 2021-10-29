@@ -33,7 +33,7 @@ RSpec.describe MileageRate, type: :model do
       end.not_to raise_error
       expect do
         create(:mileage_rate, effective_date: effective_date, is_active: true, casa_org: casa_org)
-      end.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Effective date has already been taken")
+      end.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Effective date must not have duplicate active dates")
     end
   end
 end
