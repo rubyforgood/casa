@@ -39,8 +39,7 @@ RSpec.describe "/mileage_rates", type: :request do
       end
 
       it "creates a new mileage rate" do
-        # expect { post mileage_rates_path, params: params }.to change(MileageRate, :count).by(1)
-        post mileage_rates_path, params: params
+        expect { post mileage_rates_path, params: params }.to change(MileageRate, :count).by(1)
         expect(response).to have_http_status(:redirect)
         expect(mileage_rate[:casa_org_id]).to eq(admin.casa_org_id)
         expect(mileage_rate[:effective_date]).to eq(params[:mileage_rate][:effective_date].to_date)
