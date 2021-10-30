@@ -24,7 +24,7 @@ fi
 
 case $diff_policy in
   --all)
-    changed_file_list="a.rb\nb.erb"
+    changed_file_list="a.rb\nb.erb\nc.js"
     ;;
 
   --staged)
