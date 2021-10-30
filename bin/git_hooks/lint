@@ -45,9 +45,9 @@ case $diff_policy in
     ;;
 esac
 
-erb_changed_count=$(echo "$changed_file_list" | grep -c ".erb$")
-js_changed_count=$(echo "$changed_file_list" | grep -c ".js$")
-rb_changed_count=$(echo "$changed_file_list" | grep -c ".rb$")
+erb_changed_count=$(echo "$changed_file_list" | grep -c "\.erb$")
+js_changed_count=$(echo "$changed_file_list" | grep -c "\.js$")
+rb_changed_count=$(echo "$changed_file_list" | grep -c "\.rb$")
 
 lint_time=$(date +%s)
 
