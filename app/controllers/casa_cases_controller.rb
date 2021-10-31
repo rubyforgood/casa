@@ -59,7 +59,8 @@ class CasaCasesController < ApplicationController
     original_attributes = @casa_case.full_attributes_hash
     if @casa_case.update_cleaning_contact_types(casa_case_update_params)
       updated_attributes = @casa_case.full_attributes_hash
-      redirect_to edit_casa_case_path, notice: "CASA case was successfully updated.#{changed_attributes_message(original_attributes, updated_attributes)}"
+      changed_attributes_list = html_formatted_list(changed_attributes_messages(original_attributes, updated_attributes))
+      redirect_to edit_casa_case_path, notice: "CASA case was successfully updated.#{changed_attributes_list}"
     else
       render :edit
     end
@@ -124,24 +125,28 @@ class CasaCasesController < ApplicationController
     "#{casa_case_number.nil? ? "" : casa_case_number + "-"}case-contacts-#{current_date}.csv"
   end
 
-  def changed_attributes_message(original, changed)
-    changed_attributes = changed.select { |k, v| original[k] != v }.keys.delete_if { |k| k == :updated_at }
-    if changed_attributes.any?
-      html_string = changed_attributes.map do |att|
-        if att == :contact_types
-          changed_count = (changed[att].map { |contact| contact["contact_type_id"] } - original[att].map { |contact| contact["contact_type_id"] }).count
-          next if changed_count == 0
-          "#{changed_count} #{att.to_s.humanize.singularize.pluralize(changed_count)} added or updated"
-        elsif att == :court_orders
-          changed_count = (changed[att] - original[att]).count
-          "#{changed_count} #{att.to_s.humanize.singularize.pluralize(changed_count)} added or updated"
-        else
-          "Changed #{att.to_s.gsub(/_id\Z/, "").humanize}"
-        end
-      end.delete_if(&:nil?).join("</li><li>")
-      if html_string.present?
-        "<ul><li>#{html_string}</li></ul>"
-      end
+  def html_formatted_list(messages)
+    html_string = messages&.join("</li><li>")
+    if html_string.present?
+      "<ul><li>#{html_string}</li></ul>"
     end
+  end
+
+  def changed_attributes_messages(original, changed)
+    changed_attributes = changed.select { |k, v| original[k] != v }.keys.delete_if { |k| k == :updated_at }
+    return if changed_attributes.empty?
+
+    changed_attributes.map do |att|
+      if att == :contact_types
+        changed_count = (changed[att].map { |contact| contact["contact_type_id"] } - original[att].map { |contact| contact["contact_type_id"] }).count
+        next if changed_count == 0
+        "#{changed_count} #{att.to_s.humanize.singularize.pluralize(changed_count)} added or updated"
+      elsif att == :court_orders
+        changed_count = (changed[att] - original[att]).count
+        "#{changed_count} #{att.to_s.humanize.singularize.pluralize(changed_count)} added or updated"
+      else
+        "Changed #{att.to_s.gsub(/_id\Z/, "").humanize}"
+      end
+    end.delete_if(&:nil?)
   end
 end
