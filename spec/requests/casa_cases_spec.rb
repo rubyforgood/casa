@@ -155,7 +155,7 @@ RSpec.describe "/casa_cases", type: :request do
 
             expect(response.content_type).to eq("application/json; charset=utf-8")
             expect(response).to have_http_status(:unprocessable_entity)
-            expect(response.body).to eq(["Case number can't be blank", "Birth month year youth can't be blank"].to_json)
+            expect(response.body).to eq(["Case number can't be blank"].to_json)
           end
         end
 
