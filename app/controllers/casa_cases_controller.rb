@@ -137,16 +137,22 @@ class CasaCasesController < ApplicationController
     return if changed_attributes.empty?
 
     changed_attributes.map do |att|
-      if att == :contact_types
-        changed_count = (changed[att].map { |contact| contact["contact_type_id"] } - original[att].map { |contact| contact["contact_type_id"] }).count
-        next if changed_count == 0
-        "#{changed_count} #{att.to_s.humanize.singularize.pluralize(changed_count)} added or updated"
-      elsif att == :court_orders
-        changed_count = (changed[att] - original[att]).count
-        "#{changed_count} #{att.to_s.humanize.singularize.pluralize(changed_count)} added or updated"
-      else
-        "Changed #{att.to_s.gsub(/_id\Z/, "").humanize}"
-      end
+      change_message_text(att, original[att], changed[att])
     end.delete_if(&:nil?)
+  end
+
+  def change_message_text(attribute, original_attribute, updated_attribute)
+    if attribute == :contact_types
+      new_contact_type_ids = updated_attribute.map { |contact| contact["contact_type_id"] }
+      previous_contact_type_ids = original_attribute.map { |contact| contact["contact_type_id"] }
+      changed_count = new_contact_type_ids - previous_contact_type_ids
+      return if changed_count == 0
+      "#{changed_count} #{attribute.to_s.humanize.singularize.pluralize(changed_count)} added"
+    elsif attribute == :court_orders
+      changed_count = (updated_attribute - original_attribute).count
+      "#{changed_count} #{attribute.to_s.humanize.singularize.pluralize(changed_count)} added or updated"
+    else
+      "Changed #{attribute.to_s.gsub(/_id\Z/, "").humanize}"
+    end
   end
 end
