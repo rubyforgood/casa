@@ -1,4 +1,3 @@
-# rubocop:todo Style/Documentation
 class CreateCaseAssignments < ActiveRecord::Migration[6.0]
   def change
     create_table :case_assignments do |t|

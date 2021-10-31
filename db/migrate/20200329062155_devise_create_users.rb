@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:todo Style/Documentation
 class DeviseCreateUsers < ActiveRecord::Migration[6.0]
   def change
     create_table :users do |t|

@@ -13,7 +13,7 @@ class CaseCourtReportsController < ApplicationController
     authorize CaseCourtReport
     if !@casa_case || !@casa_case.court_reports.attached?
       flash[:alert] = "Report #{params[:id]} is not found."
-      redirect_to(case_court_reports_path) and return # rubocop:disable Style/AndOr
+      redirect_to(case_court_reports_path) and return
     end
 
     respond_to do |format|

@@ -16,7 +16,7 @@ module TemplateHelper
   def sanitize_closing_tags(closing_tags)
     closing_tags.map { |tag|
       if tag.include? "\/"
-        tag.squish.tr('\/', "")
+        tag.squish.tr("\\/", "")
       else
         tag
       end
