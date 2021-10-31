@@ -214,6 +214,11 @@ RSpec.describe "/casa_cases", type: :request do
           casa_case.reload
           expect(response).to redirect_to(edit_casa_case_path)
         end
+
+        it "displays changed attributes" do
+          patch casa_case_url(casa_case), params: {casa_case: new_attributes}
+          expect(flash[:notice]).to eq("CASA case was successfully updated.<ul><li>Changed Case number</li><li>Changed Hearing type</li><li>Changed Judge</li><li>2 Court orders added or updated</li></ul>")
+        end
       end
 
       context "with invalid parameters" do
