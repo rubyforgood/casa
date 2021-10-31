@@ -128,17 +128,17 @@ class CasaCasesController < ApplicationController
     changed_attributes = changed.select { |k, v| original[k] != v }.keys.delete_if { |k| k == :updated_at }
     if changed_attributes.any?
       html_string = changed_attributes.map do |att|
-        if att == :case_contact_types
+        if att == :contact_types
           changed_count = (changed[att].map { |contact| contact["contact_type_id"] } - original[att].map { |contact| contact["contact_type_id"] }).count
           next if changed_count == 0
-          "#{changed_count} #{att.to_s.humanize.singularize.pluralize(changed_count)} added or updated."
-        elsif att == :case_court_orders
+          "#{changed_count} #{att.to_s.humanize.singularize.pluralize(changed_count)} added or updated"
+        elsif att == :court_orders
           changed_count = (changed[att] - original[att]).count
-          "#{changed_count} #{att.to_s.humanize.singularize.pluralize(changed_count)} added or updated."
+          "#{changed_count} #{att.to_s.humanize.singularize.pluralize(changed_count)} added or updated"
         else
-          "Changed #{att.to_s.gsub(/_id\Z/, "").humanize}."
+          "Changed #{att.to_s.gsub(/_id\Z/, "").humanize}"
         end
-      end.join("</li><li>")
+      end.delete_if(&:nil?).join("</li><li>")
       if html_string.present?
         "<ul><li>#{html_string}</li></ul>"
       end
