@@ -45,7 +45,7 @@
           </td>
 
           <td>
-            <%= form_with(model: reimbursement) do |form| %>
+            <%= form_with(model: reimbursement, url: reimbursement_mark_as_complete_path(reimbursement), method: "patch", local: true) do |form| %>
               <%= form.label(:reimbursement_complete, "Yes") %>
               <%= form.check_box(:reimbursement_complete, value: reimbursement.reimbursement_complete, onchange: 'this.form.submit();') %>
             <% end %>

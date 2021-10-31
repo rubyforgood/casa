@@ -64,7 +64,9 @@ Rails.application.routes.draw do
       post :generate
     end
   end
-  resources :reimbursements, only: %i[index]
+  resources :reimbursements, only: %i[index mark_as_complete] do
+    patch :mark_as_complete
+  end
   resources :imports, only: %i[index create] do
     collection do
       get :download_failed
