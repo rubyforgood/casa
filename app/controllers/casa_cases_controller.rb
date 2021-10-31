@@ -59,7 +59,6 @@ class CasaCasesController < ApplicationController
     original_attributes = @casa_case.full_attributes_hash
     if @casa_case.update_cleaning_contact_types(casa_case_update_params)
       updated_attributes = @casa_case.full_attributes_hash
-      changed_attributes_message(original_attributes, updated_attributes)
       redirect_to edit_casa_case_path, notice: "CASA case was successfully updated.#{changed_attributes_message(original_attributes, updated_attributes)}"
     else
       render :edit
@@ -139,7 +138,7 @@ class CasaCasesController < ApplicationController
         else
           "Changed #{att.to_s.gsub(/_id\Z/, "").humanize}."
         end
-      end.join("</li></li>")
+      end.join("</li><li>")
       if html_string.present?
         "<ul><li>#{html_string}</li></ul>"
       end
