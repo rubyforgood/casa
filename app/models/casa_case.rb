@@ -189,6 +189,10 @@ class CasaCase < ApplicationRecord
     self.slug = case_number.parameterize preserve_case: true
   end
 
+  def full_attributes_hash
+    attributes.symbolize_keys.merge({contact_types: casa_case_contact_types.map(&:attributes), court_orders: case_court_orders.map(&:attributes)})
+  end
+
   # def to_param
   #   id
   #   # slug # TODO use slug eventually for routes
