@@ -27,8 +27,8 @@ Rails.application.routes.draw do
   resources :health, only: %i[index]
 
   get "/.well-known/assetlinks.json", to: "android_app_associations#index"
-  resources :casa_cases do
-    resource :emancipation do
+  resources :casa_cases, except: %i[destroy] do
+    resource :emancipation, only: %i[show] do
       member do
         post "save"
       end
@@ -42,7 +42,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :casa_admins, except: %i[destroy] do
+  resources :casa_admins, except: %i[destroy show] do
     member do
       patch :deactivate
       patch :activate
@@ -81,7 +81,7 @@ Rails.application.routes.draw do
   resources :judges, only: %i[new create edit update]
   resources :notifications, only: :index
 
-  resources :supervisors, except: %i[destroy], concerns: %i[with_datatable] do
+  resources :supervisors, except: %i[destroy show], concerns: %i[with_datatable] do
     member do
       patch :activate
       patch :deactivate
@@ -93,7 +93,7 @@ Rails.application.routes.draw do
       patch :unassign
     end
   end
-  resources :volunteers, except: %i[destroy], concerns: %i[with_datatable] do
+  resources :volunteers, except: %i[destroy show], concerns: %i[with_datatable] do
     post :stop_impersonating, on: :collection
     member do
       patch :activate
