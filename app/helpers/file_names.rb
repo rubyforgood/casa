@@ -5,4 +5,8 @@ module FileNames
 
     "#{casa_case_number.nil? ? "" : casa_case_number + "-"}case-contacts-#{current_date}.csv"
   end
+
+  def casa_case_filename(casa_case)
+    casa_case.case_number + "-case-contacts-" + Time.now.strftime("%Y-%m-%d") + ".xlsx"
+  end
 end
