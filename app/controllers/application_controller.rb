@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   before_action :set_current_user
   before_action :set_current_organization
   before_action :set_paper_trail_whodunnit
+  after_action :verify_authorized
 
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
   rescue_from Organizational::UnknownOrganization, with: :not_authorized
