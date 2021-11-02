@@ -19,10 +19,4 @@ class CasaAdminPolicy < UserPolicy
   def see_deactivate_option?
     is_admin? && user.active?
   end
-
-  private
-
-  def current_organization
-    user&.casa_org
-  end
 end

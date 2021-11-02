@@ -74,6 +74,10 @@ class ApplicationPolicy
     @record&.casa_org == @user&.casa_org && !@record.casa_org.nil?
   end
 
+  def current_organization
+    user&.casa_org
+  end
+
   alias_method :modify_organization?, :is_admin?
   alias_method :see_import_page?, :is_admin?
 end
