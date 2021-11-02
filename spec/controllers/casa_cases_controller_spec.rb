@@ -10,11 +10,11 @@ RSpec.describe CasaCasesController, type: :controller do
         allow(controller).to receive(:authenticate_user!).and_return(true)
         allow(controller).to receive(:current_user).and_return(volunteer)
 
-        get :show, params: {id: case_id, format: :csv}
+        get :show, params: { casa_org_slug: organization.slug, slug: case_slug, format: :csv }
       end
 
       context "when exporting a csv" do
-        let(:case_id) { volunteer.casa_cases.first.id }
+        let(:case_slug) { volunteer.casa_cases.first.slug }
         let(:current_time) { Time.now.strftime("%Y-%m-%d") }
         let(:casa_case_number) { volunteer.casa_cases.first.case_number }
 
@@ -36,11 +36,11 @@ RSpec.describe CasaCasesController, type: :controller do
         allow(controller).to receive(:authenticate_user!).and_return(true)
         allow(controller).to receive(:current_user).and_return(volunteer)
 
-        get :show, params: {id: case_id, format: :xlsx}
+        get :show, params: { casa_org_slug: organization.slug, slug: case_slug, format: :xlsx }
       end
 
       context "when exporting a xlsx" do
-        let(:case_id) { volunteer.casa_cases.first.id }
+        let(:case_slug) { volunteer.casa_cases.first.slug }
         let(:current_time) { Time.now.strftime("%Y-%m-%d") }
         let(:casa_case_number) { volunteer.casa_cases.first.case_number }
 
