@@ -45,7 +45,7 @@ class CasaCasesController < ApplicationController
 
     if @casa_case.save
       respond_to do |format|
-        redirect_to casa_org_casa_case_path(current_organization, @casa_case), notice: "CASA case was successfully created."
+        format.html { redirect_to casa_org_casa_case_path(current_organization, @casa_case), notice: "CASA case was successfully created." }
         format.json { render json: @casa_case, status: :created }
       end
       redirect_to casa_org_casa_case_path(current_organization, @casa_case), notice: "CASA case was successfully created."

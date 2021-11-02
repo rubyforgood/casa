@@ -15,7 +15,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
   before do
     sign_in user
-    visit casa_case_path(casa_case.id)
+    visit casa_org_casa_case_path(organization, casa_case.id)
   end
 
   context "when admin" do
@@ -55,12 +55,54 @@ RSpec.describe "casa_cases/show", type: :system do
     context "when there is no future court date or court report due date" do
       before do
         casa_case = create(:casa_case, casa_org: organization)
-        visit casa_case_path(casa_case.id)
+        visit casa_org_casa_case_path(organization, casa_case.id)
       end
 
       it "can not see Add to Calendar buttons", js: true do
         expect(page).not_to have_content("Add Court Report Due Date for #{casa_case.case_number} to Calendar")
         expect(page).not_to have_content("Add Next Court Date #{casa_case.case_number} to Calendar")
+      end
+    end
+
+    context "court order - implementation status symbol" do
+      it "when implemented" do
+        casa_case.case_court_orders[0].update(implementation_status: :implemented)
+
+        visit casa_org_casa_case_path(organization, casa_case.id)
+
+        expect(page).to have_content("Court Orders")
+        expect(page).to have_content(casa_case.case_court_orders[0].text)
+        expect(page).to have_content("✅")
+      end
+
+      it "when not implemented" do
+        casa_case.case_court_orders[0].update(implementation_status: :not_implemented)
+
+        visit casa_org_casa_case_path(organization, casa_case.id)
+
+        expect(page).to have_content("Court Orders")
+        expect(page).to have_content(casa_case.case_court_orders[0].text)
+        expect(page).to have_content("❌")
+      end
+
+      it "when partiall implemented" do
+        casa_case.case_court_orders[0].update(implementation_status: :partially_implemented)
+
+        visit casa_org_casa_case_path(organization, casa_case.id)
+
+        expect(page).to have_content("Court Orders")
+        expect(page).to have_content(casa_case.case_court_orders[0].text)
+        expect(page).to have_content("🕗")
+      end
+
+      it "when not specified" do
+        casa_case.case_court_orders[0].update(implementation_status: nil)
+
+        visit casa_org_casa_case_path(organization, casa_case.id)
+
+        expect(page).to have_content("Court Orders")
+        expect(page).to have_content(casa_case.case_court_orders[0].text)
+        expect(page).to have_content("❌")
       end
     end
   end
@@ -121,50 +163,6 @@ RSpec.describe "casa_cases/show", type: :system do
       expect(page).to have_content("Court Orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
       expect(page).to have_content(casa_case.case_court_orders[0].implementation_status_symbol)
-    end
-  end
-
-  context "court order - implementation status symbol" do
-    let(:user) { admin }
-
-    it "when implemented" do
-      casa_case.case_court_orders[0].update(implementation_status: :implemented)
-
-      visit casa_case_path(casa_case)
-
-      expect(page).to have_content("Court Orders")
-      expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content("✅")
-    end
-
-    it "when not implemented" do
-      casa_case.case_court_orders[0].update(implementation_status: :not_implemented)
-
-      visit casa_case_path(casa_case)
-
-      expect(page).to have_content("Court Orders")
-      expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content("❌")
-    end
-
-    it "when partiall implemented" do
-      casa_case.case_court_orders[0].update(implementation_status: :partially_implemented)
-
-      visit casa_case_path(casa_case)
-
-      expect(page).to have_content("Court Orders")
-      expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content("🕗")
-    end
-
-    it "when not specified" do
-      casa_case.case_court_orders[0].update(implementation_status: nil)
-
-      visit casa_case_path(casa_case)
-
-      expect(page).to have_content("Court Orders")
-      expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content("❌")
     end
   end
 end
