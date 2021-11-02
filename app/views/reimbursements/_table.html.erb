@@ -1,0 +1,60 @@
+<div class="card card-container">
+  <div class="card-body">
+    <table class="table table-striped table-bordered case-list" id="<%= @casa_cases_filter_id %>">
+      <thead>
+      <tr>
+        <th><%= t(".heading.volunteer") %></th>
+        <th><%= t(".heading.case_number") %></th>
+        <th><%= t(".heading.contact_types") %></th>
+        <th><%= t(".heading.date_added") %></th>
+        <th><%= t(".heading.expense_type") %></th>
+        <th><%= t(".heading.description") %></th>
+        <th><%= t(".heading.amount") %></th>
+        <th><%= t(".heading.reimbursement_complete") %></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @reimbursements.each do |reimbursement| %>
+        <tr>
+          <td id="volunteer-<%= reimbursement.id %>">
+            <span class="mobile-label">Volunteer</span>
+            <%= link_to(reimbursement.creator.display_name, volunteer_path(reimbursement.creator)) %>
+          </td>
+
+          <td id="case-number-<%= reimbursement.id %>">
+            <span class="mobile-label">Case Number</span>
+            <%= link_to(reimbursement.casa_case.case_number, casa_case_path(reimbursement.casa_case)) %>
+          </td>
+
+          <td id="contact-types-<%= reimbursement.id %>">
+          <%= contact_types_list(reimbursement) %>
+          </td>
+
+          <td id="date-added-<%= reimbursement.id %>">
+            <%= reimbursement.created_at.strftime("%B %d %Y") %>
+          </td>
+
+          <td id="expense-type-<%= reimbursement.id %>">
+          </td>
+
+          <td id="description-<%= reimbursement.id %>">
+          </td>
+
+          <td id="amount-<%= reimbursement.id %>">
+            <%= reimbursement.miles_driven %>
+          </td>
+
+          <td>
+            <%= form_with(model: reimbursement, url: reimbursement_mark_as_complete_path(reimbursement),
+method: "patch") do |form| %>
+              <%= form.label(:reimbursement_complete, "Yes") %>
+              <%= form.check_box(:reimbursement_complete, value: reimbursement.reimbursement_complete,
+onchange: 'this.form.submit();') %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

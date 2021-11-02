@@ -46,6 +46,9 @@ class CaseContact < ApplicationRecord
   scope :occurred_ending_at, ->(end_date = nil) {
     where("occurred_at <= ?", end_date) if end_date.present?
   }
+  scope :created_max_ago, ->(time_range = nil) {
+    where("created_at > ?", time_range) if time_range.present?
+  }
   scope :contact_made, ->(contact_made = nil) {
     where(contact_made: contact_made) if /true|false/.match?(contact_made.to_s)
   }
@@ -84,6 +87,8 @@ class CaseContact < ApplicationRecord
   scope :contact_medium, ->(medium_type) {
     where(medium_type: medium_type) if medium_type.present?
   }
+
+  scope :filter_by_reimbursement_status, ->(boolean) { where reimbursement_complete: boolean }
 
   scope :sorted_by, ->(sort_option) {
     direction = /desc$/.match?(sort_option) ? "desc" : "asc"
@@ -212,6 +217,7 @@ end
 #  miles_driven               :integer          default(0), not null
 #  notes                      :string
 #  occurred_at                :datetime         not null
+#  reimbursement_complete     :boolean          default(FALSE)
 #  want_driving_reimbursement :boolean          default(FALSE)
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null

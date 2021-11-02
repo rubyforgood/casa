@@ -35,4 +35,12 @@ module TemplateHelper
 
     opening_tags.sort == closing_tags.sort
   end
+
+  def active_if(cond)
+    cond ? "active" : nil
+  end
+
+  def active_if_status(status)
+    status == "complete" ? "active" : nil
+  end
 end
