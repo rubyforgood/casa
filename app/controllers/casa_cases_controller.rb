@@ -1,4 +1,7 @@
 class CasaCasesController < ApplicationController
+  include FileNames
+  include HtmlFormatting
+  include ChangedAttributes
   before_action :set_casa_case, only: %i[show edit update deactivate reactivate]
   before_action :set_contact_types, only: %i[new edit update create deactivate]
   before_action :require_organization!
@@ -138,7 +141,6 @@ class CasaCasesController < ApplicationController
     head :not_found
   end
 
-  # Only allow a list of trusted parameters through.
   def casa_case_params
     params.require(:casa_case).permit(
       :case_number,
@@ -157,43 +159,5 @@ class CasaCasesController < ApplicationController
 
   def set_contact_types
     @contact_types = ContactType.for_organization(current_organization)
-  end
-
-  def case_contact_csv_name(case_contacts)
-    casa_case_number = case_contacts&.first&.casa_case&.case_number
-    current_date = Time.now.strftime("%Y-%m-%d")
-
-    "#{casa_case_number.nil? ? "" : casa_case_number + "-"}case-contacts-#{current_date}.csv"
-  end
-
-  def html_formatted_list(messages)
-    html_string = messages&.join("</li><li>")
-    if html_string.present?
-      "<ul><li>#{html_string}</li></ul>"
-    end
-  end
-
-  def changed_attributes_messages(original, changed)
-    changed_attributes = changed.select { |k, v| original[k] != v }.keys.delete_if { |k| k == :updated_at }
-    return if changed_attributes.empty?
-
-    changed_attributes.map do |att|
-      change_message_text(att, original[att], changed[att])
-    end.delete_if(&:nil?)
-  end
-
-  def change_message_text(attribute, original_attribute, updated_attribute)
-    if attribute == :contact_types
-      new_contact_type_ids = updated_attribute.map { |contact| contact["contact_type_id"] }
-      previous_contact_type_ids = original_attribute.map { |contact| contact["contact_type_id"] }
-      changed_count = new_contact_type_ids - previous_contact_type_ids
-      return if changed_count == 0
-      "#{changed_count} #{attribute.to_s.humanize.singularize.pluralize(changed_count)} added"
-    elsif attribute == :court_orders
-      changed_count = (updated_attribute - original_attribute).count
-      "#{changed_count} #{attribute.to_s.humanize.singularize.pluralize(changed_count)} added or updated"
-    else
-      "Changed #{attribute.to_s.gsub(/_id\Z/, "").humanize}"
-    end
   end
 end
