@@ -393,6 +393,17 @@ en:
         none: None
         no_case_court_mandates: There are no court orders associated with this court date.
       title: Court Date
+  reimbursements:
+    table:
+      heading:
+        amount: Amount
+        case_number: Case Number
+        contact_types: Contact Types
+        date_added: Date Added
+        description: Description
+        expense_type: Expense Type
+        reimbursement_complete: Reimbursement Complete
+        volunteer: Volunteer
   reports:
     index:
       assigned_to_label: "Assigned To:"
