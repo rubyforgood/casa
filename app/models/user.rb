@@ -92,12 +92,11 @@ class User < ApplicationRecord
     no_attempt_count = 0
     volunteers.map do |volunteer|
       if volunteer.supervisor.active? &&
-         volunteer.case_assignments.any? { |assignment| assignment.active? } &&
-         ( volunteer.case_contacts.none? ||
-           volunteer.case_contacts.maximum(:occurred_at) < (Time.zone.now - 14.days)
-         )
-      then
-        no_attempt_count +=1
+          volunteer.case_assignments.any? { |assignment| assignment.active? } &&
+          (volunteer.case_contacts.none? ||
+          volunteer.case_contacts.maximum(:occurred_at) < (Time.zone.now - 14.days))
+
+        no_attempt_count += 1
       end
     end
     no_attempt_count
