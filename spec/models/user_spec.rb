@@ -93,13 +93,22 @@ RSpec.describe User, type: :model do
     describe "#no_attempt_for_two_weeks" do
       let(:supervisor) { create(:supervisor) }
 
-      it "returns one for a volunteer that has attempted contact in at least one contact_case within the last 2 weeks" do
+      it "returns zero for a volunteer that has attempted contact in at least one contact_case within the last 2 weeks" do
         volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
 
         case_of_interest_1 = volunteer_1.casa_cases.first
-        build_stubbed(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: false, occurred_at: 1.week.ago)
-        expect(supervisor.no_attempt_for_two_weeks).to eq(1)
         create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, occurred_at: 1.week.ago)
+        expect(supervisor.no_attempt_for_two_weeks).to eq(0)
+      end
+
+      it "returns one for a supervisor with two volunteers, only one of which has a contact newer than 2 weeks old" do
+        volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
+        volunteer_2 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
+
+        case_of_interest_1 = volunteer_1.casa_cases.first
+        case_of_interest_2 = volunteer_2.casa_cases.first
+        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, occurred_at: 1.week.ago)
+        create(:case_contact, creator: volunteer_2, casa_case: case_of_interest_2, contact_made: true, occurred_at: 3.weeks.ago)
         expect(supervisor.no_attempt_for_two_weeks).to eq(1)
       end
 
