@@ -47,7 +47,7 @@ class CaseContact < ApplicationRecord
     where("occurred_at <= ?", end_date) if end_date.present?
   }
   scope :created_max_ago, ->(time_range = nil) {
-    where("created_at > ?", time_range) if time_range.present?
+    where("case_contacts.created_at > ?", time_range) if time_range.present?
   }
   scope :contact_made, ->(contact_made = nil) {
     where(contact_made: contact_made) if /true|false/.match?(contact_made.to_s)
@@ -81,7 +81,7 @@ class CaseContact < ApplicationRecord
     end
   }
   scope :grab_all, ->(current_user) {
-    with_deleted if current_user.is_a?(CasaAdmin)
+    with_deleted if current_user.is_a?(CasaAdmin) # TODO since this cases on user type it should be in a Policy file
   }
 
   scope :contact_medium, ->(medium_type) {

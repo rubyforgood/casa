@@ -156,10 +156,7 @@ class CaseContactsController < ApplicationController
   end
 
   def all_case_contacts
-    policy_scope(
-      current_organization.case_contacts.grab_all(current_user)
-                                        .includes(:creator, contact_types: :contact_type_group)
-    )
+    policy_scope(current_organization.case_contacts).includes(:creator, contact_types: :contact_type_group)
   end
 
   def create_notice
