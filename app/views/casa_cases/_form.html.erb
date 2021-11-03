@@ -12,7 +12,7 @@
       <% if casa_case.new_record? || policy(casa_case).update_case_number? %>
         <div class="field form-group">
           <%= form.label :case_number %>
-          <%= form.text_field :case_number, class: "form-control w-25" %>
+          <%= form.text_field :case_number, class: "form-control w-25", :required=> 'required' %>
         </div>
       <% end %>
 
