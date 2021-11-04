@@ -3,24 +3,15 @@
     <div class="row d-flex justify-content-between no-gutters">
       <div class="col-8">
         <div class="media">
-          <% header_color_class = contact.quarter_editable? ? "text-primary" : "text-secondary" %>
-
-          <i class="mt-1 mr-3 <%= header_color_class %> <%= contact.decorate.medium_icon_classes %>"></i>
+          <i class="mt-1 mr-3 <%= "text-primary" %> <%= contact.decorate.medium_icon_classes %>"></i>
           <div class="media-body">
             <h5 class="mt-0 card-title">
-              <strong class="<%= header_color_class %>">
+              <strong class="<%= "text-primary" %>">
                 <%= t(".deleted_text") if policy(contact).restore? && contact.deleted? %>
                 <%= contact.contact_groups_with_types.keys.join(", ") %>
-                <%= t("case_contacts.archived") unless contact.quarter_editable? %>
               </strong>
               <%= link_to(t("button.undelete"), restore_case_contact_path(contact.id), method: :post,
                           class: "btn btn-info") if policy(contact).restore? && contact.deleted? %>
-              <% unless contact.quarter_editable? %>
-                <br>
-                <small aria-hidden="true" class="card-title__hint text-muted">
-                  <%= t("case_contacts.quarter_not_editable") %>
-                </small>
-              <% end %>
             </h5>
             <h6 class="card-subtitle mb-2 text-muted">
               <%= contact.decorate.contact_types %>
@@ -46,14 +37,12 @@
       </div>
       <div class="row justify-content-between">
         <% if Pundit.policy(current_user, contact).update? %>
-          <% if contact.quarter_editable? %>
-            <%= render "case_contacts/followup", contact: contact, followup: contact.requested_followup %>
-            <div class="col-sm-5">
-              <%= link_to edit_case_contact_path(contact), class: "btn btn-outline-primary" do %>
-                <strong><%= t("button.edit") %></strong>
-              <% end %>
-            </div>
-          <% end %>
+          <%= render "case_contacts/followup", contact: contact, followup: contact.requested_followup %>
+          <div class="col-sm-5">
+            <%= link_to edit_case_contact_path(contact), class: "btn btn-outline-primary" do %>
+              <strong><%= t("button.edit") %></strong>
+            <% end %>
+          </div>
         <% end %>
       </div>
       <div class="row pl-3">

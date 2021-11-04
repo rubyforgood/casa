@@ -79,7 +79,7 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         end
       end
 
-      context "with archived case contact", js: true do
+      context "with old case contact", js: true do
         let!(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 1.year.ago) }
 
         before do
@@ -90,12 +90,8 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         it "displays correct color for contact" do
           within ".card-title" do
             title = find("strong.text-secondary")
-            expect(title).to have_content("#{contact_group_text} (Archived)")
+            expect(title).to have_content("#{contact_group_text}")
           end
-        end
-
-        it "displays an information hint about the archived contacts" do
-          expect(page).to have_content("Archived contacts can't be edited. Case contacts are archived after the end of each quarter.")
         end
       end
     end
