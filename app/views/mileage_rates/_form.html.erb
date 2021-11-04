@@ -11,7 +11,12 @@
 
   <div class="field form-group">
     <%= form.label :amount %>
-    <%= form.number_field :amount, required: true, placeholder: '0.0', min: 0, step: 0.01, class: "form-control" %>
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">$</span>
+      </div>
+      <%= form.number_field :amount, required: true, placeholder: '0.0', min: 0, step: 0.01, class: "form-control", aria: { label: "Amount in US Dollars" } %>
+    </div>
   </div>
 
   <div class="field form-group">
