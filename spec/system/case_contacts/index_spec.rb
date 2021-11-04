@@ -90,7 +90,7 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         it "displays correct color for contact" do
           within ".card-title" do
             title = find("strong.text-secondary")
-            expect(title).to have_content("#{contact_group_text}")
+            expect(title).to have_content(contact_group_text.to_s)
           end
         end
       end
