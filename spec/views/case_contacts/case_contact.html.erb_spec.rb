@@ -31,26 +31,6 @@ RSpec.describe "case_contacts/case_contact", type: :view do
         expect(rendered).to have_button("Make Reminder")
       end
     end
-
-    context "occured_at is after the last day of the month in the quarter that the case contact was created" do
-      let(:case_contact) { build_stubbed(:case_contact, occurred_at: Time.zone.now - 1.year) }
-
-      it "does not show edit button" do
-        assign :case_contact, case_contact
-        assign :casa_cases, [case_contact.casa_case]
-
-        render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
-        expect(rendered).to have_no_link(nil, href: "/case_contacts/#{case_contact.id}/edit")
-      end
-
-      it "does not show make reminder button" do
-        assign :case_contact, case_contact
-        assign :casa_cases, [case_contact.casa_case]
-
-        render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
-        expect(rendered).to_not have_text("Make Reminder")
-      end
-    end
   end
 
   describe "delete and undelete buttons" do
