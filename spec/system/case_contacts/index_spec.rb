@@ -78,22 +78,6 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
           end
         end
       end
-
-      context "with old case contact", js: true do
-        let!(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 1.year.ago) }
-
-        before do
-          sign_in volunteer
-          visit case_contacts_path
-        end
-
-        it "displays correct color for contact" do
-          within ".card-title" do
-            title = find("strong.text-secondary")
-            expect(title).to have_content(contact_group_text.to_s)
-          end
-        end
-      end
     end
   end
 
