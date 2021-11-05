@@ -26,6 +26,6 @@ jobs:
           token: ${{secrets.GITHUB_TOKEN}}
           issues: ${{steps.unassign_issues.outputs.unassigned_issues}}
           from_column: '8461148'
-          to_column: '8461147'
+          to_column: '15690587'
       - name: Print moved issues
         run: echo "Moved issues = ${{steps.move_issues.outputs.moved_issues}}"

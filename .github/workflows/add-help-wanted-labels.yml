@@ -14,4 +14,4 @@ jobs:
         with:
           token: ${{secrets.GITHUB_TOKEN}}
           label_to_add: 'Help Wanted'
-          column_id: '8461147'
+          column_id: '15690587'
