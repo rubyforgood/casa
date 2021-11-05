@@ -11,8 +11,10 @@
       </div>
 
       <div class="field form-group">
-        <%= form.check_box :active %>
-        <%= form.label :active %>
+        <div class="form-check">
+          <%= form.check_box :active, class: 'form-check-input' %>
+          <%= form.label :active, class: 'form-check-label' %>
+        </div>
       </div>
 
       <div class="actions">

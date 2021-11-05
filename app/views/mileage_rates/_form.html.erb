@@ -15,8 +15,10 @@
   </div>
 
   <div class="field form-group">
-    <%= form.label :is_active, 'Currently active?' %>
-    <%= form.check_box :is_active %>
+    <div class="form-check">
+      <%= form.check_box :is_active, class: 'form-check-input' %>
+      <%= form.label :is_active, 'Currently active?', class: 'form-check-label' %>
+    </div>
   </div>
 
   <div class="actions">
