@@ -26,18 +26,18 @@
         aria-haspopup="true"
         aria-expanded="false"><%= t(".status") %></button>
       <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
-        <li>
-          <a class="small" data-value="option1" tabIndex="-1">
-            <input class="active" type="checkbox" data-value="true" checked>
-            <%= t(".active") %>
-          </a>
-        </li>
-        <li>
-          <a class="small" data-value="option1" tabIndex="-1">
-            <input class="inactive" type="checkbox" data-value="false">
-            <%= t(".inactive") %>
-          </a>
-        </li>
+        <div class="dropdown-item form-check">
+          <%= check_box_tag "status_option_active", "true", true,
+                    class: "active form-check-input",
+                    data: { value: "true" } %>
+          <%= label_tag "status_option_active", t(".active") %>
+        </div>
+        <div class="dropdown-item form-check">
+          <%= check_box_tag "status_option_inactive", "false", false,
+                    class: "inactive form-check-input",
+                    data: { value: "false" } %>
+          <%= label_tag "status_option_inactive", t(".inactive") %>
+        </div>
       </div>
     </div>
   </div>
