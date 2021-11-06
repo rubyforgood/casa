@@ -2,7 +2,7 @@
 # :nocov:
 class DeviseMailerPreview < ActionMailer::Preview
   def reset_password_instructions
-    user = User.find_by(id: params[:id]) || User.last
+    user = if params.has_key?(:id) then User.find_by(id: params[:id]) else User.last end
     Devise::Mailer.reset_password_instructions(user, "faketoken")
   end
 
@@ -44,12 +44,12 @@ class DeviseMailerPreview < ActionMailer::Preview
   end
 
   def email_changed
-    user = User.find_by(id: params[:id]) || User.last
+    user = if params.has_key?(:id) then User.find_by(id: params[:id]) else User.last end
     Devise::Mailer.email_changed(user)
   end
 
   def password_change
-    user = User.find_by(id: params[:id]) || User.last
+    user = if params.has_key?(:id) then User.find_by(id: params[:id]) else User.last end
     Devise::Mailer.password_change(user)
   end
 end
