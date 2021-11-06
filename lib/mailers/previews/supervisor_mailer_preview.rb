@@ -2,12 +2,12 @@
 # :nocov:
 class SupervisorMailerPreview < ActionMailer::Preview
   def account_setup
-    supervisor = Supervisor.find_by(id: params[:id]) || Supervisor.last
+    supervisor = if params.has_key?(:id) then Supervisor.find_by(id: params[:id]) else Supervisor.last end
     SupervisorMailer.account_setup(supervisor)
   end
 
   def weekly_digest
-    supervisor = Supervisor.find_by(id: params[:id]) || Supervisor.last
+    supervisor = if params.has_key?(:id) then Supervisor.find_by(id: params[:id]) else Supervisor.last end
     SupervisorMailer.weekly_digest(supervisor)
   end
 end
