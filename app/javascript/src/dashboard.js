@@ -237,7 +237,6 @@ $('document').ready(() => {
     }
   })
 
-
   // Because the table saves state, we have to check/uncheck modal inputs based on what
   // columns are visible
   volunteersTable.columns().every(function (index) {
@@ -292,10 +291,6 @@ $('document').ready(() => {
 
   $('.volunteer-filters input[type="checkbox"]').not('#unassigned-vol-filter').on('click', function () {
     volunteersTable.draw()
-  })
-
-  $('.supervisor-filters input[type="checkbox"]').on('click', function () {
-    supervisorsTable.draw()
   })
 
   $('.casa-case-filters input[type="checkbox"]').on('click', function () {
