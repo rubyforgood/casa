@@ -137,7 +137,6 @@ en:
       select_case: Select a Case
       title: Edit Volunteer Assignments for
   case_contacts:
-    archived: (Archived)
     index:
       filter:
         contact_date: Date of contact
@@ -171,7 +170,6 @@ en:
       singular_label: CASA case
     new:
       title: New Case Contact
-    quarter_not_editable: Archived contacts can't be edited. Case contacts are archived after the end of each quarter.
   casa_orgs:
     contact_type_groups:
       button:

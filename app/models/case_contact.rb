@@ -12,7 +12,6 @@ class CaseContact < ApplicationRecord
   validates :occurred_at, presence: true
   validate :occurred_at_not_in_future
   validate :reimbursement_only_when_miles_driven
-  validate :check_if_allow_edit, on: :update
 
   belongs_to :creator, class_name: "User"
   has_one :supervisor_volunteer, -> {
@@ -150,17 +149,6 @@ class CaseContact < ApplicationRecord
   def contact_made_chosen
     errors.add(:base, "Must enter whether the contact was made.") if contact_made.nil?
     !contact_made.nil?
-  end
-
-  def quarter_editable?
-    # case contacts should no longer be editable after the current quarter plus a grace period
-    Time.zone.now < occurred_at.end_of_quarter + 30.days
-  end
-
-  def check_if_allow_edit
-    return if quarter_editable?
-
-    errors.add(:base, message: "cannot edit case contacts created before the current quarter plus 30 days")
   end
 
   def supervisor_id
