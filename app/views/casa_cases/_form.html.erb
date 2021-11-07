@@ -83,8 +83,10 @@
       <% if casa_case.new_record? %>
         <%# Only show the field when creating, but not when updating %>
         <div class="field form-group">
-          <%= form.label :transition_aged_youth %>
-          <%= form.check_box :transition_aged_youth %>
+          <div class="form-check">
+            <%= form.check_box :transition_aged_youth, class: 'form-check-input' %>
+            <%= form.label :transition_aged_youth, class: 'form-check-label' %>
+          </div>
         </div>
       <% end %>
 
