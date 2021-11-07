@@ -8,7 +8,7 @@ RSpec.describe SupervisorWeeklyDigest do
     context "on monday" do
       context "with active and deactivated supervisor" do
         before do
-          travel_to Date.new(2021, 9, 27) # monday
+          travel_to Time.zone.local(2021, 9, 27, 12, 0, 0) # monday noon
           create(:supervisor, active: true)
           create(:supervisor, active: false)
         end
@@ -22,7 +22,7 @@ RSpec.describe SupervisorWeeklyDigest do
 
     context "not on monday" do
       before do
-        travel_to Date.new(2021, 9, 29) # not monday
+        travel_to Time.zone.local(2021, 9, 29, 12, 0, 0) # not monday
         create(:supervisor, active: true)
       end
 
