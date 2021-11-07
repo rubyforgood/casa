@@ -36,6 +36,18 @@ RSpec.describe "/all_casa_admins", type: :request do
           }
         end.to change(AllCasaAdmin, :count).by(1)
       end
+
+      it "also responds as json", :aggregate_failures do
+        post all_casa_admins_path(format: :json), params: {
+          all_casa_admin: {
+            email: "admin1@example.com"
+          }
+        }
+
+        expect(response).to have_http_status(:created)
+        expect(response.content_type).to eq("application/json; charset=utf-8")
+        expect(response.body).to match("admin1@example.com".to_json)
+      end
     end
 
     context "with invalid parameters" do
@@ -48,6 +60,18 @@ RSpec.describe "/all_casa_admins", type: :request do
         expect(response).to be_successful
         expect(response).to render_template "all_casa_admins/new"
       end
+
+      it "also responds as json", :aggregate_failures do
+        post all_casa_admins_path(format: :json), params: {
+          all_casa_admin: {
+            email: ""
+          }
+        }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.content_type).to eq("application/json; charset=utf-8")
+        expect(response.body).to match("Email can't be blank".to_json)
+      end
     end
   end
 
@@ -59,6 +83,15 @@ RSpec.describe "/all_casa_admins", type: :request do
 
         expect(admin.email).to eq "newemail@example.com"
       end
+
+      it "also responds as json", :aggregate_failures do
+        patch all_casa_admins_path(format: :json),
+          params: {all_casa_admin: {email: "newemail@example.com"}}
+
+        expect(response).to have_http_status(:ok)
+        expect(response.content_type).to eq("application/json; charset=utf-8")
+        expect(response.body).to match("newemail@example.com".to_json)
+      end
     end
 
     context "with invalid parameters" do
@@ -68,6 +101,16 @@ RSpec.describe "/all_casa_admins", type: :request do
         expect(response).to have_http_status(:ok)
 
         expect(admin.email).to_not eq "newemail@example.com"
+      end
+
+      it "also responds as json", :aggregate_failures do
+        other_admin = create(:all_casa_admin)
+        patch all_casa_admins_path(format: :json),
+          params: {all_casa_admin: {email: other_admin.email}}
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.content_type).to eq("application/json; charset=utf-8")
+        expect(response.body).to match("Email has already been taken".to_json)
       end
     end
   end
@@ -99,6 +142,14 @@ RSpec.describe "/all_casa_admins", type: :request do
 
         subject
       end
+
+      it "also responds as json", :aggregate_failures do
+        patch update_password_all_casa_admins_path(format: :json), params: params
+
+        expect(response).to have_http_status(:ok)
+        expect(response.content_type).to eq("application/json; charset=utf-8")
+        expect(response.body).to match("Password was successfully updated.")
+      end
     end
 
     context "with invalid parameters", :aggregate_failures do
@@ -126,6 +177,14 @@ RSpec.describe "/all_casa_admins", type: :request do
         expect(mailer).not_to receive(:deliver)
 
         subject
+      end
+
+      it "also responds as json", :aggregate_failures do
+        patch update_password_all_casa_admins_path(format: :json), params: params
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.content_type).to eq("application/json; charset=utf-8")
+        expect(response.body).to match("Password confirmation doesn't match Password".to_json)
       end
     end
   end

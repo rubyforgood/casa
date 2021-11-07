@@ -15,12 +15,26 @@ class AllCasaAdminsController < ApplicationController
   def create
     service = ::CreateAllCasaAdminService.new(params, current_user)
     @all_casa_admin = service.build
+
     begin
       service.create!
-      redirect_to authenticated_all_casa_admin_root_path,
-        notice: "New All CASA admin created successfully"
+
+      respond_to do |format|
+        format.html do
+          redirect_to authenticated_all_casa_admin_root_path,
+            notice: "New All CASA admin created successfully"
+        end
+
+        format.json { render json: @all_casa_admin, status: :created }
+      end
     rescue ActiveRecord::RecordInvalid
-      render :new
+      respond_to do |format|
+        format.html { render :new }
+
+        format.json do
+          render json: @all_casa_admin.errors.full_messages, status: :unprocessable_entity
+        end
+      end
     end
   end
 
@@ -28,10 +42,19 @@ class AllCasaAdminsController < ApplicationController
     @user = current_all_casa_admin
 
     if @user.update(all_casa_admin_params)
-      flash[:success] = "Profile was successfully updated."
-      redirect_to edit_all_casa_admins_path
+      respond_to do |format|
+        format.html do
+          flash[:success] = "Profile was successfully updated."
+          redirect_to edit_all_casa_admins_path
+        end
+
+        format.json { render json: @user, status: :ok }
+      end
     else
-      render :edit
+      respond_to do |format|
+        format.html { render :edit }
+        format.json { render json: @user.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -42,11 +65,21 @@ class AllCasaAdminsController < ApplicationController
       bypass_sign_in(@user)
 
       UserMailer.password_changed_reminder(@user).deliver
-      flash[:success] = "Password was successfully updated."
 
-      redirect_to edit_all_casa_admins_path
+      respond_to do |format|
+        format.html do
+          flash[:success] = "Password was successfully updated."
+
+          redirect_to edit_all_casa_admins_path
+        end
+
+        format.json { render json: "Password was successfully updated.", status: :ok }
+      end
     else
-      render "edit"
+      respond_to do |format|
+        format.html { render :edit }
+        format.json { render json: @user.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   end
 
