@@ -46,8 +46,8 @@
 
 <div class="supervisor_indicator_legend">
 <div class="supervisor_indicator_legend_negative_positive">
-  <span class="supervisor_indicator_legend_positive">Have made contact in the last 14 days</span><%#
-  %><span class="supervisor_indicator_legend_negative">Have not made contact in the last 14 days</span>
+  <span class="supervisor_indicator_legend_positive">Have made contact in the last 14 days</span>
+  <span class="supervisor_indicator_legend_negative">Have not made contact in the last 14 days</span>
 </div>
 <div class="supervisor_indicator_legend_transition_aged_youth">(Transition aged youth)</div>
 </div>
@@ -56,8 +56,7 @@
   <div class="card-body">
     <table
       class="table table-striped table-bordered supervisors-list"
-      id="supervisors"
-    >
+      id="supervisors">
       <thead>
       <tr>
         <th>Supervisor Name</th>
@@ -79,7 +78,6 @@
             <% active_percentage = 0 %>
           <% end %>
 
-
           <% transition_volunteers = supervisor.volunteers_serving_transition_aged_youth %>
 
           <td id="name-<%= supervisor.id %>">
@@ -87,12 +85,19 @@
             <%= link_to(supervisor.display_name, edit_supervisor_path(supervisor)) %>
           </td>
 
-
           <td class="supervisor_indicator_container">
             <div class="supervisor_indicator_negative_positive">
-              <% if active_volunteers %><span class="supervisor_indicator_positive" style="width: <%= active_percentage %>%"><%= active_volunteers%></span><%end%><%#
-              %><% if no_attempt_volunteers.nonzero? %><span class="supervisor_indicator_negative" style="width: <%= no_attempt_percentage %>%"><%= no_attempt_volunteers%></span><% end %><%#
-          %></div>
+              <% if active_volunteers %>
+                <span class="supervisor_indicator_positive" style="width: <%= active_percentage %> %">
+                  <%= active_volunteers %>
+                </span>
+              <% end %>
+              <% if no_attempt_volunteers.nonzero? %>
+                <span class="supervisor_indicator_negative" style="width: <%= no_attempt_percentage %> %">
+                  <%= no_attempt_volunteers %>
+                </span>
+              <% end %>
+          </div>
             <div class="supervisor_indicator_transition_aged_youth">(<%= transition_volunteers %>)</div>
           </td>
 
