@@ -2,6 +2,7 @@ $indictator_negative_color: #ff0000;
 $indicator_positive_color: #00c800;
 
 .supervisor_indicator_container {
+  overflow: hidden;
   width: 20em;
 }
 

@@ -67,10 +67,16 @@
       <tbody>
       <% @supervisors.each do |supervisor| %>
         <tr>
-          <% active_volunteers = supervisor.active_volunteers %>
           <% no_attempt_volunteers = supervisor.no_attempt_for_two_weeks %>
-          <% no_attempt_percentage = ((no_attempt_volunteers.to_f / active_volunteers.to_f) * 100).to_i %>
-          <% active_percentage = (100 - no_attempt_percentage).to_i %>
+          <% active_volunteers = (supervisor.active_volunteers - no_attempt_volunteers).nonzero? %>
+          <% if active_volunteers %>
+            <% no_attempt_percentage = ((no_attempt_volunteers.to_f / supervisor.active_volunteers.to_f) * 100).to_i %>
+            <% active_percentage = (100 - no_attempt_percentage).to_i %>
+          <% else %>
+            <% no_attempt_percentage = 100 %>
+            <% active_percentage = 0 %>
+          <% end %>
+
 
           <% transition_volunteers = supervisor.volunteers_serving_transition_aged_youth %>
 
