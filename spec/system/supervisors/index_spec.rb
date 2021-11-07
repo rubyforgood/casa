@@ -193,14 +193,14 @@ RSpec.describe "supervisors/index", type: :system do
         it "filters the supervisors correctly", :aggregate_failures do
           within(:css, ".supervisor-filters") do
             click_on "Status"
+            find(:css, ".active").set(false)
             find(:css, ".active").set(true)
             find(:css, ".inactive").set(false)
-            click_on "Status"
           end
 
           within("table#supervisors") do
-            expect(page).to have_content("Active Supervisor")
-            expect(page).not_to have_content("Inactive Supervisor")
+            expect(page).to have_text("Active Supervisor")
+            expect(page).not_to have_text("Inactive Supervisor")
           end
         end
       end
