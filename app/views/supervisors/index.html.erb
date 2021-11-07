@@ -87,12 +87,13 @@
             <%= link_to(supervisor.display_name, edit_supervisor_path(supervisor)) %>
           </td>
 
+
           <td class="supervisor_indicator_container">
             <div class="supervisor_indicator_negative_positive">
               <% if active_volunteers %><span class="supervisor_indicator_positive" style="width: <%= active_percentage %>%"><%= active_volunteers%></span><%end%><%#
-              %><%if no_attempt_volunteers %><span class="supervisor_indicator_negative" style="width: <%= no_attempt_percentage %>%"><%= no_attempt_volunteers%></span><% end %><%#
+              %><% if no_attempt_volunteers.nonzero? %><span class="supervisor_indicator_negative" style="width: <%= no_attempt_percentage %>%"><%= no_attempt_volunteers%></span><% end %><%#
           %></div>
-            <dive class="supervisor_indicator_transition_aged_youth">(<%= transition_volunteers %>)</div>
+            <div class="supervisor_indicator_transition_aged_youth">(<%= transition_volunteers %>)</div>
           </td>
 
           <td>
