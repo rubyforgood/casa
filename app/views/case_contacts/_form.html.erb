@@ -31,11 +31,22 @@
 
   <div class="field contact-type form-group">
     <h2><%= form.label :contact_made %></h2>
-    <%= form.radio_button(:contact_made, true, checked: case_contact.contact_made, required: true) %>
-    <%= form.label "Yes", for: "case_contact_contact_made_true" %>
-    <br>
-    <%= form.radio_button(:contact_made, false, checked: set_contact_made_false(case_contact), required: true) %>
-    <%= form.label "No", for: "case_contact_contact_made_false" %>
+    <div class="form-check">
+      <%= form.radio_button :contact_made, true,
+                      checked: case_contact.contact_made,
+                      required: true,
+                      class: 'form-check-input' %>
+      <%= form.label "Yes", class: "form-check-label",
+                      for: "case_contact_contact_made_true" %>
+    </div>
+    <div class="form-check">
+      <%= form.radio_button :contact_made, false,
+                      checked: set_contact_made_false(case_contact),
+                      required: true,
+                      class: 'form-check-input' %>
+      <%= form.label "No", class: "form-check-label",
+                      for: "case_contact_contact_made_false" %>
+    </div>
   </div>
 
   <div class="field contact-medium form-group">
