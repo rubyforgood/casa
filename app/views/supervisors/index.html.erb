@@ -45,9 +45,11 @@
 <br>
 
 <div class="supervisor_indicator_legend">
-<span class="supervisor_indicator_legend_positive">Have made contact in the last 14 days</span><%#
-%><span class="supervisor_indicator_legend_negative">Have not made contact in the last 14 days</span><%#
-%><span class="supervisor_indicator_legend_transition_aged_youth">(Transition aged youth)</span>
+<div class="supervisor_indicator_legend_negative_positive">
+  <span class="supervisor_indicator_legend_positive">Have made contact in the last 14 days</span><%#
+  %><span class="supervisor_indicator_legend_negative">Have not made contact in the last 14 days</span>
+</div>
+<div class="supervisor_indicator_legend_transition_aged_youth">(Transition aged youth)</div>
 </div>
 
 <div class="card card-container">
@@ -86,9 +88,11 @@
           </td>
 
           <td class="supervisor_indicator_container">
-            <span class="supervisor_indicator_positive" style="width: <%= active_percentage %>%"><%= active_volunteers%></span><%#
-            %><span class="supervisor_indicator_negative" style="width: <%= no_attempt_percentage %>%"><%= no_attempt_volunteers%></span><%#
-            %><span class="supervisor_indicator_transition_aged_youth">(<%= transition_volunteers %>)</span>
+            <div class="supervisor_indicator_negative_positive">
+              <% if active_volunteers %><span class="supervisor_indicator_positive" style="width: <%= active_percentage %>%"><%= active_volunteers%></span><%end%><%#
+              %><%if no_attempt_volunteers %><span class="supervisor_indicator_negative" style="width: <%= no_attempt_percentage %>%"><%= no_attempt_volunteers%></span><% end %><%#
+          %></div>
+            <dive class="supervisor_indicator_transition_aged_youth">(<%= transition_volunteers %>)</div>
           </td>
 
           <td>

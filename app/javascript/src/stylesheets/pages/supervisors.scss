@@ -2,12 +2,11 @@ $indictator_negative_color: #ff0000;
 $indicator_positive_color: #00c800;
 
 .supervisor_indicator_container {
-  overflow: hidden;
   width: 20em;
 }
 
 .supervisor_indicator_legend {
-  text-align: center;
+  font-size: x-small;
 }
 
 .supervisor_indicator_legend_negative,
@@ -23,6 +22,7 @@ $indicator_positive_color: #00c800;
   background: $indictator_negative_color;
   border: 1px solid;
   display: inline-block;
+  text-align: center;
 }
 
 .supervisor_indicator_positive,
@@ -30,8 +30,16 @@ $indicator_positive_color: #00c800;
   background: $indicator_positive_color;
   border: 1px solid;
   display: inline-block;
+  text-align: center;
+}
+
+.supervisor_indicator_legend_negative_positive,
+.supervisor_indicator_negative_positive {
+  display: inline-block;
+  width: 80%;
 }
 
 .supervisor_indicator_legend_transition_aged_youth {
+  display: inline;
   font-size: smaller;
 }
