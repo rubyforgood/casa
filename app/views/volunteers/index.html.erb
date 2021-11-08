@@ -18,7 +18,7 @@
       <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <%= t(".supervisor") %>
       </button>
-      <ul class="dropdown-menu supervisor-options">
+      <div class="dropdown-menu supervisor-options">
         <div class="dropdown-item form-check">
           <%= check_box_tag "supervisor-option-none", "", false,
                     class: "form-check-input",
@@ -37,7 +37,7 @@
             <%= label_tag tag_name, supervisor.display_name, class: "form-check-label" %>
           </div>
         <% end %>
-      </ul>
+      </div>
     </div>
     <div class="dropdown pull-left mr-2">
       <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
