@@ -30,13 +30,13 @@
           <%= check_box_tag "status_option_active", "true", true,
                     class: "active form-check-input",
                     data: { value: "true" } %>
-          <%= label_tag "status_option_active", t(".active") %>
+          <%= label_tag "status_option_active", t(".active"), class: "form-check-label" %>
         </div>
         <div class="dropdown-item form-check">
           <%= check_box_tag "status_option_inactive", "false", false,
                     class: "inactive form-check-input",
                     data: { value: "false" } %>
-          <%= label_tag "status_option_inactive", t(".inactive") %>
+          <%= label_tag "status_option_inactive", t(".inactive"), class: "form-check-label" %>
         </div>
       </div>
     </div>
