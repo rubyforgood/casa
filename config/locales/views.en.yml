@@ -470,14 +470,14 @@ en:
         status: Status
       inactive: Inactive
       no_supervisor: No supervisor assignment
-      "no": No
+      no: No
       pick_displayed_columns: Pick displayed columns
       select_columns: Select columns
       supervisor: Supervisor
       status: Status
       transition_aged_youth: Assigned to Transition Aged Youth
       volunteers: Volunteers
-      "yes": Yes
+      yes: Yes
     send_reminder_button:
       admin_checkbox_text: Send CC to Supervisor and Admin
       send_reminder: Send Reminder
