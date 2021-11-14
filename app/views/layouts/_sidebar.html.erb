@@ -45,7 +45,7 @@
           <% if policy(:application).see_court_reports_page? %>
             <%= link_to t(".link.generate_court_reports"), case_court_reports_path, class: "list-group-item" %>
           <% end %>
-          <% if policy(:application).is_admin? %>
+          <% if policy(:reimbursement).index? %>
             <%= link_to t(".link.reimbursement_queue"), reimbursements_path, class: "list-group-item" %>
           <% end %>
           <% if policy(:application).see_reports_page? %>
