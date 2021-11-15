@@ -10,7 +10,7 @@ RSpec.describe CasaCasesController, type: :controller do
         allow(controller).to receive(:authenticate_user!).and_return(true)
         allow(controller).to receive(:current_user).and_return(volunteer)
 
-        get :show, params: { casa_org_slug: organization.slug, slug: case_slug, format: :csv }
+        get :show, params: {casa_org_slug: organization.slug, slug: case_slug, format: :csv}
       end
 
       context "when exporting a csv" do
@@ -36,7 +36,7 @@ RSpec.describe CasaCasesController, type: :controller do
         allow(controller).to receive(:authenticate_user!).and_return(true)
         allow(controller).to receive(:current_user).and_return(volunteer)
 
-        get :show, params: { casa_org_slug: organization.slug, slug: case_slug, format: :xlsx }
+        get :show, params: {casa_org_slug: organization.slug, slug: case_slug, format: :xlsx}
       end
 
       context "when exporting a xlsx" do
