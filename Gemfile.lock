@@ -243,8 +243,6 @@ GEM
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
     nio4r (2.5.8)
-    nokogiri (1.12.5-x86_64-darwin)
-      racc (~> 1.4)
     nokogiri (1.12.5-x86_64-linux)
       racc (~> 1.4)
     noticed (1.5.5)
@@ -477,8 +475,8 @@ DEPENDENCIES
   request_store
   rspec-rails (~> 5.0.2)
   sablon
-  scout_apm (~> 5.1)
-  selenium-webdriver (= 4.1.0)
+  scout_apm
+  selenium-webdriver
   shoulda-matchers
   simplecov (~> 0.21.2)
   spring
