@@ -26,7 +26,7 @@ RSpec.describe "casa_cases/show", type: :system do
       expect(page).to have_content(emancipation_option.name) # Make sure list of options is showing
       find(".check-item").click # Select the first option
       find(".emancipation-category").click # Close the list of options for this category
-
+      # TODO fix flakiness
       expect(page).to have_css(".async-success-indicator", text: "Unchecked #{emancipation_option.name}")
 
       # TODO more asserts here - checking and unchecking items
