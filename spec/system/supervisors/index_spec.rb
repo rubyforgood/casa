@@ -202,7 +202,7 @@ RSpec.describe "supervisors/index", type: :system do
             expect(page).to have_text("Active Supervisor")
             expect(page).not_to have_text("Inactive Supervisor")
           end
-        end  # TODO fix test
+        end # TODO fix test
       end
 
       context "when only inactive checked" do
@@ -218,11 +218,11 @@ RSpec.describe "supervisors/index", type: :system do
             expect(page).not_to have_content("Active Supervisor")
             expect(page).to have_content("Inactive Supervisor")
           end
-        end  # TODO fix test
+        end # TODO fix test
       end
 
       context "when both checked" do
-        xit "filters the supervisors correctly", :aggregate_failures do  # TODO fix test
+        xit "filters the supervisors correctly", :aggregate_failures do # TODO fix test
           within(:css, ".supervisor-filters") do
             click_on "Status"
             find(:css, ".active").set(true)
