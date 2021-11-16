@@ -170,7 +170,7 @@ en:
       singular_label: CASA case
     new:
       title: New Case Contact
-  casa_orgs:
+  casa_org:
     contact_type_groups:
       button:
         edit: Edit
