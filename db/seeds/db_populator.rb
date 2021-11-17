@@ -4,7 +4,7 @@
 # Email addresses generated will be globally unique across all orgs.
 
 class DbPopulator
-  SEED_PASSWORD = "123456"
+  SEED_PASSWORD = "12345678"
   WORD_LENGTH_TUNING = 10
   LINE_BREAK_TUNING = 5
   PREFIX_OPTIONS = ("A".ord.."Z".ord).to_a.map(&:chr)
