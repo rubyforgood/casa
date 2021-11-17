@@ -26,8 +26,8 @@ RSpec.describe "all_casa_admin_edit_spec", type: :system do
     it "notifies password changed by email", :aggregate_failures do
       click_on "Change Password"
 
-      fill_in "Password", with: "1234567"
-      fill_in "Password Confirmation", with: "1234567"
+      fill_in "Password", with: "12345678"
+      fill_in "Password Confirmation", with: "12345678"
 
       click_on "Update Password"
 

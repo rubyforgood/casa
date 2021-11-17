@@ -34,22 +34,22 @@ describe('ensure the password field matches the confirmation field on the client
   }
 
   test('password fields match', () => {
-    passwordField.value = '123456'
-    confirmationField.value = '123456'
+    passwordField.value = '12345678'
+    confirmationField.value = '12345678'
     checkPasswordsAndDisplayPopup(submitButton, passwordField, confirmationField)
     expect(isDisabled(submitButton)).toBe(false)
     expect(document.getElementsByClassName('swal2-container').length).toBe(0)
   })
 
   test("password fields don't match", () => {
-    passwordField.value = '123456'
+    passwordField.value = '12345678'
     confirmationField.value = 'bad'
     checkPasswordsAndDisplayPopup(submitButton, passwordField, confirmationField, true)
     expect(document.getElementsByClassName('swal2-container').length).toBe(1)
   })
 
   test("password fields don't match and pop-up suppressed", () => {
-    passwordField.value = '123456'
+    passwordField.value = '12345678'
     confirmationField.value = 'bad'
     checkPasswordsAndDisplayPopup(submitButton, passwordField, confirmationField)
     expect(document.getElementsByClassName('swal2-container').length).toBe(0)
