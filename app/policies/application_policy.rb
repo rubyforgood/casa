@@ -1,4 +1,17 @@
 class ApplicationPolicy
+  class Scope
+    attr_reader :user, :scope
+
+    def initialize(user, scope)
+      @user = user
+      @scope = scope
+    end
+
+    def resolve
+      raise NotImplementedError
+    end
+  end
+
   attr_reader :user, :record
 
   def initialize(user, record)
