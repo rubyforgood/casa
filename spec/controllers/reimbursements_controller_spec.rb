@@ -13,15 +13,27 @@ RSpec.describe ReimbursementsController, type: :controller do
       allow(controller).to receive(:current_user).and_return(admin)
     end
 
-    it "can see reimbursements page and excludes case contacts for a different org" do
-      casa_case = create(:casa_case, casa_org: casa_org)
-      case_contact = create(:case_contact, casa_case: casa_case, want_driving_reimbursement: true, miles_driven: 1, reimbursement_complete: false)
-      other_org_casa_case = create(:casa_case, casa_org: create(:casa_org))
-      _case_contact = create(:case_contact, casa_case: other_org_casa_case, want_driving_reimbursement: true, miles_driven: 2, reimbursement_complete: false)
+    it "calls ReimbursementPolicy::Scope to filter reimbursements" do
+      contact_relation = double(CaseContact)
+      allow(contact_relation).to receive_message_chain(
+        :want_driving_reimbursement,
+        :created_max_ago,
+        :filter_by_reimbursement_status
+      ).and_return([])
+      allow(ReimbursementPolicy::Scope).to receive(:new)
+        .with(controller.current_user, CaseContact.joins(:casa_case))
+        .and_return(double(resolve: contact_relation))
+
+      expect(contact_relation).to receive_message_chain(
+        :want_driving_reimbursement,
+        :created_max_ago,
+        :filter_by_reimbursement_status
+      )
+
       get :index
-      expect(response).to render_template("index")
-      expect(response).to have_http_status(:ok)
-      expect(assigns(:reimbursements)).to eq([case_contact])
+
+      expect(ReimbursementPolicy::Scope).to have_received(:new)
+        .with(controller.current_user, CaseContact.joins(:casa_case))
     end
 
     xit "can change reimbursement status to complete" do
