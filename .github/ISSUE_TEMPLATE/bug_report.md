@@ -29,7 +29,7 @@ Login Emails:
 - supervisor1@example.com view site as a supervisor
 - casa_admin1@example.com view site as an admin
 
-password for all users: 123456  
+password for all users: 12345678  
 
 ### Questions? Join Slack!
 
