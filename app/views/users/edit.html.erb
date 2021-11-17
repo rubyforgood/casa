@@ -49,11 +49,13 @@
         </div>
         <div class="field form-group">
           <%= f.label :password, "New Password" %><br>
-          <%= f.password_field :password, autocomplete: "off", class: "form-control password-new", minlength: User.password_length.min %>
+          <%= f.password_field :password, autocomplete: "off", class: "form-control password-new",
+minlength: User.password_length.min %>
         </div>
         <div class="field form-group">
           <%= f.label :password_confirmation, "New Password Confirmation" %><br>
-          <%= f.password_field :password_confirmation, class: "form-control password-confirmation", minlength: User.password_length.min %>
+          <%= f.password_field :password_confirmation, class: "form-control password-confirmation",
+minlength: User.password_length.min %>
         </div>
         <div class="action_container">
           <%= f.submit "Update Password", class: "btn btn-danger submit-password" %>
