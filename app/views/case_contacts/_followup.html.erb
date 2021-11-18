@@ -1,7 +1,4 @@
 <% if followup %>
-  <div class="col-sm-2 pt-2">
-    <i class="fas fa-lg <%= followup_icon(followup.creator) %>"></i>
-  </div>
   <div class="col-sm-5">
     <%= button_to resolve_followup_path(followup), method: :patch, class: "btn btn-success" do %>
       <%= t("button.resolve") %>
@@ -10,7 +7,7 @@
 <% else %>
   <div class="col-sm-4">
     <button type="button"
-            class="btn btn-danger followup-button"
+            class="btn btn-outline-primary followup-button"
             id="followup-button-<%= contact.id %>">
 
       <%= t("button.follow_up") %>

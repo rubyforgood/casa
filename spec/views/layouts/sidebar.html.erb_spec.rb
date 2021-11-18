@@ -1,9 +1,17 @@
 require "rails_helper"
 
+module PretenderContext
+  def true_user
+  end
+end
+
 RSpec.describe "layout/sidebar", type: :view do
   before do
+    view.class.include PretenderContext
+
     enable_pundit(view, user)
     allow(view).to receive(:current_user).and_return(user)
+    allow(view).to receive(:true_user).and_return(user)
     allow(view).to receive(:user_signed_in?).and_return(true)
     allow(view).to receive(:current_role).and_return(user.role)
     allow(view).to receive(:current_organization).and_return(user.casa_org)
@@ -24,7 +32,10 @@ RSpec.describe "layout/sidebar", type: :view do
   end
 
   context "when logged in as a supervisor" do
-    let(:user) { build_stubbed :supervisor }
+    let(:user) do
+      build_stubbed :supervisor, display_name: "Supervisor's name",
+        email: "supervisor&email@test.com"
+    end
 
     it "renders the correct Role name on the sidebar" do
       sign_in user
@@ -55,14 +66,21 @@ RSpec.describe "layout/sidebar", type: :view do
 
       render partial: "layouts/sidebar"
 
-      expect(rendered).to match user.display_name
-      expect(rendered).to match user.email
+      expect(rendered).to match CGI.escapeHTML user.display_name
+      expect(rendered).to match CGI.escapeHTML user.email
     end
   end
 
   context "when logged in as a volunteer" do
     let(:organization) { build(:casa_org) }
-    let(:user) { create(:volunteer, casa_org: organization) }
+
+    let(:user) do
+      create(
+        :volunteer,
+        casa_org: organization,
+        display_name: "Volunteer's name%"
+      )
+    end
 
     it "renders the correct Role name on the sidebar" do
       sign_in user
@@ -92,8 +110,8 @@ RSpec.describe "layout/sidebar", type: :view do
 
       render partial: "layouts/sidebar"
 
-      expect(rendered).to match user.display_name
-      expect(rendered).to match user.email
+      expect(rendered).to match CGI.escapeHTML user.display_name
+      expect(rendered).to match CGI.escapeHTML user.email
     end
 
     context "when the volunteer does not have a transitioning case" do
@@ -142,7 +160,7 @@ RSpec.describe "layout/sidebar", type: :view do
   end
 
   context "when logged in as a casa admin" do
-    let(:user) { build_stubbed :casa_admin }
+    let(:user) { build_stubbed :casa_admin, display_name: "Superviso's another n&ame" }
 
     it "renders the correct Role name on the sidebar" do
       sign_in user
@@ -175,8 +193,8 @@ RSpec.describe "layout/sidebar", type: :view do
 
       render partial: "layouts/sidebar"
 
-      expect(rendered).to match user.display_name
-      expect(rendered).to match user.email
+      expect(rendered).to match CGI.escapeHTML user.display_name
+      expect(rendered).to match CGI.escapeHTML user.email
     end
   end
 
@@ -200,6 +218,27 @@ RSpec.describe "layout/sidebar", type: :view do
       render partial: "layouts/sidebar"
 
       expect(rendered).not_to have_css("span.badge")
+    end
+  end
+
+  context "impersonation" do
+    let(:user) { build_stubbed :volunteer }
+    let(:true_user) { build_stubbed :casa_admin }
+
+    it "renders a stop impersonating link when impersonating" do
+      allow(view).to receive(:true_user).and_return(true_user)
+
+      render partial: "layouts/sidebar"
+
+      expect(rendered).to have_link(href: "/volunteers/stop_impersonating")
+    end
+
+    it "renders correct Role name when impersonating a volunteer" do
+      allow(view).to receive(:true_user).and_return(true_user)
+
+      render partial: "layouts/sidebar"
+
+      expect(rendered).to match '<span class="value">Volunteer</span>'
     end
   end
 end

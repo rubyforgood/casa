@@ -12,6 +12,7 @@ RSpec.describe CasaCase, type: :model do
   it { is_expected.to belong_to(:hearing_type).optional }
   it { is_expected.to belong_to(:judge).optional }
   it { is_expected.to validate_presence_of(:case_number) }
+  it { is_expected.to validate_presence_of(:birth_month_year_youth) }
   it { is_expected.to validate_uniqueness_of(:case_number).scoped_to(:casa_org_id).case_insensitive }
   it { is_expected.to have_many(:case_court_orders).dependent(:destroy) }
   it { is_expected.to have_many(:volunteers).through(:case_assignments) }
@@ -23,13 +24,15 @@ RSpec.describe CasaCase, type: :model do
       subject { described_class.due_date_passed }
 
       context "when casa_case is present" do
-        let(:casa_case) { create(:casa_case, court_date: Time.current - 3.days) }
+        let!(:court_date) { create(:court_date, date: Time.current - 3.days) }
+        let(:casa_case) { court_date.casa_case }
 
         it { is_expected.to include(casa_case) }
       end
 
       context "when casa_case is not present" do
-        let(:casa_case) { create(:casa_case, court_date: Time.current + 3.days) }
+        let!(:court_date) { create(:court_date, date: Time.current + 3.days) }
+        let(:casa_case) { court_date.casa_case }
 
         it { is_expected.not_to include(casa_case) }
       end
@@ -120,10 +123,10 @@ RSpec.describe CasaCase, type: :model do
         birth_month_year_youth: Date.current - 13.years,
         transition_aged_youth: false)
       transitioned_14_yo = build(:casa_case,
-        birth_month_year_youth: Date.current - 14.years,
+        birth_month_year_youth: pre_transition_aged_youth_age,
         transition_aged_youth: true)
       not_transitioned_14_yo = create(:casa_case,
-        birth_month_year_youth: Date.current - 14.years,
+        birth_month_year_youth: pre_transition_aged_youth_age,
         transition_aged_youth: false)
       cases = CasaCase.should_transition
       aggregate_failures do
@@ -204,22 +207,15 @@ RSpec.describe CasaCase, type: :model do
 
   describe "#clear_court_dates" do
     context "when court date has passed" do
-      it "clears court date" do
-        casa_case = build(:casa_case, court_date: "2020-09-13 02:11:58")
-        casa_case.clear_court_dates
-
-        expect(casa_case.court_date).to be nil
-      end
-
       it "clears report due date" do
-        casa_case = build(:casa_case, court_date: "2020-09-13 02:11:58", court_report_due_date: "2020-09-13 02:11:58")
+        casa_case = build(:casa_case, court_report_due_date: "2020-09-13 02:11:58")
         casa_case.clear_court_dates
 
         expect(casa_case.court_report_due_date).to be nil
       end
 
       it "sets court report as unsubmitted" do
-        casa_case = build(:casa_case, court_date: "2020-09-13 02:11:58", court_report_status: :submitted)
+        casa_case = build(:casa_case, court_report_status: :submitted)
         casa_case.clear_court_dates
 
         expect(casa_case.court_report_status).to eq "not_submitted"
@@ -285,17 +281,17 @@ RSpec.describe CasaCase, type: :model do
     end
   end
 
-  describe "#latest_court_date" do
+  describe "#most_recent_past_court_date" do
     let(:casa_case) { create(:casa_case) }
 
     it "returns the latest past court date" do
-      latest_court_date = create(:court_date, date: 3.months.ago)
+      most_recent_past_court_date = create(:court_date, date: 3.months.ago)
 
       casa_case.court_dates << create(:court_date, date: 9.months.ago)
-      casa_case.court_dates << latest_court_date
+      casa_case.court_dates << most_recent_past_court_date
       casa_case.court_dates << create(:court_date, date: 15.months.ago)
 
-      expect(casa_case.latest_court_date).to eq(latest_court_date)
+      expect(casa_case.most_recent_past_court_date).to eq(most_recent_past_court_date)
     end
   end
 
@@ -364,6 +360,13 @@ RSpec.describe CasaCase, type: :model do
       expect(bad_case.errors[:court_report_submitted_at]).to include(
         "Submission date must be nil if court report status is not submitted."
       )
+    end
+  end
+
+  describe "slug" do
+    let(:casa_case) { create(:casa_case, case_number: "CINA-21-1234") }
+    it "should be parameterized from the case number" do
+      expect(casa_case.slug).to eq "CINA-21-1234"
     end
   end
 end

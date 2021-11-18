@@ -12,19 +12,6 @@ const defineCaseContactsTable = function () {
   )
 }
 
-const defineSupervisorsDataTable = function () {
-  $('table#supervisors').DataTable(
-    {
-      columnDefs: [
-        { orderable: false, targets: 4 }
-      ],
-      autoWidth: false,
-      searching: false,
-      order: [[0, 'desc']]
-    }
-  )
-}
-
 $('document').ready(() => {
   $.fn.dataTable.ext.search.push(
     function (settings, data, dataIndex) {
@@ -104,6 +91,7 @@ $('document').ready(() => {
   // Enable all data tables on dashboard but only filter on volunteers table
   const editSupervisorPath = id => `/supervisors/${id}/edit`
   const editVolunteerPath = id => `/volunteers/${id}/edit`
+  const impersonateVolunteerPath = id => `/volunteers/${id}/impersonate`
   const casaCasePath = id => `/casa_cases/${id}`
   const volunteersTable = $('table#volunteers').DataTable({
     autoWidth: false,
@@ -207,8 +195,11 @@ $('document').ready(() => {
         render: (data, type, row, meta) => {
           return `
           <span class="mobile-label">Actions</span>
-            <a href="${editVolunteerPath(row.id)}">
+            <a href="${editVolunteerPath(row.id)}" class="btn btn-primary">
               Edit
+            </a>
+            <a href="${impersonateVolunteerPath(row.id)}" class="btn btn-secondary">
+              Impersonate
             </a>
           `
         },
@@ -283,8 +274,6 @@ $('document').ready(() => {
 
   defineCaseContactsTable()
 
-  defineSupervisorsDataTable()
-
   function filterOutUnassignedVolunteers (checked) {
     $('.supervisor-options').find('input[type="checkbox"]').not('#unassigned-vol-filter').each(function () {
       this.checked = checked
@@ -320,4 +309,4 @@ $('document').ready(() => {
   })
 })
 
-export { defineCaseContactsTable, defineSupervisorsDataTable }
+export { defineCaseContactsTable }

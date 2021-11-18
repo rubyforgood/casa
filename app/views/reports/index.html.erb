@@ -2,9 +2,9 @@
 
 <div class="card card-container my-4">
   <div class="card-body">
-    <%= form_with url: mileage_reports_path(format: :csv), method: :get, local: true do |f| %>
-      <%= f.submit t(".download_mileage_report_button"), class: "btn btn-primary",
-        data: {disable_with: "Downloading mileage report"} %>
+    <%= form_with url: mileage_reports_path(format: :csv), method: :get do |f| %>
+        <%= f.submit t(".download_mileage_report_button.enabled"), class: "btn btn-primary report-form-submit",
+         data: {disable_with: t(".download_mileage_report_button.disabled")} %>
     <% end %>
   </div>
 </div>
@@ -21,12 +21,18 @@
     <%= form_with url: case_contact_reports_path(format: :csv), scope: 'report', method: :get, local: true do |f| %>
       <div class="field form-group">
         <label><strong><%= t(".start_date_label") %></strong></label>
-        <%= f.date_field :start_date, class: "form-control", value: 6.months.ago.to_date %>
+        <%= f.text_field :start_date, value: 6.months.ago.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT),
+                                      data: { provide: "datepicker",
+                                      date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
+                                      class: "form-control" %>
       </div>
 
       <div class="field form-group">
         <label><strong><%= t(".end_date_label") %></strong></label>
-        <%= f.date_field :end_date, class: "form-control", value: Date.today.to_date %>
+        <%= f.text_field :end_date, value: Date.today.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT),
+                                    data:{ provide: "datepicker",
+                                    date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
+                                    class: "form-control" %>
       </div>
 
       <% if current_user&.casa_admin? || current_user&.supervisor? %>

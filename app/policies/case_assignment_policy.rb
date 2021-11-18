@@ -8,7 +8,7 @@ class CaseAssignmentPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.all
+      scope.all # TODO limit to one CASA
     end
   end
 

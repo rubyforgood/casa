@@ -24,9 +24,11 @@ Rails.application.routes.draw do
     root to: "all_casa_admins/sessions#new", as: :unauthenticated_all_casa_root
   end
 
+  resources :health, only: %i[index]
+
   get "/.well-known/assetlinks.json", to: "android_app_associations#index"
-  resources :casa_cases do
-    resource :emancipation do
+  resources :casa_cases, except: %i[destroy] do
+    resource :emancipation, only: %i[show] do
       member do
         post "save"
       end
@@ -40,7 +42,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :casa_admins, except: %i[destroy] do
+  resources :casa_admins, except: %i[destroy show] do
     member do
       patch :deactivate
       patch :activate
@@ -62,6 +64,10 @@ Rails.application.routes.draw do
       post :generate
     end
   end
+  resources :reimbursements, only: %i[index change_complete_status] do
+    patch :mark_as_complete, to: "reimbursements#change_complete_status"
+    patch :mark_as_needs_review, to: "reimbursements#change_complete_status"
+  end
   resources :imports, only: %i[index create] do
     collection do
       get :download_failed
@@ -69,6 +75,7 @@ Rails.application.routes.draw do
   end
   resources :case_contact_reports, only: %i[index]
   resources :mileage_reports, only: %i[index]
+  resources :mileage_rates, only: %i[index new create edit update]
   resources :casa_orgs, only: %i[edit update]
   resources :contact_type_groups, only: %i[new create edit update]
   resources :contact_types, only: %i[new create edit update]
@@ -77,7 +84,7 @@ Rails.application.routes.draw do
   resources :judges, only: %i[new create edit update]
   resources :notifications, only: :index
 
-  resources :supervisors, except: %i[destroy] do
+  resources :supervisors, except: %i[destroy show], concerns: %i[with_datatable] do
     member do
       patch :activate
       patch :deactivate
@@ -89,12 +96,14 @@ Rails.application.routes.draw do
       patch :unassign
     end
   end
-  resources :volunteers, except: %i[destroy], concerns: %i[with_datatable] do
+  resources :volunteers, except: %i[destroy show], concerns: %i[with_datatable] do
+    post :stop_impersonating, on: :collection
     member do
       patch :activate
       patch :deactivate
       get :resend_invitation
       patch :reminder
+      get :impersonate
     end
   end
   resources :case_assignments, only: %i[create destroy] do

@@ -34,7 +34,7 @@ class CourtDatesController < ApplicationController
     authorize @court_date
 
     if @court_date.save
-      redirect_to casa_case_court_date_path(@casa_case, @court_date), notice: "Past court date was successfully created."
+      redirect_to casa_case_court_date_path(@casa_case, @court_date), notice: "Court date was successfully created."
     else
       render :new
     end
@@ -43,7 +43,7 @@ class CourtDatesController < ApplicationController
   def update
     authorize @court_date
     if @court_date.update(court_dates_params)
-      redirect_to casa_case_court_date_path(@casa_case, @court_date), notice: "Past court date was successfully updated."
+      redirect_to casa_case_court_date_path(@casa_case, @court_date), notice: "Court date was successfully updated."
     else
       render :edit
     end

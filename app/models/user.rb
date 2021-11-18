@@ -27,6 +27,7 @@ class User < ApplicationRecord
     where(is_active: true)
   }, foreign_key: "volunteer_id", dependent: :destroy
   has_one :supervisor, through: :supervisor_volunteer
+  has_one :preference_set, dependent: :destroy
 
   scope :active, -> { where(active: true) }
 
@@ -88,14 +89,17 @@ class User < ApplicationRecord
     # Get ACTIVE volunteers that have ACTIVE supervisor assignments with at least one ACTIVE case
     # 1st condition: Volunteer has not created a contact AT ALL within the past 14 days
 
-    volunteers
-      .includes(:case_assignments)
-      .joins("LEFT JOIN case_contacts cc on cc.creator_id = users.id AND cc.occurred_at > (CURRENT_DATE - INTERVAL '14 days')")
-      .group("users.id, supervisor_volunteers_users.id, case_assignments.id")
-      .where(active: true)
-      .where(supervisor_volunteers: {is_active: true})
-      .where(case_assignments: {active: true})
-      .length
+    no_attempt_count = 0
+    volunteers.map do |volunteer|
+      if volunteer.supervisor.active? &&
+          volunteer.case_assignments.any? { |assignment| assignment.active? } &&
+          (volunteer.case_contacts.none? ||
+          volunteer.case_contacts.maximum(:occurred_at) < (Time.zone.now - 14.days))
+
+        no_attempt_count += 1
+      end
+    end
+    no_attempt_count
   end
 
   def past_names

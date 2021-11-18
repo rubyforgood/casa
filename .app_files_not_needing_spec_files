@@ -21,6 +21,7 @@ controllers/contact_type_groups_controller.rb
 controllers/contact_types_controller.rb
 controllers/emancipation_checklists_controller.rb
 controllers/hearing_types_controller.rb
+controllers/health_controller.rb
 controllers/imports_controller.rb
 controllers/judges_controller.rb
 controllers/mileage_reports_controller.rb
@@ -32,6 +33,7 @@ controllers/supervisors_controller.rb
 controllers/users/sessions_controller.rb
 controllers/users_controller.rb
 controllers/volunteers_controller.rb
+controllers/mileage_rates_controller.rb
 datatables/application_datatable.rb
 decorators/application_decorator.rb
 decorators/case_assignment_decorator.rb
@@ -39,6 +41,7 @@ decorators/court_date_decorator.rb
 helpers/all_casa_admins/casa_orgs_helper.rb
 helpers/contact_types_helper.rb
 helpers/date_helper.rb
+helpers/template_helper.rb
 jobs/application_job.rb
 mailers/application_mailer.rb
 models/application_record.rb

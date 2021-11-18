@@ -11,6 +11,13 @@ class SupervisorsController < ApplicationController
   def index
     authorize Supervisor
     @supervisors = policy_scope(current_organization.supervisors)
+    @show_all = params[:all]
+    if @show_all == "true"
+      @supervisors
+    else
+      @supervisors = @supervisors.active
+      @show_all = false
+    end
   end
 
   def new
@@ -72,6 +79,15 @@ class SupervisorsController < ApplicationController
     @supervisor.invite!
 
     redirect_to edit_supervisor_path(@supervisor), notice: "Invitation sent"
+  end
+
+  def datatable
+    authorize Supervisor
+    supervisors = policy_scope(current_organization.supervisors)
+
+    datatable = SupervisorDatatable.new(supervisors, params)
+
+    render json: datatable
   end
 
   private

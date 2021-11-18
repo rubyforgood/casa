@@ -8,6 +8,8 @@ class Supervisor < User
   has_many :volunteers, -> { includes(:supervisor_volunteer).order(:display_name) }, through: :active_supervisor_volunteers
   has_many :volunteers_ever_assigned, -> { includes(:supervisor_volunteer).order(:display_name) }, through: :supervisor_volunteers, source: :volunteer
 
+  scope :active, -> { where(active: true) }
+
   # Activates supervisor.
   def activate
     update(active: true)

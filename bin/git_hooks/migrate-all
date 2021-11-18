@@ -1,0 +1,22 @@
+#!/bin/sh
+# Runs migrations if any are found to be down
+# Usage:
+#   ./migrate-all
+
+repo_root="$(git rev-parse --show-toplevel)"
+. "$repo_root/bin/git_hooks/logger"
+
+log info "Checking for down migrations"
+
+if ! [ -x "$(command -v bundle)" ]; then
+  log error "Command bundle could not be found"
+  exit 1
+fi
+
+if bundle exec rails db:migrate:status | grep "  down"; then
+  log info "Down migrations found. Migrating..."
+
+  bundle exec rails db:migrate
+else
+  log success "No down migrations found"
+fi

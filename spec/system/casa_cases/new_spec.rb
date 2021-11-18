@@ -18,14 +18,15 @@ RSpec.describe "casa_cases/new", type: :system do
     it "is successful", js: true do
       travel_to Time.zone.local(2020, 12, 1) do
         next_year = (Date.today.year + 1).to_s
+        fourteen_years = (Date.today.year - 14).to_s
         fill_in "Case number", with: case_number
-        select "3", from: "casa_case_court_date_3i"
-        select "March", from: "casa_case_court_date_2i"
-        select next_year, from: "casa_case_court_date_1i"
 
         select "1", from: "casa_case_court_report_due_date_3i"
         select "April", from: "casa_case_court_report_due_date_2i"
         select next_year, from: "casa_case_court_report_due_date_1i"
+
+        select "March", from: "casa_case_birth_month_year_youth_2i"
+        select fourteen_years, from: "casa_case_birth_month_year_youth_1i"
 
         check "Transition aged youth"
         has_checked_field? "Transition aged youth"
@@ -38,7 +39,6 @@ RSpec.describe "casa_cases/new", type: :system do
 
         expect(page.body).to have_content(case_number)
         expect(page).to have_content("CASA case was successfully created.")
-        expect(page).to have_content("Next Court Date: Wednesday, 3-MAR-2021") # accurate for frozen time
         expect(page).to have_content("Court Report Due Date: Thursday, 1-APR-2021") # accurate for frozen time
         expect(page).to have_content("Transition Aged Youth: Yes")
       end
@@ -48,6 +48,11 @@ RSpec.describe "casa_cases/new", type: :system do
   context "when non-mandatory fields are not filled" do
     it "is successful" do
       fill_in "Case number", with: case_number
+
+      five_years = (Date.today.year - 5).to_s
+      select "March", from: "casa_case_birth_month_year_youth_2i"
+      select five_years, from: "casa_case_birth_month_year_youth_1i"
+
       within ".actions" do
         click_on "Create CASA Case"
       end

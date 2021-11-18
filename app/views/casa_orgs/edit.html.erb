@@ -18,15 +18,17 @@
       </div>
       <div class="custom-file mb-5">
         <%= form.label :logo %>
-        <%= form.file_field :logo, class: "form-control" %>
+        <%= form.file_field :logo, class: "form-control", accept: ".png,.gif,.jpg,.jpeg" %>
       </div>
       <div class="custom-file mb-5">
         <%= form.label :court_report_template %>
         <%= form.file_field :court_report_template, class: "form-control" %>
       </div>
       <div class="field form-group">
-        <%= form.check_box :show_driving_reimbursement %>
-        <%= form.label :show_driving_reimbursement %>
+        <div class="form-check">
+          <%= form.check_box :show_driving_reimbursement, class: 'form-check-input' %>
+          <%= form.label :show_driving_reimbursement, class: 'form-check-label' %>
+        </div>
       </div>
       <div class="actions">
         <%= form.submit t("button.submit"), class: "btn btn-primary" %>

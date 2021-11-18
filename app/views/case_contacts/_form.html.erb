@@ -31,11 +31,22 @@
 
   <div class="field contact-type form-group">
     <h2><%= form.label :contact_made %></h2>
-    <%= form.radio_button(:contact_made, true, checked: case_contact.contact_made, required: true) %>
-    <%= form.label "Yes", for: "case_contact_contact_made_true" %>
-    <br>
-    <%= form.radio_button(:contact_made, false, checked: set_contact_made_false(case_contact), required: true) %>
-    <%= form.label "No", for: "case_contact_contact_made_false" %>
+    <div class="form-check">
+      <%= form.radio_button :contact_made, true,
+                      checked: case_contact.contact_made,
+                      required: true,
+                      class: 'form-check-input' %>
+      <%= form.label "Yes", class: "form-check-label",
+                      for: "case_contact_contact_made_true" %>
+    </div>
+    <div class="form-check">
+      <%= form.radio_button :contact_made, false,
+                      checked: set_contact_made_false(case_contact),
+                      required: true,
+                      class: 'form-check-input' %>
+      <%= form.label "No", class: "form-check-label",
+                      for: "case_contact_contact_made_false" %>
+    </div>
   </div>
 
   <div class="field contact-medium form-group">
@@ -65,8 +76,9 @@
           <div>23</div>
         </div>
         <div class="row range-value">
-          <%= form.text_field :duration_hours,
+          <%= form.number_field :duration_hours,
                               id: "casa-contact-duration-hours-display",
+                              min: 0,
                               value: duration_hours(case_contact),
                               required: true %> &nbsp; <span> hour(s)</span>
         </div>
@@ -91,11 +103,11 @@
         <div>59</div>
       </div>
       <div class="row range-value">
-        <%= form.text_field :duration_minutes,
-                            class: "",
-                            id: "casa-contact-duration-minutes-display",
-                            value: duration_minutes(case_contact),
-                            required: true %> &nbsp; <span> minute(s)</span>
+        <%= form.number_field :duration_minutes,
+                              id: "casa-contact-duration-minutes-display",
+                              min: 0,
+                              value: duration_minutes(case_contact),
+                              required: true %> &nbsp; <span> minute(s)</span>
       </div>
     </fieldset>
   </div>

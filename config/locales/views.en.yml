@@ -41,10 +41,10 @@ en:
       pick_displayed_columns: Pick displayed columns
     new:
       title: New CASA Case
-    no_past_court_dates: No past court dates
+    no_court_dates: No court dates
     court_dates:
-      add_past_court_date: Add a past court date
-      past_court_dates: Past court dates
+      add_court_date: Add a court date
+      court_dates: Court dates
     shared:
       assigned_multiple: Assigned to more than 1 Volunteer
       assigned_single: Assigned to Volunteer
@@ -137,7 +137,6 @@ en:
       select_case: Select a Case
       title: Edit Volunteer Assignments for
   case_contacts:
-    archived: (Archived)
     index:
       filter:
         contact_date: Date of contact
@@ -171,7 +170,6 @@ en:
       singular_label: CASA case
     new:
       title: New Case Contact
-    quarter_not_editable: Archived contacts can't be edited. Case contacts are archived after the end of each quarter.
   casa_orgs:
     contact_type_groups:
       button:
@@ -356,8 +354,10 @@ en:
         edit_profile: Edit Profile
         export_data: Export Data
         generate_court_reports: Generate Court Reports
+        reimbursement_queue: Reimbursement Queue
         report_site_issue: Report a site issue
         system_imports: System Imports
+        mileage_rate: Mileage Rates
       menu_item:
         admins: Admins
         case_contacts: Case Contacts
@@ -369,16 +369,16 @@ en:
       no_notifications: You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.
   court_dates:
     edit:
-      title: Editing Past Court Date
+      title: Editing Court Date
     form:
       button:
         create: Create
         update: Update
     new:
-      title: New Past Court Date
+      title: New Court Date
     show:
       button:
-        edit_past_court_date: Edit
+        edit_court_date: Edit
       label:
         casa_case_court_order:
           implementation_status: Implementation Status
@@ -389,15 +389,28 @@ en:
         hearing_type: Hearing Type
         judge: Judge
         none: None
-        no_case_court_mandates: There are no court orders associated with this past court date.
-      title: Past Court Date
+        no_case_court_mandates: There are no court orders associated with this court date.
+      title: Court Date
+  reimbursements:
+    table:
+      heading:
+        amount: Amount
+        case_number: Case Number
+        contact_types: Contact Types
+        date_added: Date Added
+        description: Description
+        expense_type: Expense Type
+        reimbursement_complete: Reimbursement Complete
+        volunteer: Volunteer
   reports:
     index:
       assigned_to_label: "Assigned To:"
       contact_made_label: "Contact Made:"
       contact_type_group_label: "Contact Type Group:"
       contact_type_label: "Contact Type:"
-      download_mileage_report_button: Mileage Report
+      download_mileage_report_button:
+        enabled: Mileage Report
+        disabled: Downloading Mileage Report
       download_report_button: Download Report
       driving_reimbursement_label: "Want Driving Reimbursement:"
       end_date_label: "Ending At:"
@@ -416,6 +429,11 @@ en:
       filter_exported_columns: Filter Exported Columns
       select_columns: "Select columns:"
   supervisors:
+    index:
+      filter: Filter by
+      active: Active
+      inactive: Inactive
+      both: Both
     edit:
       assign_a_volunteer: Assign a Volunteer
       assign_volunteer: Assign Volunteer
@@ -452,16 +470,30 @@ en:
         status: Status
       inactive: Inactive
       no_supervisor: No supervisor assignment
-      "no": No
+      no: No
       pick_displayed_columns: Pick displayed columns
       select_columns: Select columns
       supervisor: Supervisor
       status: Status
       transition_aged_youth: Assigned to Transition Aged Youth
       volunteers: Volunteers
-      "yes": Yes
+      yes: Yes
     send_reminder_button:
       admin_checkbox_text: Send CC to Supervisor and Admin
       send_reminder: Send Reminder
       supervisor_checkbox_text: Send CC to Supervisor
       tooltip: Remind volunteer to input case contacts
+  mileage_rates:
+    index:
+      mileage_rates: Mileage Rates
+      button:
+        new: New Mileage Rate
+        edit: Edit
+      pick_displayed_columns: Pick displayed columns
+      heading:
+        amount: Amount
+        effective_date: Effective Date
+        status: Active?
+        created_by: Created By
+        created_at: Created At
+        actions: Actions

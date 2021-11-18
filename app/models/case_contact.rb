@@ -12,7 +12,6 @@ class CaseContact < ApplicationRecord
   validates :occurred_at, presence: true
   validate :occurred_at_not_in_future
   validate :reimbursement_only_when_miles_driven
-  validate :check_if_allow_edit, on: :update
 
   belongs_to :creator, class_name: "User"
   has_one :supervisor_volunteer, -> {
@@ -46,6 +45,9 @@ class CaseContact < ApplicationRecord
   scope :occurred_ending_at, ->(end_date = nil) {
     where("occurred_at <= ?", end_date) if end_date.present?
   }
+  scope :created_max_ago, ->(time_range = nil) {
+    where("case_contacts.created_at > ?", time_range) if time_range.present?
+  }
   scope :contact_made, ->(contact_made = nil) {
     where(contact_made: contact_made) if /true|false/.match?(contact_made.to_s)
   }
@@ -78,12 +80,14 @@ class CaseContact < ApplicationRecord
     end
   }
   scope :grab_all, ->(current_user) {
-    with_deleted if current_user.is_a?(CasaAdmin)
+    with_deleted if current_user.is_a?(CasaAdmin) # TODO since this cases on user type it should be in a Policy file
   }
 
   scope :contact_medium, ->(medium_type) {
     where(medium_type: medium_type) if medium_type.present?
   }
+
+  scope :filter_by_reimbursement_status, ->(boolean) { where reimbursement_complete: boolean }
 
   scope :sorted_by, ->(sort_option) {
     direction = /desc$/.match?(sort_option) ? "desc" : "asc"
@@ -147,17 +151,6 @@ class CaseContact < ApplicationRecord
     !contact_made.nil?
   end
 
-  def quarter_editable?
-    # case contacts should no longer be editable after the current quarter plus a grace period
-    Time.zone.now < occurred_at.end_of_quarter + 30.days
-  end
-
-  def check_if_allow_edit
-    return if quarter_editable?
-
-    errors.add(:base, message: "cannot edit case contacts created before the current quarter plus 30 days")
-  end
-
   def supervisor_id
     supervisor.id
   end
@@ -212,6 +205,7 @@ end
 #  miles_driven               :integer          default(0), not null
 #  notes                      :string
 #  occurred_at                :datetime         not null
+#  reimbursement_complete     :boolean          default(FALSE)
 #  want_driving_reimbursement :boolean          default(FALSE)
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null

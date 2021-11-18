@@ -33,19 +33,19 @@ CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunte
 
 ## Welcome contributors!
 
-We are very happy to have you! CASA and Ruby for Good are committed to welcoming new contrinbutors of all skill levels.
+We are very happy to have you! CASA and Ruby for Good are committed to welcoming new contributors of all skill levels.
 
 We highly recommend that you join us in slack https://rubyforgood.herokuapp.com/ #casa channel to ask questions quickly and hear about office hours (currently Wednesday 6-8pm Pacific), stakeholder news, and upcoming new issues.
 
 Issues on the issue board https://github.com/rubyforgood/casa/projects/1 in the TODO column are fair game. An issue can be claimed by commenting on it.
 
-Pull requests which are not for an issue but which improve the codebase are also welcome! Feel free to make github issues for bugs and improvements. A maintainer will be keeping an eye on issues and PRs every day or three.
+Pull requests which are not for an issue but which improve the codebase are also welcome! Feel free to make GitHub issues for bugs and improvements. A maintainer will be keeping an eye on issues and PRs every day or three.
 
 See also our [contributing guide](./doc/CONTRIBUTING.md) 💖 ✨
 
 ### About this project
 
-CASA is a national organization with many regional chapters. We currenly work with [Prince George's County CASA in Maryland](https://pgcasa.org/) and [Montgomery CASA Maryland](https://casaspeaks4kids.com)
+CASA is a national organization with many regional chapters. We currently work with [Prince George's County CASA in Maryland](https://pgcasa.org/), [Montgomery CASA Maryland](https://casaspeaks4kids.com), and [Howard County Maryland](https://marylandcasa.org/programs/howard-county/)
 
 This system provides value by:
 
@@ -158,7 +158,7 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 **Cleaning up before you pull request**
 1. `bundle exec standardrb --fix` auto-fix Ruby linting issues [more linter info](https://github.com/testdouble/standard)
 1. `bundle exec erblint --lint-all --autocorrect` [ERB linter](https://github.com/Shopify/erb-lint)
-1. `yarn lint:fix` to run the [JS linter](https://standardjs.com/index.html) and fix isses
+1. `yarn lint:fix` to run the [JS linter](https://standardjs.com/index.html) and fix issues
 1. `rake factory_bot:lint` if you have been editing factories and want to find factories and traits which produce invalid objects
 
 If additional work arises from your pull request that is outside the scope of the issue it resolves, please open a new issue.
@@ -203,7 +203,7 @@ There is a `doc` directory at the top level that includes:
 
 Most conversation happens in the #casa channel of the Ruby For Good slack. Get access here: https://rubyforgood.herokuapp.com/
 
-You can also open an issue or comment on an issue on github and a maintainer will reply to you.
+You can also open an issue or comment on an issue on GitHub and a maintainer will reply to you.
 
 We have a weekly team office hours / hangout on Wednesday 6-8pm Pacific time where we do pair/mob programming and talk about issues. Please stop by! (Zoom link in slack)
 

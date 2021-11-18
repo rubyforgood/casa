@@ -287,4 +287,60 @@ RSpec.describe "volunteers/edit", type: :system do
       expect(ActionMailer::Base.deliveries.first.cc).to include(admin.email)
     end
   end
+
+  describe "impersonate button" do
+    let(:volunteer) { create(:volunteer, casa_org: organization, display_name: "John Doe") }
+
+    before do
+      sign_in user
+      visit edit_volunteer_path(volunteer)
+    end
+
+    context "when user is an admin" do
+      let(:user) { create(:casa_admin, casa_org: organization) }
+
+      it "shows the impersonate button" do
+        expect(page).to have_link("Impersonate")
+      end
+
+      it "impersonates the volunteer" do
+        click_on "Impersonate"
+
+        within(".sidebar-wrapper") do
+          expect(page).to have_text(
+            "You (#{user.display_name}) are signed in as John Doe. " \
+              "Click here to stop impersonating."
+          )
+        end
+      end
+    end
+
+    context "when user is a supervisor" do
+      let(:user) { create(:supervisor, casa_org: organization) }
+
+      it "shows the impersonate button" do
+        expect(page).to have_link("Impersonate")
+      end
+
+      it "impersonates the volunteer" do
+        click_on "Impersonate"
+
+        within(".sidebar-wrapper") do
+          expect(page).to have_text(
+            "You (#{user.display_name}) are signed in as John Doe. " \
+              "Click here to stop impersonating."
+          )
+        end
+      end
+    end
+
+    context "when user is a volunteer" do
+      let(:user) { create(:volunteer, casa_org: organization) }
+
+      it "does not show the impersonate button", :aggregate_failures do
+        expect(page).not_to have_link("Impersonate")
+        expect(current_path).not_to eq(edit_volunteer_path(volunteer))
+      end
+    end
+  end
 end

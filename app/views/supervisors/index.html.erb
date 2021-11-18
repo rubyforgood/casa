@@ -4,18 +4,63 @@
     <% if policy(Supervisor).create? %>
       <%= link_to "New Supervisor", new_supervisor_path, class: "btn btn-primary mb-2 mb-md-0" %>
     <% end %>
+
+    <% if @show_all %>
+      <%= link_to "Hide deactivated", supervisors_path, class: "btn btn-light mb-2 mb-md-0" %>
+    <% else %>
+      <%= link_to "Show deactivated", supervisors_path(all: "true"), class: "btn btn-light mb-2 mb-md-0" %>
+    <% end %>
   </div>
+</div>
+<hr>
+
+<div class="row supervisor-filters">
+  <div class="col-sm-12">
+    <h4 class="pull-left mr-2"><%= t(".filter") %></h4>
+    <div class="dropdown pull-left mr-2">
+      <button
+        class="btn btn-secondary dropdown-toggle show"
+        type="button"
+        id="dropdownMenuButton"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"><%= t(".status") %></button>
+      <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
+        <div class="dropdown-item form-check">
+          <%= check_box_tag "status_option_active", "true", true,
+                    class: "active form-check-input",
+                    data: { value: "true" } %>
+          <%= label_tag "status_option_active", t(".active"), class: "form-check-label" %>
+        </div>
+        <div class="dropdown-item form-check">
+          <%= check_box_tag "status_option_inactive", "false", false,
+                    class: "inactive form-check-input",
+                    data: { value: "false" } %>
+          <%= label_tag "status_option_inactive", t(".inactive"), class: "form-check-label" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+
+<div class="supervisor_indicator_legend">
+<div class="supervisor_indicator_legend_negative_positive">
+  <span class="supervisor_indicator_legend_positive">Have made contact in the last 14 days</span>
+  <span class="supervisor_indicator_legend_negative">Have not made contact in the last 14 days</span>
+</div>
+<div class="supervisor_indicator_legend_transition_aged_youth">(Transition aged youth)</div>
 </div>
 
 <div class="card card-container">
   <div class="card-body">
-    <table class="table table-striped table-bordered supervisors-list" id="supervisors">
+    <table
+      class="table table-striped table-bordered supervisors-list"
+      id="supervisors">
       <thead>
       <tr>
         <th>Supervisor Name</th>
-        <th>Volunteer Assignments</th>
-        <th>Serving Transition Aged Youth</th>
-        <th>No Attempt (14 days)</th>
+        <th></th>
         <th>Actions</th>
       </tr>
       </thead>
@@ -23,27 +68,37 @@
       <tbody>
       <% @supervisors.each do |supervisor| %>
         <tr>
+          <% no_attempt_volunteers = supervisor.no_attempt_for_two_weeks %>
+          <% active_volunteers = (supervisor.active_volunteers - no_attempt_volunteers).nonzero? %>
+          <% if active_volunteers %>
+            <% no_attempt_percentage = ((no_attempt_volunteers.to_f / supervisor.active_volunteers.to_f) * 100).to_i %>
+            <% active_percentage = (100 - no_attempt_percentage).to_i %>
+          <% else %>
+            <% no_attempt_percentage = 100 %>
+            <% active_percentage = 0 %>
+          <% end %>
+
+          <% transition_volunteers = supervisor.volunteers_serving_transition_aged_youth %>
+
           <td id="name-<%= supervisor.id %>">
             <span class="mobile-label">Supervisor Name</span>
             <%= link_to(supervisor.display_name, edit_supervisor_path(supervisor)) %>
           </td>
 
-          <% active_volunteers = supervisor.active_volunteers %>
-          <td id="volunteer-assignments-<%= supervisor.id %>" data-order="<%= active_volunteers %>">
-            <span class="mobile-label">Volunteer Assignments</span>
-            <%= active_volunteers %>
-          </td>
-
-          <% transition_volunteers = supervisor.volunteers_serving_transition_aged_youth %>
-          <td id="serving-transition-aged-youth-<%= supervisor.id %>" data-order="<%= transition_volunteers %>">
-            <span class="mobile-label">Serving Transition Aged Youth</span>
-            <%= transition_volunteers %>
-          </td>
-
-          <% no_attempt_volunteers = supervisor.no_attempt_for_two_weeks %>
-          <td id="no-attempt-<%= supervisor.id %>" data-order="<%= no_attempt_volunteers %>">
-            <span class="mobile-label">No Attempt (14 days)</span>
-            <%= no_attempt_volunteers %>
+          <td class="supervisor_indicator_container">
+            <div class="supervisor_indicator_negative_positive">
+              <% if active_volunteers %>
+                <span class="supervisor_indicator_positive" style="width: <%= active_percentage %>%">
+                  <%= active_volunteers %>
+                </span>
+              <% end %>
+              <% if no_attempt_volunteers.nonzero? %>
+                <span class="supervisor_indicator_negative" style="width: <%= no_attempt_percentage %>%">
+                  <%= no_attempt_volunteers %>
+                </span>
+              <% end %>
+          </div>
+            <div class="supervisor_indicator_transition_aged_youth">(<%= transition_volunteers %>)</div>
           </td>
 
           <td>

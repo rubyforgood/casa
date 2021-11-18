@@ -18,53 +18,44 @@
       <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <%= t(".supervisor") %>
       </button>
-      <ul class="dropdown-menu supervisor-options">
-        <li>
-          <a class="small" data-value="option1" tabIndex="-1">
-            <input
-              id="unassigned-vol-filter"
-              type="checkbox"
-              data-value=""
-              unchecked>
-              <%= t(".no_supervisor") %>
-          </a>
-        </li>
+      <div class="dropdown-menu supervisor-options">
+        <div class="dropdown-item form-check">
+          <%= check_box_tag "supervisor-option-none", "", false,
+                    class: "form-check-input",
+                    data: { value: "" },
+                    id: "unassigned-vol-filter" %>
+          <%= label_tag "supervisor-option-none", t(".no_supervisor"), class: "form-check-label" %>
+        </div>
         <% current_organization.supervisors.where(active: true).each do |supervisor| %>
-          <li>
-            <a class="small" data-value="option1" tabIndex="-1">
-              <% if policy(User).edit_name?(supervisor) %>
-                <input
-                  type="checkbox"
-                  data-value="<%= supervisor.display_name %>"
-                  checked>
-              <% else %>
-                <input
-                  type="checkbox"
-                  data-value="<%= supervisor.display_name %>">
-              <% end %>
-              <%= supervisor.display_name %>
-            </a>
-          </li>
+          <div class="dropdown-item form-check">
+            <% option_for_name = supervisor.display_name.downcase.gsub(/ /, '_').gsub(/[^a-z_]+/, '') -%>
+            <% tag_name = "supervisor-option-#{option_for_name}" -%>
+            <%= check_box_tag tag_name, supervisor.display_name,
+                    policy(User).edit_name?(supervisor),   # checked?
+                    class: "form-check-input",
+                    data: { value: supervisor.display_name } %>
+            <%= label_tag tag_name, supervisor.display_name, class: "form-check-label" %>
+          </div>
         <% end %>
-      </ul>
+      </div>
     </div>
     <div class="dropdown pull-left mr-2">
       <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <%= t(".status") %>
       </button>
       <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
-        <li>
-          <a class="small" data-value="option1" tabIndex="-1">
-            <input type="checkbox" data-value="true" checked>
-            <%= t(".active") %>
-          </a>
-        </li>
-        <li>
-          <a class="small" data-value="option1" tabIndex="-1">
-            <input type="checkbox" data-value="false">
-            <%= t(".inactive") %>
-          </a>
-        </li>
+        <div class="dropdown-item form-check">
+          <%= check_box_tag "status_option_active", "true", true,
+                    class: "form-check-input",
+                    data: { value: "true" } %>
+          <%= label_tag "status_option_active", t(".active"), class: "form-check-label" %>
+        </div>
+        <div class="dropdown-item form-check">
+          <%= check_box_tag "status_option_inactive", "false", false,
+                    class: "form-check-input",
+                    data: { value: "false" } %>
+          <%= label_tag "status_option_inactive", t(".inactive"), class: "form-check-label" %>
+        </div>
       </div>
     </div>
     <div class="dropdown pull-left mr-2">
@@ -72,16 +63,18 @@
       <%= t(".transition_aged_youth") %>
       </button>
       <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton">
-        <li>
-          <a class="small" data-value="option1" tabIndex="-1">
-            <input type="checkbox" data-value="true" checked><%= t(".yes") %>
-          </a>
-        </li>
-        <li>
-          <a class="small" data-value="option1" tabIndex="-1">
-            <input type="checkbox" data-value="false" checked><%= t(".no") %>
-          </a>
-        </li>
+        <div class="dropdown-item form-check">
+          <%= check_box_tag "transition_youth_option_yes", "true", true,
+                    class: "form-check-input",
+                    data: { value: "true" } %>
+          <%= label_tag "transition_youth_option_yes", t(".yes"), class: "form-check-label" %>
+        </div>
+        <div class="dropdown-item form-check">
+          <%= check_box_tag "transition_youth_option_no", "false", true,
+                    class: "form-check-input",
+                    data: { value: "false" } %>
+          <%= label_tag "transition_youth_option_no", t(".no"), class: "form-check-label" %>
+        </div>
       </div>
     </div>
   </div>

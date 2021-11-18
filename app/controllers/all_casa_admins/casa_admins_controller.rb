@@ -55,5 +55,6 @@ class AllCasaAdmins::CasaAdminsController < AllCasaAdminsController
 
   def set_casa_org
     @casa_org = CasaOrg.find(params[:casa_org_id])
+    # @casa_org = CasaOrg.find_by(slug: params[:casa_org_id]) # TODO when using slugs
   end
 end

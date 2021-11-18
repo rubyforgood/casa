@@ -19,6 +19,51 @@ RSpec.describe "supervisors/index", type: :view do
 
       expect(rendered).to have_link("New Supervisor", href: new_supervisor_path)
     end
+
+    it "shows the legend for the colored bars at all times" do
+      render template: "supervisors/index"
+
+      expect(rendered).to match /Have made contact in the last 14 days/
+      expect(rendered).to match /Have not made contact in the last 14 days/
+      expect(rendered).to match /(Transition aged youth)/
+    end
+
+    it "shows positive and negative numbers for each supervisor" do
+      supervisor = create(:supervisor)
+      create(:volunteer, :with_cases_and_contacts, supervisor: supervisor)
+      create(:volunteer, :with_casa_cases, supervisor: supervisor)
+
+      assign :supervisors, [supervisor]
+      render template: "supervisors/index"
+
+      expect(rendered).to match /supervisor_indicator_positive/
+      expect(rendered).to match /supervisor_indicator_negative/
+      expect(rendered).to match /supervisor_indicator_transition_aged_youth/
+    end
+
+    it "omits the positive bar if there are no active volunteers with contact w/in 14 days" do
+      supervisor = create(:supervisor)
+      create(:volunteer, :with_casa_cases, supervisor: supervisor)
+
+      assign :supervisors, [supervisor]
+      render template: "supervisors/index"
+
+      expect(rendered).not_to match /supervisor_indicator_positive/
+      expect(rendered).to match /supervisor_indicator_negative/
+      expect(rendered).to match /supervisor_indicator_transition_aged_youth/
+    end
+
+    it "omits the negative bar if all volunteers have a contact within 14 days" do
+      supervisor = create(:supervisor)
+      create(:volunteer, :with_cases_and_contacts, supervisor: supervisor)
+
+      assign :supervisors, [supervisor]
+      render template: "supervisors/index"
+
+      expect(rendered).to match /supervisor_indicator_positive/
+      expect(rendered).not_to match /supervisor_indicator_negative$/
+      expect(rendered).to match /supervisor_indicator_transition_aged_youth/
+    end
   end
 
   context "when logged in as a supervisor" do

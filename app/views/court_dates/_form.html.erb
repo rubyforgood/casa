@@ -12,13 +12,13 @@
       </p>
 
       <div class="field form-group">
-        <%= form.label :date, "Add Court Date (past)" %>
+        <%= form.label :date, "Add Court Date" %>
         <br>
         <span class="datetime-year-month">
           <%= form.date_select :date,
                                 {
                                     order: [:day, :month, :year],
-                                    start_year: Date.current.year,
+                                    start_year: Date.current.year + 3,
                                     end_year: 2000,
                                     prompt: {day: t("common.day"), month: t("common.month"), year: t("common.year")}
                                 },

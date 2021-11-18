@@ -2,6 +2,8 @@ class CasaOrg < ApplicationRecord
   CASA_DEFAULT_COURT_REPORT = File.new(Rails.root.join("app", "documents", "templates", "default_report_template.docx"), "r")
   CASA_DEFAULT_LOGO = Rails.root.join("public", "logo.jpeg")
 
+  before_create :set_slug
+
   has_paper_trail
   validates :name, presence: true, uniqueness: true
 
@@ -9,6 +11,7 @@ class CasaOrg < ApplicationRecord
   has_many :casa_cases, dependent: :destroy
   has_many :contact_type_groups, dependent: :destroy
   has_many :hearing_types, dependent: :destroy
+  has_many :mileage_rates, dependent: :destroy
   has_many :case_assignments, through: :users, source: :casa_cases
   has_one_attached :logo
   has_one_attached :court_report_template
@@ -46,6 +49,15 @@ class CasaOrg < ApplicationRecord
       yield CASA_DEFAULT_COURT_REPORT
     end
   end
+
+  def set_slug
+    self.slug = name.parameterize
+  end
+
+  # def to_param
+  #   id
+  #   # slug # TODO use slug eventually for routes
+  # end
 end
 
 # == Schema Information
@@ -58,6 +70,11 @@ end
 #  footer_links               :string           default([]), is an Array
 #  name                       :string           not null
 #  show_driving_reimbursement :boolean          default(TRUE)
+#  slug                       :string
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null
+#
+# Indexes
+#
+#  index_casa_orgs_on_slug  (slug) UNIQUE
 #
