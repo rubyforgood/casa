@@ -23,8 +23,8 @@ RSpec.describe "supervisors/index", type: :view do
     it "shows the legend for the colored bars at all times" do
       render template: "supervisors/index"
 
-      expect(rendered).to match /Have made contact in the last 14 days/
-      expect(rendered).to match /Have not made contact in the last 14 days/
+      expect(rendered).to match /Have attempted contact in the last 14 days/
+      expect(rendered).to match /Have not attempted contact in the last 14 days/
       expect(rendered).to match /(Transition aged youth)/
     end
 
