@@ -65,6 +65,11 @@ RSpec.describe "/casa_cases", type: :request do
         get casa_case_url(other_case)
         expect(response).to be_not_found
       end
+
+      it "shows the hearing type of past court dates" do
+        get casa_case_url(casa_case)
+        expect(response.body).to include("Emergency Hearing")
+      end
     end
 
     describe "GET /new" do
