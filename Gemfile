@@ -30,7 +30,7 @@ gem "pundit" # for authorization management - based on user.role field
 gem "rack-attack" # for blocking & throttling abusive requests
 gem "request_store"
 gem "sablon" # Word document templating tool for Case Court Reports
-gem "scout_apm", "~> 5.0"
+gem "scout_apm", "~> 5.1"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "webpacker", "~> 5.4" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 
