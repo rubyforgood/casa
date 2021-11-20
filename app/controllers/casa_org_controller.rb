@@ -1,4 +1,4 @@
-class CasaOrgsController < ApplicationController
+class CasaOrgController < ApplicationController
   before_action :set_casa_org, only: %i[edit update]
   before_action :set_contact_type_data, only: %i[edit update]
   before_action :set_hearing_types, only: %i[edit update]
