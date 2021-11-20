@@ -21,7 +21,7 @@
       </div>
     <% end %>
   </div>
-
+  
   <%= render "contact_types",
       form: form,
       model: @case_contact,
@@ -125,7 +125,11 @@
 
   <div class="field miles-driven form-group">
     <h2><%= form.label :miles_driven %></h2>
-    <%= form.number_field :miles_driven, class: "form-control", required: true, min: "0", max: 10000 %>
+    <% if form_type == 'new' %>
+      <%= form.number_field :miles_driven, class: "form-control", required: true, min: "0", max: 10000, placeholder: "0", value: nil %>
+    <% else %>
+      <%= form.number_field :miles_driven, class: "form-control", required: true, min: "0", max: 10000, placeholder: "0" %>
+    <% end %>
   </div>
 
   <% if current_organization.show_driving_reimbursement %>
