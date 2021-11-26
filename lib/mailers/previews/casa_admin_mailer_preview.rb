@@ -1,11 +1,13 @@
 class CasaAdminMailerPreview < ActionMailer::Preview
   def account_setup
-    casa_admin = params.has_key?(:id) ? CasaAdmin.find_by(id: params[:id]) : CasaAdmin.last
-    CasaAdminMailer.account_setup(casa_admin)
+    CasaAdminMailer.account_setup(get_casa_admin)
   end
 
   def deactivation
-    casa_admin = params.has_key?(:id) ? CasaAdmin.find_by(id: params[:id]) : CasaAdmin.last
-    CasaAdminMailer.deactivation(casa_admin)
+    CasaAdminMailer.deactivation(get_casa_admin)
+  end
+
+  def get_casa_admin
+    CasaAdmin.find_by(id: params[:id]) || CasaAdmin.last
   end
 end

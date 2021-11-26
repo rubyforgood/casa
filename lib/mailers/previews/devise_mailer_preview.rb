@@ -2,8 +2,7 @@
 # :nocov:
 class DeviseMailerPreview < ActionMailer::Preview
   def reset_password_instructions
-    user = params.has_key?(:id) ? User.find_by(id: params[:id]) : User.last
-    Devise::Mailer.reset_password_instructions(user, "faketoken")
+    Devise::Mailer.reset_password_instructions(get_user, "faketoken")
   end
 
   def invitation_instructions_as_all_casa_admin
@@ -44,13 +43,15 @@ class DeviseMailerPreview < ActionMailer::Preview
   end
 
   def email_changed
-    user = params.has_key?(:id) ? User.find_by(id: params[:id]) : User.last
-    Devise::Mailer.email_changed(user)
+    Devise::Mailer.email_changed(get_user)
   end
 
   def password_change
-    user = params.has_key?(:id) ? User.find_by(id: params[:id]) : User.last
-    Devise::Mailer.password_change(user)
+    Devise::Mailer.password_change(get_user)
+  end
+
+  def get_user
+    User.find_by(id: params[:id]) || User.last
   end
 end
 # :nocov:
