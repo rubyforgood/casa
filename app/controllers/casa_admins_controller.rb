@@ -30,11 +30,19 @@ class CasaAdminsController < ApplicationController
     service = ::CreateCasaAdminService.new(current_organization, params, current_user)
     @casa_admin = service.build
     authorize @casa_admin
+
     begin
       service.create!
-      redirect_to casa_admins_path, notice: "New admin created successfully"
+
+      respond_to do |format|
+        format.html { redirect_to casa_admins_path, notice: "New admin created successfully" }
+        format.json { render json: @casa_admin, status: :created }
+      end
     rescue ActiveRecord::RecordInvalid
-      render new_casa_admin_path
+      respond_to do |format|
+        format.html { render :new }
+        format.json { render json: service.casa_admin.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   end
 

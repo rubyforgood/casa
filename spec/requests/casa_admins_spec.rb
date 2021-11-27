@@ -210,4 +210,69 @@ RSpec.describe "/casa_admins", type: :request do
       expect(response).to redirect_to(edit_casa_admin_path(casa_admin))
     end
   end
+
+  describe "POST /casa_admins" do
+    subject { post casa_admins_path, params: {casa_admin: params} }
+
+    before { sign_in_as_admin }
+
+    context "when successfully" do
+      let(:params) { attributes_for(:casa_admin) }
+
+      it "creates a new casa_admin" do
+        expect { subject }.to change(CasaAdmin, :count).by(1)
+      end
+
+      it "has flash notice" do
+        subject
+
+        expect(flash[:notice]).to eq("New admin created successfully")
+      end
+
+      it "redirects to casa_admins_path" do
+        subject
+
+        expect(response).to redirect_to casa_admins_path
+      end
+
+      it "also respond to json", :aggregate_failures do
+        post casa_admins_path(format: :json), params: {casa_admin: params}
+
+        expect(response.content_type).to eq("application/json; charset=utf-8")
+        expect(response).to have_http_status(:created)
+        expect(response.body).to match(params[:display_name].to_json)
+      end
+    end
+
+    context "when failure" do
+      let(:params) { attributes_for(:casa_admin) }
+
+      before do
+        allow_any_instance_of(CreateCasaAdminService).to receive(:create!)
+          .and_raise(ActiveRecord::RecordInvalid)
+      end
+
+      it "does not create a new casa_admin" do
+        expect { subject }.not_to change(CasaAdmin, :count)
+      end
+
+      it "renders new_casa_admin_path" do
+        subject
+
+        expect(response).to render_template :new
+      end
+
+      it "also respond to json", :aggregate_failures do
+        casa_admin = instance_spy(CasaAdmin)
+        allow(casa_admin).to receive_message_chain(:errors, :full_messages).and_return(["Some error message"])
+        allow_any_instance_of(CreateCasaAdminService).to receive(:casa_admin).and_return(casa_admin)
+
+        post casa_admins_path(format: :json), params: {casa_admin: params}
+
+        expect(response.content_type).to eq("application/json; charset=utf-8")
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to match("Some error message".to_json)
+      end
+    end
+  end
 end
