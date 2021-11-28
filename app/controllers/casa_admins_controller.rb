@@ -82,9 +82,15 @@ class CasaAdminsController < ApplicationController
     if @casa_admin.deactivate
       CasaAdminMailer.deactivation(@casa_admin).deliver
 
-      redirect_to edit_casa_admin_path(@casa_admin), notice: "Admin was deactivated."
+      respond_to do |format|
+        format.html { redirect_to edit_casa_admin_path(@casa_admin), notice: "Admin was deactivated." }
+        format.json { render json: @casa_admin, status: :ok }
+      end
     else
-      render :edit
+      respond_to do |format|
+        format.html { render :edit }
+        format.json { render json: @casa_admin.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   rescue Errno::ECONNREFUSED => error
     redirect_to_casa_admin_edition_page(error)

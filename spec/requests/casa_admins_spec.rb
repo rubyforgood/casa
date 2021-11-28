@@ -197,28 +197,37 @@ RSpec.describe "/casa_admins", type: :request do
     let(:casa_admin) { create(:casa_admin, active: true) }
 
     context "logged in as admin user" do
-      it "can successfully deactivate a casa admin user" do
-        sign_in_as_admin
-        patch deactivate_casa_admin_path(casa_admin)
-        casa_admin.reload
-        expect(casa_admin.active).to be_falsey
+      context "when successfully" do
+        before { sign_in_as_admin }
 
-        expect(response).to redirect_to edit_casa_admin_path(casa_admin)
-        expect(response.request.flash[:notice]).to eq "Admin was deactivated."
-      end
-
-      it "sends a deactivation email" do
-        sign_in_as_admin
-
-        expect {
+        it "can successfully deactivate a casa admin user" do
           patch deactivate_casa_admin_path(casa_admin)
-        }.to change { ActionMailer::Base.deliveries.count }.by(1)
+          casa_admin.reload
+          expect(casa_admin.active).to be_falsey
+
+          expect(response).to redirect_to edit_casa_admin_path(casa_admin)
+          expect(response.request.flash[:notice]).to eq "Admin was deactivated."
+        end
+
+        it "sends a deactivation email" do
+          expect { patch deactivate_casa_admin_path(casa_admin) }
+            .to change { ActionMailer::Base.deliveries.count }
+            .by(1)
+        end
+
+        it "also respond as json", :aggregate_failures do
+          patch deactivate_casa_admin_path(casa_admin, format: :json)
+
+          expect(response.content_type).to eq("application/json; charset=utf-8")
+          expect(response).to have_http_status(:ok)
+          expect(response.body).to match(casa_admin.reload.active.to_json)
+        end
       end
 
       context "when occurs send errors" do
-        it "redirects to admin edition page" do
-          sign_in_as_admin
+        before { sign_in_as_admin }
 
+        it "redirects to admin edition page" do
           allow(CasaAdminMailer).to receive_message_chain(:deactivation, :deliver) { raise Errno::ECONNREFUSED }
 
           patch deactivate_casa_admin_path(casa_admin)
@@ -227,13 +236,24 @@ RSpec.describe "/casa_admins", type: :request do
         end
 
         it "shows error message" do
-          sign_in_as_admin
-
           allow(CasaAdminMailer).to receive_message_chain(:deactivation, :deliver) { raise Errno::ECONNREFUSED }
 
           patch deactivate_casa_admin_path(casa_admin)
 
           expect(flash[:alert]).to eq("Email not sent.")
+        end
+
+        it "also respond as json", :aggregate_failures do
+          casa_admin = create(:casa_admin, active: true)
+          allow_any_instance_of(CasaAdmin).to receive(:deactivate).and_return(false)
+          allow_any_instance_of(CasaAdmin).to receive_message_chain(:errors, :full_messages)
+            .and_return ["Error message test"]
+
+          patch deactivate_casa_admin_path(casa_admin, format: :json)
+
+          expect(response.content_type).to eq("application/json; charset=utf-8")
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response.body).to match("Error message test".to_json)
         end
       end
     end
