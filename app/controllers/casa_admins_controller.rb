@@ -14,10 +14,17 @@ class CasaAdminsController < ApplicationController
 
   def update
     authorize @casa_admin
+
     if @casa_admin.update(update_casa_admin_params)
-      redirect_to casa_admins_path, notice: "New admin created successfully"
+      respond_to do |format|
+        format.html { redirect_to casa_admins_path, notice: "New admin created successfully" }
+        format.json { render json: @casa_admin, status: :ok }
+      end
     else
-      render :edit
+      respond_to do |format|
+        format.html { render :edit }
+        format.json { render json: @casa_admin.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   end
 

@@ -34,12 +34,15 @@ RSpec.describe "/casa_admins", type: :request do
 
   describe "PUT /casa_admins/:id" do
     context "logged in as admin user" do
-      it "can successfully update a casa admin user" do
-        sign_in_as_admin
-        casa_admin = create(:casa_admin)
-        expected_display_name = "Admin 2"
-        expected_email = "admin2@casa.com"
+      let(:casa_admin) { create(:casa_admin) }
+      let(:expected_display_name) { "Admin 2" }
+      let(:expected_email) { "admin2@casa.com" }
 
+      before do
+        sign_in_as_admin
+      end
+
+      it "can successfully update a casa admin user", :aggregate_failures do
         put casa_admin_path(casa_admin), params: {
           casa_admin: {
             email: expected_email,
@@ -50,11 +53,52 @@ RSpec.describe "/casa_admins", type: :request do
         casa_admin.reload
         expect(casa_admin.email).to eq expected_email
         expect(casa_admin.display_name).to eq expected_display_name
-
         expect(response).to redirect_to casa_admins_path
         expect(response.request.flash[:notice]).to eq "New admin created successfully"
       end
+
+      it 'also respond as json', :aggregate_failures do
+        put casa_admin_path(casa_admin, format: :json), params: {
+          casa_admin: {
+            email: expected_email,
+            display_name: expected_display_name
+          }
+        }
+
+        expect(response.content_type).to eq("application/json; charset=utf-8")
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to match(expected_email.to_json)
+      end
     end
+
+    context "when logged in as admin, but invalid data" do
+      let(:casa_admin) { create(:casa_admin) }
+
+      before do
+        sign_in_as_admin
+      end
+
+      it "cannot update the casa admin", :aggregate_failures do
+        put casa_admin_path(casa_admin), params: {
+          casa_admin: { email: nil }
+        }
+
+        casa_admin.reload
+        expect(casa_admin.email).not_to eq nil
+        expect(response).to render_template :edit
+      end
+
+      it 'also respond as json', :aggregate_failures do
+        put casa_admin_path(casa_admin, format: :json), params: {
+          casa_admin: { email: nil }
+        }
+
+        expect(response.content_type).to eq("application/json; charset=utf-8")
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to match("Email can't be blank".to_json)
+      end
+    end
+
 
     context "logged in as a non-admin user" do
       it "cannot update a casa admin user" do
