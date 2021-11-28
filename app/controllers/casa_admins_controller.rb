@@ -55,12 +55,23 @@ class CasaAdminsController < ApplicationController
 
   def activate
     authorize @casa_admin
+
     if @casa_admin.activate
       CasaAdminMailer.account_setup(@casa_admin).deliver
 
-      redirect_to edit_casa_admin_path(@casa_admin), notice: "Admin was activated. They have been sent an email."
+      respond_to do |format|
+        format.html do
+          redirect_to edit_casa_admin_path(@casa_admin),
+            notice: "Admin was activated. They have been sent an email."
+        end
+
+        format.json { render json: @casa_admin, status: :ok }
+      end
     else
-      render :edit
+      respond_to do |format|
+        format.html { render :edit }
+        format.json { render json: @casa_admin.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   rescue Errno::ECONNREFUSED => error
     redirect_to_casa_admin_edition_page(error)

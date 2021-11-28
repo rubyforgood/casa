@@ -57,7 +57,7 @@ RSpec.describe "/casa_admins", type: :request do
         expect(response.request.flash[:notice]).to eq "New admin created successfully"
       end
 
-      it 'also respond as json', :aggregate_failures do
+      it "also respond as json", :aggregate_failures do
         put casa_admin_path(casa_admin, format: :json), params: {
           casa_admin: {
             email: expected_email,
@@ -80,7 +80,7 @@ RSpec.describe "/casa_admins", type: :request do
 
       it "cannot update the casa admin", :aggregate_failures do
         put casa_admin_path(casa_admin), params: {
-          casa_admin: { email: nil }
+          casa_admin: {email: nil}
         }
 
         casa_admin.reload
@@ -88,9 +88,9 @@ RSpec.describe "/casa_admins", type: :request do
         expect(response).to render_template :edit
       end
 
-      it 'also respond as json', :aggregate_failures do
+      it "also respond as json", :aggregate_failures do
         put casa_admin_path(casa_admin, format: :json), params: {
-          casa_admin: { email: nil }
+          casa_admin: {email: nil}
         }
 
         expect(response.content_type).to eq("application/json; charset=utf-8")
@@ -98,7 +98,6 @@ RSpec.describe "/casa_admins", type: :request do
         expect(response.body).to match("Email can't be blank".to_json)
       end
     end
-
 
     context "logged in as a non-admin user" do
       it "cannot update a casa admin user" do
@@ -133,27 +132,37 @@ RSpec.describe "/casa_admins", type: :request do
   describe "PATCH /activate" do
     let(:casa_admin) { create(:casa_admin, active: false) }
 
-    it "activates an inactive casa_admin" do
-      sign_in_as_admin
+    context "when successfully" do
+      before { sign_in_as_admin }
 
-      patch activate_casa_admin_path(casa_admin)
-
-      casa_admin.reload
-      expect(casa_admin.active).to eq(true)
-    end
-
-    it "sends an activation email" do
-      sign_in_as_admin
-
-      expect {
+      it "activates an inactive casa_admin" do
         patch activate_casa_admin_path(casa_admin)
-      }.to change { ActionMailer::Base.deliveries.count }.by(1)
+
+        casa_admin.reload
+        expect(casa_admin.active).to eq(true)
+      end
+
+      it "sends an activation email" do
+        expect { patch activate_casa_admin_path(casa_admin) }
+          .to change { ActionMailer::Base.deliveries.count }
+          .by(1)
+      end
+
+      it "also respond as json", :aggregate_failures do
+        patch activate_casa_admin_path(casa_admin, format: :json)
+
+        expect(response.content_type).to eq("application/json; charset=utf-8")
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to match(casa_admin.reload.active.to_json)
+      end
     end
 
     context "when occurs send errors" do
-      it "redirects to admin edition page" do
+      before do
         sign_in_as_admin
+      end
 
+      it "redirects to admin edition page" do
         allow(CasaAdminMailer).to receive_message_chain(:account_setup, :deliver) { raise Errno::ECONNREFUSED }
 
         patch activate_casa_admin_path(casa_admin)
@@ -162,13 +171,24 @@ RSpec.describe "/casa_admins", type: :request do
       end
 
       it "shows error message" do
-        sign_in_as_admin
-
         allow(CasaAdminMailer).to receive_message_chain(:account_setup, :deliver) { raise Errno::ECONNREFUSED }
 
         patch activate_casa_admin_path(casa_admin)
 
         expect(flash[:alert]).to eq("Email not sent.")
+      end
+
+      it "also respond as json", :aggregate_failures do
+        casa_admin = create(:casa_admin, active: false)
+        allow_any_instance_of(CasaAdmin).to receive(:activate).and_return(false)
+        allow_any_instance_of(CasaAdmin).to receive_message_chain(:errors, :full_messages)
+          .and_return ["Error message test"]
+
+        patch activate_casa_admin_path(casa_admin, format: :json)
+
+        expect(response.content_type).to eq("application/json; charset=utf-8")
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to match("Error message test".to_json)
       end
     end
   end
