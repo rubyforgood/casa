@@ -11,20 +11,32 @@ RSpec.describe "all_casa_admins/casa_orgs/new", type: :system do
     end
 
     it "lets admin create a casa org" do
+      create(:casa_org, name: "some name")
       expect(page).to have_text "Create a new CASA Organization"
 
-      fill_in "Name", with: "A new org"
-      fill_in "Display name", with: "A new org"
+      fill_in "Name", with: "some name"
+      fill_in "Display name", with: "some name"
       fill_in "Address", with: "123 Whole St"
 
       expect {
         click_on "Create CASA Organization"
+        expect(page).not_to have_text "CASA Organization was successfully created."
+        expect(page).to have_text "1 error prohibited this Casa org from being saved:"
+        expect(page).to have_text "Name has already been taken"
+      }.to change(
+               CasaOrg,
+               :count
+           ).by(0)
+
+      fill_in "Name", with: "A new org"
+      fill_in "Display name", with: "A new org"
+      expect {
+        click_on "Create CASA Organization"
         expect(page).to have_text "CASA Organization was successfully created."
       }.to change(
-        CasaOrg,
-        :count
-      ).by(1)
-
+               CasaOrg,
+               :count
+           ).by(1)
       new_org = CasaOrg.last
       expect(new_org.name).to eq "A new org"
       expect(new_org.display_name).to eq "A new org"
@@ -36,9 +48,9 @@ RSpec.describe "all_casa_admins/casa_orgs/new", type: :system do
         click_on "Create CASA Organization"
         expect(page).to have_text "Name can't be blank"
       }.to change(
-        CasaOrg,
-        :count
-      ).by(0)
+               CasaOrg,
+               :count
+           ).by(0)
     end
   end
 
