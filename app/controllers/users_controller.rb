@@ -3,8 +3,6 @@ class UsersController < ApplicationController
   before_action :authorize_user_with_policy
   before_action :set_active_casa_admins
   after_action :verify_authorized
-  before_action :set_custom_error_heading, only: [:update_password]
-  after_action :reset_custom_error_heading, only: [:update_password]
 
   def edit
   end
@@ -68,13 +66,5 @@ class UsersController < ApplicationController
 
   def valid_user_password
     @user.valid_password?(password_params[:current_password])
-  end
-
-  def set_custom_error_heading
-    @custom_error_header = "password change"
-  end
-
-  def reset_custom_error_heading
-    @custom_error_header = nil
   end
 end
