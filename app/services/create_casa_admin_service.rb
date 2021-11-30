@@ -1,4 +1,6 @@
 class CreateCasaAdminService
+  attr_reader :casa_admin
+
   def initialize(current_organization, params, current_user)
     @current_organization = current_organization
     @params = params
@@ -10,6 +12,7 @@ class CreateCasaAdminService
       .with_password(SecureRandom.hex(10))
       .with_organization(@current_organization)
       .without(:active, :type)
+
     @casa_admin = CasaAdmin.new(processed_params)
   end
 
