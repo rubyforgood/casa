@@ -258,6 +258,11 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "Occurred at", with: "04/04/2020"
       fill_in "Miles driven", with: "30"
       select "Yes", from: "Want driving reimbursement"
+
+      # DP_Edit_Here
+
+      fill_in "other-expenses-amount", with: "5"
+      fill_in "other-expenses-describe", with: "tolls"
       fill_in "Notes", with: "Hello world"
 
       expect(page).not_to have_text("error")
