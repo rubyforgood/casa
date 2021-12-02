@@ -46,10 +46,19 @@ class DbPopulator
     create_users(casa_org, options)
     create_cases(casa_org, options)
     create_hearing_types(casa_org)
+    create_judges(casa_org)
     casa_org
   end
 
   private # -------------------------------------------------------------------------------------------------------
+
+  # Create 2 judges for each casa_org.
+  def create_judges(casa_org)
+    env = ENV["APP_ENVIRONMENT"] || Rails.env
+    if env == "qa" || env == "test"
+      2.times { Judge.create(name: Faker::Name.name, casa_org: casa_org) }
+    end
+  end
 
   # Creates 3 users, 1 each for [Volunteer, Supervisor, CasaAdmin].
   # For org's after the first one created, adds an org number to the email address so that they will be globally unique
