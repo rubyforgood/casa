@@ -49,6 +49,7 @@ class SeederMain
     @active_record_classes ||= [
       CasaOrg,
       CasaCase,
+      Judge,
       User,
       Volunteer,
       Supervisor,
