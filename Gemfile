@@ -65,7 +65,7 @@ group :test do
   gem "database_cleaner-active_record", "~> 2.0.1"
   gem "rails-controller-testing"
   gem "rake"
-  gem "selenium-webdriver", "4.0.3" # temporarily locking to a beta version until 4.x comes out - to fix docker tests https://github.com/SeleniumHQ/selenium/issues/9001
+  gem "selenium-webdriver", "4.1.0" # temporarily locking to a beta version until 4.x comes out - to fix docker tests https://github.com/SeleniumHQ/selenium/issues/9001
   gem "simplecov", "~> 0.21.2", require: false # 0.17.1 pinned as a workaround for https://github.com/codeclimate/test-reporter/issues/418
   gem "webdrivers" # easy installation and use of web drivers to run system tests with browsers
 end
