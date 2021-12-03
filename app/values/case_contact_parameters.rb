@@ -1,6 +1,9 @@
 # Calculate values when using case contact parameters
 class CaseContactParameters < SimpleDelegator
   def initialize(params)
+
+#DP_Edit_Here
+
     params =
       params.require(:case_contact).permit(
         :duration_minutes,
@@ -9,6 +12,7 @@ class CaseContactParameters < SimpleDelegator
         :medium_type,
         :miles_driven,
         :want_driving_reimbursement,
+        :other_expense_amount,
         :notes,
         case_contact_contact_type_attributes: [:contact_type_id]
       )
