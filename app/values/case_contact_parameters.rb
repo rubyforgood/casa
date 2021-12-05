@@ -13,6 +13,7 @@ class CaseContactParameters < SimpleDelegator
         :miles_driven,
         :want_driving_reimbursement,
         :other_expense_amount,
+        :other_expense_describe,
         :notes,
         case_contact_contact_type_attributes: [:contact_type_id]
       )
