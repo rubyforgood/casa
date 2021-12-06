@@ -1,8 +1,7 @@
 class AdditionalExpense < ApplicationRecord
 
-  belongs to :casa_contact
+  belongs to :case_contact
 
-  
 
 end
 
