@@ -44,7 +44,7 @@ group :development, :test do
   gem "pry-byebug"
   gem "rspec-rails", "~> 5.0.2"
   gem "shoulda-matchers"
-  gem "standard", "~> 1.4.0" # linter https://github.com/testdouble/standard
+  gem "standard", "~> 1.5.0" # linter https://github.com/testdouble/standard
 end
 
 group :development do
