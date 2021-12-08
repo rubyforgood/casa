@@ -1,6 +1,7 @@
 class AdditionalExpensesController < ApplicationController
   before_action :set_additional_expense, except: [:new, :create]
 
+
   def new
     authorize AdditionalExpense
     @additional_expense = AdditionalExpense.new
