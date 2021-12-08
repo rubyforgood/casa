@@ -3,13 +3,11 @@ class AdditionalExpensesController < ApplicationController
 
 
   def new
-    authorize AdditionalExpense
-    @additional_expense = AdditionalExpense.new
+    @additional_expense = AdditionalExpenses.new
   end
 
   def create
-    authorize AdditionalExpense
-    @additional_expense = AdditionalExpense.new(additional_expense_params)
+    @additional_expense = AdditionalExpenses.new(additional_expense_params)
 
     if @additional_expense.save
       notice: "Additional Expense successfully created."
@@ -29,16 +27,17 @@ class AdditionalExpensesController < ApplicationController
     else
       render :edit
     end
+  end
 
   private
 
   def set_additional_expense
-    @additional_expense = AdditionalExpense.find(params[:id])
+    @additional_expense = AdditionalExpenses.find(params[:id])
   end
 
   def additional_expense_params
     params.require(:additional_expense).permit(:other_expense_amount, :other_expense_describe)
-# DP not how to merge with current casa_contact
+  end
 
 
 end
