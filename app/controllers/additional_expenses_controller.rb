@@ -37,7 +37,7 @@ class AdditionalExpensesController < ApplicationController
   end
 
   def additional_expense_params
-    params.require(:additional_expense).permit(:other_expense_amount, :other_expense_describe).merge(casa_contact:)
+    params.require(:additional_expense).permit(:other_expense_amount, :other_expense_describe)
 # DP not how to merge with current casa_contact
 
 

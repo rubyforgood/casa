@@ -1,10 +1,7 @@
 class AdditionalExpense < ApplicationRecord
 
-  belongs to :case_contact
+  belongs_to :case_contact
   
-  attr_accessor :other_expense_amount,
-  :other_expense_describe
-
 end
 
 # == Schema Information
