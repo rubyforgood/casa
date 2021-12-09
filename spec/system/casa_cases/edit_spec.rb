@@ -9,7 +9,7 @@ RSpec.describe "Edit CASA Case", type: :system do
     let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
     let!(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
     before do
-      travel_to Time.zone.local(2020, 8, 29, 4, 5, 6)
+      travel_to DateTime.new(2020, 8, 29, 4, 5, 6)
     end
     before { sign_in admin }
 
@@ -273,7 +273,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       end
 
       before do
-        travel_to Time.zone.local(2020, 8, 29, 4, 5, 6)
+        travel_to DateTime.new(2020, 8, 29, 4, 5, 6)
       end
 
       after { travel_back }
@@ -475,7 +475,7 @@ of it unless it was included in a previous court report.")
       end
     end
     before do
-      travel_to Time.zone.local(2020, 8, 29, 4, 5, 6)
+      travel_to DateTime.new(2020, 8, 29, 4, 5, 6)
     end
     before { sign_in volunteer }
 
