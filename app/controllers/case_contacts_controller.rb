@@ -164,7 +164,6 @@ class CaseContactsController < ApplicationController
   end
 
   def additional_expense_params
-    binding.pry
     params.require(:additional_expense).permit(:other_expense_amount, :other_expense_describe)
   end
 end
