@@ -3,7 +3,7 @@
   <ul>
     <% casa_case.court_dates.ordered_ascending.each do |pcd| %>
       <p>
-        <%= link_to(pcd.decorate.formatted_date_with_hearing_type_name, casa_case_past_court_date_path(casa_case, pcd)) %>
+        <%= link_to(pcd.decorate.formatted_date_with_hearing_type_name, casa_case_court_date_path(casa_case, pcd)) %>
 
         <% if report = pcd.latest_associated_report %>
           <%= link_to(rails_blob_path(report, disposition: 'attachment')) do %>
