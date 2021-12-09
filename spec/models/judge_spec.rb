@@ -20,4 +20,15 @@ RSpec.describe Judge, type: :model do
       expect(described_class.for_organization(casa_org_2)).to eq([record_2])
     end
   end
+
+  describe "default scope" do
+    let(:casa_org) { create(:casa_org) }
+    let(:judges) do
+      5.times.map { create(:judge, casa_org: casa_org) }
+    end
+
+    it "orders alphabetically by name" do
+      expect(described_class.for_organization(casa_org)).to eq(judges.sort_by(&:name))
+    end
+  end
 end

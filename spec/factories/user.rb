@@ -3,8 +3,8 @@ FactoryBot.define do
     casa_org { CasaOrg.first || create(:casa_org) }
     sequence(:email) { |n| "email#{n}@example.com" }
     sequence(:display_name) { |n| "User #{n}" }
-    password { "123456" }
-    password_confirmation { "123456" }
+    password { "12345678" }
+    password_confirmation { "12345678" }
     case_assignments { [] }
 
     trait :inactive do

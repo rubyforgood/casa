@@ -11,10 +11,12 @@ RSpec.describe "/dashboard", type: :request do
     end
 
     describe "GET /show" do
-      it "renders a successful response" do
-        get root_url
+      context "with one active case" do
+        it "redirects to the new case contact" do
+          get root_url
 
-        expect(response).to redirect_to(casa_case_path(case_assignment.casa_case.id))
+          expect(response).to redirect_to(new_case_contact_path)
+        end
       end
 
       context "more than one active case" do

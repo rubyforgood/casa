@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "/volunteers", type: :request do
-  let(:admin) { create(:casa_admin) }
+  let(:admin) { build(:casa_admin) }
   let(:volunteer) { create(:volunteer) }
 
   describe "GET /index" do
@@ -132,7 +132,7 @@ RSpec.describe "/volunteers", type: :request do
       let!(:other_volunteer) { create(:volunteer) }
 
       it "does not update the volunteer" do
-        volunteer.supervisor = create(:supervisor)
+        volunteer.supervisor = build(:supervisor)
 
         patch volunteer_path(volunteer), params: {
           volunteer: {email: other_volunteer.email, display_name: "New Name"}
@@ -215,12 +215,10 @@ RSpec.describe "/volunteers", type: :request do
       expect(volunteer.active).to eq(false)
     end
 
-    it "sends an activation email" do
-      sign_in admin
-
+    it "doesn't send an deactivation email" do
       expect {
         patch deactivate_volunteer_path(volunteer)
-      }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      }.to_not change { ActionMailer::Base.deliveries.count }
     end
   end
 
@@ -236,6 +234,38 @@ RSpec.describe "/volunteers", type: :request do
       expect(Devise.mailer.deliveries.count).to eq(1)
       expect(Devise.mailer.deliveries.first.subject).to eq(I18n.t("devise.mailer.invitation_instructions.subject"))
       expect(response).to redirect_to(edit_volunteer_path(volunteer))
+    end
+  end
+
+  describe "GET /impersonate" do
+    let!(:other_volunteer) { create(:volunteer) }
+    let!(:supervisor) { create(:supervisor) }
+
+    it "can impersonate a volunteer as an admin" do
+      sign_in admin
+
+      get impersonate_volunteer_path(volunteer)
+      expect(response).to redirect_to(root_path)
+      expect(controller.current_user).to eq(volunteer)
+    end
+
+    it "can impersonate a volunteer as a supervisor" do
+      sign_in supervisor
+
+      get impersonate_volunteer_path(volunteer)
+      expect(response).to redirect_to(root_path)
+      expect(controller.current_user).to eq(volunteer)
+    end
+
+    it "can not impersonate as a volunteer" do
+      sign_in volunteer
+
+      get impersonate_volunteer_path(other_volunteer)
+      expect(response).to redirect_to(root_path)
+      expect(controller.current_user).to eq(volunteer)
+
+      follow_redirect!
+      expect(flash[:notice]).to match(/Sorry, you are not authorized to perform this action./)
     end
   end
 end

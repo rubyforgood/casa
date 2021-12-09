@@ -4,7 +4,7 @@ RSpec.describe "/users", type: :request do
   describe "GET /edit" do
     context "with a volunteer signed in" do
       it "renders a successful response" do
-        sign_in create(:volunteer)
+        sign_in build(:volunteer)
 
         get edit_users_path
 
@@ -14,7 +14,7 @@ RSpec.describe "/users", type: :request do
 
     context "with an admin signed in" do
       it "renders a successful response" do
-        sign_in create(:casa_admin)
+        sign_in build(:casa_admin)
 
         get edit_users_path
 
@@ -25,7 +25,7 @@ RSpec.describe "/users", type: :request do
 
   describe "PATCH /update" do
     it "updates the user" do
-      volunteer = create(:volunteer)
+      volunteer = build(:volunteer)
       sign_in volunteer
 
       patch users_path, params: {user: {display_name: "New Name"}}
@@ -39,6 +39,7 @@ RSpec.describe "/users", type: :request do
       patch update_password_users_path(user),
         params: {
           user: {
+            current_password: "12345678",
             password: "new_pass",
             password_confirmation: "new_pass"
           }
@@ -111,6 +112,17 @@ RSpec.describe "/users", type: :request do
 
           subject
         end
+
+        it "bypasses sign in if the current user is the true user" do
+          expect_any_instance_of(UsersController).to receive(:bypass_sign_in).with(user)
+          subject
+        end
+
+        it "does not bypass sign in when the current user is not the true user" do
+          allow_any_instance_of(UsersController).to receive(:true_user).and_return(User.new)
+          expect_any_instance_of(UsersController).to_not receive(:bypass_sign_in).with(user)
+          subject
+        end
       end
 
       context "when failure" do
@@ -156,6 +168,17 @@ RSpec.describe "/users", type: :request do
           allow(UserMailer).to receive(:password_changed_reminder).with(user).and_return(mailer)
           expect(mailer).to receive(:deliver)
 
+          subject
+        end
+
+        it "bypasses sign in if the current user is the true user" do
+          expect_any_instance_of(UsersController).to receive(:bypass_sign_in).with(user)
+          subject
+        end
+
+        it "does not bypass sign in when the current user is not the true user" do
+          allow_any_instance_of(UsersController).to receive(:true_user).and_return(User.new)
+          expect_any_instance_of(UsersController).to_not receive(:bypass_sign_in).with(user)
           subject
         end
       end

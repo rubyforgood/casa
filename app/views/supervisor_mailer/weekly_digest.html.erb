@@ -86,6 +86,7 @@
           <% end %>
           <br>
         <% end %>
+      </td>
     </tr>
   <% end %>
 
@@ -97,22 +98,30 @@
   </tr>
 
   <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-      <% @supervisor.volunteers.each do |volunteer| %>
-        <% inactive_cases = CaseAssignment.inactive_this_week(volunteer.id) %>
-          <% inactive_cases.each do |case_assignment| %>
-            <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-            <% inactive_case_number = case_assignment.casa_case.case_number %>
-            <%= "#{volunteer.display_name} Case #{inactive_case_number} marked inactive this week." %>
-            <br>
+    <% @inactive_messages.each do |message| %>
+      <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+        <%= message %>
+        <br>
+      </td>
+    <% end %>
+  </tr>
+
+  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+    <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 18px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+      <% if @show_notes %>
+        There are no additional notes.
+      <% end %>
     </td>
   </tr>
-<% end %>
-<% end %>
 
   <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
     <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 18px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
       <b>Pending Volunteers:</b>
       <br>
+        <% if @supervisor.pending_volunteers.empty? %>
+        <br>
+          There are no pending volunteers.
+        <% end %>
     </td>
   </tr>
 
@@ -124,6 +133,7 @@
       <td>
         <button> <%= link_to "Re-invite", resend_invitation_volunteer_url(volunteer) %></button>
       </td>
-  </tr>
+    </tr>
   <% end %>
+
 </table>

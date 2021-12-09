@@ -1,9 +1,17 @@
 require "rails_helper"
 
+module PretenderContext
+  def true_user
+  end
+end
+
 RSpec.describe "layout/sidebar", type: :view do
   before do
+    view.class.include PretenderContext
+
     enable_pundit(view, user)
     allow(view).to receive(:current_user).and_return(user)
+    allow(view).to receive(:true_user).and_return(user)
     allow(view).to receive(:user_signed_in?).and_return(true)
     allow(view).to receive(:current_role).and_return(user.role)
     allow(view).to receive(:current_organization).and_return(user.casa_org)
@@ -24,7 +32,10 @@ RSpec.describe "layout/sidebar", type: :view do
   end
 
   context "when logged in as a supervisor" do
-    let(:user) { build_stubbed :supervisor }
+    let(:user) do
+      build_stubbed :supervisor, display_name: "Supervisor's name",
+        email: "supervisor&email@test.com"
+    end
 
     it "renders the correct Role name on the sidebar" do
       sign_in user
@@ -55,14 +66,21 @@ RSpec.describe "layout/sidebar", type: :view do
 
       render partial: "layouts/sidebar"
 
-      expect(rendered).to match user.display_name
-      expect(rendered).to match user.email
+      expect(rendered).to match CGI.escapeHTML user.display_name
+      expect(rendered).to match CGI.escapeHTML user.email
     end
   end
 
   context "when logged in as a volunteer" do
-    let(:organization) { create(:casa_org) }
-    let(:user) { create(:volunteer, casa_org: organization) }
+    let(:organization) { build(:casa_org) }
+
+    let(:user) do
+      create(
+        :volunteer,
+        casa_org: organization,
+        display_name: "Volunteer's name%"
+      )
+    end
 
     it "renders the correct Role name on the sidebar" do
       sign_in user
@@ -92,8 +110,8 @@ RSpec.describe "layout/sidebar", type: :view do
 
       render partial: "layouts/sidebar"
 
-      expect(rendered).to match user.display_name
-      expect(rendered).to match user.email
+      expect(rendered).to match CGI.escapeHTML user.display_name
+      expect(rendered).to match CGI.escapeHTML user.email
     end
 
     context "when the volunteer does not have a transitioning case" do
@@ -105,8 +123,8 @@ RSpec.describe "layout/sidebar", type: :view do
         expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
 
         # 1 Non transitioning case
-        casa_case = create(:casa_case, casa_org: organization, transition_aged_youth: false)
-        create(:case_assignment, volunteer: user, casa_case: casa_case)
+        casa_case = build_stubbed(:casa_case, casa_org: organization, transition_aged_youth: false)
+        build_stubbed(:case_assignment, volunteer: user, casa_case: casa_case)
 
         render partial: "layouts/sidebar"
         expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
@@ -117,11 +135,11 @@ RSpec.describe "layout/sidebar", type: :view do
       it "does not render emancipation checklist(s)" do
         sign_in user
 
-        inactive_case = create(:casa_case, casa_org: organization, transition_aged_youth: true, active: false)
-        create(:case_assignment, volunteer: user, casa_case: inactive_case)
+        inactive_case = build_stubbed(:casa_case, casa_org: organization, transition_aged_youth: true, active: false)
+        build_stubbed(:case_assignment, volunteer: user, casa_case: inactive_case)
 
-        unassigned_case = create(:casa_case, casa_org: organization, transition_aged_youth: true)
-        create(:case_assignment, volunteer: user, casa_case: unassigned_case, active: false)
+        unassigned_case = build_stubbed(:casa_case, casa_org: organization, transition_aged_youth: true)
+        build_stubbed(:case_assignment, volunteer: user, casa_case: unassigned_case, active: false)
 
         render partial: "layouts/sidebar"
         expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
@@ -142,7 +160,7 @@ RSpec.describe "layout/sidebar", type: :view do
   end
 
   context "when logged in as a casa admin" do
-    let(:user) { build_stubbed :casa_admin }
+    let(:user) { build_stubbed :casa_admin, display_name: "Superviso's another n&ame" }
 
     it "renders the correct Role name on the sidebar" do
       sign_in user
@@ -163,7 +181,7 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Supervisors", href: "/supervisors")
       expect(rendered).to have_link("Admins", href: "/casa_admins")
       expect(rendered).to have_link("System Imports", href: "/imports")
-      expect(rendered).to have_link("Edit Organization", href: "/casa_orgs/#{user.casa_org.id}/edit")
+      expect(rendered).to have_link("Edit Organization", href: "/casa_org/#{user.casa_org.id}/edit")
       expect(rendered).to have_link("Report a site issue", href: "https://rubyforgood.typeform.com/to/iXY4BubB")
       expect(rendered).to have_link("Generate Court Reports", href: "/case_court_reports")
       expect(rendered).to have_link("Export Data", href: "/reports")
@@ -175,13 +193,13 @@ RSpec.describe "layout/sidebar", type: :view do
 
       render partial: "layouts/sidebar"
 
-      expect(rendered).to match user.display_name
-      expect(rendered).to match user.email
+      expect(rendered).to match CGI.escapeHTML user.display_name
+      expect(rendered).to match CGI.escapeHTML user.email
     end
   end
 
   context "notifications" do
-    let(:user) { build_stubbed :volunteer }
+    let(:user) { build_stubbed(:volunteer) }
 
     it "displays badge when user has notifications" do
       sign_in user
@@ -200,6 +218,27 @@ RSpec.describe "layout/sidebar", type: :view do
       render partial: "layouts/sidebar"
 
       expect(rendered).not_to have_css("span.badge")
+    end
+  end
+
+  context "impersonation" do
+    let(:user) { build_stubbed :volunteer }
+    let(:true_user) { build_stubbed :casa_admin }
+
+    it "renders a stop impersonating link when impersonating" do
+      allow(view).to receive(:true_user).and_return(true_user)
+
+      render partial: "layouts/sidebar"
+
+      expect(rendered).to have_link(href: "/volunteers/stop_impersonating")
+    end
+
+    it "renders correct Role name when impersonating a volunteer" do
+      allow(view).to receive(:true_user).and_return(true_user)
+
+      render partial: "layouts/sidebar"
+
+      expect(rendered).to match '<span class="value">Volunteer</span>'
     end
   end
 end

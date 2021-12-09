@@ -1,10 +1,8 @@
 <h1>Edit Profile</h1>
-
+<%= render "/shared/error_messages", resource: @user %>
 <div class="card card-container">
   <div class="card-body">
     <%= form_for @user, as: :user, url: users_path do |form| %>
-      <%= render "/shared/error_messages", resource: @user %>
-
       <div class="field form-group">
         <%= form.label :email %>
         <%= form.text_field :email, class: "form-control", disabled: !current_user.casa_admin? %>
@@ -46,15 +44,21 @@
       <br>
       <%= form_for(@user, as: :user, url: {action: "update_password"}) do |f| %>
         <div class="field form-group">
-          <%= f.label :password, "Password" %><br>
-          <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
+          <%= f.label :current_password, "Current Password" %><br>
+          <%= f.password_field :current_password, autocomplete: "off", class: "form-control" %>
         </div>
         <div class="field form-group">
-          <%= f.label :password_confirmation, "Password Confirmation" %><br>
-          <%= f.password_field :password_confirmation, class: "form-control" %>
+          <%= f.label :password, "New Password" %><br>
+          <%= f.password_field :password, autocomplete: "off", class: "form-control password-new",
+minlength: User.password_length.min %>
+        </div>
+        <div class="field form-group">
+          <%= f.label :password_confirmation, "New Password Confirmation" %><br>
+          <%= f.password_field :password_confirmation, class: "form-control password-confirmation",
+minlength: User.password_length.min %>
         </div>
         <div class="action_container">
-          <%= f.submit "Update Password", class: "btn btn-danger" %>
+          <%= f.submit "Update Password", class: "btn btn-danger submit-password" %>
         </div>
       <% end %>
     </div>

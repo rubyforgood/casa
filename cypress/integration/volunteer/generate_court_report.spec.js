@@ -1,6 +1,7 @@
+  // TODO - fix flakey spec ref: https://github.com/rubyforgood/casa/issues/2550#issuecomment-943474980
 const path = require("path");
 
-context("Logging into cypress as a volunteer", () => {
+context.skip("Logging into cypress as a volunteer", () => {
   before(() => {
     cy.visit("0.0.0.0:4040");
     cy.loginAsVolunteer();
@@ -12,9 +13,9 @@ context("Logging into cypress as a volunteer", () => {
     // Pick the first non-blank option from the case selection dropdown
     cy.get("#case-selection option")
       .eq(1)
-      .then(element => {
-        const option = element.val()
-        cy.get('#case-selection').select(option, {force: true});
+      .then((element) => {
+        const option = element.val();
+        cy.get("#case-selection").select(option, { force: true });
 
         cy.contains("Generate Report").click();
 

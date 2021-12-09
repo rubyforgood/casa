@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe "/casa_case/:id/emancipation", type: :request do
-  let(:organization) { create(:casa_org) }
+  let(:organization) { build(:casa_org) }
   let(:organization_different) { create(:casa_org) }
-  let(:casa_case) { create(:casa_case, casa_org: organization, transition_aged_youth: true) }
+  let(:casa_case) { create(:casa_case, casa_org: organization, birth_month_year_youth: 15.years.ago) }
 
   describe "GET /show" do
     before { sign_in user }
@@ -17,9 +17,14 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
             get casa_case_emancipation_path(casa_case)
             expect(response).to be_successful
           end
+
+          it "renders a successful response for docx format" do
+            get casa_case_emancipation_path(casa_case, format: :docx)
+            expect(response).to be_successful
+          end
         end
 
-        context "when the user and case belong to defferent orgs" do
+        context "when the user and case belong to different orgs" do
           it "renders an unauthorized error" do
             user.casa_org = organization_different
 
@@ -182,11 +187,11 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
 
     context "when passing parameters" do
       let(:mutually_exclusive_category) { create(:emancipation_category, mutually_exclusive: true, name: "mutex_category") }
-      let(:mutex_option_a) { create(:emancipation_option, emancipation_category_id: mutually_exclusive_category.id, name: "A") }
+      let(:mutex_option_a) { build(:emancipation_option, emancipation_category_id: mutually_exclusive_category.id, name: "A") }
       let(:mutex_option_b) { create(:emancipation_option, emancipation_category_id: mutually_exclusive_category.id, name: "B") }
 
       let(:user) { create(:volunteer, casa_org: organization) }
-      let(:non_transitioning_casa_case) { create(:casa_case, casa_org: organization, transition_aged_youth: false) }
+      let(:non_transitioning_casa_case) { build(:casa_case, casa_org: organization, birth_month_year_youth: 8.years.ago) }
       let!(:case_assignment) { create(:case_assignment, volunteer: user, casa_case: casa_case) }
       let!(:case_assignment_non_transitioning_case) { create(:case_assignment, volunteer: user, casa_case: non_transitioning_casa_case) }
 

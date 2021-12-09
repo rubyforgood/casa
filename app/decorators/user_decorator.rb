@@ -13,8 +13,8 @@ class UserDecorator < Draper::Decorator
     I18n.l(object.updated_at, format: :full, default: nil)
   end
 
-  def formatted_last_sign_in_at
-    I18n.l(object.last_sign_in_at, format: :full, default: nil)
+  def formatted_current_sign_in_at
+    I18n.l(object.current_sign_in_at, format: :full, default: nil)
   end
 
   def formatted_invitation_accepted_at

@@ -3,10 +3,10 @@ require "rails_helper"
 RSpec.describe CasaAdminPolicy do
   subject { described_class }
 
-  let(:organization) { create(:casa_org) }
+  let(:organization) { build(:casa_org) }
   let(:casa_admin) { create(:casa_admin, casa_org: organization) }
-  let(:volunteer) { create(:volunteer, casa_org: organization) }
-  let(:supervisor) { create(:supervisor, casa_org: organization) }
+  let(:volunteer) { build(:volunteer, casa_org: organization) }
+  let(:supervisor) { build(:supervisor, casa_org: organization) }
 
   permissions :index?, :new?, :create?, :edit?, :update?, :activate?, :resend_invitation? do
     it "allows casa_admins" do
@@ -24,7 +24,7 @@ RSpec.describe CasaAdminPolicy do
 
   permissions :deactivate? do
     context "when user is a casa admin" do
-      let(:admin_inactive) { create(:casa_admin, active: false, casa_org: organization) }
+      let(:admin_inactive) { build_stubbed(:casa_admin, active: false, casa_org: organization) }
 
       it "does not permit if is a inactive user" do
         is_expected.not_to permit(admin_inactive, :casa_admin)

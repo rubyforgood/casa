@@ -12,6 +12,23 @@ class EmancipationsController < ApplicationController
     @current_case = CasaCase.find(params[:casa_case_id])
     authorize @current_case
     @emancipation_form_data = EmancipationCategory.all
+
+    respond_to do |format|
+      format.html
+      format.docx {
+        template_filename = File.join("app", "documents", "templates", "emancipation_checklist_template.docx")
+        @template = Sablon.template(File.expand_path(template_filename))
+
+        html_body = EmancipationChecklistDownloadHtml.new(@current_case, @emancipation_form_data).call
+
+        context = {
+          case_number: @current_case.case_number,
+          emancipation_checklist: Sablon.content(:html, html_body)
+        }
+
+        send_data @template.render_to_string context, type: :docx
+      }
+    end
   end
 
   def save
@@ -26,7 +43,7 @@ class EmancipationsController < ApplicationController
       return
     end
 
-    unless current_case.has_transitioned?
+    unless current_case.in_transition_age?
       render json: {error: "The current case is not marked as transitioning"}
       return
     end

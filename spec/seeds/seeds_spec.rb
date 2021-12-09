@@ -6,6 +6,7 @@ def empty_ar_classes
     AllCasaAdmin,
     CasaAdmin,
     CasaCase,
+    Judge,
     CasaOrg,
     CaseAssignment,
     CaseContact,
@@ -16,7 +17,7 @@ def empty_ar_classes
     User,
     HearingType,
     Volunteer,
-    CaseCourtMandate
+    CaseCourtOrder
   ]
   ar_classes.select { |klass| klass.count == 0 }.map(&:name)
 end

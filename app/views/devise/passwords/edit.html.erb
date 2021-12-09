@@ -12,16 +12,25 @@
           <% if @minimum_password_length %>
             <em>(<%= @minimum_password_length %> characters minimum)</em><br>
           <% end %>
-          <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: "form-control" %>
+          <%= f.password_field :password,
+            autofocus: true,
+            autocomplete: "new-password",
+            class: "form-control password-new",
+            required: true,
+            minlength: @minimum_password_length %>
         </div>
 
         <div class="field form-group">
           <%= f.label :password_confirmation, "Confirm new password" %><br>
-          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
+          <%= f.password_field :password_confirmation,
+            autocomplete: "new-password",
+            class: "form-control password-confirmation",
+            required: true,
+            minlength: @minimum_password_length %>
         </div>
 
         <div class="actions">
-          <%= f.submit "Change my password", class: "btn btn-primary" %>
+          <%= f.submit "Change my password", class: "btn btn-primary submit-password" %>
         </div>
       <% end %>
     </div>

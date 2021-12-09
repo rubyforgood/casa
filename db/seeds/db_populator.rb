@@ -4,7 +4,7 @@
 # Email addresses generated will be globally unique across all orgs.
 
 class DbPopulator
-  SEED_PASSWORD = "123456"
+  SEED_PASSWORD = "12345678"
   WORD_LENGTH_TUNING = 10
   LINE_BREAK_TUNING = 5
   PREFIX_OPTIONS = ("A".ord.."Z".ord).to_a.map(&:chr)
@@ -46,10 +46,19 @@ class DbPopulator
     create_users(casa_org, options)
     create_cases(casa_org, options)
     create_hearing_types(casa_org)
+    create_judges(casa_org)
     casa_org
   end
 
   private # -------------------------------------------------------------------------------------------------------
+
+  # Create 2 judges for each casa_org.
+  def create_judges(casa_org)
+    env = ENV["APP_ENVIRONMENT"] || Rails.env
+    if env == "qa" || env == "test"
+      2.times { Judge.create(name: Faker::Name.name, casa_org: casa_org) }
+    end
+  end
 
   # Creates 3 users, 1 each for [Volunteer, Supervisor, CasaAdmin].
   # For org's after the first one created, adds an org number to the email address so that they will be globally unique
@@ -98,6 +107,10 @@ class DbPopulator
     "CINA-#{yy}-#{@case_number_sequence}"
   end
 
+  def generate_court_date
+    ((Date.today + 1.month)..(Date.today + 5.months)).to_a.sample
+  end
+
   def random_true_false
     @true_false_array ||= [true, false]
     @true_false_array.sample(random: rng)
@@ -108,9 +121,19 @@ class DbPopulator
     @random_case_contact_counts.sample(random: rng)
   end
 
-  def random_court_mandate_count
-    @random_court_mandate_counts ||= [0, 3, 5, 10]
-    @random_court_mandate_counts.sample(random: rng)
+  def random_past_court_date_count
+    @random_past_court_date_counts ||= [0, 2, 3, 4, 5]
+    @random_past_court_date_counts.sample(random: rng)
+  end
+
+  def random_future_court_date_count
+    @random_future_court_date_counts ||= [0, 1]
+    @random_future_court_date_counts.sample(random: rng)
+  end
+
+  def random_court_order_count
+    @random_court_order_counts ||= [0, 3, 5, 10]
+    @random_court_order_counts.sample(random: rng)
   end
 
   def likely_contact_durations
@@ -139,7 +162,7 @@ class DbPopulator
     )
   end
 
-  def mandate_choices
+  def order_choices
     [
       "Limited guardianship of the children for medical and educational purposes to [name] shall be rescinded;",
       "The children shall remain children in need of assistance (cina), under the jurisdiction of the juvenile court, and shall remain committed to the department of health and human services/child welfare services, for continued placement on a trial home visit with [NAME]",
@@ -155,26 +178,43 @@ class DbPopulator
     ]
   end
 
+  def transition_aged_youth?(birth_month_year_youth)
+    (Date.today - birth_month_year_youth).days.in_years > 14
+  end
+
   def create_cases(casa_org, options)
     ContactTypePopulator.populate
-    options.case_count.times do
+    options.case_count.times do |index|
       case_number = generate_case_number
+      court_date = generate_court_date
+      court_report_submitted = index.even?
 
       new_casa_case = CasaCase.find_by(case_number: case_number)
+      birth_month_year_youth = ((Date.today - 18.year)..(Date.today - 14.year)).to_a.sample
       new_casa_case ||=
         if @case_fourteen_years_old
           CasaCase.find_or_create_by!(
             casa_org_id: casa_org.id,
             case_number: case_number,
-            transition_aged_youth: false,
+            court_date: court_date,
+            court_report_due_date: court_date + 1.month,
+            court_report_submitted_at: court_report_submitted ? Date.today : nil,
+            court_report_status: court_report_submitted ? :submitted : :not_submitted,
+            transition_aged_youth: transition_aged_youth?(birth_month_year_youth),
             birth_month_year_youth: ((Date.today - 18.years)..(Date.today - 14.years)).to_a.sample
           )
         else
+
+          birth_month_year_youth = ((Date.today - 18.year)..(Date.today - 1.year)).to_a.sample
           CasaCase.find_or_create_by!(
             casa_org_id: casa_org.id,
             case_number: case_number,
-            transition_aged_youth: false,
-            birth_month_year_youth: ((Date.today - 18.year)..(Date.today - 4.year)).to_a.sample
+            court_date: court_date,
+            court_report_due_date: court_date + 1.month,
+            court_report_submitted_at: court_report_submitted ? Date.today : nil,
+            court_report_status: court_report_submitted ? :submitted : :not_submitted,
+            transition_aged_youth: transition_aged_youth?(birth_month_year_youth),
+            birth_month_year_youth: birth_month_year_youth
           )
         end
 
@@ -192,12 +232,44 @@ class DbPopulator
         create_case_contact(new_casa_case)
       end
 
-      random_court_mandate_count.times do
-        CaseCourtMandate.create!(
+      random_court_order_count.times do
+        CaseCourtOrder.create!(
           casa_case_id: new_casa_case.id,
-          mandate_text: mandate_choices.sample(random: rng),
-          implementation_status: CaseCourtMandate::IMPLEMENTATION_STATUSES.values.sample(random: rng)
+          text: order_choices.sample(random: rng),
+          implementation_status: CaseCourtOrder::IMPLEMENTATION_STATUSES.values.sample(random: rng)
         )
+      end
+
+      random_future_court_date_count.times do |index|
+        CourtDate.create!(
+          casa_case_id: new_casa_case.id,
+          date: Date.today + 5.weeks
+        )
+      end
+
+      random_past_court_date_count.times do |index|
+        CourtDate.create!(
+          casa_case_id: new_casa_case.id,
+          date: Date.today - (index + 1).weeks
+        )
+      end
+
+      # guarantee at least one transition aged youth case to "volunteer1"
+      volunteer1 = Volunteer.find_by(email: "volunteer1@example.com")
+      if volunteer1.casa_cases.where(transition_aged_youth: true).blank?
+        rand(1..3).times do
+          birth_month_year_youth = ((Date.today - 18.year)..(Date.today - 14.year)).to_a.sample
+          volunteer1.casa_cases.find_or_create_by!(
+            casa_org_id: volunteer1.casa_org.id,
+            case_number: generate_case_number,
+            court_date: court_date,
+            court_report_due_date: court_date + 1.month,
+            court_report_submitted_at: court_report_submitted ? Date.today : nil,
+            court_report_status: court_report_submitted ? :submitted : :not_submitted,
+            transition_aged_youth: transition_aged_youth?(birth_month_year_youth),
+            birth_month_year_youth: birth_month_year_youth
+          )
+        end
       end
     end
   end

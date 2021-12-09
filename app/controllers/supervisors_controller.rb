@@ -11,6 +11,13 @@ class SupervisorsController < ApplicationController
   def index
     authorize Supervisor
     @supervisors = policy_scope(current_organization.supervisors)
+    @show_all = params[:all]
+    if @show_all == "true"
+      @supervisors
+    else
+      @supervisors = @supervisors.active
+      @show_all = false
+    end
   end
 
   def new
@@ -52,7 +59,7 @@ class SupervisorsController < ApplicationController
     if @supervisor.activate
       SupervisorMailer.account_setup(@supervisor).deliver
 
-      redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was activated."
+      redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was activated. They have been sent an email."
     else
       render :edit, notice: "Supervisor could not be activated."
     end
@@ -61,8 +68,6 @@ class SupervisorsController < ApplicationController
   def deactivate
     authorize @supervisor
     if @supervisor.deactivate
-      SupervisorMailer.deactivation(@supervisor).deliver
-
       redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was deactivated."
     else
       render :edit, notice: "Supervisor could not be deactivated."
@@ -74,6 +79,15 @@ class SupervisorsController < ApplicationController
     @supervisor.invite!
 
     redirect_to edit_supervisor_path(@supervisor), notice: "Invitation sent"
+  end
+
+  def datatable
+    authorize Supervisor
+    supervisors = policy_scope(current_organization.supervisors)
+
+    datatable = SupervisorDatatable.new(supervisors, params)
+
+    render json: datatable
   end
 
   private

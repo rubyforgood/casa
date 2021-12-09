@@ -1,4 +1,3 @@
-# rubocop:todo Style/Documentation
 class CreateSupervisorVolunteers < ActiveRecord::Migration[6.0]
   def change
     create_table :supervisor_volunteers do |t|

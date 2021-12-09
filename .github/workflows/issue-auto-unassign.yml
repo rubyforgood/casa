@@ -9,7 +9,7 @@ jobs:
     name: Unassign issues
     steps:
       - name: Unassign issues
-        uses: bjthompson805/unassign-issues@v1
+        uses: rubyforgood/unassign-issues@v1
         id: unassign_issues
         with:
           token: ${{secrets.GITHUB_TOKEN}}
@@ -26,6 +26,6 @@ jobs:
           token: ${{secrets.GITHUB_TOKEN}}
           issues: ${{steps.unassign_issues.outputs.unassigned_issues}}
           from_column: '8461148'
-          to_column: '8461147'
+          to_column: '15690587'
       - name: Print moved issues
         run: echo "Moved issues = ${{steps.move_issues.outputs.moved_issues}}"

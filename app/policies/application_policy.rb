@@ -1,4 +1,17 @@
 class ApplicationPolicy
+  class Scope
+    attr_reader :user, :scope
+
+    def initialize(user, scope)
+      @user = user
+      @scope = scope
+    end
+
+    def resolve
+      raise NotImplementedError
+    end
+  end
+
   attr_reader :user, :record
 
   def initialize(user, record)
@@ -64,6 +77,18 @@ class ApplicationPolicy
 
   def see_court_reports_page?
     is_volunteer? || is_supervisor? || is_admin?
+  end
+
+  def see_mileage_rate?
+    is_admin? # && matches_casa_org? # TODO do this *in* is_admin - what might that break?
+  end
+
+  def matches_casa_org?
+    @record&.casa_org == @user&.casa_org && !@record.casa_org.nil?
+  end
+
+  def current_organization
+    user&.casa_org
   end
 
   alias_method :modify_organization?, :is_admin?

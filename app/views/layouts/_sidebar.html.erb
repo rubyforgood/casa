@@ -45,11 +45,17 @@
           <% if policy(:application).see_court_reports_page? %>
             <%= link_to t(".link.generate_court_reports"), case_court_reports_path, class: "list-group-item" %>
           <% end %>
+          <% if policy(:reimbursement).index? %>
+            <%= link_to t(".link.reimbursement_queue"), reimbursements_path, class: "list-group-item" %>
+          <% end %>
           <% if policy(:application).see_reports_page? %>
             <%= link_to t(".link.export_data"), reports_path, class: "list-group-item" %>
           <% end %>
           <% if policy(:application).see_import_page? %>
             <%= link_to t(".link.system_imports"), imports_path, class: "list-group-item" %>
+          <% end %>
+          <% if policy(:application).see_mileage_rate? %>
+            <%= link_to t(".link.mileage_rate"), mileage_rates_path, class: "list-group-item" %>
           <% end %>
           <% if policy(:application).modify_organization? %>
             <%= link_to t(".link.edit_organization"), edit_casa_org_path(current_organization), class: "list-group-item" %>
@@ -69,7 +75,14 @@
           </li>
           <%= link_to t(".link.edit_profile"), edit_all_casa_admins_path, class: "list-group-item" %>
         <% end %>
+        <% if current_user != true_user %>
+          <%= link_to stop_impersonating_volunteers_path, method: :post, class: "list-group-item" do %>
+              You (<%= true_user.display_name %>) are signed in as <%= current_user.display_name %>.
+              Click here to stop impersonating.
+          <% end %>
+        <% end %>
         <%= session_link %>
+        <div id="mobile-space"></div>
       </div>
     </div>
   </div>

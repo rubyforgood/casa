@@ -32,7 +32,7 @@ RSpec.describe "volunteers/edit", type: :system do
 
     context "with invalid data" do
       it "shows error message for duplicate email" do
-        volunteer.supervisor = create(:supervisor)
+        volunteer.supervisor = build(:supervisor)
         fill_in "volunteer_email", with: admin.email
         fill_in "volunteer_display_name", with: "Mickey Mouse"
         click_on "Submit"
@@ -67,7 +67,7 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   it "allows an admin to reactivate a volunteer" do
-    inactive_volunteer = create(:volunteer, casa_org_id: organization.id)
+    inactive_volunteer = build(:volunteer, casa_org_id: organization.id)
     inactive_volunteer.deactivate
 
     sign_in admin
@@ -82,7 +82,7 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   it "allows the admin to unassign a volunteer from a supervisor" do
-    supervisor = create(:supervisor, display_name: "Haka Haka")
+    supervisor = build(:supervisor, display_name: "Haka Haka")
     volunteer = create(:volunteer, display_name: "Bolu Bolu", supervisor: supervisor)
 
     sign_in admin
@@ -118,7 +118,7 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   context "when volunteer is assigned to multiple cases" do
-    let(:casa_org) { create(:casa_org) }
+    let(:casa_org) { build(:casa_org) }
     let!(:supervisor) { create(:casa_admin, casa_org: casa_org) }
     let!(:volunteer) { create(:volunteer, casa_org: casa_org, display_name: "AAA") }
     let!(:casa_case_1) { create(:casa_case, casa_org: casa_org, case_number: "CINA1") }
@@ -141,11 +141,11 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   context "with previously assigned cases" do
-    let(:casa_org) { create(:casa_org) }
+    let(:casa_org) { build(:casa_org) }
     let!(:supervisor) { create(:casa_admin, casa_org: casa_org) }
     let!(:volunteer) { create(:volunteer, casa_org: casa_org, display_name: "AAA") }
-    let!(:casa_case_1) { create(:casa_case, casa_org: casa_org, case_number: "CINA1") }
-    let!(:casa_case_2) { create(:casa_case, casa_org: casa_org, case_number: "CINA2") }
+    let!(:casa_case_1) { build(:casa_case, casa_org: casa_org, case_number: "CINA1") }
+    let!(:casa_case_2) { build(:casa_case, casa_org: casa_org, case_number: "CINA2") }
 
     it "shows the unassign button for assigned cases and not for unassigned cases" do
       sign_in supervisor
@@ -179,7 +179,7 @@ RSpec.describe "volunteers/edit", type: :system do
     let!(:active_casa_case) { create(:casa_case, casa_org: organization, case_number: "ACTIVE") }
     let!(:inactive_casa_case) { create(:casa_case, casa_org: organization, active: false, case_number: "INACTIVE") }
     let!(:volunteer) { create(:volunteer, display_name: "Awesome Volunteer", casa_org: organization) }
-    let(:supervisor) { create(:casa_admin, casa_org: organization) }
+    let(:supervisor) { build(:casa_admin, casa_org: organization) }
 
     it "supervisor does not have inactive cases as an option to assign to a volunteer" do
       sign_in supervisor
@@ -225,28 +225,122 @@ RSpec.describe "volunteers/edit", type: :system do
   describe "send reminder as a supervisor" do
     let(:supervisor) { create(:supervisor, casa_org: organization) }
 
-    it "allows a supervisor to send case contact reminder to a volunteer" do
+    before(:each) do
       sign_in supervisor
+    end
 
+    it "emails the volunteer" do
       visit edit_volunteer_path(volunteer)
 
-      expect(page).to have_button("Send reminder")
+      expect(page).to have_button("Send Reminder")
+      expect(page).to have_text(/Send CC to Supervisor$/)
 
-      click_on "Send reminder"
+      click_on "Send Reminder"
 
       expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.first.cc).to be_empty
+    end
+
+    it "emails volunteer and cc's the supervisor" do
+      visit edit_volunteer_path(volunteer)
+
+      check "with_cc"
+      click_on "Send Reminder"
+
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.first.cc).to include(volunteer.supervisor.email)
+    end
+
+    it "emails the volunteer without a supervisor" do
+      volunteer_without_supervisor = create(:volunteer)
+      visit edit_volunteer_path(volunteer_without_supervisor)
+
+      check "with_cc"
+      click_on "Send Reminder"
+
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.first.cc).to be_empty
     end
   end
 
-  it "send reminder as an admin" do
-    sign_in admin
+  describe "send reminder as admin" do
+    before(:each) do
+      sign_in admin
+      visit edit_volunteer_path(volunteer)
+    end
 
-    visit edit_volunteer_path(volunteer)
+    it "emails the volunteer" do
+      expect(page).to have_button("Send Reminder")
+      expect(page).to have_text("Send CC to Supervisor and Admin")
 
-    expect(page).to have_button("Send reminder")
+      click_on "Send Reminder"
 
-    click_on "Send reminder"
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+    end
 
-    expect(ActionMailer::Base.deliveries.count).to eq(1)
+    it "emails the volunteer and cc's their supervisor and admin" do
+      check "with_cc"
+      click_on "Send Reminder"
+
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.first.cc).to include(volunteer.supervisor.email)
+      expect(ActionMailer::Base.deliveries.first.cc).to include(admin.email)
+    end
+  end
+
+  describe "impersonate button" do
+    let(:volunteer) { create(:volunteer, casa_org: organization, display_name: "John Doe") }
+
+    before do
+      sign_in user
+      visit edit_volunteer_path(volunteer)
+    end
+
+    context "when user is an admin" do
+      let(:user) { create(:casa_admin, casa_org: organization) }
+
+      it "shows the impersonate button" do
+        expect(page).to have_link("Impersonate")
+      end
+
+      it "impersonates the volunteer" do
+        click_on "Impersonate"
+
+        within(".sidebar-wrapper") do
+          expect(page).to have_text(
+            "You (#{user.display_name}) are signed in as John Doe. " \
+              "Click here to stop impersonating."
+          )
+        end
+      end
+    end
+
+    context "when user is a supervisor" do
+      let(:user) { create(:supervisor, casa_org: organization) }
+
+      it "shows the impersonate button" do
+        expect(page).to have_link("Impersonate")
+      end
+
+      it "impersonates the volunteer" do
+        click_on "Impersonate"
+
+        within(".sidebar-wrapper") do
+          expect(page).to have_text(
+            "You (#{user.display_name}) are signed in as John Doe. " \
+              "Click here to stop impersonating."
+          )
+        end
+      end
+    end
+
+    context "when user is a volunteer" do
+      let(:user) { create(:volunteer, casa_org: organization) }
+
+      it "does not show the impersonate button", :aggregate_failures do
+        expect(page).not_to have_link("Impersonate")
+        expect(current_path).not_to eq(edit_volunteer_path(volunteer))
+      end
+    end
   end
 end

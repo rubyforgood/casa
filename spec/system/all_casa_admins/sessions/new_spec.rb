@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "all_casa_admins/sessions/new", type: :system do
   let(:all_casa_admin) { create(:all_casa_admin) }
-  let(:volunteer) { create(:volunteer) }
+  let(:volunteer) { build_stubbed(:volunteer) }
 
   context "when authenticated user" do
     before { sign_in all_casa_admin }
@@ -31,7 +31,7 @@ RSpec.describe "all_casa_admins/sessions/new", type: :system do
       visit "/all_casa_admins/sign_in"
 
       fill_in "Email", with: all_casa_admin.email
-      fill_in "Password", with: "123456"
+      fill_in "Password", with: "12345678"
       within ".actions" do
         click_on "Log in"
       end
@@ -43,7 +43,7 @@ RSpec.describe "all_casa_admins/sessions/new", type: :system do
       visit "/all_casa_admins/sign_in"
 
       fill_in "Email", with: volunteer.email
-      fill_in "Password", with: "123456"
+      fill_in "Password", with: "12345678"
       within ".actions" do
         click_on "Log in"
       end

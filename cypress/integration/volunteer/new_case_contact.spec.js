@@ -1,6 +1,7 @@
+  // TODO - fix flakey spec ref: https://github.com/rubyforgood/casa/issues/2550#issuecomment-943474980
 const faker = require("faker");
 
-context("Logging into cypress as a volunteer", () => {
+context.skip("Logging into cypress as a volunteer", () => {
   beforeEach(() => {
     cy.visit("0.0.0.0:4040");
     cy.loginAsVolunteer();

@@ -34,8 +34,8 @@ class CasaCaseDecorator < Draper::Decorator
     ]
   end
 
-  def court_mandate_select_options
-    CaseCourtMandate.implementation_statuses.map do |status|
+  def court_order_select_options
+    CaseCourtOrder.implementation_statuses.map do |status|
       [status[0].humanize, status[0]]
     end
   end
@@ -78,5 +78,13 @@ class CasaCaseDecorator < Draper::Decorator
   def unsuccessful_contacts_this_week_before(date)
     this_week_before_date = Date.today - 7.days..date
     object.case_contacts.where(occurred_at: this_week_before_date).where(contact_made: false).count
+  end
+
+  def emancipation_checklist_count
+    "#{object.casa_case_emancipation_categories.count} / #{EmancipationCategory.count}"
+  end
+
+  def show_contact_type?(contact_type_id)
+    object.casa_case_contact_types.map(&:contact_type_id).include?(contact_type_id)
   end
 end

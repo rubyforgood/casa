@@ -2,56 +2,54 @@ require "rails_helper"
 
 RSpec.describe "followups/resolve", type: :system do
   let(:admin) { create(:casa_admin) }
-  let(:case_contact) { create(:case_contact) }
-  let(:volunteer) { create(:volunteer) }
-  let(:supervisor) { create(:supervisor) }
+  let(:case_contact) { build(:case_contact) }
+  let(:volunteer) { build(:volunteer) }
+  let(:supervisor) { build(:supervisor) }
   let!(:followup) { create(:followup, case_contact: case_contact) }
 
   it "changes status of followup to resolved" do
     sign_in admin
     visit casa_case_path(case_contact.casa_case)
 
-    click_button "Resolve"
+    click_button "Resolve Reminder"
 
     expect(case_contact.followups.count).to eq(1)
     expect(case_contact.followups.first.resolved?).to be_truthy
   end
 
   context "logged in as admin, followup created by volunteer" do
-    let(:case_contact) { create(:case_contact, creator: volunteer) }
+    let(:case_contact) { build(:case_contact, creator: volunteer) }
     let!(:followup) { create(:followup, creator: volunteer, case_contact: case_contact) }
 
     it "changes status of followup to resolved" do
       sign_in admin
       visit casa_case_path(case_contact.casa_case)
 
-      click_button "Resolve"
+      click_button "Resolve Reminder"
 
       expect(case_contact.followups.count).to eq(1)
       expect(case_contact.followups.first.resolved?).to be_truthy
     end
 
-    it "removes followup icon and button changes back to 'Follow up'" do
+    it "removes followup icon and button changes back to 'Make Reminder'" do
       sign_in admin
       visit casa_case_path(case_contact.casa_case)
-      expect(page).to have_css("i.fa-exclamation-circle")
 
-      click_button "Resolve"
+      click_button "Resolve Reminder"
 
-      expect(page).not_to have_css("i.fa-exclamation-circle")
-      expect(page).to have_button("Follow up")
+      expect(page).to have_button("Make Reminder")
     end
   end
 
   context "logged in as supervisor, followup created by volunteer" do
-    let(:case_contact) { create(:case_contact, creator: supervisor) }
+    let(:case_contact) { build(:case_contact, creator: supervisor) }
     let!(:followup) { create(:followup, creator: volunteer, case_contact: case_contact) }
 
     it "changes status of followup to resolved" do
       sign_in supervisor
       visit casa_case_path(case_contact.casa_case)
 
-      click_button "Resolve"
+      click_button "Resolve Reminder"
 
       expect(case_contact.followups.count).to eq(1)
       expect(case_contact.followups.first.resolved?).to be_truthy
@@ -59,8 +57,8 @@ RSpec.describe "followups/resolve", type: :system do
   end
 
   context "logged in as volunteer, followup created by admin" do
-    let(:case_contact) { create(:case_contact, creator: volunteer) }
-    let(:volunteer) { create(:volunteer) }
+    let(:case_contact) { build(:case_contact, creator: volunteer) }
+    let(:volunteer) { build(:volunteer) }
     let!(:followup) { create(:followup, creator: admin, case_contact: case_contact) }
 
     before do
@@ -71,7 +69,7 @@ RSpec.describe "followups/resolve", type: :system do
       sign_in volunteer
       visit case_contacts_path
 
-      click_button "Resolve"
+      click_button "Resolve Reminder"
 
       expect(case_contact.followups.count).to eq(1)
       expect(case_contact.followups.first.resolved?).to be_truthy

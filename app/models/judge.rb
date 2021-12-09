@@ -4,7 +4,7 @@ class Judge < ApplicationRecord
   belongs_to :casa_org
 
   validates :name, presence: true, uniqueness: {scope: %i[casa_org]}
-
+  default_scope { order(name: :asc) }
   scope :for_organization, ->(org) { where(casa_org: org) }
   scope :active, -> { where(active: true) }
 end
@@ -26,5 +26,5 @@ end
 #
 # Foreign Keys
 #
-#  fk_rails_...  (casa_org_id => casa_orgs.id)
+#  fk_rails_...  (casa_org_id => casa_org.id)
 #

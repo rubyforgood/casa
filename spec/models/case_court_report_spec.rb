@@ -30,7 +30,7 @@ RSpec.describe CaseCourtReport, type: :model do
       let!(:far_past_case_contact) { create :case_contact, occurred_at: 5.days.ago, casa_case_id: casa_case_with_contacts.id }
 
       before do
-        casa_case_with_contacts.update!(court_date: 1.day.from_now)
+        create(:court_date, casa_case: casa_case_with_contacts, date: 1.day.from_now)
       end
 
       describe "without past court date" do
@@ -40,10 +40,10 @@ RSpec.describe CaseCourtReport, type: :model do
       end
 
       describe "with past court date" do
-        let!(:past_court_date) { create(:past_court_date, date: 2.days.ago, casa_case_id: casa_case_with_contacts.id) }
+        let!(:court_date) { create(:court_date, date: 2.days.ago, casa_case_id: casa_case_with_contacts.id) }
 
         it "has all case contacts created since the previous court date" do
-          expect(casa_case_with_contacts.past_court_dates.length).to eq(1)
+          expect(casa_case_with_contacts.court_dates.length).to eq(2)
           expect(report.context[:case_contacts].length).to eq(4)
         end
       end
@@ -70,9 +70,9 @@ RSpec.describe CaseCourtReport, type: :model do
 
       context "when the case has multiple past court dates" do
         before do
-          casa_case_with_contacts.past_court_dates << create(:past_court_date, date: 9.months.ago)
-          casa_case_with_contacts.past_court_dates << create(:past_court_date, date: 3.months.ago)
-          casa_case_with_contacts.past_court_dates << create(:past_court_date, date: 15.months.ago)
+          casa_case_with_contacts.court_dates << create(:court_date, date: 9.months.ago)
+          casa_case_with_contacts.court_dates << create(:court_date, date: 3.months.ago)
+          casa_case_with_contacts.court_dates << create(:court_date, date: 15.months.ago)
         end
 
         it "sets latest_hearing_date as the latest past court date" do
@@ -90,7 +90,7 @@ RSpec.describe CaseCourtReport, type: :model do
             case_contact_type: "Unique Case Contact Type",
             case_hearing_date: 2.weeks.from_now,
             case_number: "A-CASA-CASE-NUMBER-12345",
-            mandate_text: "This text shall not be strikingly similar to other text in the document",
+            text: "This text shall not be strikingly similar to other text in the document",
             org_address: "596 Unique Avenue Seattle, Washington",
             supervisor_name: "A very unique supervisor name",
             volunteer_case_assignment_date: 2.months.ago,
@@ -100,17 +100,17 @@ RSpec.describe CaseCourtReport, type: :model do
 
         let(:contact_type) { create(:contact_type, name: document_data[:case_contact_type]) }
         let(:case_contact) { create(:case_contact, contact_made: false, occurred_at: document_data[:case_contact_time]) }
-        let(:court_mandate) { create(:case_court_mandate, implementation_status: :partially_implemented) }
+        let(:court_order) { create(:case_court_order, implementation_status: :partially_implemented) }
 
         before(:each) do
           casa_case_with_contacts.casa_org.update_attribute(:address, document_data[:org_address])
           casa_case_with_contacts.update_attribute(:birth_month_year_youth, document_data[:case_birthday])
           casa_case_with_contacts.update_attribute(:case_number, document_data[:case_number])
-          casa_case_with_contacts.update_attribute(:court_date, document_data[:case_hearing_date])
+          create(:court_date, casa_case: casa_case_with_contacts, date: document_data[:case_hearing_date])
           case_contact.contact_types << contact_type
           casa_case_with_contacts.case_contacts << case_contact
-          casa_case_with_contacts.case_court_mandates << court_mandate
-          court_mandate.update_attribute(:mandate_text, document_data[:mandate_text])
+          casa_case_with_contacts.case_court_orders << court_order
+          court_order.update_attribute(:text, document_data[:text])
           CaseAssignment.find_by(casa_case_id: casa_case_with_contacts.id, volunteer_id: volunteer.id).update_attribute(:created_at, document_data[:volunteer_case_assignment_date])
           volunteer.update_attribute(:display_name, document_data[:volunteer_name])
           volunteer.supervisor.update_attribute(:display_name, document_data[:supervisor_name])
@@ -127,8 +127,8 @@ RSpec.describe CaseCourtReport, type: :model do
           expect(report_body).to include(document_data[:case_number])
           expect(report_body).to include(document_data[:case_contact_type])
           expect(report_body).to include("#{document_data[:case_contact_time].strftime("%-m/%d")}*")
-          expect(report_body).to include(document_data[:mandate_text])
-          expect(report_body).to include("Partially implemented") # Mandate Status
+          expect(report_body).to include(document_data[:text])
+          expect(report_body).to include("Partially implemented") # Order Status
           expect(report_body).to include(document_data[:volunteer_name])
           expect(report_body).to include(document_data[:volunteer_case_assignment_date].strftime("%B %-d, %Y"))
           expect(report_body).to include(document_data[:supervisor_name])
@@ -152,7 +152,7 @@ RSpec.describe CaseCourtReport, type: :model do
             case_contact_type: "Unique Case Contact Type",
             case_hearing_date: 2.weeks.from_now,
             case_number: "A-CASA-CASE-NUMBER-12345",
-            mandate_text: "This text shall not be strikingly similar to other text in the document",
+            text: "This text shall not be strikingly similar to other text in the document",
             org_address: nil,
             supervisor_name: nil,
             volunteer_case_assignment_date: 2.months.ago,
@@ -163,17 +163,17 @@ RSpec.describe CaseCourtReport, type: :model do
         let(:casa_case) { create(:casa_case) }
         let(:contact_type) { create(:contact_type, name: document_data[:case_contact_type]) }
         let(:case_contact) { create(:case_contact, contact_made: false, occurred_at: document_data[:case_contact_time]) }
-        let(:court_mandate) { create(:case_court_mandate, implementation_status: :partially_implemented) }
+        let(:court_order) { create(:case_court_order, implementation_status: :partially_implemented) }
 
         before(:each) do
           casa_case.casa_org.update_attribute(:address, document_data[:org_address])
           casa_case.update_attribute(:birth_month_year_youth, document_data[:case_birthday])
           casa_case.update_attribute(:case_number, document_data[:case_number])
-          casa_case.update_attribute(:court_date, document_data[:case_hearing_date])
+          create(:court_date, casa_case: casa_case, date: document_data[:case_hearing_date])
           case_contact.contact_types << contact_type
           casa_case.case_contacts << case_contact
-          casa_case.case_court_mandates << court_mandate
-          court_mandate.update_attribute(:mandate_text, document_data[:mandate_text])
+          casa_case.case_court_orders << court_order
+          court_order.update_attribute(:text, document_data[:text])
         end
 
         it "display all expected information" do
@@ -185,8 +185,8 @@ RSpec.describe CaseCourtReport, type: :model do
           expect(report_body).to include(document_data[:case_number])
           expect(report_body).to include(document_data[:case_contact_type])
           expect(report_body).to include("#{document_data[:case_contact_time].strftime("%-m/%d")}*")
-          expect(report_body).to include(document_data[:mandate_text])
-          expect(report_body).to include("Partially implemented") # Mandate Status
+          expect(report_body).to include(document_data[:text])
+          expect(report_body).to include("Partially implemented") # Order Status
         end
       end
     end
@@ -204,6 +204,44 @@ RSpec.describe CaseCourtReport, type: :model do
         path_to_template: nonexistent_path
       )
       expect { bad_report.generate_to_string }.to raise_error(Zip::Error)
+    end
+  end
+
+  describe "when court orders has different implementation statuses" do
+    let(:casa_case) { create(:casa_case, case_number: "Sample-Case-12345") }
+    let(:court_order_implemented) { create(:case_court_order, casa_case: casa_case, text: "This order is implemented already", implementation_status: :implemented) }
+    let(:court_order_not_implemented) { create(:case_court_order, casa_case: casa_case, text: "This order is not implemented yet", implementation_status: :not_implemented) }
+    let(:court_order_partially_implemented) { create(:case_court_order, casa_case: casa_case, text: "This order is partially implemented", implementation_status: :partially_implemented) }
+    let(:court_order_not_specified) { create(:case_court_order, casa_case: casa_case, text: "This order does not have any implementation status", implementation_status: nil) }
+
+    before(:each) do
+      casa_case.case_court_orders << court_order_implemented
+      casa_case.case_court_orders << court_order_not_implemented
+      casa_case.case_court_orders << court_order_partially_implemented
+      casa_case.case_court_orders << court_order_not_specified
+    end
+
+    it "should have all the court orders" do
+      case_report = CaseCourtReport.new(
+        case_id: casa_case.id,
+        path_to_template: path_to_template,
+        path_to_report: path_to_report
+      )
+      case_report_body = get_docx_subfile_contents(case_report.generate_to_string, "word/document.xml")
+
+      expect(case_report_body).to include(casa_case.case_number)
+
+      expect(case_report_body).to include(court_order_implemented.text)
+      expect(case_report_body).to include("Implemented")
+
+      expect(case_report_body).to include(court_order_not_implemented.text)
+      expect(case_report_body).to include("Not implemented")
+
+      expect(case_report_body).to include(court_order_partially_implemented.text)
+      expect(case_report_body).to include("Partially implemented")
+
+      expect(case_report_body).to include(court_order_partially_implemented.text)
+      expect(case_report_body).to include("Not specified")
     end
   end
 end

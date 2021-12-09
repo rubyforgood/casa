@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe EmancipationsController, type: :controller do
-  let(:organization) { create(:casa_org) }
+  let(:organization) { build(:casa_org) }
   let(:volunteer) { create(:volunteer, :with_casa_cases, casa_org: organization) }
-  let(:test_case_category) { create(:casa_case_emancipation_category) }
+  let(:test_case_category) { build(:casa_case_emancipation_category) }
+  let(:casa_case) { create(:casa_case, casa_org: organization) }
   subject { post :save, params: params }
 
   before do
@@ -40,7 +41,6 @@ RSpec.describe EmancipationsController, type: :controller do
 
   describe "check_item_action" do
     it "raises missing param error message" do
-      casa_case = create :casa_case, casa_org: organization
       post :save, params: {casa_case_id: casa_case.id.to_s}
       expect(response.body).to eq({error: "Sorry, you are not authorized to perform this action. Did the session expire?"}.to_json)
     end
@@ -52,7 +52,6 @@ RSpec.describe EmancipationsController, type: :controller do
   end
 
   it "raises must be positive integer error message" do
-    casa_case = create :casa_case, casa_org: organization
     post :save, params: {casa_case_id: casa_case.id.to_s, check_item_action: "1", check_item_id: "-1"}
     expect(response.body).to eq({error: "Sorry, you are not authorized to perform this action. Did the session expire?"}.to_json)
   end
@@ -61,6 +60,8 @@ RSpec.describe EmancipationsController, type: :controller do
     let(:params) { {casa_case_id: volunteer.casa_cases.first.id} }
 
     it "errors for unfindable check item" do
+      volunteer.casa_cases.first.update_attribute(:birth_month_year_youth, 8.years.ago)
+
       subject
       expect(response.body).to eq({error: "The current case is not marked as transitioning"}.to_json)
     end

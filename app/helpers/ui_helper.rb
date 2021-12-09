@@ -1,8 +1,4 @@
 module UiHelper
-  def return_to_dashboard_button
-    link_to "Return to Dashboard", root_path, {class: "btn btn-info pull-right"}
-  end
-
   def grouped_options_for_assigning_case(volunteer)
     [
       [
@@ -20,5 +16,12 @@ module UiHelper
           .map { |casa_case| [casa_case.case_number, casa_case.id] }
       ]
     ]
+  end
+
+  def contact_types_list(reimbursement)
+    reimbursement
+      .contact_groups_with_types
+      .map { |cg, types_arr| "#{cg} (#{types_arr.join(", ")})" }
+      .join(", ")
   end
 end

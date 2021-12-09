@@ -37,8 +37,8 @@ RSpec.describe "/judges", type: :request do
 
     context "logged in as admin user" do
       it "can successfully create a judge" do
-        casa_org = create(:casa_org)
-        sign_in create(:casa_admin, casa_org: casa_org)
+        casa_org = build(:casa_org)
+        sign_in build(:casa_admin, casa_org: casa_org)
 
         expect {
           post judges_path, params: params
@@ -113,8 +113,8 @@ RSpec.describe "/judges", type: :request do
 
     context "logged in as admin user" do
       it "can successfully update a judge" do
-        casa_org = create(:casa_org)
-        sign_in create(:casa_admin, casa_org: casa_org)
+        casa_org = build(:casa_org)
+        sign_in build(:casa_admin, casa_org: casa_org)
 
         put judge_path(judge), params: params
 

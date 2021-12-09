@@ -1,0 +1,40 @@
+column_names = [
+  "Internal Contact Number",
+  "Duration Minutes",
+  "Contact Types",
+  "Contact Made",
+  "Contact Medium",
+  "Occurred At",
+  "Added To System At",
+  "Miles Driven",
+  "Wants Driving Reimbursement",
+  "Casa Case Number",
+  "Creator Email",
+  "Creator Name",
+  "Supervisor Name",
+  "Case Contact Notes"
+]
+
+wb = xlsx_package.workbook
+case_contacts = @casa_case.decorate.case_contacts_ordered_by_occurred_at
+wb.add_worksheet(name: @casa_case.case_number) do |sheet|
+  sheet.add_row column_names
+  case_contacts.each do |case_contact|
+    sheet.add_row [
+      case_contact.id,
+      case_contact.duration_minutes,
+      case_contact.contact_types.map(&:name).join("|"),
+      case_contact.contact_made,
+      case_contact.medium_type,
+      case_contact.occurred_at.strftime("%B %d, %Y"),
+      case_contact.created_at.strftime("%F %T UTC"),
+      case_contact.miles_driven,
+      case_contact.want_driving_reimbursement,
+      @casa_case.case_number,
+      case_contact.creator.email,
+      case_contact.creator.display_name,
+      case_contact.creator.supervisor&.display_name,
+      case_contact.notes
+    ]
+  end
+end

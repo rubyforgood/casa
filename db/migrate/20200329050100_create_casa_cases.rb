@@ -1,4 +1,3 @@
-# rubocop:todo Style/Documentation
 class CreateCasaCases < ActiveRecord::Migration[6.0]
   def change
     create_table :casa_cases do |t|

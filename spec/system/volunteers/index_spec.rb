@@ -44,14 +44,15 @@ RSpec.describe "view all volunteers", type: :system do
       end
     end
 
-    it "displays last contact made by default", js: true do
+    it "displays last attempted contact by default", js: true do
+      travel_to Date.new(2021, 1, 1)
       create(:volunteer, :with_assigned_supervisor, display_name: "User 1", email: "casa@example.com", casa_org: organization)
 
       sign_in admin
 
       visit volunteers_path
 
-      expect(page).to have_content(:visible, "Last Contact Made")
+      expect(page).to have_content(:visible, "Last Attempted Contact")
     end
 
     it "can show/hide columns on volunteers table", js: true do
@@ -64,19 +65,21 @@ RSpec.describe "view all volunteers", type: :system do
       expect(page).to have_text("Name")
       expect(page).to have_text("Status")
       expect(page).to have_text("Contact Made In Past 60 Days")
-      expect(page).to have_text("Last Contact Made")
+      expect(page).to have_text("Last Attempted Contact")
       check "Name"
       check "Status"
       uncheck "Contact Made In Past 60 Days"
-      uncheck "Last Contact Made"
+      uncheck "Last Attempted Contact"
       within(".modal-dialog") do
         click_button "Close"
       end
 
       expect(page).to have_text("Name")
       expect(page).to have_text("Status")
-      expect(page).not_to have_text("Contact Made In Past 60 Days")
-      expect(page).not_to have_text("Last Contact Made")
+      within("#volunteers") do
+        expect(page).to have_no_text("Contact Made In Past 60 Days")
+        expect(page).to have_no_text("Last Attempted Contact")
+      end
     end
 
     it "can filter volunteers", js: true do
@@ -219,6 +222,7 @@ RSpec.describe "view all volunteers", type: :system do
     end
 
     it "can show/hide columns on volunteers table", js: true do
+      travel_to Date.new(2021, 1, 1)
       sign_in supervisor
 
       visit volunteers_path
@@ -228,19 +232,21 @@ RSpec.describe "view all volunteers", type: :system do
       expect(page).to have_text("Name")
       expect(page).to have_text("Status")
       expect(page).to have_text("Contact Made In Past 60 Days")
-      expect(page).to have_text("Last Contact Made")
+      expect(page).to have_text("Last Attempted Contact")
       check "Name"
       check "Status"
       uncheck "Contact Made In Past 60 Days"
-      uncheck "Last Contact Made"
+      uncheck "Last Attempted Contact"
       within(".modal-dialog") do
         click_button "Close"
       end
 
       expect(page).to have_text("Name")
       expect(page).to have_text("Status")
-      expect(page).not_to have_text("Contact Made In Past 60 Days")
-      expect(page).not_to have_text("Last Contact Made")
+      within("#volunteers") do
+        expect(page).to have_no_text("Contact Made In Past 60 Days")
+        expect(page).to have_no_text("Last Attempted Contact")
+      end
     end
 
     context "with volunteers" do

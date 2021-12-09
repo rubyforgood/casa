@@ -39,7 +39,7 @@ RSpec.describe "/contact_types", type: :request do
 
     context "logged in as admin user" do
       it "can successfully create a contact type" do
-        casa_org = create(:casa_org)
+        casa_org = build(:casa_org)
         sign_in create(:casa_admin, casa_org: casa_org)
 
         expect {
@@ -108,13 +108,13 @@ RSpec.describe "/contact_types", type: :request do
   end
 
   describe "PUT /contact_types/:id" do
-    let(:casa_org) { create(:casa_org) }
+    let(:casa_org) { build(:casa_org) }
     let(:new_group) { create(:contact_type_group, casa_org: casa_org) }
     let(:params) { {contact_type: {name: "New Name", contact_type_group_id: new_group.id, active: false}} }
 
     context "logged in as admin user" do
       it "can successfully update a contact type" do
-        sign_in create(:casa_admin, casa_org: casa_org)
+        sign_in build(:casa_admin, casa_org: casa_org)
 
         contact_type = create(:contact_type, contact_type_group: group)
 

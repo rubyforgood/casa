@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "/supervisors", type: :request do
-  let(:admin) { create(:casa_admin) }
+  let(:admin) { build(:casa_admin) }
   let(:supervisor) { create(:supervisor) }
 
   let(:update_supervisor_params) do
@@ -46,7 +46,7 @@ RSpec.describe "/supervisors", type: :request do
     end
 
     it "other supervisor can view the edit supervisor page" do
-      sign_in create(:supervisor)
+      sign_in build(:supervisor)
 
       get edit_supervisor_url(supervisor)
 
@@ -155,6 +155,40 @@ RSpec.describe "/supervisors", type: :request do
       expect(Devise.mailer.deliveries.count).to eq(1)
       expect(Devise.mailer.deliveries.first.text_part.body.to_s).to include(admin.casa_org.display_name)
       expect(Devise.mailer.deliveries.first.text_part.body.to_s).to include("This is the first step to accessing your new Supervisor account.")
+    end
+  end
+
+  describe "PATCH /activate" do
+    let(:inactive_supervisor) { create(:supervisor, :inactive) }
+
+    before { sign_in admin }
+
+    it "activates an inactive supervisor" do
+      patch activate_supervisor_path(inactive_supervisor)
+      expect(flash[:notice]).to eq("Supervisor was activated. They have been sent an email.")
+      inactive_supervisor.reload
+      expect(inactive_supervisor.active).to be true
+    end
+
+    it "sends an activation mail" do
+      expect { patch activate_supervisor_path(inactive_supervisor) }.to change { ActionMailer::Base.deliveries.count }.by(1)
+    end
+  end
+
+  describe "PATCH /deactivate" do
+    before { sign_in admin }
+
+    it "deactivates an active supervisor" do
+      patch deactivate_supervisor_path(supervisor)
+
+      supervisor.reload
+      expect(supervisor.active).to be false
+    end
+
+    it "doesn't send an deactivation email" do
+      expect {
+        patch deactivate_supervisor_path(supervisor)
+      }.to_not change { ActionMailer::Base.deliveries.count }
     end
   end
 

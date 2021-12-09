@@ -11,8 +11,20 @@ body.casa_cases {
     }
   }
 
+  #cc-check {
+    p {
+      display: flex;
+      align-items: center;
+    }
+
+    #with_cc {
+      margin-right: 5px;
+    }
+  }
+
   #reminder_button {
     margin-left: 30px;
+    margin-bottom: 0;
   }
 
   .case-contact-list {
@@ -33,6 +45,15 @@ body.casa_cases {
     textarea, .add-court-mandate {
       width: 500px;
     }
+
+    .implementation-status {
+      align-self: flex-start;
+      min-height: 38px;
+    }
+
+    .remove-mandate-button {
+      align-self: flex-start;
+    }
   }
 
   .court-mandate-entry {
@@ -46,7 +67,7 @@ body.casa_cases {
   }
 }
 
-@media only screen and (max-width: 640px) {
+@media only screen and (max-width: $small) {
   body.casa_cases {
     .court-mandates {
       textarea, .add-court-mandate {

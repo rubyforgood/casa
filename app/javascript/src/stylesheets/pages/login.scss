@@ -3,6 +3,10 @@ body.devise-sessions-new, body.users-sessions-new, body.devise-passwords-new {
     max-width: none;
   }
 
+  .login-email-link {
+    font-size: small;
+  }
+
   aside {
     background-position: right;
     background-image: url("../images/login.jpg");

@@ -5,20 +5,27 @@ RSpec.describe "case_contacts/new", type: :system do
   include ActionView::Helpers::SanitizeHelper
 
   context "when admin" do
-    let(:organization) { create(:casa_org) }
-    let(:admin) { create(:casa_admin, casa_org: organization) }
-    let(:casa_case) { create(:casa_case, casa_org: organization) }
-    let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
-    let!(:empty) { create(:contact_type_group, name: "Empty", casa_org: organization) }
-    let!(:grp_with_hidden) { create(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization) }
-    let!(:hidden_type) { create(:contact_type, name: "Hidden", active: false, contact_type_group: grp_with_hidden) }
-    let!(:school) { create(:contact_type, name: "School", contact_type_group: contact_type_group) }
-    let!(:therapist) { create(:contact_type, name: "Therapist", contact_type_group: contact_type_group) }
+    it "does not display empty or hidden contact type groups; can create CaseContact", js: true do
+      organization = build(:casa_org)
+      admin = create(:casa_admin, casa_org: organization)
+      casa_case = create(:casa_case, casa_org: organization)
+      contact_type_group = build(:contact_type_group, casa_org: organization)
+      build(:contact_type_group, name: "Empty", casa_org: organization)
+      grp_with_hidden = build(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization)
+      create(:contact_type, name: "Hidden", active: false, contact_type_group: grp_with_hidden)
+      school = create(:contact_type, name: "School", contact_type_group: contact_type_group)
+      therapist = create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
 
-    before do
       sign_in admin
 
       visit casa_case_path(casa_case.id)
+
+      # does not show empty contact type groups
+      expect(page).to_not have_text("Empty")
+
+      # does not show contact type groups with only hidden contact types
+      expect(page).to_not have_text("Hidden")
+
       click_on "New Case Contact"
 
       check "School"
@@ -26,9 +33,7 @@ RSpec.describe "case_contacts/new", type: :system do
       choose "Yes"
       select "Video", from: "case_contact[medium_type]"
       fill_in "case_contact_occurred_at", with: "04/04/2020"
-    end
 
-    it "is successful", js: true do
       fill_in "case-contact-duration-hours", with: "1"
       fill_in "case-contact-duration-minutes", with: "45"
 
@@ -41,15 +46,23 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(CaseContact.first.duration_minutes).to eq 105
     end
 
-    it "does not show empty contact type groups" do
-      expect(page).to_not have_text("Empty")
-    end
-
-    it "does not show contact type groups with only hidden contact types" do
-      expect(page).to_not have_text("Hidden")
-    end
-
     it "should display full text in table if notes are less than 100 characters", js: true do
+      organization = build(:casa_org)
+      admin = create(:casa_admin, casa_org: organization)
+      casa_case = create(:casa_case, casa_org: organization)
+      contact_type_group = build(:contact_type_group, casa_org: organization)
+      create(:contact_type, name: "School", contact_type_group: contact_type_group)
+      create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
+      sign_in admin
+
+      visit casa_case_path(casa_case.id)
+      click_on "New Case Contact"
+
+      check "School"
+      check "Therapist"
+      choose "Yes"
+      select "Video", from: "case_contact[medium_type]"
+      fill_in "case_contact_occurred_at", with: "04/04/2020"
       fill_in "case-contact-duration-hours", with: "1"
       fill_in "case-contact-duration-minutes", with: "45"
 
@@ -68,6 +81,23 @@ RSpec.describe "case_contacts/new", type: :system do
     end
 
     it "should allow expanding or hiding if notes are more than 100 characters", js: true do
+      organization = build(:casa_org)
+      admin = create(:casa_admin, casa_org: organization)
+      casa_case = create(:casa_case, casa_org: organization)
+      contact_type_group = build(:contact_type_group, casa_org: organization)
+      create(:contact_type, name: "School", contact_type_group: contact_type_group)
+      create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
+
+      sign_in admin
+
+      visit casa_case_path(casa_case.id)
+      click_on "New Case Contact"
+
+      check "School"
+      check "Therapist"
+      choose "Yes"
+      select "Video", from: "case_contact[medium_type]"
+      fill_in "case_contact_occurred_at", with: "04/04/2020"
       fill_in "case-contact-duration-hours", with: "1"
       fill_in "case-contact-duration-minutes", with: "45"
 
@@ -98,6 +128,23 @@ RSpec.describe "case_contacts/new", type: :system do
 
     context "with invalid inputs" do
       it "does not submit the form" do
+        organization = build(:casa_org)
+        admin = create(:casa_admin, casa_org: organization)
+        casa_case = create(:casa_case, casa_org: organization)
+        contact_type_group = build(:contact_type_group, casa_org: organization)
+        create(:contact_type, name: "School", contact_type_group: contact_type_group)
+        create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
+
+        sign_in admin
+
+        visit casa_case_path(casa_case.id)
+        click_on "New Case Contact"
+
+        check "School"
+        check "Therapist"
+        choose "Yes"
+        select "Video", from: "case_contact[medium_type]"
+        fill_in "case_contact_occurred_at", with: "04/04/2020"
         fill_in "case-contact-duration-hours", with: "0"
         fill_in "case-contact-duration-minutes", with: "5"
 
@@ -109,6 +156,23 @@ RSpec.describe "case_contacts/new", type: :system do
 
     context "with HTML in notes" do
       it "renders HTML correctly on the index page", js: true do
+        organization = build(:casa_org)
+        admin = create(:casa_admin, casa_org: organization)
+        casa_case = create(:casa_case, casa_org: organization)
+        contact_type_group = build(:contact_type_group, casa_org: organization)
+        create(:contact_type, name: "School", contact_type_group: contact_type_group)
+        create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
+
+        sign_in admin
+
+        visit casa_case_path(casa_case.id)
+        click_on "New Case Contact"
+
+        check "School"
+        check "Therapist"
+        choose "Yes"
+        select "Video", from: "case_contact[medium_type]"
+        fill_in "case_contact_occurred_at", with: "04/04/2020"
         note_content = "<h1>Hello world</h1>"
 
         fill_in "case-contact-duration-hours", with: "1"
@@ -117,11 +181,12 @@ RSpec.describe "case_contacts/new", type: :system do
         click_on "Submit"
 
         expect(page).to have_text("Confirm Note Content")
-        hello_line = page.body.split("\n").select { |x| x.include?("Hello") }
-        expect(hello_line).to eq(["        <div id=\"note-content\">&lt;h1&gt;Hello world&lt;/h1&gt;</div>"])
         expect {
           click_on "Continue Submitting"
         }.to change(CaseContact, :count).by(1)
+
+        hello_line = page.body.split("\n").select { |x| x.include?("Hello") }
+        expect(hello_line.first.include?(note_content)).to be true
         expected_text = strip_tags(note_content)
         expect(page).to have_css("h1", text: expected_text)
       end
@@ -129,33 +194,52 @@ RSpec.describe "case_contacts/new", type: :system do
   end
 
   context "mutliple contact type groups" do
-    let(:organization) { create(:casa_org) }
-    let(:admin) { create(:casa_admin, casa_org: organization) }
-    let(:casa_case) { create(:casa_case, casa_org: organization) }
-
-    before do
-      sign_in admin
-    end
-
     it "should check the correct box when clicking the label" do
-      group_1 = create(:contact_type_group, casa_org: organization)
+      organization = build(:casa_org)
+      admin = build(:casa_admin, casa_org: organization)
+      casa_case = build(:casa_case, casa_org: organization)
+      group_1 = build_stubbed(:contact_type_group, casa_org: organization)
       create(:contact_type, name: "School", contact_type_group: group_1)
-      group_2 = create(:contact_type_group, casa_org: organization)
+      group_2 = build(:contact_type_group, casa_org: organization)
       create(:contact_type, name: "Parent", contact_type_group: group_2)
 
+      sign_in admin
       visit new_case_contact_path(casa_case.id)
 
       expect { check "Parent" }.not_to raise_error
     end
+
+    it "shows the contact type groups, and their contact type alphabetically", :aggregate_failures do
+      organization = build(:casa_org)
+      admin = build(:casa_admin, casa_org: organization)
+      casa_case = build(:casa_case, casa_org: organization)
+      group_1 = create(:contact_type_group, name: "Placement", casa_org: organization)
+      group_2 = create(:contact_type_group, name: "Education", casa_org: organization)
+      create(:contact_type, name: "School", contact_type_group: group_1)
+      create(:contact_type, name: "Sports", contact_type_group: group_1)
+      create(:contact_type, name: "Caregiver Family", contact_type_group: group_2)
+      create(:contact_type, name: "Foster Parent", contact_type_group: group_2)
+
+      sign_in admin
+      visit(new_case_contact_path(casa_case.id))
+
+      expect(index_of("Education")).to be < index_of("Placement")
+      expect(index_of("School")).to be < index_of("Sports")
+      expect(index_of("Caregiver Family")).to be < index_of("Foster Parent")
+      expect(index_of("School")).to be > index_of("Caregiver Family")
+    end
+
+    def index_of(text)
+      page.text.index(text)
+    end
   end
 
   context "volunteer user" do
-    let(:organization) { create(:casa_org) }
-    let!(:empty) { create(:contact_type_group, name: "Empty", casa_org: organization) }
-    let!(:grp_with_hidden) { create(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization) }
-    let!(:hidden_type) { create(:contact_type, name: "Hidden", active: false, contact_type_group: grp_with_hidden) }
-
     it "is successful", js: true do
+      organization = build(:casa_org)
+      build(:contact_type_group, name: "Empty", casa_org: organization)
+      grp_with_hidden = build(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization)
+      build(:contact_type, name: "Hidden", active: false, contact_type_group: grp_with_hidden)
       volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first
       create_contact_types(volunteer_casa_case_one.casa_org)
@@ -192,6 +276,64 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(case_contact.contact_types.map(&:name)).to include "School"
       expect(case_contact.contact_types.map(&:name)).to include "Therapist"
       expect(case_contact.duration_minutes).to eq 105
+    end
+
+    it "autosaves notes", js: true do
+      volunteer = create(:volunteer, :with_casa_cases)
+      volunteer_casa_case_one = volunteer.casa_cases.first
+      create_contact_types(volunteer_casa_case_one.casa_org)
+
+      sign_in volunteer
+
+      visit new_case_contact_path(volunteer_casa_case_one.id)
+
+      check volunteer_casa_case_one.case_number
+      check "School"
+      check "Therapist"
+      choose "Yes"
+      select "In Person", from: "Contact medium"
+      fill_in "case-contact-duration-hours", with: "1"
+      fill_in "case-contact-duration-minutes", with: "45"
+      fill_in "Occurred at", with: "04/04/2020"
+      fill_in "Miles driven", with: "30"
+      select "Yes", from: "Want driving reimbursement"
+      fill_in "Notes", with: "Hello world"
+
+      # Allow 5 seconds for the Notes to be saved in localstorage
+      sleep 5
+
+      click_on "Log out"
+
+      sign_in volunteer
+
+      visit new_case_contact_path
+
+      expect(page).to have_field("Notes", with: "Hello world")
+    end
+
+    it "delete local storage notes after successfuly submited", js: true do
+      volunteer = create(:volunteer)
+      sign_in volunteer
+
+      visit new_case_contact_path
+
+      choose "Yes"
+      select "In Person", from: "Contact medium"
+      fill_in "case-contact-duration-hours", with: "1"
+      fill_in "case-contact-duration-minutes", with: "45"
+      fill_in "Miles driven", with: "30"
+      select "Yes", from: "Want driving reimbursement"
+      fill_in "Notes", with: "Hello world"
+
+      # Allow 5 seconds for the Notes to be saved in localstorage
+      sleep 5
+      click_on "Submit"
+      click_on "Continue Submitting"
+      expect(page).to have_text("At least one case must be selected")
+
+      visit new_case_contact_path
+
+      expect(page).to have_field("Notes", with: "Hello world")
     end
 
     it "submits the form when no note was added", js: true do
@@ -381,9 +523,9 @@ RSpec.describe "case_contacts/new", type: :system do
 
     context "with no contact types set for the volunteer's cases" do
       it "renders all of the org's contact types", js: true do
-        org = create(:casa_org)
+        org = build(:casa_org)
         create_contact_types(org)
-        volunteer = create(:volunteer, :with_casa_cases, casa_org: org)
+        volunteer = build(:volunteer, :with_casa_cases, casa_org: org)
 
         sign_in volunteer
 
@@ -397,7 +539,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
     context "with specific contact types allowed for the volunteer's cases" do
       it "only renders contact types that are allowed for the volunteer's cases", js: true do
-        org = create(:casa_org)
+        org = build(:casa_org)
         contact_type_group = create_contact_types(org)
         volunteer = create(:volunteer, :with_casa_cases, casa_org: org)
         contact_types_for_cases = contact_type_group.contact_types.reject { |ct| ct.name == "Attorney" }
@@ -410,6 +552,22 @@ RSpec.describe "case_contacts/new", type: :system do
         expect(page).not_to have_field("Attorney")
         expect(page).to have_field("School")
         expect(page).to have_field("Therapist")
+      end
+    end
+
+    context "when driving reimbursement is hidden by the CASA org" do
+      it "does not show for case_contacts" do
+        org = build(:casa_org, show_driving_reimbursement: false)
+        contact_type_group = create_contact_types(org)
+        volunteer = create(:volunteer, :with_casa_cases, casa_org: org)
+        contact_types_for_cases = contact_type_group.contact_types.reject { |ct| ct.name == "Attorney" }
+        assign_contact_types_to_cases(volunteer.casa_cases, contact_types_for_cases)
+
+        sign_in volunteer
+
+        visit new_case_contact_path
+
+        expect(page).not_to have_field("Want driving reimbursement")
       end
     end
 

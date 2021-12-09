@@ -1,0 +1,37 @@
+# This configuration file is used for Scout APM.
+# https://scoutapm.com/docs/ruby/configuration
+common: &defaults
+
+  # key: Your Organization key for Scout APM. Found on the settings screen.
+  # - Default: none
+  key:  <%= ENV.fetch("SCOUT_APM_KEY") %>
+
+  # log_level: Verboseness of logs.
+  # - Default: 'info'
+  # - Valid Options: debug, info, warn, error
+  # log_level: debug
+
+  # name: Application name in APM Web UI
+  # - Default: the application names comes from the Rails or Sinatra class name
+  # name:
+
+  # monitor: Enable Scout APM or not
+  # - Default: none
+  # - Valid Options: true, false
+  monitor: true
+
+production:
+  <<: *defaults
+
+development:
+  <<: *defaults
+  monitor: false
+  dev_trace: true
+
+test:
+  <<: *defaults
+  monitor: false
+
+staging:
+  <<: *defaults
+  dev_trace: true

@@ -173,7 +173,7 @@ RSpec.describe "supervisors/edit", type: :system do
     end
 
     context "when editing other supervisor" do
-      let(:user) { create(:supervisor, casa_org: organization) }
+      let(:user) { build(:supervisor, casa_org: organization) }
       let(:supervisor) { create(:supervisor, casa_org: organization) }
 
       it "sees red message when there are no active volunteers" do
@@ -222,6 +222,7 @@ RSpec.describe "supervisors/edit", type: :system do
 
           expect(page).to have_text "Assigned Volunteers"
           expect(page).to_not have_button("Include unassigned")
+          expect(page).to_not have_text("Currently Assigned To")
           supervisor.volunteers.each do |volunteer|
             expect(page).to have_text volunteer.email
           end
@@ -241,6 +242,7 @@ RSpec.describe "supervisors/edit", type: :system do
             expect(page).to have_button("Hide unassigned")
             expect(page).to have_text("All Volunteers")
             expect(page).to have_text unassigned_volunteer.email
+            expect(page).to have_text "Currently Assigned To"
           end
         end
       end
@@ -262,6 +264,13 @@ RSpec.describe "supervisors/edit", type: :system do
 
             expect(page).to have_button("Hide unassigned")
             expect(page).to have_text unassigned_volunteer.email
+            expect(page).to have_text "No One"
+            expect(page).to have_text "Currently Assigned To"
+
+            click_on "Hide unassigned"
+
+            expect(page).to_not have_text "Currently Assigned To"
+            expect(page).to_not have_text "No One"
           end
         end
       end

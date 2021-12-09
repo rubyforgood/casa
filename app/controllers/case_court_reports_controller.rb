@@ -13,7 +13,7 @@ class CaseCourtReportsController < ApplicationController
     authorize CaseCourtReport
     if !@casa_case || !@casa_case.court_reports.attached?
       flash[:alert] = "Report #{params[:id]} is not found."
-      redirect_to(case_court_reports_path) and return # rubocop:disable Style/AndOr
+      redirect_to(case_court_reports_path) and return
     end
 
     respond_to do |format|
@@ -32,7 +32,7 @@ class CaseCourtReportsController < ApplicationController
     respond_to do |format|
       format.json do
         if casa_case
-          report_data = generate_report_to_string(casa_case)
+          report_data = generate_report_to_string(casa_case, params[:time_zone])
           save_report(report_data, casa_case)
 
           render json: {link: case_court_report_path(casa_case.case_number, format: "docx"), status: :ok}
@@ -69,14 +69,15 @@ class CaseCourtReportsController < ApplicationController
     end
   end
 
-  def generate_report_to_string(casa_case)
+  def generate_report_to_string(casa_case, time_zone)
     return unless casa_case
 
     casa_case.casa_org.open_org_court_report_template do |template_docx_file|
       court_report = CaseCourtReport.new(
         volunteer_id: current_user.volunteer? ? current_user.id : casa_case.assigned_volunteers.first&.id,
         case_id: casa_case.id,
-        path_to_template: template_docx_file.to_path
+        path_to_template: template_docx_file.to_path,
+        time_zone: time_zone
       )
 
       return court_report.generate_to_string

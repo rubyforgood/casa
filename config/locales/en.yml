@@ -44,9 +44,9 @@ en:
     case_contact:
       notes_placeholder: "Please refer to individuals by their roles instead of by their names. Ex: My supervisor joined me for a call with the social worker to discuss my youth."
     supervisor:
-      mark_inactive_warning: "WARNING: Marking a supervisor inactive will make them unable to login. They will receive an email saying their account has been marked inactive. Are you sure you want to do this?"
+      mark_inactive_warning: "WARNING: Marking a supervisor inactive will make them unable to login. Are you sure you want to do this?"
     volunteer:
-      mark_inactive_warning: "WARNING: Marking a volunteer inactive will make them unable to login. They will receive an email saying their account has been marked inactive. Are you sure you want to do this?"
+      mark_inactive_warning: "WARNING: Marking a volunteer inactive will make them unable to login. Are you sure you want to do this?"
   page:
     meta:
       title: CASA Volunteer Tracking
@@ -74,8 +74,8 @@ en:
     edit: Edit
     back: Back
     submit: Submit
-    resolve: Resolve
-    follow_up: Follow up
+    resolve: Resolve Reminder
+    follow_up: Make Reminder
     go_back_to_form: Go Back to Form
     continue_submitting: Continue Submitting
     close: Close
@@ -94,3 +94,17 @@ en:
   date:
     formats:
       full: "%B %-d, %Y"
+  case_contact:
+    create: Case contact was successfully created.
+    update: Case contact was successfully updated.
+    destroy: Contact is successfully deleted.
+    restore: Contact is successfully restored.
+    case_min_validation: At least one case must be selected
+    thank_you_1: Thanks for all you do!
+    thank_you_2: Thank you for your hard work!
+    thank_you_3: Thank you for a job well done!
+    thank_you_4: Thank you for volunteering!
+    thank_you_5: Thanks for being a great volunteer!
+    thank_you_6: One of the greatest gifts you can give is your time!
+    thank_you_7: Those who can do, do. Those who can do more, volunteer.
+    thank_you_8: Volunteers do not necessarily have the time, they just have the heart.

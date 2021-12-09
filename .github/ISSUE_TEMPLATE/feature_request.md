@@ -18,4 +18,8 @@ Login Emails:
 - supervisor1@example.com view site as a supervisor
 - casa_admin1@example.com view site as an admin
 
-password for all users: 123456  
+password for all users: 12345678  
+
+### Questions? Join Slack!
+
+We highly recommend that you join us in slack https://rubyforgood.herokuapp.com/ #casa channel to ask questions quickly and hear about office hours (currently Wednesday 6-8pm Pacific), stakeholder news, and upcoming new issues.
