@@ -59,8 +59,6 @@ class CaseContactsController < ApplicationController
     @casa_cases = policy_scope(current_organization.casa_cases)
     @case_contact = CaseContact.new(create_case_contact_params)
     authorize @case_contact
-  # DP_Edit_Here  
-    @additional_expense = @case_contact.additional_expenses.new(additional_expense_params)
     @current_organization_groups = current_organization.contact_type_groups
 
     @selected_cases = @casa_cases.where(id: params.dig(:case_contact, :casa_case_id))
@@ -163,5 +161,10 @@ class CaseContactsController < ApplicationController
 
   def create_notice
     "#{t("create", scope: "case_contact")} #{t("thank_you_#{rand(1..8)}", scope: "case_contact")}"
+  end
+
+  def additional_expense_params
+    binding.pry
+    params.require(:additional_expense).permit(:other_expense_amount, :other_expense_describe)
   end
 end

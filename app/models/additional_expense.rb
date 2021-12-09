@@ -13,13 +13,13 @@ end
 #  other_expenses_describe :string
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
-#  case_contacts_id        :bigint           not null
+#  case_contact_id         :bigint           not null
 #
 # Indexes
 #
-#  index_additional_expenses_on_case_contacts_id  (case_contacts_id)
+#  index_additional_expenses_on_case_contact_id  (case_contact_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (case_contacts_id => case_contacts.id)
+#  fk_rails_...  (case_contact_id => case_contacts.id)
 #

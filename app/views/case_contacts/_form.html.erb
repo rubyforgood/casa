@@ -141,11 +141,11 @@
 <%# DP_Edit_Here %>
 
   <div class="field other-expenses form-group">
-    <h2><%= form.label :other_expense_amount %></h2>
-    <%= form.number_field :other_expense_amount, class: "form-control", value: "Enter amount", min: "0", max: 1000, step: 0.01 %>
+    <%= form.fields_for :additional_expense do |additional_expense_form| %>
+      <h2><%= additional_expense_form.label :other_expense_amount %></h2>
+      <%= additional_expense_form.number_field :other_expense_amount, class: "form-control", value: "Enter amount", min: "0", max: 1000, step: 0.01 %>
+    <% end %>
   </div> 
-
-
   <div class="field notes form-group">
     <h2><%= form.label :notes %></h2>
     <%= form.text_area :notes, :rows => 5, placeholder: t("forms.case_contact.notes_placeholder"), class: "form-control" %>
