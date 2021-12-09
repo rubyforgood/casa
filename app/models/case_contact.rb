@@ -29,6 +29,7 @@ class CaseContact < ApplicationRecord
 
 # DP_Edit_Here
   has_many :additional_expenses
+  accepts_nested_attributes_for :additional_expenses
 
   accepts_nested_attributes_for :case_contact_contact_type
 
