@@ -8,7 +8,9 @@ RSpec.describe "Edit CASA Case", type: :system do
     let(:casa_case) { create(:casa_case, :with_one_court_order, casa_org: organization) }
     let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
     let!(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
-
+    before do
+      travel_to Time.zone.local(2020, 8, 29, 4, 5, 6)
+    end
     before { sign_in admin }
 
     it_behaves_like "shows court dates links"
@@ -472,7 +474,9 @@ of it unless it was included in a previous court report.")
         attached_report
       end
     end
-
+    before do
+      travel_to Time.zone.local(2020, 8, 29, 4, 5, 6)
+    end
     before { sign_in volunteer }
 
     it_behaves_like "shows court dates links"
