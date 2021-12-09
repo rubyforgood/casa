@@ -6,6 +6,6 @@ class CourtDateDecorator < Draper::Decorator
   end
 
   def formatted_date_with_hearing_type_name
-    formatted_date + " - " + hearing_type.name.titleize
+    formatted_date + " - " + hearing_type.name.titleize if hearing_type
   end
 end
