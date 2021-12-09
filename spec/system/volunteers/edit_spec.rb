@@ -96,13 +96,16 @@ RSpec.describe "volunteers/edit", type: :system do
     expect(page).to have_content("Bolu Bolu was unassigned from Haka Haka")
   end
 
-  it "shows the admin the option to assign an unassigned volunteer to a different supervisor" do
-    volunteer = create(:volunteer)
+  it "shows the admin the option to assign an unassigned volunteer to a different active supervisor" do
+    volunteer = create(:volunteer, casa_org: organization)
+    deactivated_supervisor = create(:supervisor, active: false, casa_org: organization, display_name: "Inactive Supervisor")
+    active_supervisor = create(:supervisor, active: true, casa_org: organization, display_name: "Active Supervisor")
 
     sign_in admin
 
     visit edit_volunteer_path(volunteer)
-
+    expect(page).not_to have_select("supervisor_volunteer[supervisor_id]", with_options: [deactivated_supervisor.display_name])
+    expect(page).to have_select("supervisor_volunteer[supervisor_id]", options: [active_supervisor.display_name])
     expect(page).to have_content("Select a Supervisor")
     expect(page).to have_content("Assign a Supervisor")
   end
