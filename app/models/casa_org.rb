@@ -50,6 +50,10 @@ class CasaOrg < ApplicationRecord
     end
   end
 
+  def user_count
+    users.count
+  end
+
   def set_slug
     self.slug = name.parameterize
   end

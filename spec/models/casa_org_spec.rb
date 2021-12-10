@@ -37,4 +37,13 @@ RSpec.describe CasaOrg, type: :model do
       expect(org.slug).to eq "prince-george-casa"
     end
   end
+
+  describe "user_count" do
+    let(:org) { create(:casa_org) }
+    subject(:count) { org.user_count }
+    before do
+      2.times { create(:user, casa_org: org) }
+    end
+    it { is_expected.to eq 2 }
+  end
 end
