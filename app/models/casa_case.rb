@@ -96,10 +96,11 @@ class CasaCase < ApplicationRecord
   end
 
   def add_emancipation_option(option_id)
-    option_category = EmancipationOption.find(option_id).emancipation_category
+    option = EmancipationOption.find(option_id)
+    option_category = option.emancipation_category
 
     if !(option_category.mutually_exclusive && EmancipationOption.options_with_category_and_case(option_category, id).any?)
-      emancipation_options << EmancipationOption.find(option_id)
+      emancipation_options << option
     else
       raise "Attempted adding multiple options belonging to a mutually exclusive category"
     end
@@ -153,11 +154,17 @@ class CasaCase < ApplicationRecord
   end
 
   def remove_emancipation_category(category_id)
-    emancipation_categories.destroy(EmancipationCategory.find(category_id))
+    category = EmancipationCategory.find(category_id)
+    raise ActiveRecord::RecordNotFound unless emancipation_categories.include?(category)
+
+    emancipation_categories.destroy(category)
   end
 
   def remove_emancipation_option(option_id)
-    emancipation_options.destroy(EmancipationOption.find(option_id))
+    option = EmancipationOption.find(option_id)
+    raise ActiveRecord::RecordNotFound unless emancipation_options.include?(option)
+
+    emancipation_options.destroy(option)
   end
 
   def update_cleaning_contact_types(args)
