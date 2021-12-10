@@ -34,6 +34,10 @@ class CasaOrg < ApplicationRecord
     )
   end
 
+  def case_contacts_count
+    case_contacts.count
+  end
+
   def org_logo
     if logo.attached?
       Rails.application.routes.url_helpers.rails_blob_path(logo, only_path: true)
