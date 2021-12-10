@@ -13,6 +13,8 @@
       <tr>
         <th>Name</th>
         <th>Created At</th>
+        <th>User Count</th>
+        <th>Case Contact Count</th>
       </tr>
       </thead>
       <tbody>
@@ -20,6 +22,8 @@
         <tr>
           <td><%= link_to organization.name, all_casa_admins_casa_org_path(organization) %></td>
           <td><%= I18n.l(organization.created_at, format: :full, default: nil) %></td>
+          <td><%= organization.user_count %></td>
+          <td><%= organization.case_contacts_count %></td>
         </tr>
       <% end %>
       </tbody>
