@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
   rescue_from Organizational::UnknownOrganization, with: :not_authorized
+  rescue_from ActiveRecord::RecordNotFound, with: :route_not_found
 
   impersonates :user
 
@@ -36,5 +37,11 @@ class ApplicationController < ActionController::Base
   def not_authorized
     flash[:notice] = t("default", scope: "pundit")
     redirect_to(request.referrer || root_url)
+  end
+
+  def route_not_found
+    respond_to do |format|
+      format.html { render file: "#{Rails.root}/public/404", layout: false, status: :not_found }
+    end
   end
 end
