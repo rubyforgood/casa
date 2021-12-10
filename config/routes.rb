@@ -89,6 +89,7 @@ Rails.application.routes.draw do
       patch :activate
       patch :deactivate
       patch :resend_invitation
+      patch :change_to_admin
     end
   end
   resources :supervisor_volunteers, only: %i[create] do
