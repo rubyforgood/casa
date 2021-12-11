@@ -68,14 +68,20 @@ class CaseContactsController < ApplicationController
       render :new
       return
     end
-    
+
     # Create a case contact for every case that was checked
     case_contacts = @selected_cases.map { |casa_case|
-      casa_case.case_contacts.create(create_case_contact_params)
+      ActiveRecord::Base.transaction do
+        case_contact = casa_case.case_contacts.create(create_case_contact_params)
+        if additional_expense_params.keys.any?
+          case_contact.additional_expenses.create(additional_expense_params)
+        end
+        case_contact
+      end
     }
 
     # @case_contact.additional_expenses.save!
-    
+
     if case_contacts.all?(&:persisted?)
       # binding.pry
       redirect_to casa_case_path(CaseContact.last.casa_case), notice: create_notice
@@ -168,6 +174,6 @@ class CaseContactsController < ApplicationController
   end
 
   def additional_expense_params
-    params.require(:additional_expense).permit(:other_expense_amount, :other_expense_describe)
+    params.dig("case_contact", "additional_expense").permit(:other_expense_amount, :other_expense_describe)
   end
 end
