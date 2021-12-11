@@ -264,7 +264,6 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "other_expense_amount", with: "5.01"
       # fill_in "other-expenses-describe", with: "tolls"
 
-
       fill_in "Notes", with: "Hello world"
 
       expect(page).not_to have_text("error")

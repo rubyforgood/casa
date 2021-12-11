@@ -17,7 +17,7 @@ class CaseContactReportsController < ApplicationController
 
   private
 
-# DP_Edit_Here
+  # DP_Edit_Here
 
   def report_params
     parameters = params.require(:report).permit(

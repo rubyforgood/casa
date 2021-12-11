@@ -1,8 +1,7 @@
 # Calculate values when using case contact parameters
 class CaseContactParameters < SimpleDelegator
   def initialize(params)
-
-#DP_Edit_Here
+    # DP_Edit_Here
 
     params =
       params.require(:case_contact).permit(
@@ -14,7 +13,7 @@ class CaseContactParameters < SimpleDelegator
         :want_driving_reimbursement,
         :notes,
         case_contact_contact_type_attributes: [:contact_type_id],
-        additional_expense_attributes: [:id,:other_expense_amount]
+        additional_expense_attributes: [:id, :other_expense_amount]
       )
 
     super(params)
