@@ -109,6 +109,18 @@ RSpec.describe "supervisors/edit", type: :system do
       expect(deliveries.last.subject).to have_text "CASA Console invitation instructions"
     end
 
+    it "can convert the supervisor to an admin", js: true do
+      supervisor = create(:supervisor, casa_org_id: organization.id)
+
+      sign_in user
+
+      visit edit_supervisor_path(supervisor)
+      click_on "Change to Admin"
+
+      expect(page).to have_text("Supervisor was changed to Admin.")
+      expect(User.find(supervisor.id)).to be_casa_admin
+    end
+
     context "logged in as a supervisor" do
       let(:supervisor) { create(:supervisor) }
       it "can't deactivate a supervisor", js: true do
