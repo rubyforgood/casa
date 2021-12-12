@@ -32,6 +32,7 @@ require('src/sidebar')
 require('src/readMore')
 require('src/tooltip')
 require('src/password_confirmation')
+require('src/reimbursements')
 require('src/reports')
 
 // Uncomment to copy all static images under ../images to the output folder and
