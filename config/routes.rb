@@ -64,7 +64,7 @@ Rails.application.routes.draw do
       post :generate
     end
   end
-  resources :reimbursements, only: %i[index change_complete_status] do
+  resources :reimbursements, only: %i[index change_complete_status], concerns: %i[with_datatable] do
     patch :mark_as_complete, to: "reimbursements#change_complete_status"
     patch :mark_as_needs_review, to: "reimbursements#change_complete_status"
   end
