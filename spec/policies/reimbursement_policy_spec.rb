@@ -13,6 +13,12 @@ RSpec.describe ReimbursementPolicy do
     it { is_expected.to_not permit(volunteer) }
   end
 
+  permissions :datatable? do
+    it { is_expected.to permit(casa_admin) }
+    it { is_expected.to_not permit(supervisor) }
+    it { is_expected.to_not permit(volunteer) }
+  end
+
   describe "ReimbursementPolicy::Scope #resolve" do
     subject { described_class::Scope.new(user, scope).resolve }
 
