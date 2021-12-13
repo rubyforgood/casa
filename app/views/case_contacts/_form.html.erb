@@ -125,11 +125,12 @@
 
   <div class="field miles-driven form-group">
     <h2><%= form.label :miles_driven %></h2>
-    <% if form_type == 'new' %>
-      <%= form.number_field :miles_driven, class: "form-control", required: true, min: "0", max: 10000, placeholder: "0", value: nil %>
+    <% if form_type == 'new' && @case_contact.miles_driven == 0 %>
+      <input class="form-control" required="required" min="0" max="10000" type="number" value="" name="case_contact[miles_driven]" id="case_contact_miles_driven">
     <% else %>
       <%= form.number_field :miles_driven, class: "form-control", required: true, min: "0", max: 10000, placeholder: "0" %>
     <% end %>
+  </div>
   </div>
 
   <% if current_organization.show_driving_reimbursement %>
