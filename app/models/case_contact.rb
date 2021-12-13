@@ -12,8 +12,6 @@ class CaseContact < ApplicationRecord
   validates :occurred_at, presence: true
   validate :occurred_at_not_in_future
   validate :reimbursement_only_when_miles_driven
-  # DP_Edit_Here
-  # validate :other_expense_amount
 
   belongs_to :creator, class_name: "User"
   has_one :supervisor_volunteer, -> {
@@ -27,7 +25,6 @@ class CaseContact < ApplicationRecord
   has_many :case_contact_contact_type
   has_many :contact_types, through: :case_contact_contact_type, source: :contact_type
 
-  # DP_Edit_Here
   has_many :additional_expenses
   accepts_nested_attributes_for :additional_expenses
 

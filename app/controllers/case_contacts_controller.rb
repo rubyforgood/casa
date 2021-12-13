@@ -33,7 +33,6 @@ class CaseContactsController < ApplicationController
     end
 
     @case_contact = CaseContact.new
-    # @additional_expense = @case_contact.additional_expenses.build
 
     # By default the first case is selected
     @selected_cases = @casa_cases[0, 1]
@@ -80,10 +79,7 @@ class CaseContactsController < ApplicationController
       end
     }
 
-    # @case_contact.additional_expenses.save!
-
     if case_contacts.all?(&:persisted?)
-      # binding.pry
       redirect_to casa_case_path(CaseContact.last.casa_case), notice: create_notice
     else
       @case_contact = case_contacts.first

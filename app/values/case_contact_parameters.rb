@@ -1,7 +1,6 @@
 # Calculate values when using case contact parameters
 class CaseContactParameters < SimpleDelegator
   def initialize(params)
-    # DP_Edit_Here
 
     params =
       params.require(:case_contact).permit(
