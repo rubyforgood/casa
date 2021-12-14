@@ -30,7 +30,7 @@ gem "pundit" # for authorization management - based on user.role field
 gem "rack-attack" # for blocking & throttling abusive requests
 gem "request_store"
 gem "sablon" # Word document templating tool for Case Court Reports
-gem "scout_apm", "~> 5.0"
+gem "scout_apm"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "webpacker", "~> 5.4" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 
@@ -44,7 +44,7 @@ group :development, :test do
   gem "pry-byebug"
   gem "rspec-rails", "~> 5.0.2"
   gem "shoulda-matchers"
-  gem "standard", "~> 1.4.0" # linter https://github.com/testdouble/standard
+  gem "standard", "~> 1.5.0" # linter https://github.com/testdouble/standard
 end
 
 group :development do
@@ -65,7 +65,7 @@ group :test do
   gem "database_cleaner-active_record", "~> 2.0.1"
   gem "rails-controller-testing"
   gem "rake"
-  gem "selenium-webdriver", "4.0.3" # temporarily locking to a beta version until 4.x comes out - to fix docker tests https://github.com/SeleniumHQ/selenium/issues/9001
+  gem "selenium-webdriver"
   gem "simplecov", "~> 0.21.2", require: false # 0.17.1 pinned as a workaround for https://github.com/codeclimate/test-reporter/issues/418
   gem "webdrivers" # easy installation and use of web drivers to run system tests with browsers
 end

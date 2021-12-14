@@ -229,5 +229,5 @@ end
 #
 # Foreign Keys
 #
-#  fk_rails_...  (casa_org_id => casa_orgs.id)
+#  fk_rails_...  (casa_org_id => casa_org.id)
 #
