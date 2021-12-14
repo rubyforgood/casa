@@ -61,6 +61,7 @@
       <%= render "calendar_button", date:  I18n.l(@casa_case.next_court_date&.date,
                                                   format: :default, default: ''),
                                                   id: "btnNextCourtDate",
+                                                  tooltip: "Add Next Court Date to Calendar",
                                                   title: "Next Court Date for [#{@casa_case.case_number}]" %>
     </h6>
     </p>
@@ -72,6 +73,7 @@
       <%= render "calendar_button", date: I18n.l(@casa_case.court_report_due_date,
                                                 format: :default, default: ''),
                                                 id: "btnCourtReportDueDate",
+                                                tooltip: "Add Court Report Due Date to Calendar",
                                                 title: "Court Report Due Date for [#{@casa_case.case_number}]" %>
     </h6>
     </p>

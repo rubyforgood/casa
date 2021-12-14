@@ -14,9 +14,8 @@ function createCalendarEvents () {
       isAllDay: true
     })
 
-    console.log(btn.id)
-
     calendarEvent.createWidget(`#${btn.id}`)
+    btn.title = btn.dataset.tooltip
   })
 }
 
