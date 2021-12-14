@@ -476,7 +476,7 @@ RSpec.describe "case_contacts/new", type: :system do
         expect(page).to have_field("case-contact-duration-hours", with: "1")
         expect(page).to have_field("case-contact-duration-minutes", with: "45")
         expect(page).to have_field("Occurred at", with: 2.days.ago.strftime("%Y-%m-%d"))
-        expect(page).to have_field("Miles driven", with: "0")
+        expect(page).to have_field("Miles driven", with: nil)
         expect(page).to have_select("Want driving reimbursement", selected: "Yes")
         expect(page).to have_field("Notes", with: "Hello world")
       end
