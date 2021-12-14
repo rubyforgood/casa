@@ -12,7 +12,7 @@ class CaseContactParameters < SimpleDelegator
         :want_driving_reimbursement,
         :notes,
         case_contact_contact_type_attributes: [:contact_type_id],
-        additional_expense_attributes: [:id, :other_expense_amount]
+        additional_expense_attributes: [:id, :other_expense_amount, :other_expenses_describe]
       )
 
     super(params)

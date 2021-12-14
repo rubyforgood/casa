@@ -103,7 +103,7 @@ class CaseContactDecorator < Draper::Decorator
     object.other_expense_amount
   end
 
-  def other_expense_describe
-    object.other_expense_describe
+  def other_expenses_describe
+    object.other_expenses_describe
   end
 end

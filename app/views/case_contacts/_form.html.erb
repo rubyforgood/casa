@@ -142,7 +142,7 @@
     <%= form.fields_for :additional_expense do |additional_expense_form| %>
       <h2><%= additional_expense_form.label :other_expenses %></h2>
       <%= additional_expense_form.number_field :other_expense_amount, class: "form-control", id: "other_expense_amount", min: "0", max: 1000, step: 0.01 %>
-      <%= additional_expense_form.text_field :other_expense_describe, class: "form-control", id: "other_expense_describe" %>
+      <%= additional_expense_form.text_field :other_expenses_describe, class: "form-control", id: "other_expenses_describe" %>
     <% end %>
   </div>
 
