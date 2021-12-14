@@ -6,6 +6,7 @@ def empty_ar_classes
     AllCasaAdmin,
     CasaAdmin,
     CasaCase,
+    Judge,
     CasaOrg,
     CaseAssignment,
     CaseContact,
