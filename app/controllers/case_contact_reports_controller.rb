@@ -17,8 +17,6 @@ class CaseContactReportsController < ApplicationController
 
   private
 
-# DP_Edit_Here
-
   def report_params
     parameters = params.require(:report).permit(
       :start_date,
@@ -26,7 +24,8 @@ class CaseContactReportsController < ApplicationController
       :contact_made,
       :has_transitioned,
       :want_driving_reimbursement,
-      :other_expense_amount,
+      :other_expense_amount, 
+      :other_expenses_describe, 
       contact_type_ids: [],
       contact_type_group_ids: [],
       creator_ids: [],

@@ -1,7 +1,5 @@
 class AdditionalExpense < ApplicationRecord
-
   belongs_to :case_contact
-  
 end
 
 # == Schema Information
