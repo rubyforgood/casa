@@ -72,7 +72,7 @@ class CaseContactsController < ApplicationController
     case_contacts = @selected_cases.map { |casa_case|
       ActiveRecord::Base.transaction do
         case_contact = casa_case.case_contacts.create(create_case_contact_params)
-        if additional_expense_params&.keys&.any?
+        if case_contact.persisted? && additional_expense_params&.keys&.any?
           case_contact.additional_expenses.create(additional_expense_params)
         end
         case_contact
