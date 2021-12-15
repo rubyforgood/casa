@@ -22,7 +22,7 @@ RSpec.describe "court_dates/new", type: :system do
     it "is successful", js: true do
       expect(page.body).to have_content(casa_case.case_number)
 
-      fill_in "case_contact_occurred_at", with: "04/04/2020"
+      fill_in "court_date_date", with: "04/04/2020"
 
       select judge.name, from: "Judge"
       select hearing_type.name, from: "Hearing type"
