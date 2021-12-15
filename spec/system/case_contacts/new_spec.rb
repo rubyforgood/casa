@@ -259,10 +259,9 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "Miles driven", with: "30"
       select "Yes", from: "Want driving reimbursement"
 
-      # DP_Edit_Here
-
       fill_in "other_expense_amount", with: "5.01"
       fill_in "other_expenses_describe", with: "tolls"
+      expect(page).to have_text("Add Another Expense")
 
       fill_in "Notes", with: "Hello world"
 
