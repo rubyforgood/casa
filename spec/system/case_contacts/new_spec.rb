@@ -36,6 +36,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
       fill_in "case-contact-duration-hours", with: "1"
       fill_in "case-contact-duration-minutes", with: "45"
+      fill_in "case_contact_miles_driven", with: "0"
 
       expect {
         click_on "Submit"
@@ -65,6 +66,7 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "case_contact_occurred_at", with: "04/04/2020"
       fill_in "case-contact-duration-hours", with: "1"
       fill_in "case-contact-duration-minutes", with: "45"
+      fill_in "case_contact_miles_driven", with: "0"
 
       short_notes = "Hello world!"
       fill_in "Notes", with: short_notes
@@ -100,6 +102,7 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "case_contact_occurred_at", with: "04/04/2020"
       fill_in "case-contact-duration-hours", with: "1"
       fill_in "case-contact-duration-minutes", with: "45"
+      fill_in "case_contact_miles_driven", with: "0"
 
       long_notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."\
         "Nullam id placerat eros. Fusce egestas sem facilisis interdum maximus."\
@@ -175,6 +178,7 @@ RSpec.describe "case_contacts/new", type: :system do
         fill_in "case_contact_occurred_at", with: "04/04/2020"
         note_content = "<h1>Hello world</h1>"
 
+        fill_in "case_contact_miles_driven", with: "0"
         fill_in "case-contact-duration-hours", with: "1"
         fill_in "case-contact-duration-minutes", with: "45"
         fill_in "Notes", with: note_content
@@ -472,7 +476,7 @@ RSpec.describe "case_contacts/new", type: :system do
         expect(page).to have_field("case-contact-duration-hours", with: "1")
         expect(page).to have_field("case-contact-duration-minutes", with: "45")
         expect(page).to have_field("Occurred at", with: 2.days.ago.strftime("%Y-%m-%d"))
-        expect(page).to have_field("Miles driven", with: "0")
+        expect(page).to have_field("Miles driven", with: nil)
         expect(page).to have_select("Want driving reimbursement", selected: "Yes")
         expect(page).to have_field("Notes", with: "Hello world")
       end
