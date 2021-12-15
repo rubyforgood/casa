@@ -30,7 +30,7 @@ RSpec.describe EmancipationsController, type: :controller do
       let(:sablon_template) { double("Sablon::Template") }
       let(:html_body) { double("EmancipationChecklistDownloadHtml", call: "<html>some html</html>") }
       let(:emancipation_checklist) { [] }
-      let(:expected_context) { { case_number: casa_case.case_number, emancipation_checklist: emancipation_checklist } }
+      let(:expected_context) { {case_number: casa_case.case_number, emancipation_checklist: emancipation_checklist} }
       let(:rendered_to_string_context) { "context to string" }
 
       before do
