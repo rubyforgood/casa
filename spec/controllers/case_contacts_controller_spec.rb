@@ -5,7 +5,8 @@ RSpec.describe CaseContactsController, type: :controller do
   let(:volunteer) { create(:volunteer, :with_casa_cases, casa_org: organization) }
   let(:admin) { create(:casa_admin) }
   let(:supervisor) { create(:supervisor) }
-  let(:case_id) { volunteer.casa_cases.first.id }
+  let(:casa_case) { volunteer.casa_cases.first }
+  let(:case_id) { casa_case.id }
   let(:params) { {case_contact: {casa_case_id: case_id}} }
   let!(:contact_type_group_one) do
     create(:contact_type_group, casa_org: organization).tap do |group|
@@ -130,6 +131,18 @@ RSpec.describe CaseContactsController, type: :controller do
           expect(
             (1..8).map { |n| "#{I18n.t("create", scope: "case_contact")} #{I18n.t("thank_you_#{n}", scope: "case_contact")}" }
           ).to include(flash[:notice])
+        end
+      end
+
+      context "with additional expense" do
+        let(:additional_expense) { build(:additional_expense) }
+        let(:case_contact) { build(:case_contact, casa_case_id: case_id) }
+        let(:params) { case_contact.attributes.merge("additional_expense" => additional_expense.attributes) }
+
+        it "creates additional expense" do
+          expect(organization.casa_cases).to include(casa_case)
+          expect { post :create, params: {case_contact: params}, format: :js }.to change(AdditionalExpense, :count).by(1)
+          expect(casa_case.case_contacts.last.additional_expenses.count).to eq(1)
         end
       end
     end
