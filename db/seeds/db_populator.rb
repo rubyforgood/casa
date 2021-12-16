@@ -4,7 +4,7 @@
 # Email addresses generated will be globally unique across all orgs.
 
 class DbPopulator
-  SEED_PASSWORD = "123456"
+  SEED_PASSWORD = "12345678"
   WORD_LENGTH_TUNING = 10
   LINE_BREAK_TUNING = 5
   PREFIX_OPTIONS = ("A".ord.."Z".ord).to_a.map(&:chr)
@@ -46,10 +46,19 @@ class DbPopulator
     create_users(casa_org, options)
     create_cases(casa_org, options)
     create_hearing_types(casa_org)
+    create_judges(casa_org)
     casa_org
   end
 
   private # -------------------------------------------------------------------------------------------------------
+
+  # Create 2 judges for each casa_org.
+  def create_judges(casa_org)
+    env = ENV["APP_ENVIRONMENT"] || Rails.env
+    if env == "qa" || env == "test"
+      2.times { Judge.create(name: Faker::Name.name, casa_org: casa_org) }
+    end
+  end
 
   # Creates 3 users, 1 each for [Volunteer, Supervisor, CasaAdmin].
   # For org's after the first one created, adds an org number to the email address so that they will be globally unique
@@ -243,6 +252,24 @@ class DbPopulator
           casa_case_id: new_casa_case.id,
           date: Date.today - (index + 1).weeks
         )
+      end
+
+      # guarantee at least one transition aged youth case to "volunteer1"
+      volunteer1 = Volunteer.find_by(email: "volunteer1@example.com")
+      if volunteer1.casa_cases.where(transition_aged_youth: true).blank?
+        rand(1..3).times do
+          birth_month_year_youth = ((Date.today - 18.year)..(Date.today - 14.year)).to_a.sample
+          volunteer1.casa_cases.find_or_create_by!(
+            casa_org_id: volunteer1.casa_org.id,
+            case_number: generate_case_number,
+            court_date: court_date,
+            court_report_due_date: court_date + 1.month,
+            court_report_submitted_at: court_report_submitted ? Date.today : nil,
+            court_report_status: court_report_submitted ? :submitted : :not_submitted,
+            transition_aged_youth: transition_aged_youth?(birth_month_year_youth),
+            birth_month_year_youth: birth_month_year_youth
+          )
+        end
       end
     end
   end

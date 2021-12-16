@@ -69,9 +69,7 @@ class CaseContactsController < ApplicationController
     end
 
     # Create a case contact for every case that was checked
-    case_contacts = @selected_cases.map { |casa_case|
-      casa_case.case_contacts.create(create_case_contact_params)
-    }
+    case_contacts = create_case_contact_for_every_selected_casa_case(@selected_cases)
 
     if case_contacts.all?(&:persisted?)
       redirect_to casa_case_path(CaseContact.last.casa_case), notice: create_notice
@@ -122,6 +120,18 @@ class CaseContactsController < ApplicationController
 
   private
 
+  def create_case_contact_for_every_selected_casa_case(selected_cases)
+    selected_cases.map { |casa_case|
+      ActiveRecord::Base.transaction do
+        case_contact = casa_case.case_contacts.create(create_case_contact_params)
+        if case_contact.persisted? && additional_expense_params&.keys&.any?
+          case_contact.additional_expenses.create(additional_expense_params)
+        end
+        case_contact
+      end
+    }
+  end
+
   def set_case_contact
     if current_organization.case_contacts.exists?(params[:id])
       @case_contact = authorize(current_organization.case_contacts.find(params[:id]))
@@ -161,5 +171,9 @@ class CaseContactsController < ApplicationController
 
   def create_notice
     "#{t("create", scope: "case_contact")} #{t("thank_you_#{rand(1..8)}", scope: "case_contact")}"
+  end
+
+  def additional_expense_params
+    params.dig("case_contact", "additional_expense")&.permit(:other_expense_amount, :other_expenses_describe)
   end
 end

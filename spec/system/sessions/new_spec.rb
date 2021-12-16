@@ -17,7 +17,7 @@ RSpec.describe "sessions/new", type: :system do
         expect(page).to_not have_text "sign in before continuing"
 
         fill_in "Email", with: user.email
-        fill_in "Password", with: "123456"
+        fill_in "Password", with: "12345678"
         within ".actions" do
           click_on "Log in"
         end
@@ -40,7 +40,7 @@ RSpec.describe "sessions/new", type: :system do
       expect(page).to_not have_text "sign in before continuing"
 
       fill_in "Email", with: user.email
-      fill_in "Password", with: "123456"
+      fill_in "Password", with: "12345678"
       within ".actions" do
         click_on "Log in"
       end

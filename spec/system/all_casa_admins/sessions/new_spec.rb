@@ -31,7 +31,7 @@ RSpec.describe "all_casa_admins/sessions/new", type: :system do
       visit "/all_casa_admins/sign_in"
 
       fill_in "Email", with: all_casa_admin.email
-      fill_in "Password", with: "123456"
+      fill_in "Password", with: "12345678"
       within ".actions" do
         click_on "Log in"
       end
@@ -43,7 +43,7 @@ RSpec.describe "all_casa_admins/sessions/new", type: :system do
       visit "/all_casa_admins/sign_in"
 
       fill_in "Email", with: volunteer.email
-      fill_in "Password", with: "123456"
+      fill_in "Password", with: "12345678"
       within ".actions" do
         click_on "Log in"
       end

@@ -22,8 +22,8 @@ RSpec.describe "users/edit", type: :system do
       click_on "Change Password"
 
       fill_in "Current Password", with: "12345"
-      fill_in "New Password", with: "1234567"
-      fill_in "New Password Confirmation", with: "1234567"
+      fill_in "New Password", with: "123456789"
+      fill_in "New Password Confirmation", with: "123456789"
 
       click_on "Update Password"
       expect(page).to have_content "1 error prohibited this password change from being saved:"
@@ -33,22 +33,22 @@ RSpec.describe "users/edit", type: :system do
     it "displays password errors messages when user is unable to set a password" do
       click_on "Change Password"
 
-      fill_in "Current Password", with: "123456"
+      fill_in "Current Password", with: "12345678"
       fill_in "New Password", with: "123"
       fill_in "New Password Confirmation", with: "1234"
 
       click_on "Update Password"
       expect(page).to have_content "2 errors prohibited this password change from being saved:"
       expect(page).to have_text("Password confirmation doesn't match Password")
-      expect(page).to have_text("Password is too short (minimum is 6 characters)")
+      expect(page).to have_text("Password is too short (minimum is #{User.password_length.min} characters)")
     end
 
     it "notifies a user when they update their password" do
       click_on "Change Password"
 
-      fill_in "Current Password", with: "123456"
-      fill_in "New Password", with: "1234567"
-      fill_in "New Password Confirmation", with: "1234567"
+      fill_in "Current Password", with: "12345678"
+      fill_in "New Password", with: "123456789"
+      fill_in "New Password Confirmation", with: "123456789"
 
       click_on "Update Password"
 
@@ -58,9 +58,9 @@ RSpec.describe "users/edit", type: :system do
     it "notifies password changed by email", :aggregate_failures do
       click_on "Change Password"
 
-      fill_in "Current Password", with: "123456"
-      fill_in "New Password", with: "1234567"
-      fill_in "Password Confirmation", with: "1234567"
+      fill_in "Current Password", with: "12345678"
+      fill_in "New Password", with: "123456789"
+      fill_in "Password Confirmation", with: "123456789"
 
       click_on "Update Password"
 
@@ -93,9 +93,9 @@ RSpec.describe "users/edit", type: :system do
     it "notifies password changed by email", :aggregate_failures do
       click_on "Change Password"
 
-      fill_in "Current Password", with: "123456"
-      fill_in "New Password", with: "1234567"
-      fill_in "Password Confirmation", with: "1234567"
+      fill_in "Current Password", with: "12345678"
+      fill_in "New Password", with: "123456789"
+      fill_in "Password Confirmation", with: "123456789"
 
       click_on "Update Password"
 
@@ -136,22 +136,22 @@ RSpec.describe "users/edit", type: :system do
     it "displays password errors messages when admin is unable to set a password" do
       click_on "Change Password"
 
-      fill_in "Current Password", with: "123456"
+      fill_in "Current Password", with: "12345678"
       fill_in "New Password", with: "123"
       fill_in "Password Confirmation", with: "1234"
 
       click_on "Update Password"
       expect(page).to have_content "2 errors prohibited this password change from being saved:"
       expect(page).to have_text("Password confirmation doesn't match Password")
-      expect(page).to have_text("Password is too short (minimum is 6 characters)")
+      expect(page).to have_text("Password is too short (minimum is #{User.password_length.min} characters)")
     end
 
     it "display success message when admin update password" do
       click_on "Change Password"
 
-      fill_in "Current Password", with: "123456"
-      fill_in "New Password", with: "1234567"
-      fill_in "Password Confirmation", with: "1234567"
+      fill_in "Current Password", with: "12345678"
+      fill_in "New Password", with: "123456789"
+      fill_in "Password Confirmation", with: "123456789"
 
       click_on "Update Password"
 
@@ -161,9 +161,9 @@ RSpec.describe "users/edit", type: :system do
     it "notifies password changed by email", :aggregate_failures do
       click_on "Change Password"
 
-      fill_in "Current Password", with: "123456"
-      fill_in "New Password", with: "1234567"
-      fill_in "Password Confirmation", with: "1234567"
+      fill_in "Current Password", with: "12345678"
+      fill_in "New Password", with: "123456789"
+      fill_in "Password Confirmation", with: "123456789"
 
       click_on "Update Password"
 

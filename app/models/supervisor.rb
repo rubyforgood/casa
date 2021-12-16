@@ -27,6 +27,10 @@ class Supervisor < User
     end
   end
 
+  def change_to_admin!
+    becomes!(CasaAdmin).save
+  end
+
   def pending_volunteers
     Volunteer.where(invited_by_id: id).or(
       Volunteer.where(id: volunteers.pluck(:id))

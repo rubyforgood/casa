@@ -33,7 +33,7 @@ class VolunteersController < ApplicationController
 
   def edit
     authorize @volunteer
-    @supervisors = policy_scope current_organization.supervisors
+    @supervisors = policy_scope current_organization.supervisors.active
   end
 
   def update

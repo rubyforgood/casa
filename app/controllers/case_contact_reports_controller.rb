@@ -24,6 +24,8 @@ class CaseContactReportsController < ApplicationController
       :contact_made,
       :has_transitioned,
       :want_driving_reimbursement,
+      :other_expense_amount,
+      :other_expenses_describe,
       contact_type_ids: [],
       contact_type_group_ids: [],
       creator_ids: [],

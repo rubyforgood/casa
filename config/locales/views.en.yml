@@ -170,7 +170,7 @@ en:
       singular_label: CASA case
     new:
       title: New Case Contact
-  casa_orgs:
+  casa_org:
     contact_type_groups:
       button:
         edit: Edit
@@ -470,14 +470,14 @@ en:
         status: Status
       inactive: Inactive
       no_supervisor: No supervisor assignment
-      no: No
+      "no": No
       pick_displayed_columns: Pick displayed columns
       select_columns: Select columns
       supervisor: Supervisor
       status: Status
       transition_aged_youth: Assigned to Transition Aged Youth
       volunteers: Volunteers
-      yes: Yes
+      "yes": Yes
     send_reminder_button:
       admin_checkbox_text: Send CC to Supervisor and Admin
       send_reminder: Send Reminder
@@ -497,3 +497,4 @@ en:
         created_by: Created By
         created_at: Created At
         actions: Actions
+
