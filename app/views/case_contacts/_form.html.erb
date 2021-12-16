@@ -125,7 +125,11 @@
 
   <div class="field miles-driven form-group">
     <h2><%= form.label :miles_driven %></h2>
-    <%= form.number_field :miles_driven, class: "form-control", required: true, min: "0", max: 10000 %>
+    <% if form_type == 'new' && @case_contact.miles_driven == 0 %>
+      <input class="form-control" required="required" min="0" max="10000" type="number" value="" name="case_contact[miles_driven]" autocomplete="off" id="case_contact_miles_driven">
+    <% else %>
+      <%= form.number_field :miles_driven, class: "form-control", required: true, min: "0", max: 10000, placeholder: "0" %>
+    <% end %>
   </div>
 
   <% if current_organization.show_driving_reimbursement %>
@@ -138,6 +142,16 @@
     </div>
   <% end %>
 
+  <div class="field other-expenses form-group">
+    <%= form.fields_for :additional_expense do |additional_expense_form| %>
+      <h2><%= additional_expense_form.label :other_expenses %></h2>
+      <%= additional_expense_form.number_field :other_expense_amount, class: "form-control",
+id: "other_expense_amount", min: "0", max: 1000, step: 0.01 %>
+      <%= additional_expense_form.text_field :other_expenses_describe, class: "form-control",
+id: "other_expenses_describe" %>
+    <% end %>
+  </div>
+
   <div class="field notes form-group">
     <h2><%= form.label :notes %></h2>
     <%= form.text_area :notes, :rows => 5, placeholder: t("forms.case_contact.notes_placeholder"), class: "form-control" %>
@@ -148,4 +162,4 @@
 "data-target": "#confirm-submit" %>
   </div>
   <%= render 'confirm_note_content_dialog', form: form %>
-<% end %>
+  <% end %>

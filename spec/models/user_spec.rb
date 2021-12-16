@@ -122,7 +122,7 @@ RSpec.describe User, type: :model do
         expect(supervisor.no_attempt_for_two_weeks).to eq(0)
       end
 
-      it "returns one for a volunteer that has successfully made contact in at least one contact_case with occurred_at after 2 weeks" do
+      it "returns one for a volunteer who has attempted contact in at least one contact_case with occurred_at after 2 weeks" do
         volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
 
         case_of_interest_1 = volunteer_1.casa_cases.first

@@ -14,10 +14,17 @@ class CasaAdminsController < ApplicationController
 
   def update
     authorize @casa_admin
+
     if @casa_admin.update(update_casa_admin_params)
-      redirect_to casa_admins_path, notice: "New admin created successfully"
+      respond_to do |format|
+        format.html { redirect_to casa_admins_path, notice: "New admin created successfully" }
+        format.json { render json: @casa_admin, status: :ok }
+      end
     else
-      render :edit
+      respond_to do |format|
+        format.html { render :edit }
+        format.json { render json: @casa_admin.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -30,22 +37,41 @@ class CasaAdminsController < ApplicationController
     service = ::CreateCasaAdminService.new(current_organization, params, current_user)
     @casa_admin = service.build
     authorize @casa_admin
+
     begin
       service.create!
-      redirect_to casa_admins_path, notice: "New admin created successfully"
+
+      respond_to do |format|
+        format.html { redirect_to casa_admins_path, notice: "New admin created successfully" }
+        format.json { render json: @casa_admin, status: :created }
+      end
     rescue ActiveRecord::RecordInvalid
-      render new_casa_admin_path
+      respond_to do |format|
+        format.html { render :new }
+        format.json { render json: service.casa_admin.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   end
 
   def activate
     authorize @casa_admin
+
     if @casa_admin.activate
       CasaAdminMailer.account_setup(@casa_admin).deliver
 
-      redirect_to edit_casa_admin_path(@casa_admin), notice: "Admin was activated. They have been sent an email."
+      respond_to do |format|
+        format.html do
+          redirect_to edit_casa_admin_path(@casa_admin),
+            notice: "Admin was activated. They have been sent an email."
+        end
+
+        format.json { render json: @casa_admin, status: :ok }
+      end
     else
-      render :edit
+      respond_to do |format|
+        format.html { render :edit }
+        format.json { render json: @casa_admin.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   rescue Errno::ECONNREFUSED => error
     redirect_to_casa_admin_edition_page(error)
@@ -56,9 +82,15 @@ class CasaAdminsController < ApplicationController
     if @casa_admin.deactivate
       CasaAdminMailer.deactivation(@casa_admin).deliver
 
-      redirect_to edit_casa_admin_path(@casa_admin), notice: "Admin was deactivated."
+      respond_to do |format|
+        format.html { redirect_to edit_casa_admin_path(@casa_admin), notice: "Admin was deactivated." }
+        format.json { render json: @casa_admin, status: :ok }
+      end
     else
-      render :edit
+      respond_to do |format|
+        format.html { render :edit }
+        format.json { render json: @casa_admin.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   rescue Errno::ECONNREFUSED => error
     redirect_to_casa_admin_edition_page(error)

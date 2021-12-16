@@ -21,6 +21,7 @@ require('datatables.net-dt/css/jquery.dataTables.css')
 require('select2')
 require('select2/dist/css/select2')
 
+require('src/addToCalendarButton')
 require('src/case_contact')
 require('src/case_contact_autosave')
 require('src/case_emancipation')

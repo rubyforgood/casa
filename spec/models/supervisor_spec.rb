@@ -42,4 +42,18 @@ RSpec.describe Supervisor, type: :model do
       expect(supervisor.pending_volunteers).to eq([volunteer])
     end
   end
+
+  describe "change to admin" do
+    it "returns true if the change was successful" do
+      expect(subject.change_to_admin!).to be_truthy
+    end
+
+    it "changes the supervisor to an admin" do
+      subject.change_to_admin!
+
+      user = User.find(subject.id) # subject.reload will cause RecordNotFound because it's looking in the wrong table
+      expect(user).not_to be_supervisor
+      expect(user).to be_casa_admin
+    end
+  end
 end
