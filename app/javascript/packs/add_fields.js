@@ -1,11 +1,11 @@
 class AddFields {
   constructor() {
-    this.links = document.querySelectorAll('.add_fields')
     console.log('second')
+    this.links = document.querySelectorAll('.add_fields')
     this.iterateLinks()
   }
 
-  iterateLinks () {
+  iterateLinks() {
     console.log('hello')
     if (this.links.length === 0) return
     this.links.forEach(link => {
@@ -15,7 +15,7 @@ class AddFields {
     })
   }
 
-  handleClick (link, e) {
+  handleClick(link, e) {
     if (!link || !e) return
     e.preventDefault()
     console.log('click')
@@ -27,5 +27,5 @@ class AddFields {
   }
 }
 
-window.addEventListener('turbolinks:load', () => new AddFields())
+window.addEventListener('load', () => new AddFields())
 console.log('start')
