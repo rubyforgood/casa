@@ -46,6 +46,7 @@ RSpec.describe "all_casa_admin/dashboard/show", type: :system do
       let(:org2_row) { find("[data-test='organization-table'] tbody tr:last") }
 
       before do
+        User.destroy_all
         2.times { create(:user, casa_org: organization2) }
         2.times { 3.times { create(:case_contact, casa_case: create(:casa_case, casa_org: organization2)) } }
         visit "/"
