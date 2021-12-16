@@ -140,10 +140,10 @@
 
   <div class="field other-expenses form-group">
     <fieldset>
-      <%= form.fields_for :additional_expense do |additional_expense_form| %>
-        <%= render "additional_expenses_fields", form: additional_expense_form %>
+      <%= form.fields_for :additional_expense, local: true do |additional_expense_form| %>
+        <%= render "additional_expense_fields", form: additional_expense_form %>
       <% end %>
-      <%= link_to_add_fields "Add another expense", form, :other_expenses %>
+      <%= link_to_add_fields "Add another expense", form, :additional_expenses %>
     </fieldset>
   </div>
 

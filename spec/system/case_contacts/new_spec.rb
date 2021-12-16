@@ -261,7 +261,10 @@ RSpec.describe "case_contacts/new", type: :system do
 
       fill_in "other_expense_amount", with: "5.01"
       fill_in "other_expenses_describe", with: "tolls"
-      expect(page).to have_text("Add Another Expense")
+      expect(page).to have_text("Add another expense")
+      click_on "Add another expense"
+      expect(page).to have_css("input.other-expense-amount", :count => 2)
+
 
       fill_in "Notes", with: "Hello world"
 
