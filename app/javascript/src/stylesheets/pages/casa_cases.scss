@@ -11,6 +11,22 @@ body.casa_cases {
     }
   }
 
+  .a2cldr {
+    width: 175px;
+  }
+
+  .a2cldr .a2cldr-btn {
+    width: 175px;
+  }
+
+  .a2cldr-list {
+    position: absolute;
+    width: 100%;
+  }
+  .cal-btn {
+    display: inline-block;
+  }
+
   #cc-check {
     p {
       display: flex;

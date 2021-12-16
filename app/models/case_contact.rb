@@ -28,6 +28,9 @@ class CaseContact < ApplicationRecord
   has_many :additional_expenses
   accepts_nested_attributes_for :additional_expenses
 
+  has_many :additional_expenses
+  accepts_nested_attributes_for :additional_expenses
+
   accepts_nested_attributes_for :case_contact_contact_type
 
   scope :supervisors, ->(supervisor_ids = nil) {
