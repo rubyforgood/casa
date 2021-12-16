@@ -10,7 +10,7 @@ jobs:
     name: Add help wanted labels
     steps:
       - name: Add help wanted labels
-        uses: rubyforgood/add-label-to-cards@v2
+        uses: rubyforgood/add-label-to-cards@v2.1
         id: add-help-wanted-labels
         with:
           token: ${{secrets.GITHUB_TOKEN}}
