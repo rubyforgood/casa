@@ -22,9 +22,7 @@ RSpec.describe "court_dates/new", type: :system do
     it "is successful", js: true do
       expect(page.body).to have_content(casa_case.case_number)
 
-      select "3", from: "court_date_date_3i"
-      select "March", from: "court_date_date_2i"
-      select "2020", from: "court_date_date_1i"
+      fill_in "court_date_date", with: "04/04/2020"
 
       select judge.name, from: "Judge"
       select hearing_type.name, from: "Hearing type"
@@ -47,14 +45,13 @@ RSpec.describe "court_dates/new", type: :system do
     end
   end
 
-  context "when non-mandatory fields are not filled" do
-    it "does not create a new court_date" do
+  context "without changing default court date" do
+    it "does create a new court_date" do
       within ".top-page-actions" do
         click_on "Create"
       end
 
-      expect(page).to have_current_path(casa_case_court_dates_path(casa_case), ignore_query: true)
-      expect(page).to have_content("Date can't be blank")
+      expect(page).to have_content("Court date was successfully created.")
     end
   end
 end
