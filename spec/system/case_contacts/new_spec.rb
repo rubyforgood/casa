@@ -263,12 +263,12 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "Miles driven", with: "30"
       select "Yes", from: "Want driving reimbursement"
 
-      fill_in "other_expense_amount", with: "5.01"
-      fill_in "other_expenses_describe", with: "tolls"
+      fill_in "other_expense_amount-", with: "5.01"
+      fill_in "other_expenses_describe-", with: "tolls"
       expect(page).to have_text("Add another expense")
       click_on "Add another expense"
-      expect(page).to have_css("input.other-expense-amount", :count => 2)
-
+      # expect(page).to have_css("fieldset.other-expense-amount", :count => 2)
+      page.find(:css, "fieldset.additional_expense_multilines ~ .other-expense-amount.nth-of-type(3)").set("7.23")
 
       fill_in "Notes", with: "Hello world"
 
