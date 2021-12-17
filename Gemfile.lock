@@ -92,7 +92,7 @@ GEM
     bindex (0.8.1)
     bootsnap (1.9.3)
       msgpack (~> 1.0)
-    brakeman (5.1.2)
+    brakeman (5.2.0)
     bugsnag (6.24.1)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
