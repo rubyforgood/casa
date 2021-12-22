@@ -9,7 +9,7 @@ let courtOrders
 
 function removeMandateWithConfirmation () {
   const text = 'Are you sure you want to remove this court order? Doing so will ' +
-               'delete all records of it unless it was included in a previous court report.'
+    'delete all records of it unless it was included in a previous court report.'
   Swal.fire({
     icon: 'warning',
     title: 'Delete court order?',
@@ -54,18 +54,26 @@ function removeMandateAction (order) {
   })
 }
 
-function showBtn (el) { el.classList.remove('d-none') }
-function hideBtn (el) { el.classList.add('d-none') }
+function showBtn (el) {
+  el.classList.remove('d-none')
+}
+
+function hideBtn (el) {
+  el.classList.add('d-none')
+}
+
 function disableBtn (el) {
   el.disabled = true
   el.classList.add('disabled')
   el.setAttribute('aria-disabled', true)
 }
+
 function enableBtn (el) {
   el.disabled = false
   el.classList.remove('disabled')
   el.removeAttribute('aria-disabled')
 }
+
 function showAlert (html) {
   const alertEl = new DOMParser().parseFromString(html, 'text/html').body.firstElementChild
   document.querySelector('.header-flash').replaceWith(alertEl)
