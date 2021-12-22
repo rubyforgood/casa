@@ -19,6 +19,7 @@ RSpec.describe "casa_cases/show", type: :view do
 
     it "renders thank you modal" do
       assign :casa_case, casa_case
+
       render
 
       expect(rendered).to match /"thank-you-modal-wrapper"/
@@ -31,6 +32,7 @@ RSpec.describe "casa_cases/show", type: :view do
 
     it "does not render thank you modal" do
       assign :casa_case, casa_case
+
       render
 
       expect(rendered).not_to match /"thank-you-modal-wrapper"/

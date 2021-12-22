@@ -1,5 +1,5 @@
 <div class="row">
-  <%= render "thank_you_modal" %>
+  <%= render "thank_you_modal" if contains_success_param? %>
 
   <div class="col-sm-12 form-header">
     <h1 class="pull-left"><%= @casa_case.decorate.transition_aged_youth_icon %> <%= t(".title") %></h1>
@@ -141,13 +141,3 @@
     </div>
   </div>
 </div>
-
-<% if contains_success_param? %>
-  <div id="thank-you-modal-wrapper">
-    <%= content_for :javascript do %>
-      <script>
-        $('#thank_you').modal();
-      </script>
-    <% end %>
-  </div>
-<% end %>

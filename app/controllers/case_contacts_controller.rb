@@ -70,9 +70,8 @@ class CaseContactsController < ApplicationController
 
     # Create a case contact for every case that was checked
     case_contacts = create_case_contact_for_every_selected_casa_case(@selected_cases)
-
     if case_contacts.all?(&:persisted?)
-      redirect_to casa_case_path(CaseContact.last.casa_case), notice: create_notice
+      redirect_to casa_case_path(CaseContact.last.casa_case, success: true)
     else
       @case_contact = case_contacts.first
       @casa_cases = [@case_contact.casa_case]
@@ -167,10 +166,6 @@ class CaseContactsController < ApplicationController
 
   def all_case_contacts
     policy_scope(current_organization.case_contacts).includes(:creator, contact_types: :contact_type_group)
-  end
-
-  def create_notice
-    "#{t("create", scope: "case_contact")} #{t("thank_you_#{rand(1..8)}", scope: "case_contact")}"
   end
 
   def additional_expense_params
