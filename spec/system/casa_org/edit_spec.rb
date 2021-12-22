@@ -103,7 +103,7 @@ RSpec.describe "casa_org/edit", type: :system do
     has_checked_field? "Show driving reimbursement"
   end
 
-  it "can upload a logo image" do
+  it "can upload a logo image", :aggregate_failure do
     page.attach_file("Logo", "spec/fixtures/company_logo.png", make_visible: true)
 
     expect(organization.logo.attachment).to be_nil
