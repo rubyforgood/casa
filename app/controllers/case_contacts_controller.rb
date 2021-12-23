@@ -149,6 +149,7 @@ class CaseContactsController < ApplicationController
       .new(params)
       .with_creator(current_user)
       .with_converted_duration_minutes(params[:case_contact][:duration_hours].to_i)
+      .with_converted_miles_driven(params[:case_contact][:miles_driven])
   end
 
   def update_case_contact_params
@@ -156,6 +157,7 @@ class CaseContactsController < ApplicationController
     CaseContactParameters
       .new(params)
       .with_converted_duration_minutes(params[:case_contact][:duration_hours].to_i)
+      .with_converted_miles_driven(params[:case_contact][:miles_driven])
   end
 
   def current_organization_groups

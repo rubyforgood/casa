@@ -29,6 +29,11 @@ class CaseContactParameters < SimpleDelegator
     self
   end
 
+  def with_converted_miles_driven(miles_driven)
+    params[:miles_driven] = miles_driven.to_i
+    self
+  end
+
   private
 
   def params
