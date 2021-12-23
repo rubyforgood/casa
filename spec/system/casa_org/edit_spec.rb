@@ -102,4 +102,14 @@ RSpec.describe "casa_org/edit", type: :system do
     click_on "Submit"
     has_checked_field? "Show driving reimbursement"
   end
+
+  it "can upload a logo image", :aggregate_failure do
+    page.attach_file("Logo", "spec/fixtures/company_logo.png", make_visible: true)
+
+    expect(organization.logo.attachment).to be_nil
+
+    click_on "Submit"
+
+    expect(organization.reload.logo.attachment).not_to be_nil
+  end
 end
