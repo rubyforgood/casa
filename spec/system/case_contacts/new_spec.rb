@@ -239,7 +239,7 @@ RSpec.describe "case_contacts/new", type: :system do
   end
 
   context "volunteer user" do
-    it "is successful", js: true do
+    it "is successful without miles driven or driving reimbursement", js: true do
       organization = build(:casa_org)
       build(:contact_type_group, name: "Empty", casa_org: organization)
       grp_with_hidden = build(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization)
@@ -260,10 +260,6 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "case-contact-duration-hours", with: "1"
       fill_in "case-contact-duration-minutes", with: "45"
       fill_in "Occurred at", with: "04/04/2020"
-      fill_in "Miles driven", with: "30"
-      select "Yes", from: "Want driving reimbursement"
-
-      # DP_Edit_Here
 
       fill_in "other_expense_amount", with: "5.01"
       fill_in "other_expenses_describe", with: "tolls"
