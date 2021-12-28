@@ -122,6 +122,9 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(page).to have_text("Read more")
       expect(page).to have_text(expected_text)
 
+      sleep(2)
+      click_on "Close" # close thank-you modal
+
       click_link "Read more"
 
       expect(page).to have_text("Hide")

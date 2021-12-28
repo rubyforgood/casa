@@ -140,15 +140,7 @@ RSpec.describe CaseContactsController, type: :controller do
 
         it "renders the casa case show template" do
           post :create, params: {case_contact: params}, format: :js
-          expect(flash[:notice]).to include("Case contact was successfully created.")
-          expect(response).to redirect_to casa_case_path(CaseContact.last.casa_case)
-        end
-
-        it "renders a random thank you message" do
-          post :create, params: {case_contact: params}, format: :js
-          expect(
-            (1..8).map { |n| "#{I18n.t("create", scope: "case_contact")} #{I18n.t("thank_you_#{n}", scope: "case_contact")}" }
-          ).to include(flash[:notice])
+          expect(response).to redirect_to casa_case_path(CaseContact.last.casa_case, success: true)
         end
       end
 
