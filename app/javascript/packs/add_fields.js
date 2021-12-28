@@ -21,6 +21,9 @@ class AddFields {
     const regexp = linkId ? new RegExp(linkId, 'g') : null
     const newFields = regexp ? link.dataset.fields.replace(regexp, time) : null
     newFields ? link.insertAdjacentHTML('beforebegin', newFields) : null
+    console.log(newFields);
+    console.log(link.dataset.fields);
+    
   }
 }
 
