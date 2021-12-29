@@ -46,15 +46,10 @@ class ReimbursementDatatable < ApplicationDatatable
       .select(
         <<-SQL
           case_contacts.*,
-          casa_case.case_number AS case_number,
           users.display_name AS volunteer
         SQL
       )
-      .joins(
-        <<-SQL
-          LEFT JOIN users ON case_contacts.creator_id = users.id
-        SQL
-      )
+      .joins(:creator)
   end
 
   def order_clause
