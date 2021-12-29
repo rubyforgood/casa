@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-ruby "3.0.2"
+ruby "3.1.0"
 gem "rails", "~> 6.1.4"
 
 gem "after_party" # post-deployment tasks
@@ -10,8 +10,8 @@ gem "amazing_print" # easier console reading
 gem "azure-storage-blob", require: false
 gem "bootsnap", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "bugsnag" # tracking errors in prod
-gem "caxlsx", "~> 3.0"
-gem "caxlsx_rails", "~> 0.6.2"
+gem "caxlsx", "~> 3.0" # excel spreadsheets - TODO can we remove this version restriction?
+gem "caxlsx_rails", "~> 0.6.2" # excel spreadsheets - TODO can we remove this version restriction?
 gem "devise" # for authentication
 gem "devise_invitable"
 gem "draper" # adds decorators for cleaner presentation logic
@@ -42,27 +42,27 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "pry"
   gem "pry-byebug"
-  gem "rspec-rails", "~> 5.0.2"
+  gem "rspec-rails", "~> 5.0.2" # TODO can we remove this version restriction?
   gem "shoulda-matchers"
-  gem "standard", "~> 1.5.0" # linter https://github.com/testdouble/standard
+  gem "standard", "~> 1.5.0" # linter https://github.com/testdouble/standard TODO can we remove this version restriction?
 end
 
 group :development do
   gem "annotate" # for adding db field listings to models as comments
   gem "letter_opener" # Opens emails in new tab for easier testing
-  gem "listen", ">= 3.0.5", "< 3.8"
+  gem "listen", ">= 3.0.5", "< 3.8" # TODO can we remove this version restriction?
   gem "spring" # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring-commands-rspec"
-  gem "spring-watcher-listen", "~> 2.0.0"
+  gem "spring-watcher-listen", "~> 2.0.0" # TODO can we remove this version restriction?
   gem "traceroute" # for finding unused routes
   gem "web-console", ">= 3.3.0" # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
 end
 
 group :test do
   gem "brakeman" # security inspection
-  gem "capybara", ">= 2.15"
+  gem "capybara", ">= 2.15" # TODO can we remove this version restriction?
   gem "capybara-screenshot"
-  gem "database_cleaner-active_record", "~> 2.0.1"
+  gem "database_cleaner-active_record", "~> 2.0.1" # TODO can we remove this version restriction?
   gem "rails-controller-testing"
   gem "rake"
   gem "selenium-webdriver"
