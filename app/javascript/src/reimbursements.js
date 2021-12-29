@@ -21,13 +21,32 @@ $(function () {
     }
   }
 
+  const formatCreatedAtDate = (inputDate) => {
+    const date = new Date(inputDate)
+    return date.toLocaleString('en-US', {
+      month: 'long',
+      day: '2-digit',
+      year: 'numeric'
+    })
+  }
+
+  const renderContactTypes = (contactTypes) => {
+    if (!Array.isArray(contactTypes)) {
+      return ''
+    }
+
+    return contactTypes.map((contactType) => {
+      return `${contactType.group_name} (${contactType.name})`
+    }).join(', ')
+  }
+
   // Enable all data tables on dashboard but only filter on volunteers table
   const editVolunteerPath = id => `/volunteers/${id}/edit`
   const casaCasePath = id => `/casa_cases/${id}`
   const volunteersTable = $('table#reimbursements-table').DataTable({
     autoWidth: false,
     stateSave: false,
-    order: [[6, 'desc']],
+    order: [[3, 'desc']],
     columns: [
       {
         name: 'volunteer',
@@ -47,23 +66,24 @@ $(function () {
             <span class="mobile-label">Case Number(s)</span>
             <a href="${casaCasePath(row.casa_case.id)}">${row.casa_case.case_number}</a>
           `
-        },
+        }
       },
       {
         name: 'contact_types',
         render: (data, type, row, meta) => {
           return `
             <span class="mobile-label">Contact Type(s)</span>
-            TODO
+            ${ renderContactTypes(row.contact_types) }
           `
-        }
+        },
+        orderable: false
       },
       {
         name: 'date_added',
         render: (data, type, row, meta) => {
           return `
             <span class="mobile-label">Date Added</span>
-            TODO
+            ${formatCreatedAtDate(row.created_at)}
           `
         },
         searchable: false
@@ -73,31 +93,29 @@ $(function () {
         render: (data, type, row, meta) => {
           return `
             <span class="mobile-label">Expense Type</span>
-            TODO
           `
         },
-        searchable: false
+        searchable: false,
+        orderable: false
       },
       {
         name: 'description',
         render: (data, type, row, meta) => {
           return `
             <span class="mobile-label">Description</span>
-            TODO
           `
         },
         orderable: false
       },
       {
-        name: 'amount',
+        name: 'miles_driven',
         render: (data, type, row, meta) => {
           return `
             <span class="mobile-label">Amount</span>
-            TODO
+            ${row.miles_driven}
           `
         },
-        searchable: false,
-        visible: true
+        searchable: false
       },
       {
         name: 'reimbursement_complete',
@@ -108,7 +126,8 @@ $(function () {
           `
         },
         searchable: false,
-      },
+        orderable: false
+      }
     ],
     processing: true,
     serverSide: true,
@@ -125,6 +144,4 @@ $(function () {
       $('[data-toggle=tooltip]').tooltip()
     }
   })
-
-  console.log(volunteersTable)
-});
+})
