@@ -46,7 +46,7 @@ class ReimbursementDatatable < ApplicationDatatable
       .select(
         <<-SQL
           case_contacts.*,
-          casa_cases.case_number AS case_number,
+          casa_case.case_number AS case_number,
           users.display_name AS volunteer
         SQL
       )
