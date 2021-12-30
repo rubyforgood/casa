@@ -101,7 +101,7 @@ RSpec.describe "ReimbursementDatatable" do
     describe ":mark_as_complete_path" do
       subject(:mark_as_complete_path) { first_result[:mark_as_complete_path] }
 
-      it { is_expected.to eq(reimbursement_mark_as_complete_path(first_contact)) }
+      it { is_expected.to eq("/reimbursements/#{first_contact.id}/mark_as_complete")}
     end
   end
 
