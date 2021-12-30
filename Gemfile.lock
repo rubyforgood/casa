@@ -243,6 +243,10 @@ GEM
     multipart-post (2.1.1)
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
+    net-pop (0.1.1)
+      digest
+      net-protocol
+      timeout
     net-protocol (0.1.2)
       io-wait
       timeout
@@ -468,6 +472,7 @@ DEPENDENCIES
   letter_opener
   listen (>= 3.0.5, < 3.8)
   lograge
+  net-pop
   net-smtp
   noticed
   paper_trail
