@@ -12,6 +12,7 @@ gem "bootsnap", require: false # Reduces boot times through caching; required in
 gem "bugsnag" # tracking errors in prod
 gem "caxlsx", "~> 3.0" # excel spreadsheets - TODO can we remove this version restriction?
 gem "caxlsx_rails", "~> 0.6.2" # excel spreadsheets - TODO can we remove this version restriction?
+gem "delayed_job_active_record"
 gem "devise" # for authentication
 gem "devise_invitable"
 gem "draper" # adds decorators for cleaner presentation logic
