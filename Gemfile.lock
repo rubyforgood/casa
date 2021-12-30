@@ -141,6 +141,7 @@ GEM
       actionmailer (>= 5.0)
       devise (>= 4.6)
     diff-lcs (1.5.0)
+    digest (3.1.0)
     docile (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
@@ -210,6 +211,7 @@ GEM
     image_processing (1.12.1)
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.17, < 3)
+    io-wait (0.2.1)
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
@@ -244,6 +246,13 @@ GEM
     multipart-post (2.1.1)
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
+    net-protocol (0.1.2)
+      io-wait
+      timeout
+    net-smtp (0.3.1)
+      digest
+      net-protocol
+      timeout
     nio4r (2.5.8)
     nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
@@ -396,6 +405,7 @@ GEM
       rubocop (= 1.23.0)
       rubocop-performance (= 1.12.0)
     thor (1.1.0)
+    timeout (0.2.0)
     traceroute (0.8.1)
       rails (>= 3.0.0)
     tzinfo (2.0.4)
@@ -462,6 +472,7 @@ DEPENDENCIES
   letter_opener
   listen (>= 3.0.5, < 3.8)
   lograge
+  net-smtp
   noticed
   paper_trail
   paranoia
