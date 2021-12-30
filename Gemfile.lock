@@ -243,6 +243,10 @@ GEM
     multipart-post (2.1.1)
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
+    net-imap (0.2.2)
+      digest
+      net-protocol
+      strscan
     net-pop (0.1.1)
       digest
       net-protocol
@@ -405,6 +409,7 @@ GEM
     standard (1.5.0)
       rubocop (= 1.23.0)
       rubocop-performance (= 1.12.0)
+    strscan (3.0.1)
     thor (1.1.0)
     timeout (0.2.0)
     traceroute (0.8.1)
@@ -472,6 +477,7 @@ DEPENDENCIES
   letter_opener
   listen (>= 3.0.5, < 3.8)
   lograge
+  net-imap
   net-pop
   net-smtp
   noticed
