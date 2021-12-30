@@ -16,14 +16,20 @@ class AddFields {
   handleClick(link, e) {
     if (!link || !e) return
     e.preventDefault()
-    const time = new Date().getTime()
-    const linkId = link.dataset.id
-    const regexp = linkId ? new RegExp(linkId, 'g') : null
-    const newFields = regexp ? link.dataset.fields.replace(regexp, time) : null
-    newFields ? link.insertAdjacentHTML('beforebegin', newFields) : null
-    console.log(newFields);
-    console.log(link.dataset.fields);
-    
+    link.insertAdjacentHTML('beforebegin', 
+    `<input placeholder="Enter amount" 
+      class="form-control other-expense-amount" 
+      min="0" 
+      max="1000"
+      step="0.01"
+      type="number"
+      name="case_contact[additional_expenses_attributes][${2+3}][other_expense_amount]" 
+      id="case_contact_additional_expenses_attributes_0_other_expense_amount">
+      <input placeholder="Describe the expense" 
+      class="form-control other-expenses-describe" 
+      type="text"  
+      name="case_contact[additional_expenses_attributes][0][other_expenses_describe]" 
+      id="case_contact_additional_expenses_attributes_0_other_expenses_describe">`)
   }
 }
 
