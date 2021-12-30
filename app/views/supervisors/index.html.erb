@@ -49,7 +49,7 @@
   <span class="supervisor_indicator_legend_positive">Have attempted contact in the last 14 days</span>
   <span class="supervisor_indicator_legend_negative">Have not attempted contact in the last 14 days</span>
 </div>
-<div class="supervisor_indicator_legend_transition_aged_youth">(Transition aged youth)</div>
+<div class="supervisor_indicator_legend_transition_aged_youth">Transition aged youth</div>
 </div>
 
 <div class="card card-container">
@@ -58,7 +58,7 @@
       class="table table-striped table-bordered supervisors-list"
       id="supervisors">
       <thead>
-      <tr>
+      <tr class="supervisor_table_row">
         <th>Supervisor Name</th>
         <th></th>
         <th>Actions</th>
@@ -67,7 +67,7 @@
 
       <tbody>
       <% @supervisors.each do |supervisor| %>
-        <tr>
+        <tr class="supervisor_table_row">
           <% no_attempt_volunteers = supervisor.no_attempt_for_two_weeks %>
           <% active_volunteers = (supervisor.active_volunteers - no_attempt_volunteers).nonzero? %>
           <% if active_volunteers %>
@@ -98,7 +98,7 @@
                 </span>
               <% end %>
           </div>
-            <div class="supervisor_indicator_transition_aged_youth">(<%= transition_volunteers %>)</div>
+            <div class="supervisor_indicator_transition_aged_youth"><%= transition_volunteers %></div>
           </td>
 
           <td>
