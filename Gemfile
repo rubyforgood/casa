@@ -8,7 +8,6 @@ gem "rails", "~> 6.1.4"
 gem "after_party" # post-deployment tasks
 gem "amazing_print" # easier console reading
 gem "azure-storage-blob", require: false
-gem "bootsnap", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "bugsnag" # tracking errors in prod
 gem "caxlsx", "~> 3.0" # excel spreadsheets - TODO can we remove this version restriction?
 gem "caxlsx_rails", "~> 0.6.2" # excel spreadsheets - TODO can we remove this version restriction?
@@ -21,7 +20,6 @@ gem "image_processing", "~> 1.12" # Set of higher-level helper methods for image
 gem "jbuilder" # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "lograge" # log less so heroku papertrail quits rate limiting our logs
 gem "net-smtp", require: false # needed for ruby upgrade to 3.1.0 for some dang reason
-gem "net-ssh" # needed for ruby upgrade to 3.1.0 for some dang reason
 gem "noticed" # Notifications
 gem "paper_trail" # tracking changes
 gem "paranoia" # For soft-deleting purpose
