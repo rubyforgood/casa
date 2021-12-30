@@ -20,6 +20,7 @@ gem "image_processing", "~> 1.12" # Set of higher-level helper methods for image
 gem "jbuilder" # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "lograge" # log less so heroku papertrail quits rate limiting our logs
 gem "net-smtp", require: false # needed for ruby upgrade to 3.1.0 for some dang reason
+gem "net-pop" # needed for ruby upgrade to 3.1.0 https://www.ruby-lang.org/en/news/2021/12/25/ruby-3-1-0-released/
 gem "noticed" # Notifications
 gem "paper_trail" # tracking changes
 gem "paranoia" # For soft-deleting purpose
