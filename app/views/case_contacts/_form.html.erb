@@ -143,6 +143,7 @@
   <% end %>
 
   <div class="field other-expenses form-group">
+    <h2><%= form.label :additional_expense %></h2>
     <fieldset class="other-expense-amount additional_expense_multilines">
       <%= form.fields_for :additional_expense do |additional_expense_form| %>
         <%= render "additional_expense_fields", form: additional_expense_form %>
