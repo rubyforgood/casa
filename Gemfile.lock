@@ -487,7 +487,7 @@ DEPENDENCIES
   rails-controller-testing
   rake
   request_store
-  rspec-rails (~> 5.0.2)
+  rspec-rails
   sablon
   scout_apm
   selenium-webdriver
@@ -496,12 +496,12 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   spring-watcher-listen (~> 2.0.0)
-  standard (~> 1.5.0)
+  standard
   traceroute
   tzinfo-data
   web-console (>= 3.3.0)
   webdrivers
-  webpacker (~> 5.4)
+  webpacker
 
 RUBY VERSION
    ruby 3.1.0p0

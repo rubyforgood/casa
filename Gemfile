@@ -33,7 +33,7 @@ gem "request_store"
 gem "sablon" # Word document templating tool for Case Court Reports
 gem "scout_apm"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "webpacker", "~> 5.4" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
+gem "webpacker" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
@@ -43,9 +43,9 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "pry"
   gem "pry-byebug"
-  gem "rspec-rails", "~> 5.0.2" # TODO can we remove this version restriction?
+  gem "rspec-rails"
   gem "shoulda-matchers"
-  gem "standard", "~> 1.5.0" # linter https://github.com/testdouble/standard TODO can we remove this version restriction?
+  gem "standard" # linter
 end
 
 group :development do
