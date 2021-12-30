@@ -71,6 +71,8 @@ class CaseContactsController < ApplicationController
     # Create a case contact for every case that was checked
     case_contacts = create_case_contact_for_every_selected_casa_case(@selected_cases)
 
+    binding.pry
+
     if case_contacts.all?(&:persisted?)
       redirect_to casa_case_path(CaseContact.last.casa_case), notice: create_notice
     else
@@ -176,7 +178,7 @@ class CaseContactsController < ApplicationController
   end
 
   def additional_expense_params
-    additional_expenses = params.dig("case_contact", "additional_expense")
+    additional_expenses = params.dig("case_contact", "additional_expenses")
     additional_expenses.map { |ae| ae.permit(:other_expense_amount, :other_expenses_describe) }
   end
 end
