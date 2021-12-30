@@ -46,6 +46,14 @@ RSpec.describe "CasaOrg", type: :request do
           casa_org.reload
           expect(response).to redirect_to(edit_casa_org_path)
         end
+
+        it "also responds as json", :aggregate_failures do
+          patch casa_org_url(casa_org, format: :json), params: {casa_org: valid_attributes}
+
+          expect(response.content_type).to eq "application/json; charset=utf-8"
+          expect(response).to have_http_status :ok
+          expect(response.body).to match("display_name".to_json)
+        end
       end
 
       context "with invalid parameters" do
@@ -53,6 +61,14 @@ RSpec.describe "CasaOrg", type: :request do
           patch casa_org_url(casa_org), params: {casa_org: invalid_attributes}
           expect(response).to be_successful
           expect(response.body).to match(/error_explanation/)
+        end
+
+        it "also responds as json", :aggregate_failures do
+          patch casa_org_url(casa_org, format: :json), params: {casa_org: invalid_attributes}
+
+          expect(response.content_type).to eq "application/json; charset=utf-8"
+          expect(response).to have_http_status :unprocessable_entity
+          expect(response.body).to match "Name can't be blank".to_json
         end
       end
     end
