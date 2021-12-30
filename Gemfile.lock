@@ -454,12 +454,12 @@ DEPENDENCIES
   bugsnag
   bullet
   byebug
-  capybara (>= 2.15)
+  capybara
   capybara-screenshot
   caxlsx (~> 3.0)
   caxlsx_rails (~> 0.6.2)
   cypress-on-rails (~> 1.11)
-  database_cleaner-active_record (~> 2.0.1)
+  database_cleaner-active_record
   devise
   devise_invitable
   draper
@@ -492,7 +492,7 @@ DEPENDENCIES
   scout_apm
   selenium-webdriver
   shoulda-matchers
-  simplecov (~> 0.21.2)
+  simplecov
   spring
   spring-commands-rspec
   spring-watcher-listen (~> 2.0.0)

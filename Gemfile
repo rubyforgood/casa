@@ -61,12 +61,12 @@ end
 
 group :test do
   gem "brakeman" # security inspection
-  gem "capybara", ">= 2.15" # TODO can we remove this version restriction?
+  gem "capybara"
   gem "capybara-screenshot"
-  gem "database_cleaner-active_record", "~> 2.0.1" # TODO can we remove this version restriction?
+  gem "database_cleaner-active_record"
   gem "rails-controller-testing"
   gem "rake"
   gem "selenium-webdriver"
-  gem "simplecov", "~> 0.21.2", require: false # 0.17.1 pinned as a workaround for https://github.com/codeclimate/test-reporter/issues/418
+  gem "simplecov"
   gem "webdrivers" # easy installation and use of web drivers to run system tests with browsers
 end
