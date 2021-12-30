@@ -90,8 +90,6 @@ GEM
       parser (>= 2.4)
       smart_properties
     bindex (0.8.1)
-    bootsnap (1.9.3)
-      msgpack (~> 1.0)
     brakeman (5.2.0)
     bugsnag (6.24.1)
       concurrent-ruby (~> 1.0)
@@ -242,7 +240,6 @@ GEM
     mini_mime (1.1.2)
     mini_portile2 (2.6.1)
     minitest (5.15.0)
-    msgpack (1.4.2)
     multipart-post (2.1.1)
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
@@ -253,7 +250,6 @@ GEM
       digest
       net-protocol
       timeout
-    net-ssh (6.1.0)
     nio4r (2.5.8)
     nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
@@ -450,7 +446,6 @@ DEPENDENCIES
   amazing_print
   annotate
   azure-storage-blob
-  bootsnap
   brakeman
   bugsnag
   bullet
@@ -474,7 +469,6 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.8)
   lograge
   net-smtp
-  net-ssh
   noticed
   paper_trail
   paranoia
