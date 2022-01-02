@@ -42,5 +42,3 @@ require('src/reports')
 // NOTE: all image asset url helpers in Rails views must prefix image/$blah with media/src/.
 // TODO: figure out why?
 const images = require.context('../src/images', true) // eslint-disable-line no-unused-vars
-
-window.$ = $
