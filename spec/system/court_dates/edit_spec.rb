@@ -7,6 +7,7 @@ RSpec.describe "court_dates/edit", type: :system do
   let!(:court_date) { create(:court_date, :with_court_details, casa_case: casa_case) }
 
   before do
+    travel_to Date.new(2021, 1, 1)
     sign_in admin
     visit root_path
     click_on "Cases"
@@ -16,7 +17,7 @@ RSpec.describe "court_dates/edit", type: :system do
     click_on "Edit"
   end
 
-  it "shows court mandates" do
+  it "shows court orders" do
     court_order = court_date.case_court_orders.first
 
     expect(page).to have_text(court_order.text)
@@ -24,15 +25,22 @@ RSpec.describe "court_dates/edit", type: :system do
   end
 
   it "edits past court date", js: true do
-    expect(page).to have_select("Hearing type")
+    expect(page).to have_text("Editing Court Date")
+    expect(page).to have_text("Add Court Date")
+    expect(page).to have_field("court_date_date", with: "2021-12-23")
+    expect(page).to have_text("Case Number:")
+    expect(page).to have_text(casa_case.case_number)
     expect(page).to have_select("Judge")
+    expect(page).to have_select("Hearing type")
+    expect(page).to have_text("Court Orders - Please check that you didn't enter any youth names")
+    expect(page).to have_text("Add a court order")
 
     page.find("#add-mandate-button").click
-    find("#court-orders-list-container").first("textarea").send_keys("Court Mandate Text One")
+    find("#court-orders-list-container").first("textarea").send_keys("Court Order Text One")
 
     within ".top-page-actions" do
       click_on "Update"
     end
-    expect(page).to have_text("Court Mandate Text One")
+    expect(page).to have_text("Court Order Text One")
   end
 end
