@@ -202,7 +202,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
 
         post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option"}
         expect(JSON.parse(response.body)).to have_key("error")
-        expect(JSON.parse(response.body)["error"]).to eq("Could not find option from id given by param check_item_id")
+        expect(JSON.parse(response.body)["error"]).to eq("Tried to destroy an association that does not exist")
       end
 
       it "sends an error when attempting to perform an action on a case that is not transitioning" do

@@ -1,4 +1,6 @@
 <div class="row">
+  <%= render "thank_you_modal" %>
+
   <div class="col-sm-12 form-header">
     <h1 class="pull-left"><%= @casa_case.decorate.transition_aged_youth_icon %> <%= t(".title") %></h1>
     <%- if policy(:case_contact).new? & @casa_case.active? %>
@@ -59,7 +61,9 @@
       <strong><%= t(".label.next_court_date") %>:</strong>
       <%= I18n.l(@casa_case.next_court_date&.date, format: :day_and_date, default: '') %>
       <%= render "calendar_button", date:  I18n.l(@casa_case.next_court_date&.date,
-                                                  format: :day_and_date, default: ''),
+                                                  format: :default, default: ''),
+                                                  id: "btnNextCourtDate",
+                                                  tooltip: "Add Next Court Date to Calendar",
                                                   title: "Next Court Date for [#{@casa_case.case_number}]" %>
     </h6>
     </p>
@@ -69,8 +73,10 @@
       <strong><%= t(".label.court_report_due_date") %>:</strong>
       <%= I18n.l(@casa_case.court_report_due_date, format: :day_and_date, default: '') %>
       <%= render "calendar_button", date: I18n.l(@casa_case.court_report_due_date,
-                                                 format: :day_and_date, default: ''),
-                                                 title: "Court Report Due Date for [#{@casa_case.case_number}]" %>
+                                                format: :default, default: ''),
+                                                id: "btnCourtReportDueDate",
+                                                tooltip: "Add Court Report Due Date to Calendar",
+                                                title: "Court Report Due Date for [#{@casa_case.case_number}]" %>
     </h6>
     </p>
 
@@ -104,7 +110,7 @@
     <div>
       <h6><strong><%= t(".assigned_volunteers") %>:</strong></h6>
       <div class="container">
-      <% policy_scope(@casa_case.assigned_volunteers).each do |volunteer| %>
+      <% Pundit.policy_scope(current_user, @casa_case.assigned_volunteers).each do |volunteer| %>
         <div class="row mb-3">
         <% if current_user.volunteer? %>
             <div class="col-12"><%= volunteer.display_name %></div>

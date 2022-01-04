@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_29_033530) do
+ActiveRecord::Schema.define(version: 2021_12_30_033457) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,15 @@ ActiveRecord::Schema.define(version: 2021_10_29_033530) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "additional_expenses", force: :cascade do |t|
+    t.bigint "case_contact_id", null: false
+    t.decimal "other_expense_amount"
+    t.string "other_expenses_describe"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["case_contact_id"], name: "index_additional_expenses_on_case_contact_id"
   end
 
   create_table "all_casa_admins", force: :cascade do |t|
@@ -202,6 +211,21 @@ ActiveRecord::Schema.define(version: 2021_10_29_033530) do
     t.index ["judge_id"], name: "index_court_dates_on_judge_id"
   end
 
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer "priority", default: 0, null: false
+    t.integer "attempts", default: 0, null: false
+    t.text "handler", null: false
+    t.text "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string "locked_by"
+    t.string "queue"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
   create_table "emancipation_categories", force: :cascade do |t|
     t.string "name", null: false
     t.boolean "mutually_exclusive", null: false
@@ -357,6 +381,7 @@ ActiveRecord::Schema.define(version: 2021_10_29_033530) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "additional_expenses", "case_contacts"
   add_foreign_key "casa_case_emancipation_categories", "casa_cases"
   add_foreign_key "casa_case_emancipation_categories", "emancipation_categories"
   add_foreign_key "casa_cases", "casa_orgs"

@@ -69,12 +69,9 @@ class CaseContactsController < ApplicationController
     end
 
     # Create a case contact for every case that was checked
-    case_contacts = @selected_cases.map { |casa_case|
-      casa_case.case_contacts.create(create_case_contact_params)
-    }
-
+    case_contacts = create_case_contact_for_every_selected_casa_case(@selected_cases)
     if case_contacts.all?(&:persisted?)
-      redirect_to casa_case_path(CaseContact.last.casa_case), notice: create_notice
+      redirect_to casa_case_path(CaseContact.last.casa_case, success: true)
     else
       @case_contact = case_contacts.first
       @casa_cases = [@case_contact.casa_case]
@@ -122,6 +119,18 @@ class CaseContactsController < ApplicationController
 
   private
 
+  def create_case_contact_for_every_selected_casa_case(selected_cases)
+    selected_cases.map { |casa_case|
+      ActiveRecord::Base.transaction do
+        case_contact = casa_case.case_contacts.create(create_case_contact_params)
+        if case_contact.persisted? && additional_expense_params&.keys&.any?
+          case_contact.additional_expenses.create(additional_expense_params)
+        end
+        case_contact
+      end
+    }
+  end
+
   def set_case_contact
     if current_organization.case_contacts.exists?(params[:id])
       @case_contact = authorize(current_organization.case_contacts.find(params[:id]))
@@ -139,6 +148,7 @@ class CaseContactsController < ApplicationController
       .new(params)
       .with_creator(current_user)
       .with_converted_duration_minutes(params[:case_contact][:duration_hours].to_i)
+      .with_converted_miles_driven(params[:case_contact][:miles_driven])
   end
 
   def update_case_contact_params
@@ -146,6 +156,7 @@ class CaseContactsController < ApplicationController
     CaseContactParameters
       .new(params)
       .with_converted_duration_minutes(params[:case_contact][:duration_hours].to_i)
+      .with_converted_miles_driven(params[:case_contact][:miles_driven])
   end
 
   def current_organization_groups
@@ -159,7 +170,7 @@ class CaseContactsController < ApplicationController
     policy_scope(current_organization.case_contacts).includes(:creator, contact_types: :contact_type_group)
   end
 
-  def create_notice
-    "#{t("create", scope: "case_contact")} #{t("thank_you_#{rand(1..8)}", scope: "case_contact")}"
+  def additional_expense_params
+    params.dig("case_contact", "additional_expense")&.permit(:other_expense_amount, :other_expenses_describe)
   end
 end

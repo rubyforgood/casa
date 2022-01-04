@@ -13,18 +13,14 @@
 
       <div class="field form-group">
         <%= form.label :date, "Add Court Date" %>
-        <br>
-        <span class="datetime-year-month">
-          <%= form.date_select :date,
-                                {
-                                    order: [:day, :month, :year],
-                                    start_year: Date.current.year + 3,
-                                    end_year: 2000,
-                                    prompt: {day: t("common.day"), month: t("common.month"), year: t("common.year")}
-                                },
-                                class: "select2 date-input" %>
-        </span>
+         <% court_date = casa_case.court_date || Time.zone.now %>
+        <%= form.text_field :date,
+                        value: court_date.to_date,
+                        data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
+                        class: "form-control" %>
       </div>
+      <br>
+
       <div class="field form-group">
         <%= form.label :judge_id %>
         <%= form.collection_select(

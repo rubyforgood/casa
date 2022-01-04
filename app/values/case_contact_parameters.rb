@@ -10,7 +10,8 @@ class CaseContactParameters < SimpleDelegator
         :miles_driven,
         :want_driving_reimbursement,
         :notes,
-        case_contact_contact_type_attributes: [:contact_type_id]
+        case_contact_contact_type_attributes: [:contact_type_id],
+        additional_expense_attributes: [:id, :other_expense_amount, :other_expenses_describe]
       )
 
     super(params)
@@ -25,6 +26,11 @@ class CaseContactParameters < SimpleDelegator
     converted_duration_hours = duration_hours * 60
     duration_minutes = params[:duration_minutes].to_i
     params[:duration_minutes] = converted_duration_hours + duration_minutes
+    self
+  end
+
+  def with_converted_miles_driven(miles_driven)
+    params[:miles_driven] = miles_driven.to_i
     self
   end
 

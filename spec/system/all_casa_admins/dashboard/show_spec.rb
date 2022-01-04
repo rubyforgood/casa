@@ -40,6 +40,30 @@ RSpec.describe "all_casa_admin/dashboard/show", type: :system do
       click_on "New CASA Organization"
       expect(page).to have_text "Create a new CASA Organization"
     end
+
+    describe "organization table" do
+      let!(:organization2) { create(:casa_org) }
+      let(:org2_row) { find("[data-test='organization-table'] tbody tr:last") }
+
+      before do
+        User.destroy_all
+        2.times { create(:user, casa_org: organization2) }
+        2.times { 3.times { create(:case_contact, casa_case: create(:casa_case, casa_org: organization2)) } }
+        visit "/"
+      end
+
+      it "renders a row for each organization" do
+        expect(page).to have_selector("[data-test='organization-table'] tbody tr", count: 2)
+      end
+
+      it "displays the correct number of users" do
+        expect(org2_row.find("td:nth(3)")).to have_content("2")
+      end
+
+      it "displays the correct number of case contacts" do
+        expect(org2_row.find("td:nth(4)")).to have_content("6")
+      end
+    end
   end
 
   context "as any other user" do
