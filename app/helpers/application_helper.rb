@@ -44,8 +44,4 @@ module ApplicationHelper
   def og_tag(type, options = {})
     tag.meta(property: "og:#{type}", **options)
   end
-
-  def contains_success_param?
-    params[:success] == "true"
-  end
 end
