@@ -35,7 +35,7 @@ CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunte
 
 We are very happy to have you! CASA and Ruby for Good are committed to welcoming new contributors of all skill levels.
 
-We highly recommend that you join us in slack https://rubyforgood.herokuapp.com/ #casa channel to ask questions quickly and hear about office hours (currently Wednesday 6-8pm Pacific), stakeholder news, and upcoming new issues.
+We highly recommend that you join us in slack https://rubyforgood.herokuapp.com/ #casa channel to ask questions quickly and hear about office hours (currently Tuesday 6-8pm Pacific), stakeholder news, and upcoming new issues.
 
 Issues on the issue board https://github.com/rubyforgood/casa/projects/1 in the TODO column are fair game. An issue can be claimed by commenting on it.
 
@@ -217,9 +217,9 @@ Most conversation happens in the #casa channel of the Ruby For Good slack. Get a
 
 You can also open an issue or comment on an issue on GitHub and a maintainer will reply to you.
 
-We have a weekly team office hours / hangout on Wednesday 6-8pm Pacific time where we do pair/mob programming and talk about issues. Please stop by! (Zoom link in slack)
+We have a weekly team office hours / hangout on Tuesday 6-8pm Pacific time where we do pair/mob programming and talk about issues. Please stop by! (Zoom link in slack)
 
-We have a weekly stakeholder call with CASA stakeholders on Wednesday at 8:30am Pacific time where we show off progress and discuss launch plans. Feel free to join! (Zoom link in slack)
+We have a weekly stakeholder call with CASA stakeholders on Friday at 11:00am Pacific time where we show off progress and discuss launch plans. Feel free to join! (Zoom link in slack)
 
 Join info for all public meetings is posted in the rubyforgood slack in the #casa channel
 
