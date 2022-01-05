@@ -172,6 +172,6 @@ class CaseContactsController < ApplicationController
 
   def additional_expense_params
     additional_expenses = params.dig("case_contact", "additional_expenses")
-    additional_expenses.map { |ae| ae.permit(:other_expense_amount, :other_expenses_describe) }
+    additional_expenses&.map { |ae| ae.permit(:other_expense_amount, :other_expenses_describe) } || []
   end
 end
