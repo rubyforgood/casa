@@ -145,6 +145,10 @@ RSpec.describe CaseContactsController, type: :controller do
       end
 
       context "with additional expense" do
+        before do
+          FeatureFlagService.enable!(FeatureFlagService::SOME_FLAG)
+        end
+
         let(:additional_expense) { build(:additional_expense) }
         let(:case_contact) { build(:case_contact, casa_case_id: case_id) }
         let(:params) { case_contact.attributes.merge("additional_expense" => additional_expense.attributes) }
