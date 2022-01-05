@@ -146,7 +146,7 @@ RSpec.describe CaseContactsController, type: :controller do
 
       context "with additional expense" do
         before do
-          FeatureFlagService.enable!(FeatureFlagService::SOME_FLAG)
+          FeatureFlagService.enable!(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
         end
 
         let(:additional_expense) { build(:additional_expense) }

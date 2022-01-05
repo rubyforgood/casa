@@ -142,7 +142,7 @@
     </div>
   <% end %>
 
-  <% FeatureFlagService.is_enabled?(FeatureFlagService::SOME_FLAG) %>
+  <% FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
   <div class="field other-expenses form-group">
     <h2><%= form.label :additional_expense %></h2>
     <fieldset class="other-expense-amount additional_expense_multilines">

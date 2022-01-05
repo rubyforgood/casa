@@ -243,6 +243,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
   context "volunteer user" do
     it "is successful without miles driven or driving reimbursement", js: true do
+      FeatureFlagService.enable!(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
       organization = build(:casa_org)
       build(:contact_type_group, name: "Empty", casa_org: organization)
       grp_with_hidden = build(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization)
