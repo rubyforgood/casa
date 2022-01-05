@@ -142,17 +142,20 @@
     </div>
   <% end %>
 
+  <% FeatureFlagService.is_enabled?(FeatureFlagService::SOME_FLAG) %>
   <div class="field other-expenses form-group">
     <h2><%= form.label :additional_expense %></h2>
     <fieldset class="other-expense-amount additional_expense_multilines">
       <%= form.fields_for :additional_expenses do |ff| %>
         <%= ff.number_field :other_expense_amount,
         placeholder: "Enter amount", class: "form-control other-expense-amount", min: "0", max: 1000, step: 0.01 %>
-        <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",  class: "form-control other-expenses-describe" %>
+        <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
+class: "form-control other-expenses-describe" %>
       <% end %>
       <%= link_to_add_fields "Add another expense", form, :additional_expenses %>
     </fieldset>
   </div>
+  <% end %>
 
   <div class="field notes form-group">
     <h2><%= form.label :notes %></h2>
