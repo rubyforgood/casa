@@ -151,7 +151,7 @@ RSpec.describe CaseContactsController, type: :controller do
 
         let(:additional_expense) { build(:additional_expense) }
         let(:case_contact) { build(:case_contact, casa_case_id: case_id) }
-        let(:params) { case_contact.attributes.merge("additional_expense" => additional_expense.attributes) }
+        let(:params) { case_contact.attributes.merge("additional_expenses" => [additional_expense.attributes]) }
 
         it "creates additional expense" do
           expect(organization.casa_cases).to include(casa_case)
