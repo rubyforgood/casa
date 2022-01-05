@@ -23,13 +23,13 @@ class AddFields {
       max="1000"
       step="0.01"
       type="number"
-      name="case_contact[additional_expenses_attributes][${2+3}][other_expense_amount]" 
-      id="case_contact_additional_expenses_attributes_0_other_expense_amount">
+      name="case_contact[additional_expenses][][${1}][other_expense_amount]" 
+      id="case_contact_additional_expense_0_other_expense_amount">
       <input placeholder="Describe the expense" 
       class="form-control other-expenses-describe" 
       type="text"  
-      name="case_contact[additional_expenses_attributes][0][other_expenses_describe]" 
-      id="case_contact_additional_expenses_attributes_0_other_expenses_describe">`)
+      name="case_contact[additional_expenses][][${1}][other_expenses_describe]" 
+      id="case_contact_additional_expense_0_other_expenses_describe">`)
   }
 }
 
