@@ -176,6 +176,6 @@ class CaseContactsController < ApplicationController
 
   def additional_expense_params
     additional_expenses = params.dig("case_contact", "additional_expenses_attributes")
-    0.upto(10).map {|i| additional_expenses[i.to_s]&.permit(:other_expense_amount, :other_expenses_describe)}.compact
+    0.upto(10).map { |i| additional_expenses[i.to_s]&.permit(:other_expense_amount, :other_expenses_describe) }.compact
   end
 end
