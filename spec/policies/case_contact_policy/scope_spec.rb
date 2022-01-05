@@ -8,7 +8,7 @@ RSpec.describe CaseContactPolicy::Scope do
 
       scope = described_class.new(user, CaseContact)
 
-      expect(scope.resolve).to eq all_case_contacts
+      expect(scope.resolve).to match_array all_case_contacts
     end
 
     context "when user is volunteer" do

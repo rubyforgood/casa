@@ -1,4 +1,6 @@
 <div class="row">
+  <%= render "thank_you_modal" %>
+
   <div class="col-sm-12 form-header">
     <h1 class="pull-left"><%= @casa_case.decorate.transition_aged_youth_icon %> <%= t(".title") %></h1>
     <%- if policy(:case_contact).new? & @casa_case.active? %>
@@ -108,7 +110,7 @@
     <div>
       <h6><strong><%= t(".assigned_volunteers") %>:</strong></h6>
       <div class="container">
-      <% policy_scope(@casa_case.assigned_volunteers).each do |volunteer| %>
+      <% Pundit.policy_scope(current_user, @casa_case.assigned_volunteers).each do |volunteer| %>
         <div class="row mb-3">
         <% if current_user.volunteer? %>
             <div class="col-12"><%= volunteer.display_name %></div>
