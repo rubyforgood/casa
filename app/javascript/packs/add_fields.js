@@ -12,7 +12,6 @@ class AddFields {
       link.addEventListener('click', e => {
         addLinkCount = addLinkCount + 1
         this.handleClick(link, e, addLinkCount)
-        console.log(addLinkCount)
       })
     })
   }
