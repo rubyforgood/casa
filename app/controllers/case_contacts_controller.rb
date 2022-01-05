@@ -88,12 +88,16 @@ class CaseContactsController < ApplicationController
   end
 
   def update
+    # binding.pry
     authorize @case_contact
     @casa_cases = [@case_contact.casa_case]
     @selected_cases = @casa_cases
     @current_organization_groups = current_organization.contact_type_groups
 
     if @case_contact.update_cleaning_contact_types(update_case_contact_params)
+      additional_expense_params.each { |single_additional_expense_params|
+        @case_contact.additional_expenses.create(single_additional_expense_params)
+      }
       redirect_to casa_case_path(@case_contact.casa_case), notice: t("update", scope: "case_contact")
     else
       render :edit
@@ -171,7 +175,7 @@ class CaseContactsController < ApplicationController
   end
 
   def additional_expense_params
-    additional_expenses = params.dig("case_contact", "additional_expenses")
-    additional_expenses&.map { |ae| ae.permit(:other_expense_amount, :other_expenses_describe) } || []
+    additional_expenses = params.dig("case_contact", "additional_expenses_attributes")
+    0.upto(10).map {|i| additional_expenses[i.to_s]&.permit(:other_expense_amount, :other_expenses_describe)}.compact
   end
 end
