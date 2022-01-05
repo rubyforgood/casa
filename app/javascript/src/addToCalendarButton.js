@@ -4,7 +4,6 @@ import 'add2calendar/css/add2calendar.css'
 function createCalendarEvents () {
   const calendarButtons = document.querySelectorAll('div.cal-btn')
   if (!calendarButtons) return
-  console.log(calendarButtons)
   calendarButtons.forEach((btn) => {
     const calendarEvent = new Add2Calendar({
       title: btn.dataset.title,

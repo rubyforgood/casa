@@ -4,7 +4,7 @@ RSpec.describe "/case_contacts", type: :request do
   let(:organization) { build(:casa_org) }
   let(:volunteer) { create(:volunteer, casa_org: organization) }
   let(:other_volunteer) { build(:volunteer, casa_org: organization) }
-  let(:casa_case) { build(:casa_case, casa_org: organization) }
+  let(:casa_case) { create(:casa_case, casa_org: organization) }
 
   let(:valid_attributes) do
     attributes_for(:case_contact, casa_case: casa_case).merge(
@@ -52,6 +52,26 @@ RSpec.describe "/case_contacts", type: :request do
           expect {
             post case_contacts_url, params: {case_contact: valid_attributes}
           }.to change(CaseContact, :count).by(2)
+        end
+
+        context "when the URL contains ?success=true" do
+          before do
+            allow_any_instance_of(CaseContactsController).to receive(:policy_scope)
+              .and_return(double("active_record_relation", where: [casa_case]))
+          end
+
+          let(:valid_attributes) do
+            attributes_for(:case_contact, casa_case: casa_case).merge(
+              creator: volunteer,
+              casa_case_id: [casa_case.id]
+            )
+          end
+
+          it "redirects to casa_case#show" do
+            post case_contacts_url, params: {case_contact: valid_attributes}
+
+            expect(response).to redirect_to(casa_case_url(casa_case, success: true))
+          end
         end
       end
 

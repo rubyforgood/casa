@@ -122,6 +122,9 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(page).to have_text("Read more")
       expect(page).to have_text(expected_text)
 
+      sleep(2)
+      click_on "Close" # close thank-you modal
+
       click_link "Read more"
 
       expect(page).to have_text("Hide")
@@ -239,7 +242,7 @@ RSpec.describe "case_contacts/new", type: :system do
   end
 
   context "volunteer user" do
-    it "is successful", js: true do
+    it "is successful without miles driven or driving reimbursement", js: true do
       organization = build(:casa_org)
       build(:contact_type_group, name: "Empty", casa_org: organization)
       grp_with_hidden = build(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization)
@@ -282,7 +285,7 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(page).to have_text("Confirm Note Content")
       expect {
         click_on "Continue Submitting"
-      }.to change(CaseContact, :count).by(1).and change(AdditionalExpense, :count).by(2)
+      }.to change(CaseContact, :count).by(1).and change(AdditionalExpense, :count).by(1)
 
       expect(volunteer_casa_case_one.case_contacts.length).to eq(1)
       case_contact = volunteer_casa_case_one.case_contacts.first

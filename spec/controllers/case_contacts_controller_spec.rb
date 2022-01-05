@@ -70,11 +70,29 @@ RSpec.describe CaseContactsController, type: :controller do
 
   describe "POST #create" do
     context "with valid params" do
-      let(:params) { build(:case_contact).attributes }
+      let(:params) {
+        {
+          "id" => nil,
+          "creator_id" => nil,
+          "casa_case_id" => nil,
+          "duration_minutes" => 60,
+          "occurred_at" => Time.zone.now,
+          "created_at" => nil,
+          "updated_at" => nil,
+          "contact_made" => false,
+          "medium_type" => "in-person",
+          "want_driving_reimbursement" => false,
+          "notes" => nil,
+          "deleted_at" => nil,
+          "reimbursement_complete" => false
+        }
+      }
 
-      it "assigns @case_contact" do
-        post :create, params: {case_contact: params}, format: :js
+      it "creates and assigns @case_contact" do
+        post :create, params: {case_contact: params.merge(casa_case_id: case_id)}, format: :js
+        expect(response).to have_http_status(302)
         expect(assigns(:case_contact)).to be_an_instance_of(CaseContact)
+        expect(casa_case.case_contacts.last.miles_driven).to eq(0)
       end
 
       it "assigns @casa_cases" do
@@ -122,15 +140,7 @@ RSpec.describe CaseContactsController, type: :controller do
 
         it "renders the casa case show template" do
           post :create, params: {case_contact: params}, format: :js
-          expect(flash[:notice]).to include("Case contact was successfully created.")
-          expect(response).to redirect_to casa_case_path(CaseContact.last.casa_case)
-        end
-
-        it "renders a random thank you message" do
-          post :create, params: {case_contact: params}, format: :js
-          expect(
-            (1..8).map { |n| "#{I18n.t("create", scope: "case_contact")} #{I18n.t("thank_you_#{n}", scope: "case_contact")}" }
-          ).to include(flash[:notice])
+          expect(response).to redirect_to casa_case_path(CaseContact.last.casa_case, success: true)
         end
       end
 
@@ -143,6 +153,15 @@ RSpec.describe CaseContactsController, type: :controller do
           expect(organization.casa_cases).to include(casa_case)
           expect { post :create, params: {case_contact: params}, format: :js }.to change(AdditionalExpense, :count).by(1)
           expect(casa_case.case_contacts.last.additional_expenses.count).to eq(1)
+        end
+      end
+
+      context "with miles driven" do
+        let(:params) { build(:case_contact, casa_case_id: case_id).attributes.merge("miles_driven" => 123) }
+
+        it "sets miles driven" do
+          expect { post :create, params: {case_contact: params}, format: :js }.to change(CaseContact, :count).by(1)
+          expect(casa_case.case_contacts.last.miles_driven).to eq(123)
         end
       end
     end
