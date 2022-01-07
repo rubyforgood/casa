@@ -11,6 +11,15 @@ $indicator_positive_color: #4caf50;
       flex-grow: 1;
     }
 
+    &:last-child {
+      display: inline;
+      font-size: smaller;
+      margin: auto;
+      background-color: #cfd8dc;
+      border-radius: 100vw;
+      padding: 0.2em 1em;
+    }
+
     span {
       float: right;
       text-align: center;
@@ -31,7 +40,6 @@ $indicator_positive_color: #4caf50;
 }
 
 .supervisor_indicator_legend {
-  display: flex;
   align-items: center;
   font-size: 1rem;
   margin-bottom: 0.25rem;
@@ -41,16 +49,6 @@ $indicator_positive_color: #4caf50;
     padding: .25em;
     flex-grow: 1;
   }
-}
-
-.supervisor_indicator_transition_aged_youth,
-.supervisor_indicator_legend_transition_aged_youth {
-  display: inline;
-  font-size: smaller;
-  margin: auto;
-  background-color: #cfd8dc;
-  border-radius: 100vw;
-  padding: 0.2em 1em;
 }
 
 .supervisor_table_row {
