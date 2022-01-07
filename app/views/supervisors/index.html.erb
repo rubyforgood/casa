@@ -44,7 +44,7 @@
 </div>
 <br>
 <div class="supervisor_indicator_legend supervisor_case_contact_stats">
-  <div class="supervisor_indicator_legend_negative_positive">
+  <div>
     <span>Have attempted contact in the last 14 days</span>
     <span>Have not attempted contact in the last 14 days</span>
   </div>
@@ -79,8 +79,8 @@
             <span class="mobile-label">Supervisor Name</span>
             <%= link_to(supervisor.display_name, edit_supervisor_path(supervisor)) %>
           </td>
-          <td class="supervisor_indicator_container supervisor_case_contact_stats">
-            <div class="supervisor_indicator_negative_positive">
+          <td class="supervisor_case_contact_stats">
+            <div>
               <% if active_volunteers %>
                 <span style="width: <%= active_percentage %>%">
                   <%= active_volunteers %>
