@@ -1,6 +1,29 @@
 $indictator_negative_color: #f44336;
 $indicator_positive_color: #4caf50;
 
+.supervisor_case_contact_stats {
+  display: flex;
+
+  div {
+    span {
+      float: right;
+      text-align: center;
+
+      &:first-child {
+        background: $indicator_positive_color;
+        border-bottom-left-radius: 0.25em;
+        border-top-left-radius: 0.25em;
+      };
+
+      &:last-child {
+        background: $indictator_negative_color;
+        border-bottom-right-radius: 0.25em;
+        border-top-right-radius: 0.25em;
+      }
+    }
+  }
+}
+
 .supervisor_indicator_container {
   display: flex;
 }
@@ -10,31 +33,12 @@ $indicator_positive_color: #4caf50;
   align-items: center;
   font-size: 1rem;
   margin-bottom: 0.25rem;
-}
 
-.supervisor_indicator_legend_negative,
-.supervisor_indicator_legend_positive {
-  font-size: smaller;
-  padding: .25em;
-  flex-grow: 1;
-}
-
-.supervisor_indicator_negative,
-.supervisor_indicator_legend_negative {
-  background: $indictator_negative_color;
-  float: right;
-  text-align: center;
-  border-bottom-right-radius: 0.25em;
-  border-top-right-radius: 0.25em;
-}
-
-.supervisor_indicator_positive,
-.supervisor_indicator_legend_positive {
-  background: $indicator_positive_color;
-  float: left;
-  text-align: center;
-  border-bottom-left-radius: 0.25em;
-  border-top-left-radius: 0.25em;
+  span {
+    font-size: smaller;
+    padding: .25em;
+    flex-grow: 1;
+  }
 }
 
 .supervisor_indicator_legend_negative_positive,
