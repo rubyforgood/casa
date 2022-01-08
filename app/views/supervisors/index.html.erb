@@ -47,8 +47,8 @@
   <div>
     <span>Have attempted contact in the last 14 days</span>
     <span>Have not attempted contact in the last 14 days</span>
+    <span>Transition aged youth</span>
   </div>
-  <div>Transition aged youth</div>
 </div>
 <div class="card card-container">
   <div class="card-body">
@@ -65,7 +65,7 @@
       <tbody>
       <% @supervisors.each do |supervisor| %>
         <tr class="supervisor_table_row">
-          <% no_attempt_volunteers = supervisor.no_attempt_for_two_weeks %>
+          <% no_attempt_volunteers = supervisor.no_attempt_for_two_weeks.nonzero? %>
           <% active_volunteers = (supervisor.active_volunteers - no_attempt_volunteers).nonzero? %>
           <% transition_volunteers = supervisor.volunteers_serving_transition_aged_youth %>
           <td id="name-<%= supervisor.id %>">
@@ -74,18 +74,14 @@
           </td>
           <td class="supervisor_case_contact_stats">
             <div>
-              <% if active_volunteers %>
-                <span style="flex-grow:<%= active_volunteers %>">
-                  <%= active_volunteers %>
-                </span>
-              <% end %>
-              <% if no_attempt_volunteers.nonzero? %>
-                <span style="flex-grow:<%= no_attempt_volunteers %>">
-                  <%= no_attempt_volunteers %>
-                </span>
-              <% end %>
-          </div>
-            <div><%= transition_volunteers %></div>
+              <span style="<%= active_volunteers ? "flex-grow: #{active_volunteers}" : "display:none" %>">
+                <%= active_volunteers %>
+              </span>
+              <span style="<%= no_attempt_volunteers ? "flex-grow: #{no_attempt_volunteers}" : "display: none" %>">
+                <%= no_attempt_volunteers %>
+              </span>
+              <span><%= transition_volunteers %></span>
+            </div>
           </td>
           <td>
             <span class="mobile-label">Actions</span>
