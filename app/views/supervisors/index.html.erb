@@ -67,13 +67,6 @@
         <tr class="supervisor_table_row">
           <% no_attempt_volunteers = supervisor.no_attempt_for_two_weeks %>
           <% active_volunteers = (supervisor.active_volunteers - no_attempt_volunteers).nonzero? %>
-          <% if active_volunteers %>
-            <% no_attempt_percentage = ((no_attempt_volunteers.to_f / supervisor.active_volunteers.to_f) * 100).to_i %>
-            <% active_percentage = (100 - no_attempt_percentage).to_i %>
-          <% else %>
-            <% no_attempt_percentage = 100 %>
-            <% active_percentage = 0 %>
-          <% end %>
           <% transition_volunteers = supervisor.volunteers_serving_transition_aged_youth %>
           <td id="name-<%= supervisor.id %>">
             <span class="mobile-label">Supervisor Name</span>
@@ -82,12 +75,12 @@
           <td class="supervisor_case_contact_stats">
             <div>
               <% if active_volunteers %>
-                <span style="width: <%= active_percentage %>%">
+                <span style="flex-grow:<%= active_volunteers %>">
                   <%= active_volunteers %>
                 </span>
               <% end %>
               <% if no_attempt_volunteers.nonzero? %>
-                <span style="width: <%= no_attempt_percentage %>%">
+                <span style="flex-grow:<%= no_attempt_volunteers %>">
                   <%= no_attempt_volunteers %>
                 </span>
               <% end %>
