@@ -15,16 +15,21 @@ $indicator_positive_color: #4caf50;
       padding-top: .25em;
       text-align: center;
 
-      &:first-child {
+      &.attempted-contact {
         background: $indicator_positive_color;
+
+        & + span.no-attempted-contact {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+      }
+
+      &.no-attempted-contact {
+        background: $indictator_negative_color;
       }
 
       &:not(:last-child) {
         border-radius: 0.25em;
-      }
-
-      &:nth-child(2) {
-        background: $indictator_negative_color;
       }
 
       &:last-child {
