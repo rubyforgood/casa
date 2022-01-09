@@ -13,7 +13,6 @@
   </div>
 </div>
 <hr>
-
 <div class="row supervisor-filters">
   <div class="col-sm-12">
     <h4 class="pull-left mr-2"><%= t(".filter") %></h4>
@@ -42,11 +41,10 @@
     </div>
   </div>
 </div>
-<br>
 <div class="legend supervisor_case_contact_stats">
   <div>
-    <span>Have attempted contact in the last 14 days</span>
-    <span>Have not attempted contact in the last 14 days</span>
+    <span class="attempted-contact" >Have attempted contact in the last 14 days</span>
+    <span class="no-attempted-contact">Have not attempted contact in the last 14 days</span>
     <span>Transition aged youth</span>
   </div>
 </div>
@@ -74,12 +72,19 @@
           </td>
           <td class="supervisor_case_contact_stats">
             <div>
-              <span style="<%= active_volunteers ? "flex-grow: #{active_volunteers}" : "display:none" %>">
-                <%= active_volunteers %>
-              </span>
-              <span style="<%= no_attempt_volunteers ? "flex-grow: #{no_attempt_volunteers}" : "display: none" %>">
-                <%= no_attempt_volunteers %>
-              </span>
+              <% if active_volunteers %>
+                <span class="attempted-contact" style="flex-grow: <%= active_volunteers %>">
+                  <%= active_volunteers %>
+                </span>
+              <% end %>
+              <% if no_attempt_volunteers %>
+                <span class="no-attempted-contact" style="flex-grow: <%= no_attempt_volunteers %>">
+                  <%= no_attempt_volunteers %>
+                </span>
+              <% end %>
+              <% if !(active_volunteers || no_attempt_volunteers) %>
+                <span class="no-volunteers" style="flex-grow: 1">No assigned volunteers</span>
+              <% end %>
               <span><%= transition_volunteers %></span>
             </div>
           </td>

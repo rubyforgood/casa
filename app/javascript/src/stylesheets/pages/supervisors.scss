@@ -17,14 +17,14 @@ $indicator_positive_color: #4caf50;
 
       &:first-child {
         background: $indicator_positive_color;
-        border-bottom-left-radius: 0.25em;
-        border-top-left-radius: 0.25em;
+      }
+
+      &:not(:last-child) {
+        border-radius: 0.25em;
       }
 
       &:nth-child(2) {
         background: $indictator_negative_color;
-        border-bottom-right-radius: 0.25em;
-        border-top-right-radius: 0.25em;
       }
 
       &:last-child {
@@ -39,6 +39,7 @@ $indicator_positive_color: #4caf50;
   &.legend {
     align-items: center;
     margin-bottom: 0.25rem;
+    margin-top: 1em;
 
     span {
       &:last-child {
