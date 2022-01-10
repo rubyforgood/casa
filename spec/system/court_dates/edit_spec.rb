@@ -29,7 +29,7 @@ RSpec.describe "court_dates/edit", type: :system do
   it "edits past court date", js: true do
     expect(page).to have_text("Editing Court Date")
     expect(page).to have_text("Add Court Date")
-    expect(page).to have_field("court_date_date", with: "2021-12-25")
+    expect(page).to have_field("court_date_date", with: "2020-12-25")
     expect(page).to have_text("Case Number:")
     expect(page).to have_text(casa_case.case_number)
     expect(page).to have_select("Judge")
