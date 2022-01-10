@@ -38,6 +38,10 @@ $indicator_positive_color: #4caf50;
         background-color: $indictator_negative_color;
       }
 
+      &.no-volunteers {
+        background-color: #ccc;
+      }
+
       &:last-child {
         margin-left: 0.5em;
         background-color: #cfd8dc;
