@@ -12,24 +12,30 @@ $indicator_positive_color: #4caf50;
     }
 
     span {
+      border-radius: 0.25em;
       padding-top: .25em;
       text-align: center;
 
       &.attempted-contact {
-        background: $indicator_positive_color;
+        background-color: $indicator_positive_color;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
 
         & + span.no-attempted-contact {
           border-top-left-radius: 0;
           border-bottom-left-radius: 0;
         }
+
+        & + span.attempted-contact-end {
+          background-color: $indicator_positive_color;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          width: 0.25em;
+        }
       }
 
       &.no-attempted-contact {
-        background: $indictator_negative_color;
-      }
-
-      &:not(:last-child) {
-        border-radius: 0.25em;
+        background-color: $indictator_negative_color;
       }
 
       &:last-child {

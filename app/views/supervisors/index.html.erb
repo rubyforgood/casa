@@ -63,7 +63,7 @@
       <tbody>
       <% @supervisors.each do |supervisor| %>
         <tr class="supervisor_table_row">
-          <% no_attempt_volunteers = supervisor.no_attempt_for_two_weeks.nonzero? %>
+          <% no_attempt_volunteers = supervisor.no_attempt_for_two_weeks %>
           <% active_volunteers = (supervisor.active_volunteers - no_attempt_volunteers).nonzero? %>
           <% transition_volunteers = supervisor.volunteers_serving_transition_aged_youth %>
           <td id="name-<%= supervisor.id %>">
@@ -77,12 +77,15 @@
                   <%= active_volunteers %>
                 </span>
               <% end %>
-              <% if no_attempt_volunteers %>
+              <% if no_attempt_volunteers.nonzero? %>
                 <span class="no-attempted-contact" style="flex-grow: <%= no_attempt_volunteers %>">
                   <%= no_attempt_volunteers %>
                 </span>
+              <% else %>
+                <span class="attempted-contact-end"></span>
               <% end %>
-              <% if !(active_volunteers || no_attempt_volunteers) %>
+
+              <% if !(active_volunteers || no_attempt_volunteers.nonzero?) %>
                 <span class="no-volunteers" style="flex-grow: 1">No assigned volunteers</span>
               <% end %>
               <span><%= transition_volunteers %></span>
