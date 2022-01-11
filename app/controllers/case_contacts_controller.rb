@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CaseContactsController < ApplicationController
   before_action :set_case_contact, only: %i[edit update destroy]
   before_action :set_contact_types, only: %i[new edit update create]
@@ -95,9 +97,9 @@ class CaseContactsController < ApplicationController
     @current_organization_groups = current_organization.contact_type_groups
 
     if @case_contact.update_cleaning_contact_types(update_case_contact_params)
-      additional_expense_params.each { |single_additional_expense_params|
+      additional_expense_params.each do |single_additional_expense_params|
         @case_contact.additional_expenses.create(single_additional_expense_params)
-      }
+      end
       redirect_to casa_case_path(@case_contact.casa_case), notice: t("update", scope: "case_contact")
     else
       render :edit
@@ -124,17 +126,17 @@ class CaseContactsController < ApplicationController
   private
 
   def create_case_contact_for_every_selected_casa_case(selected_cases)
-    selected_cases.map { |casa_case|
+    selected_cases.map do |casa_case|
       ActiveRecord::Base.transaction do
         case_contact = casa_case.case_contacts.create(create_case_contact_params)
         if case_contact.persisted? && additional_expense_params&.any?
-          additional_expense_params.each { |single_additional_expense_params|
+          additional_expense_params.each do |single_additional_expense_params|
             case_contact.additional_expenses.create(single_additional_expense_params)
-          }
+          end
         end
         case_contact
       end
-    }
+    end
   end
 
   def set_case_contact
@@ -176,6 +178,11 @@ class CaseContactsController < ApplicationController
 
   def additional_expense_params
     additional_expenses = params.dig("case_contact", "additional_expenses_attributes")
-    0.upto(10).map { |i| additional_expenses[i.to_s]&.permit(:other_expense_amount, :other_expenses_describe) }.compact
+    additional_expenses && 0.upto(10).map do |i|
+      possible_key = i.to_s
+      if additional_expenses&.key?(possible_key)
+        additional_expenses[i.to_s]&.permit(:other_expense_amount, :other_expenses_describe)
+      end
+    end.compact
   end
 end
