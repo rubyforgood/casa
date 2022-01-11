@@ -23,9 +23,9 @@ RSpec.describe "supervisors/index", type: :view do
     it "shows the legend for the colored bars at all times" do
       render template: "supervisors/index"
 
-      expect(rendered).to match /Have attempted contact in the last 14 days/
-      expect(rendered).to match /Have not attempted contact in the last 14 days/
-      expect(rendered).to match /(Transition aged youth)/
+      expect(rendered).to match("Have attempted contact in the last 14 days")
+      expect(rendered).to match("Have not attempted contact in the last 14 days")
+      expect(rendered).to match("(Transition aged youth)")
     end
 
     xit "shows positive and negative numbers for each supervisor" do # TODO FireLemons
@@ -36,9 +36,9 @@ RSpec.describe "supervisors/index", type: :view do
       assign :supervisors, [supervisor]
       render template: "supervisors/index"
 
-      expect(rendered).to match /supervisor_indicator_positive/
-      expect(rendered).to match /supervisor_indicator_negative/
-      expect(rendered).to match /supervisor_indicator_transition_aged_youth/
+      expect(rendered).to match("supervisor_indicator_positive")
+      expect(rendered).to match("supervisor_indicator_negative")
+      expect(rendered).to match("supervisor_indicator_transition_aged_youth")
     end
 
     xit "omits the positive bar if there are no active volunteers with contact w/in 14 days" do # TODO FireLemons
@@ -48,9 +48,9 @@ RSpec.describe "supervisors/index", type: :view do
       assign :supervisors, [supervisor]
       render template: "supervisors/index"
 
-      expect(rendered).not_to match /supervisor_indicator_positive/
-      expect(rendered).to match /supervisor_indicator_negative/
-      expect(rendered).to match /supervisor_indicator_transition_aged_youth/
+      expect(rendered).not_to match("supervisor_indicator_positive")
+      expect(rendered).to match("supervisor_indicator_negative")
+      expect(rendered).to match("supervisor_indicator_transition_aged_youth")
     end
 
     xit "omits the negative bar if all volunteers have a contact within 14 days" do # TODO FireLemons
@@ -60,9 +60,9 @@ RSpec.describe "supervisors/index", type: :view do
       assign :supervisors, [supervisor]
       render template: "supervisors/index"
 
-      expect(rendered).to match /supervisor_indicator_positive/
-      expect(rendered).not_to match /supervisor_indicator_negative$/
-      expect(rendered).to match /supervisor_indicator_transition_aged_youth/
+      expect(rendered).to match("supervisor_indicator_positive")
+      expect(rendered).not_to match("supervisor_indicator_negative")
+      expect(rendered).to match("supervisor_indicator_transition_aged_youth")
     end
   end
 
