@@ -11,6 +11,7 @@ gem "azure-storage-blob", require: false
 gem "bugsnag" # tracking errors in prod
 gem "caxlsx", "~> 3.0" # excel spreadsheets - TODO can we remove this version restriction?
 gem "caxlsx_rails", "~> 0.6.2" # excel spreadsheets - TODO can we remove this version restriction?
+gem "delayed_job_active_record"
 gem "devise" # for authentication
 gem "devise_invitable"
 gem "draper" # adds decorators for cleaner presentation logic
@@ -46,7 +47,7 @@ group :development, :test do
   gem "pry-byebug"
   gem "rspec-rails"
   gem "shoulda-matchers"
-  gem "standard" # linter
+  gem "standard", "1.5.0" # 1.6.0 errors on all factorybot create variables
 end
 
 group :development do

@@ -137,6 +137,10 @@ $('document').ready(() => {
   }
 
   $('#btnGenerateReport').on('click', handleGenerateReport)
+
+  if (/\/casa_cases\/.*\?.*success=true/.test(window.location.href)) {
+    $('#thank_you').modal()
+  }
 })
 
 export {
