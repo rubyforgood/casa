@@ -1,74 +1,84 @@
 $indictator_negative_color: #f44336;
 $indicator_positive_color: #4caf50;
 
-.supervisor_indicator_container {
+.supervisor_case_contact_stats {
   display: flex;
-}
 
-.supervisor_indicator_legend {
-  display: flex;
-  align-items: center;
-  font-size: 1rem;
-  margin-bottom: 0.25rem;
-}
+  div {
+    &:first-child {
+      display: flex;
+      margin-right: 1em;
+      flex-grow: 1;
+    }
 
-.supervisor_indicator_legend_negative,
-.supervisor_indicator_legend_positive {
-  font-size: smaller;
-  padding: .25em;
-  flex-grow: 1;
-}
+    span {
+      border-radius: 0.25em;
+      padding-top: .25em;
+      text-align: center;
 
-.supervisor_indicator_negative,
-.supervisor_indicator_legend_negative {
-  background: $indictator_negative_color;
-  float: right;
-  text-align: center;
-  border-bottom-right-radius: 0.25em;
-  border-top-right-radius: 0.25em;
-}
+      &.attempted-contact {
+        background-color: $indicator_positive_color;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
 
-.supervisor_indicator_positive,
-.supervisor_indicator_legend_positive {
-  background: $indicator_positive_color;
-  float: left;
-  text-align: center;
-  border-bottom-left-radius: 0.25em;
-  border-top-left-radius: 0.25em;
-}
+        & + span.no-attempted-contact {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
 
-.supervisor_indicator_legend_negative_positive,
-.supervisor_indicator_negative_positive {
-  display: flex;
-  margin-right: 1em;
-  flex-grow: 1;
-}
+        & + span.attempted-contact-end {
+          background-color: $indicator_positive_color;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          width: 0.25em;
+        }
+      }
 
-.supervisor_indicator_transition_aged_youth,
-.supervisor_indicator_legend_transition_aged_youth {
-  display: inline;
-  font-size: smaller;
-  margin: auto;
-  background-color: #cfd8dc;
-  border-radius: 100vw;
-  padding: 0.2em 1em;
+      &.no-attempted-contact {
+        background-color: $indictator_negative_color;
+      }
+
+      &.no-volunteers {
+        background-color: #ccc;
+      }
+
+      &:last-child {
+        margin-left: 0.5em;
+        background-color: #cfd8dc;
+        border-radius: 100vw;
+        padding: 0.2em 1em;
+      }
+    }
+  }
+
+  &.legend {
+    align-items: center;
+    margin-bottom: 0.25rem;
+    margin-top: 1em;
+
+    span {
+      &:last-child {
+        padding: .5em;
+      }
+
+      padding: .5em 1em;
+      flex-grow: 1;
+    }
+  }
 }
 
 .supervisor_table_row {
   display: flex;
-}
 
-.supervisor_table_row th:nth-of-type(1),
-.supervisor_table_row td:nth-of-type(1) {
-  flex: 3;
-}
+  td:nth-of-type(1), th:nth-of-type(1) {
+    flex: 3;
+  }
 
-.supervisor_table_row th:nth-of-type(2),
-.supervisor_table_row td:nth-of-type(2) {
-  flex: 2;
-}
+  td:nth-of-type(2), th:nth-of-type(2) {
+    flex: 3;
+  }
 
-.supervisor_table_row th:nth-of-type(3),
-.supervisor_table_row td:nth-of-type(3) {
-  flex: 1;
+  td:nth-of-type(3), th:nth-of-type(3) {
+    flex: 1;
+  }
 }

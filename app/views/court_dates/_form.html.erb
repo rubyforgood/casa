@@ -13,9 +13,8 @@
 
       <div class="field form-group">
         <%= form.label :date, "Add Court Date" %>
-         <% court_date = casa_case.court_date || Time.zone.now %>
         <%= form.text_field :date,
-                        value: court_date.to_date,
+                        value: court_date.date&.to_date || Time.zone.now,
                         data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
                         class: "form-control" %>
       </div>
