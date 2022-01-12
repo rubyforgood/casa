@@ -38,16 +38,21 @@ RSpec.describe "supervisors/index", type: :view do
       end
     end
 
-    xit "omits the positive bar if there are no active volunteers with contact w/in 14 days" do # TODO FireLemons
-      supervisor = create(:supervisor)
-      create(:volunteer, :with_casa_cases, supervisor: supervisor)
+    context "when a supervisor only has volunteers who have not submitted a case contact in 14 days" do
+      let(:supervisor) { create(:supervisor) }
+      let!(:volunteer_without_recently_created_contacts) {
+        create(:volunteer, :with_casa_cases, supervisor: supervisor)
+      }
 
-      assign :supervisors, [supervisor]
-      render template: "supervisors/index"
+      it "omits the positive bar if there are no active volunteers with contact w/in 14 days" do
+        assign :supervisors, [supervisor]
+        render template: "supervisors/index"
 
-      expect(rendered).not_to match("supervisor_indicator_positive")
-      expect(rendered).to match("supervisor_indicator_negative")
-      expect(rendered).to match("supervisor_indicator_transition_aged_youth")
+        PARSED_HTML_PAGE = Nokogiri.HTML5(rendered)
+
+        expect(PARSED_HTML_PAGE.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to equal(1)
+        expect(PARSED_HTML_PAGE.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to equal(0)
+      end
     end
 
     xit "omits the negative bar if all volunteers have a contact within 14 days" do # TODO FireLemons
