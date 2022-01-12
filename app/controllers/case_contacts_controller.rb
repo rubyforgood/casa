@@ -95,6 +95,9 @@ class CaseContactsController < ApplicationController
     @current_organization_groups = current_organization.contact_type_groups
 
     if @case_contact.update_cleaning_contact_types(update_case_contact_params)
+      additional_expense_params.each { |single_additional_expense_params|
+        @case_contact.additional_expenses.create(single_additional_expense_params)
+      }
       redirect_to casa_case_path(@case_contact.casa_case), notice: t("update", scope: "case_contact")
     else
       render :edit
@@ -126,7 +129,8 @@ class CaseContactsController < ApplicationController
         case_contact = casa_case.case_contacts.create(create_case_contact_params)
         if case_contact.persisted? && additional_expense_params&.any?
           additional_expense_params.each { |single_additional_expense_params|
-            case_contact.additional_expenses.create(single_additional_expense_params)
+            additional_expense_params = AdditionalExpense.where(id: additional_expense_params.dig("id").to_s).first_or_create(id: additional_expense_params.dig("id").to_s).update(single_additional_expense_params)
+            # case_contact.additional_expenses.create(single_additional_expense_params)
           }
         end
         case_contact
