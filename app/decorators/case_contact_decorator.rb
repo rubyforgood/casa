@@ -96,14 +96,4 @@ class CaseContactDecorator < Draper::Decorator
   def show_contact_type?(contact_type_id)
     object.case_contact_contact_type.map(&:contact_type_id).include?(contact_type_id)
   end
-
-  # DP_Edit_Here
-
-  def other_expense_amount
-    object.other_expense_amount
-  end
-
-  def other_expenses_describe
-    object.other_expenses_describe
-  end
 end

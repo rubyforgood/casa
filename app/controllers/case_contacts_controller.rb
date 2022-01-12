@@ -58,6 +58,7 @@ class CaseContactsController < ApplicationController
     # These variables are used to re-render the form (render :new) if there are
     # validation errors so that the user does not lose inputs to fields that
     # they did previously enter.
+
     @casa_cases = policy_scope(current_organization.casa_cases)
     @case_contact = CaseContact.new(create_case_contact_params)
     authorize @case_contact
