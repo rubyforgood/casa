@@ -13,7 +13,7 @@
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@rails/actioncable": "^7.0.1",
     "@rails/activestorage": "^7.0.0",
-    "@rails/ujs": "^7.0.0",
+    "@rails/ujs": "^7.0.1",
     "@rails/webpacker": "5.4.3",
     "add2calendar": "^1.1.7",
     "bindings": "^1.5.0",
