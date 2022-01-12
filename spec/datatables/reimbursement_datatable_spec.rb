@@ -1,5 +1,4 @@
 require "rails_helper"
-include Rails.application.routes.url_helpers
 
 RSpec.describe "ReimbursementDatatable" do
   let(:org) { CasaOrg.first }
@@ -16,7 +15,7 @@ RSpec.describe "ReimbursementDatatable" do
       order_by: order_by,
       order_direction: order_direction,
       page: page,
-      per_page: per_page,
+      per_page: per_page
     )
   end
 
@@ -28,7 +27,7 @@ RSpec.describe "ReimbursementDatatable" do
     end
 
     describe "explicit ascending order" do
-      let(:order_direction) { 'ASC' }
+      let(:order_direction) { "ASC" }
 
       it "should order correctly" do
         expect(first_result[:id]).to eq(sorted_case_contacts.first.id.to_s)
@@ -36,7 +35,7 @@ RSpec.describe "ReimbursementDatatable" do
     end
 
     describe "descending order" do
-      let(:order_direction) { 'DESC' }
+      let(:order_direction) { "DESC" }
 
       it "should order correctly" do
         expect(first_result[:id]).to eq(sorted_case_contacts.last.id.to_s)
@@ -54,16 +53,16 @@ RSpec.describe "ReimbursementDatatable" do
     describe ":casa_case" do
       subject(:casa_case) { first_result[:casa_case] }
 
-      it { is_expected.to include(:id => first_contact.casa_case.id.to_s) }
-      it { is_expected.to include(:case_number => first_contact.casa_case.case_number.to_s) }
+      it { is_expected.to include(id: first_contact.casa_case.id.to_s) }
+      it { is_expected.to include(case_number: first_contact.casa_case.case_number.to_s) }
     end
 
     describe ":volunteer" do
       subject(:volunteer) { first_result[:volunteer] }
 
-      it { is_expected.to include(:id => first_contact.creator.id.to_s) }
-      it { is_expected.to include(:display_name => first_contact.creator.display_name.to_s) }
-      it { is_expected.to include(:email => first_contact.creator.email.to_s) }
+      it { is_expected.to include(id: first_contact.creator.id.to_s) }
+      it { is_expected.to include(display_name: first_contact.creator.display_name.to_s) }
+      it { is_expected.to include(email: first_contact.creator.email.to_s) }
     end
 
     describe ":contact_types" do
@@ -72,7 +71,7 @@ RSpec.describe "ReimbursementDatatable" do
         first_contact.contact_types.map do |ct|
           {
             name: ct.name,
-            group_name: ct.contact_type_group.name,
+            group_name: ct.contact_type_group.name
           }
         end
       end
@@ -101,7 +100,7 @@ RSpec.describe "ReimbursementDatatable" do
     describe ":mark_as_complete_path" do
       subject(:mark_as_complete_path) { first_result[:mark_as_complete_path] }
 
-      it { is_expected.to eq("/reimbursements/#{first_contact.id}/mark_as_complete")}
+      it { is_expected.to eq("/reimbursements/#{first_contact.id}/mark_as_complete") }
     end
   end
 
@@ -114,7 +113,7 @@ RSpec.describe "ReimbursementDatatable" do
             :case_contact,
             casa_case: casa_case,
             created_at: Time.new - rand(1000),
-            miles_driven: rand(1000),
+            miles_driven: rand(1000)
           )
         end.reverse
       end.flatten

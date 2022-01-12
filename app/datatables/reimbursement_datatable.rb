@@ -1,4 +1,3 @@
-include Rails.application.routes.url_helpers
 class ReimbursementDatatable < ApplicationDatatable
   ORDERABLE_FIELDS = %w[
     volunteer
@@ -26,7 +25,7 @@ class ReimbursementDatatable < ApplicationDatatable
         created_at: case_contact.created_at,
         miles_driven: case_contact.miles_driven,
         complete: case_contact.reimbursement_complete,
-        mark_as_complete_path: reimbursement_mark_as_complete_path(case_contact),
+        mark_as_complete_path: mark_as_complete_path(case_contact)
       }
     end
   end
@@ -35,9 +34,13 @@ class ReimbursementDatatable < ApplicationDatatable
     case_contact.contact_types.map do |contact_type|
       {
         name: contact_type.name,
-        group_name: contact_type.contact_type_group.name,
+        group_name: contact_type.contact_type_group.name
       }
     end
+  end
+
+  def mark_as_complete_path(case_contact)
+    "/reimbursements/#{case_contact.id}/mark_as_complete"
   end
 
   def raw_records
