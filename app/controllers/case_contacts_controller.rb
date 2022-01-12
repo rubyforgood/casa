@@ -97,8 +97,10 @@ class CaseContactsController < ApplicationController
     @current_organization_groups = current_organization.contact_type_groups
 
     if @case_contact.update_cleaning_contact_types(update_case_contact_params)
-      additional_expense_params.each do |single_additional_expense_params|
-        @case_contact.additional_expenses.create(single_additional_expense_params)
+      if additional_expense_params&.any? && FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+        additional_expense_params.each do |single_additional_expense_params|
+          @case_contact.additional_expenses.create(single_additional_expense_params)
+        end
       end
       redirect_to casa_case_path(@case_contact.casa_case), notice: t("update", scope: "case_contact")
     else
@@ -129,8 +131,8 @@ class CaseContactsController < ApplicationController
     selected_cases.map do |casa_case|
       ActiveRecord::Base.transaction do
         case_contact = casa_case.case_contacts.create(create_case_contact_params)
-        if case_contact.persisted? && additional_expense_params&.any?
-          additional_expense_params.each do |single_additional_expense_params|
+        if case_contact.persisted? && additional_expense_params&.any? && FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+          additional_expense_params&.each do |single_additional_expense_params|
             case_contact.additional_expenses.create(single_additional_expense_params)
           end
         end
