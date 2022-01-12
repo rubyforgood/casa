@@ -90,7 +90,6 @@ class CaseContactsController < ApplicationController
   end
 
   def update
-    # binding.pry
     authorize @case_contact
     @casa_cases = [@case_contact.casa_case]
     @selected_cases = @casa_cases
@@ -98,8 +97,18 @@ class CaseContactsController < ApplicationController
 
     if @case_contact.update_cleaning_contact_types(update_case_contact_params)
       if additional_expense_params&.any? && FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
-        additional_expense_params.each do |single_additional_expense_params|
-          @case_contact.additional_expenses.create(single_additional_expense_params)
+        additional_expense_params.each do |ae_params|
+          id = ae_params[:id]
+          current = AdditionalExpense.find_by(id: id)
+          if current
+            current.update!(other_expense_amount: ae_params[:other_expense_amount], other_expenses_describe: ae_params[:other_expenses_describe])
+            # update
+          else
+            # create
+            @case_contact.additional_expenses.create(ae_params)
+          end
+          # if exists, update
+          # else create
         end
       end
       redirect_to casa_case_path(@case_contact.casa_case), notice: t("update", scope: "case_contact")
@@ -183,7 +192,7 @@ class CaseContactsController < ApplicationController
     additional_expenses && 0.upto(10).map do |i|
       possible_key = i.to_s
       if additional_expenses&.key?(possible_key)
-        additional_expenses[i.to_s]&.permit(:other_expense_amount, :other_expenses_describe)
+        additional_expenses[i.to_s]&.permit(:other_expense_amount, :other_expenses_describe, :id)
       end
     end.compact
   end
