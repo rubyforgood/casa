@@ -43,7 +43,8 @@ $(function () {
   // Enable all data tables on dashboard but only filter on volunteers table
   const editVolunteerPath = id => `/volunteers/${id}/edit`
   const casaCasePath = id => `/casa_cases/${id}`
-  const volunteersTable = $('table#reimbursements-table').DataTable({
+  const mobileLabel = title => `<span class="mobile-label">${title}</span>`
+  $('table#reimbursements-table').DataTable({
     autoWidth: false,
     stateSave: false,
     order: [[3, 'desc']],
@@ -52,7 +53,7 @@ $(function () {
         name: 'volunteer',
         render: (data, type, row, meta) => {
           return `
-            <span class="mobile-label">Volunteer</span>
+            ${mobileLabel('Volunteer')}
             <a href="${editVolunteerPath(row.volunteer.id)}">
               ${row.volunteer.display_name || row.volunteer.email}
             </a>
@@ -63,7 +64,7 @@ $(function () {
         name: 'case_number',
         render: (data, type, row, meta) => {
           return `
-            <span class="mobile-label">Case Number(s)</span>
+            ${mobileLabel('Case Number(s)')}
             <a href="${casaCasePath(row.casa_case.id)}">${row.casa_case.case_number}</a>
           `
         }
@@ -72,8 +73,8 @@ $(function () {
         name: 'contact_types',
         render: (data, type, row, meta) => {
           return `
-            <span class="mobile-label">Contact Type(s)</span>
-            ${ renderContactTypes(row.contact_types) }
+            ${mobileLabel('Contact Type(s)')}
+            ${renderContactTypes(row.contact_types)}
           `
         },
         orderable: false
@@ -82,7 +83,7 @@ $(function () {
         name: 'date_added',
         render: (data, type, row, meta) => {
           return `
-            <span class="mobile-label">Date Added</span>
+            ${mobileLabel('Date Added')}
             ${formatCreatedAtDate(row.created_at)}
           `
         },
@@ -90,28 +91,20 @@ $(function () {
       },
       {
         name: 'expense_type',
-        render: (data, type, row, meta) => {
-          return `
-            <span class="mobile-label">Expense Type</span>
-          `
-        },
+        render: (data, type, row, meta) => mobileLabel('Expense Type'),
         searchable: false,
         orderable: false
       },
       {
         name: 'description',
-        render: (data, type, row, meta) => {
-          return `
-            <span class="mobile-label">Description</span>
-          `
-        },
+        render: (data, type, row, meta) => mobileLabel('Description'),
         orderable: false
       },
       {
         name: 'miles_driven',
         render: (data, type, row, meta) => {
           return `
-            <span class="mobile-label">Amount</span>
+            ${mobileLabel('Amount')}
             ${row.miles_driven}
           `
         },
@@ -121,7 +114,7 @@ $(function () {
         name: 'reimbursement_complete',
         render: (data, type, row, meta) => {
           return `
-            <span class="mobile-label">Reimbursement Complete?</span>
+            ${mobileLabel('Reimbursement Complete?')}
             TODO
           `
         },
