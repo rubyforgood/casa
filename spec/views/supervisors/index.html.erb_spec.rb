@@ -33,8 +33,10 @@ RSpec.describe "supervisors/index", type: :view do
         assign :supervisors, [supervisor]
         render template: "supervisors/index"
 
-        expect(rendered).to match("<span class=\"attempted-contact\"")
-        expect(rendered).to match("<span class=\"no-attempted-contact\"")
+        PARSED_HTML = Nokogiri.HTML5(rendered)
+
+        expect(PARSED_HTML.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to equal(1)
+        expect(PARSED_HTML.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to equal(1)
       end
     end
 
@@ -44,14 +46,14 @@ RSpec.describe "supervisors/index", type: :view do
         create(:volunteer, :with_casa_cases, supervisor: supervisor)
       }
 
-      it "omits the positive bar if there are no active volunteers with contact w/in 14 days" do
+      it "omits the positive bar" do
         assign :supervisors, [supervisor]
         render template: "supervisors/index"
 
-        PARSED_HTML_PAGE = Nokogiri.HTML5(rendered)
+        PARSED_HTML = Nokogiri.HTML5(rendered)
 
-        expect(PARSED_HTML_PAGE.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to equal(1)
-        expect(PARSED_HTML_PAGE.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to equal(0)
+        expect(PARSED_HTML.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to equal(1)
+        expect(PARSED_HTML.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to equal(0)
       end
     end
 
