@@ -33,10 +33,10 @@ RSpec.describe "supervisors/index", type: :view do
         assign :supervisors, [supervisor]
         render template: "supervisors/index"
 
-        PARSED_HTML = Nokogiri.HTML5(rendered)
+        parsed_html = Nokogiri.HTML5(rendered)
 
-        expect(PARSED_HTML.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to eq(1)
-        expect(PARSED_HTML.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to eq(1)
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to eq(1)
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to eq(1)
       end
     end
 
@@ -50,10 +50,10 @@ RSpec.describe "supervisors/index", type: :view do
         assign :supervisors, [supervisor]
         render template: "supervisors/index"
 
-        PARSED_HTML = Nokogiri.HTML5(rendered)
+        parsed_html = Nokogiri.HTML5(rendered)
 
-        expect(PARSED_HTML.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to eq(0)
-        expect(PARSED_HTML.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to eq(1)
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to eq(0)
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to eq(1)
       end
     end
 
@@ -67,11 +67,11 @@ RSpec.describe "supervisors/index", type: :view do
         assign :supervisors, [supervisor]
         render template: "supervisors/index"
 
-        PARSED_HTML = Nokogiri.HTML5(rendered)
+        parsed_html = Nokogiri.HTML5(rendered)
 
-        expect(PARSED_HTML.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to eq(1)
-        expect(PARSED_HTML.css("#supervisors .supervisor_case_contact_stats .attempted-contact-end").length).to eq(1)
-        expect(PARSED_HTML.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to eq(0)
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to eq(1)
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact-end").length).to eq(1)
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to eq(0)
       end
     end
 
@@ -82,11 +82,11 @@ RSpec.describe "supervisors/index", type: :view do
         assign :supervisors, [supervisor]
         render template: "supervisors/index"
 
-        PARSED_HTML = Nokogiri.HTML5(rendered)
+        parsed_html = Nokogiri.HTML5(rendered)
 
-        expect(PARSED_HTML.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to eq(0)
-        expect(PARSED_HTML.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to eq(0)
-        expect(PARSED_HTML.css("#supervisors .supervisor_case_contact_stats .no-volunteers").length).to eq(1)
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to eq(0)
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to eq(0)
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .no-volunteers").length).to eq(1)
       end
     end
   end
