@@ -163,17 +163,12 @@ class CaseContactsController < ApplicationController
   end
 
   def create_case_contact_params
-    CaseContactParameters
-      .new(params)
-      .with_creator(current_user)
-      .with_converted_duration_minutes(params[:case_contact][:duration_hours].to_i)
+    CaseContactParameters.new(params, creator: current_user)
   end
 
   def update_case_contact_params
-    # Updating a case contact does not change its original creator
-    CaseContactParameters
-      .new(params)
-      .with_converted_duration_minutes(params[:case_contact][:duration_hours].to_i)
+    # Updating a case contact should not change its original creator
+    CaseContactParameters.new(params)
   end
 
   def current_organization_groups
