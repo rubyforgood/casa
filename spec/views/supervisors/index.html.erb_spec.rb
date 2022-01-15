@@ -20,49 +20,74 @@ RSpec.describe "supervisors/index", type: :view do
       expect(rendered).to have_link("New Supervisor", href: new_supervisor_path)
     end
 
-    it "shows the legend for the colored bars at all times" do
-      render template: "supervisors/index"
+    context "when a supervisor has volunteers who have and have not submitted a case contact in 14 days" do
+      let(:supervisor) { create(:supervisor) }
+      let!(:volunteer_with_recently_created_contacts) {
+        create(:volunteer, :with_cases_and_contacts, supervisor: supervisor)
+      }
+      let!(:volunteer_without_recently_created_contacts) {
+        create(:volunteer, :with_casa_cases, supervisor: supervisor)
+      }
 
-      expect(rendered).to match /Have attempted contact in the last 14 days/
-      expect(rendered).to match /Have not attempted contact in the last 14 days/
-      expect(rendered).to match /(Transition aged youth)/
+      it "shows positive and negative numbers" do
+        assign :supervisors, [supervisor]
+        render template: "supervisors/index"
+
+        parsed_html = Nokogiri.HTML5(rendered)
+
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to eq(1)
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to eq(1)
+      end
     end
 
-    xit "shows positive and negative numbers for each supervisor" do # TODO FireLemons
-      supervisor = create(:supervisor)
-      create(:volunteer, :with_cases_and_contacts, supervisor: supervisor)
-      create(:volunteer, :with_casa_cases, supervisor: supervisor)
+    context "when a supervisor only has volunteers who have not submitted a case contact in 14 days" do
+      let(:supervisor) { create(:supervisor) }
+      let!(:volunteer_without_recently_created_contacts) {
+        create(:volunteer, :with_casa_cases, supervisor: supervisor)
+      }
 
-      assign :supervisors, [supervisor]
-      render template: "supervisors/index"
+      it "omits the attempted contact stat bar" do
+        assign :supervisors, [supervisor]
+        render template: "supervisors/index"
 
-      expect(rendered).to match /supervisor_indicator_positive/
-      expect(rendered).to match /supervisor_indicator_negative/
-      expect(rendered).to match /supervisor_indicator_transition_aged_youth/
+        parsed_html = Nokogiri.HTML5(rendered)
+
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to eq(0)
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to eq(1)
+      end
     end
 
-    xit "omits the positive bar if there are no active volunteers with contact w/in 14 days" do # TODO FireLemons
-      supervisor = create(:supervisor)
-      create(:volunteer, :with_casa_cases, supervisor: supervisor)
+    context "when a supervisor only has volunteers who have submitted a case contact in 14 days" do
+      let(:supervisor) { create(:supervisor) }
+      let!(:volunteer_with_recently_created_contacts) {
+        create(:volunteer, :with_cases_and_contacts, supervisor: supervisor)
+      }
 
-      assign :supervisors, [supervisor]
-      render template: "supervisors/index"
+      it "shows the end of the attempted contact bar instead of the no attempted contact bar" do
+        assign :supervisors, [supervisor]
+        render template: "supervisors/index"
 
-      expect(rendered).not_to match /supervisor_indicator_positive/
-      expect(rendered).to match /supervisor_indicator_negative/
-      expect(rendered).to match /supervisor_indicator_transition_aged_youth/
+        parsed_html = Nokogiri.HTML5(rendered)
+
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to eq(1)
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact-end").length).to eq(1)
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to eq(0)
+      end
     end
 
-    xit "omits the negative bar if all volunteers have a contact within 14 days" do # TODO FireLemons
-      supervisor = create(:supervisor)
-      create(:volunteer, :with_cases_and_contacts, supervisor: supervisor)
+    context "when a supervisor does not have volunteers" do
+      let(:supervisor) { create(:supervisor) }
 
-      assign :supervisors, [supervisor]
-      render template: "supervisors/index"
+      it "shows a no assigned volunteers message instead of attempted and no attempted contact bars" do
+        assign :supervisors, [supervisor]
+        render template: "supervisors/index"
 
-      expect(rendered).to match /supervisor_indicator_positive/
-      expect(rendered).not_to match /supervisor_indicator_negative$/
-      expect(rendered).to match /supervisor_indicator_transition_aged_youth/
+        parsed_html = Nokogiri.HTML5(rendered)
+
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to eq(0)
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to eq(0)
+        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .no-volunteers").length).to eq(1)
+      end
     end
   end
 
