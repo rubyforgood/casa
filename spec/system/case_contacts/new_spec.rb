@@ -264,8 +264,7 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "case-contact-duration-hours", with: "1"
       fill_in "case-contact-duration-minutes", with: "45"
       fill_in "Occurred at", with: "04/04/2020"
-      fill_in "Miles driven", with: "30"
-      select "Yes", from: "Want driving reimbursement"
+      select "No", from: "Want driving reimbursement"
 
       # fill_in "other_expense_amount-", with: "5.01"
       # fill_in "other_expenses_describe-", with: "tolls"

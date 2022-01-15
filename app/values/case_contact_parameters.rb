@@ -13,7 +13,7 @@ class CaseContactParameters < SimpleDelegator
         case_contact_contact_type_attributes: [:contact_type_id]
         # additional_expense_attributes: [:id, :other_expense_amount, :other_expenses_describe]
       )
-
+    params[:miles_driven] = params[:miles_driven].to_i
     super(params)
   end
 
