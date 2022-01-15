@@ -51,7 +51,7 @@ RSpec.describe "casa_cases/edit", type: :view do
 
       render template: "casa_cases/edit"
 
-      expect(rendered).to include("Assign a New Volunteer")
+      expect(rendered).to include(I18n.t("casa_cases.volunteer_assignment.assign_new"))
       expect(rendered).to include(CGI.escapeHTML("Youth's Birth Month & Year"))
     end
   end
