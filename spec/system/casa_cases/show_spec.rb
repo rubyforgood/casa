@@ -145,7 +145,7 @@ RSpec.describe "casa_cases/show", type: :system do
       expect(page).to have_content("❌")
     end
 
-    it "when partiall implemented" do
+    it "when partial implemented" do
       casa_case.case_court_orders[0].update(implementation_status: :partially_implemented)
 
       visit casa_case_path(casa_case)
