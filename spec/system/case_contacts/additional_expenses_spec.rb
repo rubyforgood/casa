@@ -40,7 +40,7 @@ RSpec.describe "addtional_expenses", type: :system do
     }.to change(CaseContact, :count).by(1)#.and change(AdditionalExpense, :count).by(1) #doesn't work yet
 
     casa_case.case_contacts.last.additional_expenses << AdditionalExpense.create(other_expense_amount: 12, other_expenses_describe: "Toll bridge")
-    visit edit_case_contact_path(casa_case.case_contacts.last)
+    visit edit_case_contact_path(casa_case.reload.case_contacts.last)
     expect(page).to have_text("Editing Case Contact")
     visit "#case_contact_notes"
     expect(page).to have_text("12")
