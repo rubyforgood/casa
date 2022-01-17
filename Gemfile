@@ -34,6 +34,7 @@ gem "rack-attack" # for blocking & throttling abusive requests
 gem "request_store"
 gem "sablon" # Word document templating tool for Case Court Reports
 gem "scout_apm"
+gem "strong_migrations"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "webpacker" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 
