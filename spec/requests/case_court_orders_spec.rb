@@ -46,12 +46,11 @@ RSpec.describe "/case_court_orders", type: :request do
     describe "DELETE /destroy" do
       it "renders a successful response" do
         delete_request
-        # CASA will attempt to redirect to another page
-        expect(response.status).to be(302)
+        expect(response).to be_successful
       end
 
       it "deletes the court order" do
-        expect { delete_request }.to_not change(CaseCourtOrder, :count)
+        expect { delete_request }.to change(CaseCourtOrder, :count).from(1).to(0)
       end
     end
   end
