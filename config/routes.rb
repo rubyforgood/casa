@@ -116,11 +116,11 @@ Rails.application.routes.draw do
   resources :case_court_orders, only: %i[destroy]
 
   namespace :all_casa_admins do
-    resources :casa_orgs, only: [:new, :create, :show] do
-      resources :casa_admins, only: [:new, :create, :edit, :update] do
+    resources :casa_orgs, param: :slug, only: %i[edit update] do
+      resources :casa_cases, param: :slug do
         member do
           patch :deactivate
-          patch :activate
+          patch :reactivate
         end
       end
     end

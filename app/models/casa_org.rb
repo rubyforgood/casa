@@ -62,10 +62,10 @@ class CasaOrg < ApplicationRecord
     self.slug = name.parameterize
   end
 
-  # def to_param
-  #   id
-  #   # slug # TODO use slug eventually for routes
-  # end
+  def to_param
+    # this makes rails routes use slug instead of id
+    slug
+  end
 end
 
 # == Schema Information
