@@ -15,7 +15,7 @@ class AddFields {
     })
   }
 
-  handleClick (link, e) {
+  handleClick (link, e, addLinkCount) {
     if (!link || !e) return
     e.preventDefault()
     link.insertAdjacentHTML('beforebegin',
