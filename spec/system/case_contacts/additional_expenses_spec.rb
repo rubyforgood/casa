@@ -4,6 +4,7 @@ require "action_view"
 RSpec.describe "addtional_expenses", type: :system do
 
   it "additional expenses", js: true do
+    FeatureFlagService.enable!("show_additional_expenses")
     organization = build(:casa_org)
     volunteer = create(:volunteer, casa_org: organization)
     casa_case = create(:casa_case, casa_org: organization)
@@ -28,9 +29,15 @@ RSpec.describe "addtional_expenses", type: :system do
     # should not be needed anymore
     fill_in "case_contact_miles_driven", with: "0"
 
+    click_on "Add another expense"
+    expect(page).to have_text("Add another expense")
+    click_on "Add another expense"
+    page.all("input.other-expense-amount").last.fill_in(with: "7.21")
+    page.all("input.other-expenses-describe").last.fill_in(with: "Another Toll")
+
     expect {
       click_on "Submit"
-    }.to change(CaseContact, :count).by(1)
+    }.to change(CaseContact, :count).by(1).and change(AdditionalExpense, :count).by(1)
 
     expect(CaseContact.first.additional_expenses.length).to eq 1
   end
