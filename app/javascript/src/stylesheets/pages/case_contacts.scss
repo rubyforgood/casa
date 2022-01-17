@@ -34,3 +34,24 @@ legend {
 .followup-button {
   min-width: max-content;
 }
+
+.flex-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+}
+
+.field-card {
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,0.125);
+    border-radius: .25rem;
+    padding: 1rem;
+    box-shadow: 0 4px 12px 5px rgba(0, 0, 0, 0.08);
+}
+
+.pr-6 {
+    padding-right: 1.5rem !important;
+}
