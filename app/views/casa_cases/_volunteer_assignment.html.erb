@@ -1,6 +1,6 @@
 <h1 class="pt-5"><%= t(".title") %></h1>
 
-<div class="card card-container">
+<div id="volunteer-assignment" class="card card-container">
   <div class="card-body">
     <% if @casa_case.volunteers.present? %>
       <br>
@@ -8,14 +8,14 @@
       <div class="table-responsive">
         <table class='table case-list'>
           <thead>
-          <tr>
-            <th><%= t(".heading.volunteer_name") %></th>
-            <th><%= t(".heading.volunteer_email") %></th>
-            <th><%= t(".heading.status") %></th>
-            <th><%= t(".heading.start_date") %></th>
-            <th><%= t(".heading.end_date") %></th>
-            <th><%= t(".heading.actions") %></th>
-          </tr>
+            <tr>
+              <th><%= t(".heading.volunteer_name") %></th>
+              <th><%= t(".heading.volunteer_email") %></th>
+              <th><%= t(".heading.status") %></th>
+              <th><%= t(".heading.start_date") %></th>
+              <th><%= t(".heading.end_date") %></th>
+              <th><%= t(".heading.actions") %></th>
+            </tr>
           </thead>
           <tbody>
           <% @casa_case.case_assignments.each do |assignment| %>
