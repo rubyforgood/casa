@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "CaseContactPopulator" do
+RSpec.describe CaseContactPopulator do
   before do
     Rake::Task.clear
     Casa::Application.load_tasks
