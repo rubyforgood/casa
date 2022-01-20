@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "VolunteerDatatable" do
+RSpec.describe VolunteerDatatable do
   let(:org) { CasaOrg.first }
   let(:supervisors) { Supervisor.all }
   let(:assigned_volunteers) { Volunteer.joins(:supervisor) }
