@@ -112,13 +112,13 @@ RSpec.describe CaseContact, type: :model do
         subject(:occurred_starting_at) { described_class.occurred_starting_at(date) }
 
         context "with specified date" do
-          it { is_expected.to eq [case_contacts.second, case_contacts.third] }
+          it { is_expected.to match_array([case_contacts.second, case_contacts.third]) }
         end
 
         context "with no specified date" do
           let(:date) { nil }
 
-          it { is_expected.to eq case_contacts }
+          it { is_expected.to match_array(case_contacts) }
         end
       end
 
@@ -126,13 +126,13 @@ RSpec.describe CaseContact, type: :model do
         subject(:occurred_ending_at) { described_class.occurred_ending_at(date) }
 
         context "with specified date" do
-          it { is_expected.to eq [case_contacts.first, case_contacts.second] }
+          it { is_expected.to match_array([case_contacts.first, case_contacts.second]) }
         end
 
         context "with no specified date" do
           let(:date) { nil }
 
-          it { is_expected.to eq case_contacts }
+          it { is_expected.to match_array(case_contacts) }
         end
       end
     end
@@ -267,7 +267,7 @@ RSpec.describe CaseContact, type: :model do
       describe "without specified medium parameter" do
         let(:medium_type) { nil }
 
-        it { is_expected.to eq case_contacts }
+        it { is_expected.to match_array(case_contacts) }
       end
     end
 
