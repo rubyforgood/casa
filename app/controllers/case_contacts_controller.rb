@@ -73,6 +73,7 @@ class CaseContactsController < ApplicationController
 
     # Create a case contact for every case that was checked
     case_contacts = create_case_contact_for_every_selected_casa_case(@selected_cases)
+    binding.pry
     if case_contacts.all?(&:persisted?)
       redirect_to casa_case_path(CaseContact.last.casa_case, success: true)
     else
