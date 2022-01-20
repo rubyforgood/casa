@@ -7,8 +7,8 @@ function createCalendarEvents () {
   calendarButtons.forEach((btn) => {
     const calendarEvent = new Add2Calendar({
       title: btn.dataset.title,
-      start: btn.dataset.date,
-      end: btn.dataset.date,
+      start: btn.dataset.start,
+      end: btn.dataset.end,
       description: btn.dataset.title,
       isAllDay: true
     })

@@ -40,6 +40,18 @@ class CasaCaseDecorator < Draper::Decorator
     end
   end
 
+  def calendar_next_court_date
+    {start: calendar_format(object.next_court_date.date), end: calendar_format(object.next_court_date.date + 1.day)}
+  end
+
+  def calendar_court_report_due_date
+    {start: calendar_format(object.court_report_due_date), end: calendar_format(object.court_report_due_date + 1.day)}
+  end
+
+  def calendar_format(date)
+    I18n.l(date, format: :long, default: "")
+  end
+
   def formatted_updated_at
     I18n.l(object.updated_at, format: :standard, default: nil)
   end
