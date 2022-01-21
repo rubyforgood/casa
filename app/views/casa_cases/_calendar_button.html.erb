@@ -1,5 +1,5 @@
 <!-- Button code -->
 <% if date.present? %>
-  <%= tag.div class: "cal-btn", id: id, data: { title: title, date: date, tooltip: tooltip } do %>
+  <%= tag.div class: "cal-btn", id: id, data: { title: title, start: date[:start], end: date[:end], tooltip: tooltip } do %>
   <% end %>
 <% end %>
