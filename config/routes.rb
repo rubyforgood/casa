@@ -47,6 +47,7 @@ Rails.application.routes.draw do
       patch :deactivate
       patch :activate
       patch :resend_invitation
+      patch :change_to_supervisor
     end
   end
 

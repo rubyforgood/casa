@@ -103,6 +103,13 @@ class CasaAdminsController < ApplicationController
     redirect_to edit_casa_admin_path(@casa_admin), notice: "Invitation sent"
   end
 
+  def change_to_supervisor
+    authorize @casa_admin
+    @casa_admin.change_to_supervisor!
+
+    redirect_to edit_supervisor_path(@casa_admin), notice: "Admin was changed to Supervisor."
+  end
+
   private
 
   def redirect_to_casa_admin_edition_page(error)
