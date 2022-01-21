@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "SupervisorDatatable" do
+RSpec.describe SupervisorDatatable do
   subject { described_class.new(org.supervisors, params).as_json }
 
   let(:org) { create(:casa_org) }
