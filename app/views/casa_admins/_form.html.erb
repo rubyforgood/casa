@@ -44,6 +44,13 @@
                         method: :patch,
                         class: "btn btn-outline-danger" %>
           <% end %>
+
+          <% if current_user.casa_admin? %>
+            <%= link_to "Change to Supervisor",
+                        change_to_supervisor_casa_admin_path(casa_admin),
+                        method: :patch,
+                        class: "btn btn-outline-danger" %>
+          <% end %>
         </div>
       <% end %>
 
