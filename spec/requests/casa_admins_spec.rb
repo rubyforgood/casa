@@ -359,4 +359,39 @@ RSpec.describe "/casa_admins", type: :request do
       end
     end
   end
+
+  describe "PATCH /change_to_supervisor" do
+    let(:casa_admin) { create(:casa_admin) }
+    let(:user) { User.find(casa_admin.id) } # find the user after their type has changed
+
+    context "when signed in as an admin" do
+      before do
+        sign_in_as_admin
+        patch change_to_supervisor_casa_admin_path(casa_admin)
+      end
+
+      it "changes the admin to a supervisor" do
+        expect(user).not_to be_casa_admin
+        expect(user).to be_supervisor
+      end
+
+      it "redirects to the edit page for a supervisor" do
+        expect(response).to redirect_to(edit_supervisor_path(casa_admin))
+      end
+    end
+
+    context "when signed in as a supervisor" do
+      let(:supervisor) { create(:supervisor) }
+
+      before do
+        sign_in supervisor
+        patch change_to_supervisor_casa_admin_path(casa_admin)
+      end
+
+      it "does not change the admin to a supervisor" do
+        expect(user).to be_casa_admin
+        expect(user).not_to be_supervisor
+      end
+    end
+  end
 end
