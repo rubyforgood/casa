@@ -60,6 +60,7 @@ class CaseContactsController < ApplicationController
     # they did previously enter.
 
     @casa_cases = policy_scope(current_organization.casa_cases)
+    binding.pry
     @case_contact = CaseContact.new(create_case_contact_params)
     authorize @case_contact
     @current_organization_groups = current_organization.contact_type_groups
@@ -73,7 +74,6 @@ class CaseContactsController < ApplicationController
 
     # Create a case contact for every case that was checked
     case_contacts = create_case_contact_for_every_selected_casa_case(@selected_cases)
-    binding.pry
     if case_contacts.all?(&:persisted?)
       redirect_to casa_case_path(CaseContact.last.casa_case, success: true)
     else
