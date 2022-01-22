@@ -6,7 +6,7 @@ RSpec.describe "casa_cases/show", type: :system do
   let(:volunteer) { build(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
   let(:casa_case) {
     create(:casa_case, :with_one_court_order, casa_org: organization,
-    case_number: "CINA-1", transition_aged_youth: true, court_report_due_date: 1.month.from_now)
+    case_number: "CINA-1", court_report_due_date: 1.month.from_now)
   }
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
   let!(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
@@ -18,10 +18,30 @@ RSpec.describe "casa_cases/show", type: :system do
     visit casa_case_path(casa_case.id)
   end
 
-  context "when admin" do
+  shared_examples "shows emancipation checklist link" do
+    context "when youth is in transition age" do
+      it "sees link to emancipation" do
+        expect(page).to have_link("Emancipation 0 / #{emancipation_categories.size}")
+      end
+    end
+
+    context "when youth is not in transition age" do
+      before do
+        casa_case.update!(birth_month_year_youth: DateTime.current)
+        visit casa_case_path(casa_case)
+      end
+
+      it "does not see a link to emancipation checklist" do
+        expect(page).not_to have_link("Emancipation 0 / #{emancipation_categories.size}")
+      end
+    end
+  end
+
+  context "admin user" do
     let(:user) { admin }
 
     it_behaves_like "shows court dates links"
+    it_behaves_like "shows emancipation checklist link"
 
     it "can see case creator in table" do
       expect(page).to have_text("Bob Loblaw")
@@ -67,6 +87,8 @@ RSpec.describe "casa_cases/show", type: :system do
     let(:user) { create(:supervisor, casa_org: organization) }
     let!(:case_contact) { create(:case_contact, creator: user, casa_case: casa_case) }
 
+    it_behaves_like "shows emancipation checklist link"
+
     it "sees link to own edit page" do
       expect(page).to have_link(href: "/supervisors/#{user.id}/edit")
     end
@@ -111,9 +133,7 @@ RSpec.describe "casa_cases/show", type: :system do
   context "volunteer user" do
     let(:user) { volunteer }
 
-    it "sees link to emancipation" do
-      expect(page).to have_link("Emancipation 0 / #{emancipation_categories.size}")
-    end
+    it_behaves_like "shows emancipation checklist link"
 
     it "can see court orders" do
       expect(page).to have_content("Court Orders")
