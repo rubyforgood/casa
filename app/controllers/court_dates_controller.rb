@@ -34,7 +34,7 @@ class CourtDatesController < ApplicationController
     @casa_case.court_report_due_date = @court_date.date - 3.weeks
     authorize @court_date
 
-    if @court_date.save and @casa_case.save
+    if @court_date.save && @casa_case.save
       redirect_to casa_case_court_date_path(@casa_case, @court_date), notice: "Court date was successfully created."
     else
       render :new
