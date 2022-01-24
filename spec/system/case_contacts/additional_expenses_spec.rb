@@ -48,11 +48,13 @@ RSpec.describe "addtional_expenses", type: :system do
     expect(page).to have_text("Editing Case Contact")
 
     # page.save_screenshot()
-    find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.22")
-    find_by_id("case_contact_additional_expenses_attributes_1_other_expenses_describe").fill_in(with: "Another Toll")
     
     # expect(page).to have_content("7.21")
+    expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount", with: "7.21")
     expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expenses_describe", with: "Toll")
+    
+    find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.22")
+    find_by_id("case_contact_additional_expenses_attributes_1_other_expenses_describe").fill_in(with: "Another Toll")
 
   end
 end
