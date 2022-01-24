@@ -29,11 +29,16 @@ RSpec.describe "addtional_expenses", type: :system do
     # should not be needed anymore
     fill_in "case_contact_miles_driven", with: "0"
 
-    click_on "Add another expense"
     expect(page).to have_text("Add another expense")
     click_on "Add another expense"
-    page.all("input.other-expense-amount").last.fill_in(with: "7.21")
-    page.all("input.other-expenses-describe").last.fill_in(with: "Another Toll")
+    page.all("input.other-expense-amount").first.fill_in(with: "7.21")
+    page.all("input.other-expenses-describe").first.fill_in(with: "Toll")
+
+    # page.all("input.other-expense-amount").second.fill_in(with: "7.22")
+    # page.all("input.other-expenses-describe").second.fill_in(with: "Another Toll")
+
+    # page.all("input.other-expense-amount").third.fill_in(with: "8.23")
+    # page.all("input.other-expenses-describe").third.fill_in(with: "Yet another Toll")
 
     expect {
       click_on "Submit"
