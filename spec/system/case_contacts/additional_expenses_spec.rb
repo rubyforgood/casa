@@ -31,8 +31,8 @@ RSpec.describe "addtional_expenses", type: :system do
 
     expect(page).to have_text("Add another expense")
     click_on "Add another expense"
-    page.all("input.other-expense-amount").first.fill_in(with: "7.21")
-    page.all("input.other-expenses-describe").first.fill_in(with: "Toll")
+    find_by_id("case_contact_additional_expenses_attributes_0_other_expense_amount").fill_in(with: "7.21")
+    find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe").fill_in(with: "Toll")
 
     # page.all("input.other-expense-amount").second.fill_in(with: "7.22")
     # page.all("input.other-expenses-describe").second.fill_in(with: "Another Toll")
@@ -44,11 +44,11 @@ RSpec.describe "addtional_expenses", type: :system do
       click_on "Submit"
     }.to change(CaseContact, :count).by(1).and change(AdditionalExpense, :count).by(1)
 
-    # visit edit_case_contact_path(casa_case.reload.case_contacts.last)
-    # expect(page).to have_text("Editing Case Contact")
+    visit edit_case_contact_path(casa_case.reload.case_contacts.last)
+    expect(page).to have_text("Editing Case Contact")
     # visit "#case_contact_notes"
-    # expect(page).to have_text("7.21")
-    # expect(page).to have_text("Another Toll")
+    expect(page).to have_text("7.20")
+    expect(page).to have_text("Another Toll")
 
   end
 end
