@@ -46,9 +46,13 @@ RSpec.describe "addtional_expenses", type: :system do
 
     visit edit_case_contact_path(casa_case.reload.case_contacts.last)
     expect(page).to have_text("Editing Case Contact")
-    # visit "#case_contact_notes"
-    expect(page).to have_text("7.20")
-    expect(page).to have_text("Another Toll")
+
+    # page.save_screenshot()
+    find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.22")
+    find_by_id("case_contact_additional_expenses_attributes_1_other_expenses_describe").fill_in(with: "Another Toll")
+    
+    # expect(page).to have_content("7.21")
+    expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expenses_describe", with: "Toll")
 
   end
 end
