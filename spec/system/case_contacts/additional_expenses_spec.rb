@@ -34,6 +34,9 @@ RSpec.describe "addtional_expenses", type: :system do
     find_by_id("case_contact_additional_expenses_attributes_0_other_expense_amount").fill_in(with: "7.21")
     find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe").fill_in(with: "Toll")
 
+    find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.22")
+    find_by_id("case_contact_additional_expenses_attributes_1_other_expenses_describe").fill_in(with: "Another Toll")
+
     # page.all("input.other-expense-amount").second.fill_in(with: "7.22")
     # page.all("input.other-expenses-describe").second.fill_in(with: "Another Toll")
 
@@ -42,7 +45,7 @@ RSpec.describe "addtional_expenses", type: :system do
 
     expect {
       click_on "Submit"
-    }.to change(CaseContact, :count).by(1).and change(AdditionalExpense, :count).by(1)
+    }.to change(CaseContact, :count).by(1).and change(AdditionalExpense, :count).by(2)
 
     visit edit_case_contact_path(casa_case.reload.case_contacts.last)
     expect(page).to have_text("Editing Case Contact")
@@ -52,9 +55,12 @@ RSpec.describe "addtional_expenses", type: :system do
     # expect(page).to have_content("7.21")
     expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount", with: "7.21")
     expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expenses_describe", with: "Toll")
+
+    expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount", with: "7.22")
+    expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expenses_describe", with: "Another Toll")
     
-    find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.22")
-    find_by_id("case_contact_additional_expenses_attributes_1_other_expenses_describe").fill_in(with: "Another Toll")
+    # find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.22")
+    # find_by_id("case_contact_additional_expenses_attributes_1_other_expenses_describe").fill_in(with: "Another Toll")
 
   end
 end
