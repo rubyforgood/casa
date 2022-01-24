@@ -60,12 +60,13 @@ class CaseContactsController < ApplicationController
     # they did previously enter.
 
     @casa_cases = policy_scope(current_organization.casa_cases)
-    binding.pry
+    # binding.pry
     @case_contact = CaseContact.new(create_case_contact_params)
     authorize @case_contact
     @current_organization_groups = current_organization.contact_type_groups
 
     @selected_cases = @casa_cases.where(id: params.dig(:case_contact, :casa_case_id))
+    # binding.pry
     if @selected_cases.empty?
       flash[:alert] = t("case_min_validation", scope: "case_contact")
       render :new
@@ -194,7 +195,9 @@ class CaseContactsController < ApplicationController
     additional_expenses && 0.upto(10).map do |i|
       possible_key = i.to_s
       if additional_expenses&.key?(possible_key)
-        additional_expenses[i.to_s]&.permit(:other_expense_amount, :other_expenses_describe, :id)
+        if !additional_expenses[i.to_s]["other_expense_amount"].blank?
+          additional_expenses[i.to_s]&.permit(:other_expense_amount, :other_expenses_describe, :id)
+        end
       end
     end.compact
   end
