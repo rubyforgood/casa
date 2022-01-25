@@ -29,7 +29,15 @@ RSpec.describe "addtional_expenses", type: :system do
     fill_in "case_contact_miles_driven", with: "0"
 
     expect(page).to have_text("Add another expense")
+
+    # behavior should be, one default appearing field and clicking Add another expense adds a new field
+
+    expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount")
+    expect(page).to have_no_field("case_contact_additional_expenses_attributes_1_other_expense_amount")
     click_on "Add another expense"
+
+    # Next test that "case_contact_additional_expenses_attributes_1_other_expense_amount" has appeared, but not "case_contact_additional_expenses_attributes_2_other_expense_amount"
+
     find_by_id("case_contact_additional_expenses_attributes_0_other_expense_amount").fill_in(with: "7.21")
     find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe").fill_in(with: "Toll")
 
