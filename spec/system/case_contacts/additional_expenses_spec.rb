@@ -26,7 +26,6 @@ RSpec.describe "addtional_expenses", type: :system do
 
     fill_in "case-contact-duration-hours", with: "1"
     fill_in "case-contact-duration-minutes", with: "45"
-    # should not be needed anymore
     fill_in "case_contact_miles_driven", with: "0"
 
     expect(page).to have_text("Add another expense")
@@ -37,30 +36,21 @@ RSpec.describe "addtional_expenses", type: :system do
     find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.22")
     find_by_id("case_contact_additional_expenses_attributes_1_other_expenses_describe").fill_in(with: "Another Toll")
 
-    # page.all("input.other-expense-amount").second.fill_in(with: "7.22")
-    # page.all("input.other-expenses-describe").second.fill_in(with: "Another Toll")
-
-    # page.all("input.other-expense-amount").third.fill_in(with: "8.23")
-    # page.all("input.other-expenses-describe").third.fill_in(with: "Yet another Toll")
-
     expect {
       click_on "Submit"
     }.to change(CaseContact, :count).by(1).and change(AdditionalExpense, :count).by(2)
 
     visit edit_case_contact_path(casa_case.reload.case_contacts.last)
     expect(page).to have_text("Editing Case Contact")
-
-    # page.save_screenshot()
-    
-    # expect(page).to have_content("7.21")
     expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount", with: "7.21")
     expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expenses_describe", with: "Toll")
-
     expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount", with: "7.22")
     expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expenses_describe", with: "Another Toll")
     
-    # To test updating
+    # To test update adding a new set of additional expenses as well as modifying existing ones
 
+    find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe").fill_in(with: "Breakfast")
+    find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.23")
     find_by_id("case_contact_additional_expenses_attributes_2_other_expense_amount").fill_in(with: "8.23")
     find_by_id("case_contact_additional_expenses_attributes_2_other_expenses_describe").fill_in(with: "Yet another toll")
 
@@ -70,11 +60,10 @@ RSpec.describe "addtional_expenses", type: :system do
 
     visit edit_case_contact_path(casa_case.reload.case_contacts.last)
     expect(page).to have_text("Editing Case Contact")
-
     expect(page).to have_field("case_contact_additional_expenses_attributes_2_other_expense_amount", with: "8.23")
     expect(page).to have_field("case_contact_additional_expenses_attributes_2_other_expenses_describe", with: "Yet another toll")
-
-
+    expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expenses_describe", with: "Breakfast")
+    expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount", with: "7.23")
 
   end
 end
