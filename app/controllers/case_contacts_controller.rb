@@ -58,6 +58,7 @@ class CaseContactsController < ApplicationController
     # These variables are used to re-render the form (render :new) if there are
     # validation errors so that the user does not lose inputs to fields that
     # they did previously enter.
+
     @casa_cases = policy_scope(current_organization.casa_cases)
     @case_contact = CaseContact.new(create_case_contact_params)
     authorize @case_contact
@@ -186,7 +187,7 @@ class CaseContactsController < ApplicationController
     additional_expenses = params.dig("case_contact", "additional_expenses_attributes")
     additional_expenses && 0.upto(10).map do |i|
       possible_key = i.to_s
-      if additional_expenses&.key?(possible_key)
+      if additional_expenses&.key?(possible_key) && !additional_expenses[i.to_s]["other_expense_amount"].blank?
         additional_expenses[i.to_s]&.permit(:other_expense_amount, :other_expenses_describe, :id)
       end
     end.compact

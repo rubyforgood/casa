@@ -272,8 +272,8 @@ RSpec.describe "case_contacts/new", type: :system do
       click_on "Add another expense"
       # expect(page).to have_css("fieldset.other-expense-amount", :count => 2)
       # page.all("input.other-expense-amount")[1].set("7.21")
-      page.all("input.other-expense-amount").last.fill_in(with: "7.21")
-      page.all("input.other-expenses-describe").last.fill_in(with: "Another Toll")
+      page.all("input.other-expense-amount").first.fill_in(with: "7.21")
+      page.all("input.other-expenses-describe").first.fill_in(with: "Another Toll")
 
       fill_in "Notes", with: "Hello world"
 
@@ -285,8 +285,7 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(page).to have_text("Confirm Note Content")
       expect {
         click_on "Continue Submitting"
-      }.to change(CaseContact, :count).by(1).and change(AdditionalExpense, :count).by(0)
-      # }.to change(CaseContact, :count).by(1).and change(AdditionalExpense, :count).by(1)
+      }.to change(CaseContact, :count).by(1).and change(AdditionalExpense, :count).by(1)
 
       expect(volunteer_casa_case_one.case_contacts.length).to eq(1)
       case_contact = volunteer_casa_case_one.case_contacts.first
