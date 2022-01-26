@@ -96,4 +96,9 @@ class CaseContactDecorator < Draper::Decorator
   def show_contact_type?(contact_type_id)
     object.case_contact_contact_type.map(&:contact_type_id).include?(contact_type_id)
   end
+
+
+  def additional_expenses_count
+    object.additional_expenses.any? ? object.additional_expenses.length : 0 
+  end
 end
