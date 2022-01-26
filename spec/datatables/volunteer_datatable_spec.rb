@@ -8,9 +8,9 @@ RSpec.describe "VolunteerDatatable" do
 
   let(:additional_filters) do
     {
-      active: %w[false true],
-      supervisor: supervisors.map(&:display_name),
-      transition_aged_youth: %w[false true]
+        active: %w[false true],
+        supervisor: supervisors.map(&:display_name),
+        transition_aged_youth: %w[false true]
     }
   end
   let(:order_by) { "display_name" }
@@ -20,12 +20,12 @@ RSpec.describe "VolunteerDatatable" do
   let(:search_term) { nil }
   let(:params) do
     datatable_params(
-      additional_filters: additional_filters,
-      order_by: order_by,
-      order_direction: order_direction,
-      page: page,
-      per_page: per_page,
-      search_term: search_term
+        additional_filters: additional_filters,
+        order_by: order_by,
+        order_direction: order_direction,
+        page: page,
+        per_page: per_page,
+        search_term: search_term
     )
   end
 
@@ -223,9 +223,9 @@ RSpec.describe "VolunteerDatatable" do
       let(:casa_case2) { volunteer2.casa_cases.first }
       let(:sorted_models) do
         assigned_volunteers
-          .order(:id)
-          .sort_by { |v| v.case_contacts.where(occurred_at: 60.days.ago.to_date..).count }
-          .sort_by { |v| v.case_contacts.exists?(occurred_at: 60.days.ago.to_date..) ? 0 : 1 }
+            .order(:id)
+            .sort_by { |v| v.case_contacts.where(occurred_at: 60.days.ago.to_date..).count }
+            .sort_by { |v| v.case_contacts.exists?(occurred_at: 60.days.ago.to_date..) ? 0 : 1 }
       end
 
       before do
@@ -248,8 +248,8 @@ RSpec.describe "VolunteerDatatable" do
         let(:order_direction) { "desc" }
         let(:sorted_models) do
           assigned_volunteers
-            .order(id: :desc)
-            .sort_by { |v| v.case_contacts.where(occurred_at: 60.days.ago.to_date..).count }
+              .order(id: :desc)
+              .sort_by { |v| v.case_contacts.where(occurred_at: 60.days.ago.to_date..).count }
         end
 
         it "is successful" do

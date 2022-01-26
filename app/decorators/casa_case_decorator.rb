@@ -63,11 +63,11 @@ class CasaCaseDecorator < Draper::Decorator
   end
 
   def transition_aged_youth
-    object.in_transition_age? || object.transition_aged_youth ? "Yes #{CasaCase::TRANSITION_AGE_YOUTH_ICON}" : "No #{CasaCase::NON_TRANSITION_AGE_YOUTH_ICON}"
+    object.in_transition_age? ? "Yes #{CasaCase::TRANSITION_AGE_YOUTH_ICON}" : "No #{CasaCase::NON_TRANSITION_AGE_YOUTH_ICON}"
   end
 
   def transition_aged_youth_icon
-    object.in_transition_age? || object.transition_aged_youth ? CasaCase::TRANSITION_AGE_YOUTH_ICON : CasaCase::NON_TRANSITION_AGE_YOUTH_ICON
+    object.in_transition_age? ? CasaCase::TRANSITION_AGE_YOUTH_ICON : CasaCase::NON_TRANSITION_AGE_YOUTH_ICON
   end
 
   def unsuccessful_contacts_this_week

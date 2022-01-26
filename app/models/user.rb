@@ -81,7 +81,9 @@ class User < ApplicationRecord
     volunteers.includes(
       case_assignments: :casa_case
     ).where(
-      case_assignments: {active: true}, casa_cases: {active: true, transition_aged_youth: true}
+      case_assignments: {active: true}, casa_cases: {active: true}
+    ).where(
+      "casa_cases.birth_month_year_youth <= ?", CasaCase::TRANSITION_AGE_YOUTH_DATE_CUTOFF
     ).size
   end
 
@@ -136,7 +138,7 @@ class User < ApplicationRecord
   end
 
   def serving_transition_aged_youth?
-    actively_assigned_and_active_cases.where(transition_aged_youth: true).any?
+    actively_assigned_and_active_cases.where("birth_month_year_youth <= ?", CasaCase::TRANSITION_AGE_YOUTH_DATE_CUTOFF).any?
   end
 
   def admin_self_deactivated?

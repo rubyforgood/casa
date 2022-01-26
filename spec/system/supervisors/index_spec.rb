@@ -57,13 +57,13 @@ RSpec.describe "supervisors/index", type: :system do
       )
 
       active_volunteers_for_first_supervisor.map { |av|
-        casa_case = create(:casa_case, transition_aged_youth: true, casa_org: av.casa_org)
+        casa_case = create(:casa_case, :transition_aged, casa_org: av.casa_org)
         create(:case_contact, contact_made: false, occurred_at: 1.week.ago, casa_case_id: casa_case.id)
         create(:case_assignment, casa_case: casa_case, volunteer: av)
       }
 
       active_volunteers_for_last_supervisor.map { |av|
-        casa_case = create(:casa_case, transition_aged_youth: true, casa_org: av.casa_org)
+        casa_case = create(:casa_case, :transition_aged, casa_org: av.casa_org)
         create(:case_contact, contact_made: false, occurred_at: 1.week.ago, casa_case_id: casa_case.id)
         create(:case_assignment, casa_case: casa_case, volunteer: av)
       }

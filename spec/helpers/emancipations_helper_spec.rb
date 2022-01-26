@@ -11,7 +11,7 @@ require "rails_helper"
 #   end
 # end
 RSpec.describe EmancipationsHelper, type: :helper do
-  let(:casa_case) { create(:casa_case, transition_aged_youth: true) }
+  let(:casa_case) { create(:casa_case, :transition_aged) }
 
   describe "#emancipation_category_checkbox_checked" do
     let(:emancipation_category) { create(:emancipation_category, name: "unique name") }

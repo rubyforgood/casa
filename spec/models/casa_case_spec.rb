@@ -118,14 +118,11 @@ RSpec.describe CasaCase, type: :model do
   describe ".should_transition" do
     it "returns only youth who should have transitioned but have not" do
       not_transitioned_13_yo = build(:casa_case,
-        birth_month_year_youth: Date.current - 13.years,
-        transition_aged_youth: false)
+        birth_month_year_youth: Date.current - 13.years)
       transitioned_14_yo = build(:casa_case,
-        birth_month_year_youth: pre_transition_aged_youth_age,
-        transition_aged_youth: true)
+        birth_month_year_youth: pre_transition_aged_youth_age)
       not_transitioned_14_yo = create(:casa_case,
-        birth_month_year_youth: pre_transition_aged_youth_age,
-        transition_aged_youth: false)
+        birth_month_year_youth: pre_transition_aged_youth_age)
       cases = CasaCase.should_transition
       aggregate_failures do
         expect(cases.length).to eq 1

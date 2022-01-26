@@ -4,7 +4,7 @@ RSpec.describe "/casa_cases", type: :request do
   let(:organization) { build(:casa_org) }
   let(:hearing_type) { create(:hearing_type) }
   let(:judge) { create(:judge) }
-  let(:valid_attributes) { {case_number: "1234", transition_aged_youth: true, birth_month_year_youth: pre_transition_aged_youth_age, casa_org_id: organization.id, hearing_type_id: hearing_type.id, judge_id: judge.id} }
+  let(:valid_attributes) { {case_number: "1234", birth_month_year_youth: pre_transition_aged_youth_age, casa_org_id: organization.id, hearing_type_id: hearing_type.id, judge_id: judge.id} }
   let(:invalid_attributes) { {case_number: nil, birth_month_year_youth: nil} }
   let(:casa_case) { create(:casa_case, casa_org: organization, case_number: "111") }
   let(:texts) { ["1-New Mandate Text One", "0-New Mandate Text Two"] }
@@ -107,7 +107,7 @@ RSpec.describe "/casa_cases", type: :request do
           post casa_cases_url, params: {casa_case: valid_attributes}
           casa_case = CasaCase.last
           expect(casa_case.casa_org).to eq organization
-          expect(casa_case.transition_aged_youth).to be true
+          expect(casa_case.has_transitioned?).to be true
           expect(casa_case.hearing_type).to eq hearing_type
           expect(casa_case.judge).to eq judge
         end
@@ -125,7 +125,6 @@ RSpec.describe "/casa_cases", type: :request do
         other_org = build(:casa_org)
         attributes = {
           case_number: "1234",
-          transition_aged_youth: true,
           birth_month_year_youth: pre_transition_aged_youth_age,
           casa_org_id: other_org.id,
           hearing_type_id: hearing_type.id,
