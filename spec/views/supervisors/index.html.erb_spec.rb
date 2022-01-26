@@ -38,6 +38,26 @@ RSpec.describe "supervisors/index", type: :view do
         expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to eq(1)
         expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to eq(1)
       end
+
+      it "accurately displays the number of active and inactive volunteers per supervisor" do
+        create(:volunteer, :with_cases_and_contacts, supervisor: supervisor)
+        assign :supervisors, [supervisor]
+        render template: "supervisors/index"
+
+        parsed_html = Nokogiri.HTML5(rendered)
+
+        active_bar = parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact")
+        inactive_bar = parsed_html.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact")
+        active_flex = active_bar.attribute("style").value.split.last
+        inactive_flex = inactive_bar.attribute("style").value.split.last
+        active_content = active_bar.children[0].text.strip
+        inactive_content = inactive_bar.children[0].text.strip
+
+        expect(active_flex).to eq(active_content)
+        expect(inactive_flex).to eq(inactive_content)
+        expect(active_flex.to_i).to eq(2)
+        expect(inactive_flex.to_i).to eq(1)
+      end
     end
 
     context "when a supervisor only has volunteers who have not submitted a case contact in 14 days" do
