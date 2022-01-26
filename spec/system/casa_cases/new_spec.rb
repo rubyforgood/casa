@@ -25,7 +25,7 @@ RSpec.describe "casa_cases/new", type: :system do
         select "April", from: "casa_case_court_report_due_date_2i"
         select next_year, from: "casa_case_court_report_due_date_1i"
 
-        select "March", from: "casa_case_birth_month_year_youth_2i"
+        select "December", from: "casa_case_birth_month_year_youth_2i"
         select fourteen_years, from: "casa_case_birth_month_year_youth_1i"
 
         check "Transition aged youth"
@@ -36,6 +36,10 @@ RSpec.describe "casa_cases/new", type: :system do
         within ".top-page-actions" do
           click_on "Create CASA Case"
         end
+
+        new_casa_case = CasaCase.find_by(case_number: case_number)
+        expect(new_casa_case.has_transitioned?).to be_truthy
+        expect(new_casa_case.birth_month_year_youth).to eq(Date.new(2006, 12, 1))
 
         expect(page.body).to have_content(case_number)
         expect(page).to have_content("CASA case was successfully created.")

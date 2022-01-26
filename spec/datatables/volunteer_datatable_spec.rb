@@ -42,8 +42,8 @@ RSpec.describe VolunteerDatatable do
 
       volunteers.each_with_index do |volunteer, idx|
         volunteer.update display_name: Faker::Name.unique.name, email: Faker::Internet.unique.email
-        volunteer.casa_cases << build(:casa_case, casa_org: org, transition_aged_youth: false)
-        volunteer.casa_cases << build(:casa_case, casa_org: org, transition_aged_youth: idx == 1)
+        volunteer.casa_cases << build(:casa_case, :not_transition_aged, casa_org: org)
+        volunteer.casa_cases << build(:casa_case, casa_org: org, transition_aged_youth: idx == 1) # TODO remove TAY usage
       end
     end
 
@@ -165,7 +165,7 @@ RSpec.describe VolunteerDatatable do
       let(:order_by) { "has_transition_aged_youth_cases" }
       let(:transition_aged_youth_bool_to_int) do
         lambda { |volunteer|
-          volunteer.casa_cases.exists?(transition_aged_youth: true) ? 1 : 0
+          volunteer.casa_cases.any? { |x| x.has_transitioned? } ? 1 : 0
         }
       end
       let(:sorted_models) { assigned_volunteers.sort_by(&transition_aged_youth_bool_to_int) }
@@ -173,7 +173,7 @@ RSpec.describe VolunteerDatatable do
       context "when ascending" do
         it "is successful" do
           sorted_models.each_with_index do |model, idx|
-            expect(values[idx][:has_transition_aged_youth_cases]).to eq model.casa_cases.exists?(transition_aged_youth: true).to_s
+            expect(values[idx][:has_transition_aged_youth_cases]).to eq model.casa_cases.any? { |x| x.has_transitioned? }.to_s
           end
         end
       end
@@ -184,7 +184,7 @@ RSpec.describe VolunteerDatatable do
 
         it "is successful" do
           sorted_models.reverse.each_with_index do |model, idx|
-            expect(values[idx][:has_transition_aged_youth_cases]).to eq model.casa_cases.exists?(transition_aged_youth: true).to_s
+            expect(values[idx][:has_transition_aged_youth_cases]).to eq model.casa_cases.any? { |x| x.has_transitioned? }.to_s
           end
         end
       end

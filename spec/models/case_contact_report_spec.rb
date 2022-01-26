@@ -172,8 +172,8 @@ RSpec.describe CaseContactReport, type: :model do
     end
 
     describe "has transitioned behavior" do
-      let(:case_case_1) { build(:casa_case, transition_aged_youth: false) }
-      let(:case_case_2) { build(:casa_case, transition_aged_youth: true) }
+      let(:case_case_1) { build(:casa_case, :not_transition_aged) }
+      let(:case_case_2) { build(:casa_case, :transition_aged) }
 
       before(:each) do
         create(:case_contact, {casa_case: case_case_1})
@@ -311,7 +311,7 @@ RSpec.describe CaseContactReport, type: :model do
         school = build(:contact_type, name: "School")
         therapist = build(:contact_type, name: "Therapist")
         untransitioned_casa_case = build(:casa_case, transition_aged_youth: false)
-        transitioned_casa_case = build(:casa_case, transition_aged_youth: true)
+        transitioned_casa_case = build(:casa_case, :transition_aged)
         contact1 = create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, contact_types: [court])
         build_stubbed(:case_contact, occurred_at: 40.days.ago, casa_case: transitioned_casa_case, contact_types: [court])
         build_stubbed(:case_contact, occurred_at: 20.days.ago, casa_case: untransitioned_casa_case, contact_types: [court])

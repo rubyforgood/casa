@@ -5,7 +5,7 @@ RSpec.describe "casa_cases/show", type: :system do
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:volunteer) { build(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
   let(:casa_case) {
-    create(:casa_case, :with_one_court_order, casa_org: organization,
+    create(:casa_case, :transition_aged, :with_one_court_order, casa_org: organization,
     case_number: "CINA-1", court_report_due_date: 1.month.from_now)
   }
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
