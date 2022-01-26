@@ -1,7 +1,7 @@
 <%= form_with(model: case_contact, local: true, id: "casa-contact-form") do |form| %>
   <%= render "/shared/error_messages", resource: case_contact %>
 
-  <div class="field casa-case form-group">
+  <div class="field casa-case form-group field-card">
     <% if casa_cases.length > 1 %>
       <h2><label for="case_contact_casa_case"><%= t(".plural_label") %></label></h2>
     <% else %>
@@ -22,143 +22,160 @@
     <% end %>
   </div>
 
-  <%= render "contact_types",
+  <div class="field-card form-group">
+    <%= render "contact_types",
       form: form,
       model: @case_contact,
       contact_type_groups:  @current_organization_groups,
       selected_case_contact_types: @selected_case_contact_types,
       checkbox_tag_name: "case_contact[case_contact_contact_type_attributes][][contact_type_id]" %>
-
-  <div class="field contact-type form-group">
-    <h2><%= form.label :contact_made %></h2>
-    <div class="form-check">
-      <%= form.radio_button :contact_made, true,
-                      checked: case_contact.contact_made,
-                      required: true,
-                      class: 'form-check-input' %>
-      <%= form.label "Yes", class: "form-check-label",
-                      for: "case_contact_contact_made_true" %>
-    </div>
-    <div class="form-check">
-      <%= form.radio_button :contact_made, false,
-                      checked: set_contact_made_false(case_contact),
-                      required: true,
-                      class: 'form-check-input' %>
-      <%= form.label "No", class: "form-check-label",
-                      for: "case_contact_contact_made_false" %>
-    </div>
   </div>
 
-  <div class="field contact-medium form-group">
-    <h2><%= form.label :medium_type, "Contact medium" %></h2>
-    <%= form.select :medium_type,
-                    options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type),
-                    {prompt: t(".prompt_select_one")},
-                    class: "custom-select col-sm-12 col-md-4",
-                    required: true %>
-  </div>
+  <div class="field-card form-group">
+    <h2>3. Enter Contact Details *</h2>
+    <div class="field contact-type form-group">
+      <h2><%= form.label :contact_made %></h2>
+      <div class="form-check">
+        <%= form.radio_button :contact_made, true,
+                        checked: case_contact.contact_made,
+                        required: true,
+                        class: 'form-check-input' %>
+        <%= form.label "Yes", class: "form-check-label",
+                        for: "case_contact_contact_made_true" %>
+      </div>
+      <div class="form-check">
+        <%= form.radio_button :contact_made, false,
+                        checked: set_contact_made_false(case_contact),
+                        required: true,
+                        class: 'form-check-input' %>
+        <%= form.label "No", class: "form-check-label",
+                        for: "case_contact_contact_made_false" %>
+      </div>
+    </div>
 
-  <div class="field duration-minutes form-group">
-    <h2><%= form.label "Duration" %></h2>
+    <div class="field contact-medium form-group">
+      <h2><%= form.label :medium_type, "Contact medium" %></h2>
+      <%= form.select :medium_type,
+                      options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type),
+                      {prompt: t(".prompt_select_one")},
+                      class: "custom-select col-sm-12 col-md-4",
+                      required: true %>
+    </div>
+    <div class="field occurred-at form-group">
+      <h2><%= form.label :occurred_at %></h2>
+      <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
+      <%= form.text_field :occurred_at,
+                          value: occurred_at.to_date,
+                          data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
+                          class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <div class="field duration-minutes form-group">
+        <h2><%= form.label "Duration" %></h2>
+        <div class="row slider-row">
+          <fieldset class="col-sm-12 col-md-6">
+            <legend>Hours</legend>
+            <div class="row slide-container">
+              <div>0</div>
+              <div class="slider col">
+                <%= form.range_field :duration_hours,
+                                    class: "custom-range slide",
+                                    id: "case-contact-duration-hours",
+                                    min: 0,
+                                    max: 23,
+                                    value: duration_hours(case_contact) %>
+              </div>
+              <div>23</div>
+            </div>
+            <div class="row range-value">
+              <%= form.number_field :duration_hours,
+                                  id: "casa-contact-duration-hours-display",
+                                  min: 0,
+                                  value: duration_hours(case_contact),
+                                  required: true %> &nbsp; <span> hour(s)</span>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
     <div class="row slider-row">
       <fieldset class="col-sm-12 col-md-6">
-        <legend>Hours</legend>
+        <legend>Minutes</legend>
         <div class="row slide-container">
           <div>0</div>
           <div class="slider col">
-            <%= form.range_field :duration_hours,
-                                 class: "custom-range slide",
-                                 id: "case-contact-duration-hours",
-                                 min: 0,
-                                 max: 23,
-                                 value: duration_hours(case_contact) %>
+            <%= form.range_field :duration_minutes,
+                                class: "custom-range slide",
+                                id: "case-contact-duration-minutes",
+                                min: 0,
+                                max: 59,
+                                step: 15,
+                                value: duration_minutes(case_contact) %>
           </div>
-          <div>23</div>
+          <div>59</div>
         </div>
         <div class="row range-value">
-          <%= form.number_field :duration_hours,
-                              id: "casa-contact-duration-hours-display",
-                              min: 0,
-                              value: duration_hours(case_contact),
-                              required: true %> &nbsp; <span> hour(s)</span>
+          <%= form.number_field :duration_minutes,
+                                id: "casa-contact-duration-minutes-display",
+                                min: 0,
+                                value: duration_minutes(case_contact),
+                                required: true %> &nbsp; <span> minute(s)</span>
         </div>
       </fieldset>
     </div>
+    </div>
+    </div>
+    </div>
   </div>
 
-  <div class="row slider-row">
-    <fieldset class="col-sm-12 col-md-6">
-      <legend>Minutes</legend>
-      <div class="row slide-container">
-        <div>0</div>
-        <div class="slider col">
-          <%= form.range_field :duration_minutes,
-                               class: "custom-range slide",
-                               id: "case-contact-duration-minutes",
-                               min: 0,
-                               max: 59,
-                               step: 15,
-                               value: duration_minutes(case_contact) %>
-        </div>
-        <div>59</div>
+  <div class="field-card form-group">
+    <h2>4. Enter Travel Details</h2>
+    <div class="field miles-driven form-group">
+      <h2><%= form.label :miles_driven %></h2>
+      <% if form_type == 'new' && @case_contact.miles_driven == 0 %>
+        <input class="form-control" min="0" max="10000" type="number" value="" name="case_contact[miles_driven]" autocomplete="off" id="case_contact_miles_driven">
+      <% else %>
+        <%= form.number_field :miles_driven, class: "form-control", min: "0", max: 10000, placeholder: "0" %>
+      <% end %>
+    </div>
+
+    <% if current_organization.show_driving_reimbursement %>
+      <div class="field want-driving-reimbursement form-group">
+        <h2><%= form.label :want_driving_reimbursement %></h2>
+        <%= form.select :want_driving_reimbursement,
+                        options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement),
+                        {},
+                        class: "custom-select" %>
       </div>
-      <div class="row range-value">
-        <%= form.number_field :duration_minutes,
-                              id: "casa-contact-duration-minutes-display",
-                              min: 0,
-                              value: duration_minutes(case_contact),
-                              required: true %> &nbsp; <span> minute(s)</span>
-      </div>
-    </fieldset>
-  </div>
-  </div>
-  </div>
+    <% end %>
 
-  <div class="field occurred-at form-group">
-    <h2><%= form.label :occurred_at %></h2>
-    <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
-    <%= form.text_field :occurred_at,
-                        value: occurred_at.to_date,
-                        data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
-                        class: "form-control" %>
-  </div>
-
-  <div class="field miles-driven form-group">
-    <h2><%= form.label :miles_driven %></h2>
-    <% if form_type == 'new' && @case_contact.miles_driven == 0 %>
-      <input class="form-control" min="0" max="10000" type="number" value="" name="case_contact[miles_driven]" autocomplete="off" id="case_contact_miles_driven">
-    <% else %>
-      <%= form.number_field :miles_driven, class: "form-control", min: "0", max: 10000, placeholder: "0" %>
+    <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
+    <div class="field other-expenses form-group">
+      <h2><%= form.label :additional_expense %></h2>
+      <fieldset class="other-expense-amount additional_expense_multilines">
+        <% @case_contact.additional_expenses.any? ? expense_count = @case_contact.additional_expenses.length : expense_count = 0  %> 
+        <% if @case_contact.additional_expenses.any? %> 
+          <%= form.fields_for :additional_expenses do |ff| %>
+            <%= ff.number_field :other_expense_amount,
+            placeholder: "Enter amount", class: "form-control other-expense-amount", min: "0", max: 1000, step: 0.01 %>
+            <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",  class: "form-control other-expenses-describe" %>
+          <% end %>
+        <% end %>
+        <% (10 - expense_count).times do |i| %> 
+          <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
+            <%= ff.number_field :other_expense_amount,
+            placeholder: "Enter amount", class: "form-control other-expense-amount", min: "0", max: 1000, step: 0.01 %>
+            <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",  class: "form-control other-expenses-describe" %>
+          <% end %>
+        <% end %>
+        <%= link_to_add_fields "Add another expense", form, :additional_expenses %>
+      </fieldset>
+    </div>
     <% end %>
   </div>
 
-  <% if current_organization.show_driving_reimbursement %>
-    <div class="field want-driving-reimbursement form-group">
-      <h2><%= form.label :want_driving_reimbursement %></h2>
-      <%= form.select :want_driving_reimbursement,
-                      options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement),
-                      {},
-                      class: "custom-select" %>
-    </div>
-  <% end %>
-
-  <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
-  <div class="field other-expenses form-group">
-    <h2><%= form.label :additional_expense %></h2>
-    <fieldset class="other-expense-amount additional_expense_multilines">
-      <%= form.fields_for :additional_expenses do |ff| %>
-        <%= ff.number_field :other_expense_amount,
-        placeholder: "Enter amount", class: "form-control other-expense-amount", min: "0", max: 1000, step: 0.01 %>
-        <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
-class: "form-control other-expenses-describe" %>
-        <%= ff.hidden_field :id, value: ff.object.id %>
-      <% end %>
-      <%= link_to_add_fields "Add another expense", form, :additional_expenses %>
-    </fieldset>
-  </div>
-  <% end %>
-
-  <div class="field notes form-group">
+  <div class="field notes form-group field-card">
     <h2><%= form.label :notes %></h2>
     <%= form.text_area :notes, :rows => 5, placeholder: t("forms.case_contact.notes_placeholder"), class: "form-control" %>
   </div>
