@@ -83,7 +83,7 @@ RSpec.describe "Edit CASA Case", type: :system do
   context "logged in as supervisor" do
     let(:casa_org) { build(:casa_org) }
     let(:supervisor) { create(:supervisor, casa_org: casa_org) }
-    let(:casa_case) { create(:casa_case, :with_one_court_order, casa_org: casa_org) }
+    let(:casa_case) { create(:casa_case, :with_hearing_type, :with_one_court_order, casa_org: casa_org) }
     let!(:contact_type_group) { build(:contact_type_group, casa_org: casa_org) }
     let!(:contact_type_1) { create(:contact_type, name: "Youth", contact_type_group: contact_type_group) }
     let!(:contact_type_2) { build(:contact_type, name: "Supervisor", contact_type_group: contact_type_group) }
@@ -416,8 +416,7 @@ of it unless it was included in a previous court report.")
       it "is able to assign another hearing type to the case" do
         visit edit_casa_case_path(casa_case.id)
 
-        case_hearing = casa_case.hearing_type
-        expect(page).to have_select("Hearing type", selected: case_hearing.name)
+        expect(page).to have_select("Hearing type", selected: casa_case.hearing_type.name)
         select hearing_type.name, from: "casa_case_hearing_type_id"
 
         within ".actions" do
