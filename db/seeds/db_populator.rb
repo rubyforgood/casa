@@ -256,7 +256,7 @@ class DbPopulator
 
       # guarantee at least one transition aged youth case to "volunteer1"
       volunteer1 = Volunteer.find_by(email: "volunteer1@example.com")
-      if volunteer1.casa_cases.where(transition_aged_youth: true).blank?
+      if volunteer1.casa_cases.where("birth_month_year_youth <= ?", CasaCase::TRANSITION_AGE_YOUTH_DATE_CUTOFF).blank?
         rand(1..3).times do
           birth_month_year_youth = ((Date.today - 18.year)..(Date.today - 14.year)).to_a.sample
           volunteer1.casa_cases.find_or_create_by!(
