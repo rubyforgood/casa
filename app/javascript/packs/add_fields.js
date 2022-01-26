@@ -1,7 +1,7 @@
 class AddFields {
   constructor () {
     this.links = document.querySelectorAll('.add_fields')
-    let addLinkCount = 0
+    const addLinkCount = 0
     this.iterateLinks(addLinkCount)
   }
 
