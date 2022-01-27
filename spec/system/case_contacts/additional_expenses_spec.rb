@@ -76,6 +76,9 @@ RSpec.describe "addtional_expenses", type: :system do
     find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe").fill_in(with: "Toll")
 
     click_on "Add another expense"
+    expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount")
+    expect(page).to have_no_field("case_contact_additional_expenses_attributes_2_other_expense_amount")
+
     find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.22")
     find_by_id("case_contact_additional_expenses_attributes_1_other_expenses_describe").fill_in(with: "Another Toll")
 
@@ -89,6 +92,8 @@ RSpec.describe "addtional_expenses", type: :system do
     expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expenses_describe", with: "Toll")
     expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount", with: "7.22")
     expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expenses_describe", with: "Another Toll")
+    #Here Next
+    expect(page).to have_no_field("case_contact_additional_expenses_attributes_2_other_expense_amount")
 
     find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe").fill_in(with: "Breakfast")
     find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.23")
