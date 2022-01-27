@@ -29,6 +29,8 @@ class User < ApplicationRecord
   has_one :supervisor, through: :supervisor_volunteer
   has_one :preference_set, dependent: :destroy
 
+  has_many :notes, as: :notable
+
   scope :active, -> { where(active: true) }
 
   scope :inactive, -> { where(active: false) }

@@ -346,4 +346,64 @@ RSpec.describe "volunteers/edit", type: :system do
       end
     end
   end
+
+  context "logged in as an admin" do
+    before do
+      sign_in admin
+      visit edit_volunteer_path(volunteer)
+    end
+
+    it "can save notes about a volunteer" do
+      freeze_time do
+        current_date = Date.today
+        fill_in("note[content]", with: "Great job today.")
+        within(".notes") do
+          click_on("Save Note")
+        end
+
+        expect(current_path).to eq(edit_volunteer_path(volunteer))
+        within(".notes") do
+          expect(page).to have_text("Great job today.")
+          expect(page).to have_text(admin.display_name)
+          expect(page).to have_text(I18n.l(current_date.to_date, format: :standard, default: ""))
+        end
+      end
+    end
+  end
+
+  context "logged in as a supervisor" do
+    before do
+      volunteer.supervisor = create(:supervisor)
+      sign_in volunteer.supervisor
+      visit edit_volunteer_path(volunteer)
+    end
+
+    it "can save notes about a volunteer" do
+      freeze_time do
+        current_date = Date.today
+        fill_in("note[content]", with: "Great job today.")
+        within(".notes") do
+          click_on("Save Note")
+        end
+
+        expect(current_path).to eq(edit_volunteer_path(volunteer))
+        within(".notes") do
+          expect(page).to have_text("Great job today.")
+          expect(page).to have_text(volunteer.supervisor.display_name)
+          expect(page).to have_text(I18n.l(current_date.to_date, format: :standard, default: ""))
+        end
+      end
+    end
+  end
+
+  context "logged in as volunteer" do
+    before do
+      sign_in volunteer
+      visit edit_volunteer_path(volunteer)
+    end
+
+    it "can't see the notes section" do
+      expect(page).not_to have_selector(".notes")
+    end
+  end
 end
