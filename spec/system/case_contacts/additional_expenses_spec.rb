@@ -43,7 +43,6 @@ RSpec.describe "addtional_expenses", type: :system do
     expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expenses_describe", with: "Lunch")
     expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount")
     expect(page).to have_no_field("case_contact_additional_expenses_attributes_2_other_expense_amount")
-
   end
   it "additional expenses for multiple entries", js: true do
     FeatureFlagService.enable!("show_additional_expenses")
