@@ -266,12 +266,8 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "Occurred at", with: "04/04/2020"
       select "No", from: "Want driving reimbursement"
 
-      # fill_in "other_expense_amount-", with: "5.01"
-      # fill_in "other_expenses_describe-", with: "tolls"
       expect(page).to have_text("Add another expense")
       click_on "Add another expense"
-      # expect(page).to have_css("fieldset.other-expense-amount", :count => 2)
-      # page.all("input.other-expense-amount")[1].set("7.21")
       page.all("input.other-expense-amount").first.fill_in(with: "7.21")
       page.all("input.other-expenses-describe").first.fill_in(with: "Another Toll")
 
