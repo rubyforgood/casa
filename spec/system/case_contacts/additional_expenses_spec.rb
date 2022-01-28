@@ -102,7 +102,6 @@ RSpec.describe "addtional_expenses", type: :system do
     find_by_id("case_contact_additional_expenses_attributes_2_other_expense_amount").fill_in(with: "8.23")
     find_by_id("case_contact_additional_expenses_attributes_2_other_expenses_describe").fill_in(with: "Yet another toll")
 
-
     expect {
       click_on "Submit"
     }.to change(CaseContact, :count).by(0).and change(AdditionalExpense, :count).by(1)
@@ -156,10 +155,10 @@ RSpec.describe "addtional_expenses", type: :system do
       click_on "Add another expense"
       expect(page).to have_field("case_contact_additional_expenses_attributes_#{i}_other_expense_amount")
       expect(page).to have_field("case_contact_additional_expenses_attributes_#{i}_other_expenses_describe")
-      expect(page).to have_no_field("case_contact_additional_expenses_attributes_#{i+1}_other_expense_amount")
-      expect(page).to have_no_field("case_contact_additional_expenses_attributes_#{i+1}_other_expenses_describe")
+      expect(page).to have_no_field("case_contact_additional_expenses_attributes_#{i + 1}_other_expense_amount")
+      expect(page).to have_no_field("case_contact_additional_expenses_attributes_#{i + 1}_other_expenses_describe")
       find_by_id("case_contact_additional_expenses_attributes_#{i}_other_expense_amount").fill_in(with: "#{i}.11")
-      find_by_id("case_contact_additional_expenses_attributes_#{i}_other_expenses_describe").fill_in(with: "#{i+1} meal")
+      find_by_id("case_contact_additional_expenses_attributes_#{i}_other_expenses_describe").fill_in(with: "#{i + 1} meal")
     }
 
     expect {
