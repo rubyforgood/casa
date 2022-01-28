@@ -192,30 +192,5 @@ RSpec.describe "addtional_expenses", type: :system do
     expect(page).to have_no_field("case_contact_additional_expenses_attributes_10_other_expense_amount")
     expect(page).to have_no_field("case_contact_additional_expenses_attributes_10_other_expenses_describe")
     expect(page).to have_no_text("Add another expense")
-
-
-    # expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount", with: "7.22")
-    # expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expenses_describe", with: "Another Toll")
-    # expect(page).to have_field("case_contact_additional_expenses_attributes_2_other_expense_amount")
-
-    # find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe").fill_in(with: "Breakfast")
-    # find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.23")
-    # find_by_id("case_contact_additional_expenses_attributes_2_other_expense_amount").fill_in(with: "8.23")
-    # find_by_id("case_contact_additional_expenses_attributes_2_other_expenses_describe").fill_in(with: "Yet another toll")
-
-    # expect {
-    #   click_on "Submit"
-    # }.to change(CaseContact, :count).by(0).and change(AdditionalExpense, :count).by(1)
-
-    # visit edit_case_contact_path(casa_case.reload.case_contacts.last)
-    # expect(page).to have_text("Editing Case Contact")
-    # expect(page).to have_field("case_contact_additional_expenses_attributes_2_other_expense_amount", with: "8.23")
-    # expect(page).to have_field("case_contact_additional_expenses_attributes_2_other_expenses_describe", with: "Yet another toll")
-    # expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expenses_describe", with: "Breakfast")
-    # expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount", with: "7.23")
-    # expect(page).to have_field("case_contact_additional_expenses_attributes_3_other_expense_amount")
-    # expect(page).to have_no_field("case_contact_additional_expenses_attributes_4_other_expense_amount")
-    # click_on "Add another expense"
-    # expect(page).to have_field("case_contact_additional_expenses_attributes_4_other_expense_amount")
   end
 end
