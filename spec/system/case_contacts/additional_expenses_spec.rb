@@ -182,8 +182,8 @@ RSpec.describe "addtional_expenses", type: :system do
     expect(page).to have_field("case_contact_additional_expenses_attributes_9_other_expense_amount", with: "9.11")
     expect(page).to have_field("case_contact_additional_expenses_attributes_9_other_expenses_describe", with: "10 meal")
 
-    expect(page).to have_field("case_contact_additional_expenses_attributes_10_other_expense_amount") #should fail sb no field LEFT OFF HERE, SB no field 10!!!!! Add limiter to decorator at 10 count?
-    
+    expect(page).to have_no_field("case_contact_additional_expenses_attributes_10_other_expense_amount") #should fail sb no field LEFT OFF HERE, SB no field 10!!!!! Add limiter to decorator at 10 count?
+
     # expect(page).to have_field("case_contact_additional_expenses_attributes_10_other_expenses_describe") #should fail sb no field
 
 
