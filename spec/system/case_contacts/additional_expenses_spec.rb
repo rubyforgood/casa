@@ -43,6 +43,7 @@ RSpec.describe "addtional_expenses", type: :system do
     expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expenses_describe", with: "Lunch")
     expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount")
     expect(page).to have_no_field("case_contact_additional_expenses_attributes_2_other_expense_amount")
+    expect(page).to have_text("Add another expense")
   end
   it "additional expenses for multiple entries", js: true do
     FeatureFlagService.enable!("show_additional_expenses")
@@ -81,6 +82,7 @@ RSpec.describe "addtional_expenses", type: :system do
 
     find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.22")
     find_by_id("case_contact_additional_expenses_attributes_1_other_expenses_describe").fill_in(with: "Another Toll")
+    expect(page).to have_text("Add another expense")
 
     expect {
       click_on "Submit"
@@ -93,11 +95,13 @@ RSpec.describe "addtional_expenses", type: :system do
     expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount", with: "7.22")
     expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expenses_describe", with: "Another Toll")
     expect(page).to have_field("case_contact_additional_expenses_attributes_2_other_expense_amount")
+    expect(page).to have_text("Add another expense")
 
     find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe").fill_in(with: "Breakfast")
     find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.23")
     find_by_id("case_contact_additional_expenses_attributes_2_other_expense_amount").fill_in(with: "8.23")
     find_by_id("case_contact_additional_expenses_attributes_2_other_expenses_describe").fill_in(with: "Yet another toll")
+
 
     expect {
       click_on "Submit"
@@ -139,11 +143,14 @@ RSpec.describe "addtional_expenses", type: :system do
     fill_in "case-contact-duration-minutes", with: "45"
     fill_in "case_contact_miles_driven", with: "0"
 
+    expect(page).to have_text("Add another expense")
+
     expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount")
     expect(page).to have_no_field("case_contact_additional_expenses_attributes_1_other_expense_amount")
     expect(page).to have_no_field("case_contact_additional_expenses_attributes_1_other_expenses_describe")
     find_by_id("case_contact_additional_expenses_attributes_0_other_expense_amount").fill_in(with: "0.11")
     find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe").fill_in(with: "1 meal")
+    expect(page).to have_text("Add another expense")
 
     (1..9).each { |i|
       click_on "Add another expense"
@@ -182,10 +189,9 @@ RSpec.describe "addtional_expenses", type: :system do
     expect(page).to have_field("case_contact_additional_expenses_attributes_9_other_expense_amount", with: "9.11")
     expect(page).to have_field("case_contact_additional_expenses_attributes_9_other_expenses_describe", with: "10 meal")
 
-    expect(page).to have_no_field("case_contact_additional_expenses_attributes_10_other_expense_amount") #should fail sb no field LEFT OFF HERE, SB no field 10!!!!! Add limiter to decorator at 10 count?
-
-    # expect(page).to have_field("case_contact_additional_expenses_attributes_10_other_expenses_describe") #should fail sb no field
-
+    expect(page).to have_no_field("case_contact_additional_expenses_attributes_10_other_expense_amount")
+    expect(page).to have_no_field("case_contact_additional_expenses_attributes_10_other_expenses_describe")
+    expect(page).to have_no_text("Add another expense")
 
 
     # expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount", with: "7.22")
