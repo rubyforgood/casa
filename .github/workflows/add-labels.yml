@@ -10,10 +10,30 @@ jobs:
     name: Add help wanted labels
     steps:
       - name: Add help wanted labels
-        uses: rubyforgood/add-label-to-cards@v2.1
+        uses: rubyforgood/add-label-to-cards@v3
         id: add-help-wanted-labels
         with:
+          columns_labels: >
+            [
+              {
+                "column_name": "To do",
+                "labels": ["Help Wanted"],
+                "project_name": "CASA Volunteer Portal"
+              },
+              {
+                "column_name": "To do",
+                "labels": ["Stakeholder-Feature"],
+                "project_name": "Stakeholder Requested Features"
+              },
+              {
+                "column_name": "In progress",
+                "labels": ["Stakeholder-Feature"],
+                "project_name": "Stakeholder Requested Features"
+              },
+              {
+                "column_name": "Done",
+                "labels": ["Stakeholder-Feature"],
+                "project_name": "Stakeholder Requested Features"
+              }
+            ]
           token: ${{secrets.GITHUB_TOKEN}}
-          column_name: 'To do'
-          label_to_add: 'Help Wanted'
-          project_name: 'CASA Volunteer Portal'
