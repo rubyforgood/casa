@@ -404,6 +404,7 @@ RSpec.describe "volunteers/edit", type: :system do
 
     it "can't see the notes section" do
       expect(page).not_to have_selector(".notes")
+      expect(page).to have_content("Sorry, you are not authorized to perform this action.")
     end
   end
 end
