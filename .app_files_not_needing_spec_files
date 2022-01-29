@@ -69,3 +69,4 @@ values/user_parameters.rb
 values/volunteer_parameters.rb
 helpers/additional_expense_helper.rb
 models/feature_flag.rb
+controllers/notes_controller.rb
