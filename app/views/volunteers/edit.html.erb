@@ -42,6 +42,10 @@
   </div>
 </div>
 
+<% if current_user.casa_admin? || current_user.supervisor? %>
+  <%= render 'notes' %>
+<% end %>
+
 <%= render 'manage_cases' %>
 
 <%= render 'manage_supervisor' %>

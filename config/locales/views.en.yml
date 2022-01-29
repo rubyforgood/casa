@@ -453,6 +453,9 @@ en:
         other: All Volunteers
         zero: Assigned Volunteers
   volunteers:
+    edit:
+      notes_placeholder: "Enter a note regarding the volunteer. These notes are only visible to CASA administrators and supervisors."
+      note_submit: "Save Note"
     index:
       active: Active
       button:
@@ -497,4 +500,3 @@ en:
         created_by: Created By
         created_at: Created At
         actions: Actions
-
