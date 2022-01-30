@@ -1,0 +1,39 @@
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '0 * * * *'
+  workflow_dispatch: # Enable manual runs of the bot
+
+jobs:
+  add_help_wanted_labels:
+    runs-on: ubuntu-latest
+    name: Add help wanted labels
+    steps:
+      - name: Add help wanted labels
+        uses: rubyforgood/add-label-to-cards@v3
+        id: add-help-wanted-labels
+        with:
+          columns_labels: >
+            [
+              {
+                "column_name": "To do",
+                "labels": ["Help Wanted"],
+                "project_name": "CASA Volunteer Portal"
+              },
+              {
+                "column_name": "To do",
+                "labels": ["Stakeholder-Feature"],
+                "project_name": "Stakeholder Requested Features"
+              },
+              {
+                "column_name": "In progress",
+                "labels": ["Stakeholder-Feature"],
+                "project_name": "Stakeholder Requested Features"
+              },
+              {
+                "column_name": "Done",
+                "labels": ["Stakeholder-Feature"],
+                "project_name": "Stakeholder Requested Features"
+              }
+            ]
+          token: ${{secrets.GITHUB_TOKEN}}
