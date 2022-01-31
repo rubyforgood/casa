@@ -31,11 +31,8 @@ class CourtDatesController < ApplicationController
 
   def create
     @court_date = CourtDate.new(court_dates_params.merge(casa_case: @casa_case))
+    @casa_case.court_report_due_date = @court_date.date - 3.weeks
     authorize @court_date
-
-    if !@court_date.date.nil?
-      @casa_case.court_report_due_date = @court_date.date - 3.weeks
-    end
 
     if @court_date.save && @casa_case.save
       redirect_to casa_case_court_date_path(@casa_case, @court_date), notice: "Court date was successfully created."
