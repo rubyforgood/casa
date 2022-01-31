@@ -33,7 +33,7 @@ class CourtDatesController < ApplicationController
     @court_date = CourtDate.new(court_dates_params.merge(casa_case: @casa_case))
     authorize @court_date
 
-    if not @court_date.date.nil?
+    if !@court_date.date.nil?
       @casa_case.court_report_due_date = @court_date.date - 3.weeks
     end
 
