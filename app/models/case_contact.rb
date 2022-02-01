@@ -56,7 +56,9 @@ class CaseContact < ApplicationRecord
   }
   scope :has_transitioned, ->(has_transitioned = nil) {
     if /true|false/.match?(has_transitioned.to_s)
-      joins(:casa_case).where(casa_cases: {transition_aged_youth: has_transitioned})
+      operator = has_transitioned ? "<=" : ">"
+
+      joins(:casa_case).where("casa_cases.birth_month_year_youth #{operator} ?", 14.years.ago)
     end
   }
   scope :want_driving_reimbursement, ->(want_driving_reimbursement = nil) {
