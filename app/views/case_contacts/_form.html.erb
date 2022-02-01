@@ -31,8 +31,9 @@
   </div>
 
   <div class="form-group field-card">
+    <h2><%= "3. Enter Contact Details *" %></h2>
     <div class="field contact-type form-group">
-      <h2><%= form.label :contact_made %></h2>
+      <h5><%= form.label :contact_made, "a. Contact Made" %></h5>
       <div class="form-check">
         <%= form.radio_button :contact_made, true,
                         checked: case_contact.contact_made,
@@ -52,7 +53,7 @@
     </div>
 
     <div class="field contact-medium form-group">
-      <h2><%= form.label :medium_type, "Contact medium" %></h2>
+      <h5><%= form.label :medium_type, "b. Contact Medium" %></h5>
       <%= form.select :medium_type,
                       options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type),
                       {prompt: t(".prompt_select_one")},
@@ -60,7 +61,7 @@
                       required: true %>
     </div>
     <div class="field occurred-at form-group">
-      <h2><%= form.label :occurred_at %></h2>
+      <h5><%= form.label :occurred_at, "c. Occurred On" %></h5>
       <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
       <%= form.text_field :occurred_at,
                           value: occurred_at.to_date,
@@ -69,7 +70,7 @@
     </div>
 
     <div class="field duration-minutes form-group">
-      <h2><%= form.label "Duration" %></h2>
+      <h5><%= form.label "d. Duration of Meeting" %></h5>
       <div class="row slider-row">
         <fieldset class="col-sm-12 col-md-6">
           <legend>Hours</legend>
@@ -123,8 +124,9 @@
   </div>
 
   <div class="form-group field-card">
+    <h2><%= "4. Enter Travel Details *" %></h2>
     <div class="field miles-driven form-group">
-      <h2><%= form.label :miles_driven %></h2>
+      <h5><%= form.label :miles_driven, "a. Miles Driven" %></h5>
       <% if form_type == 'new' && @case_contact.miles_driven == 0 %>
         <input class="form-control" min="0" max="10000" type="number" value="" name="case_contact[miles_driven]" autocomplete="off" id="case_contact_miles_driven">
       <% else %>
@@ -134,7 +136,7 @@
 
     <% if current_organization.show_driving_reimbursement %>
       <div class="field want-driving-reimbursement form-group">
-        <h2><%= form.label :want_driving_reimbursement %></h2>
+        <h5><%= form.label :want_driving_reimbursement, "b. Want Driving Reimbursement" %></h5>
         <%= form.select :want_driving_reimbursement,
                         options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement),
                         {},
@@ -144,7 +146,7 @@
 
     <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
       <div class="field other-expenses form-group">
-        <h2><%= form.label :additional_expense %></h2>
+        <h5><%= form.label :additional_expense, "c. Other Expenses" %></h5>
         <fieldset class="other-expense-amount additional_expense_multilines">
           <% @case_contact.decorate.additional_expenses_count %>
           <% if @case_contact.additional_expenses.any? %>
@@ -180,7 +182,7 @@
   </div>
 
   <div class="field notes form-group field-card">
-    <h2><%= form.label :notes %></h2>
+    <h2><%= form.label :notes, "5. Enter Notes" %></h2>
     <%= form.text_area :notes, :rows => 5, placeholder: t("forms.case_contact.notes_placeholder"), class: "form-control" %>
   </div>
 
