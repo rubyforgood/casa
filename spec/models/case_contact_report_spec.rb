@@ -172,8 +172,8 @@ RSpec.describe CaseContactReport, type: :model do
     end
 
     describe "has transitioned behavior" do
-      let(:case_case_1) { build(:casa_case, transition_aged_youth: false) }
-      let(:case_case_2) { build(:casa_case, transition_aged_youth: true) }
+      let(:case_case_1) { build(:casa_case, birth_month_year_youth: 15.years.ago) }
+      let(:case_case_2) { build(:casa_case, birth_month_year_youth: 10.years.ago) }
 
       before(:each) do
         create(:case_contact, {casa_case: case_case_1})
@@ -181,20 +181,20 @@ RSpec.describe CaseContactReport, type: :model do
       end
 
       it "returns only case contacts the youth has transitioned" do
-        report = CaseContactReport.new({has_transitioned: false})
-        contacts = report.case_contacts
+        contacts = CaseContactReport.new(has_transitioned: false).case_contacts
+
         expect(contacts.length).to eq(1)
       end
 
       it "returns only case contacts the youth has transitioned" do
-        report = CaseContactReport.new({has_transitioned: true})
-        contacts = report.case_contacts
+        contacts = CaseContactReport.new(has_transitioned: true).case_contacts
+
         expect(contacts.length).to eq(1)
       end
 
       it "returns case contacts with both youth has transitioned and youth has not transitioned" do
-        report = CaseContactReport.new({has_transitioned: ""})
-        contacts = report.case_contacts
+        contacts = CaseContactReport.new(has_transitioned: "").case_contacts
+
         expect(contacts.length).to eq(2)
       end
     end
