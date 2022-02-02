@@ -6,11 +6,13 @@ on:
       - main
     paths:
       - '**.erb'
+      - '**.html'
   pull_request:
     branches:
       - main
     paths:
       - '**.erb'
+      - '**.html'
 
 jobs:
   erb_lint:
