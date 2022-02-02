@@ -52,14 +52,15 @@
       </div>
     </div>
 
-    <div class="field contact-medium form-group">
-      <h5><%= form.label :medium_type, "b. Contact Medium" %></h5>
-      <%= form.select :medium_type,
-                      options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type),
-                      {prompt: t(".prompt_select_one")},
-                      class: "custom-select col-sm-12 col-md-4",
-                      required: true %>
+    <h5><%= form.label :medium_type, "b. Contact Medium" %></h5>
+    <div class="field contact-type form-group">
+      <%# form is broken and need to shift the radio button to the right, has to do with form-check-input %>
+      <% contact_mediums.map do |rb| %>
+        <%= form.radio_button case_contact.medium_type, rb.value, required: true, class: "form-check form-check-input" %>
+        <%= form.label rb.label, class: "form-check form-check-label" %>
+      <% end %>
     </div>
+
     <div class="field occurred-at form-group">
       <h5><%= form.label :occurred_at, "c. Occurred On" %></h5>
       <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
