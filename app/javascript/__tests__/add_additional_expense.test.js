@@ -22,33 +22,21 @@ beforeEach(() => {
 })
 
 describe('Add Additional Expense tests', () => {
-  // test('Test link to add expenses is present', () => {
-  //   expect($('#add-another-expense').text()).toEqual("Add another expense")
-  // })
-  // test('Test that initial expense amount field is hidden', () => {
-  //   expect($('#case_contact_additional_expenses_attributes_1_other_expense_amount').is(':hidden')).toBe(true)
-  // })
-  // test('Test that initial expense describe field is hidden', () => {
-  //   expect($('#case_contact_additional_expenses_attributes_1_other_expenses_describe').is(':hidden')).toBe(true)
-  // })
+  test('Test link to add expenses is present', () => {
+    expect($('#add-another-expense').text()).toEqual("Add another expense")
+  })
+  test('Test that initial expense amount field is hidden', () => {
+    expect($('#case_contact_additional_expenses_attributes_1_other_expense_amount').is(':hidden')).toBe(true)
+  })
+  test('Test that initial expense describe field is hidden', () => {
+    expect($('#case_contact_additional_expenses_attributes_1_other_expenses_describe').is(':hidden')).toBe(true)
+  })
   test('Displays a new set of fields after a click', () => {
     
     require('../src/add_additional_expense')
 
     $('#add-additional-expense').trigger("click")
-    console.log("*** after click HEY***")
 
-    expect($('#case_contact_additional_expenses_attributes_1_other_expense_amount').is(':visible')).toBe(true)
-    
+    expect($('#case_contact_additional_expenses_attributes_1_other_expense_amount').css("display: inline-block"))
   })
 })
-
-
-/// the problem is that the link itself doesn't call the js
-
-// expect($('#case_contact_additional_expenses_attributes_1_other_expense_amount')).toBeVisible();
-// expect('Enter amount').toBeVisible();
-// expect(getByText('Enter amount')).toBeInDocument();
-// expect($('#case_contact_additional_expenses_attributes_1_other_expense_amount').is(':visible')).toBe(true)
-// expect($('#case_contact_additional_expenses_attributes_1_other_expense_amount').text()).toEqual('Enter amount')
-// app/javascript/src/add_additional_expense.js
