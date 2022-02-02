@@ -52,14 +52,13 @@
       </div>
     </div>
 
-    <h5><%= form.label :medium_type, "b. Contact Medium" %></h5>
-    <div class="field contact-type form-group">
+    
+    <div class="field contact-medium form-group">
+      <h5><%= form.label :medium_type, "b. Contact Medium" %></h5>
       <%# form is broken and need to shift the radio button to the right, has to do with form-check-input %>
-      <% contact_mediums.map do |rb| %>
-        <%= form.radio_button case_contact.medium_type, rb.value, required: true, class: "form-check form-check-input" %>
-        <%= form.label rb.label, class: "form-check form-check-label" %>
-      <% end %>
+        <%= form.collection_radio_buttons(:medium_type, contact_mediums, 'value', 'label') %>
     </div>
+
 
     <div class="field occurred-at form-group">
       <h5><%= form.label :occurred_at, "c. Occurred On" %></h5>
