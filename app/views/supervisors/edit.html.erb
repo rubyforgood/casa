@@ -93,7 +93,7 @@
 
     <h3><%= t(".assign_a_volunteer") %></h3>
 
-   <fieldset <%= 'disabled' unless @available_volunteers.any? %>>
+   <fieldset class="border-0" <%= 'disabled' unless @available_volunteers.any? %>>
       <%= form_for SupervisorVolunteer.new, url: supervisor_volunteers_path(supervisor_id: @supervisor.id) do |form| %>
 
         <div class='form-group'>
