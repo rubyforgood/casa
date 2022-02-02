@@ -25,6 +25,6 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         bundler-cache: true
-    - name: rake check_app_rb_files_for_spec_files
-      run: bundle exec rake check_app_rb_files_for_spec_files
+    - name: rake test_checker
+      run: bundle exec rake test_checker
 
