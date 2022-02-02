@@ -5,14 +5,14 @@ on:
     branches:
       - main
     paths:
-      - '**.erb'
-      - '**.html'
+      - '**/*.erb'
+      - '**/*.html'
   pull_request:
     branches:
       - main
     paths:
-      - '**.erb'
-      - '**.html'
+      - '**/*.erb'
+      - '**/*.html'
 
 jobs:
   erb_lint:
