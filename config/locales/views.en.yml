@@ -165,9 +165,9 @@ en:
     edit:
       title: Editing Case Contact
     form:
-      plural_label: Select all relevant CASA cases
+      plural_label: 1. Select all relevant CASA cases *
       prompt_select_one: Please Select One
-      singular_label: CASA case
+      singular_label: 1. Select relevant CASA case *
     new:
       title: New Case Contact
   casa_org:
