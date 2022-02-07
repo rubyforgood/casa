@@ -33,7 +33,7 @@
   "devDependencies": {
     "@webpack-cli/serve": "^1.6.1",
     "cypress": "^9.4.1",
-    "jest": "^27.4.7",
+    "jest": "^27.5.0",
     "markdown-toc": "^1.2.0",
     "standard": "^16.0.4",
     "start-server-and-test": "^1.14.0",
