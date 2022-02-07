@@ -71,57 +71,26 @@
                           class: "form-control" %>
     </div>
 
-    <div class="field duration-minutes form-group">
+    <div class="field form-group">
       <h5><%= form.label "d. Duration of Meeting" %></h5>
-      <div class="row slider-row">
-        <fieldset class="col-sm-12 col-md-6">
-          <legend>Hours</legend>
-          <div class="row slide-container">
-            <div>0</div>
-            <div class="slider col">
-              <%= form.range_field :duration_hours,
-                                  class: "custom-range slide",
-                                  id: "case-contact-duration-hours",
-                                  min: 0,
-                                  max: 23,
-                                  value: duration_hours(case_contact) %>
-            </div>
-            <div>23</div>
-          </div>
-          <div class="row range-value">
-            <%= form.number_field :duration_hours,
-                                id: "casa-contact-duration-hours-display",
-                                min: 0,
-                                value: duration_hours(case_contact),
-                                required: true %> &nbsp; <span> hour(s)</span>
-          </div>
-        </fieldset>
+      <div >
+        <div class="form-control duration-hours">
+          <%= form.number_field :duration_hours,
+                              id: "casa-contact-duration-hours-display",
+                              min: 0,
+                              value: duration_hours(case_contact),
+                              required: true %> &nbsp; <span> hour(s)</span>
+        </div>
       </div>
     </div>
-    <div class="row slider-row">
-      <fieldset class="col-sm-12 col-md-6">
-        <legend>Minutes</legend>
-        <div class="row slide-container">
-          <div>0</div>
-          <div class="slider col">
-            <%= form.range_field :duration_minutes,
-                                class: "custom-range slide",
-                                id: "case-contact-duration-minutes",
-                                min: 0,
-                                max: 59,
-                                step: 15,
-                                value: duration_minutes(case_contact) %>
-          </div>
-          <div>59</div>
-        </div>
-        <div class="row range-value">
-          <%= form.number_field :duration_minutes,
-                                id: "casa-contact-duration-minutes-display",
-                                min: 0,
-                                value: duration_minutes(case_contact),
-                                required: true %> &nbsp; <span> minute(s)</span>
-        </div>
-      </fieldset>
+    <div >
+      <div class="form-control duration-minutes">
+        <%= form.number_field :duration_minutes,
+                              id: "casa-contact-duration-minutes-display",
+                              min: 0,
+                              value: duration_minutes(case_contact),
+                              required: true %> &nbsp; <span> minute(s)</span>
+      </div>
     </div>
   </div>
 
