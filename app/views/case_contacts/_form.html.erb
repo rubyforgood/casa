@@ -74,20 +74,24 @@
     <div class="field form-group">
       <h5><%= form.label "d. Duration of Meeting" %></h5>
       <div >
-        <div class="form-control duration-hours">
+        <div class="duration-hours">
           <%= form.number_field :duration_hours,
-                              id: "casa-contact-duration-hours-display",
+                              id: "case-contact-duration-hours-display",
                               min: 0,
+                              class: "field",
+                              size: "10",
                               value: duration_hours(case_contact),
                               required: true %> &nbsp; <span> hour(s)</span>
         </div>
       </div>
     </div>
     <div >
-      <div class="form-control duration-minutes">
+      <div class="duration-minutes">
         <%= form.number_field :duration_minutes,
-                              id: "casa-contact-duration-minutes-display",
+                              id: "case-contact-duration-minutes-display",
                               min: 0,
+                              class: "field",
+                              size: "10",
                               value: duration_minutes(case_contact),
                               required: true %> &nbsp; <span> minute(s)</span>
       </div>
@@ -116,14 +120,14 @@
     <% end %>
 
     <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
-      <div class="field other-expenses form-group">
+      <div class="other-expenses">
         <h5><%= form.label :additional_expense, "c. Other Expenses" %></h5>
-        <fieldset class="other-expense-amount additional_expense_multilines">
+        <fieldset class="other-expense-amount">
           <% @case_contact.decorate.additional_expenses_count %>
           <% if @case_contact.additional_expenses.any? %>
             <%= form.fields_for :additional_expenses do |ff| %>
               <%= ff.number_field :other_expense_amount,
-              placeholder: "Enter amount", class: "form-control other-expense-amount", min: "0", max: 1000, step: 0.01 %>
+              placeholder: "Enter amount", class: "other-expense-amount", min: "0", max: 1000, step: 0.01 %>
               <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
               class: "form-control other-expenses-describe" %>
             <% end %>
@@ -131,18 +135,18 @@
           <% if @case_contact.decorate.additional_expenses_count < 10 %>
             <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
               <%= ff.number_field :other_expense_amount,
-              placeholder: "Enter amount", class: "form-control other-expense-amount",
+              placeholder: "Enter amount", class: "other-expense-amount",
               min: "0", max: 1000, step: 0.01 %>
               <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
-              class: "form-control other-expenses-describe" %>
+              class: "other-expenses-describe" %>
             <% end %>
             <% (9 - @case_contact.decorate.additional_expenses_count).times do |i| %>
               <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
                 <%= ff.number_field :other_expense_amount,
-                placeholder: "Enter amount", class: "form-control other-expense-amount hide-field",
+                placeholder: "Enter amount", class: "other-expense-amount hide-field",
                 min: "0", max: 1000, step: 0.01 %>
                 <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
-                class: "form-control other-expenses-describe hide-field" %>
+                class: "other-expenses-describe hide-field" %>
               <% end %>
             <% end %>
             <a href="#" class="add-another-expense" id="add-another-expense">Add another expense</a>
