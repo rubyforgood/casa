@@ -6,12 +6,12 @@
       <%= render "/shared/error_messages", resource: casa_admin %>
 
       <div class="field form-group">
-        <%= form.label :email %>
+        <%= form.label :email, t("common.email") %>
         <%= form.text_field :email, class: "form-control" %>
       </div>
 
       <div class="field form-group">
-        <%= form.label :display_name, t(".label.display_name") %>
+        <%= form.label :display_name, t("common.display_name") %>
         <%= form.text_field :display_name, class: "form-control" %>
       </div>
 

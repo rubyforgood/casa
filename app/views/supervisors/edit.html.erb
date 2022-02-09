@@ -6,7 +6,7 @@
       <%= render "/shared/error_messages", resource: @supervisor %>
 
       <div class="field form-group">
-        <%= form.label :email %>
+        <%= form.label :email, t("common.email") %>
         <% if policy(@supervisor).update_supervisor_email? %>
           <%= form.text_field :email, class: "form-control" %>
         <% else %>
@@ -15,7 +15,7 @@
       </div>
 
       <div class="field form-group">
-        <%= form.label :display_name %>
+        <%= form.label :display_name, t("common.display_name") %>
         <% if policy(@supervisor).update_supervisor_name? %>
           <%= form.text_field :display_name, class: "form-control" %>
         <% else %>
