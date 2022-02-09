@@ -31,7 +31,7 @@
   </div>
 
   <div class="form-group field-card">
-    <h2><%= "3. Enter Contact Details" %><span class="red-letter"> *</span></h2>
+    <h2><label for="case_contact_casa_case"><%= t(".contact_details") %></label><span class="red-letter"> *</span></h2>
     <div class="field contact-type form-group">
       <h5><%= form.label :contact_made, "a. Contact Made" %></h5>
       <div class="form-check">
@@ -99,7 +99,7 @@
   </div>
 
   <div class="form-group field-card">
-    <h2><%= "4. Enter Travel Details" %></h2>
+    <h2><label for="case_contact_casa_case"><%= t(".travel_details") %></label></h2>
     <div class="field miles-driven form-group">
       <h5><%= form.label :miles_driven, "a. Miles Driven" %></h5>
       <% if form_type == 'new' && @case_contact.miles_driven == 0 %>
@@ -149,7 +149,7 @@
                 class: "other-expenses-describe hide-field" %>
               <% end %>
             <% end %>
-            <a href="#" class="add-another-expense" id="add-another-expense">Add another expense</a>
+            <a href="#" class="add-another-expense pr-6" id="add-another-expense">Add another expense</a>
           <% end %>
         </fieldset>
       </div>
