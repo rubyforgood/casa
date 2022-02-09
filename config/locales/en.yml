@@ -93,7 +93,7 @@ en:
     none: None
     email: Email
     name: Name
-    display_name: Display Name
+    display_name: Display name
     address: Address
   date:
     formats:

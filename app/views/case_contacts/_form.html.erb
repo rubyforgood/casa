@@ -115,7 +115,7 @@
   </div>
 
   <div class="field occurred-at form-group">
-    <h2><%= form.label :occurred_at, t("occurred_at") %></h2>
+    <h2><%= form.label :occurred_at, t(".occurred_at") %></h2>
     <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
     <%= form.text_field :occurred_at,
                         value: occurred_at.to_date,
@@ -134,7 +134,7 @@
 
   <% if current_organization.show_driving_reimbursement %>
     <div class="field want-driving-reimbursement form-group">
-      <h2><%= form.label :want_driving_reimbursement, t(".want_drive_reimbursiment") %></h2>
+      <h2><%= form.label :want_driving_reimbursement, t(".want_driving_reimbursement") %></h2>
       <%= form.select :want_driving_reimbursement,
                       options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement),
                       {},

@@ -21,9 +21,9 @@ en:
         select_hearing_type: -Select Hearing Type-
         select_judge: -Select Judge-
       youth_birth_month_year: "Youth's Birth Month & Year"
-      case_number: Case Number
+      case_number: Case number
       court_details: Court Details
-      hearing_type: Hearing Type
+      hearing_type: Hearing type
       judge: Judge
       transigion_aged_youth: Transigion Aged Youth
       court_report_status: Court Report Status
@@ -113,7 +113,7 @@ en:
         deactivate: Deactivate
       deactive_text: Admin was deactivated on
       label:
-        display_name: Display Name
+        display_name: Display name
       prompt:
         mark_inactive_warning: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"
     new:
@@ -179,13 +179,13 @@ en:
       duration: Duration
       occurred_at: Occurred at
       miles_driven: Miles driven
-      want_drive_reimbursiment: Want drive reimbursiment
+      want_driving_reimbursement: Want driving reimbursement
       notes: Notes
       additional_expenses: Additional expenses
     new:
       title: New Case Contact
     contact_types: 
-      contact_types: Contact Types
+      contact_types: Contact types
   casa_org:
     contact_type_groups:
       button:
@@ -405,7 +405,7 @@ en:
         update: Update
       add_cout_date: Add Court Date
       judge: Judge
-      hearing_type: Hearing Type
+      hearing_type: Hearing type
     new:
       title: New Court Date
     show:
@@ -527,16 +527,16 @@ en:
       pick_displayed_columns: Pick displayed columns
       heading:
         amount: Amount
-        effective_date: Effective Date
+        effective_date: Effective date
         status: Active?
         created_by: Created By
         created_at: Created At
         actions: Actions
     form:
-      effective_date: Effective Date
+      effective_date: Effective date
       ammount: Amount
       is_active: Currently active?
   users:
     edit:
       email: Email
-      display_name: Display Name
+      display_name: Display name
