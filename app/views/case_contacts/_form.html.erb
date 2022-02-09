@@ -3,9 +3,9 @@
 
   <div class="field casa-case form-group field-card">
     <% if casa_cases.length > 1 %>
-      <h2><label for="case_contact_casa_case"><%= t(".plural_label") %></label></h2>
+      <h2><label for="case_contact_casa_case"><%= t(".plural_label") %><span class="red-letter"> *</span></label></h2>
     <% else %>
-      <h2><label for="case_contact_casa_case"><%= t(".singular_label") %></label></h2>
+      <h2><label for="case_contact_casa_case"><%= t(".singular_label") %><span class="red-letter"> *</span></label></h2>
     <% end %>
     <% casa_cases.each_with_index do |casa_case, index| %>
       <div class="form-check">
@@ -31,7 +31,7 @@
   </div>
 
   <div class="form-group field-card">
-    <h2><%= "3. Enter Contact Details *" %></h2>
+    <h2><%= "3. Enter Contact Details" %><span class="red-letter"> *</span></h2>
     <div class="field contact-type form-group">
       <h5><%= form.label :contact_made, "a. Contact Made" %></h5>
       <div class="form-check">
@@ -99,7 +99,7 @@
   </div>
 
   <div class="form-group field-card">
-    <h2><%= "4. Enter Travel Details *" %></h2>
+    <h2><%= "4. Enter Travel Details" %></h2>
     <div class="field miles-driven form-group">
       <h5><%= form.label :miles_driven, "a. Miles Driven" %></h5>
       <% if form_type == 'new' && @case_contact.miles_driven == 0 %>
