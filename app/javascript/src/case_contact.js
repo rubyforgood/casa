@@ -5,7 +5,7 @@ window.onload = function () {
   const milesDriven = document.getElementById('case_contact_miles_driven')
   if (!milesDriven) return
 
-  const durationHours = document.getElementById('cas   e-contact-duration-hours-display')
+  const durationHours = document.getElementById('case-contact-duration-hours-display')
   const durationMinutes = document.getElementById('case-contact-duration-minutes-display')
   const caseOccurredAt = document.getElementById('case_contact_occurred_at')
   const caseContactSubmit = document.getElementById('case-contact-submit')

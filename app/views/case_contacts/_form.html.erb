@@ -55,7 +55,7 @@
     <div class="field contact-medium form-group">
       <h5><%= form.label :medium_type, "b. Contact Medium" %></h5>
       <%= form.collection_radio_buttons(:medium_type, contact_mediums, 'value', 'label') do |b| %>
-        <div class = "form-check">
+        <div class="form-check">
           <%= b.radio_button(class: "form-check-input") %>
           <%= b.label(class: "form-check-label") %>
         </div>
@@ -68,12 +68,12 @@
       <%= form.text_field :occurred_at,
                           value: occurred_at.to_date,
                           data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
-                          class: "form-control" %>
+                          class: "form-control label-font-weight" %>
     </div>
 
     <div class="field form-group">
       <h5><label for="case_contact_casa_case"><%= t(".duration_meeting") %></label></h5>
-      <div >
+      <div>
         <div class="duration-hours">
           <%= form.number_field :duration_hours,
                               id: "case-contact-duration-hours-display",
@@ -81,11 +81,11 @@
                               class: "field",
                               size: "10",
                               value: duration_hours(case_contact),
-                              required: true %> &nbsp; <span> hour(s)</span>
+                              required: true %> &nbsp; <span class="label-font-weight"> hour(s)</span>
         </div>
       </div>
     </div>
-    <div >
+    <div>
       <div class="duration-minutes">
         <%= form.number_field :duration_minutes,
                               id: "case-contact-duration-minutes-display",
@@ -93,7 +93,7 @@
                               class: "field",
                               size: "10",
                               value: duration_minutes(case_contact),
-                              required: true %> &nbsp; <span> minute(s)</span>
+                              required: true %> &nbsp; <span class="label-font-weight"> minute(s)</span>
       </div>
     </div>
   </div>
