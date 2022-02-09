@@ -170,6 +170,7 @@ en:
       singular_label: 1. Select relevant CASA case
       contact_details: 3. Enter Contact Details
       travel_details: 4. Enter Travel Details
+      duration_meeting: d. Duration of Meeting
     new:
       title: New Case Contact
   casa_org:
