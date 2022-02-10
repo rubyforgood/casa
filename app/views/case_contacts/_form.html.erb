@@ -33,7 +33,7 @@
   <div class="form-group field-card">
     <h2><label for="case_contact_casa_case"><%= t(".contact_details") %></label><span class="red-letter"> *</span></h2>
     <div class="field contact-type form-group">
-      <h5><%= form.label :contact_made, "a. Contact Made" %></h5>
+      <h5><%= form.label :contact_made, t(".contact_made_label") %></h5>
       <div class="form-check">
         <%= form.radio_button :contact_made, true,
                         checked: case_contact.contact_made,
@@ -53,7 +53,7 @@
     </div>
 
     <div class="field contact-medium form-group">
-      <h5><%= form.label :medium_type, "b. Contact Medium" %></h5>
+      <h5><%= form.label :medium_type, t(".contact_medium") %></h5>
       <%= form.collection_radio_buttons(:medium_type, contact_mediums, 'value', 'label') do |b| %>
         <div class="form-check">
           <%= b.radio_button(class: "form-check-input") %>
@@ -63,7 +63,7 @@
     </div>
 
     <div class="field occurred-at form-group">
-      <h5><%= form.label :occurred_at, "c. Occurred On" %></h5>
+      <h5><%= form.label :occurred_at, t(".occurred_on") %></h5>
       <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
       <%= form.text_field :occurred_at,
                           value: occurred_at.to_date,
@@ -100,7 +100,7 @@
   <div class="form-group field-card">
     <h2><label for="case_contact_casa_case"><%= t(".travel_details") %></label></h2>
     <div class="field miles-driven form-group">
-      <h5><%= form.label :miles_driven, "a. Miles Driven" %></h5>
+      <h5><%= form.label :miles_driven, t(".miles_driven") %></h5>
       <% if form_type == 'new' && @case_contact.miles_driven == 0 %>
         <input class="form-control" min="0" max="10000" type="number" value="" name="case_contact[miles_driven]" autocomplete="off" id="case_contact_miles_driven">
       <% else %>
@@ -110,7 +110,7 @@
 
     <% if current_organization.show_driving_reimbursement %>
       <div class="field want-driving-reimbursement form-group">
-        <h5><%= form.label :want_driving_reimbursement, "b. Want Driving Reimbursement" %></h5>
+        <h5><%= form.label :want_driving_reimbursement, t(".driving_reimburse_label") %></h5>
         <%= form.select :want_driving_reimbursement,
                         options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement),
                         {},
@@ -120,7 +120,7 @@
 
     <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
       <div class="other-expenses">
-        <h5><%= form.label :additional_expense, "c. Other Expenses" %></h5>
+        <h5><%= form.label :additional_expense, t(".other_expenses") %></h5>
         <div class="other-expense-amount">
           <% @case_contact.decorate.additional_expenses_count %>
           <% if @case_contact.additional_expenses.any? %>
