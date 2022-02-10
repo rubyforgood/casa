@@ -111,10 +111,20 @@
     <% if current_organization.show_driving_reimbursement %>
       <div class="field want-driving-reimbursement form-group">
         <h5><%= form.label :want_driving_reimbursement, t(".driving_reimburse_label") %></h5>
-        <%= form.select :want_driving_reimbursement,
-                        options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement),
-                        {},
-                        class: "custom-select" %>
+        <div class="form-check">
+          <%= form.radio_button :want_driving_reimbursement, true,
+                          required: false,
+                          class: 'form-check-input' %>
+          <%= form.label "Yes", class: "form-check-label",
+                          for: "want_driving_reimbursement_made_true" %>
+        </div>
+        <div class="form-check">
+          <%= form.radio_button :want_driving_reimbursement, false,
+                          required: false,
+                          class: 'form-check-input' %>
+          <%= form.label "No", class: "form-check-label",
+                          for: "want_driving_reimbursement_made_false" %>
+        </div>
       </div>
     <% end %>
 
