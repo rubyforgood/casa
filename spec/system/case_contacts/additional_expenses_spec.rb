@@ -20,11 +20,11 @@ RSpec.describe "addtional_expenses", type: :system do
 
     check "School"
     choose "Yes"
-    select "Video", from: "case_contact[medium_type]"
+    choose "Video"
     fill_in "case_contact_occurred_at", with: "04/04/2020"
 
-    fill_in "case-contact-duration-hours", with: "1"
-    fill_in "case-contact-duration-minutes", with: "45"
+    fill_in "case-contact-duration-hours-display", with: "1"
+    fill_in "case-contact-duration-minutes-display", with: "45"
     fill_in "case_contact_miles_driven", with: "0"
 
     expect(page).to have_text("Add another expense")
@@ -63,11 +63,11 @@ RSpec.describe "addtional_expenses", type: :system do
 
     check "School"
     choose "Yes"
-    select "Video", from: "case_contact[medium_type]"
+    choose "Video"
     fill_in "case_contact_occurred_at", with: "04/04/2020"
 
-    fill_in "case-contact-duration-hours", with: "1"
-    fill_in "case-contact-duration-minutes", with: "45"
+    fill_in "case-contact-duration-hours-display", with: "1"
+    fill_in "case-contact-duration-minutes-display", with: "45"
     fill_in "case_contact_miles_driven", with: "0"
 
     expect(page).to have_text("Add another expense")
@@ -135,11 +135,11 @@ RSpec.describe "addtional_expenses", type: :system do
 
     check "School"
     choose "Yes"
-    select "Video", from: "case_contact[medium_type]"
+    choose "Video"
     fill_in "case_contact_occurred_at", with: "04/04/2020"
 
-    fill_in "case-contact-duration-hours", with: "1"
-    fill_in "case-contact-duration-minutes", with: "45"
+    fill_in "case-contact-duration-hours-display", with: "1"
+    fill_in "case-contact-duration-minutes-display", with: "45"
     fill_in "case_contact_miles_driven", with: "0"
 
     expect(page).to have_text("Add another expense")

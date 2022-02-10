@@ -31,11 +31,11 @@ RSpec.describe "case_contacts/new", type: :system do
       check "School"
       check "Therapist"
       choose "Yes"
-      select "Video", from: "case_contact[medium_type]"
+      choose "Video"
       fill_in "case_contact_occurred_at", with: "04/04/2020"
 
-      fill_in "case-contact-duration-hours", with: "1"
-      fill_in "case-contact-duration-minutes", with: "45"
+      fill_in "case-contact-duration-hours-display", with: "1"
+      fill_in "case-contact-duration-minutes-display", with: "45"
       fill_in "case_contact_miles_driven", with: "0"
 
       expect {
@@ -62,10 +62,10 @@ RSpec.describe "case_contacts/new", type: :system do
       check "School"
       check "Therapist"
       choose "Yes"
-      select "Video", from: "case_contact[medium_type]"
+      choose "Video"
       fill_in "case_contact_occurred_at", with: "04/04/2020"
-      fill_in "case-contact-duration-hours", with: "1"
-      fill_in "case-contact-duration-minutes", with: "45"
+      fill_in "case-contact-duration-hours-display", with: "1"
+      fill_in "case-contact-duration-minutes-display", with: "45"
       fill_in "case_contact_miles_driven", with: "0"
 
       short_notes = "Hello world!"
@@ -98,10 +98,10 @@ RSpec.describe "case_contacts/new", type: :system do
       check "School"
       check "Therapist"
       choose "Yes"
-      select "Video", from: "case_contact[medium_type]"
+      choose "Video"
       fill_in "case_contact_occurred_at", with: "04/04/2020"
-      fill_in "case-contact-duration-hours", with: "1"
-      fill_in "case-contact-duration-minutes", with: "45"
+      fill_in "case-contact-duration-hours-display", with: "1"
+      fill_in "case-contact-duration-minutes-display", with: "45"
       fill_in "case_contact_miles_driven", with: "0"
 
       long_notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."\
@@ -149,10 +149,10 @@ RSpec.describe "case_contacts/new", type: :system do
         check "School"
         check "Therapist"
         choose "Yes"
-        select "Video", from: "case_contact[medium_type]"
+        choose "Video"
         fill_in "case_contact_occurred_at", with: "04/04/2020"
-        fill_in "case-contact-duration-hours", with: "0"
-        fill_in "case-contact-duration-minutes", with: "5"
+        fill_in "case-contact-duration-hours-display", with: "0"
+        fill_in "case-contact-duration-minutes-display", with: "5"
 
         expect {
           click_on "Submit"
@@ -177,13 +177,13 @@ RSpec.describe "case_contacts/new", type: :system do
         check "School"
         check "Therapist"
         choose "Yes"
-        select "Video", from: "case_contact[medium_type]"
+        choose "Video"
         fill_in "case_contact_occurred_at", with: "04/04/2020"
         note_content = "<h1>Hello world</h1>"
 
         fill_in "case_contact_miles_driven", with: "0"
-        fill_in "case-contact-duration-hours", with: "1"
-        fill_in "case-contact-duration-minutes", with: "45"
+        fill_in "case-contact-duration-hours-display", with: "1"
+        fill_in "case-contact-duration-minutes-display", with: "45"
         fill_in "Notes", with: note_content
         click_on "Submit"
 
@@ -242,7 +242,7 @@ RSpec.describe "case_contacts/new", type: :system do
   end
 
   context "volunteer user" do
-    it "is successful without miles driven or driving reimbursement", js: true do
+    it "is successful without a. Miles Driven or driving reimbursement", js: true do
       FeatureFlagService.enable!(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
       organization = build(:casa_org)
       build(:contact_type_group, name: "Empty", casa_org: organization)
@@ -260,11 +260,11 @@ RSpec.describe "case_contacts/new", type: :system do
       check "School"
       check "Therapist"
       choose "Yes"
-      select "In Person", from: "Contact medium"
-      fill_in "case-contact-duration-hours", with: "1"
-      fill_in "case-contact-duration-minutes", with: "45"
-      fill_in "Occurred at", with: "04/04/2020"
-      select "No", from: "Want driving reimbursement"
+      choose "In Person"
+      fill_in "case-contact-duration-hours-display", with: "1"
+      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "c. Occurred On", with: "04/04/2020"
+      select "No", from: "b. Want Driving Reimbursement"
 
       expect(page).to have_text("Add another expense")
       click_on "Add another expense"
@@ -304,12 +304,12 @@ RSpec.describe "case_contacts/new", type: :system do
       check "School"
       check "Therapist"
       choose "Yes"
-      select "In Person", from: "Contact medium"
-      fill_in "case-contact-duration-hours", with: "1"
-      fill_in "case-contact-duration-minutes", with: "45"
-      fill_in "Occurred at", with: "04/04/2020"
-      fill_in "Miles driven", with: "30"
-      select "Yes", from: "Want driving reimbursement"
+      choose "In Person"
+      fill_in "case-contact-duration-hours-display", with: "1"
+      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "c. Occurred On", with: "04/04/2020"
+      fill_in "a. Miles Driven", with: "30"
+      select "Yes", from: "b. Want Driving Reimbursement"
       fill_in "Notes", with: "Hello world"
 
       # Allow 5 seconds for the Notes to be saved in localstorage
@@ -331,11 +331,11 @@ RSpec.describe "case_contacts/new", type: :system do
       visit new_case_contact_path
 
       choose "Yes"
-      select "In Person", from: "Contact medium"
-      fill_in "case-contact-duration-hours", with: "1"
-      fill_in "case-contact-duration-minutes", with: "45"
-      fill_in "Miles driven", with: "30"
-      select "Yes", from: "Want driving reimbursement"
+      choose "In Person"
+      fill_in "case-contact-duration-hours-display", with: "1"
+      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "a. Miles Driven", with: "30"
+      select "Yes", from: "b. Want Driving Reimbursement"
       fill_in "Notes", with: "Hello world"
 
       # Allow 5 seconds for the Notes to be saved in localstorage
@@ -362,12 +362,12 @@ RSpec.describe "case_contacts/new", type: :system do
       check "School"
       check "Therapist"
       choose "Yes"
-      select "In Person", from: "Contact medium"
-      fill_in "case-contact-duration-hours", with: "1"
-      fill_in "case-contact-duration-minutes", with: "45"
-      fill_in "Occurred at", with: "04/04/2020"
-      fill_in "Miles driven", with: "30"
-      select "Yes", from: "Want driving reimbursement"
+      choose "In Person"
+      fill_in "case-contact-duration-hours-display", with: "1"
+      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "c. Occurred On", with: "04/04/2020"
+      fill_in "a. Miles Driven", with: "30"
+      select "Yes", from: "b. Want Driving Reimbursement"
       fill_in "Notes", with: ""
 
       expect(page).not_to have_text("error")
@@ -391,12 +391,12 @@ RSpec.describe "case_contacts/new", type: :system do
       check "School"
       check "Therapist"
       choose "Yes"
-      select "In Person", from: "Contact medium"
-      fill_in "case-contact-duration-hours", with: "1"
-      fill_in "case-contact-duration-minutes", with: "45"
-      fill_in "Occurred at", with: "04/04/2020"
-      fill_in "Miles driven", with: "30"
-      select "Yes", from: "Want driving reimbursement"
+      choose "In Person"
+      fill_in "case-contact-duration-hours-display", with: "1"
+      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "c. Occurred On", with: "04/04/2020"
+      fill_in "a. Miles Driven", with: "30"
+      select "Yes", from: "b. Want Driving Reimbursement"
       fill_in "Notes", with: "This is the note"
 
       expect(page).not_to have_text("error")
@@ -422,12 +422,12 @@ RSpec.describe "case_contacts/new", type: :system do
       check "School"
       check "Therapist"
       choose "Yes"
-      select "In Person", from: "Contact medium"
-      fill_in "case-contact-duration-hours", with: "1"
-      fill_in "case-contact-duration-minutes", with: "45"
-      fill_in "Occurred at", with: "04/04/2020"
-      fill_in "Miles driven", with: "30"
-      select "Yes", from: "Want driving reimbursement"
+      choose "In Person"
+      fill_in "case-contact-duration-hours-display", with: "1"
+      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "c. Occurred On", with: "04/04/2020"
+      fill_in "a. Miles Driven", with: "30"
+      select "Yes", from: "b. Want Driving Reimbursement"
       fill_in "Notes", with: "This is the note"
 
       expect(page).not_to have_text("error")
@@ -453,20 +453,20 @@ RSpec.describe "case_contacts/new", type: :system do
         check "School"
         check "Therapist"
         choose "Yes"
-        select "In Person", from: "Contact medium"
-        fill_in "case-contact-duration-hours", with: "1"
-        fill_in "case-contact-duration-minutes", with: "45"
+        choose "In Person"
+        fill_in "case-contact-duration-hours-display", with: "1"
+        fill_in "case-contact-duration-minutes-display", with: "45"
         # Future date: invalid
 
         alert_msg = page.accept_alert do
-          fill_in "Occurred at", with: future_date.strftime("%Y/%m/%d\n")
+          fill_in "c. Occurred On", with: future_date.strftime("%Y/%m/%d\n")
         end
         expect(alert_msg).to eq("Case Contact Occurrences cannot be in the future.") # js validation
 
-        fill_in "Occurred at", with: 2.days.ago.strftime("%Y/%m/%d\n")
+        fill_in "c. Occurred On", with: 2.days.ago.strftime("%Y/%m/%d\n")
 
-        fill_in "Miles driven", with: "0"
-        select "Yes", from: "Want driving reimbursement"
+        fill_in "a. Miles Driven", with: "0"
+        select "Yes", from: "b. Want Driving Reimbursement"
         fill_in "Notes", with: "Hello world"
 
         click_on "Submit"
@@ -481,12 +481,12 @@ RSpec.describe "case_contacts/new", type: :system do
         expect(page).to have_checked_field("School")
         expect(page).to have_checked_field("Therapist")
         expect(page).to have_checked_field("Yes")
-        expect(page).to have_select("Contact medium", selected: "In Person")
-        expect(page).to have_field("case-contact-duration-hours", with: "1")
-        expect(page).to have_field("case-contact-duration-minutes", with: "45")
-        expect(page).to have_field("Occurred at", with: 2.days.ago.strftime("%Y-%m-%d"))
-        expect(page).to have_field("Miles driven", with: nil)
-        expect(page).to have_select("Want driving reimbursement", selected: "Yes")
+        expect(page).to have_checked_field("In Person")
+        expect(page).to have_field("case-contact-duration-hours-display", with: "1")
+        expect(page).to have_field("case-contact-duration-minutes-display", with: "45")
+        expect(page).to have_field("c. Occurred On", with: 2.days.ago.strftime("%Y-%m-%d"))
+        expect(page).to have_field("a. Miles Driven", with: nil)
+        expect(page).to have_select("b. Want Driving Reimbursement", selected: "Yes")
         expect(page).to have_field("Notes", with: "Hello world")
       end
     end
@@ -504,32 +504,32 @@ RSpec.describe "case_contacts/new", type: :system do
         check volunteer_casa_case_one.case_number
         check "School"
         check "Therapist"
-        select "In Person", from: "Contact medium"
-        fill_in "case-contact-duration-hours", with: "1"
-        fill_in "case-contact-duration-minutes", with: "45"
+        choose "In Person"
+        fill_in "case-contact-duration-hours-display", with: "1"
+        fill_in "case-contact-duration-minutes-display", with: "45"
         # Future date: invalid
-        fill_in "Occurred at", with: 2.days.ago.strftime("%Y-%m-%d")
-        fill_in "Miles driven", with: "0"
-        select "Yes", from: "Want driving reimbursement"
+        fill_in "c. Occurred On", with: 2.days.ago.strftime("%Y-%m-%d")
+        fill_in "a. Miles Driven", with: "0"
+        select "Yes", from: "b. Want Driving Reimbursement"
         fill_in "Notes", with: "Hello world"
 
         expect {
           click_on "Submit"
         }.not_to change(CaseContact, :count)
 
-        expect(page).not_to have_text("Must enter miles driven to receive driving reimbursement.")
+        expect(page).not_to have_text("Must enter a. Miles Driven to receive driving reimbursement.")
         expect(page).to have_checked_field(volunteer_casa_case_one.case_number)
         expect(page).to have_unchecked_field("Attorney")
         expect(page).to have_checked_field("School")
         expect(page).to have_checked_field("Therapist")
         expect(page).not_to have_checked_field("Yes")
         expect(page).not_to have_checked_field("No")
-        expect(page).to have_select("Contact medium", selected: "In Person")
-        expect(page).to have_field("case-contact-duration-hours", with: "1")
-        expect(page).to have_field("case-contact-duration-minutes", with: "45")
-        expect(page).to have_field("Occurred at", with: 2.days.ago.strftime("%Y/%m/%d"))
-        expect(page).to have_field("Miles driven", with: "0")
-        expect(page).to have_select("Want driving reimbursement", selected: "Yes")
+        expect(page).to have_checked_field("In Person")
+        expect(page).to have_field("case-contact-duration-hours-display", with: "1")
+        expect(page).to have_field("case-contact-duration-minutes-display", with: "45")
+        expect(page).to have_field("c. Occurred On", with: 2.days.ago.strftime("%Y/%m/%d"))
+        expect(page).to have_field("a. Miles Driven", with: "0")
+        expect(page).to have_select("b. Want Driving Reimbursement", selected: "Yes")
         expect(page).to have_field("Notes", with: "Hello world")
       end
     end
@@ -580,7 +580,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
         visit new_case_contact_path
 
-        expect(page).not_to have_field("Want driving reimbursement")
+        expect(page).not_to have_field("b. Want Driving Reimbursement")
       end
     end
 

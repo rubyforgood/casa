@@ -30,6 +30,6 @@ RSpec.describe "casa_cases/new", type: :view do
     end
 
     it { is_expected.not_to include(CGI.escapeHTML("Youth's Birth Month & Year")) }
-    it { is_expected.to have_selector("label", text: "Contact types") }
+    it { is_expected.to have_selector("label", text: "2. Select All Contact Types") }
   end
 end
