@@ -74,7 +74,6 @@ legend {
 }
 
 .text-field-border {
-    // width: 100%;
     height: calc(1.5em + .75rem + 2px);
     padding: .375rem .75rem;
     font-size: 1rem;
@@ -90,3 +89,9 @@ legend {
 .add-expense-link {
     display: block;
 }
+
+.pr-7 {
+    padding-right: 1.5rem !important;
+    padding-left: 2.5rem !important;
+}
+
