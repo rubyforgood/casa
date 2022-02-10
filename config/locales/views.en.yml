@@ -25,7 +25,7 @@ en:
       court_details: Court Details
       hearing_type: Hearing type
       judge: Judge
-      transigion_aged_youth: Transigion Aged Youth
+      transition_aged_youth: Transition Aged Youth
       court_report_status: Court Report Status
     inactive_case:
       notice: Case was deactivated on
