@@ -5,13 +5,13 @@
     <%= form_with(model: judge, local: true) do |form| %>
       <%= render "/shared/error_messages", resource: judge %>
       <div class="field form-group">
-        <%= form.label :name %>
+        <%= form.label :name, t("common.name") %>
         <%= form.text_field :name, class: "form-control" %>
       </div>
       <div class="field form-group">
         <div class="form-check">
           <%= form.check_box :active, class: 'form-check-input' %>
-          <%= form.label :active, class: 'form-check-label' %>
+          <%= form.label :active, t(".active"), class: 'form-check-label' %>
         </div>
       </div>
       <div class="actions">

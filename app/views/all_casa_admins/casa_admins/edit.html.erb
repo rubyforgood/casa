@@ -6,7 +6,7 @@
       <%= render "/shared/error_messages", resource: @casa_admin %>
 
       <div class="field form-group">
-        <%= form.label :email %>
+        <%= form.label :email, t("common.email") %>
         <%= form.email_field :email, class: "form-control" %>
       </div>
       <% if @casa_admin.persisted? %>

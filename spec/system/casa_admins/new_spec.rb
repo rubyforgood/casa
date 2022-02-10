@@ -18,13 +18,13 @@ RSpec.describe "casa_admins/new", type: :system do
     expect(page).to have_content "Display name can't be blank"
 
     fill_in "Email", with: "invalid email"
-    fill_in "Display Name", with: "Freddy"
+    fill_in "Display name", with: "Freddy"
     click_button "Submit"
     expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
     expect(page).to have_content "Email is invalid"
 
     fill_in "Email", with: "valid@example.com"
-    fill_in "Display Name", with: "Freddy Valid"
+    fill_in "Display name", with: "Freddy Valid"
     click_button "Submit"
     expect(page).to have_content "New admin created successfully"
     expect(page).to have_content "valid@example.com"
@@ -36,7 +36,7 @@ RSpec.describe "casa_admins/new", type: :system do
 
     click_on "New Admin"
     fill_in "Email", with: "valid@example.com"
-    fill_in "Display Name", with: "Freddy Valid"
+    fill_in "Display name", with: "Freddy Valid"
     click_button "Submit"
     expect(page).to have_content "Email has already been taken"
 

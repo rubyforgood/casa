@@ -30,13 +30,13 @@
       checkbox_tag_name: "case_contact[case_contact_contact_type_attributes][][contact_type_id]" %>
 
   <div class="field contact-type form-group">
-    <h2><%= form.label :contact_made %></h2>
+    <h2><%= form.label :contact_made, t(".contact_made") %></h2>
     <div class="form-check">
       <%= form.radio_button :contact_made, true,
                       checked: case_contact.contact_made,
                       required: true,
                       class: 'form-check-input' %>
-      <%= form.label "Yes", class: "form-check-label",
+      <%= form.label t("common.yes_text"), class: "form-check-label",
                       for: "case_contact_contact_made_true" %>
     </div>
     <div class="form-check">
@@ -44,13 +44,13 @@
                       checked: set_contact_made_false(case_contact),
                       required: true,
                       class: 'form-check-input' %>
-      <%= form.label "No", class: "form-check-label",
+      <%= form.label t("common.no_text"), class: "form-check-label",
                       for: "case_contact_contact_made_false" %>
     </div>
   </div>
 
   <div class="field contact-medium form-group">
-    <h2><%= form.label :medium_type, "Contact medium" %></h2>
+    <h2><%= form.label :medium_type, t(".contact_medium") %></h2>
     <%= form.select :medium_type,
                     options_from_collection_for_select(contact_mediums, 'value', 'label', case_contact.medium_type),
                     {prompt: t(".prompt_select_one")},
@@ -59,7 +59,7 @@
   </div>
 
   <div class="field duration-minutes form-group">
-    <h2><%= form.label "Duration" %></h2>
+    <h2><%= form.label :duration, t(".duration") %></h2>
     <div class="row slider-row">
       <fieldset class="col-sm-12 col-md-6">
         <legend>Hours</legend>
@@ -115,7 +115,7 @@
   </div>
 
   <div class="field occurred-at form-group">
-    <h2><%= form.label :occurred_at %></h2>
+    <h2><%= form.label :occurred_at, t(".occurred_at") %></h2>
     <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
     <%= form.text_field :occurred_at,
                         value: occurred_at.to_date,
@@ -124,7 +124,7 @@
   </div>
 
   <div class="field miles-driven form-group">
-    <h2><%= form.label :miles_driven %></h2>
+    <h2><%= form.label :miles_driven, t(".miles_driven") %></h2>
     <% if form_type == 'new' && @case_contact.miles_driven == 0 %>
       <input class="form-control" min="0" max="10000" type="number" value="" name="case_contact[miles_driven]" autocomplete="off" id="case_contact_miles_driven">
     <% else %>
@@ -134,7 +134,7 @@
 
   <% if current_organization.show_driving_reimbursement %>
     <div class="field want-driving-reimbursement form-group">
-      <h2><%= form.label :want_driving_reimbursement %></h2>
+      <h2><%= form.label :want_driving_reimbursement, t(".want_driving_reimbursement") %></h2>
       <%= form.select :want_driving_reimbursement,
                       options_for_select([['Yes', true], ['No', false]], case_contact.want_driving_reimbursement),
                       {},
@@ -144,7 +144,7 @@
 
   <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
     <div class="field other-expenses form-group">
-      <h2><%= form.label :additional_expense %></h2>
+      <h2><%= form.label :additional_expense, t(".additional_expenses") %></h2>
       <fieldset class="other-expense-amount additional_expense_multilines">
         <% @case_contact.decorate.additional_expenses_count %>
         <% if @case_contact.additional_expenses.any? %>
@@ -170,7 +170,7 @@
   <% end %>
 
   <div class="field notes form-group">
-    <h2><%= form.label :notes %></h2>
+    <h2><%= form.label :notes, t(".notes") %></h2>
     <%= form.text_area :notes, :rows => 5, placeholder: t("forms.case_contact.notes_placeholder"), class: "form-control" %>
   </div>
 

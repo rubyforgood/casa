@@ -19,7 +19,7 @@ RSpec.describe "mileage_rates/new", type: :system do
     click_on "Save Mileage Rate"
 
     expect(page).to have_text("Mileage Rates")
-    expect(page).to have_text("Effective Date")
+    expect(page).to have_text("Effective date")
     expect(page).to have_text("January 1, 2020")
     expect(page).to have_text("Amount")
     expect(page).to have_text("$1.35")

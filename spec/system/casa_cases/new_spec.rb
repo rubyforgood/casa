@@ -28,8 +28,8 @@ RSpec.describe "casa_cases/new", type: :system do
         select "March", from: "casa_case_birth_month_year_youth_2i"
         select fourteen_years, from: "casa_case_birth_month_year_youth_1i"
 
-        check "Transition aged youth"
-        has_checked_field? "Transition aged youth"
+        check "Transition Aged Youth"
+        has_checked_field? "Transition Aged Youth"
 
         select "Submitted", from: "casa_case_court_report_status"
 

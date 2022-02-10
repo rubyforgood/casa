@@ -12,7 +12,7 @@
       </p>
 
       <div class="field form-group">
-        <%= form.label :date, "Add Court Date" %>
+        <%= form.label :date, t(".add_cout_date") %>
         <%= form.text_field :date,
                         value: court_date.date&.to_date || Time.zone.now,
                         data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
@@ -21,7 +21,7 @@
       <br>
 
       <div class="field form-group">
-        <%= form.label :judge_id %>
+        <%= form.label :judge_id, t(".judge") %>
         <%= form.collection_select(
                 :judge_id,
                 Judge.for_organization(current_organization),
@@ -31,7 +31,7 @@
             ) %>
       </div>
       <div class="field form-group">
-        <%= form.label :hearing_type_id %>
+        <%= form.label :hearing_type_id, t(".hearing_type") %>
         <%= form.collection_select(
                 :hearing_type_id,
                 HearingType.active.for_organization(current_organization),

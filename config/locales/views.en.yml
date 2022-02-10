@@ -21,6 +21,12 @@ en:
         select_hearing_type: -Select Hearing Type-
         select_judge: -Select Judge-
       youth_birth_month_year: "Youth's Birth Month & Year"
+      case_number: Case number
+      court_details: Court Details
+      hearing_type: Hearing type
+      judge: Judge
+      transition_aged_youth: Transition Aged Youth
+      court_report_status: Court Report Status
     inactive_case:
       notice: Case was deactivated on
     index:
@@ -107,7 +113,7 @@ en:
         deactivate: Deactivate
       deactive_text: Admin was deactivated on
       label:
-        display_name: Display Name
+        display_name: Display name
       prompt:
         mark_inactive_warning: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"
     new:
@@ -168,8 +174,18 @@ en:
       plural_label: Select all relevant CASA cases
       prompt_select_one: Please Select One
       singular_label: CASA case
+      contact_made: Contact made
+      contact_medium: Contact medium
+      duration: Duration
+      occurred_at: Occurred at
+      miles_driven: Miles driven
+      want_driving_reimbursement: Want driving reimbursement
+      notes: Notes
+      additional_expenses: Additional expenses
     new:
       title: New Case Contact
+    contact_types: 
+      contact_types: Contact types
   casa_org:
     contact_type_groups:
       button:
@@ -219,6 +235,9 @@ en:
       manage_court_details_title: Manage Court Details
       manage_contact_types_title: Manage Contact Types
       title: Editing CASA Organization
+      logo: Logo
+      court_report_template: Court report template
+      show_driving_reimbursement: Show driving reimbursement
   case_court_reports:
     index:
       button:
@@ -238,11 +257,16 @@ en:
       title: New Contact Type Group
     edit:
       title: Edit Contact Type Group
+    form:
+      active: Active
   contact_types:
     new:
       title: New Contact Type
     edit:
       title: Edit Contact Type
+    form:
+      contact_type_group: Contact type group
+      active: Active
   emancipation:
     index:
       heading:
@@ -261,11 +285,14 @@ en:
   global:
     add_court_order: Add a court order
     court_orders: Court Orders - Please check that you didn't enter any youth names
+    email: Email
   hearing_types:
     edit:
       title: Edit Hearing Type
     new:
       title: New Hearing Type
+    form:
+      active: Active
   imports:
     cases:
       button:
@@ -324,6 +351,8 @@ en:
       title: Edit Judge
     new:
       title: New Judge
+    form:
+      active: Active
   layouts:
     application:
       javascript_instrucion:
@@ -374,6 +403,9 @@ en:
       button:
         create: Create
         update: Update
+      add_cout_date: Add Court Date
+      judge: Judge
+      hearing_type: Hearing type
     new:
       title: New Court Date
     show:
@@ -495,8 +527,16 @@ en:
       pick_displayed_columns: Pick displayed columns
       heading:
         amount: Amount
-        effective_date: Effective Date
+        effective_date: Effective date
         status: Active?
         created_by: Created By
         created_at: Created At
         actions: Actions
+    form:
+      effective_date: Effective date
+      ammount: Amount
+      is_active: Currently active?
+  users:
+    edit:
+      email: Email
+      display_name: Display name
