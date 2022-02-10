@@ -168,9 +168,12 @@ en:
       plural_label: 1. Select all relevant CASA cases
       prompt_select_one: Please Select One
       singular_label: 1. Select relevant CASA case
+      contact_types: 2. Select All Contact Types
       contact_details: 3. Enter Contact Details
       travel_details: 4. Enter Travel Details
+      enter_notes: 5. Enter Notes
       duration_meeting: d. Duration of Meeting
+      enter_notes_placeholder: Enter notes here
     new:
       title: New Case Contact
   casa_org:
