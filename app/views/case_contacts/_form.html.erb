@@ -73,28 +73,26 @@
 
     <div class="form-group duration">
       <h5><label for="case_contact_casa_case"><%= t(".duration_meeting") %></label></h5>
-
-        <div class="form-group duration-hours inline-fields">
-          <%= form.number_field :duration_hours,
-                              id: "case-contact-duration-hours-display",
+      <div class="form-group duration-hours inline-fields">
+        <%= form.number_field :duration_hours,
+                            id: "case-contact-duration-hours-display",
+                            min: 0,
+                            class: "inline-fields cc-field",
+                            size: "10",
+                            value: duration_hours(case_contact),
+                            required: true %> &nbsp; <span class="label-font-weight"> hour(s)</span>
+      </div>
+      <div class="inline-fields pr-7">and</div>
+      <div class="form-group duration-minutes inline-fields">
+        <%= form.number_field :duration_minutes,
+                              id: "case-contact-duration-minutes-display",
                               min: 0,
-                              class: "inline-fields text-field-border",
+                              class: "inline-fields cc-field",
                               size: "10",
-                              value: duration_hours(case_contact),
-                              required: true %> &nbsp; <span class="label-font-weight"> hour(s)</span>
-        </div>
-        <div class="inline-fields pr-7">and</div>
-        <div class="form-group duration-minutes inline-fields">
-          <%= form.number_field :duration_minutes,
-                                id: "case-contact-duration-minutes-display",
-                                min: 0,
-                                class: "inline-fields text-field-border",
-                                size: "10",
-                                value: duration_minutes(case_contact),
-                                required: true %> &nbsp; <span class="label-font-weight"> minute(s)</span>
-        </div>
-
-    </div>     
+                              value: duration_minutes(case_contact),
+                              required: true %> &nbsp; <span class="label-font-weight"> minute(s)</span>
+      </div>
+    </div>
   </div>
 
   <div class="form-group field-card">
@@ -136,26 +134,29 @@
           <% if @case_contact.additional_expenses.any? %>
             <%= form.fields_for :additional_expenses do |ff| %>
               <%= ff.number_field :other_expense_amount,
-              placeholder: "Enter amount", class: "case-contact-italic text-field-border other-expense-amount", min: "0", max: 1000, step: 0.01 %>
+              placeholder: "Enter amount",
+              class: "cc-italic cc-field other-expense-amount", min: "0", max: 1000, step: 0.01 %>
               <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
-              class: "case-contact-italic text-field-border other-expenses-describe" %>
+              class: "cc-italic cc-field other-expenses-describe" %>
             <% end %>
           <% end %>
           <% if @case_contact.decorate.additional_expenses_count < 10 %>
             <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
               <%= ff.number_field :other_expense_amount,
-              placeholder: "Enter amount", class: "case-contact-italic text-field-border other-expense-amount",
+              placeholder: "Enter amount",
+              class: "cc-italic cc-field other-expense-amount",
               min: "0", max: 1000, step: 0.01 %>
               <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
-              class: "case-contact-italic text-field-border other-expenses-describe" %>
+              class: "cc-italic cc-field other-expenses-describe" %>
             <% end %>
             <% (9 - @case_contact.decorate.additional_expenses_count).times do |i| %>
               <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
                 <%= ff.number_field :other_expense_amount,
-                placeholder: "Enter amount", class: "case-contact-italic text-field-border other-expense-amount hide-field",
+                placeholder: "Enter amount",
+                class: "cc-italic cc-field other-expense-amount hide-field",
                 min: "0", max: 1000, step: 0.01 %>
                 <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
-                class: "case-contact-italic text-field-border other-expenses-describe hide-field" %>
+                class: "cc-italic cc-field other-expenses-describe hide-field" %>
               <% end %>
             <% end %>
             <a href="#" class="add-another-expense add-expense-link pr-6" id="add-another-expense">Add Another Expense</a>
@@ -167,10 +168,10 @@
 
   <div class="field notes form-group field-card">
     <h2><%= form.label :notes, t(".enter_notes") %></h2>
-    <div class="case-contact-italic">
+    <div class="cc-italic">
       <%= t("forms.case_contact.notes_placeholder") %>
     </div>
-    <%= form.text_area :notes, :rows => 5, placeholder: t(".enter_notes_placeholder"), class: "case-contact-italic form-control" %>
+    <%= form.text_area :notes, :rows => 5, placeholder: t(".enter_notes_placeholder"), class: "cc-italic form-control" %>
   </div>
 
   <div class="actions">
