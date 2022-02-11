@@ -11,7 +11,7 @@ RSpec.describe "supervisors/new", type: :system do
       visit new_supervisor_path
 
       fill_in "Email", with: "new_supervisor_email@example.com"
-      fill_in "Display Name", with: "New Supervisor Display Name"
+      fill_in "Display name", with: "New Supervisor Display Name"
 
       expect {
         click_on "Create Supervisor"
@@ -23,7 +23,7 @@ RSpec.describe "supervisors/new", type: :system do
       visit new_supervisor_path
 
       fill_in "Email", with: "new_supervisor_email2@example.com"
-      fill_in "Display Name", with: "New Supervisor Display Name 2"
+      fill_in "Display name", with: "New Supervisor Display Name 2"
 
       click_on "Create Supervisor"
 

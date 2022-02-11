@@ -4,12 +4,15 @@ FactoryBot.define do
     transition_aged_youth { false } # TODO remove this db field and always calculate based on birth year month?
     birth_month_year_youth { 16.years.ago }
     casa_org { CasaOrg.first || create(:casa_org) }
-    judge # TODO make optional move to traits
     court_report_status { :not_submitted }
     case_court_orders { [] }
 
     trait :with_hearing_type do
       hearing_type
+    end
+
+    trait :with_judge do
+      judge
     end
 
     trait :with_case_assignments do

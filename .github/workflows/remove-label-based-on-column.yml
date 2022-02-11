@@ -1,0 +1,44 @@
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '0 * * * *'
+  workflow_dispatch: # Enable manual runs of the bot
+
+jobs:
+  remove_help_wanted_labels:
+    runs-on: ubuntu-latest
+    name: Remove help wanted labels based on column
+    steps:
+      - name: Remove help wanted labels based on column
+        uses: rubyforgood/remove-label-from-cards@2.0
+        id: remove-help-wanted-labels
+        with:
+          token: ${{secrets.GITHUB_TOKEN}}
+          columns_labels: >
+            [
+              {
+                "column_name": "Done (in prod!)",
+                "labels": ["Help Wanted"],
+                "project_name": "CASA Volunteer Portal"
+              },
+              {
+                "column_name": "In progress",
+                "labels": ["Help Wanted"],
+                "project_name": "CASA Volunteer Portal"
+              },
+              {
+                "column_name": "Merged to QA",
+                "labels": ["Help Wanted"],
+                "project_name": "CASA Volunteer Portal"
+              },
+              {
+                "column_name": "Not ready to build",
+                "labels": ["Help Wanted"],
+                "project_name": "CASA Volunteer Portal"
+              },
+              {
+                "column_name": "Requires Design / Issues To Be",
+                "labels": ["Help Wanted"],
+                "project_name": "CASA Volunteer Portal"
+              }
+            ]

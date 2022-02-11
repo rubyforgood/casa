@@ -4,12 +4,12 @@
   <div class="card-body">
     <%= form_for @user, as: :user, url: users_path do |form| %>
       <div class="field form-group">
-        <%= form.label :email %>
+        <%= form.label :email, t("common.email") %>
         <%= form.text_field :email, class: "form-control", disabled: !current_user.casa_admin? %>
       </div>
 
       <div class="field form-group">
-        <%= form.label :display_name %>
+        <%= form.label :display_name, t("common.display_name") %>
         <%= form.text_field :display_name, class: "form-control" %>
       </div>
 

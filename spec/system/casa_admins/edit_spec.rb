@@ -13,7 +13,7 @@ RSpec.describe "casa_admins/edit", type: :system do
       visit edit_casa_admin_path(admin)
 
       fill_in "Email", with: expected_email
-      fill_in "Display Name", with: expected_display_name
+      fill_in "Display name", with: expected_display_name
 
       click_on "Submit"
 
@@ -30,7 +30,7 @@ RSpec.describe "casa_admins/edit", type: :system do
       visit edit_casa_admin_path(admin)
 
       fill_in "Email", with: ""
-      fill_in "Display Name", with: ""
+      fill_in "Display name", with: ""
 
       click_on "Submit"
 

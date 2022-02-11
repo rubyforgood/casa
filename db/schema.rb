@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_05_030922) do
+ActiveRecord::Schema.define(version: 2022_01_27_055733) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -297,6 +297,16 @@ ActiveRecord::Schema.define(version: 2022_01_05_030922) do
     t.index ["user_id"], name: "index_mileage_rates_on_user_id"
   end
 
+  create_table "notes", force: :cascade do |t|
+    t.string "content"
+    t.bigint "creator_id"
+    t.string "notable_type"
+    t.bigint "notable_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["notable_type", "notable_id"], name: "index_notes_on_notable"
+  end
+
   create_table "notifications", force: :cascade do |t|
     t.string "recipient_type", null: false
     t.bigint "recipient_id", null: false
@@ -377,7 +387,8 @@ ActiveRecord::Schema.define(version: 2022_01_05_030922) do
   end
 
   create_table "versions", force: :cascade do |t|
-    t.string "item_type", null: false
+    t.string "item_type"
+    t.string "{:null=>false}"
     t.bigint "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"
