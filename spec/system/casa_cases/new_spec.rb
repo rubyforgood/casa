@@ -17,13 +17,11 @@ RSpec.describe "casa_cases/new", type: :system do
   context "when all fields are filled" do
     it "is successful", js: true do
       travel_to Time.zone.local(2020, 12, 1) do
-        next_year = (Date.today.year + 1).to_s
+        next_year = Date.new(Date.today.year + 1, 4, 1)
         fourteen_years = (Date.today.year - 14).to_s
         fill_in "Case number", with: case_number
 
-        select "1", from: "casa_case_court_report_due_date_3i"
-        select "April", from: "casa_case_court_report_due_date_2i"
-        select next_year, from: "casa_case_court_report_due_date_1i"
+        fill_in "Court Report Due Date", with: next_year.strftime("%Y/%m/%d\n")
 
         select "March", from: "casa_case_birth_month_year_youth_2i"
         select fourteen_years, from: "casa_case_birth_month_year_youth_1i"

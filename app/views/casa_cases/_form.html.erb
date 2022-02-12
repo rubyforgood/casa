@@ -67,16 +67,13 @@
         <% if policy(casa_case).update_court_report_due_date? %>
           <%= form.label :court_report_due_date, t(".court_report_due_date") %>
           <br>
-          <span class="datetime-year-month">
-            <%= form.date_select :court_report_due_date,
-                                 {
-                                     order: [:day, :month, :year],
-                                     start_year: Date.current.year + 3,
-                                     end_year: 2000,
-                                     prompt: {day: 'Day', month: 'Month', year: 'Year'}
-                                 },
-                                 class: "select2 date-input" %>
-          </span>
+          <div class="field form-group">
+            <% court_report_due_date = casa_case.court_report_due_date || Time.zone.now %>
+            <%= form.text_field :court_report_due_date,
+                            value: court_report_due_date.to_date,
+                            data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
+                            class: "form-control" %>
+          </div>
         <% end %>
       </div>
 
