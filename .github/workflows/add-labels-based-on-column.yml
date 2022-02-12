@@ -16,6 +16,11 @@ jobs:
           columns_labels: >
             [
               {
+                "column_name": "Not ready to build",
+                "labels": ["not-ready-to-build"],
+                "project_name": "CASA Volunteer Portal"
+              },
+              {
                 "column_name": "To do",
                 "labels": ["Help Wanted"],
                 "project_name": "CASA Volunteer Portal"
