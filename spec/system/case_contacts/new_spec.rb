@@ -408,7 +408,7 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(CaseContact.first.notes).to eq "This is the note"
     end
 
-    it "does not submit the form when note is added but not confirmed" do
+    it "does not submit the form when note is added but not confirmed", js: true do
       volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first
       create_contact_types(volunteer_casa_case_one.casa_org)
