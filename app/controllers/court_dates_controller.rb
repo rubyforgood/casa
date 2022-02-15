@@ -1,6 +1,6 @@
 class CourtDatesController < ApplicationController
   before_action :set_casa_case
-  before_action :set_court_date, only: %i[edit show generate update]
+  before_action :set_court_date, only: %i[edit show generate update destroy]
   before_action :require_organization!
 
   rescue_from ActiveRecord::RecordNotFound, with: -> { head :not_found }
@@ -51,6 +51,12 @@ class CourtDatesController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def destroy
+    return unless current_user.casa_admin? || current_user.supervisor?
+    @court_date.destroy
+    redirect_to casa_case_path(@casa_case), notice: "Court date was successfully deleted."
   end
 
   private

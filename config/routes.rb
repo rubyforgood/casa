@@ -34,7 +34,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :court_dates, only: %i[create edit new show update]
+    resources :court_dates, only: %i[create edit new show update destroy]
 
     member do
       patch :deactivate
