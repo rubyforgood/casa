@@ -87,25 +87,27 @@ legend {
 }
 
 .expense-container {
+    width: 100%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
+    gap: .5rem;
+    justify-content: flex-end;
 }
 
 .add-expense-line {
-    display: inline-block;
-    justify-content: flex-start;
+    // display: block;
+    margin-right: auto;
 }
 
 .other-expense-amount {
     width: 20%;
-    justify-content: right;
 }
 
 .other-expenses-describe {
-    width: 74%;
-    justify-content: end; 
+    width: 75%;
+    min-width: 50%;
 }
 
 .add-expense-link {
@@ -120,8 +122,7 @@ legend {
 }
 
 .pr-8 {
-    display: inline-block;
-    padding-right: .7rem !important;
+    // display: inline-block;
     padding-left: .7rem !important;
 }
 

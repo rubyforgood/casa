@@ -158,7 +158,6 @@
               min: "0", max: 1000, step: 0.01 %>
               <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
               class: "cc-italic cc-field other-expenses-describe" %>
-              <br/>
 
             <% end %>
             <% (9 - @case_contact.decorate.additional_expenses_count).times do |i| %>
@@ -173,7 +172,6 @@
                   min: "0", max: 1000, step: 0.01 %>
                   <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
                   class: "cc-italic cc-field other-expenses-describe hide-field" %>
-                  <br/>
 
               <% end %>
             <% end %>
