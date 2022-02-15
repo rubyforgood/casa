@@ -100,7 +100,7 @@
     <div class="field miles-driven form-group">
       <h5><%= form.label :miles_driven, t(".miles_driven") %></h5>
       <% if form_type == 'new' && @case_contact.miles_driven == 0 %>
-        <input class="form-control" min="0" max="10000" type="number" value="" name="case_contact[miles_driven]" autocomplete="off" id="case_contact_miles_driven">
+        <input class="form-control" min="0" max="10000" type="number" value="0" name="case_contact[miles_driven]" autocomplete="off" id="case_contact_miles_driven">
       <% else %>
         <%= form.number_field :miles_driven, class: "form-control", min: "0", max: 10000, placeholder: "0" %>
       <% end %>
@@ -129,13 +129,14 @@
     <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
       <div class="other-expenses">
         <h5><%= form.label :additional_expense, t(".other_expenses") %></h5>
-        <div class="other-expense-amount">
+        <div class="other-expense-line">
           <% @case_contact.decorate.additional_expenses_count %>
           <% if @case_contact.additional_expenses.any? %>
             <%= form.fields_for :additional_expenses do |ff| %>
               <%= ff.number_field :other_expense_amount,
               placeholder: "Enter amount",
-              class: "cc-italic cc-field other-expense-amount", min: "0", max: 1000, step: 0.01 %>
+              class: "cc-italic cc-field other-expense-amount", 
+              min: "0", max: 1000, step: 0.01 %>
               <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
               class: "cc-italic cc-field other-expenses-describe" %>
             <% end %>
