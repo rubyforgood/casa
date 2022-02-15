@@ -39,9 +39,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Submitted")
       expect(page).to have_text("Court Date")
       expect(page).to have_text("Court Report Due Date")
-      expect(page).to have_text("Day")
-      expect(page).to have_text("Month")
-      expect(page).to have_text("Year")
+      expect(page).to have_field("Court Report Due Date")
       expect(page).to have_text("Court Mandate Text One")
       expect(page).not_to have_text("Deactivate Case")
 
@@ -59,9 +57,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Reactivate CASA Case")
       expect(page).to_not have_text("Court Date")
       expect(page).to_not have_text("Court Report Due Date")
-      expect(page).to_not have_text("Day")
-      expect(page).to_not have_text("Month")
-      expect(page).to_not have_text("Year")
+      expect(page).to_not have_field("Court Report Due Date")
     end
 
     it "reactivates a case", js: true do
@@ -74,9 +70,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Deactivate CASA Case")
       expect(page).to have_text("Court Date")
       expect(page).to have_text("Court Report Due Date")
-      expect(page).to have_text("Day")
-      expect(page).to have_text("Month")
-      expect(page).to have_text("Year")
+      expect(page).to have_field("Court Report Due Date")
     end
   end
 
@@ -100,9 +94,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       select "Submitted", from: "casa_case_court_report_status"
       check "Youth"
 
-      select "8", from: "casa_case_court_report_due_date_3i"
-      select "September", from: "casa_case_court_report_due_date_2i"
-      select next_year, from: "casa_case_court_report_due_date_1i"
+      fill_in "Court Report Due Date", with: Date.new(next_year.to_i, 9, 8).strftime("%Y/%m/%d\n")
 
       page.find("#add-mandate-button").click
       find("#court-orders-list-container").first("textarea").send_keys("Court Mandate Text One")
@@ -119,11 +111,8 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       expect(page).to have_text("Court Date")
       expect(page).to have_text("Court Report Due Date")
-      expect(page).to have_text("Day")
-      expect(page).to have_text("Month")
-      expect(page).to have_text("Year")
-      expect(page).to have_text("November")
-      expect(page).to have_text("September")
+      expect(page).to have_field("Court Report Due Date")
+      expect(page).to have_field("Court Report Due Date", with: "#{next_year}-09-08")
       expect(page).to have_text("Court Mandate Text One")
       expect(page).to have_text("Partially implemented")
 
@@ -179,36 +168,6 @@ RSpec.describe "Edit CASA Case", type: :system do
         expect(page).to have_select("Judge", selected: "-Select Judge-")
         expect(casa_case.reload.judge).to be_nil
       end
-    end
-
-    it "will return error message if date fields are not fully selected" do
-      visit casa_case_path(casa_case)
-      expect(page).to have_text("Court Report Status: Not submitted")
-      visit edit_casa_case_path(casa_case)
-
-      select "April", from: "casa_case_court_report_due_date_2i"
-
-      within ".actions" do
-        click_on "Update CASA Case"
-      end
-
-      expect(page).to have_text("Court report due date was not a valid date.")
-    end
-
-    it "will return error message if date fields are not valid" do
-      visit casa_case_path(casa_case)
-      expect(page).to have_text("Court Report Status: Not submitted")
-      visit edit_casa_case_path(casa_case)
-
-      select "31", from: "casa_case_court_report_due_date_3i"
-      select "April", from: "casa_case_court_report_due_date_2i"
-      select next_year, from: "casa_case_court_report_due_date_1i"
-
-      within ".actions" do
-        click_on "Update CASA Case"
-      end
-
-      expect(page).to have_text("Court report due date was not a valid date.")
     end
 
     it "views deactivated case" do
@@ -508,9 +467,7 @@ of it unless it was included in a previous court report.")
         click_on "Update CASA Case"
       end
 
-      expect(page).to have_text("Day")
-      expect(page).to have_text("Month")
-      expect(page).to have_text("Year")
+      expect(page).to have_field("Court Report Due Date")
       expect(page).not_to have_text("Deactivate Case")
 
       expect(page).to have_css("#add-mandate-button")
