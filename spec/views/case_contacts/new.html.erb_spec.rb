@@ -22,7 +22,7 @@ RSpec.describe "case_contacts/new", type: :view do
 
     let(:current_time) { Time.zone.now.strftime("%Y-%m-%d") }
 
-    it { is_expected.to have_field("Occurred at", with: current_time) }
+    it { is_expected.to have_field("c. Occurred On", with: current_time) }
     it { is_expected.to have_selector("textarea", id: "case_contact_notes") }
   end
 end
