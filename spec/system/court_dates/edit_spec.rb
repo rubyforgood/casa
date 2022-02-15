@@ -5,9 +5,9 @@ RSpec.describe "court_dates/edit", type: :system do
   let(:now) { Date.new(2021, 1, 1) }
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
+  let(:volunteer) { create(:volunteer) }
+  let(:supervisor) { create(:casa_admin, casa_org: organization) }
   let!(:casa_case) { create(:casa_case, casa_org: organization) }
-  let(:supervisor) { volunteer.supervisor }
-  let!(:volunteer) { create(:volunteer) }
   let!(:court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: now - 1.week) }
 
   before do
@@ -48,7 +48,7 @@ RSpec.describe "court_dates/edit", type: :system do
     expect(page).to have_text("Court Order Text One")
   end
 
-  it "can delete a court date", js: true do
+  it "can delete a court date as admin", js: true do
     visit root_path
     click_on "Cases"
     click_on casa_case.case_number
@@ -82,13 +82,12 @@ RSpec.describe "court_dates/edit", type: :system do
   end
 
   it "can't delete a court date as volunteer", js: true do
-    volunteer.casa_cases = [casa_case]
     sign_out admin
+    volunteer.casa_cases = [casa_case]
     sign_in volunteer
 
     visit root_path
     click_on "Cases"
-    # binding.pry
     click_on casa_case.case_number
 
     expect(CourtDate.count).to eq 1
