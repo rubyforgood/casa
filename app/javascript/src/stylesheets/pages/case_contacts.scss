@@ -86,6 +86,10 @@ legend {
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
+.add-expense-fields {
+    width: 100%;
+}
+
 .add-expense-link {
     display: block;
     padding: .8rem;
@@ -97,12 +101,24 @@ legend {
     padding-left: 2.5rem !important;
 }
 
+.pr-8 {
+    display: inline-block;
+    padding-right: .7rem !important;
+    padding-left: .7rem !important;
+}
+
+.pr-9 {
+    padding-left: 3.1rem !important;
+}
+
 .other-expense-amount {
     width: 20%;
+    box-align: right;
 }
 
 .other-expenses-describe {
-    width: 70%;
+    width: 74%;
+    box-align: right;
 }
 
 .wide_button {
