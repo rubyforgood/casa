@@ -86,8 +86,26 @@ legend {
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
-.add-expense-fields {
-    width: 100%;
+.expense-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.add-expense-line {
+    display: inline-block;
+    justify-content: flex-start;
+}
+
+.other-expense-amount {
+    width: 20%;
+    justify-content: right;
+}
+
+.other-expenses-describe {
+    width: 74%;
+    justify-content: end; 
 }
 
 .add-expense-link {
@@ -111,15 +129,6 @@ legend {
     padding-left: 3.1rem !important;
 }
 
-.other-expense-amount {
-    width: 20%;
-    box-align: right;
-}
-
-.other-expenses-describe {
-    width: 74%;
-    box-align: right;
-}
 
 .wide_button {
     width: 100%;
