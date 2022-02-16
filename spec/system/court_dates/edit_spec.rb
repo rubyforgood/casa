@@ -52,11 +52,11 @@ RSpec.describe "court_dates/edit", type: :system do
     visit root_path
     click_on "Cases"
     click_on casa_case.case_number
- 
+
     expect(CourtDate.count).to eq 1
     expect(page).to have_content court_date.date.strftime("%B %-d, %Y")
-    page.find('a', text: court_date.date.strftime("%B %-d, %Y")).click
-    page.find('a', text: "Delete Future Court Date").click
+    page.find("a", text: court_date.date.strftime("%B %-d, %Y")).click
+    page.find("a", text: "Delete Future Court Date").click
     page.driver.browser.switch_to.alert.accept
 
     expect(page).to have_content "Court date was successfully deleted."
@@ -73,8 +73,8 @@ RSpec.describe "court_dates/edit", type: :system do
 
     expect(CourtDate.count).to eq 1
     expect(page).to have_content court_date.date.strftime("%B %-d, %Y")
-    page.find('a', text: court_date.date.strftime("%B %-d, %Y")).click
-    page.find('a', text: "Delete Future Court Date").click
+    page.find("a", text: court_date.date.strftime("%B %-d, %Y")).click
+    page.find("a", text: "Delete Future Court Date").click
     page.driver.browser.switch_to.alert.accept
 
     expect(page).to have_content "Court date was successfully deleted."
@@ -92,7 +92,7 @@ RSpec.describe "court_dates/edit", type: :system do
 
     expect(CourtDate.count).to eq 1
     expect(page).to have_content court_date.date.strftime("%B %-d, %Y")
-    page.find('a', text: court_date.date.strftime("%B %-d, %Y")).click
+    page.find("a", text: court_date.date.strftime("%B %-d, %Y")).click
     expect(page).not_to have_content "Delete Future Court Date"
   end
 end

@@ -54,7 +54,7 @@ class CourtDatesController < ApplicationController
   end
 
   def destroy
-    return unless current_user.casa_admin? || current_user.supervisor?
+    authorize @court_date
     @court_date.destroy
     redirect_to casa_case_path(@casa_case), notice: "Court date was successfully deleted."
   end
