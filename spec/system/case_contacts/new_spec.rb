@@ -266,7 +266,7 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "c. Occurred On", with: "04/04/2020"
       choose "case_contact_want_driving_reimbursement_false"
 
-      click_on "Add Another Expense"
+      find_by_id("add-another-expense").click
       page.all("input.other-expense-amount").first.fill_in(with: "7.21")
       page.all("input.other-expenses-describe").first.fill_in(with: "Another Toll")
 
