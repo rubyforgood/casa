@@ -181,7 +181,7 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Supervisors", href: "/supervisors")
       expect(rendered).to have_link("Admins", href: "/casa_admins")
       expect(rendered).to have_link("System Imports", href: "/imports")
-      expect(rendered).to have_link("Edit Organization", href: "/casa_org/#{user.casa_org.id}/edit")
+      expect(rendered).to have_link("Edit Organization", href: "/casa_org/#{user.casa_org.slug}/edit")
       expect(rendered).to have_link("Report a site issue", href: "https://rubyforgood.typeform.com/to/iXY4BubB")
       expect(rendered).to have_link("Generate Court Reports", href: "/case_court_reports")
       expect(rendered).to have_link("Export Data", href: "/reports")
