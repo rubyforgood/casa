@@ -122,7 +122,7 @@ Rails.application.routes.draw do
       resources :casa_admins, param: :slug, only: [:new, :create, :edit, :update] do
         member do
           patch :deactivate
-          patch :reactivate
+          patch :activate
         end
       end
     end
