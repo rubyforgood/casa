@@ -90,7 +90,7 @@ legend {
     width: 100%;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
     align-items: center;
     gap: .5rem;
     justify-content: flex-end;
@@ -101,16 +101,23 @@ legend {
     margin-right: auto;
     // margin-right: 5%;
     // flex-grow: 0;
+    // flex-shrink: 1;
+    // flex-basis: 0;
+    // min-width: 3%;
 }
 
 .other-expense-amount {
     width: 20%;
+    // flex-shrink: 1;
 }
 
 .other-expenses-describe {
     // flex-grow: 3;
+    // width: 75%;
     width: 75%;
     // flex-shrink: 2;
+    // align-self: end;
+    // flex-basis: initial;
 }
 
 .add-expense-link {
@@ -118,6 +125,7 @@ legend {
     padding: .8rem;
     text-decoration: underline;
 }
+
 #add-another-expense {
     cursor: pointer;
 }
