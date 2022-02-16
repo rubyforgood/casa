@@ -64,3 +64,11 @@ casa_case_path(@casa_case) %></h6>
       class: "btn btn-primary" %>
   </div>
 </div>
+
+<% if policy(:court_date).destroy? && @court_date.date > Time.now %>
+  <br>
+  <div class="row">
+    <%= link_to 'Delete Future Court Date', [@casa_case, @court_date], method: :delete,
+data: { confirm: 'Are you sure?' }, class: "btn btn-danger mx-auto" %>
+  </div>
+<% end %>
