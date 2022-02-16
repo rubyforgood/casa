@@ -76,7 +76,7 @@ RSpec.describe "addtional_expenses", type: :system do
     find_by_id("case_contact_additional_expenses_attributes_0_other_expense_amount").fill_in(with: "7.21")
     find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe").fill_in(with: "Toll")
 
-    click_on "Add Another Expense"
+    find_by_id("add-another-expense").click
     expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount")
     expect(page).to have_no_field("case_contact_additional_expenses_attributes_2_other_expense_amount")
 
@@ -114,7 +114,7 @@ RSpec.describe "addtional_expenses", type: :system do
     expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount", with: "7.23")
     expect(page).to have_field("case_contact_additional_expenses_attributes_3_other_expense_amount")
     expect(page).to have_no_field("case_contact_additional_expenses_attributes_4_other_expense_amount")
-    click_on "Add Another Expense"
+    find_by_id("add-another-expense").click
     expect(page).to have_field("case_contact_additional_expenses_attributes_4_other_expense_amount")
   end
   it "additional expenses for maximum entries", js: true do
@@ -152,7 +152,7 @@ RSpec.describe "addtional_expenses", type: :system do
     expect(page).to have_text("Add Another Expense")
 
     (1..9).each { |i|
-      click_on "Add Another Expense"
+      find_by_id("add-another-expense").click
       expect(page).to have_field("case_contact_additional_expenses_attributes_#{i}_other_expense_amount")
       expect(page).to have_field("case_contact_additional_expenses_attributes_#{i}_other_expenses_describe")
       expect(page).to have_no_field("case_contact_additional_expenses_attributes_#{i + 1}_other_expense_amount")
