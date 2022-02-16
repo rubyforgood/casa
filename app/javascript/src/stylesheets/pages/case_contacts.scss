@@ -99,6 +99,8 @@ legend {
 .add-expense-line {
     // display: block;
     margin-right: auto;
+    // margin-right: 5%;
+    // flex-grow: 0;
 }
 
 .other-expense-amount {
@@ -106,8 +108,9 @@ legend {
 }
 
 .other-expenses-describe {
+    // flex-grow: 3;
     width: 75%;
-    min-width: 50%;
+    // flex-shrink: 2;
 }
 
 .add-expense-link {
