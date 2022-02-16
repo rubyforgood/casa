@@ -38,7 +38,12 @@ class CasaCasesController < ApplicationController
   end
 
   def create
-    @casa_case = CasaCase.new(casa_case_params.merge(casa_org: current_organization))
+    @casa_case = CasaCase.new(
+      casa_case_params.merge(
+        casa_org: current_organization,
+        transition_aged_youth: is_transition_aged_youth?(casa_case_params)
+      )
+    )
     authorize @casa_case
 
     if @casa_case.save
@@ -119,6 +124,11 @@ class CasaCasesController < ApplicationController
   end
 
   private
+
+  def is_transition_aged_youth?(params)
+    # TODO remove this once TAY conversion is done
+    Date.parse(params[:birth_month_year_youth]) < 14.years.ago
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_casa_case
