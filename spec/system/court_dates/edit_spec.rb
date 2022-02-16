@@ -9,6 +9,7 @@ RSpec.describe "court_dates/edit", type: :system do
   let(:supervisor) { create(:casa_admin, casa_org: organization) }
   let!(:casa_case) { create(:casa_case, casa_org: organization) }
   let!(:court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: now - 1.week) }
+  let!(:future_court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: now + 1.week) }
 
   before do
     travel_to now
@@ -48,22 +49,22 @@ RSpec.describe "court_dates/edit", type: :system do
     expect(page).to have_text("Court Order Text One")
   end
 
-  it "can delete a court date as admin", js: true do
+  it "can delete a future court date as admin", js: true do
     visit root_path
     click_on "Cases"
     click_on casa_case.case_number
 
-    expect(CourtDate.count).to eq 1
-    expect(page).to have_content court_date.date.strftime("%B %-d, %Y")
-    page.find("a", text: court_date.date.strftime("%B %-d, %Y")).click
+    expect(CourtDate.count).to eq 2
+    expect(page).to have_content future_court_date.date.strftime("%B %-d, %Y")
+    page.find("a", text: future_court_date.date.strftime("%B %-d, %Y")).click
     page.find("a", text: "Delete Future Court Date").click
     page.driver.browser.switch_to.alert.accept
 
     expect(page).to have_content "Court date was successfully deleted."
-    expect(CourtDate.count).to eq 0
+    expect(CourtDate.count).to eq 1
   end
 
-  it "can delete a court date as supervisor", js: true do
+  it "can delete a future court date as supervisor", js: true do
     sign_out admin
     sign_in supervisor
 
@@ -71,17 +72,17 @@ RSpec.describe "court_dates/edit", type: :system do
     click_on "Cases"
     click_on casa_case.case_number
 
-    expect(CourtDate.count).to eq 1
-    expect(page).to have_content court_date.date.strftime("%B %-d, %Y")
-    page.find("a", text: court_date.date.strftime("%B %-d, %Y")).click
+    expect(CourtDate.count).to eq 2
+    expect(page).to have_content future_court_date.date.strftime("%B %-d, %Y")
+    page.find("a", text: future_court_date.date.strftime("%B %-d, %Y")).click
     page.find("a", text: "Delete Future Court Date").click
     page.driver.browser.switch_to.alert.accept
 
     expect(page).to have_content "Court date was successfully deleted."
-    expect(CourtDate.count).to eq 0
+    expect(CourtDate.count).to eq 1
   end
 
-  it "can't delete a court date as volunteer", js: true do
+  it "can't delete a future court date as volunteer", js: true do
     sign_out admin
     volunteer.casa_cases = [casa_case]
     sign_in volunteer
@@ -90,9 +91,9 @@ RSpec.describe "court_dates/edit", type: :system do
     click_on "Cases"
     click_on casa_case.case_number
 
-    expect(CourtDate.count).to eq 1
-    expect(page).to have_content court_date.date.strftime("%B %-d, %Y")
-    page.find("a", text: court_date.date.strftime("%B %-d, %Y")).click
+    expect(CourtDate.count).to eq 2
+    expect(page).to have_content future_court_date.date.strftime("%B %-d, %Y")
+    page.find("a", text: future_court_date.date.strftime("%B %-d, %Y")).click
     expect(page).not_to have_content "Delete Future Court Date"
   end
 end

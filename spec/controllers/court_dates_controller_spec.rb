@@ -6,7 +6,7 @@ RSpec.describe CourtDatesController, type: :controller do
   let(:admin) { create(:casa_admin) }
   let(:supervisor) { create(:supervisor) }
   let!(:casa_case) { create(:casa_case, casa_org: organization) }
-  let!(:court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: Date.current - 1.week) }
+  let!(:court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: Date.current + 1.week) }
 
   describe "DELETE destroy" do
     context "when logged in as admin" do

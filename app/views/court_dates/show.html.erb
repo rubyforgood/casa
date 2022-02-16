@@ -65,7 +65,7 @@ casa_case_path(@casa_case) %></h6>
   </div>
 </div>
 
-<% if current_user.casa_admin? || current_user.supervisor? %>
+<% if policy(:court_date).destroy? && @court_date.date > Time.now %>
   <br>
   <div class="row">
     <%= link_to 'Delete Future Court Date', [@casa_case, @court_date], method: :delete,
