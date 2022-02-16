@@ -8,7 +8,7 @@ RSpec.describe CasaAdminPolicy do
   let(:volunteer) { build(:volunteer, casa_org: organization) }
   let(:supervisor) { build(:supervisor, casa_org: organization) }
 
-  permissions :index?, :new?, :create?, :edit?, :update?, :activate?, :resend_invitation? do
+  permissions :index?, :new?, :create?, :edit?, :update?, :activate?, :resend_invitation?, :change_to_supervisor? do
     it "allows casa_admins" do
       is_expected.to permit(casa_admin)
     end

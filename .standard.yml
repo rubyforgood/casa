@@ -1,2 +1,3 @@
 ignore:
+  - 'storage/**/*'
   - 'lib/tasks/deployment/20201005203405_populate_case_contact_contact_type.rake'

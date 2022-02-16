@@ -10,6 +10,10 @@ class CasaAdmin < User
   def deactivate
     update(active: false)
   end
+
+  def change_to_supervisor!
+    becomes!(Supervisor).save
+  end
 end
 
 # == Schema Information
@@ -53,5 +57,5 @@ end
 #
 # Foreign Keys
 #
-#  fk_rails_...  (casa_org_id => casa_orgs.id)
+#  fk_rails_...  (casa_org_id => casa_org.id)
 #

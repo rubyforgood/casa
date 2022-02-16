@@ -34,8 +34,7 @@ require('src/readMore')
 require('src/tooltip')
 require('src/password_confirmation')
 require('src/reports')
-
-require('./add_fields')
+require('src/add_additional_expense')
 
 // Uncomment to copy all static images under ../images to the output folder and
 // reference them with the image_pack_tag or asset_pack_path helpers in views.

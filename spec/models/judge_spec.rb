@@ -5,8 +5,7 @@ RSpec.describe Judge, type: :model do
   it { is_expected.to validate_presence_of(:name) }
 
   it "has a valid factory" do
-    judge = build(:judge)
-    expect(judge.valid?).to be true
+    expect(build(:judge).valid?).to be true
   end
 
   describe "for_organization" do
@@ -15,7 +14,7 @@ RSpec.describe Judge, type: :model do
     let!(:record_1) { create(:judge, casa_org: casa_org_1) }
     let!(:record_2) { create(:judge, casa_org: casa_org_2) }
 
-    it "returns only reords matching the specified organization" do
+    it "returns only records matching the specified organization" do
       expect(described_class.for_organization(casa_org_1)).to eq([record_1])
       expect(described_class.for_organization(casa_org_2)).to eq([record_2])
     end

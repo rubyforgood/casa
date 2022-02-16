@@ -13,7 +13,7 @@ RSpec.describe "casa_admins/edit", type: :system do
       visit edit_casa_admin_path(admin)
 
       fill_in "Email", with: expected_email
-      fill_in "Display Name", with: expected_display_name
+      fill_in "Display name", with: expected_display_name
 
       click_on "Submit"
 
@@ -30,7 +30,7 @@ RSpec.describe "casa_admins/edit", type: :system do
       visit edit_casa_admin_path(admin)
 
       fill_in "Email", with: ""
-      fill_in "Display Name", with: ""
+      fill_in "Display name", with: ""
 
       click_on "Submit"
 
@@ -68,6 +68,16 @@ RSpec.describe "casa_admins/edit", type: :system do
     deliveries = ActionMailer::Base.deliveries
     expect(deliveries.count).to eq(1)
     expect(deliveries.last.subject).to have_text "CASA Console invitation instructions"
+  end
+
+  it "can convert the admin to a supervisor", js: true do
+    another = create(:casa_admin)
+    visit edit_casa_admin_path(another)
+
+    click_on "Change to Supervisor"
+
+    expect(page).to have_text("Admin was changed to Supervisor.")
+    expect(User.find(another.id)).to be_supervisor
   end
 
   it "is not able to edit last sign in" do

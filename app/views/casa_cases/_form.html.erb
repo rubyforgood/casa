@@ -11,12 +11,12 @@
 
       <% if casa_case.new_record? || policy(casa_case).update_case_number? %>
         <div class="field form-group">
-          <%= form.label :case_number %>
+          <%= form.label :case_number, t(".case_number") %>
           <%= form.text_field :case_number, class: "form-control w-25", :required=> 'required' %>
         </div>
       <% end %>
 
-      <h2><%= form.label :court_details %></h2>
+      <h2><%= form.label :court_details, t(".court_details") %></h2>
 
       <% if policy(casa_case).update_birth_month_year_youth? %>
         <div class="field form-group">
@@ -37,7 +37,7 @@
 
       <% if policy(casa_case).update_hearing_type? %>
         <div class="field form-group">
-          <%= form.label :hearing_type_id %>
+          <%= form.label :hearing_type_id, t(".hearing_type") %>
           <%= form.collection_select(
                   :hearing_type_id,
                   HearingType.active.for_organization(current_organization),
@@ -51,7 +51,7 @@
       <% if Judge.for_organization(current_organization).any? %>
         <% if policy(casa_case).update_judge? %>
           <div class="field form-group">
-            <%= form.label :judge_id %>
+            <%= form.label :judge_id, t(".judge") %>
             <%= form.collection_select(
                     :judge_id,
                     Judge.for_organization(current_organization),
@@ -67,16 +67,13 @@
         <% if policy(casa_case).update_court_report_due_date? %>
           <%= form.label :court_report_due_date, t(".court_report_due_date") %>
           <br>
-          <span class="datetime-year-month">
-            <%= form.date_select :court_report_due_date,
-                                 {
-                                     order: [:day, :month, :year],
-                                     start_year: Date.current.year + 3,
-                                     end_year: 2000,
-                                     prompt: {day: 'Day', month: 'Month', year: 'Year'}
-                                 },
-                                 class: "select2 date-input" %>
-          </span>
+          <div class="field form-group">
+            <% court_report_due_date = casa_case.court_report_due_date || Time.zone.now %>
+            <%= form.text_field :court_report_due_date,
+                            value: court_report_due_date.to_date,
+                            data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
+                            class: "form-control" %>
+          </div>
         <% end %>
       </div>
 
@@ -85,13 +82,13 @@
         <div class="field form-group">
           <div class="form-check">
             <%= form.check_box :transition_aged_youth, class: 'form-check-input' %>
-            <%= form.label :transition_aged_youth, class: 'form-check-label' %>
+            <%= form.label :transition_aged_youth, t(".transition_aged_youth"), class: 'form-check-label' %>
           </div>
         </div>
       <% end %>
 
       <div class="field form-group">
-        <%= form.label :court_report_status %>
+        <%= form.label :court_report_status, t(".court_report_status") %>
         <%= form.select :court_report_status,
                         CasaCase.court_report_statuses&.map { |status| [status.first.humanize, status.first] } %>
       </div>
@@ -101,7 +98,7 @@
           <% if policy(casa_case).update_court_orders? %>
             <%= render partial: "shared/court_order_list", locals: {casa_case: @casa_case, form: form} %>
           <% else %>
-            <%= form.label :case_court_mandates, "#{t(".label.court_orders")}" %>
+            <%= form.label :case_court_mandates, t(".label.court_orders") %>
             <div id="mandate-list-container">
               <% @casa_case.case_court_orders.each do |order| %>
                 <div class="court-mandate-entry">

@@ -40,4 +40,20 @@ RSpec.describe CasaAdmin, type: :model do
       expect(user.errors.full_messages).to include("Invitation token is invalid")
     end
   end
+
+  describe "change to supervisor" do
+    subject(:admin) { create(:casa_admin) }
+
+    it "returns true if the change was successful" do
+      expect(subject.change_to_supervisor!).to be_truthy
+    end
+
+    it "changes the supervisor to an admin" do
+      subject.change_to_supervisor!
+
+      user = User.find(subject.id) # subject.reload will cause RecordNotFound because it's looking in the wrong table
+      expect(user).not_to be_casa_admin
+      expect(user).to be_supervisor
+    end
+  end
 end

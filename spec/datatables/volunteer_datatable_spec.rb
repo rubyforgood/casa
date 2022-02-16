@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "VolunteerDatatable" do
+RSpec.describe VolunteerDatatable do
   let(:org) { CasaOrg.first }
   let(:supervisors) { Supervisor.all }
   let(:assigned_volunteers) { Volunteer.joins(:supervisor) }
@@ -394,8 +394,8 @@ RSpec.describe "VolunteerDatatable" do
         before { additional_filters[:transition_aged_youth] = %w[true] }
 
         it "is successful" do
-          expect(subject[:recordsTotal]).to eq Volunteer.count
-          expect(subject[:recordsFiltered]).to eq assigned_volunteers.joins(:casa_cases).where(casa_cases: {transition_aged_youth: true}).count
+          expect(subject[:recordsTotal]).to eq 8
+          expect(subject[:recordsFiltered]).to eq 3
         end
       end
 
@@ -403,8 +403,8 @@ RSpec.describe "VolunteerDatatable" do
         before { additional_filters[:transition_aged_youth] = %w[false] }
 
         it "is successful" do
-          expect(subject[:recordsTotal]).to eq Volunteer.count
-          expect(subject[:recordsFiltered]).to eq assigned_volunteers.where.not(id: CaseAssignment.select(:volunteer_id).joins(:casa_case).where(casa_cases: {transition_aged_youth: true})).count
+          expect(subject[:recordsTotal]).to eq 8
+          expect(subject[:recordsFiltered]).to eq 3
         end
       end
 
@@ -412,8 +412,8 @@ RSpec.describe "VolunteerDatatable" do
         before { additional_filters[:transition_aged_youth] = %w[false true] }
 
         it "is successful" do
-          expect(subject[:recordsTotal]).to eq Volunteer.count
-          expect(subject[:recordsFiltered]).to eq assigned_volunteers.count
+          expect(subject[:recordsTotal]).to eq 8
+          expect(subject[:recordsFiltered]).to eq 6
         end
       end
 
@@ -421,7 +421,7 @@ RSpec.describe "VolunteerDatatable" do
         before { additional_filters[:transition_aged_youth] = [] }
 
         it "is successful" do
-          expect(subject[:recordsTotal]).to eq Volunteer.count
+          expect(subject[:recordsTotal]).to eq 8
           expect(subject[:recordsFiltered]).to be_zero
         end
       end

@@ -1,10 +1,10 @@
 require "amazing_print"
 
-DENY_FILESPEC = File.join(Rails.root, ".app_files_not_needing_spec_files")
+DENY_FILESPEC = File.join(Rails.root, ".allow_skipping_tests")
 DASHED_LINE = "-" * 80
 
 desc "Check app rb files to verify that there are corresponding spec files."
-task check_app_rb_files_for_spec_files: :environment do
+task test_checker: :environment do
   # File containing app filespecs that should not be flagged as errors for not having spec files.
   # Lines beginning with '#' are ignored.
 

@@ -59,7 +59,7 @@ class CaseCourtReport
   def filter_out_old_case_contacts(interviewees)
     most_recent_court_date = @casa_case.most_recent_past_court_date&.date
     if most_recent_court_date
-      interviewees.where("occurred_at > ?", most_recent_court_date)
+      interviewees.where("occurred_at >= ?", most_recent_court_date)
     else
       interviewees
     end

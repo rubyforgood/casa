@@ -15,13 +15,13 @@ legend {
     display: inline;
 }
 
-.range-value {
-    justify-content: center;
-}
+// .range-value {
+//     justify-content: center;
+// }
 
-.range-value input {
-    width: 60%;
-}
+// .range-value input {
+//     width: 60%;
+// }
 
 .slider-row {
     margin: 0px;
@@ -34,3 +34,80 @@ legend {
 .followup-button {
   min-width: max-content;
 }
+
+.flex-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+}
+
+.field-card {
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,0.125);
+    border-radius: .25rem;
+    padding: 1rem;
+    box-shadow: 0 4px 12px 5px rgba(0, 0, 0, 0.08);
+}
+
+.pr-6 {
+    padding-right: 1.5rem !important;
+}
+
+.hide-field {
+    display: none;
+}
+
+.red-letter {
+    color: #ff2229;
+    font-weight: 900;
+}
+
+.label-font-weight {
+    font-weight: 900;
+}
+
+.inline-fields {
+    display: inline-block;
+}
+
+.cc-field {
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.add-expense-link {
+    display: block;
+    padding: .8rem;
+    text-decoration: underline;
+}
+
+.pr-7 {
+    padding-right: 1.5rem !important;
+    padding-left: 2.5rem !important;
+}
+
+// .add-expense-fields {
+//     width: 50%;
+// }
+
+.wide_button {
+    width: 100%;
+    height: 3rem;
+    font-weight: 900;
+}
+
+.cc-italic {
+    font-style: italic;
+}
+

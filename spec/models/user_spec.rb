@@ -13,6 +13,8 @@ RSpec.describe User, type: :model do
   it { is_expected.to have_one(:supervisor_volunteer) }
   it { is_expected.to have_one(:supervisor).through(:supervisor_volunteer) }
 
+  it { is_expected.to have_many(:notes) }
+
   it "requires display name" do
     user = build(:user, display_name: "")
     expect(user.valid?).to be false
