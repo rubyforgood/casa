@@ -129,14 +129,12 @@
     <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
       <div class="other-expenses">
         <h5><%= form.label :additional_expense, t(".other_expenses") %></h5>
-
+        <ol>
         <% @case_contact.decorate.additional_expenses_count %>
         <% if @case_contact.additional_expenses.any? %>
           <%= form.fields_for :additional_expenses do |ff| %>
+            <li>
             <div class="expense-container">
-              <div class="pr-8 add-expense-line">
-                <%= @case_contact.decorate.additional_expenses_count + 1 %>.
-              </div>
               <%= ff.number_field :other_expense_amount,
               placeholder: "Enter amount",
               class: "cc-italic cc-field other-expense-amount",
@@ -144,14 +142,13 @@
               <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
               class: "cc-italic cc-field other-expenses-describe" %>
             </div>
+            </li>
           <% end %>
         <% end %>
         <% if @case_contact.decorate.additional_expenses_count < 10 %>
           <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
+          <li>
           <div class="expense-container">
-            <div class="pr-8 add-expense-line">
-              <%= @case_contact.decorate.additional_expenses_count + 1 %>.
-            </div>
             <%= ff.number_field :other_expense_amount,
             placeholder: "Enter amount",
             class: "cc-italic cc-field other-expense-amount",
@@ -159,22 +156,23 @@
             <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
             class: "cc-italic cc-field other-expenses-describe" %>
           </div>
+          </li>
           <% end %>
           <% (9 - @case_contact.decorate.additional_expenses_count).times do |i| %>
             <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
+            <%# <li> %>
             <div class="expense-container">
-              <div class="pr-8 add-expense-line hide-field">
-                <%= i + 2 %>.
-              </div>
-                <%= ff.number_field :other_expense_amount,
-                placeholder: "Enter amount",
-                class: "cc-italic cc-field other-expense-amount hide-field",
-                min: "0", max: 1000, step: 0.01 %>
-                <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
-                class: "cc-italic cc-field other-expenses-describe hide-field" %>
+              <%= ff.number_field :other_expense_amount,
+              placeholder: "Enter amount",
+              class: "cc-italic cc-field other-expense-amount hide-field",
+              min: "0", max: 1000, step: 0.01 %>
+              <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
+              class: "cc-italic cc-field other-expenses-describe hide-field" %>
             </div>
+            <%# </li> %>
             <% end %>
           <% end %>
+          </ol>
 
           <a class="add-another-expense add-expense-link pr-9" id="add-another-expense">Add Another Expense</a>
           <% end %>
