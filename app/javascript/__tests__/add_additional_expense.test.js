@@ -10,8 +10,10 @@ beforeEach(() => {
   '</style>' +
   '<div>' +
   ' <a href="#" class="add-another-expense" id="add-another-expense">Add another expense</a>' +
+  '<div class="expense-container>' +
   ' <input placeholder="Describe the expense" class="form-control other-expenses-describe hide-field" type="text" name="case_contact[additional_expenses_attributes][1][other_expenses_describe]" id="case_contact_additional_expenses_attributes_1_other_expense_amount" style="display: inline-block;">' +
   ' <input placeholder="Describe the expense" class="form-control other-expenses-describe hide-field" type="text" name="case_contact[additional_expenses_attributes][1][other_expenses_describe]" id="case_contact_additional_expenses_attributes_1_other_expenses_describe" style="display: inline-block;" >' +
+  '</div>' +
   '</div>'
 
   $(document).ready(() => {
