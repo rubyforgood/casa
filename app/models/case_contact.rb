@@ -12,7 +12,7 @@ class CaseContact < ApplicationRecord
   validates :occurred_at, presence: true
   validate :occurred_at_not_in_future
   validate :reimbursement_only_when_miles_driven
-  validate :additional_expense_description_on_amount
+  # validate :additional_expense_description_on_amount
 
   belongs_to :creator, class_name: "User"
   has_one :supervisor_volunteer, -> {
@@ -183,12 +183,12 @@ class CaseContact < ApplicationRecord
     end
   end
 
-  def additional_expense_description_on_amount
-    binding.pry
-    additional_expenses.map do |ae|
-      errors.add(:base, "Each expense must have a description") if additional_expenses[ae.to_s]["other_expenses_describe"].blank?
-    end
-  end
+  # def additional_expense_description_on_amount
+  #   binding.pry
+  #   additional_expenses.map do |ae|
+  #     errors.add(:base, "Each expense must have a description") if additional_expenses[ae.to_s]["other_expenses_describe"].blank?
+  #   end
+  # end
 
   private_class_method def self.sorted_by_params
     %i[
