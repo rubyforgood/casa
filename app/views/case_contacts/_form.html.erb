@@ -162,7 +162,7 @@
             <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
             <div class="expense-container" id="<%= if @case_contact.decorate.additional_expenses_count === 0
             then "expense" + (i + 2).to_s
-            else "expense" + ((@case_contact.decorate.additional_expenses_count) + (i + 2)).to_s 
+            else "expense" + ((@case_contact.decorate.additional_expenses_count) + (i + 2)).to_s
             end %>">
               <%= ff.number_field :other_expense_amount,
               placeholder: "Enter amount",
@@ -171,7 +171,6 @@
               <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
               class: "cc-italic cc-field other-expenses-describe hide-field" %>
             </div>
-            <%# </li> %>
             <% end %>
           <% end %>
           </ol>
