@@ -160,7 +160,7 @@
           <% end %>
           <% (9 - @case_contact.decorate.additional_expenses_count).times do |i| %>
             <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
-            <div class="expense-container" id="<%= "expense" + (i + 2).to_s %>">
+            <div class="expense-container" id="<%= "expense" + ((9 - @case_contact.decorate.additional_expenses_count) + (i - 1)).to_s %>">
               <%= ff.number_field :other_expense_amount,
               placeholder: "Enter amount",
               class: "cc-italic cc-field other-expense-amount hide-field",
