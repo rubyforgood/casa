@@ -12,7 +12,6 @@ class CaseContact < ApplicationRecord
   validates :occurred_at, presence: true
   validate :occurred_at_not_in_future
   validate :reimbursement_only_when_miles_driven
-  validate :additional_expense_description_on_amount
 
   belongs_to :creator, class_name: "User"
   has_one :supervisor_volunteer, -> {
@@ -27,7 +26,8 @@ class CaseContact < ApplicationRecord
   has_many :contact_types, through: :case_contact_contact_type, source: :contact_type
 
   has_many :additional_expenses
-  accepts_nested_attributes_for :additional_expenses, reject_if: :all_blank, reject_if: proc { |attributes| attributes['other_expenses_describe'].blank?}
+  accepts_nested_attributes_for :additional_expenses, reject_if: :all_blank
+  validates_associated :additional_expenses
 
   accepts_nested_attributes_for :case_contact_contact_type
 
@@ -180,13 +180,6 @@ class CaseContact < ApplicationRecord
   def self.options_for_sorted_by
     sorted_by_params.map do |option|
       [I18n.t("models.case_contact.options_for_sorted_by.#{option}"), option]
-    end
-  end
-
-  def additional_expense_description_on_amount
-    additional_expenses.map do |ae|
-      binding.pry
-      errors.add(:base, "Each expense must have a description") if ae["other_expenses_describe"].blank?
     end
   end
 

@@ -103,13 +103,9 @@ class CaseContactsController < ApplicationController
           current = AdditionalExpense.find_by(id: id)
           if current
             current.update!(other_expense_amount: ae_params[:other_expense_amount], other_expenses_describe: ae_params[:other_expenses_describe])
-            # update
           else
-            # create
             @case_contact.additional_expenses.create(ae_params)
           end
-          # if exists, update
-          # else create
         end
       end
       redirect_to casa_case_path(@case_contact.casa_case), notice: t("update", scope: "case_contact")

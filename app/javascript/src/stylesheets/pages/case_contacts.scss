@@ -90,36 +90,22 @@ legend {
     width: 100%;
     display: flex;
     flex-direction: row;
-    // flex-wrap: wrap;
     align-items: center;
     gap: .5rem;
     justify-content: flex-end;
-    // margin-bottom: .2rem;
 }
 
-// .add-expense-line {
-//     // display: block;
-//     margin-right: auto;
-//     // margin-right: 5%;
-//     // flex-grow: 0;
-//     // flex-shrink: 1;
-//     // flex-basis: 0;
-//     // min-width: 3%;
-// }
+.other-expenses li {
+    margin-bottom: .2rem;
+}
 
 .other-expense-amount {
     width: 20%;
     margin-left: .4rem
-    // flex-shrink: 1;
 }
 
 .other-expenses-describe {
-    // flex-grow: 3;
-    // width: 75%;
     width: 80%;
-    // flex-shrink: 2;
-    // align-self: end;
-    // flex-basis: initial;
 }
 
 .add-expense-link {
@@ -139,15 +125,9 @@ legend {
     padding-left: 2.5rem !important;
 }
 
-// .pr-8 {
-//     // display: inline-block;
-//     padding-left: .7rem !important;
-// }
-
 .pr-9 {
     padding-left: 3.1rem !important;
 }
-
 
 .wide_button {
     width: 100%;
