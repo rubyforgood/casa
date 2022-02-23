@@ -324,11 +324,16 @@ RSpec.describe "case_contacts/new", type: :system do
     end
 
     it "delete local storage notes after successfuly submited", js: true do
-      volunteer = create(:volunteer)
-      sign_in volunteer
+      volunteer = create(:volunteer, :with_casa_cases)
+      volunteer_casa_case_one = volunteer.casa_cases.first
+      create_contact_types(volunteer_casa_case_one.casa_org)
 
+      sign_in volunteer
       visit new_case_contact_path
 
+      check volunteer_casa_case_one.case_number
+      check "School"
+      check "Therapist"
       choose "Yes"
       choose "In Person"
       fill_in "case-contact-duration-hours-display", with: "1"
@@ -341,11 +346,12 @@ RSpec.describe "case_contacts/new", type: :system do
       sleep 5
       click_on "Submit"
       click_on "Continue Submitting"
-      expect(page).to have_text("At least one case must be selected")
+
+      expect(page).to have_text "successfully created"
 
       visit new_case_contact_path
 
-      expect(page).to have_field("Notes", with: "Hello world")
+      expect(page).to_not have_field("Notes", with: "Hello world")
     end
 
     it "submits the form when no note was added", js: true do
