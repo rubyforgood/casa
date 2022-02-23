@@ -14,6 +14,6 @@ RSpec.describe "reimbursements", type: :system do
     expect(page).to have_content("Reimbursement Complete")
     expect(page).to have_content("Occurred At")
     expect(page).to have_content(contact1.casa_case.case_number)
-    expect(page).to have_content(contact2.casa_case.miles_driven)
+    expect(page).to have_content(contact2.miles_driven)
   end
 end
