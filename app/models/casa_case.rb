@@ -219,7 +219,7 @@ end
 #  court_report_status       :integer          default("not_submitted")
 #  court_report_submitted_at :datetime
 #  slug                      :string
-#  transition_aged_youth     :boolean          default(FALSE), not null
+#  transition_aged_youth     :boolean          default(FALSE)
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  casa_org_id               :bigint           not null

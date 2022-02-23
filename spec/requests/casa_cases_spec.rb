@@ -4,7 +4,15 @@ RSpec.describe "/casa_cases", type: :request do
   let(:organization) { build(:casa_org) }
   let(:hearing_type) { create(:hearing_type) }
   let(:judge) { create(:judge) }
-  let(:valid_attributes) { {case_number: "1234", transition_aged_youth: true, birth_month_year_youth: pre_transition_aged_youth_age, casa_org_id: organization.id, hearing_type_id: hearing_type.id, judge_id: judge.id} }
+  let(:valid_attributes) do
+    {
+      case_number: "1234",
+      birth_month_year_youth: pre_transition_aged_youth_age,
+      casa_org_id: organization.id,
+      hearing_type_id: hearing_type.id,
+      judge_id: judge.id
+    }
+  end
   let(:invalid_attributes) { {case_number: nil, birth_month_year_youth: nil} }
   let(:casa_case) { create(:casa_case, casa_org: organization, case_number: "111") }
   let(:texts) { ["1-New Mandate Text One", "0-New Mandate Text Two"] }
