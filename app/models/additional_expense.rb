@@ -1,15 +1,8 @@
 class AdditionalExpense < ApplicationRecord
   belongs_to :case_contact
 
-  validates :other_expenses_describe, :presence => { :message => "Expense description cannot be blank."}
-  # It is rejecting the expense line on both create and update, 
-  # but there is not display of the message
-  # And it creates the casa case
-  # I think what is happening is the needs to a stop in the save process
-  # And the controller has to explicitly redirect and show the error message
-
-  # On create and update, its allow any values that have the description, rejecting those that don't regardless of order of those that don't (thats good!)
-
+  # validates :other_expense_amount, presence: true
+  validates :other_expenses_describe, presence: {message: "Expense description cannot be blank."}
 
 end
 
