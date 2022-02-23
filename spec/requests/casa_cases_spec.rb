@@ -6,11 +6,11 @@ RSpec.describe "/casa_cases", type: :request do
   let(:judge) { create(:judge) }
   let(:valid_attributes) do
     {
-        case_number: "1234",
-        birth_month_year_youth: pre_transition_aged_youth_age,
-        casa_org_id: organization.id,
-        hearing_type_id: hearing_type.id,
-        judge_id: judge.id
+      case_number: "1234",
+      birth_month_year_youth: pre_transition_aged_youth_age,
+      casa_org_id: organization.id,
+      hearing_type_id: hearing_type.id,
+      judge_id: judge.id
     }
   end
   let(:invalid_attributes) { {case_number: nil, birth_month_year_youth: nil} }

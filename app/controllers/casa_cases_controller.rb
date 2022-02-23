@@ -127,7 +127,7 @@ class CasaCasesController < ApplicationController
 
   def is_transition_aged_youth?(params)
     # TODO remove this once TAY conversion is done
-    Date.parse(params[:birth_month_year_youth]) < 14.years.ago
+    params[:birth_month_year_youth] && Date.parse(params[:birth_month_year_youth]) < 14.years.ago
   end
 
   # Use callbacks to share common setup or constraints between actions.
