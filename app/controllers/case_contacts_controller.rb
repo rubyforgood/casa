@@ -102,13 +102,22 @@ class CaseContactsController < ApplicationController
           id = ae_params[:id]
           current = AdditionalExpense.find_by(id: id)
           if current
-            current.update!(other_expense_amount: ae_params[:other_expense_amount], other_expenses_describe: ae_params[:other_expenses_describe])
+            current.assign_attributes(other_expense_amount: ae_params[:other_expense_amount], other_expenses_describe: ae_params[:other_expenses_describe])
+            if current.valid?
+              current.save
+            else
+              @case_contact.errors.add(:base, current.errors.full_messages.to_sentence)
+            end
           else
             @case_contact.additional_expenses.create(ae_params)
           end
         end
       end
-      redirect_to casa_case_path(@case_contact.casa_case), notice: t("update", scope: "case_contact")
+      if @case_contact.valid?
+        redirect_to casa_case_path(@case_contact.casa_case), notice: t("update", scope: "case_contact")
+      else
+        render :edit
+      end
     else
       render :edit
     end
