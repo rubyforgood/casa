@@ -481,10 +481,11 @@ en:
       select_columns: "Select columns:"
   supervisors:
     index:
-      filter: Filter by
       active: Active
-      inactive: Inactive
       both: Both
+      filter: Filter by
+      inactive: Inactive
+      status: Status
     edit:
       assign_a_volunteer: Assign a Volunteer
       assign_volunteer: Assign Volunteer
