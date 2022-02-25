@@ -110,7 +110,7 @@ GEM
     capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
-    caxlsx (3.1.1)
+    caxlsx (3.2.0)
       htmlentities (~> 4.3, >= 4.3.4)
       marcel (~> 1.0)
       nokogiri (~> 1.10, >= 1.10.4)
@@ -267,11 +267,11 @@ GEM
       net-protocol
       timeout
     nio4r (2.5.8)
-    nokogiri (1.13.1-arm64-darwin)
+    nokogiri (1.13.3-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.13.1-x86_64-darwin)
+    nokogiri (1.13.3-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.13.1-x86_64-linux)
+    nokogiri (1.13.3-x86_64-linux)
       racc (~> 1.4)
     noticed (1.5.7)
       http (>= 4.0.0)
@@ -476,7 +476,7 @@ DEPENDENCIES
   byebug
   capybara
   capybara-screenshot
-  caxlsx (~> 3.0)
+  caxlsx (~> 3.2)
   caxlsx_rails (~> 0.6.2)
   cypress-on-rails (~> 1.12)
   database_cleaner-active_record
