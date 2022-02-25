@@ -404,12 +404,17 @@ en:
     edit:
       title: Editing Court Date
     form:
+      add_court_date: Add Court Date
       button:
         create: Create
         update: Update
-      add_cout_date: Add Court Date
-      judge: Judge
       hearing_type: Hearing type
+      judge: Judge
+      label:
+        case_number: Case Number
+      prompt:
+        select_hearing_type: -Select Hearing Type-
+        select_judge: -Select Judge-
     new:
       title: New Court Date
     show:
