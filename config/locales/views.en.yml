@@ -554,7 +554,7 @@ en:
         actions: Actions
     form:
       effective_date: Effective date
-      ammount: Amount
+      amount: Amount
       is_active: Currently active?
   users:
     edit:
