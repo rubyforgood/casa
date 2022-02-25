@@ -286,6 +286,15 @@ en:
         saved: Saved
         saving: Saving
       title: Emancipation Checklist
+  emancipation_checklists:
+    index:
+      heading:
+        case_number: Case Number
+        checklist: Checklist
+      link:
+        checklist: Checklist
+        details: Details
+      title: Emancipation Checklists
   global:
     add_court_order: Add a court order
     court_orders: Court Orders - Please check that you didn't enter any youth names
