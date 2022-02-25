@@ -47,10 +47,10 @@ en:
       pick_displayed_columns: Pick displayed columns
     new:
       title: New CASA Case
-    no_court_dates: No court dates
     court_dates:
       add_court_date: Add a court date
       court_dates: Court dates
+      no_court_dates: No court dates
     shared:
       assigned_multiple: Assigned to more than 1 Volunteer
       assigned_single: Assigned to Volunteer
