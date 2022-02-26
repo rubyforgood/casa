@@ -50,7 +50,9 @@ en:
     court_dates:
       add_court_date: Add a court date
       court_dates: Court dates
-      no_court_dates: No court dates
+      label:
+        attached_report: Attached Report
+      no_court_dates: No Court Dates
     shared:
       assigned_multiple: Assigned to more than 1 Volunteer
       assigned_single: Assigned to Volunteer
