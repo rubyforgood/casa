@@ -26,7 +26,7 @@ RSpec.describe FundRequestsController, type: :controller do
     }.to change { ActionMailer::Base.deliveries.count }.by(1)
     expect(assigns(:fund_request)).to be_present
     mail = ActionMailer::Base.deliveries.last
-    expect(mail.subject).to eq("Fund request from requested_by_and_relationship")
+    expect(mail.subject).to eq("Fund request from submitter_email@example.com")
     expect(mail.to).to match_array(["a@example.com", "submitter_email@example.com"])
     expect(mail.body.encoded).to include("youth_name")
     expect(mail.body.encoded).to include("payment_amount")
