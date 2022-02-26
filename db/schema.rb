@@ -71,11 +71,6 @@ ActiveRecord::Schema.define(version: 2022_02_26_043321) do
     t.index ["reset_password_token"], name: "index_all_casa_admins_on_reset_password_token", unique: true
   end
 
-  create_table "bars", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "casa_case_contact_types", force: :cascade do |t|
     t.bigint "contact_type_id", null: false
     t.bigint "casa_case_id", null: false
@@ -264,11 +259,6 @@ ActiveRecord::Schema.define(version: 2022_02_26_043321) do
     t.text "note"
     t.index ["case_contact_id"], name: "index_followups_on_case_contact_id"
     t.index ["creator_id"], name: "index_followups_on_creator_id"
-  end
-
-  create_table "foos", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "fund_requests", force: :cascade do |t|
