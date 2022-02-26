@@ -1,0 +1,39 @@
+<h1>New Fund Request</h1>
+
+<div class="card card-container">
+  <div class="card-body">
+    <%= form_with(model: @form_request, local: true, url: fund_requests_path, method: :post) do |form| %>
+      <%= form.label :submitter_email %>
+      <%= form.text_field :submitter_email, class: "form-control", required: true %>
+
+      <%= form.label :youth_name %>
+      <%= form.text_field :youth_name, class: "form-control", required: false %>
+
+      <%= form.label :payment_amount %>
+      <%= form.text_field :payment_amount, class: "form-control", required: false %>
+
+      <%= form.label :deadline %>
+      <%= form.text_field :deadline, class: "form-control", required: false %>
+
+      <%= form.label :request_purpose %>
+      <%= form.text_area :request_purpose, class: "form-control", required: false %>
+
+      <%= form.label :payee_name %>
+      <%= form.text_field :payee_name, class: "form-control", required: false %>
+
+      <%= form.label :requested_by_and_relationship %>
+      <%= form.text_field :requested_by_and_relationship, class: "form-control", required: false %>
+
+      <%= form.label :other_funding_source_sought %>
+      <%= form.text_area :other_funding_source_sought, class: "form-control", required: false %>
+
+      <%= form.label :impact %>
+      <%= form.text_area :impact, class: "form-control", required: false %>
+
+      <%= form.label :extra_information %>
+      <%= form.text_area :extra_information, class: "form-control", required: false %>
+
+      <%= form.submit "Submit Fund Request", class: "btn btn-primary", required: false %>
+    <% end %>
+  </div>
+</div>

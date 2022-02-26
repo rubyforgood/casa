@@ -143,4 +143,5 @@ Rails.application.routes.draw do
       patch "update_password"
     end
   end
+  resources :fund_requests, only: %i[new create]
 end
