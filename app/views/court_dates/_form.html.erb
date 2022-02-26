@@ -12,7 +12,7 @@
       </p>
 
       <div class="field form-group">
-        <%= form.label :date, t(".add_cout_date") %>
+        <%= form.label :date, t(".add_court_date") %>
         <%= form.text_field :date,
                         value: court_date.date&.to_date || Time.zone.now,
                         data: {provide: "datepicker", date_format: "yyyy/mm/dd"},

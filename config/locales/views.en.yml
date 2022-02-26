@@ -47,10 +47,12 @@ en:
       pick_displayed_columns: Pick displayed columns
     new:
       title: New CASA Case
-    no_court_dates: No court dates
     court_dates:
       add_court_date: Add a court date
       court_dates: Court dates
+      label:
+        attached_report: Attached Report
+      no_court_dates: No Court Dates
     shared:
       assigned_multiple: Assigned to more than 1 Volunteer
       assigned_single: Assigned to Volunteer
@@ -286,6 +288,15 @@ en:
         saved: Saved
         saving: Saving
       title: Emancipation Checklist
+  emancipation_checklists:
+    index:
+      heading:
+        case_number: Case Number
+        checklist: Checklist
+      link:
+        checklist: Checklist
+        details: Details
+      title: Emancipation Checklists
   global:
     add_court_order: Add a court order
     court_orders: Court Orders - Please check that you didn't enter any youth names
@@ -404,12 +415,17 @@ en:
     edit:
       title: Editing Court Date
     form:
+      add_court_date: Add Court Date
       button:
         create: Create
         update: Update
-      add_cout_date: Add Court Date
-      judge: Judge
       hearing_type: Hearing type
+      judge: Judge
+      label:
+        case_number: Case Number
+      prompt:
+        select_hearing_type: -Select Hearing Type-
+        select_judge: -Select Judge-
     new:
       title: New Court Date
     show:
@@ -467,10 +483,11 @@ en:
       select_columns: "Select columns:"
   supervisors:
     index:
-      filter: Filter by
       active: Active
-      inactive: Inactive
       both: Both
+      filter: Filter by
+      inactive: Inactive
+      status: Status
     edit:
       assign_a_volunteer: Assign a Volunteer
       assign_volunteer: Assign Volunteer
@@ -539,7 +556,7 @@ en:
         actions: Actions
     form:
       effective_date: Effective date
-      ammount: Amount
+      amount: Amount
       is_active: Currently active?
   users:
     edit:
