@@ -32,13 +32,13 @@ RSpec.describe "volunteer downloads court reports for case", type: :system do
   it "views and downloads", js: true do
     now = Date.new(2021, 1, 22)
     travel_to now do
-      case_contact_1 = create(:case_contact, casa_case: casa_case, occurred_at: Date.new(2021, 1, 1))
-      court_date_1 = create(:court_date, casa_case: casa_case, date: Date.new(2021, 1, 10))
-      case_contact_2 = create(:case_contact, casa_case: casa_case, occurred_at: Date.new(2021, 1, 20))
+      _case_contact_1 = create(:case_contact, casa_case: casa_case, occurred_at: Date.new(2021, 1, 1))
+      _court_date_1 = create(:court_date, casa_case: casa_case, date: Date.new(2021, 1, 10))
+      _case_contact_2 = create(:case_contact, casa_case: casa_case, occurred_at: Date.new(2021, 1, 20))
       # now
-      court_date_2 = create(:court_date, casa_case: casa_case, date: Date.new(2021, 1, 21))
-      case_contact_3 = create(:case_contact, casa_case: casa_case, occurred_at: Date.new(2021, 1, 22))
-      court_date_future = create(:court_date, casa_case: casa_case, date: Date.new(2021, 3, 3))
+      _court_date_2 = create(:court_date, casa_case: casa_case, date: Date.new(2021, 1, 21))
+      _case_contact_3 = create(:case_contact, casa_case: casa_case, occurred_at: Date.new(2021, 1, 22))
+      _court_date_future = create(:court_date, casa_case: casa_case, date: Date.new(2021, 3, 3))
 
       sign_in volunteer
       visit casa_case_path(casa_case)
