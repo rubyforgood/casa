@@ -4,7 +4,7 @@
   <div class="card-body">
     <%= form_with(model: @form_request, local: true, url: fund_requests_path, method: :post) do |form| %>
       <%= form.label :submitter_email %>
-      <%= form.text_field :submitter_email, class: "form-control", required: false %>
+      <%= form.text_field :submitter_email, class: "form-control", required: true %>
 
       <%= form.label :youth_name %>
       <%= form.text_field :youth_name, class: "form-control", required: false %>
