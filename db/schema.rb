@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_23_035901) do
+ActiveRecord::Schema.define(version: 2022_02_26_043321) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,6 +69,11 @@ ActiveRecord::Schema.define(version: 2022_02_23_035901) do
     t.index ["email"], name: "index_all_casa_admins_on_email", unique: true
     t.index ["invitation_token"], name: "index_all_casa_admins_on_invitation_token", unique: true
     t.index ["reset_password_token"], name: "index_all_casa_admins_on_reset_password_token", unique: true
+  end
+
+  create_table "bars", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "casa_case_contact_types", force: :cascade do |t|
@@ -259,6 +264,25 @@ ActiveRecord::Schema.define(version: 2022_02_23_035901) do
     t.text "note"
     t.index ["case_contact_id"], name: "index_followups_on_case_contact_id"
     t.index ["creator_id"], name: "index_followups_on_creator_id"
+  end
+
+  create_table "foos", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "fund_requests", force: :cascade do |t|
+    t.text "submitter_email"
+    t.text "youth_name"
+    t.text "payment_amount"
+    t.text "deadline"
+    t.text "request_purpose"
+    t.text "payee_name"
+    t.text "requested_by_and_relationship"
+    t.text "other_funding_source_sought"
+    t.text "impact"
+    t.text "extra_information"
+    t.text "timestamps"
   end
 
   create_table "healths", force: :cascade do |t|
