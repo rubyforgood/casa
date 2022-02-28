@@ -10,9 +10,9 @@ class FundRequestMailer < ApplicationMailer
     submitter_name = fund_request.submitter_email.split("@").first
     begin
       pdf_attachment = FdfInputsService.new(
-          inputs: @inputs,
-          pdf_template_path: File.join(["data", "fund_request.pdf"]),
-          basename: ["fund_request", "pdf"]
+        inputs: @inputs,
+        pdf_template_path: File.join(["data", "fund_request.pdf"]),
+        basename: ["fund_request", "pdf"]
       ).write_to_file.read
       attachments.inline["fund-request-#{Date.today}-#{submitter_name}.pdf"] = pdf_attachment
     rescue => e
