@@ -5,6 +5,7 @@ RSpec.describe "casa_cases/new", type: :system do
   let(:admin) { create(:casa_admin, casa_org: casa_org) }
   let(:case_number) { "12345" }
   let!(:next_year) { (Date.today.year + 1).to_s }
+  let(:court_date) { 21.days.from_now }
 
   before do
     sign_in admin
@@ -21,6 +22,7 @@ RSpec.describe "casa_cases/new", type: :system do
         fourteen_years = (Date.today.year - 14).to_s
         fill_in "Case number", with: case_number
 
+        fill_in "Court Date", with: court_date.strftime("%Y/%m/%d")
         fill_in "Court Report Due Date", with: next_year.strftime("%Y/%m/%d\n")
 
         select "March", from: "casa_case_birth_month_year_youth_2i"
@@ -33,6 +35,7 @@ RSpec.describe "casa_cases/new", type: :system do
         end
 
         expect(page.body).to have_content(case_number)
+        expect(page).to have_content(I18n.l(court_date, format: :day_and_date))
         expect(page).to have_content("CASA case was successfully created.")
         expect(page).to have_content("Court Report Due Date: Thursday, 1-APR-2021") # accurate for frozen time
         expect(page).to have_content("Transition Aged Youth: Yes")
