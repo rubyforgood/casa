@@ -27,6 +27,7 @@ gem "noticed" # Notifications
 gem "paper_trail" # tracking changes
 gem "paranoia" # For soft-deleting database objects
 gem "pdf-forms" # filling in fund request PDFs with user input
+gem 'rexml' # pdf-forms needs this to deploy to heroku apparently
 gem "pg" # Use postgresql as the database for Active Record
 gem "pretender"
 gem "puma" # Use Puma as the app server

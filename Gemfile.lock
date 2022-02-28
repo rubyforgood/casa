@@ -516,6 +516,7 @@ DEPENDENCIES
   rails-controller-testing
   rake
   request_store
+  rexml
   rspec-rails
   sablon
   scout_apm
