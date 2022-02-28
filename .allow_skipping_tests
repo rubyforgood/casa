@@ -67,4 +67,3 @@ values/supervisor_parameters.rb
 values/user_parameters.rb
 values/volunteer_parameters.rb
 models/fund_request.rb
-services/fdf_inputs_service.rb
