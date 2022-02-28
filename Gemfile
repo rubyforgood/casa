@@ -25,7 +25,8 @@ gem "net-pop" # needed for ruby upgrade to 3.1.0 https://www.ruby-lang.org/en/ne
 gem "net-imap" # needed for ruby upgrade to 3.1.0 https://www.ruby-lang.org/en/news/2021/12/25/ruby-3-1-0-released/
 gem "noticed" # Notifications
 gem "paper_trail" # tracking changes
-gem "paranoia" # For soft-deleting purpose
+gem "paranoia" # For soft-deleting database objects
+gem "pdf-forms" # filling in fund request PDFs with user input
 gem "pg" # Use postgresql as the database for Active Record
 gem "pretender"
 gem "puma" # Use Puma as the app server
@@ -73,3 +74,5 @@ group :test do
   gem "simplecov"
   gem "webdrivers" # easy installation and use of web drivers to run system tests with browsers
 end
+
+# gem "pdf-reader", "~> 2.9"

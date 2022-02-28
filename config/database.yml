@@ -1,23 +1,18 @@
 default: &default
   adapter: postgresql
-  encoding: unicode
-  username: <%= ENV.fetch("POSTGRES_USER") { } %>
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  port: <%= ENV.fetch("POSTGRES_PORT", "5432") %>
-  password: password
+  host: <%= ENV.fetch("DB_HOST", "localhost") %>
+  username: <%= ENV.fetch("DB_USERNAME", "postgres") %>
+  password: <%= ENV.fetch("DB_PASSWORD", "postgres") %>
 
-development:
+development: &development
   <<: *default
   database: casa_development
-  host: <%= ENV.fetch("DATABASE_HOST") { } %>
+
+read_replica_development:
+  <<: *development
+  <%# username: readonly %>
+  <%# need to setup a readonly user or can just use same connection %>
 
 test:
   <<: *default
-  database: casa_test
-  host: <%= ENV.fetch("DATABASE_HOST") { } %>
-
-production:
-  <<: *default
-  database: casa_production
-  username: casa
-  password: <%= ENV['CASA_DATABASE_PASSWORD'] %>
+  database: app_workflow_test
