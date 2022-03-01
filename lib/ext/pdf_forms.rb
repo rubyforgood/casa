@@ -1,12 +1,9 @@
 module Ext
-  p "LINDA EXT"
   module PdfForms
-    p "LINDA PDFFORMS"
     #
     # Fill form using FDF file directly
     #
     def fill_form_with_fdf(template, destination, fdf_path, fill_options = {}, flatten:)
-      p "LINDA fill_form_with_fdf"
       args = pdftk_arguments(template, destination, fdf_path, flatten: flatten)
 
       result = call_pdftk(*append_options(args, fill_options))
