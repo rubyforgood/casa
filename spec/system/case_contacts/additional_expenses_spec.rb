@@ -229,18 +229,29 @@ RSpec.describe "addtional_expenses", type: :system do
 
     expect(page).to have_text("error")
 
-    # TODO change it to save successfully (remove AE?) and then save, and *then* test failure to update invalid
+    find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe").fill_in(with: "1 meal")
+
+    expect {
+      click_on "Submit"
+    }.to change(CaseContact, :count).by(1).and change(AdditionalExpense, :count).by(1)
+    expect(page).not_to have_text("error")
+
+    visit edit_case_contact_path(casa_case.reload.case_contacts.last)
+    #Confirming validation and correct errors to user for update method
+
+    find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.45")
+
     expect {
       click_on "Submit"
     }.to change(CaseContact, :count).by(0).and change(AdditionalExpense, :count).by(0)
     expect(page).to have_text("error")
 
-    find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe", with: "1 meal")
+    find_by_id("case_contact_additional_expenses_attributes_1_other_expenses_describe").fill_in(with: "2nd meal")
 
     expect {
       click_on "Submit"
     }.to change(CaseContact, :count).by(0).and change(AdditionalExpense, :count).by(1)
-
     expect(page).not_to have_text("error")
+
   end
 end
