@@ -237,7 +237,7 @@ RSpec.describe "addtional_expenses", type: :system do
     expect(page).not_to have_text("error")
 
     visit edit_case_contact_path(casa_case.reload.case_contacts.last)
-    #Confirming validation and correct errors to user for update method
+    # Confirming validation and correct errors to user for update method
 
     find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.45")
 
@@ -252,6 +252,5 @@ RSpec.describe "addtional_expenses", type: :system do
       click_on "Submit"
     }.to change(CaseContact, :count).by(0).and change(AdditionalExpense, :count).by(1)
     expect(page).not_to have_text("error")
-
   end
 end

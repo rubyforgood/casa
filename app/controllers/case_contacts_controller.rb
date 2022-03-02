@@ -141,7 +141,6 @@ class CaseContactsController < ApplicationController
 
   def create_case_contact_for_every_selected_casa_case(selected_cases)
     # create case contact and additional expense
-    #
     selected_cases.map do |casa_case|
       new_cc = casa_case.case_contacts.build(create_case_contact_params)
       if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
