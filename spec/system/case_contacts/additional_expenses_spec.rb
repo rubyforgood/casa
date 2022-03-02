@@ -240,6 +240,5 @@ RSpec.describe "addtional_expenses", type: :system do
     }.to change(CaseContact, :count).by(0).and change(AdditionalExpense, :count).by(1)
 
     expect(page).not_to have_text("error")
-
   end
 end

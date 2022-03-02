@@ -3,7 +3,6 @@ class AdditionalExpense < ApplicationRecord
 
   # validates :other_expense_amount, presence: true
   validates :other_expenses_describe, presence: {message: "Expense description cannot be blank."}
-
 end
 
 # == Schema Information
