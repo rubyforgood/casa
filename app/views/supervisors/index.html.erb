@@ -13,7 +13,6 @@
   </div>
 </div>
 <hr>
-
 <div class="row supervisor-filters">
   <div class="col-sm-12">
     <h4 class="pull-left mr-2"><%= t(".filter") %></h4>
@@ -42,65 +41,56 @@
     </div>
   </div>
 </div>
-<br>
-
-<div class="supervisor_indicator_legend">
-<div class="supervisor_indicator_legend_negative_positive">
-  <span class="supervisor_indicator_legend_positive">Have attempted contact in the last 14 days</span>
-  <span class="supervisor_indicator_legend_negative">Have not attempted contact in the last 14 days</span>
+<div class="legend supervisor_case_contact_stats">
+  <div>
+    <span class="attempted-contact"># Volunteers attempting contact (within 2 weeks)</span>
+    <span class="no-attempted-contact"># Volunteers not attempting contact (within 2 weeks)</span>
+    <span>Transition aged youth</span>
+  </div>
 </div>
-<div class="supervisor_indicator_legend_transition_aged_youth">(Transition aged youth)</div>
-</div>
-
 <div class="card card-container">
   <div class="card-body">
     <table
       class="table table-striped table-bordered supervisors-list"
       id="supervisors">
       <thead>
-      <tr>
-        <th>Supervisor Name</th>
-        <th></th>
-        <th>Actions</th>
-      </tr>
+        <tr class="supervisor_table_row">
+          <th>Supervisor Name</th>
+          <th></th>
+          <th>Actions</th>
+        </tr>
       </thead>
-
       <tbody>
       <% @supervisors.each do |supervisor| %>
-        <tr>
+        <tr class="supervisor_table_row">
           <% no_attempt_volunteers = supervisor.no_attempt_for_two_weeks %>
           <% active_volunteers = (supervisor.active_volunteers - no_attempt_volunteers).nonzero? %>
-          <% if active_volunteers %>
-            <% no_attempt_percentage = ((no_attempt_volunteers.to_f / supervisor.active_volunteers.to_f) * 100).to_i %>
-            <% active_percentage = (100 - no_attempt_percentage).to_i %>
-          <% else %>
-            <% no_attempt_percentage = 100 %>
-            <% active_percentage = 0 %>
-          <% end %>
-
           <% transition_volunteers = supervisor.volunteers_serving_transition_aged_youth %>
-
           <td id="name-<%= supervisor.id %>">
             <span class="mobile-label">Supervisor Name</span>
             <%= link_to(supervisor.display_name, edit_supervisor_path(supervisor)) %>
           </td>
-
-          <td class="supervisor_indicator_container">
-            <div class="supervisor_indicator_negative_positive">
+          <td class="supervisor_case_contact_stats">
+            <div>
               <% if active_volunteers %>
-                <span class="supervisor_indicator_positive" style="width: <%= active_percentage %>%">
+                <span class="attempted-contact" style="flex-grow: <%= active_volunteers %>">
                   <%= active_volunteers %>
                 </span>
               <% end %>
               <% if no_attempt_volunteers.nonzero? %>
-                <span class="supervisor_indicator_negative" style="width: <%= no_attempt_percentage %>%">
+                <span class="no-attempted-contact" style="flex-grow: <%= no_attempt_volunteers %>">
                   <%= no_attempt_volunteers %>
                 </span>
+              <% else %>
+                <span class="attempted-contact-end"></span>
               <% end %>
-          </div>
-            <div class="supervisor_indicator_transition_aged_youth">(<%= transition_volunteers %>)</div>
-          </td>
 
+              <% if !(active_volunteers || no_attempt_volunteers.nonzero?) %>
+                <span class="no-volunteers" style="flex-grow: 1">No assigned volunteers</span>
+              <% end %>
+              <span><%= transition_volunteers %></span>
+            </div>
+          </td>
           <td>
             <span class="mobile-label">Actions</span>
             <%= link_to 'Edit', edit_supervisor_path(supervisor) %>
@@ -111,7 +101,6 @@
     </table>
   </div>
 </div>
-
 <div class="row">
   <div class="col-sm-12 dashboard-table-header">
     <div class="card card-container">
@@ -119,9 +108,9 @@
         <% if @available_volunteers.any? %>
           <table class="table table-striped table-bordered" id="unassigned-volunteers">
             <thead>
-            <th></th>
-            <th>Active volunteers not assigned to supervisors</th>
-            <th>Assigned to Case(s)</th>
+              <th></th>
+              <th>Active volunteers not assigned to supervisors</th>
+              <th>Assigned to Case(s)</th>
             </thead>
             <tbody>
             <% @available_volunteers.each_with_index do |volunteer, index| %>

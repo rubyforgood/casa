@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "SupervisorDatatable" do
+RSpec.describe SupervisorDatatable do
   subject { described_class.new(org.supervisors, params).as_json }
 
   let(:org) { create(:casa_org) }
@@ -19,8 +19,8 @@ RSpec.describe "SupervisorDatatable" do
         it "brings only active supervisors", :aggregate_failures do
           expect(subject[:recordsTotal]).to eq(2)
           expect(subject[:recordsFiltered]).to eq(1)
-          expect(subject[:data].map { |d| d[:display_name] }).to include(active_supervisor.display_name)
-          expect(subject[:data].map { |d| d[:display_name] }).not_to include(inactive_supervisor.display_name)
+          expect(subject[:data].map { |d| d[:display_name] }).to include(CGI.escapeHTML(active_supervisor.display_name))
+          expect(subject[:data].map { |d| d[:display_name] }).not_to include(CGI.escapeHTML(inactive_supervisor.display_name))
         end
       end
 
@@ -30,8 +30,8 @@ RSpec.describe "SupervisorDatatable" do
         it "brings only inactive supervisors", :aggregate_failures do
           expect(subject[:recordsTotal]).to eq(2)
           expect(subject[:recordsFiltered]).to eq(1)
-          expect(subject[:data].map { |d| d[:display_name] }).to include(inactive_supervisor.display_name)
-          expect(subject[:data].map { |d| d[:display_name] }).not_to include(active_supervisor.display_name)
+          expect(subject[:data].map { |d| d[:display_name] }).to include(CGI.escapeHTML(inactive_supervisor.display_name))
+          expect(subject[:data].map { |d| d[:display_name] }).not_to include(CGI.escapeHTML(active_supervisor.display_name))
         end
       end
 

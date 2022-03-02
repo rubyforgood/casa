@@ -4,17 +4,15 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - 'doc/**'
-      - '**.md'
-      - 'bin/**'
+    paths:
+      - '**/*.js'
+      - '**/*.jsx'
   pull_request:
     branches:
       - main
-    paths-ignore:
-      - 'doc/**'
-      - '**.md'
-      - 'bin/**'
+    paths:
+      - '**/*.js'
+      - '**/*.jsx'
 
 jobs:
   yarn_lint:
@@ -24,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2.4.0
 
-      - uses: actions/setup-node@v2.5.0
+      - uses: actions/setup-node@v3
         with:
           node-version: lts/fermium
 

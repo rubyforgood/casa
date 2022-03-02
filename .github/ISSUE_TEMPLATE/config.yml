@@ -1,18 +1,18 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Bug report
+  - name: 🪲Bug report
     about: 🔨What needs fixing? ✨
     url: https://github.com/rubyforgood/casa/issues/new?template=bug_report.md&projects=rubyforgood/casa/1
   - name: 💡Feature request
     about: 🔨What needs building? ✨
     url: https://github.com/rubyforgood/casa/issues/new?template=feature_request.md&projects=rubyforgood/casa/1
-  - name: Documentation addition/change
+  - name: 📄Documentation addition/change
     about: 🔨What needs documenting? ✨
     url: https://github.com/rubyforgood/casa/issues/new?template=documentation.md&projects=rubyforgood/casa/1
-  - name: Chore
+  - name: 🧹Chore
     about: 🔨What needs updating or removing? ✨
     url: https://github.com/rubyforgood/casa/issues/new?template=chore.md&projects=rubyforgood/casa/1
-  - name: Problem Validation
+  - name: 🙏Problem Validation
     about: 🔨Describe a stakeholder's issue✨
     url: https://github.com/rubyforgood/casa/issues/new?template=problem_validation.md&projects=rubyforgood/casa/1
 

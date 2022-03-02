@@ -12,7 +12,7 @@ en:
         reactivate: Reactivate CASA Case
         update: Update CASA Case
       court_report_due_date: Court Report Due Date
-      next_court_date: Next Court Date
+      court_date: Next Court Date
       prompt:
         deactivate:
           confirm_swal: Deactivating a CASA Case will unassign any volunteers currently assigned to this case.
@@ -21,6 +21,12 @@ en:
         select_hearing_type: -Select Hearing Type-
         select_judge: -Select Judge-
       youth_birth_month_year: "Youth's Birth Month & Year"
+      case_number: Case number
+      court_details: Court Details
+      hearing_type: Hearing type
+      judge: Judge
+      transition_aged_youth: Transition Aged Youth
+      court_report_status: Court Report Status
     inactive_case:
       notice: Case was deactivated on
     index:
@@ -41,10 +47,12 @@ en:
       pick_displayed_columns: Pick displayed columns
     new:
       title: New CASA Case
-    no_court_dates: No court dates
     court_dates:
       add_court_date: Add a court date
       court_dates: Court dates
+      label:
+        attached_report: Attached Report
+      no_court_dates: No Court Dates
     shared:
       assigned_multiple: Assigned to more than 1 Volunteer
       assigned_single: Assigned to Volunteer
@@ -107,7 +115,7 @@ en:
         deactivate: Deactivate
       deactive_text: Admin was deactivated on
       label:
-        display_name: Display Name
+        display_name: Display name
       prompt:
         mark_inactive_warning: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"
     new:
@@ -165,11 +173,25 @@ en:
     edit:
       title: Editing Case Contact
     form:
-      plural_label: Select all relevant CASA cases
+      plural_label: 1. Select all relevant CASA cases
       prompt_select_one: Please Select One
-      singular_label: CASA case
+      singular_label: 1. Select relevant CASA case
+      contact_types_label: 2. Select All Contact Types
+      contact_details: 3. Enter Contact Details
+      travel_details: 4. Enter Travel Details
+      enter_notes: 5. Enter Notes
+      contact_made_label: a. Contact Made
+      contact_medium: b. Contact Medium
+      occurred_on: c. Occurred On
+      duration_meeting: d. Duration of Meeting
+      miles_driven: a. Miles Driven
+      driving_reimburse_label: b. Want Driving Reimbursement
+      other_expenses: c. Other Expenses
+      enter_notes_placeholder: Enter notes here
     new:
       title: New Case Contact
+    contact_types: 
+      contact_types: Contact types
   casa_org:
     contact_type_groups:
       button:
@@ -219,6 +241,9 @@ en:
       manage_court_details_title: Manage Court Details
       manage_contact_types_title: Manage Contact Types
       title: Editing CASA Organization
+      logo: Logo
+      court_report_template: Court report template
+      show_driving_reimbursement: Show driving reimbursement
   case_court_reports:
     index:
       button:
@@ -238,11 +263,16 @@ en:
       title: New Contact Type Group
     edit:
       title: Edit Contact Type Group
+    form:
+      active: Active
   contact_types:
     new:
       title: New Contact Type
     edit:
       title: Edit Contact Type
+    form:
+      contact_type_group: Contact type group
+      active: Active
   emancipation:
     index:
       heading:
@@ -258,14 +288,26 @@ en:
         saved: Saved
         saving: Saving
       title: Emancipation Checklist
+  emancipation_checklists:
+    index:
+      heading:
+        case_number: Case Number
+        checklist: Checklist
+      link:
+        checklist: Checklist
+        details: Details
+      title: Emancipation Checklists
   global:
     add_court_order: Add a court order
     court_orders: Court Orders - Please check that you didn't enter any youth names
+    email: Email
   hearing_types:
     edit:
       title: Edit Hearing Type
     new:
       title: New Hearing Type
+    form:
+      active: Active
   imports:
     cases:
       button:
@@ -324,6 +366,8 @@ en:
       title: Edit Judge
     new:
       title: New Judge
+    form:
+      active: Active
   layouts:
     application:
       javascript_instrucion:
@@ -371,9 +415,17 @@ en:
     edit:
       title: Editing Court Date
     form:
+      add_court_date: Add Court Date
       button:
         create: Create
         update: Update
+      hearing_type: Hearing type
+      judge: Judge
+      label:
+        case_number: Case Number
+      prompt:
+        select_hearing_type: -Select Hearing Type-
+        select_judge: -Select Judge-
     new:
       title: New Court Date
     show:
@@ -399,6 +451,7 @@ en:
         contact_types: Contact Types
         date_added: Date Added
         description: Description
+        occurred_at: Occurred At
         expense_type: Expense Type
         reimbursement_complete: Reimbursement Complete
         volunteer: Volunteer
@@ -430,10 +483,11 @@ en:
       select_columns: "Select columns:"
   supervisors:
     index:
-      filter: Filter by
       active: Active
-      inactive: Inactive
       both: Both
+      filter: Filter by
+      inactive: Inactive
+      status: Status
     edit:
       assign_a_volunteer: Assign a Volunteer
       assign_volunteer: Assign Volunteer
@@ -453,6 +507,9 @@ en:
         other: All Volunteers
         zero: Assigned Volunteers
   volunteers:
+    edit:
+      notes_placeholder: "Enter a note regarding the volunteer. These notes are only visible to CASA administrators and supervisors."
+      note_submit: "Save Note"
     index:
       active: Active
       button:
@@ -492,8 +549,16 @@ en:
       pick_displayed_columns: Pick displayed columns
       heading:
         amount: Amount
-        effective_date: Effective Date
+        effective_date: Effective date
         status: Active?
         created_by: Created By
         created_at: Created At
         actions: Actions
+    form:
+      effective_date: Effective date
+      amount: Amount
+      is_active: Currently active?
+  users:
+    edit:
+      email: Email
+      display_name: Display name

@@ -24,8 +24,6 @@ $('document').ready(() => {
   }
 
   if (/\/casa_cases\/\d+$/.test(window.location.pathname)) {
-    if ($('.header-flash').text().includes('Case contact was successfully created.')) {
-      window.localStorage.removeItem(formId)
-    }
+    window.localStorage.removeItem(formId)
   }
 })

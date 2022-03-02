@@ -18,7 +18,7 @@ RSpec.describe CaseCourtReport, type: :model do
       )
     end
 
-    describe "With volunteer without supervisor" do
+    describe "with volunteer without supervisor" do
       let(:volunteer) { create(:volunteer, :with_cases_and_contacts) }
 
       it "has supervisor name placeholder" do
@@ -42,9 +42,10 @@ RSpec.describe CaseCourtReport, type: :model do
       describe "with past court date" do
         let!(:court_date) { create(:court_date, date: 2.days.ago, casa_case_id: casa_case_with_contacts.id) }
 
-        it "has all case contacts created since the previous court date" do
+        it "has all case contacts created since the previous court date including case contact created on the court date" do
+          create(:case_contact, casa_case: casa_case_with_contacts, created_at: court_date.date, notes: "created ON most recent court date")
           expect(casa_case_with_contacts.court_dates.length).to eq(2)
-          expect(report.context[:case_contacts].length).to eq(4)
+          expect(report.context[:case_contacts].length).to eq(5)
         end
       end
     end

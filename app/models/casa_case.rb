@@ -42,6 +42,7 @@ class CasaCase < ApplicationRecord
   has_many :casa_case_contact_types
   has_many :contact_types, through: :casa_case_contact_types, source: :contact_type
   accepts_nested_attributes_for :casa_case_contact_types
+  accepts_nested_attributes_for :court_dates
 
   has_many :case_court_orders, -> { order "id asc" }, dependent: :destroy
   accepts_nested_attributes_for :case_court_orders, reject_if: :all_blank
@@ -96,10 +97,11 @@ class CasaCase < ApplicationRecord
   end
 
   def add_emancipation_option(option_id)
-    option_category = EmancipationOption.find(option_id).emancipation_category
+    option = EmancipationOption.find(option_id)
+    option_category = option.emancipation_category
 
     if !(option_category.mutually_exclusive && EmancipationOption.options_with_category_and_case(option_category, id).any?)
-      emancipation_options << EmancipationOption.find(option_id)
+      emancipation_options << option
     else
       raise "Attempted adding multiple options belonging to a mutually exclusive category"
     end
@@ -153,11 +155,17 @@ class CasaCase < ApplicationRecord
   end
 
   def remove_emancipation_category(category_id)
-    emancipation_categories.destroy(EmancipationCategory.find(category_id))
+    category = EmancipationCategory.find(category_id)
+    raise ActiveRecord::RecordNotFound unless emancipation_categories.include?(category)
+
+    emancipation_categories.destroy(category)
   end
 
   def remove_emancipation_option(option_id)
-    emancipation_options.destroy(EmancipationOption.find(option_id))
+    option = EmancipationOption.find(option_id)
+    raise ActiveRecord::RecordNotFound unless emancipation_options.include?(option)
+
+    emancipation_options.destroy(option)
   end
 
   def update_cleaning_contact_types(args)
@@ -212,7 +220,7 @@ end
 #  court_report_status       :integer          default("not_submitted")
 #  court_report_submitted_at :datetime
 #  slug                      :string
-#  transition_aged_youth     :boolean          default(FALSE), not null
+#  transition_aged_youth     :boolean          default(FALSE)
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  casa_org_id               :bigint           not null
@@ -229,5 +237,5 @@ end
 #
 # Foreign Keys
 #
-#  fk_rails_...  (casa_org_id => casa_org.id)
+#  fk_rails_...  (casa_org_id => casa_orgs.id)
 #

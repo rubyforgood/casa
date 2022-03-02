@@ -8,6 +8,7 @@ class CourtDatePolicy < ApplicationPolicy
   alias_method :update?, :allowed_to_edit_casa_case?
   alias_method :new?, :allowed_to_edit_casa_case?
   alias_method :create?, :allowed_to_edit_casa_case?
+  alias_method :destroy?, :admin_or_supervisor?
 
   private
 

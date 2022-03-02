@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CaseContactsController < ApplicationController
   before_action :set_case_contact, only: %i[edit update destroy]
   before_action :set_contact_types, only: %i[new edit update create]
@@ -56,6 +58,7 @@ class CaseContactsController < ApplicationController
     # These variables are used to re-render the form (render :new) if there are
     # validation errors so that the user does not lose inputs to fields that
     # they did previously enter.
+
     @casa_cases = policy_scope(current_organization.casa_cases)
     @case_contact = CaseContact.new(create_case_contact_params)
     authorize @case_contact
@@ -69,12 +72,9 @@ class CaseContactsController < ApplicationController
     end
 
     # Create a case contact for every case that was checked
-    case_contacts = @selected_cases.map { |casa_case|
-      casa_case.case_contacts.create(create_case_contact_params)
-    }
-
+    case_contacts = create_case_contact_for_every_selected_casa_case(@selected_cases)
     if case_contacts.all?(&:persisted?)
-      redirect_to casa_case_path(CaseContact.last.casa_case), notice: create_notice
+      redirect_to casa_case_path(CaseContact.last.casa_case, success: true)
     else
       @case_contact = case_contacts.first
       @casa_cases = [@case_contact.casa_case]
@@ -97,6 +97,21 @@ class CaseContactsController < ApplicationController
     @current_organization_groups = current_organization.contact_type_groups
 
     if @case_contact.update_cleaning_contact_types(update_case_contact_params)
+      if additional_expense_params&.any? && FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+        additional_expense_params.each do |ae_params|
+          id = ae_params[:id]
+          current = AdditionalExpense.find_by(id: id)
+          if current
+            current.update!(other_expense_amount: ae_params[:other_expense_amount], other_expenses_describe: ae_params[:other_expenses_describe])
+            # update
+          else
+            # create
+            @case_contact.additional_expenses.create(ae_params)
+          end
+          # if exists, update
+          # else create
+        end
+      end
       redirect_to casa_case_path(@case_contact.casa_case), notice: t("update", scope: "case_contact")
     else
       render :edit
@@ -122,6 +137,20 @@ class CaseContactsController < ApplicationController
 
   private
 
+  def create_case_contact_for_every_selected_casa_case(selected_cases)
+    selected_cases.map do |casa_case|
+      ActiveRecord::Base.transaction do
+        case_contact = casa_case.case_contacts.create(create_case_contact_params)
+        if case_contact.persisted? && additional_expense_params&.any? && FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+          additional_expense_params&.each do |single_additional_expense_params|
+            case_contact.additional_expenses.create(single_additional_expense_params)
+          end
+        end
+        case_contact
+      end
+    end
+  end
+
   def set_case_contact
     if current_organization.case_contacts.exists?(params[:id])
       @case_contact = authorize(current_organization.case_contacts.find(params[:id]))
@@ -135,17 +164,12 @@ class CaseContactsController < ApplicationController
   end
 
   def create_case_contact_params
-    CaseContactParameters
-      .new(params)
-      .with_creator(current_user)
-      .with_converted_duration_minutes(params[:case_contact][:duration_hours].to_i)
+    CaseContactParameters.new(params, creator: current_user)
   end
 
   def update_case_contact_params
-    # Updating a case contact does not change its original creator
-    CaseContactParameters
-      .new(params)
-      .with_converted_duration_minutes(params[:case_contact][:duration_hours].to_i)
+    # Updating a case contact should not change its original creator
+    CaseContactParameters.new(params)
   end
 
   def current_organization_groups
@@ -159,7 +183,13 @@ class CaseContactsController < ApplicationController
     policy_scope(current_organization.case_contacts).includes(:creator, contact_types: :contact_type_group)
   end
 
-  def create_notice
-    "#{t("create", scope: "case_contact")} #{t("thank_you_#{rand(1..8)}", scope: "case_contact")}"
+  def additional_expense_params
+    additional_expenses = params.dig("case_contact", "additional_expenses_attributes")
+    additional_expenses && 0.upto(10).map do |i|
+      possible_key = i.to_s
+      if additional_expenses&.key?(possible_key) && !additional_expenses[i.to_s]["other_expense_amount"].blank?
+        additional_expenses[i.to_s]&.permit(:other_expense_amount, :other_expenses_describe, :id)
+      end
+    end.compact
   end
 end

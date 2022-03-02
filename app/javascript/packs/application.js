@@ -21,6 +21,7 @@ require('datatables.net-dt/css/jquery.dataTables.css')
 require('select2')
 require('select2/dist/css/select2')
 
+require('src/addToCalendarButton')
 require('src/case_contact')
 require('src/case_contact_autosave')
 require('src/case_emancipation')
@@ -34,6 +35,7 @@ require('src/tooltip')
 require('src/password_confirmation')
 require('src/reimbursements')
 require('src/reports')
+require('src/add_additional_expense')
 
 // Uncomment to copy all static images under ../images to the output folder and
 // reference them with the image_pack_tag or asset_pack_path helpers in views.

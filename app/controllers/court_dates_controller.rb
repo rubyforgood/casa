@@ -1,6 +1,6 @@
 class CourtDatesController < ApplicationController
   before_action :set_casa_case
-  before_action :set_court_date, only: %i[edit show generate update]
+  before_action :set_court_date, only: %i[edit show generate update destroy]
   before_action :require_organization!
 
   rescue_from ActiveRecord::RecordNotFound, with: -> { head :not_found }
@@ -33,7 +33,11 @@ class CourtDatesController < ApplicationController
     @court_date = CourtDate.new(court_dates_params.merge(casa_case: @casa_case))
     authorize @court_date
 
-    if @court_date.save
+    if !@court_date.date.nil?
+      @casa_case.court_report_due_date = @court_date.date - 3.weeks
+    end
+
+    if @court_date.save && @casa_case.save
       redirect_to casa_case_court_date_path(@casa_case, @court_date), notice: "Court date was successfully created."
     else
       render :new
@@ -46,6 +50,16 @@ class CourtDatesController < ApplicationController
       redirect_to casa_case_court_date_path(@casa_case, @court_date), notice: "Court date was successfully updated."
     else
       render :edit
+    end
+  end
+
+  def destroy
+    authorize @court_date
+    if @court_date.date > Time.now
+      @court_date.destroy
+      redirect_to casa_case_path(@casa_case), notice: "Court date was successfully deleted."
+    else
+      redirect_to casa_case_court_date_path(@casa_case, @court_date), notice: "You can delete only future court dates."
     end
   end
 

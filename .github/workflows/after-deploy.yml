@@ -1,0 +1,17 @@
+on:
+  schedule:
+    - cron:  '0 7 * * *' # Run every day at 7AM UTC
+  workflow_dispatch: # Enable Manual Runs
+
+jobs:
+  on_deploy:
+    runs-on: ubuntu-latest
+    name: On Deploy
+    steps:
+      - name: After Deploy
+        uses: Firelemons/on-deploy@v1.0
+        with:
+          project_name: "CASA Volunteer Portal"
+          done_column_name: "Done (in prod!)"
+          QA_column_name: "Merged to QA"
+          token: ${{secrets.GITHUB_TOKEN}}

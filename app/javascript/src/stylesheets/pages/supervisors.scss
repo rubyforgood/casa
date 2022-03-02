@@ -1,46 +1,84 @@
-$indictator_negative_color: #ff0000;
-$indicator_positive_color: #00c800;
+$indictator_negative_color: #f44336;
+$indicator_positive_color: #4caf50;
 
-.supervisor_indicator_container {
-  width: 20em;
+.supervisor_case_contact_stats {
+  display: flex;
+
+  div {
+    &:first-child {
+      display: flex;
+      margin-right: 1em;
+      flex-grow: 1;
+    }
+
+    span {
+      border-radius: 0.25em;
+      padding-top: .25em;
+      text-align: center;
+
+      &.attempted-contact {
+        background-color: $indicator_positive_color;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+
+        & + span.no-attempted-contact {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+
+        & + span.attempted-contact-end {
+          background-color: $indicator_positive_color;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          width: 0.25em;
+        }
+      }
+
+      &.no-attempted-contact {
+        background-color: $indictator_negative_color;
+      }
+
+      &.no-volunteers {
+        background-color: #ccc;
+      }
+
+      &:last-child {
+        margin-left: 0.5em;
+        background-color: #cfd8dc;
+        border-radius: 100vw;
+        padding: 0.2em 1em;
+      }
+    }
+  }
+
+  &.legend {
+    align-items: center;
+    margin-bottom: 0.25rem;
+    margin-top: 1em;
+
+    span {
+      &:last-child {
+        padding: .5em;
+      }
+
+      padding: .5em 1em;
+      flex-grow: 1;
+    }
+  }
 }
 
-.supervisor_indicator_legend {
-  font-size: x-small;
-}
+.supervisor_table_row {
+  display: flex;
 
-.supervisor_indicator_legend_negative,
-.supervisor_indicator_legend_positive {
-  border: 1px solid;
-  font-size: smaller;
-  padding: .25em;
-  width: 50%;
-}
+  td:nth-of-type(1), th:nth-of-type(1) {
+    flex: 3;
+  }
 
-.supervisor_indicator_negative,
-.supervisor_indicator_legend_negative {
-  background: $indictator_negative_color;
-  border: 1px solid;
-  float: right;
-  text-align: center;
-}
+  td:nth-of-type(2), th:nth-of-type(2) {
+    flex: 3;
+  }
 
-.supervisor_indicator_positive,
-.supervisor_indicator_legend_positive {
-  background: $indicator_positive_color;
-  border: 1px solid;
-  float: left;
-  text-align: center;
-}
-
-.supervisor_indicator_legend_negative_positive,
-.supervisor_indicator_negative_positive {
-  display: inline-block;
-  width: 80%;
-}
-
-.supervisor_indicator_transition_aged_youth,
-.supervisor_indicator_legend_transition_aged_youth {
-  display: inline;
-  font-size: smaller;
+  td:nth-of-type(3), th:nth-of-type(3) {
+    flex: 1;
+  }
 }

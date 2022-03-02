@@ -6,7 +6,7 @@
         <th><%= t(".heading.volunteer") %></th>
         <th><%= t(".heading.case_number") %></th>
         <th><%= t(".heading.contact_types") %></th>
-        <th><%= t(".heading.date_added") %></th>
+        <th><%= t(".heading.occurred_at") %></th>
         <th><%= t(".heading.expense_type") %></th>
         <th><%= t(".heading.description") %></th>
         <th><%= t(".heading.amount") %></th>
@@ -30,8 +30,8 @@
           <%= contact_types_list(reimbursement) %>
           </td>
 
-          <td id="date-added-<%= reimbursement.id %>">
-            <%= reimbursement.created_at.strftime("%B %d %Y") %>
+          <td id="date-attempted-<%= reimbursement.id %>">
+            <%= reimbursement.occurred_at.strftime("%B %d %Y") %>
           </td>
 
           <td id="expense-type-<%= reimbursement.id %>">
@@ -47,7 +47,7 @@
           <td>
             <%= form_with(model: reimbursement, url: reimbursement_mark_as_complete_path(reimbursement),
 method: "patch") do |form| %>
-              <%= form.label(:reimbursement_complete, "Yes") %>
+              <%= form.label :reimbursement_complete, t("common.yes_text") %>
               <%= form.check_box(:reimbursement_complete, value: reimbursement.reimbursement_complete,
 onchange: 'this.form.submit();') %>
             <% end %>

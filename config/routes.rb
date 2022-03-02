@@ -34,7 +34,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :court_dates, only: %i[create edit new show update]
+    resources :court_dates, only: %i[create edit new show update destroy]
 
     member do
       patch :deactivate
@@ -47,6 +47,7 @@ Rails.application.routes.draw do
       patch :deactivate
       patch :activate
       patch :resend_invitation
+      patch :change_to_supervisor
     end
   end
 
@@ -106,6 +107,7 @@ Rails.application.routes.draw do
       patch :reminder
       get :impersonate
     end
+    resources :notes, only: %i[create]
   end
   resources :case_assignments, only: %i[create destroy] do
     member do
@@ -141,4 +143,5 @@ Rails.application.routes.draw do
       patch "update_password"
     end
   end
+  resources :fund_requests, only: %i[new create]
 end

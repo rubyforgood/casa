@@ -5,7 +5,7 @@ RSpec.describe "Edit CASA Case", type: :system do
   context "logged in as admin" do
     let(:organization) { build(:casa_org) }
     let(:admin) { create(:casa_admin, casa_org: organization) }
-    let(:casa_case) { create(:casa_case, :with_one_court_order, casa_org: organization) }
+    let(:casa_case) { create(:casa_case, :with_judge, :with_one_court_order, casa_org: organization) }
     let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
     let!(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
 
@@ -39,9 +39,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Submitted")
       expect(page).to have_text("Court Date")
       expect(page).to have_text("Court Report Due Date")
-      expect(page).to have_text("Day")
-      expect(page).to have_text("Month")
-      expect(page).to have_text("Year")
+      expect(page).to have_field("Court Report Due Date")
       expect(page).to have_text("Court Mandate Text One")
       expect(page).not_to have_text("Deactivate Case")
 
@@ -59,9 +57,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Reactivate CASA Case")
       expect(page).to_not have_text("Court Date")
       expect(page).to_not have_text("Court Report Due Date")
-      expect(page).to_not have_text("Day")
-      expect(page).to_not have_text("Month")
-      expect(page).to_not have_text("Year")
+      expect(page).to_not have_field("Court Report Due Date")
     end
 
     it "reactivates a case", js: true do
@@ -74,16 +70,14 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Deactivate CASA Case")
       expect(page).to have_text("Court Date")
       expect(page).to have_text("Court Report Due Date")
-      expect(page).to have_text("Day")
-      expect(page).to have_text("Month")
-      expect(page).to have_text("Year")
+      expect(page).to have_field("Court Report Due Date")
     end
   end
 
   context "logged in as supervisor" do
     let(:casa_org) { build(:casa_org) }
     let(:supervisor) { create(:supervisor, casa_org: casa_org) }
-    let(:casa_case) { create(:casa_case, :with_one_court_order, casa_org: casa_org) }
+    let(:casa_case) { create(:casa_case, :with_judge, :with_hearing_type, :with_one_court_order, casa_org: casa_org) }
     let!(:contact_type_group) { build(:contact_type_group, casa_org: casa_org) }
     let!(:contact_type_1) { create(:contact_type, name: "Youth", contact_type_group: contact_type_group) }
     let!(:contact_type_2) { build(:contact_type, name: "Supervisor", contact_type_group: contact_type_group) }
@@ -100,9 +94,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       select "Submitted", from: "casa_case_court_report_status"
       check "Youth"
 
-      select "8", from: "casa_case_court_report_due_date_3i"
-      select "September", from: "casa_case_court_report_due_date_2i"
-      select next_year, from: "casa_case_court_report_due_date_1i"
+      fill_in "Court Report Due Date", with: Date.new(next_year.to_i, 9, 8).strftime("%Y/%m/%d\n")
 
       page.find("#add-mandate-button").click
       find("#court-orders-list-container").first("textarea").send_keys("Court Mandate Text One")
@@ -119,11 +111,8 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       expect(page).to have_text("Court Date")
       expect(page).to have_text("Court Report Due Date")
-      expect(page).to have_text("Day")
-      expect(page).to have_text("Month")
-      expect(page).to have_text("Year")
-      expect(page).to have_text("November")
-      expect(page).to have_text("September")
+      expect(page).to have_field("Court Report Due Date")
+      expect(page).to have_field("Court Report Due Date", with: "#{next_year}-09-08")
       expect(page).to have_text("Court Mandate Text One")
       expect(page).to have_text("Partially implemented")
 
@@ -179,36 +168,6 @@ RSpec.describe "Edit CASA Case", type: :system do
         expect(page).to have_select("Judge", selected: "-Select Judge-")
         expect(casa_case.reload.judge).to be_nil
       end
-    end
-
-    it "will return error message if date fields are not fully selected" do
-      visit casa_case_path(casa_case)
-      expect(page).to have_text("Court Report Status: Not submitted")
-      visit edit_casa_case_path(casa_case)
-
-      select "April", from: "casa_case_court_report_due_date_2i"
-
-      within ".actions" do
-        click_on "Update CASA Case"
-      end
-
-      expect(page).to have_text("Court report due date was not a valid date.")
-    end
-
-    it "will return error message if date fields are not valid" do
-      visit casa_case_path(casa_case)
-      expect(page).to have_text("Court Report Status: Not submitted")
-      visit edit_casa_case_path(casa_case)
-
-      select "31", from: "casa_case_court_report_due_date_3i"
-      select "April", from: "casa_case_court_report_due_date_2i"
-      select next_year, from: "casa_case_court_report_due_date_1i"
-
-      within ".actions" do
-        click_on "Update CASA Case"
-      end
-
-      expect(page).to have_text("Court report due date was not a valid date.")
     end
 
     it "views deactivated case" do
@@ -416,8 +375,7 @@ of it unless it was included in a previous court report.")
       it "is able to assign another hearing type to the case" do
         visit edit_casa_case_path(casa_case.id)
 
-        case_hearing = casa_case.hearing_type
-        expect(page).to have_select("Hearing type", selected: case_hearing.name)
+        expect(page).to have_select("Hearing type", selected: casa_case.hearing_type.name)
         select hearing_type.name, from: "casa_case_hearing_type_id"
 
         within ".actions" do
@@ -509,9 +467,7 @@ of it unless it was included in a previous court report.")
         click_on "Update CASA Case"
       end
 
-      expect(page).to have_text("Day")
-      expect(page).to have_text("Month")
-      expect(page).to have_text("Year")
+      expect(page).to have_field("Court Report Due Date")
       expect(page).not_to have_text("Deactivate Case")
 
       expect(page).to have_css("#add-mandate-button")

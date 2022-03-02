@@ -1,0 +1,14 @@
+<div id="thank-you-modal-wrapper">
+  <div class="modal fade" id="thank_you" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+          <%= "#{t("create", scope: "case_contact")} #{t("thank_you_#{rand(1..8)}", scope: "case_contact")}" %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

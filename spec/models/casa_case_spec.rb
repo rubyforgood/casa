@@ -142,7 +142,7 @@ RSpec.describe CasaCase, type: :model do
       casa_case = create(:casa_case, casa_org: casa_org)
       case_assignments = 2.times.map { create(:case_assignment, casa_case: casa_case, volunteer: create(:volunteer, casa_org: casa_org)) }
 
-      expect(casa_case.active_case_assignments).to eq case_assignments
+      expect(casa_case.active_case_assignments).to match_array case_assignments
 
       case_assignments.first.update(active: false)
       expect(casa_case.reload.active_case_assignments).to eq [case_assignments.last]

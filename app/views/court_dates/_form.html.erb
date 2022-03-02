@@ -12,21 +12,16 @@
       </p>
 
       <div class="field form-group">
-        <%= form.label :date, "Add Court Date" %>
-        <br>
-        <span class="datetime-year-month">
-          <%= form.date_select :date,
-                                {
-                                    order: [:day, :month, :year],
-                                    start_year: Date.current.year + 3,
-                                    end_year: 2000,
-                                    prompt: {day: t("common.day"), month: t("common.month"), year: t("common.year")}
-                                },
-                                class: "select2 date-input" %>
-        </span>
+        <%= form.label :date, t(".add_court_date") %>
+        <%= form.text_field :date,
+                        value: court_date.date&.to_date || Time.zone.now,
+                        data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
+                        class: "form-control" %>
       </div>
+      <br>
+
       <div class="field form-group">
-        <%= form.label :judge_id %>
+        <%= form.label :judge_id, t(".judge") %>
         <%= form.collection_select(
                 :judge_id,
                 Judge.for_organization(current_organization),
@@ -36,7 +31,7 @@
             ) %>
       </div>
       <div class="field form-group">
-        <%= form.label :hearing_type_id %>
+        <%= form.label :hearing_type_id, t(".hearing_type") %>
         <%= form.collection_select(
                 :hearing_type_id,
                 HearingType.active.for_organization(current_organization),

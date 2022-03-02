@@ -1,13 +1,14 @@
 require "rails_helper"
+require "./lib/tasks/data_post_processors/case_contact_populator"
 
-RSpec.describe "CaseContactPopulator" do
+RSpec.describe CaseContactPopulator do
   before do
     Rake::Task.clear
     Casa::Application.load_tasks
   end
 
   it "does nothing on an empty database" do
-    CaseContactPopulator.populate
+    described_class.populate
 
     expect(ContactType.count).to eq(0)
     expect(ContactTypeGroup.count).to eq(0)
@@ -16,7 +17,7 @@ RSpec.describe "CaseContactPopulator" do
   it "does nothing if there are no contact types" do
     case_contact = create(:case_contact, contact_types: [])
 
-    CaseContactPopulator.populate
+    described_class.populate
 
     expect(case_contact.contact_types).to be_empty
     expect(ContactType.count).to eq(0)
@@ -31,7 +32,7 @@ RSpec.describe "CaseContactPopulator" do
     casa_case = create(:casa_case, casa_org: casa_org2)
     create(:case_contact, casa_case: casa_case, contact_types: [contact_type])
 
-    CaseContactPopulator.populate
+    described_class.populate
 
     expect(ContactTypeGroup.count).to eq(2)
     expect(ContactTypeGroup.last.casa_org).to eq(casa_org2)
@@ -49,7 +50,7 @@ RSpec.describe "CaseContactPopulator" do
     casa_case = create(:casa_case, casa_org: ctg2.casa_org)
     create(:case_contact, casa_case: casa_case, contact_types: [contact_type])
 
-    CaseContactPopulator.populate
+    described_class.populate
 
     expect(ContactTypeGroup.count).to eq(2)
     expect(ContactType.count).to eq(2)

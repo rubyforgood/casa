@@ -14,6 +14,12 @@ label {
   font-weight: 900;
 }
 
+// This may effect other pages than the case contact form!!!
+h5 label {
+  font-weight: 500;
+}
+
+
 .unbold {
   font-weight: 100;
 }
@@ -60,7 +66,7 @@ div.row.volunteer-filters {
 }
 
 #dropdownMenuButton {
-  margin: 6px 0;
+  margin-bottom: 0.5em;
 }
 
 @media only screen and (max-width: $mobile) {
