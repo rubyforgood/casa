@@ -149,17 +149,17 @@ class CaseContactsController < ApplicationController
       end
       new_cc
     end
+  end
 
-    def create_additional_expenses(new_cc)
-      additional_expense_params.map { |aep|
-        new_ae = new_cc.additional_expenses.build(aep)
-        if new_ae.valid?
-          new_ae.save!
-        else
-          new_cc.errors.add(:base, new_ae.errors.full_messages.to_sentence)
-        end
-      }
-    end
+  def create_additional_expenses(new_cc)
+    additional_expense_params.map { |aep|
+      new_ae = new_cc.additional_expenses.build(aep)
+      if new_ae.valid?
+        new_ae.save!
+      else
+        new_cc.errors.add(:base, new_ae.errors.full_messages.to_sentence)
+      end
+    }
   end
 
   def set_case_contact
