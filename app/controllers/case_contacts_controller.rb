@@ -103,13 +103,10 @@ class CaseContactsController < ApplicationController
           current = AdditionalExpense.find_by(id: id)
           if current
             current.assign_attributes(other_expense_amount: ae_params[:other_expense_amount], other_expenses_describe: ae_params[:other_expenses_describe])
-            if current.valid?
-              current.save
-            else
-              @case_contact.errors.add(:base, current.errors.full_messages.to_sentence)
-            end
+            current.valid? ? current.save : @case_contact.errors.add(:base, current.errors.full_messages.to_sentence)
           else
-            @case_contact.additional_expenses.create(ae_params)
+            create_new_exp = @case_contact.additional_expenses.build(ae_params)
+            create_new_exp.valid? ? create_new_exp.save : @case_contact.errors.add(:base, create_new_exp.errors.full_messages.to_sentence)
           end
         end
       end
@@ -148,7 +145,10 @@ class CaseContactsController < ApplicationController
         case_contact = casa_case.case_contacts.create(create_case_contact_params)
         if case_contact.persisted? && additional_expense_params&.any? && FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
           additional_expense_params&.each do |single_additional_expense_params|
-            case_contact.additional_expenses.create(single_additional_expense_params)
+            create_new_exp = case_contact.additional_expenses.build(single_additional_expense_params)
+            create_new_exp.valid? ? create_new_exp.save : @case_contact.errors.add(:base, create_new_exp.errors.full_messages.to_sentence)
+            # This is where new case contacts with additional expenses are created and screened out with validations
+            # They are screened out, but no errors are given
           end
         end
         case_contact

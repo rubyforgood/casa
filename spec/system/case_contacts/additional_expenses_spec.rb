@@ -227,5 +227,19 @@ RSpec.describe "addtional_expenses", type: :system do
     }.to change(CaseContact, :count).by(0).and change(AdditionalExpense, :count).by(0)
 
     expect(page).to have_text("error")
+
+    expect {
+      click_on "Submit"
+    }.to change(CaseContact, :count).by(0).and change(AdditionalExpense, :count).by(0)
+    expect(page).to have_text("error")
+
+    find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe", with: "1 meal")
+
+    expect {
+      click_on "Submit"
+    }.to change(CaseContact, :count).by(0).and change(AdditionalExpense, :count).by(1)
+
+    expect(page).not_to have_text("error")
+
   end
 end
