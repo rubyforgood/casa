@@ -95,9 +95,16 @@ legend {
     justify-content: flex-end;
 }
 
-.expense-container > .field_with_errors {
-    width: 80% !important;
-}
+.expense-container {
+    & > *:last-child {
+        width: 80%;
+    };
+    .field_with_errors {
+        input {
+            width: 100%;
+        }
+    }
+ }
 
 .other-expenses li {
     margin-bottom: .2rem;
@@ -106,10 +113,6 @@ legend {
 .other-expense-amount {
     width: 20%;
     margin-left: .4rem
-}
-
-.other-expenses-describe {
-    width: 80%;
 }
 
 .add-expense-link {
