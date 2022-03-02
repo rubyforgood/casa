@@ -12,7 +12,7 @@ en:
         reactivate: Reactivate CASA Case
         update: Update CASA Case
       court_report_due_date: Court Report Due Date
-      next_court_date: Next Court Date
+      court_date: Next Court Date
       prompt:
         deactivate:
           confirm_swal: Deactivating a CASA Case will unassign any volunteers currently assigned to this case.
