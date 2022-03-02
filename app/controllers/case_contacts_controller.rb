@@ -140,19 +140,25 @@ class CaseContactsController < ApplicationController
   private
 
   def create_case_contact_for_every_selected_casa_case(selected_cases)
+    # create case contact and additional expense
+    #
     selected_cases.map do |casa_case|
-      ActiveRecord::Base.transaction do
-        case_contact = casa_case.case_contacts.create(create_case_contact_params)
-        if case_contact.persisted? && additional_expense_params&.any? && FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
-          additional_expense_params&.each do |single_additional_expense_params|
-            create_new_exp = case_contact.additional_expenses.build(single_additional_expense_params)
-            create_new_exp.valid? ? create_new_exp.save : @case_contact.errors.add(:base, create_new_exp.errors.full_messages.to_sentence)
-            # This is where new case contacts with additional expenses are created and screened out with validations
-            # They are screened out, but no errors are given
-          end
-        end
-        case_contact
+      new_cc = casa_case.case_contacts.build(create_case_contact_params)
+      if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+        create_additional_expenses(new_cc)
       end
+      new_cc
+    end
+
+    def create_additional_expenses(new_cc)
+      additional_expense_params.map { |aep|
+        new_ae = new_cc.additional_expenses.build(aep)
+        if new_ae.valid?
+          new_ae.save!
+        else
+          new_cc.errors.add(:base, new_ae.errors.full_messages.to_sentence)
+        end
+      }
     end
   end
 

@@ -192,6 +192,7 @@ RSpec.describe "addtional_expenses", type: :system do
     expect(page).to have_no_field("case_contact_additional_expenses_attributes_10_other_expenses_describe")
     expect(page).to have_no_text("Add Another Expense")
   end
+
   it "verifies that an additional expense without a description will cause an error", js: true do
     FeatureFlagService.enable!("show_additional_expenses")
     organization = build(:casa_org)
@@ -228,6 +229,7 @@ RSpec.describe "addtional_expenses", type: :system do
 
     expect(page).to have_text("error")
 
+    # TODO change it to save successfully (remove AE?) and then save, and *then* test failure to update invalid
     expect {
       click_on "Submit"
     }.to change(CaseContact, :count).by(0).and change(AdditionalExpense, :count).by(0)
