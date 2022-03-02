@@ -46,7 +46,7 @@ RSpec.describe "casa_cases/new", type: :system do
   context "when non-mandatory fields are not filled" do
     it "is successful" do
       fill_in "Case number", with: case_number
-
+      fill_in "Next Court Date", with: DateTime.now.next_month.strftime("%Y/%m/%d")
       five_years = (Date.today.year - 5).to_s
       select "March", from: "casa_case_birth_month_year_youth_2i"
       select five_years, from: "casa_case_birth_month_year_youth_1i"
