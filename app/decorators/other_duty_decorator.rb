@@ -26,6 +26,8 @@ class OtherDutyDecorator < Draper::Decorator
     end
   end
 
+  private
+
   def limited_notes
     object.notes.truncate_words(NOTES_WORD_LIMIT)
   end
