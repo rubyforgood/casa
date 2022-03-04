@@ -104,6 +104,13 @@ en:
       select_volunteer: Select a Volunteer
       title: Manage Volunteers
       unassigned: Unassigned
+    other_duties:
+      title: Other Duties
+      heading:
+        occurred_at: Duties Occurred
+        created_at: Created
+        duration: Duration
+        title: Title
   casa_admins:
     edit:
       title: Edit Casa Admin
@@ -190,7 +197,7 @@ en:
       enter_notes_placeholder: Enter notes here
     new:
       title: New Case Contact
-    contact_types: 
+    contact_types:
       contact_types: Contact types
   casa_org:
     contact_type_groups:
