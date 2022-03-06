@@ -4,12 +4,10 @@ class OtherDutyDecorator < Draper::Decorator
   NOTES_WORD_LIMIT = 10
 
   def duration_in_minutes
-    minutes = object.duration_minutes
+    return "#{object.duration_minutes} minutes" if object.duration_minutes <= 60
 
-    return "#{minutes} minutes" if minutes <= 60
-
-    formatted_hour_value = minutes / 60
-    formatted_minutes_value = minutes.remainder(60)
+    formatted_hour_value = object.duration_minutes / 60
+    formatted_minutes_value = object.duration_minutes.remainder(60)
 
     if formatted_minutes_value.zero?
       "#{formatted_hour_value} #{"hour".pluralize(formatted_hour_value)}"

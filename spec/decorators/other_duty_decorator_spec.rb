@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe OtherDutyDecorator do
   let(:other_duty) { build(:other_duty) }
 
-  describe "#duration_in_minutes" do
+  describe "#duration_minutes" do
     context "when duration_minutes is less than 60" do
       it "returns only minutes" do
         other_duty.update_attribute(:duration_minutes, 45)
@@ -22,9 +22,10 @@ RSpec.describe OtherDutyDecorator do
   end
 
   describe "#truncate_notes" do
-    let(:truncated_od) { build(:other_duty,
-      notes: "I have no fear, for fear is the little death that kills me over and over. Without fear, I die but once."
-      ) }
+    let(:truncated_od) {
+      build(:other_duty,
+        notes: "I have no fear, for fear is the little death that kills me over and over. Without fear, I die but once.")
+    }
 
     context "when notes length is shorter than limit" do
       it "returns notes completely" do
