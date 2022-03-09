@@ -99,15 +99,7 @@ class CaseContactsController < ApplicationController
     if @case_contact.update_cleaning_contact_types(update_case_contact_params)
       if additional_expense_params&.any? && FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
         additional_expense_params.each do |ae_params|
-          id = ae_params[:id]
-          current = AdditionalExpense.find_by(id: id)
-          if current
-            current.assign_attributes(other_expense_amount: ae_params[:other_expense_amount], other_expenses_describe: ae_params[:other_expenses_describe])
-            current.valid? ? current.save : @case_contact.errors.add(:base, current.errors.full_messages.to_sentence)
-          else
-            create_new_exp = @case_contact.additional_expenses.build(ae_params)
-            create_new_exp.valid? ? create_new_exp.save : @case_contact.errors.add(:base, create_new_exp.errors.full_messages.to_sentence)
-          end
+          update_or_create_additional_expense(ae_params)
         end
       end
       if @case_contact.valid?
@@ -138,6 +130,18 @@ class CaseContactsController < ApplicationController
   end
 
   private
+
+  def update_or_create_additional_expense(ae_params)
+    id = ae_params[:id]
+    current = AdditionalExpense.find_by(id: id)
+    if current
+      current.assign_attributes(other_expense_amount: ae_params[:other_expense_amount], other_expenses_describe: ae_params[:other_expenses_describe])
+      current.valid? ? current.save : @case_contact.errors.add(:base, current.errors.full_messages.to_sentence)
+    else
+      create_new_exp = @case_contact.additional_expenses.build(ae_params)
+      create_new_exp.valid? ? create_new_exp.save : @case_contact.errors.add(:base, create_new_exp.errors.full_messages.to_sentence)
+    end
+  end
 
   def create_case_contact_for_every_selected_casa_case(selected_cases)
     # create case contact and additional expense
