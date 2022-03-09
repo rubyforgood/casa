@@ -3288,10 +3288,10 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk=
 
-cypress@^9.4.1:
-  version "9.4.1"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-9.4.1.tgz#1a4ba706435829c24b7edf350c2b059e05da9084"
-  integrity sha512-+JgMG9uT+QFx97JU9kOHE3jO3+0UdkQ9H1oCBiC7A74qme7Jkdy2sYDBCPjjGczutnWnGUTMRlwiNMP/Uq6LrQ==
+cypress@^9.5.1:
+  version "9.5.1"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-9.5.1.tgz#51162f3688cedf5ffce311b914ef49a7c1ece076"
+  integrity sha512-H7lUWB3Svr44gz1rNnj941xmdsCljXoJa2cDneAltjI9leKLMQLm30x6jLlpQ730tiVtIbW5HdUmBzPzwzfUQg==
   dependencies:
     "@cypress/request" "^2.88.10"
     "@cypress/xvfb" "^1.2.4"
@@ -3352,10 +3352,10 @@ data-urls@^2.0.0:
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
 
-datatables.net-dt@^1.11.4:
-  version "1.11.4"
-  resolved "https://registry.yarnpkg.com/datatables.net-dt/-/datatables.net-dt-1.11.4.tgz#abdc672c2250f9486db16aa874fb060d80eab7a4"
-  integrity sha512-MKPAkehqxqZN1tMrqPH2t3jhv1VG69wq3JLFmsJn/Kd4Oez/WYP+q1XTeMopwhGM7pSVQLPo4pPVPmzw7cqY2g==
+datatables.net-dt@^1.11.5:
+  version "1.11.5"
+  resolved "https://registry.yarnpkg.com/datatables.net-dt/-/datatables.net-dt-1.11.5.tgz#18bb59d1fb8f1336835a8e37f3de316a182254ac"
+  integrity sha512-QZ6AZv6bFyGPuJLILQ50T9IHT0foKw5XOl+pA1W8BFHTQ/CkUuU54GtgvAnq+ag0wdis4+Qq/YuN2yTogoLXdA==
   dependencies:
     datatables.net ">=1.11.3"
     jquery ">=1.7"
@@ -10385,9 +10385,9 @@ urix@^0.1.0:
   integrity sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=
 
 url-parse@^1.4.3, url-parse@^1.5.3:
-  version "1.5.4"
-  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.4.tgz#e4f645a7e2a0852cc8a66b14b292a3e9a11a97fd"
-  integrity sha512-ITeAByWWoqutFClc/lRZnFplgXgEZr3WJ6XngMM/N9DMIm4K8zXPCZ1Jdu0rERwO84w1WC5wkle2ubwTA4NTBg==
+  version "1.5.10"
+  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.10.tgz#9d3c2f736c1d75dd3bd2be507dcc111f1e2ea9c1"
+  integrity sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"

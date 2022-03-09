@@ -42,6 +42,7 @@ class CasaCase < ApplicationRecord
   has_many :casa_case_contact_types
   has_many :contact_types, through: :casa_case_contact_types, source: :contact_type
   accepts_nested_attributes_for :casa_case_contact_types
+  accepts_nested_attributes_for :court_dates
 
   has_many :case_court_orders, -> { order "id asc" }, dependent: :destroy
   accepts_nested_attributes_for :case_court_orders, reject_if: :all_blank
@@ -219,7 +220,7 @@ end
 #  court_report_status       :integer          default("not_submitted")
 #  court_report_submitted_at :datetime
 #  slug                      :string
-#  transition_aged_youth     :boolean          default(FALSE), not null
+#  transition_aged_youth     :boolean          default(FALSE)
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  casa_org_id               :bigint           not null

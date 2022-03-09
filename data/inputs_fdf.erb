@@ -1,0 +1,17 @@
+%FDF-1.2
+%âãÏÓ
+1 0 obj
+
+<</FDF
+<</Fields[
+<% @inputs.as_json.each do |name, value| %>
+  << /V (<%= FdfInputsService.clean(value) %>) /T (<%= name %>) >>
+<% end %>
+]
+>>
+>>
+endobj
+trailer
+
+<</Root 1 0 R>>
+%%EOF

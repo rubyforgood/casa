@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_27_055733) do
+ActiveRecord::Schema.define(version: 2022_03_03_183053) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,7 +91,7 @@ ActiveRecord::Schema.define(version: 2022_01_27_055733) do
 
   create_table "casa_cases", force: :cascade do |t|
     t.string "case_number", null: false
-    t.boolean "transition_aged_youth", default: false, null: false
+    t.boolean "transition_aged_youth", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "casa_org_id", null: false
@@ -261,6 +261,20 @@ ActiveRecord::Schema.define(version: 2022_01_27_055733) do
     t.index ["creator_id"], name: "index_followups_on_creator_id"
   end
 
+  create_table "fund_requests", force: :cascade do |t|
+    t.text "submitter_email"
+    t.text "youth_name"
+    t.text "payment_amount"
+    t.text "deadline"
+    t.text "request_purpose"
+    t.text "payee_name"
+    t.text "requested_by_and_relationship"
+    t.text "other_funding_source_sought"
+    t.text "impact"
+    t.text "extra_information"
+    t.text "timestamps"
+  end
+
   create_table "healths", force: :cascade do |t|
     t.datetime "latest_deploy_time"
     t.integer "singleton_guard"
@@ -317,6 +331,16 @@ ActiveRecord::Schema.define(version: 2022_01_27_055733) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["read_at"], name: "index_notifications_on_read_at"
     t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient"
+  end
+
+  create_table "other_duties", force: :cascade do |t|
+    t.bigint "creator_id", null: false
+    t.string "creator_type"
+    t.datetime "occurred_at"
+    t.bigint "duration_minutes"
+    t.text "notes"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "preference_sets", force: :cascade do |t|
