@@ -22,7 +22,7 @@ RSpec.describe Judge, type: :model do
 
   describe "default scope" do
     let(:casa_org) { create(:casa_org) }
-    let(:judges) do
+    let!(:judges) do
       5.times.map { create(:judge, casa_org: casa_org) }
     end
 
