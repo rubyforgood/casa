@@ -74,6 +74,23 @@ RSpec.describe "casa_cases/new", type: :system do
     end
   end
 
+  context "when the court date field is not filled" do
+    it "does not create a new case" do
+      fill_in "Case number", with: case_number
+      five_years = (Date.today.year - 5).to_s
+      select "March", from: "casa_case_birth_month_year_youth_2i"
+      select five_years, from: "casa_case_birth_month_year_youth_1i"
+
+      within ".actions" do
+        click_on "Create CASA Case"
+      end
+
+      expect(page).to have_current_path(casa_cases_path, ignore_query: true)
+      expect(page).to have_content("Court dates date can't be blank")
+      expect(page.find_field("Next Court Date")[:required]).to eq("required")
+    end
+  end
+
   context "when the case number already exists in the organization" do
     let!(:casa_case) { create(:casa_case, case_number: case_number, casa_org: casa_org) }
 
