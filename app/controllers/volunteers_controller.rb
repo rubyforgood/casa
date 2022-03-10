@@ -6,6 +6,11 @@ class VolunteersController < ApplicationController
     authorize Volunteer
   end
 
+  def show
+    authorize @volunteer
+    redirect_to action: :edit
+  end
+
   def datatable
     authorize Volunteer
     volunteers = policy_scope current_organization.volunteers
