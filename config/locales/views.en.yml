@@ -304,6 +304,12 @@ en:
         checklist: Checklist
         details: Details
       title: Emancipation Checklists
+  learning_hours:
+    index:
+      heading:
+        learning: Learning
+        time: Time 
+      title: Learning Hours
   global:
     add_court_order: Add a court order
     court_orders: Court Orders - Please check that you didn't enter any youth names
@@ -418,6 +424,7 @@ en:
         admins: Admins
         case_contacts: Case Contacts
         emancipation_checklists: Emancipation Checklist(s)
+        learning_hours: Learning Hours
         supervisors: Supervisors
         volunteers: Volunteers
   notifications:
