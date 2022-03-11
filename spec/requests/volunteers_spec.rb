@@ -13,6 +13,15 @@ RSpec.describe "/volunteers", type: :request do
     end
   end
 
+  describe "GET /show" do
+    it "renders a successful response" do
+      sign_in admin
+
+      get volunteer_path(volunteer.id)
+      expect(response).to redirect_to(edit_volunteer_path(volunteer.id))
+    end
+  end
+
   describe "POST /datatable" do
     let(:data) { {recordsTotal: 51, recordsFiltered: 10, data: 10.times.map { {} }} }
 

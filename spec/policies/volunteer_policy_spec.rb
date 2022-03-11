@@ -7,7 +7,7 @@ RSpec.describe VolunteerPolicy do
   let(:supervisor) { build_stubbed(:supervisor) }
   let(:volunteer) { build_stubbed(:volunteer) }
 
-  permissions :index?, :datatable?, :edit?, :update?, :activate?, :deactivate?, :create?, :new? do
+  permissions :index?, :show?, :datatable?, :edit?, :update?, :activate?, :deactivate?, :create?, :new? do
     context "when user is a casa admin" do
       it "allows" do
         is_expected.to permit(admin)
