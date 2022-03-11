@@ -1,0 +1,32 @@
+<h1 class="pt-5"><%= t(".title") %></h1>
+
+<div id="volunteer-assignment" class="card card-container">
+  <div class="card-body">
+    <% if staffable_obj.volunteers.present? %>
+      <br>
+      <h3><%= t(".assigned_volunteers") %></h3>
+      <div class="table-responsive">
+        <table class='table case-list'>
+          <%= yield %>
+        </table>
+      </div>
+    <% end %>
+
+    <br>
+
+    <h3><%= t(".assign_new") %></h3>
+
+    <%= form_for relational_obj.new, url: relational_action do |form| %>
+      <div class='form-group'>
+        <label for='case_assignment_casa_case_id'><%= t(".select_volunteer") %></label>
+        <select id='case_assignment_casa_case_id' name='case_assignment[volunteer_id]' class='form-control select2'>
+          <% staffable_obj.unassigned_volunteers.each do |volunteer| %>
+            <option value="<%= volunteer.id %>"><%= volunteer.display_name %></option>
+          <% end %>
+        </select>
+      </div>
+
+      <%= form.submit t(".button.assign"), class: 'btn btn-secondary' %>
+    <% end %>
+  </div>
+</div>

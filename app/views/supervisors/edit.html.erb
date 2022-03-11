@@ -40,76 +40,52 @@
   </div>
 </div>
 
-<h1 class="pt-5"><%= t(".manage_volunteers") %></h1>
+<%=
+  render(
+    "shared/volunteer_assignment",
+    staffable_obj: @supervisor,
+    relational_obj: SupervisorVolunteer,
+    relational_action: supervisor_volunteers_path(supervisor_id: @supervisor.id)
+  ) do
+%>
+  <% button_text = @all_volunteers_ever_assigned.nil? ? t(".include_unassigned") : t(".hide_unassigned") %>
 
-<div class="card card-container">
-  <div class="card-body">
-    <% if @supervisor_has_unassigned_volunteers || @supervisor.volunteers.any? %>
-      <h3 class="pull-left"><%= t(".volunteer_title", count: @unassigned_volunteer_count) %></h3>
-      <% if @supervisor_has_unassigned_volunteers %>
-        <% button_text = @all_volunteers_ever_assigned.nil? ? t(".include_unassigned") : t(".hide_unassigned") %>
-        <%= button_to button_text,
-                      edit_supervisor_path(@supervisor),
-                      params: { include_unassigned: @all_volunteers_ever_assigned.nil? },
-                      method: :get,
-                      class: "btn btn-outline-primary pull-right" %>
+  <thead>
+    <tr>
+      <th><%= t(".heading.volunteer_name") %></th>
+      <th><%= t(".heading.volunteer_email") %></th>
+      <% if button_text == t(".hide_unassigned") %>
+        <th><%= t(".heading.currently_assigned_to") %></th>
       <% end %>
-      <table class='table volunteer-list'>
-        <thead>
-        <tr>
-          <th><%= t(".volunteer_name") %></th>
-          <th><%= t(".volunteer_email") %></th>
-          <% if button_text == t(".hide_unassigned") %>
-            <th><%= t(".currently_assigned_to") %></th>
-          <% end %>
-          <th><%= t(".unassign") %></th>
-        </tr>
-        </thead>
-        <tbody>
-        <% (@all_volunteers_ever_assigned || @supervisor.volunteers).each do |volunteer| %>
-          <tr>
-            <td><%= link_to volunteer.display_name, edit_volunteer_path(volunteer) %></td>
-            <td><%= volunteer.email %></td>
-            <% if button_text == t(".hide_unassigned") %>
-              <td>
-                <%= volunteer.has_supervisor? ? volunteer.supervisor.display_name : "No One" %>
-              </td>
-            <% end %>
-            <td>
-              <% if volunteer.supervised_by?(@supervisor) %>
-                <%= button_to t(".unassign"),
-                              unassign_supervisor_volunteer_path(volunteer),
-                              method: :patch,
-                              class: "btn btn-danger" %>
-              <% else %>
-                <%= t(".unassigned") %>
-              <% end %>
-            </td>
-          </tr>
+      <th><%= t(".button.unassign") %></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% (@all_volunteers_ever_assigned || @supervisor.volunteers).each do |volunteer| %>
+      <tr>
+        <td><%= link_to volunteer.display_name, edit_volunteer_path(volunteer) %></td>
+        <td><%= volunteer.email %></td>
+        <% if button_text == t(".hide_unassigned") %>
+          <td>
+            <%= volunteer.has_supervisor? ? volunteer.supervisor.display_name : "No One" %>
+          </td>
         <% end %>
-        </tbody>
-      </table>
+        <td>
+          <% if volunteer.supervised_by?(@supervisor) %>
+            <%=
+              button_to(
+                t(".button.unassign"),
+                unassign_supervisor_volunteer_path(volunteer),
+                method: :patch,
+                class: "btn btn-danger"
+              )
+            %>
+          <% else %>
+            <%= t(".button.unassigned") %>
+          <% end %>
+        </td>
+      </tr>
     <% end %>
-
-    <h3><%= t(".assign_a_volunteer") %></h3>
-
-   <fieldset class="border-0" <%= 'disabled' unless @available_volunteers.any? %>>
-      <%= form_for SupervisorVolunteer.new, url: supervisor_volunteers_path(supervisor_id: @supervisor.id) do |form| %>
-
-        <div class='form-group'>
-          <label for='supervisor_volunteer_volunteer_id'><%= t(".select_a_volunteer") %></label>
-          <select name='supervisor_volunteer[volunteer_id]' class='form-control select2'>
-            <% @available_volunteers.each do |volunteer| %>
-              <option value="<%= volunteer.id %>"><%= volunteer.display_name %></option>
-            <% end %>
-          </select>
-        </div>
-        <%= form.hidden_field :supervisor_id, :value => @supervisor.id %>
-        <%= form.submit t(".assign_volunteer"), class: 'btn btn-primary' %>
-      <% end %>
-   </fieldset>
-    <% unless @available_volunteers.any? %>
-      <p class="text-danger"><%= t(".no_volunteers_available") %></p>
-    <% end %>
-  </div>
-</div>
+  </tbody>
+<% end %>

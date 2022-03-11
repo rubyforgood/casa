@@ -85,25 +85,6 @@ en:
         generate_report: Generate Report
         new_contact: New Case Contact
       title: CASA Case Details
-    volunteer_assignment:
-      assign_new: Assign a New Volunteer
-      assigned_volunteers: Assigned Volunteers
-      assigned: Assigned
-      button:
-        activate: Activate Volunteer
-        assign: Assign Volunteer
-        unassign: Unassign Volunteer
-      deactivated_volunteer: Deactivated volunteer
-      heading:
-        actions: Actions
-        end_date: End Date
-        start_date: Start Date
-        status: Status
-        volunteer_email: Volunteer Email
-        volunteer_name: Volunteer Name
-      select_volunteer: Select a Volunteer
-      title: Manage Volunteers
-      unassigned: Unassigned
     other_duties:
       title: Other Duties
       heading:
@@ -488,6 +469,28 @@ en:
     filter:
       filter_exported_columns: Filter Exported Columns
       select_columns: "Select columns:"
+  shared:
+    volunteer_assignment:
+      assign_new: Assign a New Volunteer
+      assigned_volunteers: Assigned Volunteers
+      assigned: Assigned
+      button:
+        activate: Activate Volunteer
+        assign: Assign Volunteer
+        unassign: Unassign Volunteer
+      deactivated_volunteer: Deactivated volunteer
+      heading:
+        actions: Actions
+        currently_assigned_to: Currently Assigned To
+        end_date: End Date
+        start_date: Start Date
+        status: Status
+        volunteer_email: Volunteer Email
+        volunteer_name: Volunteer Name
+      hide_unassigned: Hide unassigned
+      select_volunteer: Select a Volunteer
+      title: Manage Volunteers
+      unassigned: Unassigned
   supervisors:
     index:
       active: Active
@@ -498,8 +501,6 @@ en:
     edit:
       assign_a_volunteer: Assign a Volunteer
       assign_volunteer: Assign Volunteer
-      currently_assigned_to: Currently Assigned To
-      hide_unassigned: Hide unassigned
       include_unassigned: Include unassigned
       manage_volunteers: Manage Volunteers
       no_volunteers_available: There are no active, unassigned volunteers available.

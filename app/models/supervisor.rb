@@ -4,6 +4,7 @@ class Supervisor < User
   has_many :supervisor_volunteers, foreign_key: "supervisor_id"
   has_many :active_supervisor_volunteers, -> { where(is_active: true) }, class_name: "SupervisorVolunteer", foreign_key: "supervisor_id"
   has_many :unassigned_supervisor_volunteers, -> { where(is_active: false) }, class_name: "SupervisorVolunteer", foreign_key: "supervisor_id"
+  has_many :unassigned_volunteers, through: :unassigned_supervisor_volunteers, source: :volunteer
 
   has_many :volunteers, -> { includes(:supervisor_volunteer).order(:display_name) }, through: :active_supervisor_volunteers
   has_many :volunteers_ever_assigned, -> { includes(:supervisor_volunteer).order(:display_name) }, through: :supervisor_volunteers, source: :volunteer

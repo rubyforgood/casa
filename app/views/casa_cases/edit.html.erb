@@ -7,5 +7,67 @@
 <% end %>
 
 <% if Pundit.policy(current_user, @casa_case).assign_volunteers? %>
-  <%= render "volunteer_assignment" %>
+  <%=
+    render(
+      "shared/volunteer_assignment",
+      staffable_obj: @casa_case,
+      relational_obj: CaseAssignment,
+      relational_action: case_assignments_path(casa_case_id: @casa_case.id)
+    ) do
+  %>
+    <thead>
+      <tr>
+        <th><%= t(".heading.volunteer_name") %></th>
+        <th><%= t(".heading.volunteer_email") %></th>
+        <th><%= t(".heading.status") %></th>
+        <th><%= t(".heading.start_date") %></th>
+        <th><%= t(".heading.end_date") %></th>
+        <th><%= t(".heading.actions") %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @casa_case.case_assignments.each do |assignment| %>
+        <tr>
+          <td data-test="volunteer-name">
+            <%= link_to assignment.volunteer.display_name, edit_volunteer_path(assignment.volunteer) %>
+          </td>
+          <td data-test="volunteer-email"><%= assignment&.volunteer&.email %></td>
+          <td data-test="assigned">
+            <% if assignment.active? %>
+              <span class='badge badge-success text-uppercase'><%= t(".assigned") %></span>
+            <% else %>
+                <span class="badge badge-danger text-uppercase">
+                  <%= assignment.volunteer.active? ? t(".unassigned") : t(".deactivated_volunteer") %>
+                </span>
+            <% end %>
+          </td>
+          <td data-test="assignment-start"><%= I18n.l(assignment.created_at, format: :full, default: nil) %></td>
+          <td data-test="assignment-end">
+            <% unless assignment.active? %>
+              <%= I18n.l(assignment.updated_at, format: :full, default: nil) %>
+            <% end %>
+          </td>
+          <td data-test="action">
+            <% if policy(assignment).unassign? %>
+              <%= button_to(t(".button.unassign"),
+                            unassign_case_assignment_path(assignment),
+                            method: :patch,
+                            class: "btn btn-outline-danger text-wrap") %>
+            <% elsif !assignment.volunteer.active? && policy(assignment.volunteer).activate? %>
+              <%= link_to t(".button.activate"),
+                          activate_volunteer_path(assignment.volunteer,
+                                                  redirect_to_path: 'casa_case',
+                                                  casa_case_id: @casa_case.id
+                          ),
+                          method: :patch,
+                          class: "btn btn-outline-success" %>
+            <% else %>
+              <%= t("common.none") %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  <% end %>
 <% end %>
