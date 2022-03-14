@@ -3,6 +3,7 @@ class VolunteerPolicy < UserPolicy
     attr_reader :user, :scope
 
     def initialize(user, scope)
+      binding.pry
       @user = user
       @scope = scope
     end
@@ -10,6 +11,7 @@ class VolunteerPolicy < UserPolicy
     def resolve
       case user
       when CasaAdmin, Supervisor, Volunteer
+        binding.pry
         scope.by_organization(@user.casa_org)
       else
         raise "unrecognized role #{@user.type}"
@@ -18,6 +20,7 @@ class VolunteerPolicy < UserPolicy
   end
 
   def index?
+    binding.pry
     admin_or_supervisor?
   end
 

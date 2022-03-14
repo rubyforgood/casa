@@ -35,8 +35,20 @@ class VolunteersController < ApplicationController
       render :new
     end
   end
+  #
+#   class Scope < Scope
+#     def resolve
+#       return @scope.all if current_employer.doctor?
+#       return @scope if current_employer.supplier?
+#       return @scope.where(id: current_employer.id) if current_employer.clinical_facility?
+#
+#       @scope.none
+#     end
+#   end
+# end
 
-  def edit
+
+def edit
     authorize @volunteer
     @supervisors = policy_scope current_organization.supervisors.active
   end

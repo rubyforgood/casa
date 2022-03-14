@@ -60,7 +60,7 @@ class ApplicationPolicy
   end
 
   def admin_or_supervisor?
-    is_admin? || is_supervisor?
+     is_admin? || is_supervisor?
   end
 
   def admin_or_supervisor_or_volunteer?
