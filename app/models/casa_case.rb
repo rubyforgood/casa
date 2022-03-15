@@ -4,7 +4,7 @@ class CasaCase < ApplicationRecord
 
   has_paper_trail
 
-  self.ignored_columns = %w(court_date)
+  self.ignored_columns = %w[court_date]
 
   TABLE_COLUMNS = %w[
     case_number
