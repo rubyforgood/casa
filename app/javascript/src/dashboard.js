@@ -193,7 +193,7 @@ $('document').ready(() => {
         name: 'hours_spent_in_days',
         render: (data, type, row, meta) => {
           return `
-            <span class="mobile-label">Hours</span>
+            <span class="mobile-label">Hours spent in last 30 days</span>
             ${row.hours_spent_in_days}
           `
         }
