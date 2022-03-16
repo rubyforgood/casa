@@ -106,10 +106,12 @@ class Volunteer < User
   end
 
   def hours_spent_in_days(num_days)
-    actively_assigned_and_active_cases
-      .includes(:case_contacts)
-      .where(case_contacts: {contact_made: true, occurred_at: num_days.days.ago.to_date..})
-      .sum(:duration_minutes) / 60.0
+    minutes = actively_assigned_and_active_cases
+                .includes(:case_contacts)
+                .where(case_contacts: {contact_made: true, occurred_at: num_days.days.ago.to_date..})
+                .sum(:duration_minutes)
+
+    minutes_to_str(minutes)
   end
 
   private
@@ -118,6 +120,10 @@ class Volunteer < User
     actively_assigned_and_active_cases
       .joins(:case_contacts)
       .where(case_contacts: {contact_made: true, occurred_at: num_days.days.ago.to_date..})
+  end
+
+  def minutes_to_str(minutes)
+    ["#{minutes / 60}h", "#{minutes % 60}m"].select { |str| str =~ /[1-9]/ }.join(" ")
   end
 end
 
