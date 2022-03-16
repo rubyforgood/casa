@@ -21,6 +21,10 @@ class VolunteerPolicy < UserPolicy
     admin_or_supervisor?
   end
 
+  def edit?
+    admin_or_supervisor_same_org?
+  end
+
   def impersonate?
     admin_or_supervisor?
   end
@@ -32,7 +36,6 @@ class VolunteerPolicy < UserPolicy
   alias_method :datatable?, :index?
   alias_method :new?, :index?
   alias_method :create?, :index?
-  alias_method :edit?, :index?
   alias_method :show?, :index?
   alias_method :update?, :index?
   alias_method :activate?, :index?
