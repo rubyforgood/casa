@@ -196,7 +196,8 @@ $('document').ready(() => {
             <span class="mobile-label">Hours spent in last 30 days</span>
             ${row.hours_spent_in_days}
           `
-        }
+        },
+        searchable: false
       },
       {
         name: 'actions',

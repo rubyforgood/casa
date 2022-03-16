@@ -51,7 +51,8 @@ class VolunteerDatatable < ApplicationDatatable
           transition_aged_youth_cases.volunteer_id IS NOT NULL AS has_transition_aged_youth_cases,
           most_recent_attempts.casa_case_id AS most_recent_attempt_case_id,
           most_recent_attempts.occurred_at AS most_recent_attempt_occurred_at,
-          contacts_made_in_past_days.contact_count AS contacts_made_in_past_days
+          contacts_made_in_past_days.contact_count AS contacts_made_in_past_days,
+          supervisors.id AS hours_spent_in_days
         SQL
       )
       .joins(
@@ -67,6 +68,9 @@ class VolunteerDatatable < ApplicationDatatable
           LEFT JOIN (
             #{sanitize_sql(contacts_made_in_past_days_subquery)}
           ) contacts_made_in_past_days ON contacts_made_in_past_days.creator_id = users.id
+          LEFT JOIN (
+            #{sanitize_sql(hours_spent_in_days_subquery)}
+          ) hours_spent_in_days ON hours_spent_in_days.creator_id = users.id
         SQL
       )
       .order(order_clause)
@@ -106,6 +110,20 @@ class VolunteerDatatable < ApplicationDatatable
           SQL
         )
         .where(contact_made: true, occurred_at: Volunteer::CONTACT_MADE_IN_PAST_DAYS_NUM.days.ago.to_date..)
+        .group(:creator_id)
+        .to_sql
+  end
+
+  def hours_spent_in_days_subquery
+    @hours_spent_in_days_subquery ||=
+      CaseContact
+        .select(
+          <<-SQL
+          creator_id,
+          SUM(duration_minutes) AS duration_minutes
+          SQL
+        )
+        .where(contact_made: true, occurred_at: 60.days.ago.to_date..)
         .group(:creator_id)
         .to_sql
   end
