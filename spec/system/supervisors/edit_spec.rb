@@ -53,6 +53,7 @@ RSpec.describe "supervisors/edit", type: :system do
 
       visit edit_supervisor_path(supervisor)
 
+      expect(page).to have_text "CASA organization "
       expect(page).to have_text "Added to system "
       expect(page).to have_text "Invitation email sent never"
       expect(page).to have_text "Last logged in"
