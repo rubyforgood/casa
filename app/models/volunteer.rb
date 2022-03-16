@@ -12,7 +12,7 @@ class Volunteer < User
   LAST_ATTEMPTED_CONTACT_COLUMN = "last_attempted_contact"
   CONTACT_MADE_IN_PAST_DAYS_NUM = 60
   CONTACT_MADE_IN_PAST_DAYS_COLUMN = "contact_made_in_past_#{CONTACT_MADE_IN_PAST_DAYS_NUM}_days".freeze
-  HOURS_COLUMN = "hours"
+  HOURS_SPENT_IN_DAYS_COLUMN = "hours_spent_in_days"
   ACTIONS_COLUMN = "actions"
   TABLE_COLUMNS = [
     NAME_COLUMN,
@@ -23,7 +23,7 @@ class Volunteer < User
     CASE_NUMBER_COLUMN,
     LAST_ATTEMPTED_CONTACT_COLUMN,
     CONTACT_MADE_IN_PAST_DAYS_COLUMN,
-    HOURS_COLUMN,
+    HOURS_SPENT_IN_DAYS_COLUMN,
     ACTIONS_COLUMN
   ].freeze
   CONTACT_MADE_IN_DAYS_NUM = 14

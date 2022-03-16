@@ -52,7 +52,7 @@ class VolunteerDatatable < ApplicationDatatable
           most_recent_attempts.casa_case_id AS most_recent_attempt_case_id,
           most_recent_attempts.occurred_at AS most_recent_attempt_occurred_at,
           contacts_made_in_past_days.contact_count AS contacts_made_in_past_days,
-          supervisors.id AS hours_spent_in_days
+          hours_spent_in_days.duration_minutes AS hours_spent_in_days
         SQL
       )
       .joins(
