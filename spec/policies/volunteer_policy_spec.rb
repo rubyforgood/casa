@@ -7,7 +7,51 @@ RSpec.describe VolunteerPolicy do
   let(:supervisor) { build_stubbed(:supervisor) }
   let(:volunteer) { build_stubbed(:volunteer) }
 
-  permissions :index?, :show?, :datatable?, :edit?, :update?, :activate?, :deactivate?, :create?, :new? do
+  permissions :edit? do
+    context "same org" do
+      let(:record) { build_stubbed(:volunteer, casa_org: admin.casa_org) }
+      context "when user is a casa admin" do
+        it "allows for same org" do
+          is_expected.to permit(admin, record)
+        end
+      end
+
+      context "when user is a supervisor" do
+        it "allows" do
+          is_expected.to permit(supervisor, record)
+        end
+      end
+
+      context "when user is a volunteer" do
+        it "does not permit" do
+          is_expected.not_to permit(volunteer)
+        end
+      end
+    end
+
+    context "different org" do
+      let(:record) { build_stubbed(:volunteer, casa_org: build_stubbed(:casa_org)) }
+      context "when user is a casa admin" do
+        it "does not allow for different org" do
+          is_expected.not_to permit(admin, record)
+        end
+      end
+
+      context "when user is a supervisor" do
+        it "does not allow" do
+          is_expected.not_to permit(supervisor, record)
+        end
+      end
+
+      context "when user is a volunteer" do
+        it "does not permit" do
+          is_expected.not_to permit(volunteer)
+        end
+      end
+    end
+  end
+
+  permissions :index?, :show?, :datatable?, :update?, :activate?, :deactivate?, :create?, :new? do
     context "when user is a casa admin" do
       it "allows" do
         is_expected.to permit(admin)
