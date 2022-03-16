@@ -98,7 +98,7 @@ Rails.application.routes.draw do
       patch :unassign
     end
   end
-  resources :volunteers, except: %i[destroy show], concerns: %i[with_datatable] do
+  resources :volunteers, except: %i[destroy], concerns: %i[with_datatable] do
     post :stop_impersonating, on: :collection
     member do
       patch :activate
@@ -143,4 +143,5 @@ Rails.application.routes.draw do
       patch "update_password"
     end
   end
+  resources :fund_requests, only: %i[new create]
 end

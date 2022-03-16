@@ -4,6 +4,8 @@ class CasaCase < ApplicationRecord
 
   has_paper_trail
 
+  self.ignored_columns = %w[court_date]
+
   TABLE_COLUMNS = %w[
     case_number
     hearing_type_name
@@ -42,6 +44,7 @@ class CasaCase < ApplicationRecord
   has_many :casa_case_contact_types
   has_many :contact_types, through: :casa_case_contact_types, source: :contact_type
   accepts_nested_attributes_for :casa_case_contact_types
+  accepts_nested_attributes_for :court_dates
 
   has_many :case_court_orders, -> { order "id asc" }, dependent: :destroy
   accepts_nested_attributes_for :case_court_orders, reject_if: :all_blank
@@ -214,7 +217,6 @@ end
 #  active                    :boolean          default(TRUE), not null
 #  birth_month_year_youth    :datetime
 #  case_number               :string           not null
-#  court_date                :datetime
 #  court_report_due_date     :datetime
 #  court_report_status       :integer          default("not_submitted")
 #  court_report_submitted_at :datetime

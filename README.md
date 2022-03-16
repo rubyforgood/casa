@@ -1,7 +1,6 @@
 # CASA Project and Organization Overview
 
 [![rspec](https://github.com/rubyforgood/casa/workflows/rspec/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/rspec.yml)
-[![cypress](https://github.com/rubyforgood/casa/workflows/cypress/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/cypress.yml)
 [![erb lint](https://github.com/rubyforgood/casa/actions/workflows/erb_lint.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/erb_lint.yml)
 [![standardrb lint](https://github.com/rubyforgood/casa/actions/workflows/ruby_lint.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/ruby_lint.yml)
 [![brakeman](https://github.com/rubyforgood/casa/workflows/brakeman/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/security.yml)
@@ -158,11 +157,6 @@ The password for all seed users is `12345678`
 **Running Tests**
  - run the ruby test suite `bin/rails spec`
  - run the javascript test suite `yarn test`
- - run cypress tests
-
-       bundle exec rails server -b 0.0.0.0 -p 4040
-       npm run test:cypress --exit-code 0
-
 
 If you have trouble running tests, check out CI scripts in [`.github/workflows/`](.github/workflows/) for sample commands.
 Test coverage is run by simplecov on all builds and aggregated by CodeClimate

@@ -51,7 +51,8 @@ Rails.application.configure do
   ENV["IP_BLOCKLIST"] = "4.5.6.7, 9.8.7.6,100.101.102.103"
 
   # Raises error for missing translations.
-  # config.action_view.raise_on_missing_translations = true
+  config.i18n.raise_on_missing_translations = true
+
   config.after_initialize do
     Bullet.enable = true
     Bullet.console = true

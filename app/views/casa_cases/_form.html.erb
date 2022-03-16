@@ -63,6 +63,20 @@
         <% end %>
       <% end %>
 
+      <% if policy(casa_case).update_court_date? && casa_case.new_record? %>
+        <%= form.fields_for :court_dates, casa_case.court_dates.new do |cdf| %>
+          <div class="field form-group">
+            <%= cdf.label :date, t(".court_date") %>
+            <br>
+            <div class="field form-group">
+              <%= cdf.text_field :date,
+                              data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
+                              class: "form-control",
+                              :required=> 'required' %>
+          </div>
+        <% end %>
+      <% end %>
+
       <div class="field form-group">
         <% if policy(casa_case).update_court_report_due_date? %>
           <%= form.label :court_report_due_date, t(".court_report_due_date") %>
