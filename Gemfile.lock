@@ -115,7 +115,7 @@ GEM
       marcel (~> 1.0)
       nokogiri (~> 1.10, >= 1.10.4)
       rubyzip (>= 1.3.0, < 3)
-    caxlsx_rails (0.6.2)
+    caxlsx_rails (0.6.3)
       actionpack (>= 3.1)
       caxlsx (>= 3.0)
     childprocess (4.1.0)
@@ -480,7 +480,7 @@ DEPENDENCIES
   capybara
   capybara-screenshot
   caxlsx (~> 3.2)
-  caxlsx_rails (~> 0.6.2)
+  caxlsx_rails (~> 0.6.3)
   database_cleaner-active_record
   delayed_job_active_record
   devise
