@@ -51,8 +51,22 @@ class ApplicationPolicy
     user.casa_admin?
   end
 
+  def same_org?
+    user.casa_org == record.casa_org
+  end
+
+  def is_admin_same_org?
+    # eventually everything should use this
+    user.casa_admin? && same_org?
+  end
+
   def is_supervisor?
     user.supervisor?
+  end
+
+  def is_supervisor_same_org?
+    # eventually everything should use this
+    user.supervisor? && same_org?
   end
 
   def is_volunteer?
@@ -61,6 +75,11 @@ class ApplicationPolicy
 
   def admin_or_supervisor?
     is_admin? || is_supervisor?
+  end
+
+  def admin_or_supervisor_same_org?
+    # eventually everything should use this
+    is_admin_same_org? || is_supervisor_same_org?
   end
 
   def admin_or_supervisor_or_volunteer?
