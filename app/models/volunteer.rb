@@ -12,6 +12,7 @@ class Volunteer < User
   LAST_ATTEMPTED_CONTACT_COLUMN = "last_attempted_contact"
   CONTACT_MADE_IN_PAST_DAYS_NUM = 60
   CONTACT_MADE_IN_PAST_DAYS_COLUMN = "contact_made_in_past_#{CONTACT_MADE_IN_PAST_DAYS_NUM}_days".freeze
+  HOURS_COLUMN = "hours"
   ACTIONS_COLUMN = "actions"
   TABLE_COLUMNS = [
     NAME_COLUMN,
@@ -22,6 +23,7 @@ class Volunteer < User
     CASE_NUMBER_COLUMN,
     LAST_ATTEMPTED_CONTACT_COLUMN,
     CONTACT_MADE_IN_PAST_DAYS_COLUMN,
+    HOURS_COLUMN,
     ACTIONS_COLUMN
   ].freeze
   CONTACT_MADE_IN_DAYS_NUM = 14
@@ -101,6 +103,13 @@ class Volunteer < User
     return true if total_active_case_count.zero?
     current_contact_cases_count = cases_where_contact_made_in_days(num_days).count
     current_contact_cases_count == total_active_case_count
+  end
+
+  def hours_spent_in_days(num_days)
+    actively_assigned_and_active_cases
+      .includes(:case_contacts)
+      .where(case_contacts: {contact_made: true, occurred_at: num_days.days.ago.to_date..})
+      .sum(:duration_minutes) / 60.0
   end
 
   private

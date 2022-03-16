@@ -7,6 +7,7 @@ class VolunteerDatatable < ApplicationDatatable
     has_transition_aged_youth_cases
     most_recent_attempt_occurred_at
     supervisor_name
+    hours_spent_in_days
   ]
 
   private
@@ -26,7 +27,8 @@ class VolunteerDatatable < ApplicationDatatable
           case_id: volunteer.most_recent_attempt_case_id,
           occurred_at: I18n.l(volunteer.most_recent_attempt_occurred_at, format: :full, default: nil)
         },
-        supervisor: {id: volunteer.supervisor_id, name: volunteer.supervisor_name}
+        supervisor: {id: volunteer.supervisor_id, name: volunteer.supervisor_name},
+        hours_spent_in_days: volunteer.hours_spent_in_days(60)
       }
     end
   end

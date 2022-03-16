@@ -190,6 +190,15 @@ $('document').ready(() => {
         visible: false
       },
       {
+        name: 'hours_spent_in_days',
+        render: (data, type, row, meta) => {
+          return `
+            <span class="mobile-label">Hours</span>
+            ${row.hours_spent_in_days}
+          `
+        }
+      },
+      {
         name: 'actions',
         orderable: false,
         render: (data, type, row, meta) => {
