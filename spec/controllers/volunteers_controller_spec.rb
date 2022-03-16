@@ -11,7 +11,7 @@ RSpec.describe VolunteersController, type: :controller do
         allow(controller).to receive(:current_user).and_return(supervisor)
         volunteer_east = create :volunteer, casa_org: east
         _volunteer_west = create :volunteer, casa_org: west
-        get :edit, params: { id: volunteer_east.id }
+        get :edit, params: {id: volunteer_east.id}
         # expect(response).to redirect_to(reimbursements_path)
         expect(response).to have_http_status(:ok)
         expect(assigns(:supervisors)).to eq([supervisor])
