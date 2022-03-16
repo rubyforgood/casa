@@ -1,4 +1,28 @@
 module WordDocHelper
+  # This class is here so I can have private methods https://stackoverflow.com/a/424569
+  class DocxInspector
+    def initialize(docx_path)
+      #Sort w:t s by length and keep array on instance
+    end
+
+    def contains_str?(str)
+    end
+
+    private
+
+    def get_docx_as_directory()
+    end
+
+    def get_docx_readable_text_XML_file_paths(docx_word_directory)
+    end
+
+    def get_XML_object(file_path)
+    end
+
+    def get_displayed_text_list()
+    end
+  end
+
   # Get the contents of an XML file in the word document as a string
   # @example
   #
