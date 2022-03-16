@@ -42,9 +42,6 @@ Some things that will increase the chance that your pull request is accepted:
 bundle exec brakeman
 bundle exec standardrb
 bundle exec rake
-## to run cypress tests
-bundle exec rails s -p 4040
-npm run test:cypress
 ```
 
 If you are wondering how to keep your fork in sync with the main [repo], follow this [github guide](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork).

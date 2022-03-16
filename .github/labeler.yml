@@ -23,7 +23,6 @@ javascript:
 
 Tests! 🎉💖👏:
 - "app/javascript/__tests__/**.test.js"
-- "cypress/**/*.spec.js"
 - "spec/**/*_spec.rb"
 
 dependencies:

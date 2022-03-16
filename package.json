@@ -2,9 +2,7 @@
   "name": "casa",
   "private": true,
   "scripts": {
-    "test:cypress": "$(npm bin)/cypress run",
     "test": "jest",
-    "test:e2e": "cypress open",
     "lint": "standard",
     "lint:fix": "standard --fix",
     "toc": "markdown-toc -i README.md"
@@ -32,7 +30,6 @@
   "version": "0.1.0",
   "devDependencies": {
     "@webpack-cli/serve": "^1.6.1",
-    "cypress": "^9.5.1",
     "jest": "^27.5.1",
     "markdown-toc": "^1.2.0",
     "standard": "^16.0.4",
