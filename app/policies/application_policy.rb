@@ -48,7 +48,7 @@ class ApplicationPolicy
   end
 
   def is_admin?
-    user.casa_admin?
+    user.casa_admin? && user.casa_org == record.casa_org
   end
 
   def is_supervisor?
