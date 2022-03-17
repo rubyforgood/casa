@@ -26,7 +26,7 @@ class VolunteerPolicy < UserPolicy
   end
 
   def impersonate?
-    admin_or_supervisor?
+    admin_or_supervisor_same_org?
   end
 
   def stop_impersonating?
@@ -34,12 +34,12 @@ class VolunteerPolicy < UserPolicy
   end
 
   alias_method :datatable?, :index?
-  alias_method :new?, :index?
-  alias_method :create?, :index?
-  alias_method :show?, :index?
-  alias_method :update?, :index?
-  alias_method :activate?, :index?
-  alias_method :deactivate?, :index?
-  alias_method :resend_invitation?, :index?
-  alias_method :reminder?, :index?
+  alias_method :new?, :admin_or_supervisor_same_org?
+  alias_method :create?, :admin_or_supervisor_same_org?
+  alias_method :show?, :admin_or_supervisor_same_org?
+  alias_method :update?, :admin_or_supervisor_same_org?
+  alias_method :activate?, :admin_or_supervisor_same_org?
+  alias_method :deactivate?, :admin_or_supervisor_same_org?
+  alias_method :resend_invitation?, :admin_or_supervisor_same_org?
+  alias_method :reminder?, :admin_or_supervisor_same_org?
 end
