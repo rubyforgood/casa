@@ -83,8 +83,7 @@ RSpec.describe "/volunteers", type: :request do
         {
           volunteer: {
             display_name: "Example",
-            email: "volunteer1@example.com",
-            casa_org_id: admin.casa_org_id
+            email: "volunteer1@example.com"
           }
         }
       end
@@ -96,6 +95,10 @@ RSpec.describe "/volunteers", type: :request do
         expect(volunteer.email).to eq("volunteer1@example.com")
         expect(volunteer.display_name).to eq("Example")
         expect(response).to redirect_to edit_volunteer_path(volunteer)
+      end
+
+      it "assigns new volunteer to creator's organization" do
+        expect(volunteer.casa_org_id).to eq(admin.casa_org_id)
       end
 
       it "sends an account_setup email" do
@@ -110,8 +113,7 @@ RSpec.describe "/volunteers", type: :request do
         {
           volunteer: {
             display_name: "",
-            email: "volunteer1@example.com",
-            casa_org_id: admin.casa_org_id
+            email: "volunteer1@example.com"
           }
         }
       end
