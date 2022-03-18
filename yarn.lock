@@ -1607,10 +1607,10 @@ acorn@^8.2.4:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.7.0.tgz#90951fde0f8f09df93549481e5fc141445b791cf"
   integrity sha512-V/LGr1APy+PXIwKebEWrkZPwoeoF+w1jiOBUmuxuiUIaOHtob8Qc9BTrYo7VuI5fR8tqsy+buA2WFooR5olqvQ==
 
-add2calendar@^1.1.7:
-  version "1.1.7"
-  resolved "https://registry.yarnpkg.com/add2calendar/-/add2calendar-1.1.7.tgz#2382d79acc970ed8b5d9232bf06cb64cfecb3668"
-  integrity sha512-yfvqhUjf5+fD8u8932QaJAkJjyd8wlUUy3EidHPnqWjmWM9hoceRPcRiuX/qKnrAeNKh5VKjRJqcxH1z+asmEw==
+add2calendar@^1.1.8:
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/add2calendar/-/add2calendar-1.1.8.tgz#fd6e38e664211a35a320c497f37342c28b04a021"
+  integrity sha512-piPwahYIRSZvxus2sqJ2nv163YuXrKGxExxYStxlCKwSQ28CBkvFtakmllRwrB/760dxNgIR8bID25Y74no7og==
 
 agent-base@6, agent-base@^6.0.2:
   version "6.0.2"
