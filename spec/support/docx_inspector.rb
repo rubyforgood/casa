@@ -3,6 +3,7 @@ class DocxInspector
     if !docx_contents.nil?
       @docx_file = store_docx_contents_in_tempfile(docx_contents)
     elsif !docx_path.nil?
+      @docx_file = File.open(docx_path, "r")
     else
       raise ArgumentError.new("Insufficient parameters. Either docx_contents or docx_path is required.")
     end
