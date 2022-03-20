@@ -196,7 +196,6 @@ class DbPopulator
           CasaCase.find_or_create_by!(
             casa_org_id: casa_org.id,
             case_number: case_number,
-            court_date: court_date,
             court_report_due_date: court_date + 1.month,
             court_report_submitted_at: court_report_submitted ? Date.today : nil,
             court_report_status: court_report_submitted ? :submitted : :not_submitted,
@@ -209,7 +208,6 @@ class DbPopulator
           CasaCase.find_or_create_by!(
             casa_org_id: casa_org.id,
             case_number: case_number,
-            court_date: court_date,
             court_report_due_date: court_date + 1.month,
             court_report_submitted_at: court_report_submitted ? Date.today : nil,
             court_report_status: court_report_submitted ? :submitted : :not_submitted,
@@ -262,7 +260,6 @@ class DbPopulator
           volunteer1.casa_cases.find_or_create_by!(
             casa_org_id: volunteer1.casa_org.id,
             case_number: generate_case_number,
-            court_date: court_date,
             court_report_due_date: court_date + 1.month,
             court_report_submitted_at: court_report_submitted ? Date.today : nil,
             court_report_status: court_report_submitted ? :submitted : :not_submitted,

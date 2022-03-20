@@ -46,7 +46,7 @@ RSpec.describe "casa_cases/new", type: :system do
   context "when non-mandatory fields are not filled" do
     it "is successful" do
       fill_in "Case number", with: case_number
-
+      fill_in "Next Court Date", with: DateTime.now.next_month.strftime("%Y/%m/%d")
       five_years = (Date.today.year - 5).to_s
       select "March", from: "casa_case_birth_month_year_youth_2i"
       select five_years, from: "casa_case_birth_month_year_youth_1i"
@@ -71,6 +71,23 @@ RSpec.describe "casa_cases/new", type: :system do
 
       expect(page).to have_current_path(casa_cases_path, ignore_query: true)
       expect(page).to have_content("Case number can't be blank")
+    end
+  end
+
+  context "when the court date field is not filled" do
+    it "does not create a new case" do
+      fill_in "Case number", with: case_number
+      five_years = (Date.today.year - 5).to_s
+      select "March", from: "casa_case_birth_month_year_youth_2i"
+      select five_years, from: "casa_case_birth_month_year_youth_1i"
+
+      within ".actions" do
+        click_on "Create CASA Case"
+      end
+
+      expect(page).to have_current_path(casa_cases_path, ignore_query: true)
+      expect(page).to have_content("Court dates date can't be blank")
+      expect(page.find_field("Next Court Date")[:required]).to eq("required")
     end
   end
 

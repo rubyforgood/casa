@@ -82,8 +82,8 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   it "allows the admin to unassign a volunteer from a supervisor" do
-    supervisor = build(:supervisor, display_name: "Haka Haka")
-    volunteer = create(:volunteer, display_name: "Bolu Bolu", supervisor: supervisor)
+    supervisor = build(:supervisor, display_name: "Haka Haka", casa_org: organization)
+    volunteer = create(:volunteer, display_name: "Bolu Bolu", supervisor: supervisor, casa_org: organization)
 
     sign_in admin
 

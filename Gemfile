@@ -10,7 +10,7 @@ gem "amazing_print" # easier console reading
 gem "azure-storage-blob", require: false
 gem "bugsnag" # tracking errors in prod
 gem "caxlsx", "~> 3.2" # excel spreadsheets - TODO can we remove this version restriction?
-gem "caxlsx_rails", "~> 0.6.2" # excel spreadsheets - TODO can we remove this version restriction?
+gem "caxlsx_rails", "~> 0.6.3" # excel spreadsheets - TODO can we remove this version restriction?
 gem "delayed_job_active_record"
 gem "devise" # for authentication
 gem "devise_invitable"
@@ -43,7 +43,6 @@ gem "webpacker" # Transpile app-like JavaScript. Read more: https://github.com/r
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
   gem "byebug", platforms: %i[mri mingw x64_mingw] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem "cypress-on-rails", "~> 1.12"
   gem "erb_lint", require: false
   gem "factory_bot_rails"
   gem "pry"

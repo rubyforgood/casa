@@ -71,7 +71,8 @@
             <div class="field form-group">
               <%= cdf.text_field :date,
                               data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
-                              class: "form-control" %>
+                              class: "form-control",
+                              :required=> 'required' %>
           </div>
         <% end %>
       <% end %>

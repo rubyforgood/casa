@@ -3,9 +3,9 @@ class FundRequestMailer < ApplicationMailer
 
   def send_request(_user, fund_request)
     to_recipient_email = ENV["FUND_REQUEST_RECIPIENT_EMAIL"]
-    Bugsnag.notify("No user for FUND_REQUEST_RECIPIENT_EMAIL for fund request from: #{submitter_email}") unless to_recipient_email
 
     submitter_email = fund_request.submitter_email
+    Bugsnag.notify("No user for FUND_REQUEST_RECIPIENT_EMAIL for fund request from: #{submitter_email}") unless to_recipient_email
     @inputs = fund_request.as_json
     submitter_name = fund_request.submitter_email.split("@").first
     begin
