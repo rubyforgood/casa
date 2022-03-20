@@ -453,7 +453,7 @@ en:
   reimbursements:
     table:
       heading:
-        amount: Amount
+        amount: Miles Driven
         case_number: Case Number
         contact_types: Contact Types
         date_added: Date Added
