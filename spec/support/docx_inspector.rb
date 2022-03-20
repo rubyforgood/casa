@@ -11,6 +11,8 @@ class DocxInspector
     end
 
     @docx_zip_object = get_docx_as_zip_object(docx_file)
+
+    puts get_docx_readable_text_XML_files
   end
 
   def contains_str?(str)
@@ -26,7 +28,14 @@ class DocxInspector
     Zip::File.open(docx_file.path)
   end
 
-  def get_docx_readable_text_XML_file_paths(docx_word_directory)
+  def get_docx_readable_text_XML_files
+    if @docx_zip_object.nil?
+      raise "Required variable @docx_zip_object is uninitialized"
+    end
+
+    word_entries = @docx_zip_object.entries.select do |entry|
+      entry.name =~ /^word\/[^\/]*\.xml/ # A file in the word/ directory not in a directory below word
+    end
   end
 
   def get_XML_object(file_path)
