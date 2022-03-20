@@ -96,6 +96,7 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "casa_org_id", null: false
     t.datetime "birth_month_year_youth"
+    t.datetime "court_date"
     t.datetime "court_report_due_date"
     t.bigint "hearing_type_id"
     t.boolean "active", default: true, null: false

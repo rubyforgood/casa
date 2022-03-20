@@ -529,6 +529,7 @@ en:
         contacts: Contacts Made in Past 60 Days
         e_mail: Email
         last_attempted_contact:  Last Attempted Contact
+        hours_spent_in: Hours spent in last 30 days
         name: Name
         supervisor: Supervisor
         status: Status
