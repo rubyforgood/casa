@@ -1,4 +1,6 @@
 class DocxInspector
+  IGNORED_FILE_LIST = {fontTable: 0, numbering: 0, webSettings: 0}
+
   def initialize(docx_contents: nil, docx_path: nil)
     docx_file = nil
 
@@ -32,8 +34,6 @@ class DocxInspector
     if @docx_zip_object.nil?
       raise "Required variable @docx_zip_object is uninitialized"
     end
-
-    IGNORED_FILE_LIST = {fontTable: 0, numbering: 0, webSettings: 0}
 
     word_entries = @docx_zip_object.entries.select do |entry|
       entry.name.match(/^word\/[^\/]*\.xml/).nil? # A file in the word/ directory not in a directory below word
