@@ -36,6 +36,8 @@ class DocxInspector
     word_entries = @docx_zip_object.entries.select do |entry|
       entry.name =~ /^word\/[^\/]*\.xml/ # A file in the word/ directory not in a directory below word
     end
+
+    puts word_entries
   end
 
   def get_XML_object(file_path)
