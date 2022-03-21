@@ -1,5 +1,5 @@
 class DocxInspector
-  IGNORED_FILE_LIST = {fontTable: 0, numbering: 0, webSettings: 0}
+  IGNORED_FILE_LIST = {"fontTable" => 0, "numbering" => 0, "settings" => 0, "styles" => 0, "webSettings" => 0}
 
   def initialize(docx_contents: nil, docx_path: nil)
     docx_file = nil
@@ -36,7 +36,16 @@ class DocxInspector
     end
 
     word_entries = @docx_zip_object.entries.select do |entry|
-      entry.name.match(/^word\/[^\/]*\.xml/).nil? # A file in the word/ directory not in a directory below word
+      entry_name = entry.name
+      is_ignored_file = false
+      xml_file_in_word_match = entry_name.match(/^word\/([^\/]*)\.xml/) # A file in the word/ directory not in a directory below word
+
+      unless xml_file_in_word_match.nil?
+        xml_file_name = xml_file_in_word_match.captures[0]
+        is_ignored_file = !IGNORED_FILE_LIST[xml_file_name].nil?
+      end
+
+      !(xml_file_in_word_match.nil? || is_ignored_file)
     end
 
     puts word_entries
