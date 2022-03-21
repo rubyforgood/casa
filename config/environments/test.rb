@@ -1,3 +1,5 @@
+require "active_support/core_ext/integer/time"
+
 # The test environment is used exclusively to run your application's
 # test suite. You never need to work with it otherwise. Remember that
 # your test database is "scratch space" for the test suite and is wiped
@@ -9,6 +11,7 @@ Rails.application.configure do
   config.action_mailer.default_url_options = {host: "localhost", port: 3000} # for devise authentication
 
   config.cache_classes = false
+  config.action_view.cache_template_loading = true
 
   # Do not eager load code on boot. This avoids loading your whole application
   # just for the purpose of running a single test. If you are using a tool that
@@ -50,6 +53,12 @@ Rails.application.configure do
   # gets read during application initialization.
   ENV["IP_BLOCKLIST"] = "4.5.6.7, 9.8.7.6,100.101.102.103"
 
+  # Raise exceptions for disallowed deprecations.
+  config.active_support.disallowed_deprecation = :raise
+
+  # Tell Active Support which deprecation messages to disallow.
+  config.active_support.disallowed_deprecation_warnings = []
+
   # Raises error for missing translations.
   config.i18n.raise_on_missing_translations = true
 
@@ -60,4 +69,7 @@ Rails.application.configure do
     Bullet.rails_logger = true
     # Bullet.raise = true # TODO https://github.com/rubyforgood/casa/issues/2441
   end
+
+  # Annotate rendered view with file names.
+  # config.action_view.annotate_rendered_view_with_filenames = true
 end
