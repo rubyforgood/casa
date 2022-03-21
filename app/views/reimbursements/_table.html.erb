@@ -51,6 +51,7 @@ method: "patch") do |form| %>
               <%= form.check_box(:reimbursement_complete, value: reimbursement.reimbursement_complete,
 onchange: 'this.form.submit();') %>
             <% end %>
+            <%= link_to "Invoice", reimbursement_invoice_url(reimbursement) %>
           </td>
         </tr>
       <% end %>

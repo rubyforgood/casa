@@ -1,0 +1,178 @@
+                                        Prefix Verb   URI Pattern                                                                                       Controller#Action
+                    new_all_casa_admin_session GET    /all_casa_admins/sign_in(.:format)                                                                all_casa_admins/sessions#new
+                        all_casa_admin_session POST   /all_casa_admins/sign_in(.:format)                                                                all_casa_admins/sessions#create
+                destroy_all_casa_admin_session GET    /all_casa_admins/sign_out(.:format)                                                               all_casa_admins/sessions#destroy
+                   new_all_casa_admin_password GET    /all_casa_admins/password/new(.:format)                                                           devise/passwords#new
+                  edit_all_casa_admin_password GET    /all_casa_admins/password/edit(.:format)                                                          devise/passwords#edit
+                       all_casa_admin_password PATCH  /all_casa_admins/password(.:format)                                                               devise/passwords#update
+                                               PUT    /all_casa_admins/password(.:format)                                                               devise/passwords#update
+                                               POST   /all_casa_admins/password(.:format)                                                               devise/passwords#create
+              accept_all_casa_admin_invitation GET    /all_casa_admins/invitation/accept(.:format)                                                      devise/invitations#edit
+              remove_all_casa_admin_invitation GET    /all_casa_admins/invitation/remove(.:format)                                                      devise/invitations#destroy
+                 new_all_casa_admin_invitation GET    /all_casa_admins/invitation/new(.:format)                                                         devise/invitations#new
+                     all_casa_admin_invitation PATCH  /all_casa_admins/invitation(.:format)                                                             devise/invitations#update
+                                               PUT    /all_casa_admins/invitation(.:format)                                                             devise/invitations#update
+                                               POST   /all_casa_admins/invitation(.:format)                                                             devise/invitations#create
+                              new_user_session GET    /users/sign_in(.:format)                                                                          users/sessions#new
+                                  user_session POST   /users/sign_in(.:format)                                                                          users/sessions#create
+                          destroy_user_session GET    /users/sign_out(.:format)                                                                         users/sessions#destroy
+                             new_user_password GET    /users/password/new(.:format)                                                                     devise/passwords#new
+                            edit_user_password GET    /users/password/edit(.:format)                                                                    devise/passwords#edit
+                                 user_password PATCH  /users/password(.:format)                                                                         devise/passwords#update
+                                               PUT    /users/password(.:format)                                                                         devise/passwords#update
+                                               POST   /users/password(.:format)                                                                         devise/passwords#create
+                        accept_user_invitation GET    /users/invitation/accept(.:format)                                                                devise/invitations#edit
+                        remove_user_invitation GET    /users/invitation/remove(.:format)                                                                devise/invitations#destroy
+                           new_user_invitation GET    /users/invitation/new(.:format)                                                                   devise/invitations#new
+                               user_invitation PATCH  /users/invitation(.:format)                                                                       devise/invitations#update
+                                               PUT    /users/invitation(.:format)                                                                       devise/invitations#update
+                                               POST   /users/invitation(.:format)                                                                       devise/invitations#create
+             authenticated_all_casa_admin_root GET    /                                                                                                 all_casa_admins/dashboard#show
+                       authenticated_user_root GET    /                                                                                                 dashboard#show
+                                          root GET    /                                                                                                 devise/sessions#new
+                 unauthenticated_all_casa_root GET    /                                                                                                 all_casa_admins/sessions#new
+                                  health_index GET    /health(.:format)                                                                                 health#index
+                                               GET    /.well-known/assetlinks.json(.:format)                                                            android_app_associations#index
+                   save_casa_case_emancipation POST   /casa_cases/:casa_case_id/emancipation/save(.:format)                                             emancipations#save
+                        casa_case_emancipation GET    /casa_cases/:casa_case_id/emancipation(.:format)                                                  emancipations#show
+                         casa_case_court_dates POST   /casa_cases/:casa_case_id/court_dates(.:format)                                                   court_dates#create
+                      new_casa_case_court_date GET    /casa_cases/:casa_case_id/court_dates/new(.:format)                                               court_dates#new
+                     edit_casa_case_court_date GET    /casa_cases/:casa_case_id/court_dates/:id/edit(.:format)                                          court_dates#edit
+                          casa_case_court_date GET    /casa_cases/:casa_case_id/court_dates/:id(.:format)                                               court_dates#show
+                                               PATCH  /casa_cases/:casa_case_id/court_dates/:id(.:format)                                               court_dates#update
+                                               PUT    /casa_cases/:casa_case_id/court_dates/:id(.:format)                                               court_dates#update
+                                               DELETE /casa_cases/:casa_case_id/court_dates/:id(.:format)                                               court_dates#destroy
+                          deactivate_casa_case PATCH  /casa_cases/:id/deactivate(.:format)                                                              casa_cases#deactivate
+                          reactivate_casa_case PATCH  /casa_cases/:id/reactivate(.:format)                                                              casa_cases#reactivate
+                                    casa_cases GET    /casa_cases(.:format)                                                                             casa_cases#index
+                                               POST   /casa_cases(.:format)                                                                             casa_cases#create
+                                 new_casa_case GET    /casa_cases/new(.:format)                                                                         casa_cases#new
+                                edit_casa_case GET    /casa_cases/:id/edit(.:format)                                                                    casa_cases#edit
+                                     casa_case GET    /casa_cases/:id(.:format)                                                                         casa_cases#show
+                                               PATCH  /casa_cases/:id(.:format)                                                                         casa_cases#update
+                                               PUT    /casa_cases/:id(.:format)                                                                         casa_cases#update
+                         deactivate_casa_admin PATCH  /casa_admins/:id/deactivate(.:format)                                                             casa_admins#deactivate
+                           activate_casa_admin PATCH  /casa_admins/:id/activate(.:format)                                                               casa_admins#activate
+                  resend_invitation_casa_admin PATCH  /casa_admins/:id/resend_invitation(.:format)                                                      casa_admins#resend_invitation
+               change_to_supervisor_casa_admin PATCH  /casa_admins/:id/change_to_supervisor(.:format)                                                   casa_admins#change_to_supervisor
+                                   casa_admins GET    /casa_admins(.:format)                                                                            casa_admins#index
+                                               POST   /casa_admins(.:format)                                                                            casa_admins#create
+                                new_casa_admin GET    /casa_admins/new(.:format)                                                                        casa_admins#new
+                               edit_casa_admin GET    /casa_admins/:id/edit(.:format)                                                                   casa_admins#edit
+                                    casa_admin PATCH  /casa_admins/:id(.:format)                                                                        casa_admins#update
+                                               PUT    /casa_admins/:id(.:format)                                                                        casa_admins#update
+                          restore_case_contact POST   /case_contacts/:id/restore(.:format)                                                              case_contacts#restore
+                              resolve_followup PATCH  /followups/:id/resolve(.:format)                                                                  case_contacts/followups#resolve
+                        case_contact_followups POST   /case_contacts/:case_contact_id/followups(.:format)                                               case_contacts/followups#create
+                                 case_contacts GET    /case_contacts(.:format)                                                                          case_contacts#index
+                                               POST   /case_contacts(.:format)                                                                          case_contacts#create
+                              new_case_contact GET    /case_contacts/new(.:format)                                                                      case_contacts#new
+                             edit_case_contact GET    /case_contacts/:id/edit(.:format)                                                                 case_contacts#edit
+                                  case_contact PATCH  /case_contacts/:id(.:format)                                                                      case_contacts#update
+                                               PUT    /case_contacts/:id(.:format)                                                                      case_contacts#update
+                                               DELETE /case_contacts/:id(.:format)                                                                      case_contacts#destroy
+                                       reports GET    /reports(.:format)                                                                                reports#index
+                   generate_case_court_reports POST   /case_court_reports/generate(.:format)                                                            case_court_reports#generate
+                            case_court_reports GET    /case_court_reports(.:format)                                                                     case_court_reports#index
+                             case_court_report GET    /case_court_reports/:id(.:format)                                                                 case_court_reports#show
+                reimbursement_mark_as_complete PATCH  /reimbursements/:reimbursement_id/mark_as_complete(.:format)                                      reimbursements#change_complete_status
+            reimbursement_mark_as_needs_review PATCH  /reimbursements/:reimbursement_id/mark_as_needs_review(.:format)                                  reimbursements#change_complete_status
+                                reimbursements GET    /reimbursements(.:format)                                                                         reimbursements#index
+                       download_failed_imports GET    /imports/download_failed(.:format)                                                                imports#download_failed
+                                       imports GET    /imports(.:format)                                                                                imports#index
+                                               POST   /imports(.:format)                                                                                imports#create
+                          case_contact_reports GET    /case_contact_reports(.:format)                                                                   case_contact_reports#index
+                               mileage_reports GET    /mileage_reports(.:format)                                                                        mileage_reports#index
+                                 mileage_rates GET    /mileage_rates(.:format)                                                                          mileage_rates#index
+                                               POST   /mileage_rates(.:format)                                                                          mileage_rates#create
+                              new_mileage_rate GET    /mileage_rates/new(.:format)                                                                      mileage_rates#new
+                             edit_mileage_rate GET    /mileage_rates/:id/edit(.:format)                                                                 mileage_rates#edit
+                                  mileage_rate PATCH  /mileage_rates/:id(.:format)                                                                      mileage_rates#update
+                                               PUT    /mileage_rates/:id(.:format)                                                                      mileage_rates#update
+                                 edit_casa_org GET    /casa_org/:id/edit(.:format)                                                                      casa_org#edit
+                                      casa_org PATCH  /casa_org/:id(.:format)                                                                           casa_org#update
+                                               PUT    /casa_org/:id(.:format)                                                                           casa_org#update
+                           contact_type_groups POST   /contact_type_groups(.:format)                                                                    contact_type_groups#create
+                        new_contact_type_group GET    /contact_type_groups/new(.:format)                                                                contact_type_groups#new
+                       edit_contact_type_group GET    /contact_type_groups/:id/edit(.:format)                                                           contact_type_groups#edit
+                            contact_type_group PATCH  /contact_type_groups/:id(.:format)                                                                contact_type_groups#update
+                                               PUT    /contact_type_groups/:id(.:format)                                                                contact_type_groups#update
+                                 contact_types POST   /contact_types(.:format)                                                                          contact_types#create
+                              new_contact_type GET    /contact_types/new(.:format)                                                                      contact_types#new
+                             edit_contact_type GET    /contact_types/:id/edit(.:format)                                                                 contact_types#edit
+                                  contact_type PATCH  /contact_types/:id(.:format)                                                                      contact_types#update
+                                               PUT    /contact_types/:id(.:format)                                                                      contact_types#update
+                                 hearing_types POST   /hearing_types(.:format)                                                                          hearing_types#create
+                              new_hearing_type GET    /hearing_types/new(.:format)                                                                      hearing_types#new
+                             edit_hearing_type GET    /hearing_types/:id/edit(.:format)                                                                 hearing_types#edit
+                                  hearing_type PATCH  /hearing_types/:id(.:format)                                                                      hearing_types#update
+                                               PUT    /hearing_types/:id(.:format)                                                                      hearing_types#update
+                       emancipation_checklists GET    /emancipation_checklists(.:format)                                                                emancipation_checklists#index
+                                        judges POST   /judges(.:format)                                                                                 judges#create
+                                     new_judge GET    /judges/new(.:format)                                                                             judges#new
+                                    edit_judge GET    /judges/:id/edit(.:format)                                                                        judges#edit
+                                         judge PATCH  /judges/:id(.:format)                                                                             judges#update
+                                               PUT    /judges/:id(.:format)                                                                             judges#update
+                                 notifications GET    /notifications(.:format)                                                                          notifications#index
+                           activate_supervisor PATCH  /supervisors/:id/activate(.:format)                                                               supervisors#activate
+                         deactivate_supervisor PATCH  /supervisors/:id/deactivate(.:format)                                                             supervisors#deactivate
+                  resend_invitation_supervisor PATCH  /supervisors/:id/resend_invitation(.:format)                                                      supervisors#resend_invitation
+                    change_to_admin_supervisor PATCH  /supervisors/:id/change_to_admin(.:format)                                                        supervisors#change_to_admin
+                         datatable_supervisors POST   /supervisors/datatable(.:format)                                                                  supervisors#datatable
+                                   supervisors GET    /supervisors(.:format)                                                                            supervisors#index
+                                               POST   /supervisors(.:format)                                                                            supervisors#create
+                                new_supervisor GET    /supervisors/new(.:format)                                                                        supervisors#new
+                               edit_supervisor GET    /supervisors/:id/edit(.:format)                                                                   supervisors#edit
+                                    supervisor PATCH  /supervisors/:id(.:format)                                                                        supervisors#update
+                                               PUT    /supervisors/:id(.:format)                                                                        supervisors#update
+                 unassign_supervisor_volunteer PATCH  /supervisor_volunteers/:id/unassign(.:format)                                                     supervisor_volunteers#unassign
+                         supervisor_volunteers POST   /supervisor_volunteers(.:format)                                                                  supervisor_volunteers#create
+                 stop_impersonating_volunteers POST   /volunteers/stop_impersonating(.:format)                                                          volunteers#stop_impersonating
+                            activate_volunteer PATCH  /volunteers/:id/activate(.:format)                                                                volunteers#activate
+                          deactivate_volunteer PATCH  /volunteers/:id/deactivate(.:format)                                                              volunteers#deactivate
+                   resend_invitation_volunteer GET    /volunteers/:id/resend_invitation(.:format)                                                       volunteers#resend_invitation
+                            reminder_volunteer PATCH  /volunteers/:id/reminder(.:format)                                                                volunteers#reminder
+                         impersonate_volunteer GET    /volunteers/:id/impersonate(.:format)                                                             volunteers#impersonate
+                               volunteer_notes POST   /volunteers/:volunteer_id/notes(.:format)                                                         notes#create
+                          datatable_volunteers POST   /volunteers/datatable(.:format)                                                                   volunteers#datatable
+                                    volunteers GET    /volunteers(.:format)                                                                             volunteers#index
+                                               POST   /volunteers(.:format)                                                                             volunteers#create
+                                 new_volunteer GET    /volunteers/new(.:format)                                                                         volunteers#new
+                                edit_volunteer GET    /volunteers/:id/edit(.:format)                                                                    volunteers#edit
+                                     volunteer GET    /volunteers/:id(.:format)                                                                         volunteers#show
+                                               PATCH  /volunteers/:id(.:format)                                                                         volunteers#update
+                                               PUT    /volunteers/:id(.:format)                                                                         volunteers#update
+                      unassign_case_assignment GET    /case_assignments/:id/unassign(.:format)                                                          case_assignments#unassign
+                                               PATCH  /case_assignments/:id/unassign(.:format)                                                          case_assignments#unassign
+                              case_assignments POST   /case_assignments(.:format)                                                                       case_assignments#create
+                               case_assignment DELETE /case_assignments/:id(.:format)                                                                   case_assignments#destroy
+                              case_court_order DELETE /case_court_orders/:id(.:format)                                                                  case_court_orders#destroy
+deactivate_all_casa_admins_casa_org_casa_admin PATCH  /all_casa_admins/casa_orgs/:casa_org_id/casa_admins/:id/deactivate(.:format)                      all_casa_admins/casa_admins#deactivate
+  activate_all_casa_admins_casa_org_casa_admin PATCH  /all_casa_admins/casa_orgs/:casa_org_id/casa_admins/:id/activate(.:format)                        all_casa_admins/casa_admins#activate
+          all_casa_admins_casa_org_casa_admins POST   /all_casa_admins/casa_orgs/:casa_org_id/casa_admins(.:format)                                     all_casa_admins/casa_admins#create
+       new_all_casa_admins_casa_org_casa_admin GET    /all_casa_admins/casa_orgs/:casa_org_id/casa_admins/new(.:format)                                 all_casa_admins/casa_admins#new
+      edit_all_casa_admins_casa_org_casa_admin GET    /all_casa_admins/casa_orgs/:casa_org_id/casa_admins/:id/edit(.:format)                            all_casa_admins/casa_admins#edit
+           all_casa_admins_casa_org_casa_admin PATCH  /all_casa_admins/casa_orgs/:casa_org_id/casa_admins/:id(.:format)                                 all_casa_admins/casa_admins#update
+                                               PUT    /all_casa_admins/casa_orgs/:casa_org_id/casa_admins/:id(.:format)                                 all_casa_admins/casa_admins#update
+                     all_casa_admins_casa_orgs POST   /all_casa_admins/casa_orgs(.:format)                                                              all_casa_admins/casa_orgs#create
+                  new_all_casa_admins_casa_org GET    /all_casa_admins/casa_orgs/new(.:format)                                                          all_casa_admins/casa_orgs#new
+                      all_casa_admins_casa_org GET    /all_casa_admins/casa_orgs/:id(.:format)                                                          all_casa_admins/casa_orgs#show
+                          edit_all_casa_admins GET    /all_casa_admins/edit(.:format)                                                                   all_casa_admins#edit
+                               all_casa_admins PATCH  /all_casa_admins(.:format)                                                                        all_casa_admins#update
+               update_password_all_casa_admins PATCH  /all_casa_admins/update_password(.:format)                                                        all_casa_admins#update_password
+                                               POST   /all_casa_admins(.:format)                                                                        all_casa_admins#create
+                            new_all_casa_admin GET    /all_casa_admins/new(.:format)                                                                    all_casa_admins#new
+                                    edit_users GET    /users/edit(.:format)                                                                             users#edit
+                                         users PATCH  /users(.:format)                                                                                  users#update
+                         update_password_users PATCH  /users/update_password(.:format)                                                                  users#update_password
+                                 fund_requests POST   /fund_requests(.:format)                                                                          fund_requests#create
+                              new_fund_request GET    /fund_requests/new(.:format)                                                                      fund_requests#new
+                            rails_service_blob GET    /rails/active_storage/blobs/redirect/:signed_id/*filename(.:format)                               active_storage/blobs/redirect#show
+                      rails_service_blob_proxy GET    /rails/active_storage/blobs/proxy/:signed_id/*filename(.:format)                                  active_storage/blobs/proxy#show
+                                               GET    /rails/active_storage/blobs/:signed_id/*filename(.:format)                                        active_storage/blobs/redirect#show
+                     rails_blob_representation GET    /rails/active_storage/representations/redirect/:signed_blob_id/:variation_key/*filename(.:format) active_storage/representations/redirect#show
+               rails_blob_representation_proxy GET    /rails/active_storage/representations/proxy/:signed_blob_id/:variation_key/*filename(.:format)    active_storage/representations/proxy#show
+                                               GET    /rails/active_storage/representations/:signed_blob_id/:variation_key/*filename(.:format)          active_storage/representations/redirect#show
+                            rails_disk_service GET    /rails/active_storage/disk/:encoded_key/*filename(.:format)                                       active_storage/disk#show
+                     update_rails_disk_service PUT    /rails/active_storage/disk/:encoded_token(.:format)                                               active_storage/disk#update
+                          rails_direct_uploads POST   /rails/active_storage/direct_uploads(.:format)                                                    active_storage/direct_uploads#create

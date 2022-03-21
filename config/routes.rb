@@ -69,6 +69,7 @@ Rails.application.routes.draw do
     patch :mark_as_complete, to: "reimbursements#change_complete_status"
     patch :mark_as_needs_review, to: "reimbursements#change_complete_status"
   end
+  resources :reimbursement_invoices, only: %i[view]
   resources :imports, only: %i[index create] do
     collection do
       get :download_failed
