@@ -24,6 +24,7 @@ module Casa
     config.load_defaults 7.0
     config.action_view.button_to_generates_button_tag = false
     config.active_record.has_many_inversing = false
+    config.active_storage.variant_processor = :mini_magick
     config.serve_static_assets = true
   end
 end
