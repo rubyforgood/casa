@@ -14,7 +14,7 @@ class DocxInspector
 
     @docx_zip_object = get_docx_as_zip_object(docx_file)
 
-    word_list = []
+    # word_list = []
 
     get_docx_readable_text_XML_files.each do |file|
       puts file.name
@@ -40,7 +40,7 @@ class DocxInspector
       raise "Required variable @docx_zip_object is uninitialized"
     end
 
-    word_entries = @docx_zip_object.entries.select do |entry|
+    @docx_zip_object.entries.select do |entry|
       entry_name = entry.name
       is_ignored_file = false
       xml_file_in_word_match = entry_name.match(/^word\/([^\/]*)\.xml/) # A file in the word/ directory not in a directory below word
