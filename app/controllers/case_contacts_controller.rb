@@ -135,12 +135,16 @@ class CaseContactsController < ApplicationController
       current = AdditionalExpense.find_by(id: id)
       if current
         current.assign_attributes(other_expense_amount: ae_params[:other_expense_amount], other_expenses_describe: ae_params[:other_expenses_describe])
-        current.valid? ? current.save : cc.errors.add(:base, current.errors.full_messages.to_sentence)
+        save_or_add_error(current, cc)
       else
         create_new_exp = cc.additional_expenses.build(ae_params)
-        create_new_exp.valid? ? create_new_exp.save : cc.errors.add(:base, create_new_exp.errors.full_messages.to_sentence)
+        save_or_add_error(create_new_exp, cc)
       end
     end
+  end
+
+  def save_or_add_error(obj, case_contact)
+    obj.valid? ? obj.save : case_contact.errors.add(:base, obj.errors.full_messages.to_sentence)
   end
 
   def create_case_contact_for_every_selected_casa_case(selected_cases)
