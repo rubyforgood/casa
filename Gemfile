@@ -55,7 +55,6 @@ end
 group :development do
   gem "annotate" # for adding db field listings to models as comments
   gem "letter_opener" # Opens emails in new tab for easier testing
-  gem "listen", ">= 3.0.5", "< 3.8" # TODO can we remove this version restriction?
   gem "spring" # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring-commands-rspec"
   gem "traceroute" # for finding unused routes
