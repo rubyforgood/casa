@@ -416,9 +416,6 @@ GEM
     spring (2.1.1)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
-    spring-watcher-listen (2.0.1)
-      listen (>= 2.7, < 4.0)
-      spring (>= 1.2, < 3.0)
     standard (1.5.0)
       rubocop (= 1.23.0)
       rubocop-performance (= 1.12.0)
@@ -522,7 +519,6 @@ DEPENDENCIES
   simplecov
   spring
   spring-commands-rspec
-  spring-watcher-listen (~> 2.0.0)
   standard (= 1.5.0)
   strong_migrations
   traceroute
