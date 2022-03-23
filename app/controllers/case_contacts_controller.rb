@@ -149,7 +149,7 @@ class CaseContactsController < ApplicationController
       if new_ae.valid?
         new_ae.save!
       else
-        @case_contact.errors.add(:base, new_ae.errors.full_messages.to_sentence)
+        new_cc.errors.add(:base, new_ae.errors.full_messages.to_sentence)
       end
     }
   end
