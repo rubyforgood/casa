@@ -21,7 +21,8 @@ module Casa
   class Application < Rails::Application
     config.action_mailer.preview_path ||= defined?(Rails.root) ? Rails.root.join("lib", "mailers", "previews") : nil
     config.eager_load_paths << Rails.root.join("app", "lib", "importers")
-    config.load_defaults 6.1
+    config.load_defaults 7.0
+    config.action_view.button_to_generates_button_tag = false
     config.active_record.has_many_inversing = false
     config.serve_static_assets = true
   end
