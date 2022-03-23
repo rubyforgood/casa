@@ -99,7 +99,7 @@ class CaseContactsController < ApplicationController
     if @case_contact.update_cleaning_contact_types(update_case_contact_params)
       if additional_expense_params&.any? && FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
         additional_expense_params.each do |ae_params|
-          update_or_create_additional_expense(ae_params)
+          update_or_create_additional_expense(ae_params, @case_contact)
         end
       end
       if @case_contact.valid?
@@ -131,16 +131,27 @@ class CaseContactsController < ApplicationController
 
   private
 
-  def update_or_create_additional_expense(ae_params)
+  def update_or_create_additional_expense(ae_params, cc)
     id = ae_params[:id]
     current = AdditionalExpense.find_by(id: id)
     if current
       current.assign_attributes(other_expense_amount: ae_params[:other_expense_amount], other_expenses_describe: ae_params[:other_expenses_describe])
-      current.valid? ? current.save : @case_contact.errors.add(:base, current.errors.full_messages.to_sentence)
+      current.valid? ? current.save : cc.errors.add(:base, current.errors.full_messages.to_sentence)
     else
-      create_new_exp = @case_contact.additional_expenses.build(ae_params)
-      create_new_exp.valid? ? create_new_exp.save : @case_contact.errors.add(:base, create_new_exp.errors.full_messages.to_sentence)
+      create_new_exp = cc.additional_expenses.build(ae_params)
+      create_new_exp.valid? ? create_new_exp.save : cc.errors.add(:base, create_new_exp.errors.full_messages.to_sentence)
     end
+  end
+
+  def create_additional_expenses(new_cc)
+    additional_expense_params.map { |aep|
+      new_ae = new_cc.additional_expenses.build(aep)
+      if new_ae.valid?
+        new_ae.save!
+      else
+        @case_contact.errors.add(:base, new_ae.errors.full_messages.to_sentence)
+      end
+    }
   end
 
   def create_case_contact_for_every_selected_casa_case(selected_cases)
@@ -160,16 +171,7 @@ class CaseContactsController < ApplicationController
     end
   end
 
-  def create_additional_expenses(new_cc)
-    additional_expense_params.map { |aep|
-      new_ae = new_cc.additional_expenses.build(aep)
-      if new_ae.valid?
-        new_ae.save!
-      else
-        @case_contact.errors.add(:base, new_ae.errors.full_messages.to_sentence)
-      end
-    }
-  end
+
 
   def set_case_contact
     if current_organization.case_contacts.exists?(params[:id])
