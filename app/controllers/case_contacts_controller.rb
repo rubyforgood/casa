@@ -144,7 +144,7 @@ class CaseContactsController < ApplicationController
   end
 
   def create_additional_expenses(all_ae_params, new_cc)
-    all_ae_params.map { |aep|
+    all_ae_params.each { |aep|
       new_ae = new_cc.additional_expenses.build(aep)
       if new_ae.valid?
         new_ae.save!
