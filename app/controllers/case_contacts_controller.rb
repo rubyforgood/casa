@@ -143,22 +143,11 @@ class CaseContactsController < ApplicationController
     end
   end
 
-  def create_additional_expenses(all_ae_params, new_cc)
-    all_ae_params.each { |aep|
-      new_ae = new_cc.additional_expenses.build(aep)
-      if new_ae.valid?
-        new_ae.save!
-      else
-        new_cc.errors.add(:base, new_ae.errors.full_messages.to_sentence)
-      end
-    }
-  end
-
   def create_case_contact_for_every_selected_casa_case(selected_cases)
     selected_cases.map do |casa_case|
       if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
         new_cc = casa_case.case_contacts.new(create_case_contact_params)
-        create_additional_expenses(additional_expense_params, new_cc)
+        update_or_create_additional_expense(additional_expense_params, new_cc)
         if @case_contact.valid?
           new_cc.save!
         else
