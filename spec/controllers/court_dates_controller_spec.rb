@@ -13,7 +13,7 @@ RSpec.describe CourtDatesController, type: :controller do
       before do
         allow(controller).to receive(:authenticate_user!).and_return(true)
         allow(controller).to receive(:current_user).and_return(admin)
-        request.env["HTTP_REFERER"] = "http://example.com"
+        request.env["HTTP_REFERER"] = "/"
       end
 
       context ".destroy" do
@@ -27,7 +27,7 @@ RSpec.describe CourtDatesController, type: :controller do
       before do
         allow(controller).to receive(:authenticate_user!).and_return(true)
         allow(controller).to receive(:current_user).and_return(supervisor)
-        request.env["HTTP_REFERER"] = "http://example.com"
+        request.env["HTTP_REFERER"] = "/"
       end
 
       context ".destroy" do
@@ -41,7 +41,7 @@ RSpec.describe CourtDatesController, type: :controller do
       before do
         allow(controller).to receive(:authenticate_user!).and_return(true)
         allow(controller).to receive(:current_user).and_return(volunteer)
-        request.env["HTTP_REFERER"] = "http://example.com"
+        request.env["HTTP_REFERER"] = "/"
       end
 
       context ".destroy" do
