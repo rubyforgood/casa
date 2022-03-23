@@ -14,7 +14,12 @@ class DocxInspector
 
     @docx_zip_object = get_docx_as_zip_object(docx_file)
 
-    puts get_docx_readable_text_XML_files
+    word_list = []
+
+    get_docx_readable_text_XML_files.each do |file|
+      puts file.name
+      puts get_XML_object(file)
+    end
   end
 
   def contains_str?(str)
@@ -23,7 +28,7 @@ class DocxInspector
 
   private
 
-  def get_displayed_text_list
+  def get_displayed_text_list(xml_object)
   end
 
   def get_docx_as_zip_object(docx_file)
@@ -47,11 +52,10 @@ class DocxInspector
 
       !(xml_file_in_word_match.nil? || is_ignored_file)
     end
-
-    puts word_entries
   end
 
-  def get_XML_object(file_path)
+  def get_XML_object(xml_file_as_docx_zip_entry)
+    xml_file_as_docx_zip_entry.get_input_stream.read
   end
 
   def store_docx_contents_in_tempfile(docx_contents)
