@@ -309,15 +309,15 @@ en:
       heading:
         name: Title
         type: Learning Type
-        occurred_at: Occurred On
+        occurred_at: Date
         time: Time Spent 
       title: Learning Hours
     new:
       title: New Learning Hours
       occurred_at: Occurred At
-      confirm_note_content_dialog:
-        body: Please double check your notes to ensure they don't contain any identifying details about your youth or anyone else.
-        header: Confirm Note Content
+    confirm_note_content_dialog:
+        header: Congratulations
+        body: New entry created
   global:
     add_court_order: Add a court order
     court_orders: Court Orders - Please check that you didn't enter any youth names

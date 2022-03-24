@@ -12,7 +12,7 @@ class LearningHoursController < ApplicationController
     @learning_hour = LearningHour.new(learning_hours_params)
     respond_to do |format|
       if @learning_hour.save
-        format.html { redirect_to volunteer_learning_hours_path, notice: "New entry was successfully created." }
+        format.html { redirect_to volunteer_learning_hours_path(current_user.id), notice: "New entry was successfully created." }
       else
         format.html { render (:new), status: 404 }
         
