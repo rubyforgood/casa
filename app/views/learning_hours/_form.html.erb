@@ -1,0 +1,18 @@
+
+<%= form_with model: LearningHour, url: volunteer_learning_hours_path do |form| %>
+  <%= render "/shared/error_messages", resource: @learning_hour %>
+  
+  <%= form.hidden_field :user_id, value: current_user.id %>
+
+  <div>
+  <%= form.select :learning_type, [['book'], ['movie'], ['webinar'], ['conference'], ['other']]%>
+  </div>
+  <div>
+  <%= form.range_field :duration_minutes, in: 1..60 %>
+  <%= form.range_field :duration_hours, in: 1..100 %>
+  </div>
+  <div>
+  <%= form.date_field :occurred_at %>
+  </div>
+  <%= form.submit "Create new volunteer hours entry" %>
+<% end %>
