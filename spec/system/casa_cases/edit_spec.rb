@@ -240,8 +240,8 @@ RSpec.describe "Edit CASA Case", type: :system do
           sign_in_and_assign_volunteer
           expect(casa_case.case_assignments.count).to eq 1
 
-          unassign_button = page.find("input.btn-outline-danger")
-          expect(unassign_button.value).to eq "Unassign Volunteer"
+          unassign_button = page.find("button.btn-outline-danger")
+          expect(unassign_button.text).to eq "Unassign Volunteer"
 
           assign_badge = page.find("span.badge-success")
           expect(assign_badge.text).to eq "ASSIGNED"
@@ -260,8 +260,8 @@ RSpec.describe "Edit CASA Case", type: :system do
       context "when a volunteer is unassigned from a case" do
         it "marks the volunteer as unassigned and shows assignment start/end dates", js: true do
           sign_in_and_assign_volunteer
-          unassign_button = page.find("input.btn-outline-danger")
-          expect(unassign_button.value).to eq "Unassign Volunteer"
+          unassign_button = page.find("button.btn-outline-danger")
+          expect(unassign_button.text).to eq "Unassign Volunteer"
 
           click_on "Unassign Volunteer"
 
@@ -283,8 +283,8 @@ RSpec.describe "Edit CASA Case", type: :system do
 
         it "unassigns volunteer", js: true do
           sign_in_and_assign_volunteer
-          unassign_button = page.find("input.btn-outline-danger")
-          expect(unassign_button.value).to eq "Unassign Volunteer"
+          unassign_button = page.find("button.btn-outline-danger")
+          expect(unassign_button.text).to eq "Unassign Volunteer"
 
           click_on "Unassign Volunteer"
 
