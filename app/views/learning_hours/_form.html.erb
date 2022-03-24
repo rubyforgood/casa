@@ -5,7 +5,7 @@
   <%= form.hidden_field :user_id, value: current_user.id %>
 
   <div>
-  <%= form.collection_select :learning_type_id, LearningHour.learning_types, :id, :name %>
+  <%= form.select :learning_type, [['book'], ['movie'], ['webinar'], ['conference'], ['other']]%>
   </div>
   <div>
   <%= form.range_field :duration_minutes, in: 1..60 %>

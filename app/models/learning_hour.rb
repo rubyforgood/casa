@@ -10,9 +10,7 @@ class LearningHour < ApplicationRecord
     other: 5
   }
 
-  def name
-    name
-  end
+  
 end
 
 # == Schema Information
