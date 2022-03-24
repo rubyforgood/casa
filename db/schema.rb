@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_03_183053) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_03_23_145733) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,7 +19,7 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
     t.string "record_type", null: false
     t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -31,8 +30,8 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
     t.string "content_type"
     t.text "metadata"
     t.bigint "byte_size", null: false
-    t.string "checksum", null: false
-    t.datetime "created_at", null: false
+    t.string "checksum"
+    t.datetime "created_at", precision: nil, null: false
     t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
@@ -47,8 +46,8 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
     t.bigint "case_contact_id", null: false
     t.decimal "other_expense_amount"
     t.string "other_expenses_describe"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["case_contact_id"], name: "index_additional_expenses_on_case_contact_id"
   end
 
@@ -56,13 +55,13 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "reset_password_sent_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "invitation_token"
-    t.datetime "invitation_created_at"
-    t.datetime "invitation_sent_at"
-    t.datetime "invitation_accepted_at"
+    t.datetime "invitation_created_at", precision: nil
+    t.datetime "invitation_sent_at", precision: nil
+    t.datetime "invitation_accepted_at", precision: nil
     t.integer "invitation_limit"
     t.integer "invited_by_id"
     t.string "invited_by_type"
@@ -74,8 +73,8 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
   create_table "casa_case_contact_types", force: :cascade do |t|
     t.bigint "contact_type_id", null: false
     t.bigint "casa_case_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["casa_case_id"], name: "index_casa_case_contact_types_on_casa_case_id"
     t.index ["contact_type_id"], name: "index_casa_case_contact_types_on_contact_type_id"
   end
@@ -83,8 +82,8 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
   create_table "casa_case_emancipation_categories", force: :cascade do |t|
     t.bigint "casa_case_id", null: false
     t.bigint "emancipation_category_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["casa_case_id"], name: "index_casa_case_emancipation_categories_on_casa_case_id"
     t.index ["emancipation_category_id"], name: "index_case_emancipation_categories_on_emancipation_category_id"
   end
@@ -92,16 +91,16 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
   create_table "casa_cases", force: :cascade do |t|
     t.string "case_number", null: false
     t.boolean "transition_aged_youth", default: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "casa_org_id", null: false
-    t.datetime "birth_month_year_youth"
-    t.datetime "court_date"
-    t.datetime "court_report_due_date"
+    t.datetime "birth_month_year_youth", precision: nil
+    t.datetime "court_date", precision: nil
+    t.datetime "court_report_due_date", precision: nil
     t.bigint "hearing_type_id"
     t.boolean "active", default: true, null: false
     t.bigint "judge_id"
-    t.datetime "court_report_submitted_at"
+    t.datetime "court_report_submitted_at", precision: nil
     t.integer "court_report_status", default: 0
     t.string "slug"
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
@@ -114,15 +113,15 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
   create_table "casa_cases_emancipation_options", force: :cascade do |t|
     t.bigint "casa_case_id", null: false
     t.bigint "emancipation_option_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["casa_case_id", "emancipation_option_id"], name: "index_cases_options_on_case_id_and_option_id", unique: true
   end
 
   create_table "casa_orgs", force: :cascade do |t|
     t.string "name", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "display_name"
     t.string "address"
     t.string "footer_links", default: [], array: true
@@ -135,8 +134,8 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
     t.bigint "casa_case_id", null: false
     t.bigint "volunteer_id", null: false
     t.boolean "active", default: true, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["casa_case_id"], name: "index_case_assignments_on_casa_case_id"
     t.index ["volunteer_id"], name: "index_case_assignments_on_volunteer_id"
   end
@@ -144,8 +143,8 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
   create_table "case_contact_contact_types", force: :cascade do |t|
     t.bigint "case_contact_id", null: false
     t.bigint "contact_type_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["case_contact_id"], name: "index_case_contact_contact_types_on_case_contact_id"
     t.index ["contact_type_id"], name: "index_case_contact_contact_types_on_contact_type_id"
   end
@@ -154,26 +153,26 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
     t.bigint "creator_id", null: false
     t.bigint "casa_case_id", null: false
     t.integer "duration_minutes", null: false
-    t.datetime "occurred_at", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "occurred_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "contact_made", default: false
     t.string "medium_type"
     t.integer "miles_driven", default: 0, null: false
     t.boolean "want_driving_reimbursement", default: false
     t.string "notes"
-    t.datetime "deleted_at"
+    t.datetime "deleted_at", precision: nil
     t.boolean "reimbursement_complete", default: false
     t.index ["casa_case_id"], name: "index_case_contacts_on_casa_case_id"
     t.index ["creator_id"], name: "index_case_contacts_on_creator_id"
     t.index ["deleted_at"], name: "index_case_contacts_on_deleted_at"
-    t.check_constraint "(miles_driven IS NOT NULL) OR (NOT want_driving_reimbursement)", name: "want_driving_reimbursement_only_when_miles_driven"
+    t.check_constraint "miles_driven IS NOT NULL OR NOT want_driving_reimbursement", name: "want_driving_reimbursement_only_when_miles_driven"
   end
 
   create_table "case_court_orders", force: :cascade do |t|
     t.bigint "casa_case_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "implementation_status"
     t.bigint "court_date_id"
     t.string "text"
@@ -184,8 +183,8 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
   create_table "contact_type_groups", force: :cascade do |t|
     t.bigint "casa_org_id", null: false
     t.string "name", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "active", default: true
     t.index ["casa_org_id"], name: "index_contact_type_groups_on_casa_org_id"
   end
@@ -193,17 +192,17 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
   create_table "contact_types", force: :cascade do |t|
     t.bigint "contact_type_group_id", null: false
     t.string "name", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "active", default: true
     t.index ["contact_type_group_id"], name: "index_contact_types_on_contact_type_group_id"
   end
 
   create_table "court_dates", force: :cascade do |t|
-    t.datetime "date", null: false
+    t.datetime "date", precision: nil, null: false
     t.bigint "casa_case_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "hearing_type_id"
     t.bigint "judge_id"
     t.index ["casa_case_id"], name: "index_court_dates_on_casa_case_id"
@@ -216,29 +215,29 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
     t.integer "attempts", default: 0, null: false
     t.text "handler", null: false
     t.text "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
+    t.datetime "run_at", precision: nil
+    t.datetime "locked_at", precision: nil
+    t.datetime "failed_at", precision: nil
     t.string "locked_by"
     t.string "queue"
-    t.datetime "created_at", precision: 6
-    t.datetime "updated_at", precision: 6
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
   create_table "emancipation_categories", force: :cascade do |t|
     t.string "name", null: false
     t.boolean "mutually_exclusive", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["name"], name: "index_emancipation_categories_on_name", unique: true
   end
 
   create_table "emancipation_options", force: :cascade do |t|
     t.bigint "emancipation_category_id", null: false
     t.string "name", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["emancipation_category_id", "name"], name: "index_emancipation_options_on_emancipation_category_id_and_name", unique: true
     t.index ["emancipation_category_id"], name: "index_emancipation_options_on_emancipation_category_id"
   end
@@ -246,16 +245,16 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
   create_table "feature_flags", force: :cascade do |t|
     t.string "name", null: false
     t.boolean "enabled", default: false, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "followups", force: :cascade do |t|
     t.bigint "case_contact_id"
     t.bigint "creator_id"
     t.integer "status", default: 0
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.text "note"
     t.index ["case_contact_id"], name: "index_followups_on_case_contact_id"
     t.index ["creator_id"], name: "index_followups_on_creator_id"
@@ -276,10 +275,10 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
   end
 
   create_table "healths", force: :cascade do |t|
-    t.datetime "latest_deploy_time"
+    t.datetime "latest_deploy_time", precision: nil
     t.integer "singleton_guard"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["singleton_guard"], name: "index_healths_on_singleton_guard", unique: true
   end
 
@@ -292,8 +291,8 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
 
   create_table "judges", force: :cascade do |t|
     t.bigint "casa_org_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "active", default: true
     t.string "name"
     t.index ["casa_org_id"], name: "index_judges_on_casa_org_id"
@@ -304,8 +303,8 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
     t.date "effective_date"
     t.boolean "is_active", default: true
     t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "casa_org_id", null: false
     t.index ["casa_org_id"], name: "index_mileage_rates_on_casa_org_id"
     t.index ["user_id"], name: "index_mileage_rates_on_user_id"
@@ -316,8 +315,8 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
     t.bigint "creator_id"
     t.string "notable_type"
     t.bigint "notable_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["notable_type", "notable_id"], name: "index_notes_on_notable"
   end
 
@@ -326,9 +325,9 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
     t.bigint "recipient_id", null: false
     t.string "type", null: false
     t.jsonb "params"
-    t.datetime "read_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "read_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["read_at"], name: "index_notifications_on_read_at"
     t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient"
   end
@@ -336,18 +335,18 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
   create_table "other_duties", force: :cascade do |t|
     t.bigint "creator_id", null: false
     t.string "creator_type"
-    t.datetime "occurred_at"
+    t.datetime "occurred_at", precision: nil
     t.bigint "duration_minutes"
     t.text "notes"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "preference_sets", force: :cascade do |t|
     t.bigint "user_id"
     t.jsonb "case_volunteer_columns", default: "{}", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_preference_sets_on_user_id"
   end
 
@@ -357,8 +356,8 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
     t.string "mailer_type"
     t.string "category"
     t.string "sent_address"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["casa_org_id"], name: "index_sent_emails_on_casa_org_id"
     t.index ["user_id"], name: "index_sent_emails_on_user_id"
   end
@@ -366,8 +365,8 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
   create_table "supervisor_volunteers", force: :cascade do |t|
     t.bigint "supervisor_id", null: false
     t.bigint "volunteer_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "is_active", default: true
     t.index ["supervisor_id"], name: "index_supervisor_volunteers_on_supervisor_id"
     t.index ["volunteer_id"], name: "index_supervisor_volunteers_on_volunteer_id"
@@ -381,15 +380,15 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "reset_password_sent_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "casa_org_id", null: false
     t.string "display_name", default: "", null: false
     t.string "invitation_token"
-    t.datetime "invitation_created_at"
-    t.datetime "invitation_sent_at"
-    t.datetime "invitation_accepted_at"
+    t.datetime "invitation_created_at", precision: nil
+    t.datetime "invitation_sent_at", precision: nil
+    t.datetime "invitation_accepted_at", precision: nil
     t.integer "invitation_limit"
     t.string "invited_by_type"
     t.bigint "invited_by_id"
@@ -397,8 +396,8 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
     t.string "type"
     t.boolean "active", default: true
     t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
+    t.datetime "current_sign_in_at", precision: nil
+    t.datetime "last_sign_in_at", precision: nil
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.index ["casa_org_id"], name: "index_users_on_casa_org_id"
@@ -417,7 +416,7 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
     t.string "event", null: false
     t.string "whodunnit"
     t.text "object"
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
