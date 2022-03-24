@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_03_183053) do
+ActiveRecord::Schema.define(version: 2022_03_24_155258) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -299,6 +299,18 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
     t.index ["casa_org_id"], name: "index_judges_on_casa_org_id"
   end
 
+  create_table "learning_hours", force: :cascade do |t|
+    t.integer "duration_minutes", null: false
+    t.datetime "occurred_at", null: false
+    t.bigint "user_id", null: false
+    t.integer "learning_type", default: 5
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "name"
+    t.integer "duration_hours"
+    t.index ["user_id"], name: "index_learning_hours_on_user_id"
+  end
+
   create_table "mileage_rates", force: :cascade do |t|
     t.decimal "amount"
     t.date "effective_date"
@@ -438,6 +450,7 @@ ActiveRecord::Schema.define(version: 2022_03_03_183053) do
   add_foreign_key "emancipation_options", "emancipation_categories"
   add_foreign_key "followups", "users", column: "creator_id"
   add_foreign_key "judges", "casa_orgs"
+  add_foreign_key "learning_hours", "users"
   add_foreign_key "mileage_rates", "users"
   add_foreign_key "preference_sets", "users"
   add_foreign_key "sent_emails", "casa_orgs"
