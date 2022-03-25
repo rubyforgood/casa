@@ -1,18 +1,20 @@
 
 <%= form_with model: LearningHour, url: volunteer_learning_hours_path, local: true, id: "learning-hours-form" do |form| %>
-  <%= render "/shared/error_messages", resource: @learning_hour %>
-  
+  <div class="mt-2">
+    <%= render "/shared/error_messages", resource: @learning_hour %>
+  </div>
+
   <%= form.hidden_field :user_id, value: current_user.id %>
 
-  <div>
-    <%= form.text_field :name %>
+  <div class="mt-4">
+    <%= form.text_field :name, placeholder: "Enter a title", value: @learning_hour.name %>
   </div>
-  <div>
-  <%= form.select :learning_type, [['book'], ['movie'], ['webinar'], ['conference'], ['other']]%>
+  <div class="mt-4">
+  <%= form.select :learning_type, [['book'], ['movie'], ['webinar'], ['conference'], ['other']], :prompt => "Select type"%>
   </div>
-
-  <div class="form-group duration">
-    <h5><label>Duration</label></h5>
+  <hr>
+  <div class="form-group duration mt-4">
+    <h5 class="mb-4"><label>Duration:</label></h5>
       <div class="form-group duration-hours inline-fields">
         <%= form.number_field :duration_hours,
                             id: "learning-hours-duration-hours-display",
@@ -33,12 +35,13 @@
                             required: true %> &nbsp; <span class="label-font-weight"> minute(s)</span>        
       </div>
   </div>
-  <div class="field occurred-at form-group">
-  <h5><label>Occurred at</label></h5>
+  <hr>
+  <div class="field occurred-at form-group mt-2">
+  <h5 class="mb-4"><label>Occurred on:</label></h5>
   <%= form.date_field :occurred_at %>
   </div>
   <div class="actions">
-  <%= form.submit "Create new volunteer hours entry", class: "wide_button btn btn-primary", id: "learning-hour-submit" %>
+  <%= form.submit "Create New Learning Hours Entry", class: "wide_button btn btn-primary", id: "learning-hour-submit" %>
   </div>
 
 <% end %>
