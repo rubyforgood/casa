@@ -17,8 +17,8 @@ class DocxInspector
     # word_list = []
 
     get_docx_readable_text_XML_files.each do |file|
-      puts file.name
-      puts get_XML_object(file)
+      test = get_XML_object(file)
+      binding.pry
     end
   end
 
@@ -29,6 +29,7 @@ class DocxInspector
   private
 
   def get_displayed_text_list(xml_object)
+    xml_object.xpath("//w:t/text()").map(&:text)
   end
 
   def get_docx_as_zip_object(docx_file)
@@ -55,7 +56,7 @@ class DocxInspector
   end
 
   def get_XML_object(xml_file_as_docx_zip_entry)
-    xml_file_as_docx_zip_entry.get_input_stream.read
+    Nokogiri::XML(xml_file_as_docx_zip_entry.get_input_stream.read)
   end
 
   def store_docx_contents_in_tempfile(docx_contents)
