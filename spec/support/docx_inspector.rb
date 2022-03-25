@@ -17,8 +17,7 @@ class DocxInspector
     # word_list = []
 
     get_docx_readable_text_XML_files.each do |file|
-      test = get_XML_object(file)
-      binding.pry
+      get_XML_object(file)
     end
   end
 
