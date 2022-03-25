@@ -6,15 +6,12 @@
 
   <%= form.hidden_field :user_id, value: current_user.id %>
 
-  <div class="mt-4">
-    <%= form.text_field :name, placeholder: "Enter a title", value: @learning_hour.name %>
+  <div class="field form-group field-card mt-4">
+    <%= form.text_field :name, placeholder: "Enter a title", value: @learning_hour.name, class:"mr-5" %>
+    <%= form.select :learning_type, [['book'], ['movie'], ['webinar'], ['conference'], ['other']], prompt:"Select type", data: {label: "What type?"}, class: "form-control label-font-weight" %>
   </div>
-  <div class="mt-4">
-  <%= form.select :learning_type, [['book'], ['movie'], ['webinar'], ['conference'], ['other']], :prompt => "Select type"%>
-  </div>
-  <hr>
-  <div class="form-group duration mt-4">
-    <h5 class="mb-4"><label>Duration:</label></h5>
+  <div class="field form-group field-card duration mt-4">
+    <h5 class="mb-4"><label><%=t(".duration")%></label></h5>
       <div class="form-group duration-hours inline-fields">
         <%= form.number_field :duration_hours,
                             id: "learning-hours-duration-hours-display",
@@ -35,9 +32,8 @@
                             required: true %> &nbsp; <span class="label-font-weight"> minute(s)</span>        
       </div>
   </div>
-  <hr>
-  <div class="field occurred-at form-group mt-2">
-  <h5 class="mb-4"><label>Occurred on:</label></h5>
+  <div class="field field-card form-group mt-4">
+  <h5 class="mb-4"><label><%=t(".occurred_on")%></label></h5>
   <%= form.date_field :occurred_at %>
   </div>
   <div class="actions">
