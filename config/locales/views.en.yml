@@ -310,6 +310,13 @@ en:
         learning: Learning
         time: Time 
       title: Learning Hours
+    new:
+      title: New Learning Hours
+      occurred_on: Occurred On
+      duration: Duration
+    confirm_note_content_dialog:
+        header: Congratulations
+        body: New entry created
   global:
     add_court_order: Add a court order
     court_orders: Court Orders - Please check that you didn't enter any youth names
