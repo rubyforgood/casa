@@ -84,7 +84,6 @@ Rails.application.routes.draw do
   resources :emancipation_checklists, only: %i[index]
   resources :judges, only: %i[new create edit update]
   resources :notifications, only: :index
-  resources :learning_hours, except: %i[show]
 
   resources :supervisors, except: %i[destroy show], concerns: %i[with_datatable] do
     member do
