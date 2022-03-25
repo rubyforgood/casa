@@ -1,0 +1,47 @@
+
+<%= form_with model: LearningHour, url: volunteer_learning_hours_path, local: true, id: "learning-hours-form" do |form| %>
+  <div class="mt-2">
+    <%= render "/shared/error_messages", resource: @learning_hour %>
+  </div>
+
+  <%= form.hidden_field :user_id, value: current_user.id %>
+
+  <div class="mt-4">
+    <%= form.text_field :name, placeholder: "Enter a title", value: @learning_hour.name %>
+  </div>
+  <div class="mt-4">
+  <%= form.select :learning_type, [['book'], ['movie'], ['webinar'], ['conference'], ['other']], :prompt => "Select type"%>
+  </div>
+  <hr>
+  <div class="form-group duration mt-4">
+    <h5 class="mb-4"><label>Duration:</label></h5>
+      <div class="form-group duration-hours inline-fields">
+        <%= form.number_field :duration_hours,
+                            id: "learning-hours-duration-hours-display",
+                            min: 0,
+                            class: "inline-fields cc-field",
+                            size: "10",
+                            value: duration_hours(learning_hour),
+                            required: true %> &nbsp; <span class="label-font-weight"> hour(s)</span>        
+      </div>
+      <div class="inline-fields pr-7">and</div>
+      <div class="form-group duration-minutes inline-fields">
+        <%= form.number_field :duration_minutes,
+                            id: "learning-minutes-duration-hours-display",
+                            min: 0,
+                            class: "inline-fields cc-field",
+                            size: "10",
+                            value: duration_minutes(learning_hour),
+                            required: true %> &nbsp; <span class="label-font-weight"> minute(s)</span>        
+      </div>
+  </div>
+  <hr>
+  <div class="field occurred-at form-group mt-2">
+  <h5 class="mb-4"><label>Occurred on:</label></h5>
+  <%= form.date_field :occurred_at %>
+  </div>
+  <div class="actions">
+  <%= form.submit "Create New Learning Hours Entry", class: "wide_button btn btn-primary", id: "learning-hour-submit" %>
+  </div>
+
+<% end %>
