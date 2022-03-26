@@ -15,7 +15,7 @@ class DocxInspector
 
     @docx_zip_object = get_docx_as_zip_object(docx_file)
 
-    word_list = {"document" => [], "footnotes" => [], "endnotes" => [], "footer" => [], "header" => []}
+    # word_list = {"document" => [], "footnotes" => [], "endnotes" => [], "footer" => [], "header" => []}
 
     get_docx_readable_text_XML_files.each do |file|
       puts file.name
