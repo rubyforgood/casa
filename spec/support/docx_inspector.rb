@@ -17,7 +17,7 @@ class DocxInspector
     # word_list = []
 
     get_docx_readable_text_XML_files.each do |file|
-      get_XML_object(file)
+      get_displayed_text_list(get_XML_object(file))
     end
   end
 
@@ -28,7 +28,10 @@ class DocxInspector
   private
 
   def get_displayed_text_list(xml_object)
-    xml_object.xpath("//w:t/text()").map(&:text)
+    xml_object.xpath("//w:t/text()").filter_map do |word_text_element|
+      stripped_text = word_text_element.text.strip
+      stripped_text if stripped_text.length > 0
+    end
   end
 
   def get_docx_as_zip_object(docx_file)
