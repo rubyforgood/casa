@@ -20,6 +20,12 @@
               <label class="form-check-label" for="<%= dom_id(contact_type, :case_contact) %>">
                 <%= contact_type.name %>
               </label>
+              <span style="color: #93903C;">
+                <%= time_ago_of_last_contact_made_of(
+                  contact_type.name,
+                  @casa_cases.order(created_at: :desc).first
+                ) %>
+              </span>
             </div>
           <% end %>
         </td>
