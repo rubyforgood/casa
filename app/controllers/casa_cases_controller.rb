@@ -135,7 +135,13 @@ class CasaCasesController < ApplicationController
   def set_casa_case
     @casa_case = current_organization.casa_cases.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    head :not_found
+    if params[:action] != 'show'
+      head :not_found
+    else
+      respond_to do |format|
+        format.html { redirect_to casa_cases_path, notice: "Sorry you are not authorized to perform this action." }
+      end
+    end
   end
 
   # Only allow a list of trusted parameters through.
