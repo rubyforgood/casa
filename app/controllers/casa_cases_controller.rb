@@ -135,7 +135,7 @@ class CasaCasesController < ApplicationController
   def set_casa_case
     @casa_case = current_organization.casa_cases.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    if params[:action] != 'show'
+    if params[:action] != "show"
       head :not_found
     else
       respond_to do |format|
