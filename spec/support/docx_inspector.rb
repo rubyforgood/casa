@@ -36,6 +36,10 @@ class DocxInspector
           word_lists_by_document_section[:header].concat(viewable_strings)
       end
     end
+
+    word_lists_by_document_section.each do |section, word_list|
+      sort_string_list_by_length_ascending(word_list)
+    end
   end
 
   def contains_str?(str)
@@ -79,6 +83,7 @@ class DocxInspector
   end
 
   def sort_string_list_by_length_ascending(str_list)
+    str_list.sort_by!(&:length)
   end
 
   def store_docx_contents_in_tempfile(docx_contents)
