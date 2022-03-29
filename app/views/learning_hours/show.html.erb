@@ -22,7 +22,9 @@
         <td> <%= @learning_hour.learning_type %> </td>
         <td> <%= @learning_hour.occurred_at.strftime("%B %d, %Y") %> </td>
         <td> <%= @learning_hour.duration_hours %> hr <%= @learning_hour.duration_minutes %> min </td>
-        <td> <%= link_to 'edit', edit_volunteer_learning_hour_path %> 
+        <td> 
+        <%= link_to 'Edit ', edit_volunteer_learning_hour_path %> |
+        <%= link_to ' Delete', volunteer_learning_hour_path, method: :delete, data: { confirm: "Are you sure to delete this learning record?" }  %> 
         </td>
         </tr>
       </tbody>

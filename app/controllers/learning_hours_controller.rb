@@ -1,6 +1,5 @@
 class LearningHoursController < ApplicationController
-  before_action :set_volunteer
-  before_action :set_learning_hour, only: %i[show edit update]
+  before_action :set_learning_hour, only: %i[show edit update destroy]
 
   def index
     @learning_hours = LearningHour.where(user_id: current_user.id)
@@ -40,14 +39,16 @@ class LearningHoursController < ApplicationController
     end
   end
 
+  def destroy
+    @learning_hour.destroy
+    flash[:notice] = "Entry was successfully deleted."
+    redirect_to volunteer_learning_hours_path
+  end
+
   private
 
   def set_learning_hour
     @learning_hour = LearningHour.find(params[:id])
-  end
-
-  def set_volunteer
-    @volunteer = current_user.id
   end
 
   def learning_hours_params
