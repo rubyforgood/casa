@@ -312,10 +312,11 @@ en:
         occurred_at: Date
         time: Time Spent 
       title: Learning Hours
-    new:
-      title: New Learning Hours
+    form:
+      learning_hours_title: Title of Learning Hours
+      learning_type: Type of Learning
+      duration: Learning Duration
       occurred_on: Occurred On
-      duration: Duration
     confirm_note_content_dialog:
         header: Congratulations
         body: New entry created
