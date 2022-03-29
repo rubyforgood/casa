@@ -15,25 +15,25 @@ class DocxInspector
 
     @docx_zip_object = get_docx_as_zip_object(docx_file)
 
-    # word_list = {"document" => [], "footnotes" => [], "endnotes" => [], "footer" => [], "header" => []}
+    word_lists_by_document_section = {document: [], footnotes: [], endnotes: [], footer: [], header: []}
 
     get_docx_readable_text_XML_files.each do |file|
       puts file.name
-      # puts get_displayed_text_list(get_XML_object(file))
 
       file_name = file.name.match(DOCX_WORD_DIRECTORY_FILENAME_CAPTURE_PATTERN).captures[0]
+      viewable_strings = get_displayed_text_list(get_XML_object(file))
 
       case file_name
         when /^document/
-          puts "document"
+          word_lists_by_document_section[:document].concat(viewable_strings)
         when /^footnotes/
-          puts "footnotes"
+          word_lists_by_document_section[:footnotes].concat(viewable_strings)
         when /^endnotes/
-          puts "endnotes"
+          word_lists_by_document_section[:endnotes].concat(viewable_strings)
         when /^footer/
-          puts "footer"
+          word_lists_by_document_section[:footer].concat(viewable_strings)
         when /^header/
-          puts "header"
+          word_lists_by_document_section[:header].concat(viewable_strings)
       end
     end
   end
@@ -76,6 +76,9 @@ class DocxInspector
 
   def get_XML_object(xml_file_as_docx_zip_entry)
     Nokogiri::XML(xml_file_as_docx_zip_entry.get_input_stream.read)
+  end
+
+  def sort_string_list_by_length_ascending(str_list)
   end
 
   def store_docx_contents_in_tempfile(docx_contents)
