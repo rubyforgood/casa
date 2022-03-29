@@ -10,7 +10,19 @@ class LearningHour < ApplicationRecord
     other: 5
   }
 
-  
+  validates :learning_type, presence: true
+  validates :duration_minutes, presence: true, numericality: {greater_than: 0}
+  validates :name, presence: {message: "/ Title cannot be blank"}
+  validates :occurred_at, presence: true
+  validate :occurred_at_not_in_future
+
+  private
+
+  def occurred_at_not_in_future
+    if occurred_at > Date.today
+      errors.add(:date, "cannot be in the future")
+    end
+  end
 end
 
 # == Schema Information

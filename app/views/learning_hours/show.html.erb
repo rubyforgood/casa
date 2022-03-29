@@ -1,7 +1,6 @@
 <div class="row">
   <div class="col-sm-12 dashboard-table-header">
-    <h1><%= t(".title") %></h1>
-    <%= link_to ("Record Learning Hours"), new_volunteer_learning_hour_path, class: "btn btn-primary" %>
+    <h1><%= @learning_hour.name %></h1>
   </div>
 </div>
 
@@ -18,15 +17,14 @@
       </tr>
       </thead>
       <tbody>
-      <% @learning_hours.each do |learning_hour| %>
         <tr>
-        <td> <%= learning_hour.name %> </td>
-        <td> <%= learning_hour.learning_type %> </td>
-        <td> <%= learning_hour.occurred_at.strftime("%B %d, %Y") %> </td>
-        <td> <%= learning_hour.duration_hours %> hr <%= learning_hour.duration_minutes %> min </td>
-        <td> <%= link_to 'see more', volunteer_learning_hour_path(id: learning_hour.id) %> </td>
+        <td> <%= @learning_hour.name %> </td>
+        <td> <%= @learning_hour.learning_type %> </td>
+        <td> <%= @learning_hour.occurred_at.strftime("%B %d, %Y") %> </td>
+        <td> <%= @learning_hour.duration_hours %> hr <%= @learning_hour.duration_minutes %> min </td>
+        <td> <%= link_to 'edit', edit_volunteer_learning_hour_path %> 
+        </td>
         </tr>
-      <% end %>
       </tbody>
     </table>
   </div>

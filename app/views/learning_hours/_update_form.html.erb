@@ -1,5 +1,5 @@
 
-<%= form_with model: LearningHour, url: volunteer_learning_hours_path, local: true, id: "learning-hours-form" do |form| %>
+<%= form_with model: @learning_hour, url: volunteer_learning_hour_path, local: true, id: "learning-hours-form" do |form| %>
  
   <div class="mt-2">
     <%= render "/shared/error_messages", resource: @learning_hour %>
@@ -56,7 +56,7 @@
                         class: "form-control label-font-weight" %>
   </div>
   <div class="actions">
-    <%= form.submit @learning_hour.persisted? ? t(".update_button") : t(".create_button"), class: "wide_button btn btn-primary" %>
+    <%= form.submit "update", class: "wide_button btn btn-primary" %>
   </div>
 
 <% end %>

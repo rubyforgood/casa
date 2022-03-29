@@ -108,7 +108,7 @@ Rails.application.routes.draw do
       get :impersonate
     end
     resources :notes, only: %i[create]
-    resources :learning_hours, except: %i[show]
+    resources :learning_hours
   end
   resources :case_assignments, only: %i[create destroy] do
     member do
