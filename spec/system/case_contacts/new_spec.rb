@@ -521,50 +521,6 @@ RSpec.describe "case_contacts/new", type: :system do
       end
     end
 
-    context "with contact made not checked" do
-      it "does not re-render form, preserves all previously entered selections", js: true do
-        volunteer = create(:volunteer, :with_casa_cases)
-        volunteer_casa_case_one = volunteer.casa_cases.first
-        create_contact_types(volunteer_casa_case_one.casa_org)
-
-        sign_in volunteer
-
-        visit new_case_contact_path
-
-        check volunteer_casa_case_one.case_number
-        check "School"
-        check "Therapist"
-        choose "In Person"
-        fill_in "case-contact-duration-hours-display", with: "1"
-        fill_in "case-contact-duration-minutes-display", with: "45"
-        # Future date: invalid
-        fill_in "c. Occurred On", with: 2.days.ago.strftime("%Y-%m-%d")
-        fill_in "a. Miles Driven", with: "0"
-        choose "case_contact_want_driving_reimbursement_true"
-        fill_in "Notes", with: "Hello world"
-
-        expect {
-          click_on "Submit"
-        }.not_to change(CaseContact, :count)
-
-        expect(page).not_to have_text("Must enter a. Miles Driven to receive driving reimbursement.")
-        expect(page).to have_checked_field(volunteer_casa_case_one.case_number)
-        expect(page).to have_unchecked_field("Attorney")
-        expect(page).to have_checked_field("School")
-        expect(page).to have_checked_field("Therapist")
-        expect(page).not_to have_checked_field("Yes")
-        expect(page).not_to have_checked_field("No")
-        expect(page).to have_checked_field("In Person")
-        expect(page).to have_field("case-contact-duration-hours-display", with: "1")
-        expect(page).to have_field("case-contact-duration-minutes-display", with: "45")
-        expect(page).to have_field("c. Occurred On", with: 2.days.ago.strftime("%Y/%m/%d"))
-        expect(page).to have_field("a. Miles Driven", with: "0")
-        expect(page).to have_checked_field("case_contact_want_driving_reimbursement_true")
-        expect(page).not_to have_checked_field("case_contact_want_driving_reimbursement_false")
-        expect(page).to have_field("Notes", with: "Hello world")
-      end
-    end
-
     context "with no contact types set for the volunteer's cases" do
       it "renders all of the org's contact types", js: true do
         org = build(:casa_org)
