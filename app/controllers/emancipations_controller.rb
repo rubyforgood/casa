@@ -80,7 +80,7 @@ class EmancipationsController < ApplicationController
 
   # Render a json error for json endpoints
   def not_authorized(exception)
-    if exception.backtrace[1].end_with?("save'")
+    if exception.backtrace[2].end_with?("save'")
       render json: {error: "Sorry, you are not authorized to perform this action. Did the session expire?"}
     else
       super()

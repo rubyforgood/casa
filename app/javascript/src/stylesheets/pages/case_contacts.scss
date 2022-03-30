@@ -15,14 +15,6 @@ legend {
     display: inline;
 }
 
-// .range-value {
-//     justify-content: center;
-// }
-
-// .range-value input {
-//     width: 60%;
-// }
-
 .slider-row {
     margin: 0px;
 }
@@ -86,10 +78,45 @@ legend {
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
+.expense-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .5rem;
+    justify-content: flex-end;
+}
+
+.expense-container {
+    & > *:last-child {
+        width: 80%;
+    };
+    .field_with_errors {
+        input {
+            width: 100%;
+        }
+    }
+ }
+
+.other-expenses li {
+    margin-bottom: .2rem;
+}
+
+.other-expense-amount {
+    width: 20%;
+    margin-left: .4rem
+}
+
 .add-expense-link {
+    margin-top: -.5rem;
+    margin-bottom: .5rem;
     display: block;
-    padding: .8rem;
+    padding-left: .8rem;
     text-decoration: underline;
+}
+
+#add-another-expense {
+    cursor: pointer;
 }
 
 .pr-7 {
@@ -97,9 +124,9 @@ legend {
     padding-left: 2.5rem !important;
 }
 
-// .add-expense-fields {
-//     width: 50%;
-// }
+.pr-9 {
+    padding-left: 3.1rem !important;
+}
 
 .wide_button {
     width: 100%;

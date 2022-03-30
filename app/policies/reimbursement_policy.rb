@@ -10,6 +10,10 @@ class ReimbursementPolicy < ApplicationPolicy
     is_admin?
   end
 
+  def datatable?
+    is_admin?
+  end
+
   def change_complete_status?
     index?
   end

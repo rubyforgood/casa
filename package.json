@@ -2,9 +2,7 @@
   "name": "casa",
   "private": true,
   "scripts": {
-    "test:cypress": "$(npm bin)/cypress run",
     "test": "jest",
-    "test:e2e": "cypress open",
     "lint": "standard",
     "lint:fix": "standard --fix",
     "toc": "markdown-toc -i README.md"
@@ -15,7 +13,7 @@
     "@rails/activestorage": "^7.0.2",
     "@rails/ujs": "^7.0.2",
     "@rails/webpacker": "5.4.3",
-    "add2calendar": "^1.1.7",
+    "add2calendar": "^1.1.8",
     "bindings": "^1.5.0",
     "bootstrap": "4.6.1",
     "bootstrap-datepicker": "^1.9.0",
@@ -32,7 +30,6 @@
   "version": "0.1.0",
   "devDependencies": {
     "@webpack-cli/serve": "^1.6.1",
-    "cypress": "^9.5.1",
     "jest": "^27.5.1",
     "markdown-toc": "^1.2.0",
     "standard": "^16.0.4",

@@ -3,14 +3,14 @@
 source "https://rubygems.org"
 
 ruby "3.1.0"
-gem "rails", "~> 6.1.4"
+gem "rails", "~> 7.0.2"
 
 gem "after_party" # post-deployment tasks
 gem "amazing_print" # easier console reading
 gem "azure-storage-blob", require: false
 gem "bugsnag" # tracking errors in prod
 gem "caxlsx", "~> 3.2" # excel spreadsheets - TODO can we remove this version restriction?
-gem "caxlsx_rails", "~> 0.6.2" # excel spreadsheets - TODO can we remove this version restriction?
+gem "caxlsx_rails", "~> 0.6.3" # excel spreadsheets - TODO can we remove this version restriction?
 gem "delayed_job_active_record"
 gem "devise" # for authentication
 gem "devise_invitable"
@@ -43,7 +43,6 @@ gem "webpacker" # Transpile app-like JavaScript. Read more: https://github.com/r
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
   gem "byebug", platforms: %i[mri mingw x64_mingw] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem "cypress-on-rails", "~> 1.12"
   gem "erb_lint", require: false
   gem "factory_bot_rails"
   gem "pry"
@@ -56,10 +55,8 @@ end
 group :development do
   gem "annotate" # for adding db field listings to models as comments
   gem "letter_opener" # Opens emails in new tab for easier testing
-  gem "listen", ">= 3.0.5", "< 3.8" # TODO can we remove this version restriction?
   gem "spring" # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring-commands-rspec"
-  gem "spring-watcher-listen", "~> 2.0.0" # TODO can we remove this version restriction?
   gem "traceroute" # for finding unused routes
   gem "web-console", ">= 3.3.0" # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
 end

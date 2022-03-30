@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-sm-12 dashboard-table-header">
     <h1><%= t(".volunteers") %></h1>
-    <% if policy(Volunteer).new? %>
+    <% if policy(current_organization.volunteers.new).new? %>
       <%= link_to t(".button.new"), new_volunteer_path, class: "btn btn-primary mb-2 mb-md-0" %>
     <% end %>
     <button type="button" class="btn btn-primary mb-2 mb-md-0" data-toggle="modal" data-target="#visibleColumns">
@@ -133,6 +133,7 @@
         <th><%= t(".heading.case_number") %></th>
         <th><%= t(".heading.last_attempted_contact") %></th>
         <th><%= t(".heading.contacts") %></th>
+        <th><%= t(".heading.hours_spent_in") %></th>
         <th><%= t(".heading.actions") %></th>
       </tr>
       </thead>

@@ -13,6 +13,15 @@ class ReimbursementsController < ApplicationController
       .filter_by_reimbursement_status(@complete_status)
   end
 
+  def datatable
+    authorize :reimbursement
+
+    reimbursements = fetch_reimbursements
+    datatable = ReimbursementDatatable.new reimbursements, params
+
+    render json: datatable
+  end
+
   def change_complete_status
     authorize :reimbursement
 

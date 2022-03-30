@@ -13,7 +13,9 @@ RSpec.describe "case_contacts/edit", type: :system do
 
       visit edit_case_contact_path(case_contact)
 
-      choose "Yes"
+      within "#enter-contact-details" do
+        choose "Yes"
+      end
       choose "Letter"
 
       click_on "Submit"
@@ -47,7 +49,9 @@ RSpec.describe "case_contacts/edit", type: :system do
       sign_in volunteer
       visit edit_case_contact_path(case_contact)
 
-      choose "Yes"
+      within "#enter-contact-details" do
+        choose "Yes"
+      end
       choose "Letter"
 
       click_on "Submit"
