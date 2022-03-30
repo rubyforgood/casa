@@ -19,7 +19,9 @@ RSpec.describe "addtional_expenses", type: :system do
     click_on "New Case Contact"
 
     check "School"
-    choose "Yes"
+    within "#enter-contact-details" do
+      choose "Yes"
+    end
     choose "Video"
     fill_in "case_contact_occurred_at", with: "04/04/2020"
 
@@ -62,7 +64,9 @@ RSpec.describe "addtional_expenses", type: :system do
     click_on "New Case Contact"
 
     check "School"
-    choose "Yes"
+    within "#enter-contact-details" do
+      choose "Yes"
+    end
     choose "Video"
     fill_in "case_contact_occurred_at", with: "04/04/2020"
 
@@ -134,7 +138,9 @@ RSpec.describe "addtional_expenses", type: :system do
     click_on "New Case Contact"
 
     check "School"
-    choose "Yes"
+    within "#enter-contact-details" do
+      choose "Yes"
+    end
     choose "Video"
     fill_in "case_contact_occurred_at", with: "04/04/2020"
 
@@ -210,7 +216,9 @@ RSpec.describe "addtional_expenses", type: :system do
     click_on "New Case Contact"
 
     check "School"
-    choose "Yes"
+    within "#enter-contact-details" do
+      choose "Yes"
+    end
     choose "Video"
     fill_in "case_contact_occurred_at", with: "04/04/2020"
 
