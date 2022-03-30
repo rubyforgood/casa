@@ -18,6 +18,8 @@ class LearningHour < ApplicationRecord
   private
 
   def occurred_at_not_in_future
+    return false if !occurred_at
+
     if occurred_at > Date.today
       errors.add(:date, "cannot be in the future")
     end
