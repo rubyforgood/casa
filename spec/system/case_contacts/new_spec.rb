@@ -30,7 +30,9 @@ RSpec.describe "case_contacts/new", type: :system do
 
       check "School"
       check "Therapist"
-      choose "Yes"
+      within "#enter-contact-details" do
+        choose "Yes"
+      end
       choose "Video"
       fill_in "case_contact_occurred_at", with: "04/04/2020"
 
@@ -61,7 +63,9 @@ RSpec.describe "case_contacts/new", type: :system do
 
       check "School"
       check "Therapist"
-      choose "Yes"
+      within "#enter-contact-details" do
+        choose "Yes"
+      end
       choose "Video"
       fill_in "case_contact_occurred_at", with: "04/04/2020"
       fill_in "case-contact-duration-hours-display", with: "1"
@@ -97,7 +101,9 @@ RSpec.describe "case_contacts/new", type: :system do
 
       check "School"
       check "Therapist"
-      choose "Yes"
+      within "#enter-contact-details" do
+        choose "Yes"
+      end
       choose "Video"
       fill_in "case_contact_occurred_at", with: "04/04/2020"
       fill_in "case-contact-duration-hours-display", with: "1"
@@ -148,7 +154,9 @@ RSpec.describe "case_contacts/new", type: :system do
 
         check "School"
         check "Therapist"
-        choose "Yes"
+        within "#enter-contact-details" do
+          choose "Yes"
+        end
         choose "Video"
         fill_in "case_contact_occurred_at", with: "04/04/2020"
         fill_in "case-contact-duration-hours-display", with: "0"
@@ -176,7 +184,9 @@ RSpec.describe "case_contacts/new", type: :system do
 
         check "School"
         check "Therapist"
-        choose "Yes"
+        within "#enter-contact-details" do
+          choose "Yes"
+        end
         choose "Video"
         fill_in "case_contact_occurred_at", with: "04/04/2020"
         note_content = "<h1>Hello world</h1>"
@@ -259,7 +269,9 @@ RSpec.describe "case_contacts/new", type: :system do
       check volunteer_casa_case_one.case_number
       check "School"
       check "Therapist"
-      choose "Yes"
+      within "#enter-contact-details" do
+        choose "Yes"
+      end
       choose "In Person"
       fill_in "case-contact-duration-hours-display", with: "1"
       fill_in "case-contact-duration-minutes-display", with: "45"
@@ -302,7 +314,9 @@ RSpec.describe "case_contacts/new", type: :system do
       check volunteer_casa_case_one.case_number
       check "School"
       check "Therapist"
-      choose "Yes"
+      within "#enter-contact-details" do
+        choose "Yes"
+      end
       choose "In Person"
       fill_in "case-contact-duration-hours-display", with: "1"
       fill_in "case-contact-duration-minutes-display", with: "45"
@@ -334,7 +348,9 @@ RSpec.describe "case_contacts/new", type: :system do
       check volunteer_casa_case_one.case_number
       check "School"
       check "Therapist"
-      choose "Yes"
+      within "#enter-contact-details" do
+        choose "Yes"
+      end
       choose "In Person"
       fill_in "case-contact-duration-hours-display", with: "1"
       fill_in "case-contact-duration-minutes-display", with: "45"
@@ -366,7 +382,9 @@ RSpec.describe "case_contacts/new", type: :system do
       check volunteer_casa_case_one.case_number
       check "School"
       check "Therapist"
-      choose "Yes"
+      within "#enter-contact-details" do
+        choose "Yes"
+      end
       choose "In Person"
       fill_in "case-contact-duration-hours-display", with: "1"
       fill_in "case-contact-duration-minutes-display", with: "45"
@@ -395,7 +413,9 @@ RSpec.describe "case_contacts/new", type: :system do
       check volunteer_casa_case_one.case_number
       check "School"
       check "Therapist"
-      choose "Yes"
+      within "#enter-contact-details" do
+        choose "Yes"
+      end
       choose "In Person"
       fill_in "case-contact-duration-hours-display", with: "1"
       fill_in "case-contact-duration-minutes-display", with: "45"
@@ -426,7 +446,9 @@ RSpec.describe "case_contacts/new", type: :system do
       check volunteer_casa_case_one.case_number
       check "School"
       check "Therapist"
-      choose "Yes"
+      within "#enter-contact-details" do
+        choose "Yes"
+      end
       choose "In Person"
       fill_in "case-contact-duration-hours-display", with: "1"
       fill_in "case-contact-duration-minutes-display", with: "45"
@@ -457,7 +479,9 @@ RSpec.describe "case_contacts/new", type: :system do
         check volunteer_casa_case_one.case_number
         check "School"
         check "Therapist"
-        choose "Yes"
+        within "#enter-contact-details" do
+          choose "Yes"
+        end
         choose "In Person"
         fill_in "case-contact-duration-hours-display", with: "1"
         fill_in "case-contact-duration-minutes-display", with: "45"
