@@ -22,7 +22,7 @@ class LearningHoursController < ApplicationController
       if @learning_hour.save
         format.html { redirect_to volunteer_learning_hours_path(current_user.id), notice: "New entry was successfully created." }
       else
-        format.html { render (:new), status: 404 } 
+        format.html { render :new, status: 404 }
       end
     end
   end
@@ -37,7 +37,7 @@ class LearningHoursController < ApplicationController
       if @learning_hour.update(update_learning_hours_params)
         format.html { redirect_to volunteer_learning_hour_path, notice: "Entry was successfully updated." }
       else
-        format.html { render (:edit), status: 404 }
+        format.html { render :edit, status: 404 }
       end
     end
   end

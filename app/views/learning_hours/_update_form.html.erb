@@ -1,31 +1,30 @@
 
 <%= form_with model: @learning_hour, url: volunteer_learning_hour_path, local: true, id: "learning-hours-form" do |form| %>
- 
+
   <div class="mt-2">
     <%= render "/shared/error_messages", resource: @learning_hour %>
   </div>
 
-
   <%= form.hidden_field :user_id, value: current_user.id %>
 
   <div class="field form-group field-card mt-4">
-    <%= form.label :name, t(".learning_hours_title")%>
-    <%= form.text_field :name, 
-                        id: "title", 
-                        placeholder: "-- Enter a title --", 
-                        value: @learning_hour.name, 
+    <%= form.label :name, t(".learning_hours_title") %>
+    <%= form.text_field :name,
+                        id: "title",
+                        placeholder: "-- Enter a title --",
+                        value: @learning_hour.name,
                         class:"mr-5" %>
     <br>
     <%= form.label :learning_type, t(".learning_type") %>
-    <%= form.select :learning_type, 
-                    LearningHour.learning_types&.map {|learning| [learning.first.humanize, learning.first]}, 
-                    prompt:"Select learning type", 
-                    value: @learning_hour.learning_type, 
+    <%= form.select :learning_type,
+                    LearningHour.learning_types&.map {|learning| [learning.first.humanize, learning.first]},
+                    prompt:"Select learning type",
+                    value: @learning_hour.learning_type,
                     selected: @learning_hour.learning_type,
                     class: "form-control label-font-weight" %>
   </div>
   <div class="field form-group field-card duration mt-4">
-    <h5 class="mb-4"><label><%=t(".duration")%>:</label></h5>
+    <h5 class="mb-4"><label><%= t(".duration") %>:</label></h5>
       <div class="form-group duration-hours inline-fields">
         <%= form.number_field :duration_hours,
                             id: "learning-hours-duration-hours-display",
@@ -33,7 +32,7 @@
                             class: "inline-fields cc-field",
                             size: "10",
                             value: @learning_hour.duration_hours,
-                            required: true %> &nbsp; <span class="label-font-weight"> hour(s)</span>        
+                            required: true %> &nbsp; <span class="label-font-weight"> hour(s)</span>
       </div>
       <div class="inline-fields pr-7">and</div>
       <div class="form-group duration-minutes inline-fields">
@@ -43,15 +42,15 @@
                             class: "inline-fields cc-field",
                             size: "10",
                             value: duration_minutes(@learning_hour),
-                            required: true %> &nbsp; <span class="label-font-weight"> minute(s)</span>        
+                            required: true %> &nbsp; <span class="label-font-weight"> minute(s)</span>
       </div>
   </div>
   <div class="field field-card form-group mt-4">
-    <h5><%= form.label :occurred_at, t(".occurred_on")%>:</h5>
+    <h5><%= form.label :occurred_at, t(".occurred_on") %>:</h5>
     <% occurred_at = @learning_hour.occurred_at || Time.zone.now %>
-    <%= form.text_field :occurred_at, 
+    <%= form.text_field :occurred_at,
                         id:"learning-occurred-at",
-                        value: occurred_at.to_date, 
+                        value: occurred_at.to_date,
                         data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
                         class: "form-control label-font-weight" %>
   </div>

@@ -25,11 +25,12 @@
         <% if (@learning_hour.duration_hours > 0) %>
           <%= @learning_hour.duration_hours %> hr
         <% end %>
-        <%= @learning_hour.duration_minutes %> min 
+        <%= @learning_hour.duration_minutes %> min
         </td>
-        <td> 
+        <td>
         <%= link_to 'Edit ', edit_volunteer_learning_hour_path %> |
-        <%= link_to ' Delete', volunteer_learning_hour_path, method: :delete, data: { confirm: "Are you sure to delete this learning record?" }  %> 
+        <%= link_to ' Delete', volunteer_learning_hour_path, method: :delete,
+data: { confirm: "Are you sure to delete this learning record?" } %>
         </td>
         </tr>
       </tbody>
