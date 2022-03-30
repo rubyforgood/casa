@@ -19,9 +19,14 @@
       <tbody>
         <tr>
         <td> <%= @learning_hour.name %> </td>
-        <td> <%= @learning_hour.learning_type %> </td>
+        <td> <%= (@learning_hour.learning_type).humanize %> </td>
         <td> <%= @learning_hour.occurred_at.strftime("%B %d, %Y") %> </td>
-        <td> <%= @learning_hour.duration_hours %> hr <%= @learning_hour.duration_minutes %> min </td>
+        <td>
+        <% if (@learning_hour.duration_hours > 0) %>
+          <%= @learning_hour.duration_hours %> hr
+        <% end %>
+        <%= @learning_hour.duration_minutes %> min 
+        </td>
         <td> 
         <%= link_to 'Edit ', edit_volunteer_learning_hour_path %> |
         <%= link_to ' Delete', volunteer_learning_hour_path, method: :delete, data: { confirm: "Are you sure to delete this learning record?" }  %> 
