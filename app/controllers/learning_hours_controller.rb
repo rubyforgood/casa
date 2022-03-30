@@ -6,30 +6,33 @@ class LearningHoursController < ApplicationController
   end
 
   def show
+    authorize @learning_hour
   end
 
   def new
+    authorize LearningHour
     @learning_hour = LearningHour.new
   end
 
   def create
     @learning_hour = LearningHour.new(learning_hours_params)
+    authorize @learning_hour
 
     respond_to do |format|
       if @learning_hour.save
         format.html { redirect_to volunteer_learning_hours_path(current_user.id), notice: "New entry was successfully created." }
       else
-        format.html { render (:new), status: 404 }
-        
+        format.html { render (:new), status: 404 } 
       end
     end
   end
 
   def edit
+    authorize @learning_hour
   end
 
   def update
-
+    authorize @learning_hour
     respond_to do |format|
       if @learning_hour.update(update_learning_hours_params)
         format.html { redirect_to volunteer_learning_hour_path, notice: "Entry was successfully updated." }
@@ -40,6 +43,7 @@ class LearningHoursController < ApplicationController
   end
 
   def destroy
+    authorize @learning_hour
     @learning_hour.destroy
     flash[:notice] = "Entry was successfully deleted."
     redirect_to volunteer_learning_hours_path
