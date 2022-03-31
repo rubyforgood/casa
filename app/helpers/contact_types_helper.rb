@@ -13,6 +13,8 @@ module ContactTypesHelper
   end
 
   def last_contact_made_of(contact_type_name, casa_case)
+    return unless casa_case
+
     casa_case
       .case_contacts
       .joins(:contact_types)

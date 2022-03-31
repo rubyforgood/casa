@@ -17,9 +17,9 @@ RSpec.describe ContactTypesHelper, type: :helper do
       before do
         contact = build_stubbed(:case_contact, casa_case: casa_case, created_at: 1.day.ago)
         allow(helper).to receive(:last_contact_made_of).and_return(contact)
-
-        it { is_expected.to eq("1 day ago") }
       end
+
+      it { is_expected.to eq("1 day ago") }
     end
   end
 
@@ -38,6 +38,12 @@ RSpec.describe ContactTypesHelper, type: :helper do
 
     it "returns the last contact made of the given type" do
       expect(subject).to eq(contact_1)
+    end
+
+    context "when casa_case is nil" do
+      subject { helper.last_contact_made_of(contact_type.name, nil) }
+
+      it { is_expected.to be_nil }
     end
   end
 end
