@@ -71,7 +71,8 @@ RSpec.describe "/casa_cases", type: :request do
         other_case = create(:casa_case, casa_org: other_org)
 
         get casa_case_url(other_case)
-        expect(response).to be_not_found
+        expect(response).to be_redirect
+        expect(flash[:notice]).to eq("Sorry you are not authorized to perform this action.")
       end
     end
 

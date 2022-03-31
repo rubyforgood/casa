@@ -451,6 +451,17 @@ en:
         no_case_court_mandates: There are no court orders associated with this court date.
       title: Court Date
   reimbursements:
+    data_table:
+      heading:
+        amount: Amount
+        case_number: Case Number
+        contact_types: Contact Types
+        date_added: Date Added
+        description: Description
+        occurred_at: Occurred At
+        expense_type: Expense Type
+        reimbursement_complete: Reimbursement Complete
+        volunteer: Volunteer
     table:
       heading:
         amount: Miles Driven
