@@ -86,8 +86,12 @@ The Casa package frontend leverages several javascript packages managed through 
    `sudo apt install postgresql postgresql-contrib` - install
    
    `psql --version` - confirm installation and see version number
+   
+ 2. **Install libpq-dev library**
+ 
+      `sudo apt-get install libpq-dev`
 
-2. **Start your postgresql service** 
+3. **Start your postgresql service** 
 
    `sudo service postgresql start`
 
@@ -117,13 +121,6 @@ Casa's install will also install the correct version of Rails.
    `bundle install` -  install ruby dependencies.
 
    `yarn` - install javascript dependencies.
-   
-      *If you get an error like this:*
-      
-   > An error occurred while installing pg (1.3.4), and Bundler cannot
-continue.
-
-   *Do `sudo apt-get install libpq-dev` and run `bundle install` again*
 
 3. **Database Setup**
 
