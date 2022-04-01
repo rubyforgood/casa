@@ -20,7 +20,8 @@
           <%= menu_item(label: cases_index_title, path: casa_cases_path) %>
           <% if current_user.volunteer? %>
             <%= menu_item(label: t(".menu_item.case_contacts"), path: case_contacts_path) %>
-            <%= menu_item(label: t(".menu_item.learning_hours"), path: volunteer_learning_hours_path(volunteer_id: current_user.id)) %>
+            <%= menu_item(label: t(".menu_item.learning_hours"),
+            path: volunteer_learning_hours_path(volunteer_id: current_user.id)) %>
           <% end %>
           <% if current_user.serving_transition_aged_youth? %>
             <%= menu_item(label: t(".menu_item.emancipation_checklists"), path: emancipation_checklists_path) %>
