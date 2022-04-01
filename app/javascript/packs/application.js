@@ -33,7 +33,6 @@ require('src/sidebar')
 require('src/readMore')
 require('src/tooltip')
 require('src/password_confirmation')
-require('src/reimbursements')
 require('src/reports')
 require('src/add_additional_expense')
 
