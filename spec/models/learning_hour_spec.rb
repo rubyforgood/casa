@@ -6,7 +6,7 @@ RSpec.describe LearningHour, type: :model do
     expect(learning_hour).to_not be_valid
     expect(learning_hour.errors[:name]).to eq(["/ Title cannot be blank"])
   end
-  
+
   it "has a learning_type" do
     learning_hour = build_stubbed(:learning_hour, learning_type: nil)
     expect(learning_hour).to_not be_valid
@@ -26,9 +26,7 @@ RSpec.describe LearningHour, type: :model do
   end
 
   it "has date that is not in the future" do
-    learning_hour = build_stubbed(:learning_hour, occurred_at: 1.day.from_now.strftime('%d %b %Y'))
+    learning_hour = build_stubbed(:learning_hour, occurred_at: 1.day.from_now.strftime("%d %b %Y"))
     expect(learning_hour).to_not be_valid
   end
-
-  
 end
