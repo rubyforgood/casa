@@ -20,6 +20,7 @@ class SeederMain
     @rng = Random.new(random_seed) # rng = random number generator
     @db_populator = DbPopulator.new(rng)
     Faker::Config.random = rng
+    Faker::Config.locale = 'en-US' # only allow US phone numbers
   end
 
   def seed
