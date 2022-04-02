@@ -1,20 +1,27 @@
 class SupervisorImporter < FileImporter
-  IMPORT_HEADER = ["email", "display_name", "supervisor_volunteers"]
+  IMPORT_HEADER = ["email", "display_name", "supervisor_volunteers", "phone_number"]
+  VALID_PHONE_NUMBER_LENGTH = 11
 
   def self.import_supervisors(csv_filespec, org_id)
     new(csv_filespec, org_id).import_supervisors
   end
 
   def initialize(csv_filespec, org_id)
-    super(csv_filespec, org_id, "supervisors", ["email", "display_name", "supervisor_volunteers"])
+    super(csv_filespec, org_id, "supervisors", ["email", "display_name", "supervisor_volunteers", "phone_number"])
   end
 
   def import_supervisors
     import do |row|
-      supervisor_params = row.to_hash.slice(:display_name, :email).compact
-
+      supervisor_params = row.to_hash.slice(:display_name, :email, :phone_number).compact
+      
       unless supervisor_params.key?(:email)
         raise "Row does not contain e-mail address."
+      end
+      
+      if supervisor_params.key?(:phone_number) && supervisor_params[:phone_number].length != VALID_PHONE_NUMBER_LENGTH
+        raise "Phone number is not in correct format"
+      else
+        supervisor_params[:phone_number] = "+#{supervisor_params[:phone_number]}"
       end
 
       supervisor = Supervisor.find_by(email: supervisor_params[:email])
