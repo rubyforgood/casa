@@ -15,7 +15,7 @@ class DocxInspector
 
     @docx_zip_object = get_docx_as_zip_object(docx_file)
 
-    word_lists_by_document_section = {document: [], footnotes: [], endnotes: [], footer: [], header: []}
+    @word_lists_by_document_section = {document: [], endnotes: [], footnotes: [], footer: [], header: []}
 
     get_docx_readable_text_XML_files.each do |file|
       puts file.name
@@ -25,25 +25,35 @@ class DocxInspector
 
       case file_name
         when /^document/
-          word_lists_by_document_section[:document].concat(viewable_strings)
-        when /^footnotes/
-          word_lists_by_document_section[:footnotes].concat(viewable_strings)
+          @word_lists_by_document_section[:document].concat(viewable_strings)
         when /^endnotes/
-          word_lists_by_document_section[:endnotes].concat(viewable_strings)
+          @word_lists_by_document_section[:endnotes].concat(viewable_strings)
+        when /^footnotes/
+          @word_lists_by_document_section[:footnotes].concat(viewable_strings)
         when /^footer/
-          word_lists_by_document_section[:footer].concat(viewable_strings)
+          @word_lists_by_document_section[:footer].concat(viewable_strings)
         when /^header/
-          word_lists_by_document_section[:header].concat(viewable_strings)
+          @word_lists_by_document_section[:header].concat(viewable_strings)
       end
     end
 
-    word_lists_by_document_section.each do |section, word_list|
+    @word_lists_by_document_section.each do |section, word_list|
       sort_string_list_by_length_ascending(word_list)
     end
   end
 
   def contains_str?(str)
     # Sort w:t s by length and keep array on instance
+  end
+
+  def get_word_list_all
+    sort_string_list_by_length_ascending(
+      @word_lists_by_document_section[:document] +
+      @word_lists_by_document_section[:endnotes] +
+      @word_lists_by_document_section[:footnotes] +
+      @word_lists_by_document_section[:footer] +
+      @word_lists_by_document_section[:header]
+    )
   end
 
   private
