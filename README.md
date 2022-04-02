@@ -118,7 +118,7 @@ Another option is to install the Chromium browser for your operating system so t
  - [Linux](doc/LINUX_SETUP.md)
  - [Mac(Help Wanted)](doc/MAC_SETUP.md)
  - Windows(Help Wanted)
- - Windows Subsystem for Linux(WSL) (Help Wanted)
+ - [Windows Subsystem for Linux(WSL)](https://github.com/rubyforgood/casa/blob/main/doc/WSL_SETUP.md)
 
 #### Ubuntu and WSL
 
