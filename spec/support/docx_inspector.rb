@@ -38,8 +38,6 @@ class DocxInspector
     @word_lists_by_document_section.each do |section, word_list|
       sort_string_list_by_length_ascending(word_list)
     end
-
-    binding.pry
   end
 
   def get_word_list_all
