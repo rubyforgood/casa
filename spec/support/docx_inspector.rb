@@ -56,6 +56,26 @@ class DocxInspector
     )
   end
 
+  def get_word_list_document
+    @word_lists_by_document_section[:document]
+  end
+
+  def get_word_list_endnotes
+    @word_lists_by_document_section[:endnotes]
+  end
+
+  def get_word_list_footnotes
+    @word_lists_by_document_section[:footnotes]
+  end
+
+  def get_word_list_footer
+    @word_lists_by_document_section[:footer]
+  end
+
+  def get_word_list_header
+    @word_lists_by_document_section[:header]
+  end
+
   private
 
   def get_displayed_text_list(xml_object)
