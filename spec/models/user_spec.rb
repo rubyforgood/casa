@@ -26,13 +26,13 @@ RSpec.describe User, type: :model do
       expect(user.valid?).to be false
     end
 
-    it "requires 10 digit phone numbers" do
-      user = build(:user, phone_number: "416321809")
+    it "requires 12 digit phone numbers" do
+      user = build(:user, phone_number: "+1416321809")
       expect(user.valid?).to be false
     end
 
     it "requires phone number to only contain numbers" do
-      user = build(:user, phone_number: "416eee4325")
+      user = build(:user, phone_number: "+1416eee4325")
       expect(user.valid?).to be false
     end
   end
