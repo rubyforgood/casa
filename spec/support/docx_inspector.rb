@@ -38,6 +38,8 @@ class DocxInspector
     @word_lists_by_document_section.each do |section, word_list|
       sort_string_list_by_length_ascending(word_list)
     end
+
+    binding.pry
   end
 
   def get_word_list_all
@@ -68,6 +70,30 @@ class DocxInspector
 
   def get_word_list_header
     @word_lists_by_document_section[:header]
+  end
+
+  def word_list_all_contains?(str)
+    word_list_contains_str?(get_word_list_all, str)
+  end
+
+  def word_list_document_contains?(str)
+    word_list_contains_str?(get_word_list_document, str)
+  end
+
+  def word_list_endnotes_contains?(str)
+    word_list_contains_str?(get_word_list_endnotes, str)
+  end
+
+  def word_list_footnotes_contains?(str)
+    word_list_contains_str?(get_word_list_footnotes, str)
+  end
+
+  def word_list_footer_contains?(str)
+    word_list_contains_str?(get_word_list_footer, str)
+  end
+
+  def word_list_header_contains?(str)
+    word_list_contains_str?(get_word_list_header, str)
   end
 
   private
