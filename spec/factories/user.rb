@@ -6,6 +6,7 @@ FactoryBot.define do
     password { "12345678" }
     password_confirmation { "12345678" }
     case_assignments { [] }
+    phone_number { "4163218092" }
 
     trait :inactive do
       volunteer
