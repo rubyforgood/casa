@@ -43,7 +43,18 @@ class DocxInspector
   end
 
   def contains_str?(str)
-    # Sort w:t s by length and keep array on instance
+    word_list_all = get_word_list_all
+
+    first_possible_word_containing_str_index = search_string_list_for_index_of_first_string_of_at_least_n_length(
+      word_list_all,
+      str.length
+    )
+
+    if first_possible_word_containing_str_index.nil?
+      return false
+    end
+
+    puts word_list_all[first_possible_word_containing_str_index .. (word_list_all.length - 1)]
   end
 
   def get_word_list_all
@@ -125,7 +136,6 @@ class DocxInspector
       end
 
       mid = (low + high) / 2
-      puts "low: #{low}, high: #{high}, mid: #{mid}"
     end
 
     if string_list_sorted_by_length[mid].length < n
