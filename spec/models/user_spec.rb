@@ -35,6 +35,11 @@ RSpec.describe User, type: :model do
       user = build(:user, phone_number: "+1416eee4325")
       expect(user.valid?).to be false
     end
+
+    it "requires phone number with US area code" do
+      user = build(:user, phone_number: "+76758890432")
+      expect(user.valid?).to be false
+    end
   end
 
 

@@ -10,6 +10,7 @@ class User < ApplicationRecord
 
   validates :email, presence: true
   validates :display_name, presence: true
+  validates_with UserValidator
 
   belongs_to :casa_org
 
@@ -175,6 +176,7 @@ end
 #  invited_by_type        :string
 #  last_sign_in_at        :datetime
 #  last_sign_in_ip        :string
+#  phone_number           :string           default("")
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
 #  sign_in_count          :integer          default(0), not null
