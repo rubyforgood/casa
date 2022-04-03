@@ -54,7 +54,7 @@ class DocxInspector
       return false
     end
 
-    puts word_list_all[first_possible_word_containing_str_index .. (word_list_all.length - 1)]
+    puts word_list_all[first_possible_word_containing_str_index..(word_list_all.length - 1)]
   end
 
   def get_word_list_all
