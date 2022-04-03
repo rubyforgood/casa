@@ -117,8 +117,8 @@ class DocxInspector
     high = string_list_sorted_by_length.length - 1
     mid = (low + high) / 2
 
-    while (low < high)
-      if(string_list_sorted_by_length[mid].length < n)
+    while low < high
+      if string_list_sorted_by_length[mid].length < n
         low = mid + 1
       else
         high = mid - 1
@@ -128,15 +128,15 @@ class DocxInspector
       puts "low: #{low}, high: #{high}, mid: #{mid}"
     end
 
-    if (string_list_sorted_by_length[mid].length < n)
-      if (string_list_sorted_by_length.length - 1 == mid)
+    if string_list_sorted_by_length[mid].length < n
+      if string_list_sorted_by_length.length - 1 == mid
         return nil
       else
         return mid + 1
       end
     end
 
-    return [0, mid].max
+    [0, mid].max
   end
 
   def sort_string_list_by_length_ascending(str_list)
