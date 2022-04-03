@@ -19,7 +19,7 @@ class SupervisorImporter < FileImporter
       end
       
       if supervisor_params.key?(:phone_number)
-        if supervisor_params[:phone_number].length != VALID_PHONE_NUMBER_LENGTH
+        if supervisor_params[:phone_number].length != VALID_PHONE_NUMBER_LENGTH || !supervisor_params[:phone_number].scan(/\D/).empty?
           raise "Phone number is not in correct format"
         else
           supervisor_params[:phone_number] = "+#{supervisor_params[:phone_number]}"
