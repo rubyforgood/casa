@@ -18,10 +18,14 @@ class SupervisorImporter < FileImporter
         raise "Row does not contain e-mail address."
       end
       
-      if supervisor_params.key?(:phone_number) && supervisor_params[:phone_number].length != VALID_PHONE_NUMBER_LENGTH
-        raise "Phone number is not in correct format"
+      if supervisor_params.key?(:phone_number)
+        if supervisor_params[:phone_number].length != VALID_PHONE_NUMBER_LENGTH
+          raise "Phone number is not in correct format"
+        else
+          supervisor_params[:phone_number] = "+#{supervisor_params[:phone_number]}"
+        end
       else
-        supervisor_params[:phone_number] = "+#{supervisor_params[:phone_number]}"
+        supervisor_params[:phone_number] = ""
       end
 
       supervisor = Supervisor.find_by(email: supervisor_params[:email])
