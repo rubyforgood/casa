@@ -18,8 +18,6 @@ class DocxInspector
     @word_lists_by_document_section = {document: [], endnotes: [], footnotes: [], footer: [], header: []}
 
     get_docx_readable_text_XML_files.each do |file|
-      puts file.name
-
       file_name = file.name.match(DOCX_WORD_DIRECTORY_FILENAME_CAPTURE_PATTERN).captures[0]
       viewable_strings = get_displayed_text_list(get_XML_object(file))
 
@@ -42,11 +40,9 @@ class DocxInspector
     end
   end
 
-  def contains_str?(str)
-    word_list_all = get_word_list_all
-
+  def word_list_contains_str?(word_list, str)
     first_possible_word_containing_str_index = search_string_list_for_index_of_first_string_of_at_least_n_length(
-      word_list_all,
+      word_list,
       str.length
     )
 
@@ -54,7 +50,13 @@ class DocxInspector
       return false
     end
 
-    puts word_list_all[first_possible_word_containing_str_index..(word_list_all.length - 1)]
+    word_list[first_possible_word_containing_str_index..(word_list.length - 1)].each do |word|
+      if word.include?(str)
+        return true
+      end
+    end
+
+    return false
   end
 
   def get_word_list_all
