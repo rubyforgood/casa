@@ -11,7 +11,7 @@ class ContactTypeDecorator < Draper::Decorator
 
     return nil if contact.nil?
 
-    "#{time_ago_in_words(object.created_at)} ago"
+    "#{time_ago_in_words(contact.created_at)} ago"
   end
 
   def last_contact_made_of(contact_type_name, casa_case)
