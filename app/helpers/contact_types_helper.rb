@@ -7,7 +7,7 @@ module ContactTypesHelper
   def time_ago_of_last_contact_made_of(contact_type_name, casa_case)
     contact = last_contact_made_of(contact_type_name, casa_case)
 
-    return "never" if contact.nil?
+    return nil if contact.nil?
 
     "#{time_ago_in_words(contact.created_at)} ago"
   end
