@@ -1,6 +1,5 @@
 class SupervisorImporter < FileImporter
   IMPORT_HEADER = ["email", "display_name", "supervisor_volunteers", "phone_number"]
-  VALID_PHONE_NUMBER_LENGTH = 11
 
   def self.import_supervisors(csv_filespec, org_id)
     new(csv_filespec, org_id).import_supervisors
@@ -18,15 +17,8 @@ class SupervisorImporter < FileImporter
         raise "Row does not contain e-mail address."
       end
 
-      if supervisor_params.key?(:phone_number)
-        if supervisor_params[:phone_number].length != VALID_PHONE_NUMBER_LENGTH || !supervisor_params[:phone_number].scan(/\D/).empty?
-          raise "Phone number is not in correct format"
-        else
-          supervisor_params[:phone_number] = "+#{supervisor_params[:phone_number]}"
-        end
-      else
-        supervisor_params[:phone_number] = ""
-      end
+      has_phone_number = supervisor_params.key?(:phone_number)
+      supervisor_params[:phone_number] = has_phone_number ? "+#{supervisor_params[:phone_number]}" : ""
 
       supervisor = Supervisor.find_by(email: supervisor_params[:email])
       volunteer_assignment_list = email_addresses_to_users(Volunteer, String(row[:supervisor_volunteers]))

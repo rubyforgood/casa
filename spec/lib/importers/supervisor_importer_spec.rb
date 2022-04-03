@@ -119,7 +119,7 @@ RSpec.describe SupervisorImporter do
 
       expect(alert[:type]).to eq(:error)
       expect(alert[:message]).to eq("Not all rows were imported.")
-      expect(alert[:exported_rows]).to include("Phone number is not in correct format")
+      expect(alert[:exported_rows]).to include("Phone number is not in correct format: 1XXXXXXXXXX")
     end
   end
 

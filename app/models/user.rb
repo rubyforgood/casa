@@ -5,6 +5,8 @@ class User < ApplicationRecord
   include Roles
   include ByOrganizationScope
 
+  validates_with UserValidator
+
   has_paper_trail
   devise :database_authenticatable, :invitable, :recoverable, :validatable, :timeoutable, :trackable
 
