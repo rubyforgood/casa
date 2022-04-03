@@ -22,8 +22,7 @@
               </label>
               <% if @casa_cases %>
                 <span style="color: #93903C;">
-                  <%= time_ago_of_last_contact_made_of(
-                    contact_type.name,
+                  <%= contact_type.decorate.time_difference_since_most_recent_contact(
                     @casa_cases.sort_by(&:created_at).last
                   ) %>
                 </span>
