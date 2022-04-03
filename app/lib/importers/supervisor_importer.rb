@@ -17,8 +17,7 @@ class SupervisorImporter < FileImporter
         raise "Row does not contain e-mail address."
       end
 
-      has_phone_number = supervisor_params.key?(:phone_number)
-      supervisor_params[:phone_number] = has_phone_number ? "+#{supervisor_params[:phone_number]}" : ""
+      supervisor_params[:phone_number] = supervisor_params.key?(:phone_number) ? "+#{supervisor_params[:phone_number]}" : ""
 
       supervisor = Supervisor.find_by(email: supervisor_params[:email])
       volunteer_assignment_list = email_addresses_to_users(Volunteer, String(row[:supervisor_volunteers]))
