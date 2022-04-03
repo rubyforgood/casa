@@ -112,6 +112,33 @@ class DocxInspector
     Nokogiri::XML(xml_file_as_docx_zip_entry.get_input_stream.read)
   end
 
+  def search_string_list_for_index_of_first_string_of_at_least_n_length(string_list_sorted_by_length, n)
+    low = 0
+    high = string_list_sorted_by_length.length - 1
+    mid = (low + high) / 2
+
+    while (low < high)
+      if(string_list_sorted_by_length[mid].length < n)
+        low = mid + 1
+      else
+        high = mid - 1
+      end
+
+      mid = (low + high) / 2
+      puts "low: #{low}, high: #{high}, mid: #{mid}"
+    end
+
+    if (string_list_sorted_by_length[mid].length < n)
+      if (string_list_sorted_by_length.length - 1 == mid)
+        return nil
+      else
+        return mid + 1
+      end
+    end
+
+    return [0, mid].max
+  end
+
   def sort_string_list_by_length_ascending(str_list)
     str_list.sort_by!(&:length)
   end
