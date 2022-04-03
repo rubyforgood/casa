@@ -12,17 +12,19 @@ class UserValidator < ActiveModel::Validator
   private
 
   def valid_phone_number_contents(number)
-    unless number.empty?
-      if number.length != VALID_PHONE_NUMBER_LENGTH
-        return false
-      end
+    if number.empty?
+        return true
+    end
 
-      country_code = number[0..1]
-      phone_number = number[2..number.length]
-
-      if country_code != VALID_COUNTRY_CODE || !phone_number.scan(/\D/).empty?
+    if number.length != VALID_PHONE_NUMBER_LENGTH
         return false
-      end
+    end
+
+    country_code = number[0..1]
+    phone_number = number[2..number.length]
+
+    if country_code != VALID_COUNTRY_CODE || !phone_number.scan(/\D/).empty?
+        return false
     end
 
     true
