@@ -98,11 +98,11 @@ RSpec.describe SupervisorImporter do
     end
   end
 
-  context "when row doesn't have phone number" do 
+  context "when row doesn't have phone number" do
     let(:supervisor_import_data_path) { Rails.root.join("spec", "fixtures", "supervisors_without_phone_numbers.csv") }
 
     let!(:existing_supervisor_with_number) { create(:supervisor, display_name: "#", email: "supervisor1@example.net", phone_number: "+11111111111") }
-    
+
     it "updates phone number to be deleted" do
       expect {
         supervisor_importer.import_supervisors

@@ -13,11 +13,11 @@ class SupervisorImporter < FileImporter
   def import_supervisors
     import do |row|
       supervisor_params = row.to_hash.slice(:display_name, :email, :phone_number).compact
-      
+
       unless supervisor_params.key?(:email)
         raise "Row does not contain e-mail address."
       end
-      
+
       if supervisor_params.key?(:phone_number)
         if supervisor_params[:phone_number].length != VALID_PHONE_NUMBER_LENGTH || !supervisor_params[:phone_number].scan(/\D/).empty?
           raise "Phone number is not in correct format"
