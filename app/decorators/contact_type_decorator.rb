@@ -1,8 +1,9 @@
-require 'action_view'
-require 'action_view/helpers'
-include ActionView::Helpers::DateHelper
+require "action_view"
+require "action_view/helpers"
 
 class ContactTypeDecorator < Draper::Decorator
+  include ActionView::Helpers::DateHelper
+
   delegate_all
 
   def time_difference_since_most_recent_contact(casa_case)
