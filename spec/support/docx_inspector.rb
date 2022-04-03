@@ -1,6 +1,6 @@
 class DocxInspector
   IGNORED_FILE_LIST = {"fontTable" => 0, "numbering" => 0, "settings" => 0, "styles" => 0, "webSettings" => 0}
-  DOCX_WORD_DIRECTORY_FILENAME_CAPTURE_PATTERN = /^word\/([^\/]*)\.xml/ # Capture the file name of a file in the docx's word/ directory not in a directory below word
+  DOCX_WORD_DIRECTORY_FILENAME_CAPTURE_PATTERN = /^word\/([^\/]*)\.xml/ # Capture the file name of a file in the docx's word/ directory (not recursive)
 
   def initialize(docx_contents: nil, docx_path: nil)
     docx_file = nil
