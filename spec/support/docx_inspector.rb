@@ -40,25 +40,6 @@ class DocxInspector
     end
   end
 
-  def word_list_contains_str?(word_list, str)
-    first_possible_word_containing_str_index = search_string_list_for_index_of_first_string_of_at_least_n_length(
-      word_list,
-      str.length
-    )
-
-    if first_possible_word_containing_str_index.nil?
-      return false
-    end
-
-    word_list[first_possible_word_containing_str_index..(word_list.length - 1)].each do |word|
-      if word.include?(str)
-        return true
-      end
-    end
-
-    return false
-  end
-
   def get_word_list_all
     sort_string_list_by_length_ascending(
       @word_lists_by_document_section[:document] +
@@ -161,5 +142,24 @@ class DocxInspector
 
       return file
     end
+  end
+
+  def word_list_contains_str?(word_list, str)
+    first_possible_word_containing_str_index = search_string_list_for_index_of_first_string_of_at_least_n_length(
+      word_list,
+      str.length
+    )
+
+    if first_possible_word_containing_str_index.nil?
+      return false
+    end
+
+    word_list[first_possible_word_containing_str_index..(word_list.length - 1)].each do |word|
+      if word.include?(str)
+        return true
+      end
+    end
+
+    false
   end
 end
