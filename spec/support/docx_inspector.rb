@@ -101,10 +101,9 @@ class DocxInspector
 
   def get_docx_as_zip_object(docx_contents: nil, docx_path: nil)
     if !docx_contents.nil?
-      return Zip::File.open_buffer(docx_contents)
-      docx_as_zip = get_docx_as_zip_object(docx_contents: docx_contents)
+      Zip::File.open_buffer(docx_contents)
     elsif !docx_path.nil?
-      return Zip::File.open(docx_path)
+      Zip::File.open(docx_path)
     else
       raise ArgumentError.new("Insufficient parameters. Either docx_contents or docx_path is required.")
     end
