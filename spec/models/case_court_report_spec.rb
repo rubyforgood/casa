@@ -122,6 +122,8 @@ RSpec.describe CaseCourtReport, type: :model do
           report_top_header = get_docx_subfile_contents(report_as_raw_docx, "word/header3.xml")
           report_body = get_docx_subfile_contents(report_as_raw_docx, "word/document.xml")
 
+          DocxInspector.new(docx_path: path_to_template)
+
           expect(report_top_header).to include(document_data[:org_address])
           expect(report_body).to include(Date.today.strftime("%B %-d, %Y"))
           expect(report_body).to include(document_data[:case_hearing_date].strftime("%B %-d, %Y"))
