@@ -63,4 +63,25 @@ minlength: User.password_length.min %>
       <% end %>
     </div>
   </div>
+
+  </div>
+ <%= form_for @user, as: :user, url: users_path do |form| %>
+   <br>
+   <h3>Communication Preferences</h3>
+   <p>Tell us how you'd like to receive notifications.</p>
+ 
+   <div>
+     <%= form.check_box :receive_email_notifications %>
+     <%= form.label :receive_email_notifications, t("common.email_me")%> 
+   </div>
+ 
+   <div>
+     <%= form.check_box :receive_sms_notifications %>
+     <%= form.label :receive_sms_notifications, t("common.text_me") %> 
+   <div>
+ 
+   <div class="action_container">
+     <%= form.submit "Save Preferences", class: "btn btn-primary mb-3" %>
+   </div>
+ <% end %>
 </div>
