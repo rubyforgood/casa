@@ -127,31 +127,33 @@ end
 #
 # Table name: users
 #
-#  id                     :bigint           not null, primary key
-#  active                 :boolean          default(TRUE)
-#  current_sign_in_at     :datetime
-#  current_sign_in_ip     :string
-#  display_name           :string           default(""), not null
-#  email                  :string           default(""), not null
-#  encrypted_password     :string           default(""), not null
-#  invitation_accepted_at :datetime
-#  invitation_created_at  :datetime
-#  invitation_limit       :integer
-#  invitation_sent_at     :datetime
-#  invitation_token       :string
-#  invitations_count      :integer          default(0)
-#  invited_by_type        :string
-#  last_sign_in_at        :datetime
-#  last_sign_in_ip        :string
-#  phone_number           :string           default("")
-#  reset_password_sent_at :datetime
-#  reset_password_token   :string
-#  sign_in_count          :integer          default(0), not null
-#  type                   :string
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  casa_org_id            :bigint           not null
-#  invited_by_id          :bigint
+#  id                          :bigint           not null, primary key
+#  active                      :boolean          default(TRUE)
+#  current_sign_in_at          :datetime
+#  current_sign_in_ip          :string
+#  display_name                :string           default(""), not null
+#  email                       :string           default(""), not null
+#  encrypted_password          :string           default(""), not null
+#  invitation_accepted_at      :datetime
+#  invitation_created_at       :datetime
+#  invitation_limit            :integer
+#  invitation_sent_at          :datetime
+#  invitation_token            :string
+#  invitations_count           :integer          default(0)
+#  invited_by_type             :string
+#  last_sign_in_at             :datetime
+#  last_sign_in_ip             :string
+#  phone_number                :string           default("")
+#  receive_email_notifications :boolean          default(FALSE)
+#  receive_sms_notifications   :boolean          default(FALSE)
+#  reset_password_sent_at      :datetime
+#  reset_password_token        :string
+#  sign_in_count               :integer          default(0), not null
+#  type                        :string
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
+#  casa_org_id                 :bigint           not null
+#  invited_by_id               :bigint
 #
 # Indexes
 #
