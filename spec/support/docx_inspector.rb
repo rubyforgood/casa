@@ -3,21 +3,17 @@ class DocxInspector
   DOCX_WORD_DIRECTORY_FILENAME_CAPTURE_PATTERN = /^word\/([^\/]*)\.xml/ # Capture the file name of a file in the docx's word/ directory (not recursive)
 
   def initialize(docx_contents: nil, docx_path: nil)
-    docx_file = nil
-
     if !docx_contents.nil?
-      docx_file = store_docx_contents_in_tempfile(docx_contents)
+      docx_as_zip = get_docx_as_zip_object(docx_contents: docx_contents)
     elsif !docx_path.nil?
-      docx_file = File.open(docx_path, "r")
+      docx_as_zip = get_docx_as_zip_object(docx_path: docx_path)
     else
       raise ArgumentError.new("Insufficient parameters. Either docx_contents or docx_path is required.")
     end
 
-    @docx_zip_object = get_docx_as_zip_object(docx_file)
-
     @word_lists_by_document_section = {document: [], endnotes: [], footnotes: [], footer: [], header: []}
 
-    get_docx_readable_text_XML_files.each do |file|
+    get_docx_readable_text_XML_files(docx_as_zip).each do |file|
       file_name = file.name.match(DOCX_WORD_DIRECTORY_FILENAME_CAPTURE_PATTERN).captures[0]
       viewable_strings = get_displayed_text_list(get_XML_object(file))
 
@@ -103,16 +99,19 @@ class DocxInspector
     end
   end
 
-  def get_docx_as_zip_object(docx_file)
-    Zip::File.open(docx_file.path)
+  def get_docx_as_zip_object(docx_contents: nil, docx_path: nil)
+    if !docx_contents.nil?
+      return Zip::File.open_buffer(docx_contents)
+      docx_as_zip = get_docx_as_zip_object(docx_contents: docx_contents)
+    elsif !docx_path.nil?
+      return Zip::File.open(docx_path)
+    else
+      raise ArgumentError.new("Insufficient parameters. Either docx_contents or docx_path is required.")
+    end
   end
 
-  def get_docx_readable_text_XML_files
-    if @docx_zip_object.nil?
-      raise "Required variable @docx_zip_object is uninitialized"
-    end
-
-    @docx_zip_object.entries.select do |entry|
+  def get_docx_readable_text_XML_files(docx_as_zip)
+    docx_as_zip.entries.select do |entry|
       entry_name = entry.name
       is_ignored_file = false
       xml_file_in_word_match = entry_name.match(DOCX_WORD_DIRECTORY_FILENAME_CAPTURE_PATTERN)
@@ -158,14 +157,6 @@ class DocxInspector
 
   def sort_string_list_by_length_ascending(str_list)
     str_list.sort_by!(&:length)
-  end
-
-  def store_docx_contents_in_tempfile(docx_contents)
-    Tempfile.create("court_report.zip", "tmp") do |file|
-      file << docx_contents.force_encoding("UTF-8")
-
-      return file
-    end
   end
 
   def word_list_contains_str?(word_list, str)
