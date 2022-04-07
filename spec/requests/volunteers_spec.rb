@@ -154,13 +154,14 @@ RSpec.describe "/volunteers", type: :request do
     context "with valid params" do
       it "updates the volunteer" do
         patch volunteer_path(volunteer), params: {
-          volunteer: {email: "newemail@gmail.com", display_name: "New Name"}
+          volunteer: {email: "newemail@gmail.com", display_name: "New Name", phone_number: "+14163218092"}
         }
         expect(response).to have_http_status(:redirect)
 
         volunteer.reload
         expect(volunteer.display_name).to eq "New Name"
         expect(volunteer.email).to eq "newemail@gmail.com"
+        expect(volunteer.phone_number).to eq "+14163218092"
       end
     end
 
@@ -171,13 +172,14 @@ RSpec.describe "/volunteers", type: :request do
         volunteer.supervisor = build(:supervisor)
 
         patch volunteer_path(volunteer), params: {
-          volunteer: {email: other_volunteer.email, display_name: "New Name"}
+          volunteer: {email: other_volunteer.email, display_name: "New Name", phone_number: "+14163218092"}
         }
         expect(response).to have_http_status(:success) # Re-renders form
 
         volunteer.reload
         expect(volunteer.display_name).to_not eq "New Name"
         expect(volunteer.email).to_not eq other_volunteer.email
+        expect(volunteer.email).to_not eq "+14163218092"
       end
     end
 

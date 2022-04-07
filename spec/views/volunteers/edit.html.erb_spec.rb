@@ -16,6 +16,19 @@ RSpec.describe "volunteers/edit", type: :view do
     expect(rendered).to_not have_field("volunteer_email", readonly: true)
   end
 
+  it "allows an administrator to edit a volunteers phone number" do
+    administrator = build_stubbed :casa_admin
+    enable_pundit(view, administrator)
+    allow(view).to receive(:current_user).and_return(administrator)
+
+    assign :volunteer, volunteer
+    assign :supervisors, []
+
+    render template: "volunteers/edit"
+
+    expect(rendered).to_not have_field("volunteer_email", readonly: true)
+  end
+
   it "allows a supervisor to edit a volunteers email address" do
     supervisor = build_stubbed :supervisor
     enable_pundit(view, supervisor)
