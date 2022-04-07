@@ -12,6 +12,7 @@ class User < ApplicationRecord
 
   validates :email, presence: true
   validates :display_name, presence: true
+  validate :at_least_one_communication_preference_selected 
 
   belongs_to :casa_org
 
@@ -150,6 +151,10 @@ class User < ApplicationRecord
     id.to_s == last_deactivated_by
   end
 
+  def at_least_one_communication_preference_selected
+    errors.add(:base, "One option must be selected.") unless receive_email_notifications || receive_sms_notifications
+  end
+ 
   def last_deactivated_by
     versions.where(event: "update").reverse_each do |version|
       return version.whodunnit if version.reify.active
