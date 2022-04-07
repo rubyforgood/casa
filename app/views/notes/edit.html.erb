@@ -1,0 +1,12 @@
+<%= form_with(model: @note, local: true, url: volunteer_note_path(@volunteer, @note)) do |form| %>
+  <h3>Update Volunteer Note</h3>
+
+  <div class="form-group">
+    <%= form.text_area :content,
+      rows: 5,
+      placeholder: t("volunteers.edit.notes_placeholder"),
+      class: "form-control" %>
+  </div>
+
+  <%= form.submit t("notes.update"), class: "btn btn-primary", id: "note-submit" %>
+<% end %>
