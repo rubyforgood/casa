@@ -225,21 +225,22 @@ RSpec.describe CaseCourtReport, type: :model do
         path_to_template: path_to_template,
         path_to_report: path_to_report
       )
-      case_report_body = get_docx_subfile_contents(case_report.generate_to_string, "word/document.xml")
 
-      expect(case_report_body).to include(casa_case.case_number)
+      document_inspector = DocxInspector.new(docx_contents: case_report.generate_to_string)
 
-      expect(case_report_body).to include(court_order_implemented.text)
-      expect(case_report_body).to include("Implemented")
+      expect(document_inspector.word_list_document_contains?(casa_case.case_number)).to eq(true)
 
-      expect(case_report_body).to include(court_order_not_implemented.text)
-      expect(case_report_body).to include("Not implemented")
+      expect(document_inspector.word_list_document_contains?(court_order_implemented.text)).to eq(true)
+      expect(document_inspector.word_list_document_contains?("Implemented")).to eq(true)
 
-      expect(case_report_body).to include(court_order_partially_implemented.text)
-      expect(case_report_body).to include("Partially implemented")
+      expect(document_inspector.word_list_document_contains?(court_order_not_implemented.text)).to eq(true)
+      expect(document_inspector.word_list_document_contains?("Not implemented")).to eq(true)
 
-      expect(case_report_body).to include(court_order_partially_implemented.text)
-      expect(case_report_body).to include("Not specified")
+      expect(document_inspector.word_list_document_contains?(court_order_partially_implemented.text)).to eq(true)
+      expect(document_inspector.word_list_document_contains?("Partially implemented")).to eq(true)
+
+      expect(document_inspector.word_list_document_contains?(court_order_not_specified.text)).to eq(true)
+      expect(document_inspector.word_list_document_contains?("Not specified")).to eq(true)
     end
   end
 end
