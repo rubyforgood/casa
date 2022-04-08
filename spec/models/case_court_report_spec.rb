@@ -176,16 +176,15 @@ RSpec.describe CaseCourtReport, type: :model do
         end
 
         it "display all expected information" do
-          report_as_raw_docx = report.generate_to_string
-          report_body = get_docx_subfile_contents(report_as_raw_docx, "word/document.xml")
+          document_inspector = DocxInspector.new(docx_contents: report.generate_to_string)
 
-          expect(report_body).to include(Date.today.strftime("%B %-d, %Y"))
-          expect(report_body).to include(document_data[:case_hearing_date].strftime("%B %-d, %Y"))
-          expect(report_body).to include(document_data[:case_number])
-          expect(report_body).to include(document_data[:case_contact_type])
-          expect(report_body).to include("#{document_data[:case_contact_time].strftime("%-m/%d")}*")
-          expect(report_body).to include(document_data[:text])
-          expect(report_body).to include("Partially implemented") # Order Status
+          expect(document_inspector.word_list_document_contains?(Date.today.strftime("%B %-d, %Y"))).to eq(true)
+          expect(document_inspector.word_list_document_contains?(document_data[:case_hearing_date].strftime("%B %-d, %Y"))).to eq(true)
+          expect(document_inspector.word_list_document_contains?(document_data[:case_number])).to eq(true)
+          expect(document_inspector.word_list_document_contains?(document_data[:case_contact_type])).to eq(true)
+          expect(document_inspector.word_list_document_contains?("#{document_data[:case_contact_time].strftime("%-m/%d")}*")).to eq(true)
+          expect(document_inspector.word_list_document_contains?(document_data[:text])).to eq(true)
+          expect(document_inspector.word_list_document_contains?("Partially implemented")).to eq(true) # Order Status
         end
       end
     end
