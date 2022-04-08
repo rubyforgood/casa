@@ -117,7 +117,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
           document_inspector = DocxInspector.new(docx_contents: response.body)
 
           expect(document_inspector.word_list_document_contains?(hearing_type.name)).to eq(false)
-          expect(document_inspector.word_list_document_contains?("Hearing Type")).to eq(true) # Hearing Type: None
+          expect(document_inspector.word_list_document_contains?("Hearing Type:")).to eq(true) # Hearing Type: None
           expect(document_inspector.word_list_document_contains?("None")).to eq(true)
         end
       end
@@ -131,8 +131,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
 
           document_inspector = DocxInspector.new(docx_contents: response.body)
 
-          expect(document_inspector.word_list_document_contains?("Court")).to eq(true) # Court Orders:
-          expect(document_inspector.word_list_document_contains?("Order")).to eq(true)
+          expect(document_inspector.word_list_document_contains?("Court Orders:")).to eq(true) # Court Orders:
           expect(document_inspector.word_list_document_contains?(court_date.case_court_orders.first.text)).to eq(true)
           expect(document_inspector.word_list_document_contains?(court_date.case_court_orders.first.implementation_status.humanize)).to eq(true)
         end
@@ -147,7 +146,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
 
           document_inspector = DocxInspector.new(docx_contents: response.body)
 
-          expect(document_inspector.word_list_document_contains?("Order")).to eq(false) # Court Orders:
+          expect(document_inspector.word_list_document_contains?("Court Orders:")).to eq(false) # Court Orders:
         end
       end
     end
