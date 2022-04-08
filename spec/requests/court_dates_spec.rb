@@ -89,7 +89,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
           document_inspector = DocxInspector.new(docx_contents: response.body)
 
           expect(document_inspector.word_list_document_contains?(judge.name)).to eq(false)
-          expect(document_inspector.word_list_document_contains?("Judge:")).to eq(true)
+          expect(document_inspector.word_list_document_contains?("Judge:")).to eq(true) # Judge: None
           expect(document_inspector.word_list_document_contains?("None")).to eq(true)
         end
       end
@@ -100,8 +100,10 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
         }
         it "includes the hearing type in the document" do
           show
-          document = get_docx_contents_as_string(response.body, collapse: true)
-          expect(document).to include(hearing_type.name)
+
+          document_inspector = DocxInspector.new(docx_contents: response.body)
+
+          expect(document_inspector.word_list_document_contains?(hearing_type.name)).to eq(true)
         end
       end
 
@@ -111,9 +113,12 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
         }
         it "includes None for the hearing type in the document" do
           show
-          document = get_docx_contents_as_string(response.body, collapse: true)
-          expect(document).not_to include(hearing_type.name)
-          expect(document.downcase).to include("hearing type: none")
+
+          document_inspector = DocxInspector.new(docx_contents: response.body)
+
+          expect(document_inspector.word_list_document_contains?(hearing_type.name)).to eq(false)
+          expect(document_inspector.word_list_document_contains?("Hearing Type")).to eq(true) # Hearing Type: None
+          expect(document_inspector.word_list_document_contains?("None")).to eq(true)
         end
       end
 
@@ -123,10 +128,13 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
         }
         it "includes court order info" do
           show
-          document = get_docx_contents_as_string(response.body, collapse: true)
-          expect(document).to include("Court Orders:")
-          expect(document).to include(court_date.case_court_orders.first.text)
-          expect(document).to include(court_date.case_court_orders.first.implementation_status.humanize)
+
+          document_inspector = DocxInspector.new(docx_contents: response.body)
+
+          expect(document_inspector.word_list_document_contains?("Court")).to eq(true) # Court Orders:
+          expect(document_inspector.word_list_document_contains?("Order")).to eq(true)
+          expect(document_inspector.word_list_document_contains?(court_date.case_court_orders.first.text)).to eq(true)
+          expect(document_inspector.word_list_document_contains?(court_date.case_court_orders.first.implementation_status.humanize)).to eq(true)
         end
       end
 
@@ -136,8 +144,10 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
         }
         it "does not include court orders section" do
           show
-          document = get_docx_contents_as_string(response.body, collapse: true)
-          expect(document).not_to include("Court Orders:")
+
+          document_inspector = DocxInspector.new(docx_contents: response.body)
+
+          expect(document_inspector.word_list_document_contains?("Order")).to eq(false) # Court Orders:
         end
       end
     end
