@@ -36,6 +36,72 @@ RSpec.describe "supervisors/edit", type: :system do
       expect(page).to have_text("Editing Supervisor")
     end
 
+    context "with invalid data" do
+      it "shows error message for phone number < 12 digits" do
+        supervisor_name = "Lesile Knope"
+        create(:supervisor, display_name: supervisor_name, casa_org: organization)
+        sign_in user
+
+        visit supervisors_path
+
+        within "#supervisors" do
+          click_on supervisor_name
+          fill_in "supervisor_phone_number", with: "+1416321"
+        end
+
+        click_on "Submit"
+        expect(page).to have_text("phone number too short")
+      end
+
+      it "shows error message for phone number > 12 digits" do
+        supervisor_name = "Lesile Knope"
+        create(:supervisor, display_name: supervisor_name, casa_org: organization)
+        sign_in user
+
+        visit supervisors_path
+
+        within "#supervisors" do
+          click_on supervisor_name
+          fill_in "supervisor_phone_number", with: "+1416321432443"
+        end
+
+        click_on "Submit"
+        expect(page).to have_text("phone number too long")
+      end
+
+      it "shows error message for bad phone number" do
+        supervisor_name = "Lesile Knope"
+        create(:supervisor, display_name: supervisor_name, casa_org: organization)
+        sign_in user
+
+        visit supervisors_path
+
+        within "#supervisors" do
+          click_on supervisor_name
+          fill_in "supervisor_phone_number", with: "+1416321809u"
+        end
+
+        click_on "Submit"
+        expect(page).to have_text("incorrect phone number format")
+      end
+
+      it "shows error message for phone number without country code" do
+        supervisor_name = "Lesile Knope"
+        create(:supervisor, display_name: supervisor_name, casa_org: organization)
+        sign_in user
+
+        visit supervisors_path
+
+        within "#supervisors" do
+          click_on supervisor_name
+          fill_in "supervisor_phone_number", with: "4163218092"
+        end
+
+        click_on "Submit"
+        expect(page).to have_text("phone number must have a country code")
+      end
+    end
+
     it "can go to the supervisor edit page and see red message when there are no active volunteers" do
       supervisor = create :supervisor, casa_org: organization
 

@@ -31,6 +31,38 @@ RSpec.describe "volunteers/edit", type: :system do
     end
 
     context "with invalid data" do
+      it "shows error message for phone number < 12 digits" do
+        fill_in "volunteer_email", with: "newemail@example.com"
+        fill_in "volunteer_display_name", with: "Driving Thunder"
+        fill_in "volunteer_phone_number", with: "+141632489"
+        click_on "Submit"
+        expect(page).to have_text "phone number too short"
+      end
+
+      it "shows error message for phone number > 12 digits" do
+        fill_in "volunteer_email", with: "newemail@example.com"
+        fill_in "volunteer_display_name", with: "Kamisato Ayato"
+        fill_in "volunteer_phone_number", with: "+141632180923"
+        click_on "Submit"
+        expect(page).to have_text "phone number too long"
+      end
+
+      it "shows error message for bad phone number" do
+        fill_in "volunteer_email", with: "newemail@example.com"
+        fill_in "volunteer_display_name", with: "Rex Lapis"
+        fill_in "volunteer_phone_number", with: "+141632u809o"
+        click_on "Submit"
+        expect(page).to have_text "incorrect phone number format"
+      end
+
+      it "shows error message for phone number without country code" do
+        fill_in "volunteer_email", with: "newemail@example.com"
+        fill_in "volunteer_display_name", with: "Lara Croft"
+        fill_in "volunteer_phone_number", with: "4163218092"
+        click_on "Submit"
+        expect(page).to have_text "phone number must have a country code"
+      end
+
       it "shows error message for duplicate email" do
         volunteer.supervisor = build(:supervisor)
         fill_in "volunteer_email", with: admin.email
