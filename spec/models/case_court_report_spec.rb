@@ -207,10 +207,10 @@ RSpec.describe CaseCourtReport, type: :model do
 
   describe "when court orders has different implementation statuses" do
     let(:casa_case) { create(:casa_case, case_number: "Sample-Case-12345") }
-    let(:court_order_implemented) { create(:case_court_order, casa_case: casa_case, text: "This order is implemented already", implementation_status: :implemented) }
-    let(:court_order_not_implemented) { create(:case_court_order, casa_case: casa_case, text: "This order is not implemented yet", implementation_status: :not_implemented) }
-    let(:court_order_partially_implemented) { create(:case_court_order, casa_case: casa_case, text: "This order is partially implemented", implementation_status: :partially_implemented) }
-    let(:court_order_not_specified) { create(:case_court_order, casa_case: casa_case, text: "This order does not have any implementation status", implementation_status: nil) }
+    let(:court_order_implemented) { create(:case_court_order, casa_case: casa_case, text: "K6N-ce8|NuXnht(", implementation_status: :implemented) }
+    let(:court_order_not_implemented) { create(:case_court_order, casa_case: casa_case, text: "'q\"tE1LP-9W>,2)", implementation_status: :not_implemented) }
+    let(:court_order_partially_implemented) { create(:case_court_order, casa_case: casa_case, text: "ZmCw@w@\d`&roct", implementation_status: :partially_implemented) }
+    let(:court_order_not_specified) { create(:case_court_order, casa_case: casa_case, text: "(4WqOL7e'FRYd@%", implementation_status: nil) }
 
     before(:each) do
       casa_case.case_court_orders << court_order_implemented
