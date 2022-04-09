@@ -179,7 +179,7 @@ RSpec.describe "/volunteers", type: :request do
         volunteer.reload
         expect(volunteer.display_name).to_not eq "New Name"
         expect(volunteer.email).to_not eq other_volunteer.email
-        expect(volunteer.email).to_not eq "+14163218092"
+        expect(volunteer.phone_number).to_not eq "+14163218092"
       end
     end
 

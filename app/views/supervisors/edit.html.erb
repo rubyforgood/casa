@@ -23,6 +23,11 @@
         <% end %>
       </div>
 
+      <div class="field form-group">
+          <%= form.label :phone_number, t("common.phone_number") %>
+          <%= form.text_field :phone_number, class: "form-control" %>
+      </div>
+
       <p>
         <%= render "/shared/invite_login", resource: @supervisor %>
       </p>

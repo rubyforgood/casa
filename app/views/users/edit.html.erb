@@ -13,6 +13,11 @@
         <%= form.text_field :display_name, class: "form-control" %>
       </div>
 
+      <div class="field form-group">
+        <%= form.label :phone_number, t("common.phone_number") %>
+        <%= form.text_field :phone_number, class: "form-control" %>
+      </div>
+
       <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
 
       <%= render "/shared/invite_login", resource: current_user %>
