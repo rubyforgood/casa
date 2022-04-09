@@ -401,8 +401,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_06_011144) do
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.string "phone_number", default: ""
-    t.boolean "receive_sms_notifications", default: false
-    t.boolean "receive_email_notifications", default: false
+    t.boolean "receive_sms_notifications", default: false, null: false
+    t.boolean "receive_email_notifications", default: true
     t.index ["casa_org_id"], name: "index_users_on_casa_org_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
