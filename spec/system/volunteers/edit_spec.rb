@@ -36,7 +36,7 @@ RSpec.describe "volunteers/edit", type: :system do
         fill_in "volunteer_display_name", with: "Driving Thunder"
         fill_in "volunteer_phone_number", with: "+141632489"
         click_on "Submit"
-        expect(page).to have_text "phone number must be 12 digits"
+        expect(page).to have_text "Phone number must be 12 digits"
       end
 
       it "shows error message for phone number > 12 digits" do
@@ -44,7 +44,7 @@ RSpec.describe "volunteers/edit", type: :system do
         fill_in "volunteer_display_name", with: "Kamisato Ayato"
         fill_in "volunteer_phone_number", with: "+141632180923"
         click_on "Submit"
-        expect(page).to have_text "phone number must be 12 digits"
+        expect(page).to have_text "Phone number must be 12 digits"
       end
 
       it "shows error message for bad phone number" do
@@ -52,15 +52,15 @@ RSpec.describe "volunteers/edit", type: :system do
         fill_in "volunteer_display_name", with: "Rex Lapis"
         fill_in "volunteer_phone_number", with: "+141632u809o"
         click_on "Submit"
-        expect(page).to have_text "phone number must have correct format"
+        expect(page).to have_text "Phone number must have correct format"
       end
 
       it "shows error message for phone number without country code" do
         fill_in "volunteer_email", with: "newemail@example.com"
         fill_in "volunteer_display_name", with: "Lara Croft"
-        fill_in "volunteer_phone_number", with: "4163218092"
+        fill_in "volunteer_phone_number", with: "+24163218092"
         click_on "Submit"
-        expect(page).to have_text "phone number must have a valid country code"
+        expect(page).to have_text "Phone number must have a valid country code"
       end
 
       it "shows error message for duplicate email" do
