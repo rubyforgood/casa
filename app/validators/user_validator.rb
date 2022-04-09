@@ -14,7 +14,7 @@ class UserValidator < ActiveModel::Validator
     end
 
     if number.length != VALID_PHONE_NUMBER_LENGTH
-      record.errors.add(:phone_number, " must be 12 digits")
+      record.errors.add(:phone_number, " must be 12 digits including country code (+1)")
       return false
     end
 
@@ -22,7 +22,7 @@ class UserValidator < ActiveModel::Validator
     phone_number = number[2..number.length]
 
     if country_code != VALID_COUNTRY_CODE
-      record.errors.add(:phone_number, " must have a valid country code")
+      record.errors.add(:phone_number, " must have a valid country code (+1)")
       return false
     end
 
