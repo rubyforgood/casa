@@ -152,7 +152,7 @@ class User < ApplicationRecord
   end
 
   def at_least_one_communication_preference_selected
-    errors.add(:base, "One option must be selected.") unless receive_email_notifications || receive_sms_notifications
+    errors.add(:base, " At least one communication preference must be selected.") unless receive_email_notifications || receive_sms_notifications
   end
  
   def last_deactivated_by

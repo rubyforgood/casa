@@ -82,6 +82,13 @@ RSpec.describe "users/edit", type: :system do
       expect(page).to have_text("Last logged in #{formatted_current_sign_in_at}")
       expect(page).not_to have_text("Last logged in #{formatted_last_sign_in_at}")
     end
+
+    it "displays Volunteer error message if no communication preference is selected" do
+      click_on "Email Me"
+      click_on "Save Preferences"
+      expect(page).to have_content "1 error prohibited this Volunteer from being saved:"
+      expect(page).to have_text("At least one communication preference must be selected.")
+    end  
   end
 
   context "supervisor user" do
@@ -110,6 +117,13 @@ RSpec.describe "users/edit", type: :system do
     it "is not able to update the email if user is a supervisor" do
       expect(page).to have_field("Email", disabled: true)
     end
+
+    it "displays Supervisor error message if no communication preference is selected" do
+      click_on "Email Me"
+      click_on "Save Preferences"
+      expect(page).to have_content "1 error prohibited this Supervisor from being saved:"
+      expect(page).to have_text("At least one communication preference must be selected.")
+    end  
   end
 
   context "when admin" do
@@ -174,5 +188,12 @@ RSpec.describe "users/edit", type: :system do
       expect(ActionMailer::Base.deliveries.first.body.encoded)
         .to match("Your CASA password has been changed.")
     end
+
+    it "displays Casa admin error message if no communication preference is selected" do
+      click_on "Email Me"
+      click_on "Save Preferences"
+      expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
+      expect(page).to have_text("At least one communication preference must be selected.")
+    end  
   end
 end
