@@ -70,7 +70,7 @@ RSpec.describe "casa_admins/edit", type: :system do
 
       fill_in "Email", with: "newemail@example.com"
       fill_in "Display name", with: "Patrick Star"
-      fill_in "Phone number", with: "4163218092"
+      fill_in "Phone number", with: "+24163218092"
 
       click_on "Submit"
 
