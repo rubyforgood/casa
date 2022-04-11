@@ -88,7 +88,7 @@ RSpec.describe "users/edit", type: :system do
       click_on "Save Preferences"
       expect(page).to have_content "1 error prohibited this Volunteer from being saved:"
       expect(page).to have_text("At least one communication preference must be selected.")
-    end  
+    end
   end
 
   context "supervisor user" do
@@ -123,7 +123,7 @@ RSpec.describe "users/edit", type: :system do
       click_on "Save Preferences"
       expect(page).to have_content "1 error prohibited this Supervisor from being saved:"
       expect(page).to have_text("At least one communication preference must be selected.")
-    end  
+    end
   end
 
   context "when admin" do
@@ -194,6 +194,6 @@ RSpec.describe "users/edit", type: :system do
       click_on "Save Preferences"
       expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
       expect(page).to have_text("At least one communication preference must be selected.")
-    end  
+    end
   end
 end
