@@ -84,7 +84,7 @@ RSpec.describe "users/edit", type: :system do
     end
 
     it "displays Volunteer error message if no communication preference is selected" do
-      click_on "Email Me"
+      uncheck "user_receive_email_notifications"
       click_on "Save Preferences"
       expect(page).to have_content "1 error prohibited this Volunteer from being saved:"
       expect(page).to have_text("At least one communication preference must be selected.")
@@ -119,7 +119,7 @@ RSpec.describe "users/edit", type: :system do
     end
 
     it "displays Supervisor error message if no communication preference is selected" do
-      click_on "Email Me"
+      uncheck "user_receive_email_notifications"
       click_on "Save Preferences"
       expect(page).to have_content "1 error prohibited this Supervisor from being saved:"
       expect(page).to have_text("At least one communication preference must be selected.")
@@ -190,7 +190,7 @@ RSpec.describe "users/edit", type: :system do
     end
 
     it "displays Casa admin error message if no communication preference is selected" do
-      click_on "Email Me"
+      uncheck "user_receive_email_notifications"
       click_on "Save Preferences"
       expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
       expect(page).to have_text("At least one communication preference must be selected.")
