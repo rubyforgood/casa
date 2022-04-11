@@ -46,11 +46,12 @@ RSpec.describe "supervisors/edit", type: :system do
 
         within "#supervisors" do
           click_on supervisor_name
-          fill_in "supervisor_phone_number", with: "+1416321"
         end
 
+        fill_in "supervisor_phone_number", with: "+1416321"
         click_on "Submit"
-        expect(page).to have_text("phone number too short")
+
+        expect(page).to have_text("Phone number must be 12 digits including country code (+1)")
       end
 
       it "shows error message for phone number > 12 digits" do
@@ -62,11 +63,12 @@ RSpec.describe "supervisors/edit", type: :system do
 
         within "#supervisors" do
           click_on supervisor_name
-          fill_in "supervisor_phone_number", with: "+1416321432443"
         end
 
+        fill_in "supervisor_phone_number", with: "+1416321432443"
         click_on "Submit"
-        expect(page).to have_text("phone number too long")
+
+        expect(page).to have_text("Phone number must be 12 digits including country code (+1)")
       end
 
       it "shows error message for bad phone number" do
@@ -78,11 +80,12 @@ RSpec.describe "supervisors/edit", type: :system do
 
         within "#supervisors" do
           click_on supervisor_name
-          fill_in "supervisor_phone_number", with: "+1416321809u"
         end
 
+        fill_in "supervisor_phone_number", with: "+1416321809u"
         click_on "Submit"
-        expect(page).to have_text("incorrect phone number format")
+
+        expect(page).to have_text("Phone number must have correct format")
       end
 
       it "shows error message for phone number without country code" do
@@ -94,11 +97,12 @@ RSpec.describe "supervisors/edit", type: :system do
 
         within "#supervisors" do
           click_on supervisor_name
-          fill_in "supervisor_phone_number", with: "4163218092"
         end
 
+        fill_in "supervisor_phone_number", with: "+24163218092"
         click_on "Submit"
-        expect(page).to have_text("phone number must have a country code")
+
+        expect(page).to have_text("Phone number must have a valid country code (+1)")
       end
     end
 

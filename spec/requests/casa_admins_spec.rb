@@ -83,11 +83,13 @@ RSpec.describe "/casa_admins", type: :request do
 
       it "cannot update the casa admin", :aggregate_failures do
         put casa_admin_path(casa_admin), params: {
-          casa_admin: {email: nil}
+          casa_admin: {email: nil},
+          phone_number: {phone_number: "dsadw323"}
         }
 
         casa_admin.reload
         expect(casa_admin.email).not_to eq nil
+        expect(casa_admin.phone_number).not_to eq "dsadw323"
         expect(response).to render_template :edit
       end
 

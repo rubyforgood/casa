@@ -9,11 +9,13 @@ RSpec.describe "casa_admins/edit", type: :system do
     it "can successfully edit user email and display name" do
       expected_email = "root@casa.com"
       expected_display_name = "Root Admin"
+      expected_phone_number = "+14163218092"
 
       visit edit_casa_admin_path(admin)
 
       fill_in "Email", with: expected_email
       fill_in "Display name", with: expected_display_name
+      fill_in "Phone number", with: expected_phone_number
 
       click_on "Submit"
 
@@ -22,6 +24,7 @@ RSpec.describe "casa_admins/edit", type: :system do
       expect(page).to have_text "New admin created successfully"
       expect(admin.email).to eq expected_email
       expect(admin.display_name).to eq expected_display_name
+      expect(admin.phone_number).to eq expected_phone_number
     end
   end
 
@@ -29,49 +32,49 @@ RSpec.describe "casa_admins/edit", type: :system do
     it "shows error message for phone number < 12 digits" do
       visit edit_casa_admin_path(admin)
 
-      fill_in "volunteer_email", with: "newemail@example.com"
-      fill_in "volunteer_display_name", with: "Lumine"
-      fill_in "volunteer_phone_number", with: "+141632489"
+      fill_in "Email", with: "newemail@example.com"
+      fill_in "Display name", with: "Lumine"
+      fill_in "Phone number", with: "+141632489"
 
       click_on "Submit"
 
-      expect(page).to have_text "phone number too short"
+      expect(page).to have_text "Phone number must be 12 digits including country code (+1)"
     end
 
     it "shows error message for phone number > 12 digits" do
       visit edit_casa_admin_path(admin)
 
-      fill_in "volunteer_email", with: "newemail@example.com"
-      fill_in "volunteer_display_name", with: "Raiden Shogun"
-      fill_in "volunteer_phone_number", with: "+141632180923"
+      fill_in "Email", with: "newemail@example.com"
+      fill_in "Display name", with: "Raiden Shogun"
+      fill_in "Phone number", with: "+141632180923"
 
       click_on "Submit"
 
-      expect(page).to have_text "phone number too long"
+      expect(page).to have_text "Phone number must be 12 digits including country code (+1)"
     end
 
     it "shows error message for bad phone number" do
       visit edit_casa_admin_path(admin)
 
-      fill_in "volunteer_email", with: "newemail@example.com"
-      fill_in "volunteer_display_name", with: "Nyan Cat"
-      fill_in "volunteer_phone_number", with: "+141632u809o"
+      fill_in "Email", with: "newemail@example.com"
+      fill_in "Display name", with: "Nyan Cat"
+      fill_in "Phone number", with: "+141632u809o"
 
       click_on "Submit"
 
-      expect(page).to have_text "incorrect phone number format"
+      expect(page).to have_text "Phone number must have correct format"
     end
 
     it "shows error message for phone number without country code" do
       visit edit_casa_admin_path(admin)
 
-      fill_in "volunteer_email", with: "newemail@example.com"
-      fill_in "volunteer_display_name", with: "Patrick Star"
-      fill_in "volunteer_phone_number", with: "4163218092"
+      fill_in "Email", with: "newemail@example.com"
+      fill_in "Display name", with: "Patrick Star"
+      fill_in "Phone number", with: "4163218092"
 
       click_on "Submit"
 
-      expect(page).to have_text "phone number must have a country code"
+      expect(page).to have_text "Phone number must have a valid country code (+1)"
     end
 
     it "shows error message for empty email" do
