@@ -124,6 +124,30 @@ RSpec.describe "users/edit", type: :system do
       expect(page).to have_text("Display name can't be blank")
     end
 
+    it "is not able to update the profile when phone number is too short" do
+      fill_in "Phone number", with: "+1416321"
+      click_on "Update Profile"
+      expect(page).to have_text("Phone number must be 12 digits including country code (+1)")
+    end
+
+    it "is not able to update the profile when phone number is too long" do
+      fill_in "Phone number", with: "+1416321809231"
+      click_on "Update Profile"
+      expect(page).to have_text("Phone number must be 12 digits including country code (+1)")
+    end
+
+    it "is not able to update the profile when phone number is not valid" do
+      fill_in "Phone number", with: "+1416321809o"
+      click_on "Update Profile"
+      expect(page).to have_text("Phone number must have correct format")
+    end
+
+    it "is not able to update the profile when phone number includes an invalid country code" do
+      fill_in "Phone number", with: "+24163218092"
+      click_on "Update Profile"
+      expect(page).to have_text("Phone number must have a valid country code (+1)")
+    end
+
     it "is able to update the email if user is a admin" do
       expect(page).to have_field("Email", disabled: false)
       fill_in "Email", with: "new_admin@example.com"

@@ -45,7 +45,7 @@ RSpec.describe "casa_admins/edit", type: :system do
       visit edit_casa_admin_path(admin)
 
       fill_in "Email", with: "newemail@example.com"
-      fill_in "Display name", with: "Raiden Shogun"
+      fill_in "Display name", with: "Kadehara Kazuha"
       fill_in "Phone number", with: "+141632180923"
 
       click_on "Submit"
