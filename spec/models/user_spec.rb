@@ -42,7 +42,6 @@ RSpec.describe User, type: :model do
     end
   end
 
-
   describe "#case_contacts_for" do
     let(:volunteer) { create(:volunteer, :with_casa_cases) }
     let(:case_of_interest) { volunteer.casa_cases.first }

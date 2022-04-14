@@ -2,7 +2,6 @@ require "rails_helper"
 
 RSpec.describe VolunteersController, type: :controller do
   describe "update" do
-
     before :each do
       @east = create :casa_org, name: "East"
       @west = create :casa_org, name: "West"
