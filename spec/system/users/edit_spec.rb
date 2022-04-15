@@ -113,7 +113,7 @@ RSpec.describe "users/edit", type: :system do
   end
 
   context "when admin" do
-    let(:role) {"user"}
+    let(:role) { "user" }
     before do
       sign_in admin
       visit edit_users_path

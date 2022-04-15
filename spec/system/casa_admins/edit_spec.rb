@@ -29,7 +29,7 @@ RSpec.describe "casa_admins/edit", type: :system do
   end
 
   context "with invalid data" do
-    let(:role) {"admin"}
+    let(:role) { "admin" }
     before do
       visit edit_casa_admin_path(admin)
       fill_in "Email", with: "newemail@example.com"

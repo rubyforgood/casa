@@ -37,8 +37,8 @@ RSpec.describe "supervisors/edit", type: :system do
     end
 
     context "with invalid data" do
-      let(:role) {"supervisor"}
-      let(:supervisor) {create(:supervisor, display_name: "Lesile Knope", casa_org: organization)}
+      let(:role) { "supervisor" }
+      let(:supervisor) { create(:supervisor, display_name: "Lesile Knope", casa_org: organization) }
       before do
         sign_in user
         visit edit_supervisor_path(supervisor)

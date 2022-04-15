@@ -31,7 +31,7 @@ RSpec.describe "volunteers/edit", type: :system do
     end
 
     context "with invalid data" do
-      let(:role) {"volunteer"}
+      let(:role) { "volunteer" }
 
       it_should_behave_like "shows error for invalid phone numbers"
 

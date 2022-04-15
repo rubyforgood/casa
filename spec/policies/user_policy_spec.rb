@@ -32,7 +32,7 @@ RSpec.describe UserPolicy do
       it "allows supervisors to update another volunteer settings" do
         is_expected.to permit(supervisor, volunteer)
       end
-      
+
       it "allows supervisors to update their own settings" do
         is_expected.to permit(supervisor, supervisor)
       end
