@@ -80,6 +80,7 @@ class DbPopulator
           password: SEED_PASSWORD,
           password_confirmation: SEED_PASSWORD,
           display_name: Faker::Name.name,
+          phone_number: Faker::PhoneNumber.cell_phone_in_e164,
           active: true
         }
         # Approximately 1 out of 30 volunteers should be set to inactive.
