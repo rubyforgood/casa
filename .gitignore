@@ -59,3 +59,9 @@ vendor/bundle/
 default.nix
 
 npm-debug.log
+
+# Ignore compiled assets
+/app/assets/builds/*
+
+# In case we want to keep something in the compiled assets directory
+!/app/assets/builds/.keep

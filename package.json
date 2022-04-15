@@ -5,7 +5,8 @@
     "test": "jest",
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "toc": "markdown-toc -i README.md"
+    "toc": "markdown-toc -i README.md",
+    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
@@ -19,6 +20,7 @@
     "bootstrap-datepicker": "^1.9.0",
     "bootstrap-select": "^1.13.18",
     "datatables.net-dt": "^1.12.1",
+    "esbuild": "^0.14.36",
     "faker": "^5.5.3",
     "jest-environment-jsdom": "^28.1.0",
     "jquery": "^3.6.0",

@@ -21,6 +21,7 @@
     <%= javascript_pack_tag 'all_casa_admin', 'data-turbolinks-track': 'reload' %>
     <%= stylesheet_pack_tag 'all_casa_admin', 'data-turbolinks-track': 'reload' %>
   <% end %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
 
 </head>
 <body class="<%= body_class %>">
