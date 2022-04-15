@@ -15,24 +15,7 @@
     <%= form_for @volunteer, url: volunteer_path(@volunteer) do |form| %>
       <%= render "/shared/error_messages", resource: @volunteer %>
 
-      <div class="field form-group">
-        <%= form.label :email, t("common.email") %>
-        <% if policy(:volunteer).update_volunteer_email? %>
-          <%= form.text_field :email, class: "form-control" %>
-        <% else %>
-          <input class="form-control" type="text" placeholder="<%= @volunteer.email %>" autocomplete="off" readonly>
-        <% end %>
-      </div>
-
-      <div class="field form-group">
-        <%= form.label :display_name, t("common.display_name") %>
-        <%= form.text_field :display_name, class: "form-control" %>
-      </div>
-
-      <div class="field form-group">
-        <%= form.label :phone_number, t("common.phone_number") %>
-        <%= form.text_field :phone_number, class: "form-control" %>
-      </div>
+      <%= render "/shared/edit_form", resource: @volunteer, f: form %>
 
       <%= render "/shared/invite_login", resource: @volunteer %>
 
