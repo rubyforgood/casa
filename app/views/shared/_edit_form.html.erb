@@ -1,6 +1,6 @@
 <div class="field form-group">
   <%= f.label :email, t("common.email") %>
-  <% if policy(resource).update_supervisor_email? %>
+  <% if policy(resource).update_user_setting? %>
     <%= f.text_field :email, class: "form-control" %>
   <% else %>
     <input class="form-control" type="text" placeholder="<%= resource.email %>" autocomplete="off" readonly>
@@ -9,7 +9,7 @@
 
 <div class="field form-group">
   <%= f.label :display_name, t("common.display_name") %>
-  <% if policy(resource).update_supervisor_name? %>
+  <% if policy(resource).update_user_setting? %>
     <%= f.text_field :display_name, class: "form-control" %>
   <% else %>
     <input class="form-control" type="text" placeholder="<%= resource.display_name %>" autocomplete="off" readonly>
