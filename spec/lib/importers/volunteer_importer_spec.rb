@@ -49,6 +49,13 @@ RSpec.describe VolunteerImporter do
         existing_volunteer.reload
       }.to change(existing_volunteer, :display_name).to("Volunteer One")
     end
+
+    it "updates phone number to valid number" do
+      expect {
+        volunteer_importer.call
+        existing_volunteer.reload
+      }.to change(existing_volunteer, :phone_number).to("+11234567890")
+    end
   end
 
   context "when row doesn't have e-mail address" do
@@ -60,6 +67,31 @@ RSpec.describe VolunteerImporter do
       expect(alert[:type]).to eq(:error)
       expect(alert[:message]).to eq("You successfully imported 1 volunteers. Not all rows were imported.")
       expect(alert[:exported_rows]).to include("Row does not contain an e-mail address.")
+    end
+  end
+
+  context "when row doesn't have phone number" do
+    let(:import_file_path) { Rails.root.join("spec", "fixtures", "volunteers_without_phone_numbers.csv") }
+
+    let!(:existing_volunteer_with_number) { create(:volunteer, display_name: "#", email: "volunteer2@example.net", phone_number: "+11111111111") }
+
+    it "updates phone number to be deleted" do
+      expect {
+        volunteer_importer.call
+        existing_volunteer_with_number.reload
+      }.to change(existing_volunteer_with_number, :phone_number).to("")
+    end
+  end
+
+  context "when phone number in row is invalid" do
+    let(:import_file_path) { Rails.root.join("spec", "fixtures", "volunteers_invalid_phone_numbers.csv") }
+
+    it "returns an error message" do
+      alert = volunteer_importer.call
+
+      expect(alert[:type]).to eq(:error)
+      expect(alert[:message]).to eq("Not all rows were imported.")
+      expect(alert[:exported_rows]).to include("Phone number is not in correct format: 1XXXXXXXXXX")
     end
   end
 end
