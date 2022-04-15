@@ -12,6 +12,8 @@ class User < ApplicationRecord
 
   validates :email, presence: true
   validates :display_name, presence: true
+
+  validates_with UserValidator
   validate :at_least_one_communication_preference_selected
 
   belongs_to :casa_org

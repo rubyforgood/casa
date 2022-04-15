@@ -25,6 +25,14 @@ class UserPolicy < ApplicationPolicy
     update_supervisor_email?
   end
 
+  def update_user_setting?
+    if is_supervisor?
+      # allow access to own record or volunteer record
+      return record == user || record.volunteer?
+    end
+    is_admin?
+  end
+
   def edit_name?(viewed_user)
     is_admin? || viewed_user == user
   end

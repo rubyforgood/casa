@@ -9,11 +9,13 @@ RSpec.describe "casa_admins/edit", type: :system do
     it "can successfully edit user email and display name" do
       expected_email = "root@casa.com"
       expected_display_name = "Root Admin"
+      expected_phone_number = "+14398761234"
 
       visit edit_casa_admin_path(admin)
 
       fill_in "Email", with: expected_email
       fill_in "Display name", with: expected_display_name
+      fill_in "Phone number", with: expected_phone_number
 
       click_on "Submit"
 
@@ -22,13 +24,21 @@ RSpec.describe "casa_admins/edit", type: :system do
       expect(page).to have_text "New admin created successfully"
       expect(admin.email).to eq expected_email
       expect(admin.display_name).to eq expected_display_name
+      expect(admin.phone_number).to eq expected_phone_number
     end
   end
 
   context "with invalid data" do
-    it "shows error message for empty email" do
+    let(:role) { "admin" }
+    before do
       visit edit_casa_admin_path(admin)
+      fill_in "Email", with: "newemail@example.com"
+      fill_in "Display name", with: "Kadehara Kazuha"
+    end
 
+    it_should_behave_like "shows error for invalid phone numbers"
+
+    it "shows error message for empty email" do
       fill_in "Email", with: ""
       fill_in "Display name", with: ""
 

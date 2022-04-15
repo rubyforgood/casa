@@ -7,7 +7,7 @@ RSpec.describe "/supervisors", type: :request do
   let(:supervisor) { create(:supervisor) }
 
   let(:update_supervisor_params) do
-    {supervisor: {email: "newemail@gmail.com", display_name: "New Name"}}
+    {supervisor: {email: "newemail@gmail.com", display_name: "New Name", phone_number: "+14163218092"}}
   end
 
   describe "GET /new" do
@@ -84,6 +84,7 @@ RSpec.describe "/supervisors", type: :request do
 
         expect(supervisor.display_name).to eq "New Name"
         expect(supervisor.email).to eq "newemail@gmail.com"
+        expect(supervisor.phone_number).to eq "+14163218092"
       end
 
       it "can set the supervisor to be inactive" do

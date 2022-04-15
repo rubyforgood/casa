@@ -36,6 +36,16 @@ RSpec.describe "supervisors/edit", type: :system do
       expect(page).to have_text("Editing Supervisor")
     end
 
+    context "with invalid data" do
+      let(:role) { "supervisor" }
+      let(:supervisor) { create(:supervisor, display_name: "Lesile Knope", casa_org: organization) }
+      before do
+        sign_in user
+        visit edit_supervisor_path(supervisor)
+      end
+      it_should_behave_like "shows error for invalid phone numbers"
+    end
+
     it "can go to the supervisor edit page and see red message when there are no active volunteers" do
       supervisor = create :supervisor, casa_org: organization
 
