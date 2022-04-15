@@ -37,73 +37,13 @@ RSpec.describe "supervisors/edit", type: :system do
     end
 
     context "with invalid data" do
-      it "shows error message for phone number < 12 digits" do
-        supervisor_name = "Lesile Knope"
-        create(:supervisor, display_name: supervisor_name, casa_org: organization)
+      let(:role) {"supervisor"}
+      let(:supervisor) {create(:supervisor, display_name: "Lesile Knope", casa_org: organization)}
+      before do
         sign_in user
-
-        visit supervisors_path
-
-        within "#supervisors" do
-          click_on supervisor_name
-        end
-
-        fill_in "supervisor_phone_number", with: "+1416321"
-        click_on "Submit"
-
-        expect(page).to have_text("Phone number must be 12 digits including country code (+1)")
+        visit edit_supervisor_path(supervisor)
       end
-
-      it "shows error message for phone number > 12 digits" do
-        supervisor_name = "Lesile Knope"
-        create(:supervisor, display_name: supervisor_name, casa_org: organization)
-        sign_in user
-
-        visit supervisors_path
-
-        within "#supervisors" do
-          click_on supervisor_name
-        end
-
-        fill_in "supervisor_phone_number", with: "+1416321432443"
-        click_on "Submit"
-
-        expect(page).to have_text("Phone number must be 12 digits including country code (+1)")
-      end
-
-      it "shows error message for bad phone number" do
-        supervisor_name = "Lesile Knope"
-        create(:supervisor, display_name: supervisor_name, casa_org: organization)
-        sign_in user
-
-        visit supervisors_path
-
-        within "#supervisors" do
-          click_on supervisor_name
-        end
-
-        fill_in "supervisor_phone_number", with: "+1416321809u"
-        click_on "Submit"
-
-        expect(page).to have_text("Phone number must have correct format")
-      end
-
-      it "shows error message for phone number without country code" do
-        supervisor_name = "Lesile Knope"
-        create(:supervisor, display_name: supervisor_name, casa_org: organization)
-        sign_in user
-
-        visit supervisors_path
-
-        within "#supervisors" do
-          click_on supervisor_name
-        end
-
-        fill_in "supervisor_phone_number", with: "+24163218092"
-        click_on "Submit"
-
-        expect(page).to have_text("Phone number must have a valid country code (+1)")
-      end
+      it_should_behave_like "shows error for invalid phone numbers"
     end
 
     it "can go to the supervisor edit page and see red message when there are no active volunteers" do

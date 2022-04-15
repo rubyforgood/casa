@@ -19,49 +19,21 @@ RSpec.describe "volunteers/edit", type: :system do
     before do
       sign_in admin
       visit edit_volunteer_path(volunteer)
+      fill_in "volunteer_email", with: "newemail@example.com"
+      fill_in "volunteer_display_name", with: "Kamisato Ayato"
     end
 
     context "with valid data" do
       it "updates successfully" do
-        fill_in "volunteer_email", with: "newemail@example.com"
-        fill_in "volunteer_display_name", with: "Mickey Mouse"
         click_on "Submit"
         expect(page).to have_text "Volunteer was successfully updated."
       end
     end
 
     context "with invalid data" do
-      it "shows error message for phone number < 12 digits" do
-        fill_in "volunteer_email", with: "newemail@example.com"
-        fill_in "volunteer_display_name", with: "Driving Thunder"
-        fill_in "volunteer_phone_number", with: "+141632489"
-        click_on "Submit"
-        expect(page).to have_text "Phone number must be 12 digits including country code (+1)"
-      end
+      let(:role) {"volunteer"}
 
-      it "shows error message for phone number > 12 digits" do
-        fill_in "volunteer_email", with: "newemail@example.com"
-        fill_in "volunteer_display_name", with: "Kamisato Ayato"
-        fill_in "volunteer_phone_number", with: "+141632180923"
-        click_on "Submit"
-        expect(page).to have_text "Phone number must be 12 digits including country code (+1)"
-      end
-
-      it "shows error message for bad phone number" do
-        fill_in "volunteer_email", with: "newemail@example.com"
-        fill_in "volunteer_display_name", with: "Rex Lapis"
-        fill_in "volunteer_phone_number", with: "+141632u809o"
-        click_on "Submit"
-        expect(page).to have_text "Phone number must have correct format"
-      end
-
-      it "shows error message for phone number without country code" do
-        fill_in "volunteer_email", with: "newemail@example.com"
-        fill_in "volunteer_display_name", with: "Lara Croft"
-        fill_in "volunteer_phone_number", with: "+24163218092"
-        click_on "Submit"
-        expect(page).to have_text "Phone number must have a valid country code (+1)"
-      end
+      it_should_behave_like "shows error for invalid phone numbers"
 
       it "shows error message for duplicate email" do
         volunteer.supervisor = build(:supervisor)
