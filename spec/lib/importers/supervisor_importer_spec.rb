@@ -77,6 +77,13 @@ RSpec.describe SupervisorImporter do
         existing_supervisor.reload
       }.to change(existing_supervisor, :display_name).to("Supervisor Two")
     end
+
+    it "updates phone number to valid number" do
+      expect {
+        supervisor_importer.import_supervisors
+        existing_supervisor.reload
+      }.to change(existing_supervisor, :phone_number).to("+11111111111")
+    end
   end
 
   context "when row doesn't have e-mail address" do
@@ -88,6 +95,31 @@ RSpec.describe SupervisorImporter do
       expect(alert[:type]).to eq(:error)
       expect(alert[:message]).to eq("You successfully imported 1 supervisors. Not all rows were imported.")
       expect(alert[:exported_rows]).to include("Row does not contain e-mail address.")
+    end
+  end
+
+  context "when row doesn't have phone number" do
+    let(:supervisor_import_data_path) { Rails.root.join("spec", "fixtures", "supervisors_without_phone_numbers.csv") }
+
+    let!(:existing_supervisor_with_number) { create(:supervisor, display_name: "#", email: "supervisor1@example.net", phone_number: "+11111111111") }
+
+    it "updates phone number to be deleted" do
+      expect {
+        supervisor_importer.import_supervisors
+        existing_supervisor_with_number.reload
+      }.to change(existing_supervisor_with_number, :phone_number).to("")
+    end
+  end
+
+  context "when phone number in row is invalid" do
+    let(:supervisor_import_data_path) { Rails.root.join("spec", "fixtures", "supervisors_invalid_phone_numbers.csv") }
+
+    it "returns an error message" do
+      alert = supervisor_importer.import_supervisors
+
+      expect(alert[:type]).to eq(:error)
+      expect(alert[:message]).to eq("Not all rows were imported.")
+      expect(alert[:exported_rows]).to include("Phone number is not in correct format: 1XXXXXXXXXX")
     end
   end
 

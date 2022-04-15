@@ -5,12 +5,16 @@ class User < ApplicationRecord
   include Roles
   include ByOrganizationScope
 
+  validates_with UserValidator
+
   has_paper_trail
   devise :database_authenticatable, :invitable, :recoverable, :validatable, :timeoutable, :trackable
 
   validates :email, presence: true
   validates :display_name, presence: true
+  
   validates_with UserValidator
+  validate :at_least_one_communication_preference_selected
 
   belongs_to :casa_org
 
@@ -149,6 +153,10 @@ class User < ApplicationRecord
     id.to_s == last_deactivated_by
   end
 
+  def at_least_one_communication_preference_selected
+    errors.add(:base, " At least one communication preference must be selected.") unless receive_email_notifications || receive_sms_notifications
+  end
+
   def last_deactivated_by
     versions.where(event: "update").reverse_each do |version|
       return version.whodunnit if version.reify.active
@@ -160,31 +168,33 @@ end
 #
 # Table name: users
 #
-#  id                     :bigint           not null, primary key
-#  active                 :boolean          default(TRUE)
-#  current_sign_in_at     :datetime
-#  current_sign_in_ip     :string
-#  display_name           :string           default(""), not null
-#  email                  :string           default(""), not null
-#  encrypted_password     :string           default(""), not null
-#  invitation_accepted_at :datetime
-#  invitation_created_at  :datetime
-#  invitation_limit       :integer
-#  invitation_sent_at     :datetime
-#  invitation_token       :string
-#  invitations_count      :integer          default(0)
-#  invited_by_type        :string
-#  last_sign_in_at        :datetime
-#  last_sign_in_ip        :string
-#  phone_number           :string           default("")
-#  reset_password_sent_at :datetime
-#  reset_password_token   :string
-#  sign_in_count          :integer          default(0), not null
-#  type                   :string
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  casa_org_id            :bigint           not null
-#  invited_by_id          :bigint
+#  id                          :bigint           not null, primary key
+#  active                      :boolean          default(TRUE)
+#  current_sign_in_at          :datetime
+#  current_sign_in_ip          :string
+#  display_name                :string           default(""), not null
+#  email                       :string           default(""), not null
+#  encrypted_password          :string           default(""), not null
+#  invitation_accepted_at      :datetime
+#  invitation_created_at       :datetime
+#  invitation_limit            :integer
+#  invitation_sent_at          :datetime
+#  invitation_token            :string
+#  invitations_count           :integer          default(0)
+#  invited_by_type             :string
+#  last_sign_in_at             :datetime
+#  last_sign_in_ip             :string
+#  phone_number                :string           default("")
+#  receive_email_notifications :boolean          default(TRUE)
+#  receive_sms_notifications   :boolean          default(FALSE), not null
+#  reset_password_sent_at      :datetime
+#  reset_password_token        :string
+#  sign_in_count               :integer          default(0), not null
+#  type                        :string
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
+#  casa_org_id                 :bigint           not null
+#  invited_by_id               :bigint
 #
 # Indexes
 #

@@ -559,6 +559,9 @@ en:
       send_reminder: Send Reminder
       supervisor_checkbox_text: Send CC to Supervisor
       tooltip: Remind volunteer to input case contacts
+
+  notes:
+    update: Update Note
   mileage_rates:
     index:
       mileage_rates: Mileage Rates

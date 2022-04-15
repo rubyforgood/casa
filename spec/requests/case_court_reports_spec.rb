@@ -161,7 +161,9 @@ RSpec.describe "/case_court_reports", type: :request do
           request_generate_court_report
           get JSON.parse(response.body)["link"]
 
-          expect(get_docx_subfile_contents(response.body, "word/header3.xml")).to include("YOUR CASA ORG’S NUMBER")
+          document_inspector = DocxInspector.new(docx_contents: response.body)
+
+          expect(document_inspector.word_list_header_contains?("YOUR CASA ORG’S NUMBER")).to eq(true)
         end
 
         context "as a supervisor" do
@@ -199,7 +201,9 @@ RSpec.describe "/case_court_reports", type: :request do
         it "uses the custom template" do
           get JSON.parse(response.body)["link"]
 
-          expect(get_docx_subfile_contents(response.body, "word/document.xml")).to include("Did you forget to enter your court orders?")
+          document_inspector = DocxInspector.new(docx_contents: response.body)
+
+          expect(document_inspector.word_list_document_contains?("Did you forget to enter your court orders?")).to eq(true)
         end
       end
     end
@@ -226,8 +230,10 @@ RSpec.describe "/case_court_reports", type: :request do
           headers: {ACCEPT: "application/json"}
 
         get JSON.parse(response.body)["link"]
-        document = get_docx_contents_as_string(response.body, collapse: true)
-        expect(document).to include(I18n.l(user_different_timezone.at(server_time).to_date, format: :full, default: nil))
+
+        document_inspector = DocxInspector.new(docx_contents: response.body)
+
+        expect(document_inspector.word_list_document_contains?(I18n.l(user_different_timezone.at(server_time).to_date, format: :full, default: nil))).to eq(true)
       end
     end
   end
