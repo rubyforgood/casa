@@ -37,17 +37,5 @@ RSpec.describe VolunteersController, type: :controller do
         expect(response).to redirect_to("/")
       end
     end
-
-    context "as a admin" do
-      it "can have permission to edit volunteer info" do
-        # create volunteer in db
-        log_in_as_admin
-        volunteer = create :volunteer
-        # hit update route with params
-        patch :update, params: {id: volunteer.id}
-        # expect 302 response
-        expect(response).to have_http_status(:found)
-      end
-    end
   end
 end
