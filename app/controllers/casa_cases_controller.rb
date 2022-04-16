@@ -190,11 +190,11 @@ class CasaCasesController < ApplicationController
 
   def change_message_text(attribute, original_attribute, updated_attribute)
     if attribute == :contact_types
-      new_contact_type_ids = updated_attribute.map { |contact| contact["contact_type_id"] }
-      previous_contact_type_ids = original_attribute.map { |contact| contact["contact_type_id"] }
-      changed_count = new_contact_type_ids - previous_contact_type_ids
-      return if changed_count == 0
-      "#{changed_count} #{attribute.to_s.humanize.singularize.pluralize(changed_count)} added"
+      new_contact_types = updated_attribute.map { |contact| contact["name"] }
+      previous_contact_types = original_attribute.map { |contact| contact["name"] }
+      changed_contact_types = new_contact_types - previous_contact_types
+      return if changed_contact_types.empty?
+      "#{changed_contact_types} #{attribute.to_s.humanize.singularize.pluralize(changed_contact_types)} added"
     elsif attribute == :court_orders
       changed_count = (updated_attribute - original_attribute).count
       "#{changed_count} #{attribute.to_s.humanize.singularize.pluralize(changed_count)} added or updated"
