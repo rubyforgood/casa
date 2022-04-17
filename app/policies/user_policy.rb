@@ -26,11 +26,11 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update_user_setting?
-    if is_supervisor?
+    if is_supervisor_same_org?
       # allow access to own record or volunteer record
       return record == user || record.volunteer?
     end
-    is_admin?
+    is_admin_same_org?
   end
 
   def edit_name?(viewed_user)

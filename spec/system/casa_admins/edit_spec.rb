@@ -33,7 +33,7 @@ RSpec.describe "casa_admins/edit", type: :system do
     before do
       visit edit_casa_admin_path(admin)
       fill_in "Email", with: "newemail@example.com"
-      fill_in "Display name", with: "Kadehara Kazuha"
+      fill_in "Display name", with: "Kaedehara Kazuha"
     end
 
     it_should_behave_like "shows error for invalid phone numbers"
