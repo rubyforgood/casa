@@ -29,15 +29,7 @@ RSpec.describe UserPolicy do
   permissions :update_user_setting? do
     context "when user is an admin" do
       it "allows update settings of all roles" do
-        is_expected.to permit(casa_admin_b, casa_admin_b)
-        is_expected.to permit(casa_admin_b, supervisor_b)
-        is_expected.to permit(casa_admin_b, volunteer_b)
-      end
-
-      it "does not allow update settings of roles in different casa org" do
-        is_expected.not_to permit(casa_admin, casa_admin_b)
-        is_expected.not_to permit(casa_admin, supervisor_b)
-        is_expected.not_to permit(casa_admin, volunteer_b)
+        is_expected.to permit(casa_admin)
       end
     end
 
