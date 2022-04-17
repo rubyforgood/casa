@@ -24,10 +24,10 @@
     </div>
 
     <%= render 'sms_opt_in', form: f %>
-    <button type="button" id="volunteer-import-button" class="btn btn-md btn-success pull-right" 
-            data-toggle="modal" data-target="#smsOptIn">
-        <i class="fa fa-upload"></i> <%= t(".button.import") %>
-    </button>
+    <%= button_tag type: "button", id: "volunteer-import-button", class: "btn btn-md btn-success pull-right",
+                   disabled: true, data: { toggle: "modal", target: "#smsOptIn", disable_with: "<i class='fa fa-spinner fa-spin'></i> #{t(".disable_with")}"} do %>
+      <i class="fa fa-upload"></i> <%= t(".button.import") %>
+    <% end %>
 
     <script type="text/javascript">
       document.getElementById('volunteer-file').addEventListener('change', function (event) {
