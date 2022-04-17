@@ -128,8 +128,10 @@ class ImportsController < ApplicationController
         next
       end
 
-      phone_number = line.split(",")[2]
+      phone_number = line.split(",").last
       if phone_number != nil && !phone_number.strip.empty?
+        puts "PHONE"
+        puts phone_number
         return true
       end
     end
