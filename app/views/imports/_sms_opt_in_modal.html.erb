@@ -1,4 +1,4 @@
-<div class="modal fade" id="smsOptIn" tabindex="-1" role="dialog" aria-labelledby="smsOptInLabel" aria-hidden="true">
+<div class="modal show" id="smsOptIn" style="display: block;">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -11,11 +11,12 @@
       </div>
       <div class="modal-body">
         <div>
-          <strong><i><%= t(".description") %></i></strong>
+          <%= t(".description") %>
         </div>
+        <br/>
         <span>
-          <input type="checkbox" id="sms-opt-in-checkbox"/>
-          <%= t(".label") %>
+          <%= form.label :sms_opt_in_label, t(".label") %>
+          <%= form.check_box :sms_opt_in, { id: "sms-opt-in-checkbox" } %>
         <span>
       </div>
       <div class="modal-footer">

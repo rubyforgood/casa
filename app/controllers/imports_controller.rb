@@ -6,12 +6,14 @@ class ImportsController < ApplicationController
     authorize :import
     @import_type = params.fetch(:import_type, "volunteer")
     @import_error = session[:import_error]
+    @sms_opt_in_error = session[:sms_opt_in_error]
     session[:import_error] = nil
+    session[:sms_opt_in_error] = nil
   end
 
   def create
     authorize :import
-    import = import_from_csv(params[:import_type], params[:file], current_user.casa_org_id)
+    import = import_from_csv(params[:import_type], params[:sms_opt_in], params[:file], current_user.casa_org_id)
     message = import[:message]
 
     # If there were failed imports
@@ -23,6 +25,8 @@ class ImportsController < ApplicationController
 
     if import[:type] == :error
       session[:import_error] = message
+    elsif import[:type] == :sms_opt_in_error
+      session[:sms_opt_in_error] = true
     # Only use flash for success messages. Otherwise may cause CookieOverflow
     else
       flash[:success] = message
@@ -60,10 +64,14 @@ class ImportsController < ApplicationController
     file_header == header[import_type]
   end
 
-  def import_from_csv(import_type, file, org_id)
+  def import_from_csv(import_type, sms_opt_in, file, org_id)
     validated_file = validate_file(file, import_type)
 
     return validated_file unless validated_file.nil?
+
+    if requires_sms_opt_in(file, import_type, sms_opt_in)
+      return {type: :sms_opt_in_error }
+    end
 
     case import_type
     when "volunteer"
@@ -104,5 +112,13 @@ class ImportsController < ApplicationController
 
       {type: :error, message: message}
     end
+  end
+
+  def requires_sms_opt_in(file, import_type, sms_opt_in)
+    if import_type == "volunteer" || import_type == "supervisor"
+      return sms_opt_in != "1"
+    end
+
+    return false
   end
 end
