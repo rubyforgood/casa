@@ -115,8 +115,23 @@ class ImportsController < ApplicationController
   end
 
   def requires_sms_opt_in(file, import_type, sms_opt_in)
-    if import_type == "volunteer" || import_type == "supervisor"
+    if (import_type == "volunteer" || import_type == "supervisor") && import_contains_phone_numbers(file)
       return sms_opt_in != "1"
+    end
+
+    return false
+  end
+
+  def import_contains_phone_numbers(file)
+    File.readlines(file).each_with_index do |line, index|
+      if index == 0
+        next
+      end
+
+      phone_number = line.split(",")[2]
+      if phone_number != nil && !phone_number.strip.empty?
+        return true
+      end
     end
 
     return false
