@@ -18,5 +18,9 @@
 
 <div class="field form-group">
   <%= f.label :phone_number, t("common.phone_number") %>
-  <%= f.text_field :phone_number, class: "form-control" %>
+  <% if policy(resource).update_user_setting? %>
+    <%= f.text_field :phone_number, class: "form-control" %>
+  <% else %>
+    <input class="form-control" type="text" placeholder="<%= resource.phone_number %>" autocomplete="off" readonly>
+  <% end %>
 </div>
