@@ -12,11 +12,11 @@
   <%= og_tag :title, content: translate('page.meta.title') %>
   <%= og_tag :description, content: translate('page.meta.description') %>
   <%= og_tag :url, content: root_url %>
-  <%= og_tag :image, content: asset_pack_url('media/src/images/login.jpg') %>
+  <%= og_tag :image, content: image_path('login.jpg') %>
 
   <%= render 'shared/favicons' %>
-  <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-  <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_link_tag 'application', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   <% if all_casa_admin_signed_in? %>
     <%= javascript_pack_tag 'all_casa_admin', 'data-turbolinks-track': 'reload' %>
     <%= stylesheet_pack_tag 'all_casa_admin', 'data-turbolinks-track': 'reload' %>
