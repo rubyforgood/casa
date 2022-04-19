@@ -6,7 +6,8 @@
     "lint": "standard",
     "lint:fix": "standard --fix",
     "toc": "markdown-toc -i README.md",
-    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds"
+    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds",
+    "build:css": "sass ./app/assets/stylesheets/application.sass.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
@@ -26,6 +27,7 @@
     "jquery": "^3.6.0",
     "node-sass": "^7.0.1",
     "popper.js": "^1.16.1",
+    "sass": "^1.50.1",
     "select2": "^4.0.13",
     "sweetalert2": "^11.3.5",
     "turbolinks": "^5.2.0"

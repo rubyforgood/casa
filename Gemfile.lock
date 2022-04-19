@@ -132,6 +132,8 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
+    cssbundling-rails (1.1.0)
+      railties (>= 6.0.0)
     database_cleaner-active_record (2.0.1)
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
@@ -470,6 +472,7 @@ DEPENDENCIES
   capybara-screenshot
   caxlsx (~> 3.2)
   caxlsx_rails (~> 0.6.3)
+  cssbundling-rails (~> 1.1)
   database_cleaner-active_record
   delayed_job_active_record
   devise
