@@ -29,46 +29,69 @@ RSpec.describe "/supervisors", type: :request do
   end
 
   describe "GET /edit" do
-    it "admin can view the edit supervisor page" do
-      sign_in admin
+    context "same org" do
+      it "admin can view the edit supervisor page" do
+        sign_in admin
 
-      get edit_supervisor_url(supervisor)
+        get edit_supervisor_url(supervisor)
 
-      expect(response).to be_successful
+        expect(response).to be_successful
+      end
+
+      it "supervisor can view the edit supervisor page" do
+        sign_in supervisor
+
+        get edit_supervisor_url(supervisor)
+
+        expect(response).to be_successful
+      end
+
+      it "other supervisor can view the edit supervisor page" do
+        sign_in build(:supervisor)
+
+        get edit_supervisor_url(supervisor)
+
+        expect(response).to be_successful
+      end
+
+      it "returns volunteers ever assigned if include_unassigned param is present" do
+        sign_in admin
+
+        get edit_supervisor_url(supervisor), params: {include_unassigned: true}
+
+        expect(response).to be_successful
+        expect(assigns(:all_volunteers_ever_assigned)).to_not be_nil
+      end
+
+      it "returns no volunteers ever assigned if include_unassigned param is false" do
+        sign_in admin
+
+        get edit_supervisor_url(supervisor), params: {include_unassigned: false}
+
+        expect(response).to be_successful
+        expect(assigns(:all_volunteers_ever_assigned)).to be_nil
+      end
     end
 
-    it "supervisor can view the edit supervisor page" do
-      sign_in supervisor
+    context "different org" do
+      let(:diff_org) { create(:casa_org) }
+      let(:supervisor_diff_org) { create(:supervisor, casa_org: diff_org) }
+      it "admin cannot view the edit supervisor page" do
+        sign_in_as_admin
 
-      get edit_supervisor_url(supervisor)
+        get edit_supervisor_url(supervisor_diff_org)
 
-      expect(response).to be_successful
-    end
+        expect(response).to redirect_to root_path
+        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+      end
+      it "supervisor cannot view the edit supervisor page" do
+        sign_in_as_supervisor
 
-    it "other supervisor can view the edit supervisor page" do
-      sign_in build(:supervisor)
+        get edit_supervisor_url(supervisor_diff_org)
 
-      get edit_supervisor_url(supervisor)
-
-      expect(response).to be_successful
-    end
-
-    it "returns volunteers ever assigned if include_unassigned param is present" do
-      sign_in admin
-
-      get edit_supervisor_url(supervisor), params: {include_unassigned: true}
-
-      expect(response).to be_successful
-      expect(assigns(:all_volunteers_ever_assigned)).to_not be_nil
-    end
-
-    it "returns no volunteers ever assigned if include_unassigned param is false" do
-      sign_in admin
-
-      get edit_supervisor_url(supervisor), params: {include_unassigned: false}
-
-      expect(response).to be_successful
-      expect(assigns(:all_volunteers_ever_assigned)).to be_nil
+        expect(response).to redirect_to root_path
+        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+      end
     end
   end
 
