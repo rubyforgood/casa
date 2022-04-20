@@ -70,7 +70,7 @@ class ImportsController < ApplicationController
     return validated_file unless validated_file.nil?
 
     if requires_sms_opt_in(file, import_type, sms_opt_in)
-      return {type: :sms_opt_in_error }
+      return {type: :sms_opt_in_error}
     end
 
     case import_type
@@ -119,7 +119,7 @@ class ImportsController < ApplicationController
       return sms_opt_in != "1"
     end
 
-    return false
+    false
   end
 
   def import_contains_phone_numbers(file)
@@ -129,13 +129,11 @@ class ImportsController < ApplicationController
       end
 
       phone_number = line.split(",").last
-      if phone_number != nil && !phone_number.strip.empty?
-        puts "PHONE"
-        puts phone_number
+      if !phone_number.nil? && !phone_number.strip.empty?
         return true
       end
     end
 
-    return false
+    false
   end
 end
