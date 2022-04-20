@@ -1,0 +1,26 @@
+<div class="field form-group">
+  <%= f.label :email, t("common.email") %>
+  <% if policy(resource).update_user_setting? %>
+    <%= f.text_field :email, class: "form-control" %>
+  <% else %>
+    <input class="form-control" type="text" placeholder="<%= resource.email %>" autocomplete="off" readonly>
+  <% end %>
+</div>
+
+<div class="field form-group">
+  <%= f.label :display_name, t("common.display_name") %>
+  <% if policy(resource).update_user_setting? %>
+    <%= f.text_field :display_name, class: "form-control" %>
+  <% else %>
+    <input class="form-control" type="text" placeholder="<%= resource.display_name %>" autocomplete="off" readonly>
+  <% end %>
+</div>
+
+<div class="field form-group">
+  <%= f.label :phone_number, t("common.phone_number") %>
+  <% if policy(resource).update_user_setting? %>
+    <%= f.text_field :phone_number, class: "form-control" %>
+  <% else %>
+    <input class="form-control" type="text" placeholder="<%= resource.phone_number %>" autocomplete="off" readonly>
+  <% end %>
+</div>

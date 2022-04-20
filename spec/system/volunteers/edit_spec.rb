@@ -19,18 +19,22 @@ RSpec.describe "volunteers/edit", type: :system do
     before do
       sign_in admin
       visit edit_volunteer_path(volunteer)
+      fill_in "volunteer_email", with: "newemail@example.com"
+      fill_in "volunteer_display_name", with: "Kamisato Ayato"
     end
 
     context "with valid data" do
       it "updates successfully" do
-        fill_in "volunteer_email", with: "newemail@example.com"
-        fill_in "volunteer_display_name", with: "Mickey Mouse"
         click_on "Submit"
         expect(page).to have_text "Volunteer was successfully updated."
       end
     end
 
     context "with invalid data" do
+      let(:role) { "volunteer" }
+
+      it_should_behave_like "shows error for invalid phone numbers"
+
       it "shows error message for duplicate email" do
         volunteer.supervisor = build(:supervisor)
         fill_in "volunteer_email", with: admin.email
