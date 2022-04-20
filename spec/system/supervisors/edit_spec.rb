@@ -162,7 +162,7 @@ RSpec.describe "supervisors/edit", type: :system do
     end
 
     context "when the email exists already" do
-      let!(:existing_supervisor) { create(:supervisor) }
+      let!(:existing_supervisor) { create(:supervisor, casa_org_id: organization.id) }
 
       it "responds with a notice" do
         sign_in user
