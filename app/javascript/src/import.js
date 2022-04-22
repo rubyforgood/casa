@@ -35,14 +35,6 @@ function fetchCSVFile(key) {
   return file;
 }
 
-function deleteCSVFile(key, submitEvent) {
-  const formData = new FormData(submitEvent.target);
-  const formProps = Object.fromEntries(formData);
-  if (formProps.sms_opt_in === "1") {
-    delete localStorage[key];
-  }
-}
-
 function populateFileInput(inputId) {
   const csvInput = document.getElementById(inputId);
   if (csvInput.files.length === 0 && localStorage[inputId]) {
@@ -54,17 +46,10 @@ function populateFileInput(inputId) {
 }
 
 $("document").ready(() => {
-  populateFileInput("volunteer-file");
-  populateFileInput("supervisor-file");
-
   document.getElementById("volunteer-file").addEventListener("change", function (event) {
     document.getElementById("volunteer-import-button").disabled = event.target.value == "";
     const file = document.getElementById("volunteer-file").files[0];
     storeCSVFile(file, "volunteer-file");
-  });
-
-  document.getElementById("volunteer-import-form").addEventListener("submit", function (event) {
-    deleteCSVFile("volunteer-file", event);
   });
 
   document.getElementById("supervisor-file").addEventListener("change", function (event) {
@@ -73,7 +58,11 @@ $("document").ready(() => {
     storeCSVFile(file, "supervisor-file");
   });
 
-  document.getElementById("supervisor-import-form").addEventListener("submit", function (event) {
-    deleteCSVFile("supervisor-file", event);
-  });
+  if (document.getElementById("smsOptIn") === null) {
+    delete localStorage["volunteer-file"];
+    delete localStorage["supervisor-file"];
+  } else {
+    populateFileInput("volunteer-file");
+    populateFileInput("supervisor-file");
+  }
 });
