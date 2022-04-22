@@ -78,6 +78,7 @@ class Volunteer < User
       updated = update(active: false)
       if updated
         case_assignments.update_all(active: false)
+        supervisor_volunteer&.update(is_active: false)
       end
 
       updated
