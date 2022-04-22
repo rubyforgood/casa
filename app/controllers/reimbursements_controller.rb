@@ -42,7 +42,7 @@ class ReimbursementsController < ApplicationController
       :creator,
       :case_contact_contact_type,
       contact_types: [:contact_type_group]
-    )
+    ).preload(:casa_case)
     policy_scope(case_contacts, policy_scope_class: ReimbursementPolicy::Scope)
   end
 end
