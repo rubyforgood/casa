@@ -38,8 +38,7 @@
     "jest-environment-jsdom": "^28.1.0",
     "markdown-toc": "^1.2.0",
     "standard": "^17.0.0",
-    "start-server-and-test": "^1.14.0",
-    "webpack-dev-server": "~3"
+    "start-server-and-test": "^1.14.0"
   },
   "standard": {
     "globals": [
