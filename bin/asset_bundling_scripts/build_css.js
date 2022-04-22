@@ -1,9 +1,18 @@
 #!/usr/bin/env node
 
+const fileSystem = require('fs')
+const logger = require("./logger.js")
 const sass = require('sass')
 
 const compiledCSS = sass.renderSync({
-  file: "app/javascript/src/stylesheets/application.scss"
-});
+  file: 'app/javascript/src/stylesheets/application.scss'
+})
 
-//console.log(compiledCSS.css.toString())
+fileSystem.writeFile("./app/assets/builds/application.css", compiledCSS.css.toString(), function (err) {
+  if (err) {
+    logger.error(err);
+    return
+  }
+
+  logger.info("CSS generated successfully")
+});
