@@ -13,7 +13,7 @@
     2. <%= t(".upload_title") %>
     <i class="fa fa-file-csv" aria-hidden="true"></i>
   </h4>
-  <%= form_with(url: imports_path, local: :true) do |f| %>
+  <%= form_with(url: imports_path, local: :true, id: "volunteer-import-form") do |f| %>
     <%= f.hidden_field :import_type, value: "volunteer" %>
     <%= f.hidden_field :sms_opt_in, value: false %>
 
@@ -30,10 +30,4 @@
                    disabled: true, data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> #{t(".disable_with")}"} do %>
       <i class="fa fa-upload"></i> <%= t(".button.import") %>
     <% end %>
-
-    <script type="text/javascript">
-      document.getElementById('volunteer-file').addEventListener('change', function (event) {
-        document.getElementById('volunteer-import-button').disabled = (event.target.value == '')
-      })
-    </script>
   <% end %>
