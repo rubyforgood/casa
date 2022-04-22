@@ -1,3 +1,10 @@
+/* global atob */
+/* global Blob */
+/* global FileReader */
+/* global localStorage */
+/* global File */
+/* global DataTransfer */
+
 function dataURItoBlob (dataURI) {
   // convert base64 to raw binary data held in a string
   const byteString = atob(dataURI.split(',')[1])
@@ -47,13 +54,13 @@ function populateFileInput (inputId) {
 
 $('document').ready(() => {
   document.getElementById('volunteer-file').addEventListener('change', function (event) {
-    document.getElementById('volunteer-import-button').disabled = event.target.value == ''
+    document.getElementById('volunteer-import-button').disabled = event.target.value === ''
     const file = document.getElementById('volunteer-file').files[0]
     storeCSVFile(file, 'volunteer-file')
   })
 
   document.getElementById('supervisor-file').addEventListener('change', function (event) {
-    document.getElementById('supervisor-import-button').disabled = event.target.value == ''
+    document.getElementById('supervisor-import-button').disabled = event.target.value === ''
     const file = document.getElementById('supervisor-file').files[0]
     storeCSVFile(file, 'supervisor-file')
   })
