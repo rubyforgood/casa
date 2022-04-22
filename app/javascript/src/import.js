@@ -38,8 +38,7 @@ function fetchCSVFile(key) {
 function deleteCSVFile(key, submitEvent) {
   const formData = new FormData(submitEvent.target);
   const formProps = Object.fromEntries(formData);
-  console.log(formProps.sms_opt_in);
-  if (formProps.sms_opt_in) {
+  if (formProps.sms_opt_in === "1") {
     delete localStorage[key];
   }
 }
@@ -64,9 +63,17 @@ $("document").ready(() => {
     storeCSVFile(file, "volunteer-file");
   });
 
+  document.getElementById("volunteer-import-form").addEventListener("submit", function (event) {
+    deleteCSVFile("volunteer-file", event);
+  });
+
   document.getElementById("supervisor-file").addEventListener("change", function (event) {
     document.getElementById("supervisor-import-button").disabled = event.target.value == "";
     const file = document.getElementById("supervisor-file").files[0];
     storeCSVFile(file, "supervisor-file");
+  });
+
+  document.getElementById("supervisor-import-form").addEventListener("submit", function (event) {
+    deleteCSVFile("supervisor-file", event);
   });
 });
