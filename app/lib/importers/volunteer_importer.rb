@@ -18,6 +18,7 @@ class VolunteerImporter < FileImporter
       end
 
       volunteer_params[:phone_number] = volunteer_params.key?(:phone_number) ? "+#{volunteer_params[:phone_number]}" : ""
+      volunteer_params[:receive_sms_notifications] = !volunteer_params[:phone_number].empty?
 
       volunteer = Volunteer.find_by(email: volunteer_params[:email])
 

@@ -18,6 +18,7 @@ class SupervisorImporter < FileImporter
       end
 
       supervisor_params[:phone_number] = supervisor_params.key?(:phone_number) ? "+#{supervisor_params[:phone_number]}" : ""
+      supervisor_params[:receive_sms_notifications] = !supervisor_params[:phone_number].empty?
 
       supervisor = Supervisor.find_by(email: supervisor_params[:email])
       volunteer_assignment_list = email_addresses_to_users(Volunteer, String(row[:supervisor_volunteers]))
