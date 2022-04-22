@@ -50,11 +50,12 @@ RSpec.describe VolunteerImporter do
       }.to change(existing_volunteer, :display_name).to("Volunteer One")
     end
 
-    it "updates phone number to valid number" do
+    it "updates phone number to valid number and turns sms notifications on" do
       expect {
         volunteer_importer.call
         existing_volunteer.reload
       }.to change(existing_volunteer, :phone_number).to("+11234567890")
+       .and change(existing_volunteer, :receive_sms_notifications).to(true)
     end
   end
 
@@ -73,13 +74,14 @@ RSpec.describe VolunteerImporter do
   context "when row doesn't have phone number" do
     let(:import_file_path) { Rails.root.join("spec", "fixtures", "volunteers_without_phone_numbers.csv") }
 
-    let!(:existing_volunteer_with_number) { create(:volunteer, display_name: "#", email: "volunteer2@example.net", phone_number: "+11111111111") }
+    let!(:existing_volunteer_with_number) { create(:volunteer, display_name: "#", email: "volunteer2@example.net", phone_number: "+11111111111", receive_sms_notifications: true) }
 
-    it "updates phone number to be deleted" do
+    it "updates phone number to be deleted and turns sms notifications off" do
       expect {
         volunteer_importer.call
         existing_volunteer_with_number.reload
       }.to change(existing_volunteer_with_number, :phone_number).to("")
+       .and change(existing_volunteer_with_number, :receive_sms_notifications).to(false)
     end
   end
 
