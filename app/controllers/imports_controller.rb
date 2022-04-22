@@ -28,7 +28,7 @@ class ImportsController < ApplicationController
     if import[:type] == :error
       session[:import_error] = message
     elsif import[:type] == :sms_opt_in_error
-      session[:sms_opt_in_error] = true
+      session[:sms_opt_in_error] = import[:import_type]
     # Only use flash for success messages. Otherwise may cause CookieOverflow
     else
       flash[:success] = message
@@ -72,7 +72,7 @@ class ImportsController < ApplicationController
     return validated_file unless validated_file.nil?
 
     if requires_sms_opt_in(file, import_type, sms_opt_in)
-      return {type: :sms_opt_in_error}
+      return {type: :sms_opt_in_error, import_type: import_type}
     end
 
     case import_type
@@ -131,7 +131,7 @@ class ImportsController < ApplicationController
         return true
       end
     end
-    
+
     false
   end
 end
