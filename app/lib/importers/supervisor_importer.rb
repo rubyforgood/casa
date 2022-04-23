@@ -22,7 +22,7 @@ class SupervisorImporter < FileImporter
 
       supervisor = Supervisor.find_by(email: supervisor_params[:email])
       volunteer_assignment_list = email_addresses_to_users(Volunteer, String(row[:supervisor_volunteers]))
-      
+
       if volunteer_assignment_list.count != String(row[:supervisor_volunteers]).split(",").count
         raise "Row contains unimported volunteers."
       end
@@ -45,8 +45,8 @@ class SupervisorImporter < FileImporter
 
   def assign_volunteers(supervisor, volunteer_assignment_list)
     volunteer_assignment_list.each do |volunteer|
+      next if volunteer.supervisor && volunteer.supervisor == supervisor
       if volunteer.supervisor
-        next if volunteer.supervisor == supervisor
         raise "Volunteer #{volunteer.email} already has a supervisor"
       else
         supervisor.volunteers << volunteer
