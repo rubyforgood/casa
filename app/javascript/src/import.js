@@ -53,23 +53,19 @@ function populateFileInput (inputId) {
 }
 
 $('document').ready(() => {
-  document.getElementById('volunteer-file').addEventListener('change', function (event) {
-    document.getElementById('volunteer-import-button').disabled = event.target.value === ''
-    const file = document.getElementById('volunteer-file').files[0]
-    storeCSVFile(file, 'volunteer-file')
-  })
+  ['volunteer', 'supervisor'].forEach((importType) => {
+    const inputFileElementId = `${importType}-file`
 
-  document.getElementById('supervisor-file').addEventListener('change', function (event) {
-    document.getElementById('supervisor-import-button').disabled = event.target.value === ''
-    const file = document.getElementById('supervisor-file').files[0]
-    storeCSVFile(file, 'supervisor-file')
-  })
+    document.getElementById(inputFileElementId).addEventListener('change', function (event) {
+      document.getElementById(`${importType}-import-button`).disabled = event.target.value === ''
+      const file = document.getElementById(inputFileElementId).files[0]
+      storeCSVFile(file, inputFileElementId)
+    })
 
-  if (document.getElementById('smsOptIn') === null) {
-    delete localStorage['volunteer-file']
-    delete localStorage['supervisor-file']
-  } else {
-    populateFileInput('volunteer-file')
-    populateFileInput('supervisor-file')
-  }
+    if (document.getElementById('smsOptIn') == null) {
+      delete localStorage[inputFileElementId]
+    } else {
+      populateFileInput(inputFileElementId)
+    }
+  })
 })

@@ -36,7 +36,6 @@ class SupervisorImporter < FileImporter
       volunteer_assignment_list.each do |volunteer|
         if volunteer.supervisor
           next if volunteer.supervisor == supervisor
-
           raise "Volunteer #{volunteer.email} already has a supervisor"
         else
           supervisor.volunteers << volunteer
