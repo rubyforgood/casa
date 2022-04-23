@@ -83,7 +83,7 @@ RSpec.describe SupervisorImporter do
         supervisor_importer.import_supervisors
         existing_supervisor.reload
       }.to change(existing_supervisor, :phone_number).to("+11111111111")
-       .and change(existing_supervisor, :receive_sms_notifications).to(true)
+        .and change(existing_supervisor, :receive_sms_notifications).to(true)
     end
   end
 
@@ -109,7 +109,7 @@ RSpec.describe SupervisorImporter do
         supervisor_importer.import_supervisors
         existing_supervisor_with_number.reload
       }.to change(existing_supervisor_with_number, :phone_number).to("")
-       .and change(existing_supervisor_with_number, :receive_sms_notifications).to(false)
+        .and change(existing_supervisor_with_number, :receive_sms_notifications).to(false)
     end
   end
 

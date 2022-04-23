@@ -55,7 +55,7 @@ RSpec.describe VolunteerImporter do
         volunteer_importer.call
         existing_volunteer.reload
       }.to change(existing_volunteer, :phone_number).to("+11234567890")
-       .and change(existing_volunteer, :receive_sms_notifications).to(true)
+        .and change(existing_volunteer, :receive_sms_notifications).to(true)
     end
   end
 
@@ -81,7 +81,7 @@ RSpec.describe VolunteerImporter do
         volunteer_importer.call
         existing_volunteer_with_number.reload
       }.to change(existing_volunteer_with_number, :phone_number).to("")
-       .and change(existing_volunteer_with_number, :receive_sms_notifications).to(false)
+        .and change(existing_volunteer_with_number, :receive_sms_notifications).to(false)
     end
   end
 
