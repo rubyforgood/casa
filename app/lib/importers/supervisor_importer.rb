@@ -22,7 +22,6 @@ class SupervisorImporter < FileImporter
 
       supervisor = Supervisor.find_by(email: supervisor_params[:email])
       volunteer_assignment_list = email_addresses_to_users(Volunteer, String(row[:supervisor_volunteers]))
-
       if volunteer_assignment_list.count != String(row[:supervisor_volunteers]).split(",").count
         raise "Row contains unimported volunteers."
       end
