@@ -44,8 +44,7 @@ class SupervisorImporter < FileImporter
   end
 
   def assign_volunteers(supervisor, volunteer_assignment_list)
-    volunteer_assignment_list.each do |volunteer|
-      next if volunteer.supervisor && volunteer.supervisor == supervisor
+    volunteer_assignment_list.select { |v| v.supervisor != supervisor }.each do |volunteer|
       if volunteer.supervisor
         raise "Volunteer #{volunteer.email} already has a supervisor"
       else
