@@ -22,6 +22,7 @@ class SupervisorImporter < FileImporter
 
       supervisor = Supervisor.find_by(email: supervisor_params[:email])
       volunteer_assignment_list = email_addresses_to_users(Volunteer, String(row[:supervisor_volunteers]))
+      
       if volunteer_assignment_list.count != String(row[:supervisor_volunteers]).split(",").count
         raise "Row contains unimported volunteers."
       end
@@ -32,20 +33,24 @@ class SupervisorImporter < FileImporter
         supervisor = create_user_record(Supervisor, supervisor_params)
       end
 
-      volunteer_assignment_list.each do |volunteer|
-        if volunteer.supervisor
-          next if volunteer.supervisor == supervisor
-          raise "Volunteer #{volunteer.email} already has a supervisor"
-        else
-          supervisor.volunteers << volunteer
-        end
-      end
+      assign_volunteers(supervisor, volunteer_assignment_list)
     end
   end
 
   def update_supervisor(supervisor, supervisor_params, volunteer_assignment_list)
     if record_outdated?(supervisor, supervisor_params)
       supervisor.update(supervisor_params)
+    end
+  end
+
+  def assign_volunteers(supervisor, volunteer_assignment_list)
+    volunteer_assignment_list.each do |volunteer|
+      if volunteer.supervisor
+        next if volunteer.supervisor == supervisor
+        raise "Volunteer #{volunteer.email} already has a supervisor"
+      else
+        supervisor.volunteers << volunteer
+      end
     end
   end
 end
