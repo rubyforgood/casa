@@ -25,7 +25,7 @@
     <%= f.file_field :file, id: 'volunteer-file', accept: 'text/csv', class: 'form-control-file', style: "margin: auto;" %>
     </div>
 
-    <%= render "sms_opt_in_modal", { form: f } if @sms_opt_in_error == "volunteer" %>
+    <%= render "sms_opt_in_modal", { form: f } if @sms_opt_in_warning == "volunteer" %>
     <%= button_tag id: "volunteer-import-button", class: "btn btn-md btn-success pull-right",
                    disabled: true, data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> #{t(".disable_with")}"} do %>
       <i class="fa fa-upload"></i> <%= t(".button.import") %>

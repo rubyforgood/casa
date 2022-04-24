@@ -8,9 +8,9 @@ class ImportsController < ApplicationController
     authorize :import
     @import_type = params.fetch(:import_type, "volunteer")
     @import_error = session[:import_error]
-    @sms_opt_in_error = session[:sms_opt_in_error]
+    @sms_opt_in_warning = session[:sms_opt_in_warning]
     session[:import_error] = nil
-    session[:sms_opt_in_error] = nil
+    session[:sms_opt_in_warning] = nil
   end
 
   def create
@@ -27,8 +27,8 @@ class ImportsController < ApplicationController
 
     if import[:type] == :error
       session[:import_error] = message
-    elsif import[:type] == :sms_opt_in_error
-      session[:sms_opt_in_error] = import[:import_type]
+    elsif import[:type] == :sms_opt_in_warning
+      session[:sms_opt_in_warning] = import[:import_type]
     # Only use flash for success messages. Otherwise may cause CookieOverflow
     else
       flash[:success] = message
@@ -72,7 +72,7 @@ class ImportsController < ApplicationController
     return validated_file unless validated_file.nil?
 
     if requires_sms_opt_in(file, import_type, sms_opt_in)
-      return {type: :sms_opt_in_error, import_type: import_type}
+      return {type: :sms_opt_in_warning, import_type: import_type}
     end
 
     case import_type

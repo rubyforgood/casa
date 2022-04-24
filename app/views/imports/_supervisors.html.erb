@@ -27,7 +27,7 @@
                      style: "margin: auto;" %>
     </div>
 
-    <%= render "sms_opt_in_modal", { form: f } if @sms_opt_in_error == "supervisor" %>
+    <%= render "sms_opt_in_modal", { form: f } if @sms_opt_in_warning == "supervisor" %>
     <%= button_tag id: "supervisor-import-button", class: "btn btn-md btn-success pull-right",
                    disabled: true, data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> #{t(".disable_with")}"} do %>
       <i class="fa fa-upload"></i> <%= t(".button.import") %>
