@@ -123,6 +123,6 @@ class CasaAdminsController < ApplicationController
   end
 
   def update_casa_admin_params
-    CasaAdminParameters.new(params).with_only(:email, :display_name)
+    CasaAdminParameters.new(params).with_only(:email, :display_name, :phone_number)
   end
 end

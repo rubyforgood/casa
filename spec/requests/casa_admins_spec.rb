@@ -37,6 +37,7 @@ RSpec.describe "/casa_admins", type: :request do
       let(:casa_admin) { create(:casa_admin) }
       let(:expected_display_name) { "Admin 2" }
       let(:expected_email) { "admin2@casa.com" }
+      let(:expected_phone_number) { "+14163218092" }
 
       before do
         sign_in_as_admin
@@ -46,13 +47,15 @@ RSpec.describe "/casa_admins", type: :request do
         put casa_admin_path(casa_admin), params: {
           casa_admin: {
             email: expected_email,
-            display_name: expected_display_name
+            display_name: expected_display_name,
+            phone_number: expected_phone_number
           }
         }
 
         casa_admin.reload
         expect(casa_admin.email).to eq expected_email
         expect(casa_admin.display_name).to eq expected_display_name
+        expect(casa_admin.phone_number).to eq expected_phone_number
         expect(response).to redirect_to casa_admins_path
         expect(response.request.flash[:notice]).to eq "New admin created successfully"
       end
@@ -80,11 +83,13 @@ RSpec.describe "/casa_admins", type: :request do
 
       it "cannot update the casa admin", :aggregate_failures do
         put casa_admin_path(casa_admin), params: {
-          casa_admin: {email: nil}
+          casa_admin: {email: nil},
+          phone_number: {phone_number: "dsadw323"}
         }
 
         casa_admin.reload
         expect(casa_admin.email).not_to eq nil
+        expect(casa_admin.phone_number).not_to eq "dsadw323"
         expect(response).to render_template :edit
       end
 

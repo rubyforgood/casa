@@ -60,6 +60,34 @@ RSpec.describe "supervisors/edit", type: :view do
       expect(rendered).to have_text("Password reset last sent \n  never")
     end
 
+    it "shows profile info form fields as editable for a supervisor editing their own profile" do
+      enable_pundit(view, supervisor)
+
+      assign :supervisor, supervisor
+      assign :all_volunteers_ever_assigned, [volunteer]
+      assign :available_volunteers, []
+
+      render template: "supervisors/edit"
+
+      expect(rendered).to have_field("supervisor_email")
+      expect(rendered).to have_field("supervisor_display_name")
+      expect(rendered).to have_field("supervisor_phone_number")
+    end
+
+    it "shows profile info form fields as disabled for a supervisor editing another supervisor" do
+      enable_pundit(view, supervisor)
+
+      assign :supervisor, build_stubbed(:supervisor, casa_org: build_stubbed(:casa_org))
+      assign :all_volunteers_ever_assigned, [volunteer]
+      assign :available_volunteers, []
+
+      render template: "supervisors/edit"
+
+      expect(rendered).not_to have_field("supervisor_email")
+      expect(rendered).not_to have_field("supervisor_display_name")
+      expect(rendered).not_to have_field("supervisor_phone_number")
+    end
+
     it "shows for an admin editing a supervisor" do
       enable_pundit(view, supervisor)
       allow(view).to receive(:current_user).and_return(admin)

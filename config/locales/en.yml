@@ -94,6 +94,7 @@ en:
     email: Email
     name: Name
     display_name: Display name
+    phone_number: Phone number
     address: Address
   date:
     formats:

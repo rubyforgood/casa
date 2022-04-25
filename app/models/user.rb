@@ -12,6 +12,8 @@ class User < ApplicationRecord
 
   validates :email, presence: true
   validates :display_name, presence: true
+
+  validates_with UserValidator
   validate :at_least_one_communication_preference_selected
 
   belongs_to :casa_org
@@ -192,7 +194,7 @@ end
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  casa_org_id                 :bigint           not null
-#  invited_by_id               :bigint
+#  invited_by_id               :integer
 #
 # Indexes
 #
