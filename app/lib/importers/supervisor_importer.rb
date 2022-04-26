@@ -18,6 +18,7 @@ class SupervisorImporter < FileImporter
       end
 
       supervisor_params[:phone_number] = supervisor_params.key?(:phone_number) ? "+#{supervisor_params[:phone_number]}" : ""
+      supervisor_params[:receive_sms_notifications] = !supervisor_params[:phone_number].empty?
 
       supervisor = Supervisor.find_by(email: supervisor_params[:email])
       volunteer_assignment_list = email_addresses_to_users(Volunteer, String(row[:supervisor_volunteers]))
@@ -32,21 +33,23 @@ class SupervisorImporter < FileImporter
         supervisor = create_user_record(Supervisor, supervisor_params)
       end
 
-      volunteer_assignment_list.each do |volunteer|
-        if volunteer.supervisor
-          next if volunteer.supervisor == supervisor
-
-          raise "Volunteer #{volunteer.email} already has a supervisor"
-        else
-          supervisor.volunteers << volunteer
-        end
-      end
+      assign_volunteers(supervisor, volunteer_assignment_list)
     end
   end
 
   def update_supervisor(supervisor, supervisor_params, volunteer_assignment_list)
     if record_outdated?(supervisor, supervisor_params)
       supervisor.update(supervisor_params)
+    end
+  end
+
+  def assign_volunteers(supervisor, volunteer_assignment_list)
+    volunteer_assignment_list.select { |v| v.supervisor != supervisor }.each do |volunteer|
+      if volunteer.supervisor
+        raise "Volunteer #{volunteer.email} already has a supervisor"
+      else
+        supervisor.volunteers << volunteer
+      end
     end
   end
 end
