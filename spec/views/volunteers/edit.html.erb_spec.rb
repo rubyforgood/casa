@@ -69,19 +69,6 @@ RSpec.describe "volunteers/edit", type: :view do
     expect(rendered).not_to have_field("volunteer_phone_number")
   end
 
-  it "does not allow a supervisor to edit a volunteers email address" do
-    supervisor = build_stubbed :supervisor
-    enable_pundit(view, supervisor)
-    allow(view).to receive(:current_user).and_return(supervisor)
-
-    assign :volunteer, volunteer
-    assign :supervisors, []
-
-    render template: "volunteers/edit"
-
-    expect(rendered).to_not have_field("volunteer_email", readonly: true)
-  end
-
   it "shows invite and login info" do
     supervisor = build_stubbed :supervisor
     enable_pundit(view, supervisor)
