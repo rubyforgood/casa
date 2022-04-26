@@ -4,8 +4,8 @@ class UserValidator < ActiveModel::Validator
 
   def validate(record)
     valid_phone_number_contents(record.phone_number, record)
-    validate_presence(record.display_name, record)
-    validate_presence(record.email, record)
+    validate_presence(:email, record)
+    validate_presence(:display_name, record)
     at_least_one_communication_preference_selected(record)
   end
 
@@ -38,9 +38,9 @@ class UserValidator < ActiveModel::Validator
   end
 
   def validate_presence(attribute, record)
-    if attribute.empty?
+    if record[attribute].blank?
       record.errors.add(attribute, " can't be blank")
-      return true
+      return false
     end
 
     true
