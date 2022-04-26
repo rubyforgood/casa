@@ -205,6 +205,11 @@ There is a `doc` directory at the top level that includes:
 * [productsense.md](doc/productsense.md)(for team leads & product interested contributors)
 * [SECURITY.md](doc/SECURITY.md)
 
+# required acknowledgement
+
+Thank you to [Scout](https://ter.li/h8k29r) for letting us use their dashboard for free!
+![Scout](https://user-images.githubusercontent.com/578159/165240278-c2c0ac30-c86f-4b67-9da6-e6a5e4ab4c37.png)
+
 # Communication and Collaboration
 
 Most conversation happens in the #casa channel of the Ruby For Good slack. Get access here: https://rubyforgood.herokuapp.com/
