@@ -3,12 +3,28 @@ require "rails_helper"
 RSpec.describe "/casa_admins", type: :request do
   describe "GET /casa_admins/:id/edit" do
     context "logged in as admin user" do
-      it "can successfully access a casa admin edit page" do
-        sign_in_as_admin
+      context "same org" do
+        let(:casa_one) { create(:casa_org) }
+        let(:casa_admin_one) { create(:casa_admin, casa_org: casa_one) }
+        it "can successfully access a casa admin edit page" do
+          sign_in(casa_admin_one)
 
-        get edit_casa_admin_path(create(:casa_admin))
+          get edit_casa_admin_path(create(:casa_admin, casa_org: casa_one))
 
-        expect(response).to be_successful
+          expect(response).to be_successful
+        end
+      end
+
+      context "different org" do
+        let(:diff_org) { create(:casa_org) }
+        it "cannot access a casa admin edit page" do
+          sign_in_as_admin
+
+          get edit_casa_admin_path(create(:casa_admin, casa_org: diff_org))
+
+          expect(response).to redirect_to root_path
+          expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        end
       end
     end
 

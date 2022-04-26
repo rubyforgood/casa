@@ -47,7 +47,36 @@ RSpec.describe SupervisorPolicy do
     end
   end
 
-  permissions :index?, :edit?, :datatable? do
+  permissions :edit? do
+    context "same org" do
+      let(:record) { build_stubbed(:supervisor, casa_org: casa_admin.casa_org) }
+      context "when user is admin" do
+        it "can edit a supervisor" do
+          is_expected.to permit(casa_admin, record)
+        end
+      end
+      context "when user is supervisor" do
+        it "can edit a supervisor" do
+          is_expected.to permit(supervisor, record)
+        end
+      end
+    end
+    context "different org" do
+      let(:record) { build_stubbed(:supervisor, casa_org: build_stubbed(:casa_org)) }
+      context "when user is admin" do
+        it "cannot edit a supervisor" do
+          is_expected.not_to permit(casa_admin, record)
+        end
+      end
+      context "when user is a supervisor" do
+        it "cannot edit a supervisor" do
+          is_expected.not_to permit(supervisor, record)
+        end
+      end
+    end
+  end
+
+  permissions :index?, :datatable? do
     context "when user is an admin" do
       it "has access to the supervisors index action" do
         is_expected.to permit(casa_admin, Supervisor)
@@ -59,7 +88,9 @@ RSpec.describe SupervisorPolicy do
         is_expected.to permit(supervisor, Supervisor)
       end
     end
+  end
 
+  permissions :index?, :edit?, :datatable? do
     context "when user is a volunteer" do
       it "does not have access to the supervisors index action" do
         is_expected.to_not permit(volunteer, Supervisor)
