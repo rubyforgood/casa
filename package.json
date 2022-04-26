@@ -32,7 +32,7 @@
     "@webpack-cli/serve": "^1.6.1",
     "jest": "^27.5.1",
     "markdown-toc": "^1.2.0",
-    "standard": "^16.0.4",
+    "standard": "^17.0.0",
     "start-server-and-test": "^1.14.0",
     "webpack-dev-server": "~3"
   },
