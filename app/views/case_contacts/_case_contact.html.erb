@@ -35,22 +35,23 @@
           </div>
         </div>
       </div>
-      <div class="row justify-content-between">
+      <div class="d-flex justify-content-between">
         <% if Pundit.policy(current_user, contact).update? %>
           <%= render "case_contacts/followup", contact: contact, followup: contact.requested_followup %>
-          <div class="col-sm-5">
+          <div class="mr-2">
             <%= link_to edit_case_contact_path(contact), class: "btn btn-outline-primary" do %>
               <strong><%= t("button.edit") %></strong>
             <% end %>
           </div>
         <% end %>
-      </div>
-      <div class="row pl-3">
-        <div class="col">
+        <div class="">
+        <div class="">
           <%= link_to(t("button.delete"), case_contact_path(contact.id), method: :delete,
                 class: "btn btn-danger") if policy(current_user).destroy? && !contact.deleted? %>
         </div>
       </div>
+      </div>
+
     </div>
   </div>
   <div>
