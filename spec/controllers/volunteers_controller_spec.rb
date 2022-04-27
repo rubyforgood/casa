@@ -37,5 +37,16 @@ RSpec.describe VolunteersController, type: :controller do
         expect(response).to redirect_to("/")
       end
     end
+
+    context "#deactivate" do
+      it "deactivates" do
+        allow(controller).to receive(:authenticate_user!).and_return(true)
+        log_in_as_admin
+        volunteer = create(:volunteer, casa_org: @east)
+        post :deactivate, params: {id: volunteer.id}
+        expect(response).to redirect_to edit_volunteer_path(volunteer)
+        expect(volunteer.reload.active).to be_falsey
+      end
+    end
   end
 end

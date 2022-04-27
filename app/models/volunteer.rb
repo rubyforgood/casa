@@ -75,14 +75,12 @@ class Volunteer < User
   # Deactivates this volunteer and all of their case assignments.
   def deactivate
     transaction do
-      updated = update(active: false)
-      if updated
+      if update(active: false)
         case_assignments.update_all(active: false)
         supervisor_volunteer&.update(is_active: false)
       end
-
-      updated
     end
+    self
   end
 
   def case_assignments_with_cases
