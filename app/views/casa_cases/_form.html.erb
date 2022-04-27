@@ -12,7 +12,7 @@
       <% if casa_case.new_record? || policy(casa_case).update_case_number? %>
         <div class="field form-group">
           <%= form.label :case_number, t(".case_number") %>
-          <%= form.text_field :case_number, class: "form-control w-25", :required=> 'required' %>
+          <%= form.text_field :case_number, class: "form-control w-25", :required => 'required' %>
         </div>
       <% end %>
 
@@ -70,10 +70,10 @@
             <br>
             <div class="field form-group">
               <%= cdf.text_field :date,
-                              data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
-                              class: "form-control",
-                              :required=> 'required' %>
-          </div>
+                                 data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
+                                 class: "form-control",
+                                 :required => 'required' %>
+            </div>
         <% end %>
       <% end %>
 
@@ -84,9 +84,9 @@
           <div class="field form-group">
             <% court_report_due_date = casa_case.court_report_due_date || Time.zone.now %>
             <%= form.text_field :court_report_due_date,
-                            value: court_report_due_date.to_date,
-                            data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
-                            class: "form-control" %>
+                                value: court_report_due_date.to_date,
+                                data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
+                                class: "form-control" %>
           </div>
         <% end %>
       </div>
@@ -127,11 +127,11 @@
 
       <% if Pundit.policy(current_user, casa_case).update_contact_types? %>
         <%= render "case_contacts/contact_types",
-            form: form,
-            model: casa_case,
-            contact_type_groups: @contact_types.map(&:contact_type_group).sort_by(&:name).uniq,
-            selected_case_contact_types: [],
-            checkbox_tag_name: "casa_case[casa_case_contact_types_attributes][][contact_type_id]" %>
+                   form: form,
+                   model: casa_case,
+                   contact_type_groups: @contact_types.map(&:contact_type_group).sort_by(&:name).uniq,
+                   selected_case_contact_types: [],
+                   checkbox_tag_name: "casa_case[casa_case_contact_types_attributes][][contact_type_id]" %>
       <% end %>
 
       <br>
@@ -157,5 +157,6 @@
         <% end %>
       </div>
     <% end %>
+    </div>
   </div>
 </div>
