@@ -34,6 +34,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resource :fund_request, only: %i[new create]
+
     resources :court_dates, only: %i[create edit new show update destroy]
 
     member do

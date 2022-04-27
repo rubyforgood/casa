@@ -10,24 +10,27 @@
     <%- end %>
     <% if @casa_case.active? %>
       <%= link_to t(".button.edit_case"), edit_casa_case_path(@casa_case),
-              class: "btn btn-primary pull-left casa-case-button" %>
+                  class: "btn btn-primary pull-left casa-case-button" %>
     <% end %>
     <% if @casa_case.in_transition_age? %>
       <%= link_to(casa_case_emancipation_path(@casa_case),
-              class: "btn btn-primary pull-left casa-case-button") do %>
+                  class: "btn btn-primary pull-left casa-case-button") do %>
         <%= t(".button.emancipation") %>
         <span class="badge badge-light">
           <%= @casa_case.decorate.emancipation_checklist_count %>
         </span>
       <% end %>
     <% end %>
-      <%= form_with url: generate_case_court_reports_path, local: false, class: "d-inline" do |form| %>
-        <%= form.hidden_field :case_number, value: @casa_case.case_number %>
-        <%= button_tag t(".button.generate_report"), type: :submit,
-                       data: {button_name: t(".button.generate_report")},
-                       id: "btnGenerateReport",
-                       class: "btn btn-success pull-right mb-2" %>
-        <i id="spinner" class='fas fa-spin d-none pull-right'>⏳</i>
+    <%= form_with url: generate_case_court_reports_path, local: false, class: "d-inline" do |form| %>
+      <%= form.hidden_field :case_number, value: @casa_case.case_number %>
+      <%= button_tag t(".button.generate_report"), type: :submit,
+                     data: {button_name: t(".button.generate_report")},
+                     id: "btnGenerateReport",
+                     class: "btn btn-success pull-right mb-2" %>
+      <i id="spinner" class='fas fa-spin d-none pull-right'>⏳</i>
+    <% end %>
+    <% if @casa_case.casa_org.show_fund_request %>
+      <%= link_to("New Fund Request", new_casa_case_fund_request_path(@casa_case), class: "btn btn-primary pull-left casa-case-button") %>
     <% end %>
   </div>
 </div>
@@ -61,9 +64,9 @@
       <strong><%= t(".label.next_court_date") %>:</strong>
       <%= I18n.l(@casa_case.next_court_date&.date, format: :day_and_date, default: '') %>
       <%= render "calendar_button", date: @casa_case.decorate.calendar_next_court_date,
-                                    id: "btnNextCourtDate",
-                                    tooltip: "Add Next Court Date to Calendar",
-                                    title: "Next Court Date for [#{@casa_case.case_number}]" %>
+                 id: "btnNextCourtDate",
+                 tooltip: "Add Next Court Date to Calendar",
+                 title: "Next Court Date for [#{@casa_case.case_number}]" %>
     </h6>
     </p>
 
@@ -72,9 +75,9 @@
       <strong><%= t(".label.court_report_due_date") %>:</strong>
       <%= I18n.l(@casa_case.court_report_due_date, format: :day_and_date, default: '') %>
       <%= render "calendar_button", date: @casa_case.decorate.calendar_court_report_due_date,
-                                    id: "btnCourtReportDueDate",
-                                    tooltip: "Add Court Report Due Date to Calendar",
-                                    title: "Court Report Due Date for [#{@casa_case.case_number}]" %>
+                 id: "btnCourtReportDueDate",
+                 tooltip: "Add Court Report Due Date to Calendar",
+                 title: "Court Report Due Date for [#{@casa_case.case_number}]" %>
     </h6>
     </p>
 
@@ -108,20 +111,20 @@
     <div>
       <h6><strong><%= t(".assigned_volunteers") %>:</strong></h6>
       <div class="container">
-      <% Pundit.policy_scope(current_user, @casa_case.assigned_volunteers).each do |volunteer| %>
-        <div class="row mb-3">
-        <% if current_user.volunteer? %>
-            <div class="col-12"><%= volunteer.display_name %></div>
-        <% else %>
-            <div class="col-2">
-              <%= link_to "#{volunteer.display_name} ", edit_volunteer_path(volunteer) %>
-            </div>
-            <div class="col-10">
-              <%= render "volunteers/volunteer_reminder_form", volunteer: volunteer %>
-            </div>
+        <% Pundit.policy_scope(current_user, @casa_case.assigned_volunteers).each do |volunteer| %>
+          <div class="row mb-3">
+            <% if current_user.volunteer? %>
+              <div class="col-12"><%= volunteer.display_name %></div>
+            <% else %>
+              <div class="col-2">
+                <%= link_to "#{volunteer.display_name} ", edit_volunteer_path(volunteer) %>
+              </div>
+              <div class="col-10">
+                <%= render "volunteers/volunteer_reminder_form", volunteer: volunteer %>
+              </div>
+            <% end %>
+          </div>
         <% end %>
-        </div>
-      <% end %>
       </div>
       <br>
 

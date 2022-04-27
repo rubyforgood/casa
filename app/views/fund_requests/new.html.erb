@@ -4,12 +4,14 @@
 <div class="card card-container">
   <div class="card-body">
     <%= form_with(model: @form_request, local: true, url: fund_requests_path, method: :post) do |form| %>
+      <%= form.hidden_field :casa_case_id, value: @casa_case.id %>
+
       <%= form.label "Your email" %>
-      <%= form.text_field :submitter_email, class: "form-control", required: true %>
+      <%= form.text_field :submitter_email, class: "form-control", required: true, value: current_user.email %>
 
       <br>
-      <%= form.label "Name of youth" %>
-      <%= form.text_field :youth_name, class: "form-control", required: false %>
+      <%= form.label "Name or case number of youth" %>
+      <%= form.text_field :youth_name, class: "form-control", required: false, value: @casa_case&.case_number %>
 
       <br>
       <%= form.label "Amount of payment*" %>
@@ -29,7 +31,7 @@
 
       <br>
       <%= form.label "Requested by & relationship to youth" %>
-      <%= form.text_field :requested_by_and_relationship, class: "form-control", required: false %>
+      <%= form.text_field :requested_by_and_relationship, class: "form-control", required: false, value: "#{current_user.display_name} CASA Volunteer" %>
 
       <br>
       <%= form.label "Other source of funding available/sought please include status of these

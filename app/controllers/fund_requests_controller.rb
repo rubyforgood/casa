@@ -1,14 +1,14 @@
 class FundRequestsController < ApplicationController
-  skip_before_action :authenticate_user!
-
   def new
+    @casa_case = CasaCase.find(params[:casa_case_id])
     @fund_request = FundRequest.new
   end
 
   def create
     @fund_request = FundRequest.new(parsed_params)
     FundRequestMailer.send_request(nil, @fund_request).deliver
-    redirect_to new_fund_request_path, notice: "Fund Request was sent"
+    @casa_case = CasaCase.find(params[:casa_case_id])
+    redirect_to casa_case_path(@casa_case), notice: "Fund Request was sent for case #{@casa_case.case_number}"
   end
 
   private

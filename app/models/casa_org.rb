@@ -78,6 +78,7 @@ end
 #  footer_links               :string           default([]), is an Array
 #  name                       :string           not null
 #  show_driving_reimbursement :boolean          default(TRUE)
+#  show_fund_request          :boolean          default(FALSE)
 #  slug                       :string
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null
