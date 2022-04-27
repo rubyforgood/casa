@@ -7,14 +7,14 @@
     "lint:fix": "standard --fix",
     "toc": "markdown-toc -i README.md",
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds",
-    "build:css": "sass ./app/assets/stylesheets/application.sass.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules"
+    "build:css": "./bin/asset_bundling_scripts/build_css.js",
+    "build:css-auto-generated": "sass ./app/assets/stylesheets/application.sass.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@rails/actioncable": "^7.0.3",
     "@rails/activestorage": "^7.0.3",
     "@rails/ujs": "^7.0.3",
-    "@rails/webpacker": "5.4.3",
     "add2calendar": "^1.1.8",
     "bindings": "^1.5.0",
     "bootstrap": "4.6.1",
@@ -25,7 +25,6 @@
     "faker": "^5.5.3",
     "jest-environment-jsdom": "^28.1.0",
     "jquery": "^3.6.0",
-    "node-sass": "^7.0.1",
     "popper.js": "^1.16.1",
     "sass": "^1.50.1",
     "select2": "^4.0.13",
