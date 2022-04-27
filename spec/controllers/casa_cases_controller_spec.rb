@@ -52,4 +52,17 @@ RSpec.describe CasaCasesController, type: :controller do
       end
     end
   end
+
+  describe "#reactivate" do
+    context "only admin can de/reactivate" do
+      let(:case_id) { volunteer.casa_cases.first.id }
+      it "reactivates" do
+        casa_admin = create(:casa_admin, casa_org: organization)
+        allow(controller).to receive(:authenticate_user!).and_return(true)
+        allow(controller).to receive(:current_user).and_return(casa_admin)
+        patch :reactivate, params: {id: case_id}
+        expect(response).to have_http_status(:redirect)
+      end
+    end
+  end
 end
