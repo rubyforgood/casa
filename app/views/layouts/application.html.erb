@@ -23,6 +23,16 @@
     <%= stylesheet_link_tag 'all_casa_admin', 'data-turbolinks-track': 'reload' %>
   <% end %>
 
+  <style>
+    @font-face {
+      font-family: 'Font Awesome 6 Free';
+      font-style: normal;
+      font-weight: 900;
+      font-display: $fa-font-display;
+      src: url('<%= asset_path("fa-solid-900.woff2") %>') format('woff2'),
+        url('<%= asset_path("fa-solid-900.ttf") %>') format('truetype');
+    }
+  </style>
 </head>
 <body class="<%= body_class %>">
   <noscript>

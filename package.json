@@ -11,7 +11,7 @@
     "build:css-auto-generated": "sass ./app/assets/stylesheets/application.sass.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.4",
+    "@fortawesome/fontawesome-free": "^6.1.1",
     "@rails/actioncable": "^7.0.3",
     "@rails/activestorage": "^7.0.3",
     "@rails/ujs": "^7.0.3",
