@@ -68,6 +68,24 @@ RSpec.describe Volunteer, type: :model do
       case_contacts.each { |c| c.reload }
       expect(case_contacts).to all(satisfy { |c| !c.active })
     end
+
+    context "when volunteer has previously been assigned a supervisor", runme: true do
+      let!(:supervisor_volunteer) { create(:supervisor_volunteer, volunteer: volunteer) }
+
+      it "deactivates the supervisor-volunteer relationship" do
+        volunteer.deactivate
+
+        expect { volunteer.reload }.to change(volunteer, :supervisor_volunteer)
+      end
+    end
+
+    context "when volunteer had no supervisor previously assigned" do
+      it "does not attempt to update a supervisor-volunteer table" do
+        volunteer.deactivate
+
+        expect { volunteer.reload }.not_to change(volunteer, :supervisor_volunteer)
+      end
+    end
   end
 
   describe "#display_name" do
