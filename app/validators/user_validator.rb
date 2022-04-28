@@ -4,7 +4,6 @@ class UserValidator < ActiveModel::Validator
 
   def validate(record)
     valid_phone_number_contents(record.phone_number, record)
-    validate_presence(:email, record)
     validate_presence(:display_name, record)
     at_least_one_communication_preference_selected(record)
   end
