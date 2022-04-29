@@ -10,12 +10,6 @@ class User < ApplicationRecord
   has_paper_trail
   devise :database_authenticatable, :invitable, :recoverable, :validatable, :timeoutable, :trackable
 
-  validates :email, presence: true
-  validates :display_name, presence: true
-
-  validates_with UserValidator
-  validate :at_least_one_communication_preference_selected
-
   belongs_to :casa_org
 
   has_many :case_assignments, foreign_key: "volunteer_id", dependent: :destroy # TODO destroy is wrong
@@ -151,10 +145,6 @@ class User < ApplicationRecord
   def admin_self_deactivated?
     return false if !casa_admin? || active
     id.to_s == last_deactivated_by
-  end
-
-  def at_least_one_communication_preference_selected
-    errors.add(:base, " At least one communication preference must be selected.") unless receive_email_notifications || receive_sms_notifications
   end
 
   def last_deactivated_by
