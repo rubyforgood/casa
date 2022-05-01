@@ -98,7 +98,7 @@ Another option is to install the Chromium browser for your operating system so t
 
 **Downloading the Project**
 (*on a Mac or Linux machine*)
-1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine. You can ask a maintainer for permission to make a branch on this repo. You can also [create a fork on GitHub](https://docs.github.com/en/get-started/quickstart/fork-a-repo) and makr a pull request from the fork. See [our contributing guide](doc/CONTRIBUTING.md) for more detailed instructions.
+1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine. You can ask a [maintainer](https://github.com/rubyforgood/casa/wiki/Who's-who%3F) for permission to make a branch on this repo. You can also [create a fork on GitHub](https://docs.github.com/en/get-started/quickstart/fork-a-repo) and makr a pull request from the fork. See [our contributing guide](doc/CONTRIBUTING.md) for more detailed instructions.
 
 **Installing Packages**
 1. `cd casa/`
