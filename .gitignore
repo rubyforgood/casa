@@ -58,3 +58,5 @@ vendor/bundle/
 default.nix
 
 npm-debug.log
+
+secrets.env

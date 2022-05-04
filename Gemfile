@@ -41,6 +41,7 @@ gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not
 gem "webpacker" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 
 group :development, :test do
+  gem "dotenv-rails"
   gem "bullet" # Detect and fix N+1 queries
   gem "byebug", platforms: %i[mri mingw x64_mingw] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "erb_lint", require: false
