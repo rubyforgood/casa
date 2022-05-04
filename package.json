@@ -30,7 +30,7 @@
   "version": "0.1.0",
   "devDependencies": {
     "@webpack-cli/serve": "^1.6.1",
-    "jest": "^28.0.2",
+    "jest": "^28.0.3",
     "markdown-toc": "^1.2.0",
     "standard": "^17.0.0",
     "start-server-and-test": "^1.14.0",
