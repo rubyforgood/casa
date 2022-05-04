@@ -5,7 +5,7 @@ const logger = require('./logger.js')
 const sass = require('sass')
 
 const compiledCSS = sass.renderSync({
-  file: 'app/javascript/src/stylesheets/application.scss'
+  file: 'app/assets/stylesheets/application.scss'
 })
 
 fileSystem.writeFile('./app/assets/builds/application.css', compiledCSS.css.toString(), function (err) {
