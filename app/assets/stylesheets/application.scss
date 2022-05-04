@@ -1,9 +1,9 @@
-@use "node_modules/bootstrap/scss/bootstrap.scss" with (
+@use "bootstrap/scss/bootstrap.scss" with (
   $primary: #00447c
 );
-@use "node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker";
-@use "node_modules/@fortawesome/fontawesome-free/scss/fontawesome";
-@use "node_modules/@fortawesome/fontawesome-free/scss/solid";
+@use "bootstrap-datepicker/dist/css/bootstrap-datepicker";
+@use "@fortawesome/fontawesome-free/scss/fontawesome";
+@use "@fortawesome/fontawesome-free/scss/solid";
 
 @use "base/breakpoints";
 
