@@ -352,6 +352,10 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   context "logged in as an admin" do
+    let!(:note_1) { volunteer.notes.create(creator: admin, content: "Note_1") }
+    let!(:note_2) { volunteer.notes.create(creator: admin, content: "Note_2") }
+    let!(:note_3) { volunteer.notes.create(creator: admin, content: "Note_3") }
+
     before do
       sign_in admin
       visit edit_volunteer_path(volunteer)
@@ -373,9 +377,28 @@ RSpec.describe "volunteers/edit", type: :system do
         end
       end
     end
+
+    it "can delete notes about a volunteer" do
+      expect(page).to have_css ".notes .table tbody tr", count: 3
+
+      expect(page.text.index(note_3.content)).to be < (page.text.index(note_2.content))
+      expect(page.text.index(note_2.content)).to be < (page.text.index(note_1.content))
+
+      click_on("Delete", match: :first)
+
+      expect(page).to have_css ".notes .table tbody tr", count: 2
+
+      expect(page).to have_content note_2.content
+      expect(page).to have_content note_1.content
+      expect(page).not_to have_content note_3.content
+    end
   end
 
   context "logged in as a supervisor" do
+    let!(:note_1) { volunteer.notes.create(creator: admin, content: "Note_1") }
+    let!(:note_2) { volunteer.notes.create(creator: admin, content: "Note_2") }
+    let!(:note_3) { volunteer.notes.create(creator: admin, content: "Note_3") }
+
     before do
       volunteer.supervisor = create(:supervisor)
       sign_in volunteer.supervisor
@@ -397,6 +420,21 @@ RSpec.describe "volunteers/edit", type: :system do
           expect(page).to have_text(I18n.l(current_date.to_date, format: :standard, default: ""))
         end
       end
+    end
+
+    it "can delete notes about a volunteer" do
+      expect(page).to have_css ".notes .table tbody tr", count: 3
+
+      expect(page.text.index(note_3.content)).to be < (page.text.index(note_2.content))
+      expect(page.text.index(note_2.content)).to be < (page.text.index(note_1.content))
+
+      click_on("Delete", match: :first)
+
+      expect(page).to have_css ".notes .table tbody tr", count: 2
+
+      expect(page).to have_content note_2.content
+      expect(page).to have_content note_1.content
+      expect(page).not_to have_content note_3.content
     end
   end
 
