@@ -1,4 +1,6 @@
 require "pry"
+require "webmock/rspec"
+WebMock.disable_net_connect!(allow_localhost: true)
 
 if ENV["RUN_SIMPLECOV"]
   require "simplecov"
@@ -22,6 +24,12 @@ if ENV["RUN_SIMPLECOV"]
 end
 
 RSpec.configure do |config|
+  config.before(:each) do
+    stub_request(:post, "https://api.short.io/links").
+      with(body: "{\"originalURL\":\"https://wiki.com\",\"domain\":\"lel.com\"}", headers: { "Accept" => "application/json", "Content-Type" => "application/json", "Authorization" => ENV['SHORT_API_KEY'] }).
+      to_return(status: 201, body: "{\"shortURL\":\"https://lel.com/xpsmpw\"}", headers: {})
+  end
+
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
