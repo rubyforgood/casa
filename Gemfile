@@ -14,7 +14,7 @@ gem "caxlsx_rails", "~> 0.6.3" # excel spreadsheets - TODO can we remove this ve
 gem "delayed_job_active_record"
 gem "devise" # for authentication
 gem "devise_invitable"
-gem "httparty" # for making HTTP network requests
+gem "httparty" # for making HTTP network requests 🥳
 gem "draper" # adds decorators for cleaner presentation logic
 gem "faker" # creates realistic seed data, valuable for staging and demos
 gem "filterrific" # filtering and sorting of models
@@ -42,7 +42,6 @@ gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not
 gem "webpacker" # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 
 group :development, :test do
-  gem "dotenv-rails"
   gem "bullet" # Detect and fix N+1 queries
   gem "byebug", platforms: %i[mri mingw x64_mingw] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "erb_lint", require: false
