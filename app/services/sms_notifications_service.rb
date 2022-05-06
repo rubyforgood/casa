@@ -1,3 +1,5 @@
+require "json"
+
 class SmsNotificationsService
   include HTTParty
   base_uri "https://api.short.io/"
@@ -15,8 +17,12 @@ class SmsNotificationsService
   def create_short_url(original_url = nil)
     params = { body: { originalURL: original_url, domain: @short_domain }.to_json, headers: { "Authorization" => @short_api_key } }
     response = self.class.post("/links", params)
+    @short_url = JSON.parse(response.body)["shortURL"]
     return response
   end
 
   # to do: short url getter
+  def get_short_url()
+    @short_url
+  end
 end
