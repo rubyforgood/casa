@@ -16,5 +16,13 @@ RSpec.describe SmsNotificationsService do
       expect(response.code).to match 200
       expect(response.body).to match "{\"shortURL\":\"https://lel.com/xpsmpw\"}"
     end
+
+    it "returns a short url" do
+      original_url = "https://wiki.com"
+      short_domain = "lel.com"
+      short_url = SmsNotificationsService.new(short_domain, "fdfdsf").get_short_url()
+      expect(short_url).to be_an_instance_of(String)
+      expect(short_url).to match "https://lel.com/xpsmpw"
+    end
   end
 end
