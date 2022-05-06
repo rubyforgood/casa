@@ -26,8 +26,16 @@ end
 RSpec.configure do |config|
   config.before(:each) do
     stub_request(:post, "https://api.short.io/links").
-      with(body: "{\"originalURL\":\"https://wiki.com\",\"domain\":\"lel.com\"}", headers: { "Accept" => "application/json", "Content-Type" => "application/json", "Authorization" => ENV['SHORT_API_KEY'] }).
-      to_return(status: 201, body: "{\"shortURL\":\"https://lel.com/xpsmpw\"}", headers: {})
+      with(
+        body: { originalURL: "https://wiki.com", domain: "lel.com" }.to_json,
+        headers: {
+       	  'Accept'=>'application/json',
+       	  'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+       	  'Authorization'=>'fdfdsf',
+       	  'Content-Type'=>'application/json',
+       	  'User-Agent'=>'Ruby'
+         }).
+      to_return(status: 200, body: "{\"shortURL\":\"https://lel.com/xpsmpw\"}", headers: {})
   end
 
   config.expect_with :rspec do |expectations|
