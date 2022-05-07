@@ -1,3 +1,4 @@
+// links to stylesheets inside node_modules
 @use "bootstrap/scss/bootstrap.scss" with (
   $primary: #00447c
 );
@@ -5,6 +6,7 @@
 @use "@fortawesome/fontawesome-free/scss/fontawesome";
 @use "@fortawesome/fontawesome-free/scss/solid";
 
+// custom css for the app
 @use "base/breakpoints";
 
 @use "shared/dashboard";
