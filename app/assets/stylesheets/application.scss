@@ -6,6 +6,7 @@
 @use "datatables.net-dt/css/jquery.dataTables.css";
 @use "@fortawesome/fontawesome-free/scss/fontawesome";
 @use "@fortawesome/fontawesome-free/scss/solid";
+@use "select2/dist/css/select2";
 
 // custom css for the app
 @use "base/breakpoints";
@@ -16,7 +17,7 @@
 @use "shared/form";
 @use "shared/layout";
 @use "shared/navbar";
-@use "shared/select2";
+@use "shared/select2_additional_styles";
 @use "shared/sidebar";
 @use "shared/typography";
 @use "shared/utilities";
