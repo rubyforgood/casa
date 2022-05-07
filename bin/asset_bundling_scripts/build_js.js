@@ -7,7 +7,7 @@ esbuild.build({
   entryPoints: ['javascript/application.js'],
   outfile: 'out.js',
   bundle: true,
-  watch: true,
+  watch: true
 }).then(result => {
   logger.info('application.js built successfully')
   logger.info('watching for changes')
