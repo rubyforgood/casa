@@ -26,7 +26,7 @@ function displayPopUpIfPreferencesIsInvalid () {
 
 $('document').ready(() => {
     if ($(`.${SAVE_BUTTON_CLASS}`).length > 0) {
-        enableBtn($(`.${SUBMIT_BUTTON_CLASS}`)[0])
+        enableBtn($(`.${SAVE_BUTTON_CLASS}`)[0])
         $(`.${SMS_TOGGLE_CLASS}`).on('blur', () => {
             displayPopUpIfPreferencesIsInvalid() 
         })
@@ -36,3 +36,8 @@ $('document').ready(() => {
         })
       }
     })
+
+export {
+    displayPopUpIfPreferencesIsInvalid
+}
+     
