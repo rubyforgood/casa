@@ -13,19 +13,20 @@ function displayPopUpIfPreferencesIsInvalid () {
     let smsNotificationState = $("#user_receive_sms_notifications").prop('checked')
 
     if (smsNotificationState == false && emailNotificationState == false) {
-        
+        disableBtn($(`.${SAVE_BUTTON_CLASS}`)[0])
         Swal.fire({
             icon: 'error',
             title: 'Preference Error',
             text: 'At least one communication preference required'
           })
-    } 
-
+    } else {
+        enableBtn($(`.${SAVE_BUTTON_CLASS}`)[0])
+    }
 }
 
 $('document').ready(() => {
     if ($(`.${SAVE_BUTTON_CLASS}`).length > 0) {
-
+        enableBtn($(`.${SUBMIT_BUTTON_CLASS}`)[0])
         $(`.${SMS_TOGGLE_CLASS}`).on('blur', () => {
             displayPopUpIfPreferencesIsInvalid() 
         })
