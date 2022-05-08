@@ -13,7 +13,7 @@ function removeMandateWithConfirmation () {
   Swal.fire({
     icon: 'warning',
     title: 'Delete court order?',
-    text,
+    text: text,
     showCloseButton: true,
     showCancelButton: true,
     focusConfirm: false,
