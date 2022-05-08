@@ -21,7 +21,6 @@ class SmsNotificationsService
     return response
   end
 
-  # to do: short url getter
   def get_short_url()
     @short_url
   end

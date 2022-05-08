@@ -232,6 +232,7 @@ GEM
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
+    jwt (2.3.0)
     launchy (2.5.0)
       addressable (~> 2.7)
     letter_opener (1.8.1)
@@ -424,6 +425,10 @@ GEM
     timeout (0.2.0)
     traceroute (0.8.1)
       rails (>= 3.0.0)
+    twilio-ruby (5.67.0)
+      faraday (>= 0.9, < 3.0)
+      jwt (>= 1.5, <= 2.5)
+      nokogiri (>= 1.6, < 2.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
@@ -518,6 +523,7 @@ DEPENDENCIES
   standard (= 1.5.0)
   strong_migrations
   traceroute
+  twilio-ruby
   tzinfo-data
   web-console (>= 3.3.0)
   webdrivers
