@@ -72,18 +72,18 @@ minlength: User.password_length.min %>
   </div>
  <%= form_for @user, as: :user, url: users_path do |form| %>
    <br>
-   <h3>Communication Preferences</h3>
-   <p>Tell us how you'd like to receive notifications.</p>
+   <h3><%= t("communication_preferences.header") %></h3>
+   <p><%= t("communication_preferences.paragraph") %></p>
    <div>
      <%= form.check_box :receive_email_notifications, class: "toggle-email-notifications" %>
-     <%= form.label :receive_email_notifications, "Email Me" %>
+     <%= form.label :receive_email_notifications, t("communication_preferences.email_me")  %>
    </div>
    <div>
      <%= form.check_box :receive_sms_notifications, class: "toggle-sms-notifications" %>
-     <%= form.label :receive_sms_notifications, "Text Me" %>
+     <%= form.label :receive_sms_notifications, t("communication_preferences.text_me") %>
    <div>
    <div class="action_container">
-     <%= form.submit "Save Preferences", class: "btn btn-primary mb-3 save-preference" %>
+     <%= form.submit t("communication_preferences.save_preferences"), class: "btn btn-primary mb-3 save-preference" %>
    </div>
  <% end %>
 </div>
