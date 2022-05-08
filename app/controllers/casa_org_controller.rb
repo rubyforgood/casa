@@ -45,7 +45,10 @@ class CasaOrgController < ApplicationController
       :address,
       :logo,
       :court_report_template,
-      :show_driving_reimbursement
+      :show_driving_reimbursement,
+      :twilio_account_sid,
+      :twilio_auth_token,
+      :twilio_phone_number
     )
   end
 

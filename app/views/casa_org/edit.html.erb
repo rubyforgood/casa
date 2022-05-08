@@ -30,6 +30,19 @@
           <%= form.label :show_driving_reimbursement, t(".show_driving_reimbursement"), class: 'form-check-label' %>
         </div>
       </div>
+      <hr>
+      <div class="field form-group">
+          <%= form.label :twilio_account_sid, t("edit.twilio_account_sid") %>
+          <%= form.text_field :twilio_account_sid, class: "form-control" %>
+      </div>
+      <div class="field form-group">
+          <%= form.label :twilio_auth_token, t("edit.twilio_auth_token") %>
+          <%= form.text_field :twilio_auth_token, class: "form-control" %>
+      </div>
+      <div class="field form-group">
+          <%= form.label :twilio_phone_number, t("edit.twilio_phone_number") %>
+          <%= form.text_field :twilio_phone_number, class: "form-control" %>
+      </div>
       <div class="actions">
         <%= form.submit t("button.submit"), class: "btn btn-primary" %>
       </div>
