@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "CasaOrg", type: :request do
   let(:casa_org) { build(:casa_org) }
-  let(:valid_attributes) { {name: "name", display_name: "display_name", address: "address", twilio_account_sid: "fyxpz5naqnir3ftopvxuzev6ir48xb4jmc", twilio_auth_token: "gukogx4k99885clw6j7ucd62hgzj5w4p", twilio_phone_number: "+12223334444"} }
+  let(:valid_attributes) { {name: "name", display_name: "display_name", address: "address", twilio_account_sid: "fyxpz5naqnir3ftopvxuzev6ir48xb4jmc", twilio_api_key_sid: "gukogx4k99885clw6j7ucd62hgzj5w4p", twilio_api_key_secret: "gukogx4k99885clw6j7ucd62hgzj5w4p", twilio_phone_number: "+12223334444"} }
   let(:logo) { upload_file("#{Rails.root}/spec/fixtures/company_logo.png") }
   let(:invalid_attributes) { {name: nil} }
   let(:casa_case) { build_stubbed(:casa_case, casa_org: casa_org) }
