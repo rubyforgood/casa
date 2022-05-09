@@ -76,7 +76,7 @@ RSpec.describe "CasaOrg", type: :request do
 
           expect(response.content_type).to eq "application/json; charset=utf-8"
           expect(response).to have_http_status :unprocessable_entity
-          expect(response.body).to match ["Twilio phone number format is invalid. Please follow the format +1XXXXXXXXXX where X is a digit"].to_json
+          expect(response.body).to match ["Number must be 12 digits including country code (+1)"].to_json
         end
 
         it "with long twilio phone number", :aggregate_failures do
@@ -84,7 +84,7 @@ RSpec.describe "CasaOrg", type: :request do
 
           expect(response.content_type).to eq "application/json; charset=utf-8"
           expect(response).to have_http_status :unprocessable_entity
-          expect(response.body).to match ["Twilio phone number format is invalid. Please follow the format +1XXXXXXXXXX where X is a digit"].to_json
+          expect(response.body).to match ["Number must be 12 digits including country code (+1)"].to_json
         end
 
         it "with twilio phone number that contains characters", :aggregate_failures do
@@ -92,7 +92,7 @@ RSpec.describe "CasaOrg", type: :request do
 
           expect(response.content_type).to eq "application/json; charset=utf-8"
           expect(response).to have_http_status :unprocessable_entity
-          expect(response.body).to match ["Twilio phone number format is invalid. Please follow the format +1XXXXXXXXXX where X is a digit"].to_json
+          expect(response.body).to match ["Number must be 12 digits including country code (+1)"].to_json
         end
       end
     end
