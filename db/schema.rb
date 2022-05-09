@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_08_232038) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_09_224425) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -127,9 +127,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_08_232038) do
     t.string "footer_links", default: [], array: true
     t.string "slug"
     t.boolean "show_driving_reimbursement", default: true
-    t.string "twilio_account_sid"
-    t.string "twilio_auth_token"
     t.string "twilio_phone_number"
+    t.string "twilio_account_sid"
+    t.string "twilio_api_key_sid"
+    t.string "twilio_api_key_secret"
     t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 

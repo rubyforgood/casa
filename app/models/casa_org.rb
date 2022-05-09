@@ -81,7 +81,8 @@ end
 #  show_driving_reimbursement :boolean          default(TRUE)
 #  slug                       :string
 #  twilio_account_sid         :string
-#  twilio_auth_token          :string
+#  twilio_api_key_secret      :string
+#  twilio_api_key_sid         :string
 #  twilio_phone_number        :string
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null

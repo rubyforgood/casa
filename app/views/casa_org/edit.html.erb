@@ -32,16 +32,20 @@
       </div>
       <hr>
       <div class="field form-group">
+          <%= form.label :twilio_phone_number, t(".twilio_phone_number") %>
+          <%= form.text_field :twilio_phone_number, class: "form-control" %>
+      </div>
+      <div class="field form-group">
           <%= form.label :twilio_account_sid, t(".twilio_account_sid") %>
           <%= form.text_field :twilio_account_sid, class: "form-control" %>
       </div>
       <div class="field form-group">
-          <%= form.label :twilio_auth_token, t(".twilio_auth_token") %>
-          <%= form.text_field :twilio_auth_token, class: "form-control" %>
+          <%= form.label :twilio_api_key_sid, t(".twilio_api_key_sid") %>
+          <%= form.text_field :twilio_api_key_sid, class: "form-control" %>
       </div>
       <div class="field form-group">
-          <%= form.label :twilio_phone_number, t(".twilio_phone_number") %>
-          <%= form.text_field :twilio_phone_number, class: "form-control" %>
+          <%= form.label :twilio_api_key_secret, t(".twilio_api_key_secret") %>
+          <%= form.text_field :twilio_api_key_secret, class: "form-control" %>
       </div>
       <div class="actions">
         <%= form.submit t("button.submit"), class: "btn btn-primary" %>
