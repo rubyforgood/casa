@@ -6,6 +6,7 @@ class CasaOrg < ApplicationRecord
 
   has_paper_trail
   validates :name, presence: true, uniqueness: true
+  validates_with CasaOrgValidator
 
   has_many :users, dependent: :destroy
   has_many :casa_cases, dependent: :destroy

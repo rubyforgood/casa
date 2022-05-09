@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "CasaOrg", type: :request do
   let(:casa_org) { build(:casa_org) }
-  let(:valid_attributes) { {name: "name", display_name: "display_name", address: "address"} }
+  let(:valid_attributes) { {name: "name", display_name: "display_name", address: "address", twilio_account_sid: "fyxpz5naqnir3ftopvxuzev6ir48xb4jmc", twilio_auth_token: "gukogx4k99885clw6j7ucd62hgzj5w4p", twilio_phone_number: "+12223334444"} }
   let(:logo) { upload_file("#{Rails.root}/spec/fixtures/company_logo.png") }
   let(:invalid_attributes) { {name: nil} }
   let(:casa_case) { build_stubbed(:casa_case, casa_org: casa_org) }
@@ -69,6 +69,30 @@ RSpec.describe "CasaOrg", type: :request do
           expect(response.content_type).to eq "application/json; charset=utf-8"
           expect(response).to have_http_status :unprocessable_entity
           expect(response.body).to match "Name can't be blank".to_json
+        end
+
+        it "with short twilio phone number", :aggregate_failures do
+          patch casa_org_url(casa_org, format: :json), params: {casa_org: {**valid_attributes, twilio_phone_number: "+111"}}
+
+          expect(response.content_type).to eq "application/json; charset=utf-8"
+          expect(response).to have_http_status :unprocessable_entity
+          expect(response.body).to match ["Twilio phone number format is invalid. Please follow the format +1XXXXXXXXXX where X is a digit"].to_json
+        end
+
+        it "with long twilio phone number", :aggregate_failures do
+          patch casa_org_url(casa_org, format: :json), params: {casa_org: {**valid_attributes, twilio_phone_number: "+1222333444455"}}
+
+          expect(response.content_type).to eq "application/json; charset=utf-8"
+          expect(response).to have_http_status :unprocessable_entity
+          expect(response.body).to match ["Twilio phone number format is invalid. Please follow the format +1XXXXXXXXXX where X is a digit"].to_json
+        end
+
+        it "with twilio phone number that contains characters", :aggregate_failures do
+          patch casa_org_url(casa_org, format: :json), params: {casa_org: {**valid_attributes, twilio_phone_number: "+1222333abcd"}}
+
+          expect(response.content_type).to eq "application/json; charset=utf-8"
+          expect(response).to have_http_status :unprocessable_entity
+          expect(response.body).to match ["Twilio phone number format is invalid. Please follow the format +1XXXXXXXXXX where X is a digit"].to_json
         end
       end
     end
