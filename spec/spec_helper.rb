@@ -32,7 +32,7 @@ RSpec.configure do |config|
           'Content-Type' => 'application/x-www-form-urlencoded',
           'Authorization' => 'Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
         }).
-      to_return(body: "{\"error_code\":\"null\", \"status\":\"sent\", \"body\":\"The cake is a lie\"}")
+      to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"The cake is a lie\"}")
 
     stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno34/Messages.json").
       with(
@@ -41,7 +41,7 @@ RSpec.configure do |config|
           'Content-Type' => 'application/x-www-form-urlencoded',
           'Authorization' => 'Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
         }).
-      to_return(body: "{\"error_code\":\"null\", \"status\":\"sent\", \"body\":\"Execute Order 66 - https://42ni.short.gy/jzTwdF\"}")
+      to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"Execute Order 66 - https://42ni.short.gy/jzTwdF\"}")
 
     stub_request(:post, "https://api.short.io/links").
       with(

@@ -26,6 +26,4 @@ RSpec.describe SmsNotificationsService do
       expect(short_url).to match "https://cw-archives.com/fives"
     end
   end
-
-  # describe "twilio API" test in the future?
 end
