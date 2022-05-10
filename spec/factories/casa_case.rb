@@ -25,6 +25,17 @@ FactoryBot.define do
       end
     end
 
+    trait :with_casa_case_contact_types do
+      after(:create) do |casa_case, _|
+        casa_org = casa_case.casa_org
+        2.times.map do
+          contact_type_group = create(:contact_type_group, casa_org: casa_org)
+          contact_type = create(:contact_type, contact_type_group: contact_type_group)
+          create(:casa_case_contact_type, casa_case: casa_case, contact_type: contact_type)
+        end
+      end
+    end
+
     trait :with_one_court_order do
       after(:create) do |casa_case|
         casa_case.case_court_orders << build(:case_court_order)

@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe CaseAssignment, type: :model do
   let(:casa_org_1) { build(:casa_org) }
-  let(:casa_case_1) { create(:casa_case, casa_org: casa_org_1) }
+  let(:casa_case_1) { create(:casa_case, :with_casa_case_contact_types, casa_org: casa_org_1) }
   let(:volunteer_1) { create(:volunteer, casa_org: casa_org_1) }
   let(:inactive) { build(:volunteer, :inactive, casa_org: casa_org_1) }
   let(:supervisor) { build(:supervisor, casa_org: casa_org_1) }
