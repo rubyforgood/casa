@@ -10,11 +10,14 @@ class TwilioService
   end
 
   def send_sms(params)
+    from = params[:From]
+    body = params.key?(:URL) ? params[:Body] + params[:URL] : params[:Body]
+    to = params[:To]
     # line 14 returns a twilio API message object
     message = @client.messages.create(
-      from: params[:From],
-      body: params[:Body],
-      to: params[:To],
+      from: from,
+      body: body,
+      to: to,
     )
   end
 
