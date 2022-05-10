@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
-    "@rails/actioncable": "^7.0.2",
+    "@rails/actioncable": "^7.0.3",
     "@rails/activestorage": "^7.0.2",
     "@rails/ujs": "^7.0.2",
     "@rails/webpacker": "5.4.3",
