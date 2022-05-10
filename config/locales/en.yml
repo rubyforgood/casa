@@ -101,7 +101,7 @@ en:
       full: "%B %-d, %Y"
   case_contact:
     create: Case contact was successfully created.
-    update: Case contact was successfully updated.
+    update: "Case contact #%{case_contact_id} created at %{created_at}, was successfully updated."
     destroy: Contact is successfully deleted.
     restore: Contact is successfully restored.
     case_min_validation: At least one case must be selected
