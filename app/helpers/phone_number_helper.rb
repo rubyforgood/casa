@@ -24,6 +24,6 @@ module PhoneNumberHelper
       return false, message
     end
 
-    true, nil
+    [true, nil]
   end
 end
