@@ -9,7 +9,7 @@
   </div>
   <table class="mt-3">
     <tr>
-      <% default_checked = @casa_case.contact_types.empty? %>
+      <% default_checked = defined?(@casa_case) ? @casa_case.contact_types.empty? : true  %>
       <% contact_type_groups.each do |group| %>
         <td class="align-top d-inline-block pr-6 pb-4">
           <h5> <%= group.name %> </h5>
