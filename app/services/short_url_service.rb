@@ -1,6 +1,6 @@
 require "json"
 
-class SmsNotificationsService
+class ShortUrlService
   include HTTParty
   base_uri "https://api.short.io/"
   headers "Accept" => "application/json"

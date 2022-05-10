@@ -1,11 +1,11 @@
 require "rails_helper"
 
-RSpec.describe SmsNotificationsService do
+RSpec.describe ShortUrlService do
   describe "short.io API" do
     before :each do
       @original_url = "https://wiki.com"
       @short_domain = "cw-archives.com"
-      @notification_object = SmsNotificationsService.new(@short_domain, "fdfdsf")
+      @notification_object = ShortUrlService.new(@short_domain, "fdfdsf")
     end
 
     it "returns a successful response with correct http request" do

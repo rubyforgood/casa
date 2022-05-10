@@ -22,7 +22,7 @@ RSpec.describe TwilioService do
 
         # get a real (not stubbed) short url to test
         WebMock.allow_net_connect!(allow: "https://api.short.io/links")
-        short_url = SmsNotificationsService.new("42ni.short.gy", "sk_lrzC9C5wrlnmuKag")
+        short_url = ShortUrlService.new("42ni.short.gy", "sk_lrzC9C5wrlnmuKag")
         short_url.create_short_url("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
         params = {
           From: "+15555555555",
