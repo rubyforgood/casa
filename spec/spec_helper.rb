@@ -1,5 +1,4 @@
 require "pry"
-# requiring this gem will disable HTTP req. by default
 require "webmock/rspec"
 
 if ENV["RUN_SIMPLECOV"]
@@ -24,6 +23,7 @@ if ENV["RUN_SIMPLECOV"]
 end
 
 RSpec.configure do |config|
+  # webmock gem disables net connections globally by default and so need to allow net connections before each test
   config.before(:each) do
     WebMock.allow_net_connect!
   end
