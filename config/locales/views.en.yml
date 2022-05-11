@@ -307,13 +307,14 @@ en:
   learning_hours:
     index:
       heading:
-        learning: Learning
-        time: Time 
+        name: Title
+        type: Learning Type
+        occurred_at: Date
+        time: Time Spent 
       title: Learning Hours
     new:
       title: New Learning Hours
-      occurred_on: Occurred On
-      duration: Duration
+      occurred_at: Occurred At
     confirm_note_content_dialog:
         header: Congratulations
         body: New entry created
