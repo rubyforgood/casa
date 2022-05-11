@@ -23,8 +23,8 @@ window.onload = function () {
   }
 
   caseOccurredAt.onfocusout = function () {
-    validateOccurredAt("focusout")
-  } 
+    validateOccurredAt('focusout')
+  }
 
   function validateAtLeastOneChecked (elements) {
     // convert to Array
@@ -50,7 +50,7 @@ window.onload = function () {
     }
   }
 
-  function validateOccurredAt (eventType = "") {
+  function validateOccurredAt (eventType = '') {
     const msg = 'Case Contact Occurrences cannot be in the future.'
     const today = new Date()
     today.setHours(0, 0, 0, 0)
@@ -60,12 +60,11 @@ window.onload = function () {
     caseDate.setHours(0, 0, 0, 0)
 
     if (caseDate > today) {
-      if(eventType !== "focusout"){
+      if (eventType !== 'focusout') {
         alert(msg)
       }
       caseOccurredAt.value = today.toLocaleDateString('en-GB').split('/').reverse().join('-')
     }
-
   }
 
   function validateNoteContent (e) {
