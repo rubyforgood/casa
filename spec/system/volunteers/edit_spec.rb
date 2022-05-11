@@ -381,16 +381,9 @@ RSpec.describe "volunteers/edit", type: :system do
     it "can delete notes about a volunteer" do
       expect(page).to have_css ".notes .table tbody tr", count: 3
 
-      expect(page.text.index(note_3.content)).to be < (page.text.index(note_2.content))
-      expect(page.text.index(note_2.content)).to be < (page.text.index(note_1.content))
-
       click_on("Delete", match: :first)
 
       expect(page).to have_css ".notes .table tbody tr", count: 2
-
-      expect(page).to have_content note_2.content
-      expect(page).to have_content note_1.content
-      expect(page).not_to have_content note_3.content
     end
   end
 
@@ -425,16 +418,9 @@ RSpec.describe "volunteers/edit", type: :system do
     it "can delete notes about a volunteer" do
       expect(page).to have_css ".notes .table tbody tr", count: 3
 
-      expect(page.text.index(note_3.content)).to be < (page.text.index(note_2.content))
-      expect(page.text.index(note_2.content)).to be < (page.text.index(note_1.content))
-
       click_on("Delete", match: :first)
 
       expect(page).to have_css ".notes .table tbody tr", count: 2
-
-      expect(page).to have_content note_2.content
-      expect(page).to have_content note_1.content
-      expect(page).not_to have_content note_3.content
     end
   end
 
