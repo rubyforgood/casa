@@ -1,19 +1,10 @@
 require "rails_helper"
+require "support/webmock_helper"
 
 RSpec.describe ShortUrlService do
   describe "short.io API" do
     before :each do
-      stub_request(:post, "https://api.short.io/links").
-      with(
-        body: { originalURL: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", domain: "42ni.short.gy" }.to_json,
-        headers: {
-          'Accept'=>'application/json',
-          'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-          'Authorization'=>'1337',
-          'Content-Type'=>'application/json',
-          'User-Agent'=>'Ruby'
-        }).
-      to_return(status: 200, body: "{\"shortURL\":\"https://42ni.short.gy/jzTwdF\"}", headers: {})
+      stubbed_requests()
       WebMock.disable_net_connect!
       @original_url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
       @short_domain = "42ni.short.gy"
