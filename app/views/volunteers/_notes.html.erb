@@ -11,6 +11,7 @@
               <th>Note</th>
               <th>Creator</th>
               <th>Date</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -19,6 +20,9 @@
                 <td><%= note.content %></td>
                 <td><%= note.creator.display_name %></td>
                 <td><%= note.created_at.strftime(t("time.formats.standard")) %></td>
+                <td>
+                  <%= link_to "Edit", edit_volunteer_note_path(@volunteer, note), class: "btn btn-primary" %>
+                </td>
               </tr>
             <% end %>
           </tbody>

@@ -140,17 +140,6 @@ RSpec.describe "ReimbursementDatatable" do
       it_behaves_like "a sorted results set"
     end
 
-    describe "order by case number" do
-      let(:order_by) { "case_number" }
-      let(:sorted_case_contacts) do
-        case_contacts
-          .sort_by { |case_contact| case_contact.casa_case.case_number }
-          .sort_by { |case_contact| case_contact.id }
-      end
-
-      it_behaves_like "a sorted results set"
-    end
-
     describe "order by created at" do
       let(:order_by) { "created_at" }
       let(:sorted_case_contacts) do
@@ -167,6 +156,34 @@ RSpec.describe "ReimbursementDatatable" do
       end
 
       it_behaves_like "a sorted results set"
+    end
+
+    describe "order by case number" do
+      let(:order_by) { "case_number" }
+      let(:sorted_case_contacts) { case_contacts.sort_by { |case_contact| case_contact.casa_case.case_number } }
+      let(:first_case_number) { first_result[:casa_case][:case_number] }
+      let(:lowest_case_number) { sorted_case_contacts.first.casa_case.case_number }
+
+      it "should order ascending by default" do
+        expect(first_case_number).to eq(lowest_case_number)
+      end
+
+      describe "explicit ascending order" do
+        let(:order_direction) { "ASC" }
+
+        it "should order correctly" do
+          expect(first_case_number).to eq(lowest_case_number)
+        end
+      end
+
+      describe "descending order" do
+        let(:order_direction) { "DESC" }
+        let(:highest_case_number) { sorted_case_contacts.last.casa_case.case_number }
+
+        it "should order correctly" do
+          expect(first_case_number).to eq(highest_case_number)
+        end
+      end
     end
   end
 end

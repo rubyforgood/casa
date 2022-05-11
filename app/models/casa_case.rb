@@ -200,7 +200,7 @@ class CasaCase < ApplicationRecord
   end
 
   def full_attributes_hash
-    attributes.symbolize_keys.merge({contact_types: casa_case_contact_types.map(&:attributes), court_orders: case_court_orders.map(&:attributes)})
+    attributes.symbolize_keys.merge({contact_types: contact_types.reload.map(&:attributes), court_orders: case_court_orders.map(&:attributes)})
   end
 
   # def to_param

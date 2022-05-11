@@ -133,7 +133,10 @@
 
       <div>
         <%= render(partial: "case_contacts/case_contact",
-                   collection: @casa_case.decorate.case_contacts_ordered_by_occurred_at.grab_all(current_user),
+                   collection: @casa_case.decorate
+                    .case_contacts_ordered_by_occurred_at
+                    .includes(contact_types: [:contact_type_group])
+                    .grab_all(current_user),
                    as: :contact) %>
       </div>
     </div>

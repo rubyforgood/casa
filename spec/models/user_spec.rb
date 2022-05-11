@@ -15,9 +15,31 @@ RSpec.describe User, type: :model do
 
   it { is_expected.to have_many(:notes) }
 
-  it "requires display name" do
-    user = build(:user, display_name: "")
-    expect(user.valid?).to be false
+  describe "model validations" do
+    it "requires display name" do
+      user = build(:user, display_name: "")
+      expect(user.valid?).to be false
+    end
+
+    it "requires email" do
+      user = build(:user, email: "")
+      expect(user.valid?).to be false
+    end
+
+    it "requires 12 digit phone numbers" do
+      user = build(:user, phone_number: "+1416321809")
+      expect(user.valid?).to be false
+    end
+
+    it "requires phone number to only contain numbers" do
+      user = build(:user, phone_number: "+1416eee4325")
+      expect(user.valid?).to be false
+    end
+
+    it "requires phone number with US area code" do
+      user = build(:user, phone_number: "+76758890432")
+      expect(user.valid?).to be false
+    end
   end
 
   describe "#case_contacts_for" do

@@ -3,12 +3,28 @@ require "rails_helper"
 RSpec.describe "/casa_admins", type: :request do
   describe "GET /casa_admins/:id/edit" do
     context "logged in as admin user" do
-      it "can successfully access a casa admin edit page" do
-        sign_in_as_admin
+      context "same org" do
+        let(:casa_one) { create(:casa_org) }
+        let(:casa_admin_one) { create(:casa_admin, casa_org: casa_one) }
+        it "can successfully access a casa admin edit page" do
+          sign_in(casa_admin_one)
 
-        get edit_casa_admin_path(create(:casa_admin))
+          get edit_casa_admin_path(create(:casa_admin, casa_org: casa_one))
 
-        expect(response).to be_successful
+          expect(response).to be_successful
+        end
+      end
+
+      context "different org" do
+        let(:diff_org) { create(:casa_org) }
+        it "cannot access a casa admin edit page" do
+          sign_in_as_admin
+
+          get edit_casa_admin_path(create(:casa_admin, casa_org: diff_org))
+
+          expect(response).to redirect_to root_path
+          expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        end
       end
     end
 
@@ -37,6 +53,7 @@ RSpec.describe "/casa_admins", type: :request do
       let(:casa_admin) { create(:casa_admin) }
       let(:expected_display_name) { "Admin 2" }
       let(:expected_email) { "admin2@casa.com" }
+      let(:expected_phone_number) { "+14163218092" }
 
       before do
         sign_in_as_admin
@@ -46,13 +63,15 @@ RSpec.describe "/casa_admins", type: :request do
         put casa_admin_path(casa_admin), params: {
           casa_admin: {
             email: expected_email,
-            display_name: expected_display_name
+            display_name: expected_display_name,
+            phone_number: expected_phone_number
           }
         }
 
         casa_admin.reload
         expect(casa_admin.email).to eq expected_email
         expect(casa_admin.display_name).to eq expected_display_name
+        expect(casa_admin.phone_number).to eq expected_phone_number
         expect(response).to redirect_to casa_admins_path
         expect(response.request.flash[:notice]).to eq "New admin created successfully"
       end
@@ -80,11 +99,13 @@ RSpec.describe "/casa_admins", type: :request do
 
       it "cannot update the casa admin", :aggregate_failures do
         put casa_admin_path(casa_admin), params: {
-          casa_admin: {email: nil}
+          casa_admin: {email: nil},
+          phone_number: {phone_number: "dsadw323"}
         }
 
         casa_admin.reload
         expect(casa_admin.email).not_to eq nil
+        expect(casa_admin.phone_number).not_to eq "dsadw323"
         expect(response).to render_template :edit
       end
 

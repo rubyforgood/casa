@@ -5,6 +5,7 @@ class UserParameters < SimpleDelegator
         :email,
         :casa_org_id,
         :display_name,
+        :phone_number,
         :password,
         :active,
         :type

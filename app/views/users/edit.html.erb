@@ -13,6 +13,11 @@
         <%= form.text_field :display_name, class: "form-control" %>
       </div>
 
+      <div class="field form-group">
+        <%= form.label :phone_number, t("common.phone_number") %>
+        <%= form.text_field :phone_number, class: "form-control" %>
+      </div>
+
       <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
 
       <%= render "/shared/invite_login", resource: current_user %>
@@ -63,4 +68,22 @@ minlength: User.password_length.min %>
       <% end %>
     </div>
   </div>
+
+  </div>
+ <%= form_for @user, as: :user, url: users_path do |form| %>
+   <br>
+   <h3>Communication Preferences</h3>
+   <p>Tell us how you'd like to receive notifications.</p>
+   <div>
+     <%= form.check_box :receive_email_notifications %>
+     <%= form.label :receive_email_notifications, "Email Me" %>
+   </div>
+   <div>
+     <%= form.check_box :receive_sms_notifications %>
+     <%= form.label :receive_sms_notifications, "Text Me" %>
+   <div>
+   <div class="action_container">
+     <%= form.submit "Save Preferences", class: "btn btn-primary mb-3" %>
+   </div>
+ <% end %>
 </div>

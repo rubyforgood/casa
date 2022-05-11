@@ -1,7 +1,11 @@
+<% court_dates = casa_case.court_dates.includes(:hearing_type).ordered_ascending.load %>
+
 <label><%= t(".court_dates") %>:</label>
-<% if casa_case.court_dates.size > 0 %>
+<% if court_dates.size == 0 %>
+  <%= t(".no_court_dates") %>
+<% else %>
   <ul>
-    <% casa_case.court_dates.ordered_ascending.each do |pcd| %>
+    <% court_dates.each do |pcd| %>
       <p>
         <%= link_to(pcd.decorate.court_date_info, casa_case_court_date_path(casa_case, pcd)) %>
 
@@ -13,8 +17,6 @@
       </p>
     <% end %>
   </ul>
-<% else %>
-  <%= t(".no_court_dates") %>
 <% end %>
 <div class="add-container past-court-dates">
   <a class="btn btn-primary add-button" href="<%= new_casa_case_court_date_path(casa_case) %>">

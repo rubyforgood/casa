@@ -49,7 +49,6 @@ mailers/application_mailer.rb
 models/application_record.rb
 models/concerns/by_organization_scope.rb
 models/concerns/roles.rb
-models/feature_flag.rb
 models/notification.rb
 notifications/base_notification.rb
 notifications/followup_notification.rb
@@ -64,6 +63,7 @@ services/create_all_casa_admin_service.rb
 services/create_casa_admin_service.rb
 services/mileage_export_csv_service.rb
 validators/court_report_validator.rb
+validators/user_validator.rb
 values/all_casa_admin_parameters.rb
 values/casa_admin_parameters.rb
 values/supervisor_parameters.rb

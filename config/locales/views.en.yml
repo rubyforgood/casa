@@ -375,6 +375,11 @@ en:
         do_not: Do not
         import: Then click the "Import Supervisors CSV" button to import your supervisors.
       upload_title: Upload your CSV file
+    sms_opt_in_modal:
+      title: SMS Opt In
+      description: Please check this box to verify that these mobile numbers have opted in to receive SMS notifications. (They will have the opportunity to opt out or update their preferences.)
+      label: Opt into SMS notifications
+      continue: Continue Import
     volunteers:
       button:
         download: Download and reference example Volunteer CSV file
@@ -579,6 +584,9 @@ en:
       send_reminder: Send Reminder
       supervisor_checkbox_text: Send CC to Supervisor
       tooltip: Remind volunteer to input case contacts
+
+  notes:
+    update: Update Note
   mileage_rates:
     index:
       mileage_rates: Mileage Rates

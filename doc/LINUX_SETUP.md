@@ -105,7 +105,9 @@ but feel free to substitute your own favorite Ruby version manager such as [rben
 #
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y curl git git-gui htop hub libpq-dev net-tools nodejs npm openssh-server postgresql-12 vim zsh
+sudo apt install -y curl git net-tools nodejs npm openssh-server postgresql-12 vim zsh
+sudo apt install -y libvips42 # Render images for your local web server
+sudo apt install -y libpq-dev # Helps compile C programs to be able to communicate with postgres
 ```
 
 ```

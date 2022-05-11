@@ -1,0 +1,33 @@
+<div class="modal show" id="smsOptIn" style="display: block;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="smsOptIn">
+          <%= t(".title") %>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <%= t(".description") %>
+        </div>
+        <br>
+        <span>
+          <%= form.label :sms_opt_in_label, t(".label") %>
+          <%= form.check_box :sms_opt_in, { id: "sms-opt-in-checkbox" } %>
+        <span>
+      </div>
+      <div class="modal-footer">
+        <%= form.submit t(".continue"), { id: "sms-opt-in-continue-button", class: "btn btn-primary", disabled: true } %>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+      document.getElementById('sms-opt-in-checkbox').addEventListener('change', function (event) {
+        document.getElementById('sms-opt-in-continue-button').disabled = !event.target.checked;
+      })
+  </script>
+</div>

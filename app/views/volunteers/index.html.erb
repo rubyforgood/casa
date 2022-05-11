@@ -119,27 +119,29 @@
 
 <div class="card card-container">
   <div class="card-body">
-    <table
-      class="table table-striped table-bordered"
-      id="volunteers"
-      data-source="<%= datatable_volunteers_path format: :json %>">
-      <thead>
-      <tr>
-        <th><%= t(".heading.name") %></th>
-        <th><%= t(".heading.e_mail") %></th>
-        <th><%= t(".heading.supervisor") %></th>
-        <th><%= t(".heading.status") %></th>
-        <th><%= t(".heading.assigned_transition_aged_youth") %></th>
-        <th><%= t(".heading.case_number") %></th>
-        <th><%= t(".heading.last_attempted_contact") %></th>
-        <th><%= t(".heading.contacts") %></th>
-        <th><%= t(".heading.hours_spent_in") %></th>
-        <th><%= t(".heading.actions") %></th>
-      </tr>
-      </thead>
+    <div class="table-responsive">
+      <table
+        class="table table-striped table-bordered"
+        id="volunteers"
+        data-source="<%= datatable_volunteers_path format: :json %>">
+        <thead>
+          <tr>
+            <th><%= t(".heading.name") %></th>
+            <th><%= t(".heading.e_mail") %></th>
+            <th><%= t(".heading.supervisor") %></th>
+            <th><%= t(".heading.status") %></th>
+            <th><%= t(".heading.assigned_transition_aged_youth") %></th>
+            <th><%= t(".heading.case_number") %></th>
+            <th><%= t(".heading.last_attempted_contact") %></th>
+            <th><%= t(".heading.contacts") %></th>
+            <th><%= t(".heading.hours_spent_in") %></th>
+            <th><%= t(".heading.actions") %></th>
+          </tr>
+        </thead>
 
-      <tbody>
-      </tbody>
-    </table>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

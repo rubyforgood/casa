@@ -77,6 +77,14 @@ RSpec.describe SupervisorImporter do
         existing_supervisor.reload
       }.to change(existing_supervisor, :display_name).to("Supervisor Two")
     end
+
+    it "updates phone number to valid number and turns on sms notifications" do
+      expect {
+        supervisor_importer.import_supervisors
+        existing_supervisor.reload
+      }.to change(existing_supervisor, :phone_number).to("+11111111111")
+        .and change(existing_supervisor, :receive_sms_notifications).to(true)
+    end
   end
 
   context "when row doesn't have e-mail address" do
@@ -88,6 +96,32 @@ RSpec.describe SupervisorImporter do
       expect(alert[:type]).to eq(:error)
       expect(alert[:message]).to eq("You successfully imported 1 supervisors. Not all rows were imported.")
       expect(alert[:exported_rows]).to include("Row does not contain e-mail address.")
+    end
+  end
+
+  context "when row doesn't have phone number" do
+    let(:supervisor_import_data_path) { Rails.root.join("spec", "fixtures", "supervisors_without_phone_numbers.csv") }
+
+    let!(:existing_supervisor_with_number) { create(:supervisor, display_name: "#", email: "supervisor1@example.net", phone_number: "+11111111111", receive_sms_notifications: true) }
+
+    it "updates phone number to be deleted and turns off sms notifications" do
+      expect {
+        supervisor_importer.import_supervisors
+        existing_supervisor_with_number.reload
+      }.to change(existing_supervisor_with_number, :phone_number).to("")
+        .and change(existing_supervisor_with_number, :receive_sms_notifications).to(false)
+    end
+  end
+
+  context "when phone number in row is invalid" do
+    let(:supervisor_import_data_path) { Rails.root.join("spec", "fixtures", "supervisors_invalid_phone_numbers.csv") }
+
+    it "returns an error message" do
+      alert = supervisor_importer.import_supervisors
+
+      expect(alert[:type]).to eq(:error)
+      expect(alert[:message]).to eq("Not all rows were imported.")
+      expect(alert[:exported_rows]).to include("Phone number  must be 12 digits including country code (+1)")
     end
   end
 
