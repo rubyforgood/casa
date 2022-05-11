@@ -20,7 +20,7 @@ jobs:
   rspec:
     runs-on: ubuntu-latest
     env:
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      RAILS_ENV: test
 
     services:
       db:

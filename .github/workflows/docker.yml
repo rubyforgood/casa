@@ -20,7 +20,7 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     env:
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      RAILS_ENV: test
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
