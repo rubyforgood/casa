@@ -5,20 +5,19 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'doc/**'
-      - '**/*.md'
-      - 'bin/**'
+      - "doc/**"
+      - "**/*.md"
+      - "bin/**"
   pull_request:
     branches:
       - main
     paths-ignore:
-      - 'doc/**'
-      - '**/*.md'
-      - 'bin/**'
+      - "doc/**"
+      - "**/*.md"
+      - "bin/**"
 
 jobs:
   rspec:
-
     runs-on: ubuntu-latest
 
     services:
@@ -69,6 +68,7 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
           RUN_SIMPLECOV: true
           CC_TEST_REPORTER_ID: 31464536e34ab26588cb951d0fa6b5898abdf401dbe912fd47274df298e432ac
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
