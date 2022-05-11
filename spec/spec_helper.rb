@@ -1,6 +1,6 @@
 require "pry"
+# requiring this gem will disable HTTP req. by default
 require "webmock/rspec"
-WebMock.disable_net_connect!(allow_localhost: true)
 
 if ENV["RUN_SIMPLECOV"]
   require "simplecov"
@@ -25,26 +25,7 @@ end
 
 RSpec.configure do |config|
   config.before(:each) do
-    stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno34/Messages.json").
-      with(
-        body: { From: "+15555555555", Body: "Execute Order 66 - https://42ni.short.gy/jzTwdF", To: "+12222222222" },
-        headers: {
-          'Content-Type' => 'application/x-www-form-urlencoded',
-          'Authorization' => 'Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
-        }).
-      to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"Execute Order 66 - https://42ni.short.gy/jzTwdF\"}")
-
-    stub_request(:post, "https://api.short.io/links").
-      with(
-        body: { originalURL: "https://wiki.com", domain: "cw-archives.com" }.to_json,
-        headers: {
-       	  'Accept'=>'application/json',
-       	  'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-       	  'Authorization'=>'fdfdsf',
-       	  'Content-Type'=>'application/json',
-       	  'User-Agent'=>'Ruby'
-         }).
-      to_return(status: 200, body: "{\"shortURL\":\"https://cw-archives.com/fives\"}", headers: {})
+    WebMock.allow_net_connect!
   end
 
   config.expect_with :rspec do |expectations|

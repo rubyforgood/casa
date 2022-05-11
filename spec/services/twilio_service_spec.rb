@@ -4,6 +4,14 @@ RSpec.describe TwilioService do
   describe "twilio API" do
     context "SMS messaging" do
       before :each do
+        stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno34/Messages.json").
+        with(
+          body: { From: "+15555555555", Body: "Execute Order 66 - https://42ni.short.gy/jzTwdF", To: "+12222222222" },
+          headers: {
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'Authorization' => 'Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+          }).
+        to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"Execute Order 66 - https://42ni.short.gy/jzTwdF\"}")
         @acc_sid = "articuno34"
         @api_key = "Aladdin"
         @api_secret = "open sesame"
