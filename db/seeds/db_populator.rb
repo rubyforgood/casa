@@ -55,7 +55,7 @@ class DbPopulator
   # Create 2 judges for each casa_org.
   def create_judges(casa_org)
     env = ENV["APP_ENVIRONMENT"] || Rails.env
-    if env == "qa" || env == "test"
+    if env == "qa" || env == "test" || env == "development"
       2.times { Judge.create(name: Faker::Name.name, casa_org: casa_org) }
     end
   end
