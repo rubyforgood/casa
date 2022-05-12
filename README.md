@@ -11,7 +11,7 @@
 [![Snyk Vulnerabilities](https://snyk.io/test/github/rubyforgood/casa/badge.svg)](https://snyk.io/test/github/rubyforgood/casa)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/rubyforgood/casa.svg)](http://isitmaintained.com/project/rubyforgood/casa "Average time to resolve an issue")
 
-CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunteer sworn into a county-level juvenile dependency court system to advocate on behalf of a youth in the corresponding county's foster care system. CASA is also the namesake role of the national organization, CASA, which exists to cultivate and supervise volunteers carrying out this work – with county level chapters (operating relatively independently of each other) across the country.
+A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates on behalf of a youth in their county's foster care system. CASA is also the namesake role of the national organization, CASA, which exists to cultivate and supervise volunteers carrying out this work – with county level chapters (operating relatively independently of each other) across the country.
 
 <!-- toc -->
 
@@ -74,6 +74,15 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 # Developing! ✨🛠✨
 ## Installation
 ### General Setup Instructions
+**Downloading the Project**
+(*on a Mac or Linux machine*)
+1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine.  
+2. You can ask a [maintainer](https://github.com/rubyforgood/casa/wiki/Who's-who%3F) for permission to make a branch on this repo.  
+3. You can also [create a fork on GitHub](https://docs.github.com/en/get-started/quickstart/fork-a-repo) and make a pull request from the fork.  
+4. ⚠️ Warning ⚠️ Github workflows are enabled by default on forks. Workflows are scripts that run at regular intervals or after events like commits. They take Github's resources to run and may send you emails if they fail. Most forks will not need any workflows. Please disable workflows for your fork by clicking on the actions tab of your fork.  
+![Fork](https://i.stack.imgur.com/dMT7J.png)  
+5. See [our contributing guide](doc/CONTRIBUTING.md) for more detailed instructions.
+
 **Ruby**
 1. Install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
 1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`. Right now that's Ruby 3.1.0
@@ -95,15 +104,6 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 1. The Spec tests uses Chrome Browser and Chromedriver for some of the tests. A current version of chromedriver will be installed when `bundle install` is run. TO install Chrome, see [Chrome Install](https://support.google.com/chrome/answer/95346?hl=en&ref_topic=7439538).
 
 Another option is to install the Chromium browser for your operating system so the browser-based Ruby feature/integration tests can run. Installing `chromium-browser` is enough, even in WSL (Windows subsystem for Linux)
-
-**Downloading the Project**
-(*on a Mac or Linux machine*)
-1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine.  
-2. You can ask a [maintainer](https://github.com/rubyforgood/casa/wiki/Who's-who%3F) for permission to make a branch on this repo.  
-3. You can also [create a fork on GitHub](https://docs.github.com/en/get-started/quickstart/fork-a-repo) and makr a pull request from the fork.  
-4. ⚠️ Warning ⚠️ Github workflows are enabled by default on forks. Workflows are scripts that run at regular intervals or after events like commits. They take Github's resources to run and may send you emails if they fail. Most forks will not need any workflows. Please disable workflows for your fork by clicking on the actions tab of your fork.  
-![Fork](https://i.stack.imgur.com/dMT7J.png)  
-5. See [our contributing guide](doc/CONTRIBUTING.md) for more detailed instructions.
 
 **Installing Packages**
 1. `cd casa/`
