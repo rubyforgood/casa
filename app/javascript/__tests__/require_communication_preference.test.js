@@ -3,7 +3,7 @@ import { displayPopUpIfPreferencesIsInvalid } from '../src/require_communication
 
 require('jest')
 
-let saveButton, receiveEmail, receiveSMS
+let saveButton
 
 beforeEach(() => {
   document.body.innerHTML = `
@@ -23,8 +23,6 @@ beforeEach(() => {
  </form>
  `
   saveButton = document.getElementsByClassName('save-preference')[0]
-  receiveEmail = document.getElementsByClassName('toggle-email-notifications')[0]
-  receiveSMS = document.getElementsByClassName('toggle-sms-notifications')[0]
 })
 
 describe('ensure the save button is enabled when at least one preference is selected', () => {
