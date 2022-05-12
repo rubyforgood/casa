@@ -2,9 +2,9 @@ require "json"
 
 class ShortUrlService
   include HTTParty
-  base_uri "https://api.short.io/"
-  headers "Accept" => "application/json"
-  headers "Content-Type" => "application/json"
+  base_uri ApiBaseUrl::SHORT_IO
+  headers RequestHeader::ACCEPT_JSON
+  headers RequestHeader::CONTENT_TYPE_JSON
 
   def initialize(short_domain = nil, api_key = nil)
     @short_domain = short_domain
