@@ -11,29 +11,29 @@ class TwilioService
 
   # this method takes in a hash
   # required keys are: From:, To:, Body:
-  # to send a short url, use URL: key in hash
+  # to send a short url, set URL: key in hash
   def send_sms(params)
     from = params[:From]
     body = params.key?(:URL) ? params[:Body] + params[:URL] : params[:Body]
     to = params[:To]
     # returns a twilio API message object
-    # refer: https://www.twilio.com/docs/sms/api/message-resource#message-properties
-    message = @client.messages.create(
+    # refer to docs: https://www.twilio.com/docs/sms/api/message-resource#message-properties
+    @client.messages.create(
       from: from,
       body: body,
-      to: to,
+      to: to
     )
   end
 
-  def get_acc_sid()
+  def get_acc_sid
     @acc_sid
   end
 
-  def get_api_key()
+  def get_api_key
     @api_key
   end
 
-  def get_api_secret()
+  def get_api_secret
     @api_secret
   end
 end
