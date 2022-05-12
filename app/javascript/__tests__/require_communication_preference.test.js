@@ -20,7 +20,6 @@ beforeEach(() => {
        <div class="action_container">
            <input type="submit" name="commit" value="Save Preferences" class="btn btn-primary mb-3 save-preference" data-disable-with="Save Preferences">
        </div>
-   </div>
  </form>
  `
   saveButton = document.getElementsByClassName('save-preference')[0]
@@ -33,26 +32,8 @@ describe('ensure the save button is enabled when at least one preference is sele
     return el.disabled && el.classList.contains('disabled') && el.hasAttribute('aria-disabled')
   }
 
-  test('only email preference is selected', () => {
-    receiveEmail = true
-    receiveSMS = false
-    displayPopUpIfPreferencesIsInvalid(receiveEmail, receiveSMS, false)
-    expect(isDisabled(saveButton)).toBe(false)
-    expect(document.getElementsByClassName('swal2-container').length).toBe(0)
-  })
-
-  test('only SMS preference is selected', () => {
-    receiveEmail = false
-    receiveSMS = true
-    displayPopUpIfPreferencesIsInvalid(receiveEmail, receiveSMS, false)
-    expect(isDisabled(saveButton)).toBe(false)
-    expect(document.getElementsByClassName('swal2-container').length).toBe(0)
-  })
-
-  test('both email and SMS preferences are selected', () => {
-    receiveEmail = true
-    receiveSMS = true
-    displayPopUpIfPreferencesIsInvalid(receiveEmail, receiveSMS, false)
+  test('default user preferences state is always valid', () => {
+    displayPopUpIfPreferencesIsInvalid()
     expect(isDisabled(saveButton)).toBe(false)
     expect(document.getElementsByClassName('swal2-container').length).toBe(0)
   })
