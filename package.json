@@ -9,9 +9,9 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
-    "@rails/actioncable": "^7.0.2",
-    "@rails/activestorage": "^7.0.2",
-    "@rails/ujs": "^7.0.2",
+    "@rails/actioncable": "^7.0.3",
+    "@rails/activestorage": "^7.0.3",
+    "@rails/ujs": "^7.0.3",
     "@rails/webpacker": "5.4.3",
     "add2calendar": "^1.1.8",
     "bindings": "^1.5.0",
@@ -30,7 +30,7 @@
   "version": "0.1.0",
   "devDependencies": {
     "@webpack-cli/serve": "^1.6.1",
-    "jest": "^28.0.2",
+    "jest": "^28.1.0",
     "markdown-toc": "^1.2.0",
     "standard": "^17.0.0",
     "start-server-and-test": "^1.14.0",
