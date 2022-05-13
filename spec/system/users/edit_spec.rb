@@ -192,7 +192,7 @@ RSpec.describe "users/edit", type: :system do
         .to match("Your CASA password has been changed.")
     end
 
-    it "displays Casa admin error message if no communication preference is selected" do
+    it "displays admin error message if no communication preference is selected" do
       uncheck "user_receive_email_notifications"
       click_on "Save Preferences"
       expect(page).to have_content "1 error prohibited this Casa admin from being saved:"

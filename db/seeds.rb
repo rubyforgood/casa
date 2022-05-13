@@ -24,7 +24,6 @@ class SeederMain
   end
 
   def seed
-    PaperTrail.enabled = false # don't create rows in the versions table during seed
     log "NOTE: CASA seed does not delete anything anymore! Run rake db:seed:replant to delete everything and re-seed"
     log "Creating the objects in the database..."
     db_populator.create_all_casa_admin("allcasaadmin@example.com")
@@ -38,7 +37,6 @@ class SeederMain
     end
 
     post_process_data
-    PaperTrail::Version.delete_all
     report_object_counts
     log "\nDone.\n\n"
   end
@@ -68,7 +66,6 @@ class SeederMain
   def post_process_data
     ContactTypePopulator.populate
     CaseContactPopulator.populate
-    # PaperTrail::Versions.delete_all # not needed for seed, and it takes up a lot of heroku rows we don't care to pay for
   end
 
   def get_seed_specification
@@ -92,7 +89,6 @@ class SeederMain
     active_record_classes.each do |klass|
       log "%5d  %s" % [klass.count, klass.name]
     end
-    log "%5d  %s" % [PaperTrail::Version.count, PaperTrail::Version.name]
   end
 
   def log(message)
