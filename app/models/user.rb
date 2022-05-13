@@ -7,7 +7,6 @@ class User < ApplicationRecord
 
   validates_with UserValidator
 
-  has_paper_trail
   devise :database_authenticatable, :invitable, :recoverable, :validatable, :timeoutable, :trackable
 
   belongs_to :casa_org
