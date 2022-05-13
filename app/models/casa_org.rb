@@ -4,7 +4,6 @@ class CasaOrg < ApplicationRecord
 
   before_create :set_slug
 
-  has_paper_trail
   validates :name, presence: true, uniqueness: true
 
   has_many :users, dependent: :destroy
