@@ -78,6 +78,7 @@ en:
         judge: Judge
         next_court_date: Next Court Date
         transition_aged_youth: Transition Aged Youth
+        youth_date_in_care: "Youth's Date in Care"
       button:
         click_to_download: Click to download
         download_all: Download All
