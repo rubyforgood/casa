@@ -21,6 +21,7 @@ en:
         select_hearing_type: -Select Hearing Type-
         select_judge: -Select Judge-
       youth_birth_month_year: "Youth's Birth Month & Year"
+      youth_date_in_care: "Youth's Date in Care"
       case_number: Case number
       court_details: Court Details
       hearing_type: Hearing type
