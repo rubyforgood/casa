@@ -220,6 +220,7 @@ end
 #  court_report_due_date     :datetime
 #  court_report_status       :integer          default("not_submitted")
 #  court_report_submitted_at :datetime
+#  date_in_care              :datetime
 #  slug                      :string
 #  transition_aged_youth     :boolean          default(FALSE)
 #  created_at                :datetime         not null
