@@ -4,8 +4,8 @@ const esbuild = require('esbuild')
 const logger = require('./logger.js')
 
 esbuild.build({
-  entryPoints: ['javascript/application.js'],
-  outfile: 'out.js',
+  entryPoints: ['app/javascript/application.js'],
+  outdir: 'app/assets/builds',
   bundle: true,
   watch: true
 }).then(result => {

@@ -1,4 +1,4 @@
-const $ = require('jquery')
+/* global $ */
 
 module.exports = class Notifier {
   //  @param {object} notificationsElement The notification DOM element as a jQuery object

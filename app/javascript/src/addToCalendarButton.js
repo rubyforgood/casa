@@ -1,5 +1,6 @@
-import * as Add2Calendar from 'add2calendar'
-import 'add2calendar/css/add2calendar.css'
+/* global $ */
+
+const Add2Calendar = require('add2calendar')
 
 function createCalendarEvents () {
   const calendarButtons = document.querySelectorAll('div.cal-btn')

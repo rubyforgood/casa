@@ -1,6 +1,9 @@
+/* global alert */
+/* global window */
+/* global $ */
+
 import Swal from 'sweetalert2'
 
-/* global alert $ */
 window.onload = function () {
   const milesDriven = document.getElementById('case_contact_miles_driven')
   if (!milesDriven) return

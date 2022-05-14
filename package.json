@@ -6,7 +6,7 @@
     "lint": "standard",
     "lint:fix": "standard --fix",
     "toc": "markdown-toc -i README.md",
-    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds",
+    "build": "./bin/asset_bundling_scripts/build_js.js",
     "build:css": "sass app/assets/stylesheets/application.scss app/assets/builds/application.css --load-path=node_modules --watch"
   },
   "dependencies": {
