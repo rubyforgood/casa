@@ -1,6 +1,5 @@
 class CaseContact < ApplicationRecord
   include ByOrganizationScope
-  has_paper_trail
   acts_as_paranoid
 
   attr_accessor :duration_hours
