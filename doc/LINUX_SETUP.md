@@ -1,5 +1,4 @@
-# Setting Up the Application on Linux
-## Linux Development Environment Installation
+# Linux Development Environment Installation
 
 The commands below can be run all at once by copying and pasting them all into a file and running the file as a script
 (e.g. `bash -x script_name`).
