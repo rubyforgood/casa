@@ -113,4 +113,10 @@ en:
     thank_you_6: One of the greatest gifts you can give is your time!
     thank_you_7: Those who can do, do. Those who can do more, volunteer.
     thank_you_8: Volunteers do not necessarily have the time, they just have the heart.
+  communication_preferences:
+    header: "Communication Preferences"
+    paragraph: "Tell us how you'd like to receive notifications."
+    email_me: "Email Me"
+    text_me: "Text Me"
+    save_preferences: "Save Preferences"
 
