@@ -45,7 +45,7 @@
       "jQuery"
     ],
     "ignore": [
-      "cypress"
+      "app/assets/builds/**/*"
     ]
   },
   "engines": {
