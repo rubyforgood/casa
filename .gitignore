@@ -23,6 +23,8 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+/config/credentials/production.key
+/config/credentials.yml.enc
 
 # intellij IDE
 *.iml
@@ -40,7 +42,6 @@ yarn-debug.log*
 
 coverage/
 .idea/
-config/credentials.yml.enc
 vendor/bundle/
 .generators
 
@@ -58,3 +59,4 @@ vendor/bundle/
 default.nix
 
 npm-debug.log
+
