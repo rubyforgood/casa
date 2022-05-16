@@ -525,20 +525,20 @@ RSpec.describe "case_contacts/new", type: :system do
         volunteer_casa_case_one = volunteer.casa_cases.first
         create_contact_types(volunteer_casa_case_one.casa_org)
 
-        currentDateString = DateTime.now.strftime("%Y-%m-%e")
-        tomorrowDateString = (DateTime.now+1).strftime("%Y-%m-%e")
+        current_date_string = DateTime.now.strftime("%Y-%m-%e")
+        tomorrow_date_string = (DateTime.now + 1).strftime("%Y-%m-%e")
 
         sign_in volunteer
 
         visit new_case_contact_path
 
-        fill_in "case_contact_occurred_at", with: tomorrowDateString
+        fill_in "case_contact_occurred_at", with: tomorrow_date_string
 
-        find('body').click
+        find("body").click
 
         field_value = page.find_field("case_contact_occurred_at").value
-        
-        expect(field_value).to eq(currentDateString)
+
+        expect(field_value).to eq(current_date_string)
       end
     end
 
