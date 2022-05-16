@@ -101,7 +101,7 @@ class CaseContactsController < ApplicationController
         update_or_create_additional_expense(additional_expense_params, @case_contact)
       end
       if @case_contact.valid?
-        redirect_to casa_case_path(@case_contact.casa_case), notice: t("update", scope: "case_contact")
+        redirect_to casa_case_path(@case_contact.casa_case), notice: I18n.t("case_contact.update", created_at: @case_contact.created_at)
       else
         render :edit
       end

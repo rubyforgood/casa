@@ -112,4 +112,11 @@ RSpec.describe "casa_org/edit", type: :system do
 
     expect(organization.reload.logo.attachment).not_to be_nil
   end
+
+  it "has twilio API data required for SMS" do
+    expect(page).to have_text("Twilio Account SID")
+    expect(page).to have_text("Twilio API Key SID")
+    expect(page).to have_text("Twilio API Key Secret")
+    expect(page).to have_text("Twilio Phone Number")
+  end
 end

@@ -253,6 +253,10 @@ en:
       logo: Logo
       court_report_template: Court report template
       show_driving_reimbursement: Show driving reimbursement
+      twilio_account_sid: Twilio Account SID
+      twilio_api_key_sid: Twilio API Key SID
+      twilio_api_key_secret: Twilio API Key Secret
+      twilio_phone_number: Twilio Phone Number
   case_court_reports:
     index:
       button:

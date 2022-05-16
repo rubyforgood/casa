@@ -2,8 +2,6 @@ class CasaCase < ApplicationRecord
   include ByOrganizationScope
   include DateHelper
 
-  has_paper_trail
-
   self.ignored_columns = %w[court_date]
 
   TABLE_COLUMNS = %w[
@@ -18,8 +16,6 @@ class CasaCase < ApplicationRecord
 
   TRANSITION_AGE_YOUTH_ICON = "🦋".freeze
   NON_TRANSITION_AGE_YOUTH_ICON = "🐛".freeze
-
-  has_paper_trail
 
   before_create :set_slug
 
