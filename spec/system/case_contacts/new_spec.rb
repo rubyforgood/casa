@@ -519,6 +519,28 @@ RSpec.describe "case_contacts/new", type: :system do
         expect(page).not_to have_checked_field("case_contact_want_driving_reimbursement_false")
         expect(page).to have_field("Notes", with: "Hello world")
       end
+
+      it "sets occured date field to current date when a future date is selected", js: true do
+        volunteer = create(:volunteer, :with_casa_cases)
+        volunteer_casa_case_one = volunteer.casa_cases.first
+        future_date = 2.days.from_now
+        create_contact_types(volunteer_casa_case_one.casa_org)
+
+        currentDateString = DateTime.now.strftime("%Y-%m-%e")
+        tomorrowDateString = (DateTime.now+1).strftime("%Y-%m-%e")
+
+        sign_in volunteer
+
+        visit new_case_contact_path
+
+        fill_in "case_contact_occurred_at", with: tomorrowDateString
+
+        find('body').click
+
+        field_value = page.find_field("case_contact_occurred_at").value
+        
+        expect(field_value).to eq(currentDateString)
+      end
     end
 
     context "with no contact types set for the volunteer's cases" do
