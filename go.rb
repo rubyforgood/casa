@@ -84,7 +84,7 @@ We highly recommend that you join us in slack https://rubyforgood.herokuapp.com/
 }
     response = client.create_issue(repo_name, title, body, labels: ['railsconf2022workshop'])
     issue_number = response[:number]
-    p "created issue #{issue_number} for #{filename}"
+    p "created issue #{issue_number} as railsconf #{ticket_number} for #{filename}"
     ticket_number += 1
   end
 end
