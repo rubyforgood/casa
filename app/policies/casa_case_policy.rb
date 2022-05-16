@@ -27,6 +27,10 @@ class CasaCasePolicy < ApplicationPolicy
     is_admin?
   end
 
+  def update_date_in_care_youth?
+    is_supervisor? || is_admin?
+  end
+
   def update_emancipation_option?
     is_in_same_org? && (
     admin_or_supervisor? || is_volunteer_actively_assigned_to_case?
@@ -58,9 +62,14 @@ class CasaCasePolicy < ApplicationPolicy
 
     case @user
     when CasaAdmin
-      common_attrs.concat(%i[case_number birth_month_year_youth court_date court_report_due_date hearing_type_id judge_id])
+      common_attrs.concat(
+        %i[case_number birth_month_year_youth court_date court_report_due_date hearing_type_id judge_id date_in_care]
+      )
       common_attrs << case_court_orders_attributes
-    when Supervisor, Volunteer
+    when Supervisor
+      common_attrs.concat(%i[court_date court_report_due_date hearing_type_id judge_id date_in_care])
+      common_attrs << case_court_orders_attributes
+    when Volunteer
       common_attrs.concat(%i[court_date court_report_due_date hearing_type_id judge_id])
       common_attrs << case_court_orders_attributes
     else

@@ -3,7 +3,7 @@ module PhoneNumberHelper
   VALID_COUNTRY_CODE = "+1"
 
   def valid_phone_number(number)
-    message = " must be 12 digits including country code (+1)"
+    message = "must be 12 digits including country code (+1)"
 
     if number.nil? || number.empty?
       return true, nil

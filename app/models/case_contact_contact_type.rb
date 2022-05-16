@@ -12,8 +12,8 @@ end
 #  id              :bigint           not null, primary key
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  case_contact_id :bigint           not null
-#  contact_type_id :bigint           not null
+#  case_contact_id :integer          not null
+#  contact_type_id :integer          not null
 #
 # Indexes
 #
