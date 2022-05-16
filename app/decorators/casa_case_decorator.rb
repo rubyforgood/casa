@@ -1,4 +1,6 @@
 class CasaCaseDecorator < Draper::Decorator
+  include ActionView::Helpers::DateHelper
+
   delegate_all
 
   def case_contacts_ordered_by_occurred_at
@@ -38,6 +40,16 @@ class CasaCaseDecorator < Draper::Decorator
     CaseCourtOrder.implementation_statuses.map do |status|
       [status[0].humanize, status[0]]
     end
+  end
+
+  def date_in_care
+    return nil unless object.date_in_care
+    I18n.l(object.date_in_care, format: :youth_date_of_birth)
+  end
+
+  def duration_in_care
+    return nil unless object.date_in_care
+    "(#{time_ago_in_words(object.date_in_care)} ago)"
   end
 
   def calendar_next_court_date
