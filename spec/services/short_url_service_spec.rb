@@ -22,7 +22,7 @@ RSpec.describe ShortUrlService do
 
     it "returns a short url" do
       @notification_object.create_short_url(@original_url)
-      short_url = @notification_object.get_short_url
+      short_url = @notification_object.short_url
       expect(short_url).to be_an_instance_of(String)
       expect(short_url).to match "https://42ni.short.gy/jzTwdF"
     end

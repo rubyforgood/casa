@@ -1,6 +1,8 @@
 require "json"
 
 class ShortUrlService
+  attr_reader :short_url
+
   include HTTParty
   base_uri ApiBaseUrl::SHORT_IO
   headers RequestHeader::ACCEPT_JSON
@@ -20,9 +22,5 @@ class ShortUrlService
     response = self.class.post("/links", params)
     @short_url = JSON.parse(response.body)["shortURL"]
     response
-  end
-
-  def get_short_url
-    @short_url
   end
 end

@@ -20,7 +20,7 @@ RSpec.describe TwilioService do
           From: "+15555555555",
           Body: "Execute Order 66 - ",
           To: "+12222222222",
-          URL: @short_url.get_short_url
+          URL: @short_url.short_url
         }
 
         # response is a Twilio API obj
