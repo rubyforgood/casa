@@ -2,7 +2,8 @@ require 'octokit' # gem install octokit
 regex = /t\(["']/
 GITHUB_ACCESS_TOKEN = ENV["GITHUB_ACCESS_TOKEN"]
 client = Octokit::Client.new(:access_token => GITHUB_ACCESS_TOKEN)
-ticket_number = 1
+ticket_number = ENV["START_TICKET_NUMBER"].to_i || 1
+p "Starting at ticket: #{ticket_number}"
 # repo_name = 'compwron/practice-ticket-creation'
 repo_name = 'rubyforgood/casa'
 
