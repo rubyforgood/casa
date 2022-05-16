@@ -14,6 +14,8 @@ gem "caxlsx_rails", "~> 0.6.3" # excel spreadsheets - TODO can we remove this ve
 gem "delayed_job_active_record"
 gem "devise" # for authentication
 gem "devise_invitable"
+gem "httparty" # for making HTTP network requests 🥳
+gem "twilio-ruby" # twilio helper functions
 gem "draper" # adds decorators for cleaner presentation logic
 gem "faker" # creates realistic seed data, valuable for staging and demos
 gem "filterrific" # filtering and sorting of models
@@ -62,6 +64,7 @@ end
 
 group :test do
   gem "brakeman" # security inspection
+  gem "webmock" # HTTP request stubber
   gem "capybara"
   gem "capybara-screenshot"
   gem "database_cleaner-active_record"
