@@ -523,7 +523,6 @@ RSpec.describe "case_contacts/new", type: :system do
       it "sets occured date field to current date when a future date is selected", js: true do
         volunteer = create(:volunteer, :with_casa_cases)
         volunteer_casa_case_one = volunteer.casa_cases.first
-        future_date = 2.days.from_now
         create_contact_types(volunteer_casa_case_one.casa_org)
 
         currentDateString = DateTime.now.strftime("%Y-%m-%e")
