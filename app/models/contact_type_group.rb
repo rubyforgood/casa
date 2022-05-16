@@ -1,5 +1,4 @@
 class ContactTypeGroup < ApplicationRecord
-  has_paper_trail
   belongs_to :casa_org
   has_many :contact_types
 
@@ -22,7 +21,7 @@ end
 #  name        :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  casa_org_id :integer          not null
+#  casa_org_id :bigint           not null
 #
 # Indexes
 #

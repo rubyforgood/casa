@@ -1,6 +1,4 @@
 class CaseAssignment < ApplicationRecord
-  has_paper_trail
-
   belongs_to :casa_case
   belongs_to :volunteer, class_name: "User", inverse_of: "case_assignments"
 
@@ -37,8 +35,8 @@ end
 #  active       :boolean          default(TRUE), not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
-#  casa_case_id :integer          not null
-#  volunteer_id :integer          not null
+#  casa_case_id :bigint           not null
+#  volunteer_id :bigint           not null
 #
 # Indexes
 #

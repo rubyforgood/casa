@@ -1,5 +1,4 @@
 class CasaCaseContactType < ApplicationRecord
-  has_paper_trail
   belongs_to :casa_case
   belongs_to :contact_type
 
@@ -13,8 +12,8 @@ end
 #  id              :bigint           not null, primary key
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  casa_case_id    :integer          not null
-#  contact_type_id :integer          not null
+#  casa_case_id    :bigint           not null
+#  contact_type_id :bigint           not null
 #
 # Indexes
 #
