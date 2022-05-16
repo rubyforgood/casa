@@ -74,6 +74,45 @@ RSpec.describe "/casa_cases", type: :request do
         expect(response).to be_redirect
         expect(flash[:notice]).to eq("Sorry you are not authorized to perform this action.")
       end
+
+      context "when exporting a csv" do
+        subject(:casa_case_show) { get casa_case_path(casa_case, format: :csv) }
+
+        let(:current_time) { Time.now.strftime("%Y-%m-%d") }
+
+        it "generates a csv" do
+          casa_case_show
+
+          expect(response).to have_http_status :ok
+          expect(response.headers["Content-Type"]).to include "text/csv"
+          expect(response.headers["Content-Disposition"]).to include "case-contacts-#{current_time}"
+        end
+
+        it "adds the correct headers to the csv" do
+          casa_case_show
+
+          csv_headers = ["Internal Contact Number", "Duration Minutes", "Contact Types",
+            "Contact Made", "Contact Medium", "Occurred At", "Added To System At", "Miles Driven",
+            "Wants Driving Reimbursement", "Casa Case Number", "Creator Email", "Creator Name",
+            "Supervisor Name", "Case Contact Notes"]
+
+          csv_headers.each { |header| expect(response.body).to include header }
+        end
+      end
+
+      context "when exporting a xlsx" do
+        subject(:casa_case_show) { get casa_case_path(casa_case, format: :xlsx) }
+
+        let(:current_time) { Time.now.strftime("%Y-%m-%d") }
+
+        it "generates a xlsx file" do
+          casa_case_show
+
+          expect(response).to have_http_status :ok
+          expect(response.headers["Content-Type"]).to include "application/vnd.openxmlformats"
+          expect(response.headers["Content-Disposition"]).to include "case-contacts-#{current_time}"
+        end
+      end
     end
 
     describe "GET /new" do
