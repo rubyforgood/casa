@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_13_111133) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -37,7 +37,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
-    t.integer "blob_id", null: false
+    t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
@@ -71,8 +71,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
   end
 
   create_table "casa_case_contact_types", force: :cascade do |t|
-    t.integer "contact_type_id", null: false
-    t.integer "casa_case_id", null: false
+    t.bigint "contact_type_id", null: false
+    t.bigint "casa_case_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["casa_case_id"], name: "index_casa_case_contact_types_on_casa_case_id"
@@ -127,12 +127,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
     t.string "footer_links", default: [], array: true
     t.string "slug"
     t.boolean "show_driving_reimbursement", default: true
+    t.string "twilio_phone_number"
+    t.string "twilio_account_sid"
+    t.string "twilio_api_key_sid"
+    t.string "twilio_api_key_secret"
     t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 
   create_table "case_assignments", force: :cascade do |t|
-    t.integer "casa_case_id", null: false
-    t.integer "volunteer_id", null: false
+    t.bigint "casa_case_id", null: false
+    t.bigint "volunteer_id", null: false
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -141,8 +145,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
   end
 
   create_table "case_contact_contact_types", force: :cascade do |t|
-    t.integer "case_contact_id", null: false
-    t.integer "contact_type_id", null: false
+    t.bigint "case_contact_id", null: false
+    t.bigint "contact_type_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["case_contact_id"], name: "index_case_contact_contact_types_on_case_contact_id"
@@ -150,8 +154,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
   end
 
   create_table "case_contacts", force: :cascade do |t|
-    t.integer "creator_id", null: false
-    t.integer "casa_case_id", null: false
+    t.bigint "creator_id", null: false
+    t.bigint "casa_case_id", null: false
     t.integer "duration_minutes", null: false
     t.datetime "occurred_at", precision: nil, null: false
     t.datetime "created_at", null: false
@@ -181,7 +185,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
   end
 
   create_table "contact_type_groups", force: :cascade do |t|
-    t.integer "casa_org_id", null: false
+    t.bigint "casa_org_id", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -190,7 +194,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
   end
 
   create_table "contact_types", force: :cascade do |t|
-    t.integer "contact_type_group_id", null: false
+    t.bigint "contact_type_group_id", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -200,7 +204,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
 
   create_table "court_dates", force: :cascade do |t|
     t.datetime "date", precision: nil, null: false
-    t.integer "casa_case_id", null: false
+    t.bigint "casa_case_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "hearing_type_id"
@@ -234,7 +238,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
   end
 
   create_table "emancipation_options", force: :cascade do |t|
-    t.integer "emancipation_category_id", null: false
+    t.bigint "emancipation_category_id", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -284,14 +288,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
   end
 
   create_table "hearing_types", force: :cascade do |t|
-    t.integer "casa_org_id", null: false
+    t.bigint "casa_org_id", null: false
     t.string "name", null: false
     t.boolean "active", default: true, null: false
     t.index ["casa_org_id"], name: "index_hearing_types_on_casa_org_id"
   end
 
   create_table "judges", force: :cascade do |t|
-    t.integer "casa_org_id", null: false
+    t.bigint "casa_org_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "active", default: true
@@ -364,8 +368,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
   end
 
   create_table "supervisor_volunteers", force: :cascade do |t|
-    t.integer "supervisor_id", null: false
-    t.integer "volunteer_id", null: false
+    t.bigint "supervisor_id", null: false
+    t.bigint "volunteer_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_active", default: true
@@ -392,7 +396,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
     t.datetime "invitation_accepted_at", precision: nil
     t.integer "invitation_limit"
     t.string "invited_by_type"
-    t.integer "invited_by_id"
+    t.bigint "invited_by_id"
     t.integer "invitations_count", default: 0
     t.string "type"
     t.boolean "active", default: true
@@ -411,17 +415,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
     t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by_type_and_invited_by_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-  end
-
-  create_table "versions", force: :cascade do |t|
-    t.string "item_type"
-    t.string "{:null=>false}"
-    t.bigint "item_id", null: false
-    t.string "event", null: false
-    t.string "whodunnit"
-    t.text "object"
-    t.datetime "created_at", precision: nil
-    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

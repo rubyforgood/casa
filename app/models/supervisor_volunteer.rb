@@ -1,6 +1,5 @@
 # relationship between a supervisor and volunteer
 class SupervisorVolunteer < ApplicationRecord
-  has_paper_trail
   belongs_to :volunteer, class_name: "User"
   belongs_to :supervisor, class_name: "User"
 
@@ -25,8 +24,8 @@ end
 #  is_active     :boolean          default(TRUE)
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  supervisor_id :integer          not null
-#  volunteer_id  :integer          not null
+#  supervisor_id :bigint           not null
+#  volunteer_id  :bigint           not null
 #
 # Indexes
 #

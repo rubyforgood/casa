@@ -1,5 +1,4 @@
 class AllCasaAdmin < ApplicationRecord
-  has_paper_trail
   include Roles
 
   # Include default devise modules. Others available are:
