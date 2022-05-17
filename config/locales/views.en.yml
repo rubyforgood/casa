@@ -21,6 +21,7 @@ en:
         select_hearing_type: -Select Hearing Type-
         select_judge: -Select Judge-
       youth_birth_month_year: "Youth's Birth Month & Year"
+      youth_date_in_care: "Youth's Date in Care"
       case_number: Case number
       court_details: Court Details
       hearing_type: Hearing type
@@ -77,6 +78,7 @@ en:
         judge: Judge
         next_court_date: Next Court Date
         transition_aged_youth: Transition Aged Youth
+        youth_date_in_care: "Youth's Date in Care"
       button:
         click_to_download: Click to download
         download_all: Download All
@@ -251,6 +253,10 @@ en:
       logo: Logo
       court_report_template: Court report template
       show_driving_reimbursement: Show driving reimbursement
+      twilio_account_sid: Twilio Account SID
+      twilio_api_key_sid: Twilio API Key SID
+      twilio_api_key_secret: Twilio API Key Secret
+      twilio_phone_number: Twilio Phone Number
   case_court_reports:
     index:
       button:

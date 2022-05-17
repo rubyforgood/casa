@@ -40,6 +40,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Court Date")
       expect(page).to have_text("Court Report Due Date")
       expect(page).to have_field("Court Report Due Date")
+      expect(page).to have_text("Youth's Date in Care")
       expect(page).to have_text("Court Mandate Text One")
       expect(page).not_to have_text("Deactivate Case")
 
@@ -113,6 +114,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Court Report Due Date")
       expect(page).to have_field("Court Report Due Date")
       expect(page).to have_field("Court Report Due Date", with: "#{next_year}-09-08")
+      expect(page).to have_text("Youth's Date in Care")
       expect(page).to have_text("Court Mandate Text One")
       expect(page).to have_text("Partially implemented")
 
@@ -177,6 +179,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Case was deactivated on: #{I18n.l(casa_case.updated_at, format: :standard, default: nil)}")
       expect(page).not_to have_text("Court Date")
       expect(page).not_to have_text("Court Report Due Date")
+      expect(page).not_to have_text("Youth's Date in Care")
       expect(page).not_to have_text("Day")
       expect(page).not_to have_text("Month")
       expect(page).not_to have_text("Year")
@@ -468,6 +471,7 @@ of it unless it was included in a previous court report.")
       end
 
       expect(page).to have_field("Court Report Due Date")
+      expect(page).not_to have_text("Youth's Date in Care")
       expect(page).not_to have_text("Deactivate Case")
 
       expect(page).to have_css("#add-mandate-button")

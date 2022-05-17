@@ -101,7 +101,7 @@ en:
       full: "%B %-d, %Y"
   case_contact:
     create: Case contact was successfully created.
-    update: Case contact was successfully updated.
+    update: "Case contact created at %{created_at}, was successfully updated."
     destroy: Contact is successfully deleted.
     restore: Contact is successfully restored.
     case_min_validation: At least one case must be selected
@@ -113,4 +113,10 @@ en:
     thank_you_6: One of the greatest gifts you can give is your time!
     thank_you_7: Those who can do, do. Those who can do more, volunteer.
     thank_you_8: Volunteers do not necessarily have the time, they just have the heart.
+  communication_preferences:
+    header: "Communication Preferences"
+    paragraph: "Tell us how you'd like to receive notifications."
+    email_me: "Email Me"
+    text_me: "Text Me"
+    save_preferences: "Save Preferences"
 
