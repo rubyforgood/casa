@@ -21,7 +21,8 @@
                           deactivate_all_casa_admins_casa_org_casa_admin_path,
                           method: :patch,
                           class: "btn btn-outline-danger",
-                          data: {confirm: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"} %>
+                          data: { confirm: "WARNING: Marking an admin inactive will make them unable to login. " \
+                                           "Are you sure you want to do this?"} %>
               <%= form.submit "Update Profile", class: "btn btn-primary" %>
             </div>
           <% else %>
