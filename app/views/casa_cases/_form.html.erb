@@ -16,7 +16,7 @@
         </div>
       <% end %>
 
-      <h2><%= form.label :court_details, "Court Details") %></h2>
+      <h2><%= form.label :court_details, "Court Details" %></h2>
 
       <% if policy(casa_case).update_birth_month_year_youth? %>
         <div class="field form-group">
@@ -68,7 +68,7 @@
       <% if Judge.for_organization(current_organization).any? %>
         <% if policy(casa_case).update_judge? %>
           <div class="field form-group">
-            <%= form.label :judge_id, "Judge") %>
+            <%= form.label :judge_id, "Judge" %>
             <%= form.collection_select(
                     :judge_id,
                     Judge.for_organization(current_organization),
