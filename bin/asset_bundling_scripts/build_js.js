@@ -11,4 +11,7 @@ esbuild.build({
 }).then(result => {
   logger.info('application.js built successfully')
   logger.info('watching for changes')
+}).catch((err) => {
+  logger.error('failed to build application.js')
+  logger.error(err)
 })
