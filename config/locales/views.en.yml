@@ -221,15 +221,6 @@ en:
         group: Group
         name: Name
       title: Contact Types
-    hearing_types:
-      button:
-        edit: Edit
-        new: New Hearing Type
-      heading:
-        actions: Actions
-        active: Active?
-        name: Name
-      title: Hearing Types
     judges:
       button:
         edit: Edit
@@ -314,13 +305,6 @@ en:
     add_court_order: Add a court order
     court_orders: Court Orders - Please check that you didn't enter any youth names
     email: Email
-  hearing_types:
-    edit:
-      title: Edit Hearing Type
-    new:
-      title: New Hearing Type
-    form:
-      active: Active
   imports:
     cases:
       button:
