@@ -22,7 +22,6 @@
     "datatables.net-dt": "^1.12.1",
     "esbuild": "^0.14.36",
     "faker": "^5.5.3",
-    "jest-environment-jsdom": "^28.1.0",
     "jquery": "^3.6.0",
     "popper.js": "^1.16.1",
     "sass": "^1.50.1",
@@ -32,6 +31,7 @@
   },
   "version": "0.1.0",
   "devDependencies": {
+    "@babel/preset-env": "^7.17.12",
     "@webpack-cli/serve": "^1.6.1",
     "jest": "^28.1.0",
     "jest-environment-jsdom": "^28.1.0",
