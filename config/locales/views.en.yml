@@ -272,8 +272,6 @@ en:
         select_case_number: Select case number
       title: Report Categories
   contact_type_groups:
-    new:
-      title: New Contact Type Group
     edit:
       title: Edit Contact Type Group
     form:
