@@ -28,8 +28,6 @@ en:
       judge: Judge
       transition_aged_youth: Transition Aged Youth
       court_report_status: Court Report Status
-    inactive_case:
-      notice: Case was deactivated on
     index:
       button:
         new: New Case
