@@ -12,18 +12,18 @@
       <% if casa_admin.persisted? %>
         <div class="field form-group">
           <% if casa_admin.active? %>
-            <%= t(".active_text") %> <span class="badge badge-success text-uppercase display-1"><%= t(".active") %></span>
-            <%= link_to t(".button.deactivate"),
+            Admin is <span class="badge badge-success text-uppercase display-1">Active</span>
+            <%= link_to "Deactivate",
                         deactivate_casa_admin_path(casa_admin),
                         method: :patch,
                         class: "btn btn-outline-danger",
-                        data: {confirm: t(".prompt.mark_inactive_warning")} %>
+                        data: {confirm: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"} %>
           <% else %>
             <div class="alert alert-danger">
-              <%= t(".deactive_text") %>: <%= I18n.l(casa_admin.updated_at, format: :standard, default: nil) %>
+              Admin was deactivated on: <%= I18n.l(casa_admin.updated_at, format: :standard, default: nil) %>
             </div>
             <% if policy(casa_admin).activate? %>
-              <%= link_to t(".button.activate"),
+              <%= link_to "Activate Admin",
                           activate_casa_admin_path(casa_admin),
                           method: :patch,
                           class: "btn btn-outline-success" %>
@@ -47,7 +47,7 @@
       <% end %>
 
       <div class="actions">
-        <%= form.submit t("button.submit"), class: "btn btn-primary" %>
+        <%= form.submit "Submit", class: "btn btn-primary" %>
       </div>
     <% end %>
   </div>
