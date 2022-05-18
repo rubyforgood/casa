@@ -279,9 +279,6 @@ en:
       title: New Contact Type
     edit:
       title: Edit Contact Type
-    form:
-      contact_type_group: Contact type group
-      active: Active
   emancipation:
     index:
       heading:
