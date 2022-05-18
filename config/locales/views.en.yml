@@ -183,10 +183,6 @@ en:
       title: Editing Case Contact
     form:
       contact_types_label: 2. Select All Contact Types
-      contact_made_label: a. Contact Made
-      contact_medium: b. Contact Medium
-      miles_driven: a. Miles Driven
-      other_expenses: c. Other Expenses
     new:
       title: New Case Contact
     contact_types:
