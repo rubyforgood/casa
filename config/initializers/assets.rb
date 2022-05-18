@@ -16,5 +16,5 @@ Casa::Application.load_tasks
 #   Rails.application.config.assets.precompile += %w( admin.js admin.css )
 
 # ===== Custom =====
-Rake::Task['css:build'].invoke
-Rake::Task['javascript:build'].invoke
+Rake::Task["css:build"].invoke
+Rake::Task["javascript:build"].invoke
