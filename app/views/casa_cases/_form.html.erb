@@ -155,13 +155,14 @@
 
       <div class="actions">
         <% if casa_case.active %>
-          <%= form.submit casa_case.persisted? ? "Update" : "Create", class: "btn btn-primary" %>
+          <%= form.submit casa_case.persisted? ? "Update CASA Case" : "Create CASA Case", class: "btn btn-primary" %>
           <%= link_to("Deactivate CASA Case",
                       deactivate_casa_case_path(casa_case),
                       method: :patch,
                       class: "btn btn-outline-danger pull-right",
                       data: {
-                          confirm_swal: "Deactivating a CASA Case will unassign any volunteers currently assigned to this case.",
+                          confirm_swal:
+                              "Deactivating a CASA Case will unassign any volunteers currently assigned to this case.",
                           reload: true,
                           success: "Yes, deactivate",
                           fail: "No, go back"
