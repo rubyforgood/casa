@@ -85,7 +85,7 @@ minlength: User.password_length.min %>
    <div class="pl-4 pb-4">
       <%= form.collection_check_boxes("sms_notification_event_ids", @sms_notification_events, :id, :name) do |event| %>
         <div class="form-check">
-          <%= event.check_box(class: "form-check-input") %>
+          <%= event.check_box(class: "form-check-input", id: "toggle-sms-notification-event") %>
           <%= event.label(class: "form-check-label") %>
         </div>
       <% end %>

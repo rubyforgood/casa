@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :users_sms_event do
+  factory :user_sms_notification_event do
     user { nil }
     sms_notification_event { nil }
   end

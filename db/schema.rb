@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_19_224400) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_19_233803) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -389,6 +389,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_19_224400) do
     t.string "version", null: false
   end
 
+  create_table "user_sms_notification_events", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "sms_notification_event_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sms_notification_event_id"], name: "index_user_sms_notification_events_on_sms_notification_event_id"
+    t.index ["user_id"], name: "index_user_sms_notification_events_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -425,15 +434,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_19_224400) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  create_table "users_sms_events", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "sms_notification_event_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["sms_notification_event_id"], name: "index_users_sms_events_on_sms_notification_event_id"
-    t.index ["user_id"], name: "index_users_sms_events_on_user_id"
-  end
-
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "additional_expenses", "case_contacts"
@@ -457,7 +457,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_19_224400) do
   add_foreign_key "sent_emails", "users"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"
   add_foreign_key "supervisor_volunteers", "users", column: "volunteer_id"
+  add_foreign_key "user_sms_notification_events", "sms_notification_events"
+  add_foreign_key "user_sms_notification_events", "users"
   add_foreign_key "users", "casa_orgs"
-  add_foreign_key "users_sms_events", "sms_notification_events"
-  add_foreign_key "users_sms_events", "users"
 end
