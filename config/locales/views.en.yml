@@ -178,21 +178,7 @@ en:
     edit:
       title: Editing Case Contact
     form:
-      plural_label: 1. Select all relevant CASA cases
-      prompt_select_one: Please Select One
-      singular_label: 1. Select relevant CASA case
       contact_types_label: 2. Select All Contact Types
-      contact_details: 3. Enter Contact Details
-      travel_details: 4. Enter Travel Details
-      enter_notes: 5. Enter Notes
-      contact_made_label: a. Contact Made
-      contact_medium: b. Contact Medium
-      occurred_on: c. Occurred On
-      duration_meeting: d. Duration of Meeting
-      miles_driven: a. Miles Driven
-      driving_reimburse_label: b. Want Driving Reimbursement
-      other_expenses: c. Other Expenses
-      enter_notes_placeholder: Enter notes here
     new:
       title: New Case Contact
     contact_types:
