@@ -6,13 +6,11 @@ class UsersController < ApplicationController
   before_action :set_custom_error_heading, only: [:update_password]
   after_action :reset_custom_error_heading, only: [:update_password]
 
+  
   def edit
-    @sms_notification_events = SmsNotificationEvent.where(user_type: @user.type)
   end
 
   def update
-    puts "PARAMS:"
-    puts user_params
     if @user.update(user_params)
       flash[:success] = "Profile was successfully updated."
       redirect_to edit_users_path
