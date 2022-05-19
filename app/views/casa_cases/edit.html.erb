@@ -1,4 +1,4 @@
-<h1><%= t(".title") %>&nbsp;<%= link_to(@casa_case.case_number, @casa_case) %></h1>
+<h1>Editing&nbsp;<%= link_to(@casa_case.case_number, @casa_case) %></h1>
 
 <% if @casa_case.active %>
   <%= render 'form', casa_case: @casa_case %>
