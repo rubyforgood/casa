@@ -63,7 +63,7 @@
     </div>
 
     <div class="field occurred-at form-group">
-      <h5><%= form.label :occurred_at, ". Occurred On" %></h5>
+      <h5><%= form.label :occurred_at, "c. Occurred On" %></h5>
       <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
       <%= form.text_field :occurred_at,
                           value: occurred_at.to_date,
