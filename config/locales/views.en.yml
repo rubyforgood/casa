@@ -261,8 +261,6 @@ en:
       title: New Contact Type Group
     edit:
       title: Edit Contact Type Group
-    form:
-      active: Active
   contact_types:
     new:
       title: New Contact Type
