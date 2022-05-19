@@ -9,26 +9,42 @@ RSpec.describe "sessions/new", type: :system do
     end
 
     %w[volunteer supervisor casa_admin].each do |user_type|
-      it "allows #{user_type} to sign in" do
-        user = create(user_type.to_sym)
-
+      before do
         visit "/"
-        expect(page).to have_text "Log in"
-        expect(page).to_not have_text "sign in before continuing"
-
-        fill_in "Email", with: user.email
-        fill_in "Password", with: "12345678"
-        within ".actions" do
-          click_on "Log in"
-        end
-
-        expect(page).to have_text user.email
       end
 
       it "allows #{user_type} to click email link" do
-        visit "/"
         expect(page).to have_text "Want to add your CASA? Email: casa@rubyforgood.org"
         expect(page).to have_link("casa@rubyforgood.org", href: "mailto:casa@rubyforgood.org")
+      end
+
+      it "renders sign in page with no flash messages" do
+        expect(page).to have_text "Log in"
+        expect(page).to_not have_text "sign in before continuing"
+      end
+
+      context "when a #{user_type} fills in their email and password" do
+        let!(:user) { create(user_type.to_sym) }
+
+        before do
+          fill_in "Email", with: user.email
+          fill_in "Password", with: "12345678"
+          within ".actions" do
+            click_on "Log in"
+          end
+        end
+
+        it "allows them to sign in" do
+          expect(page).to have_text user.email
+        end
+
+        context "but they are inactive" do
+          let!(:user) { create(user_type.to_sym, active: false) }
+
+          it "does not allow them to sign in" do
+            expect(page).to have_text I18n.t("devise.failure.inactive")
+          end
+        end
       end
     end
 
@@ -49,7 +65,7 @@ RSpec.describe "sessions/new", type: :system do
     end
   end
 
-  context "when authenticated user" do
+  context "when authenticated admin" do
     let(:user) { create(:casa_admin) }
 
     before { sign_in user }

@@ -35,6 +35,23 @@
         </div>
       <% end %>
 
+      <% if policy(casa_case).update_date_in_care_youth? %>
+        <div class="field form-group">
+          <%= form.label :date_in_care, t(".youth_date_in_care") %>
+          <br>
+          <span class="datetime-year-month">
+            <%= form.date_select :date_in_care,
+                                  {
+                                      order: [:month, :year],
+                                      start_year: Date.current.year,
+                                      end_year: 1989,
+                                      prompt: {month: t("common.month"), year: t("common.year")},
+                                      discard_day: true
+                                  }, class: "select2 date-input" %>
+          </span>
+        </div>
+      <% end %>
+
       <% if policy(casa_case).update_hearing_type? %>
         <div class="field form-group">
           <%= form.label :hearing_type_id, t(".hearing_type") %>

@@ -7,7 +7,6 @@ class User < ApplicationRecord
 
   validates_with UserValidator
 
-  has_paper_trail
   devise :database_authenticatable, :invitable, :recoverable, :validatable, :timeoutable, :trackable
 
   belongs_to :casa_org
@@ -105,11 +104,6 @@ class User < ApplicationRecord
     no_attempt_count
   end
 
-  def past_names
-    # get past_names from paper_trail gem, version_limit is 10 so no performance concerns
-    versions.map { |version| version&.reify&.display_name }
-  end
-
   # Generate a Devise reset_token, used for the account_setup mailer. This happens automatically
   # when a user clicks "Reset My Password", so do not use this method in that flow.
   def generate_password_reset_token
@@ -129,28 +123,8 @@ class User < ApplicationRecord
     super && active
   end
 
-  # Called by Devise to generate an error message when a user is not active.
-  def inactive_message
-    if !active
-      admin_self_deactivated? ? :admin_self_deactivated : :inactive
-    else
-      super
-    end
-  end
-
   def serving_transition_aged_youth?
     actively_assigned_and_active_cases.where(transition_aged_youth: true).any?
-  end
-
-  def admin_self_deactivated?
-    return false if !casa_admin? || active
-    id.to_s == last_deactivated_by
-  end
-
-  def last_deactivated_by
-    versions.where(event: "update").reverse_each do |version|
-      return version.whodunnit if version.reify.active
-    end
   end
 end
 
