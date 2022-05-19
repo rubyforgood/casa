@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-sm-12 dashboard-table-header pt-2 pb-2">
     <h3>Judge</h3>
-    <%= link_to 'New', new_judge_path, class: "btn btn-primary" %>
+    <%= link_to "New Judge", new_judge_path, class: "btn btn-primary" %>
   </div>
 </div>
 
@@ -10,7 +10,7 @@
   <tr>
     <th>Name</th>
     <th>Active?</th>
-    <th>Actions%></th>
+    <th>Actions</th>
   </tr>
   </thead>
 
@@ -24,7 +24,7 @@
         <%= judge.active ? "Yes" : "No" %>
       </td>
       <td>
-        <%= link_to 'Edit', edit_judge_path(judge) %>
+        <%= link_to "Edit", edit_judge_path(judge) %>
       </td>
     </tr>
   <% end %>
