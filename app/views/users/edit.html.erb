@@ -79,9 +79,15 @@ minlength: User.password_length.min %>
      <%= form.label :receive_email_notifications, t("communication_preferences.email_me") %>
    </div>
    <div>
-     <%= form.check_box :receive_sms_notifications, class: "toggle-sms-notifications" %>
+     <%= form.check_box :receive_sms_notifications, id: "toggle-sms-notifications", class: "toggle-sms-notifications" %>
      <%= form.label :receive_sms_notifications, t("communication_preferences.text_me") %>
    <div>
+   <div class="pl-4">
+      <% @sms_notification_events.each do |event| %>
+        <%= form.check_box :receive_sms_notifications, id: "toggle-sms-notification-event", class: "toggle-sms-notification-event" %>
+        <%= form.label event.id, event.name %>
+      <% end %>
+   </div>
    <div class="action_container">
      <%= form.submit t("communication_preferences.save_preferences"), class: "btn btn-primary mb-3 save-preference" %>
    </div>

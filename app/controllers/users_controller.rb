@@ -7,6 +7,7 @@ class UsersController < ApplicationController
   after_action :reset_custom_error_heading, only: [:update_password]
 
   def edit
+    @sms_notification_events = SmsNotificationEvent.where(user_type: @user.type)
   end
 
   def update
