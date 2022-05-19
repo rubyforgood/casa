@@ -17,7 +17,10 @@
                         deactivate_casa_admin_path(casa_admin),
                         method: :patch,
                         class: "btn btn-outline-danger",
-                        data: {confirm: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"} %>
+                        data: {
+                            confirm: "WARNING: Marking an admin inactive will make them unable to login. Are you sure" +
+                                " you want to do this?"
+                        } %>
           <% else %>
             <div class="alert alert-danger">
               Admin was deactivated on: <%= I18n.l(casa_admin.updated_at, format: :standard, default: nil) %>
