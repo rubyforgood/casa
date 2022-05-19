@@ -19,7 +19,11 @@ window.onload = function () {
   }
 
   caseOccurredAt.onchange = function () {
-    validateOccurredAt()
+    validateOccurredAt(caseOccurredAt)
+  }
+
+  caseOccurredAt.onfocusout = function () {
+    validateOccurredAt(caseOccurredAt, 'focusout')
   }
 
   function validateAtLeastOneChecked (elements) {
@@ -43,20 +47,6 @@ window.onload = function () {
       durationMinutes.setCustomValidity(msg)
     } else {
       durationMinutes.setCustomValidity('')
-    }
-  }
-
-  function validateOccurredAt () {
-    const msg = 'Case Contact Occurrences cannot be in the future.'
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-
-    const caseDate = new Date(caseOccurredAt.value)
-    caseDate.setDate(caseDate.getDate())
-    caseDate.setHours(0, 0, 0, 0)
-
-    if (caseDate > today) {
-      alert(msg)
     }
   }
 
@@ -96,6 +86,23 @@ window.onload = function () {
     validateAtLeastOneChecked(document.querySelectorAll('.case-contact-contact-type'))
 
     validateDuration()
+  }
+}
+
+function validateOccurredAt (caseOccurredAt, eventType = '') {
+  const msg = 'Case Contact Occurrences cannot be in the future.'
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const caseDate = new Date(caseOccurredAt.value)
+  caseDate.setDate(caseDate.getDate())
+  caseDate.setHours(0, 0, 0, 0)
+
+  if (caseDate > today) {
+    if (eventType !== 'focusout') {
+      alert(msg)
+    }
+    caseOccurredAt.value = today.toLocaleDateString('en-GB').split('/').reverse().join('-')
   }
 }
 
@@ -139,3 +146,7 @@ $('document').ready(() => {
   $('[data-toggle="tooltip"]').tooltip()
   $('.followup-button').on('click', displayFollowupAlert)
 })
+
+export {
+  validateOccurredAt
+}
