@@ -1,22 +1,22 @@
-<h1><%= t(".title") %></h1>
+<h1>Report Categories</h1>
 
 <div class="card card-container">
   <div class="card-body">
-    <h5 class="card-title"><strong><%= t(".generate_report") %></strong></h5>
+    <h5 class="card-title"><strong>Generate Court Report</strong></h5>
     <p class="card-text">
-      <%= t(".description") %>
+      The Court Report is pre-filled with information for your case. You can select among currently active cases assigned to you. The document is in Microsoft Word format (.docx).
     </p>
 
     <hr>
 
     <%= form_with url: generate_case_court_reports_path, local: false do |form| %>
       <div class="field form-group">
-        <%= label_tag :case_number, t(".label.case_number") %>
+        <%= label_tag :case_number, "Case Number:" %>
         <% select_options = @assigned_cases.map { |casa_case| casa_case.decorate.court_report_select_option } %>
 
         <% show_search = !current_user.volunteer? %>
 
-        <% select_case_prompt = show_search ? t(".prompt.search_case_number") : t(".prompt.select_case_number") %>
+        <% select_case_prompt = show_search ? "Search by volunteer name or case number" : "Select case number" %>
         <% select2_class = show_search ? "select2" : "" %>
 
         <%= select_tag :case_number,
@@ -30,9 +30,9 @@
 
       </div>
       <div class="form-group">
-        <%= button_tag t(".button.generate"), type: :submit,
+        <%= button_tag "Generate Report", type: :submit,
                        data: {
-                           button_name: t(".button.generate")
+                           button_name: "Generate Report"
                        },
                        id: "btnGenerateReport",
                        class: "btn btn-primary",
