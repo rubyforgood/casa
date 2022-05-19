@@ -1,11 +1,11 @@
-class SmsNotificationEventPref < ApplicationRecord
+class UsersSmsEvent < ApplicationRecord
   belongs_to :user
   belongs_to :sms_notification_event
 end
 
 # == Schema Information
 #
-# Table name: sms_notification_event_prefs
+# Table name: users_sms_events
 #
 #  id                        :bigint           not null, primary key
 #  created_at                :datetime         not null
@@ -15,8 +15,8 @@ end
 #
 # Indexes
 #
-#  index_sms_notification_event_prefs_on_sms_notification_event_id  (sms_notification_event_id)
-#  index_sms_notification_event_prefs_on_user_id                    (user_id)
+#  index_users_sms_events_on_sms_notification_event_id  (sms_notification_event_id)
+#  index_users_sms_events_on_user_id                    (user_id)
 #
 # Foreign Keys
 #

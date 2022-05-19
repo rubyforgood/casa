@@ -1,4 +1,6 @@
 class SmsNotificationEvent < ApplicationRecord
+    has_many :users_sms_events
+    has_many :users, through: :users_sms_events
 end
 
 # == Schema Information

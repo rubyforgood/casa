@@ -11,6 +11,8 @@ class UsersController < ApplicationController
   end
 
   def update
+    puts "PARAMS:"
+    puts user_params
     if @user.update(user_params)
       flash[:success] = "Profile was successfully updated."
       redirect_to edit_users_path
@@ -61,9 +63,9 @@ class UsersController < ApplicationController
 
   def user_params
     if current_user.casa_admin?
-      params.require(:user).permit(:email, :display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications)
+      params.require(:user).permit(:email, :display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [])
     else
-      params.require(:user).permit(:display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications)
+      params.require(:user).permit(:display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [])
     end
   end
 
