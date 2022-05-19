@@ -85,7 +85,7 @@
           </button>
         <% end %>
         <div class="dropdown-menu case-number-prefix-options" aria-labelledby="dropdownMenuButton">
-          <% ["CINA", "None", "TPR"].each do |_, option| %>
+          <% ["CINA", "None", "TPR"].each do |option| %>
             <div class="dropdown-item form-check">
               <% option_for_name = option.downcase.gsub(/[^a-z]+/, '') -%>
               <% tag_name = "case_case_prefix_option_#{option_for_name}" -%>
