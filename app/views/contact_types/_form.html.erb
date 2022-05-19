@@ -9,13 +9,13 @@
         <%= form.text_field :name, class: "form-control" %>
       </div>
       <div class="field form-group">
-        <%= form.label :contact_type_group, t(".contact_type_group") %>
+        <%= form.label :contact_type_group, "Contact type group" %>
         <%= form.select :contact_type_group_id, set_group_options, class: "form-control" %>
       </div>
       <div class="field form-group">
         <div class="form-check">
           <%= form.check_box :active, class: 'form-check-input' %>
-          <%= form.label :active, t(".active"), class: 'form-check-label' %>
+          <%= form.label :active, "Active", class: 'form-check-label' %>
         </div>
       </div>
 
