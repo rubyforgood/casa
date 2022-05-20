@@ -31,7 +31,7 @@ class SeederMain
     db_populator.create_all_casa_admin("admin1@example.com")
     db_populator.create_org(CasaOrgPopulatorPresets.for_environment.merge({org_name: "Prince George CASA"}))
     db_populator.create_org(CasaOrgPopulatorPresets.minimal_dataset_options)
-    db_populator.create_sms_notification_events()
+    db_populator.create_sms_notification_events
     2.times do
       DbPopulator.new(rng, case_fourteen_years_old: true)
         .create_org(CasaOrgPopulatorPresets.minimal_dataset_options)

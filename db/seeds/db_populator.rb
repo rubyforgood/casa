@@ -50,7 +50,7 @@ class DbPopulator
     casa_org
   end
 
-  def create_sms_notification_events()
+  def create_sms_notification_events
     events_data = [
       {
         names: [],
