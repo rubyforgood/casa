@@ -128,7 +128,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_13_111133) do
     t.string "footer_links", default: [], array: true
     t.string "slug"
     t.boolean "show_driving_reimbursement", default: true
-    t.boolean "show_fund_request", default: false
     t.string "twilio_phone_number"
     t.string "twilio_account_sid"
     t.string "twilio_api_key_sid"
