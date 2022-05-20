@@ -6,7 +6,6 @@ class UsersController < ApplicationController
   before_action :set_custom_error_heading, only: [:update_password]
   after_action :reset_custom_error_heading, only: [:update_password]
 
-  
   def edit
   end
 
