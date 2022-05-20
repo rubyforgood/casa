@@ -1,6 +1,11 @@
 require "rails_helper"
 
 RSpec.describe "/users", type: :request do
+  before {
+    sms_notification_event = SmsNotificationEvent.new(name: "test", user_type: Volunteer)
+    sms_notification_event.save
+  }
+  
   describe "GET /edit" do
     context "with a volunteer signed in" do
       it "renders a successful response" do
@@ -11,26 +16,29 @@ RSpec.describe "/users", type: :request do
         expect(response).to be_successful
       end
     end
-
+    
     context "with an admin signed in" do
       it "renders a successful response" do
         sign_in build(:casa_admin)
-
+        
         get edit_users_path
-
+        
         expect(response).to be_successful
       end
     end
   end
-
+  
   describe "PATCH /update" do
     it "updates the user" do
       volunteer = build(:volunteer)
       sign_in volunteer
-
-      patch users_path, params: {user: {display_name: "New Name"}}
+      
+      patch users_path, params: {user: {display_name: "New Name", phone_number: "+12223334444", sms_notification_event_ids: [SmsNotificationEvent.first.id]}}
 
       expect(volunteer.display_name).to eq "New Name"
+      expect(volunteer.phone_number).to eq "+12223334444"
+      expect(volunteer.sms_notification_event_ids).to include SmsNotificationEvent.first.id
+      expect(UserSmsNotificationEvent.count).to eq 1
     end
   end
 
