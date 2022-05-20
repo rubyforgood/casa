@@ -2919,9 +2919,9 @@ data-urls@^3.0.1:
     whatwg-mimetype "^3.0.0"
     whatwg-url "^11.0.0"
 
-datatables.net-dt@^1.12.0:
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/datatables.net-dt/-/datatables.net-dt-1.12.0.tgz#8760cf822bd0d0af8fa1459ca64e7cbdd472ae96"
+datatables.net-dt@^1.12.1:
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/datatables.net-dt/-/datatables.net-dt-1.12.1.tgz#43aa00adb1ea9a3adbffae4a0b6baf56ec74ccd9"
   dependencies:
     datatables.net ">=1.11.3"
     jquery ">=1.7"
