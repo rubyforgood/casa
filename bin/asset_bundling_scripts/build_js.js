@@ -7,12 +7,12 @@ const esbuild = require('esbuild')
 const logger = require('./logger.js')
 
 esbuild.build({
-  entryPoints: ['app/javascript/application.js'],
+  entryPoints: ['app/javascript/application.js', 'app/javascript/all_casa_admin.js'],
   outdir: 'app/assets/builds',
   bundle: true,
   watch: isWatching
 }).then(result => {
-  logger.info('application.js built successfully')
+  logger.info('application.js, all_casa_admin.js built successfully')
 
   if (isWatching) {
     logger.info('watching for changes')
