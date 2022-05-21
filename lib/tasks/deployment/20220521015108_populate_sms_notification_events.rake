@@ -1,7 +1,7 @@
-require_relative '../data_post_processors/sms_notification_event_populator'
+require_relative "../data_post_processors/sms_notification_event_populator"
 
 namespace :after_party do
-  desc 'Deployment task: populate_sms_notification_events'
+  desc "Deployment task: populate_sms_notification_events"
   task populate_sms_notification_events: :environment do
     puts "Running deploy task 'populate_sms_notification_events'"
 
