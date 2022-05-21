@@ -18,8 +18,6 @@ Only take multiple issues if they are related and you can solve all of them at t
 ### Pull Requests  
 If you are so inclined, you can open a draft PR as you continue to work on it.
 
-1. Claim an issue on  by commenting on the issue saying you are working on it. If the issue doesn't exist yet, open it. Please only claim one at a time.
-
 1. Fork the [repo] and clone your forked repo locally on your machine.
 
 1. Follow [setup guidelines][setup] to get the project setup locally.
