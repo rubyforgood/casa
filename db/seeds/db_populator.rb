@@ -50,29 +50,6 @@ class DbPopulator
     casa_org
   end
 
-  def create_sms_notification_events
-    events_data = [
-      {
-        names: [],
-        type: CasaAdmin
-      },
-      {
-        names: ["Volunteer made case contact"],
-        type: Supervisor
-      },
-      {
-        names: ["CASA case youth has birthday"],
-        type: Volunteer
-      }
-    ]
-
-    events_data.each do |data|
-      data[:names].each do |name|
-        SmsNotificationEvent.create(name: name, user_type: data[:type])
-      end
-    end
-  end
-
   private # -------------------------------------------------------------------------------------------------------
 
   # Create 2 judges for each casa_org.
