@@ -25,7 +25,7 @@ If you are so inclined, you can open a draft PR as you continue to work on it.
 1. Add a test for your change. If you are adding functionality or fixing a  bug, you should add a test!
 
 1. Run linters and fix any linting errors they brings up.  
-   - (from the repo root)`./bin/git_hooks/lint`
+   - (from the repo root) `./bin/git_hooks/lint`
 
 1. Push to your fork and submit a pull request. Include the issue number (ex. `Resolves #1`) in the PR description.
 
