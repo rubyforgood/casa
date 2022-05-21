@@ -42,7 +42,7 @@ bundle exec standardrb
 bundle exec rake
 ```
 * For pull requests changing UI, make sure the UI matches the rest of the site. Some of our users aren't great with computers and we don't want to make them learn new things if we don't need to.
-* Update the documentation, for things like new rails/bash commands. Please make a guide if modyifying the code in the future is difficult. For example [editing .docx templates](https://github.com/rubyforgood/casa/wiki/How-to-edit-docx-templates) is difficult because the documentation is hard to find and it requires microsoft word.  
+* Update the documentation, for things like new rails/bash commands. Please make a guide if modyifying the code in the future is difficult. For example [editing .docx templates]([https://github.com/rubyforgood/casa/wiki/How-to-edit-docx-templates](https://github.com/rubyforgood/casa/wiki/How-to-edit-docx-templates---word-document-court-report)) is difficult because the documentation is hard to find and it requires microsoft word.  
 * Use Rails idioms and helpers  
 
 If you are wondering how to keep your fork in sync with the main [repo], follow this [github guide](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork).
