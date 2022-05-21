@@ -20,7 +20,7 @@ If you are so inclined, you can open a draft PR as you continue to work on it.
 
 1. Fork the [repo] and clone your forked repo locally on your machine.
 
-1. Follow [setup guidelines][setup] to get the project setup locally.
+1. Follow [setup guidelines](https://github.com/rubyforgood/casa#installation) to get the project setup locally.
 
 1. Run the tests. We only take pull requests with passing tests, and it's great to know that you have a clean slate: `bundle exec rake`
 
