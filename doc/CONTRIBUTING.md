@@ -20,17 +20,12 @@ If you are so inclined, you can open a draft PR as you continue to work on it.
 
 1. Follow [the setup guide](https://github.com/rubyforgood/casa#installation) to get the project working locally.
 
-1. Run the tests. We only take pull requests with passing tests, and it's great to know that you have a clean slate: `bundle exec rake`
+1. Run the tests. We only take pull requests with passing tests, and it's great to know that you have a clean slate: `bundle exec rspec`
 
 1. Add a test for your change. If you are adding functionality or fixing a  bug, you should add a test!
 
-1. Make the test pass.
-
-1. Run linters and fix any linting errors they brings up.
-   1. `bundle exec standardrb --fix` is required by CI
-   1. But you should also be a good citizen and run:
-      1. `bundle exec erblint --lint-all --autocorrect`
-      1. `yarn lint:fix`
+1. Run linters and fix any linting errors they brings up.  
+   - (from the repo root)`./bin/git_hooks/lint`
 
 1. Push to your fork and submit a pull request. Include the issue number (ex. `Resolves #1`) in the PR description.
 
