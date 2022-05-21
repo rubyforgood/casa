@@ -43,7 +43,7 @@ bundle exec rake
 * Update the documentation, for things like new rails/bash commands. Please make a guide if modyifying the code in the future is difficult. For example [editing .docx templates](https://github.com/rubyforgood/casa/wiki/How-to-edit-docx-templates---word-document-court-report) is difficult because the documentation is hard to find and it requires microsoft word.  
 * Use Rails idioms and helpers  
 
-If you are wondering how to keep your fork in sync with the main [repo], follow this [github guide](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork).
+Check out [the wiki](https://github.com/rubyforgood/casa/wiki) for help with common problems
 
 [code of conduct]: https://github.com/rubyforgood/code-of-conduct
 [issues]: https://github.com/rubyforgood/casa/issues?q=is%3Aopen+is%3Aissue+label%3A%22Status%3A+Available%22
