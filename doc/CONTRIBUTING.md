@@ -6,7 +6,9 @@ We ♥ contributors! By participating in this project, you agree to abide by the
 If you have any questions about an issue, comment on the issue, open a new issue or ask in [the RubyForGood slack](https://rubyforgood.herokuapp.com/). CASA has a `#casa` channel in the Slack. Our channel in slack also contains a zoom link for office hours every day office hours are held.
 
 ## Contributing Procedure  
+### Issues  
 All work is organized by issues.  
+[Find issues here.][issues]
 If you would like to contribute, please ask for an issue to be assigned to you.  
 If you would like to contribute something that is not represented by an issue, please make an issue and assign yourself.  
 Only take multiple issues if they are related and you can solve all of them at the same time with the same pull request.  
@@ -16,7 +18,7 @@ You won't be yelled at for giving your best effort. The worst that can happen is
 ### Pull Requests  
 If you are so inclined, you can open a draft PR as you continue to work on it.
 
-1. Claim an issue on [our issue tracker][issues] by commenting on the issue saying you are working on it. If the issue doesn't exist yet, open it. Please only claim one at a time.
+1. Claim an issue on  by commenting on the issue saying you are working on it. If the issue doesn't exist yet, open it. Please only claim one at a time.
 
 1. Fork the [repo] and clone your forked repo locally on your machine.
 
