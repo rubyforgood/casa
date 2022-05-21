@@ -1,6 +1,4 @@
-# Contributing
-WIP Under construction sorry for the temporary incoherence.
-
+# Contributing  
 We ♥ contributors! By participating in this project, you agree to abide by the Ruby for Good [code of conduct].
 
 If you have any questions about an issue, comment on the issue, open a new issue or ask in [the RubyForGood slack](https://rubyforgood.herokuapp.com/). CASA has a `#casa` channel in the Slack. Our channel in slack also contains a zoom link for office hours every day office hours are held.  
