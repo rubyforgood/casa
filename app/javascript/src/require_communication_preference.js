@@ -45,7 +45,7 @@ $('document').ready(() => {
 
   const smsToggle = $(`.${SMS_TOGGLE_CLASS}`)[0]
   const smsEventToggle = $(`#${SMS_NOTIFICATION_EVENT_ID}`)[0]
-  if(smsToggle && smsEventToggle){
+  if (smsToggle && smsEventToggle) {
     smsEventToggle.disabled = !smsToggle.checked
     smsToggle.addEventListener('change', () => {
       smsEventToggle.disabled = !smsToggle.checked
