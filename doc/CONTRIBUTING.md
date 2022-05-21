@@ -27,7 +27,7 @@ If you are so inclined, you can open a draft PR as you continue to work on it.
 1. Run linters and fix any linting errors they brings up.  
    - (from the repo root) `./bin/git_hooks/lint`
 
-1. Push to your fork and submit a pull request. Include the issue number (ex. `Resolves #1`) in the PR description.
+1. Push to your fork and submit a pull request. Include the issue number (ex. `Resolves #1`) in the PR description. This will ensure the issue gets closed automatically when the pull request gets merged.
 
 1. For any changes, please create a feature branch and open a PR for it when you feel it's ready to merge. Even if there's no real disagreement about a PR, at least one other person on the team needs to look over a PR before merging. The purpose of this review requirement is to ensure shared knowledge of the app and its changes and to take advantage of the benefits of working together changes without any single person being a bottleneck to making progress.
 
