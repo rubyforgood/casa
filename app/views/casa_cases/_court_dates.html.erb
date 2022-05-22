@@ -11,7 +11,7 @@
 
         <% if report = pcd.latest_associated_report %>
           <%= link_to(rails_blob_path(report, disposition: 'attachment')) do %>
-            Attached Report
+            (Attached Report)
           <% end %>
         <% end %>
       </p>
