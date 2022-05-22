@@ -350,6 +350,7 @@ en:
         built_by: Built by
         link:
           report_site_issue: Report a site issue
+          sms_terms_and_conditions: SMS Terms & Conditions
         ruby_for_good: Ruby For Good
     login_header:
       image:
