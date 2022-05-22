@@ -18,7 +18,7 @@
     "bootstrap": "4.6.1",
     "bootstrap-datepicker": "^1.9.0",
     "bootstrap-select": "^1.13.18",
-    "datatables.net-dt": "^1.12.0",
+    "datatables.net-dt": "^1.12.1",
     "faker": "^5.5.3",
     "jest-environment-jsdom": "^28.1.0",
     "jquery": "^3.6.0",

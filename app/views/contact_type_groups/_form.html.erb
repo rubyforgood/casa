@@ -6,7 +6,7 @@
       <%= render "/shared/error_messages", resource: contact_type_group %>
 
       <div class="field form-group">
-        <%= form.label :name, t("common.name") %>
+        <%= form.label :name, "Name" %>
         <%= form.text_field :name, class: "form-control" %>
       </div>
 
@@ -18,7 +18,7 @@
       </div>
 
       <div class="actions">
-        <%= form.submit t("button.submit"), class: "btn btn-primary" %>
+        <%= form.submit "Submit", class: "btn btn-primary" %>
       </div>
     <% end %>
   </div>
