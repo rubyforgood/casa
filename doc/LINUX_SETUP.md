@@ -44,7 +44,7 @@ sudo apt install rbenv
 rbenv init
 #   Restart your terminal
 
-#   setup rbenv install command
+#   fetch extended list of ruby versions
 mkdir -p "$(rbenv root)"/plugins
 git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 
