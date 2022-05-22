@@ -32,7 +32,7 @@ nvm ls-remote | grep -i 'Latest LTS'
 # Install an LTS version
 nvm install lts/gallium # Latest might not be gallium
 # Update npm
-npm i -g npm
+npm i -g npm@latest
 ```
 
 ```
