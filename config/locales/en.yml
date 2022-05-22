@@ -41,8 +41,6 @@ en:
   forms:
     casa_admin:
       mark_inactive_warning: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"
-    case_contact:
-      notes_placeholder: "Please refer to individuals by their roles instead of by their names. Ex: My supervisor joined me for a call with the social worker to discuss my youth."
     supervisor:
       mark_inactive_warning: "WARNING: Marking a supervisor inactive will make them unable to login. Are you sure you want to do this?"
     volunteer:
@@ -119,4 +117,3 @@ en:
     email_me: "Email Me"
     text_me: "Text Me"
     save_preferences: "Save Preferences"
-

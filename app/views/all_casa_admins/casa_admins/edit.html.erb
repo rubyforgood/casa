@@ -6,7 +6,7 @@
       <%= render "/shared/error_messages", resource: @casa_admin %>
 
       <div class="field form-group">
-        <%= form.label :email, t("common.email") %>
+        <%= form.label :email, "Email" %>
         <%= form.email_field :email, class: "form-control" %>
       </div>
       <% if @casa_admin.persisted? %>
@@ -21,7 +21,8 @@
                           deactivate_all_casa_admins_casa_org_casa_admin_path,
                           method: :patch,
                           class: "btn btn-outline-danger",
-                          data: {confirm: t("forms.casa_admin.mark_inactive_warning")} %>
+                          data: { confirm: "WARNING: Marking an admin inactive will make them unable to login. " \
+                                           "Are you sure you want to do this?"} %>
               <%= form.submit "Update Profile", class: "btn btn-primary" %>
             </div>
           <% else %>
