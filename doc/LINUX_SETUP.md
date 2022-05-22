@@ -10,11 +10,13 @@ but feel free to substitute your own favorite Ruby version manager such as [rben
 
 ```
 # Install Linux Packages
-sudo apt update               # Check internet for updates
-sudo apt upgrade -y           # Install updates
-sudo apt install -y curl git postgresql-12
-sudo apt install -y libvips42 # Render images for your local web server
-sudo apt install -y libpq-dev # Helps compile C programs to be able to communicate with postgres
+sudo apt update                    # Check internet for updates
+sudo apt upgrade -y                # Install updates
+sudo apt install -y curl           # A command to help fetching and sending data to urls
+sudo apt install -y git            # In case you don't have it already
+sudo apt install -y postgresql-12
+sudo apt install -y libvips42      # Render images for your local web server
+sudo apt install -y libpq-dev      # Helps compile C programs to be able to communicate with postgres
 ```
 
 ```
