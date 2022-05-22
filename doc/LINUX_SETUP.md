@@ -23,8 +23,14 @@ sudo apt install -y libpq-dev # Helps compile C programs to be able to communica
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 #   or wget
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-. ./.bashrc
-nvm install lts/fermium
+
+#   Restart your terminal
+
+# List all available LTS versions
+nvm ls-remote | grep -i 'Latest LTS'
+
+# Install an LTS version
+nvm install lts/gallium # Latest might not be gallium
 # Update npm
 npm i -g npm
 ```
