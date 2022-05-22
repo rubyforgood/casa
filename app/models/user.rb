@@ -29,6 +29,10 @@ class User < ApplicationRecord
   has_one :supervisor, through: :supervisor_volunteer
   has_one :preference_set, dependent: :destroy
 
+  has_many :user_sms_notification_events
+  has_many :sms_notification_events, through: :user_sms_notification_events
+  accepts_nested_attributes_for :user_sms_notification_events, allow_destroy: true
+
   has_many :notes, as: :notable
 
   scope :active, -> { where(active: true) }
@@ -158,7 +162,7 @@ end
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  casa_org_id                 :bigint           not null
-#  invited_by_id               :integer
+#  invited_by_id               :bigint
 #
 # Indexes
 #
