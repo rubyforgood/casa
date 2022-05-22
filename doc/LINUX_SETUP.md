@@ -9,20 +9,20 @@ The commands below include a section for installing [rvm](https://rvm.io/),
 but feel free to substitute your own favorite Ruby version manager such as [rbenv](https://github.com/rbenv/rbenv).
 
 ```
-# Install packages available from the main Linux repos & upgrade the Vagrant image if necessary
-#
-sudo apt update
-sudo apt upgrade -y
-sudo apt install -y curl git net-tools nodejs npm openssh-server postgresql-12 vim zsh
+# Install Linux Packages
+sudo apt update               # Check internet for updates
+sudo apt upgrade -y           # Install updates
+sudo apt install -y curl git postgresql-12
 sudo apt install -y libvips42 # Render images for your local web server
 sudo apt install -y libpq-dev # Helps compile C programs to be able to communicate with postgres
 ```
 
 ```
 # Install NVM and Node JS
-#   you can use wget or curl
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+#   you can use curl
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+#   or wget
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 . ./.bashrc
 nvm install lts/fermium
 # Update npm
@@ -44,7 +44,7 @@ sudo apt install rbenv
 rbenv init
 #   Restart your terminal
 
-#   setup rbenv install command
+#   fetch extended list of ruby versions
 mkdir -p "$(rbenv root)"/plugins
 git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 
