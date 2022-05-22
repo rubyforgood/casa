@@ -20,9 +20,10 @@ sudo apt install -y libpq-dev # Helps compile C programs to be able to communica
 
 ```
 # Install NVM and Node JS
-#   you can use wget or curl
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+#   you can use curl
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+#   or wget
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 . ./.bashrc
 nvm install lts/fermium
 # Update npm
