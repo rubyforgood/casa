@@ -9,8 +9,7 @@ The commands below include a section for installing [rvm](https://rvm.io/),
 but feel free to substitute your own favorite Ruby version manager such as [rbenv](https://github.com/rbenv/rbenv).
 
 ```
-# Install packages available from the main Linux repos & upgrade the Vagrant image if necessary
-#
+# Install Linux Packages
 sudo apt update
 sudo apt upgrade -y
 sudo apt install -y curl git net-tools nodejs npm openssh-server postgresql-12 vim zsh
