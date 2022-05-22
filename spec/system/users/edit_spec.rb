@@ -11,6 +11,10 @@ RSpec.describe "users/edit", type: :system do
   end
   let(:admin) { create(:casa_admin) }
   let(:supervisor) { create(:supervisor) }
+  SmsNotificationEvent.delete_all
+  SmsNotificationEvent.new(name: "sms_event_test_volunteer", user_type: Volunteer).save
+  SmsNotificationEvent.new(name: "sms_event_test_supervisor", user_type: Supervisor).save
+  SmsNotificationEvent.new(name: "sms_event_test_casa_admin", user_type: CasaAdmin).save
 
   context "volunteer user" do
     before do
@@ -41,6 +45,12 @@ RSpec.describe "users/edit", type: :system do
       expect(page).to have_content "2 errors prohibited this password change from being saved:"
       expect(page).to have_text("Password confirmation doesn't match Password")
       expect(page).to have_text("Password is too short (minimum is #{User.password_length.min} characters)")
+    end
+
+    it "displays sms notification events for the volunteer user" do
+      expect(page).to have_content "sms_event_test_volunteer"
+      expect(page).not_to have_content "sms_event_test_supervisor"
+      expect(page).not_to have_content "sms_event_test_casa_admin"
     end
 
     it "notifies a user when they update their password" do
@@ -118,6 +128,12 @@ RSpec.describe "users/edit", type: :system do
       expect(page).to have_field("Email", disabled: true)
     end
 
+    it "displays sms notification events for the supervisor user" do
+      expect(page).not_to have_content "sms_event_test_volunteer"
+      expect(page).to have_content "sms_event_test_supervisor"
+      expect(page).not_to have_content "sms_event_test_casa_admin"
+    end
+
     it "displays Supervisor error message if no communication preference is selected" do
       uncheck "user_receive_email_notifications"
       click_on "Save Preferences"
@@ -173,6 +189,12 @@ RSpec.describe "users/edit", type: :system do
       click_on "Update Password"
 
       expect(page).to have_text("Password was successfully updated.")
+    end
+
+    it "displays sms notification events for the casa admin user" do
+      expect(page).not_to have_content "sms_event_test_volunteer"
+      expect(page).not_to have_content "sms_event_test_supervisor"
+      expect(page).to have_content "sms_event_test_casa_admin"
     end
 
     it "notifies password changed by email", :aggregate_failures do

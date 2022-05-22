@@ -82,7 +82,6 @@ end
 #  footer_links               :string           default([]), is an Array
 #  name                       :string           not null
 #  show_driving_reimbursement :boolean          default(TRUE)
-#  show_fund_request          :boolean          default(FALSE)
 #  slug                       :string
 #  twilio_account_sid         :string
 #  twilio_api_key_secret      :string
