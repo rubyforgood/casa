@@ -193,16 +193,6 @@ en:
         active: Active?
         name: Name
       title: Contact Type Groups
-    contact_types:
-      button:
-        edit: Edit
-        new: New Contact Type
-      heading:
-        actions: Actions
-        active: Active?
-        group: Group
-        name: Name
-      title: Contact Types
     hearing_types:
       button:
         edit: Edit
