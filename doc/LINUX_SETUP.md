@@ -10,11 +10,13 @@ but feel free to substitute your own favorite Ruby version manager such as [rben
 
 ```
 # Install Linux Packages
-sudo apt update               # Check internet for updates
-sudo apt upgrade -y           # Install updates
-sudo apt install -y curl git postgresql-12
-sudo apt install -y libvips42 # Render images for your local web server
-sudo apt install -y libpq-dev # Helps compile C programs to be able to communicate with postgres
+sudo apt update                    # Check internet for updates
+sudo apt upgrade -y                # Install updates
+sudo apt install -y curl           # A command to help fetching and sending data to urls
+sudo apt install -y git            # In case you don't have it already
+sudo apt install -y postgresql-12  # Postgres; our database management system
+sudo apt install -y libvips42      # Render images for your local web server
+sudo apt install -y libpq-dev      # Helps compile C programs to be able to communicate with postgres
 ```
 
 ```
@@ -23,10 +25,16 @@ sudo apt install -y libpq-dev # Helps compile C programs to be able to communica
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 #   or wget
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-. ./.bashrc
-nvm install lts/fermium
+
+#   Restart your terminal
+
+# List all available LTS versions
+nvm ls-remote | grep -i 'Latest LTS'
+
+# Install an LTS version
+nvm install lts/gallium # Latest might not be gallium
 # Update npm
-npm i -g npm
+npm i -g npm@latest
 ```
 
 ```
@@ -74,8 +82,6 @@ sudo apt-get -y install google-chrome-stable
 ```
 # Add user to Postgres:
 sudo -u postgres psql -c "CREATE USER $USER WITH CREATEDB"
-# If you are using a VM
-sudo -u postgres psql -c "CREATE USER vagrant WITH CREATEDB"
 ```
 
 #### Creating an SSH Key Pair
