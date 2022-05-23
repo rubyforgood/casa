@@ -22,6 +22,7 @@
                 <td><%= note.created_at.strftime(t("time.formats.standard")) %></td>
                 <td>
                   <%= link_to "Edit", edit_volunteer_note_path(@volunteer, note), class: "btn btn-primary" %>
+                  <%= link_to "Delete", volunteer_note_path(@volunteer, note), class: "btn btn-primary", method: :delete %>
                 </td>
               </tr>
             <% end %>

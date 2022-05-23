@@ -25,4 +25,29 @@ RSpec.describe "/volunteers/notes", type: :request do
       end
     end
   end
+
+  describe "DELETE /destroy" do
+    let!(:note_1) { volunteer.notes.create(creator: admin, content: "Note_1") }
+
+    before do
+      sign_in admin
+      request
+    end
+
+    context "when logged in as an admin" do
+      it "can delete notes about a volunteer" do
+        expect do
+          delete volunteer_note_path(volunteer, note_1)
+        end.to change(Note, :count).by(-1)
+      end
+    end
+
+    context "when logged in as a supervisor" do
+      it "can delete notes about a volunteer" do
+        expect do
+          delete volunteer_note_path(volunteer, note_1)
+        end.to change(Note, :count).by(-1)
+      end
+    end
+  end
 end
