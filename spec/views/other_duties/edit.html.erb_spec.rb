@@ -25,6 +25,6 @@ RSpec.describe "other_duties/edit", type: :view do
   it "displays notes in the notes form field" do
     render template: "other_duties/edit"
 
-    expect(rendered).to include(other_duty.notes)
+    expect(rendered).to include(CGI.escapeHTML(other_duty.notes))
   end
 end
