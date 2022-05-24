@@ -113,6 +113,8 @@ en:
         created_at: Created
         duration: Duration
         title: Title
+      button:
+        new_other_duty: New Duty
   casa_admins:
     edit:
       title: Edit Casa Admin
@@ -595,3 +597,13 @@ en:
     edit:
       email: Email
       display_name: Display name
+  other_duties:
+    new:
+      title: New Duty
+    edit:
+      title: Editing Duty
+    form:
+      occurred_on: Occurred On
+      duration_meeting: Duration Meeting
+      enter_notes: Enter Notes
+      enter_notes_placeholder: Enter notes here
