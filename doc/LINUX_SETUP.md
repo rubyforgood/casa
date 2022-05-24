@@ -9,24 +9,32 @@ The commands below include a section for installing [rvm](https://rvm.io/),
 but feel free to substitute your own favorite Ruby version manager such as [rbenv](https://github.com/rbenv/rbenv).
 
 ```
-# Install packages available from the main Linux repos & upgrade the Vagrant image if necessary
-#
-sudo apt update
-sudo apt upgrade -y
-sudo apt install -y curl git net-tools nodejs npm openssh-server postgresql-12 vim zsh
-sudo apt install -y libvips42 # Render images for your local web server
-sudo apt install -y libpq-dev # Helps compile C programs to be able to communicate with postgres
+# Install Linux Packages
+sudo apt update                    # Check internet for updates
+sudo apt upgrade -y                # Install updates
+sudo apt install -y curl           # A command to help fetching and sending data to urls
+sudo apt install -y git            # In case you don't have it already
+sudo apt install -y postgresql-12  # Postgres; our database management system
+sudo apt install -y libvips42      # Render images for your local web server
+sudo apt install -y libpq-dev      # Helps compile C programs to be able to communicate with postgres
 ```
 
 ```
 # Install NVM and Node JS
-#   you can use wget or curl
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-. ./.bashrc
-nvm install lts/fermium
+#   you can use curl
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+#   or wget
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+
+#   Restart your terminal
+
+# List all available LTS versions
+nvm ls-remote | grep -i 'Latest LTS'
+
+# Install an LTS version
+nvm install lts/gallium # Latest might not be gallium
 # Update npm
-npm i -g npm
+npm i -g npm@latest
 ```
 
 ```
@@ -44,7 +52,7 @@ sudo apt install rbenv
 rbenv init
 #   Restart your terminal
 
-#   setup rbenv install command
+#   fetch extended list of ruby versions
 mkdir -p "$(rbenv root)"/plugins
 git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 
@@ -74,8 +82,6 @@ sudo apt-get -y install google-chrome-stable
 ```
 # Add user to Postgres:
 sudo -u postgres psql -c "CREATE USER $USER WITH CREATEDB"
-# If you are using a VM
-sudo -u postgres psql -c "CREATE USER vagrant WITH CREATEDB"
 ```
 
 #### Creating an SSH Key Pair
