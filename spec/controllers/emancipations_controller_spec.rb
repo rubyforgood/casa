@@ -60,7 +60,7 @@ RSpec.describe EmancipationsController, type: :controller do
 
     context "the backtrace ends in 'save'" do
       before do
-        allow_any_instance_of(Organizational::UnknownOrganization).to receive(:backtrace).and_return(["", "save'"])
+        allow_any_instance_of(Organizational::UnknownOrganization).to receive(:backtrace).and_return(["", "", "save'"])
       end
 
       it "will render the correct json message" do

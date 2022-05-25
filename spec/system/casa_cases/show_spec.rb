@@ -1,13 +1,16 @@
 require "rails_helper"
 
 RSpec.describe "casa_cases/show", type: :system do
+  include ActionView::Helpers::DateHelper
+
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:volunteer) { build(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
   let(:casa_case) {
     create(:casa_case, :with_one_court_order, casa_org: organization,
-    case_number: "CINA-1", court_report_due_date: 1.month.from_now)
+    case_number: "CINA-1", court_report_due_date: 1.month.from_now, date_in_care: date_in_care)
   }
+  let(:date_in_care) { 6.years.ago }
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
   let!(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
   let!(:emancipation_categories) { create_list(:emancipation_category, 3) }
@@ -61,10 +64,20 @@ RSpec.describe "casa_cases/show", type: :system do
       expect(page).to have_content(casa_case.case_court_orders[0].implementation_status_symbol)
     end
 
-    it "can see next court date", js: true do
-      if casa_case.court_date
-        expect(page).to have_content("Next Court Date: #{I18n.l(future_court_date.date, format: :day_and_date, default: "")}")
-      end
+    xit "can see next court date", js: true do # TODO fix and re-enable
+      expect(page).to have_content(
+        "Next Court Date: #{I18n.l(future_court_date.date, format: :day_and_date, default: "")}"
+      )
+    end
+
+    it "can see the youth's Date In Care", js: true do
+      expect(page).to have_content(
+        "Youth's Date in Care: #{I18n.l(date_in_care, format: :youth_date_of_birth)}"
+      )
+    end
+
+    it "can see the time since the youth's Date In Care", js: true do
+      expect(page).to have_content("#{time_ago_in_words(date_in_care)} ago")
     end
 
     it "can see Add to Calendar buttons", js: true do

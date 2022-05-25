@@ -1,6 +1,5 @@
 class CaseContact < ApplicationRecord
   include ByOrganizationScope
-  has_paper_trail
   acts_as_paranoid
 
   attr_accessor :duration_hours
@@ -27,6 +26,7 @@ class CaseContact < ApplicationRecord
 
   has_many :additional_expenses
   accepts_nested_attributes_for :additional_expenses, reject_if: :all_blank
+  validates_associated :additional_expenses
 
   accepts_nested_attributes_for :case_contact_contact_type
 

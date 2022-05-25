@@ -13,12 +13,15 @@ RSpec.describe "case_contacts/edit", type: :system do
 
       visit edit_case_contact_path(case_contact)
 
-      choose "Yes"
+      within "#enter-contact-details" do
+        choose "Yes"
+      end
       choose "Letter"
 
       click_on "Submit"
 
       case_contact.reload
+      expect(page).to have_text "Case contact created at #{case_contact.created_at}, was successfully updated."
       expect(case_contact.casa_case_id).to eq casa_case.id
       expect(case_contact.duration_minutes).to eq 105
       expect(case_contact.medium_type).to eq "letter"
@@ -47,12 +50,15 @@ RSpec.describe "case_contacts/edit", type: :system do
       sign_in volunteer
       visit edit_case_contact_path(case_contact)
 
-      choose "Yes"
+      within "#enter-contact-details" do
+        choose "Yes"
+      end
       choose "Letter"
 
       click_on "Submit"
 
       case_contact.reload
+      expect(page).to have_text "Case contact created at #{case_contact.created_at}, was successfully updated."
       expect(case_contact.casa_case_id).to eq casa_case.id
       expect(case_contact.duration_minutes).to eq 105
       expect(case_contact.medium_type).to eq "letter"

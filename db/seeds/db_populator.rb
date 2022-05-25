@@ -80,6 +80,7 @@ class DbPopulator
           password: SEED_PASSWORD,
           password_confirmation: SEED_PASSWORD,
           display_name: Faker::Name.name,
+          phone_number: Faker::PhoneNumber.cell_phone_in_e164,
           active: true
         }
         # Approximately 1 out of 30 volunteers should be set to inactive.
@@ -196,7 +197,6 @@ class DbPopulator
           CasaCase.find_or_create_by!(
             casa_org_id: casa_org.id,
             case_number: case_number,
-            court_date: court_date,
             court_report_due_date: court_date + 1.month,
             court_report_submitted_at: court_report_submitted ? Date.today : nil,
             court_report_status: court_report_submitted ? :submitted : :not_submitted,
@@ -209,7 +209,6 @@ class DbPopulator
           CasaCase.find_or_create_by!(
             casa_org_id: casa_org.id,
             case_number: case_number,
-            court_date: court_date,
             court_report_due_date: court_date + 1.month,
             court_report_submitted_at: court_report_submitted ? Date.today : nil,
             court_report_status: court_report_submitted ? :submitted : :not_submitted,
@@ -262,7 +261,6 @@ class DbPopulator
           volunteer1.casa_cases.find_or_create_by!(
             casa_org_id: volunteer1.casa_org.id,
             case_number: generate_case_number,
-            court_date: court_date,
             court_report_due_date: court_date + 1.month,
             court_report_submitted_at: court_report_submitted ? Date.today : nil,
             court_report_status: court_report_submitted ? :submitted : :not_submitted,

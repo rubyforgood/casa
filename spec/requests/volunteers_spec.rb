@@ -1,8 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "/volunteers", type: :request do
-  let(:admin) { build(:casa_admin) }
-  let(:volunteer) { create(:volunteer) }
+  let(:organization) { create(:casa_org) }
+  let(:admin) { build(:casa_admin, casa_org: organization) }
+  let(:supervisor) { create(:supervisor, casa_org: organization) }
+  let(:volunteer) { create(:volunteer, casa_org: organization) }
 
   describe "GET /index" do
     it "renders a successful response" do
@@ -10,6 +12,24 @@ RSpec.describe "/volunteers", type: :request do
 
       get volunteers_path
       expect(response).to be_successful
+    end
+  end
+
+  describe "GET /show" do
+    it "renders a successful response" do
+      sign_in admin
+
+      get volunteer_path(volunteer.id)
+      expect(response).to redirect_to(edit_volunteer_path(volunteer.id))
+    end
+
+    context "with admin from different organization" do
+      let(:other_org_admin) { build(:casa_admin, casa_org: create(:casa_org)) }
+      it "does not show" do
+        sign_in other_org_admin
+        get volunteer_path(volunteer.id)
+        expect(response).to redirect_to("/")
+      end
     end
   end
 
@@ -36,11 +56,25 @@ RSpec.describe "/volunteers", type: :request do
   end
 
   describe "GET /new" do
-    it "renders a successful response only for admin user" do
+    it "renders a successful response for admin user" do
       sign_in admin
 
       get new_volunteer_path
       expect(response).to be_successful
+    end
+
+    it "renders a successful response for supervisor user" do
+      sign_in supervisor
+
+      get new_volunteer_path
+      expect(response).to be_successful
+    end
+
+    it "does not render for volunteers" do
+      sign_in volunteer
+
+      get new_volunteer_path
+      expect(response).to_not be_successful
     end
   end
 
@@ -64,8 +98,7 @@ RSpec.describe "/volunteers", type: :request do
         {
           volunteer: {
             display_name: "Example",
-            email: "volunteer1@example.com",
-            casa_org_id: admin.casa_org_id
+            email: "volunteer1@example.com"
           }
         }
       end
@@ -77,6 +110,10 @@ RSpec.describe "/volunteers", type: :request do
         expect(volunteer.email).to eq("volunteer1@example.com")
         expect(volunteer.display_name).to eq("Example")
         expect(response).to redirect_to edit_volunteer_path(volunteer)
+      end
+
+      it "assigns new volunteer to creator's organization" do
+        expect(volunteer.casa_org_id).to eq(admin.casa_org_id)
       end
 
       it "sends an account_setup email" do
@@ -91,8 +128,7 @@ RSpec.describe "/volunteers", type: :request do
         {
           volunteer: {
             display_name: "",
-            email: "volunteer1@example.com",
-            casa_org_id: admin.casa_org_id
+            email: "volunteer1@example.com"
           }
         }
       end
@@ -118,13 +154,14 @@ RSpec.describe "/volunteers", type: :request do
     context "with valid params" do
       it "updates the volunteer" do
         patch volunteer_path(volunteer), params: {
-          volunteer: {email: "newemail@gmail.com", display_name: "New Name"}
+          volunteer: {email: "newemail@gmail.com", display_name: "New Name", phone_number: "+15463457898"}
         }
         expect(response).to have_http_status(:redirect)
 
         volunteer.reload
         expect(volunteer.display_name).to eq "New Name"
         expect(volunteer.email).to eq "newemail@gmail.com"
+        expect(volunteer.phone_number).to eq "+15463457898"
       end
     end
 
@@ -135,13 +172,14 @@ RSpec.describe "/volunteers", type: :request do
         volunteer.supervisor = build(:supervisor)
 
         patch volunteer_path(volunteer), params: {
-          volunteer: {email: other_volunteer.email, display_name: "New Name"}
+          volunteer: {email: other_volunteer.email, display_name: "New Name", phone_number: "+15463457898"}
         }
         expect(response).to have_http_status(:success) # Re-renders form
 
         volunteer.reload
         expect(volunteer.display_name).to_not eq "New Name"
         expect(volunteer.email).to_not eq other_volunteer.email
+        expect(volunteer.phone_number).to_not eq "+15463457898"
       end
     end
 
@@ -158,8 +196,7 @@ RSpec.describe "/volunteers", type: :request do
   end
 
   describe "PATCH /activate" do
-    let(:volunteer) { create(:volunteer, :inactive) }
-    let(:organization) { create(:casa_org) }
+    let(:volunteer) { create(:volunteer, :inactive, casa_org: organization) }
     let(:volunteer_with_cases) { create(:volunteer, :with_cases_and_contacts, casa_org: organization) }
     let(:case_id) { volunteer_with_cases.casa_cases.first.id }
 
@@ -193,7 +230,7 @@ RSpec.describe "/volunteers", type: :request do
     end
 
     context "activated volunteer with cases" do
-      it "shows a flash messages indicating the volunteer has been activated and sent an email" do
+      it "shows a flash message indicating the volunteer has been activated and sent an email" do
         sign_in admin
 
         patch activate_volunteer_path(id: volunteer_with_cases, redirect_to_path: "casa_case", casa_case_id: case_id)
@@ -238,8 +275,8 @@ RSpec.describe "/volunteers", type: :request do
   end
 
   describe "GET /impersonate" do
-    let!(:other_volunteer) { create(:volunteer) }
-    let!(:supervisor) { create(:supervisor) }
+    let!(:other_volunteer) { create(:volunteer, casa_org: organization) }
+    let!(:supervisor) { create(:supervisor, casa_org: organization) }
 
     it "can impersonate a volunteer as an admin" do
       sign_in admin

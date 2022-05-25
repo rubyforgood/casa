@@ -21,14 +21,13 @@ en:
         select_hearing_type: -Select Hearing Type-
         select_judge: -Select Judge-
       youth_birth_month_year: "Youth's Birth Month & Year"
+      youth_date_in_care: "Youth's Date in Care"
       case_number: Case number
       court_details: Court Details
       hearing_type: Hearing type
       judge: Judge
       transition_aged_youth: Transition Aged Youth
       court_report_status: Court Report Status
-    inactive_case:
-      notice: Case was deactivated on
     index:
       button:
         new: New Case
@@ -77,6 +76,7 @@ en:
         judge: Judge
         next_court_date: Next Court Date
         transition_aged_youth: Transition Aged Youth
+        youth_date_in_care: "Youth's Date in Care"
       button:
         click_to_download: Click to download
         download_all: Download All
@@ -92,6 +92,8 @@ en:
         created_at: Created
         duration: Duration
         title: Title
+      button:
+        new_other_duty: New Duty
   casa_admins:
     edit:
       title: Edit Casa Admin
@@ -106,8 +108,6 @@ en:
         display_name: Display name
       prompt:
         mark_inactive_warning: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"
-    new:
-      title: Create New Casa Admin
     index:
       active: Active
       active_text: Admin is
@@ -161,21 +161,7 @@ en:
     edit:
       title: Editing Case Contact
     form:
-      plural_label: 1. Select all relevant CASA cases
-      prompt_select_one: Please Select One
-      singular_label: 1. Select relevant CASA case
       contact_types_label: 2. Select All Contact Types
-      contact_details: 3. Enter Contact Details
-      travel_details: 4. Enter Travel Details
-      enter_notes: 5. Enter Notes
-      contact_made_label: a. Contact Made
-      contact_medium: b. Contact Medium
-      occurred_on: c. Occurred On
-      duration_meeting: d. Duration of Meeting
-      miles_driven: a. Miles Driven
-      driving_reimburse_label: b. Want Driving Reimbursement
-      other_expenses: c. Other Expenses
-      enter_notes_placeholder: Enter notes here
     new:
       title: New Case Contact
     contact_types:
@@ -190,16 +176,6 @@ en:
         active: Active?
         name: Name
       title: Contact Type Groups
-    contact_types:
-      button:
-        edit: Edit
-        new: New Contact Type
-      heading:
-        actions: Actions
-        active: Active?
-        group: Group
-        name: Name
-      title: Contact Types
     hearing_types:
       button:
         edit: Edit
@@ -225,13 +201,6 @@ en:
         mailer_type: Mailer Type
         sent_address: Recipient
       title: Sent Emails
-    edit:
-      manage_court_details_title: Manage Court Details
-      manage_contact_types_title: Manage Contact Types
-      title: Editing CASA Organization
-      logo: Logo
-      court_report_template: Court report template
-      show_driving_reimbursement: Show driving reimbursement
   case_court_reports:
     index:
       button:
@@ -247,20 +216,13 @@ en:
         select_case_number: Select case number
       title: Report Categories
   contact_type_groups:
-    new:
-      title: New Contact Type Group
     edit:
       title: Edit Contact Type Group
-    form:
-      active: Active
   contact_types:
     new:
       title: New Contact Type
     edit:
       title: Edit Contact Type
-    form:
-      contact_type_group: Contact type group
-      active: Active
   emancipation:
     index:
       heading:
@@ -337,6 +299,11 @@ en:
         do_not: Do not
         import: Then click the "Import Supervisors CSV" button to import your supervisors.
       upload_title: Upload your CSV file
+    sms_opt_in_modal:
+      title: SMS Opt In
+      description: Please check this box to verify that these mobile numbers have opted in to receive SMS notifications. (They will have the opportunity to opt out or update their preferences.)
+      label: Opt into SMS notifications
+      continue: Continue Import
     volunteers:
       button:
         download: Download and reference example Volunteer CSV file
@@ -366,6 +333,7 @@ en:
         built_by: Built by
         link:
           report_site_issue: Report a site issue
+          sms_terms_and_conditions: SMS Terms & Conditions
         ruby_for_good: Ruby For Good
     login_header:
       image:
@@ -432,9 +400,20 @@ en:
         no_case_court_mandates: There are no court orders associated with this court date.
       title: Court Date
   reimbursements:
-    table:
+    data_table:
       heading:
         amount: Amount
+        case_number: Case Number
+        contact_types: Contact Types
+        date_added: Date Added
+        description: Description
+        occurred_at: Occurred At
+        expense_type: Expense Type
+        reimbursement_complete: Reimbursement Complete
+        volunteer: Volunteer
+    table:
+      heading:
+        amount: Miles Driven
         case_number: Case Number
         contact_types: Contact Types
         date_added: Date Added
@@ -530,6 +509,7 @@ en:
         contacts: Contacts Made in Past 60 Days
         e_mail: Email
         last_attempted_contact:  Last Attempted Contact
+        hours_spent_in: Hours spent in last 30 days
         name: Name
         supervisor: Supervisor
         status: Status
@@ -548,6 +528,9 @@ en:
       send_reminder: Send Reminder
       supervisor_checkbox_text: Send CC to Supervisor
       tooltip: Remind volunteer to input case contacts
+
+  notes:
+    update: Update Note
   mileage_rates:
     index:
       mileage_rates: Mileage Rates
@@ -570,3 +553,13 @@ en:
     edit:
       email: Email
       display_name: Display name
+  other_duties:
+    new:
+      title: New Duty
+    edit:
+      title: Editing Duty
+    form:
+      occurred_on: Occurred On
+      duration_meeting: Duration Meeting
+      enter_notes: Enter Notes
+      enter_notes_placeholder: Enter notes here

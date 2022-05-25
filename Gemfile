@@ -3,17 +3,19 @@
 source "https://rubygems.org"
 
 ruby "3.1.0"
-gem "rails", "~> 6.1.4"
+gem "rails", "~> 7.0.3"
 
 gem "after_party" # post-deployment tasks
 gem "amazing_print" # easier console reading
 gem "azure-storage-blob", require: false
 gem "bugsnag" # tracking errors in prod
 gem "caxlsx", "~> 3.2" # excel spreadsheets - TODO can we remove this version restriction?
-gem "caxlsx_rails", "~> 0.6.2" # excel spreadsheets - TODO can we remove this version restriction?
+gem "caxlsx_rails", "~> 0.6.3" # excel spreadsheets - TODO can we remove this version restriction?
 gem "delayed_job_active_record"
 gem "devise" # for authentication
 gem "devise_invitable"
+gem "httparty" # for making HTTP network requests 🥳
+gem "twilio-ruby" # twilio helper functions
 gem "draper" # adds decorators for cleaner presentation logic
 gem "faker" # creates realistic seed data, valuable for staging and demos
 gem "filterrific" # filtering and sorting of models
@@ -24,7 +26,6 @@ gem "net-smtp", require: false # needed for ruby upgrade to 3.1.0 for some dang 
 gem "net-pop" # needed for ruby upgrade to 3.1.0 https://www.ruby-lang.org/en/news/2021/12/25/ruby-3-1-0-released/
 gem "net-imap" # needed for ruby upgrade to 3.1.0 https://www.ruby-lang.org/en/news/2021/12/25/ruby-3-1-0-released/
 gem "noticed" # Notifications
-gem "paper_trail" # tracking changes
 gem "paranoia" # For soft-deleting database objects
 gem "pdf-forms" # filling in fund request PDFs with user input
 gem "rexml" # pdf-forms needs this to deploy to heroku apparently
@@ -43,7 +44,6 @@ gem "webpacker" # Transpile app-like JavaScript. Read more: https://github.com/r
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
   gem "byebug", platforms: %i[mri mingw x64_mingw] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem "cypress-on-rails", "~> 1.12"
   gem "erb_lint", require: false
   gem "factory_bot_rails"
   gem "pry"
@@ -56,16 +56,15 @@ end
 group :development do
   gem "annotate" # for adding db field listings to models as comments
   gem "letter_opener" # Opens emails in new tab for easier testing
-  gem "listen", ">= 3.0.5", "< 3.8" # TODO can we remove this version restriction?
   gem "spring" # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring-commands-rspec"
-  gem "spring-watcher-listen", "~> 2.0.0" # TODO can we remove this version restriction?
   gem "traceroute" # for finding unused routes
   gem "web-console", ">= 3.3.0" # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
 end
 
 group :test do
   gem "brakeman" # security inspection
+  gem "webmock" # HTTP request stubber
   gem "capybara"
   gem "capybara-screenshot"
   gem "database_cleaner-active_record"

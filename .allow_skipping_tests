@@ -8,6 +8,7 @@ controllers/all_casa_admins_controller.rb
 controllers/android_app_associations_controller.rb
 controllers/application_controller.rb
 controllers/casa_admins_controller.rb
+controllers/casa_cases_controller.rb
 controllers/casa_org_controller.rb
 controllers/case_assignments_controller.rb
 controllers/case_contact_reports_controller.rb
@@ -19,6 +20,7 @@ controllers/concerns/organizational.rb
 controllers/contact_type_groups_controller.rb
 controllers/contact_types_controller.rb
 controllers/court_dates_controller.rb
+controllers/dashboard_controller.rb
 controllers/emancipation_checklists_controller.rb
 controllers/health_controller.rb
 controllers/hearing_types_controller.rb
@@ -28,6 +30,7 @@ controllers/mileage_rates_controller.rb
 controllers/mileage_reports_controller.rb
 controllers/notes_controller.rb
 controllers/notifications_controller.rb
+controllers/other_duties_controller.rb
 controllers/reports_controller.rb
 controllers/supervisor_volunteers_controller.rb
 controllers/supervisors_controller.rb
@@ -47,7 +50,7 @@ mailers/application_mailer.rb
 models/application_record.rb
 models/concerns/by_organization_scope.rb
 models/concerns/roles.rb
-models/feature_flag.rb
+models/fund_request.rb
 models/notification.rb
 notifications/base_notification.rb
 notifications/followup_notification.rb
@@ -59,12 +62,13 @@ services/case_contacts_export_csv_service.rb
 services/court_report_format_contact_date.rb
 services/create_all_casa_admin_service.rb
 services/create_casa_admin_service.rb
+services/fdf_inputs_service.rb
 services/mileage_export_csv_service.rb
 validators/court_report_validator.rb
+validators/user_validator.rb
+validators/casa_org_validator.rb
 values/all_casa_admin_parameters.rb
 values/casa_admin_parameters.rb
 values/supervisor_parameters.rb
 values/user_parameters.rb
 values/volunteer_parameters.rb
-models/fund_request.rb
-services/fdf_inputs_service.rb

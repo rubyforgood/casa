@@ -1,12 +1,11 @@
 class ApplicationController < ActionController::Base
-  include Pundit
+  include Pundit::Authorization
   include Organizational
 
   protect_from_forgery
   before_action :authenticate_user!
   before_action :set_current_user
   before_action :set_current_organization
-  before_action :set_paper_trail_whodunnit
   # after_action :verify_authorized, except: :index # TODO add this back and fix all tests
   # after_action :verify_policy_scoped, only: :index
 

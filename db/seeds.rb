@@ -11,6 +11,7 @@ require_relative "seeds/casa_org_populator_presets"
 require_relative "seeds/db_populator"
 require_relative "../lib/tasks/data_post_processors/case_contact_populator"
 require_relative "../lib/tasks/data_post_processors/contact_type_populator"
+require_relative "../lib/tasks/data_post_processors/sms_notification_event_populator"
 
 class SeederMain
   attr_reader :db_populator, :rng
@@ -20,10 +21,10 @@ class SeederMain
     @rng = Random.new(random_seed) # rng = random number generator
     @db_populator = DbPopulator.new(rng)
     Faker::Config.random = rng
+    Faker::Config.locale = "en-US" # only allow US phone numbers
   end
 
   def seed
-    PaperTrail.enabled = false # don't create rows in the versions table during seed
     log "NOTE: CASA seed does not delete anything anymore! Run rake db:seed:replant to delete everything and re-seed"
     log "Creating the objects in the database..."
     db_populator.create_all_casa_admin("allcasaadmin@example.com")
@@ -31,13 +32,13 @@ class SeederMain
     db_populator.create_all_casa_admin("admin1@example.com")
     db_populator.create_org(CasaOrgPopulatorPresets.for_environment.merge({org_name: "Prince George CASA"}))
     db_populator.create_org(CasaOrgPopulatorPresets.minimal_dataset_options)
+    SmsNotificationEventPopulator.populate
     2.times do
       DbPopulator.new(rng, case_fourteen_years_old: true)
         .create_org(CasaOrgPopulatorPresets.minimal_dataset_options)
     end
 
     post_process_data
-    PaperTrail::Version.delete_all
     report_object_counts
     log "\nDone.\n\n"
   end
@@ -67,7 +68,6 @@ class SeederMain
   def post_process_data
     ContactTypePopulator.populate
     CaseContactPopulator.populate
-    # PaperTrail::Versions.delete_all # not needed for seed, and it takes up a lot of heroku rows we don't care to pay for
   end
 
   def get_seed_specification
@@ -91,7 +91,6 @@ class SeederMain
     active_record_classes.each do |klass|
       log "%5d  %s" % [klass.count, klass.name]
     end
-    log "%5d  %s" % [PaperTrail::Version.count, PaperTrail::Version.name]
   end
 
   def log(message)

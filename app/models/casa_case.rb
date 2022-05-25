@@ -2,7 +2,7 @@ class CasaCase < ApplicationRecord
   include ByOrganizationScope
   include DateHelper
 
-  has_paper_trail
+  self.ignored_columns = %w[court_date]
 
   TABLE_COLUMNS = %w[
     case_number
@@ -16,8 +16,6 @@ class CasaCase < ApplicationRecord
 
   TRANSITION_AGE_YOUTH_ICON = "🦋".freeze
   NON_TRANSITION_AGE_YOUTH_ICON = "🐛".freeze
-
-  has_paper_trail
 
   before_create :set_slug
 
@@ -198,7 +196,7 @@ class CasaCase < ApplicationRecord
   end
 
   def full_attributes_hash
-    attributes.symbolize_keys.merge({contact_types: casa_case_contact_types.map(&:attributes), court_orders: case_court_orders.map(&:attributes)})
+    attributes.symbolize_keys.merge({contact_types: contact_types.reload.map(&:attributes), court_orders: case_court_orders.map(&:attributes)})
   end
 
   # def to_param
@@ -215,10 +213,10 @@ end
 #  active                    :boolean          default(TRUE), not null
 #  birth_month_year_youth    :datetime
 #  case_number               :string           not null
-#  court_date                :datetime
 #  court_report_due_date     :datetime
 #  court_report_status       :integer          default("not_submitted")
 #  court_report_submitted_at :datetime
+#  date_in_care              :datetime
 #  slug                      :string
 #  transition_aged_youth     :boolean          default(FALSE)
 #  created_at                :datetime         not null

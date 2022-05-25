@@ -19,18 +19,22 @@ RSpec.describe "volunteers/edit", type: :system do
     before do
       sign_in admin
       visit edit_volunteer_path(volunteer)
+      fill_in "volunteer_email", with: "newemail@example.com"
+      fill_in "volunteer_display_name", with: "Kamisato Ayato"
     end
 
     context "with valid data" do
       it "updates successfully" do
-        fill_in "volunteer_email", with: "newemail@example.com"
-        fill_in "volunteer_display_name", with: "Mickey Mouse"
         click_on "Submit"
         expect(page).to have_text "Volunteer was successfully updated."
       end
     end
 
     context "with invalid data" do
+      let(:role) { "volunteer" }
+
+      it_should_behave_like "shows error for invalid phone numbers"
+
       it "shows error message for duplicate email" do
         volunteer.supervisor = build(:supervisor)
         fill_in "volunteer_email", with: admin.email
@@ -82,8 +86,8 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   it "allows the admin to unassign a volunteer from a supervisor" do
-    supervisor = build(:supervisor, display_name: "Haka Haka")
-    volunteer = create(:volunteer, display_name: "Bolu Bolu", supervisor: supervisor)
+    supervisor = build(:supervisor, display_name: "Haka Haka", casa_org: organization)
+    volunteer = create(:volunteer, display_name: "Bolu Bolu", supervisor: supervisor, casa_org: organization)
 
     sign_in admin
 
@@ -348,6 +352,10 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   context "logged in as an admin" do
+    let!(:note_1) { volunteer.notes.create(creator: admin, content: "Note_1") }
+    let!(:note_2) { volunteer.notes.create(creator: admin, content: "Note_2") }
+    let!(:note_3) { volunteer.notes.create(creator: admin, content: "Note_3") }
+
     before do
       sign_in admin
       visit edit_volunteer_path(volunteer)
@@ -369,9 +377,21 @@ RSpec.describe "volunteers/edit", type: :system do
         end
       end
     end
+
+    it "can delete notes about a volunteer" do
+      expect(page).to have_css ".notes .table tbody tr", count: 3
+
+      click_on("Delete", match: :first)
+
+      expect(page).to have_css ".notes .table tbody tr", count: 2
+    end
   end
 
   context "logged in as a supervisor" do
+    let!(:note_1) { volunteer.notes.create(creator: admin, content: "Note_1") }
+    let!(:note_2) { volunteer.notes.create(creator: admin, content: "Note_2") }
+    let!(:note_3) { volunteer.notes.create(creator: admin, content: "Note_3") }
+
     before do
       volunteer.supervisor = create(:supervisor)
       sign_in volunteer.supervisor
@@ -393,6 +413,14 @@ RSpec.describe "volunteers/edit", type: :system do
           expect(page).to have_text(I18n.l(current_date.to_date, format: :standard, default: ""))
         end
       end
+    end
+
+    it "can delete notes about a volunteer" do
+      expect(page).to have_css ".notes .table tbody tr", count: 3
+
+      click_on("Delete", match: :first)
+
+      expect(page).to have_css ".notes .table tbody tr", count: 2
     end
   end
 

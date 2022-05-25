@@ -8,11 +8,28 @@ RSpec.describe CasaAdminPolicy do
   let(:volunteer) { build(:volunteer, casa_org: organization) }
   let(:supervisor) { build(:supervisor, casa_org: organization) }
 
-  permissions :index?, :new?, :create?, :edit?, :update?, :activate?, :resend_invitation?, :change_to_supervisor? do
+  permissions :edit? do
+    context "same org" do
+      let(:record) { build_stubbed(:casa_admin, casa_org: casa_admin.casa_org) }
+      it "allows editing admin" do
+        is_expected.to permit(casa_admin, record)
+      end
+    end
+    context "different org" do
+      let(:record) { build_stubbed(:casa_admin, casa_org: build_stubbed(:casa_org)) }
+      it "does not allow editing admin" do
+        is_expected.not_to permit(casa_admin, record)
+      end
+    end
+  end
+
+  permissions :index?, :new?, :create?, :update?, :activate?, :resend_invitation?, :change_to_supervisor? do
     it "allows casa_admins" do
       is_expected.to permit(casa_admin)
     end
+  end
 
+  permissions :index?, :edit?, :new?, :create?, :update?, :activate?, :resend_invitation?, :change_to_supervisor? do
     it "does not permit supervisor" do
       is_expected.to_not permit(supervisor)
     end

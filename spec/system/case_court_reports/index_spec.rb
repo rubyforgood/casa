@@ -222,7 +222,7 @@ RSpec.describe "case_court_reports/index", type: :system do
         send_keys(search_term)
         send_keys :enter
 
-        expect(find(".select2-selection__rendered").text).to match /^#{casa_case.case_number}/
+        expect(find(".select2-selection__rendered").text).to match(/^#{casa_case.case_number}/)
       end
     end
   end

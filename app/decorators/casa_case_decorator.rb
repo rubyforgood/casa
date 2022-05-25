@@ -1,4 +1,6 @@
 class CasaCaseDecorator < Draper::Decorator
+  include ActionView::Helpers::DateHelper
+
   delegate_all
 
   def case_contacts_ordered_by_occurred_at
@@ -40,6 +42,16 @@ class CasaCaseDecorator < Draper::Decorator
     end
   end
 
+  def date_in_care
+    return nil unless object.date_in_care
+    I18n.l(object.date_in_care, format: :youth_date_of_birth)
+  end
+
+  def duration_in_care
+    return nil unless object.date_in_care
+    "(#{time_ago_in_words(object.date_in_care)} ago)"
+  end
+
   def calendar_next_court_date
     return nil unless object.next_court_date
     {start: calendar_format(object.next_court_date.date), end: calendar_format(object.next_court_date.date + 1.day)}
@@ -74,6 +86,19 @@ class CasaCaseDecorator < Draper::Decorator
   def successful_contacts_this_week_before(date)
     this_week_before_date = Date.today - 7.days..date
     object.case_contacts.where(occurred_at: this_week_before_date).where(contact_made: true).count
+  end
+
+  def thank_you_message
+    [
+      "Thanks for all you do!",
+      "Thank you for your hard work!",
+      "Thank you for a job well done!",
+      "Thank you for volunteering!",
+      "Thanks for being a great volunteer!",
+      "One of the greatest gifts you can give is your time!",
+      "Those who can do, do. Those who can do more, volunteer.",
+      "Volunteers do not necessarily have the time, they just have the heart."
+    ].sample
   end
 
   def transition_aged_youth

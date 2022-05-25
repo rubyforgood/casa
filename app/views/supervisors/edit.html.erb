@@ -5,23 +5,7 @@
     <%= form_for @supervisor, as: :supervisor, url: supervisor_path(@supervisor) do |form| %>
       <%= render "/shared/error_messages", resource: @supervisor %>
 
-      <div class="field form-group">
-        <%= form.label :email, t("common.email") %>
-        <% if policy(@supervisor).update_supervisor_email? %>
-          <%= form.text_field :email, class: "form-control" %>
-        <% else %>
-          <input class="form-control" type="text" placeholder="<%= @supervisor.email %>" autocomplete="off" readonly>
-        <% end %>
-      </div>
-
-      <div class="field form-group">
-        <%= form.label :display_name, t("common.display_name") %>
-        <% if policy(@supervisor).update_supervisor_name? %>
-          <%= form.text_field :display_name, class: "form-control" %>
-        <% else %>
-          <input class="form-control" type="text" placeholder="<%= @supervisor.display_name %>" autocomplete="off" readonly>
-        <% end %>
-      </div>
+      <%= render "/shared/edit_form", resource: @supervisor, f: form %>
 
       <p>
         <%= render "/shared/invite_login", resource: @supervisor %>

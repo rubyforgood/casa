@@ -3,9 +3,9 @@
 
   <div class="field casa-case form-group field-card">
     <% if casa_cases.length > 1 %>
-      <h2><label for="case_contact_casa_case"><%= t(".plural_label") %><span class="red-letter"> *</span></label></h2>
+      <h2><label for="case_contact_casa_case">1. Select all relevant CASA cases<span class="red-letter"> *</span></label></h2>
     <% else %>
-      <h2><label for="case_contact_casa_case"><%= t(".singular_label") %><span class="red-letter"> *</span></label></h2>
+      <h2><label for="case_contact_casa_case">1. Select relevant CASA case<span class="red-letter"> *</span></label></h2>
     <% end %>
     <% casa_cases.each_with_index do |casa_case, index| %>
       <div class="form-check">
@@ -30,10 +30,10 @@
         checkbox_tag_name: "case_contact[case_contact_contact_type_attributes][][contact_type_id]" %>
   </div>
 
-  <div class="form-group field-card">
-    <h2><label for="case_contact_casa_case"><%= t(".contact_details") %></label><span class="red-letter"> *</span></h2>
+  <div id="enter-contact-details" class="form-group field-card">
+    <h2><label for="case_contact_casa_case">3. Enter Contact Details</label><span class="red-letter"> *</span></h2>
     <div class="field contact-type form-group">
-      <h5><%= form.label :contact_made, t(".contact_made_label") %></h5>
+      <h5><%= form.label :contact_made, "a. Contact Made" %></h5>
       <div class="form-check">
         <%= form.radio_button :contact_made, true,
                         checked: case_contact.contact_made,
@@ -53,7 +53,7 @@
     </div>
 
     <div class="field contact-medium form-group">
-      <h5><%= form.label :medium_type, t(".contact_medium") %></h5>
+      <h5><%= form.label :medium_type, "b. Contact Medium" %></h5>
       <%= form.collection_radio_buttons(:medium_type, contact_mediums, 'value', 'label') do |b| %>
         <div class="form-check">
           <%= b.radio_button(class: "form-check-input") %>
@@ -63,7 +63,7 @@
     </div>
 
     <div class="field occurred-at form-group">
-      <h5><%= form.label :occurred_at, t(".occurred_on") %></h5>
+      <h5><%= form.label :occurred_at, "c. Occurred On" %></h5>
       <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
       <%= form.text_field :occurred_at,
                           value: occurred_at.to_date,
@@ -72,7 +72,7 @@
     </div>
 
     <div class="form-group duration">
-      <h5><label for="case_contact_casa_case"><%= t(".duration_meeting") %></label></h5>
+      <h5><label for="case_contact_casa_case">d. Duration of Meeting</label></h5>
       <div class="form-group duration-hours inline-fields">
         <%= form.number_field :duration_hours,
                             id: "case-contact-duration-hours-display",
@@ -96,11 +96,11 @@
   </div>
 
   <div class="form-group field-card">
-    <h2><label for="case_contact_casa_case"><%= t(".travel_details") %></label></h2>
+    <h2><label for="case_contact_casa_case">4. Enter Travel Details</label></h2>
     <div class="field miles-driven form-group">
-      <h5><%= form.label :miles_driven, t(".miles_driven") %></h5>
+      <h5><%= form.label :miles_driven, "a. Miles Driven" %></h5>
       <% if form_type == 'new' && @case_contact.miles_driven == 0 %>
-        <input class="form-control" min="0" max="10000" type="number" value="" name="case_contact[miles_driven]" autocomplete="off" id="case_contact_miles_driven">
+        <input class="form-control" min="0" max="10000" type="number" value="0" name="case_contact[miles_driven]" autocomplete="off" id="case_contact_miles_driven">
       <% else %>
         <%= form.number_field :miles_driven, class: "form-control", min: "0", max: 10000, placeholder: "0" %>
       <% end %>
@@ -108,74 +108,89 @@
 
     <% if current_organization.show_driving_reimbursement %>
       <div class="field want-driving-reimbursement form-group">
-        <h5><%= form.label :want_driving_reimbursement, t(".driving_reimburse_label") %></h5>
+        <h5><%= form.label :want_driving_reimbursement, "b. Want Driving Reimbursement" %></h5>
         <div class="form-check">
           <%= form.radio_button :want_driving_reimbursement, true,
                           required: false,
                           class: 'form-check-input' %>
           <%= form.label "Yes", class: "form-check-label",
-                          for: "want_driving_reimbursement_made_true" %>
+                          for: "case_contact_want_driving_reimbursement_true" %>
         </div>
         <div class="form-check">
           <%= form.radio_button :want_driving_reimbursement, false,
                           required: false,
                           class: 'form-check-input' %>
           <%= form.label "No", class: "form-check-label",
-                          for: "want_driving_reimbursement_made_false" %>
+                          for: "case_contact_want_driving_reimbursement_false" %>
         </div>
       </div>
     <% end %>
 
     <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
       <div class="other-expenses">
-        <h5><%= form.label :additional_expense, t(".other_expenses") %></h5>
-        <div class="other-expense-amount">
-          <% @case_contact.decorate.additional_expenses_count %>
-          <% if @case_contact.additional_expenses.any? %>
-            <%= form.fields_for :additional_expenses do |ff| %>
-              <%= ff.number_field :other_expense_amount,
-              placeholder: "Enter amount",
-              class: "cc-italic cc-field other-expense-amount", min: "0", max: 1000, step: 0.01 %>
-              <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
-              class: "cc-italic cc-field other-expenses-describe" %>
-            <% end %>
-          <% end %>
-          <% if @case_contact.decorate.additional_expenses_count < 10 %>
-            <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
+        <h5><%= form.label :additional_expense, "c. Other Expenses" %></h5>
+        <ol>
+        <% @case_contact.decorate.additional_expenses_count %>
+        <% if @case_contact.additional_expenses.any? %>
+          <%= form.fields_for :additional_expenses do |ff| %>
+            <li>
+            <div class="expense-container">
               <%= ff.number_field :other_expense_amount,
               placeholder: "Enter amount",
               class: "cc-italic cc-field other-expense-amount",
               min: "0", max: 1000, step: 0.01 %>
               <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
               class: "cc-italic cc-field other-expenses-describe" %>
-            <% end %>
-            <% (9 - @case_contact.decorate.additional_expenses_count).times do |i| %>
-              <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
-                <%= ff.number_field :other_expense_amount,
-                placeholder: "Enter amount",
-                class: "cc-italic cc-field other-expense-amount hide-field",
-                min: "0", max: 1000, step: 0.01 %>
-                <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
-                class: "cc-italic cc-field other-expenses-describe hide-field" %>
-              <% end %>
-            <% end %>
-            <a href="#" class="add-another-expense add-expense-link pr-6" id="add-another-expense">Add Another Expense</a>
+            </div>
+            </li>
           <% end %>
-        </div>
+        <% end %>
+        <% if @case_contact.decorate.additional_expenses_count < 10 %>
+          <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
+          <li>
+          <div class="expense-container">
+            <%= ff.number_field :other_expense_amount,
+            placeholder: "Enter amount",
+            class: "cc-italic cc-field other-expense-amount",
+            min: "0", max: 1000, step: 0.01 %>
+            <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
+            class: "cc-italic cc-field other-expenses-describe" %>
+          </div>
+          </li>
+          <% end %>
+          <% (9 - @case_contact.decorate.additional_expenses_count).times do |i| %>
+            <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
+            <div class="expense-container" id="<%= if @case_contact.decorate.additional_expenses_count === 0
+            then "expense" + (i + 2).to_s
+            else "expense" + ((@case_contact.decorate.additional_expenses_count) + (i + 2)).to_s
+            end %>">
+              <%= ff.number_field :other_expense_amount,
+              placeholder: "Enter amount",
+              class: "cc-italic cc-field other-expense-amount hide-field",
+              min: "0", max: 1000, step: 0.01 %>
+              <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
+              class: "cc-italic cc-field other-expenses-describe hide-field" %>
+            </div>
+            <% end %>
+          <% end %>
+          </ol>
+
+          <a class="add-another-expense add-expense-link pr-9" id="add-another-expense">Add Another Expense</a>
+          <% end %>
       </div>
     <% end %>
   </div>
 
   <div class="field notes form-group field-card">
-    <h2><%= form.label :notes, t(".enter_notes") %></h2>
+    <h2><%= form.label :notes, "5. Enter Notes" %></h2>
     <div class="cc-italic">
-      <%= t("forms.case_contact.notes_placeholder") %>
+      Please refer to individuals by their roles instead of by their names. Ex: My supervisor joined me for a call with the social worker to discuss my youth.
     </div>
-    <%= form.text_area :notes, :rows => 5, placeholder: t(".enter_notes_placeholder"), class: "cc-italic form-control" %>
+    <%= form.text_area :notes, :rows => 5, placeholder: "Enter notes here", class: "cc-italic form-control" %>
   </div>
 
   <div class="actions">
-    <%= form.submit t("button.submit"), class: "wide_button btn btn-primary", id: "case-contact-submit",
+    <%= form.submit "Submit", class: "wide_button btn btn-primary", id: "case-contact-submit",
 "data-target": "#confirm-submit" %>
   </div>
   <%= render 'confirm_note_content_dialog', form: form %>

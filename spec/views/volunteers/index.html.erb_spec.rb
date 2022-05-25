@@ -31,7 +31,7 @@ RSpec.describe "volunteers", type: :view do
       let(:supervisor) { build(:supervisor) }
 
       it "shows up in the supervisor dropdown" do
-        expect(subject).to include(supervisor.display_name)
+        expect(subject).to include(ERB::Util.url_encode(supervisor.display_name).gsub("%20", " ")) # don't flake on names with ' like O'Hara
       end
     end
 

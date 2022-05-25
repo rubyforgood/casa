@@ -30,11 +30,13 @@ require('src/emancipations')
 require('src/select')
 require('src/dashboard')
 require('src/sidebar')
+require('src/import')
 require('src/readMore')
 require('src/tooltip')
 require('src/password_confirmation')
 require('src/reports')
 require('src/add_additional_expense')
+require('src/require_communication_preference')
 
 // Uncomment to copy all static images under ../images to the output folder and
 // reference them with the image_pack_tag or asset_pack_path helpers in views.

@@ -36,6 +36,16 @@ RSpec.describe "supervisors/edit", type: :system do
       expect(page).to have_text("Editing Supervisor")
     end
 
+    context "with invalid data" do
+      let(:role) { "supervisor" }
+      let(:supervisor) { create(:supervisor, display_name: "Leslie Knope", casa_org: organization) }
+      before do
+        sign_in user
+        visit edit_supervisor_path(supervisor)
+      end
+      it_should_behave_like "shows error for invalid phone numbers"
+    end
+
     it "can go to the supervisor edit page and see red message when there are no active volunteers" do
       supervisor = create :supervisor, casa_org: organization
 
@@ -53,6 +63,7 @@ RSpec.describe "supervisors/edit", type: :system do
 
       visit edit_supervisor_path(supervisor)
 
+      expect(page).to have_text "CASA organization "
       expect(page).to have_text "Added to system "
       expect(page).to have_text "Invitation email sent never"
       expect(page).to have_text "Last logged in"
@@ -161,7 +172,7 @@ RSpec.describe "supervisors/edit", type: :system do
     end
 
     context "when the email exists already" do
-      let!(:existing_supervisor) { create(:supervisor) }
+      let!(:existing_supervisor) { create(:supervisor, casa_org_id: organization.id) }
 
       it "responds with a notice" do
         sign_in user

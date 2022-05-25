@@ -2,20 +2,20 @@
   <%= render "thank_you_modal" %>
 
   <div class="col-sm-12 form-header">
-    <h1 class="pull-left"><%= @casa_case.decorate.transition_aged_youth_icon %> <%= t(".title") %></h1>
+    <h1 class="pull-left"><%= @casa_case.decorate.transition_aged_youth_icon %>CASA Case Details</h1>
     <%- if policy(:case_contact).new? & @casa_case.active? %>
-      <%= link_to(t(".button.new_contact"),
+      <%= link_to('New Case Contact',
                   new_case_contact_path(case_contact: {casa_case_id: @casa_case.id}),
                   class: "btn btn-primary pull-left casa-case-button") %>
     <%- end %>
     <% if @casa_case.active? %>
-      <%= link_to t(".button.edit_case"), edit_casa_case_path(@casa_case),
+      <%= link_to 'Edit Case Details', edit_casa_case_path(@casa_case),
               class: "btn btn-primary pull-left casa-case-button" %>
     <% end %>
     <% if @casa_case.in_transition_age? %>
       <%= link_to(casa_case_emancipation_path(@casa_case),
               class: "btn btn-primary pull-left casa-case-button") do %>
-        <%= t(".button.emancipation") %>
+        Emancipation
         <span class="badge badge-light">
           <%= @casa_case.decorate.emancipation_checklist_count %>
         </span>
@@ -23,8 +23,8 @@
     <% end %>
       <%= form_with url: generate_case_court_reports_path, local: false, class: "d-inline" do |form| %>
         <%= form.hidden_field :case_number, value: @casa_case.case_number %>
-        <%= button_tag t(".button.generate_report"), type: :submit,
-                       data: {button_name: t(".button.generate_report")},
+        <%= button_tag 'Generate Report', type: :submit,
+                       data: { button_name: 'Generate Report' },
                        id: "btnGenerateReport",
                        class: "btn btn-success pull-right mb-2" %>
         <i id="spinner" class='fas fa-spin d-none pull-right'>⏳</i>
@@ -38,27 +38,37 @@
       <%= render "inactive_case", casa_case: @casa_case %>
     <% end %>
     <p>
-    <h6><strong><%= t(".label.case_number") %>:</strong> <%= @casa_case.case_number %></h6>
+    <h6><strong>Case number:</strong> <%= @casa_case.case_number %></h6>
     </p>
     <% if @casa_case.has_hearing_type? %>
       <p>
-      <h6><strong><%= t(".label.hearing_type") %>:</strong> <%= @casa_case.hearing_type_name %></h6>
+      <h6><strong>Hearing Type:</strong> <%= @casa_case.hearing_type_name %></h6>
       </p>
     <% end %>
 
     <% if @casa_case.has_judge_name? %>
       <p>
-      <h6><strong><%= t(".label.judge") %>:</strong> <%= @casa_case.judge_name %></h6>
+      <h6><strong>Judge:</strong> <%= @casa_case.judge_name %></h6>
       </p>
     <% end %>
 
     <p>
-    <h6><strong><%= t(".label.transition_aged_youth") %>:</strong> <%= @casa_case.decorate.transition_aged_youth %></h6>
+    <h6><strong>Transition Aged Youth:</strong> <%= @casa_case.decorate.transition_aged_youth %></h6>
     </p>
+
+    <div>
+      <h6>
+        <strong>
+          Youth's Date in Care:
+        </strong>
+        <%= @casa_case.decorate.date_in_care %>
+        <%= @casa_case.decorate.duration_in_care %>
+      </h6>
+    </div>
 
     <p>
     <h6>
-      <strong><%= t(".label.next_court_date") %>:</strong>
+      <strong>Next Court Date:</strong>
       <%= I18n.l(@casa_case.next_court_date&.date, format: :day_and_date, default: '') %>
       <%= render "calendar_button", date: @casa_case.decorate.calendar_next_court_date,
                                     id: "btnNextCourtDate",
@@ -69,7 +79,7 @@
 
     <p>
     <h6>
-      <strong><%= t(".label.court_report_due_date") %>:</strong>
+      <strong>Court Report Due Date:</strong>
       <%= I18n.l(@casa_case.court_report_due_date, format: :day_and_date, default: '') %>
       <%= render "calendar_button", date: @casa_case.decorate.calendar_court_report_due_date,
                                     id: "btnCourtReportDueDate",
@@ -80,24 +90,24 @@
 
     <p>
     <h6>
-      <strong><%= t(".label.court_report_status") %>:</strong>
+      <strong>Court Report Status:</strong>
       <%= @casa_case.decorate.court_report_submission %></h6>
     </p>
 
     <% unless @casa_case.court_report_not_submitted? %>
       <% if @casa_case.court_report_submitted? && @casa_case.court_reports.attached? %>
-        <%= link_to(t(".button.click_to_download"),
+        <%= link_to('Click to download',
                     rails_blob_path(@casa_case.latest_court_report, disposition: 'attachment')) %>
       <% end %>
       <p>
       <h6>
-        <strong><%= t(".label.court_report_submitted_date") %>:</strong>
+        <strong>Court Report Submitted Date:</strong>
         <%= @casa_case.decorate.court_report_submitted_date %></h6>
       </p>
     <% end %>
 
     <% if @casa_case.case_court_orders.exists? %>
-      <h6><strong><%= t(".label.court_orders") %>:</strong></h6>
+      <h6><strong>Court Orders:</strong></h6>
       <% @casa_case.case_court_orders.each do |court_order| %>
         <p><%= court_order.implementation_status_symbol %> <%= court_order.text %></p>
       <% end %>
@@ -106,7 +116,7 @@
     <%= render "court_dates", casa_case: @casa_case %>
 
     <div>
-      <h6><strong><%= t(".assigned_volunteers") %>:</strong></h6>
+      <h6><strong>Assigned Volunteers:</strong></h6>
       <div class="container">
       <% Pundit.policy_scope(current_user, @casa_case.assigned_volunteers).each do |volunteer| %>
         <div class="row mb-3">
@@ -127,13 +137,16 @@
 
       <% if @casa_case.case_contacts.present? %>
         <div class="text-right mb-2">
-          <%= link_to t(".button.download_all"), casa_case_path(params[:id], format: :xlsx), class: "btn btn-success" %>
+          <%= link_to 'Download All', casa_case_path(params[:id], format: :xlsx), class: "btn btn-success" %>
         </div>
       <% end %>
 
       <div>
         <%= render(partial: "case_contacts/case_contact",
-                   collection: @casa_case.decorate.case_contacts_ordered_by_occurred_at.grab_all(current_user),
+                   collection: @casa_case.decorate
+                    .case_contacts_ordered_by_occurred_at
+                    .includes(contact_types: [:contact_type_group])
+                    .grab_all(current_user),
                    as: :contact) %>
       </div>
     </div>

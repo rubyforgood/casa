@@ -13,6 +13,15 @@ class ReimbursementsController < ApplicationController
       .filter_by_reimbursement_status(@complete_status)
   end
 
+  def datatable
+    authorize :reimbursement
+
+    reimbursements = fetch_reimbursements
+    datatable = ReimbursementDatatable.new reimbursements, params
+
+    render json: datatable
+  end
+
   def change_complete_status
     authorize :reimbursement
 
@@ -29,6 +38,11 @@ class ReimbursementsController < ApplicationController
   end
 
   def fetch_reimbursements
-    policy_scope(CaseContact.joins(:casa_case), policy_scope_class: ReimbursementPolicy::Scope)
+    case_contacts = CaseContact.joins(:casa_case).includes(
+      :creator,
+      :case_contact_contact_type,
+      contact_types: [:contact_type_group]
+    ).preload(:casa_case)
+    policy_scope(case_contacts, policy_scope_class: ReimbursementPolicy::Scope)
   end
 end

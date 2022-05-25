@@ -31,8 +31,6 @@ RSpec.configure do |config|
   config.include SessionHelper, type: :request
   config.include TemplateHelper
   config.include Warden::Test::Helpers
-  config.include WordDocHelper, type: :model
-  config.include WordDocHelper, type: :request
 
   config.after do
     Warden.test_reset!
