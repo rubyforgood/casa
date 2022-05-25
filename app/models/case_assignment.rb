@@ -1,6 +1,4 @@
 class CaseAssignment < ApplicationRecord
-  has_paper_trail
-
   belongs_to :casa_case
   belongs_to :volunteer, class_name: "User", inverse_of: "case_assignments"
 

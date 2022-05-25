@@ -1,6 +1,4 @@
 class Judge < ApplicationRecord
-  has_paper_trail
-
   belongs_to :casa_org
 
   validates :name, presence: true, uniqueness: {scope: %i[casa_org]}

@@ -90,6 +90,30 @@ class DocxInspector
     word_list_contains_str?(get_word_list_header, str)
   end
 
+  def word_list_all_contains_in_order?(str_list)
+    word_list_contains_str_in_order?(get_word_list_all, str_list)
+  end
+
+  def word_list_document_contains_in_order?(str_list)
+    word_list_contains_str_in_order?(get_word_list_document, str_list)
+  end
+
+  def word_list_endnotes_contains_in_order?(str_list)
+    word_list_contains_str_in_order?(get_word_list_endnotes, str_list)
+  end
+
+  def word_list_footnotes_contains_in_order?(str_list)
+    word_list_contains_str_in_order?(get_word_list_footnotes, str_list)
+  end
+
+  def word_list_footer_contains_in_order?(str_list)
+    word_list_contains_str_in_order?(get_word_list_footer, str_list)
+  end
+
+  def word_list_header_contains_in_order?(str_list)
+    word_list_contains_str_in_order?(get_word_list_header, str_list)
+  end
+
   private
 
   def get_displayed_text_list(xml_object)
@@ -171,6 +195,20 @@ class DocxInspector
     word_list[first_possible_word_containing_str_index..(word_list.length - 1)].each do |word|
       if word.include?(str)
         return true
+      end
+    end
+
+    false
+  end
+
+  def word_list_contains_str_in_order?(word_list, str_list)
+    return true unless str_list.present?
+
+    str_index = 0
+    word_list.each do |word|
+      if word.include?(str_list[str_index])
+        str_index += 1
+        return true if str_index == str_list.length
       end
     end
 

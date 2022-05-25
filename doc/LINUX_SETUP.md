@@ -1,96 +1,4 @@
-# Setting Up the Application on Linux
-
-This document will provide information about getting the application up and running on Linux,
-on either a physical system or a Vagrant virtual machine. You may want to do this for the following reasons:
-
-* to do software development
-* to run the server
-* to test the software
-
-
-## [Optional] Using a Vagrant Virtual Machine(VM)
-### [skip](#linux-development-environment-installation)
-
-#### Installing Virtual Box and Vagrant
-
-Install [Virtual Box](https://www.virtualbox.org/) and [Vagrant](https://www.vagrantup.com/) if necessary:
-
-```
-sudo apt install virtualbox vagrant
-```
-
-#### Initialize the Vagrant VM Control Directory
-
-Create a new directory for the Vagrant VM, `cd` into it, then generate the Vagrantfile config file:
-
-```
-vagrant init bento/ubuntu-20.04
-```
-
-#### Accessing the VM from the Host OS
-
-To access a server running on the Vagrant VM from a browser on the host machine,
-you will need to assign the VM an IP address in the `Vagrantfile`.
-Edit that file, uncomment out the following line, and change the IP address to whatever address you want:
-
-```
-config.vm.network "private_network", ip: "192.168.33.10"
-```
-
-You may want to look at the other settings in the config file as well, to see if they may also need modification.
-
-
-#### Start the VM and SSH Into It
-
-```
-vagrant up
-vagrant ssh
-```
-
-Skip the rest of this section for now and do the general Linux installation. Be sure `vagrant ssh`
-has brought you to your VM's prompt though, because otherwise you will be modifying
-your host operating system and not the VM!
-
-#### Your SSH Keys
-
-If you want to create new SSH keys, go to the general Linux instructions below; if you would like to save some
-time and effort and use your host OS' keys, you can do that using the commands below. Note that you must be in
-your host OS and not inside the Vagrant VM to do this:
-
-```
-vagrant plugin install vagrant-scp
-vagrant scp ~/.ssh/id_rsa     :~/.ssh
-vagrant scp ~/.ssh/id_rsa.pub :~/.ssh
-```
-
-#### Running the Rails Server to Accept Hosts Other than the VM
-
-When you eventually start the rails server, add the `-b 0.0.0.0` option to allow access from hosts other than the VM:
-
-`rails s -b 0.0.0.0`
-
-Assuming the use of the 192.168.33.10 address specified above,
-you will be able to access the running Rails server from the guest OS as `192.168.33.10:3000`.
-
-
-#### Editing Files on the VM
-
-To edit files on the Vagrant VM, you can use `vim`, which will already be installed. However, it's even
-easier to set up a synchronized directory tree on both the host and guest OS so that any changes made
-in one will be updated on the other. Simply add a line to the `Vagrantfile` like this one:
-
-```
-  config.vm.synced_folder "/home/kbennett/work/casa/", "/home/vagrant/casa"
-```
-
-...where the first directory spec is the host machine's project root and the second is the Vagrant VM project root.
-
-Another approach is to use an editor on your host OS that is capable of editing files over SSH.
-VS Code does this nicely, and you can start looking into this
-[here](https://code.visualstudio.com/docs/remote/ssh-tutorial). The IP address will be the one specified
-in the Vagrant file, and the user id and password are both `vagrant`.
-
-## Linux Development Environment Installation
+# Linux Development Environment Installation
 
 The commands below can be run all at once by copying and pasting them all into a file and running the file as a script
 (e.g. `bash -x script_name`).
@@ -101,24 +9,32 @@ The commands below include a section for installing [rvm](https://rvm.io/),
 but feel free to substitute your own favorite Ruby version manager such as [rbenv](https://github.com/rbenv/rbenv).
 
 ```
-# Install packages available from the main Linux repos & upgrade the Vagrant image if necessary
-#
-sudo apt update
-sudo apt upgrade -y
-sudo apt install -y curl git net-tools nodejs npm openssh-server postgresql-12 vim zsh
-sudo apt install -y libvips42 # Render images for your local web server
-sudo apt install -y libpq-dev # Helps compile C programs to be able to communicate with postgres
+# Install Linux Packages
+sudo apt update                    # Check internet for updates
+sudo apt upgrade -y                # Install updates
+sudo apt install -y curl           # A command to help fetching and sending data to urls
+sudo apt install -y git            # In case you don't have it already
+sudo apt install -y postgresql-12  # Postgres; our database management system
+sudo apt install -y libvips42      # Render images for your local web server
+sudo apt install -y libpq-dev      # Helps compile C programs to be able to communicate with postgres
 ```
 
 ```
 # Install NVM and Node JS
-#   you can use wget or curl
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-. ./.bashrc
-nvm install lts/fermium
+#   you can use curl
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+#   or wget
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+
+#   Restart your terminal
+
+# List all available LTS versions
+nvm ls-remote | grep -i 'Latest LTS'
+
+# Install an LTS version
+nvm install lts/gallium # Latest might not be gallium
 # Update npm
-npm i -g npm
+npm i -g npm@latest
 ```
 
 ```
@@ -136,7 +52,7 @@ sudo apt install rbenv
 rbenv init
 #   Restart your terminal
 
-#   setup rbenv install command
+#   fetch extended list of ruby versions
 mkdir -p "$(rbenv root)"/plugins
 git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 
@@ -166,8 +82,6 @@ sudo apt-get -y install google-chrome-stable
 ```
 # Add user to Postgres:
 sudo -u postgres psql -c "CREATE USER $USER WITH CREATEDB"
-# If you are using a VM
-sudo -u postgres psql -c "CREATE USER vagrant WITH CREATEDB"
 ```
 
 #### Creating an SSH Key Pair

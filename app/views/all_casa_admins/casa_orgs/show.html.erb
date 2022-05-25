@@ -25,7 +25,7 @@
           <td><%= admin.display_name %></td>
           <td><%= admin.email %></td>
           <td><%= I18n.l(admin.created_at, format: :full, default: nil) %></td>
-          <td><%= link_to t("button.edit"), edit_all_casa_admins_casa_org_casa_admin_path(selected_organization, admin) %></td>
+          <td><%= link_to "Edit", edit_all_casa_admins_casa_org_casa_admin_path(selected_organization, admin) %></td>
         </tr>
       <% end %>
       </tbody>
