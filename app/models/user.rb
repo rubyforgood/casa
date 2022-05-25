@@ -7,14 +7,7 @@ class User < ApplicationRecord
 
   validates_with UserValidator
 
-  has_paper_trail
   devise :database_authenticatable, :invitable, :recoverable, :validatable, :timeoutable, :trackable
-
-  validates :email, presence: true
-  validates :display_name, presence: true
-
-  validates_with UserValidator
-  validate :at_least_one_communication_preference_selected
 
   belongs_to :casa_org
 
@@ -35,6 +28,10 @@ class User < ApplicationRecord
   }, foreign_key: "volunteer_id", dependent: :destroy
   has_one :supervisor, through: :supervisor_volunteer
   has_one :preference_set, dependent: :destroy
+
+  has_many :user_sms_notification_events
+  has_many :sms_notification_events, through: :user_sms_notification_events
+  accepts_nested_attributes_for :user_sms_notification_events, allow_destroy: true
 
   has_many :notes, as: :notable
 
@@ -111,11 +108,6 @@ class User < ApplicationRecord
     no_attempt_count
   end
 
-  def past_names
-    # get past_names from paper_trail gem, version_limit is 10 so no performance concerns
-    versions.map { |version| version&.reify&.display_name }
-  end
-
   # Generate a Devise reset_token, used for the account_setup mailer. This happens automatically
   # when a user clicks "Reset My Password", so do not use this method in that flow.
   def generate_password_reset_token
@@ -135,32 +127,8 @@ class User < ApplicationRecord
     super && active
   end
 
-  # Called by Devise to generate an error message when a user is not active.
-  def inactive_message
-    if !active
-      admin_self_deactivated? ? :admin_self_deactivated : :inactive
-    else
-      super
-    end
-  end
-
   def serving_transition_aged_youth?
     actively_assigned_and_active_cases.where(transition_aged_youth: true).any?
-  end
-
-  def admin_self_deactivated?
-    return false if !casa_admin? || active
-    id.to_s == last_deactivated_by
-  end
-
-  def at_least_one_communication_preference_selected
-    errors.add(:base, " At least one communication preference must be selected.") unless receive_email_notifications || receive_sms_notifications
-  end
-
-  def last_deactivated_by
-    versions.where(event: "update").reverse_each do |version|
-      return version.whodunnit if version.reify.active
-    end
   end
 end
 

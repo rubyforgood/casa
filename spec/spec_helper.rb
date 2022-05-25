@@ -1,4 +1,5 @@
 require "pry"
+require "webmock/rspec"
 
 if ENV["RUN_SIMPLECOV"]
   require "simplecov"
@@ -22,6 +23,11 @@ if ENV["RUN_SIMPLECOV"]
 end
 
 RSpec.configure do |config|
+  # webmock gem disables net connections globally by default and so need to allow net connections before each test
+  config.before(:each) do
+    WebMock.allow_net_connect!
+  end
+
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end

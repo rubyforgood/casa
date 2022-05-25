@@ -4,8 +4,8 @@ class CasaOrg < ApplicationRecord
 
   before_create :set_slug
 
-  has_paper_trail
   validates :name, presence: true, uniqueness: true
+  validates_with CasaOrgValidator
 
   has_many :users, dependent: :destroy
   has_many :casa_cases, dependent: :destroy
@@ -15,6 +15,10 @@ class CasaOrg < ApplicationRecord
   has_many :case_assignments, through: :users, source: :casa_cases
   has_one_attached :logo
   has_one_attached :court_report_template
+
+  encrypts :twilio_account_sid
+  encrypts :twilio_api_key_sid
+  encrypts :twilio_api_key_secret
 
   def casa_admins
     CasaAdmin.in_organization(self)
@@ -80,6 +84,10 @@ end
 #  show_driving_reimbursement :boolean          default(TRUE)
 #  show_fund_request          :boolean          default(FALSE)
 #  slug                       :string
+#  twilio_account_sid         :string
+#  twilio_api_key_secret      :string
+#  twilio_api_key_sid         :string
+#  twilio_phone_number        :string
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null
 #

@@ -11,13 +11,14 @@
 [![Snyk Vulnerabilities](https://snyk.io/test/github/rubyforgood/casa/badge.svg)](https://snyk.io/test/github/rubyforgood/casa)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/rubyforgood/casa.svg)](http://isitmaintained.com/project/rubyforgood/casa "Average time to resolve an issue")
 
-CASA (Court Appointed Special Advocate) is a role fulfilled by a trained volunteer sworn into a county-level juvenile dependency court system to advocate on behalf of a youth in the corresponding county's foster care system. CASA is also the namesake role of the national organization, CASA, which exists to cultivate and supervise volunteers carrying out this work – with county level chapters (operating relatively independently of each other) across the country.
+A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates on behalf of a youth in their county's foster care system. CASA is also the namesake role of the national organization, CASA, which exists to cultivate and supervise volunteers carrying out this work – with county level chapters (operating relatively independently of each other) across the country.
 
 <!-- toc -->
 
 - [Welcome contributors!](#welcome-contributors)
   - [About this project](#about-this-project)
 - [Developing! ✨🛠✨](#developing-)
+  - [How to Contribute](#how-to-contribute)
   - [Installation](#installation)
     - [General Setup Instructions](#general-setup-instructions)
     - [Platform Specific Installation Instructions](#platform-specific-installation-instructions)
@@ -39,8 +40,6 @@ We highly recommend that you join us in slack https://rubyforgood.herokuapp.com/
 Issues on the issue board https://github.com/rubyforgood/casa/projects/1 in the TODO column are fair game. An issue can be claimed by commenting on it.
 
 Pull requests which are not for an issue but which improve the codebase are also welcome! Feel free to make GitHub issues for bugs and improvements. A maintainer will be keeping an eye on issues and PRs every day or three.
-
-See also our [contributing guide](./doc/CONTRIBUTING.md) 💖 ✨
 
 ### About this project
 
@@ -71,9 +70,19 @@ Read about the [product sense](doc/productsense.md) that guides our approach to 
 
 The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer-description/) in Prince George's County.
 
-# Developing! ✨🛠✨
+# Developing! ✨🛠✨  
+## How to Contribute  
+  See our [contributing guide](./doc/CONTRIBUTING.md) 💖 ✨
 ## Installation
 ### General Setup Instructions
+**Downloading the Project**
+(*on a Mac or Linux machine*)
+1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine.  
+2. You can ask a [maintainer](https://github.com/rubyforgood/casa/wiki/Who's-who%3F) for permission to make a branch on this repo.  
+3. You can also [create a fork on GitHub](https://docs.github.com/en/get-started/quickstart/fork-a-repo) and make a pull request from the fork.  
+4. ⚠️ Warning ⚠️ Github workflows are enabled by default on forks. Workflows are scripts that run at regular intervals or after events like commits. They take Github's resources to run and may send you emails if they fail. Most forks will not need any workflows. Please disable workflows for your fork by clicking on the actions tab of your fork.  
+![Fork](https://i.stack.imgur.com/dMT7J.png)  
+
 **Ruby**
 1. Install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
 1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`. Right now that's Ruby 3.1.0
@@ -95,10 +104,6 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 1. The Spec tests uses Chrome Browser and Chromedriver for some of the tests. A current version of chromedriver will be installed when `bundle install` is run. TO install Chrome, see [Chrome Install](https://support.google.com/chrome/answer/95346?hl=en&ref_topic=7439538).
 
 Another option is to install the Chromium browser for your operating system so the browser-based Ruby feature/integration tests can run. Installing `chromium-browser` is enough, even in WSL (Windows subsystem for Linux)
-
-**Downloading the Project**
-(*on a Mac or Linux machine*)
-1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine. You should create a fork in GitHub if you don't have permission to commit directly to this repo, though. See [our contributing guide](doc/CONTRIBUTING.md) for more detailed instructions.
 
 **Installing Packages**
 1. `cd casa/`
@@ -208,7 +213,7 @@ There is a `doc` directory at the top level that includes:
 # required acknowledgement
 
 Thank you to [Scout](https://ter.li/h8k29r) for letting us use their dashboard for free!
-![Scout](https://user-images.githubusercontent.com/578159/165240278-c2c0ac30-c86f-4b67-9da6-e6a5e4ab4c37.png)
+[![Scout](https://user-images.githubusercontent.com/578159/165240278-c2c0ac30-c86f-4b67-9da6-e6a5e4ab4c37.png)](https://ter.li/h8k29r)
 
 # Communication and Collaboration
 

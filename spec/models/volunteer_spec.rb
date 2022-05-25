@@ -51,10 +51,7 @@ RSpec.describe Volunteer, type: :model do
     let(:volunteer) { build(:volunteer) }
 
     it "deactivates the volunteer" do
-      volunteer.deactivate
-
-      volunteer.reload
-      expect(volunteer.active).to eq(false)
+      expect(volunteer.deactivate.reload.active).to eq(false)
     end
 
     it "sets all of a volunteer's case assignments to inactive" do
@@ -69,21 +66,17 @@ RSpec.describe Volunteer, type: :model do
       expect(case_contacts).to all(satisfy { |c| !c.active })
     end
 
-    context "when volunteer has previously been assigned a supervisor", runme: true do
+    context "when volunteer has previously been assigned a supervisor" do
       let!(:supervisor_volunteer) { create(:supervisor_volunteer, volunteer: volunteer) }
 
       it "deactivates the supervisor-volunteer relationship" do
-        volunteer.deactivate
-
-        expect { volunteer.reload }.to change(volunteer, :supervisor_volunteer)
+        expect { volunteer.deactivate.reload }.to change(volunteer, :supervisor_volunteer)
       end
     end
 
     context "when volunteer had no supervisor previously assigned" do
       it "does not attempt to update a supervisor-volunteer table" do
-        volunteer.deactivate
-
-        expect { volunteer.reload }.not_to change(volunteer, :supervisor_volunteer)
+        expect { volunteer.deactivate.reload }.not_to change(volunteer, :supervisor_volunteer)
       end
     end
   end
