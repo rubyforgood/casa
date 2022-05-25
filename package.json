@@ -5,38 +5,40 @@
     "test": "jest",
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "toc": "markdown-toc -i README.md"
+    "toc": "markdown-toc -i README.md",
+    "build": "./bin/asset_bundling_scripts/build_js.js",
+    "build:dev": "./bin/asset_bundling_scripts/build_js.js --watch",
+    "build:css": "sass app/assets/stylesheets/application.scss app/assets/builds/application.css --load-path=node_modules",
+    "build:css:dev": "sass app/assets/stylesheets/application.scss app/assets/builds/application.css --load-path=node_modules --watch"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.4",
+    "@fortawesome/fontawesome-free": "^6.1.1",
     "@rails/actioncable": "^7.0.3",
     "@rails/activestorage": "^7.0.3",
     "@rails/ujs": "^7.0.3",
-    "@rails/webpacker": "5.4.3",
     "add2calendar": "^1.1.8",
     "bindings": "^1.5.0",
     "bootstrap": "4.6.1",
     "bootstrap-datepicker": "^1.9.0",
     "bootstrap-select": "^1.13.18",
     "datatables.net-dt": "^1.12.1",
+    "esbuild": "^0.14.36",
     "faker": "^5.5.3",
-    "jest-environment-jsdom": "^28.1.0",
     "jquery": "^3.6.0",
-    "node-sass": "^7.0.1",
     "popper.js": "^1.16.1",
+    "sass": "^1.50.1",
     "select2": "^4.0.13",
     "sweetalert2": "^11.3.5",
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",
   "devDependencies": {
-    "@webpack-cli/serve": "^1.6.1",
+    "@babel/preset-env": "^7.17.12",
     "jest": "^28.1.0",
     "jest-environment-jsdom": "^28.1.0",
     "markdown-toc": "^1.2.0",
     "standard": "^17.0.0",
-    "start-server-and-test": "^1.14.0",
-    "webpack-dev-server": "~3"
+    "start-server-and-test": "^1.14.0"
   },
   "standard": {
     "globals": [
@@ -44,7 +46,7 @@
       "jQuery"
     ],
     "ignore": [
-      "cypress"
+      "app/assets/builds/**/*"
     ]
   },
   "engines": {

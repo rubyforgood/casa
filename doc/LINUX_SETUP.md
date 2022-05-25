@@ -134,8 +134,6 @@ cd casa
 bin/rails db:setup
 bin/update
 yarn
-# webpacker one time setup
-bundle exec rails webpacker:compile
 ```
 
 (`bin/update` is a very useful script that should be run after each `git pull` and can be used whenever you want to make sure your setup is up to date with respect to code and configuration changes.)

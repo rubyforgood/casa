@@ -1,3 +1,5 @@
+@use "../base/breakpoints.scss" as screen-sizes;
+
 .navbar {
   color: #fff;
   background: #00447c;
@@ -22,7 +24,7 @@
   width: 40px;
 }
 
-@media only screen and (max-width: $mobile) {
+@media only screen and (max-width: screen-sizes.$mobile) {
   .navbar.mobile {
     display: flex;
     position: sticky;

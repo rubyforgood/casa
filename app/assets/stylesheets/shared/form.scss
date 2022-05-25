@@ -1,3 +1,5 @@
+@use "../base/variables.scss" as globals;
+
 form {
   .field_with_errors {
     label {
@@ -6,7 +8,7 @@ form {
     }
 
     input {
-      border: 1px solid $red;
+      border: 1px solid globals.$red;
     }
   }
 
