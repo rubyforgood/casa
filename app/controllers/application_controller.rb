@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   include Organizational
 
   protect_from_forgery
+  before_action :store_user_location!, if: :storable_location?
   before_action :authenticate_user!
   before_action :set_current_user
   before_action :set_current_organization
@@ -14,6 +15,11 @@ class ApplicationController < ActionController::Base
 
   impersonates :user
 
+  def after_sign_in_path_for(resource_or_scope)
+    p "hit"
+    stored_location_for(resource_or_scope) || super
+  end
+
   def after_sign_out_path_for(resource_or_scope)
     if resource_or_scope == :all_casa_admin
       new_all_casa_admin_session_path
@@ -23,6 +29,15 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def store_user_location!
+    store_location_for(:user, request.fullpath)
+    p session[:user_return_to]
+  end
+
+  def storable_location?
+    request.get? && is_navigational_format? && !devise_controller? && !request.xhr?
+  end
 
   def set_current_user
     RequestStore.store[:current_user] = current_user
