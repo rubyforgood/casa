@@ -1,7 +1,9 @@
+@use "../base/variables" as globals;
+
 footer {
   padding: 2rem 0;
   text-align: center;
-  background-color: $primary;
+  background-color: globals.$primary;
   color: #fff;
 
   .default-footer {
@@ -9,7 +11,7 @@ footer {
       color: #fff;
     }
 
-    .rfglogo{
+    .rfglogo {
       max-height: 3em;
     }
   }
@@ -17,10 +19,9 @@ footer {
     color:#fff;
   }
 
-  .footer-logos{
+  .footer-logos {
     .rfglink {
-
-      .rfglogo{
+      .rfglogo {
         max-height: 6em;
       }
     }

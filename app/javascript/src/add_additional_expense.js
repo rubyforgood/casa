@@ -1,3 +1,5 @@
+/* global $ */
+
 function showAdditionalExpense () {
   for (let i = 1; i < 10; i++) {
     if ($(`#case_contact_additional_expenses_attributes_${i}_other_expense_amount`).is(':hidden')) {

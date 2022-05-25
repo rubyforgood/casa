@@ -1,3 +1,6 @@
+@use "../base/variables.scss" as globals;
+@use "../base/breakpoints.scss" as screen-sizes;
+
 #wrapper {
     overflow-x: hidden;
  }
@@ -16,7 +19,7 @@
   position: sticky;
   top: 0;
   z-index: 10;
-  background: $primary;
+  background: globals.$primary;
   border-bottom: 1px solid #103862;
   font-size: 1.2rem;
   padding-bottom: 16px;
@@ -42,7 +45,7 @@
 }
 
 .sidebar-container {
-  background: $primary;
+  background: globals.$primary;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -111,7 +114,7 @@
 }
 
 // Media Queries
-@media only screen and (max-width: $mobile) {
+@media only screen and (max-width: screen-sizes.$mobile) {
   .sidebar-wrapper {
     display: none;
     width: 100%;

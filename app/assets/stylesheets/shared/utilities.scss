@@ -1,3 +1,5 @@
+@use "../base/variables.scss" as globals;
+
 .pull-left {
   float: left;
 }
@@ -20,7 +22,7 @@
   .add-button {
     color: white;
     border: none;
-    background-color: #{$primary};
+    background-color: #{globals.$primary};
 
     padding: 0.25em 1.5em;
     border-radius: 10px;

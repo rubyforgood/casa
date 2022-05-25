@@ -3,13 +3,13 @@
   <span class="default-footer">
     <%= t(".built_by") %> <a href="https://rubyforgood.org/" class="rfglink"><%= t(".ruby_for_good") %></a>
     <a href="https://rubyforgood.org/" class="rfglink" target="_blank">
-      <%= image_pack_tag("media/src/images/rfglogo.png", class: "rfglogo") %>
+      <%= image_tag("rfglogo.png", class: "rfglogo") %>
     </a>
     <%= link_to t(".link.report_site_issue"), "https://rubyforgood.typeform.com/to/iXY4BubB", class: "rfglink" %><br>
     <%= link_to t(".link.sms_terms_and_conditions"), "/sms-terms-conditions.html", class: "terms-conditions-link" %>
   </span>
 
-  <div class="footer-logos"><br>
-    <%= image_pack_tag("media/src/images/default-logo.png") %>
+  <div class="footer-logos">
+    <%= image_tag("default-logo.png") %>
   </div>
 </footer>

@@ -1,3 +1,5 @@
+@use "../base/breakpoints.scss" as screen-sizes;
+
 body.casa_cases {
   .form-header {
     h1 {
@@ -83,7 +85,7 @@ body.casa_cases {
   }
 }
 
-@media only screen and (max-width: $small) {
+@media only screen and (max-width: screen-sizes.$small) {
   body.casa_cases {
     .court-mandates {
       textarea, .add-court-mandate {

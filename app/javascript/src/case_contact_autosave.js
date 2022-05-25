@@ -1,3 +1,5 @@
+/* global $ */
+
 $('document').ready(() => {
   const formId = 'casa-contact-form'
 
