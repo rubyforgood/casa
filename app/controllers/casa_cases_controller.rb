@@ -63,7 +63,7 @@ class CasaCasesController < ApplicationController
   def update
     authorize @casa_case
     original_attributes = @casa_case.full_attributes_hash
-    @casa_case.validate_contact_type = true unless current_role == 'Volunteer'
+    @casa_case.validate_contact_type = true unless current_role == "Volunteer"
     if @casa_case.update_cleaning_contact_types(casa_case_update_params)
       updated_attributes = @casa_case.full_attributes_hash
       changed_attributes_list = CasaCaseChangeService.new(original_attributes, updated_attributes).calculate

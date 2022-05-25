@@ -252,7 +252,7 @@ RSpec.describe "/casa_cases", type: :request do
           hearing_type_id: hearing_type.id,
           judge_id: judge.id,
           case_court_orders_attributes: orders_attributes,
-          casa_case_contact_types_attributes: [{ contact_type_id: type1.id }]
+          casa_case_contact_types_attributes: [{contact_type_id: type1.id}]
         }
       end
 
@@ -625,22 +625,22 @@ RSpec.describe "/casa_cases", type: :request do
     describe "PATCH /update" do
       let(:group) { build(:contact_type_group) }
       let(:type1) { create(:contact_type, contact_type_group: group) }
-      let(:new_attributes) do 
+      let(:new_attributes) do
         {
-          case_number: "12345", 
-          court_report_status: :completed, 
+          case_number: "12345",
+          court_report_status: :completed,
           case_court_orders_attributes: orders_attributes
-        } 
+        }
       end
-      let(:new_attributes2) do 
+      let(:new_attributes2) do
         {
-          case_number: "12345", 
-          court_report_status: :completed, 
+          case_number: "12345",
+          court_report_status: :completed,
           case_court_orders_attributes: orders_attributes,
-          casa_case_contact_types_attributes: [{ contact_type_id: type1.id }]
-        } 
+          casa_case_contact_types_attributes: [{contact_type_id: type1.id}]
+        }
       end
-      
+
       context "with valid parameters" do
         it "updates fields (except case_number)" do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes2}
