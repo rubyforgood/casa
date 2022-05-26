@@ -193,7 +193,7 @@ class VolunteerDatatable < ApplicationDatatable
         CaseAssignment
           .select(:volunteer_id)
           .joins(:casa_case)
-          .where("casa_cases.case_number ILIKE ?", "%#{search_term}%")
+          .where("casa_cases.case_number ILIKE ? AND case_assignments.active = true", "%#{search_term}%")
           .group(:volunteer_id)
           .to_sql
       }.call
