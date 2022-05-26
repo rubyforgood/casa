@@ -48,7 +48,8 @@ class ApplicationController < ActionController::Base
   end
 
   def not_authorized
+    session[:user_return_to] = nil
     flash[:notice] = t("default", scope: "pundit")
-    redirect_to(request.referrer || root_url)
+    redirect_to(root_url)
   end
 end
