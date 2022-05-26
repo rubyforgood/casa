@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_19_233803) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_26_011848) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -389,6 +389,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_19_233803) do
     t.string "version", null: false
   end
 
+  create_table "user_case_contact_types_reminders", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "reminder_sent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_case_contact_types_reminders_on_user_id"
+  end
+
   create_table "user_sms_notification_events", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "sms_notification_event_id", null: false
@@ -457,6 +465,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_19_233803) do
   add_foreign_key "sent_emails", "users"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"
   add_foreign_key "supervisor_volunteers", "users", column: "volunteer_id"
+  add_foreign_key "user_case_contact_types_reminders", "users"
   add_foreign_key "user_sms_notification_events", "sms_notification_events"
   add_foreign_key "user_sms_notification_events", "users"
   add_foreign_key "users", "casa_orgs"
