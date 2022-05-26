@@ -5,7 +5,7 @@ RSpec.describe "deep_link", type: :system do
     %w[volunteer supervisor casa_admin].each do |user_type|
       let(:user) { create(user_type.to_sym) }
 
-      it "redirects #{user_type} to target url" do
+      it "redirects #{user_type} to target url immediately after sign in" do
         visit "/users/edit"
         fill_in "Email", with: user.email
         fill_in "Password", with: "12345678"
@@ -17,25 +17,27 @@ RSpec.describe "deep_link", type: :system do
       end
     end
 
-    context "when volunteer or supervisor is visiting a casa_admin link" do
-      let(:volunteer) { create(:volunteer) }
-      let(:supervisor) { create(:supervisor) }
+    context "when user is a volunteer or supervisor" do
+      %w[volunteer supervisor].each do |user_type|
+        let(:user) { create(user_type.to_sym) }
 
-      before do
-        visit "/casa_admins"
-        fill_in "Password", with: "12345678"
-      end
-
-      it "flashes unauthorized message when volunteer tries to access a casa_admin link" do
-        fill_in "Email", with: volunteer.email
-        within ".actions" do
-          click_on "Log in"
+        it "flashes unauthorized notice when #{user_type} tries to access a casa_admin link" do
+          visit "/casa_admins"
+          fill_in "Email", with: user.email
+          fill_in "Password", with: "12345678"
+          within ".actions" do
+            click_on "Log in"
+          end
+          expect(page).to have_text "Sorry, you are not authorized to perform this action."
         end
-        expect(page).to have_text "Sorry, you are not authorized to perform this action."
       end
 
-      it "flashes unauthorized message when supervisor tries to access a casa_admin link" do
-        fill_in "Email", with: supervisor.email
+      let(:volunteer) { create(:volunteer) }
+
+      it "flashes unauthorized notice when volunteer tries to access a supervisor link" do
+        visit "/supervisors"
+        fill_in "Email", with: volunteer.email
+        fill_in "Password", with: "12345678"
         within ".actions" do
           click_on "Log in"
         end
