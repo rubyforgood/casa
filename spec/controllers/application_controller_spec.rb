@@ -6,7 +6,7 @@ RSpec.describe ApplicationController, :type => :controller do
   # stub an index action in application controller
   controller do
     def index
-      render :plain => "hello there"
+      render :plain => "hello there..."
     end
   end
   before do
