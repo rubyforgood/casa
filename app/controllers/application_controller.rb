@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_out_path_for(resource_or_scope)
+    session[:user_return_to] = nil
     if resource_or_scope == :all_casa_admin
       new_all_casa_admin_session_path
     else
@@ -31,6 +32,7 @@ class ApplicationController < ActionController::Base
   private
 
   def store_user_location!
+    # the current URL can be accessed from a session
     store_location_for(:user, request.fullpath)
     p session[:user_return_to]
   end
