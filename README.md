@@ -117,9 +117,9 @@ Another option is to install the Chromium browser for your operating system so t
 
 **Compile Assets**  
 1.  `yarn build` compile javascript  
-&ensp;&ensp;`yarn build --watch` to auto recompile for when you edit js files  
+&ensp;&ensp;`yarn build:dev` to auto recompile for when you edit js files  
 3.  `yarn build:css` compile css  
-&ensp;&ensp;`yarn build:css --watch` to auto recompile for when you edit sass files  
+&ensp;&ensp;`yarn build:css:dev` to auto recompile for when you edit sass files  
 
 ### Platform Specific Installation Instructions
  - [Docker](doc/DOCKER.md)
