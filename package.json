@@ -33,7 +33,7 @@
   },
   "version": "0.1.0",
   "devDependencies": {
-    "@babel/preset-env": "^7.17.12",
+    "@babel/preset-env": "^7.18.2",
     "jest": "^28.1.0",
     "jest-environment-jsdom": "^28.1.0",
     "markdown-toc": "^1.2.0",
