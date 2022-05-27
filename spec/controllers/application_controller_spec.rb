@@ -1,12 +1,11 @@
 require "rails_helper"
-# hit a POST route
-# assert POST URLs not stored in session
-RSpec.describe ApplicationController, :type => :controller do
+
+RSpec.describe ApplicationController, type: :controller do
   let(:volunteer) { create(:volunteer) }
   # stub an index action in application controller
   controller do
     def index
-      render :plain => "hello there..."
+      render plain: "hello there..."
     end
   end
   before do
@@ -21,8 +20,6 @@ RSpec.describe ApplicationController, :type => :controller do
       session_key = "user_return_to"
       routes.draw { post "index" => "anonymous#index" }
       post :index
-      p request.fullpath
-      p response.body
       expect(session[session_key]).not_to eq path
       expect(session[session_key]).to be nil
     end

@@ -16,7 +16,6 @@ class ApplicationController < ActionController::Base
   impersonates :user
 
   def after_sign_in_path_for(resource_or_scope)
-    p "hit"
     stored_location_for(resource_or_scope) || super
   end
 
@@ -34,7 +33,6 @@ class ApplicationController < ActionController::Base
   def store_user_location!
     # the current URL can be accessed from a session
     store_location_for(:user, request.fullpath)
-    p session[:user_return_to]
   end
 
   def storable_location?
