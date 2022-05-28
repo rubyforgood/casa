@@ -5,7 +5,6 @@ class FundRequestsController < ApplicationController
   end
 
   def create
-    binding.pry
     @fund_request = FundRequest.new(parsed_params)
     FundRequestMailer.send_request(nil, @fund_request).deliver
     @casa_case = CasaCase.find(params[:casa_case_id])
