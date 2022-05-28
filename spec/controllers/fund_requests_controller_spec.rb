@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe FundRequestsController, type: :controller do
   let(:user) { create(:user, email: "a@example.com") }
   let(:organization) { create(:casa_org) }
-  let(:casa_case) { create(:casa_case, casa_org: organization) }
-  let(:volunteer) { create(:volunteer, casa_org: organization) }
+  let(:volunteer) { create(:volunteer, :with_casa_cases, casa_org: organization) }
+  let(:casa_case) { volunteer.casa_cases.first }
 
   before do
     allow(controller).to receive(:authenticate_user!).and_return(true)
@@ -19,7 +19,6 @@ RSpec.describe FundRequestsController, type: :controller do
 
   it "send email" do
     stub_const("ENV", {"FUND_REQUEST_RECIPIENT_EMAIL" => user.email})
-    expect(assigns(:fund_request)).to be_present
     expect {
       post :create, params: {
           submitter_email: "submitter_email@example.com",
@@ -34,6 +33,7 @@ RSpec.describe FundRequestsController, type: :controller do
           extra_information: "extra_information"
       }
     }.to change { ActionMailer::Base.deliveries.count }.by(1)
+    expect(assigns(:fund_request)).to be_present
     # mail = ActionMailer::Base.deliveries.last
     # expect(mail.subject).to eq("Fund request from submitter_email@example.com")
     # expect(mail.to).to match_array(["a@example.com", "submitter_email@example.com"])
