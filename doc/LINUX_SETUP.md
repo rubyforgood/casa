@@ -14,9 +14,29 @@ sudo apt update                    # Check internet for updates
 sudo apt upgrade -y                # Install updates
 sudo apt install -y curl           # A command to help fetching and sending data to urls
 sudo apt install -y git            # In case you don't have it already
-sudo apt install -y postgresql-12  # Postgres; our database management system
 sudo apt install -y libvips42      # Render images for your local web server
 sudo apt install -y libpq-dev      # Helps compile C programs to be able to communicate with postgres
+```  
+  
+```
+# Install Postgres
+#   Add the postgres repo
+#     Create the file repository configuration:
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+
+#     Import the repository signing key:
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+#     Update the package lists:
+sudo apt update
+
+#   Install Postgres 12
+sudo apt install -y postgresql-12
+
+#   Add user to Postgres:
+sudo -u postgres psql -c "CREATE USER $USER WITH CREATEDB"
+
+# See https://www.postgresql.org/download/linux/ubuntu/ for more details
 ```
 
 ```
@@ -77,11 +97,6 @@ sudo curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo 
 sudo echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
 sudo apt-get -y update
 sudo apt-get -y install google-chrome-stable
-```
-
-```
-# Add user to Postgres:
-sudo -u postgres psql -c "CREATE USER $USER WITH CREATEDB"
 ```
 
 #### Creating an SSH Key Pair
