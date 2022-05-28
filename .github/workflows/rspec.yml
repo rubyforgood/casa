@@ -60,7 +60,8 @@ jobs:
           yarn
           bundle exec rake db:create
           bundle exec rake db:schema:load
-          bundle exec rails webpacker:compile
+          bundle exec rails css:build
+          bundle exec rails javascript:build
 
       - name: Run rspec and upload code coverage
         env:

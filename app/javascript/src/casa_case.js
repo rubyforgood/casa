@@ -2,8 +2,10 @@
 /* global FormData */
 /* global DOMParser */
 /* global spinner */
+/* global $ */
 
 import Swal from 'sweetalert2'
+
 const CourtOrderList = require('./court_order_list.js')
 let courtOrders
 

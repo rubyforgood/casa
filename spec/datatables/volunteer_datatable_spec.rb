@@ -308,8 +308,7 @@ RSpec.describe VolunteerDatatable do
 
     describe "case_numbers" do
       let(:casa_case) { volunteer.casa_cases.first }
-      let(:case_number) { casa_case.case_number }
-      let(:search_term) { case_number }
+      let(:search_term) { casa_case.case_number }
 
       # Sometimes the default case number is a substring of other case numbers
       before { casa_case.update case_number: Random.hex }
@@ -317,6 +316,24 @@ RSpec.describe VolunteerDatatable do
       it "is successful" do
         expect(subject[:data].length).to eq 1
         expect(subject[:data].first[:id]).to eq volunteer.id.to_s
+      end
+
+      context "when search term case number matches unassigned case" do
+        let(:new_supervisor) { create(:supervisor, casa_org: casa_case.casa_org) }
+        let(:new_casa_case) { create(:casa_case, casa_org: casa_case.casa_org, case_number: "ABC-123", transition_aged_youth: false) }
+        let(:volunteer_1) { create(:volunteer, display_name: "Volunteer 1", casa_org: casa_case.casa_org, supervisor: new_supervisor) }
+        let(:volunteer_2) { create(:volunteer, display_name: "Volunteer 2", casa_org: casa_case.casa_org, supervisor: new_supervisor) }
+        let(:search_term) { new_casa_case.case_number }
+
+        before do
+          create(:case_assignment, casa_case: new_casa_case, volunteer: volunteer_1)
+          create(:case_assignment, casa_case: new_casa_case, volunteer: volunteer_2, active: false)
+        end
+
+        it "does not include unassigned case matches in search results" do
+          expect(subject[:data].length).to eq 1
+          expect(subject[:data].first[:id]).to eq volunteer_1.id.to_s
+        end
       end
     end
   end
