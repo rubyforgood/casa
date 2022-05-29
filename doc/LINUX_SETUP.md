@@ -14,9 +14,34 @@ sudo apt update                    # Check internet for updates
 sudo apt upgrade -y                # Install updates
 sudo apt install -y curl           # A command to help fetching and sending data to urls
 sudo apt install -y git            # In case you don't have it already
-sudo apt install -y postgresql-12  # Postgres; our database management system
 sudo apt install -y libvips42      # Render images for your local web server
 sudo apt install -y libpq-dev      # Helps compile C programs to be able to communicate with postgres
+```  
+  
+```
+# Install Postgres
+#   Add the postgres repo
+#     Create the file repository configuration:
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+
+#     Add the repo key to your keyring:
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | sudo tee /usr/share/keyrings/postgres-archive-keyring.gpg
+
+#     Open /etc/apt/sources.list.d/pgdg.list with super user permissions
+#     Paste "[signed-by=/usr/share/keyrings/postgres-archive-keyring.gpg]" between "deb" and "http://apt.postgresql..."
+#       Example: deb [signed-by=/usr/share/keyrings/postgres-archive-keyring.gpg] http://apt.postgresql.org/pub/repos/apt jammy-pgdg main
+#     Save the file
+
+#     Update the package lists:
+sudo apt update
+
+#   Install Postgres 12
+sudo apt install -y postgresql-12
+
+#   Add user to Postgres:
+sudo -u postgres psql -c "CREATE USER $USER WITH CREATEDB"
+
+# See https://www.postgresql.org/download/linux/ubuntu/ for more details
 ```
 
 ```
@@ -79,11 +104,6 @@ sudo apt-get -y update
 sudo apt-get -y install google-chrome-stable
 ```
 
-```
-# Add user to Postgres:
-sudo -u postgres psql -c "CREATE USER $USER WITH CREATEDB"
-```
-
 #### Creating an SSH Key Pair
 
 (If you are using a Vagrant VM and want to use your host OS key pair, go back up to the Vagrant
@@ -134,8 +154,6 @@ cd casa
 bin/rails db:setup
 bin/update
 yarn
-# webpacker one time setup
-bundle exec rails webpacker:compile
 ```
 
 (`bin/update` is a very useful script that should be run after each `git pull` and can be used whenever you want to make sure your setup is up to date with respect to code and configuration changes.)

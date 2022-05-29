@@ -4,6 +4,7 @@
 /* global localStorage */
 /* global File */
 /* global DataTransfer */
+/* global $ */
 
 function dataURItoBlob (dataURI) {
   // convert base64 to raw binary data held in a string
@@ -55,17 +56,21 @@ function populateFileInput (inputId) {
 $('document').ready(() => {
   ['volunteer', 'supervisor'].forEach((importType) => {
     const inputFileElementId = `${importType}-file`
+    const inputFileElement = $(`#${inputFileElementId}`)[0]
+    const importButtonElement = $(`#${importType}-import-button`)[0]
 
-    document.getElementById(inputFileElementId).addEventListener('change', function (event) {
-      document.getElementById(`${importType}-import-button`).disabled = event.target.value === ''
-      const file = document.getElementById(inputFileElementId).files[0]
-      storeCSVFile(file, inputFileElementId)
-    })
+    if (inputFileElement && importButtonElement) {
+      inputFileElement.addEventListener('change', function (event) {
+        importButtonElement.disabled = event.target.value === ''
+        const file = inputFileElement.files[0]
+        storeCSVFile(file, inputFileElementId)
+      })
 
-    if (document.getElementById('smsOptIn') == null) {
-      delete localStorage[inputFileElementId]
-    } else {
-      populateFileInput(inputFileElementId)
+      if ($('#smsOptIn') == null) {
+        delete localStorage[inputFileElementId]
+      } else {
+        populateFileInput(inputFileElementId)
+      }
     }
   })
 })
