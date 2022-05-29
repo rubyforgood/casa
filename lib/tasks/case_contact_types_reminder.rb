@@ -16,7 +16,7 @@ class CaseContactTypesReminder
       )
       update_reminder_sent_time(volunteer)
     end
-    return responses
+    responses
   end
 
   private
@@ -50,7 +50,7 @@ class CaseContactTypesReminder
       sms_params[:Body] = contents.join("\n")
       responses.push(twilio_service.send_sms(sms_params))
     end
-    
+
     responses
   end
 
@@ -62,7 +62,7 @@ class CaseContactTypesReminder
     reminder = UserCaseContactTypesReminder.find_by(user_id: volunteer.id)
 
     if reminder
-      return reminder.reminder_sent < 3.months.ago
+      return reminder.reminder_sent > 3.months.ago
     end
 
     false
@@ -72,9 +72,9 @@ class CaseContactTypesReminder
     reminder = UserCaseContactTypesReminder.find_by(user_id: volunteer.id)
 
     if reminder
-        reminder.reminder_sent = DateTime.now
+      reminder.reminder_sent = DateTime.now
     else
-        reminder = UserCaseContactTypesReminder.new(user_id: volunteer.id, reminder_sent: DateTime.now)
+      reminder = UserCaseContactTypesReminder.new(user_id: volunteer.id, reminder_sent: DateTime.now)
     end
 
     reminder.save
