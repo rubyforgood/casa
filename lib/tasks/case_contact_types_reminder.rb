@@ -4,19 +4,23 @@ class CaseContactTypesReminder
 
   def send!
     responses = []
-    eligible_volunteers = User.where(type: :Volunteer, receive_sms_notifications: true).where.not(phone_number: nil)
+    eligible_volunteers = Volunteer.where(receive_sms_notifications: true)
+      .where.not(phone_number: nil)
+      .select { |v| !last_reminder_within_quarter(v) }
+
     eligible_volunteers.each do |volunteer|
-      next if last_reminder_within_quarter(volunteer)
       uncontacted_case_contact_type_names = uncontacted_case_contact_types(volunteer)
-      next if uncontacted_case_contact_type_names.count == 0
-      responses.push(
-        {
-          volunteer: volunteer,
-          messages: send_sms_messages(volunteer, uncontacted_case_contact_type_names)
-        }
-      )
-      update_reminder_sent_time(volunteer)
+      if uncontacted_case_contact_type_names.count > 0
+        responses.push(
+          {
+            volunteer: volunteer,
+            messages: send_sms_messages(volunteer, uncontacted_case_contact_type_names)
+          }
+        )
+        update_reminder_sent_time(volunteer)
+      end
     end
+
     responses
   end
 
