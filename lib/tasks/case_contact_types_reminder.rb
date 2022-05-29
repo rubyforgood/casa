@@ -8,6 +8,7 @@ class CaseContactTypesReminder
     eligible_volunteers.each do |volunteer|
       next if last_reminder_within_quarter(volunteer)
       uncontacted_case_contact_type_names = uncontacted_case_contact_types(volunteer)
+      next if uncontacted_case_contact_type_names.count == 0
       responses.push(
         {
           volunteer: volunteer,
@@ -22,7 +23,7 @@ class CaseContactTypesReminder
   private
 
   def uncontacted_case_contact_types(volunteer)
-    contacted_types = volunteer.case_contacts.where("occurred_at < ?", 2.months.ago).joins(:contact_types).pluck(:name)
+    contacted_types = volunteer.case_contacts.where("occurred_at > ?", 2.months.ago).joins(:contact_types).pluck(:name)
     ContactType.all.pluck(:name).uniq - contacted_types
   end
 

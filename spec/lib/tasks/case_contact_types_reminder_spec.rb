@@ -21,6 +21,14 @@ RSpec.describe CaseContactTypesReminder do
     )
   end
   let!(:contact_type) { create(:contact_type, name: "test") }
+  let!(:case_contact) do
+    create(
+      :case_contact,
+      creator: volunteer,
+      contact_types: [contact_type],
+      occurred_at: 4.months.ago
+    )
+  end
 
   before do
     stubbed_requests
@@ -34,6 +42,14 @@ RSpec.describe CaseContactTypesReminder do
       expect(responses[0][:messages][0].body).to match CaseContactTypesReminder::FIRST_MESSAGE
       expect(responses[0][:messages][1].body).to match contact_type.name
       expect(responses[0][:messages][2].body).to match CaseContactTypesReminder::THIRD_MESSAGE
+    end
+  end
+
+  context "volunteer with contacted contact types within last 60 days, sms notifications on, and no reminder in last quarter" do
+    it "should send not sms reminder" do
+      CaseContact.update_all(occurred_at: 1.months.ago)
+      responses = CaseContactTypesReminder.new.send!
+      expect(responses.count).to match 0
     end
   end
 
