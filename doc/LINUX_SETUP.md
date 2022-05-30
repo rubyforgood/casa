@@ -9,24 +9,57 @@ The commands below include a section for installing [rvm](https://rvm.io/),
 but feel free to substitute your own favorite Ruby version manager such as [rbenv](https://github.com/rbenv/rbenv).
 
 ```
-# Install packages available from the main Linux repos & upgrade the Vagrant image if necessary
-#
+# Install Linux Packages
+sudo apt update                    # Check internet for updates
+sudo apt upgrade -y                # Install updates
+sudo apt install -y curl           # A command to help fetching and sending data to urls
+sudo apt install -y git            # In case you don't have it already
+sudo apt install -y libvips42      # Render images for your local web server
+sudo apt install -y libpq-dev      # Helps compile C programs to be able to communicate with postgres
+```  
+  
+```
+# Install Postgres
+#   Add the postgres repo
+#     Create the file repository configuration:
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+
+#     Add the repo key to your keyring:
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | sudo tee /usr/share/keyrings/postgres-archive-keyring.gpg
+
+#     Open /etc/apt/sources.list.d/pgdg.list with super user permissions
+#     Paste "[signed-by=/usr/share/keyrings/postgres-archive-keyring.gpg]" between "deb" and "http://apt.postgresql..."
+#       Example: deb [signed-by=/usr/share/keyrings/postgres-archive-keyring.gpg] http://apt.postgresql.org/pub/repos/apt jammy-pgdg main
+#     Save the file
+
+#     Update the package lists:
 sudo apt update
-sudo apt upgrade -y
-sudo apt install -y curl git net-tools nodejs npm openssh-server postgresql-12 vim zsh
-sudo apt install -y libvips42 # Render images for your local web server
-sudo apt install -y libpq-dev # Helps compile C programs to be able to communicate with postgres
+
+#   Install Postgres 12
+sudo apt install -y postgresql-12
+
+#   Add user to Postgres:
+sudo -u postgres psql -c "CREATE USER $USER WITH CREATEDB"
+
+# See https://www.postgresql.org/download/linux/ubuntu/ for more details
 ```
 
 ```
 # Install NVM and Node JS
-#   you can use wget or curl
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-. ./.bashrc
-nvm install lts/fermium
+#   you can use curl
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+#   or wget
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+
+#   Restart your terminal
+
+# List all available LTS versions
+nvm ls-remote | grep -i 'Latest LTS'
+
+# Install an LTS version
+nvm install lts/gallium # Latest might not be gallium
 # Update npm
-npm i -g npm
+npm i -g npm@latest
 ```
 
 ```
@@ -44,7 +77,7 @@ sudo apt install rbenv
 rbenv init
 #   Restart your terminal
 
-#   setup rbenv install command
+#   fetch extended list of ruby versions
 mkdir -p "$(rbenv root)"/plugins
 git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 
@@ -69,13 +102,6 @@ sudo curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo 
 sudo echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
 sudo apt-get -y update
 sudo apt-get -y install google-chrome-stable
-```
-
-```
-# Add user to Postgres:
-sudo -u postgres psql -c "CREATE USER $USER WITH CREATEDB"
-# If you are using a VM
-sudo -u postgres psql -c "CREATE USER vagrant WITH CREATEDB"
 ```
 
 #### Creating an SSH Key Pair
@@ -128,8 +154,6 @@ cd casa
 bin/rails db:setup
 bin/update
 yarn
-# webpacker one time setup
-bundle exec rails webpacker:compile
 ```
 
 (`bin/update` is a very useful script that should be run after each `git pull` and can be used whenever you want to make sure your setup is up to date with respect to code and configuration changes.)

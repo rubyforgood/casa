@@ -30,6 +30,7 @@ controllers/mileage_rates_controller.rb
 controllers/mileage_reports_controller.rb
 controllers/notes_controller.rb
 controllers/notifications_controller.rb
+controllers/other_duties_controller.rb
 controllers/reports_controller.rb
 controllers/supervisor_volunteers_controller.rb
 controllers/supervisors_controller.rb
