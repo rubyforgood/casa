@@ -111,6 +111,8 @@ en:
         created_at: Created
         duration: Duration
         title: Title
+      button:
+        new_other_duty: New Duty
   casa_admins:
     edit:
       title: Edit Casa Admin
@@ -193,16 +195,6 @@ en:
         active: Active?
         name: Name
       title: Contact Type Groups
-    contact_types:
-      button:
-        edit: Edit
-        new: New Contact Type
-      heading:
-        actions: Actions
-        active: Active?
-        group: Group
-        name: Name
-      title: Contact Types
     hearing_types:
       button:
         edit: Edit
@@ -360,6 +352,7 @@ en:
         built_by: Built by
         link:
           report_site_issue: Report a site issue
+          sms_terms_and_conditions: SMS Terms & Conditions
         ruby_for_good: Ruby For Good
     login_header:
       image:
@@ -559,3 +552,13 @@ en:
     edit:
       email: Email
       display_name: Display name
+  other_duties:
+    new:
+      title: New Duty
+    edit:
+      title: Editing Duty
+    form:
+      occurred_on: Occurred On
+      duration_meeting: Duration Meeting
+      enter_notes: Enter Notes
+      enter_notes_placeholder: Enter notes here

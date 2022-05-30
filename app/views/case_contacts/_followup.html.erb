@@ -1,7 +1,7 @@
 <% if followup %>
   <div class="mr-2">
     <%= button_to resolve_followup_path(followup), method: :patch, class: "btn btn-success" do %>
-      <%= t("button.resolve") %>
+      Resolve Reminder
     <% end %>
   </div>
 <% else %>
@@ -9,8 +9,7 @@
     <button type="button"
             class="btn btn-outline-primary followup-button"
             id="followup-button-<%= contact.id %>">
-
-      <%= t("button.follow_up") %>
+      Make Reminder
     </button>
   </div>
 <% end %>

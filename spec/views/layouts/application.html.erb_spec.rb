@@ -22,7 +22,7 @@ RSpec.describe "layouts/application", type: :view do
     expect(rendered.scan(/<meta property="og:.*>/).count).to be(4)
     expect(subject).to match("og:title\" content=\"#{title}\"")
     expect(subject).to match('og:url" content="http://test.host/"')
-    expect(subject).to match('og:image" content="http://test.host/packs-test/media/src/images/.*.jpg"')
+    expect(subject).to match('og:image" content="http://test.host/assets/.*.jpg"')
     expect(subject).to match(
       'og:description" content="Volunteer activity tracking for CASA volunteers, supervisors, and administrators."'
     )
