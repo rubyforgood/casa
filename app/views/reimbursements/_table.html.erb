@@ -15,7 +15,8 @@
         </tr>
         </thead>
         <tbody>
-        <% @reimbursements.each do |reimbursement| %>
+        <% @grouped_reimbursements.each do |_, reimbursements| %>
+          <% reimbursement = reimbursements.first %>
           <tr>
             <td id="volunteer-<%= reimbursement.id %>">
               <span class="mobile-label">Volunteer</span>
@@ -24,11 +25,13 @@
 
             <td id="case-number-<%= reimbursement.id %>">
               <span class="mobile-label">Case Number</span>
-              <%= link_to(reimbursement.casa_case.case_number, casa_case_path(reimbursement.casa_case)) %>
+              <% reimbursements.each do |r| %>
+                <%= link_to(r.casa_case.case_number, casa_case_path(r.casa_case)) %><br/>
+              <% end %>
             </td>
 
             <td id="contact-types-<%= reimbursement.id %>">
-            <%= contact_types_list(reimbursement) %>
+              <%= contact_types_list(reimbursement) %>
             </td>
 
             <td id="date-attempted-<%= reimbursement.id %>">
@@ -47,10 +50,10 @@
 
             <td>
               <%= form_with(model: reimbursement, url: reimbursement_mark_as_complete_path(reimbursement),
-  method: "patch") do |form| %>
+                            method: "patch") do |form| %>
                 <%= form.label :reimbursement_complete, t("common.yes_text") %>
                 <%= form.check_box(:reimbursement_complete, value: reimbursement.reimbursement_complete,
-  onchange: 'this.form.submit();') %>
+                                   onchange: 'this.form.submit();') %>
               <% end %>
             </td>
           </tr>
