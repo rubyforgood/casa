@@ -26,7 +26,7 @@
             <td id="case-number-<%= reimbursement.id %>">
               <span class="mobile-label">Case Number</span>
               <% reimbursements.each do |r| %>
-                <%= link_to(r.casa_case.case_number, casa_case_path(r.casa_case)) %><br/>
+                <%= link_to(r.casa_case.case_number, casa_case_path(r.casa_case)) %><br>
               <% end %>
             </td>
 

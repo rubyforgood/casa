@@ -28,7 +28,7 @@ class ReimbursementsController < ApplicationController
 
     @case_contact = fetch_reimbursements.find(params[:reimbursement_id])
     @grouped_case_contacts = fetch_reimbursements
-                             .where({ occurred_at: @case_contact.occurred_at, creator_id: @case_contact.creator_id })
+      .where({occurred_at: @case_contact.occurred_at, creator_id: @case_contact.creator_id})
     @grouped_case_contacts.update_all(reimbursement_params.to_h)
     redirect_to reimbursements_path
   end
