@@ -102,9 +102,6 @@ sudo apt-get -y install google-chrome-stable
 
 #### Creating an SSH Key Pair
 
-(If you are using a Vagrant VM and want to use your host OS key pair, go back up to the Vagrant
-instructions to see how to do that.)
-
 If you do not already have an SSH key pair, you can create it with the defaults with this
 (see [this article](https://stackoverflow.com/questions/43235179/how-to-execute-ssh-keygen-without-prompt#:~:text=If%20you%20don't%20want,flag%20%2Df%20to%20the%20command.&text=This%20way%20user%20will%20not,file(s)%20already%20exist.&text=leave%20out%20the%20%3E%2Fdev%2F,you%20want%20to%20print%20output.)
 for more information about this command):
@@ -125,8 +122,6 @@ Skip this step if your public SSH key is already registered with your Github acc
 * Press the green "Add SSH Key" button to submit the new key.
 
 #### Final Steps
-
-(If your host is a Vagrant VM, `vagrant ssh` into it if you are not already there.)
 
 `cd` to the directory under which you would like to install the CASA software
 (if the home directory, and you are not already there, `cd` alone will work). Then:
