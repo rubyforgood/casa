@@ -100,26 +100,28 @@ sudo apt-get -y update
 sudo apt-get -y install google-chrome-stable
 ```
 
-#### Creating an SSH Key Pair
+## Connecting to Github via ssh  
+Connecting to Gihub via ssh prevents being required to login very often when using git commands. 
 
-If you do not already have an SSH key pair, you can create it with the defaults with this
-(see [this article](https://stackoverflow.com/questions/43235179/how-to-execute-ssh-keygen-without-prompt#:~:text=If%20you%20don't%20want,flag%20%2Df%20to%20the%20command.&text=This%20way%20user%20will%20not,file(s)%20already%20exist.&text=leave%20out%20the%20%3E%2Fdev%2F,you%20want%20to%20print%20output.)
-for more information about this command):
+### Creating an SSH Key Pair
+ - Open Terminal.
+ - Paste the text below, substituting in your GitHub email address.  
+`ssh-keygen -t ed25519 -C "your_email@example.com"`
+ - For all prompts simply press enter to set default values.
 
-`ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa <<<y 2>&1 >/dev/null`
+#### Adding your SSH key to the ssh-agent
+ - Run `eval "$(ssh-agent -s)"` in your terminal to start the ssh-agent in the background. It will use very few resources.
+ - Run `ssh-add ~/.ssh/id_ed25519` to add your private key to the ssh agent.
 
-#### Adding Your Key to Your Github Account
+See [github's article](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) for more details/updates.
 
-Skip this step if your public SSH key is already registered with your Github account.
+### Add your ssh key to your github account.  
+[See github's guide](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
 
-* Go to https://github.com/login and log in.
-* Click the circle, probably containing your photo, in the upper right corner.
-* Select "Settings".
-* Select "SSH and GPG Keys" on the left panel.
-* Click the green "New SSH Key" on the top right of the window.
-* For "Title", input something descriptive of this host to you
-* For "Key", paste the content of your ~/.ssh/id_rsa.pub file.
-* Press the green "Add SSH Key" button to submit the new key.
+### Test Your ssh Connection
+ - Run `ssh -T git@github.com`
+ - If you see `Are you sure you want to continue connecting (yes/no)?`, enter `yes`
+ - If you see `Hi username! You've successfully authenticated, but GitHub does not provide shell access.`, the connection is set up correctly.
 
 #### Final Steps
 
