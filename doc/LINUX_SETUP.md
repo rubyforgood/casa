@@ -57,7 +57,7 @@ wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 nvm ls-remote | grep -i 'Latest LTS'
 
 # Install an LTS version
-nvm install lts/gallium # Latest might not be gallium
+nvm install lts/fermium
 # Update npm
 npm i -g npm@latest
 ```
@@ -123,45 +123,29 @@ See [github's article](https://docs.github.com/en/authentication/connecting-to-g
  - If you see `Are you sure you want to continue connecting (yes/no)?`, enter `yes`
  - If you see `Hi username! You've successfully authenticated, but GitHub does not provide shell access.`, the connection is set up correctly.
 
-#### Final Steps
+## Project Installation
 
-`cd` to the directory under which you would like to install the CASA software
-(if the home directory, and you are not already there, `cd` alone will work). Then:
+`cd` to the directory where you would like to install CASA  
 
+Run this series of commands to install the project.  
 ```
-git clone git@github.com:rubyforgood/casa.git
-```
+git clone git@github.com:rubyforgood/casa.git # Download a copy of the repository locally
+cd casa # Go into the folder containing casa
+bundle install # Install ruby dependencies
+bundle exec rails db:setup # Create your local test database
+bundle exec rails db:migrate # Update the database if it's out of date
+bundle exec rake after_party:run # Run post deployment tasks
 
-If you see this, respond with yes:
-
-```
-The authenticity of host 'github.com (140.82.112.3)' can't be established.
-RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
-Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-```
-
-Now to set up the gems, JavaScript libraries, and data base:
-
-```
-cd casa
-bin/rails db:setup
-bin/update
-yarn
+yarn # install javascript dependencies
+yarn build # compile javascript
+yarn build:css # compile css
 ```
 
 (`bin/update` is a very useful script that should be run after each `git pull` and can be used whenever you want to make sure your setup is up to date with respect to code and configuration changes.)
 
-Run the tests and/or the server!:
-
+Test/interact with your local CASA using:  
 ```
-bin/rails spec               # run the tests
-
-bin/rails server             # run the server only for localhost clients
-# or
-bin/rails server -b 0.0.0.0  # run the server for any network-connected clients
+bundle exec rails spec # run the tests
+bundle exec rails s    # start your local web server
+# Visit localhost:3000 in your browser to see the web app. If you already have something running on port 3000, your rails app port will be printed in the console.
 ```
-
-If the tests all pass and you can access the running Rails server from the host OS,
-then your installation is successful!
-
-A `bin/login` script is provided to simplify the launching and logging in to the application. It cannot be used on the Vagrant VM since the Vagrant VM has no graphical environment.
