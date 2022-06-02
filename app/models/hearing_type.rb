@@ -15,7 +15,7 @@ end
 #  id          :bigint           not null, primary key
 #  active      :boolean          default(TRUE), not null
 #  name        :string           not null
-#  casa_org_id :bigint           not null
+#  casa_org_id :integer          not null
 #
 # Indexes
 #
