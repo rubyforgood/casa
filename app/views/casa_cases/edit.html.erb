@@ -6,7 +6,6 @@
   <%= render 'inactive_case', casa_case: @casa_case %>
 <% end %>
 <<<<<<< HEAD
-
 <% if Pundit.policy(current_user, @casa_case).assign_volunteers? %>
   <%=
     render(
@@ -15,8 +14,7 @@
       relational_obj: CaseAssignment,
       relational_action: case_assignments_path(casa_case_id: @casa_case.id)
     ) do
-  %>
-    <thead>
+  %>>
       <tr>
         <th><%= t(".heading.volunteer_name") %></th>
         <th><%= t(".heading.volunteer_email") %></th>
