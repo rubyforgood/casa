@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_19_233803) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -103,6 +103,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
     t.datetime "court_report_submitted_at", precision: nil
     t.integer "court_report_status", default: 0
     t.string "slug"
+    t.datetime "date_in_care"
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
     t.index ["case_number", "casa_org_id"], name: "index_casa_cases_on_case_number_and_casa_org_id", unique: true
     t.index ["hearing_type_id"], name: "index_casa_cases_on_hearing_type_id"
@@ -127,6 +128,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
     t.string "footer_links", default: [], array: true
     t.string "slug"
     t.boolean "show_driving_reimbursement", default: true
+    t.string "twilio_phone_number"
+    t.string "twilio_account_sid"
+    t.string "twilio_api_key_sid"
+    t.string "twilio_api_key_secret"
     t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 
@@ -375,6 +380,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
     t.index ["user_id"], name: "index_sent_emails_on_user_id"
   end
 
+  create_table "sms_notification_events", force: :cascade do |t|
+    t.string "name"
+    t.string "user_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "supervisor_volunteers", force: :cascade do |t|
     t.bigint "supervisor_id", null: false
     t.bigint "volunteer_id", null: false
@@ -387,6 +399,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
 
   create_table "task_records", id: false, force: :cascade do |t|
     t.string "version", null: false
+  end
+
+  create_table "user_sms_notification_events", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "sms_notification_event_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sms_notification_event_id"], name: "index_user_sms_notification_events_on_sms_notification_event_id"
+    t.index ["user_id"], name: "index_user_sms_notification_events_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -425,17 +446,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  create_table "versions", force: :cascade do |t|
-    t.string "item_type"
-    t.string "{:null=>false}"
-    t.bigint "item_id", null: false
-    t.string "event", null: false
-    t.string "whodunnit"
-    t.text "object"
-    t.datetime "created_at", precision: nil
-    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
-  end
-
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "additional_expenses", "case_contacts"
@@ -460,5 +470,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_180242) do
   add_foreign_key "sent_emails", "users"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"
   add_foreign_key "supervisor_volunteers", "users", column: "volunteer_id"
+  add_foreign_key "user_sms_notification_events", "sms_notification_events"
+  add_foreign_key "user_sms_notification_events", "users"
   add_foreign_key "users", "casa_orgs"
 end

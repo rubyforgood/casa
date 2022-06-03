@@ -1,6 +1,5 @@
 # relationship between a supervisor and volunteer
 class SupervisorVolunteer < ApplicationRecord
-  has_paper_trail
   belongs_to :volunteer, class_name: "User"
   belongs_to :supervisor, class_name: "User"
 

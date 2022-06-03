@@ -63,8 +63,25 @@ RSpec.describe "/dashboard", type: :request do
     end
   end
 
+  context "as a supervisor" do
+    let(:supervisor) { create(:supervisor, casa_org: organization) }
+
+    before do
+      sign_in supervisor
+    end
+
+    describe "GET /show" do
+      it "redirects to the volunteers overview" do
+        get root_url
+
+        expect(response).to redirect_to(volunteers_url)
+      end
+    end
+  end
+
   context "as an admin" do
     let(:admin) { create(:casa_admin, casa_org: organization) }
+
     before do
       sign_in admin
     end

@@ -74,6 +74,45 @@ RSpec.describe "/casa_cases", type: :request do
         expect(response).to be_redirect
         expect(flash[:notice]).to eq("Sorry you are not authorized to perform this action.")
       end
+
+      context "when exporting a csv" do
+        subject(:casa_case_show) { get casa_case_path(casa_case, format: :csv) }
+
+        let(:current_time) { Time.now.strftime("%Y-%m-%d") }
+
+        it "generates a csv" do
+          casa_case_show
+
+          expect(response).to have_http_status :ok
+          expect(response.headers["Content-Type"]).to include "text/csv"
+          expect(response.headers["Content-Disposition"]).to include "case-contacts-#{current_time}"
+        end
+
+        it "adds the correct headers to the csv" do
+          casa_case_show
+
+          csv_headers = ["Internal Contact Number", "Duration Minutes", "Contact Types",
+            "Contact Made", "Contact Medium", "Occurred At", "Added To System At", "Miles Driven",
+            "Wants Driving Reimbursement", "Casa Case Number", "Creator Email", "Creator Name",
+            "Supervisor Name", "Case Contact Notes"]
+
+          csv_headers.each { |header| expect(response.body).to include header }
+        end
+      end
+
+      context "when exporting a xlsx" do
+        subject(:casa_case_show) { get casa_case_path(casa_case, format: :xlsx) }
+
+        let(:current_time) { Time.now.strftime("%Y-%m-%d") }
+
+        it "generates a xlsx file" do
+          casa_case_show
+
+          expect(response).to have_http_status :ok
+          expect(response.headers["Content-Type"]).to include "application/vnd.openxmlformats"
+          expect(response.headers["Content-Disposition"]).to include "case-contacts-#{current_time}"
+        end
+      end
     end
 
     describe "GET /new" do
@@ -197,18 +236,29 @@ RSpec.describe "/casa_cases", type: :request do
     end
 
     describe "PATCH /update" do
-      let(:new_attributes) {
+      let(:group) { build(:contact_type_group) }
+      let(:type1) { create(:contact_type, contact_type_group: group) }
+      let(:new_attributes) do
         {
           case_number: "12345",
           hearing_type_id: hearing_type.id,
           judge_id: judge.id,
           case_court_orders_attributes: orders_attributes
         }
-      }
+      end
+      let(:new_attributes2) do
+        {
+          case_number: "12345",
+          hearing_type_id: hearing_type.id,
+          judge_id: judge.id,
+          case_court_orders_attributes: orders_attributes,
+          casa_case_contact_types_attributes: [{contact_type_id: type1.id}]
+        }
+      end
 
       context "with valid parameters" do
         it "updates the requested casa_case" do
-          patch casa_case_url(casa_case), params: {casa_case: new_attributes}
+          patch casa_case_url(casa_case), params: {casa_case: new_attributes2}
           casa_case.reload
           expect(casa_case.case_number).to eq "12345"
           expect(casa_case.hearing_type).to eq hearing_type
@@ -220,22 +270,22 @@ RSpec.describe "/casa_cases", type: :request do
         end
 
         it "redirects to the casa_case" do
-          patch casa_case_url(casa_case), params: {casa_case: new_attributes}
+          patch casa_case_url(casa_case), params: {casa_case: new_attributes2}
           casa_case.reload
           expect(response).to redirect_to(edit_casa_case_path)
         end
 
         it "displays changed attributes" do
-          patch casa_case_url(casa_case), params: {casa_case: new_attributes}
-          expect(flash[:notice]).to eq("CASA case was successfully updated.<ul><li>Changed Case number</li><li>Changed Hearing type</li><li>Changed Judge</li><li>2 Court orders added or updated</li></ul>")
+          patch casa_case_url(casa_case), params: {casa_case: new_attributes2}
+          expect(flash[:notice]).to eq("CASA case was successfully updated.<ul><li>Changed Case number</li><li>Changed Hearing type</li><li>Changed Judge</li><li>[\"#{type1.name}\"] Contact types added</li><li>2 Court orders added or updated</li></ul>")
         end
 
         it "also responds as json", :aggregate_failures do
-          patch casa_case_url(casa_case, format: :json), params: {casa_case: new_attributes}
+          patch casa_case_url(casa_case, format: :json), params: {casa_case: new_attributes2}
 
           expect(response.content_type).to eq("application/json; charset=utf-8")
           expect(response).to have_http_status(:ok)
-          expect(response.body).to match(new_attributes[:case_number].to_json)
+          expect(response.body).to match(new_attributes2[:case_number].to_json)
         end
       end
 
@@ -271,7 +321,7 @@ RSpec.describe "/casa_cases", type: :request do
           end
 
           before do
-            patch casa_case_url(casa_case), params: {casa_case: new_attributes}
+            patch casa_case_url(casa_case), params: {casa_case: new_attributes2}
             casa_case.reload
 
             orders_updated[:case_court_orders_attributes]["0"][:id] = casa_case.case_court_orders[0].id
@@ -573,11 +623,27 @@ RSpec.describe "/casa_cases", type: :request do
     end
 
     describe "PATCH /update" do
-      let(:new_attributes) { {case_number: "12345", court_report_status: :completed, case_court_orders_attributes: orders_attributes} }
+      let(:group) { build(:contact_type_group) }
+      let(:type1) { create(:contact_type, contact_type_group: group) }
+      let(:new_attributes) do
+        {
+          case_number: "12345",
+          court_report_status: :completed,
+          case_court_orders_attributes: orders_attributes
+        }
+      end
+      let(:new_attributes2) do
+        {
+          case_number: "12345",
+          court_report_status: :completed,
+          case_court_orders_attributes: orders_attributes,
+          casa_case_contact_types_attributes: [{contact_type_id: type1.id}]
+        }
+      end
 
       context "with valid parameters" do
         it "updates fields (except case_number)" do
-          patch casa_case_url(casa_case), params: {casa_case: new_attributes}
+          patch casa_case_url(casa_case), params: {casa_case: new_attributes2}
           casa_case.reload
 
           expect(casa_case.case_number).to eq "111"
@@ -591,12 +657,12 @@ RSpec.describe "/casa_cases", type: :request do
         end
 
         it "redirects to the casa_case" do
-          patch casa_case_url(casa_case), params: {casa_case: new_attributes}
+          patch casa_case_url(casa_case), params: {casa_case: new_attributes2}
           expect(response).to redirect_to(edit_casa_case_path(casa_case))
         end
 
         it "also responds as json", :aggregate_failures do
-          patch casa_case_url(casa_case, format: :json), params: {casa_case: new_attributes}
+          patch casa_case_url(casa_case, format: :json), params: {casa_case: new_attributes2}
 
           expect(response.content_type).to eq("application/json; charset=utf-8")
           expect(response).to have_http_status(:ok)

@@ -1,5 +1,4 @@
 class CaseContactContactType < ApplicationRecord
-  has_paper_trail
   belongs_to :case_contact
   belongs_to :contact_type
 

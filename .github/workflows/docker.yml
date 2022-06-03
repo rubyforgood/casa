@@ -5,20 +5,22 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'doc/**'
-      - '**/*.md'
-      - 'bin/**'
+      - "doc/**"
+      - "**/*.md"
+      - "bin/**"
   pull_request:
     branches:
       - main
     paths-ignore:
-      - 'doc/**'
-      - '**/*.md'
-      - 'bin/**'
+      - "doc/**"
+      - "**/*.md"
+      - "bin/**"
 
 jobs:
   docker:
     runs-on: ubuntu-latest
+    env:
+      RAILS_ENV: test
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -30,5 +32,9 @@ jobs:
         run: docker-compose up -d
       - name: db:reset
         run: docker-compose exec -T web rails db:reset
+      - name: compile css
+        run: docker-compose exec -T web bundle exec rails css:build
+      - name: compile js
+        run: docker-compose exec -T web bundle exec rails javascript:build
       - name: Test
         run: docker-compose exec -T web bundle exec rspec spec

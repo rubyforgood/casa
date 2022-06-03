@@ -2,9 +2,9 @@ class CasaCase < ApplicationRecord
   include ByOrganizationScope
   include DateHelper
 
-  has_paper_trail
-
   self.ignored_columns = %w[court_date]
+
+  attr_accessor :validate_contact_type
 
   TABLE_COLUMNS = %w[
     case_number
@@ -18,8 +18,6 @@ class CasaCase < ApplicationRecord
 
   TRANSITION_AGE_YOUTH_ICON = "🦋".freeze
   NON_TRANSITION_AGE_YOUTH_ICON = "🐛".freeze
-
-  has_paper_trail
 
   before_create :set_slug
 
@@ -40,7 +38,7 @@ class CasaCase < ApplicationRecord
   belongs_to :judge, optional: true
   belongs_to :casa_org
   validates :birth_month_year_youth, presence: true
-
+  validates_presence_of :casa_case_contact_types, message: ": At least one contact type must be selected", if: :validate_contact_type
   has_many :casa_case_contact_types
   has_many :contact_types, through: :casa_case_contact_types, source: :contact_type
   accepts_nested_attributes_for :casa_case_contact_types
@@ -177,7 +175,9 @@ class CasaCase < ApplicationRecord
 
     transaction do
       casa_case_contact_types.destroy_all
-      update(args)
+      update!(args)
+    rescue ActiveRecord::RecordInvalid
+      raise ActiveRecord::Rollback
     end
   end
 
@@ -203,6 +203,14 @@ class CasaCase < ApplicationRecord
     attributes.symbolize_keys.merge({contact_types: contact_types.reload.map(&:attributes), court_orders: case_court_orders.map(&:attributes)})
   end
 
+  def contact_type_validation?
+    validate_update
+  end
+
+  # def set_validate_update
+
+  # end
+
   # def to_param
   #   id
   #   # slug # TODO use slug eventually for routes
@@ -220,6 +228,7 @@ end
 #  court_report_due_date     :datetime
 #  court_report_status       :integer          default("not_submitted")
 #  court_report_submitted_at :datetime
+#  date_in_care              :datetime
 #  slug                      :string
 #  transition_aged_youth     :boolean          default(FALSE)
 #  created_at                :datetime         not null

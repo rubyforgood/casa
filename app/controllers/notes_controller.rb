@@ -1,5 +1,5 @@
 class NotesController < ApplicationController
-  before_action :find_note, only: %i[edit update]
+  before_action :find_note, only: %i[edit update destroy]
   before_action :find_volunteer
 
   def create
@@ -12,6 +12,12 @@ class NotesController < ApplicationController
 
   def update
     @note.update(note_params)
+
+    redirect_to edit_volunteer_path(@volunteer)
+  end
+
+  def destroy
+    @note.destroy
 
     redirect_to edit_volunteer_path(@volunteer)
   end

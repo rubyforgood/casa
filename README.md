@@ -18,6 +18,7 @@ A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates 
 - [Welcome contributors!](#welcome-contributors)
   - [About this project](#about-this-project)
 - [Developing! ✨🛠✨](#developing-)
+  - [How to Contribute](#how-to-contribute)
   - [Installation](#installation)
     - [General Setup Instructions](#general-setup-instructions)
     - [Platform Specific Installation Instructions](#platform-specific-installation-instructions)
@@ -39,8 +40,6 @@ We highly recommend that you join us in slack https://rubyforgood.herokuapp.com/
 Issues on the issue board https://github.com/rubyforgood/casa/projects/1 in the TODO column are fair game. An issue can be claimed by commenting on it.
 
 Pull requests which are not for an issue but which improve the codebase are also welcome! Feel free to make GitHub issues for bugs and improvements. A maintainer will be keeping an eye on issues and PRs every day or three.
-
-See also our [contributing guide](./doc/CONTRIBUTING.md) 💖 ✨
 
 ### About this project
 
@@ -71,7 +70,9 @@ Read about the [product sense](doc/productsense.md) that guides our approach to 
 
 The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer-description/) in Prince George's County.
 
-# Developing! ✨🛠✨
+# Developing! ✨🛠✨  
+## How to Contribute  
+  See our [contributing guide](./doc/CONTRIBUTING.md) 💖 ✨
 ## Installation
 ### General Setup Instructions
 **Downloading the Project**
@@ -81,7 +82,6 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 3. You can also [create a fork on GitHub](https://docs.github.com/en/get-started/quickstart/fork-a-repo) and make a pull request from the fork.  
 4. ⚠️ Warning ⚠️ Github workflows are enabled by default on forks. Workflows are scripts that run at regular intervals or after events like commits. They take Github's resources to run and may send you emails if they fail. Most forks will not need any workflows. Please disable workflows for your fork by clicking on the actions tab of your fork.  
 ![Fork](https://i.stack.imgur.com/dMT7J.png)  
-5. See [our contributing guide](doc/CONTRIBUTING.md) for more detailed instructions.
 
 **Ruby**
 1. Install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
@@ -115,8 +115,11 @@ Another option is to install the Chromium browser for your operating system so t
     requires running local postgres, with a role created for whatever user you're running rails as
 1. `bin/rails db:seed:replant` generates test data (can be rerun to regenerate test data)
 
-**Webpacker One Time Setup**
-`bundle exec rails webpacker:compile`
+**Compile Assets**  
+1.  `yarn build` compile javascript  
+&ensp;&ensp;`yarn build:dev` to auto recompile for when you edit js files  
+3.  `yarn build:css` compile css  
+&ensp;&ensp;`yarn build:css:dev` to auto recompile for when you edit sass files  
 
 ### Platform Specific Installation Instructions
  - [Docker](doc/DOCKER.md)

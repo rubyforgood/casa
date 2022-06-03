@@ -100,7 +100,7 @@ GEM
     bugsnag (6.24.2)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
-    bullet (7.0.1)
+    bullet (7.0.2)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (11.1.3)
@@ -129,7 +129,11 @@ GEM
     coderay (1.1.3)
     concurrent-ruby (1.1.10)
     connection_pool (2.2.5)
+    crack (0.4.5)
+      rexml
     crass (1.0.6)
+    cssbundling-rails (1.1.0)
+      railties (>= 6.0.0)
     database_cleaner-active_record (2.0.1)
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
@@ -174,7 +178,7 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    faker (2.20.0)
+    faker (2.21.0)
       i18n (>= 1.8.11, < 2)
     faraday (1.10.0)
       faraday-em_http (~> 1.0)
@@ -208,6 +212,7 @@ GEM
     filterrific (5.2.3)
     globalid (1.0.0)
       activesupport (>= 5.0)
+    hashdiff (1.0.1)
     html_tokenizer (0.0.7)
     htmlentities (4.3.4)
     http (5.0.4)
@@ -218,6 +223,9 @@ GEM
     http-cookie (1.0.4)
       domain_name (~> 0.5)
     http-form_data (2.3.0)
+    httparty (0.20.0)
+      mime-types (~> 3.0)
+      multi_xml (>= 0.5.2)
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.2)
@@ -226,6 +234,9 @@ GEM
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
+    jsbundling-rails (1.0.2)
+      railties (>= 6.0.0)
+    jwt (2.3.0)
     launchy (2.5.0)
       addressable (~> 2.7)
     letter_opener (1.8.1)
@@ -246,9 +257,13 @@ GEM
     marcel (1.0.2)
     matrix (0.4.2)
     method_source (1.0.0)
+    mime-types (3.4.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2022.0105)
     mini_magick (4.11.0)
     mini_mime (1.1.2)
     minitest (5.15.0)
+    multi_xml (0.6.0)
     multipart-post (2.1.1)
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
@@ -267,8 +282,6 @@ GEM
       net-protocol
       timeout
     nio4r (2.5.8)
-    nokogiri (1.13.6-arm64-darwin)
-      racc (~> 1.4)
     nokogiri (1.13.6-x86_64-darwin)
       racc (~> 1.4)
     nokogiri (1.13.6-x86_64-linux)
@@ -277,13 +290,10 @@ GEM
       http (>= 4.0.0)
       rails (>= 5.2.0)
     orm_adapter (0.5.0)
-    paper_trail (12.3.0)
-      activerecord (>= 5.2)
-      request_store (~> 1.1)
     parallel (1.21.0)
     paranoia (2.6.0)
       activerecord (>= 5.1, < 7.1)
-    parser (3.1.1.0)
+    parser (3.1.2.0)
       ast (~> 2.4.1)
     pdf-forms (1.4.0)
       cliver (~> 0.3.2)
@@ -303,11 +313,9 @@ GEM
     pundit (2.2.0)
       activesupport (>= 3.0.0)
     racc (1.6.0)
-    rack (2.2.3)
+    rack (2.2.3.1)
     rack-attack (6.6.1)
       rack (>= 1.0, < 3)
-    rack-proxy (0.7.2)
-      rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (7.0.3)
@@ -375,7 +383,7 @@ GEM
       rubocop-ast (>= 1.12.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.16.0)
+    rubocop-ast (1.17.0)
       parser (>= 3.1.1.0)
     rubocop-performance (1.12.0)
       rubocop (>= 1.7.0, < 2.0)
@@ -391,11 +399,11 @@ GEM
     safe_shell (1.1.0)
     scout_apm (5.1.1)
       parser
-    selenium-webdriver (4.1.0)
+    selenium-webdriver (4.2.1)
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
-      rubyzip (>= 1.2.2)
-    semantic_range (3.0.0)
+      rubyzip (>= 1.2.2, < 3.0)
+      websocket (~> 1.0)
     shoulda-matchers (5.1.0)
       activesupport (>= 5.2.0)
     simplecov (0.21.2)
@@ -408,6 +416,13 @@ GEM
     spring (4.0.0)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
+    sprockets (4.0.3)
+      concurrent-ruby (~> 1.0)
+      rack (> 1, < 3)
+    sprockets-rails (3.4.2)
+      actionpack (>= 5.2)
+      activesupport (>= 5.2)
+      sprockets (>= 3.0.0)
     standard (1.5.0)
       rubocop (= 1.23.0)
       rubocop-performance (= 1.12.0)
@@ -418,13 +433,17 @@ GEM
     timeout (0.2.0)
     traceroute (0.8.1)
       rails (>= 3.0.0)
+    twilio-ruby (5.67.2)
+      faraday (>= 0.9, < 3.0)
+      jwt (>= 1.5, <= 2.5)
+      nokogiri (>= 1.6, < 2.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.8.1)
     unicode-display_width (2.1.0)
-    uniform_notifier (1.14.2)
+    uniform_notifier (1.16.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.2.0)
@@ -436,11 +455,11 @@ GEM
       nokogiri (~> 1.6)
       rubyzip (>= 1.3.0)
       selenium-webdriver (~> 4.0)
-    webpacker (5.4.3)
-      activesupport (>= 5.2)
-      rack-proxy (>= 0.6.1)
-      railties (>= 5.2)
-      semantic_range (>= 2.3.0)
+    webmock (3.14.0)
+      addressable (>= 2.8.0)
+      crack (>= 0.3.2)
+      hashdiff (>= 0.4.0, < 2.0.0)
+    websocket (1.2.9)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -449,10 +468,6 @@ GEM
     zeitwerk (2.5.4)
 
 PLATFORMS
-  arm64-darwin-20
-  arm64-darwin-21
-  x86_64-darwin-18
-  x86_64-darwin-19
   x86_64-darwin-20
   x86_64-darwin-21
   x86_64-linux
@@ -470,6 +485,7 @@ DEPENDENCIES
   capybara-screenshot
   caxlsx (~> 3.2)
   caxlsx_rails (~> 0.6.3)
+  cssbundling-rails (~> 1.1)
   database_cleaner-active_record
   delayed_job_active_record
   devise
@@ -479,15 +495,16 @@ DEPENDENCIES
   factory_bot_rails
   faker
   filterrific
+  httparty
   image_processing (~> 1.12)
   jbuilder
+  jsbundling-rails
   letter_opener
   lograge
   net-imap
   net-pop
   net-smtp
   noticed
-  paper_trail
   paranoia
   pdf-forms
   pg
@@ -510,13 +527,15 @@ DEPENDENCIES
   simplecov
   spring
   spring-commands-rspec
+  sprockets-rails
   standard (= 1.5.0)
   strong_migrations
   traceroute
+  twilio-ruby
   tzinfo-data
   web-console (>= 3.3.0)
   webdrivers
-  webpacker
+  webmock
 
 RUBY VERSION
    ruby 3.1.0p0
