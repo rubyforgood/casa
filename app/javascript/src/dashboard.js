@@ -1,6 +1,6 @@
-/* global $ */
 /* global location */
 /* global alert */
+/* global $ */
 
 const defineCaseContactsTable = function () {
   $('table#case_contacts').DataTable(

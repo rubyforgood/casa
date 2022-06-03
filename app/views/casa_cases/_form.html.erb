@@ -177,4 +177,8 @@
     <% end %>
     </div>
   </div>
+
+  <% if Pundit.policy(current_user, @casa_case).assign_volunteers? %>
+    <%= render "volunteer_assignment" %>
+  <% end %>
 </div>

@@ -142,10 +142,6 @@ Casa's install will also install the correct version of Rails.
     
     `bin/rails db:seed:replant` - generates test data (can be rerun to regenerate test data)
 
-4. **Webpacker One Time Setup** 
-
-   `bundle exec rails webpacker:compile`
-
 ### Getting Started
 
 See [Running the App / Verifying Installation](https://github.com/rubyforgood/casa#running-the-app--verifying-installation). 
