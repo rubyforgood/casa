@@ -4,6 +4,6 @@ FactoryBot.define do
     name { Faker::Book.title }
     duration_minutes { 25 }
     duration_hours { 1 }
-    occurred_at { 2.days.ago  }
+    occurred_at { 2.days.ago }
   end
 end

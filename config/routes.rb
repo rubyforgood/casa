@@ -108,8 +108,8 @@ Rails.application.routes.draw do
       patch :reminder
       get :impersonate
     end
-    resources :learning_hours
     resources :notes, only: %i[create edit update destroy]
+    resources :learning_hours
   end
   resources :case_assignments, only: %i[create destroy] do
     member do
