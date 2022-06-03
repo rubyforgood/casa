@@ -140,12 +140,4 @@ yarn # install javascript dependencies
 yarn build # compile javascript
 yarn build:css # compile css
 ```
-
-(`bin/update` is a very useful script that should be run after each `git pull` and can be used whenever you want to make sure your setup is up to date with respect to code and configuration changes.)
-
-Test/interact with your local CASA using:  
-```
-bundle exec rails spec # run the tests
-bundle exec rails s    # start your local web server
-# Visit localhost:3000 in your browser to see the web app. If you already have something running on port 3000, your rails app port will be printed in the console.
-```
+[Back to the main readme for steps to test your installation.](https://github.com/rubyforgood/casa#running-the-app--verifying-installation)
