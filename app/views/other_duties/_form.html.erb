@@ -35,10 +35,10 @@
       </div>
 
       <div class="field notes form-group field-card">
-        <h2><%= form.label :notes, t(".enter_notes") %></h2>
+        <h2><%= form.label :notes, t(".enter_notes") %><span class="red-letter"> *</span></h2>
 
-        <%= form.text_area :notes, :rows => 5, placeholder: t(".enter_notes_placeholder"),
-class: "cc-italic form-control" %>
+        <%= form.text_area :notes, rows: 5, placeholder: t(".enter_notes_placeholder"),
+class: "cc-italic form-control", required: true %>
       </div>
 
       <div class="actions">

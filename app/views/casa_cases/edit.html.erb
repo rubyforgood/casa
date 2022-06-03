@@ -5,6 +5,7 @@
 <% else %>
   <%= render 'inactive_case', casa_case: @casa_case %>
 <% end %>
+<<<<<<< HEAD
 
 <% if Pundit.policy(current_user, @casa_case).assign_volunteers? %>
   <%=
@@ -71,3 +72,5 @@
     </tbody>
   <% end %>
 <% end %>
+=======
+>>>>>>> main

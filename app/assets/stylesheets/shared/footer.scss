@@ -1,0 +1,56 @@
+@use "../base/variables" as globals;
+
+footer {
+  padding: 2rem 0;
+  text-align: center;
+  background-color: globals.$primary;
+  color: #fff;
+
+  .default-footer {
+    a.rfglink {
+      color: #fff;
+    }
+
+    .rfglogo {
+      max-height: 3em;
+    }
+  }
+  .terms-conditions-link {
+    color:#fff;
+  }
+
+  .footer-logos {
+    .rfglink {
+      .rfglogo {
+        max-height: 6em;
+      }
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 2rem;
+  }
+
+  li {
+    display: inline-block;
+
+    a, a:hover {
+      color: white;
+    }
+  }
+
+  li:not(:first-child):before {
+    content: " | ";
+  }
+
+  .address {
+    margin-bottom: 2rem;
+  }
+
+  .copyright {
+    font-size: 18px;
+    font-weight: 700;
+  }
+}

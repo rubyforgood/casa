@@ -1,4 +1,5 @@
 /* global $ */
+
 function toggleSidebar () {
   const isOpen = $('#sidebar-js').hasClass('sidebar-open')
   if (isOpen) {

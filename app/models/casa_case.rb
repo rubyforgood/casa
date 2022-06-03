@@ -4,6 +4,8 @@ class CasaCase < ApplicationRecord
 
   self.ignored_columns = %w[court_date]
 
+  attr_accessor :validate_contact_type
+
   TABLE_COLUMNS = %w[
     case_number
     hearing_type_name
@@ -36,7 +38,7 @@ class CasaCase < ApplicationRecord
   belongs_to :judge, optional: true
   belongs_to :casa_org
   validates :birth_month_year_youth, presence: true
-
+  validates_presence_of :casa_case_contact_types, message: ": At least one contact type must be selected", if: :validate_contact_type
   has_many :casa_case_contact_types
   has_many :contact_types, through: :casa_case_contact_types, source: :contact_type
   accepts_nested_attributes_for :casa_case_contact_types
@@ -173,7 +175,9 @@ class CasaCase < ApplicationRecord
 
     transaction do
       casa_case_contact_types.destroy_all
-      update(args)
+      update!(args)
+    rescue ActiveRecord::RecordInvalid
+      raise ActiveRecord::Rollback
     end
   end
 
@@ -198,6 +202,14 @@ class CasaCase < ApplicationRecord
   def full_attributes_hash
     attributes.symbolize_keys.merge({contact_types: contact_types.reload.map(&:attributes), court_orders: case_court_orders.map(&:attributes)})
   end
+
+  def contact_type_validation?
+    validate_update
+  end
+
+  # def set_validate_update
+
+  # end
 
   # def to_param
   #   id

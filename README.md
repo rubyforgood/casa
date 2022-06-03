@@ -115,8 +115,11 @@ Another option is to install the Chromium browser for your operating system so t
     requires running local postgres, with a role created for whatever user you're running rails as
 1. `bin/rails db:seed:replant` generates test data (can be rerun to regenerate test data)
 
-**Webpacker One Time Setup**
-`bundle exec rails webpacker:compile`
+**Compile Assets**  
+1.  `yarn build` compile javascript  
+&ensp;&ensp;`yarn build:dev` to auto recompile for when you edit js files  
+3.  `yarn build:css` compile css  
+&ensp;&ensp;`yarn build:css:dev` to auto recompile for when you edit sass files  
 
 ### Platform Specific Installation Instructions
  - [Docker](doc/DOCKER.md)
