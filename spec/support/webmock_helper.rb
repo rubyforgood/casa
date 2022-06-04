@@ -1,4 +1,5 @@
 module StubbedRequests
+  module TwilioAPI
   def self.twilio_success_stub
     WebMock.stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno34/Messages.json")
     .with(
@@ -20,9 +21,11 @@ module StubbedRequests
         "Authorization" => "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
       }
     )
-    .to_return(body: "{\"error_code\":\"42"\, \"status\":\"failed\", \"body\":\"My tea's gone cold I wonder why\"}")
+    .to_return(body: "{\"error_code\":\"42\", \"status\":\"failed\", \"body\":\"My tea's gone cold I wonder why\"}")
   end
+end
 
+module ShortIOAPI
   def self.short_io_stub
     WebMock.stub_request(:post, "https://api.short.io/links")
     .with(
@@ -37,4 +40,5 @@ module StubbedRequests
     )
     .to_return(status: 200, body: "{\"shortURL\":\"https://42ni.short.gy/jzTwdF\"}", headers: {})
   end
+end
 end
