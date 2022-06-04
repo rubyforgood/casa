@@ -12,6 +12,15 @@ module StubbedRequests
   end
 
   def self.twilio_error_stub
+    WebMock.stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno34/Messages.json")
+    .with(
+      body: {From: "+15555555555", Body: "My tea's gone cold I wonder why", To: "+12222222222"},
+      headers: {
+        "Content-Type" => "application/x-www-form-urlencoded",
+        "Authorization" => "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
+      }
+    )
+    .to_return(body: "{\"error_code\":\"42"\, \"status\":\"failed\", \"body\":\"My tea's gone cold I wonder why\"}")
   end
 
   def self.short_io_stub
