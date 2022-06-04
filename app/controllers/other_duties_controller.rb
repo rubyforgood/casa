@@ -25,7 +25,7 @@ class OtherDutiesController < ApplicationController
     elsif current_user.supervisor?
       generate_other_duty_list(current_user.volunteers)
     else
-      render file: 'public/403.html', status: :unauthorized
+      render file: "public/403.html", status: :unauthorized
     end
   end
 
