@@ -55,11 +55,6 @@ class Volunteer < User
                                      .order(:display_name)
                                  }
 
-  scope :with_other_duties, -> {
-    joins(:other_duties)
-      .distinct
-  }
-
   def self.email_court_report_reminder
     active.includes(:case_assignments).where.not(case_assignments: nil).find_each do |volunteer|
       volunteer.case_assignments.active.each do |case_assignment|
