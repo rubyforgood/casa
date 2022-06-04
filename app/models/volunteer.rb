@@ -152,7 +152,7 @@ end
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  casa_org_id                 :bigint           not null
-#  invited_by_id               :bigint
+#  invited_by_id               :integer
 #
 # Indexes
 #
