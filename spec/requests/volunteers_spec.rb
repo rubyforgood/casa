@@ -1,4 +1,5 @@
 require "rails_helper"
+require "support/webmock_helper"
 
 RSpec.describe "/volunteers", type: :request do
   let(:organization) { create(:casa_org) }

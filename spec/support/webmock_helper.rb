@@ -1,5 +1,6 @@
-def stubbed_requests
-  stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno34/Messages.json")
+module StubbedRequests
+  def self.twilio_success_stub
+    WebMock.stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno34/Messages.json")
     .with(
       body: {From: "+15555555555", Body: "Execute Order 66 - https://42ni.short.gy/jzTwdF", To: "+12222222222"},
       headers: {
@@ -8,7 +9,13 @@ def stubbed_requests
       }
     )
     .to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"Execute Order 66 - https://42ni.short.gy/jzTwdF\"}")
-  stub_request(:post, "https://api.short.io/links")
+  end
+
+  def self.twilio_error_stub
+  end
+
+  def self.short_io_stub
+    WebMock.stub_request(:post, "https://api.short.io/links")
     .with(
       body: {originalURL: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", domain: "42ni.short.gy"}.to_json,
       headers: {
@@ -20,4 +27,5 @@ def stubbed_requests
       }
     )
     .to_return(status: 200, body: "{\"shortURL\":\"https://42ni.short.gy/jzTwdF\"}", headers: {})
+  end
 end

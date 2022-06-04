@@ -4,7 +4,7 @@ require "support/webmock_helper"
 RSpec.describe ShortUrlService do
   describe "short.io API" do
     before :each do
-      stubbed_requests
+      StubbedRequests::short_io_stub
       WebMock.disable_net_connect!
       @original_url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
       @short_domain = "42ni.short.gy"
