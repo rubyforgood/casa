@@ -536,7 +536,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
         find("body").click
 
-        # page.accept_alert
+        page.accept_alert
 
         field_value = page.find_field("case_contact_occurred_at").value
 
