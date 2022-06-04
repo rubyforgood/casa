@@ -47,7 +47,7 @@ class OtherDutiesController < ApplicationController
   end
 
   def generate_other_duty_list(volunteers)
-    other_duties = volunteers.map do |volunteer|
+    volunteers.map do |volunteer|
       {
         volunteer: volunteer,
         other_duties: volunteer.other_duties
