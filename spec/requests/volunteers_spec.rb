@@ -6,6 +6,12 @@ RSpec.describe "/volunteers", type: :request do
   let(:admin) { build(:casa_admin, casa_org: organization) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
   let(:volunteer) { create(:volunteer, casa_org: organization) }
+  # add domains to blacklist you want to stub
+  blacklist = ["api.twilio.com", "api.short.io"]
+  allowed_sites = lambda{|uri|
+    blacklist.none?{|site| uri.host.include?(site) }
+  }
+  WebMock.disable_net_connect!(allow: allowed_sites)
 
   describe "GET /index" do
     it "renders a successful response" do
