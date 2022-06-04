@@ -18,7 +18,7 @@ class YouthBirthdayNotification < Noticed::Base
   # Define helper methods to make rendering easier.
 
   def message
-    t(".message", case_number: params[:case_assignment].case_number)
+    t(".message", case_number: params[:casa_case].case_number)
   end
 
   def title
@@ -26,6 +26,6 @@ class YouthBirthdayNotification < Noticed::Base
   end
 
   def url
-    casa_case_path(params[:case_assignment].id)
+    casa_case_path(params[:casa_case].id)
   end
 end
