@@ -13,7 +13,7 @@ class YouthBirthdayNotification < Noticed::Base
 
   # Add required params
   #
-  param :casa_case, :id
+  param :casa_case
 
   # Define helper methods to make rendering easier.
 
