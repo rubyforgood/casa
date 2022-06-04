@@ -35,6 +35,22 @@ RSpec.describe CasaCase, type: :model do
         it { is_expected.not_to include(casa_case) }
       end
     end
+
+    describe ".birthday_next_month" do
+      subject { described_class.birthday_next_month }
+
+      context "when a youth has a birthday next month" do
+        let(:casa_case) { create(:casa_case, birth_month_year_youth: DateTime.now.next_month) }
+
+        it { is_expected.to include(casa_case) }
+      end
+
+      context "when no youth has a birthday next month" do
+        let(:casa_case) { create(:casa_case) }
+
+        it { is_expected.to be_empty }
+      end
+    end
   end
 
   describe ".unassigned_volunteers" do
