@@ -73,6 +73,15 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Court Report Due Date")
       expect(page).to have_field("Court Report Due Date")
     end
+
+    context "when trying to assign a volunteer to a case" do
+      it "should be able to assign volunteers", js: true do
+        visit edit_casa_case_path(casa_case)
+  
+        expect(page).to have_content("Manage Volunteers")
+        expect(page).to have_css("#volunteer-assignment")
+      end
+    end
   end
 
   context "logged in as supervisor" do
@@ -467,6 +476,15 @@ of it unless it was included in a previous court report.")
       end
 
       expect(page).to have_text("At least one contact type must be selected")
+    end
+
+    context "when trying to assign a volunteer to a case" do
+      it "should be able to assign volunteers", js: true do
+        visit edit_casa_case_path(casa_case)
+  
+        expect(page).to have_content("Manage Volunteers")
+        expect(page).to have_css("#volunteer-assignment")
+      end
     end
   end
 
