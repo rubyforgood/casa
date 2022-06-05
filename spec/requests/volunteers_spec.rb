@@ -98,6 +98,8 @@ RSpec.describe "/volunteers", type: :request do
   describe "POST /create" do
     before do
       sign_in admin
+      @twilio_activation_success_stub = StubbedRequests::TwilioAPI::twilio_activation_success_stub
+      @twilio_activation_error_stub = StubbedRequests::TwilioAPI::twilio_activation_error_stub
     end
 
     context "with valid params" do
@@ -127,6 +129,38 @@ RSpec.describe "/volunteers", type: :request do
         expect {
           post volunteers_url, params: params
         }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+
+      it "sends a SMS when phone number exists" do
+        params[:volunteer][:phone_number] = "+12222222222"
+        post volunteers_url, params: params
+        expect(@twilio_activation_success_stub).to have_been_requested.times(1)
+        expect(response).to have_http_status(:redirect)
+        follow_redirect!
+        expect(flash[:notice]).to match(/Volunteer created. SMS has been sent!/)
+      end
+
+      it "does not send a SMS when phone number is not provided" do
+        post volunteers_url, params: params
+        expect(@twilio_activation_success_stub).to have_been_requested.times(0)
+        expect(@twilio_activation_error_stub).to have_been_requested.times(0)
+        expect(response).to have_http_status(:redirect)
+        follow_redirect!
+        expect(flash[:notice]).to match(/Volunteer created./)
+      end
+
+      it "does not send a SMS when Twilio API has an error" do
+        org = create(:casa_org, twilio_account_sid: "articuno31")
+        admin = build(:casa_admin, casa_org: org)
+
+        sign_in admin
+
+        params[:volunteer][:phone_number] = "+12222222222"
+        post volunteers_url, params: params
+        expect(@twilio_activation_error_stub).to have_been_requested.times(1)
+        expect(response).to have_http_status(:redirect)
+        follow_redirect!
+        expect(flash[:notice]).to match(/Volunteer created. SMS not sent due to error./)
       end
     end
 
