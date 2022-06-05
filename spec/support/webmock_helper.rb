@@ -12,10 +12,22 @@ module StubbedRequests
     .to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"Execute Order 66 - https://42ni.short.gy/jzTwdF\"}")
   end
 
-  def self.twilio_error_stub
+  def self.twilio_activation_success_stub
     WebMock.stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno34/Messages.json")
     .with(
-      body: {From: "+15555555555", Body: "My tea's gone cold I wonder why", To: "+12222222222"},
+      body: {From: "+15555555555", Body: SMSNotifications::AccountActivation::BODY, To: "+12222222222"},
+      headers: {
+        "Content-Type" => "application/x-www-form-urlencoded",
+        "Authorization" => "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
+      }
+    )
+    .to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"Execute Order 66 - https://42ni.short.gy/jzTwdF\"}")
+  end
+
+  def self.twilio_activation_error_stub
+    WebMock.stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno31/Messages.json")
+    .with(
+      body: {From: "+15555555555", Body: SMSNotifications::AccountActivation::BODY, To: "+12222222222"},
       headers: {
         "Content-Type" => "application/x-www-form-urlencoded",
         "Authorization" => "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
