@@ -22,7 +22,7 @@ class EmancipationsController < ApplicationController
         html_body = EmancipationChecklistDownloadHtml.new(@current_case, @emancipation_form_data).call
 
         context = {
-          case_number: Sablon.content(:html, @current_case.case_number),
+          case_number: @current_case.case_number,
           emancipation_checklist: Sablon.content(:html, html_body)
         }
 
