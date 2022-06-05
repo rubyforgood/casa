@@ -123,7 +123,7 @@ class VolunteersController < ApplicationController
     acc_sid = current_user.casa_org.twilio_account_sid
     api_key = current_user.casa_org.twilio_api_key_sid
     api_secret = current_user.casa_org.twilio_api_key_secret
-    body = SMSNotifications::AccountActivation::BODY
+    body = SMSNotifications::AccountActivation::account_activation_msg("volunteer")
     to = phone_number
     from = current_user.casa_org.twilio_phone_number
 

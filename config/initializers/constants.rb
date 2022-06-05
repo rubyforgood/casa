@@ -9,7 +9,9 @@ end
 
 module SMSNotifications
   module AccountActivation
-    BODY = "A CASA [volunteer/supervisor/admin] account was created for you. Set your password: [link]
-    Txt STOP to opt out of text notifications"
+    def self.account_activation_msg(resource)
+      body = "A CASA #{resource} account was created for you.
+      Txt STOP to opt out of text notifications"
+    end
   end
 end

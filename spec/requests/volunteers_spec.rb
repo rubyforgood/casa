@@ -98,8 +98,8 @@ RSpec.describe "/volunteers", type: :request do
   describe "POST /create" do
     before do
       sign_in admin
-      @twilio_activation_success_stub = StubbedRequests::TwilioAPI::twilio_activation_success_stub
-      @twilio_activation_error_stub = StubbedRequests::TwilioAPI::twilio_activation_error_stub
+      @twilio_activation_success_stub = StubbedRequests::TwilioAPI::twilio_activation_success_stub("volunteer")
+      @twilio_activation_error_stub = StubbedRequests::TwilioAPI::twilio_activation_error_stub("volunteer")
     end
 
     context "with valid params" do
