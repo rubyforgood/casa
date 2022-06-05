@@ -12,7 +12,7 @@ class EmancipationsController < ApplicationController
     @current_case = CasaCase.find(params[:casa_case_id])
     authorize @current_case
     @emancipation_form_data = EmancipationCategory.all
-
+    
     respond_to do |format|
       format.html
       format.docx {
@@ -22,11 +22,11 @@ class EmancipationsController < ApplicationController
         html_body = EmancipationChecklistDownloadHtml.new(@current_case, @emancipation_form_data).call
 
         context = {
-          case_number: @current_case.case_number,
+          case_number: Sablon.content(:html, @current_case.case_number),
           emancipation_checklist: Sablon.content(:html, html_body)
         }
 
-        send_data @template.render_to_string context, type: :docx
+        send_data((@template.render_to_string context), filename: "#{@current_case.case_number} Emancipation Checklist.docx", type: :docx)
       }
     end
   end
