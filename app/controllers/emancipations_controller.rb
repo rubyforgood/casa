@@ -12,7 +12,7 @@ class EmancipationsController < ApplicationController
     @current_case = CasaCase.find(params[:casa_case_id])
     authorize @current_case
     @emancipation_form_data = EmancipationCategory.all
-    
+
     respond_to do |format|
       format.html
       format.docx {
