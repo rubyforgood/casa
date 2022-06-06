@@ -49,7 +49,7 @@ class CaseContactTypesReminder
 
     messages = [
       FIRST_MESSAGE,
-      uncontacted_case_contact_type_names.map{ |name| "• #{name}" }.join("\n"),
+      uncontacted_case_contact_type_names.map { |name| "• #{name}" }.join("\n"),
       THIRD_MESSAGE + new_case_contact_page_short_link
     ]
 
