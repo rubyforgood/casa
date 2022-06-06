@@ -1,14 +1,21 @@
 # frozen_string_literal: true
-
 require "rails_helper"
+require "support/webmock_helper"
 
 RSpec.describe "/supervisors", type: :request do
-  let(:admin) { build(:casa_admin) }
+  let(:org) { create(:casa_org) }
+  let(:admin) { build(:casa_admin, casa_org: org) }
   let(:supervisor) { create(:supervisor) }
 
   let(:update_supervisor_params) do
     {supervisor: {email: "newemail@gmail.com", display_name: "New Name", phone_number: "+14163218092"}}
   end
+  # add domains to blacklist you want to stub
+  blacklist = ["api.twilio.com", "api.short.io"]
+  allowed_sites = lambda{|uri|
+    blacklist.none?{|site| uri.host.include?(site) }
+  }
+  WebMock.disable_net_connect!(allow: allowed_sites)
 
   describe "GET /new" do
     it "admin can view the new supervisor page" do
@@ -171,14 +178,63 @@ RSpec.describe "/supervisors", type: :request do
   end
 
   describe "POST /create" do
+    before do
+      @twilio_activation_success_stub = StubbedRequests::TwilioAPI::twilio_activation_success_stub("supervisor")
+      @twilio_activation_error_stub = StubbedRequests::TwilioAPI::twilio_activation_error_stub("supervisor")
+    end
+
+    let(:params) do
+      {
+        supervisor: {
+          display_name: "Display Name",
+          email: "displayname@example.com"
+        }
+      }
+    end
+
     it "sends an invitation email" do
       sign_in admin
 
-      post supervisors_url, params: {supervisor: {display_name: "Display Name", email: "displayname@example.com"}}
+      post supervisors_url, params: params
 
       expect(Devise.mailer.deliveries.count).to eq(1)
       expect(Devise.mailer.deliveries.first.text_part.body.to_s).to include(admin.casa_org.display_name)
       expect(Devise.mailer.deliveries.first.text_part.body.to_s).to include("This is the first step to accessing your new Supervisor account.")
+    end
+
+    it "sends a SMS when a phone number exists" do
+      sign_in admin
+      params[:supervisor][:phone_number] = "+12222222222"
+      post supervisors_url, params: params
+      expect(@twilio_activation_success_stub).to have_been_requested.times(1)
+      expect(response).to have_http_status(:redirect)
+      follow_redirect!
+      expect(flash[:notice]).to match(/Supervisor created. SMS has been sent!/)
+    end
+
+    it "does not send a SMS if phone number not given" do
+      sign_in admin
+      post supervisors_url, params: params
+      expect(@twilio_activation_success_stub).to have_been_requested.times(0)
+      expect(@twilio_activation_error_stub).to have_been_requested.times(0)
+      expect(response).to have_http_status(:redirect)
+      follow_redirect!
+      expect(flash[:notice]).to match(/Supervisor created./)
+    end
+
+    it "does not send a SMS if Twilio has an error" do
+      # ex. credentials entered wrong
+      org = create(:casa_org, twilio_account_sid: "articuno31")
+      admin = build(:casa_admin, casa_org: org)
+
+      sign_in admin
+
+      params[:supervisor][:phone_number] = "+12222222222"
+      post supervisors_url, params: params
+      expect(@twilio_activation_error_stub).to have_been_requested.times(1)
+      expect(response).to have_http_status(:redirect)
+      follow_redirect!
+      expect(flash[:notice]).to match(/Supervisor created. SMS not sent due to error./)
     end
   end
 

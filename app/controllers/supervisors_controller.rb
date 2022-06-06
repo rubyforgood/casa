@@ -31,7 +31,8 @@ class SupervisorsController < ApplicationController
 
     if @supervisor.save
       @supervisor.invite!(current_user)
-      redirect_to edit_supervisor_path(@supervisor)
+      notice_msg = send_sms @supervisor.phone_number
+      redirect_to edit_supervisor_path(@supervisor), notice: notice_msg
     else
       render new_supervisor_path
     end
@@ -99,6 +100,33 @@ class SupervisorsController < ApplicationController
 
   private
 
+   # returns appropriate flash notice for SMS
+   def send_sms(phone_number)
+    if phone_number.blank?
+      return "Supervisor created."
+    end
+    acc_sid = current_user.casa_org.twilio_account_sid
+    api_key = current_user.casa_org.twilio_api_key_sid
+    api_secret = current_user.casa_org.twilio_api_key_secret
+    body = SMSNotifications::AccountActivation::account_activation_msg("supervisor")
+    to = phone_number
+    from = current_user.casa_org.twilio_phone_number
+
+    twilio = TwilioService.new(api_key, api_secret, acc_sid)
+    req_params = {
+      From: from,
+      Body: body,
+      To: to
+    }
+
+    twilio_res = twilio.send_sms(req_params)
+    if twilio_res.error_code === nil
+      return "Supervisor created. SMS has been sent!"
+    else
+      return "Supervisor created. SMS not sent due to error."
+    end
+  end
+
   def set_supervisor
     @supervisor = Supervisor.find(params[:id])
   end
@@ -121,7 +149,7 @@ class SupervisorsController < ApplicationController
   end
 
   def supervisor_params
-    params.require(:supervisor).permit(:display_name, :email, :active, volunteer_ids: [], supervisor_volunteer_ids: [])
+    params.require(:supervisor).permit(:display_name, :email, :phone_number, :active, volunteer_ids: [], supervisor_volunteer_ids: [])
   end
 
   def update_supervisor_params
