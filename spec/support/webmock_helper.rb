@@ -64,7 +64,7 @@ def stubbed_requests
         "Accept" => "application/json",
         "Accept-Charset" => "utf-8",
         "Authorization" => "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==",
-        "Content-Type" => "application/x-www-form-urlencoded",
+        "Content-Type" => "application/x-www-form-urlencoded"
       }
     )
     .to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"If you have made contact with them in the past 60 days, remember to log it: https://42ni.short.gy/jzTwdF\"}")
