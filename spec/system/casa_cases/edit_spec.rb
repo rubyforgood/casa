@@ -77,7 +77,7 @@ RSpec.describe "Edit CASA Case", type: :system do
     context "when trying to assign a volunteer to a case" do
       it "should be able to assign volunteers", js: true do
         visit edit_casa_case_path(casa_case)
-  
+
         expect(page).to have_content("Manage Volunteers")
         expect(page).to have_css("#volunteer-assignment")
       end
@@ -481,7 +481,7 @@ of it unless it was included in a previous court report.")
     context "when trying to assign a volunteer to a case" do
       it "should be able to assign volunteers", js: true do
         visit edit_casa_case_path(casa_case)
-  
+
         expect(page).to have_content("Manage Volunteers")
         expect(page).to have_css("#volunteer-assignment")
       end
