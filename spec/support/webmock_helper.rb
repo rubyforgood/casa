@@ -63,10 +63,8 @@ def stubbed_requests
       headers: {
         "Accept" => "application/json",
         "Accept-Charset" => "utf-8",
-        "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
         "Authorization" => "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==",
         "Content-Type" => "application/x-www-form-urlencoded",
-        "User-Agent" => "twilio-ruby/5.67.1 (darwin21 x86_64) Ruby/3.1.0"
       }
     )
     .to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"If you have made contact with them in the past 60 days, remember to log it: https://42ni.short.gy/jzTwdF\"}")
