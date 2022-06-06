@@ -41,7 +41,7 @@ RSpec.describe CaseContactTypesReminder do
       expect(responses.count).to match 1
       expect(responses[0][:messages][0].body).to match CaseContactTypesReminder::FIRST_MESSAGE
       expect(responses[0][:messages][1].body).to match contact_type.name
-      expect(responses[0][:messages][2].body).to match CaseContactTypesReminder::THIRD_MESSAGE
+      expect(responses[0][:messages][2].body).to match CaseContactTypesReminder::THIRD_MESSAGE + "https://42ni.short.gy/jzTwdF"
     end
   end
 
@@ -80,7 +80,7 @@ RSpec.describe CaseContactTypesReminder do
       expect(responses.count).to match 1
       expect(responses[0][:messages][0].body).to match CaseContactTypesReminder::FIRST_MESSAGE
       expect(responses[0][:messages][1].body).to match contact_type.name
-      expect(responses[0][:messages][2].body).to match CaseContactTypesReminder::THIRD_MESSAGE
+      expect(responses[0][:messages][2].body).to match CaseContactTypesReminder::THIRD_MESSAGE + "https://42ni.short.gy/jzTwdF"
     end
   end
 

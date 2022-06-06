@@ -1,6 +1,9 @@
 class CaseContactTypesReminder
-  FIRST_MESSAGE = "It's been 60 days or more since you've reached out to these members of your youth's network:"
-  THIRD_MESSAGE = "If you have made contact with them in the past 60 days, remember to log it: [link to create new case contact for assigned case]"
+  include Rails.application.routes.url_helpers
+
+  NEW_CASE_CONTACT_PAGE_PATH = "https://casavolunteertracking.org/case_contacts/new"
+  FIRST_MESSAGE = "It's been 60 days or more since you've reached out to these members of your youth's network:\n"
+  THIRD_MESSAGE = "If you have made contact with them in the past 60 days, remember to log it: "
 
   def send!
     responses = []
@@ -45,14 +48,14 @@ class CaseContactTypesReminder
     }
 
     messages = [
-      [FIRST_MESSAGE],
-      [uncontacted_case_contact_type_names],
-      [THIRD_MESSAGE]
+      FIRST_MESSAGE,
+      uncontacted_case_contact_type_names.map{ |name| "• #{name}" }.join("\n"),
+      THIRD_MESSAGE + new_case_contact_page_short_link
     ]
 
     responses = []
-    messages.each do |contents|
-      sms_params[:Body] = contents.join("\n")
+    messages.each do |content|
+      sms_params[:Body] = content
       responses.push(twilio_service.send_sms(sms_params))
     end
 
@@ -83,5 +86,11 @@ class CaseContactTypesReminder
     end
 
     reminder.save
+  end
+
+  def new_case_contact_page_short_link
+    short_url_service = ShortUrlService.new("42ni.short.gy", "1337")
+    short_url_service.create_short_url(NEW_CASE_CONTACT_PAGE_PATH)
+    short_url_service.short_url
   end
 end
