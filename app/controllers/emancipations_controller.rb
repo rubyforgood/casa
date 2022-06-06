@@ -26,7 +26,7 @@ class EmancipationsController < ApplicationController
           emancipation_checklist: Sablon.content(:html, html_body)
         }
 
-        send_data @template.render_to_string context, type: :docx
+        send_data((@template.render_to_string context, type: :docx), filename: "#{@current_case.case_number} Emancipation Checklist.docx")
       }
     end
   end
