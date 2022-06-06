@@ -3,9 +3,9 @@ require File.join(Rails.root, "lib", "mailers", "previews", "volunteer_mailer_pr
 
 RSpec.describe VolunteerMailerPreview do
   let(:subject) { described_class.new }
-  let!(:volunteer)  { create(:volunteer) }
+  let!(:volunteer) { create(:volunteer) }
   let!(:supervisor) { create(:supervisor) }
-  let!(:admin)      { create(:casa_admin) }
+  let!(:admin) { create(:casa_admin) }
 
   describe "#account_setup" do
     let(:message) { subject.account_setup }
@@ -34,7 +34,7 @@ RSpec.describe VolunteerMailerPreview do
       end
 
       context "when a volunteer id is provided" do
-        let(:params) { { id: volunteer.id } }
+        let(:params) { {id: volunteer.id} }
         let(:subject) { described_class.new params }
         let(:message) { subject.account_setup }
 
@@ -42,7 +42,7 @@ RSpec.describe VolunteerMailerPreview do
       end
 
       context "when a supervisor id is provided" do
-        let(:params) { { id: supervisor.id } }
+        let(:params) { {id: supervisor.id} }
         let(:subject) { described_class.new params }
         let(:message) { subject.account_setup }
 
@@ -50,7 +50,7 @@ RSpec.describe VolunteerMailerPreview do
       end
 
       context "when an admin id is provided" do
-        let(:params) { { id: admin.id } }
+        let(:params) { {id: admin.id} }
         let(:subject) { described_class.new params }
         let(:message) { subject.account_setup }
 

@@ -17,11 +17,11 @@ class VolunteerMailerPreview < ActionMailer::Preview
     VolunteerMailer.case_contacts_reminder(user, true)
   end
 
-private
+  private
 
   def get_user(user_id)
     user = User.find_by(id: user_id)
-    user && user.volunteer? ? user : Volunteer.last
+    user&.volunteer? ? user : Volunteer.last
   end
 end
 # :nocov:
