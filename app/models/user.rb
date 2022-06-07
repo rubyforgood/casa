@@ -31,9 +31,10 @@ class User < ApplicationRecord
 
   has_many :user_sms_notification_events
   has_many :sms_notification_events, through: :user_sms_notification_events
-  accepts_nested_attributes_for :user_sms_notification_events, allow_destroy: true
-
   has_many :notes, as: :notable
+  has_one :address
+  
+  accepts_nested_attributes_for :user_sms_notification_events, :address, allow_destroy: true
 
   scope :active, -> { where(active: true) }
 
@@ -132,6 +133,10 @@ class User < ApplicationRecord
   end
 end
 
+def update_with_address(user_attr)
+
+end
+
 # == Schema Information
 #
 # Table name: users
@@ -162,7 +167,7 @@ end
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  casa_org_id                 :bigint           not null
-#  invited_by_id               :bigint
+#  invited_by_id               :integer
 #
 # Indexes
 #
