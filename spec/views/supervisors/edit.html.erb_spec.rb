@@ -5,6 +5,7 @@ RSpec.describe "supervisors/edit", type: :view do
     admin = build_stubbed :casa_admin
     enable_pundit(view, admin)
     allow(view).to receive(:current_user).and_return(admin)
+    allow(view).to receive(:current_organization).and_return(admin.casa_org)
   end
 
   it "displays the 'Unassign' button next to volunteer being currently supervised by the supervisor" do
@@ -14,6 +15,7 @@ RSpec.describe "supervisors/edit", type: :view do
     assign :supervisor, supervisor
     assign :all_volunteers_ever_assigned, [volunteer]
     assign :available_volunteers, []
+    
 
     render template: "supervisors/edit"
 
@@ -32,6 +34,8 @@ RSpec.describe "supervisors/edit", type: :view do
     assign :all_volunteers_ever_assigned, [volunteer]
     assign :available_volunteers, []
 
+    
+
     render template: "supervisors/edit"
 
     expect(rendered).to_not include(unassign_supervisor_volunteer_path(volunteer))
@@ -46,7 +50,7 @@ RSpec.describe "supervisors/edit", type: :view do
     it "shows for a supervisor editig a supervisor" do
       enable_pundit(view, supervisor)
       allow(view).to receive(:current_user).and_return(supervisor)
-
+      allow(view).to receive(:current_organization).and_return(supervisor.casa_org)
       assign :supervisor, supervisor
       assign :all_volunteers_ever_assigned, [volunteer]
       assign :available_volunteers, []
@@ -62,7 +66,7 @@ RSpec.describe "supervisors/edit", type: :view do
 
     it "shows profile info form fields as editable for a supervisor editing their own profile" do
       enable_pundit(view, supervisor)
-
+      allow(view).to receive(:current_organization).and_return(supervisor.casa_org)
       assign :supervisor, supervisor
       assign :all_volunteers_ever_assigned, [volunteer]
       assign :available_volunteers, []
@@ -76,7 +80,7 @@ RSpec.describe "supervisors/edit", type: :view do
 
     it "shows profile info form fields as disabled for a supervisor editing another supervisor" do
       enable_pundit(view, supervisor)
-
+      allow(view).to receive(:current_organization).and_return(supervisor.casa_org)
       assign :supervisor, build_stubbed(:supervisor, casa_org: build_stubbed(:casa_org))
       assign :all_volunteers_ever_assigned, [volunteer]
       assign :available_volunteers, []
@@ -91,7 +95,7 @@ RSpec.describe "supervisors/edit", type: :view do
     it "shows for an admin editing a supervisor" do
       enable_pundit(view, supervisor)
       allow(view).to receive(:current_user).and_return(admin)
-
+      
       assign :supervisor, supervisor
       assign :all_volunteers_ever_assigned, [volunteer]
       assign :available_volunteers, []
@@ -115,6 +119,7 @@ RSpec.describe "supervisors/edit", type: :view do
     end
 
     it "shows for an admin editing a supervisor" do
+      
       render template: "supervisors/edit"
 
       expect(rendered).to have_text("Change to Admin")
@@ -124,7 +129,7 @@ RSpec.describe "supervisors/edit", type: :view do
     it "does not show for a supervisor editing a supervisor" do
       enable_pundit(view, supervisor)
       allow(view).to receive(:current_user).and_return(supervisor)
-
+      allow(view).to receive(:current_organization).and_return(supervisor.casa_org)
       render template: "supervisors/edit"
 
       expect(rendered).not_to have_text("Change to Admin")

@@ -8,7 +8,7 @@ RSpec.describe "volunteers/edit", type: :view do
     administrator = build_stubbed :casa_admin
     enable_pundit(view, administrator)
     allow(view).to receive(:current_user).and_return(administrator)
-
+    allow(view).to receive(:current_organization).and_return(administrator.casa_org)
     assign :volunteer, volunteer
     assign :supervisors, []
 
@@ -21,7 +21,7 @@ RSpec.describe "volunteers/edit", type: :view do
     administrator = build_stubbed :casa_admin
     enable_pundit(view, administrator)
     allow(view).to receive(:current_user).and_return(administrator)
-
+    allow(view).to receive(:current_organization).and_return(administrator.casa_org)
     assign :volunteer, volunteer
     assign :supervisors, []
 
@@ -34,7 +34,7 @@ RSpec.describe "volunteers/edit", type: :view do
     supervisor = build_stubbed :supervisor
     enable_pundit(view, supervisor)
     allow(view).to receive(:current_user).and_return(supervisor)
-
+    allow(view).to receive(:current_organization).and_return(supervisor.casa_org)
     assign :volunteer, volunteer
     assign :supervisors, []
 
@@ -47,7 +47,7 @@ RSpec.describe "volunteers/edit", type: :view do
     supervisor = build_stubbed :supervisor, casa_org: org
     enable_pundit(view, supervisor)
     allow(view).to receive(:current_user).and_return(supervisor)
-
+    allow(view).to receive(:current_organization).and_return(supervisor.casa_org)
     assign :volunteer, volunteer
     assign :supervisors, []
 
@@ -60,7 +60,7 @@ RSpec.describe "volunteers/edit", type: :view do
     different_supervisor = build_stubbed :supervisor
     enable_pundit(view, different_supervisor)
     allow(view).to receive(:current_user).and_return(different_supervisor)
-
+    allow(view).to receive(:current_organization).and_return(different_supervisor.casa_org)
     assign :volunteer, volunteer
     assign :supervisors, []
 
@@ -73,7 +73,7 @@ RSpec.describe "volunteers/edit", type: :view do
     supervisor = build_stubbed :supervisor
     enable_pundit(view, supervisor)
     allow(view).to receive(:current_user).and_return(supervisor)
-
+    allow(view).to receive(:current_organization).and_return(supervisor.casa_org)
     assign :volunteer, volunteer
     assign :supervisors, []
 
@@ -95,7 +95,7 @@ RSpec.describe "volunteers/edit", type: :view do
     it "allows an administrator resend invitation to a volunteer" do
       enable_pundit(view, supervisor)
       allow(view).to receive(:current_user).and_return(admin)
-
+      allow(view).to receive(:current_organization).and_return(admin.casa_org)
       assign :volunteer, volunteer
       assign :supervisors, []
 
@@ -107,7 +107,7 @@ RSpec.describe "volunteers/edit", type: :view do
     it "allows a supervisor to resend invitation to a volunteer" do
       enable_pundit(view, supervisor)
       allow(view).to receive(:current_user).and_return(supervisor)
-
+      allow(view).to receive(:current_organization).and_return(supervisor.casa_org)
       assign :volunteer, volunteer
       assign :supervisors, []
 
