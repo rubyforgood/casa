@@ -446,12 +446,13 @@ RSpec.describe "volunteers/edit", type: :system do
       it "shows 'Address for mileage reimbursement' label" do
         expect(page).to have_text "Address for mileage reimbursement"
         expect(page).to have_selector "input[type=text][id=volunteer_address_attributes_content]"
-        fill_in "volunteer_address_attributes_content", with: "123 Main St"
       end
 
       it "updates successfully" do
+        fill_in "volunteer_address_attributes_content", with: "123 Main St"
         click_on "Submit"
         expect(page).to have_text "Volunteer was successfully updated."
+        expect(page).to have_selector("input[value='123 Main St']")
       end
     end
 
