@@ -33,7 +33,7 @@ class User < ApplicationRecord
   has_many :sms_notification_events, through: :user_sms_notification_events
   has_many :notes, as: :notable
   has_one :address
-  
+
   accepts_nested_attributes_for :user_sms_notification_events, :address, allow_destroy: true
 
   scope :active, -> { where(active: true) }
@@ -131,10 +131,6 @@ class User < ApplicationRecord
   def serving_transition_aged_youth?
     actively_assigned_and_active_cases.where(transition_aged_youth: true).any?
   end
-end
-
-def update_with_address(user_attr)
-
 end
 
 # == Schema Information
