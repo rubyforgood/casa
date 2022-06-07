@@ -435,4 +435,33 @@ RSpec.describe "volunteers/edit", type: :system do
       expect(page).to have_content("Sorry, you are not authorized to perform this action.")
     end
   end
+
+  describe "updating volunteer address" do
+    before do
+      sign_in admin
+      visit edit_volunteer_path(volunteer)
+    end
+
+    context "with mileage reimbursement turned on" do
+      it "shows 'Address for mileage reimbursement' label" do
+        expect(page).to have_text "Address for mileage reimbursement"
+        expect(page).to have_selector "input[type=text][id=volunteer_address_attributes_content]" 
+        fill_in "volunteer_address_attributes_content", with: "123 Main St"
+      end
+
+      it "updates successfully" do
+        click_on "Submit"
+        expect(page).to have_text "Volunteer was successfully updated."
+      end
+    end
+
+    context "with mileage reimbursement turned off" do
+      let(:organization) { create(:casa_org, show_driving_reimbursement: false) }
+      let(:volunteer) { create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id) }
+      it "won't show 'Address for mileage reimbursement' label" do
+        expect(page).not_to have_text "Address for mileage reimbursement"
+        expect(page).not_to have_selector "input[type=text][id=volunteer_address_attributes_content]" 
+      end
+    end
+  end
 end
