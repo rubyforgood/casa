@@ -32,7 +32,9 @@
         <%= a.text_field :content, class: "form-control" %>
       <% end %>
     <% else %>
-      <input class="form-control" type="text" placeholder="<%= resource.addresses.pick.content %>" autocomplete="off" readonly>
+      <%= f.fields_for :address, (resource.address ? nil : Address.new) do |a| %>
+        <%= a.text_field :content, class: "form-control", readonly: true %>
+      <% end %>
     <% end %>
   </div>
 <% end %>
