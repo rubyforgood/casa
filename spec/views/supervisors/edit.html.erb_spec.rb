@@ -15,7 +15,6 @@ RSpec.describe "supervisors/edit", type: :view do
     assign :supervisor, supervisor
     assign :all_volunteers_ever_assigned, [volunteer]
     assign :available_volunteers, []
-    
 
     render template: "supervisors/edit"
 
@@ -33,8 +32,6 @@ RSpec.describe "supervisors/edit", type: :view do
     assign :supervisor_has_unassigned_volunteers, true
     assign :all_volunteers_ever_assigned, [volunteer]
     assign :available_volunteers, []
-
-    
 
     render template: "supervisors/edit"
 
@@ -95,7 +92,7 @@ RSpec.describe "supervisors/edit", type: :view do
     it "shows for an admin editing a supervisor" do
       enable_pundit(view, supervisor)
       allow(view).to receive(:current_user).and_return(admin)
-      
+
       assign :supervisor, supervisor
       assign :all_volunteers_ever_assigned, [volunteer]
       assign :available_volunteers, []
@@ -119,7 +116,6 @@ RSpec.describe "supervisors/edit", type: :view do
     end
 
     it "shows for an admin editing a supervisor" do
-      
       render template: "supervisors/edit"
 
       expect(rendered).to have_text("Change to Admin")
