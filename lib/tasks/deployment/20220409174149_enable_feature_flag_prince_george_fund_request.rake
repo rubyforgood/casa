@@ -1,7 +1,7 @@
 namespace :after_party do
-  desc 'Deployment task: enable_prince_george_fund_request'
-  task enable_prince_george_fund_request: :environment do
-    puts "Running deploy task 'enable_prince_george_fund_request'"
+  desc 'Deployment task: enable_feature_flag_prince_george_fund_request.rake'
+  task enable_feature_flag_prince_george_fund_request: :environment do
+    puts "Running deploy task 'enable_feature_flag_prince_george_fund_request'"
 
     casa_org = CasaOrg.find_by(name: "Prince George CASA")
     if casa_org
