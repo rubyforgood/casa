@@ -305,14 +305,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_19_233803) do
   end
 
   create_table "learning_hours", force: :cascade do |t|
-    t.integer "duration_minutes", null: false
-    t.datetime "occurred_at", precision: nil, null: false
     t.bigint "user_id", null: false
     t.integer "learning_type", default: 5
+    t.string "name", null: false
+    t.integer "duration_minutes", null: false
+    t.integer "duration_hours", null: false
+    t.datetime "occurred_at", precision: nil, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "name"
-    t.integer "duration_hours"
     t.index ["user_id"], name: "index_learning_hours_on_user_id"
   end
 

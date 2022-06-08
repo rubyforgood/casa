@@ -31,10 +31,10 @@ end
 # Table name: learning_hours
 #
 #  id               :bigint           not null, primary key
-#  duration_hours   :integer
+#  duration_hours   :integer          not null
 #  duration_minutes :integer          not null
 #  learning_type    :integer          default("other")
-#  name             :string
+#  name             :string           not null
 #  occurred_at      :datetime         not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null

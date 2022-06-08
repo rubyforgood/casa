@@ -21,7 +21,7 @@
           <% if current_user.volunteer? %>
             <%= menu_item(label: t(".menu_item.case_contacts"), path: case_contacts_path) %>
             <%= menu_item(label: t(".menu_item.learning_hours"),
-            path: volunteer_learning_hours_path(user_id: current_user.id)) %>
+            path: volunteer_learning_hours_path(volunteer_id: current_user.id)) %>
           <% end %>
           <% if current_user.serving_transition_aged_youth? %>
             <%= menu_item(label: t(".menu_item.emancipation_checklists"), path: emancipation_checklists_path) %>

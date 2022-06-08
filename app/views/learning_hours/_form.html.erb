@@ -1,5 +1,5 @@
 
-<%= form_with model: LearningHour, url: volunteer_learning_hours_path, local: true, id: "learning-hours-form" do |form| %>
+<%= form_with model: LearningHour, url: volunteer_learning_hours_path(volunteer_id: current_user.id), local: true, id: "learning-hours-form" do |form| %>
 
   <div class="mt-2">
     <%= render "/shared/error_messages", resource: @learning_hour %>
