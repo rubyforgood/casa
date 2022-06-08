@@ -19,16 +19,16 @@ class FundRequestsController < ApplicationController
 
   def parsed_params
     params.permit(
-        :submitter_email,
-        :youth_name,
-        :payment_amount,
-        :deadline,
-        :request_purpose,
-        :payee_name,
-        :requested_by_and_relationship,
-        :other_funding_source_sought,
-        :impact,
-        :extra_information
+      :submitter_email,
+      :youth_name,
+      :payment_amount,
+      :deadline,
+      :request_purpose,
+      :payee_name,
+      :requested_by_and_relationship,
+      :other_funding_source_sought,
+      :impact,
+      :extra_information
     )
   end
 end

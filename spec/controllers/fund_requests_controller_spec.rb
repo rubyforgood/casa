@@ -19,17 +19,17 @@ RSpec.describe FundRequestsController, type: :controller do
     stub_const("ENV", {"FUND_REQUEST_RECIPIENT_EMAIL" => volunteer.email})
     expect {
       post :create, params: {
-          casa_case_id: casa_case.id,
-          submitter_email: "submitter_email@example.com",
-          youth_name: "youth_name",
-          payment_amount: "payment_amount",
-          deadline: "deadline",
-          request_purpose: "request_purpose",
-          payee_name: "payee_name",
-          requested_by_and_relationship: "requested_by_and_relationship",
-          other_funding_source_sought: "other_funding_source_sought",
-          impact: "impact",
-          extra_information: "extra_information"
+        casa_case_id: casa_case.id,
+        submitter_email: "submitter_email@example.com",
+        youth_name: "youth_name",
+        payment_amount: "payment_amount",
+        deadline: "deadline",
+        request_purpose: "request_purpose",
+        payee_name: "payee_name",
+        requested_by_and_relationship: "requested_by_and_relationship",
+        other_funding_source_sought: "other_funding_source_sought",
+        impact: "impact",
+        extra_information: "extra_information"
       }
     }.to change { ActionMailer::Base.deliveries.count }.by(1)
     expect(assigns(:fund_request)).to be_present
