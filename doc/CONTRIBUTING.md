@@ -28,7 +28,7 @@ If you are so inclined, you can open a draft PR as you continue to work on it.
 1. Push to your branch/fork and submit a pull request. Include the issue number (ex. `Resolves #1`) in the PR description. This will ensure the issue gets closed automatically when the pull request gets merged.
 
 #### Pull Request Checks
-There are scripts that check the code to ensure the code is working. Most of them need to pass. You can see the scripts run at the bottom of your pull request webpage. More about the scrips [here(coming soon)]() Pull requests are also manually reviewed. We may request changes after a manual review. We will try to respond to your PR quickly.  
+There are scripts that check the code to ensure the code is working. Most of them need to pass. You can see the scripts run at the bottom of your pull request webpage. More about the scrips [here(coming soon)](#) Pull requests are also manually reviewed. We may request changes after a manual review. We will try to respond to your PR quickly.  
 
 Some qualities of good pull requests:  
 * Small line diff count. Several small pull requests for a large issue are much more preferable to one big pull request.  
