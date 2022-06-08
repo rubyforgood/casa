@@ -6,12 +6,14 @@ on:
       - main
     paths:
       - '**/*.js'
+      - '**/*.json'
       - '**/*.jsx'
   pull_request:
     branches:
       - main
     paths:
       - '**/*.js'
+      - '**/*.json'
       - '**/*.jsx'
 
 jobs:
