@@ -14,6 +14,10 @@ You can read more about Git hooks [here](https://git-scm.com/docs/githooks).
 
 ## Hook Scripts
 
+### `build-assets`  
+Compiles js and css to be served b your local webserver  
+Usage: `./build-assets`
+
 ### `lint`  
 Lints files on the current branch  
 Usage: `./lint <diff policy>`  
