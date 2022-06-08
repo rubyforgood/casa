@@ -17,10 +17,11 @@
           <%= menu_item(label: inbox_label, path: notifications_path) %>
           <%= menu_item(label: t(".menu_item.supervisors"), path: supervisors_path, visible: policy(Supervisor).index?) %>
           <%= menu_item(label: t(".menu_item.volunteers"), path: volunteers_path, visible: policy(Volunteer).index?) %>
+          <%= menu_item(label: t(".menu_item.other_duties"), path: other_duties_path, visible: policy(OtherDuty).index?) %>
           <%= menu_item(label: cases_index_title, path: casa_cases_path) %>
           <% if current_user.volunteer? %>
             <%= menu_item(label: t(".menu_item.case_contacts"), path: case_contacts_path) %>
-            <%= menu_item(label: t(".menu_item.learning_hours"),
+            <%= menu_item(label: "Learning Hours",
             path: volunteer_learning_hours_path(volunteer_id: current_user.id)) %>
           <% end %>
           <% if current_user.serving_transition_aged_youth? %>

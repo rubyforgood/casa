@@ -57,6 +57,7 @@ models/notification.rb
 notifications/base_notification.rb
 notifications/followup_notification.rb
 notifications/followup_resolved_notification.rb
+notifications/youth_birthday_notification.rb
 policies/case_court_order_policy.rb
 policies/learning_hour_policy.rb
 presenters/base_presenter.rb

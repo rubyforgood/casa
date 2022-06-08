@@ -84,7 +84,7 @@ Rails.application.routes.draw do
   resources :emancipation_checklists, only: %i[index]
   resources :judges, only: %i[new create edit update]
   resources :notifications, only: :index
-  resources :other_duties, only: %i[new create edit update]
+  resources :other_duties, only: %i[new create edit index update]
 
   resources :supervisors, except: %i[destroy show], concerns: %i[with_datatable] do
     member do
@@ -109,7 +109,7 @@ Rails.application.routes.draw do
       get :impersonate
     end
     resources :notes, only: %i[create edit update destroy]
-    resources :learning_hours
+    resources :learning_hours, only: %i[index show new create edit update destroy]
   end
   resources :case_assignments, only: %i[create destroy] do
     member do
