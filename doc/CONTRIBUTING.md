@@ -25,7 +25,7 @@ If you are so inclined, you can open a draft PR as you continue to work on it.
 1. Run linters and fix any linting errors they brings up.  
    - (from the repo root) `./bin/git_hooks/lint`
 
-1. Push to your fork and submit a pull request. Include the issue number (ex. `Resolves #1`) in the PR description. This will ensure the issue gets closed automatically when the pull request gets merged.
+1. Push to your branch/fork and submit a pull request. Include the issue number (ex. `Resolves #1`) in the PR description. This will ensure the issue gets closed automatically when the pull request gets merged.
 
 1. Pull requests are manually reviewed. We may request changes after a manual review. We will try to respond to your PR quickly(1 week).  
 
