@@ -9,15 +9,6 @@
                   class: "btn btn-primary pull-left casa-case-button") %>
     <%- end %>
     <% if @casa_case.active? %>
-<<<<<<< HEAD
-      <%= link_to t(".button.edit_case"), edit_casa_case_path(@casa_case),
-                  class: "btn btn-primary pull-left casa-case-button" %>
-    <% end %>
-    <% if @casa_case.in_transition_age? %>
-      <%= link_to(casa_case_emancipation_path(@casa_case),
-                  class: "btn btn-primary pull-left casa-case-button") do %>
-        <%= t(".button.emancipation") %>
-=======
       <%= link_to 'Edit Case Details', edit_casa_case_path(@casa_case),
               class: "btn btn-primary pull-left casa-case-button" %>
     <% end %>
@@ -25,13 +16,11 @@
       <%= link_to(casa_case_emancipation_path(@casa_case),
               class: "btn btn-primary pull-left casa-case-button") do %>
         Emancipation
->>>>>>> main
         <span class="badge badge-light">
           <%= @casa_case.decorate.emancipation_checklist_count %>
         </span>
       <% end %>
     <% end %>
-<<<<<<< HEAD
     <%= form_with url: generate_case_court_reports_path, local: false, class: "d-inline" do |form| %>
       <%= form.hidden_field :case_number, value: @casa_case.case_number %>
       <%= button_tag t(".button.generate_report"), type: :submit,
@@ -42,15 +31,6 @@
     <% end %>
     <% if @casa_case.casa_org.show_fund_request %>
       <%= link_to("New Fund Request", new_casa_case_fund_request_path(@casa_case), class: "btn btn-primary pull-left casa-case-button") %>
-=======
-      <%= form_with url: generate_case_court_reports_path, local: false, class: "d-inline" do |form| %>
-        <%= form.hidden_field :case_number, value: @casa_case.case_number %>
-        <%= button_tag 'Generate Report', type: :submit,
-                       data: { button_name: 'Generate Report' },
-                       id: "btnGenerateReport",
-                       class: "btn btn-success pull-right mb-2" %>
-        <i id="spinner" class='fas fa-spin d-none pull-right'>⏳</i>
->>>>>>> main
     <% end %>
   </div>
 </div>
