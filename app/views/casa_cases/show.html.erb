@@ -30,7 +30,8 @@
       <i id="spinner" class='fas fa-spin d-none pull-right'>⏳</i>
     <% end %>
     <% if @casa_case.casa_org.show_fund_request %>
-      <%= link_to("New Fund Request", new_casa_case_fund_request_path(@casa_case), class: "btn btn-primary pull-left casa-case-button") %>
+      <%= link_to("New Fund Request", new_casa_case_fund_request_path(@casa_case),
+class: "btn btn-primary pull-left casa-case-button") %>
     <% end %>
   </div>
 </div>
