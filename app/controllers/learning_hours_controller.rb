@@ -1,5 +1,6 @@
 class LearningHoursController < ApplicationController
   before_action :set_learning_hour, only: %i[show edit update destroy]
+  after_action :verify_authorized, except: :index # TODO add this back and fix all tests
 
   def index
     @learning_hours = LearningHour.where(user_id: current_user.id)
