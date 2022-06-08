@@ -1,6 +1,6 @@
 class CaseAssignment < ApplicationRecord
   belongs_to :casa_case
-  belongs_to :volunteer, class_name: "User", inverse_of: "case_assignments"
+  belongs_to :volunteer, class_name: "User"
 
   validates :casa_case_id, uniqueness: {scope: :volunteer_id} # only 1 row allowed per case-volunteer pair
   validates :volunteer, presence: true

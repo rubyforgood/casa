@@ -525,8 +525,8 @@ RSpec.describe "case_contacts/new", type: :system do
         volunteer_casa_case_one = volunteer.casa_cases.first
         create_contact_types(volunteer_casa_case_one.casa_org)
 
-        current_date_string = DateTime.now.strftime("%Y-%m-%e")
-        tomorrow_date_string = (DateTime.now + 1).strftime("%Y-%m-%e")
+        current_date_string = DateTime.now.strftime("%Y-%m-%d")
+        tomorrow_date_string = (DateTime.now + 1).strftime("%Y-%m-%d")
 
         sign_in volunteer
 

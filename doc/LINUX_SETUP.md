@@ -24,8 +24,13 @@ sudo apt install -y libpq-dev      # Helps compile C programs to be able to comm
 #     Create the file repository configuration:
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 
-#     Import the repository signing key:
-wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+#     Add the repo key to your keyring:
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | sudo tee /usr/share/keyrings/postgres-archive-keyring.gpg
+
+#     Open /etc/apt/sources.list.d/pgdg.list with super user permissions
+#     Paste "[signed-by=/usr/share/keyrings/postgres-archive-keyring.gpg]" between "deb" and "http://apt.postgresql..."
+#       Example: deb [signed-by=/usr/share/keyrings/postgres-archive-keyring.gpg] http://apt.postgresql.org/pub/repos/apt jammy-pgdg main
+#     Save the file
 
 #     Update the package lists:
 sudo apt update
@@ -52,7 +57,7 @@ wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 nvm ls-remote | grep -i 'Latest LTS'
 
 # Install an LTS version
-nvm install lts/gallium # Latest might not be gallium
+nvm install lts/fermium
 # Update npm
 npm i -g npm@latest
 ```
@@ -60,10 +65,6 @@ npm i -g npm@latest
 ```
 # Install Yarn
 npm i -g yarn
-# OR
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-sudo apt update && sudo apt install --no-install-recommends yarn
 ```
 
 ```
@@ -99,71 +100,44 @@ sudo apt-get -y update
 sudo apt-get -y install google-chrome-stable
 ```
 
-#### Creating an SSH Key Pair
+## Connecting to Github via ssh  
+Connecting to Gihub via ssh prevents being required to login very often when using git commands. 
 
-(If you are using a Vagrant VM and want to use your host OS key pair, go back up to the Vagrant
-instructions to see how to do that.)
+### Creating an SSH Key Pair
+ - Open Terminal.
+ - Paste the text below, substituting in your GitHub email address.  
+`ssh-keygen -t ed25519 -C "your_email@example.com"`
+ - For all prompts simply press enter to set default values.
 
-If you do not already have an SSH key pair, you can create it with the defaults with this
-(see [this article](https://stackoverflow.com/questions/43235179/how-to-execute-ssh-keygen-without-prompt#:~:text=If%20you%20don't%20want,flag%20%2Df%20to%20the%20command.&text=This%20way%20user%20will%20not,file(s)%20already%20exist.&text=leave%20out%20the%20%3E%2Fdev%2F,you%20want%20to%20print%20output.)
-for more information about this command):
+#### Adding your SSH key to the ssh-agent
+ - Run `eval "$(ssh-agent -s)"` in your terminal to start the ssh-agent in the background. It will use very few resources.
+ - Run `ssh-add ~/.ssh/id_ed25519` to add your private key to the ssh agent.
 
-`ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa <<<y 2>&1 >/dev/null`
+See [github's article](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) for more details/updates.
 
-#### Adding Your Key to Your Github Account
+### Add your ssh key to your github account.  
+[See github's guide](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
 
-Skip this step if your public SSH key is already registered with your Github account.
+### Test Your ssh Connection
+ - Run `ssh -T git@github.com`
+ - If you see `Are you sure you want to continue connecting (yes/no)?`, enter `yes`
+ - If you see `Hi username! You've successfully authenticated, but GitHub does not provide shell access.`, the connection is set up correctly.
 
-* Go to https://github.com/login and log in.
-* Click the circle, probably containing your photo, in the upper right corner.
-* Select "Settings".
-* Select "SSH and GPG Keys" on the left panel.
-* Click the green "New SSH Key" on the top right of the window.
-* For "Title", input something descriptive of this host to you
-* For "Key", paste the content of your ~/.ssh/id_rsa.pub file.
-* Press the green "Add SSH Key" button to submit the new key.
+## Project Installation
 
-#### Final Steps
+`cd` to the directory where you would like to install CASA  
 
-(If your host is a Vagrant VM, `vagrant ssh` into it if you are not already there.)
-
-`cd` to the directory under which you would like to install the CASA software
-(if the home directory, and you are not already there, `cd` alone will work). Then:
-
+Run this series of commands to install the project.  
 ```
-git clone git@github.com:rubyforgood/casa.git
+git clone git@github.com:rubyforgood/casa.git # Download a copy of the repository locally
+cd casa # Go into the folder containing casa
+bundle install # Install ruby dependencies
+bundle exec rails db:setup # Create your local test database
+bundle exec rails db:migrate # Update the database if it's out of date
+bundle exec rake after_party:run # Run post deployment tasks
+
+yarn # install javascript dependencies
+yarn build # compile javascript
+yarn build:css # compile css
 ```
-
-If you see this, respond with yes:
-
-```
-The authenticity of host 'github.com (140.82.112.3)' can't be established.
-RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
-Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-```
-
-Now to set up the gems, JavaScript libraries, and data base:
-
-```
-cd casa
-bin/rails db:setup
-bin/update
-yarn
-```
-
-(`bin/update` is a very useful script that should be run after each `git pull` and can be used whenever you want to make sure your setup is up to date with respect to code and configuration changes.)
-
-Run the tests and/or the server!:
-
-```
-bin/rails spec               # run the tests
-
-bin/rails server             # run the server only for localhost clients
-# or
-bin/rails server -b 0.0.0.0  # run the server for any network-connected clients
-```
-
-If the tests all pass and you can access the running Rails server from the host OS,
-then your installation is successful!
-
-A `bin/login` script is provided to simplify the launching and logging in to the application. It cannot be used on the Vagrant VM since the Vagrant VM has no graphical environment.
+[Back to the main readme for steps to test your installation.](https://github.com/rubyforgood/casa#running-the-app--verifying-installation)

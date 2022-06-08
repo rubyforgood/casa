@@ -162,6 +162,14 @@ Login as an all CASA admin at http://localhost:3000/all_casa_admins/sign_in. An 
 
 The password for all seed users is `12345678`
 
+**Local email**
+
+We are using [Letter Opener](https://github.com/ryanb/letter_opener) in
+development to receive mail. All emails sent in development should open in a
+new tab in the browser.
+
+To see local email previews, check out http://localhost:3000/rails/mailers
+
 **Running Tests**
  - run the ruby test suite `bin/rails spec`
  - run the javascript test suite `yarn test`
@@ -176,14 +184,6 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 1. `rake factory_bot:lint` if you have been editing factories and want to find factories and traits which produce invalid objects
 
 If additional work arises from your pull request that is outside the scope of the issue it resolves, please open a new issue.
-
-**Local email**
-
-We are using [Letter Opener](https://github.com/ryanb/letter_opener) in
-development to receive mail. All emails sent in development should open in a
-new tab in the browser.
-
-To see local email previews, check out http://localhost:3000/rails/mailers
 
 **Post-deployment tasks**
 
