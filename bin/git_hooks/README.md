@@ -38,7 +38,7 @@ Usage: `./update-dependencies`
 Updates the `main` and current branch by rebasing your commits on top of changes from the official casa repo  
 This script assumes no commits were made directly to main  
 Usage: `./update-branch <remote name>`  
- + `<remote name>` is the name of the remote pointing to the official casa repo
+ + `<remote name>` is the name of the [remote](https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes) pointing to the official casa repo
    
 ## Example Hooks
 ### pre-push
