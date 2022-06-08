@@ -5,7 +5,7 @@ If you have any questions about an issue, comment on the issue, open a new issue
   
 You won't be yelled at for giving your best effort. The worst that can happen is that you'll be politely asked to change something. We appreciate any sort of contributions, and don't want a wall of rules to get in the way of that.
 
-## Contributing Procedure  
+## Contributing Steps  
 ### Issues  
 All work is organized by issues.  
 [Find issues here.][issues]  
