@@ -13,6 +13,7 @@ RSpec.describe "reimbursements/index", type: :view do
 
     case_contact = create :case_contact, :wants_reimbursement, creator: volunteer, contact_made: true, occurred_at: Time.current - 6.days
     assign :reimbursements, [case_contact]
+    assign :grouped_reimbursements, []
     render template: "reimbursements/index"
 
     expect(rendered).not_to have_css("span.translation_missing")
