@@ -1,4 +1,4 @@
-This folder contains helper scripts for Git hooks.
+This folder contains helper scripts for [Git hooks](https://www.atlassian.com/git/tutorials/git-hooks).
 
 To create a hook, make a file inside the directory `.git/hooks/` with the name of the hook you want to set up. Do not use a file extension.
 For example, if you want to set up a pre-commit hook, the file should be called `pre-commit`, or if you want a pre-push hook, it should be called `pre-push`.
@@ -13,6 +13,10 @@ See [Example Hooks](#example-hooks) below for how you might want to set these up
 You can read more about Git hooks [here](https://git-scm.com/docs/githooks).
 
 ## Hook Scripts
+
+### `build-assets`  
+Compiles js and css to be served b your local webserver  
+Usage: `./build-assets`
 
 ### `lint`  
 Lints files on the current branch  
@@ -34,7 +38,7 @@ Usage: `./update-dependencies`
 Updates the `main` and current branch by rebasing your commits on top of changes from the official casa repo  
 This script assumes no commits were made directly to main  
 Usage: `./update-branch <remote name>`  
- + `<remote name>` is the name of the remote pointing to the official casa repo
+ + `<remote name>` is the name of the [remote](https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes) pointing to the official casa repo
    
 ## Example Hooks
 ### pre-push
@@ -46,5 +50,16 @@ Usage: `./update-branch <remote name>`
     #!/bin/sh
 
     ./bin/git_hooks/update-dependencies
+    ./bin/git_hooks/build-assets
     # migrate-all has to come after update-dependencies because it relies on bundle
     ./bin/git_hooks/migrate-all
+    
+## Disabling Hook Scripts  
+If you ever need to disable a certain script from running in a hook, simply comment it out using `#`.  
+  
+Example:  
+
+    #!/bin/sh
+  
+    ./bin/git_hooks/update-branch actual_casa
+    #./bin/git_hooks/lint --unpushed # <-- This hook is now disabled

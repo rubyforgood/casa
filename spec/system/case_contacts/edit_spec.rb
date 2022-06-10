@@ -21,7 +21,7 @@ RSpec.describe "case_contacts/edit", type: :system do
       click_on "Submit"
 
       case_contact.reload
-      expect(page).to have_text "Case contact created at #{case_contact.created_at}, was successfully updated."
+      expect(page).to have_text "Case contact created at #{case_contact.created_at.strftime("%-I:%-M %p on %m-%e-%Y")}, was successfully updated."
       expect(case_contact.casa_case_id).to eq casa_case.id
       expect(case_contact.duration_minutes).to eq 105
       expect(case_contact.medium_type).to eq "letter"
@@ -58,7 +58,7 @@ RSpec.describe "case_contacts/edit", type: :system do
       click_on "Submit"
 
       case_contact.reload
-      expect(page).to have_text "Case contact created at #{case_contact.created_at}, was successfully updated."
+      expect(page).to have_text "Case contact created at #{case_contact.created_at.strftime("%-I:%-M %p on %m-%e-%Y")}, was successfully updated."
       expect(case_contact.casa_case_id).to eq casa_case.id
       expect(case_contact.duration_minutes).to eq 105
       expect(case_contact.medium_type).to eq "letter"
