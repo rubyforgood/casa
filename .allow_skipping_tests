@@ -26,6 +26,7 @@ controllers/health_controller.rb
 controllers/hearing_types_controller.rb
 controllers/imports_controller.rb
 controllers/judges_controller.rb
+controllers/learning_hours_controller.rb
 controllers/mileage_rates_controller.rb
 controllers/mileage_reports_controller.rb
 controllers/notes_controller.rb
@@ -41,6 +42,7 @@ datatables/application_datatable.rb
 decorators/application_decorator.rb
 decorators/case_assignment_decorator.rb
 decorators/court_date_decorator.rb
+decorators/learning_hour_decorator.rb
 helpers/all_casa_admins/casa_orgs_helper.rb
 helpers/contact_types_helper.rb
 helpers/date_helper.rb
@@ -57,6 +59,7 @@ notifications/followup_notification.rb
 notifications/followup_resolved_notification.rb
 notifications/youth_birthday_notification.rb
 policies/case_court_order_policy.rb
+policies/learning_hour_policy.rb
 presenters/base_presenter.rb
 presenters/case_contact_presenter.rb
 services/case_contacts_export_csv_service.rb

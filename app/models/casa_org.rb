@@ -3,6 +3,7 @@ class CasaOrg < ApplicationRecord
   CASA_DEFAULT_LOGO = Rails.root.join("public", "logo.jpeg")
 
   before_create :set_slug
+  before_update :sanitize_svg
 
   validates :name, presence: true, uniqueness: true
   validates_with CasaOrgValidator
@@ -73,6 +74,16 @@ class CasaOrg < ApplicationRecord
     end
   end
 
+  private
+
+  def sanitize_svg
+    if attachment_changes["logo"]
+      file = attachment_changes["logo"].attachable
+      sanitized_file = SvgSanitizerService.sanitize(file)
+      logo.unfurl(sanitized_file)
+    end
+  end
+
   # def to_param
   #   id
   #   # slug # TODO use slug eventually for routes
@@ -89,6 +100,7 @@ end
 #  footer_links               :string           default([]), is an Array
 #  name                       :string           not null
 #  show_driving_reimbursement :boolean          default(TRUE)
+#  show_fund_request          :boolean          default(FALSE)
 #  slug                       :string
 #  twilio_account_sid         :string
 #  twilio_api_key_secret      :string

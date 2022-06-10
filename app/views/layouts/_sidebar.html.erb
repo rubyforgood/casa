@@ -6,8 +6,15 @@
                          alt: t(".image.alt.logo"),
                          class: "d-inline-block align-text-bottom") %>
     <% else %>
-      <%= image_tag(current_organization.logo.variant(resize_to_limit: [200, 100]),
-                    alt: t(".image.alt.logo")) %>
+      <% if current_organization.logo.variable? %>
+        <%= image_tag(current_organization.logo.variant(resize_to_limit: [200, 100]),
+                      alt: t(".image.alt.logo")) %>
+      <% else %>
+        <%= image_tag(current_organization.logo,
+                      width: 200,
+                      height: 100,
+                      alt: t(".image.alt.logo")) %>
+      <% end %>
     <% end %>
   </div>
   <div class="sidebar-container">
@@ -21,6 +28,8 @@
           <%= menu_item(label: cases_index_title, path: casa_cases_path) %>
           <% if current_user.volunteer? %>
             <%= menu_item(label: t(".menu_item.case_contacts"), path: case_contacts_path) %>
+            <%= menu_item(label: "Learning Hours",
+            path: volunteer_learning_hours_path(volunteer_id: current_user.id || 0)) %>
           <% end %>
           <% if current_user.serving_transition_aged_youth? %>
             <%= menu_item(label: t(".menu_item.emancipation_checklists"), path: emancipation_checklists_path) %>

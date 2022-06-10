@@ -7,7 +7,7 @@ class FundRequestMailer < ApplicationMailer
     submitter_email = fund_request.submitter_email
     Bugsnag.notify("No user for FUND_REQUEST_RECIPIENT_EMAIL for fund request from: #{submitter_email}") unless to_recipient_email
     @inputs = fund_request.as_json
-    submitter_name = fund_request.submitter_email.split("@").first
+    submitter_name = fund_request.submitter_email&.split("@")&.first
     begin
       pdf_attachment = FdfInputsService.new(
         inputs: @inputs,

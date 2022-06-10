@@ -11,7 +11,7 @@ Install [Docker Community Edition](https://docs.docker.com/install/) if it is no
 The automatic setup explained here relies on Bash scripts in the docker directory to execute the most basic and frequent tasks in Docker.  There is substantially less typing to do under the automatic setup than under the manual setup.
 
 ### Initial setup
-1. Clone the respository to your local machine: `git clone
+1. Clone the repository to your local machine: `git clone
    https://github.com/rubyforgood/casa.git` or create a fork in GitHub if you
    don't have permission to commit directly to this repo.
 2. Change into the application directory: `cd casa`
