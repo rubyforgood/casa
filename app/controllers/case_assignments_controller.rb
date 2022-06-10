@@ -57,7 +57,7 @@ class CaseAssignmentsController < ApplicationController
   end
 
   def show_hide_contacts
-    authorize @case_assignment, :allowed_show_or_hide_contacts?
+    authorize @case_assignment, :show_or_hide_contacts?
     casa_case = @case_assignment.casa_case
     volunteer = @case_assignment.volunteer
 

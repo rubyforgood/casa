@@ -28,7 +28,7 @@ class CaseAssignmentPolicy < ApplicationPolicy
     !record.active? && !record.hide_old_contacts? && admin_or_supervisor?
   end
 
-  def allowed_show_or_hide_contacts?
+  def show_or_hide_contacts?
     hide_contacts? || !hide_contacts?
   end
 end
