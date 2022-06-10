@@ -178,7 +178,7 @@
     </div>
   </div>
 
-  <% if Pundit.policy(current_user, @casa_case).assign_volunteers? %>
+  <% if Pundit.policy(current_user, @casa_case).assign_volunteers? && casa_case.persisted? %>
     <%= render "volunteer_assignment" %>
   <% end %>
 </div>

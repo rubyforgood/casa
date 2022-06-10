@@ -22,11 +22,11 @@
     "bootstrap-datepicker": "^1.9.0",
     "bootstrap-select": "^1.13.18",
     "datatables.net-dt": "^1.12.1",
-    "esbuild": "^0.14.42",
+    "esbuild": "^0.14.43",
     "faker": "^5.5.3",
     "jquery": "^3.6.0",
     "popper.js": "^1.16.1",
-    "sass": "^1.52.2",
+    "sass": "^1.52.3",
     "select2": "^4.0.13",
     "sweetalert2": "^11.3.5",
     "turbolinks": "^5.2.0"

@@ -116,4 +116,13 @@ RSpec.describe "casa_cases/new", type: :system do
       expect(page).to have_content(contact_type_group.name)
     end
   end
+
+  context "when trying to assign a volunteer to a case" do
+    it "should not be able to assign volunteers" do
+      visit new_casa_case_path
+
+      expect(page).not_to have_content("Manage Volunteers")
+      expect(page).not_to have_css("#volunteer-assignment")
+    end
+  end
 end
