@@ -66,6 +66,13 @@ class CasaOrg < ApplicationRecord
     self.slug = name.parameterize
   end
 
+  def generate_contact_types_and_hearing_types
+    ActiveRecord::Base.transaction do
+      ContactTypeGroup.generate_for_org!(self)
+      HearingType.generate_for_org!(self)
+    end
+  end
+
   # def to_param
   #   id
   #   # slug # TODO use slug eventually for routes
