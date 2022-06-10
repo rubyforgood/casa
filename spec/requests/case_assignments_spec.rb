@@ -164,4 +164,20 @@ RSpec.describe "/case_assignments", type: :request do
       end
     end
   end
+
+  describe "PATCH /show_hide_contacts" do
+    context "when the 'case_assignment' is not active" do
+      it "hides case contacts" do
+        assignment = create(:case_assignment, casa_case: casa_case, active: false)
+
+        sign_in admin
+
+        expect {
+          patch show_hide_contacts_case_assignment_path(assignment)
+        }.to change { assignment.reload.hide_old_contacts? }
+
+        expect(response).to redirect_to  edit_casa_case_path(casa_case)
+      end
+    end
+  end
 end

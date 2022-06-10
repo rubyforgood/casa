@@ -94,6 +94,22 @@ RSpec.describe "casa_cases/show", type: :system do
         expect(page).not_to have_content("Add to Calendar")
       end
     end
+
+    context "when old case contacts are hidden" do
+      it "should display all case contacts to admin", js: true do
+        casa_case = create(:casa_case, casa_org: organization)
+        volunteer_1 = create(:volunteer, display_name: "Volunteer 1", casa_org: casa_case.casa_org)
+        volunteer_2 = create(:volunteer, display_name: "Volunteer 2", casa_org: casa_case.casa_org)
+        case_assignment_1 = create(:case_assignment, casa_case: casa_case, volunteer: volunteer_1)
+        case_assignment_2 = create(:case_assignment, casa_case: casa_case, volunteer: volunteer_2, active: false, hide_old_contacts: true)
+        case_contact_1 = create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_1, occurred_at: DateTime.now - 1)
+        case_contact_2 = create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2, occurred_at: DateTime.now - 1)
+       
+        visit casa_case_path(casa_case.id)
+
+        expect(page).to have_css("#case_contacts_list .card", count: 2)
+      end
+    end
   end
 
   context "supervisor user" do
@@ -141,6 +157,22 @@ RSpec.describe "casa_cases/show", type: :system do
         end
       end
     end
+
+    context "when old case contacts are hidden" do
+      it "should display all case contacts to supervisor", js: true do
+        casa_case = create(:casa_case, casa_org: organization)
+        volunteer_1 = create(:volunteer, display_name: "Volunteer 1", casa_org: casa_case.casa_org)
+        volunteer_2 = create(:volunteer, display_name: "Volunteer 2", casa_org: casa_case.casa_org)
+        case_assignment_1 = create(:case_assignment, casa_case: casa_case, volunteer: volunteer_1)
+        case_assignment_2 = create(:case_assignment, casa_case: casa_case, volunteer: volunteer_2, active: false, hide_old_contacts: true)
+        case_contact_1 = create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_1, occurred_at: DateTime.now - 1)
+        case_contact_2 = create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2, occurred_at: DateTime.now - 1)
+       
+        visit casa_case_path(casa_case.id)
+
+        expect(page).to have_css("#case_contacts_list .card", count: 2)
+      end
+    end
   end
 
   context "volunteer user" do
@@ -152,6 +184,25 @@ RSpec.describe "casa_cases/show", type: :system do
       expect(page).to have_content("Court Orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
       expect(page).to have_content(casa_case.case_court_orders[0].implementation_status_symbol)
+    end
+
+    context "when old case contacts are hidden" do
+      it "should display only visible cases to volunteer", js: true do
+        casa_case = create(:casa_case, casa_org: organization)
+        volunteer_1 = create(:volunteer, display_name: "Volunteer 1", casa_org: casa_case.casa_org)
+
+        sign_in volunteer_1
+
+        volunteer_2 = create(:volunteer, display_name: "Volunteer 2", casa_org: casa_case.casa_org)
+        case_assignment_1 = create(:case_assignment, casa_case: casa_case, volunteer: volunteer_1)
+        case_assignment_2 = create(:case_assignment, casa_case: casa_case, volunteer: volunteer_2, active: false, hide_old_contacts: true)
+        case_contact_1 = create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_1, occurred_at: DateTime.now - 1)
+        case_contact_2 = create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2, occurred_at: DateTime.now - 1)
+       
+        visit casa_case_path(casa_case.id)
+
+        expect(page).to have_css("#case_contacts_list .card", count: 1)
+      end
     end
   end
 
