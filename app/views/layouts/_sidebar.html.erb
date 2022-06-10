@@ -10,9 +10,9 @@
         <%= image_tag(current_organization.logo.variant(resize_to_limit: [200, 100]),
                       alt: t(".image.alt.logo")) %>
       <% else %>
-        <%= image_tag(current_organization.logo, 
-                      width: 200, 
-                      height: 100, 
+        <%= image_tag(current_organization.logo,
+                      width: 200,
+                      height: 100,
                       alt: t(".image.alt.logo")) %>
       <% end %>
     <% end %>

@@ -70,10 +70,10 @@ class CasaOrg < ApplicationRecord
   private
 
   def sanitize_svg
-    if self.attachment_changes['logo']
-      file = self.attachment_changes['logo'].attachable
+    if attachment_changes["logo"]
+      file = attachment_changes["logo"].attachable
       sanitized_file = SvgSanitizerService.sanitize(file)
-      self.logo.unfurl(sanitized_file)
+      logo.unfurl(sanitized_file)
     end
   end
 
