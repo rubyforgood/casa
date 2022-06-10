@@ -23,7 +23,7 @@ class ContactTypeGroup < ApplicationRecord
 
   class << self
     def generate_for_org!(casa_org)
-        DEFAULT_CONTACT_TYPE_GROUPS.each do |group_name, type_names|
+      DEFAULT_CONTACT_TYPE_GROUPS.each do |group_name, type_names|
         group = ContactTypeGroup.find_or_create_by!(
           casa_org: casa_org,
           name: group_name
