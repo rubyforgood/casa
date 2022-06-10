@@ -266,6 +266,25 @@ en:
         checklist: Checklist
         details: Details
       title: Emancipation Checklists
+  learning_hours:
+    index:
+      heading:
+        name: Title
+        type: Learning Type
+        occurred_at: Date
+        time: Time Spent 
+        action: Action
+      title: Learning Hours
+    form:
+      learning_hours_title: Learning Hours Title
+      learning_type: Type of Learning
+      duration: Learning Duration
+      occurred_on: Occurred On
+      create_button: Create New Learning Hours Entry
+      update_button: Edit Learning Hours Entry
+    confirm_note_content_dialog:
+        header: Congratulations
+        body: New entry created
   global:
     add_court_order: Add a court order
     court_orders: Court Orders - Please check that you didn't enter any youth names
@@ -381,6 +400,7 @@ en:
         admins: Admins
         case_contacts: Case Contacts
         emancipation_checklists: Emancipation Checklist(s)
+        learning_hours: Learning Hours
         other_duties: Other Duties
         supervisors: Supervisors
         volunteers: Volunteers

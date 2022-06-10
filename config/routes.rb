@@ -111,6 +111,7 @@ Rails.application.routes.draw do
       get :impersonate
     end
     resources :notes, only: %i[create edit update destroy]
+    resources :learning_hours, only: %i[index show new create edit update destroy]
   end
   resources :case_assignments, only: %i[create destroy] do
     member do
