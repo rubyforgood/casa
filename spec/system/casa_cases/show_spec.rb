@@ -100,11 +100,11 @@ RSpec.describe "casa_cases/show", type: :system do
         casa_case = create(:casa_case, casa_org: organization)
         volunteer_1 = create(:volunteer, display_name: "Volunteer 1", casa_org: casa_case.casa_org)
         volunteer_2 = create(:volunteer, display_name: "Volunteer 2", casa_org: casa_case.casa_org)
-        case_assignment_1 = create(:case_assignment, casa_case: casa_case, volunteer: volunteer_1)
-        case_assignment_2 = create(:case_assignment, casa_case: casa_case, volunteer: volunteer_2, active: false, hide_old_contacts: true)
-        case_contact_1 = create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_1, occurred_at: DateTime.now - 1)
-        case_contact_2 = create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2, occurred_at: DateTime.now - 1)
-       
+        create(:case_assignment, casa_case: casa_case, volunteer: volunteer_1)
+        create(:case_assignment, casa_case: casa_case, volunteer: volunteer_2, active: false, hide_old_contacts: true)
+        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_1, occurred_at: DateTime.now - 1)
+        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2, occurred_at: DateTime.now - 1)
+
         visit casa_case_path(casa_case.id)
 
         expect(page).to have_css("#case_contacts_list .card", count: 2)
@@ -163,11 +163,11 @@ RSpec.describe "casa_cases/show", type: :system do
         casa_case = create(:casa_case, casa_org: organization)
         volunteer_1 = create(:volunteer, display_name: "Volunteer 1", casa_org: casa_case.casa_org)
         volunteer_2 = create(:volunteer, display_name: "Volunteer 2", casa_org: casa_case.casa_org)
-        case_assignment_1 = create(:case_assignment, casa_case: casa_case, volunteer: volunteer_1)
-        case_assignment_2 = create(:case_assignment, casa_case: casa_case, volunteer: volunteer_2, active: false, hide_old_contacts: true)
-        case_contact_1 = create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_1, occurred_at: DateTime.now - 1)
-        case_contact_2 = create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2, occurred_at: DateTime.now - 1)
-       
+        create(:case_assignment, casa_case: casa_case, volunteer: volunteer_1)
+        create(:case_assignment, casa_case: casa_case, volunteer: volunteer_2, active: false, hide_old_contacts: true)
+        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_1, occurred_at: DateTime.now - 1)
+        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2, occurred_at: DateTime.now - 1)
+
         visit casa_case_path(casa_case.id)
 
         expect(page).to have_css("#case_contacts_list .card", count: 2)
@@ -194,11 +194,11 @@ RSpec.describe "casa_cases/show", type: :system do
         sign_in volunteer_1
 
         volunteer_2 = create(:volunteer, display_name: "Volunteer 2", casa_org: casa_case.casa_org)
-        case_assignment_1 = create(:case_assignment, casa_case: casa_case, volunteer: volunteer_1)
-        case_assignment_2 = create(:case_assignment, casa_case: casa_case, volunteer: volunteer_2, active: false, hide_old_contacts: true)
-        case_contact_1 = create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_1, occurred_at: DateTime.now - 1)
-        case_contact_2 = create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2, occurred_at: DateTime.now - 1)
-       
+        create(:case_assignment, casa_case: casa_case, volunteer: volunteer_1)
+        create(:case_assignment, casa_case: casa_case, volunteer: volunteer_2, active: false, hide_old_contacts: true)
+        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_1, occurred_at: DateTime.now - 1)
+        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2, occurred_at: DateTime.now - 1)
+
         visit casa_case_path(casa_case.id)
 
         expect(page).to have_css("#case_contacts_list .card", count: 1)

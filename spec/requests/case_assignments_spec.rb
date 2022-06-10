@@ -176,7 +176,7 @@ RSpec.describe "/case_assignments", type: :request do
           patch show_hide_contacts_case_assignment_path(assignment)
         }.to change { assignment.reload.hide_old_contacts? }
 
-        expect(response).to redirect_to  edit_casa_case_path(casa_case)
+        expect(response).to redirect_to edit_casa_case_path(casa_case)
       end
     end
   end
