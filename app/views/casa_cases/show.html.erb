@@ -141,7 +141,7 @@
         </div>
       <% end %>
 
-      <div id="case_contacts_list" >
+      <div id="case_contacts_list">
         <% if current_user.supervisor? || current_user.casa_admin? %>
           <%= render(partial: "case_contacts/case_contact",
                     collection: @casa_case.decorate
@@ -156,7 +156,7 @@
                       .includes(contact_types: [:contact_type_group])
                       .grab_all(current_user),
                     as: :contact) %>
-        <%end%>
+        <% end %>
       </div>
     </div>
   </div>
