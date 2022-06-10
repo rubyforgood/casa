@@ -61,9 +61,11 @@ class CaseAssignmentsController < ApplicationController
     casa_case = @case_assignment.casa_case
     volunteer = @case_assignment.volunteer
 
-    flash_message = @case_assignment.hide_old_contacts? ?
-      "Old Case Contacts created by #{volunteer.display_name} are now visible." :
+    flash_message = if @case_assignment.hide_old_contacts?
+      "Old Case Contacts created by #{volunteer.display_name} are now visible."
+    else
       "Old Case Contacts created by #{volunteer.display_name} were successfully hidden."
+    end
 
     if !@case_assignment.active
       if @case_assignment.update(hide_old_contacts: !@case_assignment.hide_old_contacts?)
