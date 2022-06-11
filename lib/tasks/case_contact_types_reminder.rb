@@ -89,7 +89,7 @@ class CaseContactTypesReminder
   end
 
   def new_case_contact_page_short_link
-    short_url_service = ShortUrlService.new("42ni.short.gy", "1337")
+    short_url_service = ShortUrlService.new
     short_url_service.create_short_url(NEW_CASE_CONTACT_PAGE_PATH)
     short_url_service.short_url
   end
