@@ -15,7 +15,7 @@ RSpec.describe TwilioService do
       end
 
       it "can send a SMS with a short url successfully" do
-        @short_url.create_short_url("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+        @short_url.create_short_url("https://www.google.com/")
         params = {
           From: "+15555555555",
           Body: "Execute Order 66 - ",
