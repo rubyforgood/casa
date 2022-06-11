@@ -2,7 +2,7 @@ def stubbed_requests
   # Short IO
   stub_request(:post, "https://api.short.io/links")
     .with(
-      body: {originalURL: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", domain: "42ni.short.gy"}.to_json,
+      body: {originalURL: "https://www.google.com/", domain: "42ni.short.gy"}.to_json,
       headers: {
         "Accept" => "application/json",
         "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",

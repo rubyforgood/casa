@@ -6,7 +6,7 @@ RSpec.describe ShortUrlService do
     before :each do
       stubbed_requests
       WebMock.disable_net_connect!
-      @original_url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      @original_url = "https://www.google.com/"
       @short_domain = "42ni.short.gy"
       @notification_object = ShortUrlService.new(@short_domain, "1337")
     end
