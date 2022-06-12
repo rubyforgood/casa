@@ -42,6 +42,12 @@ Many of the frontend tests are run using Google Chrome, so if you don't already 
 
 `brew install google-chrome`
 --------------------------
+from Gemfile 
+
+ruby "3.1.0"
+gem "rails", "~> 7.0.3"
+
+----------------------
 Ruby Version
 This app uses Ruby version 3.1.2, indicated in /.ruby-version and Gemfile, which will be auto-selected if you use a Ruby versioning manager like rvm, rbenv, or asdf.
 
