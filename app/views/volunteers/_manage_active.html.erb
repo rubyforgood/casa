@@ -22,8 +22,13 @@
   <% if (current_user.supervisor? ||
       current_user.casa_admin?) &&
       user.invitation_accepted_at.nil? %>
-    <%= link_to "Resend Invitation",
+    <%= link_to "Resend Invitation (Email)",
                 resend_invitation_volunteer_path(user),
                 class: "btn btn-outline-danger" %>
   <% end %>
+  <% if current_user.casa_admin? %>
+ <%= link_to "Send Reactivation Alert (SMS)",
+            send_reactivation_alert_volunteer_path(user),
+            class: "btn btn-outline-danger" %>
+ <% end %>
 </div>
