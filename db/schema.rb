@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_19_233803) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_10_221701) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -128,11 +128,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_19_233803) do
     t.string "footer_links", default: [], array: true
     t.string "slug"
     t.boolean "show_driving_reimbursement", default: true
-    t.boolean "show_fund_request", default: false
     t.string "twilio_phone_number"
     t.string "twilio_account_sid"
     t.string "twilio_api_key_sid"
     t.string "twilio_api_key_secret"
+    t.boolean "show_fund_request", default: false
     t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 
@@ -184,6 +184,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_19_233803) do
     t.string "text"
     t.index ["casa_case_id"], name: "index_case_court_orders_on_casa_case_id"
     t.index ["court_date_id"], name: "index_case_court_orders_on_court_date_id"
+  end
+
+  create_table "checklist_items", force: :cascade do |t|
+    t.integer "hearing_type_id"
+    t.text "description", null: false
+    t.string "category", null: false
+    t.boolean "mandatory", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["hearing_type_id"], name: "index_checklist_items_on_hearing_type_id"
   end
 
   create_table "contact_type_groups", force: :cascade do |t|
@@ -445,6 +455,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_19_233803) do
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
     t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by_type_and_invited_by_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "versions", force: :cascade do |t|
+    t.string "item_type", null: false
+    t.bigint "item_id", null: false
+    t.string "event", null: false
+    t.string "whodunnit"
+    t.text "object"
+    t.datetime "created_at", precision: nil
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

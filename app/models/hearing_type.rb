@@ -1,5 +1,6 @@
 class HearingType < ApplicationRecord
   belongs_to :casa_org
+  has_many :checklist_items
 
   validates :name, presence: true, uniqueness: {scope: %i[casa_org]}
 
