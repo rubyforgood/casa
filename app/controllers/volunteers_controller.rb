@@ -134,4 +134,14 @@ class VolunteersController < ApplicationController
       .new(params)
       .without_active
   end
+
+  def volunteers_phone_number
+    authorize @volunteer
+    @volunteers_phone_number = @volunteer.phone_number
+  end
+
+  def casa_orgs_twilio_phone_number
+    authorize @volunteer
+    @casa_orgs_twilio_phone_number = @volunteer.casa_org.twilio_phone_number
+  end
 end
