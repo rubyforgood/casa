@@ -1,13 +1,13 @@
 class CaseContactTypesReminder
   include Rails.application.routes.url_helpers
 
-  NEW_CASE_CONTACT_PAGE_PATH = Rails.application.credentials[:BASE_URL] 
+  NEW_CASE_CONTACT_PAGE_PATH = Rails.application.credentials[:BASE_URL]
   FIRST_MESSAGE = "It's been 60 days or more since you've reached out to these members of your youth's network:\n"
   THIRD_MESSAGE = "If you have made contact with them in the past 60 days, remember to log it: "
 
   def send!
     if NEW_CASE_CONTACT_PAGE_PATH.blank?
-      raise "NEW_CASE_CONTACT_PAGE_PATH environment variable not defined" 
+      raise "NEW_CASE_CONTACT_PAGE_PATH environment variable not defined"
     end
     responses = []
     eligible_volunteers = Volunteer.where(receive_sms_notifications: true)
