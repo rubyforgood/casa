@@ -9,9 +9,9 @@ end
 
 module SMSNotifications
   module AccountActivation
-    def self.account_activation_msg(resource)
+    def self.account_activation_msg(resource, target_path = "hello kitty")
       body = "A CASA #{resource} account was created for you.
-      Txt STOP to opt out of text notifications"
+      Visit #{target_path} to change text messaging settings."
     end
   end
 end

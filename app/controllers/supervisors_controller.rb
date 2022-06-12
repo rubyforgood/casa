@@ -108,7 +108,8 @@ class SupervisorsController < ApplicationController
     acc_sid = current_user.casa_org.twilio_account_sid
     api_key = current_user.casa_org.twilio_api_key_sid
     api_secret = current_user.casa_org.twilio_api_key_secret
-    body = SMSNotifications::AccountActivation::account_activation_msg("supervisor")
+    target_path = request.base_url + "/users/edit"
+    body = SMSNotifications::AccountActivation::account_activation_msg("supervisor", target_path)
     to = phone_number
     from = current_user.casa_org.twilio_phone_number
 
@@ -118,7 +119,7 @@ class SupervisorsController < ApplicationController
       Body: body,
       To: to
     }
-
+    
     twilio_res = twilio.send_sms(req_params)
     if twilio_res.error_code === nil
       return "Supervisor created. SMS has been sent!"

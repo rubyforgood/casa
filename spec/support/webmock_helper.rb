@@ -15,7 +15,6 @@ module StubbedRequests
   def self.twilio_activation_success_stub(resource)
     WebMock.stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno34/Messages.json")
     .with(
-      body: {From: "+15555555555", Body: SMSNotifications::AccountActivation::account_activation_msg(resource), To: "+12222222222"},
       headers: {
         "Content-Type" => "application/x-www-form-urlencoded",
         "Authorization" => "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
@@ -27,7 +26,6 @@ module StubbedRequests
   def self.twilio_activation_error_stub(resource)
     WebMock.stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno31/Messages.json")
     .with(
-      body: {From: "+15555555555", Body: SMSNotifications::AccountActivation::account_activation_msg(resource), To: "+12222222222"},
       headers: {
         "Content-Type" => "application/x-www-form-urlencoded",
         "Authorization" => "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
