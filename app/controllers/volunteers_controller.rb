@@ -144,4 +144,10 @@ class VolunteersController < ApplicationController
     authorize @volunteer
     @casa_orgs_twilio_phone_number = @volunteer.casa_org.twilio_phone_number
   end
+
+  def send_sms_to(phone_number, body)
+    twilio = TwilioService.new(api_key = current_user.casa_org.twilio_api_key_sid, api_secret = current_user.casa_org.twilio_api_key_secret, acc_sid = current_user.casa_org.twilio_account_sid)
+    req_params = {From: casa_orgs_twilio_phone_number, Body: body, To: phone_number}
+    twilio_res = twilio.send_sms(req_params)
+  end
 end
