@@ -14,7 +14,7 @@ def stubbed_requests
     .to_return(status: 200, body: "{\"shortURL\":\"https://42ni.short.gy/jzTwdF\"}", headers: {})
   stub_request(:post, "https://api.short.io/links")
     .with(
-      body: "{\"originalURL\":\"https://casavolunteertracking.org/case_contacts/new\",\"domain\":\"42ni.short.gy\"}",
+      body: "{\"originalURL\":\"#{Rails.application.credentials[:BASE_URL]}/case_contacts/new\",\"domain\":\"42ni.short.gy\"}",
       headers: {
         "Accept" => "application/json",
         "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",

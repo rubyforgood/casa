@@ -1,11 +1,14 @@
 class CaseContactTypesReminder
   include Rails.application.routes.url_helpers
 
-  NEW_CASE_CONTACT_PAGE_PATH = "https://casavolunteertracking.org/case_contacts/new"
+  NEW_CASE_CONTACT_PAGE_PATH = Rails.application.credentials[:BASE_URL] 
   FIRST_MESSAGE = "It's been 60 days or more since you've reached out to these members of your youth's network:\n"
   THIRD_MESSAGE = "If you have made contact with them in the past 60 days, remember to log it: "
 
   def send!
+    if NEW_CASE_CONTACT_PAGE_PATH.blank?
+      raise "NEW_CASE_CONTACT_PAGE_PATH environment variable not defined" 
+    end
     responses = []
     eligible_volunteers = Volunteer.where(receive_sms_notifications: true)
       .where.not(phone_number: nil)
@@ -90,7 +93,7 @@ class CaseContactTypesReminder
 
   def new_case_contact_page_short_link
     short_url_service = ShortUrlService.new
-    short_url_service.create_short_url(NEW_CASE_CONTACT_PAGE_PATH)
+    short_url_service.create_short_url(NEW_CASE_CONTACT_PAGE_PATH + "/case_contacts/new")
     short_url_service.short_url
   end
 end
