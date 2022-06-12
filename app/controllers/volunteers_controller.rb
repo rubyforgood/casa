@@ -85,6 +85,14 @@ class VolunteersController < ApplicationController
     end
   end
 
+  def send_reactivation_alert
+    authorize @volunteer
+    if @volunteer.save
+      send_sms_to(volunteers_phone_number, "Hello #{@volunteer.display_name}, \n \n Your CASA/Prince George’s County volunteer console account has been reactivated. You can login using the credentials you were already using. \n \n If you have any questions, please contact your most recent Case Supervisor for assistance. \n \n CASA/Prince George’s County")
+      redirect_to edit_volunteer_path(@volunteer), notice: "Reactivation alert sent"
+    end
+  end 
+  
   def reminder
     authorize @volunteer
     with_cc = params[:with_cc].present?
