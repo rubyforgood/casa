@@ -93,8 +93,8 @@ class VolunteersController < ApplicationController
     else
       redirect_to edit_volunteer_path(@volunteer), alert: "Volunteer reactivation alert failed"
     end
-  end 
-  
+  end
+
   def reminder
     authorize @volunteer
     with_cc = params[:with_cc].present?
@@ -156,15 +156,15 @@ class VolunteersController < ApplicationController
   end
 
   def send_sms_to(phone_number, body)
-    twilio = TwilioService.new(api_key = current_user.casa_org.twilio_api_key_sid, api_secret = current_user.casa_org.twilio_api_key_secret, acc_sid = current_user.casa_org.twilio_account_sid)
+    twilio = TwilioService.new(current_user.casa_org.twilio_api_key_sid, current_user.casa_org.twilio_api_key_secret, current_user.casa_org.twilio_account_sid)
     req_params = {From: casa_orgs_twilio_phone_number, Body: body, To: phone_number}
     twilio_res = twilio.send_sms(req_params)
-    
-    #Error handling for spec test purposes
-    if twilio_res.error_code === nil
-      return "SMS has been sent to Volunteer!"
+
+    # Error handling for spec test purposes
+    if twilio_res.error_code.nil?
+      "SMS has been sent to Volunteer!"
     else
-      return "SMS was not sent to Volunteer due to an error."
+      "SMS was not sent to Volunteer due to an error."
     end
   end
 end
