@@ -13,12 +13,12 @@ $(() => {
         }
       })
 
-      localStorage.setItem(formId, JSON.stringify(data))
+      window.localStorage.setItem(formId, JSON.stringify(data))
     }
 
     const load = () => {
-      if (localStorage.key(formId)) {
-        const data = JSON.parse(localStorage.getItem(formId))
+      if (window.localStorage.key(formId)) {
+        const data = JSON.parse(window.localStorage.getItem(formId))
 
         data.forEach(({ id, value, checked }) => {
           const element = document.querySelector(`#${id}`)
@@ -37,6 +37,6 @@ $(() => {
   }
 
   if (/\/casa_cases\/\d+$/.test(window.location.pathname)) {
-    localStorage.removeItem(formId)
+    window.localStorage.removeItem(formId)
   }
 })
