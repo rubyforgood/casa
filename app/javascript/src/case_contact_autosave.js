@@ -1,31 +1,42 @@
 /* global $ */
 
-$('document').ready(() => {
+$(() => {
   const formId = 'casa-contact-form'
 
   if ($('.case_contacts-new').length > 0) {
-    const caseNotes = document.querySelector('#case_contact_notes')
+    const save = () => {
+      const data = []
 
-    const populateForm = () => {
-      if (window.localStorage.key(formId)) {
-        const savedData = JSON.parse(window.localStorage.getItem(formId)) // get and parse the saved data from localStorage
-        caseNotes.value = savedData
+      $(`#${formId} :input`).each((_, { id, type, value, checked }) => {
+        if (id && type !== 'button' && type !== 'submit') {
+          data.push({ id, value, checked })
+        }
+      })
+
+      localStorage.setItem(formId, JSON.stringify(data))
+    }
+
+    const load = () => {
+      if (localStorage.key(formId)) {
+        const data = JSON.parse(localStorage.getItem(formId))
+
+        data.forEach(({ id, value, checked }) => {
+          const element = document.querySelector(`#${id}`)
+
+          if (element) {
+            element.value = value
+            element.checked = checked
+          }
+        })
       }
     }
 
-    const autoSave = () => {
-      setInterval(function () {
-        const data = {}
-        data[formId] = caseNotes.value
-        window.localStorage.setItem(formId, JSON.stringify(data[formId]))
-      }, 5000)
-    }
+    $(`#${formId}`).on('keyup change paste', 'input, select, textarea', save)
 
-    document.onload = autoSave()
-    document.onload = populateForm() // populate the form when the document is loaded
+    document.onload = load()
   }
 
   if (/\/casa_cases\/\d+$/.test(window.location.pathname)) {
-    window.localStorage.removeItem(formId)
+    localStorage.removeItem(formId)
   }
 })
