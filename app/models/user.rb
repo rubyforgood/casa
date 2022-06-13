@@ -23,6 +23,8 @@ class User < ApplicationRecord
 
   has_many :other_duties, foreign_key: "creator_id", dependent: :destroy
 
+  has_many :learning_hours, dependent: :destroy
+
   has_one :supervisor_volunteer, -> {
     where(is_active: true)
   }, foreign_key: "volunteer_id", dependent: :destroy

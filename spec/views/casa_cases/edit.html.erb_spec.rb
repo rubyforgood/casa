@@ -62,7 +62,7 @@ RSpec.describe "casa_cases/edit", type: :view do
     let(:user) { build_stubbed(:casa_admin, casa_org: organization) }
 
     it "does not have an option to select a volunteer that is already assigned to the casa case" do
-      casa_case = build(:casa_case, casa_org: organization)
+      casa_case = create(:casa_case, casa_org: organization)
       assign :casa_case, casa_case
       assigned_volunteer = build_stubbed(:volunteer)
       build_stubbed(:case_assignment, volunteer: assigned_volunteer, casa_case: casa_case)
