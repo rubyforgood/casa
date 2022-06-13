@@ -31,12 +31,13 @@ end
 #
 # Table name: case_assignments
 #
-#  id           :bigint           not null, primary key
-#  active       :boolean          default(TRUE), not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  casa_case_id :bigint           not null
-#  volunteer_id :bigint           not null
+#  id                :bigint           not null, primary key
+#  active            :boolean          default(TRUE), not null
+#  hide_old_contacts :boolean          default(FALSE)
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  casa_case_id      :bigint           not null
+#  volunteer_id      :bigint           not null
 #
 # Indexes
 #
