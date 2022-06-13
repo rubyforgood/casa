@@ -10,7 +10,7 @@ class ChecklistItemsController < ApplicationController
     @hearing_type = HearingType.find(params[:hearing_type_id])
     @checklist_item = @hearing_type.checklist_items.create(checklist_item_params)
     if @checklist_item.save
-      redirect_to edit_hearing_type_path(@hearing_type)
+      redirect_to edit_hearing_type_path(@hearing_type), notice: "Checklist Item was successfully created."
     else
       render :new
     end
