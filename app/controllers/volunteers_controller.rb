@@ -150,14 +150,9 @@ class VolunteersController < ApplicationController
     @volunteers_phone_number = @volunteer.phone_number
   end
 
-  def casa_orgs_twilio_phone_number
-    authorize @volunteer
-    @casa_orgs_twilio_phone_number = @volunteer.casa_org.twilio_phone_number
-  end
-
   def send_sms_to(phone_number, body)
     twilio = TwilioService.new(current_user.casa_org.twilio_api_key_sid, current_user.casa_org.twilio_api_key_secret, current_user.casa_org.twilio_account_sid)
-    req_params = {From: casa_orgs_twilio_phone_number, Body: body, To: phone_number}
+    req_params = {From: current_user.casa_org.twilio_phone_number, Body: body, To: phone_number}
     twilio_res = twilio.send_sms(req_params)
 
     # Error handling for spec test purposes
