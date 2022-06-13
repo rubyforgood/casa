@@ -320,13 +320,10 @@ RSpec.describe "case_contacts/new", type: :system do
       choose "In Person"
       fill_in "case-contact-duration-hours-display", with: "1"
       fill_in "case-contact-duration-minutes-display", with: "45"
-      fill_in "c. Occurred On", with: "04/04/2020"
+      fill_in "c. Occurred On", with: "2020/4/4"
       fill_in "a. Miles Driven", with: "30"
       choose "case_contact_want_driving_reimbursement_true"
       fill_in "Notes", with: "Hello world"
-
-      # Allow 5 seconds for the Notes to be saved in localstorage
-      sleep 5
 
       click_on "Log out"
 
@@ -334,6 +331,17 @@ RSpec.describe "case_contacts/new", type: :system do
 
       visit new_case_contact_path
 
+      expect(page).to have_checked_field(volunteer_casa_case_one.case_number)
+      expect(page).to have_checked_field("School")
+      expect(page).to have_checked_field("Therapist")
+      expect(page).to have_checked_field("Yes")
+      expect(page).to have_checked_field("In Person")
+      expect(page).to have_field("case-contact-duration-hours-display", with: "1")
+      expect(page).to have_field("case-contact-duration-minutes-display", with: "45")
+      expect(page).to have_field("c. Occurred On", with: "2020/04/04")
+      expect(page).to have_field("a. Miles Driven", with: "30")
+      expect(page).to have_checked_field("case_contact_want_driving_reimbursement_true")
+      expect(page).not_to have_checked_field("case_contact_want_driving_reimbursement_false")
       expect(page).to have_field("Notes", with: "Hello world")
     end
 
