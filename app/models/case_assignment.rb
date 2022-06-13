@@ -1,6 +1,6 @@
 class CaseAssignment < ApplicationRecord
   belongs_to :casa_case
-  belongs_to :volunteer, class_name: "User", inverse_of: "case_assignments"
+  belongs_to :volunteer, class_name: "User"
 
   validates :casa_case_id, uniqueness: {scope: :volunteer_id} # only 1 row allowed per case-volunteer pair
   validates :volunteer, presence: true
@@ -31,12 +31,13 @@ end
 #
 # Table name: case_assignments
 #
-#  id           :bigint           not null, primary key
-#  active       :boolean          default(TRUE), not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  casa_case_id :bigint           not null
-#  volunteer_id :bigint           not null
+#  id                :bigint           not null, primary key
+#  active            :boolean          default(TRUE), not null
+#  hide_old_contacts :boolean          default(FALSE)
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  casa_case_id      :bigint           not null
+#  volunteer_id      :bigint           not null
 #
 # Indexes
 #
