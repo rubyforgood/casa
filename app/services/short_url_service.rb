@@ -8,9 +8,10 @@ class ShortUrlService
   headers RequestHeader::ACCEPT_JSON
   headers RequestHeader::CONTENT_TYPE_JSON
 
-  def initialize(short_domain = nil, api_key = nil)
-    @short_domain = short_domain
-    @short_api_key = api_key
+  def initialize
+    validate_credentials
+    @short_domain = Rails.application.credentials[:SHORT_IO_DOMAIN]
+    @short_api_key = Rails.application.credentials[:SHORT_IO_API_KEY]
     @short_url = nil
   end
 
@@ -22,5 +23,16 @@ class ShortUrlService
     response = self.class.post("/links", params)
     @short_url = JSON.parse(response.body)["shortURL"]
     response
+  end
+
+  private
+
+  def validate_credentials
+    variables = [Rails.application.credentials[:SHORT_IO_DOMAIN], Rails.application.credentials[:SHORT_IO_API_KEY]]
+    variables.each do |var|
+      if var.blank?
+        raise "#{var} environment variable missing for Short IO serivce"
+      end
+    end
   end
 end
