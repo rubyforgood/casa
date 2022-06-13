@@ -4,12 +4,25 @@ This guide assumes you have [homebrew](https://brew.sh/) installed.
 
 You will need the following local tools installed:
 
+# command line tools - what are they
+articles that will help with command line
+
+https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Understanding_client-side_tools/Command_line
+
+
+
+
+
 1. Ruby
 2. NodeJs (optional)
 3. Postgres
 4. Google Chrome
 
 All dependencies are installed with homebrew.
+
+Open your command line
+
+
 
 ### Ruby
 
