@@ -3,6 +3,7 @@
 <div class="card card-container">
   <div class="card-body">
     <%= form_with(model: [hearing_type, checklist_item], local: true) do |form| %>
+      <%= render "/shared/error_messages", resource: checklist_item %>
       <div class="field form-group">
         <%= form.label :category %>
         <%= form.text_field :category, class: "form-control" %>
@@ -18,7 +19,7 @@
         </div>
       </div>
       <div class="actions">
-        <%= form.submit t("button.submit"), class: "btn btn-primary" %>
+        <%= form.submit "Submit", class: "btn btn-primary" %>
       </div>
     <% end %>
   </div>

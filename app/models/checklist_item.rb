@@ -1,5 +1,7 @@
 class ChecklistItem < ApplicationRecord
   belongs_to :hearing_type
+  validates :category, presence: true
+  validates :description, presence: true
 end
 
 # == Schema Information

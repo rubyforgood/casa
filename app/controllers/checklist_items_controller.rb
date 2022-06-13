@@ -9,7 +9,11 @@ class ChecklistItemsController < ApplicationController
     authorize ChecklistItem
     @hearing_type = HearingType.find(params[:hearing_type_id])
     @checklist_item = @hearing_type.checklist_items.create(checklist_item_params)
-    redirect_to edit_hearing_type_path(@hearing_type)
+    if @checklist_item.save
+      redirect_to edit_hearing_type_path(@hearing_type)
+    else
+      render :new
+    end
   end
 
   private
