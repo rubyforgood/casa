@@ -11,6 +11,8 @@ https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Understanding_c
 
 this assumes you have a github account
 
+cd into casa
+
 
 
 
