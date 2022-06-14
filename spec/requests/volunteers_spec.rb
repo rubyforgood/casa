@@ -137,7 +137,7 @@ RSpec.describe "/volunteers", type: :request do
         expect(@twilio_activation_success_stub).to have_been_requested.times(1)
         expect(response).to have_http_status(:redirect)
         follow_redirect!
-        expect(flash[:notice]).to match(/Volunteer created. SMS has been sent!/)
+        expect(flash[:notice]).to match(/New volunteer created successfully. SMS has been sent!/)
       end
 
       it "does not send a SMS when phone number is not provided" do
@@ -146,7 +146,7 @@ RSpec.describe "/volunteers", type: :request do
         expect(@twilio_activation_error_stub).to have_been_requested.times(0)
         expect(response).to have_http_status(:redirect)
         follow_redirect!
-        expect(flash[:notice]).to match(/Volunteer created./)
+        expect(flash[:notice]).to match(/New volunteer created successfully./)
       end
 
       it "does not send a SMS when Twilio API has an error" do
@@ -160,7 +160,7 @@ RSpec.describe "/volunteers", type: :request do
         expect(@twilio_activation_error_stub).to have_been_requested.times(1)
         expect(response).to have_http_status(:redirect)
         follow_redirect!
-        expect(flash[:notice]).to match(/Volunteer created. SMS not sent due to error./)
+        expect(flash[:notice]).to match(/New volunteer created successfully. SMS not sent due to error./)
       end
     end
 

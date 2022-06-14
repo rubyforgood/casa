@@ -30,7 +30,7 @@ class VolunteersController < ApplicationController
 
     if @volunteer.save
       @volunteer.invite!(current_user)
-      notice_msg = send_sms @volunteer.phone_number
+      notice_msg = send_sms @volunteer.phone_number, "volunteer"
       redirect_to edit_volunteer_path(@volunteer), notice: notice_msg
     else
       render :new
@@ -114,33 +114,6 @@ class VolunteersController < ApplicationController
   end
 
   private
-
-  # returns appropriate flash notice for SMS
-  def send_sms(phone_number)
-    if phone_number.blank?
-      return "Volunteer created."
-    end
-    acc_sid = current_user.casa_org.twilio_account_sid
-    api_key = current_user.casa_org.twilio_api_key_sid
-    api_secret = current_user.casa_org.twilio_api_key_secret
-    body = SMSNotifications::AccountActivation::account_activation_msg("volunteer")
-    to = phone_number
-    from = current_user.casa_org.twilio_phone_number
-
-    twilio = TwilioService.new(api_key, api_secret, acc_sid)
-    req_params = {
-      From: from,
-      Body: body,
-      To: to
-    }
-
-    twilio_res = twilio.send_sms(req_params)
-    if twilio_res.error_code === nil
-      return "Volunteer created. SMS has been sent!"
-    else
-      return "Volunteer created. SMS not sent due to error."
-    end
-  end
 
   def set_volunteer
     @volunteer = Volunteer.find(params[:id])

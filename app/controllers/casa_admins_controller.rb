@@ -40,7 +40,7 @@ class CasaAdminsController < ApplicationController
 
     begin
       casa_admin = service.create!
-      notice_msg = send_sms casa_admin.phone_number
+      notice_msg = send_sms casa_admin.phone_number, "admin"
 
       respond_to do |format|
         format.html { redirect_to casa_admins_path, notice: notice_msg }
@@ -112,32 +112,6 @@ class CasaAdminsController < ApplicationController
   end
 
   private
-
-  def send_sms(phone_number)
-    if phone_number.blank?
-      return "New admin created successfully"
-    end
-    acc_sid = current_user.casa_org.twilio_account_sid
-    api_key = current_user.casa_org.twilio_api_key_sid
-    api_secret = current_user.casa_org.twilio_api_key_secret
-    body = SMSNotifications::AccountActivation::account_activation_msg("admin")
-    to = phone_number
-    from = current_user.casa_org.twilio_phone_number
-
-    twilio = TwilioService.new(api_key, api_secret, acc_sid)
-    req_params = {
-      From: from,
-      Body: body,
-      To: to
-    }
-
-    twilio_res = twilio.send_sms(req_params)
-    if twilio_res.error_code === nil
-      return "New admin created successfully. SMS has been sent!"
-    else
-      return "New admin created successfully. SMS not sent due to error."
-    end
-  end
 
   def redirect_to_casa_admin_edition_page(error)
     Bugsnag.notify(error)

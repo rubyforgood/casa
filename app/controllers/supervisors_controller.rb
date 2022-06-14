@@ -31,7 +31,7 @@ class SupervisorsController < ApplicationController
 
     if @supervisor.save
       @supervisor.invite!(current_user)
-      notice_msg = send_sms @supervisor.phone_number
+      notice_msg = send_sms @supervisor.phone_number, "supervisor"
       redirect_to edit_supervisor_path(@supervisor), notice: notice_msg
     else
       render new_supervisor_path
@@ -99,34 +99,6 @@ class SupervisorsController < ApplicationController
   end
 
   private
-
-   # returns appropriate flash notice for SMS
-   def send_sms(phone_number)
-    if phone_number.blank?
-      return "Supervisor created."
-    end
-    acc_sid = current_user.casa_org.twilio_account_sid
-    api_key = current_user.casa_org.twilio_api_key_sid
-    api_secret = current_user.casa_org.twilio_api_key_secret
-    target_path = request.base_url + "/users/edit"
-    body = SMSNotifications::AccountActivation::account_activation_msg("supervisor", target_path)
-    to = phone_number
-    from = current_user.casa_org.twilio_phone_number
-
-    twilio = TwilioService.new(api_key, api_secret, acc_sid)
-    req_params = {
-      From: from,
-      Body: body,
-      To: to
-    }
-    
-    twilio_res = twilio.send_sms(req_params)
-    if twilio_res.error_code === nil
-      return "Supervisor created. SMS has been sent!"
-    else
-      return "Supervisor created. SMS not sent due to error."
-    end
-  end
 
   def set_supervisor
     @supervisor = Supervisor.find(params[:id])

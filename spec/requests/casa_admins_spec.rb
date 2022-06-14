@@ -343,7 +343,7 @@ RSpec.describe "/casa_admins", type: :request do
       it "has flash notice" do
         subject
 
-        expect(flash[:notice]).to eq("New admin created successfully")
+        expect(flash[:notice]).to eq("New admin created successfully.")
       end
 
       it "redirects to casa_admins_path" do
@@ -379,7 +379,7 @@ RSpec.describe "/casa_admins", type: :request do
         expect(@twilio_activation_error_stub).to have_been_requested.times(0)
         expect(response).to have_http_status(:redirect)
         follow_redirect!
-        expect(flash[:notice]).to match(/New admin created successfully/)
+        expect(flash[:notice]).to match(/New admin created successfully./)
       end
 
       it "does not send SMS when Twilio has an error" do

@@ -28,6 +28,37 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  protected
+
+  # volunteer/supervisor/casa_admin controller uses to send acct creation SMS
+  # returns appropriate flash notice for SMS
+  def send_sms(phone_number, resource_name)
+    if phone_number.blank?
+      return "New #{resource_name} created successfully."
+    end
+    acc_sid = current_user.casa_org.twilio_account_sid
+    api_key = current_user.casa_org.twilio_api_key_sid
+    api_secret = current_user.casa_org.twilio_api_key_secret
+    edit_path = request.base_url + "/users/edit"
+    body = SMSNotifications::AccountActivation::account_activation_msg(resource_name, edit_path)
+    to = phone_number
+    from = current_user.casa_org.twilio_phone_number
+
+    twilio = TwilioService.new(api_key, api_secret, acc_sid)
+    req_params = {
+      From: from,
+      Body: body,
+      To: to
+    }
+
+    twilio_res = twilio.send_sms(req_params)
+    if twilio_res.error_code === nil
+      return "New #{resource_name} created successfully. SMS has been sent!"
+    else
+      return "New #{resource_name} created successfully. SMS not sent due to error."
+    end
+  end
+
   private
 
   def store_user_location!

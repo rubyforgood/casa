@@ -209,7 +209,7 @@ RSpec.describe "/supervisors", type: :request do
       expect(@twilio_activation_success_stub).to have_been_requested.times(1)
       expect(response).to have_http_status(:redirect)
       follow_redirect!
-      expect(flash[:notice]).to match(/Supervisor created. SMS has been sent!/)
+      expect(flash[:notice]).to match(/New supervisor created successfully. SMS has been sent!/)
     end
 
     it "does not send a SMS if phone number not given" do
@@ -219,7 +219,7 @@ RSpec.describe "/supervisors", type: :request do
       expect(@twilio_activation_error_stub).to have_been_requested.times(0)
       expect(response).to have_http_status(:redirect)
       follow_redirect!
-      expect(flash[:notice]).to match(/Supervisor created./)
+      expect(flash[:notice]).to match(/New supervisor created successfully./)
     end
 
     it "does not send a SMS if Twilio has an error" do
@@ -234,7 +234,7 @@ RSpec.describe "/supervisors", type: :request do
       expect(@twilio_activation_error_stub).to have_been_requested.times(1)
       expect(response).to have_http_status(:redirect)
       follow_redirect!
-      expect(flash[:notice]).to match(/Supervisor created. SMS not sent due to error./)
+      expect(flash[:notice]).to match(/New supervisor created successfully. SMS not sent due to error./)
     end
   end
 
