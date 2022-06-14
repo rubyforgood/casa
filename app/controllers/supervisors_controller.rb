@@ -31,8 +31,8 @@ class SupervisorsController < ApplicationController
 
     if @supervisor.save
       @supervisor.invite!(current_user)
-      edit_path = request.base_url + "/users/edit"
-      body_msg = SMSNotifications::AccountActivation::account_activation_msg("supervisor", edit_path)
+      base_url = request.base_url
+      body_msg = SMSNotifications::account_activation_msg("supervisor", base_url)
       notice_msg = deliver_sms_to @supervisor.phone_number, "supervisor", body_msg
       redirect_to edit_supervisor_path(@supervisor), notice: notice_msg
     else

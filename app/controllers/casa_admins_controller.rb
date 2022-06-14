@@ -40,8 +40,8 @@ class CasaAdminsController < ApplicationController
 
     begin
       casa_admin = service.create!
-      edit_path = request.base_url + "/users/edit"
-      body_msg = SMSNotifications::AccountActivation::account_activation_msg("admin", edit_path)
+      base_url = request.base_url
+      body_msg = SMSNotifications::account_activation_msg("admin", base_url)
       notice_msg = deliver_sms_to casa_admin.phone_number, "admin", body_msg
 
       respond_to do |format|
