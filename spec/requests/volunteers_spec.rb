@@ -281,9 +281,9 @@ RSpec.describe "/volunteers", type: :request do
 
       stubbed_requests
       WebMock.disable_net_connect!
-      @acc_sid = "articuno34"
-      @api_key = "Aladin"
-      @api_secret = "open sesame"
+      @acc_sid = "fake_twilio_sid"
+      @api_key = "fake_twilio_api_key"
+      @api_secret = "fake_twilio_api_secret"
       @short_url = ShortUrlService.new
       @twilio = TwilioService.new(@api_key, @api_secret, @acc_sid)
     end
