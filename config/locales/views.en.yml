@@ -471,6 +471,7 @@ en:
       download_mileage_report_button:
         enabled: Mileage Report
         disabled: Downloading Mileage Report
+      download_missing_data_report_button: "Missing Data Report"
       download_report_button: Download Report
       driving_reimbursement_label: "Want Driving Reimbursement:"
       end_date_label: "Ending At:"
