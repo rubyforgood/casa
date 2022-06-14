@@ -145,13 +145,22 @@ class: "btn btn-primary pull-left casa-case-button") %>
         </div>
       <% end %>
 
-      <div>
-        <%= render(partial: "case_contacts/case_contact",
-                   collection: @casa_case.decorate
-                    .case_contacts_ordered_by_occurred_at
-                    .includes(contact_types: [:contact_type_group])
-                    .grab_all(current_user),
-                   as: :contact) %>
+      <div id="case_contacts_list">
+        <% if current_user.supervisor? || current_user.casa_admin? %>
+          <%= render(partial: "case_contacts/case_contact",
+                    collection: @casa_case.decorate
+                      .case_contacts_ordered_by_occurred_at
+                      .includes(contact_types: [:contact_type_group])
+                      .grab_all(current_user),
+                    as: :contact) %>
+        <% else %>
+          <%= render(partial: "case_contacts/case_contact",
+                    collection: @casa_case.decorate
+                      .case_contacts_filtered_by_active_assignment_ordered_by_occurred_at
+                      .includes(contact_types: [:contact_type_group])
+                      .grab_all(current_user),
+                    as: :contact) %>
+        <% end %>
       </div>
     </div>
   </div>

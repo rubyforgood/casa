@@ -119,6 +119,7 @@ Rails.application.routes.draw do
     member do
       get :unassign
       patch :unassign
+      patch :show_hide_contacts
     end
   end
   resources :case_court_orders, only: %i[destroy]

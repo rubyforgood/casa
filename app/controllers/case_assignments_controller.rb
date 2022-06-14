@@ -1,5 +1,5 @@
 class CaseAssignmentsController < ApplicationController
-  before_action :load_case_assignment, only: %i[destroy unassign]
+  before_action :load_case_assignment, only: %i[destroy unassign show_hide_contacts]
   after_action :verify_authorized
 
   def create
@@ -51,6 +51,20 @@ class CaseAssignmentsController < ApplicationController
       else
         redirect_to after_action_path(casa_case), notice: flash_message
       end
+    else
+      render :edit
+    end
+  end
+
+  def show_hide_contacts
+    authorize @case_assignment, :show_or_hide_contacts?
+    casa_case = @case_assignment.casa_case
+    volunteer = @case_assignment.volunteer
+
+    flash_message = "Old Case Contacts created by #{volunteer.display_name} #{@case_assignment.hide_old_contacts? ? "are now visible" : "were successfully hidden"}."
+
+    if !@case_assignment.active && @case_assignment.update(hide_old_contacts: !@case_assignment.hide_old_contacts?)
+      redirect_to after_action_path(casa_case), notice: flash_message
     else
       render :edit
     end
