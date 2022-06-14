@@ -2,11 +2,9 @@ require "rails_helper"
 require "support/webmock_helper"
 
 RSpec.describe "/casa_admins", type: :request do
-  # add domains to blacklist you want to stub
+  # stub the domains within blacklist for testing
   blacklist = ["api.twilio.com", "api.short.io"]
-  allowed_sites = lambda{|uri|
-    blacklist.none?{|site| uri.host.include?(site) }
-  }
+  allowed_sites = StubbedRequests::allowed_sites(blacklist)
   WebMock.disable_net_connect!(allow: allowed_sites)
 
   describe "GET /casa_admins/:id/edit" do

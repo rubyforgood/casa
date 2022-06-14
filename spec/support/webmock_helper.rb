@@ -1,4 +1,10 @@
 module StubbedRequests
+  def self.allowed_sites(blacklist)
+    lambda{|uri|
+      blacklist.none?{|site| uri.host.include?(site) }
+    }
+  end
+
   module TwilioAPI
   def self.twilio_success_stub
     WebMock.stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno34/Messages.json")

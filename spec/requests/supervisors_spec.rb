@@ -12,9 +12,7 @@ RSpec.describe "/supervisors", type: :request do
   end
   # add domains to blacklist you want to stub
   blacklist = ["api.twilio.com", "api.short.io"]
-  allowed_sites = lambda{|uri|
-    blacklist.none?{|site| uri.host.include?(site) }
-  }
+  allowed_sites = StubbedRequests::allowed_sites(blacklist)
   WebMock.disable_net_connect!(allow: allowed_sites)
 
   describe "GET /new" do
