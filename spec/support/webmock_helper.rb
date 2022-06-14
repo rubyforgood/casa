@@ -77,7 +77,7 @@ def stubbed_requests
         "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
         "Authorization" => "Basic Og==",
         "Content-Type" => "application/x-www-form-urlencoded",
-        "User-Agent" => "twilio-ruby/5.67.2 (linux x86_64) Ruby/3.1.0"
+        "User-Agent" => "twilio-ruby/5.67.2 (linux-musl x86_64) Ruby/3.1.0"
       }
     )
     .to_return(status: 200, body: "", headers: {})
