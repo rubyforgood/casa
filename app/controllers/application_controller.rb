@@ -30,17 +30,16 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  # volunteer/supervisor/casa_admin controller uses to send acct creation SMS
+  # volunteer/supervisor/casa_admin controller uses to send SMS
   # returns appropriate flash notice for SMS
-  def send_sms(phone_number, resource_name)
+  def deliver_sms_to(phone_number, resource_name, body_msg)
     if phone_number.blank?
       return "New #{resource_name} created successfully."
     end
     acc_sid = current_user.casa_org.twilio_account_sid
     api_key = current_user.casa_org.twilio_api_key_sid
     api_secret = current_user.casa_org.twilio_api_key_secret
-    edit_path = request.base_url + "/users/edit"
-    body = SMSNotifications::AccountActivation::account_activation_msg(resource_name, edit_path)
+    body = body_msg
     to = phone_number
     from = current_user.casa_org.twilio_phone_number
 

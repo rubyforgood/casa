@@ -30,7 +30,9 @@ class VolunteersController < ApplicationController
 
     if @volunteer.save
       @volunteer.invite!(current_user)
-      notice_msg = send_sms @volunteer.phone_number, "volunteer"
+      edit_path = request.base_url + "/users/edit"
+      body_msg = SMSNotifications::AccountActivation::account_activation_msg("volunteer", edit_path)
+      notice_msg = deliver_sms_to @volunteer.phone_number, "volunteer", body_msg
       redirect_to edit_volunteer_path(@volunteer), notice: notice_msg
     else
       render :new
