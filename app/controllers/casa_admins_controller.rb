@@ -41,11 +41,11 @@ class CasaAdminsController < ApplicationController
     begin
       casa_admin = service.create!
       base_url = request.base_url
-      body_msg = SMSNotifications::account_activation_msg("admin", base_url)
-      notice_msg = deliver_sms_to casa_admin.phone_number, "admin", body_msg
+      body_msg = SMSBodyText::account_activation_msg("admin", base_url)
+      sms_status = deliver_sms_to casa_admin.phone_number, body_msg
 
       respond_to do |format|
-        format.html { redirect_to casa_admins_path, notice: notice_msg }
+        format.html { redirect_to casa_admins_path, notice: sms_acct_creation_notice("admin", sms_status) }
         format.json { render json: @casa_admin, status: :created }
       end
     rescue ActiveRecord::RecordInvalid
