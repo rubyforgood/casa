@@ -24,8 +24,8 @@ class MissingDataExportCsvService
 
   def has_missing_values?(casa_case)
     !casa_case.birth_month_year_youth? ||
-    casa_case.next_court_date.nil? ||
-    casa_case.case_court_orders.empty?
+      casa_case.next_court_date.nil? ||
+      casa_case.case_court_orders.empty?
   end
 
   def get_status(missing)
