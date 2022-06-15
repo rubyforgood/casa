@@ -50,11 +50,11 @@ class ApplicationController < ActionController::Base
       To: to
     }
 
-    twilio_res = twilio.send_sms(req_params)
-    if twilio_res.error_code.nil?
-      "sent"
-    else
-      "error"
+    begin
+      twilio_res = twilio.send_sms(req_params)
+      return "sent"
+    rescue Twilio::REST::RestError
+      return "error"
     end
   end
 
