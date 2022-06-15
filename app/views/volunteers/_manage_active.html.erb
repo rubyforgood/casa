@@ -27,8 +27,8 @@
                 class: "btn btn-outline-danger" %>
   <% end %>
   <% if current_user.casa_admin? %>
- <%= link_to "Send Reactivation Alert (SMS)",
-            send_reactivation_alert_volunteer_path(user),
-            class: "btn btn-outline-danger" %>
- <% end %>
+    <%= link_to "Send Reactivation Alert (SMS)",
+                send_reactivation_alert_volunteer_path(user),
+                class: "btn btn-outline-danger" %>
+  <% end %>
 </div>
