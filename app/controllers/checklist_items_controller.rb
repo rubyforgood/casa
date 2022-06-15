@@ -33,6 +33,14 @@ class ChecklistItemsController < ApplicationController
     end
   end
 
+  def destroy
+    authorize ChecklistItem
+    @hearing_type = HearingType.find(params[:hearing_type_id])
+    @checklist_item = ChecklistItem.find(params[:id])
+    flash[:error] = "Failed to delete checklist item." if !@checklist_item.destroy
+    redirect_to edit_hearing_type_path(@hearing_type), notice: "Checklist Item was successfully deleted."
+  end
+
   private
 
   def checklist_item_params

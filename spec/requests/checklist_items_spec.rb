@@ -133,4 +133,29 @@ RSpec.describe "ChecklistItems", type: :request do
       end
     end
   end
+
+  describe "DELETE destroy" do
+    context "when logged in as an admin user" do
+      it "should allow for the deletion of checklist items" do
+        sign_in_as_admin
+        hearing_type = create(:hearing_type)
+        checklist_item = create(:checklist_item)
+        delete hearing_type_checklist_item_path(hearing_type, checklist_item)
+        expect(response).to redirect_to edit_hearing_type_path(hearing_type)
+        expect(ChecklistItem.count).to eq 0
+      end
+    end
+
+    context "when logged in as a non-admin user" do
+      it "should not allow for the deletion of checklist items" do
+        sign_in_as_volunteer
+        hearing_type = create(:hearing_type)
+        checklist_item = create(:checklist_item)
+        delete hearing_type_checklist_item_path(hearing_type, checklist_item)
+        expect(response).to redirect_to root_path
+        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(ChecklistItem.count).to eq 1
+      end
+    end
+  end
 end
