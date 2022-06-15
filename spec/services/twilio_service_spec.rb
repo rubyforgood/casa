@@ -5,9 +5,8 @@ RSpec.describe TwilioService do
   describe "twilio API" do
     context "SMS messaging" do
       before :all do
-        stubbed_requests
-        #         StubbedRequests::TwilioAPI::twilio_success_stub
-        #         StubbedRequests::ShortIOAPI::short_io_stub
+        StubbedRequests::TwilioAPI::twilio_success_stub
+        StubbedRequests::ShortIOAPI::short_io_stub
         WebMock.disable_net_connect!
         @acc_sid = "articuno34"
         @api_key = "Aladdin"

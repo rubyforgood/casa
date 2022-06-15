@@ -31,7 +31,8 @@ RSpec.describe CaseContactTypesReminder do
   end
 
   before do
-    stubbed_requests
+    StubbedRequests::TwilioAPI::twilio_success_stub
+    StubbedRequests::ShortIOAPI::short_io_stub
     WebMock.disable_net_connect!
   end
 
