@@ -51,10 +51,10 @@ class ApplicationController < ActionController::Base
     }
 
     begin
-      twilio_res = twilio.send_sms(req_params)
-      return "sent"
+      twilio.send_sms(req_params)
+      "sent"
     rescue Twilio::REST::RestError
-      return "error"
+      "error"
     end
   end
 

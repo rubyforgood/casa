@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 require "support/stubbed_requests/webmock_helper"
 
