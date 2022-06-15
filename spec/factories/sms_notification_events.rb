@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :sms_notification_event do
-    name { "MyString" }
-    user_type { "MyString" }
+    name { "name" }
+    user_type { "user type" }
   end
 end
