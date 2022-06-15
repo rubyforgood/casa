@@ -32,16 +32,17 @@ RSpec.describe CaseContactTypesReminder do
 
   before do
     StubbedRequests::TwilioAPI.twilio_success_stub
-    StubbedRequests::ShortIOAPI.short_io_stub
+    StubbedRequests::TwilioAPI.twilio_success_stub_messages_60_days
+    StubbedRequests::ShortIOAPI.short_io_stub_localhost
     WebMock.disable_net_connect!
   end
 
   context "volunteer with uncontacted contact types, sms notifications on, and no reminder in last quarter" do
     it "should send sms reminder" do
       responses = CaseContactTypesReminder.new.send!
-      expect(responses.count).to match 1
-      expect(responses[0][:messages][0].body).to match CaseContactTypesReminder::FIRST_MESSAGE
-      expect(responses[0][:messages][1].body).to match contact_type.name
+      expect(responses.count).to eq 1
+      expect(responses[0][:messages][0].body).to include CaseContactTypesReminder::FIRST_MESSAGE.strip
+      expect(responses[0][:messages][1].body).to include contact_type.name
       expect(responses[0][:messages][2].body).to match CaseContactTypesReminder::THIRD_MESSAGE + "https://42ni.short.gy/jzTwdF"
     end
   end
@@ -79,8 +80,8 @@ RSpec.describe CaseContactTypesReminder do
       end
       responses = CaseContactTypesReminder.new.send!
       expect(responses.count).to match 1
-      expect(responses[0][:messages][0].body).to match CaseContactTypesReminder::FIRST_MESSAGE
-      expect(responses[0][:messages][1].body).to match contact_type.name
+      expect(responses[0][:messages][0].body).to eq CaseContactTypesReminder::FIRST_MESSAGE.strip
+      expect(responses[0][:messages][1].body).to include contact_type.name
       expect(responses[0][:messages][2].body).to match CaseContactTypesReminder::THIRD_MESSAGE + "https://42ni.short.gy/jzTwdF"
     end
   end
