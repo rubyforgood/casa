@@ -31,7 +31,7 @@ module StubbedRequests
         .to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"Execute Order 66 - https://42ni.short.gy/jzTwdF\"}")
     end
 
-    def self.twilio_activation_success_stub(resource)
+    def self.twilio_activation_success_stub(resource = "")
       WebMock.stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno34/Messages.json")
         .with(
           headers: {
@@ -42,7 +42,7 @@ module StubbedRequests
         .to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"Execute Order 66 - https://42ni.short.gy/jzTwdF\"}")
     end
 
-    def self.twilio_activation_error_stub(resource)
+    def self.twilio_activation_error_stub(resource = "")
       WebMock.stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno31/Messages.json")
         .with(
           headers: {

@@ -316,14 +316,7 @@ RSpec.describe "/volunteers", type: :request do
   describe "POST /send_reactivation_alert" do
     before do
       sign_in admin
-
-      stubbed_requests
-      WebMock.disable_net_connect!
-      @acc_sid = "fake_twilio_sid"
-      @api_key = "fake_twilio_api_key"
-      @api_secret = "fake_twilio_api_secret"
-      @short_url = ShortUrlService.new
-      @twilio = TwilioService.new(@api_key, @api_secret, @acc_sid)
+      @short_io_stub = StubbedRequests::TwilioAPI::twilio_activation_success_stub
     end
 
     it "sends an reactivation SMS" do

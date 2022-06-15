@@ -2,7 +2,7 @@ require "rails_helper"
 require "support/webmock_helper"
 
 RSpec.describe ShortUrlService do
-  let!(:original_url) { "https://www.google.com/" }
+  let!(:original_url) { "https://www.google.com" }
   let!(:notification_object) { ShortUrlService.new }
   let!(:short_io_domain) { Rails.application.credentials[:SHORT_IO_DOMAIN] }
 
