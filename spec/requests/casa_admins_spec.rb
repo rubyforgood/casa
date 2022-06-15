@@ -1,6 +1,12 @@
 require "rails_helper"
+require "support/stubbed_requests/webmock_helper"
 
 RSpec.describe "/casa_admins", type: :request do
+  # stub the domains within blacklist for testing
+  blacklist = ["api.twilio.com", "api.short.io"]
+  web_mock = WebMockHelper.new(blacklist)
+  web_mock.stub_network_connection
+
   describe "GET /casa_admins/:id/edit" do
     context "logged in as admin user" do
       context "same org" do
@@ -319,7 +325,11 @@ RSpec.describe "/casa_admins", type: :request do
   describe "POST /casa_admins" do
     subject { post casa_admins_path, params: {casa_admin: params} }
 
-    before { sign_in_as_admin }
+    before do
+      sign_in_as_admin
+      @twilio_activation_success_stub = WebMockHelper.twilio_activation_success_stub("admin")
+      @twilio_activation_error_stub = WebMockHelper.twilio_activation_error_stub("admin")
+    end
 
     context "when successfully" do
       let(:params) { attributes_for(:casa_admin) }
@@ -331,7 +341,7 @@ RSpec.describe "/casa_admins", type: :request do
       it "has flash notice" do
         subject
 
-        expect(flash[:notice]).to eq("New admin created successfully")
+        expect(flash[:notice]).to eq("New admin created successfully.")
       end
 
       it "redirects to casa_admins_path" do
@@ -346,6 +356,40 @@ RSpec.describe "/casa_admins", type: :request do
         expect(response.content_type).to eq("application/json; charset=utf-8")
         expect(response).to have_http_status(:created)
         expect(response.body).to match(params[:display_name].to_json)
+      end
+    end
+
+    context "when creating new admin" do
+      let(:params) { attributes_for(:casa_admin) }
+
+      it "sends SMS when phone number is provided " do
+        params[:phone_number] = "+12222222222"
+        subject
+        expect(@twilio_activation_success_stub).to have_been_requested.times(1)
+        expect(response).to have_http_status(:redirect)
+        follow_redirect!
+        expect(flash[:notice]).to match(/New admin created successfully. SMS has been sent!/)
+      end
+
+      it "does not send SMS when phone number not given" do
+        subject
+        expect(@twilio_activation_success_stub).to have_been_requested.times(0)
+        expect(@twilio_activation_error_stub).to have_been_requested.times(0)
+        expect(response).to have_http_status(:redirect)
+        follow_redirect!
+        expect(flash[:notice]).to match(/New admin created successfully./)
+      end
+
+      it "does not send SMS when Twilio has an error" do
+        org = create(:casa_org, twilio_account_sid: "articuno31")
+        admin = build(:casa_admin, casa_org: org)
+        sign_in admin
+        params[:phone_number] = "+12222222222"
+        subject
+        expect(@twilio_activation_error_stub).to have_been_requested.times(1)
+        expect(response).to have_http_status(:redirect)
+        follow_redirect!
+        expect(flash[:notice]).to match(/New admin created successfully. SMS not sent due to error./)
       end
     end
 

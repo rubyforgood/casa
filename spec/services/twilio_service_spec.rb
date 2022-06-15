@@ -1,11 +1,12 @@
 require "rails_helper"
-require "support/webmock_helper"
+require "support/stubbed_requests/webmock_helper"
 
 RSpec.describe TwilioService do
   describe "twilio API" do
     context "SMS messaging" do
       before :all do
-        stubbed_requests
+        WebMockHelper.twilio_success_stub
+        WebMockHelper.short_io_stub
         WebMock.disable_net_connect!
         @acc_sid = "articuno34"
         @api_key = "Aladdin"
@@ -15,7 +16,7 @@ RSpec.describe TwilioService do
       end
 
       it "can send a SMS with a short url successfully" do
-        @short_url.create_short_url("https://www.google.com/")
+        @short_url.create_short_url("https://www.google.com")
         params = {
           From: "+15555555555",
           Body: "Execute Order 66 - ",
