@@ -70,7 +70,7 @@ module StubbedRequests
         .to_return(status: 200, body: "{\"shortURL\":\"https://42ni.short.gy/jzTwdF\"}", headers: {})
     end
 
-    def self.short_io_stub_localhost
+    def self.short_io_stub_localhost(base_url = "http://localhost:3000/case_contacts/new")
       WebMock.stub_request(:post, "https://api.short.io/links")
         .with(
           body: {originalURL: base_url, domain: "42ni.short.gy"}.to_json,
