@@ -49,6 +49,7 @@ Rails.application.routes.draw do
       patch :deactivate
       patch :activate
       patch :resend_invitation
+      post :send_reactivation_alert
       patch :change_to_supervisor
     end
   end
@@ -107,6 +108,7 @@ Rails.application.routes.draw do
       patch :activate
       patch :deactivate
       get :resend_invitation
+      get :send_reactivation_alert
       patch :reminder
       get :impersonate
     end

@@ -68,4 +68,17 @@ def stubbed_requests
       }
     )
     .to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"If you have made contact with them in the past 60 days, remember to log it: https://42ni.short.gy/jzTwdF\"}")
+  stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts//Messages.json")
+    .with(
+      body: {"Body" => /volunteer\sconsole\saccount\shas\sbeen\sreactivated/, "From" => nil, "To" => ""},
+      headers: {
+        "Accept" => "application/json",
+        "Accept-Charset" => "utf-8",
+        "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+        "Authorization" => "Basic Og==",
+        "Content-Type" => "application/x-www-form-urlencoded",
+        "User-Agent" => "twilio-ruby/5.67.2 (linux x86_64) Ruby/3.1.0"
+      }
+    )
+    .to_return(status: 200, body: "", headers: {})
 end
