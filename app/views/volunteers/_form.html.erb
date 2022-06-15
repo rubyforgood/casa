@@ -11,10 +11,10 @@
     <%= form.text_field :display_name, class: "form-control" %>
   </div>
 
-    <div class="field form-group">
-      <%= form.label :phone_number, t("common.phone_number") %>
-      <%= form.text_field :phone_number, class: "form-control" %>
-    </div>
+  <div class="field form-group">
+    <%= form.label :phone_number, t("common.phone_number") %>
+    <%= form.telephone_field :phone_number, class: "form-control" %>
+  </div>
 
   <div class="actions">
     <%= form.submit "Create User", class: "btn btn-primary" %>

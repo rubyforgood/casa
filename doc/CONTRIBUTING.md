@@ -5,7 +5,7 @@ If you have any questions about an issue, comment on the issue, open a new issue
   
 You won't be yelled at for giving your best effort. The worst that can happen is that you'll be politely asked to change something. We appreciate any sort of contributions, and don't want a wall of rules to get in the way of that.
 
-## Contributing Procedure  
+## Contributing Steps  
 ### Issues  
 All work is organized by issues.  
 [Find issues here.][issues]  
@@ -25,27 +25,15 @@ If you are so inclined, you can open a draft PR as you continue to work on it.
 1. Run linters and fix any linting errors they brings up.  
    - (from the repo root) `./bin/git_hooks/lint`
 
-1. Push to your fork and submit a pull request. Include the issue number (ex. `Resolves #1`) in the PR description. This will ensure the issue gets closed automatically when the pull request gets merged.
+1. Push to your branch/fork and submit a pull request. Include the issue number (ex. `Resolves #1`) in the PR description. This will ensure the issue gets closed automatically when the pull request gets merged.
 
-1. Pull requests are manually reviewed. We may request changes after a manual review. We will try to respond to your PR quickly(1 week).  
+#### Pull Request Checks
+There are scripts that check the code to ensure the code is working. Most of them need to pass. You can see the scripts run at the bottom of your pull request webpage. More about the scrips [here](https://github.com/rubyforgood/casa/wiki/Pull-Request-Checks) Pull requests are also manually reviewed. We may request changes after a manual review. We will try to respond to your PR quickly.  
 
-Some things that will increase the chance that your pull request is accepted:
-
+Some qualities of good pull requests:  
 * Small line diff count. Several small pull requests for a large issue are much more preferable to one big pull request.  
-* Include tests that fail without your code, and pass with it
-* Ensure that the following all pass locally:
-```
-bundle exec brakeman
-bundle exec standardrb
-bundle exec rake
-```
-* For pull requests changing UI, make sure the UI matches the rest of the site. Some of our users aren't great with computers and we don't want to make them learn new things if we don't need to.
+* Include tests that fail without your code, and pass with it  
+* For pull requests changing UI, make sure the UI matches the rest of the site. Some of our users aren't great with computers and we don't want to make them learn new things if we don't need to.  
 * Update the documentation, for things like new rails/bash commands. Please make a guide if modyifying the code in the future is difficult. For example [editing .docx templates](https://github.com/rubyforgood/casa/wiki/How-to-edit-docx-templates---word-document-court-report) is difficult because the documentation is hard to find and it requires microsoft word.  
-* Use Rails idioms and helpers  
-
-Check out [the wiki](https://github.com/rubyforgood/casa/wiki) for help with common problems
-
-[code of conduct]: https://github.com/rubyforgood/code-of-conduct
-[issues]: https://github.com/rubyforgood/casa/issues?q=is%3Aopen+is%3Aissue+label%3A%22Status%3A+Available%22
-[repo]: https://github.com/rubyforgood/casa
-[setup]: https://github.com/rubyforgood/casa#developing-
+* If your pull request involves user permissions, use [policy files](https://github.com/varvet/pundit#pundit).  
+* If your pull request has an erb file with complex rails logic inside of it, please use a [decorator](https://medium.com/@kosovacsedad/ruby-on-rails-decorator-design-pattern-b54a1afd03c8).  

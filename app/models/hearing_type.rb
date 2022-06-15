@@ -6,6 +6,27 @@ class HearingType < ApplicationRecord
   default_scope { order(name: :asc) }
   scope :for_organization, ->(org) { where(casa_org: org) }
   scope :active, -> { where(active: true) }
+
+  DEFAULT_HEARING_TYPES = [
+    "emergency hearing",
+    "trial on the merits",
+    "scheduling conference",
+    "uncontested hearing",
+    "pendente lite hearing",
+    "pretrial conference"
+  ].freeze
+
+  class << self
+    def generate_for_org!(casa_org)
+      DEFAULT_HEARING_TYPES.each do |hearing_type|
+        HearingType.find_or_create_by!(
+          casa_org: casa_org,
+          name: hearing_type,
+          active: true
+        )
+      end
+    end
+  end
 end
 
 # == Schema Information

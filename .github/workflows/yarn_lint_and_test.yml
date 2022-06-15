@@ -6,13 +6,17 @@ on:
       - main
     paths:
       - '**/*.js'
+      - '**/*.json'
       - '**/*.jsx'
+      - 'yarn.lock'
   pull_request:
     branches:
       - main
     paths:
       - '**/*.js'
+      - '**/*.json'
       - '**/*.jsx'
+      - 'yarn.lock'
 
 jobs:
   yarn_lint:
