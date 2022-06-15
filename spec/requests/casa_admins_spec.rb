@@ -1,11 +1,11 @@
 require "rails_helper"
-require "support/webmock_helper"
+require "support/stubbed_requests/webmock_helper"
 
 RSpec.describe "/casa_admins", type: :request do
   # stub the domains within blacklist for testing
   blacklist = ["api.twilio.com", "api.short.io"]
-  allowed_sites = StubbedRequests.allowed_sites(blacklist)
-  WebMock.disable_net_connect!(allow: allowed_sites)
+  web_mock = WebMockHelper.new(blacklist)
+  web_mock.stub_network_connection
 
   describe "GET /casa_admins/:id/edit" do
     context "logged in as admin user" do
@@ -327,8 +327,8 @@ RSpec.describe "/casa_admins", type: :request do
 
     before do
       sign_in_as_admin
-      @twilio_activation_success_stub = StubbedRequests::TwilioAPI.twilio_activation_success_stub("admin")
-      @twilio_activation_error_stub = StubbedRequests::TwilioAPI.twilio_activation_error_stub("admin")
+      @twilio_activation_success_stub = WebMockHelper.twilio_activation_success_stub("admin")
+      @twilio_activation_error_stub = WebMockHelper.twilio_activation_error_stub("admin")
     end
 
     context "when successfully" do

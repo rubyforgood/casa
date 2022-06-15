@@ -1,5 +1,5 @@
 require "rails_helper"
-require "support/webmock_helper"
+require "support/stubbed_requests/webmock_helper"
 
 RSpec.describe "/volunteers", type: :request do
   let(:organization) { create(:casa_org) }
@@ -8,8 +8,8 @@ RSpec.describe "/volunteers", type: :request do
   let(:volunteer) { create(:volunteer, casa_org: organization) }
   # add domains to blacklist you want to stub
   blacklist = ["api.twilio.com", "api.short.io"]
-  allowed_sites = StubbedRequests.allowed_sites(blacklist)
-  WebMock.disable_net_connect!(allow: allowed_sites)
+  web_mock = WebMockHelper.new(blacklist)
+  web_mock.stub_network_connection
 
   describe "GET /index" do
     it "renders a successful response" do
@@ -96,8 +96,8 @@ RSpec.describe "/volunteers", type: :request do
   describe "POST /create" do
     before do
       sign_in admin
-      @twilio_activation_success_stub = StubbedRequests::TwilioAPI.twilio_activation_success_stub("volunteer")
-      @twilio_activation_error_stub = StubbedRequests::TwilioAPI.twilio_activation_error_stub("volunteer")
+      @twilio_activation_success_stub = WebMockHelper.twilio_activation_success_stub("volunteer")
+      @twilio_activation_error_stub = WebMockHelper.twilio_activation_error_stub("volunteer")
     end
 
     context "with valid params" do
@@ -316,7 +316,7 @@ RSpec.describe "/volunteers", type: :request do
   describe "POST /send_reactivation_alert" do
     before do
       sign_in admin
-      @short_io_stub = StubbedRequests::TwilioAPI::twilio_activation_success_stub
+      @short_io_stub = WebMockHelper.twilio_activation_success_stub
     end
 
     it "sends an reactivation SMS" do

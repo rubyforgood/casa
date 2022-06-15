@@ -1,12 +1,12 @@
 require "rails_helper"
-require "support/webmock_helper"
+require "support/stubbed_requests/webmock_helper"
 
 RSpec.describe TwilioService do
   describe "twilio API" do
     context "SMS messaging" do
       before :all do
-        StubbedRequests::TwilioAPI.twilio_success_stub
-        StubbedRequests::ShortIOAPI.short_io_stub
+        WebMockHelper.twilio_success_stub
+        WebMockHelper.short_io_stub
         WebMock.disable_net_connect!
         @acc_sid = "articuno34"
         @api_key = "Aladdin"

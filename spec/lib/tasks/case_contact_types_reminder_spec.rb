@@ -1,6 +1,6 @@
 require "rails_helper"
 require_relative "../../../lib/tasks/case_contact_types_reminder"
-require "support/webmock_helper"
+require "support/stubbed_requests/webmock_helper"
 
 RSpec.describe CaseContactTypesReminder do
   let!(:casa_org) do
@@ -31,9 +31,9 @@ RSpec.describe CaseContactTypesReminder do
   end
 
   before do
-    StubbedRequests::TwilioAPI.twilio_success_stub
-    StubbedRequests::TwilioAPI.twilio_success_stub_messages_60_days
-    StubbedRequests::ShortIOAPI.short_io_stub_localhost
+    WebMockHelper.twilio_success_stub
+    WebMockHelper.twilio_success_stub_messages_60_days
+    WebMockHelper.short_io_stub_localhost
     WebMock.disable_net_connect!
   end
 
