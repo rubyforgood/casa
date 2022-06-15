@@ -40,7 +40,7 @@
                   <%= checklist_item.mandatory ? "Yes" : "Optional" %>
                 </td>
                 <td>
-                  Edit checklist item
+                  <%= link_to "Edit", edit_hearing_type_checklist_item_path(hearing_type, checklist_item) %>
                 </td>
               </tr>
             <% end %>

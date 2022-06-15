@@ -16,6 +16,23 @@ class ChecklistItemsController < ApplicationController
     end
   end
 
+  def edit
+    authorize ChecklistItem
+    @hearing_type = HearingType.find(params[:hearing_type_id])
+    @checklist_item = ChecklistItem.find(params[:id])
+  end
+
+  def update
+    authorize ChecklistItem
+    @hearing_type = HearingType.find(params[:hearing_type_id])
+    @checklist_item = ChecklistItem.find(params[:id])
+    if @checklist_item.update(checklist_item_params)
+      redirect_to edit_hearing_type_path(@hearing_type), notice: "Checklist Item was successfully updated."
+    else
+      render :edit
+    end
+  end
+
   private
 
   def checklist_item_params
