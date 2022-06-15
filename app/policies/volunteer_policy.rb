@@ -41,5 +41,6 @@ class VolunteerPolicy < UserPolicy
   alias_method :activate?, :admin_or_supervisor_same_org?
   alias_method :deactivate?, :admin_or_supervisor_same_org?
   alias_method :resend_invitation?, :admin_or_supervisor_same_org?
+  alias_method :send_reactivation_alert?, :admin_or_supervisor_same_org?
   alias_method :reminder?, :admin_or_supervisor_same_org?
 end

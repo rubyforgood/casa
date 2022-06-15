@@ -66,6 +66,9 @@ en:
       message: "%{created_by_name} has flagged a Case Contact that needs follow up."
       note: "Note: \"%{note}\""
       more_info: "Click to see more."
+    youth_birthday_notification:
+      title: "Youth Birthday Notification"
+      message: "Your youth, case number: %{case_number} has a birthday next month."
   button:
     delete: Delete
     undelete: undelete

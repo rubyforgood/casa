@@ -12,6 +12,7 @@ class AllCasaAdmins::CasaOrgsController < AllCasaAdminsController
     @casa_org = CasaOrg.new(casa_org_params)
 
     if @casa_org.save
+      @casa_org.generate_contact_types_and_hearing_types
       respond_to do |format|
         format.html do
           redirect_to all_casa_admins_casa_org_path(@casa_org),

@@ -11,6 +11,7 @@ class ReimbursementsController < ApplicationController
       .want_driving_reimbursement(true)
       .created_max_ago(1.year.ago)
       .filter_by_reimbursement_status(@complete_status)
+    @grouped_reimbursements = @reimbursements.group_by { |cc| "#{cc.occurred_at}-#{cc.creator_id}" }
   end
 
   def datatable
@@ -26,8 +27,9 @@ class ReimbursementsController < ApplicationController
     authorize :reimbursement
 
     @case_contact = fetch_reimbursements.find(params[:reimbursement_id])
-    @case_contact.update(reimbursement_params)
-    @case_contact.save!(validate: false)
+    @grouped_case_contacts = fetch_reimbursements
+      .where({occurred_at: @case_contact.occurred_at, creator_id: @case_contact.creator_id})
+    @grouped_case_contacts.update_all(reimbursement_params.to_h)
     redirect_to reimbursements_path
   end
 

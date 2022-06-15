@@ -34,6 +34,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resource :fund_request, only: %i[new create]
+
     resources :court_dates, only: %i[create edit new show update destroy]
 
     member do
@@ -47,6 +49,7 @@ Rails.application.routes.draw do
       patch :deactivate
       patch :activate
       patch :resend_invitation
+      post :send_reactivation_alert
       patch :change_to_supervisor
     end
   end
@@ -84,7 +87,7 @@ Rails.application.routes.draw do
   resources :emancipation_checklists, only: %i[index]
   resources :judges, only: %i[new create edit update]
   resources :notifications, only: :index
-  resources :other_duties, only: %i[new create edit update]
+  resources :other_duties, only: %i[new create edit index update]
 
   resources :supervisors, except: %i[destroy show], concerns: %i[with_datatable] do
     member do
@@ -105,15 +108,18 @@ Rails.application.routes.draw do
       patch :activate
       patch :deactivate
       get :resend_invitation
+      get :send_reactivation_alert
       patch :reminder
       get :impersonate
     end
     resources :notes, only: %i[create edit update destroy]
+    resources :learning_hours, only: %i[index show new create edit update destroy]
   end
   resources :case_assignments, only: %i[create destroy] do
     member do
       get :unassign
       patch :unassign
+      patch :show_hide_contacts
     end
   end
   resources :case_court_orders, only: %i[destroy]
