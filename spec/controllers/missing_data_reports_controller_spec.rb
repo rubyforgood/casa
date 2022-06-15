@@ -14,7 +14,7 @@ RSpec.describe MissingDataReportsController, type: :controller do
 
       it "returns a successful response" do
         expect(response).to be_successful
-        expect(response.header['Content-Type']).to eq("text/csv")
+        expect(response.header["Content-Type"]).to eq("text/csv")
       end
     end
   end
