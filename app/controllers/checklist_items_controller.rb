@@ -1,47 +1,50 @@
 class ChecklistItemsController < ApplicationController
+  before_action :authorize_checklist_item
+  before_action :set_hearing_type
+  before_action :set_checklist_item, except: [:new, :create]
+
   def new
-    authorize ChecklistItem
-    @hearing_type = HearingType.find(params[:hearing_type_id])
     @checklist_item = ChecklistItem.new
   end
 
   def create
-    authorize ChecklistItem
-    @hearing_type = HearingType.find(params[:hearing_type_id])
     @checklist_item = @hearing_type.checklist_items.create(checklist_item_params)
     if @checklist_item.save
-      redirect_to edit_hearing_type_path(@hearing_type), notice: "Checklist Item was successfully created."
+      redirect_to edit_hearing_type_path(@hearing_type), notice: "Checklist item was successfully created."
     else
       render :new
     end
   end
 
   def edit
-    authorize ChecklistItem
-    @hearing_type = HearingType.find(params[:hearing_type_id])
-    @checklist_item = ChecklistItem.find(params[:id])
   end
 
   def update
-    authorize ChecklistItem
-    @hearing_type = HearingType.find(params[:hearing_type_id])
-    @checklist_item = ChecklistItem.find(params[:id])
     if @checklist_item.update(checklist_item_params)
-      redirect_to edit_hearing_type_path(@hearing_type), notice: "Checklist Item was successfully updated."
+      redirect_to edit_hearing_type_path(@hearing_type), notice: "Checklist item was successfully updated."
     else
       render :edit
     end
   end
 
   def destroy
-    authorize ChecklistItem
-    @hearing_type = HearingType.find(params[:hearing_type_id])
-    @checklist_item = ChecklistItem.find(params[:id])
     flash[:error] = "Failed to delete checklist item." if !@checklist_item.destroy
-    redirect_to edit_hearing_type_path(@hearing_type), notice: "Checklist Item was successfully deleted."
+    redirect_to edit_hearing_type_path(@hearing_type), notice: "Checklist item was successfully deleted."
   end
 
   private
+
+  def authorize_checklist_item
+    authorize ChecklistItem
+  end
+
+  def set_hearing_type
+    @hearing_type ||= HearingType.find(params[:hearing_type_id])
+  end
+
+  def set_checklist_item
+    @checklist_item ||= ChecklistItem.find(params[:id])
+  end
 
   def checklist_item_params
     params.require(:checklist_item).permit(:category, :description, :mandatory)
