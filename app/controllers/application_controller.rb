@@ -52,7 +52,7 @@ class ApplicationController < ActionController::Base
 
     begin
       twilio_res = twilio.send_sms(req_params)
-      return twilio_res.error_code.nil? ? "sent" : "error"
+      twilio_res.error_code.nil? ? "sent" : "error"
     rescue Twilio::REST::RestError
       "error"
     end
@@ -66,7 +66,7 @@ class ApplicationController < ActionController::Base
       return "New #{resource_name} created successfully. SMS not sent due to error."
     end
     if sms_status === "sent"
-      return "New #{resource_name} created successfully. SMS has been sent!"
+      "New #{resource_name} created successfully. SMS has been sent!"
     end
   end
 
