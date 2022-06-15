@@ -8,7 +8,7 @@ RSpec.describe ShortUrlService do
 
   describe "short.io API" do
     before :each do
-      StubbedRequests::ShortIOAPI::short_io_stub
+      StubbedRequests::ShortIOAPI.short_io_stub
       WebMock.disable_net_connect!
     end
 

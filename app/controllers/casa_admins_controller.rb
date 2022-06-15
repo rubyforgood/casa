@@ -41,7 +41,7 @@ class CasaAdminsController < ApplicationController
     begin
       casa_admin = service.create!
       base_url = request.base_url
-      body_msg = SMSBodyText::account_activation_msg("admin", base_url)
+      body_msg = SMSBodyText.account_activation_msg("admin", base_url)
       sms_status = deliver_sms_to casa_admin.phone_number, body_msg
 
       respond_to do |format|

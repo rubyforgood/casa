@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 require "support/webmock_helper"
 
@@ -12,7 +13,7 @@ RSpec.describe "/supervisors", type: :request do
   end
   # add domains to blacklist you want to stub
   blacklist = ["api.twilio.com", "api.short.io"]
-  allowed_sites = StubbedRequests::allowed_sites(blacklist)
+  allowed_sites = StubbedRequests.allowed_sites(blacklist)
   WebMock.disable_net_connect!(allow: allowed_sites)
 
   describe "GET /new" do
@@ -177,8 +178,8 @@ RSpec.describe "/supervisors", type: :request do
 
   describe "POST /create" do
     before do
-      @twilio_activation_success_stub = StubbedRequests::TwilioAPI::twilio_activation_success_stub("supervisor")
-      @twilio_activation_error_stub = StubbedRequests::TwilioAPI::twilio_activation_error_stub("supervisor")
+      @twilio_activation_success_stub = StubbedRequests::TwilioAPI.twilio_activation_success_stub("supervisor")
+      @twilio_activation_error_stub = StubbedRequests::TwilioAPI.twilio_activation_error_stub("supervisor")
     end
 
     let(:params) do

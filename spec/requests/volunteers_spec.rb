@@ -8,7 +8,7 @@ RSpec.describe "/volunteers", type: :request do
   let(:volunteer) { create(:volunteer, casa_org: organization) }
   # add domains to blacklist you want to stub
   blacklist = ["api.twilio.com", "api.short.io"]
-  allowed_sites = StubbedRequests::allowed_sites(blacklist)
+  allowed_sites = StubbedRequests.allowed_sites(blacklist)
   WebMock.disable_net_connect!(allow: allowed_sites)
 
   describe "GET /index" do
@@ -96,8 +96,8 @@ RSpec.describe "/volunteers", type: :request do
   describe "POST /create" do
     before do
       sign_in admin
-      @twilio_activation_success_stub = StubbedRequests::TwilioAPI::twilio_activation_success_stub("volunteer")
-      @twilio_activation_error_stub = StubbedRequests::TwilioAPI::twilio_activation_error_stub("volunteer")
+      @twilio_activation_success_stub = StubbedRequests::TwilioAPI.twilio_activation_success_stub("volunteer")
+      @twilio_activation_error_stub = StubbedRequests::TwilioAPI.twilio_activation_error_stub("volunteer")
     end
 
     context "with valid params" do
