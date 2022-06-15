@@ -313,6 +313,26 @@ RSpec.describe "/volunteers", type: :request do
     end
   end
 
+  describe "POST /send_reactivation_alert" do
+    before do
+      sign_in admin
+
+      stubbed_requests
+      WebMock.disable_net_connect!
+      @acc_sid = "fake_twilio_sid"
+      @api_key = "fake_twilio_api_key"
+      @api_secret = "fake_twilio_api_secret"
+      @short_url = ShortUrlService.new
+      @twilio = TwilioService.new(@api_key, @api_secret, @acc_sid)
+    end
+
+    it "sends an reactivation SMS" do
+      get send_reactivation_alert_volunteer_path(volunteer)
+      expect(response).to redirect_to(edit_volunteer_path(volunteer))
+      expect(response.status).to match 302
+    end
+  end
+
   describe "GET /impersonate" do
     let!(:other_volunteer) { create(:volunteer, casa_org: organization) }
     let!(:supervisor) { create(:supervisor, casa_org: organization) }
