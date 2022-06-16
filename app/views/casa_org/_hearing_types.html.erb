@@ -22,7 +22,7 @@
         <%= hearing_type.name %>
       </td>
       <td>
-        Updated (insert date here)
+        <%= "#{hearing_type.checklist_updated_date}" %> 
       </td>
       <td scope="row">
         <%= hearing_type.active ? "Yes" : "No" %>

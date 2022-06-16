@@ -10,6 +10,7 @@ class ChecklistItemsController < ApplicationController
   def create
     @checklist_item = @hearing_type.checklist_items.create(checklist_item_params)
     if @checklist_item.save
+      set_checklist_updated_date(@hearing_type)
       redirect_to edit_hearing_type_path(@hearing_type), notice: "Checklist item was successfully created."
     else
       render :new
@@ -21,6 +22,7 @@ class ChecklistItemsController < ApplicationController
 
   def update
     if @checklist_item.update(checklist_item_params)
+      set_checklist_updated_date(@hearing_type)
       redirect_to edit_hearing_type_path(@hearing_type), notice: "Checklist item was successfully updated."
     else
       render :edit
@@ -28,11 +30,20 @@ class ChecklistItemsController < ApplicationController
   end
 
   def destroy
-    flash[:error] = "Failed to delete checklist item." if !@checklist_item.destroy
-    redirect_to edit_hearing_type_path(@hearing_type), notice: "Checklist item was successfully deleted."
+    if @checklist_item.destroy
+      set_checklist_updated_date(@hearing_type)
+      redirect_to edit_hearing_type_path(@hearing_type), notice: "Checklist item was successfully deleted."
+    else
+      flash[:error] = "Failed to delete checklist item."
+      redirect_to edit_hearing_type_path(@hearing_type)
+    end
   end
 
   private
+
+  def set_checklist_updated_date(hearing_type)
+    hearing_type.update_attribute(:checklist_updated_date, "Updated #{Time.new.strftime("%m/%d/%Y")}")
+  end
 
   def authorize_checklist_item
     authorize ChecklistItem

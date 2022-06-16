@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_10_221701) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_16_021404) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -303,6 +303,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_10_221701) do
     t.bigint "casa_org_id", null: false
     t.string "name", null: false
     t.boolean "active", default: true, null: false
+    t.string "checklist_updated_date", default: "None", null: false
     t.index ["casa_org_id"], name: "index_hearing_types_on_casa_org_id"
   end
 
