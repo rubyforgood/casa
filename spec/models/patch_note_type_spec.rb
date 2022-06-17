@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe PatchNoteType, type: :model do
   it "does not have duplicate names" do

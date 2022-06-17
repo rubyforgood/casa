@@ -1,5 +1,5 @@
 namespace :after_party do
-  desc 'Deployment task: create_initial_patch_note_types'
+  desc "Deployment task: create_initial_patch_note_types"
   task create_initial_patch_note_types: :environment do
     puts "Running deploy task 'create_initial_patch_note_types'"
 
