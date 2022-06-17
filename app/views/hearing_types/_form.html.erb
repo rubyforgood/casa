@@ -42,7 +42,8 @@
                 </td>
                 <td>
                   <%= link_to "Edit", edit_hearing_type_checklist_item_path(hearing_type, checklist_item) %>
-                  <%= link_to "Delete", hearing_type_checklist_item_path(hearing_type, checklist_item), method: :delete, data: { confirm: "Are you sure that you want to delete this checklist item?" } %>
+                  <%= link_to "Delete", hearing_type_checklist_item_path(hearing_type, checklist_item),
+                  method: :delete, data: { confirm: "Are you sure that you want to delete this checklist item?" } %>
                 </td>
               </tr>
             <% end %>

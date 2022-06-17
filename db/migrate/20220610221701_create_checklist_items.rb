@@ -10,4 +10,3 @@ class CreateChecklistItems < ActiveRecord::Migration[7.0]
     add_index :checklist_items, :hearing_type_id
   end
 end
- 
