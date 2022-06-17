@@ -59,4 +59,10 @@ FactoryBot.define do
       end
     end
   end
+
+  trait :with_upcoming_court_date do
+    after(:create) do |casa_case|
+      create(:court_date, casa_case: casa_case, date: Date.tomorrow)
+    end
+  end
 end
