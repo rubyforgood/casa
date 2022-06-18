@@ -180,6 +180,7 @@ RSpec.describe "/supervisors", type: :request do
     before do
       @twilio_activation_success_stub = WebMockHelper.twilio_activation_success_stub("supervisor")
       @twilio_activation_error_stub = WebMockHelper.twilio_activation_error_stub("supervisor")
+      @short_io_stub = WebMockHelper.short_io_stub_sms
     end
 
     let(:params) do
@@ -205,6 +206,7 @@ RSpec.describe "/supervisors", type: :request do
       sign_in admin
       params[:supervisor][:phone_number] = "+12222222222"
       post supervisors_url, params: params
+      expect(@short_io_stub).to have_been_requested.times(2)
       expect(@twilio_activation_success_stub).to have_been_requested.times(1)
       expect(response).to have_http_status(:redirect)
       follow_redirect!
@@ -214,6 +216,7 @@ RSpec.describe "/supervisors", type: :request do
     it "does not send a SMS if phone number not given" do
       sign_in admin
       post supervisors_url, params: params
+      expect(@short_io_stub).to have_been_requested.times(0)
       expect(@twilio_activation_success_stub).to have_been_requested.times(0)
       expect(@twilio_activation_error_stub).to have_been_requested.times(0)
       expect(response).to have_http_status(:redirect)

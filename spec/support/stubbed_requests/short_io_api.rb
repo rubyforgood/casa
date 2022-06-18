@@ -14,6 +14,20 @@ module ShortIOAPI
       .to_return(status: 200, body: "{\"shortURL\":\"https://42ni.short.gy/jzTwdF\"}", headers: {})
   end
 
+  def short_io_stub_sms
+    WebMock.stub_request(:post, "https://api.short.io/links")
+    .with(
+      headers: {
+        "Accept" => "application/json",
+        "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+        "Authorization" => "1337",
+        "Content-Type" => "application/json",
+        "User-Agent" => "Ruby"
+      }
+    )
+    .to_return(status: 200, body: "{\"shortURL\":\"https://42ni.short.gy/jzTwdF\"}", headers: {})
+  end
+
   def short_io_stub_localhost(base_url = "http://localhost:3000/case_contacts/new")
     WebMock.stub_request(:post, "https://api.short.io/links")
       .with(
