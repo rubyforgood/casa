@@ -39,7 +39,6 @@ end
 #  checklist_updated_date :string           default("None"), not null
 #  name                   :string           not null
 #  casa_org_id            :bigint           not null
-=======
 #
 # Indexes
 #
