@@ -24,7 +24,7 @@ end
 #  name                     :string           not null
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
-#  emancipation_category_id :bigint           not null
+#  emancipation_category_id :integer          not null
 #
 # Indexes
 #

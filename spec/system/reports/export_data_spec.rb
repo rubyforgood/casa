@@ -68,4 +68,14 @@ RSpec.describe "case_contact_reports/index", type: :system do
     expect(download_content).to include(case_contact_with_mileage.creator.display_name)
     expect(download_content).not_to include(case_contact_without_mileage.creator.display_name)
   end
+
+  it "downloads missing data report", js: true do
+    sign_in admin
+
+    visit reports_path
+    click_button "Missing Data Report"
+    wait_for_download
+
+    expect(download_file_name).to match(/missing-data-report-\d{4}-\d{2}-\d{2}.csv/)
+  end
 end

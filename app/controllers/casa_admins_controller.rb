@@ -39,10 +39,12 @@ class CasaAdminsController < ApplicationController
     authorize @casa_admin
 
     begin
-      service.create!
+      casa_admin = service.create!
+      body_msg = SMSBodyText.account_activation_msg("admin", request.base_url)
+      sms_status = deliver_sms_to casa_admin.phone_number, body_msg
 
       respond_to do |format|
-        format.html { redirect_to casa_admins_path, notice: "New admin created successfully" }
+        format.html { redirect_to casa_admins_path, notice: sms_acct_creation_notice("admin", sms_status) }
         format.json { render json: @casa_admin, status: :created }
       end
     rescue ActiveRecord::RecordInvalid

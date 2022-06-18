@@ -49,6 +49,7 @@ Rails.application.routes.draw do
       patch :deactivate
       patch :activate
       patch :resend_invitation
+      post :send_reactivation_alert
       patch :change_to_supervisor
     end
   end
@@ -89,6 +90,7 @@ Rails.application.routes.draw do
   resources :judges, only: %i[new create edit update]
   resources :notifications, only: :index
   resources :other_duties, only: %i[new create edit index update]
+  resources :missing_data_reports, only: %i[index]
 
   resources :supervisors, except: %i[destroy show], concerns: %i[with_datatable] do
     member do
@@ -109,6 +111,7 @@ Rails.application.routes.draw do
       patch :activate
       patch :deactivate
       get :resend_invitation
+      get :send_reactivation_alert
       patch :reminder
       get :impersonate
     end
@@ -119,6 +122,7 @@ Rails.application.routes.draw do
     member do
       get :unassign
       patch :unassign
+      patch :show_hide_contacts
     end
   end
   resources :case_court_orders, only: %i[destroy]

@@ -15,6 +15,13 @@ class CasaCaseDecorator < Draper::Decorator
     object.case_contacts.where("occurred_at < ?", date).max_by(&:occurred_at)
   end
 
+  def case_contacts_filtered_by_active_assignment_ordered_by_occurred_at
+    object.case_contacts
+      .joins("INNER JOIN case_assignments on case_assignments.casa_case_id = case_contacts.casa_case_id and case_assignments.volunteer_id = case_contacts.creator_id")
+      .where("case_assignments.hide_old_contacts = false")
+      .order(occurred_at: :desc)
+  end
+
   def court_report_submission
     object.court_report_status.humanize
   end
