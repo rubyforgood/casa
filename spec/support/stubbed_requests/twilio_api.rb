@@ -45,4 +45,20 @@ module TwilioAPI
       )
       .to_return(body: "{\"error_code\":\"42\", \"status\":\"failed\", \"body\":\"My tea's gone cold I wonder why\"}")
   end
+
+  def twilio_court_report_due_date_stub(resource = "")
+    WebMock.stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno34/Messages.json")
+      .with(
+        body: {"Body" => "Your court report is due on 2022-06-26. Generate a court report to complete & submit here: https://42ni.short.gy/jzTwdF", "From" => "+15555555555", "To" => ""},
+        headers: {
+          "Accept" => "application/json",
+          "Accept-Charset" => "utf-8",
+          "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+          "Authorization" => "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==",
+          "Content-Type" => "application/x-www-form-urlencoded",
+          "User-Agent" => "twilio-ruby/5.67.2 (darwin21 arm64) Ruby/3.1.0"
+        }
+      )
+      .to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"Your court report is due on 2022-06-26. Generate a court report to complete & submit here: https://42ni.short.gy/jzTwdF\"}")
+  end
 end

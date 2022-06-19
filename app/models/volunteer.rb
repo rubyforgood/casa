@@ -62,7 +62,7 @@ class Volunteer < User
         report_due_date = current_case.court_report_due_date
         if (report_due_date == Date.current + COURT_REPORT_SUBMISSION_REMINDER) && current_case.court_report_not_submitted?
           VolunteerMailer.court_report_reminder(volunteer, report_due_date)
-          CourtReportDueSMSReminderSerivce.court_report_reminder(volunteer, report_due_date) if receive_sms_notifications && !phone_number.blank?
+          CourtReportDueSmsReminderSerivce.court_report_reminder(volunteer, report_due_date) if receive_sms_notifications && !phone_number.blank?
         end
       end
     end
