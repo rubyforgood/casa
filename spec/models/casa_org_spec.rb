@@ -58,4 +58,27 @@ RSpec.describe CasaOrg, type: :model do
     end
     it { is_expected.to eq 15 }
   end
+
+  describe "generate_contact_types_and_hearing_types" do
+    let(:org) { create(:casa_org) }
+
+    before { org.generate_contact_types_and_hearing_types }
+
+    describe "generates default contact type groups" do
+      let(:groups) { ContactTypeGroup.where(casa_org: org).joins(:contact_types).pluck(:name, "contact_types.name") }
+      let(:groups_hash) { groups.group_by(&:first).map { |k, a| [k, a.map(&:last)] }.to_h }
+
+      it "matches default contact type groups" do
+        expect(groups_hash).to eq(ContactTypeGroup::DEFAULT_CONTACT_TYPE_GROUPS.stringify_keys)
+      end
+    end
+
+    describe "generates default hearing types" do
+      let(:hearing_types_names) { HearingType.where(casa_org: org).pluck(:name) }
+
+      it "matches default hearing types" do
+        expect(hearing_types_names).to include(*HearingType::DEFAULT_HEARING_TYPES)
+      end
+    end
+  end
 end

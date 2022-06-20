@@ -1,0 +1,17 @@
+#!/bin/sh
+# Builds assets(js and css)
+# Usage:
+#   ./build-assets
+
+repo_root="$(git rev-parse --show-toplevel)"
+. "$repo_root/bin/git_hooks/logger"
+
+log info "Building Assets"
+
+if ! [ -x "$(command -v yarn)" ]; then
+  log error "Command yarn could not be found"
+  exit 1
+fi
+
+yarn build
+yarn build:css

@@ -74,6 +74,10 @@ class CasaCase < ApplicationRecord
       .where("birth_month_year_youth <= ?", 14.years.ago)
   }
 
+  scope :birthday_next_month, -> {
+    where("EXTRACT(month from birth_month_year_youth) = ?", DateTime.now.next_month.month)
+  }
+
   scope :due_date_passed, -> {
     # No more future court dates
     where.not(id: CourtDate.where("date >= ?", Date.today).pluck(:casa_case_id))

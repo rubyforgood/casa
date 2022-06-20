@@ -9,7 +9,7 @@ RSpec.describe "/users", type: :request do
   describe "GET /edit" do
     context "with a volunteer signed in" do
       it "renders a successful response" do
-        sign_in build(:volunteer)
+        sign_in create(:volunteer)
 
         get edit_users_path
 

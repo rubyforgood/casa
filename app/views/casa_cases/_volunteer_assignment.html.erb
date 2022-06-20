@@ -45,16 +45,27 @@
                                 unassign_case_assignment_path(assignment),
                                 method: :patch,
                                 class: "btn btn-outline-danger text-wrap") %>
-                <% elsif !assignment.volunteer.active? && policy(assignment.volunteer).activate? %>
-                  <%= link_to "Activate Volunteer",
-                              activate_volunteer_path(assignment.volunteer,
-                                                      redirect_to_path: 'casa_case',
-                                                      casa_case_id: @casa_case.id
-                              ),
-                              method: :patch,
-                              class: "btn btn-outline-success" %>
                 <% else %>
-                  None
+                  <% if !assignment.volunteer.active? && policy(assignment.volunteer).activate? %>
+                    <%= link_to "Activate Volunteer",
+                                activate_volunteer_path(assignment.volunteer,
+                                                        redirect_to_path: 'casa_case',
+                                                        casa_case_id: @casa_case.id
+                                ),
+                                method: :patch,
+                                class: "btn btn-outline-success" %>
+                  <% end %>
+                  <% if (policy(assignment).hide_contacts?) %>
+                    <%= button_to("Hide Old Contacts",
+                                show_hide_contacts_case_assignment_path(assignment),
+                                method: :patch,
+                                class: "btn btn-outline-secondary text-wrap") %>
+                  <% else %>
+                    <%= button_to("Show Old Contacts",
+                                show_hide_contacts_case_assignment_path(assignment),
+                                method: :patch,
+                                class: "btn btn-outline-warning text-wrap") %>
+                  <% end %>
                 <% end %>
               </td>
             </tr>
