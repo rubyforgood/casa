@@ -124,6 +124,17 @@
                           for: "case_contact_want_driving_reimbursement_false" %>
         </div>
       </div>
+      <div class="field volunteer-address form-group">
+        <h5><%= form.label :volunteer_address, "c. Volunteer Address" %></h5>
+        <% address = @case_contact.casa_case.volunteers.first.address.nil? ? Address.new : nil %>
+        <%= form.fields_for :casa_case, @case_contact.casa_case do |cc| %>
+          <%= cc.fields_for :volunteers do |v| %>
+            <%= v.fields_for :address, address do |a| %>
+              <%= a.text_field :content, class: "form-control", required: true %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
     <% end %>
 
     <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
