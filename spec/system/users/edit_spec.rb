@@ -99,6 +99,16 @@ RSpec.describe "users/edit", type: :system do
       expect(page).to have_content "1 error prohibited this Volunteer from being saved:"
       expect(page).to have_text("At least one communication preference must be selected.")
     end
+
+    it "displays notification events selection as enabled if sms notification preference is selected" do
+      check "user_receive_sms_notifications"
+      expect(page).to have_field("toggle-sms-notification-event", type: "checkbox", disabled: false)
+    end
+
+    it "displays notification events selection as disabled if sms notification preference is not selected" do
+      uncheck "user_receive_sms_notifications"
+      expect(page).to have_field("toggle-sms-notification-event", type: "checkbox", disabled: true)
+    end
   end
 
   context "supervisor user" do
