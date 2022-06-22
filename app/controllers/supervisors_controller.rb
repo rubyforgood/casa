@@ -31,6 +31,10 @@ class SupervisorsController < ApplicationController
 
     if @supervisor.save
       @supervisor.invite!(current_user)
+      # call short io api here
+      # handle short url
+      # input => array of urls
+      # output => hash of valid short urls {id => short url/nil}
       body_msg = SMSBodyText.account_activation_msg("supervisor", request.base_url)
       sms_status = deliver_sms_to @supervisor.phone_number, body_msg
       redirect_to edit_supervisor_path(@supervisor), notice: sms_acct_creation_notice("supervisor", sms_status)

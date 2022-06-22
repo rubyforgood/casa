@@ -30,6 +30,19 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  def handle_short_url(urlList)
+    hash_of_short_urls = {}
+    urlList.each_with_index { |val, index|
+      # call short io service to shorten url
+      # create an entry in hash if api is success
+      short_io_service = ShortUrlService.new
+      response = short_io_service.create_short_url(val)
+      short_url = short_io_service.short_url
+      hash_of_short_urls[index] = response.code == 201 || response.code == 200 ? short_url : nil
+    }
+    hash_of_short_urls
+  end
+
   # volunteer/supervisor/casa_admin controller uses to send SMS
   # returns appropriate flash notice for SMS
   def deliver_sms_to(phone_number, body_msg)
