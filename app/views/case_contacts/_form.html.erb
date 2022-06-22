@@ -126,7 +126,7 @@
       </div>
       <div class="field volunteer-address form-group">
         <h5><%= form.label :volunteer_address, "c. Volunteer Address" %></h5>
-        <% 
+        <%
           if current_role == "Volunteer"
             volunteer = current_user
             address = current_user.address.nil? ? Address.new : current_user.address
@@ -140,7 +140,8 @@
           end
         %>
         <% if message %>
-          <%= form.text_field :no_address_content, class: "form-control red-letter", value: message, disabled: true, readonly: true %>
+          <%= form.text_field :no_address_content, class: "form-control red-letter", value: message, disabled: true,
+readonly: true %>
         <% else %>
           <%= form.fields_for :casa_case, casa_cases[0] do |cc| %>
             <%= cc.fields_for :volunteers, volunteer do |v| %>
