@@ -16,7 +16,7 @@ end
 #  name        :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  casa_org_id :bigint           not null
+#  casa_org_id :integer          not null
 #
 # Indexes
 #

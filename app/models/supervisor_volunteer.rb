@@ -24,8 +24,8 @@ end
 #  is_active     :boolean          default(TRUE)
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  supervisor_id :bigint           not null
-#  volunteer_id  :bigint           not null
+#  supervisor_id :integer          not null
+#  volunteer_id  :integer          not null
 #
 # Indexes
 #

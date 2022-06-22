@@ -1,14 +1,14 @@
 require "rails_helper"
-require "support/webmock_helper"
+require "support/stubbed_requests/webmock_helper"
 
 RSpec.describe ShortUrlService do
-  let!(:original_url) { "https://www.google.com/" }
+  let!(:original_url) { "https://www.google.com" }
   let!(:notification_object) { ShortUrlService.new }
   let!(:short_io_domain) { Rails.application.credentials[:SHORT_IO_DOMAIN] }
 
   describe "short.io API" do
     before :each do
-      stubbed_requests
+      WebMockHelper.short_io_stub
       WebMock.disable_net_connect!
     end
 

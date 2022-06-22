@@ -31,7 +31,9 @@ class SupervisorsController < ApplicationController
 
     if @supervisor.save
       @supervisor.invite!(current_user)
-      redirect_to edit_supervisor_path(@supervisor)
+      body_msg = SMSBodyText.account_activation_msg("supervisor", request.base_url)
+      sms_status = deliver_sms_to @supervisor.phone_number, body_msg
+      redirect_to edit_supervisor_path(@supervisor), notice: sms_acct_creation_notice("supervisor", sms_status)
     else
       render new_supervisor_path
     end
@@ -121,7 +123,7 @@ class SupervisorsController < ApplicationController
   end
 
   def supervisor_params
-    params.require(:supervisor).permit(:display_name, :email, :active, volunteer_ids: [], supervisor_volunteer_ids: [])
+    params.require(:supervisor).permit(:display_name, :email, :phone_number, :active, volunteer_ids: [], supervisor_volunteer_ids: [])
   end
 
   def update_supervisor_params
