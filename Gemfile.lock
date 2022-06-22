@@ -399,7 +399,7 @@ GEM
       nokogiri (>= 1.8.5)
       rubyzip (>= 1.1.1)
     safe_shell (1.1.0)
-    scout_apm (5.1.1)
+    scout_apm (5.2.0)
       parser
     selenium-webdriver (4.2.1)
       childprocess (>= 0.5, < 5.0)
