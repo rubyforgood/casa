@@ -1,5 +1,6 @@
 class HearingType < ApplicationRecord
   belongs_to :casa_org
+  has_many :checklist_items
 
   validates :name, presence: true, uniqueness: {scope: %i[casa_org]}
 
@@ -33,10 +34,11 @@ end
 #
 # Table name: hearing_types
 #
-#  id          :bigint           not null, primary key
-#  active      :boolean          default(TRUE), not null
-#  name        :string           not null
-#  casa_org_id :integer          not null
+#  id                     :bigint           not null, primary key
+#  active                 :boolean          default(TRUE), not null
+#  checklist_updated_date :string           default("None"), not null
+#  name                   :string           not null
+#  casa_org_id            :bigint           not null
 #
 # Indexes
 #

@@ -9,6 +9,7 @@
   <thead>
   <tr>
     <th>Name</th>
+    <th>Checklist</th>
     <th>Active?</th>
     <th>Actions</th>
   </tr>
@@ -19,6 +20,9 @@
     <tr id="hearing_type-<%= hearing_type.id %>">
       <td scope="row">
         <%= hearing_type.name %>
+      </td>
+      <td>
+        <%= "#{hearing_type.checklist_updated_date}" %>
       </td>
       <td scope="row">
         <%= hearing_type.active ? "Yes" : "No" %>

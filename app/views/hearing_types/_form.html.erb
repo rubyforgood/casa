@@ -14,6 +14,42 @@
           <%= form.label :active, t(".active"), class: 'form-check-label' %>
         </div>
       </div>
+      <% if !hearing_type.id.nil? %>
+        <div class="dashboard-table-header pt-2 pb-2">
+          <h3>Checklist</h3>
+          <%= link_to "New List Item", new_hearing_type_checklist_item_path(hearing_type), class: "btn btn-primary" %>
+        </div>
+        <table class="table table-striped table-bordered" id="checklist_items">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Mandatory</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% hearing_type.checklist_items.each do |checklist_item| %>
+              <tr id="checklist_item-<%= checklist_item.id %>">
+                <td scope="row">
+                  <%= checklist_item.description %>
+                </td>
+                <td>
+                  <%= checklist_item.category %>
+                </td>
+                <td scope="row">
+                  <%= checklist_item.mandatory ? "Yes" : "Optional" %>
+                </td>
+                <td>
+                  <%= link_to "Edit", edit_hearing_type_checklist_item_path(hearing_type, checklist_item) %>
+                  <%= link_to "Delete", hearing_type_checklist_item_path(hearing_type, checklist_item),
+                  method: :delete, data: { confirm: "Are you sure that you want to delete this checklist item?" } %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
       <div class="actions">
         <%= form.submit t("button.submit"), class: "btn btn-primary" %>
       </div>

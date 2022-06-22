@@ -46,6 +46,7 @@ class DbPopulator
     create_users(casa_org, options)
     create_cases(casa_org, options)
     create_hearing_types(casa_org)
+    create_checklist_items
     create_judges(casa_org)
     casa_org
   end
@@ -297,6 +298,30 @@ class DbPopulator
         name: hearing_type_name,
         active: false
       )
+    end
+  end
+
+  def create_checklist_items
+    checklist_item_categories = [
+      "Education/Vocation",
+      "Placement",
+      "Category 3"
+    ]
+    checklist_item_descriptions = [
+      "checklist item description 1",
+      "checklist item description 2",
+      "checklist item description 3"
+    ]
+    mandatory_options = [true, false]
+    half_of_the_hearing_types = HearingType.all.slice(0, HearingType.all.length / 2)
+    half_of_the_hearing_types.each do |hearing_type|
+      ChecklistItem.create(
+        hearing_type_id: hearing_type.id,
+        description: checklist_item_descriptions.sample,
+        category: checklist_item_categories.sample,
+        mandatory: mandatory_options.sample
+      )
+      hearing_type.update_attribute(:checklist_updated_date, "Updated #{Time.new.strftime("%m/%d/%Y")}")
     end
   end
 end
