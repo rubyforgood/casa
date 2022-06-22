@@ -13,28 +13,26 @@ window.onload = function () {
   const caseOccurredAt = document.getElementById('case_contact_occurred_at')
   const caseContactSubmit = document.getElementById('case-contact-submit')
   if ($('.want-driving-reimbursement input.form-check-input[type="radio"][value=true]')[0].checked) {
-    $('.field.volunteer-address').removeClass('hide-field');
-    $('.field.volunteer-address input[type=text]').prop("disabled", false);
-    $('.field.volunteer-address input[type=text]').prop("required", true);
-  }
-  else {
-    $('.field.volunteer-address').addClass('hide-field');
-    $('.field.volunteer-address input[type=text]').prop("disabled", true);
-    $('.field.volunteer-address input[type=text]').prop("required", false);
+    $('.field.volunteer-address').removeClass('hide-field')
+    $('.field.volunteer-address input[type=text]').prop('disabled', false)
+    $('.field.volunteer-address input[type=text]').prop('required', true)
+  } else {
+    $('.field.volunteer-address').addClass('hide-field')
+    $('.field.volunteer-address input[type=text]').prop('disabled', true)
+    $('.field.volunteer-address input[type=text]').prop('required', false)
   }
 
-  $('.want-driving-reimbursement input.form-check-input[type="radio"]').on("change", function() {
-    if (this.value == 'true') {
-      $('.field.volunteer-address').removeClass('hide-field');
-      $('.field.volunteer-address input[type=text]').prop("disabled", false);
-      $('.field.volunteer-address input[type=text]').prop("required", true);
+  $('.want-driving-reimbursement input.form-check-input[type="radio"]').on('change', function () {
+    if (this.value === 'true') {
+      $('.field.volunteer-address').removeClass('hide-field')
+      $('.field.volunteer-address input[type=text]').prop('disabled', false)
+      $('.field.volunteer-address input[type=text]').prop('required', true)
+    } else if (this.value === 'false') {
+      $('.field.volunteer-address').addClass('hide-field')
+      $('.field.volunteer-address input[type=text]').prop('disabled', true)
+      $('.field.volunteer-address input[type=text]').prop('required', false)
     }
-    else if (this.value == 'false') {
-      $('.field.volunteer-address').addClass('hide-field');
-      $('.field.volunteer-address input[type=text]').prop("disabled", true);
-      $('.field.volunteer-address input[type=text]').prop("required", false);
-    }
-  });
+  })
 
   milesDriven.onchange = function () {
     const contactMedium = document.getElementById('case_contact_medium_type').value || '(contact medium not set)'
