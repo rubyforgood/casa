@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class SupervisorsController < ApplicationController
+  include SmsBodyHelper
+  
   before_action :available_volunteers, only: [:edit, :update, :index]
   before_action :set_supervisor, only: [:edit, :update, :activate, :deactivate, :resend_invitation, :change_to_admin]
   before_action :all_volunteers_ever_assigned, only: [:update]
@@ -35,7 +37,7 @@ class SupervisorsController < ApplicationController
       # handle short url
       # input => array of urls
       # output => hash of valid short urls {id => short url/nil}
-      body_msg = SMSBodyText.account_activation_msg("supervisor", request.base_url)
+      body_msg = account_activation_msg("supervisor", request.base_url)
       sms_status = deliver_sms_to @supervisor.phone_number, body_msg
       redirect_to edit_supervisor_path(@supervisor), notice: sms_acct_creation_notice("supervisor", sms_status)
     else

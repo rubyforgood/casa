@@ -1,4 +1,6 @@
 class VolunteersController < ApplicationController
+  include SmsBodyHelper
+  
   before_action :set_volunteer, except: %i[index new create datatable stop_impersonating]
   after_action :verify_authorized, except: %i[stop_impersonating]
 
@@ -30,7 +32,7 @@ class VolunteersController < ApplicationController
 
     if @volunteer.save
       @volunteer.invite!(current_user)
-      body_msg = SMSBodyText.account_activation_msg("volunteer", request.base_url)
+      body_msg = account_activation_msg("volunteer", request.base_url)
       sms_status = deliver_sms_to @volunteer.phone_number, body_msg
       redirect_to edit_volunteer_path(@volunteer), notice: sms_acct_creation_notice("volunteer", sms_status)
     else

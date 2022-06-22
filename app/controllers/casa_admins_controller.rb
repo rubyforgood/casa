@@ -1,4 +1,6 @@
 class CasaAdminsController < ApplicationController
+  include SmsBodyHelper
+
   before_action :set_admin, except: [:index, :new, :create]
   before_action :require_organization!
   after_action :verify_authorized
@@ -40,7 +42,7 @@ class CasaAdminsController < ApplicationController
 
     begin
       casa_admin = service.create!
-      body_msg = SMSBodyText.account_activation_msg("admin", request.base_url)
+      body_msg = account_activation_msg("admin", request.base_url)
       sms_status = deliver_sms_to casa_admin.phone_number, body_msg
 
       respond_to do |format|
