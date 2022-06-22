@@ -14,6 +14,12 @@
         <%= f.submit t(".download_missing_data_report_button"), class: "btn btn-primary report-form-submit" %>
       <% end %>
     </div>
+
+    <div class="btn-group">
+      <%= form_with url: learning_hours_reports_path(format: :csv), method: :get do |f| %>
+        <%= f.submit t(".download_learning_hours_report_button"), class: "btn btn-primary report-form-submit" %>
+      <% end %>
+    </div>
   </div>
 </div>
 
