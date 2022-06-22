@@ -373,6 +373,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_16_021404) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "patch_note_types", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_patch_note_types_on_name", unique: true
+  end
+
   create_table "preference_sets", force: :cascade do |t|
     t.bigint "user_id"
     t.jsonb "case_volunteer_columns", default: "{}", null: false
