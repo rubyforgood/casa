@@ -13,6 +13,12 @@ window.onload = function () {
   const caseOccurredAt = document.getElementById('case_contact_occurred_at')
   const caseContactSubmit = document.getElementById('case-contact-submit')
 
+  const timeZoneConvertedDate = enGBDateString(new Date())
+
+  if (enGBDateString(convertDateToSystemTimeZone(caseOccurredAt.value)) === timeZoneConvertedDate) {
+    caseOccurredAt.value = timeZoneConvertedDate
+  }
+
   milesDriven.onchange = function () {
     const contactMedium = document.getElementById('case_contact_medium_type').value || '(contact medium not set)'
     const contactMediumInPerson = `${contactMedium}` === 'in-person'
@@ -105,8 +111,16 @@ function validateOccurredAt (caseOccurredAt, eventType = '') {
     if (eventType !== 'focusout') {
       alert(msg)
     }
-    caseOccurredAt.value = today.toLocaleDateString('en-GB').split('/').reverse().join('-')
+    caseOccurredAt.value = enGBDateString(today)
   }
+}
+
+function enGBDateString (date) {
+  return date.toLocaleDateString('en-GB').split('/').reverse().join('-')
+}
+
+function convertDateToSystemTimeZone (date) {
+  return new Date((typeof date === 'string' ? new Date(date) : date))
 }
 
 async function displayFollowupAlert () {
@@ -151,5 +165,6 @@ $('document').ready(() => {
 })
 
 export {
-  validateOccurredAt
+  validateOccurredAt,
+  convertDateToSystemTimeZone
 }

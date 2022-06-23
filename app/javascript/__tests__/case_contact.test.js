@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import { validateOccurredAt } from '../src/case_contact'
+import { validateOccurredAt, convertDateToSystemTimeZone } from '../src/case_contact'
 
 require('jest')
 
@@ -34,4 +34,8 @@ test("occured date field won't allow future dates and it will be set back to the
   validateOccurredAt(caseOccurredAt, 'focusout')
 
   expect(caseOccurredAt.value).toEqual(todayString)
+})
+
+test('utc date is correctly converted to system date', () => {
+  expect(convertDateToSystemTimeZone('2022-06-22 17:14:50 UTC')).toEqual(new Date('2022-06-22 17:14:50 UTC'))
 })
