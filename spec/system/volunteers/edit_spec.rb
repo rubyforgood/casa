@@ -13,6 +13,7 @@ RSpec.describe "volunteers/edit", type: :system do
     expect(page).to have_text "Last logged in"
     expect(page).to have_text "Invitation accepted never"
     expect(page).to have_text "Password reset last sent never"
+    expect(page).to have_text "Learning Hours This Year 0h 0min"
   end
 
   describe "updating volunteer personal data" do
