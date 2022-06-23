@@ -22,3 +22,10 @@
   <span class="font-weight-bold">Password reset last sent </span>
   <%= resource&.decorate&.formatted_reset_password_sent_at || "never" %>
 </div>
+
+<% if resource.is_a?(Volunteer) %>
+  <div>
+    <span class="font-weight-bold">Learning Hours This Year</span>
+    <%= resource.learning_hours_spent_in_one_year %>
+  </div>
+<% end %>

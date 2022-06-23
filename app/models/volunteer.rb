@@ -113,6 +113,17 @@ class Volunteer < User
     ["#{minutes / 60}h", "#{minutes % 60}m"].select { |str| str =~ /[1-9]/ }.join(" ")
   end
 
+  def learning_hours_spent_in_one_year
+    year_duration = learning_hours
+      .where("learning_hours.occurred_at > ?", 1.year.ago)
+      .pluck(:duration_hours, :duration_minutes)
+
+    total_hours = year_duration.map(&:first).reduce(:+) || 0
+    total_minutes = year_duration.map(&:last).reduce(:+) || 0
+    total_duration = total_minutes + total_hours * 60
+    "#{total_duration / 60}h #{total_duration % 60}min"
+  end
+
   private
 
   def cases_where_contact_made_in_days(num_days = CONTACT_MADE_IN_DAYS_NUM)

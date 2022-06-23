@@ -308,4 +308,19 @@ RSpec.describe Volunteer, type: :model do
       expect(user.errors.full_messages).to include("Invitation token is invalid")
     end
   end
+
+  describe "#learning_hours_spent_in_one_year" do
+    let(:volunteer) { create :volunteer }
+    let!(:leraning_hours) do
+      [
+        create(:learning_hour, user: volunteer, duration_hours: 1, duration_minutes: 30),
+        create(:learning_hour, user: volunteer, duration_hours: 3, duration_minutes: 45),
+        create(:learning_hour, user: volunteer, duration_hours: 1, duration_minutes: 30, occurred_at: 2.year.ago)
+      ]
+    end
+
+    it "returns the hours spent in one year" do
+      expect(volunteer.learning_hours_spent_in_one_year).to eq("5h 15min")
+    end
+  end
 end
