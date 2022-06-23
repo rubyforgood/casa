@@ -78,4 +78,14 @@ RSpec.describe "case_contact_reports/index", type: :system do
 
     expect(download_file_name).to match(/missing-data-report-\d{4}-\d{2}-\d{2}.csv/)
   end
+
+  it "downloads learning hours report", js: true do
+    sign_in admin
+
+    visit reports_path
+    click_button "Learning Hours Report"
+    wait_for_download
+
+    expect(download_file_name).to match(/learning-hours-report-\d{4}-\d{2}-\d{2}.csv/)
+  end
 end
