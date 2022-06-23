@@ -15,8 +15,8 @@ window.onload = function () {
 
   const timeZoneConvertedDate = enGBDateString(new Date())
 
-  if (enGBDateString(convertDateToSystemTimeZone(caseOccurredAt.value)) == timeZoneConvertedDate) {
-    caseOccurredAt.value = timeZoneConvertedDate;
+  if (enGBDateString(convertDateToSystemTimeZone(caseOccurredAt.value)) === timeZoneConvertedDate) {
+    caseOccurredAt.value = timeZoneConvertedDate
   }
 
   milesDriven.onchange = function () {
@@ -115,12 +115,12 @@ function validateOccurredAt (caseOccurredAt, eventType = '') {
   }
 }
 
-function enGBDateString(date) {
+function enGBDateString (date) {
   return date.toLocaleDateString('en-GB').split('/').reverse().join('-')
 }
 
-function convertDateToSystemTimeZone(date) {
-  return new Date((typeof date === "string" ? new Date(date) : date))   
+function convertDateToSystemTimeZone (date) {
+  return new Date((typeof date === 'string' ? new Date(date) : date))
 }
 
 async function displayFollowupAlert () {
