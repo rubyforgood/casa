@@ -30,7 +30,7 @@ RSpec.describe "/case_contacts", type: :request do
 
     describe "GET /edit" do
       it "should mark notification as read" do
-        case_contact = build(:case_contact)
+        case_contact = create(:case_contact, casa_case: create(:casa_case, :with_case_assignments))
         followup = create(:followup, case_contact: case_contact, creator: admin)
         FollowupResolvedNotification
           .with(followup: followup, created_by: volunteer)
