@@ -12,30 +12,25 @@ window.onload = function () {
   const durationMinutes = document.getElementById('case-contact-duration-minutes-display')
   const caseOccurredAt = document.getElementById('case_contact_occurred_at')
   const caseContactSubmit = document.getElementById('case-contact-submit')
-  const showVolunteerAddressField = () => {
-    $('.field.volunteer-address').removeClass('hide-field')
-    $('.field.volunteer-address input[type=text]').prop('disabled', false)
-    $('.field.volunteer-address input[type=hidden]').prop('disabled', false)
-    $('.field.volunteer-address input[type=text]').prop('required', true)
-  }
-  const hideVolunteerAddressField = () => {
-    $('.field.volunteer-address').addClass('hide-field')
-    $('.field.volunteer-address input[type=text]').prop('disabled', true)
-    $('.field.volunteer-address input[type=hidden]').prop('disabled', true)
-    $('.field.volunteer-address input[type=text]').prop('required', false)
+  const volunteerAddressFieldState = (hide) => {
+    if (hide) $('.field.volunteer-address').addClass('hide-field')
+    else $('.field.volunteer-address').removeClass('hide-field')
+    $('.field.volunteer-address input[type=text]').prop('disabled', hide)
+    $('.field.volunteer-address input[type=hidden]').prop('disabled', hide)
+    $('.field.volunteer-address input[type=text]').prop('required', !hide)
   }
 
   if ($('.want-driving-reimbursement input.form-check-input[type="radio"][value=true]')[0].checked) {
-    showVolunteerAddressField()
+    volunteerAddressFieldState(false)
   } else {
-    hideVolunteerAddressField()
+    volunteerAddressFieldState(true)
   }
 
   $('.want-driving-reimbursement input.form-check-input[type="radio"]').on('change', function () {
     if (this.value === 'true') {
-      showVolunteerAddressField()
+      volunteerAddressFieldState(false)
     } else if (this.value === 'false') {
-      hideVolunteerAddressField()
+      volunteerAddressFieldState(true)
     }
   })
 
