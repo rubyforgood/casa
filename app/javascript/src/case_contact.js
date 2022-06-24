@@ -15,10 +15,12 @@ window.onload = function () {
   if ($('.want-driving-reimbursement input.form-check-input[type="radio"][value=true]')[0].checked) {
     $('.field.volunteer-address').removeClass('hide-field')
     $('.field.volunteer-address input[type=text]').prop('disabled', false)
+    $('.field.volunteer-address input[type=hidden]').prop('disabled', false)
     $('.field.volunteer-address input[type=text]').prop('required', true)
   } else {
     $('.field.volunteer-address').addClass('hide-field')
     $('.field.volunteer-address input[type=text]').prop('disabled', true)
+    $('.field.volunteer-address input[type=hidden]').prop('disabled', true)
     $('.field.volunteer-address input[type=text]').prop('required', false)
   }
 
@@ -26,10 +28,12 @@ window.onload = function () {
     if (this.value === 'true') {
       $('.field.volunteer-address').removeClass('hide-field')
       $('.field.volunteer-address input[type=text]').prop('disabled', false)
+      $('.field.volunteer-address input[type=hidden]').prop('disabled', false)
       $('.field.volunteer-address input[type=text]').prop('required', true)
     } else if (this.value === 'false') {
       $('.field.volunteer-address').addClass('hide-field')
       $('.field.volunteer-address input[type=text]').prop('disabled', true)
+      $('.field.volunteer-address input[type=hidden]').prop('disabled', true)
       $('.field.volunteer-address input[type=text]').prop('required', false)
     }
   })
