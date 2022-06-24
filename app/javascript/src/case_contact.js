@@ -12,29 +12,30 @@ window.onload = function () {
   const durationMinutes = document.getElementById('case-contact-duration-minutes-display')
   const caseOccurredAt = document.getElementById('case_contact_occurred_at')
   const caseContactSubmit = document.getElementById('case-contact-submit')
-  if ($('.want-driving-reimbursement input.form-check-input[type="radio"][value=true]')[0].checked) {
+  const showVolunteerAddressField = () => {
     $('.field.volunteer-address').removeClass('hide-field')
     $('.field.volunteer-address input[type=text]').prop('disabled', false)
     $('.field.volunteer-address input[type=hidden]').prop('disabled', false)
     $('.field.volunteer-address input[type=text]').prop('required', true)
-  } else {
+  }
+  const hideVolunteerAddressField = () => {
     $('.field.volunteer-address').addClass('hide-field')
     $('.field.volunteer-address input[type=text]').prop('disabled', true)
     $('.field.volunteer-address input[type=hidden]').prop('disabled', true)
     $('.field.volunteer-address input[type=text]').prop('required', false)
   }
 
+  if ($('.want-driving-reimbursement input.form-check-input[type="radio"][value=true]')[0].checked) {
+    showVolunteerAddressField()
+  } else {
+    hideVolunteerAddressField()
+  }
+
   $('.want-driving-reimbursement input.form-check-input[type="radio"]').on('change', function () {
     if (this.value === 'true') {
-      $('.field.volunteer-address').removeClass('hide-field')
-      $('.field.volunteer-address input[type=text]').prop('disabled', false)
-      $('.field.volunteer-address input[type=hidden]').prop('disabled', false)
-      $('.field.volunteer-address input[type=text]').prop('required', true)
+      showVolunteerAddressField()
     } else if (this.value === 'false') {
-      $('.field.volunteer-address').addClass('hide-field')
-      $('.field.volunteer-address input[type=text]').prop('disabled', true)
-      $('.field.volunteer-address input[type=hidden]').prop('disabled', true)
-      $('.field.volunteer-address input[type=text]').prop('required', false)
+      hideVolunteerAddressField()
     }
   })
 
