@@ -5,6 +5,11 @@ This guide assumes you have [homebrew](https://brew.sh/) installed.
 You will need the following local tools installed:
 
 # command line tools - what are they
+task 1. intro to the command line
+
+task 2. this assumes you have a github account
+
+
 articles that will help with command line
 
 https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Understanding_client-side_tools/Command_line
