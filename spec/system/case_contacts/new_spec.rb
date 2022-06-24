@@ -8,7 +8,7 @@ RSpec.describe "case_contacts/new", type: :system do
     it "does not display empty or hidden contact type groups; can create CaseContact", js: true do
       organization = build(:casa_org)
       admin = create(:casa_admin, casa_org: organization)
-      casa_case = create(:casa_case, casa_org: organization)
+      casa_case = create(:casa_case, :with_case_assignments, casa_org: organization)
       contact_type_group = build(:contact_type_group, casa_org: organization)
       build(:contact_type_group, name: "Empty", casa_org: organization)
       grp_with_hidden = build(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization)
@@ -52,7 +52,7 @@ RSpec.describe "case_contacts/new", type: :system do
     it "should display full text in table if notes are less than 100 characters", js: true do
       organization = build(:casa_org)
       admin = create(:casa_admin, casa_org: organization)
-      casa_case = create(:casa_case, casa_org: organization)
+      casa_case = create(:casa_case, :with_case_assignments, casa_org: organization)
       contact_type_group = build(:contact_type_group, casa_org: organization)
       create(:contact_type, name: "School", contact_type_group: contact_type_group)
       create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
@@ -89,7 +89,7 @@ RSpec.describe "case_contacts/new", type: :system do
     it "should allow expanding or hiding if notes are more than 100 characters", js: true do
       organization = build(:casa_org)
       admin = create(:casa_admin, casa_org: organization)
-      casa_case = create(:casa_case, casa_org: organization)
+      casa_case = create(:casa_case, :with_case_assignments, casa_org: organization)
       contact_type_group = build(:contact_type_group, casa_org: organization)
       create(:contact_type, name: "School", contact_type_group: contact_type_group)
       create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
@@ -142,7 +142,7 @@ RSpec.describe "case_contacts/new", type: :system do
       it "does not submit the form" do
         organization = build(:casa_org)
         admin = create(:casa_admin, casa_org: organization)
-        casa_case = create(:casa_case, casa_org: organization)
+        casa_case = create(:casa_case, :with_case_assignments, casa_org: organization)
         contact_type_group = build(:contact_type_group, casa_org: organization)
         create(:contact_type, name: "School", contact_type_group: contact_type_group)
         create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
@@ -172,7 +172,7 @@ RSpec.describe "case_contacts/new", type: :system do
       it "renders HTML correctly on the index page", js: true do
         organization = build(:casa_org)
         admin = create(:casa_admin, casa_org: organization)
-        casa_case = create(:casa_case, casa_org: organization)
+        casa_case = create(:casa_case, :with_case_assignments, casa_org: organization)
         contact_type_group = build(:contact_type_group, casa_org: organization)
         create(:contact_type, name: "School", contact_type_group: contact_type_group)
         create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
@@ -214,7 +214,7 @@ RSpec.describe "case_contacts/new", type: :system do
     it "should check the correct box when clicking the label" do
       organization = build(:casa_org)
       admin = build(:casa_admin, casa_org: organization)
-      casa_case = build(:casa_case, casa_org: organization)
+      casa_case = create(:casa_case, :with_case_assignments, casa_org: organization)
       group_1 = build_stubbed(:contact_type_group, casa_org: organization)
       create(:contact_type, name: "School", contact_type_group: group_1)
       group_2 = build(:contact_type_group, casa_org: organization)
@@ -229,7 +229,7 @@ RSpec.describe "case_contacts/new", type: :system do
     it "shows the contact type groups, and their contact type alphabetically", :aggregate_failures do
       organization = build(:casa_org)
       admin = build(:casa_admin, casa_org: organization)
-      casa_case = build(:casa_case, casa_org: organization)
+      casa_case = create(:casa_case, :with_case_assignments, casa_org: organization)
       group_1 = create(:contact_type_group, name: "Placement", casa_org: organization)
       group_2 = create(:contact_type_group, name: "Education", casa_org: organization)
       create(:contact_type, name: "School", contact_type_group: group_1)
@@ -265,7 +265,6 @@ RSpec.describe "case_contacts/new", type: :system do
       sign_in volunteer
 
       visit new_case_contact_path(volunteer_casa_case_one.id)
-
       check volunteer_casa_case_one.case_number
       check "School"
       check "Therapist"
@@ -363,7 +362,7 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "case-contact-duration-hours-display", with: "1"
       fill_in "case-contact-duration-minutes-display", with: "45"
       fill_in "a. Miles Driven", with: "30"
-      choose "case_contact_want_driving_reimbursement_true"
+      choose "case_contact_want_driving_reimbursement_false"
       fill_in "Notes", with: "Hello world"
 
       # Allow 5 seconds for the Notes to be saved in localstorage
@@ -398,7 +397,7 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "case-contact-duration-minutes-display", with: "45"
       fill_in "c. Occurred On", with: "04/04/2020"
       fill_in "a. Miles Driven", with: "30"
-      choose "case_contact_want_driving_reimbursement_true"
+      choose "case_contact_want_driving_reimbursement_false"
       fill_in "Notes", with: ""
 
       expect(page).not_to have_text("error")
@@ -429,7 +428,7 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "case-contact-duration-minutes-display", with: "45"
       fill_in "c. Occurred On", with: "04/04/2020"
       fill_in "a. Miles Driven", with: "30"
-      choose "case_contact_want_driving_reimbursement_true"
+      choose "case_contact_want_driving_reimbursement_false"
       fill_in "Notes", with: "This is the note"
 
       expect(page).not_to have_text("error")
@@ -462,7 +461,7 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "case-contact-duration-minutes-display", with: "45"
       fill_in "c. Occurred On", with: "04/04/2020"
       fill_in "a. Miles Driven", with: "30"
-      choose "case_contact_want_driving_reimbursement_true"
+      choose "case_contact_want_driving_reimbursement_false"
       fill_in "Notes", with: "This is the note"
 
       expect(page).not_to have_text("error")
@@ -498,12 +497,15 @@ RSpec.describe "case_contacts/new", type: :system do
         alert_msg = page.accept_alert do
           fill_in "c. Occurred On", with: future_date.strftime("%Y/%m/%d\n")
         end
-        expect(alert_msg).to eq("Case Contact Occurrences cannot be in the future.") # js validation
+        expect(alert_msg).to eq("Case Contact Occurrences cannot be in the future.")
+        expect(page.find("#case_contact_occurred_at").value).to eq(Date.current.strftime("%Y-%m-%d"))
+        # js validation
 
         fill_in "c. Occurred On", with: 2.days.ago.strftime("%Y/%m/%d\n")
 
         fill_in "a. Miles Driven", with: "0"
         choose "case_contact_want_driving_reimbursement_true"
+        fill_in "case_contact_casa_case_attributes_volunteers_attributes_0_address_attributes_content",	with: "123 str"
         fill_in "Notes", with: "Hello world"
 
         click_on "Submit"

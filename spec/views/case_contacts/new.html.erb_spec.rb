@@ -14,10 +14,11 @@ RSpec.describe "case_contacts/new", type: :view do
 
   context "while signed-in as a volunteer" do
     let(:casa_org) { CasaOrg.first }
-
+    let(:role) { "Volunteer" }
     before do
       sign_in_as_volunteer
       allow(view).to receive(:current_organization).and_return(casa_org)
+      allow(view).to receive(:current_role).and_return(role)
     end
 
     let(:current_time) { Time.zone.now.strftime("%Y-%m-%d") }
