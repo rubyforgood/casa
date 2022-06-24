@@ -133,7 +133,7 @@
           elsif ["Supervisor", "Casa Admin"].include? current_role
             if casa_cases[0].volunteers.count > 1
               message = "There are two volunteers assigned to this case and you are trying to set the address" +
-              "for both of them. This is not currently possible."
+              " for both of them. This is not currently possible."
             else
               volunteer = casa_cases[0].volunteers.first
               address = volunteer.address.nil? ? Address.new : volunteer.address
