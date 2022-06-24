@@ -112,5 +112,35 @@ you are trying to set the address for both of them. This is not currently possib
       expect(case_contact.medium_type).to eq "letter"
       expect(case_contact.contact_made).to eq true
     end
+
+    it "is successful with mileage reimbursement on", js: true do
+      case_contact = create(:case_contact, duration_minutes: 105, casa_case: casa_case, creator: volunteer)
+      sign_in volunteer
+      visit edit_case_contact_path(case_contact)
+
+      within "#enter-contact-details" do
+        choose "Yes"
+      end
+
+      choose "In Person"
+      fill_in "case-contact-duration-hours-display", with: "1"
+      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "c. Occurred On", with: "04/04/2020"
+      fill_in "a. Miles Driven", with: "10"
+      choose "case_contact_want_driving_reimbursement_true"
+      expect(page).to have_selector("#case_contact_casa_case_attributes_volunteers_attributes_0_address_attributes_content")
+      fill_in "case_contact_casa_case_attributes_volunteers_attributes_0_address_attributes_content",	with: "123 str"
+
+      click_on "Submit"
+
+      case_contact.reload
+      volunteer.reload
+      expect(page).to have_text "Case contact created at #{case_contact.created_at.strftime("%-I:%-M %p on %m-%e-%Y")}, was successfully updated."
+      expect(volunteer.address.content).to eq "123 str"
+      expect(case_contact.casa_case_id).to eq casa_case.id
+      expect(case_contact.duration_minutes).to eq 105
+      expect(case_contact.medium_type).to eq "in-person"
+      expect(case_contact.contact_made).to eq true
+    end
   end
 end
