@@ -15,6 +15,14 @@ FactoryBot.define do
       judge
     end
 
+    trait :with_one_case_assignment do
+      after(:create) do |casa_case, _|
+        casa_org = casa_case.casa_org
+        volunteer = create(:volunteer, casa_org: casa_org)
+        create(:case_assignment, casa_case: casa_case, volunteer: volunteer)
+      end
+    end
+
     trait :with_case_assignments do
       after(:create) do |casa_case, _|
         casa_org = casa_case.casa_org
