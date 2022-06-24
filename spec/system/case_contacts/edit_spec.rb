@@ -28,6 +28,54 @@ RSpec.describe "case_contacts/edit", type: :system do
       expect(case_contact.contact_made).to eq true
     end
 
+    it "admin successfully edits case contact with mileage reimbursement", js: true do
+      casa_case = create(:casa_case, :with_one_case_assignment, casa_org: organization)
+      case_contact = create(:case_contact, duration_minutes: 105, casa_case: casa_case)
+      sign_in admin
+
+      visit edit_case_contact_path(case_contact)
+
+      within "#enter-contact-details" do
+        choose "Yes"
+      end
+      choose "In Person"
+      fill_in "case-contact-duration-hours-display", with: "1"
+      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "c. Occurred On", with: "04/04/2020"
+      fill_in "a. Miles Driven", with: "10"
+      choose "case_contact_want_driving_reimbursement_true"
+      expect(page).to have_selector("#case_contact_casa_case_attributes_volunteers_attributes_0_address_attributes_content")
+      fill_in "case_contact_casa_case_attributes_volunteers_attributes_0_address_attributes_content",	with: "123 str"
+      click_on "Submit"
+      case_contact.reload
+      expect(page).to have_text "Case contact created at #{case_contact.created_at.strftime("%-I:%-M %p on %m-%e-%Y")}, was successfully updated."
+      expect(case_contact.casa_case.volunteers[0].address.content).to eq "123 str"
+      expect(case_contact.casa_case_id).to eq casa_case.id
+      expect(case_contact.duration_minutes).to eq 105
+      expect(case_contact.medium_type).to eq "in-person"
+      expect(case_contact.contact_made).to eq true
+    end
+
+    it "admin fails to edit volunteer address for case contact  with mileage reimbursement", js: true do
+      sign_in admin
+
+      visit edit_case_contact_path(case_contact)
+
+      within "#enter-contact-details" do
+        choose "Yes"
+      end
+      choose "In Person"
+      fill_in "case-contact-duration-hours-display", with: "1"
+      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "c. Occurred On", with: "04/04/2020"
+      fill_in "a. Miles Driven", with: "10"
+      choose "case_contact_want_driving_reimbursement_true"
+      expect(page).not_to have_selector("#case_contact_casa_case_attributes_volunteers_attributes_0_address_attributes_content")
+      expect(find("#case_contact_no_address_content").value)
+        .to eq("There are two volunteers assigned to this case and \
+you are trying to set the address for both of them. This is not currently possible.")
+    end
+
     context "is part of a different organization" do
       let(:other_organization) { build(:casa_org) }
       let(:admin) { create(:casa_admin, casa_org: other_organization) }
