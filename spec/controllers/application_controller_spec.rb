@@ -15,7 +15,7 @@ RSpec.describe ApplicationController, type: :controller do
 
     # input => array of urls
     # output => hash of valid short urls {id => short url/nil}
-    def handle_short_url(urlList)
+    def handle_short_url(url_list)
       super
     end
   end

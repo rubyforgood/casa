@@ -46,7 +46,7 @@ class CasaAdminsController < ApplicationController
       if !casa_admin.phone_number.blank?
         raw_token = casa_admin.raw_invitation_token
         base_domain = request.base_url + "/users/edit"
-        invitation_url = Rails.application.routes.url_helpers.accept_user_invitation_url(:invitation_token => raw_token, :host => request.base_url)
+        invitation_url = Rails.application.routes.url_helpers.accept_user_invitation_url(invitation_token: raw_token, host: request.base_url)
         hash_of_short_urls = handle_short_url([invitation_url, base_domain])
         body_msg = account_activation_msg("admin", hash_of_short_urls)
         sms_status = deliver_sms_to casa_admin, body_msg

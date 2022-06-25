@@ -30,9 +30,9 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def handle_short_url(urlList)
+  def handle_short_url(url_list)
     hash_of_short_urls = {}
-    urlList.each_with_index { |val, index|
+    url_list.each_with_index { |val, index|
       # call short io service to shorten url
       # create an entry in hash if api is success
       short_io_service = ShortUrlService.new
