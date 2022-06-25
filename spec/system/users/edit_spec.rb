@@ -16,7 +16,7 @@ RSpec.describe "users/edit", type: :system do
   SmsNotificationEvent.new(name: "sms_event_test_supervisor", user_type: Supervisor).save
   SmsNotificationEvent.new(name: "sms_event_test_casa_admin", user_type: CasaAdmin).save
 
-  context "volunteer user" do
+  context "volunteer user", js: true do
     before do
       sign_in volunteer
       visit edit_users_path
@@ -111,7 +111,7 @@ RSpec.describe "users/edit", type: :system do
     end
   end
 
-  context "supervisor user" do
+  context "supervisor user", js: true do
     before do
       sign_in supervisor
       visit edit_users_path
@@ -152,7 +152,7 @@ RSpec.describe "users/edit", type: :system do
     end
   end
 
-  context "when admin" do
+  context "when admin", js: true do
     let(:role) { "user" }
     before do
       sign_in admin
