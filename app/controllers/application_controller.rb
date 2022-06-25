@@ -45,15 +45,15 @@ class ApplicationController < ActionController::Base
 
   # volunteer/supervisor/casa_admin controller uses to send SMS
   # returns appropriate flash notice for SMS
-  def deliver_sms_to(phone_number, body_msg)
-    if phone_number.blank?
+  def deliver_sms_to(resource, body_msg)
+    if resource.phone_number.blank?
       return "blank"
     end
     acc_sid = current_user.casa_org.twilio_account_sid
     api_key = current_user.casa_org.twilio_api_key_sid
     api_secret = current_user.casa_org.twilio_api_key_secret
     body = body_msg
-    to = phone_number
+    to = resource.phone_number
     from = current_user.casa_org.twilio_phone_number
 
     twilio = TwilioService.new(api_key, api_secret, acc_sid)
