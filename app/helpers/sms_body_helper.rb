@@ -15,6 +15,6 @@ module SmsBodyHelper
     elsif hash_of_links[0] && hash_of_links[1].nil?
       body_msg = first_msg + " " + second_msg + " " + "Go to profile edit page to change SMS settings."
     end
-    return body_msg
+    body_msg
   end
 end

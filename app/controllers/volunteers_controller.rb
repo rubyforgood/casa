@@ -29,7 +29,6 @@ class VolunteersController < ApplicationController
   def create
     @volunteer = current_organization.volunteers.new(create_volunteer_params)
     authorize @volunteer
-    sms_status = "blank"
 
     if @volunteer.save
       @volunteer.invite!(current_user)

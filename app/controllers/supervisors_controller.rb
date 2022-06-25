@@ -30,7 +30,6 @@ class SupervisorsController < ApplicationController
   def create
     authorize Supervisor
     @supervisor = Supervisor.new(supervisor_params.merge(supervisor_values))
-    sms_status = "blank"
 
     if @supervisor.save
       @supervisor.invite!(current_user)
