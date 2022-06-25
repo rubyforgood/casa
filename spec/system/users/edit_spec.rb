@@ -16,7 +16,7 @@ RSpec.describe "users/edit", type: :system do
   SmsNotificationEvent.new(name: "sms_event_test_supervisor", user_type: Supervisor).save
   SmsNotificationEvent.new(name: "sms_event_test_casa_admin", user_type: CasaAdmin).save
 
-  context "volunteer user", js: true do
+  context "volunteer user" do
     before do
       sign_in volunteer
       visit edit_users_path
@@ -100,18 +100,18 @@ RSpec.describe "users/edit", type: :system do
       expect(page).to have_text("At least one communication preference must be selected.")
     end
 
-    it "displays notification events selection as enabled if sms notification preference is selected" do
+    it "displays notification events selection as enabled if sms notification preference is selected", js: true do
       check "user_receive_sms_notifications"
       expect(page).to have_field("toggle-sms-notification-event", type: "checkbox", disabled: false)
     end
 
-    it "displays notification events selection as disabled if sms notification preference is not selected" do
+    it "displays notification events selection as disabled if sms notification preference is not selected", js: true do
       uncheck "user_receive_sms_notifications"
       expect(page).to have_field("toggle-sms-notification-event", type: "checkbox", disabled: true)
     end
   end
 
-  context "supervisor user", js: true do
+  context "supervisor user" do
     before do
       sign_in supervisor
       visit edit_users_path
@@ -152,7 +152,7 @@ RSpec.describe "users/edit", type: :system do
     end
   end
 
-  context "when admin", js: true do
+  context "when admin" do
     let(:role) { "user" }
     before do
       sign_in admin
