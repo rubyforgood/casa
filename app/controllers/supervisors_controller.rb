@@ -34,18 +34,12 @@ class SupervisorsController < ApplicationController
 
     if @supervisor.save
       @supervisor.invite!(current_user)
-      if !@supervisor.phone_number.blank?
-        # call short io api here
-        raw_token = @supervisor.raw_invitation_token
-        base_domain = request.base_url + "/users/edit"
-        invitation_url = Rails.application.routes.url_helpers.accept_user_invitation_url(invitation_token: raw_token, host: request.base_url)
-        # handle short url
-        hash_of_short_urls = handle_short_url([invitation_url, base_domain])
-        # input => array of urls
-        # output => hash of valid short urls {id => short url/nil}
-        body_msg = account_activation_msg("supervisor", hash_of_short_urls)
-        sms_status = deliver_sms_to @supervisor, body_msg
-      end
+      # call short io api here
+      raw_token = @supervisor.raw_invitation_token
+      invitation_url = Rails.application.routes.url_helpers.accept_user_invitation_url(invitation_token: raw_token, host: request.base_url)
+      hash_of_short_urls = @supervisor.phone_number.blank? ? {0 => nil, 1 => nil} : handle_short_url([invitation_url, request.base_url + "/users/edit"])
+      body_msg = account_activation_msg("supervisor", hash_of_short_urls)
+      sms_status = deliver_sms_to @supervisor, body_msg
       redirect_to edit_supervisor_path(@supervisor), notice: sms_acct_creation_notice("supervisor", sms_status)
     else
       render new_supervisor_path

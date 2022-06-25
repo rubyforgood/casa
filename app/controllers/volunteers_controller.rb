@@ -33,15 +33,12 @@ class VolunteersController < ApplicationController
 
     if @volunteer.save
       @volunteer.invite!(current_user)
-      if !@volunteer.phone_number.blank?
-        # call short io api here
-        raw_token = @volunteer.raw_invitation_token
-        base_domain = request.base_url + "/users/edit"
-        invitation_url = Rails.application.routes.url_helpers.accept_user_invitation_url(invitation_token: raw_token, host: request.base_url)
-        hash_of_short_urls = handle_short_url([invitation_url, base_domain])
-        body_msg = account_activation_msg("volunteer", hash_of_short_urls)
-        sms_status = deliver_sms_to @volunteer, body_msg
-      end
+      # call short io api here
+      raw_token = @volunteer.raw_invitation_token
+      invitation_url = Rails.application.routes.url_helpers.accept_user_invitation_url(invitation_token: raw_token, host: request.base_url)
+      hash_of_short_urls = @volunteer.phone_number.blank? ? {0 => nil, 1 => nil} : handle_short_url([invitation_url, request.base_url + "/users/edit"])
+      body_msg = account_activation_msg("volunteer", hash_of_short_urls)
+      sms_status = deliver_sms_to @volunteer, body_msg
       redirect_to edit_volunteer_path(@volunteer), notice: sms_acct_creation_notice("volunteer", sms_status)
     else
       render :new
