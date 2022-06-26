@@ -3,10 +3,12 @@ require "json"
 class ShortUrlService
   attr_reader :short_url
 
+  include ApiBaseHelper
+  include RequestHeaderHelper
   include HTTParty
-  base_uri ApiBaseUrl::SHORT_IO
-  headers RequestHeader::ACCEPT_JSON
-  headers RequestHeader::CONTENT_TYPE_JSON
+  base_uri SHORT_IO
+  headers ACCEPT_JSON
+  headers CONTENT_TYPE_JSON
 
   def initialize
     validate_credentials

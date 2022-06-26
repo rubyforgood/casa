@@ -1,4 +1,6 @@
 class CasaAdminsController < ApplicationController
+  include SmsBodyHelper
+
   before_action :set_admin, except: [:index, :new, :create]
   before_action :require_organization!
   after_action :verify_authorized
@@ -37,12 +39,18 @@ class CasaAdminsController < ApplicationController
     service = ::CreateCasaAdminService.new(current_organization, params, current_user)
     @casa_admin = service.build
     authorize @casa_admin
+    sms_status = "blank"
 
     begin
       casa_admin = service.create!
-      body_msg = SMSBodyText.account_activation_msg("admin", request.base_url)
-      sms_status = deliver_sms_to casa_admin.phone_number, body_msg
-
+      if !casa_admin.phone_number.blank?
+        raw_token = casa_admin.raw_invitation_token
+        base_domain = request.base_url + "/users/edit"
+        invitation_url = Rails.application.routes.url_helpers.accept_user_invitation_url(invitation_token: raw_token, host: request.base_url)
+        hash_of_short_urls = handle_short_url([invitation_url, base_domain])
+        body_msg = account_activation_msg("admin", hash_of_short_urls)
+        sms_status = deliver_sms_to casa_admin, body_msg
+      end
       respond_to do |format|
         format.html { redirect_to casa_admins_path, notice: sms_acct_creation_notice("admin", sms_status) }
         format.json { render json: @casa_admin, status: :created }
