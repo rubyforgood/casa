@@ -77,3 +77,10 @@ jobs:
           ./cc-test-reporter before-build
           RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
           ./cc-test-reporter after-build --exit-code $?
+
+      - name: Archive selenium screenshots
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: selenium-screenshots
+          path: ${{ github.workspace }}/tmp/capybara/*.png
