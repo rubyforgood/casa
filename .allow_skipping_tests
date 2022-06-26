@@ -17,7 +17,6 @@ controllers/case_court_orders_controller.rb
 controllers/case_court_reports_controller.rb
 controllers/checklist_items_controller.rb
 controllers/concerns/accessible.rb
-controllers/concerns/organizational.rb
 controllers/contact_type_groups_controller.rb
 controllers/contact_types_controller.rb
 controllers/court_dates_controller.rb
