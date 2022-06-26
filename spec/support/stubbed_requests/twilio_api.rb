@@ -52,12 +52,8 @@ module TwilioAPI
       .with(
         body: {"Body" => "Your court report is due on #{court_due_date}. Generate a court report to complete & submit here: https://42ni.short.gy/jzTwdF", "From" => "+15555555555", "To" => "+12223334444"},
         headers: {
-          "Accept" => "application/json",
-          "Accept-Charset" => "utf-8",
-          "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-          "Authorization" => "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==",
           "Content-Type" => "application/x-www-form-urlencoded",
-          "User-Agent" => "twilio-ruby/5.67.2 (darwin21 arm64) Ruby/3.1.0"
+          "Authorization" => "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==",
         }
       )
       .to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"Your court report is due on #{court_due_date}. Generate a court report to complete & submit here: https://42ni.short.gy/jzTwdF\"}")
