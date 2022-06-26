@@ -53,7 +53,7 @@ module TwilioAPI
         body: {"Body" => "Your court report is due on #{court_due_date}. Generate a court report to complete & submit here: https://42ni.short.gy/jzTwdF", "From" => "+15555555555", "To" => "+12223334444"},
         headers: {
           "Content-Type" => "application/x-www-form-urlencoded",
-          "Authorization" => "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==",
+          "Authorization" => "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
         }
       )
       .to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"Your court report is due on #{court_due_date}. Generate a court report to complete & submit here: https://42ni.short.gy/jzTwdF\"}")
