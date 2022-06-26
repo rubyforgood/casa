@@ -6,7 +6,7 @@ RSpec.describe "casa_admins/edit", type: :view do
   it "shows invite and login info" do
     enable_pundit(view, admin)
     allow(view).to receive(:current_user).and_return(admin)
-
+    allow(view).to receive(:current_organization).and_return(admin.casa_org)
     assign :casa_admin, admin
 
     render template: "casa_admins/edit"
@@ -29,7 +29,7 @@ RSpec.describe "casa_admins/edit", type: :view do
     it "shows for an admin editing an admin" do
       enable_pundit(view, admin)
       allow(view).to receive(:current_user).and_return(admin)
-
+      allow(view).to receive(:current_organization).and_return(admin.casa_org)
       render template: "casa_admins/edit"
 
       expect(rendered).to have_text("Change to Supervisor")
@@ -39,7 +39,7 @@ RSpec.describe "casa_admins/edit", type: :view do
     it "does not show for a supervisor editing an admin" do
       enable_pundit(view, admin)
       allow(view).to receive(:current_user).and_return(supervisor)
-
+      allow(view).to receive(:current_organization).and_return(supervisor.casa_org)
       render template: "casa_admins/edit"
 
       expect(rendered).not_to have_text("Change to Supervisor")

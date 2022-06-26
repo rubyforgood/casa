@@ -60,7 +60,7 @@ class CaseContactsController < ApplicationController
     # they did previously enter.
 
     @casa_cases = policy_scope(current_organization.casa_cases)
-    @case_contact = CaseContact.new(create_case_contact_params)
+    @case_contact = CaseContact.new(create_case_contact_params.except(:casa_case_attributes))
     authorize @case_contact
     @current_organization_groups = current_organization.contact_type_groups
 
@@ -158,9 +158,26 @@ class CaseContactsController < ApplicationController
           @case_contact.errors
         end
       else
-        new_cc = casa_case.case_contacts.create(create_case_contact_params)
+        new_cc = casa_case.case_contacts.create(create_case_contact_params.except(:casa_case_attributes))
+      end
+
+      if @selected_cases.count == 1 && @case_contact.valid?
+        if current_role == "Volunteer"
+          update_volunteer_address
+        elsif ["Supervisor", "Casa Admin"].include?(current_role) && casa_case.volunteers.count == 1
+          update_volunteer_address(casa_case.volunteers[0])
+        end
       end
       new_cc
+    end
+  end
+
+  def update_volunteer_address(volunteer = current_user)
+    content = create_case_contact_params[:casa_case_attributes][:volunteers_attributes]["0"][:address_attributes][:content]
+    if volunteer.address
+      volunteer.address.update!(content: content)
+    else
+      volunteer.address = Address.create!(content: content)
     end
   end
 

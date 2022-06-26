@@ -12,6 +12,27 @@ window.onload = function () {
   const durationMinutes = document.getElementById('case-contact-duration-minutes-display')
   const caseOccurredAt = document.getElementById('case_contact_occurred_at')
   const caseContactSubmit = document.getElementById('case-contact-submit')
+  const volunteerAddressFieldState = (hide) => {
+    if (hide) $('.field.volunteer-address').addClass('hide-field')
+    else $('.field.volunteer-address').removeClass('hide-field')
+    $('.field.volunteer-address input[type=text]').prop('disabled', hide)
+    $('.field.volunteer-address input[type=hidden]').prop('disabled', hide)
+    $('.field.volunteer-address input[type=text]').prop('required', !hide)
+  }
+
+  if ($('.want-driving-reimbursement input.form-check-input[type="radio"][value=true]')[0].checked) {
+    volunteerAddressFieldState(false)
+  } else {
+    volunteerAddressFieldState(true)
+  }
+
+  $('.want-driving-reimbursement input.form-check-input[type="radio"]').on('change', function () {
+    if (this.value === 'true') {
+      volunteerAddressFieldState(false)
+    } else if (this.value === 'false') {
+      volunteerAddressFieldState(true)
+    }
+  })
 
   const timeZoneConvertedDate = enGBDateString(new Date())
 

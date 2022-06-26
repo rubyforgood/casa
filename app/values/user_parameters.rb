@@ -8,7 +8,8 @@ class UserParameters < SimpleDelegator
         :phone_number,
         :password,
         :active,
-        :type
+        :type,
+        address_attributes: [:id, :content]
       )
 
     super(params)

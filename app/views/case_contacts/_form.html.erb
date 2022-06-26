@@ -124,6 +124,35 @@
                           for: "case_contact_want_driving_reimbursement_false" %>
         </div>
       </div>
+      <div class="field volunteer-address form-group">
+        <h5><%= form.label :volunteer_address, "c. Volunteer Address" %></h5>
+        <%
+          if current_role == "Volunteer"
+            volunteer = current_user
+            address = current_user.address.nil? ? Address.new : current_user.address
+          elsif ["Supervisor", "Casa Admin"].include? current_role
+            if casa_cases[0].volunteers.count > 1
+              message = "There are two volunteers assigned to this case and you are trying to set the address" +
+              " for both of them. This is not currently possible."
+            else
+              volunteer = casa_cases[0].volunteers.first
+              address = volunteer.address.nil? ? Address.new : volunteer.address
+            end
+          end
+        %>
+        <% if message %>
+          <%= form.text_field :no_address_content, class: "form-control red-letter", value: message, disabled: true,
+readonly: true %>
+        <% else %>
+          <%= form.fields_for :casa_case, casa_cases[0] do |cc| %>
+            <%= cc.fields_for :volunteers, volunteer do |v| %>
+              <%= v.fields_for :address, address do |a| %>
+                <%= a.text_field :content, class: "form-control", required: true %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
     <% end %>
 
     <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
