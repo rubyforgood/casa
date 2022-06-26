@@ -27,12 +27,24 @@ RSpec.describe Volunteer, type: :model do
       expect(VolunteerMailer).to receive(:court_report_reminder).with(v1, Date.current + 7.days)
       expect(VolunteerMailer).to_not receive(:court_report_reminder).with(v2, anything)
       expect(VolunteerMailer).to_not receive(:court_report_reminder).with(v3, anything)
-      described_class.email_court_report_reminder
+      described_class.send_court_report_reminder
     end
 
     it "should not send reminders about unassigned cases" do
       expect(VolunteerMailer).to_not receive(:court_report_reminder).with(v4, anything)
-      described_class.email_court_report_reminder
+      described_class.send_court_report_reminder
+    end
+
+    it "sends one sms" do
+      expect(CourtReportDueSmsReminderService).to receive(:court_report_reminder).with(v1, Date.current + 7.days)
+      expect(CourtReportDueSmsReminderService).to_not receive(:court_report_reminder).with(v2, anything)
+      expect(CourtReportDueSmsReminderService).to_not receive(:court_report_reminder).with(v3, anything)
+      described_class.send_court_report_reminder
+    end
+
+    it "should not send sms about unassigned cases" do
+      expect(CourtReportDueSmsReminderService).to_not receive(:court_report_reminder).with(v4, anything)
+      described_class.send_court_report_reminder
     end
   end
 

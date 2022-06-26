@@ -4,6 +4,8 @@ class CourtReportDueSmsReminderService
 
   class << self
     def court_report_reminder(user, report_due_date)
+      return if !user[:receive_sms_notifications] || user[:phone_number].blank?
+
       user_casa_org = user.casa_org
       twilio_service = TwilioService.new(user_casa_org.twilio_api_key_sid, user_casa_org.twilio_api_key_secret, user_casa_org.twilio_account_sid)
       sms_params = {

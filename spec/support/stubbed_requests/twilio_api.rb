@@ -50,7 +50,7 @@ module TwilioAPI
     court_due_date = Date.current + 7.days
     WebMock.stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno34/Messages.json")
       .with(
-        body: {"Body" => "Your court report is due on #{court_due_date}. Generate a court report to complete & submit here: https://42ni.short.gy/jzTwdF", "From" => "+15555555555", "To" => ""},
+        body: {"Body" => "Your court report is due on #{court_due_date}. Generate a court report to complete & submit here: https://42ni.short.gy/jzTwdF", "From" => "+15555555555", "To" => "+12223334444"},
         headers: {
           "Accept" => "application/json",
           "Accept-Charset" => "utf-8",
