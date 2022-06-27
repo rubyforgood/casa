@@ -6,6 +6,14 @@ You will need the following local tools installed:
 
 # command line tools - what are they
 task 1. intro to the command line
+within the finder bar of your cumputer lives the following
+-application
+-utilites
+-terminal 
+ click on and open the terminal
+
+ the terminal aka the command line is where we build our enivorment for this project
+
 
 task 2. this assumes you have a github account
 
