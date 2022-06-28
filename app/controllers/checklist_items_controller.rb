@@ -48,7 +48,7 @@ class ChecklistItemsController < ApplicationController
   def authorize_checklist_item
     authorize ChecklistItem
   end
- 
+
   def set_hearing_type
     @hearing_type ||= policy_scope(HearingType).find(params[:hearing_type_id])
   end
