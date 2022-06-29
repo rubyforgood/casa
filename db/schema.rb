@@ -136,11 +136,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_18_042137) do
     t.string "footer_links", default: [], array: true
     t.string "slug"
     t.boolean "show_driving_reimbursement", default: true
-    t.boolean "show_fund_request", default: false
     t.string "twilio_phone_number"
     t.string "twilio_account_sid"
     t.string "twilio_api_key_sid"
     t.string "twilio_api_key_secret"
+    t.boolean "show_fund_request", default: false
     t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 
