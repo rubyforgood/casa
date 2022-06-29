@@ -28,7 +28,8 @@ class MileageExportCsvService
       occurred_at: I18n.l(case_contact&.occurred_at, format: :full, default: nil),
       miles_driven: case_contact&.miles_driven,
       casa_case_number: case_contact&.casa_case&.case_number,
-      creator_name: case_contact&.creator&.display_name
+      creator_name: case_contact&.creator&.display_name,
+      volunteer_address: case_contact&.creator&.address&.content
     }
   end
 end
