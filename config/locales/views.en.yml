@@ -291,7 +291,7 @@ en:
     email: Email
   hearing_types:
     edit:
-      title: Edit Hearing Type
+      title: Edit
     new:
       title: New Hearing Type
     form:
