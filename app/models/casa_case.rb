@@ -147,10 +147,6 @@ class CasaCase < ApplicationRecord
     court_dates.where("date < ?", Date.today).order(:date).last
   end
 
-  def has_hearing_type?
-    hearing_type
-  end
-
   def has_judge_name?
     judge_name
   end
