@@ -6,7 +6,7 @@
       <%= render "/shared/error_messages", resource: hearing_type %>
       <div class="field form-group">
         <%= form.label :name, t("common.name") %>
-        <%= form.text_field :name, class: "form-control" %>
+        <%= form.text_field :name, class: "form-control", required: true %>
       </div>
       <div class="field form-group">
         <div class="form-check">
