@@ -4,12 +4,42 @@ This guide assumes you have [homebrew](https://brew.sh/) installed.
 
 You will need the following local tools installed:
 
+# command line tools - what are they
+task 1. intro to the command line
+within the finder bar of your cumputer lives the following
+-application
+-utilites
+-terminal 
+ click on and open the terminal
+
+ the terminal aka the command line is where we build our enivorment for this project
+
+
+task 2. this assumes you have a github account
+
+
+articles that will help with command line
+
+https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Understanding_client-side_tools/Command_line
+
+this assumes you have a github account
+
+cd into casa
+
+
+
+
+
 1. Ruby
 2. NodeJs (optional)
 3. Postgres
 4. Google Chrome
 
 All dependencies are installed with homebrew.
+
+Open your command line
+
+
 
 ### Ruby
 
@@ -41,3 +71,34 @@ For a more GUI focused postgres experience, try [Postgres.app](https://postgresa
 Many of the frontend tests are run using Google Chrome, so if you don't already have that installed you may wish to include it:
 
 `brew install google-chrome`
+--------------------------
+from Gemfile 
+
+ruby "3.1.0"
+gem "rails", "~> 7.0.3"
+
+----------------------
+Ruby Version
+This app uses Ruby version 3.1.2, indicated in /.ruby-version and Gemfile, which will be auto-selected if you use a Ruby versioning manager like rvm, rbenv, or asdf.
+
+Yarn Installation
+If you don't have Yarn installed, you can install with Homebrew on macOS brew install yarn or visit https://yarnpkg.com/en/docs/install. Be sure to run yarn install after installing Yarn. NOTE: It's possible that Node version 12 may cause you problems, see issue #751. Node 10 or 11 seem to be fine.
+
+Install dependencies using Yarn
+Run yarn to install project dependencies.
+
+Create your .env with database credentials
+Be sure to create a .env file in the root of the app that includes the following lines (change to whatever is appropriate for your system):
+
+PG_USERNAME=username
+PG_PASSWORD=password
+If you're getting the error PG::ConnectionBad: fe_sendauth: no password supplied, it's because you have probably not done this.
+
+Database Configuration
+This app uses PostgreSQL for all environments. You'll also need to create the dev and test databases, the app is expecting them to be named diaper_dev, diaper_test, partner_dev, and partner_test respectively. This should all be handled with rails db:setup. Create a database.yml file on config/ directory with your database configurations. You can also copy the existing file called database.yml.example as an example and just change the credentials.
+
+Seed the database
+From the root of the app, run bundle exec rails db:seed. This will create some initial data to use while testing the app and developing new features, including setting up the default user.
+
+Start the app
+Run bundle exec rails server or bin/start (recommended since it runs webpacker in the background!) an
