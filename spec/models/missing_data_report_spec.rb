@@ -28,7 +28,7 @@ RSpec.describe MissingDataReport, type: :model do
 
       let!(:incomplete_casa_cases_from_other_org) { create_list(:casa_case, 3, casa_org: create(:casa_org)) }
       let!(:complete_casa_cases) { create_list(:casa_case, 3, :with_upcoming_court_date, :with_one_court_order) }
-      
+
       let(:expected_result) do
         [
           [incomplete_casa_cases[0].case_number, "OK", "MISSING", "MISSING"],
