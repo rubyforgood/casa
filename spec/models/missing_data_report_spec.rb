@@ -28,12 +28,18 @@ RSpec.describe MissingDataReport, type: :model do
 
       let!(:incomplete_casa_cases_from_other_org) { create_list(:casa_case, 3, casa_org: create(:casa_org)) }
       let!(:complete_casa_cases) { create_list(:casa_case, 3, :with_upcoming_court_date, :with_one_court_order) }
+      
+      let(:expected_result) do
+        [
+          [incomplete_casa_cases[0].case_number, "OK", "MISSING", "MISSING"],
+          [incomplete_casa_cases[1].case_number, "OK", "MISSING", "OK"],
+          [incomplete_casa_cases[2].case_number, "OK", "OK", "MISSING"]
+        ]
+      end
 
       it "includes only cases with missing data" do
         expect(result.length).to eq(4)
-        expect(result[1]).to eq([incomplete_casa_cases[0].case_number, "OK", "MISSING", "MISSING"])
-        expect(result[2]).to eq([incomplete_casa_cases[1].case_number, "OK", "MISSING", "OK"])
-        expect(result[3]).to eq([incomplete_casa_cases[2].case_number, "OK", "OK", "MISSING"])
+        expect(result).to include(*expected_result)
       end
 
       it_behaves_like "report_with_header"
