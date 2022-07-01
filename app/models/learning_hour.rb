@@ -10,12 +10,17 @@ class LearningHour < ApplicationRecord
   }
 
   validates :learning_type, presence: true
-  validates :duration_minutes, presence: true, numericality: {greater_than: 0}
+  validates :duration_minutes, presence: true
+  validates :duration_minutes, numericality: {greater_than: 0}, if: :zero_duration_hours?
   validates :name, presence: {message: "/ Title cannot be blank"}
   validates :occurred_at, presence: true
   validate :occurred_at_not_in_future
 
   private
+
+  def zero_duration_hours?
+    duration_hours == 0
+  end
 
   def occurred_at_not_in_future
     return false if !occurred_at
