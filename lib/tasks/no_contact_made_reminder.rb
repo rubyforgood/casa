@@ -40,11 +40,11 @@ class NoContactMadeReminder
   def valid_past_reminders(volunteer)
     reminder = UserReminderTime.find_by(user_id: volunteer.id)
 
-    if reminder&.case_contact_types&.today?
+    if reminder&.case_contact_types && reminder.case_contact_types.today?
       return false
     end
 
-    if reminder&.no_contact_made && reminder&.no_contact_made >= 1.months.ago
+    if reminder&.no_contact_made && reminder.no_contact_made >= 1.months.ago
       return false
     end
 
