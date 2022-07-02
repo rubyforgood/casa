@@ -7,9 +7,8 @@ class NoContactMadeReminder
       .select { |v| !quarterly_case_contacts_type_reminder_sent_today(v) }
 
     eligible_volunteers.each do |volunteer|
-      contact_types = contact_types_to_contact(volunteer)
       if contact_types.count > 0
-        responses += send_reminders(volunteer, contact_types)
+        responses += send_reminders(volunteer)
       end
     end
 
@@ -18,8 +17,9 @@ class NoContactMadeReminder
 
   private
 
-  def send_reminders(volunteer, contact_types)
+  def send_reminders(volunteer)
     responses = []
+    contact_types = get_contact_types_in_past_2_weeks(volunteer, false) - get_contact_types_in_past_2_weeks(volunteer, true)
     contact_types.each do |type|
       responses.push(
         {
@@ -32,26 +32,26 @@ class NoContactMadeReminder
     responses
   end
 
-  def contact_types_to_contact(volunteer)
-    
+  def get_contact_types_in_past_2_weeks(volunteer, contact_made)
+    volunteer.case_contacts.where("occurred_at > ?", 2.weeks.ago).where(contact_made: false).joins(:contact_types).pluck(:name)
   end
 
   def quarterly_case_contacts_type_reminder_sent_today(volunteer)
-    reminder = UserCaseContactTypesReminder.find_by(user_id: volunteer.id)
+    reminder = UserReminderTime.find_by(user_id: volunteer.id)
 
-    if reminder
-      return reminder.reminder_sent.today?
+    if reminder && reminder.case_contact_types
+      return reminder.case_contact_types.today?
     
     false
   end
 
   def update_reminder_sent_time(volunteer)
-    reminder = UserNoContactMadeReminder.find_by(user_id: volunteer.id)
+    reminder = UserReminderTime.find_by(user_id: volunteer.id)
 
     if reminder
-      reminder.reminder_sent = DateTime.now
+      reminder.no_contact_made = DateTime.now
     else
-      reminder = UserNoContactMadeReminder.new(user_id: volunteer.id, reminder_sent: DateTime.now)
+      reminder = UserReminderTime.new(user_id: volunteer.id, no_contact_made: DateTime.now)
     end
 
     reminder.save
