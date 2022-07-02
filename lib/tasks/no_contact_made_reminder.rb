@@ -40,7 +40,7 @@ class NoContactMadeReminder
   def quarterly_case_contacts_type_reminder_sent_today(volunteer)
     reminder = UserReminderTime.find_by(user_id: volunteer.id)
 
-    if reminder && reminder.case_contact_types
+    if reminder&.case_contact_types
       return reminder.case_contact_types.today?
     end
 

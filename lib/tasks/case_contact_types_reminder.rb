@@ -70,7 +70,7 @@ class CaseContactTypesReminder
   def last_reminder_within_quarter(volunteer)
     reminder = UserReminderTime.find_by(user_id: volunteer.id)
 
-    if reminder && reminder.case_contact_types
+    if reminder&.case_contact_types
       return reminder.case_contact_types > 3.months.ago
     end
 
