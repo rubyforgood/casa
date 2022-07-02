@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_18_042137) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_22_022147) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -395,6 +395,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_18_042137) do
     t.index ["name"], name: "index_patch_note_types_on_name", unique: true
   end
 
+  create_table "patch_notes", force: :cascade do |t|
+    t.text "note", null: false
+    t.bigint "patch_note_type_id", null: false
+    t.bigint "patch_note_group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["patch_note_group_id"], name: "index_patch_notes_on_patch_note_group_id"
+    t.index ["patch_note_type_id"], name: "index_patch_notes_on_patch_note_type_id"
+  end
+
   create_table "preference_sets", force: :cascade do |t|
     t.bigint "user_id"
     t.jsonb "case_volunteer_columns", default: "{}", null: false
@@ -519,6 +529,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_18_042137) do
   add_foreign_key "judges", "casa_orgs"
   add_foreign_key "learning_hours", "users"
   add_foreign_key "mileage_rates", "users"
+  add_foreign_key "patch_notes", "patch_note_groups"
+  add_foreign_key "patch_notes", "patch_note_types"
   add_foreign_key "preference_sets", "users"
   add_foreign_key "sent_emails", "casa_orgs"
   add_foreign_key "sent_emails", "users"
