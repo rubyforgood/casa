@@ -1,4 +1,4 @@
-class NoContactMadeReminderService < SmsReminderService
+class NoContactMadeSmsReminderService < SmsReminderService
   NEW_CASE_CONTACT_LINK = "/case_contacts/new"
 
   class << self

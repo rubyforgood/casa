@@ -24,7 +24,7 @@ class NoContactMadeReminder
       responses.push(
         {
           volunteer: volunteer,
-          message: NoContactMadeReminderService.no_contact_made_reminder(volunteer, type)
+          message: NoContactMadeSmsReminderService.no_contact_made_reminder(volunteer, type)
         }
       )
       update_reminder_sent_time(volunteer)
