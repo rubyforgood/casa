@@ -27,7 +27,7 @@ class NoContactMadeReminder
           message: NoContactMadeSmsReminderService.no_contact_made_reminder(volunteer, type)
         }
       )
-      update_reminder_sent_time(volunteer)
+      UserReminderTime.find_by(user_id: volunteer.id)&.update_attributes(no_contact_made: DateTime.now)
     end
 
     responses
@@ -45,17 +45,5 @@ class NoContactMadeReminder
     end
 
     false
-  end
-
-  def update_reminder_sent_time(volunteer)
-    reminder = UserReminderTime.find_by(user_id: volunteer.id)
-
-    if reminder
-      reminder.no_contact_made = DateTime.now
-    else
-      reminder = UserReminderTime.new(user_id: volunteer.id, no_contact_made: DateTime.now)
-    end
-
-    reminder.save
   end
 end

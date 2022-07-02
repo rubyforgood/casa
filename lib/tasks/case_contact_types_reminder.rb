@@ -21,7 +21,7 @@ class CaseContactTypesReminder
             messages: send_sms_messages(volunteer, uncontacted_case_contact_type_names)
           }
         )
-        update_reminder_sent_time(volunteer)
+        UserReminderTime.find_by(user_id: volunteer.id)&.update_attributes(case_contact_types: DateTime.now)
       end
     end
 
@@ -75,18 +75,6 @@ class CaseContactTypesReminder
     end
 
     false
-  end
-
-  def update_reminder_sent_time(volunteer)
-    reminder = UserReminderTime.find_by(user_id: volunteer.id)
-
-    if reminder
-      reminder.case_contact_types = DateTime.now
-    else
-      reminder = UserReminderTime.new(user_id: volunteer.id, case_contact_types: DateTime.now)
-    end
-
-    reminder.save
   end
 
   def new_case_contact_page_short_link
