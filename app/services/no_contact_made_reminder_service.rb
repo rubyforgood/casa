@@ -1,4 +1,4 @@
-class NoContactMadeReminderService
+class NoContactMadeReminderService < SmsReminderService
   NEW_CASE_CONTACT_LINK = "/case_contacts/new"
 
   class << self
@@ -9,7 +9,7 @@ class NoContactMadeReminderService
     private
 
     def create_message(contact_type)
-      "It's been two weeks since you've tried reaching #{contact_type}. Try again! #{create_short_link(NEW_CASE_CONTACT_LINK)}"
+      "It's been two weeks since you've tried reaching '#{contact_type}'. Try again! #{create_short_link(NEW_CASE_CONTACT_LINK)}"
     end
   end
 end
