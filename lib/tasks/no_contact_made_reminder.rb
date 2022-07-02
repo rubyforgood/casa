@@ -4,7 +4,7 @@ class NoContactMadeReminder
 
     eligible_volunteers = Volunteer.where(receive_sms_notifications: true)
       .where.not(phone_number: nil)
-      .select { |v| !quarterly_case_contacts_type_reminder_sent_today(v) }
+      .select { |v| valid_past_reminders(v) }
 
     eligible_volunteers.each do |volunteer|
       responses += send_reminders(volunteer)
@@ -37,13 +37,17 @@ class NoContactMadeReminder
     volunteer.case_contacts.where("occurred_at > ?", 2.weeks.ago).where(contact_made: contact_made).joins(:contact_types).pluck(:name)
   end
 
-  def quarterly_case_contacts_type_reminder_sent_today(volunteer)
+  def valid_past_reminders(volunteer)
     reminder = UserReminderTime.find_by(user_id: volunteer.id)
 
     if reminder&.case_contact_types
-      return reminder.case_contact_types.today?
+      return false if reminder.case_contact_types.today?
     end
 
-    false
+    if reminder&.no_contact_made
+      return false if reminder.no_contact_made >= 1.months.ago
+    end
+
+    true
   end
 end
