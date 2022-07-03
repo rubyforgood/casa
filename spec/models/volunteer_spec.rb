@@ -22,7 +22,7 @@ RSpec.describe Volunteer, type: :model do
     let!(:v4) { build_stubbed(:volunteer, casa_org: casa_org, case_assignments: [case_assignment_unassigned]) }
 
     before do
-      stub_const("Volunteer::COURT_REPORT_SUBMISSION_REMINDER", 7.days) 
+      stub_const("Volunteer::COURT_REPORT_SUBMISSION_REMINDER", 7.days)
       WebMockHelper.short_io_court_report_due_date_stub
       WebMock.disable_net_connect!
     end
