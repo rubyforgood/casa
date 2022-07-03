@@ -21,7 +21,11 @@ RSpec.describe Volunteer, type: :model do
     let!(:v3) { build_stubbed(:volunteer, casa_org: casa_org) }
     let!(:v4) { build_stubbed(:volunteer, casa_org: casa_org, case_assignments: [case_assignment_unassigned]) }
 
-    before { stub_const("Volunteer::COURT_REPORT_SUBMISSION_REMINDER", 7.days) }
+    before do
+      stub_const("Volunteer::COURT_REPORT_SUBMISSION_REMINDER", 7.days) 
+      WebMockHelper.short_io_court_report_due_date_stub
+      WebMock.disable_net_connect!
+    end
 
     it "sends one mailer" do
       expect(VolunteerMailer).to receive(:court_report_reminder).with(v1, Date.current + 7.days)
