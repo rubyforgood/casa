@@ -1,6 +1,6 @@
 class DeliveryMethods::Sms < Noticed::DeliveryMethods::Base
   def deliver
-    # Logic for sending the notification
+    twilio = TwilioService.new(recipient.casa_org.twilio_api_key_sid, recipient.casa_org.twilio_api_key_secret, recipient.casa_org.twilio_account_sid)
   end
 
   # You may override this method to validate options for the delivery method
