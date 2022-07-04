@@ -2,6 +2,8 @@ require "rails_helper"
 require "support/stubbed_requests/webmock_helper"
 
 RSpec.describe CourtReportDueSmsReminderService do
+  include SmsBodyHelper
+
   describe "court report due sms reminder service" do
     let!(:volunteer) { create(:volunteer, receive_sms_notifications: true, phone_number: "+12223334444") }
     let!(:report_due_date) { Date.current + 7.days }
@@ -18,7 +20,7 @@ RSpec.describe CourtReportDueSmsReminderService do
 
         expect(response.error_code).to match nil
         expect(response.status).to match "sent"
-        expect(response.body).to match "Your court report is due on #{report_due_date}. Generate a court report to complete & submit here: https://42ni.short.gy/jzTwdF"
+        expect(response.body).to match court_report_due_msg(report_due_date, "https://42ni.short.gy/jzTwdF")
       end
     end
 

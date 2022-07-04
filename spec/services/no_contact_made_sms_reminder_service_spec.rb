@@ -2,6 +2,8 @@ require "rails_helper"
 require "support/stubbed_requests/webmock_helper"
 
 RSpec.describe NoContactMadeSmsReminderService do
+  include SmsBodyHelper
+
   describe "court report due sms reminder service" do
     let!(:volunteer) { create(:volunteer, receive_sms_notifications: true, phone_number: "+12222222222") }
     let!(:contact_type) { "test" }
@@ -18,7 +20,7 @@ RSpec.describe NoContactMadeSmsReminderService do
 
         expect(response.error_code).to match nil
         expect(response.status).to match "sent"
-        expect(response.body).to match "It's been two weeks since you've tried reaching '#{contact_type}'. Try again! https://42ni.short.gy/jzTwdF"
+        expect(response.body).to match no_contact_made_msg(contact_type, "https://42ni.short.gy/jzTwdF")
       end
     end
 
