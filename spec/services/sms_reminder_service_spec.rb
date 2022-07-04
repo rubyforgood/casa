@@ -1,26 +1,24 @@
 require "rails_helper"
 require "support/stubbed_requests/webmock_helper"
 
-RSpec.describe CourtReportDueSmsReminderService do
-  include SmsBodyHelper
-
+RSpec.describe SmsReminderService do
   describe "court report due sms reminder service" do
-    let!(:volunteer) { create(:volunteer, receive_sms_notifications: true, phone_number: "+12223334444") }
-    let!(:report_due_date) { Date.current + 7.days }
+    let!(:volunteer) { create(:volunteer, receive_sms_notifications: true, phone_number: "+12222222222") }
+    let!(:message) { "It's been two weeks since you've tried reaching 'test'. Try again! https://42ni.short.gy/jzTwdF" }
 
     before :each do
-      WebMockHelper.short_io_court_report_due_date_stub
-      WebMockHelper.twilio_court_report_due_date_stub
+      WebMockHelper.short_io_stub_localhost
+      WebMockHelper.twilio_no_contact_made_stub
       WebMock.disable_net_connect!
     end
 
     context "when sending sms reminder" do
       it "should send a SMS with a short url successfully" do
-        response = CourtReportDueSmsReminderService.court_report_reminder(volunteer, report_due_date)
+        response = SmsReminderService.send_reminder(volunteer, message)
 
         expect(response.error_code).to match nil
         expect(response.status).to match "sent"
-        expect(response.body).to match court_report_due_msg(report_due_date, "https://42ni.short.gy/jzTwdF")
+        expect(response.body).to match "It's been two weeks since you've tried reaching 'test'. Try again! https://42ni.short.gy/jzTwdF"
       end
     end
 
@@ -28,7 +26,7 @@ RSpec.describe CourtReportDueSmsReminderService do
       let(:volunteer) { create(:volunteer, receive_sms_notifications: false) }
 
       it "should not send a SMS" do
-        response = CourtReportDueSmsReminderService.court_report_reminder(volunteer, report_due_date)
+        response = SmsReminderService.send_reminder(volunteer, message)
         expect(response).to be_nil
       end
     end
@@ -37,7 +35,7 @@ RSpec.describe CourtReportDueSmsReminderService do
       let(:volunteer) { create(:volunteer, phone_number: nil) }
 
       it "should not send a SMS" do
-        response = CourtReportDueSmsReminderService.court_report_reminder(volunteer, report_due_date)
+        response = SmsReminderService.send_reminder(volunteer, message)
         expect(response).to be_nil
       end
     end
