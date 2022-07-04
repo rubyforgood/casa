@@ -1,49 +1,49 @@
 /* eslint-env jquery */
 
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2'
 
-import { disableBtn, enableBtn } from "./casa_case";
+import { disableBtn, enableBtn } from './casa_case'
 
-const EMAIL_TOGGLE_CLASS = "toggle-email-notifications";
-const SMS_TOGGLE_CLASS = "toggle-sms-notifications";
-const SAVE_BUTTON_CLASS = "save-preference";
-const SMS_NOTIFICATION_EVENT_ID = "toggle-sms-notification-event";
+const EMAIL_TOGGLE_CLASS = 'toggle-email-notifications'
+const SMS_TOGGLE_CLASS = 'toggle-sms-notifications'
+const SAVE_BUTTON_CLASS = 'save-preference'
+const SMS_NOTIFICATION_EVENT_ID = 'toggle-sms-notification-event'
 
-function displayPopUpIfPreferencesIsInvalid() {
-  const emailNotificationState = $("#user_receive_email_notifications").prop("checked");
-  const smsNotificationState = $("#user_receive_sms_notifications").prop("checked");
+function displayPopUpIfPreferencesIsInvalid () {
+  const emailNotificationState = $('#user_receive_email_notifications').prop('checked')
+  const smsNotificationState = $('#user_receive_sms_notifications').prop('checked')
 
-  if (smsNotificationState == false && emailNotificationState == false) {
-    disableBtn($(`.${SAVE_BUTTON_CLASS}`)[0]);
+  if (smsNotificationState === false && emailNotificationState === false) {
+    disableBtn($(`.${SAVE_BUTTON_CLASS}`)[0])
     Swal.fire({
-      icon: "error",
-      title: "Preference Error",
-      text: "At least one communication preference required",
-    });
+      icon: 'error',
+      title: 'Preference Error',
+      text: 'At least one communication preference required'
+    })
   } else {
-    enableBtn($(`.${SAVE_BUTTON_CLASS}`)[0]);
+    enableBtn($(`.${SAVE_BUTTON_CLASS}`)[0])
   }
 }
 
-$("document").ready(() => {
-  const smsToggle = $(`.${SMS_TOGGLE_CLASS}`)[0];
-  const emailToggle = $(`.${EMAIL_TOGGLE_CLASS}`)[0];
+$('document').ready(() => {
+  const smsToggle = $(`.${SMS_TOGGLE_CLASS}`)[0]
+  const emailToggle = $(`.${EMAIL_TOGGLE_CLASS}`)[0]
 
-  emailToggle.addEventListener("change", () => {
-    displayPopUpIfPreferencesIsInvalid();
-  });
+  emailToggle.addEventListener('change', () => {
+    displayPopUpIfPreferencesIsInvalid()
+  })
 
-  smsToggle.addEventListener("change", () => {
-    displayPopUpIfPreferencesIsInvalid();
-  });
+  smsToggle.addEventListener('change', () => {
+    displayPopUpIfPreferencesIsInvalid()
+  })
 
-  const smsEventToggle = $(`#${SMS_NOTIFICATION_EVENT_ID}`)[0];
+  const smsEventToggle = $(`#${SMS_NOTIFICATION_EVENT_ID}`)[0]
   if (smsToggle && smsEventToggle) {
-    smsEventToggle.disabled = !smsToggle.checked;
-    smsToggle.addEventListener("change", () => {
-      smsEventToggle.disabled = !smsToggle.checked;
-    });
+    smsEventToggle.disabled = !smsToggle.checked
+    smsToggle.addEventListener('change', () => {
+      smsEventToggle.disabled = !smsToggle.checked
+    })
   }
-});
+})
 
-export { displayPopUpIfPreferencesIsInvalid };
+export { displayPopUpIfPreferencesIsInvalid }
