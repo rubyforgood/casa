@@ -19,7 +19,7 @@ module SmsBodyHelper
   end
 
   def court_report_due_msg(report_due_date, short_link)
-     "Your court report is due on #{report_due_date}. Generate a court report to complete & submit here: #{short_link}"
+    "Your court report is due on #{report_due_date}. Generate a court report to complete & submit here: #{short_link}"
   end
 
   def no_contact_made_msg(contact_type, short_link)
