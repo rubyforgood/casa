@@ -9,41 +9,34 @@ const SMS_TOGGLE_CLASS = 'toggle-sms-notifications'
 const SAVE_BUTTON_CLASS = 'save-preference'
 const SMS_NOTIFICATION_EVENT_ID = 'toggle-sms-notification-event'
 
-function displayPopUpIfPreferencesIsInvalid (receiveEmail, receiveSMS, triggerPopup = false) {
+function displayPopUpIfPreferencesIsInvalid () {
   const emailNotificationState = $('#user_receive_email_notifications').prop('checked')
   const smsNotificationState = $('#user_receive_sms_notifications').prop('checked')
-  receiveSMS = smsNotificationState
-  receiveEmail = emailNotificationState
 
-  if (receiveSMS === false && receiveEmail === false) {
+  if (smsNotificationState === false && emailNotificationState === false) {
     disableBtn($(`.${SAVE_BUTTON_CLASS}`)[0])
-    if (triggerPopup) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Preference Error',
-        text: 'At least one communication preference required'
-      })
-    }
+    Swal.fire({
+      icon: 'error',
+      title: 'Preference Error',
+      text: 'At least one communication preference required'
+    })
   } else {
     enableBtn($(`.${SAVE_BUTTON_CLASS}`)[0])
   }
 }
 
 $('document').ready(() => {
-  if ($(`.${SAVE_BUTTON_CLASS}`).length > 0) {
-    const receiveSMS = $(`.${SMS_TOGGLE_CLASS}`)[0]
-    const receiveEmail = $(`.${EMAIL_TOGGLE_CLASS}`)[0]
-    enableBtn($(`.${SAVE_BUTTON_CLASS}`)[0])
-    $(`.${SMS_TOGGLE_CLASS}`).on('blur', () => {
-      displayPopUpIfPreferencesIsInvalid(receiveEmail, receiveSMS, true)
-    })
-
-    $(`.${EMAIL_TOGGLE_CLASS}`).on('blur', () => {
-      displayPopUpIfPreferencesIsInvalid(receiveEmail, receiveSMS, true)
-    })
-  }
-
   const smsToggle = $(`.${SMS_TOGGLE_CLASS}`)[0]
+  const emailToggle = $(`.${EMAIL_TOGGLE_CLASS}`)[0]
+
+  emailToggle.addEventListener('change', () => {
+    displayPopUpIfPreferencesIsInvalid()
+  })
+
+  smsToggle.addEventListener('change', () => {
+    displayPopUpIfPreferencesIsInvalid()
+  })
+
   const smsEventToggle = $(`#${SMS_NOTIFICATION_EVENT_ID}`)[0]
   if (smsToggle && smsEventToggle) {
     smsEventToggle.disabled = !smsToggle.checked
