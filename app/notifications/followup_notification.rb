@@ -7,10 +7,10 @@ class FollowupNotification < BaseNotification
   # Add your delivery methods
   #
   deliver_by :database
-  # deliver_by :email, mailer: "UserMailer", if: email_notifications?
+  # deliver_by :email, mailer: "UserMailer", if: :email_notifications?
   # deliver_by :slack
   # deliver_by :custom, class: "MyDeliveryMethod"
-  deliver_by :sms, class: "DeliveryMethods:Sms", if: sms_notifications? # Reminder: Validate that when 'receive_sms_notifications' == true 'phone_number' is not nil (UserValidator)
+  deliver_by :sms, class: "DeliveryMethods::Sms", if: :sms_notifications? # Reminder: Validate that when 'receive_sms_notifications' == true 'phone_number' is not nil (UserValidator)
 
   # Add required params
   #
