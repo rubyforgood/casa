@@ -100,6 +100,14 @@ RSpec.describe "users/edit", type: :system do
       expect(page).to have_text("At least one communication preference must be selected.")
     end
 
+    it "displays Volunteer error message if SMS communication preference is selected without adding a valid phone number" do
+      uncheck "user_receive_email_notifications"
+      check "user_receive_sms_notifications"
+      click_on "Save Preferences"
+      expect(page).to have_content "1 error prohibited this Volunteer from being saved:"
+      expect(page).to have_text("Must add a valid phone number to receive SMS notifications.")
+    end
+
     it "displays notification events selection as enabled if sms notification preference is selected", js: true do
       check "user_receive_sms_notifications"
       expect(page).to have_field("toggle-sms-notification-event", type: "checkbox", disabled: false)
@@ -149,6 +157,14 @@ RSpec.describe "users/edit", type: :system do
       click_on "Save Preferences"
       expect(page).to have_content "1 error prohibited this Supervisor from being saved:"
       expect(page).to have_text("At least one communication preference must be selected.")
+    end
+
+    it "displays Supervisor error message if SMS communication preference is selected without adding a valid phone number" do
+      uncheck "user_receive_email_notifications"
+      check "user_receive_sms_notifications"
+      click_on "Save Preferences"
+      expect(page).to have_content "1 error prohibited this Supervisor from being saved:"
+      expect(page).to have_text("Must add a valid phone number to receive SMS notifications.")
     end
   end
 
@@ -229,6 +245,14 @@ RSpec.describe "users/edit", type: :system do
       click_on "Save Preferences"
       expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
       expect(page).to have_text("At least one communication preference must be selected.")
+    end
+
+    it "displays admin error message if SMS communication preference is selected without adding a valid phone number" do
+      uncheck "user_receive_email_notifications"
+      check "user_receive_sms_notifications"
+      click_on "Save Preferences"
+      expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
+      expect(page).to have_text("Must add a valid phone number to receive SMS notifications.")
     end
   end
 end
