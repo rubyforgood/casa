@@ -1,5 +1,5 @@
 class DeliveryMethods::Sms < Noticed::DeliveryMethods::Base
-include SmsBodyHelper
+  include SmsBodyHelper
   def deliver
     if sender.casa_admin? || sender.supervisor?
       short_io_api = ShortUrlService.new
