@@ -137,7 +137,10 @@ Rails.application.routes.draw do
         end
       end
     end
+
+    resources :patch_notes, only: %i[index]
   end
+
 
   resources :all_casa_admins, only: [:new, :create] do
     collection do
