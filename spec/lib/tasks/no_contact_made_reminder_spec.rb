@@ -125,20 +125,4 @@ RSpec.describe NoContactMadeReminder do
       expect(responses.count).to eq 0
     end
   end
-
-  context "volunteer with no phone number" do
-    let(:volunteer) {
-      create(
-        :volunteer,
-        casa_org_id: casa_org.id,
-        phone_number: nil,
-        receive_sms_notifications: true
-      )
-    }
-
-    it "should send not sms reminder" do
-      responses = NoContactMadeReminder.new.send!
-      expect(responses.count).to eq 0
-    end
-  end
 end
