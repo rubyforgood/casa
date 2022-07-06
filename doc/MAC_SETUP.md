@@ -6,21 +6,22 @@ You will need the following local tools installed:
 
 # command line tools - what are they
 task 1. intro to the command line
-within the finder bar of your cumputer lives the following
+within the finder bar of your cumputer lives the following.
 -application
 -utilites
 -terminal 
- click on and open the terminal
+-click on and open the terminal
 
- the terminal aka the command line is where we build our enivorment for this project
+    -the terminal aka the command line is where we build our enivorment for this project
+https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Understanding_client-side_tools/Command_line
 
 
 task 2. this assumes you have a github account
 
 
-articles that will help with command line
 
-https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Understanding_client-side_tools/Command_line
+
+articles that will help with command line
 
 this assumes you have a github account
 
