@@ -17,8 +17,8 @@ function displayPopUpIfPreferencesIsInvalid () {
     disableBtn($(`.${SAVE_BUTTON_CLASS}`)[0])
     Swal.fire({
       icon: 'error',
-      title: 'Preference Error',
-      text: 'At least one communication preference required'
+      title: 'Contact Method Needed',
+      text: 'Please select at least one method of contact so we can communicate with you.'
     })
   } else {
     enableBtn($(`.${SAVE_BUTTON_CLASS}`)[0])
