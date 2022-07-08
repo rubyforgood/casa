@@ -85,13 +85,4 @@ RSpec.describe CaseContactTypesReminder do
       expect(responses[0][:messages][2].body).to match CaseContactTypesReminder::THIRD_MESSAGE + "https://42ni.short.gy/jzTwdF"
     end
   end
-
-  context "volunteer with uncontacted contact types, sms notifications on, no reminder in last quarter, no phone number" do
-    it "should not send sms reminder" do
-      UserReminderTime.destroy_all
-      Volunteer.update_all(phone_number: nil)
-      responses = CaseContactTypesReminder.new.send!
-      expect(responses.count).to match 0
-    end
-  end
 end

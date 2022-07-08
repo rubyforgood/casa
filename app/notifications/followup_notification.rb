@@ -7,7 +7,8 @@ class FollowupNotification < BaseNotification
   # Add your delivery methods
   #
   deliver_by :database
-  # deliver_by :email, mailer: "UserMailer"
+  # deliver_by :email, mailer: "UserMailer", if: :email_notifications?
+  # deliver_by :sms, class: "DeliveryMethods::Sms", if: :sms_notifications?
   # deliver_by :slack
   # deliver_by :custom, class: "MyDeliveryMethod"
 
@@ -28,6 +29,14 @@ class FollowupNotification < BaseNotification
   end
 
   private
+
+  def sms_notifications?
+    recipient.receive_sms_notifications == true
+  end
+
+  def email_notifications?
+    recipient.receive_email_notifications == true
+  end
 
   def message_with_note(note)
     [

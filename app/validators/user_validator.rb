@@ -5,6 +5,7 @@ class UserValidator < ActiveModel::Validator
     valid_phone_number_contents(record.phone_number, record)
     validate_presence(:display_name, record)
     at_least_one_communication_preference_selected(record)
+    valid_phone_number_if_receive_sms_notifications(record)
   end
 
   private
@@ -28,5 +29,11 @@ class UserValidator < ActiveModel::Validator
 
   def at_least_one_communication_preference_selected(record)
     record.errors.add(:base, " At least one communication preference must be selected.") unless record.receive_email_notifications || record.receive_sms_notifications
+  end
+
+  def valid_phone_number_if_receive_sms_notifications(record)
+    if record.receive_sms_notifications && record.phone_number.blank?
+      record.errors.add(:base, " Must add a valid phone number to receive SMS notifications.")
+    end
   end
 end

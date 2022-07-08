@@ -25,4 +25,8 @@ module SmsBodyHelper
   def no_contact_made_msg(contact_type, short_link)
     "It's been two weeks since you've tried reaching '#{contact_type}'. Try again! #{short_link}"
   end
+
+  def case_contact_flagged_msg(display_name, short_link)
+    "-\n \n#{display_name} has flagged a Case Contact that needs follow up. Click to see more: #{short_link}"
+  end
 end
