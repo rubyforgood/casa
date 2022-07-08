@@ -27,6 +27,6 @@ module SmsBodyHelper
   end
 
   def case_contact_flagged_msg(display_name, short_link)
-    "-\n \n#{display_name} has flagged a Case Contact that needs follow up. Click to see more: #{short_link}"
+    "#{display_name} has flagged a Case Contact that needs follow up. Click to see more: #{short_link}"
   end
 end
