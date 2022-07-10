@@ -15,6 +15,11 @@
               <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", required: true %>
             </div>
 
+            <div class="field form-group">
+              <%= f.label :phone_number %><br>
+              <%= f.text_field :phone_number, autofocus: true, autocomplete: "phone number", class: "form-control" %>
+            </div>
+
             <div class="actions">
               <%= f.submit "Send me reset password instructions", class: "btn btn-primary" %>
             </div>
