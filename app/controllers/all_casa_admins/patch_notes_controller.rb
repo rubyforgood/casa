@@ -1,4 +1,4 @@
-class  AllCasaAdmins::PatchNotesController < AllCasaAdminsController
+class AllCasaAdmins::PatchNotesController < AllCasaAdminsController
   # GET /patch_notes or /patch_notes.json
   def index
     @patch_notes = PatchNote.all
@@ -43,13 +43,14 @@ class  AllCasaAdmins::PatchNotesController < AllCasaAdminsController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_patch_note
-      @patch_note = PatchNote.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def patch_note_params
-      params.fetch(:patch_note, {})
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_patch_note
+    @patch_note = PatchNote.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def patch_note_params
+    params.fetch(:patch_note, {})
+  end
 end
