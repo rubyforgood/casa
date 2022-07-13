@@ -17,7 +17,7 @@ RSpec.describe "/patch_notes", type: :request do
   # PatchNote. As you add validations to PatchNote, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    note: "not an empty note"
   }
 
   let(:invalid_attributes) {
