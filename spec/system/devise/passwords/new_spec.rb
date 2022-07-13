@@ -25,4 +25,12 @@ RSpec.describe "users/passwords/new", type: :system do
     expect(page).to have_content "1 error prohibited this User from being saved:"
     expect(page).to have_text("Phone number must be 12 digits including country code (+1)")
   end
+
+  it "successfully redirects to sign up page with a notice" do
+    create(:user, email: "glados@aperture.labs")
+    fill_in "Email", with: "glados@aperture.labs"
+
+    click_on "Send me reset password instructions"
+    expect(page).to have_content "You will receive an email with instructions on how to reset your password in a few minutes."
+  end
 end
