@@ -6,11 +6,11 @@
       <%= render "/shared/error_messages", resource: checklist_item %>
       <div class="field form-group">
         <%= form.label :category %>
-        <%= form.text_field :category, class: "form-control" %>
+        <%= form.text_field :category, class: "form-control", required: true %>
       </div>
       <div class="field form-group">
         <%= form.label :description %>
-        <%= form.text_field :description, class: "form-control" %>
+        <%= form.text_field :description, class: "form-control", required: true %>
       </div>
       <div class="field form-group">
         <div class="form-check">
