@@ -12,22 +12,32 @@ require "rails_helper"
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/patch_notes", type: :request do
+RSpec.describe "/all_casa_admins/patch_notes", type: :request do
   # This should return the minimal set of attributes required to create a valid
   # PatchNote. As you add validations to PatchNote, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    note: "not an empty note"
-  }
+  let(:all_casa_admin) { build(:all_casa_admin) }
+  let(:patch_note_group) { create(:patch_note_group) }
+  let(:patch_note_type) { create(:patch_note_type) }
+
+  let(:valid_attributes) do
+    {
+      note: "not an empty note",
+      patch_note_group_id: patch_note_group.id,
+      patch_note_type_id: patch_note_type.id
+    }
+  end
 
   let(:invalid_attributes) {
     skip("Add a hash of attributes invalid for your model")
   }
 
+  before { sign_in all_casa_admin }
+
   describe "GET /index" do
     it "renders a successful response" do
       PatchNote.create! valid_attributes
-      get patch_notes_url
+      get all_casa_admins_patch_notes_path
       expect(response).to be_successful
     end
   end
