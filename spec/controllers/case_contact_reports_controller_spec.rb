@@ -61,16 +61,16 @@ RSpec.describe CaseContactReportsController, type: :controller do
         end
       end
     end
-    
+
     context "when casa_admin" do
       it_behaves_like "can view reports" do
         let(:user) { admin }
       end
-      
+
       before do
         sign_in admin
       end
-  
+
       it "passes in casa_org_id to CaseContractReport" do
         allow(CaseContactReport).to receive(:new).and_return([])
 
@@ -102,5 +102,4 @@ RSpec.describe CaseContactReportsController, type: :controller do
       end
     end
   end
-
 end
