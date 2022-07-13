@@ -138,7 +138,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :patch_notes, only: %i[index]
+    resources :patch_notes, only: %i[create destroy index update]
   end
 
 

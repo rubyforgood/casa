@@ -7,19 +7,19 @@ RSpec.describe AllCasaAdmins::PatchNotesController, type: :routing do
     end
 
     it "routes to #create" do
-      expect(post: "/all_casa_admins/patch_notes").to route_to("patch_notes#create")
+      expect(post: "/all_casa_admins/patch_notes").to route_to("all_casa_admins/patch_notes#create")
     end
 
     it "routes to #update via PUT" do
-      expect(put: "/all_casa_admins/patch_notes/1").to route_to("patch_notes#update", id: "1")
+      expect(put: "/all_casa_admins/patch_notes/1").to route_to("all_casa_admins/patch_notes#update", id: "1")
     end
 
     it "routes to #update via PATCH" do
-      expect(patch: "/all_casa_admins/patch_notes/1").to route_to("patch_notes#update", id: "1")
+      expect(patch: "/all_casa_admins/patch_notes/1").to route_to("all_casa_admins/patch_notes#update", id: "1")
     end
 
     it "routes to #destroy" do
-      expect(delete: "/all_casa_admins/patch_notes/1").to route_to("patch_notes#destroy", id: "1")
+      expect(delete: "/all_casa_admins/patch_notes/1").to route_to("all_casa_admins/patch_notes#destroy", id: "1")
     end
   end
 end
