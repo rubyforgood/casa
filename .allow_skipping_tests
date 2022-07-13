@@ -9,7 +9,6 @@ controllers/android_app_associations_controller.rb
 controllers/application_controller.rb
 controllers/casa_admins_controller.rb
 controllers/casa_cases_controller.rb
-controllers/casa_org_controller.rb
 controllers/case_assignments_controller.rb
 controllers/case_contact_reports_controller.rb
 controllers/case_contacts/followups_controller.rb
