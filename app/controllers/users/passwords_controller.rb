@@ -6,10 +6,10 @@ class Users::PasswordsController < Devise::PasswordsController
   def create
     email = params[resource_name][:email]
     phone_number = params[resource_name][:phone_number]
-    reset_token = "";
+    reset_token = ""
 
     # try to find user by email
-    if !User.find_by(email: email)
+    if !email.blank? && !User.find_by(email: email)
       resource.errors.add(:base, "Email not found")
     end
 
@@ -28,7 +28,7 @@ class Users::PasswordsController < Devise::PasswordsController
     end
 
     # otherwise, send reset email and sms
-    @resource = User.find_by(email: email)
+    @resource = email.blank? ? User.find_by(phone_number: phone_number) : User.find_by(email: email)
     # generate a reset token
     # call devise mailer
     reset_token = @resource.send_reset_password_instructions
@@ -49,8 +49,6 @@ class Users::PasswordsController < Devise::PasswordsController
       twilio_service.send_sms(sms_params)
     end
 
-    if successfully_sent?(@resource)
-      respond_with({}, location: after_sending_reset_password_instructions_path_for(resource_name))
-    end
+    redirect_to after_sending_reset_password_instructions_path_for(resource_name), notice: "You will receive an email or SMS with instructions on how to reset your password in a few minutes."
   end
 end

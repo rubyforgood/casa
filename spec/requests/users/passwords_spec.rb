@@ -27,6 +27,8 @@ RSpec.describe "/users/passwords", type: :request do
       expect(@short_io_stub).to have_been_requested.times(1)
       expect(@twilio_stub).to have_been_requested.times(1)
       expect(response).to have_http_status(:redirect)
+      follow_redirect!
+      expect(flash[:notice]).to match(/You will receive an email or SMS with instructions on how to reset your password in a few minutes./)
     end
   end
 end
