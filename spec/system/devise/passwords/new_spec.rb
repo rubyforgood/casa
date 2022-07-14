@@ -6,6 +6,10 @@ RSpec.describe "users/passwords/new", type: :system do
     click_on "Forgot your password?"
   end
 
+  it "displays text above form fields" do
+    expect(page).to have_text("Please enter email or phone number to recieve reset instructions.")
+  end
+
   it "displays error messages for non-existent user" do
     fill_in "Email", with: "tangerine@forward.com"
     fill_in "Phone number", with: "+16578900012"
@@ -26,11 +30,11 @@ RSpec.describe "users/passwords/new", type: :system do
     expect(page).to have_text("Phone number must be 12 digits including country code (+1)")
   end
 
-  it "successfully redirects to sign up page with a notice" do
+  it "redirects to sign up page for email" do
     create(:user, email: "glados@aperture.labs")
     fill_in "Email", with: "glados@aperture.labs"
 
     click_on "Send me reset password instructions"
-    expect(page).to have_content "You will receive an email with instructions on how to reset your password in a few minutes."
+    expect(page).to have_content "You will receive an email or SMS with instructions on how to reset your password in a few minutes."
   end
 end
