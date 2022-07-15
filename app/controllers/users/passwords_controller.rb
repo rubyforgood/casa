@@ -6,7 +6,11 @@ class Users::PasswordsController < Devise::PasswordsController
   def create
     email = params[resource_name][:email]
     phone_number = params[resource_name][:phone_number]
-    reset_token = ""
+    reset_token = nil
+
+    if email.blank? && phone_number.blank?
+      resource.errors.add(:base, "Please enter at least one field.")
+    end
 
     # try to find user by email
     if !email.blank? && !User.find_by(email: email)
@@ -31,9 +35,15 @@ class Users::PasswordsController < Devise::PasswordsController
     @resource = email.blank? ? User.find_by(phone_number: phone_number) : User.find_by(email: email)
     # generate a reset token
     # call devise mailer
-    reset_token = @resource.send_reset_password_instructions
+    if !email.blank?
+      reset_token = @resource.send_reset_password_instructions
+    end
 
     if !phone_number.blank?
+      # when user enters ONLY a phone number, generate a new reset token to use;
+      # otherwise, use the same reset token as sent in the email
+      reset_token ||= @resource.generate_password_reset_token
+
       reset_password_link = request.base_url + "/resource/password/edit?reset_password_token=#{reset_token}"
       short_io_service = ShortUrlService.new
       twilio_service = TwilioService.new(@resource.casa_org.twilio_api_key_sid, @resource.casa_org.twilio_api_key_secret, @resource.casa_org.twilio_account_sid)
