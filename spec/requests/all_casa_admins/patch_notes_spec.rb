@@ -54,7 +54,7 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
         }.to change(PatchNote, :count).by(1)
       end
 
-      it "redirects to the created patch_note" do
+      it "shows json indicating the patch note was created" do
         post all_casa_admins_patch_notes_path, params: {patch_note: valid_attributes}
         expect(response.header["Content-Type"]).to match(/application\/json/)
         expect(response.body).to_not be_nil
@@ -69,9 +69,12 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
         }.to change(PatchNote, :count).by(0)
       end
 
-      it "renders a successful response (i.e. to display the 'new' template)" do
+      it "shows json indicating the patch note could not be created" do
         post all_casa_admins_patch_notes_path, params: {patch_note: invalid_attributes}
-        expect(response).to be_successful
+        expect(response.header["Content-Type"]).to match(/application\/json/)
+        expect(response.body).to_not be_nil
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(JSON.parse(response.body)).to have_key("error")
       end
     end
   end
