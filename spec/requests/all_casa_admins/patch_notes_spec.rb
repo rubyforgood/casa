@@ -28,9 +28,13 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
     }
   end
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  let(:invalid_attributes) do
+    {
+      note: "",
+      patch_note_group_id: patch_note_group.id,
+      patch_note_type_id: patch_note_type.id
+    }
+  end
 
   before { sign_in all_casa_admin }
 
@@ -46,12 +50,12 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
     context "with valid parameters" do
       it "creates a new PatchNote" do
         expect {
-          post patch_notes_url, params: {patch_note: valid_attributes}
+          post all_casa_admins_patch_notes_path, params: {patch_note: valid_attributes}
         }.to change(PatchNote, :count).by(1)
       end
 
       it "redirects to the created patch_note" do
-        post patch_notes_url, params: {patch_note: valid_attributes}
+        post all_casa_admins_patch_notes_path, params: {patch_note: valid_attributes}
         expect(response).to redirect_to(patch_note_url(PatchNote.last))
       end
     end
@@ -59,12 +63,12 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
     context "with invalid parameters" do
       it "does not create a new PatchNote" do
         expect {
-          post patch_notes_url, params: {patch_note: invalid_attributes}
+          post all_casa_admins_patch_notes_path, params: {patch_note: invalid_attributes}
         }.to change(PatchNote, :count).by(0)
       end
 
       it "renders a successful response (i.e. to display the 'new' template)" do
-        post patch_notes_url, params: {patch_note: invalid_attributes}
+        post all_casa_admins_patch_notes_path, params: {patch_note: invalid_attributes}
         expect(response).to be_successful
       end
     end
@@ -78,14 +82,14 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
 
       it "updates the requested patch_note" do
         patch_note = PatchNote.create! valid_attributes
-        patch patch_note_url(patch_note), params: {patch_note: new_attributes}
+        patch all_casa_admins_patch_notes_path(patch_note), params: {patch_note: new_attributes}
         patch_note.reload
         skip("Add assertions for updated state")
       end
 
       it "redirects to the patch_note" do
         patch_note = PatchNote.create! valid_attributes
-        patch patch_note_url(patch_note), params: {patch_note: new_attributes}
+        patch all_casa_admins_patch_notes_path(patch_note), params: {patch_note: new_attributes}
         patch_note.reload
         expect(response).to redirect_to(patch_note_url(patch_note))
       end
@@ -94,7 +98,7 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
     context "with invalid parameters" do
       it "renders a successful response (i.e. to display the 'edit' template)" do
         patch_note = PatchNote.create! valid_attributes
-        patch patch_note_url(patch_note), params: {patch_note: invalid_attributes}
+        patch all_casa_admins_patch_notes_path(patch_note), params: {patch_note: invalid_attributes}
         expect(response).to be_successful
       end
     end
@@ -104,13 +108,13 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
     it "destroys the requested patch_note" do
       patch_note = PatchNote.create! valid_attributes
       expect {
-        delete patch_note_url(patch_note)
+        delete all_casa_admins_patch_notes_path(patch_note)
       }.to change(PatchNote, :count).by(-1)
     end
 
     it "redirects to the patch_notes list" do
       patch_note = PatchNote.create! valid_attributes
-      delete patch_note_url(patch_note)
+      delete all_casa_admins_patch_notes_path(patch_note)
       expect(response).to redirect_to(patch_notes_url)
     end
   end

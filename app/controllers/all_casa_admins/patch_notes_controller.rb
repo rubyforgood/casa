@@ -10,10 +10,8 @@ class AllCasaAdmins::PatchNotesController < AllCasaAdminsController
 
     respond_to do |format|
       if @patch_note.save
-        format.html { redirect_to patch_note_url(@patch_note), notice: "Patch note was successfully created." }
         format.json { render :show, status: :created, location: @patch_note }
       else
-        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @patch_note.errors, status: :unprocessable_entity }
       end
     end
@@ -23,10 +21,8 @@ class AllCasaAdmins::PatchNotesController < AllCasaAdminsController
   def update
     respond_to do |format|
       if @patch_note.update(patch_note_params)
-        format.html { redirect_to patch_note_url(@patch_note), notice: "Patch note was successfully updated." }
         format.json { render :show, status: :ok, location: @patch_note }
       else
-        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @patch_note.errors, status: :unprocessable_entity }
       end
     end
@@ -37,7 +33,6 @@ class AllCasaAdmins::PatchNotesController < AllCasaAdminsController
     @patch_note.destroy
 
     respond_to do |format|
-      format.html { redirect_to patch_notes_url, notice: "Patch note was successfully destroyed." }
       format.json { head :no_content }
     end
   end
@@ -51,6 +46,6 @@ class AllCasaAdmins::PatchNotesController < AllCasaAdminsController
 
   # Only allow a list of trusted parameters through.
   def patch_note_params
-    params.fetch(:patch_note, {})
+    params.require(:patch_note).permit(:note, :patch_note_group_id, :patch_note_type_id)
   end
 end
