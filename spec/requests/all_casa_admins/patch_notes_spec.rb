@@ -56,7 +56,9 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
 
       it "redirects to the created patch_note" do
         post all_casa_admins_patch_notes_path, params: {patch_note: valid_attributes}
-        expect(response).to redirect_to(patch_note_url(PatchNote.last))
+        expect(response.header["Content-Type"]).to match(/application\/json/)
+        expect(response.body).to_not be_nil
+        expect(response).to have_http_status(:created)
       end
     end
 
