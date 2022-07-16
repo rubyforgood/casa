@@ -2,15 +2,17 @@ require "rails_helper"
 
 RSpec.describe CasaOrgController, type: :controller do
   let(:admin) { create(:casa_admin) }
-  let(:valid_attributes) {{
-    name: "name",
-    display_name: "display_name",
-    address: "address",
-    twilio_account_sid: "fyxpz5naqnir3ftopvxuzev6ir48xb4jmc",
-    twilio_api_key_sid: "gukogx4k99885clw6j7ucd62hgzj5w4p",
-    twilio_api_key_secret: "gukogx4k99885clw6j7ucd62hgzj5w4p",
-    twilio_phone_number: "+12223334444"
-  }}
+  let(:valid_attributes) {
+    {
+      name: "name",
+      display_name: "display_name",
+      address: "address",
+      twilio_account_sid: "fyxpz5naqnir3ftopvxuzev6ir48xb4jmc",
+      twilio_api_key_sid: "gukogx4k99885clw6j7ucd62hgzj5w4p",
+      twilio_api_key_secret: "gukogx4k99885clw6j7ucd62hgzj5w4p",
+      twilio_phone_number: "+12223334444"
+    }
+  }
   let(:logo) { upload_file("#{Rails.root}/spec/fixtures/company_logo.png") }
 
   context "when logged in as an admin user" do
@@ -20,7 +22,7 @@ RSpec.describe CasaOrgController, type: :controller do
 
     describe "GET edit" do
       it "should successfully load the page" do
-        get :edit, params: { id: create(:casa_org).id }
+        get :edit, params: {id: create(:casa_org).id}
         expect(response).to be_successful
       end
     end
