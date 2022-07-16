@@ -1,8 +1,8 @@
 require "rails_helper"
 require "support/stubbed_requests/webmock_helper"
 
-RSpec.describe "/users/passwords", type: :request do
-  describe "POST /create" do
+RSpec.describe Users::PasswordsController, type: :controller do
+  describe "create" do
     before do
       stubbed_sites = ["api.twilio.com", "api.short.io"]
       web_mock = WebMockHelper.new(stubbed_sites)
@@ -23,12 +23,10 @@ RSpec.describe "/users/passwords", type: :request do
         }
       }
 
-      post "/users/password", params: params
+      post :create, params: params
       expect(@short_io_stub).to have_been_requested.times(1)
       expect(@twilio_stub).to have_been_requested.times(1)
       expect(response).to have_http_status(:redirect)
-      follow_redirect!
-      expect(flash[:notice]).to match(/You will receive an email or SMS with instructions on how to reset your password in a few minutes./)
     end
   end
 end

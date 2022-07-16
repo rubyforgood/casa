@@ -27,7 +27,8 @@ class Users::PasswordsController < Devise::PasswordsController
       # otherwise, use the same reset token as sent by devise mailer
       reset_token ||= @resource.generate_password_reset_token
       reset_password_link = request.base_url + "/users/password/edit?reset_password_token=#{reset_token}"
-      short_io_service = ShortUrlService.new.create_short_url(reset_password_link)
+      short_io_service = ShortUrlService.new()
+      short_io_service.create_short_url(reset_password_link)
       twilio_service = TwilioService.new(@resource.casa_org.twilio_api_key_sid, @resource.casa_org.twilio_api_key_secret, @resource.casa_org.twilio_account_sid)
       sms_params = {
         From: @resource.casa_org.twilio_phone_number,
