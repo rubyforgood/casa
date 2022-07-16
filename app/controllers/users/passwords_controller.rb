@@ -26,35 +26,29 @@ class Users::PasswordsController < Devise::PasswordsController
       # when user enters ONLY a phone number, generate a new reset token to use;
       # otherwise, use the same reset token as sent by devise mailer
       reset_token ||= @resource.generate_password_reset_token
-
       reset_password_link = request.base_url + "/users/password/edit?reset_password_token=#{reset_token}"
-      short_io_service = ShortUrlService.new
+      short_io_service = ShortUrlService.new.create_short_url(reset_password_link)
       twilio_service = TwilioService.new(@resource.casa_org.twilio_api_key_sid, @resource.casa_org.twilio_api_key_secret, @resource.casa_org.twilio_account_sid)
-
-      short_io_service.create_short_url(reset_password_link)
-      body_msg = password_reset_msg(@resource.display_name, short_io_service.short_url)
-
       sms_params = {
         From: @resource.casa_org.twilio_phone_number,
-        Body: body_msg,
+        Body: password_reset_msg(@resource.display_name, short_io_service.short_url),
         To: phone_number
       }
       twilio_service.send_sms(sms_params)
     end
-
     redirect_to after_sending_reset_password_instructions_path_for(resource_name), notice: "You will receive an email or SMS with instructions on how to reset your password in a few minutes."
   end
 
   private
 
   def password_params_is_valid(resource, email, phone_number)
-    if email.blank? && phone_number.blank? && resource
+    if email.blank? && phone_number.blank?
       resource.errors.add(:base, "Please enter at least one field.")
       return [false, resource]
     end
 
     phone_number_is_valid, error_message = valid_phone_number(phone_number)
-    if !phone_number_is_valid && resource
+    if !phone_number_is_valid
       resource.errors.add(:phone_number, error_message)
       return [false, resource]
     end
