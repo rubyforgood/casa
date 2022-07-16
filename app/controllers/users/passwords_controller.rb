@@ -65,6 +65,6 @@ class Users::PasswordsController < Devise::PasswordsController
       resource.errors.add(:base, "User does not exist.")
       return [false, resource]
     end
-    return [true, nil]
+    [true, nil]
   end
 end
