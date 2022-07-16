@@ -12,12 +12,10 @@ class Users::PasswordsController < Devise::PasswordsController
       resource.errors.add(:base, "Please enter at least one field.")
     end
 
-    # try to find user by email
     if !email.blank? && !User.find_by(email: email)
       resource.errors.add(:base, "Email not found")
     end
 
-    # validate and add any errors
     validation = valid_phone_number(phone_number)
     if validation[0]
       User.find_by(phone_number: phone_number) ? "" : resource.errors.add(:base, "Phone number not found")
@@ -25,7 +23,7 @@ class Users::PasswordsController < Devise::PasswordsController
       resource.errors.add(:phone_number, validation[1])
     end
 
-    # re-render and display errors
+    # re-render and display any errors
     if resource.errors.any?
       respond_with(resource)
       return
@@ -33,15 +31,15 @@ class Users::PasswordsController < Devise::PasswordsController
 
     # otherwise, send reset email and sms
     @resource = email.blank? ? User.find_by(phone_number: phone_number) : User.find_by(email: email)
-    # generate a reset token
-    # call devise mailer
     if !email.blank?
+      # generate a reset token and
+      # call devise mailer
       reset_token = @resource.send_reset_password_instructions
     end
 
     if !phone_number.blank?
       # when user enters ONLY a phone number, generate a new reset token to use;
-      # otherwise, use the same reset token as sent in the email
+      # otherwise, use the same reset token as sent by devise mailer
       reset_token ||= @resource.generate_password_reset_token
 
       reset_password_link = request.base_url + "/users/password/edit?reset_password_token=#{reset_token}"
