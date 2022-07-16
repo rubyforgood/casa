@@ -9,9 +9,9 @@ class AllCasaAdmins::PatchNotesController < AllCasaAdminsController
     @patch_note = PatchNote.new(patch_note_params)
 
     if @patch_note.save
-      render json: {status: :created}
+      render json: {status: :created}, status: :created
     else
-      render json: @patch_note.errors, status: :unprocessable_entity
+      render json: {errors: @patch_note.errors.full_messages.to_json}, status: :unprocessable_entity
     end
   end
 

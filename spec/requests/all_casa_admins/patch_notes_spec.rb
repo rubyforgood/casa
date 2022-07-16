@@ -74,7 +74,7 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
         expect(response.header["Content-Type"]).to match(/application\/json/)
         expect(response.body).to_not be_nil
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)).to have_key("error")
+        expect(JSON.parse(response.body)).to have_key("errors")
       end
     end
   end
