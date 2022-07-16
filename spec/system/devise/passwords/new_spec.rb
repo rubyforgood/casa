@@ -26,6 +26,11 @@ RSpec.describe "users/passwords/new", type: :system do
     expect(page).to have_text("Phone number must be 12 digits including country code (+1)")
   end
 
+  it "displays error if user tries to submit empty form" do
+    click_on "Send me reset password instructions"
+    expect(page).to have_text("Please enter at least one field.")
+  end
+
   it "redirects to sign up page for email" do
     create(:user, email: "glados@aperture.labs")
     fill_in "Email", with: "glados@aperture.labs"
