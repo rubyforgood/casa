@@ -7,33 +7,18 @@ class Users::PasswordsController < Devise::PasswordsController
     email = params[resource_name][:email]
     phone_number = params[resource_name][:phone_number]
     reset_token = nil
-
-    if email.blank? && phone_number.blank?
-      resource.errors.add(:base, "Please enter at least one field.")
-    end
-
-    if !email.blank? && !User.find_by(email: email)
-      resource.errors.add(:base, "Email not found")
-    end
-
-    validation = valid_phone_number(phone_number)
-    if validation[0]
-      User.find_by(phone_number: phone_number) ? "" : resource.errors.add(:base, "Phone number not found")
-    else
-      resource.errors.add(:phone_number, validation[1])
-    end
+    @resource = email.blank? ? User.find_by(phone_number: phone_number) : User.find_by(email: email)
 
     # re-render and display any errors
-    if resource.errors.any?
-      respond_with(resource)
+    params_is_valid, error_resource = password_params_is_valid(resource, email, phone_number)
+    if !params_is_valid
+      respond_with(error_resource)
       return
     end
 
-    # otherwise, send reset email and sms
-    @resource = email.blank? ? User.find_by(phone_number: phone_number) : User.find_by(email: email)
+    # generate a reset token and
+    # call devise mailer
     if !email.blank?
-      # generate a reset token and
-      # call devise mailer
       reset_token = @resource.send_reset_password_instructions
     end
 
@@ -58,5 +43,28 @@ class Users::PasswordsController < Devise::PasswordsController
     end
 
     redirect_to after_sending_reset_password_instructions_path_for(resource_name), notice: "You will receive an email or SMS with instructions on how to reset your password in a few minutes."
+  end
+
+  private
+
+  def password_params_is_valid(resource, email, phone_number)
+    if email.blank? && phone_number.blank? && resource
+      resource.errors.add(:base, "Please enter at least one field.")
+      return [false, resource]
+    end
+
+    phone_number_is_valid, error_message = valid_phone_number(phone_number)
+    if !phone_number_is_valid && resource
+      resource.errors.add(:phone_number, error_message)
+      return [false, resource]
+    end
+
+    if resource.email != email || resource.phone_number != phone_number
+      # A new, empty resource is returned (see application helper)
+      # so to check for nil, we need to check its email/phone fields
+      resource.errors.add(:base, "User does not exist.")
+      return [false, resource]
+    end
+    return [true, nil]
   end
 end
