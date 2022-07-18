@@ -282,11 +282,11 @@ GEM
       net-protocol
       timeout
     nio4r (2.5.8)
-    nokogiri (1.13.6-arm64-darwin)
+    nokogiri (1.13.7-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.13.6-x86_64-darwin)
+    nokogiri (1.13.7-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.13.6-x86_64-linux)
+    nokogiri (1.13.7-x86_64-linux)
       racc (~> 1.4)
     noticed (1.5.9)
       http (>= 4.0.0)
@@ -435,7 +435,7 @@ GEM
     timeout (0.3.0)
     traceroute (0.8.1)
       rails (>= 3.0.0)
-    twilio-ruby (5.68.0)
+    twilio-ruby (5.69.0)
       faraday (>= 0.9, < 3.0)
       jwt (>= 1.5, <= 2.5)
       nokogiri (>= 1.6, < 2.0)
