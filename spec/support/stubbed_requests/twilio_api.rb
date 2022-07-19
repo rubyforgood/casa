@@ -70,4 +70,16 @@ module TwilioAPI
       )
       .to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"It's been two weeks since you've tried reaching 'test'. Try again! https://42ni.short.gy/jzTwdF\"}")
   end
+
+  def twilio_password_reset_stub(resource)
+    WebMock.stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno34/Messages.json")
+      .with(
+        body: {From: "+15555555555", Body: "Hi #{resource.display_name}, click here to reset your password: https://42ni.short.gy/jzTwdF", To: "+12222222222"},
+        headers: {
+          "Content-Type" => "application/x-www-form-urlencoded",
+          "Authorization" => "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
+        }
+      )
+      .to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"Execute Order 66 - https://42ni.short.gy/jzTwdF\"}")
+  end
 end

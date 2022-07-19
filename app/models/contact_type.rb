@@ -21,7 +21,7 @@ end
 #  name                  :string           not null
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
-#  contact_type_group_id :bigint           not null
+#  contact_type_group_id :integer          not null
 #
 # Indexes
 #
