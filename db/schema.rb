@@ -37,7 +37,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_22_022147) do
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
-    t.integer "blob_id", null: false
+    t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
@@ -79,8 +79,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_22_022147) do
   end
 
   create_table "casa_case_contact_types", force: :cascade do |t|
-    t.integer "contact_type_id", null: false
-    t.integer "casa_case_id", null: false
+    t.bigint "contact_type_id", null: false
+    t.bigint "casa_case_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["casa_case_id"], name: "index_casa_case_contact_types_on_casa_case_id"
@@ -136,17 +136,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_22_022147) do
     t.string "footer_links", default: [], array: true
     t.string "slug"
     t.boolean "show_driving_reimbursement", default: true
+    t.boolean "show_fund_request", default: false
     t.string "twilio_phone_number"
     t.string "twilio_account_sid"
     t.string "twilio_api_key_sid"
     t.string "twilio_api_key_secret"
-    t.boolean "show_fund_request", default: false
     t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 
   create_table "case_assignments", force: :cascade do |t|
-    t.integer "casa_case_id", null: false
-    t.integer "volunteer_id", null: false
+    t.bigint "casa_case_id", null: false
+    t.bigint "volunteer_id", null: false
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -156,8 +156,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_22_022147) do
   end
 
   create_table "case_contact_contact_types", force: :cascade do |t|
-    t.integer "case_contact_id", null: false
-    t.integer "contact_type_id", null: false
+    t.bigint "case_contact_id", null: false
+    t.bigint "contact_type_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["case_contact_id"], name: "index_case_contact_contact_types_on_case_contact_id"
@@ -165,8 +165,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_22_022147) do
   end
 
   create_table "case_contacts", force: :cascade do |t|
-    t.integer "creator_id", null: false
-    t.integer "casa_case_id", null: false
+    t.bigint "creator_id", null: false
+    t.bigint "casa_case_id", null: false
     t.integer "duration_minutes", null: false
     t.datetime "occurred_at", precision: nil, null: false
     t.datetime "created_at", null: false
@@ -206,7 +206,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_22_022147) do
   end
 
   create_table "contact_type_groups", force: :cascade do |t|
-    t.integer "casa_org_id", null: false
+    t.bigint "casa_org_id", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -215,7 +215,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_22_022147) do
   end
 
   create_table "contact_types", force: :cascade do |t|
-    t.integer "contact_type_group_id", null: false
+    t.bigint "contact_type_group_id", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -225,7 +225,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_22_022147) do
 
   create_table "court_dates", force: :cascade do |t|
     t.datetime "date", precision: nil, null: false
-    t.integer "casa_case_id", null: false
+    t.bigint "casa_case_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "hearing_type_id"
@@ -259,7 +259,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_22_022147) do
   end
 
   create_table "emancipation_options", force: :cascade do |t|
-    t.integer "emancipation_category_id", null: false
+    t.bigint "emancipation_category_id", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -309,7 +309,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_22_022147) do
   end
 
   create_table "hearing_types", force: :cascade do |t|
-    t.integer "casa_org_id", null: false
+    t.bigint "casa_org_id", null: false
     t.string "name", null: false
     t.boolean "active", default: true, null: false
     t.string "checklist_updated_date", default: "None", null: false
@@ -317,7 +317,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_22_022147) do
   end
 
   create_table "judges", force: :cascade do |t|
-    t.integer "casa_org_id", null: false
+    t.bigint "casa_org_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "active", default: true
@@ -433,8 +433,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_22_022147) do
   end
 
   create_table "supervisor_volunteers", force: :cascade do |t|
-    t.integer "supervisor_id", null: false
-    t.integer "volunteer_id", null: false
+    t.bigint "supervisor_id", null: false
+    t.bigint "volunteer_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_active", default: true
@@ -446,12 +446,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_22_022147) do
     t.string "version", null: false
   end
 
-  create_table "user_case_contact_types_reminders", force: :cascade do |t|
+  create_table "user_reminder_times", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.datetime "reminder_sent"
+    t.datetime "case_contact_types"
+    t.datetime "no_contact_made"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_user_case_contact_types_reminders_on_user_id"
+    t.index ["user_id"], name: "index_user_reminder_times_on_user_id"
   end
 
   create_table "user_sms_notification_events", force: :cascade do |t|
@@ -478,7 +479,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_22_022147) do
     t.datetime "invitation_accepted_at", precision: nil
     t.integer "invitation_limit"
     t.string "invited_by_type"
-    t.integer "invited_by_id"
+    t.bigint "invited_by_id"
     t.integer "invitations_count", default: 0
     t.string "type"
     t.boolean "active", default: true
@@ -526,7 +527,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_22_022147) do
   add_foreign_key "sent_emails", "users"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"
   add_foreign_key "supervisor_volunteers", "users", column: "volunteer_id"
-  add_foreign_key "user_case_contact_types_reminders", "users"
+  add_foreign_key "user_reminder_times", "users"
   add_foreign_key "user_sms_notification_events", "sms_notification_events"
   add_foreign_key "user_sms_notification_events", "users"
   add_foreign_key "users", "casa_orgs"

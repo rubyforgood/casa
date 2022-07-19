@@ -17,6 +17,8 @@ class Users::PasswordsController < Devise::PasswordsController
     # generate a reset token and
     # call devise mailer
     reset_token = send_email_reset(email)
+    # for case where user enters ONLY a phone number, generate a new reset token to use;
+    # otherwise, use the same reset token as sent by devise mailer
     send_sms_reset(@resource, phone_number, reset_token)
     redirect_to after_sending_reset_password_instructions_path_for(resource_name), notice: "You will receive an email or SMS with instructions on how to reset your password in a few minutes."
   end
@@ -33,8 +35,6 @@ class Users::PasswordsController < Devise::PasswordsController
 
   def send_sms_reset(resource, phone_number, reset_token)
     if !phone_number.blank?
-      # when user enters ONLY a phone number, generate a new reset token to use;
-      # otherwise, use the same reset token as sent by devise mailer
       reset_token ||= resource.generate_password_reset_token
       short_io_service = ShortUrlService.new
       short_io_service.create_short_url(request.base_url + "/users/password/edit?reset_password_token=#{reset_token}")
