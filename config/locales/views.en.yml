@@ -582,6 +582,6 @@ en:
       title: Editing Duty
     form:
       occurred_on: Occurred On
-      duration_meeting: Duration Meeting
+      duration_meeting: Duty Duration
       enter_notes: Enter Notes
       enter_notes_placeholder: Enter notes here
