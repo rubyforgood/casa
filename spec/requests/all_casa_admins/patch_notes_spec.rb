@@ -81,9 +81,13 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
 
   describe "PATCH /update" do
     context "with valid parameters" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+      let(:new_attributes) do
+        {
+          note: "a different update note",
+          patch_note_group_id: patch_note_group.id,
+          patch_note_type_id: patch_note_type.id
+        }
+      end
 
       it "updates the requested patch_note" do
         patch_note = PatchNote.create! valid_attributes
@@ -92,11 +96,12 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
         skip("Add assertions for updated state")
       end
 
-      it "redirects to the patch_note" do
+      it "renders a successful response (a json with an ok status)" do
         patch_note = PatchNote.create! valid_attributes
         patch all_casa_admins_patch_note_path(patch_note), params: {patch_note: new_attributes}
-        patch_note.reload
-        expect(response).to redirect_to(patch_note_url(patch_note))
+        expect(response.header["Content-Type"]).to match(/application\/json/)
+        expect(response.body).to_not be_nil
+        expect(response).to have_http_status(:ok)
       end
     end
 
@@ -119,7 +124,7 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
       }.to change(PatchNote, :count).by(-1)
     end
 
-    it "renders a successful response (a json with a list of errors)" do
+    it "renders a successful response (a json with an ok status)" do
       patch_note = PatchNote.create! valid_attributes
       delete all_casa_admins_patch_note_path(patch_note)
       expect(response.header["Content-Type"]).to match(/application\/json/)
