@@ -36,7 +36,7 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
     }
   end
 
-  before { sign_in all_casa_admin }
+  before(:each) { sign_in all_casa_admin }
 
   describe "GET /index" do
     it "renders a successful response" do
