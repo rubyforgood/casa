@@ -12,7 +12,7 @@ RSpec.describe "other_duties/edit", type: :view do
 
     expect(rendered).to have_text("Editing Duty")
     expect(rendered).to have_text("Occurred On")
-    expect(rendered).to have_text("Duration Meeting")
+    expect(rendered).to have_text("Duty Duration")
     expect(rendered).to have_text("Enter Notes")
   end
 
