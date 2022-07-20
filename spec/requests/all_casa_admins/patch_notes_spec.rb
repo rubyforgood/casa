@@ -101,10 +101,12 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
     end
 
     context "with invalid parameters" do
-      it "renders a successful response (i.e. to display the 'edit' template)" do
+      it "renders a successful response (a json with a list of errors)" do
         patch_note = PatchNote.create! valid_attributes
         patch all_casa_admins_patch_note_path(patch_note), params: {patch_note: invalid_attributes}
-        expect(response).to be_successful
+        expect(response.body).to_not be_nil
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(JSON.parse(response.body)).to have_key("errors")
       end
     end
   end
@@ -117,10 +119,12 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
       }.to change(PatchNote, :count).by(-1)
     end
 
-    it "redirects to the patch_notes list" do
+    it "renders a successful response (a json with a list of errors)" do
       patch_note = PatchNote.create! valid_attributes
       delete all_casa_admins_patch_note_path(patch_note)
-      expect(response).to redirect_to(patch_notes_url)
+      expect(response.header["Content-Type"]).to match(/application\/json/)
+      expect(response.body).to_not be_nil
+      expect(response).to have_http_status(:ok)
     end
   end
 end

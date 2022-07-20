@@ -17,19 +17,22 @@ class AllCasaAdmins::PatchNotesController < AllCasaAdminsController
 
   # PATCH/PUT /patch_notes/1 or /patch_notes/1.json
   def update
+    @patch_note = PatchNote.find(params[:id])
     if @patch_note.update(patch_note_params)
       render json: {status: :ok}
     else
-      render json: @patch_note.errors, status: :unprocessable_entity
+      render json: {errors: @patch_note.errors.full_messages.to_json}, status: :unprocessable_entity
     end
   end
 
   # DELETE /patch_notes/1 or /patch_notes/1.json
   def destroy
-    @patch_note.destroy
+    @patch_note = PatchNote.find(params[:id])
 
-    respond_to do |format|
-      format.json { head :no_content }
+    if @patch_note.destroy
+      render json: {status: :ok}
+    else
+      render json: {errors: @patch_note.errors.full_messages.to_json}, status: :unprocessable_entity
     end
   end
 
