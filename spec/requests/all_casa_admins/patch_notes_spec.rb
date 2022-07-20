@@ -31,8 +31,8 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
   let(:invalid_attributes) do
     {
       note: "",
-      patch_note_group_id: patch_note_group.id,
-      patch_note_type_id: patch_note_type.id
+      patch_note_group_id: patch_note_group.id + 1,
+      patch_note_type_id: patch_note_type.id + 1
     }
   end
 
@@ -81,11 +81,14 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
 
   describe "PATCH /update" do
     context "with valid parameters" do
+      let(:patch_note_group_2) { create(:patch_note_group) }
+      let(:patch_note_type_2) { create(:patch_note_type) }
+
       let(:new_attributes) do
         {
           note: "a different update note",
-          patch_note_group_id: patch_note_group.id,
-          patch_note_type_id: patch_note_type.id
+          patch_note_group_id: patch_note_group_2.id,
+          patch_note_type_id: patch_note_type_2.id
         }
       end
 
@@ -93,7 +96,9 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
         patch_note = PatchNote.create! valid_attributes
         patch all_casa_admins_patch_note_path(patch_note), params: {patch_note: new_attributes}
         patch_note.reload
-        skip("Add assertions for updated state")
+        expect(patch_note.note).to eq(new_attributes[:note])
+        expect(patch_note.patch_note_group_id).to eq(patch_note_group_2.id)
+        expect(patch_note.patch_note_type_id).to eq(patch_note_type_2.id)
       end
 
       it "renders a successful response (a json with an ok status)" do
