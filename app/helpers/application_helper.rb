@@ -44,4 +44,16 @@ module ApplicationHelper
   def og_tag(type, options = {})
     tag.meta(property: "og:#{type}", **options)
   end
+
+  def resource_name
+    :user
+  end
+
+  def resource
+    @resource ||= User.new
+  end
+
+  def devise_mapping
+    @devise_mapping ||= Devise.mappings[:user]
+  end
 end

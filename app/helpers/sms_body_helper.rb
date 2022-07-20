@@ -29,4 +29,8 @@ module SmsBodyHelper
   def case_contact_flagged_msg(display_name, short_link)
     "#{display_name} has flagged a Case Contact that needs follow up. Click to see more: #{short_link}"
   end
+
+  def password_reset_msg(display_name, short_link)
+    "Hi #{display_name}, click here to reset your password: #{short_link}"
+  end
 end

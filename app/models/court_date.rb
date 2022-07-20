@@ -73,7 +73,7 @@ end
 #  date            :datetime         not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  casa_case_id    :bigint           not null
+#  casa_case_id    :integer          not null
 #  hearing_type_id :bigint
 #  judge_id        :bigint
 #

@@ -10,9 +10,16 @@
           <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: {method: :post}) do |f| %>
             <%= render "/shared/error_messages", resource: resource %>
 
+            <h4>Please enter email or phone number to recieve reset instructions.</h4>
+
             <div class="field form-group">
               <%= f.label :email %><br>
-              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", required: true %>
+              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+            </div>
+
+            <div class="field form-group">
+              <%= f.label :phone_number %><br>
+              <%= f.text_field :phone_number, autofocus: true, autocomplete: "phone number", class: "form-control" %>
             </div>
 
             <div class="actions">
