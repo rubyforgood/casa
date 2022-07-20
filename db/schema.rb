@@ -136,11 +136,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_22_022147) do
     t.string "footer_links", default: [], array: true
     t.string "slug"
     t.boolean "show_driving_reimbursement", default: true
+    t.boolean "show_fund_request", default: false
     t.string "twilio_phone_number"
     t.string "twilio_account_sid"
     t.string "twilio_api_key_sid"
     t.string "twilio_api_key_secret"
-    t.boolean "show_fund_request", default: false
     t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 
@@ -497,16 +497,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_22_022147) do
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
     t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by_type_and_invited_by_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-  end
-
-  create_table "versions", force: :cascade do |t|
-    t.string "item_type", null: false
-    t.bigint "item_id", null: false
-    t.string "event", null: false
-    t.string "whodunnit"
-    t.text "object"
-    t.datetime "created_at", precision: nil
-    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
