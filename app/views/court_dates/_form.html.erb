@@ -31,7 +31,7 @@
             ) %>
       </div>
       <div class="field form-group">
-        <%= form.label :hearing_type_id, "Hearing Type" %>
+        <%= form.label :hearing_type_id, "Hearing type" %>
         <%= form.collection_select(
                 :hearing_type_id,
                 HearingType.active.for_organization(current_organization),
