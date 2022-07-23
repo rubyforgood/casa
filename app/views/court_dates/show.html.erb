@@ -15,7 +15,7 @@
       <dd class="h6 mb-3"><%= link_to "#{@casa_case.case_number}", casa_case_path(@casa_case) %></dd>
       <dt class="h6 float-left mr-2"><strong>Judge:</strong></dt>
       <dd class="h6 mb-3"><%= @court_date.judge&.name || "None" %></dd>
-      <dt class="h6 float-left mr-2"><strong>Hearing:</strong></dt>
+      <dt class="h6 float-left mr-2"><strong>Hearing Type:</strong></dt>
       <dd class="h6 mb-3"><%= @court_date.hearing_type&.name || "None" %></dd>
     </dl>
     <h6>
