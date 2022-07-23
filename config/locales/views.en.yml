@@ -151,23 +151,6 @@ en:
         transition_aged_youth: Transition Aged Youth
       select_case: Select a Case
       title: Edit Volunteer Assignments for
-  case_contacts:
-    index:
-      filter:
-        contact_date: Date of contact
-        contact_types: Contact types
-        display_all: Display all
-        end_date: Ending at
-        other: Other filters
-        reset: Reset filters
-        show_hide: Show / Hide
-        start_date: Starting from
-        submit: Filter
-        title: Filter by
-      new: New Case Contact
-      no_contacts_found: No case contacts have been found.
-      no_contacts_present: You have no case contacts for this case. Please click New Case Contact button above to create a case contact for your youth!
-      title: Case Contacts
     case_contact:
       created_by: Created by
       deleted_text: "[DELETE] "
