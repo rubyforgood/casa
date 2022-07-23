@@ -290,8 +290,6 @@ en:
     court_orders: Court Orders - Please check that you didn't enter any youth names
     email: Email
   hearing_types:
-    edit:
-      title: Edit
     form:
       active: Active
   judges:
