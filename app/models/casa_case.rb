@@ -2,7 +2,7 @@ class CasaCase < ApplicationRecord
   include ByOrganizationScope
   include DateHelper
 
-  self.ignored_columns = %w[court_date]
+  self.ignored_columns = %w[court_date hearing_type_id judge_id]
 
   attr_accessor :validate_contact_type
 
