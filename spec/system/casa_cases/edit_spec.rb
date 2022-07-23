@@ -5,7 +5,7 @@ RSpec.describe "Edit CASA Case", type: :system do
   context "logged in as admin" do
     let(:organization) { build(:casa_org) }
     let(:admin) { create(:casa_admin, casa_org: organization) }
-    let(:casa_case) { create(:casa_case, :with_judge, :with_one_court_order, casa_org: organization) }
+    let(:casa_case) { create(:casa_case, :with_one_court_order, casa_org: organization) }
     let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
     let!(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
 
@@ -25,8 +25,6 @@ RSpec.describe "Edit CASA Case", type: :system do
     it "edits case", js: true do
       visit casa_case_path(casa_case.id)
       click_on "Edit Case Details"
-      expect(page).to have_select("Hearing type")
-      expect(page).to have_select("Judge")
       select "Submitted", from: "casa_case_court_report_status"
       check contact_type.name
 
@@ -87,7 +85,7 @@ RSpec.describe "Edit CASA Case", type: :system do
   context "logged in as supervisor" do
     let(:casa_org) { build(:casa_org) }
     let(:supervisor) { create(:supervisor, casa_org: casa_org) }
-    let(:casa_case) { create(:casa_case, :with_judge, :with_hearing_type, :with_one_court_order, casa_org: casa_org) }
+    let(:casa_case) { create(:casa_case, :with_one_court_order, casa_org: casa_org) }
     let!(:contact_type_group) { build(:contact_type_group, casa_org: casa_org) }
     let!(:contact_type_1) { create(:contact_type, name: "Youth", contact_type_group: contact_type_group) }
     let!(:contact_type_2) { build(:contact_type, name: "Supervisor", contact_type_group: contact_type_group) }
@@ -134,6 +132,7 @@ RSpec.describe "Edit CASA Case", type: :system do
     end
 
     context "with an available judge" do
+      before { skip }
       let!(:judge) { create(:judge, casa_org: casa_org) }
 
       it "is able to assign a judge to the case when there is no assigned judge", js: true do
@@ -207,6 +206,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
     context "When a Casa instance has no judge names added" do
       it "does not display judge names details" do
+        skip
         casa_case = create(:casa_case, casa_org: casa_org, judge: nil)
 
         visit edit_casa_case_path(casa_case)
@@ -217,6 +217,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
     context "When an admin has added judge names to a Casa instance" do
       it "displays judge details as select option" do
+        skip
         create :judge, casa_org: casa_org
 
         visit edit_casa_case_path(casa_case)
@@ -365,6 +366,7 @@ of it unless it was included in a previous court report.")
     end
 
     context "with an available hearing type", js: true do
+      before { skip }
       let!(:hearing_type) { create(:hearing_type, casa_org: casa_org) }
 
       it "is able to assign a hearing type when there is none assigned" do

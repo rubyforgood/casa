@@ -2,15 +2,11 @@ require "rails_helper"
 
 RSpec.describe "/casa_cases", type: :request do
   let(:organization) { build(:casa_org) }
-  let(:hearing_type) { create(:hearing_type) }
-  let(:judge) { create(:judge) }
   let(:valid_attributes) do
     {
       case_number: "1234",
       birth_month_year_youth: pre_transition_aged_youth_age,
-      casa_org_id: organization.id,
-      hearing_type_id: hearing_type.id,
-      judge_id: judge.id
+      casa_org_id: organization.id
     }
   end
   let(:invalid_attributes) { {case_number: nil, birth_month_year_youth: nil} }
@@ -156,8 +152,6 @@ RSpec.describe "/casa_cases", type: :request do
           casa_case = CasaCase.last
           expect(casa_case.casa_org).to eq organization
           expect(casa_case.transition_aged_youth).to be true
-          expect(casa_case.hearing_type).to eq hearing_type
-          expect(casa_case.judge).to eq judge
         end
 
         it "also responds as json", :aggregate_failures do
@@ -175,9 +169,7 @@ RSpec.describe "/casa_cases", type: :request do
           case_number: "1234",
           transition_aged_youth: true,
           birth_month_year_youth: pre_transition_aged_youth_age,
-          casa_org_id: other_org.id,
-          hearing_type_id: hearing_type.id,
-          judge_id: judge.id
+          casa_org_id: other_org.id
         }
 
         expect { post casa_cases_url, params: {casa_case: attributes} }.to(
@@ -241,16 +233,12 @@ RSpec.describe "/casa_cases", type: :request do
       let(:new_attributes) do
         {
           case_number: "12345",
-          hearing_type_id: hearing_type.id,
-          judge_id: judge.id,
           case_court_orders_attributes: orders_attributes
         }
       end
       let(:new_attributes2) do
         {
           case_number: "12345",
-          hearing_type_id: hearing_type.id,
-          judge_id: judge.id,
           case_court_orders_attributes: orders_attributes,
           casa_case_contact_types_attributes: [{contact_type_id: type1.id}]
         }
@@ -261,8 +249,6 @@ RSpec.describe "/casa_cases", type: :request do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes2}
           casa_case.reload
           expect(casa_case.case_number).to eq "12345"
-          expect(casa_case.hearing_type).to eq hearing_type
-          expect(casa_case.judge).to eq judge
           expect(casa_case.case_court_orders[0].text).to eq texts[0]
           expect(casa_case.case_court_orders[0].implementation_status).to eq implementation_statuses[0]
           expect(casa_case.case_court_orders[1].text).to eq texts[1]
@@ -277,7 +263,7 @@ RSpec.describe "/casa_cases", type: :request do
 
         it "displays changed attributes" do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes2}
-          expect(flash[:notice]).to eq("CASA case was successfully updated.<ul><li>Changed Case number</li><li>Changed Hearing type</li><li>Changed Judge</li><li>[\"#{type1.name}\"] Contact types added</li><li>2 Court orders added or updated</li></ul>")
+          expect(flash[:notice]).to eq("CASA case was successfully updated.<ul><li>Changed Case number</li><li>[\"#{type1.name}\"] Contact types added</li><li>2 Court orders added or updated</li></ul>")
         end
 
         it "also responds as json", :aggregate_failures do
@@ -502,8 +488,6 @@ RSpec.describe "/casa_cases", type: :request do
         {
           case_number: "12345",
           court_report_status: :submitted,
-          hearing_type_id: hearing_type.id,
-          judge_id: judge.id,
           case_court_orders_attributes: orders_attributes
         }
       }
@@ -517,8 +501,6 @@ RSpec.describe "/casa_cases", type: :request do
 
           # Not permitted
           expect(casa_case.case_number).to eq "111"
-          expect(casa_case.hearing_type).to eq hearing_type
-          expect(casa_case.judge).to eq judge
           expect(casa_case.case_court_orders.size).to be 2
         end
 
