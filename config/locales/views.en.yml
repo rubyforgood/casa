@@ -289,9 +289,6 @@ en:
     add_court_order: Add a court order
     court_orders: Court Orders - Please check that you didn't enter any youth names
     email: Email
-  hearing_types:
-    form:
-      active: Active
   judges:
     edit:
       title: Edit Judge
