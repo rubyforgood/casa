@@ -131,55 +131,6 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("8-SEP-#{next_year}")
     end
 
-    context "with an available judge" do
-      before { skip }
-      let!(:judge) { create(:judge, casa_org: casa_org) }
-
-      it "is able to assign a judge to the case when there is no assigned judge", js: true do
-        casa_case.update(judge: nil)
-
-        visit edit_casa_case_path(casa_case)
-
-        expect(page).to have_select("Judge", selected: "-Select Judge-")
-        select judge.name, from: "casa_case_judge_id"
-
-        within ".actions" do
-          click_on "Update CASA Case"
-        end
-
-        expect(page).to have_select("Judge", selected: judge.name)
-        expect(casa_case.reload.judge).to eq judge
-      end
-
-      it "is able to assign another judge to the case", js: true do
-        visit edit_casa_case_path(casa_case)
-
-        expect(page).to have_select("Judge", selected: casa_case.judge.name)
-        select judge.name, from: "casa_case_judge_id"
-
-        within ".actions" do
-          click_on "Update CASA Case"
-        end
-
-        expect(page).to have_select("Judge", selected: judge.name)
-        expect(casa_case.reload.judge).to eq judge
-      end
-
-      it "is able to unassign a judge from the case", js: true do
-        visit edit_casa_case_path(casa_case)
-
-        expect(page).to have_select("Judge", selected: casa_case.judge.name)
-        select "-Select Judge-", from: "casa_case_judge_id"
-
-        within ".actions" do
-          click_on "Update CASA Case"
-        end
-
-        expect(page).to have_select("Judge", selected: "-Select Judge-")
-        expect(casa_case.reload.judge).to be_nil
-      end
-    end
-
     it "views deactivated case" do
       casa_case.deactivate
       visit edit_casa_case_path(casa_case)
@@ -202,28 +153,6 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       expect(page).to have_text(court_order.text)
       expect(page).to have_text(court_order.implementation_status.humanize)
-    end
-
-    context "When a Casa instance has no judge names added" do
-      it "does not display judge names details" do
-        skip
-        casa_case = create(:casa_case, casa_org: casa_org, judge: nil)
-
-        visit edit_casa_case_path(casa_case)
-
-        expect(page).not_to have_select("Judge")
-      end
-    end
-
-    context "When an admin has added judge names to a Casa instance" do
-      it "displays judge details as select option" do
-        skip
-        create :judge, casa_org: casa_org
-
-        visit edit_casa_case_path(casa_case)
-
-        expect(page).to have_select("Judge")
-      end
     end
 
     describe "assign and unassign a volunteer to a case" do
@@ -362,61 +291,6 @@ of it unless it was included in a previous court report.")
           click_on "Update CASA Case"
         end
         expect(page).to_not have_text(text)
-      end
-    end
-
-    context "with an available hearing type", js: true do
-      before { skip }
-      let!(:hearing_type) { create(:hearing_type, casa_org: casa_org) }
-
-      it "is able to assign a hearing type when there is none assigned" do
-        casa_case.update(hearing_type: nil)
-
-        visit edit_casa_case_path(casa_case.id)
-
-        expect(page).to have_select("Hearing type",
-          selected: I18n.t("casa_cases.form.prompt.select_hearing_type"))
-        select hearing_type.name, from: "casa_case_hearing_type_id"
-
-        within ".actions" do
-          click_on "Update CASA Case"
-        end
-
-        expect(page).to have_select("Hearing type", selected: hearing_type.name)
-        expect(casa_case.reload.hearing_type).to eq hearing_type
-      end
-
-      it "is able to assign another hearing type to the case" do
-        visit edit_casa_case_path(casa_case.id)
-
-        expect(page).to have_select("Hearing type", selected: casa_case.hearing_type.name)
-        select hearing_type.name, from: "casa_case_hearing_type_id"
-
-        within ".actions" do
-          click_on "Update CASA Case"
-        end
-
-        expect(page).to have_select("Hearing type", selected: hearing_type.name)
-        expect(casa_case.reload.hearing_type).to eq hearing_type
-      end
-
-      it "is able to unassign a hearing type from the case" do
-        expect(casa_case.hearing_type).not_to be_nil
-
-        visit edit_casa_case_path(casa_case.id)
-
-        expect(page).to have_select("Hearing type",
-          selected: casa_case.hearing_type.name)
-        select(I18n.t("casa_cases.form.prompt.select_hearing_type"),
-          from: "casa_case_hearing_type_id")
-
-        within ".actions" do
-          click_on "Update CASA Case"
-        end
-
-        expect(page).to have_select("Hearing type",
-          selected: I18n.t("casa_cases.form.prompt.select_hearing_type"))
-        expect(casa_case.reload.hearing_type).to be_nil
       end
     end
 
