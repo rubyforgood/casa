@@ -326,17 +326,6 @@ en:
         return_to_dashboard: Return To Dashboard
       system_imports_title: System Imports
       title: Import Categories
-    supervisors:
-      button:
-        download: Download and reference example Supervisor CSV file
-        import: Import Supervisors CSV
-      disable_with: Importing File
-      instruction:
-        change_values: change any of the values in the first line of the example csv file.
-        click: Click the choose file button and navigate to the saved file and select it.
-        do_not: Do not
-        import: Then click the "Import Supervisors CSV" button to import your supervisors.
-      upload_title: Upload your CSV file
     sms_opt_in_modal:
       title: SMS Opt In
       description: Please check this box to verify that these mobile numbers have opted in to receive SMS notifications. (They will have the opportunity to opt out or update their preferences.)
