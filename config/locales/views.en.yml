@@ -297,17 +297,6 @@ en:
     form:
       active: Active
   imports:
-    cases:
-      button:
-        download: Download and reference example Case CSV file
-        import: Import Cases CSV
-      disable_with: Importing File
-      instruction:
-        change_values: change any of the values in the first line of the example csv file.
-        click: Click the choose file button and navigate to the saved file and select it.
-        do_not: Do not
-        import: Then click the "Import Cases CSV" button to import your cases.
-      upload_title: Upload your CSV file
     index:
       button:
         import_cases: Import Cases
