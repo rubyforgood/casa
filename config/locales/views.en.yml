@@ -308,10 +308,6 @@ en:
         do_not: Do not
         import: Then click the "Import Cases CSV" button to import your cases.
       upload_title: Upload your CSV file
-    csv_error_modal:
-      button:
-        ok: OK
-      title: CSV Import Error
     index:
       button:
         import_cases: Import Cases
