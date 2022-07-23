@@ -326,11 +326,6 @@ en:
         return_to_dashboard: Return To Dashboard
       system_imports_title: System Imports
       title: Import Categories
-    sms_opt_in_modal:
-      title: SMS Opt In
-      description: Please check this box to verify that these mobile numbers have opted in to receive SMS notifications. (They will have the opportunity to opt out or update their preferences.)
-      label: Opt into SMS notifications
-      continue: Continue Import
     volunteers:
       button:
         download: Download and reference example Volunteer CSV file

@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="smsOptIn">
-          <%= t(".title") %>
+          SMS Opt In
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -11,16 +11,16 @@
       </div>
       <div class="modal-body">
         <div>
-          <%= t(".description") %>
+          Please check this box to verify that these mobile numbers have opted in to receive SMS notifications. (They will have the opportunity to opt out or update their preferences.)
         </div>
         <br>
         <span>
-          <%= form.label :sms_opt_in_label, t(".label") %>
+          <%= form.label :sms_opt_in_label, "Opt into SMS notifications" %>
           <%= form.check_box :sms_opt_in, { id: "sms-opt-in-checkbox" } %>
         <span>
       </div>
       <div class="modal-footer">
-        <%= form.submit t(".continue"), { id: "sms-opt-in-continue-button", class: "btn btn-primary", disabled: true } %>
+        <%= form.submit "Continue Import", { id: "sms-opt-in-continue-button", class: "btn btn-primary", disabled: true } %>
       </div>
     </div>
   </div>
