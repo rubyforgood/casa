@@ -9,12 +9,6 @@ en:
       updated_not_active: "Your password was set successfully."
       no_invitations_remaining: "No invitations remaining"
       invitation_removed: "Your invitation was removed."
-      new:
-        header: "Send invitation"
-        submit_button: "Send an invitation"
-      edit:
-        header: "Set your password"
-        submit_button: "Set my password"
     mailer:
       invitation_instructions:
         subject: "CASA Console invitation instructions"
