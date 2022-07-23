@@ -296,33 +296,6 @@ en:
       title: New Hearing Type
     form:
       active: Active
-  imports:
-    index:
-      button:
-        import_cases: Import Cases
-        import_supervisors: Import Supervisors
-        import_volunteers: Import Volunteers
-      instruction:
-        cases: Cases
-        supervisors: Supervisors
-        title: You should import files in the following order
-        volunteers: Volunteers
-      link:
-        return_to_dashboard: Return To Dashboard
-      system_imports_title: System Imports
-      title: Import Categories
-    volunteers:
-      button:
-        download: Download and reference example Volunteer CSV file
-        import: Import Volunteers CSV
-      disable_with: Importing File
-      instruction:
-        change_values: change any of the values in the first line of the example csv file.
-        click: Click the choose file button and navigate to the saved file and select it.
-        do_not: Do not
-        import: Then click the "Import Volunteers CSV" button to import your volunteers.
-        note: This will email the new volunteers asking them to log in!
-      upload_title: Upload your CSV file
   judges:
     edit:
       title: Edit Judge
