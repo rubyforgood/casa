@@ -9,8 +9,6 @@ RSpec.describe CasaCase, type: :model do
   it { is_expected.to have_many(:emancipation_categories).through(:casa_case_emancipation_categories) }
   it { is_expected.to have_many(:casa_cases_emancipation_options).dependent(:destroy) }
   it { is_expected.to have_many(:emancipation_options).through(:casa_cases_emancipation_options) }
-  it { is_expected.to belong_to(:hearing_type).optional }
-  it { is_expected.to belong_to(:judge).optional }
   it { is_expected.to validate_presence_of(:case_number) }
   it { is_expected.to validate_presence_of(:birth_month_year_youth) }
   it { is_expected.to validate_uniqueness_of(:case_number).scoped_to(:casa_org_id).case_insensitive }
