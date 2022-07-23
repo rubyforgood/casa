@@ -292,8 +292,6 @@ en:
   hearing_types:
     edit:
       title: Edit
-    new:
-      title: New Hearing Type
     form:
       active: Active
   judges:
