@@ -150,8 +150,6 @@ class CasaCasesController < ApplicationController
       :case_number,
       :birth_month_year_youth,
       :court_report_due_date,
-      :hearing_type_id,
-      :judge_id,
       court_dates_attributes: [:date]
     )
   end
