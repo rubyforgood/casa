@@ -252,14 +252,6 @@ en:
         details: Details
       title: Transitioning Case(s)
   emancipation_checklists:
-    index:
-      heading:
-        case_number: Case Number
-        checklist: Checklist
-      link:
-        checklist: Checklist
-        details: Details
-      title: Emancipation Checklists
   learning_hours:
     index:
       heading:
