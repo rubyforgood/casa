@@ -242,16 +242,6 @@ en:
       title: New Contact Type
     edit:
       title: Edit Contact Type
-  emancipation:
-    index:
-      heading:
-        case_number: Case Number
-        checklist: Checklist
-      link:
-        checkList: Checklist
-        details: Details
-      title: Transitioning Case(s)
-  emancipation_checklists:
   learning_hours:
     index:
       heading:
@@ -343,8 +333,6 @@ en:
       prompt:
         select_hearing_type: -Select Hearing Type-
         select_judge: -Select Judge-
-    new:
-      title: New Court Date
     show:
       button:
         edit_court_date: Edit
