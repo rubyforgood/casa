@@ -318,36 +318,6 @@ en:
   notifications:
     index:
       no_notifications: You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.
-  court_dates:
-    edit:
-      title: Editing Court Date
-    form:
-      add_court_date: Add Court Date
-      button:
-        create: Create
-        update: Update
-      hearing_type: Hearing type
-      judge: Judge
-      label:
-        case_number: Case Number
-      prompt:
-        select_hearing_type: -Select Hearing Type-
-        select_judge: -Select Judge-
-    show:
-      button:
-        edit_court_date: Edit
-      label:
-        casa_case_court_order:
-          implementation_status: Implementation Status
-          court_order_text: Court Order Text
-        case_court_orders: Court Orders
-        case_number: Case Number
-        download_report_docx: Download Report (.docx)
-        hearing_type: Hearing Type
-        judge: Judge
-        none: None
-        no_case_court_mandates: There are no court orders associated with this court date.
-      title: Court Date
   reimbursements:
     data_table:
       heading:
