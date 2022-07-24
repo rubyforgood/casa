@@ -52,34 +52,6 @@
         </div>
       <% end %>
 
-      <% if policy(casa_case).update_hearing_type? %>
-        <div class="field form-group">
-          <%= form.label :hearing_type_id, "Hearing type" %>
-          <%= form.collection_select(
-                  :hearing_type_id,
-                  HearingType.active.for_organization(current_organization),
-                  :id, :name,
-                  {include_hidden: false, include_blank: "-Select Hearing Type-"},
-                  {class: "form-control"}
-              ) %>
-        </div>
-      <% end %>
-
-      <% if Judge.for_organization(current_organization).any? %>
-        <% if policy(casa_case).update_judge? %>
-          <div class="field form-group">
-            <%= form.label :judge_id, "Judge" %>
-            <%= form.collection_select(
-                    :judge_id,
-                    Judge.for_organization(current_organization),
-                    :id, :name,
-                    {include_hidden: false, include_blank: "-Select Judge-"},
-                    {class: "form-control"}
-                ) %>
-          </div>
-        <% end %>
-      <% end %>
-
       <% if policy(casa_case).update_court_date? && casa_case.new_record? %>
         <%= form.fields_for :court_dates, casa_case.court_dates.new do |cdf| %>
           <div class="field form-group">
