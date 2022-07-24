@@ -5,13 +5,13 @@
     <%= form_with(model: hearing_type, local: true) do |form| %>
       <%= render "/shared/error_messages", resource: hearing_type %>
       <div class="field form-group">
-        <%= form.label :name, t("common.name") %>
+        <%= form.label :name, "Name" %>
         <%= form.text_field :name, class: "form-control", required: true %>
       </div>
       <div class="field form-group">
         <div class="form-check">
           <%= form.check_box :active, class: 'form-check-input' %>
-          <%= form.label :active, t(".active"), class: 'form-check-label' %>
+          <%= form.label :active, class: 'form-check-label' %>
         </div>
       </div>
       <% if !hearing_type.id.nil? %>
@@ -51,7 +51,7 @@
         </table>
       <% end %>
       <div class="actions">
-        <%= form.submit t("button.submit"), class: "btn btn-primary" %>
+        <%= form.submit "Submit", class: "btn btn-primary" %>
       </div>
     <% end %>
   </div>
