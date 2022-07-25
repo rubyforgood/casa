@@ -18,7 +18,7 @@ RSpec.describe MockController, type: :controller do
 
   before do
     routes.disable_clear_and_finalize = true
-    routes.draw do 
+    routes.draw do
       get :action, to: "mock#action"
       get :no_session_action, to: "mock#no_session_action"
     end
@@ -31,7 +31,7 @@ RSpec.describe MockController, type: :controller do
       get :action
       expect(response).to redirect_to authenticated_all_casa_admin_root_path
     end
-  
+
     it "should redirect to authenticated user root path" do
       allow(controller).to receive(:authenticate_user!).and_return(true)
       allow(controller).to receive(:current_user).and_return(volunteer)
