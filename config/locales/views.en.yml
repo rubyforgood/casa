@@ -18,14 +18,10 @@ en:
           confirm_swal: Deactivating a CASA Case will unassign any volunteers currently assigned to this case.
           fail: No, go back
           success: Yes, deactivate
-        select_hearing_type: -Select Hearing Type-
-        select_judge: -Select Judge-
       youth_birth_month_year: "Youth's Birth Month & Year"
       youth_date_in_care: "Youth's Date in Care"
       case_number: Case number
       court_details: Court Details
-      hearing_type: Hearing type
-      judge: Judge
       transition_aged_youth: Transition Aged Youth
       court_report_status: Court Report Status
     index:
@@ -72,8 +68,6 @@ en:
         court_report_due_date: Court Report Due Date
         court_report_status: Court Report Status
         court_report_submitted_date: Court Report Submitted Date
-        hearing_type: Hearing Type
-        judge: Judge
         next_court_date: Next Court Date
         transition_aged_youth: Transition Aged Youth
         youth_date_in_care: "Youth's Date in Care"
@@ -151,23 +145,6 @@ en:
         transition_aged_youth: Transition Aged Youth
       select_case: Select a Case
       title: Edit Volunteer Assignments for
-  case_contacts:
-    index:
-      filter:
-        contact_date: Date of contact
-        contact_types: Contact types
-        display_all: Display all
-        end_date: Ending at
-        other: Other filters
-        reset: Reset filters
-        show_hide: Show / Hide
-        start_date: Starting from
-        submit: Filter
-        title: Filter by
-      new: New Case Contact
-      no_contacts_found: No case contacts have been found.
-      no_contacts_present: You have no case contacts for this case. Please click New Case Contact button above to create a case contact for your youth!
-      title: Case Contacts
     case_contact:
       created_by: Created by
       deleted_text: "[DELETE] "
@@ -242,30 +219,6 @@ en:
       title: New Contact Type
     edit:
       title: Edit Contact Type
-  emancipation:
-    index:
-      heading:
-        case_number: Case Number
-        checklist: Checklist
-      link:
-        checkList: Checklist
-        details: Details
-      title: Transitioning Case(s)
-  emancipations:
-    show:
-      state:
-        saved: Saved
-        saving: Saving
-      title: Emancipation Checklist
-  emancipation_checklists:
-    index:
-      heading:
-        case_number: Case Number
-        checklist: Checklist
-      link:
-        checklist: Checklist
-        details: Details
-      title: Emancipation Checklists
   learning_hours:
     index:
       heading:
@@ -289,71 +242,6 @@ en:
     add_court_order: Add a court order
     court_orders: Court Orders - Please check that you didn't enter any youth names
     email: Email
-  hearing_types:
-    edit:
-      title: Edit Hearing Type
-    new:
-      title: New Hearing Type
-    form:
-      active: Active
-  imports:
-    cases:
-      button:
-        download: Download and reference example Case CSV file
-        import: Import Cases CSV
-      disable_with: Importing File
-      instruction:
-        change_values: change any of the values in the first line of the example csv file.
-        click: Click the choose file button and navigate to the saved file and select it.
-        do_not: Do not
-        import: Then click the "Import Cases CSV" button to import your cases.
-      upload_title: Upload your CSV file
-    csv_error_modal:
-      button:
-        ok: OK
-      title: CSV Import Error
-    index:
-      button:
-        import_cases: Import Cases
-        import_supervisors: Import Supervisors
-        import_volunteers: Import Volunteers
-      instruction:
-        cases: Cases
-        supervisors: Supervisors
-        title: You should import files in the following order
-        volunteers: Volunteers
-      link:
-        return_to_dashboard: Return To Dashboard
-      system_imports_title: System Imports
-      title: Import Categories
-    supervisors:
-      button:
-        download: Download and reference example Supervisor CSV file
-        import: Import Supervisors CSV
-      disable_with: Importing File
-      instruction:
-        change_values: change any of the values in the first line of the example csv file.
-        click: Click the choose file button and navigate to the saved file and select it.
-        do_not: Do not
-        import: Then click the "Import Supervisors CSV" button to import your supervisors.
-      upload_title: Upload your CSV file
-    sms_opt_in_modal:
-      title: SMS Opt In
-      description: Please check this box to verify that these mobile numbers have opted in to receive SMS notifications. (They will have the opportunity to opt out or update their preferences.)
-      label: Opt into SMS notifications
-      continue: Continue Import
-    volunteers:
-      button:
-        download: Download and reference example Volunteer CSV file
-        import: Import Volunteers CSV
-      disable_with: Importing File
-      instruction:
-        change_values: change any of the values in the first line of the example csv file.
-        click: Click the choose file button and navigate to the saved file and select it.
-        do_not: Do not
-        import: Then click the "Import Volunteers CSV" button to import your volunteers.
-        note: This will email the new volunteers asking them to log in!
-      upload_title: Upload your CSV file
   judges:
     edit:
       title: Edit Judge
@@ -407,38 +295,6 @@ en:
   notifications:
     index:
       no_notifications: You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.
-  court_dates:
-    edit:
-      title: Editing Court Date
-    form:
-      add_court_date: Add Court Date
-      button:
-        create: Create
-        update: Update
-      hearing_type: Hearing type
-      judge: Judge
-      label:
-        case_number: Case Number
-      prompt:
-        select_hearing_type: -Select Hearing Type-
-        select_judge: -Select Judge-
-    new:
-      title: New Court Date
-    show:
-      button:
-        edit_court_date: Edit
-      label:
-        casa_case_court_order:
-          implementation_status: Implementation Status
-          court_order_text: Court Order Text
-        case_court_orders: Court Orders
-        case_number: Case Number
-        download_report_docx: Download Report (.docx)
-        hearing_type: Hearing Type
-        judge: Judge
-        none: None
-        no_case_court_mandates: There are no court orders associated with this court date.
-      title: Court Date
   reimbursements:
     data_table:
       heading:
@@ -582,6 +438,6 @@ en:
       title: Editing Duty
     form:
       occurred_on: Occurred On
-      duration_meeting: Duration Meeting
+      duration_meeting: Duty Duration
       enter_notes: Enter Notes
       enter_notes_placeholder: Enter notes here

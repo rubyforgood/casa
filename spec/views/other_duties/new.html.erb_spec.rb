@@ -11,7 +11,7 @@ RSpec.describe "other_duties/new", type: :view do
   it "display all form fields" do
     expect(rendered).to have_text("New Duty")
     expect(rendered).to have_field("Occurred On", with: current_time)
-    expect(rendered).to have_text("Duration Meeting")
+    expect(rendered).to have_text("Duty Duration")
     expect(rendered).to have_text("Enter Notes")
   end
 end

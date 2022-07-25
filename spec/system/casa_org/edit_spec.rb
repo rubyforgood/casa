@@ -84,11 +84,12 @@ RSpec.describe "casa_org/edit", type: :system do
     visit edit_casa_org_path(organization)
 
     scroll_to(page.find("table#sent-emails", visible: false))
+    expect(page).to have_table(id: "sent-emails")
     expect(page).to have_table(
       id: "sent-emails",
       with_rows:
       [
-        ["Spec Test Mailer Type", "Spec Test Mail Action Category", admin.email, "12:30pm 02 Jan 2021"]
+        ["Mailer Type", "Mail Action Category", admin.email, "12:30pm 02 Jan 2021"]
       ]
     )
   end

@@ -22,7 +22,8 @@ RSpec.describe MileageReport, type: :model do
         "Occurred At",
         "Miles Driven",
         "Casa Case Number",
-        "Creator Name"
+        "Creator Name",
+        "Volunteer Address"
       ])
       case_contact_data = parsed_csv[1]
       expect(case_contact_data[0]).to eq("Therapist")
@@ -43,7 +44,8 @@ RSpec.describe MileageReport, type: :model do
         "Occurred At",
         "Miles Driven",
         "Casa Case Number",
-        "Creator Name"
+        "Creator Name",
+        "Volunteer Address"
       ])
     end
 

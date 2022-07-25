@@ -44,7 +44,7 @@ class: "btn btn-primary pull-left casa-case-button") %>
     <p>
     <h6><strong>Case number:</strong> <%= @casa_case.case_number %></h6>
     </p>
-    <% if @casa_case.has_hearing_type? %>
+    <% if @casa_case.hearing_type %>
       <p>
       <h6><strong>Hearing Type:</strong> <%= @casa_case.hearing_type_name %></h6>
       </p>

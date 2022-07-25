@@ -21,7 +21,7 @@ class CaseContactTypesReminder
             messages: send_sms_messages(volunteer, uncontacted_case_contact_type_names)
           }
         )
-        update_reminder_sent_time(volunteer)
+        UserReminderTime.find_by(user_id: volunteer.id)&.update_attributes(case_contact_types: DateTime.now)
       end
     end
 
@@ -68,25 +68,13 @@ class CaseContactTypesReminder
   end
 
   def last_reminder_within_quarter(volunteer)
-    reminder = UserCaseContactTypesReminder.find_by(user_id: volunteer.id)
+    reminder = UserReminderTime.find_by(user_id: volunteer.id)
 
-    if reminder
-      return reminder.reminder_sent > 3.months.ago
+    if reminder&.case_contact_types
+      return reminder.case_contact_types > 3.months.ago
     end
 
     false
-  end
-
-  def update_reminder_sent_time(volunteer)
-    reminder = UserCaseContactTypesReminder.find_by(user_id: volunteer.id)
-
-    if reminder
-      reminder.reminder_sent = DateTime.now
-    else
-      reminder = UserCaseContactTypesReminder.new(user_id: volunteer.id, reminder_sent: DateTime.now)
-    end
-
-    reminder.save
   end
 
   def new_case_contact_page_short_link

@@ -69,7 +69,7 @@ RSpec.describe CasaOrg, type: :model do
       let(:groups_hash) { groups.group_by(&:first).map { |k, a| [k, a.map(&:last)] }.to_h }
 
       it "matches default contact type groups" do
-        expect(groups_hash).to eq(ContactTypeGroup::DEFAULT_CONTACT_TYPE_GROUPS.stringify_keys)
+        expect(groups_hash).to match_array(ContactTypeGroup::DEFAULT_CONTACT_TYPE_GROUPS.stringify_keys)
       end
     end
 

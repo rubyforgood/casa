@@ -38,3 +38,10 @@ jobs:
         run: docker-compose exec -T web bundle exec rails javascript:build
       - name: Test
         run: docker-compose exec -T web bundle exec rspec spec
+
+      - name: Archive selenium screenshots
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: selenium-screenshots
+          path: ${{ github.workspace }}/tmp/capybara/*.png

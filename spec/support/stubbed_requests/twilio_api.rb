@@ -58,4 +58,28 @@ module TwilioAPI
       )
       .to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"Your court report is due on #{court_due_date}. Generate a court report to complete & submit here: https://42ni.short.gy/jzTwdF\"}")
   end
+
+  def twilio_no_contact_made_stub(resousne = "")
+    WebMock.stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno34/Messages.json")
+      .with(
+        body: {"Body" => "It's been two weeks since you've tried reaching 'test'. Try again! https://42ni.short.gy/jzTwdF", "From" => "+15555555555", "To" => "+12222222222"},
+        headers: {
+          "Content-Type" => "application/x-www-form-urlencoded",
+          "Authorization" => "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
+        }
+      )
+      .to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"It's been two weeks since you've tried reaching 'test'. Try again! https://42ni.short.gy/jzTwdF\"}")
+  end
+
+  def twilio_password_reset_stub(resource)
+    WebMock.stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno34/Messages.json")
+      .with(
+        body: {From: "+15555555555", Body: "Hi #{resource.display_name}, click here to reset your password: https://42ni.short.gy/jzTwdF", To: "+12222222222"},
+        headers: {
+          "Content-Type" => "application/x-www-form-urlencoded",
+          "Authorization" => "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
+        }
+      )
+      .to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"Execute Order 66 - https://42ni.short.gy/jzTwdF\"}")
+  end
 end

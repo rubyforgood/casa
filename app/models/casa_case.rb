@@ -2,7 +2,7 @@ class CasaCase < ApplicationRecord
   include ByOrganizationScope
   include DateHelper
 
-  self.ignored_columns = %w[court_date]
+  self.ignored_columns = %w[court_date hearing_type_id judge_id]
 
   attr_accessor :validate_contact_type
 
@@ -145,10 +145,6 @@ class CasaCase < ApplicationRecord
 
   def most_recent_past_court_date
     court_dates.where("date < ?", Date.today).order(:date).last
-  end
-
-  def has_hearing_type?
-    hearing_type
   end
 
   def has_judge_name?

@@ -115,6 +115,54 @@ RSpec.describe "volunteers/edit", type: :system do
     expect(page).to have_content("Assign a Supervisor")
   end
 
+  context "when the volunteer is unassigned from all of their cases" do
+    let!(:casa_case_1) { create(:casa_case, casa_org: organization, case_number: "CINA1") }
+    let!(:casa_case_2) { create(:casa_case, casa_org: organization, case_number: "CINA2") }
+    let!(:case_assignment_1) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case_1) }
+    let!(:case_assignment_2) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case_2) }
+
+    before do
+      case_assignment_1.active = false
+      case_assignment_2.active = false
+      case_assignment_1.save
+      case_assignment_2.save
+    end
+
+    it "does not show any active assignment status in the Manage Cases section" do
+      sign_in admin
+      visit edit_volunteer_path(volunteer)
+      within ".table.case-list" do
+        expect(page).not_to have_content("Volunteer is Active")
+      end
+    end
+
+    it "shows the unassigned cases in the Manage Cases section" do
+      sign_in admin
+      visit edit_volunteer_path(volunteer)
+
+      within "#case_assignment_#{case_assignment_1.id}" do
+        expect(page).to have_link("CINA1", href: "/casa_cases/#{casa_case_1.id}")
+      end
+
+      within "#case_assignment_#{case_assignment_2.id}" do
+        expect(page).to have_link("CINA2", href: "/casa_cases/#{casa_case_2.id}")
+      end
+    end
+
+    it "shows assignment status as 'Volunteer is Unassigned' for each unassigned case" do
+      sign_in admin
+      visit edit_volunteer_path(volunteer)
+
+      within "#case_assignment_#{case_assignment_1.id}" do
+        expect(page).to have_content("Volunteer is Unassigned")
+      end
+
+      within "#case_assignment_#{case_assignment_2.id}" do
+        expect(page).to have_content("Volunteer is Unassigned")
+      end
+    end
+  end
+
   context "with a deactivated case" do
     it "displays inactive message" do
       deactivated_casa_case = create(:casa_case, active: false, casa_org: volunteer.casa_org, volunteers: [volunteer])

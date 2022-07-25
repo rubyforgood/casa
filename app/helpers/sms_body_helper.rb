@@ -17,4 +17,20 @@ module SmsBodyHelper
     end
     body_msg
   end
+
+  def court_report_due_msg(report_due_date, short_link)
+    "Your court report is due on #{report_due_date}. Generate a court report to complete & submit here: #{short_link}"
+  end
+
+  def no_contact_made_msg(contact_type, short_link)
+    "It's been two weeks since you've tried reaching '#{contact_type}'. Try again! #{short_link}"
+  end
+
+  def case_contact_flagged_msg(display_name, short_link)
+    "#{display_name} has flagged a Case Contact that needs follow up. Click to see more: #{short_link}"
+  end
+
+  def password_reset_msg(display_name, short_link)
+    "Hi #{display_name}, click here to reset your password: #{short_link}"
+  end
 end

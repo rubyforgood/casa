@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_16_021404) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_22_022147) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -136,11 +136,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_16_021404) do
     t.string "footer_links", default: [], array: true
     t.string "slug"
     t.boolean "show_driving_reimbursement", default: true
+    t.boolean "show_fund_request", default: false
     t.string "twilio_phone_number"
     t.string "twilio_account_sid"
     t.string "twilio_api_key_sid"
     t.string "twilio_api_key_secret"
-    t.boolean "show_fund_request", default: false
     t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 
@@ -381,11 +381,28 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_16_021404) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "patch_note_groups", force: :cascade do |t|
+    t.string "value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["value"], name: "index_patch_note_groups_on_value", unique: true
+  end
+
   create_table "patch_note_types", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_patch_note_types_on_name", unique: true
+  end
+
+  create_table "patch_notes", force: :cascade do |t|
+    t.text "note", null: false
+    t.bigint "patch_note_type_id", null: false
+    t.bigint "patch_note_group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["patch_note_group_id"], name: "index_patch_notes_on_patch_note_group_id"
+    t.index ["patch_note_type_id"], name: "index_patch_notes_on_patch_note_type_id"
   end
 
   create_table "preference_sets", force: :cascade do |t|
@@ -429,12 +446,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_16_021404) do
     t.string "version", null: false
   end
 
-  create_table "user_case_contact_types_reminders", force: :cascade do |t|
+  create_table "user_reminder_times", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.datetime "reminder_sent"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_user_case_contact_types_reminders_on_user_id"
+    t.datetime "case_contact_types", precision: nil
+    t.index ["user_id"], name: "index_user_reminder_times_on_user_id"
   end
 
   create_table "user_sms_notification_events", force: :cascade do |t|
@@ -482,16 +500,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_16_021404) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  create_table "versions", force: :cascade do |t|
-    t.string "item_type", null: false
-    t.bigint "item_id", null: false
-    t.string "event", null: false
-    t.string "whodunnit"
-    t.text "object"
-    t.datetime "created_at", precision: nil
-    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
-  end
-
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "additional_expenses", "case_contacts"
@@ -512,12 +520,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_16_021404) do
   add_foreign_key "judges", "casa_orgs"
   add_foreign_key "learning_hours", "users"
   add_foreign_key "mileage_rates", "users"
+  add_foreign_key "patch_notes", "patch_note_groups"
+  add_foreign_key "patch_notes", "patch_note_types"
   add_foreign_key "preference_sets", "users"
   add_foreign_key "sent_emails", "casa_orgs"
   add_foreign_key "sent_emails", "users"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"
   add_foreign_key "supervisor_volunteers", "users", column: "volunteer_id"
-  add_foreign_key "user_case_contact_types_reminders", "users"
+  add_foreign_key "user_reminder_times", "users"
   add_foreign_key "user_sms_notification_events", "sms_notification_events"
   add_foreign_key "user_sms_notification_events", "users"
   add_foreign_key "users", "casa_orgs"

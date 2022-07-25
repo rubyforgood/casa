@@ -4,15 +4,15 @@
       <%= render "/shared/error_messages", resource: court_date %>
 
       <div class="top-page-actions pull-right">
-        <%= form.submit court_date.persisted? ? t(".button.update") : t(".button.create"), class: "btn btn-primary" %>
+        <%= form.submit court_date.persisted? ? "Update" : "Create", class: "btn btn-primary" %>
       </div>
 
       <p>
-        <h6><strong><%= t(".label.case_number") %>:</strong> <%= link_to casa_case.case_number, casa_case %></h6>
+        <h6><strong>Case Number:</strong> <%= link_to casa_case.case_number, casa_case %></h6>
       </p>
 
       <div class="field form-group">
-        <%= form.label :date, t(".add_court_date") %>
+        <%= form.label :date, "Add Court Date" %>
         <%= form.text_field :date,
                         value: court_date.date&.to_date || Time.zone.now,
                         data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
@@ -21,22 +21,22 @@
       <br>
 
       <div class="field form-group">
-        <%= form.label :judge_id, t(".judge") %>
+        <%= form.label :judge_id, "Judge" %>
         <%= form.collection_select(
                 :judge_id,
                 Judge.for_organization(current_organization),
                 :id, :name,
-                {include_hidden: false, include_blank: t(".prompt.select_judge")},
+                {include_hidden: false, include_blank: "-Select Judge-"},
                 {class: "form-control"}
             ) %>
       </div>
       <div class="field form-group">
-        <%= form.label :hearing_type_id, t(".hearing_type") %>
+        <%= form.label :hearing_type_id, "Hearing type" %>
         <%= form.collection_select(
                 :hearing_type_id,
                 HearingType.active.for_organization(current_organization),
                 :id, :name,
-                {include_hidden: false, include_blank: t(".prompt.select_hearing_type")},
+                {include_hidden: false, include_blank: "-Select Hearing Type-"},
                 {class: "form-control"}
             ) %>
       </div>

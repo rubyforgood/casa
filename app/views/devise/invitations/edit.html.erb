@@ -1,5 +1,5 @@
 <div class="password-box">
-  <h2><%= t "devise.invitations.edit.header" %></h2>
+  <h2>Send invitation</h2>
 
   <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: {method: :put}) do |f| %>
     <%= render "/shared/error_messages", resource: resource %>
@@ -18,7 +18,7 @@
     <% end %>
 
     <div class="actions">
-      <%= f.submit t("devise.invitations.edit.submit_button") %>
+      <%= f.submit "Set my password" %>
     </div>
   <% end %>
 </div>
