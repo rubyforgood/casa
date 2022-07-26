@@ -8,7 +8,7 @@ RSpec.describe "casa_cases/show", type: :system do
   let(:volunteer) { build(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
   let(:casa_case) {
     create(:casa_case, :with_one_court_order, casa_org: organization,
-    case_number: "CINA-1", court_report_due_date: 1.month.from_now, date_in_care: date_in_care)
+      case_number: "CINA-1", court_report_due_date: 1.month.from_now, date_in_care: date_in_care)
   }
   let(:date_in_care) { 6.years.ago }
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }

@@ -18,16 +18,16 @@ class DocxInspector
       viewable_strings = get_displayed_text_list(get_XML_object(file))
 
       case file_name
-        when /^document/
-          @word_lists_by_document_section[:document].concat(viewable_strings)
-        when /^endnotes/
-          @word_lists_by_document_section[:endnotes].concat(viewable_strings)
-        when /^footnotes/
-          @word_lists_by_document_section[:footnotes].concat(viewable_strings)
-        when /^footer/
-          @word_lists_by_document_section[:footer].concat(viewable_strings)
-        when /^header/
-          @word_lists_by_document_section[:header].concat(viewable_strings)
+      when /^document/
+        @word_lists_by_document_section[:document].concat(viewable_strings)
+      when /^endnotes/
+        @word_lists_by_document_section[:endnotes].concat(viewable_strings)
+      when /^footnotes/
+        @word_lists_by_document_section[:footnotes].concat(viewable_strings)
+      when /^footer/
+        @word_lists_by_document_section[:footer].concat(viewable_strings)
+      when /^header/
+        @word_lists_by_document_section[:header].concat(viewable_strings)
       end
     end
 

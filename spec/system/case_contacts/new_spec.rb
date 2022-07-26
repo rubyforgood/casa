@@ -110,11 +110,11 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "case-contact-duration-minutes-display", with: "45"
       fill_in "case_contact_miles_driven", with: "0"
 
-      long_notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."\
-        "Nullam id placerat eros. Fusce egestas sem facilisis interdum maximus."\
-        "Donec ullamcorper ligula et consectetur placerat. Duis vel purus molestie,"\
-        "euismod diam pretium, mattis nibh. Fusce eget leo ex. Donec vitae lacus eu"\
-        "magna tincidunt placerat. Mauris nibh nibh, venenatis sit amet libero in,"\
+      long_notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit." \
+        "Nullam id placerat eros. Fusce egestas sem facilisis interdum maximus." \
+        "Donec ullamcorper ligula et consectetur placerat. Duis vel purus molestie," \
+        "euismod diam pretium, mattis nibh. Fusce eget leo ex. Donec vitae lacus eu" \
+        "magna tincidunt placerat. Mauris nibh nibh, venenatis sit amet libero in," \
 
       fill_in "Notes", with: long_notes
       click_on "Submit"

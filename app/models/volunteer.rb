@@ -30,8 +30,8 @@ class Volunteer < User
   COURT_REPORT_SUBMISSION_REMINDER = 7.days
 
   scope :with_no_supervisor, lambda { |org|
-    joins("left join supervisor_volunteers "\
-          "on supervisor_volunteers.volunteer_id = users.id "\
+    joins("left join supervisor_volunteers " \
+          "on supervisor_volunteers.volunteer_id = users.id " \
           "and supervisor_volunteers.is_active")
       .active
       .in_organization(org)
@@ -47,8 +47,8 @@ class Volunteer < User
   }
 
   scope :with_no_assigned_cases, -> {
-                                   joins("left join case_assignments "\
-                                         "on case_assignments.volunteer_id = users.id "\
+                                   joins("left join case_assignments " \
+                                         "on case_assignments.volunteer_id = users.id " \
                                          "and case_assignments.active")
                                      .where("case_assignments.volunteer_id is NULL")
                                      .distinct

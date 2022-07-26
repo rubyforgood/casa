@@ -20,7 +20,7 @@ class CaseCourtReportsController < ApplicationController
       format.docx do
         @casa_case.latest_court_report.open do |file|
           # TODO test this .read being present, we've broken it twice now
-          send_data File.open(file.path).read, type: :docx, disposition: "attachment", status: :ok
+          send_data File.read(file.path), type: :docx, disposition: "attachment", status: :ok
         end
       end
     end

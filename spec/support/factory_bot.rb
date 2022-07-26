@@ -1,5 +1,5 @@
 def upload_file(file)
-  content = File.open(file).read
+  content = File.read(file)
   tempfile = Tempfile.open
   tempfile.write content
   tempfile.rewind
