@@ -32,10 +32,6 @@ class SupervisorVolunteersController < ApplicationController
   end
 
   def supervisor_volunteer_parent
-    if params[:supervisor_id]
-      Supervisor.find(params[:supervisor_id])
-    else
-      Supervisor.find(supervisor_volunteer_params[:supervisor_id])
-    end
+    Supervisor.find(params[:supervisor_id] || supervisor_volunteer_params[:supervisor_id])
   end
 end

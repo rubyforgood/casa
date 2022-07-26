@@ -14,7 +14,7 @@ RSpec.describe LearningHoursExportCsvService do
     let(:result) { described_class.new(LearningHour.all).perform }
 
     it "returns a csv as string with larning hours" do
-      expect(result).to eq("Volunteer Name,Learning Hours Title,Learning Hours Type,Duration,Date Of Learning\n"\
+      expect(result).to eq("Volunteer Name,Learning Hours Title,Learning Hours Type,Duration,Date Of Learning\n" \
         "#{user.display_name},#{learning_hour.name},#{learning_hour.learning_type},2:30,2022-06-20\n")
     end
   end

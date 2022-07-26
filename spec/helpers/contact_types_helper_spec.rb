@@ -33,7 +33,7 @@ RSpec.describe ContactTypesHelper, type: :helper do
 
     let!(:contact_2) do
       create(:case_contact, casa_case: casa_case, contact_types: [contact_type],
-             created_at: 1.day.ago)
+        created_at: 1.day.ago)
     end
 
     it "returns the last contact made of the given type" do

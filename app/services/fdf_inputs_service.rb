@@ -36,6 +36,6 @@ class FdfInputsService
   end
 
   def fdf_template
-    File.open(Rails.root.join(*FDF_ERB_TEMPLATE_PATH)).read
+    File.read(Rails.root.join(*FDF_ERB_TEMPLATE_PATH))
   end
 end
