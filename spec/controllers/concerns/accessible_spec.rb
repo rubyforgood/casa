@@ -16,15 +16,16 @@ RSpec.describe MockController, type: :controller do
   let(:admin) { create(:casa_admin) }
   let(:volunteer) { create(:volunteer) }
 
-  before do
-    routes.disable_clear_and_finalize = true
-    routes.draw do
-      get :action, to: "mock#action"
-      get :no_session_action, to: "mock#no_session_action"
-    end
-  end
-
   context "Authenticated user" do
+    before :each do
+      Rails.application.reload_routes!
+      Rails.application.routes.disable_clear_and_finalize = true
+      Rails.application.routes.draw do
+        get :action, to: "mock#action"
+        get :no_session_action, to: "mock#no_session_action"
+      end
+    end
+
     it "should redirect to authenticated casa admin root path" do
       allow(controller).to receive(:authenticate_user!).and_return(true)
       allow(controller).to receive(:current_all_casa_admin).and_return(admin)
