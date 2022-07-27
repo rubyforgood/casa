@@ -18,6 +18,14 @@ RSpec.describe ApplicationController, type: :controller do
     def handle_short_url(url_list)
       super
     end
+
+    def not_authorized_error
+      raise Pundit::NotAuthorizedError
+    end
+
+    def unknown_organization
+      raise Organizational::UnknownOrganization
+    end
   end
 
   before do
@@ -57,6 +65,54 @@ RSpec.describe ApplicationController, type: :controller do
       expect(output_hash.length).to eq(3)
       expect(@short_io_stub).to have_been_requested.times(3)
       expect(@short_io_error_stub).to have_been_requested.times(1)
+    end
+  end
+
+  describe "Raise error: " do
+    it "should redirect to root_url if rescued Pundit::NotAuthorizedError" do
+      routes.draw { get :not_authorized_error, to: "anonymous#not_authorized_error" }
+      get :not_authorized_error
+      expect(response).to redirect_to(root_url)
+    end
+
+    it "should redirect to root_url if rescued Organizational::UnknownOrganization" do
+      routes.draw { get :unknown_organization, to: "anonymous#unknown_organization" }
+      get :unknown_organization
+      expect(response).to redirect_to(root_url)
+    end
+  end
+
+  describe "After signin path" do
+    it "should be equal to initial path" do
+      routes.draw { get :index, to: "anonymous#index" }
+      get :index
+      path = controller.after_sign_in_path_for(volunteer)
+      expect(path).to eq("/index")
+    end
+  end
+
+  describe "After signout path" do
+    it "should be equal to new_all_casa_admin_session_path" do
+      path = controller.after_sign_out_path_for(:all_casa_admin)
+      expect(path).to eq(new_all_casa_admin_session_path)
+    end
+    it "should be equal to root_path" do
+      path = controller.after_sign_out_path_for(volunteer)
+      expect(path).to eq(root_path)
+    end
+  end
+
+  describe "sms acct creation notice" do
+    it "sms status is blank" do
+      expect(controller.send(:sms_acct_creation_notice, "admin", "blank")).to eq("New admin created successfully.")
+    end
+
+    it "sms status is error" do
+      expect(controller.send(:sms_acct_creation_notice, "admin", "error")).to eq("New admin created successfully. SMS not sent due to error.")
+    end
+
+    it "sms status is sent" do
+      expect(controller.send(:sms_acct_creation_notice, "admin", "sent")).to eq("New admin created successfully. SMS has been sent!")
     end
   end
 end
