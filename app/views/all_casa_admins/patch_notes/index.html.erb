@@ -3,6 +3,7 @@
 <h1>Patch notes</h1>
 
 <div id="patch_notes">
+  <% # Paginate this %>
   <% @patch_notes.each do |patch_note| %>
     <%= render "all_casa_admins/patch_notes/patch_note", patch_note: patch_note %>
     <p>
