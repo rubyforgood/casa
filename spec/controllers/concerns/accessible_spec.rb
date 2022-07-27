@@ -8,7 +8,7 @@ class MockController < ApplicationController
   end
 
   def no_session_action
-    render plain: "controller action test..."
+    render plain: "controller no session action test..."
   end
 end
 
