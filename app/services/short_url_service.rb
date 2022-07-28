@@ -21,6 +21,11 @@ class ShortUrlService
   # currently, only need short url from body
   # refer to docs: https://developers.short.io/docs/cre
   def create_short_url(original_url = nil)
+    if Rails.env.development?
+      response = {originalURL: original_url}.to_json
+      @short_url = JSON.parse(response)["originalURL"]
+      response
+    end
     params = {body: {originalURL: original_url, domain: @short_domain}.to_json, headers: {"Authorization" => @short_api_key}}
     response = self.class.post("/links", params)
     @short_url = JSON.parse(response.body)["shortURL"]
