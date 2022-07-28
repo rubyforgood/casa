@@ -1,8 +1,4 @@
 module SidebarHelper
-  def menu_item(label:, path:, visible: true)
-    link_to label, path, class: "list-group-item #{active_class(path)}" if visible
-  end
-
   def active_class(link_path)
     url_route_sections = link_path.split("/")
     url_route_sections.delete("all_casa_admins")
@@ -22,5 +18,9 @@ module SidebarHelper
     unread_count = current_user.notifications.unread.count
     return "Inbox" if unread_count == 0
     "Inbox <span class='badge badge-danger'>#{unread_count}</span>".html_safe
+  end
+
+  def menu_item(label:, path:, visible: true)
+    link_to label, path, class: "list-group-item #{active_class(path)}" if visible
   end
 end
