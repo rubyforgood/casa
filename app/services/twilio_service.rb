@@ -20,10 +20,15 @@ class TwilioService
     to = params[:To]
     # returns a twilio API message object
     # refer to docs: https://www.twilio.com/docs/sms/api/message-resource#message-properties
+
+    return sms_preview(from, body, to) if Rails.env.development?
     @client.messages.create(
       from: from,
       body: body,
       to: to
     )
+  end
+
+  def sms_preview(from, body, to)
   end
 end
