@@ -30,5 +30,7 @@ class TwilioService
   end
 
   def sms_preview(from, body, to)
+    tmp_dir = Dir.mktmpdir
+    file_path = File.join(tmp_dir, "#{SecureRandom.uuid}.html")
   end
 end
