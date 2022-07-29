@@ -152,10 +152,10 @@ class CaseContactsController < ApplicationController
       if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
         new_cc = casa_case.case_contacts.new(create_case_contact_params)
         update_or_create_additional_expense(additional_expense_params, new_cc)
-        if @case_contact.valid?
+        if new_cc.valid?
           new_cc.save!
         else
-          @case_contact.errors
+          new_cc.errors
         end
       else
         new_cc = casa_case.case_contacts.create(create_case_contact_params.except(:casa_case_attributes))
