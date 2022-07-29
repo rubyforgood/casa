@@ -20,9 +20,6 @@ RSpec.describe "reimbursements", type: :system do
   it "shows pagination", js: true do
     sign_in admin
 
-    contact1 = create(:case_contact, :wants_reimbursement)
-    contact2 = create(:case_contact, :wants_reimbursement)
-
     visit reimbursements_path
     expect(page).to have_content("Previous")
     expect(page).to have_content("Next")
