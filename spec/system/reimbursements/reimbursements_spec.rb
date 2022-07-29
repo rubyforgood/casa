@@ -16,4 +16,12 @@ RSpec.describe "reimbursements", type: :system do
     expect(page).to have_content(contact1.casa_case.case_number)
     expect(page).to have_content(contact2.miles_driven)
   end
+
+  it "shows pagination", js: true do
+    sign_in admin
+
+    visit reimbursements_path
+    expect(page).to have_content("Previous")
+    expect(page).to have_content("Next")
+  end
 end
