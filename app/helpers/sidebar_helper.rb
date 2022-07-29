@@ -1,13 +1,4 @@
 module SidebarHelper
-  def active_class(link_path)
-    url_route_sections = link_path.split("/")
-    url_route_sections.delete("all_casa_admins")
-    controller_name = url_route_sections.second
-    current_page?({controller: controller_name, action: action_name}) ? "active" : ""
-  rescue ActionController::UrlGenerationError
-    ""
-  end
-
   def cases_index_title
     return "My Cases" if current_user.volunteer?
 
@@ -22,5 +13,16 @@ module SidebarHelper
 
   def menu_item(label:, path:, visible: true)
     link_to label, path, class: "list-group-item #{active_class(path)}" if visible
+  end
+
+  private # private doesn't work in modules. It's here for semantic purposes
+
+  def active_class(link_path)
+    url_route_sections = link_path.split("/")
+    url_route_sections.delete("all_casa_admins")
+    controller_name = url_route_sections.second
+    current_page?({controller: controller_name, action: action_name}) ? "active" : ""
+  rescue ActionController::UrlGenerationError
+    ""
   end
 end
