@@ -45,6 +45,7 @@ gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
   gem "byebug", platforms: %i[mri mingw x64_mingw] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem "dotenv-rails"
   gem "erb_lint", require: false
   gem "factory_bot_rails"
   gem "pry"

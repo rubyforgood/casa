@@ -157,6 +157,10 @@ GEM
     docile (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
+    dotenv (2.8.1)
+    dotenv-rails (2.8.1)
+      dotenv (= 2.8.1)
+      railties (>= 3.2)
     draper (4.0.2)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
@@ -473,6 +477,7 @@ PLATFORMS
   arm64-darwin-20
   arm64-darwin-21
   x86_64-darwin-18
+  x86_64-darwin-19
   x86_64-darwin-20
   x86_64-darwin-21
   x86_64-linux
@@ -495,6 +500,7 @@ DEPENDENCIES
   delayed_job_active_record
   devise
   devise_invitable
+  dotenv-rails
   draper
   erb_lint
   factory_bot_rails
