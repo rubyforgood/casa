@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe AllCasaAdmins::DashboardController, type: :controller do
   describe "show" do
@@ -24,7 +24,7 @@ RSpec.describe AllCasaAdmins::DashboardController, type: :controller do
 
     it "renders the index template" do
       subject
-      expect(response).to render_template('show')
+      expect(response).to render_template("show")
     end
   end
 end
