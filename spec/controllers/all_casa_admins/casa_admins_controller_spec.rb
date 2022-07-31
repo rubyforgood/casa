@@ -14,6 +14,20 @@ RSpec.describe AllCasaAdmins::CasaAdminsController, type: :controller do
       get :new, params: { casa_org_id: casa_org.id }
       expect(response).to be_successful
     end
+
+    it "should authenticate the user" do
+      sign_out all_casa_admin
+      get :new, params: { casa_org_id: casa_org.id }
+      expect(response).to have_http_status(:redirect)
+    end
+
+    it "should only allow all casa admin users" do
+      sign_out all_casa_admin
+      other_admin = create(:casa_admin, email: "other_admin@example.com", display_name: "Other Admin")
+      sign_in other_admin
+      get :new, params: { casa_org_id: casa_org.id }
+      expect(response).to have_http_status(:redirect)
+    end
   end
 
   describe "POST create" do
@@ -52,6 +66,28 @@ RSpec.describe AllCasaAdmins::CasaAdminsController, type: :controller do
         casa_org_id: casa_org.id
       }
       expect(response).to be_successful
+    end
+
+    it "should authenticate the user" do
+      sign_out all_casa_admin
+      casa_admin = create(:casa_admin)
+      get :edit, params: {
+        id: casa_admin.id,
+        casa_org_id: casa_org.id
+      }
+      expect(response).to have_http_status(:redirect)
+    end
+
+    it "should only allow all casa admin users" do
+      sign_out all_casa_admin
+      other_admin = create(:casa_admin, email: "other_admin@example.com", display_name: "Other Admin")
+      sign_in other_admin
+      casa_admin = create(:casa_admin)
+      get :edit, params: {
+        id: casa_admin.id,
+        casa_org_id: casa_org.id
+      }
+      expect(response).to have_http_status(:redirect)
     end
   end
 
