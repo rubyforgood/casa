@@ -38,7 +38,7 @@ RSpec.describe AllCasaAdmins::CasaOrgsController, type: :controller do
 
   describe "#create" do
     let(:params) { {} }
-    subject { post :create, params: params }
+    subject { post :create, params: params, format: :html }
 
     before do
       allow(controller).to receive(:authenticate_all_casa_admin!).and_return(true)
@@ -54,12 +54,24 @@ RSpec.describe AllCasaAdmins::CasaOrgsController, type: :controller do
           }
         }
       end
+      context "with html format" do
+        it { expect { subject }.to change(CasaOrg, :count).by(1) }
+        it "redirects to the created casa_org" do
+          subject
+          expect(response).to redirect_to(all_casa_admins_casa_org_path(CasaOrg.last))
+          expect(flash[:notice]).to match(/CASA Organization was successfully created./)
+        end
+      end
 
-      it { expect { subject }.to change(CasaOrg, :count).by(1) }
-      it "redirects to the created casa_org" do
-        subject
-        expect(response).to redirect_to(all_casa_admins_casa_org_path(CasaOrg.last))
-        expect(flash[:notice]).to match(/CASA Organization was successfully created./)
+      context "with json format" do
+        subject { post :create, params: params, format: :json }
+
+        it "return new object in json" do
+          subject
+          expect(response.content_type).to eq "application/json; charset=utf-8"
+          expect(response).to be_successful
+          expect(response.body).to match CasaOrg.last.to_json
+        end
       end
     end
 
