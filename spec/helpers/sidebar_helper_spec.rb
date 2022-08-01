@@ -59,4 +59,14 @@ RSpec.describe SidebarHelper do
       expect(helper.cases_index_title).to eq "My Cases"
     end
   end
+
+  describe "#inbox_label" do
+    it "returns 'Inbox' when there are no unread notifications" do
+      volunteer = build :volunteer
+
+      allow(helper).to receive(:current_user).and_return(volunteer)
+
+      expect(helper.inbox_label).to eq "Inbox"
+    end
+  end
 end
