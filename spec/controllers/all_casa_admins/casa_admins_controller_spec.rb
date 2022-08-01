@@ -1,11 +1,10 @@
 require "rails_helper"
 
 RSpec.describe AllCasaAdmins::CasaAdminsController, type: :controller do
-  let(:all_casa_admin) { build(:all_casa_admin) }
+  let(:all_casa_admin) { create(:all_casa_admin) }
   let(:casa_org) { create(:casa_org) }
 
   before do
-    all_casa_admin.update_attribute(:id, 5)
     sign_in all_casa_admin
   end
 
