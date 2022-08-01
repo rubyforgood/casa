@@ -1,10 +1,9 @@
 channels/application_cable/channel.rb
 channels/application_cable/connection.rb
-controllers/all_casa_admins/casa_orgs_controller.rb
 controllers/all_casa_admins/dashboard_controller.rb
+controllers/all_casa_admins/patch_notes_controller.rb
 controllers/all_casa_admins/sessions_controller.rb
 controllers/all_casa_admins_controller.rb
-controllers/android_app_associations_controller.rb
 controllers/application_controller.rb
 controllers/casa_cases_controller.rb
 controllers/case_assignments_controller.rb
@@ -13,7 +12,6 @@ controllers/case_contacts/followups_controller.rb
 controllers/case_court_orders_controller.rb
 controllers/case_court_reports_controller.rb
 controllers/checklist_items_controller.rb
-controllers/concerns/accessible.rb
 controllers/contact_type_groups_controller.rb
 controllers/contact_types_controller.rb
 controllers/court_dates_controller.rb

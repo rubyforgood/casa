@@ -9,7 +9,7 @@ RSpec.describe PatchNotePolicy, type: :policy do
     pending "add some examples to (or delete) #{__FILE__}"
   end
 
-  permissions :show? do
+  permissions :index? do
     pending "add some examples to (or delete) #{__FILE__}"
   end
 

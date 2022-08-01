@@ -9,6 +9,7 @@ RSpec.describe Rack::Attack do
   let(:cache) { Rails.cache }
 
   before do
+    Rack::Attack.enabled = true
     ActionController::Base.perform_caching = true
     allow(Rails).to receive(:cache).and_return(memory_store)
     Rails.cache.clear
