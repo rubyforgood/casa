@@ -4,6 +4,11 @@ require "action_view"
 RSpec.describe "case_contacts/new", type: :system do
   include ActionView::Helpers::SanitizeHelper
 
+  before do
+    travel_to Date.new(2021, 6, 1)
+  end
+
+
   context "when admin" do
     it "does not display empty or hidden contact type groups; can create CaseContact", js: true do
       organization = build(:casa_org)
