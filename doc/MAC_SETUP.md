@@ -75,7 +75,7 @@ Many of the frontend tests are run using Google Chrome, so if you don't already 
 --------------------------
 from Gemfile 
 
-ruby "3.1.0"
+ruby "3.1.2"
 gem "rails", "~> 7.0.3"
 
 ----------------------
