@@ -38,6 +38,7 @@ RSpec.describe AllCasaAdminsController, type: :controller do
         }
       }.to change(AllCasaAdmin, :count).by(1)
       expect(response).to have_http_status(:redirect)
+      expect(flash[:notice]).to eq("New All CASA admin created successfully")
     end
 
     it "also responds as json", :aggregate_failures do
@@ -62,6 +63,50 @@ RSpec.describe AllCasaAdminsController, type: :controller do
 
     it "handles blank emails in json format", :aggregate_failures do
       post :create, format: :json, params: {
+        all_casa_admin: {
+          email: ""
+        }
+      }
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.content_type).to eq("application/json; charset=utf-8")
+      expect(response.body).to match("Email can't be blank".to_json)
+    end
+  end
+
+  describe "PATCH update" do
+    it "updates all_casa_admin users", :aggregate_failures do
+      patch :update, params: {
+        all_casa_admin: {
+          email: "updated_admin1@example.com"
+        }
+      }
+      expect(response).to have_http_status(:redirect)
+      expect(flash[:success]).to eq("Profile was successfully updated.")
+      expect(AllCasaAdmin.first.email).to eq "updated_admin1@example.com"
+    end
+
+    it "responds in json format", :aggregate_failures do
+      patch :update, format: :json, params: {
+        all_casa_admin: {
+          email: "updated_admin1@example.com"
+        }
+      }
+      expect(response).to have_http_status(:ok)
+      expect(response.content_type).to eq("application/json; charset=utf-8")
+      expect(response.body).to match("updated_admin1@example.com".to_json)
+    end
+
+    it "email can't be blank" do
+      patch :update, params: {
+        all_casa_admin: {
+          email: ""
+        }
+      }
+      expect(response).to render_template "all_casa_admins/edit"
+    end
+
+    it "handles blank emails in json format", :aggregate_failures do
+      patch :update, format: :json, params: {
         all_casa_admin: {
           email: ""
         }
