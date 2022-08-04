@@ -1,4 +1,4 @@
-<%= form.label :case_court_orders, t("global.court_orders") %>
+<%= form.label :case_court_orders, "Court Orders - Please check that you didn't enter any youth names" %>
 <div id="court-orders-list-container">
     <%= form.fields_for :case_court_orders do |ff| %>
     <div class="court-mandate-entry">
@@ -9,7 +9,7 @@
                     {include_blank: 'Set Implementation Status'},
                     {class: 'implementation-status'}
         %>
-        <button type="button" class="remove-mandate-button btn btn-danger"><%= t("button.delete") %></button>
+        <button type="button" class="remove-mandate-button btn btn-danger">Delete</button>
     </div>
     <% end %>
 </div>
@@ -17,5 +17,5 @@
     <button type="button" class="add-button" id="add-mandate-button">
     <i class="fa fa-plus" aria-hidden="true"></i>
     </button>
-    <strong><%= t("global.add_court_order") %></strong>
+    <strong>Add a court order</strong>
 </div>
