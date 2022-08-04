@@ -165,5 +165,29 @@ RSpec.describe AllCasaAdminsController, type: :controller do
       expect(response.content_type).to eq("application/json; charset=utf-8")
       expect(response.body).to match("Password confirmation doesn't match Password".to_json)
     end
+
+    it "calls UserMailer.password_changed_reminder" do
+      mailer = double(UserMailer, deliver: nil)
+      allow(UserMailer).to receive(:password_changed_reminder).with(all_casa_admin).and_return(mailer)
+      expect(mailer).to receive(:deliver)
+      patch :update_password, params: {
+        all_casa_admin: {
+          password: "updated_password",
+          password_confirmation: "updated_password"
+        }
+      }
+    end
+
+    it "doesn't call UserMailer.password_changed_reminder when password confirmation fails" do
+      mailer = double(UserMailer, deliver: nil)
+      allow(UserMailer).to receive(:password_changed_reminder).with(all_casa_admin).and_return(mailer)
+      expect(mailer).not_to receive(:deliver)
+      patch :update_password, params: {
+        all_casa_admin: {
+          password: "updated_password",
+          password_confirmation: "some_other_value"
+        }
+      }
+    end
   end
 end
