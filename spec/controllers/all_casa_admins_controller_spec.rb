@@ -116,4 +116,54 @@ RSpec.describe AllCasaAdminsController, type: :controller do
       expect(response.body).to match("Email can't be blank".to_json)
     end
   end
+
+  describe "PATCH update_password" do
+    it "updates the all_casa_admin password", :aggregate_failures do
+      patch :update_password, params: {
+        all_casa_admin: {
+          password: "updated_password",
+          password_confirmation: "updated_password"
+        }
+      }
+      expect(response).to have_http_status(:redirect)
+      expect(flash[:success]).to eq("Password was successfully updated.")
+      expect(AllCasaAdmin.first.valid_password?("updated_password")).to be true
+    end
+
+    it "responds in json format", :aggregate_failures do
+      patch :update_password, format: :json, params: {
+        all_casa_admin: {
+          password: "updated_password",
+          password_confirmation: "updated_password"
+        }
+      }
+      expect(response).to have_http_status(:ok)
+      expect(response.content_type).to eq("application/json; charset=utf-8")
+      expect(response.body).to match("Password was successfully updated.")
+    end
+
+    it "handles invalid password confirmation", :aggregate_failures do
+      patch :update_password, params: {
+        all_casa_admin: {
+          password: "updated_password",
+          password_confirmation: "some_other_value"
+        }
+      }
+      expect(response).to have_http_status(:ok)
+      expect(response).to render_template "all_casa_admins/edit"
+      expect(AllCasaAdmin.first.valid_password?("updated_password")).to be false
+    end
+
+    it "handles invalid password confirmation in json format", :aggregate_failures do
+      patch :update_password, format: :json, params: {
+        all_casa_admin: {
+          password: "updated_password",
+          password_confirmation: "some_other_value"
+        }
+      }
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.content_type).to eq("application/json; charset=utf-8")
+      expect(response.body).to match("Password confirmation doesn't match Password".to_json)
+    end
+  end
 end
