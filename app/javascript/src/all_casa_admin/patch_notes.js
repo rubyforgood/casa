@@ -9,7 +9,7 @@ $('document').ready(() => {
   const newPatchNoteElement = $('#new-patch-note')
 
   newPatchNoteElement.children('button').click(() => {
-    console.log(`Patch Note: ${ newPatchNoteElement.children('textarea').val() }`)
+    console.log(`Patch Note: ${newPatchNoteElement.children('textarea').val()}`)
   })
 
   console.log(newPatchNoteElement)
