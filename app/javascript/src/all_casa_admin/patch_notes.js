@@ -10,9 +10,9 @@ $('document').ready(() => {
 
   newPatchNoteElement.children('button').click(() => {
     console.log(`Patch Note: ${newPatchNoteElement.children('textarea').val()}`)
+    console.log(`Patch Note Group ID: ${$('#new-patch-note-group').val()}`)
+    console.log(`Patch Note Type ID: ${$('#new-patch-note-type').val()}`)
   })
-
-  console.log(newPatchNoteElement)
 
   patchNotePage.notifier.notify('test', 'info')
 })
