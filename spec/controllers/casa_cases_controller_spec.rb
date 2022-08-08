@@ -2,11 +2,9 @@ require "rails_helper"
 
 RSpec.describe CasaCasesController, type: :controller do
 
-
 	let(:organization) { create(:casa_org) }
 	let(:admin) { create(:casa_admin) }
 	let!(:casa_case) { create(:casa_case, casa_org: organization) }
-
 
   context 'when logged in as an admin user' do
 
