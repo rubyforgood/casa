@@ -24,7 +24,7 @@ class ShortUrlService
     if Rails.env.development?
       response = {originalURL: original_url}.to_json
       @short_url = JSON.parse(response)["originalURL"]
-      response
+      return response
     end
     params = {body: {originalURL: original_url, domain: @short_domain}.to_json, headers: {"Authorization" => @short_api_key}}
     response = self.class.post("/links", params)

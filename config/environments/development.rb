@@ -1,4 +1,12 @@
 require "active_support/core_ext/integer/time"
+require "webmock"
+
+class AllowWebMock
+  include WebMock::API
+end
+
+WebMock.enable!
+WebMock.disable_net_connect!(allow_localhost: true)
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.

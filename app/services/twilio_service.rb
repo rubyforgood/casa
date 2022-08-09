@@ -32,5 +32,18 @@ class TwilioService
   def sms_preview(from, body, to)
     tmp_dir = Dir.mktmpdir
     file_path = File.join(tmp_dir, "#{SecureRandom.uuid}.html")
+    File.open(file_path, "w") do |file|
+      template = ERB.new(<<-TEMPLATE)
+      <html>
+      <head><title>SMS Preview</title></head>
+      <body>
+      <center><h1>SMS Preview</h1></center>
+      <p>#{body}</p>
+      </body>
+      </html>
+      TEMPLATE
+      file.write(template.result(binding))
+    end
+    Launchy.open(file_path)
   end
 end
