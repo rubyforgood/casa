@@ -6,5 +6,15 @@ RSpec.describe "layout/footer", type: :view do
       render partial: "layouts/footers/not_logged_in"
       expect(rendered).to have_link("Report a site issue", href: "https://rubyforgood.typeform.com/to/iXY4BubB")
     end
+
+    it "renders SMS terms and conditions link on the footer" do
+      render partial: "layouts/footers/not_logged_in"
+      expect(rendered).to have_link("SMS Terms & Conditions", href: "/sms-terms-conditions.html")
+    end
+
+    it "renders Ruby For Good link on the footer" do
+      render partial: "layouts/footers/not_logged_in"
+      expect(rendered).to have_link("Ruby For Good", href: "https://rubyforgood.org/")
+    end
   end
 end
