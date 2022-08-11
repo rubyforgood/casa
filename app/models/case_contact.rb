@@ -102,7 +102,7 @@ class CaseContact < ApplicationRecord
     when /^occurred_at/
       order(occurred_at: direction)
     when /^contact_type/
-      joins(:contact_types).order(name: direction)
+      joins(:contact_types).merge(ContactType.order(name: direction))
     when /^medium_type/
       order(medium_type: direction)
     when /^want_driving_reimbursement/
