@@ -25,6 +25,45 @@ RSpec.describe CaseContactsController, type: :controller do
     allow(controller).to receive(:current_user).and_return(volunteer)
   end
 
+  describe "GET index" do
+    let!(:past_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 3.weeks.ago) }
+    let!(:recent_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 3.days.ago) }
+
+    it "returns all case contacts" do
+      get :index
+
+      expect(assigns(:presenter).case_contacts.fetch(case_id)).to include(past_contact, recent_contact)
+    end
+
+    context "with filters applied" do
+      it "returns filtered case contacts by date" do
+        get :index, params: {
+          filterrific: {
+            occurred_starting_at: 4.weeks.ago,
+            occurred_ending_at: 1.week.ago
+          }
+        }
+
+        case_contacts = assigns(:presenter).case_contacts.fetch(case_id)
+        expect(case_contacts).to include(past_contact)
+        expect(case_contacts).not_to include(recent_contact)
+      end
+
+      it "returns filtered case contacts by contact type" do
+        get :index, params: {
+          filterrific: {
+            contact_type: recent_contact.contact_types.pluck(:id),
+            sorted_by: "contact_type_asc"
+          }
+        }
+
+        case_contacts = assigns(:presenter).case_contacts.fetch(case_id)
+        expect(case_contacts).to include(recent_contact)
+        expect(case_contacts).not_to include(past_contact)
+      end
+    end
+  end
+
   describe "GET new" do
     context "when the case has specific contact types assigned" do
       before do
