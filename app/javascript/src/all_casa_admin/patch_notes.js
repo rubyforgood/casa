@@ -55,6 +55,7 @@ $('document').ready(() => {
     console.log(`Patch Note Type ID: ${newPatchNoteTypeDropdown.val()}`)
 
     disableNewPatchNoteForm()
+    patchNotePage.notifier.startAsyncOperation()
   })
 
   patchNotePage.notifier.notify('test', 'info')
