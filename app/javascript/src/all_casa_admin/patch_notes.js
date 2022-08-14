@@ -58,5 +58,5 @@ $('document').ready(() => {
     patchNotePage.notifier.startAsyncOperation()
   })
 
-  patchNotePage.notifier.notify('test', 'info')
+  patchNotePage.notifier.notify('test', 'warn')
 })
