@@ -47,7 +47,7 @@
         <div class="">
         <div class="">
           <%= link_to("Delete", case_contact_path(contact.id), method: :delete,
-                class: "btn btn-danger") if policy(current_user).destroy? && !contact.deleted? %>
+                class: "btn btn-danger") if policy(contact).destroy? && !contact.deleted? %>
         </div>
       </div>
       </div>

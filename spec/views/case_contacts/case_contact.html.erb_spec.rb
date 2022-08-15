@@ -89,12 +89,12 @@ RSpec.describe "case_contacts/case_contact", type: :view do
         allow(view).to receive(:current_user).and_return(supervisor)
       end
 
-      it "should not show delete button" do
+      it "shows delete button" do
         assign :case_contact, case_contact
         assign :casa_cases, [case_contact.casa_case]
 
         render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
-        expect(rendered).not_to have_link("Delete", href: "/case_contacts/#{case_contact.id}")
+        expect(rendered).to have_link("Delete", href: "/case_contacts/#{case_contact.id}")
       end
 
       it "should not show undelete button" do
