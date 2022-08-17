@@ -35,6 +35,8 @@
             <%= menu_item(label: t(".menu_item.emancipation_checklists"), path: emancipation_checklists_path) %>
           <% end %>
           <%= menu_item(label: t(".menu_item.admins"), path: casa_admins_path, visible: policy(CasaAdmin).index?) %>
+        <% elsif all_casa_admin_signed_in? %>
+          <%= menu_item(label: "Patch Notes", path: all_casa_admins_patch_notes_path) %>
         <% end %>
       </div>
     </div>

@@ -15,6 +15,7 @@ module.exports = class Notifier {
   //  @param  {string} level One of the following logging levels
   //    "error"  Shows a red notification
   //    "info"   Shows a green notification
+  //    "warn"   Shows an orange notification
   //  @throws {TypeError}  for a parameter of the incorrect type
   //  @throws {RangeError} for unsupported logging levels
 
@@ -47,6 +48,17 @@ module.exports = class Notifier {
             <button class="btn btn-success btn-sm">×</button>
           </div>`)
           .find('.async-success-indicator button').click(function () {
+            $(this).parent().remove()
+          })
+
+        break
+      case 'warn':
+        this.notificationsElement.append(`
+          <div class="async-warn-indicator">
+            ${escapedMessage}
+            <button class="btn btn-warning btn-sm">×</button>
+          </div>`)
+          .find('.async-warn-indicator button').click(function () {
             $(this).parent().remove()
           })
 

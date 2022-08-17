@@ -54,11 +54,4 @@ class: "btn btn-primary" %>
   </div>
 </div>
 
-<div id="async-notifications">
-  <div id="async-waiting-indicator" style="display: none">
-    Saving <i class="load-spinner"></i>
-  </div>
-  <div id="async-success-indicator" class="async-success-indicator" style="display: none">
-    Saved
-  </div>
-</div>
+<%= render "shared/async_notifier" %>
