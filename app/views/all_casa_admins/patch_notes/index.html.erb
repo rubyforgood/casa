@@ -10,7 +10,7 @@
         <div class="label-and-select">
           <label for="new-patch-note-type">Patch Note Type:</label>
           <select id="new-patch-note-type">
-            <% @patch_note_types.each do |patch_note_type| %>
+            <% @patch_note_types&.each do |patch_note_type| %>
               <option value="<%= patch_note_type.id %>"><%= patch_note_type.name %></option>
             <% end %>
           </select>
@@ -18,7 +18,7 @@
         <div class="label-and-select">
           <label for="new-patch-note-group">User Group:</label>
           <select id="new-patch-note-group">
-            <% @patch_note_groups.each do |patch_note_group| %>
+            <% @patch_note_groups&.each do |patch_note_group| %>
               <option value="<%= patch_note_group.id %>"><%= patch_note_group.value %></option>
             <% end %>
           </select>
@@ -28,7 +28,7 @@
     </div>
   </div>
   <% # Paginate this %>
-  <% @patch_notes.each do |patch_note| %>
+  <% @patch_notes&.each do |patch_note| %>
     <%= render "all_casa_admins/patch_notes/patch_note", patch_note: patch_note %>
     <p>
     </p>
