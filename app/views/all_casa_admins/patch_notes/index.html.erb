@@ -1,11 +1,38 @@
 <p style="color: green"><%= notice %></p>
 
-<h1>Patch notes</h1>
+<h1>Patch Notes</h1>
 
-<div id="patch_notes">
-  <% @patch_notes.each do |patch_note| %>
+<div id="patch-notes">
+  <div id="patch-note-list">
+    <div class="patch-note-list-item card">
+      <div id="new-patch-note" class="card-body">
+        <textarea placeholder="New Patch Note"></textarea>
+        <div class="label-and-select">
+          <label for="new-patch-note-type">Patch Note Type:</label>
+          <select id="new-patch-note-type">
+            <% @patch_note_types&.each do |patch_note_type| %>
+              <option value="<%= patch_note_type.id %>"><%= patch_note_type.name %></option>
+            <% end %>
+          </select>
+        </div>
+        <div class="label-and-select">
+          <label for="new-patch-note-group">User Group:</label>
+          <select id="new-patch-note-group">
+            <% @patch_note_groups&.each do |patch_note_group| %>
+              <option value="<%= patch_note_group.id %>"><%= patch_note_group.value %></option>
+            <% end %>
+          </select>
+        </div>
+        <button type="button" class="btn btn-primary">Create</button>
+      </div>
+    </div>
+  </div>
+  <% # Paginate this %>
+  <% @patch_notes&.each do |patch_note| %>
     <%= render "all_casa_admins/patch_notes/patch_note", patch_note: patch_note %>
     <p>
     </p>
   <% end %>
 </div>
+
+<%= render "shared/async_notifier" %>

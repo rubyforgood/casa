@@ -30,7 +30,7 @@ You will need the following local tools installed:
 
 Install a ruby version manager like [rbenv](https://github.com/rbenv/rbenv#installation)
 
-  **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 3.1.0.** 
+  **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 3.1.2.** 
 
 Instructions for rbenv:
 
@@ -50,13 +50,13 @@ Instructions for rbenv:
 
 5.  **[Install Ruby](https://github.com/rbenv/rbenv#installing-ruby-versions)**
 
-      **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 3.1.0.** 
+      **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 3.1.2.** 
 
-      `rbenv install 3.1.0`
+      `rbenv install 3.1.2`
 
 6. **Set a Ruby version to finish installation and start**
 
-    `rbenv global 3.1.0` OR `rbenv local 3.1.0`
+    `rbenv global 3.1.2` OR `rbenv local 3.1.2`
 
 
 ### NodeJS

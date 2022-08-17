@@ -20,6 +20,7 @@ RSpec.describe LearningHoursReport, type: :model do
       it "includes all learning hours" do
         expect(result.length).to eq(learning_hours.length + 1)
         learning_hours.each_with_index do |learning_hour, index|
+          wait_for_csv_parse(learning_hour, result[index + 1], %i[name learning_type])
           expect(result[index + 1]).to eq([
             learning_hour.user.display_name,
             learning_hour.name,

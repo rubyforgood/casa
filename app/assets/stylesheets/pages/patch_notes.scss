@@ -1,0 +1,31 @@
+#patch-notes {
+  display: flex;
+
+  #patch-note-list {
+    width: 50%;
+
+    .patch-note-list-item {
+      textarea {
+        width: 100%;
+      }
+
+      .label-and-select {
+        display: flex;
+
+        label {
+          padding-right: 0.5rem;
+        }
+
+        select {
+         flex-grow: 1
+        }
+      }
+
+      #new-patch-note {
+        button {
+          width: 100%;
+        }
+      }
+    };
+  };
+}
