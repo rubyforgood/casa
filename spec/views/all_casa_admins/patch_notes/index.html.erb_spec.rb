@@ -18,4 +18,14 @@ RSpec.describe "patch_notes/index", type: :view do
   it "renders a list of patch_notes" do
     render template: "all_casa_admins/patch_notes/index"
   end
+
+  describe "the new patch note form" do
+    it "is present on the page" do
+      render template: "all_casa_admins/patch_notes/index"
+
+      parsed_html = Nokogiri.HTML5(rendered)
+
+      expect(parsed_html.css("#new-patch-note").length).to eq(1)
+    end
+  end
 end
