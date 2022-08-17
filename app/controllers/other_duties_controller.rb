@@ -21,7 +21,7 @@ class OtherDutiesController < ApplicationController
 
   def index
     @volunteer_duties = if current_user.casa_admin?
-      generate_other_duty_list(Volunteer.all)
+      generate_other_duty_list(Volunteer.where(casa_org_id: current_user.casa_org_id))
     elsif current_user.supervisor?
       generate_other_duty_list(current_user.volunteers)
     else
