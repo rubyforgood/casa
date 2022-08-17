@@ -56,6 +56,55 @@ function removeMandateAction (order) {
   })
 }
 
+function copyOrdersFromCaseWithConfirmation () {
+  const id = $(this).next().val()
+  const caseNumber = $('select.siblings-casa-cases').find(':selected').text()
+  const text = `Are you sure you want to copy all orders from case #${caseNumber}?`
+  Swal.fire({
+    icon: 'warning',
+    title: `Copy all orders from case #${caseNumber}?`,
+    text,
+    showCloseButton: true,
+    showCancelButton: true,
+    focusConfirm: false,
+
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#39c',
+
+    confirmButtonText: 'Copy',
+    cancelButtonText: 'Cancel'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      copyOrdersFromCaseAction(id, caseNumber)
+    }
+  })
+}
+
+function copyOrdersFromCaseAction (id, caseNumber) {
+  $.ajax({
+    url: `/casa_cases/${id}/copy_court_orders`,
+    method: 'patch',
+    data: {
+      case_number_cp: caseNumber
+    },
+    success: () => {
+      Swal.fire({
+        icon: 'success',
+        text: 'Court orders have been copied.',
+        showCloseButton: true,
+        timer: 2000
+      }).then(() => window.location.reload(true))
+    },
+    error: () => {
+      Swal.fire({
+        icon: 'error',
+        text: 'Something went wrong when attempting to copy court orders.',
+        showCloseButton: true
+      })
+    }
+  })
+}
+
 function showBtn (el) {
   el.classList.remove('d-none')
 }
@@ -123,6 +172,20 @@ function handleGenerateReport (e) {
 
 $('document').ready(() => {
   const courtOrdersListContainer = $('#court-orders-list-container')
+
+  $('button.copy-court-button').on('click', copyOrdersFromCaseWithConfirmation)
+
+  if ($('button.copy-court-button').length) {
+    disableBtn($('button.copy-court-button')[0])
+  }
+
+  $('select.siblings-casa-cases').on('change', () => {
+    if ($('select.siblings-casa-cases').find(':selected').text()) {
+      enableBtn($('button.copy-court-button')[0])
+    } else {
+      disableBtn($('button.copy-court-button')[0])
+    }
+  })
 
   if (courtOrdersListContainer.length) {
     courtOrders = new CourtOrderList(courtOrdersListContainer)
