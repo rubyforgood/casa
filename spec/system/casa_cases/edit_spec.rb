@@ -161,7 +161,6 @@ RSpec.describe "Edit CASA Case", type: :system do
         expect(selected_case.case_court_orders.count).to be > 0
       end
     end
-    
   end
 
   context "logged in as supervisor" do
