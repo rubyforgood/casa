@@ -77,13 +77,13 @@ RSpec.describe "/other_duties", type: :request do
     end
   end
 
-  context 'logged as admin' do
-    describe 'GET /INDEX' do
-      context 'when admin is on the same org as volunteer' do
+  context "logged as admin" do
+    describe "GET /INDEX" do
+      context "when admin is on the same org as volunteer" do
         let(:volunteer) { create(:volunteer) }
         let!(:other_duty) { create(:other_duty, creator: volunteer) }
         let(:org_admin) { create(:casa_admin, casa_org_id: volunteer.casa_org_id) }
-        
+
         before { sign_in org_admin }
         it "other's duties" do
           get other_duties_path
@@ -92,7 +92,7 @@ RSpec.describe "/other_duties", type: :request do
         end
       end
 
-      context 'when admin is on a different org than the volunteer' do
+      context "when admin is on a different org than the volunteer" do
         let(:volunteer) { create(:volunteer) }
         let(:casa_org) { create(:casa_org) }
         let(:another_volunteer) { create(:volunteer, casa_org_id: casa_org.id) }
