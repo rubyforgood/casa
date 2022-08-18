@@ -34,7 +34,7 @@ class User < ApplicationRecord
   has_many :user_sms_notification_events
   has_many :sms_notification_events, through: :user_sms_notification_events
   has_many :notes, as: :notable
-  has_one :address
+  has_one :address, :dependent => :destroy
 
   accepts_nested_attributes_for :user_sms_notification_events, :address, allow_destroy: true
 

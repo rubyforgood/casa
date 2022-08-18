@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "/users", type: :request do
+  let(:address) { create(:address) }
+
   before {
     sms_notification_event = SmsNotificationEvent.new(name: "test", user_type: Volunteer)
     sms_notification_event.save
@@ -33,8 +35,9 @@ RSpec.describe "/users", type: :request do
       volunteer = build(:volunteer)
       sign_in volunteer
 
-      patch users_path, params: {user: {display_name: "New Name", phone_number: "+12223334444", sms_notification_event_ids: [SmsNotificationEvent.first.id]}}
+      patch users_path, params: {user: {display_name: "New Name", address_attributes: {content: "some address"}, phone_number: "+12223334444", sms_notification_event_ids: [SmsNotificationEvent.first.id]}}
 
+      expect(volunteer.address.content).to eq "some address"
       expect(volunteer.display_name).to eq "New Name"
       expect(volunteer.phone_number).to eq "+12223334444"
       expect(volunteer.sms_notification_event_ids).to include SmsNotificationEvent.first.id
