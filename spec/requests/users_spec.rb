@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "/users", type: :request do
-  let(:address) { create(:address) }
 
   before {
     sms_notification_event = SmsNotificationEvent.new(name: "test", user_type: Volunteer)
