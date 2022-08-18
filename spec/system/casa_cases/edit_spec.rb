@@ -8,6 +8,10 @@ RSpec.describe "Edit CASA Case", type: :system do
     let(:casa_case) { create(:casa_case, :with_one_court_order, casa_org: organization) }
     let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
     let!(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
+    let!(:siblings_casa_cases) do
+      create(:casa_case, :with_one_court_order, casa_org: organization)
+      organization.casa_cases.excluding(casa_case)
+    end
 
     before { sign_in admin }
 
@@ -80,6 +84,84 @@ RSpec.describe "Edit CASA Case", type: :system do
         expect(page).to have_css("#volunteer-assignment")
       end
     end
+
+    context "Copy all court orders from a case" do
+      it "copy button should be disabled when no case is selected", js: true do
+        visit edit_casa_case_path(casa_case)
+        expect(page).to have_button("copy-court-button", disabled: true)
+      end
+
+      it "copy button should be enabled when a case is selected", js: true do
+        visit edit_casa_case_path(casa_case)
+        select siblings_casa_cases.first.case_number, from: "casa_case_siblings_casa_cases"
+        expect(page).to have_button("copy-court-button", disabled: false)
+      end
+
+      it "should contains all case from organization except current case", js: true do
+        visit edit_casa_case_path(casa_case)
+        within "#casa_case_siblings_casa_cases" do
+          siblings_casa_cases.each do |scc|
+            expect(page).to have_selector("option", text: scc.case_number)
+          end
+          expect(page).not_to have_selector("option", text: casa_case.case_number)
+        end
+      end
+
+      it "should copy all court orders from selected case", js: true do
+        visit casa_case_path(casa_case.id)
+        click_on "Edit Case Details"
+        selected_case = siblings_casa_cases.first
+        select selected_case.case_number, from: "casa_case_siblings_casa_cases"
+        click_on "Copy"
+        within ".swal2-popup" do
+          expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+          click_on "Copy"
+        end
+        expect(page).to have_text("Court orders have been copied")
+        casa_case.reload
+        court_orders_text = casa_case.case_court_orders.map(&:text)
+        court_orders_status = casa_case.case_court_orders.map(&:implementation_status)
+        selected_case.case_court_orders.each do |orders|
+          expect(court_orders_text).to include orders.text
+          expect(court_orders_status).to include orders.implementation_status
+        end
+      end
+
+      it "should not overwrite existing court orders", js: true do
+        visit casa_case_path(casa_case.id)
+        click_on "Edit Case Details"
+        selected_case = siblings_casa_cases.first
+        current_orders = casa_case.case_court_orders.each(&:dup)
+        select selected_case.case_number, from: "casa_case_siblings_casa_cases"
+        click_on "Copy"
+        within ".swal2-popup" do
+          expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+          click_on "Copy"
+        end
+        expect(page).to have_text("Court orders have been copied")
+        casa_case.reload
+        current_orders.each do |orders|
+          expect(casa_case.case_court_orders.map(&:text)).to include orders.text
+        end
+        expect(casa_case.case_court_orders.count).to be >= current_orders.count
+      end
+
+      it "should not move court orders from one case to another", js: true do
+        visit casa_case_path(casa_case.id)
+        click_on "Edit Case Details"
+        selected_case = siblings_casa_cases.first
+        select selected_case.case_number, from: "casa_case_siblings_casa_cases"
+        click_on "Copy"
+        within ".swal2-popup" do
+          expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+          click_on "Copy"
+        end
+        expect(page).to have_text("Court orders have been copied")
+        casa_case.reload
+        expect(selected_case.case_court_orders.count).to be > 0
+      end
+    end
+    
   end
 
   context "logged in as supervisor" do
@@ -388,6 +470,13 @@ of it unless it was included in a previous court report.")
       end
     end
 
+    let!(:siblings_casa_cases) do
+      organization = volunteer.casa_org
+      casa_case2 = create(:casa_case, :with_one_court_order, casa_org: organization)
+      create(:case_assignment, volunteer: volunteer, casa_case: casa_case2)
+      organization.casa_cases.excluding(casa_case)
+    end
+
     before { sign_in volunteer }
 
     it_behaves_like "shows court dates links"
@@ -432,6 +521,92 @@ of it unless it was included in a previous court report.")
 
       visit casa_case_path(casa_case)
       expect(page).to have_text("Court Report Status: Submitted")
+    end
+
+    context "Copy all court orders from a case" do
+      it "copy button should be disabled when no case is selected", js: true do
+        visit edit_casa_case_path(casa_case)
+        expect(page).to have_button("copy-court-button", disabled: true)
+      end
+
+      it "copy button should be enabled when a case is selected", js: true do
+        visit edit_casa_case_path(casa_case)
+        select siblings_casa_cases.first.case_number, from: "casa_case_siblings_casa_cases"
+        expect(page).to have_button("copy-court-button", disabled: false)
+      end
+
+      it "copy button and select shouldn't be visible when a volunteer only has one case", js: true do
+        volunteer = build(:volunteer)
+        casa_case = create(:casa_case, :with_one_court_order, casa_org: volunteer.casa_org)
+        create(:case_assignment, volunteer: volunteer, casa_case: casa_case)
+        visit edit_casa_case_path(casa_case)
+        expect(page).not_to have_button("copy-court-button")
+        expect(page).not_to have_selector("casa_case_siblings_casa_cases")
+      end
+
+      it "should contains all cases associated to current volunteer except current case", js: true do
+        visit edit_casa_case_path(casa_case)
+        within "#casa_case_siblings_casa_cases" do
+          siblings_casa_cases.each do |scc|
+            expect(page).to have_selector("option", text: scc.case_number)
+          end
+          expect(page).not_to have_selector("option", text: casa_case.case_number)
+        end
+      end
+
+      it "should copy all court orders from selected case", js: true do
+        visit casa_case_path(casa_case.id)
+        click_on "Edit Case Details"
+        selected_case = siblings_casa_cases.first
+        select selected_case.case_number, from: "casa_case_siblings_casa_cases"
+        click_on "Copy"
+        within ".swal2-popup" do
+          expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+          click_on "Copy"
+        end
+        expect(page).to have_text("Court orders have been copied")
+        casa_case.reload
+        court_orders_text = casa_case.case_court_orders.map(&:text)
+        court_orders_status = casa_case.case_court_orders.map(&:implementation_status)
+        selected_case.case_court_orders.each do |orders|
+          expect(court_orders_text).to include orders.text
+          expect(court_orders_status).to include orders.implementation_status
+        end
+      end
+
+      it "should not overwrite existing court orders", js: true do
+        visit casa_case_path(casa_case.id)
+        click_on "Edit Case Details"
+        selected_case = siblings_casa_cases.first
+        current_orders = casa_case.case_court_orders.each(&:dup)
+        select selected_case.case_number, from: "casa_case_siblings_casa_cases"
+        click_on "Copy"
+        within ".swal2-popup" do
+          expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+          click_on "Copy"
+        end
+        expect(page).to have_text("Court orders have been copied")
+        casa_case.reload
+        current_orders.each do |orders|
+          expect(casa_case.case_court_orders.map(&:text)).to include orders.text
+        end
+        expect(casa_case.case_court_orders.count).to be >= current_orders.count
+      end
+
+      it "should not move court orders from one case to another", js: true do
+        visit casa_case_path(casa_case.id)
+        click_on "Edit Case Details"
+        selected_case = siblings_casa_cases.first
+        select selected_case.case_number, from: "casa_case_siblings_casa_cases"
+        click_on "Copy"
+        within ".swal2-popup" do
+          expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+          click_on "Copy"
+        end
+        expect(page).to have_text("Court orders have been copied")
+        casa_case.reload
+        expect(selected_case.case_court_orders.count).to be > 0
+      end
     end
   end
 end
