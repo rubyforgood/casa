@@ -4,6 +4,8 @@
 class User < ApplicationRecord
   include Roles
   include ByOrganizationScope
+  include DateHelper
+
 
   validates_with UserValidator
 
@@ -131,10 +133,9 @@ class User < ApplicationRecord
   end
 
   def serving_transition_aged_youth?
-    actively_assigned_and_active_cases.where(transition_aged_youth: true).any?
+    actively_assigned_and_active_cases.where("birth_month_year_youth <= ?", 14.years.ago).any?
   end
 end
-
 # == Schema Information
 #
 # Table name: users

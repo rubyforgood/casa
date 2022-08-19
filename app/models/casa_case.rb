@@ -12,6 +12,7 @@ class CasaCase < ApplicationRecord
     judge_name
     status
     transition_aged_youth
+    birth_month_year_youth
     assigned_to
     actions
   ].freeze
@@ -70,8 +71,7 @@ class CasaCase < ApplicationRecord
       .order(:case_number)
   }
   scope :should_transition, -> {
-    where(transition_aged_youth: false)
-      .where("birth_month_year_youth <= ?", 14.years.ago)
+    where("birth_month_year_youth <= ?", 14.years.ago)
   }
 
   scope :birthday_next_month, -> {
@@ -152,7 +152,7 @@ class CasaCase < ApplicationRecord
   end
 
   def has_transitioned?
-    transition_aged_youth
+    birth_month_year_youth && birth_month_year_youth < 14.years.ago  
   end
 
   def remove_emancipation_category(category_id)
