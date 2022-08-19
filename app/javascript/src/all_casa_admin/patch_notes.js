@@ -48,6 +48,11 @@ $('document').ready(() => {
   }
 
   newPatchNoteFormElements.submitButton.click(() => {
+    if (!(newPatchNoteFormElements.noteTextArea.val())) {
+      patchNotePage.notifier.notify('Cannot save an empty patch note', 'warn')
+      return
+    }
+
     console.log(`Patch Note: ${newPatchNoteFormElements.noteTextArea.val()}`)
     console.log(`Patch Note Group ID: ${newPatchNoteFormElements.dropdownGroup.val()}`)
     console.log(`Patch Note Type ID: ${newPatchNoteFormElements.dropdownType.val()}`)
@@ -55,6 +60,4 @@ $('document').ready(() => {
     disableNewPatchNoteForm()
     patchNotePage.notifier.startAsyncOperation()
   })
-
-  patchNotePage.notifier.notify('test', 'warn')
 })
