@@ -98,7 +98,7 @@ RSpec.describe "/other_duties", type: :request do
         let(:another_volunteer) { create(:volunteer, casa_org_id: casa_org.id) }
         let!(:other_duty) { create(:other_duty, creator: volunteer) }
         let(:org_admin) { create(:casa_admin, casa_org_id: another_volunteer.casa_org_id) }
-        
+
         before { sign_in org_admin }
         it "other's duties" do
           get other_duties_path
