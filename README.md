@@ -124,7 +124,7 @@ Another option is to install the Chromium browser for your operating system so t
 ### Platform Specific Installation Instructions
  - [Docker](doc/DOCKER.md)
  - [Linux](doc/LINUX_SETUP.md)
- - [Mac(Help Wanted)](doc/MAC_SETUP.md)
+ - [Mac](doc/MAC_SETUP.md)
  - Windows(Help Wanted)
  - [Windows Subsystem for Linux(WSL)](https://github.com/rubyforgood/casa/blob/main/doc/WSL_SETUP.md)
 
