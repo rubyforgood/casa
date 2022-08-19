@@ -39,20 +39,18 @@ $('document').ready(() => {
   const asyncNotificationsElement = $('#async-notifications')
   patchNotePage.notifier = new Notifier(asyncNotificationsElement)
 
-  const newPatchNoteElement = $('#new-patch-note')
-  const newPatchNoteGroupDropdown = $('#new-patch-note-group')
-  const newPatchNoteTypeDropdown = $('#new-patch-note-type')
+  const newPatchNoteFormElements = getPatchNoteFormInputs('new-patch-note')
 
   const disableNewPatchNoteForm = () => {
-    for (const formElement of Object.values(getPatchNoteFormInputs('new-patch-note'))) {
+    for (const formElement of Object.values(newPatchNoteFormElements)) {
       formElement.prop('disabled', true)
     }
   }
 
-  newPatchNoteElement.children('button').click(() => {
-    console.log(`Patch Note: ${newPatchNoteElement.children('textarea').val()}`)
-    console.log(`Patch Note Group ID: ${newPatchNoteGroupDropdown.val()}`)
-    console.log(`Patch Note Type ID: ${newPatchNoteTypeDropdown.val()}`)
+  newPatchNoteFormElements.submitButton.click(() => {
+    console.log(`Patch Note: ${newPatchNoteFormElements.noteTextArea.val()}`)
+    console.log(`Patch Note Group ID: ${newPatchNoteFormElements.dropdownGroup.val()}`)
+    console.log(`Patch Note Type ID: ${newPatchNoteFormElements.dropdownType.val()}`)
 
     disableNewPatchNoteForm()
     patchNotePage.notifier.startAsyncOperation()
