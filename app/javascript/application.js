@@ -5,8 +5,8 @@ import 'bootstrap-select'
 import './jQueryGlobalizer.js'
 import './sweet-alert-confirm.js'
 
-require('select2')(window.jQuery)
 require('datatables.net-dt')(null, window.jQuery) // First parameter is the global object. Defaults to window if null
+require('select2')(window.jQuery)
 
 require('@rails/ujs').start()
 require('@rails/activestorage').start()
