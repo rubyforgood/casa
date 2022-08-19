@@ -11,6 +11,8 @@ RSpec.describe "patch_notes/index", type: :view do
 
   before(:each) do
     assign(:patch_notes, patch_notes)
+    assign(:patch_note_groups, PatchNoteGroup.all)
+    assign(:patch_note_types, PatchNoteType.all)
 
     sign_in all_casa_admin
   end
@@ -36,12 +38,12 @@ RSpec.describe "patch_notes/index", type: :view do
       expect(parsed_html.css("#new-patch-note button").length).to eq(1)
     end
 
-    it "contains a textarea to enter the patch note" do
+    it "contains a dropdown for the patch note group" do
       render template: "all_casa_admins/patch_notes/index"
 
       parsed_html = Nokogiri.HTML5(rendered)
 
-      expect(parsed_html.css("#new-patch-note textarea").length).to eq(1)
+      expect(parsed_html.css("#new-patch-note #new-patch-note-group").length).to eq(1)
     end
 
     it "contains a dropdown for the patch note type" do
@@ -52,12 +54,40 @@ RSpec.describe "patch_notes/index", type: :view do
       expect(parsed_html.css("#new-patch-note #new-patch-note-type").length).to eq(1)
     end
 
-    it "contains a dropdown for the patch note group" do
+    it "contains a textarea to enter the patch note" do
       render template: "all_casa_admins/patch_notes/index"
 
       parsed_html = Nokogiri.HTML5(rendered)
 
-      expect(parsed_html.css("#new-patch-note #new-patch-note-group").length).to eq(1)
+      expect(parsed_html.css("#new-patch-note textarea").length).to eq(1)
+    end
+
+    describe "the patch note group dropdown" do
+      let!(:patch_note_group_1) { create(:patch_note_group, value: "8Sm02WT!zZnJ") }
+
+      it "contains all the patch note group values as options" do
+        render template: "all_casa_admins/patch_notes/index"
+
+        parsed_html = Nokogiri.HTML5(rendered)
+
+        option_text = parsed_html.css("#new-patch-note #new-patch-note-group option").text
+
+        expect(option_text).to include(patch_note_group_1.value)
+      end
+    end
+
+    describe "the patch note type dropdown" do
+      let!(:patch_note_type_1) { create(:patch_note_type, name: "3dI!9a9@s$KX") }
+
+      it "contains all the patch note type values as options" do
+        render template: "all_casa_admins/patch_notes/index"
+
+        parsed_html = Nokogiri.HTML5(rendered)
+
+        option_text = parsed_html.css("#new-patch-note #new-patch-note-type option").text
+
+        expect(option_text).to include(patch_note_type_1.name)
+      end
     end
   end
 end
