@@ -5,7 +5,7 @@ RSpec.describe "case_court_reports/index", type: :system do
   let(:supervisor) { volunteer.supervisor }
   let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
   let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:has_transitioned?).first }
-  let(:at_least_transition_age) { volunteer.casa_cases.select(&:has_transitioned?).first }
+  let(:at_least_transition_age) { volunteer.casa_cases.find(&:has_transitioned?).first }
 
   before do
     sign_in volunteer
