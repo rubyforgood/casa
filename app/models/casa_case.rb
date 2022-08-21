@@ -152,7 +152,7 @@ class CasaCase < ApplicationRecord
   end
 
   def has_transitioned?
-    birth_month_year_youth && birth_month_year_youth < 14.years.ago  
+    birth_month_year_youth && birth_month_year_youth < 14.years.ago
   end
 
   def remove_emancipation_category(category_id)

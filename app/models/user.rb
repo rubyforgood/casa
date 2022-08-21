@@ -6,7 +6,6 @@ class User < ApplicationRecord
   include ByOrganizationScope
   include DateHelper
 
-
   validates_with UserValidator
 
   devise :database_authenticatable, :invitable, :recoverable, :validatable, :timeoutable, :trackable
