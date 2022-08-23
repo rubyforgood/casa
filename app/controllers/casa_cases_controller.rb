@@ -1,5 +1,5 @@
 class CasaCasesController < ApplicationController
-  before_action :set_casa_case, only: %i[show edit update deactivate reactivate]
+  before_action :set_casa_case, only: %i[show edit update deactivate reactivate copy_court_orders]
   before_action :set_contact_types, only: %i[new edit update create deactivate reactivate]
   before_action :require_organization!
   after_action :verify_authorized
@@ -35,6 +35,11 @@ class CasaCasesController < ApplicationController
   end
 
   def edit
+    if current_role == "Volunteer"
+      @siblings_casa_cases = current_user.casa_cases.excluding(@casa_case)
+    elsif ["Supervisor", "Casa Admin"].include? current_role
+      @siblings_casa_cases = current_organization.casa_cases.excluding(@casa_case)
+    end
     authorize @casa_case
   end
 
@@ -121,6 +126,15 @@ class CasaCasesController < ApplicationController
         format.html { render :edit }
         format.json { render json: @casa_case.errors.full_messages, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def copy_court_orders
+    authorize @casa_case, :update_court_orders?
+    CasaCase.find_by_case_number(params[:case_number_cp]).case_court_orders.each do |court_order|
+      dup_court_order = court_order.dup
+      dup_court_order.save
+      @casa_case.case_court_orders.append dup_court_order
     end
   end
 

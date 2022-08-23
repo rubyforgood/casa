@@ -41,6 +41,7 @@ Rails.application.routes.draw do
     member do
       patch :deactivate
       patch :reactivate
+      patch :copy_court_orders
     end
   end
 

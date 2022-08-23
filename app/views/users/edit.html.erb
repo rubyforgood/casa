@@ -18,6 +18,19 @@
         <%= form.text_field :phone_number, class: "form-control" %>
       </div>
 
+      <% if current_user.address %>
+        <% address = current_user.address %>
+      <% else %>
+        <% address = Address.new %>
+      <% end %>
+
+      <div class="field form-group">
+        <%= form.fields_for :address, address do |f| %>
+          <%= f.label :address, "Address" %>
+          <%= f.text_field :content, class: "form-control" %>
+        <% end %>
+      </div>
+
       <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
 
       <%= render "/shared/invite_login", resource: current_user %>

@@ -1,105 +1,112 @@
-## Assumptions
+# Install Needed Dependencies
 
-This guide assumes you have [homebrew](https://brew.sh/) installed.
+## Homebrew
 
-You will need the following local tools installed:
+If you haven't already, install the [homebrew](https://brew.sh/) package manager.
 
-# command line tools - what are they
-task 1. intro to the command line
-within the finder bar of your cumputer lives the following.
--application
--utilites
--terminal 
--click on and open the terminal
+## Postgres
 
-    -the terminal aka the command line is where we build our enivorment for this project
-https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Understanding_client-side_tools/Command_line
+Use homebrew to install and run postgresql:
 
+```bash
+brew install postgresql
+```
 
-task 2. this assumes you have a github account
-
-
-
-
-articles that will help with command line
-
-this assumes you have a github account
-
-cd into casa
-
-
-
-
-
-1. Ruby
-2. NodeJs (optional)
-3. Postgres
-4. Google Chrome
-
-All dependencies are installed with homebrew.
-
-Open your command line
-
-
-
-### Ruby
-
-Your Mac came with a version of ruby installed (when you installed homebrew you used it), however Apple is sometimes a little behind the current version and homebrew allows you to stey up to date.
-
-[`brew install ruby`](https://formulae.brew.sh/formula/ruby#default)
-
-If you installed ruby awhile ago and haven't updated it, the bundle installer may flag the need for an update, in which case use:
-
-`brew upgrade ruby`
-
-### NodeJS
-
-The Casa package frontend leverages several javascript packages managed through `yarn`, so if you are working on those elements you will want to have node, npm, and yarn installed.
-
-`brew install node`
-`brew install yarn`
-
-### Postgres
-
-[`brew install postgresql`](https://wiki.postgresql.org/wiki/Homebrew)
+```bash
+brew services start postgreql
+```
 
 If you have an older version of postgres, `brew postgresql-upgrade-database`
 
 For a more GUI focused postgres experience, try [Postgres.app](https://postgresapp.com/) an alternative to the CLI focused default postgres
 
-### Google Chrome
+## Ruby
 
+### Rbenv
+
+It is often useful to install Ruby with a ruby version manager. The version of Ruby that comes with Mac is not sufficient
+for this project. You can install [rbenv](https://github.com/rbenv/rbenv) with:
+
+```bash
+brew install rbenv ruby-build
+```
+
+Then, setup rbenv:
+
+```bash
+rbenv init
+```
+
+And finally, follow the setup instructions that are outputted to your terminal after running that.
+
+### Actually installing Ruby
+
+Next, install the version of Ruby that this project uses. This can be found by checking the file in this repo, `.ruby-version`.
+
+To install the appropriate ruby version, run:
+
+```bash
+rbenv install 3.1.0
+```
+
+(Do not forget to switch 3.1.0 to the appropriate version)
+
+Finally, run:
+
+```bash
+rbenv local 3.1.0
+```
+(Do not forget to swtich 3.1.0 to the appropriate version)
+
+## Nodejs
+
+The Casa package frontend leverages several javascript packages managed through `yarn`, so if you are working on those elements you will want to have node, npm, and yarn installed.
+
+```bash
+brew install node
+```
+
+```
+brew install yarn
+```
+
+## Chrome
 Many of the frontend tests are run using Google Chrome, so if you don't already have that installed you may wish to include it:
 
-`brew install google-chrome`
---------------------------
-from Gemfile 
+```bash
+brew install google-chrome
+```
 
-ruby "3.1.2"
-gem "rails", "~> 7.0.3"
+## Project setup
 
-----------------------
-Ruby Version
-This app uses Ruby version 3.1.2, indicated in /.ruby-version and Gemfile, which will be auto-selected if you use a Ruby versioning manager like rvm, rbenv, or asdf.
+Install gem dependencies with:
 
-Yarn Installation
-If you don't have Yarn installed, you can install with Homebrew on macOS brew install yarn or visit https://yarnpkg.com/en/docs/install. Be sure to run yarn install after installing Yarn. NOTE: It's possible that Node version 12 may cause you problems, see issue #751. Node 10 or 11 seem to be fine.
+```bash
+bundle install
+```
 
-Install dependencies using Yarn
-Run yarn to install project dependencies.
+Setup the database with:
 
-Create your .env with database credentials
-Be sure to create a .env file in the root of the app that includes the following lines (change to whatever is appropriate for your system):
+```bash
+bin/rails db:setup
+```
 
-PG_USERNAME=username
-PG_PASSWORD=password
-If you're getting the error PG::ConnectionBad: fe_sendauth: no password supplied, it's because you have probably not done this.
+Compile assets with:
 
-Database Configuration
-This app uses PostgreSQL for all environments. You'll also need to create the dev and test databases, the app is expecting them to be named diaper_dev, diaper_test, partner_dev, and partner_test respectively. This should all be handled with rails db:setup. Create a database.yml file on config/ directory with your database configurations. You can also copy the existing file called database.yml.example as an example and just change the credentials.
+```bash
+yarn build
+```
 
-Seed the database
-From the root of the app, run bundle exec rails db:seed. This will create some initial data to use while testing the app and developing new features, including setting up the default user.
+and then:
 
-Start the app
-Run bundle exec rails server or bin/start (recommended since it runs webpacker in the background!) an
+```bash
+yarn build:css
+```
+
+And lastly, run the app with:
+
+```bash
+bin/rails server
+```
+
+See the README for login information.

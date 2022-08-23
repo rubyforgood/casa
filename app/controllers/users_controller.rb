@@ -7,6 +7,7 @@ class UsersController < ApplicationController
   after_action :reset_custom_error_heading, only: [:update_password]
 
   def edit
+    set_initial_address
   end
 
   def update
@@ -38,6 +39,10 @@ class UsersController < ApplicationController
 
   private
 
+  def set_initial_address
+    Address.create(user_id: current_user.id, content: "") if !current_user.address
+  end
+
   def set_active_casa_admins
     @active_casa_admins = CasaAdmin.in_organization(current_organization).active
   end
@@ -60,9 +65,9 @@ class UsersController < ApplicationController
 
   def user_params
     if current_user.casa_admin?
-      params.require(:user).permit(:email, :display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [])
+      params.require(:user).permit(:email, :display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
     else
-      params.require(:user).permit(:display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [])
+      params.require(:user).permit(:display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
     end
   end
 
