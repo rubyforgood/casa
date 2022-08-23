@@ -157,4 +157,5 @@ Rails.application.routes.draw do
     end
   end
   resources :fund_requests, only: %i[new create]
+  resources :languages
 end
