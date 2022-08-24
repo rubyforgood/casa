@@ -6,7 +6,7 @@ end
 
 RSpec.describe MockController, type: :controller do
   it "should raise a UnknownOrganization error" do
-    expect { controller.require_organization! }.to raise_error(StandardError)
+    expect { controller.require_organization! }.to raise_error(Organizational::UnknownOrganization)
   end
 
   it "should not raise a UnknownOrganization error" do
@@ -14,7 +14,7 @@ RSpec.describe MockController, type: :controller do
 
     allow(controller).to receive(:current_user).and_return(current_user)
 
-    expect { controller.require_organization! }.not_to raise_error(StandardError)
+    expect { controller.require_organization! }.not_to raise_error
   end
 
   it "should return the user's current organization" do
