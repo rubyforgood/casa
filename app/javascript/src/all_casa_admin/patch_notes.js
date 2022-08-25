@@ -1,6 +1,6 @@
 const AsyncNotifier = require('../async_notifier')
 const patchNotePath = window.location.pathname
-let pageNotifier;
+let pageNotifier
 
 // Creates a patch note
 //  @param    {number} patchNoteGroupId  The id of the group allowed to view the patch note
