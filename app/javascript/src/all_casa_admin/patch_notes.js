@@ -132,11 +132,7 @@ $('document').ready(() => {
       Number.parseInt(newPatchNoteFormElements.dropdownGroup.val()),
       newPatchNoteFormElements.noteTextArea.val(),
       Number.parseInt(newPatchNoteFormElements.dropdownType.val())
-    ).then(function (response, textStatus, jqXHR) {
-      resolveAsyncOperation()
-
-      return response
-    }).always(function () {
+    ).always(function () {
       enablePatchNoteForm(newPatchNoteFormElements)
     })
   })
