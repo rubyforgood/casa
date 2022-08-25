@@ -47,6 +47,6 @@ class AllCasaAdmins::PatchNotesController < AllCasaAdminsController
 
   # Only allow a list of trusted parameters through.
   def patch_note_params
-    params.require(:patch_note).permit(:note, :patch_note_group_id, :patch_note_type_id)
+    params.permit(:note, :patch_note_group_id, :patch_note_type_id)
   end
 end
