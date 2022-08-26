@@ -1,8 +1,6 @@
 <div class="patch-note-list-item card">
   <div id="patch-note-<%= dom_id patch_note %>" class="card-body">
-    <textarea disabled="true">
-      <%= patch_note.note %>
-    </textarea>
+    <textarea disabled="true"><%= patch_note.note %></textarea>
     <div class="label-and-select">
       <label for="patch-note-<%= dom_id patch_note %>-type">Patch Note Type:</label>
       <select id="patch-note-<%= dom_id patch_note %>-type" disabled="true">
