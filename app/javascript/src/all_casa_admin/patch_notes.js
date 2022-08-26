@@ -1,11 +1,78 @@
-const Notifier = require('../async_notifier')
-const patchNotePage = {
+const AsyncNotifier = require('../async_notifier')
+const patchNotePath = window.location.pathname
+let pageNotifier
+
+// Creates a patch note
+//  @param    {number} patchNoteGroupId  The id of the group allowed to view the patch note
+//  @param    {string} patchNoteText     The text of the patch note
+//  @param    {number} patchNoteTypeId   The id of the patch note type
+//  @returns  {array} a jQuery jqXHR object. See https://api.jquery.com/jQuery.ajax/#jqXHR
+//  @throws   {TypeError}  for a parameter of the incorrect type
+//  @throws   {RangeError} if optionId is negative
+function createPatchNote (patchNoteGroupId, patchNoteText, patchNoteTypeId) {
+  // Input check
+  if (!Number.isInteger(patchNoteGroupId)) {
+    throw new TypeError('Param patchNoteGroupId is not an integer')
+  } else if (patchNoteGroupId < 0) {
+    throw new RangeError('Param patchNoteGroupId cannot be negative')
+  }
+
+  if (!Number.isInteger(patchNoteTypeId)) {
+    throw new TypeError('Param patchNoteTypeId is not an integer')
+  } else if (patchNoteTypeId < 0) {
+    throw new RangeError('Param patchNoteTypeId cannot be negative')
+  }
+
+  if (typeof patchNoteText !== 'string') {
+    throw new TypeError('Param patchNoteText must be a string')
+  }
+
+  pageNotifier.startAsyncOperation()
+
+  // Post request
+  return $.post(patchNotePath, {
+    note: patchNoteText,
+    patch_note_group_id: patchNoteGroupId,
+    patch_note_type_id: patchNoteTypeId
+  })
+    .then(function (response, textStatus, jqXHR) {
+      if (response.error) {
+        return $.Deferred().reject(jqXHR, textStatus, response.error)
+      } else if (response.status && response.status === 'created') {
+        resolveAsyncOperation()
+      } else {
+        resolveAsyncOperation('Unknown response')
+      }
+
+      return response
+    })
+    .fail(function (jqXHR, textStatus, error) {
+      resolveAsyncOperation(error)
+    })
+}
+
+// Disables all form elements of a patch note form
+//  @param    {object} patchNoteFormElements An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormElements()
+//  @throws   {TypeError}      for a parameter of the incorrect type
+function disablePatchNoteForm (patchNoteFormElements) {
+  for (const formElement of Object.values(patchNoteFormElements)) {
+    formElement.prop('disabled', true)
+  }
+}
+
+// Enables all form elements of a patch note form
+//  @param    {object} patchNoteFormElements An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormElements()
+//  @throws   {TypeError}      for a parameter of the incorrect type
+function enablePatchNoteForm (patchNoteFormElements) {
+  for (const formElement of Object.values(patchNoteFormElements)) {
+    formElement.removeAttr('disabled')
+  }
 }
 
 // Get all form elements of a patch note in edit mode
 //  @param    {number} patchNoteId The id of the patch note form
 //  @throws   {TypeError}      for a parameter of the incorrect type
-//  @throws   {ReferenceError} if an element could not be
+//  @throws   {ReferenceError} if an element could not be found
 function getPatchNoteFormInputs (patchNoteId) {
   if (typeof patchNoteId !== 'string') {
     throw new TypeError('Param patchNoteId must be a string')
@@ -35,28 +102,38 @@ function getPatchNoteFormInputs (patchNoteId) {
   }
 }
 
-$('document').ready(() => {
-  const asyncNotificationsElement = $('#async-notifications')
-  patchNotePage.notifier = new Notifier(asyncNotificationsElement)
-
-  const newPatchNoteElement = $('#new-patch-note')
-  const newPatchNoteGroupDropdown = $('#new-patch-note-group')
-  const newPatchNoteTypeDropdown = $('#new-patch-note-type')
-
-  const disableNewPatchNoteForm = () => {
-    for (const formElement of Object.values(getPatchNoteFormInputs('new-patch-note'))) {
-      formElement.prop('disabled', true)
-    }
+// Called when an async operation completes. May show notifications describing how the operation completed
+//  @param    {string | Error=}  error The error to be displayed(optional)
+//  @throws   {TypeError}  for a parameter of the incorrect type
+//  @throws   {Error}      for trying to resolve more async operations than the amount currently awaiting
+function resolveAsyncOperation (error) {
+  if (error instanceof Error) {
+    error = error.message
   }
 
-  newPatchNoteElement.children('button').click(() => {
-    console.log(`Patch Note: ${newPatchNoteElement.children('textarea').val()}`)
-    console.log(`Patch Note Group ID: ${newPatchNoteGroupDropdown.val()}`)
-    console.log(`Patch Note Type ID: ${newPatchNoteTypeDropdown.val()}`)
+  pageNotifier.stopAsyncOperation(error)
+}
 
-    disableNewPatchNoteForm()
-    patchNotePage.notifier.startAsyncOperation()
+$('document').ready(() => {
+  const asyncNotificationsElement = $('#async-notifications')
+  pageNotifier = new AsyncNotifier(asyncNotificationsElement)
+
+  const newPatchNoteFormElements = getPatchNoteFormInputs('new-patch-note')
+
+  newPatchNoteFormElements.submitButton.click(() => {
+    if (!(newPatchNoteFormElements.noteTextArea.val())) {
+      pageNotifier.notify('Cannot save an empty patch note', 'warn')
+      return
+    }
+
+    disablePatchNoteForm(newPatchNoteFormElements)
+
+    createPatchNote(
+      Number.parseInt(newPatchNoteFormElements.dropdownGroup.val()),
+      newPatchNoteFormElements.noteTextArea.val(),
+      Number.parseInt(newPatchNoteFormElements.dropdownType.val())
+    ).always(function () {
+      enablePatchNoteForm(newPatchNoteFormElements)
+    })
   })
-
-  patchNotePage.notifier.notify('test', 'warn')
 })
