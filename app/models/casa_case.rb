@@ -83,6 +83,10 @@ class CasaCase < ApplicationRecord
     where.not(id: CourtDate.where("date >= ?", Date.today).pluck(:casa_case_id))
   }
 
+  scope :is_transitioned, -> {
+    where("birth_month_year_youth < ?", 14.years.ago)
+  }
+
   scope :active, -> {
     where(active: true)
   }

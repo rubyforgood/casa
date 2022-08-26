@@ -132,7 +132,7 @@ class User < ApplicationRecord
   end
 
   def serving_transition_aged_youth?
-    actively_assigned_and_active_cases.where("birth_month_year_youth <= ?", 14.years.ago).any?
+    actively_assigned_and_active_cases.is_transitioned.any?
   end
 end
 # == Schema Information
