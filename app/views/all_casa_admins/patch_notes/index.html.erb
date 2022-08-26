@@ -1,9 +1,8 @@
 <p style="color: green"><%= notice %></p>
 
-<h1>Patch Notes</h1>
-
 <div id="patch-notes">
   <div id="patch-note-list">
+    <h1>Patch Notes</h1>
     <div class="patch-note-list-item card">
       <div id="new-patch-note" class="card-body">
         <textarea placeholder="New Patch Note"></textarea>
@@ -26,13 +25,11 @@
         <button type="button" class="btn btn-primary">Create</button>
       </div>
     </div>
+    <% # Paginate this %>
+    <% @patch_notes&.each do |patch_note| %>
+      <%= render "all_casa_admins/patch_notes/patch_note", patch_note: patch_note %>
+    <% end %>
   </div>
-  <% # Paginate this %>
-  <% @patch_notes&.each do |patch_note| %>
-    <%= render "all_casa_admins/patch_notes/patch_note", patch_note: patch_note %>
-    <p>
-    </p>
-  <% end %>
 </div>
 
 <%= render "shared/async_notifier" %>

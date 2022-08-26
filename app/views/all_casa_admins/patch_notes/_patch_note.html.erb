@@ -1,2 +1,24 @@
-<div id="<%= dom_id patch_note %>">
+<div class="patch-note-list-item card">
+  <div id="patch-note-<%= dom_id patch_note %>" class="card-body">
+    <textarea disabled="true">
+      <%= patch_note.note %>
+    </textarea>
+    <div class="label-and-select">
+      <label for="patch-note-<%= dom_id patch_note %>-type">Patch Note Type:</label>
+      <select id="patch-note-<%= dom_id patch_note %>-type" disabled="true">
+        <% @patch_note_types&.each do |patch_note_type| %>
+          <option value="<%= patch_note_type.id %>"><%= patch_note_type.name %></option>
+        <% end %>
+      </select>
+    </div>
+    <div class="label-and-select">
+      <label for="patch-note-<%= dom_id patch_note %>-group">User Group:</label>
+      <select id="patch-note-<%= dom_id patch_note %>-group" disabled="true">
+        <% @patch_note_groups&.each do |patch_note_group| %>
+          <option value="<%= patch_note_group.id %>"><%= patch_note_group.value %></option>
+        <% end %>
+      </select>
+    </div>
+    <button type="button" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i>Edit</button>
+  </div>
 </div>

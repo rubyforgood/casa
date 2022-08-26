@@ -3,7 +3,7 @@ class AllCasaAdmins::PatchNotesController < AllCasaAdminsController
   def index
     @patch_note_groups = PatchNoteGroup.all
     @patch_note_types = PatchNoteType.all
-    @patch_notes = PatchNote.all
+    @patch_notes = PatchNote.order(created_at: :desc)
   end
 
   # POST /patch_notes or /patch_notes.json

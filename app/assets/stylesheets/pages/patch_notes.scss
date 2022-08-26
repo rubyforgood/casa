@@ -4,6 +4,10 @@
   #patch-note-list {
     width: 50%;
 
+    h1 {
+      text-align: center
+    }
+
     .patch-note-list-item {
       textarea {
         width: 100%;
@@ -21,10 +25,8 @@
         }
       }
 
-      #new-patch-note {
-        button {
-          width: 100%;
-        }
+      button {
+        width: 100%;
       }
     };
   };
