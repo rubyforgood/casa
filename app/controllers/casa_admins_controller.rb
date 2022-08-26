@@ -7,7 +7,7 @@ class CasaAdminsController < ApplicationController
 
   def index
     authorize CasaAdmin
-    @admins = policy_scope(current_organization.casa_admins)
+    policy_scope(current_organization.casa_admins)
   end
 
   def edit
