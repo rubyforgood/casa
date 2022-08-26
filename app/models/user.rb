@@ -35,6 +35,7 @@ class User < ApplicationRecord
   has_many :sms_notification_events, through: :user_sms_notification_events
   has_many :notes, as: :notable
   has_one :address, dependent: :destroy
+  has_and_belongs_to_many :languages
 
   accepts_nested_attributes_for :user_sms_notification_events, :address, allow_destroy: true
 
@@ -165,7 +166,7 @@ end
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  casa_org_id                 :bigint           not null
-#  invited_by_id               :integer
+#  invited_by_id               :bigint
 #
 # Indexes
 #
