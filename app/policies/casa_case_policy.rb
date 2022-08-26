@@ -17,6 +17,17 @@ class CasaCasePolicy < ApplicationPolicy
         raise "unrecognized user type #{@user.type}"
       end
     end
+
+    def sibling_cases
+      case @user
+      when CasaAdmin, Supervisor
+        user.casa_org.casa_cases.excluding(scope)
+      when Volunteer
+        user.casa_cases.excluding(scope)
+      else
+        raise "unrecognized user type #{@user.type}"
+      end
+    end
   end
 
   def update_contact_types?
