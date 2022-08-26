@@ -17,10 +17,6 @@ RSpec.describe "patch_notes/index", type: :view do
     sign_in all_casa_admin
   end
 
-  it "renders a list of patch_notes" do
-    render template: "all_casa_admins/patch_notes/index"
-  end
-
   describe "the new patch note form" do
     it "is present on the page" do
       render template: "all_casa_admins/patch_notes/index"
@@ -88,6 +84,19 @@ RSpec.describe "patch_notes/index", type: :view do
 
         expect(option_text).to include(patch_note_type_1.name)
       end
+    end
+  end
+
+  describe "the patch note list" do
+    it "renders a list of patch_notes" do
+      patch_notes[0].update(note: "?UvV*Z~v\"`P]4ol")
+      patch_notes[1].update(note: "#tjJ/+o\"3s@osjV")
+
+      render template: "all_casa_admins/patch_notes/index"
+      parsed_html = Nokogiri.HTML5(rendered)
+
+      expect(parsed_html.css(".patch-note-list-item textarea").text).to include(patch_notes[0].note)
+      expect(parsed_html.css(".patch-note-list-item textarea").text).to include(patch_notes[1].note)
     end
   end
 end
