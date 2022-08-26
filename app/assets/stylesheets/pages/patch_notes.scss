@@ -9,6 +9,10 @@
     }
 
     .patch-note-list-item {
+      &.new {
+        background-color: #ffecb3;
+      }
+
       textarea {
         width: 100%;
       }
