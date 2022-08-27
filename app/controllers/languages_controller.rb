@@ -55,11 +55,12 @@ class LanguagesController < ApplicationController
   end
 
   private
-    def set_language
-      @language = Language.find(params[:id] || params[:language_id])
-    end
 
-    def language_params
-      params.require(:language).permit(:name)
-    end
+  def set_language
+    @language = Language.find(params[:id] || params[:language_id])
+  end
+
+  def language_params
+    params.require(:language).permit(:name)
+  end
 end

@@ -333,6 +333,6 @@ class DbPopulator
   end
 
   def create_language(name, casa_org)
-    Language.find_or_create_by!(name:, casa_org:)
+    Language.find_or_create_by!(name: name, casa_org: casa_org)
   end
 end
