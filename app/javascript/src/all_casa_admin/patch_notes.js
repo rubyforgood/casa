@@ -69,7 +69,7 @@ function deletePatchNote (patchNoteId) {
   // Post request
   return $.ajax({
     url: `${patchNotePath}/${patchNoteId}`,
-    type: 'DELETE',
+    type: 'DELETE'
   })
     .then(function (response, textStatus, jqXHR) {
       if (response.errors) {
