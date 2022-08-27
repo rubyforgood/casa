@@ -3,7 +3,7 @@ class AllCasaAdmins::PatchNotesController < AllCasaAdminsController
   def index
     @patch_note_groups = PatchNoteGroup.all
     @patch_note_types = PatchNoteType.all
-    @patch_notes = PatchNote.all
+    @patch_notes = PatchNote.order(created_at: :desc)
   end
 
   # POST /patch_notes or /patch_notes.json
@@ -47,6 +47,6 @@ class AllCasaAdmins::PatchNotesController < AllCasaAdminsController
 
   # Only allow a list of trusted parameters through.
   def patch_note_params
-    params.require(:patch_note).permit(:note, :patch_note_group_id, :patch_note_type_id)
+    params.permit(:note, :patch_note_group_id, :patch_note_type_id)
   end
 end
