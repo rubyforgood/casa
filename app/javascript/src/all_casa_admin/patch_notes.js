@@ -36,9 +36,46 @@ function createPatchNote (patchNoteGroupId, patchNoteText, patchNoteTypeId) {
     patch_note_type_id: patchNoteTypeId
   })
     .then(function (response, textStatus, jqXHR) {
-      if (response.error) {
+      if (response.errors) {
         return $.Deferred().reject(jqXHR, textStatus, response.error)
       } else if (response.status && response.status === 'created') {
+        resolveAsyncOperation()
+      } else {
+        resolveAsyncOperation('Unknown response')
+      }
+
+      return response
+    })
+    .fail(function (jqXHR, textStatus, error) {
+      resolveAsyncOperation(error)
+    })
+}
+
+// Deletes a patch note
+//  @param    {number} .parent().parent()patchNoteId The id of the patch note deleted
+//  @returns  {array} a jQuery jqXHR object. See https://api.jquery.com/jQuery.ajax/#jqXHR
+//  @throws   {TypeError}  for a parameter of the incorrect type
+//  @throws   {RangeError} if optionId is negative
+function deletePatchNote (patchNoteId) {
+  // Input check
+  if (!Number.isInteger(patchNoteId)) {
+    throw new TypeError('Param patchNoteId is not an integer')
+  } else if (patchNoteId < 0) {
+    throw new RangeError('Param patchNoteId cannot be negative')
+  }
+
+  pageNotifier.startAsyncOperation()
+
+  // Post request
+  return $.ajax({
+    url: patchNotePath,
+    type: 'DELETE',
+    data: { patch_note_id: patchNoteId }
+  })
+    .then(function (response, textStatus, jqXHR) {
+      if (response.errors) {
+        return $.Deferred().reject(jqXHR, textStatus, response.error)
+      } else if (response.status && response.status === 'ok') {
         resolveAsyncOperation()
       } else {
         resolveAsyncOperation('Unknown response')
@@ -73,35 +110,33 @@ function enablePatchNoteForm (patchNoteFormElements) {
 //  @param    {number} patchNoteId The id of the patch note form
 //  @throws   {TypeError}      for a parameter of the incorrect type
 //  @throws   {ReferenceError} if an element could not be found
-function getPatchNoteFormInputs (patchNoteId) {
-  if (typeof patchNoteId !== 'string') {
-    throw new TypeError('Param patchNoteId must be a string')
+function getPatchNoteFormInputs (patchNoteElement) {
+  if (!(patchNoteElement instanceof jQuery)) {
+    throw new TypeError('Param patchNoteElement must be a jQuery object')
   }
 
-  const patchNoteElement = $(`#${patchNoteId}`)
-
-  if (patchNoteElement.length) {
-    const selects = patchNoteElement.children('.label-and-select').children('select')
-
-    const fields = {
-      dropdownGroup: selects.eq(1),
-      dropdownType: selects.eq(0),
-      noteTextArea: patchNoteElement.children('textarea'),
-      buttonControls: patchNoteElement.children('.patch-note-button-controls').children('button')
-    }
-
-    for (const fieldName of Object.keys(fields)) {
-      const field = fields[fieldName]
-
-      if (!((field instanceof jQuery) && field.length)) {
-        throw new ReferenceError(`Could not find form element ${fieldName}`)
-      }
-    }
-
-    return fields
-  } else {
-    return null
+  if (!patchNoteElement.length) {
+    throw new ReferenceError('Param patchNoteElement contains no elements')
   }
+
+  const selects = patchNoteElement.children('.label-and-select').children('select')
+
+  const fields = {
+    dropdownGroup: selects.eq(1),
+    dropdownType: selects.eq(0),
+    noteTextArea: patchNoteElement.children('textarea'),
+    buttonControls: patchNoteElement.children('.patch-note-button-controls').children('button')
+  }
+
+  for (const fieldName of Object.keys(fields)) {
+    const field = fields[fieldName]
+
+    if (!((field instanceof jQuery) && field.length)) {
+      throw new ReferenceError(`Could not find form element ${fieldName}`)
+    }
+  }
+
+  return fields
 }
 
 // Called when an async operation completes. May show notifications describing how the operation completed
@@ -121,7 +156,7 @@ $('document').ready(() => {
     const asyncNotificationsElement = $('#async-notifications')
     pageNotifier = new AsyncNotifier(asyncNotificationsElement)
 
-    const newPatchNoteFormElements = getPatchNoteFormInputs('new-patch-note')
+    const newPatchNoteFormElements = getPatchNoteFormInputs($('#new-patch-note'))
 
     newPatchNoteFormElements.buttonControls.click(() => {
       if (!(newPatchNoteFormElements.noteTextArea.val())) {
@@ -140,6 +175,10 @@ $('document').ready(() => {
       }).always(function () {
         enablePatchNoteForm(newPatchNoteFormElements)
       })
+    })
+
+    $('#patch-note-list .button-delete').click(function () {
+      disablePatchNoteForm(getPatchNoteFormInputs($(this).parent().parent()))
     })
   } catch (err) {
     pageNotifier.notify('Could not intialize app', 'error')
