@@ -87,11 +87,13 @@ function getPatchNoteFormInputs (patchNoteId) {
       dropdownGroup: selects.eq(1),
       dropdownType: selects.eq(0),
       noteTextArea: patchNoteElement.children('textarea'),
-      submitButton: patchNoteElement.children('button')
+      buttonControls: patchNoteElement.children('.patch-note-button-controls').children('button')
     }
 
     for (const fieldName of Object.keys(fields)) {
-      if (!(fields[fieldName] instanceof jQuery)) {
+      const field = fields[fieldName]
+
+      if (!((field instanceof jQuery) && field.length)) {
         throw new ReferenceError(`Could not find form element ${fieldName}`)
       }
     }
@@ -115,25 +117,32 @@ function resolveAsyncOperation (error) {
 }
 
 $('document').ready(() => {
-  const asyncNotificationsElement = $('#async-notifications')
-  pageNotifier = new AsyncNotifier(asyncNotificationsElement)
+  try {
+    const asyncNotificationsElement = $('#async-notifications')
+    pageNotifier = new AsyncNotifier(asyncNotificationsElement)
 
-  const newPatchNoteFormElements = getPatchNoteFormInputs('new-patch-note')
+    const newPatchNoteFormElements = getPatchNoteFormInputs('new-patch-note')
 
-  newPatchNoteFormElements.submitButton.click(() => {
-    if (!(newPatchNoteFormElements.noteTextArea.val())) {
-      pageNotifier.notify('Cannot save an empty patch note', 'warn')
-      return
-    }
+    newPatchNoteFormElements.buttonControls.click(() => {
+      if (!(newPatchNoteFormElements.noteTextArea.val())) {
+        pageNotifier.notify('Cannot save an empty patch note', 'warn')
+        return
+      }
 
-    disablePatchNoteForm(newPatchNoteFormElements)
+      disablePatchNoteForm(newPatchNoteFormElements)
 
-    createPatchNote(
-      Number.parseInt(newPatchNoteFormElements.dropdownGroup.val()),
-      newPatchNoteFormElements.noteTextArea.val(),
-      Number.parseInt(newPatchNoteFormElements.dropdownType.val())
-    ).always(function () {
-      enablePatchNoteForm(newPatchNoteFormElements)
+      createPatchNote(
+        Number.parseInt(newPatchNoteFormElements.dropdownGroup.val()),
+        newPatchNoteFormElements.noteTextArea.val(),
+        Number.parseInt(newPatchNoteFormElements.dropdownType.val())
+      ).then(function () {
+        newPatchNoteFormElements.noteTextArea.val('')
+      }).always(function () {
+        enablePatchNoteForm(newPatchNoteFormElements)
+      })
     })
-  })
+  } catch (err) {
+    pageNotifier.notify('Could not intialize app', 'error')
+    pageNotifier.notify(err.message, 'error')
+  }
 })
