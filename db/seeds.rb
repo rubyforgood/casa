@@ -61,7 +61,8 @@ class SeederMain
       ContactType,
       ContactTypeGroup,
       CaseContact,
-      CaseCourtOrder
+      CaseCourtOrder,
+      Language
     ]
   end
 

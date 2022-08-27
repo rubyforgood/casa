@@ -48,6 +48,7 @@ class DbPopulator
     create_hearing_types(casa_org)
     create_checklist_items
     create_judges(casa_org)
+    create_languages(casa_org)
     casa_org
   end
 
@@ -320,5 +321,18 @@ class DbPopulator
       )
       hearing_type.update_attribute(:checklist_updated_date, "Updated #{Time.new.strftime("%m/%d/%Y")}")
     end
+  end
+
+  def create_languages(casa_org)
+    create_language("Spanish", casa_org)
+    create_language("Vietnamese", casa_org)
+    create_language("French", casa_org)
+    create_language("Chinese Cantonese", casa_org)
+    create_language("ASL", casa_org)
+    create_language("Other", casa_org)
+  end
+
+  def create_language(name, casa_org)
+    Language.find_or_create_by!(name:, casa_org:)
   end
 end
