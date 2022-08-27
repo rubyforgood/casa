@@ -108,4 +108,7 @@ minlength: User.password_length.min %>
      <%= form.submit t("communication_preferences.save_preferences"), class: "btn btn-primary mb-3 save-preference" %>
    </div>
  <% end %>
+  <% if current_user.volunteer? %>
+    <%= render partial: "languages", locals: { volunteer: current_user } %>
+  <% end %>
 </div>
