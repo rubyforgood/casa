@@ -68,9 +68,8 @@ function deletePatchNote (patchNoteId) {
 
   // Post request
   return $.ajax({
-    url: patchNotePath,
+    url: `${patchNotePath}/${patchNoteId}`,
     type: 'DELETE',
-    data: { patch_note_id: patchNoteId }
   })
     .then(function (response, textStatus, jqXHR) {
       if (response.errors) {
@@ -178,7 +177,18 @@ $('document').ready(() => {
     })
 
     $('#patch-note-list .button-delete').click(function () {
-      disablePatchNoteForm(getPatchNoteFormInputs($(this).parent().parent()))
+      const patchNoteFormContainer = $(this).parent().parent()
+      const formInputs = getPatchNoteFormInputs(patchNoteFormContainer)
+
+      disablePatchNoteForm(formInputs)
+
+      deletePatchNote(
+        Number.parseInt(patchNoteFormContainer.attr('id').match(/patch-note-(\d+)/)[1])
+      ).then(function () {
+        patchNoteFormContainer.parent().remove()
+      }).fail(function () {
+        enablePatchNoteForm(formInputs)
+      })
     })
   } catch (err) {
     pageNotifier.notify('Could not intialize app', 'error')
