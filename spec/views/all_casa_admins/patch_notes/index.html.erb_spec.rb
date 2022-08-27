@@ -110,5 +110,25 @@ RSpec.describe "patch_notes/index", type: :view do
       expect(parsed_html.css(".patch-note-list-item textarea")[2].text).to include(patch_notes[1].note)
       expect(patch_notes[0].created_at < patch_notes[1].created_at).to eq(true)
     end
+
+    it "displays the correct patch note group and patch note type with the patch note" do
+      patch_notes[0].update(note: "#'hQ+`dGC(qc=}wu")
+      patch_notes[1].update(note: "k2cz&c'xYLr|&)B)")
+
+      render template: "all_casa_admins/patch_notes/index"
+      parsed_html = Nokogiri.HTML5(rendered)
+
+      patch_note_element = parsed_html.css(".patch-note-list-item")[1]
+
+      expect(patch_note_element.css("textarea").text).to include(patch_notes[0].note)
+      expect(patch_note_element
+        .css("#patch-note-#{patch_notes[0].id}-group option[@selected=\"selected\"]")
+        .attr("value").value
+      ).to eq("#{patch_notes[0].patch_note_group_id}")
+      expect(patch_note_element
+        .css("#patch-note-#{patch_notes[0].id}-type option[@selected=\"selected\"]")
+        .attr("value").value
+      ).to eq("#{patch_notes[0].patch_note_type_id}")
+    end
   end
 end
