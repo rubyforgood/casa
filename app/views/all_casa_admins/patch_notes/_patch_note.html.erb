@@ -7,7 +7,7 @@
         <% @patch_note_types&.each do |patch_note_type| %>
           <% if patch_note_type.id === patch_note.patch_note_type_id %>
             <option value="<%= patch_note_type.id %>" selected="selected">
-          <% else%>
+          <% else %>
             <option value="<%= patch_note_type.id %>">
           <% end %>
               <%= patch_note_type.name %>
@@ -21,7 +21,7 @@
         <% @patch_note_groups&.each do |patch_note_group| %>
           <% if patch_note_group.id === patch_note.patch_note_group_id %>
             <option value="<%= patch_note_group.id %>" selected="selected">
-          <% else%>
+          <% else %>
             <option value="<%= patch_note_group.id %>">
           <% end %>
               <%= patch_note_group.value %>

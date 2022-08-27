@@ -123,12 +123,10 @@ RSpec.describe "patch_notes/index", type: :view do
       expect(patch_note_element.css("textarea").text).to include(patch_notes[0].note)
       expect(patch_note_element
         .css("#patch-note-#{patch_notes[0].id}-group option[@selected=\"selected\"]")
-        .attr("value").value
-      ).to eq("#{patch_notes[0].patch_note_group_id}")
+        .attr("value").value).to eq(patch_notes[0].patch_note_group_id.to_s)
       expect(patch_note_element
         .css("#patch-note-#{patch_notes[0].id}-type option[@selected=\"selected\"]")
-        .attr("value").value
-      ).to eq("#{patch_notes[0].patch_note_type_id}")
+        .attr("value").value).to eq(patch_notes[0].patch_note_type_id.to_s)
     end
   end
 end
