@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "casa_org/edit", type: :system do
   let(:organization) { build(:casa_org) }
-  let!(:languages) do 
+  let!(:languages) do
     5.times { create(:language, casa_org: organization) }
   end
   let(:admin) { build(:casa_admin, casa_org_id: organization.id) }
