@@ -107,6 +107,13 @@ function enablePatchNoteForm (patchNoteFormElements) {
 
 // Get all form elements of a patch note in edit mode
 //  @param    {number} patchNoteId The id of the patch note form
+//  @returns  {object} An object containing jQuery objects in this form
+//    {
+//      dropdownGroup:  The select for the patch note's user visibility group
+//      dropdownType:   The select for the patch note's type
+//      noteTextArea:   The textarea containing the patch note
+//      buttonControls: A list of all the buttons at the bottom of the form
+//    }
 //  @throws   {TypeError}      for a parameter of the incorrect type
 //  @throws   {ReferenceError} if an element could not be found
 function getPatchNoteFormInputs (patchNoteElement) {
