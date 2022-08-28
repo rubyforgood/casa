@@ -13,6 +13,8 @@ class VolunteerDatatable < ApplicationDatatable
   private
 
   def data
+    puts "=========record==========="
+    puts records
     records.map do |volunteer|
       {
         active: volunteer.active?,
@@ -29,17 +31,19 @@ class VolunteerDatatable < ApplicationDatatable
         },
         supervisor: {id: volunteer.supervisor_id, name: volunteer.supervisor_name},
         hours_spent_in_days: volunteer.hours_spent_in_days(30),
-        extra_languages: volunteer.languages.map { |lang| {id: lang.id, name: lang.name} }
+        extra_languages: volunteer.languages&.map { |lang| {id: lang.id, name: lang.name} }
       }
     end
   end
 
   def filtered_records
-    raw_records
-      .where(supervisor_filter)
-      .where(active_filter)
-      .where(transition_aged_youth_filter)
-      .where(search_filter)
+    extra_languages_filter do
+      raw_records
+        .where(supervisor_filter)
+        .where(active_filter)
+        .where(transition_aged_youth_filter)
+        .where(search_filter)
+    end
   end
 
   def raw_records
@@ -165,6 +169,19 @@ class VolunteerDatatable < ApplicationDatatable
           "transition_aged_youth_cases.volunteer_id IS #{filter[0] == "true" ? "NOT" : nil} NULL"
         end
       }.call
+  end
+
+  def extra_languages_filter
+    filter = additional_filters[:extra_languages]
+    return yield unless filter
+
+    if filter.count > 1
+      yield.includes(:languages).distinct
+    elsif filter[0] == "true"
+      yield.joins(:languages).distinct
+    elsif filter[0] == "false"
+      yield.includes(:languages).excluding(base_relation.joins(:languages)).distinct
+    end
   end
 
   def search_filter

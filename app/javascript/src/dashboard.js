@@ -202,7 +202,8 @@ $('document').ready(() => {
       {
         name: 'has_any_extra_languages ',
         render: (data, type, row, meta) => {
-          return row.extra_languages.length > 0 ? '<span class="language-icon">🌎​</span>' : ''
+          const languages = row.extra_languages.map(x => x.name).join(', ')
+          return row.extra_languages.length > 0 ? `<span class="language-icon" data-toggle="tooltip" title="${languages}">🌎</span>` : ''
         },
         searchable: false,
         visible: true
@@ -239,11 +240,14 @@ $('document').ready(() => {
         const transitionYouthOptions = $('.transition-youth-options input:checked')
         const transitionYouthFilter = Array.from(transitionYouthOptions).map(option => JSON.parse(option.dataset.value))
 
+        const extraLanguageOptions = $('.extra-language-options input:checked')
+        const extraLanguageFilter = Array.from(extraLanguageOptions).map(option => JSON.parse(option.dataset.value))
         return $.extend({}, d, {
           additional_filters: {
             supervisor: supervisorFilter,
             active: statusFilter,
-            transition_aged_youth: transitionYouthFilter
+            transition_aged_youth: transitionYouthFilter,
+            extra_languages: extraLanguageFilter
           }
         })
       },
