@@ -202,8 +202,7 @@ $('document').ready(() => {
       {
         name: 'has_any_extra_languages ',
         render: (data, type, row, meta) => {
-           return row.extra_languages.length > 0 ? `
-            <span class="language-icon">🌎​</span>` : '';
+          return row.extra_languages.length > 0 ? '<span class="language-icon">🌎​</span>' : ''
         },
         searchable: false,
         visible: true

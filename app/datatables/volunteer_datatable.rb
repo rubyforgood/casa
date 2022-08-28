@@ -29,7 +29,7 @@ class VolunteerDatatable < ApplicationDatatable
         },
         supervisor: {id: volunteer.supervisor_id, name: volunteer.supervisor_name},
         hours_spent_in_days: volunteer.hours_spent_in_days(30),
-        extra_languages: volunteer.languages.map { |lang| { id: lang.id, name: lang.name } }
+        extra_languages: volunteer.languages.map { |lang| {id: lang.id, name: lang.name} }
       }
     end
   end
