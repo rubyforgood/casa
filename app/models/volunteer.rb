@@ -13,6 +13,7 @@ class Volunteer < User
   CONTACT_MADE_IN_PAST_DAYS_NUM = 60
   CONTACT_MADE_IN_PAST_DAYS_COLUMN = "contact_made_in_past_#{CONTACT_MADE_IN_PAST_DAYS_NUM}_days".freeze
   HOURS_SPENT_IN_DAYS_COLUMN = "hours_spent_in_days"
+  EXTRA_LANGUAGES_COLUMN = "has_any_extra_languages"
   ACTIONS_COLUMN = "actions"
   TABLE_COLUMNS = [
     NAME_COLUMN,
@@ -24,6 +25,7 @@ class Volunteer < User
     LAST_ATTEMPTED_CONTACT_COLUMN,
     CONTACT_MADE_IN_PAST_DAYS_COLUMN,
     HOURS_SPENT_IN_DAYS_COLUMN,
+    EXTRA_LANGUAGES_COLUMN,
     ACTIONS_COLUMN
   ].freeze
   CONTACT_MADE_IN_DAYS_NUM = 14

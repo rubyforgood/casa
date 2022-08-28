@@ -28,7 +28,8 @@ class VolunteerDatatable < ApplicationDatatable
           occurred_at: I18n.l(volunteer.most_recent_attempt_occurred_at, format: :full, default: nil)
         },
         supervisor: {id: volunteer.supervisor_id, name: volunteer.supervisor_name},
-        hours_spent_in_days: volunteer.hours_spent_in_days(30)
+        hours_spent_in_days: volunteer.hours_spent_in_days(30),
+        extra_languages: volunteer.languages.map { |lang| { id: lang.id, name: lang.name } }
       }
     end
   end
