@@ -2,13 +2,23 @@ const AsyncNotifier = require('../async_notifier')
 const patchNotePath = window.location.pathname
 let pageNotifier
 
+// Inserts a patch note display after the create patch note form in the patch note list and styles it as new
+//  @param    {number} patchNoteGroupId  The id of the group allowed to view the patch note
+//  @param    {jQuery} patchNoteList     A jQuery object representing the patch note list
+//  @param    {string} patchNoteText     The text of the patch note
+//  @param    {number} patchNoteTypeId   The id of the patch note type
+//  @throws   {TypeError}  for a parameter of the incorrect type
+//  @throws   {RangeError} if an id parameter is negative
+function addPatchNoteUI (patchNoteGroupId, patchNoteId, patchNoteList, patchNoteText, patchNoteTypeId) {
+}
+
 // Creates a patch note
 //  @param    {number} patchNoteGroupId  The id of the group allowed to view the patch note
 //  @param    {string} patchNoteText     The text of the patch note
 //  @param    {number} patchNoteTypeId   The id of the patch note type
 //  @returns  {array} a jQuery jqXHR object. See https://api.jquery.com/jQuery.ajax/#jqXHR
 //  @throws   {TypeError}  for a parameter of the incorrect type
-//  @throws   {RangeError} if optionId is negative
+//  @throws   {RangeError} if an id parameter is negative
 function createPatchNote (patchNoteGroupId, patchNoteText, patchNoteTypeId) {
   // Input check
   if (!Number.isInteger(patchNoteGroupId)) {
@@ -89,7 +99,7 @@ function deletePatchNote (patchNoteId) {
 
 // Disables all form elements of a patch note form
 //  @param    {object} patchNoteFormElements An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormElements()
-//  @throws   {TypeError}      for a parameter of the incorrect type
+//  @throws   {TypeError} for a parameter of the incorrect type
 function disablePatchNoteForm (patchNoteFormElements) {
   for (const formElement of Object.values(patchNoteFormElements)) {
     formElement.prop('disabled', true)
@@ -98,7 +108,7 @@ function disablePatchNoteForm (patchNoteFormElements) {
 
 // Enables all form elements of a patch note form
 //  @param    {object} patchNoteFormElements An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormElements()
-//  @throws   {TypeError}      for a parameter of the incorrect type
+//  @throws   {TypeError} for a parameter of the incorrect type
 function enablePatchNoteForm (patchNoteFormElements) {
   for (const formElement of Object.values(patchNoteFormElements)) {
     formElement.removeAttr('disabled')
