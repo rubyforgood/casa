@@ -9,8 +9,8 @@ let pageNotifier
 //  @param    {number} patchNoteTypeId   The id of the patch note type
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {RangeError} if an id parameter is negative
-function addPatchNoteUI (patchNoteGroupId, patchNoteId, patchNoteList, patchNoteText, patchNoteTypeId) {
-}
+//function addPatchNoteUI (patchNoteGroupId, patchNoteId, patchNoteList, patchNoteText, patchNoteTypeId) {
+//}
 
 // Creates a patch note
 //  @param    {number} patchNoteGroupId  The id of the group allowed to view the patch note
