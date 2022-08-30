@@ -153,9 +153,10 @@ You'll probably hit a problem where ruby-version reads `ruby-2.7.2` but the inst
 **Logging in with seed users**
 
 Login as a regular user at http://localhost:3000/users/sign_in. Some example seed users:
-- volunteer1@example.com  view site as a volunteer
-- supervisor1@example.com view site as a supervisor
-- casa_admin1@example.com view site as an admin
+- volunteer1@example.com    view site as a volunteer
+- supervisor1@example.com   view site as a supervisor
+- casa_admin1@example.com   view site as an admin
+- casa_admin2-1@example.com view site as admin from a different org
 
 Login as an all CASA admin at http://localhost:3000/all_casa_admins/sign_in. An example seed user:
 - allcasaadmin@example.com view site as an all CASA admin
