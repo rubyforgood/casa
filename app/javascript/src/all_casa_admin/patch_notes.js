@@ -22,18 +22,8 @@ let pageNotifier
 //  @throws   {RangeError} if an id parameter is negative
 function createPatchNote (patchNoteGroupId, patchNoteText, patchNoteTypeId) {
   // Input check
-  if (!Number.isInteger(patchNoteGroupId)) {
-    throw new TypeError('Param patchNoteGroupId is not an integer')
-  } else if (patchNoteGroupId < 0) {
-    throw new RangeError('Param patchNoteGroupId cannot be negative')
-  }
-
-  if (!Number.isInteger(patchNoteTypeId)) {
-    throw new TypeError('Param patchNoteTypeId is not an integer')
-  } else if (patchNoteTypeId < 0) {
-    throw new RangeError('Param patchNoteTypeId cannot be negative')
-  }
-
+  TypeChecker.checkPositiveInteger(patchNoteGroupId, 'patchNoteGroupId')
+  TypeChecker.checkPositiveInteger(patchNoteTypeId, 'patchNoteTypeId')
   TypeChecker.checkString(patchNoteText, 'patchNoteText')
 
   pageNotifier.startAsyncOperation()
