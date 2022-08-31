@@ -1,4 +1,5 @@
 const AsyncNotifier = require('../async_notifier')
+const TypeChecker = require('./type_checker.js')
 const patchNotePath = window.location.pathname
 let pageNotifier
 
@@ -9,8 +10,8 @@ let pageNotifier
 //  @param    {number} patchNoteTypeId   The id of the patch note type
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {RangeError} if an id parameter is negative
-//function addPatchNoteUI (patchNoteGroupId, patchNoteId, patchNoteList, patchNoteText, patchNoteTypeId) {
-//}
+// function addPatchNoteUI (patchNoteGroupId, patchNoteId, patchNoteList, patchNoteText, patchNoteTypeId) {
+// }
 
 // Creates a patch note
 //  @param    {number} patchNoteGroupId  The id of the group allowed to view the patch note
@@ -33,9 +34,7 @@ function createPatchNote (patchNoteGroupId, patchNoteText, patchNoteTypeId) {
     throw new RangeError('Param patchNoteTypeId cannot be negative')
   }
 
-  if (typeof patchNoteText !== 'string') {
-    throw new TypeError('Param patchNoteText must be a string')
-  }
+  TypeChecker.checkString(patchNoteText, 'patchNoteText')
 
   pageNotifier.startAsyncOperation()
 
