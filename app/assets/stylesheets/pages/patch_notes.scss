@@ -29,8 +29,12 @@
         }
       }
 
-      button {
-        width: 100%;
+      .patch-note-button-controls {
+        display: flex;
+
+        button {
+          flex-grow: 1
+        }
       }
     };
   };

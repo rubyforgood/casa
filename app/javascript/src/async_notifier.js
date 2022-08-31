@@ -1,4 +1,5 @@
 /* global $ */
+const TypeChecker = require('./type_checker.js')
 
 module.exports = class Notifier {
   //  @param {object} notificationsElement The notification DOM element as a jQuery object
@@ -20,9 +21,7 @@ module.exports = class Notifier {
   //  @throws {RangeError} for unsupported logging levels
 
   notify (message, level) {
-    if (typeof message !== 'string') {
-      throw new TypeError('Param message must be a string')
-    }
+    TypeChecker.checkString(message, 'message')
 
     const escapedMessage = message.replace(/&/g, '&amp;')
       .replace(/>/g, '&gt;')
