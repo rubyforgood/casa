@@ -1,5 +1,5 @@
 const AsyncNotifier = require('../async_notifier')
-const TypeChecker = require('./type_checker.js')
+const TypeChecker = require('../type_checker')
 const patchNotePath = window.location.pathname
 let pageNotifier
 
@@ -209,5 +209,6 @@ $('document').ready(() => {
   } catch (err) {
     pageNotifier.notify('Could not intialize app', 'error')
     pageNotifier.notify(err.message, 'error')
+    console.error(err)
   }
 })
