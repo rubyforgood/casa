@@ -2,6 +2,7 @@
 /* global $ */
 
 const Notifier = require('./async_notifier')
+const TypeChecker = require('./type_checker')
 
 const emancipationPage = {
   savePath: window.location.pathname + '/save'
@@ -33,20 +34,10 @@ function resolveAsyncOperation (error) {
 function saveCheckState (action, checkItemId) {
   // Input check
   if (typeof checkItemId === 'string') {
-    const checkItemIdAsNum = parseInt(checkItemId)
-
-    if (!checkItemIdAsNum) {
-      throw new TypeError('Param checkItemId is not an integer')
-    } else if (checkItemIdAsNum < 0) {
-      throw new RangeError('Param checkItemId cannot be negative')
-    }
-  } else {
-    if (!Number.isInteger(checkItemId)) {
-      throw new TypeError('Param checkItemId is not an integer')
-    } else if (checkItemId < 0) {
-      throw new RangeError('Param checkItemId cannot be negative')
-    }
+    checkItemId = parseInt(checkItemId)
   }
+
+  TypeChecker.checkPositiveInteger(checkItemId, 'checkItemId')
 
   emancipationPage.notifier.startAsyncOperation()
 
