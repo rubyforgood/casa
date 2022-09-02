@@ -4,6 +4,8 @@ const TypeChecker = require('./type_checker.js')
 module.exports = class Notifier {
   //  @param {object} notificationsElement The notification DOM element as a jQuery object
   constructor (notificationsElement) {
+    TypeChecker.checkNonEmptyJQueryObject(notificationsElement, 'notificationsElement')
+
     this.loadingToast = notificationsElement.find('#async-waiting-indicator')
     this.notificationsElement = notificationsElement
     this.savedToast = notificationsElement.find('#async-success-indicator')
