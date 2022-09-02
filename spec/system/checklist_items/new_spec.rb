@@ -17,6 +17,11 @@ RSpec.describe "checklist_items/new", type: :system do
     expect(page).to have_text("Checklist item was successfully created.")
     expect(page).to have_text("checklist item category")
     expect(page).to have_text("checklist item description")
+    expect(page).to have_text("Optional")
+
+    click_on "Submit"
+    current_date = Time.new.strftime("%m/%d/%Y")
+    expect(page).to have_text("Updated #{current_date}")
   end
 
   it "rejects with invalid data" do
