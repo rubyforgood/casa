@@ -1,6 +1,21 @@
 // Object.keys({variable})[0]
 
 module.exports = {
+  // Checks if a variable is a JQuery object
+  //  @param    {any}    variable The variable to be checked
+  //  @param    {string} varName  The name of the variable to be checked
+  //  @throws   {TypeError} If variable is not a JQuery object
+  //  @throws   {ReferenceError} If variable is a JQuery object but points to no elements
+  checkNonEmptyJQueryObject (variable, varName) {
+    if (!(variable instanceof jQuery)) {
+      throw new TypeError(`Param ${varName} must be a jQuery object`)
+    }
+
+    if (!variable.length) {
+      throw new ReferenceError(`Param ${varName} contains no elements`)
+    }
+  },
+
   // Checks if a variable is a positive integer
   //  @param    {any}    variable The variable to be checked
   //  @param    {string} varName  The name of the variable to be checked

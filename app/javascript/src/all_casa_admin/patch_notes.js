@@ -56,12 +56,7 @@ function createPatchNote (patchNoteGroupId, patchNoteText, patchNoteTypeId) {
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {RangeError} if optionId is negative
 function deletePatchNote (patchNoteId) {
-  // Input check
-  if (!Number.isInteger(patchNoteId)) {
-    throw new TypeError('Param patchNoteId is not an integer')
-  } else if (patchNoteId < 0) {
-    throw new RangeError('Param patchNoteId cannot be negative')
-  }
+  TypeChecker.checkPositiveInteger(patchNoteId, 'patchNoteId')
 
   pageNotifier.startAsyncOperation()
 
@@ -116,13 +111,7 @@ function enablePatchNoteForm (patchNoteFormElements) {
 //  @throws   {TypeError}      for a parameter of the incorrect type
 //  @throws   {ReferenceError} if an element could not be found
 function getPatchNoteFormInputs (patchNoteElement) {
-  if (!(patchNoteElement instanceof jQuery)) {
-    throw new TypeError('Param patchNoteElement must be a jQuery object')
-  }
-
-  if (!patchNoteElement.length) {
-    throw new ReferenceError('Param patchNoteElement contains no elements')
-  }
+  TypeChecker.checkNonEmptyJQueryObject(patchNoteElement, 'patchNoteElement')
 
   const selects = patchNoteElement.children('.label-and-select').children('select')
 
