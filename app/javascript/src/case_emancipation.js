@@ -63,7 +63,7 @@ function saveCheckState (action, checkItemId) {
 }
 
 $('document').ready(() => {
-  if(!(/casa_cases\/\d+\/emancipation/.test(window.location.pathname))) {
+  if (!(/casa_cases\/\d+\/emancipation/.test(window.location.pathname))) {
     return
   }
 

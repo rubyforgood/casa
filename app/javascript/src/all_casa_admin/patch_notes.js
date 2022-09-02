@@ -146,7 +146,7 @@ function resolveAsyncOperation (error) {
 }
 
 $('document').ready(() => {
-  if(!(window.location.pathname.includes('patch_notes'))) {
+  if (!(window.location.pathname.includes('patch_notes'))) {
     return
   }
 
