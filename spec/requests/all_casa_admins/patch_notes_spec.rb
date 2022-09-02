@@ -78,12 +78,12 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
       end
 
       it "shows json with the id of the patch note created" do
-         post all_casa_admins_patch_notes_path, params: valid_attributes
-         expect(response.header["Content-Type"]).to match(/application\/json/)
-         expect(response.body).to_not be_nil
-         expect(response).to have_http_status(:created)
-         expect(JSON.parse(response.body)).to have_key("id")
-       end
+        post all_casa_admins_patch_notes_path, params: valid_attributes
+        expect(response.header["Content-Type"]).to match(/application\/json/)
+        expect(response.body).to_not be_nil
+        expect(response).to have_http_status(:created)
+        expect(JSON.parse(response.body)).to have_key("id")
+      end
     end
   end
 
