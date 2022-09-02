@@ -157,6 +157,10 @@ function resolveAsyncOperation (error) {
 }
 
 $('document').ready(() => {
+  if(!(window.location.pathname.includes('patch_notes'))) {
+    return
+  }
+
   try {
     const asyncNotificationsElement = $('#async-notifications')
     pageNotifier = new AsyncNotifier(asyncNotificationsElement)
