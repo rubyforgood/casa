@@ -63,6 +63,10 @@ function saveCheckState (action, checkItemId) {
 }
 
 $('document').ready(() => {
+  if(!(/casa_cases\/\d+\/emancipation/.test(window.location.pathname))) {
+    return
+  }
+
   const asyncNotificationsElement = $('#async-notifications')
   emancipationPage.notifier = new Notifier(asyncNotificationsElement)
 
