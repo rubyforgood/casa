@@ -5,9 +5,6 @@ The commands below can be run all at once by copying and pasting them all into a
 
 If you copy and paste directly from this page to your command line, we recommend you do so one section (or even one line) at a time.
 
-The commands below include a section for installing [rvm](https://rvm.io/),
-but feel free to substitute your own favorite Ruby version manager such as [rbenv](https://github.com/rbenv/rbenv).
-
 ```
 # Install Linux Packages
 sudo apt update                    # Check internet for updates
