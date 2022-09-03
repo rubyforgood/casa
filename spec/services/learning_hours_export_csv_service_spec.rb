@@ -13,9 +13,20 @@ RSpec.describe LearningHoursExportCsvService do
   describe "#perform" do
     let(:result) { described_class.new(LearningHour.all).perform }
 
-    it "returns a csv as string with larning hours" do
-      expect(result).to eq("Volunteer Name,Learning Hours Title,Learning Hours Type,Duration,Date Of Learning\n" \
-        "#{user.display_name},#{learning_hour.name},#{learning_hour.learning_type},2:30,2022-06-20\n")
+    it "returns a csv as a string starting with the learning hours headers" do
+      csv_headers = "Volunteer Name,Learning Hours Title,Learning Hours Type,Duration,Date Of Learning\n"
+
+      expect(result).to start_with(csv_headers)
+    end
+
+    it "returns a csv as a string ending with the learning hours values" do
+      csv_values = "#{user.display_name},#{learning_hour.name},#{learning_hour.learning_type},2:30,2022-06-20\n"
+
+      if learning_hour.name.include? ","
+        csv_values.gsub!(learning_hour.name, '"' + learning_hour.name + '"')
+      end
+
+      expect(result).to end_with(csv_values)
     end
   end
 end
