@@ -10,8 +10,13 @@ let pageNotifier
 //  @param    {number} patchNoteTypeId   The id of the patch note type
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {RangeError} if an id parameter is negative
-// function addPatchNoteUI (patchNoteGroupId, patchNoteId, patchNoteList, patchNoteText, patchNoteTypeId) {
-// }
+function addPatchNoteUI (patchNoteGroupId, patchNoteId, patchNoteList, patchNoteText, patchNoteTypeId) {
+  TypeChecker.checkPositiveInteger(patchNoteGroupId, 'patchNoteGroupId')
+  TypeChecker.checkPositiveInteger(patchNoteId, 'patchNoteId')
+  TypeChecker.checkPositiveInteger(patchNoteTypeId, 'patchNoteTypeId')
+  TypeChecker.checkNonEmptyJQueryObject(patchNoteList, 'patchNoteList')
+  TypeChecker.checkString(patchNoteText, 'patchNoteText')
+}
 
 // Creates a patch note
 //  @param    {number} patchNoteGroupId  The id of the group allowed to view the patch note
