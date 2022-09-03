@@ -132,14 +132,14 @@ See [github's article](https://docs.github.com/en/authentication/connecting-to-g
 Run this series of commands to install the project.  
 ```
 git clone git@github.com:rubyforgood/casa.git # Download a copy of the repository locally
-cd casa # Go into the folder containing casa
-bundle install # Install ruby dependencies
-bundle exec rails db:setup # Create your local test database
-bundle exec rails db:migrate # Update the database if it's out of date
-bundle exec rake after_party:run # Run post deployment tasks
+cd casa                                       # Go into the folder containing casa
+bundle install                                # Install ruby dependencies
+bundle exec rails db:setup                    # Create your local test database
+bundle exec rails db:migrate                  # Update the database if it's out of date
+bundle exec rake after_party:run              # Run post deployment tasks
 
-yarn # install javascript dependencies
-yarn build # compile javascript
-yarn build:css # compile css
+yarn                                          # install javascript dependencies
+yarn build                                    # compile javascript
+yarn build:css                                # compile css
 ```
 [Back to the main readme for steps to test your installation.](https://github.com/rubyforgood/casa#running-the-app--verifying-installation)
