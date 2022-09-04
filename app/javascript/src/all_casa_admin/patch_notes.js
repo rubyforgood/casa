@@ -16,6 +16,32 @@ function addPatchNoteUI (patchNoteGroupId, patchNoteId, patchNoteList, patchNote
   TypeChecker.checkPositiveInteger(patchNoteTypeId, 'patchNoteTypeId')
   TypeChecker.checkNonEmptyJQueryObject(patchNoteList, 'patchNoteList')
   TypeChecker.checkString(patchNoteText, 'patchNoteText')
+
+  const newPatchNoteForm = patchNoteList.children().eq(1)
+
+  if (!(newPatchNoteForm.length)) {
+    throw new ReferenceError('Could not find new patch note form')
+  }
+
+  const newPatchNoteUI = newPatchNoteForm.clone()
+  const newPatchNoteUIFormInputs = getPatchNoteFormInputs(newPatchNoteUI.children())
+
+  newPatchNoteUI.addClass('new')
+  newPatchNoteUIFormInputs.noteTextArea.val(patchNoteText)
+  newPatchNoteUIFormInputs.dropdownGroup.children().removeAttr('selected')
+  newPatchNoteUIFormInputs.dropdownGroup.children(`option[value="${patchNoteGroupId}"]`).attr('selected', true)
+  newPatchNoteUIFormInputs.dropdownType.children().removeAttr('selected')
+  newPatchNoteUIFormInputs.dropdownType.children(`option[value="${patchNoteTypeId}"]`).attr('selected', true)
+  newPatchNoteUIFormInputs.buttonControls.parent().html(`
+    <button type="button" class="btn btn-primary button-edit">
+      <i class="fa-solid fa-pen-to-square"></i>Edit
+    </button>
+    <button type="button" class="btn btn-danger button-delete">
+      <i class="fa-solid fa-trash-can"></i>Delete
+    </button>
+  `)
+
+  newPatchNoteForm.after(newPatchNoteUI)
 }
 
 // Creates a patch note
@@ -105,7 +131,7 @@ function enablePatchNoteForm (patchNoteFormElements) {
 }
 
 // Get all form elements of a patch note in edit mode
-//  @param    {number} patchNoteId The id of the patch note form
+//  @param    {jQuery} patchNoteElement The direct parent of the form elements
 //  @returns  {object} An object containing jQuery objects in this form
 //    {
 //      dropdownGroup:  The select for the patch note's user visibility group
@@ -159,6 +185,7 @@ $('document').ready(() => {
     const asyncNotificationsElement = $('#async-notifications')
     pageNotifier = new AsyncNotifier(asyncNotificationsElement)
 
+    const patchNoteList = $('#patch-note-list')
     const newPatchNoteFormElements = getPatchNoteFormInputs($('#new-patch-note'))
 
     newPatchNoteFormElements.buttonControls.click(() => {
@@ -169,12 +196,21 @@ $('document').ready(() => {
 
       disablePatchNoteForm(newPatchNoteFormElements)
 
+      const patchNoteGroupId = Number.parseInt(newPatchNoteFormElements.dropdownGroup.val())
+      const patchNoteTypeId = Number.parseInt(newPatchNoteFormElements.dropdownType.val())
+      const patchNoteText = newPatchNoteFormElements.noteTextArea.val()
+
       createPatchNote(
-        Number.parseInt(newPatchNoteFormElements.dropdownGroup.val()),
-        newPatchNoteFormElements.noteTextArea.val(),
-        Number.parseInt(newPatchNoteFormElements.dropdownType.val())
-      ).then(function () {
+        patchNoteGroupId,
+        patchNoteText,
+        patchNoteTypeId
+      ).then(function (response) {
         newPatchNoteFormElements.noteTextArea.val('')
+        addPatchNoteUI(patchNoteGroupId, response.id, patchNoteList, patchNoteText, patchNoteTypeId)
+      }).fail(function (err) {
+        pageNotifier.notify('Failed to update UI', 'error')
+        pageNotifier.notify(err.message, 'error')
+        console.error(err)
       }).always(function () {
         enablePatchNoteForm(newPatchNoteFormElements)
       })
