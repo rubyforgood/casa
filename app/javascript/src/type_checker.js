@@ -27,7 +27,7 @@ module.exports = {
     if (!(variable.length)) {
       throw new RangeError(`Param ${varName} cannot be empty string`)
     }
-  }
+  },
 
   // Checks if a variable is a positive integer
   //  @param  {any}    variable The variable to be checked
