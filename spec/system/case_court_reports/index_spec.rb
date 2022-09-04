@@ -4,13 +4,15 @@ RSpec.describe "case_court_reports/index", type: :system do
   let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
   let(:supervisor) { volunteer.supervisor }
   let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
+  let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:has_transitioned?).first }
+  let(:at_least_transition_age) { volunteer.casa_cases.find(&:has_transitioned?) }
 
   before do
     sign_in volunteer
     visit case_court_reports_path
   end
 
-  context "when first arriving to 'Generate Court Report' page, by default" do
+  context "when first arriving to 'Generate Court Report' page" do
     it "sees 'Generate Report' button" do
       options = {text: "Generate Report", visible: true}
 
@@ -34,13 +36,13 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
 
     it "shows transition stamp for transitioned case" do
-      expected_text = "#{casa_cases.second.case_number} - transition"
+      expected_text = "#{at_least_transition_age.case_number} - transition"
 
       expect(page).to have_selector "#case-selection option", text: expected_text
     end
 
     it "shows non-transition stamp for non-transitioned case" do
-      expected_text = "#{casa_cases.first.case_number} - non-transition"
+      expected_text = "#{younger_than_transition_age.case_number} - non-transition"
 
       expect(page).to have_selector "#case-selection option", text: expected_text
     end
