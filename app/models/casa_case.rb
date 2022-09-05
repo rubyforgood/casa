@@ -155,10 +155,6 @@ class CasaCase < ApplicationRecord
     judge_name
   end
 
-  def has_transitioned?
-    birth_month_year_youth && birth_month_year_youth < 14.years.ago
-  end
-
   def remove_emancipation_category(category_id)
     category = EmancipationCategory.find(category_id)
     raise ActiveRecord::RecordNotFound unless emancipation_categories.include?(category)

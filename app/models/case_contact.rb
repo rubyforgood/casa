@@ -162,7 +162,7 @@ class CaseContact < ApplicationRecord
   end
 
   def has_casa_case_transitioned
-    casa_case.has_transitioned?
+    casa_case.in_transition_age?
   end
 
   def contact_groups_with_types

@@ -4,8 +4,8 @@ RSpec.describe "case_court_reports/index", type: :system do
   let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
   let(:supervisor) { volunteer.supervisor }
   let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
-  let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:has_transitioned?).first }
-  let(:at_least_transition_age) { volunteer.casa_cases.find(&:has_transitioned?) }
+  let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
+  let(:at_least_transition_age) { volunteer.casa_cases.find(&:in_transition_age?) }
 
   before do
     sign_in volunteer
@@ -83,9 +83,9 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   describe "'Case Number' dropdown list", js: true do
-    let(:transitioned_case_number) { casa_cases.find(&:has_transitioned?).case_number.to_s }
+    let(:transitioned_case_number) { casa_cases.find(&:in_transition_age?).case_number.to_s }
     let(:transitioned_option_text) { "#{transitioned_case_number} - transition(assigned to Name Last)" }
-    let(:non_transitioned_case_number) { casa_cases.reject(&:has_transitioned?).first.case_number.to_s }
+    let(:non_transitioned_case_number) { casa_cases.reject(&:in_transition_age?).first.case_number.to_s }
     let(:non_transitioned_option_text) { "#{non_transitioned_case_number} - non-transition(assigned to Name Last)" }
 
     it "has transition case option selected" do
@@ -106,7 +106,7 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   context "when generating a report, volunteer sees waiting page", js: true do
-    let(:casa_case) { casa_cases.find(&:has_transitioned?) }
+    let(:casa_case) { casa_cases.find(&:in_transition_age?) }
     let(:option_text) { "#{casa_case.case_number} - transition" }
 
     before do
@@ -134,7 +134,7 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   context "when selecting a case, volunteer can generate and download a report", js: true do
-    let(:casa_case) { casa_cases.find(&:has_transitioned?) }
+    let(:casa_case) { casa_cases.find(&:in_transition_age?) }
     let(:option_text) { "#{casa_case.case_number} - transition" }
 
     before do
