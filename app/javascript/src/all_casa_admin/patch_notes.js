@@ -3,6 +3,12 @@ const TypeChecker = require('../type_checker')
 const patchNotePath = window.location.pathname
 let pageNotifier
 
+jQuery.ajaxSetup({
+  beforeSend: function() {
+    pageNotifier.startAsyncOperation()
+  }
+})
+
 // Inserts a patch note display after the create patch note form in the patch note list and styles it as new
 //  @param    {number} patchNoteGroupId  The id of the group allowed to view the patch note
 //  @param    {jQuery} patchNoteList     A jQuery object representing the patch note list
@@ -57,8 +63,6 @@ function createPatchNote (patchNoteGroupId, patchNoteText, patchNoteTypeId) {
   TypeChecker.checkPositiveInteger(patchNoteTypeId, 'patchNoteTypeId')
   TypeChecker.checkString(patchNoteText, 'patchNoteText')
 
-  pageNotifier.startAsyncOperation()
-
   // Post request
   return $.post(patchNotePath, {
     note: patchNoteText,
@@ -88,8 +92,6 @@ function createPatchNote (patchNoteGroupId, patchNoteText, patchNoteTypeId) {
 //  @throws   {RangeError} if optionId is negative
 function deletePatchNote (patchNoteId) {
   TypeChecker.checkPositiveInteger(patchNoteId, 'patchNoteId')
-
-  pageNotifier.startAsyncOperation()
 
   // Post request
   return $.ajax({
