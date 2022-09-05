@@ -34,10 +34,10 @@ class CasaCaseDecorator < Draper::Decorator
     volunteer_names = object.assigned_volunteers.map(&:display_name).join(",")
 
     [
-      "#{object.case_number} - #{object.has_transitioned? ? "transition" : "non-transition"}(assigned to #{volunteer_names.length > 0 ? volunteer_names : "no one"})",
+      "#{object.case_number} - #{object.in_transition_age? ? "transition" : "non-transition"}(assigned to #{volunteer_names.length > 0 ? volunteer_names : "no one"})",
       object.case_number,
       {
-        "data-transitioned": object.has_transitioned?,
+        "data-transitioned": object.in_transition_age?,
         "data-lookup": volunteer_names
       }
     ]
@@ -109,11 +109,11 @@ class CasaCaseDecorator < Draper::Decorator
   end
 
   def transition_aged_youth
-    object.in_transition_age? || object.has_transitioned? ? "Yes #{CasaCase::TRANSITION_AGE_YOUTH_ICON}" : "No #{CasaCase::NON_TRANSITION_AGE_YOUTH_ICON}"
+    object.in_transition_age? ? "Yes #{CasaCase::TRANSITION_AGE_YOUTH_ICON}" : "No #{CasaCase::NON_TRANSITION_AGE_YOUTH_ICON}"
   end
 
   def transition_aged_youth_icon
-    object.in_transition_age? || object.has_transitioned? ? CasaCase::TRANSITION_AGE_YOUTH_ICON : CasaCase::NON_TRANSITION_AGE_YOUTH_ICON
+    object.in_transition_age? ? CasaCase::TRANSITION_AGE_YOUTH_ICON : CasaCase::NON_TRANSITION_AGE_YOUTH_ICON
   end
 
   def unsuccessful_contacts_this_week
