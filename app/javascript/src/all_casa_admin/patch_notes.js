@@ -4,7 +4,7 @@ const patchNotePath = window.location.pathname
 let pageNotifier
 
 jQuery.ajaxSetup({
-  beforeSend: function() {
+  beforeSend: function () {
     pageNotifier.startAsyncOperation()
   }
 })
