@@ -6,7 +6,7 @@ Only the latest version (master branch) and currently deployed version (also mas
 
 ## Reporting a Vulnerability
 
-Please report a vulnerability by emailing sean@rubybythebay.org
+Please report a vulnerability by emailing casa@rubyforgood.org
 
 You can also open a github issue (do NOT provide vulnerability details on github) to notify us that you need to report an issue. 
 
