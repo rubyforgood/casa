@@ -1,3 +1,9 @@
+---
+name: Bug Report
+title: "Bug: "
+labels: "Type: Bug"
+---
+
 ### Impacted User Types
  - volunteers?
  - supervisors?
