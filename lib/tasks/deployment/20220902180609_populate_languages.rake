@@ -1,5 +1,5 @@
 namespace :after_party do
-  desc 'Deployment task: Populate languages table'
+  desc "Deployment task: Populate languages table"
   task populate_languages: :environment do
     puts "Running deploy task 'populate_languages'"
 
