@@ -1,5 +1,6 @@
 ---
 name: Bug Report
+about: For bugs found on the site
 title: "Bug: "
 labels: "Type: Bug"
 ---
