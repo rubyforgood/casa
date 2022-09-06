@@ -2,7 +2,7 @@
 name: 🪲Bug report
 about: 🔨What needs fixing? ✨
 title: "Bug: "
-labels: "Type: Bug" , "Help Wanted"
+labels: "Type: Bug"
 ---
 
 ### Impacted User Types
