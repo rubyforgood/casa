@@ -1,3 +1,9 @@
+---
+name: 💡Feature request
+about: 🔨What needs building? ✨ 
+labels: ["✨ New Feature", "Help Wanted"]
+---
+
 **What type(s) of user does this feature affect?**
  - volunteers?
  - supervisors?
