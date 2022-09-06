@@ -1,6 +1,6 @@
 ---
-name: Bug Report
-about: For bugs found on the site
+name: 🪲Bug report
+about: 🔨What needs fixing? ✨
 title: "Bug: "
 labels: "Type: Bug"
 ---
