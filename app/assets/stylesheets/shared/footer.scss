@@ -56,8 +56,12 @@ footer {
   }
 }
 
+.footer.container-fluid {
+  min-height: calc(100vh - 45px);
+}
+
 footer.logged-in {
-  position: fixed;
+  position: relative;
   height: 40px;
   left: 0px;
   bottom: 0px;
@@ -86,6 +90,6 @@ footer.logged-in {
     width: 100%;
     margin-left: 0;
     padding-bottom: 1rem;
-    height: auto;
+    height: 100px;
   }
 }
