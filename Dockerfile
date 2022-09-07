@@ -21,6 +21,7 @@ COPY Gemfile* $RAILS_ROOT
 RUN bundle install
 
 COPY . .
+RUN yarn build && yarn build:css
 
 ### BUILD STEP DONE ###
 
