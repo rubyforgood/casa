@@ -162,3 +162,7 @@ it's probably easier to click on [vnc://localhost:5900](vnc://localhost:5900)
 The VNC password is `secret`.
 
 Run the spec(s) from the command line and you can see the test running in the browser through the VNC client.
+
+## Troubleshooting
+### Nokogiri not found on some macs
+https://stackoverflow.com/questions/70963924/unable-to-load-nokogiri-in-docker-container-on-m1-mac
