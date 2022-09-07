@@ -255,6 +255,12 @@ en:
         enable: Please enable javascript
         require: This app requires javascript to work
     footers:
+      logged_in:
+        built_by: Built by
+        link:
+          report_site_issue: Report a site issue
+          sms_terms_and_conditions: SMS Terms & Conditions
+        ruby_for_good: Ruby For Good
       not_logged_in:
         built_by: Built by
         link:
