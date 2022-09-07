@@ -78,6 +78,10 @@ footer.logged-in {
     color: #2E2E2E;
   }
 
+  a {
+    white-space: nowrap;
+  }
+
   @media only screen and (max-width: screen-sizes.$mobile) {
     width: 100%;
     margin-left: 0;
