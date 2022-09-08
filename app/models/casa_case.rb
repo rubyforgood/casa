@@ -235,8 +235,6 @@ end
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  casa_org_id               :bigint           not null
-#  hearing_type_id           :bigint
-#  judge_id                  :bigint
 #
 # Indexes
 #

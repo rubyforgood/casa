@@ -35,11 +35,7 @@ class CasaCasesController < ApplicationController
   end
 
   def edit
-    if current_role == "Volunteer"
-      @siblings_casa_cases = current_user.casa_cases.excluding(@casa_case)
-    elsif ["Supervisor", "Casa Admin"].include? current_role
-      @siblings_casa_cases = current_organization.casa_cases.excluding(@casa_case)
-    end
+    @siblings_casa_cases = CasaCasePolicy::Scope.new(current_user, @casa_case).sibling_cases
     authorize @casa_case
   end
 

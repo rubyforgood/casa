@@ -58,6 +58,7 @@
         </div>
       </div>
     </div>
+
     <div class="dropdown pull-left mr-2">
       <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <%= t(".transition_aged_youth") %>
@@ -74,6 +75,25 @@
                     class: "form-check-input",
                     data: { value: "false" } %>
           <%= label_tag "transition_youth_option_no", t("common.no_text"), class: "form-check-label" %>
+        </div>
+      </div>
+    </div>
+    <div class="dropdown pull-left mr-2">
+      <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Has Extra Languages
+      </button>
+      <div class="dropdown-menu extra-language-options" aria-labelledby="dropdownMenuButton">
+        <div class="dropdown-item form-check">
+          <%= check_box_tag "extra_language_option_yes", "true", true,
+                    class: "form-check-input",
+                    data: { value: "true" } %>
+          <%= label_tag "extra_language_option_yes",  t("common.yes_text"), class: "form-check-label" %>
+        </div>
+        <div class="dropdown-item form-check">
+          <%= check_box_tag "extra_language_option_no", "false", true,
+                    class: "form-check-input",
+                    data: { value: "false" } %>
+          <%= label_tag "extra_language_option_no", t("common.no_text"), class: "form-check-label" %>
         </div>
       </div>
     </div>
@@ -135,6 +155,7 @@
             <th><%= t(".heading.last_attempted_contact") %></th>
             <th><%= t(".heading.contacts") %></th>
             <th><%= t(".heading.hours_spent_in") %></th>
+            <th>Extra Languages</th>
             <th><%= t(".heading.actions") %></th>
           </tr>
         </thead>
