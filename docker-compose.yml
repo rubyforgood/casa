@@ -16,6 +16,7 @@ services:
       - database
     stdin_open: true
     tty: true
+    platform: linux/x86_64
 
   database:
     image: postgres:12.5
