@@ -69,8 +69,12 @@ class ApplicationPolicy
     user.supervisor? && same_org?
   end
 
-  def is_volunteer?
+  def is_volunteer? # deprecated in favor of is_volunteer_same_org?
     user.volunteer?
+  end
+
+  def is_volunteer_same_org?
+    user.volunteer? && same_org?
   end
 
   def admin_or_supervisor?
