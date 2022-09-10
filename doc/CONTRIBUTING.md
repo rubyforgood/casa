@@ -8,7 +8,7 @@ You won't be yelled at for giving your best effort. The worst that can happen is
 ## Contributing Steps  
 ### Issues  
 All work is organized by issues.  
-[Find issues here.][issues]  
+[Find issues here.](https://github.com/rubyforgood/casa/projects/1)  
 If you would like to contribute, please ask for an issue to be assigned to you.  
 If you would like to contribute something that is not represented by an issue, please make an issue and assign yourself.  
 Only take multiple issues if they are related and you can solve all of them at the same time with the same pull request.  
