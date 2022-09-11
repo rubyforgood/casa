@@ -3,12 +3,12 @@ require "csv"
 
 RSpec.describe MileageReport, type: :model do
   describe "#to_csv" do
-    it "includes only case contacts that are eligible for driving reimbursement" do
+    it "includes only case contacts that are eligible for driving reimbursement and not already reimbursed" do
       user1 = create(:volunteer, display_name: "Linda")
       contact_type1 = create(:contact_type, name: "Therapist")
       casa_case1 = create(:casa_case, case_number: "Hello")
       case_contact1 = create(:case_contact, want_driving_reimbursement: true, miles_driven: 5, creator: user1, contact_types: [contact_type1], occurred_at: Date.new(2020, 1, 1), casa_case: casa_case1)
-      create(:case_contact, want_driving_reimbursement: false, miles_driven: 10)
+      create(:case_contact, want_driving_reimbursement: false, miles_driven: 10, reimbursement_complete: false)
       create(:case_contact, want_driving_reimbursement: false)
       create(:case_contact, want_driving_reimbursement: true, miles_driven: 15, created_at: 2.years.ago)
 
@@ -23,7 +23,8 @@ RSpec.describe MileageReport, type: :model do
         "Miles Driven",
         "Casa Case Number",
         "Creator Name",
-        "Volunteer Address"
+        "Volunteer Address",
+        "Reimbursed"
       ])
       case_contact_data = parsed_csv[1]
       expect(case_contact_data[0]).to eq("Therapist")
@@ -45,7 +46,8 @@ RSpec.describe MileageReport, type: :model do
         "Miles Driven",
         "Casa Case Number",
         "Creator Name",
-        "Volunteer Address"
+        "Volunteer Address",
+        "Reimbursed"
       ])
     end
 
