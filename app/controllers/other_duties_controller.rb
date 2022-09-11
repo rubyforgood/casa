@@ -47,12 +47,23 @@ class OtherDutiesController < ApplicationController
   end
 
   def generate_other_duty_list(volunteers)
+    return [] if no_other_duties_for(volunteers)
     volunteers.map do |volunteer|
       {
         volunteer: volunteer,
         other_duties: volunteer.other_duties
       }
     end
+  end
+
+  def no_other_duties_for(volunteers)
+    no_duties_found = true
+    volunteers.each do |volunteer|
+      if volunteer.other_duties.present?
+        no_duties_found = false
+      end
+    end
+    no_duties_found
   end
 
   def other_duty_params
