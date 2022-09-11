@@ -1,14 +1,21 @@
 <h1> Reimbursement Queue </h1>
 
+<div class="btn-group">
+  <%= form_with url: mileage_reports_path(format: :csv), method: :get do |f| %>
+    <%= f.submit "Download Mileage Report", class: "btn btn-primary report-form-submit",
+                 data: {disable_with: "Downloading Mileage Report"} %>
+  <% end %>
+</div>
 <ul class="nav nav-tabs" id="nav-tab" role="tablist">
   <li class="nav-item">
     <%= link_to "Needs Review", reimbursements_path(status: "needs_review"),
-class: "nav-link #{active_if(!@complete_status)}" %>
+                class: "nav-link #{active_if(!@complete_status)}" %>
   </li>
   <li class="nav-item">
     <%= link_to "Reimbursement Complete", reimbursements_path(status: "complete"),
-class: "nav-link #{active_if(@complete_status)}" %>
+                class: "nav-link #{active_if(@complete_status)}" %>
   </li>
-<%= render "table" %>
+
+  <%= render "table" %>
 
 </ul>
