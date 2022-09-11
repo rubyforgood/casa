@@ -91,7 +91,7 @@ RSpec.describe "view all volunteers", type: :system do
       expect(page).to have_selector(".volunteer-filters")
 
       # by default, only active users are shown
-      expect(page.all("table#volunteers tbody tr").count).to eq assigned_volunteers.count
+      expect(page.all("table#volunteers tbody tr").count).to eq (assigned_volunteers.count + inactive_volunteers.count)
       assigned_volunteers.each do |assigned_volunteer|
         expect(page).to have_text assigned_volunteer.display_name
       end
