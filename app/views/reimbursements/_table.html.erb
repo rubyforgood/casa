@@ -4,14 +4,13 @@
       <table class="table table-striped table-bordered case-list" id="reimbursements">
         <thead>
         <tr>
-          <th><%= t(".heading.volunteer") %></th>
-          <th><%= t(".heading.case_number") %></th>
-          <th><%= t(".heading.contact_types") %></th>
-          <th><%= t(".heading.occurred_at") %></th>
-          <th><%= t(".heading.expense_type") %></th>
-          <th><%= t(".heading.description") %></th>
-          <th><%= t(".heading.amount") %></th>
-          <th><%= t(".heading.reimbursement_complete") %></th>
+          <th><%= "Volunteer" %></th>
+          <th><%= "Case Number" %></th>
+          <th><%= "Contact Types" %></th>
+          <th><%= "Occurred At" %></th>
+          <th><%= "Miles Driven" %></th>
+          <th><%= "Address" %></th>
+          <th><%= "Reimbursement Complete" %></th>
         </tr>
         </thead>
         <tbody>
@@ -38,14 +37,12 @@
               <%= reimbursement.occurred_at.strftime("%B %d %Y") %>
             </td>
 
-            <td id="expense-type-<%= reimbursement.id %>">
-            </td>
-
-            <td id="description-<%= reimbursement.id %>">
-            </td>
-
             <td id="amount-<%= reimbursement.id %>">
               <%= reimbursement.miles_driven %>
+            </td>
+
+            <td id="volunteer-address-<%= reimbursement.id %>">
+              <%= reimbursement.creator.address&.content %>
             </td>
 
             <td>
