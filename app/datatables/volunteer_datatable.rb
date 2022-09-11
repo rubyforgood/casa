@@ -13,8 +13,6 @@ class VolunteerDatatable < ApplicationDatatable
   private
 
   def data
-    puts "=========record==========="
-    puts records
     records.map do |volunteer|
       {
         active: volunteer.active?,
@@ -22,7 +20,7 @@ class VolunteerDatatable < ApplicationDatatable
         contacts_made_in_past_days: volunteer.contacts_made_in_past_days,
         display_name: volunteer.display_name,
         email: volunteer.email,
-        has_transition_aged_youth_cases: volunteer.has_transition_aged_youth_cases?,
+        has_transition_aged_youth_cases: volunteer.has_transition_aged_youth_cases?, # TODO fix this
         id: volunteer.id,
         made_contact_with_all_cases_in_days: volunteer.made_contact_with_all_cases_in_days?,
         most_recent_attempt: {
