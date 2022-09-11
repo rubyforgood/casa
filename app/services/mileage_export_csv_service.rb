@@ -1,8 +1,6 @@
 require "csv"
 
 class MileageExportCsvService
-  attr_reader :case_contacts
-
   def initialize(case_contacts)
     @case_contacts = case_contacts.preload({creator: :supervisor}, :contact_types, :casa_case)
   end
@@ -10,8 +8,8 @@ class MileageExportCsvService
   def perform
     CSV.generate(headers: true) do |csv|
       csv << full_data.keys.map(&:to_s).map(&:titleize)
-      if case_contacts.present?
-        case_contacts.decorate.each do |case_contact|
+      if @case_contacts.present?
+        @case_contacts.decorate.each do |case_contact|
           csv << full_data(case_contact).values
         end
       end
