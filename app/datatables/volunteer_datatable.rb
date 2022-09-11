@@ -15,21 +15,23 @@ class VolunteerDatatable < ApplicationDatatable
   def data
     records.map do |volunteer|
       {
-        active: volunteer.active?,
-        casa_cases: volunteer.casa_cases.map { |cc| {id: cc.id, case_number: cc.case_number} },
-        contacts_made_in_past_days: volunteer.contacts_made_in_past_days,
         display_name: volunteer.display_name,
-        email: volunteer.email,
+        supervisor: {id: volunteer.supervisor_id, name: volunteer.supervisor_name},
+        active: volunteer.active?,
         has_transition_aged_youth_cases: volunteer.has_transition_aged_youth_cases?, # TODO fix this
-        id: volunteer.id,
-        made_contact_with_all_cases_in_days: volunteer.made_contact_with_all_cases_in_days?,
+        casa_cases: volunteer.casa_cases.map { |cc| {id: cc.id, case_number: cc.case_number} },
         most_recent_attempt: {
           case_id: volunteer.most_recent_attempt_case_id,
           occurred_at: I18n.l(volunteer.most_recent_attempt_occurred_at, format: :full, default: nil)
         },
-        supervisor: {id: volunteer.supervisor_id, name: volunteer.supervisor_name},
         hours_spent_in_days: volunteer.hours_spent_in_days(30),
-        extra_languages: volunteer.languages&.map { |lang| {id: lang.id, name: lang.name} }
+        extra_languages: volunteer.languages&.map { |lang| {id: lang.id, name: lang.name} },
+        has_any_extra_languages: volunteer.languages.any?,
+
+        contacts_made_in_past_days: volunteer.contacts_made_in_past_days,
+        email: volunteer.email,
+        id: volunteer.id,
+        made_contact_with_all_cases_in_days: volunteer.made_contact_with_all_cases_in_days?,
       }
     end
   end
