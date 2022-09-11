@@ -63,7 +63,7 @@ class OtherDutiesController < ApplicationController
         no_duties_found = false
       end
     end
-    no_duties_found 
+    no_duties_found
   end
 
   def other_duty_params
