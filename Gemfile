@@ -30,7 +30,7 @@ gem "noticed" # Notifications
 gem "paranoia" # For soft-deleting database objects
 gem "pdf-forms" # filling in fund request PDFs with user input
 gem "rexml" # pdf-forms needs this to deploy to heroku apparently
-gem "pg" # Use postgresql as the database for Active Record
+gem 'pg', '~> 1.4', '>= 1.4.3'# Use postgresql as the database for Active Record
 gem "pretender"
 gem "puma" # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
