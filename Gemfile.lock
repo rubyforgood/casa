@@ -515,7 +515,7 @@ DEPENDENCIES
   noticed
   paranoia
   pdf-forms
-  pg (~> 1.4, >= 1.4.3)
+  pg
   pretender
   pry
   pry-byebug
