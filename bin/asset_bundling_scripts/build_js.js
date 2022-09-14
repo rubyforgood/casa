@@ -13,7 +13,7 @@ const watchValue = isWatching ? {
       logger.error(error.stack)
     } else {
       logger.info('watch build succeeded:')
-      logger.info(JSON.stringify(result))
+      logger.info(JSON.stringify(result, null, 2))
     }
   }
 } : false
