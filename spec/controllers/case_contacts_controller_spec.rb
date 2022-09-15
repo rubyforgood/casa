@@ -264,13 +264,14 @@ RSpec.describe CaseContactsController, type: :controller do
       before do
         allow(controller).to receive(:authenticate_user!).and_return(true)
         allow(controller).to receive(:current_user).and_return(supervisor)
+        request.env["HTTP_REFERER"] = "/"
       end
 
       context ".destroy" do
         before { delete :destroy, params: {id: case_contact.id} }
         it { expect(response).to have_http_status(:redirect) }
-        it { expect(case_contact.reload.deleted?).to be_falsey }
-        it { expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.") }
+        it { expect(case_contact.reload.deleted?).to be_truthy }
+        it { expect(flash[:notice]).to eq("Contact is successfully deleted.") }
       end
 
       context ".restore" do
