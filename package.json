@@ -18,7 +18,7 @@
     "@rails/ujs": "^7.0.4",
     "add2calendar": "^1.1.8",
     "bindings": "^1.5.0",
-    "bootstrap": "4.6.2",
+    "bootstrap": "5.2.1",
     "bootstrap-datepicker": "^1.9.0",
     "bootstrap-select": "^1.13.18",
     "datatables.net-dt": "^1.12.1",
