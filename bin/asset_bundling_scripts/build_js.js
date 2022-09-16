@@ -31,5 +31,5 @@ esbuild.build({
   }
 }).catch((err) => {
   logger.error('failed to build application.js')
-  logger.error(err)
+  logger.error(err.stack)
 })
