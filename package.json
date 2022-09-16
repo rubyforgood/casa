@@ -25,9 +25,11 @@
     "esbuild": "^0.15.7",
     "faker": "^5.5.3",
     "jquery": "^3.6.1",
+    "lodash": "^4.17.21",
     "popper.js": "^1.16.1",
     "sass": "^1.54.9",
     "select2": "^4.0.13",
+    "strftime": "^0.10.1",
     "sweetalert2": "^11.3.5",
     "turbolinks": "^5.2.0"
   },

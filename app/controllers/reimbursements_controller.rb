@@ -6,18 +6,16 @@ class ReimbursementsController < ApplicationController
     authorize :reimbursement
 
     @complete_status = params[:status] == "complete"
-
-    @reimbursements = fetch_reimbursements
-      .want_driving_reimbursement(true)
-      .created_max_ago(1.year.ago)
-      .filter_by_reimbursement_status(@complete_status)
+    @datatable_url = datatable_reimbursements_path(format: :json, status: params[:status])
+    @reimbursements = fetch_reimbursements_for_list(@complete_status)
     @grouped_reimbursements = @reimbursements.group_by { |cc| "#{cc.occurred_at}-#{cc.creator_id}" }
   end
 
   def datatable
     authorize :reimbursement
 
-    reimbursements = fetch_reimbursements
+    @complete_status = params[:status] == "complete"
+    reimbursements = fetch_reimbursements_for_list(@complete_status)
     datatable = ReimbursementDatatable.new reimbursements, params
 
     render json: datatable
@@ -46,5 +44,12 @@ class ReimbursementsController < ApplicationController
       contact_types: [:contact_type_group]
     ).preload(:casa_case)
     policy_scope(case_contacts, policy_scope_class: ReimbursementPolicy::Scope)
+  end
+
+  def fetch_reimbursements_for_list(complete_only)
+    fetch_reimbursements
+      .want_driving_reimbursement(true)
+      .created_max_ago(1.year.ago)
+      .filter_by_reimbursement_status(complete_only)
   end
 end
