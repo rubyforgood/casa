@@ -128,7 +128,7 @@ RSpec.describe "/imports", type: :request do
       expect(response).to redirect_to(imports_url(import_type: "supervisor"))
     end
 
-    it "creates case in cases CSV imports" do
+    it "creates case in cases CSV imports and adds next court date" do
       sign_in casa_admin
 
       expect(CasaCase.count).to eq(0)
@@ -141,6 +141,9 @@ RSpec.describe "/imports", type: :request do
             sms_opt_in: "1"
           }
       }.to change(CasaCase, :count).by(3)
+
+      expect(CasaCase.first.next_court_date).not_to be_nil
+      expect(CasaCase.last.next_court_date).to be_nil
 
       expect(response).to redirect_to(imports_url(import_type: "casa_case"))
     end
