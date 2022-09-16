@@ -16,6 +16,11 @@
     </td>
   </tr>
   <% @supervisor.volunteers_ever_assigned.where("supervisor_volunteers.is_active = ?", true).active.each do |volunteer| %>
+    <tr>
+      <td class="content-block" style="font-size: 16px; padding: 0 0 10px">
+      <b>Summary for <%= link_to volunteer.display_name, edit_volunteer_url(volunteer) %></b>
+      </td>
+    </tr>
     <% volunteer.case_assignments_with_cases.each do |case_assignment| %>
       <% recently_unassigned = case_assignment.decorate.unassigned_in_past_week? %>
       <% if case_assignment.active || recently_unassigned %>
@@ -23,7 +28,6 @@
         <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; text-align: left;">
           <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
             <b>
-              Summary for <%= link_to volunteer.display_name, edit_volunteer_url(volunteer) %>
               Case <%= link_to casa_case.case_number, casa_case_url(casa_case) %>
             </b>
             <br>
@@ -70,6 +74,8 @@
         </tr>
       <% end %>
     <% end %>
+    <!-- If the table elements don't wrap this <hr> then the <hr> gets moved to the outside of the table by the HTML renderer -->
+    <tr><td style="padding: 0 0 10px"><hr></td></tr>
   <% end %>
 
   <% if @supervisor.recently_unassigned_volunteers.any? %>
