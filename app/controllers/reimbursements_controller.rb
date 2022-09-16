@@ -28,7 +28,7 @@ class ReimbursementsController < ApplicationController
     @grouped_case_contacts = fetch_reimbursements
       .where({occurred_at: @case_contact.occurred_at, creator_id: @case_contact.creator_id})
     @grouped_case_contacts.update_all(reimbursement_params.to_h)
-    redirect_to reimbursements_path
+    redirect_to reimbursements_path unless params[:ajax]
   end
 
   private

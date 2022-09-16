@@ -53,12 +53,63 @@ $('document').ready(() => {
     ).join(', ')
   }
 
+  const renderCompleteCheckbox = (record) => `
+    <label>
+      Yes
+      <input
+        ${record.complete === 'true' ? 'checked' : ''}
+        name="case_contact[reimbursement_complete]"
+        type="checkbox"
+        data-submit-to="${record.mark_as_complete_path}"
+      />
+    </label>
+  `
+
   const editVolunteerPath = id => `/volunteers/${id}/edit`
   const casaCasePath = id => `/casa_cases/${id}`
+
+  const onMarkAsCompleteChange = (event) => {
+    const revert = () => event.target.checked = !event.target.checked
+    const $checkbox = $(event.target)
+
+    try {
+      const url = $checkbox.data('submit-to')
+      const reimbursement_complete = $checkbox.is(':checked')
+
+      console.log('reimbursement_complete', reimbursement_complete)
+      
+      if(!url) {
+        throw 'URL missing'
+      }
+
+      $.ajax(url, {
+        data: JSON.stringify({
+          case_contact: {
+            reimbursement_complete,
+          },
+          ajax: true
+        }),
+        method: 'PATCH',
+        contentType: 'application/json',
+      }).then((d) => volunteersTable.draw())
+    } catch (error) {
+      console.log(error)
+      revert()
+      alert('Failed to update reimbursement complete setting')
+    }
+
+    return false
+  }
+
+  $('table#reimbursements-datatable').on('draw.dt', function(e, settings) {
+    $(e.target).find('input[name="case_contact[reimbursement_complete]"]').on('change', onMarkAsCompleteChange)
+  });
+
   const volunteersTable = $('table#reimbursements-datatable').DataTable({
     autoWidth: false,
     stateSave: false,
     order: [[6, 'desc']],
+    searching: false,
     columns: [
       {
         name: 'display_name',
@@ -97,7 +148,6 @@ $('document').ready(() => {
             ${formatOccurredAtDate(row)}
           `
         },
-        searchable: false
       },
       {
         name: 'miles_driven',
@@ -107,7 +157,6 @@ $('document').ready(() => {
             ${row.miles_driven}
           `
         },
-        searchable: false
       },
       {
         name: 'address',
@@ -124,10 +173,9 @@ $('document').ready(() => {
         render: (data, type, row, meta) => {
           return `
             <span class="mobile-label">Reimbursement Complete?</span>
-            TODO
+            ${renderCompleteCheckbox(row)}
           `
         },
-        searchable: false,
       },
     ],
     processing: true,
@@ -141,10 +189,5 @@ $('document').ready(() => {
       error: handleAjaxError,
       dataType: 'json'
     },
-    drawCallback: function (settings) {
-      $('[data-toggle=tooltip]').tooltip()
-    }
   })
-
-  console.log(volunteersTable)
 });
