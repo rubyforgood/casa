@@ -30,6 +30,11 @@ RSpec.describe CaseImporter do
       expect(CasaCase.find_by(case_number: "CINA-01-4347").volunteers.size).to eq(1)
       expect(CasaCase.find_by(case_number: "CINA-01-4348").volunteers.size).to eq(2)
       expect(CasaCase.find_by(case_number: "CINA-01-4349").volunteers.size).to eq(0)
+
+      # correctly adds next court date
+      expect(CasaCase.find_by(case_number: "CINA-01-4348").next_court_date.date.strftime("%Y-%m-%d")).to eql "2023-01-01"
+      expect(CasaCase.find_by(case_number: "CINA-01-4347").next_court_date.date.strftime("%Y-%m-%d")).to eql "2022-09-16"
+      expect(CasaCase.find_by(case_number: "CINA-01-4349").next_court_date).to be_nil
     end
 
     context "when updating records" do
@@ -45,6 +50,13 @@ RSpec.describe CaseImporter do
           existing_case.reload
         }.to change(existing_case, :birth_month_year_youth).to(Date.new(2000, 2, 1))
       end
+
+      it "adds a next court date" do
+        expect {
+          case_importer.import_cases
+          existing_case.reload
+        }.to change(existing_case, :court_dates).from([])
+      end
     end
 
     it "returns a success message with the number of cases imported" do
@@ -58,6 +70,7 @@ RSpec.describe CaseImporter do
       CaseImporter.new(import_file_path, casa_org_id).import_cases
       data_using_instance = CasaCase.pluck(:case_number).sort
 
+      CourtDate.delete_all
       CasaCase.delete_all
       CaseImporter.import_cases(import_file_path, casa_org_id)
       data_using_static = CasaCase.pluck(:case_number).sort
