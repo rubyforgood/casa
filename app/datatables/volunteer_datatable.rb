@@ -88,7 +88,7 @@ class VolunteerDatatable < ApplicationDatatable
       CaseAssignment
         .select(:volunteer_id)
         .joins(:casa_case)
-        .where(casa_cases: {birth_month_year_youth: 14.years.ago..})
+        .where(casa_cases: {birth_month_year_youth: ..14.years.ago})
         .group(:volunteer_id)
         .to_sql
   end
