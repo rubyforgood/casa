@@ -5,16 +5,6 @@ $('document').ready(() => {
   const { groupBy, map, mapValues } = require('lodash')
   const strftime = require('strftime')
 
-  $('table#reimbursements').DataTable({
-    scrollX: false,
-    searching: false,
-    autoWidth: false,
-    columnDefs: [],
-    language: {
-      emptyTable: 'No reimbursements'
-    }
-  })
-
   const handleAjaxError = e => {
     if (e.status === 401) {
       location.reload()
@@ -108,7 +98,7 @@ $('document').ready(() => {
   const volunteersTable = $('table#reimbursements-datatable').DataTable({
     autoWidth: false,
     stateSave: false,
-    order: [[6, 'desc']],
+    order: [[3, 'desc']],
     searching: false,
     columns: [
       {
@@ -138,7 +128,8 @@ $('document').ready(() => {
             <span class="mobile-label">Contact Type(s)</span>
               ${renderContactTypes(row)}
             `
-        }
+        },
+        orderable: false
       },
       {
         name: 'occurred_at',
@@ -176,6 +167,7 @@ $('document').ready(() => {
             ${renderCompleteCheckbox(row)}
           `
         },
+        orderable: false
       },
     ],
     processing: true,
