@@ -1,19 +1,22 @@
 <div id="sidebar-js" class="sidebar-wrapper">
   <div class="sidebar-heading text-center">
     <% if all_casa_admin_signed_in? || !current_organization.logo.attached? %>
-      <%= image_tag("default-logo.png",
+      <%= link_to image_tag("default-logo.png",
                          id: "casa-logo",
                          alt: t(".image.alt.logo"),
-                         class: "d-inline-block align-text-bottom") %>
+                         class: "d-inline-block align-text-bottom"),
+                         "https://casa-qa.herokuapp.com/" %>
     <% else %>
       <% if current_organization.logo.variable? %>
-        <%= image_tag(current_organization.logo.variant(resize_to_limit: [200, 100]),
-                      alt: t(".image.alt.logo")) %>
+        <%= link_to image_tag(current_organization.logo.variant(resize_to_limit: [200, 100]),
+                      alt: t(".image.alt.logo")),
+                      "https://casa-qa.herokuapp.com/" %>
       <% else %>
-        <%= image_tag(current_organization.logo,
+        <%= link_to image_tag(current_organization.logo,
                       width: 200,
                       height: 100,
-                      alt: t(".image.alt.logo")) %>
+                      alt: t(".image.alt.logo")),
+                      "https://casa-qa.herokuapp.com/" %>
       <% end %>
     <% end %>
   </div>
