@@ -8,6 +8,15 @@ RSpec.describe "/imports", type: :request do
   let(:supervisor_volunteers_file) { Rails.root.join("spec", "fixtures", "supervisor_volunteers.csv") }
   let(:casa_admin) { build(:casa_admin) }
 
+  before do
+    # next_court_date in casa_cases.csv needs to be a future date
+    travel_to Date.parse("Sept 15 2022")
+  end
+
+  after do
+    travel_back
+  end
+
   describe "GET /index" do
     it "renders an unsuccessful response when the user is not an admin" do
       sign_in create(:volunteer)
