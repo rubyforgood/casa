@@ -5,18 +5,18 @@
                          id: "casa-logo",
                          alt: t(".image.alt.logo"),
                          class: "d-inline-block align-text-bottom"),
-                         "https://casa-qa.herokuapp.com/" %>
+                         "/" %>
     <% else %>
       <% if current_organization.logo.variable? %>
         <%= link_to image_tag(current_organization.logo.variant(resize_to_limit: [200, 100]),
                       alt: t(".image.alt.logo")),
-                      "https://casa-qa.herokuapp.com/" %>
+                      "/" %>
       <% else %>
         <%= link_to image_tag(current_organization.logo,
                       width: 200,
                       height: 100,
                       alt: t(".image.alt.logo")),
-                      "https://casa-qa.herokuapp.com/" %>
+                      "/" %>
       <% end %>
     <% end %>
   </div>
