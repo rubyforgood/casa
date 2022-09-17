@@ -111,7 +111,7 @@ class CaseContactsController < ApplicationController
   end
 
   def destroy
-    authorize CasaAdmin
+    authorize CaseContact
 
     @case_contact.destroy
     flash[:notice] = t("destroy", scope: "case_contact")
