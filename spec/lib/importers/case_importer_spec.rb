@@ -11,6 +11,13 @@ RSpec.describe CaseImporter do
     allow(case_importer).to receive(:email_addresses_to_users) do |_clazz, comma_separated_emails|
       create_list(:volunteer, comma_separated_emails.split(",").size, casa_org_id: casa_org_id)
     end
+
+    # next_court_date in casa_cases.csv needs to be a future date
+    travel_to Date.parse("Sept 15 2022")
+  end
+
+  after do
+    travel_back
   end
 
   describe "#import_cases" do
