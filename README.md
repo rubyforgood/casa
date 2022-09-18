@@ -103,7 +103,14 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 
 1. The Spec tests uses Chrome Browser and Chromedriver for some of the tests. A current version of chromedriver will be installed when `bundle install` is run. TO install Chrome, see [Chrome Install](https://support.google.com/chrome/answer/95346?hl=en&ref_topic=7439538).
 
-Another option is to install the Chromium browser for your operating system so the browser-based Ruby feature/integration tests can run. Installing `chromium-browser` is enough, even in WSL (Windows subsystem for Linux)
+Another option is to install the Chromium browser for your operating system so the browser-based Ruby feature/integration tests can run. Installing `chromium-browser` is enough, including for many WSL (Windows subsystem for Linux) distributions.
+
+If you are using Ubuntu on WSL and receive the following message when trying to run the test suite...
+
+> Command '/usr/bin/chromium-browser' requires the chromium snap to be installed. Please install it with:
+> `snap install chromium`
+
+...check out the instructions on [installing google-chrome and chromedriver for WSL Ubuntu](https://github.com/rubyforgood/casa/blob/main/doc/WSL_SETUP.md#google-chrome).
 
 **Installing Packages**
 1. `cd casa/`
@@ -130,15 +137,22 @@ Another option is to install the Chromium browser for your operating system so t
 
 #### Ubuntu and WSL
 
-1. If you are on Ubuntu in Windows Subsystem for Linux (WSL) and `rbenv install` indicates that the Ruby version is unavailable, you might be using Ubuntu's default install of `ruby-build`, which only comes with old installs of Ruby (ending before 2.6.) You should uninstall rvm and ruby-build's apt packages (`apt remove rvm ruby-build`) and install them with Git like this:
+1. Rbenv
 
-- `git clone https://github.com/rbenv/rbenv.git ~/.rbenv`
-- `echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc`
-- `echo 'eval "$(rbenv init -)"' >> ~/.bashrc`
-- `exec $SHELL`
-- `git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build`
+    If you are on Ubuntu in Windows Subsystem for Linux (WSL) and `rbenv install` indicates that the Ruby version is unavailable, you might be using Ubuntu's default install of `ruby-build`, which only comes with old installs of Ruby (ending before 2.6.) You should uninstall rvm and ruby-build's apt packages (`apt remove rvm ruby-build`) and install them with Git like this:
 
-You'll probably hit a problem where ruby-version reads `ruby-2.7.2` but the install available to you is called `2.7.2`. If you do, install [rbenv-alias](https://github.com/tpope/rbenv-aliases) and create an alias between the two.
+    - `git clone https://github.com/rbenv/rbenv.git ~/.rbenv`
+    - `echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc`
+    - `echo 'eval "$(rbenv init -)"' >> ~/.bashrc`
+    - `exec $SHELL`
+    - `git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build`
+
+    You'll probably hit a problem where ruby-version reads `ruby-2.7.2` but the install available to you is called `2.7.2`. If you do, install [rbenv-alias](https://github.com/tpope/rbenv-aliases) and create an alias between the two.
+
+2. Chrome / Chromium
+
+    If you are on Ubuntu in Windows Subsystem for Linux (WSL) you may need to install google-chrome and chromedriver if your version of Ubuntu requires the chromium snap to be installed.
+    For instructions how to do this, check out our [WSL Setup docs](https://github.com/rubyforgood/casa/blob/main/doc/WSL_SETUP.md#google-chrome).
 
 ### Common issues
 
