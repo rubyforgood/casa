@@ -5,24 +5,6 @@ $('document').ready(() => {
   const { groupBy, map, mapValues } = require('lodash')
   const strftime = require('strftime')
 
-  const handleAjaxError = e => {
-    if (e.status === 401) {
-      location.reload()
-    } else {
-      console.log(e)
-      if (e.responseJSON && e.responseJSON.error) {
-        alert(e.responseJSON.error)
-      } else {
-        const responseErrorMessage = e.response.statusText
-          ? `\n${e.response.statusText}\n`
-          : ''
-
-        alert(`Sorry, try that again?\n${responseErrorMessage}\nIf you're seeing a problem, please fill out the Report A Site Issue
-        link to the bottom left near your email address.`)
-      }
-    }
-  }
-
   const formatOccurredAtDate = (record) => strftime('%B %d %Y', new Date(record.occurred_at))
 
   const mapContactTypes = (contactTypes) => {
@@ -91,9 +73,39 @@ $('document').ready(() => {
     return false
   }
 
+  const getSelectedVolunteers = () => {
+    const checked = $('[data-filter="volunteer"] input[type="checkbox"]').filter(
+      (i, checkbox) => checkbox.checked
+    )
+
+    return map(checked, checkbox => checkbox.value)
+  }
+
   $('table#reimbursements-datatable').on('draw.dt', function(e, settings) {
-    $(e.target).find('input[name="case_contact[reimbursement_complete]"]').on('change', onMarkAsCompleteChange)
+    $(e.target)
+      .find('input[name="case_contact[reimbursement_complete]"]')
+      .on('change', onMarkAsCompleteChange)
   });
+
+  $('[data-filter="volunteer"] input[type="checkbox"]').on('change', () => volunteersTable.draw())
+
+  const handleAjaxError = e => {
+    if (e.status === 401) {
+      location.reload()
+    } else {
+      console.log(e)
+      if (e.responseJSON && e.responseJSON.error) {
+        alert(e.responseJSON.error)
+      } else {
+        const responseErrorMessage = e.response.statusText
+          ? `\n${e.response.statusText}\n`
+          : ''
+
+        alert(`Sorry, try that again?\n${responseErrorMessage}\nIf you're seeing a problem, please fill out the Report A Site Issue
+        link to the bottom left near your email address.`)
+      }
+    }
+  }
 
   const volunteersTable = $('table#reimbursements-datatable').DataTable({
     autoWidth: false,
@@ -175,8 +187,10 @@ $('document').ready(() => {
     ajax: {
       url: $('table#reimbursements-datatable').data('source'),
       type: 'POST',
-      data: function (d) {
-        return $.extend({}, d)
+      data: function (data) {
+        return $.extend({}, data, {
+          volunteers: getSelectedVolunteers(),
+        })
       },
       error: handleAjaxError,
       dataType: 'json'

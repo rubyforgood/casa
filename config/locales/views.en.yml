@@ -313,6 +313,9 @@ en:
         expense_type: Expense Type
         reimbursement_complete: Reimbursement Complete
         volunteer: Volunteer
+    filters:
+      title: Filter By
+      volunteer_filter_title: Volunteer
     table:
       heading:
         amount: Miles Driven

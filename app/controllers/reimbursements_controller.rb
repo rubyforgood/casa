@@ -7,8 +7,9 @@ class ReimbursementsController < ApplicationController
 
     @complete_status = params[:status] == "complete"
     @datatable_url = datatable_reimbursements_path(format: :json, status: params[:status])
-    @reimbursements = fetch_reimbursements_for_list(@complete_status)
-    @grouped_reimbursements = @reimbursements.group_by { |cc| "#{cc.occurred_at}-#{cc.creator_id}" }
+    reimbursements = fetch_reimbursements_for_list(@complete_status)
+    @volunteers_for_filter = volunteers_for_filter(reimbursements)
+    # @grouped_reimbursements = @reimbursements.group_by { |cc| "#{cc.occurred_at}-#{cc.creator_id}" }
   end
 
   def datatable
@@ -16,7 +17,7 @@ class ReimbursementsController < ApplicationController
 
     @complete_status = params[:status] == "complete"
     reimbursements = fetch_reimbursements_for_list(@complete_status)
-    datatable = ReimbursementDatatable.new reimbursements, params
+    datatable = ReimbursementDatatable.new(reimbursements, params)
 
     render json: datatable
   end
@@ -47,9 +48,19 @@ class ReimbursementsController < ApplicationController
   end
 
   def fetch_reimbursements_for_list(complete_only)
-    fetch_reimbursements
+    query = fetch_reimbursements
       .want_driving_reimbursement(true)
       .created_max_ago(1.year.ago)
       .filter_by_reimbursement_status(complete_only)
+    query = query.where(creator_id: params[:volunteers]) if params[:volunteers]
+
+    query
+  end
+
+  def volunteers_for_filter(reimbursements)
+    reimbursements
+      .map { |reimbursement| [reimbursement.creator.id, reimbursement.creator.display_name] }
+      .sort_by { |_, name| name }
+      .to_h
   end
 end
