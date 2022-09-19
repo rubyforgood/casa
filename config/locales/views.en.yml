@@ -315,6 +315,9 @@ en:
         volunteer: Volunteer
     filters:
       title: Filter By
+      occurred_at_filter_end_label: Ending at
+      occurred_at_filter_start_label: Starting from
+      occurred_at_filter_title: Occurred at
       volunteer_filter_title: Volunteer
     table:
       heading:

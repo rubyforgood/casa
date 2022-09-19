@@ -1,0 +1,14 @@
+<label>
+  <%= label %>
+  <%= text_field(
+    nil,
+    name,
+    data: {
+      provide: "datepicker",
+      date_format: "yyyy/mm/dd",
+      date_end_date: Time.now,
+      date_start_date: @occurred_at_filter_start_date
+    },
+    class: "form-control"
+  ) %>
+</label>

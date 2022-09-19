@@ -19,6 +19,7 @@
     <h4 class="pull-left mr-2">
       <%= t("reimbursements.filters.title") %>
     </h4>
+    <!-- Volunteer filter -->
     <div class="dropdown pull-left mr-2" data-filter="volunteer">
       <%= render partial: "filter_trigger", locals: { title: t("reimbursements.filters.volunteer_filter_title") } %>
       <div class="dropdown-menu">
@@ -28,6 +29,20 @@
             <%= label_tag '', value, class: "form-check-label" %>
           </div>
         <% end %>
+      </div>
+    </div>
+    <!-- Occurred at filter -->
+    <div class="dropdown pull-left mr-2" data-filter="occurred_at">
+      <%= render partial: "filter_trigger", locals: { title: t("reimbursements.filters.occurred_at_filter_title") } %>
+      <div class="dropdown-menu">
+        <%= render partial: "occurred_at_filter_input", locals: {
+          label: t("reimbursements.filters.occurred_at_filter_start_label"),
+          name: :occurred_at_starting
+        } %>
+        <%= render partial: "occurred_at_filter_input", locals: {
+          label: t("reimbursements.filters.occurred_at_filter_end_label"),
+          name: :occurred_at_ending
+        } %>
       </div>
     </div>
   </div>

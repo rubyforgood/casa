@@ -1,7 +1,6 @@
 /* global $ */
 
 $('document').ready(() => {
-  
   const { groupBy, map, mapValues } = require('lodash')
   const strftime = require('strftime')
 
@@ -10,12 +9,12 @@ $('document').ready(() => {
   const mapContactTypes = (contactTypes) => {
     return mapValues(
       groupBy(contactTypes, 'group_name'),
-      contactType => map(contactType, 'name').join(', '),
+      contactType => map(contactType, 'name').join(', ')
     )
   }
 
   const renderContactTypes = (record) => {
-    if(!record || !Array.isArray(record.contact_types)) {
+    if (!record || !Array.isArray(record.contact_types)) {
       return ''
     }
 
@@ -41,159 +40,159 @@ $('document').ready(() => {
   const casaCasePath = id => `/casa_cases/${id}`
 
   const onMarkAsCompleteChange = (event) => {
-    const revert = () => event.target.checked = !event.target.checked
     const $checkbox = $(event.target)
 
     try {
       const url = $checkbox.data('submit-to')
-      const reimbursement_complete = $checkbox.is(':checked')
+      const reimbursementComplete = $checkbox.is(':checked')
 
-      console.log('reimbursement_complete', reimbursement_complete)
-      
-      if(!url) {
-        throw 'URL missing'
+      if (!url) {
+        throw new Error('URL missing')
       }
 
       $.ajax(url, {
         data: JSON.stringify({
           case_contact: {
-            reimbursement_complete,
+            reimbursement_complete: reimbursementComplete
           },
           ajax: true
         }),
         method: 'PATCH',
-        contentType: 'application/json',
-      }).then((d) => volunteersTable.draw())
+        contentType: 'application/json'
+      }).then(() => reimbursementsTable.draw())
     } catch (error) {
       console.log(error)
-      revert()
-      alert('Failed to update reimbursement complete setting')
+      event.target.checked = !event.target.checked
+      window.alert('Failed to update reimbursement complete setting')
     }
 
     return false
   }
 
-  const getSelectedVolunteers = () => {
-    const checked = $('[data-filter="volunteer"] input[type="checkbox"]').filter(
-      (i, checkbox) => checkbox.checked
-    )
-
-    return map(checked, checkbox => checkbox.value)
-  }
-
-  $('table#reimbursements-datatable').on('draw.dt', function(e, settings) {
+  $('table#reimbursements-datatable').on('draw.dt', function (e) {
     $(e.target)
       .find('input[name="case_contact[reimbursement_complete]"]')
       .on('change', onMarkAsCompleteChange)
-  });
+  })
 
-  $('[data-filter="volunteer"] input[type="checkbox"]').on('change', () => volunteersTable.draw())
+  $('[data-filter="volunteer"] input[type="checkbox"]').on('change', () => reimbursementsTable.draw())
+  $('[data-filter="occurred_at"] input').on('change', () => reimbursementsTable.draw())
 
   const handleAjaxError = e => {
     if (e.status === 401) {
-      location.reload()
+      window.location.reload()
     } else {
       console.log(e)
       if (e.responseJSON && e.responseJSON.error) {
-        alert(e.responseJSON.error)
+        window.alert(e.responseJSON.error)
       } else {
         const responseErrorMessage = e.response.statusText
           ? `\n${e.response.statusText}\n`
           : ''
 
-        alert(`Sorry, try that again?\n${responseErrorMessage}\nIf you're seeing a problem, please fill out the Report A Site Issue
+        window.alert(`Sorry, try that again?\n${responseErrorMessage}\nIf you're seeing a problem, please fill out the Report A Site Issue
         link to the bottom left near your email address.`)
       }
     }
   }
 
-  const volunteersTable = $('table#reimbursements-datatable').DataTable({
+  const getDatatableFilterParams = () => {
+    return {
+      volunteers: map($('[data-filter="volunteer"] input:checked'), 'value'),
+      occurred_at: {
+        start: $('input[name="occurred_at_starting"]').val(),
+        end: $('input[name="occurred_at_ending"]').val()
+      }
+    }
+  }
+
+  const reimbursementsTableCols = [
+    {
+      name: 'display_name',
+      render: (data, type, row, meta) => {
+        return `
+          <span class="mobile-label">Volunteer</span>
+          <a href="${editVolunteerPath(row.volunteer.id)}">
+            ${row.volunteer.display_name || row.volunteer.email}
+          </a>
+        `
+      }
+    },
+    {
+      name: 'case_number',
+      render: (data, type, row, meta) => {
+        return `
+          <span class="mobile-label">Case Number(s)</span>
+          <a href="${casaCasePath(row.casa_case.id)}">${row.casa_case.case_number}</a>
+        `
+      }
+    },
+    {
+      name: 'contact_types',
+      render: (data, type, row, meta) => {
+        return `
+          <span class="mobile-label">Contact Type(s)</span>
+            ${renderContactTypes(row)}
+          `
+      },
+      orderable: false
+    },
+    {
+      name: 'occurred_at',
+      render: (data, type, row, meta) => {
+        return `
+          <span class="mobile-label">Date Added</span>
+          ${formatOccurredAtDate(row)}
+        `
+      }
+    },
+    {
+      name: 'miles_driven',
+      render: (data, type, row, meta) => {
+        return `
+          <span class="mobile-label">Expense Type</span>
+          ${row.miles_driven}
+        `
+      }
+    },
+    {
+      name: 'address',
+      render: (data, type, row, meta) => {
+        return `
+          <span class="mobile-label">Description</span>
+          ${row.volunteer.address}
+        `
+      },
+      orderable: false
+    },
+    {
+      name: 'reimbursement_complete',
+      render: (data, type, row, meta) => {
+        return `
+          <span class="mobile-label">Reimbursement Complete?</span>
+          ${renderCompleteCheckbox(row)}
+        `
+      },
+      orderable: false
+    }
+  ]
+
+  const reimbursementsTable = $('table#reimbursements-datatable').DataTable({
     autoWidth: false,
     stateSave: false,
     order: [[3, 'desc']],
     searching: false,
-    columns: [
-      {
-        name: 'display_name',
-        render: (data, type, row, meta) => {
-          return `
-            <span class="mobile-label">Volunteer</span>
-            <a href="${editVolunteerPath(row.volunteer.id)}">
-              ${row.volunteer.display_name || row.volunteer.email}
-            </a>
-          `
-        }
-      },
-      {
-        name: 'case_number',
-        render: (data, type, row, meta) => {
-          return `
-            <span class="mobile-label">Case Number(s)</span>
-            <a href="${casaCasePath(row.casa_case.id)}">${row.casa_case.case_number}</a>
-          `
-        },
-      },
-      {
-        name: 'contact_types',
-        render: (data, type, row, meta) => {
-          return `
-            <span class="mobile-label">Contact Type(s)</span>
-              ${renderContactTypes(row)}
-            `
-        },
-        orderable: false
-      },
-      {
-        name: 'occurred_at',
-        render: (data, type, row, meta) => {
-          return `
-            <span class="mobile-label">Date Added</span>
-            ${formatOccurredAtDate(row)}
-          `
-        },
-      },
-      {
-        name: 'miles_driven',
-        render: (data, type, row, meta) => {
-          return `
-            <span class="mobile-label">Expense Type</span>
-            ${row.miles_driven}
-          `
-        },
-      },
-      {
-        name: 'address',
-        render: (data, type, row, meta) => {
-          return `
-            <span class="mobile-label">Description</span>
-            ${row.volunteer.address}
-          `
-        },
-        orderable: false
-      },
-      {
-        name: 'reimbursement_complete',
-        render: (data, type, row, meta) => {
-          return `
-            <span class="mobile-label">Reimbursement Complete?</span>
-            ${renderCompleteCheckbox(row)}
-          `
-        },
-        orderable: false
-      },
-    ],
+    columns: reimbursementsTableCols,
     processing: true,
     serverSide: true,
     ajax: {
       url: $('table#reimbursements-datatable').data('source'),
       type: 'POST',
       data: function (data) {
-        return $.extend({}, data, {
-          volunteers: getSelectedVolunteers(),
-        })
+        return $.extend({}, data, getDatatableFilterParams())
       },
       error: handleAjaxError,
       dataType: 'json'
-    },
+    }
   })
-});
+})
