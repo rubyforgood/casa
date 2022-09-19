@@ -188,6 +188,11 @@ Casa's install will also install the correct version of Rails.
     `bin/rails db:setup`  - sets up the db
     
     `bin/rails db:seed:replant` - generates test data (can be rerun to regenerate test data)
+4. **Compile Assets**  
+-  `yarn build` compile javascript  
+&ensp;&ensp;`yarn build:dev` to auto recompile for when you edit js files  
+-  `yarn build:css` compile css  
+&ensp;&ensp;`yarn build:css:dev` to auto recompile for when you edit sass files  
 
 ### Getting Started
 
