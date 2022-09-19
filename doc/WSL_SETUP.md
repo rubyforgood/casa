@@ -98,7 +98,54 @@ The Casa package frontend leverages several javascript packages managed through 
 
 ### Google Chrome
 
-Many of the frontend tests are run using Google Chrome, so if you don't already have that installed you may wish to [install it](https://www.google.com/chrome/downloads/).
+Many of the frontend tests are run using Google Chrome, so if you don't already have that installed you may wish to install it.
+
+For some linux distributions, installing `chromium-browser` may be enough on WSL. However, some versions of Ubuntu may require the chromium snap to be installed in order to use chromium.
+If you receive errors about needing the chromium snap while running the test suite, you can install Chrome and chromedriver instead:
+
+1. Download and Install Chrome on WSL Ubuntu
+  - Update your packages:
+
+    `sudo apt update`
+
+  - Download Chrome:
+
+    `wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb`
+
+  - Install chrome from the downloaded file
+
+    `sudo dpkg -i google-chrome-stable_current_amd64.deb`
+
+    `sudo apt-get install -f`
+
+  - Check that Chrome is installed correctly
+
+    `google-chrome --version`
+
+2. Install the appropriate Chromedriver
+  - Depending on the version of google-chrome you installed, you will need a specific chromedriver. You can see which version you need on the [chromedriver dowload page](https://chromedriver.chromium.org/downloads).
+    - For example, if `google-chrome --version` returns 105.x.xxxx.xxx you will want to download the version of chromedriver recommended on the page for version 105.
+    - As of this writing, the download page says the following for Chrome version 105:
+      > If you are using Chrome version 105, please download ChromeDriver 105.0.5195.52
+  - To download chromedriver, run the following command, replacing `{CHROMEDRIVER-VERSION}` with the version of chromedriver you need (e.g., 105.0.5195.52)
+
+    `wget https://chromedriver.storage.googleapis.com/{CHROMEDRIVER-VERSION}/chromedriver_linux64.zip`
+
+  - Next, unzip the file you downloaded
+
+    `unzip chromedriver_linux64.zip`
+
+  - Finally, move chromedriver to the correct location and enable it for use:
+
+    `sudo mv chromedriver /usr/bin/chromedriver`
+
+    `sudo chown root:root /usr/bin/chromedriver`
+
+    `sudo chmod +x /usr/bin/chromedriver`
+
+3. Run the test suite
+  - Assuming the rest of the application is already set up, you can run the test suite to verify that you no longer receive error regarding chromium snap:
+    `bin/rails spec`
 
 ### Casa & Rails
 
