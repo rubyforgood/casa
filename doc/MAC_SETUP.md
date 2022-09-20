@@ -49,7 +49,7 @@ To install the appropriate ruby version, run:
 rbenv install 3.1.2
 ```
 
-(Do not forget to switch 3.1.0 to the appropriate version)
+(Do not forget to switch 3.1.2 to the appropriate version)
 
 Finally, run:
 
