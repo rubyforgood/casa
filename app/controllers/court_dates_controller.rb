@@ -73,8 +73,16 @@ class CourtDatesController < ApplicationController
     @court_date = @casa_case.court_dates.find(params[:id])
   end
 
+  def sanitized_params
+    params.require(:court_date).tap do |p|
+      p[:case_court_orders_attributes]&.reject! do |k, _|
+        p[:case_court_orders_attributes][k][:text].blank? && p[:case_court_orders_attributes][k][:implementation_status].blank?
+      end
+    end
+  end
+
   def court_dates_params
-    params.require(:court_date).permit(
+    sanitized_params.permit(
       :date,
       :hearing_type_id,
       :judge_id,
