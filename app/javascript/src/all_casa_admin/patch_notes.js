@@ -53,7 +53,6 @@ patchNoteFunctions.addPatchNoteUI = function (patchNoteGroupId, patchNoteId, pat
   patchNoteFunctions.initPatchNoteForm(newPatchNoteUI)
 }
 
-
 // Creates a patch note
 //  @param    {number} patchNoteGroupId  The id of the group allowed to view the patch note
 //  @param    {string} patchNoteText     The text of the patch note
@@ -202,10 +201,9 @@ patchNoteFunctions.onToggleEditPatchNote = function () {
   switch ($(this).text()) {
     case 'Edit':
       patchNoteFunctions.togglePatchNoteFormEditMode(patchNoteFormInputs)
-      break;
+      break
     default:
       throw new RangeError('Unrecogniszed Form State')
-      break;
   }
 }
 
