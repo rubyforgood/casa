@@ -234,7 +234,7 @@ patchNoteFunctions.enablePatchNoteFormEditMode = function (patchNoteFormInputs) 
     patchNoteFormBeforeEditData[patchNoteFunctions.getPatchNoteId(patchNoteFormInputs.noteTextArea.parent())] = {
       note: patchNoteFormInputs.noteTextArea.val(),
       groupId: Number.parseInt(patchNoteFormInputs.dropdownGroup.val()),
-      typeId:  Number.parseInt(patchNoteFormInputs.dropdownType.val())
+      typeId: Number.parseInt(patchNoteFormInputs.dropdownType.val())
     }
 
     console.log(patchNoteFormBeforeEditData)
