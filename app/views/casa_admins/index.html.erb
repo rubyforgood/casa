@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-sm-12 dashboard-table-header">
-    <h1><%= t(".title") %></h1>
-    <%= link_to t(".button.new"), new_casa_admin_path, class: "btn btn-primary" %>
+    <h1>Admins</h1>
+    <%= link_to New Admin, new_casa_admin_path, class: "btn btn-primary" %>
   </div>
 </div>
 
@@ -10,8 +10,8 @@
     <table class="table table-striped table-bordered" id="admins">
       <thead>
       <tr>
-        <th><%= t(".heading.admin_email") %></th>
-        <th><%= t(".heading.actions") %></th>
+        <th>Admin Email</th>
+        <th>Actions</th>
       </tr>
       </thead>
 
@@ -22,12 +22,12 @@
             <%= admin.email %>
             <% unless admin.active? %>
               <span class="badge badge-danger display-1 text-uppercase">
-                <%= t(".deactivated") %>
+                Deactivated
               </span>
             <% end %>
           </th>
           <td>
-            <%= link_to t(".button.edit"), edit_casa_admin_path(admin) %>
+            <%= link_to Edit, edit_casa_admin_path(admin) %>
           </td>
         </tr>
       <% end %>
