@@ -1,7 +1,7 @@
 const AsyncNotifier = require('../async_notifier')
 const TypeChecker = require('../type_checker')
 const patchNotePath = window.location.pathname
-const patchNoteFormBeforeEditData = {}
+//const patchNoteFormBeforeEditData = {}
 const patchNoteFunctions = {} // A hack to be able to alphabetize functions
 
 let pageNotifier
@@ -230,8 +230,6 @@ patchNoteFunctions.resolveAsyncOperation = function (error) {
 //  @param  {object} patchNoteFormInputs An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormElements()
 //  @throws {TypeError} for a parameter of the incorrect type
 patchNoteFunctions.enablePatchNoteFormEditMode = function (patchNoteFormInputs) {
-  const isInEditMode = patchNoteFormInputs.noteTextArea.attr('disabled')
-
   patchNoteFunctions.enablePatchNoteForm(patchNoteFormInputs)
 
   // Change button controls
