@@ -23,8 +23,8 @@
     <% end %>
     <%= form_with url: generate_case_court_reports_path, local: false, class: "d-inline" do |form| %>
       <%= form.hidden_field :case_number, value: @casa_case.case_number %>
-      <%= button_tag Generate Report, type: :submit,
-                     data: {button_name: Generate Report)},
+      <%= button_tag "Generate Report", type: :submit,
+                     data: {button_name: "Generate Report"},
                      id: "btnGenerateReport",
                      class: "btn btn-success pull-right mb-2" %>
       <i id="spinner" class='fas fa-spin d-none pull-right'>⏳</i>
