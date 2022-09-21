@@ -17,10 +17,11 @@
       </p>
     <% end %>
   </ul>
+  <ul>
+    <div class="add-container past-court-dates">
+      <a class="btn btn-primary" href="<%= new_casa_case_court_date_path(casa_case) %>">
+        <i class="fa fa-plus" aria-hidden="true"></i> Add a court date
+      </a>
+    </div>
+  </ul>
 <% end %>
-<div class="add-container past-court-dates">
-  <a class="btn btn-primary add-button" href="<%= new_casa_case_court_date_path(casa_case) %>">
-    <i class="fa fa-plus" aria-hidden="true"></i>
-  </a>
-  <strong>Add a court date</strong>
-</div>
