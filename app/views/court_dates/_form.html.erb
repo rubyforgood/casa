@@ -21,6 +21,18 @@
       <br>
 
       <div class="field form-group">
+        <%= form.label :court_report_due_date, "Add Court Report Due Date" %>
+            <br>
+            <div class="field form-group">
+              <% court_report_due_date = casa_case.court_report_due_date || Time.zone.now %>
+              <%= form.text_field :court_report_due_date,
+                                  value: court_report_due_date.to_date,
+                                  data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
+                                  class: "form-control" %>
+      </div>
+      <br>
+
+      <div class="field form-group">
         <%= form.label :judge_id, "Judge" %>
         <%= form.collection_select(
                 :judge_id,
