@@ -2,7 +2,7 @@
   <%= render "/shared/error_messages", resource: mileage_rate %>
 
   <div class="field form-group">
-    <%= form.label :effective_date, t(".effective_date") %>
+    <%= form.label :effective_date, 'Effective date' %>
     <%= form.text_field :effective_date, value: effective_date_parser(mileage_rate.effective_date),
                                       data: { provide: "datepicker",
                                       date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
@@ -10,7 +10,7 @@
   </div>
 
   <div class="field form-group">
-    <%= form.label :amount, t(".amount") %>
+    <%= form.label :amount, 'Amount' %>
     <div class="input-group">
       <div class="input-group-prepend">
         <span class="input-group-text">$</span>
@@ -28,7 +28,7 @@
   <div class="field form-group">
     <div class="form-check">
       <%= form.check_box :is_active, class: 'form-check-input' %>
-      <%= form.label :is_active, t(".is_active"), class: 'form-check-label' %>
+      <%= form.label :is_active, 'Currently active?', class: 'form-check-label' %>
     </div>
   </div>
 
