@@ -67,20 +67,6 @@
       <% end %>
 
       <div class="field form-group">
-        <% if policy(casa_case).update_court_report_due_date? %>
-          <%= form.label :court_report_due_date, "Court Report Due Date" %>
-          <br>
-          <div class="field form-group">
-            <% court_report_due_date = casa_case.court_report_due_date || Time.zone.now %>
-            <%= form.text_field :court_report_due_date,
-                                value: court_report_due_date.to_date,
-                                data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
-                                class: "form-control" %>
-          </div>
-        <% end %>
-      </div>
-
-      <div class="field form-group">
         <%= form.label :court_report_status, "Court Report Status" %>
         <%= form.select :court_report_status,
                         CasaCase.court_report_statuses&.map { |status| [status.first.humanize, status.first] } %>
