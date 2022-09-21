@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-sm-12 dashboard-table-header">
-    <h1><%= t(".mileage_rates") %></h1>
-    <%= link_to t(".button.new"), new_mileage_rate_path, class: "btn btn-primary mb-2 mb-md-0" %>
+    <h1>Mileage Rates</h1>
+    <%= link_to "New Mileage Rate", new_mileage_rate_path, class: "btn btn-primary mb-2 mb-md-0" %>
 
   </div>
 </div>
@@ -9,15 +9,15 @@
 
 <div class="card card-container">
   <div class="card-body">
-    <table
+    <table 
       class="table table-striped table-bordered"
       id="mileage_rates">
       <thead>
       <tr>
-        <th><%= t(".heading.effective_date") %></th>
-        <th><%= t(".heading.amount") %></th>
-        <th><%= t(".heading.status") %></th>
-        <th><%= t(".heading.actions") %></th>
+        <th>Effective date</th>
+        <th>Amount</th>
+        <th>Active?</th>
+        <th>Actions</th>
       </tr>
       </thead>
       <tbody>
@@ -27,7 +27,7 @@
             <td><%= number_to_currency(mileage_rate.amount) %></td>
             <td><%= mileage_rate.is_active? ? 'Yes' : 'No' %></td>
             <td>
-              <%= link_to t(".button.edit"), edit_mileage_rate_path(mileage_rate) %>
+              <%= link_to "Edit", edit_mileage_rate_path(mileage_rate) %>
             </td>
           </tr>
 
