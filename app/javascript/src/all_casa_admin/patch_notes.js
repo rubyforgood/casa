@@ -1,7 +1,9 @@
 const AsyncNotifier = require('../async_notifier')
 const TypeChecker = require('../type_checker')
 const patchNotePath = window.location.pathname
-const patchNoteFunctions = {}
+const patchNoteFormBeforeEditData = {}
+const patchNoteFunctions = {} // A hack to be able to alphabetize functions
+
 let pageNotifier
 
 jQuery.ajaxSetup({
@@ -169,13 +171,24 @@ patchNoteFunctions.getPatchNoteFormInputs = function (patchNoteElement) {
   return fields
 }
 
+// Get the id of a patch note from its form
+//  @param   {object} patchNoteForm A jQuery object representing the div with the patch note's id
+//  @returns {number} The id of the patch note as a number
+//  @throws  {TypeError}  for a parameter of the incorrect type
+patchNoteFunctions.getPatchNoteId = function (patchNoteForm) {
+  TypeChecker.checkNonEmptyJQueryObject(patchNoteForm)
+
+  return Number.parseInt(patchNoteForm.attr('id').match(/patch-note-(\d+)/)[1])
+}
+
 // Add event listeners to a patch note form
-//  @param {object} patchNoteForm An jQuery object representing the patch note form
+//  @param {object} patchNoteForm A jQuery object representing the patch note form
 //  @throws   {TypeError}  for a parameter of the incorrect type
 patchNoteFunctions.initPatchNoteForm = function (patchNoteForm) {
   TypeChecker.checkNonEmptyJQueryObject(patchNoteForm)
 
   patchNoteForm.find('.button-delete').click(patchNoteFunctions.onDeletePatchNote)
+  patchNoteForm.find('.button-edit').click(patchNoteFunctions.onEditPatchNote)
 }
 
 // Called when the delete button is pressed on a patch note form
@@ -186,7 +199,7 @@ patchNoteFunctions.onDeletePatchNote = function () {
   patchNoteFunctions.disablePatchNoteForm(formInputs)
 
   patchNoteFunctions.deletePatchNote(
-    Number.parseInt(patchNoteFormContainer.attr('id').match(/patch-note-(\d+)/)[1])
+    patchNoteFunctions.getPatchNoteId(patchNoteFormContainer)
   ).then(function () {
     patchNoteFormContainer.parent().remove()
   }).fail(function () {
@@ -195,16 +208,10 @@ patchNoteFunctions.onDeletePatchNote = function () {
 }
 
 // Called when the delete button is pressed on a patch note form
-patchNoteFunctions.onToggleEditPatchNote = function () {
+patchNoteFunctions.onEditPatchNote = function () {
   const patchNoteFormInputs = patchNoteFunctions.getPatchNoteFormInputs($(this).parent().parent())
 
-  switch ($(this).text()) {
-    case 'Edit':
-      patchNoteFunctions.togglePatchNoteFormEditMode(patchNoteFormInputs)
-      break
-    default:
-      throw new RangeError('Unrecogniszed Form State')
-  }
+  patchNoteFunctions.enablePatchNoteFormEditMode(patchNoteFormInputs)
 }
 
 // Called when an async operation completes. May show notifications describing how the operation completed
@@ -219,15 +226,30 @@ patchNoteFunctions.resolveAsyncOperation = function (error) {
   pageNotifier.stopAsyncOperation(error)
 }
 
-// Toggle a patch note form into edit mode
+// Change a patch note form into edit mode
 //  @param  {object} patchNoteFormInputs An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormElements()
 //  @throws {TypeError} for a parameter of the incorrect type
-patchNoteFunctions.togglePatchNoteFormEditMode = function (patchNoteFormInputs) {
+patchNoteFunctions.enablePatchNoteFormEditMode = function (patchNoteFormInputs) {
   const isInEditMode = patchNoteFormInputs.noteTextArea.attr('disabled')
 
-  console.log(isInEditMode)
-
   patchNoteFunctions.enablePatchNoteForm(patchNoteFormInputs)
+
+  // Change button controls
+  //   Clear click listeners
+  patchNoteFormInputs.buttonControls.off()
+
+  const buttonLeft = patchNoteFormInputs.buttonControls.siblings('.button-edit')
+  const buttonRight = patchNoteFormInputs.buttonControls.siblings('.button-delete')
+
+  buttonLeft.html('<i class="fas fa-save"></i> Save')
+  buttonLeft.removeClass('button-edit')
+  buttonLeft.addClass('button-save')
+
+  buttonRight.html('<i class="fa-solid fa-xmark"></i> Cancel')
+  buttonRight.removeClass('button-delete')
+  buttonRight.removeClass('btn-danger')
+  buttonRight.addClass('button-cancel')
+  buttonRight.addClass('btn-secondary')
 }
 
 $('document').ready(() => {
@@ -271,7 +293,7 @@ $('document').ready(() => {
     })
 
     $('#patch-note-list .button-delete').click(patchNoteFunctions.onDeletePatchNote)
-    $('#patch-note-list .button-edit').click(patchNoteFunctions.onToggleEditPatchNote)
+    $('#patch-note-list .button-edit').click(patchNoteFunctions.onEditPatchNote)
   } catch (err) {
     pageNotifier.notify('Could not intialize app', 'error')
     pageNotifier.notify(err.message, 'error')

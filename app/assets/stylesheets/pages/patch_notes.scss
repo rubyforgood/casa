@@ -42,6 +42,10 @@
           &:nth-child(2) {
             margin-left: 0.5em
           };
+
+          &.button-cancel {
+            flex-grow: 3
+          }
         }
       }
     };
