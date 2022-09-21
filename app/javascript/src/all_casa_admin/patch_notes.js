@@ -1,7 +1,7 @@
 const AsyncNotifier = require('../async_notifier')
 const TypeChecker = require('../type_checker')
 const patchNotePath = window.location.pathname
-//const patchNoteFormBeforeEditData = {}
+// const patchNoteFormBeforeEditData = {}
 const patchNoteFunctions = {} // A hack to be able to alphabetize functions
 
 let pageNotifier
