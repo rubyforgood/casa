@@ -41,6 +41,7 @@ module.exports = class Notifier {
           .find('.async-failure-indicator button').click(function () {
             $(this).parent().remove()
           })
+
         break
       case 'info':
         this.notificationsElement.append(`
