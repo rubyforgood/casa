@@ -1,6 +1,8 @@
 class Language < ApplicationRecord
   belongs_to :casa_org
   has_and_belongs_to_many :users
+
+  validates :name, presence: true
 end
 
 # == Schema Information
