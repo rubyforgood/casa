@@ -1,0 +1,398 @@
+# Modify this code to update the DB schema diagram.
+# To reset the sample schema, replace everything with
+# two dots ('..' - without quotes).
+#################
+# Examples I'm not yet willing to delete
+#################
+# Table documentation comment 1 (try the PDF/RTF export)
+#Product as p # Table documentation comment 2
+#------------
+#ProductID PK int
+# Field documentation comment 1
+# Field documentation comment 2 
+#Name varchar(200) UNIQUE
+#Price money
+
+#OrderStatus as os
+#----
+#OrderStatusID PK int
+#Name UNIQUE string
+
+casa_cases
+-
+id PK bigint
+case_number string 
+transition_aged_youth boolean
+created_at datetime
+updated_at datetime
+casa_org_id bigint
+birth_month_year_youth datetime NULL
+court_date datetime
+court_report_due_date datetime
+hearing_type_id bigint
+active boolean
+judge_id bigint
+court_report_submitted_at datetime
+court_report_status integer
+slug string
+date_in_care datetime
+
+casa_cases_emancipation_options
+-
+id PK int
+casa_case_id int FK >- casa_cases.id
+emancipation_option_id bigint FK >- emancipation_options.id
+
+emancipation_options
+-
+id PK bigint
+emancipation_category_id bigint 
+name UNIQUE string
+created_at datetime
+updated_at datetime
+
+additional_expenses
+-
+case_contact_id bigint
+other_expense_amount decimal
+other_expenses_describe string
+created_at datetime
+updated_at datetime
+
+addresses
+-
+content string
+user_id bigint
+created_at datetime
+updated_at datetime
+
+all_casa_admins
+-
+email string
+encrypted_password string
+reset_password_token string
+reset_password_sent_at datetime
+created_at datetime
+updated_at datetime
+invitation_token string
+invitation_created_at datetime
+invitation_sent_at datetime
+invitation_accepted_at datetime
+invitation_limit integer
+invited_by_id integer
+invited_by_type string
+
+casa_case_contact_types
+-
+contact_type_id bigint
+casa_case_id bigint
+created_at datetime
+updated_at datetime
+
+casa_case_emancipation_categories
+-
+casa_case_id bigint
+emancipation_category_id bigint
+created_at datetime
+updated_at datetime
+
+casa_orgs
+-
+name string
+created_at datetime
+updated_at datetime
+display_name string
+address string
+footer_links string
+slug string
+show_driving_reimbursement boolean
+show_fund_request boolean
+twilio_phone_number string
+twilio_account_sid string
+twilio_api_key_sid string
+twilio_api_key_secret string
+
+case_assignments
+-
+casa_case_id bigint
+volunteer_id bigint
+active boolean
+created_at datetime
+updated_at datetime
+hide_old_contacts boolean
+
+case_contact_contact_types
+-
+case_contact_id bigint
+contact_type_id bigint
+created_at datetime
+updated_at datetime
+
+case_contacts
+-
+creator_id bigint
+casa_case_id bigint
+duration_minutes integer
+occurred_at datetime
+created_at datetime
+updated_at datetime
+contact_made boolean
+medium_type string
+miles_driven integer
+want_driving_reimbursement boolean
+notes string
+deleted_at datetime
+reimbursement_complete boolean
+
+case_court_orders
+-
+casa_case_id bigint
+created_at datetime
+updated_at datetime
+implementation_status integer
+court_date_id bigint
+text string
+
+checklist_items
+-
+hearing_type_id integer
+description text
+category string
+mandatory boolean
+created_at datetime
+updated_at datetime
+
+contact_type_groups
+-
+casa_org_id bigint
+name string
+created_at datetime
+updated_at datetime
+active boolean
+
+contact_types
+-
+contact_type_group_id bigint
+name string
+created_at datetime
+updated_at datetime
+active boolean
+
+court_dates
+-
+date datetime
+casa_case_id bigint
+created_at datetime
+updated_at datetime
+hearing_type_id bigint
+judge_id bigint
+
+emancipation_categories
+-
+name string
+mutually_exclusive boolean
+created_at datetime
+updated_at datetime
+
+feature_flags
+-
+name string
+enabled boolean
+created_at datetime
+updated_at datetime
+
+followups
+-
+case_contact_id bigint
+creator_id bigint
+status integer
+created_at datetime
+updated_at datetime
+note text
+
+fund_requests
+-
+submitter_email text
+youth_name text
+payment_amount text
+deadline text
+request_purpose text
+payee_name text
+requested_by_and_relationship text
+other_funding_source_sought text
+impact text
+extra_information text
+timestamps text
+
+hearing_types
+-
+casa_org_id bigint
+name string
+active boolean
+checklist_updated_date string
+
+judges
+-
+casa_org_id bigint
+created_at datetime
+updated_at datetime
+active boolean
+name string
+
+languages
+-
+name string
+casa_org_id bigint
+created_at datetime
+updated_at datetime
+
+languages_users
+-
+language_id bigint
+user_id bigint
+
+learning_hours
+-
+user_id bigint
+learning_type integer
+name string
+duration_minutes integer
+duration_hours integer
+occurred_at datetime
+created_at datetime
+updated_at datetime
+
+mileage_rates
+-
+amount decimal
+effective_date date
+is_active boolean
+user_id bigint
+created_at datetime
+updated_at datetime
+casa_org_id bigint
+
+notes
+-
+content string
+creator_id bigint
+notable_type string
+notable_id bigint
+created_at datetime
+updated_at datetime
+
+notifications
+-
+recipient_type string
+recipient_id bigint
+type string
+params jsonb
+read_at datetime
+created_at datetime
+updated_at datetime
+
+other_duties
+-
+creator_id bigint
+creator_type string
+occurred_at datetime
+duration_minutes bigint
+notes text
+created_at datetime
+updated_at datetime
+
+patch_note_groups
+-
+value string
+created_at datetime
+updated_at datetime
+
+patch_note_types
+-
+name string
+created_at datetime
+updated_at datetime
+
+patch_notes
+-
+note text
+patch_note_type_id bigint
+patch_note_group_id bigint
+created_at datetime
+updated_at datetime
+
+preference_sets
+-
+user_id bigint
+case_volunteer_columns jsonb
+created_at datetime
+updated_at datetime
+
+sent_emails
+-
+user_id bigint
+casa_org_id bigint
+mailer_type string
+category string
+sent_address string
+created_at datetime
+updated_at datetime
+
+sms_notification_events
+-
+name string
+user_type string
+created_at datetime
+updated_at datetime
+
+supervisor_volunteers
+-
+supervisor_id bigint
+volunteer_id bigint
+created_at datetime
+updated_at datetime
+is_active boolean
+
+user_reminder_times
+-
+user_id bigint
+reminder_sent datetime
+created_at datetime
+updated_at datetime
+case_contact_types datetime
+
+user_sms_notification_events
+-
+user_id bigint
+sms_notification_event_id bigint
+created_at datetime
+updated_at datetime
+
+users
+-
+email string
+encrypted_password string
+reset_password_token string
+reset_password_sent_at datetime
+created_at datetime
+updated_at datetime
+casa_org_id bigint
+display_name string
+invitation_token string
+invitation_created_at datetime
+invitation_sent_at datetime
+invitation_accepted_at datetime
+invitation_limit integer
+invited_by_type string
+invited_by_id bigint
+invitations_count integer
+type string
+active boolean
+sign_in_count integer
+current_sign_in_at datetime
+last_sign_in_at datetime
+current_sign_in_ip string
+last_sign_in_ip string
+phone_number string
+receive_sms_notifications boolean
+receive_email_notifications boolean
