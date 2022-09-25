@@ -70,7 +70,6 @@ class CaseContactsController < ApplicationController
       render :new
       return
     end
-
     # Create a case contact for every case that was checked
     case_contacts = create_case_contact_for_every_selected_casa_case(@selected_cases)
     if case_contacts.all?(&:persisted?)
@@ -161,7 +160,9 @@ class CaseContactsController < ApplicationController
         new_cc = casa_case.case_contacts.create(create_case_contact_params.except(:casa_case_attributes))
       end
 
-      if @selected_cases.count == 1 && @case_contact.valid?
+      case_contact = @case_contact.dup
+      case_contact.casa_case = casa_case
+      if @selected_cases.count == 1 && case_contact.valid?
         if current_role == "Volunteer"
           update_volunteer_address
         elsif ["Supervisor", "Casa Admin"].include?(current_role) && casa_case.volunteers.count == 1
@@ -173,11 +174,13 @@ class CaseContactsController < ApplicationController
   end
 
   def update_volunteer_address(volunteer = current_user)
-    content = create_case_contact_params[:casa_case_attributes][:volunteers_attributes]["0"][:address_attributes][:content]
+    content = create_case_contact_params.dig(:casa_case_attributes, :volunteers_attributes, "0", :address_attributes, :content)
+    return if content.blank?
     if volunteer.address
       volunteer.address.update!(content: content)
     else
-      volunteer.address = Address.create!(content: content)
+      volunteer.address = Address.new(content: content)
+      volunteer.save!
     end
   end
 
