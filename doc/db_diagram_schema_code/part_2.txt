@@ -1,0 +1,56 @@
+
+active_storage_attachments
+-
+id bigint PK
+name string
+record_type string
+record_id bigint
+blob_id bigint FK - active_storage_blobs.id
+created_at datetime
+
+active_storage_blobs
+-
+id bigint PK
+key string UNIQUE
+filename string
+content_type string NULL
+metadata text NULL
+byte_size bigint
+checksum string NULL
+created_at datetime
+service_name string
+
+active_storage_variant_records
+-
+id bigint PK
+blob_id bigint FK - active_storage_blobs.id
+variation_digest string
+
+delayed_jobs
+-
+id bigint PK
+priority integer
+attempts integer
+handler text
+last_error text
+run_at datetime
+locked_at datetime
+failed_at datetime
+locked_by string
+queue string
+created_at datetime
+updated_at datetime
+
+healths
+-
+id bigint PK
+latest_deploy_time datetime
+singleton_guard integer
+created_at datetime
+updated_at datetime
+
+task_records
+-
+id bigint PK
+version string
+
