@@ -40,8 +40,8 @@ RSpec.describe "Edit CASA Case", type: :system do
       end
       expect(page).to have_text("Submitted")
       expect(page).to have_text("Court Date")
-      expect(page).to have_text("Court Report Due Date")
-      expect(page).to have_field("Court Report Due Date")
+      expect(page).not_to have_text("Court Report Due Date")
+      expect(page).not_to have_field("Court Report Due Date")
       expect(page).to have_text("Youth's Date in Care")
       expect(page).to have_text("Court Mandate Text One")
       expect(page).not_to have_text("Deactivate Case")
@@ -72,8 +72,8 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Case #{casa_case.case_number} has been reactivated.")
       expect(page).to have_text("Deactivate CASA Case")
       expect(page).to have_text("Court Date")
-      expect(page).to have_text("Court Report Due Date")
-      expect(page).to have_field("Court Report Due Date")
+      expect(page).not_to have_text("Court Report Due Date")
+      expect(page).not_to have_field("Court Report Due Date")
     end
 
     context "when trying to assign a volunteer to a case" do
@@ -183,7 +183,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       select "Submitted", from: "casa_case_court_report_status"
       check "Youth"
 
-      fill_in "Court Report Due Date", with: Date.new(next_year.to_i, 9, 8).strftime("%Y/%m/%d\n")
+      # fill_in "Court Report Due Date", with: Date.new(next_year.to_i, 9, 8).strftime("%Y/%m/%d\n")
 
       page.find("#add-mandate-button").click
       find("#court-orders-list-container").first("textarea").send_keys("Court Mandate Text One")
@@ -199,9 +199,9 @@ RSpec.describe "Edit CASA Case", type: :system do
       has_no_checked_field? "Supervisor"
 
       expect(page).to have_text("Court Date")
-      expect(page).to have_text("Court Report Due Date")
-      expect(page).to have_field("Court Report Due Date")
-      expect(page).to have_field("Court Report Due Date", with: "#{next_year}-09-08")
+      expect(page).not_to have_text("Court Report Due Date")
+      expect(page).not_to have_field("Court Report Due Date")
+      expect(page).not_to have_field("Court Report Due Date", with: "#{next_year}-09-08")
       expect(page).to have_text("Youth's Date in Care")
       expect(page).to have_text("Court Mandate Text One")
       expect(page).to have_text("Partially implemented")
@@ -209,7 +209,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       visit casa_case_path(casa_case)
 
       expect(page).to have_text("Court Report Status: Submitted")
-      expect(page).to have_text("8-SEP-#{next_year}")
+      expect(page).not_to have_text("8-SEP-#{next_year}")
     end
 
     it "views deactivated case" do
@@ -512,7 +512,7 @@ of it unless it was included in a previous court report.")
         click_on "Update CASA Case"
       end
 
-      expect(page).to have_field("Court Report Due Date")
+      expect(page).not_to have_field("Court Report Due Date")
       expect(page).not_to have_text("Youth's Date in Care")
       expect(page).not_to have_text("Deactivate Case")
 
