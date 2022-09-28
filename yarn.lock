@@ -4886,9 +4886,9 @@ supports-preserve-symlinks-flag@^1.0.0:
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
 sweetalert2@^11.3.5:
-  version "11.4.33"
-  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-11.4.33.tgz#7aaf12d63aca41dd3f8e095e48b387d630104f10"
-  integrity sha512-gnXH7c7xFzs9BtmHBVH4Fl/cEKhOhf4gv6UuZpFqUoFWtwIKG5sjNkcDNYW+8v3wyFestLab5qI4i1H1MkN0Pg==
+  version "11.4.34"
+  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-11.4.34.tgz#0208909647a09f6b5a063b59a5afcddad75f0e18"
+  integrity sha512-R9u4mE4zYBoJbwFypeioyE+NKhZYk+6DzHTGA8J21naQOkqeWEGWVT+OFEg/kS1/MMogj92x/1pCsx92I2VTbA==
 
 symbol-tree@^3.2.4:
   version "3.2.4"
