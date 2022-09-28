@@ -207,6 +207,40 @@ RSpec.describe CaseContactsController, type: :controller do
           expect(casa_case.case_contacts.last.miles_driven).to eq(123)
         end
       end
+
+      context "when volunteer address filled" do
+        let(:params) {
+          build(:case_contact, casa_case_id: case_id).attributes.merge(
+            casa_case_attributes: {
+              id: case_id, volunteers_attributes: {
+                "0" => {
+                  id: volunteer.id,
+                  address_attributes: {
+                    id: 0, content: "Volunteer address"
+                  }
+                }
+              }
+            }
+          )
+        }
+
+        context "when volunteer already has a address created" do
+          let(:volunteer) { create(:volunteer, :with_casa_cases, casa_org: organization, address: build(:address)) }
+
+          it "update volunteer address" do
+            expect { post :create, params: {case_contact: params}, format: :js }.to change(CaseContact, :count).by(1)
+            expect(casa_case.volunteers.first.address.content).to eq("Volunteer address")
+          end
+        end
+
+        context "when volunteer doesnt have a address created" do
+          let(:volunteer) { create(:volunteer, :with_casa_cases, casa_org: organization, address: nil) }
+          it "create new volunteer address" do
+            expect { post :create, params: {case_contact: params}, format: :js }.to change(CaseContact, :count).by(1)
+            expect(casa_case.volunteers.first.address.content).to eq("Volunteer address")
+          end
+        end
+      end
     end
 
     context "with invalid params" do
