@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "reimbursements", type: :system do
   let(:admin) { create(:casa_admin) }
 
-  it "shows reimbursements" do
+  it "shows reimbursements", js: true do
     sign_in admin
 
     contact1 = create(:case_contact, :wants_reimbursement)

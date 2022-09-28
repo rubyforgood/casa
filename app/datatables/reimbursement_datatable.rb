@@ -1,8 +1,8 @@
 class ReimbursementDatatable < ApplicationDatatable
   ORDERABLE_FIELDS = %w[
-    volunteer
+    display_name
     case_number
-    created_at
+    occurred_at
     miles_driven
   ].freeze
 
@@ -11,21 +11,22 @@ class ReimbursementDatatable < ApplicationDatatable
   def data
     records.map do |case_contact|
       {
-        id: case_contact.id,
         casa_case: {
           id: case_contact.casa_case.id,
           case_number: case_contact.casa_case.case_number
         },
-        volunteer: {
-          id: case_contact.creator.id,
-          display_name: case_contact.creator.display_name,
-          email: case_contact.creator.email
-        },
-        contact_types: case_contact_types(case_contact),
-        created_at: case_contact.created_at,
-        miles_driven: case_contact.miles_driven,
         complete: case_contact.reimbursement_complete,
-        mark_as_complete_path: mark_as_complete_path(case_contact)
+        contact_types: case_contact_types(case_contact),
+        id: case_contact.id,
+        mark_as_complete_path: mark_as_complete_path(case_contact),
+        miles_driven: case_contact.miles_driven,
+        occurred_at: case_contact.occurred_at,
+        volunteer: {
+          address: case_contact.creator.address&.content,
+          display_name: case_contact.creator.display_name,
+          email: case_contact.creator.email,
+          id: case_contact.creator.id
+        }
       }
     end
   end
