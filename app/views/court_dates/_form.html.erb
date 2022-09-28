@@ -26,7 +26,7 @@
             <div class="field form-group">
               <% court_report_due_date = casa_case.court_report_due_date || Time.zone.now %>
               <%= form.text_field :court_report_due_date,
-                                  value: court_report_due_date.to_date,
+                                  value: court_report_due_date&.to_date,
                                   data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
                                   class: "form-control" %>
       </div>
