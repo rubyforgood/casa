@@ -1,4 +1,5 @@
 class CasaCasesController < ApplicationController
+  include TransitionAgedYouthHelper
   before_action :set_casa_case, only: %i[show edit update deactivate reactivate copy_court_orders]
   before_action :set_contact_types, only: %i[new edit update create deactivate reactivate]
   before_action :require_organization!
@@ -138,7 +139,7 @@ class CasaCasesController < ApplicationController
 
   def is_transition_aged_youth?(params)
     # TODO remove this once TAY conversion is done
-    params[:birth_month_year_youth] && Date.parse(params[:birth_month_year_youth]) < 14.years.ago
+    params[:birth_month_year_youth] && Date.parse(params[:birth_month_year_youth]) < TRANSITION_AGE_YEARS_AGO
   end
 
   # Use callbacks to share common setup or constraints between actions.

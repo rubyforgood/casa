@@ -1,4 +1,5 @@
 class VolunteerDatatable < ApplicationDatatable
+  include TransitionAgedYouthHelper
   ORDERABLE_FIELDS = %w[
     active
     contacts_made_in_past_days
@@ -88,7 +89,7 @@ class VolunteerDatatable < ApplicationDatatable
       CaseAssignment
         .select(:volunteer_id)
         .joins(:casa_case)
-        .where(casa_cases: {birth_month_year_youth: ..14.years.ago})
+        .where(casa_cases: {birth_month_year_youth: ..TRANSITION_AGE_YEARS_AGO})
         .group(:volunteer_id)
         .to_sql
   end

@@ -1,6 +1,7 @@
 class CasaCase < ApplicationRecord
   include ByOrganizationScope
   include DateHelper
+  include TransitionAgedYouthHelper
 
   self.ignored_columns = %w[court_date hearing_type_id judge_id]
 
@@ -16,9 +17,6 @@ class CasaCase < ApplicationRecord
     assigned_to
     actions
   ].freeze
-
-  TRANSITION_AGE_YOUTH_ICON = "🦋".freeze
-  NON_TRANSITION_AGE_YOUTH_ICON = "🐛".freeze
 
   before_create :set_slug
 
@@ -71,7 +69,7 @@ class CasaCase < ApplicationRecord
       .order(:case_number)
   }
   scope :should_transition, -> {
-    where("birth_month_year_youth <= ?", 14.years.ago)
+    where("birth_month_year_youth <= ?", TRANSITION_AGE_YEARS_AGO)
   }
 
   scope :birthday_next_month, -> {
@@ -84,7 +82,7 @@ class CasaCase < ApplicationRecord
   }
 
   scope :is_transitioned, -> {
-    where("birth_month_year_youth < ?", 14.years.ago)
+    where("birth_month_year_youth < ?", TRANSITION_AGE_YEARS_AGO)
   }
 
   scope :active, -> {
@@ -133,10 +131,6 @@ class CasaCase < ApplicationRecord
       self.court_report_submitted_at ||= Time.current
     end
     court_report_status
-  end
-
-  def in_transition_age?
-    birth_month_year_youth.nil? ? false : birth_month_year_youth <= 14.years.ago
   end
 
   def latest_court_report
