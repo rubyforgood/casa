@@ -11,6 +11,7 @@ class CourtDate < ApplicationRecord
   belongs_to :judge, optional: true
 
   accepts_nested_attributes_for :case_court_orders, reject_if: :all_blank
+  accepts_nested_attributes_for :casa_case
 
   scope :ordered_ascending, -> { order("date asc") }
 
