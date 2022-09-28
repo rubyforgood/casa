@@ -14,13 +14,11 @@
       <dt class="h6 float-left mr-2"><strong>Case Number:</strong></dt>
       <dd class="h6 mb-3"><%= link_to "#{@casa_case.case_number}", casa_case_path(@casa_case) %></dd>
       <dt class="h6 float-left mr-2"><strong>Court Report Due Date:</strong></dt>
-      <dd class="h6 mb-3"><%= @casa_case.court_report_due_date&.to_date %> data aqui</dd>
+      <dd class="h6 mb-3"><%= @casa_case.court_report_due_date&.to_date || "None" %></dd>
       <dt class="h6 float-left mr-2"><strong>Judge:</strong></dt>
       <dd class="h6 mb-3"><%= @court_date.judge&.name || "None" %></dd>
       <dt class="h6 float-left mr-2"><strong>Hearing Type:</strong></dt>
       <dd class="h6 mb-3"><%= @court_date.hearing_type&.name || "None" %></dd>
-            <%# <% raise %> %>
-
     </dl>
     <h6>
       <strong>Court Orders:</strong>

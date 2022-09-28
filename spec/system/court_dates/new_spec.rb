@@ -1,21 +1,22 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "court_dates/new", type: :system do
+  let(:now) { Date.new(2021, 1, 1) }
   let(:casa_org) { create(:casa_org) }
+  let(:admin) { create(:casa_admin, casa_org: casa_org) }
   let!(:casa_case) { create(:casa_case, casa_org: casa_org) }
+  let!(:court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: now - 1.week) }
   let!(:judge) { create(:judge) }
   let!(:hearing_type) { create(:hearing_type) }
-  let(:admin) { create(:casa_admin, casa_org: casa_org) }
   let(:text) { Faker::Lorem.paragraph(sentence_count: 2) }
 
   before do
-    travel_to Date.new(2021, 1, 1)
+    travel_to now
     sign_in admin
-    visit root_path
-    click_on "Cases"
-    click_on casa_case.case_number
-    click_on "Edit Case Details"
-    find(".past-court-dates.add-container .btn-primary").click
+    visit casa_case_path(casa_case)
+    click_link("Add a court date")
   end
 
   context "when all fields are filled" do

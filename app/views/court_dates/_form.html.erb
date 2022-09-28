@@ -20,19 +20,10 @@
       </div>
       <br>
 
-      <%= form_with(model: casa_case, url: casa_case, local: true) do |form| %>
-        <%= render "/shared/error_messages", resource: casa_case %>
-
-        <div class="top-page-actions pull-right">
-          <%= form.submit casa_case.persisted? ? "Update" : "Create", class: "btn btn-primary" %>
-        </div>
-
+      <%= form.fields_for :casa_case do |casa_case_subform| %>
         <div class="field form-group">
-          <%= form.label :court_report_due_date, "Add Court Report Due Date" %>
-              <%# <br>
-              <div class="field form-group">
-                <% court_report_due_date = casa_case.court_report_due_date || Time.zone.now %> %>
-                <%= form.text_field :court_report_due_date,
+          <%= casa_case_subform.label :court_report_due_date, "Add Court Report Due Date" %>
+                <%= casa_case_subform.text_field :court_report_due_date,
                                     value: casa_case.court_report_due_date&.to_date,
                                     data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
                                     class: "form-control" %>
