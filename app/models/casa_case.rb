@@ -207,15 +207,6 @@ class CasaCase < ApplicationRecord
   def contact_type_validation?
     validate_update
   end
-
-  # def set_validate_update
-
-  # end
-
-  # def to_param
-  #   id
-  #   # slug # TODO use slug eventually for routes
-  # end
 end
 
 # == Schema Information
