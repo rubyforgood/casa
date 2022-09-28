@@ -14,10 +14,7 @@ RSpec.describe "court_dates/edit", type: :system do
   before do
     travel_to now
     sign_in admin
-    visit root_path
-    click_on "Cases"
-    click_on casa_case.case_number
-    click_on "Edit Case Details"
+    visit casa_case_path(casa_case)
     click_on court_date.date.strftime("%B %-d, %Y")
     click_on "Edit"
   end
