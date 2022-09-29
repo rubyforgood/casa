@@ -294,11 +294,11 @@ patchNoteFunctions.onDeletePatchNote = function () {
     case 'Delete':
       pageNotifier.notify('Click 2 more times to delete', 'warn')
       deleteButton.text('2')
-      break;
+      break
     case '2':
       deleteButton.text('1')
-      break;
-    case '1': 
+      break
+    case '1':
       patchNoteFunctions.disablePatchNoteForm(formInputs)
 
       patchNoteFunctions.deletePatchNote(
@@ -310,7 +310,7 @@ patchNoteFunctions.onDeletePatchNote = function () {
         deleteButton.html('<i class="fa-solid fa-trash-can"></i> Delete')
       })
 
-      break;
+      break
   }
 }
 
