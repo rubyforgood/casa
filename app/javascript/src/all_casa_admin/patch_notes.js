@@ -209,6 +209,7 @@ patchNoteFunctions.enablePatchNoteFormEditMode = function (patchNoteFormInputs) 
   buttonLeft.html('<i class="fas fa-save"></i> Save')
   buttonLeft.removeClass('button-edit')
   buttonLeft.addClass('button-save')
+  buttonLeft.click(patchNoteFunctions.onSavePatchNote)
 
   buttonRight.html('<i class="fa-solid fa-xmark"></i> Cancel')
   buttonRight.removeClass('button-delete')
@@ -288,8 +289,6 @@ patchNoteFunctions.onDeletePatchNote = function () {
   const patchNoteFormContainer = deleteButton.parent().parent()
   const formInputs = patchNoteFunctions.getPatchNoteFormInputs(patchNoteFormContainer)
 
-  console.log(deleteButton.text())
-
   switch (deleteButton.text().trim()) {
     case 'Delete':
       pageNotifier.notify('Click 2 more times to delete', 'warn')
@@ -319,6 +318,13 @@ patchNoteFunctions.onEditPatchNote = function () {
   const patchNoteFormInputs = patchNoteFunctions.getPatchNoteFormInputs($(this).parent().parent())
 
   patchNoteFunctions.enablePatchNoteFormEditMode(patchNoteFormInputs)
+}
+
+// Called when the save button is pressed on a patch note form in edit mode
+patchNoteFunctions.onSavePatchNote = function () {
+  if ($(this).parent().siblings('textarea').val() === '') {
+    pageNotifier.notify('Cannot save a blank patch note', 'warn')
+  }
 }
 
 // Called when an async operation completes. May show notifications describing how the operation completed
