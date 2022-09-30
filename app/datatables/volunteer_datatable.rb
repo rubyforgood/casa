@@ -13,8 +13,6 @@ class VolunteerDatatable < ApplicationDatatable
   private
 
   def data
-    puts "=========record==========="
-    puts records
     records.map do |volunteer|
       {
         active: volunteer.active?,
