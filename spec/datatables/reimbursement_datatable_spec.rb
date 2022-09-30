@@ -63,6 +63,7 @@ RSpec.describe "ReimbursementDatatable" do
       it { is_expected.to include(id: first_contact.creator.id.to_s) }
       it { is_expected.to include(display_name: first_contact.creator.display_name.to_s) }
       it { is_expected.to include(email: first_contact.creator.email.to_s) }
+      it { is_expected.to include(address: first_contact.creator.address.to_s) }
     end
 
     describe ":contact_types" do
@@ -79,10 +80,10 @@ RSpec.describe "ReimbursementDatatable" do
       it { is_expected.to eq(expected_contact_types) }
     end
 
-    describe ":created_at" do
-      subject(:created_at) { first_result[:created_at] }
+    describe ":occurred_at" do
+      subject(:occurred_at) { first_result[:occurred_at] }
 
-      it { is_expected.to eq(first_contact.created_at.to_s) }
+      it { is_expected.to eq(first_contact.occurred_at.to_s) }
     end
 
     describe ":miles_driven" do
@@ -112,7 +113,7 @@ RSpec.describe "ReimbursementDatatable" do
           create(
             :case_contact,
             casa_case: casa_case,
-            created_at: Time.new - rand(1000),
+            occurred_at: Time.new - rand(1000),
             miles_driven: rand(1000)
           )
         end.reverse
@@ -132,7 +133,7 @@ RSpec.describe "ReimbursementDatatable" do
     end
 
     describe "order by creator display name" do
-      let(:order_by) { "volunteer" }
+      let(:order_by) { "display_name" }
       let(:sorted_case_contacts) do
         case_contacts.sort_by { |case_contact| case_contact.creator.display_name }
       end
@@ -141,9 +142,9 @@ RSpec.describe "ReimbursementDatatable" do
     end
 
     describe "order by created at" do
-      let(:order_by) { "created_at" }
+      let(:order_by) { "occurred_at" }
       let(:sorted_case_contacts) do
-        case_contacts.sort_by { |case_contact| case_contact.created_at }
+        case_contacts.sort_by { |case_contact| case_contact.occurred_at }
       end
 
       it_behaves_like "a sorted results set"

@@ -29,6 +29,7 @@ RSpec.configure do |config|
   config.include PunditHelper, type: :view
   config.include SessionHelper, type: :view
   config.include SessionHelper, type: :request
+  config.include CsvExporterHelper, type: :model
   config.include TemplateHelper
   config.include Warden::Test::Helpers
 

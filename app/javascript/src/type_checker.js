@@ -29,6 +29,16 @@ module.exports = {
     }
   },
 
+  // Checks if a variable is an object
+  //  @param  {any}    variable The variable to be checked
+  //  @param  {string} varName  The name of the variable to be checked
+  //  @throws {TypeError}  If variable is not an object
+  checkObject (variable, varName) {
+    if (typeof variable !== 'object' || Array.isArray(variable) || variable === null) {
+      throw new TypeError(`Param ${varName} is not an object`)
+    }
+  },
+
   // Checks if a variable is a positive integer
   //  @param  {any}    variable The variable to be checked
   //  @param  {string} varName  The name of the variable to be checked

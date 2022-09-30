@@ -2,7 +2,7 @@ require "rails_helper"
 require "csv"
 
 RSpec.describe LearningHoursReport, type: :model do
-  let!(:casa_org) { create(:casa_org) }
+  let!(:casa_org) { build(:casa_org) }
   let!(:users) { create_list(:user, 3, casa_org: casa_org) }
 
   describe "#to_csv" do

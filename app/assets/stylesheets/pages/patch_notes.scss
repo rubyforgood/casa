@@ -9,6 +9,10 @@
     }
 
     .patch-note-list-item {
+      & .card-body>* {
+        margin: 0.25em 0;
+      }
+
       &.new {
         background-color: #ffecb3;
       }
@@ -33,7 +37,15 @@
         display: flex;
 
         button {
-          flex-grow: 1
+          flex-grow: 1;
+
+          &:nth-child(2) {
+            margin-left: 0.5em
+          };
+
+          &.button-cancel {
+            flex-grow: 3
+          }
         }
       }
     };
