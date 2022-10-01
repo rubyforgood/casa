@@ -1,8 +1,8 @@
 /* global window */
 
+import './jQueryGlobalizer.js'
 import 'bootstrap'
 import 'bootstrap-select'
-import './jQueryGlobalizer.js'
 import './sweet-alert-confirm.js'
 
 require('datatables.net-dt')(null, window.jQuery) // First parameter is the global object. Defaults to window if null
