@@ -203,7 +203,7 @@ $('document').ready(() => {
         name: 'has_any_extra_languages ',
         render: (data, type, row, meta) => {
           const languages = row.extra_languages.map(x => x.name).join(', ')
-          return row.extra_languages.length > 0 ? `<span class="language-icon" data-toggle="tooltip" title="${languages}">🌎</span>` : ''
+          return row.extra_languages.length > 0 ? `<span class="language-icon" data-bs-toggle="tooltip" title="${languages}">🌎</span>` : ''
         },
         searchable: false,
         visible: true

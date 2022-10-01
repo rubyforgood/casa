@@ -4,7 +4,7 @@
     <% if policy(current_organization.volunteers.new).new? %>
       <%= link_to t(".button.new"), new_volunteer_path, class: "btn btn-primary mb-2 mb-md-0" %>
     <% end %>
-    <button type="button" class="btn btn-primary mb-2 mb-md-0" data-toggle="modal" data-target="#visibleColumns">
+    <button type="button" class="btn btn-primary mb-2 mb-md-0" data-bs-toggle="modal" data-bs-target="#visibleColumns">
       <%= t(".pick_displayed_columns") %>
     </button>
   </div>
@@ -15,7 +15,7 @@
   <div class="col-sm-12">
     <h4 class="pull-left mr-2"><%= t(".filter") %></h4>
     <div class="dropdown pull-left mr-2">
-      <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <%= t(".supervisor") %>
       </button>
       <div class="dropdown-menu supervisor-options">
@@ -40,7 +40,7 @@
       </div>
     </div>
     <div class="dropdown pull-left mr-2">
-      <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <%= t(".status") %>
       </button>
       <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
@@ -60,7 +60,7 @@
     </div>
 
     <div class="dropdown pull-left mr-2">
-      <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <%= t(".transition_aged_youth") %>
       </button>
       <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton">
@@ -79,7 +79,7 @@
       </div>
     </div>
     <div class="dropdown pull-left mr-2">
-      <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Has Extra Languages
       </button>
       <div class="dropdown-menu extra-language-options" aria-labelledby="dropdownMenuButton">

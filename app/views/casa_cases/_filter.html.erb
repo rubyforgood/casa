@@ -3,7 +3,7 @@
     <div class="col-sm-12">
       <h4 class="pull-left mr-2">Filter by:</h4>
       <div class="dropdown pull-left mr-2">
-        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Status
         </button>
         <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="dropdown pull-left mr-2">
-        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Assigned to Volunteer
         </button>
         <div class="dropdown-menu assigned-to-volunteer-options" aria-labelledby="dropdownMenuButton">
@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="dropdown pull-left mr-2">
-        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Assigned to more than 1 Volunteer
         </button>
         <div class="dropdown-menu more-than-one-volunteer-options" aria-labelledby="dropdownMenuButton">
@@ -60,7 +60,7 @@
         </div>
       </div>
       <div class="dropdown pull-left mr-2">
-        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Assigned to Transition Aged Youth
         </button>
         <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton">
@@ -80,7 +80,7 @@
       </div>
       <div class="dropdown pull-left mr-2">
         <% unless current_user.volunteer? %>
-          <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Casa Case Prefix
           </button>
         <% end %>
