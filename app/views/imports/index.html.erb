@@ -28,7 +28,7 @@
                                   "nav-link",
                                   ("active" if @import_type == "volunteer")
                               ].compact,
-                              data: {toggle: "tab"},
+                              data: {"bs-toggle": "tab"},
                               aria: {controls: "volunteer", selected: (@import_type == "volunteer")} do %>
                 Import Volunteers
               <% end %>
@@ -42,7 +42,7 @@
                                   "nav-link",
                                   ("active" if @import_type == "supervisor")
                               ].compact,
-                              data: {toggle: "tab"},
+                              data: {"bs-toggle": "tab"},
                               aria: {controls: "supervisor", selected: (@import_type == "supervisor")} do %>
               Import Supervisors
               <% end %>
@@ -56,7 +56,7 @@
                                   "nav-link",
                                   ("active" if @import_type == "casa_case")
                               ].compact,
-                              data: {toggle: "tab"},
+                              data: {"bs-toggle": "tab"},
                               aria: {controls: "casa-case", selected: (@import_type == "casa_case")} do %>
                 Import Cases
               <% end %>
