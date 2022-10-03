@@ -23,8 +23,8 @@ RSpec.describe "court_dates/new", type: :system do
     it "is successful", js: true do
       expect(page.body).to have_content(casa_case.case_number)
 
-      fill_in "court_date_date", with: "04/04/2020"
-
+      fill_in "court_date_date", with: :now
+      fill_in "court_date_court_report_due_date", with: :now
       select judge.name, from: "Judge"
       select hearing_type.name, from: "Hearing type"
 
@@ -37,8 +37,9 @@ RSpec.describe "court_dates/new", type: :system do
         click_on "Create"
       end
 
-      expect(page.body).to have_content(casa_case.case_number)
       expect(page).to have_content("Court date was successfully created.")
+      expect(page.body).to have_content(casa_case.case_number)
+      expect(page).to have_content("Court Report Due Date:")
       expect(page).to have_content(judge.name)
       expect(page).to have_content(hearing_type.name)
       expect(page).to have_content(text)
