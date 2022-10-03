@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_24_181447) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_03_202112) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -230,6 +230,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_24_181447) do
     t.datetime "updated_at", null: false
     t.bigint "hearing_type_id"
     t.bigint "judge_id"
+    t.datetime "court_report_due_date", precision: nil
     t.index ["casa_case_id"], name: "index_court_dates_on_casa_case_id"
     t.index ["hearing_type_id"], name: "index_court_dates_on_hearing_type_id"
     t.index ["judge_id"], name: "index_court_dates_on_judge_id"
