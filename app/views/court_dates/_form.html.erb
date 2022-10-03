@@ -20,15 +20,13 @@
       </div>
       <br>
 
-      <%= form.fields_for :casa_case do |casa_case_subform| %>
-        <div class="field form-group">
-          <%= casa_case_subform.label :court_report_due_date, "Add Court Report Due Date" %>
-                <%= casa_case_subform.text_field :court_report_due_date,
-                                    value: casa_case.court_report_due_date&.to_date,
-                                    data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
-                                    class: "form-control" %>
-        </div>
-      <% end %>
+      <div class="field form-group">
+        <%= form.label :court_report_due_date, "Add Court Report Due Date" %>
+        <%= form.text_field :court_report_due_date,
+                        value: court_date.court_report_due_date&.to_date,
+                        data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
+                        class: "form-control" %>
+      </div>
       <br>
 
       <div class="field form-group">
