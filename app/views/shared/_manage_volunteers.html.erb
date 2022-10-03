@@ -1,0 +1,54 @@
+<h1 class="pt-5">Manage Volunteers</h1>
+
+<div id="volunteer-assignment" class="card card-container">
+  <div class="card-body">
+    <% if show_assigned_volunteers %>
+      <%= yield :table_title %>
+      <div class="table-responsive">
+        <table class='table case-list'>
+          <thead>
+            <tr>
+              <th>Volunteer Name</th>
+              <th>Volunteer Email</th>
+              <% if @casa_case %>
+                <th>Status</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+              <% end %>
+              <% if local_assigns[:button_text] == "Hide unassigned" %>
+                <th>Currently Assigned To</th>
+              <% end %>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <%= yield :table_body %>
+        </table>
+      </div>
+    <% end %>
+
+    <br>
+
+    <h3>Assign a New Volunteer</h3>
+
+    <fieldset class="border-0" <%= 'disabled' unless available_volunteers.any? %>>
+      <%= form_for assignable_obj.new, url: assign_action do |form| %>
+        <div class='form-group'>
+          <label for="<%= select_id %>">Select a Volunteer</label>
+          <select id="<%= select_id %>" name="<%= select_name %>" class='form-control select2'>
+            <% available_volunteers.each do |volunteer| %>
+              <option value="<%= volunteer.id %>"><%= volunteer.display_name %></option>
+            <% end %>
+          </select>
+        </div>
+        <% if @supervisor %>
+          <%= form.hidden_field :supervisor_id, :value => @supervisor.id %>
+        <% end %>
+
+        <%= form.submit "Assign Volunteer", class: 'btn btn-secondary' %>
+      <% end %>
+    </fieldset>
+    <% unless available_volunteers.any? %>
+      <p class="text-danger">There are no active, unassigned volunteers available.</p>
+    <% end %>
+  </div>
+</div>
