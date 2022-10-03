@@ -1,96 +1,72 @@
-<h1 class="pt-5">Manage Volunteers</h1>
+<% content_for :table_title do %>
+  <h3>Assigned Volunteers</h3>
+<% end %>
 
-<div id="volunteer-assignment" class="card card-container">
-  <div class="card-body">
-    <% if @casa_case.volunteers.present? %>
-      <br>
-      <h3>Assigned Volunteers</h3>
-      <div class="table-responsive">
-        <table class='table case-list'>
-          <thead>
-            <tr>
-              <th>Volunteer Name</th>
-              <th>Volunteer Email</th>
-              <th>Status</th>
-              <th>Start Date</th>
-              <th>End Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-          <% @casa_case.case_assignments.each do |assignment| %>
-            <tr>
-              <td data-test="volunteer-name">
-                <%= link_to assignment.volunteer.display_name, edit_volunteer_path(assignment.volunteer) %>
-              </td>
-              <td data-test="volunteer-email"><%= assignment&.volunteer&.email %></td>
-              <td data-test="assigned">
-                <% if assignment.active? %>
-                  <span class='badge badge-success text-uppercase'>Assigned</span>
-                <% else %>
-                    <span class="badge badge-danger text-uppercase">
-                      <%= assignment.volunteer.active? ? "Unassigned" : "Deactivated volunteer" %>
-                    </span>
-                <% end %>
-              </td>
-              <td data-test="assignment-start"><%= I18n.l(assignment.created_at, format: :full, default: nil) %></td>
-              <td data-test="assignment-end">
-                <% unless assignment.active? %>
-                  <%= I18n.l(assignment.updated_at, format: :full, default: nil) %>
-                <% end %>
-              </td>
-              <td data-test="action">
-                <% if policy(assignment).unassign? %>
-                  <%= button_to("Unassign Volunteer",
-                                unassign_case_assignment_path(assignment),
-                                method: :patch,
-                                class: "btn btn-outline-danger text-wrap") %>
-                <% else %>
-                  <% if !assignment.volunteer.active? && policy(assignment.volunteer).activate? %>
-                    <%= link_to "Activate Volunteer",
-                                activate_volunteer_path(assignment.volunteer,
-                                                        redirect_to_path: 'casa_case',
-                                                        casa_case_id: @casa_case.id
-                                ),
-                                method: :patch,
-                                class: "btn btn-outline-success" %>
-                  <% end %>
-                  <% if (policy(assignment).hide_contacts?) %>
-                    <%= button_to("Hide Old Contacts",
-                                show_hide_contacts_case_assignment_path(assignment),
-                                method: :patch,
-                                class: "btn btn-outline-secondary text-wrap") %>
-                  <% else %>
-                    <%= button_to("Show Old Contacts",
-                                show_hide_contacts_case_assignment_path(assignment),
-                                method: :patch,
-                                class: "btn btn-outline-warning text-wrap") %>
-                  <% end %>
-                <% end %>
-              </td>
-            </tr>
+<% content_for :table_body do %>
+  <tbody>
+  <% @casa_case.case_assignments.each do |assignment| %>
+    <tr>
+      <td data-test="volunteer-name">
+        <%= link_to assignment.volunteer.display_name, edit_volunteer_path(assignment.volunteer) %>
+      </td>
+      <td data-test="volunteer-email"><%= assignment&.volunteer&.email %></td>
+      <td data-test="assigned">
+        <% if assignment.active? %>
+          <span class='badge badge-success text-uppercase'>Assigned</span>
+        <% else %>
+            <span class="badge badge-danger text-uppercase">
+              <%= assignment.volunteer.active? ? "Unassigned" : "Deactivated volunteer" %>
+            </span>
+        <% end %>
+      </td>
+      <td data-test="assignment-start"><%= I18n.l(assignment.created_at, format: :full, default: nil) %></td>
+      <td data-test="assignment-end">
+        <% unless assignment.active? %>
+          <%= I18n.l(assignment.updated_at, format: :full, default: nil) %>
+        <% end %>
+      </td>
+      <td data-test="action">
+        <% if policy(assignment).unassign? %>
+          <%= button_to("Unassign Volunteer",
+                        unassign_case_assignment_path(assignment),
+                        method: :patch,
+                        class: "btn btn-outline-danger text-wrap") %>
+        <% else %>
+          <% if !assignment.volunteer.active? && policy(assignment.volunteer).activate? %>
+            <%= link_to "Activate Volunteer",
+                        activate_volunteer_path(assignment.volunteer,
+                                                redirect_to_path: 'casa_case',
+                                                casa_case_id: @casa_case.id
+                        ),
+                        method: :patch,
+                        class: "btn btn-outline-success" %>
           <% end %>
-          </tbody>
-        </table>
-      </div>
-    <% end %>
-
-    <br>
-
-    <h3>Assign a New Volunteer</h3>
-
-    <%= form_for CaseAssignment.new, url: case_assignments_path(casa_case_id: @casa_case.id) do |form| %>
-
-      <div class='form-group'>
-        <label for='case_assignment_casa_case_id'>Select a Volunteer</label>
-        <select id='case_assignment_casa_case_id' name='case_assignment[volunteer_id]' class='form-control select2'>
-          <% @casa_case.unassigned_volunteers.each do |volunteer| %>
-            <option value="<%= volunteer.id %>"><%= volunteer.display_name %></option>
+          <% if (policy(assignment).hide_contacts?) %>
+            <%= button_to("Hide Old Contacts",
+                        show_hide_contacts_case_assignment_path(assignment),
+                        method: :patch,
+                        class: "btn btn-outline-secondary text-wrap") %>
+          <% else %>
+            <%= button_to("Show Old Contacts",
+                        show_hide_contacts_case_assignment_path(assignment),
+                        method: :patch,
+                        class: "btn btn-outline-warning text-wrap") %>
           <% end %>
-        </select>
-      </div>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+<% end %>
 
-      <%= form.submit "Assign Volunteer", class: 'btn btn-secondary' %>
-    <% end %>
-  </div>
-</div>
+<%=
+  render(
+  "shared/manage_volunteers",
+  assignable_obj: CaseAssignment,
+  assign_action: case_assignments_path(casa_case_id: @casa_case.id),
+  available_volunteers: @casa_case.unassigned_volunteers,
+  select_id: 'case_assignment_casa_case_id',
+  select_name: 'case_assignment[volunteer_id]',
+  show_assigned_volunteers: @casa_case.volunteers.present?
+  )
+%>
