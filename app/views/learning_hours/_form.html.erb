@@ -56,7 +56,7 @@ id: "learning-hours-form" do |form| %>
                         class: "form-control label-font-weight" %>
   </div>
   <div class="actions">
-    <%= form.submit @learning_hour.persisted? ? Edit Learning Hours Entry : Create New Learning Hours Entry,
+    <%= form.submit @learning_hour.persisted? ? "Edit Learning Hours Entry" : "Create New Learning Hours Entry",
 class: "wide_button btn btn-primary" %>
   </div>
 
