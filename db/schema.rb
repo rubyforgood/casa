@@ -537,6 +537,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_03_202112) do
   add_foreign_key "languages", "casa_orgs"
   add_foreign_key "learning_hours", "users"
   add_foreign_key "mileage_rates", "users"
+  add_foreign_key "other_duties", "users", column: "creator_id"
   add_foreign_key "patch_notes", "patch_note_groups"
   add_foreign_key "patch_notes", "patch_note_types"
   add_foreign_key "preference_sets", "users"

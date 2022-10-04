@@ -241,4 +241,13 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  context "when there is an associated Other Duty record" do
+    let(:user) { create(:supervisor) }
+    let!(:duty) { create(:other_duty, creator: user) }
+
+    it "cannot be destroyed without destroying the associated Other Duty record" do
+      expect { user.delete }.to raise_error ActiveRecord::InvalidForeignKey
+    end
+  end
 end
