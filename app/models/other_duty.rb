@@ -18,3 +18,7 @@ end
 #  updated_at       :datetime         not null
 #  creator_id       :bigint           not null
 #
+# Foreign Keys
+#
+#  fk_rails_...  (creator_id => users.id)
+#
