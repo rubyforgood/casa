@@ -11,11 +11,11 @@
       <div class="field form-group">
         <div class="form-check">
           <%= form.check_box :active, class: 'form-check-input' %>
-          <%= form.label :active, t(".active"), class: 'form-check-label' %>
+          <%= form.label :active, "Active?", class: 'form-check-label' %>
         </div>
       </div>
       <div class="actions">
-        <%= form.submit t("button.submit"), class: "btn btn-primary" %>
+        <%= form.submit "Submit", class: "btn btn-primary" %>
       </div>
     <% end %>
   </div>
