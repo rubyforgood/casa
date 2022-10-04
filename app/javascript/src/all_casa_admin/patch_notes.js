@@ -284,18 +284,34 @@ patchNoteFunctions.onCancelEdit = function () {
 
 // Called when the delete button is pressed on a patch note form
 patchNoteFunctions.onDeletePatchNote = function () {
-  const patchNoteFormContainer = $(this).parent().parent()
+  const deleteButton = $(this)
+  const patchNoteFormContainer = deleteButton.parent().parent()
   const formInputs = patchNoteFunctions.getPatchNoteFormInputs(patchNoteFormContainer)
 
-  patchNoteFunctions.disablePatchNoteForm(formInputs)
+  console.log(deleteButton.text())
 
-  patchNoteFunctions.deletePatchNote(
-    patchNoteFunctions.getPatchNoteId(patchNoteFormContainer)
-  ).then(function () {
-    patchNoteFormContainer.parent().remove()
-  }).fail(function () {
-    patchNoteFunctions.enablePatchNoteForm(formInputs)
-  })
+  switch (deleteButton.text().trim()) {
+    case 'Delete':
+      pageNotifier.notify('Click 2 more times to delete', 'warn')
+      deleteButton.text('2')
+      break
+    case '2':
+      deleteButton.text('1')
+      break
+    case '1':
+      patchNoteFunctions.disablePatchNoteForm(formInputs)
+
+      patchNoteFunctions.deletePatchNote(
+        patchNoteFunctions.getPatchNoteId(patchNoteFormContainer)
+      ).then(function () {
+        patchNoteFormContainer.parent().remove()
+      }).fail(function () {
+        patchNoteFunctions.enablePatchNoteForm(formInputs)
+        deleteButton.html('<i class="fa-solid fa-trash-can"></i> Delete')
+      })
+
+      break
+  }
 }
 
 // Called when the delete button is pressed on a patch note form
