@@ -8,14 +8,14 @@
   <%= form.hidden_field :user_id, value: current_user.id %>
 
   <div class="field form-group field-card mt-4">
-    <%= form.label :name, t(".learning_hours_title") %>
+    <%= form.label :name, "Learning Hours Title" %>
     <%= form.text_field :name,
                         id: "title",
                         placeholder: "-- Enter a title --",
                         value: @learning_hour.name,
                         class:"mr-5" %>
     <br>
-    <%= form.label :learning_type, t(".learning_type") %>
+    <%= form.label :learning_type, "Type of Learning" %>
     <%= form.select :learning_type,
                     LearningHour.learning_types&.map {|learning| [learning.first.humanize, learning.first]},
                     prompt:"Select learning type",
@@ -24,7 +24,7 @@
                     class: "form-control label-font-weight" %>
   </div>
   <div class="field form-group field-card duration mt-4">
-    <h5 class="mb-4"><label><%= t(".duration") %>:</label></h5>
+    <h5 class="mb-4">Learning Duration</h5>
       <div class="form-group duration-hours inline-fields">
         <%= form.number_field :duration_hours,
                             id: "learning-hours-duration-hours-display",
@@ -46,7 +46,7 @@
       </div>
   </div>
   <div class="field field-card form-group mt-4">
-    <h5><%= form.label :occurred_at, t(".occurred_on") %>:</h5>
+    <h5><%= form.label :occurred_at, "Occurred On" %>:</h5>
     <% occurred_at = @learning_hour.occurred_at || Time.zone.now %>
     <%= form.text_field :occurred_at,
                         id:"learning-occurred-at",
