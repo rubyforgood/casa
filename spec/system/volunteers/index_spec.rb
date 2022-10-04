@@ -27,7 +27,6 @@ RSpec.describe "view all volunteers", type: :system do
         expect(page).to have_text("Case number: #{casa_case.case_number}")
         expect(page).to have_text("Transition Aged Youth: Yes")
         expect(page).to have_text("Next Court Date:")
-        expect(page).to have_text("Court Report Due Date:")
         expect(page).to have_text("Court Report Status: Not submitted")
         expect(page).to have_text("Assigned Volunteers:")
       end

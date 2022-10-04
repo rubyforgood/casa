@@ -57,7 +57,7 @@ RSpec.describe "casa_cases/new", type: :system do
       expect(page.body).to have_content(case_number)
       expect(page).to have_content("CASA case was successfully created.")
       expect(page).to have_content("Next Court Date:")
-      expect(page).to have_content("Court Report Due Date:")
+      expect(page).not_to have_content("Court Report Due Date:")
       expect(page).to have_content("Transition Aged Youth: No")
     end
   end
