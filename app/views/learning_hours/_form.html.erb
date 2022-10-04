@@ -47,7 +47,7 @@ id: "learning-hours-form" do |form| %>
       </div>
   </div>
   <div class="field field-card form-group mt-4">
-    <h5><%= form.label :occurred_at, Occurred On %>:</h5>
+    <h5><%= form.label :occurred_at, "Occurred On" %>:</h5>
     <% occurred_at = @learning_hour.occurred_at || Time.zone.now %>
     <%= form.text_field :occurred_at,
                         id:"learning-occurred-at",
