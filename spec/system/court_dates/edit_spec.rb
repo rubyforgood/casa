@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "court_dates/edit", type: :system do
@@ -14,10 +16,7 @@ RSpec.describe "court_dates/edit", type: :system do
   before do
     travel_to now
     sign_in admin
-    visit root_path
-    click_on "Cases"
-    click_on casa_case.case_number
-    click_on "Edit Case Details"
+    visit casa_case_path(casa_case)
     click_on court_date.date.strftime("%B %-d, %Y")
     click_on "Edit"
   end
@@ -31,10 +30,12 @@ RSpec.describe "court_dates/edit", type: :system do
 
   it "edits past court date", js: true do
     expect(page).to have_text("Editing Court Date")
-    expect(page).to have_text("Add Court Date")
-    expect(page).to have_field("court_date_date", with: "2020-12-25")
     expect(page).to have_text("Case Number:")
     expect(page).to have_text(casa_case.case_number)
+    expect(page).to have_text("Add Court Date")
+    expect(page).to have_field("court_date_date", with: "2020-12-25")
+    expect(page).to have_text("Add Court Report Due Date")
+    expect(page).to have_field("court_date_court_report_due_date")
     expect(page).to have_select("Judge")
     expect(page).to have_select("Hearing type")
     expect(page).to have_text("Court Orders - Please check that you didn't enter any youth names")

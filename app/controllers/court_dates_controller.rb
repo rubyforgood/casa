@@ -86,6 +86,7 @@ class CourtDatesController < ApplicationController
       :date,
       :hearing_type_id,
       :judge_id,
+      :court_report_due_date,
       {case_court_orders_attributes: %i[text implementation_status id casa_case_id]}
     )
   end

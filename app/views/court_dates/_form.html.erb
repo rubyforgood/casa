@@ -21,6 +21,15 @@
       <br>
 
       <div class="field form-group">
+        <%= form.label :court_report_due_date, "Add Court Report Due Date" %>
+        <%= form.text_field :court_report_due_date,
+                        value: court_date.court_report_due_date&.to_date,
+                        data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
+                        class: "form-control" %>
+      </div>
+      <br>
+
+      <div class="field form-group">
         <%= form.label :judge_id, "Judge" %>
         <%= form.collection_select(
                 :judge_id,
@@ -42,7 +51,7 @@
       </div>
       <div class="field form-group court-mandates">
         <%= render partial: "shared/court_order_list",
-locals: {casa_case: casa_case, siblings_casa_cases: nil, form: form} %>
+        locals: {casa_case: casa_case, siblings_casa_cases: nil, form: form} %>
       </div>
     <% end %>
   </div>

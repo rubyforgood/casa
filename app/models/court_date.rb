@@ -69,13 +69,14 @@ end
 #
 # Table name: court_dates
 #
-#  id              :bigint           not null, primary key
-#  date            :datetime         not null
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  casa_case_id    :bigint           not null
-#  hearing_type_id :bigint
-#  judge_id        :bigint
+#  id                    :bigint           not null, primary key
+#  court_report_due_date :datetime
+#  date                  :datetime         not null
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  casa_case_id          :bigint           not null
+#  hearing_type_id       :bigint
+#  judge_id              :bigint
 #
 # Indexes
 #
