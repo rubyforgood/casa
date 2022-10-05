@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+require_relative "../migrate_court_report_due_date_service"
 namespace :after_party do
   desc "Deployment task: migrate_court_report_due_date_to_court_dates"
   task migrate_court_report_due_date_to_court_dates: :environment do
