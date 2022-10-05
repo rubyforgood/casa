@@ -131,7 +131,7 @@ RSpec.describe "volunteers/edit", type: :system do
     it "does not show any active assignment status in the Manage Cases section" do
       sign_in admin
       visit edit_volunteer_path(volunteer)
-      within ".table.case-list" do
+      within "#manage_cases" do
         expect(page).not_to have_content("Volunteer is Active")
       end
     end
