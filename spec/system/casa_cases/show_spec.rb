@@ -14,7 +14,7 @@ RSpec.describe "casa_cases/show", type: :system do
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
   let!(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
   let!(:emancipation_categories) { create_list(:emancipation_category, 3) }
-  let!(:future_court_date) { create(:court_date, date: 1.year.from_now, casa_case: casa_case) }
+  let!(:future_court_date) { create(:court_date, date: 21.days.from_now, casa_case: casa_case) }
 
   before do
     sign_in user
@@ -64,9 +64,9 @@ RSpec.describe "casa_cases/show", type: :system do
       expect(page).to have_content(casa_case.case_court_orders[0].implementation_status_symbol)
     end
 
-    xit "can see next court date", js: true do # TODO fix and re-enable
+    it "can see next court date", js: true do
       expect(page).to have_content(
-        "Next Court Date: #{I18n.l(future_court_date.date, format: :day_and_date, default: "")}"
+        "Next Court Date: #{I18n.l(future_court_date.date, format: :day_and_date)}"
       )
     end
 
