@@ -190,7 +190,7 @@ $('document').ready(() => {
   if (courtOrdersListContainer.length) {
     courtOrders = new CourtOrderList(courtOrdersListContainer)
 
-    $('button#add-mandate-button').on('click', () => {
+    $('button#add-court-order-button').on('click', () => {
       courtOrders.addCourtOrder()
     })
 

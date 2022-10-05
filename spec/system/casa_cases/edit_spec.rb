@@ -32,7 +32,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       select "Submitted", from: "casa_case_court_report_status"
       check contact_type.name
 
-      page.find("#add-mandate-button").click
+      page.find("#add-court-order-button").click
       find("#court-orders-list-container").first("textarea").send_keys("Court Mandate Text One")
 
       within ".top-page-actions" do
@@ -185,7 +185,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       # fill_in "Court Report Due Date", with: Date.new(next_year.to_i, 9, 8).strftime("%Y/%m/%d\n")
 
-      page.find("#add-mandate-button").click
+      page.find("#add-court-order-button").click
       find("#court-orders-list-container").first("textarea").send_keys("Court Mandate Text One")
 
       select "Partially implemented", from: "casa_case[case_court_orders_attributes][0][implementation_status]"
@@ -516,7 +516,7 @@ of it unless it was included in a previous court report.")
       expect(page).not_to have_text("Youth's Date in Care")
       expect(page).not_to have_text("Deactivate Case")
 
-      expect(page).to have_css("#add-mandate-button")
+      expect(page).to have_css("#add-court-order-button")
 
       visit casa_case_path(casa_case)
       expect(page).to have_text("Court Report Status: Submitted")
