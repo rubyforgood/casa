@@ -20,16 +20,12 @@
       <%= t("reimbursements.filters.title") %>
     </h4>
     <!-- Volunteer filter -->
-    <div class="dropdown pull-left mr-2" data-filter="volunteer">
-      <%= render partial: "filter_trigger", locals: { title: t("reimbursements.filters.volunteer_filter_title") } %>
-      <div class="dropdown-menu">
-        <% @volunteers_for_filter.each do |key, value| %>
-          <div class="dropdown-item form-check">
-            <%= check_box_tag(nil, key, true, class: "form-check-input", data: { value: key }) %>
-            <%= label_tag '', value, class: "form-check-label" %>
-          </div>
+    <div class="pull-left mr-2 w-25" data-filter="volunteer">
+      <select class="form-control select2 creator_ids" multiple="true" data-placeholder="Volunteer">
+        <% @volunteers_for_filter.each do |volunteer| %>
+          <option value="<%= volunteer[0] %>"><%= volunteer[1] %></option>
         <% end %>
-      </div>
+      </select>
     </div>
     <!-- Occurred at filter -->
     <div class="dropdown pull-left mr-2" data-filter="occurred_at">
