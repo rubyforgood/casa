@@ -75,7 +75,7 @@ $('document').ready(() => {
       .on('change', onMarkAsCompleteChange)
   })
 
-  $('[data-filter="volunteer"] input[type="checkbox"]').on('change', () => reimbursementsTable.draw())
+  $('[data-filter="volunteer"] .select2').on('select2:select select2:unselect', () => reimbursementsTable.draw())
   $('[data-filter="occurred_at"] input').on('change', () => reimbursementsTable.draw())
 
   const handleAjaxError = e => {
@@ -98,12 +98,20 @@ $('document').ready(() => {
 
   const getDatatableFilterParams = () => {
     return {
-      volunteers: map($('[data-filter="volunteer"] input:checked'), 'value'),
+      volunteers: selectedVolunteerIdsOrAll(),
       occurred_at: {
         start: $('input[name="occurred_at_starting"]').val(),
         end: $('input[name="occurred_at_ending"]').val()
       }
     }
+  }
+
+  const selectedVolunteerIdsOrAll = () => {
+    let selectedVols = $('[data-filter="volunteer"] .creator_ids').val()
+    if (selectedVols.length === 0) {
+      selectedVols = map($('[data-filter="volunteer"] .creator_ids option'), 'value')
+    }
+    return selectedVols
   }
 
   const reimbursementsTableCols = [
