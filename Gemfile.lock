@@ -285,7 +285,10 @@ GEM
     noticed (1.6.0)
       http (>= 4.0.0)
       rails (>= 5.2.0)
+    oj (3.13.21)
     orm_adapter (0.5.0)
+    ougai (2.0.0)
+      oj (~> 3.10)
     parallel (1.22.1)
     paranoia (2.6.0)
       activerecord (>= 5.1, < 7.1)
@@ -505,6 +508,7 @@ DEPENDENCIES
   net-pop
   net-smtp
   noticed
+  ougai (~> 2.0)
   paranoia
   pdf-forms
   pg
