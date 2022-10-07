@@ -4,9 +4,6 @@
     <% if policy(current_organization.volunteers.new).new? %>
       <%= link_to t(".button.new"), new_volunteer_path, class: "btn btn-primary mb-2 mb-md-0" %>
     <% end %>
-    <button type="button" class="btn btn-primary mb-2 mb-md-0" data-toggle="modal" data-target="#visibleColumns">
-      <%= t(".pick_displayed_columns") %>
-    </button>
   </div>
 </div>
 <hr>
@@ -97,6 +94,11 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="ml-3">
+    <button type="button" class="btn btn-primary mb-2 mb-md-0" data-toggle="modal" data-target="#visibleColumns">
+      <%= t(".pick_displayed_columns") %>
+    </button>
   </div>
 </div>
 <br>
