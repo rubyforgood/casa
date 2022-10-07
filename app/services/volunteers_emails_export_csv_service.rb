@@ -3,7 +3,7 @@ require "csv"
 class VolunteersEmailsExportCsvService
   attr_reader :volunteers
 
-  def initialize()
+  def initialize
     @volunteers = Volunteer.active
   end
 
@@ -21,7 +21,7 @@ class VolunteersEmailsExportCsvService
   def full_data(volunteer = nil)
     {
       email: volunteer&.email,
-      case_number: volunteer&.casa_cases&.active&.pluck(:case_number).to_s,
+      case_number: volunteer&.casa_cases&.active&.pluck(:case_number).to_a.join(", ")
     }
   end
 end

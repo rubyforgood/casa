@@ -20,6 +20,12 @@
         <%= f.submit "Learning Hours Report", class: "btn btn-primary report-form-submit" %>
       <% end %>
     </div>
+
+    <div class="btn-group">
+      <%= form_with url: export_emails_path(format: :csv), method: :get do |f| %>
+        <%= f.submit "Export Volunteers Emails", class: "btn btn-primary report-form-submit" %>
+      <% end %>
+    </div>
   </div>
 </div>
 
