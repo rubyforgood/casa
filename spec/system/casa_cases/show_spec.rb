@@ -220,7 +220,7 @@ RSpec.describe "casa_cases/show", type: :system do
     end
 
     it "when not implemented" do
-      casa_case.case_court_orders[0].update(implementation_status: :not_implemented)
+      casa_case.case_court_orders[0].update(implementation_status: :unimplemented)
 
       visit casa_case_path(casa_case)
 

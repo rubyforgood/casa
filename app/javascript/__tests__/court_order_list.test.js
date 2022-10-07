@@ -146,7 +146,7 @@ describe('removeCourtOrder', () => {
           <textarea name="casa_case[case_court_orders_attributes][0][text]" id="casa_case_case_court_orders_attributes_0_text">${courtOrdersText[0]}</textarea>\
           <select class="implementation-status" name="casa_case[case_court_orders_attributes][0][implementation_status]" id="casa_case_case_court_orders_attributes_0_implementation_status">\
             <option value="">Set Implementation Status</option>\
-            <option value="not_implemented">Not implemented</option>
+            <option value="unimplemented">Not implemented</option>
             <option value="partially_implemented">Partially implemented</option>\
             <option value="implemented">Implemented</option>
           </select>\
@@ -157,7 +157,7 @@ describe('removeCourtOrder', () => {
           <textarea name="casa_case[case_court_orders_attributes][1][text]" id="casa_case_case_court_orders_attributes_1_text">${courtOrdersText[1]}</textarea>\
           <select class="implementation-status" name="casa_case[case_court_orders_attributes][1][implementation_status]" id="casa_case_case_court_orders_attributes_1_implementation_status">\
             <option value="">Set Implementation Status</option>\
-            <option value="not_implemented">Not implemented</option>\
+            <option value="unimplemented">Not implemented</option>\
             <option value="partially_implemented">Partially implemented</option>\
             <option value="implemented">Implemented</option></select>\
           <button type="button" class="remove-mandate-button btn btn-danger">Delete</button>\
@@ -167,7 +167,7 @@ describe('removeCourtOrder', () => {
           <textarea name="casa_case[case_court_orders_attributes][2][text]" id="casa_case_case_court_orders_attributes_2_text">${courtOrdersText[2]}</textarea>\
           <select class="implementation-status" name="casa_case[case_court_orders_attributes][2][implementation_status]" id="casa_case_case_court_orders_attributes_2_implementation_status">\
             <option value="">Set Implementation Status</option>\
-            <option value="not_implemented">Not implemented</option>\
+            <option value="unimplemented">Not implemented</option>\
             <option value="partially_implemented">Partially implemented</option>\
             <option value="implemented">Implemented</option>\
           </select>\
@@ -178,7 +178,7 @@ describe('removeCourtOrder', () => {
           <textarea name="casa_case[case_court_orders_attributes][3][text]" id="casa_case_case_court_orders_attributes_3_text">${courtOrdersText[3]}</textarea>\
           <select class="implementation-status" name="casa_case[case_court_orders_attributes][3][implementation_status]" id="casa_case_case_court_orders_attributes_3_implementation_status">\
             <option value="">Set Implementation Status</option>\
-            <option value="not_implemented">Not implemented</option>\
+            <option value="unimplemented">Not implemented</option>\
             <option value="partially_implemented">Partially implemented</option>\
             <option value="implemented">Implemented</option>\
           </select>\
@@ -189,7 +189,7 @@ describe('removeCourtOrder', () => {
           <textarea name="casa_case[case_court_orders_attributes][4][text]" id="casa_case_case_court_orders_attributes_4_text">${courtOrdersText[4]}</textarea>\
           <select class="implementation-status" name="casa_case[case_court_orders_attributes][4][implementation_status]" id="casa_case_case_court_orders_attributes_4_implementation_status">\
             <option value="">Set Implementation Status</option>\
-            <option value="not_implemented">Not implemented</option>\
+            <option value="unimplemented">Not implemented</option>\
             <option value="partially_implemented">Partially implemented</option>\
             <option value="implemented">Implemented</option>\
           </select>\
