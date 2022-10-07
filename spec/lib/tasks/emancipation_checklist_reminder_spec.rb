@@ -34,6 +34,14 @@ RSpec.describe "lib/tasks/emancipation_checklist_reminder.rake" do
     end
   end
 
+  context "when the case assignment is inactive" do
+    let!(:case_assignment) { create(:case_assignment, :inactive) }
+
+    it "should not send notification" do
+      expect { rake_task }.not_to change { case_assignment.volunteer.notifications.count }
+    end
+  end
+
   context "when there are no case assignments" do
     it "does not raise error" do
       expect { rake_task }.not_to raise_error
