@@ -1,4 +1,4 @@
-require 'ougai'
+require "ougai"
 
 module Casa
   class Logger < Ougai::Logger

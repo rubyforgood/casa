@@ -73,7 +73,7 @@ Rails.application.configure do
     Bullet.bullet_logger = true
   end
 
-  config.logger = Casa::Logger.new(STDOUT)
+  config.logger = Casa::Logger.new($stdout)
 
   # Annotate rendered view with file names.
   config.action_view.annotate_rendered_view_with_filenames = true
