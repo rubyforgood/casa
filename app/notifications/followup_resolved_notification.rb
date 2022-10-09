@@ -17,8 +17,12 @@ class FollowupResolvedNotification < BaseNotification
 
   # Define helper methods to make rendering easier.
   #
+  def title
+    "Followup resolved"
+  end
+
   def message
-    t(".message", created_by_name: created_by_name)
+    "#{created_by_name} resolved a follow up. Click to see more."
   end
 
   def url

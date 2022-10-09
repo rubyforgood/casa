@@ -66,7 +66,7 @@ class CaseContactsController < ApplicationController
 
     @selected_cases = @casa_cases.where(id: params.dig(:case_contact, :casa_case_id))
     if @selected_cases.empty?
-      flash[:alert] = t("case_min_validation", scope: "case_contact")
+      flash[:alert] = "At least one case must be selected"
       render :new
       return
     end
@@ -100,7 +100,9 @@ class CaseContactsController < ApplicationController
         update_or_create_additional_expense(additional_expense_params, @case_contact)
       end
       if @case_contact.valid?
-        redirect_to casa_case_path(@case_contact.casa_case), notice: I18n.t("case_contact.update", created_at: @case_contact.created_at.strftime("%-I:%-M %p on %m-%e-%Y"))
+        created_at = @case_contact.created_at.strftime("%-I:%-M %p on %m-%e-%Y")
+        flash[:notice] = "Case contact created at #{created_at}, was successfully updated."
+        redirect_to casa_case_path(@case_contact.casa_case)
       else
         render :edit
       end
@@ -113,7 +115,7 @@ class CaseContactsController < ApplicationController
     authorize CaseContact
 
     @case_contact.destroy
-    flash[:notice] = t("destroy", scope: "case_contact")
+    flash[:notice] = "Contact is successfully deleted."
     redirect_to request.referer
   end
 
@@ -122,7 +124,7 @@ class CaseContactsController < ApplicationController
 
     case_contact = authorize(current_organization.case_contacts.with_deleted.find(params[:id]))
     case_contact.restore(recrusive: true)
-    flash[:notice] = t("restore", scope: "case_contact")
+    flash[:notice] = "Contact is successfully restored."
     redirect_to request.referer
   end
 
