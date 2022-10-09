@@ -87,6 +87,18 @@ Rails.application.configure do
   # require "syslog/logger"
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
+  # Apply the monkey patch for Ougai and embed the tags as a field on output
+  # rubocop:disable Lint/ConstantDefinitionInBlock
+  module ActiveSupport::TaggedLogging::Formatter
+    def call(severity, time, progname, data)
+      data = {msg: data.to_s} unless data.is_a?(Hash)
+      tags = current_tags
+      data[:tags] = tags if tags.present?
+      _call(severity, time, progname, data)
+    end
+  end
+  # rubocop:enable Lint/ConstantDefinitionInBlock
+
   if ENV["RAILS_LOG_TO_STDOUT"].present?
     logger = Casa::Logger.new($stdout)
     config.logger = ActiveSupport::TaggedLogging.new(logger)
