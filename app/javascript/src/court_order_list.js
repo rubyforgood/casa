@@ -34,7 +34,7 @@ module.exports = class CourtOrderList {
     name="${resourceName}[case_court_orders_attributes][${index}][implementation_status]"\
     id="${resourceName}_case_court_orders_attributes_${index}_implementation_status">\
         <option value="">Set Implementation Status</option>
-        <option value="not_implemented">Not implemented</option>
+        <option value="unimplemented">Not implemented</option>
         <option value="partially_implemented">Partially implemented</option>
         <option value="implemented">Implemented</option>
       </select>

@@ -14,7 +14,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
     }
   end
   let(:texts) { ["1-New Order Text One", "0-New Order Text Two"] }
-  let(:implementation_statuses) { ["not_implemented", nil] }
+  let(:implementation_statuses) { ["unimplemented", nil] }
   let(:orders_attributes) do
     {
       "0" => {text: texts[0], implementation_status: implementation_statuses[0], casa_case_id: casa_case.id},
@@ -309,7 +309,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
             case_court_orders_attributes: {
               "0" => {
                 text: "New Order Text One Updated",
-                implementation_status: :not_implemented
+                implementation_status: :unimplemented
               },
               "1" => {
                 text: ""
