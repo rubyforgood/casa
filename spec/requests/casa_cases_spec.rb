@@ -151,7 +151,7 @@ RSpec.describe "/casa_cases", type: :request do
           post casa_cases_url, params: {casa_case: valid_attributes}
           casa_case = CasaCase.last
           expect(casa_case.casa_org).to eq organization
-          expect(casa_case.transition_aged_youth).to be true
+          expect(casa_case.birth_month_year_youth).to eq pre_transition_aged_youth_age
         end
 
         it "also responds as json", :aggregate_failures do

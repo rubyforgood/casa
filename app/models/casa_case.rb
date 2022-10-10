@@ -2,7 +2,7 @@ class CasaCase < ApplicationRecord
   include ByOrganizationScope
   include DateHelper
 
-  self.ignored_columns = %w[court_date hearing_type_id judge_id]
+  self.ignored_columns = %w[court_date hearing_type_id judge_id transition_aged_youth]
 
   attr_accessor :validate_contact_type
 
@@ -11,7 +11,6 @@ class CasaCase < ApplicationRecord
     hearing_type_name
     judge_name
     status
-    transition_aged_youth
     birth_month_year_youth
     assigned_to
     actions
@@ -231,7 +230,6 @@ end
 #  court_report_submitted_at :datetime
 #  date_in_care              :datetime
 #  slug                      :string
-#  transition_aged_youth     :boolean          default(FALSE)
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  casa_org_id               :bigint           not null
