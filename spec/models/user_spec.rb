@@ -108,7 +108,7 @@ RSpec.describe User, type: :model do
       it "ignores volunteers' inactive and unassgined cases" do
         volunteer = create(:volunteer, supervisor: supervisor, casa_org: casa_org)
         build_stubbed(:case_assignment, casa_case: build_stubbed(:casa_case, casa_org: casa_org, active: false), volunteer: volunteer)
-        build_stubbed(:case_assignment, casa_case: build_stubbed(:casa_case, casa_org: casa_org, active: false), volunteer: volunteer)
+        build_stubbed(:case_assignment, casa_case: build_stubbed(:casa_case, casa_org: casa_org), active: false, volunteer: volunteer)
 
         expect(supervisor.volunteers_serving_transition_aged_youth).to eq(0)
       end
