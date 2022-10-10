@@ -190,7 +190,7 @@ class DbPopulator
       court_report_submitted = index.even?
 
       new_casa_case = CasaCase.find_by(case_number: case_number)
-      birth_month_year_youth = @case_fourteen_years_old ? ((Date.today - 18.year)..(Date.today - 14.year)).to_a.sample : ((Date.today - 18.year)..(Date.today - 1.year)).to_a.sample
+      birth_month_year_youth = @case_fourteen_years_old ? ((Date.today - 18.year)..(Date.today - CasaCase::TRANSITION_AGE.year)).to_a.sample : ((Date.today - 18.year)..(Date.today - 1.year)).to_a.sample
       new_casa_case ||= CasaCase.find_or_create_by!(
         casa_org_id: casa_org.id,
         case_number: case_number,
@@ -238,9 +238,9 @@ class DbPopulator
 
       # guarantee at least one transition aged youth case to "volunteer1"
       volunteer1 = Volunteer.find_by(email: "volunteer1@example.com")
-      if volunteer1.casa_cases.where(birth_month_year_youth: ..14.years.ago).blank?
+      if volunteer1.casa_cases.where(birth_month_year_youth: ..CasaCase::TRANSITION_AGE.years.ago).blank?
         rand(1..3).times do
-          birth_month_year_youth = ((Date.today - 18.year)..(Date.today - 14.year)).to_a.sample
+          birth_month_year_youth = ((Date.today - 18.year)..(Date.today - CasaCase::TRANSITION_AGE.year)).to_a.sample
           volunteer1.casa_cases.find_or_create_by!(
             casa_org_id: volunteer1.casa_org.id,
             case_number: generate_case_number,

@@ -16,6 +16,7 @@ class CasaCase < ApplicationRecord
     actions
   ].freeze
 
+  TRANSITION_AGE = 14
   TRANSITION_AGE_YOUTH_ICON = "🦋".freeze
   NON_TRANSITION_AGE_YOUTH_ICON = "🐛".freeze
 
@@ -70,7 +71,7 @@ class CasaCase < ApplicationRecord
       .order(:case_number)
   }
   scope :should_transition, -> {
-    where("birth_month_year_youth <= ?", 14.years.ago)
+    where("birth_month_year_youth <= ?", TRANSITION_AGE.years.ago)
   }
 
   scope :birthday_next_month, -> {
@@ -83,7 +84,7 @@ class CasaCase < ApplicationRecord
   }
 
   scope :is_transitioned, -> {
-    where("birth_month_year_youth < ?", 14.years.ago)
+    where("birth_month_year_youth < ?", TRANSITION_AGE.years.ago)
   }
 
   scope :active, -> {
@@ -135,7 +136,7 @@ class CasaCase < ApplicationRecord
   end
 
   def in_transition_age?
-    birth_month_year_youth.nil? ? false : birth_month_year_youth <= 14.years.ago
+    birth_month_year_youth.nil? ? false : birth_month_year_youth <= TRANSITION_AGE.years.ago
   end
 
   def latest_court_report

@@ -59,7 +59,7 @@ class CaseContact < ApplicationRecord
     if /true|false/.match?(has_transitioned.to_s)
       operator = has_transitioned ? "<=" : ">"
 
-      joins(:casa_case).where("casa_cases.birth_month_year_youth #{operator} ?", 14.years.ago)
+      joins(:casa_case).where("casa_cases.birth_month_year_youth #{operator} ?", CasaCase::TRANSITION_AGE.years.ago)
     end
   }
   scope :want_driving_reimbursement, ->(want_driving_reimbursement = nil) {

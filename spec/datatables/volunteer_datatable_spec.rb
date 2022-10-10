@@ -163,7 +163,7 @@ RSpec.describe VolunteerDatatable do
       let(:order_by) { "has_transition_aged_youth_cases" }
       let(:transition_aged_youth_bool_to_int) do
         lambda { |volunteer|
-          volunteer.casa_cases.exists?(birth_month_year_youth: ..14.years.ago) ? 1 : 0
+          volunteer.casa_cases.exists?(birth_month_year_youth: ..CasaCase::TRANSITION_AGE.years.ago) ? 1 : 0
         }
       end
       let(:sorted_models) { assigned_volunteers.sort_by(&transition_aged_youth_bool_to_int) }
@@ -171,7 +171,7 @@ RSpec.describe VolunteerDatatable do
       context "when ascending" do
         it "is successful" do
           sorted_models.each_with_index do |model, idx|
-            expect(values[idx][:has_transition_aged_youth_cases]).to eq model.casa_cases.exists?(birth_month_year_youth: ..14.years.ago).to_s
+            expect(values[idx][:has_transition_aged_youth_cases]).to eq model.casa_cases.exists?(birth_month_year_youth: ..CasaCase::TRANSITION_AGE.years.ago).to_s
           end
         end
       end
@@ -182,7 +182,7 @@ RSpec.describe VolunteerDatatable do
 
         it "is successful" do
           sorted_models.reverse.each_with_index do |model, idx|
-            expect(values[idx][:has_transition_aged_youth_cases]).to eq model.casa_cases.exists?(birth_month_year_youth: ..14.years.ago).to_s
+            expect(values[idx][:has_transition_aged_youth_cases]).to eq model.casa_cases.exists?(birth_month_year_youth: ..CasaCase::TRANSITION_AGE.years.ago).to_s
           end
         end
       end

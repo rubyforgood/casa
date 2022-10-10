@@ -8,8 +8,8 @@ RSpec.describe "view all volunteers", type: :system do
     context "when no logo_url" do
       it "can see volunteers and navigate to their cases", js: true do
         volunteer = create(:volunteer, :with_assigned_supervisor, display_name: "User 1", email: "casa@example.com", casa_org: organization)
-        volunteer.casa_cases << create(:casa_case, casa_org: organization, birth_month_year_youth: 14.years.ago)
-        volunteer.casa_cases << create(:casa_case, casa_org: organization, birth_month_year_youth: 14.years.ago)
+        volunteer.casa_cases << create(:casa_case, casa_org: organization, birth_month_year_youth: CasaCase::TRANSITION_AGE.years.ago)
+        volunteer.casa_cases << create(:casa_case, casa_org: organization, birth_month_year_youth: CasaCase::TRANSITION_AGE.years.ago)
         casa_case = volunteer.casa_cases[0]
 
         sign_in admin
