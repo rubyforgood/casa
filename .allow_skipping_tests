@@ -52,6 +52,7 @@ models/concerns/roles.rb
 models/fund_request.rb
 models/notification.rb
 notifications/base_notification.rb
+notifications/emancipation_checklist_reminder_notification.rb
 notifications/followup_notification.rb
 notifications/followup_resolved_notification.rb
 notifications/youth_birthday_notification.rb
