@@ -42,7 +42,7 @@ class CasaCasesController < ApplicationController
   def create
     @casa_case = CasaCase.new(
       casa_case_params.merge(
-        casa_org: current_organization,
+        casa_org: current_organization
       )
     )
     authorize @casa_case
