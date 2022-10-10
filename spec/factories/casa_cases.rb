@@ -1,11 +1,14 @@
 FactoryBot.define do
   factory :casa_case do
     sequence(:case_number) { |n| "CINA-#{n}" }
-    transition_aged_youth { false } # TODO remove this db field and always calculate based on birth year month?
     birth_month_year_youth { 16.years.ago }
     casa_org { CasaOrg.first || create(:casa_org) }
     court_report_status { :not_submitted }
     case_court_orders { [] }
+
+    trait :pre_transition do
+      birth_month_year_youth { 13.years.ago }
+    end
 
     trait :with_one_case_assignment do
       after(:create) do |casa_case, _|

@@ -54,7 +54,7 @@ RSpec.describe CasaCaseDecorator do
 
   describe "#transition_age_youth" do
     it "returns transition age youth status with icon if not transition age youth && birthday is nil" do
-      casa_case = build(:casa_case, transition_aged_youth: false, birth_month_year_youth: nil)
+      casa_case = build(:casa_case, birth_month_year_youth: nil)
       expect(casa_case.decorate.transition_aged_youth)
         .to eq "No #{CasaCase::NON_TRANSITION_AGE_YOUTH_ICON}"
     end
@@ -74,7 +74,7 @@ RSpec.describe CasaCaseDecorator do
 
   describe "#transition_age_youth_icon" do
     it "returns transition age youth status with icon if not transition age youth && birthday is nil" do
-      casa_case = build(:casa_case, transition_aged_youth: false, birth_month_year_youth: nil)
+      casa_case = build(:casa_case, birth_month_year_youth: nil)
       expect(casa_case.decorate.transition_aged_youth_icon)
         .to eq CasaCase::NON_TRANSITION_AGE_YOUTH_ICON
     end

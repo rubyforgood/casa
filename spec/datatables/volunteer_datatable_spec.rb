@@ -318,7 +318,7 @@ RSpec.describe VolunteerDatatable do
 
       context "when search term case number matches unassigned case" do
         let(:new_supervisor) { create(:supervisor, casa_org: casa_case.casa_org) }
-        let(:new_casa_case) { create(:casa_case, casa_org: casa_case.casa_org, case_number: "ABC-123", transition_aged_youth: false) }
+        let(:new_casa_case) { create(:casa_case, :pre_transition, casa_org: casa_case.casa_org, case_number: "ABC-123") }
         let(:volunteer_1) { create(:volunteer, display_name: "Volunteer 1", casa_org: casa_case.casa_org, supervisor: new_supervisor) }
         let(:volunteer_2) { create(:volunteer, display_name: "Volunteer 2", casa_org: casa_case.casa_org, supervisor: new_supervisor) }
         let(:search_term) { new_casa_case.case_number }

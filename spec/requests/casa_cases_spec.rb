@@ -167,7 +167,6 @@ RSpec.describe "/casa_cases", type: :request do
         other_org = build(:casa_org)
         attributes = {
           case_number: "1234",
-          transition_aged_youth: true,
           birth_month_year_youth: pre_transition_aged_youth_age,
           casa_org_id: other_org.id
         }

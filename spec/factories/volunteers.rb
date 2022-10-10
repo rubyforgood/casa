@@ -13,7 +13,7 @@ FactoryBot.define do
 
     trait :with_cases_and_contacts do
       after(:create) do |user, _|
-        assignment1 = create :case_assignment, casa_case: create(:casa_case, casa_org: user.casa_org, transition_aged_youth: false), volunteer: user
+        assignment1 = create :case_assignment, casa_case: create(:casa_case, :pre_transition, casa_org: user.casa_org), volunteer: user
         create :case_assignment, casa_case: create(:casa_case, casa_org: user.casa_org, birth_month_year_youth: 10.years.ago), volunteer: user
         create :case_assignment, casa_case: create(:casa_case, casa_org: user.casa_org, birth_month_year_youth: 15.years.ago), volunteer: user
         contact = create :case_contact, creator: user, casa_case: assignment1.casa_case
