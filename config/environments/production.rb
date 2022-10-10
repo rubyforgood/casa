@@ -83,17 +83,27 @@ Rails.application.configure do
   # Don't log any deprecations.
   config.active_support.report_deprecations = false
 
-  # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
-
   # Use a different logger for distributed setups.
   # require "syslog/logger"
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
+  # Apply the monkey patch for Ougai and embed the tags as a field on output
+  # rubocop:disable Lint/ConstantDefinitionInBlock
+  module ActiveSupport::TaggedLogging::Formatter
+    def call(severity, time, progname, data)
+      data = {msg: data.to_s} unless data.is_a?(Hash)
+      tags = current_tags
+      data[:tags] = tags if tags.present?
+      _call(severity, time, progname, data)
+    end
+  end
+  # rubocop:enable Lint/ConstantDefinitionInBlock
+
   if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger = ActiveSupport::Logger.new($stdout)
-    logger.formatter = config.log_formatter
+    logger = Casa::Logger.new($stdout)
     config.logger = ActiveSupport::TaggedLogging.new(logger)
+  else
+    config.logger = Casa::Logger.new(config.paths["log"].first)
   end
 
   # Do not dump schema after migrations.

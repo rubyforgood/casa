@@ -1,4 +1,5 @@
 require "active_support/core_ext/integer/time"
+require_relative "../../lib/casa/logger"
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -71,6 +72,8 @@ Rails.application.configure do
     Bullet.rails_logger = true
     Bullet.bullet_logger = true
   end
+
+  config.logger = Casa::Logger.new($stdout)
 
   # Annotate rendered view with file names.
   config.action_view.annotate_rendered_view_with_filenames = true
