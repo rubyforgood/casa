@@ -63,7 +63,10 @@ Rails.application.routes.draw do
       patch :resolve, on: :member
     end
   end
+
   resources :reports, only: %i[index]
+  get :export_emails, to: "reports#export_emails"
+
   resources :case_court_reports, only: %i[index show] do
     collection do
       post :generate
