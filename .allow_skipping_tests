@@ -19,6 +19,7 @@ controllers/health_controller.rb
 controllers/hearing_types_controller.rb
 controllers/imports_controller.rb
 controllers/judges_controller.rb
+controllers/languages_controller.rb
 controllers/learning_hours_controller.rb
 controllers/mileage_rates_controller.rb
 controllers/mileage_reports_controller.rb

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe LanguagesController, type: :controller do
+RSpec.describe LanguagesController, type: :request do
   let(:organization) { create(:casa_org) }
   let!(:admin) { create(:casa_admin, casa_org: organization) }
   let!(:volunteer) { create(:volunteer, casa_org: organization) }
@@ -16,7 +16,7 @@ RSpec.describe LanguagesController, type: :controller do
     describe "#create" do
       context "when request params are valid" do
         it "should create a new language" do
-          post :create, params: {
+          post languages_path, params: {
             language: {
               name: "Spanish"
             }
@@ -32,8 +32,7 @@ RSpec.describe LanguagesController, type: :controller do
     describe "#update" do
       context "when request params are valid" do
         it "should create a new language" do
-          patch :update, params: {
-            id: random_lang.id,
+          patch language_path(random_lang), params: {
             language: {
               name: "Spanishes"
             }
@@ -57,7 +56,7 @@ RSpec.describe LanguagesController, type: :controller do
     describe "#add_to_volunteer" do
       context "when request params are valid" do
         it "should add language to current user" do
-          patch :add_to_volunteer, params: {
+          patch add_to_volunteer_languages_path, params: {
             language_id: random_lang.id
           }
 
@@ -71,7 +70,7 @@ RSpec.describe LanguagesController, type: :controller do
       context "when request params are invalid" do
         it "should raise error when Language do not exist" do
           expect {
-            patch :add_to_volunteer, params: {
+            patch add_to_volunteer_languages_path, params: {
               language_id: 800
             }
           }.to raise_error(ActiveRecord::RecordNotFound)
@@ -82,15 +81,13 @@ RSpec.describe LanguagesController, type: :controller do
     describe "#remove_from_volunteer" do
       context "when request params are valid" do
         before do
-          patch :add_to_volunteer, params: {
+          patch add_to_volunteer_languages_path, params: {
             language_id: random_lang.id
           }
         end
 
         it "should remove a language from a volunteer languages list" do
-          delete :remove_from_volunteer, params: {
-            language_id: random_lang.id
-          }
+          delete language_remove_from_volunteer_path(random_lang)
 
           expect(response.status).to eq 302
           expect(response).to redirect_to(edit_users_path)
@@ -100,13 +97,13 @@ RSpec.describe LanguagesController, type: :controller do
       end
       context "when request params are invalid" do
         before do
-          patch :add_to_volunteer, params: {
+          patch add_to_volunteer_languages_path, params: {
             language_id: random_lang.id
           }
         end
 
         it "should raise error when Language do not exist" do
-          expect { delete :remove_from_volunteer, params: {language_id: 800} }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { delete language_remove_from_volunteer_path(800) }.to raise_error(ActiveRecord::RecordNotFound)
         end
       end
     end
