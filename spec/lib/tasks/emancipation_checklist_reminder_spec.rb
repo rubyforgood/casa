@@ -8,6 +8,12 @@ RSpec.describe "lib/tasks/emancipation_checklist_reminder.rake" do
   before do
     Rake::Task.clear
     Casa::Application.load_tasks
+
+    travel_to Date.new(2022, 10, 1)
+  end
+
+  after do
+    travel_back
   end
 
   context "volunteer with transition age youth case" do
