@@ -66,7 +66,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
     it "can see next court date", js: true do
       expect(page).to have_content(
-        "Next Court Date: #{I18n.l(future_court_date.date, format: :day_and_date)}"
+        "Next Court Date: #{I18n.l(future_court_date.date, format: "%A, %-d-%^b-%Y")}"
       )
     end
 
