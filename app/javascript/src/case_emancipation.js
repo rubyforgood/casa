@@ -70,7 +70,7 @@ $('document').ready(() => {
   const asyncNotificationsElement = $('#async-notifications')
   emancipationPage.notifier = new Notifier(asyncNotificationsElement)
 
-  $('.emancipation-category').click(function () {
+  $('.emancipation-category').on('click', function () {
     const category = $(this)
     const categoryCheckbox = category.find('input[type="checkbox"]')
     const categoryCollapseIcon = category.find('span')
@@ -124,7 +124,7 @@ $('document').ready(() => {
     }
   })
 
-  $('.check-item').click(function () {
+  $('.check-item').on('click', function () {
     const checkComponent = $(this)
     const checkElement = checkComponent.find('input')
 
