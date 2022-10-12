@@ -1,5 +1,5 @@
 class LanguagesController < ApplicationController
-  before_action :set_language, only: %i[edit update add_to_volunteer remove_from_volunteer]
+  before_action :set_language, only: %i[edit update remove_from_volunteer]
 
   def new
     authorize Language
@@ -31,16 +31,6 @@ class LanguagesController < ApplicationController
       else
         format.html { render :edit, status: :unprocessable_entity }
       end
-    end
-  end
-
-  def add_to_volunteer
-    authorize @language
-    begin
-      current_user.languages << @language
-      redirect_to edit_users_path, notice: "#{@language.name} was added to your languages list."
-    rescue ActiveRecord::RecordInvalid
-      redirect_to edit_users_path, notice: "Error unable to add #{@language.name} to your languages list!"
     end
   end
 

@@ -158,11 +158,11 @@ Rails.application.routes.draw do
       get :edit
       patch :update
       patch "update_password"
+      patch :add_language
     end
   end
   resources :fund_requests, only: %i[new create]
   resources :languages, only: %i[new create edit update] do
-    patch :add_to_volunteer, on: :collection
     delete :remove_from_volunteer
   end
 end

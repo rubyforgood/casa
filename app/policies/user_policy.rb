@@ -1,4 +1,7 @@
 class UserPolicy < ApplicationPolicy
+  def add_language?
+    true
+  end
   def edit?
     admin_or_supervisor_or_volunteer?
   end

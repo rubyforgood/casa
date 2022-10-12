@@ -52,4 +52,14 @@ RSpec.describe UserPolicy do
       end
     end
   end
+
+  permissions :add_language? do
+    context "when user is a volunteer" do
+      it "allows volunteer to add a language to themselves" do
+        is_expected.to permit(volunteer, volunteer)
+      end
+
+    end 
+
+  end
 end
