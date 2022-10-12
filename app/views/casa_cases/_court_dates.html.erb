@@ -1,7 +1,7 @@
 <% court_dates = casa_case.court_dates.includes(:hearing_type).ordered_ascending.load %>
 
 <label>Court dates:</label>
-<% if court_dates.size == 0 %>
+<% if court_dates.empty? %>
   No Court Dates
 <% else %>
   <ul>
@@ -17,6 +17,7 @@
       </p>
     <% end %>
   </ul>
+<% end %>
   <ul>
     <div class="add-container past-court-dates">
       <a class="btn btn-primary" href="<%= new_casa_case_court_date_path(casa_case) %>">
@@ -24,4 +25,3 @@
       </a>
     </div>
   </ul>
-<% end %>
