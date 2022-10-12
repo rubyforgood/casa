@@ -21,7 +21,7 @@ class UsersController < ApplicationController
   end
 
   def add_language
-    if @language = nil
+    if @language.nil?
       @user.error.add("Error - 'Add Language' field can not be blank. Please select a language before adding.")
       return redirect_to edit_users_path
     end
@@ -53,7 +53,7 @@ class UsersController < ApplicationController
   end
 
   private
-  
+
   def set_language
     @language = Language.find_by(id: params[:id] || params[:language_id])
   end
