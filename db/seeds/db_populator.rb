@@ -179,7 +179,7 @@ class DbPopulator
   end
 
   def transition_aged_youth?(birth_month_year_youth)
-    (Date.today - birth_month_year_youth).days.in_years > 14
+    (Date.today - birth_month_year_youth).days.in_years > CasaCase::TRANSITION_AGE
   end
 
   def create_cases(casa_org, options)
