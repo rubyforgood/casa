@@ -19,7 +19,7 @@
               <tr>
                 <td><%= note.content %></td>
                 <td><%= note.creator.display_name %></td>
-                <td><%= note.created_at.strftime("%m-%d-%Y") %></td>
+                <td><%= l(note.created_at, format: :standard) %></td>
                 <td>
                   <%= link_to "Edit", edit_volunteer_note_path(@volunteer, note), class: "btn btn-primary" %>
                   <%= link_to "Delete", volunteer_note_path(@volunteer, note), class: "btn btn-primary", method: :delete %>
