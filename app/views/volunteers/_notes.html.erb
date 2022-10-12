@@ -19,7 +19,7 @@
               <tr>
                 <td><%= note.content %></td>
                 <td><%= note.creator.display_name %></td>
-                <td><%= note.created_at.strftime(t("time.formats.standard")) %></td>
+                <td><%= l(note.created_at, format: :standard) %></td>
                 <td>
                   <%= link_to "Edit", edit_volunteer_note_path(@volunteer, note), class: "btn btn-primary" %>
                   <%= link_to "Delete", volunteer_note_path(@volunteer, note), class: "btn btn-primary", method: :delete %>
@@ -34,12 +34,12 @@
 id: "volunteer-note-form") do |form| %>
         <h3>Create a New Note</h3>
         <div class="form-group">
-          <%= form.text_area :content, :rows => 5, placeholder: t("volunteers.edit.notes_placeholder"),
+          <%= form.text_area :content, :rows => 5, placeholder: "Enter a note regarding the volunteer. These notes are only visible to CASA administrators and supervisors.",
 class: "form-control" %>
         </div>
 
         <div class="actions">
-          <%= form.submit t("volunteers.edit.note_submit"), class: "btn btn-primary", id: "note-submit" %>
+          <%= form.submit "Save Note", class: "btn btn-primary", id: "note-submit" %>
         </div>
       <% end %>
     </div>

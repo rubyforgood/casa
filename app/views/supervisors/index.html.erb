@@ -15,7 +15,7 @@
 <hr>
 <div class="row supervisor-filters">
   <div class="col-sm-12">
-    <h4 class="pull-left mr-2"><%= t(".filter") %></h4>
+    <h4 class="pull-left mr-2">Filter by</h4>
     <div class="dropdown pull-left mr-2">
       <button
         class="btn btn-secondary dropdown-toggle show"
@@ -23,19 +23,19 @@
         id="dropdownMenuButton"
         data-toggle="dropdown"
         aria-haspopup="true"
-        aria-expanded="false"><%= t(".status") %></button>
+        aria-expanded="false">Status</button>
       <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
         <div class="dropdown-item form-check">
           <%= check_box_tag "status_option_active", "true", true,
                     class: "active form-check-input",
                     data: { value: "true" } %>
-          <%= label_tag "status_option_active", t(".active"), class: "form-check-label" %>
+          <%= label_tag "status_option_active", "Active", class: "form-check-label" %>
         </div>
         <div class="dropdown-item form-check">
           <%= check_box_tag "status_option_inactive", "false", false,
                     class: "inactive form-check-input",
                     data: { value: "false" } %>
-          <%= label_tag "status_option_inactive", t(".inactive"), class: "form-check-label" %>
+          <%= label_tag "status_option_inactive", "Inactive", class: "form-check-label" %>
         </div>
       </div>
     </div>

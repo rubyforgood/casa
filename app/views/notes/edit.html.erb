@@ -4,9 +4,9 @@
   <div class="form-group">
     <%= form.text_area :content,
       rows: 5,
-      placeholder: t("volunteers.edit.notes_placeholder"),
+      placeholder: "Enter a note regarding the volunteer. These notes are only visible to CASA administrators and supervisors.",
       class: "form-control" %>
   </div>
 
-  <%= form.submit t("notes.update"), class: "btn btn-primary", id: "note-submit" %>
+  <%= form.submit "Update Note", class: "btn btn-primary", id: "note-submit" %>
 <% end %>

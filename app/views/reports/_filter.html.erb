@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="filterColumnsLabel">
-          <%= t(".filter_exported_columns") %>
+          Filter Exported Columns
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -11,7 +11,7 @@
       </div>
       <div class="modal-body">
         <div>
-          <%= t(".select_columns") %>
+          Select columns:
           <%= form.fields_for :filtered_csv_cols do |ff| %>
             <% CaseContactsExportCsvService.DATA_COLUMNS.keys.each_with_index do |column, index| %>
               <div class="row mt-0">
@@ -27,7 +27,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal"><%= t("button.close") %></button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

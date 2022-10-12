@@ -17,7 +17,7 @@
 <div class="row my-4">
   <div class="col-sm-12">
     <h4 class="pull-left mr-2">
-      <%= t("reimbursements.filters.title") %>
+      Filter By
     </h4>
     <!-- Volunteer filter -->
     <div class="pull-left mr-2 w-25" data-filter="volunteer">
@@ -29,14 +29,14 @@
     </div>
     <!-- Occurred at filter -->
     <div class="dropdown pull-left mr-2" data-filter="occurred_at">
-      <%= render partial: "filter_trigger", locals: { title: t("reimbursements.filters.occurred_at_filter_title") } %>
+      <%= render partial: "filter_trigger", locals: { title: "Occurred at" } %>
       <div class="dropdown-menu">
         <%= render partial: "occurred_at_filter_input", locals: {
-          label: t("reimbursements.filters.occurred_at_filter_start_label"),
+          label: "Starting from",
           name: :occurred_at_starting
         } %>
         <%= render partial: "occurred_at_filter_input", locals: {
-          label: t("reimbursements.filters.occurred_at_filter_end_label"),
+          label: "Ending at",
           name: :occurred_at_ending
         } %>
       </div>
