@@ -8,7 +8,7 @@ class CasaCaseDecorator < Draper::Decorator
   end
 
   def case_contacts_latest
-    object.case_contacts.max_by(&:occurred_at)
+    object.case_contacts.order(occurred_at: :desc, created_at: :desc).first
   end
 
   def case_contacts_latest_before(date)
