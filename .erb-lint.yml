@@ -10,7 +10,6 @@ linters:
     enabled: true
     rubocop_config:
       Layout/LineLength:
-        Exclude:
-          - app/views/devise/mailer/reset_password_instructions.html.erb
+        Enabled: false
     only:
       - Layout/LineLength
