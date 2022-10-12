@@ -72,6 +72,6 @@ RSpec.configure do |config|
   end
 
   def pre_transition_aged_youth_age
-    Date.current - 14.years
+    Date.current - CasaCase::TRANSITION_AGE.years
   end
 end
