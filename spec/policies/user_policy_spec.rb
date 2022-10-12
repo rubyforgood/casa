@@ -62,8 +62,7 @@ RSpec.describe UserPolicy do
         another_volunteer = build_stubbed(:volunteer)
         is_expected.not_to permit(volunteer, another_volunteer)
       end
-  
-    end 
+    end
     context "when user is a supervisor" do
       it "allows supervisors to add a language to a volunteer in their organizations" do
         is_expected.to permit(supervisor_b, volunteer_b)
@@ -71,8 +70,14 @@ RSpec.describe UserPolicy do
       it "does not allow a supervisor to add a language to a volunteer in a different organization" do
         is_expected.not_to permit(supervisor, volunteer_b)
       end
-
     end
-
+    context "when user is an admin" do
+      it "allows admins to add a language to a volunteer in their organizations" do
+        is_expected.to permit(casa_admin_b, volunteer_b)
+      end
+      it "does not allow an admin to add a language to a volunteer in a different organization" do
+        is_expected.not_to permit(casa_admin, volunteer_b)
+      end
+    end
   end
 end

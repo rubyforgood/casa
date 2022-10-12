@@ -1,7 +1,8 @@
 class UserPolicy < ApplicationPolicy
   def add_language?
-    is_supervisor_same_org? || record == user
+    admin_or_supervisor_same_org? || record == user
   end
+
   def edit?
     admin_or_supervisor_or_volunteer?
   end
