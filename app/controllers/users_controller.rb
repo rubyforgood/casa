@@ -25,7 +25,7 @@ class UsersController < ApplicationController
       @user.errors.add("Error - 'Add Language' field can not be blank. Please select a language before adding.")
       return redirect_to edit_users_path
     end
-    # authorize @language
+    authorize @language
     current_user.languages << @language
     if current_user.save
       redirect_to edit_users_path, notice: "#{@language.name} was added to your languages list."
