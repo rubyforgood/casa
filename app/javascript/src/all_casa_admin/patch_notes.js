@@ -334,18 +334,44 @@ patchNoteFunctions.onSavePatchNote = function () {
   const patchNoteTypeId = Number.parseInt(patchNoteFormElements.dropdownType.val())
   const patchNoteText = patchNoteFormElements.noteTextArea.val()
 
+  patchNoteFunctions.disablePatchNoteForm(patchNoteFormElements)
+
   patchNoteFunctions.savePatchNote(
     patchNoteGroupId,
     patchNoteId,
     patchNoteText,
     patchNoteTypeId
   ).then(function (response) {
+    patchNoteFormElements.noteTextArea.prop('disabled', true)
+    patchNoteFormElements.dropdownGroup.prop('disabled', true)
+    patchNoteFormElements.dropdownType.prop('disabled', true)
+
+    // Change button controls
+    //   Clear click listeners
+    patchNoteFormElements.buttonControls.off()
+
+    const buttonLeft = patchNoteFormElements.buttonControls.siblings('.button-save')
+    const buttonRight = patchNoteFormElements.buttonControls.siblings('.button-cancel')
+
+    buttonLeft.html('<i class="fa-solid fa-pen-to-square"></i> Edit')
+    buttonLeft.removeClass('button-save')
+    buttonLeft.addClass('button-edit')
+
+    buttonRight.html('<i class="fa-solid fa-trash-can"></i> Delete')
+    buttonRight.removeClass('btn-secondary')
+    buttonRight.removeClass('button-cancel')
+    buttonRight.addClass('btn-danger')
+    buttonRight.addClass('button-delete')
+
+    patchNoteFunctions.initPatchNoteForm(patchNoteFormElements.noteTextArea.parent())
   }).fail(function (err) {
     pageNotifier.notify('Failed to update patch note', 'error')
     pageNotifier.notify(err.message, 'error')
     console.error(err)
+
+    patchNoteFunctions.enablePatchNoteForm(patchNoteFormElements)
   }).always(function () {
-    patchNoteFunctions.enablePatchNoteForm(newPatchNoteFormElements)
+    patchNoteFormElements.buttonControls.prop('disabled', false)
   })
 }
 
@@ -372,6 +398,7 @@ patchNoteFunctions.resolveAsyncOperation = function (error) {
 patchNoteFunctions.savePatchNote = function (patchNoteGroupId, patchNoteId, patchNoteText, patchNoteTypeId) {
   // Input check
   TypeChecker.checkPositiveInteger(patchNoteGroupId, 'patchNoteGroupId')
+  TypeChecker.checkPositiveInteger(patchNoteId, 'patchNoteGroupId')
   TypeChecker.checkPositiveInteger(patchNoteTypeId, 'patchNoteTypeId')
   TypeChecker.checkString(patchNoteText, 'patchNoteText')
 
@@ -402,7 +429,6 @@ patchNoteFunctions.savePatchNote = function (patchNoteGroupId, patchNoteId, patc
       patchNoteFunctions.resolveAsyncOperation(error)
     })
 }
-
 
 $('document').ready(() => {
   if (!(window.location.pathname.includes('patch_notes'))) {
