@@ -72,15 +72,20 @@ $('document').ready(() => {
 
   $('span').on('click', function () {
     const category = $('.emancipation-category')
+    const categoryCollapseIcon = $(this)
     const categoryOptionsContainer = category.siblings('.category-options')
 
     categoryOptionsContainer.toggle()
+
+    let text = categoryCollapseIcon.text()
+    categoryCollapseIcon.text( text == "+" ? "-" : "+")
   })
 
-  $('.emancipation-category-check-box').on('click', function () {
-    const category = $('.emancipation-category')
-
-    console.log('clicked input')
+  $('.emancipation-category-check-box').on('change', function () {
+    if(this.checked) {
+      const category = $('.emancipation-category')
+      console.log('clicked input')
+    };
   })
 
   // $('.emancipation-category').on('click', function () {
