@@ -98,7 +98,6 @@ patchNoteFunctions.createPatchNote = function (patchNoteGroupId, patchNoteText, 
 patchNoteFunctions.deletePatchNote = function (patchNoteId) {
   TypeChecker.checkPositiveInteger(patchNoteId, 'patchNoteId')
 
-  // Post request
   return $.ajax({
     url: `${patchNotePath}/${patchNoteId}`,
     type: 'DELETE'
@@ -209,7 +208,6 @@ patchNoteFunctions.enablePatchNoteFormEditMode = function (patchNoteFormInputs) 
   buttonLeft.html('<i class="fas fa-save"></i> Save')
   buttonLeft.removeClass('button-edit')
   buttonLeft.addClass('button-save')
-  buttonLeft.click(patchNoteFunctions.onSavePatchNote)
 
   buttonRight.html('<i class="fa-solid fa-xmark"></i> Cancel')
   buttonRight.removeClass('button-delete')
@@ -273,6 +271,7 @@ patchNoteFunctions.initPatchNoteForm = function (patchNoteForm) {
   patchNoteForm.find('.button-cancel').click(patchNoteFunctions.onCancelEdit)
   patchNoteForm.find('.button-delete').click(patchNoteFunctions.onDeletePatchNote)
   patchNoteForm.find('.button-edit').click(patchNoteFunctions.onEditPatchNote)
+  patchNoteForm.find('.button-save').click(patchNoteFunctions.onSavePatchNote)
 }
 
 // Called when the cancel button is pressed on a patch note form
@@ -322,9 +321,32 @@ patchNoteFunctions.onEditPatchNote = function () {
 
 // Called when the save button is pressed on a patch note form in edit mode
 patchNoteFunctions.onSavePatchNote = function () {
+  const patchNoteForm = $(this).parents('.card-body')
+  const patchNoteFormElements = patchNoteFunctions.getPatchNoteFormInputs(patchNoteForm)
+
   if ($(this).parent().siblings('textarea').val() === '') {
     pageNotifier.notify('Cannot save a blank patch note', 'warn')
+    return
   }
+
+  const patchNoteGroupId = Number.parseInt(patchNoteFormElements.dropdownGroup.val())
+  const patchNoteId = patchNoteFunctions.getPatchNoteId(patchNoteForm)
+  const patchNoteTypeId = Number.parseInt(patchNoteFormElements.dropdownType.val())
+  const patchNoteText = patchNoteFormElements.noteTextArea.val()
+
+  patchNoteFunctions.savePatchNote(
+    patchNoteGroupId,
+    patchNoteId,
+    patchNoteText,
+    patchNoteTypeId
+  ).then(function (response) {
+  }).fail(function (err) {
+    pageNotifier.notify('Failed to update patch note', 'error')
+    pageNotifier.notify(err.message, 'error')
+    console.error(err)
+  }).always(function () {
+    patchNoteFunctions.enablePatchNoteForm(newPatchNoteFormElements)
+  })
 }
 
 // Called when an async operation completes. May show notifications describing how the operation completed
@@ -338,6 +360,49 @@ patchNoteFunctions.resolveAsyncOperation = function (error) {
 
   pageNotifier.stopAsyncOperation(error)
 }
+
+// Saves an edited patch note
+//  @param    {number} patchNoteGroupId  The id of the group allowed to view the patch note
+//  @param    {number} patchNoteId  The id of the patch note
+//  @param    {string} patchNoteText     The text of the patch note
+//  @param    {number} patchNoteTypeId   The id of the patch note type
+//  @returns  {array} a jQuery jqXHR object. See https://api.jquery.com/jQuery.ajax/#jqXHR
+//  @throws   {TypeError}  for a parameter of the incorrect type
+//  @throws   {RangeError} if an id parameter is negative
+patchNoteFunctions.savePatchNote = function (patchNoteGroupId, patchNoteId, patchNoteText, patchNoteTypeId) {
+  // Input check
+  TypeChecker.checkPositiveInteger(patchNoteGroupId, 'patchNoteGroupId')
+  TypeChecker.checkPositiveInteger(patchNoteTypeId, 'patchNoteTypeId')
+  TypeChecker.checkString(patchNoteText, 'patchNoteText')
+
+  // Post request
+  return $.ajax({
+    url: `${patchNotePath}/${patchNoteId}`,
+    type: 'PUT',
+    data: {
+      note: patchNoteText,
+      patch_note_group_id: patchNoteGroupId,
+      patch_note_type_id: patchNoteTypeId
+    }
+  })
+    .then(function (response, textStatus, jqXHR) {
+      if (response.errors) {
+        return $.Deferred().reject(jqXHR, textStatus, response.error)
+      } else if (response.status && response.status === 'ok') {
+        patchNoteFunctions.resolveAsyncOperation()
+      } else {
+        patchNoteFunctions.resolveAsyncOperation('Unknown response')
+        console.error('Unexpected repsonse')
+        console.error(response)
+      }
+
+      return response
+    })
+    .fail(function (jqXHR, textStatus, error) {
+      patchNoteFunctions.resolveAsyncOperation(error)
+    })
+}
+
 
 $('document').ready(() => {
   if (!(window.location.pathname.includes('patch_notes'))) {
