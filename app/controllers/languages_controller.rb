@@ -36,10 +36,10 @@ class LanguagesController < ApplicationController
 
   def add_to_volunteer
     authorize @language
-    current_user.languages << @language
-    if current_user.save
+    begin
+      current_user.languages << @language
       redirect_to edit_users_path, notice: "#{@language.name} was added to your languages list."
-    else
+    rescue ActiveRecord::RecordInvalid
       redirect_to edit_users_path, notice: "Error unable to add #{@language.name} to your languages list!"
     end
   end
