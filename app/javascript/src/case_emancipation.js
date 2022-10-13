@@ -71,7 +71,7 @@ $('document').ready(() => {
   emancipationPage.notifier = new Notifier(asyncNotificationsElement)
 
   $('span').on('click', function () {
-    const category = $('.emancipation-category')
+    const category = $(this).parent()
     const categoryCollapseIcon = $(this)
     const categoryOptionsContainer = category.siblings('.category-options')
 
