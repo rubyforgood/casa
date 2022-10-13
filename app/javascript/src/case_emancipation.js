@@ -88,59 +88,59 @@ $('document').ready(() => {
     };
   })
 
-  // $('.emancipation-category').on('click', function () {
-  //   const category = $(this)
-  //   const categoryCheckbox = category.find('input[type="checkbox"]')
-  //   const categoryCollapseIcon = category.find('span')
-  //   const categoryCheckboxChecked = categoryCheckbox.is(':checked')
-  //   const categoryOptionsContainer = category.siblings('.category-options')
+  $('.emacipation-category-input-label-pair').on('click', function () {
+    const category = $(this).parent()
+    const categoryCheckbox = category.find('input[type="checkbox"]')
+    const categoryCollapseIcon = category.find('span')
+    const categoryCheckboxChecked = categoryCheckbox.is(':checked')
+    const categoryOptionsContainer = category.siblings('.category-options')
 
-  //   if (!category.data('disabled')) {
-  //     category.data('disabled', true)
-  //     category.addClass('disabled')
-  //     categoryCheckbox.prop('disabled', 'disabled')
+    if (!category.data('disabled')) {
+      category.data('disabled', true)
+      category.addClass('disabled')
+      categoryCheckbox.prop('disabled', 'disabled')
 
-  //     let saveAction,
-  //       collapseIcon,
-  //       doneCallback
+      let saveAction,
+        collapseIcon,
+        doneCallback
 
-  //     if (categoryCheckboxChecked) {
-  //       collapseIcon = '+'
-  //       doneCallback = () => {
-  //         categoryOptionsContainer.hide()
+      if (categoryCheckboxChecked) {
+        collapseIcon = '+'
+        doneCallback = () => {
+          categoryOptionsContainer.hide()
 
-  //         // Uncheck all category options
-  //         categoryOptionsContainer.children().filter(function () {
-  //           return $(this).find('input').prop('checked')
-  //         }).each(function () {
-  //           const checkbox = $(this).find('input')
+          // Uncheck all category options
+          categoryOptionsContainer.children().filter(function () {
+            return $(this).find('input').prop('checked')
+          }).each(function () {
+            const checkbox = $(this).find('input')
 
-  //           checkbox.prop('checked', false)
-  //           emancipationPage.notifier.notify('Unchecked ' + checkbox.next().text(), 'info')
-  //         })
-  //       }
-  //       saveAction = 'delete_category'
-  //     } else {
-  //       collapseIcon = '−'
-  //       doneCallback = () => {
-  //         categoryOptionsContainer.show()
-  //       }
-  //       saveAction = 'add_category'
-  //     }
+            checkbox.prop('checked', false)
+            emancipationPage.notifier.notify('Unchecked ' + checkbox.next().text(), 'info')
+          })
+        }
+        saveAction = 'delete_category'
+      } else {
+        collapseIcon = '−'
+        doneCallback = () => {
+          categoryOptionsContainer.show()
+        }
+        saveAction = 'add_category'
+      }
 
-  //     saveCheckState(saveAction, categoryCheckbox.val())
-  //       .done(function () {
-  //         doneCallback()
-  //         categoryCheckbox.prop('checked', !categoryCheckboxChecked)
-  //         categoryCollapseIcon.text(collapseIcon)
-  //       })
-  //       .always(function () {
-  //         category.data('disabled', false)
-  //         category.removeClass('disabled')
-  //         categoryCheckbox.prop('disabled', false)
-  //       })
-  //   }
-  // })
+      saveCheckState(saveAction, categoryCheckbox.val())
+        .done(function () {
+          doneCallback()
+          categoryCheckbox.prop('checked', !categoryCheckboxChecked)
+          categoryCollapseIcon.text(collapseIcon)
+        })
+        .always(function () {
+          category.data('disabled', false)
+          category.removeClass('disabled')
+          categoryCheckbox.prop('disabled', false)
+        })
+    }
+  })
 
   $('.check-item').on('click', function () {
     const checkComponent = $(this)
