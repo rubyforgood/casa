@@ -18,11 +18,11 @@ class YouthBirthdayNotification < Noticed::Base
   # Define helper methods to make rendering easier.
 
   def message
-    t(".message", case_number: params[:casa_case].case_number)
+    "Your youth, case number: #{params[:casa_case].case_number} has a birthday next month."
   end
 
   def title
-    t(".title")
+    "Youth Birthday Notification"
   end
 
   def url

@@ -41,16 +41,16 @@ class FollowupNotification < BaseNotification
   def message_with_note(note)
     [
       message_heading,
-      t(".note", note: note),
-      t(".more_info")
+      "Note: #{note}",
+      "Click to see more."
     ].join("\n")
   end
 
   def message_without_note
-    [message_heading, t(".more_info")].join(" ")
+    [message_heading, "Click to see more."].join(" ")
   end
 
   def message_heading
-    t(".message", created_by_name: created_by_name)
+    "#{created_by_name} has flagged a Case Contact that needs follow up."
   end
 end

@@ -13,8 +13,8 @@ class CaseContactPresenter < BasePresenter
 
   def boolean_select_options
     [
-      [I18n.t("common.yes_text"), true],
-      [I18n.t("common.no_text"), false]
+      ["Yes", true],
+      ["No", false]
     ]
   end
 

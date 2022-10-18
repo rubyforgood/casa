@@ -1,6 +1,6 @@
 class BaseNotification < Noticed::Base
   def title
-    t(".title")
+    "New followup"
   end
 
   private

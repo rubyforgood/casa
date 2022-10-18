@@ -104,7 +104,7 @@ class ApplicationController < ActionController::Base
 
   def not_authorized
     session[:user_return_to] = nil
-    flash[:notice] = t("default", scope: "pundit")
+    flash[:notice] = "Sorry, you are not authorized to perform this action."
     redirect_to(root_url)
   end
 end
