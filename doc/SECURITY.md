@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Only the latest version (master branch) and currently deployed version (also master branch) of this project is in scope for security issues. Also, only the production environment is in scope, although it's ok and normal to test the staging environment.
+Only the latest version [main branch](https://github.com/rubyforgood/casa) and currently deployed version of this project is in scope for security issues. Also, only the production environment is in scope, although it's ok and normal to test the staging environment.
 
 ## Reporting a Vulnerability
 
