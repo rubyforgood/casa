@@ -78,7 +78,7 @@ describe('CourtOrderList constructor', () => {
 })
 
 describe('addCourtOrder', () => {
-  test('addCourtOrder should add a textarea and dropdown in a div with class "court-mandate-entry" as a child of #court-orders-list-container', (done) => {
+  test('addCourtOrder should add a textarea and dropdown in a div with class "court-order-entry" as a child of #court-orders-list-container', (done) => {
     $(document).ready(() => {
       try {
         expect(courtOrderListElement.children().length).toBe(0)
@@ -88,7 +88,7 @@ describe('addCourtOrder', () => {
         expect(courtOrderListElement.children().length).toBe(1)
 
         const appendedCourtOrder = courtOrderListElement.children().first()
-        expect(appendedCourtOrder.attr('class')).toContain('court-mandate-entry')
+        expect(appendedCourtOrder.attr('class')).toContain('court-order-entry')
         expect(appendedCourtOrder.find('textarea').length).toBe(1)
         expect(appendedCourtOrder.find('select').length).toBe(1)
         expect(appendedCourtOrder.find('input[type="hidden"]').length).toBe(1)
@@ -142,7 +142,7 @@ describe('removeCourtOrder', () => {
   beforeEach(() => {
     $(document).ready(() => {
       courtOrderListElement.append($(`\
-        <div class="court-mandate-entry">\
+        <div class="court-order-entry">\
           <textarea name="casa_case[case_court_orders_attributes][0][text]" id="casa_case_case_court_orders_attributes_0_text">${courtOrdersText[0]}</textarea>\
           <select class="implementation-status" name="casa_case[case_court_orders_attributes][0][implementation_status]" id="casa_case_case_court_orders_attributes_0_implementation_status">\
             <option value="">Set Implementation Status</option>\
@@ -150,20 +150,20 @@ describe('removeCourtOrder', () => {
             <option value="partially_implemented">Partially implemented</option>\
             <option value="implemented">Implemented</option>
           </select>\
-          <button type="button" class="remove-mandate-button btn btn-danger">Delete</button>\
+          <button type="button" class="remove-court-order-button btn btn-danger">Delete</button>\
         </div>\
         <input type="hidden" value="202" name="casa_case[case_court_orders_attributes][0][id]" id="casa_case_case_court_orders_attributes_0_id">\
-        <div class="court-mandate-entry">\
+        <div class="court-order-entry">\
           <textarea name="casa_case[case_court_orders_attributes][1][text]" id="casa_case_case_court_orders_attributes_1_text">${courtOrdersText[1]}</textarea>\
           <select class="implementation-status" name="casa_case[case_court_orders_attributes][1][implementation_status]" id="casa_case_case_court_orders_attributes_1_implementation_status">\
             <option value="">Set Implementation Status</option>\
             <option value="unimplemented">Not implemented</option>\
             <option value="partially_implemented">Partially implemented</option>\
             <option value="implemented">Implemented</option></select>\
-          <button type="button" class="remove-mandate-button btn btn-danger">Delete</button>\
+          <button type="button" class="remove-court-order-button btn btn-danger">Delete</button>\
         </div>\
         <input type="hidden" value="203" name="casa_case[case_court_orders_attributes][1][id]" id="casa_case_case_court_orders_attributes_1_id">\
-        <div class="court-mandate-entry">\
+        <div class="court-order-entry">\
           <textarea name="casa_case[case_court_orders_attributes][2][text]" id="casa_case_case_court_orders_attributes_2_text">${courtOrdersText[2]}</textarea>\
           <select class="implementation-status" name="casa_case[case_court_orders_attributes][2][implementation_status]" id="casa_case_case_court_orders_attributes_2_implementation_status">\
             <option value="">Set Implementation Status</option>\
@@ -171,10 +171,10 @@ describe('removeCourtOrder', () => {
             <option value="partially_implemented">Partially implemented</option>\
             <option value="implemented">Implemented</option>\
           </select>\
-          <button type="button" class="remove-mandate-button btn btn-danger">Delete</button>\
+          <button type="button" class="remove-court-order-button btn btn-danger">Delete</button>\
         </div>\
         <input type="hidden" value="204" name="casa_case[case_court_orders_attributes][2][id]" id="casa_case_case_court_orders_attributes_2_id">\
-        <div class="court-mandate-entry">\
+        <div class="court-order-entry">\
           <textarea name="casa_case[case_court_orders_attributes][3][text]" id="casa_case_case_court_orders_attributes_3_text">${courtOrdersText[3]}</textarea>\
           <select class="implementation-status" name="casa_case[case_court_orders_attributes][3][implementation_status]" id="casa_case_case_court_orders_attributes_3_implementation_status">\
             <option value="">Set Implementation Status</option>\
@@ -182,10 +182,10 @@ describe('removeCourtOrder', () => {
             <option value="partially_implemented">Partially implemented</option>\
             <option value="implemented">Implemented</option>\
           </select>\
-          <button type="button" class="remove-mandate-button btn btn-danger">Delete</button>\
+          <button type="button" class="remove-court-order-button btn btn-danger">Delete</button>\
         </div>\
         <input type="hidden" value="205" name="casa_case[case_court_orders_attributes][3][id]" id="casa_case_case_court_orders_attributes_3_id">\
-        <div class="court-mandate-entry">\
+        <div class="court-order-entry">\
           <textarea name="casa_case[case_court_orders_attributes][4][text]" id="casa_case_case_court_orders_attributes_4_text">${courtOrdersText[4]}</textarea>\
           <select class="implementation-status" name="casa_case[case_court_orders_attributes][4][implementation_status]" id="casa_case_case_court_orders_attributes_4_implementation_status">\
             <option value="">Set Implementation Status</option>\
@@ -193,7 +193,7 @@ describe('removeCourtOrder', () => {
             <option value="partially_implemented">Partially implemented</option>\
             <option value="implemented">Implemented</option>\
           </select>\
-          <button type="button" class="remove-mandate-button btn btn-danger">Delete</button>\
+          <button type="button" class="remove-order-order-button btn btn-danger">Delete</button>\
         </div>\
         <input type="hidden" value="206" name="casa_case[case_court_orders_attributes][4][id]" id="casa_case_case_court_orders_attributes_4_id">\
       `))
@@ -209,7 +209,7 @@ describe('removeCourtOrder', () => {
         expect($('#casa_case_case_court_orders_attributes_4_id').length).toBe(1)
         expect(document.body.innerHTML).toEqual(expect.stringContaining(courtOrdersText[4]))
 
-        courtOrderList.removeCourtOrder($('.court-mandate-entry').eq(4), $('#casa_case_case_court_orders_attributes_4_id'))
+        courtOrderList.removeCourtOrder($('.court-order-entry').eq(4), $('#casa_case_case_court_orders_attributes_4_id'))
 
         expect(courtOrderListElement.children().length).toBe(8)
         expect($('#casa_case_case_court_orders_attributes_4_text').length).toBe(0)
@@ -249,7 +249,7 @@ describe('removeCourtOrder', () => {
           expect($(this).attr('name')).toBe(`casa_case[case_court_orders_attributes][${index}][implementation_status]`)
         })
 
-        courtOrderList.removeCourtOrder($('.court-mandate-entry').eq(0), $('#casa_case_case_court_orders_attributes_0_id'))
+        courtOrderList.removeCourtOrder($('.court-order-entry').eq(0), $('#casa_case_case_court_orders_attributes_0_id'))
 
         expect(document.body.innerHTML).toEqual(expect.not.stringContaining(courtOrdersText[0]))
 

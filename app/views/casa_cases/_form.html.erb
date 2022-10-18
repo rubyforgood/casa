@@ -73,15 +73,15 @@
       </div>
 
       <% if casa_case.persisted? %>
-        <div class="field form-group court-mandates">
+        <div class="field form-group court-orders">
           <% if policy(casa_case).update_court_orders? %>
             <%= render partial: "shared/court_order_list",
 locals: {casa_case: @casa_case, siblings_casa_cases: @siblings_casa_cases, form: form} %>
           <% else %>
-            <%= form.label :case_court_mandates, "Court Orders" %>
-            <div id="mandate-list-container">
+            <%= form.label :case_court_orders, "Court Orders" %>
+            <div id="court-orders-list-container">
               <% @casa_case.case_court_orders.each do |order| %>
-                <div class="court-mandate-entry">
+                <div class="court-order-entry">
                   <textarea disabled><%= order.text %></textarea>
 
                   <% if order.implementation_status %>

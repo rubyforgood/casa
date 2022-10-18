@@ -1,16 +1,16 @@
 body.court_dates {
-  .court-mandates {
+  .court-orders {
     textarea {
       display: block;
       margin-bottom: 5px;
     }
 
-    textarea, .add-court-mandate {
+    textarea, .add-court-order {
       width: 500px;
     }
   }
 
-  .court-mandate-entry {
+  .court-order-entry {
     display: flex;
     gap: 8px;
     align-items: center;
