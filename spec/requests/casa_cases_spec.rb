@@ -11,13 +11,10 @@ RSpec.describe "/casa_cases", type: :request do
   end
   let(:invalid_attributes) { {case_number: nil, birth_month_year_youth: nil} }
   let(:casa_case) { create(:casa_case, casa_org: organization, case_number: "111") }
-<<<<<<< HEAD
-  let(:texts) { ["1-New Mandate Text One", "0-New Mandate Text Two"] }
-  let(:implementation_statuses) { ["unimplemented", nil] }
-=======
+
   let(:texts) { ["1-New Court Order Text One", "0-New Court Order Text Two"] }
-  let(:implementation_statuses) { ["not_implemented", nil] }
->>>>>>> updated html, js, and css to replace court mandate with court order wherever possible.
+  let(:implementation_statuses) { ["unimplemented", nil] }
+
   let(:orders_attributes) do
     {
       "0" => {text: texts[0], implementation_status: implementation_statuses[0]},
@@ -301,7 +298,7 @@ RSpec.describe "/casa_cases", type: :request do
               case_court_orders_attributes: {
                 "0" => {
                   text: "New Court Order Text One Updated",
-                  implementation_status: :not_implemented
+                  implementation_status: :unimplemented
                 },
                 "1" => {
                   text: ""
