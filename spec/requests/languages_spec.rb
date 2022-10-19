@@ -56,7 +56,8 @@ RSpec.describe LanguagesController, type: :request do
    describe "#remove_from_volunteer" do
       context "when request params are valid" do
         before do
-          patch add_to_volunteer_languages_path, params: {
+
+          patch add_language_users_path, params: {
             language_id: random_lang.id
           }
         end
