@@ -8,6 +8,8 @@ Rails.application.routes.draw do
     post "datatable", on: :collection
   end
 
+  resources :preference_sets, only: %i[create]
+
   authenticated :all_casa_admin do
     root to: "all_casa_admins/dashboard#show", as: :authenticated_all_casa_admin_root
   end
