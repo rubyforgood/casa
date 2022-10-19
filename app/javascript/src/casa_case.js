@@ -9,7 +9,7 @@ import Swal from 'sweetalert2'
 const CourtOrderList = require('./court_order_list.js')
 let courtOrders
 
-function removeMandateWithConfirmation () {
+function removeCourtOrderWithConfirmation () {
   const text = 'Are you sure you want to remove this court order? Doing so will ' +
     'delete all records of it unless it was included in a previous court report.'
   Swal.fire({
@@ -27,12 +27,12 @@ function removeMandateWithConfirmation () {
     cancelButtonText: 'Go back'
   }).then((result) => {
     if (result.isConfirmed) {
-      removeMandateAction($(this).parent())
+      removeCourtOrderAction($(this).parent())
     }
   })
 }
 
-function removeMandateAction (order) {
+function removeCourtOrderAction (order) {
   const orderHiddenIdInput = order.next('input[type="hidden"]')
 
   $.ajax({
@@ -190,13 +190,13 @@ $('document').ready(() => {
   if (courtOrdersListContainer.length) {
     courtOrders = new CourtOrderList(courtOrdersListContainer)
 
-    $('button#add-mandate-button').on('click', () => {
+    $('button#add-court-order-button').on('click', () => {
       courtOrders.addCourtOrder()
     })
 
-    $('button.remove-mandate-button').on('click', removeMandateWithConfirmation)
+    $('button.remove-court-order-button').on('click', removeCourtOrderWithConfirmation)
 
-    $('.court-mandates textarea').each(function () {
+    $('.court-orders textarea').each(function () {
       $(this).height($(this).prop('scrollHeight'))
     })
   }

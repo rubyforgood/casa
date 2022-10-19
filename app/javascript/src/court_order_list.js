@@ -22,10 +22,10 @@ module.exports = class CourtOrderList {
   // Adds a row containing a text field to write the court order and a dropdown to specify the order status
   addCourtOrder () {
     const courtOrdersWidget = this.courtOrdersWidget
-    const index = courtOrdersWidget.children('.court-mandate-entry').length
+    const index = courtOrdersWidget.children('.court-order-entry').length
     const resourceName = this.resourceName
     const courtOrderRow = $(`\
-    <div class="court-mandate-entry">\
+    <div class="court-order-entry">\
       <textarea
       name="${resourceName}[case_court_orders_attributes][${index}][text]"\
       id="${resourceName}_case_court_orders_attributes_${index}_text"></textarea>
@@ -61,7 +61,7 @@ module.exports = class CourtOrderList {
     orderHiddenIdInput.remove()
 
     // Decrement indicies of all siblings after deleted element
-    this.courtOrdersWidget.children(`.court-mandate-entry:nth-child(n+${2 * index})`).each(function (originalSiblingIndex) {
+    this.courtOrdersWidget.children(`.court-order-entry:nth-child(n+${2 * index})`).each(function (originalSiblingIndex) {
       const courtOrderSibling = $(this)
       const courtOrderSiblingSelect = courtOrderSibling.children('select')
       const courtOrderSiblingTextArea = courtOrderSibling.children('textarea')
