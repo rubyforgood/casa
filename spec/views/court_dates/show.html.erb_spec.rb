@@ -8,7 +8,7 @@ RSpec.describe "court_dates/show", type: :view do
     before { render template: "court_dates/show" }
 
     it "displays all court details" do
-      expect(rendered).to include("/casa_cases/#{court_date.casa_case.id}")
+      expect(rendered).to include("/casa_cases/#{court_date.casa_case.case_number.downcase}")
       expect(rendered).to include(ERB::Util.html_escape(court_date.judge.name))
       expect(rendered).to include(court_date.hearing_type.name)
 
@@ -26,7 +26,7 @@ RSpec.describe "court_dates/show", type: :view do
 
     it "displays the download button for .docx" do
       expect(rendered).to include "Download Report (.docx)"
-      expect(rendered).to include "/casa_cases/#{court_date.casa_case.id}/court_dates/#{court_date.id}.docx"
+      expect(rendered).to include "/casa_cases/#{court_date.casa_case.case_number.downcase}/court_dates/#{court_date.id}.docx"
     end
   end
 

@@ -36,7 +36,7 @@ $(() => {
     document.onload = load()
   }
 
-  if (/\/casa_cases\/\d+$/.test(window.location.pathname)) {
+  if (/\/casa_cases\/.*\d+\/$/.test(window.location.pathname)) {
     window.localStorage.removeItem(formId)
   }
 })

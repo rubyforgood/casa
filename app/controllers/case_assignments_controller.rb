@@ -76,7 +76,7 @@ class CaseAssignmentsController < ApplicationController
     if params[:volunteer_id]
       User.find(params[:volunteer_id])
     else
-      CasaCase.find(params[:casa_case_id])
+      CasaCase.friendly.find(params[:casa_case_id])
     end
   end
 

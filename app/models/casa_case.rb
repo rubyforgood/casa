@@ -21,7 +21,7 @@ class CasaCase < ApplicationRecord
   TRANSITION_AGE_YOUTH_ICON = "🦋".freeze
   NON_TRANSITION_AGE_YOUTH_ICON = "🐛".freeze
 
-  friendly_id :case_number, :use => :scoped, :scope => :casa_org
+  friendly_id :case_number, use: :scoped, scope: :casa_org
 
   has_many :case_assignments, dependent: :destroy
   has_many(:volunteers, through: :case_assignments, source: :volunteer, class_name: "User")

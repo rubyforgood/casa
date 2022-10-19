@@ -12,7 +12,7 @@ function replaceNumberWithDecrement (str, num) {
 module.exports = class CourtOrderList {
   // @param {object} courtOrdersWidget The div containing the list of court orders
   constructor (courtOrdersWidget) {
-    const urlMatch = window.location.pathname.match(/^\/([a-z_]+)s\/(\d+)(\/(([a-z_]+)s))?/).filter(match => match !== undefined)
+    const urlMatch = window.location.pathname.match(/^\/([a-z_]+)s\/(.*\d\-\d+)\/((([a-z_]+)s))?/).filter(match => match !== undefined)
 
     this.courtOrdersWidget = courtOrdersWidget
     this.resourceName = urlMatch.length > 3 ? urlMatch[5] : urlMatch[1]
