@@ -22,10 +22,10 @@ class UsersController < ApplicationController
 
   def add_language
     if @language.nil?
-      @user.errors.add("Error - 'Add Language' field can not be blank. Please select a language before adding.")
-      return redirect_to edit_users_path
+      @user.errors.add(:base, "'Add Language' field can not be blank. Please select a language before adding.")
+      return render "edit"
     end
-    authorize @language
+
     current_user.languages << @language
     if current_user.save
       redirect_to edit_users_path, notice: "#{@language.name} was added to your languages list."
