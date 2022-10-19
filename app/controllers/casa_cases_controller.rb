@@ -48,6 +48,7 @@ class CasaCasesController < ApplicationController
     authorize @casa_case
 
     if @casa_case.save
+      @casa_case.update_cleaning_contact_types(casa_case_update_params)
       respond_to do |format|
         format.html { redirect_to @casa_case, notice: "CASA case was successfully created." }
         format.json { render json: @casa_case, status: :created }
