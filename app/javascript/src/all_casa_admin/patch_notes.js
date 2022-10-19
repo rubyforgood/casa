@@ -127,49 +127,6 @@ patchNoteFunctions.disablePatchNoteForm = function (patchNoteFormElements) {
   }
 }
 
-// Change a patch note form out of edit mode
-//  @param  {object} patchNoteFormInputs An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormElements()
-//  @throws {TypeError} for a parameter of the incorrect type
-patchNoteFunctions.disablePatchNoteFormEditMode = function (patchNoteFormInputs) {
-  TypeChecker.checkObject(patchNoteFormInputs, 'patchNoteFormInputs')
-
-  let patchNoteDataBeforeEditing
-
-  try {
-    patchNoteDataBeforeEditing = patchNoteFormBeforeEditData[patchNoteFunctions.getPatchNoteId(patchNoteFormInputs.noteTextArea.parent())]
-
-    patchNoteFormInputs.noteTextArea.val(patchNoteDataBeforeEditing.note)
-    patchNoteFormInputs.dropdownGroup.val(patchNoteDataBeforeEditing.groupId)
-    patchNoteFormInputs.dropdownType.val(patchNoteDataBeforeEditing.typeId)
-  } catch (e) {
-    pageNotifier.notify('Failed to load patch note data from before editing', 'error')
-    throw e
-  }
-
-  patchNoteFormInputs.noteTextArea.prop('disabled', true)
-  patchNoteFormInputs.dropdownGroup.prop('disabled', true)
-  patchNoteFormInputs.dropdownType.prop('disabled', true)
-
-  // Change button controls
-  //   Clear click listeners
-  patchNoteFormInputs.buttonControls.off()
-
-  const buttonLeft = patchNoteFormInputs.buttonControls.siblings('.button-save')
-  const buttonRight = patchNoteFormInputs.buttonControls.siblings('.button-cancel')
-
-  buttonLeft.html('<i class="fa-solid fa-pen-to-square"></i> Edit')
-  buttonLeft.removeClass('button-save')
-  buttonLeft.addClass('button-edit')
-
-  buttonRight.html('<i class="fa-solid fa-trash-can"></i> Delete')
-  buttonRight.removeClass('btn-secondary')
-  buttonRight.removeClass('button-cancel')
-  buttonRight.addClass('btn-danger')
-  buttonRight.addClass('button-delete')
-
-  patchNoteFunctions.initPatchNoteForm(patchNoteFormInputs.noteTextArea.parent())
-}
-
 // Enables all form elements of a patch note form
 //  @param    {object} patchNoteFormElements An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormElements()
 //  @throws   {TypeError} for a parameter of the incorrect type
@@ -214,6 +171,36 @@ patchNoteFunctions.enablePatchNoteFormEditMode = function (patchNoteFormInputs) 
   buttonRight.removeClass('btn-danger')
   buttonRight.addClass('button-cancel')
   buttonRight.addClass('btn-secondary')
+
+  patchNoteFunctions.initPatchNoteForm(patchNoteFormInputs.noteTextArea.parent())
+}
+
+// Change a patch note form out of edit mode
+//  @param  {object} patchNoteFormInputs An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormElements()
+//  @throws {TypeError} for a parameter of the incorrect type
+patchNoteFunctions.exitPatchNoteFormEditMode = function (patchNoteFormInputs) {
+  TypeChecker.checkObject(patchNoteFormInputs, 'patchNoteFormInputs')
+
+  patchNoteFormInputs.noteTextArea.prop('disabled', true)
+  patchNoteFormInputs.dropdownGroup.prop('disabled', true)
+  patchNoteFormInputs.dropdownType.prop('disabled', true)
+
+  // Change button controls
+  //   Clear click listeners
+  patchNoteFormInputs.buttonControls.off()
+
+  const buttonLeft = patchNoteFormInputs.buttonControls.siblings('.button-save')
+  const buttonRight = patchNoteFormInputs.buttonControls.siblings('.button-cancel')
+
+  buttonLeft.html('<i class="fa-solid fa-pen-to-square"></i> Edit')
+  buttonLeft.removeClass('button-save')
+  buttonLeft.addClass('button-edit')
+
+  buttonRight.html('<i class="fa-solid fa-trash-can"></i> Delete')
+  buttonRight.removeClass('btn-secondary')
+  buttonRight.removeClass('button-cancel')
+  buttonRight.addClass('btn-danger')
+  buttonRight.addClass('button-delete')
 
   patchNoteFunctions.initPatchNoteForm(patchNoteFormInputs.noteTextArea.parent())
 }
@@ -279,7 +266,8 @@ patchNoteFunctions.onCancelEdit = function () {
   const patchNoteFormContainer = $(this).parent().parent()
   const formInputs = patchNoteFunctions.getPatchNoteFormInputs(patchNoteFormContainer)
 
-  patchNoteFunctions.disablePatchNoteFormEditMode(formInputs)
+  patchNoteFunctions.resetPatchNoteFormDataBeforeEdit(formInputs)
+  patchNoteFunctions.exitPatchNoteFormEditMode(formInputs)
 }
 
 // Called when the delete button is pressed on a patch note form
@@ -373,6 +361,26 @@ patchNoteFunctions.onSavePatchNote = function () {
   }).always(function () {
     patchNoteFormElements.buttonControls.prop('disabled', false)
   })
+}
+
+// Set the value of a patch note form's inputs to before the form was put in edit mode
+//  @param  {object} patchNoteFormInputs An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormElements()
+//  @throws {TypeError} for a parameter of the incorrect type
+patchNoteFunctions.resetPatchNoteFormDataBeforeEdit = function (patchNoteFormInputs) {
+  TypeChecker.checkObject(patchNoteFormInputs, 'patchNoteFormInputs')
+
+  let patchNoteDataBeforeEditing
+
+  try {
+    patchNoteDataBeforeEditing = patchNoteFormBeforeEditData[patchNoteFunctions.getPatchNoteId(patchNoteFormInputs.noteTextArea.parent())]
+
+    patchNoteFormInputs.noteTextArea.val(patchNoteDataBeforeEditing.note)
+    patchNoteFormInputs.dropdownGroup.val(patchNoteDataBeforeEditing.groupId)
+    patchNoteFormInputs.dropdownType.val(patchNoteDataBeforeEditing.typeId)
+  } catch (e) {
+    pageNotifier.notify('Failed to load patch note data from before editing', 'error')
+    throw e
+  }
 }
 
 // Called when an async operation completes. May show notifications describing how the operation completed
