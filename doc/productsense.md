@@ -11,7 +11,7 @@ After we had a working volunteer user experience as defined by that topline requ
 ### Post MVP Approach and Shift to Multitenancy
 While we continued to work closely with PG / CASA to improve the MVP experience post production launch, it was around this time that we shifted gears and started focusing on multitenancy.
 
-CASA is an organization founded in Seattle, WA with a nationwide presence. County level chapters operate relatively independent of each other and of the national organization (the national org mostly focuses on policy advocacy, with the county level orgs providing services to foster youth in the form of community volunteers). The baseline operatons of each CASA chapter are more or less the same, but the terminology they use and day-to-day processes vary slightly. 
+CASA is an organization founded in Seattle, WA with a nationwide presence. County level chapters operate relatively independent of each other and of the national organization (the national org mostly focuses on policy advocacy, with the county level orgs providing services to foster youth in the form of community volunteers). The baseline operations of each CASA chapter are more or less the same, but the terminology they use and day-to-day processes vary slightly. 
 
 In order for casavolunteetracking.org to be a successful multitenant application, it needs to be clearly tailored for the specific needs of CASA staff and volunteers, yet customizable enough to serve CASA chapters all over the country – without becoming so complicated that it's difficult to use. (Salesforce could be a great solution for CASA chapters if they had the resources to hire a developer who can help set up, customize, and maintain a Salesforce instance. The overwhelming majority of CASA chapters do not have those resources at their disposal.) 
 ### Questions to Help Guide You
@@ -42,7 +42,7 @@ In order to answer this question, it's important to understand the core operatio
 - supervisors coach volunteers and hold them accountable
 - admins maintain a birds eye view that allows them to measure impact, generate stats for fundraising, and provide strategic leadership
 
-The fewer resources that are required to perform those core operations, the better. If a solution being devloped improves the efficiency of conducting these core operations, then it probably solves a problem every CASA faces – and henceforth, delivers a big value-add to current and prospective tenants.
+The fewer resources that are required to perform those core operations, the better. If a solution being developed improves the efficiency of conducting these core operations, then it probably solves a problem every CASA faces – and henceforth, delivers a big value-add to current and prospective tenants.
 
 #### Would this be “nice to have” for most CASA chapters? Or would this offer a big enough value-add to attract new tenants?
 
