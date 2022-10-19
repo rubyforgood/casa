@@ -1,0 +1,1 @@
+there are contoller specs, request specs, and system (capybara) specs. WHich if any should wwe prefer? 
