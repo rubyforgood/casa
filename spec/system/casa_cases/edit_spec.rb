@@ -355,7 +355,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       let(:text) { casa_case.case_court_orders.first.text }
 
       it "can delete a court order" do
-        visit edit_casa_case_path(casa_case.case_number)
+        visit edit_casa_case_path(casa_case.case_number.parameterize)
 
         expect(page).to have_text(text)
 
