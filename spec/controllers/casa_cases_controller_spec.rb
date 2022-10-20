@@ -87,7 +87,8 @@ RSpec.describe CasaCasesController, type: :controller do
             "date_in_care(2i)" => "2",
             "date_in_care(1i)" => "2020",
             "court_dates_attributes" => {"0" => {"date" => "2022/10/31"}},
-            "court_report_status" => "submitted"          }
+            "court_report_status" => "submitted"
+          }
         }
 
         it "does not create a new casa case" do
