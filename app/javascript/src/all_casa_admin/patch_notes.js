@@ -389,7 +389,6 @@ patchNoteFunctions.patchNoteFormDataSaveTemp = function (patchNoteFormInputs) {
     pageNotifier.notify('Failed to save patch note form data before editing', 'error')
     throw e
   }
-
 }
 
 // Called when an async operation completes. May show notifications describing how the operation completed
