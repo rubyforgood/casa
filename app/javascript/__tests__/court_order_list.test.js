@@ -12,7 +12,7 @@ window.location = { reload: jest.fn() }
 beforeEach(() => {
   // jest doesn't support window.location like a browser but URL is pretty close
   // see https://stackoverflow.com/a/60697570
-  window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/2151')
+  window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/CINA-2151')
   document.body.innerHTML = '<div id="court-orders-list-container"></div>'
 
   $(document).ready(() => {
@@ -25,29 +25,29 @@ describe('CourtOrderList constructor', () => {
   test('the constructor should be able to extract the rescource name from the url', (done) => {
     $(document).ready(() => {
       try {
-        window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/2151')
+        window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/CINA-2151')
         courtOrderList = new CourtOrderList(courtOrderListElement)
 
         expect(courtOrderList.resourceName).toBe('casa_case')
-        expect(courtOrderList.casaCaseId).toBe('2151')
+        expect(courtOrderList.casaCaseId).toBe('CINA-2151')
 
-        window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/2151/court_dates/new')
+        window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/CINA-2151/court_dates/new')
         courtOrderList = new CourtOrderList(courtOrderListElement)
 
         expect(courtOrderList.resourceName).toBe('court_date')
-        expect(courtOrderList.casaCaseId).toBe('2151')
+        expect(courtOrderList.casaCaseId).toBe('CINA-2151')
 
-        window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/2151/court_dates/3')
+        window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/CINA-2151/court_dates/3')
         courtOrderList = new CourtOrderList(courtOrderListElement)
 
         expect(courtOrderList.resourceName).toBe('court_date')
-        expect(courtOrderList.casaCaseId).toBe('2151')
+        expect(courtOrderList.casaCaseId).toBe('CINA-2151')
 
-        window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/2151/court_dates/3/edit')
+        window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/CINA-2151/court_dates/3/edit')
         courtOrderList = new CourtOrderList(courtOrderListElement)
 
         expect(courtOrderList.resourceName).toBe('court_date')
-        expect(courtOrderList.casaCaseId).toBe('2151')
+        expect(courtOrderList.casaCaseId).toBe('CINA-2151')
         done()
       } catch (error) {
         done(error)
@@ -58,8 +58,8 @@ describe('CourtOrderList constructor', () => {
   test('the constructor should be able to extract the casa case id from the url', (done) => {
     $(document).ready(() => {
       try {
-        const casaCaseId1 = '2151'
-        const casaCaseId2 = '1988'
+        const casaCaseId1 = 'CINA-2151'
+        const casaCaseId2 = 'CINA-1988'
         window.location = new URL(`https://casa-qa.herokuapp.com/casa_cases/${casaCaseId1}`)
         courtOrderList = new CourtOrderList(courtOrderListElement)
 
