@@ -88,17 +88,18 @@ RSpec.describe CasaCasesController, type: :controller do
             "date_in_care(1i)" => "2020",
             "court_dates_attributes" => {"0" => {"date" => "2022/10/31"}},
             "court_report_status" => "submitted",
-            "casa_case_contact_types_attributes" => [
-              {"contact_type_id" => contact_type.id}
-            ]
+            "casa_case_contact_types_attributes" => [{"contact_type_id" => contact_type.id}]
           }
         }
 
-        it "creates and assigns @case_contact" do
+        it "creates new casa case with provided case contacts" do
+          post :create, params: {casa_case: params}, format: :json
           expect {
             post :create, params: {casa_case: params}, format: :json
           }.to change(CasaCase, :count).by(1)
           expect(response).to have_http_status(201)
+          casa_case = CasaCase.find(response.parsed_body["id"])
+          expect(casa_case.contact_types.first.id).to eq(contact_type.id)
         end
       end
 
