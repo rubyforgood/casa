@@ -14,9 +14,9 @@ RSpec.describe "casa_cases/index", type: :system do
     visit casa_cases_path
 
     expect(page).to have_link("Cool Volunteer", href: "/volunteers/#{volunteer.id}/edit")
-    expect(page).to have_link("CINA-1", href: "/casa_cases/#{cina.id}")
-    expect(page).to have_link("TPR-100", href: "/casa_cases/#{tpr.id}")
-    expect(page).to have_link("123-12-123", href: "/casa_cases/#{no_prefix.id}")
+    expect(page).to have_link("CINA-1", href: "/casa_cases/#{cina.case_number.parameterize}")
+    expect(page).to have_link("TPR-100", href: "/casa_cases/#{tpr.case_number.parameterize}")
+    expect(page).to have_link("123-12-123", href: "/casa_cases/#{no_prefix.case_number.parameterize}")
 
     click_on "Status"
     click_on "Assigned to Volunteer"

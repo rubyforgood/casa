@@ -137,7 +137,7 @@ class CasaCasesController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_casa_case
-    @casa_case = current_organization.casa_cases.friendly.find(params[:id])
+    @casa_case = current_organization.casa_cases.friendly.find(params[:id].parameterize)
   rescue ActiveRecord::RecordNotFound
     if params[:action] != "show"
       head :not_found
