@@ -75,7 +75,7 @@ RSpec.describe CasaCasesController, type: :controller do
     end
 
     describe "POST #create" do
-      let!(:contact_type) { create(:casa_case_contact_type) }
+      let!(:contact_type) { create(:contact_type) }
       context "with valid params" do
         let(:params) {
           {
@@ -93,7 +93,6 @@ RSpec.describe CasaCasesController, type: :controller do
         }
 
         it "creates new casa case with provided case contacts" do
-          post :create, params: {casa_case: params}, format: :json
           expect {
             post :create, params: {casa_case: params}, format: :json
           }.to change(CasaCase, :count).by(1)
