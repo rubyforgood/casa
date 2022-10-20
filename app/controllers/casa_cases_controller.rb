@@ -47,6 +47,7 @@ class CasaCasesController < ApplicationController
     )
     authorize @casa_case
 
+    @casa_case.validate_contact_type = true
     if @casa_case.save
       respond_to do |format|
         format.html { redirect_to @casa_case, notice: "CASA case was successfully created." }
@@ -154,7 +155,8 @@ class CasaCasesController < ApplicationController
       :case_number,
       :birth_month_year_youth,
       :court_report_due_date,
-      court_dates_attributes: [:date]
+      court_dates_attributes: [:date],
+      casa_case_contact_types_attributes: [:contact_type_id]
     )
   end
 
