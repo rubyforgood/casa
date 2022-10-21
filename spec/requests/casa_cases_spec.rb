@@ -464,6 +464,22 @@ RSpec.describe "/casa_cases", type: :request do
     let(:user) { create(:volunteer, casa_org: organization) }
     let!(:case_assignment) { create(:case_assignment, volunteer: user, casa_case: casa_case) }
 
+    describe "GET /show" do
+      it "renders a successful response" do
+        get casa_case_url(casa_case)
+        expect(response).to be_successful
+      end
+
+      it "fails across organizations" do
+        other_org = build(:casa_org)
+        other_case = create(:casa_case, casa_org: other_org)
+
+        get casa_case_url(other_case)
+        expect(response).to be_redirect
+        expect(flash[:notice]).to eq("Sorry you are not authorized to perform this action.")
+      end
+    end
+
     describe "GET /new" do
       it "denies access and redirects elsewhere" do
         get new_casa_case_url
@@ -586,6 +602,22 @@ RSpec.describe "/casa_cases", type: :request do
 
   describe "as a supervisor" do
     let(:user) { create(:supervisor, casa_org: organization) }
+
+    describe "GET /show" do
+      it "renders a successful response" do
+        get casa_case_url(casa_case)
+        expect(response).to be_successful
+      end
+
+      it "fails across organizations" do
+        other_org = build(:casa_org)
+        other_case = create(:casa_case, casa_org: other_org)
+
+        get casa_case_url(other_case)
+        expect(response).to be_redirect
+        expect(flash[:notice]).to eq("Sorry you are not authorized to perform this action.")
+      end
+    end
 
     describe "GET /new" do
       it "renders a successful response" do

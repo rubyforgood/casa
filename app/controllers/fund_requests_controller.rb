@@ -2,13 +2,13 @@ class FundRequestsController < ApplicationController
   # after_action :verify_authorized
 
   def new
-    @casa_case = CasaCase.find(params[:casa_case_id])
+    @casa_case = CasaCase.friendly.find(params[:casa_case_id])
     # authorize @casa_case
     @fund_request = FundRequest.new
   end
 
   def create
-    @casa_case = CasaCase.find(params[:casa_case_id])
+    @casa_case = CasaCase.friendly.find(params[:casa_case_id])
     # authorize @casa_case
     @fund_request = FundRequest.new(parsed_params)
     FundRequestMailer.send_request(nil, @fund_request).deliver

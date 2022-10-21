@@ -36,7 +36,8 @@ $(() => {
     document.onload = load()
   }
 
-  if (/\/casa_cases\/\d+$/.test(window.location.pathname)) {
+  // The following regex will match to string like this: "/casa_cases/cina-5"
+  if (/\/casa_cases\/.*\d$/.test(window.location.pathname)) {
     window.localStorage.removeItem(formId)
   }
 })

@@ -240,7 +240,7 @@ RSpec.describe "/volunteers", type: :request do
   describe "PATCH /activate" do
     let(:volunteer) { create(:volunteer, :inactive, casa_org: organization) }
     let(:volunteer_with_cases) { create(:volunteer, :with_cases_and_contacts, casa_org: organization) }
-    let(:case_id) { volunteer_with_cases.casa_cases.first.id }
+    let(:case_number) { volunteer_with_cases.casa_cases.first.case_number.parameterize }
 
     it "activates an inactive volunteer" do
       sign_in admin
@@ -275,9 +275,9 @@ RSpec.describe "/volunteers", type: :request do
       it "shows a flash message indicating the volunteer has been activated and sent an email" do
         sign_in admin
 
-        patch activate_volunteer_path(id: volunteer_with_cases, redirect_to_path: "casa_case", casa_case_id: case_id)
+        patch activate_volunteer_path(id: volunteer_with_cases, redirect_to_path: "casa_case", casa_case_id: case_number)
 
-        expect(response).to redirect_to(edit_casa_case_path(case_id))
+        expect(response).to redirect_to(edit_casa_case_path(case_number))
         follow_redirect!
         expect(flash[:notice]).to match(/Volunteer was activated. They have been sent an email./)
       end

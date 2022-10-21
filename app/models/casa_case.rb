@@ -1,6 +1,7 @@
 class CasaCase < ApplicationRecord
   include ByOrganizationScope
   include DateHelper
+  extend FriendlyId
 
   self.ignored_columns = %w[court_date hearing_type_id judge_id transition_aged_youth]
 
@@ -20,7 +21,7 @@ class CasaCase < ApplicationRecord
   TRANSITION_AGE_YOUTH_ICON = "🦋".freeze
   NON_TRANSITION_AGE_YOUTH_ICON = "🐛".freeze
 
-  before_create :set_slug
+  friendly_id :case_number, use: :scoped, scope: :casa_org
 
   has_many :case_assignments, dependent: :destroy
   has_many(:volunteers, through: :case_assignments, source: :volunteer, class_name: "User")
@@ -196,10 +197,6 @@ class CasaCase < ApplicationRecord
     volunteers_unassigned_to_case.with_no_assigned_cases + volunteers_unassigned_to_case.with_assigned_cases
   end
 
-  def set_slug
-    self.slug = case_number.parameterize preserve_case: true
-  end
-
   def full_attributes_hash
     attributes.symbolize_keys.merge({contact_types: contact_types.reload.map(&:attributes), court_orders: case_court_orders.map(&:attributes)})
   end
@@ -207,15 +204,6 @@ class CasaCase < ApplicationRecord
   def contact_type_validation?
     validate_update
   end
-
-  # def set_validate_update
-
-  # end
-
-  # def to_param
-  #   id
-  #   # slug # TODO use slug eventually for routes
-  # end
 end
 
 # == Schema Information

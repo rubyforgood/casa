@@ -33,7 +33,7 @@ $('document').ready(() => {
     displayPopUpIfPreferencesIsInvalid()
   })
 
-  smsToggle.addEventListener('change', () => {
+  smsToggle?.addEventListener('change', () => {
     displayPopUpIfPreferencesIsInvalid()
   })
 

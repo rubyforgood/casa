@@ -66,7 +66,7 @@ class CourtDatesController < ApplicationController
   private
 
   def set_casa_case
-    @casa_case = current_organization.casa_cases.find(params[:casa_case_id])
+    @casa_case = current_organization.casa_cases.friendly.find(params[:casa_case_id])
   end
 
   def set_court_date
@@ -77,6 +77,10 @@ class CourtDatesController < ApplicationController
     params.require(:court_date).tap do |p|
       p[:case_court_orders_attributes]&.reject! do |k, _|
         p[:case_court_orders_attributes][k][:text].blank? && p[:case_court_orders_attributes][k][:implementation_status].blank?
+      end
+
+      p[:case_court_orders_attributes]&.each do |k, _|
+        p[:case_court_orders_attributes][k][:casa_case_id] = @casa_case.id
       end
     end
   end
