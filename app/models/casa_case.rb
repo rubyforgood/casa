@@ -226,7 +226,6 @@ end
 #  active                    :boolean          default(TRUE), not null
 #  birth_month_year_youth    :datetime
 #  case_number               :string           not null
-#  court_report_due_date     :datetime
 #  court_report_status       :integer          default("not_submitted")
 #  court_report_submitted_at :datetime
 #  date_in_care              :datetime

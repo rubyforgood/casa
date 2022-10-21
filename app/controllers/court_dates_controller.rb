@@ -34,7 +34,7 @@ class CourtDatesController < ApplicationController
     authorize @court_date
 
     if !@court_date.date.nil?
-      @casa_case.court_report_due_date = @court_date.date - 3.weeks
+      @court_date.court_report_due_date = @court_date.date - 3.weeks
     end
 
     if @court_date.save && @casa_case.save
