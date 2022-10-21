@@ -224,7 +224,6 @@ There is a `doc` directory at the top level that includes:
 * an `architecture-decisions` directory containing important architectural decisions and entity relationship diagrams of various models
   (see the article [Architectural Decision Records](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) describing this approach).
 * [Code of Conduct](doc/code-of-conduct.md)
-* [CYPRESS.md](doc/CYPRESS.md)
 * [productsense.md](doc/productsense.md)(for team leads & product interested contributors)
 * [SECURITY.md](doc/SECURITY.md)
 
