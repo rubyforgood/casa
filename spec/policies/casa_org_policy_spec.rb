@@ -3,21 +3,32 @@ require "rails_helper"
 RSpec.describe CasaOrgPolicy do
   subject { described_class }
 
-  let(:casa_admin) { build_stubbed(:casa_admin) }
-  let(:volunteer) { build_stubbed(:volunteer) }
-  let(:supervisor) { build_stubbed(:supervisor) }
+  let(:organization) { build(:casa_org, users: [volunteer, supervisor, casa_admin]) }
+  let(:different_organization) { create(:casa_org) }
+
+  let(:volunteer) { build(:volunteer) }
+  let(:supervisor) { build(:supervisor) }
+  let(:casa_admin) { build(:casa_admin) }
 
   permissions :edit?, :update? do
-    it "allows casa_admins" do
-      is_expected.to permit(casa_admin)
+    context "when admin belongs to the same org" do
+      it "allows casa_admins" do
+        is_expected.to permit(casa_admin, organization)
+      end
+    end
+
+    context "when admin does not belong to org" do
+      it "does not permit admin" do
+        is_expected.to_not permit(casa_admin, different_organization)
+      end
     end
 
     it "does not permit supervisor" do
-      is_expected.to_not permit(supervisor)
+      is_expected.to_not permit(supervisor, organization)
     end
 
     it "does not permit volunteer" do
-      is_expected.to_not permit(volunteer)
+      is_expected.to_not permit(volunteer, organization)
     end
   end
 end
