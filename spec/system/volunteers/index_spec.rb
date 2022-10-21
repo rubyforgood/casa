@@ -90,17 +90,13 @@ RSpec.describe "view all volunteers", type: :system do
       expect(page).to have_selector(".volunteer-filters")
 
       # by default, only active users are shown
-      expect(page.all("table#volunteers tbody tr").count).to eq assigned_volunteers.count
+      expect(page.all("table#volunteers tbody tr").count).to eq(assigned_volunteers.count + unassigned_volunteers.count)
       assigned_volunteers.each do |assigned_volunteer|
         expect(page).to have_text assigned_volunteer.display_name
       end
-
-      click_on "Supervisor"
-      find(:css, "#unassigned-vol-filter").set(true)
       unassigned_volunteers.each do |unassigned_volunteer|
         expect(page).to have_text unassigned_volunteer.display_name
       end
-      expect(page.all("table#volunteers tbody tr").count).to eq unassigned_volunteers.count
 
       click_on "Status"
       find(:css, 'input[data-value="true"]').set(false)
@@ -111,6 +107,14 @@ RSpec.describe "view all volunteers", type: :system do
         expect(page).to have_text inactive_volunteer.display_name
       end
       expect(page.all("table#volunteers tbody tr").count).to eq inactive_volunteers.count
+
+      visit volunteers_path
+      click_on "Supervisor"
+      find(:css, "#unassigned-vol-filter").set(false)
+      assigned_volunteers.each do |assigned_volunteer|
+        expect(page).to have_text assigned_volunteer.display_name
+      end
+      expect(page.all("table#volunteers tbody tr").count).to eq assigned_volunteers.count
     end
 
     it "can go to the volunteer edit page from the volunteer list", js: true do
