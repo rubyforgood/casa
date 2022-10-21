@@ -2,17 +2,22 @@ require "rails_helper"
 
 RSpec.describe "/casa_cases", type: :request do
   let(:organization) { build(:casa_org) }
+  let(:group) { build(:contact_type_group) }
+  let(:type1) { create(:contact_type, contact_type_group: group) }
   let(:valid_attributes) do
     {
       case_number: "1234",
       birth_month_year_youth: pre_transition_aged_youth_age,
-      casa_org_id: organization.id
+      casa_org_id: organization.id,
+      casa_case_contact_types_attributes: [{contact_type_id: type1.id}]
     }
   end
   let(:invalid_attributes) { {case_number: nil, birth_month_year_youth: nil} }
   let(:casa_case) { create(:casa_case, casa_org: organization, case_number: "111") }
-  let(:texts) { ["1-New Mandate Text One", "0-New Mandate Text Two"] }
+
+  let(:texts) { ["1-New Court Order Text One", "0-New Court Order Text Two"] }
   let(:implementation_statuses) { ["unimplemented", nil] }
+
   let(:orders_attributes) do
     {
       "0" => {text: texts[0], implementation_status: implementation_statuses[0]},
@@ -168,7 +173,8 @@ RSpec.describe "/casa_cases", type: :request do
         attributes = {
           case_number: "1234",
           birth_month_year_youth: pre_transition_aged_youth_age,
-          casa_org_id: other_org.id
+          casa_org_id: other_org.id,
+          casa_case_contact_types_attributes: [{contact_type_id: type1.id}]
         }
 
         expect { post casa_cases_url, params: {casa_case: attributes} }.to(
@@ -195,7 +201,7 @@ RSpec.describe "/casa_cases", type: :request do
 
             expect(response.content_type).to eq("application/json; charset=utf-8")
             expect(response).to have_http_status(:unprocessable_entity)
-            expect(response.body).to eq(["Case number can't be blank", "Birth month year youth can't be blank"].to_json)
+            expect(response.body).to eq(["Case number can't be blank", "Birth month year youth can't be blank", "Casa case contact types : At least one contact type must be selected"].to_json)
           end
         end
 
@@ -295,7 +301,7 @@ RSpec.describe "/casa_cases", type: :request do
             {
               case_court_orders_attributes: {
                 "0" => {
-                  text: "New Mandate Text One Updated",
+                  text: "New Court Order Text One Updated",
                   implementation_status: :unimplemented
                 },
                 "1" => {

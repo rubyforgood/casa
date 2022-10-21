@@ -8,7 +8,7 @@ end
 #
 #  id                 :bigint           not null, primary key
 #  case_contact_types :datetime
-#  reminder_sent      :datetime
+#  no_contact_made    :datetime
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  user_id            :bigint           not null

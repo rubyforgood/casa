@@ -68,12 +68,28 @@ RSpec.describe LanguagesController, type: :request do
       end
 
       context "when request params are invalid" do
-        it "should raise error when Language do not exist" do
-          expect {
+        context "when the language does not exist" do
+          it "should raise error" do
+            expect {
+              patch add_to_volunteer_languages_path, params: {
+                language_id: 800
+              }
+            }.to raise_error(ActiveRecord::RecordNotFound)
+          end
+        end
+
+        context "when the language is already present for the user" do
+          before { create(:user_language, user: volunteer, language: random_lang) }
+
+          it "should raise error" do
             patch add_to_volunteer_languages_path, params: {
-              language_id: 800
+              language_id: random_lang.id
             }
-          }.to raise_error(ActiveRecord::RecordNotFound)
+
+            expect(response.status).to eq 302
+            expect(response).to redirect_to(edit_users_path)
+            expect(flash[:notice]).to eq "Error unable to add #{random_lang.name} to your languages list!"
+          end
         end
       end
     end
