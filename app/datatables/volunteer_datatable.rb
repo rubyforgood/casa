@@ -143,7 +143,7 @@ class VolunteerDatatable < ApplicationDatatable
         "supervisors.id IS NULL"
       else
         null_filter = "supervisors.id IS NULL OR" if filter.any?(&:blank?)
-        ["#{null_filter} COALESCE(supervisors.display_name, supervisors.email) IN (?)", filter.select(&:present?)]
+        ["#{null_filter} COALESCE(supervisors.id) IN (?)", filter.select(&:present?)]
       end
   end
 

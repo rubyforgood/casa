@@ -27,10 +27,10 @@
           <div class="dropdown-item form-check">
             <% option_for_name = supervisor.display_name.downcase.gsub(/ /, '_').gsub(/[^a-z_]+/, '') -%>
             <% tag_name = "supervisor-option-#{option_for_name}" -%>
-            <%= check_box_tag tag_name, supervisor.display_name,
+            <%= check_box_tag tag_name, supervisor.id,
                     policy(User).edit_name?(supervisor),   # checked?
                     class: "form-check-input",
-                    data: { value: supervisor.display_name } %>
+                    data: { value: supervisor.id } %>
             <%= label_tag tag_name, supervisor.display_name, class: "form-check-label" %>
           </div>
         <% end %>
