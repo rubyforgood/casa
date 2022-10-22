@@ -5,9 +5,8 @@ require('jest')
 
 describe('showAlert', () => {
   const defaultErrorMessageHtml = '<div>Error Message</div>'
-  const defaultInitialBody = '<div class="header-flash"></div>'
   const subject = ({
-    initialBody = defaultInitialBody,
+    initialBody = '<div class="header-flash"></div>',
     errorMessageHtml = defaultErrorMessageHtml
   } = {}) => {
     document.body.innerHTML = initialBody
