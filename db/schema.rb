@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_21_210213) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_12_203806) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -111,6 +111,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_21_210213) do
     t.integer "court_report_status", default: 0
     t.string "slug"
     t.datetime "date_in_care"
+    t.datetime "court_report_due_date"
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
     t.index ["case_number", "casa_org_id"], name: "index_casa_cases_on_case_number_and_casa_org_id", unique: true
     t.index ["hearing_type_id"], name: "index_casa_cases_on_hearing_type_id"
@@ -473,10 +474,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_21_210213) do
 
   create_table "user_reminder_times", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.datetime "reminder_sent"
+    t.datetime "case_contact_types"
+    t.datetime "no_contact_made"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "case_contact_types", precision: nil
     t.index ["user_id"], name: "index_user_reminder_times_on_user_id"
   end
 
