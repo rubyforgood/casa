@@ -119,7 +119,6 @@ class CasaCase < ApplicationRecord
   def clear_court_dates
     if next_court_date.nil?
       update(
-        court_report_due_date: nil,
         court_report_status: :not_submitted
       )
     end
