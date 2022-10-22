@@ -127,7 +127,8 @@ function enableBtn (el) {
 
 function showAlert (html) {
   const alertEl = new DOMParser().parseFromString(html, 'text/html').body.firstElementChild
-  document.querySelector('.header-flash').replaceWith(alertEl)
+  const flashContainer = document.querySelector('.header-flash')
+  flashContainer && flashContainer.replaceWith(alertEl)
 }
 
 function handleGenerateReport (e) {
@@ -212,5 +213,6 @@ export {
   showBtn,
   hideBtn,
   disableBtn,
-  enableBtn
+  enableBtn,
+  showAlert
 }
