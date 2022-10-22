@@ -104,6 +104,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_203806) do
     t.bigint "casa_org_id", null: false
     t.datetime "birth_month_year_youth", precision: nil
     t.datetime "court_date", precision: nil
+    t.datetime "court_report_due_date", precision: nil
     t.bigint "hearing_type_id"
     t.boolean "active", default: true, null: false
     t.bigint "judge_id"
@@ -111,7 +112,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_203806) do
     t.integer "court_report_status", default: 0
     t.string "slug"
     t.datetime "date_in_care"
-    t.datetime "court_report_due_date"
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
     t.index ["case_number", "casa_org_id"], name: "index_casa_cases_on_case_number_and_casa_org_id", unique: true
     t.index ["hearing_type_id"], name: "index_casa_cases_on_hearing_type_id"

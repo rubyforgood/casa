@@ -61,7 +61,7 @@ class Volunteer < User
     active.includes(:case_assignments).where.not(case_assignments: nil).find_each do |volunteer|
       volunteer.case_assignments.active.each do |case_assignment|
         current_case = case_assignment.casa_case
-        report_due_date = current_case.court_report_due_date
+        report_due_date = current_case.court_report_due_date # TODO needs fixing, this field is going away
         if (report_due_date == Date.current + COURT_REPORT_SUBMISSION_REMINDER) && current_case.court_report_not_submitted?
           VolunteerMailer.court_report_reminder(volunteer, report_due_date)
           CourtReportDueSmsReminderService.court_report_reminder(volunteer, report_due_date)

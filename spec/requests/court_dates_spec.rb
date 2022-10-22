@@ -188,7 +188,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
       it "sets the court_report_due_date to be 3 weeks before the court_date" do
         post casa_case_court_dates_path(casa_case), params: {court_date: valid_attributes}
 
-        expect(court_date.casa_case.court_report_due_date).to eq(valid_attributes[:date] - 3.weeks)
+        expect(court_date.casa_case.court_report_due_date).to eq(valid_attributes[:date] - 3.weeks) # TODO this should fail
       end
 
       it "redirects to the casa_case" do

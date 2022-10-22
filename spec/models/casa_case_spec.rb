@@ -220,7 +220,7 @@ RSpec.describe CasaCase, type: :model do
         casa_case = build(:casa_case, court_report_due_date: "2020-09-13 02:11:58")
         casa_case.clear_court_dates
 
-        expect(casa_case.court_report_due_date).to be nil
+        expect(casa_case.court_report_due_date).to be nil # TODO this should fail
       end
 
       it "sets court report as unsubmitted" do
