@@ -3,7 +3,7 @@ class CasaCase < ApplicationRecord
   include DateHelper
   extend FriendlyId
 
-  self.ignored_columns = %w[court_date hearing_type_id judge_id transition_aged_youth]
+  self.ignored_columns = %w[court_date hearing_type_id judge_id transition_aged_youth court_report_due_date]
 
   attr_accessor :validate_contact_type
 
@@ -120,7 +120,6 @@ class CasaCase < ApplicationRecord
   def clear_court_dates
     if next_court_date.nil?
       update(
-        court_report_due_date: nil,
         court_report_status: :not_submitted
       )
     end
@@ -214,7 +213,6 @@ end
 #  active                    :boolean          default(TRUE), not null
 #  birth_month_year_youth    :datetime
 #  case_number               :string           not null
-#  court_report_due_date     :datetime
 #  court_report_status       :integer          default("not_submitted")
 #  court_report_submitted_at :datetime
 #  date_in_care              :datetime

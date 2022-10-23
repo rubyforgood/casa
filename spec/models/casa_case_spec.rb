@@ -216,13 +216,6 @@ RSpec.describe CasaCase, type: :model do
 
   describe "#clear_court_dates" do
     context "when court date has passed" do
-      it "clears report due date" do
-        casa_case = build(:casa_case, court_report_due_date: "2020-09-13 02:11:58")
-        casa_case.clear_court_dates
-
-        expect(casa_case.court_report_due_date).to be nil
-      end
-
       it "sets court report as unsubmitted" do
         casa_case = build(:casa_case, court_report_status: :submitted)
         casa_case.clear_court_dates
