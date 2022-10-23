@@ -5,12 +5,16 @@ RSpec.describe Volunteer, type: :model do
     let!(:casa_org) { build(:casa_org) }
 
     # Should send email for this case
-    let!(:casa_case1) { create(:casa_case, casa_org: casa_org, court_report_due_date: Date.current + 7.days) }
+    let!(:casa_case1) { create(:casa_case, casa_org: casa_org) }
+    let!(:court_date1) { create(:court_date, casa_case: casa_case1, court_report_due_date: Date.current + 7.days) }
 
     # Should NOT send emails for these two cases
-    let!(:casa_case2) { build(:casa_case, casa_org: casa_org, court_report_due_date: Date.current + 8.days) }
-    let!(:casa_case3) { build(:casa_case, casa_org: casa_org, court_report_due_date: Date.current + 7.days, court_report_submitted_at: Time.current, court_report_status: :submitted) }
-    let!(:casa_case4) { build(:casa_case, casa_org: casa_org, court_report_due_date: Date.current + 7.days) }
+    let!(:casa_case2) { build(:casa_case, casa_org: casa_org) }
+    let!(:court_date2) { create(:court_date, casa_case: casa_case2, court_report_due_date: Date.current + 8.days) }
+    let!(:casa_case3) { build(:casa_case, casa_org: casa_org, court_report_submitted_at: Time.current, court_report_status: :submitted) }
+    let!(:court_date3) { create(:court_date, casa_case: casa_case3, court_report_due_date: Date.current + 7.days) }
+    let!(:casa_case4) { build(:casa_case, casa_org: casa_org) }
+    let!(:court_date4) { create(:court_date, casa_case: casa_case4, court_report_due_date: Date.current + 7.days) }
 
     let(:case_assignment1) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case1) }
     let(:case_assignment2) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case2) }
