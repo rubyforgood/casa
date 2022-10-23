@@ -2,8 +2,13 @@
 
 $(() => {
   const formId = 'casa-contact-form'
+  let localStorageKey = formId
 
-  if ($('.case_contacts-new').length > 0) {
+  if ($('.case_contacts-new').length > 0 || $('.case_contacts-edit').length > 0) {
+    if ($('.case_contacts-edit').length > 0) {
+      const caseContactId = $(`#${formId}`)[0].action.split('/').pop()
+      localStorageKey = `${formId}-${caseContactId}`
+    }
     const save = () => {
       const data = []
 
@@ -13,12 +18,13 @@ $(() => {
         }
       })
 
-      window.localStorage.setItem(formId, JSON.stringify(data))
+      window.localStorage.setItem(localStorageKey, JSON.stringify(data))
     }
 
     const load = () => {
-      if (window.localStorage.key(formId)) {
-        const data = JSON.parse(window.localStorage.getItem(formId))
+      const rawData = window.localStorage.getItem(localStorageKey)
+      if (rawData !== null) {
+        const data = JSON.parse(rawData)
 
         data.forEach(({ id, value, checked }) => {
           const element = document.querySelector(`#${id}`)
@@ -32,12 +38,11 @@ $(() => {
     }
 
     $(`#${formId}`).on('keyup change paste', 'input, select, textarea', save)
+    $('#modal-case-contact-submit').on('click', () => {
+      window.localStorage.removeItem(formId)
+      window.localStorage.removeItem(localStorageKey)
+    })
 
     document.onload = load()
-  }
-
-  // The following regex will match to string like this: "/casa_cases/cina-5"
-  if (/\/casa_cases\/.*\d$/.test(window.location.pathname)) {
-    window.localStorage.removeItem(formId)
   }
 })
