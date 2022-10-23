@@ -6,7 +6,7 @@ require "support/stubbed_requests/webmock_helper"
 RSpec.describe "/supervisors", type: :request do
   let(:org) { create(:casa_org) }
   let(:admin) { build(:casa_admin, casa_org: org) }
-  let(:supervisor) { create(:supervisor) }
+  let(:supervisor) { create(:supervisor, casa_org: org) }
 
   let(:update_supervisor_params) do
     {supervisor: {email: "newemail@gmail.com", display_name: "New Name", phone_number: "+14163218092"}}
@@ -53,7 +53,7 @@ RSpec.describe "/supervisors", type: :request do
       end
 
       it "other supervisor can view the edit supervisor page" do
-        sign_in build(:supervisor)
+        sign_in build(:supervisor, casa_org: org)
 
         get edit_supervisor_url(supervisor)
 

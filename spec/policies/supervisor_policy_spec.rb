@@ -136,29 +136,29 @@ RSpec.describe SupervisorPolicy do
   permissions :resend_invitation?, :activate?, :deactivate? do
     context "same organization" do
       it "allows admins to modify supervisors" do
-        is_expected.to permit(casa_admin, Supervisor)
+        is_expected.to permit(casa_admin, supervisor)
       end
     end
 
     context "different organization" do
       let(:other_admin) { create(:casa_admin, casa_org: different_organization) }
       it "does not allow admin to modify supervisors" do
-        is_expected.to_not permit(other_admin, Supervisor)
+        is_expected.to_not permit(other_admin, supervisor)
       end
     end
 
     it "does not allow supervisors to modify supervisors" do
-      is_expected.to_not permit(supervisor, Supervisor)
+      is_expected.to_not permit(supervisor, supervisor)
     end
 
     it "does not allow volunteers to modify supervisors" do
-      is_expected.to_not permit(volunteer, Supervisor)
+      is_expected.to_not permit(volunteer, supervisor)
     end
   end
 
   permissions :change_to_admin? do
     it "allows admins to change to admin" do
-      is_expected.to permit(casa_admin, Supervisor)
+      is_expected.to permit(casa_admin, supervisor)
     end
 
     it "does not allow supervisors to change to admin" do

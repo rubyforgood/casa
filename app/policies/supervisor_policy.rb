@@ -12,15 +12,15 @@ class SupervisorPolicy < UserPolicy
   end
 
   def activate?
-    is_admin? && admin_belongs_to_supervisor_org?
+    is_admin_same_org?
   end
 
   def deactivate?
-    is_admin? && admin_belongs_to_supervisor_org?
+    is_admin_same_org?
   end
 
   def resend_invitation?
-    is_admin? && admin_belongs_to_supervisor_org?
+    is_admin_same_org?
   end
 
   def edit?
