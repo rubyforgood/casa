@@ -37,7 +37,7 @@ class CaseContactsController < ApplicationController
     @case_contact = CaseContact.new
 
     # By default the first case is selected
-    @selected_cases = @casa_cases[0, 1]
+    @selected_cases = @casa_cases
 
     @selected_case_contact_types = @selected_cases.flat_map(&:contact_types)
 

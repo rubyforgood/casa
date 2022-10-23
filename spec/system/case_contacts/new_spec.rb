@@ -260,12 +260,14 @@ RSpec.describe "case_contacts/new", type: :system do
       build(:contact_type, name: "Hidden", active: false, contact_type_group: grp_with_hidden)
       volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first
+      volunteer_casa_case_two = volunteer.casa_cases.second
       create_contact_types(volunteer_casa_case_one.casa_org)
 
       sign_in volunteer
 
       visit new_case_contact_path(volunteer_casa_case_one.id)
       check volunteer_casa_case_one.case_number
+      uncheck volunteer_casa_case_two.case_number
       check "School"
       check "Therapist"
       within "#enter-contact-details" do
@@ -380,6 +382,7 @@ RSpec.describe "case_contacts/new", type: :system do
     it "submits the form when no note was added", js: true do
       volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first
+      volunteer_casa_case_two = volunteer.casa_cases.second
       create_contact_types(volunteer_casa_case_one.casa_org)
 
       sign_in volunteer
@@ -387,6 +390,7 @@ RSpec.describe "case_contacts/new", type: :system do
       visit new_case_contact_path
 
       check volunteer_casa_case_one.case_number
+      uncheck volunteer_casa_case_two.case_number
       check "School"
       check "Therapist"
       within "#enter-contact-details" do
@@ -411,6 +415,7 @@ RSpec.describe "case_contacts/new", type: :system do
     it "submits the form when note is added and confirmed", js: true do
       volunteer = create(:volunteer, :with_casa_cases)
       volunteer_casa_case_one = volunteer.casa_cases.first
+      volunteer_casa_case_two = volunteer.casa_cases.second
       create_contact_types(volunteer_casa_case_one.casa_org)
 
       sign_in volunteer
@@ -418,6 +423,7 @@ RSpec.describe "case_contacts/new", type: :system do
       visit new_case_contact_path
 
       check volunteer_casa_case_one.case_number
+      uncheck volunteer_casa_case_two.case_number
       check "School"
       check "Therapist"
       within "#enter-contact-details" do
@@ -601,6 +607,21 @@ RSpec.describe "case_contacts/new", type: :system do
         visit new_case_contact_path
 
         expect(page).not_to have_field("b. Want Driving Reimbursement")
+      end
+    end
+
+    context "when there are multiple cases" do
+      let(:volunteer) { create(:volunteer, :with_casa_cases) }
+      let(:first_case) { volunteer.casa_cases.first }
+      let(:second_case) { volunteer.casa_cases.second }
+
+      it "selects all cases by default" do
+        sign_in volunteer
+
+        visit new_case_contact_path(volunteer.casa_cases.first.id)
+
+        expect(page).to have_checked_field(first_case.case_number)
+        expect(page).to have_checked_field(second_case.case_number)
       end
     end
 
