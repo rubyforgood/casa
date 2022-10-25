@@ -5,6 +5,8 @@
 # Please instead update this file by running `bin/tapioca gem database_cleaner-core`.
 
 # Abstract strategy class for orm adapter gems to subclass
+#
+# source://database_cleaner-core//lib/database_cleaner/version.rb#1
 module DatabaseCleaner
   class << self
     # source://forwardable/1.3.2/forwardable.rb#229
@@ -85,6 +87,7 @@ module DatabaseCleaner
   end
 end
 
+# source://database_cleaner-core//lib/database_cleaner/cleaner.rb#8
 class DatabaseCleaner::Cleaner
   include ::Comparable
   extend ::Forwardable
@@ -159,6 +162,7 @@ class DatabaseCleaner::Cleaner
   end
 end
 
+# source://database_cleaner-core//lib/database_cleaner/cleaners.rb#5
 class DatabaseCleaner::Cleaners < ::Hash
   # @return [Cleaners] a new instance of Cleaners
   #
@@ -196,6 +200,7 @@ class DatabaseCleaner::Cleaners < ::Hash
   def remove_duplicates; end
 end
 
+# source://database_cleaner-core//lib/database_cleaner/null_strategy.rb#2
 class DatabaseCleaner::NullStrategy
   # source://database_cleaner-core//lib/database_cleaner/null_strategy.rb#11
   def clean; end
@@ -210,11 +215,13 @@ class DatabaseCleaner::NullStrategy
   def start; end
 end
 
+# source://database_cleaner-core//lib/database_cleaner/safeguard.rb#2
 class DatabaseCleaner::Safeguard
   # source://database_cleaner-core//lib/database_cleaner/safeguard.rb#103
   def run; end
 end
 
+# source://database_cleaner-core//lib/database_cleaner/safeguard.rb#23
 class DatabaseCleaner::Safeguard::AllowedUrl
   # @raise [Error::UrlNotAllowed]
   #
@@ -237,8 +244,10 @@ end
 # source://database_cleaner-core//lib/database_cleaner/safeguard.rb#97
 DatabaseCleaner::Safeguard::CHECKS = T.let(T.unsafe(nil), Array)
 
+# source://database_cleaner-core//lib/database_cleaner/safeguard.rb#3
 class DatabaseCleaner::Safeguard::Error < ::Exception; end
 
+# source://database_cleaner-core//lib/database_cleaner/safeguard.rb#10
 class DatabaseCleaner::Safeguard::Error::ProductionEnv < ::DatabaseCleaner::Safeguard::Error
   # @return [ProductionEnv] a new instance of ProductionEnv
   #
@@ -246,6 +255,7 @@ class DatabaseCleaner::Safeguard::Error::ProductionEnv < ::DatabaseCleaner::Safe
   def initialize(env); end
 end
 
+# source://database_cleaner-core//lib/database_cleaner/safeguard.rb#4
 class DatabaseCleaner::Safeguard::Error::RemoteDatabaseUrl < ::DatabaseCleaner::Safeguard::Error
   # @return [RemoteDatabaseUrl] a new instance of RemoteDatabaseUrl
   #
@@ -253,6 +263,7 @@ class DatabaseCleaner::Safeguard::Error::RemoteDatabaseUrl < ::DatabaseCleaner::
   def initialize; end
 end
 
+# source://database_cleaner-core//lib/database_cleaner/safeguard.rb#16
 class DatabaseCleaner::Safeguard::Error::UrlNotAllowed < ::DatabaseCleaner::Safeguard::Error
   # @return [UrlNotAllowed] a new instance of UrlNotAllowed
   #
@@ -260,6 +271,7 @@ class DatabaseCleaner::Safeguard::Error::UrlNotAllowed < ::DatabaseCleaner::Safe
   def initialize; end
 end
 
+# source://database_cleaner-core//lib/database_cleaner/safeguard.rb#74
 class DatabaseCleaner::Safeguard::Production
   # @raise [Error::ProductionEnv]
   #
@@ -285,6 +297,7 @@ end
 # source://database_cleaner-core//lib/database_cleaner/safeguard.rb#75
 DatabaseCleaner::Safeguard::Production::KEYS = T.let(T.unsafe(nil), Array)
 
+# source://database_cleaner-core//lib/database_cleaner/safeguard.rb#41
 class DatabaseCleaner::Safeguard::RemoteDatabaseUrl
   # @raise [Error::RemoteDatabaseUrl]
   #
@@ -312,6 +325,7 @@ end
 # source://database_cleaner-core//lib/database_cleaner/safeguard.rb#42
 DatabaseCleaner::Safeguard::RemoteDatabaseUrl::LOCAL = T.let(T.unsafe(nil), Array)
 
+# source://database_cleaner-core//lib/database_cleaner/strategy.rb#4
 class DatabaseCleaner::Strategy
   # Override this method if the strategy accepts options
   #
@@ -346,6 +360,7 @@ class DatabaseCleaner::Strategy
   def start; end
 end
 
+# source://database_cleaner-core//lib/database_cleaner/cleaner.rb#6
 class DatabaseCleaner::UnknownStrategySpecified < ::ArgumentError; end
 
 # source://database_cleaner-core//lib/database_cleaner/version.rb#2

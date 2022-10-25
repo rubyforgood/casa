@@ -7,6 +7,8 @@
 # Some parts adapted from
 # https://golang.org/src/pkg/json/decode.go and
 # https://golang.org/src/pkg/utf8/utf8.go
+#
+# source://spring//lib/spring/watcher/abstract.rb#4
 module Spring
   class << self
     # source://spring//lib/spring/configuration.rb#31
@@ -108,9 +110,13 @@ module Spring
   end
 end
 
+# source://spring//lib/spring/errors.rb#2
 class Spring::ClientError < ::StandardError; end
+
+# source://spring//lib/spring/errors.rb#34
 class Spring::CommandNotFound < ::Spring::ClientError; end
 
+# source://spring//lib/spring/command_wrapper.rb#4
 class Spring::CommandWrapper
   # @return [CommandWrapper] a new instance of CommandWrapper
   #
@@ -160,8 +166,10 @@ class Spring::CommandWrapper
   def setup?; end
 end
 
+# source://spring//lib/spring/commands/rails.rb#2
 module Spring::Commands; end
 
+# source://spring//lib/spring/commands/rails.rb#3
 class Spring::Commands::Rails
   # source://spring//lib/spring/commands/rails.rb#4
   def call; end
@@ -170,6 +178,7 @@ class Spring::Commands::Rails
   def description; end
 end
 
+# source://spring//lib/spring/commands/rails.rb#14
 class Spring::Commands::RailsConsole < ::Spring::Commands::Rails
   # source://spring//lib/spring/commands/rails.rb#31
   def command_name; end
@@ -178,16 +187,19 @@ class Spring::Commands::RailsConsole < ::Spring::Commands::Rails
   def env(args); end
 end
 
+# source://spring//lib/spring/commands/rails.rb#42
 class Spring::Commands::RailsDestroy < ::Spring::Commands::Rails
   # source://spring//lib/spring/commands/rails.rb#43
   def command_name; end
 end
 
+# source://spring//lib/spring/commands/rails.rb#36
 class Spring::Commands::RailsGenerate < ::Spring::Commands::Rails
   # source://spring//lib/spring/commands/rails.rb#37
   def command_name; end
 end
 
+# source://spring//lib/spring/commands/rails.rb#48
 class Spring::Commands::RailsRunner < ::Spring::Commands::Rails
   # source://spring//lib/spring/commands/rails.rb#49
   def call; end
@@ -202,6 +214,7 @@ class Spring::Commands::RailsRunner < ::Spring::Commands::Rails
   def extract_environment(args); end
 end
 
+# source://spring//lib/spring/commands/rails.rb#86
 class Spring::Commands::RailsTest < ::Spring::Commands::Rails
   # source://spring//lib/spring/commands/rails.rb#101
   def command_name; end
@@ -210,6 +223,7 @@ class Spring::Commands::RailsTest < ::Spring::Commands::Rails
   def env(args); end
 end
 
+# source://spring//lib/spring/commands/rake.rb#3
 class Spring::Commands::Rake
   # source://spring//lib/spring/commands/rake.rb#13
   def env(args); end
@@ -229,6 +243,7 @@ class Spring::Commands::Rake
   end
 end
 
+# source://spring//lib/spring/errors.rb#18
 class Spring::MissingApplication < ::Spring::ClientError
   # @return [MissingApplication] a new instance of MissingApplication
   #
@@ -244,6 +259,7 @@ class Spring::MissingApplication < ::Spring::ClientError
   def project_root; end
 end
 
+# source://spring//lib/spring/errors.rb#4
 class Spring::UnknownProject < ::StandardError
   # @return [UnknownProject] a new instance of UnknownProject
   #
@@ -259,6 +275,7 @@ class Spring::UnknownProject < ::StandardError
   def message; end
 end
 
+# source://spring//lib/spring/watcher/abstract.rb#5
 module Spring::Watcher; end
 
 # A user of a watcher can use IO.select to wait for changes:
@@ -266,6 +283,8 @@ module Spring::Watcher; end
 #   watcher = MyWatcher.new(root, latency)
 #   IO.select([watcher]) # watcher is running in background
 #   watcher.stale? # => true
+#
+# source://spring//lib/spring/watcher/abstract.rb#11
 class Spring::Watcher::Abstract
   include ::Mutex_m
 
@@ -348,6 +367,7 @@ class Spring::Watcher::Abstract
   def unlock; end
 end
 
+# source://spring//lib/spring/watcher/polling.rb#5
 class Spring::Watcher::Polling < ::Spring::Watcher::Abstract
   # @return [Polling] a new instance of Polling
   #

@@ -17,6 +17,8 @@
 #
 #   Chronic.parse('monday', :context => :past)
 #     #=> Mon Aug 21 12:00:00 PDT 2006
+#
+# source://chronic//lib/chronic/handlers.rb#1
 module Chronic
   class << self
     # Construct a new time object determining possible month overflows
@@ -88,6 +90,7 @@ module Chronic
   end
 end
 
+# source://chronic//lib/chronic/date.rb#2
 class Chronic::Date
   class << self
     # Checks if given number could be day
@@ -184,6 +187,7 @@ Chronic::Date::YEAR_MONTHS = T.let(T.unsafe(nil), Integer)
 # source://chronic//lib/chronic/date.rb#6
 Chronic::Date::YEAR_SECONDS = T.let(T.unsafe(nil), Integer)
 
+# source://chronic//lib/chronic/grabber.rb#2
 class Chronic::Grabber < ::Chronic::Tag
   # source://chronic//lib/chronic/grabber.rb#29
   def to_s; end
@@ -209,6 +213,7 @@ class Chronic::Grabber < ::Chronic::Tag
   end
 end
 
+# source://chronic//lib/chronic/handler.rb#2
 class Chronic::Handler
   # pattern        - An Array of patterns to match tokens against.
   # handler_method - A Symbol representing the method to be invoked
@@ -255,6 +260,7 @@ class Chronic::Handler
   def tags_match?(name, tokens, token_index); end
 end
 
+# source://chronic//lib/chronic/handlers.rb#2
 module Chronic::Handlers
   private
 
@@ -691,6 +697,7 @@ module Chronic::Handlers
   end
 end
 
+# source://chronic//lib/chronic/mini_date.rb#2
 class Chronic::MiniDate
   # @return [MiniDate] a new instance of MiniDate
   #
@@ -737,6 +744,7 @@ class Chronic::MiniDate
   end
 end
 
+# source://chronic//lib/chronic/numerizer.rb#4
 class Chronic::Numerizer
   class << self
     # source://chronic//lib/chronic/numerizer.rb#72
@@ -761,6 +769,7 @@ Chronic::Numerizer::ORDINALS = T.let(T.unsafe(nil), Array)
 # source://chronic//lib/chronic/numerizer.rb#52
 Chronic::Numerizer::TEN_PREFIXES = T.let(T.unsafe(nil), Array)
 
+# source://chronic//lib/chronic/ordinal.rb#2
 class Chronic::Ordinal < ::Chronic::Tag
   # source://chronic//lib/chronic/ordinal.rb#26
   def to_s; end
@@ -779,21 +788,25 @@ class Chronic::Ordinal < ::Chronic::Tag
   end
 end
 
+# source://chronic//lib/chronic/ordinal.rb#31
 class Chronic::OrdinalDay < ::Chronic::Ordinal
   # source://chronic//lib/chronic/ordinal.rb#32
   def to_s; end
 end
 
+# source://chronic//lib/chronic/ordinal.rb#37
 class Chronic::OrdinalMonth < ::Chronic::Ordinal
   # source://chronic//lib/chronic/ordinal.rb#38
   def to_s; end
 end
 
+# source://chronic//lib/chronic/ordinal.rb#43
 class Chronic::OrdinalYear < ::Chronic::Ordinal
   # source://chronic//lib/chronic/ordinal.rb#44
   def to_s; end
 end
 
+# source://chronic//lib/chronic/parser.rb#4
 class Chronic::Parser
   include ::Chronic::Handlers
 
@@ -915,6 +928,7 @@ end
 # source://chronic//lib/chronic/parser.rb#8
 Chronic::Parser::DEFAULT_OPTIONS = T.let(T.unsafe(nil), Hash)
 
+# source://chronic//lib/chronic/pointer.rb#2
 class Chronic::Pointer < ::Chronic::Tag
   # source://chronic//lib/chronic/pointer.rb#28
   def to_s; end
@@ -940,6 +954,7 @@ class Chronic::Pointer < ::Chronic::Tag
   end
 end
 
+# source://chronic//lib/chronic/repeater.rb#2
 class Chronic::Repeater < ::Chronic::Tag
   # source://chronic//lib/chronic/repeater.rb#123
   def <=>(other); end
@@ -1016,6 +1031,7 @@ class Chronic::Repeater < ::Chronic::Tag
   end
 end
 
+# source://chronic//lib/chronic/repeaters/repeater_day.rb#2
 class Chronic::RepeaterDay < ::Chronic::Repeater
   # @return [RepeaterDay] a new instance of RepeaterDay
   #
@@ -1043,6 +1059,7 @@ end
 # source://chronic//lib/chronic/repeaters/repeater_day.rb#3
 Chronic::RepeaterDay::DAY_SECONDS = T.let(T.unsafe(nil), Integer)
 
+# source://chronic//lib/chronic/repeaters/repeater_day_name.rb#2
 class Chronic::RepeaterDayName < ::Chronic::Repeater
   # @return [RepeaterDayName] a new instance of RepeaterDayName
   #
@@ -1072,6 +1089,7 @@ end
 # source://chronic//lib/chronic/repeaters/repeater_day_name.rb#3
 Chronic::RepeaterDayName::DAY_SECONDS = T.let(T.unsafe(nil), Integer)
 
+# source://chronic//lib/chronic/repeaters/repeater_day_portion.rb#2
 class Chronic::RepeaterDayPortion < ::Chronic::Repeater
   # @return [RepeaterDayPortion] a new instance of RepeaterDayPortion
   #
@@ -1102,6 +1120,7 @@ end
 # source://chronic//lib/chronic/repeaters/repeater_day_portion.rb#3
 Chronic::RepeaterDayPortion::PORTIONS = T.let(T.unsafe(nil), Hash)
 
+# source://chronic//lib/chronic/repeaters/repeater_fortnight.rb#2
 class Chronic::RepeaterFortnight < ::Chronic::Repeater
   # @return [RepeaterFortnight] a new instance of RepeaterFortnight
   #
@@ -1129,6 +1148,7 @@ end
 # source://chronic//lib/chronic/repeaters/repeater_fortnight.rb#3
 Chronic::RepeaterFortnight::FORTNIGHT_SECONDS = T.let(T.unsafe(nil), Integer)
 
+# source://chronic//lib/chronic/repeaters/repeater_hour.rb#2
 class Chronic::RepeaterHour < ::Chronic::Repeater
   # @return [RepeaterHour] a new instance of RepeaterHour
   #
@@ -1156,6 +1176,7 @@ end
 # source://chronic//lib/chronic/repeaters/repeater_hour.rb#3
 Chronic::RepeaterHour::HOUR_SECONDS = T.let(T.unsafe(nil), Integer)
 
+# source://chronic//lib/chronic/repeaters/repeater_minute.rb#2
 class Chronic::RepeaterMinute < ::Chronic::Repeater
   # @return [RepeaterMinute] a new instance of RepeaterMinute
   #
@@ -1181,6 +1202,7 @@ end
 # source://chronic//lib/chronic/repeaters/repeater_minute.rb#3
 Chronic::RepeaterMinute::MINUTE_SECONDS = T.let(T.unsafe(nil), Integer)
 
+# source://chronic//lib/chronic/repeaters/repeater_month.rb#2
 class Chronic::RepeaterMonth < ::Chronic::Repeater
   # @return [RepeaterMonth] a new instance of RepeaterMonth
   #
@@ -1225,6 +1247,7 @@ Chronic::RepeaterMonth::MONTH_SECONDS = T.let(T.unsafe(nil), Integer)
 # source://chronic//lib/chronic/repeaters/repeater_month.rb#4
 Chronic::RepeaterMonth::YEAR_MONTHS = T.let(T.unsafe(nil), Integer)
 
+# source://chronic//lib/chronic/repeaters/repeater_month_name.rb#2
 class Chronic::RepeaterMonthName < ::Chronic::Repeater
   # @return [RepeaterMonthName] a new instance of RepeaterMonthName
   #
@@ -1255,6 +1278,7 @@ Chronic::RepeaterMonthName::MONTHS = T.let(T.unsafe(nil), Hash)
 # source://chronic//lib/chronic/repeaters/repeater_month_name.rb#3
 Chronic::RepeaterMonthName::MONTH_SECONDS = T.let(T.unsafe(nil), Integer)
 
+# source://chronic//lib/chronic/repeaters/repeater_season.rb#2
 class Chronic::RepeaterSeason < ::Chronic::Repeater
   # @return [RepeaterSeason] a new instance of RepeaterSeason
   #
@@ -1308,6 +1332,7 @@ Chronic::RepeaterSeason::SEASONS = T.let(T.unsafe(nil), Hash)
 # source://chronic//lib/chronic/repeaters/repeater_season.rb#3
 Chronic::RepeaterSeason::SEASON_SECONDS = T.let(T.unsafe(nil), Integer)
 
+# source://chronic//lib/chronic/repeaters/repeater_season_name.rb#2
 class Chronic::RepeaterSeasonName < ::Chronic::RepeaterSeason
   # source://chronic//lib/chronic/repeaters/repeater_season_name.rb#6
   def next(pointer); end
@@ -1332,6 +1357,7 @@ Chronic::RepeaterSeasonName::DAY_SECONDS = T.let(T.unsafe(nil), Integer)
 # source://chronic//lib/chronic/repeaters/repeater_season_name.rb#3
 Chronic::RepeaterSeasonName::SEASON_SECONDS = T.let(T.unsafe(nil), Integer)
 
+# source://chronic//lib/chronic/repeaters/repeater_second.rb#2
 class Chronic::RepeaterSecond < ::Chronic::Repeater
   # @return [RepeaterSecond] a new instance of RepeaterSecond
   #
@@ -1359,6 +1385,7 @@ end
 # source://chronic//lib/chronic/repeaters/repeater_second.rb#3
 Chronic::RepeaterSecond::SECOND_SECONDS = T.let(T.unsafe(nil), Integer)
 
+# source://chronic//lib/chronic/repeaters/repeater_time.rb#2
 class Chronic::RepeaterTime < ::Chronic::Repeater
   # @raise [ArgumentError]
   # @return [RepeaterTime] a new instance of RepeaterTime
@@ -1383,6 +1410,7 @@ class Chronic::RepeaterTime < ::Chronic::Repeater
   def width; end
 end
 
+# source://chronic//lib/chronic/repeaters/repeater_time.rb#3
 class Chronic::RepeaterTime::Tick
   # @return [Tick] a new instance of Tick
   #
@@ -1416,6 +1444,7 @@ class Chronic::RepeaterTime::Tick
   def to_s; end
 end
 
+# source://chronic//lib/chronic/repeaters/repeater_week.rb#2
 class Chronic::RepeaterWeek < ::Chronic::Repeater
   # @return [RepeaterWeek] a new instance of RepeaterWeek
   #
@@ -1443,6 +1472,7 @@ end
 # source://chronic//lib/chronic/repeaters/repeater_week.rb#3
 Chronic::RepeaterWeek::WEEK_SECONDS = T.let(T.unsafe(nil), Integer)
 
+# source://chronic//lib/chronic/repeaters/repeater_weekday.rb#2
 class Chronic::RepeaterWeekday < ::Chronic::Repeater
   # @return [RepeaterWeekday] a new instance of RepeaterWeekday
   #
@@ -1488,6 +1518,7 @@ Chronic::RepeaterWeekday::DAYS = T.let(T.unsafe(nil), Hash)
 # source://chronic//lib/chronic/repeaters/repeater_weekday.rb#3
 Chronic::RepeaterWeekday::DAY_SECONDS = T.let(T.unsafe(nil), Integer)
 
+# source://chronic//lib/chronic/repeaters/repeater_weekend.rb#2
 class Chronic::RepeaterWeekend < ::Chronic::Repeater
   # @return [RepeaterWeekend] a new instance of RepeaterWeekend
   #
@@ -1515,6 +1546,7 @@ end
 # source://chronic//lib/chronic/repeaters/repeater_weekend.rb#3
 Chronic::RepeaterWeekend::WEEKEND_SECONDS = T.let(T.unsafe(nil), Integer)
 
+# source://chronic//lib/chronic/repeaters/repeater_year.rb#2
 class Chronic::RepeaterYear < ::Chronic::Repeater
   # @return [RepeaterYear] a new instance of RepeaterYear
   #
@@ -1550,6 +1582,7 @@ end
 # source://chronic//lib/chronic/repeaters/repeater_year.rb#3
 Chronic::RepeaterYear::YEAR_SECONDS = T.let(T.unsafe(nil), Integer)
 
+# source://chronic//lib/chronic/scalar.rb#2
 class Chronic::Scalar < ::Chronic::Tag
   # source://chronic//lib/chronic/scalar.rb#35
   def to_s; end
@@ -1571,41 +1604,49 @@ end
 # source://chronic//lib/chronic/scalar.rb#3
 Chronic::Scalar::DAY_PORTIONS = T.let(T.unsafe(nil), Array)
 
+# source://chronic//lib/chronic/scalar.rb#64
 class Chronic::ScalarDay < ::Chronic::Scalar
   # source://chronic//lib/chronic/scalar.rb#65
   def to_s; end
 end
 
+# source://chronic//lib/chronic/scalar.rb#58
 class Chronic::ScalarHour < ::Chronic::Scalar
   # source://chronic//lib/chronic/scalar.rb#59
   def to_s; end
 end
 
+# source://chronic//lib/chronic/scalar.rb#52
 class Chronic::ScalarMinute < ::Chronic::Scalar
   # source://chronic//lib/chronic/scalar.rb#53
   def to_s; end
 end
 
+# source://chronic//lib/chronic/scalar.rb#70
 class Chronic::ScalarMonth < ::Chronic::Scalar
   # source://chronic//lib/chronic/scalar.rb#71
   def to_s; end
 end
 
+# source://chronic//lib/chronic/scalar.rb#46
 class Chronic::ScalarSecond < ::Chronic::Scalar
   # source://chronic//lib/chronic/scalar.rb#47
   def to_s; end
 end
 
+# source://chronic//lib/chronic/scalar.rb#40
 class Chronic::ScalarSubsecond < ::Chronic::Scalar
   # source://chronic//lib/chronic/scalar.rb#41
   def to_s; end
 end
 
+# source://chronic//lib/chronic/scalar.rb#76
 class Chronic::ScalarYear < ::Chronic::Scalar
   # source://chronic//lib/chronic/scalar.rb#77
   def to_s; end
 end
 
+# source://chronic//lib/chronic/season.rb#2
 class Chronic::Season
   # @return [Season] a new instance of Season
   #
@@ -1634,6 +1675,7 @@ class Chronic::Season
   end
 end
 
+# source://chronic//lib/chronic/separator.rb#2
 class Chronic::Separator < ::Chronic::Tag
   # source://chronic//lib/chronic/separator.rb#124
   def to_s; end
@@ -1743,71 +1785,85 @@ class Chronic::Separator < ::Chronic::Tag
   end
 end
 
+# source://chronic//lib/chronic/separator.rb#189
 class Chronic::SeparatorAnd < ::Chronic::Separator
   # source://chronic//lib/chronic/separator.rb#190
   def to_s; end
 end
 
+# source://chronic//lib/chronic/separator.rb#171
 class Chronic::SeparatorAt < ::Chronic::Separator
   # source://chronic//lib/chronic/separator.rb#172
   def to_s; end
 end
 
+# source://chronic//lib/chronic/separator.rb#141
 class Chronic::SeparatorColon < ::Chronic::Separator
   # source://chronic//lib/chronic/separator.rb#142
   def to_s; end
 end
 
+# source://chronic//lib/chronic/separator.rb#129
 class Chronic::SeparatorComma < ::Chronic::Separator
   # source://chronic//lib/chronic/separator.rb#130
   def to_s; end
 end
 
+# source://chronic//lib/chronic/separator.rb#159
 class Chronic::SeparatorDash < ::Chronic::Separator
   # source://chronic//lib/chronic/separator.rb#160
   def to_s; end
 end
 
+# source://chronic//lib/chronic/separator.rb#135
 class Chronic::SeparatorDot < ::Chronic::Separator
   # source://chronic//lib/chronic/separator.rb#136
   def to_s; end
 end
 
+# source://chronic//lib/chronic/separator.rb#177
 class Chronic::SeparatorIn < ::Chronic::Separator
   # source://chronic//lib/chronic/separator.rb#178
   def to_s; end
 end
 
+# source://chronic//lib/chronic/separator.rb#183
 class Chronic::SeparatorOn < ::Chronic::Separator
   # source://chronic//lib/chronic/separator.rb#184
   def to_s; end
 end
 
+# source://chronic//lib/chronic/separator.rb#165
 class Chronic::SeparatorQuote < ::Chronic::Separator
   # source://chronic//lib/chronic/separator.rb#166
   def to_s; end
 end
 
+# source://chronic//lib/chronic/separator.rb#153
 class Chronic::SeparatorSlash < ::Chronic::Separator
   # source://chronic//lib/chronic/separator.rb#154
   def to_s; end
 end
 
+# source://chronic//lib/chronic/separator.rb#147
 class Chronic::SeparatorSpace < ::Chronic::Separator
   # source://chronic//lib/chronic/separator.rb#148
   def to_s; end
 end
 
+# source://chronic//lib/chronic/separator.rb#195
 class Chronic::SeparatorT < ::Chronic::Separator
   # source://chronic//lib/chronic/separator.rb#196
   def to_s; end
 end
 
+# source://chronic//lib/chronic/separator.rb#201
 class Chronic::SeparatorW < ::Chronic::Separator
   # source://chronic//lib/chronic/separator.rb#202
   def to_s; end
 end
 
+# source://chronic//lib/chronic/sign.rb#2
 class Chronic::Sign < ::Chronic::Tag
   # source://chronic//lib/chronic/sign.rb#32
   def to_s; end
@@ -1840,11 +1896,13 @@ class Chronic::Sign < ::Chronic::Tag
   end
 end
 
+# source://chronic//lib/chronic/sign.rb#43
 class Chronic::SignMinus < ::Chronic::Sign
   # source://chronic//lib/chronic/sign.rb#44
   def to_s; end
 end
 
+# source://chronic//lib/chronic/sign.rb#37
 class Chronic::SignPlus < ::Chronic::Sign
   # source://chronic//lib/chronic/sign.rb#38
   def to_s; end
@@ -1853,6 +1911,8 @@ end
 # A Span represents a range of time. Since this class extends
 # Range, you can use #begin and #end to get the beginning and
 # ending times of the span (they will be of class Time)
+#
+# source://chronic//lib/chronic/span.rb#6
 class Chronic::Span < ::Range
   # Add a number of seconds to this span, returning the
   # resulting Span
@@ -1879,6 +1939,8 @@ end
 
 # Tokens are tagged with subclassed instances of this class when
 # they match specific criteria.
+#
+# source://chronic//lib/chronic/tag.rb#4
 class Chronic::Tag
   # type - The Symbol type of this tag.
   #
@@ -1912,6 +1974,7 @@ class Chronic::Tag
   end
 end
 
+# source://chronic//lib/chronic/time.rb#2
 class Chronic::Time
   class << self
     # Checks if given number could be hour
@@ -1965,6 +2028,7 @@ Chronic::Time::SECOND_SECONDS = T.let(T.unsafe(nil), Integer)
 # source://chronic//lib/chronic/time.rb#6
 Chronic::Time::SUBSECOND_SECONDS = T.let(T.unsafe(nil), Float)
 
+# source://chronic//lib/chronic/time_zone.rb#2
 class Chronic::TimeZone < ::Chronic::Tag
   # source://chronic//lib/chronic/time_zone.rb#28
   def to_s; end
@@ -1990,6 +2054,7 @@ class Chronic::TimeZone < ::Chronic::Tag
   end
 end
 
+# source://chronic//lib/chronic/token.rb#2
 class Chronic::Token
   # @return [Token] a new instance of Token
   #

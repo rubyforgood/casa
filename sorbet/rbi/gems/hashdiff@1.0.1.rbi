@@ -5,6 +5,8 @@
 # Please instead update this file by running `bin/tapioca gem hashdiff`.
 
 # This module provides methods to diff two hash, patch and unpatch hash
+#
+# source://hashdiff//lib/hashdiff/util.rb#3
 module Hashdiff
   class << self
     # Best diff two objects, which tries to generate the smallest change set using different similarity values.
@@ -183,6 +185,8 @@ end
 # Used to compare hashes
 #
 # @private
+#
+# source://hashdiff//lib/hashdiff/compare_hashes.rb#6
 class Hashdiff::CompareHashes
   class << self
     # source://hashdiff//lib/hashdiff/compare_hashes.rb#8
@@ -193,6 +197,8 @@ end
 # Used to compare arrays using the lcs algorithm
 #
 # @private
+#
+# source://hashdiff//lib/hashdiff/lcs_compare_arrays.rb#6
 class Hashdiff::LcsCompareArrays
   class << self
     # source://hashdiff//lib/hashdiff/lcs_compare_arrays.rb#8
@@ -204,6 +210,8 @@ end
 # than using the lcs algorithm but is considerably faster
 #
 # @private
+#
+# source://hashdiff//lib/hashdiff/linear_compare_array.rb#8
 class Hashdiff::LinearCompareArray
   # @return [LinearCompareArray] a new instance of LinearCompareArray
   #

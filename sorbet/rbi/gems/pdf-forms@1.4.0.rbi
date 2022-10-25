@@ -5,6 +5,8 @@
 # Please instead update this file by running `bin/tapioca gem pdf-forms`.
 
 # coding UTF-8
+#
+# source://pdf-forms//lib/pdf_forms/version.rb#3
 module PdfForms
   class << self
     # shorthand for PdfForms::PdftkWrapper.new(...)
@@ -14,6 +16,7 @@ module PdfForms
   end
 end
 
+# source://pdf-forms//lib/pdf_forms/data_format.rb#4
 class PdfForms::DataFormat
   # @return [DataFormat] a new instance of DataFormat
   #
@@ -50,6 +53,8 @@ end
 #
 # Straight port of Perl's PDF::FDF::Simple by Steffen Schwigon.
 # Parsing FDF files is not supported (yet).
+#
+# source://pdf-forms//lib/pdf_forms/fdf.rb#9
 class PdfForms::Fdf < ::PdfForms::DataFormat
   # @return [Fdf] a new instance of Fdf
   #
@@ -89,6 +94,8 @@ PdfForms::Fdf::FOOTER = T.let(T.unsafe(nil), String)
 # Information about hexadesimal FDF values was found here:
 #
 # http://stackoverflow.com/questions/6047970/weird-characters-when-filling-pdf-with-pdftk
+#
+# source://pdf-forms//lib/pdf_forms/fdf_hex.rb#13
 class PdfForms::FdfHex < ::PdfForms::Fdf
   private
 
@@ -107,6 +114,7 @@ class PdfForms::FdfHex < ::PdfForms::Fdf
   def field(key, value); end
 end
 
+# source://pdf-forms//lib/pdf_forms/field.rb#4
 class PdfForms::Field
   # FieldType: Button
   # FieldName: Sprachoptionen_Inverssuche_Widerspruch
@@ -158,11 +166,13 @@ end
 # source://pdf-forms//lib/pdf_forms/field.rb#55
 PdfForms::Field::ATTRS = T.let(T.unsafe(nil), Array)
 
+# source://pdf-forms//lib/pdf_forms/normalize_path.rb#7
 module PdfForms::NormalizePath
   # source://pdf-forms//lib/pdf_forms/normalize_path.rb#9
   def normalize_path(path); end
 end
 
+# source://pdf-forms//lib/pdf_forms/pdf.rb#6
 class PdfForms::Pdf
   include ::PdfForms::NormalizePath
 
@@ -201,9 +211,12 @@ class PdfForms::Pdf
   def read_fields; end
 end
 
+# source://pdf-forms//lib/pdf_forms/pdftk_wrapper.rb#9
 class PdfForms::PdftkError < ::StandardError; end
 
 # Wraps calls to PdfTk
+#
+# source://pdf-forms//lib/pdf_forms/pdftk_wrapper.rb#13
 class PdfForms::PdftkWrapper
   include ::PdfForms::NormalizePath
 
@@ -309,6 +322,8 @@ PdfForms::PdftkWrapper::PDFTK = T.let(T.unsafe(nil), String)
 PdfForms::VERSION = T.let(T.unsafe(nil), String)
 
 # Map keys and values to Adobe's XFDF format.
+#
+# source://pdf-forms//lib/pdf_forms/xfdf.rb#7
 class PdfForms::XFdf < ::PdfForms::DataFormat
   # @return [XFdf] a new instance of XFdf
   #

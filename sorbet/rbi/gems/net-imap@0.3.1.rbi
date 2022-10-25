@@ -198,6 +198,8 @@
 # [[UTF7[https://tools.ietf.org/html/rfc2152]]]
 #    Goldsmith, D. and Davis, M., "UTF-7: A Mail-Safe Transformation Format of
 #    Unicode", RFC-2152[https://tools.ietf.org/html/rfc2152], May 1997.
+#
+# source://net-imap//lib/net/imap.rb#222
 class Net::IMAP < ::Net::Protocol
   include ::MonitorMixin
   include ::OpenSSL
@@ -1097,6 +1099,7 @@ Net::IMAP::ALL = T.let(T.unsafe(nil), Symbol)
 # source://net-imap//lib/net/imap/flags.rb#199
 Net::IMAP::ARCHIVE = T.let(T.unsafe(nil), Symbol)
 
+# source://net-imap//lib/net/imap/command_data.rb#133
 class Net::IMAP::Atom
   # @return [Atom] a new instance of Atom
   #
@@ -1111,6 +1114,8 @@ class Net::IMAP::Atom
 end
 
 # Registry for SASL authenticators used by Net::IMAP.
+#
+# source://net-imap//lib/net/imap/authenticators.rb#4
 module Net::IMAP::Authenticators
   # Adds an authenticator for use with Net::IMAP#authenticate.  +auth_type+ is the
   # {SASL mechanism}[https://www.iana.org/assignments/sasl-mechanisms/sasl-mechanisms.xhtml]
@@ -1150,6 +1155,8 @@ end
 # param:: Returns a hash that represents parameters.
 #
 # multipart?:: Returns false.
+#
+# source://net-imap//lib/net/imap/response_data.rb#472
 class Net::IMAP::BodyTypeAttachment < ::Struct
   # @return [Boolean]
   #
@@ -1187,6 +1194,8 @@ end
 # extension:: Returns extension data.
 #
 # multipart?:: Returns false.
+#
+# source://net-imap//lib/net/imap/response_data.rb#388
 class Net::IMAP::BodyTypeBasic < ::Struct
   # Obsolete: use +subtype+ instead.  Calling this will
   # generate a warning message to +stderr+, then return
@@ -1201,6 +1210,7 @@ class Net::IMAP::BodyTypeBasic < ::Struct
   def multipart?; end
 end
 
+# source://net-imap//lib/net/imap/response_data.rb#520
 class Net::IMAP::BodyTypeExtension < ::Struct
   # @return [Boolean]
   #
@@ -1217,6 +1227,8 @@ end
 # body:: Returns an object giving the body structure.
 #
 # And Net::IMAP::BodyTypeMessage has all methods of Net::IMAP::BodyTypeText.
+#
+# source://net-imap//lib/net/imap/response_data.rb#444
 class Net::IMAP::BodyTypeMessage < ::Struct
   # Obsolete: use +subtype+ instead.  Calling this will
   # generate a warning message to +stderr+, then return
@@ -1253,6 +1265,8 @@ end
 # extension:: Returns extension data.
 #
 # multipart?:: Returns true.
+#
+# source://net-imap//lib/net/imap/response_data.rb#504
 class Net::IMAP::BodyTypeMultipart < ::Struct
   # Obsolete: use +subtype+ instead.  Calling this will
   # generate a warning message to +stderr+, then return
@@ -1274,6 +1288,8 @@ end
 # lines:: Returns the size of the body in text lines.
 #
 # And Net::IMAP::BodyTypeText has all fields of Net::IMAP::BodyTypeBasic.
+#
+# source://net-imap//lib/net/imap/response_data.rb#415
 class Net::IMAP::BodyTypeText < ::Struct
   # Obsolete: use +subtype+ instead.  Calling this will
   # generate a warning message to +stderr+, then return
@@ -1288,6 +1304,7 @@ class Net::IMAP::BodyTypeText < ::Struct
   def multipart?; end
 end
 
+# source://net-imap//lib/net/imap/command_data.rb#234
 class Net::IMAP::ClientID
   # @return [ClientID] a new instance of ClientID
   #
@@ -1322,6 +1339,8 @@ end
 # Additionally, RFC8314[https://tools.ietf.org/html/rfc8314] discourage the use
 # of cleartext and recommends TLS version 1.2 or greater be used for all
 # traffic.  With TLS +CRAM-MD5+ is okay, but so is +PLAIN+
+#
+# source://net-imap//lib/net/imap/authenticators/cram_md5.rb#16
 class Net::IMAP::CramMD5Authenticator
   # @return [CramMD5Authenticator] a new instance of CramMD5Authenticator
   #
@@ -1355,6 +1374,8 @@ Net::IMAP::DRAFTS = T.let(T.unsafe(nil), Symbol)
 # "+DIGEST-MD5+" has been deprecated by
 # {RFC6331}[https://tools.ietf.org/html/rfc6331] and should not be relied on for
 # security.  It is included for compatibility with existing servers.
+#
+# source://net-imap//lib/net/imap/authenticators/digest_md5.rb#11
 class Net::IMAP::DigestMD5Authenticator
   # @return [DigestMD5Authenticator] a new instance of DigestMD5Authenticator
   #
@@ -1421,6 +1442,8 @@ Net::IMAP::HAS_NO_CHILDREN = T.let(T.unsafe(nil), Symbol)
 # ==== Fields:
 #
 # raw_data:: Returns the raw data string.
+#
+# source://net-imap//lib/net/imap/response_data.rb#53
 class Net::IMAP::IgnoredResponse < ::Struct; end
 
 # Mailbox attribute indicating that this mailbox is where messages deemed to
@@ -1431,6 +1454,7 @@ class Net::IMAP::IgnoredResponse < ::Struct; end
 # source://net-imap//lib/net/imap/flags.rb#215
 Net::IMAP::JUNK = T.let(T.unsafe(nil), Symbol)
 
+# source://net-imap//lib/net/imap/command_data.rb#163
 class Net::IMAP::Literal
   # @return [Literal] a new instance of Literal
   #
@@ -1461,6 +1485,8 @@ end
 # compatibility with existing servers.  See
 # {draft-murchison-sasl-login}[https://www.iana.org/go/draft-murchison-sasl-login]
 # for both specification and deprecation.
+#
+# source://net-imap//lib/net/imap/authenticators/login.rb#20
 class Net::IMAP::LoginAuthenticator
   # @return [LoginAuthenticator] a new instance of LoginAuthenticator
   #
@@ -1471,6 +1497,7 @@ class Net::IMAP::LoginAuthenticator
   def process(data); end
 end
 
+# source://net-imap//lib/net/imap/command_data.rb#178
 class Net::IMAP::MessageSet
   # @return [MessageSet] a new instance of MessageSet
   #
@@ -1529,6 +1556,8 @@ Net::IMAP::NONEXISTENT = T.let(T.unsafe(nil), Symbol)
 # prefix:: Returns the namespace prefix string.
 # delim:: Returns nil or the hierarchy delimiter character.
 # extensions:: Returns a hash of extension names to extension flag arrays.
+#
+# source://net-imap//lib/net/imap/response_data.rb#204
 class Net::IMAP::Namespace < ::Struct; end
 
 # Net::IMAP::Namespaces represents the response from [RFC-2342] NAMESPACE.
@@ -1545,9 +1574,13 @@ class Net::IMAP::Namespace < ::Struct; end
 # personal:: Returns an array of Personal Net::IMAP::Namespace objects.
 # other:: Returns an array of Other Users' Net::IMAP::Namespace objects.
 # shared:: Returns an array of Shared Net::IMAP::Namespace objects.
+#
+# source://net-imap//lib/net/imap/response_data.rb#222
 class Net::IMAP::Namespaces < ::Struct; end
 
 # Common validators of number and nz_number types
+#
+# source://net-imap//lib/net/imap/data_encoding.rb#49
 module Net::IMAP::NumValidator
   private
 
@@ -1635,6 +1668,8 @@ end
 # RFC8314[https://tools.ietf.org/html/rfc8314] recommends TLS version 1.2 or
 # greater be used for all traffic, and deprecate cleartext access ASAP.  +PLAIN+
 # can be secured by TLS encryption.
+#
+# source://net-imap//lib/net/imap/authenticators/plain.rb#12
 class Net::IMAP::PlainAuthenticator
   # +username+ is the authentication identity, the identity whose +password+ is
   # used.  +username+ is referred to as +authcid+ by
@@ -1658,6 +1693,7 @@ end
 # source://net-imap//lib/net/imap/authenticators/plain.rb#19
 Net::IMAP::PlainAuthenticator::NULL = T.let(T.unsafe(nil), String)
 
+# source://net-imap//lib/net/imap/command_data.rb#148
 class Net::IMAP::QuotedString
   # @return [QuotedString] a new instance of QuotedString
   #
@@ -1679,6 +1715,7 @@ Net::IMAP::REMOTE = T.let(T.unsafe(nil), Symbol)
 # source://net-imap//lib/net/imap/errors.rb#54
 Net::IMAP::RESPONSE_ERRORS = T.let(T.unsafe(nil), Hash)
 
+# source://net-imap//lib/net/imap/command_data.rb#118
 class Net::IMAP::RawData
   # @return [RawData] a new instance of RawData
   #
@@ -1694,6 +1731,8 @@ end
 
 # Superclass of all errors used to encapsulate "fail" responses
 # from the server.
+#
+# source://net-imap//lib/net/imap/errors.rb#20
 class Net::IMAP::ResponseError < ::Net::IMAP::Error
   # @return [ResponseError] a new instance of ResponseError
   #
@@ -1711,6 +1750,7 @@ class Net::IMAP::ResponseError < ::Net::IMAP::Error
   def response=(_arg0); end
 end
 
+# source://net-imap//lib/net/imap/response_parser.rb#8
 class Net::IMAP::ResponseParser
   # @return [ResponseParser] a new instance of ResponseParser
   #
@@ -2022,6 +2062,7 @@ Net::IMAP::SENT = T.let(T.unsafe(nil), Symbol)
 # source://net-imap//lib/net/imap/flags.rb#162
 Net::IMAP::SUBSCRIBED = T.let(T.unsafe(nil), Symbol)
 
+# source://net-imap//lib/net/imap/command_data.rb#269
 module Net::IMAP::StringFormatter
   private
 
@@ -2088,11 +2129,14 @@ Net::IMAP::StringFormatter::LITERAL_REGEX = T.let(T.unsafe(nil), Regexp)
 Net::IMAP::TRASH = T.let(T.unsafe(nil), Symbol)
 
 # Error raised upon an unknown response from the server.
+#
+# source://net-imap//lib/net/imap/errors.rb#51
 class Net::IMAP::UnknownResponseError < ::Net::IMAP::ResponseError; end
 
 # source://net-imap//lib/net/imap.rb#223
 Net::IMAP::VERSION = T.let(T.unsafe(nil), String)
 
+# source://net-imap//lib/net/imap/authenticators/xoauth2.rb#3
 class Net::IMAP::XOauth2Authenticator
   # @return [XOauth2Authenticator] a new instance of XOauth2Authenticator
   #

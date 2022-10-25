@@ -10,6 +10,7 @@
 # source://yard/0.9.28/lib/yard.rb#62
 ::RUBY19 = T.let(T.unsafe(nil), TrueClass)
 
+# source://bullet//lib/bullet/dependency.rb#3
 module Bullet
   extend ::Bullet::Dependency
 
@@ -251,6 +252,7 @@ module Bullet
   end
 end
 
+# source://bullet//lib/bullet/active_job.rb#4
 module Bullet::ActiveJob
   class << self
     # @private
@@ -260,6 +262,7 @@ module Bullet::ActiveJob
   end
 end
 
+# source://bullet//lib/bullet/active_record70.rb#13
 module Bullet::ActiveRecord
   class << self
     # source://bullet//lib/bullet/active_record70.rb#14
@@ -267,8 +270,10 @@ module Bullet::ActiveRecord
   end
 end
 
+# source://bullet//lib/bullet.rb#24
 class Bullet::BulletRailtie < ::Rails::Railtie; end
 
+# source://bullet//lib/bullet/dependency.rb#4
 module Bullet::Dependency
   # @return [Boolean]
   #
@@ -372,8 +377,10 @@ module Bullet::Dependency
   def mongoid_version; end
 end
 
+# source://bullet//lib/bullet/detector.rb#4
 module Bullet::Detector; end
 
+# source://bullet//lib/bullet/detector/association.rb#5
 class Bullet::Detector::Association < ::Bullet::Detector::Base
   class << self
     # source://bullet//lib/bullet/detector/association.rb#19
@@ -433,8 +440,10 @@ class Bullet::Detector::Association < ::Bullet::Detector::Base
   end
 end
 
+# source://bullet//lib/bullet/detector/base.rb#5
 class Bullet::Detector::Base; end
 
+# source://bullet//lib/bullet/detector/counter_cache.rb#5
 class Bullet::Detector::CounterCache < ::Bullet::Detector::Base
   class << self
     # source://bullet//lib/bullet/detector/counter_cache.rb#7
@@ -464,6 +473,7 @@ class Bullet::Detector::CounterCache < ::Bullet::Detector::Base
   end
 end
 
+# source://bullet//lib/bullet/detector/n_plus_one_query.rb#5
 class Bullet::Detector::NPlusOneQuery < ::Bullet::Detector::Association
   extend ::Bullet::Dependency
   extend ::Bullet::StackTraceFilter
@@ -517,6 +527,7 @@ class Bullet::Detector::NPlusOneQuery < ::Bullet::Detector::Association
   end
 end
 
+# source://bullet//lib/bullet/detector/unused_eager_loading.rb#5
 class Bullet::Detector::UnusedEagerLoading < ::Bullet::Detector::Association
   extend ::Bullet::Dependency
   extend ::Bullet::StackTraceFilter
@@ -546,8 +557,10 @@ class Bullet::Detector::UnusedEagerLoading < ::Bullet::Detector::Association
   end
 end
 
+# source://bullet//lib/bullet/notification.rb#4
 module Bullet::Notification; end
 
+# source://bullet//lib/bullet/notification/base.rb#5
 class Bullet::Notification::Base
   # @return [Base] a new instance of Base
   #
@@ -641,6 +654,7 @@ class Bullet::Notification::Base
   def klazz_associations_str; end
 end
 
+# source://bullet//lib/bullet/notification/counter_cache.rb#5
 class Bullet::Notification::CounterCache < ::Bullet::Notification::Base
   # source://bullet//lib/bullet/notification/counter_cache.rb#6
   def body; end
@@ -649,6 +663,7 @@ class Bullet::Notification::CounterCache < ::Bullet::Notification::Base
   def title; end
 end
 
+# source://bullet//lib/bullet/notification/n_plus_one_query.rb#5
 class Bullet::Notification::NPlusOneQuery < ::Bullet::Notification::Base
   # @return [NPlusOneQuery] a new instance of NPlusOneQuery
   #
@@ -670,8 +685,10 @@ class Bullet::Notification::NPlusOneQuery < ::Bullet::Notification::Base
   def call_stack_messages; end
 end
 
+# source://bullet//lib/bullet/notification.rb#10
 class Bullet::Notification::UnoptimizedQueryError < ::StandardError; end
 
+# source://bullet//lib/bullet/notification/unused_eager_loading.rb#5
 class Bullet::Notification::UnusedEagerLoading < ::Bullet::Notification::Base
   # @return [UnusedEagerLoading] a new instance of UnusedEagerLoading
   #
@@ -693,6 +710,7 @@ class Bullet::Notification::UnusedEagerLoading < ::Bullet::Notification::Base
   def call_stack_messages; end
 end
 
+# source://bullet//lib/bullet/notification_collector.rb#6
 class Bullet::NotificationCollector
   # @return [NotificationCollector] a new instance of NotificationCollector
   #
@@ -716,6 +734,7 @@ class Bullet::NotificationCollector
   def reset; end
 end
 
+# source://bullet//lib/bullet/rack.rb#4
 class Bullet::Rack
   include ::Bullet::Dependency
 
@@ -781,8 +800,10 @@ class Bullet::Rack
   def xhr_script; end
 end
 
+# source://bullet//lib/bullet/registry.rb#4
 module Bullet::Registry; end
 
+# source://bullet//lib/bullet/registry/association.rb#5
 class Bullet::Registry::Association < ::Bullet::Registry::Base
   # source://bullet//lib/bullet/registry/association.rb#6
   def merge(base, associations); end
@@ -791,6 +812,7 @@ class Bullet::Registry::Association < ::Bullet::Registry::Base
   def similarly_associated(base, associations); end
 end
 
+# source://bullet//lib/bullet/registry/base.rb#5
 class Bullet::Registry::Base
   # @return [Base] a new instance of Base
   #
@@ -823,6 +845,7 @@ class Bullet::Registry::Base
   def select(*args, &block); end
 end
 
+# source://bullet//lib/bullet/registry/object.rb#5
 class Bullet::Registry::Object < ::Bullet::Registry::Base
   # source://bullet//lib/bullet/registry/object.rb#6
   def add(bullet_key); end
@@ -833,11 +856,13 @@ class Bullet::Registry::Object < ::Bullet::Registry::Base
   def include?(bullet_key); end
 end
 
+# source://bullet//lib/bullet/active_record70.rb#4
 module Bullet::SaveWithBulletSupport
   # source://bullet//lib/bullet/active_record70.rb#5
   def _create_record(*_arg0); end
 end
 
+# source://bullet//lib/bullet/stack_trace_filter.rb#5
 module Bullet::StackTraceFilter
   # source://bullet//lib/bullet/stack_trace_filter.rb#9
   def caller_in_project; end
@@ -868,15 +893,10 @@ Bullet::StackTraceFilter::IS_RUBY_19 = T.let(T.unsafe(nil), FalseClass)
 Bullet::StackTraceFilter::VENDOR_PATH = T.let(T.unsafe(nil), String)
 
 # Same as above, except in Object.
+#
+# source://bullet//lib/bullet/ext/object.rb#3
 class Object < ::BasicObject
-  include ::ActiveSupport::ToJsonWithActiveSupportEncoder
-  include ::ActiveSupport::Dependencies::RequireDependency
   include ::Kernel
-  include ::ActiveSupport::Tryable
-  include ::Delayed::MessageSending
-  include ::FriendlyId::ObjectUtils
-  include ::PP::ObjectMixin
-  include ::Azure::Storage::Common::Core::Auth
 
   # source://bullet//lib/bullet/ext/object.rb#4
   def bullet_key; end
@@ -887,6 +907,8 @@ end
 
 # Enhance the String class with a XML escaped character version of
 # to_s.
+#
+# source://bullet//lib/bullet/ext/string.rb#3
 class String
   include ::Comparable
 

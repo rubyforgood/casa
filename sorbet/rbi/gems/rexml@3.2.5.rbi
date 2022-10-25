@@ -15,6 +15,8 @@
 # interesting idea about how to map the hideous, terrible design of DTD
 # AttlistDecls onto an intuitive Ruby interface, let me know.  I'm desperate
 # for anything to make DTDs more palateable.
+#
+# source://rexml//lib/rexml/attlistdecl.rb#18
 class REXML::AttlistDecl < ::REXML::Child
   include ::Enumerable
 
@@ -67,6 +69,8 @@ end
 # <element attribute="value"/>.  Attributes can be in their own
 # namespaces.  General users of REXML will not interact with the
 # Attribute class much.
+#
+# source://rexml//lib/rexml/attribute.rb#10
 class REXML::Attribute
   include ::REXML::Node
   include ::REXML::XMLTokens
@@ -221,6 +225,8 @@ end
 
 # A class that defines the set of Attributes of an Element and provides
 # operations for accessing elements in that set.
+#
+# source://rexml//lib/rexml/element.rb#2141
 class REXML::Attributes < ::Hash
   # :call-seq:
   #   new(element)
@@ -562,6 +568,7 @@ class REXML::Attributes < ::Hash
   def to_a; end
 end
 
+# source://rexml//lib/rexml/cdata.rb#5
 class REXML::CData < ::REXML::Text
   # Constructor.  CData is data between <![CDATA[ ... ]]>
   #
@@ -622,6 +629,8 @@ end
 # A Child object is something contained by a parent, and this class
 # contains methods to support that.  Most user code will not use this
 # class directly.
+#
+# source://rexml//lib/rexml/child.rb#9
 class REXML::Child
   include ::REXML::Node
 
@@ -709,6 +718,8 @@ class REXML::Child
 end
 
 # Represents an XML comment; that is, text between \<!-- ... -->
+#
+# source://rexml//lib/rexml/comment.rb#7
 class REXML::Comment < ::REXML::Child
   include ::Comparable
 
@@ -776,10 +787,13 @@ class REXML::Comment < ::REXML::Child
   def write(output, indent = T.unsafe(nil), transitive = T.unsafe(nil), ie_hack = T.unsafe(nil)); end
 end
 
+# source://rexml//lib/rexml/xpath_parser.rb#11
 module REXML::DClonable; end
 
 # This is an abstract class.  You never use this directly; it serves as a
 # parent class for the specific declarations.
+#
+# source://rexml//lib/rexml/doctype.rb#242
 class REXML::Declaration < ::REXML::Child
   # @return [Declaration] a new instance of Declaration
   #
@@ -799,6 +813,8 @@ end
 # Represents an XML DOCTYPE declaration; that is, the contents of <!DOCTYPE
 # ... >.  DOCTYPES can be used to declare the DTD of a document, as well as
 # being used to declare entities used in the document.
+#
+# source://rexml//lib/rexml/doctype.rb#51
 class REXML::DocType < ::REXML::Parent
   include ::REXML::XMLTokens
 
@@ -929,6 +945,8 @@ end
 # {tasks pages}[../doc/rexml/tasks/tocs/master_toc_rdoc.html],
 # and in particular, the
 # {tasks page for documents}[../doc/rexml/tasks/tocs/document_toc_rdoc.html].
+#
+# source://rexml//lib/rexml/document.rb#39
 class REXML::Document < ::REXML::Element
   # :call-seq:
   #   new(string = nil, context = {}) -> new_document
@@ -1558,6 +1576,8 @@ end
 # #elements:: Returns the REXML::Elements object for the element.
 # #attributes:: Returns the REXML::Attributes object for the element.
 # #context:: Returns or sets the context hash for the element.
+#
+# source://rexml//lib/rexml/element.rb#279
 class REXML::Element < ::REXML::Parent
   include ::REXML::XMLTokens
   include ::REXML::Namespace
@@ -2593,6 +2613,7 @@ class REXML::Element < ::REXML::Parent
   def each_with_something(test, max = T.unsafe(nil), name = T.unsafe(nil)); end
 end
 
+# source://rexml//lib/rexml/doctype.rb#261
 class REXML::ElementDecl < ::REXML::Declaration
   # @return [ElementDecl] a new instance of ElementDecl
   #
@@ -2641,6 +2662,8 @@ end
 #   d = REXML::Document.new(xml_string)
 #   elements = d.root.elements
 #   elements # => #<REXML::Elements @element=<bookstore> ... </>>
+#
+# source://rexml//lib/rexml/element.rb#1595
 class REXML::Elements
   include ::Enumerable
 
@@ -3167,6 +3190,7 @@ class REXML::Elements
   def literalize(name); end
 end
 
+# source://rexml//lib/rexml/encoding.rb#4
 module REXML::Encoding
   # source://rexml//lib/rexml/encoding.rb#29
   def decode(string); end
@@ -3188,6 +3212,7 @@ module REXML::Encoding
   def find_encoding(name); end
 end
 
+# source://rexml//lib/rexml/entity.rb#7
 class REXML::Entity < ::REXML::Child
   include ::REXML::XMLTokens
 
@@ -3284,6 +3309,7 @@ class REXML::Entity < ::REXML::Child
   end
 end
 
+# source://rexml//lib/rexml/doctype.rb#267
 class REXML::ExternalEntity < ::REXML::Child
   # @return [ExternalEntity] a new instance of ExternalEntity
   #
@@ -3297,6 +3323,7 @@ class REXML::ExternalEntity < ::REXML::Child
   def write(output, indent); end
 end
 
+# source://rexml//lib/rexml/formatters/default.rb#5
 class REXML::Formatters::Default
   # Prints out the XML document with no formatting -- except if ie_hack is
   # set.
@@ -3346,6 +3373,8 @@ end
 # and will insert carriage returns and indentations.
 #
 # TODO: Add an option to print attributes on new lines
+#
+# source://rexml//lib/rexml/formatters/pretty.rb#10
 class REXML::Formatters::Pretty < ::REXML::Formatters::Default
   # Create a new pretty printer.
   #
@@ -3415,6 +3444,8 @@ end
 
 # A Source that wraps an IO.  See the Source class for method
 # documentation
+#
+# source://rexml//lib/rexml/source.rb#160
 class REXML::IOSource < ::REXML::Source
   # block_size has been deprecated
   #
@@ -3459,6 +3490,8 @@ end
 
 # Represents an XML Instruction; IE, <? ... ?>
 # TODO: Add parent arg (3rd arg) to constructor
+#
+# source://rexml//lib/rexml/instruction.rb#9
 class REXML::Instruction < ::REXML::Child
   # Constructs a new Instruction
   # the target of this instruction is set to this.  If an Instruction,
@@ -3521,11 +3554,14 @@ class REXML::Instruction < ::REXML::Child
   def write(writer, indent = T.unsafe(nil), transitive = T.unsafe(nil), ie_hack = T.unsafe(nil)); end
 end
 
+# source://rexml//lib/rexml/light/node.rb#5
 module REXML::Light; end
 
 # Represents a tagged XML element.  Elements are characterized by
 # having children, attributes, and names, and can themselves be
 # children.
+#
+# source://rexml//lib/rexml/light/node.rb#9
 class REXML::Light::Node
   # Create a new element.
   #
@@ -3624,6 +3660,7 @@ REXML::Light::Node::NAMESPLIT = T.let(T.unsafe(nil), Regexp)
 # source://rexml//lib/rexml/light/node.rb#11
 REXML::Light::Node::PARENTS = T.let(T.unsafe(nil), Array)
 
+# source://rexml//lib/rexml/doctype.rb#280
 class REXML::NotationDecl < ::REXML::Child
   # @return [NotationDecl] a new instance of NotationDecl
   #
@@ -3668,6 +3705,7 @@ class REXML::NotationDecl < ::REXML::Child
   def write(output, indent = T.unsafe(nil)); end
 end
 
+# source://rexml//lib/rexml/output.rb#5
 class REXML::Output
   include ::REXML::Encoding
 
@@ -3691,6 +3729,8 @@ end
 # A parent has children, and has methods for accessing them.  The Parent
 # class is never encountered except as the superclass for some other
 # object.
+#
+# source://rexml//lib/rexml/parent.rb#8
 class REXML::Parent < ::REXML::Child
   include ::Enumerable
 
@@ -3819,6 +3859,7 @@ class REXML::Parent < ::REXML::Child
   def unshift(object); end
 end
 
+# source://rexml//lib/rexml/parseexception.rb#3
 class REXML::ParseException < ::RuntimeError
   # @return [ParseException] a new instance of ParseException
   #
@@ -3893,6 +3934,8 @@ end
 #  end
 #
 # Nat Price gave me some good ideas for the API.
+#
+# source://rexml//lib/rexml/parsers/baseparser.rb#29
 class REXML::Parsers::BaseParser
   # @return [BaseParser] a new instance of BaseParser
   #
@@ -4002,6 +4045,7 @@ REXML::Parsers::BaseParser::QNAME = T.let(T.unsafe(nil), Regexp)
 # source://rexml//lib/rexml/parsers/baseparser.rb#37
 REXML::Parsers::BaseParser::QNAME_STR = T.let(T.unsafe(nil), String)
 
+# source://rexml//lib/rexml/parsers/streamparser.rb#6
 class REXML::Parsers::StreamParser
   # @return [StreamParser] a new instance of StreamParser
   #
@@ -4015,6 +4059,7 @@ class REXML::Parsers::StreamParser
   def parse; end
 end
 
+# source://rexml//lib/rexml/parsers/treeparser.rb#7
 class REXML::Parsers::TreeParser
   # @return [TreeParser] a new instance of TreeParser
   #
@@ -4032,6 +4077,8 @@ end
 # for this class.  Believe me.  You don't want to poke around in here.
 # There is strange, dark magic at work in this code.  Beware.  Go back!  Go
 # back while you still can!
+#
+# source://rexml//lib/rexml/parsers/xpathparser.rb#11
 class REXML::Parsers::XPathParser
   include ::REXML::XMLTokens
 
@@ -4168,6 +4215,7 @@ REXML::Parsers::XPathParser::LOCAL_NAME_WILDCARD = T.let(T.unsafe(nil), Regexp)
 # source://rexml//lib/rexml/parsers/xpathparser.rb#288
 REXML::Parsers::XPathParser::PREFIX_WILDCARD = T.let(T.unsafe(nil), Regexp)
 
+# source://rexml//lib/rexml/doctype.rb#10
 class REXML::ReferenceWriter
   # @return [ReferenceWriter] a new instance of ReferenceWriter
   #
@@ -4180,6 +4228,8 @@ end
 
 # A Source can be searched for patterns, and wraps buffers and other
 # objects and provides consumption of text
+#
+# source://rexml//lib/rexml/source.rb#31
 class REXML::Source
   include ::REXML::Encoding
 
@@ -4273,6 +4323,8 @@ class REXML::Source
 end
 
 # Represents text nodes in an XML document
+#
+# source://rexml//lib/rexml/text.rb#11
 class REXML::Text < ::REXML::Child
   include ::Comparable
 
@@ -4475,6 +4527,7 @@ class REXML::Text < ::REXML::Child
   end
 end
 
+# source://rexml//lib/rexml/undefinednamespaceexception.rb#4
 class REXML::UndefinedNamespaceException < ::REXML::ParseException
   # @return [UndefinedNamespaceException] a new instance of UndefinedNamespaceException
   #
@@ -4482,6 +4535,7 @@ class REXML::UndefinedNamespaceException < ::REXML::ParseException
   def initialize(prefix, source, parser); end
 end
 
+# source://rexml//lib/rexml/validation/validationexception.rb#4
 class REXML::Validation::ValidationException < ::RuntimeError
   # @return [ValidationException] a new instance of ValidationException
   #
@@ -4490,6 +4544,8 @@ class REXML::Validation::ValidationException < ::RuntimeError
 end
 
 # NEEDS DOCUMENTATION
+#
+# source://rexml//lib/rexml/xmldecl.rb#8
 class REXML::XMLDecl < ::REXML::Child
   include ::REXML::Encoding
 
@@ -4592,6 +4648,8 @@ class REXML::XMLDecl < ::REXML::Child
 end
 
 # @private
+#
+# source://rexml//lib/rexml/xpath_parser.rb#959
 class REXML::XPathNode
   # @return [XPathNode] a new instance of XPathNode
   #
@@ -4616,6 +4674,8 @@ end
 # for this class.  Believe me.  You don't want to poke around in here.
 # There is strange, dark magic at work in this code.  Beware.  Go back!  Go
 # back while you still can!
+#
+# source://rexml//lib/rexml/xpath_parser.rb#54
 class REXML::XPathParser
   include ::REXML::XMLTokens
 

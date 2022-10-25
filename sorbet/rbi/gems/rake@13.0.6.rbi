@@ -14,6 +14,8 @@ FileList = Rake::FileList
 # --
 # This a FileUtils extension that defines several additional commands to be
 # added to the FileUtils utility functions.
+#
+# source://rake//lib/rake/file_utils.rb#8
 module FileUtils
   # Run a Ruby interpreter with the given arguments.
   #
@@ -88,10 +90,8 @@ FileUtils::LN_SUPPORTED = T.let(T.unsafe(nil), Array)
 # source://rake//lib/rake/file_utils.rb#10
 FileUtils::RUBY = T.let(T.unsafe(nil), String)
 
+# source://rake//lib/rake/ext/core.rb#2
 class Module
-  include ::Module::Concerning
-  include ::Delayed::MessageSendingClassMethods
-
   # Check for an existing method in the current class before extending.  If
   # the method already exists, then a warning is printed and the extension is
   # not added.  Otherwise the block is yielded and any definitions in the
@@ -117,11 +117,10 @@ Module::DELEGATION_RESERVED_KEYWORDS = T.let(T.unsafe(nil), Array)
 # source://activesupport/7.0.4/lib/active_support/core_ext/module/delegation.rb#14
 Module::DELEGATION_RESERVED_METHOD_NAMES = T.let(T.unsafe(nil), Set)
 
-class Module::DelegationError < ::NoMethodError; end
-
 # source://activesupport/7.0.4/lib/active_support/core_ext/module/delegation.rb#10
 Module::RUBY_RESERVED_KEYWORDS = T.let(T.unsafe(nil), Array)
 
+# source://rake//lib/rake/cloneable.rb#2
 module Rake
   extend ::FileUtils::StreamUtils_
   extend ::FileUtils
@@ -190,6 +189,8 @@ end
 
 # Rake main application object.  When invoking +rake+ from the
 # command line, a Rake::Application object is created and run.
+#
+# source://rake//lib/rake/application.rb#19
 class Rake::Application
   include ::Rake::TaskManager
   include ::Rake::TraceOutput
@@ -494,6 +495,7 @@ end
 # source://rake//lib/rake/application.rb#41
 Rake::Application::DEFAULT_RAKEFILES = T.let(T.unsafe(nil), Array)
 
+# source://rake//lib/rake/backtrace.rb#3
 module Rake::Backtrace
   class << self
     # source://rake//lib/rake/backtrace.rb#18
@@ -517,6 +519,8 @@ Rake::Backtrace::SYS_KEYS = T.let(T.unsafe(nil), Array)
 Rake::Backtrace::SYS_PATHS = T.let(T.unsafe(nil), Array)
 
 # Mixin for creating easily cloned objects.
+#
+# source://rake//lib/rake/cloneable.rb#6
 module Rake::Cloneable
   private
 
@@ -526,10 +530,13 @@ module Rake::Cloneable
   def initialize_copy(source); end
 end
 
+# source://rake//lib/rake/application.rb#13
 class Rake::CommandLineOptionError < ::StandardError; end
 
 # Based on a script at:
 #   http://stackoverflow.com/questions/891537/ruby-detect-number-of-cpus-installed
+#
+# source://rake//lib/rake/cpu_counter.rb#6
 class Rake::CpuCounter
   # source://rake//lib/rake/cpu_counter.rb#22
   def count; end
@@ -548,6 +555,8 @@ end
 #
 # For a Rakefile you run from the command line this module is automatically
 # included.
+#
+# source://rake//lib/rake/dsl_definition.rb#14
 module Rake::DSL
   include ::FileUtils::StreamUtils_
   include ::FileUtils
@@ -695,6 +704,8 @@ module Rake::DSL
 end
 
 # Default Rakefile loader used by +import+.
+#
+# source://rake//lib/rake/default_loader.rb#5
 class Rake::DefaultLoader
   # Loads a rakefile into the current application from +fn+
   #
@@ -709,6 +720,8 @@ Rake::EARLY = T.let(T.unsafe(nil), Rake::EarlyTime)
 Rake::EMPTY_TASK_ARGS = T.let(T.unsafe(nil), Rake::TaskArguments)
 
 # EarlyTime is a fake timestamp that occurs _before_ any other time value.
+#
+# source://rake//lib/rake/early_time.rb#5
 class Rake::EarlyTime
   include ::Comparable
   include ::Singleton
@@ -727,6 +740,8 @@ end
 # needed if and only if the file has not been created.  Once created, it is
 # not re-triggered if any of its dependencies are newer, nor does trigger
 # any rebuilds of tasks that depend on it whenever it is updated.
+#
+# source://rake//lib/rake/file_creation_task.rb#13
 class Rake::FileCreationTask < ::Rake::FileTask
   # Is this file task needed?  Yes if it doesn't exist.
   #
@@ -754,6 +769,8 @@ end
 # actually used.  The key is that the first time an element of the
 # FileList/Array is requested, the pending patterns are resolved into a real
 # list of file names.
+#
+# source://rake//lib/rake/file_list.rb#22
 class Rake::FileList
   include ::Rake::Cloneable
 
@@ -1519,6 +1536,8 @@ Rake::FileList::SPECIAL_RETURN = T.let(T.unsafe(nil), Array)
 # FileTask's prerequisites have a timestamp that is later than the file
 # represented by this task, then the file must be rebuilt (using the
 # supplied actions).
+#
+# source://rake//lib/rake/file_task.rb#12
 class Rake::FileTask < ::Rake::Task
   # Is this file task needed?  Yes if it doesn't exist, or if its time stamp
   # is out of date.
@@ -1554,6 +1573,8 @@ end
 # FileUtilsExt provides a custom version of the FileUtils methods
 # that respond to the <tt>verbose</tt> and <tt>nowrite</tt>
 # commands.
+#
+# source://rake//lib/rake/file_utils_ext.rb#10
 module Rake::FileUtilsExt
   include ::FileUtils::StreamUtils_
   include ::FileUtils
@@ -1750,6 +1771,8 @@ Rake::FileUtilsExt::DEFAULT = T.let(T.unsafe(nil), Object)
 
 # InvocationChain tracks the chain of task invocations to detect
 # circular dependencies.
+#
+# source://rake//lib/rake/invocation_chain.rb#6
 class Rake::InvocationChain < ::Rake::LinkedList
   # Append an invocation to the chain of invocations. It is an error
   # if the invocation already listed.
@@ -1786,6 +1809,8 @@ end
 Rake::InvocationChain::EMPTY = T.let(T.unsafe(nil), Rake::InvocationChain::EmptyInvocationChain)
 
 # Null object for an empty chain.
+#
+# source://rake//lib/rake/invocation_chain.rb#39
 class Rake::InvocationChain::EmptyInvocationChain < ::Rake::LinkedList::EmptyLinkedList
   # source://rake//lib/rake/invocation_chain.rb#46
   def append(invocation); end
@@ -1799,6 +1824,7 @@ class Rake::InvocationChain::EmptyInvocationChain < ::Rake::LinkedList::EmptyLin
   def to_s; end
 end
 
+# source://rake//lib/rake/invocation_exception_mixin.rb#3
 module Rake::InvocationExceptionMixin
   # Return the invocation chain (list of Rake tasks) that were in
   # effect when this exception was detected by rake.  May be null if
@@ -1818,6 +1844,8 @@ end
 Rake::LATE = T.let(T.unsafe(nil), Rake::LateTime)
 
 # LateTime is a fake timestamp that occurs _after_ any other time value.
+#
+# source://rake//lib/rake/late_time.rb#4
 class Rake::LateTime
   include ::Comparable
   include ::Singleton
@@ -1832,6 +1860,8 @@ end
 
 # Polylithic linked list structure used to implement several data
 # structures in Rake.
+#
+# source://rake//lib/rake/linked_list.rb#6
 class Rake::LinkedList
   include ::Enumerable
 
@@ -1914,6 +1944,8 @@ Rake::LinkedList::EMPTY = T.let(T.unsafe(nil), Rake::LinkedList::EmptyLinkedList
 # a type specific Empty class as well. Make sure you set the class
 # instance variable @parent to the associated list class (this
 # allows conj, cons and make to work polymorphically).
+#
+# source://rake//lib/rake/linked_list.rb#95
 class Rake::LinkedList::EmptyLinkedList < ::Rake::LinkedList
   # @return [EmptyLinkedList] a new instance of EmptyLinkedList
   #
@@ -1933,6 +1965,8 @@ end
 
 # Same as a regular task, but the immediate prerequisites are done in
 # parallel using Ruby threads.
+#
+# source://rake//lib/rake/multi_task.rb#7
 class Rake::MultiTask < ::Rake::Task
   private
 
@@ -1942,6 +1976,8 @@ end
 
 # The NameSpace class will lookup task names in the scope defined by a
 # +namespace+ command.
+#
+# source://rake//lib/rake/name_space.rb#6
 class Rake::NameSpace
   # Create a namespace lookup object using the given task manager
   # and the list of scopes.
@@ -1968,6 +2004,8 @@ class Rake::NameSpace
 end
 
 # Include PrivateReader to use +private_reader+.
+#
+# source://rake//lib/rake/private_reader.rb#5
 module Rake::PrivateReader
   mixes_in_class_methods ::Rake::PrivateReader::ClassMethods
 
@@ -1977,6 +2015,7 @@ module Rake::PrivateReader
   end
 end
 
+# source://rake//lib/rake/private_reader.rb#11
 module Rake::PrivateReader::ClassMethods
   # Declare a list of private accessors
   #
@@ -1990,6 +2029,8 @@ end
 # the promised chore.
 #
 # Used by ThreadPool.
+#
+# source://rake//lib/rake/promise.rb#11
 class Rake::Promise
   # Create a promise to do the chore specified by the block.
   #
@@ -2060,6 +2101,8 @@ end
 Rake::Promise::NOT_SET = T.let(T.unsafe(nil), Object)
 
 # Exit status class for times the system just gives us a nil.
+#
+# source://rake//lib/rake/pseudo_status.rb#6
 class Rake::PseudoStatus
   # @return [PseudoStatus] a new instance of PseudoStatus
   #
@@ -2086,7 +2129,12 @@ class Rake::PseudoStatus
   def to_i; end
 end
 
+# source://rdoc/6.4.0/rdoc/task.rb#326
+Rake::RDocTask = RDoc::Task
+
 # Error indicating a recursion overflow error in task selection.
+#
+# source://rake//lib/rake/rule_recursion_overflow_error.rb#5
 class Rake::RuleRecursionOverflowError < ::StandardError
   # @return [RuleRecursionOverflowError] a new instance of RuleRecursionOverflowError
   #
@@ -2100,6 +2148,7 @@ class Rake::RuleRecursionOverflowError < ::StandardError
   def message; end
 end
 
+# source://rake//lib/rake/scope.rb#3
 class Rake::Scope < ::Rake::LinkedList
   # Path for the scope.
   #
@@ -2125,6 +2174,8 @@ Rake::Scope::EMPTY = T.let(T.unsafe(nil), Rake::Scope::EmptyScope)
 
 # Scope lists always end with an EmptyScope object. See Null
 # Object Pattern)
+#
+# source://rake//lib/rake/scope.rb#28
 class Rake::Scope::EmptyScope < ::Rake::LinkedList::EmptyLinkedList
   # source://rake//lib/rake/scope.rb#31
   def path; end
@@ -2140,6 +2191,8 @@ end
 #
 # Tasks are not usually created directly using the new method, but rather
 # use the +file+ and +task+ convenience methods.
+#
+# source://rake//lib/rake/task.rb#15
 class Rake::Task
   # Create a task named +task_name+ with no actions or prerequisites. Use
   # +enhance+ to add actions and prerequisites.
@@ -2455,9 +2508,13 @@ class Rake::Task
 end
 
 # Error indicating an ill-formed task declaration.
+#
+# source://rake//lib/rake/task_argument_error.rb#5
 class Rake::TaskArgumentError < ::ArgumentError; end
 
 # TaskArguments manage the arguments passed to a task.
+#
+# source://rake//lib/rake/task_arguments.rb#7
 class Rake::TaskArguments
   include ::Enumerable
 
@@ -2552,6 +2609,8 @@ class Rake::TaskArguments
 end
 
 # Base class for Task Libraries.
+#
+# source://rake//lib/rake/tasklib.rb#7
 class Rake::TaskLib
   include ::Rake::Cloneable
   include ::FileUtils::StreamUtils_
@@ -2561,6 +2620,8 @@ class Rake::TaskLib
 end
 
 # The TaskManager module is a mixin for managing tasks.
+#
+# source://rake//lib/rake/task_manager.rb#5
 module Rake::TaskManager
   # source://rake//lib/rake/task_manager.rb#9
   def initialize; end
@@ -2727,6 +2788,7 @@ module Rake::TaskManager
   end
 end
 
+# source://rake//lib/rake/thread_history_display.rb#6
 class Rake::ThreadHistoryDisplay
   include ::Rake::PrivateReader
   extend ::Rake::PrivateReader::ClassMethods
@@ -2754,6 +2816,7 @@ class Rake::ThreadHistoryDisplay
   def threads; end
 end
 
+# source://rake//lib/rake/thread_pool.rb#7
 class Rake::ThreadPool
   # Creates a ThreadPool object.  The +thread_count+ parameter is the size
   # of the pool.
@@ -2822,6 +2885,7 @@ class Rake::ThreadPool
   def stat(event, data = T.unsafe(nil)); end
 end
 
+# source://rake//lib/rake/trace_output.rb#3
 module Rake::TraceOutput
   # Write trace output to output stream +out+.
   #
@@ -2836,6 +2900,7 @@ end
 # source://rake//lib/rake/version.rb#3
 Rake::VERSION = T.let(T.unsafe(nil), String)
 
+# source://rake//lib/rake/version.rb#5
 module Rake::Version; end
 
 # source://rake//lib/rake/version.rb#6
@@ -2855,6 +2920,8 @@ Rake::Version::OTHER = T.let(T.unsafe(nil), Array)
 
 # Win 32 interface methods for Rake. Windows specific functionality
 # will be placed here to collect that knowledge in one spot.
+#
+# source://rake//lib/rake/win32.rb#7
 module Rake::Win32
   class << self
     # Normalize a win32 path so that the slashes are all forward slashes.
@@ -2889,11 +2956,14 @@ end
 
 # Error indicating a problem in locating the home directory on a
 # Win32 system.
+#
+# source://rake//lib/rake/win32.rb#11
 class Rake::Win32::Win32HomeError < ::RuntimeError; end
 
 # source://rake//lib/rake.rb#71
 RakeFileUtils = Rake::FileUtilsExt
 
+# source://rake//lib/rake/ext/string.rb#4
 class String
   include ::Comparable
 

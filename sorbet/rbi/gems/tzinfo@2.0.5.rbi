@@ -5,6 +5,8 @@
 # Please instead update this file by running `bin/tapioca gem tzinfo`.
 
 # The top level module for TZInfo.
+#
+# source://tzinfo//lib/tzinfo.rb#5
 module TZInfo
   class << self
     # Instructs the current {DataSource} to load all timezone and country data
@@ -29,6 +31,8 @@ end
 # the following year on a non-leap year.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/transition_rule.rb#129
 class TZInfo::AbsoluteDayOfYearTransitionRule < ::TZInfo::DayOfYearTransitionRule
   # Initializes a new {AbsoluteDayOfYearTransitionRule}.
   #
@@ -107,12 +111,16 @@ end
 # {Timezone#local_time}, {Timezone#local_timestamp}, {Timezone#local_to_utc}
 # and {Timezone#period_for_local} when using an ambiguous time and not
 # specifying how to resolve the ambiguity.
+#
+# source://tzinfo//lib/tzinfo/timezone.rb#16
 class TZInfo::AmbiguousTime < ::StandardError; end
 
 # A set of rules that define when transitions occur in time zones with
 # annually occurring daylight savings time.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/annual_rules.rb#9
 class TZInfo::AnnualRules
   # Initializes a new {AnnualRules} instance.
   #
@@ -180,6 +188,8 @@ end
 # A thread-safe version of {StringDeduper}.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/string_deduper.rb#50
 class TZInfo::ConcurrentStringDeduper < ::TZInfo::StringDeduper
   protected
 
@@ -203,6 +213,8 @@ end
 # users, to help them select time zone data appropriate for their practical
 # needs. It is not intended to take or endorse any position on legal or
 # territorial claims.
+#
+# source://tzinfo//lib/tzinfo/country.rb#26
 class TZInfo::Country
   include ::Comparable
 
@@ -410,6 +422,8 @@ end
 TZInfo::CountryIndexDefinition = TZInfo::Format1::CountryIndexDefinition
 
 # Information about a time zone used by a {Country}.
+#
+# source://tzinfo//lib/tzinfo/country_timezone.rb#5
 class TZInfo::CountryTimezone
   # Creates a new {CountryTimezone}.
   #
@@ -514,6 +528,8 @@ end
 #   and implement the {load_timezone_info}, {data_timezone_identifiers},
 #   {linked_timezone_identifiers}, {load_country_info} and {country_codes}
 #   methods.
+#
+# source://tzinfo//lib/tzinfo/data_source.rb#29
 class TZInfo::DataSource
   # Initializes a new {DataSource} instance. Typically only called via
   # subclasses of {DataSource}.
@@ -815,13 +831,19 @@ end
 # {DataSourceNotFound} is raised if no data source could be found (i.e. if
 # `'tzinfo/data'` cannot be found on the load path and no valid zoneinfo
 # directory can be found on the system).
+#
+# source://tzinfo//lib/tzinfo/data_source.rb#16
 class TZInfo::DataSourceNotFound < ::StandardError; end
 
 # {DataSource} implementations and classes used by {DataSource}
 # implementations.
+#
+# source://tzinfo//lib/tzinfo/data_sources.rb#6
 module TZInfo::DataSources; end
 
 # Represents a data time zone defined by a constantly observed offset.
+#
+# source://tzinfo//lib/tzinfo/data_sources/constant_offset_data_timezone_info.rb#8
 class TZInfo::DataSources::ConstantOffsetDataTimezoneInfo < ::TZInfo::DataSources::DataTimezoneInfo
   # Initializes a new {ConstantOffsetDataTimezoneInfo}.
   #
@@ -874,6 +896,8 @@ end
 
 # Represents a country and references to its time zones as returned by a
 # {DataSource}.
+#
+# source://tzinfo//lib/tzinfo/data_sources/country_info.rb#8
 class TZInfo::DataSources::CountryInfo
   # Initializes a new {CountryInfo}. The passed in `code`, `name` and
   # `zones` instances will be frozen.
@@ -915,6 +939,8 @@ end
 # ({ConstantOffsetDataTimezoneInfo}).
 #
 # @abstract Data sources return instances of {DataTimezoneInfo} subclasses.
+#
+# source://tzinfo//lib/tzinfo/data_sources/data_timezone_info.rb#17
 class TZInfo::DataSources::DataTimezoneInfo < ::TZInfo::DataSources::TimezoneInfo
   # @return [DataTimezone] a new {DataTimezone} instance for the time zone
   #   represented by this {DataTimezoneInfo}.
@@ -1001,6 +1027,8 @@ end
 # time zone string is encountered.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/data_sources/posix_time_zone_parser.rb#16
 class TZInfo::DataSources::InvalidPosixTimeZone < ::StandardError; end
 
 # An {InvalidZoneinfoDirectory} exception is raised if {ZoneinfoDataSource}
@@ -1008,14 +1036,20 @@ class TZInfo::DataSources::InvalidPosixTimeZone < ::StandardError; end
 # directory. A valid zoneinfo directory is one that contains time zone
 # files, a country code index file named iso3166.tab and a time zone index
 # file named zone1970.tab or zone.tab.
+#
+# source://tzinfo//lib/tzinfo/data_sources/zoneinfo_data_source.rb#15
 class TZInfo::DataSources::InvalidZoneinfoDirectory < ::StandardError; end
 
 # An {InvalidZoneinfoFile} exception is raised if an attempt is made to load
 # an invalid zoneinfo file.
+#
+# source://tzinfo//lib/tzinfo/data_sources/zoneinfo_reader.rb#12
 class TZInfo::DataSources::InvalidZoneinfoFile < ::StandardError; end
 
 # Represents a time zone that is defined as a link to or alias of another
 # zone.
+#
+# source://tzinfo//lib/tzinfo/data_sources/linked_timezone_info.rb#9
 class TZInfo::DataSources::LinkedTimezoneInfo < ::TZInfo::DataSources::TimezoneInfo
   # Initializes a new {LinkedTimezoneInfo}. The passed in `identifier` and
   # `link_to_identifier` instances will be frozen.
@@ -1049,6 +1083,8 @@ end
 # by tzfile.5 and tzset.3.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/data_sources/posix_time_zone_parser.rb#24
 class TZInfo::DataSources::PosixTimeZoneParser
   # Initializes a new {PosixTimeZoneParser}.
   #
@@ -1131,6 +1167,8 @@ end
 # {DataSource.set} as follows:
 #
 #     TZInfo::DataSource.set(:ruby)
+#
+# source://tzinfo//lib/tzinfo/data_sources/ruby_data_source.rb#25
 class TZInfo::DataSources::RubyDataSource < ::TZInfo::DataSource
   # Initializes a new {RubyDataSource} instance.
   #
@@ -1240,11 +1278,15 @@ end
 # A {TZInfoDataNotFound} exception is raised if the tzinfo-data gem could
 # not be found (i.e. `require 'tzinfo/data'` failed) when selecting the Ruby
 # data source.
+#
+# source://tzinfo//lib/tzinfo/data_sources/ruby_data_source.rb#13
 class TZInfo::DataSources::TZInfoDataNotFound < ::StandardError; end
 
 # Represents a time zone defined by a data source.
 #
 # @abstract Data sources return instances of {TimezoneInfo} subclasses.
+#
+# source://tzinfo//lib/tzinfo/data_sources/timezone_info.rb#9
 class TZInfo::DataSources::TimezoneInfo
   # Initializes a new TimezoneInfo. The passed in `identifier` instance will
   # be frozen.
@@ -1287,6 +1329,8 @@ end
 
 # Represents a data time zone defined by a list of transitions that change
 # the locally observed time.
+#
+# source://tzinfo//lib/tzinfo/data_sources/transitions_data_timezone_info.rb#10
 class TZInfo::DataSources::TransitionsDataTimezoneInfo < ::TZInfo::DataSources::DataTimezoneInfo
   # Initializes a new {TransitionsDataTimezoneInfo}.
   #
@@ -1458,6 +1502,8 @@ end
 # Database, 64-bit zoneinfo files only include future transitions up to
 # 2038-01-19 03:14:07. Any queries falling after this time may be
 # inaccurate.
+#
+# source://tzinfo//lib/tzinfo/data_sources/zoneinfo_data_source.rb#73
 class TZInfo::DataSources::ZoneinfoDataSource < ::TZInfo::DataSource
   # Initializes a new {ZoneinfoDataSource}.
   #
@@ -1761,9 +1807,13 @@ TZInfo::DataSources::ZoneinfoDataSource::EXCLUDED_FILENAMES = T.let(T.unsafe(nil
 # {ZoneinfoDataSource.search_path}. A valid zoneinfo directory is one that
 # contains time zone files, a country code index file named iso3166.tab and
 # a time zone index file named zone1970.tab or zone.tab.
+#
+# source://tzinfo//lib/tzinfo/data_sources/zoneinfo_data_source.rb#23
 class TZInfo::DataSources::ZoneinfoDirectoryNotFound < ::StandardError; end
 
 # Reads compiled zoneinfo TZif (\0, 2 or 3) files.
+#
+# source://tzinfo//lib/tzinfo/data_sources/zoneinfo_reader.rb#16
 class TZInfo::DataSources::ZoneinfoReader
   # Initializes a new {ZoneinfoReader}.
   #
@@ -1958,6 +2008,8 @@ TZInfo::DataSources::ZoneinfoReader::GENERATE_UP_TO = T.let(T.unsafe(nil), Integ
 
 # Represents time zones that are defined by rules that set out when
 # transitions occur.
+#
+# source://tzinfo//lib/tzinfo/data_timezone.rb#8
 class TZInfo::DataTimezone < ::TZInfo::InfoTimezone
   # Returns the canonical {Timezone} instance for this {DataTimezone}.
   #
@@ -2046,6 +2098,8 @@ end
 # zone-aware. Regardless of whether transitions in the time zone are crossed,
 # results of arithmetic operations will always maintain the same offset from
 # UTC (`offset`). The associated {TimezoneOffset} will aways be cleared.
+#
+# source://tzinfo//lib/tzinfo/datetime_with_offset.rb#19
 class TZInfo::DateTimeWithOffset < ::DateTime
   include ::TZInfo::WithOffset
 
@@ -2150,6 +2204,8 @@ end
 # of a calendar month.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/transition_rule.rb#339
 class TZInfo::DayOfMonthTransitionRule < ::TZInfo::DayOfWeekTransitionRule
   # Initializes a new {DayOfMonthTransitionRule}.
   #
@@ -2226,6 +2282,8 @@ end
 #
 # @abstract
 # @private
+#
+# source://tzinfo//lib/tzinfo/transition_rule.rb#273
 class TZInfo::DayOfWeekTransitionRule < ::TZInfo::TransitionRule
   # Initializes a new {DayOfWeekTransitionRule}.
   #
@@ -2300,6 +2358,8 @@ end
 #
 # @abstract
 # @private
+#
+# source://tzinfo//lib/tzinfo/transition_rule.rb#81
 class TZInfo::DayOfYearTransitionRule < ::TZInfo::TransitionRule
   # Initializes a new {DayOfYearTransitionRule}.
   #
@@ -2351,6 +2411,8 @@ end
 # Modules and classes used by the format 1 version of TZInfo::Data.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format1.rb#7
 module TZInfo::Format1; end
 
 # Instances of {Format1::CountryDefiner} are yielded to the format 1 version
@@ -2358,6 +2420,8 @@ module TZInfo::Format1; end
 # the zones of a country to be specified.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format1/country_definer.rb#11
 class TZInfo::Format1::CountryDefiner < ::TZInfo::Format2::CountryDefiner
   # Initializes a new {CountryDefiner}.
   #
@@ -2373,6 +2437,8 @@ end
 # define each country in the index.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format1/country_index_definition.rb#11
 module TZInfo::Format1::CountryIndexDefinition
   mixes_in_class_methods ::TZInfo::Format1::CountryIndexDefinition::ClassMethods
 
@@ -2390,6 +2456,8 @@ end
 # Class methods for inclusion.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format1/country_index_definition.rb#25
 module TZInfo::Format1::CountryIndexDefinition::ClassMethods
   # @return [Hash<String, DataSources::CountryInfo>] a frozen `Hash`
   #   of all the countries that have been defined in the index keyed by
@@ -2416,6 +2484,8 @@ end
 # transitions of the time zone to be specified.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format1/timezone_definer.rb#11
 class TZInfo::Format1::TimezoneDefiner < ::TZInfo::Format2::TimezoneDefiner
   # Defines an offset.
   #
@@ -2470,6 +2540,8 @@ end
 # definition modules and provides the methods for defining time zones.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format1/timezone_definition.rb#9
 module TZInfo::Format1::TimezoneDefinition
   mixes_in_class_methods ::TZInfo::Format2::TimezoneDefinition::ClassMethods
   mixes_in_class_methods ::TZInfo::Format1::TimezoneDefinition::ClassMethods
@@ -2487,6 +2559,8 @@ end
 # Class methods for inclusion.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format1/timezone_definition.rb#22
 module TZInfo::Format1::TimezoneDefinition::ClassMethods
   private
 
@@ -2503,6 +2577,8 @@ end
 # time zones in the index.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format1/timezone_index_definition.rb#10
 module TZInfo::Format1::TimezoneIndexDefinition
   mixes_in_class_methods ::TZInfo::Format1::TimezoneIndexDefinition::ClassMethods
 
@@ -2520,6 +2596,8 @@ end
 # Class methods for inclusion.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format1/timezone_index_definition.rb#28
 module TZInfo::Format1::TimezoneIndexDefinition::ClassMethods
   # @return [Array<String>] a frozen `Array` containing the identifiers of
   #   all data time zones. Identifiers are sorted according to
@@ -2555,6 +2633,8 @@ end
 # Modules and classes used by the format 2 version of TZInfo::Data.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format2.rb#7
 module TZInfo::Format2; end
 
 # Instances of {Format2::CountryDefiner} are yielded to the format 2 version
@@ -2562,6 +2642,8 @@ module TZInfo::Format2; end
 # the zones of a country to be specified.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format2/country_definer.rb#11
 class TZInfo::Format2::CountryDefiner
   # Initializes a new {CountryDefiner}.
   #
@@ -2594,6 +2676,8 @@ end
 # to allow countries and their time zones to be specified.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format2/country_index_definer.rb#10
 class TZInfo::Format2::CountryIndexDefiner
   # Initializes a new {CountryIndexDefiner}.
   #
@@ -2646,6 +2730,8 @@ end
 # used to define the country index.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format2/country_index_definition.rb#11
 module TZInfo::Format2::CountryIndexDefinition
   mixes_in_class_methods ::TZInfo::Format2::CountryIndexDefinition::ClassMethods
 
@@ -2663,6 +2749,8 @@ end
 # Class methods for inclusion.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format2/country_index_definition.rb#25
 module TZInfo::Format2::CountryIndexDefinition::ClassMethods
   # @return [Hash<String, DataSources::CountryInfo>] a frozen `Hash`
   #   of all the countries that have been defined in the index keyed by
@@ -2688,6 +2776,8 @@ end
 # to be specified.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format2/timezone_definer.rb#11
 class TZInfo::Format2::TimezoneDefiner
   # Initializes a new TimezoneDefiner.
   #
@@ -2764,6 +2854,8 @@ end
 # definition modules and provides methods for defining time zones.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format2/timezone_definition.rb#9
 module TZInfo::Format2::TimezoneDefinition
   mixes_in_class_methods ::TZInfo::Format2::TimezoneDefinition::ClassMethods
 
@@ -2780,6 +2872,8 @@ end
 # Class methods for inclusion.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format2/timezone_definition.rb#21
 module TZInfo::Format2::TimezoneDefinition::ClassMethods
   # @return [TimezoneInfo] the last time zone to be defined.
   #
@@ -2819,6 +2913,8 @@ end
 # {TimezoneIndexDefinition} to allow the time zone index to be defined.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format2/timezone_index_definer.rb#9
 class TZInfo::Format2::TimezoneIndexDefiner
   # Initializes a new TimezoneDefiner.
   #
@@ -2859,6 +2955,8 @@ end
 # timezone_index} method used to define the index.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format2/timezone_index_definition.rb#10
 module TZInfo::Format2::TimezoneIndexDefinition
   mixes_in_class_methods ::TZInfo::Format2::TimezoneIndexDefinition::ClassMethods
 
@@ -2876,6 +2974,8 @@ end
 # Class methods for inclusion.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/format2/timezone_index_definition.rb#29
 module TZInfo::Format2::TimezoneIndexDefinition::ClassMethods
   # @return [Array<String>] a frozen `Array` containing the identifiers of
   #   all data time zones. Identifiers are sorted according to
@@ -2905,6 +3005,8 @@ end
 # A {Timezone} based on a {DataSources::TimezoneInfo}.
 #
 # @abstract
+#
+# source://tzinfo//lib/tzinfo/info_timezone.rb#16
 class TZInfo::InfoTimezone < ::TZInfo::Timezone
   # Initializes a new {InfoTimezone}.
   #
@@ -2936,14 +3038,20 @@ end
 
 # {InvalidCountryCode} is raised by {Country#get} if the code given is not a
 # valid ISO 3166-1 alpha-2 code.
+#
+# source://tzinfo//lib/tzinfo/country.rb#7
 class TZInfo::InvalidCountryCode < ::StandardError; end
 
 # {InvalidDataSource} is raised if the selected {DataSource} doesn't implement
 # one of the required methods.
+#
+# source://tzinfo//lib/tzinfo/data_source.rb#10
 class TZInfo::InvalidDataSource < ::StandardError; end
 
 # {InvalidTimezoneIdentifier} is raised by {Timezone.get} if the identifier
 # given is not valid.
+#
+# source://tzinfo//lib/tzinfo/timezone.rb#26
 class TZInfo::InvalidTimezoneIdentifier < ::StandardError; end
 
 # Defines transitions that occur on the one-based nth Julian day of the year.
@@ -2952,6 +3060,8 @@ class TZInfo::InvalidTimezoneIdentifier < ::StandardError; end
 # Day 365 is always 31 December.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/transition_rule.rb#185
 class TZInfo::JulianDayOfYearTransitionRule < ::TZInfo::DayOfYearTransitionRule
   # Initializes a new {JulianDayOfYearTransitionRule}.
   #
@@ -3036,6 +3146,8 @@ TZInfo::JulianDayOfYearTransitionRule::YEAR = T.let(T.unsafe(nil), Integer)
 # of a calendar month.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/transition_rule.rb#408
 class TZInfo::LastDayOfMonthTransitionRule < ::TZInfo::DayOfWeekTransitionRule
   # Initializes a new {LastDayOfMonthTransitionRule}.
   #
@@ -3093,6 +3205,8 @@ end
 
 # Represents time zones that are defined as a link to or alias for another
 # time zone.
+#
+# source://tzinfo//lib/tzinfo/linked_timezone.rb#14
 class TZInfo::LinkedTimezone < ::TZInfo::InfoTimezone
   # Initializes a new {LinkedTimezone}.
   #
@@ -3184,6 +3298,8 @@ end
 
 # Represents the infinite period of time in a time zone that constantly
 # observes the same offset from UTC (has an unbounded start and end).
+#
+# source://tzinfo//lib/tzinfo/offset_timezone_period.rb#10
 class TZInfo::OffsetTimezonePeriod < ::TZInfo::TimezonePeriod
   # Initializes an {OffsetTimezonePeriod}.
   #
@@ -3232,12 +3348,16 @@ end
 
 # {PeriodNotFound} is raised to indicate that no {TimezonePeriod} matching a
 # given time could be found.
+#
+# source://tzinfo//lib/tzinfo/timezone.rb#21
 class TZInfo::PeriodNotFound < ::StandardError; end
 
 # Maintains a pool of `String` instances. The {#dedupe} method will return
 # either a pooled copy of a given `String` or add the instance to the pool.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/string_deduper.rb#11
 class TZInfo::StringDeduper
   # Initializes a new {StringDeduper}.
   #
@@ -3284,6 +3404,8 @@ end
 # Regardless of whether transitions in the time zone are crossed, results of
 # arithmetic operations will always maintain the same offset from UTC
 # (`utc_offset`). The associated {TimezoneOffset} will aways be cleared.
+#
+# source://tzinfo//lib/tzinfo/time_with_offset.rb#16
 class TZInfo::TimeWithOffset < ::Time
   include ::TZInfo::WithOffset
 
@@ -3413,6 +3535,8 @@ end
 # an optional UTC offset. Like Ruby's `Time` class, {Timestamp} can
 # distinguish between a local time with a zero offset and a time specified
 # explicitly as UTC.
+#
+# source://tzinfo//lib/tzinfo/timestamp.rb#11
 class TZInfo::Timestamp
   include ::Comparable
 
@@ -3804,6 +3928,8 @@ TZInfo::Timestamp::JD_EPOCH = T.let(T.unsafe(nil), Integer)
 # {TimezoneOffset} (if the {TimezoneOffset} would not necessarily be valid for
 # the result). Once the {TimezoneOffset} has been cleared,
 # {TimestampWithOffset} behaves identically to {Timestamp}.
+#
+# source://tzinfo//lib/tzinfo/timestamp_with_offset.rb#12
 class TZInfo::TimestampWithOffset < ::TZInfo::Timestamp
   include ::TZInfo::WithOffset
 
@@ -3913,6 +4039,8 @@ end
 # @abstract The {get} method returns an instance of either {DataTimezone} or
 #   {LinkedTimezone}. The {get_proxy} method and other methods returning
 #   collections of time zones return instances of {TimezoneProxy}.
+#
+# source://tzinfo//lib/tzinfo/timezone.rb#80
 class TZInfo::Timezone
   include ::Comparable
 
@@ -4914,6 +5042,8 @@ TZInfo::TimezoneDefinition = TZInfo::Format1::TimezoneDefinition
 TZInfo::TimezoneIndexDefinition = TZInfo::Format1::TimezoneIndexDefinition
 
 # Represents an offset from UTC observed by a time zone.
+#
+# source://tzinfo//lib/tzinfo/timezone_offset.rb#6
 class TZInfo::TimezoneOffset
   # Initializes a new {TimezoneOffset}.
   #
@@ -5064,6 +5194,8 @@ end
 #
 # @abstract Time zone period data will returned as an instance of one of the
 #   subclasses of {TimezonePeriod}.
+#
+# source://tzinfo//lib/tzinfo/timezone_period.rb#14
 class TZInfo::TimezonePeriod
   # Initializes a {TimezonePeriod}.
   #
@@ -5280,6 +5412,8 @@ end
 # The first time an attempt is made to access the data for the time zone, the
 # real {Timezone} will be loaded is loaded. If the proxy's identifier was not
 # valid, then an exception will be raised at this point.
+#
+# source://tzinfo//lib/tzinfo/timezone_proxy.rb#22
 class TZInfo::TimezoneProxy < ::TZInfo::Timezone
   # Initializes a new {TimezoneProxy}.
   #
@@ -5443,6 +5577,8 @@ end
 
 # Represents a transition from one observed UTC offset ({TimezoneOffset} to
 # another for a time zone.
+#
+# source://tzinfo//lib/tzinfo/timezone_transition.rb#7
 class TZInfo::TimezoneTransition
   # Initializes a new {TimezoneTransition}.
   #
@@ -5553,6 +5689,8 @@ end
 #
 # @abstract
 # @private
+#
+# source://tzinfo//lib/tzinfo/transition_rule.rb#10
 class TZInfo::TransitionRule
   # Initializes a new {TransitionRule}.
   #
@@ -5622,6 +5760,8 @@ end
 # Represents a period of time in a time zone where the same offset from UTC
 # applies. The period of time is bounded at at least one end, either having a
 # start transition, end transition or both start and end transitions.
+#
+# source://tzinfo//lib/tzinfo/transitions_timezone_period.rb#10
 class TZInfo::TransitionsTimezonePeriod < ::TZInfo::TimezonePeriod
   # Initializes a {TransitionsTimezonePeriod}.
   #
@@ -5699,6 +5839,8 @@ end
 # same string.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/string_deduper.rb#90
 class TZInfo::UnaryMinusGlobalStringDeduper
   # @param string [String] the string to deduplicate.
   # @return [bool] `string` if it is frozen, otherwise a frozen, possibly
@@ -5711,6 +5853,8 @@ end
 # {UnknownTimezone} is raised when calling methods on an instance of
 # {Timezone} that was created directly. To obtain {Timezone} instances the
 # {Timezone.get} method should be used instead.
+#
+# source://tzinfo//lib/tzinfo/timezone.rb#32
 class TZInfo::UnknownTimezone < ::StandardError; end
 
 # Object#untaint is deprecated in Ruby >= 2.7 and will be removed in 3.2.
@@ -5718,6 +5862,8 @@ class TZInfo::UnknownTimezone < ::StandardError; end
 # warning.
 #
 # @private
+#
+# source://tzinfo//lib/tzinfo/untaint_ext.rb#10
 module TZInfo::UntaintExt; end
 
 # The TZInfo version number.
@@ -5730,6 +5876,8 @@ TZInfo::VERSION = T.let(T.unsafe(nil), String)
 # the {strftime} method that handles expanding the `%Z` directive according to
 # the {TimezoneOffset#abbreviation abbreviation} of the {TimezoneOffset}
 # associated with a local time.
+#
+# source://tzinfo//lib/tzinfo/with_offset.rb#10
 module TZInfo::WithOffset
   # Overrides the `Time`, `DateTime` or {Timestamp} version of `strftime`,
   # replacing `%Z` with the {TimezoneOffset#abbreviation abbreviation} of the

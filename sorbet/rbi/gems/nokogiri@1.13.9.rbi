@@ -38,6 +38,8 @@
 #
 # - Nokogiri::XML::Searchable#css for more information about CSS searching
 # - Nokogiri::XML::Searchable#xpath for more information about XPath searching
+#
+# source://nokogiri//lib/nokogiri.rb#40
 module Nokogiri
   class << self
     # source://nokogiri//lib/nokogiri/html4.rb#10
@@ -125,6 +127,8 @@ module Nokogiri
 end
 
 # Translate a CSS selector into an XPath 1.0 query
+#
+# source://nokogiri//lib/nokogiri/css.rb#6
 module Nokogiri::CSS
   class << self
     # TODO: Deprecate this method ahead of 2.0 and delete it in 2.0.
@@ -166,6 +170,7 @@ module Nokogiri::CSS
   end
 end
 
+# source://nokogiri//lib/nokogiri/css/node.rb#5
 class Nokogiri::CSS::Node
   # Create a new Node with +type+ and +value+
   #
@@ -223,6 +228,7 @@ end
 # source://nokogiri//lib/nokogiri/css/node.rb#6
 Nokogiri::CSS::Node::ALLOW_COMBINATOR_ON_SELF = T.let(T.unsafe(nil), Array)
 
+# source://nokogiri//lib/nokogiri/css/parser_extras.rb#7
 class Nokogiri::CSS::Parser < ::Racc::Parser
   # Create a new CSS parser with respect to +namespaces+
   #
@@ -511,8 +517,10 @@ Nokogiri::CSS::Parser::Racc_debug_parser = T.let(T.unsafe(nil), FalseClass)
 # source://nokogiri//lib/nokogiri/css/parser.rb#295
 Nokogiri::CSS::Parser::Racc_token_to_s_table = T.let(T.unsafe(nil), Array)
 
+# source://nokogiri//lib/nokogiri/css/syntax_error.rb#6
 class Nokogiri::CSS::SyntaxError < ::Nokogiri::SyntaxError; end
 
+# source://nokogiri//lib/nokogiri/css/tokenizer.rb#11
 class Nokogiri::CSS::Tokenizer
   # source://nokogiri//lib/nokogiri/css/tokenizer.rb#57
   def _next_token; end
@@ -561,11 +569,14 @@ class Nokogiri::CSS::Tokenizer
   def state=(_arg0); end
 end
 
+# source://nokogiri//lib/nokogiri/css/tokenizer.rb#14
 class Nokogiri::CSS::Tokenizer::ScanError < ::StandardError; end
 
 # When translating CSS selectors to XPath queries with Nokogiri::CSS.xpath_for, the XPathVisitor
 # class allows for changing some of the behaviors related to builtin xpath functions and quirks
 # of HTML5.
+#
+# source://nokogiri//lib/nokogiri/css/xpath_visitor.rb#9
 class Nokogiri::CSS::XPathVisitor
   # :call-seq:
   #   new() → XPathVisitor
@@ -656,6 +667,8 @@ class Nokogiri::CSS::XPathVisitor
 end
 
 # Enum to direct XPathVisitor when to use Nokogiri builtin XPath functions.
+#
+# source://nokogiri//lib/nokogiri/css/xpath_visitor.rb#13
 module Nokogiri::CSS::XPathVisitor::BuiltinsConfig; end
 
 # Always use Nokogiri builtin functions whenever possible. This is probably only useful for testing.
@@ -682,6 +695,8 @@ Nokogiri::CSS::XPathVisitor::BuiltinsConfig::VALUES = T.let(T.unsafe(nil), Array
 # Enum to direct XPathVisitor when to tweak the XPath query to suit the nature of the document
 # being searched. Note that searches for CSS selectors from a Nokogiri document, fragment, or
 # node will choose the correct option automatically.
+#
+# source://nokogiri//lib/nokogiri/css/xpath_visitor.rb#33
 module Nokogiri::CSS::XPathVisitor::DoctypeConfig; end
 
 # The document being searched is an HTML4 document.
@@ -705,6 +720,7 @@ Nokogiri::CSS::XPathVisitor::DoctypeConfig::XML = T.let(T.unsafe(nil), Symbol)
 # source://nokogiri//lib/nokogiri/css/xpath_visitor.rb#10
 Nokogiri::CSS::XPathVisitor::WILDCARD_NAMESPACES = T.let(T.unsafe(nil), TrueClass)
 
+# source://nokogiri//lib/nokogiri/css/xpath_visitor.rb#337
 module Nokogiri::CSS::XPathVisitorAlwaysUseBuiltins
   class << self
     # source://nokogiri//lib/nokogiri/css/xpath_visitor.rb#338
@@ -712,6 +728,7 @@ module Nokogiri::CSS::XPathVisitorAlwaysUseBuiltins
   end
 end
 
+# source://nokogiri//lib/nokogiri/css/xpath_visitor.rb#347
 module Nokogiri::CSS::XPathVisitorOptimallyUseBuiltins
   class << self
     # source://nokogiri//lib/nokogiri/css/xpath_visitor.rb#348
@@ -729,6 +746,8 @@ end
 #   HTML5::Document → HTML5::DocumentFragment
 #
 # This module is included into those key classes who need to do this.
+#
+# source://nokogiri//lib/nokogiri/class_resolver.rb#19
 module Nokogiri::ClassResolver
   # :call-seq:
   #   related_class(class_name) → Class
@@ -762,10 +781,13 @@ end
 # source://nokogiri//lib/nokogiri/class_resolver.rb#21
 Nokogiri::ClassResolver::VALID_NAMESPACES = T.let(T.unsafe(nil), Set)
 
+# source://nokogiri//lib/nokogiri/decorators/slop.rb#4
 module Nokogiri::Decorators; end
 
 # The Slop decorator implements method missing such that a methods may be
 # used instead of XPath or CSS.  See Nokogiri.Slop
+#
+# source://nokogiri//lib/nokogiri/decorators/slop.rb#8
 module Nokogiri::Decorators::Slop
   # look for node with +name+.  See Nokogiri.Slop
   #
@@ -796,6 +818,7 @@ class Nokogiri::EncodingHandler
   end
 end
 
+# source://nokogiri//lib/nokogiri/gumbo.rb#4
 module Nokogiri::Gumbo
   class << self
     def fragment(_arg0, _arg1, _arg2, _arg3, _arg4, _arg5); end
@@ -830,6 +853,8 @@ Nokogiri::HTML = Nokogiri::HTML4
 #
 # 💡 Before v1.12.0, Nokogiri::HTML4 did not exist, and Nokogiri::HTML was the module/namespace
 # for parsing HTML.
+#
+# source://nokogiri//lib/nokogiri/html4.rb#19
 module Nokogiri::HTML4
   class << self
     # Parse a fragment from +string+ in to a NodeSet.
@@ -867,6 +892,8 @@ end
 #
 # The HTML builder inherits from the XML builder, so make sure to read the
 # Nokogiri::XML::Builder documentation.
+#
+# source://nokogiri//lib/nokogiri/html.rb#31
 class Nokogiri::HTML4::Builder < ::Nokogiri::XML::Builder
   # Convert the builder to HTML
   #
@@ -874,6 +901,7 @@ class Nokogiri::HTML4::Builder < ::Nokogiri::XML::Builder
   def to_html; end
 end
 
+# source://nokogiri//lib/nokogiri/html4/document.rb#11
 class Nokogiri::HTML4::Document < ::Nokogiri::XML::Document
   # Create a Nokogiri::XML::DocumentFragment from +tags+
   #
@@ -983,6 +1011,7 @@ class Nokogiri::HTML4::Document < ::Nokogiri::XML::Document
   end
 end
 
+# source://nokogiri//lib/nokogiri/html4/document.rb#224
 class Nokogiri::HTML4::Document::EncodingFound < ::StandardError
   # @return [EncodingFound] a new instance of EncodingFound
   #
@@ -995,6 +1024,7 @@ class Nokogiri::HTML4::Document::EncodingFound < ::StandardError
   def found_encoding; end
 end
 
+# source://nokogiri//lib/nokogiri/html4/document.rb#234
 class Nokogiri::HTML4::Document::EncodingReader
   # @return [EncodingReader] a new instance of EncodingReader
   #
@@ -1017,6 +1047,7 @@ class Nokogiri::HTML4::Document::EncodingReader
   end
 end
 
+# source://nokogiri//lib/nokogiri/html4/document.rb#257
 class Nokogiri::HTML4::Document::EncodingReader::JumpSAXHandler < ::Nokogiri::HTML4::Document::EncodingReader::SAXHandler
   # @return [JumpSAXHandler] a new instance of JumpSAXHandler
   #
@@ -1027,6 +1058,7 @@ class Nokogiri::HTML4::Document::EncodingReader::JumpSAXHandler < ::Nokogiri::HT
   def start_element(name, attrs = T.unsafe(nil)); end
 end
 
+# source://nokogiri//lib/nokogiri/html4/document.rb#235
 class Nokogiri::HTML4::Document::EncodingReader::SAXHandler < ::Nokogiri::XML::SAX::Document
   # @return [SAXHandler] a new instance of SAXHandler
   #
@@ -1042,6 +1074,7 @@ class Nokogiri::HTML4::Document::EncodingReader::SAXHandler < ::Nokogiri::XML::S
   def start_element(name, attrs = T.unsafe(nil)); end
 end
 
+# source://nokogiri//lib/nokogiri/html4/document_fragment.rb#7
 class Nokogiri::HTML4::DocumentFragment < ::Nokogiri::XML::DocumentFragment
   # @return [DocumentFragment] a new instance of DocumentFragment
   # @yield [options]
@@ -1057,6 +1090,7 @@ class Nokogiri::HTML4::DocumentFragment < ::Nokogiri::XML::DocumentFragment
   end
 end
 
+# source://nokogiri//lib/nokogiri/html4/element_description.rb#5
 class Nokogiri::HTML4::ElementDescription
   # Is this element a block element?
   #
@@ -1447,8 +1481,10 @@ Nokogiri::HTML4::ElementDescription::VERSION_ATTR = T.let(T.unsafe(nil), Array)
 # source://nokogiri//lib/nokogiri/html4/element_description_defaults.rb#255
 Nokogiri::HTML4::ElementDescription::WIDTH_ATTR = T.let(T.unsafe(nil), Array)
 
+# source://nokogiri//lib/nokogiri/html4/entity_lookup.rb#5
 class Nokogiri::HTML4::EntityDescription < ::Struct; end
 
+# source://nokogiri//lib/nokogiri/html4/entity_lookup.rb#7
 class Nokogiri::HTML4::EntityLookup
   # Look up entity with +name+
   #
@@ -1468,6 +1504,8 @@ Nokogiri::HTML4::NamedCharacters = T.let(T.unsafe(nil), Nokogiri::HTML4::EntityL
 # See Nokogiri::HTML4::SAX::Parser for a basic example of using a SAX parser with HTML.
 #
 # For more information on SAX parsers, see Nokogiri::XML::SAX
+#
+# source://nokogiri//lib/nokogiri/html4/sax/parser_context.rb#5
 module Nokogiri::HTML4::SAX; end
 
 # This class lets you perform SAX style parsing on HTML with HTML error correction.
@@ -1484,6 +1522,8 @@ module Nokogiri::HTML4::SAX; end
 #   parser.parse(File.read(ARGV[0], mode: 'rb'))
 #
 # For more information on SAX parsers, see Nokogiri::XML::SAX
+#
+# source://nokogiri//lib/nokogiri/html4/sax/parser.rb#29
 class Nokogiri::HTML4::SAX::Parser < ::Nokogiri::XML::SAX::Parser
   # Parse a file with +filename+
   #
@@ -1511,6 +1551,8 @@ end
 
 # Context for HTML SAX parsers. This class is usually not instantiated by the user. Instead,
 # you should be looking at Nokogiri::HTML4::SAX::Parser
+#
+# source://nokogiri//lib/nokogiri/html4/sax/parser_context.rb#9
 class Nokogiri::HTML4::SAX::ParserContext < ::Nokogiri::XML::SAX::ParserContext
   def parse_with(_arg0); end
 
@@ -1523,6 +1565,7 @@ class Nokogiri::HTML4::SAX::ParserContext < ::Nokogiri::XML::SAX::ParserContext
   end
 end
 
+# source://nokogiri//lib/nokogiri/html4/sax/push_parser.rb#6
 class Nokogiri::HTML4::SAX::PushParser < ::Nokogiri::XML::SAX::PushParser
   # @return [PushParser] a new instance of PushParser
   #
@@ -1759,6 +1802,8 @@ end
 #   original tag name is returned verbatim.
 #
 # Since v1.12.0
+#
+# source://nokogiri//lib/nokogiri/html5/document.rb#23
 module Nokogiri::HTML5
   class << self
     # source://nokogiri//lib/nokogiri/html5.rb#457
@@ -1820,6 +1865,8 @@ end
 # Since v1.12.0
 #
 # 💡 HTML5 functionality is not available when running JRuby.
+#
+# source://nokogiri//lib/nokogiri/html5/document.rb#27
 class Nokogiri::HTML5::Document < ::Nokogiri::HTML4::Document
   # source://nokogiri//lib/nokogiri/html5/document.rb#58
   def fragment(tags = T.unsafe(nil)); end
@@ -1861,6 +1908,8 @@ end
 # Since v1.12.0
 #
 # 💡 HTML5 functionality is not available when running JRuby.
+#
+# source://nokogiri//lib/nokogiri/html5/document_fragment.rb#27
 class Nokogiri::HTML5::DocumentFragment < ::Nokogiri::HTML4::DocumentFragment
   # Create a document fragment.
   #
@@ -1918,6 +1967,8 @@ Nokogiri::HTML5::MATHML_NAMESPACE = T.let(T.unsafe(nil), String)
 # Since v1.12.0
 #
 # 💡 HTML5 functionality is not available when running JRuby.
+#
+# source://nokogiri//lib/nokogiri/html5/node.rb#27
 module Nokogiri::HTML5::Node
   # source://nokogiri//lib/nokogiri/html5/node.rb#67
   def fragment(tags); end
@@ -1966,6 +2017,8 @@ Nokogiri::LIBXSLT_PATCHES = T.let(T.unsafe(nil), Array)
 Nokogiri::OTHER_LIBRARY_VERSIONS = T.let(T.unsafe(nil), String)
 Nokogiri::PACKAGED_LIBRARIES = T.let(T.unsafe(nil), TrueClass)
 Nokogiri::PRECOMPILED_LIBRARIES = T.let(T.unsafe(nil), TrueClass)
+
+# source://nokogiri//lib/nokogiri/syntax_error.rb#4
 class Nokogiri::SyntaxError < ::StandardError; end
 
 module Nokogiri::Test
@@ -1984,6 +2037,7 @@ Nokogiri::VERSION = T.let(T.unsafe(nil), String)
 # source://nokogiri//lib/nokogiri/version/info.rb#221
 Nokogiri::VERSION_INFO = T.let(T.unsafe(nil), Hash)
 
+# source://nokogiri//lib/nokogiri/version/info.rb#7
 class Nokogiri::VersionInfo
   include ::Singleton
   extend ::Singleton::SingletonClassMethods
@@ -2056,6 +2110,7 @@ class Nokogiri::VersionInfo
   def windows?; end
 end
 
+# source://nokogiri//lib/nokogiri/xml.rb#12
 module Nokogiri::XML
   class << self
     # Parse an XML document using the Nokogiri::XML::Reader API.  See
@@ -2090,6 +2145,7 @@ module Nokogiri::XML
   end
 end
 
+# source://nokogiri//lib/nokogiri/xml/attr.rb#5
 class Nokogiri::XML::Attr < ::Nokogiri::XML::Node
   def content=(_arg0); end
   def to_s; end
@@ -2107,6 +2163,8 @@ class Nokogiri::XML::Attr < ::Nokogiri::XML::Node
 end
 
 # Represents an attribute declaration in a DTD
+#
+# source://nokogiri//lib/nokogiri/xml/attribute_decl.rb#7
 class Nokogiri::XML::AttributeDecl < ::Nokogiri::XML::Node
   def attribute_type; end
   def default; end
@@ -2373,6 +2431,8 @@ end
 #   <root>
 #     <foo/>
 #   </root>
+#
+# source://nokogiri//lib/nokogiri/xml/builder.rb#264
 class Nokogiri::XML::Builder
   include ::Nokogiri::ClassResolver
 
@@ -2489,6 +2549,7 @@ end
 # source://nokogiri//lib/nokogiri/xml/builder.rb#267
 Nokogiri::XML::Builder::DEFAULT_DOCUMENT_OPTIONS = T.let(T.unsafe(nil), Hash)
 
+# source://nokogiri//lib/nokogiri/xml/builder.rb#442
 class Nokogiri::XML::Builder::NodeBuilder
   # @return [NodeBuilder] a new instance of NodeBuilder
   #
@@ -2505,6 +2566,7 @@ class Nokogiri::XML::Builder::NodeBuilder
   def method_missing(method, *args, &block); end
 end
 
+# source://nokogiri//lib/nokogiri/xml/cdata.rb#7
 class Nokogiri::XML::CDATA < ::Nokogiri::XML::Text
   # Get the name of this CDATA node
   #
@@ -2516,6 +2578,7 @@ class Nokogiri::XML::CDATA < ::Nokogiri::XML::Text
   end
 end
 
+# source://nokogiri//lib/nokogiri/xml/character_data.rb#5
 class Nokogiri::XML::CharacterData < ::Nokogiri::XML::Node
   include ::Nokogiri::XML::PP::CharacterData
 end
@@ -2526,6 +2589,7 @@ class Nokogiri::XML::Comment < ::Nokogiri::XML::CharacterData
   end
 end
 
+# source://nokogiri//lib/nokogiri/xml/dtd.rb#5
 class Nokogiri::XML::DTD < ::Nokogiri::XML::Node
   def attributes; end
 
@@ -2560,6 +2624,8 @@ end
 #
 # For searching a Document, see Nokogiri::XML::Searchable#css and
 # Nokogiri::XML::Searchable#xpath
+#
+# source://nokogiri//lib/nokogiri/xml/document.rb#17
 class Nokogiri::XML::Document < ::Nokogiri::XML::Node
   # @return [Document] a new instance of Document
   #
@@ -2938,6 +3004,7 @@ Nokogiri::XML::Document::NCNAME_RE = T.let(T.unsafe(nil), Regexp)
 # source://nokogiri//lib/nokogiri/xml/document.rb#18
 Nokogiri::XML::Document::NCNAME_START_CHAR = T.let(T.unsafe(nil), String)
 
+# source://nokogiri//lib/nokogiri/xml/document_fragment.rb#7
 class Nokogiri::XML::DocumentFragment < ::Nokogiri::XML::Node
   # Create a new DocumentFragment from +tags+.
   #
@@ -3046,6 +3113,8 @@ class Nokogiri::XML::Element < ::Nokogiri::XML::Node; end
 #
 # ElementContent represents the tree inside the <!ELEMENT> tag shown above
 # that lists the possible content for the div1 tag.
+#
+# source://nokogiri//lib/nokogiri/xml/element_content.rb#16
 class Nokogiri::XML::ElementContent
   # Get the children of this ElementContent node
   #
@@ -3096,6 +3165,7 @@ Nokogiri::XML::ElementContent::PLUS = T.let(T.unsafe(nil), Integer)
 # source://nokogiri//lib/nokogiri/xml/element_content.rb#20
 Nokogiri::XML::ElementContent::SEQ = T.let(T.unsafe(nil), Integer)
 
+# source://nokogiri//lib/nokogiri/xml/element_decl.rb#5
 class Nokogiri::XML::ElementDecl < ::Nokogiri::XML::Node
   def content; end
   def element_type; end
@@ -3106,6 +3176,7 @@ class Nokogiri::XML::ElementDecl < ::Nokogiri::XML::Node
   def prefix; end
 end
 
+# source://nokogiri//lib/nokogiri/xml/entity_decl.rb#5
 class Nokogiri::XML::EntityDecl < ::Nokogiri::XML::Node
   def content; end
   def entity_type; end
@@ -3130,6 +3201,7 @@ Nokogiri::XML::EntityDecl::INTERNAL_GENERAL = T.let(T.unsafe(nil), Integer)
 Nokogiri::XML::EntityDecl::INTERNAL_PARAMETER = T.let(T.unsafe(nil), Integer)
 Nokogiri::XML::EntityDecl::INTERNAL_PREDEFINED = T.let(T.unsafe(nil), Integer)
 
+# source://nokogiri//lib/nokogiri/xml/entity_reference.rb#5
 class Nokogiri::XML::EntityReference < ::Nokogiri::XML::Node
   # source://nokogiri//lib/nokogiri/xml/entity_reference.rb#6
   def children; end
@@ -3142,6 +3214,7 @@ class Nokogiri::XML::EntityReference < ::Nokogiri::XML::Node
   end
 end
 
+# source://nokogiri//lib/nokogiri/xml/namespace.rb#5
 class Nokogiri::XML::Namespace
   include ::Nokogiri::XML::PP::Node
 
@@ -3206,6 +3279,8 @@ end
 # You may search this node's subtree using methods like #xpath and #css.
 #
 # See the method group entitled Node@Searching+via+XPath+or+CSS+Queries for the full set of methods.
+#
+# source://nokogiri//lib/nokogiri/xml/node.rb#56
 class Nokogiri::XML::Node
   include ::Nokogiri::HTML5::Node
   include ::Nokogiri::XML::PP::Node
@@ -4514,6 +4589,8 @@ Nokogiri::XML::Node::PI_NODE = T.let(T.unsafe(nil), Integer)
 
 # Save options for serializing nodes.
 # See the method group entitled Node@Serialization+and+Generating+Output for usage.
+#
+# source://nokogiri//lib/nokogiri/xml/node/save_options.rb#9
 class Nokogiri::XML::Node::SaveOptions
   # Create a new SaveOptions object with +options+
   #
@@ -4625,6 +4702,8 @@ Nokogiri::XML::Node::XINCLUDE_START = T.let(T.unsafe(nil), Integer)
 # A NodeSet contains a list of Nokogiri::XML::Node objects.  Typically
 # a NodeSet is return as a result of searching a Document via
 # Nokogiri::XML::Searchable#css or Nokogiri::XML::Searchable#xpath
+#
+# source://nokogiri//lib/nokogiri/xml/node_set.rb#9
 class Nokogiri::XML::NodeSet
   include ::Nokogiri::XML::Searchable
   include ::Enumerable
@@ -5010,10 +5089,14 @@ end
 Nokogiri::XML::NodeSet::IMPLIED_XPATH_CONTEXTS = T.let(T.unsafe(nil), Array)
 
 # Struct representing an {XML Schema Notation}[https://www.w3.org/TR/xml/#Notations]
+#
+# source://nokogiri//lib/nokogiri/xml/notation.rb#7
 class Nokogiri::XML::Notation < ::Struct; end
 
+# source://nokogiri//lib/nokogiri/xml/pp/node.rb#6
 module Nokogiri::XML::PP; end
 
+# source://nokogiri//lib/nokogiri/xml/pp/character_data.rb#7
 module Nokogiri::XML::PP::CharacterData
   # source://nokogiri//lib/nokogiri/xml/pp/character_data.rb#15
   def inspect; end
@@ -5022,6 +5105,7 @@ module Nokogiri::XML::PP::CharacterData
   def pretty_print(pp); end
 end
 
+# source://nokogiri//lib/nokogiri/xml/pp/node.rb#7
 module Nokogiri::XML::PP::Node
   # source://nokogiri//lib/nokogiri/xml/pp/node.rb#8
   def inspect; end
@@ -5052,6 +5136,8 @@ end
 #   # later...
 #   options.norecover # Removes the Nokogiri::XML::ParseOptions::RECOVER option
 #   options.nonoent # Removes the Nokogiri::XML::ParseOptions::NOENT option
+#
+# source://nokogiri//lib/nokogiri/xml/parse_options.rb#29
 class Nokogiri::XML::ParseOptions
   # @return [ParseOptions] a new instance of ParseOptions
   #
@@ -5299,6 +5385,7 @@ Nokogiri::XML::ParseOptions::STRICT = T.let(T.unsafe(nil), Integer)
 # source://nokogiri//lib/nokogiri/xml/parse_options.rb#53
 Nokogiri::XML::ParseOptions::XINCLUDE = T.let(T.unsafe(nil), Integer)
 
+# source://nokogiri//lib/nokogiri/xml/processing_instruction.rb#5
 class Nokogiri::XML::ProcessingInstruction < ::Nokogiri::XML::Node
   # @return [ProcessingInstruction] a new instance of ProcessingInstruction
   #
@@ -5336,6 +5423,8 @@ end
 #
 # The Reader parser is good for when you need the speed of a SAX parser,
 # but do not want to write a Document handler.
+#
+# source://nokogiri//lib/nokogiri/xml/reader.rb#32
 class Nokogiri::XML::Reader
   include ::Enumerable
 
@@ -5519,6 +5608,8 @@ Nokogiri::XML::Reader::TYPE_XML_DECLARATION = T.let(T.unsafe(nil), Integer)
 # NOTE: RelaxNG input is always treated as TRUSTED documents, meaning that they will cause the
 # underlying parsing libraries to access network resources. This is counter to Nokogiri's
 # "untrusted by default" security policy, but is a limitation of the underlying libraries.
+#
+# source://nokogiri//lib/nokogiri/xml/relax_ng.rb#35
 class Nokogiri::XML::RelaxNG < ::Nokogiri::XML::Schema
   private
 
@@ -5569,6 +5660,8 @@ end
 # feels necessary, and a parser that lets you spoon feed it XML. If you want to let Nokogiri
 # deal with reading your XML, use the Nokogiri::XML::SAX::Parser. If you want to have fine grain
 # control over the XML input, use the Nokogiri::XML::SAX::PushParser.
+#
+# source://nokogiri//lib/nokogiri/xml/sax/document.rb#45
 module Nokogiri::XML::SAX; end
 
 # This class is used for registering types of events you are interested in handling. All of
@@ -5590,6 +5683,8 @@ module Nokogiri::XML::SAX; end
 #
 # You can use this event handler for any SAX style parser included with Nokogiri. See
 # Nokogiri::XML::SAX, and Nokogiri::HTML4::SAX.
+#
+# source://nokogiri//lib/nokogiri/xml/sax/document.rb#66
 class Nokogiri::XML::SAX::Document
   # Called when cdata blocks are found
   # +string+ contains the cdata content
@@ -5705,6 +5800,8 @@ end
 #
 # For more information about SAX parsers, see Nokogiri::XML::SAX.  Also
 # see Nokogiri::XML::SAX::Document for the available events.
+#
+# source://nokogiri//lib/nokogiri/xml/sax/parser.rb#34
 class Nokogiri::XML::SAX::Parser
   # Create a new Parser with +doc+ and +encoding+
   #
@@ -5765,6 +5862,7 @@ class Nokogiri::XML::SAX::Parser
   def check_encoding(encoding); end
 end
 
+# source://nokogiri//lib/nokogiri/xml/sax/parser.rb#35
 class Nokogiri::XML::SAX::Parser::Attribute < ::Struct; end
 
 # Encodinds this parser supports
@@ -5775,6 +5873,8 @@ Nokogiri::XML::SAX::Parser::ENCODINGS = T.let(T.unsafe(nil), Hash)
 # Context for XML SAX parsers.  This class is usually not instantiated
 # by the user.  Instead, you should be looking at
 # Nokogiri::XML::SAX::Parser
+#
+# source://nokogiri//lib/nokogiri/xml/sax/parser_context.rb#10
 class Nokogiri::XML::SAX::ParserContext
   def column; end
   def line; end
@@ -5814,6 +5914,8 @@ end
 #   parser << "<div>hello<"
 #   parser << "/div>"
 #   parser.finish
+#
+# source://nokogiri//lib/nokogiri/xml/sax/push_parser.rb#27
 class Nokogiri::XML::SAX::PushParser
   # Create a new PushParser with +doc+ as the SAX Document, providing
   # an optional +file_name+ and +encoding+
@@ -5886,6 +5988,8 @@ end
 # documents as "trusted" by default which was counter to Nokogiri's "untrusted by default"
 # security policy. If a document is trusted, then the caller may turn off the NONET option via
 # the ParseOptions to re-enable external entity resolution over a network connection.
+#
+# source://nokogiri//lib/nokogiri/xml/schema.rb#37
 class Nokogiri::XML::Schema
   # Errors while parsing the schema file
   #
@@ -5946,6 +6050,8 @@ end
 #  It implements the public methods #search, #css, and #xpath,
 #  as well as allowing specific implementations to specialize some
 #  of the important behaviors.
+#
+# source://nokogiri//lib/nokogiri/xml/searchable.rb#13
 module Nokogiri::XML::Searchable
   # call-seq:
   #   at(*paths, [namespace-bindings, xpath-variable-bindings, custom-handler-class])
@@ -6180,6 +6286,8 @@ Nokogiri::XML::Searchable::LOOKS_LIKE_XPATH = T.let(T.unsafe(nil), Regexp)
 
 # This class provides information about XML SyntaxErrors.  These
 # exceptions are typically stored on Nokogiri::XML::Document#errors.
+#
+# source://nokogiri//lib/nokogiri/xml/syntax_error.rb#8
 class Nokogiri::XML::SyntaxError < ::Nokogiri::SyntaxError
   # Returns the value of attribute code.
   #
@@ -6276,6 +6384,7 @@ class Nokogiri::XML::SyntaxError < ::Nokogiri::SyntaxError
   def nil_or_zero?(attribute); end
 end
 
+# source://nokogiri//lib/nokogiri/xml/text.rb#5
 class Nokogiri::XML::Text < ::Nokogiri::XML::CharacterData
   # source://nokogiri//lib/nokogiri/xml/text.rb#6
   def content=(string); end
@@ -6300,6 +6409,7 @@ Nokogiri::XML::XML_C14N_1_1 = T.let(T.unsafe(nil), Integer)
 # source://nokogiri//lib/nokogiri/xml.rb#16
 Nokogiri::XML::XML_C14N_EXCLUSIVE_1_0 = T.let(T.unsafe(nil), Integer)
 
+# source://nokogiri//lib/nokogiri/xml/xpath.rb#5
 module Nokogiri::XML::XPath; end
 
 # The XPath search prefix to search direct descendants of the current element, +./+
@@ -6322,11 +6432,13 @@ Nokogiri::XML::XPath::ROOT_SEARCH_PREFIX = T.let(T.unsafe(nil), String)
 # source://nokogiri//lib/nokogiri/xml/xpath.rb#16
 Nokogiri::XML::XPath::SUBTREE_SEARCH_PREFIX = T.let(T.unsafe(nil), String)
 
+# source://nokogiri//lib/nokogiri/xml/xpath/syntax_error.rb#6
 class Nokogiri::XML::XPath::SyntaxError < ::Nokogiri::XML::SyntaxError
   # source://nokogiri//lib/nokogiri/xml/xpath/syntax_error.rb#7
   def to_s; end
 end
 
+# source://nokogiri//lib/nokogiri/xml/xpath_context.rb#5
 class Nokogiri::XML::XPathContext
   def evaluate(*_arg0); end
 
@@ -6345,6 +6457,8 @@ end
 
 # See Nokogiri::XSLT::Stylesheet for creating and manipulating
 # Stylesheet object.
+#
+# source://nokogiri//lib/nokogiri/xslt.rb#21
 module Nokogiri::XSLT
   class << self
     # Parse the stylesheet in +string+, register any +modules+
@@ -6381,6 +6495,8 @@ end
 #
 # See Nokogiri::XSLT::Stylesheet#transform for more transformation
 # information.
+#
+# source://nokogiri//lib/nokogiri/xslt/stylesheet.rb#17
 class Nokogiri::XSLT::Stylesheet
   # Apply an XSLT stylesheet to an XML::Document.
   # +params+ is an array of strings used as XSLT parameters.
@@ -6398,14 +6514,7 @@ class Nokogiri::XSLT::Stylesheet
 end
 
 class Object < ::BasicObject
-  include ::ActiveSupport::ToJsonWithActiveSupportEncoder
-  include ::ActiveSupport::Dependencies::RequireDependency
   include ::Kernel
-  include ::ActiveSupport::Tryable
-  include ::Delayed::MessageSending
-  include ::FriendlyId::ObjectUtils
-  include ::PP::ObjectMixin
-  include ::Azure::Storage::Common::Core::Auth
 
   private
 

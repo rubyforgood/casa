@@ -38,6 +38,8 @@
 # "spans": [
 #   ...
 # ]
+#
+# source://scout_apm//lib/scout_apm/detailed_trace.rb#33
 class DetailedTrace
   # @return [DetailedTrace] a new instance of DetailedTrace
   #
@@ -163,6 +165,8 @@ DetailedTrace::VERSION = T.let(T.unsafe(nil), Integer)
 #       "function": "index"
 #     } ]
 #   }
+#
+# source://scout_apm//lib/scout_apm/detailed_trace.rb#147
 class DetailedTraceSpan
   # @return [DetailedTraceSpan] a new instance of DetailedTraceSpan
   #
@@ -214,6 +218,8 @@ class DetailedTraceSpan
 end
 
 # Tags for either a request, or a span
+#
+# source://scout_apm//lib/scout_apm/detailed_trace.rb#196
 class DetailedTraceTags
   # @return [DetailedTraceTags] a new instance of DetailedTraceTags
   #
@@ -230,13 +236,7 @@ class DetailedTraceTags
 end
 
 class Object < ::BasicObject
-  include ::ActiveSupport::ToJsonWithActiveSupportEncoder
-  include ::ActiveSupport::Dependencies::RequireDependency
   include ::Kernel
-  include ::ActiveSupport::Tryable
-  include ::Delayed::MessageSending
-  include ::FriendlyId::ObjectUtils
-  include ::PP::ObjectMixin
 
   private
 
@@ -246,6 +246,8 @@ end
 
 # Removes actual values from SQL. Used to both obfuscate the SQL and group
 # similar queries in the UI.
+#
+# source://scout_apm//lib/scout_apm.rb#1
 module ScoutApm; end
 
 # The entry-point for the ScoutApm Agent.
@@ -255,6 +257,8 @@ module ScoutApm; end
 #   - coordinates configuration & logging
 #   - starts background threads, running periodically
 #   - installs shutdown hooks
+#
+# source://scout_apm//lib/scout_apm/agent.rb#9
 class ScoutApm::Agent
   # First call of the agent. Does very little so that the object can be created, and exist.
   #
@@ -382,6 +386,7 @@ end
 # source://scout_apm//lib/scout_apm/agent.rb#205
 ScoutApm::Agent::ERROR_SEND_FREQUENCY = T.let(T.unsafe(nil), Integer)
 
+# source://scout_apm//lib/scout_apm/agent/exit_handler.rb#3
 class ScoutApm::Agent::ExitHandler
   # @return [ExitHandler] a new instance of ExitHandler
   #
@@ -418,6 +423,7 @@ class ScoutApm::Agent::ExitHandler
   def shutdown; end
 end
 
+# source://scout_apm//lib/scout_apm/agent/preconditions.rb#3
 class ScoutApm::Agent::Preconditions
   # @return [Boolean]
   #
@@ -458,6 +464,7 @@ ScoutApm::Agent::Preconditions::PRECONDITION_INTERACTIVE = T.let(T.unsafe(nil), 
 # source://scout_apm//lib/scout_apm/agent/preconditions.rb#44
 ScoutApm::Agent::Preconditions::PRECONDITION_OLD_SCOUT_RAILS = T.let(T.unsafe(nil), Hash)
 
+# source://scout_apm//lib/scout_apm/agent_context.rb#2
 class ScoutApm::AgentContext
   # Initially start up without attempting to load a configuration file. We
   # need to be able to lookup configuration options like "application_root"
@@ -624,6 +631,7 @@ class ScoutApm::AgentContext
   def transaction_time_consumed; end
 end
 
+# source://scout_apm//lib/scout_apm/exceptions.rb#2
 module ScoutApm::AllExceptionsExceptOnesWeMustNotRescue
   class << self
     # source://scout_apm//lib/scout_apm/exceptions.rb#8
@@ -638,6 +646,7 @@ end
 # source://scout_apm//lib/scout_apm/exceptions.rb#6
 ScoutApm::AllExceptionsExceptOnesWeMustNotRescue::AVOID_RESCUING = T.let(T.unsafe(nil), Array)
 
+# source://scout_apm//lib/scout_apm/app_server_load.rb#2
 class ScoutApm::AppServerLoad
   # @return [AppServerLoad] a new instance of AppServerLoad
   #
@@ -670,6 +679,7 @@ class ScoutApm::AppServerLoad
   def to_s_safe(obj); end
 end
 
+# source://scout_apm//lib/scout_apm/attribute_arranger.rb#2
 module ScoutApm::AttributeArranger
   class << self
     # pass in an array of symbols to return as hash keys
@@ -680,8 +690,10 @@ module ScoutApm::AttributeArranger
   end
 end
 
+# source://scout_apm//lib/scout_apm/background_job_integrations/sidekiq.rb#2
 module ScoutApm::BackgroundJobIntegrations; end
 
+# source://scout_apm//lib/scout_apm/background_job_integrations/delayed_job.rb#3
 class ScoutApm::BackgroundJobIntegrations::DelayedJob
   # @return [Boolean]
   #
@@ -711,6 +723,7 @@ ScoutApm::BackgroundJobIntegrations::DelayedJob::ACTIVE_JOB_KLASS = T.let(T.unsa
 # source://scout_apm//lib/scout_apm/background_job_integrations/delayed_job.rb#5
 ScoutApm::BackgroundJobIntegrations::DelayedJob::DJ_PERFORMABLE_METHOD = T.let(T.unsafe(nil), String)
 
+# source://scout_apm//lib/scout_apm/background_job_integrations/faktory.rb#3
 class ScoutApm::BackgroundJobIntegrations::Faktory
   # source://scout_apm//lib/scout_apm/background_job_integrations/faktory.rb#23
   def add_middleware; end
@@ -742,6 +755,8 @@ end
 
 # We insert this middleware into the Sidekiq stack, to capture each job,
 # and time them.
+#
+# source://scout_apm//lib/scout_apm/background_job_integrations/faktory.rb#49
 class ScoutApm::BackgroundJobIntegrations::FaktoryMiddleware
   # source://scout_apm//lib/scout_apm/background_job_integrations/faktory.rb#50
   def call(worker_instance, job); end
@@ -759,6 +774,7 @@ ScoutApm::BackgroundJobIntegrations::FaktoryMiddleware::ACTIVE_JOB_KLASS = T.let
 # source://scout_apm//lib/scout_apm/background_job_integrations/faktory.rb#72
 ScoutApm::BackgroundJobIntegrations::FaktoryMiddleware::UNKNOWN_CLASS_PLACEHOLDER = T.let(T.unsafe(nil), String)
 
+# source://scout_apm//lib/scout_apm/background_job_integrations/legacy_sneakers.rb#13
 module ScoutApm::BackgroundJobIntegrations::LegacySneakers
   # source://scout_apm//lib/scout_apm/background_job_integrations/legacy_sneakers.rb#20
   def initialize(*args); end
@@ -775,6 +791,7 @@ end
 # source://scout_apm//lib/scout_apm/background_job_integrations/legacy_sneakers.rb#14
 ScoutApm::BackgroundJobIntegrations::LegacySneakers::UNKNOWN_QUEUE_PLACEHOLDER = T.let(T.unsafe(nil), String)
 
+# source://scout_apm//lib/scout_apm/background_job_integrations/que.rb#3
 class ScoutApm::BackgroundJobIntegrations::Que
   # @return [Boolean]
   #
@@ -816,6 +833,7 @@ ScoutApm::BackgroundJobIntegrations::Que::UNKNOWN_CLASS_PLACEHOLDER = T.let(T.un
 # source://scout_apm//lib/scout_apm/background_job_integrations/que.rb#7
 ScoutApm::BackgroundJobIntegrations::Que::UNKNOWN_QUEUE_PLACEHOLDER = T.let(T.unsafe(nil), String)
 
+# source://scout_apm//lib/scout_apm/background_job_integrations/resque.rb#3
 class ScoutApm::BackgroundJobIntegrations::Resque
   # Lies. This forks really aggressively, but we have to do handling
   # of it manually here, rather than via any sort of automatic
@@ -865,6 +883,7 @@ class ScoutApm::BackgroundJobIntegrations::Resque
   def port; end
 end
 
+# source://scout_apm//lib/scout_apm/background_job_integrations/shoryuken.rb#3
 class ScoutApm::BackgroundJobIntegrations::Shoryuken
   # source://scout_apm//lib/scout_apm/background_job_integrations/shoryuken.rb#31
   def add_middleware; end
@@ -899,6 +918,8 @@ end
 
 # We insert this middleware into the Shoryuken stack, to capture each job,
 # and time them.
+#
+# source://scout_apm//lib/scout_apm/background_job_integrations/shoryuken.rb#59
 class ScoutApm::BackgroundJobIntegrations::ShoryukenMiddleware
   # source://scout_apm//lib/scout_apm/background_job_integrations/shoryuken.rb#60
   def call(worker_instance, queue, msg, body); end
@@ -913,6 +934,7 @@ ScoutApm::BackgroundJobIntegrations::ShoryukenMiddleware::ACTIVE_JOB_KLASS = T.l
 # source://scout_apm//lib/scout_apm/background_job_integrations/shoryuken.rb#91
 ScoutApm::BackgroundJobIntegrations::ShoryukenMiddleware::UNKNOWN_CLASS_PLACEHOLDER = T.let(T.unsafe(nil), String)
 
+# source://scout_apm//lib/scout_apm/background_job_integrations/sidekiq.rb#3
 class ScoutApm::BackgroundJobIntegrations::Sidekiq
   # source://scout_apm//lib/scout_apm/background_job_integrations/sidekiq.rb#31
   def add_middleware; end
@@ -947,6 +969,8 @@ end
 
 # We insert this middleware into the Sidekiq stack, to capture each job,
 # and time them.
+#
+# source://scout_apm//lib/scout_apm/background_job_integrations/sidekiq.rb#51
 class ScoutApm::BackgroundJobIntegrations::SidekiqMiddleware
   # source://scout_apm//lib/scout_apm/background_job_integrations/sidekiq.rb#52
   def call(_worker, msg, queue); end
@@ -973,6 +997,7 @@ ScoutApm::BackgroundJobIntegrations::SidekiqMiddleware::DELAYED_WRAPPER_KLASS = 
 # source://scout_apm//lib/scout_apm/background_job_integrations/sidekiq.rb#72
 ScoutApm::BackgroundJobIntegrations::SidekiqMiddleware::UNKNOWN_CLASS_PLACEHOLDER = T.let(T.unsafe(nil), String)
 
+# source://scout_apm//lib/scout_apm/background_job_integrations/sneakers.rb#3
 class ScoutApm::BackgroundJobIntegrations::Sneakers
   # @return [Boolean]
   #
@@ -1010,6 +1035,7 @@ ScoutApm::BackgroundJobIntegrations::Sneakers::UNKNOWN_CLASS_PLACEHOLDER = T.let
 # source://scout_apm//lib/scout_apm/background_job_integrations/sneakers.rb#84
 ScoutApm::BackgroundJobIntegrations::Sneakers::UNKNOWN_QUEUE_PLACEHOLDER = T.let(T.unsafe(nil), String)
 
+# source://scout_apm//lib/scout_apm/background_recorder.rb#6
 class ScoutApm::BackgroundRecorder
   # @return [BackgroundRecorder] a new instance of BackgroundRecorder
   #
@@ -1047,6 +1073,7 @@ class ScoutApm::BackgroundRecorder
   def thread_func; end
 end
 
+# source://scout_apm//lib/scout_apm/background_worker.rb#3
 class ScoutApm::BackgroundWorker
   # @return [BackgroundWorker] a new instance of BackgroundWorker
   #
@@ -1090,6 +1117,7 @@ end
 # source://scout_apm//lib/scout_apm/background_worker.rb#5
 ScoutApm::BackgroundWorker::DEFAULT_PERIOD = T.let(T.unsafe(nil), Integer)
 
+# source://scout_apm//lib/scout_apm/bucket_name_splitter.rb#2
 module ScoutApm::BucketNameSplitter
   # source://scout_apm//lib/scout_apm/bucket_name_splitter.rb#7
   def bucket_name; end
@@ -1110,6 +1138,8 @@ module ScoutApm::BucketNameSplitter
 end
 
 # Encapsulates our logic to determine when a backtrace should be collected.
+#
+# source://scout_apm//lib/scout_apm/call_set.rb#3
 class ScoutApm::CallSet
   # @return [CallSet] a new instance of CallSet
   #
@@ -1164,6 +1194,7 @@ ScoutApm::CallSet::N_PLUS_ONE_MAGIC_NUMBER = T.let(T.unsafe(nil), Integer)
 # source://scout_apm//lib/scout_apm/call_set.rb#6
 ScoutApm::CallSet::N_PLUS_ONE_TIME_THRESHOLD = T.let(T.unsafe(nil), Float)
 
+# source://scout_apm//lib/scout_apm/config.rb#50
 class ScoutApm::Config
   # @return [Config] a new instance of Config
   #
@@ -1217,6 +1248,8 @@ end
 # A string is false iff it is 0 length, is "f", or "false" - otherwise true
 # An number is false if it is exactly 0
 # Other types are false
+#
+# source://scout_apm//lib/scout_apm/config.rb#122
 class ScoutApm::Config::BooleanCoercion
   # source://scout_apm//lib/scout_apm/config.rb#123
   def coerce(val); end
@@ -1225,6 +1258,7 @@ class ScoutApm::Config::BooleanCoercion
   def coerce_string(val); end
 end
 
+# source://scout_apm//lib/scout_apm/config.rb#291
 class ScoutApm::Config::ConfigDefaults
   # Defaults are here, but not counted as user specified.
   #
@@ -1248,6 +1282,7 @@ end
 # source://scout_apm//lib/scout_apm/config.rb#292
 ScoutApm::Config::ConfigDefaults::DEFAULTS = T.let(T.unsafe(nil), Hash)
 
+# source://scout_apm//lib/scout_apm/config.rb#370
 class ScoutApm::Config::ConfigEnvironment
   # @return [Boolean]
   #
@@ -1272,6 +1307,8 @@ end
 # Attempts to load a configuration file, and parse it as YAML. If the file
 # is not found, inaccessbile, or unparsable, log a message to that effect,
 # and move on.
+#
+# source://scout_apm//lib/scout_apm/config.rb#398
 class ScoutApm::Config::ConfigFile
   # @return [ConfigFile] a new instance of ConfigFile
   #
@@ -1317,6 +1354,8 @@ end
 # Good News: It has every config value you could want
 # Bad News: The content of that config value is always nil
 # Used for the null-object pattern
+#
+# source://scout_apm//lib/scout_apm/config.rb#352
 class ScoutApm::Config::ConfigNull
   # @return [Boolean]
   #
@@ -1335,6 +1374,7 @@ class ScoutApm::Config::ConfigNull
   def value(*_arg0); end
 end
 
+# source://scout_apm//lib/scout_apm/config.rb#167
 class ScoutApm::Config::IntegerCoercion
   # source://scout_apm//lib/scout_apm/config.rb#168
   def coerce(val); end
@@ -1342,6 +1382,8 @@ end
 
 # If the passed value is a string, attempt to decode as json
 # This is a no-op unless the `JSON` constant is defined
+#
+# source://scout_apm//lib/scout_apm/config.rb#152
 class ScoutApm::Config::JsonCoercion
   # source://scout_apm//lib/scout_apm/config.rb#153
   def coerce(val); end
@@ -1351,6 +1393,8 @@ end
 ScoutApm::Config::KNOWN_CONFIG_OPTIONS = T.let(T.unsafe(nil), Array)
 
 # Simply returns the passed in value, without change
+#
+# source://scout_apm//lib/scout_apm/config.rb#174
 class ScoutApm::Config::NullCoercion
   # source://scout_apm//lib/scout_apm/config.rb#175
   def coerce(val); end
@@ -1359,6 +1403,7 @@ end
 # source://scout_apm//lib/scout_apm/config.rb#181
 ScoutApm::Config::SETTING_COERCIONS = T.let(T.unsafe(nil), Hash)
 
+# source://scout_apm//lib/scout_apm/context.rb#7
 class ScoutApm::Context
   # @return [Context] a new instance of Context
   #
@@ -1433,6 +1478,7 @@ class ScoutApm::Context
   end
 end
 
+# source://scout_apm//lib/scout_apm/db_query_metric_set.rb#3
 class ScoutApm::DbQueryMetricSet
   include ::Enumerable
 
@@ -1495,6 +1541,7 @@ class ScoutApm::DbQueryMetricSet
   def metrics_to_report; end
 end
 
+# source://scout_apm//lib/scout_apm/db_query_metric_stats.rb#2
 class ScoutApm::DbQueryMetricStats
   # @return [DbQueryMetricStats] a new instance of DbQueryMetricStats
   #
@@ -1586,6 +1633,7 @@ end
 # source://scout_apm//lib/scout_apm/db_query_metric_stats.rb#4
 ScoutApm::DbQueryMetricStats::DEFAULT_HISTOGRAM_SIZE = T.let(T.unsafe(nil), Integer)
 
+# source://scout_apm//lib/scout_apm/debug.rb#2
 class ScoutApm::Debug
   # @return [Debug] a new instance of Debug
   #
@@ -1609,6 +1657,7 @@ class ScoutApm::Debug
   end
 end
 
+# source://scout_apm//lib/scout_apm/environment.rb#5
 class ScoutApm::Environment
   include ::Singleton
   extend ::Singleton::SingletonClassMethods
@@ -1764,6 +1813,7 @@ ScoutApm::Environment::SERVER_INTEGRATIONS = T.let(T.unsafe(nil), Array)
 # source://scout_apm//lib/scout_apm/environment.rb#8
 ScoutApm::Environment::STDOUT_LOGGER = T.let(T.unsafe(nil), Logger)
 
+# source://scout_apm//lib/scout_apm/error.rb#5
 module ScoutApm::Error
   class << self
     # Capture an exception, optionally with an environment hash. This may be a
@@ -1774,6 +1824,7 @@ module ScoutApm::Error
   end
 end
 
+# source://scout_apm//lib/scout_apm/error_service.rb#6
 module ScoutApm::ErrorService
   class << self
     # Public API to force a given exception to be captured.
@@ -1798,6 +1849,7 @@ end
 # source://scout_apm//lib/scout_apm/error_service.rb#7
 ScoutApm::ErrorService::API_VERSION = T.let(T.unsafe(nil), String)
 
+# source://scout_apm//lib/scout_apm/error_service/error_buffer.rb#4
 class ScoutApm::ErrorService::ErrorBuffer
   include ::Enumerable
 
@@ -1825,6 +1877,8 @@ end
 
 # Converts the raw error data captured into the captured data, and holds it
 # until it's ready to be reported.
+#
+# source://scout_apm//lib/scout_apm/error_service/error_record.rb#5
 class ScoutApm::ErrorService::ErrorRecord
   # @return [ErrorRecord] a new instance of ErrorRecord
   #
@@ -1944,6 +1998,7 @@ end
 # source://scout_apm//lib/scout_apm/error_service/error_record.rb#96
 ScoutApm::ErrorService::ErrorRecord::KEYS_TO_REMOVE = T.let(T.unsafe(nil), Array)
 
+# source://scout_apm//lib/scout_apm/error_service/error_record.rb#196
 class ScoutApm::ErrorService::ErrorRecord::LengthLimit
   # @return [LengthLimit] a new instance of LengthLimit
   #
@@ -1967,6 +2022,7 @@ end
 # source://scout_apm//lib/scout_apm/error_service.rb#9
 ScoutApm::ErrorService::HEADERS = T.let(T.unsafe(nil), Hash)
 
+# source://scout_apm//lib/scout_apm/error_service/ignored_exceptions.rb#5
 class ScoutApm::ErrorService::IgnoredExceptions
   # @return [IgnoredExceptions] a new instance of IgnoredExceptions
   #
@@ -2005,6 +2061,7 @@ class ScoutApm::ErrorService::IgnoredExceptions
   def normalize_as_klass(klass_or_str); end
 end
 
+# source://scout_apm//lib/scout_apm/error_service/middleware.rb#3
 class ScoutApm::ErrorService::Middleware
   # @return [Middleware] a new instance of Middleware
   #
@@ -2015,6 +2072,7 @@ class ScoutApm::ErrorService::Middleware
   def call(env); end
 end
 
+# source://scout_apm//lib/scout_apm/error_service/notifier.rb#3
 class ScoutApm::ErrorService::Notifier
   # @return [Notifier] a new instance of Notifier
   #
@@ -2040,6 +2098,7 @@ class ScoutApm::ErrorService::Notifier
   def default_headers; end
 end
 
+# source://scout_apm//lib/scout_apm/error_service/payload.rb#3
 class ScoutApm::ErrorService::Payload
   # @return [Payload] a new instance of Payload
   #
@@ -2068,6 +2127,7 @@ class ScoutApm::ErrorService::Payload
   def serialize_error_record(error_record); end
 end
 
+# source://scout_apm//lib/scout_apm/error_service/periodic_work.rb#3
 class ScoutApm::ErrorService::PeriodicWork
   # @return [PeriodicWork] a new instance of PeriodicWork
   #
@@ -2085,6 +2145,7 @@ class ScoutApm::ErrorService::PeriodicWork
   def run; end
 end
 
+# source://scout_apm//lib/scout_apm/error_service/sidekiq.rb#3
 class ScoutApm::ErrorService::Sidekiq
   # @return [Sidekiq] a new instance of Sidekiq
   #
@@ -2101,15 +2162,19 @@ class ScoutApm::ErrorService::Sidekiq
   def install_sidekiq_with_middleware; end
 end
 
+# source://scout_apm//lib/scout_apm/error_service/sidekiq.rb#54
 class ScoutApm::ErrorService::Sidekiq::SidekiqExceptionMiddleware
   # source://scout_apm//lib/scout_apm/error_service/sidekiq.rb#55
   def call(worker, msg, queue); end
 end
 
+# source://scout_apm//lib/scout_apm/extensions/config.rb#2
 module ScoutApm::Extensions; end
 
 # !!! Extensions are a 0.x level API and breakage is expected as the API is refined.
 # Extensions fan out data collected by the agent to additional services.
+#
+# source://scout_apm//lib/scout_apm/extensions/config.rb#5
 class ScoutApm::Extensions::Config
   # @return [Config] a new instance of Config
   #
@@ -2193,6 +2258,8 @@ end
 
 # A +TransactionCallbackPayload+ is passed to each Transaction callback's +call+ method.
 # It encapsulates the data about a specific transaction.
+#
+# source://scout_apm//lib/scout_apm/extensions/transaction_callback_payload.rb#5
 class ScoutApm::Extensions::TransactionCallbackPayload
   # @return [TransactionCallbackPayload] a new instance of TransactionCallbackPayload
   #
@@ -2249,6 +2316,7 @@ class ScoutApm::Extensions::TransactionCallbackPayload
   def transation_type; end
 end
 
+# source://scout_apm//lib/scout_apm/external_service_metric_set.rb#3
 class ScoutApm::ExternalServiceMetricSet
   include ::Enumerable
 
@@ -2311,6 +2379,7 @@ class ScoutApm::ExternalServiceMetricSet
   def metrics_to_report; end
 end
 
+# source://scout_apm//lib/scout_apm/external_service_metric_stats.rb#2
 class ScoutApm::ExternalServiceMetricStats
   # @return [ExternalServiceMetricStats] a new instance of ExternalServiceMetricStats
   #
@@ -2387,6 +2456,7 @@ end
 # source://scout_apm//lib/scout_apm/external_service_metric_stats.rb#4
 ScoutApm::ExternalServiceMetricStats::DEFAULT_HISTOGRAM_SIZE = T.let(T.unsafe(nil), Integer)
 
+# source://scout_apm//lib/scout_apm/fake_store.rb#4
 class ScoutApm::FakeStore
   # @return [FakeStore] a new instance of FakeStore
   #
@@ -2433,8 +2503,10 @@ class ScoutApm::FakeStore
   def write_to_layaway(layaway, force = T.unsafe(nil)); end
 end
 
+# source://scout_apm//lib/scout_apm/framework_integrations/rails_2.rb#2
 module ScoutApm::FrameworkIntegrations; end
 
+# source://scout_apm//lib/scout_apm/framework_integrations/rails_2.rb#3
 class ScoutApm::FrameworkIntegrations::Rails2
   # source://scout_apm//lib/scout_apm/framework_integrations/rails_2.rb#23
   def application_name; end
@@ -2465,6 +2537,7 @@ class ScoutApm::FrameworkIntegrations::Rails2
   def version; end
 end
 
+# source://scout_apm//lib/scout_apm/framework_integrations/rails_3_or_4.rb#3
 class ScoutApm::FrameworkIntegrations::Rails3Or4
   # source://scout_apm//lib/scout_apm/framework_integrations/rails_3_or_4.rb#23
   def application_name; end
@@ -2507,6 +2580,7 @@ class ScoutApm::FrameworkIntegrations::Rails3Or4
   def version; end
 end
 
+# source://scout_apm//lib/scout_apm/framework_integrations/ruby.rb#3
 class ScoutApm::FrameworkIntegrations::Ruby
   # TODO: Fetch the name (Somehow?)
   #
@@ -2539,6 +2613,7 @@ class ScoutApm::FrameworkIntegrations::Ruby
   def version; end
 end
 
+# source://scout_apm//lib/scout_apm/framework_integrations/sinatra.rb#3
 class ScoutApm::FrameworkIntegrations::Sinatra
   # source://scout_apm//lib/scout_apm/framework_integrations/sinatra.rb#20
   def application_name; end
@@ -2569,6 +2644,7 @@ class ScoutApm::FrameworkIntegrations::Sinatra
   def version; end
 end
 
+# source://scout_apm//lib/scout_apm/git_revision.rb#2
 class ScoutApm::GitRevision
   # @return [GitRevision] a new instance of GitRevision
   #
@@ -2625,6 +2701,7 @@ class ScoutApm::GitRevision
   def detect_from_mina; end
 end
 
+# source://scout_apm//lib/scout_apm/histogram.rb#2
 class ScoutApm::HistogramBin < ::Struct
   # Returns the value of attribute count
   #
@@ -2657,6 +2734,7 @@ class ScoutApm::HistogramBin < ::Struct
   end
 end
 
+# source://scout_apm//lib/scout_apm/ignored_uris.rb#3
 class ScoutApm::IgnoredUris
   # @return [IgnoredUris] a new instance of IgnoredUris
   #
@@ -2674,8 +2752,10 @@ class ScoutApm::IgnoredUris
   def regex; end
 end
 
+# source://scout_apm//lib/scout_apm/instant/middleware.rb#4
 module ScoutApm::Instant; end
 
+# source://scout_apm//lib/scout_apm/instant/middleware.rb#66
 class ScoutApm::Instant::DevTraceResponseManipulator
   # @return [DevTraceResponseManipulator] a new instance of DevTraceResponseManipulator
   #
@@ -2797,6 +2877,8 @@ class ScoutApm::Instant::DevTraceResponseManipulator
 end
 
 # Note that this middleware never even gets inserted unless Rails environment is development (See Railtie)
+#
+# source://scout_apm//lib/scout_apm/instant/middleware.rb#49
 class ScoutApm::Instant::Middleware
   # @return [Middleware] a new instance of Middleware
   #
@@ -2808,6 +2890,8 @@ class ScoutApm::Instant::Middleware
 end
 
 # an abstraction for manipulating the HTML we capture in the middleware
+#
+# source://scout_apm//lib/scout_apm/instant/middleware.rb#7
 class ScoutApm::Instant::Page
   # @return [Page] a new instance of Page
   #
@@ -2824,6 +2908,7 @@ class ScoutApm::Instant::Page
   def res; end
 end
 
+# source://scout_apm//lib/scout_apm/instant/middleware.rb#36
 class ScoutApm::Instant::Util
   class << self
     # reads the literal contents of the file in assets/#{name}
@@ -2834,6 +2919,7 @@ class ScoutApm::Instant::Util
   end
 end
 
+# source://scout_apm//lib/scout_apm/instant_reporting.rb#5
 class ScoutApm::InstantReporting
   # trace is an instance of SlowTransaction
   # instant_key is what was passed in from the browser to trigger the instant trace
@@ -2847,6 +2933,7 @@ class ScoutApm::InstantReporting
   def call; end
 end
 
+# source://scout_apm//lib/scout_apm/instrument_manager.rb#2
 class ScoutApm::InstrumentManager
   # @return [InstrumentManager] a new instance of InstrumentManager
   #
@@ -2902,23 +2989,28 @@ class ScoutApm::InstrumentManager
   def logger; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/net_http.rb#2
 module ScoutApm::Instruments; end
 
+# source://scout_apm//lib/scout_apm/instruments/action_controller_rails_3_rails4.rb#154
 module ScoutApm::Instruments::ActionControllerAPIInstruments
   # source://scout_apm//lib/scout_apm/instruments/action_controller_rails_3_rails4.rb#157
   def scout_action_name(*args); end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/action_controller_rails_3_rails4.rb#146
 module ScoutApm::Instruments::ActionControllerBaseInstruments
   # source://scout_apm//lib/scout_apm/instruments/action_controller_rails_3_rails4.rb#149
   def scout_action_name(*args); end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/action_controller_rails_3_rails4.rb#134
 module ScoutApm::Instruments::ActionControllerMetalInstruments
   # source://scout_apm//lib/scout_apm/instruments/action_controller_rails_3_rails4.rb#137
   def scout_action_name(*args); end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/action_controller_rails_2.rb#3
 class ScoutApm::Instruments::ActionControllerRails2
   # @return [ActionControllerRails2] a new instance of ActionControllerRails2
   #
@@ -2942,6 +3034,7 @@ class ScoutApm::Instruments::ActionControllerRails2
   def logger; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/action_controller_rails_2.rb#38
 module ScoutApm::Instruments::ActionControllerRails2Instruments
   # In addition to instrumenting actions, this also sets the scope to the controller action name. The scope is later
   # applied to metrics recorded during this transaction. This lets us associate ActiveRecord calls with
@@ -2959,6 +3052,8 @@ module ScoutApm::Instruments::ActionControllerRails2Instruments
 end
 
 # instrumentation for Rails 3 and Rails 4 is the same.
+#
+# source://scout_apm//lib/scout_apm/instruments/action_controller_rails_3_rails4.rb#4
 class ScoutApm::Instruments::ActionControllerRails3Rails4
   # @return [ActionControllerRails3Rails4] a new instance of ActionControllerRails3Rails4
   #
@@ -2997,8 +3092,11 @@ class ScoutApm::Instruments::ActionControllerRails3Rails4
 end
 
 # Empty, noop module to provide compatibility w/ previous manual instrumentation
+#
+# source://scout_apm//lib/scout_apm/instruments/action_controller_rails_3_rails4.rb#143
 module ScoutApm::Instruments::ActionControllerRails3Rails4Instruments; end
 
+# source://scout_apm//lib/scout_apm/instruments/action_view.rb#12
 class ScoutApm::Instruments::ActionView
   # @return [ActionView] a new instance of ActionView
   #
@@ -3033,6 +3131,7 @@ class ScoutApm::Instruments::ActionView
   def prependable?; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/action_view.rb#77
 module ScoutApm::Instruments::ActionView::ActionViewPartialRendererInstruments
   # source://scout_apm//lib/scout_apm/instruments/action_view.rb#105
   def collection_with_template(*args, **kwargs); end
@@ -3044,6 +3143,7 @@ module ScoutApm::Instruments::ActionView::ActionViewPartialRendererInstruments
   def render_partial(*args, **kwargs); end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/action_view.rb#131
 module ScoutApm::Instruments::ActionView::ActionViewTemplateRendererInstruments
   # Don't forward kwargs here, since Rails 3, 4, 5, 6 don't use them, and
   # it causes annoyances in the instrumentation
@@ -3052,6 +3152,7 @@ module ScoutApm::Instruments::ActionView::ActionViewTemplateRendererInstruments
   def render_template(*args); end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/active_record.rb#37
 class ScoutApm::Instruments::ActiveRecord
   # @return [ActiveRecord] a new instance of ActiveRecord
   #
@@ -3086,6 +3187,7 @@ class ScoutApm::Instruments::ActiveRecord
   def logger; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/active_record.rb#332
 module ScoutApm::Instruments::ActiveRecordFinderMethodsInstruments
   # source://scout_apm//lib/scout_apm/instruments/active_record.rb#343
   def find_with_associations_with_scout_instruments(*args, &block); end
@@ -3105,6 +3207,8 @@ end
 #
 # #log is very close to where AR calls out to the database itself.  We have access
 # to the real SQL, and an AR generated "name" for the Query
+#
+# source://scout_apm//lib/scout_apm/instruments/active_record.rb#168
 module ScoutApm::Instruments::ActiveRecordInstruments
   # source://scout_apm//lib/scout_apm/instruments/active_record.rb#226
   def log(*args, **_arg1, &block); end
@@ -3140,6 +3244,8 @@ end
 #   * One call here can result in several calls to #log, especially in the
 #     case where Rails needs to load the schema details for the table being
 #     queried.
+#
+# source://scout_apm//lib/scout_apm/instruments/active_record.rb#302
 module ScoutApm::Instruments::ActiveRecordQueryingInstruments
   # source://scout_apm//lib/scout_apm/instruments/active_record.rb#313
   def find_by_sql_with_scout_instruments(*args, **kwargs, &block); end
@@ -3152,6 +3258,7 @@ module ScoutApm::Instruments::ActiveRecordQueryingInstruments
   end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/active_record.rb#436
 module ScoutApm::Instruments::ActiveRecordRelationInstruments
   # source://scout_apm//lib/scout_apm/instruments/active_record.rb#465
   def delete_all_with_scout_instruments(*args, &block); end
@@ -3170,6 +3277,7 @@ module ScoutApm::Instruments::ActiveRecordRelationInstruments
   end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/active_record.rb#359
 module ScoutApm::Instruments::ActiveRecordRelationQueryInstruments
   # source://scout_apm//lib/scout_apm/instruments/active_record.rb#374
   def exec_queries(*args, &block); end
@@ -3185,6 +3293,7 @@ module ScoutApm::Instruments::ActiveRecordRelationQueryInstruments
   end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/active_record.rb#401
 module ScoutApm::Instruments::ActiveRecordUpdateInstruments
   # source://scout_apm//lib/scout_apm/instruments/active_record.rb#402
   def save(*args, **options, &block); end
@@ -3201,6 +3310,7 @@ end
 
 ScoutApm::Instruments::Allocations::ENABLED = T.let(T.unsafe(nil), TrueClass)
 
+# source://scout_apm//lib/scout_apm/instruments/elasticsearch.rb#5
 class ScoutApm::Instruments::Elasticsearch
   # @return [Elasticsearch] a new instance of Elasticsearch
   #
@@ -3224,6 +3334,7 @@ class ScoutApm::Instruments::Elasticsearch
   def logger; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/elasticsearch.rb#87
 module ScoutApm::Instruments::ElasticsearchTransportClientInstrumentationPrepend
   # source://scout_apm//lib/scout_apm/instruments/elasticsearch.rb#96
   def _sanitize_name(name); end
@@ -3232,6 +3343,7 @@ module ScoutApm::Instruments::ElasticsearchTransportClientInstrumentationPrepend
   def perform_request(*args, &block); end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/grape.rb#3
 class ScoutApm::Instruments::Grape
   # @return [Grape] a new instance of Grape
   #
@@ -3255,11 +3367,13 @@ class ScoutApm::Instruments::Grape
   def logger; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/grape.rb#35
 module ScoutApm::Instruments::GrapeEndpointInstruments
   # source://scout_apm//lib/scout_apm/instruments/grape.rb#36
   def run_with_scout_instruments(*args); end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/http.rb#3
 class ScoutApm::Instruments::HTTP
   # @return [HTTP] a new instance of HTTP
   #
@@ -3283,6 +3397,7 @@ class ScoutApm::Instruments::HTTP
   def logger; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/http.rb#53
 module ScoutApm::Instruments::HTTPInstrumentationPrepend
   # source://scout_apm//lib/scout_apm/instruments/http.rb#54
   def request(verb, uri, opts = T.unsafe(nil)); end
@@ -3291,6 +3406,7 @@ module ScoutApm::Instruments::HTTPInstrumentationPrepend
   def request_scout_description(verb, uri); end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/percentile_sampler.rb#4
 class ScoutApm::Instruments::HistogramReport
   # @return [HistogramReport] a new instance of HistogramReport
   #
@@ -3311,6 +3427,7 @@ class ScoutApm::Instruments::HistogramReport
   def name; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/http_client.rb#3
 class ScoutApm::Instruments::HttpClient
   # @return [HttpClient] a new instance of HttpClient
   #
@@ -3334,11 +3451,13 @@ class ScoutApm::Instruments::HttpClient
   def logger; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/http_client.rb#53
 module ScoutApm::Instruments::HttpClientInstrumentationPrepend
   # source://scout_apm//lib/scout_apm/instruments/http_client.rb#54
   def request(*args, &block); end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/influxdb.rb#3
 class ScoutApm::Instruments::InfluxDB
   # @return [InfluxDB] a new instance of InfluxDB
   #
@@ -3362,6 +3481,7 @@ class ScoutApm::Instruments::InfluxDB
   def logger; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/memcached.rb#3
 class ScoutApm::Instruments::Memcached
   # @return [Memcached] a new instance of Memcached
   #
@@ -3385,11 +3505,13 @@ class ScoutApm::Instruments::Memcached
   def logger; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/memcached.rb#48
 module ScoutApm::Instruments::MemcachedInstrumentationPrepend
   # source://scout_apm//lib/scout_apm/instruments/memcached.rb#49
   def perform(*args, &block); end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/middleware_detailed.rb#11
 class ScoutApm::Instruments::MiddlewareDetailed
   # @return [MiddlewareDetailed] a new instance of MiddlewareDetailed
   #
@@ -3413,6 +3535,7 @@ class ScoutApm::Instruments::MiddlewareDetailed
   def logger; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/middleware_detailed.rb#41
 class ScoutApm::Instruments::MiddlewareDetailed::MiddlewareWrapper
   # @return [MiddlewareWrapper] a new instance of MiddlewareWrapper
   #
@@ -3423,6 +3546,7 @@ class ScoutApm::Instruments::MiddlewareDetailed::MiddlewareWrapper
   def call(env); end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/middleware_summary.rb#8
 class ScoutApm::Instruments::MiddlewareSummary
   # @return [MiddlewareSummary] a new instance of MiddlewareSummary
   #
@@ -3446,6 +3570,7 @@ class ScoutApm::Instruments::MiddlewareSummary
   def logger; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/middleware_summary.rb#49
 class ScoutApm::Instruments::MiddlewareSummary::MiddlewareSummaryWrapper
   # @return [MiddlewareSummaryWrapper] a new instance of MiddlewareSummaryWrapper
   #
@@ -3479,6 +3604,7 @@ class ScoutApm::Instruments::MiddlewareSummary::MiddlewareSummaryWrapper
   def respond_to?(sym, include_private = T.unsafe(nil)); end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/mongoid.rb#3
 class ScoutApm::Instruments::Mongoid
   # @return [Mongoid] a new instance of Mongoid
   #
@@ -3525,6 +3651,7 @@ class ScoutApm::Instruments::Mongoid
   end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/moped.rb#3
 class ScoutApm::Instruments::Moped
   # @return [Moped] a new instance of Moped
   #
@@ -3548,6 +3675,7 @@ class ScoutApm::Instruments::Moped
   def logger; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/moped.rb#58
 module ScoutApm::Instruments::MopedInstrumentationPrepend
   # source://scout_apm//lib/scout_apm/instruments/moped.rb#59
   def process(operation, &callback); end
@@ -3558,6 +3686,7 @@ module ScoutApm::Instruments::MopedInstrumentationPrepend
   def scout_sanitize_log(log); end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/net_http.rb#3
 class ScoutApm::Instruments::NetHttp
   # @return [NetHttp] a new instance of NetHttp
   #
@@ -3581,6 +3710,7 @@ class ScoutApm::Instruments::NetHttp
   def logger; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/net_http.rb#61
 module ScoutApm::Instruments::NetHttpInstrumentationPrepend
   # source://scout_apm//lib/scout_apm/instruments/net_http.rb#62
   def request(request, *args, &block); end
@@ -3589,6 +3719,7 @@ module ScoutApm::Instruments::NetHttpInstrumentationPrepend
   def request_scout_description(req); end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/percentile_sampler.rb#20
 class ScoutApm::Instruments::PercentileSampler
   # @return [PercentileSampler] a new instance of PercentileSampler
   #
@@ -3611,8 +3742,10 @@ class ScoutApm::Instruments::PercentileSampler
   def percentiles(time); end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/process/process_cpu.rb#3
 module ScoutApm::Instruments::Process; end
 
+# source://scout_apm//lib/scout_apm/instruments/process/process_cpu.rb#4
 class ScoutApm::Instruments::Process::ProcessCpu
   # @return [ProcessCpu] a new instance of ProcessCpu
   #
@@ -3689,6 +3822,7 @@ class ScoutApm::Instruments::Process::ProcessCpu
   def save_times(now, utime, stime); end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/process/process_memory.rb#4
 class ScoutApm::Instruments::Process::ProcessMemory
   # @return [ProcessMemory] a new instance of ProcessMemory
   #
@@ -3727,6 +3861,7 @@ class ScoutApm::Instruments::Process::ProcessMemory
   def run; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/rails_router.rb#3
 class ScoutApm::Instruments::RailsRouter
   # @return [RailsRouter] a new instance of RailsRouter
   #
@@ -3750,6 +3885,7 @@ class ScoutApm::Instruments::RailsRouter
   def logger; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/redis.rb#3
 class ScoutApm::Instruments::Redis
   # @return [Redis] a new instance of Redis
   #
@@ -3773,6 +3909,7 @@ class ScoutApm::Instruments::Redis
   def logger; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/redis5.rb#3
 class ScoutApm::Instruments::Redis5
   # @return [Redis5] a new instance of Redis5
   #
@@ -3796,16 +3933,19 @@ class ScoutApm::Instruments::Redis5
   def logger; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/redis5.rb#48
 module ScoutApm::Instruments::Redis5ClientInstrumentationPrepend
   # source://scout_apm//lib/scout_apm/instruments/redis5.rb#49
   def call(args, &block); end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/redis.rb#48
 module ScoutApm::Instruments::RedisClientInstrumentationPrepend
   # source://scout_apm//lib/scout_apm/instruments/redis.rb#49
   def call(*args, &block); end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/resque.rb#3
 module ScoutApm::Instruments::Resque
   # source://scout_apm//lib/scout_apm/instruments/resque.rb#4
   def around_perform_with_scout_instruments(*args); end
@@ -3814,11 +3954,13 @@ module ScoutApm::Instruments::Resque
   def find_queue; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/samplers.rb#3
 class ScoutApm::Instruments::Samplers; end
 
 # source://scout_apm//lib/scout_apm/instruments/samplers.rb#4
 ScoutApm::Instruments::Samplers::DEFAULT_SAMPLERS = T.let(T.unsafe(nil), Array)
 
+# source://scout_apm//lib/scout_apm/instruments/sinatra.rb#6
 class ScoutApm::Instruments::Sinatra
   # source://scout_apm//lib/scout_apm/instruments/sinatra.rb#9
   def initalize(logger = T.unsafe(nil)); end
@@ -3837,6 +3979,7 @@ class ScoutApm::Instruments::Sinatra
   def logger; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/sinatra.rb#33
 module ScoutApm::Instruments::SinatraInstruments
   # source://scout_apm//lib/scout_apm/instruments/sinatra.rb#34
   def dispatch_with_scout_instruments!; end
@@ -3852,6 +3995,7 @@ module ScoutApm::Instruments::SinatraInstruments
   def scout_sinatra_controller_name(request); end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/typhoeus.rb#3
 class ScoutApm::Instruments::Typhoeus
   # @return [Typhoeus] a new instance of Typhoeus
   #
@@ -3875,6 +4019,7 @@ class ScoutApm::Instruments::Typhoeus
   def logger; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/typhoeus.rb#30
 module ScoutApm::Instruments::Typhoeus::TyphoeusHydraInstrumentation
   # source://scout_apm//lib/scout_apm/instruments/typhoeus.rb#31
   def run(*args, &block); end
@@ -3883,6 +4028,7 @@ module ScoutApm::Instruments::Typhoeus::TyphoeusHydraInstrumentation
   def scout_desc; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/typhoeus.rb#52
 module ScoutApm::Instruments::Typhoeus::TyphoeusInstrumentation
   # source://scout_apm//lib/scout_apm/instruments/typhoeus.rb#53
   def run(*args, &block); end
@@ -3897,6 +4043,7 @@ module ScoutApm::Instruments::Typhoeus::TyphoeusInstrumentation
   def scout_request_verb; end
 end
 
+# source://scout_apm//lib/scout_apm/job_record.rb#9
 class ScoutApm::JobRecord
   # @return [JobRecord] a new instance of JobRecord
   #
@@ -3958,6 +4105,7 @@ class ScoutApm::JobRecord
   def total_time; end
 end
 
+# source://scout_apm//lib/scout_apm/layaway.rb#9
 class ScoutApm::Layaway
   # @return [Layaway] a new instance of Layaway
   #
@@ -4061,6 +4209,7 @@ ScoutApm::Layaway::STALE_AGE = T.let(T.unsafe(nil), Integer)
 # source://scout_apm//lib/scout_apm/layaway.rb#19
 ScoutApm::Layaway::TIME_FORMAT = T.let(T.unsafe(nil), String)
 
+# source://scout_apm//lib/scout_apm/layaway_file.rb#3
 class ScoutApm::LayawayFile
   # @return [LayawayFile] a new instance of LayawayFile
   #
@@ -4099,6 +4248,7 @@ class ScoutApm::LayawayFile
   def write_raw(f, data); end
 end
 
+# source://scout_apm//lib/scout_apm/layer.rb#2
 class ScoutApm::Layer
   # @return [Layer] a new instance of Layer
   #
@@ -4300,6 +4450,8 @@ ScoutApm::Layer::BACKTRACE_CALLER_LIMIT = T.let(T.unsafe(nil), Integer)
 #
 # The next optimization, which is not yet implemented:
 #   when the set of children gets larger, attempt to merge them without data loss
+#
+# source://scout_apm//lib/scout_apm/layer_children_set.rb#17
 class ScoutApm::LayerChildrenSet
   include ::Enumerable
 
@@ -4347,13 +4499,16 @@ end
 # source://scout_apm//lib/scout_apm/layer_children_set.rb#22
 ScoutApm::LayerChildrenSet::DEFAULT_UNIQUE_CUTOFF = T.let(T.unsafe(nil), Integer)
 
+# source://scout_apm//lib/scout_apm/layer_converters/converter_base.rb#2
 module ScoutApm::LayerConverters; end
 
+# source://scout_apm//lib/scout_apm/layer_converters/allocation_metric_converter.rb#3
 class ScoutApm::LayerConverters::AllocationMetricConverter < ::ScoutApm::LayerConverters::ConverterBase
   # source://scout_apm//lib/scout_apm/layer_converters/allocation_metric_converter.rb#4
   def record!; end
 end
 
+# source://scout_apm//lib/scout_apm/layer_converters/converter_base.rb#3
 class ScoutApm::LayerConverters::ConverterBase
   # @return [ConverterBase] a new instance of ConverterBase
   #
@@ -4462,6 +4617,7 @@ end
 # source://scout_apm//lib/scout_apm/layer_converters/converter_base.rb#103
 ScoutApm::LayerConverters::ConverterBase::MAX_METRICS = T.let(T.unsafe(nil), Integer)
 
+# source://scout_apm//lib/scout_apm/layer_converters/database_converter.rb#3
 class ScoutApm::LayerConverters::DatabaseConverter < ::ScoutApm::LayerConverters::ConverterBase
   # @return [DatabaseConverter] a new instance of DatabaseConverter
   #
@@ -4501,6 +4657,7 @@ ScoutApm::LayerConverters::DatabaseConverter::DEFAULT_MODEL = T.let(T.unsafe(nil
 # source://scout_apm//lib/scout_apm/layer_converters/database_converter.rb#51
 ScoutApm::LayerConverters::DatabaseConverter::DEFAULT_OPERATION = T.let(T.unsafe(nil), String)
 
+# source://scout_apm//lib/scout_apm/layer_converters/depth_first_walker.rb#3
 class ScoutApm::LayerConverters::DepthFirstWalker
   # @return [DepthFirstWalker] a new instance of DepthFirstWalker
   #
@@ -4525,11 +4682,13 @@ class ScoutApm::LayerConverters::DepthFirstWalker
   def walk(layer = T.unsafe(nil)); end
 end
 
+# source://scout_apm//lib/scout_apm/layer_converters/error_converter.rb#3
 class ScoutApm::LayerConverters::ErrorConverter < ::ScoutApm::LayerConverters::ConverterBase
   # source://scout_apm//lib/scout_apm/layer_converters/error_converter.rb#4
   def record!; end
 end
 
+# source://scout_apm//lib/scout_apm/layer_converters/external_service_converter.rb#3
 class ScoutApm::LayerConverters::ExternalServiceConverter < ::ScoutApm::LayerConverters::ConverterBase
   # @return [ExternalServiceConverter] a new instance of ExternalServiceConverter
   #
@@ -4561,6 +4720,7 @@ end
 # source://scout_apm//lib/scout_apm/layer_converters/external_service_converter.rb#46
 ScoutApm::LayerConverters::ExternalServiceConverter::DEFAULT_DOMAIN = T.let(T.unsafe(nil), String)
 
+# source://scout_apm//lib/scout_apm/layer_converters/find_layer_by_type.rb#14
 class ScoutApm::LayerConverters::FindLayerByType
   # @return [FindLayerByType] a new instance of FindLayerByType
   #
@@ -4583,6 +4743,7 @@ class ScoutApm::LayerConverters::FindLayerByType
   def scope; end
 end
 
+# source://scout_apm//lib/scout_apm/layer_converters/histograms.rb#4
 class ScoutApm::LayerConverters::Histograms < ::ScoutApm::LayerConverters::ConverterBase
   # Updates immediate and long-term histograms for both job and web requests
   #
@@ -4590,6 +4751,7 @@ class ScoutApm::LayerConverters::Histograms < ::ScoutApm::LayerConverters::Conve
   def record!; end
 end
 
+# source://scout_apm//lib/scout_apm/layer_converters/job_converter.rb#12
 class ScoutApm::LayerConverters::JobConverter < ::ScoutApm::LayerConverters::ConverterBase
   # This isn't stored as a specific layer, so grabbing it doesn't use the
   # walker callbacks
@@ -4609,6 +4771,7 @@ class ScoutApm::LayerConverters::JobConverter < ::ScoutApm::LayerConverters::Con
   def register_hooks(walker); end
 end
 
+# source://scout_apm//lib/scout_apm/layer_converters/metric_converter.rb#10
 class ScoutApm::LayerConverters::MetricConverter < ::ScoutApm::LayerConverters::ConverterBase
   # source://scout_apm//lib/scout_apm/layer_converters/metric_converter.rb#39
   def record!; end
@@ -4617,6 +4780,7 @@ class ScoutApm::LayerConverters::MetricConverter < ::ScoutApm::LayerConverters::
   def register_hooks(walker); end
 end
 
+# source://scout_apm//lib/scout_apm/layer_converters/request_queue_time_converter.rb#3
 class ScoutApm::LayerConverters::RequestQueueTimeConverter < ::ScoutApm::LayerConverters::ConverterBase
   # source://scout_apm//lib/scout_apm/layer_converters/request_queue_time_converter.rb#7
   def headers; end
@@ -4642,6 +4806,7 @@ end
 # source://scout_apm//lib/scout_apm/layer_converters/request_queue_time_converter.rb#5
 ScoutApm::LayerConverters::RequestQueueTimeConverter::HEADERS = T.let(T.unsafe(nil), Array)
 
+# source://scout_apm//lib/scout_apm/layer_converters/slow_job_converter.rb#10
 class ScoutApm::LayerConverters::SlowJobConverter < ::ScoutApm::LayerConverters::ConverterBase
   # Called by the set to force this to actually be created.
   #
@@ -4679,6 +4844,7 @@ class ScoutApm::LayerConverters::SlowJobConverter < ::ScoutApm::LayerConverters:
   def span_trace; end
 end
 
+# source://scout_apm//lib/scout_apm/layer_converters/slow_request_converter.rb#6
 class ScoutApm::LayerConverters::SlowRequestConverter < ::ScoutApm::LayerConverters::ConverterBase
   # Unconditionally attempts to convert this into a SlowTransaction object.
   # Can return nil if the request didn't have any scope_layer.
@@ -4715,6 +4881,7 @@ class ScoutApm::LayerConverters::SlowRequestConverter < ::ScoutApm::LayerConvert
   def span_trace; end
 end
 
+# source://scout_apm//lib/scout_apm/layer_converters/trace_converter.rb#6
 class ScoutApm::LayerConverters::TraceConverter < ::ScoutApm::LayerConverters::ConverterBase
   # Take an array of ruby backtrace lines and split it into an array of hashes like:
   # ["/Users/cschneid/.rvm/rubies/ruby-2.2.7/lib/ruby/2.2.0/irb/workspace.rb:86:in `eval'", ...]
@@ -4777,6 +4944,8 @@ ScoutApm::LayerConverters::TraceConverter::MAX_SPANS = T.let(T.unsafe(nil), Inte
 # logic on when that change over happens
 #
 # QUESTION: What do we do if we attempt to merge an item that has children?
+#
+# source://scout_apm//lib/scout_apm/limited_layer.rb#7
 class ScoutApm::LimitedLayer
   # @return [LimitedLayer] a new instance of LimitedLayer
   #
@@ -4868,6 +5037,7 @@ class ScoutApm::LimitedLayer
   def type; end
 end
 
+# source://scout_apm//lib/scout_apm/logger.rb#23
 class ScoutApm::Logger
   # @return [Logger] a new instance of Logger
   #
@@ -4965,6 +5135,7 @@ class ScoutApm::Logger
   def validate_path(candidate); end
 end
 
+# source://scout_apm//lib/scout_apm/logger.rb#144
 class ScoutApm::Logger::DefaultFormatter < ::Logger::Formatter
   # source://scout_apm//lib/scout_apm/logger.rb#145
   def call(severity, time, progname, msg); end
@@ -4972,6 +5143,8 @@ end
 
 # since STDOUT & STDERR isn't only used for ScoutApm logging, apply a
 # prefix to make it easily greppable
+#
+# source://scout_apm//lib/scout_apm/logger.rb#154
 class ScoutApm::Logger::TaggedFormatter < ::ScoutApm::Logger::DefaultFormatter
   # source://scout_apm//lib/scout_apm/logger.rb#157
   def call(severity, time, progname, msg); end
@@ -4980,6 +5153,7 @@ end
 # source://scout_apm//lib/scout_apm/logger.rb#155
 ScoutApm::Logger::TaggedFormatter::TAG = T.let(T.unsafe(nil), String)
 
+# source://scout_apm//lib/scout_apm/agent_context.rb#244
 class ScoutApm::LoggerFactory
   class << self
     # source://scout_apm//lib/scout_apm/agent_context.rb#245
@@ -4990,6 +5164,7 @@ class ScoutApm::LoggerFactory
   end
 end
 
+# source://scout_apm//lib/scout_apm/metric_meta.rb#3
 class ScoutApm::MetricMeta
   include ::ScoutApm::BucketNameSplitter
 
@@ -5115,6 +5290,7 @@ class ScoutApm::MetricMeta
   end
 end
 
+# source://scout_apm//lib/scout_apm/metric_set.rb#2
 class ScoutApm::MetricSet
   # @return [MetricSet] a new instance of MetricSet
   #
@@ -5160,6 +5336,7 @@ end
 # source://scout_apm//lib/scout_apm/metric_set.rb#7
 ScoutApm::MetricSet::PASSTHROUGH_METRICS = T.let(T.unsafe(nil), Array)
 
+# source://scout_apm//lib/scout_apm/metric_stats.rb#3
 class ScoutApm::MetricStats
   # @return [MetricStats] a new instance of MetricStats
   #
@@ -5277,6 +5454,7 @@ class ScoutApm::MetricStats
   def update!(call_time, exclusive_time = T.unsafe(nil), extra_metrics = T.unsafe(nil)); end
 end
 
+# source://scout_apm//lib/scout_apm/middleware.rb#2
 class ScoutApm::Middleware
   # @return [Middleware] a new instance of Middleware
   #
@@ -5295,6 +5473,7 @@ end
 # source://scout_apm//lib/scout_apm/middleware.rb#3
 ScoutApm::Middleware::MAX_ATTEMPTS = T.let(T.unsafe(nil), Integer)
 
+# source://scout_apm//lib/scout_apm/histogram.rb#4
 class ScoutApm::NumericHistogram
   # @return [NumericHistogram] a new instance of NumericHistogram
   #
@@ -5369,6 +5548,7 @@ class ScoutApm::NumericHistogram
   def trim_one; end
 end
 
+# source://scout_apm//lib/scout_apm/periodic_work.rb#2
 class ScoutApm::PeriodicWork
   # @return [PeriodicWork] a new instance of PeriodicWork
   #
@@ -5396,8 +5576,10 @@ class ScoutApm::PeriodicWork
   def log_autoinstrument_significant_counts; end
 end
 
+# source://scout_apm//lib/scout_apm/platform_integrations/heroku.rb#2
 module ScoutApm::PlatformIntegrations; end
 
+# source://scout_apm//lib/scout_apm/platform_integrations/cloud_foundry.rb#3
 class ScoutApm::PlatformIntegrations::CloudFoundry
   # TODO: Is there a better way to get a hostname from Cloud Foundry?
   #
@@ -5420,6 +5602,7 @@ class ScoutApm::PlatformIntegrations::CloudFoundry
   def present?; end
 end
 
+# source://scout_apm//lib/scout_apm/platform_integrations/heroku.rb#3
 class ScoutApm::PlatformIntegrations::Heroku
   # source://scout_apm//lib/scout_apm/platform_integrations/heroku.rb#16
   def hostname; end
@@ -5438,6 +5621,7 @@ class ScoutApm::PlatformIntegrations::Heroku
   def present?; end
 end
 
+# source://scout_apm//lib/scout_apm/platform_integrations/server.rb#6
 class ScoutApm::PlatformIntegrations::Server
   # source://scout_apm//lib/scout_apm/platform_integrations/server.rb#19
   def hostname; end
@@ -5456,6 +5640,7 @@ class ScoutApm::PlatformIntegrations::Server
   def present?; end
 end
 
+# source://scout_apm//lib/scout_apm/rack.rb#2
 module ScoutApm::Rack
   class << self
     # source://scout_apm//lib/scout_apm/rack.rb#3
@@ -5466,8 +5651,10 @@ module ScoutApm::Rack
   end
 end
 
+# source://scout_apm//lib/scout_apm.rb#216
 class ScoutApm::Railtie < ::Rails::Railtie; end
 
+# source://scout_apm//lib/scout_apm/agent_context.rb#232
 class ScoutApm::RecorderFactory
   class << self
     # source://scout_apm//lib/scout_apm/agent_context.rb#233
@@ -5475,8 +5662,10 @@ class ScoutApm::RecorderFactory
   end
 end
 
+# source://scout_apm//lib/scout_apm/remote/server.rb#4
 module ScoutApm::Remote; end
 
+# source://scout_apm//lib/scout_apm/remote/message.rb#3
 class ScoutApm::Remote::Message
   # @return [Message] a new instance of Message
   #
@@ -5507,6 +5696,7 @@ class ScoutApm::Remote::Message
   end
 end
 
+# source://scout_apm//lib/scout_apm/remote/recorder.rb#3
 class ScoutApm::Remote::Recorder
   # @return [Recorder] a new instance of Recorder
   #
@@ -5541,6 +5731,7 @@ class ScoutApm::Remote::Recorder
   def stop; end
 end
 
+# source://scout_apm//lib/scout_apm/remote/router.rb#3
 class ScoutApm::Remote::Router
   # If/When we add different types, this signature should change to a hash
   # of {type => Object}, rather than building it in the initializer here.
@@ -5586,6 +5777,7 @@ class ScoutApm::Remote::Router
   def call_route(message); end
 end
 
+# source://scout_apm//lib/scout_apm/remote/server.rb#5
 class ScoutApm::Remote::Server
   # @return [Server] a new instance of Server
   #
@@ -5627,6 +5819,7 @@ class ScoutApm::Remote::Server
   def stop; end
 end
 
+# source://scout_apm//lib/scout_apm/reporter.rb#4
 class ScoutApm::Reporter
   # @return [Reporter] a new instance of Reporter
   #
@@ -5704,6 +5897,7 @@ end
 # source://scout_apm//lib/scout_apm/reporter.rb#5
 ScoutApm::Reporter::VERIFY_MODE = T.let(T.unsafe(nil), Integer)
 
+# source://scout_apm//lib/scout_apm/reporting.rb#3
 class ScoutApm::Reporting
   # @return [Reporting] a new instance of Reporting
   #
@@ -5760,6 +5954,7 @@ class ScoutApm::Reporting
   def reporter; end
 end
 
+# source://scout_apm//lib/scout_apm/request_histograms.rb#2
 class ScoutApm::RequestHistograms
   # @return [RequestHistograms] a new instance of RequestHistograms
   #
@@ -5813,6 +6008,7 @@ end
 # source://scout_apm//lib/scout_apm/request_histograms.rb#3
 ScoutApm::RequestHistograms::DEFAULT_HISTOGRAM_SIZE = T.let(T.unsafe(nil), Integer)
 
+# source://scout_apm//lib/scout_apm/request_manager.rb#5
 class ScoutApm::RequestManager
   class << self
     # Create a new TrackedRequest object for this thread
@@ -5831,6 +6027,7 @@ class ScoutApm::RequestManager
   end
 end
 
+# source://scout_apm//lib/scout_apm/scored_item_set.rb#8
 class ScoutApm::ScoredItemSet
   include ::Enumerable
 
@@ -5892,8 +6089,10 @@ ScoutApm::ScoredItemSet::ARBITRARILY_LARGE = T.let(T.unsafe(nil), Integer)
 # source://scout_apm//lib/scout_apm/scored_item_set.rb#15
 ScoutApm::ScoredItemSet::DEFAULT_MAX_SIZE = T.let(T.unsafe(nil), Integer)
 
+# source://scout_apm//lib/scout_apm/serializers/payload_serializer.rb#3
 module ScoutApm::Serializers; end
 
+# source://scout_apm//lib/scout_apm/serializers/app_server_load_serializer.rb#5
 class ScoutApm::Serializers::AppServerLoadSerializer
   class << self
     # source://scout_apm//lib/scout_apm/serializers/app_server_load_serializer.rb#14
@@ -5904,6 +6103,7 @@ class ScoutApm::Serializers::AppServerLoadSerializer
   end
 end
 
+# source://scout_apm//lib/scout_apm/serializers/db_query_serializer_to_json.rb#3
 class ScoutApm::Serializers::DbQuerySerializerToJson
   # @return [DbQuerySerializerToJson] a new instance of DbQuerySerializerToJson
   #
@@ -5919,6 +6119,7 @@ class ScoutApm::Serializers::DbQuerySerializerToJson
   def db_query_metrics; end
 end
 
+# source://scout_apm//lib/scout_apm/serializers/directive_serializer.rb#5
 class ScoutApm::Serializers::DirectiveSerializer
   class << self
     # source://scout_apm//lib/scout_apm/serializers/directive_serializer.rb#14
@@ -5929,6 +6130,7 @@ class ScoutApm::Serializers::DirectiveSerializer
   end
 end
 
+# source://scout_apm//lib/scout_apm/serializers/external_service_serializer_to_json.rb#3
 class ScoutApm::Serializers::ExternalServiceSerializerToJson
   # @return [ExternalServiceSerializerToJson] a new instance of ExternalServiceSerializerToJson
   #
@@ -5944,6 +6146,7 @@ class ScoutApm::Serializers::ExternalServiceSerializerToJson
   def external_service_metrics; end
 end
 
+# source://scout_apm//lib/scout_apm/serializers/histograms_serializer_to_json.rb#4
 class ScoutApm::Serializers::HistogramsSerializerToJson
   # @return [HistogramsSerializerToJson] a new instance of HistogramsSerializerToJson
   #
@@ -5959,6 +6162,7 @@ class ScoutApm::Serializers::HistogramsSerializerToJson
   def histograms; end
 end
 
+# source://scout_apm//lib/scout_apm/serializers/jobs_serializer_to_json.rb#3
 class ScoutApm::Serializers::JobsSerializerToJson
   # Jobs is a pre-deduped/combined set of job records.
   #
@@ -5978,6 +6182,7 @@ class ScoutApm::Serializers::JobsSerializerToJson
   def jobs; end
 end
 
+# source://scout_apm//lib/scout_apm/serializers/metrics_to_json_serializer.rb#3
 class ScoutApm::Serializers::MetricsToJsonSerializer
   # A hash of meta => stat pairs
   #
@@ -6005,6 +6210,7 @@ class ScoutApm::Serializers::MetricsToJsonSerializer
   def transform_child_metrics(metrics); end
 end
 
+# source://scout_apm//lib/scout_apm/serializers/payload_serializer.rb#4
 class ScoutApm::Serializers::PayloadSerializer
   class << self
     # source://scout_apm//lib/scout_apm/serializers/payload_serializer.rb#30
@@ -6015,6 +6221,7 @@ class ScoutApm::Serializers::PayloadSerializer
   end
 end
 
+# source://scout_apm//lib/scout_apm/serializers/payload_serializer_to_json.rb#3
 module ScoutApm::Serializers::PayloadSerializerToJson
   class << self
     # source://scout_apm//lib/scout_apm/serializers/payload_serializer_to_json.rb#63
@@ -6046,6 +6253,7 @@ module ScoutApm::Serializers::PayloadSerializerToJson
   end
 end
 
+# source://scout_apm//lib/scout_apm/serializers/slow_jobs_serializer_to_json.rb#3
 class ScoutApm::Serializers::SlowJobsSerializerToJson
   # Jobs is a series of slow job records
   #
@@ -6065,8 +6273,10 @@ class ScoutApm::Serializers::SlowJobsSerializerToJson
   def jobs; end
 end
 
+# source://scout_apm//lib/scout_apm/server_integrations/passenger.rb#2
 module ScoutApm::ServerIntegrations; end
 
+# source://scout_apm//lib/scout_apm/server_integrations/null.rb#6
 class ScoutApm::ServerIntegrations::Null
   # @return [Null] a new instance of Null
   #
@@ -6100,6 +6310,7 @@ class ScoutApm::ServerIntegrations::Null
   def present?; end
 end
 
+# source://scout_apm//lib/scout_apm/server_integrations/passenger.rb#3
 class ScoutApm::ServerIntegrations::Passenger
   # @return [Passenger] a new instance of Passenger
   #
@@ -6133,6 +6344,7 @@ class ScoutApm::ServerIntegrations::Passenger
   def present?; end
 end
 
+# source://scout_apm//lib/scout_apm/server_integrations/puma.rb#3
 class ScoutApm::ServerIntegrations::Puma
   # @return [Puma] a new instance of Puma
   #
@@ -6166,6 +6378,7 @@ class ScoutApm::ServerIntegrations::Puma
   def present?; end
 end
 
+# source://scout_apm//lib/scout_apm/server_integrations/rainbows.rb#3
 class ScoutApm::ServerIntegrations::Rainbows
   # @return [Rainbows] a new instance of Rainbows
   #
@@ -6199,6 +6412,7 @@ class ScoutApm::ServerIntegrations::Rainbows
   def present?; end
 end
 
+# source://scout_apm//lib/scout_apm/server_integrations/thin.rb#3
 class ScoutApm::ServerIntegrations::Thin
   # @return [Thin] a new instance of Thin
   #
@@ -6234,6 +6448,7 @@ class ScoutApm::ServerIntegrations::Thin
   def present?; end
 end
 
+# source://scout_apm//lib/scout_apm/server_integrations/unicorn.rb#3
 class ScoutApm::ServerIntegrations::Unicorn
   # @return [Unicorn] a new instance of Unicorn
   #
@@ -6267,6 +6482,7 @@ class ScoutApm::ServerIntegrations::Unicorn
   def present?; end
 end
 
+# source://scout_apm//lib/scout_apm/server_integrations/webrick.rb#3
 class ScoutApm::ServerIntegrations::Webrick
   # @return [Webrick] a new instance of Webrick
   #
@@ -6302,6 +6518,7 @@ class ScoutApm::ServerIntegrations::Webrick
   def present?; end
 end
 
+# source://scout_apm//lib/scout_apm/slow_job_record.rb#2
 class ScoutApm::SlowJobRecord
   # @return [SlowJobRecord] a new instance of SlowJobRecord
   #
@@ -6410,8 +6627,11 @@ end
 # Note that this is semi-internal API. You should not need this, and if you do
 # we're here to help at support@scoutapm.com. TrackedRequest doesn't change
 # often, but we can't promise a perfectly stable API for it either.
+#
+# source://scout_apm//lib/scout_apm/slow_policy/policy.rb#4
 module ScoutApm::SlowPolicy; end
 
+# source://scout_apm//lib/scout_apm/slow_policy/age_policy.rb#5
 class ScoutApm::SlowPolicy::AgePolicy < ::ScoutApm::SlowPolicy::Policy
   # @return [AgePolicy] a new instance of AgePolicy
   #
@@ -6439,6 +6659,7 @@ end
 # source://scout_apm//lib/scout_apm/slow_policy/age_policy.rb#6
 ScoutApm::SlowPolicy::AgePolicy::POINT_MULTIPLIER_AGE = T.let(T.unsafe(nil), Float)
 
+# source://scout_apm//lib/scout_apm/slow_policy/percent_policy.rb#6
 class ScoutApm::SlowPolicy::PercentPolicy < ::ScoutApm::SlowPolicy::Policy
   # Of the total time spent handling endpoints in this app, if this endpoint
   # is a higher percent, it should get more points.
@@ -6458,11 +6679,13 @@ end
 # source://scout_apm//lib/scout_apm/slow_policy/percent_policy.rb#7
 ScoutApm::SlowPolicy::PercentPolicy::POINT_MULTIPLIER_PERCENT_TIME = T.let(T.unsafe(nil), Float)
 
+# source://scout_apm//lib/scout_apm/slow_policy/percentile_policy.rb#4
 class ScoutApm::SlowPolicy::PercentilePolicy < ::ScoutApm::SlowPolicy::Policy
   # source://scout_apm//lib/scout_apm/slow_policy/percentile_policy.rb#5
   def call(request); end
 end
 
+# source://scout_apm//lib/scout_apm/slow_policy/policy.rb#5
 class ScoutApm::SlowPolicy::Policy
   # @return [Policy] a new instance of Policy
   #
@@ -6486,6 +6709,7 @@ class ScoutApm::SlowPolicy::Policy
   def stored!(request); end
 end
 
+# source://scout_apm//lib/scout_apm/slow_policy/speed_policy.rb#5
 class ScoutApm::SlowPolicy::SpeedPolicy < ::ScoutApm::SlowPolicy::Policy
   # Time in seconds
   # Logarithm keeps huge times from swamping the other metrics.
@@ -6500,6 +6724,7 @@ end
 # source://scout_apm//lib/scout_apm/slow_policy/speed_policy.rb#6
 ScoutApm::SlowPolicy::SpeedPolicy::POINT_MULTIPLIER_SPEED = T.let(T.unsafe(nil), Float)
 
+# source://scout_apm//lib/scout_apm/slow_request_policy.rb#5
 class ScoutApm::SlowRequestPolicy
   # @return [SlowRequestPolicy] a new instance of SlowRequestPolicy
   #
@@ -6540,6 +6765,7 @@ class ScoutApm::SlowRequestPolicy
   def stored!(request); end
 end
 
+# source://scout_apm//lib/scout_apm/slow_transaction.rb#2
 class ScoutApm::SlowTransaction
   include ::ScoutApm::BucketNameSplitter
 
@@ -6673,6 +6899,7 @@ class ScoutApm::SlowTransaction
   def uri; end
 end
 
+# source://scout_apm//lib/scout_apm/instruments/active_record.rb#4
 class ScoutApm::SqlList
   # @return [SqlList] a new instance of SqlList
   #
@@ -6699,6 +6926,7 @@ class ScoutApm::SqlList
   def to_s; end
 end
 
+# source://scout_apm//lib/scout_apm/stack_item.rb#2
 class ScoutApm::StackItem
   # @return [StackItem] a new instance of StackItem
   #
@@ -6736,6 +6964,7 @@ class ScoutApm::StackItem
   def start_time; end
 end
 
+# source://scout_apm//lib/scout_apm/store.rb#5
 class ScoutApm::Store
   # @return [Store] a new instance of Store
   #
@@ -6811,6 +7040,8 @@ class ScoutApm::Store
 end
 
 # One period of Storage. Typically 1 minute
+#
+# source://scout_apm//lib/scout_apm/store.rb#198
 class ScoutApm::StoreReportingPeriod
   # @return [StoreReportingPeriod] a new instance of StoreReportingPeriod
   #
@@ -6920,6 +7151,8 @@ end
 
 # A timestamp, normalized to the beginning of a minute. Used as a hash key to
 # bucket metrics into per-minute groups
+#
+# source://scout_apm//lib/scout_apm/store.rb#151
 class ScoutApm::StoreReportingPeriodTimestamp
   # @return [StoreReportingPeriodTimestamp] a new instance of StoreReportingPeriodTimestamp
   #
@@ -6960,6 +7193,7 @@ class ScoutApm::StoreReportingPeriodTimestamp
   end
 end
 
+# source://scout_apm//lib/scout_apm/synchronous_recorder.rb#6
 class ScoutApm::SynchronousRecorder
   # @return [SynchronousRecorder] a new instance of SynchronousRecorder
   #
@@ -6984,8 +7218,10 @@ class ScoutApm::SynchronousRecorder
   def stop; end
 end
 
+# source://scout_apm//lib/scout_apm/tasks/doctor.rb#2
 module ScoutApm::Tasks; end
 
+# source://scout_apm//lib/scout_apm/tasks/doctor.rb#3
 class ScoutApm::Tasks::Doctor
   # @return [Doctor] a new instance of Doctor
   #
@@ -7013,6 +7249,7 @@ class ScoutApm::Tasks::Doctor
   end
 end
 
+# source://scout_apm//lib/scout_apm/tasks/support.rb#3
 class ScoutApm::Tasks::Support
   # @return [Support] a new instance of Support
   #
@@ -7028,6 +7265,7 @@ class ScoutApm::Tasks::Support
   end
 end
 
+# source://scout_apm//lib/scout_apm/tracer.rb#10
 module ScoutApm::Tracer
   mixes_in_class_methods ::ScoutApm::Tracer::ClassMethods
 
@@ -7052,6 +7290,7 @@ module ScoutApm::Tracer
   end
 end
 
+# source://scout_apm//lib/scout_apm/tracer.rb#41
 module ScoutApm::Tracer::ClassMethods
   # See ScoutApm::Tracer.instrument
   #
@@ -7111,6 +7350,7 @@ module ScoutApm::Tracer::ClassMethods
   def _uninstrumented_method_name(method_name, type); end
 end
 
+# source://scout_apm//lib/scout_apm/tracked_request.rb#8
 class ScoutApm::TrackedRequest
   # units = seconds
   #
@@ -7461,6 +7701,7 @@ ScoutApm::TrackedRequest::BACKTRACE_BLACKLIST = T.let(T.unsafe(nil), Array)
 # source://scout_apm//lib/scout_apm/tracked_request.rb#53
 ScoutApm::TrackedRequest::REQUEST_TYPES = T.let(T.unsafe(nil), Array)
 
+# source://scout_apm//lib/scout_apm/transaction.rb#2
 module ScoutApm::Transaction
   class << self
     # Ignores the current request
@@ -7475,6 +7716,7 @@ module ScoutApm::Transaction
   end
 end
 
+# source://scout_apm//lib/scout_apm/transaction_time_consumed.rb#2
 class ScoutApm::TransactionTimeConsumed
   # @return [TransactionTimeConsumed] a new instance of TransactionTimeConsumed
   #
@@ -7509,6 +7751,8 @@ class ScoutApm::TransactionTimeConsumed
 end
 
 # Time is in seconds
+#
+# source://scout_apm//lib/scout_apm/transaction_time_consumed.rb#40
 class ScoutApm::TransactionTimeConsumed::TotalTimeRecord < ::Struct
   # @return [TotalTimeRecord] a new instance of TotalTimeRecord
   #
@@ -7549,8 +7793,10 @@ class ScoutApm::TransactionTimeConsumed::TotalTimeRecord < ::Struct
   end
 end
 
+# source://scout_apm//lib/scout_apm/utils/sql_sanitizer.rb#8
 module ScoutApm::Utils; end
 
+# source://scout_apm//lib/scout_apm/utils/active_record_metric_name.rb#3
 class ScoutApm::Utils::ActiveRecordMetricName
   # @return [ActiveRecordMetricName] a new instance of ActiveRecordMetricName
   #
@@ -7708,6 +7954,7 @@ ScoutApm::Utils::ActiveRecordMetricName::UPDATE_REGEX = T.let(T.unsafe(nil), Reg
 # source://scout_apm//lib/scout_apm/utils/active_record_metric_name.rb#89
 ScoutApm::Utils::ActiveRecordMetricName::WHITE_SPACE = T.let(T.unsafe(nil), String)
 
+# source://scout_apm//lib/scout_apm/utils/backtrace_parser.rb#8
 class ScoutApm::Utils::BacktraceParser
   # call_stack - an +Array+ of calls, typically generated via the +caller+ method.
   # Example single line:
@@ -7732,9 +7979,12 @@ end
 # source://scout_apm//lib/scout_apm/utils/backtrace_parser.rb#10
 ScoutApm::Utils::BacktraceParser::APP_FRAMES = T.let(T.unsafe(nil), Integer)
 
+# source://scout_apm//lib/scout_apm/utils/marshal_logging.rb#3
 class ScoutApm::Utils::Error < ::StandardError; end
 
 # A simple wrapper around Ruby's built-in gzip support.
+#
+# source://scout_apm//lib/scout_apm/utils/gzip_helper.rb#4
 class ScoutApm::Utils::GzipHelper
   # @return [GzipHelper] a new instance of GzipHelper
   #
@@ -7753,6 +8003,7 @@ end
 # source://scout_apm//lib/scout_apm/utils/gzip_helper.rb#5
 ScoutApm::Utils::GzipHelper::DEFAULT_GZIP_LEVEL = T.let(T.unsafe(nil), Integer)
 
+# source://scout_apm//lib/scout_apm/utils/installed_gems.rb#3
 class ScoutApm::Utils::InstalledGems
   # @return [InstalledGems] a new instance of InstalledGems
   #
@@ -7771,6 +8022,7 @@ class ScoutApm::Utils::InstalledGems
   def run; end
 end
 
+# source://scout_apm//lib/scout_apm/utils/marshal_logging.rb#5
 class ScoutApm::Utils::InstanceVar
   # @return [InstanceVar] a new instance of InstanceVar
   #
@@ -7794,6 +8046,7 @@ class ScoutApm::Utils::InstanceVar
   def to_s; end
 end
 
+# source://scout_apm//lib/scout_apm/utils/klass_helper.rb#3
 module ScoutApm::Utils::KlassHelper
   class << self
     # KlassHelper.defined?("ActiveRecord", "Base") #=> true / false
@@ -7812,6 +8065,7 @@ module ScoutApm::Utils::KlassHelper
   end
 end
 
+# source://scout_apm//lib/scout_apm/utils/marshal_logging.rb#24
 class ScoutApm::Utils::MarshalLogging
   # @return [MarshalLogging] a new instance of MarshalLogging
   #
@@ -7832,6 +8086,7 @@ class ScoutApm::Utils::MarshalLogging
   def offending_hash?(obj); end
 end
 
+# source://scout_apm//lib/scout_apm/utils/numbers.rb#3
 class ScoutApm::Utils::Numbers
   class << self
     # Round a float to a certain number of decimal places
@@ -7841,6 +8096,7 @@ class ScoutApm::Utils::Numbers
   end
 end
 
+# source://scout_apm//lib/scout_apm/utils/scm.rb#4
 class ScoutApm::Utils::Scm
   class << self
     # Takes an *already relative* path +path+
@@ -7854,6 +8110,8 @@ end
 # Represents a random ID that we can use to track a certain span. The
 # `span` prefix is only for ease of reading logs - it should not be
 # interpreted to convey any sort of meaning.
+#
+# source://scout_apm//lib/scout_apm/utils/unique_id.rb#31
 class ScoutApm::Utils::SpanId
   # @return [SpanId] a new instance of SpanId
   #
@@ -7864,6 +8122,7 @@ class ScoutApm::Utils::SpanId
   def to_s; end
 end
 
+# source://scout_apm//lib/scout_apm/utils/sql_sanitizer.rb#9
 class ScoutApm::Utils::SqlSanitizer
   # @return [SqlSanitizer] a new instance of SqlSanitizer
   #
@@ -8000,6 +8259,7 @@ ScoutApm::Utils::SqlSanitizer::SQLSERVER_REMOVE_INTEGERS = T.let(T.unsafe(nil), 
 # source://scout_apm//lib/scout_apm/utils/sql_sanitizer.rb#38
 ScoutApm::Utils::SqlSanitizer::SQLSERVER_REMOVE_STRINGS = T.let(T.unsafe(nil), Regexp)
 
+# source://scout_apm//lib/scout_apm/utils/time.rb#3
 class ScoutApm::Utils::Time
   class << self
     # Handles both integer (unix) time and Time objects
@@ -8013,6 +8273,8 @@ end
 # Represents a random ID that we can use to track a certain transaction.
 # The `trans` prefix is only for ease of reading logs - it should not be
 # interpreted to convey any sort of meaning.
+#
+# source://scout_apm//lib/scout_apm/utils/unique_id.rb#18
 class ScoutApm::Utils::TransactionId
   # @return [TransactionId] a new instance of TransactionId
   #
@@ -8023,6 +8285,7 @@ class ScoutApm::Utils::TransactionId
   def to_s; end
 end
 
+# source://scout_apm//lib/scout_apm/utils/unique_id.rb#3
 class ScoutApm::Utils::UniqueId
   class << self
     # source://scout_apm//lib/scout_apm/utils/unique_id.rb#6

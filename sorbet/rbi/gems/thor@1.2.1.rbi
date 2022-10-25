@@ -2274,6 +2274,8 @@ class Thor::Error < ::StandardError; end
 # is that it invokes all commands at once. It also include some methods that allows
 # invocations to be done at the class method, which are not available to Thor
 # commands.
+#
+# source://thor//lib/thor/group.rb#7
 class Thor::Group
   include ::Thor::Base
   include ::Thor::Invocation
@@ -2989,6 +2991,8 @@ Thor::Options::SHORT_SQ_RE = T.let(T.unsafe(nil), Regexp)
 #       t.spec_files = FileList['spec/**/*_spec.rb']
 #     end
 #   end
+#
+# source://thor//lib/thor/rake_compat.rb#20
 module Thor::RakeCompat
   include ::FileUtils::StreamUtils_
   include ::FileUtils
@@ -3526,6 +3530,8 @@ Thor::Shell::Color::YELLOW = T.let(T.unsafe(nil), String)
 
 # Inherit from Thor::Shell::Basic and add set_color behavior. Check
 # Thor::Shell::Basic to see all available methods.
+#
+# source://thor//lib/thor/shell/html.rb#9
 class Thor::Shell::HTML < ::Thor::Shell::Basic
   # Ask something to the user and receives a response.
   #

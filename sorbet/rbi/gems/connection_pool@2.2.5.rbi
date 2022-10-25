@@ -31,6 +31,8 @@
 # Accepts the following options:
 # - :size - number of connections to pool, defaults to 5
 # - :timeout - amount of time to wait for a connection if none currently available, defaults to 5 seconds
+#
+# source://connection_pool//lib/connection_pool/version.rb#1
 class ConnectionPool
   # @raise [ArgumentError]
   # @return [ConnectionPool] a new instance of ConnectionPool
@@ -83,7 +85,10 @@ end
 # source://connection_pool//lib/connection_pool.rb#39
 ConnectionPool::DEFAULTS = T.let(T.unsafe(nil), Hash)
 
+# source://connection_pool//lib/connection_pool.rb#5
 class ConnectionPool::Error < ::RuntimeError; end
+
+# source://connection_pool//lib/connection_pool.rb#6
 class ConnectionPool::PoolShuttingDownError < ::ConnectionPool::Error; end
 
 # Examples:
@@ -99,6 +104,8 @@ class ConnectionPool::PoolShuttingDownError < ::ConnectionPool::Error; end
 #    conn = ts.pop
 #    ts.pop timeout: 5
 #    #=> raises ConnectionPool::TimeoutError after 5 seconds
+#
+# source://connection_pool//lib/connection_pool/timed_stack.rb#20
 class ConnectionPool::TimedStack
   # Creates a new pool with +size+ connections that are created from the given
   # +block+.
@@ -202,11 +209,13 @@ class ConnectionPool::TimedStack
   def try_create(options = T.unsafe(nil)); end
 end
 
+# source://connection_pool//lib/connection_pool.rb#7
 class ConnectionPool::TimeoutError < ::Timeout::Error; end
 
 # source://connection_pool//lib/connection_pool/version.rb#2
 ConnectionPool::VERSION = T.let(T.unsafe(nil), String)
 
+# source://connection_pool//lib/connection_pool/wrapper.rb#2
 class ConnectionPool::Wrapper < ::BasicObject
   # @return [Wrapper] a new instance of Wrapper
   #

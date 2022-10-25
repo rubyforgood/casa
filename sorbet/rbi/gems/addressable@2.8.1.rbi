@@ -5,8 +5,11 @@
 # Please instead update this file by running `bin/tapioca gem addressable`.
 
 # Addressable is a library for processing links and URIs.
+#
+# source://addressable//lib/addressable/version.rb#22
 module Addressable; end
 
+# source://addressable//lib/addressable/idna/pure.rb#21
 module Addressable::IDNA
   class << self
     # Converts from a Unicode internationalized domain name to an ASCII
@@ -171,12 +174,18 @@ Addressable::IDNA::PUNYCODE_TMAX = T.let(T.unsafe(nil), Integer)
 Addressable::IDNA::PUNYCODE_TMIN = T.let(T.unsafe(nil), Integer)
 
 # Input is invalid.
+#
+# source://addressable//lib/addressable/idna/pure.rb#379
 class Addressable::IDNA::PunycodeBadInput < ::StandardError; end
 
 # Output would exceed the space provided.
+#
+# source://addressable//lib/addressable/idna/pure.rb#381
 class Addressable::IDNA::PunycodeBigOutput < ::StandardError; end
 
 # Input needs wider integers to process.
+#
+# source://addressable//lib/addressable/idna/pure.rb#383
 class Addressable::IDNA::PunycodeOverflow < ::StandardError; end
 
 # source://addressable//lib/addressable/idna/pure.rb#335
@@ -217,6 +226,8 @@ Addressable::IDNA::UTF8_REGEX_MULTIBYTE = T.let(T.unsafe(nil), Regexp)
 
 # This is an implementation of a URI template based on
 # RFC 6570 (http://tools.ietf.org/html/rfc6570).
+#
+# source://addressable//lib/addressable/template.rb#27
 class Addressable::Template
   # Creates a new <tt>Addressable::Template</tt> object.
   #
@@ -649,9 +660,13 @@ end
 Addressable::Template::EXPRESSION = T.let(T.unsafe(nil), Regexp)
 
 # Raised if an invalid template operator is used in a pattern.
+#
+# source://addressable//lib/addressable/template.rb#85
 class Addressable::Template::InvalidTemplateOperatorError < ::StandardError; end
 
 # Raised if an invalid template value is supplied.
+#
+# source://addressable//lib/addressable/template.rb#80
 class Addressable::Template::InvalidTemplateValueError < ::StandardError; end
 
 # source://addressable//lib/addressable/template.rb#70
@@ -662,6 +677,8 @@ Addressable::Template::LEADERS = T.let(T.unsafe(nil), Hash)
 
 # This class represents the data that is extracted when a Template
 # is matched against a URI.
+#
+# source://addressable//lib/addressable/template.rb#96
 class Addressable::Template::MatchData
   # Creates a new MatchData object.
   # MatchData objects should never be instantiated directly.
@@ -793,6 +810,8 @@ end
 Addressable::Template::RESERVED = T.let(T.unsafe(nil), String)
 
 # Raised if an invalid template operator is used in a pattern.
+#
+# source://addressable//lib/addressable/template.rb#90
 class Addressable::Template::TemplateOperatorAbortedError < ::StandardError; end
 
 # source://addressable//lib/addressable/template.rb#42
@@ -810,6 +829,8 @@ Addressable::Template::VARSPEC = T.let(T.unsafe(nil), Regexp)
 # This is an implementation of a URI parser based on
 # <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>,
 # <a href="http://www.ietf.org/rfc/rfc3987.txt">RFC 3987</a>.
+#
+# source://addressable//lib/addressable/uri.rb#31
 class Addressable::URI
   # Creates a new uri object from component parts.
   #
@@ -1852,6 +1873,8 @@ end
 #
 #       Interpolated `String`s *were* frozen this way before Ruby 3.0:
 #       https://bugs.ruby-lang.org/issues/17104
+#
+# source://addressable//lib/addressable/uri.rb#46
 module Addressable::URI::CharacterClasses; end
 
 # source://addressable//lib/addressable/uri.rb#47
@@ -1897,11 +1920,14 @@ Addressable::URI::CharacterClasses::UNRESERVED = T.let(T.unsafe(nil), String)
 Addressable::URI::EMPTY_STR = T.let(T.unsafe(nil), String)
 
 # Raised if something other than a uri is supplied.
+#
+# source://addressable//lib/addressable/uri.rb#34
 class Addressable::URI::InvalidURIError < ::StandardError; end
 
 # source://addressable//lib/addressable/uri.rb#1535
 Addressable::URI::NORMPATH = T.let(T.unsafe(nil), Regexp)
 
+# source://addressable//lib/addressable/uri.rb#62
 module Addressable::URI::NormalizeCharacterClasses; end
 
 # source://addressable//lib/addressable/uri.rb#67
@@ -1958,6 +1984,7 @@ Addressable::URI::SLASH = T.let(T.unsafe(nil), String)
 # source://addressable//lib/addressable/uri.rb#74
 Addressable::URI::URIREGEX = T.let(T.unsafe(nil), Regexp)
 
+# source://addressable//lib/addressable/version.rb#23
 module Addressable::VERSION; end
 
 # source://addressable//lib/addressable/version.rb#24

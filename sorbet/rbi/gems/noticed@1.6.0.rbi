@@ -15,6 +15,8 @@ ActiveJob::Arguments::OBJECT_SERIALIZER_KEY = T.let(T.unsafe(nil), String)
 #     { project_id: "api-12345" }
 #   end
 # end
+#
+# source://noticed//lib/noticed/engine.rb#1
 module Noticed
   # source://noticed//lib/noticed.rb#28
   def parent_class; end
@@ -31,6 +33,7 @@ module Noticed
   end
 end
 
+# source://noticed//lib/noticed/base.rb#2
 class Noticed::Base
   include ::Noticed::Translation
   include ::ActionDispatch::Routing::PolymorphicRoutes
@@ -226,6 +229,7 @@ class Noticed::Base
   end
 end
 
+# source://noticed//lib/noticed/coder.rb#2
 class Noticed::Coder
   class << self
     # source://noticed//lib/noticed/coder.rb#10
@@ -236,9 +240,13 @@ class Noticed::Coder
   end
 end
 
+# source://noticed//lib/noticed.rb#14
 module Noticed::DeliveryMethods; end
+
+# source://noticed//lib/noticed/engine.rb#2
 class Noticed::Engine < ::Rails::Engine; end
 
+# source://noticed//lib/noticed/has_notifications.rb#2
 module Noticed::HasNotifications
   extend ::ActiveSupport::Concern
 
@@ -248,11 +256,13 @@ module Noticed::HasNotifications
   def current_adapter; end
 end
 
+# source://noticed//lib/noticed/has_notifications.rb#0
 module Noticed::HasNotifications::ClassMethods
   # source://noticed//lib/noticed/has_notifications.rb#17
   def has_noticed_notifications(param_name: T.unsafe(nil), **options); end
 end
 
+# source://noticed//lib/noticed/model.rb#2
 module Noticed::Model
   extend ::ActiveSupport::Concern
 
@@ -287,6 +297,7 @@ module Noticed::Model
   def unread?; end
 end
 
+# source://noticed//lib/noticed/model.rb#0
 module Noticed::Model::ClassMethods
   # source://noticed//lib/noticed/model.rb#26
   def mark_as_read!; end
@@ -301,6 +312,7 @@ end
 # source://noticed//lib/noticed/model.rb#3
 Noticed::Model::DATABASE_ERROR_CLASS_NAMES = T.let(T.unsafe(nil), Array)
 
+# source://noticed//lib/noticed.rb#34
 class Noticed::ResponseUnsuccessful < ::StandardError
   # @return [ResponseUnsuccessful] a new instance of ResponseUnsuccessful
   #
@@ -313,6 +325,7 @@ class Noticed::ResponseUnsuccessful < ::StandardError
   def response; end
 end
 
+# source://noticed//lib/noticed/text_coder.rb#2
 class Noticed::TextCoder
   class << self
     # source://noticed//lib/noticed/text_coder.rb#11
@@ -323,6 +336,7 @@ class Noticed::TextCoder
   end
 end
 
+# source://noticed//lib/noticed/translation.rb#2
 module Noticed::Translation
   extend ::ActiveSupport::Concern
 
@@ -344,4 +358,5 @@ module Noticed::Translation
   def translate(key, **options); end
 end
 
+# source://noticed//lib/noticed.rb#31
 class Noticed::ValidationError < ::StandardError; end

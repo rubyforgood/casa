@@ -12,6 +12,8 @@
 
 # Represents a domain name ready for extracting its registered domain
 # and TLD.
+#
+# source://domain_name//lib/domain_name/version.rb#1
 class DomainName
   # Parses _hostname_ into a DomainName object.  An IP address is also
   # accepted.  An IPv6 address may be enclosed in square brackets.
@@ -158,6 +160,7 @@ DomainName::ETLD_DATA = T.let(T.unsafe(nil), Hash)
 # source://domain_name//lib/domain_name/etld_data.rb#2
 DomainName::ETLD_DATA_DATE = T.let(T.unsafe(nil), String)
 
+# source://domain_name//lib/domain_name/punycode.rb#52
 module DomainName::Punycode
   class << self
     # Decode a +string+ encoded in Punycode
@@ -183,11 +186,14 @@ module DomainName::Punycode
 end
 
 # Most errors we raise are basically kind of ArgumentError.
+#
+# source://domain_name//lib/domain_name/punycode.rb#96
 class DomainName::Punycode::ArgumentError < ::ArgumentError; end
 
 # source://domain_name//lib/domain_name/punycode.rb#53
 DomainName::Punycode::BASE = T.let(T.unsafe(nil), Integer)
 
+# source://domain_name//lib/domain_name/punycode.rb#97
 class DomainName::Punycode::BufferOverflowError < ::DomainName::Punycode::ArgumentError; end
 
 # source://domain_name//lib/domain_name/punycode.rb#65
@@ -249,32 +255,8 @@ DomainName::Punycode::TMIN = T.let(T.unsafe(nil), Integer)
 # source://domain_name//lib/domain_name/version.rb#2
 DomainName::VERSION = T.let(T.unsafe(nil), String)
 
-# --
-# Most objects are cloneable, but not all. For example you can't dup methods:
-#
-#   method(:puts).dup # => TypeError: allocator undefined for Method
-#
-# Classes may signal their instances are not duplicable removing +dup+/+clone+
-# or raising exceptions from them. So, to dup an arbitrary object you normally
-# use an optimistic approach and are ready to catch an exception, say:
-#
-#   arbitrary_object.dup rescue object
-#
-# Rails dups objects in a few critical spots where they are not that arbitrary.
-# That rescue is very expensive (like 40 times slower than a predicate), and it
-# is often triggered.
-#
-# That's why we hardcode the following cases and check duplicable? instead of
-# using that rescue idiom.
-# ++
 class Object < ::BasicObject
-  include ::ActiveSupport::ToJsonWithActiveSupportEncoder
-  include ::ActiveSupport::Dependencies::RequireDependency
   include ::Kernel
-  include ::ActiveSupport::Tryable
-  include ::Delayed::MessageSending
-  include ::FriendlyId::ObjectUtils
-  include ::PP::ObjectMixin
 
   private
 

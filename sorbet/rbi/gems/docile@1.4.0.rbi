@@ -5,6 +5,8 @@
 # Please instead update this file by running `bin/tapioca gem docile`.
 
 # Docile keeps your Ruby DSLs tame and well-behaved.
+#
+# source://docile//lib/docile/version.rb#3
 module Docile
   extend ::Docile::Execution
 
@@ -222,6 +224,8 @@ end
 # by this module to add filter functionalities.
 #
 # @api private
+#
+# source://docile//lib/docile/backtrace_filter.rb#11
 module Docile::BacktraceFilter
   # @api private
   #
@@ -248,6 +252,8 @@ Docile::BacktraceFilter::FILTER_PATTERN = T.let(T.unsafe(nil), Regexp)
 #
 # @api private
 # @see Docile.dsl_eval_immutable
+#
+# source://docile//lib/docile/chaining_fallback_context_proxy.rb#19
 class Docile::ChainingFallbackContextProxy < ::Docile::FallbackContextProxy
   # Proxy methods as in {FallbackContextProxy#method_missing}, replacing
   # `receiver` with the returned value.
@@ -262,6 +268,8 @@ end
 # proxy object.
 #
 # @api private
+#
+# source://docile//lib/docile/execution.rb#8
 module Docile::Execution
   private
 
@@ -308,6 +316,8 @@ end
 #
 # @api private
 # @see Docile.dsl_eval
+#
+# source://docile//lib/docile/fallback_context_proxy.rb#20
 class Docile::FallbackContextProxy
   # @api private
   # @param receiver [Object] the primary proxy target to which all methods

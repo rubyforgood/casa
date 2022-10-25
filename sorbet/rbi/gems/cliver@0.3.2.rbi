@@ -6,6 +6,8 @@
 
 # Cliver is tool for making dependency assertions against
 # command-line executables.
+#
+# source://cliver//lib/cliver/version.rb#3
 module Cliver
   extend ::Cliver
 
@@ -64,6 +66,8 @@ module Cliver
 end
 
 # This is how a dependency is specified.
+#
+# source://cliver//lib/cliver/dependency.rb#7
 class Cliver::Dependency
   # @overload initialize
   # @return [Dependency] a new instance of Dependency
@@ -178,9 +182,13 @@ class Cliver::Dependency
 end
 
 # An exception that is raised when executable is not present at all.
+#
+# source://cliver//lib/cliver/dependency.rb#17
 class Cliver::Dependency::NotFound < ::Cliver::Dependency::NotMet; end
 
 # An exception class raised when assertion is not met
+#
+# source://cliver//lib/cliver/dependency.rb#10
 class Cliver::Dependency::NotMet < ::ArgumentError; end
 
 # A pattern for extracting a {Gem::Version}-parsable version
@@ -190,10 +198,14 @@ Cliver::Dependency::PARSABLE_GEM_VERSION = T.let(T.unsafe(nil), Regexp)
 
 # An exception that is raised when executable present, but
 # no version that matches the requirements is present.
+#
+# source://cliver//lib/cliver/dependency.rb#14
 class Cliver::Dependency::VersionMismatch < ::Cliver::Dependency::NotMet; end
 
 # Default implementation of the detector needed by Cliver::Assertion,
 # which will take anything that #respond_to?(:to_proc)
+#
+# source://cliver//lib/cliver/detector.rb#10
 class Cliver::Detector < ::Struct
   # Forgiving input, allows either argument if only one supplied.
   #
@@ -266,6 +278,8 @@ Cliver::Detector::DEFAULT_COMMAND_ARG = T.let(T.unsafe(nil), String)
 Cliver::Detector::DEFAULT_VERSION_PATTERN = T.let(T.unsafe(nil), Regexp)
 
 # A Namespace to hold filter procs
+#
+# source://cliver//lib/cliver/filter.rb#5
 module Cliver::Filter
   # Apply to some input
   #
@@ -289,6 +303,7 @@ end
 # source://cliver//lib/cliver/filter.rb#7
 Cliver::Filter::IDENTITY = T.let(T.unsafe(nil), Proc)
 
+# source://cliver//lib/cliver/shell_capture.rb#4
 class Cliver::ShellCapture
   # @overload initialize
   # @return [void]
@@ -318,6 +333,8 @@ end
 Cliver::VERSION = T.let(T.unsafe(nil), String)
 
 # Core-Extensions on File
+#
+# source://cliver//lib/core_ext/file.rb#4
 class File < ::IO
   class << self
     # determine whether a String path is absolute.

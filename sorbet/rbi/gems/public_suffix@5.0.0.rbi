@@ -12,6 +12,8 @@
 # The Public Suffix List is an initiative of the Mozilla Project,
 # but is maintained as a community resource. It is available for use in any software,
 # but was originally created to meet the needs of browser manufacturers.
+#
+# source://public_suffix//lib/public_suffix/domain.rb#9
 module PublicSuffix
   class << self
     # private
@@ -112,6 +114,8 @@ PublicSuffix::BANG = T.let(T.unsafe(nil), String)
 PublicSuffix::DOT = T.let(T.unsafe(nil), String)
 
 # Domain represents a domain name, composed by a TLD, SLD and TRD.
+#
+# source://public_suffix//lib/public_suffix/domain.rb#12
 class PublicSuffix::Domain
   # Creates and returns a new {PublicSuffix::Domain} instance.
   #
@@ -331,6 +335,8 @@ end
 #
 #   PublicSuffix.parse("http://www.nic.it")
 #   # => PublicSuffix::DomainInvalid
+#
+# source://public_suffix//lib/public_suffix/errors.rb#25
 class PublicSuffix::DomainInvalid < ::PublicSuffix::Error; end
 
 # Raised when trying to parse a name that matches a suffix.
@@ -342,8 +348,11 @@ class PublicSuffix::DomainInvalid < ::PublicSuffix::Error; end
 #
 #   PublicSuffix.parse("www.nic.do")
 #   # => PublicSuffix::Domain
+#
+# source://public_suffix//lib/public_suffix/errors.rb#38
 class PublicSuffix::DomainNotAllowed < ::PublicSuffix::DomainInvalid; end
 
+# source://public_suffix//lib/public_suffix/errors.rb#11
 class PublicSuffix::Error < ::StandardError; end
 
 # A {PublicSuffix::List} is a collection of one
@@ -374,6 +383,8 @@ class PublicSuffix::Error < ::StandardError; end
 # You can create as many {PublicSuffix::List} you want.
 # The {PublicSuffix::List.default} rule list is used
 # to tokenize and validate a domain.
+#
+# source://public_suffix//lib/public_suffix/list.rb#40
 class PublicSuffix::List
   # Initializes an empty {PublicSuffix::List}.
   #
@@ -547,6 +558,8 @@ PublicSuffix::List::DEFAULT_LIST_PATH = T.let(T.unsafe(nil), String)
 #
 #   PublicSuffix::Rule.factory("ar")
 #   # => #<PublicSuffix::Rule::Normal>
+#
+# source://public_suffix//lib/public_suffix/rule.rb#22
 module PublicSuffix::Rule
   class << self
     # The default rule to use if no rule match.
@@ -655,6 +668,8 @@ end
 #   # => ["www.google", "com"]
 #
 # @abstract
+#
+# source://public_suffix//lib/public_suffix/rule.rb#102
 class PublicSuffix::Rule::Base
   # Initializes a new rule.
   #
@@ -747,6 +762,8 @@ class PublicSuffix::Rule::Base
 end
 
 # @api internal
+#
+# source://public_suffix//lib/public_suffix/rule.rb#25
 class PublicSuffix::Rule::Entry < ::Struct
   # Returns the value of attribute length
   #
@@ -791,6 +808,8 @@ class PublicSuffix::Rule::Entry < ::Struct
 end
 
 # Exception represents an exception rule (e.g. !parliament.uk).
+#
+# source://public_suffix//lib/public_suffix/rule.rb#265
 class PublicSuffix::Rule::Exception < ::PublicSuffix::Rule::Base
   # Decomposes the domain name according to rule properties.
   #
@@ -832,6 +851,8 @@ class PublicSuffix::Rule::Exception < ::PublicSuffix::Rule::Base
 end
 
 # Normal represents a standard rule (e.g. com).
+#
+# source://public_suffix//lib/public_suffix/rule.rb#187
 class PublicSuffix::Rule::Normal < ::PublicSuffix::Rule::Base
   # Decomposes the domain name according to rule properties.
   #
@@ -858,6 +879,8 @@ class PublicSuffix::Rule::Normal < ::PublicSuffix::Rule::Base
 end
 
 # Wildcard represents a wildcard rule (e.g. *.co.uk).
+#
+# source://public_suffix//lib/public_suffix/rule.rb#217
 class PublicSuffix::Rule::Wildcard < ::PublicSuffix::Rule::Base
   # Initializes a new rule.
   #

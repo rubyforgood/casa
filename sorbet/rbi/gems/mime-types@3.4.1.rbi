@@ -5,6 +5,8 @@
 # Please instead update this file by running `bin/tapioca gem mime-types`.
 
 # The namespace for MIME applications, tools, and libraries.
+#
+# source://mime-types//lib/mime/types.rb#4
 module MIME; end
 
 # The definition of one MIME content-type.
@@ -67,6 +69,8 @@ module MIME; end
 #  xwingz = MIME::Types['application/x-Wingz'].first # => application/x-Wingz
 #  puts xwingz.content_type        # => 'application/x-Wingz'
 #  puts xwingz.simplified          # => 'application/x-wingz'
+#
+# source://mime-types//lib/mime/type.rb#67
 class MIME::Type
   include ::Comparable
 
@@ -494,6 +498,8 @@ MIME::Type::BINARY_ENCODINGS = T.let(T.unsafe(nil), Array)
 #
 # MIME::Type::Columnar is *not* intended to be created except by
 # MIME::Types::Columnar containers.
+#
+# source://mime-types//lib/mime/type/columnar.rb#15
 class MIME::Type::Columnar < ::MIME::Type
   # @return [Columnar] a new instance of Columnar
   #
@@ -581,6 +587,8 @@ MIME::Type::I18N_RE = T.let(T.unsafe(nil), Regexp)
 
 # Reflects a MIME content-type specification that is not correctly
 # formatted (it isn't +type+/+subtype+).
+#
+# source://mime-types//lib/mime/type.rb#71
 class MIME::Type::InvalidContentType < ::ArgumentError
   # :stopdoc:
   #
@@ -594,6 +602,8 @@ class MIME::Type::InvalidContentType < ::ArgumentError
 end
 
 # Reflects an unsupported MIME encoding.
+#
+# source://mime-types//lib/mime/type.rb#84
 class MIME::Type::InvalidEncoding < ::ArgumentError
   # :stopdoc:
   #
@@ -673,6 +683,8 @@ MIME::Type::VERSION = T.let(T.unsafe(nil), String)
 #  puts plaintext.provisional?          # => false
 #  puts plaintext == 'text/plain'       # => true
 #  puts MIME::Type.simplified('x-appl/x-zip') # => 'appl/zip'
+#
+# source://mime-types//lib/mime/types.rb#6
 class MIME::Types
   include ::Enumerable
   extend ::Enumerable
@@ -868,6 +880,8 @@ end
 #
 # The cache is invalidated on a per-data-version basis; a cache file for
 # version 3.2015.1118 will not be reused with version 3.2015.1201.
+#
+# source://mime-types//lib/mime/types/cache.rb#3
 class MIME::Types::Cache < ::Struct
   def data; end
   def data=(_); end
@@ -912,6 +926,8 @@ end
 # MIME::Types::Columnar is not intended to be used directly, but will be added
 # to an instance of MIME::Types when it is loaded with
 # MIME::Types::Loader#load_columnar.
+#
+# source://mime-types//lib/mime/types/_columnar.rb#12
 module MIME::Types::Columnar
   # Load the first column data file (type and extensions).
   #
@@ -971,6 +987,8 @@ MIME::Types::Columnar::LOAD_MUTEX = T.let(T.unsafe(nil), Thread::Mutex)
 # format (plus, a default of a mutable object resuls in a shared mess).
 # Hash#default_proc cannot be used without a wrapper because it prevents
 # Marshal serialization (and doesn't survive the round-trip).
+#
+# source://mime-types//lib/mime/types/container.rb#12
 class MIME::Types::Container
   extend ::Forwardable
 
@@ -1057,14 +1075,6 @@ end
 # source://mime-types//lib/mime/types/container.rb#94
 MIME::Types::Container::EMPTY_SET = T.let(T.unsafe(nil), Set)
 
-module MIME::Types::Data; end
-
-# source://mime-types-data/3.2022.0105/lib/mime/types/data.rb#18
-MIME::Types::Data::PATH = T.let(T.unsafe(nil), String)
-
-# source://mime-types-data/3.2022.0105/lib/mime/types/data.rb#6
-MIME::Types::Data::VERSION = T.let(T.unsafe(nil), String)
-
 # This class is responsible for initializing the MIME::Types registry from
 # the data files supplied with the mime-types library.
 #
@@ -1076,6 +1086,8 @@ MIME::Types::Data::VERSION = T.let(T.unsafe(nil), String)
 # When #load is called, the +path+ will be searched recursively for all YAML
 # (.yml or .yaml) files. By convention, there is one file for each media
 # type (application.yml, audio.yml, etc.), but this is not required.
+#
+# source://mime-types//lib/mime/types/loader.rb#22
 class MIME::Types::Loader
   # Creates a Loader object that can be used to load MIME::Types registries
   # into memory, using YAML, JSON, or Columnar registry format loaders.
@@ -1190,6 +1202,7 @@ end
 # source://mime-types//lib/mime/types.rb#70
 MIME::Types::VERSION = T.let(T.unsafe(nil), String)
 
+# source://mime-types//lib/mime/types/logger.rb#15
 class MIME::Types::WarnLogger < ::Logger
   # @return [WarnLogger] a new instance of WarnLogger
   #
@@ -1197,6 +1210,7 @@ class MIME::Types::WarnLogger < ::Logger
   def initialize(_one, _two = T.unsafe(nil), _three = T.unsafe(nil)); end
 end
 
+# source://mime-types//lib/mime/types/logger.rb#16
 class MIME::Types::WarnLogger::WarnLogDevice < ::Logger::LogDevice
   # @return [WarnLogDevice] a new instance of WarnLogDevice
   #

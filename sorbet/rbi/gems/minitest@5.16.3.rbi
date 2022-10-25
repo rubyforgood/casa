@@ -5,6 +5,8 @@
 # Please instead update this file by running `bin/tapioca gem minitest`.
 
 # :include: README.rdoc
+#
+# source://minitest//lib/minitest/parallel.rb#1
 module Minitest
   class << self
     # Internal run method. Responsible for telling all Runnable
@@ -106,6 +108,8 @@ end
 
 # Defines the API for Reporters. Subclass this and override whatever
 # you want. Go nuts.
+#
+# source://minitest//lib/minitest.rb#578
 class Minitest::AbstractReporter
   include ::Mutex_m
 
@@ -157,6 +161,8 @@ class Minitest::AbstractReporter
 end
 
 # Represents run failures.
+#
+# source://minitest//lib/minitest.rb#903
 class Minitest::Assertion < ::Exception
   # source://minitest//lib/minitest.rb#904
   def error; end
@@ -181,6 +187,8 @@ end
 # +assertions+. This is not provided by Assertions and must be
 # provided by the thing including Assertions. See Minitest::Runnable
 # for an example.
+#
+# source://minitest//lib/minitest/assertions.rb#18
 module Minitest::Assertions
   # source://minitest//lib/minitest/assertions.rb#188
   def _synchronize; end
@@ -575,6 +583,8 @@ Minitest::Assertions::UNDEFINED = T.let(T.unsafe(nil), Object)
 # The standard backtrace filter for minitest.
 #
 # See Minitest.backtrace_filter=.
+#
+# source://minitest//lib/minitest.rb#1035
 class Minitest::BacktraceFilter
   # Filter +bt+ to something useful. Returns the whole thing if
   # $DEBUG (ruby) or $MT_DEBUG (env).
@@ -587,6 +597,8 @@ end
 Minitest::BacktraceFilter::MT_RE = T.let(T.unsafe(nil), Regexp)
 
 # Dispatch to multiple reporters as one.
+#
+# source://minitest//lib/minitest.rb#854
 class Minitest::CompositeReporter < ::Minitest::AbstractReporter
   # @return [CompositeReporter] a new instance of CompositeReporter
   #
@@ -642,6 +654,8 @@ end
 #   if windows? then
 #     # ... lots of test methods ...
 #   end
+#
+# source://minitest//lib/minitest.rb#979
 module Minitest::Guard
   # Is this running on jruby?
   #
@@ -686,9 +700,12 @@ module Minitest::Guard
   def windows?(platform = T.unsafe(nil)); end
 end
 
+# source://minitest//lib/minitest/parallel.rb#2
 module Minitest::Parallel; end
 
 # The engine used to run multiple tests in parallel.
+#
+# source://minitest//lib/minitest/parallel.rb#7
 class Minitest::Parallel::Executor
   # Create a parallel test executor of with +size+ workers.
   #
@@ -720,11 +737,13 @@ class Minitest::Parallel::Executor
   def start; end
 end
 
+# source://minitest//lib/minitest/parallel.rb#56
 module Minitest::Parallel::Test
   # source://minitest//lib/minitest/parallel.rb#57
   def _synchronize; end
 end
 
+# source://minitest//lib/minitest/parallel.rb#59
 module Minitest::Parallel::Test::ClassMethods
   # source://minitest//lib/minitest/parallel.rb#60
   def run_one_method(klass, method_name, reporter); end
@@ -739,6 +758,8 @@ end
 # the run. If you want to change the output of minitest via a
 # plugin, pull this out of the composite and replace it with your
 # own.
+#
+# source://minitest//lib/minitest.rb#643
 class Minitest::ProgressReporter < ::Minitest::Reporter
   # source://minitest//lib/minitest.rb#644
   def prerecord(klass, name); end
@@ -749,6 +770,8 @@ end
 
 # Shared code for anything that can get passed to a Reporter. See
 # Minitest::Test & Minitest::Result.
+#
+# source://minitest//lib/minitest.rb#475
 module Minitest::Reportable
   # @raise [NotImplementedError]
   #
@@ -791,6 +814,7 @@ module Minitest::Reportable
   def skipped?; end
 end
 
+# source://minitest//lib/minitest.rb#619
 class Minitest::Reporter < ::Minitest::AbstractReporter
   # @return [Reporter] a new instance of Reporter
   #
@@ -823,6 +847,8 @@ end
 # test instance and can create conditions that cause Marshal.dump to
 # blow up. By using Result.from(a_test) you can be reasonably sure
 # that the test result can be marshalled.
+#
+# source://minitest//lib/minitest.rb#528
 class Minitest::Result < ::Minitest::Runnable
   include ::Minitest::Reportable
 
@@ -861,6 +887,8 @@ class Minitest::Result < ::Minitest::Runnable
 end
 
 # re-open
+#
+# source://minitest//lib/minitest.rb#277
 class Minitest::Runnable
   # @return [Runnable] a new instance of Runnable
   #
@@ -1006,6 +1034,8 @@ end
 Minitest::Runnable::SIGNALS = T.let(T.unsafe(nil), Hash)
 
 # Assertion raised when skipping a run.
+#
+# source://minitest//lib/minitest.rb#932
 class Minitest::Skip < ::Minitest::Assertion
   # source://minitest//lib/minitest.rb#933
   def result_label; end
@@ -1030,6 +1060,8 @@ end
 #       # Remaining XML...
 #     end
 #   end
+#
+# source://minitest//lib/minitest.rb#681
 class Minitest::StatisticsReporter < ::Minitest::Reporter
   # @return [StatisticsReporter] a new instance of StatisticsReporter
   #
@@ -1146,6 +1178,8 @@ end
 # the run. If you want to change the output of minitest via a
 # plugin, pull this out of the composite and replace it with your
 # own.
+#
+# source://minitest//lib/minitest.rb#775
 class Minitest::SummaryReporter < ::Minitest::StatisticsReporter
   # source://minitest//lib/minitest.rb#809
   def aggregated_results(io); end
@@ -1199,6 +1233,8 @@ end
 # Test subclass per implementation class.
 #
 # See Minitest::Assertions
+#
+# source://minitest//lib/minitest/test.rb#10
 class Minitest::Test < ::Minitest::Runnable
   include ::Minitest::Assertions
   include ::Minitest::Reportable
@@ -1284,6 +1320,8 @@ end
 # Provides before/after hooks for setup and teardown. These are
 # meant for library writers, NOT for regular test authors. See
 # #before_setup for an example.
+#
+# source://minitest//lib/minitest/test.rb#117
 module Minitest::Test::LifecycleHooks
   # Runs before every test, after setup. This hook is meant for
   # libraries to extend minitest. It is not meant to be used by
@@ -1367,6 +1405,8 @@ Minitest::Test::PASSTHROUGH_EXCEPTIONS = T.let(T.unsafe(nil), Array)
 Minitest::Test::TEARDOWN_METHODS = T.let(T.unsafe(nil), Array)
 
 # Assertion wrapping an unexpected error that was raised during a run.
+#
+# source://minitest//lib/minitest.rb#942
 class Minitest::UnexpectedError < ::Minitest::Assertion
   # @return [UnexpectedError] a new instance of UnexpectedError
   #
@@ -1393,6 +1433,7 @@ class Minitest::UnexpectedError < ::Minitest::Assertion
   def result_label; end
 end
 
+# source://minitest//lib/minitest/unit.rb#20
 class Minitest::Unit
   class << self
     # source://minitest//lib/minitest/unit.rb#36
@@ -1403,6 +1444,7 @@ class Minitest::Unit
   end
 end
 
+# source://minitest//lib/minitest/unit.rb#22
 class Minitest::Unit::TestCase < ::Minitest::Test
   class << self
     # source://minitest//lib/minitest/unit.rb#23

@@ -7,7 +7,10 @@
 # source://multipart-post//lib/multipart/post/composite_read_io.rb#77
 CompositeIO = Multipart::Post::CompositeReadIO
 
+# source://multipart-post//lib/multipart/post/version.rb#23
 module Multipart; end
+
+# source://multipart-post//lib/multipart/post/version.rb#24
 module Multipart::Post; end
 
 # Concatenate together multiple IO objects into a single, composite IO object
@@ -18,6 +21,8 @@ module Multipart::Post; end
 #   StringIO.new('two'),
 #   StringIO.new('three'))
 #   puts crio.read # => "onetwothree"
+#
+# source://multipart-post//lib/multipart/post/composite_read_io.rb#33
 class Multipart::Post::CompositeReadIO
   # Create a new composite-read IO from the arguments, all of which should
   # respond to #read in a manner consistent with IO.
@@ -44,6 +49,7 @@ class Multipart::Post::CompositeReadIO
   def current_io; end
 end
 
+# source://multipart-post//lib/multipart/post/multipartable.rb#30
 module Multipart::Post::Multipartable
   # source://multipart-post//lib/multipart/post/multipartable.rb#45
   def initialize(path, params, headers = T.unsafe(nil), boundary = T.unsafe(nil)); end
@@ -64,9 +70,12 @@ module Multipart::Post::Multipartable
   end
 end
 
+# source://multipart-post//lib/multipart/post/parts.rb#27
 module Multipart::Post::Parts; end
 
 # Represents the epilogue or closing boundary.
+#
+# source://multipart-post//lib/multipart/post/parts.rb#139
 class Multipart::Post::Parts::EpiloguePart
   include ::Multipart::Post::Parts::Part
 
@@ -77,6 +86,8 @@ class Multipart::Post::Parts::EpiloguePart
 end
 
 # Represents a part to be filled from file IO.
+#
+# source://multipart-post//lib/multipart/post/parts.rb#84
 class Multipart::Post::Parts::FilePart
   include ::Multipart::Post::Parts::Part
 
@@ -106,6 +117,8 @@ class Multipart::Post::Parts::FilePart
 end
 
 # Represents a parametric part to be filled with given value.
+#
+# source://multipart-post//lib/multipart/post/parts.rb#52
 class Multipart::Post::Parts::ParamPart
   include ::Multipart::Post::Parts::Part
 
@@ -130,6 +143,7 @@ class Multipart::Post::Parts::ParamPart
   def length; end
 end
 
+# source://multipart-post//lib/multipart/post/parts.rb#28
 module Multipart::Post::Parts::Part
   # source://multipart-post//lib/multipart/post/parts.rb#42
   def length; end
@@ -149,6 +163,8 @@ module Multipart::Post::Parts::Part
 end
 
 # Convenience methods for dealing with files and IO that are to be uploaded.
+#
+# source://multipart-post//lib/multipart/post/upload_io.rb#26
 class Multipart::Post::UploadIO
   # Create an upload IO suitable for including in the params hash of a
   # Net::HTTP::Post::Multipart.

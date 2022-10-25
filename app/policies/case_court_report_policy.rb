@@ -1,4 +1,4 @@
-class CaseCourtReportPolicy < Struct.new(:user, :record)
+class CaseCourtReportPolicy < ApplicationPolicy
   def index?
     user.casa_admin? || user.supervisor? || user.volunteer?
   end

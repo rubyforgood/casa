@@ -10,6 +10,7 @@
 # source://yard/0.9.28/lib/yard.rb#62
 ::RUBY19 = T.let(T.unsafe(nil), TrueClass)
 
+# source://activesupport//lib/active_support/lazy_load_hooks.rb#3
 module ActiveSupport
   extend ::ActiveSupport::LazyLoadHooks
   extend ::ActiveSupport::Autoload
@@ -119,6 +120,8 @@ end
 # To make an error actionable, include the <tt>ActiveSupport::ActionableError</tt>
 # module and invoke the +action+ class macro to define the action. An action
 # needs a name and a block to execute.
+#
+# source://activesupport//lib/active_support/actionable_error.rb#9
 module ActiveSupport::ActionableError
   extend ::ActiveSupport::Concern
   include GeneratedInstanceMethods
@@ -147,6 +150,7 @@ module ActiveSupport::ActionableError
   end
 end
 
+# source://activesupport//lib/active_support/actionable_error.rb#33
 module ActiveSupport::ActionableError::ClassMethods
   # Defines an action that can resolve the error.
   #
@@ -162,6 +166,7 @@ module ActiveSupport::ActionableError::ClassMethods
   def action(name, &block); end
 end
 
+# source://activesupport//lib/active_support/actionable_error.rb#12
 class ActiveSupport::ActionableError::NonActionable < ::StandardError; end
 
 # Wrapping an array in an +ArrayInquirer+ gives a friendlier way to check
@@ -172,6 +177,8 @@ class ActiveSupport::ActionableError::NonActionable < ::StandardError; end
 #   variants.phone?    # => true
 #   variants.tablet?   # => true
 #   variants.desktop?  # => false
+#
+# source://activesupport//lib/active_support/array_inquirer.rb#24
 class ActiveSupport::ArrayInquirer < ::Array
   # Passes each element of +candidates+ collection to ArrayInquirer collection.
   # The method returns true if any element from the ArrayInquirer collection
@@ -223,6 +230,8 @@ end
 # Then your library can be eager loaded by simply calling:
 #
 #   MyLib.eager_load!
+#
+# source://activesupport//lib/active_support/dependencies/autoload.rb#27
 module ActiveSupport::Autoload
   # source://activesupport//lib/active_support/dependencies/autoload.rb#37
   def autoload(const_name, path = T.unsafe(nil)); end
@@ -275,6 +284,8 @@ end
 # These two methods will give you a completely untouched backtrace.
 #
 # Inspired by the Quiet Backtrace gem by thoughtbot.
+#
+# source://activesupport//lib/active_support/backtrace_cleaner.rb#31
 class ActiveSupport::BacktraceCleaner
   # @return [BacktraceCleaner] a new instance of BacktraceCleaner
   #
@@ -349,6 +360,7 @@ end
 # source://activesupport//lib/active_support/backtrace_cleaner.rb#88
 ActiveSupport::BacktraceCleaner::FORMATTED_GEMS_PATTERN = T.let(T.unsafe(nil), Regexp)
 
+# source://activesupport//lib/active_support/benchmarkable.rb#7
 module ActiveSupport::Benchmarkable
   # Allows you to measure the execution time of a block in a template and
   # records the result to the log. Wrap this block around expensive operations
@@ -384,12 +396,15 @@ module ActiveSupport::Benchmarkable
   def benchmark(message = T.unsafe(nil), options = T.unsafe(nil), &block); end
 end
 
+# source://activesupport//lib/active_support/core_ext/big_decimal/conversions.rb#7
 module ActiveSupport::BigDecimalWithDefaultFormat
   # source://activesupport//lib/active_support/core_ext/big_decimal/conversions.rb#8
   def to_s(format = T.unsafe(nil)); end
 end
 
 # See ActiveSupport::Cache::Store for documentation.
+#
+# source://activesupport//lib/active_support/cache.rb#16
 module ActiveSupport::Cache
   class << self
     # Expands out the +key+ argument into a key that can be used for the
@@ -462,6 +477,7 @@ module ActiveSupport::Cache
   end
 end
 
+# source://activesupport//lib/active_support/cache.rb#833
 module ActiveSupport::Cache::Coders
   class << self
     # source://activesupport//lib/active_support/cache.rb#839
@@ -469,6 +485,7 @@ module ActiveSupport::Cache::Coders
   end
 end
 
+# source://activesupport//lib/active_support/cache.rb#851
 module ActiveSupport::Cache::Coders::Loader
   extend ::ActiveSupport::Cache::Coders::Loader
 
@@ -487,6 +504,7 @@ ActiveSupport::Cache::Coders::MARK_70_COMPRESSED = T.let(T.unsafe(nil), String)
 # source://activesupport//lib/active_support/cache.rb#835
 ActiveSupport::Cache::Coders::MARK_70_UNCOMPRESSED = T.let(T.unsafe(nil), String)
 
+# source://activesupport//lib/active_support/cache.rb#874
 module ActiveSupport::Cache::Coders::Rails61Coder
   include ::ActiveSupport::Cache::Coders::Loader
   extend ::ActiveSupport::Cache::Coders::Loader
@@ -499,6 +517,7 @@ module ActiveSupport::Cache::Coders::Rails61Coder
   def dump_compressed(entry, threshold); end
 end
 
+# source://activesupport//lib/active_support/cache.rb#887
 module ActiveSupport::Cache::Coders::Rails70Coder
   include ::ActiveSupport::Cache::Coders::Loader
   extend ::ActiveSupport::Cache::Coders::Loader
@@ -521,6 +540,8 @@ ActiveSupport::Cache::DEFAULT_COMPRESS_LIMIT = T.let(T.unsafe(nil), Integer)
 #
 # Since cache entries in most instances will be serialized, the internals of this class are highly optimized
 # using short instance variable names that are lazily defined.
+#
+# source://activesupport//lib/active_support/cache.rb#916
 class ActiveSupport::Cache::Entry
   # Creates a new cache entry for the specified value. Options supported are
   # +:compressed+, +:version+, +:expires_at+ and +:expires_in+.
@@ -600,6 +621,8 @@ end
 #
 # FileStore implements the Strategy::LocalCache strategy which implements
 # an in-memory cache inside of a block.
+#
+# source://activesupport//lib/active_support/cache/file_store.rb#13
 class ActiveSupport::Cache::FileStore < ::ActiveSupport::Cache::Store
   # @return [FileStore] a new instance of FileStore
   #
@@ -734,6 +757,8 @@ ActiveSupport::Cache::FileStore::GITKEEP_FILES = T.let(T.unsafe(nil), Array)
 # compression in terms of cpu use.
 #
 # MemoryStore is thread-safe.
+#
+# source://activesupport//lib/active_support/cache/memory_store.rb#26
 class ActiveSupport::Cache::MemoryStore < ::ActiveSupport::Cache::Store
   # @return [MemoryStore] a new instance of MemoryStore
   #
@@ -817,6 +842,7 @@ class ActiveSupport::Cache::MemoryStore < ::ActiveSupport::Cache::Store
   end
 end
 
+# source://activesupport//lib/active_support/cache/memory_store.rb#27
 module ActiveSupport::Cache::MemoryStore::DupCoder
   extend ::ActiveSupport::Cache::MemoryStore::DupCoder
 
@@ -833,6 +859,7 @@ end
 # source://activesupport//lib/active_support/cache/memory_store.rb#144
 ActiveSupport::Cache::MemoryStore::PER_ENTRY_OVERHEAD = T.let(T.unsafe(nil), Integer)
 
+# source://activesupport//lib/active_support/cache.rb#817
 module ActiveSupport::Cache::NullCoder
   extend ::ActiveSupport::Cache::NullCoder
 
@@ -853,6 +880,8 @@ end
 # This cache does implement the local cache strategy, so values will actually
 # be cached inside blocks that utilize this strategy. See
 # ActiveSupport::Cache::Strategy::LocalCache for more details.
+#
+# source://activesupport//lib/active_support/cache/null_store.rb#12
 class ActiveSupport::Cache::NullStore < ::ActiveSupport::Cache::Store
   include ::ActiveSupport::Cache::Strategy::LocalCache
 
@@ -942,6 +971,8 @@ ActiveSupport::Cache::OPTION_ALIASES = T.let(T.unsafe(nil), Hash)
 #
 #   cache.namespace = -> { @last_mod_time }  # Set the namespace to a variable
 #   @last_mod_time = Time.now  # Invalidate the entire cache by changing namespace
+#
+# source://activesupport//lib/active_support/cache.rb#175
 class ActiveSupport::Cache::Store
   # Creates a new cache.
   #
@@ -1402,11 +1433,14 @@ class ActiveSupport::Cache::Store
   end
 end
 
+# source://activesupport//lib/active_support/cache.rb#34
 module ActiveSupport::Cache::Strategy; end
 
 # Caches that implement LocalCache will be backed by an in-memory cache for the
 # duration of a block. Repeated calls to the cache for the same key will hit the
 # in-memory cache for faster access.
+#
+# source://activesupport//lib/active_support/cache/strategy/local_cache.rb#11
 module ActiveSupport::Cache::Strategy::LocalCache
   # source://activesupport//lib/active_support/cache/strategy/local_cache.rb#81
   def cleanup(**options); end
@@ -1465,6 +1499,8 @@ module ActiveSupport::Cache::Strategy::LocalCache
 end
 
 # Class for storing and registering the local caches.
+#
+# source://activesupport//lib/active_support/cache/strategy/local_cache.rb#15
 module ActiveSupport::Cache::Strategy::LocalCache::LocalCacheRegistry
   extend ::ActiveSupport::Cache::Strategy::LocalCache::LocalCacheRegistry
 
@@ -1477,6 +1513,8 @@ end
 
 # Simple memory backed cache. This cache is not thread safe and is intended only
 # for serving as a temporary memory cache for a single thread.
+#
+# source://activesupport//lib/active_support/cache/strategy/local_cache.rb#31
 class ActiveSupport::Cache::Strategy::LocalCache::LocalStore
   # @return [LocalStore] a new instance of LocalStore
   #
@@ -1505,6 +1543,8 @@ end
 # --
 # This class wraps up local storage for middlewares. Only the middleware method should
 # construct them.
+#
+# source://activesupport//lib/active_support/cache/strategy/local_cache_middleware.rb#13
 class ActiveSupport::Cache::Strategy::LocalCache::Middleware
   # @return [Middleware] a new instance of Middleware
   #
@@ -1533,6 +1573,8 @@ ActiveSupport::Cache::UNIVERSAL_OPTIONS = T.let(T.unsafe(nil), Array)
 # CachingKeyGenerator is a wrapper around KeyGenerator which allows users to avoid
 # re-executing the key generation process when it's called using the same +salt+ and
 # +key_size+.
+#
+# source://activesupport//lib/active_support/key_generator.rb#47
 class ActiveSupport::CachingKeyGenerator
   # @return [CachingKeyGenerator] a new instance of CachingKeyGenerator
   #
@@ -1596,6 +1638,8 @@ end
 #   saving...
 #   - save
 #   saved
+#
+# source://activesupport//lib/active_support/callbacks.rb#63
 module ActiveSupport::Callbacks
   extend ::ActiveSupport::Concern
   include GeneratedInstanceMethods
@@ -1656,6 +1700,8 @@ ActiveSupport::Callbacks::CALLBACK_FILTER_TYPES = T.let(T.unsafe(nil), Array)
 
 # A future invocation of user-supplied code (either as a callback,
 # or a condition filter).
+#
+# source://activesupport//lib/active_support/callbacks.rb#375
 module ActiveSupport::Callbacks::CallTemplate
   class << self
     # Filters support:
@@ -1672,6 +1718,7 @@ module ActiveSupport::Callbacks::CallTemplate
   end
 end
 
+# source://activesupport//lib/active_support/callbacks.rb#434
 class ActiveSupport::Callbacks::CallTemplate::InstanceExec0
   # @return [InstanceExec0] a new instance of InstanceExec0
   #
@@ -1688,6 +1735,7 @@ class ActiveSupport::Callbacks::CallTemplate::InstanceExec0
   def make_lambda; end
 end
 
+# source://activesupport//lib/active_support/callbacks.rb#456
 class ActiveSupport::Callbacks::CallTemplate::InstanceExec1
   # @return [InstanceExec1] a new instance of InstanceExec1
   #
@@ -1704,6 +1752,7 @@ class ActiveSupport::Callbacks::CallTemplate::InstanceExec1
   def make_lambda; end
 end
 
+# source://activesupport//lib/active_support/callbacks.rb#478
 class ActiveSupport::Callbacks::CallTemplate::InstanceExec2
   # @return [InstanceExec2] a new instance of InstanceExec2
   #
@@ -1722,6 +1771,7 @@ class ActiveSupport::Callbacks::CallTemplate::InstanceExec2
   def make_lambda; end
 end
 
+# source://activesupport//lib/active_support/callbacks.rb#376
 class ActiveSupport::Callbacks::CallTemplate::MethodCall
   # @return [MethodCall] a new instance of MethodCall
   #
@@ -1752,6 +1802,7 @@ class ActiveSupport::Callbacks::CallTemplate::MethodCall
   def make_lambda; end
 end
 
+# source://activesupport//lib/active_support/callbacks.rb#411
 class ActiveSupport::Callbacks::CallTemplate::ObjectCall
   # @return [ObjectCall] a new instance of ObjectCall
   #
@@ -1768,6 +1819,7 @@ class ActiveSupport::Callbacks::CallTemplate::ObjectCall
   def make_lambda; end
 end
 
+# source://activesupport//lib/active_support/callbacks.rb#503
 class ActiveSupport::Callbacks::CallTemplate::ProcCall
   # @return [ProcCall] a new instance of ProcCall
   #
@@ -1784,6 +1836,7 @@ class ActiveSupport::Callbacks::CallTemplate::ProcCall
   def make_lambda; end
 end
 
+# source://activesupport//lib/active_support/callbacks.rb#280
 class ActiveSupport::Callbacks::Callback
   # @return [Callback] a new instance of Callback
   #
@@ -1862,6 +1915,7 @@ end
 # source://activesupport//lib/active_support/callbacks.rb#349
 ActiveSupport::Callbacks::Callback::EMPTY_ARRAY = T.let(T.unsafe(nil), Array)
 
+# source://activesupport//lib/active_support/callbacks.rb#603
 class ActiveSupport::Callbacks::CallbackChain
   include ::Enumerable
 
@@ -1937,6 +1991,8 @@ end
 # Execute before and after filters in a sequence instead of
 # chaining them with nested lambda calls, see:
 # https://github.com/rails/rails/issues/18011
+#
+# source://activesupport//lib/active_support/callbacks.rb#556
 class ActiveSupport::Callbacks::CallbackSequence
   # @return [CallbackSequence] a new instance of CallbackSequence
   #
@@ -1977,6 +2033,7 @@ class ActiveSupport::Callbacks::CallbackSequence
   def skip?(arg); end
 end
 
+# source://activesupport//lib/active_support/callbacks.rb#695
 module ActiveSupport::Callbacks::ClassMethods
   # This is used internally to append, prepend and skip callbacks to the
   # CallbackChain.
@@ -2167,8 +2224,10 @@ module ActiveSupport::Callbacks::ClassMethods
   def set_callbacks(name, callbacks); end
 end
 
+# source://activesupport//lib/active_support/callbacks.rb#150
 module ActiveSupport::Callbacks::Conditionals; end
 
+# source://activesupport//lib/active_support/callbacks.rb#151
 class ActiveSupport::Callbacks::Conditionals::Value
   # @return [Value] a new instance of Value
   #
@@ -2179,8 +2238,10 @@ class ActiveSupport::Callbacks::Conditionals::Value
   def call(target, value); end
 end
 
+# source://activesupport//lib/active_support/callbacks.rb#159
 module ActiveSupport::Callbacks::Filters; end
 
+# source://activesupport//lib/active_support/callbacks.rb#212
 class ActiveSupport::Callbacks::Filters::After
   class << self
     # source://activesupport//lib/active_support/callbacks.rb#213
@@ -2202,6 +2263,7 @@ class ActiveSupport::Callbacks::Filters::After
   end
 end
 
+# source://activesupport//lib/active_support/callbacks.rb#162
 class ActiveSupport::Callbacks::Filters::Before
   class << self
     # source://activesupport//lib/active_support/callbacks.rb#163
@@ -2217,6 +2279,7 @@ class ActiveSupport::Callbacks::Filters::Before
   end
 end
 
+# source://activesupport//lib/active_support/callbacks.rb#160
 class ActiveSupport::Callbacks::Filters::Environment < ::Struct
   # Returns the value of attribute halted
   #
@@ -2260,6 +2323,7 @@ class ActiveSupport::Callbacks::Filters::Environment < ::Struct
   end
 end
 
+# source://activesupport//lib/active_support/code_generator.rb#4
 class ActiveSupport::CodeGenerator
   # @return [CodeGenerator] a new instance of CodeGenerator
   #
@@ -2278,6 +2342,7 @@ class ActiveSupport::CodeGenerator
   end
 end
 
+# source://activesupport//lib/active_support/code_generator.rb#5
 class ActiveSupport::CodeGenerator::MethodSet
   # @return [MethodSet] a new instance of MethodSet
   #
@@ -2294,6 +2359,7 @@ end
 # source://activesupport//lib/active_support/code_generator.rb#6
 ActiveSupport::CodeGenerator::MethodSet::METHOD_CACHES = T.let(T.unsafe(nil), Hash)
 
+# source://activesupport//lib/active_support/core_ext/range/compare_range.rb#4
 module ActiveSupport::CompareWithRange
   # Extends the default Range#=== to support range comparisons.
   #  (1..5) === (1..5)  # => true
@@ -2434,6 +2500,8 @@ end
 # prepended as well.
 #
 # <tt>prepend</tt> is also used for any dependencies.
+#
+# source://activesupport//lib/active_support/concern.rb#110
 module ActiveSupport::Concern
   # source://activesupport//lib/active_support/concern.rb#127
   def append_features(base); end
@@ -2485,6 +2553,7 @@ module ActiveSupport::Concern
   end
 end
 
+# source://activesupport//lib/active_support/concern.rb#111
 class ActiveSupport::Concern::MultipleIncludedBlocks < ::StandardError
   # @return [MultipleIncludedBlocks] a new instance of MultipleIncludedBlocks
   #
@@ -2492,6 +2561,7 @@ class ActiveSupport::Concern::MultipleIncludedBlocks < ::StandardError
   def initialize; end
 end
 
+# source://activesupport//lib/active_support/concern.rb#117
 class ActiveSupport::Concern::MultiplePrependBlocks < ::StandardError
   # @return [MultiplePrependBlocks] a new instance of MultiplePrependBlocks
   #
@@ -2499,11 +2569,34 @@ class ActiveSupport::Concern::MultiplePrependBlocks < ::StandardError
   def initialize; end
 end
 
+# source://activesupport//lib/active_support/concurrency/share_lock.rb#7
 module ActiveSupport::Concurrency; end
+
+# A monitor that will permit dependency loading while blocked waiting for
+# the lock.
+#
+# source://activesupport//lib/active_support/concurrency/load_interlock_aware_monitor.rb#9
+class ActiveSupport::Concurrency::LoadInterlockAwareMonitor < ::Monitor
+  # Enters an exclusive section, but allows dependency loading while blocked
+  #
+  # source://activesupport//lib/active_support/concurrency/load_interlock_aware_monitor.rb#15
+  def mon_enter; end
+
+  # source://activesupport//lib/active_support/concurrency/load_interlock_aware_monitor.rb#20
+  def synchronize(&block); end
+end
+
+# source://activesupport//lib/active_support/concurrency/load_interlock_aware_monitor.rb#11
+ActiveSupport::Concurrency::LoadInterlockAwareMonitor::EXCEPTION_IMMEDIATE = T.let(T.unsafe(nil), Hash)
+
+# source://activesupport//lib/active_support/concurrency/load_interlock_aware_monitor.rb#10
+ActiveSupport::Concurrency::LoadInterlockAwareMonitor::EXCEPTION_NEVER = T.let(T.unsafe(nil), Hash)
 
 # A share/exclusive lock, otherwise known as a read/write lock.
 #
 # https://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock
+#
+# source://activesupport//lib/active_support/concurrency/share_lock.rb#11
 class ActiveSupport::Concurrency::ShareLock
   include ::MonitorMixin
 
@@ -2596,6 +2689,8 @@ end
 
 # Configurable provides a <tt>config</tt> method to store and retrieve
 # configuration options as an OrderedOptions.
+#
+# source://activesupport//lib/active_support/configurable.rb#9
 module ActiveSupport::Configurable
   extend ::ActiveSupport::Concern
 
@@ -2621,6 +2716,7 @@ module ActiveSupport::Configurable
   def config; end
 end
 
+# source://activesupport//lib/active_support/configurable.rb#27
 module ActiveSupport::Configurable::ClassMethods
   # source://activesupport//lib/active_support/configurable.rb#28
   def config; end
@@ -2705,6 +2801,7 @@ module ActiveSupport::Configurable::ClassMethods
   def config_accessor(*names, instance_reader: T.unsafe(nil), instance_writer: T.unsafe(nil), instance_accessor: T.unsafe(nil), default: T.unsafe(nil)); end
 end
 
+# source://activesupport//lib/active_support/configurable.rb#12
 class ActiveSupport::Configurable::Configuration < ::ActiveSupport::InheritableOptions
   # source://activesupport//lib/active_support/configurable.rb#13
   def compile_methods!; end
@@ -2722,6 +2819,8 @@ end
 #
 # Warns in case of YAML confusing characters, like invisible
 # non-breaking spaces.
+#
+# source://activesupport//lib/active_support/configuration_file.rb#9
 class ActiveSupport::ConfigurationFile
   # @return [ConfigurationFile] a new instance of ConfigurationFile
   #
@@ -2745,6 +2844,7 @@ class ActiveSupport::ConfigurationFile
   end
 end
 
+# source://activesupport//lib/active_support/configuration_file.rb#10
 class ActiveSupport::ConfigurationFile::FormatError < ::StandardError; end
 
 # Abstract super class that provides a thread-isolated attributes singleton, which resets automatically
@@ -2828,6 +2928,8 @@ class ActiveSupport::ConfigurationFile::FormatError < ::StandardError; end
 # Current should only be used for a few, top-level globals, like account, user, and request details.
 # The attributes stuck in Current should be used by more or less all actions on all requests. If you start
 # sticking controller-specific attributes in there, you're going to create a mess.
+#
+# source://activesupport//lib/active_support/current_attributes.rb#89
 class ActiveSupport::CurrentAttributes
   include ::ActiveSupport::Callbacks
   extend ::ActiveSupport::Callbacks::ClassMethods
@@ -2963,6 +3065,7 @@ class ActiveSupport::CurrentAttributes
   end
 end
 
+# source://activesupport//lib/active_support/dependencies/interlock.rb#6
 module ActiveSupport::Dependencies
   class << self
     # source://activesupport//lib/active_support/dependencies.rb#62
@@ -3044,6 +3147,7 @@ module ActiveSupport::Dependencies
   end
 end
 
+# source://activesupport//lib/active_support/dependencies/interlock.rb#7
 class ActiveSupport::Dependencies::Interlock
   # @return [Interlock] a new instance of Interlock
   #
@@ -3078,6 +3182,7 @@ class ActiveSupport::Dependencies::Interlock
   def unloading(&block); end
 end
 
+# source://activesupport//lib/active_support/dependencies/require_dependency.rb#3
 module ActiveSupport::Dependencies::RequireDependency
   # <b>Warning:</b> This method is obsolete. The semantics of the autoloader
   # match Ruby's and you do not need to be defensive with load order anymore.
@@ -3091,11 +3196,13 @@ module ActiveSupport::Dependencies::RequireDependency
   def require_dependency(filename); end
 end
 
+# source://activesupport//lib/active_support/core_ext/numeric/deprecated_conversions.rb#4
 module ActiveSupport::DeprecatedNumericWithFormat
   # source://activesupport//lib/active_support/core_ext/numeric/deprecated_conversions.rb#5
   def to_s(format = T.unsafe(nil), options = T.unsafe(nil)); end
 end
 
+# source://activesupport//lib/active_support/core_ext/range/deprecated_conversions.rb#4
 module ActiveSupport::DeprecatedRangeWithFormat
   # source://activesupport//lib/active_support/deprecation/method_wrappers.rb#63
   def to_default_s(*args, **_arg1, &block); end
@@ -3109,6 +3216,8 @@ ActiveSupport::DeprecatedRangeWithFormat::NOT_SET = T.let(T.unsafe(nil), Object)
 
 # \Deprecation specifies the API used by Rails to deprecate methods, instance
 # variables, objects, and constants.
+#
+# source://activesupport//lib/active_support/deprecation.rb#8
 class ActiveSupport::Deprecation
   include ::Singleton
   include ::ActiveSupport::Deprecation::InstanceDelegator
@@ -3212,6 +3321,8 @@ end
 #
 # Setting behaviors only affects deprecations that happen after boot time.
 # For more information you can read the documentation of the +behavior=+ method.
+#
+# source://activesupport//lib/active_support/deprecation/behaviors.rb#61
 module ActiveSupport::Deprecation::Behavior
   # Returns the current behavior or if one isn't set, defaults to +:stderr+.
   #
@@ -3303,6 +3414,8 @@ ActiveSupport::Deprecation::DEFAULT_BEHAVIORS = T.let(T.unsafe(nil), Hash)
 #   # => DEPRECATION WARNING: PLANETS is deprecated! Use PLANETS_POST_2006 instead.
 #        (Backtrace information…)
 #        ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"]
+#
+# source://activesupport//lib/active_support/deprecation/constant_accessor.rb#28
 module ActiveSupport::Deprecation::DeprecatedConstantAccessor
   class << self
     # @private
@@ -3329,6 +3442,8 @@ end
 #   # => DEPRECATION WARNING: PLANETS is deprecated! Use PLANETS_POST_2006 instead.
 #        (Backtrace information…)
 #        ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"]
+#
+# source://activesupport//lib/active_support/deprecation/proxy_wrappers.rb#123
 class ActiveSupport::Deprecation::DeprecatedConstantProxy < ::Module
   # @return [DeprecatedConstantProxy] a new instance of DeprecatedConstantProxy
   #
@@ -3411,6 +3526,8 @@ end
 #
 #   example.request.to_s
 #   # => "special_request"
+#
+# source://activesupport//lib/active_support/deprecation/proxy_wrappers.rb#88
 class ActiveSupport::Deprecation::DeprecatedInstanceVariableProxy < ::ActiveSupport::Deprecation::DeprecationProxy
   # @return [DeprecatedInstanceVariableProxy] a new instance of DeprecatedInstanceVariableProxy
   #
@@ -3437,6 +3554,8 @@ end
 #   DEPRECATION WARNING: This object is now deprecated.
 #   (Backtrace)
 #   # => "#<Object:0x007fb9b34c34b0>"
+#
+# source://activesupport//lib/active_support/deprecation/proxy_wrappers.rb#39
 class ActiveSupport::Deprecation::DeprecatedObjectProxy < ::ActiveSupport::Deprecation::DeprecationProxy
   # @return [DeprecatedObjectProxy] a new instance of DeprecatedObjectProxy
   #
@@ -3452,6 +3571,7 @@ class ActiveSupport::Deprecation::DeprecatedObjectProxy < ::ActiveSupport::Depre
   def warn(callstack, called, args); end
 end
 
+# source://activesupport//lib/active_support/deprecation/proxy_wrappers.rb#5
 class ActiveSupport::Deprecation::DeprecationProxy
   # Don't give a deprecation warning on inspect since test/unit and error
   # logs rely on it for diagnostics.
@@ -3470,6 +3590,7 @@ class ActiveSupport::Deprecation::DeprecationProxy
   end
 end
 
+# source://activesupport//lib/active_support/deprecation/disallowed.rb#5
 module ActiveSupport::Deprecation::Disallowed
   # Returns the configured criteria used to identify deprecation messages
   # which should be treated as disallowed.
@@ -3505,6 +3626,7 @@ module ActiveSupport::Deprecation::Disallowed
   def explicitly_allowed?(message); end
 end
 
+# source://activesupport//lib/active_support/deprecation/instance_delegator.rb#7
 module ActiveSupport::Deprecation::InstanceDelegator
   mixes_in_class_methods ::ActiveSupport::Deprecation::InstanceDelegator::ClassMethods
   mixes_in_class_methods ::ActiveSupport::Deprecation::InstanceDelegator::OverrideDelegators
@@ -3517,6 +3639,7 @@ module ActiveSupport::Deprecation::InstanceDelegator
   end
 end
 
+# source://activesupport//lib/active_support/deprecation/instance_delegator.rb#14
 module ActiveSupport::Deprecation::InstanceDelegator::ClassMethods
   # source://activesupport//lib/active_support/deprecation/instance_delegator.rb#15
   def include(included_module); end
@@ -3525,6 +3648,7 @@ module ActiveSupport::Deprecation::InstanceDelegator::ClassMethods
   def method_added(method_name); end
 end
 
+# source://activesupport//lib/active_support/deprecation/instance_delegator.rb#25
 module ActiveSupport::Deprecation::InstanceDelegator::OverrideDelegators
   # source://activesupport//lib/active_support/deprecation/instance_delegator.rb#31
   def deprecation_warning(deprecated_method_name, message = T.unsafe(nil), caller_backtrace = T.unsafe(nil)); end
@@ -3533,6 +3657,7 @@ module ActiveSupport::Deprecation::InstanceDelegator::OverrideDelegators
   def warn(message = T.unsafe(nil), callstack = T.unsafe(nil)); end
 end
 
+# source://activesupport//lib/active_support/deprecation/method_wrappers.rb#8
 module ActiveSupport::Deprecation::MethodWrapper
   # Declare that a method has been deprecated.
   #
@@ -3582,6 +3707,7 @@ module ActiveSupport::Deprecation::MethodWrapper
   def deprecate_methods(target_module, *method_names); end
 end
 
+# source://activesupport//lib/active_support/deprecation/reporting.rb#7
 module ActiveSupport::Deprecation::Reporting
   # Allow previously disallowed deprecation warnings within the block.
   # <tt>allowed_warnings</tt> can be an array containing strings, symbols, or regular
@@ -3693,10 +3819,14 @@ ActiveSupport::Deprecation::Reporting::RAILS_GEM_ROOT = T.let(T.unsafe(nil), Str
 
 # Raised when ActiveSupport::Deprecation::Behavior#behavior is set with <tt>:raise</tt>.
 # You would set <tt>:raise</tt>, as a behavior to raise errors and proactively report exceptions from deprecations.
+#
+# source://activesupport//lib/active_support/deprecation/behaviors.rb#8
 class ActiveSupport::DeprecationException < ::StandardError; end
 
 # This module provides an internal implementation to track descendants
 # which is faster than iterating through ObjectSpace.
+#
+# source://activesupport//lib/active_support/descendants_tracker.rb#9
 module ActiveSupport::DescendantsTracker
   # source://activesupport//lib/active_support/descendants_tracker.rb#88
   def descendants; end
@@ -3730,6 +3860,7 @@ module ActiveSupport::DescendantsTracker
   end
 end
 
+# source://activesupport//lib/active_support/digest.rb#6
 class ActiveSupport::Digest
   class << self
     # source://activesupport//lib/active_support/digest.rb#8
@@ -3749,6 +3880,8 @@ end
 # Time#advance, respectively. It mainly supports the methods on Numeric.
 #
 #   1.month.ago       # equivalent to Time.now.advance(months: -1)
+#
+# source://activesupport//lib/active_support/duration.rb#13
 class ActiveSupport::Duration
   # @return [Duration] a new instance of Duration
   #
@@ -4073,6 +4206,8 @@ end
 # See {ISO 8601}[https://en.wikipedia.org/wiki/ISO_8601#Durations] for more information.
 #
 # This parser allows negative parts to be present in pattern.
+#
+# source://activesupport//lib/active_support/duration/iso8601_parser.rb#12
 class ActiveSupport::Duration::ISO8601Parser
   # @return [ISO8601Parser] a new instance of ISO8601Parser
   #
@@ -4163,6 +4298,7 @@ ActiveSupport::Duration::ISO8601Parser::PERIOD = T.let(T.unsafe(nil), String)
 # source://activesupport//lib/active_support/duration/iso8601_parser.rb#15
 ActiveSupport::Duration::ISO8601Parser::PERIOD_OR_COMMA = T.let(T.unsafe(nil), Regexp)
 
+# source://activesupport//lib/active_support/duration/iso8601_parser.rb#13
 class ActiveSupport::Duration::ISO8601Parser::ParsingError < ::ArgumentError; end
 
 # source://activesupport//lib/active_support/duration/iso8601_parser.rb#19
@@ -4181,6 +4317,8 @@ ActiveSupport::Duration::ISO8601Parser::TIME_MARKER = T.let(T.unsafe(nil), Regex
 ActiveSupport::Duration::ISO8601Parser::TIME_TO_PART = T.let(T.unsafe(nil), Hash)
 
 # Serializes duration to string according to ISO 8601 Duration format.
+#
+# source://activesupport//lib/active_support/duration/iso8601_serializer.rb#8
 class ActiveSupport::Duration::ISO8601Serializer
   # @return [ISO8601Serializer] a new instance of ISO8601Serializer
   #
@@ -4242,6 +4380,7 @@ ActiveSupport::Duration::SECONDS_PER_WEEK = T.let(T.unsafe(nil), Integer)
 # source://activesupport//lib/active_support/duration.rb#117
 ActiveSupport::Duration::SECONDS_PER_YEAR = T.let(T.unsafe(nil), Integer)
 
+# source://activesupport//lib/active_support/duration.rb#14
 class ActiveSupport::Duration::Scalar < ::Numeric
   # @return [Scalar] a new instance of Scalar
   #
@@ -4305,6 +4444,7 @@ end
 # source://activesupport//lib/active_support/duration.rb#130
 ActiveSupport::Duration::VARIABLE_PARTS = T.let(T.unsafe(nil), Array)
 
+# source://activesupport//lib/active_support/core_ext/range/each.rb#6
 module ActiveSupport::EachTimeWithZone
   # source://activesupport//lib/active_support/core_ext/range/each.rb#7
   def each(&block); end
@@ -4320,6 +4460,7 @@ module ActiveSupport::EachTimeWithZone
   def ensure_iteration_allowed; end
 end
 
+# source://activesupport//lib/active_support/encrypted_configuration.rb#10
 class ActiveSupport::EncryptedConfiguration < ::ActiveSupport::EncryptedFile
   # @return [EncryptedConfiguration] a new instance of EncryptedConfiguration
   #
@@ -4361,6 +4502,7 @@ class ActiveSupport::EncryptedConfiguration < ::ActiveSupport::EncryptedFile
   def respond_to_missing?(name, include_private = T.unsafe(nil)); end
 end
 
+# source://activesupport//lib/active_support/encrypted_file.rb#8
 class ActiveSupport::EncryptedFile
   # @return [EncryptedFile] a new instance of EncryptedFile
   #
@@ -4455,6 +4597,7 @@ end
 # source://activesupport//lib/active_support/encrypted_file.rb#29
 ActiveSupport::EncryptedFile::CIPHER = T.let(T.unsafe(nil), String)
 
+# source://activesupport//lib/active_support/encrypted_file.rb#23
 class ActiveSupport::EncryptedFile::InvalidKeyLengthError < ::RuntimeError
   # @return [InvalidKeyLengthError] a new instance of InvalidKeyLengthError
   #
@@ -4462,6 +4605,7 @@ class ActiveSupport::EncryptedFile::InvalidKeyLengthError < ::RuntimeError
   def initialize; end
 end
 
+# source://activesupport//lib/active_support/encrypted_file.rb#9
 class ActiveSupport::EncryptedFile::MissingContentError < ::RuntimeError
   # @return [MissingContentError] a new instance of MissingContentError
   #
@@ -4469,6 +4613,7 @@ class ActiveSupport::EncryptedFile::MissingContentError < ::RuntimeError
   def initialize(content_path); end
 end
 
+# source://activesupport//lib/active_support/encrypted_file.rb#15
 class ActiveSupport::EncryptedFile::MissingKeyError < ::RuntimeError
   # @return [MissingKeyError] a new instance of MissingKeyError
   #
@@ -4476,8 +4621,10 @@ class ActiveSupport::EncryptedFile::MissingKeyError < ::RuntimeError
   def initialize(key_path:, env_key:); end
 end
 
+# source://activesupport//lib/active_support/core_ext/enumerable.rb#4
 module ActiveSupport::EnumerableCoreExt; end
 
+# source://activesupport//lib/active_support/core_ext/enumerable.rb#5
 module ActiveSupport::EnumerableCoreExt::Constants
   private
 
@@ -4491,6 +4638,7 @@ end
 # source://activesupport//lib/active_support/core_ext/enumerable.rb#25
 ActiveSupport::EnumerableCoreExt::SoleItemExpectedError = Enumerable::SoleItemExpectedError
 
+# source://activesupport//lib/active_support/environment_inquirer.rb#6
 class ActiveSupport::EnvironmentInquirer < ::ActiveSupport::StringInquirer
   # @return [EnvironmentInquirer] a new instance of EnvironmentInquirer
   #
@@ -4542,6 +4690,8 @@ ActiveSupport::EnvironmentInquirer::DEFAULT_ENVIRONMENTS = T.let(T.unsafe(nil), 
 #   user = Rails.error.handle(fallback: -> { User.anonymous }) do
 #     User.find_by(params)
 #   end
+#
+# source://activesupport//lib/active_support/error_reporter.rb#41
 class ActiveSupport::ErrorReporter
   # @return [ErrorReporter] a new instance of ErrorReporter
   #
@@ -4601,6 +4751,7 @@ end
 # source://activesupport//lib/active_support/error_reporter.rb#42
 ActiveSupport::ErrorReporter::SEVERITIES = T.let(T.unsafe(nil), Array)
 
+# source://activesupport//lib/active_support/execution_context.rb#4
 module ActiveSupport::ExecutionContext
   class << self
     # source://activesupport//lib/active_support/execution_context.rb#34
@@ -4628,6 +4779,7 @@ module ActiveSupport::ExecutionContext
   end
 end
 
+# source://activesupport//lib/active_support/execution_wrapper.rb#8
 class ActiveSupport::ExecutionWrapper
   include ::ActiveSupport::Callbacks
   extend ::ActiveSupport::Callbacks::ClassMethods
@@ -4744,6 +4896,7 @@ class ActiveSupport::ExecutionWrapper
   end
 end
 
+# source://activesupport//lib/active_support/execution_wrapper.rb#33
 class ActiveSupport::ExecutionWrapper::CompleteHook < ::Struct
   # source://activesupport//lib/active_support/execution_wrapper.rb#34
   def after(target); end
@@ -4774,6 +4927,7 @@ end
 # source://activesupport//lib/active_support/execution_wrapper.rb#11
 ActiveSupport::ExecutionWrapper::Null = T.let(T.unsafe(nil), Object)
 
+# source://activesupport//lib/active_support/execution_wrapper.rb#26
 class ActiveSupport::ExecutionWrapper::RunHook < ::Struct
   # source://activesupport//lib/active_support/execution_wrapper.rb#27
   def before(target); end
@@ -4798,6 +4952,7 @@ class ActiveSupport::ExecutionWrapper::RunHook < ::Struct
   end
 end
 
+# source://activesupport//lib/active_support/executor.rb#6
 class ActiveSupport::Executor < ::ActiveSupport::ExecutionWrapper; end
 
 # FileUpdateChecker specifies the API used by Rails to watch files
@@ -4827,6 +4982,8 @@ class ActiveSupport::Executor < ::ActiveSupport::ExecutionWrapper; end
 #   ActiveSupport::Reloader.to_prepare do
 #     i18n_reloader.execute_if_updated
 #   end
+#
+# source://activesupport//lib/active_support/file_update_checker.rb#33
 class ActiveSupport::FileUpdateChecker
   # It accepts two parameters on initialization. The first is an array
   # of files and the second is an optional hash of directories. The hash must
@@ -4891,6 +5048,7 @@ class ActiveSupport::FileUpdateChecker
   def watched; end
 end
 
+# source://activesupport//lib/active_support/fork_tracker.rb#4
 module ActiveSupport::ForkTracker
   class << self
     # source://activesupport//lib/active_support/fork_tracker.rb#59
@@ -4907,15 +5065,18 @@ module ActiveSupport::ForkTracker
   end
 end
 
+# source://activesupport//lib/active_support/fork_tracker.rb#15
 module ActiveSupport::ForkTracker::CoreExt
   # source://activesupport//lib/active_support/fork_tracker.rb#16
   def fork(*_arg0, **_arg1, &_arg2); end
 end
 
+# source://activesupport//lib/active_support/fork_tracker.rb#31
 module ActiveSupport::ForkTracker::CoreExtPrivate
   include ::ActiveSupport::ForkTracker::CoreExt
 end
 
+# source://activesupport//lib/active_support/fork_tracker.rb#5
 module ActiveSupport::ForkTracker::ModernCoreExt
   # source://activesupport//lib/active_support/fork_tracker.rb#6
   def _fork; end
@@ -4929,6 +5090,8 @@ end
 #
 #   ActiveSupport::Gzip.decompress(gzip)
 #   # => "compress me!"
+#
+# source://activesupport//lib/active_support/gzip.rb#15
 module ActiveSupport::Gzip
   class << self
     # Compresses a string using gzip.
@@ -4943,6 +5106,7 @@ module ActiveSupport::Gzip
   end
 end
 
+# source://activesupport//lib/active_support/gzip.rb#16
 class ActiveSupport::Gzip::Stream < ::StringIO
   # @return [Stream] a new instance of Stream
   #
@@ -4997,6 +5161,8 @@ end
 #   require "active_support/core_ext/hash/indifferent_access"
 #
 # which will, in turn, require this file.
+#
+# source://activesupport//lib/active_support/hash_with_indifferent_access.rb#55
 class ActiveSupport::HashWithIndifferentAccess < ::Hash
   # @return [HashWithIndifferentAccess] a new instance of HashWithIndifferentAccess
   #
@@ -5393,6 +5559,7 @@ class ActiveSupport::HashWithIndifferentAccess < ::Hash
   end
 end
 
+# source://activesupport//lib/active_support/html_safe_translation.rb#4
 module ActiveSupport::HtmlSafeTranslation
   extend ::ActiveSupport::HtmlSafeTranslation
 
@@ -5428,6 +5595,8 @@ end
 # relying on errant inflections. If you discover an incorrect inflection and
 # require it for your application or wish to define rules for languages other
 # than English, please correct or add them yourself (explained below).
+#
+# source://activesupport//lib/active_support/inflector/inflections.rb#7
 module ActiveSupport::Inflector
   extend ::ActiveSupport::Inflector
 
@@ -5843,6 +6012,8 @@ ActiveSupport::Inflector::ALLOWED_ENCODINGS_FOR_TRANSLITERATE = T.let(T.unsafe(n
 # rule for cactus will now be the first of the pluralization and
 # singularization rules that is runs. This guarantees that your rules run
 # before any of the rules that may already have been loaded.
+#
+# source://activesupport//lib/active_support/inflector/inflections.rb#28
 class ActiveSupport::Inflector::Inflections
   # @return [Inflections] a new instance of Inflections
   #
@@ -6011,6 +6182,7 @@ class ActiveSupport::Inflector::Inflections
   end
 end
 
+# source://activesupport//lib/active_support/inflector/inflections.rb#31
 class ActiveSupport::Inflector::Inflections::Uncountables < ::Array
   # @return [Uncountables] a new instance of Uncountables
   #
@@ -6045,6 +6217,8 @@ end
 #   h = ActiveSupport::InheritableOptions.new({ girl: 'Mary', boy: 'John' })
 #   h.girl # => 'Mary'
 #   h.boy  # => 'John'
+#
+# source://activesupport//lib/active_support/ordered_options.rb#79
 class ActiveSupport::InheritableOptions < ::ActiveSupport::OrderedOptions
   # @return [InheritableOptions] a new instance of InheritableOptions
   #
@@ -6055,6 +6229,7 @@ class ActiveSupport::InheritableOptions < ::ActiveSupport::OrderedOptions
   def inheritable_copy; end
 end
 
+# source://activesupport//lib/active_support/isolated_execution_state.rb#6
 module ActiveSupport::IsolatedExecutionState
   class << self
     # source://activesupport//lib/active_support/isolated_execution_state.rb#32
@@ -6101,6 +6276,7 @@ module ActiveSupport::IsolatedExecutionState
   end
 end
 
+# source://activesupport//lib/active_support/json/decoding.rb#11
 module ActiveSupport::JSON
   class << self
     # Parses a JSON string (JavaScript Object Notation) into a hash.
@@ -6150,6 +6326,7 @@ ActiveSupport::JSON::DATETIME_REGEX = T.let(T.unsafe(nil), Regexp)
 # source://activesupport//lib/active_support/json/decoding.rb#13
 ActiveSupport::JSON::DATE_REGEX = T.let(T.unsafe(nil), Regexp)
 
+# source://activesupport//lib/active_support/json/encoding.rb#25
 module ActiveSupport::JSON::Encoding
   class << self
     # If true, encode >, <, & as escaped unicode sequences (e.g. > as \u003e)
@@ -6202,6 +6379,7 @@ module ActiveSupport::JSON::Encoding
   end
 end
 
+# source://activesupport//lib/active_support/json/encoding.rb#26
 class ActiveSupport::JSON::Encoding::JSONGemEncoder
   # @return [JSONGemEncoder] a new instance of JSONGemEncoder
   #
@@ -6257,6 +6435,8 @@ ActiveSupport::JSON::Encoding::JSONGemEncoder::ESCAPE_REGEX_WITHOUT_HTML_ENTITIE
 ActiveSupport::JSON::Encoding::JSONGemEncoder::ESCAPE_REGEX_WITH_HTML_ENTITIES = T.let(T.unsafe(nil), Regexp)
 
 # This class wraps all the strings we see and does the extra escaping
+#
+# source://activesupport//lib/active_support/json/encoding.rb#54
 class ActiveSupport::JSON::Encoding::JSONGemEncoder::EscapedString < ::String
   # source://activesupport//lib/active_support/json/encoding.rb#55
   def to_json(*_arg0); end
@@ -6269,6 +6449,8 @@ end
 # It can be used to derive a number of keys for various purposes from a given secret.
 # This lets Rails applications have a single secure secret, but avoid reusing that
 # key in multiple incompatible contexts.
+#
+# source://activesupport//lib/active_support/key_generator.rb#11
 class ActiveSupport::KeyGenerator
   # @return [KeyGenerator] a new instance of KeyGenerator
   #
@@ -6328,6 +6510,8 @@ end
 #       end
 #     end
 #   end
+#
+# source://activesupport//lib/active_support/lazy_load_hooks.rb#41
 module ActiveSupport::LazyLoadHooks
   # Declares a block that will be executed when a Rails component is fully
   # loaded. If the component has already loaded, the block is executed
@@ -6423,6 +6607,8 @@ end
 # Log subscriber also has some helpers to deal with logging and automatically
 # flushes all logs when the request finishes
 # (via <tt>action_dispatch.callback</tt> notification) in a Rails environment.
+#
+# source://activesupport//lib/active_support/log_subscriber.rb#66
 class ActiveSupport::LogSubscriber < ::ActiveSupport::Subscriber
   # source://activesupport//lib/active_support/log_subscriber.rb#80
   def colorize_logging; end
@@ -6539,6 +6725,7 @@ ActiveSupport::LogSubscriber::WHITE = T.let(T.unsafe(nil), String)
 # source://activesupport//lib/active_support/log_subscriber.rb#74
 ActiveSupport::LogSubscriber::YELLOW = T.let(T.unsafe(nil), String)
 
+# source://activesupport//lib/active_support/logger.rb#8
 class ActiveSupport::Logger < ::Logger
   include ::ActiveSupport::LoggerSilence
   include ::ActiveSupport::LoggerThreadSafeLevel
@@ -6580,6 +6767,8 @@ class ActiveSupport::Logger < ::Logger
 end
 
 # Simple formatter which only displays the message.
+#
+# source://activesupport//lib/active_support/logger.rb#87
 class ActiveSupport::Logger::SimpleFormatter < ::Logger::Formatter
   # This method is invoked when a log event occurs
   #
@@ -6587,6 +6776,7 @@ class ActiveSupport::Logger::SimpleFormatter < ::Logger::Formatter
   def call(severity, timestamp, progname, msg); end
 end
 
+# source://activesupport//lib/active_support/logger_silence.rb#8
 module ActiveSupport::LoggerSilence
   extend ::ActiveSupport::Concern
   include ::ActiveSupport::LoggerThreadSafeLevel
@@ -6597,6 +6787,7 @@ module ActiveSupport::LoggerSilence
   def silence(severity = T.unsafe(nil)); end
 end
 
+# source://activesupport//lib/active_support/logger_thread_safe_level.rb#9
 module ActiveSupport::LoggerThreadSafeLevel
   extend ::ActiveSupport::Concern
 
@@ -6716,6 +6907,8 @@ end
 # the above should be combined into:
 #
 #   crypt.rotate old_secret, cipher: "aes-256-cbc"
+#
+# source://activesupport//lib/active_support/message_encryptor.rb#87
 class ActiveSupport::MessageEncryptor
   include ::ActiveSupport::Messages::Rotator
   include ::ActiveSupport::Messages::Rotator::Encryptor
@@ -6796,8 +6989,10 @@ class ActiveSupport::MessageEncryptor
   end
 end
 
+# source://activesupport//lib/active_support/message_encryptor.rb#122
 class ActiveSupport::MessageEncryptor::InvalidMessage < ::StandardError; end
 
+# source://activesupport//lib/active_support/message_encryptor.rb#102
 module ActiveSupport::MessageEncryptor::NullSerializer
   class << self
     # source://activesupport//lib/active_support/message_encryptor.rb#107
@@ -6808,6 +7003,7 @@ module ActiveSupport::MessageEncryptor::NullSerializer
   end
 end
 
+# source://activesupport//lib/active_support/message_encryptor.rb#112
 module ActiveSupport::MessageEncryptor::NullVerifier
   class << self
     # source://activesupport//lib/active_support/message_encryptor.rb#117
@@ -6912,6 +7108,8 @@ ActiveSupport::MessageEncryptor::OpenSSLCipherError = OpenSSL::Cipher::CipherErr
 # Though the above would most likely be combined into one rotation:
 #
 #   verifier.rotate old_secret, digest: "SHA256", serializer: Marshal
+#
+# source://activesupport//lib/active_support/message_verifier.rb#102
 class ActiveSupport::MessageVerifier
   include ::ActiveSupport::Messages::Rotator
   include ::ActiveSupport::Messages::Rotator::Verifier
@@ -7015,6 +7213,7 @@ class ActiveSupport::MessageVerifier
   def separator_index_for(signed_message); end
 end
 
+# source://activesupport//lib/active_support/message_verifier.rb#105
 class ActiveSupport::MessageVerifier::InvalidSignature < ::StandardError; end
 
 # source://activesupport//lib/active_support/message_verifier.rb#107
@@ -7023,8 +7222,10 @@ ActiveSupport::MessageVerifier::SEPARATOR = T.let(T.unsafe(nil), String)
 # source://activesupport//lib/active_support/message_verifier.rb#108
 ActiveSupport::MessageVerifier::SEPARATOR_LENGTH = T.let(T.unsafe(nil), Integer)
 
+# source://activesupport//lib/active_support/messages/metadata.rb#6
 module ActiveSupport::Messages; end
 
+# source://activesupport//lib/active_support/messages/metadata.rb#7
 class ActiveSupport::Messages::Metadata
   # @return [Metadata] a new instance of Metadata
   #
@@ -7075,6 +7276,7 @@ class ActiveSupport::Messages::Metadata
   end
 end
 
+# source://activesupport//lib/active_support/messages/rotation_configuration.rb#5
 class ActiveSupport::Messages::RotationConfiguration
   # @return [RotationConfiguration] a new instance of RotationConfiguration
   #
@@ -7095,6 +7297,7 @@ class ActiveSupport::Messages::RotationConfiguration
   def signed; end
 end
 
+# source://activesupport//lib/active_support/messages/rotator.rb#5
 module ActiveSupport::Messages::Rotator
   # source://activesupport//lib/active_support/messages/rotator.rb#6
   def initialize(*secrets, on_rotation: T.unsafe(nil), **options); end
@@ -7108,6 +7311,7 @@ module ActiveSupport::Messages::Rotator
   def run_rotations(on_rotation); end
 end
 
+# source://activesupport//lib/active_support/messages/rotator.rb#18
 module ActiveSupport::Messages::Rotator::Encryptor
   include ::ActiveSupport::Messages::Rotator
 
@@ -7120,6 +7324,7 @@ module ActiveSupport::Messages::Rotator::Encryptor
   def build_rotation(secret = T.unsafe(nil), sign_secret = T.unsafe(nil), options); end
 end
 
+# source://activesupport//lib/active_support/messages/rotator.rb#33
 module ActiveSupport::Messages::Rotator::Verifier
   include ::ActiveSupport::Messages::Rotator
 
@@ -7132,6 +7337,7 @@ module ActiveSupport::Messages::Rotator::Verifier
   def build_rotation(secret = T.unsafe(nil), options); end
 end
 
+# source://activesupport//lib/active_support/multibyte.rb#4
 module ActiveSupport::Multibyte
   class << self
     # Returns the current proxy class.
@@ -7186,6 +7392,8 @@ end
 #   end
 #
 #   ActiveSupport::Multibyte.proxy_class = CharsForUTF32
+#
+# source://activesupport//lib/active_support/multibyte/chars.rb#45
 class ActiveSupport::Multibyte::Chars
   include ::Comparable
 
@@ -7339,6 +7547,7 @@ class ActiveSupport::Multibyte::Chars
   def respond_to_missing?(method, include_private); end
 end
 
+# source://activesupport//lib/active_support/multibyte/unicode.rb#5
 module ActiveSupport::Multibyte::Unicode
   extend ::ActiveSupport::Multibyte::Unicode
 
@@ -7556,6 +7765,8 @@ ActiveSupport::Multibyte::Unicode::UNICODE_VERSION = T.let(T.unsafe(nil), String
 #
 # Notifications ships with a queue implementation that consumes and publishes events
 # to all log subscribers. You can use any queue implementation you want.
+#
+# source://activesupport//lib/active_support/notifications/instrumenter.rb#6
 module ActiveSupport::Notifications
   class << self
     # source://activesupport//lib/active_support/notifications.rb#204
@@ -7639,6 +7850,7 @@ module ActiveSupport::Notifications
   end
 end
 
+# source://activesupport//lib/active_support/notifications/instrumenter.rb#58
 class ActiveSupport::Notifications::Event
   # @return [Event] a new instance of Event
   #
@@ -7755,6 +7967,8 @@ end
 # It just pushes events to all registered log subscribers.
 #
 # This class is thread safe. All methods are reentrant.
+#
+# source://activesupport//lib/active_support/notifications/fanout.rb#24
 class ActiveSupport::Notifications::Fanout
   include ::Mutex_m
 
@@ -7813,6 +8027,7 @@ class ActiveSupport::Notifications::Fanout
   def wait; end
 end
 
+# source://activesupport//lib/active_support/notifications/fanout.rb#125
 module ActiveSupport::Notifications::Fanout::Subscribers
   class << self
     # source://activesupport//lib/active_support/notifications/fanout.rb#126
@@ -7820,6 +8035,7 @@ module ActiveSupport::Notifications::Fanout::Subscribers
   end
 end
 
+# source://activesupport//lib/active_support/notifications/fanout.rb#257
 class ActiveSupport::Notifications::Fanout::Subscribers::EventObject < ::ActiveSupport::Notifications::Fanout::Subscribers::Evented
   # source://activesupport//lib/active_support/notifications/fanout.rb#265
   def finish(name, id, payload); end
@@ -7836,6 +8052,7 @@ class ActiveSupport::Notifications::Fanout::Subscribers::EventObject < ::ActiveS
   def build_event(name, id, payload); end
 end
 
+# source://activesupport//lib/active_support/notifications/fanout.rb#182
 class ActiveSupport::Notifications::Fanout::Subscribers::Evented
   # @return [Evented] a new instance of Evented
   #
@@ -7868,6 +8085,7 @@ class ActiveSupport::Notifications::Fanout::Subscribers::Evented
   def unsubscribe!(name); end
 end
 
+# source://activesupport//lib/active_support/notifications/fanout.rb#145
 class ActiveSupport::Notifications::Fanout::Subscribers::Matcher
   # @return [Matcher] a new instance of Matcher
   #
@@ -7896,6 +8114,7 @@ class ActiveSupport::Notifications::Fanout::Subscribers::Matcher
   end
 end
 
+# source://activesupport//lib/active_support/notifications/fanout.rb#171
 class ActiveSupport::Notifications::Fanout::Subscribers::Matcher::AllMessages
   # source://activesupport//lib/active_support/notifications/fanout.rb#172
   def ===(name); end
@@ -7904,6 +8123,7 @@ class ActiveSupport::Notifications::Fanout::Subscribers::Matcher::AllMessages
   def unsubscribe!(*_arg0); end
 end
 
+# source://activesupport//lib/active_support/notifications/fanout.rb#240
 class ActiveSupport::Notifications::Fanout::Subscribers::MonotonicTimed < ::ActiveSupport::Notifications::Fanout::Subscribers::Evented
   # source://activesupport//lib/active_support/notifications/fanout.rb#250
   def finish(name, id, payload); end
@@ -7915,6 +8135,7 @@ class ActiveSupport::Notifications::Fanout::Subscribers::MonotonicTimed < ::Acti
   def start(name, id, payload); end
 end
 
+# source://activesupport//lib/active_support/notifications/fanout.rb#223
 class ActiveSupport::Notifications::Fanout::Subscribers::Timed < ::ActiveSupport::Notifications::Fanout::Subscribers::Evented
   # source://activesupport//lib/active_support/notifications/fanout.rb#233
   def finish(name, id, payload); end
@@ -7926,6 +8147,7 @@ class ActiveSupport::Notifications::Fanout::Subscribers::Timed < ::ActiveSupport
   def start(name, id, payload); end
 end
 
+# source://activesupport//lib/active_support/notifications/fanout.rb#10
 class ActiveSupport::Notifications::InstrumentationSubscriberError < ::RuntimeError
   # @return [InstrumentationSubscriberError] a new instance of InstrumentationSubscriberError
   #
@@ -7939,6 +8161,8 @@ class ActiveSupport::Notifications::InstrumentationSubscriberError < ::RuntimeEr
 end
 
 # Instrumenters are stored in a thread local.
+#
+# source://activesupport//lib/active_support/notifications/instrumenter.rb#8
 class ActiveSupport::Notifications::Instrumenter
   # @return [Instrumenter] a new instance of Instrumenter
   #
@@ -7980,6 +8204,7 @@ class ActiveSupport::Notifications::Instrumenter
   def unique_id; end
 end
 
+# source://activesupport//lib/active_support/number_helper.rb#4
 module ActiveSupport::NumberHelper
   extend ::ActiveSupport::Autoload
   extend ::ActiveSupport::NumberHelper
@@ -8359,6 +8584,7 @@ module ActiveSupport::NumberHelper
   def number_to_rounded(number, options = T.unsafe(nil)); end
 end
 
+# source://activesupport//lib/active_support/number_helper/number_converter.rb#11
 class ActiveSupport::NumberHelper::NumberConverter
   # @return [NumberConverter] a new instance of NumberConverter
   #
@@ -8451,6 +8677,7 @@ end
 # source://activesupport//lib/active_support/number_helper/number_converter.rb#20
 ActiveSupport::NumberHelper::NumberConverter::DEFAULTS = T.let(T.unsafe(nil), Hash)
 
+# source://activesupport//lib/active_support/number_helper/number_to_currency_converter.rb#7
 class ActiveSupport::NumberHelper::NumberToCurrencyConverter < ::ActiveSupport::NumberHelper::NumberConverter
   # source://activesupport//lib/active_support/number_helper/number_to_currency_converter.rb#10
   def convert; end
@@ -8469,6 +8696,7 @@ class ActiveSupport::NumberHelper::NumberToCurrencyConverter < ::ActiveSupport::
   end
 end
 
+# source://activesupport//lib/active_support/number_helper/number_to_delimited_converter.rb#7
 class ActiveSupport::NumberHelper::NumberToDelimitedConverter < ::ActiveSupport::NumberHelper::NumberConverter
   # source://activesupport//lib/active_support/number_helper/number_to_delimited_converter.rb#12
   def convert; end
@@ -8490,6 +8718,7 @@ end
 # source://activesupport//lib/active_support/number_helper/number_to_delimited_converter.rb#10
 ActiveSupport::NumberHelper::NumberToDelimitedConverter::DEFAULT_DELIMITER_REGEX = T.let(T.unsafe(nil), Regexp)
 
+# source://activesupport//lib/active_support/number_helper/number_to_human_converter.rb#7
 class ActiveSupport::NumberHelper::NumberToHumanConverter < ::ActiveSupport::NumberHelper::NumberConverter
   # source://activesupport//lib/active_support/number_helper/number_to_human_converter.rb#15
   def convert; end
@@ -8523,6 +8752,7 @@ ActiveSupport::NumberHelper::NumberToHumanConverter::DECIMAL_UNITS = T.let(T.uns
 # source://activesupport//lib/active_support/number_helper/number_to_human_converter.rb#10
 ActiveSupport::NumberHelper::NumberToHumanConverter::INVERTED_DECIMAL_UNITS = T.let(T.unsafe(nil), Hash)
 
+# source://activesupport//lib/active_support/number_helper/number_to_human_size_converter.rb#7
 class ActiveSupport::NumberHelper::NumberToHumanSizeConverter < ::ActiveSupport::NumberHelper::NumberConverter
   # source://activesupport//lib/active_support/number_helper/number_to_human_size_converter.rb#13
   def convert; end
@@ -8561,6 +8791,7 @@ end
 # source://activesupport//lib/active_support/number_helper/number_to_human_size_converter.rb#8
 ActiveSupport::NumberHelper::NumberToHumanSizeConverter::STORAGE_UNITS = T.let(T.unsafe(nil), Array)
 
+# source://activesupport//lib/active_support/number_helper/number_to_percentage_converter.rb#7
 class ActiveSupport::NumberHelper::NumberToPercentageConverter < ::ActiveSupport::NumberHelper::NumberConverter
   # source://activesupport//lib/active_support/number_helper/number_to_percentage_converter.rb#10
   def convert; end
@@ -8571,6 +8802,7 @@ class ActiveSupport::NumberHelper::NumberToPercentageConverter < ::ActiveSupport
   end
 end
 
+# source://activesupport//lib/active_support/number_helper/number_to_phone_converter.rb#7
 class ActiveSupport::NumberHelper::NumberToPhoneConverter < ::ActiveSupport::NumberHelper::NumberConverter
   # source://activesupport//lib/active_support/number_helper/number_to_phone_converter.rb#8
   def convert; end
@@ -8604,6 +8836,7 @@ class ActiveSupport::NumberHelper::NumberToPhoneConverter < ::ActiveSupport::Num
   def start_with_delimiter?(number); end
 end
 
+# source://activesupport//lib/active_support/number_helper/number_to_rounded_converter.rb#7
 class ActiveSupport::NumberHelper::NumberToRoundedConverter < ::ActiveSupport::NumberHelper::NumberConverter
   # source://activesupport//lib/active_support/number_helper/number_to_rounded_converter.rb#11
   def convert; end
@@ -8625,6 +8858,7 @@ class ActiveSupport::NumberHelper::NumberToRoundedConverter < ::ActiveSupport::N
   end
 end
 
+# source://activesupport//lib/active_support/number_helper/rounding_helper.rb#5
 class ActiveSupport::NumberHelper::RoundingHelper
   # @return [RoundingHelper] a new instance of RoundingHelper
   #
@@ -8651,6 +8885,7 @@ class ActiveSupport::NumberHelper::RoundingHelper
   def convert_to_decimal(number); end
 end
 
+# source://activesupport//lib/active_support/core_ext/numeric/conversions.rb#7
 module ActiveSupport::NumericWithFormat
   # Provides options for converting numbers into formatted strings.
   # Options are provided for phone numbers, currency, percentage,
@@ -8867,6 +9102,7 @@ module ActiveSupport::NumericWithFormat
   def to_fs(format = T.unsafe(nil), options = T.unsafe(nil)); end
 end
 
+# source://activesupport//lib/active_support/option_merger.rb#6
 class ActiveSupport::OptionMerger
   # @return [OptionMerger] a new instance of OptionMerger
   #
@@ -8898,6 +9134,8 @@ end
 #
 # <tt>ActiveSupport::OrderedHash</tt> is namespaced to prevent conflicts
 # with other implementations.
+#
+# source://activesupport//lib/active_support/ordered_hash.rb#24
 class ActiveSupport::OrderedHash < ::Hash
   # source://activesupport//lib/active_support/ordered_hash.rb#29
   def encode_with(coder); end
@@ -8946,6 +9184,8 @@ end
 # bang to the key name, like:
 #
 #   h.dog! # => raises KeyError: :dog is blank
+#
+# source://activesupport//lib/active_support/ordered_options.rb#31
 class ActiveSupport::OrderedOptions < ::Hash
   # source://activesupport//lib/active_support/ordered_options.rb#39
   def [](key); end
@@ -9003,6 +9243,8 @@ end
 #     v.reverse! if /secret/i.match?(k)
 #   end])
 #   => reverses the value to all keys matching /secret/i
+#
+# source://activesupport//lib/active_support/parameter_filter.rb#32
 class ActiveSupport::ParameterFilter
   # Create instance with given filters. Supported type of filters are +String+, +Regexp+, and +Proc+.
   # Other types of filters are treated as +String+ using +to_s+.
@@ -9033,6 +9275,7 @@ class ActiveSupport::ParameterFilter
   def compiled_filter; end
 end
 
+# source://activesupport//lib/active_support/parameter_filter.rb#62
 class ActiveSupport::ParameterFilter::CompiledFilter
   # @return [CompiledFilter] a new instance of CompiledFilter
   #
@@ -9104,6 +9347,8 @@ ActiveSupport::ParameterFilter::FILTERED = T.let(T.unsafe(nil), String)
 # The class methods proxy to said thread local instance.
 #
 # If the class has an initializer, it must accept no arguments.
+#
+# source://activesupport//lib/active_support/per_thread_registry.rb#41
 module ActiveSupport::PerThreadRegistry
   # source://activesupport//lib/active_support/per_thread_registry.rb#50
   def instance; end
@@ -9123,6 +9368,8 @@ end
 
 # A class with no predefined methods that behaves similarly to Builder's
 # BlankSlate. Used for proxy classes.
+#
+# source://activesupport//lib/active_support/proxy_object.rb#6
 class ActiveSupport::ProxyObject < ::BasicObject
   # Let ActiveSupport::ProxyObject at least raise exceptions.
   #
@@ -9130,8 +9377,10 @@ class ActiveSupport::ProxyObject < ::BasicObject
   def raise(*args); end
 end
 
+# source://activesupport//lib/active_support/railtie.rb#7
 class ActiveSupport::Railtie < ::Rails::Railtie; end
 
+# source://activesupport//lib/active_support/core_ext/range/conversions.rb#4
 module ActiveSupport::RangeWithFormat
   # Convert range to a formatted string. See RANGE_FORMATS for predefined formats.
   #
@@ -9194,6 +9443,8 @@ ActiveSupport::RangeWithFormat::RANGE_FORMATS = T.let(T.unsafe(nil), Hash)
 #
 #   after_class_unload -- Run immediately after the classes are
 #   unloaded.
+#
+# source://activesupport//lib/active_support/reloader.rb#27
 class ActiveSupport::Reloader < ::ActiveSupport::ExecutionWrapper
   # @return [Reloader] a new instance of Reloader
   #
@@ -9324,6 +9575,8 @@ class ActiveSupport::Reloader < ::ActiveSupport::ExecutionWrapper
 end
 
 # Rescuable module adds support for easier exception handling.
+#
+# source://activesupport//lib/active_support/rescuable.rb#9
 module ActiveSupport::Rescuable
   extend ::ActiveSupport::Concern
   include GeneratedInstanceMethods
@@ -9356,6 +9609,7 @@ module ActiveSupport::Rescuable
   end
 end
 
+# source://activesupport//lib/active_support/rescuable.rb#16
 module ActiveSupport::Rescuable::ClassMethods
   # source://activesupport//lib/active_support/rescuable.rb#103
   def handler_for_rescue(exception, object: T.unsafe(nil)); end
@@ -9425,6 +9679,7 @@ module ActiveSupport::Rescuable::ClassMethods
   def find_rescue_handler(exception); end
 end
 
+# source://activesupport//lib/active_support/ruby_features.rb#4
 module ActiveSupport::RubyFeatures; end
 
 # RUBY_VERSION >= "3.1"
@@ -9432,6 +9687,7 @@ module ActiveSupport::RubyFeatures; end
 # source://activesupport//lib/active_support/ruby_features.rb#5
 ActiveSupport::RubyFeatures::CLASS_SUBCLASSES = T.let(T.unsafe(nil), TrueClass)
 
+# source://activesupport//lib/active_support/core_ext/string/output_safety.rb#162
 class ActiveSupport::SafeBuffer < ::String
   # @return [SafeBuffer] a new instance of SafeBuffer
   #
@@ -9646,6 +9902,8 @@ class ActiveSupport::SafeBuffer < ::String
 end
 
 # Raised when ActiveSupport::SafeBuffer#safe_concat is called on unsafe buffers.
+#
+# source://activesupport//lib/active_support/core_ext/string/output_safety.rb#175
 class ActiveSupport::SafeBuffer::SafeConcatError < ::StandardError
   # @return [SafeConcatError] a new instance of SafeConcatError
   #
@@ -9682,6 +9940,8 @@ ActiveSupport::SafeBuffer::UNSAFE_STRING_METHODS_WITH_BACKREF = T.let(T.unsafe(n
 #       end
 #     end
 #   end
+#
+# source://activesupport//lib/active_support/secure_compare_rotator.rb#30
 class ActiveSupport::SecureCompareRotator
   include ::ActiveSupport::Messages::Rotator
   include ::ActiveSupport::SecurityUtils
@@ -9700,8 +9960,10 @@ class ActiveSupport::SecureCompareRotator
   def build_rotation(previous_value, _options); end
 end
 
+# source://activesupport//lib/active_support/secure_compare_rotator.rb#34
 class ActiveSupport::SecureCompareRotator::InvalidMatch < ::StandardError; end
 
+# source://activesupport//lib/active_support/security_utils.rb#4
 module ActiveSupport::SecurityUtils
   private
 
@@ -9753,6 +10015,8 @@ end
 #   vehicle = ActiveSupport::StringInquirer.new('car')
 #   vehicle.car?   # => true
 #   vehicle.bike?  # => false
+#
+# source://activesupport//lib/active_support/string_inquirer.rb#19
 class ActiveSupport::StringInquirer < ::String
   private
 
@@ -9789,6 +10053,8 @@ end
 # We can detach a subscriber as well:
 #
 #   ActiveRecord::StatsSubscriber.detach_from(:active_record)
+#
+# source://activesupport//lib/active_support/subscriber.rb#30
 class ActiveSupport::Subscriber
   # @return [Subscriber] a new instance of Subscriber
   #
@@ -9894,6 +10160,8 @@ end
 # This is used by the default Rails.logger as configured by Railties to make
 # it easy to stamp log lines with subdomains, request ids, and anything else
 # to aid debugging of multi-user production applications.
+#
+# source://activesupport//lib/active_support/tagged_logging.rb#28
 module ActiveSupport::TaggedLogging
   # source://activesupport//lib/active_support/tagged_logging.rb#95
   def clear_tags!(*_arg0, **_arg1, &_arg2); end
@@ -9916,6 +10184,7 @@ module ActiveSupport::TaggedLogging
   end
 end
 
+# source://activesupport//lib/active_support/tagged_logging.rb#29
 module ActiveSupport::TaggedLogging::Formatter
   # This method is invoked when a log event occurs.
   #
@@ -9941,6 +10210,7 @@ module ActiveSupport::TaggedLogging::Formatter
   def tags_text; end
 end
 
+# source://activesupport//lib/active_support/tagged_logging.rb#73
 module ActiveSupport::TaggedLogging::LocalTagStorage
   # Returns the value of attribute current_tags.
   #
@@ -9962,6 +10232,7 @@ module ActiveSupport::TaggedLogging::LocalTagStorage
   end
 end
 
+# source://activesupport//lib/active_support/test_case.rb#19
 class ActiveSupport::TestCase < ::Minitest::Test
   include ::ActiveSupport::Testing::SetupAndTeardown
   include ::ActiveSupport::Testing::TaggedLogging
@@ -10179,8 +10450,10 @@ end
 # source://activesupport//lib/active_support/test_case.rb#20
 ActiveSupport::TestCase::Assertion = Minitest::Assertion
 
+# source://activesupport//lib/active_support/testing/tagged_logging.rb#4
 module ActiveSupport::Testing; end
 
+# source://activesupport//lib/active_support/testing/assertions.rb#7
 module ActiveSupport::Testing::Assertions
   # Assertion that the result of evaluating an expression is changed before
   # and after invoking the passed in block.
@@ -10381,17 +10654,21 @@ ActiveSupport::Testing::Assertions::UNTRACKED = T.let(T.unsafe(nil), Object)
 #   controller = determine_constant_from_test_name(name) do |constant|
 #     Class === constant && constant < ::ActionController::Metal
 #   end
+#
+# source://activesupport//lib/active_support/testing/constant_lookup.rb#32
 module ActiveSupport::Testing::ConstantLookup
   extend ::ActiveSupport::Concern
 
   mixes_in_class_methods ::ActiveSupport::Testing::ConstantLookup::ClassMethods
 end
 
+# source://activesupport//lib/active_support/testing/constant_lookup.rb#35
 module ActiveSupport::Testing::ConstantLookup::ClassMethods
   # source://activesupport//lib/active_support/testing/constant_lookup.rb#36
   def determine_constant_from_test_name(test_name); end
 end
 
+# source://activesupport//lib/active_support/testing/declarative.rb#5
 module ActiveSupport::Testing::Declarative
   # Helper to define a test method using a String. Under the hood, it replaces
   # spaces with underscores and defines the test method.
@@ -10404,6 +10681,7 @@ module ActiveSupport::Testing::Declarative
   def test(name, &block); end
 end
 
+# source://activesupport//lib/active_support/testing/deprecation.rb#7
 module ActiveSupport::Testing::Deprecation
   # Asserts that a matching deprecation warning was emitted by the given deprecator during the execution of the yielded block.
   #
@@ -10478,6 +10756,8 @@ end
 #
 #   file_fixture("example.txt").read # get the file's content
 #   file_fixture("example.mp3").size # get the file size
+#
+# source://activesupport//lib/active_support/testing/file_fixtures.rb#16
 module ActiveSupport::Testing::FileFixtures
   extend ::ActiveSupport::Concern
   include GeneratedInstanceMethods
@@ -10503,6 +10783,7 @@ module ActiveSupport::Testing::FileFixtures
   end
 end
 
+# source://activesupport//lib/active_support/testing/isolation.rb#5
 module ActiveSupport::Testing::Isolation
   include ::ActiveSupport::Testing::Isolation::Forking
 
@@ -10520,11 +10801,13 @@ module ActiveSupport::Testing::Isolation
   end
 end
 
+# source://activesupport//lib/active_support/testing/isolation.rb#26
 module ActiveSupport::Testing::Isolation::Forking
   # source://activesupport//lib/active_support/testing/isolation.rb#27
   def run_in_isolation(&blk); end
 end
 
+# source://activesupport//lib/active_support/testing/isolation.rb#63
 module ActiveSupport::Testing::Isolation::Subprocess
   # Complicated H4X to get this working in windows / jruby with
   # no forking.
@@ -10536,6 +10819,7 @@ end
 # source://activesupport//lib/active_support/testing/isolation.rb#64
 ActiveSupport::Testing::Isolation::Subprocess::ORIG_ARGV = T.let(T.unsafe(nil), Array)
 
+# source://activesupport//lib/active_support/testing/parallelization/server.rb#8
 class ActiveSupport::Testing::Parallelization
   # @return [Parallelization] a new instance of Parallelization
   #
@@ -10575,6 +10859,7 @@ class ActiveSupport::Testing::Parallelization
   end
 end
 
+# source://activesupport//lib/active_support/testing/parallelization/server.rb#9
 class ActiveSupport::Testing::Parallelization::Server
   include ::DRb::DRbUndumped
 
@@ -10612,6 +10897,7 @@ class ActiveSupport::Testing::Parallelization::Server
   def stop_worker(worker_id); end
 end
 
+# source://activesupport//lib/active_support/testing/parallelization/worker.rb#6
 class ActiveSupport::Testing::Parallelization::Worker
   # @return [Worker] a new instance of Worker
   #
@@ -10645,6 +10931,7 @@ class ActiveSupport::Testing::Parallelization::Worker
   def set_process_title(status); end
 end
 
+# source://activesupport//lib/active_support/testing/parallelize_executor.rb#5
 class ActiveSupport::Testing::ParallelizeExecutor
   # @return [ParallelizeExecutor] a new instance of ParallelizeExecutor
   #
@@ -10719,6 +11006,8 @@ end
 #       # ...
 #     end
 #   end
+#
+# source://activesupport//lib/active_support/testing/setup_and_teardown.rb#20
 module ActiveSupport::Testing::SetupAndTeardown
   # source://activesupport//lib/active_support/testing/setup_and_teardown.rb#44
   def after_teardown; end
@@ -10732,6 +11021,7 @@ module ActiveSupport::Testing::SetupAndTeardown
   end
 end
 
+# source://activesupport//lib/active_support/testing/setup_and_teardown.rb#27
 module ActiveSupport::Testing::SetupAndTeardown::ClassMethods
   # Add a callback, which runs before <tt>TestCase#setup</tt>.
   #
@@ -10745,6 +11035,8 @@ module ActiveSupport::Testing::SetupAndTeardown::ClassMethods
 end
 
 # Manages stubs for TimeHelpers
+#
+# source://activesupport//lib/active_support/testing/time_helpers.rb#10
 class ActiveSupport::Testing::SimpleStubs
   # @return [SimpleStubs] a new instance of SimpleStubs
   #
@@ -10788,6 +11080,7 @@ class ActiveSupport::Testing::SimpleStubs
   def unstub_object(stub); end
 end
 
+# source://activesupport//lib/active_support/testing/time_helpers.rb#11
 class ActiveSupport::Testing::SimpleStubs::Stub < ::Struct
   # Returns the value of attribute method_name
   #
@@ -10833,6 +11126,8 @@ end
 
 # Logs a "PostsControllerTest: test name" heading before each test to
 # make test.log easier to search and follow along with.
+#
+# source://activesupport//lib/active_support/testing/tagged_logging.rb#7
 module ActiveSupport::Testing::TaggedLogging
   # source://activesupport//lib/active_support/testing/tagged_logging.rb#10
   def before_setup; end
@@ -10847,6 +11142,8 @@ module ActiveSupport::Testing::TaggedLogging
 end
 
 # Contains helpers that help you test passage of time.
+#
+# source://activesupport//lib/active_support/testing/time_helpers.rb#69
 module ActiveSupport::Testing::TimeHelpers
   # source://activesupport//lib/active_support/testing/time_helpers.rb#70
   def after_teardown; end
@@ -11031,6 +11328,8 @@ end
 #   t > Time.utc(1999)                    # => true
 #   t.is_a?(Time)                         # => true
 #   t.is_a?(ActiveSupport::TimeWithZone)  # => true
+#
+# source://activesupport//lib/active_support/time_with_zone.rb#42
 class ActiveSupport::TimeWithZone
   include ::DateAndTime::Compatibility
   include ::Comparable
@@ -11736,6 +12035,8 @@ ActiveSupport::TimeWithZone::SECONDS_PER_DAY = T.let(T.unsafe(nil), Integer)
 #   Time.zone      # => #<ActiveSupport::TimeZone:0x514834...>
 #   Time.zone.name # => "Eastern Time (US & Canada)"
 #   Time.zone.now  # => Sun, 18 May 2008 14:30:44 EDT -04:00
+#
+# source://activesupport//lib/active_support/values/time_zone.rb#29
 class ActiveSupport::TimeZone
   include ::Comparable
 
@@ -12049,11 +12350,13 @@ ActiveSupport::TimeZone::UTC_OFFSET_WITHOUT_COLON = T.let(T.unsafe(nil), String)
 # source://activesupport//lib/active_support/values/time_zone.rb#185
 ActiveSupport::TimeZone::UTC_OFFSET_WITH_COLON = T.let(T.unsafe(nil), String)
 
+# source://activesupport//lib/active_support/core_ext/object/json.rb#35
 module ActiveSupport::ToJsonWithActiveSupportEncoder
   # source://activesupport//lib/active_support/core_ext/object/json.rb#36
   def to_json(options = T.unsafe(nil)); end
 end
 
+# source://activesupport//lib/active_support/core_ext/object/try.rb#6
 module ActiveSupport::Tryable
   # source://activesupport//lib/active_support/core_ext/object/try.rb#7
   def try(*args, **_arg1, &block); end
@@ -12062,6 +12365,7 @@ module ActiveSupport::Tryable
   def try!(*args, **_arg1, &block); end
 end
 
+# source://activesupport//lib/active_support/gem_version.rb#9
 module ActiveSupport::VERSION; end
 
 # source://activesupport//lib/active_support/gem_version.rb#10
@@ -12079,6 +12383,7 @@ ActiveSupport::VERSION::STRING = T.let(T.unsafe(nil), String)
 # source://activesupport//lib/active_support/gem_version.rb#12
 ActiveSupport::VERSION::TINY = T.let(T.unsafe(nil), Integer)
 
+# source://activesupport//lib/active_support/core_ext/hash/conversions.rb#140
 class ActiveSupport::XMLConverter
   # @return [XMLConverter] a new instance of XMLConverter
   #
@@ -12141,6 +12446,8 @@ ActiveSupport::XMLConverter::DISALLOWED_TYPES = T.let(T.unsafe(nil), Array)
 
 # Raised if the XML contains attributes with type="yaml" or
 # type="symbol". Read Hash#from_xml for more details.
+#
+# source://activesupport//lib/active_support/core_ext/hash/conversions.rb#143
 class ActiveSupport::XMLConverter::DisallowedType < ::StandardError
   # @return [DisallowedType] a new instance of DisallowedType
   #
@@ -12153,6 +12460,8 @@ end
 # To use the much faster libxml parser:
 #   gem 'libxml-ruby', '=0.9.7'
 #   XmlMini.backend = 'LibXML'
+#
+# source://activesupport//lib/active_support/xml_mini.rb#17
 module ActiveSupport::XmlMini
   extend ::ActiveSupport::XmlMini
 
@@ -12217,6 +12526,8 @@ ActiveSupport::XmlMini::FORMATTING = T.let(T.unsafe(nil), Hash)
 
 # This module decorates files deserialized using Hash.from_xml with
 # the <tt>original_filename</tt> and <tt>content_type</tt> methods.
+#
+# source://activesupport//lib/active_support/xml_mini.rb#22
 module ActiveSupport::XmlMini::FileLike
   # source://activesupport//lib/active_support/xml_mini.rb#29
   def content_type; end
@@ -12237,6 +12548,7 @@ ActiveSupport::XmlMini::PARSING = T.let(T.unsafe(nil), Hash)
 # source://activesupport//lib/active_support/xml_mini.rb#39
 ActiveSupport::XmlMini::TYPE_NAMES = T.let(T.unsafe(nil), Hash)
 
+# source://activesupport//lib/active_support/xml_mini/rexml.rb#8
 module ActiveSupport::XmlMini_REXML
   extend ::ActiveSupport::XmlMini_REXML
 
@@ -12324,9 +12636,9 @@ end
 # source://activesupport//lib/active_support/xml_mini/rexml.rb#11
 ActiveSupport::XmlMini_REXML::CONTENT_KEY = T.let(T.unsafe(nil), String)
 
+# source://activesupport//lib/active_support/core_ext/object/blank.rb#83
 class Array
   include ::Enumerable
-  include ::FriendlyId::UnfriendlyUtils
 
   # source://activesupport//lib/active_support/core_ext/object/json.rb#158
   def as_json(options = T.unsafe(nil)); end
@@ -12767,6 +13079,7 @@ end
 # source://activesupport//lib/active_support/core_ext/array/deprecated_conversions.rb#4
 Array::NOT_SET = T.let(T.unsafe(nil), Object)
 
+# source://activesupport//lib/active_support/core_ext/object/json.rb#118
 class BigDecimal < ::Numeric
   include ::ActiveSupport::BigDecimalWithDefaultFormat
   include ::ActiveSupport::NumericWithFormat
@@ -12792,6 +13105,7 @@ end
 BigDecimal::EXCEPTION_NaN = T.let(T.unsafe(nil), Integer)
 BigDecimal::VERSION = T.let(T.unsafe(nil), String)
 
+# source://activesupport//lib/active_support/core_ext/class/attribute.rb#5
 class Class < ::Module
   # Declare a class-level attribute whose value is inheritable by subclasses.
   # Subclasses can change their own value and it will not impact parent class.
@@ -12894,6 +13208,7 @@ class Class < ::Module
   def descendants; end
 end
 
+# source://activesupport//lib/active_support/core_ext/date/zones.rb#6
 class Date
   include ::Comparable
   include ::DateAndTime::Zones
@@ -13190,8 +13505,10 @@ Date::NOT_SET = T.let(T.unsafe(nil), Object)
 # source://date/3.2.2/date.rb#7
 Date::VERSION = T.let(T.unsafe(nil), String)
 
+# source://activesupport//lib/active_support/core_ext/date_and_time/compatibility.rb#5
 module DateAndTime; end
 
+# source://activesupport//lib/active_support/core_ext/date_and_time/calculations.rb#7
 module DateAndTime::Calculations
   # Returns true if the date/time falls after <tt>date_or_time</tt>.
   #
@@ -13640,6 +13957,7 @@ DateAndTime::Calculations::DAYS_INTO_WEEK = T.let(T.unsafe(nil), Hash)
 # source://activesupport//lib/active_support/core_ext/date_and_time/calculations.rb#17
 DateAndTime::Calculations::WEEKEND_DAYS = T.let(T.unsafe(nil), Array)
 
+# source://activesupport//lib/active_support/core_ext/date_and_time/compatibility.rb#6
 module DateAndTime::Compatibility
   # source://activesupport//lib/active_support/core_ext/date_and_time/compatibility.rb#14
   def preserve_timezone; end
@@ -13662,6 +13980,7 @@ module DateAndTime::Compatibility
   end
 end
 
+# source://activesupport//lib/active_support/core_ext/date_and_time/zones.rb#4
 module DateAndTime::Zones
   # Returns the simultaneous time in <tt>Time.zone</tt> if a zone is given or
   # if Time.zone_default is set. Otherwise, it returns the current time.
@@ -13688,6 +14007,7 @@ module DateAndTime::Zones
   def time_with_zone(time, zone); end
 end
 
+# source://activesupport//lib/active_support/core_ext/date_time/calculations.rb#5
 class DateTime < ::Date
   include ::DateAndTime::Compatibility
 
@@ -14088,6 +14408,12 @@ end
 # source://activesupport//lib/active_support/core_ext/date_time/deprecated_conversions.rb#6
 DateTime::NOT_SET = T.let(T.unsafe(nil), Object)
 
+# source://activesupport//lib/active_support/core_ext/object/try.rb#117
+class Delegator < ::BasicObject
+  include ::ActiveSupport::Tryable
+end
+
+# source://activesupport//lib/active_support/core_ext/digest/uuid.rb#7
 module Digest::UUID
   class << self
     # source://activesupport//lib/active_support/core_ext/digest/uuid.rb#13
@@ -14140,6 +14466,7 @@ Digest::UUID::URL_NAMESPACE = T.let(T.unsafe(nil), String)
 # source://activesupport//lib/active_support/core_ext/digest/uuid.rb#11
 Digest::UUID::X500_NAMESPACE = T.let(T.unsafe(nil), String)
 
+# source://activesupport//lib/active_support/core_ext/string/output_safety.rb#8
 module ERB::Util
   private
 
@@ -14380,6 +14707,7 @@ ERB::Util::TAG_NAME_START_REGEXP = T.let(T.unsafe(nil), Regexp)
 # source://activesupport//lib/active_support/core_ext/string/output_safety.rb#15
 ERB::Util::TAG_NAME_START_REGEXP_SET = T.let(T.unsafe(nil), String)
 
+# source://activesupport//lib/active_support/core_ext/object/json.rb#139
 module Enumerable
   extend ::ActiveSupport::EnumerableCoreExt::Constants
 
@@ -14574,16 +14902,18 @@ end
 
 # Error generated by +sole+ when called on an enumerable that doesn't have
 # exactly one item.
+#
+# source://activesupport//lib/active_support/core_ext/enumerable.rb#21
 class Enumerable::SoleItemExpectedError < ::StandardError; end
 
+# source://activesupport//lib/active_support/core_ext/object/json.rb#240
 class Exception
   # source://activesupport//lib/active_support/core_ext/object/json.rb#241
   def as_json(options = T.unsafe(nil)); end
 end
 
+# source://activesupport//lib/active_support/core_ext/object/blank.rb#61
 class FalseClass
-  include ::FriendlyId::UnfriendlyUtils
-
   # source://activesupport//lib/active_support/core_ext/object/json.rb#81
   def as_json(options = T.unsafe(nil)); end
 
@@ -14602,6 +14932,7 @@ class FalseClass
   def to_param; end
 end
 
+# source://activesupport//lib/active_support/core_ext/object/json.rb#110
 class Float < ::Numeric
   include ::ActiveSupport::NumericWithFormat
   include ::ActiveSupport::DeprecatedNumericWithFormat
@@ -14616,9 +14947,9 @@ class Float < ::Numeric
   def to_s(format = T.unsafe(nil), options = T.unsafe(nil)); end
 end
 
+# source://activesupport//lib/active_support/core_ext/hash/deep_merge.rb#3
 class Hash
   include ::Enumerable
-  include ::FriendlyId::UnfriendlyUtils
 
   # source://activesupport//lib/active_support/core_ext/object/json.rb#164
   def as_json(options = T.unsafe(nil)); end
@@ -15090,6 +15421,71 @@ end
 # source://activesupport//lib/active_support/hash_with_indifferent_access.rb#425
 HashWithIndifferentAccess = ActiveSupport::HashWithIndifferentAccess
 
+# :enddoc:
+#
+# source://activesupport//lib/active_support/i18n_railtie.rb#8
+module I18n
+  class << self
+    # source://i18n/1.12.0/lib/i18n/backend/cache.rb#64
+    def cache_key_digest; end
+
+    # source://i18n/1.12.0/lib/i18n/backend/cache.rb#68
+    def cache_key_digest=(key_digest); end
+
+    # source://i18n/1.12.0/lib/i18n/backend/cache.rb#56
+    def cache_namespace; end
+
+    # source://i18n/1.12.0/lib/i18n/backend/cache.rb#60
+    def cache_namespace=(namespace); end
+
+    # source://i18n/1.12.0/lib/i18n/backend/cache.rb#48
+    def cache_store; end
+
+    # source://i18n/1.12.0/lib/i18n/backend/cache.rb#52
+    def cache_store=(store); end
+
+    # source://i18n/1.12.0/lib/i18n/backend/fallbacks.rb#17
+    def fallbacks; end
+
+    # source://i18n/1.12.0/lib/i18n/backend/fallbacks.rb#23
+    def fallbacks=(fallbacks); end
+
+    # source://i18n/1.12.0/lib/i18n/interpolate/ruby.rb#16
+    def interpolate(string, values); end
+
+    # source://i18n/1.12.0/lib/i18n/interpolate/ruby.rb#22
+    def interpolate_hash(string, values); end
+
+    # source://i18n/1.12.0/lib/i18n.rb#37
+    def new_double_nested_cache; end
+
+    # source://i18n/1.12.0/lib/i18n/backend/cache.rb#72
+    def perform_caching?; end
+
+    # source://i18n/1.12.0/lib/i18n.rb#45
+    def reserve_key(key); end
+
+    # source://i18n/1.12.0/lib/i18n.rb#50
+    def reserved_keys_pattern; end
+  end
+end
+
+# source://i18n/1.12.0/lib/i18n/interpolate/ruby.rb#5
+I18n::DEFAULT_INTERPOLATION_PATTERNS = T.let(T.unsafe(nil), Array)
+
+# source://i18n/1.12.0/lib/i18n.rb#35
+I18n::EMPTY_HASH = T.let(T.unsafe(nil), Hash)
+
+# source://i18n/1.12.0/lib/i18n/interpolate/ruby.rb#10
+I18n::INTERPOLATION_PATTERN = T.let(T.unsafe(nil), Regexp)
+
+# source://i18n/1.12.0/lib/i18n/backend/key_value.rb#21
+I18n::JSON = ActiveSupport::JSON
+
+# source://i18n/1.12.0/lib/i18n.rb#19
+I18n::RESERVED_KEYS = T.let(T.unsafe(nil), Array)
+
+# source://activesupport//lib/active_support/i18n_railtie.rb#9
 class I18n::Railtie < ::Rails::Railtie
   class << self
     # source://activesupport//lib/active_support/i18n_railtie.rb#78
@@ -15114,6 +15510,10 @@ class I18n::Railtie < ::Rails::Railtie
   end
 end
 
+# source://i18n/1.12.0/lib/i18n/version.rb#4
+I18n::VERSION = T.let(T.unsafe(nil), String)
+
+# source://activesupport//lib/active_support/core_ext/object/json.rb#145
 class IO
   include ::Enumerable
   include ::File::Constants
@@ -15211,16 +15611,19 @@ IO::PRIORITY = T.let(T.unsafe(nil), Integer)
 IO::READABLE = T.let(T.unsafe(nil), Integer)
 IO::WRITABLE = T.let(T.unsafe(nil), Integer)
 
+# source://activesupport//lib/active_support/core_ext/object/json.rb#228
 class IPAddr
-  include ::Comparable
-
   # source://activesupport//lib/active_support/core_ext/object/json.rb#229
   def as_json(options = T.unsafe(nil)); end
 end
 
+# source://azure-storage-common/2.0.4/lib/azure/core/utility.rb#197
+IPAddr::PRIVATE_RANGES = T.let(T.unsafe(nil), Array)
+
 # source://ipaddr/1.2.4/ipaddr.rb#43
 IPAddr::VERSION = T.let(T.unsafe(nil), String)
 
+# source://activesupport//lib/active_support/core_ext/integer/time.rb#6
 class Integer < ::Numeric
   include ::ActiveSupport::NumericWithFormat
   include ::ActiveSupport::DeprecatedNumericWithFormat
@@ -15296,6 +15699,7 @@ end
 
 Integer::GMP_VERSION = T.let(T.unsafe(nil), String)
 
+# source://activesupport//lib/active_support/core_ext/kernel/reporting.rb#3
 module Kernel
   # class_eval on an object acts like +singleton_class.class_eval+.
   #
@@ -15393,6 +15797,7 @@ module Kernel
   end
 end
 
+# source://activesupport//lib/active_support/core_ext/load_error.rb#3
 class LoadError < ::ScriptError
   include ::DidYouMean::Correctable
 
@@ -15405,10 +15810,8 @@ class LoadError < ::ScriptError
   def is_missing?(location); end
 end
 
+# source://activesupport//lib/active_support/core_ext/object/duplicable.rb#31
 class Method
-  include ::MethodSource::SourceLocation::MethodExtensions
-  include ::MethodSource::MethodExtensions
-
   # Methods are not duplicable:
   #
   #  method(:puts).duplicable? # => false
@@ -15431,9 +15834,10 @@ end
 #
 # Note that it can also be scoped per-fiber if +Rails.application.config.active_support.isolation_level+
 # is set to +:fiber+.
+#
+# source://activesupport//lib/active_support/core_ext/module/attribute_accessors.rb#8
 class Module
   include ::Module::Concerning
-  include ::Delayed::MessageSendingClassMethods
 
   # Allows you to make aliases for attributes, which includes
   # getter, setter, and a predicate.
@@ -16468,6 +16872,8 @@ end
 #
 # <tt>concerning</tt> supports a <tt>prepend: true</tt> argument which will <tt>prepend</tt> the
 # concern instead of using <tt>include</tt> for it.
+#
+# source://activesupport//lib/active_support/core_ext/module/concerning.rb#112
 module Module::Concerning
   # A low-cruft shortcut to define a concern.
   #
@@ -16500,11 +16906,14 @@ Module::DELEGATION_RESERVED_METHOD_NAMES = T.let(T.unsafe(nil), Set)
 
 # Error generated by +delegate+ when a method is called on +nil+ and +allow_nil+
 # option is not used.
+#
+# source://activesupport//lib/active_support/core_ext/module/delegation.rb#8
 class Module::DelegationError < ::NoMethodError; end
 
 # source://activesupport//lib/active_support/core_ext/module/delegation.rb#10
 Module::RUBY_RESERVED_KEYWORDS = T.let(T.unsafe(nil), Array)
 
+# source://activesupport//lib/active_support/core_ext/name_error.rb#3
 class NameError < ::StandardError
   include ::ErrorHighlight::CoreExt
   include ::DidYouMean::Correctable
@@ -16544,9 +16953,8 @@ end
 # source://activesupport//lib/active_support/core_ext/name_error.rb#53
 NameError::UNBOUND_METHOD_MODULE_NAME = T.let(T.unsafe(nil), UnboundMethod)
 
+# source://activesupport//lib/active_support/core_ext/object/blank.rb#50
 class NilClass
-  include ::FriendlyId::UnfriendlyUtils
-
   # source://activesupport//lib/active_support/core_ext/object/json.rb#87
   def as_json(options = T.unsafe(nil)); end
 
@@ -16586,9 +16994,9 @@ class NilClass
   def try!(*_arg0); end
 end
 
+# source://activesupport//lib/active_support/core_ext/object/blank.rb#134
 class Numeric
   include ::Comparable
-  include ::FriendlyId::UnfriendlyUtils
 
   # source://activesupport//lib/active_support/core_ext/object/json.rb#105
   def as_json(options = T.unsafe(nil)); end
@@ -16836,14 +17244,13 @@ Numeric::TERABYTE = T.let(T.unsafe(nil), Integer)
 # That's why we hardcode the following cases and check duplicable? instead of
 # using that rescue idiom.
 # ++
+#
+# source://activesupport//lib/active_support/core_ext/object/blank.rb#5
 class Object < ::BasicObject
   include ::ActiveSupport::ToJsonWithActiveSupportEncoder
   include ::ActiveSupport::Dependencies::RequireDependency
   include ::Kernel
   include ::ActiveSupport::Tryable
-  include ::Delayed::MessageSending
-  include ::FriendlyId::ObjectUtils
-  include ::PP::ObjectMixin
 
   # Provides a way to check whether some class acts like some other class based on the existence of
   # an appropriately-named marker method.
@@ -17107,6 +17514,7 @@ class Object < ::BasicObject
   def with_options(options, &block); end
 end
 
+# source://activesupport//lib/active_support/core_ext/object/json.rb#222
 class Pathname
   # source://activesupport//lib/active_support/core_ext/object/json.rb#223
   def as_json(options = T.unsafe(nil)); end
@@ -17139,11 +17547,13 @@ module Process
   end
 end
 
+# source://activesupport//lib/active_support/core_ext/object/json.rb#234
 class Process::Status
   # source://activesupport//lib/active_support/core_ext/object/json.rb#235
   def as_json(options = T.unsafe(nil)); end
 end
 
+# source://activesupport//lib/active_support/core_ext/object/json.rb#151
 class Range
   include ::ActiveSupport::RangeWithFormat
   include ::ActiveSupport::DeprecatedRangeWithFormat
@@ -17185,6 +17595,7 @@ class Range
   def to_s(format = T.unsafe(nil)); end
 end
 
+# source://activesupport//lib/active_support/core_ext/object/json.rb#133
 class Regexp
   # source://activesupport//lib/active_support/core_ext/object/json.rb#134
   def as_json(options = T.unsafe(nil)); end
@@ -17206,9 +17617,8 @@ end
 # source://regexp_parser/2.5.0/lib/regexp_parser/token.rb#2
 Regexp::TOKEN_KEYS = T.let(T.unsafe(nil), Array)
 
+# source://activesupport//lib/active_support/core_ext/securerandom.rb#5
 module SecureRandom
-  extend ::Random::Formatter
-
   class << self
     # SecureRandom.base36 generates a random base36 string in lowercase.
     #
@@ -17247,6 +17657,7 @@ SecureRandom::BASE36_ALPHABET = T.let(T.unsafe(nil), Array)
 # source://activesupport//lib/active_support/core_ext/securerandom.rb#6
 SecureRandom::BASE58_ALPHABET = T.let(T.unsafe(nil), Array)
 
+# source://activesupport//lib/active_support/core_ext/object/duplicable.rb#53
 module Singleton
   mixes_in_class_methods ::Singleton::SingletonClassMethods
 
@@ -17267,6 +17678,8 @@ Singleton::VERSION = T.let(T.unsafe(nil), String)
 # For instance, you can figure out the name of a table from the name of a class.
 #
 #   'ScaleScore'.tableize # => "scale_scores"
+#
+# source://activesupport//lib/active_support/core_ext/object/blank.rb#103
 class String
   include ::Comparable
 
@@ -17979,6 +18392,7 @@ String::BLANK_RE = T.let(T.unsafe(nil), Regexp)
 # source://activesupport//lib/active_support/core_ext/object/blank.rb#105
 String::ENCODED_BLANKS = T.let(T.unsafe(nil), Concurrent::Map)
 
+# source://activesupport//lib/active_support/core_ext/object/json.rb#68
 class Struct
   include ::Enumerable
 
@@ -17994,14 +18408,15 @@ Struct::HTMLElementDescription = Struct
 Struct::Passwd = Etc::Passwd
 Struct::RUsage = Struct
 
+# source://activesupport//lib/active_support/core_ext/object/json.rb#98
 class Symbol
   include ::Comparable
-  include ::FriendlyId::UnfriendlyUtils
 
   # source://activesupport//lib/active_support/core_ext/object/json.rb#99
   def as_json(options = T.unsafe(nil)); end
 end
 
+# source://activesupport//lib/active_support/core_ext/object/blank.rb#146
 class Time
   include ::Comparable
   include ::DateAndTime::Zones
@@ -18505,9 +18920,8 @@ Time::DATE_FORMATS = T.let(T.unsafe(nil), Hash)
 # source://activesupport//lib/active_support/core_ext/time/deprecated_conversions.rb#6
 Time::NOT_SET = T.let(T.unsafe(nil), Object)
 
+# source://activesupport//lib/active_support/core_ext/object/blank.rb#72
 class TrueClass
-  include ::FriendlyId::UnfriendlyUtils
-
   # source://activesupport//lib/active_support/core_ext/object/json.rb#75
   def as_json(options = T.unsafe(nil)); end
 
@@ -18526,6 +18940,7 @@ class TrueClass
   def to_param; end
 end
 
+# source://activesupport//lib/active_support/core_ext/object/json.rb#216
 class URI::Generic
   include ::URI::RFC2396_REGEXP
 
@@ -18533,10 +18948,8 @@ class URI::Generic
   def as_json(options = T.unsafe(nil)); end
 end
 
+# source://activesupport//lib/active_support/core_ext/object/duplicable.rb#41
 class UnboundMethod
-  include ::MethodSource::SourceLocation::UnboundMethodExtensions
-  include ::MethodSource::MethodExtensions
-
   # Unbound methods are not duplicable:
   #
   #  method(:puts).unbind.duplicable? # => false

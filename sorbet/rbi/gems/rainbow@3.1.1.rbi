@@ -10,32 +10,8 @@
 # source://yard/0.9.28/lib/yard.rb#62
 ::RUBY19 = T.let(T.unsafe(nil), TrueClass)
 
-# --
-# Most objects are cloneable, but not all. For example you can't dup methods:
-#
-#   method(:puts).dup # => TypeError: allocator undefined for Method
-#
-# Classes may signal their instances are not duplicable removing +dup+/+clone+
-# or raising exceptions from them. So, to dup an arbitrary object you normally
-# use an optimistic approach and are ready to catch an exception, say:
-#
-#   arbitrary_object.dup rescue object
-#
-# Rails dups objects in a few critical spots where they are not that arbitrary.
-# That rescue is very expensive (like 40 times slower than a predicate), and it
-# is often triggered.
-#
-# That's why we hardcode the following cases and check duplicable? instead of
-# using that rescue idiom.
-# ++
 class Object < ::BasicObject
-  include ::ActiveSupport::ToJsonWithActiveSupportEncoder
-  include ::ActiveSupport::Dependencies::RequireDependency
   include ::Kernel
-  include ::ActiveSupport::Tryable
-  include ::Delayed::MessageSending
-  include ::FriendlyId::ObjectUtils
-  include ::PP::ObjectMixin
 
   private
 
@@ -43,6 +19,7 @@ class Object < ::BasicObject
   def Rainbow(string); end
 end
 
+# source://rainbow//lib/rainbow/string_utils.rb#3
 module Rainbow
   class << self
     # source://rainbow//lib/rainbow/global.rb#10
@@ -62,6 +39,7 @@ module Rainbow
   end
 end
 
+# source://rainbow//lib/rainbow/color.rb#4
 class Rainbow::Color
   # Returns the value of attribute ground.
   #
@@ -77,6 +55,7 @@ class Rainbow::Color
   end
 end
 
+# source://rainbow//lib/rainbow/color.rb#54
 class Rainbow::Color::Indexed < ::Rainbow::Color
   # @return [Indexed] a new instance of Indexed
   #
@@ -92,6 +71,7 @@ class Rainbow::Color::Indexed < ::Rainbow::Color
   def num; end
 end
 
+# source://rainbow//lib/rainbow/color.rb#69
 class Rainbow::Color::Named < ::Rainbow::Color::Indexed
   # @return [Named] a new instance of Named
   #
@@ -110,6 +90,7 @@ end
 # source://rainbow//lib/rainbow/color.rb#70
 Rainbow::Color::Named::NAMES = T.let(T.unsafe(nil), Hash)
 
+# source://rainbow//lib/rainbow/color.rb#100
 class Rainbow::Color::RGB < ::Rainbow::Color::Indexed
   # @return [RGB] a new instance of RGB
   #
@@ -145,6 +126,7 @@ class Rainbow::Color::RGB < ::Rainbow::Color::Indexed
   end
 end
 
+# source://rainbow//lib/rainbow/color.rb#129
 class Rainbow::Color::X11Named < ::Rainbow::Color::RGB
   include ::Rainbow::X11ColorNames
 
@@ -162,6 +144,7 @@ class Rainbow::Color::X11Named < ::Rainbow::Color::RGB
   end
 end
 
+# source://rainbow//lib/rainbow/null_presenter.rb#4
 class Rainbow::NullPresenter < ::String
   # source://rainbow//lib/rainbow/null_presenter.rb#9
   def background(*_values); end
@@ -249,6 +232,7 @@ class Rainbow::NullPresenter < ::String
   def respond_to_missing?(method_name, *args); end
 end
 
+# source://rainbow//lib/rainbow/presenter.rb#8
 class Rainbow::Presenter < ::String
   # Sets background color of this text.
   #
@@ -382,6 +366,7 @@ end
 # source://rainbow//lib/rainbow/presenter.rb#9
 Rainbow::Presenter::TERM_EFFECTS = T.let(T.unsafe(nil), Hash)
 
+# source://rainbow//lib/rainbow/string_utils.rb#4
 class Rainbow::StringUtils
   class << self
     # source://rainbow//lib/rainbow/string_utils.rb#17
@@ -392,6 +377,7 @@ class Rainbow::StringUtils
   end
 end
 
+# source://rainbow//lib/rainbow/wrapper.rb#7
 class Rainbow::Wrapper
   # @return [Wrapper] a new instance of Wrapper
   #
@@ -414,6 +400,7 @@ class Rainbow::Wrapper
   def wrap(string); end
 end
 
+# source://rainbow//lib/rainbow/x11_color_names.rb#4
 module Rainbow::X11ColorNames; end
 
 # source://rainbow//lib/rainbow/x11_color_names.rb#5

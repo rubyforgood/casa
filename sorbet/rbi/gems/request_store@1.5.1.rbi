@@ -10,6 +10,8 @@
 #
 # Uses Rack::BodyProxy, adapted from Rack::Lock's usage of the
 # same pattern.
+#
+# source://request_store//lib/request_store/version.rb#1
 module RequestStore
   class << self
     # source://request_store//lib/request_store.rb#34
@@ -57,6 +59,7 @@ module RequestStore
   end
 end
 
+# source://request_store//lib/request_store/middleware.rb#11
 class RequestStore::Middleware
   # @return [Middleware] a new instance of Middleware
   #
@@ -67,6 +70,7 @@ class RequestStore::Middleware
   def call(env); end
 end
 
+# source://request_store//lib/request_store/railtie.rb#2
 class RequestStore::Railtie < ::Rails::Railtie; end
 
 # source://request_store//lib/request_store/version.rb#2

@@ -5,6 +5,8 @@
 # Please instead update this file by running `bin/tapioca gem dotenv`.
 
 # The top level Dotenv module. The entrypoint for the application logic.
+#
+# source://dotenv//lib/dotenv/substitutions/variable.rb#3
 module Dotenv
   private
 
@@ -105,6 +107,8 @@ end
 
 # This class inherits from Hash and represents the environment into which
 # Dotenv will load key value pairs from a file.
+#
+# source://dotenv//lib/dotenv/environment.rb#4
 class Dotenv::Environment < ::Hash
   # @return [Environment] a new instance of Environment
   #
@@ -129,9 +133,13 @@ class Dotenv::Environment < ::Hash
   def read; end
 end
 
+# source://dotenv//lib/dotenv/missing_keys.rb#2
 class Dotenv::Error < ::StandardError; end
+
+# source://dotenv//lib/dotenv/parser.rb#5
 class Dotenv::FormatError < ::SyntaxError; end
 
+# source://dotenv//lib/dotenv/missing_keys.rb#4
 class Dotenv::MissingKeys < ::Dotenv::Error
   # @return [MissingKeys] a new instance of MissingKeys
   #
@@ -142,6 +150,8 @@ end
 # This class enables parsing of a string for key value pairs to be returned
 # and stored in the Environment. It allows for variable substitutions and
 # exporting of variables.
+#
+# source://dotenv//lib/dotenv/parser.rb#10
 class Dotenv::Parser
   # @return [Parser] a new instance of Parser
   #
@@ -190,11 +200,14 @@ end
 # source://dotenv//lib/dotenv/parser.rb#14
 Dotenv::Parser::LINE = T.let(T.unsafe(nil), Regexp)
 
+# source://dotenv//lib/dotenv/substitutions/variable.rb#4
 module Dotenv::Substitutions; end
 
 # Substitute shell commands in a value.
 #
 #   SHA=$(git rev-parse HEAD)
+#
+# source://dotenv//lib/dotenv/substitutions/command.rb#9
 module Dotenv::Substitutions::Command
   class << self
     # source://dotenv//lib/dotenv/substitutions/command.rb#23
@@ -206,6 +219,8 @@ end
 #
 #   HOST=example.com
 #   URL="https://$HOST"
+#
+# source://dotenv//lib/dotenv/substitutions/variable.rb#10
 module Dotenv::Substitutions::Variable
   class << self
     # source://dotenv//lib/dotenv/substitutions/variable.rb#21

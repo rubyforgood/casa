@@ -5,6 +5,8 @@
 # Please instead update this file by running `bin/tapioca gem pundit`.
 
 # @api public
+#
+# source://pundit//lib/pundit/version.rb#3
 module Pundit
   include ::Pundit::Authorization
 
@@ -90,6 +92,7 @@ module Pundit
   end
 end
 
+# source://pundit//lib/pundit/authorization.rb#4
 module Pundit::Authorization
   extend ::ActiveSupport::Concern
 
@@ -236,18 +239,26 @@ end
 # `authorize` or `skip_authorization` methods.
 #
 # @api public
+#
+# source://pundit//lib/pundit.rb#48
 class Pundit::AuthorizationNotPerformedError < ::Pundit::Error; end
 
 # To avoid name clashes with common Error naming when mixing in Pundit,
 # keep it here with compact class style definition.
 #
 # @api private
+#
+# source://pundit//lib/pundit.rb#15
 class Pundit::Error < ::StandardError; end
 
 # @api private
+#
+# source://pundit//lib/pundit.rb#22
 module Pundit::Generators; end
 
 # @api private
+#
+# source://pundit//lib/pundit.rb#167
 module Pundit::Helper
   # @api private
   #
@@ -258,11 +269,15 @@ end
 # Error that will be raised if a policy or policy scope constructor is not called correctly.
 #
 # @api public
+#
+# source://pundit//lib/pundit.rb#44
 class Pundit::InvalidConstructorError < ::Pundit::Error; end
 
 # Error that will be raised when authorization has failed
 #
 # @api public
+#
+# source://pundit//lib/pundit.rb#25
 class Pundit::NotAuthorizedError < ::Pundit::Error
   # @api public
   # @return [NotAuthorizedError] a new instance of NotAuthorizedError
@@ -289,6 +304,8 @@ end
 # Error that will be raised if a policy or policy scope is not defined.
 #
 # @api public
+#
+# source://pundit//lib/pundit.rb#55
 class Pundit::NotDefinedError < ::Pundit::Error; end
 
 # Finds policy and scope classes for given object.
@@ -299,6 +316,8 @@ class Pundit::NotDefinedError < ::Pundit::Error; end
 #   finder = PolicyFinder.new(user)
 #   finder.policy #=> UserPolicy
 #   finder.scope #=> UserPolicy::Scope
+#
+# source://pundit//lib/pundit/policy_finder.rb#12
 class Pundit::PolicyFinder
   # @api public
   # @param object [any] the object to find policy and scope classes for
@@ -370,6 +389,8 @@ end
 # `policy_scope` or `skip_policy_scope` methods.
 #
 # @api public
+#
+# source://pundit//lib/pundit.rb#52
 class Pundit::PolicyScopingNotPerformedError < ::Pundit::AuthorizationNotPerformedError; end
 
 # @api public

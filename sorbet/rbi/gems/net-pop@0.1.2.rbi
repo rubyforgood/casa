@@ -5,6 +5,8 @@
 # Please instead update this file by running `bin/tapioca gem net-pop`.
 
 # This class is equivalent to POP3, except that it uses APOP authentication.
+#
+# source://net-pop//lib/net/pop.rb#730
 class Net::APOP < ::Net::POP3
   # Always returns true.
   #
@@ -173,6 +175,8 @@ Net::POP = Net::POP3
 #
 # The POPMail#unique_id() method returns the unique-id of the message as a
 # String. Normally the unique-id is a hash of the message.
+#
+# source://net-pop//lib/net/pop.rb#197
 class Net::POP3 < ::Net::Protocol
   # Creates a new POP3 object.
   #
@@ -585,6 +589,7 @@ end
 # source://net-pop//lib/net/pop.rb#198
 Net::POP3::VERSION = T.let(T.unsafe(nil), String)
 
+# source://net-pop//lib/net/pop.rb#892
 class Net::POP3Command
   # @return [POP3Command] a new instance of POP3Command
   #
@@ -660,18 +665,26 @@ end
 Net::POP3Session = Net::POP3
 
 # POP3 authentication error.
+#
+# source://net-pop//lib/net/pop.rb#40
 class Net::POPAuthenticationError < ::Net::ProtoAuthError; end
 
 # Unexpected response from the server.
+#
+# source://net-pop//lib/net/pop.rb#43
 class Net::POPBadResponse < ::Net::POPError; end
 
 # Non-authentication POP3 protocol error
 # (reply code "-ERR", except authentication).
+#
+# source://net-pop//lib/net/pop.rb#37
 class Net::POPError < ::Net::ProtocolError; end
 
 # This class represents a message which exists on the POP server.
 # Instances of this class are created by the POP3 class; they should
 # not be directly created by the user.
+#
+# source://net-pop//lib/net/pop.rb#744
 class Net::POPMail
   # @return [POPMail] a new instance of POPMail
   #

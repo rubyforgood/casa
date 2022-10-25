@@ -5,6 +5,8 @@
 # Please instead update this file by running `bin/tapioca gem http`.
 
 # HTTP should be easy
+#
+# source://http//lib/http/errors.rb#3
 module HTTP
   extend ::HTTP::Chainable
 
@@ -16,6 +18,7 @@ module HTTP
   end
 end
 
+# source://http//lib/http/chainable.rb#8
 module HTTP::Chainable
   # Accept the given MIME type(s)
   #
@@ -225,6 +228,8 @@ module HTTP::Chainable
 end
 
 # Clients make requests and receive responses
+#
+# source://http//lib/http/client.rb#15
 class HTTP::Client
   include ::HTTP::Chainable
   extend ::Forwardable
@@ -303,9 +308,13 @@ end
 HTTP::Client::HTTP_OR_HTTPS_RE = T.let(T.unsafe(nil), Regexp)
 
 # Timeout when first establishing the conncetion
+#
+# source://http//lib/http/errors.rb#23
 class HTTP::ConnectTimeoutError < ::HTTP::TimeoutError; end
 
 # A connection to the HTTP server
+#
+# source://http//lib/http/connection.rb#9
 class HTTP::Connection
   extend ::Forwardable
 
@@ -450,8 +459,11 @@ HTTP::Connection::HTTP_1_1 = T.let(T.unsafe(nil), String)
 HTTP::Connection::KEEP_ALIVE = T.let(T.unsafe(nil), String)
 
 # Generic Connection error
+#
+# source://http//lib/http/errors.rb#8
 class HTTP::ConnectionError < ::HTTP::Error; end
 
+# source://http//lib/http/content_type.rb#4
 class HTTP::ContentType
   # @return [ContentType] a new instance of ContentType
   #
@@ -505,8 +517,11 @@ HTTP::ContentType::CHARSET_RE = T.let(T.unsafe(nil), Regexp)
 HTTP::ContentType::MIME_TYPE_RE = T.let(T.unsafe(nil), Regexp)
 
 # Generic error
+#
+# source://http//lib/http/errors.rb#5
 class HTTP::Error < ::StandardError; end
 
+# source://http//lib/http/feature.rb#4
 class HTTP::Feature
   # @return [Feature] a new instance of Feature
   #
@@ -523,8 +538,10 @@ class HTTP::Feature
   def wrap_response(response); end
 end
 
+# source://http//lib/http/features/auto_inflate.rb#6
 module HTTP::Features; end
 
+# source://http//lib/http/features/auto_deflate.rb#10
 class HTTP::Features::AutoDeflate < ::HTTP::Feature
   # @raise [Error]
   # @return [AutoDeflate] a new instance of AutoDeflate
@@ -544,6 +561,7 @@ class HTTP::Features::AutoDeflate < ::HTTP::Feature
   def wrap_request(request); end
 end
 
+# source://http//lib/http/features/auto_deflate.rb#51
 class HTTP::Features::AutoDeflate::CompressedBody < ::HTTP::Request::Body
   # @return [CompressedBody] a new instance of CompressedBody
   #
@@ -565,16 +583,19 @@ class HTTP::Features::AutoDeflate::CompressedBody < ::HTTP::Request::Body
   def compressed_each; end
 end
 
+# source://http//lib/http/features/auto_deflate.rb#110
 class HTTP::Features::AutoDeflate::DeflatedBody < ::HTTP::Features::AutoDeflate::CompressedBody
   # source://http//lib/http/features/auto_deflate.rb#111
   def compress; end
 end
 
+# source://http//lib/http/features/auto_deflate.rb#91
 class HTTP::Features::AutoDeflate::GzippedBody < ::HTTP::Features::AutoDeflate::CompressedBody
   # source://http//lib/http/features/auto_deflate.rb#92
   def compress(&block); end
 end
 
+# source://http//lib/http/features/auto_deflate.rb#99
 class HTTP::Features::AutoDeflate::GzippedBody::BlockIO
   # @return [BlockIO] a new instance of BlockIO
   #
@@ -585,6 +606,7 @@ class HTTP::Features::AutoDeflate::GzippedBody::BlockIO
   def write(data); end
 end
 
+# source://http//lib/http/features/auto_inflate.rb#7
 class HTTP::Features::AutoInflate < ::HTTP::Feature
   # source://http//lib/http/features/auto_inflate.rb#27
   def stream_for(connection); end
@@ -618,6 +640,8 @@ HTTP::Features::AutoInflate::SUPPORTED_ENCODING = T.let(T.unsafe(nil), Set)
 #  * `start_request.http` before the request is made, so you can log the reqest being started
 #  * `request.http` after the response is recieved, and contains `start`
 #    and `finish` so the duration of the request can be calculated.
+#
+# source://http//lib/http/features/instrumentation.rb#21
 class HTTP::Features::Instrumentation < ::HTTP::Feature
   # @return [Instrumentation] a new instance of Instrumentation
   #
@@ -641,6 +665,7 @@ class HTTP::Features::Instrumentation < ::HTTP::Feature
   def wrap_response(response); end
 end
 
+# source://http//lib/http/features/instrumentation.rb#44
 class HTTP::Features::Instrumentation::NullInstrumenter
   # source://http//lib/http/features/instrumentation.rb#58
   def finish(_name, _payload); end
@@ -657,6 +682,8 @@ end
 # `debug`. Be sure to specify the logger when enabling the feature:
 #
 #    HTTP.use(logging: {logger: Logger.new(STDOUT)}).get("https://example.com/")
+#
+# source://http//lib/http/features/logging.rb#11
 class HTTP::Features::Logging < ::HTTP::Feature
   # @return [Logging] a new instance of Logging
   #
@@ -680,6 +707,7 @@ class HTTP::Features::Logging < ::HTTP::Feature
   def stringify_headers(headers); end
 end
 
+# source://http//lib/http/features/logging.rb#14
 class HTTP::Features::Logging::NullLogger
   # source://http//lib/http/features/logging.rb#16
   def debug(*_args); end
@@ -712,6 +740,7 @@ class HTTP::Features::Logging::NullLogger
   def warn?; end
 end
 
+# source://http//lib/http/features/normalize_uri.rb#7
 class HTTP::Features::NormalizeUri < ::HTTP::Feature
   # @return [NormalizeUri] a new instance of NormalizeUri
   #
@@ -725,9 +754,13 @@ class HTTP::Features::NormalizeUri < ::HTTP::Feature
 end
 
 # Header value is of unexpected format (similar to Net::HTTPHeaderSyntaxError)
+#
+# source://http//lib/http/errors.rb#26
 class HTTP::HeaderError < ::HTTP::Error; end
 
 # HTTP Headers container.
+#
+# source://http//lib/http/headers/mixin.rb#6
 class HTTP::Headers
   include ::Enumerable
   extend ::Forwardable
@@ -1060,6 +1093,8 @@ HTTP::Headers::LOCATION = T.let(T.unsafe(nil), String)
 #   @headers = HTTP::Headers.new
 #   end
 #   end
+#
+# source://http//lib/http/headers/mixin.rb#19
 module HTTP::Headers::Mixin
   extend ::Forwardable
 
@@ -1114,6 +1149,8 @@ HTTP::Headers::USER_AGENT = T.let(T.unsafe(nil), String)
 HTTP::Headers::VARY = T.let(T.unsafe(nil), String)
 
 # MIME type encode/decode adapters
+#
+# source://http//lib/http/mime_type.rb#5
 module HTTP::MimeType
   class << self
     # Returns adapter associated with MIME type
@@ -1180,6 +1217,8 @@ module HTTP::MimeType
 end
 
 # Base encode/decode MIME type adapter
+#
+# source://http//lib/http/mime_type/adapter.rb#9
 class HTTP::MimeType::Adapter
   include ::Singleton
   extend ::Singleton::SingletonClassMethods
@@ -1200,6 +1239,8 @@ class HTTP::MimeType::Adapter
 end
 
 # JSON encode/decode MIME type adapter
+#
+# source://http//lib/http/mime_type/json.rb#10
 class HTTP::MimeType::JSON < ::HTTP::MimeType::Adapter
   # Decodes JSON
   #
@@ -1212,6 +1253,7 @@ class HTTP::MimeType::JSON < ::HTTP::MimeType::Adapter
   def encode(obj); end
 end
 
+# source://http//lib/http/options.rb#9
 class HTTP::Options
   # @return [Options] a new instance of Options
   #
@@ -1487,6 +1529,7 @@ class HTTP::Options
   end
 end
 
+# source://http//lib/http/redirector.rb#8
 class HTTP::Redirector
   # @option opts
   # @option opts
@@ -1555,6 +1598,8 @@ class HTTP::Redirector
 end
 
 # Notifies that following redirects got into an endless loop
+#
+# source://http//lib/http/redirector.rb#13
 class HTTP::Redirector::EndlessRedirectError < ::HTTP::Redirector::TooManyRedirectsError; end
 
 # HTTP status codes which indicate redirects
@@ -1574,6 +1619,8 @@ HTTP::Redirector::SEE_OTHER_ALLOWED_VERBS = T.let(T.unsafe(nil), Set)
 HTTP::Redirector::STRICT_SENSITIVE_CODES = T.let(T.unsafe(nil), Set)
 
 # Notifies that we reached max allowed redirect hops
+#
+# source://http//lib/http/redirector.rb#10
 class HTTP::Redirector::TooManyRedirectsError < ::HTTP::ResponseError; end
 
 # Insecure http verbs, which should trigger StateError in strict mode
@@ -1582,6 +1629,7 @@ class HTTP::Redirector::TooManyRedirectsError < ::HTTP::ResponseError; end
 # source://http//lib/http/redirector.rb#24
 HTTP::Redirector::UNSAFE_VERBS = T.let(T.unsafe(nil), Set)
 
+# source://http//lib/http/request/body.rb#4
 class HTTP::Request
   include ::HTTP::Headers::Mixin
   extend ::Forwardable
@@ -1737,6 +1785,7 @@ class HTTP::Request
   def prepare_headers(headers); end
 end
 
+# source://http//lib/http/request/body.rb#5
 class HTTP::Request::Body
   # @return [Body] a new instance of Body
   #
@@ -1781,6 +1830,8 @@ end
 # This class provides a "writable IO" wrapper around a proc object, with
 # #write simply calling the proc, which we can pass in as the
 # "destination IO" in IO.copy_stream.
+#
+# source://http//lib/http/request/body.rb#88
 class HTTP::Request::Body::ProcIO
   # @return [ProcIO] a new instance of ProcIO
   #
@@ -1810,11 +1861,16 @@ HTTP::Request::SCHEMES = T.let(T.unsafe(nil), Array)
 HTTP::Request::USER_AGENT = T.let(T.unsafe(nil), String)
 
 # The method given was not understood
+#
+# source://http//lib/http/request.rb#21
 class HTTP::Request::UnsupportedMethodError < ::HTTP::RequestError; end
 
 # The scheme of given URI was not understood
+#
+# source://http//lib/http/request.rb#24
 class HTTP::Request::UnsupportedSchemeError < ::HTTP::RequestError; end
 
+# source://http//lib/http/request/writer.rb#7
 class HTTP::Request::Writer
   # @return [Writer] a new instance of Writer
   #
@@ -1904,8 +1960,11 @@ HTTP::Request::Writer::CRLF = T.let(T.unsafe(nil), String)
 HTTP::Request::Writer::ZERO = T.let(T.unsafe(nil), String)
 
 # Generic Request error
+#
+# source://http//lib/http/errors.rb#11
 class HTTP::RequestError < ::HTTP::Error; end
 
+# source://http//lib/http/response/status/reasons.rb#8
 class HTTP::Response
   include ::HTTP::Headers::Mixin
   extend ::Forwardable
@@ -2079,6 +2138,8 @@ class HTTP::Response
 end
 
 # A streamable response body, also easily converted into a string
+#
+# source://http//lib/http/response/body.rb#9
 class HTTP::Response::Body
   include ::Enumerable
   extend ::Forwardable
@@ -2138,6 +2199,7 @@ class HTTP::Response::Body
   def find_encoding(encoding); end
 end
 
+# source://http//lib/http/response/inflater.rb#7
 class HTTP::Response::Inflater
   # @return [Inflater] a new instance of Inflater
   #
@@ -2159,6 +2221,8 @@ class HTTP::Response::Inflater
 end
 
 # @api private
+#
+# source://http//lib/http/response/parser.rb#8
 class HTTP::Response::Parser
   # @api private
   # @return [Parser] a new instance of Parser
@@ -2240,6 +2304,8 @@ class HTTP::Response::Parser
 end
 
 # @api private
+#
+# source://http//lib/http/response/parser.rb#82
 class HTTP::Response::Parser::Handler < ::LLHttp::Delegate
   # @api private
   # @return [Handler] a new instance of Handler
@@ -2285,6 +2351,7 @@ class HTTP::Response::Parser::Handler < ::LLHttp::Delegate
   def append_header; end
 end
 
+# source://http//lib/http/response/status/reasons.rb#17
 class HTTP::Response::Status
   # source://http//lib/http/response/status.rb#148
   def __getobj__; end
@@ -2619,13 +2686,19 @@ HTTP::Response::Status::SYMBOLS = T.let(T.unsafe(nil), Hash)
 HTTP::Response::Status::SYMBOL_CODES = T.let(T.unsafe(nil), Hash)
 
 # Generic Response error
+#
+# source://http//lib/http/errors.rb#14
 class HTTP::ResponseError < ::HTTP::Error; end
 
 # Requested to do something when we're in the wrong state
+#
+# source://http//lib/http/errors.rb#17
 class HTTP::StateError < ::HTTP::ResponseError; end
 
+# source://http//lib/http/timeout/null.rb#7
 module HTTP::Timeout; end
 
+# source://http//lib/http/timeout/global.rb#10
 class HTTP::Timeout::Global < ::HTTP::Timeout::Null
   # @return [Global] a new instance of Global
   #
@@ -2693,6 +2766,7 @@ class HTTP::Timeout::Global < ::HTTP::Timeout::Null
   def write_nonblock(data); end
 end
 
+# source://http//lib/http/timeout/null.rb#8
 class HTTP::Timeout::Null
   extend ::Forwardable
 
@@ -2760,6 +2834,7 @@ class HTTP::Timeout::Null
   def rescue_writable(timeout = T.unsafe(nil)); end
 end
 
+# source://http//lib/http/timeout/per_operation.rb#9
 class HTTP::Timeout::PerOperation < ::HTTP::Timeout::Null
   # @return [PerOperation] a new instance of PerOperation
   #
@@ -2793,8 +2868,11 @@ HTTP::Timeout::PerOperation::READ_TIMEOUT = T.let(T.unsafe(nil), Float)
 HTTP::Timeout::PerOperation::WRITE_TIMEOUT = T.let(T.unsafe(nil), Float)
 
 # Generic Timeout error
+#
+# source://http//lib/http/errors.rb#20
 class HTTP::TimeoutError < ::HTTP::Error; end
 
+# source://http//lib/http/uri.rb#6
 class HTTP::URI
   extend ::Forwardable
 
@@ -3022,5 +3100,3 @@ HTTP::URI::NORMALIZER = T.let(T.unsafe(nil), Proc)
 
 # source://http//lib/http/version.rb#4
 HTTP::VERSION = T.let(T.unsafe(nil), String)
-
-class LLHttp::Delegate; end

@@ -4,18 +4,5 @@
 
 # typed: false
 
-module ::MiniMagick::Tool; end
-module ActionText::Record; end
-module ActionText::RichText::GeneratedAssociationMethods; end
-module ActiveStorage::Attachment::GeneratedAssociationMethods; end
-module ActiveStorage::BaseController; end
-module ActiveStorage::Record; end
-module AmazingPrint::ActionView; end
-module Capybara::Minitest::Assertions; end
 module Delayed::RecurringJob; end
-module Devise::PasswordsController; end
-module Devise::SessionsController; end
-module DeviseInvitable::Inviter::ClassMethods; end
-module FriendlyId::Slug::GeneratedAssociationMethods; end
-module Noticed::DeliveryMethods::Base; end
 module SupervisorPolicy::Scope; end

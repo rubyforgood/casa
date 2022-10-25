@@ -6,6 +6,8 @@
 
 # This file is auto-generated. Instead of editing this file, please
 # add MIMEs to data/custom.xml or lib/marcel/mime_type/definitions.rb.
+#
+# source://marcel//lib/marcel.rb#1
 module Marcel; end
 
 # @private
@@ -19,6 +21,8 @@ Marcel::EXTENSIONS = T.let(T.unsafe(nil), Hash)
 Marcel::MAGIC = T.let(T.unsafe(nil), Array)
 
 # Mime type detection
+#
+# source://marcel//lib/marcel/magic.rb#12
 class Marcel::Magic
   # Mime type by type string
   #
@@ -163,6 +167,7 @@ class Marcel::Magic
   end
 end
 
+# source://marcel//lib/marcel/mime_type.rb#2
 class Marcel::MimeType
   class << self
     # source://marcel//lib/marcel/mime_type.rb#6

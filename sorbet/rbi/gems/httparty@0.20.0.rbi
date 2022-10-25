@@ -5,6 +5,8 @@
 # Please instead update this file by running `bin/tapioca gem httparty`.
 
 # @see HTTParty::ClassMethods
+#
+# source://httparty//lib/httparty/module_inheritable_attributes.rb#3
 module HTTParty
   include ::HTTParty::ModuleInheritableAttributes
 
@@ -49,6 +51,21 @@ module HTTParty
   end
 end
 
+# source://httparty//lib/httparty.rb#641
+class HTTParty::Basement
+  include ::HTTParty
+  include ::HTTParty::ModuleInheritableAttributes
+  extend ::HTTParty::ClassMethods
+  extend ::HTTParty::ModuleInheritableAttributes::ClassMethods
+
+  class << self
+    def default_cookies; end
+    def default_cookies=(_arg0); end
+    def default_options; end
+    def default_options=(_arg0); end
+  end
+end
+
 # == Common Request Options
 # Request methods (get, post, patch, put, delete, head, options) all take a common set of options. These are:
 #
@@ -82,6 +99,8 @@ end
 # * :+query_string_normalizer+: see HTTParty::ClassMethods.query_string_normalizer
 # * :+ssl_ca_file+: see HTTParty::ClassMethods.ssl_ca_file.
 # * :+ssl_ca_path+: see HTTParty::ClassMethods.ssl_ca_path.
+#
+# source://httparty//lib/httparty.rb#70
 module HTTParty::ClassMethods
   # Allows setting a base uri to be used for each request.
   # Will normalize uri to include http, etc.
@@ -652,6 +671,8 @@ end
 #   super
 #   end
 #   end
+#
+# source://httparty//lib/httparty/connection_adapter.rb#69
 class HTTParty::ConnectionAdapter
   # @raise [ArgumentError]
   # @return [ConnectionAdapter] a new instance of ConnectionAdapter
@@ -725,6 +746,7 @@ HTTParty::ConnectionAdapter::OPTION_DEFAULTS = T.let(T.unsafe(nil), Hash)
 # source://httparty//lib/httparty/connection_adapter.rb#71
 HTTParty::ConnectionAdapter::StripIpv6BracketsRegex = T.let(T.unsafe(nil), Regexp)
 
+# source://httparty//lib/httparty/cookie_hash.rb#3
 class HTTParty::CookieHash < ::Hash
   # source://httparty//lib/httparty/cookie_hash.rb#6
   def add_cookies(data); end
@@ -744,6 +766,8 @@ HTTParty::CookieHash::CLIENT_COOKIES = T.let(T.unsafe(nil), Array)
 # decompressed.
 #
 # @abstract Read the HTTP Compression section for more information.
+#
+# source://httparty//lib/httparty/decompressor.rb#12
 class HTTParty::Decompressor
   # @param body [String] - the response body of the request
   # @param encoding [Symbol] - the Content-Encoding algorithm used to encode the body
@@ -801,11 +825,16 @@ end
 HTTParty::Decompressor::SupportedEncodings = T.let(T.unsafe(nil), Hash)
 
 # Exception that is raised when request redirects and location header is present more than once
+#
+# source://httparty//lib/httparty/exceptions.rb#34
 class HTTParty::DuplicateLocationHeader < ::HTTParty::ResponseError; end
 
 # @abstract Exceptions raised by HTTParty inherit from Error
+#
+# source://httparty//lib/httparty/exceptions.rb#5
 class HTTParty::Error < ::StandardError; end
 
+# source://httparty//lib/httparty/hash_conversions.rb#6
 module HTTParty::HashConversions
   class << self
     # source://httparty//lib/httparty/hash_conversions.rb#36
@@ -835,6 +864,7 @@ module HTTParty::HashConversions
   end
 end
 
+# source://httparty//lib/httparty/headers_processor.rb#4
 class HTTParty::HeadersProcessor
   # @return [HeadersProcessor] a new instance of HeadersProcessor
   #
@@ -860,6 +890,7 @@ class HTTParty::HeadersProcessor
   def process_dynamic_headers; end
 end
 
+# source://httparty//lib/httparty/logger/apache_formatter.rb#4
 module HTTParty::Logger
   class << self
     # @raise [HTTParty::Error]
@@ -875,6 +906,7 @@ module HTTParty::Logger
   end
 end
 
+# source://httparty//lib/httparty/logger/apache_formatter.rb#5
 class HTTParty::Logger::ApacheFormatter
   # @return [ApacheFormatter] a new instance of ApacheFormatter
   #
@@ -939,6 +971,7 @@ end
 # source://httparty//lib/httparty/logger/apache_formatter.rb#6
 HTTParty::Logger::ApacheFormatter::TAG_NAME = T.let(T.unsafe(nil), String)
 
+# source://httparty//lib/httparty/logger/curl_formatter.rb#5
 class HTTParty::Logger::CurlFormatter
   # @return [CurlFormatter] a new instance of CurlFormatter
   #
@@ -1033,6 +1066,7 @@ HTTParty::Logger::CurlFormatter::OUT = T.let(T.unsafe(nil), String)
 # source://httparty//lib/httparty/logger/curl_formatter.rb#6
 HTTParty::Logger::CurlFormatter::TAG_NAME = T.let(T.unsafe(nil), String)
 
+# source://httparty//lib/httparty/logger/logstash_formatter.rb#5
 class HTTParty::Logger::LogstashFormatter
   # @return [LogstashFormatter] a new instance of LogstashFormatter
   #
@@ -1100,6 +1134,7 @@ end
 # source://httparty//lib/httparty/logger/logstash_formatter.rb#6
 HTTParty::Logger::LogstashFormatter::TAG_NAME = T.let(T.unsafe(nil), String)
 
+# source://httparty//lib/httparty/module_inheritable_attributes.rb#4
 module HTTParty::ModuleInheritableAttributes
   mixes_in_class_methods ::HTTParty::ModuleInheritableAttributes::ClassMethods
 
@@ -1116,6 +1151,7 @@ module HTTParty::ModuleInheritableAttributes
   end
 end
 
+# source://httparty//lib/httparty/module_inheritable_attributes.rb#26
 module HTTParty::ModuleInheritableAttributes::ClassMethods
   # source://httparty//lib/httparty/module_inheritable_attributes.rb#38
   def inherited(subclass); end
@@ -1158,6 +1194,8 @@ end
 #   perform_atom_parsing
 #   end
 #   end
+#
+# source://httparty//lib/httparty/parser.rb#41
 class HTTParty::Parser
   # @return [Parser] a new instance of Parser
   #
@@ -1252,8 +1290,11 @@ HTTParty::Parser::UTF8_BOM = T.let(T.unsafe(nil), String)
 
 # Exception that is raised when request has redirected too many times.
 # Calling {#response} returns the Net:HTTP response object.
+#
+# source://httparty//lib/httparty/exceptions.rb#31
 class HTTParty::RedirectionTooDeep < ::HTTParty::ResponseError; end
 
+# source://httparty//lib/httparty/request/multipart_boundary.rb#6
 class HTTParty::Request
   # @return [Request] a new instance of Request
   #
@@ -1467,6 +1508,7 @@ class HTTParty::Request
   end
 end
 
+# source://httparty//lib/httparty/request/body.rb#7
 class HTTParty::Request::Body
   # @return [Body] a new instance of Body
   #
@@ -1533,6 +1575,7 @@ HTTParty::Request::Body::NEWLINE = T.let(T.unsafe(nil), String)
 # source://httparty//lib/httparty/request.rb#36
 HTTParty::Request::JSON_API_QUERY_STRING_NORMALIZER = T.let(T.unsafe(nil), Proc)
 
+# source://httparty//lib/httparty/request/multipart_boundary.rb#7
 class HTTParty::Request::MultipartBoundary
   class << self
     # source://httparty//lib/httparty/request/multipart_boundary.rb#8
@@ -1549,6 +1592,7 @@ HTTParty::Request::SupportedHTTPMethods = T.let(T.unsafe(nil), Array)
 # source://httparty//lib/httparty/request.rb#22
 HTTParty::Request::SupportedURISchemes = T.let(T.unsafe(nil), Array)
 
+# source://httparty//lib/httparty/response.rb#4
 class HTTParty::Response
   # @return [Response] a new instance of Response
   #
@@ -1853,6 +1897,7 @@ end
 # source://httparty//lib/httparty/response.rb#58
 HTTParty::Response::CODES_TO_OBJ = T.let(T.unsafe(nil), Hash)
 
+# source://httparty//lib/httparty/response/headers.rb#7
 class HTTParty::Response::Headers < ::SimpleDelegator
   include ::Net::HTTPHeader
 
@@ -1868,6 +1913,8 @@ end
 # response object accessible via the {#response} method.
 #
 # @abstract Exceptions which inherit from ResponseError contain the Net::HTTP
+#
+# source://httparty//lib/httparty/exceptions.rb#18
 class HTTParty::ResponseError < ::HTTParty::Error
   # Instantiate an instance of ResponseError with a Net::HTTPResponse object
   #
@@ -1887,6 +1934,8 @@ class HTTParty::ResponseError < ::HTTParty::Error
 end
 
 # Allow access to http_response and code by delegation on fragment
+#
+# source://httparty//lib/httparty/response_fragment.rb#7
 class HTTParty::ResponseFragment < ::SimpleDelegator
   # @return [ResponseFragment] a new instance of ResponseFragment
   #
@@ -1907,6 +1956,7 @@ class HTTParty::ResponseFragment < ::SimpleDelegator
   def http_response; end
 end
 
+# source://httparty//lib/httparty/text_encoder.rb#4
 class HTTParty::TextEncoder
   # @return [TextEncoder] a new instance of TextEncoder
   #
@@ -1952,11 +2002,16 @@ class HTTParty::TextEncoder
 end
 
 # Exception raised when you attempt to set a non-existent format
+#
+# source://httparty//lib/httparty/exceptions.rb#8
 class HTTParty::UnsupportedFormat < ::HTTParty::Error; end
 
 # Exception raised when using a URI scheme other than HTTP or HTTPS
+#
+# source://httparty//lib/httparty/exceptions.rb#11
 class HTTParty::UnsupportedURIScheme < ::HTTParty::Error; end
 
+# source://httparty//lib/httparty/utils.rb#4
 module HTTParty::Utils
   class << self
     # source://httparty//lib/httparty/utils.rb#5
@@ -1967,11 +2022,13 @@ end
 # source://httparty//lib/httparty/version.rb#4
 HTTParty::VERSION = T.let(T.unsafe(nil), String)
 
+# source://httparty//lib/httparty/net_digest_auth.rb#7
 module Net::HTTPHeader
   # source://httparty//lib/httparty/net_digest_auth.rb#8
   def digest_auth(username, password, response); end
 end
 
+# source://httparty//lib/httparty/net_digest_auth.rb#26
 class Net::HTTPHeader::DigestAuthenticator
   # @return [DigestAuthenticator] a new instance of DigestAuthenticator
   #

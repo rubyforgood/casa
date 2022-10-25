@@ -138,6 +138,8 @@
 # thread is done making requests.  If you don't call shutdown, that's OK.
 # Ruby will automatically garbage collect and shutdown your HTTP connections
 # when the thread terminates.
+#
+# source://net-http-persistent//lib/net/http/persistent.rb#149
 class Net::HTTP::Persistent
   # Creates a new Net::HTTP::Persistent.
   #
@@ -702,6 +704,8 @@ end
 
 # A Net::HTTP connection wrapper that holds extra information for managing the
 # connection's lifetime.
+#
+# source://net-http-persistent//lib/net/http/persistent/connection.rb#5
 class Net::HTTP::Persistent::Connection
   # @return [Connection] a new instance of Connection
   #
@@ -771,6 +775,8 @@ Net::HTTP::Persistent::EPOCH = T.let(T.unsafe(nil), Time)
 # Error class for errors raised by Net::HTTP::Persistent.  Various
 # SystemCallErrors are re-raised with a human-readable message under this
 # class.
+#
+# source://net-http-persistent//lib/net/http/persistent.rb#182
 class Net::HTTP::Persistent::Error < ::StandardError; end
 
 # Is OpenSSL available?  This test works with autoload
@@ -778,6 +784,7 @@ class Net::HTTP::Persistent::Error < ::StandardError; end
 # source://net-http-persistent//lib/net/http/persistent.rb#159
 Net::HTTP::Persistent::HAVE_OPENSSL = T.let(T.unsafe(nil), String)
 
+# source://net-http-persistent//lib/net/http/persistent/pool.rb#1
 class Net::HTTP::Persistent::Pool < ::ConnectionPool
   # @return [Pool] a new instance of Pool
   #
@@ -802,6 +809,7 @@ class Net::HTTP::Persistent::Pool < ::ConnectionPool
   def shutdown; end
 end
 
+# source://net-http-persistent//lib/net/http/persistent/timed_stack_multi.rb#1
 class Net::HTTP::Persistent::TimedStackMulti < ::ConnectionPool::TimedStack
   # @return [TimedStackMulti] a new instance of TimedStackMulti
   #

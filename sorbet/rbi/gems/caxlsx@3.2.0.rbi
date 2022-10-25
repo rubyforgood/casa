@@ -10,6 +10,8 @@
 # ECMA specification. Check out the README for some examples of how easy it is.
 # Best of all, you can validate your xlsx file before serialization so you know
 # for sure that anything generated is going to load on your client's machine.
+#
+# source://caxlsx//lib/axlsx/version.rb#1
 module Axlsx
   class << self
     # If value is boolean return 1 or 0
@@ -407,6 +409,8 @@ Axlsx::APP_R = T.let(T.unsafe(nil), String)
 Axlsx::APP_XSD = T.let(T.unsafe(nil), String)
 
 # This class extracts the common parts from Default and Override
+#
+# source://caxlsx//lib/axlsx/content_type/abstract_content_type.rb#4
 class Axlsx::AbstractContentType
   include ::Axlsx::OptionsParser
 
@@ -460,6 +464,8 @@ end
 # string_attr_access :foo
 #
 # To generate a new, validating set of accessors for foo.
+#
+# source://caxlsx//lib/axlsx/util/accessors.rb#10
 module Axlsx::Accessors
   mixes_in_class_methods ::Axlsx::Accessors::ClassMethods
 
@@ -472,6 +478,8 @@ module Axlsx::Accessors
 end
 
 # Defines the class level xxx_attr_accessor methods
+#
+# source://caxlsx//lib/axlsx/util/accessors.rb#16
 module Axlsx::Accessors::ClassMethods
   # Creates on or more boolean validated attr_accessors
   # names of the attributes you will add to your class.
@@ -530,6 +538,8 @@ Axlsx::Accessors::ClassMethods::SETTER = T.let(T.unsafe(nil), String)
 #   HLinks (VectorVariant),
 #   DigSig (DigSigBlob)
 # @see shared-documentPropertiesExtended.xsd
+#
+# source://caxlsx//lib/axlsx/doc_props/app.rb#12
 class Axlsx::App
   include ::Axlsx::OptionsParser
 
@@ -1034,6 +1044,8 @@ end
 # @see Chart#add_series
 # @see Series
 # @see Package#serialize
+#
+# source://caxlsx//lib/axlsx/drawing/area_chart.rb#22
 class Axlsx::AreaChart < ::Axlsx::Chart
   # Creates a new line chart object
   #
@@ -1117,6 +1129,8 @@ end
 # @note The recommended way to manage series is to use Chart#add_series
 # @see Worksheet#add_chart
 # @see Chart#add_series
+#
+# source://caxlsx//lib/axlsx/drawing/area_series.rb#7
 class Axlsx::AreaSeries < ::Axlsx::Series
   # Creates a new series
   #
@@ -1214,6 +1228,8 @@ class Axlsx::AreaSeries < ::Axlsx::Series
 end
 
 # This class represents an auto filter range in a worksheet
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/auto_filter/auto_filter.rb#8
 class Axlsx::AutoFilter
   # creates a new Autofilter object
   #
@@ -1289,6 +1305,8 @@ end
 # An axis data source that can contain referenced or literal strings or numbers
 #
 # @note only string data types are supported - mainly because we have not implemented a chart type that requires a numerical axis value
+#
+# source://caxlsx//lib/axlsx/drawing/ax_data_source.rb#5
 class Axlsx::AxDataSource < ::Axlsx::NumDataSource
   # creates a new NumDataSource object
   #
@@ -1312,6 +1330,8 @@ end
 
 # The Axes class creates and manages axis information and
 # serialization for charts.
+#
+# source://caxlsx//lib/axlsx/drawing/axes.rb#5
 class Axlsx::Axes
   # should be an axis name like :val_axis and its value should be the
   # class of the axis type to construct. The :cat_axis, if there is one,
@@ -1361,6 +1381,8 @@ class Axlsx::Axes
 end
 
 # the access class defines common properties and values for a chart axis.
+#
+# source://caxlsx//lib/axlsx/drawing/axis.rb#5
 class Axlsx::Axis
   include ::Axlsx::OptionsParser
 
@@ -1588,6 +1610,8 @@ end
 # @see Chart#add_series
 # @see Package#serialize
 # @see README for an example
+#
+# source://caxlsx//lib/axlsx/drawing/bar_3D_chart.rb#9
 class Axlsx::Bar3DChart < ::Axlsx::Chart
   # Creates a new bar chart object
   #
@@ -1768,6 +1792,8 @@ end
 # @see Chart#add_series
 # @see Package#serialize
 # @see README for an example
+#
+# source://caxlsx//lib/axlsx/drawing/bar_chart.rb#9
 class Axlsx::BarChart < ::Axlsx::Chart
   # Creates a new bar chart object
   #
@@ -1925,6 +1951,8 @@ end
 # @note The recommended way to manage series is to use Chart#add_series
 # @see Worksheet#add_chart
 # @see Chart#add_series
+#
+# source://caxlsx//lib/axlsx/drawing/bar_series.rb#7
 class Axlsx::BarSeries < ::Axlsx::Series
   # Creates a new series
   #
@@ -2010,6 +2038,8 @@ class Axlsx::BarSeries < ::Axlsx::Series
 end
 
 # This class details a border used in Office Open XML spreadsheet styles.
+#
+# source://caxlsx//lib/axlsx/stylesheet/border.rb#4
 class Axlsx::Border
   include ::Axlsx::SerializedAttributes
   include ::Axlsx::OptionsParser
@@ -2102,6 +2132,8 @@ end
 Axlsx::Border::EDGES = T.let(T.unsafe(nil), Array)
 
 # A border part.
+#
+# source://caxlsx//lib/axlsx/stylesheet/border_pr.rb#4
 class Axlsx::BorderPr
   include ::Axlsx::OptionsParser
 
@@ -2184,6 +2216,8 @@ end
 # The Break class stores the details for row and column page breaks.
 #
 # @see RowBreaks, ColBreaks
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/break.rb#5
 class Axlsx::Break
   include ::Axlsx::OptionsParser
   include ::Axlsx::Accessors
@@ -2248,6 +2282,8 @@ end
 # @see Worksheet#add_chart
 # @see Chart#add_series
 # @see README for an example
+#
+# source://caxlsx//lib/axlsx/drawing/bubble_chart.rb#8
 class Axlsx::BubbleChart < ::Axlsx::Chart
   # Creates a new bubble chart
   #
@@ -2307,6 +2343,8 @@ end
 # @see Worksheet#add_chart
 # @see Chart#add_series
 # @see examples/example.rb
+#
+# source://caxlsx//lib/axlsx/drawing/bubble_series.rb#9
 class Axlsx::BubbleSeries < ::Axlsx::Series
   # Creates a new BubbleSeries
   #
@@ -2454,6 +2492,8 @@ Axlsx::CORE_R = T.let(T.unsafe(nil), String)
 Axlsx::CORE_XSD = T.let(T.unsafe(nil), String)
 
 # A CatAxis object defines a chart category axis
+#
+# source://caxlsx//lib/axlsx/drawing/cat_axis.rb#4
 class Axlsx::CatAxis < ::Axlsx::Axis
   # Creates a new CatAxis object
   #
@@ -2600,6 +2640,8 @@ Axlsx::CatAxis::LBL_OFFSET_REGEX = T.let(T.unsafe(nil), Regexp)
 #
 # @note The recommended way to generate cells is via Worksheet#add_row
 # @see Worksheet#add_row
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/cell.rb#9
 class Axlsx::Cell
   include ::Axlsx::OptionsParser
 
@@ -3102,6 +3144,8 @@ Axlsx::Cell::INLINE_STYLES = T.let(T.unsafe(nil), Array)
 #
 # @note Using Styles#add_style is the recommended way to manage cell alignment.
 # @see Styles#add_style
+#
+# source://caxlsx//lib/axlsx/stylesheet/cell_alignment.rb#8
 class Axlsx::CellAlignment
   include ::Axlsx::SerializedAttributes
   include ::Axlsx::OptionsParser
@@ -3338,6 +3382,8 @@ end
 #
 # @note Using Styles#add_style is the recommended way to manage cell protection.
 # @see Styles#add_style
+#
+# source://caxlsx//lib/axlsx/stylesheet/cell_protection.rb#6
 class Axlsx::CellProtection
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -3387,6 +3433,8 @@ class Axlsx::CellProtection
 end
 
 # The Cell Serializer class contains the logic for serializing cells based on their type.
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/cell_serializer.rb#4
 class Axlsx::CellSerializer
   class << self
     # Serializes cells that are type array formula
@@ -3529,6 +3577,8 @@ end
 #
 # @note Using Styles#add_style is the recommended way to manage cell styling.
 # @see Styles#add_style
+#
+# source://caxlsx//lib/axlsx/stylesheet/cell_style.rb#6
 class Axlsx::CellStyle
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -3637,6 +3687,8 @@ end
 # @note The recommended way to manage these rules is via Worksheet#add_conditional_formatting
 # @see Worksheet#add_conditional_formatting
 # @see ConditionalFormattingRule#initialize
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/cfvo.rb#9
 class Axlsx::Cfvo
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -3704,6 +3756,8 @@ end
 
 # A collection of Cfvo objects that initializes with the required
 # first two items
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/cfvos.rb#5
 class Axlsx::Cfvos < ::Axlsx::SimpleTypedList
   # @return [Cfvos] a new instance of Cfvos
   #
@@ -3723,6 +3777,8 @@ end
 #
 # @note Worksheet#add_chart is the recommended way to create charts for your worksheets.
 # @see README for examples
+#
+# source://caxlsx//lib/axlsx/drawing/chart.rb#7
 class Axlsx::Chart
   include ::Axlsx::OptionsParser
 
@@ -4000,6 +4056,8 @@ class Axlsx::Chart
 end
 
 # The Col class defines column attributes for columns in sheets.
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/col.rb#5
 class Axlsx::Col
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -4181,6 +4239,8 @@ Axlsx::Col::MAX_WIDTH = T.let(T.unsafe(nil), Integer)
 # A collection of Brake objects.
 # Please do not use this class directly. Instead use
 # Worksheet#add_break
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/col_breaks.rb#6
 class Axlsx::ColBreaks < ::Axlsx::SimpleTypedList
   # Instantiates a new list restricted to Break types
   #
@@ -4211,6 +4271,8 @@ class Axlsx::ColBreaks < ::Axlsx::SimpleTypedList
 end
 
 # The color class represents a color used for borders, fills an fonts
+#
+# source://caxlsx//lib/axlsx/stylesheet/color.rb#4
 class Axlsx::Color
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -4288,6 +4350,8 @@ end
 # @note The recommended way to manage these rules is via Worksheet#add_conditional_formatting
 # @see Worksheet#add_conditional_formatting
 # @see ConditionalFormattingRule#initialize
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/color_scale.rb#8
 class Axlsx::ColorScale
   # creates a new ColorScale object.
   #
@@ -4387,6 +4451,8 @@ end
 
 # The cols class manages the col object used to manage column widths.
 # This is where the magic happens with autowidth
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/cols.rb#5
 class Axlsx::Cols < ::Axlsx::SimpleTypedList
   # @raise [ArgumentError]
   # @return [Cols] a new instance of Cols
@@ -4404,6 +4470,8 @@ class Axlsx::Cols < ::Axlsx::SimpleTypedList
 end
 
 # A comment is the text data for a comment
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/comment.rb#4
 class Axlsx::Comment
   include ::Axlsx::OptionsParser
   include ::Axlsx::Accessors
@@ -4497,6 +4565,8 @@ class Axlsx::Comment
 end
 
 # Comments is a collection of Comment objects for a worksheet
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/comments.rb#5
 class Axlsx::Comments < ::Axlsx::SimpleTypedList
   # Creates a new Comments object
   #
@@ -4576,6 +4646,8 @@ end
 # @note The recommended way to manage conditional formatting is via Worksheet#add_conditional_formatting
 # @see Worksheet#add_conditional_formatting
 # @see ConditionalFormattingRule
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/conditional_formatting.rb#7
 class Axlsx::ConditionalFormatting
   include ::Axlsx::OptionsParser
 
@@ -4661,6 +4733,8 @@ end
 # @note The recommended way to manage these rules is via Worksheet#add_conditional_formatting
 # @see Worksheet#add_conditional_formatting
 # @see ConditionalFormattingRule#initialize
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/conditional_formatting_rule.rb#9
 class Axlsx::ConditionalFormattingRule
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -4946,6 +5020,8 @@ class Axlsx::ConditionalFormattingRule
 end
 
 # A simple, self serializing class for storing conditional formattings
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/conditional_formattings.rb#4
 class Axlsx::ConditionalFormattings < ::Axlsx::SimpleTypedList
   # creates a new Tables object
   #
@@ -4969,6 +5045,8 @@ class Axlsx::ConditionalFormattings < ::Axlsx::SimpleTypedList
 end
 
 # ContentTypes used in the package. This is automatically managed by the package package.
+#
+# source://caxlsx//lib/axlsx/content_type/content_type.rb#8
 class Axlsx::ContentType < ::Axlsx::SimpleTypedList
   # @return [ContentType] a new instance of ContentType
   #
@@ -4988,6 +5066,8 @@ end
 #
 # @note Packages manage their own core object.
 # @see Package#core
+#
+# source://caxlsx//lib/axlsx/doc_props/core.rb#7
 class Axlsx::Core
   # Creates a new Core object.
   #
@@ -5061,6 +5141,8 @@ Axlsx::DIGITAL_SIGNATURE_XML_CT = T.let(T.unsafe(nil), String)
 # basics.
 # The DLbls class manages serialization of data labels
 # showLeaderLines and leaderLines are not currently implemented
+#
+# source://caxlsx//lib/axlsx/drawing/d_lbls.rb#7
 class Axlsx::DLbls
   include ::Axlsx::Accessors
   include ::Axlsx::OptionsParser
@@ -5189,6 +5271,8 @@ Axlsx::DRAWING_XSD = T.let(T.unsafe(nil), String)
 # @note The recommended way to manage these rules is via Worksheet#add_conditional_formatting
 # @see Worksheet#add_conditional_formatting
 # @see ConditionalFormattingRule#initialize
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/data_bar.rb#8
 class Axlsx::DataBar
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -5343,6 +5427,8 @@ end
 Axlsx::DataBar::CHILD_ELEMENTS = T.let(T.unsafe(nil), Array)
 
 # Validate that the class of the value provided is either an instance or the class of the allowed types and that any specified additional validation returns true.
+#
+# source://caxlsx//lib/axlsx/util/validators.rb#46
 class Axlsx::DataTypeValidator
   class << self
     # Perform validation
@@ -5363,6 +5449,8 @@ end
 #
 # @note The recommended way to manage data validations is via Worksheet#add_data_validation
 # @see Worksheet#add_data_validation
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/data_validation.rb#7
 class Axlsx::DataValidation
   include ::Axlsx::OptionsParser
 
@@ -5651,6 +5739,8 @@ end
 Axlsx::DataValidation::CHILD_ELEMENTS = T.let(T.unsafe(nil), Array)
 
 # A simple, self serializing class for storing conditional formattings
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/data_validations.rb#4
 class Axlsx::DataValidations < ::Axlsx::SimpleTypedList
   # creates a new Tables object
   #
@@ -5674,6 +5764,8 @@ class Axlsx::DataValidations < ::Axlsx::SimpleTypedList
 end
 
 # The DateTimeConverter class converts both data and time types to their apprpriate excel serializations
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/date_time_converter.rb#6
 class Axlsx::DateTimeConverter
   class << self
     # The date_to_serial method converts Date objects to the equivelant excel serialized forms
@@ -5695,6 +5787,8 @@ class Axlsx::DateTimeConverter
 end
 
 # An default content part. These parts are automatically created by for you based on the content of your package.
+#
+# source://caxlsx//lib/axlsx/content_type/default.rb#5
 class Axlsx::Default < ::Axlsx::AbstractContentType
   # The extension of the content type.
   #
@@ -5754,6 +5848,8 @@ Axlsx::Default::NODE_NAME = T.let(T.unsafe(nil), String)
 #   The formula =SUM(Sales.xls!ProjectedSales) refers to the named range ProjectedSales in the workbook named Sales.
 # @example
 #   For clarification: LOG10 is always a cell reference, LOG10() is always formula, LOGO1000 can be a defined name that overrides a cell reference.
+#
+# source://caxlsx//lib/axlsx/workbook/defined_name.rb#51
 class Axlsx::DefinedName
   include ::Axlsx::SerializedAttributes
   include ::Axlsx::OptionsParser
@@ -5891,6 +5987,8 @@ class Axlsx::DefinedName
 end
 
 # a simple types list of DefinedName objects
+#
+# source://caxlsx//lib/axlsx/workbook/defined_names.rb#3
 class Axlsx::DefinedNames < ::Axlsx::SimpleTypedList
   # creates the DefinedNames object
   #
@@ -5911,6 +6009,8 @@ end
 # This class manages the dimensions for a worksheet.
 # While this node is optional in the specification some readers like
 # LibraOffice require this node to render the sheet
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/dimension.rb#6
 class Axlsx::Dimension
   # Creates a new dimension object
   # @param[Worksheet] worksheet - the worksheet this dimension applies
@@ -5989,6 +6089,8 @@ end
 # @see Worksheet#add_chart
 # @see Worksheet#add_image
 # @see Chart
+#
+# source://caxlsx//lib/axlsx/drawing/drawing.rb#60
 class Axlsx::Drawing
   # Creates a new Drawing object
   #
@@ -6099,6 +6201,8 @@ end
 # The Dxf class defines an incremental formatting record for use in Styles. The recommended way to manage styles for your workbook is with Styles#add_style
 #
 # @see Styles#add_style
+#
+# source://caxlsx//lib/axlsx/stylesheet/dxf.rb#5
 class Axlsx::Dxf
   include ::Axlsx::OptionsParser
 
@@ -6286,6 +6390,8 @@ Axlsx::ERR_TYPE = T.let(T.unsafe(nil), String)
 # @see Styles#add_style
 # @see PatternFill
 # @see GradientFill
+#
+# source://caxlsx//lib/axlsx/stylesheet/fill.rb#8
 class Axlsx::Fill
   # Creates a new Fill object
   #
@@ -6321,6 +6427,8 @@ end
 # range and specifies filter information that has been applied to this column.
 # If a column in the AutoFilter range has no criteria specified,
 # then there is no corresponding filterColumn collection expressed for that column.
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/auto_filter/filter_column.rb#6
 class Axlsx::FilterColumn
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -6416,6 +6524,8 @@ Axlsx::FilterColumn::FILTERS = T.let(T.unsafe(nil), Array)
 
 # When multiple values are chosen to filter by, or when a group of date values are chosen to filter by,
 # this object groups those criteria together.
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/auto_filter/filters.rb#5
 class Axlsx::Filters
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -6522,6 +6632,8 @@ Axlsx::Filters::CALENDAR_TYPES = T.let(T.unsafe(nil), Array)
 # type of the first date encountered in the filter range, so that all
 # subsequent dates, even when formatted or represented by other calendar
 # types, can be correctly compared for the purposes of filtering.
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/auto_filter/filters.rb#133
 class Axlsx::Filters::DateGroupItem
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -6655,6 +6767,8 @@ end
 Axlsx::Filters::DateGroupItem::DATE_TIME_GROUPING = T.let(T.unsafe(nil), Array)
 
 # This class expresses a filter criteria value.
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/auto_filter/filters.rb#106
 class Axlsx::Filters::Filter
   # Creates a new filter value object
   #
@@ -6688,6 +6802,8 @@ end
 #
 # @note The recommended way to manage fonts, and other styles is Styles#add_style
 # @see Styles#add_style
+#
+# source://caxlsx//lib/axlsx/stylesheet/font.rb#6
 class Axlsx::Font
   include ::Axlsx::OptionsParser
 
@@ -6921,6 +7037,8 @@ Axlsx::GIF_EX = T.let(T.unsafe(nil), String)
 # A GradientFill defines the color and positioning for gradiant cell fill.
 #
 # @see Open Office XML Part 1 §18.8.24
+#
+# source://caxlsx//lib/axlsx/stylesheet/gradient_fill.rb#5
 class Axlsx::GradientFill
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -7039,6 +7157,8 @@ end
 # The GradientStop object represents a color point in a gradient.
 #
 # @see Open Office XML Part 1 §18.8.24
+#
+# source://caxlsx//lib/axlsx/stylesheet/gradient_stop.rb#5
 class Axlsx::GradientStop
   # Creates a new GradientStop object
   #
@@ -7087,6 +7207,8 @@ end
 #
 # @note The recommended way to manage charts is Worksheet#add_chart
 # @see Worksheet#add_chart
+#
+# source://caxlsx//lib/axlsx/drawing/graphic_frame.rb#6
 class Axlsx::GraphicFrame
   # Creates a new GraphicFrame object
   #
@@ -7142,6 +7264,8 @@ Axlsx::HYPERLINK_R = T.let(T.unsafe(nil), String)
 #
 # @note The recommended way of managing header/footers is via Worksheet#header_footer
 # @see Worksheet#initialize
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/header_footer.rb#11
 class Axlsx::HeaderFooter
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -7233,6 +7357,8 @@ end
 #
 # @note using the hyperlink option when calling add_image on a drawing object is the recommended way to manage hyperlinks
 # @see {file:README} README
+#
+# source://caxlsx//lib/axlsx/drawing/hyperlink.rb#6
 class Axlsx::Hyperlink
   include ::Axlsx::SerializedAttributes
   include ::Axlsx::OptionsParser
@@ -7466,6 +7592,8 @@ Axlsx::ISO_8601_REGEX = T.let(T.unsafe(nil), Regexp)
 # @note The recommended way to manage these rules is via Worksheet#add_conditional_formatting
 # @see Worksheet#add_conditional_formatting
 # @see ConditionalFormattingRule#initialize
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/icon_set.rb#8
 class Axlsx::IconSet
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -7583,6 +7711,8 @@ Axlsx::JPEG_EX = T.let(T.unsafe(nil), String)
 # @see Chart#add_series
 # @see Series
 # @see Package#serialize
+#
+# source://caxlsx//lib/axlsx/drawing/line_3D_chart.rb#22
 class Axlsx::Line3DChart < ::Axlsx::LineChart
   # Creates a new line chart object
   #
@@ -7666,6 +7796,8 @@ Axlsx::Line3DChart::GAP_AMOUNT_PERCENT = T.let(T.unsafe(nil), Regexp)
 # @see Chart#add_series
 # @see Series
 # @see Package#serialize
+#
+# source://caxlsx//lib/axlsx/drawing/line_chart.rb#22
 class Axlsx::LineChart < ::Axlsx::Chart
   # Creates a new line chart object
   #
@@ -7749,6 +7881,8 @@ end
 # @note The recommended way to manage series is to use Chart#add_series
 # @see Worksheet#add_chart
 # @see Chart#add_series
+#
+# source://caxlsx//lib/axlsx/drawing/line_series.rb#7
 class Axlsx::LineSeries < ::Axlsx::Series
   # Creates a new series
   #
@@ -7852,6 +7986,8 @@ Axlsx::MAYBE_FLOAT_REGEX = T.let(T.unsafe(nil), Regexp)
 #
 # @note The recommended way to manage markers is Worksheet#add_chart Markers are created for a two cell anchor based on the :start and :end options.
 # @see Worksheet#add_chart
+#
+# source://caxlsx//lib/axlsx/drawing/marker.rb#6
 class Axlsx::Marker
   include ::Axlsx::OptionsParser
 
@@ -7944,6 +8080,8 @@ class Axlsx::Marker
 end
 
 # A simple list of merged cells
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/merged_cells.rb#4
 class Axlsx::MergedCells < ::Axlsx::SimpleTypedList
   # creates a new MergedCells object
   #
@@ -7973,6 +8111,8 @@ class Axlsx::MergedCells < ::Axlsx::SimpleTypedList
 end
 
 # This module defines some utils related with mime type detection
+#
+# source://caxlsx//lib/axlsx/util/mime_type_utils.rb#3
 module Axlsx::MimeTypeUtils
   class << self
     # Detect a file mime type
@@ -8006,6 +8146,8 @@ Axlsx::NUM_FMT_YYYYMMDD = T.let(T.unsafe(nil), Integer)
 Axlsx::NUM_FMT_YYYYMMDDHHMMSS = T.let(T.unsafe(nil), Integer)
 
 # This class specifies data for a particular data point. It is used for both numCache and numLit object
+#
+# source://caxlsx//lib/axlsx/drawing/num_data.rb#5
 class Axlsx::NumData
   include ::Axlsx::OptionsParser
 
@@ -8046,6 +8188,8 @@ class Axlsx::NumData
 end
 
 # A numeric data source for use by charts.
+#
+# source://caxlsx//lib/axlsx/drawing/num_data_source.rb#4
 class Axlsx::NumDataSource
   include ::Axlsx::OptionsParser
 
@@ -8097,6 +8241,8 @@ end
 # A NumFmt object defines an identifier and formatting code for data in cells.
 #
 # @note The recommended way to manage styles is Styles#add_style
+#
+# source://caxlsx//lib/axlsx/stylesheet/num_fmt.rb#5
 class Axlsx::NumFmt
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -8183,6 +8329,8 @@ class Axlsx::NumFmt
 end
 
 # This class specifies data for a particular data point.
+#
+# source://caxlsx//lib/axlsx/drawing/num_val.rb#5
 class Axlsx::NumVal < ::Axlsx::StrVal
   # creates a new NumVal object
   #
@@ -8218,6 +8366,8 @@ end
 # @note The recommended way to manage drawings, images and charts is Worksheet#add_chart or Worksheet#add_image.
 # @see Worksheet#add_chart
 # @see Worksheet#add_image
+#
+# source://caxlsx//lib/axlsx/drawing/one_cell_anchor.rb#7
 class Axlsx::OneCellAnchor
   include ::Axlsx::OptionsParser
 
@@ -8321,6 +8471,8 @@ end
 
 # This module defines a single method for parsing options in class
 # initializers.
+#
+# source://caxlsx//lib/axlsx/util/options_parser.rb#4
 module Axlsx::OptionsParser
   # Parses an options hash by calling any defined method by the same
   # name of the key postfixed with an '='
@@ -8333,6 +8485,8 @@ end
 
 # The OutlinePr class manages serialization of a worksheet's outlinePr element, which provides various
 # options to control outlining.
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/outline_pr.rb#5
 class Axlsx::OutlinePr
   include ::Axlsx::OptionsParser
   include ::Axlsx::Accessors
@@ -8376,6 +8530,8 @@ class Axlsx::OutlinePr
 end
 
 # An override content part. These parts are automatically created by for you based on the content of your package.
+#
+# source://caxlsx//lib/axlsx/content_type/override.rb#6
 class Axlsx::Override < ::Axlsx::AbstractContentType
   # The name and location of the part.
   #
@@ -8459,6 +8615,8 @@ Axlsx::PNG_EX = T.let(T.unsafe(nil), String)
 
 # Package is responsible for managing all the bits and peices that Open Office XML requires to make a valid
 # xlsx document including validation and serialization.
+#
+# source://caxlsx//lib/axlsx/package.rb#5
 class Axlsx::Package
   include ::Axlsx::OptionsParser
 
@@ -8683,6 +8841,8 @@ end
 # @note The recommended way to manage page margins is via Worksheet#page_margins
 # @see Worksheet#page_margins
 # @see Worksheet#initialize
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/page_margins.rb#11
 class Axlsx::PageMargins
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -8809,6 +8969,8 @@ Axlsx::PageMargins::DEFAULT_TOP_BOTTOM = T.let(T.unsafe(nil), Float)
 
 # Page setup properties of the worksheet
 # This class name is not a typo, its spec.
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/page_set_up_pr.rb#5
 class Axlsx::PageSetUpPr
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -8862,6 +9024,8 @@ end
 # @note The recommended way to manage print options is via Worksheet#page_setup
 # @see Worksheet#print_options
 # @see Worksheet#initialize
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/page_setup.rb#7
 class Axlsx::PageSetup
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -9124,6 +9288,8 @@ end
 #
 # @note The recommended way to manage the pane options is via SheetView#pane
 # @see SheetView#pane
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/pane.rb#6
 class Axlsx::Pane
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -9271,6 +9437,8 @@ end
 #
 # @note The recommended way to manage styles is with Styles#add_style
 # @see Style#add_style
+#
+# source://caxlsx//lib/axlsx/stylesheet/pattern_fill.rb#6
 class Axlsx::PatternFill
   include ::Axlsx::OptionsParser
 
@@ -9354,6 +9522,8 @@ end
 # Worksheet#add_image is the recommended way to manage images in your sheets
 #
 # @see Worksheet#add_image
+#
+# source://caxlsx//lib/axlsx/drawing/pic.rb#6
 class Axlsx::Pic
   include ::Axlsx::OptionsParser
 
@@ -9558,6 +9728,8 @@ end
 Axlsx::Pic::ALLOWED_MIME_TYPES = T.let(T.unsafe(nil), Array)
 
 # The picture locking class defines the locking properties for pictures in your workbook.
+#
+# source://caxlsx//lib/axlsx/drawing/picture_locking.rb#4
 class Axlsx::PictureLocking
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -9657,6 +9829,8 @@ end
 # @see Worksheet#add_chart
 # @see Chart#add_series
 # @see README for an example
+#
+# source://caxlsx//lib/axlsx/drawing/pie_3D_chart.rb#9
 class Axlsx::Pie3DChart < ::Axlsx::Chart
   # Creates a new pie chart object
   #
@@ -9693,6 +9867,8 @@ end
 # @note The recommended way to manage series is to use Chart#add_series
 # @see Worksheet#add_chart
 # @see Chart#add_series
+#
+# source://caxlsx//lib/axlsx/drawing/pie_series.rb#8
 class Axlsx::PieSeries < ::Axlsx::Series
   # Creates a new series
   #
@@ -9768,6 +9944,8 @@ end
 #
 # @note Worksheet#add_pivot_table is the recommended way to create tables for your worksheets.
 # @see README for examples
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/pivot_table.rb#6
 class Axlsx::PivotTable
   include ::Axlsx::OptionsParser
 
@@ -10007,6 +10185,8 @@ end
 #
 # @note Worksheet#add_pivot_table is the recommended way to create tables for your worksheets.
 # @see README for examples
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/pivot_table_cache_definition.rb#6
 class Axlsx::PivotTableCacheDefinition
   include ::Axlsx::OptionsParser
 
@@ -10063,6 +10243,8 @@ class Axlsx::PivotTableCacheDefinition
 end
 
 # A simple, self serializing class for storing pivot tables
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/pivot_tables.rb#4
 class Axlsx::PivotTables < ::Axlsx::SimpleTypedList
   # creates a new Tables object
   #
@@ -10090,6 +10272,8 @@ end
 # @note The recommended way to manage print options is via Worksheet#print_options
 # @see Worksheet#print_options
 # @see Worksheet#initialize
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/print_options.rb#7
 class Axlsx::PrintOptions
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -10154,6 +10338,8 @@ end
 #
 # @note the recommended way to manage protected ranges with via Worksheet#protect_range
 # @see Worksheet#protect_range
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/protected_range.rb#5
 class Axlsx::ProtectedRange
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -10205,6 +10391,8 @@ end
 
 # A self serializing collection of ranges that should be protected in
 # the worksheet
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/protected_ranges.rb#5
 class Axlsx::ProtectedRanges < ::Axlsx::SimpleTypedList
   # @raise [ArgumentError]
   # @return [ProtectedRanges] a new instance of ProtectedRanges
@@ -10261,6 +10449,8 @@ Axlsx::RELS_XSD = T.let(T.unsafe(nil), String)
 # Validate that the value provided is between a specific range
 # Note that no data conversions will be done for you!
 # Comparisons will be made using < and > or <= and <= when the inclusive parameter is true
+#
+# source://caxlsx//lib/axlsx/util/validators.rb#20
 class Axlsx::RangeValidator
   class << self
     # @param name [String] The name of what is being validated
@@ -10276,6 +10466,8 @@ class Axlsx::RangeValidator
 end
 
 # Validates the value against the regular expression provided.
+#
+# source://caxlsx//lib/axlsx/util/validators.rb#36
 class Axlsx::RegexValidator
   class << self
     # @param name [String] The name of what is being validated. This is included in the output when the value is invalid
@@ -10291,6 +10483,8 @@ end
 # A relationship defines a reference between package parts.
 #
 # @note Packages automatically manage relationships.
+#
+# source://caxlsx//lib/axlsx/rels/relationship.rb#5
 class Axlsx::Relationship
   # Initializes a new relationship.
   #
@@ -10435,6 +10629,8 @@ end
 # Relationships are a collection of Relations that define how package parts are related.
 #
 # @note The package automatically manages releationships.
+#
+# source://caxlsx//lib/axlsx/rels/relationships.rb#7
 class Axlsx::Relationships < ::Axlsx::SimpleTypedList
   # Creates a new Relationships collection based on SimpleTypedList
   #
@@ -10461,6 +10657,8 @@ class Axlsx::Relationships < ::Axlsx::SimpleTypedList
 end
 
 # Validate a value against a specific list of allowed values.
+#
+# source://caxlsx//lib/axlsx/util/validators.rb#4
 class Axlsx::RestrictionValidator
   class << self
     # Perform validation
@@ -10477,6 +10675,8 @@ class Axlsx::RestrictionValidator
 end
 
 # A simple, self serializing class for storing TextRuns
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/rich_text.rb#4
 class Axlsx::RichText < ::Axlsx::SimpleTypedList
   # creates a new RichText collection
   #
@@ -10532,6 +10732,8 @@ class Axlsx::RichText < ::Axlsx::SimpleTypedList
 end
 
 # The RichTextRun class creates and self serializing text run.
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/rich_text_run.rb#4
 class Axlsx::RichTextRun
   include ::Axlsx::OptionsParser
 
@@ -10829,6 +11031,8 @@ Axlsx::RichTextRun::INLINE_STYLES = T.let(T.unsafe(nil), Array)
 #
 # @note The recommended way to manage rows and cells is to use Worksheet#add_row
 # @see Worksheet#add_row
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/row.rb#6
 class Axlsx::Row < ::Axlsx::SimpleTypedList
   include ::Axlsx::SerializedAttributes
   include ::Axlsx::Accessors
@@ -11004,6 +11208,8 @@ class Axlsx::Row < ::Axlsx::SimpleTypedList
 end
 
 # A collection of break objects that define row breaks (page breaks) for printing and preview
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/row_breaks.rb#5
 class Axlsx::RowBreaks < ::Axlsx::SimpleTypedList
   # @return [RowBreaks] a new instance of RowBreaks
   #
@@ -11085,6 +11291,8 @@ Axlsx::STYLE_DATE = T.let(T.unsafe(nil), Integer)
 Axlsx::STYLE_THIN_BORDER = T.let(T.unsafe(nil), Integer)
 
 # The Scaling class defines axis scaling
+#
+# source://caxlsx//lib/axlsx/drawing/scaling.rb#4
 class Axlsx::Scaling
   include ::Axlsx::OptionsParser
 
@@ -11164,6 +11372,8 @@ end
 # @see Worksheet#add_chart
 # @see Chart#add_series
 # @see README for an example
+#
+# source://caxlsx//lib/axlsx/drawing/scatter_chart.rb#8
 class Axlsx::ScatterChart < ::Axlsx::Chart
   # Creates a new scatter chart
   #
@@ -11247,6 +11457,8 @@ end
 # @see Worksheet#add_chart
 # @see Chart#add_series
 # @see examples/example.rb
+#
+# source://caxlsx//lib/axlsx/drawing/scatter_series.rb#9
 class Axlsx::ScatterSeries < ::Axlsx::Series
   # Creates a new ScatterSeries
   #
@@ -11341,6 +11553,8 @@ end
 #
 # @note The recommended way to manage the selection pane options is via SheetView#add_selection
 # @see SheetView#add_selection
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/selection.rb#7
 class Axlsx::Selection
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -11452,6 +11666,8 @@ class Axlsx::Selection
 end
 
 # A SerAxis object defines a series axis
+#
+# source://caxlsx//lib/axlsx/drawing/ser_axis.rb#4
 class Axlsx::SerAxis < ::Axlsx::Axis
   # Creates a new SerAxis object
   #
@@ -11522,6 +11738,8 @@ end
 
 # This module allows us to define a list of symbols defining which
 # attributes will be serialized for a class.
+#
+# source://caxlsx//lib/axlsx/util/serialized_attributes.rb#4
 module Axlsx::SerializedAttributes
   mixes_in_class_methods ::Axlsx::SerializedAttributes::ClassMethods
 
@@ -11571,6 +11789,8 @@ module Axlsx::SerializedAttributes
 end
 
 # class methods applied to all includers
+#
+# source://caxlsx//lib/axlsx/util/serialized_attributes.rb#12
 module Axlsx::SerializedAttributes::ClassMethods
   # This is the method to be used in inheriting classes to specify
   # which of the instance values are serializable
@@ -11599,6 +11819,8 @@ end
 # @note The recommended way to manage series is to use Chart#add_series
 # @see Worksheet#add_chart
 # @see Chart#add_series
+#
+# source://caxlsx//lib/axlsx/drawing/series.rb#7
 class Axlsx::Series
   include ::Axlsx::OptionsParser
 
@@ -11668,6 +11890,8 @@ class Axlsx::Series
 end
 
 # A series title is a Title with a slightly different serialization than chart titles.
+#
+# source://caxlsx//lib/axlsx/drawing/series_title.rb#4
 class Axlsx::SeriesTitle < ::Axlsx::Title
   # Serializes the object
   #
@@ -11686,6 +11910,8 @@ end
 # it is recomended that you use the default inline string method of serialization.
 #
 # @note Serialization performance is affected by using this serialization method so if you do not need interoperability
+#
+# source://caxlsx//lib/axlsx/workbook/shared_strings_table.rb#11
 class Axlsx::SharedStringsTable
   # Creates a new Shared Strings Table agains an array of cells
   #
@@ -11749,6 +11975,8 @@ end
 
 # the SheetCalcPr object for the worksheet
 # This object contains calculation properties for the worksheet.
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/sheet_calc_pr.rb#5
 class Axlsx::SheetCalcPr
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -11783,6 +12011,8 @@ class Axlsx::SheetCalcPr
 end
 
 # This class manages the serialization of rows for worksheets
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/sheet_data.rb#4
 class Axlsx::SheetData
   # Creates a new SheetData object
   #
@@ -11819,6 +12049,8 @@ end
 #   <xsd:attribute name="outlineLevelRow" type="xsd:unsignedByte" use="optional" default="0"/>
 #   <xsd:attribute name="outlineLevelCol" type="xsd:unsignedByte" use="optional" default="0"/>
 # </xsd:complexType>
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/sheet_format_pr.rb#16
 class Axlsx::SheetFormatPr
   include ::Axlsx::SerializedAttributes
   include ::Axlsx::OptionsParser
@@ -11915,6 +12147,8 @@ class Axlsx::SheetFormatPr
 end
 
 # The SheetPr class manages serialization of a worksheet's sheetPr element.
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/sheet_pr.rb#4
 class Axlsx::SheetPr
   include ::Axlsx::OptionsParser
   include ::Axlsx::Accessors
@@ -12033,6 +12267,8 @@ class Axlsx::SheetPr
 end
 
 # The SheetProtection object manages worksheet protection options per sheet.
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/sheet_protection.rb#5
 class Axlsx::SheetProtection
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -12212,6 +12448,8 @@ end
 #
 # @note The recommended way to manage the sheet view is via Worksheet#sheet_view
 # @see Worksheet#sheet_view
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/sheet_view.rb#7
 class Axlsx::SheetView
   include ::Axlsx::OptionsParser
   include ::Axlsx::Accessors
@@ -12504,6 +12742,8 @@ Axlsx::SheetView::CHILD_ELEMENTS = T.let(T.unsafe(nil), Array)
 # A SimpleTypedList is a type restrictive collection that allows some of the methods from Array and supports basic xml serialization.
 #
 # @private
+#
+# source://caxlsx//lib/axlsx/util/simple_typed_list.rb#6
 class Axlsx::SimpleTypedList
   # Creats a new typed list
   #
@@ -12817,6 +13057,8 @@ Axlsx::SimpleTypedList::DESTRUCTIVE = T.let(T.unsafe(nil), Array)
 
 # This specifies the last string data used for a chart. (e.g. strLit and strCache)
 # This class is extended for NumData to include the formatCode attribute required for numLit and numCache
+#
+# source://caxlsx//lib/axlsx/drawing/str_data.rb#6
 class Axlsx::StrData
   include ::Axlsx::OptionsParser
 
@@ -12844,6 +13086,8 @@ class Axlsx::StrData
 end
 
 # This class specifies data for a particular data point.
+#
+# source://caxlsx//lib/axlsx/drawing/str_val.rb#5
 class Axlsx::StrVal
   include ::Axlsx::OptionsParser
 
@@ -12881,6 +13125,8 @@ end
 # @note The recommended way to manage styles is with add_style
 # @see Office Open XML Part 1 18.8.11 for gory details on how this stuff gets put together
 # @see Styles#add_style
+#
+# source://caxlsx//lib/axlsx/stylesheet/styles.rb#27
 class Axlsx::Styles
   # Creates a new Styles object and prepopulates it with the requires objects to generate a valid package style part.
   #
@@ -13222,6 +13468,8 @@ Axlsx::TABLE_R = T.let(T.unsafe(nil), String)
 #
 # @note Worksheet#add_table is the recommended way to create tables for your worksheets.
 # @see README for examples
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/table.rb#6
 class Axlsx::Table
   include ::Axlsx::OptionsParser
 
@@ -13315,6 +13563,8 @@ end
 # A single table style definition and is a collection for tableStyleElements
 #
 # @note Table are not supported in this version and only the defaults required for a valid workbook are created.
+#
+# source://caxlsx//lib/axlsx/stylesheet/table_style.rb#5
 class Axlsx::TableStyle < ::Axlsx::SimpleTypedList
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -13380,6 +13630,8 @@ end
 # an element of style that belongs to a table style.
 #
 # @note tables and table styles are not supported in this version. This class exists in preparation for that support.
+#
+# source://caxlsx//lib/axlsx/stylesheet/table_style_element.rb#5
 class Axlsx::TableStyleElement
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -13471,6 +13723,8 @@ end
 
 # The table style info class manages style attributes for defined tables in
 # a worksheet
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/table_style_info.rb#5
 class Axlsx::TableStyleInfo
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -13544,6 +13798,8 @@ end
 # TableStyles represents a collection of style definitions for table styles and pivot table styles.
 #
 # @note Support for custom table styles does not exist in this version. Many of the classes required are defined in preparation for future release. Please do not attempt to add custom table styles.
+#
+# source://caxlsx//lib/axlsx/stylesheet/table_styles.rb#5
 class Axlsx::TableStyles < ::Axlsx::SimpleTypedList
   include ::Axlsx::SerializedAttributes
   extend ::Axlsx::SerializedAttributes::ClassMethods
@@ -13592,6 +13848,8 @@ class Axlsx::TableStyles < ::Axlsx::SimpleTypedList
 end
 
 # A simple, self serializing class for storing tables
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/tables.rb#4
 class Axlsx::Tables < ::Axlsx::SimpleTypedList
   # creates a new Tables object
   #
@@ -13623,6 +13881,8 @@ class Axlsx::Tables < ::Axlsx::SimpleTypedList
 end
 
 # A Title stores information about the title of a chart
+#
+# source://caxlsx//lib/axlsx/drawing/title.rb#4
 class Axlsx::Title
   # Creates a new Title object
   #
@@ -13681,6 +13941,8 @@ end
 #
 # @note The recommended way to manage drawings and charts is Worksheet#add_chart. Anchors are specified by the :start_at and :end_at options to that method.
 # @see Worksheet#add_chart
+#
+# source://caxlsx//lib/axlsx/drawing/two_cell_anchor.rb#6
 class Axlsx::TwoCellAnchor
   include ::Axlsx::OptionsParser
 
@@ -13796,6 +14058,8 @@ Axlsx::VML_DRAWING_PN = T.let(T.unsafe(nil), String)
 Axlsx::VML_DRAWING_R = T.let(T.unsafe(nil), String)
 
 # the ValAxis class defines a chart value axis.
+#
+# source://caxlsx//lib/axlsx/drawing/val_axis.rb#4
 class Axlsx::ValAxis < ::Axlsx::Axis
   # Creates a new ValAxis object
   #
@@ -13842,6 +14106,8 @@ class Axlsx::ValAxis < ::Axlsx::Axis
 end
 
 # 3D attributes for a chart.
+#
+# source://caxlsx//lib/axlsx/drawing/view_3D.rb#4
 class Axlsx::View3D
   include ::Axlsx::OptionsParser
 
@@ -14026,6 +14292,8 @@ Axlsx::View3D::DEPTH_PERCENT_REGEX = T.let(T.unsafe(nil), Regexp)
 Axlsx::View3D::H_PERCENT_REGEX = T.let(T.unsafe(nil), Regexp)
 
 # a vml drawing used for comments in excel.
+#
+# source://caxlsx//lib/axlsx/drawing/vml_drawing.rb#4
 class Axlsx::VmlDrawing
   # creates a new Vml Drawing object.
   #
@@ -14053,6 +14321,8 @@ class Axlsx::VmlDrawing
 end
 
 # A VmlShape is used to position and render a comment.
+#
+# source://caxlsx//lib/axlsx/drawing/vml_shape.rb#4
 class Axlsx::VmlShape
   include ::Axlsx::OptionsParser
   include ::Axlsx::Accessors
@@ -14216,6 +14486,8 @@ Axlsx::WORKSHEET_RELS_PN = T.let(T.unsafe(nil), String)
 #   workbookPr*
 #
 #   *workbookPr is only supported to the extend of date1904
+#
+# source://caxlsx//lib/axlsx/workbook/workbook.rb#86
 class Axlsx::Workbook
   # Creates a new Workbook
   # The recomended way to work with workbooks is via Package#workbook
@@ -14527,6 +14799,8 @@ Axlsx::Workbook::FONT_SCALE_DIVISOR = T.let(T.unsafe(nil), Float)
 # Twip measurements are portable between different display resolutions.
 # The formula is (screen pixels) * (20 * 72) / (logical device dpi),
 # where the logical device dpi can be different for x and y coordinates.
+#
+# source://caxlsx//lib/axlsx/workbook/workbook_view.rb#28
 class Axlsx::WorkbookView
   include ::Axlsx::SerializedAttributes
   include ::Axlsx::OptionsParser
@@ -14648,6 +14922,8 @@ class Axlsx::WorkbookView
 end
 
 # a simple types list of BookView objects
+#
+# source://caxlsx//lib/axlsx/workbook/workbook_views.rb#3
 class Axlsx::WorkbookViews < ::Axlsx::SimpleTypedList
   # creates the book views object
   #
@@ -14666,6 +14942,8 @@ class Axlsx::WorkbookViews < ::Axlsx::SimpleTypedList
 end
 
 # The Worksheet class represents a worksheet in the workbook.
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/worksheet.rb#5
 class Axlsx::Worksheet
   include ::Axlsx::OptionsParser
   include ::Axlsx::SerializedAttributes
@@ -15421,6 +15699,8 @@ end
 
 # A wraper class for comments that defines its on worksheet
 # serailization
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/worksheet_comments.rb#5
 class Axlsx::WorksheetComments
   # Creates a new WorksheetComments object
   # param [Worksheet] worksheet The worksheet comments in thes object belong to
@@ -15486,6 +15766,8 @@ end
 # worksheet. Drawing objects have their own serialization that exports
 # a drawing document. This is only for the single node in the
 # worksheet
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/worksheet_drawing.rb#7
 class Axlsx::WorksheetDrawing
   # Creates a new WorksheetDrawing
   #
@@ -15546,6 +15828,8 @@ class Axlsx::WorksheetDrawing
 end
 
 # A worksheet hyperlink object. Note that this is not the same as a drawing hyperlink object.
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/worksheet_hyperlink.rb#4
 class Axlsx::WorksheetHyperlink
   include ::Axlsx::OptionsParser
   include ::Axlsx::Accessors
@@ -15640,6 +15924,8 @@ class Axlsx::WorksheetHyperlink
 end
 
 # A collection of hyperlink objects for a worksheet
+#
+# source://caxlsx//lib/axlsx/workbook/worksheet/worksheet_hyperlinks.rb#4
 class Axlsx::WorksheetHyperlinks < ::Axlsx::SimpleTypedList
   # Creates a new Hyperlinks collection
   #
@@ -15715,6 +16001,8 @@ Axlsx::XML_NS_XDR = T.let(T.unsafe(nil), String)
 # The Xf class defines a formatting record for use in Styles. The recommended way to manage styles for your workbook is with Styles#add_style
 #
 # @see Styles#add_style
+#
+# source://caxlsx//lib/axlsx/stylesheet/xf.rb#5
 class Axlsx::Xf
   include ::Axlsx::SerializedAttributes
   include ::Axlsx::OptionsParser
@@ -15942,6 +16230,8 @@ end
 # identical to `Zip::OutputStream`, they are only sufficiently close so that
 # `ZipCommand` and `Zip::OutputStream` can be interchangeably used within
 # `caxlsx`.
+#
+# source://caxlsx//lib/axlsx/util/zip_command.rb#15
 class Axlsx::ZipCommand
   # @return [ZipCommand] a new instance of ZipCommand
   #
@@ -15980,4 +16270,6 @@ class Axlsx::ZipCommand
 end
 
 # Raised when the zip command exits with a non-zero status.
+#
+# source://caxlsx//lib/axlsx/util/zip_command.rb#17
 class Axlsx::ZipCommand::ZipError < ::StandardError; end

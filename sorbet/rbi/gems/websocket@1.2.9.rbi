@@ -10,6 +10,8 @@
 #
 # @author Bernard "Imanel" Potocki
 # @see http://github.com/imanel/websocket-ruby main repository
+#
+# source://websocket//lib/websocket.rb#8
 module WebSocket
   class << self
     # Limit of frame size payload in bytes
@@ -40,111 +42,136 @@ end
 # source://websocket//lib/websocket.rb#10
 WebSocket::DEFAULT_VERSION = T.let(T.unsafe(nil), Integer)
 
+# source://websocket//lib/websocket/error.rb#4
 class WebSocket::Error < ::RuntimeError; end
+
+# source://websocket//lib/websocket/error.rb#5
 class WebSocket::Error::Frame < ::WebSocket::Error; end
 
+# source://websocket//lib/websocket/error.rb#6
 class WebSocket::Error::Frame::ControlFramePayloadTooLong < ::WebSocket::Error::Frame
   # source://websocket//lib/websocket/error.rb#7
   def message; end
 end
 
+# source://websocket//lib/websocket/error.rb#12
 class WebSocket::Error::Frame::DataFrameInsteadContinuation < ::WebSocket::Error::Frame
   # source://websocket//lib/websocket/error.rb#13
   def message; end
 end
 
+# source://websocket//lib/websocket/error.rb#18
 class WebSocket::Error::Frame::FragmentedControlFrame < ::WebSocket::Error::Frame
   # source://websocket//lib/websocket/error.rb#19
   def message; end
 end
 
+# source://websocket//lib/websocket/error.rb#24
 class WebSocket::Error::Frame::Invalid < ::WebSocket::Error::Frame
   # source://websocket//lib/websocket/error.rb#25
   def message; end
 end
 
+# source://websocket//lib/websocket/error.rb#30
 class WebSocket::Error::Frame::InvalidPayloadEncoding < ::WebSocket::Error::Frame
   # source://websocket//lib/websocket/error.rb#31
   def message; end
 end
 
+# source://websocket//lib/websocket/error.rb#36
 class WebSocket::Error::Frame::MaskTooShort < ::WebSocket::Error::Frame
   # source://websocket//lib/websocket/error.rb#37
   def message; end
 end
 
+# source://websocket//lib/websocket/error.rb#42
 class WebSocket::Error::Frame::ReservedBitUsed < ::WebSocket::Error::Frame
   # source://websocket//lib/websocket/error.rb#43
   def message; end
 end
 
+# source://websocket//lib/websocket/error.rb#48
 class WebSocket::Error::Frame::TooLong < ::WebSocket::Error::Frame
   # source://websocket//lib/websocket/error.rb#49
   def message; end
 end
 
+# source://websocket//lib/websocket/error.rb#54
 class WebSocket::Error::Frame::UnexpectedContinuationFrame < ::WebSocket::Error::Frame
   # source://websocket//lib/websocket/error.rb#55
   def message; end
 end
 
+# source://websocket//lib/websocket/error.rb#72
 class WebSocket::Error::Frame::UnknownCloseCode < ::WebSocket::Error::Frame
   # source://websocket//lib/websocket/error.rb#73
   def message; end
 end
 
+# source://websocket//lib/websocket/error.rb#60
 class WebSocket::Error::Frame::UnknownFrameType < ::WebSocket::Error::Frame
   # source://websocket//lib/websocket/error.rb#61
   def message; end
 end
 
+# source://websocket//lib/websocket/error.rb#66
 class WebSocket::Error::Frame::UnknownOpcode < ::WebSocket::Error::Frame
   # source://websocket//lib/websocket/error.rb#67
   def message; end
 end
 
+# source://websocket//lib/websocket/error.rb#78
 class WebSocket::Error::Frame::UnknownVersion < ::WebSocket::Error::Frame
   # source://websocket//lib/websocket/error.rb#79
   def message; end
 end
 
+# source://websocket//lib/websocket/error.rb#85
 class WebSocket::Error::Handshake < ::WebSocket::Error; end
 
+# source://websocket//lib/websocket/error.rb#86
 class WebSocket::Error::Handshake::GetRequestRequired < ::WebSocket::Error::Handshake
   # source://websocket//lib/websocket/error.rb#87
   def message; end
 end
 
+# source://websocket//lib/websocket/error.rb#92
 class WebSocket::Error::Handshake::InvalidAuthentication < ::WebSocket::Error::Handshake
   # source://websocket//lib/websocket/error.rb#93
   def message; end
 end
 
+# source://websocket//lib/websocket/error.rb#98
 class WebSocket::Error::Handshake::InvalidHeader < ::WebSocket::Error::Handshake
   # source://websocket//lib/websocket/error.rb#99
   def message; end
 end
 
+# source://websocket//lib/websocket/error.rb#110
 class WebSocket::Error::Handshake::InvalidStatusCode < ::WebSocket::Error::Handshake
   # source://websocket//lib/websocket/error.rb#111
   def message; end
 end
 
+# source://websocket//lib/websocket/error.rb#116
 class WebSocket::Error::Handshake::NoHostProvided < ::WebSocket::Error::Handshake
   # source://websocket//lib/websocket/error.rb#117
   def message; end
 end
 
+# source://websocket//lib/websocket/error.rb#122
 class WebSocket::Error::Handshake::UnknownVersion < ::WebSocket::Error::Handshake
   # source://websocket//lib/websocket/error.rb#123
   def message; end
 end
 
+# source://websocket//lib/websocket/error.rb#104
 class WebSocket::Error::Handshake::UnsupportedProtocol < ::WebSocket::Error::Handshake
   # source://websocket//lib/websocket/error.rb#105
   def message; end
 end
 
+# source://websocket//lib/websocket/exception_handler.rb#4
 module WebSocket::ExceptionHandler
   mixes_in_class_methods ::WebSocket::ExceptionHandler::ClassMethods
 
@@ -168,6 +195,7 @@ module WebSocket::ExceptionHandler
   end
 end
 
+# source://websocket//lib/websocket/exception_handler.rb#11
 module WebSocket::ExceptionHandler::ClassMethods
   # Rescue from WebSocket::Error errors.
   #
@@ -179,9 +207,12 @@ module WebSocket::ExceptionHandler::ClassMethods
   def rescue_method(method_name, options = T.unsafe(nil)); end
 end
 
+# source://websocket//lib/websocket/frame.rb#4
 module WebSocket::Frame; end
 
 # @abstract Subclass and override to implement custom frames
+#
+# source://websocket//lib/websocket/frame/base.rb#6
 class WebSocket::Frame::Base
   include ::WebSocket::ExceptionHandler
   include ::WebSocket::NiceInspect
@@ -275,6 +306,7 @@ class WebSocket::Frame::Base
   def initialize_without_rescue(args = T.unsafe(nil)); end
 end
 
+# source://websocket//lib/websocket/frame/data.rb#5
 class WebSocket::Frame::Data < ::String
   # @return [Data] a new instance of Data
   #
@@ -312,8 +344,10 @@ class WebSocket::Frame::Data < ::String
   def unset_mask; end
 end
 
+# source://websocket//lib/websocket/frame/handler.rb#5
 module WebSocket::Frame::Handler; end
 
+# source://websocket//lib/websocket/frame/handler/base.rb#6
 class WebSocket::Frame::Handler::Base
   # @return [Base] a new instance of Base
   #
@@ -355,6 +389,7 @@ class WebSocket::Frame::Handler::Base
   def data_frame?(frame_type); end
 end
 
+# source://websocket//lib/websocket/frame/handler/handler03.rb#10
 class WebSocket::Frame::Handler::Handler03 < ::WebSocket::Frame::Handler::Base
   # @return [Handler03] a new instance of Handler03
   #
@@ -459,6 +494,7 @@ WebSocket::Frame::Handler::Handler03::FRAME_TYPES = T.let(T.unsafe(nil), Hash)
 # source://websocket//lib/websocket/frame/handler/handler03.rb#21
 WebSocket::Frame::Handler::Handler03::FRAME_TYPES_INVERSE = T.let(T.unsafe(nil), Hash)
 
+# source://websocket//lib/websocket/frame/handler/handler04.rb#7
 class WebSocket::Frame::Handler::Handler04 < ::WebSocket::Frame::Handler::Handler03
   private
 
@@ -469,6 +505,7 @@ class WebSocket::Frame::Handler::Handler04 < ::WebSocket::Frame::Handler::Handle
   def fin; end
 end
 
+# source://websocket//lib/websocket/frame/handler/handler05.rb#8
 class WebSocket::Frame::Handler::Handler05 < ::WebSocket::Frame::Handler::Handler04
   # Since handler 5 masking should be enabled by default
   #
@@ -478,6 +515,7 @@ class WebSocket::Frame::Handler::Handler05 < ::WebSocket::Frame::Handler::Handle
   def masking?; end
 end
 
+# source://websocket//lib/websocket/frame/handler/handler07.rb#8
 class WebSocket::Frame::Handler::Handler07 < ::WebSocket::Frame::Handler::Handler05
   # source://websocket//lib/websocket/frame/handler/handler07.rb#31
   def decode_frame; end
@@ -531,6 +569,7 @@ WebSocket::Frame::Handler::Handler07::FRAME_TYPES = T.let(T.unsafe(nil), Hash)
 # source://websocket//lib/websocket/frame/handler/handler07.rb#19
 WebSocket::Frame::Handler::Handler07::FRAME_TYPES_INVERSE = T.let(T.unsafe(nil), Hash)
 
+# source://websocket//lib/websocket/frame/handler/handler75.rb#8
 class WebSocket::Frame::Handler::Handler75 < ::WebSocket::Frame::Handler::Base
   # @see WebSocket::Frame::Handler::Base#decode_frame
   #
@@ -556,6 +595,8 @@ end
 #   frame.next # "Hello"
 #   frame.next # "world!""
 # @note You should NEVER use this class directly - use Client or Server subclasses instead, as they contain additional frame options(i.e. Client-side masking in draft 04)
+#
+# source://websocket//lib/websocket/frame/incoming.rb#13
 class WebSocket::Frame::Incoming < ::WebSocket::Frame::Base
   # @return [Incoming] a new instance of Incoming
   #
@@ -601,6 +642,7 @@ class WebSocket::Frame::Incoming < ::WebSocket::Frame::Base
   def to_s; end
 end
 
+# source://websocket//lib/websocket/frame/incoming/client.rb#6
 class WebSocket::Frame::Incoming::Client < ::WebSocket::Frame::Incoming
   # @return [Boolean]
   #
@@ -613,6 +655,7 @@ class WebSocket::Frame::Incoming::Client < ::WebSocket::Frame::Incoming
   def outgoing_masking?; end
 end
 
+# source://websocket//lib/websocket/frame/incoming/server.rb#6
 class WebSocket::Frame::Incoming::Server < ::WebSocket::Frame::Incoming
   # @return [Boolean]
   #
@@ -631,6 +674,8 @@ end
 #   frame = WebSocket::Frame::Outgoing::Server.new(version: @handshake.version, data: "Hello", type: :text)
 #   frame.to_s # "\x81\x05\x48\x65\x6c\x6c\x6f"
 # @note You should NEVER use this class directly - use Client or Server subclasses instead, as they contain additional frame options(i.e. Client-side masking in draft 04)
+#
+# source://websocket//lib/websocket/frame/outgoing.rb#11
 class WebSocket::Frame::Outgoing < ::WebSocket::Frame::Base
   # Should current frame be sent? Exclude empty frames etc.
   #
@@ -660,6 +705,7 @@ class WebSocket::Frame::Outgoing < ::WebSocket::Frame::Base
   def to_s_without_rescue; end
 end
 
+# source://websocket//lib/websocket/frame/outgoing/client.rb#6
 class WebSocket::Frame::Outgoing::Client < ::WebSocket::Frame::Outgoing
   # @return [Boolean]
   #
@@ -672,6 +718,7 @@ class WebSocket::Frame::Outgoing::Client < ::WebSocket::Frame::Outgoing
   def outgoing_masking?; end
 end
 
+# source://websocket//lib/websocket/frame/outgoing/server.rb#6
 class WebSocket::Frame::Outgoing::Server < ::WebSocket::Frame::Outgoing
   # @return [Boolean]
   #
@@ -684,9 +731,12 @@ class WebSocket::Frame::Outgoing::Server < ::WebSocket::Frame::Outgoing
   def outgoing_masking?; end
 end
 
+# source://websocket//lib/websocket/handshake.rb#4
 module WebSocket::Handshake; end
 
 # @abstract Subclass and override to implement custom handshakes
+#
+# source://websocket//lib/websocket/handshake/base.rb#6
 class WebSocket::Handshake::Base
   include ::WebSocket::ExceptionHandler
   include ::WebSocket::NiceInspect
@@ -854,6 +904,8 @@ WebSocket::Handshake::Base::HEADER = T.let(T.unsafe(nil), Regexp)
 #
 #   # No parsing errors?
 #   @handshake.valid?
+#
+# source://websocket//lib/websocket/handshake/client.rb#36
 class WebSocket::Handshake::Client < ::WebSocket::Handshake::Base
   # Initialize new WebSocket Client
   #
@@ -937,9 +989,12 @@ end
 # source://websocket//lib/websocket/handshake/client.rb#117
 WebSocket::Handshake::Client::FIRST_LINE = T.let(T.unsafe(nil), Regexp)
 
+# source://websocket//lib/websocket/handshake/handler.rb#5
 module WebSocket::Handshake::Handler; end
 
 # This class and it's descendants are included in client or server handshake in order to extend basic functionality
+#
+# source://websocket//lib/websocket/handshake/handler/base.rb#7
 class WebSocket::Handshake::Handler::Base
   # @return [Base] a new instance of Base
   #
@@ -980,6 +1035,7 @@ class WebSocket::Handshake::Handler::Base
   def header_line; end
 end
 
+# source://websocket//lib/websocket/handshake/handler/client.rb#6
 class WebSocket::Handshake::Handler::Client < ::WebSocket::Handshake::Handler::Base
   private
 
@@ -1002,6 +1058,7 @@ class WebSocket::Handshake::Handler::Client < ::WebSocket::Handshake::Handler::B
   def verify_protocol; end
 end
 
+# source://websocket//lib/websocket/handshake/handler/client01.rb#8
 class WebSocket::Handshake::Handler::Client01 < ::WebSocket::Handshake::Handler::Client76
   private
 
@@ -1011,6 +1068,7 @@ class WebSocket::Handshake::Handler::Client01 < ::WebSocket::Handshake::Handler:
   def handshake_keys; end
 end
 
+# source://websocket//lib/websocket/handshake/handler/client04.rb#10
 class WebSocket::Handshake::Handler::Client04 < ::WebSocket::Handshake::Handler::Client
   # @return [Boolean]
   # @see WebSocket::Handshake::Base#valid?
@@ -1054,6 +1112,7 @@ class WebSocket::Handshake::Handler::Client04 < ::WebSocket::Handshake::Handler:
   def verify_accept; end
 end
 
+# source://websocket//lib/websocket/handshake/handler/client11.rb#6
 class WebSocket::Handshake::Handler::Client11 < ::WebSocket::Handshake::Handler::Client04
   private
 
@@ -1063,6 +1122,7 @@ class WebSocket::Handshake::Handler::Client11 < ::WebSocket::Handshake::Handler:
   def handshake_keys; end
 end
 
+# source://websocket//lib/websocket/handshake/handler/client75.rb#7
 class WebSocket::Handshake::Handler::Client75 < ::WebSocket::Handshake::Handler::Client
   # @return [Boolean]
   # @see WebSocket::Handshake::Base#valid?
@@ -1084,6 +1144,7 @@ class WebSocket::Handshake::Handler::Client75 < ::WebSocket::Handshake::Handler:
   def supported_protocols; end
 end
 
+# source://websocket//lib/websocket/handshake/handler/client76.rb#9
 class WebSocket::Handshake::Handler::Client76 < ::WebSocket::Handshake::Handler::Client75
   # @return [Boolean]
   # @see WebSocket::Handshake::Base#valid?
@@ -1164,8 +1225,10 @@ end
 # source://websocket//lib/websocket/handshake/handler/client76.rb#71
 WebSocket::Handshake::Handler::Client76::NOISE_CHARS = T.let(T.unsafe(nil), Array)
 
+# source://websocket//lib/websocket/handshake/handler/server.rb#6
 class WebSocket::Handshake::Handler::Server < ::WebSocket::Handshake::Handler::Base; end
 
+# source://websocket//lib/websocket/handshake/handler/server04.rb#10
 class WebSocket::Handshake::Handler::Server04 < ::WebSocket::Handshake::Handler::Server
   # @return [Boolean]
   # @see WebSocket::Handshake::Base#valid?
@@ -1204,6 +1267,7 @@ class WebSocket::Handshake::Handler::Server04 < ::WebSocket::Handshake::Handler:
   def verify_key; end
 end
 
+# source://websocket//lib/websocket/handshake/handler/server75.rb#6
 class WebSocket::Handshake::Handler::Server75 < ::WebSocket::Handshake::Handler::Server
   private
 
@@ -1224,6 +1288,7 @@ class WebSocket::Handshake::Handler::Server75 < ::WebSocket::Handshake::Handler:
   def protocol; end
 end
 
+# source://websocket//lib/websocket/handshake/handler/server76.rb#9
 class WebSocket::Handshake::Handler::Server76 < ::WebSocket::Handshake::Handler::Server75
   # @return [Boolean]
   # @see WebSocket::Handshake::Base#valid?
@@ -1296,6 +1361,8 @@ end
 #   # Upgrade: websocket
 #   # Connection: Upgrade
 #   # Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
+#
+# source://websocket//lib/websocket/handshake/server.rb#43
 class WebSocket::Handshake::Server < ::WebSocket::Handshake::Base
   # Initialize new WebSocket Server
   #
@@ -1397,6 +1464,13 @@ end
 # source://websocket//lib/websocket/handshake/server.rb#163
 WebSocket::Handshake::Server::PATH = T.let(T.unsafe(nil), Regexp)
 
+module WebSocket::Mask
+  class << self
+    def mask(_arg0, _arg1); end
+  end
+end
+
+# source://websocket//lib/websocket/nice_inspect.rb#4
 module WebSocket::NiceInspect
   # Recreate inspect as #to_s will be overwritten
   #

@@ -5,6 +5,8 @@
 # Please instead update this file by running `bin/tapioca gem simplecov`.
 
 # Code coverage for ruby. Please check out README for a full introduction.
+#
+# source://simplecov//lib/simplecov.rb#22
 module SimpleCov
   extend ::SimpleCov::Configuration
 
@@ -274,6 +276,7 @@ module SimpleCov
   end
 end
 
+# source://simplecov//lib/simplecov/filter.rb#77
 class SimpleCov::ArrayFilter < ::SimpleCov::Filter
   # @return [ArrayFilter] a new instance of ArrayFilter
   #
@@ -289,6 +292,7 @@ class SimpleCov::ArrayFilter < ::SimpleCov::Filter
   def matches?(source_files_list); end
 end
 
+# source://simplecov//lib/simplecov/filter.rb#71
 class SimpleCov::BlockFilter < ::SimpleCov::Filter
   # Returns true if the block given when initializing this filter with BlockFilter.new {|src_file| ... }
   # returns true for the given source file.
@@ -300,6 +304,8 @@ class SimpleCov::BlockFilter < ::SimpleCov::Filter
 end
 
 # Functionally for combining coverage results
+#
+# source://simplecov//lib/simplecov/combine.rb#6
 module SimpleCov::Combine
   private
 
@@ -343,6 +349,8 @@ end
 # Combine different branch coverage results on single file.
 #
 # Should be called through `SimpleCov.combine`.
+#
+# source://simplecov//lib/simplecov/combine/branches_combiner.rb#9
 module SimpleCov::Combine::BranchesCombiner
   private
 
@@ -378,6 +386,8 @@ end
 # Handle combining two coverage results for same file
 #
 # Should be called through `SimpleCov.combine`.
+#
+# source://simplecov//lib/simplecov/combine/files_combiner.rb#9
 module SimpleCov::Combine::FilesCombiner
   private
 
@@ -401,6 +411,8 @@ end
 # Combine two different lines coverage results on same file
 #
 # Should be called through `SimpleCov.combine`.
+#
+# source://simplecov//lib/simplecov/combine/lines_combiner.rb#9
 module SimpleCov::Combine::LinesCombiner
   private
 
@@ -448,6 +460,8 @@ end
 # into unified one. This class does that.
 # To unite the results on file basis, it leverages
 # the combine of lines and branches inside each file within given results.
+#
+# source://simplecov//lib/simplecov/combine/results_combiner.rb#10
 module SimpleCov::Combine::ResultsCombiner
   private
 
@@ -513,6 +527,8 @@ module SimpleCov::Combine::ResultsCombiner
 end
 
 # Helper that tries to find out what test suite is running (for SimpleCov.command_name)
+#
+# source://simplecov//lib/simplecov/command_guesser.rb#7
 module SimpleCov::CommandGuesser
   class << self
     # source://simplecov//lib/simplecov/command_guesser.rb#16
@@ -552,6 +568,8 @@ end
 # Bundles the configuration options used for SimpleCov. All methods
 # defined here are usable from SimpleCov directly. Please check out
 # SimpleCov documentation for further info.
+#
+# source://simplecov//lib/simplecov/configuration.rb#13
 module SimpleCov::Configuration
   # source://simplecov//lib/simplecov/configuration.rb#161
   def adapters; end
@@ -913,6 +931,8 @@ SimpleCov::Configuration::SUPPORTED_COVERAGE_CRITERIA = T.let(T.unsafe(nil), Arr
 # * missed - how many of the coverables are missed
 # * percent - percentage as covered/missed
 # * strength - average hits per/coverable (will not exist for one shot lines format)
+#
+# source://simplecov//lib/simplecov/coverage_statistics.rb#13
 class SimpleCov::CoverageStatistics
   # Requires only covered, missed and strength to be initialized.
   #
@@ -962,11 +982,13 @@ class SimpleCov::CoverageStatistics
   end
 end
 
+# source://simplecov//lib/simplecov/exit_codes.rb#4
 module SimpleCov::ExitCodes; end
 
 # source://simplecov//lib/simplecov/exit_codes.rb#6
 SimpleCov::ExitCodes::EXCEPTION = T.let(T.unsafe(nil), Integer)
 
+# source://simplecov//lib/simplecov/exit_codes/exit_code_handling.rb#5
 module SimpleCov::ExitCodes::ExitCodeHandling
   private
 
@@ -991,6 +1013,7 @@ SimpleCov::ExitCodes::MAXIMUM_COVERAGE_DROP = T.let(T.unsafe(nil), Integer)
 # source://simplecov//lib/simplecov/exit_codes.rb#7
 SimpleCov::ExitCodes::MINIMUM_COVERAGE = T.let(T.unsafe(nil), Integer)
 
+# source://simplecov//lib/simplecov/exit_codes/maximum_coverage_drop_check.rb#5
 class SimpleCov::ExitCodes::MaximumCoverageDropCheck
   # @return [MaximumCoverageDropCheck] a new instance of MaximumCoverageDropCheck
   #
@@ -1041,6 +1064,7 @@ end
 # source://simplecov//lib/simplecov/exit_codes/maximum_coverage_drop_check.rb#60
 SimpleCov::ExitCodes::MaximumCoverageDropCheck::MAX_DROP_ACCURACY = T.let(T.unsafe(nil), Integer)
 
+# source://simplecov//lib/simplecov/exit_codes/minimum_coverage_by_file_check.rb#5
 class SimpleCov::ExitCodes::MinimumCoverageByFileCheck
   # @return [MinimumCoverageByFileCheck] a new instance of MinimumCoverageByFileCheck
   #
@@ -1077,6 +1101,7 @@ class SimpleCov::ExitCodes::MinimumCoverageByFileCheck
   def result; end
 end
 
+# source://simplecov//lib/simplecov/exit_codes/minimum_overall_coverage_check.rb#5
 class SimpleCov::ExitCodes::MinimumOverallCoverageCheck
   # @return [MinimumOverallCoverageCheck] a new instance of MinimumOverallCoverageCheck
   #
@@ -1118,6 +1143,8 @@ SimpleCov::ExitCodes::SUCCESS = T.let(T.unsafe(nil), Integer)
 
 # An array of SimpleCov SourceFile instances with additional collection helper
 # methods for calculating coverage across them etc.
+#
+# source://simplecov//lib/simplecov/file_list.rb#6
 class SimpleCov::FileList
   include ::Enumerable
   extend ::Forwardable
@@ -1243,6 +1270,8 @@ end
 #     false
 #   end
 # end
+#
+# source://simplecov//lib/simplecov/filter.rb#15
 class SimpleCov::Filter
   # @return [Filter] a new instance of Filter
   #
@@ -1274,6 +1303,8 @@ class SimpleCov::Filter
 end
 
 # TODO: Documentation on how to build your own formatters
+#
+# source://simplecov//lib/simplecov/formatter/multi_formatter.rb#4
 module SimpleCov::Formatter
   class << self
     # source://simplecov//lib/simplecov/default_formatter.rb#7
@@ -1281,6 +1312,7 @@ module SimpleCov::Formatter
   end
 end
 
+# source://simplecov//lib/simplecov/formatter/multi_formatter.rb#5
 class SimpleCov::Formatter::MultiFormatter
   class << self
     # source://simplecov//lib/simplecov/formatter/multi_formatter.rb#26
@@ -1291,12 +1323,15 @@ class SimpleCov::Formatter::MultiFormatter
   end
 end
 
+# source://simplecov//lib/simplecov/formatter/multi_formatter.rb#6
 module SimpleCov::Formatter::MultiFormatter::InstanceMethods
   # source://simplecov//lib/simplecov/formatter/multi_formatter.rb#7
   def format(result); end
 end
 
 # A ridiculously simple formatter for SimpleCov results.
+#
+# source://simplecov//lib/simplecov/formatter/simple_formatter.rb#8
 class SimpleCov::Formatter::SimpleFormatter
   # Takes a SimpleCov::Result and generates a string out of it
   #
@@ -1304,6 +1339,7 @@ class SimpleCov::Formatter::SimpleFormatter
   def format(result); end
 end
 
+# source://simplecov//lib/simplecov/last_run.rb#6
 module SimpleCov::LastRun
   class << self
     # source://simplecov//lib/simplecov/last_run.rb#8
@@ -1319,6 +1355,8 @@ end
 
 # Classifies whether lines are relevant for code coverage analysis.
 # Comments & whitespace lines, and :nocov: token blocks, are considered not relevant.
+#
+# source://simplecov//lib/simplecov/lines_classifier.rb#7
 class SimpleCov::LinesClassifier
   # source://simplecov//lib/simplecov/lines_classifier.rb#33
   def classify(lines); end
@@ -1359,6 +1397,8 @@ SimpleCov::LinesClassifier::WHITESPACE_OR_COMMENT_LINE = T.let(T.unsafe(nil), Re
 #   SimpleCov.profiles.define :foo do
 #     # SimpleCov configuration here, same as in  SimpleCov.configure
 #   end
+#
+# source://simplecov//lib/simplecov/profiles.rb#17
 class SimpleCov::Profiles < ::Hash
   # Define a SimpleCov profile:
   #   SimpleCov.profiles.define 'rails' do
@@ -1374,6 +1414,7 @@ class SimpleCov::Profiles < ::Hash
   def load(name); end
 end
 
+# source://simplecov//lib/simplecov/filter.rb#63
 class SimpleCov::RegexFilter < ::SimpleCov::Filter
   # Returns true when the given source file's filename matches the
   # regex configured when initializing this Filter with RegexFilter.new(/someregex/)
@@ -1386,6 +1427,8 @@ end
 
 # A simplecov code coverage result, initialized from the Hash Ruby's built-in coverage
 # library generates (Coverage.result).
+#
+# source://simplecov//lib/simplecov/result.rb#11
 class SimpleCov::Result
   extend ::Forwardable
 
@@ -1508,6 +1551,8 @@ class SimpleCov::Result
 end
 
 # Responsible for adapting the format of the coverage result whether it's default or with statistics
+#
+# source://simplecov//lib/simplecov/result_adapter.rb#7
 class SimpleCov::ResultAdapter
   # @return [ResultAdapter] a new instance of ResultAdapter
   #
@@ -1531,6 +1576,8 @@ end
 # Singleton that is responsible for caching, loading and merging
 # SimpleCov::Results into a single result for coverage analysis based
 # upon multiple test suites.
+#
+# source://simplecov//lib/simplecov/result_merger.rb#11
 module SimpleCov::ResultMerger
   class << self
     # source://simplecov//lib/simplecov/result_merger.rb#187
@@ -1618,6 +1665,8 @@ module SimpleCov::ResultMerger
 end
 
 # Responsible for producing file coverage metrics.
+#
+# source://simplecov//lib/simplecov/simulate_coverage.rb#7
 module SimpleCov::SimulateCoverage
   private
 
@@ -1646,6 +1695,8 @@ end
 
 # Representation of a source file including it's coverage data, source code,
 # source lines and featuring helpers to interpret that data.
+#
+# source://simplecov//lib/simplecov/source_file/line.rb#4
 class SimpleCov::SourceFile
   # @return [SourceFile] a new instance of SourceFile
   #
@@ -1876,6 +1927,8 @@ end
 
 # Representing single branch that has been detected in coverage report.
 # Give us support methods that handle needed calculations.
+#
+# source://simplecov//lib/simplecov/source_file/branch.rb#8
 class SimpleCov::SourceFile::Branch
   # @return [Branch] a new instance of Branch
   #
@@ -1962,6 +2015,8 @@ end
 # with the coverage being either nil (coverage not applicable, e.g. comment
 # line), 0 (line not covered) or >1 (the amount of times the line was
 # executed)
+#
+# source://simplecov//lib/simplecov/source_file/line.rb#10
 class SimpleCov::SourceFile::Line
   # @raise [ArgumentError]
   # @return [Line] a new instance of Line
@@ -2052,6 +2107,7 @@ SimpleCov::SourceFile::RUBY_FILE_ENCODING_MAGIC_COMMENT_REGEX = T.let(T.unsafe(n
 # source://simplecov//lib/simplecov/source_file.rb#193
 SimpleCov::SourceFile::SHEBANG_REGEX = T.let(T.unsafe(nil), Regexp)
 
+# source://simplecov//lib/simplecov/filter.rb#55
 class SimpleCov::StringFilter < ::SimpleCov::Filter
   # Returns true when the given source file's filename matches the
   # string configured when initializing this Filter with StringFilter.new('somestring')
@@ -2063,6 +2119,8 @@ class SimpleCov::StringFilter < ::SimpleCov::Filter
 end
 
 # Select the files that related to working scope directory of SimpleCov
+#
+# source://simplecov//lib/simplecov/useless_results_remover.rb#7
 module SimpleCov::UselessResultsRemover
   class << self
     # source://simplecov//lib/simplecov/useless_results_remover.rb#8

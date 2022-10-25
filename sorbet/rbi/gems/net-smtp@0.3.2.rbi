@@ -106,6 +106,8 @@
 #     # CRAM MD5
 #     Net::SMTP.start('your.smtp.server', 25
 #                     user: 'Your Account', secret: 'Your Password', authtype: :cram_md5)
+#
+# source://net-smtp//lib/net/smtp.rb#186
 class Net::SMTP < ::Net::Protocol
   # Creates a new Net::SMTP object.
   #
@@ -942,6 +944,8 @@ class Net::SMTP < ::Net::Protocol
 end
 
 # Address with parametres for MAIL or RCPT command
+#
+# source://net-smtp//lib/net/smtp.rb#1170
 class Net::SMTP::Address
   # :call-seq:
   #  initialize(address, parameter, ...)
@@ -972,6 +976,8 @@ end
 # of this class are created by the SMTP class; they should not be directly
 # created by the user. For more information on SMTP responses, view
 # {Section 4.2 of RFC 5321}[http://tools.ietf.org/html/rfc5321#section-4.2]
+#
+# source://net-smtp//lib/net/smtp.rb#1090
 class Net::SMTP::Response
   # Creates a new instance of the Response class and sets the status and
   # string attributes
@@ -1049,7 +1055,14 @@ end
 # source://net-smtp//lib/net/smtp.rb#187
 Net::SMTP::VERSION = T.let(T.unsafe(nil), String)
 
+# source://net-smtp//lib/net/smtp.rb#53
+class Net::SMTPAuthenticationError < ::Net::ProtoAuthError
+  include ::Net::SMTPError
+end
+
 # Module mixed in to all SMTP error classes
+#
+# source://net-smtp//lib/net/smtp.rb#31
 module Net::SMTPError
   # source://net-smtp//lib/net/smtp.rb#37
   def initialize(response, message: T.unsafe(nil)); end
@@ -1064,7 +1077,32 @@ module Net::SMTPError
   def response; end
 end
 
+# source://net-smtp//lib/net/smtp.rb#68
+class Net::SMTPFatalError < ::Net::ProtoFatalError
+  include ::Net::SMTPError
+end
+
+# source://net-smtp//lib/net/smtp.rb#58
+class Net::SMTPServerBusy < ::Net::ProtoServerError
+  include ::Net::SMTPError
+end
+
 # class SMTP
 #
 # source://net-smtp//lib/net/smtp.rb#1198
 Net::SMTPSession = Net::SMTP
+
+# source://net-smtp//lib/net/smtp.rb#63
+class Net::SMTPSyntaxError < ::Net::ProtoSyntaxError
+  include ::Net::SMTPError
+end
+
+# source://net-smtp//lib/net/smtp.rb#73
+class Net::SMTPUnknownError < ::Net::ProtoUnknownError
+  include ::Net::SMTPError
+end
+
+# source://net-smtp//lib/net/smtp.rb#78
+class Net::SMTPUnsupportedCommand < ::Net::ProtocolError
+  include ::Net::SMTPError
+end

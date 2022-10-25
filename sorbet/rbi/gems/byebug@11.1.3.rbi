@@ -5,6 +5,8 @@
 # Please instead update this file by running `bin/tapioca gem byebug`.
 
 # Reopen main module to define the library version
+#
+# source://byebug//lib/byebug/attacher.rb#6
 module Byebug
   include ::Byebug::Helpers::ReflectionHelper
   extend ::Byebug::Helpers::ReflectionHelper
@@ -196,6 +198,8 @@ module Byebug
 end
 
 # Setting for automatically invoking IRB on every stop.
+#
+# source://byebug//lib/byebug/settings/autoirb.rb#10
 class Byebug::AutoirbSetting < ::Byebug::Setting
   # @return [AutoirbSetting] a new instance of AutoirbSetting
   #
@@ -216,6 +220,8 @@ end
 Byebug::AutoirbSetting::DEFAULT = T.let(T.unsafe(nil), Integer)
 
 # Setting for automatically listing source code on every stop.
+#
+# source://byebug//lib/byebug/settings/autolist.rb#10
 class Byebug::AutolistSetting < ::Byebug::Setting
   # @return [AutolistSetting] a new instance of AutolistSetting
   #
@@ -236,6 +242,8 @@ end
 Byebug::AutolistSetting::DEFAULT = T.let(T.unsafe(nil), Integer)
 
 # Setting for automatically invoking Pry on every stop.
+#
+# source://byebug//lib/byebug/settings/autopry.rb#10
 class Byebug::AutoprySetting < ::Byebug::Setting
   # @return [AutoprySetting] a new instance of AutoprySetting
   #
@@ -257,6 +265,8 @@ Byebug::AutoprySetting::DEFAULT = T.let(T.unsafe(nil), Integer)
 
 # Setting for automatically saving previously entered commands to history
 # when exiting the debugger.
+#
+# source://byebug//lib/byebug/settings/autosave.rb#10
 class Byebug::AutosaveSetting < ::Byebug::Setting
   # source://byebug//lib/byebug/settings/autosave.rb#13
   def banner; end
@@ -268,12 +278,16 @@ Byebug::AutosaveSetting::DEFAULT = T.let(T.unsafe(nil), TrueClass)
 # Command to display short paths in file names.
 #
 # For example, when displaying source code information.
+#
+# source://byebug//lib/byebug/settings/basename.rb#11
 class Byebug::BasenameSetting < ::Byebug::Setting
   # source://byebug//lib/byebug/settings/basename.rb#12
   def banner; end
 end
 
 # Implements breakpoint functionality
+#
+# source://byebug//lib/byebug/commands/break.rb#13
 class Byebug::BreakCommand < ::Byebug::Command
   include ::Byebug::Helpers::EvalHelper
   include ::Byebug::Helpers::FileHelper
@@ -312,6 +326,8 @@ class Byebug::BreakCommand < ::Byebug::Command
 end
 
 # Implements breakpoints
+#
+# source://byebug//lib/byebug/breakpoint.rb#7
 class Byebug::Breakpoint
   def initialize(_arg0, _arg1, _arg2); end
 
@@ -397,6 +413,8 @@ class Byebug::Breakpoint
 end
 
 # Setting to customize the verbosity level for stack frames.
+#
+# source://byebug//lib/byebug/settings/callstyle.rb#9
 class Byebug::CallstyleSetting < ::Byebug::Setting
   # source://byebug//lib/byebug/settings/callstyle.rb#12
   def banner; end
@@ -411,6 +429,8 @@ Byebug::CallstyleSetting::DEFAULT = T.let(T.unsafe(nil), String)
 # Implements exception catching.
 #
 # Enables the user to catch unhandled assertion when they happen.
+#
+# source://byebug//lib/byebug/commands/catch.rb#12
 class Byebug::CatchCommand < ::Byebug::Command
   include ::Byebug::Helpers::EvalHelper
 
@@ -467,6 +487,8 @@ end
 # end
 #
 # @example Define a custom command
+#
+# source://byebug//lib/byebug/command.rb#33
 class Byebug::Command
   extend ::Forwardable
   extend ::Byebug::Helpers::StringHelper
@@ -569,6 +591,8 @@ class Byebug::Command
 end
 
 # Holds an array of subcommands for a command
+#
+# source://byebug//lib/byebug/command_list.rb#9
 class Byebug::CommandList
   include ::Enumerable
 
@@ -593,6 +617,8 @@ class Byebug::CommandList
 end
 
 # Custom exception exception to signal "command not found" errors
+#
+# source://byebug//lib/byebug/errors.rb#7
 class Byebug::CommandNotFound < ::NoMethodError
   # @return [CommandNotFound] a new instance of CommandNotFound
   #
@@ -617,6 +643,8 @@ end
 # example, whitelists only certain commands to be executed.
 #
 # @see PostMortemProcessor for a example
+#
+# source://byebug//lib/byebug/processors/command_processor.rb#17
 class Byebug::CommandProcessor
   include ::Byebug::Helpers::EvalHelper
   extend ::Forwardable
@@ -751,6 +779,8 @@ end
 # Implements conditions on breakpoints.
 #
 # Adds the ability to stop on breakpoints only under certain conditions.
+#
+# source://byebug//lib/byebug/commands/condition.rb#12
 class Byebug::ConditionCommand < ::Byebug::Command
   include ::Byebug::Helpers::ParseHelper
 
@@ -772,6 +802,8 @@ end
 # Mantains context information for the debugger and it's the main
 # communication point between the library and the C-extension through the
 # at_breakpoint, at_catchpoint, at_tracing, at_line and at_return callbacks
+#
+# source://byebug//lib/byebug/context.rb#14
 class Byebug::Context
   include ::Byebug::Helpers::FileHelper
   extend ::Byebug::Helpers::PathHelper
@@ -919,6 +951,8 @@ end
 #
 # Allows the user to continue execution until the next stopping point, a
 # specific line number or until program termination.
+#
+# source://byebug//lib/byebug/commands/continue.rb#13
 class Byebug::ContinueCommand < ::Byebug::Command
   include ::Byebug::Helpers::ParseHelper
 
@@ -953,6 +987,8 @@ class Byebug::ContinueCommand < ::Byebug::Command
 end
 
 # Processes commands when there's not program running
+#
+# source://byebug//lib/byebug/processors/control_processor.rb#12
 class Byebug::ControlProcessor < ::Byebug::CommandProcessor
   # Available commands
   #
@@ -966,6 +1002,8 @@ class Byebug::ControlProcessor < ::Byebug::CommandProcessor
 end
 
 # Spawns a subdebugger and evaluates the given expression
+#
+# source://byebug//lib/byebug/commands/debug.rb#10
 class Byebug::DebugCommand < ::Byebug::Command
   include ::Byebug::Helpers::EvalHelper
 
@@ -991,6 +1029,8 @@ class Byebug::DebugThread < ::Thread
 end
 
 # Implements breakpoint deletion.
+#
+# source://byebug//lib/byebug/commands/delete.rb#10
 class Byebug::DeleteCommand < ::Byebug::Command
   include ::Byebug::Helpers::ParseHelper
 
@@ -1010,6 +1050,8 @@ class Byebug::DeleteCommand < ::Byebug::Command
 end
 
 # Disabling custom display expressions or breakpoints.
+#
+# source://byebug//lib/byebug/commands/disable/breakpoints.rb#12
 class Byebug::DisableCommand < ::Byebug::Command
   include ::Byebug::Subcommands
   extend ::Byebug::Helpers::ReflectionHelper
@@ -1028,6 +1070,8 @@ class Byebug::DisableCommand < ::Byebug::Command
 end
 
 # Disables all or specific breakpoints
+#
+# source://byebug//lib/byebug/commands/disable/breakpoints.rb#13
 class Byebug::DisableCommand::BreakpointsCommand < ::Byebug::Command
   include ::Byebug::Helpers::ParseHelper
   include ::Byebug::Helpers::ToggleHelper
@@ -1048,6 +1092,8 @@ class Byebug::DisableCommand::BreakpointsCommand < ::Byebug::Command
 end
 
 # Enables all or specific displays
+#
+# source://byebug//lib/byebug/commands/disable/display.rb#13
 class Byebug::DisableCommand::DisplayCommand < ::Byebug::Command
   include ::Byebug::Helpers::ParseHelper
   include ::Byebug::Helpers::ToggleHelper
@@ -1068,6 +1114,8 @@ class Byebug::DisableCommand::DisplayCommand < ::Byebug::Command
 end
 
 # Custom expressions to be displayed every time the debugger stops.
+#
+# source://byebug//lib/byebug/commands/display.rb#10
 class Byebug::DisplayCommand < ::Byebug::Command
   include ::Byebug::Helpers::EvalHelper
 
@@ -1098,6 +1146,8 @@ class Byebug::DisplayCommand < ::Byebug::Command
 end
 
 # Move the current frame down in the backtrace.
+#
+# source://byebug//lib/byebug/commands/down.rb#12
 class Byebug::DownCommand < ::Byebug::Command
   include ::Byebug::Helpers::FrameHelper
   include ::Byebug::Helpers::ParseHelper
@@ -1118,6 +1168,8 @@ class Byebug::DownCommand < ::Byebug::Command
 end
 
 # Edit a file from byebug's prompt.
+#
+# source://byebug//lib/byebug/commands/edit.rb#9
 class Byebug::EditCommand < ::Byebug::Command
   # source://byebug//lib/byebug/commands/edit.rb#33
   def execute; end
@@ -1146,6 +1198,8 @@ class Byebug::EditCommand < ::Byebug::Command
 end
 
 # Enabling custom display expressions or breakpoints.
+#
+# source://byebug//lib/byebug/commands/enable/breakpoints.rb#12
 class Byebug::EnableCommand < ::Byebug::Command
   include ::Byebug::Subcommands
   extend ::Byebug::Helpers::ReflectionHelper
@@ -1164,6 +1218,8 @@ class Byebug::EnableCommand < ::Byebug::Command
 end
 
 # Enables all or specific breakpoints
+#
+# source://byebug//lib/byebug/commands/enable/breakpoints.rb#13
 class Byebug::EnableCommand::BreakpointsCommand < ::Byebug::Command
   include ::Byebug::Helpers::ParseHelper
   include ::Byebug::Helpers::ToggleHelper
@@ -1184,6 +1240,8 @@ class Byebug::EnableCommand::BreakpointsCommand < ::Byebug::Command
 end
 
 # Enables all or specific displays
+#
+# source://byebug//lib/byebug/commands/enable/display.rb#13
 class Byebug::EnableCommand::DisplayCommand < ::Byebug::Command
   include ::Byebug::Helpers::ParseHelper
   include ::Byebug::Helpers::ToggleHelper
@@ -1206,6 +1264,8 @@ end
 # Implements the finish functionality.
 #
 # Allows the user to continue execution until certain frames are finished.
+#
+# source://byebug//lib/byebug/commands/finish.rb#12
 class Byebug::FinishCommand < ::Byebug::Command
   include ::Byebug::Helpers::ParseHelper
 
@@ -1230,6 +1290,8 @@ class Byebug::FinishCommand < ::Byebug::Command
 end
 
 # Represents a frame in the stack trace
+#
+# source://byebug//lib/byebug/frame.rb#9
 class Byebug::Frame
   include ::Byebug::Helpers::FileHelper
 
@@ -1347,6 +1409,8 @@ class Byebug::Frame
 end
 
 # Move to specific frames in the backtrace.
+#
+# source://byebug//lib/byebug/commands/frame.rb#12
 class Byebug::FrameCommand < ::Byebug::Command
   include ::Byebug::Helpers::FrameHelper
   include ::Byebug::Helpers::ParseHelper
@@ -1367,6 +1431,8 @@ class Byebug::FrameCommand < ::Byebug::Command
 end
 
 # Setting to display full paths in backtraces.
+#
+# source://byebug//lib/byebug/settings/fullpath.rb#9
 class Byebug::FullpathSetting < ::Byebug::Setting
   # source://byebug//lib/byebug/settings/fullpath.rb#12
   def banner; end
@@ -1376,6 +1442,8 @@ end
 Byebug::FullpathSetting::DEFAULT = T.let(T.unsafe(nil), TrueClass)
 
 # Ask for help from byebug's prompt.
+#
+# source://byebug//lib/byebug/commands/help.rb#10
 class Byebug::HelpCommand < ::Byebug::Command
   # source://byebug//lib/byebug/commands/help.rb#34
   def execute; end
@@ -1408,9 +1476,12 @@ class Byebug::HelpCommand < ::Byebug::Command
   end
 end
 
+# source://byebug//lib/byebug/helpers/reflection.rb#4
 module Byebug::Helpers; end
 
 # Utilities for interaction with executables
+#
+# source://byebug//lib/byebug/helpers/bin.rb#8
 module Byebug::Helpers::BinHelper
   # source://byebug//lib/byebug/helpers/bin.rb#38
   def executable_file_extensions; end
@@ -1434,6 +1505,8 @@ module Byebug::Helpers::BinHelper
 end
 
 # Utilities to assist evaluation of code strings
+#
+# source://byebug//lib/byebug/helpers/eval.rb#8
 module Byebug::Helpers::EvalHelper
   # Evaluates a string containing Ruby code in a specific binding,
   # handling the errors at an error level.
@@ -1509,6 +1582,8 @@ module Byebug::Helpers::EvalHelper
 end
 
 # Utilities for interaction with files
+#
+# source://byebug//lib/byebug/helpers/file.rb#8
 module Byebug::Helpers::FileHelper
   # Reads line number +lineno+ from file named +filename+
   #
@@ -1545,6 +1620,8 @@ module Byebug::Helpers::FileHelper
 end
 
 # Utilities to assist frame navigation
+#
+# source://byebug//lib/byebug/helpers/frame.rb#8
 module Byebug::Helpers::FrameHelper
   # source://byebug//lib/byebug/helpers/frame.rb#16
   def jump_frames(steps); end
@@ -1584,6 +1661,8 @@ module Byebug::Helpers::FrameHelper
 end
 
 # Utilities to assist command parsing
+#
+# source://byebug//lib/byebug/helpers/parse.rb#8
 module Byebug::Helpers::ParseHelper
   # Parses +str+ of command +cmd+ as an integer between +min+ and +max+.
   #
@@ -1615,6 +1694,8 @@ module Byebug::Helpers::ParseHelper
 end
 
 # Utilities for managing gem paths
+#
+# source://byebug//lib/byebug/helpers/path.rb#8
 module Byebug::Helpers::PathHelper
   # source://byebug//lib/byebug/helpers/path.rb#29
   def all_files; end
@@ -1641,6 +1722,8 @@ module Byebug::Helpers::PathHelper
 end
 
 # Reflection utilitie
+#
+# source://byebug//lib/byebug/helpers/reflection.rb#8
 module Byebug::Helpers::ReflectionHelper
   # List of "command" classes in the including module
   #
@@ -1649,6 +1732,8 @@ module Byebug::Helpers::ReflectionHelper
 end
 
 # Utilities for interaction with strings
+#
+# source://byebug//lib/byebug/helpers/string.rb#8
 module Byebug::Helpers::StringHelper
   # Converts +str+ from an_underscored-or-dasherized_string to
   # ACamelizedString.
@@ -1669,6 +1754,8 @@ module Byebug::Helpers::StringHelper
 end
 
 # Utilities for thread subcommands
+#
+# source://byebug//lib/byebug/helpers/thread.rb#8
 module Byebug::Helpers::ThreadHelper
   # source://byebug//lib/byebug/helpers/thread.rb#30
   def context_from_thread(thnum); end
@@ -1699,6 +1786,8 @@ module Byebug::Helpers::ThreadHelper
 end
 
 # Utilities to assist breakpoint/display enabling/disabling.
+#
+# source://byebug//lib/byebug/helpers/toggle.rb#10
 module Byebug::Helpers::ToggleHelper
   include ::Byebug::Helpers::ParseHelper
 
@@ -1718,6 +1807,8 @@ module Byebug::Helpers::ToggleHelper
 end
 
 # Utilities for variable subcommands
+#
+# source://byebug//lib/byebug/helpers/var.rb#10
 module Byebug::Helpers::VarHelper
   include ::Byebug::Helpers::EvalHelper
 
@@ -1738,6 +1829,8 @@ module Byebug::Helpers::VarHelper
 end
 
 # Setting to customize the file where byebug's history is saved.
+#
+# source://byebug//lib/byebug/settings/histfile.rb#9
 class Byebug::HistfileSetting < ::Byebug::Setting
   # source://byebug//lib/byebug/settings/histfile.rb#12
   def banner; end
@@ -1750,6 +1843,8 @@ end
 Byebug::HistfileSetting::DEFAULT = T.let(T.unsafe(nil), String)
 
 # Handles byebug's history of commands.
+#
+# source://byebug//lib/byebug/history.rb#19
 class Byebug::History
   # @return [History] a new instance of History
   #
@@ -1833,6 +1928,8 @@ class Byebug::History
 end
 
 # Show history of byebug commands.
+#
+# source://byebug//lib/byebug/commands/history.rb#10
 class Byebug::HistoryCommand < ::Byebug::Command
   include ::Byebug::Helpers::ParseHelper
 
@@ -1852,6 +1949,8 @@ class Byebug::HistoryCommand < ::Byebug::Command
 end
 
 # Setting to customize the number of byebug commands to be saved in history.
+#
+# source://byebug//lib/byebug/settings/histsize.rb#9
 class Byebug::HistsizeSetting < ::Byebug::Setting
   # source://byebug//lib/byebug/settings/histsize.rb#12
   def banner; end
@@ -1864,6 +1963,8 @@ end
 Byebug::HistsizeSetting::DEFAULT = T.let(T.unsafe(nil), Integer)
 
 # Shows info about different aspects of the debugger.
+#
+# source://byebug//lib/byebug/commands/info/breakpoints.rb#10
 class Byebug::InfoCommand < ::Byebug::Command
   include ::Byebug::Subcommands
   extend ::Byebug::Helpers::ReflectionHelper
@@ -1882,6 +1983,8 @@ class Byebug::InfoCommand < ::Byebug::Command
 end
 
 # Information about current breakpoints
+#
+# source://byebug//lib/byebug/commands/info/breakpoints.rb#11
 class Byebug::InfoCommand::BreakpointsCommand < ::Byebug::Command
   # source://byebug//lib/byebug/commands/info/breakpoints.rb#30
   def execute; end
@@ -1904,6 +2007,8 @@ class Byebug::InfoCommand::BreakpointsCommand < ::Byebug::Command
 end
 
 # Information about display expressions
+#
+# source://byebug//lib/byebug/commands/info/display.rb#11
 class Byebug::InfoCommand::DisplayCommand < ::Byebug::Command
   # source://byebug//lib/byebug/commands/info/display.rb#30
   def execute; end
@@ -1921,6 +2026,8 @@ class Byebug::InfoCommand::DisplayCommand < ::Byebug::Command
 end
 
 # Information about a particular source file
+#
+# source://byebug//lib/byebug/commands/info/file.rb#13
 class Byebug::InfoCommand::FileCommand < ::Byebug::Command
   include ::Byebug::Helpers::FileHelper
   include ::Byebug::Helpers::StringHelper
@@ -1955,6 +2062,8 @@ class Byebug::InfoCommand::FileCommand < ::Byebug::Command
 end
 
 # Information about current location
+#
+# source://byebug//lib/byebug/commands/info/line.rb#11
 class Byebug::InfoCommand::LineCommand < ::Byebug::Command
   # source://byebug//lib/byebug/commands/info/line.rb#30
   def execute; end
@@ -1972,6 +2081,8 @@ class Byebug::InfoCommand::LineCommand < ::Byebug::Command
 end
 
 # Information about arguments of the current method/block
+#
+# source://byebug//lib/byebug/commands/info/program.rb#11
 class Byebug::InfoCommand::ProgramCommand < ::Byebug::Command
   # source://byebug//lib/byebug/commands/info/program.rb#30
   def execute; end
@@ -1996,6 +2107,8 @@ end
 # Main Interface class
 #
 # Contains common functionality to all implemented interfaces.
+#
+# source://byebug//lib/byebug/interface.rb#16
 class Byebug::Interface
   include ::Byebug::Helpers::FileHelper
 
@@ -2116,6 +2229,8 @@ class Byebug::Interface
 end
 
 # Interrupting execution of current thread.
+#
+# source://byebug//lib/byebug/commands/interrupt.rb#9
 class Byebug::InterruptCommand < ::Byebug::Command
   # source://byebug//lib/byebug/commands/interrupt.rb#28
   def execute; end
@@ -2133,6 +2248,8 @@ class Byebug::InterruptCommand < ::Byebug::Command
 end
 
 # Enter IRB from byebug's prompt
+#
+# source://byebug//lib/byebug/commands/irb.rb#11
 class Byebug::IrbCommand < ::Byebug::Command
   # source://byebug//lib/byebug/commands/irb.rb#30
   def execute; end
@@ -2155,6 +2272,8 @@ class Byebug::IrbCommand < ::Byebug::Command
 end
 
 # Send custom signals to the debugged program.
+#
+# source://byebug//lib/byebug/commands/kill.rb#9
 class Byebug::KillCommand < ::Byebug::Command
   # source://byebug//lib/byebug/commands/kill.rb#30
   def execute; end
@@ -2172,6 +2291,8 @@ class Byebug::KillCommand < ::Byebug::Command
 end
 
 # Setting to enable/disable linetracing.
+#
+# source://byebug//lib/byebug/settings/linetrace.rb#9
 class Byebug::LinetraceSetting < ::Byebug::Setting
   # source://byebug//lib/byebug/settings/linetrace.rb#10
   def banner; end
@@ -2184,6 +2305,8 @@ class Byebug::LinetraceSetting < ::Byebug::Setting
 end
 
 # List parts of the source code.
+#
+# source://byebug//lib/byebug/commands/list.rb#12
 class Byebug::ListCommand < ::Byebug::Command
   include ::Byebug::Helpers::FileHelper
   include ::Byebug::Helpers::ParseHelper
@@ -2273,6 +2396,8 @@ end
 
 # Setting to customize the number of source code lines to be displayed every
 # time the "list" command is invoked.
+#
+# source://byebug//lib/byebug/settings/listsize.rb#10
 class Byebug::ListsizeSetting < ::Byebug::Setting
   # source://byebug//lib/byebug/settings/listsize.rb#13
   def banner; end
@@ -2285,6 +2410,8 @@ end
 Byebug::ListsizeSetting::DEFAULT = T.let(T.unsafe(nil), Integer)
 
 # Interface class for standard byebug use.
+#
+# source://byebug//lib/byebug/interfaces/local_interface.rb#7
 class Byebug::LocalInterface < ::Byebug::Interface
   # @return [LocalInterface] a new instance of LocalInterface
   #
@@ -2322,6 +2449,8 @@ end
 Byebug::LocalInterface::EOF_ALIAS = T.let(T.unsafe(nil), String)
 
 # Show methods of specific classes/modules/objects.
+#
+# source://byebug//lib/byebug/commands/method.rb#10
 class Byebug::MethodCommand < ::Byebug::Command
   include ::Byebug::Helpers::EvalHelper
 
@@ -2344,6 +2473,8 @@ end
 #
 # Allows the user the continue execution until the next instruction in the
 # current frame.
+#
+# source://byebug//lib/byebug/commands/next.rb#13
 class Byebug::NextCommand < ::Byebug::Command
   include ::Byebug::Helpers::ParseHelper
 
@@ -2368,6 +2499,8 @@ end
 Byebug::PORT = T.let(T.unsafe(nil), Integer)
 
 # Processes commands in post_mortem mode
+#
+# source://byebug//lib/byebug/processors/post_mortem_processor.rb#9
 class Byebug::PostMortemProcessor < ::Byebug::CommandProcessor
   # source://byebug//lib/byebug/processors/post_mortem_processor.rb#10
   def commands; end
@@ -2378,6 +2511,8 @@ end
 
 # Setting to enable/disable post_mortem mode, i.e., a debugger prompt after
 # program termination by unhandled exception.
+#
+# source://byebug//lib/byebug/settings/post_mortem.rb#10
 class Byebug::PostMortemSetting < ::Byebug::Setting
   # @return [PostMortemSetting] a new instance of PostMortemSetting
   #
@@ -2394,9 +2529,12 @@ class Byebug::PostMortemSetting < ::Byebug::Setting
   def value=(val); end
 end
 
+# source://byebug//lib/byebug/printers/base.rb#6
 module Byebug::Printers; end
 
 # Base printer
+#
+# source://byebug//lib/byebug/printers/base.rb#10
 class Byebug::Printers::Base
   # source://byebug//lib/byebug/printers/base.rb#16
   def type; end
@@ -2424,13 +2562,18 @@ class Byebug::Printers::Base
   def translate(string, args = T.unsafe(nil)); end
 end
 
+# source://byebug//lib/byebug/printers/base.rb#12
 class Byebug::Printers::Base::MissedArgument < ::StandardError; end
+
+# source://byebug//lib/byebug/printers/base.rb#11
 class Byebug::Printers::Base::MissedPath < ::StandardError; end
 
 # source://byebug//lib/byebug/printers/base.rb#14
 Byebug::Printers::Base::SEPARATOR = T.let(T.unsafe(nil), String)
 
 # Plain text printer
+#
+# source://byebug//lib/byebug/printers/plain.rb#10
 class Byebug::Printers::Plain < ::Byebug::Printers::Base
   # source://byebug//lib/byebug/printers/plain.rb#11
   def print(path, args = T.unsafe(nil)); end
@@ -2448,6 +2591,8 @@ class Byebug::Printers::Plain < ::Byebug::Printers::Base
 end
 
 # Enter Pry from byebug's prompt
+#
+# source://byebug//lib/byebug/commands/pry.rb#10
 class Byebug::PryCommand < ::Byebug::Command
   # source://byebug//lib/byebug/commands/pry.rb#29
   def execute; end
@@ -2465,6 +2610,8 @@ class Byebug::PryCommand < ::Byebug::Command
 end
 
 # Exit from byebug.
+#
+# source://byebug//lib/byebug/commands/quit.rb#9
 class Byebug::QuitCommand < ::Byebug::Command
   # source://byebug//lib/byebug/commands/quit.rb#33
   def execute; end
@@ -2481,9 +2628,12 @@ class Byebug::QuitCommand < ::Byebug::Command
   end
 end
 
+# source://byebug//lib/byebug/remote/server.rb#6
 module Byebug::Remote; end
 
 # Client for remote debugging
+#
+# source://byebug//lib/byebug/remote/client.rb#10
 class Byebug::Remote::Client
   # @return [Client] a new instance of Client
   #
@@ -2517,6 +2667,8 @@ class Byebug::Remote::Client
 end
 
 # Server for remote debugging
+#
+# source://byebug//lib/byebug/remote/server.rb#10
 class Byebug::Remote::Server
   # @return [Server] a new instance of Server
   #
@@ -2540,6 +2692,8 @@ class Byebug::Remote::Server
 end
 
 # Interface class for remote use of byebug.
+#
+# source://byebug//lib/byebug/interfaces/remote_interface.rb#9
 class Byebug::RemoteInterface < ::Byebug::Interface
   # @return [RemoteInterface] a new instance of RemoteInterface
   #
@@ -2566,6 +2720,8 @@ class Byebug::RemoteInterface < ::Byebug::Interface
 end
 
 # Restart debugged program from within byebug.
+#
+# source://byebug//lib/byebug/commands/restart.rb#14
 class Byebug::RestartCommand < ::Byebug::Command
   include ::Byebug::Helpers::BinHelper
   include ::Byebug::Helpers::PathHelper
@@ -2594,6 +2750,8 @@ class Byebug::RestartCommand < ::Byebug::Command
 end
 
 # Save current settings to use them in another debug session.
+#
+# source://byebug//lib/byebug/commands/save.rb#9
 class Byebug::SaveCommand < ::Byebug::Command
   # source://byebug//lib/byebug/commands/save.rb#36
   def execute; end
@@ -2625,6 +2783,8 @@ class Byebug::SaveCommand < ::Byebug::Command
 end
 
 # Setting to customize the file where byebug's history is saved.
+#
+# source://byebug//lib/byebug/settings/savefile.rb#9
 class Byebug::SavefileSetting < ::Byebug::Setting
   # source://byebug//lib/byebug/settings/savefile.rb#12
   def banner; end
@@ -2637,6 +2797,8 @@ end
 Byebug::SavefileSetting::DEFAULT = T.let(T.unsafe(nil), String)
 
 # Interface class for command execution from script files.
+#
+# source://byebug//lib/byebug/interfaces/script_interface.rb#7
 class Byebug::ScriptInterface < ::Byebug::Interface
   # @return [ScriptInterface] a new instance of ScriptInterface
   #
@@ -2654,6 +2816,8 @@ class Byebug::ScriptInterface < ::Byebug::Interface
 end
 
 # Processes commands from a file
+#
+# source://byebug//lib/byebug/processors/script_processor.rb#12
 class Byebug::ScriptProcessor < ::Byebug::CommandProcessor
   # source://byebug//lib/byebug/processors/script_processor.rb#28
   def after_repl; end
@@ -2678,6 +2842,8 @@ class Byebug::ScriptProcessor < ::Byebug::CommandProcessor
 end
 
 # Change byebug settings.
+#
+# source://byebug//lib/byebug/commands/set.rb#10
 class Byebug::SetCommand < ::Byebug::Command
   include ::Byebug::Helpers::ParseHelper
 
@@ -2705,6 +2871,8 @@ class Byebug::SetCommand < ::Byebug::Command
 end
 
 # Parent class for all byebug settings.
+#
+# source://byebug//lib/byebug/setting.rb#9
 class Byebug::Setting
   # @return [Setting] a new instance of Setting
   #
@@ -2766,6 +2934,8 @@ end
 Byebug::Setting::DEFAULT = T.let(T.unsafe(nil), FalseClass)
 
 # Show byebug settings.
+#
+# source://byebug//lib/byebug/commands/show.rb#9
 class Byebug::ShowCommand < ::Byebug::Command
   # source://byebug//lib/byebug/commands/show.rb#35
   def execute; end
@@ -2787,6 +2957,8 @@ end
 
 # Allows the user to continue execution until the next breakpoint, as
 # long as it is different from the current one
+#
+# source://byebug//lib/byebug/commands/skip.rb#11
 class Byebug::SkipCommand < ::Byebug::Command
   include ::Byebug::Helpers::ParseHelper
 
@@ -2851,6 +3023,8 @@ end
 # Execute a file containing byebug commands.
 #
 # It can be used to restore a previously saved debugging session.
+#
+# source://byebug//lib/byebug/commands/source.rb#11
 class Byebug::SourceCommand < ::Byebug::Command
   # source://byebug//lib/byebug/commands/source.rb#31
   def execute; end
@@ -2868,6 +3042,8 @@ class Byebug::SourceCommand < ::Byebug::Command
 end
 
 # Formats specific line ranges in a source file
+#
+# source://byebug//lib/byebug/source_file_formatter.rb#10
 class Byebug::SourceFileFormatter
   include ::Byebug::Helpers::FileHelper
 
@@ -2919,6 +3095,8 @@ end
 
 # Setting to enable/disable the display of backtraces when evaluations raise
 # errors.
+#
+# source://byebug//lib/byebug/settings/stack_on_error.rb#10
 class Byebug::StackOnErrorSetting < ::Byebug::Setting
   # source://byebug//lib/byebug/settings/stack_on_error.rb#11
   def banner; end
@@ -2928,6 +3106,8 @@ end
 #
 # Allows the user the continue execution until the next instruction, possibily
 # in a different frame. Use step to step into method calls or blocks.
+#
+# source://byebug//lib/byebug/commands/step.rb#13
 class Byebug::StepCommand < ::Byebug::Command
   include ::Byebug::Helpers::ParseHelper
 
@@ -2947,6 +3127,8 @@ class Byebug::StepCommand < ::Byebug::Command
 end
 
 # Subcommand additions.
+#
+# source://byebug//lib/byebug/subcommands.rb#12
 module Byebug::Subcommands
   extend ::Forwardable
 
@@ -2971,6 +3153,8 @@ module Byebug::Subcommands
 end
 
 # Class methods added to subcommands
+#
+# source://byebug//lib/byebug/subcommands.rb#36
 module Byebug::Subcommands::ClassMethods
   include ::Byebug::Helpers::ReflectionHelper
 
@@ -2986,6 +3170,8 @@ module Byebug::Subcommands::ClassMethods
 end
 
 # Manipulation of Ruby threads
+#
+# source://byebug//lib/byebug/commands/thread/current.rb#12
 class Byebug::ThreadCommand < ::Byebug::Command
   include ::Byebug::Subcommands
   extend ::Byebug::Helpers::ReflectionHelper
@@ -3004,6 +3190,8 @@ class Byebug::ThreadCommand < ::Byebug::Command
 end
 
 # Information about the current thread
+#
+# source://byebug//lib/byebug/commands/thread/current.rb#13
 class Byebug::ThreadCommand::CurrentCommand < ::Byebug::Command
   include ::Byebug::Helpers::ThreadHelper
 
@@ -3023,6 +3211,8 @@ class Byebug::ThreadCommand::CurrentCommand < ::Byebug::Command
 end
 
 # Information about threads
+#
+# source://byebug//lib/byebug/commands/thread/list.rb#13
 class Byebug::ThreadCommand::ListCommand < ::Byebug::Command
   include ::Byebug::Helpers::ThreadHelper
 
@@ -3042,6 +3232,8 @@ class Byebug::ThreadCommand::ListCommand < ::Byebug::Command
 end
 
 # Resumes the specified thread
+#
+# source://byebug//lib/byebug/commands/thread/resume.rb#13
 class Byebug::ThreadCommand::ResumeCommand < ::Byebug::Command
   include ::Byebug::Helpers::ThreadHelper
 
@@ -3061,6 +3253,8 @@ class Byebug::ThreadCommand::ResumeCommand < ::Byebug::Command
 end
 
 # Stops the specified thread
+#
+# source://byebug//lib/byebug/commands/thread/stop.rb#13
 class Byebug::ThreadCommand::StopCommand < ::Byebug::Command
   include ::Byebug::Helpers::ThreadHelper
 
@@ -3080,6 +3274,8 @@ class Byebug::ThreadCommand::StopCommand < ::Byebug::Command
 end
 
 # Switches to the specified thread
+#
+# source://byebug//lib/byebug/commands/thread/switch.rb#13
 class Byebug::ThreadCommand::SwitchCommand < ::Byebug::Command
   include ::Byebug::Helpers::ThreadHelper
 
@@ -3101,6 +3297,8 @@ end
 class Byebug::ThreadsTable; end
 
 # Show (and possibily stop) at every line that changes a global variable.
+#
+# source://byebug//lib/byebug/commands/tracevar.rb#9
 class Byebug::TracevarCommand < ::Byebug::Command
   # source://byebug//lib/byebug/commands/tracevar.rb#32
   def execute; end
@@ -3123,6 +3321,8 @@ class Byebug::TracevarCommand < ::Byebug::Command
 end
 
 # Remove expressions from display list.
+#
+# source://byebug//lib/byebug/commands/undisplay.rb#10
 class Byebug::UndisplayCommand < ::Byebug::Command
   include ::Byebug::Helpers::ParseHelper
 
@@ -3142,6 +3342,8 @@ class Byebug::UndisplayCommand < ::Byebug::Command
 end
 
 # Stop tracing a global variable.
+#
+# source://byebug//lib/byebug/commands/untracevar.rb#9
 class Byebug::UntracevarCommand < ::Byebug::Command
   # source://byebug//lib/byebug/commands/untracevar.rb#26
   def execute; end
@@ -3159,6 +3361,8 @@ class Byebug::UntracevarCommand < ::Byebug::Command
 end
 
 # Move the current frame up in the backtrace.
+#
+# source://byebug//lib/byebug/commands/up.rb#12
 class Byebug::UpCommand < ::Byebug::Command
   include ::Byebug::Helpers::FrameHelper
   include ::Byebug::Helpers::ParseHelper
@@ -3179,6 +3383,8 @@ class Byebug::UpCommand < ::Byebug::Command
 end
 
 # Shows variables and its values
+#
+# source://byebug//lib/byebug/commands/var/all.rb#12
 class Byebug::VarCommand < ::Byebug::Command
   include ::Byebug::Subcommands
   extend ::Byebug::Helpers::ReflectionHelper
@@ -3197,6 +3403,8 @@ class Byebug::VarCommand < ::Byebug::Command
 end
 
 # Shows global, instance and local variables
+#
+# source://byebug//lib/byebug/commands/var/all.rb#13
 class Byebug::VarCommand::AllCommand < ::Byebug::Command
   include ::Byebug::Helpers::EvalHelper
   include ::Byebug::Helpers::VarHelper
@@ -3217,6 +3425,8 @@ class Byebug::VarCommand::AllCommand < ::Byebug::Command
 end
 
 # Information about arguments of the current method/block
+#
+# source://byebug//lib/byebug/commands/var/args.rb#13
 class Byebug::VarCommand::ArgsCommand < ::Byebug::Command
   include ::Byebug::Helpers::EvalHelper
   include ::Byebug::Helpers::VarHelper
@@ -3237,6 +3447,8 @@ class Byebug::VarCommand::ArgsCommand < ::Byebug::Command
 end
 
 # Shows constants
+#
+# source://byebug//lib/byebug/commands/var/const.rb#13
 class Byebug::VarCommand::ConstCommand < ::Byebug::Command
   include ::Byebug::Helpers::EvalHelper
 
@@ -3261,6 +3473,8 @@ class Byebug::VarCommand::ConstCommand < ::Byebug::Command
 end
 
 # Shows global variables
+#
+# source://byebug//lib/byebug/commands/var/global.rb#11
 class Byebug::VarCommand::GlobalCommand < ::Byebug::Command
   include ::Byebug::Helpers::EvalHelper
   include ::Byebug::Helpers::VarHelper
@@ -3281,6 +3495,8 @@ class Byebug::VarCommand::GlobalCommand < ::Byebug::Command
 end
 
 # Shows instance variables
+#
+# source://byebug//lib/byebug/commands/var/instance.rb#13
 class Byebug::VarCommand::InstanceCommand < ::Byebug::Command
   include ::Byebug::Helpers::EvalHelper
   include ::Byebug::Helpers::VarHelper
@@ -3301,6 +3517,8 @@ class Byebug::VarCommand::InstanceCommand < ::Byebug::Command
 end
 
 # Shows local variables in current scope
+#
+# source://byebug//lib/byebug/commands/var/local.rb#13
 class Byebug::VarCommand::LocalCommand < ::Byebug::Command
   include ::Byebug::Helpers::EvalHelper
   include ::Byebug::Helpers::VarHelper
@@ -3321,6 +3539,8 @@ class Byebug::VarCommand::LocalCommand < ::Byebug::Command
 end
 
 # Show current backtrace.
+#
+# source://byebug//lib/byebug/commands/where.rb#11
 class Byebug::WhereCommand < ::Byebug::Command
   include ::Byebug::Helpers::FrameHelper
 
@@ -3345,6 +3565,8 @@ class Byebug::WhereCommand < ::Byebug::Command
 end
 
 # Setting to customize the maximum width of byebug's output.
+#
+# source://byebug//lib/byebug/settings/width.rb#9
 class Byebug::WidthSetting < ::Byebug::Setting
   # source://byebug//lib/byebug/settings/width.rb#12
   def banner; end
@@ -3358,6 +3580,8 @@ Byebug::WidthSetting::DEFAULT = T.let(T.unsafe(nil), Integer)
 
 # Extends the extension class to be able to pass information about the
 # debugging environment from the c-extension to the user.
+#
+# source://byebug//lib/byebug/core.rb#113
 class Exception
   # Returns the value of attribute __bb_context.
   #
@@ -3368,6 +3592,8 @@ end
 # Adds a `byebug` method to the Kernel module.
 #
 # Dropping a `byebug` call anywhere in your code, you get a debug prompt.
+#
+# source://byebug//lib/byebug/attacher.rb#34
 module Kernel
   # source://byebug//lib/byebug/attacher.rb#35
   def byebug; end

@@ -19,6 +19,8 @@
 # of the formatting from Apache's mod_log_config
 # http://httpd.apache.org/docs/mod/mod_log_config.html#formats.  See
 # AccessLog::setup_params for a list of supported options
+#
+# source://webrick//lib/webrick/accesslog.rb#30
 module WEBrick::AccessLog
   private
 
@@ -104,6 +106,8 @@ module WEBrick::AccessLog
 end
 
 # A generic logging class
+#
+# source://webrick//lib/webrick/log.rb#17
 class WEBrick::BasicLog
   # Initializes a new logger for +log_file+ that outputs messages at +level+
   # or higher.  +log_file+ can be a filename, an IO-like object that
@@ -217,6 +221,8 @@ end
 
 # --
 # Updates WEBrick::GenericServer with SSL functionality
+#
+# source://webrick//lib/webrick/server.rb#56
 class WEBrick::GenericServer
   # Creates a new generic server from +config+.  The default configuration
   # comes from +default+.
@@ -341,6 +347,7 @@ class WEBrick::GenericServer
   def start_thread(sock, &block); end
 end
 
+# source://webrick//lib/webrick/htmlutils.rb#13
 module WEBrick::HTMLUtils
   private
 
@@ -389,6 +396,8 @@ end
 #
 # For digest authentication the authenticator must not be created every
 # request, it must be passed in as an option via WEBrick::HTTPServer#mount.
+#
+# source://webrick//lib/webrick/httpauth/authenticator.rb#12
 module WEBrick::HTTPAuth
   private
 
@@ -439,6 +448,8 @@ end
 
 # Module providing generic support for both Digest and Basic
 # authentication schemes.
+#
+# source://webrick//lib/webrick/httpauth/authenticator.rb#18
 module WEBrick::HTTPAuth::Authenticator
   # The logger for this authenticator
   #
@@ -495,6 +506,8 @@ WEBrick::HTTPAuth::Authenticator::AuthException = WEBrick::HTTPStatus::Unauthori
 #   config[:UserDB] = htpasswd
 #
 #   basic_auth = WEBrick::HTTPAuth::BasicAuth.new config
+#
+# source://webrick//lib/webrick/httpauth/basicauth.rb#35
 class WEBrick::HTTPAuth::BasicAuth
   include ::WEBrick::HTTPAuth::Authenticator
 
@@ -569,6 +582,8 @@ end
 # object in the servlet's #initialize.  By default WEBrick creates a new
 # servlet instance for every request and the DigestAuth object must be
 # used across requests.
+#
+# source://webrick//lib/webrick/httpauth/digestauth.rb#46
 class WEBrick::HTTPAuth::DigestAuth
   include ::WEBrick::HTTPAuth::Authenticator
 
@@ -657,6 +672,8 @@ end
 #   htpasswd = WEBrick::HTTPAuth::Htdigest.new 'my_password_file'
 #   htpasswd.set_passwd 'my realm', 'username', 'password'
 #   htpasswd.flush
+#
+# source://webrick//lib/webrick/httpauth/htdigest.rb#31
 class WEBrick::HTTPAuth::Htdigest
   include ::WEBrick::HTTPAuth::UserDB
 
@@ -712,6 +729,8 @@ end
 #   htgroup.add 'superheroes', %w[spiderman batman]
 #
 #   htgroup.members('superheroes').include? 'magneto' # => false
+#
+# source://webrick//lib/webrick/httpauth/htgroup.rb#30
 class WEBrick::HTTPAuth::Htgroup
   # Open a group database at +path+
   #
@@ -754,6 +773,8 @@ end
 #   htpasswd = WEBrick::HTTPAuth::Htpasswd.new 'my_password_file'
 #   htpasswd.set_passwd 'my realm', 'username', 'password'
 #   htpasswd.flush
+#
+# source://webrick//lib/webrick/httpauth/htpasswd.rb#32
 class WEBrick::HTTPAuth::Htpasswd
   include ::WEBrick::HTTPAuth::UserDB
 
@@ -801,11 +822,15 @@ end
 WEBrick::HTTPAuth::ProxyAuthenticator::AuthException = WEBrick::HTTPStatus::ProxyAuthenticationRequired
 
 # Basic authentication for proxy servers.  See BasicAuth for details.
+#
+# source://webrick//lib/webrick/httpauth/basicauth.rb#112
 class WEBrick::HTTPAuth::ProxyBasicAuth < ::WEBrick::HTTPAuth::BasicAuth
   include ::WEBrick::HTTPAuth::ProxyAuthenticator
 end
 
 # Digest authentication for proxy servers.  See DigestAuth for details.
+#
+# source://webrick//lib/webrick/httpauth/digestauth.rb#386
 class WEBrick::HTTPAuth::ProxyDigestAuth < ::WEBrick::HTTPAuth::DigestAuth
   include ::WEBrick::HTTPAuth::ProxyAuthenticator
 
@@ -817,6 +842,8 @@ end
 
 # User database mixin for HTTPAuth.  This mixin dispatches user record
 # access to the underlying auth_type for this database.
+#
+# source://webrick//lib/webrick/httpauth/userdb.rb#18
 module WEBrick::HTTPAuth::UserDB
   # The authentication type.
   #
@@ -855,6 +882,8 @@ end
 
 # --
 # Adds SSL functionality to WEBrick::HTTPRequest
+#
+# source://webrick//lib/webrick/httprequest.rb#25
 class WEBrick::HTTPRequest
   # Creates a new HTTP request.  WEBrick::Config::HTTP is the default
   # configuration.
@@ -1150,6 +1179,8 @@ WEBrick::HTTPRequest::MAX_HEADER_LENGTH = T.let(T.unsafe(nil), Integer)
 
 # An HTTP response.  This is filled in by the service or do_* methods of a
 # WEBrick HTTP Servlet.
+#
+# source://webrick//lib/webrick/httpresponse.rb#24
 class WEBrick::HTTPResponse
   # Creates a new HTTP response object.  WEBrick::Config::HTTP is the
   # default configuration.
@@ -1168,6 +1199,9 @@ class WEBrick::HTTPResponse
   #
   # source://webrick//lib/webrick/httpresponse.rb#157
   def []=(field, value); end
+
+  # source://webrick//lib/webrick/httpresponse.rb#240
+  def _rack_setup_header; end
 
   # Body may be:
   # * a String;
@@ -1373,11 +1407,6 @@ class WEBrick::HTTPResponse
   # source://webrick//lib/webrick/httpresponse.rb#373
   def set_redirect(status, url); end
 
-  # Sets up the headers for sending
-  #
-  # source://webrick//lib/webrick/httpresponse.rb#240
-  def setup_header; end
-
   # Response status code (200)
   #
   # source://webrick//lib/webrick/httpresponse.rb#36
@@ -1418,6 +1447,7 @@ class WEBrick::HTTPResponse
   def send_body_string(socket); end
 end
 
+# source://webrick//lib/webrick/httpresponse.rb#531
 class WEBrick::HTTPResponse::ChunkedWrapper
   # @return [ChunkedWrapper] a new instance of ChunkedWrapper
   #
@@ -1432,6 +1462,8 @@ class WEBrick::HTTPResponse::ChunkedWrapper
 end
 
 # An HTTP Server
+#
+# source://webrick//lib/webrick/httpserver.rb#44
 class WEBrick::HTTPServer < ::WEBrick::GenericServer
   # Creates a new HTTP server according to +config+
   #
@@ -1535,6 +1567,8 @@ end
 # of the server.  Users of WEBrick can only access this indirectly via
 # WEBrick::HTTPServer#mount, WEBrick::HTTPServer#unmount and
 # WEBrick::HTTPServer#search_servlet
+#
+# source://webrick//lib/webrick/httpserver.rb#247
 class WEBrick::HTTPServer::MountTable
   # @return [MountTable] a new instance of MountTable
   #
@@ -1616,6 +1650,8 @@ end
 # This servlet must be provided two arguments at mount time:
 #
 #   server.mount '/configurable', Configurable, 'red', '2em'
+#
+# source://webrick//lib/webrick/httpservlet/abstract.rb#76
 class WEBrick::HTTPServlet::AbstractServlet
   # Initializes a new servlet for +server+ using +options+ which are
   # stored as-is in +@options+.  +@logger+ is also provided.
@@ -1672,6 +1708,8 @@ end
 #
 #  server.mount('/cgi/my_script', WEBrick::HTTPServlet::CGIHandler,
 #               '/path/to/my_script')
+#
+# source://webrick//lib/webrick/httpservlet/cgihandler.rb#28
 class WEBrick::HTTPServlet::CGIHandler < ::WEBrick::HTTPServlet::AbstractServlet
   # Creates a new CGI script servlet for the script at +name+
   #
@@ -1707,6 +1745,8 @@ WEBrick::HTTPServlet::CGIHandler::CGIRunnerArray = T.let(T.unsafe(nil), Array)
 #                '/path/to/my_page.txt')
 #
 # This servlet handles If-Modified-Since and Range requests.
+#
+# source://webrick//lib/webrick/httpservlet/filehandler.rb#32
 class WEBrick::HTTPServlet::DefaultFileHandler < ::WEBrick::HTTPServlet::AbstractServlet
   # Creates a DefaultFileHandler instance for the file at +local_path+.
   #
@@ -1752,6 +1792,8 @@ end
 #   Request to <%= servlet_request.request_uri %>
 #
 #   Query params <%= servlet_request.query.inspect %>
+#
+# source://webrick//lib/webrick/httpservlet/erbhandler.rb#36
 class WEBrick::HTTPServlet::ERBHandler < ::WEBrick::HTTPServlet::AbstractServlet
   # Creates a new ERBHandler on +server+ that will evaluate and serve the
   # ERB file +name+
@@ -1789,6 +1831,8 @@ end
 #
 #   server.mount('/assets', WEBrick::HTTPServlet::FileHandler,
 #                '/path/to/assets')
+#
+# source://webrick//lib/webrick/httpservlet/filehandler.rb#175
 class WEBrick::HTTPServlet::FileHandler < ::WEBrick::HTTPServlet::AbstractServlet
   # Creates a FileHandler servlet on +server+ that serves files starting
   # at directory +root+
@@ -1888,6 +1932,8 @@ end
 #
 # See http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html for more
 # information.
+#
+# source://webrick//lib/webrick/httpstatus.rb#21
 module WEBrick::HTTPStatus
   private
 
@@ -2003,6 +2049,8 @@ module WEBrick::HTTPStatus
 end
 
 # Root of the HTTP status class hierarchy
+#
+# source://webrick//lib/webrick/httpstatus.rb#25
 class WEBrick::HTTPStatus::Status < ::StandardError
   # Returns the HTTP status code
   #
@@ -2031,6 +2079,8 @@ end
 # HTTPUtils provides utility methods for working with the HTTP protocol.
 #
 # This module is generally used internally by WEBrick
+#
+# source://webrick//lib/webrick/httputils.rb#25
 module WEBrick::HTTPUtils
   private
 
@@ -2243,6 +2293,8 @@ end
 
 # Stores multipart form data.  FormData objects are created when
 # WEBrick::HTTPUtils.parse_form_data is called.
+#
+# source://webrick//lib/webrick/httputils.rb#242
 class WEBrick::HTTPUtils::FormData < ::String
   # Creates a new FormData object.
   #
@@ -2327,6 +2379,7 @@ class WEBrick::HTTPUtils::FormData < ::String
   def next_data; end
 end
 
+# source://webrick//lib/webrick/utils.rb#17
 module WEBrick::Utils
   private
 
@@ -2437,6 +2490,8 @@ end
 #   end
 #
 # will print 'foo'
+#
+# source://webrick//lib/webrick/utils.rb#118
 class WEBrick::Utils::TimeoutHandler
   include ::Singleton
   extend ::Singleton::SingletonClassMethods

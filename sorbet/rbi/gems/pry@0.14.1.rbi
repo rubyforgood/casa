@@ -10,6 +10,7 @@
 # source://yard/0.9.28/lib/yard.rb#62
 ::RUBY19 = T.let(T.unsafe(nil), TrueClass)
 
+# source://pry//lib/pry/core_extensions.rb#115
 class BasicObject
   # Return a binding object for the receiver.
   #
@@ -25,14 +26,9 @@ class BasicObject
   def __binding__; end
 end
 
+# source://pry//lib/pry/core_extensions.rb#24
 class Object < ::BasicObject
-  include ::ActiveSupport::ToJsonWithActiveSupportEncoder
-  include ::ActiveSupport::Dependencies::RequireDependency
   include ::Kernel
-  include ::ActiveSupport::Tryable
-  include ::Delayed::MessageSending
-  include ::FriendlyId::ObjectUtils
-  include ::PP::ObjectMixin
 
   # Return a binding object for the receiver.
   #
@@ -80,6 +76,7 @@ class Object < ::BasicObject
   def pry(object = T.unsafe(nil), hash = T.unsafe(nil)); end
 end
 
+# source://pry//lib/pry/version.rb#3
 class Pry
   extend ::Forwardable
   extend ::Pry::Forwardable
@@ -966,6 +963,7 @@ end
 # source://pry//lib/pry/core_extensions.rb#9
 Pry::BINDING_METHOD_IMPL = T.let(T.unsafe(nil), Array)
 
+# source://pry//lib/pry/basic_object.rb#4
 class Pry::BasicObject < ::BasicObject
   include ::Kernel
 end
@@ -994,6 +992,8 @@ Pry::BasicObject::Pry = Pry
 # arguments and the right context.
 #
 # Create subclasses using {Pry::CommandSet#command}.
+#
+# source://pry//lib/pry/block_command.rb#13
 class Pry::BlockCommand < ::Pry::Command
   # Call the block that was registered with this command.
   #
@@ -1008,6 +1008,8 @@ class Pry::BlockCommand < ::Pry::Command
 end
 
 # Manage the processing of command line options
+#
+# source://pry//lib/pry/cli.rb#7
 class Pry::CLI
   class << self
     # Add a block responsible for processing parsed options.
@@ -1069,6 +1071,7 @@ class Pry::CLI
   end
 end
 
+# source://pry//lib/pry/cli.rb#8
 class Pry::CLI::NoOptionsError < ::StandardError; end
 
 # A super-class of Commands with structure.
@@ -1082,6 +1085,8 @@ class Pry::CLI::NoOptionsError < ::StandardError; end
 # method to actually run the command. If necessary, you can also override
 # `setup` which will be called before `options`, for example to require any
 # gems your command needs to run, or to set up state.
+#
+# source://pry//lib/pry/class_command.rb#15
 class Pry::ClassCommand < ::Pry::Command
   # Returns the value of attribute args.
   #
@@ -1275,6 +1280,8 @@ end
 # which will format the text as specified when `#to_s` is called. This allows
 # arbitrary chaining of formatting methods without mutating the original
 # object.
+#
+# source://pry//lib/pry/code.rb#32
 class Pry::Code
   extend ::MethodSource::CodeHelpers
 
@@ -1548,6 +1555,8 @@ end
 # Represents a range of lines in a code listing.
 #
 # @api private
+#
+# source://pry//lib/pry/code/code_range.rb#8
 class Pry::Code::CodeRange
   # @api private
   # @param start_line [Integer]
@@ -1635,6 +1644,8 @@ end
 #
 #   loc.indent(3)
 #   loc.line #=> "   def example\n  :example\nend"
+#
+# source://pry//lib/pry/code/loc.rb#23
 class Pry::Code::LOC
   # @api private
   # @param line [String] The line of code.
@@ -1716,6 +1727,7 @@ class Pry::Code::LOC
   def tuple; end
 end
 
+# source://pry//lib/pry/code/code_file.rb#6
 class Pry::CodeFile
   # @param filename [String] The name of a file with code to be detected
   # @param code_type [Symbol] The type of code the `filename` contains
@@ -1818,6 +1830,8 @@ Pry::CodeFile::INITIAL_PWD = T.let(T.unsafe(nil), String)
 # concept of what a "Code Object" really is. Currently
 # commands/classes/candidates/methods and so on just share a very
 # ill-defined interface.
+#
+# source://pry//lib/pry/code_object.rb#22
 class Pry::CodeObject
   include ::Pry::Helpers::OptionsHelpers
   include ::Pry::Helpers::CommandHelpers
@@ -1942,6 +1956,7 @@ class Pry::CodeObject
   end
 end
 
+# source://pry//lib/pry/code_object.rb#23
 module Pry::CodeObject::Helpers
   # @return [Boolean]
   #
@@ -1975,6 +1990,8 @@ module Pry::CodeObject::Helpers
 end
 
 # PP subclass for streaming inspect output in color.
+#
+# source://pry//lib/pry/color_printer.rb#8
 class Pry::ColorPrinter < ::PP
   # source://pry//lib/pry/color_printer.rb#25
   def pp(object); end
@@ -2000,6 +2017,8 @@ class Pry::ColorPrinter < ::PP
 end
 
 # N.B. using a regular expresion here so that "raise-up 'foo'" does the right thing.
+#
+# source://pry//lib/pry/command.rb#11
 class Pry::Command
   include ::Pry::Helpers::BaseHelpers
   include ::Pry::Helpers::OptionsHelpers
@@ -2470,6 +2489,7 @@ class Pry::Command
   end
 end
 
+# source://pry//lib/pry/commands/amend_line.rb#5
 class Pry::Command::AmendLine < ::Pry::ClassCommand
   # @raise [CommandError]
   #
@@ -2526,16 +2546,19 @@ class Pry::Command::AmendLine < ::Pry::ClassCommand
   def zero_indexed_range_from_one_indexed_numbers(start_line_number, end_line_number); end
 end
 
+# source://pry//lib/pry/commands/bang.rb#5
 class Pry::Command::Bang < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/bang.rb#16
   def process; end
 end
 
+# source://pry//lib/pry/commands/bang_pry.rb#5
 class Pry::Command::BangPry < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/bang_pry.rb#14
   def process; end
 end
 
+# source://pry//lib/pry/commands/cat.rb#5
 class Pry::Command::Cat < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/cat.rb#53
   def complete(search); end
@@ -2550,6 +2573,7 @@ class Pry::Command::Cat < ::Pry::ClassCommand
   def process; end
 end
 
+# source://pry//lib/pry/commands/cat/abstract_formatter.rb#6
 class Pry::Command::Cat::AbstractFormatter
   include ::Pry::Helpers::OptionsHelpers
   include ::Pry::Helpers::CommandHelpers
@@ -2572,6 +2596,7 @@ class Pry::Command::Cat::AbstractFormatter
   def use_line_numbers?; end
 end
 
+# source://pry//lib/pry/commands/cat/exception_formatter.rb#6
 class Pry::Command::Cat::ExceptionFormatter < ::Pry::Command::Cat::AbstractFormatter
   include ::Pry::Helpers::Text
 
@@ -2627,6 +2652,7 @@ class Pry::Command::Cat::ExceptionFormatter < ::Pry::Command::Cat::AbstractForma
   def start_and_end_line_for_code_window; end
 end
 
+# source://pry//lib/pry/commands/cat/file_formatter.rb#6
 class Pry::Command::Cat::FileFormatter < ::Pry::Command::Cat::AbstractFormatter
   # @return [FileFormatter] a new instance of FileFormatter
   #
@@ -2675,6 +2701,7 @@ class Pry::Command::Cat::FileFormatter < ::Pry::Command::Cat::AbstractFormatter
   def line_number; end
 end
 
+# source://pry//lib/pry/commands/cat/input_expression_formatter.rb#6
 class Pry::Command::Cat::InputExpressionFormatter < ::Pry::Command::Cat::AbstractFormatter
   # @return [InputExpressionFormatter] a new instance of InputExpressionFormatter
   #
@@ -2722,11 +2749,13 @@ class Pry::Command::Cat::InputExpressionFormatter < ::Pry::Command::Cat::Abstrac
   def selected_input_items; end
 end
 
+# source://pry//lib/pry/commands/cd.rb#5
 class Pry::Command::Cd < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/cd.rb#25
   def process; end
 end
 
+# source://pry//lib/pry/commands/change_inspector.rb#5
 class Pry::Command::ChangeInspector < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/change_inspector.rb#17
   def process(inspector); end
@@ -2737,6 +2766,7 @@ class Pry::Command::ChangeInspector < ::Pry::ClassCommand
   def inspector_map; end
 end
 
+# source://pry//lib/pry/commands/change_prompt.rb#5
 class Pry::Command::ChangePrompt < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/change_prompt.rb#16
   def options(opt); end
@@ -2753,11 +2783,13 @@ class Pry::Command::ChangePrompt < ::Pry::ClassCommand
   def list_prompts; end
 end
 
+# source://pry//lib/pry/commands/clear_screen.rb#5
 class Pry::Command::ClearScreen < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/clear_screen.rb#10
   def process; end
 end
 
+# source://pry//lib/pry/commands/code_collector.rb#5
 class Pry::Command::CodeCollector
   include ::Pry::Helpers::OptionsHelpers
   include ::Pry::Helpers::CommandHelpers
@@ -2905,11 +2937,13 @@ class Pry::Command::CodeCollector
   end
 end
 
+# source://pry//lib/pry/commands/disable_pry.rb#5
 class Pry::Command::DisablePry < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/disable_pry.rb#23
   def process; end
 end
 
+# source://pry//lib/pry/commands/edit.rb#5
 class Pry::Command::Edit < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/edit.rb#89
   def apply_runtime_patch; end
@@ -3005,6 +3039,7 @@ class Pry::Command::Edit < ::Pry::ClassCommand
   def runtime_patch?; end
 end
 
+# source://pry//lib/pry/commands/edit/exception_patcher.rb#6
 class Pry::Command::Edit::ExceptionPatcher
   # @return [ExceptionPatcher] a new instance of ExceptionPatcher
   #
@@ -3053,6 +3088,7 @@ class Pry::Command::Edit::ExceptionPatcher
   def state=(_arg0); end
 end
 
+# source://pry//lib/pry/commands/edit/file_and_line_locator.rb#6
 module Pry::Command::Edit::FileAndLineLocator
   class << self
     # source://pry//lib/pry/commands/edit/file_and_line_locator.rb#8
@@ -3073,6 +3109,7 @@ module Pry::Command::Edit::FileAndLineLocator
   end
 end
 
+# source://pry//lib/pry/commands/exit.rb#5
 class Pry::Command::Exit < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/exit.rb#25
   def process; end
@@ -3081,16 +3118,19 @@ class Pry::Command::Exit < ::Pry::ClassCommand
   def process_pop_and_return; end
 end
 
+# source://pry//lib/pry/commands/exit_all.rb#5
 class Pry::Command::ExitAll < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/exit_all.rb#18
   def process; end
 end
 
+# source://pry//lib/pry/commands/exit_program.rb#5
 class Pry::Command::ExitProgram < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/exit_program.rb#18
   def process; end
 end
 
+# source://pry//lib/pry/commands/find_method.rb#5
 class Pry::Command::FindMethod < ::Pry::ClassCommand
   extend ::Pry::Helpers::BaseHelpers
 
@@ -3181,11 +3221,13 @@ class Pry::Command::FindMethod < ::Pry::ClassCommand
   def show_search_results(matches); end
 end
 
+# source://pry//lib/pry/commands/fix_indent.rb#5
 class Pry::Command::FixIndent < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/fix_indent.rb#15
   def process; end
 end
 
+# source://pry//lib/pry/commands/help.rb#5
 class Pry::Command::Help < ::Pry::ClassCommand
   # Get a hash of available commands grouped by the "group" name.
   #
@@ -3286,6 +3328,7 @@ class Pry::Command::Help < ::Pry::ClassCommand
   def visible_commands; end
 end
 
+# source://pry//lib/pry/commands/hist.rb#5
 class Pry::Command::Hist < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/hist.rb#25
   def options(opt); end
@@ -3340,6 +3383,7 @@ class Pry::Command::Hist < ::Pry::ClassCommand
   def process_save; end
 end
 
+# source://pry//lib/pry/commands/import_set.rb#5
 class Pry::Command::ImportSet < ::Pry::ClassCommand
   # TODO: resolve unused parameter.
   #
@@ -3349,11 +3393,13 @@ class Pry::Command::ImportSet < ::Pry::ClassCommand
   def process(_command_set_name); end
 end
 
+# source://pry//lib/pry/commands/jump_to.rb#5
 class Pry::Command::JumpTo < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/jump_to.rb#14
   def process(break_level); end
 end
 
+# source://pry//lib/pry/commands/list_inspectors.rb#5
 class Pry::Command::ListInspectors < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/list_inspectors.rb#16
   def process; end
@@ -3372,6 +3418,7 @@ class Pry::Command::ListInspectors < ::Pry::ClassCommand
   def selected_text; end
 end
 
+# source://pry//lib/pry/commands/ls/jruby_hacks.rb#5
 class Pry::Command::Ls < ::Pry::ClassCommand
   # Exclude -q, -v and --grep because they,
   # don't specify what the user wants to see.
@@ -3396,6 +3443,7 @@ class Pry::Command::Ls < ::Pry::ClassCommand
   def raise_errors_if_arguments_are_weird; end
 end
 
+# source://pry//lib/pry/commands/ls/constants.rb#6
 class Pry::Command::Ls::Constants < ::Pry::Command::Ls::Formatter
   include ::Pry::Command::Ls::Interrogatable
 
@@ -3429,6 +3477,7 @@ Pry::Command::Ls::Constants::DEPRECATED_CONSTANTS = T.let(T.unsafe(nil), Array)
 # source://pry//lib/pry/commands/ls.rb#6
 Pry::Command::Ls::DEFAULT_OPTIONS = T.let(T.unsafe(nil), Hash)
 
+# source://pry//lib/pry/commands/ls/formatter.rb#6
 class Pry::Command::Ls::Formatter
   # @return [Formatter] a new instance of Formatter
   #
@@ -3478,6 +3527,7 @@ class Pry::Command::Ls::Formatter
   def output_self; end
 end
 
+# source://pry//lib/pry/commands/ls/globals.rb#7
 class Pry::Command::Ls::Globals < ::Pry::Command::Ls::Formatter
   # @return [Globals] a new instance of Globals
   #
@@ -3505,6 +3555,7 @@ Pry::Command::Ls::Globals::BUILTIN_GLOBALS = T.let(T.unsafe(nil), Array)
 # source://pry//lib/pry/commands/ls/globals.rb#19
 Pry::Command::Ls::Globals::PSEUDO_GLOBALS = T.let(T.unsafe(nil), Array)
 
+# source://pry//lib/pry/commands/ls/grep.rb#6
 class Pry::Command::Ls::Grep
   # @return [Grep] a new instance of Grep
   #
@@ -3515,6 +3566,7 @@ class Pry::Command::Ls::Grep
   def regexp; end
 end
 
+# source://pry//lib/pry/commands/ls/instance_vars.rb#6
 class Pry::Command::Ls::InstanceVars < ::Pry::Command::Ls::Formatter
   include ::Pry::Command::Ls::Interrogatable
 
@@ -3537,6 +3589,7 @@ class Pry::Command::Ls::InstanceVars < ::Pry::Command::Ls::Formatter
   def format(type, vars); end
 end
 
+# source://pry//lib/pry/commands/ls/interrogatable.rb#6
 module Pry::Command::Ls::Interrogatable
   private
 
@@ -3549,6 +3602,7 @@ module Pry::Command::Ls::Interrogatable
   def interrogating_a_module?; end
 end
 
+# source://pry//lib/pry/commands/ls/jruby_hacks.rb#6
 module Pry::Command::Ls::JRubyHacks
   private
 
@@ -3575,6 +3629,7 @@ module Pry::Command::Ls::JRubyHacks
   def trim_jruby_aliases(methods); end
 end
 
+# source://pry//lib/pry/commands/ls/local_names.rb#6
 class Pry::Command::Ls::LocalNames < ::Pry::Command::Ls::Formatter
   # @return [LocalNames] a new instance of LocalNames
   #
@@ -3595,6 +3650,7 @@ class Pry::Command::Ls::LocalNames < ::Pry::Command::Ls::Formatter
   def format(locals); end
 end
 
+# source://pry//lib/pry/commands/ls/local_vars.rb#6
 class Pry::Command::Ls::LocalVars < ::Pry::Command::Ls::Formatter
   # @return [LocalVars] a new instance of LocalVars
   #
@@ -3613,6 +3669,7 @@ class Pry::Command::Ls::LocalVars < ::Pry::Command::Ls::Formatter
   def format(name_value_pairs); end
 end
 
+# source://pry//lib/pry/commands/ls/ls_entity.rb#6
 class Pry::Command::Ls::LsEntity
   # @return [LsEntity] a new instance of LsEntity
   #
@@ -3657,6 +3714,7 @@ class Pry::Command::Ls::LsEntity
   def self_methods; end
 end
 
+# source://pry//lib/pry/commands/ls/methods.rb#6
 class Pry::Command::Ls::Methods < ::Pry::Command::Ls::Formatter
   include ::Pry::Command::Ls::Interrogatable
   include ::Pry::Command::Ls::JRubyHacks
@@ -3684,6 +3742,7 @@ class Pry::Command::Ls::Methods < ::Pry::Command::Ls::Formatter
   def correct_opts?; end
 end
 
+# source://pry//lib/pry/commands/ls/methods_helper.rb#6
 module Pry::Command::Ls::MethodsHelper
   include ::Pry::Command::Ls::JRubyHacks
 
@@ -3701,6 +3760,7 @@ module Pry::Command::Ls::MethodsHelper
   def resolution_order; end
 end
 
+# source://pry//lib/pry/commands/ls/self_methods.rb#6
 class Pry::Command::Ls::SelfMethods < ::Pry::Command::Ls::Formatter
   include ::Pry::Command::Ls::Interrogatable
   include ::Pry::Command::Ls::JRubyHacks
@@ -3722,11 +3782,13 @@ class Pry::Command::Ls::SelfMethods < ::Pry::Command::Ls::Formatter
   def correct_opts?; end
 end
 
+# source://pry//lib/pry/commands/nesting.rb#5
 class Pry::Command::Nesting < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/nesting.rb#14
   def process; end
 end
 
+# source://pry//lib/pry/commands/play.rb#5
 class Pry::Command::Play < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/play.rb#74
   def code_object; end
@@ -3767,16 +3829,19 @@ class Pry::Command::Play < ::Pry::ClassCommand
   def show_input; end
 end
 
+# source://pry//lib/pry/commands/pry_backtrace.rb#5
 class Pry::Command::PryBacktrace < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/pry_backtrace.rb#22
   def process; end
 end
 
+# source://pry//lib/pry/commands/raise_up.rb#6
 class Pry::Command::RaiseUp < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/raise_up.rb#27
   def process; end
 end
 
+# source://pry//lib/pry/commands/reload_code.rb#5
 class Pry::Command::ReloadCode < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/reload_code.rb#20
   def process; end
@@ -3798,16 +3863,19 @@ class Pry::Command::ReloadCode < ::Pry::ClassCommand
   def reload_object(identifier); end
 end
 
+# source://pry//lib/pry/commands/reset.rb#5
 class Pry::Command::Reset < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/reset.rb#14
   def process; end
 end
 
+# source://pry//lib/pry/commands/ri.rb#7
 class Pry::Command::Ri < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/ri.rb#21
   def process(spec); end
 end
 
+# source://pry//lib/pry/commands/save_file.rb#5
 class Pry::Command::SaveFile < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/save_file.rb#50
   def display_content; end
@@ -3830,6 +3898,7 @@ class Pry::Command::SaveFile < ::Pry::ClassCommand
   def save_file; end
 end
 
+# source://pry//lib/pry/commands/shell_command.rb#5
 class Pry::Command::ShellCommand < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/shell_command.rb#21
   def process(cmd); end
@@ -3859,11 +3928,13 @@ class Pry::Command::ShellCommand < ::Pry::ClassCommand
   def special_case_path?(dest); end
 end
 
+# source://pry//lib/pry/commands/shell_mode.rb#5
 class Pry::Command::ShellMode < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/shell_mode.rb#14
   def process; end
 end
 
+# source://pry//lib/pry/commands/show_doc.rb#5
 class Pry::Command::ShowDoc < ::Pry::Command::ShowInfo
   include ::Pry::Helpers::DocumentationHelpers
 
@@ -3904,6 +3975,7 @@ class Pry::Command::ShowDoc < ::Pry::Command::ShowInfo
   def start_line_for(code_object); end
 end
 
+# source://pry//lib/pry/commands/show_info.rb#5
 class Pry::Command::ShowInfo < ::Pry::ClassCommand
   extend ::Pry::Helpers::BaseHelpers
 
@@ -3994,11 +4066,13 @@ class Pry::Command::ShowInfo < ::Pry::ClassCommand
   def valid_superclass?(code_object); end
 end
 
+# source://pry//lib/pry/commands/show_input.rb#5
 class Pry::Command::ShowInput < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/show_input.rb#15
   def process; end
 end
 
+# source://pry//lib/pry/commands/show_source.rb#5
 class Pry::Command::ShowSource < ::Pry::Command::ShowInfo
   include ::Pry::Helpers::DocumentationHelpers
 
@@ -4042,6 +4116,7 @@ class Pry::Command::ShowSource < ::Pry::Command::ShowInfo
   def start_line_for(code_object); end
 end
 
+# source://pry//lib/pry/commands/stat.rb#5
 class Pry::Command::Stat < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/stat.rb#19
   def options(opt); end
@@ -4050,11 +4125,13 @@ class Pry::Command::Stat < ::Pry::ClassCommand
   def process; end
 end
 
+# source://pry//lib/pry/commands/switch_to.rb#5
 class Pry::Command::SwitchTo < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/switch_to.rb#14
   def process(selection); end
 end
 
+# source://pry//lib/pry/commands/toggle_color.rb#5
 class Pry::Command::ToggleColor < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/toggle_color.rb#21
   def color_toggle; end
@@ -4068,11 +4145,13 @@ end
 # source://pry//lib/pry/command.rb#20
 Pry::Command::VOID_VALUE = T.let(T.unsafe(nil), Object)
 
+# source://pry//lib/pry/commands/pry_version.rb#5
 class Pry::Command::Version < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/pry_version.rb#14
   def process; end
 end
 
+# source://pry//lib/pry/commands/watch_expression.rb#5
 class Pry::Command::WatchExpression < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/watch_expression.rb#31
   def options(opt); end
@@ -4104,6 +4183,7 @@ class Pry::Command::WatchExpression < ::Pry::ClassCommand
   def list; end
 end
 
+# source://pry//lib/pry/commands/watch_expression/expression.rb#6
 class Pry::Command::WatchExpression::Expression
   # @return [Expression] a new instance of Expression
   #
@@ -4158,6 +4238,7 @@ class Pry::Command::WatchExpression::Expression
   def target_eval(target, source); end
 end
 
+# source://pry//lib/pry/commands/whereami.rb#7
 class Pry::Command::Whereami < ::Pry::ClassCommand
   # @return [Whereami] a new instance of Whereami
   #
@@ -4263,6 +4344,7 @@ class Pry::Command::Whereami < ::Pry::ClassCommand
   end
 end
 
+# source://pry//lib/pry/commands/wtf.rb#5
 class Pry::Command::Wtf < ::Pry::ClassCommand
   # source://pry//lib/pry/commands/wtf.rb#27
   def options(opt); end
@@ -4293,10 +4375,14 @@ Pry::Command::Wtf::RUBY_FRAME_PATTERN = T.let(T.unsafe(nil), Regexp)
 
 # CommandErrors are caught by the REPL loop and displayed to the user. They
 # indicate an exceptional condition that's fatal to the current command.
+#
+# source://pry//lib/pry/exceptions.rb#68
 class Pry::CommandError < ::StandardError; end
 
 # This class is used to create sets of commands. Commands can be imported from
 # different sets, aliased, removed, etc.
+#
+# source://pry//lib/pry/command_set.rb#12
 class Pry::CommandSet
   include ::Enumerable
   include ::Pry::Helpers::BaseHelpers
@@ -4625,6 +4711,8 @@ end
 #
 # @api private
 # @since v0.13.0
+#
+# source://pry//lib/pry/command_state.rb#14
 class Pry::CommandState
   # @api private
   # @return [CommandState] a new instance of CommandState
@@ -4658,6 +4746,8 @@ end
 Pry::Commands = T.let(T.unsafe(nil), Pry::CommandSet)
 
 # @api private
+#
+# source://pry//lib/pry/config/attributable.rb#4
 class Pry::Config
   extend ::Pry::Config::Attributable
 
@@ -5131,6 +5221,8 @@ end
 #
 # @api private
 # @since v0.13.0
+#
+# source://pry//lib/pry/config/attributable.rb#11
 module Pry::Config::Attributable
   # @api private
   # @since v0.13.0
@@ -5152,6 +5244,8 @@ end
 #   value.foo # => 22
 # @see Pry::Config::MemoizedValue
 # @since v0.13.0
+#
+# source://pry//lib/pry/config/lazy_value.rb#19
 class Pry::Config::LazyValue
   # @api private
   # @return [LazyValue] a new instance of LazyValue
@@ -5180,6 +5274,8 @@ end
 #   value.call # => 20
 # @see Pry::Config::LazyValue
 # @since v0.13.0
+#
+# source://pry//lib/pry/config/memoized_value.rb#19
 class Pry::Config::MemoizedValue
   # @api private
   # @return [MemoizedValue] a new instance of MemoizedValue
@@ -5200,6 +5296,8 @@ end
 #
 # @api private
 # @since v0.13.0
+#
+# source://pry//lib/pry/config/value.rb#10
 class Pry::Config::Value
   # @api private
   # @return [Value] a new instance of Value
@@ -5217,6 +5315,8 @@ end
 
 # @api private
 # @since v0.13.0
+#
+# source://pry//lib/pry/control_d_handler.rb#6
 module Pry::ControlDHandler
   class << self
     # Deal with the ^D key being pressed. Different behaviour in different
@@ -5236,6 +5336,7 @@ end
 # source://pry//lib/pry/pry_instance.rb#59
 Pry::EMPTY_COMPLETIONS = T.let(T.unsafe(nil), Array)
 
+# source://pry//lib/pry/editor.rb#6
 class Pry::Editor
   include ::Pry::Helpers::OptionsHelpers
   include ::Pry::Helpers::CommandHelpers
@@ -5312,6 +5413,8 @@ end
 #
 # @api private
 # @since v0.13.0
+#
+# source://pry//lib/pry/env.rb#8
 module Pry::Env
   class << self
     # @api private
@@ -5324,6 +5427,8 @@ end
 
 # @api private
 # @since v0.13.0
+#
+# source://pry//lib/pry/exception_handler.rb#6
 module Pry::ExceptionHandler
   class << self
     # Will only show the first line of the backtrace.
@@ -5356,6 +5461,7 @@ module Pry::ExceptionHandler
   end
 end
 
+# source://pry//lib/pry/forwardable.rb#4
 module Pry::Forwardable
   include ::Forwardable
 
@@ -5373,6 +5479,8 @@ end
 # When we try to get a binding for an object, we try to define a method on
 # that Object's singleton class. This doesn't work for "frozen" Object's, and
 # the exception is just a vanilla RuntimeError.
+#
+# source://pry//lib/pry/exceptions.rb#56
 module Pry::FrozenObjectException
   class << self
     # source://pry//lib/pry/exceptions.rb#57
@@ -5386,6 +5494,7 @@ end
 # source://pry//lib/pry/pry_class.rb#11
 Pry::HAS_SAFE_LEVEL = T.let(T.unsafe(nil), FalseClass)
 
+# source://pry//lib/pry/helpers/base_helpers.rb#4
 module Pry::Helpers
   class << self
     # source://pry//lib/pry/helpers/table.rb#27
@@ -5399,6 +5508,7 @@ module Pry::Helpers
   end
 end
 
+# source://pry//lib/pry/helpers/base_helpers.rb#5
 module Pry::Helpers::BaseHelpers
   extend ::Pry::Helpers::BaseHelpers
 
@@ -5445,6 +5555,7 @@ module Pry::Helpers::BaseHelpers
   def use_ansi_codes?; end
 end
 
+# source://pry//lib/pry/helpers/command_helpers.rb#7
 module Pry::Helpers::CommandHelpers
   include ::Pry::Helpers::OptionsHelpers
   extend ::Pry::Helpers::OptionsHelpers
@@ -5513,6 +5624,8 @@ end
 
 # This class contains methods useful for extracting
 # documentation from methods and classes.
+#
+# source://pry//lib/pry/helpers/documentation_helpers.rb#7
 module Pry::Helpers::DocumentationHelpers
   private
 
@@ -5590,6 +5703,7 @@ end
 # source://pry//lib/pry/helpers/documentation_helpers.rb#8
 Pry::Helpers::DocumentationHelpers::YARD_TAGS = T.let(T.unsafe(nil), Array)
 
+# source://pry//lib/pry/helpers/options_helpers.rb#5
 module Pry::Helpers::OptionsHelpers
   private
 
@@ -5620,6 +5734,8 @@ end
 #
 # @api public
 # @since v0.12.0
+#
+# source://pry//lib/pry/helpers/platform.rb#10
 module Pry::Helpers::Platform
   class << self
     # @api public
@@ -5688,6 +5804,7 @@ module Pry::Helpers::Platform
   end
 end
 
+# source://pry//lib/pry/helpers/table.rb#35
 class Pry::Helpers::Table
   # @return [Table] a new instance of Table
   #
@@ -5747,6 +5864,8 @@ end
 
 # The methods defined on {Text} are available to custom commands via
 # {Pry::Command#text}.
+#
+# source://pry//lib/pry/helpers/text.rb#7
 module Pry::Helpers::Text
   extend ::Pry::Helpers::Text
 
@@ -6350,6 +6469,8 @@ Pry::Helpers::Text::COLORS = T.let(T.unsafe(nil), Hash)
 
 # The History class is responsible for maintaining the user's input history,
 # both internally and within Readline.
+#
+# source://pry//lib/pry/history.rb#6
 class Pry::History
   # @return [History] a new instance of History
   #
@@ -6490,6 +6611,8 @@ end
 #   Pry.config.hooks.add_hook(:before_session, :say_hi) do
 #   puts "hello"
 #   end
+#
+# source://pry//lib/pry/hooks.rb#14
 class Pry::Hooks
   # @return [Hooks] a new instance of Hooks
   #
@@ -6609,6 +6732,8 @@ end
 # works by tokenizing a string using CodeRay and then looping over those
 # tokens. Based on the tokens in a line of code that line (or the next one)
 # will be indented or un-indented by correctly.
+#
+# source://pry//lib/pry/indent.rb#11
 class Pry::Indent
   include ::Pry::Helpers::BaseHelpers
 
@@ -6864,8 +6989,11 @@ Pry::Indent::SPACES = T.let(T.unsafe(nil), String)
 Pry::Indent::STATEMENT_END_TOKENS = T.let(T.unsafe(nil), Array)
 
 # Raised if {#module_nesting} would not work.
+#
+# source://pry//lib/pry/indent.rb#15
 class Pry::Indent::UnparseableNestingError < ::StandardError; end
 
+# source://pry//lib/pry/input_completer.rb#6
 class Pry::InputCompleter
   # @return [InputCompleter] a new instance of InputCompleter
   #
@@ -6937,6 +7065,8 @@ Pry::InputCompleter::WORD_ESCAPE_STR = T.let(T.unsafe(nil), String)
 # input makes things delirious. InputLock serializes accesses to the input so
 # that threads to not conflict with each other. The latest thread to request
 # ownership of the input wins.
+#
+# source://pry//lib/pry/input_lock.rb#8
 class Pry::InputLock
   # @return [InputLock] a new instance of InputLock
   #
@@ -6991,7 +7121,10 @@ class Pry::InputLock
   end
 end
 
+# source://pry//lib/pry/input_lock.rb#9
 class Pry::InputLock::Interrupt < ::Exception; end
+
+# source://pry//lib/pry/inspector.rb#4
 class Pry::Inspector; end
 
 # source://pry//lib/pry/inspector.rb#5
@@ -7000,6 +7133,7 @@ Pry::Inspector::MAP = T.let(T.unsafe(nil), Hash)
 # source://pry//lib/pry/pry_class.rb#7
 Pry::LOCAL_RC_FILE = T.let(T.unsafe(nil), String)
 
+# source://pry//lib/pry/last_exception.rb#12
 class Pry::LastException < ::BasicObject
   # @return [LastException] a new instance of LastException
   #
@@ -7052,6 +7186,8 @@ end
 
 # This class wraps the normal `Method` and `UnboundMethod` classes
 # to provide extra functionality useful to Pry.
+#
+# source://pry//lib/pry/method.rb#20
 class Pry::Method
   include ::Pry::Helpers::BaseHelpers
   include ::Pry::Helpers::DocumentationHelpers
@@ -7442,6 +7578,8 @@ end
 # In this case we assume that the "owner" is the singleton class of the receiver.
 #
 # This occurs mainly in Sinatra applications.
+#
+# source://pry//lib/pry/method/disowned.rb#18
 class Pry::Method::Disowned < ::Pry::Method
   # Create a new Disowned method.
   #
@@ -7496,6 +7634,7 @@ class Pry::Method::Disowned < ::Pry::Method
   def respond_to_missing?(method_name, include_private = T.unsafe(nil)); end
 end
 
+# source://pry//lib/pry/method/patcher.rb#5
 class Pry::Method::Patcher
   # @return [Patcher] a new instance of Patcher
   #
@@ -7609,6 +7748,8 @@ end
 #
 # When we locate the method that matches the Binding we wrap it in
 # Pry::Method and return it, or return nil if we fail.
+#
+# source://pry//lib/pry/method/weird_method_locator.rb#19
 class Pry::Method::WeirdMethodLocator
   # @param method [Pry::Method] The seed method.
   # @param target [Binding] The Binding that captures the method
@@ -7758,8 +7899,10 @@ class Pry::Method::WeirdMethodLocator
   end
 end
 
+# source://pry//lib/pry/exceptions.rb#69
 class Pry::MethodNotFound < ::Pry::CommandError; end
 
+# source://pry//lib/pry/command_set.rb#4
 class Pry::NoCommandError < ::StandardError
   # @return [NoCommandError] a new instance of NoCommandError
   #
@@ -7779,6 +7922,8 @@ end
 # Object paths are mostly relevant in the context of the `cd` command.
 #
 # @see https://github.com/pry/pry/wiki/State-navigation
+#
+# source://pry//lib/pry/object_path.rb#17
 class Pry::ObjectPath
   # @param path_string [String] The object path expressed as a string.
   # @param current_stack [Array<Binding>] The current state of the binding
@@ -7809,8 +7954,11 @@ end
 Pry::ObjectPath::SPECIAL_TERMS = T.let(T.unsafe(nil), Array)
 
 # indicates obsolete API
+#
+# source://pry//lib/pry/exceptions.rb#72
 class Pry::ObsoleteError < ::StandardError; end
 
+# source://pry//lib/pry/output.rb#4
 class Pry::Output
   # @return [Output] a new instance of Output
   #
@@ -7894,6 +8042,7 @@ end
 # source://pry//lib/pry/output.rb#6
 Pry::Output::DEFAULT_SIZE = T.let(T.unsafe(nil), Array)
 
+# source://pry//lib/pry/pager.rb#7
 class Pry::Pager
   # @return [Pager] a new instance of Pager
   #
@@ -7947,6 +8096,8 @@ end
 
 # `NullPager` is a "pager" that actually just prints all output as it
 # comes in. Used when `Pry.config.pager` is false.
+#
+# source://pry//lib/pry/pager.rb#68
 class Pry::Pager::NullPager
   # @return [NullPager] a new instance of NullPager
   #
@@ -7986,6 +8137,8 @@ end
 # `true` on the basis of an incomplete line. Long lines should be
 # counted as multiple lines, but we don't have to transition from
 # `false` to `true` until we see a newline.
+#
+# source://pry//lib/pry/pager.rb#213
 class Pry::Pager::PageTracker
   # @return [PageTracker] a new instance of PageTracker
   #
@@ -8014,6 +8167,8 @@ end
 
 # `SimplePager` is a straightforward pure-Ruby pager. We use it on
 # JRuby and when we can't find a usable external pager.
+#
+# source://pry//lib/pry/pager.rb#101
 class Pry::Pager::SimplePager < ::Pry::Pager::NullPager
   # @return [SimplePager] a new instance of SimplePager
   #
@@ -8024,12 +8179,15 @@ class Pry::Pager::SimplePager < ::Pry::Pager::NullPager
   def write(str); end
 end
 
+# source://pry//lib/pry/pager.rb#8
 class Pry::Pager::StopPaging < ::StandardError; end
 
 # `SystemPager` buffers output until we're pretty sure it's at least a
 # page long, then invokes an external pager and starts streaming output
 # to it. If `#close` is called before then, it just prints out the
 # buffered content.
+#
+# source://pry//lib/pry/pager.rb#129
 class Pry::Pager::SystemPager < ::Pry::Pager::NullPager
   # @return [SystemPager] a new instance of SystemPager
   #
@@ -8098,6 +8256,8 @@ end
 #   prompt.wait_proc.call(...) #=>
 #   prompt.incomplete_proc.call(...)
 # @since v0.11.0
+#
+# source://pry//lib/pry/prompt.rb#38
 class Pry::Prompt
   # @api public
   # @param name [String]
@@ -8197,6 +8357,7 @@ class Pry::Prompt
   end
 end
 
+# source://pry//lib/pry/repl.rb#4
 class Pry::REPL
   extend ::Forwardable
   extend ::Pry::Forwardable
@@ -8363,6 +8524,8 @@ end
 # interactive when an exception is encountered, enabling you to fix
 # the error before returning to non-interactive processing with the
 # 'make-non-interactive' command.
+#
+# source://pry//lib/pry/repl_file_loader.rb#14
 class Pry::REPLFileLoader
   # @return [REPLFileLoader] a new instance of REPLFileLoader
   #
@@ -8402,6 +8565,8 @@ end
 # As a REPL, we often want to catch any unexpected exceptions that may have
 # been raised; however we don't want to go overboard and prevent the user
 # from exiting Pry when they want to.
+#
+# source://pry//lib/pry/exceptions.rb#7
 module Pry::RescuableException
   class << self
     # source://pry//lib/pry/exceptions.rb#8
@@ -8411,6 +8576,8 @@ end
 
 # Wraps the return result of process_commands, indicates if the
 # result IS a command and what kind of command (e.g void)
+#
+# source://pry//lib/pry/command_set.rb#397
 class Pry::Result
   # @return [Result] a new instance of Result
   #
@@ -8455,6 +8622,8 @@ end
 #   ring.clear
 #   ring[0] #=> nil
 # @since v0.12.0
+#
+# source://pry//lib/pry/ring.rb#22
 class Pry::Ring
   # @api public
   # @param max_size [Integer] Maximum buffer size. The buffer will start
@@ -8535,6 +8704,7 @@ class Pry::Ring
   def transpose_buffer_tail; end
 end
 
+# source://pry//lib/pry/slop.rb#5
 class Pry::Slop
   include ::Enumerable
 
@@ -8998,6 +9168,7 @@ class Pry::Slop
   end
 end
 
+# source://pry//lib/pry/slop/commands.rb#5
 class Pry::Slop::Commands
   include ::Enumerable
 
@@ -9191,23 +9362,36 @@ end
 Pry::Slop::DEFAULT_OPTIONS = T.let(T.unsafe(nil), Hash)
 
 # The main Error class, all Exception classes inherit from this class.
+#
+# source://pry//lib/pry/slop.rb#12
 class Pry::Slop::Error < ::StandardError; end
 
 # Raised when an argument does not match its intended match constraint.
+#
+# source://pry//lib/pry/slop.rb#21
 class Pry::Slop::InvalidArgumentError < ::Pry::Slop::Error; end
 
 # Raised when an invalid command is found and the strict flag is enabled.
+#
+# source://pry//lib/pry/slop.rb#27
 class Pry::Slop::InvalidCommandError < ::Pry::Slop::Error; end
 
 # Raised when an invalid option is found and the strict flag is enabled.
+#
+# source://pry//lib/pry/slop.rb#24
 class Pry::Slop::InvalidOptionError < ::Pry::Slop::Error; end
 
 # Raised when an option argument is expected but none are given.
+#
+# source://pry//lib/pry/slop.rb#15
 class Pry::Slop::MissingArgumentError < ::Pry::Slop::Error; end
 
 # Raised when an option is expected/required but not present.
+#
+# source://pry//lib/pry/slop.rb#18
 class Pry::Slop::MissingOptionError < ::Pry::Slop::Error; end
 
+# source://pry//lib/pry/slop/option.rb#5
 class Pry::Slop::Option
   # Incapsulate internal option information, mainly used to store
   # option specific configuration data, most of the meat of this
@@ -9371,6 +9555,8 @@ Pry::Slop::VERSION = T.let(T.unsafe(nil), String)
 
 # @api private
 # @since v0.13.0
+#
+# source://pry//lib/pry/syntax_highlighter.rb#8
 class Pry::SyntaxHighlighter
   class << self
     # @api private
@@ -9403,6 +9589,8 @@ end
 
 # @api private
 # @since v0.13.0
+#
+# source://pry//lib/pry/system_command_handler.rb#6
 module Pry::SystemCommandHandler
   class << self
     # @api private
@@ -9414,6 +9602,8 @@ module Pry::SystemCommandHandler
 end
 
 # Catches SecurityErrors if $SAFE is set
+#
+# source://pry//lib/pry/exceptions.rb#28
 module Pry::TooSafeException
   class << self
     # source://pry//lib/pry/exceptions.rb#29
@@ -9434,6 +9624,8 @@ end
 # pry(main)> method_that_evals("def )")
 # SyntaxError: (eval):1: syntax error, unexpected ')'
 # from ./a.rb:2 in `eval'
+#
+# source://pry//lib/pry/exceptions.rb#51
 module Pry::UserError; end
 
 # source://pry//lib/pry/version.rb#4
@@ -9441,6 +9633,8 @@ Pry::VERSION = T.let(T.unsafe(nil), String)
 
 # @api private
 # @since v0.13.0
+#
+# source://pry//lib/pry/warning.rb#6
 module Pry::Warning
   class << self
     # Prints a warning message with exact file and line location, similar to how
@@ -9456,6 +9650,7 @@ module Pry::Warning
   end
 end
 
+# source://pry//lib/pry/wrapped_module.rb#16
 class Pry::WrappedModule
   include ::Pry::Helpers::BaseHelpers
   include ::Pry::CodeObject::Helpers
@@ -9756,6 +9951,8 @@ end
 # This class represents a single candidate for a module/class definition.
 # It provides access to the source, documentation, line and file
 # for a monkeypatch (reopening) of a class/module.
+#
+# source://pry//lib/pry/wrapped_module/candidate.rb#8
 class Pry::WrappedModule::Candidate
   include ::Pry::Helpers::DocumentationHelpers
   include ::Pry::CodeObject::Helpers

@@ -5,12 +5,18 @@
 # Please instead update this file by running `bin/tapioca gem rspec-rails`.
 
 # Namespace for all core RSpec projects.
+#
+# source://rspec-rails//lib/rspec/rails/feature_check.rb#1
 module RSpec; end
 
 # Namespace for rspec-rails code.
+#
+# source://rspec-rails//lib/rspec/rails/feature_check.rb#2
 module RSpec::Rails; end
 
 # @private
+#
+# source://rspec-rails//lib/rspec/rails/feature_check.rb#4
 module RSpec::Rails::FeatureCheck
   private
 
@@ -104,6 +110,8 @@ module RSpec::Rails::FeatureCheck
 end
 
 # Railtie to hook into Rails.
+#
+# source://rspec-rails//lib/rspec-rails.rb#9
 class RSpec::Rails::Railtie < ::Rails::Railtie
   private
 

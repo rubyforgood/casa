@@ -5,6 +5,8 @@
 # Please instead update this file by running `bin/tapioca gem htmlentities`.
 
 # HTML entity encoding and decoding for Ruby
+#
+# source://htmlentities//lib/htmlentities/flavors.rb#1
 class HTMLEntities
   # Create a new HTMLEntities coder for the specified flavor.
   # Available flavors are 'html4', 'expanded' and 'xhtml1' (the default).
@@ -66,6 +68,7 @@ class HTMLEntities
   def encode(source, *instructions); end
 end
 
+# source://htmlentities//lib/htmlentities/decoder.rb#2
 class HTMLEntities::Decoder
   # @return [Decoder] a new instance of Decoder
   #
@@ -84,6 +87,7 @@ class HTMLEntities::Decoder
   def prepare(string); end
 end
 
+# source://htmlentities//lib/htmlentities/encoder.rb#4
 class HTMLEntities::Encoder
   # @return [Encoder] a new instance of Encoder
   #
@@ -146,6 +150,7 @@ HTMLEntities::Encoder::INSTRUCTIONS = T.let(T.unsafe(nil), Array)
 # source://htmlentities//lib/htmlentities/flavors.rb#2
 HTMLEntities::FLAVORS = T.let(T.unsafe(nil), Array)
 
+# source://htmlentities//lib/htmlentities/encoder.rb#2
 class HTMLEntities::InstructionError < ::RuntimeError; end
 
 # source://htmlentities//lib/htmlentities/flavors.rb#3
@@ -154,7 +159,10 @@ HTMLEntities::MAPPINGS = T.let(T.unsafe(nil), Hash)
 # source://htmlentities//lib/htmlentities/flavors.rb#4
 HTMLEntities::SKIP_DUP_ENCODINGS = T.let(T.unsafe(nil), Hash)
 
+# source://htmlentities//lib/htmlentities.rb#11
 class HTMLEntities::UnknownFlavor < ::RuntimeError; end
+
+# source://htmlentities//lib/htmlentities/version.rb#2
 module HTMLEntities::VERSION; end
 
 # source://htmlentities//lib/htmlentities/version.rb#3
