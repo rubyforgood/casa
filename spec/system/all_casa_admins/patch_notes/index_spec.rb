@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
   context "the new patch note form" do
-    let(:all_casa_admin) { build_stubbed(:all_casa_admin) }
+    let(:all_casa_admin) { build(:all_casa_admin) }
 
     context "when the new patch note form's textarea is blank" do
       it "displays a warning after trying to create", js: true do
