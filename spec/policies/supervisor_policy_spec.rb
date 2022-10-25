@@ -89,24 +89,15 @@ RSpec.describe SupervisorPolicy do
   end
 
   permissions :index?, :datatable? do
-    context "same organization" do
-      context "when user is an admin" do
-        it "has access to the supervisors index action" do
-          is_expected.to permit(casa_admin, Supervisor)
-        end
-      end
-
-      context "when user is a supervisor" do
-        it "has access to the supervisors index action" do
-          is_expected.to permit(supervisor, Supervisor)
-        end
+    context "when user is an admin" do
+      it "has access to the supervisors index action" do
+        is_expected.to permit(casa_admin, Supervisor)
       end
     end
 
-    context "different organization" do
-      let(:other_admin) { create(:casa_admin, casa_org: different_organization) }
-      it "has no access to the supervisors index action" do
-        is_expected.to_not permit(other_admin, Supervisor)
+    context "when user is a supervisor" do
+      it "has access to the supervisors index action" do
+        is_expected.to permit(supervisor, Supervisor)
       end
     end
   end
