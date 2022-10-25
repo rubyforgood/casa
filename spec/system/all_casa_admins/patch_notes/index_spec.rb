@@ -1,5 +1,4 @@
 require "rails_helper"
-require "support/wait_for_ajax"
 
 RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
   context "the new patch note form" do
