@@ -27,7 +27,7 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
         visit all_casa_admins_patch_notes_path
 
         within "#new-patch-note" do
-          text_area = first(:css, "#new-patch-note textarea").native
+          text_area = first(:css, "textarea").native
           text_area.send_keys(patch_note_text)
 
           click_on "Create"
