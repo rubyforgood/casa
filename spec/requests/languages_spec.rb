@@ -72,11 +72,7 @@ RSpec.describe LanguagesController, type: :request do
       end
       context "when request params are invalid" do
         before do
-<<<<<<< HEAD:spec/requests/languages_spec.rb
-          patch add_to_volunteer_languages_path, params: {
-=======
           patch :add_language, params: {
->>>>>>> 3043a694 (Rename new_language route name):spec/controllers/languages_controller_spec.rb
             language_id: random_lang.id
           }
         end
