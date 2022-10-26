@@ -3,11 +3,7 @@ set +e
 
 docker-compose down -v --remove-orphans
 wait
-echo '###########################'
-echo 'BEGIN: docker-compose build'
-echo '###########################'
+
+echo 'Building docker containers...'
 docker-compose build # Set up the Docker containers
-wait
-echo '##############################'
-echo 'FINISHED: docker-compose build'
-echo '##############################'
+echo 'Done building docker containers.'

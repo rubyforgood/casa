@@ -1,9 +1,7 @@
 #!/bin/bash
 set +e
 
-echo '###########################'
-echo 'BEGIN: docker-compose up -d'
-echo '###########################'
+echo 'Starting web server...'
 echo 'View this app in your web browser at'
 echo 'http://localhost:3000/'
 docker-compose up -d
