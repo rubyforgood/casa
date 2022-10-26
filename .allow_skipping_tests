@@ -59,6 +59,7 @@ notifications/youth_birthday_notification.rb
 notifications/delivery_methods/sms.rb
 policies/case_court_order_policy.rb
 policies/learning_hour_policy.rb
+policies/note_policy.rb
 presenters/base_presenter.rb
 presenters/case_contact_presenter.rb
 services/case_contacts_export_csv_service.rb
