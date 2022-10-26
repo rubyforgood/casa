@@ -35,7 +35,7 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
 
         wait_for_ajax
 
-        expect(page).to have_css(".patch-note-list-item.card.new textarea")#, value: patch_note_text)
+        expect(page).to have_css(".patch-note-list-item.card.new textarea") # , value: patch_note_text)
       end
     end
   end
