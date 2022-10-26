@@ -57,6 +57,98 @@ RSpec.describe "/volunteers/notes", type: :request do
     end
   end
 
+  describe "GET /edit" do
+    context "when logged in as admin" do
+      context "when volunteer in same organization" do
+        it "is successful if note belongs to volunteer" do
+          organization = create(:casa_org)
+          admin = create(:casa_admin, casa_org: organization)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+          note = create(:note, notable: volunteer)
+
+          sign_in admin
+          get edit_volunteer_note_path(volunteer, note)
+
+          expect(response).to be_successful
+        end
+
+        it "redirects to root path if note does not belong to volunteer" do
+          organization = create(:casa_org)
+          admin = create(:casa_admin, casa_org: organization)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+          other_volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+          note = create(:note, notable: other_volunteer)
+
+          sign_in admin
+          get edit_volunteer_note_path(volunteer, note)
+
+          expect(response).to redirect_to root_path
+        end
+      end
+
+      context "when volunteer in different organization" do
+        it "redirects to root path" do
+          organization = create(:casa_org)
+          other_organization = create(:casa_org)
+          admin = create(:casa_admin, casa_org: organization)
+
+          volunteer = create(:volunteer, casa_org: other_organization)
+          note = create(:note, notable: volunteer)
+
+          sign_in admin
+          get edit_volunteer_note_path(volunteer, note)
+
+          expect(response).to redirect_to root_path
+        end
+      end
+    end
+
+    context "when logged in as supervisor" do
+      context "when volunteer in same organization" do
+        it "is successful if note belongs to volunteer" do
+          organization = create(:casa_org)
+          supervisor = create(:supervisor, casa_org: organization)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+          note = create(:note, notable: volunteer)
+
+          sign_in supervisor
+          get edit_volunteer_note_path(volunteer, note)
+
+          expect(response).to be_successful
+        end
+
+        it "redirects to root path if note does not belong to volunteer" do
+          organization = create(:casa_org)
+          supervisor = create(:supervisor, casa_org: organization)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+          other_volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+          note = create(:note, notable: other_volunteer)
+
+          sign_in supervisor
+          get edit_volunteer_note_path(volunteer, note)
+
+          expect(response).to redirect_to root_path
+        end
+      end
+
+      context "when volunteer in different organization" do
+        it "redirects to root path" do
+          organization = create(:casa_org)
+          other_organization = create(:casa_org)
+          supervisor = create(:supervisor, casa_org: organization)
+
+          volunteer = create(:volunteer, casa_org: other_organization)
+          note = create(:note, notable: volunteer)
+
+          sign_in supervisor
+          get edit_volunteer_note_path(volunteer, note)
+
+          expect(response).to redirect_to root_path
+        end
+      end
+    end
+  end
+
   describe "PATCH /update" do
     context "when logged in as an admin" do
       context "with valid params" do

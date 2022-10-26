@@ -1,6 +1,6 @@
 class NotesController < ApplicationController
-  before_action :find_note, only: %i[edit update destroy]
   before_action :find_volunteer
+  before_action :find_note, only: %i[edit update destroy]
 
   def create
     @volunteer.notes.create(note_params)
@@ -8,6 +8,7 @@ class NotesController < ApplicationController
   end
 
   def edit
+    authorize @note
   end
 
   def update
@@ -25,7 +26,11 @@ class NotesController < ApplicationController
   private
 
   def find_note
-    @note = Note.find(params[:id])
+    @note = @volunteer.notes.find_by(id: params[:id])
+    unless @note
+      redirect_to root_path
+      return
+    end
   end
 
   def find_volunteer
