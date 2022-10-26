@@ -55,11 +55,7 @@ RSpec.describe LanguagesController, type: :request do
 
    describe "#remove_from_volunteer" do
       context "when request params are valid" do
-        before do
-          patch :add_language, params: {
-            language_id: random_lang.id
-          }
-        end
+        let!(:user_language){create(:user_language, user_id: volunteer.id, language_id: random_lang.id )}
 
         it "should remove a language from a volunteer languages list" do
           delete language_remove_from_volunteer_path(random_lang)
@@ -71,11 +67,7 @@ RSpec.describe LanguagesController, type: :request do
         end
       end
       context "when request params are invalid" do
-        before do
-          patch :add_language, params: {
-            language_id: random_lang.id
-          }
-        end
+        let!(:user_language){create(:user_language, user_id: volunteer.id, language_id: random_lang.id )}
 
         it "should raise error when Language do not exist" do
           expect { delete language_remove_from_volunteer_path(800) }.to raise_error(ActiveRecord::RecordNotFound)
