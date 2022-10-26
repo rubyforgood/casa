@@ -37,4 +37,4 @@ If both controller and request tests for a file exist, add to the request tests,
 
 You should generally write request tests rather than controller tests.
 
-You should write system tests *in addition* to
+You should write system tests *in addition* to request specs.
