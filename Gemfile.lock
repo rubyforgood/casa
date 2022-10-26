@@ -419,7 +419,7 @@ GEM
     smart_properties (1.17.0)
     sorbet (0.5.10515)
       sorbet-static (= 0.5.10515)
-    sorbet-runtime (0.5.10511)
+    sorbet-runtime (0.5.10515)
     sorbet-static (0.5.10515-universal-darwin-18)
     sorbet-static (0.5.10515-universal-darwin-19)
     sorbet-static (0.5.10515-universal-darwin-20)
