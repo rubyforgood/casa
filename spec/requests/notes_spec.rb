@@ -8,7 +8,7 @@ RSpec.describe "/volunteers/notes", type: :request do
         admin = create(:casa_admin, casa_org: organization)
         volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
         sign_in admin
-        expect{
+        expect {
           post volunteer_notes_path(volunteer), params: {note: {content: "Very nice!"}}
         }.to change(Note, :count).by(1)
         expect(response).to redirect_to edit_volunteer_path(volunteer)
@@ -22,7 +22,7 @@ RSpec.describe "/volunteers/notes", type: :request do
         volunteer = create(:volunteer, casa_org: other_organization)
 
         sign_in admin
-        expect{
+        expect {
           post volunteer_notes_path(volunteer), params: {note: {content: "Very nice!"}}
         }.to_not change(Note, :count)
         expect(response).to redirect_to root_path
@@ -35,7 +35,7 @@ RSpec.describe "/volunteers/notes", type: :request do
         supervisor = create(:supervisor, casa_org: organization)
         volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
         sign_in supervisor
-        expect{
+        expect {
           post volunteer_notes_path(volunteer), params: {note: {content: "Very nice!"}}
         }.to change(Note, :count).by(1)
         expect(response).to redirect_to edit_volunteer_path(volunteer)
@@ -49,7 +49,7 @@ RSpec.describe "/volunteers/notes", type: :request do
         volunteer = create(:volunteer, casa_org: other_organization)
 
         sign_in supervisor
-        expect{
+        expect {
           post volunteer_notes_path(volunteer), params: {note: {content: "Very nice!"}}
         }.to_not change(Note, :count)
         expect(response).to redirect_to root_path
@@ -57,11 +57,12 @@ RSpec.describe "/volunteers/notes", type: :request do
     end
 
     context "when logged in as volunteer" do
-      it "may not create a note" do
+      it "cannot create a note" do
         organization = create(:casa_org)
         volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+
         sign_in volunteer
-        expect{
+        expect {
           post volunteer_notes_path(volunteer), params: {note: {content: "Very nice!"}}
         }.to_not change(Note, :count)
         expect(response).to redirect_to root_path

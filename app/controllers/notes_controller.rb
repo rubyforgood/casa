@@ -30,18 +30,12 @@ class NotesController < ApplicationController
 
   def find_note
     @note = @volunteer.notes.find_by(id: params[:id])
-    unless @note
-      redirect_to root_path
-      return
-    end
+    redirect_to root_path unless @note
   end
 
   def find_volunteer
     @volunteer = current_user.casa_org.volunteers.find_by(id: params[:volunteer_id])
-    unless @volunteer
-      redirect_to root_path
-      return
-    end
+    redirect_to root_path unless @volunteer
   end
 
   def note_params
