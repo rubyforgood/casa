@@ -262,31 +262,73 @@ RSpec.describe "/volunteers/notes", type: :request do
 
   describe "DELETE /destroy" do
     context "when logged in as an admin" do
-      it "can delete notes about a volunteer" do
+      it "can delete notes about a volunteer in same organization" do
         organization = create(:casa_org)
         admin = create(:casa_admin, casa_org: organization)
         volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
-        note = create(:note, creator: admin, notable: volunteer)
+        note = create(:note, notable: volunteer)
 
         sign_in admin
         expect {
           delete volunteer_note_path(volunteer, note)
         }.to change(Note, :count).by(-1)
+        expect(response).to redirect_to edit_volunteer_path(volunteer)
+      end
+
+      it "cannot delete notes about a volunteer in different organization" do
+        organization = create(:casa_org)
+        other_organization = create(:casa_org)
+        admin = create(:casa_admin, casa_org: organization)
+        volunteer = create(:volunteer, casa_org: other_organization)
+        note = create(:note, notable: volunteer)
+
+        sign_in admin
+        expect {
+          delete volunteer_note_path(volunteer, note)
+        }.to_not change(Note, :count)
+        expect(response).to redirect_to root_path
       end
     end
 
     context "when logged in as a supervisor" do
-      it "can delete notes about a volunteer" do
+      it "can delete notes about a volunteer in same organization" do
         organization = create(:casa_org)
         supervisor = create(:supervisor, casa_org: organization)
-        other_supervisor = create(:supervisor, casa_org: organization)
         volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
-        note = create(:note, creator: other_supervisor, notable: volunteer)
+        note = create(:note, notable: volunteer)
 
         sign_in supervisor
         expect {
           delete volunteer_note_path(volunteer, note)
         }.to change(Note, :count).by(-1)
+        expect(response).to redirect_to edit_volunteer_path(volunteer)
+      end
+
+      it "cannot delete notes about a volunteer in different organization" do
+        organization = create(:casa_org)
+        other_organization = create(:casa_org)
+        supervisor = create(:supervisor, casa_org: organization)
+        volunteer = create(:volunteer, casa_org: other_organization)
+        note = create(:note, notable: volunteer)
+
+        sign_in supervisor
+        expect {
+          delete volunteer_note_path(volunteer, note)
+        }.to_not change(Note, :count)
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    context "when logged in as a volunteer" do
+      it "cannot delete notes" do
+        volunteer = create(:volunteer, :with_assigned_supervisor)
+        note = create(:note, notable: volunteer)
+
+        sign_in volunteer
+        expect {
+          delete volunteer_note_path(volunteer, note)
+        }.to_not change(Note, :count)
+        expect(response).to redirect_to root_path
       end
     end
   end

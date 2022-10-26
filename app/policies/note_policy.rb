@@ -10,4 +10,8 @@ class NotePolicy < ApplicationPolicy
   def update?
     edit?
   end
+
+  def destroy?
+    edit?
+  end
 end

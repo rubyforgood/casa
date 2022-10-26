@@ -20,6 +20,7 @@ class NotesController < ApplicationController
   end
 
   def destroy
+    authorize @note
     @note.destroy
 
     redirect_to edit_volunteer_path(@volunteer)
