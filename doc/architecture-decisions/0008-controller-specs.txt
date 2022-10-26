@@ -13,7 +13,7 @@ expect(response).to be_successful
 2.
 "request tests" have filenames like `spec/requests/contact_types_spec.rb` and syntax like
 ```
-sign_in_as_admin
+sign_in admin
 get new_contact_type_path
 expect(response).to be_successful
 ```
