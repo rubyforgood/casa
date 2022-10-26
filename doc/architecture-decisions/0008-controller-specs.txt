@@ -33,7 +33,7 @@ expect(page).to have_content "1 error prohibited this password change from being
 
 If only controller tests for a file exist, add to the controller tests
 
-If both controller and request tests for a file exist, add to the request tests, and consider moving over the controller test tests to the request test.
+If both controller and request tests for a file exist, add to the request tests, and consider moving over the controller tests to the request test.
 
 You should generally write request tests rather than controller tests.
 
