@@ -29,7 +29,11 @@ class NotesController < ApplicationController
   end
 
   def find_volunteer
-    @volunteer = Volunteer.find(params[:volunteer_id])
+    @volunteer = current_user.casa_org.volunteers.find_by(id: params[:volunteer_id])
+    unless @volunteer
+      redirect_to root_path
+      return
+    end
   end
 
   def note_params
