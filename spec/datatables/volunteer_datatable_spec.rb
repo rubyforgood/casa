@@ -8,7 +8,7 @@ RSpec.describe VolunteerDatatable do
   let(:additional_filters) do
     {
       active: %w[false true],
-      supervisor: supervisors.map(&:display_name),
+      supervisor: supervisors.pluck(:id),
       transition_aged_youth: %w[false true]
     }
   end
@@ -36,11 +36,9 @@ RSpec.describe VolunteerDatatable do
     supervisors = create_list :supervisor, 3, casa_org: org
 
     supervisors.each do |supervisor|
-      supervisor.update display_name: Faker::Name.unique.name
       volunteers = create_list :volunteer, 2, casa_org: org, supervisor: supervisor
 
       volunteers.each_with_index do |volunteer, idx|
-        volunteer.update display_name: Faker::Name.unique.name, email: Faker::Internet.unique.email
         volunteer.casa_cases << build(:casa_case, casa_org: org, birth_month_year_youth: idx == 1 ? 10.years.ago : 16.years.ago)
       end
     end
