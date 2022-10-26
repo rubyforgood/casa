@@ -13,6 +13,7 @@ class NotesController < ApplicationController
   end
 
   def update
+    authorize @note
     @note.update(note_params)
 
     redirect_to edit_volunteer_path(@volunteer)

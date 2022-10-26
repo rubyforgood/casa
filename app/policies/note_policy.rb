@@ -6,4 +6,8 @@ class NotePolicy < ApplicationPolicy
   def edit?
     create?
   end
+
+  def update?
+    edit?
+  end
 end

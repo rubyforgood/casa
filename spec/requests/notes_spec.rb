@@ -178,8 +178,8 @@ RSpec.describe "/volunteers/notes", type: :request do
 
   describe "PATCH /update" do
     context "when logged in as an admin" do
-      context "with valid params" do
-        it "redirects to edit volunteer page and updates note" do
+      context "when volunteer in same org" do
+        it "updates note and redirects to edit volunteer page" do
           organization = create(:casa_org)
           admin = create(:casa_admin, casa_org: organization)
           volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
@@ -190,6 +190,71 @@ RSpec.describe "/volunteers/notes", type: :request do
 
           expect(response).to redirect_to(edit_volunteer_path(volunteer))
           expect(note.reload.content).to eq "Very nice!"
+        end
+      end
+
+      context "when volunteer in different org" do
+        it "does not update note and redirects to root path" do
+          organization = create(:casa_org)
+          other_organization = create(:casa_org)
+          admin = create(:casa_admin, casa_org: organization)
+          volunteer = create(:volunteer, casa_org: other_organization)
+          note = create(:note, notable: volunteer, content: "Good job.")
+
+          sign_in admin
+          patch volunteer_note_path(volunteer, note), params: {note: {content: "Very nice!"}}
+
+          expect(response).to redirect_to root_path
+          expect(note.reload.content).to eq "Good job."
+        end
+      end
+    end
+
+    context "when logged in as a supervisor" do
+      context "when volunteer in same org" do
+        it "updates note and redirects to edit volunteer page" do
+          organization = create(:casa_org)
+          supervisor = create(:supervisor, casa_org: organization)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+          note = create(:note, notable: volunteer, content: "Good job.")
+
+          sign_in supervisor
+          patch volunteer_note_path(volunteer, note), params: {note: {content: "Very nice!"}}
+
+          expect(response).to redirect_to(edit_volunteer_path(volunteer))
+          expect(note.reload.content).to eq "Very nice!"
+        end
+      end
+
+      context "when volunteer in different org" do
+        it "does not update note and redirects to root path" do
+          organization = create(:casa_org)
+          other_organization = create(:casa_org)
+          supervisor = create(:supervisor, casa_org: organization)
+          volunteer = create(:volunteer, casa_org: other_organization)
+          note = create(:note, notable: volunteer, content: "Good job.")
+
+          sign_in supervisor
+          patch volunteer_note_path(volunteer, note), params: {note: {content: "Very nice!"}}
+
+          expect(response).to redirect_to root_path
+          expect(note.reload.content).to eq "Good job."
+        end
+      end
+    end
+
+    context "when logged in as a volunteer" do
+      context "when updating note belonging to volunteer" do
+        it "does not update note and redirects to root path" do
+          organization = create(:casa_org)
+          volunteer = create(:volunteer, casa_org: organization)
+          note = create(:note, notable: volunteer, content: "Good job.")
+
+          sign_in volunteer
+          patch volunteer_note_path(volunteer, note), params: {note: {content: "Very nice!"}}
+
+          expect(response).to redirect_to root_path
+          expect(note.reload.content).to eq "Good job."
         end
       end
     end
