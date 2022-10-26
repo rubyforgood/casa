@@ -22,7 +22,7 @@ class UsersController < ApplicationController
 
   def add_language
     if @language.nil?
-      @user.errors.add(:base, "'Add Language' field can not be blank. Please select a language before adding.")
+      @user.errors.add(:language_id, "can not be blank. Please select a language before adding.")
       return render "edit"
     end
 
