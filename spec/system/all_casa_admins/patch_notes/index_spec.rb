@@ -35,7 +35,7 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
 
         wait_for_ajax
 
-        expect(page).to have_field("textarea", with: patch_note_text)
+        expect(page).to have_field("textarea", with: patch_note_text, disabled: true)
       end
     end
   end
