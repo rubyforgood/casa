@@ -35,6 +35,6 @@ If only controller tests for a file exist, add to the controller tests
 
 If both controller and request tests for a file exist, add to the request tests, and consider moving over the controller test tests to the request test.
 
-You should generally write request tests rather than controller tests
+You should generally write request tests rather than controller tests.
 
 You should write system tests *in addition* to
