@@ -55,6 +55,18 @@ RSpec.describe "/volunteers/notes", type: :request do
         expect(response).to redirect_to root_path
       end
     end
+
+    context "when logged in as volunteer" do
+      it "may not create a note" do
+        organization = create(:casa_org)
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+        sign_in volunteer
+        expect{
+          post volunteer_notes_path(volunteer), params: {note: {content: "Very nice!"}}
+        }.to_not change(Note, :count)
+        expect(response).to redirect_to root_path
+      end
+    end
   end
 
   describe "GET /edit" do
@@ -141,6 +153,21 @@ RSpec.describe "/volunteers/notes", type: :request do
           note = create(:note, notable: volunteer)
 
           sign_in supervisor
+          get edit_volunteer_note_path(volunteer, note)
+
+          expect(response).to redirect_to root_path
+        end
+      end
+    end
+
+    context "when logged in as volunteer" do
+      context "when note belongs to volunteer" do
+        it "redirects to root path" do
+          organization = create(:casa_org)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+          note = create(:note, notable: volunteer)
+
+          sign_in volunteer
           get edit_volunteer_note_path(volunteer, note)
 
           expect(response).to redirect_to root_path

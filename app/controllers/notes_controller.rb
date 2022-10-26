@@ -3,6 +3,7 @@ class NotesController < ApplicationController
   before_action :find_note, only: %i[edit update destroy]
 
   def create
+    authorize Note
     @volunteer.notes.create(note_params)
     redirect_to edit_volunteer_path(@volunteer)
   end

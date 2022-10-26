@@ -1,5 +1,9 @@
 class NotePolicy < ApplicationPolicy
+  def create?
+    admin_or_supervisor?
+  end
+
   def edit?
-    true
+    create?
   end
 end
