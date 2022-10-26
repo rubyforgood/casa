@@ -1,5 +1,5 @@
 class PatchNotePolicy < ApplicationPolicy
-  class Scope < Scope
+  class Scope < ApplicationPolicy::Scope
     def initialize(user, scope)
       @user = user
       @scope = scope
