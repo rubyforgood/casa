@@ -31,11 +31,11 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
           text_area.send_keys(patch_note_text)
 
           click_on "Create"
-
-          wait_for_ajax
-
-          expect(page).to have_css(".patch-note-list-item.card.new textarea", text: patch_note_text)
         end
+
+        wait_for_ajax
+
+        expect(page).to have_css(".patch-note-list-item.card.new textarea", text: patch_note_text)
       end
     end
   end
