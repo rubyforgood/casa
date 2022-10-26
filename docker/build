@@ -9,6 +9,8 @@ docker/build-log 2>&1 | tee log/$DATE/build.log
 wait
 docker/seed 2>&1 | tee log/$DATE/seed.log
 wait
+docker/build-assets 2>&1 | tee log/$DATE/build-assets.log
+wait
 docker/server-log 2>&1 | tee log/$DATE/server.log
 wait
 docker/test-log 2>&1 | tee log/$DATE/test.log

@@ -1,21 +1,13 @@
 #!/bin/bash
+set +e
 
-echo '-------------------------------------'
-echo 'docker-compose run web bundle install'
-docker-compose run web bundle install
+# Update db and run tests
+# All containers must be already running
 
-echo '----------------------------------------------'
-echo 'BEGIN: docker-compose run web rails db:migrate'
-echo '----------------------------------------------'
-docker-compose run web rails db:migrate
-echo '--------------------------------------------'
-echo 'END: docker-compose run web rails db:migrate'
-echo '--------------------------------------------'
+echo 'Running migrations...'
+docker-compose exec web rails db:migrate
+echo 'Done running migrations.'
 
-echo '-----------------------------------------'
-echo 'BEGIN: docker-compose exec web rspec spec'
-echo '-----------------------------------------'
+echo 'Running rspec...'
 docker-compose exec web rspec spec
-echo '---------------------------------------'
-echo 'END: docker-compose exec web rspec spec'
-echo '---------------------------------------'
+echo 'Done running rspec.'
