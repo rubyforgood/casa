@@ -19,7 +19,7 @@ RSpec.describe CaseAssignmentPolicy do
     create(:case_assignment, casa_case: other_casa_case)
   end
 
-  permissions :create?, :destroy? do
+  permissions :create? do
     it "allows casa_admins" do
       is_expected.to permit(casa_admin)
     end
@@ -58,6 +58,30 @@ RSpec.describe CaseAssignmentPolicy do
 
     context "when is a different organization" do
       it "does not allow unassign" do
+        is_expected.not_to permit(supervisor, other_case_assignment)
+      end
+    end
+  end
+
+  permissions :destroy? do
+    context "when user is an admin" do
+      it "allow destroy" do
+        is_expected.to permit(casa_admin, case_assignment)
+      end
+    end
+
+    context "when user is a supervisor" do
+      it "allow destroy" do
+        is_expected.to permit(supervisor, case_assignment)
+      end
+    end
+
+    context "when is a different organization" do
+      it "does not allow admins to destroy" do
+        is_expected.not_to permit(casa_admin, other_case_assignment)
+      end
+
+      it "does not allow supervisor to destroy" do
         is_expected.not_to permit(supervisor, other_case_assignment)
       end
     end
