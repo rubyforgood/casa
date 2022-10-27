@@ -7,7 +7,7 @@ class CasaOrg < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
   validates_with CasaOrgValidator
-  validate :validate_twilio_credentials, if: -> {twilio_account_sid.present? || twilio_api_key_sid.present? || twilio_api_key_secret.present? }
+  validate :validate_twilio_credentials, if: -> { twilio_account_sid.present? || twilio_api_key_sid.present? || twilio_api_key_secret.present? }
 
   has_many :users, dependent: :destroy
   has_many :casa_cases, dependent: :destroy
@@ -92,7 +92,7 @@ class CasaOrg < ApplicationRecord
   # end
 
   def validate_twilio_credentials
-    client = Twilio::REST::Client.new(self.twilio_api_key_sid, self.twilio_api_key_secret, self.twilio_account_sid)
+    client = Twilio::REST::Client.new(twilio_api_key_sid, twilio_api_key_secret, twilio_account_sid)
     begin
       client.messages.list(limit: 1)
     rescue Twilio::REST::RestError

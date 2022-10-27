@@ -52,14 +52,14 @@ RSpec.describe CasaOrgController, type: :controller do
 
       it "should raise error if any of the twillo invalid crendentials are present", :aggregate_failures do
         invalid_attributes = {
-            name: "name",
-            display_name: "display_name",
-            address: "address",
-            twilio_account_sid: "",
-            twilio_api_key_sid: "",
-            twilio_api_key_secret: "open sesame",
-            twilio_phone_number: "+12223334444"
-          }
+          name: "name",
+          display_name: "display_name",
+          address: "address",
+          twilio_account_sid: "",
+          twilio_api_key_sid: "",
+          twilio_api_key_secret: "open sesame",
+          twilio_phone_number: "+12223334444"
+        }
         casa_org = admin.casa_org
         patch :update, params: {
           id: casa_org.id,
@@ -67,7 +67,6 @@ RSpec.describe CasaOrgController, type: :controller do
         }
         expect(assigns(:casa_org).errors.full_messages).to include("Your Twilio credentials are incorrect, kindly check and try again.")
       end
-
 
       it "should redirect to the edit page" do
         casa_org = admin.casa_org
