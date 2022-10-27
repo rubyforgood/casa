@@ -22,11 +22,11 @@ function resolveAsyncOperation (error) {
 
 // Adds or deletes an option from the current casa case
 //  @param    {string}  action One of the following:
-//    'add_category'    to add a category to the case
-//    'add_option'      to add an option to the case
-//    'delete_category' to remove a category from the case
-//    'delete_option'   to remove an option from the case
-//    'set_option'      to set the option for a mutually exclusive category
+//    "add_category"    to add a category to the case
+//    "add_option"      to add an option to the case
+//    "delete_category" to remove a category from the case
+//    "delete_option"   to remove an option from the case
+//    "set_option"      to set the option for a mutually exclusive category
 //  @param    {integer | string}  checkItemId The id of either an emancipation option or an emancipation category to perform an action on
 //  @returns  {array} a jQuery jqXHR object. See https://api.jquery.com/jQuery.ajax/#jqXHR
 //  @throws   {TypeError}  for a parameter of the incorrect type
@@ -62,6 +62,43 @@ function saveCheckState (action, checkItemId) {
     })
 }
 
+export function manageTogglerText (parent) {
+  const categoryCollapseIcon = parent.find('.category-collapse-icon')
+
+  if (parent.attr('data-is-open') === 'true') {
+    categoryCollapseIcon.text('–')
+  } else if (parent.attr('data-is-open') === 'false') {
+    categoryCollapseIcon.text('+')
+  }
+}
+
+export function openChildren (parent) {
+  const categoryOptionsContainer = parent.siblings('.category-options')
+
+  categoryOptionsContainer.show()
+  parent.attr('data-is-open', 'true')
+}
+
+export function closeChildren (parent) {
+  const categoryOptionsContainer = parent.siblings('.category-options')
+
+  categoryOptionsContainer.hide()
+  parent.attr('data-is-open', 'false')
+}
+
+export function deselectChildren (parent, notifierCallback) {
+  const categoryOptionsContainer = parent.siblings('.category-options')
+
+  categoryOptionsContainer.children().filter(function () {
+    return $(this).find('input').prop('checked')
+  }).each(function () {
+    const checkbox = $(this).find('input')
+
+    checkbox.prop('checked', false)
+    notifierCallback(checkbox.next().text())
+  })
+}
+
 $('document').ready(() => {
   if (!(/casa_cases\/[A-Z\-0-9]+\/emancipation/.test(window.location.pathname))) {
     return
@@ -70,12 +107,10 @@ $('document').ready(() => {
   const asyncNotificationsElement = $('#async-notifications')
   emancipationPage.notifier = new Notifier(asyncNotificationsElement)
 
-  $('.emancipation-category').click(function () {
+  $('.emancipation-category').on('click', function () {
     const category = $(this)
-    const categoryCheckbox = category.find('input[type="checkbox"]')
-    const categoryCollapseIcon = category.find('span')
+    const categoryCheckbox = category.find('.emancipation-category-check-box')
     const categoryCheckboxChecked = categoryCheckbox.is(':checked')
-    const categoryOptionsContainer = category.siblings('.category-options')
 
     if (!category.data('disabled')) {
       category.data('disabled', true)
@@ -83,29 +118,19 @@ $('document').ready(() => {
       categoryCheckbox.prop('disabled', 'disabled')
 
       let saveAction,
-        collapseIcon,
         doneCallback
 
       if (categoryCheckboxChecked) {
-        collapseIcon = '+'
         doneCallback = () => {
-          categoryOptionsContainer.hide()
-
-          // Uncheck all category options
-          categoryOptionsContainer.children().filter(function () {
-            return $(this).find('input').prop('checked')
-          }).each(function () {
-            const checkbox = $(this).find('input')
-
-            checkbox.prop('checked', false)
-            emancipationPage.notifier.notify('Unchecked ' + checkbox.next().text(), 'info')
-          })
+          closeChildren(category)
+          manageTogglerText(category)
+          deselectChildren(category, (text) => emancipationPage.notifier.notify('Unchecked ' + text, 'info'))
         }
         saveAction = 'delete_category'
       } else {
-        collapseIcon = '−'
         doneCallback = () => {
-          categoryOptionsContainer.show()
+          openChildren(category)
+          manageTogglerText(category)
         }
         saveAction = 'add_category'
       }
@@ -114,7 +139,7 @@ $('document').ready(() => {
         .done(function () {
           doneCallback()
           categoryCheckbox.prop('checked', !categoryCheckboxChecked)
-          categoryCollapseIcon.text(collapseIcon)
+          manageTogglerText(category)
         })
         .always(function () {
           category.data('disabled', false)
