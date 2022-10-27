@@ -28,6 +28,7 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
 
         within "#new-patch-note" do
           text_area = first(:css, "textarea").native
+          binding.pry
           text_area.send_keys(patch_note_text)
 
           click_on "Create"
@@ -35,7 +36,7 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
 
         wait_for_ajax
 
-        expect(page).to have_field("textarea", with: patch_note_text, disabled: true)
+        expect(page).to have_selector("textarea", with: patch_note_text, disabled: true)
       end
     end
   end
