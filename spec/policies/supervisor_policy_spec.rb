@@ -3,9 +3,12 @@ require "rails_helper"
 RSpec.describe SupervisorPolicy do
   subject { described_class }
 
-  let(:casa_admin) { build(:casa_admin) }
-  let(:supervisor) { build(:supervisor) }
-  let(:volunteer) { build(:volunteer) }
+  let(:organization) { create(:casa_org) }
+  let(:different_organization) { create(:casa_org) }
+
+  let!(:casa_admin) { create(:casa_admin, casa_org: organization) }
+  let!(:supervisor) { create(:supervisor, casa_org: organization) }
+  let(:volunteer) { create(:volunteer, casa_org: organization) }
 
   permissions :update_supervisor_email? do
     context "when user is an admin or is the record" do
@@ -32,8 +35,17 @@ RSpec.describe SupervisorPolicy do
   end
 
   permissions :update? do
-    it "allows casa_admins" do
-      is_expected.to permit(casa_admin)
+    context "same organization" do
+      it "allows casa_admins" do
+        is_expected.to permit(casa_admin, supervisor)
+      end
+    end
+
+    context "different organization" do
+      let(:other_admin) { create(:casa_admin, casa_org: different_organization) }
+      it "does not allow casa_admins" do
+        is_expected.to_not permit(other_admin, supervisor)
+      end
     end
 
     it "allows supervisors to update themselves" do
@@ -98,7 +110,7 @@ RSpec.describe SupervisorPolicy do
     end
   end
 
-  permissions :create?, :new?, :resend_invitation?, :activate?, :deactivate?, :change_to_admin? do
+  permissions :create?, :new? do
     it "allows admins to modify supervisors" do
       is_expected.to permit(casa_admin, Supervisor)
     end
@@ -108,6 +120,43 @@ RSpec.describe SupervisorPolicy do
     end
 
     it "does not allow volunteers to modify supervisors" do
+      is_expected.to_not permit(volunteer, Supervisor)
+    end
+  end
+
+  permissions :resend_invitation?, :activate?, :deactivate? do
+    context "same organization" do
+      it "allows admins to modify supervisors" do
+        is_expected.to permit(casa_admin, supervisor)
+      end
+    end
+
+    context "different organization" do
+      let(:other_admin) { create(:casa_admin, casa_org: different_organization) }
+      it "does not allow admin to modify supervisors" do
+        is_expected.to_not permit(other_admin, supervisor)
+      end
+    end
+
+    it "does not allow supervisors to modify supervisors" do
+      is_expected.to_not permit(supervisor, supervisor)
+    end
+
+    it "does not allow volunteers to modify supervisors" do
+      is_expected.to_not permit(volunteer, supervisor)
+    end
+  end
+
+  permissions :change_to_admin? do
+    it "allows admins to change to admin" do
+      is_expected.to permit(casa_admin, supervisor)
+    end
+
+    it "does not allow supervisors to change to admin" do
+      is_expected.to_not permit(supervisor, Supervisor)
+    end
+
+    it "does not allow volunteers to change to admin" do
       is_expected.to_not permit(volunteer, Supervisor)
     end
   end
