@@ -18,7 +18,7 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
     end
 
     context "when the patch note form is filled out" do
-      let(:patch_note_text) { "prolemwithspecialchars" }
+      let(:patch_note_text) { "/6cg0lad1P/NFtV" }
       let!(:patch_note_group) { create(:patch_note_group, :all_users) }
       let!(:patch_note_type) { create(:patch_note_type, name: "5[1ht=d\\%*^qRON") }
 
@@ -35,7 +35,7 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
 
         wait_for_ajax
 
-        expect(page).to have_xpath("//div[contains(@class, 'patch-note-list-item') and contains(@class, 'new')]//textarea")
+        expect(page.find(".patch-note-list-item.new textarea")&.value).to eq(patch_note_text)
       end
     end
   end
