@@ -63,7 +63,7 @@ function saveCheckState (action, checkItemId) {
 }
 
 $('document').ready(() => {
-  if (!(/casa_cases\/[A-Z\-0-9]+\/emancipation/.test(window.location.pathname))) {
+  if (!((/casa_cases\/[A-Za-z\-0-9]+\/emancipation/).test(window.location.pathname))) {
     return
   }
 
