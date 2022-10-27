@@ -29,12 +29,7 @@ RSpec.describe CasaOrgController, type: :controller do
 
     describe "PATCH update" do
       it "should preform successful updates", :aggregate_failures do
-        twillio_client = instance_double(Twilio::REST::Client)
-        messages = instance_double(Twilio::REST::Api::V2010::AccountContext::MessageList)
-        allow(Twilio::REST::Client).to receive(:new).with("Aladdin", "open sesame", "articuno34").and_return(twillio_client)
-        allow(twillio_client).to receive(:messages).and_return(messages)
-        allow(messages).to receive(:list).and_return([])
-
+        stub_twillio
         casa_org = admin.casa_org
         patch :update, params: {
           id: casa_org.id,
@@ -69,6 +64,7 @@ RSpec.describe CasaOrgController, type: :controller do
       end
 
       it "should redirect to the edit page" do
+        stub_twillio
         casa_org = admin.casa_org
         patch :update, params: {
           id: casa_org.id,
@@ -78,6 +74,7 @@ RSpec.describe CasaOrgController, type: :controller do
       end
 
       it "can upload the logo" do
+        stub_twillio
         casa_org = admin.casa_org
         expect {
           patch :update, params: {
@@ -88,6 +85,7 @@ RSpec.describe CasaOrgController, type: :controller do
       end
 
       it "doesn't revert logo to default if non logo details are updated" do
+        stub_twillio
         casa_org = admin.casa_org
         casa_org.update(logo: logo)
         expect {
@@ -99,6 +97,7 @@ RSpec.describe CasaOrgController, type: :controller do
       end
 
       it "also responds as json", :aggregate_failures do
+        stub_twillio
         casa_org = admin.casa_org
         patch :update, format: :json, params: {
           id: casa_org.id,
@@ -110,4 +109,12 @@ RSpec.describe CasaOrgController, type: :controller do
       end
     end
   end
+end
+
+def stub_twillio
+  twillio_client = instance_double(Twilio::REST::Client)
+  messages = instance_double(Twilio::REST::Api::V2010::AccountContext::MessageList)
+  allow(Twilio::REST::Client).to receive(:new).with("Aladdin", "open sesame", "articuno34").and_return(twillio_client)
+  allow(twillio_client).to receive(:messages).and_return(messages)
+  allow(messages).to receive(:list).and_return([])
 end
