@@ -49,6 +49,7 @@ class DbPopulator
     create_checklist_items
     create_judges(casa_org)
     create_languages(casa_org)
+    create_followups(casa_org)
     casa_org
   end
 
@@ -325,5 +326,23 @@ class DbPopulator
 
   def create_language(name, casa_org)
     Language.find_or_create_by!(name: name, casa_org: casa_org)
+  end
+
+  def create_followups(casa_org)
+    casa_org.volunteers.each do |creator|
+      case_contact = creator.case_contacts.first
+      return if case_contact.blank?
+
+      create_followup(creator, case_contact, rand(2))
+    end
+  end
+
+  def create_followup(creator, case_contact, status)
+    Followup.create!(
+      creator: creator,
+      case_contact: case_contact,
+      status: status,
+      note: note_generator,
+    )
   end
 end

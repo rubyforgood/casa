@@ -6,6 +6,10 @@ class Followup < ApplicationRecord
 
   validate :uniqueness_of_requested
 
+  def self.in_organization(casa_org)
+    Followup.joins(case_contact: :casa_case).where(casa_cases: {casa_org_id: casa_org.id})
+  end
+
   def uniqueness_of_requested
     return if resolved?
     return if existing_requested_followup?
