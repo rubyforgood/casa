@@ -18,7 +18,7 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
     end
 
     context "when the patch note form is filled out" do
-      let(:patch_note_text) { "2y]@WX\\lBI:c,j," }
+      let(:patch_note_text) { "prolemwithspecialchars" }
       let!(:patch_note_group) { create(:patch_note_group, :all_users) }
       let!(:patch_note_type) { create(:patch_note_type, name: "5[1ht=d\\%*^qRON") }
 
