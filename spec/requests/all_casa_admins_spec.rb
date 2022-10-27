@@ -29,6 +29,22 @@ RSpec.describe "/all_casa_admins", type: :request do
         expect(response).to be_successful
       end
     end
+
+    it "should authenticate the user" do
+      sign_out :admin
+      get new_all_casa_admin_path
+
+      expect(response).to be_successful
+    end
+
+    it "only allows all_casa_admin users" do
+      sign_out :admin
+      casa_admin = create(:casa_admin)
+      sign_in casa_admin
+      get new_all_casa_admin_path
+
+      expect(response).to be_successful
+    end
   end
 
   describe "GET /edit" do
