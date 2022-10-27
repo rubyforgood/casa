@@ -25,7 +25,7 @@ class VolunteersEmailsExportCsvService
       email: volunteer&.email,
       case_number: active_casa_cases.keys.join(", "),
       volunteer_name: volunteer&.display_name,
-      case_transition_aged_status: active_casa_cases.values.join(", "),
+      case_transition_aged_status: active_casa_cases.values.join(", ")
     }
   end
 end
