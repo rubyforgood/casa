@@ -35,7 +35,7 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
 
         wait_for_ajax
 
-        expect(page).to have_xpath("//div[contains(@class, 'patch-note-list-item') and contains(@class, 'new')]")
+        expect(page).to have_xpath("//div[contains(@class, 'patch-note-list-item') and contains(@class, 'new')]//textarea")
       end
     end
   end
