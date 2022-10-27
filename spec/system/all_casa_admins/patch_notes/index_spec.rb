@@ -22,7 +22,7 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
       let!(:patch_note_group) { create(:patch_note_group, :all_users) }
       let!(:patch_note_type) { create(:patch_note_type, name: "5[1ht=d\\%*^qRON") }
 
-      it "displays a the new patch note on the page", js: true do
+      it "displays a the new patch note text on the page", js: true do
         sign_in all_casa_admin
         visit all_casa_admins_patch_notes_path
 
