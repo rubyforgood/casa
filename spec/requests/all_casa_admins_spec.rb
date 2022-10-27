@@ -9,7 +9,7 @@ RSpec.describe "/all_casa_admins", type: :request do
     it "should authenticate the user" do
       sign_out admin
       get new_all_casa_admin_path
-      
+
       expect(response).to have_http_status(:redirect)
     end
 
@@ -18,7 +18,7 @@ RSpec.describe "/all_casa_admins", type: :request do
       casa_admin = create(:casa_admin)
       sign_in casa_admin
       get new_all_casa_admin_path
-      
+
       expect(response).to have_http_status(:redirect)
     end
 
