@@ -4,7 +4,7 @@ RSpec.describe VolunteersEmailsExportCsvService do
   subject { described_class.new.perform }
   let!(:active_volunteer) { create(:volunteer, :with_casa_cases) }
   let!(:inactive_volunteer) { create(:volunteer, :inactive) }
-  let(:active_volunteer_cases) { active_volunteer.casa_cases.active.map { |c| [c.case_number, c.decorate.transition_aged_youth] }.to_h }
+  let(:active_volunteer_cases) { active_volunteer.casa_cases.active.map { |c| [c.case_number, c.in_transition_age?] }.to_h }
 
   describe "#perform" do
     it "Exports correct data from volunteers" do
