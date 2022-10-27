@@ -7,9 +7,9 @@ RSpec.describe CasaOrgController, type: :controller do
       name: "name",
       display_name: "display_name",
       address: "address",
-      twilio_account_sid: "fyxpz5naqnir3ftopvxuzev6ir48xb4jmc",
-      twilio_api_key_sid: "gukogx4k99885clw6j7ucd62hgzj5w4p",
-      twilio_api_key_secret: "gukogx4k99885clw6j7ucd62hgzj5w4p",
+      twilio_account_sid: "articuno34",
+      twilio_api_key_sid: "Aladdin",
+      twilio_api_key_secret: "open sesame",
       twilio_phone_number: "+12223334444"
     }
   }
@@ -29,6 +29,12 @@ RSpec.describe CasaOrgController, type: :controller do
 
     describe "PATCH update" do
       it "should preform successful updates", :aggregate_failures do
+        twillio_client = instance_double(Twilio::REST::Client)
+        messages = instance_double(Twilio::REST::Api::V2010::AccountContext::MessageList)
+        allow(Twilio::REST::Client).to receive(:new).with("Aladdin", "open sesame", "articuno34").and_return(twillio_client)
+        allow(twillio_client).to receive(:messages).and_return(messages)
+        allow(messages).to receive(:list).and_return([])
+
         casa_org = admin.casa_org
         patch :update, params: {
           id: casa_org.id,
@@ -38,11 +44,30 @@ RSpec.describe CasaOrgController, type: :controller do
         expect(casa_org.name).to eq "name"
         expect(casa_org.display_name).to eq "display_name"
         expect(casa_org.address).to eq "address"
-        expect(casa_org.twilio_account_sid).to eq "fyxpz5naqnir3ftopvxuzev6ir48xb4jmc"
-        expect(casa_org.twilio_api_key_sid).to eq "gukogx4k99885clw6j7ucd62hgzj5w4p"
-        expect(casa_org.twilio_api_key_secret).to eq "gukogx4k99885clw6j7ucd62hgzj5w4p"
+        expect(casa_org.twilio_account_sid).to eq "articuno34"
+        expect(casa_org.twilio_api_key_sid).to eq "Aladdin"
+        expect(casa_org.twilio_api_key_secret).to eq "open sesame"
         expect(casa_org.twilio_phone_number).to eq "+12223334444"
       end
+
+      it "should raise error if any of the twillo invalid crendentials are present", :aggregate_failures do
+        invalid_attributes = {
+            name: "name",
+            display_name: "display_name",
+            address: "address",
+            twilio_account_sid: "",
+            twilio_api_key_sid: "",
+            twilio_api_key_secret: "open sesame",
+            twilio_phone_number: "+12223334444"
+          }
+        casa_org = admin.casa_org
+        patch :update, params: {
+          id: casa_org.id,
+          casa_org: invalid_attributes
+        }
+        expect(assigns(:casa_org).errors.full_messages).to include("Your Twilio credentials are incorrect, kindly check and try again.")
+      end
+
 
       it "should redirect to the edit page" do
         casa_org = admin.casa_org

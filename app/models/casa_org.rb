@@ -95,7 +95,6 @@ class CasaOrg < ApplicationRecord
     client = Twilio::REST::Client.new(self.twilio_api_key_sid, self.twilio_api_key_secret, self.twilio_account_sid)
     begin
       client.messages.list(limit: 1)
-      puts client.messages.list(limit: 1)
     rescue Twilio::REST::RestError
       errors.add(:base, "Your Twilio credentials are incorrect, kindly check and try again.")
     end

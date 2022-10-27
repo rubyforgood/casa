@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :user do
-    casa_org { CasaOrg.first || create(:casa_org) }
+    # Twillio credentials are not required while creating the casa org
+    casa_org { CasaOrg.first || create(:casa_org, twilio_account_sid: "", twilio_api_key_secret: "", twilio_api_key_sid: "") }
     sequence(:email) { |n| "email#{n}@example.com" }
     sequence(:display_name) { |n| "User #{n}" }
     password { "12345678" }
