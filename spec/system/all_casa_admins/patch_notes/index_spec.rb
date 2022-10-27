@@ -28,7 +28,6 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
 
         within "#new-patch-note" do
           text_area = first(:css, "textarea").native
-          binding.pry
           text_area.send_keys(patch_note_text)
 
           click_on "Create"
