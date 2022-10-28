@@ -4,5 +4,6 @@ FactoryBot.define do
     association :creator, factory: :user
 
     status { :requested }
+    note { Faker::Lorem.paragraph }
   end
 end

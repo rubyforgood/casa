@@ -40,6 +40,10 @@ class CasaOrg < ApplicationRecord
     )
   end
 
+  def followups
+    Followup.in_organization(self)
+  end
+
   def case_contacts_count
     case_contacts.count
   end

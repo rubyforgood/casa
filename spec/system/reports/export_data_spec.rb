@@ -88,4 +88,34 @@ RSpec.describe "case_contact_reports/index", type: :system do
 
     expect(download_file_name).to match(/learning-hours-report-\d{4}-\d{2}-\d{2}.csv/)
   end
+
+  it "downloads followup report", js: true do
+    sign_in admin
+
+    visit reports_path
+    click_button "Followups Report"
+    wait_for_download
+
+    expect(download_file_name).to match(/followup-report-\d{4}-\d{2}-\d{2}.csv/)
+  end
+
+  context "as volunteer" do
+    let(:volunteer) { create(:volunteer) }
+
+    it "cannot accesses reports page" do
+      sign_in volunteer
+
+      visit reports_path
+      expect(current_path).to eq(casa_cases_path)
+      expect(page).to have_text "Sorry, you are not authorized to perform this action."
+    end
+
+    it "cannot download followup report" do
+      sign_in volunteer
+
+      visit followup_reports_path
+      expect(current_path).to eq(casa_cases_path)
+      expect(page).to have_text "Sorry, you are not authorized to perform this action."
+    end
+  end
 end

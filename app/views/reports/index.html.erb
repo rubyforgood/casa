@@ -26,6 +26,12 @@
         <%= f.submit "Export Volunteers Emails", class: "btn btn-primary report-form-submit" %>
       <% end %>
     </div>
+
+    <div class="btn-group">
+      <%= form_with url: followup_reports_path(format: :csv), method: :get do |f| %>
+        <%= f.submit "Followups Report", class: "btn btn-primary report-form-submit" %>
+      <% end %>
+    </div>
   </div>
 </div>
 
