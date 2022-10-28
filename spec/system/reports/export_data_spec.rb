@@ -107,7 +107,7 @@ RSpec.describe "case_contact_reports/index", type: :system do
 
       visit reports_path
       expect(current_path).to eq(casa_cases_path)
-      expect(page).to have_text 'Sorry, you are not authorized to perform this action.'
+      expect(page).to have_text "Sorry, you are not authorized to perform this action."
     end
 
     it "cannot download followup report" do
@@ -115,7 +115,7 @@ RSpec.describe "case_contact_reports/index", type: :system do
 
       visit followup_reports_path
       expect(current_path).to eq(casa_cases_path)
-      expect(page).to have_text 'Sorry, you are not authorized to perform this action.'
+      expect(page).to have_text "Sorry, you are not authorized to perform this action."
     end
   end
 end

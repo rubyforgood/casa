@@ -15,6 +15,7 @@ controllers/contact_types_controller.rb
 controllers/court_dates_controller.rb
 controllers/dashboard_controller.rb
 controllers/emancipation_checklists_controller.rb
+controllers/followup_reports_controller.rb
 controllers/health_controller.rb
 controllers/hearing_types_controller.rb
 controllers/imports_controller.rb
@@ -39,11 +40,11 @@ decorators/case_assignment_decorator.rb
 decorators/court_date_decorator.rb
 decorators/learning_hour_decorator.rb
 helpers/all_casa_admins/casa_orgs_helper.rb
+helpers/api_base_helper.rb
 helpers/contact_types_helper.rb
 helpers/date_helper.rb
-helpers/template_helper.rb
-helpers/api_base_helper.rb
 helpers/request_header_helper.rb
+helpers/template_helper.rb
 jobs/application_job.rb
 mailers/application_mailer.rb
 models/application_record.rb
@@ -52,11 +53,11 @@ models/concerns/roles.rb
 models/fund_request.rb
 models/notification.rb
 notifications/base_notification.rb
+notifications/delivery_methods/sms.rb
 notifications/emancipation_checklist_reminder_notification.rb
 notifications/followup_notification.rb
 notifications/followup_resolved_notification.rb
 notifications/youth_birthday_notification.rb
-notifications/delivery_methods/sms.rb
 policies/case_court_order_policy.rb
 policies/learning_hour_policy.rb
 policies/note_policy.rb
@@ -68,9 +69,9 @@ services/create_all_casa_admin_service.rb
 services/create_casa_admin_service.rb
 services/fdf_inputs_service.rb
 services/mileage_export_csv_service.rb
+validators/casa_org_validator.rb
 validators/court_report_validator.rb
 validators/user_validator.rb
-validators/casa_org_validator.rb
 values/all_casa_admin_parameters.rb
 values/casa_admin_parameters.rb
 values/supervisor_parameters.rb

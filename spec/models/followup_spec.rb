@@ -25,7 +25,7 @@ RSpec.describe Followup, type: :model do
     let!(:followup_first_org) { create(:followup) }
 
     # then these lets are generated for the org_to_search organization
-    let!(:second_org) { create(:casa_org)}
+    let!(:second_org) { create(:casa_org) }
     let!(:casa_case) { create(:casa_case, casa_org: second_org) }
     let!(:casa_case_another) { create(:casa_case, casa_org: second_org) }
     let!(:case_contact) { create(:case_contact, casa_case: casa_case) }

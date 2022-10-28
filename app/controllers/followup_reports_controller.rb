@@ -8,7 +8,7 @@ class FollowupReportsController < ApplicationController
     respond_to do |format|
       format.csv do
         send_data followup_report,
-                  filename: "followup-report-#{Time.current.strftime("%Y-%m-%d")}.csv"
+          filename: "followup-report-#{Time.current.strftime("%Y-%m-%d")}.csv"
       end
     end
   end
