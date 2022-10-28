@@ -10,7 +10,7 @@ RSpec.describe "CasaOrg", type: :request do
   describe "as an admin" do
     before {
       stub_twillio
-      sign_in create(:casa_admin, casa_org: casa_org) 
+      sign_in create(:casa_admin, casa_org: casa_org)
     }
 
     describe "GET /edit" do
@@ -113,7 +113,6 @@ RSpec.describe "CasaOrg", type: :request do
     end
   end
 end
-
 
 def stub_twillio
   twillio_client = instance_double(Twilio::REST::Client)
