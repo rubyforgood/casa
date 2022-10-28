@@ -8,20 +8,20 @@
 # set :output, "/path/to/my/cron_log.log"
 #
 
-every 1.day, at: '11:00 am' do
-  rake send_supervisor_digest
+every 1.day, at: "11:00 am" do
+  rake "send_supervisor_digest"
 end
 
-every 1.day, at: '3:00 pm' do
-  rake court_report_due_reminder
+every 1.day, at: "3:00 pm" do
+  rake "court_report_due_reminder"
 end
 
-every 1.day, at: '11:00 pm' do
-  rake clear_passed_dates
+every 1.day, at: "11:00 pm" do
+  rake "clear_passed_dates"
 end
 
-every 1.day, at: '11:00 pm' do
-  rake emancipation_checklist_reminder
+every 1.day, at: "11:00 pm" do
+  rake "emancipation_checklist_reminder"
 end
 
 # Learn more: http://github.com/javan/whenever
