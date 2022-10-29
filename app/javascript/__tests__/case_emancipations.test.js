@@ -1,11 +1,12 @@
 /* eslint-env jest */
-import { openChildren, closeChildren, deselectChildren, manageTogglerText } from '../src/case_emancipation'
+import { Toggler } from '../src/case_emancipation'
 
 require('jest')
 
 let category
 let categoryCollapseIcon
 let checkBox
+let toggler
 
 beforeEach(() => {
   document.body.innerHTML = `
@@ -33,34 +34,35 @@ beforeEach(() => {
   category = $('.emancipation-category')
   categoryCollapseIcon = $('.category-collapse-icon')
   checkBox = $('.emancipation-option-check-box')
+  toggler = new Toggler(category)
 })
 
 describe('Function that changes the text of the Toggler based on the state of the parent', () => {
   test('Changes the toggler text to -', () => {
     category.attr('data-is-open', 'false')
 
-    manageTogglerText(category)
+    toggler.manageTogglerText()
     expect(categoryCollapseIcon.text()).toEqual('+')
   })
 })
 
 describe('Function that opens the children of a given parent', () => {
   test('Opens the categoryOptionsContainer', () => {
-    openChildren(category)
+    toggler.openChildren()
     expect(category.data('is-open')).toEqual(true)
   })
 })
 
 describe('Function that closes the children of a given parent', () => {
   test('Closes the categoryOptionsContainer', () => {
-    closeChildren(category)
+    toggler.closeChildren()
     expect(category.data('is-open')).toEqual(false)
   })
 })
 
 describe('Function that deselects the children of a deselected parent', () => {
   test('Deselects the inputs in the categoryOptionsContainer', () => {
-    deselectChildren(category, () => '')
+    toggler.deselectChildren(() => '')
     expect(checkBox.prop('checked')).toBe(false)
   })
 })

@@ -62,15 +62,14 @@ function saveCheckState (action, checkItemId) {
     })
 }
 
-class Toggler {
-  constructor(parent) {
+export class Toggler {
+  constructor (parent) {
     this.parent = parent
     this.categoryCollapseIcon = this.parent.find('.category-collapse-icon')
     this.categoryOptionsContainer = this.parent.siblings('.category-options')
-
   }
 
-  manageTogglerText() {
+  manageTogglerText () {
     if (this.parent.attr('data-is-open') === 'true') {
       this.categoryCollapseIcon.text('–')
     } else if (this.parent.attr('data-is-open') === 'false') {
@@ -78,28 +77,26 @@ class Toggler {
     }
   }
 
-  openChildren() {
+  openChildren () {
     this.categoryOptionsContainer.show()
     this.parent.attr('data-is-open', 'true')
   }
 
-  closeChildren() {
+  closeChildren () {
     this.categoryOptionsContainer.hide()
     this.parent.attr('data-is-open', 'false')
   }
-}
 
-export function deselectChildren (parent, notifierCallback) {
-  const categoryOptionsContainer = parent.siblings('.category-options')
+  deselectChildren (notifierCallback) {
+    this.categoryOptionsContainer.children().filter(function () {
+      return $(this).find('input').prop('checked')
+    }).each(function () {
+      const checkbox = $(this).find('input')
 
-  categoryOptionsContainer.children().filter(function () {
-    return $(this).find('input').prop('checked')
-  }).each(function () {
-    const checkbox = $(this).find('input')
-
-    checkbox.prop('checked', false)
-    notifierCallback(checkbox.next().text())
-  })
+      checkbox.prop('checked', false)
+      notifierCallback(checkbox.next().text())
+    })
+  }
 }
 
 $('document').ready(() => {
@@ -128,7 +125,7 @@ $('document').ready(() => {
         doneCallback = () => {
           toggler.closeChildren()
           toggler.manageTogglerText()
-          deselectChildren(category, (text) => emancipationPage.notifier.notify('Unchecked ' + text, 'info'))
+          toggler.deselectChildren((text) => emancipationPage.notifier.notify('Unchecked ' + text, 'info'))
         }
         saveAction = 'delete_category'
       } else {
