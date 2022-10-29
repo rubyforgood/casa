@@ -62,28 +62,31 @@ function saveCheckState (action, checkItemId) {
     })
 }
 
-export function manageTogglerText (parent) {
-  const categoryCollapseIcon = parent.find('.category-collapse-icon')
+class Toggler {
+  constructor(parent) {
+    this.parent = parent
+    this.categoryCollapseIcon = this.parent.find('.category-collapse-icon')
+    this.categoryOptionsContainer = this.parent.siblings('.category-options')
 
-  if (parent.attr('data-is-open') === 'true') {
-    categoryCollapseIcon.text('–')
-  } else if (parent.attr('data-is-open') === 'false') {
-    categoryCollapseIcon.text('+')
   }
-}
 
-export function openChildren (parent) {
-  const categoryOptionsContainer = parent.siblings('.category-options')
+  manageTogglerText() {
+    if (this.parent.attr('data-is-open') === 'true') {
+      this.categoryCollapseIcon.text('–')
+    } else if (this.parent.attr('data-is-open') === 'false') {
+      this.categoryCollapseIcon.text('+')
+    }
+  }
 
-  categoryOptionsContainer.show()
-  parent.attr('data-is-open', 'true')
-}
+  openChildren() {
+    this.categoryOptionsContainer.show()
+    this.parent.attr('data-is-open', 'true')
+  }
 
-export function closeChildren (parent) {
-  const categoryOptionsContainer = parent.siblings('.category-options')
-
-  categoryOptionsContainer.hide()
-  parent.attr('data-is-open', 'false')
+  closeChildren() {
+    this.categoryOptionsContainer.hide()
+    this.parent.attr('data-is-open', 'false')
+  }
 }
 
 export function deselectChildren (parent, notifierCallback) {
@@ -109,6 +112,7 @@ $('document').ready(() => {
 
   $('.emancipation-category').on('click', function () {
     const category = $(this)
+    const toggler = new Toggler(category)
     const categoryCheckbox = category.find('.emancipation-category-check-box')
     const categoryCheckboxChecked = categoryCheckbox.is(':checked')
 
@@ -122,15 +126,15 @@ $('document').ready(() => {
 
       if (categoryCheckboxChecked) {
         doneCallback = () => {
-          closeChildren(category)
-          manageTogglerText(category)
+          toggler.closeChildren()
+          toggler.manageTogglerText()
           deselectChildren(category, (text) => emancipationPage.notifier.notify('Unchecked ' + text, 'info'))
         }
         saveAction = 'delete_category'
       } else {
         doneCallback = () => {
-          openChildren(category)
-          manageTogglerText(category)
+          toggler.openChildren()
+          toggler.manageTogglerText()
         }
         saveAction = 'add_category'
       }
@@ -139,7 +143,7 @@ $('document').ready(() => {
         .done(function () {
           doneCallback()
           categoryCheckbox.prop('checked', !categoryCheckboxChecked)
-          manageTogglerText(category)
+          toggler.manageTogglerText()
         })
         .always(function () {
           category.data('disabled', false)
