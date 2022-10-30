@@ -43,7 +43,7 @@ class CaseContactsController < ApplicationController
 
     @case_contact = CaseContact.new
 
-    @selected_case_contact_types = @selected_cases.flat_map(&:contact_types)
+    @selected_case_contact_types = @casa_cases.flat_map(&:contact_types)
 
     @current_organization_groups =
       if @selected_case_contact_types.present?
