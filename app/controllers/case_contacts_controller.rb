@@ -76,12 +76,14 @@ class CaseContactsController < ApplicationController
     end
     # Create a case contact for every case that was checked
     case_contacts = create_case_contact_for_every_selected_casa_case(@selected_cases)
-    if case_contacts.all?(&:persisted?)
-      redirect_to casa_case_path(CaseContact.last.casa_case, success: true)
-    else
+    if case_contacts.any?(&:new_record?)
       @case_contact = case_contacts.first
       @casa_cases = [@case_contact.casa_case]
       render :new
+    elsif @selected_cases.count > 1
+      redirect_to case_contacts_path(success: true)
+    else
+      redirect_to casa_case_path(CaseContact.last.casa_case, success: true)
     end
   end
 
