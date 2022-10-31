@@ -63,6 +63,6 @@ describe('Function that closes the children of a given parent', () => {
 describe('Function that deselects the children of a deselected parent', () => {
   test('Deselects the inputs in the categoryOptionsContainer', () => {
     toggler.deselectChildren(() => '')
-    expect(checkBox.prop('checked')).toBe(false)
+    expect(checkBox.prop('checked')).toEqual(false)
   })
 })
