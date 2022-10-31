@@ -7,7 +7,7 @@ RSpec.describe LanguagePolicy do
   let(:supervisor) { build_stubbed(:supervisor) }
   let(:volunteer) { build_stubbed(:volunteer) }
 
-  permissions :add_to_volunteer?, :remove_from_volunteer? do
+  permissions :add_language?, :remove_from_volunteer? do
     context "when user is a casa admin" do
       it "doesn't permit" do
         is_expected.not_to permit(admin)
