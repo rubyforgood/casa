@@ -6,12 +6,44 @@ RSpec.describe "/all_casa_admins", type: :request do
   before(:each) { sign_in admin }
 
   describe "GET /new" do
+    it "should authenticate the user" do
+      sign_out admin
+      get new_all_casa_admin_path
+
+      expect(response).to have_http_status(:redirect)
+    end
+
+    it "only allows all_casa_admin users" do
+      sign_out admin
+      casa_admin = create(:casa_admin)
+      sign_in casa_admin
+      get new_all_casa_admin_path
+
+      expect(response).to have_http_status(:redirect)
+    end
+
     context "with a all_casa_admin signed in" do
       it "renders a successful response" do
         get new_all_casa_admin_path
 
         expect(response).to be_successful
       end
+    end
+
+    it "should authenticate the user" do
+      sign_out :admin
+      get new_all_casa_admin_path
+
+      expect(response).to be_successful
+    end
+
+    it "only allows all_casa_admin users" do
+      sign_out :admin
+      casa_admin = create(:casa_admin)
+      sign_in casa_admin
+      get new_all_casa_admin_path
+
+      expect(response).to be_successful
     end
   end
 
@@ -35,6 +67,8 @@ RSpec.describe "/all_casa_admins", type: :request do
             }
           }
         end.to change(AllCasaAdmin, :count).by(1)
+        expect(response).to have_http_status(:redirect)
+        expect(flash[:notice]).to eq("New All CASA admin created successfully")
       end
 
       it "also responds as json", :aggregate_failures do
