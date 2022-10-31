@@ -7,6 +7,7 @@ RSpec.describe "casa_cases/show", type: :system do
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
   let!(:emancipation_category) { build(:emancipation_category, mutually_exclusive: true) }
   let!(:emancipation_option) { create(:emancipation_option, emancipation_category: emancipation_category) }
+  let(:supervisor) { create(:supervisor, casa_org: organization) }
 
   before do
     sign_in user
