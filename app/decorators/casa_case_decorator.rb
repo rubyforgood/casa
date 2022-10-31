@@ -95,19 +95,6 @@ class CasaCaseDecorator < Draper::Decorator
     object.case_contacts.where(occurred_at: this_week_before_date).where(contact_made: true).count
   end
 
-  def thank_you_message
-    [
-      "Thanks for all you do!",
-      "Thank you for your hard work!",
-      "Thank you for a job well done!",
-      "Thank you for volunteering!",
-      "Thanks for being a great volunteer!",
-      "One of the greatest gifts you can give is your time!",
-      "Those who can do, do. Those who can do more, volunteer.",
-      "Volunteers do not necessarily have the time, they just have the heart."
-    ].sample
-  end
-
   def transition_aged_youth
     object.in_transition_age? ? "Yes #{CasaCase::TRANSITION_AGE_YOUTH_ICON}" : "No #{CasaCase::NON_TRANSITION_AGE_YOUTH_ICON}"
   end

@@ -604,6 +604,41 @@ RSpec.describe "case_contacts/new", type: :system do
       end
     end
 
+    describe "case default selection" do
+      let(:volunteer) { create(:volunteer, :with_casa_cases) }
+      let(:first_case) { volunteer.casa_cases.first }
+      let(:second_case) { volunteer.casa_cases.second }
+
+      before(:each) do
+        sign_in volunteer
+      end
+
+      it "selects no cases" do
+        visit new_case_contact_path
+
+        expect(page).not_to have_checked_field(first_case.case_number)
+        expect(page).not_to have_checked_field(second_case.case_number)
+      end
+
+      context "when there are params defined" do
+        it "select the cases defined in the params" do
+          visit new_case_contact_path(case_contact: {casa_case_id: first_case.id})
+
+          expect(page).to have_checked_field(first_case.case_number)
+          expect(page).not_to have_checked_field(second_case.case_number)
+        end
+      end
+
+      context "when there's only one case" do
+        it "selects the only case" do
+          second_case.destroy!
+          visit new_case_contact_path
+
+          expect(page).to have_checked_field(first_case.case_number)
+        end
+      end
+    end
+
     private
 
     def create_contact_types(org)

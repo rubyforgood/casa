@@ -193,6 +193,7 @@ RSpec.describe "/case_court_reports", type: :request do
         let(:casa_case) { volunteer.casa_cases.first }
 
         before do
+          stub_twillio
           volunteer.casa_org.court_report_template.attach(io: File.new(Rails.root.join("app", "documents", "templates", "montgomery_report_template.docx")), filename: "montgomery_report_template.docx")
 
           request_generate_court_report
@@ -247,4 +248,12 @@ RSpec.describe "/case_court_reports", type: :request do
       },
       headers: {ACCEPT: "application/json"}
   end
+end
+
+def stub_twillio
+  twillio_client = instance_double(Twilio::REST::Client)
+  messages = instance_double(Twilio::REST::Api::V2010::AccountContext::MessageList)
+  allow(Twilio::REST::Client).to receive(:new).with("Aladdin", "open sesame", "articuno34").and_return(twillio_client)
+  allow(twillio_client).to receive(:messages).and_return(messages)
+  allow(messages).to receive(:list).and_return([])
 end

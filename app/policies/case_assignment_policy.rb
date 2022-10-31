@@ -17,7 +17,7 @@ class CaseAssignmentPolicy < ApplicationPolicy
   end
 
   def destroy?
-    admin_or_supervisor?
+    admin_or_supervisor? && same_org?
   end
 
   def unassign?

@@ -7,6 +7,7 @@ class CasaOrg < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
   validates_with CasaOrgValidator
+  validate :validate_twilio_credentials, if: -> { twilio_account_sid.present? || twilio_api_key_sid.present? || twilio_api_key_secret.present? }, on: :update
 
   has_many :users, dependent: :destroy
   has_many :casa_cases, dependent: :destroy
@@ -38,6 +39,10 @@ class CasaOrg < ApplicationRecord
     CaseContact.where(
       casa_case_id: CasaCase.where(casa_org_id: id)
     )
+  end
+
+  def followups
+    Followup.in_organization(self)
   end
 
   def case_contacts_count
@@ -89,6 +94,15 @@ class CasaOrg < ApplicationRecord
   #   id
   #   # slug # TODO use slug eventually for routes
   # end
+
+  def validate_twilio_credentials
+    client = Twilio::REST::Client.new(twilio_api_key_sid, twilio_api_key_secret, twilio_account_sid)
+    begin
+      client.messages.list(limit: 1)
+    rescue Twilio::REST::RestError
+      errors.add(:base, "Your Twilio credentials are incorrect, kindly check and try again.")
+    end
+  end
 end
 
 # == Schema Information
