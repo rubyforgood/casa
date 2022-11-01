@@ -119,25 +119,25 @@ patchNoteFunctions.deletePatchNote = function (patchNoteId) {
 }
 
 // Disables all form elements of a patch note form
-//  @param    {object} patchNoteFormElements An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormElements()
+//  @param    {object} patchNoteFormInputs An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormInputs()
 //  @throws   {TypeError} for a parameter of the incorrect type
-patchNoteFunctions.disablePatchNoteForm = function (patchNoteFormElements) {
-  for (const formElement of Object.values(patchNoteFormElements)) {
-    formElement.prop('disabled', true)
+patchNoteFunctions.disablePatchNoteForm = function (patchNoteFormInputs) {
+  for (const formInput of Object.values(patchNoteFormInputs)) {
+    formInput.prop('disabled', true)
   }
 }
 
 // Enables all form elements of a patch note form
-//  @param    {object} patchNoteFormElements An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormElements()
+//  @param    {object} patchNoteFormInputs An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormInputs()
 //  @throws   {TypeError} for a parameter of the incorrect type
-patchNoteFunctions.enablePatchNoteForm = function (patchNoteFormElements) {
-  for (const formElement of Object.values(patchNoteFormElements)) {
-    formElement.removeAttr('disabled')
+patchNoteFunctions.enablePatchNoteForm = function (patchNoteFormInputs) {
+  for (const formInput of Object.values(patchNoteFormInputs)) {
+    formInput.removeAttr('disabled')
   }
 }
 
 // Change a patch note form into edit mode
-//  @param  {object} patchNoteFormInputs An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormElements()
+//  @param  {object} patchNoteFormInputs An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormInputs()
 //  @throws {TypeError} for a parameter of the incorrect type
 patchNoteFunctions.enablePatchNoteFormEditMode = function (patchNoteFormInputs) {
   TypeChecker.checkObject(patchNoteFormInputs, 'patchNoteFormInputs')
@@ -165,7 +165,7 @@ patchNoteFunctions.enablePatchNoteFormEditMode = function (patchNoteFormInputs) 
 }
 
 // Change a patch note form out of edit mode
-//  @param  {object} patchNoteFormInputs An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormElements()
+//  @param  {object} patchNoteFormInputs An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormInputs()
 //  @throws {TypeError} for a parameter of the incorrect type
 patchNoteFunctions.exitPatchNoteFormEditMode = function (patchNoteFormInputs) {
   TypeChecker.checkObject(patchNoteFormInputs, 'patchNoteFormInputs')
@@ -354,7 +354,7 @@ patchNoteFunctions.onSavePatchNote = function () {
 }
 
 // Set the value of a patch note form's inputs to before the form was put in edit mode
-//  @param  {object} patchNoteFormInputs An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormElements()
+//  @param  {object} patchNoteFormInputs An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormInputs()
 //  @throws {TypeError} for a parameter of the incorrect type
 patchNoteFunctions.patchNoteFormDataResetBeforeEdit = function (patchNoteFormInputs) {
   TypeChecker.checkObject(patchNoteFormInputs, 'patchNoteFormInputs')
@@ -374,7 +374,7 @@ patchNoteFunctions.patchNoteFormDataResetBeforeEdit = function (patchNoteFormInp
 }
 
 // Save the values of the patch note form inputs
-//  @param  {object} patchNoteFormInputs An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormElements()
+//  @param  {object} patchNoteFormInputs An object containing the form elements as jQuery objects like the object returned from getPatchNoteFormInputs()
 //  @throws {TypeError} for a parameter of the incorrect type
 patchNoteFunctions.patchNoteFormDataSaveTemp = function (patchNoteFormInputs) {
   TypeChecker.checkObject(patchNoteFormInputs, 'patchNoteFormInputs')
@@ -456,33 +456,33 @@ $('document').ready(() => {
     pageNotifier = new AsyncNotifier(asyncNotificationsElement)
 
     const patchNoteList = $('#patch-note-list')
-    const newPatchNoteFormElements = patchNoteFunctions.getPatchNoteFormInputs($('#new-patch-note'))
+    const newPatchNoteFormInputs = patchNoteFunctions.getPatchNoteFormInputs($('#new-patch-note'))
 
-    newPatchNoteFormElements.buttonControls.click(() => {
-      if (!(newPatchNoteFormElements.noteTextArea.val())) {
+    newPatchNoteFormInputs.buttonControls.click(() => {
+      if (!(newPatchNoteFormInputs.noteTextArea.val())) {
         pageNotifier.notify('Cannot save an empty patch note', 'warn')
         return
       }
 
-      patchNoteFunctions.disablePatchNoteForm(newPatchNoteFormElements)
+      patchNoteFunctions.disablePatchNoteForm(newPatchNoteFormInputs)
 
-      const patchNoteGroupId = Number.parseInt(newPatchNoteFormElements.dropdownGroup.val())
-      const patchNoteTypeId = Number.parseInt(newPatchNoteFormElements.dropdownType.val())
-      const patchNoteText = newPatchNoteFormElements.noteTextArea.val()
+      const patchNoteGroupId = Number.parseInt(newPatchNoteFormInputs.dropdownGroup.val())
+      const patchNoteTypeId = Number.parseInt(newPatchNoteFormInputs.dropdownType.val())
+      const patchNoteText = newPatchNoteFormInputs.noteTextArea.val()
 
       patchNoteFunctions.createPatchNote(
         patchNoteGroupId,
         patchNoteText,
         patchNoteTypeId
       ).then(function (response) {
-        newPatchNoteFormElements.noteTextArea.val('')
+        newPatchNoteFormInputs.noteTextArea.val('')
         patchNoteFunctions.addPatchNoteUI(patchNoteGroupId, response.id, patchNoteList, patchNoteText, patchNoteTypeId)
       }).fail(function (err) {
         pageNotifier.notify('Failed to update UI', 'error')
         pageNotifier.notify(err.message, 'error')
         console.error(err)
       }).always(function () {
-        patchNoteFunctions.enablePatchNoteForm(newPatchNoteFormElements)
+        patchNoteFunctions.enablePatchNoteForm(newPatchNoteFormInputs)
       })
     })
 
