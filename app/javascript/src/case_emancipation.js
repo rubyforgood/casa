@@ -63,8 +63,8 @@ function saveCheckState (action, checkItemId) {
 }
 
 export class Toggler {
-  constructor (category) {
-    this.emancipationCategory = category
+  constructor (emancipationCategory) {
+    this.emancipationCategory = emancipationCategory
     this.categoryCollapseIcon = this.emancipationCategory.find('.category-collapse-icon')
     this.categoryOptionsContainer = this.emancipationCategory.siblings('.category-options')
   }
@@ -108,29 +108,33 @@ $('document').ready(() => {
   emancipationPage.notifier = new Notifier(asyncNotificationsElement)
 
   $('.category-collapse-icon').on('click', function () {
-    const category = $(this)
-    const parent = category.parent()
-    const toggler = new Toggler(parent)
+    const categoryCollapseIcon = $(this)
+    const emancipationCategory = categoryCollapseIcon.parent()
+    const toggler = new Toggler(emancipationCategory)
 
-    if (parent.attr('data-is-open', 'true')) {
+    console.log('clicked +')
+
+    if (emancipationCategory.attr('data-is-open') === 'true') {
+      console.log('true')
       toggler.closeChildren()
       toggler.manageTogglerText()
-    } else {
+    } else if (emancipationCategory.attr('data-is-open') === 'false') {
+      console.log('false')
       toggler.openChildren()
       toggler.manageTogglerText()
     }
   })
 
   $('.emacipation-category-input-label-pair').on('click', function () {
-    const category = $(this)
-    const parent = category.parent()
-    const toggler = new Toggler(parent)
-    const categoryCheckbox = category.find('.emancipation-category-check-box')
+    const emacipationCategoryInputLabelPair = $(this)
+    const emancipationCategory = emacipationCategoryInputLabelPair.parent()
+    const toggler = new Toggler(emancipationCategory)
+    const categoryCheckbox = emancipationCategory.find('.emancipation-category-check-box')
     const categoryCheckboxChecked = categoryCheckbox.is(':checked')
 
-    if (!category.data('disabled')) {
-      category.data('disabled', true)
-      category.addClass('disabled')
+    if (!emancipationCategory.data('disabled')) {
+      emancipationCategory.data('disabled', true)
+      emancipationCategory.addClass('disabled')
       categoryCheckbox.prop('disabled', 'disabled')
 
       let saveAction,
@@ -138,7 +142,6 @@ $('document').ready(() => {
 
       if (categoryCheckboxChecked) {
         doneCallback = () => {
-          toggler.closeChildren()
           toggler.manageTogglerText()
           toggler.deselectChildren((text) => emancipationPage.notifier.notify('Unchecked ' + text, 'info'))
         }
@@ -158,8 +161,8 @@ $('document').ready(() => {
           toggler.manageTogglerText()
         })
         .always(function () {
-          category.data('disabled', false)
-          category.removeClass('disabled')
+          emancipationCategory.data('disabled', false)
+          emancipationCategory.removeClass('disabled')
           categoryCheckbox.prop('disabled', false)
         })
     }
