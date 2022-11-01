@@ -23,7 +23,7 @@ class: "btn btn-primary" %>
             <label><%= category.name %></label>
           </div>
           <% if category.emancipation_options.count > 0 %>
-            <span><%= emancipation_category_collapse_icon(@current_case, category) %></span>
+            <span class="category-collapse-icon"><%= emancipation_category_collapse_icon(@current_case, category) %></span>
           <% end %>
         </h6>
         <div
