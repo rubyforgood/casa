@@ -63,28 +63,35 @@ function saveCheckState (action, checkItemId) {
 }
 
 export class Toggler {
-  constructor (parent) {
-    this.parent = parent
-    this.categoryCollapseIcon = this.parent.find('.category-collapse-icon')
-    this.categoryOptionsContainer = this.parent.siblings('.category-options')
+  constructor (category) {
+    this.category = category
+    this.emancipationCategory = this.category.parent()
+    this.categoryCollapseIcon = this.category.find('.category-collapse-icon')
+    this.categoryOptionsContainer = this.emancipationCategory.siblings('.category-options')
+
+    console.log(category)
+    console.log(emancipationCategory)
+    console.log(categoryCollapseIcon)
+    console.log(categoryOptionsContainer)
+
   }
 
   manageTogglerText () {
-    if (this.parent.attr('data-is-open') === 'true') {
+    if (this.emancipationCategory.attr('data-is-open') === 'true') {
       this.categoryCollapseIcon.text('–')
-    } else if (this.parent.attr('data-is-open') === 'false') {
+    } else if (this.emancipationCategory.attr('data-is-open') === 'false') {
       this.categoryCollapseIcon.text('+')
     }
   }
 
   openChildren () {
     this.categoryOptionsContainer.show()
-    this.parent.attr('data-is-open', 'true')
+    this.emancipationCategory.attr('data-is-open', 'true')
   }
 
   closeChildren () {
     this.categoryOptionsContainer.hide()
-    this.parent.attr('data-is-open', 'false')
+    this.emancipationCategory.attr('data-is-open', 'false')
   }
 
   deselectChildren (notifierCallback) {
@@ -107,7 +114,21 @@ $('document').ready(() => {
   const asyncNotificationsElement = $('#async-notifications')
   emancipationPage.notifier = new Notifier(asyncNotificationsElement)
 
-  $('.emancipation-category').on('click', function () {
+  $('.category-collapse-icon').on('click', function () {
+    const category = $(this)
+    const toggler = new Toggler(category)
+    const emancipationCategory = category.parent()
+
+    if (emancipationCategory.attr('data-is-open', 'true')) {
+      toggler.closeChildren()
+      toggler.manageTogglerText()
+    } else {
+      toggler.openChildren()
+      toggler.manageTogglerText()
+    }
+  })
+
+  $('.emacipation-category-input-label-pair').on('click', function () {
     const category = $(this)
     const toggler = new Toggler(category)
     const categoryCheckbox = category.find('.emancipation-category-check-box')
