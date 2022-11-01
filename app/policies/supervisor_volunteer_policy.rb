@@ -1,4 +1,4 @@
-class SupervisorVolunteerPolicy < Struct.new(:user, :record)
+class SupervisorVolunteerPolicy < ApplicationPolicy
   def create?
     user.casa_admin? || user.supervisor? || user.volunteer?
   end

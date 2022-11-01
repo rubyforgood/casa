@@ -8,8 +8,9 @@ RSpec.describe "casa_cases/show", type: :system do
   let(:volunteer) { build(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
   let(:casa_case) {
     create(:casa_case, :with_one_court_order, casa_org: organization,
-      case_number: "CINA-1", court_report_due_date: 1.month.from_now, date_in_care: date_in_care)
+      case_number: "CINA-1", date_in_care: date_in_care)
   }
+  let!(:court_date) { create(:court_date, court_report_due_date: 1.month.from_now) }
   let(:date_in_care) { 6.years.ago }
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
   let!(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
@@ -66,7 +67,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
     it "can see next court date", js: true do
       expect(page).to have_content(
-        "Next Court Date: #{I18n.l(future_court_date.date, format: :day_and_date)}"
+        "Next Court Date: #{I18n.l(future_court_date.date, format: "%A, %-d-%^b-%Y")}"
       )
     end
 
@@ -220,7 +221,7 @@ RSpec.describe "casa_cases/show", type: :system do
     end
 
     it "when not implemented" do
-      casa_case.case_court_orders[0].update(implementation_status: :not_implemented)
+      casa_case.case_court_orders[0].update(implementation_status: :unimplemented)
 
       visit casa_case_path(casa_case)
 

@@ -1,0 +1,40 @@
+# 1. Testing controllers
+
+Date: 2022-10-18
+
+1.
+"controller tests" have filenames like `spec/controllers/casa_admins_controller_spec.rb` and syntax like
+```
+allow(controller).to receive(:authenticate_user!).and_return(:supervisor)
+log_in_as_admin
+get :index
+expect(response).to be_successful
+```
+2.
+"request tests" have filenames like `spec/requests/contact_types_spec.rb` and syntax like
+```
+sign_in admin
+get new_contact_type_path
+expect(response).to be_successful
+```
+
+3.
+"system tests" have filenames like `spec/system/users/edit_spec.rb` and syntax like
+```
+sign_in volunteer
+visit edit_users_path
+click_on "Change Password"
+fill_in "Current Password", with: "12345"
+fill_in "New Password", with: "123456789"
+fill_in "New Password Confirmation", with: "123456789"
+click_on "Update Password"
+expect(page).to have_content "1 error prohibited this password change from being saved:"
+```
+
+If only controller tests for a file exist, add to the controller tests
+
+If both controller and request tests for a file exist, add to the request tests, and consider moving over the controller tests to the request test.
+
+You should generally write request tests rather than controller tests.
+
+You should write system tests *in addition* to request specs.

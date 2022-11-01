@@ -86,7 +86,7 @@ class VolunteerDatatable < ApplicationDatatable
       CaseAssignment
         .select(:volunteer_id)
         .joins(:casa_case)
-        .where(casa_cases: {birth_month_year_youth: ..14.years.ago})
+        .where(casa_cases: {birth_month_year_youth: ..CasaCase::TRANSITION_AGE.years.ago})
         .group(:volunteer_id)
         .to_sql
   end
@@ -143,7 +143,7 @@ class VolunteerDatatable < ApplicationDatatable
         "supervisors.id IS NULL"
       else
         null_filter = "supervisors.id IS NULL OR" if filter.any?(&:blank?)
-        ["#{null_filter} COALESCE(supervisors.display_name, supervisors.email) IN (?)", filter.select(&:present?)]
+        ["#{null_filter} COALESCE(supervisors.id) IN (?)", filter.select(&:present?)]
       end
   end
 

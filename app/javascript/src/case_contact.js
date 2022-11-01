@@ -180,9 +180,19 @@ async function fireSwalFollowupAlert () {
   })
 }
 
+function displayHighlightModal (event) {
+  event.preventDefault()
+  $('#caseContactHighlight').modal('show')
+}
+
 $('document').ready(() => {
   $('[data-toggle="tooltip"]').tooltip()
   $('.followup-button').on('click', displayFollowupAlert)
+  $('#open-highlight-modal').on('click', displayHighlightModal)
+
+  if (/\/case_contacts\/*.*\?.*success=true/.test(window.location.href)) {
+    $('#thank_you').modal()
+  }
 })
 
 export {

@@ -14,7 +14,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
     }
   end
   let(:texts) { ["1-New Order Text One", "0-New Order Text Two"] }
-  let(:implementation_statuses) { ["not_implemented", nil] }
+  let(:implementation_statuses) { ["unimplemented", nil] }
   let(:orders_attributes) do
     {
       "0" => {text: texts[0], implementation_status: implementation_statuses[0], casa_case_id: casa_case.id},
@@ -188,7 +188,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
       it "sets the court_report_due_date to be 3 weeks before the court_date" do
         post casa_case_court_dates_path(casa_case), params: {court_date: valid_attributes}
 
-        expect(court_date.casa_case.court_report_due_date).to eq(valid_attributes[:date] - 3.weeks)
+        expect(court_date.casa_case.court_dates.last.court_report_due_date).to eq(valid_attributes[:date] - 3.weeks)
       end
 
       it "redirects to the casa_case" do
@@ -309,7 +309,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
             case_court_orders_attributes: {
               "0" => {
                 text: "New Order Text One Updated",
-                implementation_status: :not_implemented
+                implementation_status: :unimplemented
               },
               "1" => {
                 text: ""
@@ -322,15 +322,18 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
           patch casa_case_court_date_path(casa_case, court_date), params: {court_date: new_attributes}
           court_date.reload
 
-          orders_updated[:case_court_orders_attributes]["0"][:id] = court_date.case_court_orders[0].id
-          orders_updated[:case_court_orders_attributes]["1"][:id] = court_date.case_court_orders[1].id
+          @first_order_id = court_date.case_court_orders[0].id
+          @second_order_id = court_date.case_court_orders[1].id
+
+          orders_updated[:case_court_orders_attributes]["0"][:id] = @first_order_id
+          orders_updated[:case_court_orders_attributes]["1"][:id] = @second_order_id
         end
 
         it "still updates the first order" do
           expect do
             patch casa_case_court_date_path(casa_case, court_date), params: {court_date: orders_updated}
           end.to(
-            change { court_date.reload.case_court_orders[0].text }
+            change { court_date.reload.case_court_orders.find(@first_order_id).text }
           )
         end
 
@@ -338,7 +341,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
           expect do
             patch casa_case_court_date_path(casa_case, court_date), params: {court_date: orders_updated}
           end.not_to(
-            change { court_date.reload.case_court_orders[1].text }
+            change { court_date.reload.case_court_orders.find(@second_order_id).text }
           )
         end
       end

@@ -8,7 +8,7 @@ RSpec.describe VolunteerDatatable do
   let(:additional_filters) do
     {
       active: %w[false true],
-      supervisor: supervisors.map(&:display_name),
+      supervisor: supervisors.pluck(:id),
       transition_aged_youth: %w[false true]
     }
   end
@@ -36,11 +36,9 @@ RSpec.describe VolunteerDatatable do
     supervisors = create_list :supervisor, 3, casa_org: org
 
     supervisors.each do |supervisor|
-      supervisor.update display_name: Faker::Name.unique.name
       volunteers = create_list :volunteer, 2, casa_org: org, supervisor: supervisor
 
       volunteers.each_with_index do |volunteer, idx|
-        volunteer.update display_name: Faker::Name.unique.name, email: Faker::Internet.unique.email
         volunteer.casa_cases << build(:casa_case, casa_org: org, birth_month_year_youth: idx == 1 ? 10.years.ago : 16.years.ago)
       end
     end
@@ -163,7 +161,7 @@ RSpec.describe VolunteerDatatable do
       let(:order_by) { "has_transition_aged_youth_cases" }
       let(:transition_aged_youth_bool_to_int) do
         lambda { |volunteer|
-          volunteer.casa_cases.exists?(birth_month_year_youth: ..14.years.ago) ? 1 : 0
+          volunteer.casa_cases.exists?(birth_month_year_youth: ..CasaCase::TRANSITION_AGE.years.ago) ? 1 : 0
         }
       end
       let(:sorted_models) { assigned_volunteers.sort_by(&transition_aged_youth_bool_to_int) }
@@ -171,7 +169,7 @@ RSpec.describe VolunteerDatatable do
       context "when ascending" do
         it "is successful" do
           sorted_models.each_with_index do |model, idx|
-            expect(values[idx][:has_transition_aged_youth_cases]).to eq model.casa_cases.exists?(birth_month_year_youth: ..14.years.ago).to_s
+            expect(values[idx][:has_transition_aged_youth_cases]).to eq model.casa_cases.exists?(birth_month_year_youth: ..CasaCase::TRANSITION_AGE.years.ago).to_s
           end
         end
       end
@@ -182,7 +180,7 @@ RSpec.describe VolunteerDatatable do
 
         it "is successful" do
           sorted_models.reverse.each_with_index do |model, idx|
-            expect(values[idx][:has_transition_aged_youth_cases]).to eq model.casa_cases.exists?(birth_month_year_youth: ..14.years.ago).to_s
+            expect(values[idx][:has_transition_aged_youth_cases]).to eq model.casa_cases.exists?(birth_month_year_youth: ..CasaCase::TRANSITION_AGE.years.ago).to_s
           end
         end
       end
@@ -318,7 +316,7 @@ RSpec.describe VolunteerDatatable do
 
       context "when search term case number matches unassigned case" do
         let(:new_supervisor) { create(:supervisor, casa_org: casa_case.casa_org) }
-        let(:new_casa_case) { create(:casa_case, casa_org: casa_case.casa_org, case_number: "ABC-123", transition_aged_youth: false) }
+        let(:new_casa_case) { create(:casa_case, :pre_transition, casa_org: casa_case.casa_org, case_number: "ABC-123") }
         let(:volunteer_1) { create(:volunteer, display_name: "Volunteer 1", casa_org: casa_case.casa_org, supervisor: new_supervisor) }
         let(:volunteer_2) { create(:volunteer, display_name: "Volunteer 2", casa_org: casa_case.casa_org, supervisor: new_supervisor) }
         let(:search_term) { new_casa_case.case_number }

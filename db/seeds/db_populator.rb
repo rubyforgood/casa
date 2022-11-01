@@ -179,7 +179,7 @@ class DbPopulator
   end
 
   def transition_aged_youth?(birth_month_year_youth)
-    (Date.today - birth_month_year_youth).days.in_years > 14
+    (Date.today - birth_month_year_youth).days.in_years > CasaCase::TRANSITION_AGE
   end
 
   def create_cases(casa_org, options)
@@ -190,31 +190,19 @@ class DbPopulator
       court_report_submitted = index.even?
 
       new_casa_case = CasaCase.find_by(case_number: case_number)
-      birth_month_year_youth = ((Date.today - 18.year)..(Date.today - 14.year)).to_a.sample
-      new_casa_case ||=
-        if @case_fourteen_years_old
-          CasaCase.find_or_create_by!(
-            casa_org_id: casa_org.id,
-            case_number: case_number,
-            court_report_due_date: court_date + 1.month,
-            court_report_submitted_at: court_report_submitted ? Date.today : nil,
-            court_report_status: court_report_submitted ? :submitted : :not_submitted,
-            transition_aged_youth: transition_aged_youth?(birth_month_year_youth),
-            birth_month_year_youth: ((Date.today - 18.years)..(Date.today - 14.years)).to_a.sample
-          )
-        else
-
-          birth_month_year_youth = ((Date.today - 18.year)..(Date.today - 1.year)).to_a.sample
-          CasaCase.find_or_create_by!(
-            casa_org_id: casa_org.id,
-            case_number: case_number,
-            court_report_due_date: court_date + 1.month,
-            court_report_submitted_at: court_report_submitted ? Date.today : nil,
-            court_report_status: court_report_submitted ? :submitted : :not_submitted,
-            transition_aged_youth: transition_aged_youth?(birth_month_year_youth),
-            birth_month_year_youth: birth_month_year_youth
-          )
-        end
+      birth_month_year_youth = @case_fourteen_years_old ? ((Date.today - 18.year)..(Date.today - CasaCase::TRANSITION_AGE.year)).to_a.sample : ((Date.today - 18.year)..(Date.today - 1.year)).to_a.sample
+      new_casa_case ||= CasaCase.find_or_create_by!(
+        casa_org_id: casa_org.id,
+        case_number: case_number,
+        court_report_submitted_at: court_report_submitted ? Date.today : nil,
+        court_report_status: court_report_submitted ? :submitted : :not_submitted,
+        birth_month_year_youth: birth_month_year_youth
+      )
+      _new_court_date = CourtDate.find_or_create_by!(
+        casa_case: new_casa_case,
+        court_report_due_date: court_date + 1.month,
+        date: court_date
+      )
 
       volunteer = new_casa_case.casa_org.volunteers.active.sample(random: rng) ||
         new_casa_case.casa_org.volunteers.active.first ||
@@ -254,17 +242,20 @@ class DbPopulator
 
       # guarantee at least one transition aged youth case to "volunteer1"
       volunteer1 = Volunteer.find_by(email: "volunteer1@example.com")
-      if volunteer1.casa_cases.where(transition_aged_youth: true).blank?
+      if volunteer1.casa_cases.where(birth_month_year_youth: ..CasaCase::TRANSITION_AGE.years.ago).blank?
         rand(1..3).times do
-          birth_month_year_youth = ((Date.today - 18.year)..(Date.today - 14.year)).to_a.sample
-          volunteer1.casa_cases.find_or_create_by!(
+          birth_month_year_youth = ((Date.today - 18.year)..(Date.today - CasaCase::TRANSITION_AGE.year)).to_a.sample
+          new_casa_case = volunteer1.casa_cases.find_or_create_by!(
             casa_org_id: volunteer1.casa_org.id,
             case_number: generate_case_number,
-            court_report_due_date: court_date + 1.month,
             court_report_submitted_at: court_report_submitted ? Date.today : nil,
             court_report_status: court_report_submitted ? :submitted : :not_submitted,
-            transition_aged_youth: transition_aged_youth?(birth_month_year_youth),
             birth_month_year_youth: birth_month_year_youth
+          )
+          CourtDate.find_or_create_by!(
+            casa_case: new_casa_case,
+            court_report_due_date: court_date + 1.month,
+            date: court_date
           )
         end
       end

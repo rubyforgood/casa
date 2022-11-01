@@ -1,27 +1,19 @@
 #!/bin/bash
-
+set +e
 # This is the data seeding script.
 
-echo '-------------------------------------'
-echo 'docker-compose run web bundle install'
-docker-compose run web bundle install
-
 # If the local web server is running, it must be stopped to allow the database to be reseeded.
-echo '-------------------'
-echo 'docker-compose stop'
+echo 'Stopping existing containers...'
 docker-compose stop
+echo 'Done stopping existing containers.'
 
 # NOTE: "rails db:reset" creates the development and test databases AND seeds the database.
 # This app will not work until you run this command.
-echo '--------------------------------------------'
-echo 'BEGIN: docker-compose run web rails db:reset'
-echo '--------------------------------------------'
-docker-compose run web rails db:reset
-echo '------------------------------------------'
-echo 'END: docker-compose run web rails db:reset'
-echo '------------------------------------------'
+echo 'Resetting rails db...'
+docker-compose run --rm web rails db:reset
+echo 'Done resetting rails db.'
+
 echo ''
-echo '-----------------------------------------'
 echo 'The database seeding process is complete!'
 echo 'At this point, the local web server is NOT running.'
 echo 'You must enter "docker/server" to start it.'

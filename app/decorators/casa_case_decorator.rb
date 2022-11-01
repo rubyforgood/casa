@@ -8,7 +8,7 @@ class CasaCaseDecorator < Draper::Decorator
   end
 
   def case_contacts_latest
-    object.case_contacts.max_by(&:occurred_at)
+    object.case_contacts.order(occurred_at: :desc, created_at: :desc).first
   end
 
   def case_contacts_latest_before(date)
@@ -93,19 +93,6 @@ class CasaCaseDecorator < Draper::Decorator
   def successful_contacts_this_week_before(date)
     this_week_before_date = Date.today - 7.days..date
     object.case_contacts.where(occurred_at: this_week_before_date).where(contact_made: true).count
-  end
-
-  def thank_you_message
-    [
-      "Thanks for all you do!",
-      "Thank you for your hard work!",
-      "Thank you for a job well done!",
-      "Thank you for volunteering!",
-      "Thanks for being a great volunteer!",
-      "One of the greatest gifts you can give is your time!",
-      "Those who can do, do. Those who can do more, volunteer.",
-      "Volunteers do not necessarily have the time, they just have the heart."
-    ].sample
   end
 
   def transition_aged_youth

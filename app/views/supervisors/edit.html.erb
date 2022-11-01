@@ -1,4 +1,4 @@
-<h1><%= t(".title") %></h1>
+<h1>Editing Supervisor</h1>
 
 <div class="card card-container">
   <div class="card-body">
@@ -17,17 +17,18 @@
 
       <div class="actions">
         <% if policy(@supervisor).update_supervisor_email? || policy(@supervisor).update_supervisor_name? %>
-          <%= form.submit t("button.submit"), class: "btn btn-primary" %>
+          <%= form.submit "Submit", class: "btn btn-primary" %>
         <% end %>
       </div>
     <% end %>
   </div>
 </div>
 
-<% button_text = @all_volunteers_ever_assigned.nil? ? t(".include_unassigned") : t(".hide_unassigned") %>
+<% button_text = @all_volunteers_ever_assigned.nil? ? "Include unassigned" : "Hide unassigned" %>
+<% volunteer_title = @unassigned_volunteer_count == 0 ? "Assigned Volunteers" : "All Volunteers" %>
 
 <% content_for :table_title do %>
-  <h3 class="pull-left"><%= t(".volunteer_title", count: @unassigned_volunteer_count) %></h3>
+  <h3 class="pull-left"><%= volunteer_title %></h3>
   <% if @supervisor_has_unassigned_volunteers %>
     <%= button_to button_text,
                   edit_supervisor_path(@supervisor),
@@ -43,19 +44,19 @@
     <tr>
       <td><%= link_to volunteer.display_name, edit_volunteer_path(volunteer) %></td>
       <td><%= volunteer.email %></td>
-      <% if button_text == t(".hide_unassigned") %>
+      <% if button_text == "Hide unassigned" %>
         <td>
           <%= volunteer.has_supervisor? ? volunteer.supervisor.display_name : "No One" %>
         </td>
       <% end %>
       <td>
         <% if volunteer.supervised_by?(@supervisor) %>
-          <%= button_to t(".unassign"),
+          <%= button_to "Unassign",
                         unassign_supervisor_volunteer_path(volunteer),
                         method: :patch,
                         class: "btn btn-danger" %>
         <% else %>
-          <%= t(".unassigned") %>
+          Unassigned
         <% end %>
       </td>
     </tr>

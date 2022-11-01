@@ -22,7 +22,7 @@ jobs:
               },
               {
                 "column_name": "To do",
-                "labels": ["Help Wanted", "Hacktoberfest", "Multiple PRs?"],
+                "labels": ["Help Wanted"],
                 "project_name": "CASA Volunteer Portal"
               },
               {

@@ -1,4 +1,4 @@
-class ImportPolicy < Struct.new(:user, :record)
+class ImportPolicy < ApplicationPolicy
   def index?
     user.casa_admin?
   end

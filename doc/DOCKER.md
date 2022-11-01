@@ -11,9 +11,7 @@ Install [Docker Community Edition](https://docs.docker.com/install/) if it is no
 The automatic setup explained here relies on Bash scripts in the docker directory to execute the most basic and frequent tasks in Docker.  There is substantially less typing to do under the automatic setup than under the manual setup.
 
 ### Initial setup
-1. Clone the repository to your local machine: `git clone
-   https://github.com/rubyforgood/casa.git` or create a fork in GitHub if you
-   don't have permission to commit directly to this repo.
+1. Clone the repository to your local machine: `git clone https://github.com/rubyforgood/casa.git` or create a fork in GitHub if you don't have permission to commit directly to this repo.
 2. Change into the application directory: `cd casa`
 3. Run `docker/build` to build the app, seed the database, run the local web server (in a detached state), run the test suite, and log the screen outputs of these processes in the log directory.  The web application will be available at http://localhost:3000.
 4. Run `docker/test` to run the test suite and log the screen output in the log directory.
@@ -33,20 +31,20 @@ The automatic setup explained here relies on Bash scripts in the docker director
 The manual setup instructions walk you through building the images and starting
 the containers using Docker Compose commands directly. This setup method is particularly
 recommended if you are new to Docker.
+
 ### Initial setup
 The following commands should just be run for the initial setup only. Rebuilding the docker images is only necessary when upgrading, if there are changes to the Dockerfile, or if gems have been added or updated.
-1. Clone the respository to your local machine: `git clone
-   https://github.com/rubyforgood/casa.git` or create a fork in GitHub if you
-   don't have permission to commit directly to this repo.
+1. Clone the respository to your local machine: `git clone https://github.com/rubyforgood/casa.git` or create a fork in GitHub if you don't have permission to commit directly to this repo.
 2. Change into the application directory: `cd casa`
 3. Run `docker-compose build` to build images for all services.
-4. Run `docker-compose run --rm web rails db:reset` to create the dev and test
-   databases, load the schema, and run the seeds file.
-5. Run `docker-compose up -d` to start all the remaining services.
-6. Run `docker-compose ps` to view status of the containers. All should have
-   state "Up". Check the [logs](#viewing-logs) if there are any containers that
-   did not start.
-7. The web application will be available at http://localhost:3000
+4. Run `docker-compose run --rm web bundle install` to install ruby dependencies
+5. Run `docker-compose run --rm web rails db:reset` to create the dev and test databases, load the schema, and run the seeds file.
+6. Run `docker-compose run --rm web yarn` to install javascript dependencies
+7. Run `docker-compose run --rm web yarn build` to bundle javascript assets
+8. Run `docker-compose run --rm web yarn build:css` to bundle the css
+9. Run `docker-compose up` to start all the remaining services. Or use `docker-compose up -d` to start containers in the background.
+10. Run `docker-compose ps` to view status of the containers. All should have state "Up". Check the [logs](#viewing-logs) if there are any containers that did not start.
+11. The web application will be available at http://localhost:3000
 
 ### For ongoing development:
 * Run `docker-compose up -d` to start all services.

@@ -6,6 +6,8 @@ RSpec.describe "casa_cases/new", type: :system do
   let(:case_number) { "12345" }
   let!(:next_year) { (Date.today.year + 1).to_s }
   let(:court_date) { 21.days.from_now }
+  let(:contact_type_group) { create(:contact_type_group, casa_org: casa_org) }
+  let!(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
 
   before do
     sign_in admin
@@ -27,6 +29,8 @@ RSpec.describe "casa_cases/new", type: :system do
         select fourteen_years, from: "casa_case_birth_month_year_youth_1i"
 
         select "Submitted", from: "casa_case_court_report_status"
+
+        check contact_type.name
 
         within ".top-page-actions" do
           click_on "Create CASA Case"

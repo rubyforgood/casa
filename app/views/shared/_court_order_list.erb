@@ -10,7 +10,7 @@
     </div>
     <% end %>
     <%= form.fields_for :case_court_orders do |ff| %>
-    <div class="court-mandate-entry">
+    <div class="court-order-entry">
         <%= ff.text_area :text %>
         <%=
         ff.select :implementation_status,
@@ -18,12 +18,12 @@
                     {include_blank: 'Set Implementation Status'},
                     {class: 'implementation-status'}
         %>
-        <button type="button" class="remove-mandate-button btn btn-danger">Delete</button>
+        <button type="button" class="remove-court-order-button btn btn-danger">Delete</button>
     </div>
     <% end %>
 </div>
 <div class="add-container">
-    <button type="button" class="add-button" id="add-mandate-button">
+    <button type="button" class="add-button" id="add-court-order-button">
     <i class="fa fa-plus" aria-hidden="true"></i>
     </button>
     <strong>Add a court order</strong>

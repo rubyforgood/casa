@@ -8,8 +8,8 @@ RSpec.describe "view all volunteers", type: :system do
     context "when no logo_url" do
       it "can see volunteers and navigate to their cases", js: true do
         volunteer = create(:volunteer, :with_assigned_supervisor, display_name: "User 1", email: "casa@example.com", casa_org: organization)
-        volunteer.casa_cases << create(:casa_case, casa_org: organization, birth_month_year_youth: 14.years.ago)
-        volunteer.casa_cases << create(:casa_case, casa_org: organization, birth_month_year_youth: 14.years.ago)
+        volunteer.casa_cases << create(:casa_case, casa_org: organization, birth_month_year_youth: CasaCase::TRANSITION_AGE.years.ago)
+        volunteer.casa_cases << create(:casa_case, casa_org: organization, birth_month_year_youth: CasaCase::TRANSITION_AGE.years.ago)
         casa_case = volunteer.casa_cases[0]
 
         sign_in admin
@@ -90,17 +90,13 @@ RSpec.describe "view all volunteers", type: :system do
       expect(page).to have_selector(".volunteer-filters")
 
       # by default, only active users are shown
-      expect(page.all("table#volunteers tbody tr").count).to eq assigned_volunteers.count
+      expect(page.all("table#volunteers tbody tr").count).to eq(assigned_volunteers.count + unassigned_volunteers.count)
       assigned_volunteers.each do |assigned_volunteer|
         expect(page).to have_text assigned_volunteer.display_name
       end
-
-      click_on "Supervisor"
-      find(:css, "#unassigned-vol-filter").set(true)
       unassigned_volunteers.each do |unassigned_volunteer|
         expect(page).to have_text unassigned_volunteer.display_name
       end
-      expect(page.all("table#volunteers tbody tr").count).to eq unassigned_volunteers.count
 
       click_on "Status"
       find(:css, 'input[data-value="true"]').set(false)
@@ -111,6 +107,14 @@ RSpec.describe "view all volunteers", type: :system do
         expect(page).to have_text inactive_volunteer.display_name
       end
       expect(page.all("table#volunteers tbody tr").count).to eq inactive_volunteers.count
+
+      visit volunteers_path
+      click_on "Supervisor"
+      find(:css, "#unassigned-vol-filter").set(false)
+      assigned_volunteers.each do |assigned_volunteer|
+        expect(page).to have_text assigned_volunteer.display_name
+      end
+      expect(page.all("table#volunteers tbody tr").count).to eq assigned_volunteers.count
     end
 
     it "can go to the volunteer edit page from the volunteer list", js: true do

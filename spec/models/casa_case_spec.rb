@@ -132,14 +132,11 @@ RSpec.describe CasaCase, type: :model do
   describe ".should_transition" do
     it "returns only youth who should have transitioned but have not" do
       not_transitioned_13_yo = build(:casa_case,
-        birth_month_year_youth: Date.current - 13.years,
-        transition_aged_youth: false)
+        birth_month_year_youth: Date.current - 13.years)
       transitioned_14_yo = build(:casa_case,
-        birth_month_year_youth: pre_transition_aged_youth_age,
-        transition_aged_youth: true)
+        birth_month_year_youth: pre_transition_aged_youth_age)
       not_transitioned_14_yo = create(:casa_case,
-        birth_month_year_youth: pre_transition_aged_youth_age,
-        transition_aged_youth: false)
+        birth_month_year_youth: pre_transition_aged_youth_age)
       cases = CasaCase.should_transition
       aggregate_failures do
         expect(cases.length).to eq 1
@@ -219,13 +216,6 @@ RSpec.describe CasaCase, type: :model do
 
   describe "#clear_court_dates" do
     context "when court date has passed" do
-      it "clears report due date" do
-        casa_case = build(:casa_case, court_report_due_date: "2020-09-13 02:11:58")
-        casa_case.clear_court_dates
-
-        expect(casa_case.court_report_due_date).to be nil
-      end
-
       it "sets court report as unsubmitted" do
         casa_case = build(:casa_case, court_report_status: :submitted)
         casa_case.clear_court_dates
@@ -378,7 +368,7 @@ RSpec.describe CasaCase, type: :model do
   describe "slug" do
     let(:casa_case) { create(:casa_case, case_number: "CINA-21-1234") }
     it "should be parameterized from the case number" do
-      expect(casa_case.slug).to eq "CINA-21-1234"
+      expect(casa_case.slug).to eq "cina-21-1234"
     end
   end
 end

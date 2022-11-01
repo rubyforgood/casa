@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_03_202112) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_12_203806) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -462,12 +462,22 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_03_202112) do
     t.string "version", null: false
   end
 
-  create_table "user_reminder_times", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.datetime "reminder_sent"
+  create_table "user_languages", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "language_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "case_contact_types", precision: nil
+    t.index ["language_id", "user_id"], name: "index_user_languages_on_language_id_and_user_id", unique: true
+    t.index ["language_id"], name: "index_user_languages_on_language_id"
+    t.index ["user_id"], name: "index_user_languages_on_user_id"
+  end
+
+  create_table "user_reminder_times", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "case_contact_types"
+    t.datetime "no_contact_made"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_user_reminder_times_on_user_id"
   end
 

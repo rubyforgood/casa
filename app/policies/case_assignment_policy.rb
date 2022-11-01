@@ -17,11 +17,11 @@ class CaseAssignmentPolicy < ApplicationPolicy
   end
 
   def destroy?
-    admin_or_supervisor?
+    admin_or_supervisor? && same_org?
   end
 
   def unassign?
-    record.active? && admin_or_supervisor?
+    record.active? && admin_or_supervisor? && same_org?
   end
 
   def hide_contacts?
@@ -30,5 +30,9 @@ class CaseAssignmentPolicy < ApplicationPolicy
 
   def show_or_hide_contacts?
     hide_contacts? || !hide_contacts?
+  end
+
+  def same_org?
+    user.casa_org_id == record.casa_case.casa_org_id
   end
 end

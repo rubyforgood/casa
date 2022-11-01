@@ -8,20 +8,19 @@ class SupervisorPolicy < UserPolicy
   end
 
   def update?
-    is_admin? ||
-      (is_supervisor? && record == user)
+    (is_admin? || (is_supervisor? && record == user)) && same_org?
   end
 
   def activate?
-    is_admin?
+    is_admin_same_org?
   end
 
   def deactivate?
-    is_admin?
+    is_admin_same_org?
   end
 
   def resend_invitation?
-    is_admin?
+    is_admin_same_org?
   end
 
   def edit?

@@ -37,14 +37,14 @@ class CaseCourtReportsController < ApplicationController
 
           render json: {link: case_court_report_path(casa_case.case_number, format: "docx"), status: :ok}
         else
-          error_messages = generate_error(t(".error.report_not_found", case_number: params[:case_number]))
+          error_messages = generate_error("Report #{params[:case_number]} is not found.")
 
           render json: {link: "", status: :not_found, error_messages: error_messages}, status: :not_found
         end
       end
     end
   rescue Zip::Error
-    error_messages = generate_error(t(".error.template_not_found"))
+    error_messages = generate_error("Template is not found")
     render json: {status: :not_found, error_messages: error_messages}, status: :not_found
   rescue => e
     error_messages = generate_error(e.to_s)

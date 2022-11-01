@@ -36,7 +36,8 @@ class User < ApplicationRecord
   has_many :sms_notification_events, through: :user_sms_notification_events
   has_many :notes, as: :notable
   has_one :address, dependent: :destroy
-  has_and_belongs_to_many :languages
+  has_many :user_languages
+  has_many :languages, through: :user_languages
 
   accepts_nested_attributes_for :user_sms_notification_events, :address, allow_destroy: true
 
@@ -92,7 +93,7 @@ class User < ApplicationRecord
     volunteers.includes(
       case_assignments: :casa_case
     ).where(
-      case_assignments: {active: true}, casa_cases: {active: true, transition_aged_youth: true}
+      case_assignments: {active: true}, casa_cases: {active: true, birth_month_year_youth: ..CasaCase::TRANSITION_AGE.years.ago}
     ).size
   end
 

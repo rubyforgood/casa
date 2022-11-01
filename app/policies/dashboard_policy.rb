@@ -1,4 +1,4 @@
-class DashboardPolicy < Struct.new(:user, :dashboard)
+class DashboardPolicy < ApplicationPolicy
   def all_allowed
     true
   end

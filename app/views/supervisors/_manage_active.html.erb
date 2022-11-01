@@ -7,7 +7,7 @@
                     deactivate_supervisor_path(user),
                     method: :patch,
                     class: "btn btn-outline-danger",
-                    data: {confirm: t("forms.supervisor.mark_inactive_warning")} %>
+                    data: {confirm: "WARNING: Marking a supervisor inactive will make them unable to login. Are you sure you want to do this?"} %>
       <% end %>
     <% end %>
   <% else %>

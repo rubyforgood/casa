@@ -58,6 +58,9 @@ en:
       youth_date_of_birth: "%B %Y"
       short_date: "%-m/%d"
   notifications:
+    emancipation_checklist_reminder_notification:
+      title: "Emancipation Checklist Reminder"
+      message: "Your case %{case_number} is a transition aged youth. We want to make sure that along the way, we’re preparing our youth for emancipation. Make sure to check the emancipation checklist."
     followup_resolved_notification:
       title: "Followup resolved"
       message: "%{created_by_name} resolved a follow up. Click to see more."

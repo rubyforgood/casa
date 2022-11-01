@@ -29,11 +29,11 @@ $('document').ready(() => {
   const smsToggle = $(`.${SMS_TOGGLE_CLASS}`)[0]
   const emailToggle = $(`.${EMAIL_TOGGLE_CLASS}`)[0]
 
-  emailToggle.addEventListener('change', () => {
+  emailToggle?.addEventListener('change', () => {
     displayPopUpIfPreferencesIsInvalid()
   })
 
-  smsToggle.addEventListener('change', () => {
+  smsToggle?.addEventListener('change', () => {
     displayPopUpIfPreferencesIsInvalid()
   })
 

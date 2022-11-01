@@ -141,11 +141,11 @@ RSpec.describe "volunteers/edit", type: :system do
       visit edit_volunteer_path(volunteer)
 
       within "#case_assignment_#{case_assignment_1.id}" do
-        expect(page).to have_link("CINA1", href: "/casa_cases/#{casa_case_1.id}")
+        expect(page).to have_link("CINA1", href: "/casa_cases/#{casa_case_1.case_number.parameterize}")
       end
 
       within "#case_assignment_#{case_assignment_2.id}" do
-        expect(page).to have_link("CINA2", href: "/casa_cases/#{casa_case_2.id}")
+        expect(page).to have_link("CINA2", href: "/casa_cases/#{casa_case_2.case_number.parameterize}")
       end
     end
 

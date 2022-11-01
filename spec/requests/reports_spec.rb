@@ -31,4 +31,19 @@ RSpec.describe "/reports", type: :request do
       it { is_expected.not_to be_successful }
     end
   end
+
+  describe "GET #export_emails" do
+    before do
+      sign_in build(:casa_admin)
+    end
+
+    it "renders a csv file to download" do
+      get export_emails_url(format: :csv)
+
+      expect(response).to be_successful
+      expect(
+        response.headers["Content-Disposition"]
+      ).to include "attachment; filename=\"volunteers-emails-#{Time.current.strftime("%Y-%m-%d")}.csv"
+    end
+  end
 end

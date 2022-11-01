@@ -1,0 +1,31 @@
+require "csv"
+
+class VolunteersEmailsExportCsvService
+  attr_reader :volunteers
+
+  def initialize
+    @volunteers = Volunteer.active
+  end
+
+  def perform
+    CSV.generate(headers: true) do |csv|
+      csv << full_data.keys.map(&:to_s).map(&:titleize)
+      @volunteers.each do |volunteer|
+        csv << full_data(volunteer).values
+      end
+    end
+  end
+
+  private
+
+  def full_data(volunteer = nil)
+    active_casa_cases = volunteer&.casa_cases&.active&.map { |c| [c.case_number, c.in_transition_age?] }.to_h
+
+    {
+      email: volunteer&.email,
+      case_number: active_casa_cases.keys.join(", "),
+      volunteer_name: volunteer&.display_name,
+      case_transition_aged_status: active_casa_cases.values.join(", ")
+    }
+  end
+end

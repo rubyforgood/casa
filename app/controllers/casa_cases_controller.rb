@@ -42,12 +42,12 @@ class CasaCasesController < ApplicationController
   def create
     @casa_case = CasaCase.new(
       casa_case_params.merge(
-        casa_org: current_organization,
-        transition_aged_youth: is_transition_aged_youth?(casa_case_params)
+        casa_org: current_organization
       )
     )
     authorize @casa_case
 
+    @casa_case.validate_contact_type = true
     if @casa_case.save
       respond_to do |format|
         format.html { redirect_to @casa_case, notice: "CASA case was successfully created." }
@@ -136,14 +136,9 @@ class CasaCasesController < ApplicationController
 
   private
 
-  def is_transition_aged_youth?(params)
-    # TODO remove this once TAY conversion is done
-    params[:birth_month_year_youth] && Date.parse(params[:birth_month_year_youth]) < 14.years.ago
-  end
-
   # Use callbacks to share common setup or constraints between actions.
   def set_casa_case
-    @casa_case = current_organization.casa_cases.find(params[:id])
+    @casa_case = current_organization.casa_cases.friendly.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     if params[:action] != "show"
       head :not_found
@@ -160,7 +155,8 @@ class CasaCasesController < ApplicationController
       :case_number,
       :birth_month_year_youth,
       :court_report_due_date,
-      court_dates_attributes: [:date]
+      court_dates_attributes: [:date],
+      casa_case_contact_types_attributes: [:contact_type_id]
     )
   end
 

@@ -4,17 +4,17 @@
   <div class="card-body">
     <%= form_for @user, as: :user, url: users_path do |form| %>
       <div class="field form-group">
-        <%= form.label :email, t("common.email") %>
+        <%= form.label :email, "Email" %>
         <%= form.text_field :email, class: "form-control", disabled: !current_user.casa_admin? %>
       </div>
 
       <div class="field form-group">
-        <%= form.label :display_name, t("common.display_name") %>
+        <%= form.label :display_name, "Display name" %>
         <%= form.text_field :display_name, class: "form-control" %>
       </div>
 
       <div class="field form-group">
-        <%= form.label :phone_number, t("common.phone_number") %>
+        <%= form.label :phone_number, "Phone number" %>
         <%= form.text_field :phone_number, class: "form-control" %>
       </div>
 
@@ -48,7 +48,7 @@
                         deactivate_casa_admin_path(current_user),
                         method: :patch,
                         class: "btn btn-outline-danger mb-3",
-                        data: {confirm: t("forms.casa_admin.mark_inactive_warning")} %>
+                        data: {confirm: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"} %>
           <% else %>
             <%= link_to "Deactivate",
                         "#",
@@ -85,15 +85,15 @@ minlength: User.password_length.min %>
   </div>
  <%= form_for @user, as: :user, url: users_path do |form| %>
    <br>
-   <h3><%= t("communication_preferences.header") %></h3>
-   <p><%= t("communication_preferences.paragraph") %></p>
+   <h3>Communication Preferences</h3>
+   <p>Tell us how you'd like to receive notifications.</p>
    <div>
      <%= form.check_box :receive_email_notifications, class: "toggle-email-notifications" %>
-     <%= form.label :receive_email_notifications, t("communication_preferences.email_me") %>
+     <%= form.label :receive_email_notifications, "Email Me" %>
    </div>
    <div>
      <%= form.check_box :receive_sms_notifications, class: "toggle-sms-notifications" %>
-     <%= form.label :receive_sms_notifications, t("communication_preferences.text_me") %>
+     <%= form.label :receive_sms_notifications, "Text Me" %>
    <div>
    <div class="pl-4 pb-4">
       <%= form.collection_check_boxes("sms_notification_event_ids", SmsNotificationEvent.where(user_type: @user.type),
@@ -105,7 +105,7 @@ minlength: User.password_length.min %>
       <% end %>
    </div>
    <div class="action_container">
-     <%= form.submit t("communication_preferences.save_preferences"), class: "btn btn-primary mb-3 save-preference" %>
+     <%= form.submit "Save Preferences", class: "btn btn-primary mb-3 save-preference" %>
    </div>
  <% end %>
   <% if current_user.volunteer? %>

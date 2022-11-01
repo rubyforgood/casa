@@ -12,20 +12,21 @@ function replaceNumberWithDecrement (str, num) {
 module.exports = class CourtOrderList {
   // @param {object} courtOrdersWidget The div containing the list of court orders
   constructor (courtOrdersWidget) {
-    const urlMatch = window.location.pathname.match(/^\/([a-z_]+)s\/(\d+)(\/(([a-z_]+)s))?/).filter(match => match !== undefined)
-
+    // The following regex is intended for pathnames such as "/casa_cases/CINA-19-1004/court_dates/new"
+    const urlMatch = window.location.pathname.match(/^\/([a-z_]+)s\/(\w+-+\d+)(\/(([a-z_]+)s))?/).filter(match => match !== undefined)
     this.courtOrdersWidget = courtOrdersWidget
     this.resourceName = urlMatch.length > 3 ? urlMatch[5] : urlMatch[1]
+    // The casaCaseId will be something like "CINA-19-1004"
     this.casaCaseId = urlMatch[2]
   }
 
   // Adds a row containing a text field to write the court order and a dropdown to specify the order status
   addCourtOrder () {
     const courtOrdersWidget = this.courtOrdersWidget
-    const index = courtOrdersWidget.children('.court-mandate-entry').length
+    const index = courtOrdersWidget.children('.court-order-entry').length
     const resourceName = this.resourceName
     const courtOrderRow = $(`\
-    <div class="court-mandate-entry">\
+    <div class="court-order-entry">\
       <textarea
       name="${resourceName}[case_court_orders_attributes][${index}][text]"\
       id="${resourceName}_case_court_orders_attributes_${index}_text"></textarea>
@@ -34,7 +35,7 @@ module.exports = class CourtOrderList {
     name="${resourceName}[case_court_orders_attributes][${index}][implementation_status]"\
     id="${resourceName}_case_court_orders_attributes_${index}_implementation_status">\
         <option value="">Set Implementation Status</option>
-        <option value="not_implemented">Not implemented</option>
+        <option value="unimplemented">Not implemented</option>
         <option value="partially_implemented">Partially implemented</option>
         <option value="implemented">Implemented</option>
       </select>
@@ -61,7 +62,7 @@ module.exports = class CourtOrderList {
     orderHiddenIdInput.remove()
 
     // Decrement indicies of all siblings after deleted element
-    this.courtOrdersWidget.children(`.court-mandate-entry:nth-child(n+${2 * index})`).each(function (originalSiblingIndex) {
+    this.courtOrdersWidget.children(`.court-order-entry:nth-child(n+${2 * index})`).each(function (originalSiblingIndex) {
       const courtOrderSibling = $(this)
       const courtOrderSiblingSelect = courtOrderSibling.children('select')
       const courtOrderSiblingTextArea = courtOrderSibling.children('textarea')

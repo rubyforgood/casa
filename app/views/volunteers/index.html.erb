@@ -1,39 +1,36 @@
 <div class="row">
   <div class="col-sm-12 dashboard-table-header">
-    <h1><%= t(".volunteers") %></h1>
+    <h1>Volunteers</h1>
     <% if policy(current_organization.volunteers.new).new? %>
-      <%= link_to t(".button.new"), new_volunteer_path, class: "btn btn-primary mb-2 mb-md-0" %>
+      <%= link_to "New Volunteer", new_volunteer_path, class: "btn btn-primary mb-2 mb-md-0" %>
     <% end %>
-    <button type="button" class="btn btn-primary mb-2 mb-md-0" data-toggle="modal" data-target="#visibleColumns">
-      <%= t(".pick_displayed_columns") %>
-    </button>
   </div>
 </div>
 <hr>
 
 <div class="row volunteer-filters">
   <div class="col-sm-12">
-    <h4 class="pull-left mr-2"><%= t(".filter") %></h4>
+    <h4 class="pull-left mr-2">Filter by</h4>
     <div class="dropdown pull-left mr-2">
       <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <%= t(".supervisor") %>
+        Supervisor
       </button>
       <div class="dropdown-menu supervisor-options">
         <div class="dropdown-item form-check">
-          <%= check_box_tag "supervisor-option-none", "", false,
+          <%= check_box_tag "supervisor-option-none", "", true,
                     class: "form-check-input",
                     data: { value: "" },
                     id: "unassigned-vol-filter" %>
-          <%= label_tag "supervisor-option-none", t(".no_supervisor"), class: "form-check-label" %>
+          <%= label_tag "supervisor-option-none", "No supervisor assignment", class: "form-check-label" %>
         </div>
         <% current_organization.supervisors.where(active: true).each do |supervisor| %>
           <div class="dropdown-item form-check">
             <% option_for_name = supervisor.display_name.downcase.gsub(/ /, '_').gsub(/[^a-z_]+/, '') -%>
             <% tag_name = "supervisor-option-#{option_for_name}" -%>
-            <%= check_box_tag tag_name, supervisor.display_name,
+            <%= check_box_tag tag_name, supervisor.id,
                     policy(User).edit_name?(supervisor),   # checked?
                     class: "form-check-input",
-                    data: { value: supervisor.display_name } %>
+                    data: { value: supervisor.id } %>
             <%= label_tag tag_name, supervisor.display_name, class: "form-check-label" %>
           </div>
         <% end %>
@@ -41,40 +38,40 @@
     </div>
     <div class="dropdown pull-left mr-2">
       <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <%= t(".status") %>
+        Status
       </button>
       <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
         <div class="dropdown-item form-check">
           <%= check_box_tag "status_option_active", "true", true,
                     class: "form-check-input",
                     data: { value: "true" } %>
-          <%= label_tag "status_option_active", t(".active"), class: "form-check-label" %>
+          <%= label_tag "status_option_active", "Active", class: "form-check-label" %>
         </div>
         <div class="dropdown-item form-check">
           <%= check_box_tag "status_option_inactive", "false", false,
                     class: "form-check-input",
                     data: { value: "false" } %>
-          <%= label_tag "status_option_inactive", t(".inactive"), class: "form-check-label" %>
+          <%= label_tag "status_option_inactive", "Inactive", class: "form-check-label" %>
         </div>
       </div>
     </div>
 
     <div class="dropdown pull-left mr-2">
       <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <%= t(".transition_aged_youth") %>
+      Assigned to Transition Aged Youth
       </button>
       <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton">
         <div class="dropdown-item form-check">
           <%= check_box_tag "transition_youth_option_yes", "true", true,
                     class: "form-check-input",
                     data: { value: "true" } %>
-          <%= label_tag "transition_youth_option_yes",  t("common.yes_text"), class: "form-check-label" %>
+          <%= label_tag "transition_youth_option_yes",  "Yes", class: "form-check-label" %>
         </div>
         <div class="dropdown-item form-check">
           <%= check_box_tag "transition_youth_option_no", "false", true,
                     class: "form-check-input",
                     data: { value: "false" } %>
-          <%= label_tag "transition_youth_option_no", t("common.no_text"), class: "form-check-label" %>
+          <%= label_tag "transition_youth_option_no", "No", class: "form-check-label" %>
         </div>
       </div>
     </div>
@@ -87,16 +84,21 @@
           <%= check_box_tag "extra_language_option_yes", "true", true,
                     class: "form-check-input",
                     data: { value: "true" } %>
-          <%= label_tag "extra_language_option_yes",  t("common.yes_text"), class: "form-check-label" %>
+          <%= label_tag "extra_language_option_yes", "Yes", class: "form-check-label" %>
         </div>
         <div class="dropdown-item form-check">
           <%= check_box_tag "extra_language_option_no", "false", true,
                     class: "form-check-input",
                     data: { value: "false" } %>
-          <%= label_tag "extra_language_option_no", t("common.no_text"), class: "form-check-label" %>
+          <%= label_tag "extra_language_option_no", "No", class: "form-check-label" %>
         </div>
       </div>
     </div>
+  </div>
+  <div class="ml-3">
+    <button type="button" class="btn btn-primary mb-2 mb-md-0" data-toggle="modal" data-target="#visibleColumns">
+      Pick displayed columns
+    </button>
   </div>
 </div>
 <br>
@@ -105,14 +107,14 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="visibleColumnsLabel"><%= t(".pick_displayed_columns") %></h5>
+        <h5 class="modal-title" id="visibleColumnsLabel">Pick displayed columns</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <div>
-          <%= t(".select_columns") %>:
+          Select columns:
 
           <% Volunteer::TABLE_COLUMNS.each_with_index do |column, index| %>
             <div class="row">
@@ -131,7 +133,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal"><%= t("button.close") %></button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -146,17 +148,17 @@
         data-source="<%= datatable_volunteers_path format: :json %>">
         <thead>
           <tr>
-            <th><%= t(".heading.name") %></th>
-            <th><%= t(".heading.e_mail") %></th>
-            <th><%= t(".heading.supervisor") %></th>
-            <th><%= t(".heading.status") %></th>
-            <th><%= t(".heading.assigned_transition_aged_youth") %></th>
-            <th><%= t(".heading.case_number") %></th>
-            <th><%= t(".heading.last_attempted_contact") %></th>
-            <th><%= t(".heading.contacts") %></th>
-            <th><%= t(".heading.hours_spent_in") %></th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Supervisor</th>
+            <th>Status</th>
+            <th>Assigned To Transition Aged Youth</th>
+            <th>Case Number(s)</th>
+            <th>Last Attempted Contact</th>
+            <th>Contacts Made in Past 60 Days</th>
+            <th>Hours spent in last 30 days</th>
             <th>Extra Languages</th>
-            <th><%= t(".heading.actions") %></th>
+            <th>Actions</th>
           </tr>
         </thead>
 

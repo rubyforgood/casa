@@ -6,7 +6,7 @@
                   deactivate_volunteer_path(user),
                   method: :patch,
                   class: "btn btn-outline-danger",
-                  data: {confirm: t("forms.volunteer.mark_inactive_warning")} %>
+                  data: {confirm: "WARNING: Marking a volunteer inactive will make them unable to login. Are you sure you want to do this?"} %>
     <% end %>
   <% else %>
     <div class="alert alert-danger">

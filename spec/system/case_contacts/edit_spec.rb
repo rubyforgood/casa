@@ -142,5 +142,25 @@ you are trying to set the address for both of them. This is not currently possib
       expect(case_contact.medium_type).to eq "in-person"
       expect(case_contact.contact_made).to eq true
     end
+
+    it "autosaves notes", js: true do
+      case_contact = create(:case_contact, duration_minutes: 105, casa_case: casa_case, creator: volunteer, notes: "Hello from the other side")
+      sign_in volunteer
+      visit edit_case_contact_path(case_contact)
+
+      within "#enter-contact-details" do
+        choose "Yes"
+      end
+
+      fill_in "Notes", with: "Hello world"
+
+      click_on "Log out"
+
+      sign_in volunteer
+
+      visit edit_case_contact_path(case_contact)
+
+      expect(page).to have_field("Notes", with: "Hello world")
+    end
   end
 end

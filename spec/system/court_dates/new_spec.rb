@@ -28,7 +28,7 @@ RSpec.describe "court_dates/new", type: :system do
       select judge.name, from: "Judge"
       select hearing_type.name, from: "Hearing type"
 
-      find("#add-mandate-button").click
+      find("#add-court-order-button").click
 
       fill_in "court_date_case_court_orders_attributes_0_text", with: text
       select "Partially implemented", from: "court_date_case_court_orders_attributes_0_implementation_status"

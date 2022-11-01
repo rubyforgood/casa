@@ -9,7 +9,8 @@ services:
       - "4000:4000"
     volumes:
       - .:/usr/src/app
-      - /usr/src/app/node_modules
+      - node_modules:/usr/src/app/node_modules
+      - bundle_data:/usr/local/bundle/gems
     env_file:
       - config/docker.env
     depends_on:
@@ -38,3 +39,5 @@ services:
 
 volumes:
   db_data:
+  bundle_data:
+  node_modules:

@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   before_action :get_user
   before_action :authorize_user_with_policy
   before_action :set_active_casa_admins
+  before_action :set_language, only: [:add_language]
   after_action :verify_authorized
   before_action :set_custom_error_heading, only: [:update_password]
   after_action :reset_custom_error_heading, only: [:update_password]
@@ -16,6 +17,20 @@ class UsersController < ApplicationController
       redirect_to edit_users_path
     else
       render :edit
+    end
+  end
+
+  def add_language
+    if @language.nil?
+      @user.errors.add(:language_id, "can not be blank. Please select a language before adding.")
+      return render "edit"
+    end
+
+    current_user.languages << @language
+    if current_user.save
+      redirect_to edit_users_path, notice: "#{@language.name} was added to your languages list."
+    else
+      redirect_to edit_users_path, alert: "Error unable to add #{@language.name} to your languages list!"
     end
   end
 
@@ -38,6 +53,10 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def set_language
+    @language = Language.find_by(id: params[:id] || params[:language_id])
+  end
 
   def set_initial_address
     Address.create(user_id: current_user.id, content: "") if !current_user.address

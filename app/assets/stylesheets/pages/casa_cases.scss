@@ -54,13 +54,13 @@ body.casa_cases {
     padding-bottom: 15px;
   }
 
-  .court-mandates {
+  .court-orders {
     textarea {
       display: block;
       margin-bottom: 5px;
     }
 
-    textarea, .add-court-mandate {
+    textarea, .add-court-order {
       width: 500px;
     }
 
@@ -69,12 +69,12 @@ body.casa_cases {
       min-height: 38px;
     }
 
-    .remove-mandate-button {
+    .remove-court-order-button {
       align-self: flex-start;
     }
   }
 
-  .court-mandate-entry {
+  .court-order-entry {
     display: flex;
     gap: 8px;
     align-items: center;
@@ -87,13 +87,13 @@ body.casa_cases {
 
 @media only screen and (max-width: screen-sizes.$small) {
   body.casa_cases {
-    .court-mandates {
-      textarea, .add-court-mandate {
+    .court-orders {
+      textarea, .add-court-orders {
         width: 100%;
       }
     }
 
-    .court-mandate-entry {
+    .court-order-entry {
       display: grid;
       grid-template-columns: minmax(100px, 100%) 1fr;
       gap: 2px;

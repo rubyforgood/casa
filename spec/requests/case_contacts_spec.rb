@@ -54,6 +54,14 @@ RSpec.describe "/case_contacts", type: :request do
           }.to change(CaseContact, :count).by(2)
         end
 
+        context "with two cases" do
+          it "redirects to the case contact page" do
+            post case_contacts_url, params: {case_contact: valid_attributes}
+
+            expect(response).to redirect_to(case_contacts_path(success: true))
+          end
+        end
+
         context "when the URL contains ?success=true" do
           before do
             allow_any_instance_of(CaseContactsController).to receive(:policy_scope)
@@ -116,7 +124,7 @@ RSpec.describe "/case_contacts", type: :request do
               duration_minutes: 60
             }
           }
-          expect(response).to redirect_to(casa_case_path(case_contact.casa_case_id))
+          expect(response).to redirect_to(casa_case_path(casa_case.case_number.parameterize))
 
           expect(case_contact.reload.contact_types.first.name).to eq "Attorney"
         end
