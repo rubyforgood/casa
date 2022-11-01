@@ -112,14 +112,10 @@ $('document').ready(() => {
     const emancipationCategory = categoryCollapseIcon.parent()
     const toggler = new Toggler(emancipationCategory)
 
-    console.log('clicked +')
-
     if (emancipationCategory.attr('data-is-open') === 'true') {
-      console.log('true')
       toggler.closeChildren()
       toggler.manageTogglerText()
     } else if (emancipationCategory.attr('data-is-open') === 'false') {
-      console.log('false')
       toggler.openChildren()
       toggler.manageTogglerText()
     }
