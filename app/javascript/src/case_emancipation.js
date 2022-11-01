@@ -64,16 +64,9 @@ function saveCheckState (action, checkItemId) {
 
 export class Toggler {
   constructor (category) {
-    this.category = category
-    this.emancipationCategory = this.category.parent()
-    this.categoryCollapseIcon = this.category.find('.category-collapse-icon')
+    this.emancipationCategory = category
+    this.categoryCollapseIcon = this.emancipationCategory.find('.category-collapse-icon')
     this.categoryOptionsContainer = this.emancipationCategory.siblings('.category-options')
-
-    console.log(category)
-    console.log(emancipationCategory)
-    console.log(categoryCollapseIcon)
-    console.log(categoryOptionsContainer)
-
   }
 
   manageTogglerText () {
@@ -116,10 +109,10 @@ $('document').ready(() => {
 
   $('.category-collapse-icon').on('click', function () {
     const category = $(this)
-    const toggler = new Toggler(category)
-    const emancipationCategory = category.parent()
+    const parent = category.parent()
+    const toggler = new Toggler(parent)
 
-    if (emancipationCategory.attr('data-is-open', 'true')) {
+    if (parent.attr('data-is-open', 'true')) {
       toggler.closeChildren()
       toggler.manageTogglerText()
     } else {
@@ -130,7 +123,8 @@ $('document').ready(() => {
 
   $('.emacipation-category-input-label-pair').on('click', function () {
     const category = $(this)
-    const toggler = new Toggler(category)
+    const parent = category.parent()
+    const toggler = new Toggler(parent)
     const categoryCheckbox = category.find('.emancipation-category-check-box')
     const categoryCheckboxChecked = categoryCheckbox.is(':checked')
 
