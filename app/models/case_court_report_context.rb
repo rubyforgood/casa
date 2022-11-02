@@ -3,7 +3,7 @@
 require "date"
 
 class CaseCourtReportContext
-  attr_reader :report_path, :context, :template
+  attr_reader :report_path, :template
 
   def initialize(args = {})
     @casa_case = CasaCase.friendly.find(args[:case_id])

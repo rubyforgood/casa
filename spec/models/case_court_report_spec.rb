@@ -11,10 +11,10 @@ RSpec.describe CaseCourtReport, type: :model do
       let(:casa_case_without_contacts) { volunteer.casa_cases.second }
       let(:report) do
         args = {
-            case_id: casa_case_with_contacts.id,
-            volunteer_id: volunteer.id,
-            path_to_template: path_to_template,
-            path_to_report: path_to_report
+          case_id: casa_case_with_contacts.id,
+          volunteer_id: volunteer.id,
+          path_to_template: path_to_template,
+          path_to_report: path_to_report
         }
         context = CaseCourtReportContext.new(args).context
         CaseCourtReport.new(path_to_template: path_to_template, context: context)
