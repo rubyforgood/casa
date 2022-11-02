@@ -36,7 +36,6 @@
   label {
     margin: 0;
     padding: .5em;
-    width: 80vw;
     vertical-align: middle;
   }
 
@@ -76,4 +75,8 @@
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
+}
+
+.emacipation-category-input-label-pair {
+  display: flex;
 }
