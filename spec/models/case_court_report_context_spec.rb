@@ -11,10 +11,10 @@ RSpec.describe CaseCourtReportContext, type: :model do
       let(:casa_case_without_contacts) { volunteer.casa_cases.second }
       subject do
         described_class.new(
-            case_id: casa_case_with_contacts.id,
-            volunteer_id: volunteer.id,
-            path_to_template: path_to_template,
-            path_to_report: path_to_report
+          case_id: casa_case_with_contacts.id,
+          volunteer_id: volunteer.id,
+          path_to_template: path_to_template,
+          path_to_report: path_to_report
         ).context
       end
 
@@ -84,16 +84,16 @@ RSpec.describe CaseCourtReportContext, type: :model do
         context "when passed all displayable information" do
           let(:document_data) do
             {
-                case_birthday: 12.years.ago,
-                case_contact_time: 3.days.ago,
-                case_contact_type: "Unique Case Contact Type",
-                case_hearing_date: 2.weeks.from_now,
-                case_number: "A-CASA-CASE-NUMBER-12345",
-                text: "This text shall not be strikingly similar to other text in the document",
-                org_address: "596 Unique Avenue Seattle, Washington",
-                supervisor_name: "A very unique supervisor name",
-                volunteer_case_assignment_date: 2.months.ago,
-                volunteer_name: "An unmistakably unique volunteer name"
+              case_birthday: 12.years.ago,
+              case_contact_time: 3.days.ago,
+              case_contact_type: "Unique Case Contact Type",
+              case_hearing_date: 2.weeks.from_now,
+              case_number: "A-CASA-CASE-NUMBER-12345",
+              text: "This text shall not be strikingly similar to other text in the document",
+              org_address: "596 Unique Avenue Seattle, Washington",
+              supervisor_name: "A very unique supervisor name",
+              volunteer_case_assignment_date: 2.months.ago,
+              volunteer_name: "An unmistakably unique volunteer name"
             }
           end
 
@@ -119,10 +119,10 @@ RSpec.describe CaseCourtReportContext, type: :model do
         context "when missing a volunteer" do
           subject do
             args = {
-                case_id: casa_case.id,
-                volunteer_id: nil,
-                path_to_template: path_to_template,
-                path_to_report: path_to_report
+              case_id: casa_case.id,
+              volunteer_id: nil,
+              path_to_template: path_to_template,
+              path_to_report: path_to_report
             }
             context = described_class.new(args).context
             CaseCourtReport.new(path_to_template: path_to_template, context: context) # TODO remove from this test file
@@ -130,16 +130,16 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
           let(:document_data) do
             {
-                case_birthday: 12.years.ago,
-                case_contact_time: 3.days.ago,
-                case_contact_type: "Unique Case Contact Type",
-                case_hearing_date: 2.weeks.from_now,
-                case_number: "A-CASA-CASE-NUMBER-12345",
-                text: "This text shall not be strikingly similar to other text in the document",
-                org_address: nil,
-                supervisor_name: nil,
-                volunteer_case_assignment_date: 2.months.ago,
-                volunteer_name: nil
+              case_birthday: 12.years.ago,
+              case_contact_time: 3.days.ago,
+              case_contact_type: "Unique Case Contact Type",
+              case_hearing_date: 2.weeks.from_now,
+              case_number: "A-CASA-CASE-NUMBER-12345",
+              text: "This text shall not be strikingly similar to other text in the document",
+              org_address: nil,
+              supervisor_name: nil,
+              volunteer_case_assignment_date: 2.months.ago,
+              volunteer_name: nil
             }
           end
 
@@ -181,9 +181,9 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
       it "will raise Zip::Error when generating subject" do
         args = {
-            case_id: casa_case_with_contacts.id,
-            volunteer_id: volunteer.id,
-            path_to_template: nonexistent_path
+          case_id: casa_case_with_contacts.id,
+          volunteer_id: volunteer.id,
+          path_to_template: nonexistent_path
         }
         context = described_class.new(args).context
         bad_report = CaseCourtReport.new(path_to_template: nonexistent_path, context: context)
@@ -207,9 +207,9 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
       it "should have all the court orders" do
         args = {
-            case_id: casa_case.id,
-            path_to_template: path_to_template,
-            path_to_report: path_to_report
+          case_id: casa_case.id,
+          path_to_template: path_to_template,
+          path_to_report: path_to_report
         }
         context = described_class.new(args).context
         case_report = CaseCourtReport.new(path_to_template: path_to_template, context: context)
