@@ -1,23 +1,21 @@
 require "rails_helper"
 require "sablon"
 
-RSpec.describe CaseCourtReport, type: :model do
+RSpec.describe CaseCourtReportContext, type: :model do
   let(:path_to_template) { Rails.root.join("app", "documents", "templates", "default_report_template.docx").to_s }
   let(:path_to_report) { Rails.root.join("tmp", "test_report.docx").to_s }
-  context "#generate_to_string" do
+  context "#context" do
     describe "when receiving valid case, volunteer, and path_to_template" do
       let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
       let(:casa_case_with_contacts) { volunteer.casa_cases.first }
       let(:casa_case_without_contacts) { volunteer.casa_cases.second }
       let(:report) do
-        args = {
+        described_class.new(
             case_id: casa_case_with_contacts.id,
             volunteer_id: volunteer.id,
             path_to_template: path_to_template,
             path_to_report: path_to_report
-        }
-        context = CaseCourtReportContext.new(args).context
-        CaseCourtReport.new(path_to_template: path_to_template, context: context)
+        )
       end
 
       describe "with volunteer without supervisor" do
@@ -88,16 +86,16 @@ RSpec.describe CaseCourtReport, type: :model do
         context "when passed all displayable information" do
           let(:document_data) do
             {
-              case_birthday: 12.years.ago,
-              case_contact_time: 3.days.ago,
-              case_contact_type: "Unique Case Contact Type",
-              case_hearing_date: 2.weeks.from_now,
-              case_number: "A-CASA-CASE-NUMBER-12345",
-              text: "This text shall not be strikingly similar to other text in the document",
-              org_address: "596 Unique Avenue Seattle, Washington",
-              supervisor_name: "A very unique supervisor name",
-              volunteer_case_assignment_date: 2.months.ago,
-              volunteer_name: "An unmistakably unique volunteer name"
+                case_birthday: 12.years.ago,
+                case_contact_time: 3.days.ago,
+                case_contact_type: "Unique Case Contact Type",
+                case_hearing_date: 2.weeks.from_now,
+                case_number: "A-CASA-CASE-NUMBER-12345",
+                text: "This text shall not be strikingly similar to other text in the document",
+                org_address: "596 Unique Avenue Seattle, Washington",
+                supervisor_name: "A very unique supervisor name",
+                volunteer_case_assignment_date: 2.months.ago,
+                volunteer_name: "An unmistakably unique volunteer name"
             }
           end
 
@@ -118,31 +116,15 @@ RSpec.describe CaseCourtReport, type: :model do
             volunteer.update_attribute(:display_name, document_data[:volunteer_name])
             volunteer.supervisor.update_attribute(:display_name, document_data[:supervisor_name])
           end
-
-          it "displays all the information" do
-            document_inspector = DocxInspector.new(docx_contents: report.generate_to_string)
-
-            expect(document_inspector.word_list_header_contains?(document_data[:org_address])).to eq(true)
-            expect(document_inspector.word_list_document_contains?(Date.today.strftime("%B %-d, %Y"))).to eq(true)
-            expect(document_inspector.word_list_document_contains?(document_data[:case_hearing_date].strftime("%B %-d, %Y"))).to eq(true)
-            expect(document_inspector.word_list_document_contains?(document_data[:case_number])).to eq(true)
-            expect(document_inspector.word_list_document_contains?(document_data[:case_contact_type])).to eq(true)
-            expect(document_inspector.word_list_document_contains?("#{document_data[:case_contact_time].strftime("%-m/%d")}*")).to eq(true)
-            expect(document_inspector.word_list_document_contains?(document_data[:text])).to eq(true)
-            expect(document_inspector.word_list_document_contains?("Partially implemented")).to eq(true) # Order Status
-            expect(document_inspector.word_list_document_contains?(document_data[:volunteer_name])).to eq(true)
-            expect(document_inspector.word_list_document_contains?(document_data[:volunteer_case_assignment_date].strftime("%B %-d, %Y"))).to eq(true)
-            expect(document_inspector.word_list_document_contains?(document_data[:supervisor_name])).to eq(true)
-          end
         end
 
         context "when missing a volunteer" do
           let(:report) do
             args = {
-              case_id: casa_case.id,
-              volunteer_id: nil,
-              path_to_template: path_to_template,
-              path_to_report: path_to_report
+                case_id: casa_case.id,
+                volunteer_id: nil,
+                path_to_template: path_to_template,
+                path_to_report: path_to_report
             }
             context = CaseCourtReportContext.new(args).context
             CaseCourtReport.new(path_to_template: path_to_template, context: context)
@@ -150,16 +132,16 @@ RSpec.describe CaseCourtReport, type: :model do
 
           let(:document_data) do
             {
-              case_birthday: 12.years.ago,
-              case_contact_time: 3.days.ago,
-              case_contact_type: "Unique Case Contact Type",
-              case_hearing_date: 2.weeks.from_now,
-              case_number: "A-CASA-CASE-NUMBER-12345",
-              text: "This text shall not be strikingly similar to other text in the document",
-              org_address: nil,
-              supervisor_name: nil,
-              volunteer_case_assignment_date: 2.months.ago,
-              volunteer_name: nil
+                case_birthday: 12.years.ago,
+                case_contact_time: 3.days.ago,
+                case_contact_type: "Unique Case Contact Type",
+                case_hearing_date: 2.weeks.from_now,
+                case_number: "A-CASA-CASE-NUMBER-12345",
+                text: "This text shall not be strikingly similar to other text in the document",
+                org_address: nil,
+                supervisor_name: nil,
+                volunteer_case_assignment_date: 2.months.ago,
+                volunteer_name: nil
             }
           end
 
@@ -201,9 +183,9 @@ RSpec.describe CaseCourtReport, type: :model do
 
       it "will raise Zip::Error when generating report" do
         args = {
-          case_id: casa_case_with_contacts.id,
-          volunteer_id: volunteer.id,
-          path_to_template: nonexistent_path
+            case_id: casa_case_with_contacts.id,
+            volunteer_id: volunteer.id,
+            path_to_template: nonexistent_path
         }
         context = CaseCourtReportContext.new(args).context
         bad_report = CaseCourtReport.new(path_to_template: nonexistent_path, context: context)
@@ -227,9 +209,9 @@ RSpec.describe CaseCourtReport, type: :model do
 
       it "should have all the court orders" do
         args = {
-          case_id: casa_case.id,
-          path_to_template: path_to_template,
-          path_to_report: path_to_report
+            case_id: casa_case.id,
+            path_to_template: path_to_template,
+            path_to_report: path_to_report
         }
         context = CaseCourtReportContext.new(args).context
         case_report = CaseCourtReport.new(path_to_template: path_to_template, context: context)

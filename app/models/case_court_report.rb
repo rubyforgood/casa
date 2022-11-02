@@ -5,9 +5,9 @@ require "sablon"
 class CaseCourtReport
   attr_reader :report_path, :context, :template
 
-  def initialize(args = {})
-    @context = CaseCourtReportContext.new(args).context
-    @template = Sablon.template(args[:path_to_template])
+  def initialize(path_to_template:, context:)
+    @context = context
+    @template = Sablon.template(path_to_template)
   end
 
   def generate_to_string
