@@ -179,9 +179,9 @@ RSpec.describe CaseCourtReportContext, type: :model do
       let!(:court_order_not_specified) { create(:case_court_order, casa_case: casa_case, text: "(4WqOL7e'FRYd@%", implementation_status: nil) }
       subject do
         args = {
-            case_id: casa_case.id,
-            path_to_template: path_to_template,
-            path_to_report: path_to_report
+          case_id: casa_case.id,
+          path_to_template: path_to_template,
+          path_to_report: path_to_report
         }
         described_class.new(args).context
       end
