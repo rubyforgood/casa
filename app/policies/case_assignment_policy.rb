@@ -29,7 +29,7 @@ class CaseAssignmentPolicy < ApplicationPolicy
   end
 
   def show_or_hide_contacts?
-    hide_contacts? || !hide_contacts?
+    admin_or_supervisor? && same_org?
   end
 
   def same_org?
