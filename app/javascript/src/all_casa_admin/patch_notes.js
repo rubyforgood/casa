@@ -259,6 +259,44 @@ patchNoteFunctions.onCancelEdit = function () {
   patchNoteFunctions.exitPatchNoteFormEditMode(formInputs)
 }
 
+// Called when the create button is pressed on the new patch note form
+patchNoteFunctions.onCreate = function () {
+  try {
+    const patchNoteList = $('#patch-note-list')
+    const newPatchNoteFormInputs = patchNoteFunctions.getPatchNoteFormInputs($('#new-patch-note'))
+
+    if (!(newPatchNoteFormInputs.noteTextArea.val())) {
+      pageNotifier.notify('Cannot save an empty patch note', 'warn')
+      return
+    }
+
+    patchNoteFunctions.disablePatchNoteForm(newPatchNoteFormInputs)
+
+    const patchNoteGroupId = Number.parseInt(newPatchNoteFormInputs.dropdownGroup.val())
+    const patchNoteTypeId = Number.parseInt(newPatchNoteFormInputs.dropdownType.val())
+    const patchNoteText = newPatchNoteFormInputs.noteTextArea.val()
+
+    patchNoteFunctions.createPatchNote(
+      patchNoteGroupId,
+      patchNoteText,
+      patchNoteTypeId
+    ).then(function (response) {
+      newPatchNoteFormInputs.noteTextArea.val('')
+      patchNoteFunctions.addPatchNoteUI(patchNoteGroupId, response.id, patchNoteList, patchNoteText, patchNoteTypeId)
+    }).fail(function (err) {
+      pageNotifier.notify('Failed to update UI', 'error')
+      pageNotifier.notify(err.message, 'error')
+      console.error(err)
+    }).always(function () {
+      patchNoteFunctions.enablePatchNoteForm(newPatchNoteFormInputs)
+    })
+  } catch (err) {
+    pageNotifier.notify('Failed to save patch note', 'error')
+    pageNotifier.notify(err.message, 'error')
+    console.error(err)
+  }
+}
+
 // Called when the delete button is pressed on a patch note form
 patchNoteFunctions.onDeletePatchNote = function () {
   const deleteButton = $(this)
@@ -455,37 +493,7 @@ $('document').ready(() => {
     const asyncNotificationsElement = $('#async-notifications')
     pageNotifier = new AsyncNotifier(asyncNotificationsElement)
 
-    const patchNoteList = $('#patch-note-list')
-    const newPatchNoteFormInputs = patchNoteFunctions.getPatchNoteFormInputs($('#new-patch-note'))
-
-    newPatchNoteFormInputs.buttonControls.click(() => {
-      if (!(newPatchNoteFormInputs.noteTextArea.val())) {
-        pageNotifier.notify('Cannot save an empty patch note', 'warn')
-        return
-      }
-
-      patchNoteFunctions.disablePatchNoteForm(newPatchNoteFormInputs)
-
-      const patchNoteGroupId = Number.parseInt(newPatchNoteFormInputs.dropdownGroup.val())
-      const patchNoteTypeId = Number.parseInt(newPatchNoteFormInputs.dropdownType.val())
-      const patchNoteText = newPatchNoteFormInputs.noteTextArea.val()
-
-      patchNoteFunctions.createPatchNote(
-        patchNoteGroupId,
-        patchNoteText,
-        patchNoteTypeId
-      ).then(function (response) {
-        newPatchNoteFormInputs.noteTextArea.val('')
-        patchNoteFunctions.addPatchNoteUI(patchNoteGroupId, response.id, patchNoteList, patchNoteText, patchNoteTypeId)
-      }).fail(function (err) {
-        pageNotifier.notify('Failed to update UI', 'error')
-        pageNotifier.notify(err.message, 'error')
-        console.error(err)
-      }).always(function () {
-        patchNoteFunctions.enablePatchNoteForm(newPatchNoteFormInputs)
-      })
-    })
-
+    $('#new-patch-note button').click(patchNoteFunctions.onCreate)
     $('#patch-note-list .button-delete').click(patchNoteFunctions.onDeletePatchNote)
     $('#patch-note-list .button-edit').click(patchNoteFunctions.onEditPatchNote)
   } catch (err) {
