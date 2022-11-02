@@ -55,15 +55,9 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
       describe "has valid @context" do
         it { is_expected.not_to be_empty }
-        it { is_expected.to be_instance_of Hash }
 
-        it "has the following keys [:created_date, :casa_case, :case_contacts, :latest_hearing_date, :org_address, :volunteer]" do
-          expected = %i[created_date casa_case case_contacts volunteer]
-          expect(subject.keys).to include(*expected)
-        end
-
-        it "must have Case Contacts as type Array" do
-          expect(subject[:case_contacts]).to be_instance_of Array
+        it "has keys" do
+          expect(subject.keys).to match_array([:created_date, :casa_case, :case_contacts, :case_court_orders, :case_mandates, :latest_hearing_date, :org_address, :volunteer])
         end
 
         it "created_date is not nil" do
@@ -78,7 +72,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
           end
 
           it "sets latest_hearing_date as the latest past court date" do
-            expect(subject[:latest_hearing_date]).to eq(I18n.l(3.months.ago, format: :full, default: nil))
+            expect(subject[:latest_hearing_date]).to eq("October 1, 2020")
           end
         end
       end
