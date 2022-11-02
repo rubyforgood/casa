@@ -95,6 +95,7 @@ RSpec.describe CaseAssignmentPolicy do
         is_expected.not_to permit(volunteer, case_assignment)
       end
     end
+  end
 
   permissions :destroy? do
     context "when user is an admin" do
