@@ -9,20 +9,20 @@ RSpec.describe CaseCourtReportContext, type: :model do
       let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
       let(:casa_case_with_contacts) { volunteer.casa_cases.first }
       let(:casa_case_without_contacts) { volunteer.casa_cases.second }
-      let(:report) do
+      subject do
         described_class.new(
             case_id: casa_case_with_contacts.id,
             volunteer_id: volunteer.id,
             path_to_template: path_to_template,
             path_to_report: path_to_report
-        )
+        ).context
       end
 
       describe "with volunteer without supervisor" do
         let(:volunteer) { create(:volunteer, :with_cases_and_contacts) }
 
         it "has supervisor name placeholder" do
-          expect(report.context[:volunteer][:supervisor_name]).to eq("")
+          expect(subject[:volunteer][:supervisor_name]).to eq("")
         end
       end
 
@@ -35,7 +35,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
         describe "without past court date" do
           it "has all case contacts ever created for the youth" do
-            expect(report.context[:case_contacts].length).to eq(5)
+            expect(subject[:case_contacts].length).to eq(5)
           end
         end
 
@@ -45,14 +45,12 @@ RSpec.describe CaseCourtReportContext, type: :model do
           it "has all case contacts created since the previous court date including case contact created on the court date" do
             create(:case_contact, casa_case: casa_case_with_contacts, created_at: court_date.date, notes: "created ON most recent court date")
             expect(casa_case_with_contacts.court_dates.length).to eq(2)
-            expect(report.context[:case_contacts].length).to eq(5)
+            expect(subject[:case_contacts].length).to eq(5)
           end
         end
       end
 
       describe "has valid @context" do
-        subject { report.context }
-
         it { is_expected.not_to be_empty }
         it { is_expected.to be_instance_of Hash }
 
@@ -82,7 +80,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
         end
       end
 
-      describe "the default generated report" do
+      describe "the default generated subject" do
         context "when passed all displayable information" do
           let(:document_data) do
             {
@@ -119,15 +117,15 @@ RSpec.describe CaseCourtReportContext, type: :model do
         end
 
         context "when missing a volunteer" do
-          let(:report) do
+          subject do
             args = {
                 case_id: casa_case.id,
                 volunteer_id: nil,
                 path_to_template: path_to_template,
                 path_to_report: path_to_report
             }
-            context = CaseCourtReportContext.new(args).context
-            CaseCourtReport.new(path_to_template: path_to_template, context: context)
+            context = described_class.new(args).context
+            CaseCourtReport.new(path_to_template: path_to_template, context: context) # TODO remove from this test file
           end
 
           let(:document_data) do
@@ -162,7 +160,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
           end
 
           it "display all expected information" do
-            document_inspector = DocxInspector.new(docx_contents: report.generate_to_string)
+            document_inspector = DocxInspector.new(docx_contents: subject.generate_to_string)
 
             expect(document_inspector.word_list_document_contains?(Date.today.strftime("%B %-d, %Y"))).to eq(true)
             expect(document_inspector.word_list_document_contains?(document_data[:case_hearing_date].strftime("%B %-d, %Y"))).to eq(true)
@@ -181,13 +179,13 @@ RSpec.describe CaseCourtReportContext, type: :model do
       let(:casa_case_with_contacts) { volunteer.casa_cases.first }
       let(:nonexistent_path) { "app/documents/templates/nonexisitent_report_template.docx" }
 
-      it "will raise Zip::Error when generating report" do
+      it "will raise Zip::Error when generating subject" do
         args = {
             case_id: casa_case_with_contacts.id,
             volunteer_id: volunteer.id,
             path_to_template: nonexistent_path
         }
-        context = CaseCourtReportContext.new(args).context
+        context = described_class.new(args).context
         bad_report = CaseCourtReport.new(path_to_template: nonexistent_path, context: context)
         expect { bad_report.generate_to_string }.to raise_error(Zip::Error)
       end
@@ -213,7 +211,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
             path_to_template: path_to_template,
             path_to_report: path_to_report
         }
-        context = CaseCourtReportContext.new(args).context
+        context = described_class.new(args).context
         case_report = CaseCourtReport.new(path_to_template: path_to_template, context: context)
 
         document_inspector = DocxInspector.new(docx_contents: case_report.generate_to_string)
