@@ -96,6 +96,7 @@ Rails.application.routes.draw do
   resources :other_duties, only: %i[new create edit index update]
   resources :missing_data_reports, only: %i[index]
   resources :learning_hours_reports, only: %i[index]
+  resources :followup_reports, only: :index
 
   resources :supervisors, except: %i[destroy show], concerns: %i[with_datatable] do
     member do
@@ -158,11 +159,11 @@ Rails.application.routes.draw do
       get :edit
       patch :update
       patch "update_password"
+      patch :add_language
     end
   end
   resources :fund_requests, only: %i[new create]
   resources :languages, only: %i[new create edit update] do
-    patch :add_to_volunteer, on: :collection
     delete :remove_from_volunteer
   end
 end

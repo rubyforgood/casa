@@ -28,7 +28,7 @@ method: :delete %>
       <br>
       <h6 class="font-weight-bold">Add Language</h6>
       <div class="form-group">
-      <%= form_for volunteer, url: add_to_volunteer_languages_path do |form| %>
+      <%= form_for volunteer, url: add_language_users_path do |form| %>
         <%= form.select :languages,
                       current_organization.languages.map { |lang| [lang.name, lang.id] },
                       {include_blank: true},
