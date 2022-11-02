@@ -177,30 +177,25 @@ RSpec.describe CaseCourtReportContext, type: :model do
       let!(:court_order_unimplemented) { create(:case_court_order, casa_case: casa_case, text: "'q\"tE1LP-9W>,2)", implementation_status: :unimplemented) }
       let!(:court_order_partially_implemented) { create(:case_court_order, casa_case: casa_case, text: "ZmCw@w@\d`&roct", implementation_status: :partially_implemented) }
       let!(:court_order_not_specified) { create(:case_court_order, casa_case: casa_case, text: "(4WqOL7e'FRYd@%", implementation_status: nil) }
-
-      # before(:each) do
-      #   casa_case.case_court_orders << court_order_implemented
-      #   casa_case.case_court_orders << court_order_unimplemented
-      #   casa_case.case_court_orders << court_order_partially_implemented
-      #   casa_case.case_court_orders << court_order_not_specified
-      # end
+      subject do
+        args = {
+            case_id: casa_case.id,
+            path_to_template: path_to_template,
+            path_to_report: path_to_report
+        }
+        described_class.new(args).context
+      end
 
       it "should have all the court orders" do
-        args = {
-          case_id: casa_case.id,
-          path_to_template: path_to_template,
-          path_to_report: path_to_report
-        }
-        context = described_class.new(args).context
-
-        expect(context[:created_date]).to eq("December 31, 2020")
-        expect(context[:casa_case]).to eq({court_date: nil, case_number: casa_case.case_number, dob: "January 2005", is_transitioning: true, judge_name: nil})
-        expect(context[:case_contacts]).to eq([]) # TODO test this
-        expect(context[:case_court_orders].length).to eq(4) # TODO test this better
-        expect(context[:case_mandates].length).to eq(4) # TODO test this better
-        expect(context[:latest_hearing_date]).to eq("___<LATEST HEARING DATE>____")
-        expect(context[:org_address]).to eq(nil) # TODO test this better
-        expect(context[:volunteer]).to eq(nil) # TODO test this better
+        expect(subject[:created_date]).to eq("December 31, 2020")
+        expect(subject[:casa_case]).to eq({court_date: nil, case_number: casa_case.case_number, dob: "January 2005", is_transitioning: true, judge_name: nil})
+        expect(subject[:case_contacts]).to eq([]) # TODO test this
+        expect(subject[:case_court_orders].length).to eq(4)
+        expect(subject[:case_court_orders].map { |cco| cco[:status] }).to match_array(["Implemented", "Unimplemented", "Partially implemented", nil])
+        expect(subject[:case_mandates]).to eq(subject[:case_court_orders]) # backwards compatibility for old names in old montgomery template - TODO track it down and update prod templates
+        expect(subject[:latest_hearing_date]).to eq("___<LATEST HEARING DATE>____")
+        expect(subject[:org_address]).to eq(nil) # TODO test this better
+        expect(subject[:volunteer]).to eq(nil) # TODO test this better
       end
     end
   end
