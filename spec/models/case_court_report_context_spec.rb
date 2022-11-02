@@ -4,6 +4,9 @@ require "sablon"
 RSpec.describe CaseCourtReportContext, type: :model do
   let(:path_to_template) { Rails.root.join("app", "documents", "templates", "default_report_template.docx").to_s }
   let(:path_to_report) { Rails.root.join("tmp", "test_report.docx").to_s }
+  before do
+    travel_to Date.new(2021, 1, 1)
+  end
   context "#context" do
     describe "when receiving valid case, volunteer, and path_to_template" do
       let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
@@ -212,23 +215,15 @@ RSpec.describe CaseCourtReportContext, type: :model do
           path_to_report: path_to_report
         }
         context = described_class.new(args).context
-        case_report = CaseCourtReport.new(path_to_template: path_to_template, context: context)
 
-        document_inspector = DocxInspector.new(docx_contents: case_report.generate_to_string)
-
-        expect(document_inspector.word_list_document_contains?(casa_case.case_number)).to eq(true)
-
-        expect(document_inspector.word_list_document_contains?(court_order_implemented.text)).to eq(true)
-        expect(document_inspector.word_list_document_contains?("Implemented")).to eq(true)
-
-        expect(document_inspector.word_list_document_contains?(court_order_unimplemented.text)).to eq(true)
-        expect(document_inspector.word_list_document_contains?("Unimplemented")).to eq(true)
-
-        expect(document_inspector.word_list_document_contains?(court_order_partially_implemented.text)).to eq(true)
-        expect(document_inspector.word_list_document_contains?("Partially implemented")).to eq(true)
-
-        expect(document_inspector.word_list_document_contains?(court_order_not_specified.text)).to eq(true)
-        expect(document_inspector.word_list_document_contains?("Not specified")).to eq(true)
+        expect(context[:created_date]).to eq("December 31, 2020")
+        expect(context[:casa_case]).to eq({court_date: nil, case_number: casa_case.case_number, dob: "January 2005", is_transitioning: true, judge_name: nil})
+        expect(context[:case_contacts]).to eq([]) # TODO test this
+        expect(context[:case_court_orders].length).to eq(4) # TODO test this better
+        expect(context[:case_mandates].length).to eq(4) # TODO test this better
+        expect(context[:latest_hearing_date]).to eq("___<LATEST HEARING DATE>____")
+        expect(context[:org_address]).to eq(nil) # TODO test this better
+        expect(context[:volunteer]).to eq(nil) # TODO test this better
       end
     end
   end
