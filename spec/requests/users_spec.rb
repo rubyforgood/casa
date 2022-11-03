@@ -243,7 +243,6 @@ RSpec.describe "/users", type: :request do
     end
 
     context "when request params are invalid" do
-
       it "should display an error message when the Language id is empty" do
         patch add_language_users_path(volunteer), params: {
           language_id: ""
