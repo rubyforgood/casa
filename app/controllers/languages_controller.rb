@@ -1,5 +1,5 @@
 class LanguagesController < ApplicationController
-  before_action :set_language, only: %i[edit update remove_from_volunteer]
+  before_action :set_language, only: %i[edit update]
 
   def new
     authorize Language
@@ -31,16 +31,6 @@ class LanguagesController < ApplicationController
       else
         format.html { render :edit, status: :unprocessable_entity }
       end
-    end
-  end
-
-  def remove_from_volunteer
-    authorize @language
-    current_user.languages.delete @language
-    if current_user.save
-      redirect_to edit_users_path, notice: "#{@language.name} was removed from your languages list."
-    else
-      redirect_to edit_users_path, notice: "Error unable to remove #{@language.name} from your languages list!"
     end
   end
 
