@@ -160,10 +160,9 @@ Rails.application.routes.draw do
       patch :update
       patch "update_password"
       patch :add_language
+      delete :remove_language
     end
   end
   resources :fund_requests, only: %i[new create]
-  resources :languages, only: %i[new create edit update] do
-    delete :remove_from_volunteer
-  end
+  resources :languages, only: %i[new create edit update]
 end
