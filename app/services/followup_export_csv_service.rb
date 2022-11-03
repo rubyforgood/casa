@@ -27,7 +27,7 @@ class FollowupExportCsvService
   def full_data(followup = nil)
     {
       case_number: followup&.case_contact&.casa_case&.case_number,
-      'volunteer_name(s)': followup&.case_contact&.casa_case&.volunteers&.map(&:display_name)&.join(" and "),
+      "volunteer_name(s)": followup&.case_contact&.casa_case&.volunteers&.map(&:display_name)&.join(" and "),
       note_creator_name: followup&.creator&.display_name,
       note: followup&.note
     }
