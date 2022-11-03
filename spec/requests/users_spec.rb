@@ -243,18 +243,12 @@ RSpec.describe "/users", type: :request do
     end
 
     context "when request params are invalid" do
-      it "should display an error message when the language id does not exist" do
-        #     expect {
-        #       patch :add_to_volunteer, params: {
-        #         language_id: 800
-        #       }
-        #     }.to raise_error(ActiveRecord::RecordNotFound)
-      end
 
       it "should display an error message when the Language id is empty" do
         patch add_language_users_path(volunteer), params: {
           language_id: ""
         }
+        expect(response).to have_http_status(200)
         expect(response.body).to include("Please select a language before adding.")
       end
     end
