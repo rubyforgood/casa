@@ -80,4 +80,32 @@ RSpec.describe UserPolicy do
       end
     end
   end
+
+  permissions :remove_language? do
+    context "when user is a volunteer" do
+      it "allows volunteer to remove a language from themselves" do
+        is_expected.to permit(volunteer, volunteer)
+      end
+      it "does not allow another volunteer to remove a language from another volunteer" do
+        another_volunteer = build_stubbed(:volunteer)
+        is_expected.not_to permit(volunteer, another_volunteer)
+      end
+    end
+    context "when user is a supervisor" do
+      it "allows supervisors to remove a language from a volunteer in their organizations" do
+        is_expected.to permit(supervisor_b, volunteer_b)
+      end
+      it "does not allow a supervisor to remove a language from a volunteer in a different organization" do
+        is_expected.not_to permit(supervisor, volunteer_b)
+      end
+    end
+    context "when user is an admin" do
+      it "allows admins to remove a language from a volunteer in their organizations" do
+        is_expected.to permit(casa_admin_b, volunteer_b)
+      end
+      it "does not allow an admin to remove a language from a volunteer in a different organization" do
+        is_expected.not_to permit(casa_admin, volunteer_b)
+      end
+    end
+  end
 end
