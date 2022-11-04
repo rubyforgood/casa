@@ -1,10 +1,10 @@
 module NotificationsHelper
-  def notifications_after_deploy(notifications)
+  def notifications_after_and_including_deploy(notifications)
     notifications.where(created_at: Health.instance.latest_deploy_time..)
   end
 
   def notifications_before_deploy(notifications)
-    notifications.where(created_at: ..Health.instance.latest_deploy_time)
+    notifications.where(created_at: ...Health.instance.latest_deploy_time)
   end
 
   def notification_icon(notification)
