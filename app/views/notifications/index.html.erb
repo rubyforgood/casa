@@ -5,7 +5,7 @@
 </div>
 
 <div class="list-group">
-  <% notifications_after_deploy(@notifications).each do | notification | %>
+  <% notifications_after_and_including_deploy(@notifications).each do | notification | %>
     <%= render partial: "notification", locals: {notification: notification} %>
   <% end %>
   <% notifications_before_deploy(@notifications).each do | notification | %>
