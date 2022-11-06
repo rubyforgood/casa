@@ -162,7 +162,6 @@ Rails.application.routes.draw do
       patch :add_language
     end
   end
-  resources :fund_requests, only: %i[new create]
   resources :languages, only: %i[new create edit update] do
     delete :remove_from_volunteer
   end
