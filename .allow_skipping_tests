@@ -19,6 +19,7 @@ controllers/court_dates_controller.rb
 controllers/dashboard_controller.rb
 controllers/emancipation_checklists_controller.rb
 controllers/followup_reports_controller.rb
+controllers/fund_requests_controller.rb
 controllers/health_controller.rb
 controllers/hearing_types_controller.rb
 controllers/imports_controller.rb
@@ -62,6 +63,7 @@ notifications/followup_notification.rb
 notifications/followup_resolved_notification.rb
 notifications/youth_birthday_notification.rb
 policies/case_court_order_policy.rb
+policies/fund_request_policy.rb
 policies/learning_hour_policy.rb
 policies/note_policy.rb
 presenters/base_presenter.rb
