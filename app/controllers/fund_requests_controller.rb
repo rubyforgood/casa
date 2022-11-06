@@ -11,8 +11,12 @@ class FundRequestsController < ApplicationController
     @casa_case = CasaCase.friendly.find(params[:casa_case_id])
     # authorize @casa_case
     @fund_request = FundRequest.new(parsed_params)
-    FundRequestMailer.send_request(nil, @fund_request).deliver
-    redirect_to casa_case_path(@casa_case), notice: "Fund Request was sent for case #{@casa_case.case_number}"
+    if @fund_request.save
+      FundRequestMailer.send_request(nil, @fund_request).deliver
+      redirect_to casa_case_path(@casa_case), notice: "Fund Request was sent for case #{@casa_case.case_number}"
+    else
+      render :new
+    end
   end
 
   private
