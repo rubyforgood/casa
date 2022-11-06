@@ -1,15 +1,16 @@
 class FundRequestsController < ApplicationController
   before_action :verify_casa_case
-  # after_action :verify_authorized
+  after_action :verify_authorized
 
   def new
-    # authorize @casa_case
     @fund_request = FundRequest.new
+    authorize @fund_request
   end
 
   def create
-    # authorize @casa_case
     @fund_request = FundRequest.new(parsed_params)
+    authorize @fund_request
+
     if @fund_request.save
       FundRequestMailer.send_request(nil, @fund_request).deliver
       redirect_to casa_case_path(@casa_case), notice: "Fund Request was sent for case #{@casa_case.case_number}"
