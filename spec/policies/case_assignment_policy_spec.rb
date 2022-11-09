@@ -63,6 +63,40 @@ RSpec.describe CaseAssignmentPolicy do
     end
   end
 
+  permissions :show_or_hide_contacts? do
+    context "when an admin" do
+      context "in the same organization" do
+        it "allows user to show or hide contacts" do
+          is_expected.to permit(casa_admin, case_assignment)
+        end
+      end
+      context "in a different organization" do
+        it "does not allow user to show or hide contacts" do
+          is_expected.not_to permit(casa_admin, other_case_assignment)
+        end
+      end
+    end
+
+    context "when a supervisor" do
+      context "in the same organization" do
+        it "allows user to show or hide contacts" do
+          is_expected.to permit(supervisor, case_assignment)
+        end
+      end
+      context "in a different organization" do
+        it "does not allow user to show or hide contacts" do
+          is_expected.not_to permit(supervisor, other_case_assignment)
+        end
+      end
+    end
+
+    context "when a volunteer" do
+      it "does not allow user to show or hide contacts" do
+        is_expected.not_to permit(volunteer, case_assignment)
+      end
+    end
+  end
+
   permissions :destroy? do
     context "when user is an admin" do
       it "allow destroy" do
