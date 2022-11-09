@@ -80,7 +80,7 @@ class CaseCourtReportsController < ApplicationController
         time_zone: time_zone
       }
       context = CaseCourtReportContext.new(args).context
-      CaseCourtReport.new(path_to_template: template_docx_file.to_path, context: context)
+      court_report = CaseCourtReport.new(path_to_template: template_docx_file.to_path, context: context)
 
       return court_report.generate_to_string
     end
