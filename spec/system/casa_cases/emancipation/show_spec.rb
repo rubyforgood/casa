@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'casa_cases/show', type: :system do
+RSpec.describe "casa_cases/show", type: :system do
   let(:organization) { build(:casa_org) }
   let(:volunteer) { build(:volunteer, casa_org: organization) }
   let(:casa_case) { build(:casa_case, casa_org: organization) }
@@ -14,22 +14,26 @@ RSpec.describe 'casa_cases/show', type: :system do
     visit casa_case_emancipation_path(casa_case.id)
   end
 
-  context 'volunteer user', js: true do
+  context "volunteer user", js: true do
     let(:user) { volunteer }
 
-    it 'sees title, opens and select option, and unselect option trough main input' do
-      expect(page).to have_content('Emancipation Checklist')
+    it "has a title" do
+      expect(page).to have_content("Emancipation Checklist")
 
       expect(page).to have_content(emancipation_category.name)
-      expect(page).to_not have_content(emancipation_option.name)
+    end
 
-      find('.emacipation-category-input-label-pair').click
+    it "opens and select option, and unselect option trough main input" do
+      find(".emacipation-category-input-label-pair").click
       expect(page).to have_content(emancipation_option.name)
-      find('.check-item').click
-      find('.emacipation-category-input-label-pair').click
-      expect(page).to have_css('.async-success-indicator', text: "Unchecked #{emancipation_option.name}")
+      find(".check-item").click
+      find(".emacipation-category-input-label-pair").click
+      expect(page).to have_css(".async-success-indicator", text: "Unchecked #{emancipation_option.name}")
+    end
 
-      # TODO more asserts here - checking and unchecking items
+    it "shows and hides the options through collapse icon" do
+      find(".category-collapse-icon").click
+      expect(page).to have_css(".async-success-indicator", text: "Unchecked #{emancipation_option.name}")
     end
   end
 end
