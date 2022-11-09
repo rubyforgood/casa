@@ -25,12 +25,12 @@ RSpec.describe "casa_cases/show", type: :system do
     it "opens through main input, selects an option, and unselects option through main input" do
       emancipation_category = page.find(".emancipation-category")
       find(".emacipation-category-input-label-pair").click
-      expect(emancipation_category["data-is-open"]).to match(/true/)
       expect(page).to have_content(emancipation_option.name)
+      expect(emancipation_category["data-is-open"]).to match(/true/)
       find(".check-item").click
       find(".emacipation-category-input-label-pair").click
-      expect(emancipation_category["data-is-open"]).to match(/false/)
       expect(page).to have_css(".async-success-indicator", text: "Unchecked #{emancipation_option.name}")
+      expect(emancipation_category["data-is-open"]).to match(/true/)
     end
 
     it "shows and hides the options through collapse icon" do
