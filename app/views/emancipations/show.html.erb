@@ -13,7 +13,7 @@ class: "btn btn-primary" %>
   <div class="card-body">
     <% @emancipation_form_data.each do |category| %>
       <div>
-        <h6 class="emancipation-category no-select" data-is-open="false">
+        <h6 class="emancipation-category no-select" data-is-open=<%= emancipation_category_checkbox_checked(@current_case, category) ? "true" : "false" %>>
           <div class="emacipation-category-input-label-pair">
             <input
               type="checkbox"
