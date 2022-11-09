@@ -22,7 +22,7 @@ class CaseCourtReportContext
     latest_hearing_date = @casa_case.most_recent_past_court_date
 
     {
-      created_date: I18n.l(Time.now.in_time_zone(@time_zone).to_date, format: :full, default: nil),
+      created_date: I18n.l(Time.current.in_time_zone(@time_zone).to_date, format: :full, default: nil),
       casa_case: prepare_case_details,
       case_contacts: prepare_case_contacts,
       case_court_orders: prepare_case_orders,
