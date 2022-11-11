@@ -1,3 +1,5 @@
+name: Run rake after_party
+
 on:
   push:
     branches:
@@ -17,11 +19,45 @@ on:
 jobs:
   rake-after_party:
     runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:12.3
+        env:
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v3
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-      - name: Run rake after_party
-        run: rake after_party:run
+
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get -yqq install libpq-dev
+
+      - name: Build App and run rake after_party
+        env:
+          POSTGRES_HOST: localhost
+          DATABASE_HOST: localhost
+          POSTGRES_USER: postgres
+          CASA_DATABASE_PASSWORD: password
+          POSTGRES_PASSWORD: password
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_PORT: 5432
+          PGHOST: localhost
+          PGUSER: postgres
+          RAILS_ENV: test
+        run: |
+          rake db:create
+          rake db:schema:load
+          rake after_party:run
