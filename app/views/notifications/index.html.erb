@@ -8,6 +8,9 @@
   <% notifications_after_and_including_deploy(@notifications).each do | notification | %>
     <%= render partial: "notification", locals: {notification: notification} %>
   <% end %>
+  <% unless @deploy_time.nil? %>
+    <%= render partial: "patch_notes", locals: {deploy_time: @deploy_time, patch_notes: @patch_notes} %>
+  <% end %>
   <% notifications_before_deploy(@notifications).each do | notification | %>
     <%= render partial: "notification", locals: {notification: notification} %>
   <% end %>
