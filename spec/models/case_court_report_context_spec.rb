@@ -2,12 +2,37 @@ require "rails_helper"
 require "sablon"
 
 RSpec.describe CaseCourtReportContext, type: :model do
+  let(:volunteer) { create(:volunteer, :with_casa_cases) }
   let(:path_to_template) { Rails.root.join("app", "documents", "templates", "default_report_template.docx").to_s }
   let(:path_to_report) { Rails.root.join("tmp", "test_report.docx").to_s }
   before do
     travel_to Date.new(2021, 1, 1)
   end
   context "#context" do
+    subject do
+      described_class.new(
+        case_id: volunteer.casa_cases.first.id,
+        volunteer_id: volunteer.id,
+        path_to_template: path_to_template,
+        path_to_report: path_to_report
+      ).context
+    end
+    it "has a created date equal to the current date" do
+      expect(subject[:created_date]).to eq("January 1, 2021")
+    end
+
+    context "when the casa org of the casa case has an address" do
+      let(:casa_org_address) { "-m}~2c<Lk/te{<\"" }
+
+      before do
+        volunteer.casa_org.update_attribute(:address, casa_org_address)
+      end
+
+      it "shows the address" do
+        expect(subject[:org_address]).to eq(casa_org_address)
+      end
+    end
+
     describe "when receiving valid case, volunteer, and path_to_template" do
       let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
       let(:casa_case_with_contacts) { volunteer.casa_cases.first }
@@ -187,14 +212,12 @@ RSpec.describe CaseCourtReportContext, type: :model do
       end
 
       it "should have all the court orders" do
-        expect(subject[:created_date]).to eq("January 1, 2021")
         expect(subject[:casa_case]).to eq({court_date: nil, case_number: casa_case.case_number, dob: "January 2005", is_transitioning: true, judge_name: nil})
         expect(subject[:case_contacts]).to eq([]) # TODO test this
         expect(subject[:case_court_orders].length).to eq(4)
         expect(subject[:case_court_orders].map { |cco| cco[:status] }).to match_array(["Implemented", "Unimplemented", "Partially implemented", nil])
         expect(subject[:case_mandates]).to eq(subject[:case_court_orders]) # backwards compatibility for old names in old montgomery template - TODO track it down and update prod templates
         expect(subject[:latest_hearing_date]).to eq("___<LATEST HEARING DATE>____")
-        expect(subject[:org_address]).to eq(nil) # TODO test this better
         expect(subject[:volunteer]).to eq(nil) # TODO test this better
       end
     end
