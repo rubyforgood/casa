@@ -187,7 +187,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
       end
 
       it "should have all the court orders" do
-        expect(subject[:created_date]).to eq("December 31, 2020")
+        expect(subject[:created_date]).to eq("January 1, 2021")
         expect(subject[:casa_case]).to eq({court_date: nil, case_number: casa_case.case_number, dob: "January 2005", is_transitioning: true, judge_name: nil})
         expect(subject[:case_contacts]).to eq([]) # TODO test this
         expect(subject[:case_court_orders].length).to eq(4)
