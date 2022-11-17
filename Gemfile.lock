@@ -211,7 +211,7 @@ GEM
       ffi (>= 1.0.0)
       rake
     filterrific (5.2.3)
-    friendly_id (5.4.2)
+    friendly_id (5.5.0)
       activerecord (>= 4.0.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
@@ -532,7 +532,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   filterrific
-  friendly_id (~> 5.4.0)
+  friendly_id (~> 5.5.0)
   httparty
   image_processing (~> 1.12)
   jbuilder
