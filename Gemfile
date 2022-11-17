@@ -44,7 +44,6 @@ gem "sorbet-runtime" # Type definitions and checking
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "strong_migrations"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "whenever", require: false # Whenever is a Ruby gem that provides a clear syntax for writing and deploying cron jobs
 
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
