@@ -7,18 +7,22 @@ class Users::PasswordsController < Devise::PasswordsController
     @email, @phone_number = [params[resource_name][:email], params[resource_name][:phone_number]]
     @resource = @email.blank? ? User.find_by(phone_number: @phone_number) : User.find_by(email: @email)
 
-    if valid_params?(@email, @phone_number)
-      send_password_reset_mail if email?
-      send_password_reset_sms if phone_number?
-    else
-      respond_with(@resource) # re-render and display any errors
-      return
-    end
+    valid_params?(@email, @phone_number) ? send_password : render_error
+    return if @errors
+    
     redirect_to after_sending_reset_password_instructions_path_for(resource_name), notice: "You will receive an email or SMS with instructions on how to reset your password in a few minutes."
   end
 
   private
-
+  def render_error
+    respond_with(@resource) # re-render and display any errors
+    @errors = true
+  end
+  def send_password
+    send_password_reset_mail if email?
+    send_password_reset_sms if phone_number?
+  end
+  
   def send_password_reset_mail
     @reset_token = @resource.send_reset_password_instructions # generate a reset token and call devise mailer
   end
