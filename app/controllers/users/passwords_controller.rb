@@ -39,8 +39,8 @@ class Users::PasswordsController < Devise::PasswordsController
   end
 
   def valid_params?(email, phone_number)
-    return no_user_found_error unless user_exists
     return empty_fields_error if params_not_present(email, phone_number)
+    return no_user_found_error unless user_exists
 
     valid_phone_number, error_message = valid_phone_number(phone_number)
     return invalid_phone_number_error(error_message) unless valid_phone_number
@@ -57,6 +57,7 @@ class Users::PasswordsController < Devise::PasswordsController
   end
 
   def empty_fields_error
+    @resource ||= resource
     @resource.errors.add(:base, "Please enter at least one field.")
 
     false
