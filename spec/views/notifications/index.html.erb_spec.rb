@@ -40,16 +40,25 @@ RSpec.describe "notifications/index", type: :view do
       let(:patch_note_group_no_volunteers) { create(:patch_note_group, :only_supervisors_and_admins) }
       let(:patch_note_type_a) { create(:patch_note_type, name: "patch_note_type_a") }
       let(:patch_note_type_b) { create(:patch_note_type, name: "patch_note_type_b") }
-      let(:patch_note_1) { create(:patch_note, note: "*Sy@\\<iiF>(\\\"Q7") }
-      let(:patch_note_2) { create(:patch_note, note: "(W!;Ros>cIWNKX}") }
+      let(:patch_note_1) { create(:patch_note, note: "*Sy@\\<iiF>(\\\"Q7", patch_note_type: patch_note_type_a) }
+      let(:patch_note_2) { create(:patch_note, note: "(W!;Ros>cIWNKX}", patch_note_type: patch_note_type_b) }
 
       before do
         Health.instance.update_attribute(:latest_deploy_time, Date.today)
-        assign(:patch_notes, PatchNote.all)
+        assign(:notifications, Notification.all)
       end
 
       context "as an admin" do
+        before do
+          patch_note_1.update_attribute(:patch_note_group, patch_note_group_all_users)
+          patch_note_2.update_attribute(:patch_note_group, patch_note_group_no_volunteers)
+        end
+
         it "shows all the patch notes available to the admin" do
+          assign(:patch_notes, PatchNote.all)
+          assign(:deploy_time, Time.now)
+
+          render template: "notifications/index"
         end
 
         it "shows the patch notes under the correct type" do
