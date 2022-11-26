@@ -1,33 +1,70 @@
-<div class="container">
-  <div class="row">
-    <div class="col p-0">
-      <div class="container d-flex flex-column w-75 h-100 py-5 py-lg-0 px-0 px-xl-5 justify-content-center">
-          <h2 class="mb-4">Log in</h2>
+<div class="signin-wrapper">
+  <div class="form-wrapper">
+    <h6 class="mb-15">Sign In</h6>
+    <p class="text-sm mb-25">
+      Not registered but want to join?
+      <a class='text-blue-500' href="mailto:casa@rubyforgood.org?Subject=Application%20Interest" target="_top">casa@rubyforgood.org</a>
+    </p>
+    <div class="row">
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
 
-          <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-            <div class="field form-group">
-              <%= f.label :email %>
-              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", required: true %>
-            </div>
-
-            <div class="field form-group">
-              <%= f.label :password %>
-              <%= f.password_field :password, autocomplete: "current-password", class: "form-control", required: true %>
-            </div>
-
-            <div class="actions">
-              <%= f.submit "Log in", class: "btn btn-info" %>
-            </div>
-          <% end %>
-
-          <div class="my-4">
-            <%= render "devise/shared/links" %>
+        <div class="col-12">
+          <div class="input-style-1">
+            <%= f.label "Email" %>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "Email", class: "form-control", required: true %>
           </div>
+        </div>
+        <!-- end col -->
+        <div class="col-12">
+          <div class="input-style-1">
+            <%= f.label :password %>
+            <%= f.password_field :password, autocomplete: "current-password", placeholder: "Password", class: "form-control", required: true %>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="input-style-1">
+            <%= link_to "Forgot your password?", new_password_path(resource_name), class: "hover-underline" %>
+          </div>
+        </div>
+        <!-- end col -->
+        <div class="col-xxl-6 col-lg-12 col-md-6">
+          <div class="form-check checkbox-style mb-30">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="checkbox-remember"
+              />
+            <label
+              class="form-check-label"
+              for="checkbox-remember"
+            >
+              Remember me next time</label
+            >
+          </div>
+        </div>
+        <!-- end col -->
+        <!-- end col -->
+        <div class="col-12">
+          <div
+            class="
+                            button-group
+                            d-flex
+                            justify-content-center
+                            flex-wrap
+                          "
+          >
+            <%= f.submit "Log In", class: "main-btn primary-btn btn-hover w-100 text-center" %>
+      <% end %>
+      <div class="col-xxl-6 col-lg-12 col-md-6">
+        <div class="text-start text-md-end text-lg-start text-xxl-end mb-30">
+        </div>
       </div>
-    </div>
-
-    <div class="col col-xl-7 p-0 d-none d-lg-block">
-      <aside class="display-image"></aside>
+      <div class="col-xxl-6 col-lg-12 col-md-6">
+      </div>
+      </div>
+      </div>
     </div>
   </div>
 </div>
+

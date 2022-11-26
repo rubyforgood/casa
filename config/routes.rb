@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   end
 
   devise_scope :user do
-    root to: "devise/sessions#new"
+    root to: "static#index"
   end
 
   devise_scope :all_casa_admins do
