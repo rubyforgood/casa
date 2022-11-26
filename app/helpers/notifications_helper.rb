@@ -22,4 +22,20 @@ module NotificationsHelper
     return "" if notification.unread?
     " bg-light text-muted "
   end
+
+  def patch_notes_as_hash_keyed_by_type_name(patch_notes)
+    patch_notes_hash = {}
+
+    patch_notes.each do |patch_note|
+      patch_note_type_name = patch_note.patch_note_type.name
+
+      unless patch_notes_hash.has_key?(patch_note_type_name)
+        patch_notes_hash[patch_note_type_name] = []
+      end
+
+      patch_notes_hash[patch_note_type_name].push(patch_note.note)
+    end
+
+    patch_notes_hash
+  end
 end
