@@ -59,6 +59,9 @@ RSpec.describe "notifications/index", type: :view do
           assign(:deploy_time, Time.now)
 
           render template: "notifications/index"
+
+          expect(rendered).to have_text(patch_note_1.note)
+          expect(rendered).to have_text(patch_note_2.note)
         end
 
         it "shows the patch notes under the correct type" do
