@@ -193,6 +193,10 @@ $('document').ready(() => {
   if (/\/case_contacts\/*.*\?.*success=true/.test(window.location.href)) {
     $('#thank_you').modal()
   }
+
+  if (/\/case_contacts\/*.*\?.*success=true/) {
+    $('.content').prepend('<div id="banner-prompt-update-user" class="alert alert-warning role="alert">banner prompt</div>');
+  }
 })
 
 export {
