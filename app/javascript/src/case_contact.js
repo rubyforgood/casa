@@ -193,10 +193,6 @@ $('document').ready(() => {
   if (/\/case_contacts\/*.*\?.*success=true/.test(window.location.href)) {
     $('#thank_you').modal()
   }
-
-  if (/\/case_contacts\/*.*\?.*success=true/) {
-    $('#banner-prompt-update-user').removeClass('collapse');
-  }
 })
 
 export {
