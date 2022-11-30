@@ -5,14 +5,16 @@
         <div class="modal-header">
           <%= "Case contact was successfully created. #{thank_you_message}" %>
         </div>
-        <div id="prompt-update-user" class="modal-body">
-            <% past, future = when_do_we_have_court_dates(@casa_case) %>
-            <% if future.length > 0 && past.length == 0 %>
-                Please enter the previous court date if you know it so that court reports can be generated with the correct case contacts.
-            <% elsif future.length == 0 && past.length > 0 %>
-                Please enter the next court date if you know it so that court reports can be generated with the correct case contacts.
-            <% end %>
-        </div>
+        <% past, future = when_do_we_have_court_dates(@casa_case) %>
+        <% if future.length > 0 && past.length == 0 %>
+          <div id="prompt-update-user" class="modal-body">
+            Please enter the previous court date if you know it so that court reports can be generated with the correct case contacts.
+          </div>
+        <% elsif future.length == 0 && past.length > 0 %>
+          <div id="prompt-update-user" class="modal-body">
+            Please enter the next court date if you know it so that court reports can be generated with the correct case contacts.
+          </div>
+        <% end %>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
