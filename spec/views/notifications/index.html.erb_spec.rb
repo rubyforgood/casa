@@ -74,9 +74,9 @@ RSpec.describe "notifications/index", type: :view do
 
           patch_note_notification_information_container = queryable_html.css("#patch-note-notification div.my-1").first
 
-          patch_note_type_a_header = queryable_html.xpath("//*[text()[contains(.,'#{ patch_note_type_a.name }')]]").first
+          patch_note_type_a_header = queryable_html.xpath("//*[text()[contains(.,'#{patch_note_type_a.name}')]]").first
           patch_note_type_a_header_index = patch_note_notification_information_container.children.index(patch_note_type_a_header)
-          patch_note_type_b_header = queryable_html.xpath("//*[text()[contains(.,'#{ patch_note_type_b.name }')]]").first
+          patch_note_type_b_header = queryable_html.xpath("//*[text()[contains(.,'#{patch_note_type_b.name}')]]").first
           patch_note_type_b_header_index = patch_note_notification_information_container.children.index(patch_note_type_b_header)
 
           patch_note_1_list_item = queryable_html.xpath("//*[text()[contains(.,'#{patch_note_1.note}')]]").first
@@ -86,6 +86,14 @@ RSpec.describe "notifications/index", type: :view do
 
           expect(patch_note_type_a_header_index).to be < patch_note_1_unordered_list_index
           expect(patch_note_type_b_header_index).to be < patch_note_2_unordered_list_index
+
+          if patch_note_type_a_header_index < patch_note_type_b_header_index
+            expect(patch_note_type_b_header_index).to be > patch_note_1_unordered_list_index
+          end
+
+          if patch_note_type_b_header_index < patch_note_type_a_header_index
+            expect(patch_note_type_a_header_index).to be > patch_note_2_unordered_list_index
+          end
         end
       end
 
