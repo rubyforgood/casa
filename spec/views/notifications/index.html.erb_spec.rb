@@ -46,62 +46,49 @@ RSpec.describe "notifications/index", type: :view do
       before do
         Health.instance.update_attribute(:latest_deploy_time, Date.today)
         assign(:notifications, Notification.all)
+        patch_note_1.update_attribute(:patch_note_group, patch_note_group_all_users)
+        patch_note_2.update_attribute(:patch_note_group, patch_note_group_no_volunteers)
       end
 
-      context "as an admin" do
-        before do
-          patch_note_1.update_attribute(:patch_note_group, patch_note_group_all_users)
-          patch_note_2.update_attribute(:patch_note_group, patch_note_group_no_volunteers)
-        end
+      it "shows all the patch notes available" do
+        assign(:patch_notes, PatchNote.all)
+        assign(:deploy_time, Time.now)
 
-        it "shows all the patch notes available to the admin" do
-          assign(:patch_notes, PatchNote.all)
-          assign(:deploy_time, Time.now)
+        render template: "notifications/index"
 
-          render template: "notifications/index"
-
-          expect(rendered).to have_text(patch_note_1.note)
-          expect(rendered).to have_text(patch_note_2.note)
-        end
-
-        it "shows the patch notes under the correct type" do
-          assign(:patch_notes, PatchNote.all)
-          assign(:deploy_time, Time.now)
-
-          render template: "notifications/index"
-
-          queryable_html = Nokogiri.HTML5(rendered)
-
-          patch_note_notification_information_container = queryable_html.css("#patch-note-notification div.my-1").first
-
-          patch_note_type_a_header = queryable_html.xpath("//*[text()[contains(.,'#{patch_note_type_a.name}')]]").first
-          patch_note_type_a_header_index = patch_note_notification_information_container.children.index(patch_note_type_a_header)
-          patch_note_type_b_header = queryable_html.xpath("//*[text()[contains(.,'#{patch_note_type_b.name}')]]").first
-          patch_note_type_b_header_index = patch_note_notification_information_container.children.index(patch_note_type_b_header)
-
-          patch_note_1_list_item = queryable_html.xpath("//*[text()[contains(.,'#{patch_note_1.note}')]]").first
-          patch_note_1_unordered_list_index = patch_note_notification_information_container.children.index(patch_note_1_list_item.parent)
-          patch_note_2_list_item = queryable_html.xpath("//*[text()[contains(.,'#{patch_note_2.note}')]]").first
-          patch_note_2_unordered_list_index = patch_note_notification_information_container.children.index(patch_note_2_list_item.parent)
-
-          expect(patch_note_type_a_header_index).to be < patch_note_1_unordered_list_index
-          expect(patch_note_type_b_header_index).to be < patch_note_2_unordered_list_index
-
-          if patch_note_type_a_header_index < patch_note_type_b_header_index
-            expect(patch_note_type_b_header_index).to be > patch_note_1_unordered_list_index
-          end
-
-          if patch_note_type_b_header_index < patch_note_type_a_header_index
-            expect(patch_note_type_a_header_index).to be > patch_note_2_unordered_list_index
-          end
-        end
+        expect(rendered).to have_text(patch_note_1.note)
+        expect(rendered).to have_text(patch_note_2.note)
       end
 
-      context "as a volunteer" do
-        it "shows all the patch notes available to the volunteer" do
+      it "shows the patch notes under the correct type" do
+        assign(:patch_notes, PatchNote.all)
+        assign(:deploy_time, Time.now)
+
+        render template: "notifications/index"
+
+        queryable_html = Nokogiri.HTML5(rendered)
+
+        patch_note_notification_information_container = queryable_html.css("#patch-note-notification div.my-1").first
+
+        patch_note_type_a_header = queryable_html.xpath("//*[text()[contains(.,'#{patch_note_type_a.name}')]]").first
+        patch_note_type_a_header_index = patch_note_notification_information_container.children.index(patch_note_type_a_header)
+        patch_note_type_b_header = queryable_html.xpath("//*[text()[contains(.,'#{patch_note_type_b.name}')]]").first
+        patch_note_type_b_header_index = patch_note_notification_information_container.children.index(patch_note_type_b_header)
+
+        patch_note_1_list_item = queryable_html.xpath("//*[text()[contains(.,'#{patch_note_1.note}')]]").first
+        patch_note_1_unordered_list_index = patch_note_notification_information_container.children.index(patch_note_1_list_item.parent)
+        patch_note_2_list_item = queryable_html.xpath("//*[text()[contains(.,'#{patch_note_2.note}')]]").first
+        patch_note_2_unordered_list_index = patch_note_notification_information_container.children.index(patch_note_2_list_item.parent)
+
+        expect(patch_note_type_a_header_index).to be < patch_note_1_unordered_list_index
+        expect(patch_note_type_b_header_index).to be < patch_note_2_unordered_list_index
+
+        if patch_note_type_a_header_index < patch_note_type_b_header_index
+          expect(patch_note_type_b_header_index).to be > patch_note_1_unordered_list_index
         end
 
-        it "does not show the patch notes unavailable to the volunteer" do
+        if patch_note_type_b_header_index < patch_note_type_a_header_index
+          expect(patch_note_type_a_header_index).to be > patch_note_2_unordered_list_index
         end
       end
     end
