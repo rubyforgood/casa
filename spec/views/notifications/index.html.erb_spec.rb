@@ -65,6 +65,27 @@ RSpec.describe "notifications/index", type: :view do
         end
 
         it "shows the patch notes under the correct type" do
+          assign(:patch_notes, PatchNote.all)
+          assign(:deploy_time, Time.now)
+
+          render template: "notifications/index"
+
+          queryable_html = Nokogiri.HTML5(rendered)
+
+          patch_note_notification_information_container = queryable_html.css("#patch-note-notification div.my-1").first
+
+          patch_note_type_a_header = queryable_html.xpath("//*[text()[contains(.,'#{ patch_note_type_a.name }')]]").first
+          patch_note_type_a_header_index = patch_note_notification_information_container.children.index(patch_note_type_a_header)
+          patch_note_type_b_header = queryable_html.xpath("//*[text()[contains(.,'#{ patch_note_type_b.name }')]]").first
+          patch_note_type_b_header_index = patch_note_notification_information_container.children.index(patch_note_type_b_header)
+
+          patch_note_1_list_item = queryable_html.xpath("//*[text()[contains(.,'#{patch_note_1.note}')]]").first
+          patch_note_1_unordered_list_index = patch_note_notification_information_container.children.index(patch_note_1_list_item.parent)
+          patch_note_2_list_item = queryable_html.xpath("//*[text()[contains(.,'#{patch_note_2.note}')]]").first
+          patch_note_2_unordered_list_index = patch_note_notification_information_container.children.index(patch_note_2_list_item.parent)
+
+          expect(patch_note_type_a_header_index).to be < patch_note_1_unordered_list_index
+          expect(patch_note_type_b_header_index).to be < patch_note_2_unordered_list_index
         end
       end
 
