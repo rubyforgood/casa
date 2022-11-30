@@ -1,12 +1,3 @@
-<% court_dates = @casa_case.court_dates.includes(:hearing_type).ordered_ascending.load %>
-  <% future = [] %>
-  <% past = [] %>
-
-<% court_dates.each do |date| %>
-  <% diff = Date.current.to_time - date.date.to_time %>
-  <% diff > 0 ?  past.push(diff) : future.push(diff)%>
-<% end %>
-
 <div id="thank-you-modal-wrapper">
   <div class="modal fade" id="thank_you" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -15,6 +6,7 @@
           <%= "Case contact was successfully created. #{thank_you_message}" %>
         </div>
         <div id="prompt-update-user" class="modal-body">
+            <% past, future = when_do_we_have_court_dates(@casa_case) %>
             <% if future.length > 0 && past.length == 0 %>
                 Please enter the previous court date if you know it so that court reports can be generated with the correct case contacts.
             <% elsif future.length == 0 && past.length > 0 %>
