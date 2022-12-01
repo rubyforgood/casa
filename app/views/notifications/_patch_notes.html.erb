@@ -8,8 +8,8 @@
         <% patch_notes.each do |type, notes_per_type| %>
           <h5 class="ml-4"><%= type %></h5>
           <ul>
-            <% notes_per_type.each do |note| %>
-              <li><%= note %></li>
+            <% notes_per_type.each do |note_text| %>
+              <li><%= note_text %></li>
             <% end %>
           </ul>
         <% end %>
