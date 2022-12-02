@@ -492,8 +492,8 @@ RSpec.describe "volunteers/edit", type: :system do
     end
 
     context "with mileage reimbursement turned on" do
-      it "shows 'Address for mileage reimbursement' label" do
-        expect(page).to have_text "Address for mileage reimbursement"
+      it "shows 'Mailing address' label" do
+        expect(page).to have_text "Mailing address"
         expect(page).to have_selector "input[type=text][id=volunteer_address_attributes_content]"
       end
 
@@ -508,8 +508,8 @@ RSpec.describe "volunteers/edit", type: :system do
     context "with mileage reimbursement turned off" do
       let(:organization) { create(:casa_org, show_driving_reimbursement: false) }
       let(:volunteer) { create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id) }
-      it "won't show 'Address for mileage reimbursement' label" do
-        expect(page).not_to have_text "Address for mileage reimbursement"
+      it "won't show 'Mailing address' label" do
+        expect(page).not_to have_text "Mailing address"
         expect(page).not_to have_selector "input[type=text][id=volunteer_address_attributes_content]"
       end
     end
