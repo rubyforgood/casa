@@ -26,7 +26,7 @@
 </div>
 <% if current_organization.show_driving_reimbursement && resource.role == "Volunteer" %>
   <div class="field form-group">
-    <%= f.label :address, "Address for mileage reimbursement" %>
+    <%= f.label :address, "Mailing address" %>
     <% if policy(resource).update_user_setting? %>
       <%= f.fields_for :address, (resource.address ? nil : Address.new) do |a| %>
         <%= a.text_field :content, class: "form-control" %>
