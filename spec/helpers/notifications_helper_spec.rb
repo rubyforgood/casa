@@ -83,4 +83,21 @@ RSpec.describe NotificationsHelper do
       end
     end
   end
+
+  describe "#patch_notes_as_hash_keyed_by_type_name" do
+    it "returns a hash where the keys are the names of the patch note type and the values are lists of patch note strings belonging to the type" do
+      patch_note_type_a = create(:patch_note_type, name: "patch_note_type_a")
+      patch_note_type_b = create(:patch_note_type, name: "patch_note_type_b")
+      patch_note_1 = create(:patch_note, note: "Patch Note 1", patch_note_type: patch_note_type_a)
+      patch_note_2 = create(:patch_note, note: "Patch Note 2", patch_note_type: patch_note_type_b)
+      patch_note_3 = create(:patch_note, note: "Patch Note 3", patch_note_type: patch_note_type_b)
+
+      patch_notes_hash = helper.patch_notes_as_hash_keyed_by_type_name(PatchNote.all)
+
+      expect(patch_notes_hash).to have_key(patch_note_type_a.name)
+      expect(patch_notes_hash).to have_key(patch_note_type_b.name)
+      expect(patch_notes_hash[patch_note_type_a.name]).to contain_exactly(patch_note_1.note)
+      expect(patch_notes_hash[patch_note_type_b.name]).to contain_exactly(patch_note_2.note, patch_note_3.note)
+    end
+  end
 end

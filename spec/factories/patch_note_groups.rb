@@ -5,11 +5,11 @@ FactoryBot.define do
     end
 
     trait :all_users do
-      value { "Admin+Supervisor+Volunteer" }
+      value { "CasaAdmin+Supervisor+Volunteer" }
     end
 
     trait :only_supervisors_and_admins do
-      value { "Admin+Supervisor" }
+      value { "CasaAdmin+Supervisor" }
     end
   end
 end
