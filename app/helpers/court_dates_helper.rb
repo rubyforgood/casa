@@ -8,9 +8,9 @@ module CourtDatesHelper
     first_court_date = date_query.first
 
     if last_court_date.date < Date.current
-      'past'
+      "past"
     elsif last_court_date.date > Date.current && first_court_date.date > Date.current
-      'future'
+      "future"
     end
   end
 end
