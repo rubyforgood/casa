@@ -18,6 +18,12 @@ RSpec.describe CourtDatesHelper do
       end
     end
 
-    # it "returns nothing if the last court date is in the future and the first is in the past" do; end
+    describe "when casa case has dates both in the past and future" do
+      let(:casa_case) { create(:casa_case, :with_upcoming_court_date, :with_past_court_date) }
+
+      it "returns nothing" do
+        expect(helper.when_do_we_have_court_dates(casa_case)).to eq(nil)
+      end
+    end
   end
 end
