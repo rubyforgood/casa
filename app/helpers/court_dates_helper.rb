@@ -3,8 +3,12 @@
 # Helper methods for court_dates
 module CourtDatesHelper
   def when_do_we_have_court_dates(casa_case)
+    return if casa_case.blank?
+
     court_dates = casa_case.court_dates.ordered_ascending
     date_now = Date.current
+
+    return if court_dates.blank?
 
     if court_dates.last.date < date_now
       "past"
