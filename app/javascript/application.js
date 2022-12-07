@@ -14,7 +14,7 @@ require('@rails/activestorage').start()
 require('bootstrap-datepicker')
 
 require('./src/add_additional_expense')
-require('./src/addToCalendarButton')
+require('./src/add_to_calendar_button')
 require('./src/case_contact')
 require('./src/case_contact_autosave')
 require('./src/case_emancipation')
