@@ -45,11 +45,14 @@ RSpec.describe CourtDate, type: :model do
   describe "reports" do
     let!(:reports) do
       [10, 30, 60].map do |days_ago|
-        report = CaseCourtReport.new(
+        path_to_template = "app/documents/templates/default_report_template.docx"
+        args = {
           case_id: casa_case.id,
           volunteer_id: volunteer.id,
-          path_to_template: "app/documents/templates/default_report_template.docx"
-        )
+          path_to_template: path_to_template
+        }
+        context = CaseCourtReportContext.new(args).context
+        report = CaseCourtReport.new(path_to_template: path_to_template, context: context)
         casa_case.court_reports.attach(io: StringIO.new(report.generate_to_string), filename: "report-#{days_ago}.docx")
         attached_report = casa_case.latest_court_report
         attached_report.created_at = days_ago.days.ago

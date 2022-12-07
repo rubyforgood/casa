@@ -20,7 +20,7 @@ gem "twilio-ruby" # twilio helper functions
 gem "draper" # adds decorators for cleaner presentation logic
 gem "faker" # creates realistic seed data, valuable for staging and demos
 gem "filterrific" # filtering and sorting of models
-gem "friendly_id", "~> 5.4.0" # allows us to use a slug instead of casa case ids in their URLs
+gem "friendly_id", "~> 5.5.0" # allows us to use a slug instead of casa case ids in their URLs
 gem "image_processing", "~> 1.12" # Set of higher-level helper methods for image processing.
 gem "jbuilder" # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jsbundling-rails"
@@ -44,7 +44,6 @@ gem "sorbet-runtime" # Type definitions and checking
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "strong_migrations"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "whenever", require: false # Whenever is a Ruby gem that provides a clear syntax for writing and deploying cron jobs
 
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries

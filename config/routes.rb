@@ -165,4 +165,7 @@ Rails.application.routes.draw do
   end
   resources :fund_requests, only: %i[new create]
   resources :languages, only: %i[new create edit update]
+  resources :languages, only: %i[new create edit update] do
+    delete :remove_from_volunteer
+  end
 end

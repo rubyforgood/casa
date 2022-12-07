@@ -21,7 +21,9 @@ RSpec.describe "emancipations/show", type: :system do
     sign_in supervisor
     visit casa_case_emancipation_path(casa_case)
 
-    find(".emancipation-category").click
+    find(".category-collapse-icon").click
     expect(page).to have_content(emancipation_option.name)
+    find(".category-collapse-icon").click
+    expect(page).to_not have_content(emancipation_option.name)
   end
 end

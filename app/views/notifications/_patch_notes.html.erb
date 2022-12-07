@@ -1,0 +1,19 @@
+<div id="patch-note-notification" class="list-group-item">
+  <div class="d-flex flex-row">
+    <div class="ml-2 flex-grow-1">
+      <div class="d-flex justify-content-between">
+        <h3 class="mb-1">Patch Notes for <%= deploy_time.strftime("%B %e") %></h3>
+      </div>
+      <div class="my-1">
+        <% patch_notes.each do |type, notes_per_type| %>
+          <h5 class="ml-4"><%= type %></h5>
+          <ul>
+            <% notes_per_type.each do |note_text| %>
+              <li><%= note_text %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,5 @@
 .category-options {
   margin-left: 2em;
-  margin-bottom: 1em;
 
   input[type="checkbox"], input[type="radio"] {
     pointer-events: none
@@ -24,7 +23,11 @@
 
 .emancipation-category {
   border-bottom: 2px solid #bfe3ff;
-  padding: .5em;
+  margin: 0;
+  padding: 0 .5em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   input[type="checkbox"] {
     pointer-events: none
@@ -32,13 +35,12 @@
 
   label {
     margin: 0;
-    width: 80%;
+    padding: .5em;
     vertical-align: middle;
   }
 
   span {
     color: #00447c;
-    float: right;
     font-weight: bold;
     font-size: 18pt
   }
@@ -73,4 +75,8 @@
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
+}
+
+.emacipation-category-input-label-pair {
+  display: flex;
 }

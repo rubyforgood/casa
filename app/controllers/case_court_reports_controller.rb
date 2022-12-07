@@ -73,12 +73,14 @@ class CaseCourtReportsController < ApplicationController
     return unless casa_case
 
     casa_case.casa_org.open_org_court_report_template do |template_docx_file|
-      court_report = CaseCourtReport.new(
+      args = {
         volunteer_id: current_user.volunteer? ? current_user.id : casa_case.assigned_volunteers.first&.id,
         case_id: casa_case.id,
         path_to_template: template_docx_file.to_path,
         time_zone: time_zone
-      )
+      }
+      context = CaseCourtReportContext.new(args).context
+      court_report = CaseCourtReport.new(path_to_template: template_docx_file.to_path, context: context)
 
       return court_report.generate_to_string
     end

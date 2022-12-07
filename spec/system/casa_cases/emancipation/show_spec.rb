@@ -17,20 +17,28 @@ RSpec.describe "casa_cases/show", type: :system do
   context "volunteer user", js: true do
     let(:user) { volunteer }
 
-    it "sees title" do
+    it "has a title" do
       expect(page).to have_content("Emancipation Checklist")
-
       expect(page).to have_content(emancipation_category.name)
-      expect(page).to_not have_content(emancipation_option.name)
+    end
 
-      find(".emancipation-category").click # Open list of options for this category
-      expect(page).to have_content(emancipation_option.name) # Make sure list of options is showing
-      find(".check-item").click # Select the first option
-      find(".emancipation-category").click # Close the list of options for this category
-      # TODO fix flakiness
+    it "opens through main input, selects an option, and unselects option through main input" do
+      emancipation_category = page.find(".emancipation-category")
+      find(".emacipation-category-input-label-pair").click
+      expect(page).to have_content(emancipation_option.name)
+      expect(emancipation_category["data-is-open"]).to match(/true/)
+      find(".check-item").click
+      find(".emacipation-category-input-label-pair").click
       expect(page).to have_css(".async-success-indicator", text: "Unchecked #{emancipation_option.name}")
+      expect(emancipation_category["data-is-open"]).to match(/true/)
+    end
 
-      # TODO more asserts here - checking and unchecking items
+    it "shows and hides the options through collapse icon" do
+      emancipation_category = page.find(".emancipation-category")
+      find(".category-collapse-icon").click
+      expect(emancipation_category["data-is-open"]).to match(/true/)
+      find(".category-collapse-icon").click
+      expect(emancipation_category["data-is-open"]).to match(/false/)
     end
   end
 end
