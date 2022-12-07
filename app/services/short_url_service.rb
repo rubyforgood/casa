@@ -33,7 +33,7 @@ class ShortUrlService
     variables = [Rails.application.credentials[:SHORT_IO_DOMAIN], Rails.application.credentials[:SHORT_IO_API_KEY]]
     variables.each do |var|
       if var.blank?
-        raise "#{var} environment variable missing for Short IO serivce"
+        Rails.logger.error "#{var} environment variable missing for Short IO serivce"
       end
     end
   end
