@@ -457,11 +457,14 @@ of it unless it was included in a previous court report.")
 
     let!(:reports) do
       [5, 11, 23, 44, 91].map do |n|
-        report = CaseCourtReport.new(
+        path_to_template = "app/documents/templates/default_report_template.docx"
+        args = {
           volunteer_id: volunteer.id,
           case_id: casa_case.id,
-          path_to_template: "app/documents/templates/default_report_template.docx"
-        )
+          path_to_template: path_to_template
+        }
+        context = CaseCourtReportContext.new(args).context
+        report = CaseCourtReport.new(path_to_template: path_to_template, context: context)
         casa_case.court_reports.attach(io: StringIO.new(report.generate_to_string), filename: "report#{n}.docx")
         attached_report = casa_case.latest_court_report
         attached_report.created_at = n.days.ago
