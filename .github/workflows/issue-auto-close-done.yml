@@ -8,7 +8,7 @@ jobs:
   set-state:
     runs-on: ubuntu-latest
     steps:
-      - uses: dessant/issue-states@v2
+      - uses: dessant/issue-states@v3
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           open-issue-columns: ''
