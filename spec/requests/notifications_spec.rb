@@ -10,6 +10,23 @@ RSpec.describe "/notifications", type: :request do
     let(:patch_note_2) { create(:patch_note, note: "(W!;Ros>cIWNKX}", patch_note_type: patch_note_type_b) }
 
     context "when logged in as an admin" do
+      let(:admin) { create(:casa_admin) }
+
+      before do
+        sign_in admin
+      end
+      context "when there are no notifications or patch notes" do
+        it "shows the no notification message" do
+          get notifications_url
+
+          expect(response.body).to include("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
+        end
+      end
+
+      context "when there are only patch notes" do
+        context "when there is no deploy date" do
+        end
+      end
     end
 
     context "when logged in as volunteer" do
