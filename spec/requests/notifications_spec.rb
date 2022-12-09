@@ -15,6 +15,7 @@ RSpec.describe "/notifications", type: :request do
       before do
         sign_in admin
       end
+
       context "when there are no notifications or patch notes" do
         it "shows the no notification message" do
           get notifications_url
@@ -24,7 +25,29 @@ RSpec.describe "/notifications", type: :request do
       end
 
       context "when there are only patch notes" do
+        before do
+          patch_note_1.update_attribute(:patch_note_group, patch_note_group_all_users)
+          patch_note_2.update_attribute(:patch_note_group, patch_note_group_no_volunteers)
+        end
+
         context "when there is no deploy date" do
+          it "shows the no notification message" do
+            get notifications_url
+
+            expect(response.body).to include("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
+          end
+        end
+
+        context "when there is a deploy date" do
+          before do
+            Health.instance.update_attribute(:latest_deploy_time, Date.today)
+          end
+
+          it "does not show the no notification message" do
+            get notifications_url
+
+            expect(response.body).to_not include("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
+          end
         end
       end
     end
