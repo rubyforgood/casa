@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "/notifications", type: :request do
+  before do
+    travel_to Date.new(2021, 1, 1)
+  end
+
   describe "GET /index" do
     let(:patch_note_group_all_users) { create(:patch_note_group, :all_users) }
     let(:patch_note_group_no_volunteers) { create(:patch_note_group, :only_supervisors_and_admins) }
@@ -40,10 +44,10 @@ RSpec.describe "/notifications", type: :request do
         end
       end
 
-      context "when there are only patch notes" do
+      context "when there are patch notes" do
         before do
-          patch_note_1.update_attribute(:patch_note_group, patch_note_group_all_users)
-          patch_note_2.update_attribute(:patch_note_group, patch_note_group_no_volunteers)
+          patch_note_1.update(created_at: Date.new(2020, 12, 31), patch_note_group: patch_note_group_all_users)
+          patch_note_2.update(created_at: Date.new(2020, 12, 31), patch_note_group: patch_note_group_no_volunteers)
         end
 
         context "when there is no deploy date" do
@@ -64,13 +68,23 @@ RSpec.describe "/notifications", type: :request do
 
         context "when there is a deploy date" do
           before do
-            Health.instance.update_attribute(:latest_deploy_time, Date.today)
+            Health.instance.update_attribute(:latest_deploy_time, Date.new(2021, 1, 1))
           end
 
           it "does not show the no notification message" do
             get notifications_url
 
             expect(response.body).to_not include("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
+          end
+
+          it "does not show patch notes made after the deploy date" do
+            patch_note_1.update_attribute(:created_at, Date.new(2021, 1, 2))
+            patch_note_2.update_attribute(:created_at, Date.new(2020, 12, 31))
+
+            get notifications_url
+
+            expect(response.body).to_not include(CGI.escapeHTML(patch_note_1.note))
+            expect(response.body).to include(CGI.escapeHTML(patch_note_2.note))
           end
         end
       end
@@ -81,9 +95,9 @@ RSpec.describe "/notifications", type: :request do
 
       before do
         sign_in volunteer
-        Health.instance.update_attribute(:latest_deploy_time, Date.today)
-        patch_note_1.update_attribute(:patch_note_group, patch_note_group_all_users)
-        patch_note_2.update_attribute(:patch_note_group, patch_note_group_no_volunteers)
+        Health.instance.update_attribute(:latest_deploy_time, Date.new(2021, 1, 1))
+        patch_note_1.update(created_at: Date.new(2020, 12, 31), patch_note_group: patch_note_group_all_users)
+        patch_note_2.update(created_at: Date.new(2020, 12, 31), patch_note_group: patch_note_group_no_volunteers)
       end
 
       it "shows only the patch notes available to their user group" do
