@@ -24,6 +24,22 @@ RSpec.describe "/notifications", type: :request do
         end
       end
 
+      context "when there are no patch notes" do
+        context "when there is a deploy date" do
+          before do
+            Health.instance.update_attribute(:latest_deploy_time, Date.today)
+          end
+
+          it "does not show the patch notes section" do
+            get notifications_url
+
+            queryable_html = Nokogiri.HTML5(response.body)
+
+            expect(queryable_html.css("h3").text).to_not include("Patch Notes")
+          end
+        end
+      end
+
       context "when there are only patch notes" do
         before do
           patch_note_1.update_attribute(:patch_note_group, patch_note_group_all_users)
@@ -35,6 +51,14 @@ RSpec.describe "/notifications", type: :request do
             get notifications_url
 
             expect(response.body).to include("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
+          end
+
+          it "does not show the patch notes section" do
+            get notifications_url
+
+            queryable_html = Nokogiri.HTML5(response.body)
+
+            expect(queryable_html.css("h3").text).to_not include("Patch Notes")
           end
         end
 
