@@ -5,7 +5,17 @@ FactoryBot.define do
     type { "FollowupResolvedNotification" }
 
     trait :followup do
+      transient do
+        creator { build(:user) }
+      end
+
       type { "FollowupNotification" }
+      params {
+        {
+          followup: create(:followup, creator: creator),
+          created_by: creator
+        }
+      }
     end
   end
 end
