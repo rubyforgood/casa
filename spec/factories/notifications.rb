@@ -3,5 +3,5 @@ FactoryBot.define do
     association :recipient, factory: :volunteer
     recipient_type { "Volunteer" }
     type { "FollowupResolvedNotification" }
-  end 
+  end
 end
