@@ -39,17 +39,17 @@ class DocxInspector
   end
 
   def get_word_list_all(sorted: true)
-    if sorted
-      word_lists = @word_lists_by_document_section
+    word_lists = if sorted
+      @word_lists_by_document_section
     else
-      word_lists = @unsorted_word_lists_by_document_section
+      @unsorted_word_lists_by_document_section
     end
 
     all_words_list = word_lists[:document] +
-                     word_lists[:endnotes] +
-                     word_lists[:footnotes] +
-                     word_lists[:footer] +
-                     word_lists[:header]
+      word_lists[:endnotes] +
+      word_lists[:footnotes] +
+      word_lists[:footer] +
+      word_lists[:header]
 
     sort_string_list_by_length_ascending(all_words_list) unless !sorted
 
