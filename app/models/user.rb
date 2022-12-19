@@ -49,6 +49,8 @@ class User < ApplicationRecord
     where(casa_org_id: org.id)
   }
 
+  scope :no_recent_sign_in, -> { active.where("last_sign_in_at <= ?", 30.days.ago) }
+
   def casa_admin?
     is_a?(CasaAdmin)
   end

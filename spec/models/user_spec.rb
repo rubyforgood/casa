@@ -252,4 +252,13 @@ RSpec.describe User, type: :model do
       expect { user.delete }.to raise_error ActiveRecord::InvalidForeignKey
     end
   end
+
+  describe ".no_recent_sign_in" do
+    let!(:old_sign_in_user) { create(:user, last_sign_in_at: 39.days.ago) }
+    let!(:recently_signed_in_user) { create(:user, last_sign_in_at: 5.days.ago) }
+
+    it "returns users who haven't signed in in 30 days" do
+      expect(User.no_recent_sign_in).to contain_exactly(old_sign_in_user)
+    end
+  end
 end
