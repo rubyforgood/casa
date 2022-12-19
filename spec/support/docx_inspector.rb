@@ -31,39 +31,69 @@ class DocxInspector
       end
     end
 
+    @unsorted_word_lists_by_document_section = @word_lists_by_document_section.deep_dup
+
     @word_lists_by_document_section.each do |section, word_list|
       sort_string_list_by_length_ascending(word_list)
     end
   end
 
-  def get_word_list_all
-    sort_string_list_by_length_ascending(
-      @word_lists_by_document_section[:document] +
-      @word_lists_by_document_section[:endnotes] +
-      @word_lists_by_document_section[:footnotes] +
-      @word_lists_by_document_section[:footer] +
+  def get_word_list_all(sorted: true)
+    word_lists = if sorted
+      @word_lists_by_document_section
+    else
+      @unsorted_word_lists_by_document_section
+    end
+
+    all_words_list = word_lists[:document] +
+      word_lists[:endnotes] +
+      word_lists[:footnotes] +
+      word_lists[:footer] +
+      word_lists[:header]
+
+    sort_string_list_by_length_ascending(all_words_list) unless !sorted
+
+    all_words_list
+  end
+
+  def get_word_list_document(sorted: true)
+    if sorted
+      @word_lists_by_document_section[:document]
+    else
+      @unsorted_word_lists_by_document_section[:document]
+    end
+  end
+
+  def get_word_list_endnotes(sorted: true)
+    if sorted
+      @word_lists_by_document_section[:endnotes]
+    else
+      @unsorted_word_lists_by_document_section[:endnotes]
+    end
+  end
+
+  def get_word_list_footnotes(sorted: true)
+    if sorted
+      @word_lists_by_document_section[:footnotes]
+    else
+      @unsorted_word_lists_by_document_section[:footnotes]
+    end
+  end
+
+  def get_word_list_footer(sorted: true)
+    if sorted
+      @word_lists_by_document_section[:footer]
+    else
+      @unsorted_word_lists_by_document_section[:footer]
+    end
+  end
+
+  def get_word_list_header(sorted: true)
+    if sorted
       @word_lists_by_document_section[:header]
-    )
-  end
-
-  def get_word_list_document
-    @word_lists_by_document_section[:document]
-  end
-
-  def get_word_list_endnotes
-    @word_lists_by_document_section[:endnotes]
-  end
-
-  def get_word_list_footnotes
-    @word_lists_by_document_section[:footnotes]
-  end
-
-  def get_word_list_footer
-    @word_lists_by_document_section[:footer]
-  end
-
-  def get_word_list_header
-    @word_lists_by_document_section[:header]
+    else
+      @unsorted_word_lists_by_document_section[:header]
+    end
   end
 
   def word_list_all_contains?(str)
@@ -91,27 +121,27 @@ class DocxInspector
   end
 
   def word_list_all_contains_in_order?(str_list)
-    word_list_contains_str_in_order?(get_word_list_all, str_list)
+    word_list_contains_str_in_order?(get_word_list_all(sorted: false), str_list)
   end
 
   def word_list_document_contains_in_order?(str_list)
-    word_list_contains_str_in_order?(get_word_list_document, str_list)
+    word_list_contains_str_in_order?(get_word_list_document(sorted: false), str_list)
   end
 
   def word_list_endnotes_contains_in_order?(str_list)
-    word_list_contains_str_in_order?(get_word_list_endnotes, str_list)
+    word_list_contains_str_in_order?(get_word_list_endnotes(sorted: false), str_list)
   end
 
   def word_list_footnotes_contains_in_order?(str_list)
-    word_list_contains_str_in_order?(get_word_list_footnotes, str_list)
+    word_list_contains_str_in_order?(get_word_list_footnotes(sorted: false), str_list)
   end
 
   def word_list_footer_contains_in_order?(str_list)
-    word_list_contains_str_in_order?(get_word_list_footer, str_list)
+    word_list_contains_str_in_order?(get_word_list_footer(sorted: false), str_list)
   end
 
   def word_list_header_contains_in_order?(str_list)
-    word_list_contains_str_in_order?(get_word_list_header, str_list)
+    word_list_contains_str_in_order?(get_word_list_header(sorted: false), str_list)
   end
 
   private
