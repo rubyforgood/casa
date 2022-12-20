@@ -15,12 +15,12 @@
         <%= render "/shared/error_messages", resource: contact_type%>
         <div class="input-style-1">
           <%= form.label :name, "Name" %>
-          <%= form.text_field :name, class: "" %>
+          <%= form.text_field :name%>
         </div>
         <div class="select-style-1">
           <%= form.label :contact_type_group, "Contact type group" %>
           <div class="select-position">
-            <%= form.select :contact_type_group_id, set_group_options, class: "select-position" %>
+            <%= form.select :contact_type_group_id, set_group_options %>
           </div>
         </div>
         <div class="form-check checkbox-style mb-20">
