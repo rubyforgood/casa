@@ -37,9 +37,9 @@ RSpec.describe VolunteerDatatable do
 
     context "with a volunteer with a case assignment" do
       let(:casa_case) { build :casa_case, casa_org: org, birth_month_year_youth: youth_month_year }
+      let(:supervisor) { create :supervisor, casa_org: org }
+      let(:volunteer) { create :volunteer, casa_org: org, supervisor: supervisor }
       before do
-        supervisor = create :supervisor, casa_org: org
-        volunteer = create :volunteer, casa_org: org, supervisor: supervisor
         create :case_assignment, volunteer: volunteer, casa_case: casa_case, active: active_assignment
       end
 
