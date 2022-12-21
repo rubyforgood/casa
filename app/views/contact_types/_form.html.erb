@@ -13,28 +13,31 @@
 
 <!-- ========== card start ========== -->
 <div class="card-style mb-30">
-<div class="field form-group cc-italic mb-30">
-  Case contact types are the types of people that can be contacted for a case contact. Some examples are parents, teachers, and social workers.
-</div>
   <%= form_with(model: contact_type, local: true) do |form| %>
+  <div class="alert-box danger-alert">
     <%= render "/shared/error_messages", resource: contact_type%>
-    <div class="input-style-1">
-      <%= form.label :name, "Name" %>
-      <%= form.text_field :name, class: "" %>
+  </div>
+  <div class="mb-20">
+    Case contact types are the types of people that can be contacted for a case contact. Some examples are parents,
+    teachers, and social workers.
+  </div>
+  <div class="input-style-1">
+    <%= form.label :name, "Name" %>
+    <%= form.text_field :name%>
+  </div>
+  <div class="select-style-1">
+    <%= form.label :contact_type_group, "Contact type group" %>
+    <div class="select-position">
+      <%= form.select :contact_type_group_id, set_group_options %>
     </div>
-    <div class="select-style-1">
-      <%= form.label :contact_type_group, "Contact type group" %>
-      <div class="select-position">
-        <%= form.select :contact_type_group_id, set_group_options, class: "select-position" %>
-      </div>
-    </div>
-    <div class="form-check checkbox-style mb-20">
-      <%= form.check_box :active, class: 'form-check-input' %>
-      <%= form.label :active, "Active", class: 'form-check-label' %>
-    </div>
-    <div class="actions mb-10">
-      <%= form.submit "Submit", class: "main-btn primary-btn btn-hover" %>
-    </div>
+  </div>
+  <div class="form-check checkbox-style mb-20">
+    <%= form.check_box :active, class: 'form-check-input' %>
+    <%= form.label :active, "Active", class: 'form-check-label' %>
+  </div>
+  <div class="actions mb-10">
+    <%= form.submit "Submit", class: "main-btn primary-btn btn-hover" %>
+  </div>
   <% end %>
   </div>
 </div>
