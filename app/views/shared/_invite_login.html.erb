@@ -1,31 +1,31 @@
-<div>
-  <span class="font-weight-bold">CASA organization </span>
+<div class="mb-1">
+  <strong class="text-dark">CASA organization </strong>
   <%= resource&.casa_org&.name %>
 </div>
-<div>
-  <span class="font-weight-bold">Added to system </span>
+<div class="mb-1">
+  <strong class="text-dark">Added to system </strong>
   <%= resource&.decorate&.formatted_created_at %>
 </div>
-<div>
-  <span class="font-weight-bold">Invitation email sent </span>
+<div class="mb-1">
+  <strong class="text-dark">Invitation email sent </strong>
   <%= resource&.decorate&.formatted_invitation_sent_at || "never" %>
 </div>
-<div>
-  <span class="font-weight-bold">Last logged in </span>
+<div class="mb-1">
+  <strong class="text-dark">Last logged in </strong>
   <%= resource&.decorate&.formatted_current_sign_in_at || "never" %>
 </div>
-<div>
-  <span class="font-weight-bold">Invitation accepted </span>
+<div class="mb-1">
+  <strong class="text-dark">Invitation accepted </strong>
   <%= resource&.decorate&.formatted_invitation_accepted_at || "never" %>
 </div>
-<div>
-  <span class="font-weight-bold">Password reset last sent </span>
+<div class="mb-1">
+  <strong class="text-dark">Password reset last sent </strong>
   <%= resource&.decorate&.formatted_reset_password_sent_at || "never" %>
 </div>
 
 <% if resource.is_a?(Volunteer) %>
-  <div>
-    <span class="font-weight-bold">Learning Hours This Year</span>
+  <div class="mb-1">
+    <strong class="text-dark">Learning Hours This Year</strong>
     <%= resource.learning_hours_spent_in_one_year %>
   </div>
 <% end %>
