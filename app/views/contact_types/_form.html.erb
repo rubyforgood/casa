@@ -12,7 +12,13 @@
     <!-- ========== card start ========== -->
     <div class="card-style mb-30">
       <%= form_with(model: contact_type, local: true) do |form| %>
+      <div class="alert-box danger-alert">
         <%= render "/shared/error_messages", resource: contact_type%>
+      </div>
+      <div class="mb-20">
+        Case contact types are the types of people that can be contacted for a case contact. Some examples are parents,
+        teachers, and social workers.
+      </div>
         <div class="input-style-1">
           <%= form.label :name, "Name" %>
           <%= form.text_field :name%>
