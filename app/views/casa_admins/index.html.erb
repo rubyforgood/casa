@@ -1,51 +1,49 @@
-<section class="table-components">
-  <div class="container-fluid">
-    <div class="title-wrapper pt-30">
-      <div class="row align-items-center">
-        <div class="col-md-6">
-          <div class="title mb-10">
-            <h1>Admins</h1>
-            <%= link_to "New Admin", new_casa_admin_path, class: "main-btn primary-btn btn-hover mt-30" %>
-          </div>
-        </div>
-      </div>
-    </div>
-      <!-- end col -->   
-    <div class="tables-wrapper">
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="card-style mb-30">
-            <table class="table " id="admins">
-              <thead>
-              <tr>
-                <th><h5 class="ml-10 ">Admin Email</h5></th>
-                <th><h5 class="ml-10 ">Actions</h5></th>
-              </tr>
-              </thead>
-
-              <tbody>
-              <% @admins.each do |admin| %>
-                <tr id="admin-<%= admin.id %>" class="">
-                  <td scope="row" class="min-wdth">
-                    <span class="ml-10 mb-10 mt-10  pb-1"><%= admin.email %></span>
-                    <% unless admin.active? %>
-                      <span class="status-btn close-btn">
-                        Deactivated
-                      </span>
-                    <% end %>       
-                  </td>
-                  <td class="min-width">
-                    <span class="ml-10 mb-10 mt-10 pb-1">
-                    <%= link_to "Edit", edit_casa_admin_path(admin) %>
-                    </span>
-                  </td>
-                </tr>
-              <% end %>
-              </tbody>
-            </table>
-          </div>
+<div class="container-fluid">
+  <div class="title-wrapper pt-30">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <div class="title mb-10">
+          <h1>Admins</h1>
+          <%= link_to "New Admin", new_casa_admin_path, class: "main-btn primary-btn btn-hover mt-30" %>
         </div>
       </div>
     </div>
   </div>
-</section>
+    <!-- end col -->   
+  <div class="tables-wrapper">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card-style mb-30">
+          <table class="table " id="admins">
+            <thead>
+            <tr>
+              <th><h5 class="ml-10 ">Admin Email</h5></th>
+              <th><h5 class="ml-10 ">Actions</h5></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <% @admins.each do |admin| %>
+              <tr id="admin-<%= admin.id %>" class="">
+                <td scope="row" class="min-wdth">
+                  <span class="ml-10 mb-10 mt-10  pb-1"><%= admin.email %></span>
+                  <% unless admin.active? %>
+                    <span class="status-btn close-btn">
+                      Deactivated
+                    </span>
+                  <% end %>       
+                </td>
+                <td class="min-width">
+                  <span class="ml-10 mb-10 mt-10 pb-1">
+                  <%= link_to "Edit", edit_casa_admin_path(admin) %>
+                  </span>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
