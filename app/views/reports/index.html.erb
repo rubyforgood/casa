@@ -82,52 +82,58 @@
                 </div>
 
                 <% if current_user&.casa_admin? || current_user&.supervisor? %>
-                  <div class="field form-group mb-20">
-                    <label class="form-label"><h6>Assigned To</h6></label>
-                    <%= f.collection_select(
-                            :supervisor_ids,
-                            Supervisor.where(casa_org: current_user.casa_org),
-                            :id, :display_name,
-                            {include_hidden: false},
-                            {class: "form-control  select-style-1",
-                            data: {placeholder: "-Select Supervisors-"},
-                            multiple: true}
-                        ) %>
+                  <div class="select-style-1">
+                    <label><h6>Assigned To</h6></label>
+                    <div class="select-position">
+                      <%= f.collection_select(
+                              :supervisor_ids,
+                              Supervisor.where(casa_org: current_user.casa_org),
+                              :id, :display_name,
+                              {include_hidden: false},
+                              {class: "form-control  select-style-1",
+                              data: {placeholder: "-Select Supervisors-"}}
+                          ) %>
+                    </div>
                   </div>
 
-                  <div class="field form-group mb-20">
-                    <label class="form-label"><h6>Volunteers</h6></label>
-                    <%= f.collection_select(
-                            :creator_ids,
-                            Volunteer.where(casa_org: current_user.casa_org),
-                            :id,
-                            :display_name,
-                            {include_hidden: false},
-                            {class: "form-control select-style-1", data: {placeholder: "-Select Volunteers-"}, multiple: true}
-                        ) %>
+                  <div class="select-style-1">
+                    <label><h6>Volunteers</h6></label>
+                    <div class="select-position">
+                      <%= f.collection_select(
+                              :creator_ids,
+                              Volunteer.where(casa_org: current_user.casa_org),
+                              :id,
+                              :display_name,
+                              {include_hidden: false},
+                              {class: "form-control", data: {placeholder: "-Select Volunteers-"}}
+                          ) %>
+                    </div>
                   </div>
 
-                  <div class="field form-group mb-20">
-                    <label class="form-label"><h6>Contact Type</h6></label>
+                  <div class="select-style-1">
+                    <label><h6>Contact Type</h6></label>
+                    <div class="select-position">
                     <%= f.collection_select(
                             :contact_type_ids,
                             ContactType.for_organization(current_user.casa_org),
                             :id,
                             :name,
                             {include_hidden: false},
-                            {class: "form-control select-style-1", data: {placeholder: "-Select Contact Types-"}, multiple: true}
+                            {class: "form-control", data: {placeholder: "-Select Contact Types-"}}
                         ) %>
+                    </div>
                   </div>
 
                   <div class="select-style-1">
                     <label><h6>Contact Type Group</h6></label>
+                    <div class="select-position">
                           <%= f.collection_select(
                                   :contact_type_group_ids,
                                   ContactTypeGroup.for_organization(current_user.casa_org),
                                   :id,
                                   :name,
                                   {include_hidden: false},
-                                  {class: "form-control select-style-1", data: {placeholder: "-Select Contact Type Groups-"}, multiple: true}
+                                  {class: "form-control", data: {placeholder: "-Select Contact Type Groups-"}}
                               ) %>
                     </div>
                   </div>
