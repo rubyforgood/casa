@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <h1><%= title %></h1>
 
 <div class="card card-container">
@@ -14,11 +15,35 @@
       <div class="field form-group">
         <%= form.label :name, "Name" %>
         <%= form.text_field :name, placeholder: "e.g.: English", class: "form-control", required: true %>
+=======
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h1>
+          <%= title %>
+        </h1>
+>>>>>>> 6054656f (Add new plainadmin theme to the languages form)
       </div>
-
-      <div class="actions">
-        <%= form.submit "Submit", class: "btn btn-primary" %>
-      </div>
-    <% end %>
+    </div>
   </div>
+</div><!-- ==== end title ==== -->
+
+<div class="card-style mb-30">
+  <%= form_with(model: language, local: true) do |form| %>
+    <div class="alert-box danger-alert">
+      <%= render "/shared/error_messages", resource: language %>
+    </div>
+
+
+    <div class="input-style-1">
+      <%= form.label :name, "Name" %>
+      <%= form.text_field :name, class: "form-control", required: true %>
+    </div>
+
+    <div class="actions mb-10">
+      <%= form.submit "Submit", class: "main-btn primary-btn btn-hover" %>
+    </div>
+  <% end %>
 </div>
+<!-- card end -->
