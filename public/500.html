@@ -4,63 +4,86 @@
   <title>We're sorry, but something went wrong (500)</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
-  .rails-default-error-page {
-    background-color: #EFEFEF;
-    color: #2E2F30;
-    text-align: center;
-    font-family: arial, sans-serif;
-    margin: 0;
-  }
+    .rails-default-error-page {
+      background-color: #EFEFEF;
+      color: #2E2F30;
+      text-align: center;
+      font-family: arial, sans-serif;
+      margin: 0;
+    }
 
-  .rails-default-error-page div.dialog {
-    width: 95%;
-    max-width: 33em;
-    margin: 4em auto 0;
-  }
+    .rails-default-error-page .header {
+      color: #fff;
+      background: #00447c;
+      background-color: rgb(0, 68, 124);
+      box-shadow: 0 0 4px 4px rgb(0 0 0 / 28%);
+      height: 80px;
+      justify-content: flex-start;
+      padding: 16px;
+      display: flex;
+      flex-direction: row;
+      font-size: 48px;
+      align-items: center;
+      font-weight: bolder;
+    }
 
-  .rails-default-error-page div.dialog > div {
-    border: 1px solid #CCC;
-    border-right-color: #999;
-    border-left-color: #999;
-    border-bottom-color: #BBB;
-    border-top: #B00100 solid 4px;
-    border-top-left-radius: 9px;
-    border-top-right-radius: 9px;
-    background-color: white;
-    padding: 7px 12% 0;
-    box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
-  }
+    .rails-default-error-page div.dialog {
+      width: 95%;
+      max-width: 33em;
+      margin: 15em auto;
+    }
 
-  .rails-default-error-page h1 {
-    font-size: 100%;
-    color: #730E15;
-    line-height: 1.5em;
-  }
+    .rails-default-error-page div.dialog > div {
+      border: 1px solid #CCC;
+      border-right-color: #999;
+      border-left-color: #999;
+      border-bottom-color: #BBB;
+      border-top: #103862 solid 4px;
+      border-radius: 9px;
+      background-color: white;
+      padding: 7px 12% 0;
+      box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
+      height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-  .rails-default-error-page div.dialog > p {
-    margin: 0 0 1em;
-    padding: 1em;
-    background-color: #F7F7F7;
-    border: 1px solid #CCC;
-    border-right-color: #999;
-    border-left-color: #999;
-    border-bottom-color: #999;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-top-color: #DADADA;
-    color: #666;
-    box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
-  }
+    .rails-default-error-page h1 {
+      font-size: 100%;
+      color: #103862;
+      line-height: 1.5em;
+    }
+
+    .rails-default-error-page .footer {
+      color: #fff;
+      padding: 2rem 0;
+      text-align: center;
+      background-color: #00447c;
+      bottom: 0;
+      position: fixed;
+      width: 100vw;
+    }
   </style>
 </head>
 
 <body class="rails-default-error-page">
   <!-- This file lives in public/500.html -->
+   <div class="header">
+    CASA/Volunteer Tracking
+  </div>
+  
   <div class="dialog">
     <div>
       <h1>We're sorry, but something went wrong.</h1>
+      <p>If you are the application owner check the logs for more information.</p>
     </div>
-    <p>If you are the application owner check the logs for more information.</p>
+  </div>
+
+  <div class="footer">
+    <p class="copyright">
+      &#169 CASA / Volunteer Tracking
+      </class>
   </div>
 </body>
 </html>
