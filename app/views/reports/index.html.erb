@@ -11,32 +11,56 @@
       <ul class="buttons-group mb-30">
         <li>
           <%= form_with url: mileage_reports_path(format: :csv), method: :get do |f| %>
-              <%= f.submit "Mileage Report", class: "main-btn primary-btn btn-hover report-form-submit",
-              data: {disable_with: "Downloading Mileage Report"} %>
+            <%= button_tag(
+                  data: { disable_with: "Downloading Mileage Report" },
+                  class: "main-btn primary-btn btn-hover report-form-submit"
+                ) do %>
+                <i class="lni lni-dashboard mr-10"></i> Mileage Report
+            <% end %>
           <% end %>
         </li>
 
         <li>
           <%= form_with url: missing_data_reports_path(format: :csv), method: :get do |f| %>
-            <%= f.submit "Missing Data Report", class: "main-btn primary-btn btn-hover report-form-submit" %>
+            <%= button_tag(
+                  data: { disable_with: "Missing Data Report" },
+                  class: "main-btn primary-btn btn-hover report-form-submit"
+                ) do %>
+                <i class="lni lni-database mr-10"></i> Missing Data Report
+            <% end %>
           <% end %>
         </li>
 
         <li>
           <%= form_with url: learning_hours_reports_path(format: :csv), method: :get do |f| %>
-            <%= f.submit "Learning Hours Report", class: "main-btn primary-btn btn-hover report-form-submit" %>
+            <%= button_tag(
+                  data: { disable_with: "Learning Hours Report" },
+                  class: "main-btn primary-btn btn-hover report-form-submit"
+                ) do %>
+                <i class="lni lni-hourglass mr-10"></i> Learning Hours Report
+            <% end %>
           <% end %>
         </li>
 
         <li>
           <%= form_with url: export_emails_path(format: :csv), method: :get do |f| %>
-            <%= f.submit "Export Volunteers Emails", class: "main-btn primary-btn btn-hover report-form-submit" %>
+            <%= button_tag(
+                  data: { disable_with: "Export Volunteers Emails" },
+                  class: "main-btn primary-btn btn-hover report-form-submit"
+                ) do %>
+                <i class="lni lni-envelope mr-10"></i> Export Volunteers Emails
+            <% end %>
           <% end %>
         </li>
 
         <li>
           <%= form_with url: followup_reports_path(format: :csv), method: :get do |f| %>
-            <%= f.submit "Followups Report", class: "main-btn primary-btn btn-hover report-form-submit" %>
+            <%= button_tag(
+                  data: { disable_with: "Followups Report" },
+                  class: "main-btn primary-btn btn-hover report-form-submit"
+                ) do %>
+                <i class="lni lni-check-box mr-10"></i> Followups Report
+            <% end %>
           <% end %>
         </li>
       </ul>
@@ -164,10 +188,17 @@
                     </li>
 
                     <li>
-                      <%= f.submit "Download Report", class: "main-btn primary-btn btn-hover", data: {disable_with: false} %>
+                      <%= button_tag(
+                            type: "submit",
+                            data: { disable_with: false },
+                            class: "main-btn primary-btn btn-hover report-form-submit"
+                          ) do %>
+                          <i class="lni lni-download mr-10"></i> Download Report
                       <% end %>
                     </li>
                   </ul>
+
+              <% end %>
             </div>
 
           </div>
