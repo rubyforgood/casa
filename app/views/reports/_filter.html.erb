@@ -5,18 +5,20 @@
         <h5 class="modal-title" id="filterColumnsLabel">
           Filter Exported Columns
         </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="main-btn primary-btn btn-hover  btn-sm close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <div>
-          Select columns:
+          <h6 class="mb-20">
+            Select columns
+          </h6>
           <%= form.fields_for :filtered_csv_cols do |ff| %>
             <% CaseContactsExportCsvService.DATA_COLUMNS.keys.each_with_index do |column, index| %>
               <div class="row mt-0">
                 <div class="col-sm-12">
-                  <div class="form-check">
+                  <div class="form-check checkbox-style mb-20">
                     <%= ff.check_box column, { class: "form-check-input", checked: true }, true, false %>
                     <%= ff.label column, column.to_s.titleize, class: "form-check-label" %>
                   </div>
@@ -27,7 +29,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="button" class="main-btn primary-btn btn-hover" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
