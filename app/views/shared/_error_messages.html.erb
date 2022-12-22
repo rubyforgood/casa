@@ -1,5 +1,5 @@
 <% if resource.errors.any? %>
-  <div id="error_explanation" class="alert alert-danger">
+  <div id="error_explanation" class="alert">
     <h6><%= pluralize(resource.errors.count, "error") %> prohibited this
         <%= @custom_error_header || resource.model_name.human %> from being saved:</h6>
 
