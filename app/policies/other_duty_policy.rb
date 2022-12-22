@@ -15,4 +15,20 @@ class OtherDutyPolicy < UserPolicy
   def index?
     admin_or_supervisor?
   end
+
+  def new?
+    user.volunteer?
+  end
+
+  def create?
+    new?
+  end
+
+  def edit?
+    user.volunteer? && record.creator == user
+  end
+
+  def update?
+    edit?
+  end
 end
