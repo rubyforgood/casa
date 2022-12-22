@@ -1,58 +1,47 @@
 <div class="title-wrapper pt-30">
   <div class="row align-items-center">
 
-    <div class="col-md-6">
+    <div class="col-lg-12">
       <div class="title mb-30">
         <h2>Export Data</h2>
       </div>
     </div>
 
-    <div class="col-md-6">
-      <div class="breadcrumb-wrapper mb-30">
-        <span class="ml-5">
-          <div class="btn-sm main-btn primary-btn">
-            <%= form_with url: mileage_reports_path(format: :csv), method: :get do |f| %>
-                <%= f.submit "Mileage Report", class: "btn btn-primary report-form-submit",
-                data: {disable_with: "Downloading Mileage Report"} %>
-            <% end %>
-          </div>
-        </span>
+    <div class="col-lg-12">
+      <ul class="buttons-group mb-30">
+        <li>
+          <%= form_with url: mileage_reports_path(format: :csv), method: :get do |f| %>
+              <%= f.submit "Mileage Report", class: "main-btn primary-btn btn-hover report-form-submit",
+              data: {disable_with: "Downloading Mileage Report"} %>
+          <% end %>
+        </li>
 
-        <span class="ml-5">
-          <div class="btn-sm main-btn primary-btn">
-            <%= form_with url: missing_data_reports_path(format: :csv), method: :get do |f| %>
-              <%= f.submit "Missing Data Report", class: "btn btn-primary report-form-submit" %>
-            <% end %>
-          </div>
-        </span>
+        <li>
+          <%= form_with url: missing_data_reports_path(format: :csv), method: :get do |f| %>
+            <%= f.submit "Missing Data Report", class: "main-btn primary-btn btn-hover report-form-submit" %>
+          <% end %>
+        </li>
 
-        <span class="ml-5">
-          <div class="btn-sm main-btn primary-btn">
-            <%= form_with url: learning_hours_reports_path(format: :csv), method: :get do |f| %>
-              <%= f.submit "Learning Hours Report", class: "btn btn-primary report-form-submit" %>
-            <% end %>
-          </div>
-        </span>
+        <li>
+          <%= form_with url: learning_hours_reports_path(format: :csv), method: :get do |f| %>
+            <%= f.submit "Learning Hours Report", class: "main-btn primary-btn btn-hover report-form-submit" %>
+          <% end %>
+        </li>
 
-        <span class="ml-5">
-          <div class="btn-sm main-btn primary-btn">
-            <%= form_with url: export_emails_path(format: :csv), method: :get do |f| %>
-              <%= f.submit "Export Volunteers Emails", class: "btn btn-primary report-form-submit" %>
-            <% end %>
-          </div>
-        </span>
+        <li>
+          <%= form_with url: export_emails_path(format: :csv), method: :get do |f| %>
+            <%= f.submit "Export Volunteers Emails", class: "main-btn primary-btn btn-hover report-form-submit" %>
+          <% end %>
+        </li>
 
-        <span class="ml-5">
-          <div class="btn-sm main-btn primary-btn">
-            <%= form_with url: followup_reports_path(format: :csv), method: :get do |f| %>
-              <%= f.submit "Followups Report", class: "btn btn-primary report-form-submit" %>
-            <% end %>
-          </div>
-        </span>
-      </div>
+        <li>
+          <%= form_with url: followup_reports_path(format: :csv), method: :get do |f| %>
+            <%= f.submit "Followups Report", class: "main-btn primary-btn btn-hover report-form-submit" %>
+          <% end %>
+        </li>
+      </ul>
     </div>
 
-      <div class="row">
         <div class="col-lg-12">
           <div class="card-style mb-30">
             <h6 class="mb-10">Case Contacts Report</h6>
@@ -170,17 +159,23 @@
                 <% end %>
 
                 <%= render 'filter', form: f %>
-                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#filterColumns">
-                  Filter Columns
-                </button>
 
-                <%= f.submit "Download Report", class: "btn btn-primary", data: {disable_with: false} %>
-              <% end %>
+                  <ul class="buttons-group mt-30 col-8">
+                    <li>
+                      <button type="button" class="main-btn primary-btn-outline btn-hover" data-toggle="modal" data-target="#filterColumns">
+                        Filter Columns
+                      </button>
+                    </li>
+
+                    <li>
+                      <%= f.submit "Download Report", class: "main-btn primary-btn btn-hover", data: {disable_with: false} %>
+                      <% end %>
+                    </li>
+                  </ul>
             </div>
 
           </div>
         </div>
-    </div>
 
   </div>
 </div>
