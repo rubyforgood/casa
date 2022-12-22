@@ -77,10 +77,11 @@
                       <%= f.collection_select(
                               :supervisor_ids,
                               Supervisor.where(casa_org: current_user.casa_org),
-                              :id, :display_name,
-                              {include_hidden: false},
-                              {class: "form-control  select-style-1",
-                              data: {placeholder: "-Select Supervisors-"}}
+                              :id,
+                              :display_name,
+                              prompt: true
+                              # {include_hidden: false},
+                              # {class: "form-control", data: {placeholder: "-Select Supervisors-"}}
                           ) %>
                     </div>
                   </div>
@@ -93,8 +94,9 @@
                               Volunteer.where(casa_org: current_user.casa_org),
                               :id,
                               :display_name,
-                              {include_hidden: false},
-                              {class: "form-control", data: {placeholder: "-Select Volunteers-"}}
+                              prompt: true
+                              # {include_hidden: false},
+                              # {class: "form-control", data: {placeholder: "-Select Volunteers-"}}
                           ) %>
                     </div>
                   </div>
@@ -107,8 +109,9 @@
                             ContactType.for_organization(current_user.casa_org),
                             :id,
                             :name,
-                            {include_hidden: false},
-                            {class: "form-control", data: {placeholder: "-Select Contact Types-"}}
+                            prompt: true
+                            # {include_hidden: false},
+                            # {class: "form-control", data: {placeholder: "-Select Contact Types-"}}
                         ) %>
                     </div>
                   </div>
@@ -121,8 +124,9 @@
                                   ContactTypeGroup.for_organization(current_user.casa_org),
                                   :id,
                                   :name,
-                                  {include_hidden: false},
-                                  {class: "form-control", data: {placeholder: "-Select Contact Type Groups-"}}
+                                  prompt: true
+                                  # {include_hidden: false},
+                                  # {class: "form-control", data: {placeholder: "-Select Contact Type Groups-"}}
                               ) %>
                     </div>
                   </div>
