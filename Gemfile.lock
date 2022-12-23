@@ -123,7 +123,6 @@ GEM
     caxlsx_rails (0.6.3)
       actionpack (>= 3.1)
       caxlsx (>= 3.0)
-    childprocess (4.1.0)
     cliver (0.3.2)
     coderay (1.1.3)
     concurrent-ruby (1.1.10)
@@ -404,8 +403,7 @@ GEM
     safe_shell (1.1.0)
     scout_apm (5.3.2)
       parser
-    selenium-webdriver (4.6.1)
-      childprocess (>= 0.5, < 5.0)
+    selenium-webdriver (4.7.1)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
