@@ -40,7 +40,7 @@ class CasaCasesController < ApplicationController
   end
 
   def create
-    create_params = if casa_case_params[:empty_court_date] == '1'
+    create_params = if casa_case_params[:empty_court_date] == "1"
       casa_case_params.except(:court_dates_attributes)
     else
       casa_case_params
