@@ -1,0 +1,110 @@
+@use "../base/variables.scss" as globals;
+@use "../base/breakpoints.scss" as screen-sizes;
+
+body {
+  background-color: #f4f7fa;
+  min-width: 320px;
+}
+
+.content {
+  margin-left: 320px;
+  padding: 2%;
+  position: relative;
+  overflow: auto;
+}
+
+label {
+  font-weight: 900;
+}
+
+// This may effect other pages than the case contact form!!!
+h5 label {
+  font-weight: 500;
+}
+
+
+.unbold {
+  font-weight: 100;
+}
+
+.fa-car {
+  color: globals.$primary;
+}
+
+div.row div.col-sm-12.form-header h1 {
+  display: inline-block;
+  margin-right: 15px;
+  vertical-align: middle;
+}
+
+div.row.volunteer-filters {
+  margin-top: 2rem;
+}
+
+.card.card-container {
+  box-shadow: 0 4px 12px 5px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
+}
+
+.casa-case-button {
+  margin: 0 10px 10px 0;
+}
+
+.card-title {
+  &__hint {
+    font-size: 11px;
+    font-style: italic;
+  }
+}
+
+/* ASSUMPTION: default screen size is desktop view (> 1024px) */
+
+/* As 'mobile-label' class is mobile only, not display them on desktop view */
+
+@media only screen and (min-width: screen-sizes.$mobile) {
+  table.table {
+    span.mobile-label {
+      display: none;
+    }
+  }
+}
+
+#dropdownMenuButton {
+  margin-bottom: 0.5em;
+}
+
+@media only screen and (max-width: screen-sizes.$mobile) {
+  .login-header {
+    font-size: 0.75em !important;
+  }
+  .content {
+    padding: 3rem 0;
+    margin-left: 0;
+  }
+  .card-body {
+    padding: 0.5rem;
+  }
+  table.table {
+    thead {
+      display: none;
+    }
+    tr {
+      display: table;
+      width: 100%;
+      border-bottom: 1px solid #efefef;
+      > * {
+        display: block;
+      }
+    }
+    th,
+    td {
+      border-top: none;
+      font-size: 1.25rem;
+      span.mobile-label {
+        color: #757575;
+        display: block;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}

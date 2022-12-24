@@ -1,0 +1,17 @@
+body.devise-sessions-new, body.users-sessions-new, body.devise-passwords-new {
+  .container {
+    max-width: none;
+  }
+
+  .login-email-link {
+    font-size: small;
+  }
+
+  aside {
+    background-position: right;
+    background-image: url("login.jpg");
+    min-height: 700px;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}

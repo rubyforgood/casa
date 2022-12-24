@@ -1,0 +1,82 @@
+.category-options {
+  margin-left: 2em;
+
+  input[type="checkbox"], input[type="radio"] {
+    pointer-events: none
+  }
+}
+
+.check-item.disabled {
+  cursor: default;
+
+  label {
+    color: #757575
+  }
+}
+
+.check-item {
+  label {
+    width: 80%;
+    vertical-align: middle;
+  }
+}
+
+.emancipation-category {
+  border-bottom: 2px solid #bfe3ff;
+  margin: 0;
+  padding: 0 .5em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  input[type="checkbox"] {
+    pointer-events: none
+  }
+
+  label {
+    margin: 0;
+    padding: .5em;
+    vertical-align: middle;
+  }
+
+  span {
+    color: #00447c;
+    font-weight: bold;
+    font-size: 18pt
+  }
+}
+
+.emancipation-category:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+
+  input[type="checkbox"], label{
+    cursor: pointer
+  }
+}
+
+.emancipation-category.disabled {
+  cursor: default;
+
+  span, label{
+    color: #757575
+  }
+}
+
+.emancipation-category.disabled:hover{
+  background-color: unset
+}
+
+.no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+.emacipation-category-input-label-pair {
+  display: flex;
+}
