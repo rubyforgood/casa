@@ -1,0 +1,22 @@
+body.court_dates {
+  .court-orders {
+    textarea {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    textarea, .add-court-order {
+      width: 500px;
+    }
+  }
+
+  .court-order-entry {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  select {
+    padding: 5px;
+  }
+}
