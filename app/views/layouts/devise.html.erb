@@ -11,11 +11,15 @@
     />
   <title>Sign In | PlainAdmin Demo</title>
 
-  <!-- ========== All CSS files linkup ========= -->
-  <link rel="stylesheet" href="/assets/css/bootstrap.min.css"/>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+  <% if all_casa_admin_signed_in? %>
+    <%= javascript_include_tag 'all_casa_admin', 'data-turbolinks-track': 'reload', defer: true %>
+  <% end %>
+
   <link rel="stylesheet" href="/assets/css/lineicons.css"/>
   <link rel="stylesheet" href="/assets/css/materialdesignicons.min.css"/>
-  <link rel="stylesheet" href="/assets/css/fullcalendar.css"/>
   <link rel="stylesheet" href="/assets/css/main.css"/>
 </head>
 <body>
