@@ -1,0 +1,114 @@
+@use "../base/breakpoints.scss" as screen-sizes;
+
+body.casa_cases {
+  .form-header {
+    h1 {
+      display: inline-block;
+      margin-right: 15px;
+      vertical-align: middle;
+    }
+
+    a {
+      display: inline-block;
+    }
+  }
+
+  .a2cldr {
+    width: 175px;
+  }
+
+  .a2cldr .a2cldr-btn {
+    width: 175px;
+  }
+
+  .a2cldr-list {
+    position: absolute;
+    width: 100%;
+  }
+  .cal-btn {
+    display: inline-block;
+  }
+
+  #cc-check {
+    p {
+      display: flex;
+      align-items: center;
+    }
+
+    #with_cc {
+      margin-right: 5px;
+    }
+  }
+
+  #reminder_button {
+    margin-left: 30px;
+    margin-bottom: 0;
+  }
+
+  .case-contact-list {
+      margin-bottom: 20px;
+  }
+
+  .datetime-year-month select.date-input {
+    width: 130px;
+    padding-bottom: 15px;
+  }
+
+  .court-orders {
+    textarea {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    textarea, .add-court-order {
+      width: 500px;
+    }
+
+    .implementation-status {
+      align-self: flex-start;
+      min-height: 38px;
+    }
+
+    .remove-court-order-button {
+      align-self: flex-start;
+    }
+  }
+
+  .court-order-entry {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  select {
+    padding: 5px;
+  }
+}
+
+@media only screen and (max-width: screen-sizes.$small) {
+  body.casa_cases {
+    .court-orders {
+      textarea, .add-court-orders {
+        width: 100%;
+      }
+    }
+
+    .court-order-entry {
+      display: grid;
+      grid-template-columns: minmax(100px, 100%) 1fr;
+      gap: 2px;
+
+      .implementation-status {
+        grid-row: 2;
+      }
+
+      margin: 1em 1em 2em 1em;
+    }
+  }
+}
+
+body.casa_cases-show {
+  .past-court-dates.add-container {
+    display: block;
+  }
+}
