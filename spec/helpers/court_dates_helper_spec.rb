@@ -4,6 +4,12 @@ RSpec.describe CourtDatesHelper do
   describe "#when_do_we_have_court_dates" do
     subject { helper.when_do_we_have_court_dates(casa_case) }
 
+    describe "when casa case has no court dates" do
+      let(:casa_case) { create(:casa_case) }
+
+      it { expect(subject).to eq("none") }
+    end
+
     describe "when casa case has only dates in the past" do
       let(:casa_case) { create(:casa_case, :with_past_court_date) }
 
