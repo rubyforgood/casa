@@ -15,7 +15,7 @@ RSpec.describe "court_dates/new", type: :system do
   before do
     travel_to now
     sign_in admin
-    visit edit_casa_case_path(casa_case)
+    visit casa_case_path(casa_case)
     click_link("Add a court date")
   end
 
