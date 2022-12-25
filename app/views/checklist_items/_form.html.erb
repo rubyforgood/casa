@@ -1,26 +1,33 @@
-<h1><%= title %></h1>
-
-<div class="card card-container">
-  <div class="card-body">
-    <%= form_with(model: [hearing_type, checklist_item], local: true) do |form| %>
-      <%= render "/shared/error_messages", resource: checklist_item %>
-      <div class="field form-group">
-        <%= form.label :category %>
-        <%= form.text_field :category, class: "form-control", required: true %>
+<div class="pt-30">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="mb-30">
+        <h2><%= title %>
+        </h2>
       </div>
-      <div class="field form-group">
-        <%= form.label :description %>
-        <%= form.text_field :description, class: "form-control", required: true %>
-      </div>
-      <div class="field form-group">
-        <div class="form-check">
-          <%= form.check_box :mandatory, class: 'form-check-input' %>
-          <%= form.label :mandatory, class: 'form-check-label' %>
-        </div>
-      </div>
-      <div class="actions">
-        <%= form.submit "Submit", class: "btn btn-primary" %>
-      </div>
-    <% end %>
+    </div>
   </div>
 </div>
+
+<!-- ========== card start ========== -->
+<div class="card-style">
+  <%= form_with(model: [hearing_type, checklist_item], local: true) do |form| %>
+    <div class="danger-alert">
+      <%= render "/shared/error_messages", resource: checklist_item %>
+    </div>
+    <div class="input-style-1">
+      <%= form.label :category %>
+      <%= form.text_field :category, class: "form-control", required: true %>
+    </div>
+    <div class="select-style-1">
+      <%= form.label :description %>
+      <%= form.text_field :description, class: "form-control", required: true %>
+    </div>
+    <div class="checkbox-style mb-20">
+      <%= form.check_box :mandatory, class: 'form-check-input' %>
+      <%= form.label :mandatory, "Mandatory" %>
+    </div>
+    <%= form.submit "Submit", class: "main-btn primary-btn" %>
+  <% end %>
+</div>
+<!-- card end -->
