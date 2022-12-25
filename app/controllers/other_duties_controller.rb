@@ -2,11 +2,23 @@ class OtherDutiesController < ApplicationController
   before_action :set_other_duty, except: [:new, :create, :index]
   before_action :convert_duration_minutes, only: [:update, :create]
 
+  def index
+    authorize OtherDuty
+
+    @volunteer_duties = if current_user.casa_admin?
+      generate_other_duty_list(policy_scope(Volunteer))
+    else
+      generate_other_duty_list(current_user.volunteers)
+    end
+  end
+
   def new
+    authorize OtherDuty
     @other_duty = OtherDuty.new
   end
 
   def create
+    authorize OtherDuty
     @other_duty = OtherDuty.new(other_duty_params)
 
     if @other_duty.save
@@ -17,19 +29,12 @@ class OtherDutiesController < ApplicationController
   end
 
   def edit
-  end
-
-  def index
-    @volunteer_duties = if current_user.casa_admin?
-      generate_other_duty_list(policy_scope(Volunteer))
-    elsif current_user.supervisor?
-      generate_other_duty_list(current_user.volunteers)
-    else
-      render file: "public/403.html", status: :unauthorized
-    end
+    authorize @other_duty
   end
 
   def update
+    authorize @other_duty
+
     if @other_duty.update(other_duty_params)
       redirect_to casa_cases_path, notice: "Duty was successfully updated."
     else
