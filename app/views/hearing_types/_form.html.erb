@@ -9,11 +9,9 @@
     </div>
   </div>
 </div>
-
 <div class="card-style mb-30">
   <%= form_with(model: hearing_type, local: true) do |form| %>
     <%= render "/shared/error_messages", resource: hearing_type %>
-    
     <div class="input-style-1">
       <%= form.label :name, "Name" %>
       <%= form.text_field :name, class: "form-control", required: true %>
@@ -22,7 +20,6 @@
       <%= form.check_box :active, class: 'form-check-input' %>
       <%= form.label :active, class: 'form-check-label' %>
     </div>
-
     <% if !hearing_type.id.nil? %>
       <div class="dashboard-table-header pt-2 pb-2">
         <div class="row align-items-center">
@@ -33,7 +30,10 @@
           <div class="col-md-6">
             <div class="breadcrumb-wrapper">
               <span class="ml-5">
-                <%= link_to "New List Item", new_hearing_type_checklist_item_path(hearing_type), class: "btn-sm main-btn primary-btn btn-hover" %>
+                <%= link_to new_hearing_type_checklist_item_path(hearing_type), class: "btn-sm main-btn primary-btn btn-hover" do %>
+                  <i class="lni lni-plus mr-10"></i>
+                  New List Item
+                <% end %>
               </span>
             </div>
           </div>
@@ -88,9 +88,13 @@
         <!-- end table -->
       </div>
     <% end %>
-    
     <div class="actions mb-10">
-      <%= form.submit "Submit", class: "main-btn primary-btn btn-hover" %>
+      <%= button_tag(
+            type: "submit",
+            class: "main-btn primary-btn btn-hover"
+          ) do %>
+          <i class="lni lni-checkmark-circle mr-10"></i> Submit
+      <% end %>
     </div>
   <% end %>
 </div>
