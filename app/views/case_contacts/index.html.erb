@@ -74,9 +74,9 @@
         </div>
       </div>
 
-      <div class="row mb-4 align-items-end select-style-1">
+      <div class="row align-items-end select-style-1 mb-10">
         <div class="col-12">
-          <h1><label>Other filters</label></h1>
+          <h3>Other filters</h3>
         </div>
 
         <div class="col-md-6 select-position">
@@ -92,7 +92,7 @@
                                                     {class: "select-style-1"}) %>
         </div>
 
-        <div class="col-md-3 select-position">
+        <div class="col-md-3 select-position mb-10">
           <%= f.label :contact_made %>
           <%= f.select(:contact_made, @presenter.boolean_select_options,
                                       {include_blank: "Display all"},
@@ -107,7 +107,7 @@
         </div>
       </div>
 
-      <div class="mt-4 btn-group">
+      <div class="btn-group">
         <%= f.submit("Filter", class: "main-btn secondary-btn btn-hover") %>
         <%= link_to("Reset filters", reset_filterrific_url, class: "main-btn secondary-btn-outline btn-hove") %>
       </div>
@@ -116,17 +116,17 @@
 <% end %>
 
 <% @presenter.case_contacts.each do |casa_case_id, data| %>
-  <div class="card card-container">
-    <div class="card-body">
-      <h3><%= @presenter.display_case_number(casa_case_id) %></h3>
+  <div class="card-style-1 mb-5">
+    <div class="card-content">
+      <h3 class="mb-10"><%= @presenter.display_case_number(casa_case_id) %></h3>
       <%= render partial: "case_contacts/case_contact", collection: data, as: :contact %>
     </div>
   </div>
 <% end %>
 
 <% unless @presenter.case_contacts.any? %>
-  <div class="card card-container">
-    <div class="card-body">
+  <div class="card-style-1">
+    <div class="card-content">
       <%= params[:filterrific] ?
         "No case contacts have been found." :
         "You have no case contacts for this case. \
