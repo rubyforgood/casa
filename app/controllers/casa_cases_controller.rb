@@ -41,7 +41,7 @@ class CasaCasesController < ApplicationController
 
   def create
     @casa_case = CasaCase.new(
-      casa_case_params.merge(
+      casa_case_create_params.merge(
         casa_org: current_organization
       )
     )
@@ -155,9 +155,20 @@ class CasaCasesController < ApplicationController
       :case_number,
       :birth_month_year_youth,
       :court_report_due_date,
-      court_dates_attributes: [:date],
-      casa_case_contact_types_attributes: [:contact_type_id]
+      :empty_court_date,
+      casa_case_contact_types_attributes: [:contact_type_id],
+      court_dates_attributes: [:date]
     )
+  end
+
+  def casa_case_create_params
+    create_params = if court_date_unknown?
+      casa_case_params.except(:court_dates_attributes)
+    else
+      casa_case_params
+    end
+
+    create_params.except(:empty_court_date)
   end
 
   # Separate params so only admins can update the case_number
@@ -174,5 +185,9 @@ class CasaCasesController < ApplicationController
     current_date = Time.now.strftime("%Y-%m-%d")
 
     "#{casa_case_number.nil? ? "" : casa_case_number + "-"}case-contacts-#{current_date}.csv"
+  end
+
+  def court_date_unknown?
+    casa_case_params[:empty_court_date] == "1"
   end
 end
