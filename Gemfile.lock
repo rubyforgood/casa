@@ -130,7 +130,7 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
-    cssbundling-rails (1.1.1)
+    cssbundling-rails (1.1.2)
       railties (>= 6.0.0)
     database_cleaner-active_record (2.0.1)
       activerecord (>= 5.a)
