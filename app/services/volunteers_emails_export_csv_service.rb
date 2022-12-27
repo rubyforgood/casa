@@ -7,7 +7,7 @@ class VolunteersEmailsExportCsvService
     @volunteers = Volunteer.active.in_organization(casa_org)
   end
 
-  def perform
+  def call
     CSV.generate(headers: true) do |csv|
       csv << full_data.keys.map(&:to_s).map(&:titleize)
       @volunteers.each do |volunteer|

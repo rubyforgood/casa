@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe VolunteersEmailsExportCsvService do
-  describe "#perform" do
+  describe "#call" do
     it "Exports correct data from volunteers" do
       casa_org = create(:casa_org)
       other_casa_org = create(:casa_org)
@@ -11,7 +11,7 @@ RSpec.describe VolunteersEmailsExportCsvService do
       other_org_volunteer = create(:volunteer, casa_org: other_casa_org)
       active_volunteer_cases = active_volunteer.casa_cases.active.map { |c| [c.case_number, c.in_transition_age?] }.to_h
 
-      csv =  described_class.new(casa_org).perform
+      csv = described_class.new(casa_org).call
 
       results = csv.split("\n")
       expect(results.count).to eq(2)
