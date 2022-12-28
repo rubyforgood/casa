@@ -1,6 +1,10 @@
-<h1>Editing Supervisor</h1>
+<div class="col-md-6">
+  <div class="title mb-30 mt-30">
+    <h2>Editing Supervisor</h2>
+  </div>
+</div>
 
-<div class="card card-container">
+<div class="card-style">
   <div class="card-body">
     <%= form_for @supervisor, as: :supervisor, url: supervisor_path(@supervisor) do |form| %>
       <%= render "/shared/error_messages", resource: @supervisor %>
@@ -17,7 +21,7 @@
 
       <div class="actions">
         <% if policy(@supervisor).update_supervisor_email? || policy(@supervisor).update_supervisor_name? %>
-          <%= form.submit "Submit", class: "btn btn-primary" %>
+          <%= form.submit "Submit", class: "main-btn primary-btn btn-hover mt-3" %>
         <% end %>
       </div>
     <% end %>
@@ -28,13 +32,13 @@
 <% volunteer_title = @unassigned_volunteer_count == 0 ? "Assigned Volunteers" : "All Volunteers" %>
 
 <% content_for :table_title do %>
-  <h3 class="pull-left"><%= volunteer_title %></h3>
+  <h3><%= volunteer_title %></h3>
   <% if @supervisor_has_unassigned_volunteers %>
     <%= button_to button_text,
                   edit_supervisor_path(@supervisor),
                   params: { include_unassigned: @all_volunteers_ever_assigned.nil? },
                   method: :get,
-                  class: "btn btn-outline-primary pull-right" %>
+                  class: "main-btn primary-btn-outline btn-hover my-3" %>
   <% end %>
 <% end %>
 
@@ -54,7 +58,7 @@
           <%= button_to "Unassign",
                         unassign_supervisor_volunteer_path(volunteer),
                         method: :patch,
-                        class: "btn btn-danger" %>
+                        class: "main-btn danger-btn btn-hover" %>
         <% else %>
           Unassigned
         <% end %>
