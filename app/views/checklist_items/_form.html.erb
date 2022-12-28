@@ -27,7 +27,9 @@
       <%= form.check_box :mandatory, class: 'form-check-input' %>
       <%= form.label :mandatory, "Mandatory" %>
     </div>
-    <%= form.submit "Submit", class: "main-btn primary-btn" %>
+    <%= button_tag(type: "submit", class: "btn-sm main-btn primary-btn btn-hover") do %>
+      <i class="lni lni-checkmark-circle mr-10"></i> Submit
+    <% end %>
   <% end %>
 </div>
 <!-- card end -->
