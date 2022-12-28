@@ -218,11 +218,12 @@ readonly: true %>
       </div>
     <% end %>
   </div>
-<!--          Make filters this work-->
   <div class="card-style-1 pl-25 mb-10">
     <div class="notes-header">
       <h2 class="mb-3"><%= form.label :notes, "5. Enter Notes" %></h2>
+      
       <button id="open-highlight-modal" class="mb-3 main-btn primary-btn-outline btn-hover" data-toggle="modal" data-target="#visibleColumns">+ Highlight</button>
+      
     </div>
     <div class="cc-italic mb-3">
       Please refer to individuals by their roles instead of by their names. Ex: My supervisor joined me for a call with the social worker to discuss my youth.
@@ -244,7 +245,8 @@ readonly: true %>
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="caseContactHighlightLabel">Highlight</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <!--Highlight X CLOSE Does Not Work-->
+        <button type="button" class="h2 close bg-white border-0" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -252,7 +254,8 @@ readonly: true %>
         Coming Soon.
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <!--Highlight CLOSE Button Does Not Work-->
+        <button type="button" class="main-btn primary-btn btn-hover" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
