@@ -1,45 +1,56 @@
-<div class="row">
-  <div class="col-sm-12 dashboard-table-header">
-      <h1>Other Duties</h1>
-  </div>
-</div>
-<% if @volunteer_duties.empty? %>
-  <div class="card card-container">
-    <div class="card-body">
-      <h3>There are no duties to display!</h3>
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h2>Other Duties
+        </h2>
+      </div>
     </div>
   </div>
-<% else %>
-  <% @volunteer_duties.each do |volunteer| %>
-    <% if volunteer[:other_duties].any? %>
-      <div class="card card-container">
-        <div class="card-body">
-          <h3><%= link_to(volunteer[:volunteer].display_name, volunteer_path(volunteer[:volunteer].id)) %></h3>
-          <div class="card card-container">
-            <div class="card-body">
-              <table class="table table-striped table-bordered">
-                <thead>
-                <tr>
-                  <th>Duties Occurred</th>
-                  <th>Created</th>
-                  <th>Duration</th>
-                  <th>Title</th>
-                </tr>
-                </thead>
-                <tbody>
-                <% volunteer[:other_duties].decorate.each do |duty| %>
-                    <td><%= I18n.l(duty.occurred_at, format: :full, default: nil) %></td>
-                    <td><%= I18n.l(duty.created_at, format: :full, default: nil) %></td>
-                    <td><%= duty.duration_in_minutes %></td>
-                    <td><%= duty.truncate_notes %></td>
-                  </tr>
-                <% end %>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+</div>
+<div class="tables-wrapper">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card-style mb-30">
+        <% if @volunteer_duties.empty? %>
+          There are no duties to display!
+        <% else %>
+          <% @volunteer_duties.each do |volunteer| %>
+            <% if volunteer[:other_duties].any? %>
+                <%= link_to(volunteer[:volunteer].display_name, volunteer_path(volunteer[:volunteer].id)) %>
+                <div class="table-wrapper table-responsive">
+                  <table class="table">
+                    <thead>
+                    <tr>
+                      <th>Duties Occurred</th>
+                      <th>Created</th>
+                      <th>Duration</th>
+                      <th>Title</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% @available_volunteers.each_with_index do |volunteer, index| %>
+                      <tr>
+                        <td>
+                          <%= index + 1 %>
+                        </td>
+                        <td>
+                          <%= link_to volunteer.display_name, edit_volunteer_path(volunteer) %>
+                        </td>
+                        <td>
+                          <% volunteer.casa_cases.map do |casa_case| %>
+                            <%= link_to(casa_case.case_number, casa_case_path(casa_case)) %> <br>
+                          <% end %>
+                        </td>
+                      </tr>
+                    <% end %>
+                    </tbody>
+                  </table>
+                </div>
+            <% end %>
+          <% end %>
+        <% end %>
       </div>
-    <% end %>
-  <% end %>
-<% end %>
+    </div>
+  </div>
+</div>
