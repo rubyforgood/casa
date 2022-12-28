@@ -15,7 +15,7 @@
 <%= form_for_filterrific @filterrific do |f| %>
   <div class="card-style my-4">
     <div class="card-content d-flex justify-content-between align-items-end">
-      <div class="h2 btn-lg">Filter by</div>
+      <div class="h4 btn-lg">Filter by</div>
       <button href="#"
               class="btn btn-lg btn-link"
               type="button"
@@ -23,7 +23,7 @@
               data-target="#filter-card-body"
               aria-expanded="<%= params[:filterrific].present? %>>"
               aria-controls="filter-card-body">
-        <h3 class="">Show / Hide</h3>
+        <div class="h4">Show / Hide</div>
       </button>
     </div>
 
@@ -52,7 +52,7 @@
           <div id="contact-type-form" class="">
             <div class="row">
               <% @current_organization_groups.each do |group| %>
-                <div class="col-md-4 justify-content-start mb-20">
+                <div class="col-md-4 justify-content-start pb-5">
                   <h5 class="mb-1"> <%= group.name %> </h5>
                   <% group.contact_types.each do |contact_type| %>
                     <div class="form-check checkbox-style">
@@ -79,20 +79,20 @@
           <h3>Other filters</h3>
         </div>
 
-        <div class="col-md-6 select-position">
+        <div class="col-md-6 select-position pr-5">
           <%= f.label :contact_medium %>
           <%= f.select(:contact_medium, options_from_collection_for_select(contact_mediums, "value", "label"),
                                         {include_blank: "Display all"},
                                         {class: "select-style-1"}) %>
         </div>
-        <div class="col-md-3 select-position">
+        <div class="col-md-3 select-position pr-5">
           <%= f.label :want_driving_reimbursement %>
           <%= f.select(:want_driving_reimbursement, @presenter.boolean_select_options,
                                                     {include_blank: "Display all"},
                                                     {class: "select-style-1"}) %>
         </div>
 
-        <div class="col-md-3 select-position mb-10">
+        <div class="col-md-3 select-position pr-5">
           <%= f.label :contact_made %>
           <%= f.select(:contact_made, @presenter.boolean_select_options,
                                       {include_blank: "Display all"},
@@ -101,7 +101,7 @@
       </div>
 
       <div class="row select-style-1">
-        <div class="col-md-6 select-position">
+        <div class="col-md-6 select-position pr-5">
           <%= f.label :sorted_by %>
           <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: "select-style-1"}) %>
         </div>
