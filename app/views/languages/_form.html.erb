@@ -4,13 +4,7 @@
   <div class="card-body">
     <%= form_with(model: language, local: true) do |form| %>
       <%= render "/shared/error_messages", resource: language %>
-
-      <div>
-        A list of languages volunteers can add to their profile to let supervisors and admins know they can speak the language.
-      </div>
-
       <br>
-
       <div class="field form-group">
         <%= form.label :name, "Name" %>
         <%= form.text_field :name, placeholder: "e.g.: English", class: "form-control", required: true %>
