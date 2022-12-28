@@ -31,9 +31,9 @@
   </div>
 
   <div id="enter-contact-details" class="card-style-1 pl-25 mb-10">
-    <h2 class="mb-2"><label for="case_contact_casa_case">3. Enter Contact Details</label><span class="red-letter"> *</span></h2>
+    <h2 class="mb-3"><label for="case_contact_casa_case">3. Enter Contact Details</label><span class="red-letter"> *</span></h2>
     <div class="">
-      <h5><%= form.label :contact_made, "a. Contact Made" %></h5>
+      <h5 classs="mb-3"><%= form.label :contact_made, "a. Contact Made" %></h5>
       <div class="form-check radio-style mb-20">
         <%= form.radio_button :contact_made, true,
                         checked: case_contact.contact_made,
@@ -53,7 +53,7 @@
     </div>
 
     <div class="field contact-medium form-group">
-      <h5><%= form.label :medium_type, "b. Contact Medium" %></h5>
+      <h5 classs="mb-3"><%= form.label :medium_type, "b. Contact Medium" %></h5>
       <%= form.collection_radio_buttons(:medium_type, contact_mediums, 'value', 'label') do |b| %>
         <div class="form-check radio-style mb-20">
           <%= b.radio_button(class: "form-check-input") %>
@@ -64,7 +64,7 @@
 
     <div class="pr-50">
       
-      <h5><%= form.label :occurred_at, "c. Occurred On" %></h5>
+      <h5 class="mb-3"><%= form.label :occurred_at, "c. Occurred On" %></h5>
       <div class="input-style-1">
         <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
         <%= form.text_field :occurred_at,
@@ -73,27 +73,28 @@
                             class: "" %>
       </div>
     </div>
-<!--          this needs to be fixed or redone          -->
-    <div class="pr-50">
-      <h5><label for="case_contact_casa_case">d. Duration of Meeting</label></h5>
-      <div class="input-style-1">
-        <%= form.number_field :duration_hours,
-                            id: "case-contact-duration-hours-display",
-                            min: 0,
-                            class: "inline-fields cc-field",
-                            size: "10",
-                            value: duration_hours(case_contact),
-                            required: true %> &nbsp; <span class="label-font-weight"> hour(s)</span>
-      </div>
-      <div class="inline-fields pb-10">and</div>
-      <div class="input-style-1">
-        <%= form.number_field :duration_minutes,
-                              id: "case-contact-duration-minutes-display",
+    
+    <div class="pr-50 ">
+      <h5 class="mb-3"><label for="case_contact_casa_case">d. Duration of Meeting</label></h5>
+      <div class="row align-items-center">
+        <div class="input-style-1 col pl-0">
+          <%= form.number_field :duration_hours,
+                              id: "case-contact-duration-hours-display",
                               min: 0,
                               class: "inline-fields cc-field",
                               size: "10",
-                              value: duration_minutes(case_contact),
-                              required: true %> &nbsp; <span class="label-font-weight"> minute(s)</span>
+                              value: duration_hours(case_contact),
+                              required: true %> &nbsp; <strong> hour(s)</strong>
+        </div>
+        <div class="input-style-1 col">
+          <%= form.number_field :duration_minutes,
+                                id: "case-contact-duration-minutes-display",
+                                min: 0,
+                                class: "inline-fields cc-field",
+                                size: "10",
+                                value: duration_minutes(case_contact),
+                                required: true %> &nbsp; <strong> minute(s)</strong>
+        </div>
       </div>
     </div>
   </div>
@@ -101,7 +102,7 @@
   <div class="card-style-1 pl-25 mb-10">
     <h2 class="mb-3"><label for="case_contact_casa_case">4. Enter Travel Details</label></h2>
     <div class="field miles-driven form-group">
-      <h5><%= form.label :miles_driven, "a. Miles Driven" %></h5>
+      <h5 class="mb-3"><%= form.label :miles_driven, "a. Miles Driven" %></h5>
       <div class="input-style-1 pr-50">
       <% if form_type == 'new' && @case_contact.miles_driven == 0 %>
         <input class="form-control" min="0" max="10000" type="number" value="0" name="case_contact[miles_driven]" autocomplete="off" id="case_contact_miles_driven">
@@ -110,7 +111,7 @@
       <% end %>
       </div>
     </div>
-
+<!--          Add styling to here         -->
     <% if current_organization.show_driving_reimbursement %>
       <div class="field want-driving-reimbursement form-group">
         <h5 class="mb-3"><%= form.label :want_driving_reimbursement, "b. Want Driving Reimbursement" %></h5>
@@ -147,6 +148,7 @@
           end
         %>
         <% if message %>
+        <!--          TODO        -->
           <%= form.text_field :no_address_content, class: "input-style-1l red-letter", value: message, disabled: true,
 readonly: true %>
         <% else %>
@@ -161,7 +163,7 @@ readonly: true %>
         </div>
       </div>
     <% end %>
-
+<!--          TODO          -->
     <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
       <div class="other-expenses">
         <h5><%= form.label :additional_expense, "c. Other Expenses" %></h5>
@@ -216,22 +218,22 @@ readonly: true %>
       </div>
     <% end %>
   </div>
-
+<!--          Make filters this work-->
   <div class="card-style-1 pl-25 mb-10">
     <div class="notes-header">
       <h2 class="mb-3"><%= form.label :notes, "5. Enter Notes" %></h2>
       <button id="open-highlight-modal" class="mb-3 main-btn primary-btn-outline btn-hover" data-toggle="modal" data-target="#visibleColumns">+ Highlight</button>
     </div>
-    <div class="cc-italic">
+    <div class="cc-italic mb-3">
       Please refer to individuals by their roles instead of by their names. Ex: My supervisor joined me for a call with the social worker to discuss my youth.
     </div>
-    <div class="input-style-1">
+    <div class="input-style-1 pr-25">
     <%= form.text_area :notes, :rows => 5, placeholder: "Enter notes here", class: "form-control" %>
     </div>
   </div>
 
   <div class="actions">
-    <%= form.submit "Submit", class: "wide_button btn btn-primary", id: "case-contact-submit",
+    <%= form.submit "Submit", class: "main-btn primary-btn btn-hover", id: "case-contact-submit",
 "data-target": "#confirm-submit" %>
   </div>
   <%= render 'confirm_note_content_dialog', form: form %>
