@@ -50,9 +50,13 @@
 class: "cc-italic form-control", required: true %>
       </div>
     </div>
-
-    <div class="actions">
-      <%= form.submit "Submit", class: "main-btn primary-btn btn-hover btn-sm" %>
+    <div class="actions mb-10">
+      <%= button_tag(
+            type: "submit",
+            class: "btn-sm main-btn primary-btn btn-hover"
+          ) do %>
+          <i class="lni lni-checkmark-circle mr-10"></i> Submit
+      <% end %>
     </div>
   <% end %>
 </div>
