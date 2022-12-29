@@ -5,7 +5,7 @@
       <%= link_to "Deactivate volunteer",
                   deactivate_volunteer_path(user),
                   method: :patch,
-                  class: "btn btn-outline-danger",
+                  class: "main-btn danger-btn-outline btn-hover my-1",
                   data: {confirm: "WARNING: Marking a volunteer inactive will make them unable to login. Are you sure you want to do this?"} %>
     <% end %>
   <% else %>
@@ -16,7 +16,7 @@
       <%= link_to "Activate volunteer",
                   activate_volunteer_path(user),
                   method: :patch,
-                  class: "btn btn-outline-success" %>
+                  class: "main-btn success-btn-outline btn-hover my-1" %>
     <% end %>
   <% end %>
   <% if (current_user.supervisor? ||
@@ -24,11 +24,11 @@
       user.invitation_accepted_at.nil? %>
     <%= link_to "Resend Invitation (Email)",
                 resend_invitation_volunteer_path(user),
-                class: "btn btn-outline-danger" %>
+                class: "main-btn danger-btn-outline btn-hover my-1" %>
   <% end %>
   <% if current_user.casa_admin? %>
     <%= link_to "Send Reactivation Alert (SMS)",
                 send_reactivation_alert_volunteer_path(user),
-                class: "btn btn-outline-danger" %>
+                class: "main-btn danger-btn-outline btn-hover my-1" %>
   <% end %>
 </div>
