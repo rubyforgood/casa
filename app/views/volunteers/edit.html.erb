@@ -1,4 +1,4 @@
-<%= link_to 'Back', volunteers_path %>
+<%= link_to 'Back', volunteers_path, class: "my-2" %>
 
 <div class="row">
   <div class="col-sm-12 form-header">
@@ -7,7 +7,7 @@
   </div>
   <div class="col-sm-12 form-header">
     <%= link_to "Impersonate", impersonate_volunteer_path(@volunteer),
-      class: "btn btn-primary casa-case-button" %>
+      class: "main-btn primary-btn btn-hover casa-case-button my-3" %>
   </div>
 </div>
 <div class="card card-container">
@@ -24,7 +24,7 @@
       </p>
 
       <div class="actions">
-        <%= form.submit "Submit", class: "btn btn-primary" %>
+        <%= form.submit "Submit", class: "main-btn primary-btn btn-hover my-1" %>
       </div>
     <% end %>
   </div>
