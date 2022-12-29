@@ -214,10 +214,10 @@ $('document').ready(() => {
         render: (data, type, row, meta) => {
           return `
           <span class="mobile-label">Actions</span>
-            <a href="${editVolunteerPath(row.id)}" class="btn btn-primary">
+            <a href="${editVolunteerPath(row.id)}" class="main-btn primary-btn btn-hover">
               Edit
             </a>
-            <a href="${impersonateVolunteerPath(row.id)}" class="btn btn-secondary">
+            <a href="${impersonateVolunteerPath(row.id)}" class="main-btn dark-btn btn-hover">
               Impersonate
             </a>
           `

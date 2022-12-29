@@ -1,7 +1,7 @@
 <div class="input-style-1">
   <%= f.label :email, "Email" %>
   <% if policy(resource).update_user_setting? %>
-    <%= f.text_field :email%>
+    <%= f.text_field :email, placeholder: "Email" %>
   <% else %>
     <input type="text" placeholder="<%= resource.email %>" autocomplete="off" readonly>
   <% end %>
@@ -10,7 +10,7 @@
 <div class="input-style-1">
   <%= f.label :display_name, "Display name" %>
   <% if policy(resource).update_user_setting? %>
-    <%= f.text_field :display_name%>
+    <%= f.text_field :display_name, placeholder: "Display Name" %>
   <% else %>
     <input type="text" placeholder="<%= resource.display_name %>" autocomplete="off" readonly>
   <% end %>
@@ -19,7 +19,7 @@
 <div class="input-style-1">
   <%= f.label :phone_number, "Phone number" %>
   <% if policy(resource).update_user_setting? %>
-    <%= f.text_field :phone_number %>
+    <%= f.text_field :phone_number, placeholder: "Phone Number" %>
   <% else %>
     <input type="text" placeholder="<%= resource.phone_number %>" autocomplete="off" readonly>
   <% end %>
@@ -29,11 +29,11 @@
     <%= f.label :address, "Mailing address" %>
     <% if policy(resource).update_user_setting? %>
       <%= f.fields_for :address, (resource.address ? nil : Address.new) do |a| %>
-        <%= a.text_field :content %>
+        <%= a.text_field :content, placeholder: "Mailing Address" %>
       <% end %>
     <% else %>
       <%= f.fields_for :address, (resource.address ? nil : Address.new) do |a| %>
-        <%= a.text_field :content,  readonly: true %>
+        <%= a.text_field :content, readonly: true, placeholder: "Mailing Address" %>
       <% end %>
     <% end %>
   </div>

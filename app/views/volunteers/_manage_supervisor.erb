@@ -1,26 +1,24 @@
 <div>
-  <h1 class="pt-5">Manage Supervisor</h1>
+  <h1 class="pt-5 mb-2">Manage Supervisor</h1>
 
   <div class="card card-container">
     <div class="card-body">
-      <br>
       <% if @volunteer.has_supervisor? %>
-        <h5>
+        <h5 class="my-4">
           <span class="font-weight-bold">
             Current Supervisor:
           </span>
           <%= link_to(@volunteer.supervisor.display_name, edit_supervisor_path(@volunteer.supervisor.id)) %>
         </h5>
-        <br>
         <%= button_to 'Unassign from Supervisor',
                       unassign_supervisor_volunteer_path(@volunteer),
                       method: :patch,
-                      class: "btn btn-danger" %>
+                      class: "main-btn danger-btn btn-hover" %>
       <% else %>
-        <h3>Assign a Supervisor</h3>
-        <%= form_for SupervisorVolunteer.new, url: supervisor_volunteers_path(volunteer_id: @volunteer.id) do |form| %>
+        <h3 class="mb-3">Assign a Supervisor</h3>
 
-          <div class='form-group'>
+        <%= form_for SupervisorVolunteer.new, url: supervisor_volunteers_path(volunteer_id: @volunteer.id) do |form| %>
+          <div class="select-style-1">
             <label for='supervisor_volunteer_supervisor_id'>Select a Supervisor</label>
             <select name='supervisor_volunteer[supervisor_id]' class='form-control select2'>
               <% @supervisors.each do |supervisor| %>
@@ -29,7 +27,7 @@
             </select>
           </div>
           <%= form.hidden_field :volunteer_id, :value => @volunteer.id %>
-          <%= form.submit 'Assign Supervisor', class: 'btn btn-primary' %>
+          <%= form.submit 'Assign Supervisor', class: 'main-btn primary-btn btn-hover' %>
         <% end %>
       <% end %>
     </div>
