@@ -35,10 +35,11 @@
                   <td>
                     <% if @volunteer.active? && assignment.active && assignment.casa_case.active? %>
                       <%- if Pundit.policy(current_user, @volunteer).unassign_case? %>
-                        <%= button_to 'Unassign Case',
-                                      unassign_case_assignment_path(assignment, volunteer_id: @volunteer.id),
+                        <%= button_to unassign_case_assignment_path(assignment, volunteer_id: @volunteer.id),
                                       method: :patch,
-                                      class: "main-btn danger-btn btn-hover" %>
+                                      class: "main-btn danger-btn btn-hover btn-sm" do %>
+                          <i class="lni lni-cross-circle mr-5"></i> Unassign Case
+                        <% end %>
                       <%- end %>
                     <% else %>
                       None
@@ -63,7 +64,12 @@
                             {class: "form-control select2"} %>
           </div>
 
-          <%= form.submit 'Assign Case', class: 'main-btn primary-btn btn-hover' %>
+          <%= button_tag(
+            type: "submit",
+            class: "main-btn primary-btn btn-hover btn-sm"
+          ) do %>
+            <i class="lni lni-checkmark mr-5"></i> Assign Case
+          <% end %>
         <% end %>
       <% end %>
     </div>
