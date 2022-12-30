@@ -3,34 +3,34 @@
     <h2>Editing Supervisor</h2>
   </div>
 </div>
-
 <div class="card-style">
   <div class="card-body">
     <%= form_for @supervisor, as: :supervisor, url: supervisor_path(@supervisor) do |form| %>
       <%= render "/shared/error_messages", resource: @supervisor %>
-
       <%= render "/shared/edit_form", resource: @supervisor, f: form %>
-
       <p>
         <%= render "/shared/invite_login", resource: @supervisor %>
       </p>
-
       <p>
         <%= render "manage_active", user: @supervisor %>
       </p>
-
       <div class="actions">
         <% if policy(@supervisor).update_supervisor_email? || policy(@supervisor).update_supervisor_name? %>
-          <%= form.submit "Submit", class: "main-btn primary-btn btn-hover mt-3" %>
+          <div class="actions mb-10">
+            <%= button_tag(
+            type: "submit",
+            class: "btn-sm main-btn primary-btn btn-hover"
+          ) do %>
+              <i class="lni lni-checkmark-circle mr-10"></i> Submit
+            <% end %>
+          </div>
         <% end %>
       </div>
     <% end %>
   </div>
 </div>
-
 <% button_text = @all_volunteers_ever_assigned.nil? ? "Include unassigned" : "Hide unassigned" %>
 <% volunteer_title = @unassigned_volunteer_count == 0 ? "Assigned Volunteers" : "All Volunteers" %>
-
 <% content_for :table_title do %>
   <h3><%= volunteer_title %></h3>
   <% if @supervisor_has_unassigned_volunteers %>
@@ -41,33 +41,34 @@
                   class: "main-btn primary-btn-outline btn-hover my-3" %>
   <% end %>
 <% end %>
-
 <% content_for :table_body do %>
   <tbody>
-  <% (@all_volunteers_ever_assigned || @supervisor.volunteers).each do |volunteer| %>
-    <tr>
-      <td><%= link_to volunteer.display_name, edit_volunteer_path(volunteer) %></td>
-      <td><%= volunteer.email %></td>
-      <% if button_text == "Hide unassigned" %>
-        <td>
-          <%= volunteer.has_supervisor? ? volunteer.supervisor.display_name : "No One" %>
-        </td>
-      <% end %>
-      <td>
-        <% if volunteer.supervised_by?(@supervisor) %>
-          <%= button_to "Unassign",
-                        unassign_supervisor_volunteer_path(volunteer),
-                        method: :patch,
-                        class: "main-btn danger-btn btn-hover" %>
-        <% else %>
-          Unassigned
+    <% (@all_volunteers_ever_assigned || @supervisor.volunteers).each do |volunteer| %>
+      <tr>
+        <td><%= link_to volunteer.display_name, edit_volunteer_path(volunteer) %></td>
+        <td><%= volunteer.email %></td>
+        <% if button_text == "Hide unassigned" %>
+          <td>
+            <%= volunteer.has_supervisor? ? volunteer.supervisor.display_name : "No One" %>
+          </td>
         <% end %>
-      </td>
-    </tr>
-  <% end %>
+        <td>
+          <% if volunteer.supervised_by?(@supervisor) %>
+            <div class="action">
+              <%= button_to "Unassign",
+                            unassign_supervisor_volunteer_path(volunteer),
+                            method: :patch,
+                            class: "text-danger" %>
+              <i class="lni lni-ban text-danger"></i>
+            </div>
+          <% else %>
+            Unassigned
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
   </tbody>
 <% end %>
-
 <%=
   render(
   "shared/manage_volunteers",
