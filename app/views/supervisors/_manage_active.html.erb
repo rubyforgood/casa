@@ -1,4 +1,4 @@
-<div class="field form-group">
+<div class="field form-group my-3">
   <% if user.active? %>
     Supervisor is <span class="badge success-bg text-uppercase display-1 mb-1 rounded-pill">Active</span>
     <% if current_user.casa_admin? %>
@@ -6,7 +6,7 @@
         <%= link_to "Deactivate supervisor",
                     deactivate_supervisor_path(user),
                     method: :patch,
-                    class: "main-btn danger-btn-outline btn-hover",
+                    class: "btn-sm main-btn danger-btn-outline btn-hover",
                     data: {confirm: "WARNING: Marking a supervisor inactive will make them unable to login. Are you sure you want to do this?"} %>
       <% end %>
     <% end %>
@@ -20,19 +20,19 @@
       <%= link_to "Activate supervisor",
                   activate_supervisor_path(user),
                   method: :patch,
-                  class: "main-btn success-btn-outline btn-hover" %>
+                  class: "btn-sm main-btn danger-btn-outline btn-hover" %>
     <% end %>
   <% end %>
   <% if current_user.casa_admin? && user.invitation_accepted_at.nil? %>
     <%= link_to "Resend Invitation",
                 resend_invitation_supervisor_path(user),
                 method: :patch,
-                class: "main-btn danger-btn-outline btn-hover" %>
+                class: "btn-sm main-btn danger-btn-outline btn-hover" %>
   <% end %>
   <% if current_user.casa_admin? %>
     <%= link_to "Change to Admin",
                 change_to_admin_supervisor_path(user),
                 method: :patch,
-                class: "main-btn danger-btn-outline btn-hover" %>
+                class: "btn-sm main-btn danger-btn-outline btn-hover" %>
   <% end %>
 </div>
