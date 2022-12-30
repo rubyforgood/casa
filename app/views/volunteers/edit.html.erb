@@ -6,8 +6,10 @@
     <%= render "volunteer_reminder_form", volunteer: @volunteer %>
   </div>
   <div class="col-sm-12 form-header">
-    <%= link_to "Impersonate", impersonate_volunteer_path(@volunteer),
-      class: "main-btn primary-btn btn-hover casa-case-button my-3" %>
+    <%= link_to impersonate_volunteer_path(@volunteer),
+      class: "main-btn primary-btn btn-hover casa-case-button btn-sm my-3" do %>
+        <i class="lni lni-user mr-10"></i> Impersonate
+    <% end %>
   </div>
 </div>
 <div class="card card-container">
@@ -24,7 +26,12 @@
       </p>
 
       <div class="actions">
-        <%= form.submit "Submit", class: "main-btn primary-btn btn-hover my-1" %>
+        <%= button_tag(
+          type: "submit",
+          class: "main-btn primary-btn btn-hover btn-sm my-1"
+        ) do %>
+          <i class="lni lni-checkmark-circle mr-5"></i> Submit
+        <% end %>
       </div>
     <% end %>
   </div>

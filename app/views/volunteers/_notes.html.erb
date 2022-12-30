@@ -22,8 +22,12 @@
                   <td class="min-width"><%= note.creator.display_name %></td>
                   <td class="min-width"><%= l(note.created_at, format: :standard) %></td>
                   <td class="min-width">
-                    <%= link_to "Edit", edit_volunteer_note_path(@volunteer, note), class: "main-btn primary-btn btn-hover" %>
-                    <%= link_to "Delete", volunteer_note_path(@volunteer, note), class: "main-btn primary-btn btn-hover", method: :delete %>
+                    <%= link_to edit_volunteer_note_path(@volunteer, note), class: "main-btn primary-btn btn-hover btn-sm" do %>
+                      <i class="lni lni-pencil-alt mr-5"></i> Edit
+                    <% end %>
+                    <%= link_to volunteer_note_path(@volunteer, note), class: "main-btn danger-btn btn-hover btn-sm", method: :delete do %>
+                      <i class="lni lni-trash-can mr-5"></i> Delete
+                    <% end %>
                   </td>
                 </tr>
               <% end %>
@@ -41,7 +45,13 @@ id: "volunteer-note-form") do |form| %>
         </div>
 
         <div class="actions">
-          <%= form.submit "Save Note", class: "main-btn primary-btn btn-hover", id: "note-submit" %>
+          <%= button_tag(
+            type: "submit",
+            class: "main-btn primary-btn btn-hover btn-sm",
+            id: "note-submit"
+          ) do %>
+            <i class="lni lni-save mr-5"></i> Save Note
+          <% end %>    
         </div>
       <% end %>
     </div>

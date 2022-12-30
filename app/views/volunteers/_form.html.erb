@@ -17,6 +17,11 @@
   </div>
 
   <div class="actions">
-    <%= form.submit "Create User", class: "main-btn primary-btn btn-hover" %>
+    <%= button_tag(
+      type: "submit",
+      class: "main-btn primary-btn btn-hover btn-sm"
+    ) do %>
+      <i class="lni lni-user mr-5"></i> Create User
+    <% end %>
   </div>
 <% end %>

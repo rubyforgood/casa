@@ -10,10 +10,11 @@
           </span>
           <%= link_to(@volunteer.supervisor.display_name, edit_supervisor_path(@volunteer.supervisor.id)) %>
         </h5>
-        <%= button_to 'Unassign from Supervisor',
-                      unassign_supervisor_volunteer_path(@volunteer),
+        <%= button_to unassign_supervisor_volunteer_path(@volunteer),
                       method: :patch,
-                      class: "main-btn danger-btn btn-hover" %>
+                      class: "main-btn danger-btn btn-hover btn-sm" do %>
+          <i class="lni lni-cross-circle mr-5"></i> Unassign from Supervisor
+        <% end %>
       <% else %>
         <h3 class="mb-3">Assign a Supervisor</h3>
 
@@ -27,7 +28,12 @@
             </select>
           </div>
           <%= form.hidden_field :volunteer_id, :value => @volunteer.id %>
-          <%= form.submit 'Assign Supervisor', class: 'main-btn primary-btn btn-hover' %>
+          <%= button_tag(
+            type: "submit",
+            class: "main-btn primary-btn btn-hover btn-sm"
+          ) do %>
+            <i class="lni lni-checkmark mr-5"></i> Assign Supervisor
+          <% end %>
         <% end %>
       <% end %>
     </div>
