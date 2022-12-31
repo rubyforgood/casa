@@ -1,4 +1,3 @@
-
 <%= form_with model: LearningHour, url: volunteer_learning_hours_path(volunteer_id: current_user.id), local: true,
 id: "learning-hours-form" do |form| %>
 
@@ -8,56 +7,68 @@ id: "learning-hours-form" do |form| %>
 
   <%= form.hidden_field :user_id, value: current_user.id %>
 
-  <div class="field form-group field-card mt-4">
-    <%= form.label :name, "Learning Hours Title" %>
-    <%= form.text_field :name,
-                        id: "title",
-                        placeholder: "-- Enter a title --",
-                        value: @learning_hour.name,
-                        class:"mr-5" %>
-    <br>
-    <%= form.label :learning_type, "Type of Learning" %>
-    <%= form.select :learning_type,
-                    LearningHour.learning_types&.map {|learning| [learning.first.humanize, learning.first]},
-                    prompt:"Select learning type",
-                    value: @learning_hour.learning_type,
-                    selected: @learning_hour.learning_type,
-                    class: "form-control label-font-weight" %>
+  <div class="field-card mt-3">
+    <div class="input-style-1">
+      <%= form.label :name, "Learning Hours Title" %>
+      <%= form.text_field :name,
+                          id: "title",
+                          placeholder: "-- Enter a title --",
+                          value: @learning_hour.name,
+                          class:"mr-5" %>
+    </div>
+    <div class="select-style-1">
+      <%= form.label :learning_type, "Type of Learning" %>
+      <div class="select-position">
+        <%= form.select :learning_type,
+                        LearningHour.learning_types&.map {|learning| [learning.first.humanize, learning.first]},
+                        prompt:"Select learning type",
+                        value: @learning_hour.learning_type,
+                        selected: @learning_hour.learning_type %>
+      </div>
+    </div>
   </div>
-  <div class="field form-group field-card duration mt-4">
-    <h5 class="mb-4">Learning Duration</h5>
-      <div class="form-group duration-hours inline-fields">
+  <div class="field-card duration mt-4">
+    <h5 class="mb-3">Learning Duration</h5>
+      <div class="input-style-1 duration-hours">
+        <%= form.label :duration_hours, "Hour(s)" %>
         <%= form.number_field :duration_hours,
                             id: "learning-hours-duration-hours-display",
                             min: 0,
-                            class: "inline-fields cc-field",
+                            class: "cc-field",
                             size: "10",
                             value: @learning_hour.duration_hours,
-                            required: true %> &nbsp; <span class="label-font-weight"> hour(s)</span>
+                            placeholder: "1",
+                            required: true %>
       </div>
-      <div class="inline-fields pr-7">and</div>
-      <div class="form-group duration-minutes inline-fields">
+      <div class="input-style-1 duration-minutes">
+        <%= form.label :duration__minutes, "Minute(s)" %>
         <%= form.number_field :duration_minutes,
                             id: "learning-minutes-duration-hours-display",
                             min: 0,
-                            class: "inline-fields cc-field",
+                            class: "cc-field",
                             size: "10",
                             value: @learning_hour.duration_minutes,
-                            required: true %> &nbsp; <span class="label-font-weight"> minute(s)</span>
+                            placeholder: "10",
+                            required: true %>
       </div>
   </div>
-  <div class="field field-card form-group mt-4">
-    <h5><%= form.label :occurred_at, "Occurred On" %>:</h5>
+  <div class="field-card mt-4">
+    <h5 class="mb-3"><%= form.label :occurred_at, "Occurred On" %>:</h5>
     <% occurred_at = @learning_hour.occurred_at || Time.zone.now %>
-    <%= form.text_field :occurred_at,
-                        id:"learning-occurred-at",
-                        value: occurred_at.to_date,
-                        data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
-                        class: "form-control label-font-weight" %>
+    <div class="input-style-1">
+      <%= form.text_field :occurred_at,
+                          id:"learning-occurred-at",
+                          value: occurred_at.to_date,
+                          data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
+                          class: "form-control label-font-weight" %>
+    </div>
   </div>
-  <div class="actions">
-    <%= form.submit @learning_hour.persisted? ? "Edit Learning Hours Entry" : "Create New Learning Hours Entry",
-class: "wide_button btn btn-primary" %>
+  <div class="actions mt-3">
+    <%= button_tag(
+      type: "submit",
+      class: "main-btn primary-btn btn-hover btn-sm wide_button"
+    ) do %>
+      <i class="lni lni-check-box mr-10"></i><%= @learning_hour.persisted? ? "Edit Learning Hours Entry" : "Create New Learning Hours Entry" %>
+    <% end %>
   </div>
-
 <% end %>

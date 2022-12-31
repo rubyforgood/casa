@@ -13,10 +13,16 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" id="modal-learning-hours-cancel">
-          Go Back to Form
+        <button type="button" class="btn-sm main-btn light-btn-outline btn-hover" data-dismiss="modal" id="modal-learning-hours-cancel">
+          <i class="lni lni-arrow-left mr-10"></i>Go Back to Form
         </button>
-        <%= form.submit "Continue Submitting", class: "btn btn-primary", id: "modal-learning-hours-submit" %>
+        <%= button_tag(
+          type: "submit",
+          class: "main-btn primary-btn btn-hover btn-sm",
+          id: "modal-learning-hours-submit"
+        ) do %>
+          <i class="lni lni-checkmark-circle mr-10"></i>Continue Submitting
+        <% end %>
       </div>
     </div>
   </div>
