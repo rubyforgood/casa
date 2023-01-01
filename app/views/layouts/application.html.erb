@@ -76,9 +76,16 @@
     </p>
   </div>
 </noscript>
-<%= render 'layouts/sidebar' %>
+<% if all_casa_admin_signed_in? %>
+  <%= render 'layouts/all_casa_admin_sidebar' %>
+<% else %>
+  <%= render 'layouts/sidebar' %>
+<% end %>
 <main class="main-wrapper">
-  <%= render 'layouts/header' %>
+  <% if all_casa_admin_signed_in? %>
+<% else  %>
+<%= render 'layouts/header' %>
+<% end %>
 
   <!-- ========== section start ========== -->
   <section class="section">
