@@ -1,66 +1,85 @@
-<br>
-<h1>New Fund Request</h1>
-<br>
-<div class="card card-container">
-  <div class="card-body">
-    <%= form_with(model: @form_request, local: true, url: casa_case_fund_request_path(@casa_case), method: :post) do |form| %>
+<div class="pt-30">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="mb-30">
+        <h2>New Fund Request</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== card start ========== -->
+<div class="card-style mb-50">
+  <%= form_with(model: @form_request, local: true, url: casa_case_fund_request_path(@casa_case), method: :post) do |form| %>
+    <div class="input-style-1">
       <%= form.label "Your email", for: :submitter_email %>
       <%= form.text_field :submitter_email, class: "form-control", required: true, value: current_user.email %>
+    </div>
 
-      <br>
+    <div class="input-style-1">
       <%= form.label "Name or case number of youth", for: :youth_name %>
       <%= form.text_field :youth_name, class: "form-control", required: false, value: @casa_case&.case_number %>
+    </div>
 
-      <br>
+    <div class="input-style-1">
       <%= form.label "Amount of payment*", for: :payment_amount %>
       <%= form.text_field :payment_amount, class: "form-control", required: false %>
+    </div>
 
-      <br>
+    <div class="input-style-1">
       <%= form.label "Deadline / date needed", for: :deadline %>
       <%= form.text_field :deadline, class: "form-control", required: false %>
+    </div>
 
-      <br>
+    <div class="input-style-1">
       <%= form.label "Request is for...", for: :request_purpose %>
       <%= form.text_area :request_purpose, class: "form-control", required: false %>
+    </div>
 
-      <br>
+    <div class="input-style-1">
       <%= form.label "Name of payee**", for: :payee_name %>
       <%= form.text_field :payee_name, class: "form-control", required: false %>
+    </div>
 
-      <br>
+    <div class="input-style-1">
       <%= form.label "Requested by & relationship to youth", for: :requested_by_and_relationship %>
       <%= form.text_field :requested_by_and_relationship, class: "form-control", required: false,
 value: "#{current_user.display_name} CASA Volunteer" %>
+    </div>
 
-      <br>
+    <div class="input-style-1">
       <%= form.label "Other source of funding available/sought please include status of these
 requests, if applicable.", for: :other_funding_source_sought %>
       <%= form.text_area :other_funding_source_sought, class: "form-control", required: false %>
+    </div>
 
-      <br>
+    <div class="input-style-1">
       <%= form.label "How will this funding positively impact the personal goals or aspirations of
 the youth? If this is for emergency funding, please share any support that is
 or can be in place to maintain stability or alleviate the emergency moving
 forward. If funding is for a program or a service, please describe how this will
 support the youth in the short or long-term.", for: :impact %>
       <%= form.text_area :impact, class: "form-control", required: false %>
+    </div>
 
-      <br>
+    <div class="input-style-1">
       <%= form.label "Please use this space if it is necessary/helpful to provide additional information
 that will assist us in understanding the need and making a decision.", for: :extra_information %>
       <%= form.text_area :extra_information, class: "form-control", required: false %>
+    </div>
 
-      <br>
-      <%= form.submit "Submit Fund Request", class: "btn btn-primary", required: false %>
+    <%= button_tag(type: "submit", class: "btn-sm main-btn primary-btn btn-hover", required: false) do %>
+      <i class="lni lni-checkmark-circle mr-10"></i> Submit Fund Request
     <% end %>
-    <br>
-    * Please provide all documentation available for the requested expense (brochure,
-    receipt, estimate, invoice, proof of online enrollment information, etc.). If
-    additional funds have been secured, please provide evidence of the funding
-    commitment (an email, a partial payment on a bill, etc).
-    <br>
-    **Payment will be made directly to the vendor for all services. If the payment
-    must be made directly to the youth, please be sure to include why this is the
-    preferred method of payment.
-  </div>
+  <% end %>
+  <br>
+  * Please provide all documentation available for the requested expense (brochure,
+  receipt, estimate, invoice, proof of online enrollment information, etc.). If
+  additional funds have been secured, please provide evidence of the funding
+  commitment (an email, a partial payment on a bill, etc).
+  <br>
+  **Payment will be made directly to the vendor for all services. If the payment
+  must be made directly to the youth, please be sure to include why this is the
+  preferred method of payment.
 </div>
+<!-- card end -->
