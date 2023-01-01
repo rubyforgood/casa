@@ -1,35 +1,36 @@
 <div class="row">
-  <div class="col-lg-5 col-md-12 vertically-center">
+  <div class="col-lg-9 col-md-12 vertically-center">
     <div class="container">
       <div class="row">
-        <div class="offset-xl-2 col-xl-8 col-lg-12 col-sm-8 col-md-8">
-          <br>
-          <h2>Forgot your password?</h2>
-          <br>
+        <div class="offset-xl-2 col-xl-8 col-lg-12 col-sm-8 col-md-8 pb-4">
+          <h2 class="my-4">Forgot your password?</h2>
 
           <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: {method: :post}) do |f| %>
             <%= render "/shared/error_messages", resource: resource %>
 
-            <h4>Please enter email or phone number to recieve reset instructions.</h4>
+            <h4 class="mb-3">Please enter email or phone number to recieve reset instructions.</h4>
 
-            <div class="field form-group">
-              <%= f.label :email %><br>
-              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+            <div class="input-style-1">
+              <%= f.label :email %>
+              <%= f.email_field :email, placeholder: "Email", autofocus: true, autocomplete: "email" %>
             </div>
 
-            <div class="field form-group">
-              <%= f.label :phone_number %><br>
-              <%= f.text_field :phone_number, autofocus: true, autocomplete: "phone number", class: "form-control" %>
+            <div class="input-style-1">
+              <%= f.label :phone_number %>
+              <%= f.text_field :phone_number, placeholder: "Phone Number", autofocus: true, autocomplete: "phone number" %>
             </div>
 
-            <div class="actions">
-              <%= f.submit "Send me reset password instructions", class: "btn btn-primary" %>
+            <div class="actions my-2">
+              <%= button_tag(
+                type: "submit",
+                class: "main-btn primary-btn btn-hover btn-sm"
+              ) do %>
+                <i class="lni lni-telegram-original mr-10"></i>Send me reset password instructions
+              <% end %>
             </div>
           <% end %>
 
-          <br>
           <%= render "devise/shared/links" %>
-          <br>
         </div>
       </div>
     </div>

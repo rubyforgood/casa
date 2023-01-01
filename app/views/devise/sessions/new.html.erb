@@ -23,7 +23,9 @@
         </div>
         <div class="col-12">
           <div class="input-style-1">
-            <%= link_to "Forgot your password?", new_password_path(resource_name), class: "hover-underline" %>
+            <%= link_to new_password_path(resource_name), class: "hover-underline" do %>
+              <i class="lni lni-lock mr-10"></i>Forgot your password?
+            <% end %>
           </div>
         </div>
         <!-- end col -->
@@ -49,7 +51,8 @@
                             d-flex
                             justify-content-center
                             flex-wrap
-                          ">
+                          "
+          >
             <%= f.submit "Log In", class: "main-btn primary-btn btn-hover w-100 text-center" %>
       <% end %>
       <div class="col-xxl-6 col-lg-12 col-md-6">
