@@ -1,24 +1,29 @@
-<div class="password-box">
-  <h2>Send invitation</h2>
+<div class="password-box px-4 pb-3">
+  <h2 class="my-3">Send invitation</h2>
 
   <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: {method: :put}) do |f| %>
     <%= render "/shared/error_messages", resource: resource %>
     <%= f.hidden_field :invitation_token, readonly: true %>
 
     <% if f.object.class.require_password_on_accepting %>
-      <div class="field">
-        <%= f.label :password %><br>
-        <%= f.password_field :password, required: true %>
+      <div class="input-style-1">
+        <%= f.label :password %>
+        <%= f.password_field :password, placeholder: "Password", required: true %>
       </div>
 
-      <div class="field">
-        <%= f.label :password_confirmation %><br>
-        <%= f.password_field :password_confirmation, required: true %>
+      <div class="input-style-1">
+        <%= f.label :password_confirmation %>
+        <%= f.password_field :password_confirmation, placeholder: "Password Confirmation", required: true %>
       </div>
     <% end %>
 
-    <div class="actions">
-      <%= f.submit "Set my password" %>
+    <div class="actions mt-3">
+      <%= button_tag(
+        type: "submit",
+        class: "main-btn primary-btn btn-hover btn-sm"
+      ) do %>
+        <i class="lni lni-lock-alt mr-10"></i></i>Set my password
+      <% end %>
     </div>
   <% end %>
 </div>

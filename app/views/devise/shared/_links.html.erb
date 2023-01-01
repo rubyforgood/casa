@@ -1,5 +1,8 @@
 <%- if controller_name != 'sessions' %>
-  <%= link_to "Log in", new_session_path(resource_name), class: "btn btn-info" %><br>
+  <%= link_to new_session_path(resource_name), class: "btn-sm main-btn info-btn btn-hover" do %>
+    <i class="lni lni-chevron-right-circle mr-10"></i>Log in
+  <% end %>
+  <br>
 <% end %>
 
 <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
@@ -7,7 +10,7 @@
 <% end %>
 
 <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-  <%= link_to "Forgot your password?", new_password_path(resource_name), class: 'btn btn-outline-primary' %><br>
+  <%= link_to "Forgot your password?", new_password_path(resource_name), class: 'btn-sm main-btn primary-btn-outline btn-hover' %><br>
 <% end %>
 
 <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
