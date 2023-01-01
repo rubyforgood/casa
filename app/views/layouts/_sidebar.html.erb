@@ -1,6 +1,6 @@
 <aside class="sidebar-nav-wrapper">
   <div class="navbar-logo">
-    <% if all_casa_admin_signed_in? || !current_organization&.logo&.attached? %>
+    <% if !current_organization&.logo&.attached? %>
       <%= link_to image_tag("default-logo.png",
                             id: "casa-logo",
                             alt: "CASA Logo",
