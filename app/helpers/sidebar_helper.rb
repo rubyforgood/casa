@@ -11,7 +11,7 @@ module SidebarHelper
     "Inbox <span class='badge badge-danger'>#{unread_count}</span>".html_safe
   end
 
-  def menu_item(label:, path:, visible: true)
+  def menu_item(label:, path:, visible: false)
     link_to label, path, class: "list-group-item #{active_class(path)}" if visible
   end
 
