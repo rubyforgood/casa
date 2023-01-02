@@ -27,7 +27,9 @@
     </div>
 
     <div class="actions mb-10">
-      <%= form.submit "Submit", class: "main-btn primary-btn btn-hover" %>
+      <%= button_tag( type: "submit" , class: "btn-sm main-btn primary-btn btn-hover" ) do %>
+        <i class="lni lni-checkmark-circle mr-5"></i> Submit
+      <% end %>
     </div>
   <% end %>
 </div>

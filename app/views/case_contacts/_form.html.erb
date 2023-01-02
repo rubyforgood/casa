@@ -233,9 +233,10 @@ readonly: true %>
     </div>
   </div>
 
-  <div class="actions">
-    <%= form.submit "Submit", class: "main-btn btn-sm primary-btn btn-hover", id: "case-contact-submit",
-"data-target": "#confirm-submit" %>
+  <div class="actions mb-10">
+    <%= button_tag( type: "submit" , class: "btn-sm main-btn primary-btn btn-hover" ) do %>
+      <i class="lni lni-checkmark-circle mr-5"></i> Submit
+      <% end %>
   </div>
   <%= render 'confirm_note_content_dialog', form: form %>
   <% end %>
