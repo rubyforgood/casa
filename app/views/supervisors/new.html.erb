@@ -3,7 +3,6 @@
     <h2>Create New Supervisor</h2>
   </div>
 </div>
-
 <div class="card card-container">
   <div class="card-body">
     <%= form_with model: @supervisor, local: true, url: supervisors_path do |form| %>
@@ -12,20 +11,29 @@
         <%= form.label :email, "Email" %>
         <%= form.text_field :email, class: "form-control" %>
       </div>
-
       <div class="input-style-1">
         <%= form.label :display_name, "Display name" %>
         <%= form.text_field :display_name, class: "form-control" %>
       </div>
-
       <div class="input-style-1">
         <%= form.label :phone_number, "Phone number" %>
         <%= form.telephone_field :phone_number, class: "form-control" %>
       </div>
-
+      <div class="actions mb-10">
+        <%= button_tag(
+            type: "submit",
+            class: "main-btn primary-btn btn-hover mb-3"
+          ) do %>
+          Create Supervisor <i class="lni lni-plus ml-5"></i>
+        <% end %>
+      </div>
+      <%
+=begin%>
       <div class="actions">
         <%= form.submit "Create Supervisor", class: "main-btn primary-btn btn-hover" %>
       </div>
+      <%
+=end%>
     <% end %>
   </div>
 </div>
