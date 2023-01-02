@@ -35,19 +35,19 @@
           </div>
         </div>
       </div>
-      <div class="d-flex justify-content-between">
+      <div class="d-flex justify-content-between align-items-center">
         <% if Pundit.policy(current_user, contact).update? %>
           <%= render "case_contacts/followup", contact: contact, followup: contact.requested_followup %>
           <div class="mr-2">
-            <%= link_to edit_case_contact_path(contact), class: "main-btn primary-btn-outline btn-hover" do %>
-              <strong>Edit</strong>
+            <%= link_to edit_case_contact_path(contact), class: "text-danger h5" do %>
+              <i class="lni lni-pencil-alt"></i> Edit
             <% end %>
           </div>
         <% end %>
         <div class="">
         <div class="">
           <%= link_to("Delete", case_contact_path(contact.id), method: :delete,
-                class: "main-btn danger-btn btn-hove") if policy(contact).destroy? && !contact.deleted? %>
+                class: "main-btn btn-sm danger-btn btn-hover") if policy(contact).destroy? && !contact.deleted? %>
         </div>
       </div>
       </div>

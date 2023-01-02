@@ -70,7 +70,7 @@
         <%= form.text_field :occurred_at,
                             value: occurred_at.to_date,
                             data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
-                            class: "" %>
+                            class: "card-style-1" %>
       </div>
     </div>
     
@@ -111,7 +111,7 @@
       <% end %>
       </div>
     </div>
-<!--          Add styling to here         -->
+<!--          Add styling to here, but can't see what it looks like         -->
     <% if current_organization.show_driving_reimbursement %>
       <div class="field want-driving-reimbursement form-group">
         <h5 class="mb-3"><%= form.label :want_driving_reimbursement, "b. Want Driving Reimbursement" %></h5>
@@ -148,8 +148,8 @@
           end
         %>
         <% if message %>
-        <!--          TODO        -->
-          <%= form.text_field :no_address_content, class: "input-style-1l red-letter", value: message, disabled: true,
+        <!--          TODO what does this look like?????        -->
+          <%= form.text_field :no_address_content, class: "input-style-1 red-letter", value: message, disabled: true,
 readonly: true %>
         <% else %>
           <%= form.fields_for :casa_case, casa_cases[0] do |cc| %>
@@ -163,7 +163,7 @@ readonly: true %>
         </div>
       </div>
     <% end %>
-<!--          TODO          -->
+<!--          TODO what does this look like????          -->
     <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
       <div class="other-expenses">
         <h5><%= form.label :additional_expense, "c. Other Expenses" %></h5>
@@ -222,7 +222,7 @@ readonly: true %>
     <div class="notes-header">
       <h2 class="mb-3"><%= form.label :notes, "5. Enter Notes" %></h2>
       
-      <button id="open-highlight-modal" class="mb-3 main-btn primary-btn-outline btn-hover" data-toggle="modal" data-target="#visibleColumns">+ Highlight</button>
+      <button id="open-highlight-modal" class="mb-3 btn-sm main-btn secondary-btn-outline btn-hover" data-toggle="modal" data-target="#visibleColumns">+ Highlight</button>
       
     </div>
     <div class="cc-italic mb-3">
@@ -234,7 +234,7 @@ readonly: true %>
   </div>
 
   <div class="actions">
-    <%= form.submit "Submit", class: "main-btn primary-btn btn-hover", id: "case-contact-submit",
+    <%= form.submit "Submit", class: "main-btn btn-sm primary-btn btn-hover", id: "case-contact-submit",
 "data-target": "#confirm-submit" %>
   </div>
   <%= render 'confirm_note_content_dialog', form: form %>
@@ -245,8 +245,8 @@ readonly: true %>
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="caseContactHighlightLabel">Highlight</h5>
-        <!--Highlight X CLOSE Does Not Work-->
-        <button type="button" class="h2 close bg-white border-0" data-dismiss="modal" aria-label="Close">
+       
+        <button type="button" class="h2 btn-sm close bg-white border-0" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -254,8 +254,8 @@ readonly: true %>
         Coming Soon.
       </div>
       <div class="modal-footer">
-        <!--Highlight CLOSE Button Does Not Work-->
-        <button type="button" class="main-btn primary-btn btn-hover" data-dismiss="modal">Close</button>
+       
+        <button type="button" class="btn-sm main-btn primary-btn btn-hover" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
