@@ -44,16 +44,14 @@
             <% end %>
           </div>
         <% end %>
-        <div class="">
         <div class="action">
-        <!----- Couldn't find away to include this conditional block
+        <!----- Couldn't find a way to include this conditional block
                 if policy(contact).destroy? && !contact.deleted? 
                 in the link_to below                            ----->
          <%= link_to case_contact_path(contact.id), class: "main-btn btn-sm danger-btn btn-hover", method: :delete  do %>
           <i class="lni lni-trash-can mr-5"></i>Delete
         <% end %>
         </div>
-      </div>
       </div>
 
     </div>
