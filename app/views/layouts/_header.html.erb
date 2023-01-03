@@ -6,8 +6,7 @@
           <div class="menu-toggle-btn mr-20">
             <button
               id="menu-toggle"
-              class="main-btn secondary-btn btn-hover"
-            >
+              class="main-btn secondary-btn btn-hover">
               <i class="lni lni-chevron-left me-2"></i> Menu
             </button>
           </div>
@@ -26,8 +25,7 @@
                 type="button"
                 id="message"
                 data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
+                aria-expanded="false">
 
                 <i class="lni lni-envelope"></i>
                 <% notifications = current_user.notifications.unread.count %>
@@ -35,7 +33,7 @@
                   <span><%= notifications %></span>
                 <% end %>
               </button>
-            <%end %>
+            <% end %>
 
           </div>
 
@@ -45,17 +43,14 @@
               type="button"
               id="profile"
               data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+              aria-expanded="false">
               <div class="profile-info">
                 <div class="info">
                   <h6><%= current_user.display_name %>
                   </h6>
                   <div class="image">
                     <img
-                      src=<%= "/assets/images/profile/profile-image-#{rand(8) + 1}.png" %>
-                        alt=""
-                      />
+                      src=<%= "/assets/images/profile/profile-image-#{rand(8) + 1}.png" %>>
                   </div>
                 </div>
               </div>
@@ -63,8 +58,7 @@
             </button>
             <ul
               class="dropdown-menu dropdown-menu-end"
-              aria-labelledby="profile"
-            >
+              aria-labelledby="profile">
               <li>
                 <a href="#0">
                   <strong>Role: <%= current_role %></strong>

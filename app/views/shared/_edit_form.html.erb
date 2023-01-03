@@ -1,7 +1,7 @@
 <div class="input-style-1">
   <%= f.label :email, "Email" %>
   <% if policy(resource).update_user_setting? %>
-    <%= f.text_field :email%>
+    <%= f.text_field :email %>
   <% else %>
     <input type="text" placeholder="<%= resource.email %>" autocomplete="off" readonly>
   <% end %>
@@ -10,7 +10,7 @@
 <div class="input-style-1">
   <%= f.label :display_name, "Display name" %>
   <% if policy(resource).update_user_setting? %>
-    <%= f.text_field :display_name%>
+    <%= f.text_field :display_name %>
   <% else %>
     <input type="text" placeholder="<%= resource.display_name %>" autocomplete="off" readonly>
   <% end %>
