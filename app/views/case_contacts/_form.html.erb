@@ -63,7 +63,7 @@
     </div>
 
     <div class="pr-50">
-      
+
       <h5 class="mb-3"><%= form.label :occurred_at, "c. Occurred On" %></h5>
       <div class="input-style-1">
         <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
@@ -73,7 +73,7 @@
                             class: "card-style-1" %>
       </div>
     </div>
-    
+
     <div class="pr-50 ">
       <h5 class="mb-3"><label for="case_contact_casa_case">d. Duration of Meeting</label></h5>
       <div class="row align-items-center">
@@ -99,11 +99,11 @@
     </div>
   </div>
 
-  <div class="card-style-1 pl-25 mb-10">
+  <div class="card-style-1 pl-25 mb-10 pr-50">
     <h2 class="mb-3"><label for="case_contact_casa_case">4. Enter Travel Details</label></h2>
     <div class="field miles-driven form-group">
       <h5 class="mb-3"><%= form.label :miles_driven, "a. Miles Driven" %></h5>
-      <div class="input-style-1 pr-50">
+      <div class="input-style-1">
       <% if form_type == 'new' && @case_contact.miles_driven == 0 %>
         <input class="form-control" min="0" max="10000" type="number" value="0" name="case_contact[miles_driven]" autocomplete="off" id="case_contact_miles_driven">
       <% else %>
@@ -111,7 +111,7 @@
       <% end %>
       </div>
     </div>
-<!--          Add styling to here, but can't see what it looks like         -->
+
     <% if current_organization.show_driving_reimbursement %>
       <div class="field want-driving-reimbursement form-group">
         <h5 class="mb-3"><%= form.label :want_driving_reimbursement, "b. Want Driving Reimbursement" %></h5>
@@ -132,7 +132,7 @@
       </div>
       <div class="field volunteer-address form-group">
         <h5 class="mb-3"><%= form.label :volunteer_address, "c. Volunteer Address" %></h5>
-        <div class="input-style-1 pr-50">
+        <div class="input-style-1 mb-0">
         <%
           if current_role == "Volunteer"
             volunteer = current_user
@@ -148,7 +148,7 @@
           end
         %>
         <% if message %>
-        <!--          TODO what does this look like?????        -->
+
           <%= form.text_field :no_address_content, class: "input-style-1 red-letter", value: message, disabled: true,
 readonly: true %>
         <% else %>
@@ -163,57 +163,71 @@ readonly: true %>
         </div>
       </div>
     <% end %>
-<!--          TODO what does this look like????          -->
+
     <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
       <div class="other-expenses">
-        <h5><%= form.label :additional_expense, "c. Other Expenses" %></h5>
+        <h5 class="mb-3"><%= form.label :additional_expense, "d. Other Expenses" %></h5>
         <ol>
         <% @case_contact.decorate.additional_expenses_count %>
         <% if @case_contact.additional_expenses.any? %>
           <%= form.fields_for :additional_expenses do |ff| %>
             <li>
-            <div class="expense-container">
-              <%= ff.number_field :other_expense_amount,
-              placeholder: "Enter amount",
-              class: "cc-italic cc-field other-expense-amount",
-              min: "0", max: 1000, step: 0.01 %>
-              <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
-              class: "cc-italic cc-field other-expenses-describe" %>
-            </div>
+              <div class="row align-items-center">
+                <div class="col input-style-1">
+                  <%= ff.number_field :other_expense_amount,
+                  placeholder: "Enter amount",
+                  class: "cc-italic cc-field other-expense-amount w-25 input-style-1 co",
+                  min: "0", max: 1000, step: 0.01 %>
+                </div>
+                <div class="col input-style-1">
+                  <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
+                  class: "cc-italic cc-field other-expenses-describe input-style-1" %>
+                </div>
+              </div>
             </li>
           <% end %>
         <% end %>
         <% if @case_contact.decorate.additional_expenses_count < 10 %>
           <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
           <li>
-          <div class="expense-container">
-            <%= ff.number_field :other_expense_amount,
-            placeholder: "Enter amount",
-            class: "cc-italic cc-field other-expense-amount",
-            min: "0", max: 1000, step: 0.01 %>
-            <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
-            class: "cc-italic cc-field other-expenses-describe" %>
-          </div>
+            <div class="expense-container row">
+              <div class="input-style-1 col-sm-3">
+                <%= ff.number_field :other_expense_amount,
+                    placeholder: "Enter amount",
+                    class: "cc-italic cc-field other-expense-amount",
+                    min: "0", max: 1000, step: 0.01 %>
+              </div>
+              <div class="input-style-1 col">
+                <%= ff.text_field :other_expenses_describe,
+                    placeholder: "Describe the expense",
+                    class: "cc-italic cc-field other-expenses-describe" %>
+              </div>
+            </div>
           </li>
           <% end %>
           <% (9 - @case_contact.decorate.additional_expenses_count).times do |i| %>
             <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
-            <div class="expense-container" id="<%= if @case_contact.decorate.additional_expenses_count === 0
+            <div class="expense-container row" id="<%= if @case_contact.decorate.additional_expenses_count === 0
             then "expense" + (i + 2).to_s
             else "expense" + ((@case_contact.decorate.additional_expenses_count) + (i + 2)).to_s
             end %>">
-              <%= ff.number_field :other_expense_amount,
-              placeholder: "Enter amount",
-              class: "cc-italic cc-field other-expense-amount hide-field",
-              min: "0", max: 1000, step: 0.01 %>
-              <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
-              class: "cc-italic cc-field other-expenses-describe hide-field" %>
+              <div class="input-style-1 col-sm-3">
+                <%= ff.number_field :other_expense_amount,
+                    placeholder: "Enter amount",
+                    class: "cc-italic cc-field other-expense-amount hide-field",
+                  min: "0", max: 1000, step: 0.01 %>
+              </div>
+              <div class="input-style-1 col">
+                <%= ff.text_field :other_expenses_describe,
+                    placeholder: "Describe the expense",
+                    class: "cc-italic cc-field other-expenses-describe hide-field" %>
+              </div>
             </div>
             <% end %>
           <% end %>
           </ol>
 
-          <a class="add-another-expense add-expense-link pr-9" id="add-another-expense">Add Another Expense</a>
+          <button class="mb-3 btn-sm main-btn secondary-btn-outline btn-hover" id="add-another-expense">+ Add Another Expense</button>
           <% end %>
       </div>
     <% end %>
@@ -221,9 +235,9 @@ readonly: true %>
   <div class="card-style-1 pl-25 mb-10">
     <div class="notes-header">
       <h2 class="mb-3"><%= form.label :notes, "5. Enter Notes" %></h2>
-      
+
       <button id="open-highlight-modal" class="mb-3 btn-sm main-btn secondary-btn-outline btn-hover" data-toggle="modal" data-target="#visibleColumns">+ Highlight</button>
-      
+
     </div>
     <div class="cc-italic mb-3">
       Please refer to individuals by their roles instead of by their names. Ex: My supervisor joined me for a call with the social worker to discuss my youth.
@@ -246,7 +260,7 @@ readonly: true %>
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="caseContactHighlightLabel">Highlight</h5>
-       
+
         <button type="button" class="h2 btn-sm close bg-white border-0" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -255,7 +269,7 @@ readonly: true %>
         Coming Soon.
       </div>
       <div class="modal-footer">
-       
+
         <button type="button" class="btn-sm main-btn primary-btn btn-hover" data-dismiss="modal">Close</button>
       </div>
     </div>

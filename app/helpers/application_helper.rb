@@ -25,7 +25,7 @@ module ApplicationHelper
   def session_signout_link
     if user_signed_in?
       destroy_user_session_path
-      elsif all_casa_admin_signed_in?
+    elsif all_casa_admin_signed_in?
       destroy_all_casa_admin_session_path
     end
   end

@@ -10,7 +10,8 @@ class StaticController < ApplicationController
     redirect_to dashboard_path_from_current_role if current_user
   end
 
-  def register; end
+  def register
+  end
 
   def page
     # This allows for a flexible addition of static content
