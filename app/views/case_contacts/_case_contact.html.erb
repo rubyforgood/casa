@@ -1,11 +1,11 @@
-<div class="card">
-  <div class="card-body">
-    <div class="row d-flex justify-content-between no-gutters">
+<div class="container-fluid mb-1">
+  <div class="card-style-1 mb-15 pt-0 pb-5">
+    <div class="card-content">
       <div class="col-8">
-        <div class="media">
-          <i class="mt-1 mr-3 <%= "text-primary" %> <%= contact.decorate.medium_icon_classes %>"></i>
-          <div class="media-body">
-            <h5 class="mt-0 card-title">
+        <div class="mt-0">
+          <i class=" <%= "text-primary" %> <%= contact.decorate.medium_icon_classes %>"></i>
+          <div class="">
+            <h5 class="pt-0 mb-10 card-title">
               <strong class="<%= "text-primary" %>">
                 <%= "[DELETE] " if policy(contact).restore? && contact.deleted? %>
                 <%= contact.contact_groups_with_types.keys.join(", ") %>
@@ -18,7 +18,7 @@
               <br>
               <%= contact.decorate.subheading %>
             </h6>
-            <div class="card-text js-read-more-text-wrapper">
+            <div class="card-text js-read-more-text-wrapper mb-2">
               <% if contact.notes && contact.notes.length > CaseContactDecorator::NOTES_CHARACTER_LIMIT %>
                 <div class="js-truncated-text" style="display: block;">
                   <%= simple_format(contact.decorate.limited_notes) %>
@@ -35,27 +35,28 @@
           </div>
         </div>
       </div>
-      <div class="d-flex justify-content-between">
+      <div class="d-flex justify-content-between align-items-center">
         <% if Pundit.policy(current_user, contact).update? %>
           <%= render "case_contacts/followup", contact: contact, followup: contact.requested_followup %>
           <div class="mr-2">
-            <%= link_to edit_case_contact_path(contact), class: "btn btn-outline-primary" do %>
-              <strong>Edit</strong>
+            <%= link_to edit_case_contact_path(contact), class: "text-danger h5" do %>
+              <i class="lni lni-pencil-alt"></i> Edit
             <% end %>
           </div>
         <% end %>
-        <div class="">
-        <div class="">
-          <%= link_to("Delete", case_contact_path(contact.id), method: :delete,
-                class: "btn btn-danger") if policy(contact).destroy? && !contact.deleted? %>
+        <div class="action">
+        <% if policy(contact).destroy? && !contact.deleted? %>
+         <%= link_to case_contact_path(contact.id), class: "main-btn btn-sm danger-btn btn-hover", method: :delete  do %>
+          <i class="lni lni-trash-can mr-5"></i>Delete
+        <% end %>
+        <% end %>
         </div>
-      </div>
       </div>
 
     </div>
   </div>
   <div>
-    <h6 class="card-subtitle mb-2 text-primary float-right mr-2">
+    <h6 class="mb-2 text-primary ml-5">
       Created by:
       <% if policy(contact).edit? %>
         <% if current_user.volunteer? %>

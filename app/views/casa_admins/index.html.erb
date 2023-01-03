@@ -4,12 +4,15 @@
       <div class="col-md-6">
         <div class="title mb-10">
           <h1>Admins</h1>
-          <%= link_to "New Admin", new_casa_admin_path, class: "main-btn primary-btn btn-hover mt-30" %>
+          <%= link_to new_casa_admin_path, class: "main-btn mt-2 mb-2 secondary-btn btn-sm btn-hover" do %>
+            <i class="lni lni-plus mr-10"></i>
+            New Admin
+          <% end %>
         </div>
       </div>
     </div>
   </div>
-    <!-- end col -->   
+    <!-- end col -->
   <div class="tables-wrapper">
     <div class="row">
       <div class="col-lg-12">
@@ -31,11 +34,13 @@
                     <span class="status-btn close-btn">
                       Deactivated
                     </span>
-                  <% end %>       
+                  <% end %>
                 </td>
                 <td class="min-width">
                   <span class="ml-10 mb-10 mt-10 pb-1">
-                  <%= link_to "Edit", edit_casa_admin_path(admin) %>
+                  <%= link_to edit_casa_admin_path(admin), class: "text-danger h5" do %>
+                    <i class="lni lni-pencil-alt"></i> Edit
+                  <% end %>
                   </span>
                 </td>
               </tr>

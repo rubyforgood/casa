@@ -1,16 +1,24 @@
 <div class="row">
   <%= render "casa_cases/thank_you_modal" %>
-
-  <div class="col-sm-12 dashboard-table-header">
-    <h1>Case Contacts</h1>
-    <%= link_to "New Case Contact", new_case_contact_path, class: "btn btn-primary" %>
+  <div class="title-wrapper pt-30">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <div class="title">
+          <h1 class="mb-10">Case Contacts</h1>
+          <%= link_to new_case_contact_path, class: "main-btn secondary-btn btn-sm btn-hover" do %>
+            <i class="lni lni-plus mr-10"></i>
+            New Case Contact
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <%= form_for_filterrific @filterrific do |f| %>
-  <div class="card my-4">
-    <div class="card-header d-flex justify-content-between align-items-end">
-      <h3 class="d-inline">Filter by</h3>
+  <div class="card-style my-4">
+    <div class="card-content d-flex justify-content-between align-items-end">
+      <div class="h4 btn-lg">Filter by</div>
       <button href="#"
               class="btn btn-lg btn-link"
               type="button"
@@ -18,39 +26,39 @@
               data-target="#filter-card-body"
               aria-expanded="<%= params[:filterrific].present? %>>"
               aria-controls="filter-card-body">
-        Show / Hide
+        <div class="h4">Show / Hide</div>
       </button>
     </div>
 
     <% collapse_class = params[:filterrific] ? "" : "collapse" %>
-    <div class="card-body <%= collapse_class %>" id="filter-card-body">
-      <div class="row mb-4">
+    <div class="card-content mb-10 ml-20 <%= collapse_class %>" id="filter-card-body">
+      <div class="row">
         <div class="col-12">
-          <h3><label>Date of contact</label></h3>
+          <h3 class="mt-10"><label>Date of contact</label></h3>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-6 input-style-1">
           <%= f.label "Starting from", for: :occurred_starting_at %>
           <%= f.text_field(:occurred_starting_at, data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
-                                                  class: "form-control") %>
+                                                  class: "") %>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-6 input-style-1">
           <%= f.label "Ending at", for: :occurred_until %>
           <%= f.text_field(:occurred_ending_at, data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
-                                                  class: "form-control") %>
+                                                  class: "") %>
         </div>
       </div>
 
       <div class="row mb-4">
         <div class="col-12">
-          <h3><label>Contact types</label></h3>
+          <h3 class="mb-4"><label>Contact types</label></h3>
 
-          <div id="contact-type-form" class="field contact-type form-group">
+          <div id="contact-type-form" class="">
             <div class="row">
               <% @current_organization_groups.each do |group| %>
-                <div class="col-md-4 justify-content-start mb-4">
-                  <h5> <%= group.name %> </h5>
+                <div class="col-md-4 justify-content-start pb-5">
+                  <h5 class="mb-1"> <%= group.name %> </h5>
                   <% group.contact_types.each do |contact_type| %>
-                    <div class="form-check">
+                    <div class="form-check checkbox-style">
                       <%=
                         f.check_box :contact_type,
                           {multiple: true, class: "form-check-input case-contact-contact-type"},
@@ -69,59 +77,61 @@
         </div>
       </div>
 
-      <div class="row mb-4 align-items-end">
+      <div class="row align-items-end select-style-1 mb-10">
         <div class="col-12">
-          <h3><label>Other filters</label></h3>
+          <h3>Other filters</h3>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6 select-position pr-5">
           <%= f.label :contact_medium %>
           <%= f.select(:contact_medium, options_from_collection_for_select(contact_mediums, "value", "label"),
                                         {include_blank: "Display all"},
-                                        {class: "form-control"}) %>
+                                        {class: "select-style-1"}) %>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 select-position pr-5">
           <%= f.label :want_driving_reimbursement %>
           <%= f.select(:want_driving_reimbursement, @presenter.boolean_select_options,
                                                     {include_blank: "Display all"},
-                                                    {class: "form-control"}) %>
+                                                    {class: "select-style-1"}) %>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-3 select-position pr-5">
           <%= f.label :contact_made %>
           <%= f.select(:contact_made, @presenter.boolean_select_options,
                                       {include_blank: "Display all"},
-                                      {class: "form-control"}) %>
+                                      {class: "select-style-1"}) %>
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-md-6">
+      <div class="row select-style-1">
+        <div class="col-md-6 select-position pr-5">
           <%= f.label :sorted_by %>
-          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: "form-control"}) %>
+          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: "select-style-1"}) %>
         </div>
       </div>
 
-      <div class="mt-4 btn-group">
-        <%= f.submit("Filter", class: "btn btn-primary") %>
-        <%= link_to("Reset filters", reset_filterrific_url, class: "btn btn-outline-primary") %>
+      <div>
+        <%= button_tag( :class=> "btn-sm main-btn dark-btn") do %>
+          <i class="lni lni-funnel mr-10"></i> Filter
+          <% end %>
+        <%= link_to("Reset filters", reset_filterrific_url, class: "btn-sm main-btn dark-btn-outline btn-hove") %>
       </div>
     </div>
   </div>
 <% end %>
 
 <% @presenter.case_contacts.each do |casa_case_id, data| %>
-  <div class="card card-container">
-    <div class="card-body">
-      <h3><%= @presenter.display_case_number(casa_case_id) %></h3>
+  <div class="card-style-1 mb-5">
+    <div class="card-content">
+      <h3 class="mb-10"><%= @presenter.display_case_number(casa_case_id) %></h3>
       <%= render partial: "case_contacts/case_contact", collection: data, as: :contact %>
     </div>
   </div>
 <% end %>
 
 <% unless @presenter.case_contacts.any? %>
-  <div class="card card-container">
-    <div class="card-body">
+  <div class="card-style-1">
+    <div class="card-content">
       <%= params[:filterrific] ?
         "No case contacts have been found." :
         "You have no case contacts for this case. \
