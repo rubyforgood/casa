@@ -31,6 +31,8 @@ $(() => {
 
           if (element) {
             element.value = value
+          }
+          if (!element.checked) {
             element.checked = checked
           }
         })
