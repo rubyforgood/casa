@@ -1,0 +1,53 @@
+#patch-notes {
+  display: flex;
+
+  #patch-note-list {
+    width: 50%;
+
+    h1 {
+      text-align: center
+    }
+
+    .patch-note-list-item {
+      & .card-body>* {
+        margin: 0.25em 0;
+      }
+
+      &.new {
+        background-color: #ffecb3;
+      }
+
+      textarea {
+        width: 100%;
+      }
+
+      .label-and-select {
+        display: flex;
+
+        label {
+          padding-right: 0.5rem;
+        }
+
+        select {
+         flex-grow: 1
+        }
+      }
+
+      .patch-note-button-controls {
+        display: flex;
+
+        button {
+          flex-grow: 1;
+
+          &:nth-child(2) {
+            margin-left: 0.5em
+          };
+
+          &.button-cancel {
+            flex-grow: 3
+          }
+        }
+      }
+    };
+  };
+}

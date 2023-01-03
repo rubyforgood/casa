@@ -1,6 +1,6 @@
 <aside class="sidebar-nav-wrapper">
   <div class="navbar-logo">
-    <% if all_casa_admin_signed_in? || !current_organization&.logo&.attached? %>
+    <% if !current_organization&.logo&.attached? %>
       <%= link_to image_tag("default-logo.png",
                             id: "casa-logo",
                             alt: "CASA Logo",
@@ -38,7 +38,7 @@
           </li>
         <% end %>
         <% if policy(Volunteer).index? %>
-          <li class="nav-item">
+          <li class="<%= active_class(volunteers_path) %> nav-item">
             <%= link_to volunteers_path do %>
               <i class="lni lni-heart-filled mr-10"></i>
               Volunteers
@@ -46,21 +46,21 @@
           </li>
         <% end %>
         <% if policy(OtherDuty).index? %>
-          <li class="nav-item">
+          <li class="<%= active_class(other_duties_path) %> nav-item">
             <%= link_to other_duties_path do %>
               <i class="lni lni-agenda mr-10"></i>
               Other Duties
             <% end %>
           </li>
         <% end %>
-        <li class="nav-item">
+        <li class="<%= active_class(casa_cases_path) %> nav-item">
           <%= link_to casa_cases_path do %>
             <i class="lni lni-folder mr-10"></i>
             <%= cases_index_title %>
           <% end %>
         </li>
         <% if policy(CasaAdmin).index? %>
-          <li class="nav-item">
+          <li class="<%= active_class(casa_admins_path) %> nav-item">
             <%= link_to casa_admins_path do %>
               <i class="lni lni-star-filled mr-10"></i>
               Admins
@@ -68,7 +68,7 @@
           </li>
         <% end %>
         <% if all_casa_admin_signed_in? %>
-          <li class="nav-item">
+          <li class="<%= active_class(all_casa_admins_patch_notes_path) %> nav-item">
             <%= link_to all_casa_admins_patch_notes_path do %>
               <i class="lni lni-notepad mr-10"></i>
               Patch Notes
@@ -76,13 +76,13 @@
           </li>
         <% end %>
         <% if current_user.volunteer? %>
-          <li class="nav-item">
+          <li class="<%= active_class(case_contacts_path) %> nav-item">
             <%= link_to case_contacts_path do %>
               <i class="lni lni-users mr-10"></i>
               Case Contacts
             <% end %>
           </li>
-          <li class="nav-item">
+          <li class="<%= active_class(volunteer_learning_hours_path(volunteer_id: current_user.id || 0)) %> nav-item">
             <%= link_to volunteer_learning_hours_path(volunteer_id: current_user.id || 0) do %>
               <i class="lni lni-timer mr-10"></i>
               Learning Hours
@@ -90,7 +90,7 @@
           </li>
         <% end %>
         <% if current_user.serving_transition_aged_youth? %>
-          <li class="nav-item">
+          <li class="<%= active_class(emancipation_checklists_path) %> nav-item">
             <%= link_to emancipation_checklists_path do %>
               <i class="lni lni-list mr-10"></i>
               Emancipation Checklist(s)
@@ -115,7 +115,7 @@
           <ul id="ddmenu_55" class="collapse dropdown-nav show">
             <% if policy(:application).see_court_reports_page? %>
               <li>
-                <%= link_to case_court_reports_path do %>
+                <%= link_to case_court_reports_path, class: "#{active_class(case_court_reports_path)}" do %>
                   <i class="lni lni-paperclip mr-10"></i>
                   Generate Court Reports
                 <% end %>
@@ -124,7 +124,7 @@
 
             <% if policy(:reimbursement).index? %>
               <li>
-                <%= link_to reimbursements_path, class: "active" do %>
+                <%= link_to reimbursements_path, class: "#{active_class(reimbursements_path)}" do %>
                   <i class="lni lni-money-location mr-10"></i>
                   Reimbursement Queue
                 <% end %>
@@ -133,7 +133,7 @@
 
             <% if policy(:application).see_reports_page? %>
               <li>
-                <%= link_to reports_path do %>
+                <%= link_to reports_path, class: "#{active_class(reports_path)}" do %>
                   <i class="lni lni-folder mr-10"></i>
                   Export Data
                 <% end %>
@@ -142,7 +142,7 @@
 
             <% if policy(:application).see_import_page? %>
               <li>
-                <%= link_to imports_path do %>
+                <%= link_to imports_path, class: "#{active_class(imports_path)}" do %>
                   <i class="lni lni-archive mr-10"></i>
                   System Imports
                 <% end %>
@@ -151,7 +151,7 @@
 
             <% if policy(:application).see_mileage_rate? %>
               <li>
-                <%= link_to mileage_rates_path do %>
+                <%= link_to mileage_rates_path, class: "#{active_class(mileage_rates_path)}" do %>
                   <i class="lni lni-car mr-10"></i>
                   Mileage Rates
                 <% end %>
@@ -160,7 +160,7 @@
 
             <% if policy(:application).modify_organization? %>
               <li>
-                <%= link_to edit_casa_org_path(current_organization) do %>
+                <%= link_to edit_casa_org_path(current_organization), class: "#{active_class(edit_casa_org_path(current_organization))}" do %>
                   <i class="lni lni-cogs mr-10"></i>
                   Edit Organization
                 <% end %>

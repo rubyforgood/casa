@@ -1,0 +1,57 @@
+@keyframes spin {
+  0% {
+    transform: rotate(0deg)
+  }
+  100% {
+    transform: rotate(360deg)
+  }
+}
+
+#async-notifications {
+  bottom: 2em;
+  display: flex;
+  flex-direction: column;
+  font-weight: 900;
+  position: fixed;
+  right: 2em;
+  z-index: 100;
+
+  div {
+    border-radius: .25em;
+    margin: .25em;
+    margin-left: auto;
+    margin-right: 0;
+    padding: .5em
+  }
+
+  .async-failure-indicator {
+    background-color: #b71c1c;
+    color: white
+  }
+
+  .async-success-indicator {
+    background-color: #28a745;
+    color: white
+  }
+
+  .async-warn-indicator {
+    background-color: #ffc107;
+  }
+
+  #async-waiting-indicator {
+    background-color: #007bff;
+    color: white;
+
+    .load-spinner {
+      animation: spin 1.5s linear infinite;
+      border: .25em solid #f3f3f3;
+      border-top: .25em solid #3498db;
+      border-radius: 50%;
+      display: inline-block;
+      height: 1em;
+      margin: 0;
+      padding: 0;
+      width: 1em
+    }
+  }
+}

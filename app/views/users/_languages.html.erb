@@ -1,42 +1,59 @@
-<div class="languages">
-  <h2 class="pt-5">My Languages</h2>
-
-  <div class="card card-container">
-    <div class="card-body">
-      <table class="table table-striped table-bordered">
-        <thead>
-          <tr>
-            <th>Languages</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-            <tr>
-              <td>English (default language)</td>
-            </tr>
-          <% volunteer.languages.each do |lang| %>
-            <tr>
-              <td><%= lang.name %></td>
-              <td>
-                <%= link_to "Delete", language_remove_from_volunteer_path(lang), class: "btn btn-danger",
-method: :delete %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <br>
-      <h6 class="font-weight-bold">Add Language</h6>
-      <div class="form-group">
-      <%= form_for volunteer, url: add_language_users_path do |form| %>
-        <%= form.select :languages,
-                      current_organization.languages.map { |lang| [lang.name, lang.id] },
-                      {include_blank: true},
-                      {name: :language_id, class: "p-2"} %>
-        <%= button_tag "Add", type: :submit, class: "btn btn-primary ml-1 mb-1", id: "add-language-button" %>
-      <% end %>
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-lg-12">
+      <div class="title mb-30">
+        <h2>My Languages</h2>
       </div>
+    </div>
+    <div class="col-lg-12">
+      <div class ="card-style mb-30">
+        <div class="table-wrapper table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th><h4>Languages</h4></th>
+                <th><h4>Actions</h4></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>English (default language)</td>
+                <td></td>
+              </tr>
+            <% volunteer.languages.each do |lang| %>
+              <tr>
+                <td><%= lang.name %></td>
+                <td>
+                  <%= link_to "Delete", language_remove_from_volunteer_path(lang), class: "btn btn-danger",
+  method: :delete %>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
 
+        <%= form_for volunteer, url: add_language_users_path do |form| %>
+          <div class="row select-style-1 mt-3">
+            <div class="col-lg-12">
+              <label><h5>Add Language</h5></label>
+            </div>
+            <div class="col-lg-4">
+              <div class="select-position">
+                <%= form.select :languages,
+                          current_organization.languages.map { |lang| [lang.name, lang.id] },
+                          {include_blank: true},
+                          {name: :language_id} %>
+              </div>
+            </div>
+            <div class="col-lg-8">
+              <%= button_tag "Add", type: :submit, class: "main-btn primary-btn btn-hover", id: "add-language-button" %>
+            </div>
+          </div>
+        <% end %>
+
+
+      </div>
     </div>
   </div>
 </div>

@@ -1,46 +1,53 @@
-<h1>Report Categories</h1>
-
-<div class="card card-container">
-  <div class="card-body">
-    <h5 class="card-title"><strong>Generate Court Report</strong></h5>
-    <p class="card-text">
-      The Court Report is pre-filled with information for your case. You can select among currently active cases assigned to you. The document is in Microsoft Word format (.docx).
-    </p>
-
-    <hr>
-
-    <%= form_with url: generate_case_court_reports_path, local: false do |form| %>
-      <div class="field form-group">
-        <%= label_tag :case_number, "Case Number:" %>
-        <% select_options = @assigned_cases.map { |casa_case| casa_case.decorate.court_report_select_option } %>
-
-        <% show_search = !current_user.volunteer? %>
-
-        <% select_case_prompt = show_search ? "Search by volunteer name or case number" : "Select case number" %>
-        <% select2_class = show_search ? "select2" : "" %>
-
-        <%= select_tag :case_number,
-                       options_for_select(select_options),
-                       prompt: select_case_prompt,
-                       include_blank: false,
-                       id: "case-selection",
-                       class: "custom-select #{select2_class}" %>
-
-        <%= form.hidden_field :time_zone, id: "user-time-zone" %>
-
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h2>Report Categories
+        </h2>
       </div>
-      <div class="form-group">
-        <%= button_tag "Generate Report", type: :submit,
-                       data: {
-                           button_name: "Generate Report"
-                       },
-                       id: "btnGenerateReport",
-                       class: "btn btn-primary",
-                       onclick: "setTimeZone()" %>
-        <i id="spinner" class='fas fa-spin d-none'>⏳</i>
-      </div>
-    <% end %>
+    </div>
+  </div>
+</div>
+<div class="tables-wrapper">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card-style mb-30">
+        <h6 class="mb-10">Generate Court Report</h6>
+        <p class="text-sm mb-25">
+          The Court Report is pre-filled with information for your case. You can select among currently active cases assigned to you. The document is in Microsoft Word format (.docx).
+        </p>
+        <%= form_with url: generate_case_court_reports_path, local: false do |form| %>
+          <div class="input-style-1">
+            <%= form.label :case_number, "Case Number:" %>
+            <% select_options = @assigned_cases.map { |casa_case| casa_case.decorate.court_report_select_option } %>
 
+            <% show_search = !current_user.volunteer? %>
+
+            <% select_case_prompt = show_search ? "Search by volunteer name or case number" : "Select case number" %>
+            <% select2_class = show_search ? "select2" : "" %>
+
+            <%= select_tag :case_number,
+                          options_for_select(select_options),
+                          prompt: select_case_prompt,
+                          include_blank: false,
+                          id: "case-selection",
+                          class: "custom-select #{select2_class}" %>
+
+            <%= form.hidden_field :time_zone, id: "user-time-zone" %>
+          </div>
+          <div class="input-style-1">
+            <%= button_tag "Generate Report", type: :submit,
+                      data: {
+                          button_name: "Generate Report"
+                      },
+                      id: "btnGenerateReport",
+                      class: "main-btn primary-btn btn-hover btn-sm",
+                      onclick: "setTimeZone()" %>
+            <i id="spinner" class='fas fa-spin d-none'>⏳</i>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>
 

@@ -213,12 +213,12 @@ $('document').ready(() => {
         orderable: false,
         render: (data, type, row, meta) => {
           return `
-          <span class="mobile-label">Actions</span>
-            <a href="${editVolunteerPath(row.id)}" class="btn btn-primary">
-              Edit
+            <span class="mobile-label">Actions</span>
+            <a href="${editVolunteerPath(row.id)}" class="main-btn primary-btn btn-hover btn-sm">
+              <i class="lni lni-pencil-alt mr-5"></i> Edit
             </a>
-            <a href="${impersonateVolunteerPath(row.id)}" class="btn btn-secondary">
-              Impersonate
+            <a href="${impersonateVolunteerPath(row.id)}" class="main-btn dark-btn btn-hover btn-sm">
+              <i class="lni lni-user mr-5"></i> Impersonate
             </a>
           `
         },

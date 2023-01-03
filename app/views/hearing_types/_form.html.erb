@@ -1,25 +1,48 @@
-<h1><%= title %></h1>
-
-<div class="card card-container">
-  <div class="card-body">
-    <%= form_with(model: hearing_type, local: true) do |form| %>
-      <%= render "/shared/error_messages", resource: hearing_type %>
-      <div class="field form-group">
-        <%= form.label :name, "Name" %>
-        <%= form.text_field :name, class: "form-control", required: true %>
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h2>
+          <%= title %>
+        </h2>
       </div>
-      <div class="field form-group">
-        <div class="form-check">
-          <%= form.check_box :active, class: 'form-check-input' %>
-          <%= form.label :active, class: 'form-check-label' %>
+    </div>
+  </div>
+</div>
+<div class="card-style mb-30">
+  <%= form_with(model: hearing_type, local: true) do |form| %>
+    <%= render "/shared/error_messages", resource: hearing_type %>
+    <div class="input-style-1">
+      <%= form.label :name, "Name" %>
+      <%= form.text_field :name, class: "form-control", required: true %>
+    </div>
+    <div class="form-check checkbox-style mb-20">
+      <%= form.check_box :active, class: 'form-check-input' %>
+      <%= form.label :active, class: 'form-check-label' %>
+    </div>
+    <% if !hearing_type.id.nil? %>
+      <div class="dashboard-table-header pt-2 pb-2">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <h3>Checklist</h3>
+          </div>
+          <!-- end col -->
+          <div class="col-md-6">
+            <div class="breadcrumb-wrapper">
+              <span class="ml-5">
+                <%= link_to new_hearing_type_checklist_item_path(hearing_type), class: "btn-sm main-btn primary-btn btn-hover" do %>
+                  <i class="lni lni-plus mr-10"></i>
+                  New List Item
+                <% end %>
+              </span>
+            </div>
+          </div>
+          <!-- end col -->
         </div>
       </div>
-      <% if !hearing_type.id.nil? %>
-        <div class="dashboard-table-header pt-2 pb-2">
-          <h3>Checklist</h3>
-          <%= link_to "New List Item", new_hearing_type_checklist_item_path(hearing_type), class: "btn btn-primary" %>
-        </div>
-        <table class="table table-striped table-bordered" id="checklist_items">
+      <!-- end table title -->
+      <div class="table-wrapper table-responsive">
+        <table class="table striped-table" id="checklist_items">
           <thead>
             <tr>
               <th>Description</th>
@@ -27,32 +50,51 @@
               <th>Mandatory</th>
               <th>Actions</th>
             </tr>
+            <!-- end table row-->
           </thead>
           <tbody>
             <% hearing_type.checklist_items.each do |checklist_item| %>
               <tr id="checklist_item-<%= checklist_item.id %>">
-                <td scope="row">
+                <td class="min-width">
                   <%= checklist_item.description %>
                 </td>
-                <td>
+                <td class="min-width">
                   <%= checklist_item.category %>
                 </td>
-                <td scope="row">
+                <td class="min-width">
                   <%= checklist_item.mandatory ? "Yes" : "Optional" %>
                 </td>
                 <td>
-                  <%= link_to "Edit", edit_hearing_type_checklist_item_path(hearing_type, checklist_item) %>
-                  <%= link_to "Delete", hearing_type_checklist_item_path(hearing_type, checklist_item),
-                  method: :delete, data: { confirm: "Are you sure that you want to delete this checklist item?" } %>
+                  <%= link_to edit_hearing_type_checklist_item_path(hearing_type, checklist_item) do %>
+                    <div class="action">
+                      <button class="text-danger">
+                        <i class="lni lni-pencil-alt"></i> Edit
+                      </button>
+                    </div>
+                  <% end %>
+                  <%= link_to hearing_type_checklist_item_path(hearing_type, checklist_item),
+                    method: :delete, data: { confirm: "Are you sure that you want to delete this checklist item?" } do %>
+                    <div class="action">
+                      <button class="text-danger">
+                        <i class="lni lni-trash-can"></i> Delete
+                      </button>
+                    </div>
+                  <% end %>
                 </td>
               </tr>
             <% end %>
           </tbody>
         </table>
-      <% end %>
-      <div class="actions">
-        <%= form.submit "Submit", class: "btn btn-primary" %>
+        <!-- end table -->
       </div>
     <% end %>
-  </div>
+    <div class="actions mb-10">
+      <%= button_tag(
+            type: "submit",
+            class: "btn-sm main-btn primary-btn btn-hover"
+          ) do %>
+          <i class="lni lni-checkmark-circle mr-10"></i> Submit
+      <% end %>
+    </div>
+  <% end %>
 </div>

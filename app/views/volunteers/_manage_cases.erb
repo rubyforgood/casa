@@ -1,69 +1,75 @@
 <div>
-  <h1 class="pt-5">Manage Cases</h1>
+  <h1 class="pt-5 mb-2">Manage Cases</h1>
 
   <div class="card card-container">
     <div class="card-body">
       <% if @volunteer.case_assignments.any? %>
-        <br>
-        <h3>Assigned Cases</h3>
-        <table class='table' id='manage_cases'>
-          <thead>
-          <tr>
-            <th>Case Number</th>
-            <th>Transition Aged Youth</th>
-            <th>Assignment status</th>
-            <th>Actions</th>
-          </tr>
-          </thead>
-          <tbody>
-          <% @volunteer.case_assignments_with_cases.each do |assignment| %>
-            <tr id="<%= dom_id(assignment) %>">
-              <td><%= link_to assignment.casa_case.case_number, casa_case_path(assignment.casa_case) %></td>
-              <td><%= assignment.casa_case.decorate.transition_aged_youth %></td>
-              <td>
-                <% if @volunteer.active? && assignment.casa_case.active? && assignment.active? %>
-                  Volunteer is <span class="badge badge-success text-uppercase display-1">Active</span>
-                <% elsif @volunteer.active? && assignment.casa_case.active? && !assignment.active? %>
-                  Volunteer is <span class="badge badge-danger text-uppercase">Unassigned</span>
-                <% elsif @volunteer.active? %>
-                  Case was deactivated
-                  on: <%= I18n.l(assignment.casa_case.updated_at, format: :standard, default: nil) %>
-                <% else %>
-                  Deactivated
-                <% end %>
-              </td>
-              <td>
-                <% if @volunteer.active? && assignment.active && assignment.casa_case.active? %>
-                  <%- if Pundit.policy(current_user, @volunteer).unassign_case? %>
-                    <%= button_to 'Unassign Case',
-                                  unassign_case_assignment_path(assignment, volunteer_id: @volunteer.id),
-                                  method: :patch,
-                                  class: "btn btn-danger" %>
-                  <%- end %>
-                <% else %>
-                  None
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-          </tbody>
-        </table>
+        <h3 class="my-3">Assigned Cases</h3>
+        <div class="table-wrapper table-responsive">
+          <table class='table' id='manage_cases'>
+            <thead>
+              <tr>
+                <th>Case Number</th>
+                <th>Transition Aged Youth</th>
+                <th>Assignment status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @volunteer.case_assignments_with_cases.each do |assignment| %>
+                <tr id="<%= dom_id(assignment) %>">
+                  <td><%= link_to assignment.casa_case.case_number, casa_case_path(assignment.casa_case) %></td>
+                  <td><%= assignment.casa_case.decorate.transition_aged_youth %></td>
+                  <td>
+                    <% if @volunteer.active? && assignment.casa_case.active? && assignment.active? %>
+                      Volunteer is <span class="badge badge-success text-uppercase display-1">Active</span>
+                    <% elsif @volunteer.active? && assignment.casa_case.active? && !assignment.active? %>
+                      Volunteer is <span class="badge badge-danger text-uppercase">Unassigned</span>
+                    <% elsif @volunteer.active? %>
+                      Case was deactivated
+                      on: <%= I18n.l(assignment.casa_case.updated_at, format: :standard, default: nil) %>
+                    <% else %>
+                      Deactivated
+                    <% end %>
+                  </td>
+                  <td>
+                    <% if @volunteer.active? && assignment.active && assignment.casa_case.active? %>
+                      <%- if Pundit.policy(current_user, @volunteer).unassign_case? %>
+                        <%= button_to unassign_case_assignment_path(assignment, volunteer_id: @volunteer.id),
+                                      method: :patch,
+                                      class: "main-btn danger-btn btn-hover btn-sm" do %>
+                          <i class="lni lni-cross-circle mr-5"></i> Unassign Case
+                        <% end %>
+                      <%- end %>
+                    <% else %>
+                      None
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
       <% end %>
 
       <% if @volunteer.active? %>
-        <br>
-
-        <h3>Assign a New Case</h3>
+        <br/>
+        <h3 class="mb-3">Assign a New Case</h3>
 
         <%= form_for CaseAssignment.new, url: case_assignments_path(volunteer_id: @volunteer.id) do |form| %>
 
-          <div class='form-group'>
+          <div class="select-style-1">
             <label for='case_assignment_casa_case_id'>Select a Case</label>
             <%= form.select :casa_case_id, grouped_options_for_assigning_case(@volunteer), {},
                             {class: "form-control select2"} %>
           </div>
 
-          <%= form.submit 'Assign Case', class: 'btn btn-primary' %>
+          <%= button_tag(
+            type: "submit",
+            class: "main-btn primary-btn btn-hover btn-sm"
+          ) do %>
+            <i class="lni lni-checkmark mr-5"></i> Assign Case
+          <% end %>
         <% end %>
       <% end %>
     </div>

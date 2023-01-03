@@ -1,0 +1,29 @@
+@use "../base/variables.scss" as globals;
+
+form {
+  .field_with_errors {
+    label {
+      @extend .text-danger !optional;
+      @extend .font-weight-bold !optional;
+    }
+
+    input {
+      border: 1px solid globals.$red;
+    }
+  }
+
+  .alert.alert-danger {
+    ul {
+      margin-bottom: 0;
+    }
+  }
+
+  #with_cc {
+    margin-left: 20px;
+  }
+}
+
+#cc-check {
+  margin-left: 30px;
+  display: initial;
+}
