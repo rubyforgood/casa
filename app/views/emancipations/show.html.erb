@@ -12,17 +12,17 @@
 <div class="card-style">
   <% @emancipation_form_data.each do |category| %>
     <h6 class="emancipation-category no-select" data-is-open="<%= emancipation_category_checkbox_checked(@current_case, category) ? "true" : "false" %>">
-      <div class="emacipation-category-input-label-pair">
+      <div class="checkbox-style emacipation-category-input-label-pair">
         <input
           type="checkbox"
-          class="emancipation-category-check-box"
+          class="form-check-input"
           value="<%= category.id %>"
           <%= emancipation_category_checkbox_checked(@current_case, category) %>
         >
-        <label><%= category.name %></label>
+        <div class="pt-10"><%= category.name %></div>
       </div>
       <% if category.emancipation_options.count > 0 %>
-        <span class="category-collapse-icon"><%= emancipation_category_collapse_icon(@current_case, category) %></span>
+        <span class="category-collapse-icon pt-10"><%= emancipation_category_collapse_icon(@current_case, category) %></span>
       <% end %>
     </h6>
     <div class="category-options" style="<%= emancipation_category_collapse_hidden(@current_case, category) %>">
