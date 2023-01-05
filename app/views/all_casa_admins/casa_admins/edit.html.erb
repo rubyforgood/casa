@@ -1,29 +1,30 @@
-<h1>Edit Admin</h1>
+<div class="col-md-6">
+  <div class="title mb-30 mt-30">
+    <h2>Edit Admin</h2>
+  </div>
+</div>
 
-<div class="card card-container">
+<div class="card-style">
   <div class="card-body">
     <%= form_for @casa_admin, as: :all_casa_admin, url: all_casa_admins_casa_org_casa_admin_path do |form| %>
       <%= render "/shared/error_messages", resource: @casa_admin %>
 
-      <div class="field form-group">
+      <div class="input-style-1">
         <%= form.label :email, "Email" %>
-        <%= form.email_field :email, class: "form-control" %>
+        <%= form.email_field :email %>
       </div>
       <% if @casa_admin.persisted? %>
         <div class="field form-group">
           <% if @casa_admin.active? %>
             Admin is <span class="badge badge-success text-uppercase display-1">Active</span>
-            <br>
-            <br>
-
-            <div class="actions">
               <%= link_to "Deactivate",
                           deactivate_all_casa_admins_casa_org_casa_admin_path,
                           method: :patch,
-                          class: "btn btn-outline-danger",
+                          class: "main-btn danger-btn-outline btn-hover",
                           data: { confirm: "WARNING: Marking an admin inactive will make them unable to login. " \
                                            "Are you sure you want to do this?"} %>
-              <%= form.submit "Update Profile", class: "btn btn-primary" %>
+            <div class="actions">
+              <%= form.submit "Update Profile", class: "main-btn primary-btn btn-hover mt-3" %>
             </div>
           <% else %>
             <div class="alert alert-danger">
