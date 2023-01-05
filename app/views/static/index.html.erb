@@ -1,188 +1,187 @@
 <!doctype html>
 <html class="no-js" lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Casa Volunteer Tracking</title>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CASA Volunteer Tracking</title>
 
-  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <%#= javascript_pack_tag 'application' %>
-  <%#= stylesheet_pack_tag 'application' %>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-  <style>
-      .app-images {
-          height: 400px;
-      }
-  </style>
-</head>
-<body>
-<%#= render partial: "shared/flash_tailwind" %>
-<div class='pt-2' style="background: linear-gradient(135deg, #1c06f6, #7aa2f6)">
-  <div class="container max-w-7xl mx-auto pt-5 px-5">
-    <nav>
-      <div class="flex justify-between items-center">
-        <div>
-          <a class="text-lg lg:text-3xl lg:text-4xl" href="#"><h2 class="text-white font-bold">CasaVolunteerTracking.org</h2></a>
-        </div>
+    <style>
+.app-images {
+  height: 400px;
+}
+    </style>
+  </head>
 
-        <div class="flex" id="myNavbar">
-          <div class="flex text-white space-x-4 md:space-x-10 text-md lg:text-2xl items-center">
-            <a class="hidden md:block" href="#about">About</a>
-            <a class="hidden md:block" href="#testimonials">Testimonials</a>
-            <a class="hidden md:block" href="#contact">Contact</a>
-            <a href=<%= new_user_session_path %>>
-              <button class="flex flex-row items-center w-full px-4 py-2 bg-green-500 hover:bg-green-600 rounded-2xl text-md">
-                <span class='text-lg'>Login</span>
-              </button>
-            </a>
+  <body>
+    <header class="pt-2" style="background: #0949D7">
+      <div class="container max-w-7xl mx-auto pt-5 px-5">
+        <nav>
+          <div class="flex justify-between items-center">
+            <div>
+              <a class="text-lg lg:text-3xl lg:text-4xl font-bold text-white" href="/">CasaVolunteerTracking.org</a>
+            </div>
+
+            <div class="flex" id="myNavbar">
+              <div class="flex text-white space-x-4 md:space-x-10 text-md lg:text-2xl items-center">
+                <a class="hidden md:block" href="#about">About</a>
+                <a class="hidden md:block" href="#testimonials">Testimonials</a>
+                <a class="hidden md:block" href="#contact">Contact</a>
+                <a href=<%= new_user_session_path %>>
+                  <button class="flex flex-row items-center w-full px-4 py-2 bg-green-800 hover:bg-green-700 rounded-2xl text-md">
+                    <span class="text-lg">Login</span>
+                  </button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      <div class="container max-w-7xl mx-auto text-white font-bold flex px-5" style='height:60vh; min-height: 500px'>
+        <div class="flex flex-col justify-center items-center mx-auto lg:mx-0 text-center lg:text-left">
+          <div class="text-4xl">
+            <div>
+              <h1>Casa Volunteer Tracking removes<br>the complexity of managing your<br> CASA and tracking your volunteers.</h1>
+              <p class="text-lg font-normal mb-3 mt-2">Ready to make yourself more efficient?</p>
+            </div>
+          </div>
+          <div class="hidden lg:block absolute right-52 w-1/4">
+            <%= image_tag("hero-image.svg", alt: "") %>
           </div>
         </div>
       </div>
-    </nav>
-  </div>
+    </header>
 
-  <div class="container max-w-7xl mx-auto text-white font-bold flex px-5" style='height:60vh; min-height: 500px'>
-    <div class="flex flex-col justify-center items-center mx-auto lg:mx-0 text-center lg:text-left">
-      <div class="text-4xl">
-        <div>
-          <h2 class="">Casa Volunteer Tracking removes<br> the complexity of managing your<br> casa and tracking your volunteers.</h2>
-          <p class='text-lg font-normal mb-3 mt-2'>Ready to make yourself more efficient?</p>
+    <main>
+      <div class="container max-w-7xl mx-auto pt-5" id="about">
+        <div class="text-center mt-10">
+          <h2 class="text-4xl text-gray-700">The Casa Volunteer Tracking app removes the <br> complexity from your day</h2>
+          <p class="mt-1 text-gray-600">and lets you spend time helping those who need it.</p>
+          <a href="mailto:casa@rubyforgood?Subject=CasaVolunteerTracking%20Interest"><button type="button" class="text-lg bg-green-800 text-white px-3 py-2 rounded-2xl mt-5">Get In Touch</button></a>
         </div>
       </div>
-      <div class="hidden lg:block absolute right-52 w-1/4">
-        <%= image_tag("hero-image.svg") %>
-      </div>
-    </div>
-  </div>
-</div>
 
-<div class="container max-w-7xl mx-auto pt-5" id="about">
-  <div class="text-center mt-10">
-    <h2 class="text-4xl text-gray-600">The Casa Volunteer Tracking app removes the <br> complexity from your day</h2>
-    <p class="mt-1 text-gray-400">and lets you spend time helping those who need it.</p>
-    <a href="mailto:casa@rubyforgood?Subject=CasaVolunteerTracking%20Interest"><button type="button" class="text-lg bg-green-500 text-white px-3 py-2 rounded-2xl mt-5">Get In Touch</button></a>
-  </div>
-</div>
-
-<div class="w-3/4 mx-auto py-24">
-
-  <div class="flex flex-col md:flex-row justify-center items-center">
-    <div class="flex flex-col justify-center items-center w-full sm:w-1/2">
-      <div class="pb-2">
-        <%= image_tag("case-contact.svg", class: "app-images") %>
-      </div>
-      <div class="text-center">
-        <h3 class="text-3xl">Case Contacts</h3>
-        <p class="text-gray-400 mt-2">Volunteers can record case contacts and learning hours.</p>
-      </div>
-    </div>
-    <div class="flex flex-col justify-center items-center w-full sm:w-1/2">
-      <div class="pb-2">
-        <%= image_tag("court-report.svg", class: "app-images") %>
-      </div>
-      <div class="text-center">
-        <h3 class="text-3xl">Court Reports</h3>
-        <p class="text-gray-400 mt-2">Volunteers, supervisors, and admins can generate a court report for any case with all recorded case contacts pre-filled.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="flex flex-col md:flex-row justify-center">
-    <div class="flex flex-col justify-center items-center w-full sm:w-1/2">
-      <div class="pb-2">
-        <%= image_tag("reimbursement.svg", class: "app-images") %>
-      </div>
-      <div class="text-center">
-        <h3 class="text-3xl">Reimbursements</h3>
-        <p class="text-gray-400 mt-2">Volunteers can submit reimbursement requests and admins can generate reports.</p>
-      </div>
-    </div>
-
-    <div class="flex flex-col justify-center items-center w-full sm:w-1/2">
-      <div class="pb-2">
-        <%= image_tag("add-case.svg", class: "app-images") %>
-      </div>
-      <div class="text-center">
-        <h3 class="text-3xl">Add Cases</h3>
-        <p class="text-gray-400 mt-2">Supervisors and administrators can add cases and assign volunteers.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="flex flex-col md:flex-row justify-center">
-    <div class="flex flex-col justify-center items-center w-full sm:w-1/2">
-      <div class="pb-2">
-        <%= image_tag("spreadsheets.svg", class: "app-images") %>
-      </div>
-      <div class="text-center">
-        <h3 class="text-3xl">Exportable Data</h3>
-        <p class="text-gray-400 mt-2">All casa data is easily exportable in CSV format.</p>
-      </div>
-    </div>
-
-    <div class="flex flex-col justify-center items-center w-full sm:w-1/2">
-      <div class="pb-2">
-        <%= image_tag("communicate.svg", class: "app-images") %>
-      </div>
-      <div class="text-center">
-        <h3 class="text-3xl">Communication</h3>
-        <p class="text-gray-400 mt-2">Easily communicate with volunteers by email, sms or both.</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="py-5 px-0 bg-blue-600 text-white" id="testimonials">
-  <div class="container max-w-7xl mx-auto flex flex-col md:flex-row py-5 justify-center items-center">
-    <div class="w-1/2 flex justify-center">
-      <%= image_tag("quote.svg", class: "quote-image", style: 'width: 300px') %>
-    </div>
-    <div class="pt-5 px-4 w-full sm:w-1/2">
-      <h3 class="text-4xl">Testimonials</h3>
-      <div class='mt-5'>
-        <div class='space-y-12'>
-          <div>
-            <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec aliquam aliquam, nunc nisl aliquam nisl, nec aliquam nisl nunc vel nunc. Sed euismod, nisl nec aliquam aliquam, nunc nisl aliquam nisl, nec aliquam nisl nunc vel nunc.
-            Lorem.</p>
-            <strong class='mt-2'> - Person, Some Casa</strong>
+      <div class="w-3/4 mx-auto py-24">
+        <div class="flex flex-col md:flex-row justify-center">
+          <div class="flex flex-col justify-center items-center w-full sm:w-1/2">
+            <div class="pb-2">
+              <%= image_tag("case-contact.svg", class: "app-images", alt: "man reading a book to a girl") %>
+            </div>
+            <div class="text-center">
+              <h3 class="text-3xl">Case Contacts</h3>
+              <p class="text-gray-600 mt-2">Volunteers can record case contacts and learning hours.</p>
+            </div>
           </div>
-          <div>
-            <p class="text-testimonials">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec aliquam aliquam, nunc nisl aliquam nisl, nec aliquam nisl nunc vel nunc. Sed euismod, nisl nec aliquam aliquam, nunc nisl aliquam nisl, nec aliquam nisl nunc vel nunc.</p>
-            <strong> - Person, Another Casa </strong>
+          <div class="flex flex-col justify-center items-center w-full sm:w-1/2">
+            <div class="pb-2">
+              <%= image_tag("court-report.svg", class: "app-images", alt: "judge raising a gavel") %>
+            </div>
+            <div class="text-center">
+              <h3 class="text-3xl">Court Reports</h3>
+              <p class="text-gray-600 mt-2">Volunteers, supervisors, and admins can generate a court report for any case with all recorded case contacts pre-filled.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row justify-center">
+          <div class="flex flex-col justify-center items-center w-full sm:w-1/2">
+            <div class="pb-2">
+              <%= image_tag("reimbursement.svg", class: "app-images", alt: "car with two people") %>
+            </div>
+            <div class="text-center">
+              <h3 class="text-3xl">Reimbursements</h3>
+              <p class="text-gray-600 mt-2">Volunteers can submit reimbursement requests and admins can generate reports.</p>
+            </div>
+          </div>
+
+          <div class="flex flex-col justify-center items-center w-full sm:w-1/2">
+            <div class="pb-2">
+              <%= image_tag("add-case.svg", class: "app-images", alt: "file folders and file cabinet") %>
+            </div>
+            <div class="text-center">
+              <h3 class="text-3xl">Add Cases</h3>
+              <p class="text-gray-600 mt-2">Supervisors and administrators can add cases and assign volunteers.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row justify-center">
+          <div class="flex flex-col justify-center items-center w-full sm:w-1/2">
+            <div class="pb-2">
+              <%= image_tag("spreadsheets.svg", class: "app-images", alt: "computer screen with graphs and charts") %>
+            </div>
+            <div class="text-center">
+              <h3 class="text-3xl">Exportable Data</h3>
+              <p class="text-gray-600 mt-2">All CASA data is easily exportable in CSV format.</p>
+            </div>
+          </div>
+
+          <div class="flex flex-col justify-center items-center w-full sm:w-1/2">
+            <div class="pb-2">
+              <%= image_tag("communicate.svg", class: "app-images", alt: "woman holding a phone with a notification alert") %>
+            </div>
+            <div class="text-center">
+              <h3 class="text-3xl">Communication</h3>
+              <p class="text-gray-600 mt-2">Easily communicate with volunteers by email, SMS or both.</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-<div class="container max-w-7xl mx-auto py-32" id="contact">
-  <div class="text-center">
-    <h2 class="text-4xl">Want to use the Casa Volunteer Tracking App?</h2>
-<!--    <p class="text-gray-500 mt-2">After the demo, you will be able to request your own account.</p>-->
-<!--    <a href=<%#="#{new_account_request_path}"%>><button type="button" class="text-lg bg-green-500 text-white px-3 py-2 mt-5 rounded-2xl">Request A Demo</button></a>-->
 
-    <br><br>
-    <p class="text-gray-500">Have questions? Email us at <a class='text-blue-500' href="mailto:info@humanessentials.app?Subject=Essentials%20Interest" target="_top">casa@rubyforgood.org</a></p>
-  </div>
-</div>
+      <div class="py-5 px-0 bg-blue-600 text-white" id="testimonials">
+        <div class="container max-w-7xl mx-auto flex flex-col md:flex-row py-5 justify-center items-center">
+          <div class="w-1/2 flex justify-center">
+            <%= image_tag("quote.svg", class: "quote-image", style: "width: 300px", alt: "Quote: No one is useless in this world who lightens the burdens of another - Charles Dickens") %>
+          </div>
+          <div class="pt-5 px-4 w-full sm:w-1/2">
+            <h3 class="text-4xl">Testimonials</h3>
+            <div class='mt-5'>
+              <div class='space-y-12'>
+                <div>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec aliquam aliquam, nunc nisl aliquam nisl, nec aliquam nisl nunc vel nunc. Sed euismod, nisl nec aliquam aliquam, nunc nisl aliquam nisl, nec aliquam nisl nunc vel nunc.
+                    Lorem.</p>
+                  <strong class='mt-2'> - Person, Some Casa</strong>
+                </div>
+                <div>
+                  <p class="text-testimonials">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec aliquam aliquam, nunc nisl aliquam nisl, nec aliquam nisl nunc vel nunc. Sed euismod, nisl nec aliquam aliquam, nunc nisl aliquam nisl, nec aliquam nisl nunc vel nunc.</p>
+                  <strong> - Person, Another Casa </strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container max-w-7xl mx-auto py-32" id="contact">
+        <div class="text-center">
+          <h2 class="text-4xl">Want to use the CASA Volunteer Tracking App?</h2>
+          <!--    <p class="text-gray-500 mt-2">After the demo, you will be able to request your own account.</p>-->
+          <!--    <a href=<%#="#{new_account_request_path}"%>><button type="button" class="text-lg bg-green-500 text-white px-3 py-2 mt-5 rounded-2xl">Request A Demo</button></a>-->
 
-<div class="bg-gray-500">
-  <div class="container max-w-7xl mx-auto py-32 text-white">
-    <div class="flex flex-col mx-auto text-center sm:text-left sm:flex-row space-y-10 sm:space-y-0">
-      <div class="w-full sm:w-1/2">
-        <h2 class="text-3xl">casavolunteertracking.org</h2>
+          <br><br>
+          <p class="text-gray-500">Have questions? Email us at <a class="text-blue-800" href="mailto:casa@rubyforgood.org?Subject=CASA%20Interest" target="_top" >casa@rubyforgood.org</a></p>
+        </div>
       </div>
-      <div class="w-full sm:w-1/2">
-        <strong class="text-white">The Casa Volunteer Tracking app was lovingly built by:</strong>
-        <br>
-        <a class='text-blue-400' href="http://rubyforgood.org/">Ruby for Good</a>
-        <br><br>
-        <a href="https://storyset.com/data">Data illustrations by Storyset</a>
+    </main>
+
+    <footer class="bg-gray-200">
+      <div class="container max-w-7xl mx-auto py-32 text-white">
+        <div class="flex flex-col mx-auto text-center sm:text-left sm:flex-row space-y-10 sm:space-y-0">
+          <div class="w-full sm:w-1/2 text-3xl text-gray-700">
+            casavolunteertracking.org
+          </div>
+          <div class="w-full sm:w-1/2">
+            <strong class="text-gray-700">The CASA Volunteer Tracking app was lovingly built by:</strong>
+            <br>
+            <a class="text-blue-800" href="http://rubyforgood.org/">Ruby for Good</a>
+            <br><br>
+            <a class="text-gray-700" href="https://storyset.com/data">Data illustrations by Storyset</a>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
-</body>
+    </footer>
+  </body>
 </html>
