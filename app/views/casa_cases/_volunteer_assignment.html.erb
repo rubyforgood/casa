@@ -1,64 +1,70 @@
 <% content_for :table_title do %>
-  <h3>Assigned Volunteers</h3>
+  <div class="title-wrapper pt-30">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <div class="title mb-30">
+          <h3>Assigned Volunteers</h3>
+        </div>
+      </div>
+    </div>
+  </div>
 <% end %>
-
 <% content_for :table_body do %>
   <tbody>
-  <% @casa_case.case_assignments.each do |assignment| %>
-    <tr>
-      <td data-test="volunteer-name">
-        <%= link_to assignment.volunteer.display_name, edit_volunteer_path(assignment.volunteer) %>
-      </td>
-      <td data-test="volunteer-email"><%= assignment&.volunteer&.email %></td>
-      <td data-test="assigned">
-        <% if assignment.active? %>
-          <span class='badge badge-success text-uppercase'>Assigned</span>
-        <% else %>
+    <% @casa_case.case_assignments.each do |assignment| %>
+      <tr>
+        <td data-test="volunteer-name">
+          <%= link_to assignment.volunteer.display_name, edit_volunteer_path(assignment.volunteer) %>
+        </td>
+        <td data-test="volunteer-email"><%= assignment&.volunteer&.email %></td>
+        <td data-test="assigned">
+          <% if assignment.active? %>
+            <span class='badge badge-success text-uppercase'>Assigned</span>
+          <% else %>
             <span class="badge badge-danger text-uppercase">
               <%= assignment.volunteer.active? ? "Unassigned" : "Deactivated volunteer" %>
             </span>
-        <% end %>
-      </td>
-      <td data-test="assignment-start"><%= I18n.l(assignment.created_at, format: :full, default: nil) %></td>
-      <td data-test="assignment-end">
-        <% unless assignment.active? %>
-          <%= I18n.l(assignment.updated_at, format: :full, default: nil) %>
-        <% end %>
-      </td>
-      <td data-test="action">
-        <% if policy(assignment).unassign? %>
-          <%= button_to("Unassign Volunteer",
+          <% end %>
+        </td>
+        <td data-test="assignment-start"><%= I18n.l(assignment.created_at, format: :full, default: nil) %></td>
+        <td data-test="assignment-end">
+          <% unless assignment.active? %>
+            <%= I18n.l(assignment.updated_at, format: :full, default: nil) %>
+          <% end %>
+        </td>
+        <td data-test="action">
+          <% if policy(assignment).unassign? %>
+            <%= button_to("Unassign Volunteer",
                         unassign_case_assignment_path(assignment),
                         method: :patch,
                         class: "btn btn-outline-danger text-wrap") %>
-        <% else %>
-          <% if !assignment.volunteer.active? && policy(assignment.volunteer).activate? %>
-            <%= link_to "Activate Volunteer",
+          <% else %>
+            <% if !assignment.volunteer.active? && policy(assignment.volunteer).activate? %>
+              <%= link_to "Activate Volunteer",
                         activate_volunteer_path(assignment.volunteer,
                                                 redirect_to_path: 'casa_case',
                                                 casa_case_id: @casa_case.id
                         ),
                         method: :patch,
                         class: "btn btn-outline-success" %>
-          <% end %>
-          <% if (policy(assignment).hide_contacts?) %>
-            <%= button_to("Hide Old Contacts",
+            <% end %>
+            <% if (policy(assignment).hide_contacts?) %>
+              <%= button_to("Hide Old Contacts",
                         show_hide_contacts_case_assignment_path(assignment),
                         method: :patch,
                         class: "btn btn-outline-secondary text-wrap") %>
-          <% else %>
-            <%= button_to("Show Old Contacts",
+            <% else %>
+              <%= button_to("Show Old Contacts",
                         show_hide_contacts_case_assignment_path(assignment),
                         method: :patch,
                         class: "btn btn-outline-warning text-wrap") %>
+            <% end %>
           <% end %>
-        <% end %>
-      </td>
-    </tr>
-  <% end %>
+        </td>
+      </tr>
+    <% end %>
   </tbody>
 <% end %>
-
 <%=
   render(
   "shared/manage_volunteers",

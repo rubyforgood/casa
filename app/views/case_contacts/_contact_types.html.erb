@@ -1,12 +1,12 @@
 <div id="contact-type-form">
   <h2 id="contact-type-label"><%= form.label :contact_types, "2. Select All Contact Types" %><span class="red-letter"> *</span></h2>
   <% if controller.controller_name == 'casa_cases' %>
-  <div class="row">
-    <div class="col-sm">
-      <a class="btn btn-outline-primary btn-sm" id="check_all" onClick="checkContactTypes()">Check All</a>
-      <a class="btn btn-outline-secondary btn-sm" id="uncheck_all" onClick="uncheckContactTypes()">Uncheck All</a>
+    <div class="row">
+      <div class="col-sm">
+        <a class="main-btn primary-btn-outline btn-hover btn-sm" id="check_all" onClick="checkContactTypes()">Check All</a>
+        <a class="main-btn primary-btn-outline btn-hover btn-sm" id="uncheck_all" onClick="uncheckContactTypes()">Uncheck All</a>
+      </div>
     </div>
-  </div>
   <% end %>
   <table class="mt-3">
     <tr>
@@ -48,7 +48,6 @@
     </tr>
   </table>
 </div>
-
 <script type="text/javascript">
   function checkContactTypes(){
     var contact_type_boxes = document.getElementsByName("casa_case[casa_case_contact_types_attributes][][contact_type_id]")

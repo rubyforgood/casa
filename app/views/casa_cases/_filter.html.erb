@@ -1,19 +1,19 @@
 <div>
   <div class="row casa-case-filters">
-    <div class="col-sm-12">
+    <div class="col-sm-12 my-3 flex d-flex align-items-center">
       <h4 class="pull-left mr-2">Filter by:</h4>
-      <div class="dropdown pull-left mr-2">
-        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <div class="dropdown pull-left mx-2">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Status
         </button>
-        <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
-          <div class="dropdown-item form-check">
+        <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton1">
+          <div class="dropdown-item form-check checkbox-style">
             <%= check_box_tag "status_option_active", "Active", true,
                     class: "form-check-input",
                     data: { value: "Active" } %>
             <%= label_tag "status_option_active", "Active", class: "form-check-label" %>
           </div>
-          <div class="dropdown-item form-check">
+          <div class="dropdown-item form-check checkbox-style">
             <%= check_box_tag "status_option_inactive", "Inactive", false,
                       class: "form-check-input",
                       data: { value: "Inactive" } %>
@@ -21,18 +21,18 @@
           </div>
         </div>
       </div>
-      <div class="dropdown pull-left mr-2">
-        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <div class="dropdown pull-left mx-2">
+        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Assigned to Volunteer
         </button>
-        <div class="dropdown-menu assigned-to-volunteer-options" aria-labelledby="dropdownMenuButton">
-          <div class="dropdown-item form-check">
+        <div class="dropdown-menu assigned-to-volunteer-options" aria-labelledby="dropdownMenuButton2">
+          <div class="dropdown-item form-check checkbox-style">
             <%= check_box_tag "assigned_to_volunteer_option_yes", "Yes", true,
                        class: "form-check-input",
                        data: { value: "Yes" } %>
             <%= label_tag "assigned_to_volunteer_option_yes", "Yes", class: "form-check-label" %>
           </div>
-          <div class="dropdown-item form-check">
+          <div class="dropdown-item form-check form-check checkbox-style">
             <%= check_box_tag "assigned_to_volunteer_option_no", "No", true,
                        class: "form-check-input",
                        data: { value: "No" } %>
@@ -40,18 +40,18 @@
           </div>
         </div>
       </div>
-      <div class="dropdown pull-left mr-2">
-        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <div class="dropdown pull-left mx-2">
+        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Assigned to more than 1 Volunteer
         </button>
-        <div class="dropdown-menu more-than-one-volunteer-options" aria-labelledby="dropdownMenuButton">
-          <div class="dropdown-item form-check">
+        <div class="dropdown-menu more-than-one-volunteer-options" aria-labelledby="dropdownMenuButton3">
+          <div class="dropdown-item form-check checkbox-style">
             <%= check_box_tag "more_than_one_volunteer_option_yes", "Yes", true,
                        class: "form-check-input",
                        data: { value: "Yes" } %>
             <%= label_tag "more_than_one_volunteer_option_yes", "Yes", class: "form-check-label" %>
           </div>
-          <div class="dropdown-item form-check">
+          <div class="dropdown-item form-check checkbox-style">
             <%= check_box_tag "more_than_one_volunteer_option_no", "No", true,
                        class: "form-check-input",
                        data: { value: "No" } %>
@@ -59,18 +59,18 @@
           </div>
         </div>
       </div>
-      <div class="dropdown pull-left mr-2">
-        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <div class="dropdown pull-left mx-2">
+        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton4" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Assigned to Transition Aged Youth
         </button>
-        <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton">
-          <div class="dropdown-item form-check">
+        <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton4">
+          <div class="dropdown-item form-check checkbox-style">
             <%= check_box_tag "transition_youth_option_yes", "Yes 🦋", true,
                        class: "form-check-input",
                        data: { value: "Yes 🦋" } %>
             <%= label_tag "transition_youth_option_yes", "Yes", class: "form-check-label" %>
           </div>
-          <div class="dropdown-item form-check">
+          <div class="dropdown-item form-check checkbox-style">
             <%= check_box_tag "transition_youth_option_no", "No", true,
                        class: "form-check-input",
                        data: { value: "No 🐛" } %>
@@ -78,15 +78,15 @@
           </div>
         </div>
       </div>
-      <div class="dropdown pull-left mr-2">
+      <div class="dropdown pull-left mx-2">
         <% unless current_user.volunteer? %>
-          <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton5" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Casa Case Prefix
           </button>
         <% end %>
-        <div class="dropdown-menu case-number-prefix-options" aria-labelledby="dropdownMenuButton">
+        <div class="dropdown-menu case-number-prefix-options" aria-labelledby="dropdownMenuButton5">
           <% ["CINA", "None", "TPR"].each do |option| %>
-            <div class="dropdown-item form-check">
+            <div class="dropdown-item form-check checkbox-style">
               <% option_for_name = option.downcase.gsub(/[^a-z]+/, '') -%>
               <% tag_name = "case_case_prefix_option_#{option_for_name}" -%>
               <%= check_box_tag tag_name, option, true,
@@ -98,7 +98,6 @@
         </div>
       </div>
     </div>
-
     <div class="modal fade" id="visibleColumns" tabindex="-1" role="dialog" aria-labelledby="visibleColumnsLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -113,7 +112,6 @@
           <div class="modal-body">
             <div>
               Select columns:
-
               <% CasaCase::TABLE_COLUMNS.each_with_index do |column, index| %>
                 <div class="row">
                   <div class="col-sm-12">

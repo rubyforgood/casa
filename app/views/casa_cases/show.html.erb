@@ -1,20 +1,19 @@
 <div class="row">
   <%= render "thank_you_modal" %>
-
-  <div class="col-sm-12 form-header">
+  <div class="col-sm-12 form-header my-4">
     <h1 class="pull-left"><%= @casa_case.decorate.transition_aged_youth_icon %>CASA Case Details</h1>
     <%- if policy(:case_contact).new? & @casa_case.active? %>
       <%= link_to('New Case Contact',
                   new_case_contact_path(case_contact: {casa_case_id: @casa_case.id}),
-                  class: "btn btn-primary pull-left casa-case-button") %>
+                  class: "main-btn primary-btn btn-sm pull-left casa-case-button") %>
     <%- end %>
     <% if @casa_case.active? %>
       <%= link_to 'Edit Case Details', edit_casa_case_path(@casa_case),
-              class: "btn btn-primary pull-left casa-case-button" %>
+              class: "main-btn primary-btn btn-sm pull-left casa-case-button" %>
     <% end %>
     <% if @casa_case.in_transition_age? %>
       <%= link_to(casa_case_emancipation_path(@casa_case),
-              class: "btn btn-primary pull-left casa-case-button") do %>
+              class: "main-btn primary-btn btn-sm pull-left casa-case-button") do %>
         Emancipation
         <span class="badge badge-light">
           <%= @casa_case.decorate.emancipation_checklist_count %>
@@ -26,7 +25,7 @@
       <%= button_tag "Generate Report", type: :submit,
                      data: {button_name: "Generate Report"},
                      id: "btnGenerateReport",
-                     class: "btn btn-success pull-right mb-2" %>
+                     class: "main-btn success-btn btn-hover btn-sm pull-right mb-2" %>
       <i id="spinner" class='fas fa-spin d-none pull-right'>⏳</i>
     <% end %>
     <% if @casa_case.casa_org.show_fund_request %>
@@ -35,31 +34,27 @@ class: "btn btn-primary pull-left casa-case-button") %>
     <% end %>
   </div>
 </div>
-
 <div class="card card-container">
   <div class="card-body">
     <% if !@casa_case.active %>
       <%= render "inactive_case", casa_case: @casa_case %>
     <% end %>
     <p>
-    <h6><strong>Case number:</strong> <%= @casa_case.case_number %></h6>
+      <h6><strong>Case number:</strong> <%= @casa_case.case_number %></h6>
     </p>
     <% if @casa_case.hearing_type %>
       <p>
-      <h6><strong>Hearing Type:</strong> <%= @casa_case.hearing_type_name %></h6>
+        <h6><strong>Hearing Type:</strong> <%= @casa_case.hearing_type_name %></h6>
       </p>
     <% end %>
-
     <% if @casa_case.has_judge_name? %>
       <p>
-      <h6><strong>Judge:</strong> <%= @casa_case.judge_name %></h6>
+        <h6><strong>Judge:</strong> <%= @casa_case.judge_name %></h6>
       </p>
     <% end %>
-
     <p>
-    <h6><strong>Transition Aged Youth:</strong> <%= @casa_case.decorate.transition_aged_youth %></h6>
+      <h6><strong>Transition Aged Youth:</strong> <%= @casa_case.decorate.transition_aged_youth %></h6>
     </p>
-
     <div>
       <h6>
         <strong>
@@ -69,45 +64,39 @@ class: "btn btn-primary pull-left casa-case-button") %>
         <%= @casa_case.decorate.duration_in_care %>
       </h6>
     </div>
-
     <p>
-    <h6>
-      <strong>Next Court Date:</strong>
-      <%= I18n.l(@casa_case.next_court_date&.date, format: :day_and_date, default: '') %>
-      <%= render "calendar_button", date: @casa_case.decorate.calendar_next_court_date,
+      <h6>
+        <strong>Next Court Date:</strong>
+        <%= I18n.l(@casa_case.next_court_date&.date, format: :day_and_date, default: '') %>
+        <%= render "calendar_button", date: @casa_case.decorate.calendar_next_court_date,
                  id: "btnNextCourtDate",
                  tooltip: "Add Next Court Date to Calendar",
                  title: "Next Court Date for [#{@casa_case.case_number}]" %>
-    </h6>
+      </h6>
     </p>
-
     <p>
-    <h6>
-      <strong>Court Report Status:</strong>
-      <%= @casa_case.decorate.court_report_submission %></h6>
+      <h6>
+        <strong>Court Report Status:</strong>
+        <%= @casa_case.decorate.court_report_submission %></h6>
     </p>
-
     <% unless @casa_case.court_report_not_submitted? %>
       <% if @casa_case.court_report_submitted? && @casa_case.court_reports.attached? %>
         <%= link_to('Click to download',
                     rails_blob_path(@casa_case.latest_court_report, disposition: 'attachment')) %>
       <% end %>
       <p>
-      <h6>
-        <strong>Court Report Submitted Date:</strong>
-        <%= @casa_case.decorate.court_report_submitted_date %></h6>
+        <h6>
+          <strong>Court Report Submitted Date:</strong>
+          <%= @casa_case.decorate.court_report_submitted_date %></h6>
       </p>
     <% end %>
-
     <% if @casa_case.case_court_orders.exists? %>
       <h6><strong>Court Orders:</strong></h6>
       <% @casa_case.case_court_orders.each do |court_order| %>
         <p><%= court_order.implementation_status_symbol %> <%= court_order.text %></p>
       <% end %>
     <% end %>
-
     <%= render "court_dates", casa_case: @casa_case %>
-
     <div>
       <h6><strong>Assigned Volunteers:</strong></h6>
       <div class="container">
@@ -127,13 +116,11 @@ class: "btn btn-primary pull-left casa-case-button") %>
         <% end %>
       </div>
       <br>
-
       <% if @casa_case.case_contacts.present? %>
         <div class="text-right mb-2">
-          <%= link_to 'Download All', casa_case_path(params[:id], format: :xlsx), class: "btn btn-success" %>
+          <%= link_to 'Download All', casa_case_path(params[:id], format: :xlsx), class: "main-btn success-btn btn-hover btn-sm" %>
         </div>
       <% end %>
-
       <div id="case_contacts_list">
         <% if current_user.supervisor? || current_user.casa_admin? %>
           <%= render(partial: "case_contacts/case_contact",
