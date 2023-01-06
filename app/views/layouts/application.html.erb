@@ -12,42 +12,6 @@
   <%= og_tag :image, content: image_url('login.jpg') %>
 
   <%= render 'shared/favicons' %>
-  <style>
-      .fa-beat {
-          -webkit-animation: fa-beat 1s infinite linear;
-          animation: fa-beat 1s infinite linear;
-      }
-
-      @-webkit-keyframes fa-beat {
-          0% {
-              -webkit-transform: scale(1);
-              transform: scale(1);
-          }
-          50% {
-              -webkit-transform: scale(1.1);
-              transform: scale(1.1);
-          }
-          100% {
-              -webkit-transform: scale(1);
-              transform: scale(1);
-          }
-      }
-
-      @keyframes fa-beat {
-          0% {
-              -webkit-transform: scale(1);
-              transform: scale(1);
-          }
-          50% {
-              -webkit-transform: scale(1.1);
-              transform: scale(1.1);
-          }
-          100% {
-              -webkit-transform: scale(1);
-              transform: scale(1);
-          }
-      }
-  </style>
 
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
@@ -116,7 +80,7 @@
                   justify-content-center justify-content-md-end
                 ">
             <p class="text-sm pr-4">
-              Built with <i class="lni lni-heart-filled fa-beat" style="color:red;"></i> by
+              Built with <i class="lni lni-heart-filled" style="color:red;"></i> by
               <a href="https://rubyforgood.org/">Ruby For Good</a>
             </p>
             <p class="text-sm ml-15">
