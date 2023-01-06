@@ -1,19 +1,39 @@
-<h1><%= selected_organization.name %></h1>
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h2><%= selected_organization.name %></h2>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="card card-container">
   <div class="card-body">
     <div class="dashboard-table-header">
-      <h3>Administrators</h3>
-      <%=
-        link_to "New CASA Admin",
-                new_all_casa_admins_casa_org_casa_admin_path(selected_organization),
-                class: "btn btn-primary"
-      %>
-       <%=
-        link_to "Return to Organizations",
-                authenticated_all_casa_admin_root_path,
-                class: "btn btn-primary"
-       %>
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <div class="title mb-30">
+            <h2>Administrators</h2>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="breadcrumb-wrapper mb-30">
+            <span class="ml-5">
+              <%=
+                link_to "New CASA Admin",
+                  new_all_casa_admins_casa_org_casa_admin_path(selected_organization),
+                  class: "btn-sm main-btn primary-btn btn-hover"
+              %>
+              <%=
+                link_to "Return to Organizations",
+                  authenticated_all_casa_admin_root_path,
+                  class: "btn-sm main-btn primary-btn btn-hover"
+              %>
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
     <table class="table admin-list">
       <thead>
