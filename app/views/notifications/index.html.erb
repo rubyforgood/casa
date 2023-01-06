@@ -1,6 +1,10 @@
-<div class="row">
-  <div class="col-sm-12 dashboard-table-header">
-    <h1>Notifications</h1>
+<div class="title-wrapper pt-30">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h2>Notifications</h2>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -16,7 +20,7 @@
   <% end %>
 
   <% if @notifications.empty? and (@patch_notes.empty? or @deploy_time.nil?) %>
-    <div class="card-style my-4 border-warning">
+    <div class="card-style my-4">
       <div class="card-body">
         You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.
       </div>
