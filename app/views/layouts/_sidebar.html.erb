@@ -107,12 +107,11 @@
             aria-expanded="true"
             aria-label="Toggle navigation">
               <span class="icon">
-              <i class="lni lni-list mr-10"></i>
-
+                <i class="lni lni-list mr-10"></i>
               </span>
             <span class="text">Group Actions</span>
           </a>
-          <ul id="ddmenu_55" class="collapse dropdown-nav show">
+          <ul id="ddmenu_55" class="collapse dropdown-nav">
             <% if policy(:application).see_court_reports_page? %>
               <li>
                 <%= link_to case_court_reports_path, class: "#{active_class(case_court_reports_path)}" do %>
