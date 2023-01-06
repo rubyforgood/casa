@@ -21,55 +21,55 @@
           <li>Cases</li>
         </ol>
         <div>
-          <nav class="nav nav-tabs justify-content-center">
-              <%= content_tag :a,
-                              role: "tab",
-                              href: "#volunteer",
-                              id: "volunteer-tab",
-                              class: [
-                                  "nav-link",
-                                  ("active" if @import_type == "volunteer")
-                              ].compact,
-                              data: {
-                                "bs-toggle" => "tab",
-                                "bs-target" => "#volunteer"
-                              },
-                              aria: {controls: "volunteer", selected: (@import_type == "volunteer")} do %>
-                  Import Volunteers
-                <% end %>
-                <%= content_tag :a,
-                              role: "tab",
-                              href: "#supervisor",
-                              id: "supervisor-tab",
-                              class: [
-                                  "nav-link",
-                                  ("active" if @import_type == "supervisor")
-                              ].compact,
-                              data: {
-                                "bs-toggle" => "tab",
-                                "bs-target" => "#supervisor"
-                              },
-                              aria: {controls: "supervisor", selected: (@import_type == "supervisor")} do %>
-                  Import Supervisors
-                <% end %>
-                <%= content_tag :a,
-                              role: "tab",
-                              href: "#case",
-                              id: "case-tab",
-                              class: [
-                                  "nav-link",
-                                  ("active" if @import_type == "casa_case")
-                              ].compact,
-                              data: {
-                                "bs-toggle" => "tab",
-                                "bs-target" => "#casa-case"
-                              },
-                              aria: {controls: "case", selected: (@import_type == "casa_case")} do %>
-                  Import Cases
-                <% end %>
+          <nav class="nav nav-tabs justify-content-center nav-justified mt-3">
+            <%= content_tag :a,
+                            role: "tab",
+                            href: "#volunteer",
+                            id: "volunteer-tab",
+                            class: [
+                                "nav-link",
+                                ("active" if @import_type == "volunteer")
+                            ].compact,
+                            data: {
+                              "bs-toggle" => "tab",
+                              "bs-target" => "#volunteer"
+                            },
+                            aria: {controls: "volunteer", selected: (@import_type == "volunteer")} do %>
+              Import Volunteers
+            <% end %>
+            <%= content_tag :a,
+                            role: "tab",
+                            href: "#supervisor",
+                            id: "supervisor-tab",
+                            class: [
+                                "nav-link",
+                                ("active" if @import_type == "supervisor")
+                            ].compact,
+                            data: {
+                              "bs-toggle" => "tab",
+                              "bs-target" => "#supervisor"
+                            },
+                            aria: {controls: "supervisor", selected: (@import_type == "supervisor")} do %>
+              Import Supervisors
+            <% end %>
+            <%= content_tag :a,
+                            role: "tab",
+                            href: "#casa-case",
+                            id: "casa-case-tab",
+                            class: [
+                                "nav-link",
+                                ("active" if @import_type == "casa_case")
+                            ].compact,
+                            data: {
+                              "bs-toggle" => "tab",
+                              "bs-target" => "#casa-case"
+                            },
+                            aria: {controls: "case", selected: (@import_type == "casa_case")} do %>
+              Import Cases
+            <% end %>
           </nav>
           <div class="tab-content">
-              <%= content_tag :div,
+            <%= content_tag :div,
                             role: "tabpanel",
                             id: "volunteer",
                             class: [
@@ -79,32 +79,32 @@
                                 ("active" if @import_type == "volunteer")
                             ].compact,
                             aria: {labelledby: "volunteer-tab"} do %>
-                <br>
+              <br>
               <%= render "volunteers" %>
-              <%- end %>
-              <%= content_tag :div,
-                          role: "tabpanel",
-                          id: "supervisor",
-                          class: [
-                              "tab-pane",
-                              "fade",
-                              ("show" if @import_type == "supervisor"),
-                              ("active" if @import_type == "supervisor")
-                          ].compact,
-                          aria: {labelledby: "supervisor-tab"} do %>
+            <%- end %>
+            <%= content_tag :div,
+                            role: "tabpanel",
+                            id: "supervisor",
+                            class: [
+                                "tab-pane",
+                                "fade",
+                                ("show" if @import_type == "supervisor"),
+                                ("active" if @import_type == "supervisor")
+                            ].compact,
+                            aria: {labelledby: "supervisor-tab"} do %>
                 <br>
                 <%= render "supervisors" %>
               <%- end %>
               <%= content_tag :div,
-                            role: "tabpanel",
-                            id: "casa-case",
-                            class: [
-                                "tab-pane",
-                                "fade",
-                                ("show" if @import_type == "casa_case"),
-                                ("active" if @import_type == "casa_case")
-                            ].compact,
-                            aria: {labelledby: "casa-case-tab"} do %>
+                              role: "tabpanel",
+                              id: "casa-case",
+                              class: [
+                                  "tab-pane",
+                                  "fade",
+                                  ("show" if @import_type == "casa_case"),
+                                  ("active" if @import_type == "casa_case")
+                              ].compact,
+                              aria: {labelledby: "casa-case-tab"} do %>
                 <br>
                 <%= render "cases" %>
               <%- end %>
