@@ -11,6 +11,8 @@
 </div><!-- ==== end title ==== -->
 
 <div class="card-style mb-30">
+  <p class="fs-6 mb-2">Case contact groups are used to group case contact types. For example a Family group could contain the case contact types: parent, grandpa, aunt.</p>
+
   <%= form_with(model: contact_type_group, local: true) do |form| %>
     <div class="alert-box danger-alert">
       <%= render "/shared/error_messages", resource: contact_type_group %>
