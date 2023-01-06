@@ -11,17 +11,17 @@
   <div class="col-sm-12">
     <div class="card card-style">
       <div class="card-body">
-        <h5 class="card-title"><strong>System Imports</strong></h5>
+        <h5 class="card-title">System Imports</h5>
         <p class="card-text">
           You should import files in the following order:
         </p>
-        <ol>
+        <ol style="list-style-type: decimal;" class="mx-4">
           <li>Volunteers</li>
           <li>Supervisors</li>
           <li>Cases</li>
         </ol>
-        <div class="tab-style-1">
-          <nav class="nav" id="nav-tab">
+        <div>
+          <nav class="nav nav-tabs justify-content-center">
               <%= content_tag :a,
                               role: "tab",
                               href: "#volunteer",
@@ -113,7 +113,7 @@
         <br>
       </div>
     </div>
-    <%= link_to "Return To Dashboard", root_path, class: 'btn btn-info' %>
+    <%= link_to "Return To Dashboard", root_path, class: 'main-btn secondary-btn btn-hover mt-5' %>
   </div>
   <%= render "csv_error_modal", {import_error: @import_error} if @import_error %>
 </div>
