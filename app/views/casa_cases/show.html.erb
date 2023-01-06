@@ -25,9 +25,10 @@
     <% end %>
     <%= form_with url: generate_case_court_reports_path, local: false, class: "d-inline" do |form| %>
       <%= form.hidden_field :case_number, value: @casa_case.case_number %>
-      <%= button_tag(type: "submit", class: "btn-sm main-btn primary-btn pull-right btn-hover", id: "btnGenerateReport") do %>
-        <i class="lni lni-download mr-5"></i> Generate Report
-      <% end %>
+      <%= button_tag "Generate Report", type: :submit,
+                     data: {button_name: "Generate Report"},
+                     id: "btnGenerateReport",
+                     class: "main-btn success-btn btn-hover btn-sm pull-right mb-2" %>
       <i id="spinner" class='fas fa-spin d-none pull-right'>⏳</i>
     <% end %>
     <% if @casa_case.casa_org.show_fund_request %>
