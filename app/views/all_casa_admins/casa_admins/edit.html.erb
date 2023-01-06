@@ -16,7 +16,7 @@
       <% if @casa_admin.persisted? %>
         <div class="field form-group">
           <% if @casa_admin.active? %>
-            Admin is <span class="badge badge-success text-uppercase display-1">Active</span>
+            Admin is <span class="badge success-bg text-uppercase display-1 mb-1 rounded-pill">Active</span>
               <%= link_to "Deactivate",
                           deactivate_all_casa_admins_casa_org_casa_admin_path,
                           method: :patch,
