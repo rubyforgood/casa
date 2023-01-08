@@ -439,7 +439,7 @@ GEM
     standard (1.5.0)
       rubocop (= 1.23.0)
       rubocop-performance (= 1.12.0)
-    strong_migrations (1.4.0)
+    strong_migrations (1.4.1)
       activerecord (>= 5.2)
     tapioca (0.7.3)
       bundler (>= 1.17.3)
