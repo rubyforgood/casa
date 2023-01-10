@@ -9,14 +9,14 @@
         <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton1">
           <div class="dropdown-item form-check checkbox-style">
             <%= check_box_tag "status_option_active", "Active", true,
-                    class: "form-check-input",
-                    data: { value: "Active" } %>
+                              class: "form-check-input",
+                              data: { value: "Active" } %>
             <%= label_tag "status_option_active", "Active", class: "form-check-label" %>
           </div>
           <div class="dropdown-item form-check checkbox-style">
             <%= check_box_tag "status_option_inactive", "Inactive", false,
-                      class: "form-check-input",
-                      data: { value: "Inactive" } %>
+                              class: "form-check-input",
+                              data: { value: "Inactive" } %>
             <%= label_tag "status_option_inactive", "Inactive", class: "form-check-label" %>
           </div>
         </div>
@@ -28,14 +28,14 @@
         <div class="dropdown-menu assigned-to-volunteer-options" aria-labelledby="dropdownMenuButton2">
           <div class="dropdown-item form-check checkbox-style">
             <%= check_box_tag "assigned_to_volunteer_option_yes", "Yes", true,
-                       class: "form-check-input",
-                       data: { value: "Yes" } %>
+                              class: "form-check-input",
+                              data: { value: "Yes" } %>
             <%= label_tag "assigned_to_volunteer_option_yes", "Yes", class: "form-check-label" %>
           </div>
           <div class="dropdown-item form-check form-check checkbox-style">
             <%= check_box_tag "assigned_to_volunteer_option_no", "No", true,
-                       class: "form-check-input",
-                       data: { value: "No" } %>
+                              class: "form-check-input",
+                              data: { value: "No" } %>
             <%= label_tag "assigned_to_volunteer_option_no", "No", class: "form-check-label" %>
           </div>
         </div>
@@ -47,14 +47,14 @@
         <div class="dropdown-menu more-than-one-volunteer-options" aria-labelledby="dropdownMenuButton3">
           <div class="dropdown-item form-check checkbox-style">
             <%= check_box_tag "more_than_one_volunteer_option_yes", "Yes", true,
-                       class: "form-check-input",
-                       data: { value: "Yes" } %>
+                              class: "form-check-input",
+                              data: { value: "Yes" } %>
             <%= label_tag "more_than_one_volunteer_option_yes", "Yes", class: "form-check-label" %>
           </div>
           <div class="dropdown-item form-check checkbox-style">
             <%= check_box_tag "more_than_one_volunteer_option_no", "No", true,
-                       class: "form-check-input",
-                       data: { value: "No" } %>
+                              class: "form-check-input",
+                              data: { value: "No" } %>
             <%= label_tag "more_than_one_volunteer_option_no", "No", class: "form-check-label" %>
           </div>
         </div>
@@ -66,14 +66,14 @@
         <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton4">
           <div class="dropdown-item form-check checkbox-style">
             <%= check_box_tag "transition_youth_option_yes", "Yes 🦋", true,
-                       class: "form-check-input",
-                       data: { value: "Yes 🦋" } %>
+                              class: "form-check-input",
+                              data: { value: "Yes 🦋" } %>
             <%= label_tag "transition_youth_option_yes", "Yes", class: "form-check-label" %>
           </div>
           <div class="dropdown-item form-check checkbox-style">
             <%= check_box_tag "transition_youth_option_no", "No", true,
-                       class: "form-check-input",
-                       data: { value: "No 🐛" } %>
+                              class: "form-check-input",
+                              data: { value: "No 🐛" } %>
             <%= label_tag "transition_youth_option_no", "No", class: "form-check-label" %>
           </div>
         </div>
@@ -90,46 +90,52 @@
               <% option_for_name = option.downcase.gsub(/[^a-z]+/, '') -%>
               <% tag_name = "case_case_prefix_option_#{option_for_name}" -%>
               <%= check_box_tag tag_name, option, true,
-                         class: "form-check-input",
-                         data: { value: option} %>
+                                class: "form-check-input",
+                                data: { value: option } %>
               <%= label_tag tag_name, option, class: "form-check-label" %>
             </div>
           <% end %>
         </div>
       </div>
     </div>
-    <div class="modal fade" id="visibleColumns" tabindex="-1" role="dialog" aria-labelledby="visibleColumnsLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="visibleColumnsLabel">
-              Pick Displayed Columns
-            </h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div>
-              Select columns:
-              <% CasaCase::TABLE_COLUMNS.each_with_index do |column, index| %>
-                <div class="row">
-                  <div class="col-sm-12">
-                    <div class="form-check">
-                      <%= check_box_tag "pick-#{column}",
-                                        "1",
-                                        false,
-                                        class: "form-check-input toggle-visibility",
-                                        data: {column: index} %>
-                      <%= label_tag "pick-#{column}", column.titleize, class: "form-check-label" %>
-                    </div>
-                  </div>
-                </div>
-              <% end %>
+    <div class="warning-modal">
+      <div class="modal fade" id="visibleColumns" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content card-style">
+            <div class="modal-header px-0 border-0">
+              <h5 class="text-bold">Pick Displayed Columns</h5>
+              <button
+                class="border-0 bg-transparent h1"
+                data-bs-dismiss="modal"
+              >
+                <i class="lni lni-cross-circle"></i>
+              </button>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            <div class="modal-body px-0">
+              <div class="mb-30">
+                <h6 class="mb-20">
+                  Select columns:
+                </h6>
+                <% CasaCase::TABLE_COLUMNS.each_with_index do |column, index| %>
+                  <div class="form-check checkbox-style m-2">
+                    <%= check_box_tag "pick-#{column}",
+                                      "1",
+                                      false,
+                                      class: "form-check-input toggle-visibility",
+                                      data: { column: index } %>
+                    <%= label_tag "pick-#{column}", column.titleize, class: "form-check-label" %>
+                  </div>
+                <% end %>
+              </div>
+              <div class="action d-flex flex-wrap justify-content-end">
+                <button
+                  data-bs-dismiss="modal"
+                  class="main-btn danger-btn-outline btn-hover m-1"
+                ><i class="lni lni-ban mr-10"></i>
+                  Close
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
