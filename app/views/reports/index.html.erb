@@ -15,7 +15,7 @@
                   data: { disable_with: "Downloading Mileage Report" },
                   class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
                 ) do %>
-                <i class="lni lni-dashboard mr-10"></i> Mileage Report
+              <i class="lni lni-dashboard mr-10"></i> Mileage Report
             <% end %>
           <% end %>
         </li>
@@ -26,7 +26,7 @@
                   data: { disable_with: "Missing Data Report" },
                   class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
                 ) do %>
-                <i class="lni lni-database mr-10"></i> Missing Data Report
+              <i class="lni lni-database mr-10"></i> Missing Data Report
             <% end %>
           <% end %>
         </li>
@@ -37,7 +37,7 @@
                   data: { disable_with: "Learning Hours Report" },
                   class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
                 ) do %>
-                <i class="lni lni-hourglass mr-10"></i> Learning Hours Report
+              <i class="lni lni-hourglass mr-10"></i> Learning Hours Report
             <% end %>
           <% end %>
         </li>
@@ -48,7 +48,7 @@
                   data: { disable_with: "Export Volunteers Emails" },
                   class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
                 ) do %>
-                <i class="lni lni-envelope mr-10"></i> Export Volunteers Emails
+              <i class="lni lni-envelope mr-10"></i> Export Volunteers Emails
             <% end %>
           <% end %>
         </li>
@@ -59,150 +59,152 @@
                   data: { disable_with: "Followups Report" },
                   class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
                 ) do %>
-                <i class="lni lni-check-box mr-10"></i> Followups Report
+              <i class="lni lni-check-box mr-10"></i> Followups Report
             <% end %>
           <% end %>
         </li>
       </ul>
     </div>
 
-        <div class="col-lg-12">
-          <div class="card-style mb-30">
-            <h6 class="mb-10">Case Contacts Report</h6>
-            <p class="text-sm mb-20">
-              This CSV is a listing of all fields for the case contacts of all volunteers. Select the start and end date.
-            </p>
+    <div class="col-lg-12">
+      <div class="card-style mb-30">
+        <h6 class="mb-10">Case Contacts Report</h6>
+        <p class="text-sm mb-20">
+          This CSV is a listing of all fields for the case contacts of all volunteers. Select the start and end date.
+        </p>
 
-            <hr>
+        <hr>
 
-            <div class="table-wrapper table-responsive">
-              <%= form_with url: case_contact_reports_path(format: :csv), scope: 'report', method: :get, local: true do |f| %>
+        <div class="table-wrapper table-responsive">
+          <%= form_with url: case_contact_reports_path(format: :csv), scope: 'report', method: :get, local: true do |f| %>
 
-                <div class="field form-group mb-20">
-                  <label class="form-label"><h6>Starting From</h6></label>
-                  <%= f.text_field :start_date, value: 6.months.ago.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT),
-                                                data: { provide: "datepicker",
-                                                date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
-                                                class: "form-control" %>
-                </div>
-
-                <div class="field form-group mb-20">
-                  <label class="form-label"><h6>Ending At</h6></label>
-                  <%= f.text_field :end_date, value: Date.today.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT),
-                                              data:{ provide: "datepicker",
-                                              date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
-                                              class: "form-control" %>
-                </div>
-
-                <% if current_user&.casa_admin? || current_user&.supervisor? %>
-                  <div class="select-style-1">
-                    <label><h6>Assigned To</h6></label>
-                    <div class="select-position">
-                      <%= f.collection_select(
-                              :supervisor_ids,
-                              Supervisor.where(casa_org: current_user.casa_org),
-                              :id,
-                              :display_name,
-                              prompt: true
-                          ) %>
-                    </div>
-                  </div>
-
-                  <div class="select-style-1">
-                    <label><h6>Volunteers</h6></label>
-                    <div class="select-position">
-                      <%= f.collection_select(
-                              :creator_ids,
-                              Volunteer.where(casa_org: current_user.casa_org),
-                              :id,
-                              :display_name,
-                              prompt: true
-                          ) %>
-                    </div>
-                  </div>
-
-                  <div class="select-style-1">
-                    <label><h6>Contact Type</h6></label>
-                    <div class="select-position">
-                    <%= f.collection_select(
-                            :contact_type_ids,
-                            ContactType.for_organization(current_user.casa_org),
-                            :id,
-                            :name,
-                            prompt: true
-                        ) %>
-                    </div>
-                  </div>
-
-                  <div class="select-style-1">
-                    <label><h6>Contact Type Group</h6></label>
-                    <div class="select-position">
-                          <%= f.collection_select(
-                                  :contact_type_group_ids,
-                                  ContactTypeGroup.for_organization(current_user.casa_org),
-                                  :id,
-                                  :name,
-                                  prompt: true
-                              ) %>
-                    </div>
-                  </div>
-
-                  <h6 class="mb-10">Want Driving Reimbursement</h6>
-                  <div class="form-check radio-style mb-10">
-                    <%= f.collection_radio_buttons :want_driving_reimbursement, boolean_choices, :last, :first do |b| %>
-                      <div class="form-check">
-                        <%= b.radio_button(class: "form-check-input") %>
-                        <%= b.label(class: "form-check-label") %>
-                      </div>
-                    <% end %>
-                  </div>
-
-                  <h6 class="mb-10">Contact Made</h6>
-                  <div class="form-check radio-style mb-20">
-                    <%= f.collection_radio_buttons :contact_made, boolean_choices, :last, :first do |b| %>
-                      <div class="form-check">
-                        <%= b.radio_button(class: "form-check-input") %>
-                        <%= b.label(class: "form-check-label") %>
-                      </div>
-                    <% end %>
-                  </div>
-
-                  <h6 class="mb-10">Transition Aged Youth</h6>
-                  <div class="form-check radio-style mb-20">
-                    <%= f.collection_radio_buttons :has_transitioned, boolean_choices, :last, :first do |b| %>
-                      <div class="form-check">
-                        <%= b.radio_button(class: "form-check-input") %>
-                        <%= b.label(class: "form-check-label") %>
-                      </div>
-                    <% end %>
-                  </div>
-                <% end %>
-
-                <%= render 'filter', form: f %>
-
-                  <ul class="buttons-group mt-30 col-8">
-                    <li>
-                      <button type="button" class="btn-sm main-btn primary-btn-outline btn-hover" data-toggle="modal" data-target="#filterColumns">
-                        Filter Columns
-                      </button>
-                    </li>
-
-                    <li>
-                      <%= button_tag(
-                            type: "submit",
-                            data: { disable_with: false },
-                            class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
-                          ) do %>
-                          <i class="lni lni-download mr-10"></i> Download Report
-                      <% end %>
-                    </li>
-                  </ul>
-
-              <% end %>
+            <div class="field form-group mb-20">
+              <label class="form-label"><h6>Starting From</h6></label>
+              <%= f.text_field :start_date, value: 6.months.ago.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT),
+                               data: { provide: "datepicker",
+                                       date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
+                               class: "form-control" %>
             </div>
 
-          </div>
-        </div>
+            <div class="field form-group mb-20">
+              <label class="form-label"><h6>Ending At</h6></label>
+              <%= f.text_field :end_date, value: Date.today.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT),
+                               data: { provide: "datepicker",
+                                       date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
+                               class: "form-control" %>
+            </div>
 
+            <% if current_user&.casa_admin? || current_user&.supervisor? %>
+              <div class="select-style-1">
+                <label><h6>Assigned To</h6></label>
+                <div class="select-position">
+                  <%= f.collection_select(
+                        :supervisor_ids,
+                        Supervisor.where(casa_org: current_user.casa_org),
+                        :id,
+                        :display_name,
+                        prompt: true
+                      ) %>
+                </div>
+              </div>
+
+              <div class="select-style-1">
+                <label><h6>Volunteers</h6></label>
+                <div class="select-position">
+                  <%= f.collection_select(
+                        :creator_ids,
+                        Volunteer.where(casa_org: current_user.casa_org),
+                        :id,
+                        :display_name,
+                        prompt: true
+                      ) %>
+                </div>
+              </div>
+
+              <div class="select-style-1">
+                <label><h6>Contact Type</h6></label>
+                <div class="select-position">
+                  <%= f.collection_select(
+                        :contact_type_ids,
+                        ContactType.for_organization(current_user.casa_org),
+                        :id,
+                        :name,
+                        prompt: true
+                      ) %>
+                </div>
+              </div>
+
+              <div class="select-style-1">
+                <label><h6>Contact Type Group</h6></label>
+                <div class="select-position">
+                  <%= f.collection_select(
+                        :contact_type_group_ids,
+                        ContactTypeGroup.for_organization(current_user.casa_org),
+                        :id,
+                        :name,
+                        prompt: true
+                      ) %>
+                </div>
+              </div>
+
+              <h6 class="mb-10">Want Driving Reimbursement</h6>
+              <div class="form-check radio-style mb-10">
+                <%= f.collection_radio_buttons :want_driving_reimbursement, boolean_choices, :last, :first do |b| %>
+                  <div class="form-check">
+                    <%= b.radio_button(class: "form-check-input") %>
+                    <%= b.label(class: "form-check-label") %>
+                  </div>
+                <% end %>
+              </div>
+
+              <h6 class="mb-10">Contact Made</h6>
+              <div class="form-check radio-style mb-20">
+                <%= f.collection_radio_buttons :contact_made, boolean_choices, :last, :first do |b| %>
+                  <div class="form-check">
+                    <%= b.radio_button(class: "form-check-input") %>
+                    <%= b.label(class: "form-check-label") %>
+                  </div>
+                <% end %>
+              </div>
+
+              <h6 class="mb-10">Transition Aged Youth</h6>
+              <div class="form-check radio-style mb-20">
+                <%= f.collection_radio_buttons :has_transitioned, boolean_choices, :last, :first do |b| %>
+                  <div class="form-check">
+                    <%= b.radio_button(class: "form-check-input") %>
+                    <%= b.label(class: "form-check-label") %>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+
+            <%= render 'filter', form: f %>
+
+            <ul class="buttons-group mt-30 col-8">
+              <li>
+                <button
+                  type="button"
+                  class="btn-sm main-btn primary-btn-outline btn-hover"
+                  data-bs-toggle="modal"
+                  data-bs-target="#filterColumns"
+                ><i class="lni lni-funnel mr-10"></i>
+                  Filter Columns
+                </button>
+              </li>
+
+              <li>
+                <%= button_tag(
+                      type: "submit",
+                      data: { disable_with: false },
+                      class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
+                    ) do %>
+                  <i class="lni lni-download mr-10"></i> Download Report
+                <% end %>
+              </li>
+            </ul>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
