@@ -4,13 +4,22 @@ require "stringio"
 RSpec.describe "Edit CASA Case", type: :system do
   context "logged in as admin" do
     let(:organization) { build(:casa_org) }
+    let(:other_organization) { build(:casa_org) }
     let(:admin) { create(:casa_admin, casa_org: organization) }
+    let(:other_org_admin) { create(:casa_admin, casa_org: other_organization) }
     let(:casa_case) { create(:casa_case, :with_one_court_order, casa_org: organization) }
+    let(:other_org_casa_case) { create(:casa_case, :with_one_court_order, casa_org: other_organization) }
     let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
+    let(:other_org_contact_type_group) { create(:contact_type_group, casa_org: other_organization) }
     let!(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
+    let!(:other_org_contact_type) { create(:contact_type, contact_type_group: other_org_contact_type_group) }
     let!(:siblings_casa_cases) do
       create(:casa_case, :with_one_court_order, casa_org: organization)
       organization.casa_cases.excluding(casa_case)
+    end
+    let!(:other_org_siblings_casa_cases) do
+      create(:casa_case, :with_one_court_order, casa_org: other_organization)
+      other_organization.casa_cases.excluding(other_org_casa_case)
     end
 
     before { sign_in admin }
@@ -50,7 +59,12 @@ RSpec.describe "Edit CASA Case", type: :system do
       has_checked_field? contact_type.name
     end
 
-    it "deactivates a case", js: true do
+    it "does not display anything when not part of the organization", js: true do
+      visit casa_case_path(other_org_casa_case.id)
+      expect(page).to have_text("Sorry you are not authorized to perform this action.")
+    end
+
+    it "deactivates a case when part of the same organization", js: true do
       visit edit_casa_case_path(casa_case)
 
       click_on "Deactivate CASA Case"
@@ -61,6 +75,12 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to_not have_text("Court Date")
       expect(page).to_not have_text("Court Report Due Date")
       expect(page).to_not have_field("Court Report Due Date")
+    end
+
+    it "does not allow an admin to deactivate a case if not in an organization" do
+      visit edit_casa_case_path(other_org_casa_case)
+      # TODO: This breaks the UI flow and shows a blank page, but does 404 properly.
+      expect(page).to have_http_status(404)
     end
 
     it "reactivates a case", js: true do
@@ -77,15 +97,25 @@ RSpec.describe "Edit CASA Case", type: :system do
     end
 
     context "when trying to assign a volunteer to a case" do
-      it "should be able to assign volunteers", js: true do
+      it "should be able to assign volunteers if in the same organization", js: true do
         visit edit_casa_case_path(casa_case)
 
         expect(page).to have_content("Manage Volunteers")
         expect(page).to have_css("#volunteer-assignment")
       end
+
+      it "should error if trying to assign volunteers for another organization" do
+        visit edit_casa_case_path(other_org_casa_case)
+        expect(page).to have_text("Sorry you are not authorized to perform this action.")
+      end
     end
 
     context "Copy all court orders from a case" do
+      it "should not allow access to cases not within the organization" do
+        visit edit_casa_case_path(other_org_casa_case)
+        expect(page).to have_text("Sorry you are not authorized to perform this action.")
+      end
+
       it "copy button should be disabled when no case is selected", js: true do
         visit edit_casa_case_path(casa_case)
         expect(page).to have_button("copy-court-button", disabled: true)
