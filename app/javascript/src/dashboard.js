@@ -71,20 +71,16 @@ $('document').ready(() => {
   )
 
   const handleAjaxError = e => {
-    if (e.status === 401) {
-      location.reload()
+    console.log(e)
+    if (e.responseJSON && e.responseJSON.error) {
+      alert(e.responseJSON.error)
     } else {
-      console.log(e)
-      if (e.responseJSON && e.responseJSON.error) {
-        alert(e.responseJSON.error)
-      } else {
-        const responseErrorMessage = e.response.statusText
-          ? `\n${e.response.statusText}\n`
-          : ''
+      const responseErrorMessage = e.response.statusText
+        ? `\n${e.response.statusText}\n`
+        : ''
 
-        alert(`Sorry, try that again?\n${responseErrorMessage}\nIf you're seeing a problem, please fill out the Report A Site Issue
-        link to the bottom left near your email address.`)
-      }
+      alert(`Sorry, try that again?\n${responseErrorMessage}\nIf you're seeing a problem, please fill out the Report A Site Issue
+      link to the bottom left near your email address.`)
     }
   }
 
