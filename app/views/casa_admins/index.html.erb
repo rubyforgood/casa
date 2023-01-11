@@ -1,54 +1,61 @@
-<div class="container-fluid">
-  <div class="title-wrapper pt-30">
-    <div class="row align-items-center">
-      <div class="col-md-6">
-        <div class="title mb-10">
-          <h1>Admins</h1>
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h2>Casa Admins</h2>
+      </div>
+    </div>
+    <!-- end col -->
+    <div class="col-md-6">
+      <div class="breadcrumb-wrapper mb-30">
+        <span class="ml-5">
           <%= link_to new_casa_admin_path, class: "main-btn mt-2 mb-2 secondary-btn btn-sm btn-hover" do %>
             <i class="lni lni-plus mr-10"></i>
             New Admin
           <% end %>
-        </div>
+          </span>
       </div>
     </div>
   </div>
-    <!-- end col -->
-  <div class="tables-wrapper">
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="card-style mb-30">
-          <table class="table " id="admins">
-            <thead>
-            <tr>
-              <th><h5 class="ml-10 ">Admin Email</h5></th>
-              <th><h5 class="ml-10 ">Actions</h5></th>
-            </tr>
-            </thead>
+</div>
 
-            <tbody>
-            <% @admins.each do |admin| %>
-              <tr id="admin-<%= admin.id %>" class="">
-                <td scope="row" class="min-wdth">
-                  <span class="ml-10 mb-10 mt-10  pb-1"><%= admin.email %></span>
-                  <% unless admin.active? %>
+<!-- end col -->
+<div class="tables-wrapper">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card-style mb-30">
+        <table class="table " id="admins">
+          <thead>
+          <tr>
+            <th><h5 class="ml-10 ">Admin Email</h5></th>
+            <th><h5 class="ml-10 ">Actions</h5></th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <% @admins.each do |admin| %>
+            <tr id="admin-<%= admin.id %>" class="">
+              <td scope="row" class="min-wdth">
+                <span class="ml-10 mb-10 mt-10  pb-1"><%= admin.email %></span>
+                <% unless admin.active? %>
                     <span class="status-btn close-btn">
                       Deactivated
                     </span>
-                  <% end %>
-                </td>
-                <td class="min-width">
+                <% end %>
+              </td>
+              <td class="min-width">
                   <span class="ml-10 mb-10 mt-10 pb-1">
                   <%= link_to edit_casa_admin_path(admin), class: "text-danger h5" do %>
                     <i class="lni lni-pencil-alt"></i> Edit
                   <% end %>
                   </span>
-                </td>
-              </tr>
-            <% end %>
-            </tbody>
-          </table>
-        </div>
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
+</div>
 </div>

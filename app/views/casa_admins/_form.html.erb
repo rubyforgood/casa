@@ -1,78 +1,69 @@
-<div class="container-fluid">
-  <!-- ========== title start ========== -->
-  <div class="title-wrapper pt-30">
-    <div class="row align-items-center">
-      <div class="col-md-6">
-        <div class="title mb-10">
-          <h1><%= title %></h1>
-        </div>
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h2><%= title %></h2>
       </div>
     </div>
   </div>
-  <!-- ========== title end ========== -->
+</div>
 
-  <!-- ========== Form Start ========== -->
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="card-style">
-        <%= form_with(model: casa_admin, local: true) do |form| %>
+<div class="card-style-1 pl-25 mb-10">
+  <%= form_with(model: casa_admin, local: true) do |form| %>
+    <div class="alert-box danger-alert">
+      <%= render "/shared/error_messages", resource: casa_admin %>
+    </div>
+    <div class="min-wdth">
+      <%= render "/shared/edit_form", resource: casa_admin, f: form %>
+    </div>
+    <div class="mb-30">
+      <%= render "/shared/invite_login", resource: casa_admin %>
+    </div>
+    <% if casa_admin.persisted? %>
+      <div class="mb-20 col">
+        <% if casa_admin.active? %>
+          <strong class="text-dark mr-5 h4">Admin is</strong>
+          <span class="mr-10 mb-1 status-btn success-bg text-white text-uppercase display-1">Active</span>
+          <%= link_to "Deactivate",
+                      deactivate_casa_admin_path(casa_admin),
+                      method: :patch,
+                      class: "status-btn light-bg btn-outline-danger",
+                      data: {
+                        confirm: "WARNING: Marking an admin inactive will make them unable to login. Are you sure" +
+                          " you want to do this?"
+                      } %>
+        <% else %>
           <div class="alert-box danger-alert">
-          <%= render "/shared/error_messages", resource: casa_admin %>
+            Admin was deactivated on: <%= I18n.l(casa_admin.updated_at, format: :standard, default: nil) %>
           </div>
-          <div class="min-wdth">
-          <%= render "/shared/edit_form", resource: casa_admin, f: form %>
-          </div>
-          <div class="mb-30">
-          <%= render "/shared/invite_login", resource: casa_admin %>
-          </div>
-          <% if casa_admin.persisted? %>
-            <div class="mb-20 col">
-              <% if casa_admin.active? %>
-                  <strong class="text-dark mr-5 h4">Admin is</strong> <span class="mr-10 mb-1 status-btn success-bg text-white text-uppercase display-1">Active</span>
-                <%= link_to "Deactivate",
-                            deactivate_casa_admin_path(casa_admin),
-                            method: :patch,
-                            class: "status-btn light-bg btn-outline-danger",
-                            data: {
-                                confirm: "WARNING: Marking an admin inactive will make them unable to login. Are you sure" +
-                                    " you want to do this?"
-                            } %>
-              <% else %>
-                <div class="alert-box danger-alert">
-                  Admin was deactivated on: <%= I18n.l(casa_admin.updated_at, format: :standard, default: nil) %>
-                </div>
-                <% if policy(casa_admin).activate? %>
-                  <%= link_to "Activate Admin",
-                              activate_casa_admin_path(casa_admin),
-                              method: :patch,
-                              class: "status-btn btn-outline-success" %>
-                <% end %>
-              <% end %>
-
-              <% if current_user.casa_admin? && casa_admin.invitation_accepted_at.nil? %>
-                <%= link_to "Resend Invitation",
-                            resend_invitation_casa_admin_path(casa_admin),
-                            method: :patch,
-                            class: "status-btn light-bg  btn-outline-danger" %>
-              <% end %>
-
-              <% if current_user.casa_admin? %>
-                <%= link_to "Change to Supervisor",
-                            change_to_supervisor_casa_admin_path(casa_admin),
-                            method: :patch,
-                            class: "status-btn light-bg btn-outline-danger" %>
-              <% end %>
-            </div>
+          <% if policy(casa_admin).activate? %>
+            <%= link_to "Activate Admin",
+                        activate_casa_admin_path(casa_admin),
+                        method: :patch,
+                        class: "status-btn btn-outline-success" %>
           <% end %>
+        <% end %>
 
-        <div class="actions mb-10">
-          <%= button_tag( type: "submit" , class: "btn-sm main-btn primary-btn btn-hover" ) do %>
-            <i class="lni lni-checkmark-circle mr-5"></i> Submit
-            <% end %>
-        </div>
+        <% if current_user.casa_admin? && casa_admin.invitation_accepted_at.nil? %>
+          <%= link_to "Resend Invitation",
+                      resend_invitation_casa_admin_path(casa_admin),
+                      method: :patch,
+                      class: "status-btn light-bg  btn-outline-danger" %>
+        <% end %>
+
+        <% if current_user.casa_admin? %>
+          <%= link_to "Change to Supervisor",
+                      change_to_supervisor_casa_admin_path(casa_admin),
+                      method: :patch,
+                      class: "status-btn light-bg btn-outline-danger" %>
         <% end %>
       </div>
+    <% end %>
+
+    <div class="actions mb-10">
+      <%= button_tag(type: "submit", class: "btn-sm main-btn primary-btn btn-hover") do %>
+        <i class="lni lni-checkmark-circle mr-5"></i> Submit
+      <% end %>
     </div>
-  </div>
-  <!-- ========== Form End ========== -->
+  <% end %>
 </div>
