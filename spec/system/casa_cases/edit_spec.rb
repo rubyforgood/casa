@@ -3,14 +3,23 @@ require "stringio"
 
 RSpec.describe "Edit CASA Case", type: :system do
   context "logged in as admin" do
-    let(:organization) { build(:casa_org) }
-    let(:admin) { create(:casa_admin, casa_org: organization) }
-    let(:casa_case) { create(:casa_case, :with_one_court_order, casa_org: organization) }
-    let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
+    let(:organization_one) { build(:casa_org) }
+    let(:organization_two) { build(:casa_org) }
+    let(:admin) { create(:casa_admin, casa_org: organization_one) }
+    let(:org_two_admin) { create(:casa_admin, casa_org: organization_two) }
+    let(:casa_case) { create(:casa_case, :with_one_court_order, casa_org: organization_one) }
+    let(:org_two_casa_case) { create(:casa_case, :with_one_court_order, casa_org: organization_two) }
+    let(:contact_type_group) { create(:contact_type_group, casa_org: organization_one) }
+    let(:org_two_contact_type_group) { create(:contact_type_group, casa_org: organization_two) }
     let!(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
+    let!(:org_two_contact_type) { create(:contact_type, contact_type_group: org_two_contact_type_group) }
     let!(:siblings_casa_cases) do
-      create(:casa_case, :with_one_court_order, casa_org: organization)
-      organization.casa_cases.excluding(casa_case)
+      create(:casa_case, :with_one_court_order, casa_org: organization_one)
+      organization_one.casa_cases.excluding(casa_case)
+    end
+    let!(:org_two_siblings_casa_cases) do
+      create(:casa_case, :with_one_court_order, casa_org: organization_two)
+      organization_two.casa_cases.excluding(org_two_casa_case)
     end
 
     before { sign_in admin }
@@ -50,7 +59,13 @@ RSpec.describe "Edit CASA Case", type: :system do
       has_checked_field? contact_type.name
     end
 
-    it "deactivates a case", js: true do
+    it "redirects to case index when not part of the organization" do
+      visit casa_case_path(org_two_casa_case.id)
+      expect(page).to have_text("Unable to find case in current organization.")
+      expect(current_path).to eq('/casa_cases')
+    end
+
+    it "deactivates a case when part of the same organization", js: true do
       visit edit_casa_case_path(casa_case)
 
       click_on "Deactivate CASA Case"
@@ -61,6 +76,12 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to_not have_text("Court Date")
       expect(page).to_not have_text("Court Report Due Date")
       expect(page).to_not have_field("Court Report Due Date")
+    end
+
+    it "does not allow an admin to deactivate a case if not in an organization", js: true do
+      visit edit_casa_case_path(org_two_casa_case)
+      expect(page).to have_text("Unable to find case in current organization.")
+      expect(current_path).to eq('/casa_cases')
     end
 
     it "reactivates a case", js: true do
@@ -77,15 +98,28 @@ RSpec.describe "Edit CASA Case", type: :system do
     end
 
     context "when trying to assign a volunteer to a case" do
-      it "should be able to assign volunteers", js: true do
+      it "should be able to assign volunteers if in the same organization", js: true do
         visit edit_casa_case_path(casa_case)
 
         expect(page).to have_content("Manage Volunteers")
         expect(page).to have_css("#volunteer-assignment")
       end
+
+      it "should error if trying to assign volunteers for another organization", js: true do
+        visit edit_casa_case_path(org_two_casa_case)
+
+        expect(page).to have_text('Unable to find case in current organization.')
+        expect(current_path).to eq('/casa_cases')
+      end
     end
 
     context "Copy all court orders from a case" do
+      it "should not allow access to cases not within the organization" do
+        visit edit_casa_case_path(org_two_casa_case)
+        expect(page).to have_text('Unable to find case in current organization.')
+        expect(current_path).to eq('/casa_cases')
+      end
+
       it "copy button should be disabled when no case is selected", js: true do
         visit edit_casa_case_path(casa_case)
         expect(page).to have_button("copy-court-button", disabled: true)
