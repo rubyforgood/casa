@@ -36,13 +36,15 @@
             <%= form.hidden_field :time_zone, id: "user-time-zone" %>
           </div>
           <div class="input-style-1">
-            <%= button_tag "Generate Report", type: :submit,
-                      data: {
-                          button_name: "Generate Report"
-                      },
-                      id: "btnGenerateReport",
-                      class: "main-btn primary-btn btn-hover btn-sm",
-                      onclick: "setTimeZone()" %>
+            <%= button_tag type: :submit,
+                           data: {
+                             button_name: "Generate Report"
+                           },
+                           id: "btnGenerateReport",
+                           class: "main-btn primary-btn btn-hover btn-sm",
+                           onclick: "setTimeZone()" do %>
+              <i class="lni lni-download mr-10"></i> Generate Report
+            <% end %>
             <i id="spinner" class='fas fa-spin d-none'>⏳</i>
           </div>
         <% end %>
