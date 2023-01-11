@@ -1,4 +1,3 @@
-/* global location */
 /* global alert */
 /* global $ */
 
