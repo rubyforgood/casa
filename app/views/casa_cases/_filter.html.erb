@@ -1,8 +1,8 @@
 <div>
   <div class="row casa-case-filters">
-    <div class="col-sm-12 my-3 flex d-flex align-items-center">
-      <h4 class="pull-left mr-2">Filter by:</h4>
-      <div class="dropdown pull-left mx-2">
+    <div class="col-sm-12 flex align-items-center">
+      <h4 class="pull-left my-1 mr-2">Filter by:</h4>
+      <div class="dropdown pull-left mx-2 my-1">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Status
         </button>
@@ -21,8 +21,8 @@
           </div>
         </div>
       </div>
-      <div class="dropdown pull-left mx-2">
-        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <div class="dropdown pull-left mx-2 my-1">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Assigned to Volunteer
         </button>
         <div class="dropdown-menu assigned-to-volunteer-options" aria-labelledby="dropdownMenuButton2">
@@ -40,8 +40,8 @@
           </div>
         </div>
       </div>
-      <div class="dropdown pull-left mx-2">
-        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <div class="dropdown pull-left mx-2 my-1">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Assigned to more than 1 Volunteer
         </button>
         <div class="dropdown-menu more-than-one-volunteer-options" aria-labelledby="dropdownMenuButton3">
@@ -59,8 +59,8 @@
           </div>
         </div>
       </div>
-      <div class="dropdown pull-left mx-2">
-        <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton4" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <div class="dropdown pull-left mx-2 my-1">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton4" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Assigned to Transition Aged Youth
         </button>
         <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton4">
@@ -78,9 +78,9 @@
           </div>
         </div>
       </div>
-      <div class="dropdown pull-left mx-2">
+      <div class="dropdown pull-left mx-2 my-1">
         <% unless current_user.volunteer? %>
-          <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton5" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton5" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Casa Case Prefix
           </button>
         <% end %>
@@ -98,44 +98,45 @@
         </div>
       </div>
     </div>
-    <div class="warning-modal">
-      <div class="modal fade" id="visibleColumns" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content card-style">
-            <div class="modal-header px-0 border-0">
-              <h5 class="text-bold">Pick Displayed Columns</h5>
-              <button
-                class="border-0 bg-transparent h1"
-                data-bs-dismiss="modal"
-              >
-                <i class="lni lni-cross-circle"></i>
-              </button>
-            </div>
-            <div class="modal-body px-0">
-              <div class="mb-30">
-                <h6 class="mb-20">
-                  Select columns:
-                </h6>
-                <% CasaCase::TABLE_COLUMNS.each_with_index do |column, index| %>
-                  <div class="form-check checkbox-style m-2">
-                    <%= check_box_tag "pick-#{column}",
-                                      "1",
-                                      false,
-                                      class: "form-check-input toggle-visibility",
-                                      data: { column: index } %>
-                    <%= label_tag "pick-#{column}", column.titleize, class: "form-check-label" %>
-                  </div>
-                <% end %>
+  </div>
+</div>
+
+<div class="warning-modal">
+  <div class="modal fade" id="visibleColumns" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content card-style">
+        <div class="modal-header px-0 border-0">
+          <h5 class="text-bold">Pick Displayed Columns</h5>
+          <button
+            class="border-0 bg-transparent h1"
+            data-bs-dismiss="modal"
+          >
+            <i class="lni lni-cross-circle"></i>
+          </button>
+        </div>
+        <div class="modal-body px-0">
+          <div class="mb-30">
+            <h6 class="mb-20">
+              Select columns:
+            </h6>
+            <% CasaCase::TABLE_COLUMNS.each_with_index do |column, index| %>
+              <div class="form-check checkbox-style m-2">
+                <%= check_box_tag "pick-#{column}",
+                                  "1",
+                                  false,
+                                  class: "form-check-input toggle-visibility",
+                                  data: { column: index } %>
+                <%= label_tag "pick-#{column}", column.titleize, class: "form-check-label" %>
               </div>
-              <div class="action d-flex flex-wrap justify-content-end">
-                <button
-                  data-bs-dismiss="modal"
-                  class="main-btn danger-btn-outline btn-hover m-1"
-                ><i class="lni lni-ban mr-10"></i>
-                  Close
-                </button>
-              </div>
-            </div>
+            <% end %>
+          </div>
+          <div class="action d-flex flex-wrap justify-content-end">
+            <button
+              data-bs-dismiss="modal"
+              class="main-btn danger-btn-outline btn-hover m-1"
+            ><i class="lni lni-ban mr-10"></i>
+              Close
+            </button>
           </div>
         </div>
       </div>
