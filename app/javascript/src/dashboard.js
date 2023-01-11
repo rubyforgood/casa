@@ -70,7 +70,7 @@ $('document').ready(() => {
   )
 
   const handleAjaxError = e => {
-    console.log(e)
+    console.error(e)
     if (e.responseJSON && e.responseJSON.error) {
       alert(e.responseJSON.error)
     } else {
