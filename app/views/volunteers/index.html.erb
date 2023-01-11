@@ -1,14 +1,24 @@
-<div class="row mt-3">
-  <div class="col-sm-12 dashboard-table-header">
-    <h1>Volunteers</h1>
-    <% if policy(current_organization.volunteers.new).new? %>
-      <%= link_to new_volunteer_path, class: "main-btn primary-btn btn-hover btn-sm mb-2 mb-md-0" do %>
-        <i class="lni lni-plus mr-10"></i> New Volunteer
-      <% end %>
-    <% end %>
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h2>Volunteers</h2>
+      </div>
+    </div>
+    <!-- end col -->
+    <div class="col-md-6">
+      <div class="breadcrumb-wrapper mb-30">
+        <span class="ml-5">
+          <% if policy(current_organization.volunteers.new).new? %>
+            <%= link_to new_volunteer_path, class: "main-btn primary-btn btn-hover btn-sm mb-2 mb-md-0" do %>
+              <i class="lni lni-plus mr-10"></i> New Volunteer
+            <% end %>
+          <% end %>
+        </span>
+      </div>
+    </div>
   </div>
 </div>
-<hr/>
 
 <div class="row volunteer-filters">
   <div class="col-sm-12">
@@ -20,9 +30,9 @@
       <div class="dropdown-menu supervisor-options">
         <div class="dropdown-item form-check">
           <%= check_box_tag "supervisor-option-none", "", true,
-                    class: "form-check-input",
-                    data: { value: "" },
-                    id: "unassigned-vol-filter" %>
+                            class: "form-check-input",
+                            data: { value: "" },
+                            id: "unassigned-vol-filter" %>
           <%= label_tag "supervisor-option-none", "No supervisor assignment", class: "form-check-label" %>
         </div>
         <% current_organization.supervisors.where(active: true).each do |supervisor| %>
@@ -30,9 +40,9 @@
             <% option_for_name = supervisor.display_name.downcase.gsub(/ /, '_').gsub(/[^a-z_]+/, '') -%>
             <% tag_name = "supervisor-option-#{option_for_name}" -%>
             <%= check_box_tag tag_name, supervisor.id,
-                    policy(User).edit_name?(supervisor),   # checked?
-                    class: "form-check-input",
-                    data: { value: supervisor.id } %>
+                              policy(User).edit_name?(supervisor), # checked?
+                              class: "form-check-input",
+                              data: { value: supervisor.id } %>
             <%= label_tag tag_name, supervisor.display_name, class: "form-check-label" %>
           </div>
         <% end %>
@@ -45,14 +55,14 @@
       <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
         <div class="dropdown-item form-check">
           <%= check_box_tag "status_option_active", "true", true,
-                    class: "form-check-input",
-                    data: { value: "true" } %>
+                            class: "form-check-input",
+                            data: { value: "true" } %>
           <%= label_tag "status_option_active", "Active", class: "form-check-label" %>
         </div>
         <div class="dropdown-item form-check">
           <%= check_box_tag "status_option_inactive", "false", false,
-                    class: "form-check-input",
-                    data: { value: "false" } %>
+                            class: "form-check-input",
+                            data: { value: "false" } %>
           <%= label_tag "status_option_inactive", "Inactive", class: "form-check-label" %>
         </div>
       </div>
@@ -65,33 +75,33 @@
       <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton">
         <div class="dropdown-item form-check">
           <%= check_box_tag "transition_youth_option_yes", "true", true,
-                    class: "form-check-input",
-                    data: { value: "true" } %>
-          <%= label_tag "transition_youth_option_yes",  "Yes", class: "form-check-label" %>
+                            class: "form-check-input",
+                            data: { value: "true" } %>
+          <%= label_tag "transition_youth_option_yes", "Yes", class: "form-check-label" %>
         </div>
         <div class="dropdown-item form-check">
           <%= check_box_tag "transition_youth_option_no", "false", true,
-                    class: "form-check-input",
-                    data: { value: "false" } %>
+                            class: "form-check-input",
+                            data: { value: "false" } %>
           <%= label_tag "transition_youth_option_no", "No", class: "form-check-label" %>
         </div>
       </div>
     </div>
     <div class="dropdown pull-left mr-2">
       <button class="main-btn dark-btn dropdown-toggle show btn-sm mx-1" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Has Extra Languages
+        Has Extra Languages
       </button>
       <div class="dropdown-menu extra-language-options" aria-labelledby="dropdownMenuButton">
         <div class="dropdown-item form-check">
           <%= check_box_tag "extra_language_option_yes", "true", true,
-                    class: "form-check-input",
-                    data: { value: "true" } %>
+                            class: "form-check-input",
+                            data: { value: "true" } %>
           <%= label_tag "extra_language_option_yes", "Yes", class: "form-check-label" %>
         </div>
         <div class="dropdown-item form-check">
           <%= check_box_tag "extra_language_option_no", "false", true,
-                    class: "form-check-input",
-                    data: { value: "false" } %>
+                            class: "form-check-input",
+                            data: { value: "false" } %>
           <%= label_tag "extra_language_option_no", "No", class: "form-check-label" %>
         </div>
       </div>
@@ -126,7 +136,7 @@
                                     "1",
                                     nil,
                                     class: "form-check-input toggle-visibility",
-                                    data: {column: index} %>
+                                    data: { column: index } %>
                   <%= label_tag "pick-#{column}", column.titleize, class: "form-check-label" %>
                 </div>
               </div>
@@ -149,19 +159,19 @@
         id="volunteers"
         data-source="<%= datatable_volunteers_path format: :json %>">
         <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Supervisor</th>
-            <th>Status</th>
-            <th>Assigned To Transition Aged Youth</th>
-            <th>Case Number(s)</th>
-            <th>Last Attempted Contact</th>
-            <th>Contacts Made in Past 60 Days</th>
-            <th>Hours spent in last 30 days</th>
-            <th>Extra Languages</th>
-            <th>Actions</th>
-          </tr>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Supervisor</th>
+          <th>Status</th>
+          <th>Assigned To Transition Aged Youth</th>
+          <th>Case Number(s)</th>
+          <th>Last Attempted Contact</th>
+          <th>Contacts Made in Past 60 Days</th>
+          <th>Hours spent in last 30 days</th>
+          <th>Extra Languages</th>
+          <th>Actions</th>
+        </tr>
         </thead>
 
         <tbody>
