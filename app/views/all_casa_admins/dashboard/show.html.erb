@@ -1,13 +1,29 @@
-<div class="row">
-  <div class="col-sm-12 dashboard-table-header">
-    <h1>All CASA Admin</h1>
-    <a class="btn btn-primary" href="<%= new_all_casa_admins_casa_org_path %>">New CASA Organization</a>
-    <a class="btn btn-primary" href="<%= new_all_casa_admin_path %>">New All CASA Admin</a>
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h2>All CASA Admin</h2>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="breadcrumb-wrapper mb-30">
+        <span class="ml-5">
+          <%= link_to new_all_casa_admins_casa_org_path,
+              class: "btn-sm main-btn primary-btn btn-hover" do %>
+            <i class="lni lni-plus mr-10"></i>New CASA Organization
+          <% end %>
+          <%= link_to new_all_casa_admin_path,
+              class: "btn-sm main-btn primary-btn btn-hover" do %>
+            <i class="lni lni-plus mr-10"></i>New All CASA Admin
+          <% end %>
+        </span>
+      </div>
+    </div>
   </div>
 </div>
 <div class="card card-container">
   <div class="card-body">
-    <h2>CASA Organizations</h2>
+    <h2 class="mb-30">CASA Organizations</h2>
     <table class="table organization-list" data-test="organization-table">
       <thead>
         <tr>

@@ -1,35 +1,35 @@
-<div class="row">
-  <div class="col-md-12 vertically-center">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <h2>All CASA Log In</h2>
-          <br>
+<div class="signin-wrapper">
+  <div class="form-wrapper">
+    <div class="col-md-12 vertically-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <h2 class="mb-15">All CASA Log In</h2>
+            <br>
+            <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+              <div class="input-style-1">
+                <%= f.label :email %>
+                <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", required: true %>
+              </div>
 
-          <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-            <div class="field form-group">
-              <%= f.label :email %><br>
-              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", required: true %>
-            </div>
+              <div class="input-style-1">
+                <%= f.label :password %>
+                <%= f.password_field :password, autocomplete: "current-password", class: "form-control", required: true %>
+              </div>
 
-            <div class="field form-group">
-              <%= f.label :password %><br>
-              <%= f.password_field :password, autocomplete: "current-password", class: "form-control", required: true %>
-            </div>
+              <div class="input-style-1">
+                <%= link_to "Forgot your password?", new_password_path(resource_name), class: "hover-underline" %>
+              </div>
 
-            <div class="actions">
-              <%= f.submit "Log in", class: "btn btn-info" %>
-            </div>
-          <% end %>
+              <div class="actions mb-30">
+                <%= f.submit "Log in", class: "main-btn primary-btn btn-hover w-100 text-center" %>
+              </div>
+            <% end %>
 
-          <br>
-          <%= render "all_casa_admins/shared/links" %>
-
-          <br>
-          <p>
-            <strong>Not able to sign in?</strong>
-            You might be looking for the <a href="/">CASA user sign in page</a>.
-          </p>
+            <p class="text-sm mb-25">
+              Not able to sign in? You might be looking for the <a href="/">CASA user sign in page</a>.
+            </p>
+          </div>
         </div>
       </div>
     </div>
