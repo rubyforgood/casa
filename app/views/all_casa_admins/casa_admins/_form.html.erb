@@ -9,6 +9,8 @@
     <%= form.text_field :display_name, class: "form-control" %>
   </div>
   <div class="actions">
-    <%= form.submit "Submit", class: "main-btn primary-btn btn-hover" %>
+    <%= form.button nil, class: "btn-sm main-btn primary-btn btn-hover" do %>
+      <i class="lni lni-checkmark-circle mr-5"></i>Submit
+    <% end %>
   </div>
 <% end %>
