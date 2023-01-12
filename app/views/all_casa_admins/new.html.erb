@@ -13,10 +13,9 @@
         <%= form.label :email, "Email" %>
         <%= form.email_field :email, class: "form-control" %>
       </div>
-
-      <div class="actions">
-        <%= form.submit "Submit", class: "main-btn primary-btn btn-hover" %>
-      </div>
+      <%= button_tag( type: "submit" , class: "btn-sm main-btn primary-btn btn-hover" ) do %>
+        <i class="lni lni-checkmark-circle mr-5"></i> Submit
+      <% end %>
     <% end %>
   </div>
 </div>
