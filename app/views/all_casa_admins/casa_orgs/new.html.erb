@@ -1,27 +1,33 @@
-<h1>Create a new CASA Organization</h1>
+<div class="col-md-6">
+  <div class="title mb-30 mt-30">
+    <h2>Create a new CASA Organization</h1>
+  </div>
+</div>
 
 <div class="card card-container">
   <div class="card-body">
     <%= form_with model: selected_organization, url: all_casa_admins_casa_orgs_path, method: :post, local: true do |form| %>
       <%= render "/shared/error_messages", resource: selected_organization %>
 
-      <div class="field form-group">
+      <div class="input-style-1">
         <%= form.label :name, "Name" %>
         <%= form.text_field :name, class: "form-control", required: true %>
       </div>
 
-      <div class="field form-group">
+      <div class="input-style-1">
         <%= form.label :display_name, "Display name" %>
         <%= form.text_field :display_name, class: "form-control" %>
       </div>
 
-      <div class="field form-group">
+      <div class="input-style-1">
         <%= form.label :address, "Address" %>
         <%= form.text_field :address, class: "form-control" %>
       </div>
 
       <div class="actions">
-        <%= form.submit "Create CASA Organization", class: "btn btn-primary" %>
+        <%= button_tag( type: "submit" , class: "btn-sm main-btn primary-btn btn-hover" ) do %>
+          <i class="lni lni-checkmark-circle mr-5"></i> Create CASA organization
+        <% end %>
       </div>
     <% end %>
   </div>
