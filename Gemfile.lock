@@ -423,6 +423,7 @@ GEM
     sorbet-static (0.5.10575-universal-darwin-19)
     sorbet-static (0.5.10575-universal-darwin-20)
     sorbet-static (0.5.10575-universal-darwin-21)
+    sorbet-static (0.5.10575-universal-darwin-22)
     sorbet-static (0.5.10575-x86_64-linux)
     spoom (1.1.13)
       sorbet (>= 0.5.9204)
@@ -502,6 +503,7 @@ GEM
 PLATFORMS
   arm64-darwin-20
   arm64-darwin-21
+  arm64-darwin-22
   x86_64-darwin-18
   x86_64-darwin-19
   x86_64-darwin-20
