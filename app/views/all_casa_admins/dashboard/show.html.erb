@@ -8,8 +8,14 @@
     <div class="col-md-6">
       <div class="breadcrumb-wrapper mb-30">
         <span class="ml-5">
-          <a class="btn-sm main-btn primary-btn btn-hover" href="<%= new_all_casa_admins_casa_org_path %>">New CASA Organization</a>
-          <a class="btn-sm main-btn primary-btn btn-hover" href="<%= new_all_casa_admin_path %>">New All CASA Admin</a>
+          <%= link_to new_all_casa_admins_casa_org_path,
+              class: "btn-sm main-btn primary-btn btn-hover" do %>
+            <i class="lni lni-plus mr-10"></i>New CASA Organization
+          <% end %>
+          <%= link_to new_all_casa_admin_path,
+              class: "btn-sm main-btn primary-btn btn-hover" do %>
+            <i class="lni lni-plus mr-10"></i>New All CASA Admin
+          <% end %>
         </span>
       </div>
     </div>
