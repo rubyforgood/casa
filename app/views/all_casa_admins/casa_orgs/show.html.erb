@@ -20,11 +20,10 @@
         <div class="col-md-6">
           <div class="breadcrumb-wrapper mb-30">
             <span class="ml-5">
-              <%=
-                link_to "New CASA Admin",
-                  new_all_casa_admins_casa_org_casa_admin_path(selected_organization),
-                  class: "btn-sm main-btn primary-btn btn-hover"
-              %>
+              <%= link_to new_all_casa_admins_casa_org_casa_admin_path(selected_organization),
+                class: "btn-sm main-btn primary-btn btn-hover" do %>
+                <i class="lni lni-plus mr-10"></i>New CASA Admin
+              <% end %>
               <%=
                 link_to "Return to Organizations",
                   authenticated_all_casa_admin_root_path,
