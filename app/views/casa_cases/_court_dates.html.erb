@@ -18,8 +18,9 @@
 <% end %>
 <ul>
   <div class="add-container past-court-dates my-3">
-    <a class="main-btn primary-btn btn-hover btn-sm" href="<%= new_casa_case_court_date_path(casa_case) %>">
-      <i class="lni lni-plus" aria-hidden="true"></i> Add a court date
-    </a>
+    <%= link_to new_casa_case_court_date_path(casa_case), class: "main-btn btn-sm primary-btn btn-hover ml-3" do %>
+      <i class="lni lni-plus"></i>
+      Add a court date
+    <% end %>
   </div>
 </ul>
