@@ -3,7 +3,10 @@
     <h2>Emancipation Checklist</h2>
     <%= link_to @current_case.case_number, casa_case_path(@current_case) %>
     <span class="d-block float-md-right my-2 mt-md-0 text-center">
-      <%= link_to "Download Checklist", casa_case_emancipation_path(@current_case, format: :docx), class: "btn-sm main-btn primary-btn btn-hover" %>
+      <%= link_to casa_case_emancipation_path(@current_case, format: :docx), class: "main-btn primary-btn btn-sm btn-hover" do %>
+        <i class="lni lni-download mr-10"></i>
+            Download Checklist
+      <% end %>
     </span>
   </div>
 </div>

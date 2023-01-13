@@ -3,13 +3,16 @@
   <div class="col-sm-12 form-header my-4">
     <h1 class="pull-left"><%= @casa_case.decorate.transition_aged_youth_icon %>CASA Case Details</h1>
     <%- if policy(:case_contact).new? & @casa_case.active? %>
-      <%= link_to('New Case Contact',
-                  new_case_contact_path(case_contact: {casa_case_id: @casa_case.id}),
-                  class: "main-btn primary-btn btn-sm pull-left casa-case-button") %>
+      <%= link_to new_case_contact_path(case_contact: {casa_case_id: @casa_case.id}), class: "main-btn primary-btn btn-sm btn-hover pull-left casa-case-button" do %>
+        <i class="lni lni-plus mr-10"></i>
+        New Case Contact
+      <% end %>
     <%- end %>
     <% if @casa_case.active? %>
-      <%= link_to 'Edit Case Details', edit_casa_case_path(@casa_case),
-              class: "main-btn primary-btn btn-sm pull-left casa-case-button" %>
+      <%= link_to edit_casa_case_path(@casa_case), class: "main-btn primary-btn btn-sm btn-hover pull-left casa-case-button pull-left casa-case-button" do %>
+        <i class="lni lni-pencil mr-10"></i>
+        Edit Case Details
+      <% end %>
     <% end %>
     <% if @casa_case.in_transition_age? %>
       <%= link_to(casa_case_emancipation_path(@casa_case),
@@ -22,10 +25,9 @@
     <% end %>
     <%= form_with url: generate_case_court_reports_path, local: false, class: "d-inline" do |form| %>
       <%= form.hidden_field :case_number, value: @casa_case.case_number %>
-      <%= button_tag "Generate Report", type: :submit,
-                     data: {button_name: "Generate Report"},
-                     id: "btnGenerateReport",
-                     class: "main-btn success-btn btn-hover btn-sm pull-right mb-2" %>
+      <%= button_tag(type: "submit", class: "btn-sm main-btn primary-btn pull-right btn-hover", id: "btnGenerateReport") do %>
+        <i class="lni lni-download mr-5"></i> Generate Report
+      <% end %>
       <i id="spinner" class='fas fa-spin d-none pull-right'>⏳</i>
     <% end %>
     <% if @casa_case.casa_org.show_fund_request %>
@@ -118,7 +120,10 @@ class: "btn btn-primary pull-left casa-case-button") %>
       <br>
       <% if @casa_case.case_contacts.present? %>
         <div class="text-right mb-2">
-          <%= link_to 'Download All', casa_case_path(params[:id], format: :xlsx), class: "main-btn success-btn btn-hover btn-sm" %>
+          <%= link_to casa_case_path(params[:id], format: :xlsx), class: "main-btn primary-btn btn-sm btn-hover" do %>
+            <i class="lni lni-download mr-10"></i>
+            Download All
+          <% end %>
         </div>
       <% end %>
       <div id="case_contacts_list">
