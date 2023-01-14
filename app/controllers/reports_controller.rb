@@ -10,7 +10,7 @@ class ReportsController < ApplicationController
 
     respond_to do |format|
       format.csv do
-        send_data VolunteersEmailsExportCsvService.new.perform,
+        send_data VolunteersEmailsExportCsvService.new(current_user.casa_org).call,
           filename: "volunteers-emails-#{Time.current.strftime("%Y-%m-%d")}.csv"
       end
     end

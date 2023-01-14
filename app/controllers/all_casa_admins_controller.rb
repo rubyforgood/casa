@@ -3,6 +3,7 @@ class AllCasaAdminsController < ApplicationController
   before_action :authenticate_all_casa_admin!
   before_action :set_custom_error_heading, only: [:update_password]
   after_action :reset_custom_error_heading, only: [:update_password]
+  skip_after_action :verify_authorized
 
   def new
     @all_casa_admin = AllCasaAdmin.new

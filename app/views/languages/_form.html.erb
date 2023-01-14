@@ -16,6 +16,12 @@
       <%= render "/shared/error_messages", resource: language %>
     </div>
 
+    <div>
+      A list of languages volunteers can add to their profile to let supervisors and admins know they can speak the language.
+    </div>
+
+    <br>
+
     <div class="input-style-1">
       <%= form.label :name, "Name" %>
       <%= form.text_field :name, class: "form-control", required: true %>
@@ -28,4 +34,3 @@
     </div>
   <% end %>
 </div>
-<!-- card end -->

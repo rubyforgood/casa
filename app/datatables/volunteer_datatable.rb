@@ -87,6 +87,7 @@ class VolunteerDatatable < ApplicationDatatable
         .select(:volunteer_id)
         .joins(:casa_case)
         .where(casa_cases: {birth_month_year_youth: ..CasaCase::TRANSITION_AGE.years.ago})
+        .active
         .group(:volunteer_id)
         .to_sql
   end

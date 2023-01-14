@@ -8,9 +8,9 @@ module CourtDatesHelper
     court_dates = casa_case.court_dates.ordered_ascending
     date_now = Date.current
 
-    return if court_dates.blank?
-
-    if court_dates.last.date < date_now
+    if court_dates.blank?
+      "none"
+    elsif court_dates.last.date < date_now
       "past"
     elsif court_dates.first.date > date_now
       "future"

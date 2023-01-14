@@ -116,4 +116,17 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
     it { expect(rendered).to have_text("- #{volunteer.display_name}") }
     it { expect(rendered).to have_text("(not assigned to a new supervisor)") }
   end
+
+  context "when a volunteer has not recently signed in, within 30 days" do
+    let(:volunteer) { create(:volunteer, casa_org: organization, last_sign_in_at: 39.days.ago) }
+    before(:each) do
+      supervisor.volunteers << volunteer
+      sign_in supervisor
+      assign :supervisor, supervisor
+      render template: "supervisor_mailer/weekly_digest"
+    end
+
+    it { expect(rendered).to have_text("The following volunteers have not recently signed in, within 30 days") }
+    it { expect(rendered).to have_text("- #{volunteer.display_name}") }
+  end
 end

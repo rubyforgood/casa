@@ -65,11 +65,12 @@
             <div class="input-style-1">
               <%= cdf.text_field :date,
                                  data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
-                                 class: "form-control",
-                                 :required => 'required' %>
+                                 class: "form-control" %>
             </div>
           </div>
         <% end %>
+        <%= form.check_box :empty_court_date, class: "toggle-court-date-input" %>
+        <%= form.label :empty_court_date, "I don't know the court date yet" %>
       <% end %>
       <div class="select-style-1">
         <%= form.label :court_report_status, "Court Report Status" %>

@@ -14,6 +14,10 @@
           <div id="prompt-update-user" class="modal-body">
             Please enter the next court date if you know it so that court reports can be generated with the correct case contacts.
           </div>
+        <% elsif when_do_we_have_court_dates == "none" %>
+          <div id="prompt-update-user" class="modal-body">
+            Please enter any past or future court dates if you know them so that court reports can be generated with the correct case contacts.
+          </div>
         <% end %>
         <div class="modal-footer">
           <button type="button" class="main-btn secondary-btn btn-sm" data-bs-dismiss="modal">Close</button>

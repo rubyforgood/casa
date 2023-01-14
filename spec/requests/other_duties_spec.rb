@@ -1,110 +1,280 @@
 require "rails_helper"
 
 RSpec.describe "/other_duties", type: :request do
-  context "logged in as volunteer" do
-    before { sign_in_as_volunteer }
+  describe "GET /new" do
+    context "when volunteer" do
+      it "is successful" do
+        volunteer = create(:volunteer)
 
-    describe "POST /create" do
-      context "with valid parameters" do
-        let(:valid_attributes) do
-          attributes_for(:other_duty)
-        end
+        sign_in volunteer
+        get new_other_duty_path
 
-        it "does create one new Duty" do
-          expect {
-            post other_duties_path, params: {other_duty: valid_attributes}
-          }.to change(OtherDuty, :count).by(1)
-        end
-
-        it "returns page casa_cases_path" do
-          post other_duties_path, params: {other_duty: valid_attributes}
-          expect(response).to redirect_to(casa_cases_path)
-        end
-      end
-
-      context "with invalid parameters" do
-        let(:invalid_attributes) do
-          attributes_for(:other_duty, notes: "")
-        end
-
-        it "does not create a new Duty" do
-          expect {
-            post other_duties_path, params: {other_duty: invalid_attributes}
-          }.to change(OtherDuty, :count).by(0)
-        end
-
-        it "renders a successful response" do
-          post other_duties_path, params: {other_duty: invalid_attributes}
-          expect(response).to have_http_status(:unprocessable_entity)
-        end
+        expect(response).to be_successful
       end
     end
 
-    describe "PATCH /update" do
-      context "with valid parameters" do
-        it "updates the duty" do
-          other_duty = create(:other_duty, notes: "Test 1")
-          other_duty.notes = "Test 2"
+    context "when supervisor" do
+      it "redirects to root path" do
+        supervisor = create(:supervisor)
 
-          patch other_duty_path(other_duty), params: {id: other_duty.id, other_duty: other_duty.attributes}
-          other_duty.reload
+        sign_in supervisor
+        get new_other_duty_path
 
-          expect(other_duty.notes).to eq("Test 2")
-        end
-
-        it "returns page casa_cases_path" do
-          other_duty = create(:other_duty, notes: "Test 1")
-          other_duty.notes = "Test 2"
-
-          patch other_duty_path(other_duty), params: {id: other_duty.id, other_duty: other_duty.attributes}
-          other_duty.reload
-
-          expect(response).to redirect_to(casa_cases_path)
-        end
+        expect(response).to redirect_to root_path
       end
+    end
 
-      context "with invalid parameters" do
-        it "renders an error response" do
-          other_duty = create(:other_duty, notes: "Test 1")
-          other_duty.notes = ""
+    context "when admin" do
+      it "redirects to root path" do
+        admin = create(:casa_admin)
 
-          patch other_duty_path(other_duty), params: {id: other_duty.id, other_duty: other_duty.attributes}
-          other_duty.reload
+        sign_in admin
+        get new_other_duty_path
 
-          expect(response).to have_http_status(:unprocessable_entity)
-        end
+        expect(response).to redirect_to root_path
       end
     end
   end
 
-  context "logged as admin" do
-    describe "GET /INDEX" do
-      context "when admin is on the same org as volunteer" do
-        let(:volunteer) { create(:volunteer) }
-        let!(:other_duty) { create(:other_duty, creator: volunteer) }
-        let(:org_admin) { create(:casa_admin, casa_org_id: volunteer.casa_org_id) }
+  describe "POST /create" do
+    context "when volunteer" do
+      context "with valid parameters" do
+        it "creates one new Duty and returns to casa_cases page" do
+          volunteer = create(:volunteer)
 
-        before { sign_in org_admin }
-        it "other's duties" do
-          get other_duties_path
-          expect(response.body).to include(volunteer.display_name)
-          expect(response.body).to include(other_duty.decorate.truncate_notes)
+          sign_in volunteer
+
+          expect {
+            post other_duties_path, params: {other_duty: attributes_for(:other_duty)}
+          }.to change(OtherDuty, :count).by(1)
+          expect(response).to redirect_to(casa_cases_path)
         end
       end
 
-      context "when admin is on a different org than the volunteer" do
-        let(:volunteer) { create(:volunteer) }
-        let(:casa_org) { create(:casa_org) }
-        let(:another_volunteer) { create(:volunteer, casa_org_id: casa_org.id) }
-        let!(:other_duty) { create(:other_duty, creator: volunteer) }
-        let(:org_admin) { create(:casa_admin, casa_org_id: another_volunteer.casa_org_id) }
+      context "with invalid parameters" do
+        it "does not create a new Duty and renders new page" do
+          volunteer = create(:volunteer)
 
-        before { sign_in org_admin }
-        it "other's duties" do
-          get other_duties_path
-          expect(response.body).not_to include(volunteer.display_name)
-          expect(response.body).not_to include(other_duty.decorate.truncate_notes)
+          sign_in volunteer
+
+          expect {
+            post other_duties_path, params: {other_duty: attributes_for(:other_duty, notes: "")}
+          }.to_not change(OtherDuty, :count)
+          expect(response).to have_http_status(:unprocessable_entity)
         end
+      end
+    end
+
+    context "when supervisor" do
+      it "does not create record and redirects to root" do
+        supervisor = create(:supervisor)
+
+        sign_in supervisor
+
+        expect {
+          post other_duties_path, params: {other_duty: attributes_for(:other_duty)}
+        }.to_not change(OtherDuty, :count)
+
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    context "when admin" do
+      it "does not create record and redirects to root" do
+        admin = create(:casa_admin)
+
+        sign_in admin
+
+        expect {
+          post other_duties_path, params: {other_duty: attributes_for(:other_duty)}
+        }.to_not change(OtherDuty, :count)
+
+        expect(response).to redirect_to root_path
+      end
+    end
+  end
+
+  describe "GET /edit" do
+    context "when volunteer" do
+      context "when viewing own record" do
+        it "is successful" do
+          volunteer = create(:volunteer)
+          duty = create(:other_duty, creator: volunteer)
+
+          sign_in volunteer
+          get edit_other_duty_path(duty)
+
+          expect(response).to be_successful
+        end
+      end
+
+      context "when viewing other's record" do
+        it "redirects to root path" do
+          volunteer = create(:volunteer)
+          duty = create(:other_duty)
+
+          sign_in volunteer
+          get edit_other_duty_path(duty)
+
+          expect(response).to redirect_to root_path
+        end
+      end
+    end
+
+    context "when supervisor" do
+      it "redirects to root path" do
+        supervisor = create(:supervisor)
+        duty = create(:other_duty)
+
+        sign_in supervisor
+        get edit_other_duty_path(duty)
+
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    context "when admin" do
+      it "redirects to root path" do
+        admin = create(:casa_admin)
+        duty = create(:other_duty)
+
+        sign_in admin
+        get edit_other_duty_path(duty)
+
+        expect(response).to redirect_to root_path
+      end
+    end
+  end
+
+  describe "PATCH /update" do
+    context "when volunteer updating own duty" do
+      context "with valid parameters" do
+        it "updates the duty and redirects to casa_cases page" do
+          volunteer = create(:volunteer)
+          other_duty = create(:other_duty, notes: "Test 1", creator: volunteer)
+
+          sign_in volunteer
+          patch other_duty_path(other_duty), params: {other_duty: {notes: "Test 2"}}
+
+          expect(other_duty.reload.notes).to eq("Test 2")
+          expect(response).to redirect_to casa_cases_path
+        end
+      end
+
+      context "with invalid parameters" do
+        it "does not update and re-renders edit page" do
+          volunteer = create(:volunteer)
+          other_duty = create(:other_duty, notes: "Test 1", creator: volunteer)
+
+          sign_in volunteer
+          patch other_duty_path(other_duty), params: {other_duty: {notes: ""}}
+
+          expect(other_duty.reload.notes).to eq "Test 1"
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
+    end
+
+    context "when volunteer updating other person's record" do
+      it "does not update the duty and redirects to root path" do
+        volunteer = create(:volunteer)
+        other_duty = create(:other_duty, notes: "Test 1")
+
+        sign_in volunteer
+        patch other_duty_path(other_duty), params: {other_duty: {notes: "Test 2"}}
+
+        expect(other_duty.reload.notes).to eq("Test 1")
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    context "when supervisor" do
+      it "does not update the duty and redirects to root path" do
+        supervisor = create(:supervisor)
+        other_duty = create(:other_duty, notes: "Test 1")
+
+        sign_in supervisor
+        patch other_duty_path(other_duty), params: {other_duty: {notes: "Test 2"}}
+
+        expect(other_duty.reload.notes).to eq("Test 1")
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    context "when admin" do
+      it "does not update the duty and redirects to root path" do
+        admin = create(:casa_admin)
+        other_duty = create(:other_duty, notes: "Test 1")
+
+        sign_in admin
+        patch other_duty_path(other_duty), params: {other_duty: {notes: "Test 2"}}
+
+        expect(other_duty.reload.notes).to eq("Test 1")
+        expect(response).to redirect_to root_path
+      end
+    end
+  end
+
+  describe "GET /index" do
+    context "when admin" do
+      it "can see volunteer's other duties from own organization" do
+        volunteer = create(:volunteer)
+        duties = create_pair(:other_duty, creator: volunteer)
+        admin = create(:casa_admin, casa_org: volunteer.casa_org)
+        other_org_duty = create(:other_duty)
+
+        sign_in admin
+        get other_duties_path
+
+        expect(response.body).to include(volunteer.display_name)
+        expect(response.body).to include(duties.first.decorate.truncate_notes)
+        expect(response.body).to include(duties.second.decorate.truncate_notes)
+        expect(response.body).to_not include(other_org_duty.decorate.truncate_notes)
+      end
+    end
+
+    context "when supervisor" do
+      it "can see own active volunteer's other duties from own organization" do
+        supervisor = create(:supervisor, :with_volunteers)
+        volunteer1 = supervisor.volunteers.first
+        volunteer2 = supervisor.volunteers.last
+        SupervisorVolunteer.find_by(supervisor: supervisor, volunteer: volunteer2).update!(is_active: false)
+        duties = create_pair(:other_duty, creator: volunteer1)
+        inactive_duty = create(:other_duty, creator: volunteer2)
+
+        volunteer_other_sup = create(:volunteer, casa_org: volunteer1.casa_org)
+        other_sup_duty = create(:other_duty, creator: volunteer_other_sup)
+
+        other_org = create(:casa_org)
+        volunteer_other_org = create(:volunteer, casa_org: other_org)
+        other_org_duty = create(:other_duty, creator: volunteer_other_org)
+
+        sign_in supervisor
+        get other_duties_path
+
+        expect(response.body).to include(volunteer1.display_name)
+        expect(response.body).to include(duties.first.decorate.truncate_notes)
+        expect(response.body).to include(duties.second.decorate.truncate_notes)
+
+        expect(response.body).to_not include(volunteer2.display_name)
+        expect(response.body).to_not include(inactive_duty.decorate.truncate_notes)
+
+        expect(response.body).to_not include(volunteer_other_sup.display_name)
+        expect(response.body).to_not include(other_sup_duty.decorate.truncate_notes)
+
+        expect(response.body).to_not include(volunteer_other_org.display_name)
+        expect(response.body).to_not include(other_org_duty.decorate.truncate_notes)
+      end
+    end
+
+    context "when volunteer" do
+      it "redirects to root path" do
+        volunteer = create(:volunteer)
+
+        sign_in volunteer
+        get other_duties_path
+
+        expect(response).to redirect_to root_path
       end
     end
   end

@@ -77,19 +77,40 @@ RSpec.describe "casa_cases/new", type: :system do
   end
 
   context "when the court date field is not filled" do
-    it "does not create a new case" do
-      fill_in "Case number", with: case_number
-      five_years = (Date.today.year - 5).to_s
-      select "March", from: "casa_case_birth_month_year_youth_2i"
-      select five_years, from: "casa_case_birth_month_year_youth_1i"
+    context "when empty court date checkbox is checked" do
+      it "creates a new case" do
+        fill_in "Case number", with: case_number
+        five_years = (Date.today.year - 5).to_s
+        select "March", from: "casa_case_birth_month_year_youth_2i"
+        select five_years, from: "casa_case_birth_month_year_youth_1i"
+        check "casa_case_empty_court_date"
 
-      within ".actions" do
-        click_on "Create CASA Case"
+        within ".actions" do
+          click_on "Create CASA Case"
+        end
+
+        expect(page.body).to have_content(case_number)
+        expect(page).to have_content("CASA case was successfully created.")
+        expect(page).to have_content("Next Court Date:")
+        expect(page).not_to have_content("Court Report Due Date:")
+        expect(page).to have_content("Transition Aged Youth: No")
       end
+    end
 
-      expect(page).to have_current_path(casa_cases_path, ignore_query: true)
-      expect(page).to have_content("Court dates date can't be blank")
-      expect(page.find_field("Next Court Date")[:required]).to eq("required")
+    context "when empty court date checkbox is not checked" do
+      it "does not create a new case" do
+        fill_in "Case number", with: case_number
+        five_years = (Date.today.year - 5).to_s
+        select "March", from: "casa_case_birth_month_year_youth_2i"
+        select five_years, from: "casa_case_birth_month_year_youth_1i"
+
+        within ".actions" do
+          click_on "Create CASA Case"
+        end
+
+        expect(page).to have_current_path(casa_cases_path, ignore_query: true)
+        expect(page).to have_content("Court dates date can't be blank")
+      end
     end
   end
 
