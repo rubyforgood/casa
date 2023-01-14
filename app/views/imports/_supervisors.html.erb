@@ -29,7 +29,7 @@
     </div>
 
     <%= render "sms_opt_in_modal", { form: f } if @sms_opt_in_warning == "supervisor" %>
-    <%= button_tag id: "supervisor-import-button", class: "main-btn success-btn btn-hover pull-right",
+    <%= button_tag id: "supervisor-import-button", class: "main-btn primary-btn btn-hover pull-right",
                    disabled: true, data: { disable_with: "<div class='spinner-border spinner-border-sm'></div> Importing File"} do %>
       <i class="lni lni-upload"></i> Import Supervisors CSV
     <% end %>
