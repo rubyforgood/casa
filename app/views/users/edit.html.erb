@@ -94,7 +94,7 @@
               </div>
             <% end %>
           </div>
-        </div>   
+        </div>
       </div>
     </div>
     <!----------------- Update Email Begin -------------------------->
@@ -134,7 +134,7 @@
     <div class="form-check checkbox-style mb-20">
       <%= form.check_box :receive_sms_notifications, class: "toggle-sms-notifications form-check-input" %>
       <%= form.label :receive_sms_notifications, "Text Me", class: "form-check-label" %>
-    </div> 
+    </div>
     <div class="ps-4 pb-4">
       <%= form.collection_check_boxes("sms_notification_event_ids", SmsNotificationEvent.where(user_type: @user.type),
 :id, :name) do |event| %>
@@ -153,4 +153,3 @@
 <% if current_user.volunteer? %>
     <%= render partial: "languages", locals: { volunteer: current_user } %>
 <% end %>
-  

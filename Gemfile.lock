@@ -419,7 +419,6 @@ GEM
     sorbet (0.5.10616)
       sorbet-static (= 0.5.10616)
     sorbet-runtime (0.5.10616)
-    sorbet-static (0.5.10575-universal-darwin-22)
     sorbet-static (0.5.10616-universal-darwin-18)
     sorbet-static (0.5.10616-universal-darwin-19)
     sorbet-static (0.5.10616-universal-darwin-20)
@@ -585,7 +584,7 @@ DEPENDENCIES
   webmock
 
 RUBY VERSION
-   ruby 3.1.2p20
+   ruby 3.1.3p185
 
 BUNDLED WITH
    2.3.4

@@ -51,9 +51,13 @@
                             d-flex
                             justify-content-center
                             flex-wrap
-                          "
-          >
-            <%= f.submit "Log In", class: "main-btn primary-btn btn-hover w-100 text-center" %>
+                          ">
+            <%= button_tag(
+              type: "submit",
+              class: "main-btn primary-btn btn-hover w-100 text-center"
+            ) do %>
+              <i class="lni lni-chevron-right-circle mr-10"></i>Log In
+            <% end %>
       <% end %>
       <div class="col-xxl-6 col-lg-12 col-md-6">
         <div class="text-start text-md-end text-lg-start text-xxl-end mb-30">
