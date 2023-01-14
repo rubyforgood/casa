@@ -25,7 +25,6 @@ class CaseCourtReportContext
       created_date: I18n.l(Time.current.in_time_zone(@time_zone).to_date, format: :full, default: nil),
       casa_case: prepare_case_details,
       case_contacts: prepare_case_contacts,
-      individual_case_contacts: @casa_case.case_contacts.map { |cc| {occurred_at: cc.occurred_at.strftime("%-m/%d"), relationships: cc.contact_types.map(&:name).join(", ")} },
       case_court_orders: prepare_case_orders,
       case_mandates: prepare_case_orders, # backwards compatible with old Montgomery template - keep this! TODO test full generation
       latest_hearing_date: latest_hearing_date.nil? ? "___<LATEST HEARING DATE>____" : I18n.l(latest_hearing_date.date, format: :full, default: nil),
