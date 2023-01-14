@@ -20,8 +20,7 @@
           type="checkbox"
           class="form-check-input"
           value="<%= category.id %>"
-          <%= emancipation_category_checkbox_checked(@current_case, category) %>
-        >
+          <%= emancipation_category_checkbox_checked(@current_case, category) %>>
         <div class="pt-10"><%= category.name %></div>
       </div>
       <% if category.emancipation_options.count > 0 %>
@@ -38,16 +37,14 @@
               class="emancipation-radio-button"
               name="C<%= category.id %>"
               value="<%= option.id %>"
-              <%= emancipation_option_checkbox_checked(@current_case, option) %>
-            >
+              <%= emancipation_option_checkbox_checked(@current_case, option) %>>
           <% else %>
             <input
               type="checkbox"
               id="O<%= option.id %>"
               class="emancipation-option-check-box"
               value="<%= option.id %>"
-              <%= emancipation_option_checkbox_checked(@current_case, option) %>
-            >
+              <%= emancipation_option_checkbox_checked(@current_case, option) %>>
           <% end %>
           <label><%= option.name %></label>
         </div>

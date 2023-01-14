@@ -8,7 +8,7 @@
 
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
-  
+
   <%= og_tag :title, content: translate('page.meta.title') %>
   <%= og_tag :description, content: translate('page.meta.description') %>
   <%= og_tag :url, content: root_url %>
@@ -23,9 +23,9 @@
     <%= javascript_include_tag 'all_casa_admin', 'data-turbolinks-track': 'reload', defer: true %>
   <% end %>
 
-  <link rel="stylesheet" href="/assets/css/lineicons.css"/>
-  <link rel="stylesheet" href="/assets/css/materialdesignicons.min.css"/>
-  <link rel="stylesheet" href="/assets/css/main.css"/>
+  <link rel="stylesheet" href="/assets/css/lineicons.css">
+  <link rel="stylesheet" href="/assets/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
 
 </head>
 <body class="<%= body_class %>">
@@ -47,10 +47,9 @@
 <main class="main-wrapper">
 
 <% if all_casa_admin_signed_in? %>
-<% else  %>
+<% else %>
 <%= render 'layouts/header' %>
 <% end %>
-
 
   <!-- ========== section start ========== -->
   <section class="section">
