@@ -12,6 +12,7 @@
           </div>
         </div>
       </div>
+      
       <div class="col-lg-7 col-md-7 col-6">
         <div class="header-right">
           <!-- notification start -->
@@ -97,3 +98,12 @@
     </div>
   </div>
 </header>
+<% if notice || alert %>
+        <div class="alert-box danger-alert">
+          <div class="alert">
+            <p>
+              <%= notice || alert %>
+            </p>
+          </div>
+        </div>
+      <% end %>

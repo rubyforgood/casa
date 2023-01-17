@@ -7,11 +7,19 @@
     </p>
     <div class="row">
       <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-
+      <% if notice || alert %>
+        <div class="alert-box warning-alert">
+          <div class="alert">
+            <p>
+              <%= notice || alert %>
+            </p>
+          </div>
+        </div>
+      <% end %>
         <div class="col-12">
-          <div class="input-style-1">
+          <div class="input-style-1" id="email-input">
             <%= f.label "Email" %>
-            <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "Email", class: "form-control", required: true %>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "Email", class: "form-control", required: true, id:"email" %>
           </div>
         </div>
         <!-- end col -->
@@ -51,10 +59,12 @@
                             d-flex
                             justify-content-center
                             flex-wrap
+                            actions
                           ">
             <%= button_tag(
               type: "submit",
-              class: "main-btn primary-btn btn-hover w-100 text-center"
+              class: "main-btn primary-btn btn-hover w-100 text-center",
+              id: "log-in"
             ) do %>
               <i class="lni lni-chevron-right-circle mr-10"></i>Log In
             <% end %>
