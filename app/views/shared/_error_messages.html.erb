@@ -13,4 +13,12 @@
       </ul>
     </div>
   </div>
+<% elsif alert || notice %>
+    <div class="alert-box danger-alert">
+      <div class="alert">
+        <p>
+          <%= notice || alert %>
+        </p>
+      </div>
+    </div>
 <% end %>
