@@ -1,4 +1,4 @@
-FROM ruby:3.1.3-alpine AS builder
+FROM ruby:3.1.3-bullseye AS builder
 
 LABEL maintainer="jeanine@littleforestconsulting.com"
 
@@ -25,7 +25,7 @@ RUN yarn build && yarn build:css
 
 ### BUILD STEP DONE ###
 
-FROM ruby:3.1.2-alpine
+FROM ruby:3.1.3-bullseye
 
 ARG RAILS_ROOT=/usr/src/app/
 
