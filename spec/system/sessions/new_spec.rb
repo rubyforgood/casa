@@ -4,7 +4,7 @@ RSpec.describe "sessions/new", type: :system do
   context "when guest" do
     it "renders sign in page with no flash messages" do
       visit "/"
-      expect(page).to have_text "Log in"
+      expect(page).to have_text "Login"
       expect(page).to_not have_text "sign in before continuing"
     end
 
@@ -14,12 +14,12 @@ RSpec.describe "sessions/new", type: :system do
       end
 
       it "allows #{user_type} to click email link" do
-        expect(page).to have_text "Want to add your CASA? Email: casa@rubyforgood.org"
-        expect(page).to have_link("casa@rubyforgood.org", href: "mailto:casa@rubyforgood.org")
+        expect(page).to have_text "Want to use the CASA Volunteer Tracking App?"
+        expect(page).to have_link("casa@rubyforgood.org", href: "mailto:casa@rubyforgood.org?Subject=CASA%20Interest")
       end
 
       it "renders sign in page with no flash messages" do
-        expect(page).to have_text "Log in"
+        expect(page).to have_text "Login"
         expect(page).to_not have_text "sign in before continuing"
       end
 
@@ -27,10 +27,11 @@ RSpec.describe "sessions/new", type: :system do
         let!(:user) { create(user_type.to_sym) }
 
         before do
+          visit "/users/sign_in"
           fill_in "Email", with: user.email
           fill_in "Password", with: "12345678"
           within ".actions" do
-            click_on "Log in"
+            find("#log-in").click
           end
         end
 
@@ -51,14 +52,14 @@ RSpec.describe "sessions/new", type: :system do
     it "does not allow AllCasaAdmin to sign in" do
       user = build_stubbed(:all_casa_admin)
 
-      visit "/"
-      expect(page).to have_text "Log in"
+      visit "/users/sign_in"
+      expect(page).to have_text "Log In"
       expect(page).to_not have_text "sign in before continuing"
 
       fill_in "Email", with: user.email
       fill_in "Password", with: "12345678"
       within ".actions" do
-        click_on "Log in"
+        find("#log-in").click
       end
 
       expect(page).to have_text "Invalid Email or password"
