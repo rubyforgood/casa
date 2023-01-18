@@ -10,7 +10,7 @@ RSpec.describe "deep_link", type: :system do
         fill_in "Email", with: user.email
         fill_in "Password", with: "12345678"
         within ".actions" do
-          click_on "Log in"
+          find("#log-in").click
         end
         expect(current_path).to eq "/users/edit"
         expect(page).to have_text "Edit Profile"
@@ -26,7 +26,7 @@ RSpec.describe "deep_link", type: :system do
           fill_in "Email", with: user.email
           fill_in "Password", with: "12345678"
           within ".actions" do
-            click_on "Log in"
+            find("#log-in").click
           end
           expect(page).to have_text "Sorry, you are not authorized to perform this action."
         end
@@ -39,7 +39,7 @@ RSpec.describe "deep_link", type: :system do
         fill_in "Email", with: volunteer.email
         fill_in "Password", with: "12345678"
         within ".actions" do
-          click_on "Log in"
+          find("#log-in").click
         end
         expect(page).to have_text "Sorry, you are not authorized to perform this action."
       end
