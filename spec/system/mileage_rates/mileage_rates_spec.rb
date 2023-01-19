@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "mileage_rates/new", type: :system do
+RSpec.describe "mileage_rates/new", type: :system, js: true do
   let(:admin) { create(:casa_admin) }
   let(:organization) { admin.casa_org }
 
@@ -13,7 +13,7 @@ RSpec.describe "mileage_rates/new", type: :system do
   it "add new mileage rate" do
     click_on "New Mileage Rate"
     expect(page).to have_text("New Mileage Rate")
-    fill_in "Effective date", with: Date.new(2020, 1, 1)
+    fill_in "Effective date", with: "01-01-2020"
     fill_in "Amount", with: 1.35
     uncheck "Currently active?"
     click_on "Save Mileage Rate"
