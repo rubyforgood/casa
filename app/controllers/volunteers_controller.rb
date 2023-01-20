@@ -46,7 +46,7 @@ class VolunteersController < ApplicationController
 
   def edit
     authorize @volunteer
-    @supervisors = policy_scope current_organization.supervisors.active unless @volunteer.has_supervisor?
+    @supervisors = policy_scope current_organization.supervisors.active
   end
 
   def update
