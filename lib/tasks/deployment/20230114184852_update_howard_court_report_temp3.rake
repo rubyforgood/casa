@@ -1,5 +1,5 @@
 namespace :after_party do
-  desc 'Deployment task: update_howard_court_report_temp3'
+  desc "Deployment task: update_howard_court_report_temp3"
   task update_howard_court_report_temp3: :environment do
     puts "Running deploy task 'update_howard_court_report_template' 3"
 
@@ -13,6 +13,6 @@ namespace :after_party do
     # Update task as completed.  If you remove the line below, the task will
     # run with every deploy (or every time you call after_party:run).
     AfterParty::TaskRecord
-        .create version: AfterParty::TaskRecorder.new(__FILE__).timestamp
+      .create version: AfterParty::TaskRecorder.new(__FILE__).timestamp
   end
 end
