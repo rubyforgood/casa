@@ -7,6 +7,10 @@
             <h2 class="mb-15">All CASA Log In</h2>
             <br>
             <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+              <div class="alert-box danger-alert">
+                <%= render "/shared/error_messages", resource: resource %>
+              </div>
+              
               <div class="input-style-1">
                 <%= f.label :email %>
                 <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", required: true %>
