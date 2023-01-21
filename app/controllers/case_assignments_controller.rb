@@ -13,22 +13,33 @@ class CaseAssignmentsController < ApplicationController
 
     if existing_case_assignment.present?
       if existing_case_assignment.update(active: true)
-        flash.notice = "Volunteer reassigned to case"
+        message = "Volunteer reassigned to case"
+        flash.notice = message
+        status = :ok
       else
         errors = existing_case_assignment.errors.full_messages.join(". ")
-        flash.alert = "Unable to reassigned volunteer to case: #{errors}."
+        message = "Unable to reassigned volunteer to case: #{errors}."
+        flash.alert = message
+        status = :unprocessable_entity
       end
     else
       case_assignment = case_assignment_parent.case_assignments.new(case_assignment_params)
       if case_assignment.save
-        flash.notice = "Volunteer assigned to case"
+        message = "Volunteer assigned to case"
+        flash.notice = message
+        status = :ok
       else
         errors = case_assignment.errors.full_messages.join(". ")
-        flash.alert = "Unable to assign volunteer to case: #{errors}."
+        message = "Unable to assign volunteer to case: #{errors}."
+        flash.alert = message
+        status = :unprocessable_entity
       end
     end
 
-    redirect_to after_action_path(case_assignment_parent)
+    respond_to do |format|
+      format.html { redirect_to after_action_path(case_assignment_parent) }
+      format.json { render json: message, status: status }
+    end
   end
 
   # TODO don't delete this, just deactivate it
@@ -43,16 +54,22 @@ class CaseAssignmentsController < ApplicationController
     authorize @case_assignment, :unassign?
     casa_case = @case_assignment.casa_case
     volunteer = @case_assignment.volunteer
-    flash_message = "Volunteer was unassigned from Case #{casa_case.case_number}."
+    message = "Volunteer was unassigned from Case #{casa_case.case_number}."
 
     if @case_assignment.update(active: false)
       if params[:redirect_to_path] == "volunteer"
-        redirect_to edit_volunteer_path(volunteer), notice: flash_message
+        redirect_to edit_volunteer_path(volunteer), notice: message
       else
-        redirect_to after_action_path(casa_case), notice: flash_message
+        respond_to do |format|
+          format.html { redirect_to after_action_path(casa_case), notice: message }
+          format.json { render json: message, status: :ok }
+        end
       end
     else
-      render :edit
+      respond_to do |format|
+        format.html { render :edit }
+        format.json { render json: @case_assignment.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   end
 
