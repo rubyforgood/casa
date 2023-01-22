@@ -15,3 +15,17 @@ Creates a casa case
      The id of the hearing type for the next court date.
    - **judge_id**: 1  
      The id of the case judge
+
+### POST `/case_assignments.json`
+Creates a case_assignment
+- **Params:**
+   - **casa_case_id**: 1,  
+     Required. The id of the casa case the volunteer is being assigned to.
+   - **volunteer_id**: 1,  
+     Required. The id of the volunteer being assigned to the casa case.
+
+### PATCH   `/case_assignments/:id/unassign.json`
+Unassigns a case_assignment
+- **Params:**
+   - **id**: 1,  
+     Required. The id of the case_assignment to be unassigned.
