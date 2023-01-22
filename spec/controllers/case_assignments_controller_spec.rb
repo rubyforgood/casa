@@ -11,15 +11,15 @@ RSpec.describe CaseAssignmentsController, type: :controller do
       context "when request format is html" do
         it "reassigns the volunteer to the casa_case" do
           create(:case_assignment, active: false, volunteer: volunteer, casa_case: casa_case)
-  
+
           sign_in admin
-  
+
           expect {
             post :create, params: {casa_case_id: casa_case.id, case_assignment: {
               volunteer_id: volunteer.id
             }}
           }.to change { casa_case.case_assignments.first.active }.from(false).to(true)
-  
+
           expect(response).to redirect_to edit_casa_case_path(casa_case)
         end
       end
@@ -27,15 +27,15 @@ RSpec.describe CaseAssignmentsController, type: :controller do
       context "when request format is json" do
         it "reassigns the volunteer to the casa_case" do
           create(:case_assignment, active: false, volunteer: volunteer, casa_case: casa_case)
-  
+
           sign_in admin
-  
+
           expect {
             post :create, format: :json, params: {casa_case_id: casa_case.id, case_assignment: {
               volunteer_id: volunteer.id
             }}
           }.to change { casa_case.case_assignments.first.active }.from(false).to(true)
-  
+
           expect(response.status).to eq 200
           expect(response.body).to eq "Volunteer reassigned to case"
         end
@@ -46,13 +46,13 @@ RSpec.describe CaseAssignmentsController, type: :controller do
       context "when request format is html" do
         it "creates a new case assignment for the volunteer" do
           sign_in admin
-  
+
           expect {
             post :create, params: {
               volunteer_id: volunteer.id, case_assignment: {casa_case_id: casa_case.id}
             }
           }.to change(volunteer.casa_cases, :count).by(1)
-  
+
           expect(response).to redirect_to edit_volunteer_path(volunteer)
         end
       end
@@ -60,13 +60,13 @@ RSpec.describe CaseAssignmentsController, type: :controller do
       context "when request format is json" do
         it "creates a new case assignment for the volunteer" do
           sign_in admin
-  
+
           expect {
             post :create, format: :json, params: {
               volunteer_id: volunteer.id, case_assignment: {casa_case_id: casa_case.id}
             }
           }.to change(volunteer.casa_cases, :count).by(1)
-  
+
           expect(response.status).to eq 200
           expect(response.body).to eq "Volunteer assigned to case"
         end
@@ -77,13 +77,13 @@ RSpec.describe CaseAssignmentsController, type: :controller do
       context "when request format is html" do
         it "creates a new case assignment for the casa_case" do
           sign_in admin
-  
+
           expect {
             post :create, params: {
               casa_case_id: casa_case.id, case_assignment: {volunteer_id: volunteer.id}
             }
           }.to change(casa_case.volunteers, :count).by(1)
-  
+
           expect(response).to redirect_to edit_casa_case_path(casa_case)
         end
       end
@@ -91,13 +91,13 @@ RSpec.describe CaseAssignmentsController, type: :controller do
       context "when request format is json" do
         it "creates a new case assignment for the casa_case" do
           sign_in admin
-  
+
           expect {
             post :create, format: :json, params: {
               casa_case_id: casa_case.id, case_assignment: {volunteer_id: volunteer.id}
             }
           }.to change(casa_case.volunteers, :count).by(1)
-  
+
           expect(response.status).to eq 200
           expect(response.body).to eq "Volunteer assigned to case"
         end
