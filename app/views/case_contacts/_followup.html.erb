@@ -6,12 +6,8 @@
   </div>
 <% else %>
   <div>
-
-  <!--<%= button_to case_contact_followups_path(contact.id), method: :post, class:"main-btn btn-sm primary-btn-outline btn-hover", id:"followup-button-#{contact.id }" do %>
-  <i class="lni lni-calendar mr-5"></i>Make Reminder
-  <%end%> -->
     <button type="button"
-            class="main-btn btn-sm primary-btn-outline btn-hover"
+            class="followup-button pmain-btn btn-sm primary-btn-outline btn-hover"
             id="followup-button-<%= contact.id %>"><i class="lni lni-calendar mr-5"></i>
       Make Reminder
     </button>
