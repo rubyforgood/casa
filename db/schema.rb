@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_12_203806) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_21_174227) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -103,7 +103,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_203806) do
     t.datetime "updated_at", null: false
     t.bigint "casa_org_id", null: false
     t.datetime "birth_month_year_youth", precision: nil
-    t.datetime "court_date", precision: nil
     t.datetime "court_report_due_date", precision: nil
     t.bigint "hearing_type_id"
     t.boolean "active", default: true, null: false
