@@ -93,7 +93,6 @@ RSpec.describe "notifications/index", type: :system do
       it "lists followup notifications, showing the information in a single line when there are no notes" do
         # Wait until page reloads
         expect(page).to have_content "Resolve Reminder"
-
         sign_in volunteer
         visit notifications_path
 

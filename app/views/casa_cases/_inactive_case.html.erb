@@ -1,10 +1,17 @@
-<div class="alert alert-danger">
-  <p>Case was deactivated on: <%= I18n.l(@casa_case.updated_at, format: :standard, default: nil) %>
-    <%= link_to(
-            "Reactivate CASA Case",
-            reactivate_casa_case_path(@casa_case),
-            method: :patch,
-            class: "main-btn primary-btn btn-hover pull-right"
-        ) if Pundit.policy(current_user, @casa_case).update_case_status? %>
-  </p>
+<div class="card card-container">
+  <div class="card-body">
+    <% if flash %>
+      <%= render "/shared/error_messages" %>
+    <%end%>
+    <div class="alert alert-danger">
+      <p>Case was deactivated on: <%= I18n.l(@casa_case.updated_at, format: :standard, default: nil) %>
+      </p>
+      <%= link_to(
+                "Reactivate CASA Case",
+                reactivate_casa_case_path(@casa_case),
+                method: :patch,
+                class: "main-btn primary-btn btn-hover pull-right"
+            ) if Pundit.policy(current_user, @casa_case).update_case_status? %>
+    </div>
+  </div>
 </div>

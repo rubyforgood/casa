@@ -30,7 +30,6 @@ class CaseCourtReportContext
       latest_hearing_date: latest_hearing_date.nil? ? "___<LATEST HEARING DATE>____" : I18n.l(latest_hearing_date.date, format: :full, default: nil),
       org_address: org_address(is_default_template),
       volunteer: volunteer_info
-      # judge: @casa_case.judge.name
     }
   end
 

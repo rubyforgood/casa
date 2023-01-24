@@ -48,8 +48,8 @@ RSpec.describe "supervisors/index", type: :view do
 
         active_bar = parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact")
         inactive_bar = parsed_html.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact")
-        active_flex = active_bar.attribute("style").value.split.last
-        inactive_flex = inactive_bar.attribute("style").value.split.last
+        active_flex = active_bar.inner_html
+        inactive_flex = inactive_bar.inner_html
         active_content = active_bar.children[0].text.strip
         inactive_content = inactive_bar.children[0].text.strip
 

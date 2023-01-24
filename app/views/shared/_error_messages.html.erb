@@ -13,22 +13,26 @@
       </ul>
     </div>
   </div>
-<% elsif alert || notice %>
-  <% if alert %>
-    <div class="alert-box danger-alert">
-      <div class="alert">
-        <p>
-          <%= alert %>
-        </p>
-      </div>
-    </div>
-    <% else %>
-    <div class="alert-box primary-alert">
-      <div class="alert">
-        <p>
-          <%= notice %>
-        </p>
-      </div>
-    </div>
+<% elsif flash %>
+  <% flash.each do |type, msg| %>
+      <% if type == "alert" %>
+        <div class="alert-box danger-alert">
+          <div id="error_explanation" class="alert">
+            <%= msg %>
+          </div>
+        </div>
+      <% elsif type == "notice" %>
+        <div class="alert-box info-alert">
+          <div id="error_explanation" class="alert">
+            <%= msg %>
+          </div>
+        </div>
+      <% elsif type == "success" %>
+        <div class="alert-box success-alert">
+          <div id="error_explanation" class="alert">
+            <%= msg %>
+          </div>
+        </div>
     <% end %>
-<% end %>
+  <% end %>
+<%end%>
