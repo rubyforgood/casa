@@ -92,10 +92,7 @@ RSpec.describe "notifications/index", type: :system do
 
       it "lists followup notifications, showing the information in a single line when there are no notes" do
         # Wait until page reloads
-        #sleep(1)
-        ####
-        expect(page).to have_content "Resolve Reminder", wait: 50
-        ####
+        expect(page).to have_content "Resolve Reminder"
         sign_in volunteer
         visit notifications_path
 
@@ -110,15 +107,13 @@ RSpec.describe "notifications/index", type: :system do
       let(:new_notification_message) { I18n.t("notifications.followup_notification.message", created_by_name: created_by_name) }
 
       before do
-        #sign_in admin
-        #visit notifications_path
         click_button "Make Reminder"
         click_button "Confirm"
       end
 
       it "lists followup notifications showing admin current name" do
         # Wait until page reloads
-        expect(page).to have_content "Resolve Reminder", wait: 50
+        expect(page).to have_content "Resolve Reminder"
 
         visit edit_users_path
         fill_in "Display name", with: created_by_name
