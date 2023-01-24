@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 require "sablon"
 
@@ -5,9 +7,11 @@ RSpec.describe CaseCourtReportContext, type: :model do
   let(:volunteer) { create(:volunteer, :with_casa_cases) }
   let(:path_to_template) { Rails.root.join("app", "documents", "templates", "default_report_template.docx").to_s }
   let(:path_to_report) { Rails.root.join("tmp", "test_report.docx").to_s }
+
   before do
     travel_to Date.new(2021, 1, 1)
   end
+
   context "#context" do
     subject do
       described_class.new(
@@ -17,6 +21,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
         path_to_report: path_to_report
       ).context
     end
+
     it "has a created date equal to the current date" do
       expect(subject[:created_date]).to eq("January 1, 2021")
     end
@@ -37,6 +42,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
       let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
       let(:casa_case_with_contacts) { volunteer.casa_cases.first }
       let(:casa_case_without_contacts) { volunteer.casa_cases.second }
+
       subject do
         described_class.new(
           case_id: casa_case_with_contacts.id,
@@ -169,6 +175,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
           let(:contact_type) { create(:contact_type, name: document_data[:case_contact_type]) }
           let(:case_contact) { create(:case_contact, contact_made: false, occurred_at: document_data[:case_contact_time]) }
           let(:court_order) { create(:case_court_order, implementation_status: :partially_implemented) }
+          let(:document_inspector) { DocxInspector.new(docx_contents: subject.generate_to_string) }
 
           before(:each) do
             casa_case.casa_org.update_attribute(:address, document_data[:org_address])
@@ -181,15 +188,31 @@ RSpec.describe CaseCourtReportContext, type: :model do
             court_order.update_attribute(:text, document_data[:text])
           end
 
-          it "display all expected information" do
-            document_inspector = DocxInspector.new(docx_contents: subject.generate_to_string)
-
+          it "displays today's date formatted" do
             expect(document_inspector.word_list_document_contains?(Date.today.strftime("%B %-d, %Y"))).to eq(true)
+          end
+
+          it "displays the case hearing date formatted" do
             expect(document_inspector.word_list_document_contains?(document_data[:case_hearing_date].strftime("%B %-d, %Y"))).to eq(true)
+          end
+
+          it "displays the case number" do
             expect(document_inspector.word_list_document_contains?(document_data[:case_number])).to eq(true)
+          end
+
+          it "displays the case contact type" do
             expect(document_inspector.word_list_document_contains?(document_data[:case_contact_type])).to eq(true)
+          end
+
+          it "displays the case contact time formatted" do
             expect(document_inspector.word_list_document_contains?("#{document_data[:case_contact_time].strftime("%-m/%d")}*")).to eq(true)
+          end
+
+          it "displays the text" do
             expect(document_inspector.word_list_document_contains?(document_data[:text])).to eq(true)
+          end
+
+          it "displays the order status" do
             expect(document_inspector.word_list_document_contains?("Partially implemented")).to eq(true) # Order Status
           end
         end
@@ -202,6 +225,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
       let!(:court_order_unimplemented) { create(:case_court_order, casa_case: casa_case, text: "'q\"tE1LP-9W>,2)", implementation_status: :unimplemented) }
       let!(:court_order_partially_implemented) { create(:case_court_order, casa_case: casa_case, text: "ZmCw@w@\d`&roct", implementation_status: :partially_implemented) }
       let!(:court_order_not_specified) { create(:case_court_order, casa_case: casa_case, text: "(4WqOL7e'FRYd@%", implementation_status: nil) }
+
       subject do
         args = {
           case_id: casa_case.id,
@@ -211,14 +235,32 @@ RSpec.describe CaseCourtReportContext, type: :model do
         described_class.new(args).context
       end
 
-      it "should have all the court orders" do
+      it "contains a casa case" do
         expect(subject[:casa_case]).to eq({court_date: nil, case_number: casa_case.case_number, dob: "January 2005", is_transitioning: true, judge_name: nil})
+      end
+
+      it "contains casa case contacts" do
         expect(subject[:case_contacts]).to eq([]) # TODO test this
+      end
+
+      it "matches the casa case court orders length" do
         expect(subject[:case_court_orders].length).to eq(4)
+      end
+
+      it "matches the casa case court orders array" do
         expect(subject[:case_court_orders].map { |cco| cco[:status] }).to match_array(["Implemented", "Unimplemented", "Partially implemented", nil])
+      end
+
+      it "matches casa case mandates with case court orders" do
         expect(subject[:case_mandates]).to eq(subject[:case_court_orders]) # backwards compatibility for old names in old montgomery template - TODO track it down and update prod templates
+      end
+
+      it "matches casa latest hearing date" do
         expect(subject[:latest_hearing_date]).to eq("___<LATEST HEARING DATE>____")
-        expect(subject[:volunteer]).to eq(nil) # TODO test this better
+      end
+
+      it "matches volunteer with the nil value" do
+        expect(subject[:volunteer]).to be_nil
       end
     end
   end
