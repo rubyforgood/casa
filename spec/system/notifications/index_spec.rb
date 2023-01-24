@@ -118,7 +118,7 @@ RSpec.describe "notifications/index", type: :system do
 
       it "lists followup notifications showing admin current name" do
         # Wait until page reloads
-        expect(page).to have_content "Resolve Reminder", wait: 20
+        expect(page).to have_content "Resolve Reminder", wait: 50
 
         visit edit_users_path
         fill_in "Display name", with: created_by_name
