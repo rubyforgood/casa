@@ -6,32 +6,42 @@ const isWatching = CLIArgs.includes('--watch')
 const esbuild = require('esbuild')
 const logger = require('./logger.js')
 
-const watchValue = isWatching
-  ? {
-      onRebuild (error, result) {
-        if (error) {
-          logger.error('watch build failed:')
-          logger.error(error.stack)
-        } else {
-          logger.info('watch build succeeded:')
-          logger.info(JSON.stringify(result, null, 2))
-        }
+const watchingConsoleLogger = [{
+  name: 'watching-console-logger',
+  setup(build) {
+    build.onEnd(result => {
+      if (result.errors.length) {
+        logger.error('watch build failed:')
+        logger.error(`  build failed with ${result.errors.length} errors`)
+          for( const error of result.errors){
+            logger.error(`  Error:`)
+            logger.error(`    ${error.text}`)
+          }
+      } else {
+        logger.info('watch build succeeded:')
+        logger.info(JSON.stringify(result, null, 2))
       }
-    }
-  : false
+    });
+  },
+}];
 
-esbuild.build({
-  entryPoints: ['app/javascript/application.js', 'app/javascript/all_casa_admin.js'],
-  outdir: 'app/assets/builds',
-  bundle: true,
-  watch: watchValue
-}).then(result => {
-  logger.info('application.js, all_casa_admin.js built successfully')
-
-  if (isWatching) {
-    logger.info('watching for changes')
+async function main () {
+  const context = await esbuild.context({
+    entryPoints: ['app/javascript/application.js', 'app/javascript/all_casa_admin.js'],
+    outdir: 'app/assets/builds',
+    bundle: true,
+    plugins: watchingConsoleLogger
+  });
+  
+  if(isWatching){
+    await context.watch();
+  }else{
+    await context.rebuild();
+    await context.dispose();
   }
-}).catch((err) => {
-  logger.error('failed to build application.js')
-  logger.error(err.stack)
-})
+}
+
+main().catch((e) => { 
+  console.error(e.message)
+  process.exit(1)
+});
