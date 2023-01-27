@@ -36,4 +36,10 @@ RSpec.describe CourtDatePolicy do
       it { is_expected.not_to permit(volunteer, court_date) }
     end
   end
+
+  permissions :destroy? do
+    it { is_expected.to permit(casa_admin, court_date) }
+    it { is_expected.to permit(supervisor, court_date) }
+    it { is_expected.not_to permit(volunteer, court_date) }
+  end
 end
