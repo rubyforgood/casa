@@ -7,6 +7,27 @@ RSpec.describe "/casa_admins", type: :request do
   web_mock = WebMockHelper.new(blacklist)
   web_mock.stub_network_connection
 
+  describe "GET /casa_admins" do
+    subject(:request) do
+      get casa_admins_path
+
+      response
+    end
+
+    before { sign_in_as_admin }
+
+    it { is_expected.to have_http_status(:success) }
+
+    it "shows correct casa admins", :aggregate_failures do
+      casa_admins = create_list(:casa_admin, 3)
+      other_org_casa_admin = create(:casa_admin, casa_org: create(:casa_org))
+
+      page = request.parsed_body
+      casa_admins.each { |casa_admin| expect(page).to include(casa_admin.email) }
+      expect(page).not_to include(other_org_casa_admin.email)
+    end
+  end
+
   describe "GET /casa_admins/:id/edit" do
     context "logged in as admin user" do
       context "same org" do
