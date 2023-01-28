@@ -13,9 +13,10 @@ const watchingConsoleLogger = [{
       if (result.errors.length) {
         logger.error('watch build failed:')
         logger.error(`  build failed with ${result.errors.length} errors`)
+
         for (const error of result.errors) {
           logger.error('  Error:')
-          logger.error(`    ${error.text}`)
+          logger.error(JSON.stringify(error, null, 2))
         }
       } else {
         logger.info('watch build succeeded:')
