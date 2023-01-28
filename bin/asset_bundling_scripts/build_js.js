@@ -8,22 +8,22 @@ const logger = require('./logger.js')
 
 const watchingConsoleLogger = [{
   name: 'watching-console-logger',
-  setup(build) {
+  setup (build) {
     build.onEnd(result => {
       if (result.errors.length) {
         logger.error('watch build failed:')
         logger.error(`  build failed with ${result.errors.length} errors`)
-          for( const error of result.errors){
-            logger.error(`  Error:`)
-            logger.error(`    ${error.text}`)
-          }
+        for (const error of result.errors) {
+          logger.error('  Error:')
+          logger.error(`    ${error.text}`)
+        }
       } else {
         logger.info('watch build succeeded:')
         logger.info(JSON.stringify(result, null, 2))
       }
-    });
-  },
-}];
+    })
+  }
+}]
 
 async function main () {
   const context = await esbuild.context({
@@ -31,17 +31,17 @@ async function main () {
     outdir: 'app/assets/builds',
     bundle: true,
     plugins: watchingConsoleLogger
-  });
-  
-  if(isWatching){
-    await context.watch();
-  }else{
-    await context.rebuild();
-    await context.dispose();
+  })
+
+  if (isWatching) {
+    await context.watch()
+  } else {
+    await context.rebuild()
+    await context.dispose()
   }
 }
 
-main().catch((e) => { 
+main().catch((e) => {
   console.error(e.message)
   process.exit(1)
-});
+})
