@@ -66,7 +66,7 @@
           <span class="status-btn danger-bg text-white mb-10">Number of Volunteers not attempting contact (within 2 weeks)</span><br>
           <span class="status-btn deactive-bg text-black">Count of Transition Aged Youth</span>
         </p>
-        <div class="table-wrapper table-responsive">
+        <div id="supervisors" class="table-wrapper table-responsive">
           <table class="table">
             <thead>
             <tr>
@@ -83,22 +83,24 @@
                   <%= link_to(supervisor.display_name, edit_supervisor_path(supervisor)) %>
                 </td>
                 <td class="min-width">
-                  <div>
+                  <div class="supervisor_case_contact_stats">
                     <% no_attempt_volunteers = supervisor.no_attempt_for_two_weeks %>
                     <% active_volunteers = (supervisor.active_volunteers - no_attempt_volunteers).nonzero? %>
                     <% transition_volunteers = supervisor.volunteers_serving_transition_aged_youth %>
                     <% if active_volunteers %>
-                      <span class="status-btn success-bg text-white pl-<%= (active_volunteers * 15) %> pr-<%= (active_volunteers * 15) %>"><%= active_volunteers %></span>
+                      <span class="attempted-contact status-btn success-bg text-white pl-<%= (active_volunteers * 15) %> pr-<%= (active_volunteers * 15) %>"><%= active_volunteers %></span>
                     <% end %>
                     <% if no_attempt_volunteers.nonzero? %>
-                      <span class="status-btn danger-bg text-white pl-<%= (no_attempt_volunteers * 15) %> pr-<%= (no_attempt_volunteers * 15) %>"><%= no_attempt_volunteers %></span>
+                      <span class="no-attempted-contact status-btn danger-bg text-white pl-<%= (no_attempt_volunteers * 15) %> pr-<%= (no_attempt_volunteers * 15) %>"><%= no_attempt_volunteers %></span>
                     <% else %>
                       <span class="attempted-contact-end"></span>
                     <% end %>
 
                     <% if !(active_volunteers || no_attempt_volunteers.nonzero?) %>
-                    <% end %>
-                    <span class="status-btn deactive-bg text-black pl-<%= (transition_volunteers * 15) %> pr-<%= (transition_volunteers * 15) %>"><%= transition_volunteers %></span>
+                      <span class="no-volunteers" style="flex-grow: 1">No assigned volunteers</span>
+                    <%else%>
+                      <span class="status-btn deactive-bg text-black pl-<%= (transition_volunteers * 15) %> pr-<%= (transition_volunteers * 15) %>"><%= transition_volunteers %></span>
+                    <%end%>
                   </div>
                 </td>
                 <td>
