@@ -108,113 +108,76 @@ RSpec.describe CaseCourtReportContext, type: :model do
         end
       end
 
-      describe "the default generated subject" do
-        context "when passed all displayable information" do
-          let(:document_data) do
-            {
-              case_birthday: 12.years.ago,
-              case_contact_time: 3.days.ago,
-              case_contact_type: "Unique Case Contact Type",
-              case_hearing_date: 2.weeks.from_now,
-              case_number: "A-CASA-CASE-NUMBER-12345",
-              text: "This text shall not be strikingly similar to other text in the document",
-              org_address: "596 Unique Avenue Seattle, Washington",
-              supervisor_name: "A very unique supervisor name",
-              volunteer_case_assignment_date: 2.months.ago,
-              volunteer_name: "An unmistakably unique volunteer name"
-            }
-          end
-
-          let(:contact_type) { create(:contact_type, name: document_data[:case_contact_type]) }
-          let(:case_contact) { create(:case_contact, contact_made: false, occurred_at: document_data[:case_contact_time]) }
-          let(:court_order) { create(:case_court_order, implementation_status: :partially_implemented) }
-
-          before(:each) do
-            casa_case_with_contacts.casa_org.update_attribute(:address, document_data[:org_address])
-            casa_case_with_contacts.update_attribute(:birth_month_year_youth, document_data[:case_birthday])
-            casa_case_with_contacts.update_attribute(:case_number, document_data[:case_number])
-            create(:court_date, casa_case: casa_case_with_contacts, date: document_data[:case_hearing_date])
-            case_contact.contact_types << contact_type
-            casa_case_with_contacts.case_contacts << case_contact
-            casa_case_with_contacts.case_court_orders << court_order
-            court_order.update_attribute(:text, document_data[:text])
-            CaseAssignment.find_by(casa_case_id: casa_case_with_contacts.id, volunteer_id: volunteer.id).update_attribute(:created_at, document_data[:volunteer_case_assignment_date])
-            volunteer.update_attribute(:display_name, document_data[:volunteer_name])
-            volunteer.supervisor.update_attribute(:display_name, document_data[:supervisor_name])
-          end
+      describe "when missing a volunteer" do
+        subject do
+          args = {
+            case_id: casa_case.id,
+            volunteer_id: nil,
+            path_to_template: path_to_template,
+            path_to_report: path_to_report
+          }
+          context = described_class.new(args).context
+          CaseCourtReport.new(path_to_template: path_to_template, context: context) # TODO remove from this test file
         end
 
-        context "when missing a volunteer" do
-          subject do
-            args = {
-              case_id: casa_case.id,
-              volunteer_id: nil,
-              path_to_template: path_to_template,
-              path_to_report: path_to_report
-            }
-            context = described_class.new(args).context
-            CaseCourtReport.new(path_to_template: path_to_template, context: context) # TODO remove from this test file
-          end
+        let(:document_data) do
+          {
+            case_birthday: 12.years.ago,
+            case_contact_time: 3.days.ago,
+            case_contact_type: "Unique Case Contact Type",
+            case_hearing_date: 2.weeks.from_now,
+            case_number: "A-CASA-CASE-NUMBER-12345",
+            text: "This text shall not be strikingly similar to other text in the document",
+            org_address: nil,
+            supervisor_name: nil,
+            volunteer_case_assignment_date: 2.months.ago,
+            volunteer_name: nil
+          }
+        end
 
-          let(:document_data) do
-            {
-              case_birthday: 12.years.ago,
-              case_contact_time: 3.days.ago,
-              case_contact_type: "Unique Case Contact Type",
-              case_hearing_date: 2.weeks.from_now,
-              case_number: "A-CASA-CASE-NUMBER-12345",
-              text: "This text shall not be strikingly similar to other text in the document",
-              org_address: nil,
-              supervisor_name: nil,
-              volunteer_case_assignment_date: 2.months.ago,
-              volunteer_name: nil
-            }
-          end
+        let(:casa_case) { create(:casa_case) }
+        let(:contact_type) { create(:contact_type, name: document_data[:case_contact_type]) }
+        let(:case_contact) { create(:case_contact, contact_made: false, occurred_at: document_data[:case_contact_time]) }
+        let(:court_order) { create(:case_court_order, implementation_status: :partially_implemented) }
+        let(:document_inspector) { DocxInspector.new(docx_contents: subject.generate_to_string) }
 
-          let(:casa_case) { create(:casa_case) }
-          let(:contact_type) { create(:contact_type, name: document_data[:case_contact_type]) }
-          let(:case_contact) { create(:case_contact, contact_made: false, occurred_at: document_data[:case_contact_time]) }
-          let(:court_order) { create(:case_court_order, implementation_status: :partially_implemented) }
-          let(:document_inspector) { DocxInspector.new(docx_contents: subject.generate_to_string) }
+        before(:each) do
+          casa_case.casa_org.update_attribute(:address, document_data[:org_address])
+          casa_case.update_attribute(:birth_month_year_youth, document_data[:case_birthday])
+          casa_case.update_attribute(:case_number, document_data[:case_number])
+          create(:court_date, casa_case: casa_case, date: document_data[:case_hearing_date])
+          case_contact.contact_types << contact_type
+          casa_case.case_contacts << case_contact
+          casa_case.case_court_orders << court_order
+          court_order.update_attribute(:text, document_data[:text])
+        end
 
-          before(:each) do
-            casa_case.casa_org.update_attribute(:address, document_data[:org_address])
-            casa_case.update_attribute(:birth_month_year_youth, document_data[:case_birthday])
-            casa_case.update_attribute(:case_number, document_data[:case_number])
-            create(:court_date, casa_case: casa_case, date: document_data[:case_hearing_date])
-            case_contact.contact_types << contact_type
-            casa_case.case_contacts << case_contact
-            casa_case.case_court_orders << court_order
-            court_order.update_attribute(:text, document_data[:text])
-          end
+        it "displays today's date formatted" do
+          expect(document_inspector.word_list_document_contains?(Date.today.strftime("%B %-d, %Y"))).to eq(true)
+        end
 
-          it "displays today's date formatted" do
-            expect(document_inspector.word_list_document_contains?(Date.today.strftime("%B %-d, %Y"))).to eq(true)
-          end
+        it "displays the case hearing date formatted" do
+          expect(document_inspector.word_list_document_contains?(document_data[:case_hearing_date].strftime("%B %-d, %Y"))).to eq(true)
+        end
 
-          it "displays the case hearing date formatted" do
-            expect(document_inspector.word_list_document_contains?(document_data[:case_hearing_date].strftime("%B %-d, %Y"))).to eq(true)
-          end
+        it "displays the case number" do
+          expect(document_inspector.word_list_document_contains?(document_data[:case_number])).to eq(true)
+        end
 
-          it "displays the case number" do
-            expect(document_inspector.word_list_document_contains?(document_data[:case_number])).to eq(true)
-          end
+        it "displays the case contact type" do
+          expect(document_inspector.word_list_document_contains?(document_data[:case_contact_type])).to eq(true)
+        end
 
-          it "displays the case contact type" do
-            expect(document_inspector.word_list_document_contains?(document_data[:case_contact_type])).to eq(true)
-          end
+        it "displays the case contact time formatted" do
+          expect(document_inspector.word_list_document_contains?("#{document_data[:case_contact_time].strftime("%-m/%d")}*")).to eq(true)
+        end
 
-          it "displays the case contact time formatted" do
-            expect(document_inspector.word_list_document_contains?("#{document_data[:case_contact_time].strftime("%-m/%d")}*")).to eq(true)
-          end
+        it "displays the text" do
+          expect(document_inspector.word_list_document_contains?(document_data[:text])).to eq(true)
+        end
 
-          it "displays the text" do
-            expect(document_inspector.word_list_document_contains?(document_data[:text])).to eq(true)
-          end
-
-          it "displays the order status" do
-            expect(document_inspector.word_list_document_contains?("Partially implemented")).to eq(true) # Order Status
-          end
+        it "displays the order status" do
+          expect(document_inspector.word_list_document_contains?("Partially implemented")).to eq(true) # Order Status
         end
       end
     end
