@@ -98,9 +98,9 @@
 
                     <% if !(active_volunteers || no_attempt_volunteers.nonzero?) %>
                       <span class="no-volunteers" style="flex-grow: 1">No assigned volunteers</span>
-                    <%else%>
+                    <% else %>
                       <span class="status-btn deactive-bg text-black pl-<%= (transition_volunteers * 15) %> pr-<%= (transition_volunteers * 15) %>"><%= transition_volunteers %></span>
-                    <%end%>
+                    <% end %>
                   </div>
                 </td>
                 <td>
