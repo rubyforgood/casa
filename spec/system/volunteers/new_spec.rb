@@ -11,7 +11,7 @@ RSpec.describe "volunteers/new", type: :system do
       fill_in "Email", with: "new_volunteer@example.com"
       fill_in "Display name", with: "New Volunteer Display Name"
 
-      click_on "Create User"
+      click_on "Create Volunteer"
 
       last_email = ActionMailer::Base.deliveries.last
       expect(last_email.to).to eq ["new_volunteer@example.com"]
