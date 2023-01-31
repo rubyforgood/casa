@@ -7,8 +7,12 @@
     </p>
     <div class="row">
       <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-      <div class="alert-box danger-alert">
-       <%= render "/shared/error_messages", resource: resource %>
+      <div class="alert-box">
+        <% if resource.errors.any? %>
+          <%= render "/shared/error_messages", resource: resource %>
+        <% else %>
+          <%= render "layouts/flash_messages" %>
+        <% end %>
       </div>
         <div class="col-12">
           <div class="input-style-1" id="email-input">

@@ -86,7 +86,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       visit edit_casa_case_path(casa_case)
       click_on "Deactivate CASA Case"
       click_on "Yes, deactivate"
-      click_on "Reactivate CASA Case"
+      click_link("Reactivate CASA Case")
 
       expect(page).to have_text("Case #{casa_case.case_number} has been reactivated.")
       expect(page).to have_text("Deactivate CASA Case")
@@ -222,7 +222,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       expect(page).to have_text("Set Implementation Status")
 
-      within ".actions" do
+      within ".actions-cc" do
         click_on "Update CASA Case"
       end
       has_checked_field? "Youth"
@@ -398,7 +398,7 @@ of it unless it was included in a previous court report.")
         click_on "OK"
         expect(page).to_not have_text(text)
 
-        within ".actions" do
+        within ".actions-cc" do
           click_on "Update CASA Case"
         end
         expect(page).to_not have_text(text)
@@ -458,7 +458,7 @@ of it unless it was included in a previous court report.")
       find("a#uncheck_all").click
       expect(all("input[type=checkbox][class~=case-contact-contact-type]")).not_to be_empty
 
-      within ".actions" do
+      within ".actions-cc" do
         click_on "Update CASA Case"
       end
 
@@ -541,7 +541,7 @@ of it unless it was included in a previous court report.")
       expect(page).to have_text("Court Report Status: Not submitted")
       visit edit_casa_case_path(casa_case)
       select "Submitted", from: "casa_case_court_report_status"
-      within ".actions" do
+      within ".actions-cc" do
         click_on "Update CASA Case"
       end
 
