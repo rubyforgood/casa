@@ -300,7 +300,7 @@ GEM
     pg (1.4.5)
     pretender (0.4.0)
       actionpack (>= 5.2)
-    pry (0.14.1)
+    pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
     pry-byebug (3.10.1)
