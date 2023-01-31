@@ -18,7 +18,6 @@ on:
     paths-ignore:
       - 'doc/**'
       - '**/*.md'
-      - 'bin/**'
   pull_request:
     # The branches below must be a subset of the branches above
     branches:
@@ -26,7 +25,6 @@ on:
     paths-ignore:
       - 'doc/**'
       - '**/*.md'
-      - 'bin/**'
   schedule:
     - cron: '36 22 * * 3'
 

@@ -84,12 +84,30 @@ RSpec.describe "/volunteers", type: :request do
   end
 
   describe "GET /edit" do
-    it "render a successful response" do
-      sign_in admin
-
+    subject(:request) do
       get edit_volunteer_url(volunteer)
 
-      expect(response).to be_successful
+      response
+    end
+
+    before { sign_in admin }
+
+    it { is_expected.to be_successful }
+
+    it "shows correct volunteer", :aggregate_failures do
+      create(:volunteer, casa_org: organization)
+
+      page = request.parsed_body
+      expect(page).to include(volunteer.email)
+      expect(page).to include(volunteer.display_name)
+      expect(page).to include(volunteer.phone_number)
+    end
+
+    it "shows correct supervisor options", :aggregate_failures do
+      supervisors = create_list(:supervisor, 3, casa_org: organization)
+
+      page = request.parsed_body
+      supervisors.each { |supervisor| expect(page).to include(supervisor.display_name) }
     end
   end
 
@@ -285,19 +303,28 @@ RSpec.describe "/volunteers", type: :request do
   end
 
   describe "PATCH /deactivate" do
-    it "deactivates an active volunteer" do
-      sign_in admin
-
+    subject(:request) do
       patch deactivate_volunteer_path(volunteer)
 
-      volunteer.reload
-      expect(volunteer.active).to eq(false)
+      response
     end
 
-    it "doesn't send an deactivation email" do
-      expect {
-        patch deactivate_volunteer_path(volunteer)
-      }.to_not change { ActionMailer::Base.deliveries.count }
+    before { sign_in admin }
+
+    it { is_expected.to redirect_to(edit_volunteer_path(volunteer)) }
+
+    it "shows the correct flash message" do
+      request
+      expect(flash[:notice]).to eq("Volunteer was deactivated.")
+    end
+
+    it "deactivates an active volunteer" do
+      request
+      expect(volunteer.reload.active).to eq(false)
+    end
+
+    it "doesn't send a deactivation email" do
+      expect { request }.to_not change { ActionMailer::Base.deliveries.count }
     end
   end
 

@@ -24,7 +24,7 @@
     "bootstrap-scss": "^5.2.3",
     "bootstrap-select": "^1.13.18",
     "datatables.net-dt": "^1.13.1",
-    "esbuild": "^0.16.16",
+    "esbuild": "^0.17.5",
     "faker": "^5.5.3",
     "jquery": "^3.6.3",
     "lodash": "^4.17.21",
@@ -39,7 +39,7 @@
   "version": "0.1.0",
   "devDependencies": {
     "@babel/preset-env": "^7.20.2",
-    "jest": "^29.3.1",
+    "jest": "^29.4.1",
     "jest-environment-jsdom": "^29.3.1",
     "markdown-toc": "^1.2.0",
     "standard": "^17.0.0",
