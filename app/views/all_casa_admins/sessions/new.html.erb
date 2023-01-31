@@ -6,6 +6,7 @@
           <div class="col-md-6">
             <h2 class="mb-15">All CASA Log In</h2>
             <br>
+            <%= render "layouts/flash_messages" %>
             <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
               <div class="input-style-1">
                 <%= f.label :email %>

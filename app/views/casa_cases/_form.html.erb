@@ -3,7 +3,7 @@
     <%= form_with(model: casa_case, local: true) do |form| %>
       <%= render "/shared/error_messages", resource: casa_case %>
       <% if casa_case.active %>
-        <div class="top-page-actions pull-right">
+        <div class="top-page-actions pull-right z-1">
           <%= button_tag(
             type: "submit",
             class: "btn-sm main-btn primary-btn btn-hove mb-3"
@@ -18,6 +18,7 @@
           <% end %>
         </div>
       <% end %>
+      <br>
       <% if casa_case.new_record? || policy(casa_case).update_case_number? %>
         <div class="input-style-1">
           <%= form.label :case_number, "Case number" %>
@@ -114,7 +115,7 @@ locals: {casa_case: @casa_case, siblings_casa_cases: @siblings_casa_cases, form:
                    checkbox_tag_name: "casa_case[casa_case_contact_types_attributes][][contact_type_id]" %>
       <% end %>
       <br>
-      <div class="actions">
+      <div class="actions-cc">
         <% if casa_case.active %>
           <%= button_tag(
             type: "submit",
