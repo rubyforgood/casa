@@ -142,6 +142,34 @@ RSpec.describe CaseCourtReportContext, type: :model do
             volunteer.update_attribute(:display_name, document_data[:volunteer_name])
             volunteer.supervisor.update_attribute(:display_name, document_data[:supervisor_name])
           end
+
+          it "matched the casa case" do
+            expect(subject[:casa_case]).to eq({ court_date: "January 15, 2021", case_number: "A-CASA-CASE-NUMBER-12345", dob: "January 2009", is_transitioning: false, judge_name: nil })
+          end
+
+          it "matches the case number" do
+            expect(subject[:casa_case][:case_number]).to eq(document_data[:case_number])
+          end
+
+          it "matches the volunteer name" do
+            expect(subject[:volunteer][:name]).to eq(document_data[:volunteer_name])
+          end
+
+          it "matches the supervisor name" do
+            expect(subject[:volunteer][:supervisor_name]).to eq(document_data[:supervisor_name])
+          end
+
+          it "matches the case court order" do
+            expect(subject[:case_court_orders]).to eq([{ order: "This text shall not be strikingly similar to other text in the document", status: "Partially implemented" }])
+          end
+
+          it "matches the org address" do
+            expect(subject[:org_address]).to eq(document_data[:org_address])
+          end
+
+          it "matches the latest hearing date" do
+            expect(subject[:latest_hearing_date]).to eq("___<LATEST HEARING DATE>____")
+          end
         end
 
         context "when missing a volunteer" do
@@ -257,6 +285,10 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
       it "matches casa latest hearing date" do
         expect(subject[:latest_hearing_date]).to eq("___<LATEST HEARING DATE>____")
+      end
+
+      it "matches volunteer with the nil value" do
+        expect(subject[:volunteer]).to be_nil
       end
 
       it "matches volunteer with the nil value" do
