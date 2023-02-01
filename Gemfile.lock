@@ -210,7 +210,7 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
-    filterrific (5.2.3)
+    filterrific (5.2.4)
     friendly_id (5.5.0)
       activerecord (>= 4.0.0)
     globalid (1.1.0)
