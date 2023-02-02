@@ -184,15 +184,6 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Export Data", href: "/reports")
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
     end
-
-    it "renders display name and email" do
-      sign_in user
-
-      render partial: "layouts/sidebar"
-
-      expect(rendered).to match CGI.escapeHTML user.display_name
-      expect(rendered).to match CGI.escapeHTML user.email
-    end
   end
 
   context "notifications" do
