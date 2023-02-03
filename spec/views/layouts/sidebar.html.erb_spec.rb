@@ -160,14 +160,6 @@ RSpec.describe "layout/sidebar", type: :view do
   context "when logged in as a casa admin" do
     let(:user) { build_stubbed :casa_admin, display_name: "Superviso's another n&ame" }
 
-    it "renders the correct Role name on the sidebar" do
-      sign_in user
-
-      render partial: "layouts/sidebar"
-
-      expect(rendered).to match '<span class="value">Casa Admin</span>'
-    end
-
     it "renders only menu items visible by admins" do
       sign_in user
 

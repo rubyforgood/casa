@@ -9,12 +9,14 @@ RSpec.describe "layout/sidebar", type: :view do
   context "when logged in as a casa admin" do
     let(:user) { build_stubbed :casa_admin }
 
-    it "renders display name" do
+    it "renders user information", :aggregate_failures do
       sign_in user
 
       render partial: "layouts/header"
 
+      expect(rendered).to match '<strong>Role: Casa Admin</strong>'
       expect(rendered).to match CGI.escapeHTML user.display_name
+      expect(rendered).to match CGI.escapeHTML user.email
     end
   end
 end
