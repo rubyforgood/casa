@@ -144,29 +144,6 @@ RSpec.describe "layout/sidebar", type: :view do
     end
   end
 
-  context "notifications" do
-    let(:user) { build_stubbed(:volunteer) }
-
-    it "displays badge when user has notifications" do
-      sign_in user
-      build_stubbed(:notification)
-      allow(user).to receive_message_chain(:notifications, :unread).and_return([:notification])
-
-      render partial: "layouts/sidebar"
-
-      expect(rendered).to have_css("span.badge")
-    end
-
-    it "displays no badge when user has no unread notifications" do
-      sign_in user
-      allow(user).to receive_message_chain(:notifications, :unread).and_return([])
-
-      render partial: "layouts/sidebar"
-
-      expect(rendered).not_to have_css("span.badge")
-    end
-  end
-
   context "impersonation" do
     let(:user) { build_stubbed :volunteer }
     let(:true_user) { build_stubbed :casa_admin }

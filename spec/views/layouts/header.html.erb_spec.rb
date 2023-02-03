@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "layout/sidebar", type: :view do
+RSpec.describe "layout/header", type: :view do
   before do
     allow(view).to receive(:current_user).and_return(user)
     allow(view).to receive(:current_role).and_return(user.role)
@@ -45,6 +45,29 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to match '<strong>Role: Volunteer</strong>'
       expect(rendered).to match CGI.escapeHTML user.display_name
       expect(rendered).to match CGI.escapeHTML user.email
+    end
+  end
+
+  context "notifications" do
+    let(:user) { build_stubbed :casa_admin }
+
+    it "displays unread notification count if the user has unread notifications" do
+      sign_in user
+      build_stubbed(:notification)
+      allow(user).to receive_message_chain(:notifications, :unread).and_return([:notification])
+
+      render partial: "layouts/header"
+
+      expect(rendered).to match '<span>1</span>'
+    end
+
+    it "does not display unread notification count if the user has no unread notifications" do
+      sign_in user
+      allow(user).to receive_message_chain(:notifications, :unread).and_return([])
+
+      render partial: "layouts/header"
+
+      expect(rendered).not_to match '<span>0</span>'
     end
   end
 end
