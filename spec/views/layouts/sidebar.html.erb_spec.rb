@@ -37,14 +37,6 @@ RSpec.describe "layout/sidebar", type: :view do
         email: "supervisor&email@test.com"
     end
 
-    it "renders the correct Role name on the sidebar" do
-      sign_in user
-
-      render partial: "layouts/sidebar"
-
-      expect(rendered).to match '<span class="value">Supervisor</span>'
-    end
-
     it "renders only menu items visible by supervisors" do
       sign_in user
 
@@ -58,15 +50,6 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Generate Court Reports", href: "/case_court_reports")
       expect(rendered).to have_link("Export Data", href: "/reports")
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists/0")
-    end
-
-    it "renders display name and email" do
-      sign_in user
-
-      render partial: "layouts/sidebar"
-
-      expect(rendered).to match CGI.escapeHTML user.display_name
-      expect(rendered).to match CGI.escapeHTML user.email
     end
   end
 

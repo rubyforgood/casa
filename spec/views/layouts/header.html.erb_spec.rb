@@ -19,4 +19,18 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to match CGI.escapeHTML user.email
     end
   end
+
+  context "when logged in as a supervisor" do
+    let(:user) { build_stubbed :supervisor }
+
+    it "renders user information", :aggregate_failures do
+      sign_in user
+
+      render partial: "layouts/header"
+
+      expect(rendered).to match '<strong>Role: Supervisor</strong>'
+      expect(rendered).to match CGI.escapeHTML user.display_name
+      expect(rendered).to match CGI.escapeHTML user.email
+    end
+  end
 end
