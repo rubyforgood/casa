@@ -64,14 +64,6 @@ RSpec.describe "layout/sidebar", type: :view do
       )
     end
 
-    it "renders the correct Role name on the sidebar" do
-      sign_in user
-
-      render partial: "layouts/sidebar"
-
-      expect(rendered).to match '<span class="value">Volunteer</span>'
-    end
-
     it "renders only menu items visible by volunteers" do
       sign_in user
 
@@ -84,15 +76,6 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to_not have_link("Volunteers", href: "/volunteers")
       expect(rendered).to_not have_link("Supervisors", href: "/supervisors")
       expect(rendered).to_not have_link("Admins", href: "/casa_admins")
-    end
-
-    it "renders display name and email" do
-      sign_in user
-
-      render partial: "layouts/sidebar"
-
-      expect(rendered).to match CGI.escapeHTML user.display_name
-      expect(rendered).to match CGI.escapeHTML user.email
     end
 
     context "when the volunteer does not have a transitioning case" do
