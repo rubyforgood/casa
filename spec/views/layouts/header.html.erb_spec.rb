@@ -1,7 +1,14 @@
 require "rails_helper"
 
+module PretenderContext
+  def true_user
+  end
+end
+
 RSpec.describe "layout/header", type: :view do
   before do
+    view.class.include PretenderContext
+    allow(view).to receive(:true_user).and_return(user)
     allow(view).to receive(:current_user).and_return(user)
     allow(view).to receive(:current_role).and_return(user.role)
   end
@@ -68,6 +75,19 @@ RSpec.describe "layout/header", type: :view do
       render partial: "layouts/header"
 
       expect(rendered).not_to match '<span>0</span>'
+    end
+  end
+
+  context "impersonation" do
+    let(:user) { build_stubbed :volunteer }
+    let(:true_user) { build_stubbed :casa_admin }
+
+    it "renders correct role name when impersonating a volunteer" do
+      allow(view).to receive(:true_user).and_return(true_user)
+
+      render partial: "layouts/header"
+
+      expect(rendered).to match '<strong>Role: Volunteer</strong>'
     end
   end
 end

@@ -155,13 +155,5 @@ RSpec.describe "layout/sidebar", type: :view do
 
       expect(rendered).to have_link(href: "/volunteers/stop_impersonating")
     end
-
-    it "renders correct Role name when impersonating a volunteer" do
-      allow(view).to receive(:true_user).and_return(true_user)
-
-      render partial: "layouts/sidebar"
-
-      expect(rendered).to match '<span class="value">Volunteer</span>'
-    end
   end
 end
