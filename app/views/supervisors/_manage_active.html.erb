@@ -5,7 +5,7 @@
       <% if policy(user).deactivate? %>
         <%= link_to deactivate_supervisor_path(user), class: "btn-sm main-btn danger-btn-outline btn-hover", method: :patch, data: { confirm: "WARNING: Marking a supervisor inactive will make them unable to login. Are you sure you want to do this?" } do %>
           <i class="lni lni-ban mr-10"></i>
-          Deactivate Supervisor
+          Deactivate supervisor
         <% end %>
       <% end %>
     <% end %>

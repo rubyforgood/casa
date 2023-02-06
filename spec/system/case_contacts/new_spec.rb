@@ -324,7 +324,9 @@ RSpec.describe "case_contacts/new", type: :system do
       choose "case_contact_want_driving_reimbursement_true"
       fill_in "Notes", with: "Hello world"
 
-      click_on "Log out"
+      find(".profile-box").click
+      find("#sign-out").click
+      
 
       sign_in volunteer
 

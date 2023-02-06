@@ -79,7 +79,7 @@ RSpec.describe "/case_court_reports", type: :request do
         follow_redirect!
 
         expect(response.content_type).to eq "text/html; charset=utf-8"
-        expect(response.body).to match(/<h5 class="card-title"><strong>Generate Court Report<\/strong><\/h5>/)
+        expect(response.body).to match(/Generate Court Report/)
         expect(response.request.flash.to_h).to have_key("alert")
         expect(response.body).to match(/<div class="alert alert-warning alert-dismissible fade show" role="alert">/)
         expect(response.body).to match(/is not found./)
