@@ -18,6 +18,7 @@ controllers/contact_types_controller.rb
 controllers/court_dates_controller.rb
 controllers/dashboard_controller.rb
 controllers/emancipation_checklists_controller.rb
+controllers/error_controller.rb
 controllers/followup_reports_controller.rb
 controllers/fund_requests_controller.rb
 controllers/health_controller.rb

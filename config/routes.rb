@@ -165,4 +165,6 @@ Rails.application.routes.draw do
   resources :languages, only: %i[new create edit update] do
     delete :remove_from_volunteer
   end
+
+  get "/error", to: "error#index"
 end
