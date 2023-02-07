@@ -190,9 +190,8 @@ $('document').ready(() => {
   $('[data-toggle="tooltip"]').tooltip()
   $('.followup-button').on('click', displayFollowupAlert) //this works! why doesnt the thank you modal
   $('#open-highlight-modal').on('click', displayHighlightModal)
-  $('#thank_you').modal("show")
   
-  if (/\/case_contacts\/*.*\?.*success=true/.test(window.location.href)) {
+  if (/\/casa_cases\/*.*\?.*success=true/.test(window.location.href)) {
     $('#thank_you').modal("show")
   }
 })
