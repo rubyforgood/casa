@@ -22,18 +22,19 @@ $(() => {
     }
 
     const load = () => {
-      const rawData = window.localStorage.getItem(localStorageKey)
-      if (rawData !== null) {
-        const data = JSON.parse(rawData)
+      const serializedFormState = window.localStorage.getItem(localStorageKey)
+      if (serializedFormState !== null) {
+        const formData = JSON.parse(serializedFormState)
 
-        data.forEach(({ id, value, checked }) => {
-          const element = document.querySelector(`#${id}`)
+        formData.forEach(({ id, value, checked }) => {
+          const input = document.querySelector(`#${id}`)
 
-          if (element) {
-            element.value = value
+          if (input) {
+            input.value = value
           }
-          if (!element.checked) {
-            element.checked = checked
+
+          if (!input.checked) {
+            input.checked = checked
           }
         })
       }
