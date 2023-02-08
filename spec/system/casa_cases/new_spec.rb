@@ -53,7 +53,7 @@ RSpec.describe "casa_cases/new", type: :system do
       select "March", from: "casa_case_birth_month_year_youth_2i"
       select five_years, from: "casa_case_birth_month_year_youth_1i"
 
-      within ".actions" do
+      within ".top-page-actions" do
         click_on "Create CASA Case"
       end
 
