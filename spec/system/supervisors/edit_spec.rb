@@ -78,11 +78,11 @@ RSpec.describe "supervisors/edit", type: :system do
       visit edit_supervisor_path(supervisor)
 
       dismiss_confirm do
-        click_on "Deactivate supervisor"
+        click_on "Deactivate Supervisor"
       end
 
       accept_confirm do
-        click_on "Deactivate supervisor"
+        click_on "Deactivate Supervisor"
       end
       expect(page).to have_text("Supervisor was deactivated on")
 
@@ -97,7 +97,7 @@ RSpec.describe "supervisors/edit", type: :system do
 
       visit edit_supervisor_path(inactive_supervisor)
 
-      click_on "Activate supervisor"
+      click_on "Activate Supervisor"
 
       expect(page).not_to have_text("Supervisor was deactivated on")
 
@@ -215,7 +215,7 @@ RSpec.describe "supervisors/edit", type: :system do
       it "displays a submit button" do
         visit edit_supervisor_path(supervisor)
 
-        expect(page).to have_selector(:link_or_button, "Submit")
+        expect(page).to have_selector("button[type=submit]")
       end
 
       it "sees last invite and login info" do

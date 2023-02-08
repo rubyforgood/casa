@@ -25,7 +25,7 @@ RSpec.describe "case_contact_reports/index", type: :system do
     select court.name, from: "report_contact_type_ids"
     click_button "Download Report"
     wait_for_download
-
+    
     expect(download_content).to include(contact1.notes)
     expect(download_content).to include(contact2.notes)
     expect(download_content).to include(contact3.notes)
