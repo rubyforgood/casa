@@ -186,21 +186,14 @@ function displayHighlightModal (event) {
 }
 
 $('document').ready(() => {
-  console.log("Page is loaded, original firing")
   $('[data-toggle="tooltip"]').tooltip()
-  $('.followup-button').on('click', displayFollowupAlert) //this works! why doesnt the thank you modal
+  $('.followup-button').on('click', displayFollowupAlert) // this works! why doesnt the thank you modal
   $('#open-highlight-modal').on('click', displayHighlightModal)
-  
+
   if (/\/casa_cases\/*.*\?.*success=true/.test(window.location.href)) {
-    $('#thank_you').modal("show")
+    $('#thank_you').modal('show')
   }
 })
-
-//this doesn't seem to fire at all
-/*$(document).on('page:load', function () {
-    $console.log("loaded!")
-    $('#thank_you').modal("show");
-});*/
 
 export {
   validateOccurredAt,

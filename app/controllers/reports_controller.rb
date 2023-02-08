@@ -7,7 +7,6 @@ class ReportsController < ApplicationController
 
   def export_emails
     authorize :application, :see_reports_page?
-    debugger
     respond_to do |format|
       format.csv do
         send_data VolunteersEmailsExportCsvService.new(current_user.casa_org).call,

@@ -16,7 +16,7 @@ RSpec.describe "supervisors/edit", type: :system do
       expect(page).to have_text(supervisor_name)
 
       within "#supervisors" do
-        first(:link, 'Edit').click
+        first(:link, "Edit").click
       end
 
       expect(page).to have_text("Editing Supervisor")

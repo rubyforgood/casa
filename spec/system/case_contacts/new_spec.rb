@@ -326,7 +326,6 @@ RSpec.describe "case_contacts/new", type: :system do
 
       find(".profile-box").click
       find("#sign-out").click
-      
 
       sign_in volunteer
 
