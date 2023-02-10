@@ -290,21 +290,33 @@ RSpec.describe CaseCourtReport, type: :model do
 
       it "contains the court order implemented text" do
         expect(document_inspector.word_list_document_contains?(court_order_implemented.text)).to eq(true)
+      end
+
+      it "contains the exact value of 'Implemented'" do
         expect(document_inspector.word_list_document_contains?("Implemented")).to eq(true)
       end
 
       it "contains the court order unimplemented text" do
         expect(document_inspector.word_list_document_contains?(court_order_unimplemented.text)).to eq(true)
+      end
+
+      it "contains the exact value of 'Unimplemented'" do
         expect(document_inspector.word_list_document_contains?("Unimplemented")).to eq(true)
       end
 
       it "contains the court order partially implemented text" do
         expect(document_inspector.word_list_document_contains?(court_order_partially_implemented.text)).to eq(true)
+      end
+
+      it "contains the exact value of 'Partially implemented'" do
         expect(document_inspector.word_list_document_contains?("Partially implemented")).to eq(true)
       end
 
       it "contains the court order not specified text" do
         expect(document_inspector.word_list_document_contains?(court_order_not_specified.text)).to eq(true)
+      end
+
+      it "contains the exact value of 'Not specified'" do
         expect(document_inspector.word_list_document_contains?("Not specified")).to eq(true)
       end
     end
