@@ -288,7 +288,7 @@ RSpec.describe CaseCourtReport, type: :model do
         expect(document_inspector.word_list_document_contains?(casa_case.case_number)).to eq(true)
       end
 
-      it "contains the court order implemented text" do
+      it "contains the court order text" do
         expect(document_inspector.word_list_document_contains?(court_order_implemented.text)).to eq(true)
       end
 
@@ -296,7 +296,7 @@ RSpec.describe CaseCourtReport, type: :model do
         expect(document_inspector.word_list_document_contains?("Implemented")).to eq(true)
       end
 
-      it "contains the court order unimplemented text" do
+      it "contains the court order text" do
         expect(document_inspector.word_list_document_contains?(court_order_unimplemented.text)).to eq(true)
       end
 
@@ -304,7 +304,7 @@ RSpec.describe CaseCourtReport, type: :model do
         expect(document_inspector.word_list_document_contains?("Unimplemented")).to eq(true)
       end
 
-      it "contains the court order partially implemented text" do
+      it "contains the court orde text" do
         expect(document_inspector.word_list_document_contains?(court_order_partially_implemented.text)).to eq(true)
       end
 
@@ -312,7 +312,7 @@ RSpec.describe CaseCourtReport, type: :model do
         expect(document_inspector.word_list_document_contains?("Partially implemented")).to eq(true)
       end
 
-      it "contains the court order not specified text" do
+      it "contains the court order text" do
         expect(document_inspector.word_list_document_contains?(court_order_not_specified.text)).to eq(true)
       end
 
