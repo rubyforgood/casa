@@ -7,14 +7,12 @@ on:
     paths-ignore:
       - "doc/**"
       - "**/*.md"
-      - "bin/**"
   pull_request:
     branches:
       - main
     paths-ignore:
       - "doc/**"
       - "**/*.md"
-      - "bin/**"
 
 jobs:
   docker:

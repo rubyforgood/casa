@@ -6,7 +6,7 @@ controllers/all_casa_admins/sessions_controller.rb
 controllers/all_casa_admins_controller.rb
 controllers/android_app_associations_controller.rb
 controllers/application_controller.rb
-controllers/all_casa_admins_controller.rb
+controllers/casa_admins_controller.rb
 controllers/case_assignments_controller.rb
 controllers/case_contact_reports_controller.rb
 controllers/case_contacts/followups_controller.rb
@@ -26,6 +26,7 @@ controllers/imports_controller.rb
 controllers/judges_controller.rb
 controllers/languages_controller.rb
 controllers/learning_hours_controller.rb
+controllers/learning_hours_reports_controller.rb
 controllers/mileage_rates_controller.rb
 controllers/mileage_reports_controller.rb
 controllers/missing_data_reports_controller.rb
