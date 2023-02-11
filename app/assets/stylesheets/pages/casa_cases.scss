@@ -1,13 +1,5 @@
 @use "../base/breakpoints.scss" as screen-sizes;
 
-@font-face {
-  font-family: 'font-awesome';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("fa-solid-900.ttf") format('truetype');
-}
-
 body.casa_cases {
   .form-header {
     h1 {
