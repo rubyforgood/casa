@@ -29,19 +29,11 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <% @available_volunteers.each_with_index do |volunteer, index| %>
-                      <tr>
-                        <td>
-                          <%= index + 1 %>
-                        </td>
-                        <td>
-                          <%= link_to volunteer.display_name, edit_volunteer_path(volunteer) %>
-                        </td>
-                        <td>
-                          <% volunteer.casa_cases.map do |casa_case| %>
-                            <%= link_to(casa_case.case_number, casa_case_path(casa_case)) %> <br>
-                          <% end %>
-                        </td>
+                    <% volunteer[:other_duties].decorate.each do |duty| %>
+                      <td><%= I18n.l(duty.occurred_at, format: :full, default: nil) %></td>
+                      <td><%= I18n.l(duty.created_at, format: :full, default: nil) %></td>
+                      <td><%= duty.duration_in_minutes %></td>
+                      <td><%= duty.truncate_notes %></td>
                       </tr>
                     <% end %>
                     </tbody>
