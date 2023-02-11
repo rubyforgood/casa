@@ -278,7 +278,7 @@ RSpec.describe "volunteers/edit", type: :system do
     expect(deliveries.last.subject).to have_text "CASA Console invitation instructions"
   end
 
-  describe "send reminder as a supervisor", js:true do
+  describe "send reminder as a supervisor", js: true do
     let(:supervisor) { create(:supervisor, casa_org: organization) }
 
     before(:each) do
