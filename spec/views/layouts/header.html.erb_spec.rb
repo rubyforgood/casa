@@ -21,7 +21,7 @@ RSpec.describe "layout/header", type: :view do
 
       render partial: "layouts/header"
 
-      expect(rendered).to match '<strong>Role: Casa Admin</strong>'
+      expect(rendered).to match "<strong>Role: Casa Admin</strong>"
       expect(rendered).to match CGI.escapeHTML user.display_name
       expect(rendered).to match CGI.escapeHTML user.email
     end
@@ -35,7 +35,7 @@ RSpec.describe "layout/header", type: :view do
 
       render partial: "layouts/header"
 
-      expect(rendered).to match '<strong>Role: Supervisor</strong>'
+      expect(rendered).to match "<strong>Role: Supervisor</strong>"
       expect(rendered).to match CGI.escapeHTML user.display_name
       expect(rendered).to match CGI.escapeHTML user.email
     end
@@ -49,7 +49,7 @@ RSpec.describe "layout/header", type: :view do
 
       render partial: "layouts/header"
 
-      expect(rendered).to match '<strong>Role: Volunteer</strong>'
+      expect(rendered).to match "<strong>Role: Volunteer</strong>"
       expect(rendered).to match CGI.escapeHTML user.display_name
       expect(rendered).to match CGI.escapeHTML user.email
     end
@@ -65,7 +65,7 @@ RSpec.describe "layout/header", type: :view do
 
       render partial: "layouts/header"
 
-      expect(rendered).to match '<span>1</span>'
+      expect(rendered).to match "<span>1</span>"
     end
 
     it "does not display unread notification count if the user has no unread notifications" do
@@ -74,7 +74,7 @@ RSpec.describe "layout/header", type: :view do
 
       render partial: "layouts/header"
 
-      expect(rendered).not_to match '<span>0</span>'
+      expect(rendered).not_to match "<span>0</span>"
     end
   end
 
@@ -87,7 +87,7 @@ RSpec.describe "layout/header", type: :view do
 
       render partial: "layouts/header"
 
-      expect(rendered).to match '<strong>Role: Volunteer</strong>'
+      expect(rendered).to match "<strong>Role: Volunteer</strong>"
     end
   end
 end
