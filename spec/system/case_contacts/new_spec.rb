@@ -310,7 +310,7 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(page).to have_text("Confirm Note Content")
       click_on "Continue Submitting"
 
-      find('button#profile').click
+      find("button#profile").click
       click_on "Sign Out"
 
       sign_in volunteer
