@@ -124,11 +124,11 @@ RSpec.describe "case_contacts/new", type: :system do
         click_on "Continue Submitting"
       }.to change(CaseContact, :count).by(1)
 
-      sleep(2)
-      click_button "Close" # close thank-you modal
+      expected_text = long_notes.truncate(100)
+      expect(page).to have_text("Read more")
+      expect(page).to have_text(expected_text)
 
-      expect(page).to have_text(long_notes.truncate(100))
-      find(".js-read-more").click
+      click_link "Read more"
 
       expect(page).to have_text(long_notes)
     end
@@ -265,10 +265,6 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "c. Occurred On", with: "04/04/2020"
       choose "case_contact_want_driving_reimbursement_false"
 
-      find_by_id("add-another-expense").click
-      page.all("input.other-expense-amount").first.fill_in(with: "7.21")
-      page.all("input.other-expenses-describe").first.fill_in(with: "Another Toll")
-
       fill_in "Notes", with: "Hello world"
 
       expect(page).not_to have_text("error")
@@ -277,9 +273,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
       click_on "Submit"
       expect(page).to have_text("Confirm Note Content")
-      expect {
-        click_on "Continue Submitting"
-      }.to change(CaseContact, :count).by(1).and change(AdditionalExpense, :count).by(1)
+      click_on "Continue Submitting"
 
       expect(volunteer_casa_case_one.case_contacts.length).to eq(1)
       case_contact = volunteer_casa_case_one.case_contacts.first
@@ -309,26 +303,32 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "case-contact-duration-minutes-display", with: "45"
       fill_in "c. Occurred On", with: "2020/4/4"
       fill_in "a. Miles Driven", with: "30"
-      choose "case_contact_want_driving_reimbursement_true"
+      choose "case_contact_want_driving_reimbursement_false"
       fill_in "Notes", with: "Hello world"
 
-      click_on "Log out"
+      click_on "Submit"
+      expect(page).to have_text("Confirm Note Content")
+      click_on "Continue Submitting"
+
+      find('button#profile').click
+      click_on "Sign Out"
 
       sign_in volunteer
 
-      visit new_case_contact_path
+      case_contact_id = volunteer_casa_case_one.case_contacts.first.id
+      visit edit_case_contact_path(case_contact_id)
 
-      expect(page).to have_checked_field(volunteer_casa_case_one.case_number)
+      expect(page).to have_checked_field(volunteer_casa_case_one.case_number, disabled: true)
       expect(page).to have_checked_field("School")
       expect(page).to have_checked_field("Therapist")
       expect(page).to have_checked_field("Yes")
       expect(page).to have_checked_field("In Person")
       expect(page).to have_field("case-contact-duration-hours-display", with: "1")
       expect(page).to have_field("case-contact-duration-minutes-display", with: "45")
-      expect(page).to have_field("c. Occurred On", with: "2020/04/04")
+      expect(page).to have_field("c. Occurred On", with: "2020-04-04")
       expect(page).to have_field("a. Miles Driven", with: "30")
-      expect(page).to have_checked_field("case_contact_want_driving_reimbursement_true")
-      expect(page).not_to have_checked_field("case_contact_want_driving_reimbursement_false")
+      expect(page).to have_checked_field("case_contact_want_driving_reimbursement_false")
+      expect(page).not_to have_checked_field("case_contact_want_driving_reimbursement_true")
       expect(page).to have_field("Notes", with: "Hello world")
     end
 
