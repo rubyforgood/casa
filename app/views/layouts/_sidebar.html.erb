@@ -1,23 +1,17 @@
 <aside class="sidebar-nav-wrapper">
   <div class="navbar-logo">
-    <% if !current_organization&.logo&.attached? %>
+    <% if current_organization&.logo&.attached? %>
+      <%= link_to image_tag(current_organization.logo,
+                            width: 200,
+                            height: 100,
+                            alt: "CASA Logo"),
+                  "/" %>
+      <% else %>
       <%= link_to image_tag("default-logo.png",
                             id: "casa-logo",
                             alt: "CASA Logo",
                             class: "d-inline-block align-text-bottom"),
                   "/" %>
-    <% else %>
-      <% if current_organization&.logo&.variable? %>
-        <%= link_to image_tag(current_organization&.logo&.variant(resize_to_limit: [200, 100]),
-                              alt: "CASA Logo"),
-                    "/" %>
-      <% else %>
-        <%= link_to image_tag(current_organization&.logo,
-                              width: 200,
-                              height: 100,
-                              alt: "CASA Logo"),
-                    "/" %>
-      <% end %>
     <% end %>
   </div>
   <nav class="sidebar-nav">

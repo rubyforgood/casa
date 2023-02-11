@@ -41,14 +41,14 @@
 </noscript>
 <% if all_casa_admin_signed_in? %>
   <%= render 'layouts/all_casa_admin_sidebar' %>
-<% else %>
+<% elsif signed_in? %>
   <%= render 'layouts/sidebar' %>
 <% end %>
 <main class="main-wrapper">
 
 <% if all_casa_admin_signed_in? %>
-<% else %>
-<%= render 'layouts/header' %>
+<% elsif signed_in? %>
+  <%= render 'layouts/header' %>
 <% end %>
 
   <!-- ========== section start ========== -->
