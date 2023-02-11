@@ -218,7 +218,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       let(:search_term) { casa_case.case_number[-3..] }
 
       it "selects the correct case", js: true do
-        page.find("span.select2").click
+        page.find("span.selection").click
         page.find(".select2-search__field").click
 
         send_keys(search_term)
