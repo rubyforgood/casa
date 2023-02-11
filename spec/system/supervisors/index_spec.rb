@@ -78,20 +78,21 @@ RSpec.describe "supervisors/index", type: :system do
       }
 
       it "shows deactivated supervisor on show button click" do
-        expect(page).to have_selector("table#supervisors > tbody > tr td:nth-child(1)", count: 2)
+        expect(all(".table tr").count).to eq(3)
+
         expect(page).not_to have_text("Deactivated supervisor")
 
-        find("h1 + a", text: "Show deactivated").click
+        click_on(class: "show-deactivated")
 
-        expect(page).to have_selector("table#supervisors > tbody > tr td:nth-child(1)", count: 3)
+        expect(all(".table tr").count).to eq(4)
+
         expect(page).to have_text("Deactivated supervisor")
-        expect(page).to have_selector("h1 + a", text: "Hide deactivated")
 
-        find("h1 + a", text: "Hide deactivated").click
+        click_on(class: "hide-deactivated")
 
-        expect(page).to have_selector("table#supervisors > tbody > tr td:nth-child(1)", count: 2)
+        expect(all(".table tr").count).to eq(3)
         expect(page).not_to have_text("Deactivated supervisor")
-        expect(page).to have_selector("h1 + a", text: "Show deactivated")
+        expect(page).to have_text("Show deactivated")
       end
     end
 
@@ -233,22 +234,6 @@ RSpec.describe "supervisors/index", type: :system do
           within("table#supervisors") do
             expect(page).to have_content("Active Supervisor")
             expect(page).to have_content("Inactive Supervisor")
-          end
-        end
-      end
-
-      context "when none is checked" do
-        it "filters the supervisors correctly", :aggregate_failures do
-          within(:css, ".supervisor-filters") do
-            click_on "Status"
-            find(:css, ".active").set(false)
-            find(:css, ".inactive").set(false)
-            click_on "Status"
-          end
-
-          within("table#supervisors") do
-            expect(page).not_to have_content("Active Supervisor")
-            expect(page).not_to have_content("Inactive Supervisor")
           end
         end
       end

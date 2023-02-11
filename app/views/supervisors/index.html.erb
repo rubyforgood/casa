@@ -31,12 +31,12 @@
         </span>
         <span class="ml-5">
             <% if @show_all %>
-                <%= link_to supervisors_path, class: "btn-sm main-btn primary-btn" do %>
+                <%= link_to supervisors_path, class: "btn-sm main-btn primary-btn hide-deactivated" do %>
                   <i class="lni lni-checkmark mr-10"></i>
                 Hide deactivated
               <% end %>
             <% else %>
-                <%= link_to supervisors_path(all: "true"), class: "btn-sm main-btn success-btn" do %>
+                <%= link_to supervisors_path(all: "true"), class: "btn-sm main-btn success-btn show-deactivated" do %>
                   <i class="lni lni-bulb mr-10"></i>
                 Show deactivated
               <% end %>
