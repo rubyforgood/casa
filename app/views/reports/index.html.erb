@@ -118,7 +118,7 @@
                         Volunteer.where(casa_org: current_user.casa_org),
                         :id,
                         :display_name,
-                        {prompt: true, :include_hidden => false},
+                        {prompt: false, :include_hidden => false},
                         {multiple: true}
                       ) %>
                 </div>
@@ -132,7 +132,7 @@
                         ContactType.for_organization(current_user.casa_org),
                         :id,
                         :name,
-                        {prompt: true, :include_hidden => false},
+                        {prompt: false, :include_hidden => false},
                         {multiple: true}
                       ) %>
                 </div>
@@ -146,7 +146,7 @@
                         ContactTypeGroup.for_organization(current_user.casa_org),
                         :id,
                         :name,
-                        {prompt: true, :include_hidden => false},
+                        {prompt: false, :include_hidden => false},
                         {multiple: true}
                       ) %>
                 </div>
