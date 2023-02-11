@@ -69,17 +69,18 @@ RSpec.describe "/case_court_reports", type: :request do
       let(:invalid_casa_case) { build_stubbed(:casa_case) }
 
       before do
+        Capybara.current_driver = :selenium_chrome
         get case_court_report_path(invalid_casa_case.case_number, format: "docx")
       end
 
-      it "redirects back to 'Generate Court Report' page" do
+      it "redirects back to 'Generate Court Report' page", js: true do
         expect(response).to redirect_to(case_court_reports_path)
         expect(response.content_type).to eq "text/html; charset=utf-8"
 
         follow_redirect!
 
         expect(response.content_type).to eq "text/html; charset=utf-8"
-        expect(response.body).to match(/<h5 class="card-title"><strong>Generate Court Report<\/strong><\/h5>/)
+        expect(response.body).to match(/<h6 class="mb-10">Generate Court Report<\/h6>/)
         expect(response.request.flash.to_h).to have_key("alert")
         expect(response.body).to match(/<div class="alert alert-warning alert-dismissible fade show" role="alert">/)
         expect(response.body).to match(/is not found./)
