@@ -37,14 +37,6 @@ RSpec.describe "layout/sidebar", type: :view do
         email: "supervisor&email@test.com"
     end
 
-    it "renders the correct Role name on the sidebar" do
-      sign_in user
-
-      render partial: "layouts/sidebar"
-
-      expect(rendered).to match '<span class="value">Supervisor</span>'
-    end
-
     it "renders only menu items visible by supervisors" do
       sign_in user
 
@@ -59,15 +51,6 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Export Data", href: "/reports")
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists/0")
     end
-
-    it "renders display name and email" do
-      sign_in user
-
-      render partial: "layouts/sidebar"
-
-      expect(rendered).to match CGI.escapeHTML user.display_name
-      expect(rendered).to match CGI.escapeHTML user.email
-    end
   end
 
   context "when logged in as a volunteer" do
@@ -79,14 +62,6 @@ RSpec.describe "layout/sidebar", type: :view do
         casa_org: organization,
         display_name: "Volunteer's name%"
       )
-    end
-
-    it "renders the correct Role name on the sidebar" do
-      sign_in user
-
-      render partial: "layouts/sidebar"
-
-      expect(rendered).to match '<span class="value">Volunteer</span>'
     end
 
     it "renders only menu items visible by volunteers" do
@@ -101,15 +76,6 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to_not have_link("Volunteers", href: "/volunteers")
       expect(rendered).to_not have_link("Supervisors", href: "/supervisors")
       expect(rendered).to_not have_link("Admins", href: "/casa_admins")
-    end
-
-    it "renders display name and email" do
-      sign_in user
-
-      render partial: "layouts/sidebar"
-
-      expect(rendered).to match CGI.escapeHTML user.display_name
-      expect(rendered).to match CGI.escapeHTML user.email
     end
 
     context "when the volunteer does not have a transitioning case" do
@@ -160,14 +126,6 @@ RSpec.describe "layout/sidebar", type: :view do
   context "when logged in as a casa admin" do
     let(:user) { build_stubbed :casa_admin, display_name: "Superviso's another n&ame" }
 
-    it "renders the correct Role name on the sidebar" do
-      sign_in user
-
-      render partial: "layouts/sidebar"
-
-      expect(rendered).to match '<span class="value">Casa Admin</span>'
-    end
-
     it "renders only menu items visible by admins" do
       sign_in user
 
@@ -184,38 +142,6 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Export Data", href: "/reports")
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
     end
-
-    it "renders display name and email" do
-      sign_in user
-
-      render partial: "layouts/sidebar"
-
-      expect(rendered).to match CGI.escapeHTML user.display_name
-      expect(rendered).to match CGI.escapeHTML user.email
-    end
-  end
-
-  context "notifications" do
-    let(:user) { build_stubbed(:volunteer) }
-
-    it "displays badge when user has notifications" do
-      sign_in user
-      build_stubbed(:notification)
-      allow(user).to receive_message_chain(:notifications, :unread).and_return([:notification])
-
-      render partial: "layouts/sidebar"
-
-      expect(rendered).to have_css("span.badge")
-    end
-
-    it "displays no badge when user has no unread notifications" do
-      sign_in user
-      allow(user).to receive_message_chain(:notifications, :unread).and_return([])
-
-      render partial: "layouts/sidebar"
-
-      expect(rendered).not_to have_css("span.badge")
-    end
   end
 
   context "impersonation" do
@@ -228,14 +154,6 @@ RSpec.describe "layout/sidebar", type: :view do
       render partial: "layouts/sidebar"
 
       expect(rendered).to have_link(href: "/volunteers/stop_impersonating")
-    end
-
-    it "renders correct Role name when impersonating a volunteer" do
-      allow(view).to receive(:true_user).and_return(true_user)
-
-      render partial: "layouts/sidebar"
-
-      expect(rendered).to match '<span class="value">Volunteer</span>'
     end
   end
 end

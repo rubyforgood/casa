@@ -15,9 +15,9 @@ RSpec.describe "case_court_reports/index", type: :view do
       expect(controller.request.fullpath).to eq case_court_reports_path
     end
 
-    it "has a Bootstrap card with card title 'Generate Court Report'" do
-      expect(rendered).to have_selector("div", class: "card", count: 1)
-      expect(rendered).to have_selector("h5", class: "card-title", text: "Generate Court Report", count: 1)
+    it "has a card with card title 'Generate Court Report'", :aggregate_failures do
+      expect(rendered).to have_selector("div", class: "card-style", count: 1)
+      expect(rendered).to have_selector("h6", text: "Generate Court Report", count: 1)
     end
 
     it "displays a form" do
