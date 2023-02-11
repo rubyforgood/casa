@@ -35,7 +35,7 @@ RSpec.describe "supervisors/new", type: :system do
   end
 
   context "volunteer user" do
-    let(:volunteer) { build(:volunteer) }
+    let(:volunteer) { create(:volunteer) }
 
     before { sign_in volunteer }
 

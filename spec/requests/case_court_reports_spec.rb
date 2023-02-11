@@ -69,10 +69,11 @@ RSpec.describe "/case_court_reports", type: :request do
       let(:invalid_casa_case) { build_stubbed(:casa_case) }
 
       before do
+        Capybara.current_driver = :selenium_chrome
         get case_court_report_path(invalid_casa_case.case_number, format: "docx")
       end
 
-      it "redirects back to 'Generate Court Report' page" do
+      it "redirects back to 'Generate Court Report' page", js: true do
         expect(response).to redirect_to(case_court_reports_path)
         expect(response.content_type).to eq "text/html; charset=utf-8"
 

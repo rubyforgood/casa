@@ -108,7 +108,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
         visit casa_case_path(casa_case.id)
 
-        expect(page).to have_css("#case_contacts_list .card", count: 2)
+        expect(page).to have_css("#case_contacts_list .card-content", count: 2)
       end
     end
   end
@@ -171,7 +171,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
         visit casa_case_path(casa_case.id)
 
-        expect(page).to have_css("#case_contacts_list .card", count: 2)
+        expect(page).to have_css("#case_contacts_list .card-content", count: 2)
       end
     end
   end
@@ -202,7 +202,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
         visit casa_case_path(casa_case.id)
 
-        expect(page).to have_css("#case_contacts_list .card", count: 1)
+        expect(page).to have_css("#case_contacts_list .card-content", count: 1)
       end
     end
   end

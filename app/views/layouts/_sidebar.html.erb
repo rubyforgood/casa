@@ -1,23 +1,17 @@
 <aside class="sidebar-nav-wrapper">
   <div class="navbar-logo">
-    <% if !current_organization&.logo&.attached? %>
+    <% if current_organization&.logo&.attached? %>
+      <%= link_to image_tag(current_organization.logo,
+                            width: 200,
+                            height: 100,
+                            alt: "CASA Logo"),
+                  "/" %>
+      <% else %>
       <%= link_to image_tag("default-logo.png",
                             id: "casa-logo",
                             alt: "CASA Logo",
                             class: "d-inline-block align-text-bottom"),
                   "/" %>
-    <% else %>
-      <% if current_organization&.logo&.variable? %>
-        <%= link_to image_tag(current_organization&.logo&.variant(resize_to_limit: [200, 100]),
-                              alt: "CASA Logo"),
-                    "/" %>
-      <% else %>
-        <%= link_to image_tag(current_organization&.logo,
-                              width: 200,
-                              height: 100,
-                              alt: "CASA Logo"),
-                    "/" %>
-      <% end %>
     <% end %>
   </div>
   <nav class="sidebar-nav">
@@ -166,6 +160,15 @@
               </li>
             <% end %>
           </ul>
+        </li>
+        <li>
+          <% if current_user != true_user %>
+            <%= link_to stop_impersonating_volunteers_path, method: :post, class: "mr-10 ml-10" do %>
+              You (<%= true_user.display_name %>) are signed in as <%= current_user.display_name %>.
+              Click here to stop impersonating.
+            <% end %>
+          <% end %>
+
         </li>
       </ul>
     </nav>
