@@ -154,7 +154,8 @@ you are trying to set the address for both of them. This is not currently possib
 
       fill_in "Notes", with: "Hello world"
 
-      click_on "Log out"
+      find('button#profile').click
+      click_on "Sign Out"
 
       sign_in volunteer
 
