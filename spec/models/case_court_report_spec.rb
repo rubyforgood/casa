@@ -304,7 +304,7 @@ RSpec.describe CaseCourtReport, type: :model do
         expect(document_inspector.word_list_document_contains?("Unimplemented")).to eq(true)
       end
 
-      it "contains the court orde text" do
+      it "contains the court order text" do
         expect(document_inspector.word_list_document_contains?(court_order_partially_implemented.text)).to eq(true)
       end
 
