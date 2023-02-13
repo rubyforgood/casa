@@ -51,10 +51,12 @@ a:hover {
   text-decoration: none; }
 
 i,
-span,
 a {
   display: inline-block; }
 
+span {
+    display: block; }
+}
 audio,
 canvas,
 iframe,
