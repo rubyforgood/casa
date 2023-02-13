@@ -7,7 +7,10 @@
 <div class="card-style">
   <div class="card-body">
     <%= form_for @user, as: :all_casa_admin, url: all_casa_admins_path do |form| %>
-      <%= render "/shared/error_messages", resource: @user %>
+
+        <%= render "/shared/error_messages", resource: @user %>
+
+        <%= render '/layouts/flash_messages' %>
 
       <div class="input-style-1">
         <%= form.label :email, "Email" %>

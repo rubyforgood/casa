@@ -16,5 +16,5 @@ RSpec.describe "court_dates/new", type: :view do
   it { is_expected.to have_selector("h2", text: "New Court Date") }
   it { is_expected.to have_selector("h6", text: casa_case.case_number) }
   it { is_expected.to have_link(casa_case.case_number, href: "/casa_cases/#{casa_case.case_number.parameterize}") }
-  it { is_expected.to have_selector(".btn-primary") }
+  it { is_expected.to have_selector(".primary-btn") }
 end
