@@ -52,7 +52,9 @@ class ApplicationPolicy
   end
 
   def same_org?
-    user.casa_org == record.casa_org
+    return false if record.nil?
+   
+    user.casa_org == record.casa_org 
   end
 
   def is_admin_same_org?
@@ -88,6 +90,10 @@ class ApplicationPolicy
 
   def admin_or_supervisor_or_volunteer?
     admin_or_supervisor? || is_volunteer?
+  end
+
+  def admin_or_supervisor_or_volunteer_same_org?
+    admin_or_supervisor_same_org? || is_volunteer_same_org? 
   end
 
   def see_reports_page?
