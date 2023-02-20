@@ -22,7 +22,7 @@
     "bootstrap-datepicker": "^1.9.0",
     "bootstrap-select": "^1.13.18",
     "datatables.net-dt": "^1.13.2",
-    "esbuild": "^0.17.8",
+    "esbuild": "^0.17.9",
     "faker": "^5.5.3",
     "jquery": "^3.6.3",
     "lodash": "^4.17.21",
