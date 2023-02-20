@@ -17,6 +17,27 @@ RSpec.describe CasaOrg, type: :model do
     expect(new_org.valid?).to be false
   end
 
+  describe "CasaOrgValidator" do
+    let(:casa_org) { build(:casa_org) }
+
+    it "delegates phone validation to PhoneNumberHelper" do
+      expect_any_instance_of(PhoneNumberHelper).to receive(:valid_phone_number).once.with(casa_org.twilio_phone_number)
+      casa_org.valid?
+    end
+  end
+
+  describe "validate validate_twilio_credentials" do
+    let(:casa_org) { create(:casa_org) }
+
+    it "validates twillio credentials on update", :aggregate_failures do
+      %i[twilio_account_sid twilio_api_key_sid].each do |field|
+        update_successful = casa_org.update(field => "")
+        expect(update_successful).to be false
+        expect(casa_org.errors[:base]).to eq ["Your Twilio credentials are incorrect, kindly check and try again."]
+      end
+    end
+  end
+
   describe "Attachment" do
     it "is valid" do
       aggregate_failures do
