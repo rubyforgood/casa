@@ -2,7 +2,6 @@
 
 $('document').ready(() => {
   const { groupBy, map, mapValues } = require('lodash')
-  const strftime = require('strftime')
 
   const formatOccurredAtDate = (record) => new Date(Date.parse(record.occurred_at.replaceAll('-', ' '))).toDateString()
 
