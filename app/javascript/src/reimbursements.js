@@ -3,7 +3,7 @@
 $('document').ready(() => {
   const { groupBy, map, mapValues } = require('lodash')
 
-  const formatOccurredAtDate = (record) => new Date(Date.parse(record.occurred_at.replaceAll('-', ' '))).toDateString()
+  const formatOccurredAtDate = (record) => new Date(record.occurred_at.replaceAll('-', ' ')).toDateString()
 
   const mapContactTypes = (contactTypes) => {
     return mapValues(
