@@ -441,30 +441,30 @@ RSpec.describe CasaCasePolicy do
     # Should :save_emancipation belong with :index?
     context "when part of the same organization" do
       it "allows casa_admins" do
-        is_expected.to permit(casa_admin)
+        is_expected.to permit(casa_admin, organization)
       end
   
       it "allows supervisor" do
-        is_expected.to permit(supervisor)
+        is_expected.to permit(supervisor, organization)
       end
   
       it "allows volunteer" do
-        is_expected.to permit(volunteer)
+        is_expected.to permit(volunteer, organization)
       end
     end
 
     context "when not part of the same organization" do
 
       it "does not allow casa_admins" do
-        is_expected.not_to permit(other_org_casa_admin)
+        is_expected.not_to permit(other_org_casa_admin, organization)
       end
   
       it "does not allow supervisor" do
-        is_expected.not_to permit(other_org_supervisor)
+        is_expected.not_to permit(other_org_supervisor, organization)
       end
   
       it "does not allows volunteer" do
-        is_expected.not_to permit(other_org_volunteer)
+        is_expected.not_to permit(other_org_volunteer, organization)
       end
     end
   end
