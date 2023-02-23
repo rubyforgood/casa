@@ -12,10 +12,10 @@ RSpec.describe "casa_admins/edit", type: :view do
     render template: "casa_admins/edit"
 
     expect(rendered).to have_text("Added to system ")
-    expect(rendered).to have_text("Invitation email sent \n  never")
+    expect(rendered).to have_text("Invitation email sent \n    never")
     expect(rendered).to have_text("Last logged in")
-    expect(rendered).to have_text("Invitation accepted \n  never")
-    expect(rendered).to have_text("Password reset last sent \n  never")
+    expect(rendered).to have_text("Invitation accepted \n    never")
+    expect(rendered).to have_text("Password reset last sent \n    never")
   end
 
   describe "'Change to Supervisor' button" do
