@@ -52,9 +52,24 @@ class ApplicationPolicy
   end
 
   def same_org?
-    return false if record.nil?
-   
-    user.casa_org == record.casa_org 
+    case record
+    when CasaOrg
+      user.casa_org == record
+    when CasaAdmin, CasaCase, HearingType, ContactTypeGroup
+      user.casa_org == record.casa_org
+    when CourtDate, CaseContact
+      user.casa_org == record&.casa_case&.casa_org
+    when LearningHour
+      user.casa_org == record&.user&.casa_org
+    when ChecklistItem
+      user.casa_org == record&.hearing_type&.casa_org
+    when ContactType
+      user.casa_org == record&.contact_type_group&.casa_org
+    when Followup
+      user.casa_org == record&.case_contact&.casa_case&.casa_org
+    else # Type not recognized, no auth since we can't verify the record
+      false
+    end
   end
 
   def is_admin_same_org?
