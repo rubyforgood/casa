@@ -67,6 +67,8 @@ class ApplicationPolicy
       user.casa_org == record&.contact_type_group&.casa_org
     when Followup
       user.casa_org == record&.case_contact&.casa_case&.casa_org
+    when Class # Authorizing against collection, does not belong to org
+      true
     else # Type not recognized, no auth since we can't verify the record
       false
     end

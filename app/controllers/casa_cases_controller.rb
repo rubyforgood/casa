@@ -5,7 +5,7 @@ class CasaCasesController < ApplicationController
   after_action :verify_authorized
 
   def index
-    authorize current_organization, policy_class: CasaCasePolicy 
+    authorize CasaCase 
     org_cases = current_user.casa_org.casa_cases.includes(:assigned_volunteers)
     @casa_cases = policy_scope(org_cases).includes([:hearing_type, :judge])
     @casa_cases_filter_id = policy(CasaCase).can_see_filters? ? "casa-cases" : ""

@@ -120,7 +120,8 @@ class CasaCasePolicy < ApplicationPolicy
   private
 
   # I think we should get rid of this method and rely on the application policy one.
-  def is_in_same_org?    
+  def is_in_same_org?
+    # on new? checks, record is nil, on index policy_scope, record is :casa_case
     record.nil? || record == :casa_case || user.casa_org_id == record.casa_org_id
   end
 
