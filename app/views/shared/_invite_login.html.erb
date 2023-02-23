@@ -1,27 +1,39 @@
-<div>
-  <span class="font-weight-bold">CASA organization </span>
-  <%= resource&.casa_org&.name %>
-</div>
-<div>
-  <span class="font-weight-bold">Added to system </span>
-  <%= resource&.decorate&.formatted_created_at %>
-</div>
-<div>
-  <span class="font-weight-bold">Invitation email sent </span>
-  <%= resource&.decorate&.formatted_invitation_sent_at || "never" %>
-</div>
-<div>
-  <span class="font-weight-bold">Last logged in </span>
-  <%= resource&.decorate&.formatted_current_sign_in_at || "never" %>
-</div>
-<div>
-  <span class="font-weight-bold">Invitation accepted </span>
-  <%= resource&.decorate&.formatted_invitation_accepted_at || "never" %>
-</div>
-<div>
-  <span class="font-weight-bold">Password reset last sent </span>
-  <%= resource&.decorate&.formatted_reset_password_sent_at || "never" %>
-</div>
+<% if resource&.casa_org %>
+  <div>
+    <span class="font-weight-bold">CASA organization </span>
+    <%= resource&.casa_org.name %>
+  </div>
+<% end %>
+<% if resource&.casa_org %>
+  <div>
+    <span class="font-weight-bold">Added to system </span>
+    <%= resource&.decorate&.formatted_created_at %>
+  </div>
+<% end %>
+<% if resource&.casa_org %>
+  <div>
+    <span class="font-weight-bold">Invitation email sent </span>
+    <%= resource&.decorate&.formatted_invitation_sent_at || "never" %>
+  </div>
+<% end %>
+<% if resource&.casa_org %>
+  <div>
+    <span class="font-weight-bold">Last logged in </span>
+    <%= resource&.decorate&.formatted_current_sign_in_at || "never" %>
+  </div>
+<% end %>
+<% if resource&.casa_org %>
+  <div>
+    <span class="font-weight-bold">Invitation accepted </span>
+    <%= resource&.decorate&.formatted_invitation_accepted_at || "never" %>
+  </div>
+<% end %>
+<% if resource&.casa_org %>
+  <div>
+    <span class="font-weight-bold">Password reset last sent </span>
+    <%= resource&.decorate&.formatted_reset_password_sent_at || "never" %>
+  </div>
+<% end %>
 
 <% if resource.is_a?(Volunteer) %>
   <div>

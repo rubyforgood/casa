@@ -7,9 +7,7 @@
 
       <%= render "/shared/edit_form", resource: casa_admin, f: form %>
 
-      <% if controller_name == "casa_admins" && action_name == "edit" %>
-        <%= render "/shared/invite_login", resource: casa_admin %>
-      <% end %>
+      <%= render "/shared/invite_login", resource: casa_admin %>
       
       <% if casa_admin.persisted? %>
         <div class="field form-group">
