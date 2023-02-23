@@ -79,8 +79,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
     it "does not allow an admin to deactivate a case if not in an organization" do
       visit edit_casa_case_path(other_org_casa_case)
-      # TODO: This breaks the UI flow and shows a blank page, but does 404 properly.
-      expect(page).to have_http_status(404)
+      expect(page).to have_text("Sorry you are not authorized to perform this action.")
     end
 
     it "reactivates a case", js: true do
