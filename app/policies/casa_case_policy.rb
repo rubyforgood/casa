@@ -127,6 +127,7 @@ class CasaCasePolicy < ApplicationPolicy
 
   def is_volunteer_actively_assigned_to_case?
     return false if record.nil? # no record, no auth
+    return false unless same_org?
 
     record.case_assignments.exists?(volunteer_id: user.id, active: true)
   end
