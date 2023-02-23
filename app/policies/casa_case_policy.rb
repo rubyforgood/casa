@@ -35,12 +35,12 @@ class CasaCasePolicy < ApplicationPolicy
   end
 
   def update_birth_month_year_youth?
-    # View only policy?
+    # View only policy
     is_admin?
   end
 
   def update_date_in_care_youth?
-    # View only policy?
+    # View only policy
     is_supervisor? || is_admin?
   end
 
@@ -59,7 +59,7 @@ class CasaCasePolicy < ApplicationPolicy
   end
 
   def can_see_filters?
-    # View only policy?
+    # View only policy
     is_supervisor? || is_admin?
   end
 
