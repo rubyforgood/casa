@@ -100,10 +100,8 @@ class CasaCasePolicy < ApplicationPolicy
   end
 
   def same_org_supervisor_admin?
-    is_in_same_org? && admin_or_supervisor?
-    # Where is this method used?
-    # Proposed change:
-    # admin_or_supervisor_same_org?
+    # is_in_same_org? && admin_or_supervisor?
+    admin_or_supervisor_same_org?
   end
 
   def index?
