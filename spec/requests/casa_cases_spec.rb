@@ -134,7 +134,8 @@ RSpec.describe "/casa_cases", type: :request do
         other_case = create(:casa_case, casa_org: other_org)
 
         get edit_casa_case_url(other_case)
-        expect(response).to be_not_found
+        expect(response).to be_redirect
+        expect(flash[:notice]).to eq("Sorry you are not authorized to perform this action.")
       end
     end
 
@@ -369,7 +370,8 @@ RSpec.describe "/casa_cases", type: :request do
         other_casa_case = create(:casa_case, casa_org: other_org)
 
         patch deactivate_casa_case_path(other_casa_case), params: params
-        expect(response).to be_not_found
+        expect(response).to be_redirect
+        expect(flash[:notice]).to eq("Sorry you are not authorized to perform this action.")
       end
 
       it "also responds as json", :aggregate_failures do
@@ -427,7 +429,8 @@ RSpec.describe "/casa_cases", type: :request do
         other_casa_case = create(:casa_case, casa_org: other_org)
 
         patch reactivate_casa_case_path(other_casa_case), params: params
-        expect(response).to be_not_found
+        expect(response).to be_redirect
+        expect(flash[:notice]).to eq("Sorry you are not authorized to perform this action.")
       end
 
       it "also responds as json", :aggregate_failures do
@@ -500,7 +503,8 @@ RSpec.describe "/casa_cases", type: :request do
         other_case = create(:casa_case, casa_org: other_org)
 
         get edit_casa_case_url(other_case)
-        expect(response).to be_not_found
+        expect(response).to be_redirect
+        expect(flash[:notice]).to eq("Sorry you are not authorized to perform this action.")
       end
     end
 
@@ -637,7 +641,8 @@ RSpec.describe "/casa_cases", type: :request do
         other_case = create(:casa_case, casa_org: other_org)
 
         get edit_casa_case_url(other_case)
-        expect(response).to be_not_found
+        expect(response).to be_redirect
+        expect(flash[:notice]).to eq("Sorry you are not authorized to perform this action.")
       end
     end
 
