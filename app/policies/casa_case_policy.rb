@@ -35,13 +35,11 @@ class CasaCasePolicy < ApplicationPolicy
   end
 
   def update_birth_month_year_youth?
-    # View only policy
-    is_admin?
+    is_admin_same_org?
   end
 
   def update_date_in_care_youth?
-    # View only policy
-    is_supervisor? || is_admin?
+    admin_or_supervisor_same_org?
   end
 
   def update_emancipation_option?
@@ -50,13 +48,11 @@ class CasaCasePolicy < ApplicationPolicy
   end
 
   def assign_volunteers?
-    # is_in_same_org? && admin_or_supervisor? # Original
     admin_or_supervisor_same_org?
   end
 
   def can_see_filters?
-    # View only policy
-    is_supervisor? || is_admin?
+    admin_or_supervisor_same_org?
   end
 
   alias_method :update_case_number?, :is_admin_same_org?
@@ -96,12 +92,10 @@ class CasaCasePolicy < ApplicationPolicy
   end
 
   def same_org_supervisor_admin?
-    # is_in_same_org? && admin_or_supervisor?
     admin_or_supervisor_same_org?
   end
 
   def index?
-    # admin_or_supervisor_or_volunteer? # Original scope
     admin_or_supervisor_or_volunteer_same_org?
   end
 
@@ -122,7 +116,7 @@ class CasaCasePolicy < ApplicationPolicy
 
   private
 
-  # I think we should get rid of this method and rely on the application policy one.
+  # This method is no longer used, candidate for removal.
   def is_in_same_org?
     # on new? checks, record is nil, on index policy_scope, record is :casa_case
     record.nil? || record == :casa_case || user.casa_org_id == record.casa_org_id
