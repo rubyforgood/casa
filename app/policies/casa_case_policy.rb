@@ -46,11 +46,7 @@ class CasaCasePolicy < ApplicationPolicy
 
   def update_emancipation_option?
     # This permission is used in the Emancipations controller
-    is_in_same_org? && (
-      admin_or_supervisor? || is_volunteer_actively_assigned_to_case?
-    )
-    # Proposed change:
-    # admin_or_supervisor_same_org? || is_volunteer_actively_assigned_to_case?
+    admin_or_supervisor_same_org? || is_volunteer_actively_assigned_to_case?
   end
 
   def assign_volunteers?
