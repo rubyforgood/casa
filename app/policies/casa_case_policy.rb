@@ -117,6 +117,13 @@ class CasaCasePolicy < ApplicationPolicy
   alias_method :create?, :same_org_supervisor_admin?
   alias_method :destroy?, :same_org_supervisor_admin?
 
+  # TODO:
+  # The dashboard policy only shows the "New Case" button to admins, but here
+  # we allow supervisors to also access new. View spec specifically tests the
+  # casa_cases/new.html.erb view against supervisors.
+  #
+  # Should supervisors be able to create cases?
+
   private
 
   # I think we should get rid of this method and rely on the application policy one.
