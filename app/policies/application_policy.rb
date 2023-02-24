@@ -110,7 +110,7 @@ class ApplicationPolicy
   end
 
   def admin_or_supervisor_or_volunteer_same_org?
-    admin_or_supervisor_same_org? || is_volunteer_same_org? 
+    admin_or_supervisor_same_org? || is_volunteer_same_org?
   end
 
   def see_reports_page?

@@ -5,7 +5,7 @@ class CasaCasesController < ApplicationController
   after_action :verify_authorized
 
   def index
-    authorize CasaCase 
+    authorize CasaCase
     org_cases = current_user.casa_org.casa_cases.includes(:assigned_volunteers)
     @casa_cases = policy_scope(org_cases).includes([:hearing_type, :judge])
     @casa_cases_filter_id = policy(CasaCase).can_see_filters? ? "casa-cases" : ""
@@ -142,7 +142,7 @@ class CasaCasesController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     respond_to do |format|
       format.html { redirect_to casa_cases_path, notice: "Sorry, you are not authorized to perform this action." }
-      format.json { render json: { "error": "Sorry, you are not authorized to perform this action." }, status: :not_found }
+      format.json { render json: {error: "Sorry, you are not authorized to perform this action."}, status: :not_found }
     end
   end
 

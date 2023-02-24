@@ -117,7 +117,7 @@ RSpec.describe CasaCasePolicy do
           is_expected.not_to permit(other_org_volunteer, casa_case)
         end
       end
-    end  
+    end
   end
 
   permissions :update_contact_types? do
@@ -127,21 +127,21 @@ RSpec.describe CasaCasePolicy do
           is_expected.to permit(casa_admin, casa_case)
         end
       end
-  
+
       context "a supervisor" do
         it "can update" do
           is_expected.to permit(supervisor, casa_case)
         end
       end
     end
-    
+
     context "when not part of the same organization" do
       context "an admin user" do
         it "can not update" do
           is_expected.not_to permit(other_org_casa_admin, casa_case)
         end
       end
-  
+
       context "a supervisor" do
         it "can not update" do
           is_expected.not_to permit(other_org_supervisor, casa_case)
@@ -190,7 +190,7 @@ RSpec.describe CasaCasePolicy do
         expect(subject).to permit(casa_admin, casa_case)
       end
     end
-    
+
     context "when an admin belongs to a different org as the case" do
       it "does not allow admin to update" do
         casa_case = build_stubbed(:casa_case, casa_org: different_organization)
@@ -251,7 +251,7 @@ RSpec.describe CasaCasePolicy do
         end
       end
     end
-    
+
     context "when not part of the same organization" do
       context "and admin user" do
         it "does not allow admin to view" do
@@ -303,7 +303,6 @@ RSpec.describe CasaCasePolicy do
       end
     end
   end
-
 
   permissions :edit? do
     context "when part of the same organization" do
@@ -419,9 +418,9 @@ RSpec.describe CasaCasePolicy do
 
   permissions :new?, :create?, :destroy? do
     context "when part of the same organizaton" do
-       it "allows casa_admins" do
-         is_expected.to permit(casa_admin, casa_case)
-       end
+      it "allows casa_admins" do
+        is_expected.to permit(casa_admin, casa_case)
+      end
     end
 
     context "when not part of the same organization" do
