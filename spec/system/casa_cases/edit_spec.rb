@@ -61,7 +61,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
     it "does not display anything when not part of the organization", js: true do
       visit casa_case_path(other_org_casa_case.id)
-      expect(page).to have_text("Sorry you are not authorized to perform this action.")
+      expect(page).to have_text("Sorry, you are not authorized to perform this action.")
     end
 
     it "deactivates a case when part of the same organization", js: true do
@@ -79,7 +79,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
     it "does not allow an admin to deactivate a case if not in an organization" do
       visit edit_casa_case_path(other_org_casa_case)
-      expect(page).to have_text("Sorry you are not authorized to perform this action.")
+      expect(page).to have_text("Sorry, you are not authorized to perform this action.")
     end
 
     it "reactivates a case", js: true do
@@ -105,14 +105,14 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       it "should error if trying to assign volunteers for another organization" do
         visit edit_casa_case_path(other_org_casa_case)
-        expect(page).to have_text("Sorry you are not authorized to perform this action.")
+        expect(page).to have_text("Sorry, you are not authorized to perform this action.")
       end
     end
 
     context "Copy all court orders from a case" do
       it "should not allow access to cases not within the organization" do
         visit edit_casa_case_path(other_org_casa_case)
-        expect(page).to have_text("Sorry you are not authorized to perform this action.")
+        expect(page).to have_text("Sorry, you are not authorized to perform this action.")
       end
 
       it "copy button should be disabled when no case is selected", js: true do

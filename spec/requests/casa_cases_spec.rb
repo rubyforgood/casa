@@ -73,7 +73,7 @@ RSpec.describe "/casa_cases", type: :request do
 
         get casa_case_url(other_case)
         expect(response).to be_redirect
-        expect(flash[:notice]).to eq("Sorry you are not authorized to perform this action.")
+        expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
       end
 
       context "when exporting a csv" do
@@ -135,7 +135,7 @@ RSpec.describe "/casa_cases", type: :request do
 
         get edit_casa_case_url(other_case)
         expect(response).to be_redirect
-        expect(flash[:notice]).to eq("Sorry you are not authorized to perform this action.")
+        expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
       end
     end
 
@@ -371,7 +371,7 @@ RSpec.describe "/casa_cases", type: :request do
 
         patch deactivate_casa_case_path(other_casa_case), params: params
         expect(response).to be_redirect
-        expect(flash[:notice]).to eq("Sorry you are not authorized to perform this action.")
+        expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
       end
 
       it "also responds as json", :aggregate_failures do
@@ -430,7 +430,7 @@ RSpec.describe "/casa_cases", type: :request do
 
         patch reactivate_casa_case_path(other_casa_case), params: params
         expect(response).to be_redirect
-        expect(flash[:notice]).to eq("Sorry you are not authorized to perform this action.")
+        expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
       end
 
       it "also responds as json", :aggregate_failures do
@@ -479,7 +479,7 @@ RSpec.describe "/casa_cases", type: :request do
 
         get casa_case_url(other_case)
         expect(response).to be_redirect
-        expect(flash[:notice]).to eq("Sorry you are not authorized to perform this action.")
+        expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
       end
     end
 
@@ -504,7 +504,7 @@ RSpec.describe "/casa_cases", type: :request do
 
         get edit_casa_case_url(other_case)
         expect(response).to be_redirect
-        expect(flash[:notice]).to eq("Sorry you are not authorized to perform this action.")
+        expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
       end
     end
 
@@ -619,7 +619,7 @@ RSpec.describe "/casa_cases", type: :request do
 
         get casa_case_url(other_case)
         expect(response).to be_redirect
-        expect(flash[:notice]).to eq("Sorry you are not authorized to perform this action.")
+        expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
       end
     end
 
@@ -642,7 +642,7 @@ RSpec.describe "/casa_cases", type: :request do
 
         get edit_casa_case_url(other_case)
         expect(response).to be_redirect
-        expect(flash[:notice]).to eq("Sorry you are not authorized to perform this action.")
+        expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
       end
     end
 
