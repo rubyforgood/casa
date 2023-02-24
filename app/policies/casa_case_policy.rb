@@ -31,7 +31,7 @@ class CasaCasePolicy < ApplicationPolicy
   end
 
   def update_contact_types?
-    is_supervisor_same_org? || is_admin_same_org?
+    admin_or_supervisor_same_org?
   end
 
   def update_birth_month_year_youth?
@@ -64,7 +64,7 @@ class CasaCasePolicy < ApplicationPolicy
   end
 
   alias_method :update_case_number?, :is_admin_same_org?
-  alias_method :update_case_status?, :is_admin? # Should this be scoped as well?
+  alias_method :update_case_status?, :is_admin_same_org?
   alias_method :update_court_date?, :admin_or_supervisor_or_volunteer_same_org?
   alias_method :update_hearing_type?, :admin_or_supervisor_or_volunteer_same_org?
   alias_method :update_judge?, :admin_or_supervisor_or_volunteer_same_org?
