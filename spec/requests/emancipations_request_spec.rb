@@ -75,8 +75,8 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
               user.casa_org = organization_different
 
               get casa_case_emancipation_path(casa_case)
-              expect(response).to_not be_successful
-              expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+              expect(response).to be_redirect
+              expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
             end
           end
 

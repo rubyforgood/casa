@@ -18,16 +18,7 @@ RSpec.describe "addtional_expenses", type: :system do
 
     click_on "New Case Contact"
 
-    check "School"
-    within "#enter-contact-details" do
-      choose "Yes"
-    end
-    choose "Video"
-    fill_in "case_contact_occurred_at", with: "04/04/2020"
-
-    fill_in "case-contact-duration-hours-display", with: "1"
-    fill_in "case-contact-duration-minutes-display", with: "45"
-    fill_in "case_contact_miles_driven", with: "0"
+    fill_out_minimum_required_fields_for_case_contact_form
 
     expect(page).to have_text("Add Another Expense")
     expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount")
@@ -63,16 +54,7 @@ RSpec.describe "addtional_expenses", type: :system do
 
     click_on "New Case Contact"
 
-    check "School"
-    within "#enter-contact-details" do
-      choose "Yes"
-    end
-    choose "Video"
-    fill_in "case_contact_occurred_at", with: "04/04/2020"
-
-    fill_in "case-contact-duration-hours-display", with: "1"
-    fill_in "case-contact-duration-minutes-display", with: "45"
-    fill_in "case_contact_miles_driven", with: "0"
+    fill_out_minimum_required_fields_for_case_contact_form
 
     expect(page).to have_text("Add Another Expense")
     expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount")
@@ -137,16 +119,7 @@ RSpec.describe "addtional_expenses", type: :system do
 
     click_on "New Case Contact"
 
-    check "School"
-    within "#enter-contact-details" do
-      choose "Yes"
-    end
-    choose "Video"
-    fill_in "case_contact_occurred_at", with: "04/04/2020"
-
-    fill_in "case-contact-duration-hours-display", with: "1"
-    fill_in "case-contact-duration-minutes-display", with: "45"
-    fill_in "case_contact_miles_driven", with: "0"
+    fill_out_minimum_required_fields_for_case_contact_form
 
     expect(page).to have_text("Add Another Expense")
 
@@ -215,16 +188,7 @@ RSpec.describe "addtional_expenses", type: :system do
 
     click_on "New Case Contact"
 
-    check "School"
-    within "#enter-contact-details" do
-      choose "Yes"
-    end
-    choose "Video"
-    fill_in "case_contact_occurred_at", with: "04/04/2020"
-
-    fill_in "case-contact-duration-hours-display", with: "1"
-    fill_in "case-contact-duration-minutes-display", with: "45"
-    fill_in "case_contact_miles_driven", with: "0"
+    fill_out_minimum_required_fields_for_case_contact_form
 
     expect(page).to have_text("Add Another Expense")
     expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount")
