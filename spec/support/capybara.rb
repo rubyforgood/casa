@@ -18,7 +18,7 @@ Capybara.register_driver :selenium_chrome_headless_in_container do |app|
     url: "http://selenium_chrome:4444/wd/hub",
     capabilities: [Selenium::WebDriver::Remote::Capabilities.chrome(
       "goog:chromeOptions" => {
-        "args" => %w[headless disable-gpu window-size=1280,900],
+        "args" => %w[headless=new disable-gpu window-size=1280,900],
         "prefs" => {
           "download.prompt_for_download" => false,
           "download.default_directory" => "/home/seluser/Downloads",
@@ -34,7 +34,7 @@ Capybara.register_driver :selenium_chrome_headless do |app|
     browser: :chrome,
     capabilities: [Selenium::WebDriver::Remote::Capabilities.chrome(
       "goog:chromeOptions" => {
-        "args" => %w[headless disable-gpu disable-site-isolation-trials window-size=1280,900],
+        "args" => %w[headless=new disable-gpu disable-site-isolation-trials window-size=1280,900],
         "prefs" => {
           "download.prompt_for_download" => false,
           "download.default_directory" => DownloadHelpers::PATH.to_s,
@@ -50,7 +50,7 @@ Capybara.register_driver :selenium_chrome do |app|
     browser: :chrome,
     capabilities: [Selenium::WebDriver::Remote::Capabilities.chrome(
       "goog:chromeOptions" => {
-        "args" => %w[headless=new disable-gpu disable-site-isolation-trials window-size=1280,900],
+        "args" => %w[disable-gpu disable-site-isolation-trials window-size=1280,900],
         "prefs" => {
           "download.prompt_for_download" => false,
           "download.default_directory" => DownloadHelpers::PATH.to_s,
@@ -75,7 +75,7 @@ RSpec.configure do |config|
       Capybara.server_port = 4000
       Capybara.app_host = "http://web:4000"
     else
-      driven_by :selenium_chrome
+      driven_by :selenium_chrome_headless
     end
   end
 end
