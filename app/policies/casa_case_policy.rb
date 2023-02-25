@@ -116,12 +116,6 @@ class CasaCasePolicy < ApplicationPolicy
 
   private
 
-  # This method is no longer used, candidate for removal.
-  def is_in_same_org?
-    # on new? checks, record is nil, on index policy_scope, record is :casa_case
-    record.nil? || record == :casa_case || user.casa_org_id == record.casa_org_id
-  end
-
   def is_volunteer_actively_assigned_to_case?
     return false if record.nil? # no record, no auth
     return false unless same_org?
