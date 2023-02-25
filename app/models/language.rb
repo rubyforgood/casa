@@ -9,7 +9,7 @@ class Language < ApplicationRecord
   private
 
   def strip_name
-    self.name = self.name.strip if self.name
+    self.name = name.strip if name
   end
 end
 
