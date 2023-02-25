@@ -44,6 +44,22 @@ Capybara.register_driver :selenium_chrome_headless do |app|
     )]
 end
 
+# used without docker
+Capybara.register_driver :selenium_chrome do |app|
+  Capybara::Selenium::Driver.new app,
+    browser: :chrome,
+    capabilities: [Selenium::WebDriver::Remote::Capabilities.chrome(
+      "goog:chromeOptions" => {
+        "args" => %w[headless=new disable-gpu disable-site-isolation-trials window-size=1280,900],
+        "prefs" => {
+          "download.prompt_for_download" => false,
+          "download.default_directory" => DownloadHelpers::PATH.to_s,
+          "browser.set_download_behavior" => {"behavior" => "allow"}
+        }
+      }
+    )]
+end
+
 RSpec.configure do |config|
   config.before(:each, type: :system) do
     driven_by :rack_test
@@ -59,7 +75,7 @@ RSpec.configure do |config|
       Capybara.server_port = 4000
       Capybara.app_host = "http://web:4000"
     else
-      driven_by :selenium_chrome_headless
+      driven_by :selenium_chrome
     end
   end
 end
