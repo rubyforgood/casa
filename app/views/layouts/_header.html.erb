@@ -82,7 +82,10 @@
                 <% end %>
               </li>
               <li>
-                <a href="#0"> <i class="lni lni-cog"></i> Edit Organization </a>
+                <%= link_to edit_casa_org_path(current_organization), class: "#{active_class(edit_casa_org_path(current_organization))}" do %>
+                  <i class="lni lni-cogs mr-10"></i>
+                  Edit Organization
+                <% end %>
               </li>
               <li>
                 <%= link_to destroy_user_session_path do %>
