@@ -16,13 +16,16 @@ labels: ["✨ New Feature", "Help Wanted"]
 **Screenshots of current behavior, if any**  
 You can paste images on the clipboard here
 
-_QA Login Details:_  
+_Login Details:_  
 [Link to QA site](https://casa-qa.herokuapp.com/)  
+[Link to new theme site](https://casa-new-theme.herokuapp.com/languages/new)  
 
 Login Emails: 
 - volunteer1@example.com  view site as a volunteer
 - supervisor1@example.com view site as a supervisor
 - casa_admin1@example.com view site as an admin
+- all_casa_admin1@example.com view site as an all casa admin
+  - go to `/all_casa_admins/sign_in`  
 
 password for all users: 12345678  
 
