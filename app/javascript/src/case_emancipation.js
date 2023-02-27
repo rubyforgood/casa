@@ -52,7 +52,7 @@ function saveCheckState (action, checkItemId) {
       } else if (response === 'success') {
         resolveAsyncOperation()
       } else {
-        resolveAsyncOperation('Unknown response')
+        resolveAsyncOperation(500)
       }
 
       return response
