@@ -81,9 +81,14 @@ RSpec.describe "users/edit", type: :system do
       expect(ActionMailer::Base.deliveries.first.body.encoded)
         .to match("Your CASA password has been changed.")
     end
-
-    it "is not able to update the email if user is a volunteer" do
-      expect(page).to have_field("Email", disabled: true)
+    
+    it "is able to update the email if user is a volunteer" do
+      expect(page).to have_field("Email", disabled: false)
+      fill_in "Email", with: "new_volunteer@example.com"
+      click_on "Update Profile"
+      expect(page).to have_text("Profile was successfully updated.")
+      expect(page).to have_text("new_volunteer@example.com")
+      assert_equal "new_volunteer@example.com", volunteer.reload.email
     end
 
     it "displays current sign in date" do
@@ -182,7 +187,7 @@ RSpec.describe "users/edit", type: :system do
     end
 
     it_should_behave_like "shows error for invalid phone numbers"
-
+    #volunteer tests should reflect this one
     it "is able to update the email if user is a admin" do
       expect(page).to have_field("Email", disabled: false)
       fill_in "Email", with: "new_admin@example.com"
