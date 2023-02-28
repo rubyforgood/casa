@@ -187,7 +187,7 @@ RSpec.describe "users/edit", type: :system do
     end
 
     it_should_behave_like "shows error for invalid phone numbers"
-    # volunteer tests should reflect this one
+ 
     it "is able to update the email if user is a admin" do
       expect(page).to have_field("Email", disabled: false)
       fill_in "Email", with: "new_admin@example.com"
