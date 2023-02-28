@@ -42,6 +42,11 @@ RSpec.describe User, type: :model do
       user = build(:user, phone_number: "+76758890432")
       expect(user.valid?).to be false
     end
+
+    it "has an email_confirmation that matches email" do 
+      user = build(:user)
+      expect(user.email).to eq(user.email_confirmation)
+    end 
   end
 
   describe "#case_contacts_for" do
