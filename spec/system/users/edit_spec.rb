@@ -84,11 +84,14 @@ RSpec.describe "users/edit", type: :system do
 
     it "is able to update the email if user is a volunteer" do
       expect(page).to have_field("Email", disabled: false)
+      expect(page).to have_field("Email Confirmation", disabled: false)
       fill_in "Email", with: "new_volunteer@example.com"
+      fill_in "Email Confirmation", with: "new_volunteer@example.com"
       click_on "Update Profile"
       expect(page).to have_text("Profile was successfully updated.")
       expect(page).to have_text("new_volunteer@example.com")
       assert_equal "new_volunteer@example.com", volunteer.reload.email
+      assert_equal "new_volunteer@example.com", volunteer.reload.email_confirmation
     end
 
     it "displays current sign in date" do
@@ -149,6 +152,7 @@ RSpec.describe "users/edit", type: :system do
 
     it "is not able to update the email if user is a supervisor" do
       expect(page).to have_field("Email", disabled: true)
+      expect(page).to have_field("Email Confirmation", disabled: true)
     end
 
     it "displays sms notification events for the supervisor user" do
@@ -190,11 +194,14 @@ RSpec.describe "users/edit", type: :system do
  
     it "is able to update the email if user is a admin" do
       expect(page).to have_field("Email", disabled: false)
+      expect(page).to have_field("Email Confirmation", disabled: false)
       fill_in "Email", with: "new_admin@example.com"
+      fill_in "Email Confirmation", with: "new_admin@example.com"
       click_on "Update Profile"
       expect(page).to have_text("Profile was successfully updated.")
       expect(page).to have_text("new_admin@example.com")
       assert_equal "new_admin@example.com", admin.reload.email
+      assert_equal "new_admin@example.com", admin.reload.email_confirmation
     end
 
     it "displays password errors messages when admin is unable to set a password" do
