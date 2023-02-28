@@ -128,7 +128,7 @@ RSpec.describe "case_contacts/new", type: :system do
       click_button "Close" # close thank-you modal
 
       expect(page).to have_text(long_notes.truncate(100))
-      find('.js-read-more').click
+      find(".js-read-more").click
 
       expect(page).to have_text(long_notes)
     end
