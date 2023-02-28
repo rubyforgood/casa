@@ -76,6 +76,7 @@ class DbPopulator
         attributes = {
           casa_org: casa_org,
           email: current_email,
+          email_confirmation: current_email,
           password: SEED_PASSWORD,
           password_confirmation: SEED_PASSWORD,
           display_name: Faker::Name.name,
