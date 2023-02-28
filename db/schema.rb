@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_28_024440) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_28_163150) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -517,6 +517,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_28_024440) do
     t.boolean "receive_sms_notifications", default: false, null: false
     t.boolean "receive_email_notifications", default: true
     t.string "old_emails", default: [], array: true
+    t.string "email_confirmation"
     t.index ["casa_org_id"], name: "index_users_on_casa_org_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
