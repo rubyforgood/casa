@@ -39,7 +39,7 @@ class EmancipationsController < ApplicationController
       current_case = CasaCase.friendly.find(params[:casa_case_id])
       authorize current_case, :update_emancipation_option?
     rescue ActiveRecord::RecordNotFound
-      render json: {error: "Could not find case from id given by casa_case_id", status: 500}
+      render json: {error: "Could not find case from id given by casa_case_id"}
       return
     end
 
