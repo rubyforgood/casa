@@ -156,6 +156,7 @@ end
 #  invited_by_type             :string
 #  last_sign_in_at             :datetime
 #  last_sign_in_ip             :string
+#  old_emails                  :string           default([]), is an Array
 #  phone_number                :string           default("")
 #  receive_email_notifications :boolean          default(TRUE)
 #  receive_sms_notifications   :boolean          default(FALSE), not null

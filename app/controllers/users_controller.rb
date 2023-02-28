@@ -83,7 +83,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    if current_user.casa_admin?
+    if current_user.casa_admin? || current_user.volunteer?
       params.require(:user).permit(:email, :display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
     else
       params.require(:user).permit(:display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])

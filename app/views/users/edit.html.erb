@@ -5,7 +5,7 @@
     <%= form_for @user, as: :user, url: users_path do |form| %>
       <div class="field form-group">
         <%= form.label :email, "Email" %>
-        <%= form.text_field :email, class: "form-control", disabled: !current_user.casa_admin? %>
+        <%= form.text_field :email, class: "form-control", disabled: current_user.supervisor? %>
       </div>
 
       <div class="field form-group">
