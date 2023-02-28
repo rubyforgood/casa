@@ -12,12 +12,17 @@ class UsersController < ApplicationController
   end
 
   def update
-    if @user.update(user_params)
-      flash[:success] = "Profile was successfully updated."
-      redirect_to edit_users_path
-    else
-      render :edit
-    end
+    if user_params[:email] == user_params[:email_confirmation]
+      if @user.update(user_params)
+        flash[:success] = "Profile was successfully updated."
+        redirect_to edit_users_path
+      else
+        render :edit
+      end
+    else 
+      @user.errors.add(:base, "Emails must match") 
+      return render "edit"
+    end 
   end
 
   def add_language
@@ -84,7 +89,7 @@ class UsersController < ApplicationController
 
   def user_params
     if current_user.casa_admin? || current_user.volunteer?
-      params.require(:user).permit(:email, :display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
+      params.require(:user).permit(:email, :email_confirmation, :display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
     else
       params.require(:user).permit(:display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
     end
