@@ -83,6 +83,8 @@ RSpec.describe "addtional_expenses", type: :system do
     expect(page).to have_field("case_contact_additional_expenses_attributes_2_other_expense_amount")
     expect(page).to have_text("Add Another Expense")
 
+    find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe").fill_in(with: "") # This is a hack to fix a bug involving capybara and headless chrome
+    # More about the bug here: https://github.com/redux-form/redux-form/issues/686#issuecomment-326673386
     find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe").fill_in(with: "Breakfast")
     find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.23")
     find_by_id("case_contact_additional_expenses_attributes_2_other_expense_amount").fill_in(with: "8.23")
@@ -93,6 +95,7 @@ RSpec.describe "addtional_expenses", type: :system do
     }.to change(CaseContact, :count).by(0).and change(AdditionalExpense, :count).by(1)
 
     visit edit_case_contact_path(casa_case.reload.case_contacts.last)
+
     expect(page).to have_text("Editing Case Contact")
     expect(page).to have_field("case_contact_additional_expenses_attributes_2_other_expense_amount", with: "8.23")
     expect(page).to have_field("case_contact_additional_expenses_attributes_2_other_expenses_describe", with: "Yet another toll")
