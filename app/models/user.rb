@@ -5,11 +5,10 @@ class User < ApplicationRecord
   include Roles
   include ByOrganizationScope
   include DateHelper
-  #-------------Changes-----------------#
+
   include ActiveModel::Dirty
-  #define_attribute_methods #what does this do? is it necessary?
   before_update :record_previous_email
-  #------------------------------#
+
   validates_with UserValidator
 
   devise :database_authenticatable, :invitable, :recoverable, :validatable, :timeoutable, :trackable
@@ -55,17 +54,15 @@ class User < ApplicationRecord
 
   scope :no_recent_sign_in, -> { active.where("last_sign_in_at <= ?", 30.days.ago) }
 
-  #-------------Changes-----------------#
   def record_previous_email
-    if self.email_changed?
-      self.old_emails.push(self.email_was)
-      if self.old_emails.include?(self.email)
-        self.old_emails.delete(self.email)
-      end 
-      #I should also probably factor in that users can revert to an older email address and should be included in this
-    end 
-  end 
-  #-------------------------------------#
+    if email_changed?
+      old_emails.push(email_was)
+      if old_emails.include?(email)
+        old_emails.delete(email)
+      end
+    end
+  end
+
   def casa_admin?
     is_a?(CasaAdmin)
   end
