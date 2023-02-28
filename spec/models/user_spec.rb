@@ -43,10 +43,10 @@ RSpec.describe User, type: :model do
       expect(user.valid?).to be false
     end
 
-    it "has an email_confirmation that matches email" do 
+    it "has an email_confirmation that matches email" do
       user = build(:user)
       expect(user.email).to eq(user.email_confirmation)
-    end 
+    end
   end
 
   describe "#case_contacts_for" do

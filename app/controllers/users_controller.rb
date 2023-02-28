@@ -19,10 +19,10 @@ class UsersController < ApplicationController
       else
         render :edit
       end
-    else 
-      @user.errors.add(:base, "Emails must match") 
-      return render "edit"
-    end 
+    else
+      @user.errors.add(:base, "Emails must match")
+      render "edit"
+    end
   end
 
   def add_language

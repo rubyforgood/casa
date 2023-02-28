@@ -191,7 +191,7 @@ RSpec.describe "users/edit", type: :system do
     end
 
     it_should_behave_like "shows error for invalid phone numbers"
- 
+
     it "is able to update the email if user is a admin" do
       expect(page).to have_field("Email", disabled: false)
       expect(page).to have_field("Email Confirmation", disabled: false)
