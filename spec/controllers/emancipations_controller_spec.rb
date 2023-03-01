@@ -43,6 +43,7 @@ RSpec.describe EmancipationsController, type: :controller do
       it "will send the appropriate docx data" do
         expect(@controller).to receive(:send_data) { @controller.head :ok }
         show
+        expect(response).to have_http_status(:success)
       end
     end
   end
@@ -118,7 +119,7 @@ RSpec.describe EmancipationsController, type: :controller do
 
       it "returns the correct error response" do
         subject
-        expect(response).to have_https_status(:bad_request)
+        expect(response).to have_http_status(:bad_request)
         expect(response.body).to eq({error: "The current case is not marked as transitioning"}.to_json)
       end
     end
@@ -129,6 +130,7 @@ RSpec.describe EmancipationsController, type: :controller do
       let(:check_item_action) { "add_category" }
 
       it "will add the category" do
+        expect(response).to have_http_status(:ok)
         expect { subject }.to change { casa_case.emancipation_categories.count }.by(1)
       end
 
@@ -153,6 +155,7 @@ RSpec.describe EmancipationsController, type: :controller do
       let(:check_item_action) { "add_option" }
 
       it "will add the option" do
+        expect(response).to have_http_status(:ok)
         expect { subject }.to change { casa_case.emancipation_options.count }.by(1)
       end
 
@@ -178,6 +181,7 @@ RSpec.describe EmancipationsController, type: :controller do
       let(:check_item_action) { "delete_category" }
 
       it "will remove the category" do
+        expect(response).to have_http_status(:ok)
         expect { subject }.to change { casa_case.emancipation_categories.count }.by(-1)
       end
 
@@ -203,6 +207,7 @@ RSpec.describe EmancipationsController, type: :controller do
       let(:check_item_action) { "delete_option" }
 
       it "will remove the option" do
+        expect(response).to have_http_status(:ok)
         expect { subject }.to change { casa_case.emancipation_options.count }.by(-1)
       end
 
@@ -227,6 +232,7 @@ RSpec.describe EmancipationsController, type: :controller do
       let(:check_item_action) { "set_option" }
 
       it "will add the emancipation option" do
+        expect(response).to have_http_status(:ok)
         expect { subject }.to change { casa_case.emancipation_options.count }.by(1)
       end
 
