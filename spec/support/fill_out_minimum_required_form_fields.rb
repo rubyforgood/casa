@@ -1,5 +1,5 @@
 module FillOutMinimumRequiredFields
-  def fill_out_case_contact_minimum
+  def fill_out_minimum_required_fields_for_case_contact_form
     check "School"
     within "#enter-contact-details" do
       choose "Yes"
