@@ -83,83 +83,6 @@ $('document').ready(() => {
     }
   }
 
-  // Add Supervisors Table
-  const supervisorsTable = $('table#supervisors').DataTable({
-    autoWidth: false,
-    stateSave: false,
-    order: [[3, 'desc']],
-    columns: [
-      {
-        name: 'display_name',
-        render: (data, type, row, meta) => {
-          return `
-            <span class="mobile-label">Name</span>
-            <a href="${editSupervisorPath(row.id)}">
-              ${row.display_name || row.email}
-            </a>
-          `
-        }
-      },
-      {
-        name: 'active_volunteers',
-        render: (data, type, row, meta) => {
-          return `
-            <span class="atempted-contact">
-              TEST
-            </span>
-            
-          `
-        }
-      },
-      {
-        name: 'actions',
-        orderable: false,
-        render: (data, type, row, meta) => {
-          return `
-          <span class="mobile-label">Actions</span>
-            <a href="${editSupervisorPath(row.id)}" class="btn btn-primary">
-              Edit
-            </a>
-          `
-        },
-        searchable: false
-      }
-      ],
-      processing: true,
-      serverSide: true,
-      ajax: {
-        url: $('table#supervisors').data('source'),
-        type: 'POST',
-        data: function (d) {
-          const supervisorOptions = $('.supervisor-options input:checked')
-          const supervisorFilter = Array.from(supervisorOptions).map(option => option.dataset.value)
-  
-          const statusOptions = $('.status-options input:checked')
-          const statusFilter = Array.from(statusOptions).map(option => JSON.parse(option.dataset.value))
-  
-          const transitionYouthOptions = $('.transition-youth-options input:checked')
-          const transitionYouthFilter = Array.from(transitionYouthOptions).map(option => JSON.parse(option.dataset.value))
-  
-          const extraLanguageOptions = $('.extra-language-options input:checked')
-          const extraLanguageFilter = Array.from(extraLanguageOptions).map(option => JSON.parse(option.dataset.value))
-          return $.extend({}, d, {
-            additional_filters: {
-              supervisor: supervisorFilter,
-              active: statusFilter,
-              transition_aged_youth: transitionYouthFilter,
-              extra_languages: extraLanguageFilter
-            }
-          })
-        },
-        error: handleAjaxError,
-        dataType: 'json'
-      },
-      drawCallback: function (settings) {
-        $('[data-toggle=tooltip]').tooltip()
-      }
-    })
-
-
   // Enable all data tables on dashboard but only filter on volunteers table
   const editSupervisorPath = id => `/supervisors/${id}/edit`
   const editVolunteerPath = id => `/volunteers/${id}/edit`
@@ -344,6 +267,75 @@ $('document').ready(() => {
 
     return true
   })
+
+  // Add Supervisors Table
+  
+  const supervisorsTable = $('table#supervisors').DataTable({
+    autoWidth: false,
+    stateSave: false,
+    order: [[6, 'desc']],
+    columns: [
+      {
+        name: 'display_name',
+        render: (data, type, row, meta) => {
+          return `
+            <span class="mobile-label">Name</span>
+            <a href="${editSupervisorPath(row.id)}">
+              ${row.display_name || row.email}
+            </a>
+          `
+        }
+      },
+      {
+        name: '',
+        render: (data, type, row, meta) => {
+          return `
+            <span class="attempted-contact">
+              TEST CONTENT
+            </span>
+            
+          `
+        }
+      },
+      {
+        name: 'actions',
+        orderable: false,
+        render: (data, type, row, meta) => {
+          return `
+          <span class="mobile-label">Actions</span>
+            <a href="${editSupervisorPath(row.id)}" class="btn btn-primary">
+              Edit
+            </a>
+          `
+        },
+        searchable: false
+      }
+      ],
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: $('table#supervisors').data('source'),
+        type: 'POST',
+        data: function (d) {
+          const statusOptions = $('.status-options input:checked')
+          const statusFilter = Array.from(statusOptions).map(option => JSON.parse(option.dataset.value))
+
+          return $.extend({}, d, {
+            additional_filters: {
+              active: statusFilter
+            }
+          })
+        },
+        error: handleAjaxError,
+        dataType: 'json'
+      },
+      drawCallback: function (settings) {
+        $('[data-toggle=tooltip]').tooltip()
+      }
+    })
+
+    
+
 
   const casaCasesTable = $('table#casa-cases').DataTable({
     autoWidth: false,
