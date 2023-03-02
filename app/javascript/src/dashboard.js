@@ -273,7 +273,7 @@ $('document').ready(() => {
   const supervisorsTable = $('table#supervisors').DataTable({
     autoWidth: false,
     stateSave: false,
-    order: [[6, 'desc']],
+    order: [[1, 'desc']], // order by cast contacts
     columns: [
       {
         name: 'display_name',
@@ -289,6 +289,7 @@ $('document').ready(() => {
       {
         name: '',
         render: (data, type, row, meta) => {
+          // TODO: Update table content
           return `
             <span class="attempted-contact">
               TEST CONTENT
@@ -335,6 +336,17 @@ $('document').ready(() => {
     })
 
     
+  supervisorsTable.columns().every(function (index) {
+    const columnVisible = this.visible()
+
+    if (columnVisible) {
+      $('#visibleColumns input[data-column="' + index + '"]').prop('checked', true)
+    } else {
+      $('#visibleColumns input[data-column="' + index + '"]').prop('checked', false)
+    }
+
+    return true
+  })
 
 
   const casaCasesTable = $('table#casa-cases').DataTable({

@@ -46,23 +46,8 @@
       <table
         class="table table-striped table-bordered"
         id="supervisors"
-        data-source="<%= datatable_supervisors_path format: :json %>">
-          <thead>
-            <tr>
-              <th>Supervisor Name</th>
-              <th></th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-          </tbody>
-        </table>
-
-
-      <table
-        class="table table-striped table-bordered supervisors-list"
-        id="supervisors-test">
+        data-source="<%= datatable_supervisors_path format: :json %>"
+      >
         <thead>
           <tr class="supervisor_table_row">
             <th>Supervisor Name</th>
@@ -70,44 +55,8 @@
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
-        <p>TEST</p>
-        <% @supervisors.each do |supervisor| %>
-          <tr class="supervisor_table_row">
-            <% no_attempt_volunteers = supervisor.no_attempt_for_two_weeks %>
-            <% active_volunteers = (supervisor.active_volunteers - no_attempt_volunteers).nonzero? %>
-            <% transition_volunteers = supervisor.volunteers_serving_transition_aged_youth %>
-            <td id="name-<%= supervisor.id %>">
-              <span class="mobile-label">Supervisor Name</span>
-              <%= link_to(supervisor.display_name, edit_supervisor_path(supervisor)) %>
-            </td>
-            <td class="supervisor_case_contact_stats">
-              <div>
-                <% if active_volunteers %>
-                  <span class="attempted-contact" style="flex-grow: <%= active_volunteers %>">
-                    <%= active_volunteers %>
-                  </span>
-                <% end %>
-                <% if no_attempt_volunteers.nonzero? %>
-                  <span class="no-attempted-contact" style="flex-grow: <%= no_attempt_volunteers %>">
-                    <%= no_attempt_volunteers %>
-                  </span>
-                <% else %>
-                  <span class="attempted-contact-end"></span>
-                <% end %>
 
-                <% if !(active_volunteers || no_attempt_volunteers.nonzero?) %>
-                  <span class="no-volunteers" style="flex-grow: 1">No assigned volunteers</span>
-                <% end %>
-                <span><%= transition_volunteers %></span>
-              </div>
-            </td>
-            <td>
-              <span class="mobile-label">Actions</span>
-              <%= link_to 'Edit', edit_supervisor_path(supervisor) %>
-            </td>
-          </tr>
-        <% end %>
+        <tbody>
         </tbody>
       </table>
     </div>
