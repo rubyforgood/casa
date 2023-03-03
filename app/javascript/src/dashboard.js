@@ -287,6 +287,16 @@ $('document').ready(() => {
         }
       },
       {
+        name: 'active',
+        render: (data, type, row, meta) => {
+          return `
+            <span class="mobile-label">Status</span>
+            ${row.active === 'true' ? 'Active' : 'Inactive'}
+          `
+        },
+        searchable: false
+      },
+      {
         name: '',
         render: (data, type, row, meta) => {
           // TODO: Update table content
@@ -296,7 +306,8 @@ $('document').ready(() => {
             </span>
             
           `
-        }
+        },
+        searchable: false
       },
       {
         name: 'actions',
