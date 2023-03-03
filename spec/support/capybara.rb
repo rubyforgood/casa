@@ -30,35 +30,18 @@ end
 
 # used without docker
 Capybara.register_driver :selenium_chrome_headless do |app|
-  driver = Capybara::Selenium::Driver.new app,
+  Capybara::Selenium::Driver.new app,
     browser: :chrome,
     capabilities: [Selenium::WebDriver::Remote::Capabilities.chrome(
       "goog:chromeOptions" => {
-        "args" => %w[headless disable-gpu disable-site-isolation-trials window-size=1280,900],
+        "args" => %w[headless=new disable-gpu disable-site-isolation-trials window-size=1280,900],
         "prefs" => {
-          "download.directory_upgrade" => true,
           "download.prompt_for_download" => false,
           "download.default_directory" => DownloadHelpers::PATH.to_s,
           "browser.set_download_behavior" => {"behavior" => "allow"}
         }
       }
     )]
-
-  ### Allow file downloads in Google Chrome when headless!!!
-  ### https://bugs.chromium.org/p/chromium/issues/detail?id=696481#c89
-  bridge = driver.browser.send(:bridge)
-
-  path = "/session/:session_id/chromium/send_command"
-  path[":session_id"] = bridge.session_id
-
-  bridge.http.call(:post, path, cmd: "Page.setDownloadBehavior",
-                                params: {
-                                  behavior: "allow",
-                                  downloadPath: "/tmp/downloads"
-                                })
-  ###
-
-  driver
 end
 
 # used without docker
