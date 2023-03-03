@@ -36,6 +36,7 @@ Capybara.register_driver :selenium_chrome_headless do |app|
       "goog:chromeOptions" => {
         "args" => %w[headless disable-gpu disable-site-isolation-trials window-size=1280,900],
         "prefs" => {
+          "download.directory_upgrade" => true,
           "download.prompt_for_download" => false,
           "download.default_directory" => DownloadHelpers::PATH.to_s,
           "browser.set_download_behavior" => {"behavior" => "allow"}
