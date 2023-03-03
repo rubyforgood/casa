@@ -43,17 +43,17 @@ Capybara.register_driver :selenium_chrome_headless do |app|
       }
     )]
 
-    ### Allow file downloads in Google Chrome when headless!!!
+  ### Allow file downloads in Google Chrome when headless!!!
   ### https://bugs.chromium.org/p/chromium/issues/detail?id=696481#c89
   bridge = driver.browser.send(:bridge)
 
-  path = '/session/:session_id/chromium/send_command'
-  path[':session_id'] = bridge.session_id
+  path = "/session/:session_id/chromium/send_command"
+  path[":session_id"] = bridge.session_id
 
-  bridge.http.call(:post, path, cmd: 'Page.setDownloadBehavior',
+  bridge.http.call(:post, path, cmd: "Page.setDownloadBehavior",
                                 params: {
-                                  behavior: 'allow',
-                                  downloadPath: '/tmp/downloads'
+                                  behavior: "allow",
+                                  downloadPath: "/tmp/downloads"
                                 })
   ###
 
