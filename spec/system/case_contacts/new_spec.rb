@@ -526,6 +526,10 @@ RSpec.describe "case_contacts/new", type: :system do
         current_date_string = DateTime.now.strftime("%Y-%m-%d")
         tomorrow_date_string = (DateTime.now + 1).strftime("%Y-%m-%d")
 
+        puts "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        puts current_date_string
+        puts tomorrow_date_string
+
         sign_in volunteer
 
         visit new_case_contact_path
