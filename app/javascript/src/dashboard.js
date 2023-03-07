@@ -348,43 +348,29 @@ $('document').ready(() => {
         },
         searchable: false
       }
-      ],
-      processing: true,
-      serverSide: true,
-      ajax: {
-        url: $('table#supervisors').data('source'),
-        type: 'POST',
-        data: function (d) {
-          const statusOptions = $('.status-options input:checked')
-          const statusFilter = Array.from(statusOptions).map(option => JSON.parse(option.dataset.value))
+    ],
+    processing: true,
+    serverSide: true,
+    ajax: {
+      url: $('table#supervisors').data('source'),
+      type: 'POST',
+      data: function (d) {
+        const statusOptions = $('.status-options input:checked')
+        const statusFilter = Array.from(statusOptions).map(option => JSON.parse(option.dataset.value))
 
-          return $.extend({}, d, {
-            additional_filters: {
-              active: statusFilter
-            }
-          })
-        },
-        error: handleAjaxError,
-        dataType: 'json'
+        return $.extend({}, d, {
+          additional_filters: {
+            active: statusFilter
+          }
+        })
       },
-      drawCallback: function (settings) {
-        $('[data-toggle=tooltip]').tooltip()
-      }
-    })
-
-    
-  supervisorsTable.columns().every(function (index) {
-    const columnVisible = this.visible()
-
-    if (columnVisible) {
-      $('#visibleColumns input[data-column="' + index + '"]').prop('checked', true)
-    } else {
-      $('#visibleColumns input[data-column="' + index + '"]').prop('checked', false)
+      error: handleAjaxError,
+      dataType: 'json'
+    },
+    drawCallback: function (settings) {
+      $('[data-toggle=tooltip]').tooltip()
     }
-
-    return true;
   })
-
 
   const casaCasesTable = $('table#casa-cases').DataTable({
     autoWidth: false,
@@ -426,6 +412,10 @@ $('document').ready(() => {
 
   $('.volunteer-filters input[type="checkbox"]').not('#unassigned-vol-filter').on('click', function () {
     volunteersTable.draw()
+  })
+
+  $('.supervisor-filters input[type="checkbox"]').on('click', function () {
+    supervisorsTable.draw()
   })
 
   $('.casa-case-filters input[type="checkbox"]').on('click', function () {
