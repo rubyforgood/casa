@@ -334,7 +334,6 @@ $('document').ready(() => {
             </div>
           `;
         },
-        searchable: false,
       },
       {
         name: 'actions',
@@ -383,7 +382,7 @@ $('document').ready(() => {
       $('#visibleColumns input[data-column="' + index + '"]').prop('checked', false)
     }
 
-    return true
+    return true;
   })
 
 

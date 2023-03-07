@@ -4,50 +4,48 @@ $indicator_positive_color: #4caf50;
 .supervisor_case_contact_stats {
   display: flex;
 
-  div {
-    &:first-child {
-      display: flex;
-      margin-right: 1em;
-      flex-grow: 1;
+  &:first-child {
+    display: flex;
+    margin-right: 1em;
+    flex-grow: 1;
+  }
+
+  span {
+    border-radius: 0.25em;
+    padding-top: .25em;
+    text-align: center;
+
+    &.attempted-contact {
+      background-color: $indicator_positive_color;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+
+      & + span.no-attempted-contact {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+
+      & + span.attempted-contact-end {
+        background-color: $indicator_positive_color;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        width: 0.25em;
+      }
     }
 
-    span {
-      border-radius: 0.25em;
-      padding-top: .25em;
-      text-align: center;
+    &.no-attempted-contact {
+      background-color: $indictator_negative_color;
+    }
 
-      &.attempted-contact {
-        background-color: $indicator_positive_color;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
+    &.no-volunteers {
+      background-color: #ccc;
+    }
 
-        & + span.no-attempted-contact {
-          border-top-left-radius: 0;
-          border-bottom-left-radius: 0;
-        }
-
-        & + span.attempted-contact-end {
-          background-color: $indicator_positive_color;
-          border-top-left-radius: 0;
-          border-bottom-left-radius: 0;
-          width: 0.25em;
-        }
-      }
-
-      &.no-attempted-contact {
-        background-color: $indictator_negative_color;
-      }
-
-      &.no-volunteers {
-        background-color: #ccc;
-      }
-
-      &:last-child {
-        margin-left: 0.5em;
-        background-color: #cfd8dc;
-        border-radius: 100vw;
-        padding: 0.2em 1em;
-      }
+    &:last-child {
+      margin-left: 0.5em;
+      background-color: #cfd8dc;
+      border-radius: 100vw;
+      padding: 0.2em 1em;
     }
   }
 
