@@ -299,15 +299,42 @@ $('document').ready(() => {
       {
         name: '',
         render: (data, type, row, meta) => {
-          // TODO: Update table content
-          return `
-            <span class="attempted-contact">
-              TEST CONTENT
+          let active_volunteers = Number(row.active_volunteers);
+          let no_attempt_volunteers = Number(row.no_attempt_for_two_weeks);
+          let transition_volunteers = Number(row.transitions_volunteers);
+          
+          let active_element = active_volunteers > 0 ? (
+            `
+            <span class="attempted-contact" style="flex-grow: ${active_volunteers}">
+              ${active_volunteers}
             </span>
-            
-          `
+            `
+          )
+          : '';
+
+          let no_attempt_element = no_attempt_volunteers > 0 ? (
+            `
+            <span class="no-attempted-contact" style="flex-grow: ${no_attempt_volunteers}">
+              ${no_attempt_volunteers}
+            </span>
+            `
+          )
+          : '<span class="attempted-contact-end"><span>';
+
+          let no_volunteers_element = '';
+          if (active_volunteers == 0 || no_attempt_volunteers == 0) {
+            no_volunteers_element = `<span class="no-volunteers" style="flex-grow: 1">No assigned volunteers</span>`;
+          }
+
+          let transition_element = `<span>${transition_volunteers}</span>`;
+
+          return `
+            <div class="supervisor_case_contact_stats">
+              ${active_element + no_attempt_element + no_volunteers_element + transition_element}
+            </div>
+          `;
         },
-        searchable: false
+        searchable: false,
       },
       {
         name: 'actions',
