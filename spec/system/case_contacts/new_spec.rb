@@ -193,7 +193,7 @@ RSpec.describe "case_contacts/new", type: :system do
         hello_line = page.body.split("\n").select { |x| x.include?("Hello") }
         expect(hello_line.first.include?(note_content)).to be true
         expected_text = strip_tags(note_content)
-        expect(page).to have_css("#case_contacts_list .card h1", text: expected_text)
+        expect(page).to have_css("#case_contacts_list h1", text: expected_text)
       end
     end
   end
