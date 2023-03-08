@@ -140,12 +140,9 @@ class CasaCasesController < ApplicationController
   def set_casa_case
     @casa_case = current_organization.casa_cases.friendly.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    if params[:action] != "show"
-      head :not_found
-    else
-      respond_to do |format|
-        format.html { redirect_to casa_cases_path, notice: "Sorry you are not authorized to perform this action." }
-      end
+    respond_to do |format|
+      format.html { redirect_to casa_cases_path, notice: "Sorry, you are not authorized to perform this action." }
+      format.json { render json: {error: "Sorry, you are not authorized to perform this action."}, status: :not_found }
     end
   end
 
