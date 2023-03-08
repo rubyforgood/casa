@@ -12,8 +12,9 @@ Capybara.register_driver :selenium_chrome_in_container do |app|
 end
 
 options = Selenium::WebDriver::Chrome::Options.new
-options.add_argument("--window-size=1280,900")
 options.add_argument("--disable-gpu")
+options.add_argument("--ignore-certificate-errors")
+options.add_argument("--window-size=1280,900")
 
 options.add_preference(:browser, set_download_behavior: {behavior: "allow"})
 
@@ -31,6 +32,7 @@ end
 # used without docker
 Capybara.register_driver :selenium_chrome_headless do |app|
   options.add_argument("--headless=new")
+  options.add_argument("--disable-site-isolation-trials")
   options.add_preference(:download, prompt_for_download: false, default_directory: DownloadHelpers::PATH.to_s)
 
   Capybara::Selenium::Driver.new app,
