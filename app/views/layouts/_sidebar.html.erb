@@ -60,7 +60,7 @@
           <% if policy(:application).see_court_reports_page? %>
             <%= link_to "Generate Court Reports", case_court_reports_path, class: "list-group-item" %>
           <% end %>
-          <% if policy(:reimbursement).index? %>
+          <% if policy(:reimbursement).see_reports_page? %>
             <%= link_to "Reimbursement Queue", reimbursements_path, class: "list-group-item" %>
           <% end %>
           <% if policy(:application).see_reports_page? %>
