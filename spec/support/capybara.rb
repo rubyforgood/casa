@@ -19,7 +19,7 @@ options.add_preference(:browser, set_download_behavior: {behavior: "allow"})
 
 # used in docker
 Capybara.register_driver :selenium_chrome_headless_in_container do |app|
-  options.add_argument("--headless=new")
+  options.add_argument("--headless")
   options.add_preference(:download, prompt_for_download: false, default_directory: "/home/seluser/Downloads")
 
   Capybara::Selenium::Driver.new app,
