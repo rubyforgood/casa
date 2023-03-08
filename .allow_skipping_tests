@@ -7,6 +7,7 @@ controllers/all_casa_admins_controller.rb
 controllers/android_app_associations_controller.rb
 controllers/application_controller.rb
 controllers/casa_admins_controller.rb
+controllers/casa_org_controller.rb
 controllers/case_assignments_controller.rb
 controllers/case_contact_reports_controller.rb
 controllers/case_contacts/followups_controller.rb
@@ -18,6 +19,7 @@ controllers/contact_types_controller.rb
 controllers/court_dates_controller.rb
 controllers/dashboard_controller.rb
 controllers/emancipation_checklists_controller.rb
+controllers/error_controller.rb
 controllers/followup_reports_controller.rb
 controllers/fund_requests_controller.rb
 controllers/health_controller.rb

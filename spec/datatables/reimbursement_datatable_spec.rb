@@ -107,14 +107,17 @@ RSpec.describe "ReimbursementDatatable" do
 
   describe "multiple record handling" do
     before do
+      possible_miles_driven_values = (0..100).to_a.shuffle
+      possible_occurred_at_offsets = (0..100).to_a.shuffle
+
       5.times.collect do
         casa_case = create(:casa_case)
         3.times.collect do
           create(
             :case_contact,
             casa_case: casa_case,
-            occurred_at: Time.new - rand(1000),
-            miles_driven: rand(1000)
+            occurred_at: Time.new - possible_occurred_at_offsets.pop,
+            miles_driven: possible_miles_driven_values.pop
           )
         end.reverse
       end.flatten

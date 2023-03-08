@@ -3,7 +3,7 @@ class Language < ApplicationRecord
   has_many :user_languages
   has_many :users, through: :user_languages
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: {scope: :casa_org, case_sensitive: false}
 end
 
 # == Schema Information

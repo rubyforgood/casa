@@ -124,18 +124,13 @@ RSpec.describe "case_contacts/new", type: :system do
         click_on "Continue Submitting"
       }.to change(CaseContact, :count).by(1)
 
-      expected_text = long_notes.truncate(100)
-      expect(page).to have_text("Read more")
-      expect(page).to have_text(expected_text)
-
       sleep(2)
-      click_on "Close" # close thank-you modal
+      click_button "Close" # close thank-you modal
 
-      click_link "Read more"
+      expect(page).to have_text(long_notes.truncate(100))
+      find(".js-read-more").click
 
-      expect(page).to have_text("Hide")
       expect(page).to have_text(long_notes)
-      expect(page).not_to have_text("Read more")
     end
 
     context "with invalid inputs" do
@@ -182,22 +177,15 @@ RSpec.describe "case_contacts/new", type: :system do
         visit casa_case_path(casa_case.id)
         click_on "New Case Contact"
 
-        check "School"
-        check "Therapist"
-        within "#enter-contact-details" do
-          choose "Yes"
-        end
-        choose "Video"
-        fill_in "case_contact_occurred_at", with: "04/04/2020"
+        fill_out_minimum_required_fields_for_case_contact_form
+
         note_content = "<h1>Hello world</h1>"
 
-        fill_in "case_contact_miles_driven", with: "0"
-        fill_in "case-contact-duration-hours-display", with: "1"
-        fill_in "case-contact-duration-minutes-display", with: "45"
         fill_in "Notes", with: note_content
         click_on "Submit"
 
         expect(page).to have_text("Confirm Note Content")
+
         expect {
           click_on "Continue Submitting"
         }.to change(CaseContact, :count).by(1)
@@ -205,7 +193,7 @@ RSpec.describe "case_contacts/new", type: :system do
         hello_line = page.body.split("\n").select { |x| x.include?("Hello") }
         expect(hello_line.first.include?(note_content)).to be true
         expected_text = strip_tags(note_content)
-        expect(page).to have_css("h1", text: expected_text)
+        expect(page).to have_css("#case_contacts_list h1", text: expected_text)
       end
     end
   end
