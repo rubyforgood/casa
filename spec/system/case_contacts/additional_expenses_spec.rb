@@ -93,6 +93,7 @@ RSpec.describe "addtional_expenses", type: :system do
     }.to change(CaseContact, :count).by(0).and change(AdditionalExpense, :count).by(1)
 
     visit edit_case_contact_path(casa_case.reload.case_contacts.last)
+
     expect(page).to have_text("Editing Case Contact")
     expect(page).to have_field("case_contact_additional_expenses_attributes_2_other_expense_amount", with: "8.23")
     expect(page).to have_field("case_contact_additional_expenses_attributes_2_other_expenses_describe", with: "Yet another toll")

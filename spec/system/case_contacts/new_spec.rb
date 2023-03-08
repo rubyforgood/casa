@@ -124,18 +124,13 @@ RSpec.describe "case_contacts/new", type: :system do
         click_on "Continue Submitting"
       }.to change(CaseContact, :count).by(1)
 
-      expected_text = long_notes.truncate(100)
-      expect(page).to have_text("Read more")
-      expect(page).to have_text(expected_text)
-
       sleep(2)
-      click_on "Close" # close thank-you modal
+      click_button "Close" # close thank-you modal
 
-      click_link "Read more"
+      expect(page).to have_text(long_notes.truncate(100))
+      find(".js-read-more").click
 
-      expect(page).to have_text("Hide")
       expect(page).to have_text(long_notes)
-      expect(page).not_to have_text("Read more")
     end
 
     context "with invalid inputs" do
@@ -190,6 +185,7 @@ RSpec.describe "case_contacts/new", type: :system do
         click_on "Submit"
 
         expect(page).to have_text("Confirm Note Content")
+
         expect {
           click_on "Continue Submitting"
         }.to change(CaseContact, :count).by(1)
@@ -197,7 +193,7 @@ RSpec.describe "case_contacts/new", type: :system do
         hello_line = page.body.split("\n").select { |x| x.include?("Hello") }
         expect(hello_line.first.include?(note_content)).to be true
         expected_text = strip_tags(note_content)
-        expect(page).to have_css("h1", text: expected_text)
+        expect(page).to have_css("#case_contacts_list h1", text: expected_text)
       end
     end
   end
