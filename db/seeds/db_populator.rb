@@ -334,7 +334,7 @@ class DbPopulator
         amount: Faker::Number.decimal(l_digits: 2, r_digits: 2),
         effective_date: Faker::Date.forward(days: 700),
         is_active: true,
-        casa_org_id: casa_org.id 
+        casa_org_id: casa_org.id
       })
     end
   end
