@@ -17,7 +17,7 @@ RSpec.describe "supervisors/index", type: :system do
 
   before { sign_in supervisor_user }
 
-  context "when editing supervisor" do
+  context "when editing supervisor", js: true do
     let(:supervisor_name) { "Leslie Knope" }
     let!(:supervisor) { create(:supervisor, display_name: supervisor_name, casa_org: organization) }
 
@@ -77,22 +77,39 @@ RSpec.describe "supervisors/index", type: :system do
         create(:supervisor, :inactive, display_name: "Deactivated supervisor", casa_org: organization)
       }
 
-      it "shows deactivated supervisor on show button click" do
-        expect(page).to have_selector("table#supervisors > tbody > tr td:nth-child(1)", count: 2)
-        expect(page).not_to have_text("Deactivated supervisor")
-
-        find("h1 + a", text: "Show deactivated").click
-
-        expect(page).to have_selector("table#supervisors > tbody > tr td:nth-child(1)", count: 3)
-        expect(page).to have_text("Deactivated supervisor")
-        expect(page).to have_selector("h1 + a", text: "Hide deactivated")
-
-        find("h1 + a", text: "Hide deactivated").click
-
-        expect(page).to have_selector("table#supervisors > tbody > tr td:nth-child(1)", count: 2)
-        expect(page).not_to have_text("Deactivated supervisor")
-        expect(page).to have_selector("h1 + a", text: "Show deactivated")
+      # New test for active status filter (currently failing)
+      it "filters active and inactive supervisors" do
+        expect(page).to have_text("Status")
+        # by default, only active supervisors are shown
+        expect(page.all("table#supervisors > tbody > tr").count).to eq(2)        
+  
+        click_on "Status"
+        # find(:css, 'input[data-value="true"]').set(false)
+        click_on "Inactive"
+        expect(page.all("table#supervisors > tbody > tr").count).to eq(2)
+        
+        click_on "Status"
+        click_on "Active"
+        expect(page.all("table#supervisors > tbody > tr").count).to eq(0)
       end
+
+      # Old test that needs to be removed 
+      # it "shows deactivated supervisor on show button click" do
+      #   expect(page).to have_selector("table#supervisors > tbody > tr td:nth-child(1)", count: 2)
+      #   expect(page).not_to have_text("Deactivated supervisor")
+
+      #   find("h1 + a", text: "Show deactivated").click
+
+      #   expect(page).to have_selector("table#supervisors > tbody > tr td:nth-child(1)", count: 3)
+      #   expect(page).to have_text("Deactivated supervisor")
+      #   expect(page).to have_selector("h1 + a", text: "Hide deactivated")
+
+      #   find("h1 + a", text: "Hide deactivated").click
+
+      #   expect(page).to have_selector("table#supervisors > tbody > tr td:nth-child(1)", count: 2)
+      #   expect(page).not_to have_text("Deactivated supervisor")
+      #   expect(page).to have_selector("h1 + a", text: "Show deactivated")
+      # end
     end
 
     context "when sorting supervisors" do
