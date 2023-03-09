@@ -56,6 +56,7 @@ end
 #  current_sign_in_ip          :string
 #  display_name                :string           default(""), not null
 #  email                       :string           default(""), not null
+#  email_confirmation          :string
 #  encrypted_password          :string           default(""), not null
 #  invitation_accepted_at      :datetime
 #  invitation_created_at       :datetime
