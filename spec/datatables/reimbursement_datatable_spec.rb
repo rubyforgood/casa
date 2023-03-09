@@ -28,7 +28,7 @@ RSpec.describe "ReimbursementDatatable" do
 
     describe "explicit ascending order" do
       let(:order_direction) { "ASC" }
-      
+
       it "should order correctly" do
         expect(first_result[:id]).to eq(sorted_case_contacts.first.id.to_s)
       end
