@@ -10,6 +10,7 @@ RSpec.describe "layout/header", type: :view do
     view.class.include PretenderContext
     allow(view).to receive(:true_user).and_return(user)
     allow(view).to receive(:current_user).and_return(user)
+    allow(view).to receive(:current_organization).and_return(1)
     allow(view).to receive(:current_role).and_return(user.role)
   end
 
