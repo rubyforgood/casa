@@ -124,11 +124,11 @@ RSpec.describe "case_contacts/new", type: :system do
         click_on "Continue Submitting"
       }.to change(CaseContact, :count).by(1)
 
-      sleep(2)
-      click_button "Close" # close thank-you modal
+      expected_text = long_notes.truncate(100)
+      expect(page).to have_text("Read more")
+      expect(page).to have_text(expected_text)
 
-      expect(page).to have_text(long_notes.truncate(100))
-      find(".js-read-more").click
+      click_link "Read more"
 
       expect(page).to have_text(long_notes)
     end
