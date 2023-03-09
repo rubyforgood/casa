@@ -30,7 +30,7 @@ RSpec.describe "ReimbursementDatatable" do
       let(:order_direction) { "ASC" }
       
       it "should order correctly" do
-          expect(first_result[:id]).to eq(sorted_case_contacts.first.id.to_s)
+        expect(first_result[:id]).to eq(sorted_case_contacts.first.id.to_s)
       end
     end
 
@@ -114,7 +114,7 @@ RSpec.describe "ReimbursementDatatable" do
             :case_contact,
             casa_case: casa_case,
             occurred_at: Time.new - rand(1000),
-            miles_driven: 5
+            miles_driven: rand(1000)
           )
         end.reverse
       end.flatten
@@ -153,15 +153,7 @@ RSpec.describe "ReimbursementDatatable" do
     describe "order by miles driven" do
       let(:order_by) { "miles_driven" }
       let(:sorted_case_contacts) do
-        sorted_case_contacts = case_contacts.sort_by { |case_contact| case_contact.miles_driven }
-        first_case_contact_miles_driven = sorted_case_contacts.first.miles_driven
-        
-        for i in 1..sorted_case_contacts.length - 1 do
-          if sorted_case_contacts[i].miles_driven == first_case_contact_miles_driven
-            sorted_case_contacts[i].update_attribute(:miles_driven, sorted_case_contacts[i].miles_driven + 1)
-          end
-        end
-        sorted_case_contacts
+        case_contacts.sort_by { |case_contact| case_contact.miles_driven }
       end
 
       it_behaves_like "a sorted results set"
