@@ -107,7 +107,7 @@ RSpec.describe "/volunteers", type: :request do
       supervisors = create_list(:supervisor, 3, casa_org: organization)
 
       page = request.parsed_body
-      supervisors.each { |supervisor| expect(page).to include(supervisor.display_name) }
+      supervisors.each { |supervisor| expect(page).to include(supervisor.display_name.html_safe) }
     end
   end
 

@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe "casa_cases/new", type: :view do
   subject { render template: "casa_cases/new" }
 
-  before do
-    assign :casa_case, CasaCase.new
+  before(:each) do
+    assign :casa_case, CasaCase.new(casa_org: user.casa_org)
     assign :contact_types, []
 
     enable_pundit(view, user)
