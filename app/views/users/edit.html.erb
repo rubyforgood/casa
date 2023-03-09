@@ -5,12 +5,7 @@
     <%= form_for @user, as: :user, url: users_path do |form| %>
       <div class="field form-group">
         <%= form.label :email, "Email" %>
-        <%= form.text_field :email, class: "form-control", disabled: current_user.supervisor? %>
-      </div>
-
-      <div class="field form-group">
-        <%= form.label :email_confirmation, "Email Confirmation" %>
-        <%= form.text_field :email_confirmation, class: "form-control", disabled: current_user.supervisor? %>
+        <%= form.text_field :email, class: "form-control", disabled: true %>
       </div>
 
       <div class="field form-group">
@@ -41,10 +36,14 @@
       <%= render "/shared/invite_login", resource: current_user %>
 
       <br>
-      <div class="actions">
+      <div class="actions" id="accordionExample">
         <%= form.submit "Update Profile", class: "btn btn-primary mb-3" %>
-        <button class="btn btn-warning accordion mb-3" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        <button class="btn btn-warning accordion mb-3" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
           Change Password
+        </button>
+
+        <button class="btn btn-warning accordion mb-3" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+          Change Email
         </button>
 
         <% if policy(CasaAdmin).see_deactivate_option? %>
@@ -61,7 +60,7 @@
                         data: {confirm: "Contact your administrator at Ruby For Good to deactivate this account."} %>
           <% end %>
         <% end %>
-      </div>
+      
     <% end %>
     <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
       <br>
@@ -85,8 +84,30 @@ minlength: User.password_length.min %>
         </div>
       <% end %>
     </div>
-  </div>
-
+    <!----------------- Update Email -------------------------->
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <br>
+        <%= form_for(@user, as: :user, url: {action: "update"}) do |f| %>
+          <div class="field form-group">
+            <%= f.label :current_password, "Password" %><br>
+            <%= f.password_field :current_password, autocomplete: "off", class: "form-control" %>
+          </div>
+          <div class="field form-group">
+            <%= f.label :email, "New Email" %><br>
+            <%= f.text_field :email, autocomplete: "off", class: "form-control password-new"%>
+          </div>
+          <div class="field form-group">
+            <%= f.label :email_confirmation, "New Email Confirmation" %><br>
+            <%= f.text_field :email_confirmation, class: "form-control password-confirmation"%>
+          </div>
+          <div class="action_container">
+            <%= f.submit "Update Email", class: "btn btn-danger submit-password" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    </div>
+  <!----------------- Update Email End -------------------------->
   </div>
  <%= form_for @user, as: :user, url: users_path do |form| %>
    <br>
