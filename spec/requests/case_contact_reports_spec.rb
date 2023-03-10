@@ -67,6 +67,49 @@ RSpec.describe "/case_contact_reports", type: :request do
           expect(response.body.lines.length).to eq(2)
         end
       end
+
+      context "casa_case_ids filter" do
+        let!(:casa_case) { create(:casa_case) }
+        let!(:case_contacts) { create_list(:case_contact, 3, casa_case: casa_case) }
+
+        before { create_list(:case_contact, 5) }
+
+        it "returns success with proper headers" do
+          get case_contact_reports_url(format: :csv),
+            params: { report: { casa_case_ids: [casa_case.id] } }
+
+          expect(response).to be_successful
+          expect(
+            response.headers["Content-Disposition"]
+          ).to include 'attachment; filename="case-contacts-report-'
+        end
+
+        context "when filter is provided" do
+          it "renders csv with contacts from the casa cases" do
+            get case_contact_reports_url(format: :csv),
+              params: { report: { casa_case_ids: [casa_case.id] } }
+
+            expect(response.body.lines.length).to eq(4)
+
+            case_contacts.each do |contact|
+              expect(response.body).to match(/^#{contact.id}/)
+            end
+          end
+        end
+
+        context "when filter not provided" do
+          it "renders a csv with all case contacts" do
+            get case_contact_reports_url(format: :csv),
+              params: { report: { casa_case_ids: nil } }
+
+            expect(response.body.lines.length).to eq(9)
+
+            CaseContact.all.pluck(:id).each do |id|
+              expect(response.body).to match(/^#{id}/)
+            end
+          end
+        end
+      end
     end
 
     context "as supervisor" do
