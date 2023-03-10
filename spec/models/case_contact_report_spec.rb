@@ -305,6 +305,29 @@ RSpec.describe CaseContactReport, type: :model do
       end
     end
 
+    describe "casa case number filter" do
+      let!(:casa_case) { create(:casa_case) }
+      let!(:case_contacts) { create_list(:case_contact, 3, casa_case: casa_case) }
+
+      before { create_list(:case_contact, 8) }
+
+      context "when providing casa case ids" do
+        it "returns all case contacts with the casa case ids" do
+          report = described_class.new({ casa_case_ids: [casa_case.id] })
+          expect(report.case_contacts.length).to eq(case_contacts.length)
+          expect(report.case_contacts).to eq(case_contacts)
+        end
+      end
+
+      context "when not providing casa case ids" do
+        it "return all case contacts" do
+          report = described_class.new({ casa_case_ids: nil })
+          expect(report.case_contacts.length).to eq(CaseContact.count)
+          expect(report.case_contacts).to eq(CaseContact.all)
+        end
+      end
+    end
+
     describe "multiple filter behavior" do
       it "only returns records that occured less than 30 days ago, the youth has transitioned, and the contact type was either court or therapist" do
         court = build(:contact_type, name: "Court")
