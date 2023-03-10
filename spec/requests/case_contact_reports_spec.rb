@@ -76,7 +76,7 @@ RSpec.describe "/case_contact_reports", type: :request do
 
         it "returns success with proper headers" do
           get case_contact_reports_url(format: :csv),
-            params: { report: { casa_case_ids: [casa_case.id] } }
+            params: {report: {casa_case_ids: [casa_case.id]}}
 
           expect(response).to be_successful
           expect(
@@ -87,7 +87,7 @@ RSpec.describe "/case_contact_reports", type: :request do
         context "when filter is provided" do
           it "renders csv with contacts from the casa cases" do
             get case_contact_reports_url(format: :csv),
-              params: { report: { casa_case_ids: [casa_case.id] } }
+              params: {report: {casa_case_ids: [casa_case.id]}}
 
             expect(response.body.lines.length).to eq(4)
 
@@ -100,7 +100,7 @@ RSpec.describe "/case_contact_reports", type: :request do
         context "when filter not provided" do
           it "renders a csv with all case contacts" do
             get case_contact_reports_url(format: :csv),
-              params: { report: { casa_case_ids: nil } }
+              params: {report: {casa_case_ids: nil}}
 
             expect(response.body.lines.length).to eq(9)
 

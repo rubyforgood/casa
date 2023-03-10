@@ -313,7 +313,7 @@ RSpec.describe CaseContactReport, type: :model do
 
       context "when providing casa case ids" do
         it "returns all case contacts with the casa case ids" do
-          report = described_class.new({ casa_case_ids: [casa_case.id] })
+          report = described_class.new({casa_case_ids: [casa_case.id]})
           expect(report.case_contacts.length).to eq(case_contacts.length)
           expect(report.case_contacts).to eq(case_contacts)
         end
@@ -321,7 +321,7 @@ RSpec.describe CaseContactReport, type: :model do
 
       context "when not providing casa case ids" do
         it "return all case contacts" do
-          report = described_class.new({ casa_case_ids: nil })
+          report = described_class.new({casa_case_ids: nil})
           expect(report.case_contacts.length).to eq(CaseContact.count)
           expect(report.case_contacts).to eq(CaseContact.all)
         end
