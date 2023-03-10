@@ -1,9 +1,8 @@
-noscript div {
-  color: #b71c1c;
+.noscript {
   position: fixed;
   left: 50%;
+  top: 25%;
   transform: translateX(-50%);
-  background: #eee;
-  padding: 0 1em;
+  padding: 5vw;
   z-index: 99;
 }
