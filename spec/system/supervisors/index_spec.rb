@@ -72,46 +72,6 @@ RSpec.describe "supervisors/index", type: :system do
       visit supervisors_path
     end
 
-    context "with active and deactivated supervisors" do
-      let!(:deacticated_supervisor) {
-        create(:supervisor, :inactive, display_name: "Deactivated supervisor", casa_org: organization)
-      }
-
-      # New test for active status filter (currently failing)
-      it "filters active and inactive supervisors" do
-        expect(page).to have_text("Status")
-        # by default, only active supervisors are shown
-        expect(page.all("table#supervisors > tbody > tr").count).to eq(2)        
-  
-        click_on "Status"
-        # find(:css, 'input[data-value="true"]').set(false)
-        click_on "Inactive"
-        expect(page.all("table#supervisors > tbody > tr").count).to eq(2)
-        
-        click_on "Status"
-        click_on "Active"
-        expect(page.all("table#supervisors > tbody > tr").count).to eq(0)
-      end
-
-      # Old test that needs to be removed 
-      # it "shows deactivated supervisor on show button click" do
-      #   expect(page).to have_selector("table#supervisors > tbody > tr td:nth-child(1)", count: 2)
-      #   expect(page).not_to have_text("Deactivated supervisor")
-
-      #   find("h1 + a", text: "Show deactivated").click
-
-      #   expect(page).to have_selector("table#supervisors > tbody > tr td:nth-child(1)", count: 3)
-      #   expect(page).to have_text("Deactivated supervisor")
-      #   expect(page).to have_selector("h1 + a", text: "Hide deactivated")
-
-      #   find("h1 + a", text: "Hide deactivated").click
-
-      #   expect(page).to have_selector("table#supervisors > tbody > tr td:nth-child(1)", count: 2)
-      #   expect(page).not_to have_text("Deactivated supervisor")
-      #   expect(page).to have_selector("h1 + a", text: "Show deactivated")
-      # end
-    end
-
     context "when sorting supervisors" do
       let(:expected_first_ordered_value) { "5" }
       let(:expected_last_ordered_value) { "2" }
@@ -207,7 +167,7 @@ RSpec.describe "supervisors/index", type: :system do
       end
 
       context "when only active checked" do
-        xit "filters the supervisors correctly", :aggregate_failures do
+        it "filters the supervisors correctly", :aggregate_failures do
           within(:css, ".supervisor-filters") do
             click_on "Status"
             find(:css, ".active").set(false)
@@ -223,7 +183,7 @@ RSpec.describe "supervisors/index", type: :system do
       end
 
       context "when only inactive checked" do
-        xit "filters the supervisors correctly", :aggregate_failures do
+        it "filters the supervisors correctly", :aggregate_failures do
           within(:css, ".supervisor-filters") do
             click_on "Status"
             find(:css, ".active").set(false)
@@ -239,7 +199,7 @@ RSpec.describe "supervisors/index", type: :system do
       end
 
       context "when both checked" do
-        xit "filters the supervisors correctly", :aggregate_failures do # TODO fix test
+        it "filters the supervisors correctly", :aggregate_failures do # TODO fix test
           within(:css, ".supervisor-filters") do
             click_on "Status"
             find(:css, ".active").set(true)
