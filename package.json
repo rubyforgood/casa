@@ -21,13 +21,13 @@
     "bootstrap": "4.6.2",
     "bootstrap-datepicker": "^1.9.0",
     "bootstrap-select": "^1.13.18",
-    "datatables.net-dt": "^1.13.2",
-    "esbuild": "^0.17.8",
+    "datatables.net-dt": "^1.13.4",
+    "esbuild": "^0.17.11",
     "faker": "^5.5.3",
-    "jquery": "^3.6.3",
+    "jquery": "^3.6.4",
     "lodash": "^4.17.21",
     "popper.js": "^1.16.1",
-    "sass": "^1.58.2",
+    "sass": "^1.58.3",
     "select2": "^4.0.13",
     "sweetalert2": "^11.3.5",
     "turbolinks": "^5.2.0"
@@ -35,11 +35,11 @@
   "version": "0.1.0",
   "devDependencies": {
     "@babel/preset-env": "^7.20.2",
-    "jest": "^29.4.2",
-    "jest-environment-jsdom": "^29.4.3",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
     "markdown-toc": "^1.2.0",
     "standard": "^17.0.0",
-    "start-server-and-test": "^1.15.4"
+    "start-server-and-test": "^2.0.0"
   },
   "standard": {
     "globals": [
