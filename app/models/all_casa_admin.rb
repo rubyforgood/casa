@@ -19,6 +19,7 @@ end
 #  invitation_sent_at     :datetime
 #  invitation_token       :string
 #  invited_by_type        :string
+#  phone_number           :string           default("")
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
 #  created_at             :datetime         not null
