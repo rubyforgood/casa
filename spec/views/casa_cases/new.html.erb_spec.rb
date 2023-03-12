@@ -21,15 +21,4 @@ RSpec.describe "casa_cases/new", type: :view do
 
     it { is_expected.to include(CGI.escapeHTML("Youth's Birth Month & Year")) }
   end
-
-  context "while signed in as supervisor" do
-    let(:user) { build_stubbed(:supervisor) }
-
-    before do
-      sign_in user
-    end
-
-    it { is_expected.not_to include(CGI.escapeHTML("Youth's Birth Month & Year")) }
-    it { is_expected.to have_selector("label", text: "2. Select All Contact Types") }
-  end
 end

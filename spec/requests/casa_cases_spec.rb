@@ -624,9 +624,10 @@ RSpec.describe "/casa_cases", type: :request do
     end
 
     describe "GET /new" do
-      it "renders a successful response" do
+      it "renders a redirect" do
         get new_casa_case_url
-        expect(response).to be_successful
+        expect(response).to be_redirect
+        expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
       end
     end
 
