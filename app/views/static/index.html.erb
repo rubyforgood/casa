@@ -7,7 +7,7 @@
 
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <%= stylesheet_link_tag "shared/noscript" %>
     <style>
 .app-images {
   height: 400px;
@@ -16,6 +16,16 @@
   </head>
 
   <body>
+    <noscript>
+      <div class="noscript alert alert-danger">
+        <h2 class="alert-heading">
+          Please enable javascript
+        </h2>
+        <p>
+          This app requires javascript to work
+        </p>
+      </div>
+    </noscript>
     <header class="pt-2" style="background: #0949D7">
       <div class="container max-w-7xl mx-auto pt-5 px-5">
         <nav>
