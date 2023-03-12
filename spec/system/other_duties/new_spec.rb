@@ -23,7 +23,7 @@ RSpec.describe "other_duties/new", type: :system do
       click_on "Submit"
 
       message = page.find("#other_duty_notes").native.attribute("validationMessage")
-      expect(message).to eq "Please fill out this field."
+      expect(message).to match(/Please fill (in|out) this field./)
     end
   end
 end
