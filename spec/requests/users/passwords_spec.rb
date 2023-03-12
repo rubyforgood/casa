@@ -8,8 +8,21 @@ RSpec.describe "Users::PasswordsController", type: :request do
   let!(:short_url_service_double) { instance_double(ShortUrlService) }
 
   before do
-    stub_twillio
-    stub_short_url
+    allow(TwilioService).to(
+      receive(:new).with(
+        org.twilio_api_key_sid, org.twilio_api_key_secret, org.twilio_account_sid
+      ).and_return(twillio_service_double)
+    )
+
+    allow(twillio_service_double).to receive(:send_sms)
+
+    allow(ShortUrlService).to receive(:new).and_return(short_url_service_double)
+
+    allow(short_url_service_double).to(
+      receive(:create_short_url).with(a_string_matching(edit_user_password_path))
+    )
+
+    allow(short_url_service_double).to receive(:short_url).and_return("reset_url")
   end
 
   describe "POST /create" do
@@ -92,24 +105,4 @@ RSpec.describe "Users::PasswordsController", type: :request do
       end
     end
   end
-end
-
-def stub_twillio
-  allow(TwilioService).to(
-    receive(:new).with(
-      org.twilio_api_key_sid, org.twilio_api_key_secret, org.twilio_account_sid
-    ).and_return(twillio_service_double)
-  )
-
-  allow(twillio_service_double).to receive(:send_sms).and_return(true)
-end
-
-def stub_short_url
-  allow(ShortUrlService).to receive(:new).and_return(short_url_service_double)
-
-  allow(short_url_service_double).to(
-    receive(:create_short_url).with(a_string_matching(edit_user_password_path)).and_return(true)
-  )
-
-  allow(short_url_service_double).to receive(:short_url).and_return("reset_url")
 end
