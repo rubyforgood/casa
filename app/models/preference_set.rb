@@ -8,6 +8,7 @@ end
 #
 #  id                     :bigint           not null, primary key
 #  case_volunteer_columns :jsonb            not null
+#  columns_state          :text
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  user_id                :bigint
