@@ -289,11 +289,14 @@ $('document').ready(() => {
       {
         name: '',
         render: (data, type, row, meta) => {
-          let active_volunteers = Number(row.active_volunteers);
           let no_attempt_volunteers = Number(row.no_attempt_for_two_weeks);
           let transition_volunteers = Number(row.transitions_volunteers);
+          let active_volunteers = Number(row.volunteer_assignments) - no_attempt_volunteers;
+          console.log('Active: ', active_volunteers);
+          console.log('No attempt: ', no_attempt_volunteers);
+          console.log('Transition: ', transition_volunteers);
           
-          let active_element = active_volunteers > 0 ? (
+          let active_element = active_volunteers ? (
             `
             <span class="attempted-contact" style="flex-grow: ${active_volunteers}">
               ${active_volunteers}
@@ -312,7 +315,7 @@ $('document').ready(() => {
           : '<span class="attempted-contact-end"><span>';
 
           let no_volunteers_element = '';
-          if (active_volunteers == 0 || no_attempt_volunteers == 0) {
+          if (active_volunteers <= 0 && no_attempt_volunteers <= 0) {
             no_volunteers_element = `<span class="no-volunteers" style="flex-grow: 1">No assigned volunteers</span>`;
           }
 

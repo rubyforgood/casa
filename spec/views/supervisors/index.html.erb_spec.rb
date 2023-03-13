@@ -29,17 +29,20 @@ RSpec.describe "supervisors/index", type: :view do
         create(:volunteer, :with_casa_cases, supervisor: supervisor)
       }
 
-      it "shows positive and negative numbers" do
+      it "shows positive and negative numbers", js: true do
         assign :supervisors, [supervisor]
         render template: "supervisors/index"
 
         parsed_html = Nokogiri.HTML5(rendered)
+        pp parsed_html
+        # TODO: We should stub table data so we can test these CSS selection
+        # assertions.
 
         expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to eq(1)
         expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to eq(1)
       end
 
-      it "accurately displays the number of active and inactive volunteers per supervisor" do
+      it "accurately displays the number of active and inactive volunteers per supervisor", js: true do
         create(:volunteer, :with_cases_and_contacts, supervisor: supervisor)
         assign :supervisors, [supervisor]
         render template: "supervisors/index"
