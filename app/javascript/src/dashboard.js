@@ -291,11 +291,7 @@ $('document').ready(() => {
         render: (data, type, row, meta) => {
           let no_attempt_volunteers = Number(row.no_attempt_for_two_weeks);
           let transition_volunteers = Number(row.transitions_volunteers);
-          let active_volunteers = Number(row.volunteer_assignments) - no_attempt_volunteers;
-          console.log('Active: ', active_volunteers);
-          console.log('No attempt: ', no_attempt_volunteers);
-          console.log('Transition: ', transition_volunteers);
-          
+          let active_volunteers = Number(row.volunteer_assignments) - no_attempt_volunteers;   
           let active_element = active_volunteers ? (
             `
             <span class="attempted-contact" style="flex-grow: ${active_volunteers}">
