@@ -102,7 +102,7 @@ locals: {casa_case: @casa_case, siblings_casa_cases: @siblings_casa_cases, form:
         </div>
       <% end %>
 
-      <% if Pundit.policy(current_user, casa_case).update_contact_types? %>
+      <% if policy(casa_case).update_contact_types? %>
         <%= render "case_contacts/contact_types",
                    form: form,
                    model: casa_case,

@@ -7,16 +7,32 @@
 repo_root="$(git rev-parse --show-toplevel)"
 . "$repo_root/bin/git_hooks/logger"
 
-log info "Checking dependency status"
+log info "Checking rails dependency status"
 
 if ! [ -x "$(command -v bundle)" ]; then
   log error "Command bundle could not be found"
   exit 1
 fi
 
+if ! [ -x "$(command -v yarn)" ]; then
+  log error "Command yarn could not be found"
+  exit 1
+fi
+
 if ! bundle check; then
-  log info "Updating dependencies"
+  log info "Updating rails dependencies"
   bundle install
 else
   log success "Dependencies up to date"
+fi
+
+# run yarn if package.json or yarn.lock has been changed
+# Credit to
+# https://gist.github.com/foca/3148204
+
+log info "Checking javascript dependency status"
+
+if [ $(git diff HEAD@{1}..HEAD@{0} -- "yarn.lock" | wc -l) -gt 0 ] || [ $(git diff HEAD@{1}..HEAD@{0} -- "package.json" | wc -l) -gt 0 ]; then
+  log info "Updating javascript dependencies"
+  yarn
 fi

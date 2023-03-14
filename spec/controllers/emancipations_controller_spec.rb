@@ -43,6 +43,7 @@ RSpec.describe EmancipationsController, type: :controller do
       it "will send the appropriate docx data" do
         expect(@controller).to receive(:send_data) { @controller.head :ok }
         show
+        expect(response).to have_http_status(:success)
       end
     end
   end
@@ -65,6 +66,7 @@ RSpec.describe EmancipationsController, type: :controller do
 
       it "will render the correct json message" do
         show
+        expect(response).to have_http_status(:unauthorized)
         expect(response.body).to eq({error: "Sorry, you are not authorized to perform this action. Did the session expire?"}.to_json)
       end
     end
@@ -99,6 +101,7 @@ RSpec.describe EmancipationsController, type: :controller do
 
       it "returns the correct error response" do
         subject
+        expect(response).to have_http_status(:not_found)
         expect(response.body).to eq({error: "Could not find case from id given by casa_case_id"}.to_json)
       end
     end
@@ -116,6 +119,7 @@ RSpec.describe EmancipationsController, type: :controller do
 
       it "returns the correct error response" do
         subject
+        expect(response).to have_http_status(:bad_request)
         expect(response.body).to eq({error: "The current case is not marked as transitioning"}.to_json)
       end
     end
@@ -126,6 +130,7 @@ RSpec.describe EmancipationsController, type: :controller do
       let(:check_item_action) { "add_category" }
 
       it "will add the category" do
+        expect(response).to have_http_status(:ok)
         expect { subject }.to change { casa_case.emancipation_categories.count }.by(1)
       end
 
@@ -138,6 +143,7 @@ RSpec.describe EmancipationsController, type: :controller do
 
         it "returns the correct error response" do
           subject
+          expect(response).to have_http_status(:bad_request)
           expect(response.body).to eq({error: "The record already exists as an association on the case"}.to_json)
         end
       end
@@ -149,6 +155,7 @@ RSpec.describe EmancipationsController, type: :controller do
       let(:check_item_action) { "add_option" }
 
       it "will add the option" do
+        expect(response).to have_http_status(:ok)
         expect { subject }.to change { casa_case.emancipation_options.count }.by(1)
       end
 
@@ -161,6 +168,7 @@ RSpec.describe EmancipationsController, type: :controller do
 
         it "returns the correct error response" do
           subject
+          expect(response).to have_http_status(:bad_request)
           expect(response.body).to eq({error: "The record already exists as an association on the case"}.to_json)
         end
       end
@@ -173,6 +181,7 @@ RSpec.describe EmancipationsController, type: :controller do
       let(:check_item_action) { "delete_category" }
 
       it "will remove the category" do
+        expect(response).to have_http_status(:ok)
         expect { subject }.to change { casa_case.emancipation_categories.count }.by(-1)
       end
 
@@ -185,6 +194,7 @@ RSpec.describe EmancipationsController, type: :controller do
 
         it "return an appropriate error message" do
           subject
+          expect(response).to have_http_status(:bad_request)
           expect(response.body).to eq({error: "Tried to destroy an association that does not exist"}.to_json)
         end
       end
@@ -197,6 +207,7 @@ RSpec.describe EmancipationsController, type: :controller do
       let(:check_item_action) { "delete_option" }
 
       it "will remove the option" do
+        expect(response).to have_http_status(:ok)
         expect { subject }.to change { casa_case.emancipation_options.count }.by(-1)
       end
 
@@ -209,6 +220,7 @@ RSpec.describe EmancipationsController, type: :controller do
 
         it "return an appropriate error message" do
           subject
+          expect(response).to have_http_status(:bad_request)
           expect(response.body).to eq({error: "Tried to destroy an association that does not exist"}.to_json)
         end
       end
@@ -220,6 +232,7 @@ RSpec.describe EmancipationsController, type: :controller do
       let(:check_item_action) { "set_option" }
 
       it "will add the emancipation option" do
+        expect(response).to have_http_status(:ok)
         expect { subject }.to change { casa_case.emancipation_options.count }.by(1)
       end
 
@@ -237,6 +250,7 @@ RSpec.describe EmancipationsController, type: :controller do
 
       it "return an appropriate error message" do
         subject
+        expect(response).to have_http_status(:bad_request)
         expect(response.body).to eq({error: "Check item action: #{check_item_action} is not a supported action"}.to_json)
       end
     end

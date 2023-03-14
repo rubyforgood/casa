@@ -46,6 +46,13 @@ Usage: `./update-branch <remote name>`
   
     ./bin/git_hooks/update-branch actual_casa
     ./bin/git_hooks/lint --unpushed
+
+### post-checkout
+    #!/bin/sh
+
+    ./bin/git_hooks/update-dependencies
+    ./bin/git_hooks/build-assets
+
 ### post-merge, post-rewrite  
     #!/bin/sh
 
