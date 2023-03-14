@@ -236,65 +236,131 @@ RSpec.describe "supervisors/index", type: :system do
   end
 
   context "when signed in as an admin" do
-    context "with both types of volunteers" do
-      let!(:no_contact_volunteer) do
-        create(
-          :volunteer,
-          :with_casa_cases,
-          :with_assigned_supervisor,
-          supervisor: supervisor_user,
-          casa_org: organization
-        )
-      end
+    let!(:other_supervisor) { create(:supervisor, casa_org: organization) }
+    let!(:no_active_volunteers_supervisor) { create(:supervisor, casa_org: organization) }
+    let!(:inactive_supervisor) { create(:supervisor, :inactive, casa_org: organization) }
 
-      let!(:no_contact_pre_transition_volunteer) do
-        create(
-          :volunteer,
-          :with_pretransition_age_case,
-          :with_assigned_supervisor,
-          supervisor: supervisor_user,
-          casa_org: organization
-        )
-      end
+    let!(:no_contact_volunteer) do
+      create(
+        :volunteer,
+        :with_casa_cases,
+        :with_assigned_supervisor,
+        supervisor: supervisor_user,
+        casa_org: organization
+      )
+    end
+
+    let!(:no_contact_pre_transition_volunteer) do
+      create(
+        :volunteer,
+        :with_pretransition_age_case,
+        :with_assigned_supervisor,
+        supervisor: supervisor_user,
+        casa_org: organization
+      )
+    end
+
+    let!(:with_contact_volunteer) do
+      create(
+        :volunteer,
+        :with_cases_and_contacts,
+        :with_assigned_supervisor,
+        supervisor: supervisor_user,
+        casa_org: organization
+      )
+    end
+
+    let!(:active_unassigned) do
+      create(
+        :volunteer,
+        :with_casa_cases,
+        casa_org: organization
+      )
+    end
+
+    let!(:other_supervisor_active_volunteer1) do
+      create(
+        :volunteer,
+        :with_cases_and_contacts,
+        :with_assigned_supervisor,
+        supervisor: other_supervisor,
+        casa_org: organization
+      )
+    end
+
+    let!(:other_supervisor_active_volunteer2) do
+      create(
+        :volunteer,
+        :with_cases_and_contacts,
+        :with_assigned_supervisor,
+        supervisor: other_supervisor,
+        casa_org: organization
+      )
+    end
+
+    let!(:other_supervisor_no_contact_volunteer1) do
+      create(
+        :volunteer,
+        :with_casa_cases,
+        :with_assigned_supervisor,
+        supervisor: other_supervisor,
+        casa_org: organization
+      )
+    end
+
+    let!(:other_supervisor_no_contact_volunteer2) do
+      create(
+        :volunteer,
+        :with_casa_cases,
+        :with_assigned_supervisor,
+        supervisor: other_supervisor,
+        casa_org: organization
+      )
+    end
+
+    before(:each) do
+      sign_in admin
+      visit supervisors_path
+    end
+
+    it "shows the correct volunteers for the first supervisor", js: true do
+      supervisor_table = page.find('table#supervisors')
+      expect(supervisor_table).to have_text(supervisor_user.display_name.html_safe)
+
+      supervisor_stats = page.find("tr#supervisor-#{supervisor_user.id}-information")
+
+      active_contacts_expected = 1
+      no_active_contacts_expected = 2
+      transition_aged_youth_expected = 2
+
+      expect(supervisor_stats.find('span.attempted-contact')).to have_text(active_contacts_expected)
+      expect(supervisor_stats.find('span.no-attempted-contact')).to have_text(no_active_contacts_expected)
+      expect(supervisor_stats.find('span.transition-aged-youth')).to have_text(transition_aged_youth_expected)
+    end
+
+    it "shows the correct volunteers for the second supervisor", js: true do
+      supervisor_table = page.find('table#supervisors')
+      expect(supervisor_table).to have_text(supervisor_user.display_name.html_safe)
+      expect(supervisor_table).to have_text(other_supervisor.display_name.html_safe)
+      expect(supervisor_table.all('div.supervisor_case_contact_stats').length).to eq(3)
       
-      let!(:with_contact_volunteer) do
-        create(
-          :volunteer,
-          :with_cases_and_contacts,
-          :with_assigned_supervisor,
-          supervisor: supervisor_user,
-          casa_org: organization
-        )
-      end
+      other_supervisor_stats = page.find("tr#supervisor-#{other_supervisor.id}-information")
 
-      let!(:active_unassigned) do
-        create(
-          :volunteer,
-          :with_casa_cases,
-          casa_org: organization
-        )
-      end
+      active_contacts_expected = 2 
+      no_active_contacts_expected = 2
+      transition_aged_youth_expected = 4
 
-      before do
-        sign_in admin
-        visit supervisors_path
-      end
+      expect(other_supervisor_stats.find('span.attempted-contact')).to have_text(active_contacts_expected)
+      expect(other_supervisor_stats.find('span.no-attempted-contact')).to have_text(no_active_contacts_expected)
+      expect(other_supervisor_stats.find('span.transition-aged-youth')).to have_text(transition_aged_youth_expected)
+    end
 
-      it "shows the correct volunteers for the supervisor", js: true do
-        supervisor_table = page.find('table#supervisors')
-        expect(supervisor_table).to have_text(supervisor_user.display_name.html_safe)
+    it "shows the correct text with a supervisor with no assigned volunteers", js: true do
+      supervisor_table = page.find('table#supervisors')
+      expect(supervisor_table).to have_text(no_active_volunteers_supervisor.display_name.html_safe)
 
-        supervisor_stats = supervisor_table.all('div.supervisor_case_contact_stats')
-        expect(supervisor_stats.length).to eq(1)
-        
-        active_contacts_expected = 1
-        no_active_contacts_expected = 2
-        transition_aged_youth_expected = 2
-
-        expect(supervisor_table.find('span.attempted-contact')).to have_text(active_contacts_expected)
-        expect(supervisor_table.find('span.no-attempted-contact')).to have_text(no_active_contacts_expected)
-        expect(supervisor_table.find('span.transition-aged-youth')).to have_text(transition_aged_youth_expected)
-      end
+      supervisor_no_volunteer_stats = page.find("tr#supervisor-#{no_active_volunteers_supervisor.id}-information")
+      expect(supervisor_no_volunteer_stats).to have_text("No assigned volunteers")      
     end
   end
 end
