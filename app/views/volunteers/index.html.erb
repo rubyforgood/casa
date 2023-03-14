@@ -99,6 +99,7 @@
     <button type="button" class="btn btn-primary mb-2 mb-md-0" data-toggle="modal" data-target="#visibleColumns">
       Pick displayed columns
     </button>
+     <%= current_user.id %>
   </div>
 </div>
 <br>
@@ -115,8 +116,7 @@
       <div class="modal-body">
         <div>
           Select columns:
-
-          <% Volunteer::TABLE_COLUMNS.each_with_index do |column, index| %>
+          <% Volunteer.columns_state(current_user).each do |column, index| %>
             <div class="row">
               <div class="col-sm-12">
                 <div class="form-check">

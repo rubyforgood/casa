@@ -12,6 +12,7 @@ const defineCaseContactsTable = function () {
 }
 
 $('document').ready(() => {
+  console.log('dashboard.js loaded')
   $.fn.dataTable.ext.search.push(
     function (settings, data, dataIndex) {
       if (settings.nTable.id !== 'casa-cases') {
@@ -90,7 +91,28 @@ $('document').ready(() => {
   const casaCasePath = id => `/casa_cases/${id}`
   const volunteersTable = $('table#volunteers').DataTable({
     autoWidth: false,
-    stateSave: false,
+    stateSave: true,
+    stateLoadCallback: function (settings, callback) {
+      console.log('stateLoadCallback')
+      console.log($(this))
+      $.ajax({ 
+        url: '/table_state',
+        dataType: 'json',
+        type: 'GET',
+        success: function(data) {
+          // Restore column visibility
+          console.log(data)
+          if(data && data.columns) {
+            for (let i = 0; i < data.columns.length; i++) {
+              data.columns[i].visible = data.columns[i].visible === 'true'
+            }
+          }
+          
+          callback(data);
+        }
+      });
+    },
+
     order: [[6, 'desc']],
     columns: [
       {
@@ -107,7 +129,7 @@ $('document').ready(() => {
       {
         name: 'email',
         render: (data, type, row, meta) => row.email,
-        visible: false
+       // visible: false
       },
       {
         className: 'supervisor-column',
@@ -171,7 +193,7 @@ $('document').ready(() => {
             : 'None ❌'
         },
         searchable: false,
-        visible: true
+        //visible: true
       },
       {
         name: 'contacts_made_in_past_days',
@@ -182,7 +204,7 @@ $('document').ready(() => {
           `
         },
         searchable: false,
-        visible: false
+        //visible: false
       },
       {
         name: 'hours_spent_in_days',
@@ -201,7 +223,7 @@ $('document').ready(() => {
           return row.extra_languages.length > 0 ? `<span class="language-icon" data-toggle="tooltip" title="${languages}">🌎</span>` : ''
         },
         searchable: false,
-        visible: true
+        //visible: true
       },
       {
         name: 'actions',
