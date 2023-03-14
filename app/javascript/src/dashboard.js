@@ -92,8 +92,20 @@ $('document').ready(() => {
   const volunteersTable = $('table#volunteers').DataTable({
     autoWidth: false,
     stateSave: true,
+    stateLoadCallback: function (settings, callback) {
+      console.log('stateLoadCallback')
+      $.ajax({ 
+        url: '/table_state',
+        dataType: 'json',
+        type: 'GET',
+        success: function(json) {
+          console.log(json )
+          callback(json);
+        }
+      });
+    },
     order: [[6, 'desc']],
-    columns: [
+    columns: [ 
       {
         name: 'display_name',
         render: (data, type, row, meta) => {
@@ -108,7 +120,7 @@ $('document').ready(() => {
       {
         name: 'email',
         render: (data, type, row, meta) => row.email,
-       visible: true
+      //  visible: true
       },
       {
         className: 'supervisor-column',
@@ -221,32 +233,11 @@ $('document').ready(() => {
         searchable: false
       }
     ],
-    stateLoadCallback: function (settings, callback) {
-      console.log('stateLoadCallback')
-      $.ajax({ 
-        url: '/table_state',
-        dataType: 'json',
-        type: 'GET',
-        success: function(data) {
-          // Restore column visibility
-          if(data) {
-            console.log('enter if statemen')
-              for (let[ key, value] of Object.entries(data)) {
-                // console.log(key, value)
-                const column = volunteersTable.column(key)
-                console.log('column', column.visible(value)) 
-                // column.visible(value)
-                if( value == true) {
-                  column.visible(true)
-                }
-              }
-              volunteersTable.columns.adjust().draw()
-          }
-          
-          callback(data);
-        }
-      });
-    },
+
+
+
+    
+    
     processing: true,
     serverSide: true,
     ajax: {
