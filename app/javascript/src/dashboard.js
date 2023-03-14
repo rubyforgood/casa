@@ -318,7 +318,7 @@ $('document').ready(() => {
           let transition_aged_element = `<span class="transition-aged-youth">${transition_aged_case_volunteers}</span>`;
 
           return `
-            <div class="stats_display supervisor_case_contact_stats">
+            <div class="supervisor_case_contact_stats">
               ${active_contact_element + no_contact_element + no_volunteers_element + transition_aged_element}
             </div>
           `;

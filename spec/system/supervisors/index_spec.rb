@@ -280,11 +280,11 @@ RSpec.describe "supervisors/index", type: :system do
         visit supervisors_path
       end
 
-      it "shows the correct volunteers for all supervisors", js: true do
+      it "shows the correct volunteers for the supervisor", js: true do
         supervisor_table = page.find('table#supervisors')
         expect(supervisor_table).to have_text(supervisor_user.display_name.html_safe)
 
-        supervisor_stats = supervisor_table.all('div.stats_display.supervisor_case_contact_stats')
+        supervisor_stats = supervisor_table.all('div.supervisor_case_contact_stats')
         expect(supervisor_stats.length).to eq(1)
         
         active_contacts_expected = 1
