@@ -92,27 +92,6 @@ $('document').ready(() => {
   const volunteersTable = $('table#volunteers').DataTable({
     autoWidth: false,
     stateSave: true,
-    stateLoadCallback: function (settings, callback) {
-      console.log('stateLoadCallback')
-      console.log($(this))
-      $.ajax({ 
-        url: '/table_state',
-        dataType: 'json',
-        type: 'GET',
-        success: function(data) {
-          // Restore column visibility
-          console.log(data)
-          if(data && data.columns) {
-            for (let i = 0; i < data.columns.length; i++) {
-              data.columns[i].visible = data.columns[i].visible === 'true'
-            }
-          }
-          
-          callback(data);
-        }
-      });
-    },
-
     order: [[6, 'desc']],
     columns: [
       {
@@ -129,7 +108,7 @@ $('document').ready(() => {
       {
         name: 'email',
         render: (data, type, row, meta) => row.email,
-       // visible: false
+       visible: true
       },
       {
         className: 'supervisor-column',
@@ -242,6 +221,32 @@ $('document').ready(() => {
         searchable: false
       }
     ],
+    stateLoadCallback: function (settings, callback) {
+      console.log('stateLoadCallback')
+      $.ajax({ 
+        url: '/table_state',
+        dataType: 'json',
+        type: 'GET',
+        success: function(data) {
+          // Restore column visibility
+          if(data) {
+            console.log('enter if statemen')
+              for (let[ key, value] of Object.entries(data)) {
+                // console.log(key, value)
+                const column = volunteersTable.column(key)
+                console.log('column', column.visible(value)) 
+                // column.visible(value)
+                if( value == true) {
+                  column.visible(true)
+                }
+              }
+              volunteersTable.columns.adjust().draw()
+          }
+          
+          callback(data);
+        }
+      });
+    },
     processing: true,
     serverSide: true,
     ajax: {
@@ -278,6 +283,7 @@ $('document').ready(() => {
 
   // Because the table saves state, we have to check/uncheck modal inputs based on what
   // columns are visible
+
   volunteersTable.columns().every(function (index) {
     const columnVisible = this.visible()
 

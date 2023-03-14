@@ -98,8 +98,9 @@
   <div class="ml-3">
     <button type="button" class="btn btn-primary mb-2 mb-md-0" data-toggle="modal" data-target="#visibleColumns">
       Pick displayed columns
-    </button>
-     <%= current_user.id %>
+    </button> <br>
+    user_id <%= current_user.id %> <br>
+    <%= Volunteer.columns_state(current_user) %>
   </div>
 </div>
 <br>
