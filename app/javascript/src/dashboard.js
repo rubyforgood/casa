@@ -269,7 +269,7 @@ $('document').ready(() => {
   })
 
   // Add Supervisors Table
-  
+
   const supervisorsTable = $('table#supervisors').DataTable({
     autoWidth: false,
     stateSave: false,
@@ -289,40 +289,42 @@ $('document').ready(() => {
       {
         name: '',
         render: (data, type, row, meta) => {
-          let no_contact_volunteers = Number(row.no_attempt_for_two_weeks);
-          let transition_aged_case_volunteers = Number(row.transitions_volunteers);
-          let active_contact_volunteers = Number(row.volunteer_assignments) - no_contact_volunteers;
-          let active_contact_element = active_contact_volunteers ? (
+          const noContactVolunteers = Number(row.no_attempt_for_two_weeks)
+          const transitionAgedCaseVolunteers = Number(row.transitions_volunteers)
+          const activeContactVolunteers = Number(row.volunteer_assignments) - noContactVolunteers
+          const activeContactElement = activeContactVolunteers
+            ? (
             `
-            <span class="attempted-contact" style="flex-grow: ${active_contact_volunteers}">
-              ${active_contact_volunteers}
+            <span class="attempted-contact" style="flex-grow: ${activeContactVolunteers}">
+              ${activeContactVolunteers}
             </span>
             `
-          )
-          : '';
+              )
+            : ''
 
-          let no_contact_element = no_contact_volunteers > 0 ? (
+          const noContactElement = noContactVolunteers > 0
+            ? (
             `
-            <span class="no-attempted-contact" style="flex-grow: ${no_contact_volunteers}">
-              ${no_contact_volunteers}
+            <span class="no-attempted-contact" style="flex-grow: ${noContactVolunteers}">
+              ${noContactVolunteers}
             </span>
             `
-          )
-          : '<span class="attempted-contact-end"><span>';
+              )
+            : '<span class="attempted-contact-end"><span>'
 
-          let no_volunteers_element = '';
-          if (active_contact_volunteers <= 0 && no_contact_volunteers <= 0) {
-            no_volunteers_element = `<span class="no-volunteers" style="flex-grow: 1">No assigned volunteers</span>`;
+          let noVolunteersElement = ''
+          if (activeContactVolunteers <= 0 && noContactVolunteers <= 0) {
+            noVolunteersElement = '<span class="no-volunteers" style="flex-grow: 1">No assigned volunteers</span>'
           }
 
-          let transition_aged_element = `<span class="transition-aged-youth">${transition_aged_case_volunteers}</span>`;
+          const transitionAgedElement = `<span class="transition-aged-youth">${transitionAgedCaseVolunteers}</span>`
 
           return `
             <div class="supervisor_case_contact_stats">
-              ${active_contact_element + no_contact_element + no_volunteers_element + transition_aged_element}
+              ${activeContactElement + noContactElement + noVolunteersElement + transitionAgedElement}
             </div>
-          `;
-        },
+          `
+        }
       },
       {
         name: 'actions',
@@ -360,9 +362,9 @@ $('document').ready(() => {
       $('[data-toggle=tooltip]').tooltip()
     },
     createdRow: function (row, data, dataIndex, cells) {
-      row.setAttribute('id', `supervisor-${data.id}-information`);
-      row.setAttribute('style', 'supervisor_table_row');
-    },
+      row.setAttribute('id', `supervisor-${data.id}-information`)
+      row.setAttribute('style', 'supervisor_table_row')
+    }
   })
 
   const casaCasesTable = $('table#casa-cases').DataTable({
