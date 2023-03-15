@@ -237,6 +237,8 @@ RSpec.describe "supervisors/index", type: :system do
 
   context "when signed in as an admin" do
     let!(:other_supervisor) { create(:supervisor, casa_org: organization) }
+    let!(:no_contacts_supervisor) { create(:supervisor, casa_org: organization) }
+    let!(:only_contacts_supervisor) { create(:supervisor, casa_org: organization) }
     let!(:no_active_volunteers_supervisor) { create(:supervisor, casa_org: organization) }
     let!(:inactive_supervisor) { create(:supervisor, :inactive, casa_org: organization) }
 
@@ -318,41 +320,134 @@ RSpec.describe "supervisors/index", type: :system do
       )
     end
 
-    before(:each) do
+    let!(:only_contact_volunteer1) do
+      create(
+        :volunteer,
+        :with_cases_and_contacts,
+        :with_assigned_supervisor,
+        supervisor: only_contacts_supervisor,
+        casa_org: organization
+      )
+    end
+
+    let!(:only_contact_volunteer2) do
+      create(
+        :volunteer,
+        :with_cases_and_contacts,
+        :with_assigned_supervisor,
+        supervisor: only_contacts_supervisor,
+        casa_org: organization
+      )
+    end
+
+    let!(:only_contact_volunteer3) do
+      create(
+        :volunteer,
+        :with_cases_and_contacts,
+        :with_assigned_supervisor,
+        supervisor: only_contacts_supervisor,
+        casa_org: organization
+      )
+    end
+
+    
+    let!(:no_contact_volunteer1) do
+      create(
+        :volunteer,
+        :with_casa_cases,
+        :with_assigned_supervisor,
+        supervisor: no_contacts_supervisor,
+        casa_org: organization
+      )
+    end
+
+    let!(:no_contact_volunteer2) do
+      create(
+        :volunteer,
+        :with_casa_cases,
+        :with_assigned_supervisor,
+        supervisor: no_contacts_supervisor,
+        casa_org: organization
+      )
+    end
+
+    before do
       sign_in admin
       visit supervisors_path
     end
 
-    it "shows the correct volunteers for the first supervisor", js: true do
+    it "shows all active supervisors", js: true do
+      supervisor_table = page.find('table#supervisors')
+      expect(supervisor_table.all('div.supervisor_case_contact_stats').length).to eq(5)
+    end
+
+    it "shows the correct volunteers for the first supervisor with both volunteer types", js: true do
       supervisor_table = page.find('table#supervisors')
       expect(supervisor_table).to have_text(supervisor_user.display_name.html_safe)
 
       supervisor_stats = page.find("tr#supervisor-#{supervisor_user.id}-information")
-
       active_contacts_expected = 1
       no_active_contacts_expected = 2
       transition_aged_youth_expected = 2
+      active_contact_element = supervisor_stats.find('span.attempted-contact')
+      no_active_contact_element = supervisor_stats.find('span.no-attempted-contact')
 
-      expect(supervisor_stats.find('span.attempted-contact')).to have_text(active_contacts_expected)
-      expect(supervisor_stats.find('span.no-attempted-contact')).to have_text(no_active_contacts_expected)
+      expect(active_contact_element).to have_text(active_contacts_expected)
+      expect(active_contact_element.style('flex-grow')).to eq({'flex-grow' => active_contacts_expected.to_s}) 
+      expect(no_active_contact_element).to have_text(no_active_contacts_expected)
+      expect(no_active_contact_element.style('flex-grow')).to eq({'flex-grow' => no_active_contacts_expected.to_s})
       expect(supervisor_stats.find('span.transition-aged-youth')).to have_text(transition_aged_youth_expected)
     end
 
-    it "shows the correct volunteers for the second supervisor", js: true do
+    it "shows the correct volunteers for the second supervisor with both volunteer types", js: true do
       supervisor_table = page.find('table#supervisors')
-      expect(supervisor_table).to have_text(supervisor_user.display_name.html_safe)
       expect(supervisor_table).to have_text(other_supervisor.display_name.html_safe)
-      expect(supervisor_table.all('div.supervisor_case_contact_stats').length).to eq(3)
       
-      other_supervisor_stats = page.find("tr#supervisor-#{other_supervisor.id}-information")
-
+      supervisor_stats = page.find("tr#supervisor-#{other_supervisor.id}-information")
       active_contacts_expected = 2 
       no_active_contacts_expected = 2
       transition_aged_youth_expected = 4
+      active_contact_element = supervisor_stats.find('span.attempted-contact')
+      no_active_contact_element = supervisor_stats.find('span.no-attempted-contact')
 
-      expect(other_supervisor_stats.find('span.attempted-contact')).to have_text(active_contacts_expected)
-      expect(other_supervisor_stats.find('span.no-attempted-contact')).to have_text(no_active_contacts_expected)
-      expect(other_supervisor_stats.find('span.transition-aged-youth')).to have_text(transition_aged_youth_expected)
+      expect(active_contact_element).to have_text(active_contacts_expected)
+      expect(active_contact_element.style('flex-grow')).to eq({'flex-grow' => active_contacts_expected.to_s})
+      expect(no_active_contact_element).to have_text(no_active_contacts_expected)
+      expect(no_active_contact_element.style('flex-grow')).to eq({'flex-grow' => no_active_contacts_expected.to_s})
+      expect(supervisor_stats.find('span.transition-aged-youth')).to have_text(transition_aged_youth_expected)
+    end
+
+    it "shows the correct element for a supervisor with only contact volunteers", js: true do
+      supervisor_table = page.find('table#supervisors')
+      expect(supervisor_table).to have_text(only_contacts_supervisor.display_name.html_safe)
+
+      supervisor_stats = page.find("tr#supervisor-#{only_contacts_supervisor.id}-information")
+      active_contacts_expected = 3
+      transition_aged_youth_expected = 3
+      active_contact_element = supervisor_stats.find('span.attempted-contact')
+      active_contact_end_element = supervisor_stats.find('span.attempted-contact-end')
+
+      expect { supervisor_stats.find('span.no-attempted-contact') }.to raise_error(Capybara::ElementNotFound)
+      expect(active_contact_element).to have_text(active_contacts_expected)
+      expect(active_contact_element.style('flex-grow')).to eq({'flex-grow' => active_contacts_expected.to_s})
+      expect(active_contact_end_element).not_to be_nil
+      expect(supervisor_stats.find('span.transition-aged-youth')).to have_text(transition_aged_youth_expected)
+    end
+
+    it "shows the correct element for a supervisor with only no contact volunteers", js: true do
+      supervisor_table = page.find('table#supervisors')
+      expect(supervisor_table).to have_text(no_contacts_supervisor.display_name.html_safe)
+
+      supervisor_stats = page.find("tr#supervisor-#{no_contacts_supervisor.id}-information")
+      no_contacts_expected = 2
+      transition_aged_youth_expected = 2
+      no_contact_element = supervisor_stats.find('span.no-attempted-contact')
+
+      expect { supervisor_stats.find('span.attempted-contact') }.to raise_error(Capybara::ElementNotFound)
+      expect { supervisor_stats.find('span.attmepted-contact-end') }.to raise_error(Capybara::ElementNotFound)
+      expect(no_contact_element).to have_text(no_contacts_expected)
+      expect(no_contact_element.style('flex-grow')).to eq({'flex-grow' => no_contacts_expected.to_s})
+      expect(supervisor_stats.find('span.transition-aged-youth')).to have_text(transition_aged_youth_expected)
     end
 
     it "shows the correct text with a supervisor with no assigned volunteers", js: true do
@@ -360,7 +455,9 @@ RSpec.describe "supervisors/index", type: :system do
       expect(supervisor_table).to have_text(no_active_volunteers_supervisor.display_name.html_safe)
 
       supervisor_no_volunteer_stats = page.find("tr#supervisor-#{no_active_volunteers_supervisor.id}-information")
-      expect(supervisor_no_volunteer_stats).to have_text("No assigned volunteers")      
+      expect(supervisor_no_volunteer_stats).to have_text("No assigned volunteers")
+      expect(supervisor_no_volunteer_stats.find('span.no-volunteers')).to be_truthy
+      expect(supervisor_no_volunteer_stats.find('span.no-volunteers').style('flex-grow')).to eq({'flex-grow' => '1'})
     end
   end
 end
