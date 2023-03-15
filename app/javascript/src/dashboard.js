@@ -92,25 +92,30 @@ $('document').ready(() => {
   const volunteersTable = $('table#volunteers').DataTable({
     autoWidth: false,
     stateSave: true,
-    "stateSaveCallback": function (settings, data) {
+    stateSaveCallback: function (settings, data) {
       console.log('from stateSaveCallback')
       $.ajax({
-        "url": "/save_table_state",
-        "data": data,
-        "dataType": "json",
-        "type": "POST",
-        "success": function () {}
+        url: "/save_table_state",
+        data: {
+          // console.log(data),
+          table_state: JSON.stringify(data),
+        },
+        dataType: "json",
+        type: "POST",
+        "success": function () {console.log(data)}
       });
-      console.log(data)
+     
     },
     stateLoadCallback: function (settings, callback) {
       console.log('stateLoadCallback')
+      console.log(this.columns)
       $.ajax({ 
         url: '/table_state',
         dataType: 'json',
         type: 'GET',
         success: function(json) {
-          console.log(json)
+
+          console.log('success')
           callback(json);
         }
       });

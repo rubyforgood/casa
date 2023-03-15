@@ -22,32 +22,23 @@ class VolunteersController < ApplicationController
   end
 
   def table_state
-    binding.pry
     if PreferenceSet.find_by(user: current_user).nil? && PreferenceSet.find_by(user: current_user).columns_state.nil?
-    
-    # binding.pry
-    
+      render json: {message: "No table state saved"}
     else
-      # binding.pry
       state_data = JSON.parse(PreferenceSet.find_by(user: current_user).columns_state)
-    #  p state_data
       render json: state_data
-
     end
   end
 
   def save_table_state
-    # binding.pry
-    state = request.body.read
-    # binding.pry
-    ps = PreferenceSet.find_or_create_by(user: current_user)
-    
-    # binding.pry
-    
-    ps.update(columns_state: state.to_json)
-    # render json:  {message: "New table state saved"}
-  end
+    table_state = JSON.parse(params["table_state"])
 
+    preference_set = PreferenceSet.find_or_create_by(user: current_user)
+    preference_set.update(columns_state: table_state.to_json)
+
+    render json:  {message: "New table state saved"}
+  end
+ 
   def new
     @volunteer = current_organization.volunteers.new
     authorize @volunteer

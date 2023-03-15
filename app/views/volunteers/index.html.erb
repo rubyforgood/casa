@@ -101,6 +101,7 @@
     </button> <br>
     user_id <%= current_user.id %> <br>
     <%#=  JSON.parse( Volunteer.columns_state(current_user).to_json ) %>
+    <%=  Volunteer.columns_state(current_user) %>
   </div>
 </div>
 <br>
@@ -146,7 +147,8 @@
       <table
         class="table table-striped table-bordered"
         id="volunteers"
-        data-source="<%= datatable_volunteers_path format: :json %>">
+        <%# volunteers#datatable %>
+        data-source="<%= datatable_volunteers_path format: :json %>"> 
         <thead>
           <tr>
             <th>Name</th>
