@@ -31,3 +31,5 @@ require('./src/select')
 require('./src/sidebar')
 require('./src/tooltip')
 require('./src/reimbursements')
+
+require('./src/session_timeout_poller.js')
