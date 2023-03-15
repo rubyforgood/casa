@@ -358,4 +358,56 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
       )
     end
   end
+
+  describe "DELETE /destroy" do
+    subject(:request) do
+      delete casa_case_court_date_path(casa_case, court_date)
+
+      response
+    end
+
+    shared_examples "successful deletion" do
+      it "removes court date record" do
+        court_date
+        expect { request }.to change { CourtDate.count }.by(-1)
+      end
+
+      it { is_expected.to redirect_to(casa_case_path(casa_case)) }
+
+      it "shows correct flash message" do
+        request
+        expect(flash[:notice]).to match(/Court date was successfully deleted./)
+      end
+    end
+
+    shared_examples "unsuccessful deletion" do
+      it "does not remove court date record" do
+        court_date
+        expect { request }.not_to change { CourtDate.count }
+      end
+
+      it { is_expected.to redirect_to(casa_case_court_date_path(casa_case, court_date)) }
+
+      it "shows correct flash message" do
+        request
+        expect(flash[:notice]).to match(/You can delete only future court dates./)
+      end
+    end
+
+    context "when the court date is in the past" do
+      it_behaves_like "unsuccessful deletion"
+    end
+
+    context "when the court date is today" do
+      let(:court_date) { create(:court_date, date: Date.current) }
+
+      it_behaves_like "unsuccessful deletion"
+    end
+
+    context "when the court date is in the future" do
+      let(:court_date) { create(:court_date, date: 1.day.from_now) }
+
+      it_behaves_like "successful deletion"
+    end
+  end
 end

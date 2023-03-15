@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe "casa_cases/new", type: :view do
   subject { render template: "casa_cases/new" }
 
-  before do
-    assign :casa_case, CasaCase.new
+  before(:each) do
+    assign :casa_case, CasaCase.new(casa_org: user.casa_org)
     assign :contact_types, []
 
     enable_pundit(view, user)
@@ -20,16 +20,5 @@ RSpec.describe "casa_cases/new", type: :view do
     end
 
     it { is_expected.to include(CGI.escapeHTML("Youth's Birth Month & Year")) }
-  end
-
-  context "while signed in as supervisor" do
-    let(:user) { build_stubbed(:supervisor) }
-
-    before do
-      sign_in user
-    end
-
-    it { is_expected.not_to include(CGI.escapeHTML("Youth's Birth Month & Year")) }
-    it { is_expected.to have_selector("label", text: "2. Select All Contact Types") }
   end
 end

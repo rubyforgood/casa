@@ -115,6 +115,19 @@ multiple: true}
         </div>
 
         <div class="field form-group">
+          <label><strong>Casa Case Numbers:</strong></label>
+          <%= f.collection_select(
+                  :casa_case_ids,
+                  CasaCase.by_organization(current_user.casa_org),
+                  :id,
+                  :case_number,
+                  {include_hidden: false},
+                  {class: "form-control select2", data: {placeholder: "-Select Casa Case Numbers-"},
+multiple: true}
+              ) %>
+        </div>
+
+        <div class="field form-group">
           <label><strong>Want Driving Reimbursement:</strong></label>
           <%= f.collection_radio_buttons :want_driving_reimbursement, boolean_choices, :last, :first do |b| %>
             <div class="form-check">

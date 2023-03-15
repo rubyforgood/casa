@@ -52,7 +52,26 @@ class ApplicationPolicy
   end
 
   def same_org?
-    user.casa_org == record.casa_org
+    case record
+    when CasaOrg
+      user.casa_org == record
+    when CasaAdmin, CasaCase, Volunteer, Supervisor, HearingType, ContactTypeGroup
+      user.casa_org == record.casa_org
+    when CourtDate, CaseContact
+      user.casa_org == record&.casa_case&.casa_org
+    when LearningHour
+      user.casa_org == record&.user&.casa_org
+    when ChecklistItem
+      user.casa_org == record&.hearing_type&.casa_org
+    when ContactType
+      user.casa_org == record&.contact_type_group&.casa_org
+    when Followup
+      user.casa_org == record&.case_contact&.casa_case&.casa_org
+    when Class # Authorizing against collection, does not belong to org
+      true
+    else # Type not recognized, no auth since we can't verify the record
+      false
+    end
   end
 
   def is_admin_same_org?
@@ -88,6 +107,10 @@ class ApplicationPolicy
 
   def admin_or_supervisor_or_volunteer?
     admin_or_supervisor? || is_volunteer?
+  end
+
+  def admin_or_supervisor_or_volunteer_same_org?
+    admin_or_supervisor_same_org? || is_volunteer_same_org?
   end
 
   def see_reports_page?
