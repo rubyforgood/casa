@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node
+#!/usr/bin/env node
 
 const CLIArgs = process.argv.slice(2)
 const isWatching = CLIArgs.includes('--watch')
