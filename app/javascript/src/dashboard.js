@@ -12,7 +12,7 @@ const defineCaseContactsTable = function () {
 }
 
 $('document').ready(() => {
-  console.log('dashboard.js loaded')
+
   $.fn.dataTable.ext.search.push(
     function (settings, data, dataIndex) {
       if (settings.nTable.id !== 'casa-cases') {
@@ -93,29 +93,24 @@ $('document').ready(() => {
     autoWidth: false,
     stateSave: true,
     stateSaveCallback: function (settings, data) {
-      console.log('from stateSaveCallback')
       $.ajax({
         url: "/save_table_state",
         data: {
-          // console.log(data),
+        
           table_state: JSON.stringify(data),
         },
         dataType: "json",
         type: "POST",
-        "success": function () {console.log(data)}
+        success: function () { }
       });
      
     },
     stateLoadCallback: function (settings, callback) {
-      console.log('stateLoadCallback')
-      console.log(this.columns)
       $.ajax({ 
         url: '/table_state',
         dataType: 'json',
         type: 'GET',
         success: function(json) {
-
-          console.log('success')
           callback(json);
         }
       });
@@ -136,7 +131,6 @@ $('document').ready(() => {
       {
         name: 'email',
         render: (data, type, row, meta) => row.email,
-      // visible: true
       },
       {
         className: 'supervisor-column',
@@ -200,7 +194,6 @@ $('document').ready(() => {
             : 'None ❌'
         },
         searchable: false,
-        //visible: true
       },
       {
         name: 'contacts_made_in_past_days',
@@ -211,7 +204,6 @@ $('document').ready(() => {
           `
         },
         searchable: false,
-        //visible: false
       },
       {
         name: 'hours_spent_in_days',
@@ -230,7 +222,6 @@ $('document').ready(() => {
           return row.extra_languages.length > 0 ? `<span class="language-icon" data-toggle="tooltip" title="${languages}">🌎</span>` : ''
         },
         searchable: false,
-        //visible: true
       },
       {
         name: 'actions',
@@ -285,10 +276,8 @@ $('document').ready(() => {
 
   // Because the table saves state, we have to check/uncheck modal inputs based on what
   // columns are visible
-
   volunteersTable.columns().every(function (index) {
     const columnVisible = this.visible()
-
     if (columnVisible) {
       $('#visibleColumns input[data-column="' + index + '"]').prop('checked', true)
     } else {
@@ -344,23 +333,7 @@ $('document').ready(() => {
     casaCasesTable.draw()
   })
 
-
-  // $('#example').dataTable( {
-  //   "stateSave": true,
-  //   "stateSaveCallback": function (settings, data) {
-  //     // Send an Ajax request to the server with the state object
-  //     $.ajax( {
-  //       "url": "/state_save",
-  //       "data": data,
-  //       "dataType": "json",
-  //       "type": "POST",
-  //       "success": function () {}
-  //     } );
-  //   }
-  // } );
-
   $('input.toggle-visibility').on('click', function (e) {
-    // Get the column API object and toggle the visibility
     const column = volunteersTable.column($(this).attr('data-column'))
     column.visible(!column.visible())
     volunteersTable.columns.adjust().draw()

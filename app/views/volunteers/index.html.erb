@@ -99,7 +99,6 @@
     <button type="button" class="btn btn-primary mb-2 mb-md-0" data-toggle="modal" data-target="#visibleColumns">
       Pick displayed columns
     </button> <br>
-    user_id <%= current_user.id %> <br>
     <%#=  JSON.parse( Volunteer.columns_state(current_user).to_json ) %>
     <%=  Volunteer.columns_state(current_user) %>
   </div>
@@ -118,7 +117,8 @@
       <div class="modal-body">
         <div>
           Select columns:
-           <% Volunteer::TABLE_COLUMNS.each do |column, index| %>
+           <%# Volunteer.columns_state(current_user).each do |column, index| %>
+           <% Volunteer::TABLE_COLUMNS.each_with_index do |column, index| %>
             <div class="row">
               <div class="col-sm-12">
                 <div class="form-check">
@@ -147,7 +147,6 @@
       <table
         class="table table-striped table-bordered"
         id="volunteers"
-        <%# volunteers#datatable %>
         data-source="<%= datatable_volunteers_path format: :json %>"> 
         <thead>
           <tr>

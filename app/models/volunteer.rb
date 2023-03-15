@@ -14,7 +14,7 @@ class Volunteer < User
   CONTACT_MADE_IN_PAST_DAYS_COLUMN = "contact_made_in_past_#{CONTACT_MADE_IN_PAST_DAYS_NUM}_days".freeze
   HOURS_SPENT_IN_DAYS_COLUMN = "hours_spent_in_days"
   EXTRA_LANGUAGES_COLUMN = "has_any_extra_languages"
-  ACTIONS_COLUMN = "actions"
+  ACTIONS_COLUMN = "actions"  
   TABLE_COLUMNS = [
     NAME_COLUMN,
     EMAIL_COLUMN,
@@ -31,11 +31,15 @@ class Volunteer < User
    serialize :columns, JSON
 
   def self.columns_state(user)
+    cols = []
     if PreferenceSet.find_by(user: user.id).nil?
-      TABLE_COLUMNS
+      # TABLE_COLUMNS
     else
-      PreferenceSet.find_by(user: user.id).columns_state
+      JSON.parse(PreferenceSet.find_by(user: user.id).columns_state)["columns"].each_with_index do |col, index|
+        cols << TABLE_COLUMNS[index] if col["visible"] == true
+      end
     end
+    return cols[-6..-1]
   end
 
   CONTACT_MADE_IN_DAYS_NUM = 14
