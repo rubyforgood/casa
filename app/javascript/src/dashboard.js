@@ -361,6 +361,7 @@ $('document').ready(() => {
     },
     createdRow: function (row, data, dataIndex, cells) {
       row.setAttribute('id', `supervisor-${data.id}-information`);
+      row.setAttribute('style', 'supervisor_table_row');
     },
   })
 

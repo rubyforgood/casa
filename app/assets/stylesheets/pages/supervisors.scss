@@ -3,6 +3,7 @@ $indicator_positive_color: #4caf50;
 
 .supervisor_case_contact_stats {
   display: flex;
+  flex-grow: 1;
 
   &:first-child {
     display: flex;
@@ -49,19 +50,21 @@ $indicator_positive_color: #4caf50;
     }
   }
 
-  &.legend {
-    align-items: center;
-    margin-bottom: 0.25rem;
-    margin-top: 1em;
+}
 
-    span {
-      &:last-child {
-        padding: .5em;
-      }
+.legend {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25rem;
+  margin-top: 1em;
 
-      padding: .5em 1em;
-      flex-grow: 1;
+  .supervisor_case_contact_stats > span {
+    &:last-child {
+      padding: .5em;
     }
+
+    padding: .5em 1em;
+    flex-grow: 1;
   }
 }
 
