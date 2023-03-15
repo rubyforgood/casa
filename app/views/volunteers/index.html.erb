@@ -100,7 +100,7 @@
       Pick displayed columns
     </button> <br>
     user_id <%= current_user.id %> <br>
-    <%= Volunteer.columns_state(current_user) %>
+    <%#=  JSON.parse( Volunteer.columns_state(current_user).to_json ) %>
   </div>
 </div>
 <br>
@@ -117,7 +117,7 @@
       <div class="modal-body">
         <div>
           Select columns:
-          <% Volunteer.columns_state(current_user).each do |column, index| %>
+           <% Volunteer::TABLE_COLUMNS.each do |column, index| %>
             <div class="row">
               <div class="col-sm-12">
                 <div class="form-check">

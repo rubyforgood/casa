@@ -92,6 +92,17 @@ $('document').ready(() => {
   const volunteersTable = $('table#volunteers').DataTable({
     autoWidth: false,
     stateSave: true,
+    "stateSaveCallback": function (settings, data) {
+      console.log('from stateSaveCallback')
+      $.ajax({
+        "url": "/save_table_state",
+        "data": data,
+        "dataType": "json",
+        "type": "POST",
+        "success": function () {}
+      });
+      console.log(data)
+    },
     stateLoadCallback: function (settings, callback) {
       console.log('stateLoadCallback')
       $.ajax({ 
@@ -99,7 +110,7 @@ $('document').ready(() => {
         dataType: 'json',
         type: 'GET',
         success: function(json) {
-          console.log(json )
+          console.log(json)
           callback(json);
         }
       });
@@ -120,7 +131,7 @@ $('document').ready(() => {
       {
         name: 'email',
         render: (data, type, row, meta) => row.email,
-      //  visible: true
+      // visible: true
       },
       {
         className: 'supervisor-column',
@@ -233,11 +244,6 @@ $('document').ready(() => {
         searchable: false
       }
     ],
-
-
-
-    
-    
     processing: true,
     serverSide: true,
     ajax: {
@@ -332,6 +338,21 @@ $('document').ready(() => {
   $('.casa-case-filters input[type="checkbox"]').on('click', function () {
     casaCasesTable.draw()
   })
+
+
+  // $('#example').dataTable( {
+  //   "stateSave": true,
+  //   "stateSaveCallback": function (settings, data) {
+  //     // Send an Ajax request to the server with the state object
+  //     $.ajax( {
+  //       "url": "/state_save",
+  //       "data": data,
+  //       "dataType": "json",
+  //       "type": "POST",
+  //       "success": function () {}
+  //     } );
+  //   }
+  // } );
 
   $('input.toggle-visibility').on('click', function (e) {
     // Get the column API object and toggle the visibility

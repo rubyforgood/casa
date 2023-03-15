@@ -1,8 +1,8 @@
 class VolunteersController < ApplicationController
   include SmsBodyHelper
 
-  before_action :set_volunteer, except: %i[index new create datatable stop_impersonating, table_state]
-  after_action :verify_authorized, except: %i[stop_impersonating, table_state]
+  before_action :set_volunteer, except: %i[index new create datatable stop_impersonating table_state save_table_state]
+  after_action :verify_authorized, except: %i[stop_impersonating table_state save_table_state]
 
   def index
     authorize Volunteer
@@ -22,14 +22,30 @@ class VolunteersController < ApplicationController
   end
 
   def table_state
-    if PreferenceSet.find_by(user: current_user).nil?
-
+    binding.pry
+    if PreferenceSet.find_by(user: current_user).nil? && PreferenceSet.find_by(user: current_user).columns_state.nil?
+    
+    # binding.pry
+    
     else
+      # binding.pry
       state_data = JSON.parse(PreferenceSet.find_by(user: current_user).columns_state)
-     p state_data
+    #  p state_data
       render json: state_data
 
     end
+  end
+
+  def save_table_state
+    # binding.pry
+    state = request.body.read
+    # binding.pry
+    ps = PreferenceSet.find_or_create_by(user: current_user)
+    
+    # binding.pry
+    
+    ps.update(columns_state: state.to_json)
+    # render json:  {message: "New table state saved"}
   end
 
   def new

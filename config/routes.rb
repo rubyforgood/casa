@@ -10,6 +10,8 @@ Rails.application.routes.draw do
 
 
   get 'table_state', to: 'volunteers#table_state'
+  post 'save_table_state', to: 'volunteers#save_table_state'
+
 
   authenticated :all_casa_admin do
     root to: "all_casa_admins/dashboard#show", as: :authenticated_all_casa_admin_root

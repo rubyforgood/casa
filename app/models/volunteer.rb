@@ -28,15 +28,14 @@ class Volunteer < User
     EXTRA_LANGUAGES_COLUMN,
     ACTIONS_COLUMN
   ].freeze
-  serialize :columns, JSON
+   serialize :columns, JSON
 
   def self.columns_state(user)
     if PreferenceSet.find_by(user: user.id).nil?
       TABLE_COLUMNS
     else
-      JSON.parse(PreferenceSet.find_by(user: user.id).columns_state)
+      PreferenceSet.find_by(user: user.id).columns_state
     end
-    
   end
 
   CONTACT_MADE_IN_DAYS_NUM = 14
