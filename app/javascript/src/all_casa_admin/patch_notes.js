@@ -43,10 +43,10 @@ patchNoteFunctions.addPatchNoteUI = function (patchNoteGroupId, patchNoteId, pat
   newPatchNoteUIFormInputs.dropdownType.children().removeAttr('selected')
   newPatchNoteUIFormInputs.dropdownType.children(`option[value="${patchNoteTypeId}"]`).attr('selected', true)
   newPatchNoteUIFormInputs.buttonControls.parent().html(`
-    <button type="button" class="main-btn primary-btn btn-hovert">
+    <button type="button" class="main-btn primary-btn btn-hovert button-edit">
       <i class="lni lni-pencil-alt mr-10"></i>Edit
     </button>
-    <button type="button" class="main-btn danger-btn btn-hover">
+    <button type="button" class="main-btn danger-btn btn-hover button-delete">
       <i class="lni lni-trash-can mr-10"></i>Delete
     </button>
   `)
