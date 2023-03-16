@@ -6,7 +6,7 @@
                             height: 100,
                             alt: "CASA Logo"),
                   "/" %>
-      <% else %>
+    <% else %>
       <%= link_to image_tag("default-logo.png",
                             id: "casa-logo",
                             alt: "CASA Logo",
@@ -23,31 +23,34 @@
             Inbox
           <% end %>
         </li>
-        <li class="list-group-item">
-          <span class="label">Role</span>
-          <span class="value"><%= current_role %></span>
-        </li>
-      </div>
-      <div class="list-group list-group-flush footer-nav">
-        <% if user_signed_in? %>
-          <%= link_to "Edit Profile", edit_users_path, class: "list-group-item" %>
-          <% if policy(:application).see_court_reports_page? %>
-            <%= link_to "Generate Court Reports", case_court_reports_path, class: "list-group-item" %>
-          <% end %>
-          <% if policy(:reimbursement).see_reports_page? %>
-            <%= link_to "Reimbursement Queue", reimbursements_path, class: "list-group-item" %>
-          <% end %>
-          <% if policy(:application).see_reports_page? %>
-            <%= link_to "Export Data", reports_path, class: "list-group-item" %>
-          <% end %>
-          <% if policy(:application).see_import_page? %>
-            <%= link_to "System Imports", imports_path, class: "list-group-item" %>
-          <% end %>
-          <% if policy(:application).see_mileage_rate? %>
-            <%= link_to "Mileage Rates", mileage_rates_path, class: "list-group-item" %>
-          <% end %>
-          <% if policy(:application).modify_organization? %>
-            <%= link_to "Edit Organization", edit_casa_org_path(current_organization), class: "list-group-item" %>
+        <% if policy(Supervisor).index? %>
+          <li class="<%= active_class(supervisors_path) %> nav-item">
+            <%= link_to supervisors_path do %>
+              <i class="lni lni-network mr-10"></i>
+              Supervisors
+            <% end %>
+          </li>
+        <% end %>
+        <% if policy(Volunteer).index? %>
+          <li class="<%= active_class(volunteers_path) %> nav-item">
+            <%= link_to volunteers_path do %>
+              <i class="lni lni-heart-filled mr-10"></i>
+              Volunteers
+            <% end %>
+          </li>
+        <% end %>
+        <% if policy(OtherDuty).index? %>
+          <li class="<%= active_class(other_duties_path) %> nav-item">
+            <%= link_to other_duties_path do %>
+              <i class="lni lni-agenda mr-10"></i>
+              Other Duties
+            <% end %>
+          </li>
+        <% end %>
+        <li class="<%= active_class(casa_cases_path) %> nav-item">
+          <%= link_to casa_cases_path do %>
+            <i class="lni lni-folder mr-10"></i>
+            <%= cases_index_title %>
           <% end %>
         </li>
         <% if policy(CasaAdmin).index? %>
