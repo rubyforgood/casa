@@ -416,6 +416,25 @@ RSpec.describe CaseContact, type: :model do
         end
       end
     end
+
+    describe ".with_casa_case" do
+      let!(:casa_case) { create(:casa_case) }
+      let!(:case_contacts) { create_list(:case_contact, 3, casa_case: casa_case) }
+
+      before { create_list(:case_contact, 3) }
+
+      context "when parameter is nil" do
+        it "returns all casa cases" do
+          expect(described_class.with_casa_case(nil)).to eq(CaseContact.all)
+        end
+      end
+
+      context "when parameter is not nil" do
+        it "returns contacts with the given casa case ids" do
+          expect(described_class.with_casa_case(casa_case.id)).to eq(case_contacts)
+        end
+      end
+    end
   end
 
   describe "#contact_groups_with_types" do

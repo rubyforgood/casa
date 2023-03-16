@@ -4,6 +4,8 @@ class AllCasaAdmin < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :invitable, :recoverable, :validatable, :timeoutable, invite_for: 1.weeks
+
+  self.ignored_columns = ["phone_number"]
 end
 
 # == Schema Information

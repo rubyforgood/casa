@@ -78,12 +78,25 @@
         <div class="table-wrapper table-responsive">
           <%= form_with url: case_contact_reports_path(format: :csv), scope: 'report', method: :get, local: true do |f| %>
 
-            <div class="field form-group mb-20">
-              <label class="form-label"><h6>Starting From</h6></label>
-              <%= f.text_field :start_date, value: 6.months.ago.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT),
-                               data: { provide: "datepicker",
-                                       date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
-                               class: "form-control" %>
+        <div class="field form-group">
+          <label><strong>Casa Case Numbers:</strong></label>
+          <%= f.collection_select(
+                  :casa_case_ids,
+                  CasaCase.by_organization(current_user.casa_org),
+                  :id,
+                  :case_number,
+                  {include_hidden: false},
+                  {class: "form-control select2", data: {placeholder: "-Select Casa Case Numbers-"},
+multiple: true}
+              ) %>
+        </div>
+
+        <div class="field form-group">
+          <label><strong>Want Driving Reimbursement:</strong></label>
+          <%= f.collection_radio_buttons :want_driving_reimbursement, boolean_choices, :last, :first do |b| %>
+            <div class="form-check">
+              <%= b.radio_button(class: "form-check-input") %>
+              <%= b.label(class: "form-check-label") %>
             </div>
 
             <div class="field form-group mb-20">
