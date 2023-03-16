@@ -6,6 +6,10 @@ function pollForSessionTimeout() {
     var status = event.target.status;
     var response = event.target.response;
     
+    if (status === 200 && (response <= 10790)) {
+      alert("2 minutes left");
+    }
+
     // if the remaining valid time for the current user session is less than or equals to 0 seconds.
     if (status === 200 && (response <= 0)) {
       window.location.href = '/session_timeout';

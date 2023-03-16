@@ -4,11 +4,6 @@ class SessionTimeoutController < Devise::SessionsController
   def check_session_timeout
     response.headers["Etag"] = "" # clear etags to prevent caching
     render plain: ttl_to_timeout, status: :ok
-
-    if ttl_to_timeout < 10750
-      flash[:alert] = "Your session will expire in 2 minutes due to inactivity."
-      # flash[:alert] = t("devise.failure.timeout", default: "Your session has timed out.")
-    end
   end
 
   def render_timeout
@@ -18,7 +13,7 @@ class SessionTimeoutController < Devise::SessionsController
     end
 
     flash[:alert] = t("devise.failure.timeout", default: "Your session has timed out.")
-    redirect_to login_path
+    redirect_to new_user_session_path
   end
   
   private
