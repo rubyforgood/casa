@@ -12,7 +12,6 @@ const defineCaseContactsTable = function () {
 }
 
 $('document').ready(() => {
-
   $.fn.dataTable.ext.search.push(
     function (settings, data, dataIndex) {
       if (settings.nTable.id !== 'casa-cases') {
@@ -69,7 +68,6 @@ $('document').ready(() => {
         caseNumberPrefixArray.includes(caseNumberPrefix)
     }
   )
-
   const handleAjaxError = e => {
     console.error(e)
     if (e.responseJSON && e.responseJSON.error) {
@@ -92,6 +90,12 @@ $('document').ready(() => {
   const volunteersTable = $('table#volunteers').DataTable({
     autoWidth: false,
     stateSave: true,
+    initComplete: function(settings, json) {
+      this.api().columns().every(function(index) {
+        var columnVisible = this.visible();
+        $('#visibleColumns input[data-column="' + index + '"]').prop('checked', columnVisible);
+      });
+    },
     stateSaveCallback: function (settings, data) {
       $.ajax({
         url: "/save_table_state",
@@ -101,7 +105,7 @@ $('document').ready(() => {
         },
         dataType: "json",
         type: "POST",
-        success: function () { }
+        success: function (response) { console.log( 'from stateSaveCallback', data) }
       });
      
     },
@@ -111,6 +115,7 @@ $('document').ready(() => {
         dataType: 'json',
         type: 'GET',
         success: function(json) {
+          console.log('from stateLoad callbadk ',json)
           callback(json);
         }
       });
@@ -269,23 +274,24 @@ $('document').ready(() => {
       error: handleAjaxError,
       dataType: 'json'
     },
+    
     drawCallback: function (settings) {
       $('[data-toggle=tooltip]').tooltip()
     }
-  })
 
+   
+  })
+  // console.log('volunteersTable', volunteersTable.columns())
   // Because the table saves state, we have to check/uncheck modal inputs based on what
   // columns are visible
   volunteersTable.columns().every(function (index) {
     const columnVisible = this.visible()
-    if (columnVisible) {
-      $('#visibleColumns input[data-column="' + index + '"]').prop('checked', true)
-    } else {
-      $('#visibleColumns input[data-column="' + index + '"]').prop('checked', false)
-    }
+
+    $('#visibleColumns input[data-column="' + index + '"]').prop('checked', columnVisible);
 
     return true
-  })
+  }) 
+
 
   const casaCasesTable = $('table#casa-cases').DataTable({
     autoWidth: false,

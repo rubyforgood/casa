@@ -21,6 +21,16 @@ class VolunteersController < ApplicationController
     render json: datatable
   end
 
+  # def table_state
+  #   # binding.pry
+  #   preference_set = PreferenceSet.find_or_create_by(user: current_user)
+  #   # binding.pry
+  #   preference_set.columns_state = params["table_state"]
+
+  #   render json:  {message: "Table State Loaded"}
+   
+  # end 
+
   def table_state
     if PreferenceSet.find_by(user: current_user).nil? && PreferenceSet.find_by(user: current_user).columns_state.nil?
       render json: {message: "No table state saved"}
@@ -30,6 +40,29 @@ class VolunteersController < ApplicationController
     end
   end
 
+  # def save_table_state
+  #   #binding.pry
+   
+  #   preference_set = PreferenceSet.find_or_create_by(user: current_user)
+
+  #   # binding.pry
+  #   table_state = params["table_state"]
+
+  #   # data = JSON.parse(request.raw_post)
+  #   # table_state.state_data = data
+  #   preference_set.columns_state = table_state
+
+   
+  #   if preference_set.save
+  #     render json: { status: 'success', message: 'Table state saved successfully' }
+  #   else
+  #     render json: { status: 'error', message: 'Failed to save table state' }, status: :unprocessable_entity
+  #   end
+
+
+    
+  # end
+ 
   def save_table_state
     table_state = JSON.parse(params["table_state"])
 
@@ -38,7 +71,7 @@ class VolunteersController < ApplicationController
 
     render json:  {message: "New table state saved"}
   end
- 
+  
   def new
     @volunteer = current_organization.volunteers.new
     authorize @volunteer

@@ -99,8 +99,6 @@
     <button type="button" class="btn btn-primary mb-2 mb-md-0" data-toggle="modal" data-target="#visibleColumns">
       Pick displayed columns
     </button> <br>
-    <%#=  JSON.parse( Volunteer.columns_state(current_user).to_json ) %>
-    <%=  Volunteer.columns_state(current_user) %>
   </div>
 </div>
 <br>
@@ -117,14 +115,13 @@
       <div class="modal-body">
         <div>
           Select columns:
-           <%# Volunteer.columns_state(current_user).each do |column, index| %>
            <% Volunteer::TABLE_COLUMNS.each_with_index do |column, index| %>
             <div class="row">
               <div class="col-sm-12">
                 <div class="form-check">
                   <%= check_box_tag "pick-#{column}",
-                                    "1",
-                                    nil,
+                                     "1",
+                                     nil,
                                     class: "form-check-input toggle-visibility",
                                     data: {column: index} %>
                   <%= label_tag "pick-#{column}", column.titleize, class: "form-check-label" %>
@@ -163,7 +160,6 @@
             <th>Actions</th>
           </tr>
         </thead>
-
         <tbody>
         </tbody>
       </table>

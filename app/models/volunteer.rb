@@ -33,13 +33,13 @@ class Volunteer < User
   def self.columns_state(user)
     cols = []
     if PreferenceSet.find_by(user: user.id).nil?
-      # TABLE_COLUMNS
+      TABLE_COLUMNS
     else
       JSON.parse(PreferenceSet.find_by(user: user.id).columns_state)["columns"].each_with_index do |col, index|
         cols << TABLE_COLUMNS[index] if col["visible"] == true
       end
     end
-    return cols[-6..-1]
+    return cols
   end
 
   CONTACT_MADE_IN_DAYS_NUM = 14
