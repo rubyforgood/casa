@@ -18,8 +18,6 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     root to: "devise/sessions#new"
-    get "/check_session_timeout"  => "session_timeout#check_session_timeout"
-    get "/session_timeout"        => "session_timeout#render_timeout"
   end
 
   devise_scope :all_casa_admins do
