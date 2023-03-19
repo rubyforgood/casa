@@ -1,15 +1,19 @@
+<% note = notification.to_notification %>
 <a
-  href="<%= notification.to_notification.url %>"
+  href="<%= note.url %>"
   class="<%= notification_row_class(notification) %> list-group-item list-group-item-action flex-column align-items-start">
   <div class="d-flex flex-row">
     <div class="d-flex-shrink-0"><%= notification_icon(notification) %></div>
     <div class="ml-2 flex-grow-1">
       <div class="d-flex justify-content-between">
-        <h5 class="mb-1"><%= notification.to_notification.title %></h5>
-        <small><%= time_ago_in_words(notification.updated_at) %> ago</small>
+        <h5 class="mb-1"><%= note.title %></h5>
+        <small><%= time_ago_in_words(note.updated_at) %> ago</small>
       </div>
       <div class="my-1">
-        <%= simple_format notification.to_notification.message %>
+        Created by: <%= note.created_by %>
+        Has note? <%= note.has_message? %>
+        Read? <%= note.read? %>
+        Note contents (if avail): <%= note.message if note.has_message? %>
       </div>
     </div>
   </div>

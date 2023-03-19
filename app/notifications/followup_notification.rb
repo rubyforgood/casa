@@ -18,10 +18,32 @@ class FollowupNotification < BaseNotification
 
   # Define helper methods to make rendering easier.
   #
-  def message
-    note = params[:followup][:note]
+  def title
+    "New followup" 
+  end
 
-    note.present? ? message_with_note(note) : message_without_note
+  def message 
+    params[:followup][:note]
+  end
+
+  def has_message?
+    message.present?
+  end
+
+  def created_by
+    created_by_name
+  end
+
+  def created_at
+    record.created_at
+  end
+
+  def updated_at
+    record.updated_at
+  end
+
+  def read?
+    record.read?
   end
 
   def url

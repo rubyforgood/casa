@@ -1,0 +1,20 @@
+<a
+  herf="<%= @notification.url %>"
+  class="<%= @notification.read? ? "bg-light text-muted" : "" %>
+          list-group-item list-group-item-action flex-column align-items-start">
+  <div class="d-flex flex-row">
+    <div class="d-flex-shrink-0"><%= @notification.read? ? "" : "<i class='fas fa-bell'></i>" %></div>
+    <div class="ml-2 flex-grow-1">
+      <div class="d-flex justify-content-between">
+        <h5 class="mb-1"><%= @notification.title %></h5>
+        <small><%= time_ago_in_words(@notification.updated_at) %> ago</small>
+      </div>
+      <div class="my-1">
+        Created by: <%= @notification.created_by %>
+        Has note? <%= @notification.has_note? %>
+        Read? <%= @notification.read? %>
+        Note contents (if avail): <%= @notification.note if @notification.has_note? %>
+      </div>
+    </div>
+  </div>
+</a>

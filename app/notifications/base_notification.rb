@@ -1,8 +1,4 @@
 class BaseNotification < Noticed::Base
-  def title
-    "New followup"
-  end
-
   private
 
   def created_by_name

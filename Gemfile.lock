@@ -471,6 +471,10 @@ GEM
     unparser (0.6.7)
       diff-lcs (~> 1.3)
       parser (>= 3.2.0)
+    view_component (2.82.0)
+      activesupport (>= 5.2.0, < 8.0)
+      concurrent-ruby (~> 1.0)
+      method_source (~> 1.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.2.0)
@@ -577,6 +581,7 @@ DEPENDENCIES
   traceroute
   twilio-ruby
   tzinfo-data
+  view_component
   web-console (>= 3.3.0)
   webdrivers
   webmock
@@ -585,4 +590,4 @@ RUBY VERSION
    ruby 3.1.3p185
 
 BUNDLED WITH
-   2.3.4
+   2.4.8
