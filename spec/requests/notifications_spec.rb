@@ -27,7 +27,6 @@ RSpec.describe "/notifications", type: :request do
 
           it "does not show the patch notes section" do
             get notifications_url
-            pp response
 
             queryable_html = Nokogiri.HTML5(response.body)
 
