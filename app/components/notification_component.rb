@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-class NotifcationComponent < ViewComponent::Base
+class NotificationComponent < ViewComponent::Base
   def initialize(notification:)
     @notification = notification
   end
 end
+

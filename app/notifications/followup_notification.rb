@@ -22,28 +22,8 @@ class FollowupNotification < BaseNotification
     "New followup" 
   end
 
-  def message 
+  def message
     params[:followup][:note]
-  end
-
-  def has_message?
-    message.present?
-  end
-
-  def created_by
-    created_by_name
-  end
-
-  def created_at
-    record.created_at
-  end
-
-  def updated_at
-    record.updated_at
-  end
-
-  def read?
-    record.read?
   end
 
   def url
@@ -58,21 +38,5 @@ class FollowupNotification < BaseNotification
 
   def email_notifications?
     recipient.receive_email_notifications == true
-  end
-
-  def message_with_note(note)
-    [
-      message_heading,
-      "Note: #{note}",
-      "Click to see more."
-    ].join("\n")
-  end
-
-  def message_without_note
-    [message_heading, "Click to see more."].join(" ")
-  end
-
-  def message_heading
-    "#{created_by_name} has flagged a Case Contact that needs follow up."
   end
 end

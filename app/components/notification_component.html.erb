@@ -1,0 +1,24 @@
+<a
+  href="<%= @notification.url %>"
+  class="<%= @notification.read? ? "bg-light text-muted " : "" %>list-group-item list-group-item-action flex-column align-items-start">
+  <div class="d-flex flex-row">
+    <div class="d-flex-shrink-0"><%= @notification.read? ? "" : "<i class='fas fa-bell'></i>".html_safe %></div>
+    <div class="ml-2 flex-grow-1">
+      <div class="d-flex justify-content-between">
+        <h5 class="mb-1"><%= @notification.title %></h5>
+        <small><%= time_ago_in_words(@notification.updated_at) %> ago</small>
+      </div>
+      <div class="my-1">
+        <% if @notification.is_a?(FollowupNotification) %>
+          <%= @notification.created_by %> has flagged a Case Contact that needs follow up.
+          <% if @notification.has_message? %>
+            <br />Note: <%= @notification.message %><br />
+          <% end %>
+          Click to see more.
+        <% else %>
+          <%= @notification.message %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</a>
