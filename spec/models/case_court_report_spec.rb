@@ -128,7 +128,7 @@ RSpec.describe CaseCourtReport, type: :model do
           end
 
           it "displays today's date formatted" do
-            expect(document_inspector.word_list_document_contains?(Date.today.strftime("%B %-d, %Y"))).to eq(true)
+            expect(document_inspector.word_list_document_contains?(Date.current.strftime("%B %-d, %Y"))).to eq(true)
           end
 
           it "displays the case hearing date date formatted" do
@@ -213,7 +213,7 @@ RSpec.describe CaseCourtReport, type: :model do
           end
 
           it "displays today's date formatted" do
-            expect(document_inspector.word_list_document_contains?(Date.today.strftime("%B %-d, %Y"))).to eq(true)
+            expect(document_inspector.word_list_document_contains?(Date.current.strftime("%B %-d, %Y"))).to eq(true)
           end
 
           it "displays the case hearing date formatted" do
