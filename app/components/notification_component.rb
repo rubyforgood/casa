@@ -5,4 +5,3 @@ class NotificationComponent < ViewComponent::Base
     @notification = notification
   end
 end
-

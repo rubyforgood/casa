@@ -3,7 +3,7 @@
 # YouthBirthdayNotification.with(post: @post).deliver_later(current_user)
 # YouthBirthdayNotification.with(post: @post).deliver(current_user)
 
-class YouthBirthdayNotification < BaseNotification 
+class YouthBirthdayNotification < BaseNotification
   # Add your delivery methods
   #
   deliver_by :database

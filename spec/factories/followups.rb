@@ -10,7 +10,7 @@ FactoryBot.define do
     end
 
     trait :without_note do
-      note { '' }
+      note { "" }
     end
   end
 end

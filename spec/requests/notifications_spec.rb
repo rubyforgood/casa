@@ -55,13 +55,13 @@ RSpec.describe "/notifications", type: :request do
         before do
           sign_in admin
         end
-        
+
         context "when there is no deploy date" do
           it "shows the no notification message" do
             get notifications_url
 
             expect(response.body).to include("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
-            end
+          end
 
           it "does not show the patch notes section" do
             get notifications_url
@@ -81,7 +81,7 @@ RSpec.describe "/notifications", type: :request do
             get notifications_url
 
             expect(response.body).to_not include("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
-            end
+          end
 
           it "does not show patch notes made after the deploy date" do
             patch_note_1.update_attribute(:created_at, Date.new(2021, 1, 2))

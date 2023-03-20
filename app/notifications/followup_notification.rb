@@ -19,7 +19,7 @@ class FollowupNotification < BaseNotification
   # Define helper methods to make rendering easier.
   #
   def title
-    "New followup" 
+    "New followup"
   end
 
   def message
