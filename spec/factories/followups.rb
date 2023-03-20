@@ -1,9 +1,16 @@
 FactoryBot.define do
   factory :followup do
-    case_contact
     association :creator, factory: :user
 
     status { :requested }
-    note { Faker::Lorem.paragraph }
+    case_contact
+
+    trait :with_note do
+      note { Faker::Lorem.paragraph }
+    end
+
+    trait :without_note do
+      note { '' }
+    end
   end
 end
