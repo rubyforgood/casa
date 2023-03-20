@@ -15,7 +15,7 @@ FactoryBot.define do
           created_by: creator
         }
       }
-      initialize_with { Notification.new(params: params) }
+      initialize_with { new(params: params) }
     end
 
     trait :followup_read do
@@ -30,7 +30,7 @@ FactoryBot.define do
           created_by: creator
         }
       }
-      initialize_with { Notification.new(params: params) }
+      initialize_with { new(params: params) }
     end
 
     trait :followup_without_note do
@@ -44,7 +44,7 @@ FactoryBot.define do
           created_by: creator
         }
       }
-      initialize_with { Notification.new(params: params) }
+      initialize_with { new(params: params) }
     end
   end
 end
