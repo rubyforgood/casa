@@ -100,7 +100,6 @@ $('document').ready(() => {
       $.ajax({
         url: "/save_table_state",
         data: {
-        
           table_state: JSON.stringify(data),
         },
         dataType: "json",

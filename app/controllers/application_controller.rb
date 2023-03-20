@@ -83,6 +83,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def current_preference_set
+    # Return the preference set belonging to the current user, if available
+    return current_user.preference_set if current_user
+    
+    # Otherwise, return a new preference set instance
+    PreferenceSet.new
+  end
+
   private
 
   def store_user_location!

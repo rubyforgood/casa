@@ -6,10 +6,48 @@ RSpec.describe "/volunteers", type: :request do
   let(:admin) { build(:casa_admin, casa_org: organization) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
   let(:volunteer) { create(:volunteer, casa_org: organization) }
-  # add domains to blacklist you want to stub
+  let(:columns_state) do
+    [
+        {'visible' => true},
+        {'visible' => true},
+        {'visible' => true},
+        {'visible' => true},
+        {'visible' => true},
+        {'visible' => true},
+        {'visible' => true},
+        {'visible' => true},
+      ].to_json
+  end
+  let(:preference_set) { create(:preference_set, user_id: supervisor.id, columns_state: columns_state) }
+
   blacklist = ["api.twilio.com", "api.short.io"]
   web_mock = WebMockHelper.new(blacklist)
   web_mock.stub_network_connection
+
+  describe "GET /table_state" do
+    before do
+      sign_in supervisor
+      allow_any_instance_of(ApplicationController).to receive(:current_preference_set).and_return(preference_set)
+    end
+    it 'retrieves columns_state' do
+      columns_state.to_json
+      get "/table_state"
+
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe "POST /save_table_state " do
+    before do
+      sign_in supervisor
+      allow_any_instance_of(ApplicationController).to receive(:current_preference_set).and_return(preference_set)
+    end
+    it 'Correctly update columns state' do
+      post '/save_table_state', params: { table_state: columns_state.to_json }
+      expect(response).to be_successful
+      # expect(response.body).to eq columns_state
+    end
+  end
 
   describe "GET /index" do
     it "renders a successful response" do

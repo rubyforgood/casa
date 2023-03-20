@@ -23,7 +23,7 @@ class VolunteersController < ApplicationController
 
   def table_state
     if PreferenceSet.find_by(user: current_user).nil? && PreferenceSet.find_by(user: current_user).columns_state.nil?
-      render json: {message: "No table state saved"}
+      render json: state_data
     else
       state_data = JSON.parse(PreferenceSet.find_by(user: current_user).columns_state)
       render json: state_data
@@ -32,11 +32,13 @@ class VolunteersController < ApplicationController
  
   def save_table_state
     table_state = JSON.parse(params["table_state"])
-
+    
     preference_set = PreferenceSet.find_or_create_by(user: current_user)
     preference_set.update(columns_state: table_state.to_json)
 
-    render json: {message: "New table state saved"}
+    if preference_set.save
+      render json: { message: "New table state saved" }
+    end
   end
   
   def new
