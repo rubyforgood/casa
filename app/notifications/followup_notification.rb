@@ -31,9 +31,9 @@ class FollowupNotification < BaseNotification
   end
 
   def muted_display
-    return '' unless record.read?
-    
-    'bg-light text-muted'
+    return "" unless record.read?
+
+    "bg-light text-muted"
   end
 
   private
@@ -51,7 +51,7 @@ class FollowupNotification < BaseNotification
     join_char = note.present? ? "\n" : " "
     result = ["#{created_by} has flagged a Case Contact for follow up."]
     result << "Note: #{note}" if note.present?
-    result << 'Click to see more.'
+    result << "Click to see more."
     result.join(join_char)
   end
 end
