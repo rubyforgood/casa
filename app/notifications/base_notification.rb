@@ -29,11 +29,6 @@ class BaseNotification < Noticed::Base
     created_by_name
   end
 
-  # Message can be nil for some notification types
-  def has_message?
-    message.present?
-  end
-
   private
 
   def created_by_name

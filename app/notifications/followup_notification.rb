@@ -23,11 +23,17 @@ class FollowupNotification < BaseNotification
   end
 
   def message
-    params[:followup][:note]
+    build_message
   end
 
   def url
     edit_case_contact_path(params[:followup][:case_contact_id], notification_id: record.id)
+  end
+
+  def muted_display
+    return '' unless record.read?
+    
+    'bg-light text-muted'
   end
 
   private
@@ -38,5 +44,14 @@ class FollowupNotification < BaseNotification
 
   def email_notifications?
     recipient.receive_email_notifications == true
+  end
+
+  def build_message
+    note = params[:followup][:note]
+    join_char = note.present? ? "\n" : " "
+    result = ["#{created_by} has flagged a Case Contact for follow up."]
+    result << "Note: #{note}" if note.present?
+    result << 'Click to see more.'
+    result.join(join_char)
   end
 end
