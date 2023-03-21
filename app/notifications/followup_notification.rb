@@ -43,7 +43,7 @@ class FollowupNotification < BaseNotification
   def build_message
     note = params[:followup][:note]
     join_char = note.present? ? "\n" : " "
-    result = ["#{created_by} has flagged a Case Contact for follow up."]
+    result = ["#{created_by} has flagged a Case Contact that needs follow up."]
     result << "Note: #{note}" if note.present?
     result << "Click to see more."
     result.join(join_char)
