@@ -29,6 +29,12 @@ class BaseNotification < Noticed::Base
     created_by_name
   end
 
+  def muted_display
+    return "" unless record.read?
+
+    "bg-light text-muted"
+  end
+
   private
 
   def created_by_name

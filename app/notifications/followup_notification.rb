@@ -30,12 +30,6 @@ class FollowupNotification < BaseNotification
     edit_case_contact_path(params[:followup][:case_contact_id], notification_id: record.id)
   end
 
-  def muted_display
-    return "" unless record.read?
-
-    "bg-light text-muted"
-  end
-
   private
 
   def sms_notifications?
