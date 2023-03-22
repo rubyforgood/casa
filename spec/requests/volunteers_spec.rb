@@ -106,8 +106,8 @@ RSpec.describe "/volunteers", type: :request do
     it "shows correct supervisor options", :aggregate_failures do
       supervisors = create_list(:supervisor, 3, casa_org: organization)
 
-      page = request.parsed_body
-      supervisors.each { |supervisor| expect(page).to include(supervisor.display_name.html_safe) }
+      page = CGI.unescapeHTML(request.parsed_body)
+      supervisors.each { |supervisor| expect(page).to include(supervisor.display_name) }
     end
   end
 
