@@ -54,7 +54,6 @@ class User < ApplicationRecord
 
   scope :no_recent_sign_in, -> { active.where("last_sign_in_at <= ?", 30.days.ago) }
 
-  #double check this
   def record_previous_email
     if email_changed?
       old_emails.push(email_was)
@@ -63,7 +62,7 @@ class User < ApplicationRecord
       end
     end
   end
-  #
+
   def casa_admin?
     is_a?(CasaAdmin)
   end

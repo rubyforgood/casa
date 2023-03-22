@@ -5,7 +5,7 @@
     <%= form_for @user, as: :user, url: users_path do |form| %>
       <div class="field form-group">
         <%= form.label :current_email, "Email" %>
-        <%= form.text_field :current_email, value: @user.email, class: "form-control", disabled: true %> 
+        <%= form.text_field :current_email, value: @user.email, class: "form-control", disabled: true %>
                         <!--:current_email is a dummy atr, just for display purposes-->
       </div>
 
@@ -61,14 +61,14 @@
                         data: {confirm: "Contact your administrator at Ruby For Good to deactivate this account."} %>
           <% end %>
         <% end %>
-      
+
     <% end %>
     <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
       <br>
       <%= form_for(@user, as: :user, url: {action: "update_password"}) do |f| %>
         <div class="field form-group">
           <%= f.label :current_password, "Current Password" %><br>
-          <%= f.password_field :current_password, autocomplete: "off", class: "form-control", id:"current_password"%>
+          <%= f.password_field :current_password, autocomplete: "off", class: "form-control", id:"current_password" %>
         </div>
         <div class="field form-group">
           <%= f.label :password, "New Password" %><br>
@@ -91,15 +91,15 @@ minlength: User.password_length.min %>
         <%= form_for(@user, as: :user, url: {action: "update_email"}) do |f| %>
           <div class="field form-group">
             <%= f.label :current_password, "Current Password" %><br>
-            <%= f.password_field :current_password, autocomplete: "off", class: "form-control", id: "current_password_email"%>
+            <%= f.password_field :current_password, autocomplete: "off", class: "form-control", id: "current_password_email" %>
           </div>
           <div class="field form-group">
             <%= f.label :email, "New Email" %><br>
-            <%= f.text_field :email, autocomplete: "off", class: "form-control email-new", :value => nil%>
+            <%= f.text_field :email, autocomplete: "off", class: "form-control email-new", :value => nil %>
           </div>
           <div class="field form-group">
             <%= f.label :email_confirmation, "New Email Confirmation" %><br>
-            <%= f.text_field :email_confirmation, autocomplete: "off", class: "form-control email-confirmation", :value => nil%>
+            <%= f.text_field :email_confirmation, autocomplete: "off", class: "form-control email-confirmation", :value => nil %>
           </div>
           <div class="action_container">
             <%= f.submit "Update Email", class: "btn btn-danger submit-email" %>

@@ -84,11 +84,11 @@ RSpec.describe "users/edit", type: :system do
 
     it "is able to update the email" do
       expect(page).to have_field("Email", disabled: true)
-      
+
       click_on "Change Email"
       expect(page).to have_field("New Email", disabled: false)
       expect(page).to have_field("New Email Confirmation", disabled: false)
-      
+
       fill_in "current_password_email", with: "12345678"
 
       fill_in "New Email", with: "new_volunteer@example.com"
@@ -114,7 +114,7 @@ RSpec.describe "users/edit", type: :system do
       expect(page).to have_text("Current password is incorrect")
     end
 
-    it "displays email errors messages when user is unable to set a email", :js => true do
+    it "displays email errors messages when user is unable to set a email", js: true do
       click_on "Change Email"
 
       fill_in "current_password_email", with: "12345678"
@@ -122,7 +122,7 @@ RSpec.describe "users/edit", type: :system do
       fill_in "New Email Confirmation", with: "new_new_volunteer@example.com"
       click_on "Change Email"
       expect(page).to have_text("The email and the confirmation email do not match")
-    end 
+    end
 
     it "displays current sign in date" do
       formatted_current_sign_in_at = I18n.l(volunteer.current_sign_in_at, format: :full, default: nil)
@@ -182,11 +182,11 @@ RSpec.describe "users/edit", type: :system do
 
     it "is able to update the email if user is a supervisor" do
       expect(page).to have_field("Email", disabled: true)
-      
+
       click_on "Change Email"
       expect(page).to have_field("New Email", disabled: false)
       expect(page).to have_field("New Email Confirmation", disabled: false)
-      
+
       fill_in "current_password_email", with: "12345678"
 
       fill_in "New Email", with: "new_supervisor@example.com"
@@ -212,7 +212,7 @@ RSpec.describe "users/edit", type: :system do
       expect(page).to have_text("Current password is incorrect")
     end
 
-    it "displays email errors messages when user is unable to set a email", :js => true do
+    it "displays email errors messages when user is unable to set a email", js: true do
       click_on "Change Email"
 
       fill_in "current_password_email", with: "12345678"
@@ -261,11 +261,11 @@ RSpec.describe "users/edit", type: :system do
 
     it "is able to update the email if user is a admin" do
       expect(page).to have_field("Email", disabled: true)
-      
+
       click_on "Change Email"
       expect(page).to have_field("New Email", disabled: false)
       expect(page).to have_field("New Email Confirmation", disabled: false)
-      
+
       fill_in "current_password_email", with: "12345678"
 
       fill_in "New Email", with: "new_admin@example.com"
@@ -277,7 +277,7 @@ RSpec.describe "users/edit", type: :system do
       expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
       expect(ActionMailer::Base.deliveries.first.body.encoded)
         .to match("Your CASA email has been changed.")
-    end 
+    end
 
     it "displays email errors messages when user is unable to set a email with incorrect current password" do
       click_on "Change Email"
@@ -291,7 +291,7 @@ RSpec.describe "users/edit", type: :system do
       expect(page).to have_text("Current password is incorrect")
     end
 
-    it "displays email errors messages when user is unable to set a email", :js => true do
+    it "displays email errors messages when user is unable to set a email", js: true do
       click_on "Change Email"
 
       fill_in "current_password_email", with: "12345678"

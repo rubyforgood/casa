@@ -48,10 +48,10 @@ RSpec.describe User, type: :model do
       expect(user.email).to eq(user.email_confirmation)
     end
 
-    it "has an empty old_emails array when initialized" do 
+    it "has an empty old_emails array when initialized" do
       user = build(:user)
       expect(user.old_emails).to eq([])
-    end 
+    end
   end
 
   describe "#case_contacts_for" do
