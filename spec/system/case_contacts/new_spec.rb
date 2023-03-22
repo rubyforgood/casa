@@ -461,6 +461,10 @@ RSpec.describe "case_contacts/new", type: :system do
     end
 
     context "with invalid inputs" do
+      let(:name) do
+        fill_in "c. Occurred On", with: 2.days.ago.strftime("%Y/%m/%d\n")
+      end
+
       it "re-renders the form with errors, but preserving all previously entered selections", js: true do
         volunteer = create(:volunteer, :with_casa_cases)
         volunteer_casa_case_one = volunteer.casa_cases.first
@@ -489,7 +493,7 @@ RSpec.describe "case_contacts/new", type: :system do
         expect(page.find("#case_contact_occurred_at").value).to eq(Date.current.strftime("%Y-%m-%d"))
         # js validation
 
-        fill_in "c. Occurred On", with: 2.days.ago.strftime("%Y/%m/%d\n")
+        name
 
         fill_in "a. Miles Driven", with: "0"
         choose "case_contact_want_driving_reimbursement_true"
