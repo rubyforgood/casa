@@ -5,9 +5,9 @@
       <% if casa_case.active %>
         <div class="top-page-actions pull-right z-1">
           <%= button_tag(
-            type: "submit",
-            class: "btn-sm main-btn primary-btn btn-hove mb-3"
-          ) do %>
+                type: "submit",
+                class: "btn-sm main-btn primary-btn btn-hove mb-3"
+              ) do %>
             <% if casa_case.persisted? %>
               <i class="lni lni-pencil-alt"></i>
               Update CASA Case
@@ -33,11 +33,11 @@
           <span class="datetime-year-month">
             <%= form.date_select :birth_month_year_youth,
                                  {
-                                     order: [:month, :year],
-                                     start_year: Date.current.year,
-                                     end_year: 1989,
-                                     prompt: {month: "Month", year: "Year"},
-                                     discard_day: true
+                                   order: [:month, :year],
+                                   start_year: Date.current.year,
+                                   end_year: 1989,
+                                   prompt: {month: "Month", year: "Year"},
+                                   discard_day: true
                                  }, class: "form-control select-style-2" %>
           </span>
         </div>
@@ -48,13 +48,13 @@
           <br>
           <span class="datetime-year-month">
             <%= form.date_select :date_in_care,
-                                  {
-                                      order: [:month, :year],
-                                      start_year: Date.current.year,
-                                      end_year: 1989,
-                                      prompt: {month: "Month", year: "Year"},
-                                      discard_day: true
-                                  }, class: "form-control select-style-2" %>
+                                 {
+                                   order: [:month, :year],
+                                   start_year: Date.current.year,
+                                   end_year: 1989,
+                                   prompt: {month: "Month", year: "Year"},
+                                   discard_day: true
+                                 }, class: "form-control select-style-2" %>
           </span>
         </div>
       <% end %>
@@ -77,14 +77,14 @@
         <%= form.label :court_report_status, "Court Report Status" %>
         <div class="select-position">
           <%= form.select :court_report_status,
-                        CasaCase.court_report_statuses&.map { |status| [status.first.humanize, status.first] } %>
+                          CasaCase.court_report_statuses&.map { |status| [status.first.humanize, status.first] } %>
         </div>
       </div>
       <% if casa_case.persisted? %>
         <div class="field form-group court-orders">
           <% if policy(casa_case).update_court_orders? %>
             <%= render partial: "shared/court_order_list",
-locals: {casa_case: @casa_case, siblings_casa_cases: @siblings_casa_cases, form: form} %>
+                       locals: {casa_case: @casa_case, siblings_casa_cases: @siblings_casa_cases, form: form} %>
           <% else %>
             <%= form.label :case_court_orders, "Court Orders" %>
             <div id="court-orders-list-container">
@@ -106,8 +106,7 @@ locals: {casa_case: @casa_case, siblings_casa_cases: @siblings_casa_cases, form:
           <%= render "court_dates", casa_case: @casa_case %>
         </div>
       <% end %>
-
-      <% if policy(casa_case).update_contact_types? %>
+      <% if Pundit.policy(current_user, casa_case).update_contact_types? %>
         <%= render "case_contacts/contact_types",
                    form: form,
                    model: casa_case,
@@ -119,9 +118,9 @@ locals: {casa_case: @casa_case, siblings_casa_cases: @siblings_casa_cases, form:
       <div class="actions-cc">
         <% if casa_case.active %>
           <%= button_tag(
-            type: "submit",
-            class: "btn-sm main-btn primary-btn btn-hove mb-3"
-          ) do %>
+                type: "submit",
+                class: "btn-sm main-btn primary-btn btn-hove mb-3"
+              ) do %>
             <% if casa_case.persisted? %>
               <i class="lni lni-pencil-alt"></i>
               Update CASA Case
@@ -135,11 +134,11 @@ locals: {casa_case: @casa_case, siblings_casa_cases: @siblings_casa_cases, form:
                       method: :patch,
                       class: "main-btn danger-btn-outline pull-right",
                       data: {
-                          confirm_swal:
-                              "Deactivating a CASA Case will unassign any volunteers currently assigned to this case.",
-                          reload: true,
-                          success: "Yes, deactivate",
-                          fail: "No, go back"
+                        confirm_swal:
+                          "Deactivating a CASA Case will unassign any volunteers currently assigned to this case.",
+                        reload: true,
+                        success: "Yes, deactivate",
+                        fail: "No, go back"
                       }) if Pundit.policy(current_user, casa_case).update_case_status? && casa_case.persisted? %>
         <% else %>
           <%= link_to("Reactivate CASA Case",
@@ -154,4 +153,3 @@ locals: {casa_case: @casa_case, siblings_casa_cases: @siblings_casa_cases, form:
 <% if Pundit.policy(current_user, @casa_case).assign_volunteers? && casa_case.persisted? %>
   <%= render "volunteer_assignment" %>
 <% end %>
-</div>
