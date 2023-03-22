@@ -39,6 +39,7 @@ class Volunteer < User
         cols << TABLE_COLUMNS[index] if col["visible"] == true
       end
     end
+    
     return cols
   end
 

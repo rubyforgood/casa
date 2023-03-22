@@ -31,10 +31,10 @@ class VolunteersController < ApplicationController
   end
  
   def save_table_state
-    table_state = JSON.parse(params["table_state"])
-    
+    table_state = params["table_state"]
     preference_set = PreferenceSet.find_or_create_by(user: current_user)
-    preference_set.update(columns_state: table_state.to_json)
+   
+    preference_set.update(columns_state: table_state)
 
     if preference_set.save
       render json: { message: "New table state saved" }

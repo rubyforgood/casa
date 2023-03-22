@@ -108,6 +108,10 @@ $('document').ready(() => {
       });
      
     },
+    stateSaveParams: function(settings, data) {
+      data.search.search = '';
+      return data;
+    },
     stateLoadCallback: function (settings, callback) {
       $.ajax({ 
         url: '/table_state',
@@ -280,14 +284,11 @@ $('document').ready(() => {
 
    
   })
-  // console.log('volunteersTable', volunteersTable.columns())
   // Because the table saves state, we have to check/uncheck modal inputs based on what
   // columns are visible
   volunteersTable.columns().every(function (index) {
     const columnVisible = this.visible()
-
     $('#visibleColumns input[data-column="' + index + '"]').prop('checked', columnVisible);
-
     return true
   }) 
 
