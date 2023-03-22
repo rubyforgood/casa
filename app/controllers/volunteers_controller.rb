@@ -26,16 +26,19 @@ class VolunteersController < ApplicationController
       render json: state_data
     else
       state_data = JSON.parse(PreferenceSet.find_by(user: current_user).columns_state)
+      state_data = state_data["volunteers_table"]
       render json: state_data
     end
   end
  
   def save_table_state
     table_state = params["table_state"]
+    table_state = JSON.parse(table_state)
     preference_set = PreferenceSet.find_or_create_by(user: current_user)
-   
-    preference_set.update(columns_state: table_state)
-
+    
+    volunter_table_state =   { "volunteers_table" => table_state }
+    preference_set.columns_state = volunter_table_state.to_json
+    
     if preference_set.save
       render json: { message: "New table state saved" }
     end
