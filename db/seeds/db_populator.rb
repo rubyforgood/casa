@@ -49,6 +49,7 @@ class DbPopulator
     create_checklist_items
     create_judges(casa_org)
     create_languages(casa_org)
+    create_mileage_rates(casa_org)
     casa_org
   end
 
@@ -326,5 +327,16 @@ class DbPopulator
 
   def create_language(name, casa_org)
     Language.find_or_create_by!(name: name, casa_org: casa_org)
+  end
+
+  def create_mileage_rates(casa_org)
+    5.times do
+      MileageRate.create!({
+        amount: Faker::Number.decimal(l_digits: 2, r_digits: 2),
+        effective_date: Faker::Date.forward(days: 700),
+        is_active: true,
+        casa_org_id: casa_org.id
+      })
+    end
   end
 end
