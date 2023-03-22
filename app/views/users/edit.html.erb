@@ -5,7 +5,7 @@
     <%= form_for @user, as: :user, url: users_path do |form| %>
       <div class="field form-group">
         <%= form.label :email, "Email" %>
-        <%= form.text_field :email, class: "form-control", disabled: true %>
+        <%= form.text_field :dummy, value: @user.email, class: "form-control", disabled: true %>
       </div>
 
       <div class="field form-group">
@@ -84,29 +84,29 @@ minlength: User.password_length.min %>
         </div>
       <% end %>
     </div>
-    <!----------------- Update Email -------------------------->
+    <!----------------- Update Email Begin -------------------------->
     <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
         <br>
-        <%= form_for(@user, as: :user, url: {action: "update"}) do |f| %>
+        <%= form_for(@user, as: :user, url: {action: "update_email"}) do |f| %>
           <div class="field form-group">
-            <%= f.label :current_password, "Password" %><br>
+            <%= f.label :current_password, "Current Password" %><br>
             <%= f.password_field :current_password, autocomplete: "off", class: "form-control" %>
           </div>
           <div class="field form-group">
             <%= f.label :email, "New Email" %><br>
-            <%= f.text_field :email, autocomplete: "off", class: "form-control password-new"%>
+            <%= f.text_field :email, autocomplete: "off", class: "form-control email-new", :value => nil%>
           </div>
           <div class="field form-group">
             <%= f.label :email_confirmation, "New Email Confirmation" %><br>
-            <%= f.text_field :email_confirmation, class: "form-control password-confirmation"%>
+            <%= f.text_field :email_confirmation, autocomplete: "off", class: "form-control email-confirmation", :value => nil%>
           </div>
           <div class="action_container">
-            <%= f.submit "Update Email", class: "btn btn-danger submit-password" %>
+            <%= f.submit "Update Email", class: "btn btn-danger submit-email" %>
           </div>
         <% end %>
       </div>
     </div>
-    </div>
+  </div>
   <!----------------- Update Email End -------------------------->
   </div>
  <%= form_for @user, as: :user, url: users_path do |form| %>

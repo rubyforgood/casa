@@ -12,16 +12,11 @@ class UsersController < ApplicationController
   end
 
   def update
-    if user_params[:email] == user_params[:email_confirmation]
-      if @user.update(user_params)
-        flash[:success] = "Profile was successfully updated."
-        redirect_to edit_users_path
-      else
-        render :edit
-      end
+    if @user.update(user_params)
+      flash[:success] = "Profile was successfully updated."
+      redirect_to edit_users_path
     else
-      @user.errors.add(:base, "Emails must match")
-      render "edit"
+      render :edit
     end
   end
 
@@ -57,6 +52,24 @@ class UsersController < ApplicationController
     redirect_to edit_users_path
   end
 
+  def update_email
+    unless valid_user_password
+      @user.errors.add(:base, "Current password is incorrect")
+      return render "edit"
+    end
+
+    unless update_user_email
+      return render "edit"
+    end
+
+    bypass_sign_in(@user) if @user == true_user
+
+    UserMailer.email_changed_reminder(@user).deliver
+    flash[:success] = "Email was successfully updated."
+
+    redirect_to edit_users_path
+  end
+
   private
 
   def set_language
@@ -87,16 +100,27 @@ class UsersController < ApplicationController
     @user.update({password: password_params[:password], password_confirmation: password_params[:password_confirmation]})
   end
 
+  ##########EMAIL############
+
+  def email_params
+    params.require(:user).permit(:current_password, :email, :email_confirmation)
+  end
+
+  def update_user_email
+    @user.update({email: email_params[:email], email_confirmation: email_params[:email_confirmation]})
+  end
+
+  ##########EMAIL############
   def user_params
-    if current_user.casa_admin? || current_user.volunteer?
-      params.require(:user).permit(:email, :email_confirmation, :display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
-    else
-      params.require(:user).permit(:display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
-    end
+    params.require(:user).permit(:display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
   end
 
   def valid_user_password
-    @user.valid_password?(password_params[:current_password])
+    if password_params
+      @user.valid_password?(password_params[:current_password])
+    else
+      @user.valid_password?(email_params[:current_password])
+    end 
   end
 
   def set_custom_error_heading

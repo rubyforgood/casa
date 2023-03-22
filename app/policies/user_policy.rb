@@ -43,6 +43,7 @@ class UserPolicy < ApplicationPolicy
 
   alias_method :update?, :edit?
   alias_method :update_password?, :edit?
+  alias_method :update_email?, :edit?
 
   class Scope
     attr_reader :user, :scope
