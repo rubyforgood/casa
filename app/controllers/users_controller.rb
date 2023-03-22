@@ -57,7 +57,7 @@ class UsersController < ApplicationController
       @user.errors.add(:base, "Current password is incorrect")
       return render "edit"
     end
-
+    
     unless update_user_email
       return render "edit"
     end
@@ -118,7 +118,7 @@ class UsersController < ApplicationController
   def valid_user_password
     if password_params
       @user.valid_password?(password_params[:current_password])
-    else
+    elsif email_params
       @user.valid_password?(email_params[:current_password])
     end 
   end
