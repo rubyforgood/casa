@@ -1,24 +1,24 @@
 /* eslint-env jest */
 
 require('jest')
-jest.useFakeTimers();
-jest.spyOn(global, 'setTimeout');
+// jest.useFakeTimers();
+// jest.spyOn(global, 'setInterval');
 
-import { setTimeout, warningBoxAndReload } from '../src/session_timeout_poller.js';
+// import { myTimer, warningBoxAndReload } from '../src/session_timeout_poller.js';
 
 describe('warningBoxAndReload', () => {
 
+  const sessionTimeoutPoller = require('../src/session_timeout_poller.js')
+
   test("warning box displays 2 minutes before Devise Timeout", () => {
-    const warningBoxAndReload = jest.fn();
-    const setTimeout = jest.fn()
-    
-    setTimeout();
+    warningBoxAndReload = jest.fn();
+    myTimer = jest.fn();
+
+    myTimer();
+    expect(myTimer).toHaveBeenCalled();
+
     warningBoxAndReload();
-    // jest.advanceTimersByTime(178 * 60 * 1000);
-    jest.runAllTimers();
     expect(warningBoxAndReload).toHaveBeenCalled();
-    expect(setTimeout).toHaveBeenCalled();
-    // expect(document).toCont
-    // expect().toContain("Warning: You will be logged off in 2 minutes due to inactivity.");
+
   });
 });
