@@ -107,7 +107,11 @@ class UsersController < ApplicationController
   end
 
   def update_user_email
-    @user.update({email: email_params[:email], email_confirmation: email_params[:email_confirmation]})
+    if email_params[:email] === email_params[:email_confirmation]
+      @user.update({email: email_params[:email], email_confirmation: email_params[:email_confirmation]})
+    else 
+      @user.errors.add(:base, "The email and the confirmation email do not match")
+    end 
   end
 
   ##########EMAIL############
