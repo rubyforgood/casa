@@ -4,7 +4,7 @@
   <div class="card-body">
     <%= form_for @user, as: :user, url: users_path do |form| %>
       <div class="field form-group">
-        <%= form.label :email, "Email" %>
+        <%= form.label :current_email, "Email" %>
         <%= form.text_field :current_email, value: @user.email, class: "form-control", disabled: true %> 
                         <!--:current_email is a dummy atr, just for display purposes-->
       </div>
@@ -68,7 +68,7 @@
       <%= form_for(@user, as: :user, url: {action: "update_password"}) do |f| %>
         <div class="field form-group">
           <%= f.label :current_password, "Current Password" %><br>
-          <%= f.password_field :current_password, autocomplete: "off", class: "form-control" %>
+          <%= f.password_field :current_password, autocomplete: "off", class: "form-control", id:"current_password"%>
         </div>
         <div class="field form-group">
           <%= f.label :password, "New Password" %><br>
@@ -91,7 +91,7 @@ minlength: User.password_length.min %>
         <%= form_for(@user, as: :user, url: {action: "update_email"}) do |f| %>
           <div class="field form-group">
             <%= f.label :current_password, "Current Password" %><br>
-            <%= f.password_field :current_password, autocomplete: "off", class: "form-control" %>
+            <%= f.password_field :current_password, autocomplete: "off", class: "form-control", id: "current_password_email"%>
           </div>
           <div class="field form-group">
             <%= f.label :email, "New Email" %><br>
