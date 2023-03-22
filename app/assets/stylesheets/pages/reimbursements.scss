@@ -2,7 +2,7 @@
   .select2-container {
     .select2-selection {
       max-height: 60px;
-      overflow-y: scroll;
+      overflow-y: auto;
       overflow-x: hidden;
     }
   }
