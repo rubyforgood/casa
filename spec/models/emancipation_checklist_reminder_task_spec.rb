@@ -18,7 +18,7 @@ RSpec.describe EmancipationChecklistReminderTask, type: :model do
       #ActiveJob::Base.queue_adapter = :test
       pp eligible_case1.casa_case
       pp eligible_case2.casa_case
-      allow(EmancipationChecklistReminderNotification).to receive(:deliver)
+      #allow(EmancipationChecklistReminderNotification).to receive(:deliver)
       expect_any_instance_of(EmancipationChecklistReminderNotification).to receive(:deliver)
       task.send_reminders
       #expect { task.send_reminders }.to have_enqueued_job.twice
