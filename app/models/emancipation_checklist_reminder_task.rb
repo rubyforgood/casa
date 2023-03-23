@@ -1,4 +1,4 @@
-class EmancipationChecklistReminder
+class EmancipationChecklistReminderTask
   attr_reader :cases
 
   def initialize
