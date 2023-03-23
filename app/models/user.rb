@@ -11,7 +11,7 @@ class User < ApplicationRecord
 
   validates_with UserValidator
 
-  devise :database_authenticatable, :invitable, :recoverable, :validatable, :timeoutable, :trackable
+  devise :database_authenticatable, :invitable, :recoverable, :validatable, :timeoutable, :trackable, :confirmable
 
   belongs_to :casa_org
 
@@ -157,6 +157,9 @@ end
 #
 #  id                          :bigint           not null, primary key
 #  active                      :boolean          default(TRUE)
+#  confirmation_sent_at        :datetime
+#  confirmation_token          :string
+#  confirmed_at                :datetime
 #  current_sign_in_at          :datetime
 #  current_sign_in_ip          :string
 #  display_name                :string           default(""), not null
@@ -180,6 +183,7 @@ end
 #  reset_password_token        :string
 #  sign_in_count               :integer          default(0), not null
 #  type                        :string
+#  unconfirmed_email           :string
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  casa_org_id                 :bigint           not null
@@ -188,6 +192,7 @@ end
 # Indexes
 #
 #  index_users_on_casa_org_id                        (casa_org_id)
+#  index_users_on_confirmation_token                 (confirmation_token) UNIQUE
 #  index_users_on_email                              (email) UNIQUE
 #  index_users_on_invitation_token                   (invitation_token) UNIQUE
 #  index_users_on_invitations_count                  (invitations_count)

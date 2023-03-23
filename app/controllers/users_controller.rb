@@ -64,9 +64,6 @@ class UsersController < ApplicationController
 
     bypass_sign_in(@user) if @user == true_user
 
-    UserMailer.email_changed_reminder(@user).deliver
-    flash[:success] = "Email was successfully updated."
-
     redirect_to edit_users_path
   end
 
