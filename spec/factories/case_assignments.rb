@@ -2,12 +2,17 @@ FactoryBot.define do
   factory :case_assignment do
     transient do
       casa_org { CasaOrg.first || create(:casa_org) }
+      pre_transition { false }
     end
 
     active { true }
 
     casa_case do
-      create(:casa_case, casa_org: @overrides[:volunteer].try(:casa_org) || casa_org)
+      if pre_transition
+        create(:casa_case, :pre_transition, casa_org: @overrides[:volunteer].try(:casa_org) || casa_org)
+      else
+        create(:casa_case, casa_org: @overrides[:volunteer].try(:casa_org) || casa_org)
+      end
     end
 
     volunteer do
