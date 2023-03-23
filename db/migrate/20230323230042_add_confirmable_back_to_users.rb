@@ -1,5 +1,5 @@
 class AddConfirmableBackToUsers < ActiveRecord::Migration[7.0]
-   disable_ddl_transaction!
+  disable_ddl_transaction!
   # Note: You can't use change, as User.update_all will fail in the down migration
   def up
     add_column :users, :confirmation_token, :string
