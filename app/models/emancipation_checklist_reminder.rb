@@ -11,8 +11,9 @@ class EmancipationChecklistReminder
   end
 
   def send_reminders
+    # debugger
     cases.each do |assignment|
-      EmancipationChecklistReminderNotification
+      ::EmancipationChecklistReminderNotification
         .with(casa_case: assignment.casa_case)
         .deliver(assignment.volunteer)
     end

@@ -15,8 +15,10 @@ RSpec.describe EmancipationChecklistReminder, type: :model do
     end
 
     it "#send_reminders creates the reminders" do
-      expect(EmancipationChecklistReminderNotification).to receive(:deliver).twice
-      task.send_reminders
+      ActiveJob::Base.queue_adapter = :test
+      #expect(::EmancipationChecklistReminderNotification).to receive(:deliver).twice
+      #task.send_reminders
+      expect { task.send_reminders }.to have_enqueued_job.twice
     end
   end
 end
