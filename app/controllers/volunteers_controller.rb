@@ -22,19 +22,17 @@ class VolunteersController < ApplicationController
   end
 
   def table_state
-    state_data =  JSON.parse(PreferenceSet.find_by(user: current_user).table_state)
+    state_data = PreferenceSet.find_by(user: current_user).table_state
     volunteer_data_state = state_data["volunteers_table"]
 
-    render json: volunteer_data_state 
+    render json: volunteer_data_state
   end
- 
+
   def save_table_state
     table_state = JSON.parse(params["table_state"])
     preference_set = PreferenceSet.find_or_create_by(user: current_user)
-    volunter_table_state =   { "volunteers_table" => table_state.to_json }
 
-    preference_set.table_state = volunter_table_state.to_json
-    
+    preference_set.table_state["volunteers_table"] = table_state.to_json
     if preference_set.save
       render json: { message: "New table state saved" }
     end
@@ -188,5 +186,26 @@ class VolunteersController < ApplicationController
     else
       "SMS was not sent to Volunteer due to an error."
     end
+  end
+end
+
+
+
+def save_table_state
+ 
+  table_state = JSON.parse(params["table_state"])
+  preference_set = PreferenceSet.find_or_create_by(user: current_user)
+  
+  preference_state.table_state['volunteers_table'] = 
+ 
+ binding.pry
+ 
+  
+  preference_set.table_state['volunteers_table'] = table_state.to_json
+  
+  table_state['columns'] = 
+  
+  if preference_set.save
+    render json: { message: "New table state saved" }
   end
 end
