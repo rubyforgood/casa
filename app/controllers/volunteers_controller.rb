@@ -23,19 +23,14 @@ class VolunteersController < ApplicationController
 
   def table_state
     state_data = PreferenceSet.find_by(user: current_user).table_state
-    volunteer_data_state = state_data["volunteers_table"]
+    table = "volunteers_table"
+    volunteer_data_state = state_data[table]
 
     render json: volunteer_data_state
   end
 
   def save_table_state
-    table_state = JSON.parse(params["table_state"])
-    preference_set = PreferenceSet.find_or_create_by(user: current_user)
-
-    preference_set.table_state["volunteers_table"] = table_state.to_json
-    if preference_set.save
-      render json: { message: "New table state saved" }
-    end
+    render json: SaveTableStateService.new(table_name: "volunteers_table", table_state: params["table_state"], current_user: current_user).call
   end
   
   def new
