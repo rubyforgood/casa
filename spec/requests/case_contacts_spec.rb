@@ -288,7 +288,6 @@ RSpec.describe "/case_contacts", type: :request do
           miles_driven: 600,
           medium_type: CaseContact::CONTACT_MEDIUMS.second,
           want_driving_reimbursement: false,
-          # case_contact_contact_type_attributes: [{contact_type_id: contact_type.id}],
         }
       end
       let(:params) { { case_contact: valid_attributes } }
