@@ -22,15 +22,21 @@ class VolunteersController < ApplicationController
   end
 
   def table_state
-    state_data = PreferenceSet.find_by(user: current_user).table_state
-    table = "volunteers_table"
-    volunteer_data_state = state_data[table]
-
-    render json: volunteer_data_state
+    render json: TableStateService.new(
+                                            table_name: "volunteers_table",
+                                            table_state: nil,
+                                            current_user: current_user,
+                                            params: params
+                                          ).call
   end
 
   def save_table_state
-    render json: SaveTableStateService.new(table_name: "volunteers_table", table_state: params["table_state"], current_user: current_user).call
+    render json: TableStateService.new(
+                                            table_name: "volunteers_table",
+                                            table_state: params["table_state"],
+                                            current_user: current_user,
+                                            params: params
+                                          ).call
   end
   
   def new
