@@ -27,7 +27,7 @@ RSpec.describe "/case_contacts", type: :request do
     end
 
     context "with filters applied" do
-      let(:filterrific) { { occurred_starting_at: 1.week.ago } }
+      let(:filterrific) { {occurred_starting_at: 1.week.ago} }
 
       it "returns all case contacts" do
         page = request.parsed_body
@@ -39,12 +39,12 @@ RSpec.describe "/case_contacts", type: :request do
 
   describe "GET /new" do
     let!(:casa_case) { create(:casa_case, casa_org: organization) }
-    let!(:contact_type_group_b) { create(:contact_type_group, casa_org: organization, name: 'B') }
+    let!(:contact_type_group_b) { create(:contact_type_group, casa_org: organization, name: "B") }
     let!(:contact_types_b) { create_list(:contact_type, 2, contact_type_group: contact_type_group_b) }
 
-    let!(:contact_type_group_a) { create(:contact_type_group, casa_org: organization, name: 'A') }
+    let!(:contact_type_group_a) { create(:contact_type_group, casa_org: organization, name: "A") }
     let!(:contact_types_a) { create_list(:contact_type, 2, contact_type_group: contact_type_group_a) }
-        
+
     subject(:request) do
       get new_case_contact_path
 
@@ -65,11 +65,11 @@ RSpec.describe "/case_contacts", type: :request do
       expected_contact_types.each { |contact_type| expect(page.scan(contact_type).size).to eq(1) }
     end
 
-    context 'when the case has specific contact types assigned' do
+    context "when the case has specific contact types assigned" do
       let!(:other_casa_case) { create(:casa_case, :with_casa_case_contact_types, casa_org: organization) }
 
       subject(:request) do
-        get new_case_contact_path(case_contact: { casa_case_id: other_casa_case.id })
+        get new_case_contact_path(case_contact: {casa_case_id: other_casa_case.id})
 
         response
       end
@@ -96,10 +96,10 @@ RSpec.describe "/case_contacts", type: :request do
       let(:selected_casa_case_ids) { [casa_case.id] }
       let(:valid_attributes) do
         attributes_for(:case_contact, :wants_reimbursement, casa_case: casa_case).merge(
-          creator: admin, casa_case_id: selected_casa_case_ids,
+          creator: admin, casa_case_id: selected_casa_case_ids
         )
       end
-      let(:params) { { case_contact: valid_attributes } }
+      let(:params) { {case_contact: valid_attributes} }
 
       it "creates a new CaseContact with correct values", :aggregate_failures do
         expect { request }.to change(CaseContact, :count).from(0).to(1)
@@ -136,7 +136,7 @@ RSpec.describe "/case_contacts", type: :request do
         let(:params) do
           {
             case_contact: valid_attributes.merge(
-              additional_expenses_attributes: { "0" => attributes_for(:additional_expense) }
+              additional_expenses_attributes: {"0" => attributes_for(:additional_expense)}
             )
           }
         end
@@ -160,7 +160,7 @@ RSpec.describe "/case_contacts", type: :request do
         let(:params) do
           {
             case_contact: valid_attributes.merge(
-              case_contact_contact_type_attributes: { "0" => { contact_type_id: contact_type.id } }
+              case_contact_contact_type_attributes: {"0" => {contact_type_id: contact_type.id}}
             )
           }
         end
@@ -170,7 +170,7 @@ RSpec.describe "/case_contacts", type: :request do
           expect(CaseContact.first.contact_types.first).to eq(contact_type)
         end
       end
-    
+
       context "with volunteer address" do
         let(:casa_case) { volunteer.casa_cases.first }
         let(:valid_attributes) {
@@ -208,8 +208,8 @@ RSpec.describe "/case_contacts", type: :request do
     end
 
     context "with invalid parameters" do
-      let(:invalid_attributes) { { creator: nil, casa_case_id: [casa_case.id], occurred_at: Time.zone.now } }
-      let(:params) { { case_contact: invalid_attributes } }
+      let(:invalid_attributes) { {creator: nil, casa_case_id: [casa_case.id], occurred_at: Time.zone.now} }
+      let(:params) { {case_contact: invalid_attributes} }
 
       it { is_expected.to have_http_status(:success) }
 
@@ -218,7 +218,7 @@ RSpec.describe "/case_contacts", type: :request do
       end
 
       describe ": no casa cases" do
-        let(:invalid_attributes) { { creator: nil, casa_case_id: [], occurred_at: Time.zone.now } }
+        let(:invalid_attributes) { {creator: nil, casa_case_id: [], occurred_at: Time.zone.now} }
 
         it { is_expected.to have_http_status(:success) }
 
@@ -235,7 +235,7 @@ RSpec.describe "/case_contacts", type: :request do
   end
 
   describe "GET /edit" do
-    let(:case_contact) { create(:case_contact, casa_case: create(:casa_case, :with_case_assignments), notes: 'Notes') }
+    let(:case_contact) { create(:case_contact, casa_case: create(:casa_case, :with_case_assignments), notes: "Notes") }
 
     subject(:request) do
       get edit_case_contact_url(case_contact)
@@ -250,7 +250,7 @@ RSpec.describe "/case_contacts", type: :request do
       expect(page).to include(case_contact.notes)
     end
 
-    describe 'unread notification' do
+    describe "unread notification" do
       let(:followup) { create(:followup, case_contact: case_contact, creator: admin) }
 
       subject(:request) do
@@ -281,16 +281,16 @@ RSpec.describe "/case_contacts", type: :request do
     context "with valid parameters" do
       let(:selected_casa_case_ids) { [casa_case.id] }
       let(:valid_attributes) do
-        { 
+        {
           occurred_at: 3.days.ago,
           duration_minutes: 50,
           contact_made: true,
           miles_driven: 600,
           medium_type: CaseContact::CONTACT_MEDIUMS.second,
-          want_driving_reimbursement: false,
+          want_driving_reimbursement: false
         }
       end
-      let(:params) { { case_contact: valid_attributes } }
+      let(:params) { {case_contact: valid_attributes} }
 
       it { is_expected.to redirect_to(casa_case_path(casa_case.case_number.parameterize)) }
 
@@ -308,8 +308,8 @@ RSpec.describe "/case_contacts", type: :request do
 
     context "with invalid parameters" do
       let!(:other_casa_case) { create(:casa_case, casa_org: organization) }
-      let(:invalid_attributes) { { creator: volunteer, casa_case_id: [other_casa_case.id] } }
-      let(:params) { { case_contact: invalid_attributes } }
+      let(:invalid_attributes) { {creator: volunteer, casa_case_id: [other_casa_case.id]} }
+      let(:params) { {case_contact: invalid_attributes} }
 
       it { is_expected.to have_http_status(:success) }
 
@@ -325,7 +325,7 @@ RSpec.describe "/case_contacts", type: :request do
     let(:case_contact) { create(:case_contact) }
 
     subject(:request) do
-      delete case_contact_path(case_contact), headers: { HTTP_REFERER: case_contacts_path }
+      delete case_contact_path(case_contact), headers: {HTTP_REFERER: case_contacts_path}
 
       response
     end
@@ -346,7 +346,7 @@ RSpec.describe "/case_contacts", type: :request do
     let(:case_contact) { create(:case_contact) }
 
     subject(:request) do
-      post restore_case_contact_path(case_contact), headers: { HTTP_REFERER: case_contacts_path }
+      post restore_case_contact_path(case_contact), headers: {HTTP_REFERER: case_contacts_path}
 
       response
     end
