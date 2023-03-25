@@ -14,11 +14,15 @@ RSpec.describe EmancipationChecklistReminderTask, type: :model do
       expect(task.cases.length).to eq(2)
     end
 
-    it "#send_reminders creates the reminders and calls deliver" do
-      ActiveJob::Base.queue_adapter = :test
-      expect { task.send_reminders }
-        .to change { Notification.count }.by(2)
-        .and have_enqueued_job.exactly(:twice)
+    it "#send_reminders creates the reminders" do
+      expect { task.send_reminders }.to change { Notification.count }.by(2)
+    end
+
+    it "#send_reminders also sends the notifications" do
+      instance = instance_double(EmancipationChecklistReminderNotification)
+      expect(EmancipationChecklistReminderNotification).to receive(:new) { instance }.twice
+      expect(instance).to receive(:deliver).twice
+      task.send_reminders
     end
   end
 end
