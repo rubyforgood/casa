@@ -1,5 +1,12 @@
-<h1>Editing&nbsp;<%= link_to(@casa_case.case_number, @casa_case) %></h1>
-
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h1>Editing&nbsp;<%= link_to(@casa_case.case_number, @casa_case) %></h1>
+      </div>
+    </div>
+  </div>
+</div>
 <% if @casa_case.active %>
   <%= render 'form', casa_case: @casa_case %>
 <% else %>

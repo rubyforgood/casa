@@ -1,12 +1,16 @@
 <% if resource.errors.any? %>
-  <div id="error_explanation" class="alert alert-danger">
-    <h6><%= pluralize(resource.errors.count, "error") %> prohibited this
-        <%= @custom_error_header || resource.model_name.human %> from being saved:</h6>
+  <div class="alert-box danger-alert">
+    <div id="error_explanation" class="alert">
+      <h6>
+        <%= pluralize(resource.errors.count, "error") %> prohibited this
+        <%= @custom_error_header || resource.model_name.human %> from being saved:
+      </h6>
 
-    <ul>
-      <% resource.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-    </ul>
+      <ul>
+        <% resource.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
   </div>
 <% end %>

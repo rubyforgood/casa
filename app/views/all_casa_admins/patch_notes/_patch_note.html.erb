@@ -1,7 +1,7 @@
 <div class="patch-note-list-item card">
   <div id="patch-note-<%= patch_note.id %>" class="card-body">
     <textarea disabled="true"><%= patch_note.note %></textarea>
-    <div class="label-and-select">
+    <div class="select-style-1 label-and-select">
       <label for="patch-note-<%= patch_note.id %>-type">Patch Note Type:</label>
       <select id="patch-note-<%= patch_note.id %>-type" disabled="true">
         <% @patch_note_types&.each do |patch_note_type| %>
@@ -15,7 +15,7 @@
         <% end %>
       </select>
     </div>
-    <div class="label-and-select">
+    <div class="select-style-1 label-and-select">
       <label for="patch-note-<%= patch_note.id %>-group">User Group:</label>
       <select id="patch-note-<%= patch_note.id %>-group" disabled="true">
         <% @patch_note_groups&.each do |patch_note_group| %>
@@ -30,8 +30,8 @@
       </select>
     </div>
     <div class="patch-note-button-controls">
-      <button type="button" class="btn btn-primary button-edit"><i class="fa-solid fa-pen-to-square"></i>Edit</button>
-      <button type="button" class="btn btn-danger button-delete"><i class="fa-solid fa-trash-can"></i>Delete</button>
+      <button type="button" class="main-btn primary-btn btn-hover button-edit"><i class="lni lni-pencil-alt mr-10"></i>Edit</button>
+      <button type="button" class="main-btn danger-btn btn-hover button-delete"><i class="lni lni-trash-can mr-10"></i>Delete</button>
     </div>
   </div>
 </div>

@@ -55,7 +55,7 @@ RSpec.describe "casa_cases/new", type: :system do
         select "March", from: "casa_case_birth_month_year_youth_2i"
         select five_years, from: "casa_case_birth_month_year_youth_1i"
 
-        within ".actions" do
+        within ".actions-cc" do
           click_on "Create CASA Case"
         end
 
@@ -69,7 +69,7 @@ RSpec.describe "casa_cases/new", type: :system do
 
     context "when the case number field is not filled" do
       it "does not create a new case" do
-        within ".actions" do
+        within ".actions-cc" do
           click_on "Create CASA Case"
         end
 
@@ -87,7 +87,7 @@ RSpec.describe "casa_cases/new", type: :system do
           select five_years, from: "casa_case_birth_month_year_youth_1i"
           check "casa_case_empty_court_date"
 
-          within ".actions" do
+          within ".actions-cc" do
             click_on "Create CASA Case"
           end
 
@@ -106,7 +106,7 @@ RSpec.describe "casa_cases/new", type: :system do
           select "March", from: "casa_case_birth_month_year_youth_2i"
           select five_years, from: "casa_case_birth_month_year_youth_1i"
 
-          within ".actions" do
+          within ".actions-cc" do
             click_on "Create CASA Case"
           end
 
@@ -121,7 +121,7 @@ RSpec.describe "casa_cases/new", type: :system do
 
       it "does not create a new case" do
         fill_in "Case number", with: case_number
-        within ".actions" do
+        within ".actions-cc" do
           click_on "Create CASA Case"
         end
 
