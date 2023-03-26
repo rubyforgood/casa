@@ -82,7 +82,7 @@ RSpec.describe "users/edit", type: :system do
         .to match("Your CASA password has been changed.")
     end
 
-    it "is able to update the email" do
+    it "is able to send a confrimation email when Volunteer updates their email" do
       expect(page).to have_field("Email", disabled: true)
 
       click_on "Change Email"
@@ -94,12 +94,11 @@ RSpec.describe "users/edit", type: :system do
       fill_in "New Email", with: "new_volunteer@example.com"
       fill_in "New Email Confirmation", with: "new_volunteer@example.com"
       click_on "Update Email"
-      expect(page).to have_text("Email was successfully updated.")
-      expect(page).to have_text("new_volunteer@example.com")
+  
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
       expect(ActionMailer::Base.deliveries.first.body.encoded)
-        .to match("Your CASA email has been changed.")
+        .to have_text("You can confirm your account email through the link below:")
     end
 
     it "displays email errors messages when user is unable to set a email with incorrect current password" do
@@ -180,7 +179,7 @@ RSpec.describe "users/edit", type: :system do
         .to match("Your CASA password has been changed.")
     end
 
-    it "is able to update the email if user is a supervisor" do
+    it "is able to send a confrimation email when supervisor is updating email" do
       expect(page).to have_field("Email", disabled: true)
 
       click_on "Change Email"
@@ -192,12 +191,11 @@ RSpec.describe "users/edit", type: :system do
       fill_in "New Email", with: "new_supervisor@example.com"
       fill_in "New Email Confirmation", with: "new_supervisor@example.com"
       click_on "Update Email"
-      expect(page).to have_text("Email was successfully updated.")
-      expect(page).to have_text("new_supervisor@example.com")
+      
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
       expect(ActionMailer::Base.deliveries.first.body.encoded)
-        .to match("Your CASA email has been changed.")
+        .to match("You can confirm your account email through the link below:")
     end
 
     it "displays email errors messages when user is unable to set a email with incorrect current password" do
@@ -259,7 +257,7 @@ RSpec.describe "users/edit", type: :system do
 
     it_should_behave_like "shows error for invalid phone numbers"
 
-    it "is able to update the email if user is a admin" do
+    it "is able to send a confrimation email when Casa Admin updates their email" do
       expect(page).to have_field("Email", disabled: true)
 
       click_on "Change Email"
@@ -271,12 +269,11 @@ RSpec.describe "users/edit", type: :system do
       fill_in "New Email", with: "new_admin@example.com"
       fill_in "New Email Confirmation", with: "new_admin@example.com"
       click_on "Update Email"
-      expect(page).to have_text("Email was successfully updated.")
-      expect(page).to have_text("new_admin@example.com")
+      
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
       expect(ActionMailer::Base.deliveries.first.body.encoded)
-        .to match("Your CASA email has been changed.")
+        .to match("You can confirm your account email through the link below:")
     end
 
     it "displays email errors messages when user is unable to set a email with incorrect current password" do

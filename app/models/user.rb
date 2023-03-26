@@ -8,6 +8,7 @@ class User < ApplicationRecord
 
   include ActiveModel::Dirty
   before_update :record_previous_email
+  after_create :skip_email_confirmation_upon_creation
 
   validates_with UserValidator
 
@@ -55,13 +56,15 @@ class User < ApplicationRecord
   scope :no_recent_sign_in, -> { active.where("last_sign_in_at <= ?", 30.days.ago) }
 
   def record_previous_email
-    if email_changed?
-      old_emails.push(email_was)
-      if old_emails.include?(email)
-        old_emails.delete(email)
-      end
+    if (self.email_changed? && !self.old_emails.include?(email_was))
+      self.old_emails.push(email_was)
     end
   end
+
+  def skip_email_confirmation_upon_creation 
+    self.skip_confirmation! 
+    self.confirm
+  end 
 
   def casa_admin?
     is_a?(CasaAdmin)

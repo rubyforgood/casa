@@ -62,6 +62,9 @@ class UsersController < ApplicationController
       return render "edit"
     end
 
+    updated_emails = @user.old_emails.select{|old| old == @user.email}
+    @user.update(old_emails: updated_emails)
+    
     bypass_sign_in(@user) if @user == true_user
 
     redirect_to edit_users_path
@@ -97,7 +100,7 @@ class UsersController < ApplicationController
     @user.update({password: password_params[:password], password_confirmation: password_params[:password_confirmation]})
   end
 
-  # #########EMAIL############
+
 
   def email_params
     params.require(:user).permit(:current_password, :email, :email_confirmation)
@@ -111,7 +114,7 @@ class UsersController < ApplicationController
     end
   end
 
-  # #########EMAIL############
+
   def user_params
     params.require(:user).permit(:display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
   end
