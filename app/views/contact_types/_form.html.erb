@@ -1,30 +1,43 @@
-<h1><%= title %></h1>
-
-<div class="card card-container">
-  <div class="card-body">
-    <div class="field form-group cc-italic">
-      Case contact types are the types of people that can be contacted for a case contact. Some examples are parents, teachers, and social workers.
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h1>
+          <%= title %>
+        </h1>
+      </div>
     </div>
-    <%= form_with(model: contact_type, local: true) do |form| %>
-      <%= render "/shared/error_messages", resource: contact_type %>
-      <div class="field form-group">
-        <%= form.label :name, "Name" %>
-        <%= form.text_field :name, class: "form-control" %>
-      </div>
-      <div class="field form-group">
-        <%= form.label :contact_type_group, "Contact type group" %>
-        <%= form.select :contact_type_group_id, set_group_options, class: "form-control" %>
-      </div>
-      <div class="field form-group">
-        <div class="form-check">
-          <%= form.check_box :active, class: 'form-check-input' %>
-          <%= form.label :active, "Active", class: 'form-check-label' %>
-        </div>
-      </div>
-
-      <div class="actions">
-        <%= form.submit "Submit", class: "btn btn-primary" %>
-      </div>
-    <% end %>
   </div>
+</div><!-- ==== end title ==== -->
+
+<!-- ========== card start ========== -->
+<div class="card-style mb-30">
+  <%= form_with(model: contact_type, local: true) do |form| %>
+  <div class="alert-box danger-alert">
+    <%= render "/shared/error_messages", resource: contact_type %>
+  </div>
+  <div class="mb-20">
+    Case contact types are the types of people that can be contacted for a case contact. Some examples are parents,
+    teachers, and social workers.
+  </div>
+    <div class="input-style-1">
+      <%= form.label :name, "Name" %>
+      <%= form.text_field :name %>
+    </div>
+    <div class="select-style-1">
+      <%= form.label :contact_type_group, "Contact type group" %>
+      <div class="select-position">
+        <%= form.select :contact_type_group_id, set_group_options %>
+      </div>
+    </div>
+    <div class="form-check checkbox-style mb-20">
+      <%= form.check_box :active, class: 'form-check-input' %>
+      <%= form.label :active, "Active", class: 'form-check-label' %>
+    </div>
+    <div class="actions mb-10">
+      <%= button_tag( type: "submit" , class: "btn-sm main-btn primary-btn btn-hover" ) do %>
+        <i class="lni lni-checkmark-circle mr-5"></i> Submit
+      <% end %>
+    </div>
+  <% end %>
 </div>

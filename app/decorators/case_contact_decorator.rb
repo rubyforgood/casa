@@ -71,17 +71,17 @@ class CaseContactDecorator < Draper::Decorator
   def medium_icon_classes
     case object.medium_type
     when CaseContact::IN_PERSON
-      "fas fa-users"
+      "lni lni-users"
     when CaseContact::TEXT_EMAIL
-      "fas fa-envelope"
+      "lni lni-envelope"
     when CaseContact::VIDEO
-      "fas fa-video"
+      "lni lni-camera"
     when CaseContact::VOICE_ONLY
-      "fas fa-phone-square-alt"
+      "lni lni-phone"
     when CaseContact::LETTER
-      "fas fa-file-alt"
+      "lni lni-empty-file"
     else
-      "fas fa-question"
+      "lni lni-question-circle"
     end
   end
 

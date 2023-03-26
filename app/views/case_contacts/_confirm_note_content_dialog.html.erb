@@ -2,21 +2,21 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        Confirm Note Content
+        <strong>Confirm Note Content</strong>
       </div>
       <div class="modal-body">
         Please double check your notes to ensure they don't contain any identifying details about your youth or anyone else.
-        <p>
+        <p class="mt-3">
         <h6>Note</h6>
         <div id="note-content"></div>
         </p>
       </div>
 
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" id="modal-case-contact-cancel">
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="main-btn btn-sm secondary-btn-outline btn-hover mr-10" data-dismiss="modal" id="modal-case-contact-cancel">
           Go Back to Form
         </button>
-        <%= form.submit "Continue Submitting", class: "btn btn-primary", id: "modal-case-contact-submit" %>
+        <%= form.submit "Continue Submitting", class: "btn-sm main-btn primary-btn btn-hover", id: "modal-case-contact-submit" %>
       </div>
     </div>
   </div>

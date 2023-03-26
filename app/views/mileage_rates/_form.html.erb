@@ -1,20 +1,30 @@
-<%= form_for @mileage_rate, url: form_url, id: :new_mileage_rate do |form| %>
-  <%= render "/shared/error_messages", resource: mileage_rate %>
-
-  <div class="field form-group">
-    <%= form.label :effective_date, 'Effective date' %>
-    <%= form.text_field :effective_date, value: effective_date_parser(mileage_rate.effective_date),
-                                      data: { provide: "datepicker",
-                                      date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
-                                      class: "form-control" %>
-  </div>
-
-  <div class="field form-group">
-    <%= form.label :amount, 'Amount' %>
-    <div class="input-group">
-      <div class="input-group-prepend">
-        <span class="input-group-text">$</span>
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h1>
+          <%= title %>
+        </h1>
       </div>
+    </div>
+  </div>
+</div><!-- ==== end title ==== -->
+
+<!-- ========== card start ========== -->
+<div class="card-style mb-30">
+  <%= form_with(model: mileage_rate, local: true, id: :new_mileage_rate) do |form| %>
+    <div class="alert-box danger-alert">
+      <%= render "/shared/error_messages", resource: mileage_rate %>
+    </div>
+    <div class="input-style-1">
+      <%= form.label :effective_date, 'Effective date' %>
+      <%= form.text_field :effective_date, value: effective_date_parser(mileage_rate.effective_date),
+                                        data: { provide: "datepicker",
+                                        date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
+                                        class: "form-control" %>
+    </div>
+    <div class="input-style-1">
+      <%= form.label :amount, 'Amount' %>
       <%= form.number_field :amount,
                       required: true,
                       placeholder: '0.0',
@@ -23,16 +33,15 @@
                       class: "form-control",
                       aria: { label: "Amount in US Dollars" } %>
     </div>
-  </div>
 
-  <div class="field form-group">
-    <div class="form-check">
+    <div class="form-check checkbox-style mb-20">
       <%= form.check_box :is_active, class: 'form-check-input' %>
-      <%= form.label :is_active, 'Currently active?', class: 'form-check-label' %>
+      <%= form.label :is_active, "Currently active?", class: "form-check-label" %>
     </div>
-  </div>
 
-  <div class="actions">
-    <%= form.submit "Save Mileage Rate", class: "btn btn-primary" %>
-  </div>
-<% end %>
+    <div class="actions mb-10">
+      <%= form.submit "Save Mileage Rate", class: "main-btn primary-btn btn-hover" %>
+    </div>
+  <% end %>
+</div>
+<!-- card end -->

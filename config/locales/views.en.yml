@@ -332,18 +332,18 @@ en:
         volunteer: Volunteer
   reports:
     index:
-      assigned_to_label: "Assigned To:"
-      contact_made_label: "Contact Made:"
-      contact_type_group_label: "Contact Type Group:"
-      contact_type_label: "Contact Type:"
+      assigned_to_label: "Assigned To"
+      contact_made_label: "Contact Made"
+      contact_type_group_label: "Contact Type Group"
+      contact_type_label: "Contact Type"
       download_mileage_report_button:
         enabled: Mileage Report
         disabled: Downloading Mileage Report
       download_missing_data_report_button: "Missing Data Report"
       download_learning_hours_report_button: "Learning Hours Report"
       download_report_button: Download Report
-      driving_reimbursement_label: "Want Driving Reimbursement:"
-      end_date_label: "Ending At:"
+      driving_reimbursement_label: "Want Driving Reimbursement"
+      end_date_label: "Ending At"
       export_page_title: Export Data
       filter_cols: Filter Columns
       reports_subhead: Case Contacts Report
@@ -352,8 +352,8 @@ en:
       select_contact_types_placeholder: -Select Contact Types-
       select_supervisors_placeholder: -Select Supervisors-
       select_volunteers_placeholder: -Select Volunteers-
-      start_date_label: "Starting From:"
-      transition_aged_label: "Transition Aged Youth:"
+      start_date_label: "Starting From"
+      transition_aged_label: "Transition Aged Youth"
       volunteers_label: Volunteers
     filter:
       filter_exported_columns: Filter Exported Columns

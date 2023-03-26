@@ -238,7 +238,7 @@ Most conversation happens in the #casa channel of the Ruby For Good slack. Get a
 
 You can also open an issue or comment on an issue on GitHub and a maintainer will reply to you.
 
-We have a weekly team office hours / hangout on Tuesday 6-8pm Pacific time where we do pair/mob programming and talk about issues. Please stop by! (Zoom link in slack)
+We have a weekly team office hours / hangout on Tuesday 5-7pm Pacific time where we do pair/mob programming and talk about issues. Please stop by! (Zoom link in slack)
 
 We have a weekly stakeholder call with CASA stakeholders on Friday at 11:00am Pacific time where we show off progress and discuss launch plans. Feel free to join! (Zoom link in slack)
 

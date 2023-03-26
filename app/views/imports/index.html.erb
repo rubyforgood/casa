@@ -1,67 +1,73 @@
-<div class="row">
-  <div class="col-sm-12">
-    <h1>Imports</h1>
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h1>Imports</h1>
+      </div>
+    </div>
   </div>
 </div>
-<br>
 <div class="row">
   <div class="col-sm-12">
-    <div class="card">
+    <div class="card card-style">
       <div class="card-body">
-        <h5 class="card-title"><strong>System Imports</strong></h5>
+        <h5 class="card-title">System Imports</h5>
         <p class="card-text">
           You should import files in the following order:
         </p>
-        <ol>
+        <ol style="list-style-type: decimal;" class="mx-4">
           <li>Volunteers</li>
           <li>Supervisors</li>
           <li>Cases</li>
         </ol>
         <div>
-          <ul class="nav nav-tabs nav-justified" role="tablist">
-            <li class="nav-item">
-              <%= content_tag :a,
-                              role: "tab",
-                              href: "#volunteer",
-                              id: "volunteer-tab",
-                              class: [
-                                  "nav-link",
-                                  ("active" if @import_type == "volunteer")
-                              ].compact,
-                              data: {toggle: "tab"},
-                              aria: {controls: "volunteer", selected: (@import_type == "volunteer")} do %>
-                Import Volunteers
-              <% end %>
-            </li>
-            <li class="nav-item">
-              <%= content_tag :a,
-                              role: "tab",
-                              href: "#supervisor",
-                              id: "supervisor-tab",
-                              class: [
-                                  "nav-link",
-                                  ("active" if @import_type == "supervisor")
-                              ].compact,
-                              data: {toggle: "tab"},
-                              aria: {controls: "supervisor", selected: (@import_type == "supervisor")} do %>
+          <nav class="nav nav-tabs justify-content-center nav-justified mt-3">
+            <%= content_tag :a,
+                            role: "tab",
+                            href: "#volunteer",
+                            id: "volunteer-tab",
+                            class: [
+                                "nav-link",
+                                ("active" if @import_type == "volunteer")
+                            ].compact,
+                            data: {
+                              "bs-toggle" => "tab",
+                              "bs-target" => "#volunteer"
+                            },
+                            aria: {controls: "volunteer", selected: (@import_type == "volunteer")} do %>
+              Import Volunteers
+            <% end %>
+            <%= content_tag :a,
+                            role: "tab",
+                            href: "#supervisor",
+                            id: "supervisor-tab",
+                            class: [
+                                "nav-link",
+                                ("active" if @import_type == "supervisor")
+                            ].compact,
+                            data: {
+                              "bs-toggle" => "tab",
+                              "bs-target" => "#supervisor"
+                            },
+                            aria: {controls: "supervisor", selected: (@import_type == "supervisor")} do %>
               Import Supervisors
-              <% end %>
-            </li>
-            <li class="nav-item">
-              <%= content_tag :a,
-                              role: "tab",
-                              href: "#casa-case",
-                              id: "casa-case-tab",
-                              class: [
-                                  "nav-link",
-                                  ("active" if @import_type == "casa_case")
-                              ].compact,
-                              data: {toggle: "tab"},
-                              aria: {controls: "casa-case", selected: (@import_type == "casa_case")} do %>
-                Import Cases
-              <% end %>
-            </li>
-          </ul>
+            <% end %>
+            <%= content_tag :a,
+                            role: "tab",
+                            href: "#casa-case",
+                            id: "casa-case-tab",
+                            class: [
+                                "nav-link",
+                                ("active" if @import_type == "casa_case")
+                            ].compact,
+                            data: {
+                              "bs-toggle" => "tab",
+                              "bs-target" => "#casa-case"
+                            },
+                            aria: {controls: "case", selected: (@import_type == "casa_case")} do %>
+              Import Cases
+            <% end %>
+          </nav>
           <div class="tab-content">
             <%= content_tag :div,
                             role: "tabpanel",
@@ -86,28 +92,27 @@
                                 ("active" if @import_type == "supervisor")
                             ].compact,
                             aria: {labelledby: "supervisor-tab"} do %>
-              <br>
-              <%= render "supervisors" %>
-            <%- end %>
-            <%= content_tag :div,
-                            role: "tabpanel",
-                            id: "casa-case",
-                            class: [
-                                "tab-pane",
-                                "fade",
-                                ("show" if @import_type == "casa_case"),
-                                ("active" if @import_type == "casa_case")
-                            ].compact,
-                            aria: {labelledby: "casa-case-tab"} do %>
-              <br>
-              <%= render "cases" %>
-            <%- end %>
+                <br>
+                <%= render "supervisors" %>
+              <%- end %>
+              <%= content_tag :div,
+                              role: "tabpanel",
+                              id: "casa-case",
+                              class: [
+                                  "tab-pane",
+                                  "fade",
+                                  ("show" if @import_type == "casa_case"),
+                                  ("active" if @import_type == "casa_case")
+                              ].compact,
+                              aria: {labelledby: "casa-case-tab"} do %>
+                <br>
+                <%= render "cases" %>
+              <%- end %>
           </div>
         </div>
         <br>
       </div>
     </div>
-    <%= link_to "Return To Dashboard", root_path, class: 'btn btn-info' %>
   </div>
   <%= render "csv_error_modal", {import_error: @import_error} if @import_error %>
 </div>

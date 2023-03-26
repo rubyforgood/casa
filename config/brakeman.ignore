@@ -1,6 +1,29 @@
 {
   "ignored_warnings": [
     {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "82ef033042422190ef49507207d51ed6ccd9593483630925baf0bf6c5e65033e",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/controllers/static_controller.rb",
+      "line": 21,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(template => \"static/#{params[:name]}\", {})",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "StaticController",
+        "method": "page"
+      },
+      "user_input": "params[:name]",
+      "confidence": "Medium",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "b75b292df5ec0c3d4d4f307a8ff2a18caecd456a9b3c9c62bb59d7cf3b67a562",
@@ -18,9 +41,12 @@
       },
       "user_input": "order_direction",
       "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
       "note": "We have a filter for this variable here: app/datatables/application_datatable.rbapp/datatables/application_datatable.rb:72"
     }
   ],
-  "updated": "2021-10-02 10:05:32 -0300",
-  "brakeman_version": "5.1.1"
+  "updated": "2023-01-17 23:08:51 -0500",
+  "brakeman_version": "5.4.0"
 }
