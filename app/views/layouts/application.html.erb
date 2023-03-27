@@ -3,11 +3,11 @@
 <head>
   <title><%= translate('page.meta.title') %></title>
 
-  <%= csrf_meta_tags %>
-  <%= csp_meta_tag %>
-
   <meta name="description" content="<%= translate('page.meta.description') %>">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
 
   <%= og_tag :title, content: translate('page.meta.title') %>
   <%= og_tag :description, content: translate('page.meta.description') %>
@@ -18,49 +18,84 @@
 
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
   <% if all_casa_admin_signed_in? %>
     <%= javascript_include_tag 'all_casa_admin', 'data-turbolinks-track': 'reload', defer: true %>
   <% end %>
 
-  <style>
-    /* Override one of fontawesome's style rules to link fonts with fingerprinted file names */
-    @font-face {
-      font-family: 'Font Awesome 6 Free';
-      font-style: normal;
-      font-weight: 900;
-      font-display: $fa-font-display;
-      src: url('<%= asset_path("fa-solid-900.woff2") %>') format('woff2'),
-        url('<%= asset_path("fa-solid-900.ttf") %>') format('truetype');
-    }
-  </style>
+  <link rel="stylesheet" href="/assets/css/lineicons.css">
+  <link rel="stylesheet" href="/assets/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+
 </head>
 <body class="<%= body_class %>">
-  <noscript>
-    <div>
-      <h2>
-        Please enable javascript
-      </h2>
-      <p>
-        This app requires javascript to work
-      </p>
-    </div>
-  </noscript>
-<% if logged_in? %>
-  <%= render 'layouts/mobile_navbar' %>
+<noscript>
+  <div class="noscript alert alert-danger">
+    <h2 class="alert-heading">
+      Please enable javascript
+    </h2>
+    <p>
+      This app requires javascript to work
+    </p>
+  </div>
+</noscript>
+<% if all_casa_admin_signed_in? %>
+  <%= render 'layouts/all_casa_admin_sidebar' %>
+<% elsif signed_in? %>
   <%= render 'layouts/sidebar' %>
-  <div class="footer container-fluid">
-    <div class="content">
-      <%= render 'layouts/flash_messages' %>
+<% end %>
+<main class="main-wrapper">
+
+<% if all_casa_admin_signed_in? %>
+<% elsif signed_in? %>
+<%= render 'layouts/header' %>
+<% end %>
+
+  <!-- ========== section start ========== -->
+  <section class="section">
+    <div class="container-fluid">
+      <!-- ========== title-wrapper start ========== -->
       <%= yield %>
     </div>
-  </div>
-  <%= render 'layouts/footers/logged_in' %>
-<% else %>
-  <%= render 'layouts/login_header' %>
-  <%= render 'layouts/flash_messages' %>
-  <%= yield %>
-  <%= render 'layouts/footers/not_logged_in' %>
-<% end %>
-</div>
+  </section>
+
+  <footer class="footer">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-4 order-last order-md-first">
+          <div class="copyright text-center text-md-start">
+            <p class="text-sm">
+              © <%= default_page_header %>
+            </p>
+          </div>
+        </div>
+        <!-- end col-->
+        <div class="col-md-8">
+          <div
+            class="
+                  terms
+                  d-flex
+                  justify-content-center justify-content-md-end
+                ">
+            <p class="text-sm pr-4">
+              Built with <i class="lni lni-heart-filled" style="color:red;"></i> by
+              <a href="https://rubyforgood.org/">Ruby For Good</a>
+            </p>
+            <p class="text-sm ml-15">
+              <%= link_to "Report a site issue", "https://form.typeform.com/to/iXY4BubB" %>
+            </p>
+            <p class="text-sm ml-15">
+              <%= link_to "SMS Terms & Conditions", "/sms-terms-conditions.html" %>
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- end row -->
+    </div>
+    <!-- end container -->
+  </footer>
+  <!-- ========== footer end =========== -->
+</main>
+<!-- ======== main-wrapper end =========== -->
 </body>
 </html>

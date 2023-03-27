@@ -1,22 +1,27 @@
 <%= form_for @volunteer, url: volunteers_path, id: :new_user do |form| %>
   <%= render "/shared/error_messages", resource: volunteer %>
 
-  <div class="field form-group">
+  <div class="input-style-1">
     <%= form.label :email, "Email" %>
-    <%= form.text_field :email, class: "form-control" %>
+    <%= form.text_field :email, placeholder: "Email", class: "form-control" %>
   </div>
 
-  <div class="field form-group">
+  <div class="input-style-1">
     <%= form.label :display_name, "Display name" %>
-    <%= form.text_field :display_name, class: "form-control" %>
+    <%= form.text_field :display_name, placeholder: "Display Name", class: "form-control" %>
   </div>
 
-  <div class="field form-group">
+  <div class="input-style-1">
     <%= form.label :phone_number, "Phone number" %>
-    <%= form.telephone_field :phone_number, class: "form-control" %>
+    <%= form.telephone_field :phone_number, placeholder: "Phone Number", class: "form-control" %>
   </div>
 
   <div class="actions">
-    <%= form.submit "Create User", class: "btn btn-primary" %>
+    <%= button_tag(
+      type: "submit",
+      class: "main-btn primary-btn btn-hover btn-sm"
+    ) do %>
+      <i class="lni lni-user mr-5"></i> Create Volunteer
+    <% end %>
   </div>
 <% end %>

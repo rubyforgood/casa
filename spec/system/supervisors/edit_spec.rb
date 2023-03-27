@@ -16,7 +16,7 @@ RSpec.describe "supervisors/edit", type: :system do
       expect(page).to have_text(supervisor_name)
 
       within "#supervisors" do
-        click_on "Edit"
+        click_on "Edit", match: :first
       end
 
       expect(page).to have_text("Editing Supervisor")
@@ -78,11 +78,11 @@ RSpec.describe "supervisors/edit", type: :system do
       visit edit_supervisor_path(supervisor)
 
       dismiss_confirm do
-        click_on "Deactivate supervisor"
+        find("a[href='#{deactivate_supervisor_path(supervisor)}']").click
       end
 
       accept_confirm do
-        click_on "Deactivate supervisor"
+        find("a[href='#{deactivate_supervisor_path(supervisor)}']").click
       end
       expect(page).to have_text("Supervisor was deactivated on")
 

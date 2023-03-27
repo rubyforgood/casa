@@ -1,59 +1,57 @@
-<div class="row">
+<div class="row pt-30 mb-30">
   <div class="col-sm-12 dashboard-table-header">
-    <h3>Emancipation Checklist</h3>
-      <%= link_to @current_case.case_number, casa_case_path(@current_case) %>
-      <span class="d-block float-md-right my-2 mt-md-0 text-center">
-        <%= link_to "Download Checklist", casa_case_emancipation_path(@current_case, format: :docx),
-class: "btn btn-primary" %>
-      </span>
+    <h2>Emancipation Checklist</h2>
+    <%= link_to @current_case.case_number, casa_case_path(@current_case) %>
+    <span class="d-block float-md-right my-2 mt-md-0 text-center">
+      <%= link_to casa_case_emancipation_path(@current_case, format: :docx), class: "main-btn primary-btn btn-sm btn-hover" do %>
+        <i class="lni lni-download mr-10"></i>
+            Download Checklist
+      <% end %>
+    </span>
   </div>
 </div>
 
-<div class="card card-container">
-  <div class="card-body">
-    <% @emancipation_form_data.each do |category| %>
-      <div>
-        <h6 class="emancipation-category no-select" data-is-open="<%= emancipation_category_checkbox_checked(@current_case, category) ? "true" : "false" %>">
-          <div class="emacipation-category-input-label-pair">
+<!-- ========== card start ========== -->
+<div class="card-style mb-40">
+  <% @emancipation_form_data.each do |category| %>
+    <h6 class="emancipation-category no-select" data-is-open="<%= emancipation_category_checkbox_checked(@current_case, category) ? "true" : "false" %>">
+      <div class="checkbox-style emacipation-category-input-label-pair">
+        <input
+          type="checkbox"
+          class="emancipation-category-check-box form-check-input"
+          value="<%= category.id %>"
+          <%= emancipation_category_checkbox_checked(@current_case, category) %>>
+        <div class="pt-10"><%= category.name %></div>
+      </div>
+      <% if category.emancipation_options.count > 0 %>
+        <span class="category-collapse-icon pt-10"><%= emancipation_category_collapse_icon(@current_case, category) %></span>
+      <% end %>
+    </h6>
+    <div class="category-options" style="<%= emancipation_category_collapse_hidden(@current_case, category) %>">
+      <% category.emancipation_options.each do |option| %>
+        <div class="check-item">
+          <% if category.mutually_exclusive %>
+            <input
+              type="radio"
+              id="O<%= option.id %>"
+              class="emancipation-radio-button"
+              name="C<%= category.id %>"
+              value="<%= option.id %>"
+              <%= emancipation_option_checkbox_checked(@current_case, option) %>>
+          <% else %>
             <input
               type="checkbox"
-              class="emancipation-category-check-box"
-              value="<%= category.id %>"
-              <%= emancipation_category_checkbox_checked(@current_case, category) %>>
-            <label><%= category.name %></label>
-          </div>
-          <% if category.emancipation_options.count > 0 %>
-            <span class="category-collapse-icon"><%= emancipation_category_collapse_icon(@current_case, category) %></span>
+              id="O<%= option.id %>"
+              class="emancipation-option-check-box"
+              value="<%= option.id %>"
+              <%= emancipation_option_checkbox_checked(@current_case, option) %>>
           <% end %>
-        </h6>
-        <div
-          class="category-options"
-          style="<%= emancipation_category_collapse_hidden(@current_case, category) %>">
-          <% category.emancipation_options.each do |option| %>
-            <div class="check-item">
-            <% if category.mutually_exclusive %>
-              <input
-                type="radio"
-                id="O<%= option.id %>"
-                class="emancipation-radio-button"
-                name="C<%= category.id %>"
-                value="<%= option.id %>"
-                <%= emancipation_option_checkbox_checked(@current_case, option) %>>
-            <% else %>
-              <input
-                type="checkbox"
-                id="O<%= option.id %>"
-                class="emancipation-option-check-box"
-                value="<%= option.id %>"
-                <%= emancipation_option_checkbox_checked(@current_case, option) %>>
-            <% end %>
-            <label><%= option.name %></label>
-            </div>
-          <% end %>
+          <label><%= option.name %></label>
         </div>
-      </div>
-    <% end %>
-  </div>
+      <% end %>
+    </div>
+  <% end %>
 </div>
+<!-- card end -->
 
 <%= render "shared/async_notifier" %>

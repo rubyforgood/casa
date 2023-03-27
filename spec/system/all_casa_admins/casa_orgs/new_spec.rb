@@ -62,7 +62,7 @@ RSpec.describe "all_casa_admins/casa_orgs/new", type: :system do
 
     it "redirects to root" do
       visit new_all_casa_admins_casa_org_path
-      expect(page).to have_text "Volunteers"
+      expect(page).to have_text "All CASA Log In"
       expect(page).to_not have_text "Create a new CASA Organization"
     end
   end

@@ -114,6 +114,10 @@ class CaseContact < ApplicationRecord
     end
   }
 
+  scope :with_casa_case, ->(case_ids) {
+    where(casa_case_id: case_ids) if case_ids.present?
+  }
+
   filterrific(
     available_filters: [
       :sorted_by,

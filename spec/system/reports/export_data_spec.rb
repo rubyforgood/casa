@@ -22,7 +22,7 @@ RSpec.describe "case_contact_reports/index", type: :system do
     end_date = 10.days.ago.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT)
     page.execute_script("document.getElementById('report_start_date').setAttribute('value', '#{start_date}')")
     page.execute_script("document.getElementById('report_end_date').setAttribute('value', '#{end_date}')")
-    select court.name, from: "report_contact_type_ids"
+    select court.name, from: "multiple-select-field3"
     click_button "Download Report"
     wait_for_download
 
@@ -46,7 +46,7 @@ RSpec.describe "case_contact_reports/index", type: :system do
     excluded_by_contact_type_group = create(:case_contact, occurred_at: Date.yesterday, contact_types: [school], notes: "Excluded by Contact Type")
 
     visit reports_path
-    select contact_type_group.name, from: "report_contact_type_group_ids"
+    select contact_type_group.name, from: "multiple-select-field4"
     click_button "Download Report"
     wait_for_download
 

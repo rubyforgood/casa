@@ -1,53 +1,67 @@
-<div class="card card-container">
-  <div class="card-body">
-    <%= form_with(model: court_date, url: [casa_case, court_date], local: true) do |form| %>
-      <%= render "/shared/error_messages", resource: court_date %>
-
-      <div class="top-page-actions pull-right">
-        <%= form.submit court_date.persisted? ? "Update" : "Create", class: "btn btn-primary" %>
-      </div>
-
-      <p>
+<div class="card-style mb-30">
+  <%= form_with(model: court_date, url: [casa_case, court_date], local: true) do |form| %>
+    <%= render "/shared/error_messages", resource: court_date %>
+    <div class="row align-items-center">
+      <div class="col-md-6">
         <h6><strong>Case Number:</strong> <%= link_to casa_case.case_number, casa_case %></h6>
-      </p>
-
-      <div class="field form-group">
+      </div>
+      <div class="col-md-6">
+        <div class="breadcrumb-wrapper">
+          <span class="top-page-actions ml-5">
+            <%= button_tag(
+            type: "submit",
+            class: "btn-sm main-btn primary-btn btn-hover"
+          ) do %>
+              <% if court_date.persisted? %>
+                <i class="lni lni-pencil-alt"></i>
+                Update
+              <% else %>
+                <i class="lni lni-plus"></i>
+                Create
+              <% end %>
+            <% end %>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="row align-items-center">
+      <div class="input-style-1">
         <%= form.label :date, "Add Court Date" %>
         <%= form.text_field :date,
                         value: court_date.date&.to_date || Time.zone.now,
                         data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
                         class: "form-control" %>
       </div>
-      <br>
-
-      <div class="field form-group">
+      <div class="input-style-1">
         <%= form.label :court_report_due_date, "Add Court Report Due Date" %>
         <%= form.text_field :court_report_due_date,
                         value: court_date.court_report_due_date&.to_date,
                         data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
                         class: "form-control" %>
       </div>
-      <br>
-
-      <div class="field form-group">
+      <div class="select-style-1">
         <%= form.label :judge_id, "Judge" %>
-        <%= form.collection_select(
+        <div class="select-position">
+          <%= form.collection_select(
                 :judge_id,
                 Judge.for_organization(current_organization),
                 :id, :name,
                 {include_hidden: false, include_blank: "-Select Judge-"},
                 {class: "form-control"}
             ) %>
+        </div>
       </div>
-      <div class="field form-group">
+      <div class="select-style-1">
         <%= form.label :hearing_type_id, "Hearing type" %>
-        <%= form.collection_select(
+        <div class="select-position">
+          <%= form.collection_select(
                 :hearing_type_id,
                 HearingType.active.for_organization(current_organization),
                 :id, :name,
                 {include_hidden: false, include_blank: "-Select Hearing Type-"},
                 {class: "form-control"}
             ) %>
+        </div>
       </div>
       <div class="field form-group court-orders">
         <%= render partial: "shared/court_order_list",

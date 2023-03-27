@@ -1,157 +1,213 @@
-<h1>Export Data</h1>
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
 
-<div class="card card-container my-4">
-  <div class="card-body">
-    <div class="btn-group">
-      <%= form_with url: mileage_reports_path(format: :csv), method: :get do |f| %>
-          <%= f.submit "Mileage Report", class: "btn btn-primary report-form-submit",
-          data: {disable_with: "Downloading Mileage Report"} %>
-      <% end %>
-    </div>
-
-    <div class="btn-group">
-      <%= form_with url: missing_data_reports_path(format: :csv), method: :get do |f| %>
-        <%= f.submit "Missing Data Report", class: "btn btn-primary report-form-submit" %>
-      <% end %>
-    </div>
-
-    <div class="btn-group">
-      <%= form_with url: learning_hours_reports_path(format: :csv), method: :get do |f| %>
-        <%= f.submit "Learning Hours Report", class: "btn btn-primary report-form-submit" %>
-      <% end %>
-    </div>
-
-    <div class="btn-group">
-      <%= form_with url: export_emails_path(format: :csv), method: :get do |f| %>
-        <%= f.submit "Export Volunteers Emails", class: "btn btn-primary report-form-submit" %>
-      <% end %>
-    </div>
-
-    <div class="btn-group">
-      <%= form_with url: followup_reports_path(format: :csv), method: :get do |f| %>
-        <%= f.submit "Followups Report", class: "btn btn-primary report-form-submit" %>
-      <% end %>
-    </div>
-  </div>
-</div>
-
-<div class="card card-container">
-  <div class="card-body">
-    <h5 class="card-title"><strong><%= "Case Contacts Report" %></strong></h5>
-    <p class="card-text">
-      <%= "This CSV is a listing of all fields for the case contacts of all volunteers. Select the start and end date." %>
-    </p>
-
-    <hr>
-
-    <%= form_with url: case_contact_reports_path(format: :csv), scope: 'report', method: :get, local: true do |f| %>
-      <div class="field form-group">
-        <label><strong>Starting From:</strong></label>
-        <%= f.text_field :start_date, value: 6.months.ago.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT),
-                                      data: { provide: "datepicker",
-                                      date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
-                                      class: "form-control" %>
+    <div class="col-lg-12">
+      <div class="title mb-30">
+        <h2>Export Data</h2>
       </div>
+    </div>
 
-      <div class="field form-group">
-        <label><strong>Ending At:</strong></label>
-        <%= f.text_field :end_date, value: Date.today.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT),
-                                    data:{ provide: "datepicker",
-                                    date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
-                                    class: "form-control" %>
+    <div class="col-lg-12">
+      <ul class="buttons-group mb-30">
+        <li>
+          <%= form_with url: mileage_reports_path(format: :csv), method: :get do |f| %>
+            <%= button_tag(
+                  data: { disable_with: "Downloading Mileage Report" },
+                  class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
+                ) do %>
+              <i class="lni lni-dashboard mr-10"></i> Mileage Report
+            <% end %>
+          <% end %>
+        </li>
+
+        <li>
+          <%= form_with url: missing_data_reports_path(format: :csv), method: :get do |f| %>
+            <%= button_tag(
+                  data: { disable_with: "Downloading Missing Data Report" },
+                  class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
+                ) do %>
+              <i class="lni lni-database mr-10"></i> Missing Data Report
+            <% end %>
+          <% end %>
+        </li>
+
+        <li>
+          <%= form_with url: learning_hours_reports_path(format: :csv), method: :get do |f| %>
+            <%= button_tag(
+                  data: { disable_with: "Downloading Learning Hours Report" },
+                  class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
+                ) do %>
+              <i class="lni lni-hourglass mr-10"></i> Learning Hours Report
+            <% end %>
+          <% end %>
+        </li>
+
+        <li>
+          <%= form_with url: export_emails_path(format: :csv), method: :get do |f| %>
+            <%= button_tag(
+                  data: { disable_with: "Downloading Export Volunteers Emails" },
+                  class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
+                ) do %>
+              <i class="lni lni-envelope mr-10"></i> Export Volunteers Emails
+            <% end %>
+          <% end %>
+        </li>
+
+        <li>
+          <%= form_with url: followup_reports_path(format: :csv), method: :get do |f| %>
+            <%= button_tag(
+                  data: { disable_with: "Downloading Followups Report" },
+                  class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
+                ) do %>
+              <i class="lni lni-check-box mr-10"></i> Followups Report
+            <% end %>
+          <% end %>
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-lg-12">
+      <div class="card-style mb-30">
+        <h6 class="mb-10">Case Contacts Report</h6>
+        <p class="text-sm mb-20">
+          This CSV is a listing of all fields for the case contacts of all volunteers. Select the start and end date.
+        </p>
+
+        <hr>
+
+        <div class="table-wrapper table-responsive">
+          <%= form_with url: case_contact_reports_path(format: :csv), scope: 'report', method: :get, local: true do |f| %>
+
+            <div class="field form-group mb-20">
+              <label class="form-label"><h6>Starting From</h6></label>
+              <%= f.text_field :start_date, value: 6.months.ago.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT),
+                               data: { provide: "datepicker",
+                                       date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
+                               class: "form-control" %>
+            </div>
+
+            <div class="field form-group mb-20">
+              <label class="form-label"><h6>Ending At</h6></label>
+              <%= f.text_field :end_date, value: Date.today.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT),
+                               data: { provide: "datepicker",
+                                       date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
+                               class: "form-control" %>
+            </div>
+
+            <% if current_user&.casa_admin? || current_user&.supervisor? %>
+              <div class="select-style-1">
+                <label><h6>Assigned To</h6></label>
+                <div class="select-position">
+                  <%= f.collection_select(
+                        :supervisor_ids,
+                        Supervisor.where(casa_org: current_user.casa_org),
+                        :id,
+                        :display_name,
+                        {prompt: false, :include_hidden => false},
+                        {class: "form-control form-select select2", id:"multiple-select-field1", multiple:true, data: { placeholder: '-Select Supervisors-' }}
+                      ) %>
+                </div>
+              </div>
+
+              <div class="select-style-1">
+                <label><h6>Volunteers</h6></label>
+                <div class="select-position">
+                  <%= f.collection_select(
+                        :creator_ids,
+                        Volunteer.where(casa_org: current_user.casa_org),
+                        :id,
+                        :display_name,
+                        {prompt: false, :include_hidden => false},
+                        {class: "form-control form-select select2", id:"multiple-select-field2", multiple:true, data: { placeholder: '-Select Volunteers-' }}
+                      ) %>
+                </div>
+              </div>
+
+              <div class="select-style-1">
+                <label><h6>Contact Type</h6></label>
+                <div class="select-position">
+                  <%= f.collection_select(
+                        :contact_type_ids,
+                        ContactType.for_organization(current_user.casa_org),
+                        :id,
+                        :name,
+                        {prompt: false, :include_hidden => false},
+                        {class: "form-control form-select select2", id:"multiple-select-field3", multiple:true, data: { placeholder: '-Select Contact Types-' }}
+                      ) %>
+                </div>
+              </div>
+
+              <div class="select-style-1">
+                <label><h6>Contact Type Group</h6></label>
+                <div class="select-position">
+                  <%= f.collection_select(
+                        :contact_type_group_ids,
+                        ContactTypeGroup.for_organization(current_user.casa_org),
+                        :id,
+                        :name,
+                        { },
+                        { class: "form-control form-select select2", id:"multiple-select-field4", multiple:true, data: { placeholder: '-Select Contact Type Groups-' }  }
+                      ) %>
+                </div>
+              </div>
+
+              <h6 class="mb-10">Want Driving Reimbursement</h6>
+              <div class="form-check radio-style mb-10">
+                <%= f.collection_radio_buttons :want_driving_reimbursement, boolean_choices, :last, :first do |b| %>
+                  <div class="form-check">
+                    <%= b.radio_button(class: "form-check-input") %>
+                    <%= b.label(class: "form-check-label") %>
+                  </div>
+                <% end %>
+              </div>
+
+              <h6 class="mb-10">Contact Made</h6>
+              <div class="form-check radio-style mb-20">
+                <%= f.collection_radio_buttons :contact_made, boolean_choices, :last, :first do |b| %>
+                  <div class="form-check">
+                    <%= b.radio_button(class: "form-check-input") %>
+                    <%= b.label(class: "form-check-label") %>
+                  </div>
+                <% end %>
+              </div>
+
+              <h6 class="mb-10">Transition Aged Youth</h6>
+              <div class="form-check radio-style mb-20">
+                <%= f.collection_radio_buttons :has_transitioned, boolean_choices, :last, :first do |b| %>
+                  <div class="form-check">
+                    <%= b.radio_button(class: "form-check-input") %>
+                    <%= b.label(class: "form-check-label") %>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+
+            <%= render 'filter', form: f %>
+
+            <ul class="buttons-group mt-30 col-8">
+              <li>
+                <button
+                  type="button"
+                  class="btn-sm main-btn primary-btn-outline btn-hover"
+                  data-bs-toggle="modal"
+                  data-bs-target="#filterColumns"><i class="lni lni-funnel mr-10"></i>
+                  Filter Columns
+                </button>
+              </li>
+
+              <li>
+                <%= button_tag(
+                      type: "submit",
+                      data: { disable_with: "Downloading Report" },
+                      class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
+                    ) do %>
+                  <i class="lni lni-download mr-10"></i> Download Report
+                <% end %>
+              </li>
+            </ul>
+          <% end %>
+        </div>
       </div>
-
-      <% if current_user&.casa_admin? || current_user&.supervisor? %>
-        <div class="field form-group">
-          <label><strong>Assigned To:</strong></label>
-          <%= f.collection_select(
-                  :supervisor_ids,
-                  Supervisor.where(casa_org: current_user.casa_org),
-                  :id, :display_name,
-                  {include_hidden: false},
-                  {class: "form-control select2",
-                   data: {placeholder: "-Select Supervisors-"},
-                   multiple: true}
-              ) %>
-        </div>
-
-        <div class="field form-group">
-          <label><strong>Volunteers</strong></label>
-          <%= f.collection_select(
-                  :creator_ids,
-                  Volunteer.where(casa_org: current_user.casa_org),
-                  :id,
-                  :display_name,
-                  {include_hidden: false},
-                  {class: "form-control select2", data: {placeholder: "-Select Volunteers-"},
-multiple: true}
-              ) %>
-        </div>
-
-        <div class="field form-group">
-          <label><strong>Contact Type:</strong></label>
-          <%= f.collection_select(
-                  :contact_type_ids,
-                  ContactType.for_organization(current_user.casa_org),
-                  :id,
-                  :name,
-                  {include_hidden: false},
-                  {class: "form-control select2", data: {placeholder: "-Select Contact Types-"},
-multiple: true}
-              ) %>
-        </div>
-
-        <div class="field form-group">
-          <label><strong>Contact Type Group:</strong></label>
-          <%= f.collection_select(
-                  :contact_type_group_ids,
-                  ContactTypeGroup.for_organization(current_user.casa_org),
-                  :id,
-                  :name,
-                  {include_hidden: false},
-                  {class: "form-control select2", data: {placeholder: "-Select Contact Type Groups-"},
-multiple: true}
-              ) %>
-        </div>
-
-        <div class="field form-group">
-          <label><strong>Want Driving Reimbursement:</strong></label>
-          <%= f.collection_radio_buttons :want_driving_reimbursement, boolean_choices, :last, :first do |b| %>
-            <div class="form-check">
-              <%= b.radio_button(class: "form-check-input") %>
-              <%= b.label(class: "form-check-label") %>
-            </div>
-          <% end %>
-        </div>
-
-        <div class="field form-group">
-          <label><strong>Contact Made:</strong></label>
-          <%= f.collection_radio_buttons :contact_made, boolean_choices, :last, :first do |b| %>
-            <div class="form-check">
-              <%= b.radio_button(class: "form-check-input") %>
-              <%= b.label(class: "form-check-label") %>
-            </div>
-          <% end %>
-        </div>
-
-        <div class="field form-group">
-          <label><strong>Transition Aged Youth:</strong></label>
-          <%= f.collection_radio_buttons :has_transitioned, boolean_choices, :last, :first do |b| %>
-            <div class="form-check">
-              <%= b.radio_button(class: "form-check-input") %>
-              <%= b.label(class: "form-check-label") %>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
-
-      <%= render 'filter', form: f %>
-      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#filterColumns">
-        Filter Columns
-      </button>
-
-      <%= f.submit "Download Report", class: "btn btn-primary", data: {disable_with: false} %>
-    <% end %>
-
+    </div>
   </div>
 </div>
