@@ -65,8 +65,12 @@
           <span class="status-btn danger-bg text-white mb-10">Number of Volunteers not attempting contact (within 2 weeks)</span><br>
           <span class="status-btn deactive-bg text-black">Count of Transition Aged Youth</span>
         </p>
-        <div id="supervisors" class="table-wrapper table-responsive">
-          <table class="table">
+        <div class="table-wrapper table-responsive">
+          <table
+            id="supervisors"
+            class="table"
+            data-source="<%= datatable_supervisors_path format: :json %>"
+          >
             <thead>
             <tr>
               <th><h6>Supervisor Name</h6></th>
