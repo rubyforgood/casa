@@ -45,73 +45,76 @@
             <%= render "/shared/invite_login", resource: current_user %>
 
             <br>
-            <div class="actions">
+          <div class="actions" id="accordionExample">
+           
               <%= form.submit "Update Profile", class: "main-btn primary-btn btn-hover mb-3" %>
-              <button class="main-btn warning-btn btn-hover accordion mb-3" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              <button class="main-btn warning-btn btn-hover accordion mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                 Change Password
               </button>
 
-              <button class="main-btn warning-btn btn-hover accordion mb-3" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+              <button class="main-btn warning-btn btn-hover accordion mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                 Change Email
               </button>
 
-              <% if policy(CasaAdmin).see_deactivate_option? %>
-                <% if @active_casa_admins.length > 1 %>
-                  <%= link_to "Deactivate",
-                              deactivate_casa_admin_path(current_user),
-                              method: :patch,
-                              class: "btn btn-outline-danger mb-3",
-                              data: {confirm: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"} %>
-                <% else %>
-                  <%= link_to "Deactivate",
-                              "#",
-                              class: "main-btn danger-btn-outline btn-hover mb-3",
-                              data: {confirm: "Contact your administrator at Ruby For Good to deactivate this account."} %>
-                <% end %>
+            <% if policy(CasaAdmin).see_deactivate_option? %>
+              <% if @active_casa_admins.length > 1 %>
+                <%= link_to "Deactivate",
+                            deactivate_casa_admin_path(current_user),
+                            method: :patch,
+                            class: "btn btn-outline-danger mb-3",
+                            data: {confirm: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"} %>
+              <% else %>
+                <%= link_to "Deactivate",
+                            "#",
+                            class: "main-btn danger-btn-outline btn-hover mb-3",
+                            data: {confirm: "Contact your administrator at Ruby For Good to deactivate this account."} %>
+              <% end %>
+            <% end %>
+          <% end %>
+          <div class="accordionGroup">
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+              <br>
+              <%= form_for(@user, as: :user, url: {action: "update_password"}) do |f| %>
+                <div class="input-style-1">
+                  <%= f.label :current_password, "Current Password" %><br>
+                  <%= f.password_field :current_password, autocomplete: "off", class: "form-control" %>
+                </div>
+                <div class="input-style-1">
+                  <%= f.label :password, "New Password" %><br>
+                  <%= f.password_field :password, autocomplete: "off", class: "form-control password-new",
+        minlength: User.password_length.min %>
+                </div>
+                <div class="input-style-1">
+                  <%= f.label :password_confirmation, "New Password Confirmation" %><br>
+                  <%= f.password_field :password_confirmation, class: "form-control password-confirmation",
+        minlength: User.password_length.min %>
+                </div>
+                <div class="actions mb-10">
+                  <%= f.submit "Update Password", class: "btn btn-danger submit-password" %>
+                </div>
               <% end %>
             </div>
-          <% end %>
-          <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-            <br>
-            <%= form_for(@user, as: :user, url: {action: "update_password"}) do |f| %>
-              <div class="input-style-1">
-                <%= f.label :current_password, "Current Password" %><br>
-                <%= f.password_field :current_password, autocomplete: "off", class: "form-control" %>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+              <br>
+              <%= form_for(@user, as: :user, url: {action: "update_email"}) do |f| %>
+                <div class="input-style-1">
+                  <%= f.label :current_password, "Current Password" %><br>
+                  <%= f.password_field :current_password, autocomplete: "off", class: "form-control", id: "current_password_email" %>
+                </div>
+                <div class="input-style-1">
+                  <%= f.label :email, "New Email" %><br>
+                  <%= f.text_field :email, autocomplete: "off", class: "form-control email-new"%>
+                </div>
+                <div class="input-style-1">
+                  <%= f.label :email_confirmation, "New Emal Confirmation" %><br>
+                  <%= f.text_field :email_confirmation, class: "form-control email-confirmation" %>
+                </div>
+                <div class="actions mb-10">
+                  <%= f.submit "Update Email", class: "btn btn-danger submit-email" %>
+                </div>
+              <% end %>
               </div>
-              <div class="input-style-1">
-                <%= f.label :password, "New Password" %><br>
-                <%= f.password_field :password, autocomplete: "off", class: "form-control password-new",
-      minlength: User.password_length.min %>
-              </div>
-              <div class="input-style-1">
-                <%= f.label :password_confirmation, "New Password Confirmation" %><br>
-                <%= f.password_field :password_confirmation, class: "form-control password-confirmation",
-      minlength: User.password_length.min %>
-              </div>
-              <div class="actions mb-10">
-                <%= f.submit "Update Password", class: "btn btn-danger submit-password" %>
-              </div>
-            <% end %>
-          </div>
-          <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-            <br>
-            <%= form_for(@user, as: :user, url: {action: "update_email"}) do |f| %>
-              <div class="input-style-1">
-                <%= f.label :current_password, "Current Password" %><br>
-                <%= f.password_field :current_password, autocomplete: "off", class: "form-control", id: "current_password_email" %>
-              </div>
-              <div class="input-style-1">
-                <%= f.label :email, "New Email" %><br>
-                <%= f.text_field :email, autocomplete: "off", class: "form-control email-new"%>
-              </div>
-              <div class="input-style-1">
-                <%= f.label :email_confirmation, "New Emal Confirmation" %><br>
-                <%= f.text_field :email_confirmation, class: "form-control email-confirmation" %>
-              </div>
-              <div class="actions mb-10">
-                <%= f.submit "Update Email", class: "btn btn-danger submit-password" %>
-              </div>
-            <% end %>
+            </div>
           </div>
         </div>
       </div>
