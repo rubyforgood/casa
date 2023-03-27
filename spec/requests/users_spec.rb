@@ -103,6 +103,69 @@ RSpec.describe "/users", type: :request do
         end
       end
     end
+######################
+  describe "PATCH /update_email" do
+    subject do
+      patch update_email_users_path(user),
+        params: {
+          user: {
+            current_password: "12345678",
+            email: "newemail@example.com",
+            email_confirmation: "newemail@example.com"
+          }
+        }
+    end
+
+    before { sign_in user }
+
+    context "when volunteer" do
+      let(:user) { create(:volunteer) }
+
+      context "when successfully" do
+        it "updates the user email" do
+          subject
+
+          expect(user.valid_password?("new_email@example.com")).to be_truthy
+        end
+
+        it "calls UserMailer to send a confirmation email" do
+          allow(UserMailer).to receive(:confirmation_instructions).with(user).and_return(mailer)
+          expect(mailer).to receive(:deliver)
+
+          subject
+
+          subject
+        end
+      end
+
+      context "when failure" do
+        subject do
+          patch update_email_users_path(user),
+            params: {
+              user: {
+                current_password: "wrongpassword",
+                email: "wrong",
+                email_confirmation: "wrong"
+              }
+            }
+        end
+
+        it "does not update the user password", :aggregate_failures do
+          subject
+
+          expect(user.valid_password?("wrongpassword")).to be_falsey
+          expect(user.valid_password?("")).to be_falsey
+        end
+
+        it "does not call UserMailer to reminder the user that password has changed" do
+         expect(ActionMailer::Base.deliveries.count).to eq(0)
+
+          subject
+        end
+      end
+    end 
+  end 
+    #######################
 
     context "when supervisor" do
       let(:user) { create(:supervisor) }
