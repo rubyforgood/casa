@@ -8,40 +8,41 @@ RSpec.describe "/error", type: :request do
 
   describe "GET /error" do
     context "when logged in as admin user" do
-      it "500s the app" do
+      it "raises an error causing an internal server error" do
         sign_in admin
 
-        get error_path
-
-        expect(response).to raise_error(Errors::StandardError)
+        expect {
+          get error_path
+        }.to raise_error(StandardError, /This is an intentional test exception/)
       end
     end
 
     context "when logged in as volunteer" do
-      it "500s the app" do
+      it "raises an error causing an internal server error" do
         sign_in volunteer
 
-        get error_path
-
-        expect(response).to raise_error(Errors::StandardError)
+        expect {
+          get error_path
+        }.to raise_error(StandardError, /This is an intentional test exception/)
       end
     end
 
     context "when logged in as supervisor" do
-      it "500s the app" do
+      it "raises an error causing an internal server error" do
         sign_in supervisor
 
-        get error_path
-
-        expect(response).to raise_error(Errors::StandardError)
+        expect {
+          get error_path
+        }.to raise_error(StandardError, /This is an intentional test exception/)
       end
     end
 
     context "when not logged in" do
-      it "500s the app" do
-        get error_path
+      it "raises an error causing an internal server error" do
 
-        expect(response).to raise_error(Errors::StandardError)
+        expect {
+          get error_path
+        }.to raise_error(StandardError, /This is an intentional test exception/)
       end
     end
   end
