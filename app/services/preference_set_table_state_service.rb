@@ -1,5 +1,5 @@
 class PreferenceSetTableStateService
-  attr_reader :table_name, :table_state, :current_user, :params
+  attr_reader :current_user
   
   def initialize( current_user:)
     @current_user = current_user
