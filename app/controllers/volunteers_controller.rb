@@ -22,18 +22,18 @@ class VolunteersController < ApplicationController
   end
 
   def table_state
-    render json: PreferenceSetTableStateService.new(current_user: current_user.id).fetch_table_state( 
-                                                                                                      table_name: "volunteers_table"
-                                                                                                    )
+    render json: PreferenceSetTableStateService.new(current_user: current_user.id).fetch_table_state(
+      table_name: "volunteers_table"
+    )
   end
 
   def save_table_state
     render json: PreferenceSetTableStateService.new(current_user: current_user.id).save_table_state(
-                                                                                                    table_state: params["table_state"], 
-                                                                                                    table_name: "volunteers_table"
-                                                                                                  )
+      table_state: params["table_state"],
+      table_name: "volunteers_table"
+    )
   end
-  
+
   def new
     @volunteer = current_organization.volunteers.new
     authorize @volunteer
@@ -185,23 +185,17 @@ class VolunteersController < ApplicationController
   end
 end
 
-
-
 def save_table_state
- 
   table_state = JSON.parse(params["table_state"])
   preference_set = PreferenceSet.find_or_create_by(user: current_user)
-  
-  preference_state.table_state['volunteers_table'] = 
- 
- binding.pry
- 
-  
-  preference_set.table_state['volunteers_table'] = table_state.to_json
-  
-  table_state['columns'] = 
-  
-  if preference_set.save
-    render json: { message: "New table state saved" }
-  end
+
+  preference_state.table_state["volunteers_table"] =
+    binding.pry
+
+  preference_set.table_state["volunteers_table"] = table_state.to_json
+
+  table_state["columns"] =
+    if preference_set.save
+      render json: {message: "New table state saved"}
+    end
 end

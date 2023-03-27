@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe PreferenceSetTableStateService do
   let(:user) { create(:user) }
@@ -8,7 +8,7 @@ RSpec.describe PreferenceSetTableStateService do
   describe "#fetch_table_state" do
     context "when the preference set exists" do
       before do
-        create(:preference_set, user: user, table_state: { table_name => table_state })
+        create(:preference_set, user: user, table_state: {table_name => table_state})
       end
 
       it "returns the table state" do

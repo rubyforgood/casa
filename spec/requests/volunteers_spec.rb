@@ -6,19 +6,8 @@ RSpec.describe "/volunteers", type: :request do
   let(:admin) { build(:casa_admin, casa_org: organization) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
   let(:volunteer) { create(:volunteer, casa_org: organization) }
-  let(:columns_state) do
-    [
-        {'visible' => true},
-        {'visible' => true},
-        {'visible' => true},
-        {'visible' => true},
-        {'visible' => true},
-        {'visible' => true},
-        {'visible' => true},
-        {'visible' => true},
-      ].to_json
-  end
-  let(:preference_set) { create(:preference_set, user_id: supervisor.id, columns_state: columns_state) }
+  let(:table_name) { 'volunteers_table' }
+  let!(:preference_set) { create(:preference_set, user: supervisor, table_state: { table_name => { 'foo' => 'bar' } }) }
 
   blacklist = ["api.twilio.com", "api.short.io"]
   web_mock = WebMockHelper.new(blacklist)
@@ -27,25 +16,25 @@ RSpec.describe "/volunteers", type: :request do
   describe "GET /table_state" do
     before do
       sign_in supervisor
-      allow_any_instance_of(ApplicationController).to receive(:current_preference_set).and_return(preference_set)
     end
-    it 'retrieves columns_state' do
-      columns_state.to_json
-      get "/table_state"
+    it 'returns a JSON response with the saved table state' do
+      supervisor.preference_set.update!(table_state: { "volunteers_table" => "some_state" })
+      get table_state_path, params: { action: "table_state" }, as: :json
 
-      expect(response).to have_http_status(:ok)
+      expect(response).to have_http_status(:success)
+      expect(response.body).to eq("some_state")
     end
   end
 
   describe "POST /save_table_state " do
     before do
       sign_in supervisor
-      allow_any_instance_of(ApplicationController).to receive(:current_preference_set).and_return(preference_set)
     end
-    it 'Correctly update columns state' do
-      post '/save_table_state', params: { table_state: columns_state.to_json }
-      expect(response).to be_successful
-      # expect(response.body).to eq columns_state
+    it "Correctly update columns state" do
+      post save_table_state_path, params: { action: "save_table_state", table_state: "new_state" }, as: :json
+
+      expect(response).to have_http_status(:success)
+      expect(supervisor.reload.preference_set.table_state["volunteers_table"]).to eq("new_state")
     end
   end
 

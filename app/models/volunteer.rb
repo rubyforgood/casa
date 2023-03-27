@@ -14,7 +14,7 @@ class Volunteer < User
   CONTACT_MADE_IN_PAST_DAYS_COLUMN = "contact_made_in_past_#{CONTACT_MADE_IN_PAST_DAYS_NUM}_days".freeze
   HOURS_SPENT_IN_DAYS_COLUMN = "hours_spent_in_days"
   EXTRA_LANGUAGES_COLUMN = "has_any_extra_languages"
-  ACTIONS_COLUMN = "actions"  
+  ACTIONS_COLUMN = "actions"
   TABLE_COLUMNS = [
     NAME_COLUMN,
     EMAIL_COLUMN,
@@ -28,7 +28,7 @@ class Volunteer < User
     EXTRA_LANGUAGES_COLUMN,
     ACTIONS_COLUMN
   ].freeze
-   serialize :columns, JSON
+  serialize :columns, JSON
 
   def self.columns_state(user)
     cols = []
@@ -39,8 +39,8 @@ class Volunteer < User
         cols << TABLE_COLUMNS[index] if col["visible"] == true
       end
     end
-    
-    return cols
+
+    cols
   end
 
   CONTACT_MADE_IN_DAYS_NUM = 14
