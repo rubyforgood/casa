@@ -13,8 +13,8 @@
               <%= render "/shared/error_messages", resource: @user %>
             </div>
             <div class="input-style-1">
-              <%= form.label :email, "Email" %>
-              <%= form.text_field :email, class: "form-control", disabled: !current_user.casa_admin? %>
+              <%= form.label :current_email, "Email" %>
+              <%= form.text_field :current_email, class: "form-control", value: @user.email disabled: true %> #current_email is a dummy
             </div>
 
             <div class="input-style-1">
@@ -49,6 +49,10 @@
               <%= form.submit "Update Profile", class: "main-btn primary-btn btn-hover mb-3" %>
               <button class="main-btn warning-btn btn-hover accordion mb-3" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                 Change Password
+              </button>
+
+              <button class="main-btn warning-btn btn-hover accordion mb-3" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+                Change Email
               </button>
 
               <% if policy(CasaAdmin).see_deactivate_option? %>
@@ -86,6 +90,26 @@
               </div>
               <div class="actions mb-10">
                 <%= f.submit "Update Password", class: "btn btn-danger submit-password" %>
+              </div>
+            <% end %>
+          </div>
+          <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <br>
+            <%= form_for(@user, as: :user, url: {action: "update_email"}) do |f| %>
+              <div class="input-style-1">
+                <%= f.label :current_password, "Current Password" %><br>
+                <%= f.password_field :current_password, autocomplete: "off", class: "form-control", id: "current_password_email" %>
+              </div>
+              <div class="input-style-1">
+                <%= f.label :email, "New Email" %><br>
+                <%= f.text_field :email, autocomplete: "off", class: "form-control email-new"%>
+              </div>
+              <div class="input-style-1">
+                <%= f.label :email_confirmation, "New Emal Confirmation" %><br>
+                <%= f.text_field :email_confirmation, class: "form-control email-confirmation" %>
+              </div>
+              <div class="actions mb-10">
+                <%= f.submit "Update Email", class: "btn btn-danger submit-password" %>
               </div>
             <% end %>
           </div>
