@@ -42,6 +42,16 @@ RSpec.describe User, type: :model do
       user = build(:user, phone_number: "+76758890432")
       expect(user.valid?).to be false
     end
+
+    it "has an email_confirmation that matches email" do
+      user = build(:user)
+      expect(user.email).to eq(user.email_confirmation)
+    end
+
+    it "has an empty old_emails array when initialized" do
+      user = build(:user)
+      expect(user.old_emails).to eq([])
+    end
   end
 
   describe "#case_contacts_for" do
@@ -260,5 +270,39 @@ RSpec.describe User, type: :model do
     it "returns users who haven't signed in in 30 days" do
       expect(User.no_recent_sign_in).to contain_exactly(old_sign_in_user)
     end
+  end
+
+    describe "#record_previous_emails AND #verify_email" do
+    # create user, check for side effects, test method
+    let!(:new_volunteer) { create(:volunteer, email: "firstemail@example.com") }
+
+    it "instantiates with an empty old_emails attribute" do
+      # brand new account, old emails array is empty
+      expect(new_volunteer.old_emails).to match_array([])
+    end
+
+    it "saves the old email when a volunteer changes their email" do
+      # email is changed, updated, confirmed, and recorded
+      new_volunteer.update(email: "secondemail@example.com", email_confirmation: "secondemail@example.com")
+      new_volunteer.confirm
+
+
+      expect(new_volunteer.email).to eq("secondemail@example.com")
+      expect(new_volunteer.email_confirmation).to eq("secondemail@example.com")
+      expect(new_volunteer.old_emails).to match_array(["firstemail@example.com"])
+    end
+
+    #it "removes a previous email from old_emails if volunteer reinstates it" do
+      # email is changed to previously used email and is no longer recorded as an "old email"
+    #  new_volunteer.update(email: "secondemail@example.com", email_confirmation: "secondemail@example.com")
+    #  new_volunteer.confirm 
+
+    #  new_volunteer.update(email: "firstemail@example.com", email_confirmation: "firstemail@example.com")
+    #  new_volunteer.confirm
+
+    #  expect(new_volunteer.email).to eq("firstemail@example.com")
+    #  expect(new_volunteer.old_emails).to match_array(["secondemail@example.com"])
+    #  expect(new_volunteer.old_emails).not_to include("firstemail@example.com")
+    #end
   end
 end

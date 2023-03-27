@@ -8,7 +8,7 @@ class User < ApplicationRecord
   include ActiveModel::Dirty
 
   before_update :record_previous_email
-  #after_create :skip_confirmable_email_confirmation_upon_creation
+  after_create :skip_confirmable_email_confirmation_upon_creation
 
   validates_with UserValidator
 

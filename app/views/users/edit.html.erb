@@ -77,7 +77,7 @@
               <%= form_for(@user, as: :user, url: {action: "update_password"}) do |f| %>
                 <div class="input-style-1">
                   <%= f.label :current_password, "Current Password" %><br>
-                  <%= f.password_field :current_password, autocomplete: "off", class: "form-control" %>
+                  <%= f.password_field :current_password, autocomplete: "off", class: "form-control", id:"current_password" %>
                 </div>
                 <div class="input-style-1">
                   <%= f.label :password, "New Password" %><br>
@@ -106,7 +106,7 @@
                   <%= f.text_field :email, autocomplete: "off", class: "form-control email-new", autocomplete: "off", value: nil%>
                 </div>
                 <div class="input-style-1">
-                  <%= f.label :email_confirmation, "New Emal Confirmation" %><br>
+                  <%= f.label :email_confirmation, "New Email Confirmation" %><br>
                   <%= f.text_field :email_confirmation, class: "form-control email-confirmation", autocomplete: "off", value: nil %>
                 </div>
                 <div class="actions mb-10">
