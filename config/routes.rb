@@ -159,6 +159,7 @@ Rails.application.routes.draw do
       get :edit
       patch :update
       patch "update_password"
+      patch "update_email"
       patch :add_language
     end
   end
