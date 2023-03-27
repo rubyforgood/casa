@@ -113,8 +113,7 @@ class UsersController < ApplicationController
   end
 ################################
   def user_params
-      params.require(:user).permit(:display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
-    end
+    params.require(:user).permit(:display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
   end
 
   def valid_user_password
