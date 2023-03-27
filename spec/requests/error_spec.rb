@@ -13,7 +13,7 @@ RSpec.describe "/error", type: :request do
 
         get error_path
 
-        expect(response).to have_http_status(:error)
+        expect(response).to raise_error(Errors::StandardError)
       end
     end
 
@@ -23,7 +23,7 @@ RSpec.describe "/error", type: :request do
 
         get error_path
 
-        expect(response).to have_http_status(:error)
+        expect(response).to raise_error(Errors::StandardError)
       end
     end
 
@@ -33,7 +33,7 @@ RSpec.describe "/error", type: :request do
 
         get error_path
 
-        expect(response).to have_http_status(:error)
+        expect(response).to raise_error(Errors::StandardError)
       end
     end
 
@@ -41,7 +41,7 @@ RSpec.describe "/error", type: :request do
       it "500s the app" do
         get error_path
 
-        expect(response).to have_http_status(:error)
+        expect(response).to raise_error(Errors::StandardError)
       end
     end
   end
