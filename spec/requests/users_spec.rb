@@ -103,71 +103,6 @@ RSpec.describe "/users", type: :request do
         end
       end
     end
-######################
-  describe "PATCH /update_email" do
-    subject do
-      patch update_email_users_path(user),
-        params: {
-          user: {
-            current_password: "12345678",
-            email: "newemail@example.com",
-            email_confirmation: "newemail@example.com"
-          }
-        }
-    end
-
-    before { sign_in user }
-
-    context "when volunteer" do
-      let(:user) { create(:volunteer) }
-
-      context "when successfully" do
-        it "updates the user email" do
-          subject
-
-          expect(user.valid_password?("12345678")).to be_truthy
-        end
-
-        it "send an alert and a confirmation email" do
-          subject 
-          
-          expect(ActionMailer::Base.deliveries.count).to eq(2)
-          expect(ActionMailer::Base.deliveries.first.body.encoded)
-        .to include("We're contacting you to notify you that your email is being changed to newemail@example.com.")
-          expect(ActionMailer::Base.deliveries.last.body.encoded)
-        .to match("You can confirm your account email through the link below:")
-        
-        end
-      end
-
-      context "when failure" do
-        subject do
-          patch update_email_users_path(user),
-            params: {
-              user: {
-                current_password: "wrongpassword",
-                email: "wrong",
-                email_confirmation: "wrong"
-              }
-            }
-        end
-
-        it "does not update the user password", :aggregate_failures do
-          subject
-
-          expect(user.valid_password?("wrongpassword")).to be_falsey
-          expect(user.valid_password?("")).to be_falsey
-        end
-
-        it "does not call UserMailer to reminder the user that password has changed" do
-         expect(ActionMailer::Base.deliveries.count).to eq(0)
-
-          subject
-        end
-      end
-    end 
-  end 
-    #######################
 
     context "when supervisor" do
       let(:user) { create(:supervisor) }
@@ -285,6 +220,193 @@ RSpec.describe "/users", type: :request do
       end
     end
   end
+
+   describe "PATCH /update_email" do
+    subject do
+      patch update_email_users_path(user),
+        params: {
+          user: {
+            current_password: "12345678",
+            email: "newemail@example.com",
+            email_confirmation: "newemail@example.com"
+          }
+        }
+    end
+
+    before { sign_in user }
+
+    context "when volunteer" do
+      let(:user) { create(:volunteer) }
+
+      context "when successfully" do
+        it "updates the user email" do
+          subject
+          user.confirm
+          expect(user.valid_password?("12345678")).to be_truthy
+          expect(user.email).to eq("newemail@example.com")
+        end
+
+        it "send an alert and a confirmation email" do
+          subject 
+          
+          expect(ActionMailer::Base.deliveries.count).to eq(2)
+          expect(ActionMailer::Base.deliveries.first.body.encoded)
+        .to include("We're contacting you to notify you that your email is being changed to newemail@example.com.")
+          expect(ActionMailer::Base.deliveries.last.body.encoded)
+        .to match("You can confirm your account email through the link below:")
+        end
+      end
+
+      context "when failure" do
+        subject do
+          patch update_email_users_path(user),
+            params: {
+              user: {
+                current_password: "wrongpassword",
+                email: "wrong@example.com",
+                email_confirmation: "wrong@example.com"
+              }
+            }
+        end
+
+        it "does not update the user email", :aggregate_failures do
+          subject
+
+          expect(user.valid_password?("wrongpassword")).to be_falsey
+          expect(user.valid_password?("")).to be_falsey
+          expect(user.email).not_to eq("wrong@example.com")
+        end
+
+        it "does not call UserMailer to reminder the user that password has changed" do
+          subject
+         expect(ActionMailer::Base.deliveries.count).to eq(0)
+
+          subject
+        end
+      end 
+    end 
+    context "when supervisor" do
+      let(:user) { create(:supervisor) }
+
+      context "when successfully" do
+        it "updates the user email" do
+          subject
+          user.confirm
+          expect(user.valid_password?("12345678")).to be_truthy
+          expect(user.email).to eq("newemail@example.com")
+        end
+
+        it "calls DeviseMailer to remind the user that email has changed along with a confirmation link" do
+          subject 
+          
+          expect(ActionMailer::Base.deliveries.count).to eq(2)
+          expect(ActionMailer::Base.deliveries.first.body.encoded)
+        .to include("We're contacting you to notify you that your email is being changed to newemail@example.com.")
+          expect(ActionMailer::Base.deliveries.last.body.encoded)
+        .to match("You can confirm your account email through the link below:")
+        end
+
+        it "bypasses sign in if the current user is the true user" do
+          expect_any_instance_of(UsersController).to receive(:bypass_sign_in).with(user)
+          subject
+        end
+
+        it "does not bypass sign in when the current user is not the true user" do
+          allow_any_instance_of(UsersController).to receive(:true_user).and_return(User.new)
+          expect_any_instance_of(UsersController).to_not receive(:bypass_sign_in).with(user)
+          subject
+        end
+      end
+
+      context "when failure" do
+        subject do
+          patch update_password_users_path(user),
+            params: {
+              user: {
+                password: "wrong",
+                email: "wrong@example.com",
+                email_confirmation: "wrong@example.com"
+              }
+            }
+        end
+
+        it "does not update the user password", :aggregate_failures do
+          subject
+
+          expect(user.valid_password?("wrong")).to be_falsey
+          expect(user.valid_password?("")).to be_falsey
+          expect(user.email).not_to eq("wrong@example.com")
+        end
+
+        it "does not call UserMailer to reminder the user that password has changed" do
+          expect(ActionMailer::Base.deliveries.count).to eq(0)
+
+          subject
+        end
+      end
+    end
+
+    context "when casa_admin" do
+      let(:user) { create(:casa_admin) }
+
+      context "when successfully" do
+        it "updates the user email" do
+          subject
+          user.confirm 
+          
+          expect(user.valid_password?("12345678")).to be_truthy
+          expect(user.email).to eq("newemail@example.com")
+        end
+
+        it "calls DeviseMailer to remind the user that email has changed along with a confirmation link" do
+         subject
+
+          expect(ActionMailer::Base.deliveries.count).to eq(2)
+          expect(ActionMailer::Base.deliveries.first.body.encoded)
+        .to include("We're contacting you to notify you that your email is being changed to newemail@example.com.")
+          expect(ActionMailer::Base.deliveries.last.body.encoded)
+        .to match("You can confirm your account email through the link below:")
+        end
+
+        it "bypasses sign in if the current user is the true user" do
+          expect_any_instance_of(UsersController).to receive(:bypass_sign_in).with(user)
+          subject
+        end
+
+        it "does not bypass sign in when the current user is not the true user" do
+          allow_any_instance_of(UsersController).to receive(:true_user).and_return(User.new)
+          expect_any_instance_of(UsersController).to_not receive(:bypass_sign_in).with(user)
+          subject
+        end
+      end
+
+      context "when failure" do
+        subject do
+          patch update_password_users_path(user),
+            params: {
+              user: {
+                password: "",
+                email: "wrong@example.com",
+                email_confirmation: "wrong@example.com"
+              }
+            }
+        end
+
+        it "does not update the user email", :aggregate_failures do
+          subject
+
+          expect(user.valid_password?("wrong")).to be_falsey
+          expect(user.valid_password?("")).to be_falsey
+          expect(user.email).not_to eq("wrong@example.com")
+        end
+
+        it "does not call UserMailer to reminder the user that password has changed" do
+          expect(ActionMailer::Base.deliveries.count).to eq(0)
+        end
+      end
+    end
+  end
+
   describe "PATCH /add_language" do
     let(:volunteer) { create(:volunteer) }
     before { sign_in volunteer }
