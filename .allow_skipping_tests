@@ -11,6 +11,7 @@ controllers/casa_org_controller.rb
 controllers/case_assignments_controller.rb
 controllers/case_contact_reports_controller.rb
 controllers/case_contacts/followups_controller.rb
+controllers/case_contacts_controller.rb
 controllers/case_court_orders_controller.rb
 controllers/case_court_reports_controller.rb
 controllers/checklist_items_controller.rb
