@@ -272,9 +272,9 @@ RSpec.describe User, type: :model do
     end
   end
 
-    describe "#record_previous_emails AND #verify_email" do
+  describe "#record_previous_emails" do
     # create user, check for side effects, test method
-    let!(:new_volunteer) { create(:volunteer, email: "firstemail@example.com") }
+    let!(:new_volunteer) { create(:user, email: "firstemail@example.com") }
 
     it "instantiates with an empty old_emails attribute" do
       # brand new account, old emails array is empty
@@ -286,23 +286,9 @@ RSpec.describe User, type: :model do
       new_volunteer.update(email: "secondemail@example.com", email_confirmation: "secondemail@example.com")
       new_volunteer.confirm
 
-
       expect(new_volunteer.email).to eq("secondemail@example.com")
       expect(new_volunteer.email_confirmation).to eq("secondemail@example.com")
       expect(new_volunteer.old_emails).to match_array(["firstemail@example.com"])
     end
-
-    #it "removes a previous email from old_emails if volunteer reinstates it" do
-      # email is changed to previously used email and is no longer recorded as an "old email"
-    #  new_volunteer.update(email: "secondemail@example.com", email_confirmation: "secondemail@example.com")
-    #  new_volunteer.confirm 
-
-    #  new_volunteer.update(email: "firstemail@example.com", email_confirmation: "firstemail@example.com")
-    #  new_volunteer.confirm
-
-    #  expect(new_volunteer.email).to eq("firstemail@example.com")
-    #  expect(new_volunteer.old_emails).to match_array(["secondemail@example.com"])
-    #  expect(new_volunteer.old_emails).not_to include("firstemail@example.com")
-    #end
   end
 end

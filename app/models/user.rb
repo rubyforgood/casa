@@ -143,17 +143,16 @@ class User < ApplicationRecord
     actively_assigned_and_active_cases.is_transitioned.any?
   end
 
-
   def record_previous_email
-    if (self.email_changed? && !self.old_emails.include?(email_was))
-      self.old_emails.push(email_was)
+    if email_changed? && !old_emails.include?(email_was)
+      old_emails.push(email_was)
     end
   end
 
-  def skip_confirmable_email_confirmation_upon_creation #
-    self.skip_confirmation! 
-    self.confirm
-  end 
+  def skip_confirmable_email_confirmation_upon_creation
+    skip_confirmation!
+    confirm
+  end
 end
 # == Schema Information
 #

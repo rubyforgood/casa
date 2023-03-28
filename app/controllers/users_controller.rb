@@ -62,9 +62,6 @@ class UsersController < ApplicationController
       return render "edit"
     end
 
-    updated_emails = @user.old_emails.select{|old| old == @user.email}
-    @user.update(old_emails: updated_emails)
-
     bypass_sign_in(@user) if @user == true_user
 
     redirect_to edit_users_path
@@ -99,19 +96,22 @@ class UsersController < ApplicationController
   def update_user_password
     @user.update({password: password_params[:password], password_confirmation: password_params[:password_confirmation]})
   end
-###############################
+
+  ###############################
   def email_params
     params.require(:user).permit(:current_password, :email, :email_confirmation, :unconfirmed_email)
   end
 
   def update_user_email
     if email_params[:email] === email_params[:email_confirmation]
-      @user.update({email: email_params[:email], email_confirmation: email_params[:email_confirmation]})
+      updated_emails = @user.old_emails.reject { |old| old == email_params[:email] } # remove previous instances of the current_email from old_emails
+      @user.update({email: email_params[:email], email_confirmation: email_params[:email_confirmation], old_emails: updated_emails})
     else
       @user.errors.add(:base, "The email and the confirmation email do not match")
     end
   end
-################################
+
+  ################################
   def user_params
     params.require(:user).permit(:display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
   end

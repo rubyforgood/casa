@@ -221,7 +221,7 @@ RSpec.describe "/users", type: :request do
     end
   end
 
-   describe "PATCH /update_email" do
+  describe "PATCH /update_email" do
     subject do
       patch update_email_users_path(user),
         params: {
@@ -236,7 +236,7 @@ RSpec.describe "/users", type: :request do
     before { sign_in user }
 
     context "when volunteer" do
-      let(:user) { create(:volunteer) }
+      let(:user) { create(:volunteer, email: "old_email@example.com") }
 
       context "when successfully" do
         it "updates the user email" do
@@ -244,16 +244,17 @@ RSpec.describe "/users", type: :request do
           user.confirm
           expect(user.valid_password?("12345678")).to be_truthy
           expect(user.email).to eq("newemail@example.com")
+          expect(user.old_emails).to match_array(["old_email@example.com"])
         end
 
         it "send an alert and a confirmation email" do
-          subject 
-          
+          subject
+
           expect(ActionMailer::Base.deliveries.count).to eq(2)
           expect(ActionMailer::Base.deliveries.first.body.encoded)
-        .to include("We're contacting you to notify you that your email is being changed to newemail@example.com.")
+            .to include("We're contacting you to notify you that your email is being changed to newemail@example.com.")
           expect(ActionMailer::Base.deliveries.last.body.encoded)
-        .to match("You can confirm your account email through the link below:")
+            .to match("You can confirm your account email through the link below:")
         end
       end
 
@@ -279,12 +280,12 @@ RSpec.describe "/users", type: :request do
 
         it "does not call UserMailer to reminder the user that password has changed" do
           subject
-         expect(ActionMailer::Base.deliveries.count).to eq(0)
+          expect(ActionMailer::Base.deliveries.count).to eq(0)
 
           subject
         end
-      end 
-    end 
+      end
+    end
     context "when supervisor" do
       let(:user) { create(:supervisor) }
 
@@ -297,13 +298,13 @@ RSpec.describe "/users", type: :request do
         end
 
         it "calls DeviseMailer to remind the user that email has changed along with a confirmation link" do
-          subject 
-          
+          subject
+
           expect(ActionMailer::Base.deliveries.count).to eq(2)
           expect(ActionMailer::Base.deliveries.first.body.encoded)
-        .to include("We're contacting you to notify you that your email is being changed to newemail@example.com.")
+            .to include("We're contacting you to notify you that your email is being changed to newemail@example.com.")
           expect(ActionMailer::Base.deliveries.last.body.encoded)
-        .to match("You can confirm your account email through the link below:")
+            .to match("You can confirm your account email through the link below:")
         end
 
         it "bypasses sign in if the current user is the true user" do
@@ -352,20 +353,20 @@ RSpec.describe "/users", type: :request do
       context "when successfully" do
         it "updates the user email" do
           subject
-          user.confirm 
-          
+          user.confirm
+
           expect(user.valid_password?("12345678")).to be_truthy
           expect(user.email).to eq("newemail@example.com")
         end
 
         it "calls DeviseMailer to remind the user that email has changed along with a confirmation link" do
-         subject
+          subject
 
           expect(ActionMailer::Base.deliveries.count).to eq(2)
           expect(ActionMailer::Base.deliveries.first.body.encoded)
-        .to include("We're contacting you to notify you that your email is being changed to newemail@example.com.")
+            .to include("We're contacting you to notify you that your email is being changed to newemail@example.com.")
           expect(ActionMailer::Base.deliveries.last.body.encoded)
-        .to match("You can confirm your account email through the link below:")
+            .to match("You can confirm your account email through the link below:")
         end
 
         it "bypasses sign in if the current user is the true user" do

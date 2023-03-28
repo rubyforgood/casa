@@ -82,7 +82,7 @@ RSpec.describe "users/edit", type: :system do
         .to match("Your CASA password has been changed.")
     end
 
-        it "is able to send a confrimation email when Volunteer updates their email" do
+    it "is able to send a confrimation email when Volunteer updates their email" do
       expect(page).to have_field("Email", disabled: true)
 
       click_on "Change Email"
@@ -179,7 +179,7 @@ RSpec.describe "users/edit", type: :system do
         .to match("Your CASA password has been changed.")
     end
 
-        it "is able to send a confrimation email when supervisor is updating email" do
+    it "is able to send a confrimation email when supervisor is updating email" do
       expect(page).to have_field("Email", disabled: true)
 
       click_on "Change Email"
