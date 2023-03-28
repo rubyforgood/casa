@@ -2,11 +2,15 @@
 
 <div id="patch-notes">
   <div id="patch-note-list">
-    <h1>Patch Notes</h1>
+    <div class="col-md-6">
+      <div class="title mt-30 mb-30">
+        <h2>Patch Notes</h2>
+      </div>
+    </div>
     <div class="patch-note-list-item card">
       <div id="new-patch-note" class="card-body">
         <textarea placeholder="New Patch Note"></textarea>
-        <div class="label-and-select">
+        <div class="select-style-1 label-and-select">
           <label for="new-patch-note-type">Patch Note Type:</label>
           <select id="new-patch-note-type">
             <% @patch_note_types&.each do |patch_note_type| %>
@@ -14,7 +18,7 @@
             <% end %>
           </select>
         </div>
-        <div class="label-and-select">
+        <div class="select-style-1 label-and-select">
           <label for="new-patch-note-group">User Group:</label>
           <select id="new-patch-note-group">
             <% @patch_note_groups&.each do |patch_note_group| %>
@@ -23,7 +27,8 @@
           </select>
         </div>
         <div class="patch-note-button-controls">
-          <button type="button" class="btn btn-primary">Create</button>
+          <button type="button" class="main-btn primary-btn btn-hover">
+            <i class="lni lni-checkmark-circle mr-5"></i>Create</button>
         </div>
       </div>
     </div>

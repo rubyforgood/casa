@@ -238,7 +238,7 @@ GEM
       activesupport (>= 5.0.0)
     jsbundling-rails (1.1.1)
       railties (>= 6.0.0)
-    jwt (2.6.0)
+    jwt (2.7.0)
     launchy (2.5.0)
       addressable (~> 2.7)
     letter_opener (1.8.1)
@@ -403,7 +403,7 @@ GEM
     safe_shell (1.1.0)
     scout_apm (5.3.3)
       parser
-    selenium-webdriver (4.8.1)
+    selenium-webdriver (4.8.3)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
@@ -457,9 +457,9 @@ GEM
     timeout (0.3.2)
     traceroute (0.8.1)
       rails (>= 3.0.0)
-    twilio-ruby (5.74.5)
+    twilio-ruby (5.75.0)
       faraday (>= 0.9, < 3.0)
-      jwt (>= 1.5, <= 2.6)
+      jwt (>= 1.5, < 3.0)
       nokogiri (>= 1.6, < 2.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
@@ -508,6 +508,7 @@ PLATFORMS
   x86_64-darwin-19
   x86_64-darwin-20
   x86_64-darwin-21
+  x86_64-darwin-22
   x86_64-linux
 
 DEPENDENCIES
@@ -581,7 +582,7 @@ DEPENDENCIES
   webmock
 
 RUBY VERSION
-   ruby 3.1.2p20
+   ruby 3.1.3p185
 
 BUNDLED WITH
    2.3.4

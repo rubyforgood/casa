@@ -1,58 +1,65 @@
-<div class="d-flex align-items-center">
-  <h1>Reimbursement Queue</h1>
-
-  <div class="btn-group ml-3">
-    <%= form_with url: mileage_reports_path(format: :csv), method: :get do |f| %>
-      <%= f.submit(
-        "Download Mileage Report",
-        class: "btn btn-primary report-form-submit",
-        data: {disable_with: "Downloading Mileage Report"}
-      ) %>
-    <% end %>
-  </div>
-</div>
-
-<hr>
-
-<div class="row my-4">
-  <div class="col-sm-12">
-    <h4 class="pull-left mr-2">
-      Filter By
-    </h4>
-    <!-- Volunteer filter -->
-    <div class="pull-left mr-2 w-25" data-filter="volunteer">
-      <select class="form-control select2 creator_ids" multiple="true" data-placeholder="Volunteer">
-        <% @volunteers_for_filter.each do |volunteer| %>
-          <option value="<%= volunteer[0] %>"><%= volunteer[1] %></option>
-        <% end %>
-      </select>
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h2>Reimbursement Queue</h2>
+      </div>
     </div>
-    <!-- Occurred at filter -->
-    <div class="dropdown pull-left mr-2" data-filter="occurred_at">
-      <%= render partial: "filter_trigger", locals: { title: "Occurred at" } %>
-      <div class="dropdown-menu">
-        <%= render partial: "occurred_at_filter_input", locals: {
-          label: "Starting from",
-          name: :occurred_at_starting
-        } %>
-        <%= render partial: "occurred_at_filter_input", locals: {
-          label: "Ending at",
-          name: :occurred_at_ending
-        } %>
+
+    <div class="col-md-6">
+      <div class="breadcrumb-wrapper mb-30">
+        <span class="ml-5">
+          <%= form_with url: mileage_reports_path(format: :csv), method: :get do |f| %>
+                 <%= button_tag(
+                       type: "submit",
+                       class: "btn-sm main-btn primary-btn btn-hover report-form-submit",
+                       data: { disable_with: "Downloading Mileage Report" }
+                     ) do %>
+            <i class="lni lni-download mr-10"></i> Download Mileage Report
+            <% end %>
+          <% end %>
+        </span>
       </div>
     </div>
   </div>
 </div>
 
-<ul class="nav nav-tabs" id="nav-tab" role="tablist">
-  <li class="nav-item">
-    <%= link_to "Needs Review", reimbursements_path(status: "needs_review"),
-                class: "nav-link #{active_if(!@complete_status)}" %>
-  </li>
-  <li class="nav-item">
-    <%= link_to "Reimbursement Complete", reimbursements_path(status: "complete"),
-                class: "nav-link #{active_if(@complete_status)}" %>
-  </li>
+<div>
+  <div class="row volunteer-filters">
+    <div class="col-sm-12 flex align-items-center">
+      <h4 class="pull-left mr-2 my-1">Filter by:</h4>
+      <div class="dropdown pull-left mx-2" data-filter="volunteer">
+        <select class="form-control select2 creator_ids" multiple="true" data-placeholder="Volunteer">
+          <% @volunteers_for_filter.each do |volunteer| %>
+            <option value="<%= volunteer[0] %>"><%= volunteer[1] %></option>
+          <% end %>
+        </select>
+      </div>
+      <!-- Occurred at filter -->
+      <div class="dropdown pull-left mr-2" data-filter="occurred_at">
+        <%= render partial: "filter_trigger", locals: { title: "Occurred at" } %>
+        <div class="dropdown-menu">
+          <%= render partial: "occurred_at_filter_input", locals: {
+            label: "Starting from",
+            name: :occurred_at_starting
+          } %>
+          <%= render partial: "occurred_at_filter_input", locals: {
+            label: "Ending at",
+            name: :occurred_at_ending
+          } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<div>
+  <nav class="nav nav-tabs justify-content-center nav-justified mt-3">
+    <%= link_to "Needs Review", reimbursements_path(status: "needs_review"),
+                class: "nav-item nav-link #{active_if(!@complete_status)}" %>
+
+    <%= link_to "Reimbursement Complete", reimbursements_path(status: "complete"),
+                class: "nav-item nav-link #{active_if(@complete_status)}" %>
+  </nav>
   <%= render "datatable" %>
-</ul>
+</div>

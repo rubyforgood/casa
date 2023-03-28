@@ -1,5 +1,4 @@
 <% court_dates = casa_case.court_dates.includes(:hearing_type).ordered_ascending.load %>
-
 <label>Court dates:</label>
 <% if court_dates.empty? %>
   No Court Dates
@@ -8,7 +7,6 @@
     <% court_dates.each do |pcd| %>
       <p>
         <%= link_to(pcd.decorate.court_date_info, casa_case_court_date_path(casa_case, pcd)) %>
-
         <% if report = pcd.latest_associated_report %>
           <%= link_to(rails_blob_path(report, disposition: 'attachment')) do %>
             (Attached Report)
@@ -18,10 +16,11 @@
     <% end %>
   </ul>
 <% end %>
-  <ul>
-    <div class="add-container past-court-dates">
-      <a class="btn btn-primary" href="<%= new_casa_case_court_date_path(casa_case) %>">
-        <i class="fa fa-plus" aria-hidden="true"></i> Add a court date
-      </a>
-    </div>
-  </ul>
+<ul>
+  <div class="add-container past-court-dates my-3">
+    <%= link_to new_casa_case_court_date_path(casa_case), class: "main-btn btn-sm primary-btn btn-hover ml-3" do %>
+      <i class="lni lni-plus"></i>
+      Add a court date
+    <% end %>
+  </div>
+</ul>

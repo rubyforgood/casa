@@ -82,7 +82,7 @@ RSpec.describe CaseContactDecorator do
       it "returns the proper font-awesome classes" do
         case_contact.update_attribute(:medium_type, "in-person")
 
-        expect(case_contact.decorate.medium_icon_classes).to eql("fas fa-users")
+        expect(case_contact.decorate.medium_icon_classes).to eql("lni lni-users")
       end
     end
 
@@ -90,7 +90,7 @@ RSpec.describe CaseContactDecorator do
       it "returns the proper font-awesome classes" do
         case_contact.update_attribute(:medium_type, "text/email")
 
-        expect(case_contact.decorate.medium_icon_classes).to eql("fas fa-envelope")
+        expect(case_contact.decorate.medium_icon_classes).to eql("lni lni-envelope")
       end
     end
 
@@ -98,7 +98,7 @@ RSpec.describe CaseContactDecorator do
       it "returns the proper font-awesome classes" do
         case_contact.update_attribute(:medium_type, "video")
 
-        expect(case_contact.decorate.medium_icon_classes).to eql("fas fa-video")
+        expect(case_contact.decorate.medium_icon_classes).to eql("lni lni-camera")
       end
     end
 
@@ -106,7 +106,7 @@ RSpec.describe CaseContactDecorator do
       it "returns the proper font-awesome classes" do
         case_contact.update_attribute(:medium_type, "voice-only")
 
-        expect(case_contact.decorate.medium_icon_classes).to eql("fas fa-phone-square-alt")
+        expect(case_contact.decorate.medium_icon_classes).to eql("lni lni-phone")
       end
     end
 
@@ -114,7 +114,7 @@ RSpec.describe CaseContactDecorator do
       it "returns the proper font-awesome classes" do
         case_contact.update_attribute(:medium_type, "letter")
 
-        expect(case_contact.decorate.medium_icon_classes).to eql("fas fa-file-alt")
+        expect(case_contact.decorate.medium_icon_classes).to eql("lni lni-empty-file")
       end
     end
 
@@ -122,7 +122,7 @@ RSpec.describe CaseContactDecorator do
       it "returns the proper font-awesome classes" do
         case_contact.update_attribute(:medium_type, "foo")
 
-        expect(case_contact.decorate.medium_icon_classes).to eql("fas fa-question")
+        expect(case_contact.decorate.medium_icon_classes).to eql("lni lni-question-circle")
       end
     end
   end

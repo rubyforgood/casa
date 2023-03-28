@@ -43,7 +43,7 @@ RSpec.describe "casa_cases/show", js: true, type: :system do
       visit casa_case_path(casa_case.id)
 
       expect(page).to have_button("Send Reminder")
-      expect(page).to have_text(/Send CC to Supervisor$/)
+      expect(page).to have_text(/Send CC to Supervisor and Admin$/)
 
       click_on "Send Reminder"
 

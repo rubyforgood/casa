@@ -1,5 +1,5 @@
 <div class="password-box">
-  <h2>Change your password</h2>
+  <h2 class="mt-2">Change your password</h2>
 
   <div class="row">
     <div class="col-sm-6">
@@ -7,7 +7,7 @@
         <%= render "/shared/error_messages", resource: resource %>
         <%= f.hidden_field :reset_password_token %>
 
-        <div class="field form-group">
+        <div class="input-style-1">
           <%= f.label :password, "New password" %><br>
           <% if @minimum_password_length %>
             <em>(<%= @minimum_password_length %> characters minimum)</em><br>
@@ -15,27 +15,33 @@
           <%= f.password_field :password,
             autofocus: true,
             autocomplete: "new-password",
-            class: "form-control password-new",
+            class: "password-new",
+            placeholder: "New Password",
             required: true,
             minlength: @minimum_password_length %>
         </div>
 
-        <div class="field form-group">
+        <div class="input-style-1">
           <%= f.label :password_confirmation, "Confirm new password" %><br>
           <%= f.password_field :password_confirmation,
             autocomplete: "new-password",
-            class: "form-control password-confirmation",
+            class: "password-confirmation",
+            placeholder: "Confirm Password",
             required: true,
             minlength: @minimum_password_length %>
         </div>
 
-        <div class="actions">
-          <%= f.submit "Change my password", class: "btn btn-primary submit-password" %>
+        <div class="actions my-2">
+          <%= button_tag(
+            type: "submit",
+            class: "main-btn primary-btn btn-hover btn-sm submit-password"
+          ) do %>
+            <i class="lni lni-save mr-10"></i>Change my password
+          <% end %>
         </div>
       <% end %>
     </div>
   </div>
 
-  <br>
   <%= render "devise/shared/links" %>
 </div>

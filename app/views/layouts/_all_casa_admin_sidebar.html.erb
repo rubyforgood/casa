@@ -1,0 +1,35 @@
+<aside class="sidebar-nav-wrapper">
+  <div class="navbar-logo">
+    <%= link_to image_tag("default-logo.png",
+                          id: "casa-logo",
+                          alt: "CASA Logo",
+                          class: "d-inline-block align-text-bottom"),
+                "/" %>
+  </div>
+  <nav class="sidebar-nav">
+    <nav class="sidebar-nav">
+      <ul>
+        <li class="nav-item">
+          <%= link_to all_casa_admins_patch_notes_path do %>
+            <i class="lni lni-notepad mr-10"></i>
+            Patch Notes
+          <% end %>
+        </li>
+        <li>
+        <li class="nav-item">
+          <%= link_to edit_all_casa_admins_path do %>
+            <i class="lni lni-pencil-alt mr-10"></i>
+            Edit Profile
+          <% end %>
+        </li>
+        <li class="nav-item">
+          <%= link_to destroy_all_casa_admin_session_path, id:"all-casa-log-out" do %>
+            <i class="lni lni-exit mr-10"></i>
+            Log Out
+          <% end %>
+        </li>
+      </ul>
+    </nav>
+  </nav>
+</aside>
+<div class="overlay"></div>

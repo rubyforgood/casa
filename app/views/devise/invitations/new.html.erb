@@ -1,16 +1,23 @@
-<h2>Send invitation</h2>
+<div class="row p-3">
+  <h2 class="mb-2">Send invitation</h2>
 
-<%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: {method: :post}) do |f| %>
-  <%= render "/shared/error_messages", resource: resource %>
+  <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: {method: :post}) do |f| %>
+    <%= render "/shared/error_messages", resource: resource %>
 
-  <% resource.class.invite_key_fields.each do |field| -%>
-    <div class="field">
-      <%= f.label field %><br>
-      <%= f.text_field field %>
+    <% resource.class.invite_key_fields.each do |field| -%>
+      <div class="input-style-1">
+        <%= f.label field %>
+        <%= f.text_field field, placeholder: field %>
+      </div>
+    <% end -%>
+
+    <div class="actions mt-1">
+      <%= button_tag(
+        type: "submit",
+        class: "main-btn primary-btn btn-hover btn-sm"
+      ) do %>
+        <i class="lni lni-telegram-original mr-10"></i>Send an invitation
+      <% end %>
     </div>
-  <% end -%>
-
-  <div class="actions">
-    <%= f.submit "Send an invitation" %>
-  </div>
-<% end %>
+  <% end %>
+</div>

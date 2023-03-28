@@ -278,7 +278,7 @@ RSpec.describe "volunteers/edit", type: :system do
     expect(deliveries.last.subject).to have_text "CASA Console invitation instructions"
   end
 
-  describe "send reminder as a supervisor" do
+  describe "send reminder as a supervisor", js: true do
     let(:supervisor) { create(:supervisor, casa_org: organization) }
 
     before(:each) do
@@ -289,8 +289,8 @@ RSpec.describe "volunteers/edit", type: :system do
       visit edit_volunteer_path(volunteer)
 
       expect(page).to have_button("Send Reminder")
-      expect(page).to have_text(/Send CC to Supervisor$/)
-
+      expect(page).to have_text("Send CC to Supervisor")
+      uncheck "with_cc"
       click_on "Send Reminder"
 
       expect(ActionMailer::Base.deliveries.count).to eq(1)
@@ -362,7 +362,7 @@ RSpec.describe "volunteers/edit", type: :system do
       it "impersonates the volunteer" do
         click_on "Impersonate"
 
-        within(".sidebar-wrapper") do
+        within(".sidebar-nav-wrapper") do
           expect(page).to have_text(
             "You (#{user.display_name}) are signed in as John Doe. " \
               "Click here to stop impersonating."
@@ -381,7 +381,7 @@ RSpec.describe "volunteers/edit", type: :system do
       it "impersonates the volunteer" do
         click_on "Impersonate"
 
-        within(".sidebar-wrapper") do
+        within(".sidebar-nav-wrapper") do
           expect(page).to have_text(
             "You (#{user.display_name}) are signed in as John Doe. " \
               "Click here to stop impersonating."

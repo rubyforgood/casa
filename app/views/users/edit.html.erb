@@ -1,114 +1,128 @@
-<h1>Edit Profile</h1>
-<%= render "/shared/error_messages", resource: @user %>
-<div class="card card-container">
-  <div class="card-body">
-    <%= form_for @user, as: :user, url: users_path do |form| %>
-      <div class="field form-group">
-        <%= form.label :email, "Email" %>
-        <%= form.text_field :email, class: "form-control", disabled: !current_user.casa_admin? %>
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-lg-12">
+      <div class="title mb-30">
+        <h2>Edit Profile</h2>
       </div>
+    </div>
+    <div class="col-lg-12">
+      <div class="card-style mb-30">
+        <div class="card-body">
+          <%= form_for @user, as: :user, url: users_path do |form| %>
+            <div class="alert-box danger-alert">
+              <%= render "/shared/error_messages", resource: @user %>
+            </div>
+            <div class="input-style-1">
+              <%= form.label :email, "Email" %>
+              <%= form.text_field :email, class: "form-control", disabled: !current_user.casa_admin? %>
+            </div>
 
-      <div class="field form-group">
-        <%= form.label :display_name, "Display name" %>
-        <%= form.text_field :display_name, class: "form-control" %>
-      </div>
+            <div class="input-style-1">
+              <%= form.label :display_name, "Display name" %>
+              <%= form.text_field :display_name, class: "form-control" %>
+            </div>
 
-      <div class="field form-group">
-        <%= form.label :phone_number, "Phone number" %>
-        <%= form.text_field :phone_number, class: "form-control" %>
-      </div>
+            <div class="input-style-1">
+              <%= form.label :phone_number, "Phone number" %>
+              <%= form.text_field :phone_number, class: "form-control" %>
+            </div>
 
-      <% if current_user.address %>
-        <% address = current_user.address %>
-      <% else %>
-        <% address = Address.new %>
-      <% end %>
+            <% if current_user.address %>
+              <% address = current_user.address %>
+            <% else %>
+              <% address = Address.new %>
+            <% end %>
 
-      <div class="field form-group">
-        <%= form.fields_for :address, address do |f| %>
-          <%= f.label :address, "Address" %>
-          <%= f.text_field :content, class: "form-control" %>
-        <% end %>
-      </div>
+            <div class="input-style-1">
+              <%= form.fields_for :address, address do |f| %>
+                <%= f.label :address, "Address" %>
+                <%= f.text_field :content, class: "form-control" %>
+              <% end %>
+            </div>
 
-      <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
+            <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
 
-      <%= render "/shared/invite_login", resource: current_user %>
+            <%= render "/shared/invite_login", resource: current_user %>
 
-      <br>
-      <div class="actions">
-        <%= form.submit "Update Profile", class: "btn btn-primary mb-3" %>
-        <button class="btn btn-warning accordion mb-3" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          Change Password
-        </button>
+            <br>
+            <div class="actions">
+              <%= form.submit "Update Profile", class: "main-btn primary-btn btn-hover mb-3" %>
+              <button class="main-btn warning-btn btn-hover accordion mb-3" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Change Password
+              </button>
 
-        <% if policy(CasaAdmin).see_deactivate_option? %>
-          <% if @active_casa_admins.length > 1 %>
-            <%= link_to "Deactivate",
-                        deactivate_casa_admin_path(current_user),
-                        method: :patch,
-                        class: "btn btn-outline-danger mb-3",
-                        data: {confirm: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"} %>
-          <% else %>
-            <%= link_to "Deactivate",
-                        "#",
-                        class: "btn btn-outline-danger mb-3",
-                        data: {confirm: "Contact your administrator at Ruby For Good to deactivate this account."} %>
+              <% if policy(CasaAdmin).see_deactivate_option? %>
+                <% if @active_casa_admins.length > 1 %>
+                  <%= link_to "Deactivate",
+                              deactivate_casa_admin_path(current_user),
+                              method: :patch,
+                              class: "btn btn-outline-danger mb-3",
+                              data: {confirm: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"} %>
+                <% else %>
+                  <%= link_to "Deactivate",
+                              "#",
+                              class: "main-btn danger-btn-outline btn-hover mb-3",
+                              data: {confirm: "Contact your administrator at Ruby For Good to deactivate this account."} %>
+                <% end %>
+              <% end %>
+            </div>
           <% end %>
-        <% end %>
+          <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <br>
+            <%= form_for(@user, as: :user, url: {action: "update_password"}) do |f| %>
+              <div class="input-style-1">
+                <%= f.label :current_password, "Current Password" %><br>
+                <%= f.password_field :current_password, autocomplete: "off", class: "form-control" %>
+              </div>
+              <div class="input-style-1">
+                <%= f.label :password, "New Password" %><br>
+                <%= f.password_field :password, autocomplete: "off", class: "form-control password-new",
+      minlength: User.password_length.min %>
+              </div>
+              <div class="input-style-1">
+                <%= f.label :password_confirmation, "New Password Confirmation" %><br>
+                <%= f.password_field :password_confirmation, class: "form-control password-confirmation",
+      minlength: User.password_length.min %>
+              </div>
+              <div class="actions mb-10">
+                <%= f.submit "Update Password", class: "btn btn-danger submit-password" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
       </div>
-    <% end %>
-    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-      <br>
-      <%= form_for(@user, as: :user, url: {action: "update_password"}) do |f| %>
-        <div class="field form-group">
-          <%= f.label :current_password, "Current Password" %><br>
-          <%= f.password_field :current_password, autocomplete: "off", class: "form-control" %>
-        </div>
-        <div class="field form-group">
-          <%= f.label :password, "New Password" %><br>
-          <%= f.password_field :password, autocomplete: "off", class: "form-control password-new",
-minlength: User.password_length.min %>
-        </div>
-        <div class="field form-group">
-          <%= f.label :password_confirmation, "New Password Confirmation" %><br>
-          <%= f.password_field :password_confirmation, class: "form-control password-confirmation",
-minlength: User.password_length.min %>
-        </div>
-        <div class="action_container">
-          <%= f.submit "Update Password", class: "btn btn-danger submit-password" %>
-        </div>
-      <% end %>
     </div>
   </div>
+</div>
 
-  </div>
- <%= form_for @user, as: :user, url: users_path do |form| %>
-   <br>
-   <h3>Communication Preferences</h3>
-   <p>Tell us how you'd like to receive notifications.</p>
-   <div>
-     <%= form.check_box :receive_email_notifications, class: "toggle-email-notifications" %>
-     <%= form.label :receive_email_notifications, "Email Me" %>
-   </div>
-   <div>
-     <%= form.check_box :receive_sms_notifications, class: "toggle-sms-notifications" %>
-     <%= form.label :receive_sms_notifications, "Text Me" %>
-   <div>
-   <div class="pl-4 pb-4">
+<div>
+  <%= form_for @user, as: :user, url: users_path do |form| %>
+    <br>
+    <h3>Communication Preferences</h3>
+    <p>Tell us how you'd like to receive notifications.</p>
+    <div class="form-check checkbox-style mb-20">
+      <%= form.check_box :receive_email_notifications, class: "toggle-email-notifications form-check-input" %>
+      <%= form.label :receive_email_notifications, "Email Me", class: "form-check-label" %>
+    </div>
+    <div class="form-check checkbox-style mb-20">
+      <%= form.check_box :receive_sms_notifications, class: "toggle-sms-notifications form-check-input" %>
+      <%= form.label :receive_sms_notifications, "Text Me", class: "form-check-label" %>
+    </div>
+    <div class="ps-4 pb-4">
       <%= form.collection_check_boxes("sms_notification_event_ids", SmsNotificationEvent.where(user_type: @user.type),
 :id, :name) do |event| %>
-        <div class="form-check">
-          <%= event.check_box(class: "form-check-input", id: "toggle-sms-notification-event") %>
+        <div class="form-check checkbox-style mb-20">
+          <%= event.check_box(class: "form-check-input form-check-input", id: "toggle-sms-notification-event") %>
           <%= event.label(class: "form-check-label") %>
         </div>
       <% end %>
-   </div>
-   <div class="action_container">
-     <%= form.submit "Save Preferences", class: "btn btn-primary mb-3 save-preference" %>
-   </div>
- <% end %>
-  <% if current_user.volunteer? %>
-    <%= render partial: "languages", locals: { volunteer: current_user } %>
+    </div>
+    <div class="actions mb-10">
+      <%= form.submit "Save Preferences", class: "main-btn primary-btn btn-hover mb-3 save-preference" %>
+    </div>
   <% end %>
 </div>
+
+<% if current_user.volunteer? %>
+    <%= render partial: "languages", locals: { volunteer: current_user } %>
+<% end %>
