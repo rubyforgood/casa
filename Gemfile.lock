@@ -166,7 +166,7 @@ GEM
       activesupport (>= 5.0)
       request_store (>= 1.0)
       ruby2_keywords
-    erb_lint (0.3.1)
+    erb_lint (0.4.0)
       activesupport
       better_html (>= 2.0.1)
       parser (>= 2.7.1.4)
@@ -354,7 +354,7 @@ GEM
       parser (>= 2.6.4.0)
       sorbet-runtime (>= 0.5.9204)
       unparser
-    regexp_parser (2.6.1)
+    regexp_parser (2.7.0)
     request_store (1.5.1)
       rack (>= 1.4)
     responders (3.1.0)
@@ -387,12 +387,12 @@ GEM
       rubocop-ast (>= 1.12.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.23.0)
-      parser (>= 3.1.1.0)
+    rubocop-ast (1.28.0)
+      parser (>= 3.2.1.0)
     rubocop-performance (1.12.0)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
-    ruby-progressbar (1.11.0)
+    ruby-progressbar (1.13.0)
     ruby-vips (2.1.4)
       ffi (~> 1.12)
     ruby2_keywords (0.0.5)
@@ -466,7 +466,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.8.2)
-    unicode-display_width (2.3.0)
+    unicode-display_width (2.4.2)
     uniform_notifier (1.16.0)
     unparser (0.6.7)
       diff-lcs (~> 1.3)
