@@ -8,6 +8,8 @@ end
 RSpec.describe "layout/header", type: :view do
   before do
     view.class.include PretenderContext
+
+    enable_pundit(view, user)
     allow(view).to receive(:true_user).and_return(user)
     allow(view).to receive(:current_user).and_return(user)
     allow(view).to receive(:current_organization).and_return(1)
@@ -53,6 +55,14 @@ RSpec.describe "layout/header", type: :view do
       expect(rendered).to match "<strong>Role: Volunteer</strong>"
       expect(rendered).to match CGI.escapeHTML user.display_name
       expect(rendered).to match CGI.escapeHTML user.email
+    end
+
+    it "does not render unauthorized links" do
+      sign_in user
+
+      render partial: "layouts/header"
+
+      expect(rendered).to_not have_link("Edit Organization")
     end
   end
 
