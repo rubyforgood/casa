@@ -6,8 +6,8 @@ RSpec.describe "/volunteers", type: :request do
   let(:admin) { build(:casa_admin, casa_org: organization) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
   let(:volunteer) { create(:volunteer, casa_org: organization) }
-  let(:table_name) { 'volunteers_table' }
-  let!(:preference_set) { create(:preference_set, user: supervisor, table_state: { table_name => { 'foo' => 'bar' } }) }
+  let(:table_name) { "volunteers_table" }
+  let!(:preference_set) { create(:preference_set, user: supervisor, table_state: {table_name => {"foo" => "bar"}}) }
 
   blacklist = ["api.twilio.com", "api.short.io"]
   web_mock = WebMockHelper.new(blacklist)
@@ -17,9 +17,9 @@ RSpec.describe "/volunteers", type: :request do
     before do
       sign_in supervisor
     end
-    it 'returns a JSON response with the saved table state' do
-      supervisor.preference_set.update!(table_state: { "volunteers_table" => "some_state" })
-      get table_state_path, params: { action: "table_state" }, as: :json
+    it "returns a JSON response with the saved table state" do
+      supervisor.preference_set.update!(table_state: {"volunteers_table" => "some_state"})
+      get table_state_path, params: {action: "table_state"}, as: :json
 
       expect(response).to have_http_status(:success)
       expect(response.body).to eq("some_state")
@@ -31,7 +31,7 @@ RSpec.describe "/volunteers", type: :request do
       sign_in supervisor
     end
     it "Correctly update columns state" do
-      post save_table_state_path, params: { action: "save_table_state", table_state: "new_state" }, as: :json
+      post save_table_state_path, params: {action: "save_table_state", table_state: "new_state"}, as: :json
 
       expect(response).to have_http_status(:success)
       expect(supervisor.reload.preference_set.table_state["volunteers_table"]).to eq("new_state")

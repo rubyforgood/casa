@@ -3,9 +3,9 @@ require "rails_helper"
 RSpec.describe PreferenceSetTableStateService do
   let(:user) { create(:user) }
   let(:table_name) { "volunteers_table" }
-  let(:table_state) { { "columns" => [{ "visible" => true }] } }
+  let(:table_state) { {"columns" => [{"visible" => true}]} }
   subject { described_class.new(current_user: user) }
-  
+
   describe "#fetch_table_state" do
     context "when the preference set exists" do
       before do
