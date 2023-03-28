@@ -101,7 +101,7 @@ class UsersController < ApplicationController
   end
 ###############################
   def email_params
-    params.require(:user).permit(:current_password, :email, :email_confirmation)
+    params.require(:user).permit(:current_password, :email, :email_confirmation, :unconfirmed_email)
   end
 
   def update_user_email

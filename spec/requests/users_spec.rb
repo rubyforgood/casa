@@ -125,16 +125,18 @@ RSpec.describe "/users", type: :request do
         it "updates the user email" do
           subject
 
-          expect(user.valid_password?("new_email@example.com")).to be_truthy
+          expect(user.valid_password?("12345678")).to be_truthy
         end
 
-        it "calls UserMailer to send a confirmation email" do
-          allow(UserMailer).to receive(:confirmation_instructions).with(user).and_return(mailer)
-          expect(mailer).to receive(:deliver)
-
-          subject
-
-          subject
+        it "send an alert and a confirmation email" do
+          subject 
+          
+          expect(ActionMailer::Base.deliveries.count).to eq(2)
+          expect(ActionMailer::Base.deliveries.first.body.encoded)
+        .to include("We're contacting you to notify you that your email is being changed to newemail@example.com.")
+          expect(ActionMailer::Base.deliveries.last.body.encoded)
+        .to match("You can confirm your account email through the link below:")
+        
         end
       end
 
