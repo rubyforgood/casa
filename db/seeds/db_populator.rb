@@ -329,22 +329,22 @@ class DbPopulator
   end
 
   def create_mileage_rates(casa_org)
-    taken_dates = {}
-    effective_date = Faker::Date.forward(days: 700)
+    attempt_count = 5
+    i = 0
 
-    5.times do
-      while taken_dates.has_key?(effective_date)
-        effective_date = Faker::Date.forward(days: 700)
+    while i < attempt_count
+      begin
+        MileageRate.create!({
+          amount: Faker::Number.decimal(l_digits: 2, r_digits: 2),
+          effective_date: Faker::Date.forward(days: 700),
+          is_active: true,
+          casa_org_id: casa_org.id
+        })
+      rescue ActiveRecord::RecordInvalid
+        attempt_count += 1
       end
 
-      taken_dates[effective_date] = true
-
-      MileageRate.create!({
-        amount: Faker::Number.decimal(l_digits: 2, r_digits: 2),
-        effective_date: effective_date,
-        is_active: true,
-        casa_org_id: casa_org.id
-      })
+      i += 1
     end
   end
 end
