@@ -98,7 +98,7 @@ $('document').ready(() => {
     },
     stateSaveCallback: function (settings, data) {
       $.ajax({
-        url: "/save_table_state",
+        url: "/table_state_update",
         data: {
           table_state: JSON.stringify(data),
         },

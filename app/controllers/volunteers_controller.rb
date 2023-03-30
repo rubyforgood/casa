@@ -1,8 +1,8 @@
 class VolunteersController < ApplicationController
   include SmsBodyHelper
 
-  before_action :set_volunteer, except: %i[index new create datatable stop_impersonating table_state save_table_state]
-  after_action :verify_authorized, except: %i[stop_impersonating table_state save_table_state]
+  before_action :set_volunteer, except: %i[index new create datatable stop_impersonating table_state table_state_update]
+  after_action :verify_authorized, except: %i[stop_impersonating table_state table_state_update  table_state]
 
   def index
     authorize Volunteer
@@ -22,13 +22,13 @@ class VolunteersController < ApplicationController
   end
 
   def table_state
-    render json: PreferenceSetTableStateService.new(current_user: current_user.id).fetch_table_state(
+    render json: PreferenceSetTableStateService.new(user_id: current_user.id).table_state(
       table_name: "volunteers_table"
     )
   end
 
-  def save_table_state
-    render json: PreferenceSetTableStateService.new(current_user: current_user.id).save_table_state(
+  def table_state_update
+    render json: PreferenceSetTableStateService.new(user_id: current_user.id).table_state_update!(
       table_state: params["table_state"],
       table_name: "volunteers_table"
     )
