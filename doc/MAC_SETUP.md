@@ -13,7 +13,7 @@ brew install postgresql
 ```
 
 ```bash
-brew services start postgreql
+brew services start postgresql
 ```
 
 If you have an older version of postgres, `brew postgresql-upgrade-database`
