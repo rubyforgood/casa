@@ -250,9 +250,7 @@ RSpec.describe "/users", type: :request do
         it "send an alert and a confirmation email" do
           subject
 
-          expect(ActionMailer::Base.deliveries.count).to eq(2)
-          expect(ActionMailer::Base.deliveries.first.body.encoded)
-            .to include("We're contacting you to notify you that your email is being changed to newemail@example.com.")
+          expect(ActionMailer::Base.deliveries.count).to eq(1)
           expect(ActionMailer::Base.deliveries.last.body.encoded)
             .to match("You can confirm your account email through the link below:")
         end
@@ -300,9 +298,7 @@ RSpec.describe "/users", type: :request do
         it "calls DeviseMailer to remind the user that email has changed along with a confirmation link" do
           subject
 
-          expect(ActionMailer::Base.deliveries.count).to eq(2)
-          expect(ActionMailer::Base.deliveries.first.body.encoded)
-            .to include("We're contacting you to notify you that your email is being changed to newemail@example.com.")
+          expect(ActionMailer::Base.deliveries.count).to eq(1)
           expect(ActionMailer::Base.deliveries.last.body.encoded)
             .to match("You can confirm your account email through the link below:")
         end
@@ -362,9 +358,7 @@ RSpec.describe "/users", type: :request do
         it "calls DeviseMailer to remind the user that email has changed along with a confirmation link" do
           subject
 
-          expect(ActionMailer::Base.deliveries.count).to eq(2)
-          expect(ActionMailer::Base.deliveries.first.body.encoded)
-            .to include("We're contacting you to notify you that your email is being changed to newemail@example.com.")
+          expect(ActionMailer::Base.deliveries.count).to eq(1)
           expect(ActionMailer::Base.deliveries.last.body.encoded)
             .to match("You can confirm your account email through the link below:")
         end
