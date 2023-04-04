@@ -113,7 +113,11 @@ class UsersController < ApplicationController
 
   ################################
   def user_params
-    params.require(:user).permit(:display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
+    if !current_user.casa_admin?
+      params.require(:user).permit(:display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
+    else 
+      params.require(:user).permit(:email, :email_confirmation, :display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
+    end 
   end
 
   def valid_user_password
