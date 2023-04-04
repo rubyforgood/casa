@@ -2,161 +2,366 @@ require "rails_helper"
 
 RSpec.describe "/case_contacts", type: :request do
   let(:organization) { build(:casa_org) }
+  let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:volunteer) { create(:volunteer, casa_org: organization) }
-  let(:other_volunteer) { build(:volunteer, casa_org: organization) }
-  let(:casa_case) { create(:casa_case, casa_org: organization) }
 
-  let(:valid_attributes) do
-    attributes_for(:case_contact, casa_case: casa_case).merge(
-      creator: volunteer,
-      casa_case_id: [
-        create(:casa_case, volunteers: [volunteer], casa_org: organization).id,
-        create(:casa_case, volunteers: [volunteer], casa_org: organization).id
-      ]
-    )
+  before { sign_in admin }
+
+  describe "GET /index" do
+    let!(:casa_case) { create(:casa_case, casa_org: organization) }
+    let!(:past_contact) { create(:case_contact, casa_case: casa_case, occurred_at: 3.weeks.ago) }
+    let!(:recent_contact) { create(:case_contact, casa_case: casa_case, occurred_at: 3.days.ago) }
+    let(:filterrific) { {} }
+
+    subject(:request) do
+      get case_contacts_path(filterrific: filterrific)
+
+      response
+    end
+
+    it { is_expected.to have_http_status(:success) }
+
+    it "returns all case contacts" do
+      page = request.parsed_body
+      expect(page).to include(past_contact.creator.display_name, recent_contact.creator.display_name)
+    end
+
+    context "with filters applied" do
+      let(:filterrific) { {occurred_starting_at: 1.week.ago} }
+
+      it "returns all case contacts" do
+        page = request.parsed_body
+        expect(page).to include(recent_contact.creator.display_name)
+        expect(page).not_to include(past_contact.creator.display_name)
+      end
+    end
   end
 
-  let(:invalid_attributes) do
-    {
-      creator: nil,
-      casa_case_id: [build_stubbed(:casa_case, volunteers: [volunteer], casa_org: organization).id],
-      occurred_at: Time.zone.now
-    }
+  describe "GET /new" do
+    let!(:casa_case) { create(:casa_case, casa_org: organization) }
+    let!(:contact_type_group_b) { create(:contact_type_group, casa_org: organization, name: "B") }
+    let!(:contact_types_b) { create_list(:contact_type, 2, contact_type_group: contact_type_group_b) }
+
+    let!(:contact_type_group_a) { create(:contact_type_group, casa_org: organization, name: "A") }
+    let!(:contact_types_a) { create_list(:contact_type, 2, contact_type_group: contact_type_group_a) }
+
+    subject(:request) do
+      get new_case_contact_path
+
+      response
+    end
+
+    it { is_expected.to have_http_status(:success) }
+
+    it "shows all contact types alphabetically" do
+      page = request.parsed_body
+      expected_contact_types = [].concat(contact_types_a, contact_types_b).map(&:name)
+      expect(page).to match(/#{expected_contact_types.join(".*")}/m)
+    end
+
+    it "shows all contact types once" do
+      page = request.parsed_body
+      expected_contact_types = [].concat(contact_types_a, contact_types_b).map(&:name)
+      expected_contact_types.each { |contact_type| expect(page.scan(contact_type).size).to eq(1) }
+    end
+
+    context "when the case has specific contact types assigned" do
+      let!(:other_casa_case) { create(:casa_case, :with_casa_case_contact_types, casa_org: organization) }
+
+      subject(:request) do
+        get new_case_contact_path(case_contact: {casa_case_id: other_casa_case.id})
+
+        response
+      end
+
+      it "shows only contact types assigned to selected casa case" do
+        page = request.parsed_body
+        expect(page).to include(*other_casa_case.contact_types.pluck(:name))
+        expect(page).not_to include(*contact_types_a.pluck(:name))
+        expect(page).not_to include(*contact_types_b.pluck(:name))
+      end
+    end
   end
 
-  context "logged in as admin" do
-    let(:admin) { build(:casa_admin) }
-    before { sign_in admin }
+  describe "POST /create" do
+    let!(:casa_case) { create(:casa_case, casa_org: organization) }
 
-    describe "GET /edit" do
-      it "should mark notification as read" do
-        case_contact = create(:case_contact, casa_case: create(:casa_case, :with_case_assignments))
-        followup = create(:followup, case_contact: case_contact, creator: admin)
-        FollowupResolvedNotification
-          .with(followup: followup, created_by: volunteer)
-          .deliver(followup.creator)
+    subject(:request) do
+      post case_contacts_url, params: params
 
+      response
+    end
+
+    context "with valid parameters" do
+      let(:selected_casa_case_ids) { [casa_case.id] }
+      let(:valid_attributes) do
+        attributes_for(:case_contact, :wants_reimbursement, casa_case: casa_case).merge(
+          creator: admin, casa_case_id: selected_casa_case_ids
+        )
+      end
+      let(:params) { {case_contact: valid_attributes} }
+
+      it "creates a new CaseContact with correct values", :aggregate_failures do
+        expect { request }.to change(CaseContact, :count).from(0).to(1)
+
+        case_contact = CaseContact.first
+        expect(case_contact.creator).to eq(admin)
+        expect(case_contact.casa_case).to eq(casa_case)
+        expect(case_contact.occurred_at).to eq(valid_attributes[:occurred_at].floor)
+        expect(case_contact.duration_minutes).to eq(60)
+        expect(case_contact.contact_made).to eq(false)
+        expect(case_contact.miles_driven).to eq(456)
+        expect(case_contact.medium_type).to eq(CaseContact::CONTACT_MEDIUMS.first)
+        expect(case_contact.want_driving_reimbursement).to eq(true)
+      end
+
+      it "redirects to casa_case#show" do
+        expect(request).to redirect_to(casa_case_url(casa_case, success: true))
+      end
+
+      context "when multiple casa cases were selected" do
+        let!(:other_casa_case) { create(:casa_case, casa_org: organization) }
+        let(:selected_casa_case_ids) { [casa_case.id, other_casa_case.id] }
+
+        it "creates two new CaseContacts" do
+          expect { request }.to change(CaseContact, :count).by(2)
+        end
+
+        it "redirects to the case contact page" do
+          expect(request).to redirect_to(case_contacts_path(success: true))
+        end
+      end
+
+      context "with additional expense" do
+        let(:params) do
+          {
+            case_contact: valid_attributes.merge(
+              additional_expenses_attributes: {"0" => attributes_for(:additional_expense)}
+            )
+          }
+        end
+
+        before do
+          FeatureFlagService.enable!(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+        end
+
+        it "creates an additional expense with correct values", :aggregate_failures do
+          expect { request }.to change(AdditionalExpense, :count).from(0).to(1)
+
+          additional_expense = CaseContact.first.additional_expenses.first
+          expect(additional_expense.other_expense_amount).to eq(20)
+          expect(additional_expense.other_expenses_describe).to eq("description of expense")
+        end
+      end
+
+      context "with contact types" do
+        let!(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
+        let!(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
+        let(:params) do
+          {
+            case_contact: valid_attributes.merge(
+              case_contact_contact_type_attributes: {"0" => {contact_type_id: contact_type.id}}
+            )
+          }
+        end
+
+        it "creates the correct contact_type association", :aggregate_failures do
+          request
+          expect(CaseContact.first.contact_types.first).to eq(contact_type)
+        end
+      end
+
+      context "with volunteer address" do
+        let(:casa_case) { volunteer.casa_cases.first }
+        let(:valid_attributes) {
+          build(:case_contact, casa_case_id: casa_case.id).attributes.merge(
+            casa_case_attributes: {
+              id: casa_case.id, volunteers_attributes: {
+                "0" => {
+                  id: volunteer.id,
+                  address_attributes: {
+                    id: 0, content: "Volunteer address"
+                  }
+                }
+              }
+            }
+          )
+        }
+
+        context "when volunteer already has a address created" do
+          let(:volunteer) { create(:volunteer, :with_casa_cases, casa_org: organization, address: build(:address)) }
+
+          it "updates volunteer address" do
+            expect { request }.to change(CaseContact, :count).from(0).to(1)
+            expect(casa_case.volunteers.first.address.content).to eq("Volunteer address")
+          end
+        end
+
+        context "when volunteer doesnt have a address created" do
+          let(:volunteer) { create(:volunteer, :with_casa_cases, casa_org: organization, address: nil) }
+          it "create new volunteer address" do
+            expect { request }.to change(CaseContact, :count).from(0).to(1)
+            expect(casa_case.volunteers.first.address.content).to eq("Volunteer address")
+          end
+        end
+      end
+    end
+
+    context "with invalid parameters" do
+      let(:invalid_attributes) { {creator: nil, casa_case_id: [casa_case.id], occurred_at: Time.zone.now} }
+      let(:params) { {case_contact: invalid_attributes} }
+
+      it { is_expected.to have_http_status(:success) }
+
+      it "does not create a new CaseContact" do
+        expect { request }.not_to change(CaseContact, :count)
+      end
+
+      describe ": no casa cases" do
+        let(:invalid_attributes) { {creator: nil, casa_case_id: [], occurred_at: Time.zone.now} }
+
+        it { is_expected.to have_http_status(:success) }
+
+        it "does not create a new CaseContact" do
+          expect { request }.not_to change(CaseContact, :count)
+        end
+
+        it "shows alert message" do
+          request
+          expect(flash[:alert]).to eq("At least one case must be selected")
+        end
+      end
+    end
+  end
+
+  describe "GET /edit" do
+    let(:case_contact) { create(:case_contact, casa_case: create(:casa_case, :with_case_assignments), notes: "Notes") }
+
+    subject(:request) do
+      get edit_case_contact_url(case_contact)
+
+      response
+    end
+
+    it { is_expected.to have_http_status(:success) }
+
+    it "shows edit page with the correct case_contact" do
+      page = request.parsed_body
+      expect(page).to include(case_contact.notes)
+    end
+
+    describe "unread notification" do
+      let(:followup) { create(:followup, case_contact: case_contact, creator: admin) }
+
+      subject(:request) do
         get edit_case_contact_url(case_contact, notification_id: admin.notifications.first.id)
 
+        response
+      end
+
+      before { FollowupResolvedNotification.with(followup: followup, created_by: admin).deliver(followup.creator) }
+
+      it "is marked as read" do
+        request
         expect(admin.notifications.unread).to eq([])
       end
     end
   end
 
-  context "logged in as volunteer" do
-    before { sign_in volunteer }
+  describe "PATCH /update" do
+    let!(:casa_case) { create(:casa_case, casa_org: organization) }
+    let(:case_contact) { create(:case_contact, creator: admin, casa_case: casa_case) }
 
-    describe "POST /create" do
-      context "with valid parameters" do
-        it "does create two new CaseContacts" do
-          expect {
-            post case_contacts_url, params: {case_contact: valid_attributes}
-          }.to change(CaseContact, :count).by(2)
-        end
+    subject(:request) do
+      patch case_contact_url(case_contact), params: params
 
-        context "with two cases" do
-          it "redirects to the case contact page" do
-            post case_contacts_url, params: {case_contact: valid_attributes}
+      response
+    end
 
-            expect(response).to redirect_to(case_contacts_path(success: true))
-          end
-        end
-
-        context "when the URL contains ?success=true" do
-          before do
-            allow_any_instance_of(CaseContactsController).to receive(:policy_scope)
-              .and_return(double("active_record_relation", where: [casa_case]))
-          end
-
-          let(:valid_attributes) do
-            attributes_for(:case_contact, casa_case: casa_case).merge(
-              creator: volunteer,
-              casa_case_id: [casa_case.id]
-            )
-          end
-
-          it "redirects to casa_case#show" do
-            post case_contacts_url, params: {case_contact: valid_attributes}
-
-            expect(response).to redirect_to(casa_case_url(casa_case, success: true))
-          end
-        end
+    context "with valid parameters" do
+      let(:selected_casa_case_ids) { [casa_case.id] }
+      let(:valid_attributes) do
+        {
+          occurred_at: 3.days.ago,
+          duration_minutes: 50,
+          contact_made: true,
+          miles_driven: 600,
+          medium_type: CaseContact::CONTACT_MEDIUMS.second,
+          want_driving_reimbursement: false
+        }
       end
+      let(:params) { {case_contact: valid_attributes} }
 
-      context "with invalid parameters" do
-        it "does not create a new CaseContact" do
-          expect { post case_contacts_url, params: {case_contact: invalid_attributes} }.to change(
-            CaseContact,
-            :count
-          ).by(0)
-        end
+      it { is_expected.to redirect_to(casa_case_path(casa_case.case_number.parameterize)) }
 
-        it "renders a successful response (i.e. to display the new template)" do
-          post case_contacts_url, params: {case_contact: invalid_attributes}
-          expect(response).to be_successful
-        end
-      end
-
-      context "with no cases selected" do
-        it "presents the user with a relevant error message" do
-          expect {
-            post case_contacts_url, params: {
-              case_contact: valid_attributes.merge(casa_case_id: [])
-            }
-          }.to change(CaseContact, :count).by(0)
-
-          expect(response).to be_successful
-          expect(flash[:alert]).to be_present
-        end
+      it "updates the requested case_contact", :aggregate_failures do
+        request
+        case_contact.reload
+        expect(case_contact.occurred_at).to eq(valid_attributes[:occurred_at].floor)
+        expect(case_contact.duration_minutes).to eq(50)
+        expect(case_contact.contact_made).to eq(true)
+        expect(case_contact.miles_driven).to eq(600)
+        expect(case_contact.medium_type).to eq(CaseContact::CONTACT_MEDIUMS.second)
+        expect(case_contact.want_driving_reimbursement).to eq(false)
       end
     end
 
-    describe "PATCH /update" do
-      let(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
+    context "with invalid parameters" do
+      let!(:other_casa_case) { create(:casa_case, casa_org: organization) }
+      let(:invalid_attributes) { {creator: volunteer, casa_case_id: [other_casa_case.id]} }
+      let(:params) { {case_contact: invalid_attributes} }
 
-      context "with valid parameters" do
-        it "updates the requested case_contact and redirects to the root path" do
-          contact_type = create(:contact_type, name: "Attorney")
+      it { is_expected.to have_http_status(:success) }
 
-          patch case_contact_url(case_contact), params: {
-            case_contact: {
-              case_contact_contact_type_attributes: [{contact_type_id: contact_type.id}],
-              duration_minutes: 60
-            }
-          }
-          expect(response).to redirect_to(casa_case_path(casa_case.case_number.parameterize))
-
-          expect(case_contact.reload.contact_types.first.name).to eq "Attorney"
-        end
+      it "does not update the case_contact" do
+        request
+        expect(case_contact.creator).not_to eq(volunteer)
+        expect(case_contact.casa_case_id).not_to eq(other_casa_case.id)
       end
+    end
+  end
 
-      context "as another volunteer" do
-        before { sign_in other_volunteer }
+  describe "DELETE /destroy" do
+    let(:case_contact) { create(:case_contact) }
 
-        it "does not allow update of case contacts created by other volunteers" do
-          contact_type = create(:contact_type, name: "Attorney")
-          contact_type2 = build_stubbed(:contact_type, name: "Therapist")
+    subject(:request) do
+      delete case_contact_path(case_contact), headers: {HTTP_REFERER: case_contacts_path}
 
-          case_contact.contact_types << contact_type
+      response
+    end
 
-          patch case_contact_url(case_contact), params: {
-            case_contact: {
-              contact_types: [contact_type2]
-            }
-          }
-          expect(response).to redirect_to(root_path)
+    it { is_expected.to redirect_to(case_contacts_path) }
 
-          case_contact.reload
-          expect(case_contact.contact_types.first.name).to eq("Attorney")
-        end
-      end
+    it "shows correct flash message" do
+      request
+      expect(flash[:notice]).to eq("Contact is successfully deleted.")
+    end
 
-      context "with invalid parameters" do
-        it "renders a successful response (i.e. to display the edit template)" do
-          patch case_contact_url(case_contact), params: {case_contact: invalid_attributes}
-          expect(response).to be_successful
-        end
-      end
+    it "soft deletes the case_contact" do
+      expect { request }.to change { case_contact.reload.deleted? }.from(false).to(true)
+    end
+  end
+
+  describe "GET /restore" do
+    let(:case_contact) { create(:case_contact) }
+
+    subject(:request) do
+      post restore_case_contact_path(case_contact), headers: {HTTP_REFERER: case_contacts_path}
+
+      response
+    end
+
+    before { case_contact.destroy }
+
+    it { is_expected.to redirect_to(case_contacts_path) }
+
+    it "shows correct flash message" do
+      request
+      expect(flash[:notice]).to eq("Contact is successfully restored.")
+    end
+
+    it "soft deletes the case_contact" do
+      expect { request }.to change { case_contact.reload.deleted? }.from(true).to(false)
     end
   end
 end

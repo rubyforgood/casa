@@ -80,8 +80,6 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine.  
 2. You can ask a [maintainer](https://github.com/rubyforgood/casa/wiki/Who's-who%3F) for permission to make a branch on this repo.  
 3. You can also [create a fork on GitHub](https://docs.github.com/en/get-started/quickstart/fork-a-repo) and make a pull request from the fork.  
-4. ⚠️ Warning ⚠️ Github workflows are enabled by default on forks. Workflows are scripts that run at regular intervals or after events like commits. They take Github's resources to run and may send you emails if they fail. Most forks will not need any workflows. Please disable workflows for your fork from the actions tab of your fork.  
-![Fork](https://i.stack.imgur.com/dMT7J.png)  
 
 **Ruby**
 1. Install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
