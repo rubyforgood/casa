@@ -155,9 +155,9 @@ class User < ApplicationRecord
     confirm
   end
 
-  def skip_casa_admin_email_changes 
-      skip_reconfirmation!
-  end 
+  def skip_casa_admin_email_changes
+    skip_reconfirmation!
+  end
 
   def skip_email_changed_notification
     skip_email_changed_notification = true
@@ -173,8 +173,7 @@ class User < ApplicationRecord
 
   def after_confirmation
     send_email_changed_notification
-  end 
-
+  end
 end
 # == Schema Information
 #
