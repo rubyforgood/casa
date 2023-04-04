@@ -55,8 +55,12 @@ class SupervisorsController < ApplicationController
 
   def update
     authorize @supervisor
-    if @supervisor.update(update_supervisor_params)
-      redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was successfully updated."
+      @supervisor.skip_casa_admin_email_changes 
+      
+      if @supervisor.update(update_supervisor_params)
+        updated_emails = @supervisor.old_emails.reject { |old| old == supervisor_params[:email] }
+        @supervisor.update(email_confirmation: @supervisor.email, old_emails: updated_emails)
+        redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was successfully updated."
     else
       render :edit
     end
@@ -129,7 +133,7 @@ class SupervisorsController < ApplicationController
   end
 
   def supervisor_params
-    params.require(:supervisor).permit(:display_name, :email, :phone_number, :active, volunteer_ids: [], supervisor_volunteer_ids: [])
+    params.require(:supervisor).permit(:display_name, :email, :email_confirmation, :old_emails, :phone_number, :active, volunteer_ids: [], supervisor_volunteer_ids: [])
   end
 
   def update_supervisor_params
