@@ -10,8 +10,6 @@ class User < ApplicationRecord
   before_update :record_previous_email
   after_create :skip_confirmable_email_confirmation_upon_creation
   before_save :skip_email_changed_notification, if: :email_changed?
-  #before_update :skip_casa_admin_email_changes
-  #after_confirmation :send_email_changed_notification
 
   validates_with UserValidator
 
