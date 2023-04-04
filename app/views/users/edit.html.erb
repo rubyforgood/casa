@@ -13,8 +13,8 @@
               <%= render "/shared/error_messages", resource: @user %>
             </div>
             <div class="input-style-1">
-              <%= form.label :current_email, "Email" %>
-              <%= form.text_field :current_email, class: "form-control", value: @user.email, disabled: true %> <!--current_email is a dummy-->
+              <%= form.label :email, "Email" %>
+              <%= form.text_field :email, class: "form-control", value: @user.email_confirmation, disabled: true %> <!--current_email is a dummy-->
             </div>
 
             <div class="input-style-1">
