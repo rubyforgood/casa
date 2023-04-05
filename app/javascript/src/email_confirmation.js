@@ -7,7 +7,7 @@ import { disableBtn, enableBtn } from './casa_case'
 const SUBMIT_EMAIL_BUTTON_CLASS = 'submit-email'
 const EMAIL_FIELD_CLASS = 'email-new'
 
-function disableButtonWhenEmptyString (str, btn) {
+function disableButtonWhenEmptyEmailString (str, btn) {
   str.length === 0 ? disableBtn(btn) : enableBtn(btn)
 }
 
@@ -21,7 +21,7 @@ function checkEmailsAndDisplayPopup (btn, email, enablePopup = false) {
   const emailText = email.value
 
   if (emailText !== ' ' && (/^[a-z0-9.]{1,64}@[a-z0-9.]{1,64}$/i.test(emailText))) {
-    disableButtonWhenEmptyString(email, btn)
+    disableButtonWhenEmptyEmailString(email, btn)
   } else {
     if (enablePopup) {
       Swal.fire({
