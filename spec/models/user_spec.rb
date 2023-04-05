@@ -282,7 +282,7 @@ RSpec.describe User, type: :model do
       new_volunteer.confirm
 
       expect(new_volunteer.email).to eq("secondemail@example.com")
-    
+
       expect(new_volunteer.old_emails).to match_array(["firstemail@example.com"])
     end
   end

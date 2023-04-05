@@ -115,9 +115,9 @@ RSpec.describe "users/edit", type: :system do
 
       fill_in "current_password_email", with: "12345678"
       fill_in "New Email", with: "new_volunteer@example"
-    
+
       fill_in "current_password_email", with: "Look At Me!"
-      
+
       expect(page).to have_text("Email Error")
       expect(page).to have_text("Please Enter A Valid Email")
     end
