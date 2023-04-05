@@ -54,7 +54,7 @@ class VolunteersController < ApplicationController
     @volunteer.skip_casa_admin_email_changes
     if @volunteer.update(update_volunteer_params)
       updated_emails = @volunteer.old_emails.reject { |old| old == params[:email] }
-      @volunteer.update(email_confirmation: @volunteer.email, old_emails: updated_emails)
+      @volunteer.update(old_emails: updated_emails)
       redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was successfully updated."
     else
       render :edit

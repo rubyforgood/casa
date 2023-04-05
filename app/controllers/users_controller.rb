@@ -98,23 +98,19 @@ class UsersController < ApplicationController
   end
 
   def email_params
-    params.require(:user).permit(:current_password, :email, :email_confirmation, :unconfirmed_email)
+    params.require(:user).permit(:current_password, :email, :unconfirmed_email)
   end
 
   def update_user_email
-    if email_params[:email] === email_params[:email_confirmation]
-      updated_emails = @user.old_emails.reject { |old| old == email_params[:email] } # remove previous instances of the current_email from old_emails
-      @user.update({email: email_params[:email], email_confirmation: email_params[:email_confirmation], old_emails: updated_emails})
-    else
-      @user.errors.add(:base, "The email and the confirmation email do not match")
-    end
+    updated_emails = @user.old_emails.reject { |old| old == email_params[:email] } # remove previous instances of the current_email from old_emails
+    @user.update({email: email_params[:email], old_emails: updated_emails})
   end
 
   def user_params
     if !current_user.casa_admin?
       params.require(:user).permit(:display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
     else
-      params.require(:user).permit(:email, :email_confirmation, :display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
+      params.require(:user).permit(:email, :display_name, :phone_number, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
     end
   end
 

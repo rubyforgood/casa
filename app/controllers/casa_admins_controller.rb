@@ -21,7 +21,7 @@ class CasaAdminsController < ApplicationController
 
     if @casa_admin.update(update_casa_admin_params)
       updated_emails = @casa_admin.old_emails.reject { |old| old == @casa_admin.email }
-      @casa_admin.update(email_confirmation: @casa_admin.email, old_emails: updated_emails)
+      @casa_admin.update(old_emails: updated_emails)
       respond_to do |format|
         format.html { redirect_to casa_admins_path, notice: "New admin created successfully" }
         format.json { render json: @casa_admin, status: :ok }
