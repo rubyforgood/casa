@@ -2,7 +2,6 @@ FactoryBot.define do
   factory :user do
     casa_org { CasaOrg.first || create(:casa_org) }
     sequence(:email) { |n| "email#{n}@example.com" }
-    email_confirmation { |u| u.email }
     sequence(:display_name) { |n| "User #{n}" }
     password { "12345678" }
     password_confirmation { "12345678" }

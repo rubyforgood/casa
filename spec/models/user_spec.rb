@@ -43,11 +43,6 @@ RSpec.describe User, type: :model do
       expect(user.valid?).to be false
     end
 
-    it "has an email_confirmation that matches email" do
-      user = build(:user)
-      expect(user.email).to eq(user.email_confirmation)
-    end
-
     it "has an empty old_emails array when initialized" do
       user = build(:user)
       expect(user.old_emails).to eq([])
@@ -283,11 +278,11 @@ RSpec.describe User, type: :model do
 
     it "saves the old email when a volunteer changes their email" do
       # email is changed, updated, confirmed, and recorded
-      new_volunteer.update(email: "secondemail@example.com", email_confirmation: "secondemail@example.com")
+      new_volunteer.update(email: "secondemail@example.com")
       new_volunteer.confirm
 
       expect(new_volunteer.email).to eq("secondemail@example.com")
-      expect(new_volunteer.email_confirmation).to eq("secondemail@example.com")
+    
       expect(new_volunteer.old_emails).to match_array(["firstemail@example.com"])
     end
   end

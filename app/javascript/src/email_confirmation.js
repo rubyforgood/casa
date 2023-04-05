@@ -6,10 +6,9 @@ import { disableBtn, enableBtn } from './casa_case'
 
 const SUBMIT_EMAIL_BUTTON_CLASS = 'submit-email'
 const EMAIL_FIELD_CLASS = 'email-new'
-const EMAIL_CONFIRMATION_FIELD_CLASS = 'email-confirmation'
 
-function disableButtonWhenEmptyString (str, button) {
-  str.length === 0 ? disableBtn(button) : enableBtn(button)
+function disableButtonWhenEmptyString (str, btn) {
+  str.length === 0 ? disableBtn(btn) : enableBtn(btn)
 }
 
 // Checks if the password is equivalent to confirmation and has at least 1 character. If not,
@@ -18,21 +17,20 @@ function disableButtonWhenEmptyString (str, button) {
 //  @param    {HTMLElement}  password - text input form field
 //  @param    {HTMLElement}  confirmation - text input form field
 //  @param    {boolean}  enablePopup - display popup when field is not in focus
-function checkEmailsAndDisplayPopup (button, email, emailConfirmation, enablePopup = false) {
+function checkEmailsAndDisplayPopup (btn, email, enablePopup = false) {
   const emailText = email.value
-  const emailConfirmationText = emailConfirmation.value
 
-  if (emailText === emailConfirmationText) {
-    disableButtonWhenEmptyString(emailConfirmation, button)
+  if (emailText != " " && (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailText))) {
+    disableButtonWhenEmptyString(email, btn)
   } else {
     if (enablePopup) {
       Swal.fire({
         icon: 'error',
         title: 'Email Error',
-        text: 'The email and the confirmation email do not match'
+        text: 'Please Enter A Valid Email'
       })
     }
-    disableBtn(button)
+    disableBtn(btn)
   }
 }
 
@@ -40,18 +38,13 @@ function checkEmailsAndDisplayPopup (button, email, emailConfirmation, enablePop
 // `app/views/users/edit.html.erb` for usage
 $('document').ready(() => {
   if ($(`.${SUBMIT_EMAIL_BUTTON_CLASS}`).length > 0) {
-    const button = $(`.${SUBMIT_EMAIL_BUTTON_CLASS}`)[0]
+    const btn = $(`.${SUBMIT_EMAIL_BUTTON_CLASS}`)[0]
     const email = $(`.${EMAIL_FIELD_CLASS}`)[0]
-    const emailConfirmation = $(`.${EMAIL_CONFIRMATION_FIELD_CLASS}`)[0]
 
-    disableBtn(button)
+    disableBtn(btn)
 
     $(`.${EMAIL_FIELD_CLASS}`).on('blur', () => {
-      checkEmailsAndDisplayPopup(button, email, emailConfirmation)
-    })
-
-    $(`.${EMAIL_CONFIRMATION_FIELD_CLASS}`).on('blur', () => {
-      checkEmailsAndDisplayPopup(button, email, emailConfirmation, true)
+      checkEmailsAndDisplayPopup(btn, email, true)
     })
   }
 })

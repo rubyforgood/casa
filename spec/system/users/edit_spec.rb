@@ -87,12 +87,10 @@ RSpec.describe "users/edit", type: :system do
 
       click_on "Change Email"
       expect(page).to have_field("New Email", disabled: false)
-      expect(page).to have_field("New Email Confirmation", disabled: false)
 
       fill_in "current_password_email", with: "12345678"
 
       fill_in "New Email", with: "new_volunteer@example.com"
-      fill_in "New Email Confirmation", with: "new_volunteer@example.com"
       click_on "Update Email"
 
       expect(ActionMailer::Base.deliveries.count).to eq(1)
@@ -106,21 +104,22 @@ RSpec.describe "users/edit", type: :system do
 
       fill_in "current_password_email", with: "12345"
       fill_in "New Email", with: "new_volunteer@example.com"
-      fill_in "New Email Confirmation", with: "new_volunteer@example.com"
 
       click_on "Update Email"
       expect(page).to have_content "1 error prohibited this Volunteer from being saved:"
       expect(page).to have_text("Current password is incorrect")
     end
 
-    it "displays email errors messages when user is unable to set a email", js: true do
+    it "displays email errors messages when user is unable to set an invalid email", js: true do
       click_on "Change Email"
 
       fill_in "current_password_email", with: "12345678"
-      fill_in "New Email", with: "new_volunteer@example.com"
-      fill_in "New Email Confirmation", with: "new_new_volunteer@example.com"
-      click_on "Change Email"
-      expect(page).to have_text("The email and the confirmation email do not match")
+      fill_in "New Email", with: "new_volunteer@example"
+    
+      fill_in "current_password_email", with: "Look At Me!"
+      
+      expect(page).to have_text("Email Error")
+      expect(page).to have_text("Please Enter A Valid Email")
     end
 
     it "displays current sign in date" do
@@ -184,12 +183,10 @@ RSpec.describe "users/edit", type: :system do
 
       click_on "Change Email"
       expect(page).to have_field("New Email", disabled: false)
-      expect(page).to have_field("New Email Confirmation", disabled: false)
 
       fill_in "current_password_email", with: "12345678"
 
       fill_in "New Email", with: "new_supervisor@example.com"
-      fill_in "New Email Confirmation", with: "new_supervisor@example.com"
       click_on "Update Email"
 
       expect(ActionMailer::Base.deliveries.count).to eq(1)
@@ -202,8 +199,7 @@ RSpec.describe "users/edit", type: :system do
       click_on "Change Email"
 
       fill_in "current_password_email", with: "12345"
-      fill_in "New Email", with: "new_supervisor@example.com"
-      fill_in "New Email Confirmation", with: "new_supervisor@example.com"
+      fill_in "New Email", with: "new_supervisor@example"
 
       click_on "Update Email"
       expect(page).to have_content "1 error prohibited this Supervisor from being saved:"
@@ -214,10 +210,12 @@ RSpec.describe "users/edit", type: :system do
       click_on "Change Email"
 
       fill_in "current_password_email", with: "12345678"
-      fill_in "New Email", with: "new_supervisor@example.com"
-      fill_in "New Email Confirmation", with: "new_new_supervisor@example.com"
-      click_on "Change Email"
-      expect(page).to have_text("The email and the confirmation email do not match")
+      fill_in "New Email", with: "new_supervisorATexampleDOTcom"
+      sleep(1)
+      fill_in "current_password_email", with: "Look Over Here!"
+
+      expect(page).to have_text("Email Error")
+      expect(page).to have_text("Please Enter A Valid Email")
     end
 
     it "displays sms notification events for the supervisor user" do
@@ -262,12 +260,10 @@ RSpec.describe "users/edit", type: :system do
 
       click_on "Change Email"
       expect(page).to have_field("New Email", disabled: false)
-      expect(page).to have_field("New Email Confirmation", disabled: false)
 
       fill_in "current_password_email", with: "12345678"
 
       fill_in "New Email", with: "new_admin@example.com"
-      fill_in "New Email Confirmation", with: "new_admin@example.com"
       click_on "Update Email"
 
       expect(ActionMailer::Base.deliveries.count).to eq(1)
@@ -281,7 +277,6 @@ RSpec.describe "users/edit", type: :system do
 
       fill_in "current_password_email", with: "12345"
       fill_in "New Email", with: "new_admin@example.com"
-      fill_in "New Email Confirmation", with: "new_admin@example.com"
 
       click_on "Update Email"
       expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
@@ -292,11 +287,12 @@ RSpec.describe "users/edit", type: :system do
       click_on "Change Email"
 
       fill_in "current_password_email", with: "12345678"
-      fill_in "New Email", with: "new_admin@example.com"
-      fill_in "New Email Confirmation", with: "new_new_admin@example.com"
+      fill_in "New Email", with: "new_admin___example___com"
 
-      click_on "Change Email"
-      expect(page).to have_text("The email and the confirmation email do not match")
+      fill_in "current_password_email", with: "Look At Me!"
+
+      expect(page).to have_text("Email Error")
+      expect(page).to have_text("Please Enter A Valid Email")
     end
 
     it "displays password errors messages when admin is unable to set a password" do

@@ -227,8 +227,7 @@ RSpec.describe "/users", type: :request do
         params: {
           user: {
             current_password: "12345678",
-            email: "newemail@example.com",
-            email_confirmation: "newemail@example.com"
+            email: "newemail@example.com"
           }
         }
     end
@@ -262,8 +261,7 @@ RSpec.describe "/users", type: :request do
             params: {
               user: {
                 current_password: "wrongpassword",
-                email: "wrong@example.com",
-                email_confirmation: "wrong@example.com"
+                email: "wrong@example.com"
               }
             }
         end
@@ -321,8 +319,7 @@ RSpec.describe "/users", type: :request do
             params: {
               user: {
                 password: "wrong",
-                email: "wrong@example.com",
-                email_confirmation: "wrong@example.com"
+                email: "wrong@example.com"
               }
             }
         end
@@ -381,8 +378,7 @@ RSpec.describe "/users", type: :request do
             params: {
               user: {
                 password: "",
-                email: "wrong@example.com",
-                email_confirmation: "wrong@example.com"
+                email: "wrong@example.com"
               }
             }
         end
