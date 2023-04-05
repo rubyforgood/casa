@@ -160,7 +160,7 @@ class User < ApplicationRecord
   end
 
   def skip_email_changed_notification
-    skip_email_changed_notification = true
+    true
   end
 
   def send_email_changed_notification?
