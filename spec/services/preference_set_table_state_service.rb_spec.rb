@@ -18,14 +18,23 @@ RSpec.describe PreferenceSetTableStateService do
 
 
   describe '#table_state' do
+    before do
+      create(:preference_set, user: user, table_state: {table_name => table_state})
+    end
+
     it 'returns the table state' do
-      # expect(subject.table_state(table_name: table_name)).to eq(table_state)
+      expect(subject.table_state(table_name: table_name)).to eq(table_state)
+    end
+    context 'when the preference set exists' do 
+
     end
 
     context 'when there is no data for that table name' do
       let(:table_state) { {} }
 
-      it 'returns an empty hash'
+      it 'returns an empty hash' do 
+        expect(subject.table_state(table_name: table_name).to eq(nil) )
+      end
     end
   end
 
@@ -38,6 +47,7 @@ RSpec.describe PreferenceSetTableStateService do
       it 'raises an error'
     end
   end
+
 
   describe "#table_state" do
     context "when the preference set exists" do
@@ -61,4 +71,5 @@ RSpec.describe PreferenceSetTableStateService do
       }.from(nil).to(table_state)
     end
   end
+
 end
