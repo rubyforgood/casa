@@ -91,6 +91,11 @@ Setup the database with:
 bin/rails db:setup
 ```
 
+Install javascript dependencies with:
+```bash
+yarn install
+```
+
 Compile assets with:
 
 ```bash
