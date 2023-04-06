@@ -31,7 +31,7 @@ RSpec.describe "/volunteers", type: :request do
       sign_in supervisor
     end
     it "Correctly update columns state" do
-      post save_table_state_path, params: { action: "save_table_state", table_state: "new_state" }, as: :json
+      post table_state_update_path, params: { action: "table_state_update", table_state: "new_state" }, as: :json
 
       expect(response).to have_http_status(:success)
       expect(supervisor.reload.preference_set.table_state["volunteers_table"]).to eq("new_state")
