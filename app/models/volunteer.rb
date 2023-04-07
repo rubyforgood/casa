@@ -28,20 +28,8 @@ class Volunteer < User
     EXTRA_LANGUAGES_COLUMN,
     ACTIONS_COLUMN
   ].freeze
+
   serialize :columns, JSON
-
-  def self.columns_state(user)
-    cols = []
-    if PreferenceSet.find_by(user: user.id).nil?
-      TABLE_COLUMNS
-    else
-      JSON.parse(PreferenceSet.find_by(user: user.id).columns_state)["columns"].each_with_index do |col, index|
-        cols << TABLE_COLUMNS[index] if col["visible"] == true
-      end
-    end
-
-    cols
-  end
 
   CONTACT_MADE_IN_DAYS_NUM = 14
   COURT_REPORT_SUBMISSION_REMINDER = 7.days
