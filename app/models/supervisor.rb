@@ -10,6 +10,12 @@ class Supervisor < User
 
   scope :active, -> { where(active: true) }
 
+  after_create :create_preference_set
+
+  def create_preference_set
+    self.preference_set = PreferenceSet.create
+  end
+
   # Activates supervisor.
   def activate
     update(active: true)
