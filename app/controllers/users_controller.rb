@@ -36,6 +36,8 @@ class UsersController < ApplicationController
 
   def remove_language
     set_language
+    raise ActiveRecord::RecordNotFound unless @language
+    
     current_user.languages.delete @language
     if current_user.save
       redirect_to edit_users_path, notice: "#{@language.name} was removed from your languages list."
