@@ -44,5 +44,5 @@ RSpec.describe LanguagesController, type: :request do
         end
       end
     end
-  end  
+  end
 end

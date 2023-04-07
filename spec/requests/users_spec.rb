@@ -271,21 +271,19 @@ RSpec.describe "/users", type: :request do
         expect(flash[:notice]).to eq "#{language.name} was removed from your languages list."
         expect(volunteer.languages).not_to include language
       end
-    end   
-    
+    end
+
     context "when request params are invalid" do
       let(:language) { create(:language) }
       before(:each) do
         patch add_language_users_path(volunteer), params: {
           language_id: language.id
         }
-      end     
+      end
 
       it "should raise error when Language do not exist" do
         expect { delete remove_language_users_path(999) }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
-     
-
   end
 end
