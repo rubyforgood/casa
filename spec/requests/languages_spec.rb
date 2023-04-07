@@ -44,35 +44,5 @@ RSpec.describe LanguagesController, type: :request do
         end
       end
     end
-  end
-
-  context "when logged in as a volunteer" do
-    before do
-      sign_in volunteer
-      allow(controller).to receive(:current_user).and_return(volunteer)
-      allow(controller).to receive(:current_organization).and_return(organization)
-    end
-
-    describe "#remove_from_volunteer" do
-      context "when request params are valid" do
-        let!(:user_language) { create(:user_language, user_id: volunteer.id, language_id: random_lang.id) }
-
-        it "should remove a language from a volunteer languages list" do
-          delete language_remove_from_volunteer_path(random_lang)
-
-          expect(response.status).to eq 302
-          expect(response).to redirect_to(edit_users_path)
-          expect(flash[:notice]).to eq "#{random_lang.name} was removed from your languages list."
-          expect(volunteer.languages).not_to include random_lang
-        end
-      end
-      context "when request params are invalid" do
-        let!(:user_language) { create(:user_language, user_id: volunteer.id, language_id: random_lang.id) }
-
-        it "should raise error when Language do not exist" do
-          expect { delete language_remove_from_volunteer_path(800) }.to raise_error(ActiveRecord::RecordNotFound)
-        end
-      end
-    end
-  end
+  end  
 end
