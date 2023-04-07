@@ -3,6 +3,12 @@ require "rails_helper"
 RSpec.describe Supervisor, type: :model do
   subject(:supervisor) { create :supervisor }
 
+  describe "after_create" do
+    it "creates a preference set" do
+      expect(supervisor.preference_set).to be_present
+    end
+  end
+
   describe "#role" do
     it { expect(supervisor.role).to eq "Supervisor" }
 
