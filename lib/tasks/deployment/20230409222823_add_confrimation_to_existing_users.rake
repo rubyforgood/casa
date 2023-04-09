@@ -1,5 +1,5 @@
 namespace :after_party do
-  desc 'Deployment task: add_confrimation_to_existing_users'
+  desc "Deployment task: add_confrimation_to_existing_users"
   task add_confrimation_to_existing_users: :environment do
     puts "Running deploy task 'add_confrimation_to_existing_users'"
 

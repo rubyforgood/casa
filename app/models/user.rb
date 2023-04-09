@@ -5,7 +5,6 @@ class User < ApplicationRecord
   include Roles
   include ByOrganizationScope
   include DateHelper
-  
 
   before_update :record_previous_email
   after_create :skip_confirmable_email_confirmation_upon_creation
@@ -150,20 +149,20 @@ class User < ApplicationRecord
   end
 
   def filter_old_emails(previous_email)
-      updated_emails = self.old_emails.reject { |old| old == previous_email }
-      self.update(old_emails: updated_emails)
-  end 
+    updated_emails = old_emails.reject { |old| old == previous_email }
+    update(old_emails: updated_emails)
+  end
 
   def skip_confirmable_email_confirmation_upon_creation
     skip_confirmation!
     confirm
   end
 
-  def send_email_changed_notification? #hardcoded in order to prevent the email changed notification BEFORE user confirms
-    return false 
+  def send_email_changed_notification? # hardcoded in order to prevent the email changed notification BEFORE user confirms
+    false
   end
 
-  def after_confirmation #sends the email changed notification AFTER user confirms
+  def after_confirmation # sends the email changed notification AFTER user confirms
     send_email_changed_notification
   end
 end

@@ -287,11 +287,11 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe "#filter_old_emails" do 
+  describe "#filter_old_emails" do
     let!(:new_volunteer) { create(:user, email: "firstemail@example.com") }
 
     it "correctly filters out reinstated emails from old_emails when updating" do
-      #mimicking the process of user_controller#update_emails 
+      # mimicking the process of user_controller#update_emails
       new_volunteer.update(email: "secondemail@example.com")
       new_volunteer.confirm
       new_volunteer.filter_old_emails(new_volunteer.email)
@@ -302,8 +302,6 @@ RSpec.describe User, type: :model do
 
       expect(new_volunteer.email).to eq("firstemail@example.com")
       expect(new_volunteer.old_emails).to match_array(["secondemail@example.com"])
-    end 
-  end 
-
-      
+    end
+  end
 end
