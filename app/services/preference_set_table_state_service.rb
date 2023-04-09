@@ -4,6 +4,13 @@ class PreferenceSetTableStateService
   end
 
   def table_state(table_name:)
+    # table_state = JSON.parse(preference_set.table_state)
+    # if table_state[table_name].nil?
+      # table_state[table_name] = {}
+    # else
+      #  preference_set.table_state[table_name]
+    # end
+
     preference_set.table_state[table_name]
   end
 
