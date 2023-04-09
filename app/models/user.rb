@@ -9,7 +9,6 @@ class User < ApplicationRecord
 
   before_update :record_previous_email
   after_create :skip_confirmable_email_confirmation_upon_creation
-  before_save :skip_email_changed_notification, if: :email_changed?
 
   validates_with UserValidator
 
@@ -160,19 +159,11 @@ class User < ApplicationRecord
     confirm
   end
 
-  def skip_email_changed_notification
-    true
+  def send_email_changed_notification? #hardcoded in order to prevent the email changed notification BEFORE user confirms
+    return false 
   end
 
-  def send_email_changed_notification?
-    # Don't send the notification if the skip flag is set
-    return false if skip_email_changed_notification
-
-    # Otherwise, let Devise send the notification
-    super
-  end
-
-  def after_confirmation
+  def after_confirmation #sends the email changed notification AFTER user confirms
     send_email_changed_notification
   end
 end
