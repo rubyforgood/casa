@@ -5,7 +5,7 @@ class User < ApplicationRecord
   include Roles
   include ByOrganizationScope
   include DateHelper
-  include ActiveModel::Dirty
+  
 
   before_update :record_previous_email
   after_create :skip_confirmable_email_confirmation_upon_creation
@@ -158,10 +158,6 @@ class User < ApplicationRecord
   def skip_confirmable_email_confirmation_upon_creation
     skip_confirmation!
     confirm
-  end
-
-  def skip_casa_admin_email_changes
-    skip_reconfirmation!
   end
 
   def skip_email_changed_notification

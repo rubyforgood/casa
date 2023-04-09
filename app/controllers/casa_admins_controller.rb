@@ -17,7 +17,7 @@ class CasaAdminsController < ApplicationController
   def update
     authorize @casa_admin
 
-    @casa_admin.skip_casa_admin_email_changes
+    @casa_admin.skip_reconfirmation!
 
     if @casa_admin.update(update_casa_admin_params)
       @casa_admin.filter_old_emails(@casa_admin.email)

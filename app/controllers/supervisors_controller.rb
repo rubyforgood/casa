@@ -55,7 +55,7 @@ class SupervisorsController < ApplicationController
 
   def update
     authorize @supervisor
-    @supervisor.skip_casa_admin_email_changes
+    @supervisor.skip_reconfirmation!
 
     if @supervisor.update(update_supervisor_params)
       @supervisor.filter_old_emails(@supervisor.email)
