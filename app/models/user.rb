@@ -150,6 +150,11 @@ class User < ApplicationRecord
     end
   end
 
+  def filter_old_emails(previous_email)
+      updated_emails = self.old_emails.reject { |old| old == previous_email }
+      self.update(old_emails: updated_emails)
+  end 
+
   def skip_confirmable_email_confirmation_upon_creation
     skip_confirmation!
     confirm

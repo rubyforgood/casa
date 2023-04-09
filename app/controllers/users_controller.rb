@@ -102,8 +102,8 @@ class UsersController < ApplicationController
   end
 
   def update_user_email
-    updated_emails = @user.old_emails.reject { |old| old == email_params[:email] } # remove previous instances of the current_email from old_emails
-    @user.update({email: email_params[:email], old_emails: updated_emails})
+    @user.update({email: email_params[:email]})
+    @user.filter_old_emails(@user.email)
   end
 
   def user_params
