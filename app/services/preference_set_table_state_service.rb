@@ -14,7 +14,7 @@ class PreferenceSetTableStateService
     preference_set.table_state[table_name]
   end
 
-  def table_state_update!(table_name:, table_state:)
+  def update!(table_name:, table_state:)
     preference_set.table_state[table_name] = table_state
     preference_set.save!
   end

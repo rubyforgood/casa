@@ -12,7 +12,7 @@ RSpec.describe PreferenceSetTableStateService do
   describe '#update!' do
     it 'updates the table state' do
       expect {
-        subject.table_state_update!(table_state: table_state2, table_name: table_name)
+        subject.update!(table_state: table_state2, table_name: table_name)
       }.to change {
         user.reload.preference_set&.table_state&.[](table_name)
       }.from(:table_state).to( :table_state2)
@@ -32,15 +32,14 @@ RSpec.describe PreferenceSetTableStateService do
     it 'returns the table state' do
       expect(subject.table_state(table_name: table_name)).to eq(table_state[table_name])
     end
-    context 'when the preference set exists' do 
-
+    context 'when the preference set exists' do
     end
 
     context 'when there is no data for that table name' do
       let(:table_state) { {} }
 
       it 'returns an empty hash' do 
-        expect(subject.table_state(table_name: table_name)).to eq(nil) 
+        expect(subject.table_state(table_name: table_name)).to eq(nil)
       end
     end
   end
