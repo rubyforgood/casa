@@ -24,7 +24,7 @@
     "bootstrap-scss": "^5.2.3",
     "bootstrap-select": "^1.13.18",
     "datatables.net-dt": "^1.13.4",
-    "esbuild": "^0.17.14",
+    "esbuild": "^0.17.16",
     "faker": "^5.5.3",
     "jquery": "^3.6.4",
     "lodash": "^4.17.21",
