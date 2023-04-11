@@ -114,7 +114,7 @@ RSpec.describe "users/edit", type: :system do
       click_on "Change Email"
 
       fill_in "current_password_email", with: "12345678"
-      fill_in "New Email", with: "new_volunteer@example"
+      fill_in "New Email", with: ""
 
       fill_in "current_password_email", with: "Look At Me!"
 
@@ -210,7 +210,7 @@ RSpec.describe "users/edit", type: :system do
       click_on "Change Email"
 
       fill_in "current_password_email", with: "12345678"
-      fill_in "New Email", with: "new_supervisorATexampleDOTcom"
+      fill_in "New Email", with: " "
       sleep(1)
       fill_in "current_password_email", with: "Look Over Here!"
 
@@ -287,7 +287,7 @@ RSpec.describe "users/edit", type: :system do
       click_on "Change Email"
 
       fill_in "current_password_email", with: "12345678"
-      fill_in "New Email", with: "new_admin___example___com"
+      fill_in "New Email", with: " "
 
       fill_in "current_password_email", with: "Look At Me!"
 
