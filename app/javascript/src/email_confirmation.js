@@ -20,14 +20,14 @@ function disableButtonWhenEmptyEmailString (str, btn) {
 function checkEmailsAndDisplayPopup (btn, email, enableEmailPopup = false) {
   const emailText = email.value
 
-  if (emailText !== ' ' && (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(emailText))) {
+  if (emailText !== "" ) {
     disableButtonWhenEmptyEmailString(email, btn)
   } else {
     if (enableEmailPopup) {
       Swal.fire({
         icon: 'error',
         title: 'Email Error',
-        text: 'Please Enter A Valid Email'
+        text: 'Please Enter An Email'
       })
     }
     disableBtn(btn)
