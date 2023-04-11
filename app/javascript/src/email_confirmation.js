@@ -17,13 +17,13 @@ function disableButtonWhenEmptyEmailString (str, btn) {
 //  @param    {HTMLElement}  password - text input form field
 //  @param    {HTMLElement}  confirmation - text input form field
 //  @param    {boolean}  enablePopup - display popup when field is not in focus
-function checkEmailsAndDisplayPopup (btn, email, enablePopup = false) {
+function checkEmailsAndDisplayPopup (btn, email, enableEmailPopup = false) {
   const emailText = email.value
 
-  if (emailText !== ' ' && (/^[a-z0-9.]{1,64}@[a-z0-9.]{1,64}$/i.test(emailText))) {
+  if (emailText !== ' ' && (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(emailText))) {
     disableButtonWhenEmptyEmailString(email, btn)
   } else {
-    if (enablePopup) {
+    if (enableEmailPopup) {
       Swal.fire({
         icon: 'error',
         title: 'Email Error',
