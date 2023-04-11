@@ -9,7 +9,13 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
     let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
 
     context "without filter" do
-      let(:case_contacts) { [create(:case_contact, creator: volunteer, casa_case: casa_case)] }
+      let(:case_contacts) do
+        [
+          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.yesterday - 1),
+          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.yesterday),
+          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.today)
+        ]
+      end
 
       it "can see case creator in card" do
         case_contacts
@@ -29,8 +35,19 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         case_contacts
         sign_in volunteer
         visit case_contacts_path
-        within(".card-title") do
-          expect(page).to have_text(case_contacts[0].contact_groups_with_types.keys.first)
+        within(".card-title", match: :first) do
+          expect(page).to have_text(case_contacts[2].contact_groups_with_types.keys.first)
+        end
+      end
+
+      it "sorts case_contacts by occurred_at attribute (default)" do
+        case_contacts
+        sign_in volunteer
+        visit case_contacts_path
+
+        aggregate_failures do
+          expect(page.body.index(case_contacts[2].decorate.subheading)).to be < page.body.index(case_contacts[1].decorate.subheading)
+          expect(page.body.index(case_contacts[1].decorate.subheading)).to be < page.body.index(case_contacts[0].decorate.subheading)
         end
       end
     end

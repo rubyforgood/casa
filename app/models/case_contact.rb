@@ -119,6 +119,7 @@ class CaseContact < ApplicationRecord
   }
 
   filterrific(
+    default_filter_params: {sorted_by: "occurred_at_desc"},
     available_filters: [
       :sorted_by,
       :occurred_starting_at,
