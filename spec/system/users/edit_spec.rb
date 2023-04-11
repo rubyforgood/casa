@@ -119,7 +119,7 @@ RSpec.describe "users/edit", type: :system do
       fill_in "current_password_email", with: "Look At Me!"
 
       expect(page).to have_text("Email Error")
-      expect(page).to have_text("Please Enter A Valid Email")
+      expect(page).to have_text("Please Enter An Email")
     end
 
     it "displays current sign in date" do
@@ -215,7 +215,7 @@ RSpec.describe "users/edit", type: :system do
       fill_in "current_password_email", with: "Look Over Here!"
 
       expect(page).to have_text("Email Error")
-      expect(page).to have_text("Please Enter A Valid Email")
+      expect(page).to have_text("Please Enter An Email")
     end
 
     it "displays sms notification events for the supervisor user" do
@@ -292,7 +292,7 @@ RSpec.describe "users/edit", type: :system do
       fill_in "current_password_email", with: "Look At Me!"
 
       expect(page).to have_text("Email Error")
-      expect(page).to have_text("Please Enter A Valid Email")
+      expect(page).to have_text("Please Enter An Email")
     end
 
     it "displays password errors messages when admin is unable to set a password" do
