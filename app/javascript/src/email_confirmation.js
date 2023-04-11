@@ -20,7 +20,7 @@ function disableButtonWhenEmptyEmailString (str, btn) {
 function checkEmailsAndDisplayPopup (btn, email, enableEmailPopup = false) {
   const emailText = email.value
 
-  if (emailText !== "" ) {
+  if (emailText !== '') {
     disableButtonWhenEmptyEmailString(email, btn)
   } else {
     if (enableEmailPopup) {
