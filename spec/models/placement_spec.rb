@@ -5,4 +5,5 @@ RSpec.describe Placement, type: :model do
 
   it { is_expected.to belong_to(:placement_type) }
   it { is_expected.to belong_to(:creator) }
+  it { is_expected.to belong_to(:casa_case) }
 end
