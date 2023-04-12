@@ -8,7 +8,6 @@ RSpec.describe CaseContactDecorator do
     placement.update_attribute(:placement_started_at, Date.new(2023, 4, 14))
   end
 
-
   describe "#formatted_date" do
     it "returns correctly formatted date" do
       expect(placement.decorate.formatted_date).to eq date_string
