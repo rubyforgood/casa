@@ -162,6 +162,7 @@ Rails.application.routes.draw do
       patch :update
       patch "update_password"
       patch :add_language
+      delete :remove_language
     end
   end
   resources :languages, only: %i[new create edit update] do
