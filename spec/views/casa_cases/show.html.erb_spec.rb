@@ -52,7 +52,7 @@ RSpec.describe "casa_cases/show", type: :view do
     let(:placement_started_at) { casa_case.placements.map(&:placement_started_at).first.to_date.strftime("%B %d, %Y") }
 
     before { assign(:casa_case, casa_case) }
-    it "render casa case with court dates" do
+    it "renders casa case with placements" do
       render
 
       expect(rendered).to match(casa_case.case_number)
@@ -64,7 +64,7 @@ RSpec.describe "casa_cases/show", type: :view do
     let!(:casa_case) { create(:casa_case, casa_org: organization, case_number: "111") }
 
     before { assign(:casa_case, casa_case) }
-    it "render casa case without placements" do
+    it "renders casa case without placements" do
       render
 
       expect(rendered).to match(casa_case.case_number)
