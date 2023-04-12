@@ -15,7 +15,9 @@
   <%= og_tag :image, content: image_url('login.jpg') %>
 
   <%= render 'shared/favicons' %>
-
+  <script> 
+    var timeout = <%= @timeout_duration %> 
+  </script>
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 
@@ -29,7 +31,6 @@
 
 </head>
 <body class="<%= body_class %>">
-<p> <%= @timeout_duration %> </p>
 <noscript>
   <div class="noscript alert alert-danger">
     <h2 class="alert-heading">
