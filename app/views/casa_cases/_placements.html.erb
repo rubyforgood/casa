@@ -1,0 +1,13 @@
+<% placements = casa_case.placements %>
+<label>Placements:</label>
+<% if placements.empty? %>
+  No Placements
+<% else %>
+  <ul>
+    <% placements.each do |pcd| %>
+      <p>
+        <%= link_to(pcd.decorate.placement_info, casa_case_placement_path(casa_case, pcd)) %>
+      </p>
+    <% end %>
+  </ul>
+<% end %>
