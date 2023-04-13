@@ -51,7 +51,11 @@ class User < ApplicationRecord
 
   scope :no_recent_sign_in, -> { active.where("last_sign_in_at <= ?", 30.days.ago) }
 
-  # create a callback from after_create that creates a PreferenceSet for that User.
+  after_create :create_preference_set
+
+  def create_preference_set
+    self.preference_set = PreferenceSet.create
+  end
 
   def casa_admin?
     is_a?(CasaAdmin)
