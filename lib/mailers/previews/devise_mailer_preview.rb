@@ -3,7 +3,17 @@
 class DeviseMailerPreview < ActionMailer::Preview
   def reset_password_instructions
     user = params.has_key?(:id) ? User.find_by(id: params[:id]) : User.last
-    Devise::Mailer.reset_password_instructions(user, "faketoken")
+    if user.nil?
+      ActiveSupport::Notifications.unsubscribe("process.action_mailer")
+      ActionMailer::Base.mail(
+        from: "no-rply@example.com",
+        to: "user_not_found@example.com",
+        subject: "This user not found",
+        body: "Sorry, this user was not found"
+      )
+    else
+      Devise::Mailer.reset_password_instructions(user, "faketoken")
+    end
   end
 
   def invitation_instructions_as_all_casa_admin
