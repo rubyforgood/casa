@@ -222,6 +222,7 @@ class DbPopulator
       random_court_order_count.times do
         CaseCourtOrder.create!(
           casa_case_id: new_casa_case.id,
+          court_date: _new_court_date,
           text: order_choices.sample(random: rng),
           implementation_status: CaseCourtOrder::IMPLEMENTATION_STATUSES.values.sample(random: rng)
         )
