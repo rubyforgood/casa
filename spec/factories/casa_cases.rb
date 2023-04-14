@@ -74,4 +74,10 @@ FactoryBot.define do
       create(:court_date, casa_case: casa_case, date: Date.yesterday)
     end
   end
+
+  trait :with_placement do
+    after(:create) do |casa_case|
+      create(:placement, casa_case: casa_case, placement_started_at: Date.tomorrow)
+    end
+  end
 end
