@@ -5,7 +5,10 @@ RSpec.describe "All-Casa Admin" do
   let(:casa_admin) { create(:casa_admin, email: "admin1@example.com", display_name: "Example Admin") }
   let(:casa_org) { create(:casa_org) }
 
-  before { sign_in all_casa_admin }
+  before { 
+    sign_in all_casa_admin 
+    expect_any_instance_of(AllCasaAdmins::CasaAdminsController).to receive(:authenticate_all_casa_admin!).and_call_original
+  }
 
   describe "GET /new" do
     it "allows access to the new admin page" do
@@ -15,27 +18,69 @@ RSpec.describe "All-Casa Admin" do
   end
 
   describe "POST /create" do
+    subject { post all_casa_admins_casa_org_casa_admins_path(casa_org), params: }
     context "with valid parameters" do
+      let(:params) { { casa_admin: { email: "admin1@example.com", display_name: "Example Admin" } } }
       it "creates a new CASA admin for the organization" do
-        expect {
-          post all_casa_admins_casa_org_casa_admins_path(casa_org), params: {
-            casa_admin: {
-              email: "admin1@example.com",
-              display_name: "Example Admin"
-            }
-          }
-        }.to change(CasaAdmin, :count).by(1)
+        expect { subject }.to change(CasaAdmin, :count).by(1)
+      end
+
+      it { is_expected.to redirect_to all_casa_admins_casa_org_path(casa_org) }
+      
+      it 'shows correct flash message' do
+        subject 
+        expect(flash[:notice]).to include('New admin created successfully')
       end
     end
 
+
     context "with invalid parameters" do
+      let(:params) { { casa_admin: { email: "", display_name: "" } } }
       it "renders new page" do
-        post all_casa_admins_casa_org_casa_admins_path(casa_org), params: {
-          casa_admin: {
-            email: "",
-            display_name: ""
-          }
-        }
+        expect{subject}.not_to change(CasaAdmin, :count)
+
+        expect(response).to be_successful
+        expect(response).to render_template "casa_admins/new"
+      end
+    end
+  end
+
+  describe "GET /edit" do
+    subject { get edit_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin) }
+
+    it "should allow access to the edit admin page" do
+      subject
+      expect(response).to be_successful
+    end
+
+    it "shows correct admin" do
+      subject
+      expect(response.body).to include(casa_admin.email)
+    end
+  end
+
+  describe "PATCH /update" do
+    subject { patch edit_all_casa_admins_casa_org_casa_admins_path(casa_org, casa_admin), params: }
+    context "with valid parameters" do
+      let(:params) { { casa_admin: { email: "admin1@example.com" } } }
+      it "creates a new CASA admin for the organization" do
+        expect { subject }.to change(CasaAdmin, :count).by(1)
+      end
+
+      it { is_expected.to redirect_to all_casa_admins_casa_org_path(casa_org) }
+
+      it 'shows correct flash message' do
+        subject 
+        expect(flash[:notice]).to include('New admin created successfully')
+      end
+    end
+
+
+    context "with invalid parameters" do
+      let(:params) { { casa_admin: { email: "", display_name: "" } } }
+      it "renders new page" do
+        expect{subject}.not_to change(CasaAdmin, :count)
+
         expect(response).to be_successful
         expect(response).to render_template "casa_admins/new"
       end
@@ -43,6 +88,8 @@ RSpec.describe "All-Casa Admin" do
   end
 
   describe "PATCH /update" do
+    subject { patch edit_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin) }
+
     let(:email) { "casa_admin@example.com" }
 
     context "when current user is all casa admin" do
@@ -107,34 +154,4 @@ RSpec.describe "All-Casa Admin" do
     end
   end
 
-  describe ".edit" do
-    let(:other_admin) { create(:casa_admin, email: "other_admin@example.com", display_name: "Other Admin") }
-
-    context "when user is all casa admin" do
-      it "should allow access to the edit admin page" do
-        get edit_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin)
-        expect(response).to be_successful
-      end
-    end
-
-    context "when not logged in" do
-      it "should not allow access to edit admin page" do
-        sign_out all_casa_admin
-
-        get edit_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin)
-        expect(response).to have_http_status(:redirect)
-      end
-    end
-
-    context "when user does not have all casa admin permissions" do
-      it "should not allow access to edit admin page" do
-        sign_out all_casa_admin
-        sign_in other_admin
-
-        get edit_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin)
-
-        expect(response).to have_http_status(:redirect)
-      end
-    end
-  end
 end

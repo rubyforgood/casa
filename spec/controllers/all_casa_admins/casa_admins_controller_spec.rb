@@ -8,55 +8,6 @@ RSpec.describe AllCasaAdmins::CasaAdminsController, type: :controller do
     sign_in all_casa_admin
   end
 
-  describe "GET new" do
-    it "should load the page" do
-      get :new, params: {casa_org_id: casa_org.id}
-      expect(response).to be_successful
-    end
-
-    it "should authenticate the user" do
-      sign_out all_casa_admin
-      get :new, params: {casa_org_id: casa_org.id}
-      expect(response).to have_http_status(:redirect)
-    end
-
-    it "should only allow all casa admin users" do
-      sign_out all_casa_admin
-      other_admin = create(:casa_admin, email: "other_admin@example.com", display_name: "Other Admin")
-      sign_in other_admin
-      get :new, params: {casa_org_id: casa_org.id}
-      expect(response).to have_http_status(:redirect)
-    end
-  end
-
-  describe "POST create" do
-    it "should create a casa admin", :aggregate_failures do
-      expect {
-        post :create, params: {
-          casa_org_id: casa_org.id,
-          casa_admin: {
-            email: "admin1@example.com",
-            display_name: "Example Admin"
-          }
-        }
-      }.to change(CasaAdmin, :count).by(1)
-      expect(response).to have_http_status(:found)
-    end
-
-    it "doesn't allow blank attributes" do
-      expect {
-        post :create, params: {
-          casa_org_id: casa_org.id,
-          casa_admin: {
-            email: "",
-            display_name: ""
-          }
-        }
-      }.not_to change(CasaAdmin, :count)
-      expect(response).to render_template "casa_admins/new"
-    end
-  end
-
   describe "GET edit" do
     it "should load the page" do
       casa_admin = create(:casa_admin)
