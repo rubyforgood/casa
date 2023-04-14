@@ -1,5 +1,6 @@
 channels/application_cable/channel.rb
 channels/application_cable/connection.rb
+controllers/all_casa_admins/casa_admins_controller.rb
 controllers/all_casa_admins/dashboard_controller.rb
 controllers/all_casa_admins/patch_notes_controller.rb
 controllers/all_casa_admins/sessions_controller.rb

@@ -5,8 +5,8 @@ RSpec.describe "All-Casa Admin" do
   let(:casa_admin) { create(:casa_admin, email: "admin1@example.com", display_name: "Example Admin") }
   let(:casa_org) { create(:casa_org) }
 
-  before { 
-    sign_in all_casa_admin 
+  before {
+    sign_in all_casa_admin
     expect_any_instance_of(AllCasaAdmins::CasaAdminsController).to receive(:authenticate_all_casa_admin!).and_call_original
   }
 
@@ -19,25 +19,25 @@ RSpec.describe "All-Casa Admin" do
 
   describe "POST /create" do
     subject { post all_casa_admins_casa_org_casa_admins_path(casa_org), params: }
+
     context "with valid parameters" do
-      let(:params) { { casa_admin: { email: "admin1@example.com", display_name: "Example Admin" } } }
+      let(:params) { {casa_admin: {email: "admin1@example.com", display_name: "Example Admin"}} }
       it "creates a new CASA admin for the organization" do
         expect { subject }.to change(CasaAdmin, :count).by(1)
       end
 
       it { is_expected.to redirect_to all_casa_admins_casa_org_path(casa_org) }
-      
-      it 'shows correct flash message' do
-        subject 
-        expect(flash[:notice]).to include('New admin created successfully')
+
+      it "shows correct flash message" do
+        subject
+        expect(flash[:notice]).to include("New admin created successfully")
       end
     end
 
-
     context "with invalid parameters" do
-      let(:params) { { casa_admin: { email: "", display_name: "" } } }
+      let(:params) { {casa_admin: {email: "", display_name: ""}} }
       it "renders new page" do
-        expect{subject}.not_to change(CasaAdmin, :count)
+        expect { subject }.not_to change(CasaAdmin, :count)
 
         expect(response).to be_successful
         expect(response).to render_template "casa_admins/new"
@@ -60,73 +60,32 @@ RSpec.describe "All-Casa Admin" do
   end
 
   describe "PATCH /update" do
-    subject { patch edit_all_casa_admins_casa_org_casa_admins_path(casa_org, casa_admin), params: }
+    subject { patch all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin), params: }
+
     context "with valid parameters" do
-      let(:params) { { casa_admin: { email: "admin1@example.com" } } }
-      it "creates a new CASA admin for the organization" do
-        expect { subject }.to change(CasaAdmin, :count).by(1)
+      let(:params) { {all_casa_admin: {email: "casa_admin@example.com"}} }
+
+      it "should allow current user to successfully update other casa admin's email" do
+        expect { subject }.to change { casa_admin.reload.email }.from("admin1@example.com").to("casa_admin@example.com")
       end
 
-      it { is_expected.to redirect_to all_casa_admins_casa_org_path(casa_org) }
+      it { is_expected.to redirect_to edit_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin) }
 
-      it 'shows correct flash message' do
-        subject 
-        expect(flash[:notice]).to include('New admin created successfully')
+      it "shows correct flash message" do
+        subject
+        expect(flash[:notice]).to include("New admin created successfully")
       end
     end
-
 
     context "with invalid parameters" do
-      let(:params) { { casa_admin: { email: "", display_name: "" } } }
+      let(:params) { {all_casa_admin: {email: ""}} }
+
+      it "should not allow current user to successfully update other casa admin's email" do
+        expect { subject }.not_to change { casa_admin.reload.email }
+      end
+
       it "renders new page" do
-        expect{subject}.not_to change(CasaAdmin, :count)
-
-        expect(response).to be_successful
-        expect(response).to render_template "casa_admins/new"
-      end
-    end
-  end
-
-  describe "PATCH /update" do
-    subject { patch edit_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin) }
-
-    let(:email) { "casa_admin@example.com" }
-
-    context "when current user is all casa admin" do
-      it "should allow current user to successfully update other casa admin's email" do
-        patch all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin),
-          params: {all_casa_admin: {email: email}}
-
-        expect(response).to redirect_to edit_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin)
-        expect(flash[:notice]).to eq("New admin created successfully")
-        expect(casa_admin.reload.email).to eq(email)
-      end
-
-      it "should render edit page if update fails" do
-        patch all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin),
-          params: {all_casa_admin: {email: ""}}
-
-        expect(response).to be_successful
-        expect(response).to render_template "casa_admins/edit"
-      end
-    end
-  end
-
-  describe "PATCH /deactivate" do
-    context "when current user is all casa admin" do
-      it "should successfully deactivate another casa admin's profile" do
-        casa_admin.update(active: true)
-        patch deactivate_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin)
-
-        expect(response).to redirect_to edit_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin)
-        expect(flash[:notice]).to eq("Admin was deactivated.")
-        expect(casa_admin.reload.active).to eq(false)
-      end
-
-      it "should render edit page if update fails" do
-        allow_any_instance_of(CasaAdmin).to receive(:deactivate).and_return(false)
-        patch deactivate_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin)
-
+        subject
         expect(response).to be_successful
         expect(response).to render_template "casa_admins/edit"
       end
@@ -134,24 +93,78 @@ RSpec.describe "All-Casa Admin" do
   end
 
   describe "PATCH /activate" do
-    context "when current user is all casa admin" do
-      it "should successfully activate another casa admin's profile" do
-        casa_admin.update(active: false)
-        patch activate_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin)
+    subject { patch activate_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin) }
 
-        expect(response).to redirect_to edit_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin)
-        expect(flash[:notice]).to eq("Admin was activated. They have been sent an email.")
-        expect(casa_admin.reload.active).to eq(true)
+    let(:casa_admin) { create(:casa_admin, :inactive) }
+
+    it "should successfully activate another casa admin's profile" do
+      expect { subject }.to change { casa_admin.reload.active }.from(false).to(true)
+    end
+
+    it "calls for CasaAdminMailer" do
+      expect(CasaAdminMailer).to(
+        receive(:account_setup).with(casa_admin).once.and_return(double("mailer", deliver: true))
+      )
+      subject
+    end
+
+    it { is_expected.to redirect_to edit_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin) }
+
+    it "shows correct flash message" do
+      subject
+      expect(flash[:notice]).to include("Admin was activated. They have been sent an email.")
+    end
+
+    context "when activation fails" do
+      before { allow_any_instance_of(CasaAdmin).to receive(:activate).and_return(false) }
+
+      it "should not activate the casa admin's profile" do
+        expect { subject }.not_to change { casa_admin.reload.active }
       end
 
-      it "should render edit page if update fails" do
-        allow_any_instance_of(CasaAdmin).to receive(:activate).and_return(false)
-        patch activate_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin)
-
+      it "renders edit page" do
+        subject
         expect(response).to be_successful
         expect(response).to render_template "casa_admins/edit"
       end
     end
   end
 
+  describe "PATCH /deactivate" do
+    subject { patch deactivate_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin) }
+
+    let(:casa_admin) { create(:casa_admin, active: true) }
+
+    it "should successfully deactivate another casa admin's profile" do
+      expect { subject }.to change { casa_admin.reload.active }.from(true).to(false)
+    end
+
+    it "calls for CasaAdminMailer" do
+      expect(CasaAdminMailer).to(
+        receive(:deactivation).with(casa_admin).once.and_return(double("mailer", deliver: true))
+      )
+      subject
+    end
+
+    it { is_expected.to redirect_to edit_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin) }
+
+    it "shows correct flash message" do
+      subject
+      expect(flash[:notice]).to include("Admin was deactivated.")
+    end
+
+    context "when deactivation fails" do
+      before { allow_any_instance_of(CasaAdmin).to receive(:deactivate).and_return(false) }
+
+      it "should not deactivate the casa admin's profile" do
+        expect { subject }.not_to change { casa_admin.reload.active }
+      end
+
+      it "renders edit page" do
+        subject
+        expect(response).to be_successful
+        expect(response).to render_template "casa_admins/edit"
+      end
+    end
+  end
 end

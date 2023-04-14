@@ -79,5 +79,4 @@ Rails.application.configure do
   # config.action_cable.disable_request_forgery_protection = true
 
   config.assets.digest = false
-  config.hosts << "579d-177-193-26-75.ngrok-free.app"
 end
