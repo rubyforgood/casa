@@ -8,8 +8,8 @@ Rails.application.routes.draw do
     post "datatable", on: :collection
   end
 
-  get "table_state", to: "volunteers#table_state"
-  post "table_state_update", to: "volunteers#table_state_update"
+  post "table_state_update", to: "preference_sets#table_state_update"
+  get "table_state", to: "preference_sets#table_state"
 
   authenticated :all_casa_admin do
     root to: "all_casa_admins/dashboard#show", as: :authenticated_all_casa_admin_root
@@ -114,6 +114,7 @@ Rails.application.routes.draw do
       patch :unassign
     end
   end
+
   resources :volunteers, except: %i[destroy], concerns: %i[with_datatable] do
     post :stop_impersonating, on: :collection
     member do

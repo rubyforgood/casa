@@ -51,7 +51,7 @@ class User < ApplicationRecord
 
   scope :no_recent_sign_in, -> { active.where("last_sign_in_at <= ?", 30.days.ago) }
 
-  after_create :create_preference_set
+   after_create :create_preference_set
 
   def create_preference_set
     self.preference_set = PreferenceSet.create
