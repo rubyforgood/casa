@@ -11,11 +11,11 @@ function replaceNumberWithDecrement (str, num) {
 
 module.exports = class CourtOrderList {
   // @param {object} courtOrdersWidget The div containing the list of court orders
-  constructor (courtOrdersWidget) {
+  constructor (options) {
     // The following regex is intended for pathnames such as "/casa_cases/CINA-19-1004/court_dates/new"
     const urlMatch = window.location.pathname.match(/^\/([a-z_]+)s\/(\w+-+\d+)(\/(([a-z_]+)s))?/).filter(match => match !== undefined)
-    this.courtOrdersWidget = courtOrdersWidget
-    this.resourceName = urlMatch.length > 3 ? urlMatch[5] : urlMatch[1]
+    this.courtOrdersWidget = options.el
+    this.resourceName = options.resource
     // The casaCaseId will be something like "CINA-19-1004"
     this.casaCaseId = urlMatch[2]
   }

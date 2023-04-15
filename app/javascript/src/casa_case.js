@@ -189,7 +189,10 @@ $('document').ready(() => {
   })
 
   if (courtOrdersListContainer.length) {
-    courtOrders = new CourtOrderList(courtOrdersListContainer)
+    courtOrders = new CourtOrderList({
+      el: courtOrdersListContainer,
+      resource: 'casa_case'
+    })
 
     $('button#add-court-order-button').on('click', () => {
       courtOrders.addCourtOrder()
