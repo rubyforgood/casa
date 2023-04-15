@@ -1,3 +1,5 @@
+import Swal from 'sweetalert2'
+
 // Replaces a number in a string with its value -1
 //   @param  {string} str The string containing the number to replace
 //   @param  {number} num The number to replace
@@ -90,10 +92,10 @@ module.exports = class CourtOrderList {
       showCloseButton: true,
       showCancelButton: true,
       focusConfirm: false,
-  
+
       confirmButtonColor: '#d33',
       cancelButtonColor: '#39c',
-  
+
       confirmButtonText: 'Delete',
       cancelButtonText: 'Go back'
     }).then((result) => {
@@ -105,7 +107,7 @@ module.exports = class CourtOrderList {
 
   removeCourtOrderAction (order) {
     const orderHiddenIdInput = order.next('input[type="hidden"]')
-  
+
     $.ajax({
       url: `/case_court_orders/${orderHiddenIdInput.val()}`,
       method: 'delete',

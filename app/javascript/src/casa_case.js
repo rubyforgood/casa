@@ -141,14 +141,14 @@ $('document').ready(() => {
   })
 
   if (courtOrdersListContainer.length) {
-    let courtOrders = new CourtOrderList(courtOrdersListContainer)
+    const courtOrders = new CourtOrderList(courtOrdersListContainer)
 
     $('button#add-court-order-button').on('click', () => {
       courtOrders.addCourtOrder()
     })
 
     $('button.remove-court-order-button').on('click', (event) => {
-      const orderHTML = $(event.target).parent();
+      const orderHTML = $(event.target).parent()
       courtOrders.removeCourtOrderWithConfirmation(orderHTML)
     })
   }
