@@ -20,20 +20,7 @@ class VolunteersController < ApplicationController
 
     render json: datatable
   end
-
-  # def table_state
-  #   render json: PreferenceSetTableStateService.new(user_id: current_user.id).table_state(
-  #     table_name: "volunteers_table"
-  #   )
-  # end
-
-  # def table_state_update
-  #   render json: PreferenceSetTableStateService.new(user_id: current_user.id).update!(
-  #     table_state: params["table_state"],
-  #     table_name: "volunteers_table"
-  #   )
-  # end
-
+  
   def new
     @volunteer = current_organization.volunteers.new
     authorize @volunteer
