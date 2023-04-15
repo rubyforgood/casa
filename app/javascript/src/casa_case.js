@@ -141,9 +141,7 @@ $('document').ready(() => {
   })
 
   if (courtOrdersListContainer.length) {
-    let courtOrders = new CourtOrderList({
-      el: courtOrdersListContainer
-    })
+    let courtOrders = new CourtOrderList(courtOrdersListContainer)
 
     $('button#add-court-order-button').on('click', () => {
       courtOrders.addCourtOrder()

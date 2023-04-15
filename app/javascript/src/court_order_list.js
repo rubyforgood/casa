@@ -10,21 +10,19 @@ function replaceNumberWithDecrement (str, num) {
 }
 
 module.exports = class CourtOrderList {
-  // @param {object} Options for court order list instance
-  // @param {object} Options.el The HTMLElement to contain the list items
-  constructor (options) {
+  // @param {object} The HTMLElement to contain the list items
+  constructor (courtOrdersWidget) {
     // The following regex is intended for pathnames such as "/casa_cases/CINA-19-1004/court_dates/new"
     const urlMatch = window.location.pathname.match(/^\/([a-z_]+)s\/(\w+-+\d+)(\/(([a-z_]+)s))?/).filter(match => match !== undefined)
-    this.courtOrdersWidget = options.el
-    this.resourceName = this.courtOrdersWidget.data('resource')
+    this.courtOrdersWidget = courtOrdersWidget
+    this.resourceName = this.courtOrdersWidget[0].dataset.resource
     // The casaCaseId will be something like "CINA-19-1004"
     this.casaCaseId = urlMatch[2]
   }
 
   // Adds a row containing a text field to write the court order and a dropdown to specify the order status
   addCourtOrder () {
-    const courtOrdersWidget = this.courtOrdersWidget
-    const index = courtOrdersWidget.children('.court-order-entry').length
+    const index = this.courtOrdersWidget.children('.court-order-entry').length
     const resourceName = this.resourceName
     const courtOrderRow = $(`\
     <div class="court-order-entry">\
@@ -47,7 +45,7 @@ module.exports = class CourtOrderList {
         value="${this.casaCaseId}">
     </div>`)
 
-    courtOrdersWidget.append(courtOrderRow)
+    this.courtOrdersWidget.append(courtOrderRow)
     courtOrderRow.children('textarea').trigger('focus')
   }
 
