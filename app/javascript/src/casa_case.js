@@ -7,54 +7,6 @@
 import Swal from 'sweetalert2'
 
 const CourtOrderList = require('./court_order_list.js')
-let courtOrders
-
-function removeCourtOrderWithConfirmation () {
-  const text = 'Are you sure you want to remove this court order? Doing so will ' +
-    'delete all records of it unless it was included in a previous court report.'
-  Swal.fire({
-    icon: 'warning',
-    title: 'Delete court order?',
-    text,
-    showCloseButton: true,
-    showCancelButton: true,
-    focusConfirm: false,
-
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#39c',
-
-    confirmButtonText: 'Delete',
-    cancelButtonText: 'Go back'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      removeCourtOrderAction($(this).parent())
-    }
-  })
-}
-
-function removeCourtOrderAction (order) {
-  const orderHiddenIdInput = order.next('input[type="hidden"]')
-
-  $.ajax({
-    url: `/case_court_orders/${orderHiddenIdInput.val()}`,
-    method: 'delete',
-    success: () => {
-      courtOrders.removeCourtOrder(order, orderHiddenIdInput)
-      Swal.fire({
-        icon: 'success',
-        text: 'Court order has been removed.',
-        showCloseButton: true
-      })
-    },
-    error: () => {
-      Swal.fire({
-        icon: 'error',
-        text: 'Something went wrong when attempting to delete this court order.',
-        showCloseButton: true
-      })
-    }
-  })
-}
 
 function copyOrdersFromCaseWithConfirmation () {
   const id = $(this).next().val()
@@ -189,7 +141,7 @@ $('document').ready(() => {
   })
 
   if (courtOrdersListContainer.length) {
-    courtOrders = new CourtOrderList({
+    let courtOrders = new CourtOrderList({
       el: courtOrdersListContainer,
       resource: 'casa_case'
     })
@@ -198,10 +150,9 @@ $('document').ready(() => {
       courtOrders.addCourtOrder()
     })
 
-    $('button.remove-court-order-button').on('click', removeCourtOrderWithConfirmation)
-
-    $('.court-orders textarea').each(function () {
-      $(this).height($(this).prop('scrollHeight'))
+    $('button.remove-court-order-button').on('click', (event) => {
+      const orderHTML = $(event.target).parent();
+      courtOrders.removeCourtOrderWithConfirmation(orderHTML)
     })
   }
 
