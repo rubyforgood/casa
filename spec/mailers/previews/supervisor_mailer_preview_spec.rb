@@ -11,16 +11,16 @@ RSpec.describe SupervisorMailerPreview do
 
       it { expect(email.to).to eq [supervisor.email] }
     end
-     
-     context "When passed ID is valid" do
-      let(:preview) {described_class.new(id: supervisor.id) }
+
+    context "When passed ID is valid" do
+      let(:preview) { described_class.new(id: supervisor.id) }
       let(:email) { preview.account_setup }
 
       it { expect(email.to).to eq [supervisor.email] }
     end
- 
+
     context "When passed ID is invalid" do
-      let(:preview) {described_class.new(id: -1) }
+      let(:preview) { described_class.new(id: -1) }
       let(:email) { preview.account_setup }
 
       it { expect(email.to).to eq ["missing_supervisor@example.com"] }
@@ -34,16 +34,16 @@ RSpec.describe SupervisorMailerPreview do
 
       it { expect(email.to).to eq [supervisor.email] }
     end
-     
-     context "When passed ID is valid" do
-      let(:preview) {described_class.new(id: supervisor.id) }
+
+    context "When passed ID is valid" do
+      let(:preview) { described_class.new(id: supervisor.id) }
       let(:email) { preview.weekly_digest }
-      
+
       it { expect(email.to).to eq [supervisor.email] }
     end
- 
+
     context "When passed ID is invalid" do
-      let(:preview) {described_class.new(id: 3500) }
+      let(:preview) { described_class.new(id: 3500) }
       let(:email) { preview.weekly_digest }
 
       it { expect(email.to).to eq ["missing_supervisor@example.com"] }

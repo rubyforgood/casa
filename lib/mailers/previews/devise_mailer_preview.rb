@@ -1,16 +1,11 @@
 # Preview all emails at http://localhost:3000/rails/mailers/devise_mailer
 # :nocov:
+require_relative "../debug_preview_mailer"
 class DeviseMailerPreview < ActionMailer::Preview
   def reset_password_instructions
     user = params.has_key?(:id) ? User.find_by(id: params[:id]) : User.last
     if user.nil?
-      ActiveSupport::Notifications.unsubscribe("process.action_mailer")
-      ActionMailer::Base.mail(
-        from: "no-rply@example.com",
-        to: "missing_user@example.com",
-        subject: "This user not found",
-        body: "Sorry, this user was not found"
-      )
+      DebugPreviewMailer.invalid_user(user, "user")
     else
       Devise::Mailer.reset_password_instructions(user, "faketoken")
     end

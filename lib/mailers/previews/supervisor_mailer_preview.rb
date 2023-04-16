@@ -1,16 +1,12 @@
 # Preview all emails at http://localhost:3000/rails/mailers/supervisor_mailer
 # :nocov:
+require_relative "../debug_preview_mailer"
+
 class SupervisorMailerPreview < ActionMailer::Preview
   def account_setup
     supervisor = params.has_key?(:id) ? Supervisor.find_by(id: params[:id]) : Supervisor.last
     if supervisor.nil?
-      ActiveSupport::Notifications.unsubscribe("process.action_mailer")
-      ActionMailer::Base.mail(
-        from: "no-rply@example.com",
-        to: "missing_supervisor@example.com",
-        subject: "No Supervisor has been found",
-        body: "This is a debugging message letting you know no supervisor has been found"
-      )
+      DebugPreviewMailer.invalid_user(supervisor, "supervisor")
     else
       SupervisorMailer.account_setup(supervisor)
     end
@@ -19,13 +15,7 @@ class SupervisorMailerPreview < ActionMailer::Preview
   def weekly_digest
     supervisor = params.has_key?(:id) ? Supervisor.find_by(id: params[:id]) : Supervisor.last
     if supervisor.nil?
-      ActiveSupport::Notifications.unsubscribe("process.action_mailer")
-      ActionMailer::Base.mail(
-        from: "no-rply@example.com",
-        to: "missing_supervisor@example.com",
-        subject: "No Supervisor has been found",
-        body: "This is a debugging message letting you know no supervisor has been found"
-      )
+      DebugPreviewMailer.invalid_user(supervisor, "supervisor")
     else
       SupervisorMailer.account_setup(supervisor)
     end
