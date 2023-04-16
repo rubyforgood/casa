@@ -2,60 +2,73 @@ require "rails_helper"
 require File.join(Rails.root, "lib", "mailers", "previews", "volunteer_mailer_preview")
 
 RSpec.describe VolunteerMailerPreview do
-  let(:subject) { described_class.new }
   let!(:volunteer) { create(:volunteer) }
-  let!(:supervisor) { create(:supervisor) }
-  let!(:admin) { create(:casa_admin) }
 
   describe "#account_setup" do
-    let(:message) { subject.account_setup }
+    context "When no ID is passed" do
+      let(:preview) { described_class.new }
+      let(:email) { preview.account_setup }
 
-    it { expect(message.to).to eq [volunteer.email] }
+      it { expect(email.to).to eq [volunteer.email] }
+    end
+     
+     context "When passed ID is valid" do
+      let(:preview) {described_class.new(id: volunteer.id) }
+      let(:email) { preview.account_setup }
+
+      it { expect(email.to).to eq [volunteer.email] }
+    end
+ 
+    context "When passed ID is invalid" do
+      let(:preview) {described_class.new(id: -1) }
+      let(:email) { preview.account_setup }
+
+      it { expect(email.to).to eq ["missing_volunteer@example.com"] }
+    end
   end
 
   describe "#court_report_reminder" do
-    let(:message) { subject.court_report_reminder }
+    context "When no ID is passed" do
+      let(:preview) { described_class.new }
+      let(:email) { preview.court_report_reminder }
 
-    it { expect(message.to).to eq [volunteer.email] }
+      it { expect(email.to).to eq [volunteer.email] }
+    end
+     
+     context "When passed ID is valid" do
+      let(:preview) {described_class.new(id: volunteer.id) }
+      let(:email) { preview.court_report_reminder }
+
+      it { expect(email.to).to eq [volunteer.email] }
+    end
+ 
+    context "When passed ID is invalid" do
+      let(:preview) {described_class.new(id: -1) }
+      let(:email) { preview.court_report_reminder }
+
+      it { expect(email.to).to eq ["missing_volunteer@example.com"] }
+    end
   end
+describe "#case_contacts_reminder" do
+    context "When no ID is passed" do
+      let(:preview) { described_class.new }
+      let(:email) { preview.case_contacts_reminder }
 
-  describe "#case_contacts_reminder" do
-    let(:message) { subject.case_contacts_reminder }
+      it { expect(email.to).to eq [volunteer.email] }
+    end
+     
+     context "When passed ID is valid" do
+      let(:preview) {described_class.new(id: volunteer.id) }
+      let(:email) { preview.case_contacts_reminder }
 
-    it { expect(message.to).to eq [volunteer.email] }
-  end
+      it { expect(email.to).to eq [volunteer.email] }
+    end
+ 
+    context "When passed ID is invalid" do
+      let(:preview) {described_class.new(id: -1) }
+      let(:email) { preview.case_contacts_reminder }
 
-  describe "#get_user" do
-    context "uses a volunteer record" do
-      context "when no id is provided" do
-        let(:message) { subject.account_setup }
-
-        it { expect(message.to).to eq [volunteer.email] }
-      end
-
-      context "when a volunteer id is provided" do
-        let(:params) { {id: volunteer.id} }
-        let(:subject) { described_class.new params }
-        let(:message) { subject.account_setup }
-
-        it { expect(message.to).to eq [volunteer.email] }
-      end
-
-      context "when a supervisor id is provided" do
-        let(:params) { {id: supervisor.id} }
-        let(:subject) { described_class.new params }
-        let(:message) { subject.account_setup }
-
-        it { expect(message.to).to eq [volunteer.email] }
-      end
-
-      context "when an admin id is provided" do
-        let(:params) { {id: admin.id} }
-        let(:subject) { described_class.new params }
-        let(:message) { subject.account_setup }
-
-        it { expect(message.to).to eq [volunteer.email] }
-      end
+      it { expect(email.to).to eq ["missing_volunteer@example.com"] }
     end
   end
 end

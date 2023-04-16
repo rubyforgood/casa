@@ -7,7 +7,7 @@ class VolunteerMailerPreview < ActionMailer::Preview
       ActiveSupport::Notifications.unsubscribe("process.action_mailer")
       ActionMailer::Base.mail(
         from: "no-rply@example.com",
-        to: "not_a_volunteer@example.com",
+        to: "missing_volunteer@example.com",
         subject: "No Volunteer has been found",
         body: "This is a debugging message letting you know no volunteer has been found"
       )
@@ -22,7 +22,7 @@ class VolunteerMailerPreview < ActionMailer::Preview
       ActiveSupport::Notifications.unsubscribe("process.action_mailer")
       ActionMailer::Base.mail(
         from: "no-rply@example.com",
-        to: "not_a_volunteer@example.com",
+        to: "missing_volunteer@example.com",
         subject: "No Volunteer has been found",
         body: "This is a debugging message letting you know no volunteer has been found"
       )
@@ -37,12 +37,12 @@ class VolunteerMailerPreview < ActionMailer::Preview
       ActiveSupport::Notifications.unsubscribe("process.action_mailer")
       ActionMailer::Base.mail(
         from: "no-rply@example.com",
-        to: "not_a_volunteer@example.com",
+        to: "missing_volunteer@example.com",
         subject: "No Volunteer has been found",
         body: "This is a debugging message letting you know no volunteer has been found"
       )
     else
-      VolunteerMailer.court_report_reminder(volunteer, Date.today)
+      VolunteerMailer.court_report_reminder(volunteer, true)
     end
   end
 

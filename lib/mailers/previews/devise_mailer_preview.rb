@@ -7,7 +7,7 @@ class DeviseMailerPreview < ActionMailer::Preview
       ActiveSupport::Notifications.unsubscribe("process.action_mailer")
       ActionMailer::Base.mail(
         from: "no-rply@example.com",
-        to: "user_not_found@example.com",
+        to: "missing_user@example.com",
         subject: "This user not found",
         body: "Sorry, this user was not found"
       )
