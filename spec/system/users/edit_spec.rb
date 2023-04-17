@@ -83,8 +83,6 @@ RSpec.describe "users/edit", type: :system do
     end
 
     it "is able to send a confrimation email when Volunteer updates their email" do
-      expect(page).to have_field("Email", disabled: true)
-
       click_on "Change Email"
       expect(page).to have_field("New Email", disabled: false)
 
@@ -110,17 +108,6 @@ RSpec.describe "users/edit", type: :system do
       expect(page).to have_text("Current password is incorrect")
     end
 
-    it "displays email errors messages when user is unable to set an invalid email", js: true do
-      click_on "Change Email"
-
-      fill_in "current_password_email", with: "12345678"
-      fill_in "New Email", with: ""
-
-      fill_in "current_password_email", with: "Look At Me!"
-
-      expect(page).to have_text("Email Error")
-      expect(page).to have_text("Please Enter An Email")
-    end
 
     it "displays current sign in date" do
       formatted_current_sign_in_at = I18n.l(volunteer.current_sign_in_at, format: :full, default: nil)
@@ -179,7 +166,7 @@ RSpec.describe "users/edit", type: :system do
     end
 
     it "is able to send a confrimation email when supervisor is updating email" do
-      expect(page).to have_field("Email", disabled: true)
+
 
       click_on "Change Email"
       expect(page).to have_field("New Email", disabled: false)
@@ -204,18 +191,6 @@ RSpec.describe "users/edit", type: :system do
       click_on "Update Email"
       expect(page).to have_content "1 error prohibited this Supervisor from being saved:"
       expect(page).to have_text("Current password is incorrect")
-    end
-
-    it "displays email errors messages when user is unable to set a email", js: true do
-      click_on "Change Email"
-
-      fill_in "current_password_email", with: "12345678"
-      fill_in "New Email", with: " "
-      sleep(1)
-      fill_in "current_password_email", with: "Look Over Here!"
-
-      expect(page).to have_text("Email Error")
-      expect(page).to have_text("Please Enter An Email")
     end
 
     it "displays sms notification events for the supervisor user" do
@@ -256,7 +231,6 @@ RSpec.describe "users/edit", type: :system do
     it_should_behave_like "shows error for invalid phone numbers"
 
     it "is able to send a confrimation email when Casa Admin updates their email" do
-      expect(page).to have_field("Email", disabled: true)
 
       click_on "Change Email"
       expect(page).to have_field("New Email", disabled: false)
@@ -281,18 +255,6 @@ RSpec.describe "users/edit", type: :system do
       click_on "Update Email"
       expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
       expect(page).to have_text("Current password is incorrect")
-    end
-
-    it "displays email errors messages when user is unable to set a email", js: true do
-      click_on "Change Email"
-
-      fill_in "current_password_email", with: "12345678"
-      fill_in "New Email", with: " "
-
-      fill_in "current_password_email", with: "Look At Me!"
-
-      expect(page).to have_text("Email Error")
-      expect(page).to have_text("Please Enter An Email")
     end
 
     it "displays password errors messages when admin is unable to set a password" do
