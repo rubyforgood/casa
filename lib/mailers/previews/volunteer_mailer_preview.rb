@@ -5,7 +5,7 @@ class VolunteerMailerPreview < ActionMailer::Preview
   def account_setup
     volunteer = params.has_key?(:id) ? Volunteer.find_by(id: params[:id]) : Volunteer.last
     if volunteer.nil?
-      DebugPreviewMailer.invalid_user(volunteer, "volunteer")
+      DebugPreviewMailer.invalid_user("volunteer")
     else
       VolunteerMailer.account_setup(volunteer)
     end
@@ -14,7 +14,7 @@ class VolunteerMailerPreview < ActionMailer::Preview
   def court_report_reminder
     volunteer = params.has_key?(:id) ? Volunteer.find_by(id: params[:id]) : Volunteer.last
     if volunteer.nil?
-      DebugPreviewMailer.invalid_user(volunteer, "volunteer")
+      DebugPreviewMailer.invalid_user("volunteer")
     else
       VolunteerMailer.court_report_reminder(volunteer, Date.today)
     end
@@ -23,7 +23,7 @@ class VolunteerMailerPreview < ActionMailer::Preview
   def case_contacts_reminder
     volunteer = params.has_key?(:id) ? Volunteer.find_by(id: params[:id]) : Volunteer.last
     if volunteer.nil?
-      DebugPreviewMailer.invalid_user(volunteer, "volunteer")
+      DebugPreviewMailer.invalid_user("volunteer")
     else
       VolunteerMailer.court_report_reminder(volunteer, true)
     end

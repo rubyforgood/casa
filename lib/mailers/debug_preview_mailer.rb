@@ -1,5 +1,5 @@
 class DebugPreviewMailer < ActionMailer::Base
-  def invalid_user(_user, role)
+  def invalid_user(role)
     mail(
       from: "reply@example.com",
       to: "missing_#{role}@example.com",

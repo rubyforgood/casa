@@ -5,7 +5,7 @@ class DeviseMailerPreview < ActionMailer::Preview
   def reset_password_instructions
     user = params.has_key?(:id) ? User.find_by(id: params[:id]) : User.last
     if user.nil?
-      DebugPreviewMailer.invalid_user(user, "user")
+      DebugPreviewMailer.invalid_user("user")
     else
       Devise::Mailer.reset_password_instructions(user, "faketoken")
     end
