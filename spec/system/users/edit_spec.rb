@@ -108,7 +108,6 @@ RSpec.describe "users/edit", type: :system do
       expect(page).to have_text("Current password is incorrect")
     end
 
-
     it "displays current sign in date" do
       formatted_current_sign_in_at = I18n.l(volunteer.current_sign_in_at, format: :full, default: nil)
       formatted_last_sign_in_at = I18n.l(volunteer.last_sign_in_at, format: :full, default: nil)
@@ -166,8 +165,6 @@ RSpec.describe "users/edit", type: :system do
     end
 
     it "is able to send a confrimation email when supervisor is updating email" do
-
-
       click_on "Change Email"
       expect(page).to have_field("New Email", disabled: false)
 
@@ -231,7 +228,6 @@ RSpec.describe "users/edit", type: :system do
     it_should_behave_like "shows error for invalid phone numbers"
 
     it "is able to send a confrimation email when Casa Admin updates their email" do
-
       click_on "Change Email"
       expect(page).to have_field("New Email", disabled: false)
 
