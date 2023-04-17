@@ -24,7 +24,7 @@
               <tr>
                 <td><%= lang.name %></td>
                 <td>
-                  <%= link_to "Delete", language_remove_from_volunteer_path(lang), class: "btn btn-danger",
+                  <%= link_to "Delete", remove_language_users_path(language_id: lang.id), class: "btn btn-danger",
   method: :delete %>
                 </td>
               </tr>

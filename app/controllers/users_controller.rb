@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_action :get_user
   before_action :authorize_user_with_policy
   before_action :set_active_casa_admins
-  before_action :set_language, only: [:add_language]
+  before_action :set_language, only: %i[add_language remove_language]
   after_action :verify_authorized
   before_action :set_custom_error_heading, only: [:update_password]
   after_action :reset_custom_error_heading, only: [:update_password]
@@ -31,6 +31,18 @@ class UsersController < ApplicationController
       redirect_to edit_users_path, notice: "#{@language.name} was added to your languages list."
     else
       redirect_to edit_users_path, alert: "Error unable to add #{@language.name} to your languages list!"
+    end
+  end
+
+  def remove_language
+    set_language
+    raise ActiveRecord::RecordNotFound unless @language
+
+    current_user.languages.delete @language
+    if current_user.save
+      redirect_to edit_users_path, notice: "#{@language.name} was removed from your languages list."
+    else
+      redirect_to edit_users_path, alert: "Unable to remove language."
     end
   end
 

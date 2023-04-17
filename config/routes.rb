@@ -38,6 +38,8 @@ Rails.application.routes.draw do
 
     resources :court_dates, only: %i[create edit new show update destroy]
 
+    resources :placements, only: %i[create edit new show update destroy]
+
     member do
       patch :deactivate
       patch :reactivate
@@ -161,6 +163,7 @@ Rails.application.routes.draw do
       patch "update_password"
       patch "update_email"
       patch :add_language
+      delete :remove_language
     end
   end
   resources :languages, only: %i[new create edit update] do
