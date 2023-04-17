@@ -1,8 +1,8 @@
 class VolunteersController < ApplicationController
   include SmsBodyHelper
 
-  before_action :set_volunteer, except: %i[index new create datatable stop_impersonating table_state table_state_update]
-  after_action :verify_authorized, except: %i[stop_impersonating table_state table_state_update table_state]
+  before_action :set_volunteer, except: %i[index new create datatable stop_impersonating]
+  after_action :verify_authorized, except: %i[stop_impersonating]
 
   def index
     authorize Volunteer
@@ -20,7 +20,7 @@ class VolunteersController < ApplicationController
 
     render json: datatable
   end
-  
+
   def new
     @volunteer = current_organization.volunteers.new
     authorize @volunteer

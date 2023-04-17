@@ -28,7 +28,7 @@ RSpec.describe PreferenceSetTableStateService do
       it 'raises an error' do
         expect {
           subject.update!(table_state: table_state2, table_name: table_name)
-        }.to raise_error(PreferenceSetTableStateService::UpdateFailedError, "Failed to update table state for table_name: '#{table_name}'")
+        }.to raise_error("Failed to update table state for table_name: '#{table_name}'")
       end
     end
   end

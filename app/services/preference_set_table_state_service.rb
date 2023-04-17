@@ -12,7 +12,7 @@ class PreferenceSetTableStateService
     preference_set.save!
 
     unless preference_set.save
-      raise UpdateFailedError, "Failed to update table state for table_name: '#{table_name}'"
+      raise "Failed to update table state for table_name: '#{table_name}'"
     end
   end
 
@@ -21,7 +21,4 @@ private
   def preference_set
     @preference_set ||= PreferenceSet.find_by!(user_id: user_id)
   end
-
-
- class UpdateFailedError < StandardError; end
 end

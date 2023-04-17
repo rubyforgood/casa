@@ -98,7 +98,7 @@ $('document').ready(() => {
     },
     stateSaveCallback: function (settings, data) {
       $.ajax({
-        url: "/table_state_update",
+        url: "/table_state_update/" + settings.nTable.id + '_table',
         data: {
           table_state: JSON.stringify(data),
         },
@@ -113,12 +113,14 @@ $('document').ready(() => {
       return data;
     },
     stateLoadCallback: function (settings, callback) {
+      var tableName = settings.nTable.id;
       $.ajax({ 
-        url: '/table_state',
+        url: '/table_state/' + tableName + '_table',
         dataType: 'json',
         type: 'GET',
         success: function(json) {
-          console.log('from stateLoad callbadk ',json)
+          // console.log('from stateLoad callback ',json)
+          console.log('from stateLoad callback ', tableName)
           callback(json);
         }
       });

@@ -8,8 +8,8 @@ Rails.application.routes.draw do
     post "datatable", on: :collection
   end
 
-  post "table_state_update", to: "preference_sets#table_state_update"
-  get "table_state", to: "preference_sets#table_state"
+  post "/table_state_update/:table_name", to: "preference_sets#table_state_update", as: :table_state_update
+  get "/table_state/:table_name", to: "preference_sets#table_state", as: :table_state
 
   authenticated :all_casa_admin do
     root to: "all_casa_admins/dashboard#show", as: :authenticated_all_casa_admin_root
