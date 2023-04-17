@@ -12,10 +12,6 @@
             <div class="alert-box danger-alert">
               <%= render "/shared/error_messages", resource: @user %>
             </div>
-            <div class="input-style-1">
-              <%= form.label :email, "Email" %>
-              <%= form.text_field :email, class: "form-control", value: @user.email, disabled: true %>
-            </div>
 
             <div class="input-style-1">
               <%= form.label :display_name, "Display name" %>
@@ -99,11 +95,11 @@
               <%= form_for(@user, as: :user, url: {action: "update_email"}) do |f| %>
                 <div class="input-style-1">
                   <%= f.label :current_password, "Current Password" %><br>
-                  <%= f.password_field :current_password, autocomplete: "off", class: "form-control", id: "current_password_email" %>
+                  <%= f.password_field :current_password, autocomplete: "off", class: "form-control", id: "current_password_email", required: true %>
                 </div>
                 <div class="input-style-1">
                   <%= f.label :email, "New Email" %><br>
-                  <%= f.text_field :email, type: "email", class: "form-control email-new", autocomplete: "off", value: nil %>
+                  <%= f.text_field :email, type: "email", class: "form-control email-new", autocomplete: "off", value: nil, required: true %>
                 </div>
                 <div class="actions mb-10">
                   <%= f.submit "Update Email", class: "btn btn-danger submit-email" %>
