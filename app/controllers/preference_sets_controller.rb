@@ -7,10 +7,10 @@ class PreferenceSetsController < ApplicationController
   end
 
   def table_state_update
-    render json: PreferenceSetTableStateService.new(user_id: current_user.id).update!(
-      table_state: params["table_state"],
-      table_name: @table_name
-    )
+      render json: PreferenceSetTableStateService.new(user_id: current_user.id).update!(
+        table_state: params["table_state"],
+        table_name: @table_name
+      )
   end
 
 
