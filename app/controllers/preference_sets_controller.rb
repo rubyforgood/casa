@@ -11,6 +11,9 @@ class PreferenceSetsController < ApplicationController
         table_state: params["table_state"],
         table_name: @table_name
       )
+
+    rescue PreferenceSetTableStateService::TableStateUpdateFailed
+      render json: {error: "Failed to update table state for '#{@table_name}'" } 
   end
 
 
