@@ -22,13 +22,13 @@ RSpec.describe PreferenceSetTableStateService do
 
     context 'when the update fails' do
       before do
-        allow_any_instance_of(PreferenceSet).to receive(:save!).and_raise(ActiveRecord::ActiveRecordError.new(PreferenceSet.new))
+        allow_any_instance_of(PreferenceSet).to receive(:save!).and_raise(ActiveRecord::RecordNotSaved)
       end
       
       it 'raises an error' do
         expect {
           subject.update!(table_state: table_state2, table_name: table_name)
-        }.to raise_error()
+        }.to raise_error(PreferenceSetTableStateService::TableStateUpdateFailed, "Failed to update table state for '#{table_name}'")
       end
     end
   end
