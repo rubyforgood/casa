@@ -148,7 +148,7 @@ class User < ApplicationRecord
     end
   end
 
-  def filter_old_emails(previous_email)
+  def filter_old_emails!(previous_email)
     updated_emails = old_emails.reject { |old| old == previous_email }
     update(old_emails: updated_emails)
   end

@@ -58,7 +58,7 @@ class SupervisorsController < ApplicationController
     @supervisor.skip_reconfirmation!
 
     if @supervisor.update(update_supervisor_params)
-      @supervisor.filter_old_emails(@supervisor.email)
+      @supervisor.filter_old_emails!(@supervisor.email)
       redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was successfully updated."
     else
       render :edit

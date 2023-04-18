@@ -115,7 +115,7 @@ class UsersController < ApplicationController
 
   def update_user_email
     @user.update({email: email_params[:email]})
-    @user.filter_old_emails(@user.email)
+    @user.filter_old_emails!(@user.email)
   end
 
   def user_params

@@ -53,7 +53,7 @@ class VolunteersController < ApplicationController
     authorize @volunteer
     @volunteer.skip_reconfirmation!
     if @volunteer.update(update_volunteer_params)
-      @volunteer.filter_old_emails(@volunteer.email)
+      @volunteer.filter_old_emails!(@volunteer.email)
       redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was successfully updated."
     else
       render :edit
