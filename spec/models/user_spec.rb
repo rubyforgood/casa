@@ -272,7 +272,6 @@ RSpec.describe User, type: :model do
     let!(:new_volunteer) { create(:user, email: "firstemail@example.com") }
 
     it "instantiates with an empty old_emails attribute" do
-
       expect(new_volunteer.old_emails).to match_array([])
     end
 
