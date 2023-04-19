@@ -272,12 +272,11 @@ RSpec.describe User, type: :model do
     let!(:new_volunteer) { create(:user, email: "firstemail@example.com") }
 
     it "instantiates with an empty old_emails attribute" do
-      # brand new account, old emails array is empty
+
       expect(new_volunteer.old_emails).to match_array([])
     end
 
     it "saves the old email when a volunteer changes their email" do
-      # email is changed, updated, confirmed, and recorded
       new_volunteer.update(email: "secondemail@example.com")
       new_volunteer.confirm
 
