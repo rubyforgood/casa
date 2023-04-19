@@ -294,11 +294,11 @@ RSpec.describe User, type: :model do
       # mimicking the process of user_controller#update_emails
       new_volunteer.update(email: "secondemail@example.com")
       new_volunteer.confirm
-      new_volunteer.filter_old_emails(new_volunteer.email)
+      new_volunteer.filter_old_emails!(new_volunteer.email)
 
       new_volunteer.update(email: "firstemail@example.com")
       new_volunteer.confirm
-      new_volunteer.filter_old_emails(new_volunteer.email)
+      new_volunteer.filter_old_emails!(new_volunteer.email)
 
       expect(new_volunteer.email).to eq("firstemail@example.com")
       expect(new_volunteer.old_emails).to match_array(["secondemail@example.com"])
