@@ -12,7 +12,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
     travel_to Date.new(2021, 1, 1)
   end
 
-  context "#context" do
+  describe "#context" do
     subject do
       described_class.new(
         case_id: volunteer.casa_cases.first.id,
@@ -22,8 +22,12 @@ RSpec.describe CaseCourtReportContext, type: :model do
       ).context
     end
 
-    it "has a created date equal to the current date" do
-      expect(subject[:created_date]).to eq("January 1, 2021")
+    describe ":created_date" do
+      let(:court_report_context) { build(:case_court_report_context) }
+
+      it "has a created date equal to the current date" do
+        expect(court_report_context.context[:created_date]).to eq("January 1, 2021")
+      end
     end
 
     context "when the casa org of the casa case has an address" do
