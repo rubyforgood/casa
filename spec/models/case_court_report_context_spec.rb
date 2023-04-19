@@ -30,6 +30,27 @@ RSpec.describe CaseCourtReportContext, type: :model do
       end
     end
 
+    describe ":casa_case" do
+    end
+
+    describe ":case_contacts" do
+    end
+
+    describe ":case_court_orders" do
+    end
+
+    describe ":case_mandates" do
+    end
+
+    describe ":latest_hearing_date" do
+    end
+
+    describe ":org_address" do
+    end
+
+    describe ":volunteer" do
+    end
+
     context "when the casa org of the casa case has an address" do
       let(:casa_org_address) { "-m}~2c<Lk/te{<\"" }
 
