@@ -14,7 +14,7 @@ class PlacementExportCsvService
       csv << full_data.keys.map(&:to_s).map(&:titleize)
       if placements.present?
         placements.decorate.each do |placement|
-          csv << full_data(placement).values
+          csv << full_data(placements).values
         end
       end
     end
