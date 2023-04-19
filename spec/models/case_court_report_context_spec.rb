@@ -13,6 +13,8 @@ RSpec.describe CaseCourtReportContext, type: :model do
   end
 
   describe "#context" do
+    let(:court_report_context) { build(:case_court_report_context) }
+
     subject do
       described_class.new(
         case_id: volunteer.casa_cases.first.id,
@@ -23,14 +25,13 @@ RSpec.describe CaseCourtReportContext, type: :model do
     end
 
     describe ":created_date" do
-      let(:court_report_context) { build(:case_court_report_context) }
-
       it "has a created date equal to the current date" do
         expect(court_report_context.context[:created_date]).to eq("January 1, 2021")
       end
     end
 
     describe ":casa_case" do
+      # court_report_context.instance_variable_get(:@volunteer)
     end
 
     describe ":case_contacts" do
@@ -43,6 +44,11 @@ RSpec.describe CaseCourtReportContext, type: :model do
     end
 
     describe ":latest_hearing_date" do
+      context "when there are no hearing dates" do
+        it "contains text prompting the reader to enter a hearing date" do
+          expect(court_report_context.context[:latest_hearing_date]).to eq("___<LATEST HEARING DATE>____")
+        end
+      end
     end
 
     describe ":org_address" do
@@ -241,10 +247,6 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
       it "matches casa case mandates with case court orders" do
         expect(subject[:case_mandates]).to eq(subject[:case_court_orders]) # backwards compatibility for old names in old montgomery template - TODO track it down and update prod templates
-      end
-
-      it "matches casa latest hearing date" do
-        expect(subject[:latest_hearing_date]).to eq("___<LATEST HEARING DATE>____")
       end
 
       it "matches volunteer with the nil value" do
