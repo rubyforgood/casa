@@ -1,9 +1,14 @@
 # Preview all emails at http://localhost:3000/rails/mailers/devise_mailer
 # :nocov:
+require_relative "../debug_preview_mailer"
 class DeviseMailerPreview < ActionMailer::Preview
   def reset_password_instructions
     user = params.has_key?(:id) ? User.find_by(id: params[:id]) : User.last
-    Devise::Mailer.reset_password_instructions(user, "faketoken")
+    if user.nil?
+      DebugPreviewMailer.invalid_user("user")
+    else
+      Devise::Mailer.reset_password_instructions(user, "faketoken")
+    end
   end
 
   def invitation_instructions_as_all_casa_admin

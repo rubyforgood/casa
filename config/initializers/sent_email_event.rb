@@ -1,5 +1,7 @@
 ActiveSupport::Notifications.subscribe "process.action_mailer" do |*args|
   data = args.extract_options!
+  next if data[:mailer] == "DebugPreviewMailer"
+
   user = data[:args][0]
   if user&.role != "All Casa Admin"
     SentEmail.create(
