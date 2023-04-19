@@ -99,6 +99,7 @@ Rails.application.routes.draw do
   resources :missing_data_reports, only: %i[index]
   resources :learning_hours_reports, only: %i[index]
   resources :followup_reports, only: :index
+  resources :placement_reports, only: :index
 
   resources :supervisors, except: %i[destroy show], concerns: %i[with_datatable] do
     member do

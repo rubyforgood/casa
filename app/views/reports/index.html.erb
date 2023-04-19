@@ -63,8 +63,21 @@
             <% end %>
           <% end %>
         </li>
+        <li>
+          <%= form_with url: placement_reports_path(format: :csv), method: :get do |f| %>
+            <%= button_tag(
+                  data: { disable_with: "Downloading Placements Report" },
+                  class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
+                ) do %>
+              <i class="lni lni-check-box mr-10"></i> Placements Report
+            <% end %>
+          <% end %>
+        </li>
       </ul>
     </div>
+      </ul>
+    </div>
+
 
     <div class="col-lg-12">
       <div class="card-style mb-30">
