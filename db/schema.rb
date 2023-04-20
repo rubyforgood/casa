@@ -445,6 +445,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_12_103356) do
     t.jsonb "case_volunteer_columns", default: "{}", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "table_state", default: {}
     t.index ["user_id"], name: "index_preference_sets_on_user_id"
   end
 
