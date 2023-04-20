@@ -40,6 +40,8 @@ class User < ApplicationRecord
   has_many :languages, through: :user_languages
 
   accepts_nested_attributes_for :user_sms_notification_events, :address, allow_destroy: true
+  
+  after_create :create_preference_set
 
   scope :active, -> { where(active: true) }
 
@@ -69,6 +71,10 @@ class User < ApplicationRecord
 
   def active_volunteers
     volunteers.active.size
+  end
+
+  def create_preference_set
+    self.preference_set = PreferenceSet.create
   end
 
   # all contacts this user has with this casa case
