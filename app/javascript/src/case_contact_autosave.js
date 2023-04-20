@@ -47,9 +47,10 @@ $(() => {
               input.classList.add('fa-lock')
               const checkboxId = id.split('-')[1];
               const checkbox = $(`#case_contact_casa_case_id_${checkboxId}`)
-              console.log('checkbox', checkbox)
+              const checkboxLabel = $(`#checkboxDisable-${checkboxId}`)
               checkbox.prop("checked", true);
-              checkbox.prop("disabled", true);
+              checkbox.addClass('disable-checkbox');
+              checkboxLabel.addClass('disable-checkbox');
             }              
           }          
         })
@@ -67,9 +68,12 @@ $(() => {
       e.target.classList.remove(isOpenIcon ? 'fa-lock-open' : 'fa-lock')
       e.target.classList.add(!isOpenIcon ? 'fa-lock-open' : 'fa-lock')
       const id = e.target.id.split('-')[1];
+      const checkboxLabel = $(`#checkboxDisable-${id}`)
       const checkbox = $(`#case_contact_casa_case_id_${id}`)
       if (isOpenIcon) checkbox.prop("checked", isOpenIcon);
-      checkbox.prop("disabled", isOpenIcon);
+      isOpenIcon ? checkbox.addClass('disable-checkbox') : checkbox.removeClass('disable-checkbox');
+      isOpenIcon ? checkboxLabel.addClass('disable-checkbox') : checkboxLabel.removeClass('disable-checkbox');
+      console.log(checkboxLabel)
       save();
     });
 
