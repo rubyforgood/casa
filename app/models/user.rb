@@ -40,7 +40,7 @@ class User < ApplicationRecord
   has_many :languages, through: :user_languages
 
   accepts_nested_attributes_for :user_sms_notification_events, :address, allow_destroy: true
-  
+
   after_create :create_preference_set
 
   scope :active, -> { where(active: true) }
