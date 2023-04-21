@@ -115,7 +115,7 @@ GEM
     capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
-    caxlsx (3.3.0)
+    caxlsx (3.4.0)
       htmlentities (~> 4.3, >= 4.3.4)
       marcel (~> 1.0)
       nokogiri (~> 1.10, >= 1.10.4)
@@ -486,7 +486,7 @@ DEPENDENCIES
   byebug
   capybara
   capybara-screenshot
-  caxlsx (~> 3.3)
+  caxlsx (~> 3.4)
   caxlsx_rails (~> 0.6.3)
   cssbundling-rails (~> 1.1)
   database_cleaner-active_record
