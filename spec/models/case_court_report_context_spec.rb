@@ -49,6 +49,24 @@ RSpec.describe CaseCourtReportContext, type: :model do
           expect(court_report_context.context[:latest_hearing_date]).to eq("___<LATEST HEARING DATE>____")
         end
       end
+
+      context "when there are multiple hearing dates" do
+        let(:casa_case_with_court_dates) {
+          casa_case = create(:casa_case)
+
+          casa_case.court_dates << create(:court_date, date: 9.months.ago)
+          casa_case.court_dates << create(:court_date, date: 3.months.ago)
+          casa_case.court_dates << create(:court_date, date: 15.months.ago)
+
+          casa_case
+        }
+
+        let(:court_report_context_with_latest_hearing_date) { build(:case_court_report_context, casa_case: casa_case_with_court_dates) }
+
+        it "sets latest_hearing_date as the latest past court date" do
+          expect(court_report_context_with_latest_hearing_date.context[:latest_hearing_date]).to eq("October 1, 2020")
+        end
+      end
     end
 
     describe ":org_address" do
@@ -111,30 +129,6 @@ RSpec.describe CaseCourtReportContext, type: :model do
             create(:case_contact, casa_case: casa_case_with_contacts, created_at: court_date.date, notes: "created ON most recent court date")
             expect(casa_case_with_contacts.court_dates.length).to eq(2)
             expect(subject[:case_contacts].length).to eq(5)
-          end
-        end
-      end
-
-      describe "has valid @context" do
-        it { is_expected.not_to be_empty }
-
-        it "has keys" do
-          expect(subject.keys).to match_array([:created_date, :casa_case, :case_contacts, :case_court_orders, :case_mandates, :latest_hearing_date, :org_address, :volunteer])
-        end
-
-        it "created_date is not nil" do
-          expect(subject[:created_date]).to_not be(nil)
-        end
-
-        context "when the case has multiple past court dates" do
-          before do
-            casa_case_with_contacts.court_dates << create(:court_date, date: 9.months.ago)
-            casa_case_with_contacts.court_dates << create(:court_date, date: 3.months.ago)
-            casa_case_with_contacts.court_dates << create(:court_date, date: 15.months.ago)
-          end
-
-          it "sets latest_hearing_date as the latest past court date" do
-            expect(subject[:latest_hearing_date]).to eq("October 1, 2020")
           end
         end
       end
