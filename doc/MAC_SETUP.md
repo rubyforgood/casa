@@ -13,7 +13,7 @@ brew install postgresql
 ```
 
 ```bash
-brew services start postgreql
+brew services start postgresql
 ```
 
 If you have an older version of postgres, `brew postgresql-upgrade-database`
@@ -89,6 +89,11 @@ Setup the database with:
 
 ```bash
 bin/rails db:setup
+```
+
+Install javascript dependencies with:
+```bash
+yarn install
 ```
 
 Compile assets with:

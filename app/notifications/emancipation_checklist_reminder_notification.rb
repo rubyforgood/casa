@@ -3,7 +3,7 @@
 # EmancipationChecklistNotification.with(post: @post).deliver_later(current_user)
 # EmancipationChecklistNotification.with(post: @post).deliver(current_user)
 
-class EmancipationChecklistReminderNotification < Noticed::Base
+class EmancipationChecklistReminderNotification < BaseNotification
   # Add your delivery methods
   #
   deliver_by :database

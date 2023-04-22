@@ -81,12 +81,14 @@
                   Messages
                 <% end %>
               </li>
-              <li>
-                <%= link_to edit_casa_org_path(current_organization) do %>
-                  <i class="lni lni-cogs mr-10"></i>
-                  Edit Organization
-                <% end %>
-              </li>
+              <% if policy(:application).modify_organization? %>
+                <li>
+                  <%= link_to edit_casa_org_path(current_organization) do %>
+                    <i class="lni lni-cogs mr-10"></i>
+                    Edit Organization
+                  <% end %>
+                </li>
+              <% end %>
               <li>
                 <%= link_to destroy_user_session_path do %>
                   <i class="lni lni-exit"></i>

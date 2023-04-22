@@ -252,4 +252,38 @@ RSpec.describe "/users", type: :request do
       end
     end
   end
+  describe "DELETE /remove_language" do
+    let(:volunteer) { create(:volunteer) }
+    before { sign_in volunteer }
+
+    context "when request params are valid" do
+      let(:language) { create(:language) }
+      before(:each) do
+        patch add_language_users_path(volunteer), params: {
+          language_id: language.id
+        }
+      end
+      it "should remove a language from a volunteer languages list" do
+        delete remove_language_users_path(language_id: language.id)
+
+        expect(response.status).to eq 302
+        expect(response).to redirect_to(edit_users_path)
+        expect(flash[:notice]).to eq "#{language.name} was removed from your languages list."
+        expect(volunteer.languages).not_to include language
+      end
+    end
+
+    context "when request params are invalid" do
+      let(:language) { create(:language) }
+      before(:each) do
+        patch add_language_users_path(volunteer), params: {
+          language_id: language.id
+        }
+      end
+
+      it "should raise error when Language do not exist" do
+        expect { delete remove_language_users_path(999) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
 end
