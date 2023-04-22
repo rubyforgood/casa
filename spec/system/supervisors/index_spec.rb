@@ -86,18 +86,18 @@ RSpec.describe "supervisors/index", type: :system do
       context "with active and deactivated supervisors" do
 
         it "shows deactivated supervisor on show button click", js: true do
-          expect(page).to have_text("Showing 1 to 5 of 5 entries (filtered from 6 total entries)")
+          expect(page).to have_text("Showing 1 to 2 of 2 entries (filtered from 3 total entries)")
           expect(page).not_to have_text("Deactivated supervisor")
 
           find('.supervisor-filters').click_on('Filter Status')
           check('status_option_inactive')
 
-          expect(page).to have_text("Showing 1 to 6 of 6 entries")
+          expect(page).to have_text("Showing 1 to 3 of 3 entries")
           expect(page).to have_text("Deactivated supervisor")
 
           uncheck('status_option_inactive')
 
-          expect(page).to have_text("Showing 1 to 5 of 5 entries (filtered from 6 total entries)")
+          expect(page).to have_text("Showing 1 to 2 of 2 entries (filtered from 3 total entries)")
           expect(page).not_to have_text("Deactivated supervisor")
         end
       end
@@ -210,6 +210,8 @@ RSpec.describe "supervisors/index", type: :system do
   end
 
   context "when signed in as an admin" do
+    let!(:no_active_volunteers_supervisor) { create(:supervisor, casa_org: organization, display_name: "No Active Volunteers Supervisor") }
+
     let!(:no_contact_volunteer) do
       create(
         :volunteer,
