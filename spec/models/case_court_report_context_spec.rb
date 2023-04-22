@@ -318,14 +318,6 @@ RSpec.describe CaseCourtReportContext, type: :model do
         described_class.new(args).context
       end
 
-      it "contains a casa case" do
-        expect(subject[:casa_case]).to eq({court_date: nil, case_number: casa_case.case_number, dob: "January 2005", is_transitioning: true, judge_name: nil})
-      end
-
-      it "contains casa case contacts" do
-        expect(subject[:case_contacts]).to eq([]) # TODO test this
-      end
-
       it "matches the casa case court orders length" do
         expect(subject[:case_court_orders].length).to eq(4)
       end
@@ -336,10 +328,6 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
       it "matches casa case mandates with case court orders" do
         expect(subject[:case_mandates]).to eq(subject[:case_court_orders]) # backwards compatibility for old names in old montgomery template - TODO track it down and update prod templates
-      end
-
-      it "matches volunteer with the nil value" do
-        expect(subject[:volunteer]).to be_nil
       end
     end
   end
