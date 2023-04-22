@@ -31,6 +31,16 @@ RSpec.describe CaseCourtReportContext, type: :model do
     end
 
     describe ":casa_case" do
+      describe ":court_date" do
+      end
+      describe ":case_number" do
+      end
+      describe ":dob" do
+      end
+      describe ":is_transitioning" do
+      end
+      describe ":judge_name" do
+      end
       # court_report_context.instance_variable_get(:@volunteer)
     end
 
