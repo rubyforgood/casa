@@ -31,17 +31,94 @@ RSpec.describe CaseCourtReportContext, type: :model do
     end
 
     describe ":casa_case" do
+      let(:case_number) { "Sample-Case-12345" }
+      let(:casa_case) { create(:casa_case,
+        birth_month_year_youth: 121.months.ago, # 10 Years 1 month ago
+        case_number: case_number
+      )}
+      let(:court_report_context) { build(:case_court_report_context, casa_case: casa_case) }
+
       describe ":court_date" do
+        context "when there are future court dates" do
+          let(:court_date_1) { create(:court_date, date: 2.months.since) }
+          let(:court_date_2) { create(:court_date, date: 5.months.since) }
+
+          before(:each) do
+            casa_case.court_dates << court_date_1
+            casa_case.court_dates << court_date_2
+          end
+
+          it "contains the soonest future court date in a human readable format" do
+            expect(court_report_context.context[:casa_case][:court_date]).to eq("March 1, 2021")
+          end
+        end
+
+        context "when there are no future court dates" do
+          let(:past_court_date) { create(:court_date, date: 2.months.ago) }
+
+          before(:each) do
+            casa_case.court_dates << past_court_date
+          end
+
+          it "contains the soonest future court date in a human readable format" do
+            expect(court_report_context.context[:casa_case][:court_date]).to be_nil
+          end
+        end
       end
+
       describe ":case_number" do
+        it "contains the case number of the casa case" do
+          expect(court_report_context.context[:casa_case][:case_number]).to eq(case_number)
+        end
       end
+
       describe ":dob" do
+        it "contains the month and year of birth" do
+          expect(court_report_context.context[:casa_case][:dob]).to eq("December 2010")
+        end
       end
+
       describe ":is_transitioning" do
+        context "when the case birth month and year is less than 14 years ago" do
+          before(:each) do
+            casa_case.update_attribute(:birth_month_year_youth, 167.months.ago)
+          end
+
+          it "contains false" do
+            expect(court_report_context.context[:casa_case][:is_transitioning]).to eq(false)
+          end
+        end
+
+        context "when the case birth month and year is greater or equal to 14 years ago" do
+          before(:each) do
+            casa_case.update_attribute(:birth_month_year_youth, 14.years.ago)
+          end
+
+          it "contains true" do
+            expect(court_report_context.context[:casa_case][:is_transitioning]).to eq(true)
+          end
+        end
       end
+
       describe ":judge_name" do
+        context "when there are future court dates" do
+          let(:next_court_date_judge_name) { "Judge A" }
+          let(:court_date_1) { create(:court_date, :with_judge, date: 2.months.since)  }
+          let(:court_date_2) { create(:court_date, :with_judge, date: 5.months.since) }
+
+          before(:each) do
+            court_date_1.judge.update_attribute(:name, next_court_date_judge_name)
+            court_date_2.judge.update_attribute(:name, "Judge B")
+
+            casa_case.court_dates << court_date_1
+            casa_case.court_dates << court_date_2
+          end
+
+          it "contains the soonest future court date in a human readable format" do
+            expect(court_report_context.context[:casa_case][:judge_name]).to eq(next_court_date_judge_name)
+          end
+        end
       end
-      # court_report_context.instance_variable_get(:@volunteer)
     end
 
     describe ":case_contacts" do
