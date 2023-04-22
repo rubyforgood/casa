@@ -70,21 +70,23 @@ RSpec.describe CaseCourtReportContext, type: :model do
     end
 
     describe ":org_address" do
+      let(:casa_org_address) { "-m}~2c<Lk/te{<\"" }
+      let(:case_court_report_context_with_org_address) {
+        volunteer = create(:volunteer)
+
+        volunteer.casa_org.update_attribute(:address, casa_org_address)
+
+        build(:case_court_report_context, volunteer: volunteer)
+      }
+
+      context "when the casa org has an address" do
+        it "appears in the context under the org_address key" do
+          expect(case_court_report_context_with_org_address.context[:org_address]).to eq(casa_org_address)
+        end
+      end
     end
 
     describe ":volunteer" do
-    end
-
-    context "when the casa org of the casa case has an address" do
-      let(:casa_org_address) { "-m}~2c<Lk/te{<\"" }
-
-      before do
-        volunteer.casa_org.update_attribute(:address, casa_org_address)
-      end
-
-      it "shows the address" do
-        expect(subject[:org_address]).to eq(casa_org_address)
-      end
     end
 
     describe "when receiving valid case, volunteer, and path_to_template" do
