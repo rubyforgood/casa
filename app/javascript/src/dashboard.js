@@ -310,7 +310,7 @@ $('document').ready(() => {
             </span>
             `
               )
-            : '<span class="attempted-contact-end"></span>'
+            : ''
 
           let volunteersCounterElement = ''
           if (activeContactVolunteers <= 0 && noContactVolunteers <= 0) {
