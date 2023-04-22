@@ -15,7 +15,7 @@ RSpec.describe "supervisors/index", type: :system do
   let(:organization) { build(:casa_org) }
   let(:supervisor_user) { create(:supervisor, casa_org: organization, display_name: "Logged Supervisor") }
   let(:organization_two) { build(:casa_org) }
-  let(:supervisor_other_org) { create(:supervisor, casa_org: organization_two, display_name: 'No Volunteers Org') }
+  let(:supervisor_other_org) { create(:supervisor, casa_org: organization_two, display_name: "No Volunteers Org") }
   let(:other_supervisor) { create(:supervisor, casa_org: organization, display_name: "Other Supervisor") }
   let(:only_contacts_supervisor) { create(:supervisor, casa_org: organization, display_name: "Only Contacts Supervisor") }
   let(:no_contacts_supervisor) { create(:supervisor, casa_org: organization, display_name: "No Contacts Supervisor") }
@@ -84,18 +84,17 @@ RSpec.describe "supervisors/index", type: :system do
       end
 
       context "with active and deactivated supervisors" do
-
         it "shows deactivated supervisor on show button click", js: true do
           expect(page).to have_text("Showing 1 to 2 of 2 entries (filtered from 3 total entries)")
           expect(page).not_to have_text("Deactivated supervisor")
 
-          find('.supervisor-filters').click_on('Filter Status')
-          check('status_option_inactive')
+          find(".supervisor-filters").click_on("Filter Status")
+          check("status_option_inactive")
 
           expect(page).to have_text("Showing 1 to 3 of 3 entries")
           expect(page).to have_text("Deactivated supervisor")
 
-          uncheck('status_option_inactive')
+          uncheck("status_option_inactive")
 
           expect(page).to have_text("Showing 1 to 2 of 2 entries (filtered from 3 total entries)")
           expect(page).not_to have_text("Deactivated supervisor")
@@ -206,7 +205,6 @@ RSpec.describe "supervisors/index", type: :system do
         end
       end
     end
-
   end
 
   context "when signed in as an admin" do
@@ -398,7 +396,7 @@ RSpec.describe "supervisors/index", type: :system do
 
       expect { supervisor_stats.find("span.no-attempted-contact") }.to raise_error(Capybara::ElementNotFound)
       expect(active_contact_element).to have_text(active_contacts_expected)
-      expect(active_contact_element.has_css?("pl-#{active_contacts_expected*15}"))
+      expect(active_contact_element.has_css?("pl-#{active_contacts_expected * 15}"))
       expect(active_contact_end_element).not_to be_nil
       expect(supervisor_stats.find(".status-btn.deactive-bg")).to have_text(transition_aged_youth_expected)
     end
@@ -416,7 +414,7 @@ RSpec.describe "supervisors/index", type: :system do
       expect { supervisor_stats.find("span.attmepted-contact-end") }.to raise_error(Capybara::ElementNotFound)
       expect(no_contact_element).to have_text(no_contacts_expected)
       expect(no_contact_element.has_css?("pl-#{no_contacts_expected * 15}"))
-        expect(supervisor_stats.find(".status-btn.deactive-bg")).to have_text(transition_aged_youth_expected)
+      expect(supervisor_stats.find(".status-btn.deactive-bg")).to have_text(transition_aged_youth_expected)
     end
 
     it "shows the correct text with a supervisor with no assigned volunteers", js: true do
