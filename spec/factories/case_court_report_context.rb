@@ -10,22 +10,16 @@ FactoryBot.define do
     end
 
     initialize_with {
-      if volunteer.nil? && casa_case.nil?
-        volunteer = create(:volunteer, :with_casa_cases)
-      elsif volunteer.nil?
-        volunteer = create(:volunteer)
-        volunteer.casa_cases << casa_case
-      elsif casa_case.nil?
-        volunteer.casa_cases << create(:casa_case)
-      else
-        unless volunteer.casa_cases.where(id: casa_case.id).exists?
-          volunteer.casa_cases << casa_case
-        end
+      volunteer_for_context = volunteer.nil? ? create(:volunteer) : volunteer
+      casa_case_for_context = casa_case.nil? ? create(:casa_case) : casa_case
+
+      unless volunteer_for_context.casa_cases.where(id: casa_case_for_context.id).exists?
+        volunteer_for_context.casa_cases << casa_case_for_context
       end
 
       new(
-        case_id: volunteer.casa_cases.first.id,
-        volunteer_id: volunteer.id,
+        case_id: casa_case_for_context.id,
+        volunteer_id: volunteer_for_context.id,
         path_to_report: path_to_report,
         path_to_template: path_to_template
       )
