@@ -199,7 +199,7 @@ class DbPopulator
         court_report_status: court_report_submitted ? :submitted : :not_submitted,
         birth_month_year_youth: birth_month_year_youth
       )
-      _new_court_date = CourtDate.find_or_create_by!(
+      new_court_date = CourtDate.find_or_create_by!(
         casa_case: new_casa_case,
         court_report_due_date: court_date + 1.month,
         date: court_date
@@ -222,6 +222,7 @@ class DbPopulator
       random_court_order_count.times do
         CaseCourtOrder.create!(
           casa_case_id: new_casa_case.id,
+          court_date: new_court_date,
           text: order_choices.sample(random: rng),
           implementation_status: CaseCourtOrder::IMPLEMENTATION_STATUSES.values.sample(random: rng)
         )

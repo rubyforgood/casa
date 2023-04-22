@@ -65,7 +65,7 @@
       </div>
       <div class="field form-group court-orders">
         <%= render partial: "shared/court_order_list",
-        locals: {casa_case: casa_case, siblings_casa_cases: nil, form: form} %>
+        locals: {casa_case: casa_case, siblings_casa_cases: nil, form: form, resource: 'court_date'} %>
       </div>
     <% end %>
   </div>
