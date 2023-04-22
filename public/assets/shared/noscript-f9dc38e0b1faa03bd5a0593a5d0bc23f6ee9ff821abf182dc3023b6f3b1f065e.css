@@ -1,8 +1,0 @@
-.noscript {
-  position: fixed;
-  left: 50%;
-  top: 25%;
-  transform: translateX(-50%);
-  padding: 5vw;
-  z-index: 99;
-}
