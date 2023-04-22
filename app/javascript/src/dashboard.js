@@ -276,7 +276,7 @@ $('document').ready(() => {
     columns: [
       {
         name: 'display_name',
-        className: 'min-width',
+        className: "min-width",
         render: (data, type, row, meta) => {
           return `
             <a href="${editSupervisorPath(row.id)}">
@@ -287,7 +287,7 @@ $('document').ready(() => {
       },
       {
         name: 'volunteer_info',
-        className: 'min-width',
+        className: "min-width",
         render: (data, type, row, meta) => {
           const noContactVolunteers = Number(row.no_attempt_for_two_weeks)
           const transitionAgedCaseVolunteers = Number(row.transitions_volunteers)
@@ -354,7 +354,7 @@ $('document').ready(() => {
 
         return $.extend({}, d, {
           additional_filters: {
-            active: statusFilter
+            active: statusFilter,
           }
         })
       },
