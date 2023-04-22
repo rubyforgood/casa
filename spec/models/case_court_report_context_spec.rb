@@ -32,10 +32,11 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
     describe ":casa_case" do
       let(:case_number) { "Sample-Case-12345" }
-      let(:casa_case) { create(:casa_case,
-        birth_month_year_youth: 121.months.ago, # 10 Years 1 month ago
-        case_number: case_number
-      )}
+      let(:casa_case) {
+        create(:casa_case,
+          birth_month_year_youth: 121.months.ago, # 10 Years 1 month ago
+          case_number: case_number)
+      }
       let(:court_report_context) { build(:case_court_report_context, casa_case: casa_case) }
 
       describe ":court_date" do
@@ -103,7 +104,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
       describe ":judge_name" do
         context "when there are future court dates" do
           let(:next_court_date_judge_name) { "Judge A" }
-          let(:court_date_1) { create(:court_date, :with_judge, date: 2.months.since)  }
+          let(:court_date_1) { create(:court_date, :with_judge, date: 2.months.since) }
           let(:court_date_2) { create(:court_date, :with_judge, date: 5.months.since) }
 
           before(:each) do
