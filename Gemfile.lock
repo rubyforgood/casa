@@ -70,7 +70,7 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
-    addressable (2.8.1)
+    addressable (2.8.4)
       public_suffix (>= 2.0.2, < 6.0)
     after_party (1.11.2)
     amazing_print (1.4.0)
@@ -103,7 +103,7 @@ GEM
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (11.1.3)
-    capybara (3.38.0)
+    capybara (3.39.0)
       addressable
       matrix
       mini_mime (>= 0.1.3)
@@ -115,7 +115,7 @@ GEM
     capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
-    caxlsx (3.3.0)
+    caxlsx (3.4.0)
       htmlentities (~> 4.3, >= 4.3.4)
       marcel (~> 1.0)
       nokogiri (~> 1.10, >= 1.10.4)
@@ -142,7 +142,7 @@ GEM
     delayed_job_active_record (4.1.7)
       activerecord (>= 3.0, < 8.0)
       delayed_job (>= 3.0, < 5)
-    devise (4.9.0)
+    devise (4.9.2)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 4.1.0)
@@ -166,7 +166,7 @@ GEM
       activesupport (>= 5.0)
       request_store (>= 1.0)
       ruby2_keywords
-    erb_lint (0.3.1)
+    erb_lint (0.4.0)
       activesupport
       better_html (>= 2.0.1)
       parser (>= 2.7.1.4)
@@ -179,7 +179,7 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    faker (3.1.1)
+    faker (3.2.0)
       i18n (>= 1.8.11, < 2)
     faraday (1.10.3)
       faraday-em_http (~> 1.0)
@@ -251,7 +251,7 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    loofah (2.19.1)
+    loofah (2.20.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.8.1)
@@ -278,12 +278,12 @@ GEM
       timeout
     net-smtp (0.3.3)
       net-protocol
-    nio4r (2.5.8)
-    nokogiri (1.14.2-arm64-darwin)
+    nio4r (2.5.9)
+    nokogiri (1.14.3-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.14.2-x86_64-darwin)
+    nokogiri (1.14.3-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.14.2-x86_64-linux)
+    nokogiri (1.14.3-x86_64-linux)
       racc (~> 1.4)
     noticed (1.6.0)
       http (>= 4.0.0)
@@ -306,8 +306,8 @@ GEM
     pry-byebug (3.10.1)
       byebug (~> 11.0)
       pry (>= 0.13, < 0.15)
-    public_suffix (5.0.0)
-    puma (6.1.1)
+    public_suffix (5.0.1)
+    puma (6.2.1)
       nio4r (~> 2.0)
     pundit (2.3.0)
       activesupport (>= 3.0.0)
@@ -315,7 +315,7 @@ GEM
     rack (2.2.6.4)
     rack-attack (6.6.1)
       rack (>= 1.0, < 3)
-    rack-test (2.0.2)
+    rack-test (2.1.0)
       rack (>= 1.3)
     rails (7.0.4.3)
       actioncable (= 7.0.4.3)
@@ -349,12 +349,7 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.0.6)
-    rbi (0.0.16)
-      ast
-      parser (>= 2.6.4.0)
-      sorbet-runtime (>= 0.5.9204)
-      unparser
-    regexp_parser (2.6.1)
+    regexp_parser (2.7.0)
     request_store (1.5.1)
       rack (>= 1.4)
     responders (3.1.0)
@@ -387,12 +382,12 @@ GEM
       rubocop-ast (>= 1.12.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.23.0)
-      parser (>= 3.1.1.0)
+    rubocop-ast (1.28.0)
+      parser (>= 3.2.1.0)
     rubocop-performance (1.12.0)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
-    ruby-progressbar (1.11.0)
+    ruby-progressbar (1.13.0)
     ruby-vips (2.1.4)
       ffi (~> 1.12)
     ruby2_keywords (0.0.5)
@@ -403,7 +398,7 @@ GEM
     safe_shell (1.1.0)
     scout_apm (5.3.3)
       parser
-    selenium-webdriver (4.8.1)
+    selenium-webdriver (4.8.6)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
@@ -416,19 +411,6 @@ GEM
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
     smart_properties (1.17.0)
-    sorbet (0.5.10722)
-      sorbet-static (= 0.5.10722)
-    sorbet-runtime (0.5.10731)
-    sorbet-static (0.5.10722-universal-darwin-18)
-    sorbet-static (0.5.10722-universal-darwin-19)
-    sorbet-static (0.5.10722-universal-darwin-20)
-    sorbet-static (0.5.10722-universal-darwin-21)
-    sorbet-static (0.5.10722-universal-darwin-22)
-    sorbet-static (0.5.10722-x86_64-linux)
-    spoom (1.1.16)
-      sorbet (>= 0.5.10187)
-      sorbet-runtime (>= 0.5.9204)
-      thor (>= 0.19.2)
     spring (4.1.1)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
@@ -444,20 +426,11 @@ GEM
       rubocop-performance (= 1.12.0)
     strong_migrations (1.4.4)
       activerecord (>= 5.2)
-    tapioca (0.7.3)
-      bundler (>= 1.17.3)
-      pry (>= 0.12.2)
-      rbi (~> 0.0.0, >= 0.0.14)
-      sorbet-runtime (>= 0.5.9204)
-      sorbet-static (>= 0.5.9204)
-      spoom (~> 1.1.0, >= 1.1.11)
-      thor (>= 1.2.0)
-      yard-sorbet
     thor (1.2.1)
     timeout (0.3.2)
     traceroute (0.8.1)
       rails (>= 3.0.0)
-    twilio-ruby (5.75.0)
+    twilio-ruby (5.76.0)
       faraday (>= 0.9, < 3.0)
       jwt (>= 1.5, < 3.0)
       nokogiri (>= 1.6, < 2.0)
@@ -466,7 +439,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.8.2)
-    unicode-display_width (2.3.0)
+    unicode-display_width (2.4.2)
     uniform_notifier (1.16.0)
     unparser (0.6.7)
       diff-lcs (~> 1.3)
@@ -490,18 +463,12 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    webrick (1.7.0)
     websocket (1.2.9)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    yard (0.9.28)
-      webrick (~> 1.7.0)
-    yard-sorbet (0.8.0)
-      sorbet-runtime (>= 0.5)
-      yard (>= 0.9)
     zeitwerk (2.6.7)
 
 PLATFORMS
@@ -526,7 +493,7 @@ DEPENDENCIES
   byebug
   capybara
   capybara-screenshot
-  caxlsx (~> 3.3)
+  caxlsx (~> 3.4)
   caxlsx_rails (~> 0.6.3)
   cssbundling-rails (~> 1.1)
   database_cleaner-active_record
@@ -570,14 +537,11 @@ DEPENDENCIES
   selenium-webdriver
   shoulda-matchers
   simplecov
-  sorbet
-  sorbet-runtime
   spring
   spring-commands-rspec
   sprockets-rails
   standard (= 1.5.0)
   strong_migrations
-  tapioca
   traceroute
   twilio-ruby
   tzinfo-data

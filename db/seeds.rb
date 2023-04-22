@@ -48,21 +48,25 @@ class SeederMain
   # Used for reporting record counts after completion:
   def active_record_classes
     @active_record_classes ||= [
+      AllCasaAdmin,
+      CasaAdmin,
       CasaOrg,
       CasaCase,
-      Judge,
-      User,
-      Volunteer,
-      Supervisor,
-      CasaAdmin,
-      AllCasaAdmin,
-      SupervisorVolunteer,
-      CaseAssignment,
-      ContactType,
-      ContactTypeGroup,
       CaseContact,
       CaseCourtOrder,
-      Language
+      CaseAssignment,
+      ChecklistItem,
+      CourtDate,
+      ContactType,
+      ContactTypeGroup,
+      HearingType,
+      Judge,
+      Language,
+      MileageRate,
+      Supervisor,
+      SupervisorVolunteer,
+      User,
+      Volunteer
     ]
   end
 
@@ -92,6 +96,7 @@ class SeederMain
     active_record_classes.each do |klass|
       log "%5d  %s" % [klass.count, klass.name]
     end
+    log "\n\nVolunteers, Supervisors and CasaAdmins are types of Users"
   end
 
   def log(message)

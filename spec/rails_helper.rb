@@ -66,10 +66,6 @@ RSpec.configure do |config|
 
   config.disable_monkey_patching!
 
-  if ENV["SKIP_BULLET"]
-    Bullet.enable = false
-  end
-
   config.around :each, :disable_bullet do |example|
     Bullet.raise = false
     example.run
