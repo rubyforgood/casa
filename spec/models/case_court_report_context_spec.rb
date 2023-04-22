@@ -97,6 +97,12 @@ RSpec.describe CaseCourtReportContext, type: :model do
     end
 
     describe ":volunteer" do
+      describe ":assignment_date" do
+      end
+      describe ":name" do
+      end
+      describe ":supervisor_name" do
+      end
     end
 
     describe "when receiving valid case, volunteer, and path_to_template" do
