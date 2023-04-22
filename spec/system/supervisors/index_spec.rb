@@ -70,72 +70,72 @@ RSpec.describe "supervisors/index", type: :system do
           create(:case_assignment, casa_case: casa_case, volunteer: av)
         }
 
-        sign_in supervisor_user
-        visit supervisors_path
+      sign_in supervisor_user
+      visit supervisors_path
+    end
+
+    context "with active and deactivated supervisors" do
+      let!(:deacticated_supervisor) {
+        create(:supervisor, :inactive, display_name: "Deactivated supervisor", casa_org: organization)
+      }
+
+      it "shows deactivated supervisor on show button click" do
+        expect(all(".table tr").count).to eq(3)
+
+        expect(page).not_to have_text("Deactivated supervisor")
+
+        click_on(class: "show-deactivated")
+
+        expect(all(".table tr").count).to eq(4)
+
+        expect(page).to have_text("Deactivated supervisor")
+
+        click_on(class: "hide-deactivated")
+
+        expect(all(".table tr").count).to eq(3)
+        expect(page).not_to have_text("Deactivated supervisor")
+        expect(page).to have_text("Show deactivated")
+      end
+    end
+
+    context "when sorting supervisors" do
+      let(:expected_first_ordered_value) { "5" }
+      let(:expected_last_ordered_value) { "2" }
+
+      # TODO https://github.com/rubyforgood/casa/issues/2820
+      xit "by supervisor name", :aggregate_failures, js: true do
+        expect(page).to have_selector("th.sorting_asc", text: "Supervisor Name")
+        expect(page).to have_selector("tr:nth-child(1)", text: "First Supervisor")
+
+        find("th", text: "Supervisor Name").click
+
+        expect(page).to have_selector("tr:nth-child(1)", text: "Logged Supervisor")
       end
 
-      context "with active and deactivated supervisors" do
-        let!(:deacticated_supervisor) {
-          create(:supervisor, :inactive, display_name: "Deactivated supervisor", casa_org: organization)
-        }
+      describe "by volunteer count", js: true do
+        let(:column_to_sort) { "Volunteer Assignments" }
 
-        it "shows deactivated supervisor on show button click" do
-          expect(all(".table tr").count).to eq(3)
-
-          expect(page).not_to have_text("Deactivated supervisor")
-
-          click_on(class: "show-deactivated")
-
-          expect(all(".table tr").count).to eq(4)
-
-          expect(page).to have_text("Deactivated supervisor")
-
-          click_on(class: "hide-deactivated")
-
-          expect(all(".table tr").count).to eq(3)
-          expect(page).not_to have_text("Deactivated supervisor")
-          expect(page).to have_text("Show deactivated")
-        end
+        # TODO: uncomment this line when sort by Volunteer Assignments is available
+        # Issue: https://github.com/rubyforgood/casa/issues/2683
+        # it_behaves_like "functioning sort buttons"
       end
 
-      context "when sorting supervisors" do
-        let(:expected_first_ordered_value) { "5" }
-        let(:expected_last_ordered_value) { "2" }
+      describe "by transition-aged youth", js: true do
+        let(:column_to_sort) { "Serving Transition Aged Youth" }
 
-        # TODO https://github.com/rubyforgood/casa/issues/2820
-        xit "by supervisor name", :aggregate_failures, js: true do
-          expect(page).to have_selector("th.sorting_asc", text: "Supervisor Name")
-          expect(page).to have_selector("tr:nth-child(1)", text: "First Supervisor")
-
-          find("th", text: "Supervisor Name").click
-
-          expect(page).to have_selector("tr:nth-child(1)", text: "Logged Supervisor")
-        end
-
-        describe "by volunteer count", js: true do
-          let(:column_to_sort) { "Volunteer Assignments" }
-
-          # TODO: uncomment this line when sort by Volunteer Assignments is available
-          # Issue: https://github.com/rubyforgood/casa/issues/2683
-          # it_behaves_like "functioning sort buttons"
-        end
-
-        describe "by transition-aged youth", js: true do
-          let(:column_to_sort) { "Serving Transition Aged Youth" }
-
-          # TODO: uncomment this line when sort by Serving Transition Aged Youth is available
-          # Issue: https://github.com/rubyforgood/casa/issues/2683
-          # it_behaves_like "functioning sort buttons"
-        end
-
-        describe "by no-contact count", js: true do
-          let(:column_to_sort) { "No Attempt (14 days)" }
-
-          # TODO: uncomment this line when sort by No Attempt (14 days) is available
-          # Issue: https://github.com/rubyforgood/casa/issues/2683
-          # it_behaves_like "functioning sort buttons"
-        end
+        # TODO: uncomment this line when sort by Serving Transition Aged Youth is available
+        # Issue: https://github.com/rubyforgood/casa/issues/2683
+        # it_behaves_like "functioning sort buttons"
       end
+
+      describe "by no-contact count", js: true do
+        let(:column_to_sort) { "No Attempt (14 days)" }
+
+        # TODO: uncomment this line when sort by No Attempt (14 days) is available
+        # Issue: https://github.com/rubyforgood/casa/issues/2683
+        # it_behaves_like "functioning sort buttons"
+      end
+    end
 
       context "with unassigned volunteers" do
         let(:unassigned_volunteer_name) { "Tony Ruiz" }
@@ -233,14 +233,14 @@ RSpec.describe "supervisors/index", type: :system do
               click_on "Status"
             end
 
-            within("table#supervisors") do
-              expect(page).to have_content("Active Supervisor")
-              expect(page).to have_content("Inactive Supervisor")
-            end
+          within("table#supervisors") do
+            expect(page).to have_content("Active Supervisor")
+            expect(page).to have_content("Inactive Supervisor")
           end
         end
       end
     end
+  end
 
     let!(:no_contact_volunteer) do
       create(
