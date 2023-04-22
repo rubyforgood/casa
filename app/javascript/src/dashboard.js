@@ -272,7 +272,7 @@ $('document').ready(() => {
   const supervisorsTable = $('table#supervisors').DataTable({
     autoWidth: false,
     stateSave: false,
-    order: [[1, 'desc']], // order by cast contacts
+    order: [[1, 'asc']], // order by cast contacts
     columns: [
       {
         name: 'display_name',

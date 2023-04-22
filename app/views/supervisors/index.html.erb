@@ -9,7 +9,7 @@
     <div class="col-md-6">
       <div class="breadcrumb-wrapper mb-30">
         <span class="ml-5">
-        <div class="dropdown pull-left mx-2">
+        <div class="dropdown pull-left mx-2 supervisor-filters">
           <button class="btn-sm main-btn dark-btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="lni lni-funnel mr-10"></i>Filter Status</button>
           <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
@@ -27,19 +27,6 @@
             </div>
           </div>
         </div>
-        </span>
-        <span class="ml-5">
-          <% if @show_all %>
-            <%= link_to supervisors_path, class: "btn-sm main-btn primary-btn hide-deactivated" do %>
-              <i class="lni lni-checkmark mr-10"></i>
-              Hide deactivated
-            <% end %>
-          <% else %>
-            <%= link_to supervisors_path(all: "true"), class: "btn-sm main-btn success-btn show-deactivated" do %>
-              <i class="lni lni-bulb mr-10"></i>
-              Show deactivated
-            <% end %>
-          <% end %>
         </span>
         <span class="ml-5">
           <% if policy(Supervisor).create? %>
