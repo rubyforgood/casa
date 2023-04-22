@@ -289,14 +289,13 @@ $('document').ready(() => {
         name: 'volunteer_info',
         className: 'min-width',
         render: (data, type, row, meta) => {
-          const spacingMultiplier = 15;
           const noContactVolunteers = Number(row.no_attempt_for_two_weeks)
           const transitionAgedCaseVolunteers = Number(row.transitions_volunteers)
           const activeContactVolunteers = Number(row.volunteer_assignments) - noContactVolunteers
           const activeContactElement = activeContactVolunteers
             ? (
             `
-            <span class="attempted-contact status-btn success-bg text-white pl-${activeContactVolunteers * spacingMultiplier} pr-${activeContactVolunteers * spacingMultiplier}">
+            <span class="attempted-contact status-btn success-bg text-white pl-${activeContactVolunteers * 15} pr-${activeContactVolunteers * 15}">
               ${activeContactVolunteers}
             </span>
             `
@@ -306,7 +305,7 @@ $('document').ready(() => {
           const noContactElement = noContactVolunteers > 0
             ? (
             `
-            <span class="no-attempted-contact status-btn danger-bg text-white pl-${noContactVolunteers * spacingMultiplier} pr-${noContactVolunteers * spacingMultiplier}">
+            <span class="no-attempted-contact status-btn danger-bg text-white pl-${noContactVolunteers * 15} pr-${noContactVolunteers * 15}">
               ${noContactVolunteers}
             </span>
             `
@@ -317,7 +316,7 @@ $('document').ready(() => {
           if (activeContactVolunteers <= 0 && noContactVolunteers <= 0) {
             volunteersCounterElement = '<span class="no-volunteers" style="flex-grow: 1">No assigned volunteers</span>'
           } else {
-            volunteersCounterElement = `<span class="status-btn deactive-bg text-black pl-${transitionAgedCaseVolunteers * spacingMultiplier} pr-${transitionAgedCaseVolunteers * spacingMultiplier}">${transitionAgedCaseVolunteers}</span>`
+            volunteersCounterElement = `<span class="status-btn deactive-bg text-black pl-${transitionAgedCaseVolunteers * 15} pr-${transitionAgedCaseVolunteers * 15}">${transitionAgedCaseVolunteers}</span>`
           }
 
           return `
