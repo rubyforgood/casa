@@ -272,7 +272,7 @@ $('document').ready(() => {
   const supervisorsTable = $('table#supervisors').DataTable({
     autoWidth: false,
     stateSave: false,
-    order: [[1, 'desc']], // order by cast contacts
+    order: [[1, 'asc']], // order by volunteers
     columns: [
       {
         name: 'display_name',
@@ -286,7 +286,7 @@ $('document').ready(() => {
         }
       },
       {
-        name: '',
+        name: 'volunteer_info',
         className: "min-width",
         render: (data, type, row, meta) => {
           const noContactVolunteers = Number(row.no_attempt_for_two_weeks)
@@ -354,7 +354,7 @@ $('document').ready(() => {
 
         return $.extend({}, d, {
           additional_filters: {
-            active: statusFilter
+            active: statusFilter,
           }
         })
       },
