@@ -3,68 +3,67 @@ $indicator_positive_color: #4caf50;
 
 .supervisor_case_contact_stats {
   display: flex;
-  flex-grow: 1;
 
-  &:first-child {
-    display: flex;
-    margin-right: 1em;
-    flex-grow: 1;
-  }
+  div {
+    &:first-child {
+      display: flex;
+      margin-right: 1em;
+      flex-grow: 1;
+    }
 
-  span {
-    border-radius: 0.25em;
-    padding-top: .25em;
-    text-align: center;
+    span {
+      border-radius: 0.25em;
+      padding-top: .25em;
+      text-align: center;
 
-    &.attempted-contact {
-      background-color: $indicator_positive_color;
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-
-      & + span.no-attempted-contact {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-      }
-
-      & + span.attempted-contact-end {
+      &.attempted-contact {
         background-color: $indicator_positive_color;
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-        width: 0.25em;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+
+        & + span.no-attempted-contact {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+
+        & + span.attempted-contact-end {
+          background-color: $indicator_positive_color;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          width: 0.25em;
+        }
       }
-    }
 
-    &.no-attempted-contact {
-      background-color: $indictator_negative_color;
-    }
+      &.no-attempted-contact {
+        background-color: $indictator_negative_color;
+      }
 
-    &.no-volunteers {
-      background-color: #ccc;
-    }
+      &.no-volunteers {
+        background-color: #ccc;
+      }
 
-    &:last-child {
-      margin-left: 0.5em;
-      background-color: #cfd8dc;
-      border-radius: 100vw;
-      padding: 0.2em 1em;
+      &:last-child {
+        margin-left: 0.5em;
+        background-color: #cfd8dc;
+        border-radius: 100vw;
+        padding: 0.2em 1em;
+      }
     }
   }
 
-}
+  &.legend {
+    align-items: center;
+    margin-bottom: 0.25rem;
+    margin-top: 1em;
 
-.legend {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.25rem;
-  margin-top: 1em;
+    span {
+      &:last-child {
+        padding: .5em;
+      }
 
-  .supervisor_case_contact_stats > span {
-    &:last-child {
-      padding: .5em;
+      padding: .5em 1em;
+      flex-grow: 1;
     }
-
-    padding: .5em 1em;
-    flex-grow: 1;
   }
 }
 
