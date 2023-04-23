@@ -125,10 +125,9 @@ RSpec.describe CaseCourtReportContext, type: :model do
     describe ":case_contacts" do
     end
 
-    describe ":case_court_orders" do
-    end
-
-    describe ":case_mandates" do
+    describe ":case_court_orders and :case_mandates" do
+      # :case_court_orders should be identical for :case_mandates
+      # this duplication exists for backwards compatability for the mongomery court report template
     end
 
     describe ":latest_hearing_date" do
