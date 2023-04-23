@@ -7,7 +7,7 @@ class User < ApplicationRecord
   include DateHelper
 
   before_update :record_previous_email
-  after_create :skip_confirmable_email_confirmation_upon_creation
+  after_create :skip_email_confirmation_upon_creation
 
   validates_with UserValidator
 
@@ -153,7 +153,7 @@ class User < ApplicationRecord
     update(old_emails: updated_emails)
   end
 
-  def skip_confirmable_email_confirmation_upon_creation
+  def skip_email_confirmation_upon_creation
     skip_confirmation!
     confirm
   end
