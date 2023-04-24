@@ -158,11 +158,11 @@ class User < ApplicationRecord
     confirm
   end
 
-  def send_email_changed_notification? # hardcoded in order to prevent the email changed notification BEFORE user confirms
+  def send_email_changed_notification?
     false
   end
 
-  def after_confirmation # sends the email changed notification AFTER user confirms
+  def after_confirmation
     send_email_changed_notification
   end
 end
