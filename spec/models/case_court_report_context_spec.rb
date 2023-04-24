@@ -15,15 +15,6 @@ RSpec.describe CaseCourtReportContext, type: :model do
   describe "#context" do
     let(:court_report_context) { build(:case_court_report_context) }
 
-    subject do
-      described_class.new(
-        case_id: volunteer.casa_cases.first.id,
-        volunteer_id: volunteer.id,
-        path_to_template: path_to_template,
-        path_to_report: path_to_report
-      ).context
-    end
-
     describe ":created_date" do
       it "has a created date equal to the current date" do
         expect(court_report_context.context[:created_date]).to eq("January 1, 2021")
