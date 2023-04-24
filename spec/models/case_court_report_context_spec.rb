@@ -137,6 +137,9 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
       it "includes the implementation status and text of each court order" do
         expect(court_report_context[:case_court_orders]).to include({order: court_order_implemented.text, status: court_order_implemented.implementation_status&.humanize})
+        expect(court_report_context[:case_court_orders]).to include({order: court_order_not_specified.text, status: court_order_not_specified.implementation_status&.humanize})
+        expect(court_report_context[:case_court_orders]).to include({order: court_order_partially_implemented.text, status: court_order_partially_implemented.implementation_status&.humanize})
+        expect(court_report_context[:case_court_orders]).to include({order: court_order_unimplemented.text, status: court_order_unimplemented.implementation_status&.humanize})
       end
 
       it "has identical values for :case_court_orders and :case_mandates" do
