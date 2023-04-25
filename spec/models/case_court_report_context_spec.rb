@@ -191,13 +191,18 @@ RSpec.describe CaseCourtReportContext, type: :model do
     end
 
     describe ":volunteer" do
-      let(:volunteer) { create(:volunteer, supervisor: build(:supervisor, display_name: "Mm^ED;`zg(g<Z]q")) }
+      let(:volunteer) { create(:volunteer, display_name: "Y>cy%F7v;\\].-g$", supervisor: build(:supervisor, display_name: "Mm^ED;`zg(g<Z]q")) }
       let(:case_court_report_context) { build(:case_court_report_context, volunteer: volunteer).context }
 
       describe ":assignment_date" do
       end
+
       describe ":name" do
+        it "contains the volunteer's name" do
+          expect(case_court_report_context[:volunteer][:name]).to eq(volunteer.display_name)
+        end
       end
+
       describe ":supervisor_name" do
         it "contains the name of the volunteer's supervisor" do
           expect(case_court_report_context[:volunteer][:supervisor_name]).to eq(volunteer.supervisor.display_name)
