@@ -536,7 +536,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_12_103356) do
     t.string "phone_number", default: ""
     t.boolean "receive_sms_notifications", default: false, null: false
     t.boolean "receive_email_notifications", default: true
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.string "old_emails", default: [], array: true
     t.index ["casa_org_id"], name: "index_users_on_casa_org_id"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invitations_count"], name: "index_users_on_invitations_count"

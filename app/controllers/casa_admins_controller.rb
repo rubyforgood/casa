@@ -17,7 +17,10 @@ class CasaAdminsController < ApplicationController
   def update
     authorize @casa_admin
 
+    @casa_admin.skip_reconfirmation!
+
     if @casa_admin.update(update_casa_admin_params)
+      @casa_admin.filter_old_emails!(@casa_admin.email)
       respond_to do |format|
         format.html { redirect_to casa_admins_path, notice: "New admin created successfully" }
         format.json { render json: @casa_admin, status: :ok }

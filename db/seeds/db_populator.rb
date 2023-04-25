@@ -81,7 +81,8 @@ class DbPopulator
           password_confirmation: SEED_PASSWORD,
           display_name: Faker::Name.name,
           phone_number: Faker::PhoneNumber.cell_phone_in_e164,
-          active: true
+          active: true,
+          confirmed_at: Time.now
         }
         # Approximately 1 out of 30 volunteers should be set to inactive.
         if klass == Volunteer && rng.rand(30) == 0
