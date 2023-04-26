@@ -192,20 +192,25 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
     describe ":volunteer" do
       let(:volunteer) { create(:volunteer, display_name: "Y>cy%F7v;\\].-g$", supervisor: build(:supervisor, display_name: "Mm^ED;`zg(g<Z]q")) }
-      let(:case_court_report_context) { build(:case_court_report_context, volunteer: volunteer).context }
+      let(:case_court_report_context) { build(:case_court_report_context, volunteer: volunteer) }
 
       describe ":assignment_date" do
+        it "contains the assignment date in a human readable format" do
+          case_court_report_context.instance_variable_get(:@casa_case).case_assignments.first.update_attribute(:created_at, 24.months.ago)
+
+          expect(case_court_report_context.context[:volunteer][:assignment_date]).to eq("January 1, 2019")
+        end
       end
 
       describe ":name" do
         it "contains the volunteer's name" do
-          expect(case_court_report_context[:volunteer][:name]).to eq(volunteer.display_name)
+          expect(case_court_report_context.context[:volunteer][:name]).to eq(volunteer.display_name)
         end
       end
 
       describe ":supervisor_name" do
         it "contains the name of the volunteer's supervisor" do
-          expect(case_court_report_context[:volunteer][:supervisor_name]).to eq(volunteer.supervisor.display_name)
+          expect(case_court_report_context.context[:volunteer][:supervisor_name]).to eq(volunteer.supervisor.display_name)
         end
       end
     end
