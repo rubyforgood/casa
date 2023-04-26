@@ -4,11 +4,8 @@ import './jQueryGlobalizer.js'
 import 'bootstrap'
 import 'bootstrap-select'
 import './sweet-alert-confirm.js'
-// import Chart from 'chart.js/auto';
-// import { DateTime } from 'luxon';
-import { Chart, registerables } from 'chart.js';
-import 'chartjs-adapter-luxon';
-
+// import { Chart, registerables } from 'chart.js'
+// import 'chartjs-adapter-luxon'
 
 require('datatables.net-dt')(null, window.jQuery) // First parameter is the global object. Defaults to window if null
 require('select2')(window.jQuery)
