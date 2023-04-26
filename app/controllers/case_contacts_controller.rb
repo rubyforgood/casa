@@ -5,6 +5,8 @@ class CaseContactsController < ApplicationController
   before_action :set_contact_types, only: %i[new edit update create]
   before_action :require_organization!
   after_action :verify_authorized
+  skip_before_action :authenticate_user!, :only => :case_contacts_creation_times_in_last_week
+  skip_after_action :verify_authorized, :only => :case_contacts_creation_times_in_last_week
 
   def index
     authorize CaseContact
@@ -132,6 +134,17 @@ class CaseContactsController < ApplicationController
     case_contact.restore(recrusive: true)
     flash[:notice] = "Contact is successfully restored."
     redirect_to request.referer
+  end
+
+  def case_contacts_creation_times_in_last_week    
+    # Get the case contacts created in the last week
+    case_contacts = CaseContact.where("created_at >= ?", 10.week.ago)
+
+    # Extract the created_at timestamps and convert them to Unix time
+    timestamps = case_contacts.pluck(:created_at).map { |t| t.to_i }
+
+    # Return the timestamps as a JSON response
+    render json: { timestamps: timestamps }
   end
 
   private
