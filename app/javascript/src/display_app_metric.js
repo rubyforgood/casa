@@ -15,10 +15,45 @@ $(document).ready(function() {
 })
 
 function handleResponse(data) {
-  const timestamps = data.timestamps
-  const counts = getCountsByDayAndHour(timestamps)
+  const counts = getCountsByDayAndHour(data.timestamps)
   const dataset = createDatasetFromCounts(counts)
+  createChart(dataset)
+}
 
+function getCountsByDayAndHour(timestamps) {
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  const counts = {}
+  for (let i = 0; i < timestamps.length; i++) {
+    const timestamp = new Date(timestamps[i] * 1000)
+    const day = days[timestamp.getUTCDay()]
+    const hour = timestamp.getUTCHours()
+    const key = day + ' ' + hour
+    if (key in counts) {
+      counts[key] += 1
+    } else {
+      counts[key] = 1
+    }
+  }
+  return counts
+}
+
+function createDatasetFromCounts(counts) {
+  const dataset = []
+  for (const key in counts) {
+    const parts = key.split(' ')
+    const day = parts[0]
+    const hour = parseInt(parts[1])
+    dataset.push({
+      x: hour,
+      y: days.indexOf(day),
+      r: Math.sqrt(counts[key]) * 2,
+      count: counts[key]
+    })
+  }
+  return dataset
+}
+
+function createChart(dataset) {
   const ctx = document.getElementById('myChart').getContext('2d')
   const chart = new Chart(ctx, {
     type: 'bubble',
