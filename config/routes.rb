@@ -64,6 +64,9 @@ Rails.application.routes.draw do
     resources :followups, only: %i[create], controller: "case_contacts/followups", shallow: true do
       patch :resolve, on: :member
     end
+    collection do 
+      get :case_contacts_creation_times_in_last_week
+    end
   end
 
   resources :reports, only: %i[index]
