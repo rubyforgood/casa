@@ -7,13 +7,11 @@ RSpec.describe "casa_admins/edit", type: :system do
 
   context "with valid data" do
     it "can successfully edit user email and display name" do
-      expected_email = "root@casa.com"
       expected_display_name = "Root Admin"
       expected_phone_number = "+14398761234"
 
       visit edit_casa_admin_path(admin)
 
-      fill_in "Email", with: expected_email
       fill_in "Display name", with: expected_display_name
       fill_in "Phone number", with: expected_phone_number
 
@@ -21,10 +19,23 @@ RSpec.describe "casa_admins/edit", type: :system do
 
       admin.reload
 
-      expect(page).to have_text "New admin created successfully"
-      expect(admin.email).to eq expected_email
+      expect(page).to have_text "New admin created successfully" # should be updated
+
       expect(admin.display_name).to eq expected_display_name
       expect(admin.phone_number).to eq expected_phone_number
+    end
+    it "can edit user email and send a confirmation email" do
+      visit edit_casa_admin_path(admin)
+      fill_in "Email", with: "new_admin_email@example.com"
+
+      click_on "Submit"
+
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
+      expect(ActionMailer::Base.deliveries.first.body.encoded)
+        .to match("You can confirm your account email through the link below:")
+
+      expect(page).to have_text "Confirmation Email Sent To Admin."
     end
   end
 

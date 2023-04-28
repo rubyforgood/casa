@@ -20,7 +20,6 @@ RSpec.describe "volunteers/edit", type: :system do
     before do
       sign_in admin
       visit edit_volunteer_path(volunteer)
-      fill_in "volunteer_email", with: "newemail@example.com"
       fill_in "volunteer_display_name", with: "Kamisato Ayato"
     end
 
@@ -50,6 +49,27 @@ RSpec.describe "volunteers/edit", type: :system do
         fill_in "volunteer_display_name", with: ""
         click_on "Submit"
         expect(page).to have_text "can't be blank"
+      end
+    end
+  end
+
+  describe "updating a volunteer's email" do
+    before do
+      sign_in admin
+      visit edit_volunteer_path(volunteer)
+      fill_in "volunteer_email", with: "newemail@example.com"
+    end
+
+    context "with a valid email" do
+      it "sends volunteer a confirmation email" do
+        click_on "Submit"
+
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
+        expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
+        expect(ActionMailer::Base.deliveries.first.body.encoded)
+          .to match("You can confirm your account email through the link below:")
+
+        expect(page).to have_text "Confirmation Email Sent To Volunteer."
       end
     end
   end

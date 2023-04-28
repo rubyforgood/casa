@@ -156,18 +156,20 @@ RSpec.describe "supervisors/edit", type: :system do
     end
 
     context "when entering valid information" do
-      it "updates the e-mail address successfully" do
+      it "sends a confirmaton email to the supervisor" do
         sign_in user
         supervisor = create(:supervisor)
         visit edit_supervisor_path(supervisor)
+        fill_in "supervisor_email", with: ""
+        fill_in "supervisor_email", with: "new" + supervisor.email
 
-        expect {
-          fill_in "supervisor_email", with: ""
-          fill_in "supervisor_email", with: "new" + supervisor.email
-          click_on "Submit"
-          page.find ".header-flash > div"
-          supervisor.reload
-        }.to change { supervisor.email }.to "new" + supervisor.email
+        click_on "Submit"
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
+        expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
+        expect(ActionMailer::Base.deliveries.first.body.encoded)
+          .to match("You can confirm your account email through the link below:")
+
+        expect(page).to have_text "Confirmation Email Sent To Supervisor."
       end
     end
 
