@@ -9,7 +9,7 @@ RSpec.describe "/supervisors", type: :request do
   let(:supervisor) { create(:supervisor, casa_org: org) }
 
   let(:update_supervisor_params) do
-    {supervisor: {email: "newemail@gmail.com", display_name: "New Name", phone_number: "+14163218092"}}
+    {supervisor: {display_name: "New Name", phone_number: "+14163218092"}}
   end
   # add domains to blacklist you want to stub
   blacklist = ["api.twilio.com", "api.short.io"]
@@ -112,8 +112,22 @@ RSpec.describe "/supervisors", type: :request do
         supervisor.reload
 
         expect(supervisor.display_name).to eq "New Name"
-        expect(supervisor.email).to eq "newemail@gmail.com"
         expect(supervisor.phone_number).to eq "+14163218092"
+      end
+
+      it "updates supervisor email and sends a confirmation email" do
+        patch supervisor_path(supervisor), params: {
+          supervisor: {email: "newemail@gmail.com"}
+        }
+
+        supervisor.reload
+        expect(response).to have_http_status(:redirect)
+
+        expect(supervisor.unconfirmed_email).to eq("newemail@gmail.com")
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
+        expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
+        expect(ActionMailer::Base.deliveries.first.body.encoded)
+          .to match("You can confirm your account email through the link below:")
       end
 
       it "can set the supervisor to be inactive" do
@@ -140,13 +154,26 @@ RSpec.describe "/supervisors", type: :request do
         sign_in supervisor
       end
 
-      it "supervisor updates their own name and email" do
+      it "supervisor updates their own name" do
         patch supervisor_path(supervisor), params: update_supervisor_params
         supervisor.reload
 
         expect(supervisor.display_name).to eq "New Name"
-        expect(supervisor.email).to eq "newemail@gmail.com"
         expect(supervisor).to be_active
+      end
+
+      it "supervisor updates their own email and receives a confirmation email" do
+        patch supervisor_path(supervisor), params: {
+          supervisor: {email: "newemail@gmail.com"}
+        }
+
+        supervisor.reload
+        expect(response).to have_http_status(:redirect)
+        expect(supervisor.unconfirmed_email).to eq("newemail@gmail.com")
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
+        expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
+        expect(ActionMailer::Base.deliveries.first.body.encoded)
+          .to match("You can confirm your account email through the link below:")
       end
 
       it "cannot change its own type" do

@@ -89,18 +89,32 @@ RSpec.describe "/casa_admins", type: :request do
       it "can successfully update a casa admin user", :aggregate_failures do
         put casa_admin_path(casa_admin), params: {
           casa_admin: {
-            email: expected_email,
             display_name: expected_display_name,
             phone_number: expected_phone_number
           }
         }
 
         casa_admin.reload
-        expect(casa_admin.email).to eq expected_email
         expect(casa_admin.display_name).to eq expected_display_name
         expect(casa_admin.phone_number).to eq expected_phone_number
         expect(response).to redirect_to casa_admins_path
         expect(response.request.flash[:notice]).to eq "New admin created successfully"
+      end
+
+      it "can update a casa admin user's email and send them a confirmation email", :aggregate_failures do
+        put casa_admin_path(casa_admin), params: {
+          casa_admin: {
+            email: expected_email
+          }
+        }
+        casa_admin.reload
+        expect(response).to have_http_status(:redirect)
+
+        expect(casa_admin.unconfirmed_email).to eq("admin2@casa.com")
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
+        expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
+        expect(ActionMailer::Base.deliveries.first.body.encoded)
+          .to match("You can confirm your account email through the link below:")
       end
 
       it "also respond as json", :aggregate_failures do
@@ -110,10 +124,10 @@ RSpec.describe "/casa_admins", type: :request do
             display_name: expected_display_name
           }
         }
-
+        casa_admin.reload
         expect(response.content_type).to eq("application/json; charset=utf-8")
         expect(response).to have_http_status(:ok)
-        expect(response.body).to match(expected_email.to_json)
+        expect(response.body).to_not include(expected_email.to_json)
       end
     end
 
