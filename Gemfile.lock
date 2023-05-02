@@ -148,6 +148,9 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    devise-jwt (0.10.0)
+      devise (~> 4.0)
+      warden-jwt_auth (~> 0.6)
     devise_invitable (2.0.7)
       actionmailer (>= 5.0)
       devise (>= 4.6)
@@ -166,6 +169,15 @@ GEM
       activesupport (>= 5.0)
       request_store (>= 1.0)
       ruby2_keywords
+    dry-auto_inject (1.0.1)
+      dry-core (~> 1.0)
+      zeitwerk (~> 2.6)
+    dry-configurable (1.0.1)
+      dry-core (~> 1.0, < 2)
+      zeitwerk (~> 2.6)
+    dry-core (1.0.0)
+      concurrent-ruby (~> 1.0)
+      zeitwerk (~> 2.6)
     erb_lint (0.3.1)
       activesupport
       better_html (>= 2.0.1)
@@ -316,6 +328,8 @@ GEM
     rack (2.2.6.2)
     rack-attack (6.6.1)
       rack (>= 1.0, < 3)
+    rack-cors (2.0.0)
+      rack (>= 2.0.0)
     rack-test (2.0.2)
       rack (>= 1.3)
     rails (7.0.4.2)
@@ -477,6 +491,11 @@ GEM
       parser (>= 3.2.0)
     warden (1.2.9)
       rack (>= 2.0.9)
+    warden-jwt_auth (0.8.0)
+      dry-auto_inject (>= 0.8, < 2)
+      dry-configurable (>= 0.13, < 2)
+      jwt (~> 2.1)
+      warden (~> 1.2)
     web-console (4.2.0)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -531,6 +550,7 @@ DEPENDENCIES
   database_cleaner-active_record
   delayed_job_active_record
   devise
+  devise-jwt
   devise_invitable
   dotenv-rails
   draper
@@ -558,6 +578,7 @@ DEPENDENCIES
   puma
   pundit
   rack-attack
+  rack-cors
   rails (~> 7.0.4)
   rails-controller-testing
   rake
