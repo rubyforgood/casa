@@ -132,7 +132,7 @@ class CaseContactsController < ApplicationController
     case_contact.restore(recrusive: true)
     flash[:notice] = "Contact is successfully restored."
     redirect_to request.referer
-  end  
+  end
 
   private
 
