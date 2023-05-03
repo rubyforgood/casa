@@ -8,7 +8,7 @@ const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 
 $(document).ready(function () {
   $.ajax({
     type: 'GET',
-    url: '/case_contacts/case_contacts_creation_times_in_last_week',
+    url: '/health/case_contacts_creation_times_in_last_week',
     success: function (data) {
       const timestamps = data.timestamps
 
