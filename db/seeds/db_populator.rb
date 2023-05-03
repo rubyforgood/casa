@@ -246,16 +246,17 @@ class DbPopulator
       # guarantee at least one case contact before and after most recent past court date
       most_recent_past_court_date = most_recent_past_court_date(new_casa_case.id)
       if most_recent_past_court_date
-        unless case_contact_before_last_court_date(new_casa_case.id)
+        unless case_contact_before_last_court_date?(new_casa_case.id, most_recent_past_court_date)
           new_case_contact = create_case_contact(new_casa_case)
           new_case_contact.occurred_at = most_recent_past_court_date - 24.hours
           new_case_contact.save!
         end
   
-        unless case_contact_after_last_court_date(new_casa_case.id)
+        unless case_contact_after_last_court_date?(new_casa_case.id, most_recent_past_court_date)
           new_case_contact = create_case_contact(new_casa_case)
           new_case_contact.occurred_at = most_recent_past_court_date + 24.hours
           new_case_contact.save!
+        end
       end
 
       # guarantee at least one transition aged youth case to "volunteer1"
@@ -373,18 +374,18 @@ class DbPopulator
     ).order(date: :desc).first&.date
   end
 
-  def case_contact_before_last_court_date?(casa_case_id)
+  def case_contact_before_last_court_date?(casa_case_id, date)
     CaseContact.where(
-      "ocurred_at < ? AND casa_case_id = ?", 
-      most_recent_past_court_date, 
+      "occurred_at < ? AND casa_case_id = ?", 
+      date, 
       casa_case_id
     ).any?
   end
 
-  def case_contact_after_last_court_date?(case_case_id)
+  def case_contact_after_last_court_date?(case_case_id, date)
     CaseContact.where(
-      "ocurred_at > ? AND casa_case_id = ?", 
-      most_recent_past_court_date,
+      "occurred_at > ? AND casa_case_id = ?", 
+      date,
       case_case_id
     ).any?
   end
