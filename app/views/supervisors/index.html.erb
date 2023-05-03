@@ -89,12 +89,10 @@
 
                       <div class="d-flex flex-row w-100">
                         <% if active_volunteers %>
-                          <div class="status-btn success-bg text-white flex-grow-1",
-                            style="max-width: <%= (active_volunteers * 15) %>%; text-align: center"><%= active_volunteers %></div>
+                          <div class="status-btn success-bg text-white flex-grow-1" style="max-width: <%= (active_volunteers * 15) %>%; text-align: center"><%= active_volunteers %></div>
                         <% end %>
                         <% if no_attempt_volunteers.nonzero? %>
-                          <div class="status-btn danger-bg text-white flex-grow-1",
-                            style="max-width: <%= (no_attempt_volunteers * 15) %>%; text-align: center"><%= no_attempt_volunteers %></div>
+                          <div class="status-btn danger-bg text-white flex-grow-1" style="max-width: <%= (no_attempt_volunteers * 15) %>%; text-align: center"><%= no_attempt_volunteers %></div>
                         <% else %>
                           <div class="flex-grow-1"></div>
                         <% end %>
