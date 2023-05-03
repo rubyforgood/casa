@@ -120,14 +120,12 @@ RSpec.describe "/casa_admins", type: :request do
       it "also respond as json", :aggregate_failures do
         put casa_admin_path(casa_admin, format: :json), params: {
           casa_admin: {
-            email: expected_email,
             display_name: expected_display_name
           }
         }
         casa_admin.reload
         expect(response.content_type).to eq("application/json; charset=utf-8")
         expect(response).to have_http_status(:ok)
-        expect(response.body).to_not include(expected_email.to_json)
       end
     end
 

@@ -35,7 +35,7 @@ RSpec.describe "casa_admins/edit", type: :system do
       expect(ActionMailer::Base.deliveries.first.body.encoded)
         .to match("You can confirm your account email through the link below:")
 
-      expect(page).to have_text "Confirmation Email Sent To Admin."
+      expect(page).to have_text "Confirmation Email Sent To Casa Admin."
     end
   end
 

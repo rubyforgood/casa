@@ -18,12 +18,7 @@ class CasaAdminsController < ApplicationController
     authorize @casa_admin
 
     if @casa_admin.update(update_casa_admin_params)
-      if @casa_admin.saved_changes.include?("unconfirmed_email")
-        respond_to do |format|
-          format.html { redirect_to casa_admins_path, notice: "Confirmation Email Sent To Admin." }
-          format.json { render json: @casa_admin, status: :ok }
-        end
-      else
+      unless admin_email_change(@casa_admin)
         @casa_admin.filter_old_emails!(@casa_admin.email)
         respond_to do |format|
           format.html { redirect_to casa_admins_path, notice: "New admin created successfully" }

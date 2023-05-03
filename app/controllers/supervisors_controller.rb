@@ -57,9 +57,7 @@ class SupervisorsController < ApplicationController
     authorize @supervisor
 
     if @supervisor.update(update_supervisor_params)
-      if @supervisor.saved_changes.include?("unconfirmed_email")
-        redirect_to edit_supervisor_path(@supervisor), notice: "Confirmation Email Sent To Supervisor."
-      else
+      unless admin_email_change(@supervisor)
         @supervisor.filter_old_emails!(@supervisor.email)
         redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was successfully updated."
       end
