@@ -114,6 +114,41 @@ RSpec.describe CaseCourtReportContext, type: :model do
     end
 
     describe ":case_contacts" do
+      let(:casa_case) { create(:casa_case) }
+      let(:case_contact_1) { create(:case_contact, occurred_at: 30.days.ago) }
+      let(:case_contact_2) { create(:case_contact, occurred_at: 45.days.ago) }
+      let(:case_contact_3) { create(:case_contact, occurred_at: 60.days.ago) }
+      let(:case_contact_4) { create(:case_contact, occurred_at: 75.days.ago) }
+      let(:contact_type_1) { create(:contact_type, name: "XM_L!_g=Ko\\-'A!") }
+      let(:contact_type_2) { create(:contact_type, name: "uHp$O2;oq!C3{]l") }
+      let(:contact_type_3) { create(:contact_type, name: "\"PlqEsCP[JktjTS") }
+      let(:contact_type_4) { create(:contact_type, name: "K3BbzNCni4mVC5@") }
+      let(:contact_type_5) { create(:contact_type, name: "lf7CA&n8BQ*qJ?E") }
+      let(:court_report_context) { build(:case_court_report_context, casa_case: casa_case).context }
+
+      before(:each) do
+        case_contact_1.contact_types << contact_type_1
+        case_contact_2.contact_types << contact_type_2
+        case_contact_3.contact_types << contact_type_3
+        case_contact_4.contact_types << contact_type_4
+        case_contact_1.contact_types << contact_type_5
+
+        casa_case.case_contacts << case_contact_1
+        casa_case.case_contacts << case_contact_2
+        casa_case.case_contacts << case_contact_3
+        casa_case.case_contacts << case_contact_4
+      end
+
+      context "when there are past court dates" do
+        let!(:past_court_date) { create(:court_date, date: 50.days.ago, casa_case: casa_case) }
+        it "contains only the case contacts after the latest past court date" do
+          expect(court_report_context[:case_contacts]).to include(include(type: contact_type_1.name))
+          expect(court_report_context[:case_contacts]).to include(include(type: contact_type_5.name))
+          expect(court_report_context[:case_contacts]).to include(include(type: contact_type_2.name))
+          expect(court_report_context[:case_contacts]).to_not include(include(type: contact_type_3.name))
+          expect(court_report_context[:case_contacts]).to_not include(include(type: contact_type_4.name))
+        end
+      end
     end
 
     describe ":case_court_orders and :case_mandates" do
