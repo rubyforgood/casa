@@ -13,7 +13,7 @@ beforeEach(() => {
   // jest doesn't support window.location like a browser but URL is pretty close
   // see https://stackoverflow.com/a/60697570
   window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/CINA-2151')
-  document.body.innerHTML = '<div id="court-orders-list-container"></div>'
+  document.body.innerHTML = '<div id="court-orders-list-container" data-resource="casa_case"></div>'
 
   $(document).ready(() => {
     courtOrderListElement = $('#court-orders-list-container')
@@ -22,32 +22,12 @@ beforeEach(() => {
 })
 
 describe('CourtOrderList constructor', () => {
-  test('the constructor should be able to extract the rescource name from the url', (done) => {
+  test('the constructor should be able to extract the resource name from element', (done) => {
     $(document).ready(() => {
       try {
-        window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/CINA-2151')
         courtOrderList = new CourtOrderList(courtOrderListElement)
 
         expect(courtOrderList.resourceName).toBe('casa_case')
-        expect(courtOrderList.casaCaseId).toBe('CINA-2151')
-
-        window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/CINA-2151/court_dates/new')
-        courtOrderList = new CourtOrderList(courtOrderListElement)
-
-        expect(courtOrderList.resourceName).toBe('court_date')
-        expect(courtOrderList.casaCaseId).toBe('CINA-2151')
-
-        window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/CINA-2151/court_dates/3')
-        courtOrderList = new CourtOrderList(courtOrderListElement)
-
-        expect(courtOrderList.resourceName).toBe('court_date')
-        expect(courtOrderList.casaCaseId).toBe('CINA-2151')
-
-        window.location = new URL('https://casa-qa.herokuapp.com/casa_cases/CINA-2151/court_dates/3/edit')
-        courtOrderList = new CourtOrderList(courtOrderListElement)
-
-        expect(courtOrderList.resourceName).toBe('court_date')
-        expect(courtOrderList.casaCaseId).toBe('CINA-2151')
         done()
       } catch (error) {
         done(error)

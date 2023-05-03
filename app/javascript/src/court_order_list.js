@@ -1,3 +1,5 @@
+import Swal from 'sweetalert2'
+
 // Replaces a number in a string with its value -1
 //   @param  {string} str The string containing the number to replace
 //   @param  {number} num The number to replace
@@ -10,20 +12,19 @@ function replaceNumberWithDecrement (str, num) {
 }
 
 module.exports = class CourtOrderList {
-  // @param {object} courtOrdersWidget The div containing the list of court orders
+  // @param {object} The HTMLElement to contain the list items
   constructor (courtOrdersWidget) {
     // The following regex is intended for pathnames such as "/casa_cases/CINA-19-1004/court_dates/new"
     const urlMatch = window.location.pathname.match(/^\/([a-z_]+)s\/(\w+-+\d+)(\/(([a-z_]+)s))?/).filter(match => match !== undefined)
     this.courtOrdersWidget = courtOrdersWidget
-    this.resourceName = urlMatch.length > 3 ? urlMatch[5] : urlMatch[1]
+    this.resourceName = this.courtOrdersWidget[0].dataset.resource
     // The casaCaseId will be something like "CINA-19-1004"
     this.casaCaseId = urlMatch[2]
   }
 
   // Adds a row containing a text field to write the court order and a dropdown to specify the order status
   addCourtOrder () {
-    const courtOrdersWidget = this.courtOrdersWidget
-    const index = courtOrdersWidget.children('.court-order-entry').length
+    const index = this.courtOrdersWidget.children('.court-order-entry').length
     const resourceName = this.resourceName
     const courtOrderRow = $(`\
     <div class="court-order-entry">\
@@ -46,7 +47,7 @@ module.exports = class CourtOrderList {
         value="${this.casaCaseId}">
     </div>`)
 
-    courtOrdersWidget.append(courtOrderRow)
+    this.courtOrdersWidget.append(courtOrderRow)
     courtOrderRow.children('textarea').trigger('focus')
   }
 
@@ -78,6 +79,53 @@ module.exports = class CourtOrderList {
 
       courtOrderSiblingId.attr('id', replaceNumberWithDecrement(courtOrderSiblingId.attr('id'), originalSiblingIndex + index + 1))
       courtOrderSiblingId.attr('name', replaceNumberWithDecrement(courtOrderSiblingId.attr('name'), originalSiblingIndex + index + 1))
+    })
+  }
+
+  removeCourtOrderWithConfirmation (order) {
+    const text = 'Are you sure you want to remove this court order? Doing so will ' +
+      'delete all records of it unless it was included in a previous court report.'
+    Swal.fire({
+      icon: 'warning',
+      title: 'Delete court order?',
+      text,
+      showCloseButton: true,
+      showCancelButton: true,
+      focusConfirm: false,
+
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#39c',
+
+      confirmButtonText: 'Delete',
+      cancelButtonText: 'Go back'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.removeCourtOrderAction(order)
+      }
+    })
+  }
+
+  removeCourtOrderAction (order) {
+    const orderHiddenIdInput = order.next('input[type="hidden"]')
+
+    $.ajax({
+      url: `/case_court_orders/${orderHiddenIdInput.val()}`,
+      method: 'delete',
+      success: () => {
+        this.removeCourtOrder(order, orderHiddenIdInput)
+        Swal.fire({
+          icon: 'success',
+          text: 'Court order has been removed.',
+          showCloseButton: true
+        })
+      },
+      error: () => {
+        Swal.fire({
+          icon: 'error',
+          text: 'Something went wrong when attempting to delete this court order.',
+          showCloseButton: true
+        })
+      }
     })
   }
 }
