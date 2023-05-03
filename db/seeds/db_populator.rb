@@ -216,10 +216,6 @@ class DbPopulator
         )
       CaseAssignment.find_or_create_by!(casa_case: new_casa_case, volunteer: volunteer)
 
-      random_case_contact_count.times do
-        create_case_contact(new_casa_case)
-      end
-
       random_court_order_count.times do
         CaseCourtOrder.create!(
           casa_case_id: new_casa_case.id,
@@ -241,6 +237,25 @@ class DbPopulator
           casa_case_id: new_casa_case.id,
           date: Date.today - (index + 1).weeks
         )
+      end
+
+      random_case_contact_count.times do
+        create_case_contact(new_casa_case)
+      end
+
+      # guarantee at least one case contact before and after most recent past court date
+      most_recent_past_court_date = most_recent_past_court_date(new_casa_case.id)
+      if most_recent_past_court_date
+        unless case_contact_before_last_court_date(new_casa_case.id)
+          new_case_contact = create_case_contact(new_casa_case)
+          new_case_contact.occurred_at = most_recent_past_court_date - 24.hours
+          new_case_contact.save!
+        end
+  
+        unless case_contact_after_last_court_date(new_casa_case.id)
+          new_case_contact = create_case_contact(new_casa_case)
+          new_case_contact.occurred_at = most_recent_past_court_date + 24.hours
+          new_case_contact.save!
       end
 
       # guarantee at least one transition aged youth case to "volunteer1"
@@ -348,5 +363,29 @@ class DbPopulator
 
       i += 1
     end
+  end
+
+  def most_recent_past_court_date(casa_case_id)
+    CourtDate.where(
+      "date < ? AND casa_case_id = ?", 
+      Date.today, 
+      casa_case_id
+    ).order(date: :desc).first&.date
+  end
+
+  def case_contact_before_last_court_date?(casa_case_id)
+    CaseContact.where(
+      "ocurred_at < ? AND casa_case_id = ?", 
+      most_recent_past_court_date, 
+      casa_case_id
+    ).any?
+  end
+
+  def case_contact_after_last_court_date?(case_case_id)
+    CaseContact.where(
+      "ocurred_at > ? AND casa_case_id = ?", 
+      most_recent_past_court_date,
+      case_case_id
+    ).any?
   end
 end
