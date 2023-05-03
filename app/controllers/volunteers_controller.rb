@@ -51,9 +51,8 @@ class VolunteersController < ApplicationController
 
   def update
     authorize @volunteer
-
     if @volunteer.update(update_volunteer_params)
-      if @volunteer.unconfirmed_email?
+      if @volunteer.saved_changes.include?("unconfirmed_email") # If the update includes an email change
         redirect_to edit_volunteer_path(@volunteer), notice: "Confirmation Email Sent To Volunteer."
       else
         @volunteer.filter_old_emails!(@volunteer.email)
