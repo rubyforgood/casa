@@ -143,12 +143,21 @@ RSpec.describe CaseCourtReportContext, type: :model do
         casa_case.case_contacts << case_contact_4
       end
 
-      it "for each contact type in a case contact contains the name of the type and the occurred at date" do
+      it "for each contact type in a case contact, contains the name of the type and the occurred at date" do
         expect(court_report_context[:case_contacts]).to include(include(dates: case_contact_1_date.strftime("%m/%d*"), type: contact_type_1.name))
         expect(court_report_context[:case_contacts]).to include(include(dates: case_contact_2_date.strftime("%m/%d*"), type: contact_type_2.name))
         expect(court_report_context[:case_contacts]).to include(include(dates: case_contact_3_date.strftime("%m/%d*"), type: contact_type_3.name))
         expect(court_report_context[:case_contacts]).to include(include(dates: case_contact_4_date.strftime("%m/%d*"), type: contact_type_4.name))
         expect(court_report_context[:case_contacts]).to include(include(dates: case_contact_1_date.strftime("%m/%d*"), type: contact_type_5.name))
+      end
+
+      it "for each contact type in a case contact, contains a placeholder value for the name(s) of the people involved" do
+        case_contact_report_data = court_report_context[:case_contacts]
+        expect(case_contact_report_data.length).to be > 0
+
+        case_contact_report_data.each { |contact_type_and_dates|
+          expect(contact_type_and_dates[:name]).to eq("Names of persons involved, starting with the child's name")
+        }
       end
 
       context "when there are past court dates" do
