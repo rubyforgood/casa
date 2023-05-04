@@ -115,10 +115,14 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
     describe ":case_contacts" do
       let(:casa_case) { create(:casa_case) }
-      let(:case_contact_1) { create(:case_contact, occurred_at: 30.days.ago) }
-      let(:case_contact_2) { create(:case_contact, occurred_at: 45.days.ago) }
-      let(:case_contact_3) { create(:case_contact, occurred_at: 60.days.ago) }
-      let(:case_contact_4) { create(:case_contact, occurred_at: 75.days.ago) }
+      let(:case_contact_1_date) { 30.days.ago }
+      let(:case_contact_2_date) { 45.days.ago }
+      let(:case_contact_3_date) { 60.days.ago }
+      let(:case_contact_4_date) { 75.days.ago }
+      let(:case_contact_1) { create(:case_contact, occurred_at: case_contact_1_date) }
+      let(:case_contact_2) { create(:case_contact, occurred_at: case_contact_2_date) }
+      let(:case_contact_3) { create(:case_contact, occurred_at: case_contact_3_date) }
+      let(:case_contact_4) { create(:case_contact, occurred_at: case_contact_4_date) }
       let(:contact_type_1) { create(:contact_type, name: "XM_L!_g=Ko\\-'A!") }
       let(:contact_type_2) { create(:contact_type, name: "uHp$O2;oq!C3{]l") }
       let(:contact_type_3) { create(:contact_type, name: "\"PlqEsCP[JktjTS") }
@@ -139,9 +143,18 @@ RSpec.describe CaseCourtReportContext, type: :model do
         casa_case.case_contacts << case_contact_4
       end
 
+      it "for each contact type in a case contact contains the name of the type and the occurred at date" do
+        expect(court_report_context[:case_contacts]).to include(include(dates: case_contact_1_date.strftime("%m/%d*"), type: contact_type_1.name))
+        expect(court_report_context[:case_contacts]).to include(include(dates: case_contact_2_date.strftime("%m/%d*"), type: contact_type_2.name))
+        expect(court_report_context[:case_contacts]).to include(include(dates: case_contact_3_date.strftime("%m/%d*"), type: contact_type_3.name))
+        expect(court_report_context[:case_contacts]).to include(include(dates: case_contact_4_date.strftime("%m/%d*"), type: contact_type_4.name))
+        expect(court_report_context[:case_contacts]).to include(include(dates: case_contact_1_date.strftime("%m/%d*"), type: contact_type_5.name))
+      end
+
       context "when there are past court dates" do
         let!(:past_court_date) { create(:court_date, date: 50.days.ago, casa_case: casa_case) }
-        it "contains only the case contacts after the latest past court date" do
+
+        it "contains only case contacts information after the latest past court date" do
           expect(court_report_context[:case_contacts]).to include(include(type: contact_type_1.name))
           expect(court_report_context[:case_contacts]).to include(include(type: contact_type_5.name))
           expect(court_report_context[:case_contacts]).to include(include(type: contact_type_2.name))
