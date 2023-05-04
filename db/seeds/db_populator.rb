@@ -250,12 +250,14 @@ class DbPopulator
           new_case_contact = create_case_contact(new_casa_case)
           new_case_contact.occurred_at = most_recent_past_court_date - 24.hours
           new_case_contact.save!
+          puts "new case contact id #{new_case_contact.id} before last court date"
         end
-  
+
         unless case_contact_after_last_court_date?(new_casa_case.id, most_recent_past_court_date)
           new_case_contact = create_case_contact(new_casa_case)
           new_case_contact.occurred_at = most_recent_past_court_date + 24.hours
           new_case_contact.save!
+          puts "new case contact id #{new_case_contact.id} after last court date"
         end
       end
 
@@ -368,23 +370,23 @@ class DbPopulator
 
   def most_recent_past_court_date(casa_case_id)
     CourtDate.where(
-      "date < ? AND casa_case_id = ?", 
-      Date.today, 
+      "date < ? AND casa_case_id = ?",
+      Date.today,
       casa_case_id
     ).order(date: :desc).first&.date
   end
 
   def case_contact_before_last_court_date?(casa_case_id, date)
     CaseContact.where(
-      "occurred_at < ? AND casa_case_id = ?", 
-      date, 
+      "occurred_at < ? AND casa_case_id = ?",
+      date,
       casa_case_id
     ).any?
   end
 
   def case_contact_after_last_court_date?(case_case_id, date)
     CaseContact.where(
-      "occurred_at > ? AND casa_case_id = ?", 
+      "occurred_at > ? AND casa_case_id = ?",
       date,
       case_case_id
     ).any?
