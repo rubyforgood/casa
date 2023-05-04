@@ -57,19 +57,31 @@ RSpec.describe "volunteers/edit", type: :system do
     before do
       sign_in admin
       visit edit_volunteer_path(volunteer)
-      fill_in "volunteer_email", with: "newemail@example.com"
+      @old_email = volunteer.email
+      fill_in "Email", with: "newemail@example.com"
+      click_on "Submit"
+      volunteer.reload
     end
 
     context "with a valid email" do
-      it "sends volunteer a confirmation email" do
-        click_on "Submit"
-
+      it "sends volunteer a confirmation email and does not change the displayed email" do
         expect(ActionMailer::Base.deliveries.count).to eq(1)
         expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
         expect(ActionMailer::Base.deliveries.first.body.encoded)
           .to match("You can confirm your account email through the link below:")
 
         expect(page).to have_text "Confirmation Email Sent To Volunteer."
+        expect(page).to have_field("Email", with: @old_email)
+        expect(volunteer.unconfirmed_email).to eq("newemail@example.com")
+      end
+      it "succesfully displays the new email once the user confirms" do
+        volunteer.reload
+        volunteer.confirm
+
+        visit edit_volunteer_path(volunteer)
+        expect(page).to have_field("Email", with: "newemail@example.com")
+        expect(page).to_not have_field("Email", with: @old_email)
+        expect(volunteer.old_emails).to eq([@old_email])
       end
     end
   end
