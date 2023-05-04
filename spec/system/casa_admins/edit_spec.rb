@@ -19,7 +19,7 @@ RSpec.describe "casa_admins/edit", type: :system do
 
       admin.reload
 
-      expect(page).to have_text "New admin created successfully" # should be updated
+      expect(page).to have_text "New admin created successfully"
 
       expect(admin.display_name).to eq expected_display_name
       expect(admin.phone_number).to eq expected_phone_number
