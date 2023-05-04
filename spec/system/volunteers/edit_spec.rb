@@ -74,6 +74,7 @@ RSpec.describe "volunteers/edit", type: :system do
         expect(page).to have_field("Email", with: @old_email)
         expect(volunteer.unconfirmed_email).to eq("newemail@example.com")
       end
+
       it "succesfully displays the new email once the user confirms" do
         volunteer.reload
         volunteer.confirm

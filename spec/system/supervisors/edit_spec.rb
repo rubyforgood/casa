@@ -167,6 +167,7 @@ RSpec.describe "supervisors/edit", type: :system do
         click_on "Submit"
         @supervisor.reload
       end
+
       it "sends a confirmaton email to the supervisor and displays current email" do
         expect(ActionMailer::Base.deliveries.count).to eq(1)
         expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
@@ -177,6 +178,7 @@ RSpec.describe "supervisors/edit", type: :system do
         expect(page).to have_field("Email", with: @old_email)
         expect(@supervisor.unconfirmed_email).to eq("new_supervisor_email@example.com")
       end
+
       it "correctly updates the supervisor email once confirmed" do
         @supervisor.confirm
         @supervisor.reload
