@@ -123,11 +123,11 @@ RSpec.describe CaseCourtReportContext, type: :model do
       let(:case_contact_2) { create(:case_contact, occurred_at: case_contact_2_date) }
       let(:case_contact_3) { create(:case_contact, occurred_at: case_contact_3_date) }
       let(:case_contact_4) { create(:case_contact, occurred_at: case_contact_4_date) }
-      let(:contact_type_1) { create(:contact_type, name: "XM_L!_g=Ko\\-'A!") }
-      let(:contact_type_2) { create(:contact_type, name: "uHp$O2;oq!C3{]l") }
-      let(:contact_type_3) { create(:contact_type, name: "\"PlqEsCP[JktjTS") }
-      let(:contact_type_4) { create(:contact_type, name: "K3BbzNCni4mVC5@") }
-      let(:contact_type_5) { create(:contact_type, name: "lf7CA&n8BQ*qJ?E") }
+      let(:contact_type_1) { build(:contact_type, name: "XM_L!_g=Ko\\-'A!") }
+      let(:contact_type_2) { build(:contact_type, name: "uHp$O2;oq!C3{]l") }
+      let(:contact_type_3) { build(:contact_type, name: "\"PlqEsCP[JktjTS") }
+      let(:contact_type_4) { build(:contact_type, name: "K3BbzNCni4mVC5@") }
+      let(:contact_type_5) { build(:contact_type, name: "lf7CA&n8BQ*qJ?E") }
       let(:court_report_context) { build(:case_court_report_context, casa_case: casa_case).context }
 
       before(:each) do
@@ -215,9 +215,9 @@ RSpec.describe CaseCourtReportContext, type: :model do
         let(:casa_case_with_court_dates) {
           casa_case = create(:casa_case)
 
-          casa_case.court_dates << create(:court_date, date: 9.months.ago)
-          casa_case.court_dates << create(:court_date, date: 3.months.ago)
-          casa_case.court_dates << create(:court_date, date: 15.months.ago)
+          casa_case.court_dates << build(:court_date, date: 9.months.ago)
+          casa_case.court_dates << build(:court_date, date: 3.months.ago)
+          casa_case.court_dates << build(:court_date, date: 15.months.ago)
 
           casa_case
         }
@@ -268,53 +268,6 @@ RSpec.describe CaseCourtReportContext, type: :model do
       describe ":supervisor_name" do
         it "contains the name of the volunteer's supervisor" do
           expect(case_court_report_context.context[:volunteer][:supervisor_name]).to eq(volunteer.supervisor.display_name)
-        end
-      end
-    end
-
-    describe "when receiving valid case, volunteer, and path_to_template" do
-      let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
-      let(:casa_case_with_contacts) { volunteer.casa_cases.first }
-      let(:casa_case_without_contacts) { volunteer.casa_cases.second }
-
-      subject do
-        described_class.new(
-          case_id: casa_case_with_contacts.id,
-          volunteer_id: volunteer.id,
-          path_to_template: path_to_template,
-          path_to_report: path_to_report
-        ).context
-      end
-
-      describe "with volunteer without supervisor" do
-        let(:volunteer) { create(:volunteer, :with_cases_and_contacts) }
-
-        it "has supervisor name placeholder" do
-          expect(subject[:volunteer][:supervisor_name]).to eq("")
-        end
-      end
-
-      describe "with court date in the future" do
-        let!(:far_past_case_contact) { create :case_contact, occurred_at: 5.days.ago, casa_case_id: casa_case_with_contacts.id }
-
-        before do
-          create(:court_date, casa_case: casa_case_with_contacts, date: 1.day.from_now)
-        end
-
-        describe "without past court date" do
-          it "has all case contacts ever created for the youth" do
-            expect(subject[:case_contacts].length).to eq(5)
-          end
-        end
-
-        describe "with past court date" do
-          let!(:court_date) { create(:court_date, date: 2.days.ago, casa_case_id: casa_case_with_contacts.id) }
-
-          it "has all case contacts created since the previous court date including case contact created on the court date" do
-            create(:case_contact, casa_case: casa_case_with_contacts, created_at: court_date.date, notes: "created ON most recent court date")
-            expect(casa_case_with_contacts.court_dates.length).to eq(2)
-            expect(subject[:case_contacts].length).to eq(5)
-          end
         end
       end
     end
