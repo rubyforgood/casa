@@ -13,13 +13,6 @@ class SupervisorsController < ApplicationController
   def index
     authorize Supervisor
     @supervisors = policy_scope(current_organization.supervisors)
-    @show_all = params[:all]
-    if @show_all == "true"
-      @supervisors
-    else
-      @supervisors = @supervisors.active
-      @show_all = false
-    end
   end
 
   def new
@@ -101,9 +94,8 @@ class SupervisorsController < ApplicationController
 
   def datatable
     authorize Supervisor
-    supervisors = policy_scope(current_organization.supervisors)
-
-    datatable = SupervisorDatatable.new(supervisors, params)
+    supervisors = policy_scope current_organization.supervisors
+    datatable = SupervisorDatatable.new supervisors, params
 
     render json: datatable
   end
