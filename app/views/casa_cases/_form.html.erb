@@ -84,7 +84,8 @@
         <div class="field form-group court-orders">
           <% if policy(casa_case).update_court_orders? %>
             <%= render partial: "shared/court_order_list",
-                       locals: {casa_case: @casa_case, siblings_casa_cases: @siblings_casa_cases, form: form} %>
+                       locals: {casa_case: @casa_case, siblings_casa_cases: @siblings_casa_cases, form: form,
+                                resource: 'casa_case'} %>
           <% else %>
             <%= form.label :case_court_orders, "Court Orders" %>
             <div id="court-orders-list-container">

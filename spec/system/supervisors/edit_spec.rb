@@ -6,7 +6,7 @@ RSpec.describe "supervisors/edit", type: :system do
   context "logged in as an admin" do
     let(:user) { create(:casa_admin, casa_org: organization) }
 
-    it "can edit supervisor by clicking on the edit link from the supervisors list page" do
+    it "can edit supervisor by clicking on the edit link from the supervisors list page", js: true do
       supervisor_name = "Leslie Knope"
       create(:supervisor, display_name: supervisor_name, casa_org: organization)
       sign_in user
@@ -22,7 +22,7 @@ RSpec.describe "supervisors/edit", type: :system do
       expect(page).to have_text("Editing Supervisor")
     end
 
-    it "can edit supervisor by clicking on the supervisor's name from the supervisors list page" do
+    it "can edit supervisor by clicking on the supervisor's name from the supervisors list page", js: true do
       supervisor_name = "Leslie Knope"
       create(:supervisor, display_name: supervisor_name, casa_org: organization)
       sign_in user

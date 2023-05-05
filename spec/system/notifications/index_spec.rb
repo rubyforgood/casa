@@ -71,6 +71,7 @@ RSpec.describe "notifications/index", type: :system do
 
       it "lists followup notifications, showing their note" do
         # Wait until page reloads
+        sleep(1)
         expect(page).to have_content "Resolve Reminder"
 
         sign_in volunteer
@@ -92,6 +93,7 @@ RSpec.describe "notifications/index", type: :system do
 
       it "lists followup notifications, showing the information in a single line when there are no notes" do
         # Wait until page reloads
+        sleep(1)
         expect(page).to have_content "Resolve Reminder"
 
         sign_in volunteer
@@ -114,6 +116,7 @@ RSpec.describe "notifications/index", type: :system do
 
       it "lists followup notifications showing admin current name" do
         # Wait until page reloads
+        sleep(1)
         expect(page).to have_content "Resolve Reminder"
 
         visit edit_users_path

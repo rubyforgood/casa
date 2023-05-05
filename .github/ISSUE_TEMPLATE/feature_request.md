@@ -18,7 +18,6 @@ You can paste images on the clipboard here
 
 _Login Details:_  
 [Link to QA site](https://casa-qa.herokuapp.com/)  
-[Link to new theme site](https://casa-new-theme.herokuapp.com/languages/new)  
 
 Login Emails: 
 - volunteer1@example.com  view site as a volunteer

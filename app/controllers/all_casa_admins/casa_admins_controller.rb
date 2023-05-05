@@ -22,7 +22,9 @@ class AllCasaAdmins::CasaAdminsController < AllCasaAdminsController
 
   def update
     @casa_admin = CasaAdmin.find(params[:id])
+    @casa_admin.skip_reconfirmation!
     if @casa_admin.update(all_casa_admin_params)
+      @casa_admin.filter_old_emails!(@casa_admin.email)
       redirect_to edit_all_casa_admins_casa_org_casa_admin_path, notice: "New admin created successfully"
     else
       render :edit

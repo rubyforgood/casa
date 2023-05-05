@@ -42,6 +42,11 @@ RSpec.describe User, type: :model do
       user = build(:user, phone_number: "+76758890432")
       expect(user.valid?).to be false
     end
+
+    it "has an empty old_emails array when initialized" do
+      user = build(:user)
+      expect(user.old_emails).to eq([])
+    end
   end
 
   describe "#case_contacts_for" do
@@ -259,6 +264,41 @@ RSpec.describe User, type: :model do
 
     it "returns users who haven't signed in in 30 days" do
       expect(User.no_recent_sign_in).to contain_exactly(old_sign_in_user)
+    end
+  end
+
+  describe "#record_previous_emails" do
+    # create user, check for side effects, test method
+    let!(:new_volunteer) { create(:user, email: "firstemail@example.com") }
+
+    it "instantiates with an empty old_emails attribute" do
+      expect(new_volunteer.old_emails).to match_array([])
+    end
+
+    it "saves the old email when a volunteer changes their email" do
+      new_volunteer.update(email: "secondemail@example.com")
+      new_volunteer.confirm
+
+      expect(new_volunteer.email).to eq("secondemail@example.com")
+
+      expect(new_volunteer.old_emails).to match_array(["firstemail@example.com"])
+    end
+  end
+
+  describe "#filter_old_emails" do
+    let!(:new_volunteer) { create(:user, email: "firstemail@example.com") }
+
+    it "correctly filters out reinstated emails from old_emails when updating" do
+      new_volunteer.update(email: "secondemail@example.com")
+      new_volunteer.confirm
+      new_volunteer.filter_old_emails!(new_volunteer.email)
+
+      new_volunteer.update(email: "firstemail@example.com")
+      new_volunteer.confirm
+      new_volunteer.filter_old_emails!(new_volunteer.email)
+
+      expect(new_volunteer.email).to eq("firstemail@example.com")
+      expect(new_volunteer.old_emails).to match_array(["secondemail@example.com"])
     end
   end
 end
