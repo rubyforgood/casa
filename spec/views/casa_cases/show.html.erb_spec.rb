@@ -13,7 +13,7 @@ RSpec.describe "casa_cases/show", type: :view do
   context "when there is court date" do
     it "renders casa case with court dates" do
       casa_case = create(:casa_case, case_number: "111")
-      court_date = create(:court_date, casa_case: casa_case, date: Date.new(2023, 5, 6))
+      create(:court_date, casa_case: casa_case, date: Date.new(2023, 5, 6))
 
       assign(:casa_case, casa_case)
       render
@@ -50,7 +50,7 @@ RSpec.describe "casa_cases/show", type: :view do
   context "when there is a placement" do
     it "renders casa case with placements" do
       casa_case = create(:casa_case, case_number: "111")
-      placement_started_at = create(:placement, casa_case: casa_case, placement_started_at: Date.new(2023, 5, 6))
+      create(:placement, casa_case: casa_case, placement_started_at: Date.new(2023, 5, 6))
 
       assign(:casa_case, casa_case)
       render
