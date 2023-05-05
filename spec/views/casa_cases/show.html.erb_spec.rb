@@ -49,7 +49,7 @@ RSpec.describe "casa_cases/show", type: :view do
 
   context "when there is a placement" do
     let!(:casa_case) { create(:casa_case, :with_placement, casa_org: organization, case_number: "111") }
-    let(:placement_started_at) { casa_case.placements.map(&:placement_started_at).first.to_date.strftime("%B %-d, %Y") }
+    let(:placement_started_at) { casa_case.placements.map(&:placement_started_at).first.to_date.strftime("%B %d, %Y") }
 
     before { assign(:casa_case, casa_case) }
     it "renders casa case with placements" do
