@@ -36,7 +36,6 @@ RSpec.describe ReimbursementPolicy do
     end
   end
 
-
   describe "ReimbursementPolicy::Scope #resolve" do
     subject { described_class::Scope.new(user, scope).resolve }
 
