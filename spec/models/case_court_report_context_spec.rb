@@ -119,10 +119,10 @@ RSpec.describe CaseCourtReportContext, type: :model do
       let(:case_contact_2_date) { 45.days.ago }
       let(:case_contact_3_date) { 60.days.ago }
       let(:case_contact_4_date) { 75.days.ago }
-      let(:case_contact_1) { create(:case_contact, occurred_at: case_contact_1_date) }
-      let(:case_contact_2) { create(:case_contact, occurred_at: case_contact_2_date) }
-      let(:case_contact_3) { create(:case_contact, occurred_at: case_contact_3_date) }
-      let(:case_contact_4) { create(:case_contact, occurred_at: case_contact_4_date) }
+      let(:case_contact_1) { build(:case_contact, occurred_at: case_contact_1_date) }
+      let(:case_contact_2) { build(:case_contact, occurred_at: case_contact_2_date) }
+      let(:case_contact_3) { build(:case_contact, occurred_at: case_contact_3_date) }
+      let(:case_contact_4) { build(:case_contact, occurred_at: case_contact_4_date) }
       let(:contact_type_1) { build(:contact_type, name: "XM_L!_g=Ko\\-'A!") }
       let(:contact_type_2) { build(:contact_type, name: "uHp$O2;oq!C3{]l") }
       let(:contact_type_3) { build(:contact_type, name: "\"PlqEsCP[JktjTS") }
