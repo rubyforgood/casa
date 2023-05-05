@@ -244,20 +244,17 @@ class DbPopulator
       end
 
       # guarantee at least one case contact before and after most recent past court date
-      most_recent_past_court_date = most_recent_past_court_date(new_casa_case.id)
-      if most_recent_past_court_date
-        unless case_contact_before_last_court_date?(new_casa_case.id, most_recent_past_court_date)
+      if most_recent_past_court_date(new_casa_case.id)
+        if !case_contact_before_last_court_date?(new_casa_case.id, most_recent_past_court_date(new_casa_case.id))
           new_case_contact = create_case_contact(new_casa_case)
-          new_case_contact.occurred_at = most_recent_past_court_date - 24.hours
+          new_case_contact.occurred_at = most_recent_past_court_date(new_casa_case.id) - 24.hours
           new_case_contact.save!
-          puts "new case contact id #{new_case_contact.id} before last court date"
         end
 
-        unless case_contact_after_last_court_date?(new_casa_case.id, most_recent_past_court_date)
+        if !case_contact_after_last_court_date?(new_casa_case.id, most_recent_past_court_date(new_casa_case.id))
           new_case_contact = create_case_contact(new_casa_case)
-          new_case_contact.occurred_at = most_recent_past_court_date + 24.hours
+          new_case_contact.occurred_at = most_recent_past_court_date(new_casa_case.id) + 24.hours
           new_case_contact.save!
-          puts "new case contact id #{new_case_contact.id} after last court date"
         end
       end
 
