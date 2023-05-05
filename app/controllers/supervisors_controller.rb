@@ -13,13 +13,6 @@ class SupervisorsController < ApplicationController
   def index
     authorize Supervisor
     @supervisors = policy_scope(current_organization.supervisors)
-    @show_all = params[:all]
-    if @show_all == "true"
-      @supervisors
-    else
-      @supervisors = @supervisors.active
-      @show_all = false
-    end
   end
 
   def new
@@ -55,7 +48,10 @@ class SupervisorsController < ApplicationController
 
   def update
     authorize @supervisor
+    @supervisor.skip_reconfirmation!
+
     if @supervisor.update(update_supervisor_params)
+      @supervisor.filter_old_emails!(@supervisor.email)
       redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was successfully updated."
     else
       render :edit
@@ -98,9 +94,8 @@ class SupervisorsController < ApplicationController
 
   def datatable
     authorize Supervisor
-    supervisors = policy_scope(current_organization.supervisors)
-
-    datatable = SupervisorDatatable.new(supervisors, params)
+    supervisors = policy_scope current_organization.supervisors
+    datatable = SupervisorDatatable.new supervisors, params
 
     render json: datatable
   end
@@ -129,7 +124,7 @@ class SupervisorsController < ApplicationController
   end
 
   def supervisor_params
-    params.require(:supervisor).permit(:display_name, :email, :phone_number, :active, volunteer_ids: [], supervisor_volunteer_ids: [])
+    params.require(:supervisor).permit(:display_name, :email, :old_emails, :phone_number, :active, volunteer_ids: [], supervisor_volunteer_ids: [])
   end
 
   def update_supervisor_params

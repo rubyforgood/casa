@@ -18,10 +18,12 @@ class FollowupNotification < BaseNotification
 
   # Define helper methods to make rendering easier.
   #
-  def message
-    note = params[:followup][:note]
+  def title
+    "New followup"
+  end
 
-    note.present? ? message_with_note(note) : message_without_note
+  def message
+    build_message
   end
 
   def url
@@ -38,19 +40,12 @@ class FollowupNotification < BaseNotification
     recipient.receive_email_notifications == true
   end
 
-  def message_with_note(note)
-    [
-      message_heading,
-      "Note: #{note}",
-      "Click to see more."
-    ].join("\n")
-  end
-
-  def message_without_note
-    [message_heading, "Click to see more."].join(" ")
-  end
-
-  def message_heading
-    "#{created_by_name} has flagged a Case Contact that needs follow up."
+  def build_message
+    note = params[:followup][:note]
+    join_char = note.present? ? "\n" : " "
+    result = ["#{created_by} has flagged a Case Contact that needs follow up."]
+    result << "Note: #{note}" if note.present?
+    result << "Click to see more."
+    result.join(join_char)
   end
 end

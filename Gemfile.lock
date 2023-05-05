@@ -115,7 +115,7 @@ GEM
     capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
-    caxlsx (3.3.0)
+    caxlsx (3.4.1)
       htmlentities (~> 4.3, >= 4.3.4)
       marcel (~> 1.0)
       nokogiri (~> 1.10, >= 1.10.4)
@@ -148,7 +148,7 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
-    devise_invitable (2.0.7)
+    devise_invitable (2.0.8)
       actionmailer (>= 5.0)
       devise (>= 4.6)
     diff-lcs (1.5.0)
@@ -179,7 +179,7 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    faker (3.1.1)
+    faker (3.2.0)
       i18n (>= 1.8.11, < 2)
     faraday (1.10.3)
       faraday-em_http (~> 1.0)
@@ -217,7 +217,7 @@ GEM
       activesupport (>= 5.0)
     hashdiff (1.0.1)
     htmlentities (4.3.4)
-    http (5.1.0)
+    http (5.1.1)
       addressable (~> 2.8)
       http-cookie (~> 1.0)
       http-form_data (~> 2.2)
@@ -228,7 +228,7 @@ GEM
     httparty (0.21.0)
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
-    i18n (1.12.0)
+    i18n (1.13.0)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.2)
       mini_magick (>= 4.9.5, < 5)
@@ -285,7 +285,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.14.3-x86_64-linux)
       racc (~> 1.4)
-    noticed (1.6.0)
+    noticed (1.6.2)
       http (>= 4.0.0)
       rails (>= 5.2.0)
     orm_adapter (0.5.0)
@@ -297,7 +297,7 @@ GEM
     pdf-forms (1.4.0)
       cliver (~> 0.3.2)
       safe_shell (>= 1.0.3, < 2.0)
-    pg (1.4.6)
+    pg (1.5.0)
     pretender (0.4.0)
       actionpack (>= 5.2)
     pry (0.14.2)
@@ -307,12 +307,12 @@ GEM
       byebug (~> 11.0)
       pry (>= 0.13, < 0.15)
     public_suffix (5.0.1)
-    puma (6.2.1)
+    puma (6.2.2)
       nio4r (~> 2.0)
     pundit (2.3.0)
       activesupport (>= 3.0.0)
     racc (1.6.2)
-    rack (2.2.6.4)
+    rack (2.2.7)
     rack-attack (6.6.1)
       rack (>= 1.0, < 3)
     rack-test (2.1.0)
@@ -398,7 +398,7 @@ GEM
     safe_shell (1.1.0)
     scout_apm (5.3.3)
       parser
-    selenium-webdriver (4.8.6)
+    selenium-webdriver (4.9.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
@@ -430,7 +430,7 @@ GEM
     timeout (0.3.2)
     traceroute (0.8.1)
       rails (>= 3.0.0)
-    twilio-ruby (5.76.0)
+    twilio-ruby (5.77.0)
       faraday (>= 0.9, < 3.0)
       jwt (>= 1.5, < 3.0)
       nokogiri (>= 1.6, < 2.0)
@@ -441,6 +441,10 @@ GEM
     unf_ext (0.0.8.2)
     unicode-display_width (2.4.2)
     uniform_notifier (1.16.0)
+    view_component (2.82.0)
+      activesupport (>= 5.2.0, < 8.0)
+      concurrent-ruby (~> 1.0)
+      method_source (~> 1.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.2.0)
@@ -462,7 +466,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.7)
+    zeitwerk (2.6.8)
 
 PLATFORMS
   arm64-darwin-20
@@ -486,7 +490,7 @@ DEPENDENCIES
   byebug
   capybara
   capybara-screenshot
-  caxlsx (~> 3.3)
+  caxlsx (~> 3.4)
   caxlsx_rails (~> 0.6.3)
   cssbundling-rails (~> 1.1)
   database_cleaner-active_record
@@ -538,6 +542,7 @@ DEPENDENCIES
   traceroute
   twilio-ruby
   tzinfo-data
+  view_component
   web-console (>= 3.3.0)
   webdrivers
   webmock
@@ -546,4 +551,4 @@ RUBY VERSION
    ruby 3.1.3p185
 
 BUNDLED WITH
-   2.3.4
+   2.4.8
