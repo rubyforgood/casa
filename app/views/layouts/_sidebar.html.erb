@@ -115,7 +115,7 @@
               </li>
             <% end %>
 
-            <% if policy(:reimbursement).index? %>
+            <% if policy(:reimbursement).index? && current_organization.show_driving_reimbursement %>
               <li>
                 <%= link_to reimbursements_path, class: "#{active_class(reimbursements_path)}" do %>
                   <i class="lni lni-money-location mr-10"></i>
@@ -142,7 +142,7 @@
               </li>
             <% end %>
 
-            <% if policy(:application).see_mileage_rate? %>
+            <% if policy(:application).see_mileage_rate? && current_organization.show_driving_reimbursement %>
               <li>
                 <%= link_to mileage_rates_path, class: "#{active_class(mileage_rates_path)}" do %>
                   <i class="lni lni-car mr-10"></i>
