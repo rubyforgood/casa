@@ -76,5 +76,15 @@ RSpec.describe ApplicationPolicy do
     it "allow casa_admins for same org" do
       is_expected.to permit(casa_admin)
     end
+
+    context "when org reimbursement is disabled" do
+      before do
+        casa_org.show_driving_reimbursement = false
+      end
+
+      it "does not allow casa_admins" do
+        is_expected.not_to permit(casa_admin)
+      end
+    end
   end
 end
