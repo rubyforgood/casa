@@ -6,18 +6,36 @@ RSpec.describe ReimbursementPolicy do
   let(:casa_admin) { build_stubbed(:casa_admin) }
   let(:volunteer) { build_stubbed(:volunteer) }
   let(:supervisor) { build_stubbed(:supervisor) }
+  let(:organization) { build(:casa_org, users: [volunteer, supervisor, casa_admin]) }
 
-  permissions :index?, :change_complete_status? do
-    it { is_expected.to permit(casa_admin) }
-    it { is_expected.to_not permit(supervisor) }
-    it { is_expected.to_not permit(volunteer) }
+  context "when org reimbursement is enabled" do
+    permissions :index?, :change_complete_status? do
+      it { is_expected.to permit(casa_admin) }
+      it { is_expected.to_not permit(supervisor) }
+      it { is_expected.to_not permit(volunteer) }
+    end
+
+    permissions :datatable? do
+      it { is_expected.to permit(casa_admin) }
+      it { is_expected.to_not permit(supervisor) }
+      it { is_expected.to_not permit(volunteer) }
+    end
   end
 
-  permissions :datatable? do
-    it { is_expected.to permit(casa_admin) }
-    it { is_expected.to_not permit(supervisor) }
-    it { is_expected.to_not permit(volunteer) }
+  context "when org reimbursement is disabled" do
+    before do
+      organization.show_driving_reimbursement = false
+    end
+
+    permissions :index?, :change_complete_status? do
+      it { is_expected.to_not permit(casa_admin) }
+    end
+
+    permissions :datatable? do
+      it { is_expected.to_not permit(casa_admin) }
+    end
   end
+
 
   describe "ReimbursementPolicy::Scope #resolve" do
     subject { described_class::Scope.new(user, scope).resolve }
