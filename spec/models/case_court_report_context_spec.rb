@@ -160,6 +160,25 @@ RSpec.describe CaseCourtReportContext, type: :model do
         }
       end
 
+      context "when a contact type is included in multiple case contacts" do
+        before(:each) do
+          case_contact_2.contact_types << contact_type_1
+          case_contact_4.contact_types << contact_type_1
+        end
+
+        it "includes an object with the contact type name and the dates of all case contacts" do
+          contact_type_and_dates = court_report_context[:case_contacts].find { |case_contact_type_and_dates|
+            case_contact_type_and_dates[:type] == contact_type_1.name
+          }
+
+          expect(contact_type_and_dates).to_not be_nil
+          expect(contact_type_and_dates[:dates]).to include(case_contact_1_date.strftime("%m/%d"))
+          expect(contact_type_and_dates[:dates]).to include(case_contact_2_date.strftime("%m/%d"))
+          expect(contact_type_and_dates[:dates]).to include(case_contact_1_date.strftime("%m/%d"))
+          expect(contact_type_and_dates[:dates]).to_not include(case_contact_3_date.strftime("%m/%d"))
+        end
+      end
+
       context "when there are past court dates" do
         let!(:past_court_date) { create(:court_date, date: 50.days.ago, casa_case: casa_case) }
 
