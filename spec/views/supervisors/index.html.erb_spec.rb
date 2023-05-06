@@ -39,7 +39,7 @@ RSpec.describe "supervisors/index", type: :view do
         expect(parsed_html.css("#supervisors .danger-bg").length).to eq(1)
       end
 
-       it "accurately displays the number of active and inactive volunteers per supervisor" do
+      it "accurately displays the number of active and inactive volunteers per supervisor" do
         create(:volunteer, :with_cases_and_contacts, supervisor: supervisor)
         assign :supervisors, [supervisor]
         render template: "supervisors/index"
