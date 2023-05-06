@@ -174,8 +174,24 @@ RSpec.describe CaseCourtReportContext, type: :model do
           expect(contact_type_and_dates).to_not be_nil
           expect(contact_type_and_dates[:dates]).to include(case_contact_1_date.strftime("%m/%d"))
           expect(contact_type_and_dates[:dates]).to include(case_contact_2_date.strftime("%m/%d"))
-          expect(contact_type_and_dates[:dates]).to include(case_contact_1_date.strftime("%m/%d"))
+          expect(contact_type_and_dates[:dates]).to include(case_contact_4_date.strftime("%m/%d"))
           expect(contact_type_and_dates[:dates]).to_not include(case_contact_3_date.strftime("%m/%d"))
+        end
+
+        it "contains a string with the dates of the case contacts with the contact type sorted by oldest date first" do
+          contact_type_and_dates = court_report_context[:case_contacts].find { |case_contact_type_and_dates|
+            case_contact_type_and_dates[:type] == contact_type_1.name
+          }
+
+          expect(contact_type_and_dates).to_not be_nil
+
+          dates = contact_type_and_dates[:dates]
+          case_contact_1_date_index = dates.index(case_contact_1_date.strftime("%m/%d"))
+          case_contact_2_date_index = dates.index(case_contact_2_date.strftime("%m/%d"))
+          case_contact_4_date_index = dates.index(case_contact_4_date.strftime("%m/%d"))
+
+          expect(case_contact_1_date_index).to be > case_contact_2_date_index
+          expect(case_contact_2_date_index).to be > case_contact_4_date_index
         end
       end
 
@@ -204,6 +220,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
         casa_case.case_court_orders << court_order_implemented
         casa_case.case_court_orders << court_order_not_specified
         casa_case.case_court_orders << court_order_partially_implemented
+
         casa_case.case_court_orders << court_order_unimplemented
       end
 
