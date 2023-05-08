@@ -26,6 +26,5 @@ module Casa
     config.active_storage.variant_processor = :mini_magick
     config.active_storage.content_types_to_serve_as_binary.delete("image/svg+xml")
     config.serve_static_assets = true
-    config.time_zone = "Eastern Time (US & Canada)"
   end
 end
