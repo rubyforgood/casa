@@ -20,42 +20,21 @@ RSpec.describe "/supervisors", type: :request do
     let!(:active_supervisor) { create(:supervisor, casa_org: org, active: true) }
     let!(:inactive_supervisor) { create(:supervisor, casa_org: org, active: false) }
 
-    context "when params[:all] is used" do
-      it "returns http status ok" do
-        sign_in admin
+    it "returns http status ok" do
+      sign_in admin
 
-        get supervisors_path, params: { all: true }
+      get supervisors_path
 
-        expect(response).to have_http_status(:ok)
-      end
-
-      it "all supervisors are listed" do
-        sign_in admin
-
-        get supervisors_path, params: { all: true }
-
-        expect(response.body).to include(active_supervisor.display_name)
-        expect(response.body).to include(inactive_supervisor.display_name)
-      end
+      expect(response).to have_http_status(:ok)
     end
 
-    context "when params[:all] is not used" do
-      it "returns http status ok" do
-        sign_in admin
+    it "all supervisors are listed" do
+      sign_in admin
 
-        get supervisors_path, params: { all: false }
+      get supervisors_path
 
-        expect(response).to have_http_status(:ok)
-      end
-
-      it "only active supervisor is listed" do
-        sign_in admin
-
-        get supervisors_path, params: { all: false }
-
-        expect(response.body).to include(active_supervisor.display_name)
-        expect(response.body).not_to include(inactive_supervisor.display_name)
-      end
+      expect(response.body).to include(active_supervisor.display_name)
+      expect(response.body).to include(inactive_supervisor.display_name)
     end
 
     context "when casa case has court_dates" do
