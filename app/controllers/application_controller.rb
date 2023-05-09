@@ -108,14 +108,16 @@ class ApplicationController < ActionController::Base
     redirect_to(root_url)
   end
 
-  def check_admin_email_change_confirmation_notice(user, notice) # for casa admins
+  def check_admin_email_change_confirmation_notice(user) # for casa admins
+    notice = "#{user.role} was successfully updated."
     if user.saved_changes.include?("unconfirmed_email")
       notice += " Confirmation Email Sent."
     end
     notice
   end
 
-  def check_all_casa_admin_email_change_confirmation_notice(user, notice) # for all casa admins
+  def check_all_casa_admin_email_change_confirmation_notice(user) # for all casa admins
+    notice = "#{user.role} was successfully updated."
     if user.saved_changes.include?("unconfirmed_email")
       notice += " Confirmation Email Sent."
     end

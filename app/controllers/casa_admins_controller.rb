@@ -16,9 +16,8 @@ class CasaAdminsController < ApplicationController
 
   def update
     authorize @casa_admin
-    notice = "Casa Admin was successfully updated."
     if @casa_admin.update(update_casa_admin_params)
-      notice = check_admin_email_change_confirmation_notice(@casa_admin, notice)
+      notice = check_admin_email_change_confirmation_notice(@casa_admin)
 
       @casa_admin.filter_old_emails!(@casa_admin.email)
       respond_to do |format|

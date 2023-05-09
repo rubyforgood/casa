@@ -48,9 +48,8 @@ class SupervisorsController < ApplicationController
 
   def update
     authorize @supervisor
-    notice = "Supervisor was successfully updated."
     if @supervisor.update(update_supervisor_params)
-      notice = check_admin_email_change_confirmation_notice(@supervisor, notice)
+      notice = check_admin_email_change_confirmation_notice(@supervisor)
 
       @supervisor.filter_old_emails!(@supervisor.email)
       redirect_to edit_supervisor_path(@supervisor), notice: notice

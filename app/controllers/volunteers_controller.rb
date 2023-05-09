@@ -51,9 +51,8 @@ class VolunteersController < ApplicationController
 
   def update
     authorize @volunteer
-    notice = "Volunteer was successfully updated."
     if @volunteer.update(update_volunteer_params)
-      notice = check_admin_email_change_confirmation_notice(@volunteer, notice)
+      notice = check_admin_email_change_confirmation_notice(@volunteer)
 
       @volunteer.filter_old_emails!(@volunteer.email)
       redirect_to edit_volunteer_path(@volunteer), notice: notice

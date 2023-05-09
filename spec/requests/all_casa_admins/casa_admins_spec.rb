@@ -79,7 +79,7 @@ RSpec.describe "All-Casa Admin" do
 
       it "shows correct flash message" do
         subject
-        expect(flash[:notice]).to eq("Admin was successfully updated. Confirmation Email Sent.")
+        expect(flash[:notice]).to eq("Casa Admin was successfully updated. Confirmation Email Sent.")
       end
     end
 
