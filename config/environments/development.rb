@@ -79,4 +79,7 @@ Rails.application.configure do
   # config.action_cable.disable_request_forgery_protection = true
 
   config.assets.digest = false
+
+  # allow requests from ngrok
+  config.hosts << '.ngrok-free.app'
 end
