@@ -21,6 +21,20 @@ RSpec.describe "supervisors/index", type: :view do
 
       expect(rendered).to have_link("New Supervisor", href: new_supervisor_path)
     end
+
+    it "show casa_cases list" do
+      assign :supervisors, []
+      assign :casa_cases, casa_cases
+      render template: "supervisors/index"
+
+      casa_cases.each do |casa_case|
+        expect(rendered).to have_text(casa_case.case_number)
+        expect(rendered).to have_text(casa_case.hearing_type_name)
+        expect(rendered).to have_text(casa_case.judge_name)
+        expect(rendered).to have_text(casa_case.decorate.status)
+        expect(rendered).to have_text(casa_case.decorate.transition_aged_youth)
+      end
+    end
   end
 
   context "when logged in as a supervisor" do
