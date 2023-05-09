@@ -13,7 +13,7 @@ class SupervisorsController < ApplicationController
   def index
     authorize Supervisor
     @supervisors = policy_scope(current_organization.supervisors)
-    @casa_cases = CasaCase.where.missing(:court_dates)
+    @casa_cases = current_organization.casa_cases.missing_court_dates
   end
 
   def new

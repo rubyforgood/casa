@@ -97,6 +97,10 @@ class CasaCase < ApplicationRecord
     where(active: false)
   }
 
+  scope :missing_court_dates, -> {
+    where.missing(:court_dates)
+  }
+
   delegate :name, to: :hearing_type, prefix: true, allow_nil: true
   delegate :name, to: :judge, prefix: true, allow_nil: true
 
