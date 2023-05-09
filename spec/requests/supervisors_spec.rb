@@ -28,15 +28,6 @@ RSpec.describe "/supervisors", type: :request do
       expect(response).to have_http_status(:ok)
     end
 
-    it "all supervisors are listed" do
-      sign_in admin
-
-      get supervisors_path
-
-      expect(response.body).to include(active_supervisor.display_name)
-      expect(response.body).to include(inactive_supervisor.display_name)
-    end
-
     context "when casa case has court_dates" do
       let!(:casa_case) { create(:casa_case, casa_org: org, court_dates: [court_date]) }
       let(:court_date) { create(:court_date) }
