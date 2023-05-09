@@ -193,6 +193,29 @@ RSpec.describe CaseCourtReportContext, type: :model do
           expect(case_contact_1_date_index).to be > case_contact_2_date_index
           expect(case_contact_2_date_index).to be > case_contact_4_date_index
         end
+
+        context "when there are multiple medium types" do
+          before(:each) do
+            case_contact_4.update_attribute(:medium_type, "voice-only")
+          end
+
+          describe ":dates_by_medium_type" do
+            it "contains a key for each medium type and the dates of the case contacts with the medium type the values" do
+              case_contact_object_containing_complex_dates_by_medium_type = court_report_context[:case_contacts].find { |case_contact_type_and_dates|
+                case_contact_type_and_dates[:type] == contact_type_1.name
+              }
+
+              dates_by_medium_type = case_contact_object_containing_complex_dates_by_medium_type[:dates_by_medium_type]
+
+              expect(dates_by_medium_type).to have_key(case_contact_1.medium_type)
+              expect(dates_by_medium_type).to have_key(case_contact_4.medium_type)
+
+              expect(dates_by_medium_type[case_contact_1.medium_type]).to include(case_contact_1_date.strftime("%m/%d"))
+              expect(dates_by_medium_type[case_contact_2.medium_type]).to include(case_contact_2_date.strftime("%m/%d"))
+              expect(dates_by_medium_type[case_contact_4.medium_type]).to include(case_contact_4_date.strftime("%m/%d"))
+            end
+          end
+        end
       end
 
       context "when there are past court dates" do
