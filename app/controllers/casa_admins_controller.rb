@@ -16,14 +16,14 @@ class CasaAdminsController < ApplicationController
 
   def update
     authorize @casa_admin
-
+    notice = "Casa Admin was successfully updated."
     if @casa_admin.update(update_casa_admin_params)
-      unless admin_email_change(@casa_admin)
-        @casa_admin.filter_old_emails!(@casa_admin.email)
-        respond_to do |format|
-          format.html { redirect_to casa_admins_path, notice: "New admin created successfully" }
-          format.json { render json: @casa_admin, status: :ok }
-        end
+      notice = check_admin_email_change_confirmation_notice(@casa_admin, notice)
+
+      @casa_admin.filter_old_emails!(@casa_admin.email)
+      respond_to do |format|
+        format.html { redirect_to edit_casa_admin_path(@casa_admin), notice: notice }
+        format.json { render json: @casa_admin, status: :ok }
       end
     else
       respond_to do |format|

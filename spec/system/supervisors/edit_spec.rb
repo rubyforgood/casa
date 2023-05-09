@@ -161,7 +161,6 @@ RSpec.describe "supervisors/edit", type: :system do
         @supervisor = create(:supervisor)
         @old_email = @supervisor.email
         visit edit_supervisor_path(@supervisor)
-        fill_in "supervisor_email", with: ""
         fill_in "supervisor_email", with: "new_supervisor_email@example.com"
 
         click_on "Submit"
@@ -174,7 +173,7 @@ RSpec.describe "supervisors/edit", type: :system do
         expect(ActionMailer::Base.deliveries.first.body.encoded)
           .to match("You can confirm your account email through the link below:")
 
-        expect(page).to have_text "Confirmation Email Sent To Supervisor."
+        expect(page).to have_text "Supervisor was successfully updated. Confirmation Email Sent."
         expect(page).to have_field("Email", with: @old_email)
         expect(@supervisor.unconfirmed_email).to eq("new_supervisor_email@example.com")
       end

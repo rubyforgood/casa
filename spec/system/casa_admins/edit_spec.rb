@@ -19,7 +19,7 @@ RSpec.describe "casa_admins/edit", type: :system do
 
       admin.reload
 
-      expect(page).to have_text "New admin created successfully"
+      expect(page).to have_text "Casa Admin was successfully updated."
 
       expect(admin.display_name).to eq expected_display_name
       expect(admin.phone_number).to eq expected_phone_number
@@ -41,7 +41,7 @@ RSpec.describe "casa_admins/edit", type: :system do
       expect(ActionMailer::Base.deliveries.first.body.encoded)
         .to match("You can confirm your account email through the link below:")
 
-      expect(page).to have_text "Confirmation Email Sent To Casa Admin."
+      expect(page).to have_text "Admin was successfully updated. Confirmation Email Sent."
       expect(page).to have_field("Email", with: @old_email)
       expect(admin.unconfirmed_email).to eq("new_admin_email@example.com")
     end

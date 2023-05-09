@@ -70,7 +70,7 @@ RSpec.describe "volunteers/edit", type: :system do
         expect(ActionMailer::Base.deliveries.first.body.encoded)
           .to match("You can confirm your account email through the link below:")
 
-        expect(page).to have_text "Confirmation Email Sent To Volunteer."
+        expect(page).to have_text "Volunteer was successfully updated. Confirmation Email Sent."
         expect(page).to have_field("Email", with: @old_email)
         expect(volunteer.unconfirmed_email).to eq("newemail@example.com")
       end

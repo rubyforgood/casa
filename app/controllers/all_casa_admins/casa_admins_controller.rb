@@ -22,12 +22,12 @@ class AllCasaAdmins::CasaAdminsController < AllCasaAdminsController
 
   def update
     @casa_admin = CasaAdmin.find(params[:id])
-
+    notice = "Admin was successfully updated."
     if @casa_admin.update(all_casa_admin_params)
-      unless all_casa_admin_email_change(@casa_admin, @casa_org)
-        @casa_admin.filter_old_emails!(@casa_admin.email)
-        redirect_to edit_all_casa_admins_casa_org_casa_admin_path(@casa_org), notice: "Casa Admin was successfully updated."
-      end
+      notice = check_all_casa_admin_email_change_confirmation_notice(@casa_admin, notice)
+
+      @casa_admin.filter_old_emails!(@casa_admin.email)
+      redirect_to edit_all_casa_admins_casa_org_casa_admin_path(@casa_org), notice: notice
     else
       render :edit
     end

@@ -97,8 +97,8 @@ RSpec.describe "/casa_admins", type: :request do
         casa_admin.reload
         expect(casa_admin.display_name).to eq expected_display_name
         expect(casa_admin.phone_number).to eq expected_phone_number
-        expect(response).to redirect_to casa_admins_path
-        expect(response.request.flash[:notice]).to eq "New admin created successfully"
+        expect(response).to redirect_to edit_casa_admin_path(casa_admin)
+        expect(response.request.flash[:notice]).to eq "Casa Admin was successfully updated."
       end
 
       it "can update a casa admin user's email and send them a confirmation email", :aggregate_failures do
