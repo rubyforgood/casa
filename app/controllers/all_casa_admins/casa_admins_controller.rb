@@ -23,7 +23,7 @@ class AllCasaAdmins::CasaAdminsController < AllCasaAdminsController
   def update
     @casa_admin = CasaAdmin.find(params[:id])
     if @casa_admin.update(all_casa_admin_params)
-      notice = check_all_casa_admin_email_change_confirmation_notice(@casa_admin)
+      notice = check_unconfirmed_email_notice(@casa_admin)
 
       @casa_admin.filter_old_emails!(@casa_admin.email)
       redirect_to edit_all_casa_admins_casa_org_casa_admin_path(@casa_org), notice: notice

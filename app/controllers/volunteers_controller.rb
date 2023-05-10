@@ -52,7 +52,7 @@ class VolunteersController < ApplicationController
   def update
     authorize @volunteer
     if @volunteer.update(update_volunteer_params)
-      notice = check_admin_email_change_confirmation_notice(@volunteer)
+      notice = check_unconfirmed_email_notice(@volunteer)
 
       @volunteer.filter_old_emails!(@volunteer.email)
       redirect_to edit_volunteer_path(@volunteer), notice: notice
