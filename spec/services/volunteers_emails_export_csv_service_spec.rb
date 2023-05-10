@@ -17,7 +17,7 @@ RSpec.describe VolunteersEmailsExportCsvService do
       results = csv.split("\n")
       expect(results.count).to eq(3)
       expect(results[0].split(",")).to eq(["Email", "Old Emails", "Case Number", "Volunteer Name", "Case Transition Aged Status"])
-      expect(results[1]).to eq("#{active_volunteer.email},None,\"#{active_volunteer_cases.keys.join(", ")}\",#{active_volunteer.display_name},\"#{active_volunteer_cases.values.join(", ")}\"")
+      expect(results[1]).to eq("#{active_volunteer.email},No Old Emails,\"#{active_volunteer_cases.keys.join(", ")}\",#{active_volunteer.display_name},\"#{active_volunteer_cases.values.join(", ")}\"")
       expect(results[2]).to eq("#{volunteer_with_old_emails.email},#{volunteer_with_old_emails.old_emails.join(", ")},\"\",#{volunteer_with_old_emails.display_name},\"\"")
       expect(csv).to match(/#{active_volunteer.email}/)
       expect(csv).not_to match(/#{inactive_volunteer.email}/)
