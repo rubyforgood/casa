@@ -20,7 +20,7 @@ class VolunteersEmailsExportCsvService
 
   def full_data(volunteer = nil)
     active_casa_cases = volunteer&.casa_cases&.active&.map { |c| [c.case_number, c.in_transition_age?] }.to_h
-    old_emails = volunteer&.old_emails? ? volunteer.old_emails.join(", ") : "None"
+    old_emails = volunteer&.old_emails? ? volunteer.old_emails.join(", ") : "No Old Emails"
     {
       email: volunteer&.email,
       old_emails: old_emails,
