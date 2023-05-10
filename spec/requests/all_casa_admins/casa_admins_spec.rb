@@ -65,15 +65,21 @@ RSpec.describe "All-Casa Admin" do
     context "with valid parameters" do
       let(:params) { {all_casa_admin: {email: "casa_admin@example.com"}} }
 
-      it "should allow current user to successfully update other casa admin's email" do
-        expect { subject }.to change { casa_admin.reload.email }.from("admin1@example.com").to("casa_admin@example.com")
+      it "should allow current user to begin to update other casa admin's email and send a confirmation email" do
+        subject
+        casa_admin.reload
+        expect(casa_admin.unconfirmed_email).to eq("casa_admin@example.com")
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
+        expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
+        expect(ActionMailer::Base.deliveries.first.body.encoded)
+          .to match("You can confirm your account email through the link below:")
       end
 
       it { is_expected.to redirect_to edit_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin) }
 
       it "shows correct flash message" do
         subject
-        expect(flash[:notice]).to include("New admin created successfully")
+        expect(flash[:notice]).to eq("Casa Admin was successfully updated. Confirmation Email Sent.")
       end
     end
 
