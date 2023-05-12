@@ -4,6 +4,7 @@ class CasaOrg < ApplicationRecord
 
   before_create :set_slug
   before_update :sanitize_svg
+  before_save :normalize_phone_number
 
   validates :name, presence: true, uniqueness: true
   validates_with CasaOrgValidator
@@ -101,6 +102,12 @@ class CasaOrg < ApplicationRecord
       client.messages.list(limit: 1)
     rescue Twilio::REST::RestError
       errors.add(:base, "Your Twilio credentials are incorrect, kindly check and try again.")
+    end
+  end
+
+  def normalize_phone_number
+    if self.twilio_phone_number&.length == 10
+      self.twilio_phone_number = "+1#{self.twilio_phone_number}"
     end
   end
 end
