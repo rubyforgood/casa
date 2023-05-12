@@ -176,8 +176,8 @@ class User < ApplicationRecord
   private
 
   def normalize_phone_number
-    if self.phone_number&.length == 10
-      self.phone_number = "+1#{self.phone_number}"
+    if phone_number&.length == 10
+      self.phone_number = "+1#{phone_number}"
     end
   end
 end

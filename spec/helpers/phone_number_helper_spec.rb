@@ -5,7 +5,7 @@ RSpec.describe PhoneNumberHelper do
     include PhoneNumberHelper
 
     context "valid phone number" do
-      it 'with empty string' do
+      it "with empty string" do
         valid, error = valid_phone_number("")
         expect(valid).to be(true)
         expect(error).to be_nil

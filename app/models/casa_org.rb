@@ -106,8 +106,8 @@ class CasaOrg < ApplicationRecord
   end
 
   def normalize_phone_number
-    if self.twilio_phone_number&.length == 10
-      self.twilio_phone_number = "+1#{self.twilio_phone_number}"
+    if twilio_phone_number&.length == 10
+      self.twilio_phone_number = "+1#{twilio_phone_number}"
     end
   end
 end
