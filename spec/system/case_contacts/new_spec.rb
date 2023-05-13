@@ -631,6 +631,35 @@ RSpec.describe "case_contacts/new", type: :system do
       end
     end
 
+    describe "case locking selection", js: true do
+      let(:volunteer) { create(:volunteer, :with_casa_cases) }
+      let(:first_case) { volunteer.casa_cases.first }
+      let(:second_case) { volunteer.casa_cases.second }
+
+      before(:each) do
+        sign_in volunteer
+      end
+
+      it "click on first casa case lock" do
+        visit new_case_contact_path(case_contact: {casa_case_id: first_case.id})
+        casa_case_lock_icon = page.find_by_id("lock_case_contact_casa_case_id-0")
+        is_checked = casa_case_lock_icon.sibling("input[type=checkbox]").checked?
+        casa_case_lock_icon.click
+
+        expect(casa_case_lock_icon.sibling("input[type=checkbox]").checked?).to eq(is_checked)
+        expect(page).to have_css("#case_contact_casa_case_id_0.disable-checkbox")
+      end
+
+      it "lock icon is locked, checkbox and label act as disabled" do
+        visit new_case_contact_path(case_contact: {casa_case_id: second_case.id})
+        casa_case_lock_icon = page.find_by_id("lock_case_contact_casa_case_id-1")
+        is_disabled = casa_case_lock_icon.sibling("input[type=checkbox]").disabled?
+        casa_case_lock_icon.click
+
+        expect(casa_case_lock_icon.sibling("input[type=checkbox]").disabled?).to eq(!is_disabled)
+      end
+    end
+
     private
 
     def create_contact_types(org)
