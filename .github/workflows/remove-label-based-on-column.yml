@@ -22,9 +22,8 @@ jobs:
                 "project_name": "CASA Volunteer Portal"
               },
               {
-                "column_name": "In progress",
-                "labels": ["Help Wanted"],
-                "project_name": "CASA Volunteer Portal"
+                "column_id": 47fc9ee4,
+                "labels": ["Help Wanted"]
               },
               {
                 "column_name": "Merged to QA",
