@@ -8,6 +8,7 @@ class User < ApplicationRecord
 
   before_update :record_previous_email
   after_create :skip_email_confirmation_upon_creation
+  before_save :normalize_phone_number
 
   validates_with UserValidator
 
@@ -44,6 +45,8 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :user_sms_notification_events, :address, allow_destroy: true
 
+  after_create :create_preference_set
+
   scope :active, -> { where(active: true) }
 
   scope :inactive, -> { where(active: false) }
@@ -72,6 +75,10 @@ class User < ApplicationRecord
 
   def active_volunteers
     volunteers.active.size
+  end
+
+  def create_preference_set
+    self.preference_set = PreferenceSet.create
   end
 
   # all contacts this user has with this casa case
@@ -164,6 +171,14 @@ class User < ApplicationRecord
 
   def after_confirmation
     send_email_changed_notification
+  end
+
+  private
+
+  def normalize_phone_number
+    if phone_number&.length == 10
+      self.phone_number = "+1#{phone_number}"
+    end
   end
 end
 # == Schema Information

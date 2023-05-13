@@ -7,14 +7,14 @@ class ReimbursementPolicy < ApplicationPolicy
   end
 
   def index?
-    is_admin?
+    is_admin? && reimbursement_enabled?
   end
 
   def datatable?
-    is_admin?
+    is_admin? && reimbursement_enabled?
   end
 
   def change_complete_status?
-    index?
+    index? && reimbursement_enabled?
   end
 end

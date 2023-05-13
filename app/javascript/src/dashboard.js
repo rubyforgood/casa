@@ -268,6 +268,107 @@ $('document').ready(() => {
     return true
   })
 
+  // Add Supervisors Table
+  const supervisorsTable = $('table#supervisors').DataTable({
+    autoWidth: false,
+    stateSave: false,
+    order: [[1, 'asc']], // order by cast contacts
+    columns: [
+      {
+        name: 'display_name',
+        className: 'min-width',
+        render: (data, type, row, meta) => {
+          return `
+            <a href="${editSupervisorPath(row.id)}">
+              ${row.display_name || row.email}
+            </a>
+          `
+        }
+      },
+      {
+        name: '',
+        className: 'min-width',
+        render: (data, type, row, meta) => {
+          const noContactVolunteers = Number(row.no_attempt_for_two_weeks)
+          const transitionAgedCaseVolunteers = Number(row.transitions_volunteers)
+          const activeContactVolunteers = Number(row.volunteer_assignments) - noContactVolunteers
+          const activeContactElement = activeContactVolunteers
+            ? (
+            `
+            <span class="attempted-contact status-btn success-bg text-white pl-${activeContactVolunteers * 15} pr-${activeContactVolunteers * 15}">
+              ${activeContactVolunteers}
+            </span>
+            `
+              )
+            : ''
+
+          const noContactElement = noContactVolunteers > 0
+            ? (
+            `
+            <span class="no-attempted-contact status-btn danger-bg text-white pl-${noContactVolunteers * 15} pr-${noContactVolunteers * 15}">
+              ${noContactVolunteers}
+            </span>
+            `
+              )
+            : ''
+
+          let volunteersCounterElement = ''
+          if (activeContactVolunteers <= 0 && noContactVolunteers <= 0) {
+            volunteersCounterElement = '<span class="no-volunteers" style="flex-grow: 1">No assigned volunteers</span>'
+          } else {
+            volunteersCounterElement = `<span class="status-btn deactive-bg text-black pl-${transitionAgedCaseVolunteers * 15} pr-${transitionAgedCaseVolunteers * 15}">${transitionAgedCaseVolunteers}</span>`
+          }
+
+          return `
+            <div class="supervisor_case_contact_stats">
+              ${activeContactElement + noContactElement + volunteersCounterElement}
+            </div>
+          `
+        }
+      },
+      {
+        name: 'actions',
+        orderable: false,
+        render: (data, type, row, meta) => {
+          return `
+            <a href="${editSupervisorPath(row.id)}">
+              <div class="action">
+                <button class="text-danger">
+                 <i class="lni lni-pencil-alt"></i>Edit
+                </button>
+              </div>
+            </a>
+          `
+        },
+        searchable: false
+      }
+    ],
+    processing: true,
+    serverSide: true,
+    ajax: {
+      url: $('table#supervisors').data('source'),
+      type: 'POST',
+      data: function (d) {
+        const statusOptions = $('.status-options input:checked')
+        const statusFilter = Array.from(statusOptions).map(option => JSON.parse(option.dataset.value))
+
+        return $.extend({}, d, {
+          additional_filters: {
+            active: statusFilter
+          }
+        })
+      },
+      error: handleAjaxError,
+      dataType: 'json'
+    },
+    drawCallback: function (settings) {
+      $('[data-toggle=tooltip]').tooltip()
+    },
+    createdRow: function (row, data, dataIndex, cells) {
+      row.setAttribute('id', `supervisor-${data.id}-information`)
+    }
+  })
+
   const casaCasesTable = $('table#casa-cases').DataTable({
     autoWidth: false,
     stateSave: false,
@@ -308,6 +409,10 @@ $('document').ready(() => {
 
   $('.volunteer-filters input[type="checkbox"]').not('#unassigned-vol-filter').on('click', function () {
     volunteersTable.draw()
+  })
+
+  $('.supervisor-filters input[type="checkbox"]').on('click', function () {
+    supervisorsTable.draw()
   })
 
   $('.casa-case-filters input[type="checkbox"]').on('click', function () {

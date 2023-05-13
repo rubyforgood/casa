@@ -6,14 +6,12 @@ RSpec.describe "casa_admins/edit", type: :system do
   before { sign_in admin }
 
   context "with valid data" do
-    it "can successfully edit user email and display name" do
-      expected_email = "root@casa.com"
+    it "can successfully edit user display name and phone number" do
       expected_display_name = "Root Admin"
       expected_phone_number = "+14398761234"
 
       visit edit_casa_admin_path(admin)
 
-      fill_in "Email", with: expected_email
       fill_in "Display name", with: expected_display_name
       fill_in "Phone number", with: expected_phone_number
 
@@ -21,10 +19,41 @@ RSpec.describe "casa_admins/edit", type: :system do
 
       admin.reload
 
-      expect(page).to have_text "New admin created successfully"
-      expect(admin.email).to eq expected_email
+      expect(page).to have_text "Casa Admin was successfully updated."
+
       expect(admin.display_name).to eq expected_display_name
       expect(admin.phone_number).to eq expected_phone_number
+    end
+  end
+
+  context "with valid email data" do
+    before do
+      visit edit_casa_admin_path(admin)
+      @old_email = admin.email
+      fill_in "Email", with: "new_admin_email@example.com"
+
+      click_on "Submit"
+      admin.reload
+    end
+
+    it "sends a confirmation email upon submission and does not change the user's displayed email" do
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
+      expect(ActionMailer::Base.deliveries.first.body.encoded)
+        .to match("You can confirm your account email through the link below:")
+
+      expect(page).to have_text "Admin was successfully updated. Confirmation Email Sent."
+      expect(page).to have_field("Email", with: @old_email)
+      expect(admin.unconfirmed_email).to eq("new_admin_email@example.com")
+    end
+
+    it "succesfully updates the user email once the user confirms the changes" do
+      admin.confirm
+      admin.reload
+      visit edit_casa_admin_path(admin)
+
+      expect(page).to have_field("Email", with: "new_admin_email@example.com")
+      expect(admin.old_emails).to eq([@old_email])
     end
   end
 

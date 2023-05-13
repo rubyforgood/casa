@@ -11,6 +11,12 @@ FactoryBot.define do
       end
     end
 
+    trait :with_pretransition_age_case do
+      after(:create) do |user, _|
+        create(:case_assignment, casa_case: create(:casa_case, :pre_transition, casa_org: user.casa_org), volunteer: user)
+      end
+    end
+
     trait :with_cases_and_contacts do
       after(:create) do |user, _|
         assignment1 = create :case_assignment, casa_case: create(:casa_case, :pre_transition, casa_org: user.casa_org), volunteer: user

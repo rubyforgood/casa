@@ -107,4 +107,12 @@ class ApplicationController < ActionController::Base
     flash[:notice] = "Sorry, you are not authorized to perform this action."
     redirect_to(root_url)
   end
+
+  def check_unconfirmed_email_notice(user)
+    notice = "#{user.role} was successfully updated."
+    if user.saved_changes.include?("unconfirmed_email")
+      notice += " Confirmation Email Sent."
+    end
+    notice
+  end
 end

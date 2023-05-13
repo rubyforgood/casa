@@ -126,11 +126,15 @@ class ApplicationPolicy
   end
 
   def see_mileage_rate?
-    is_admin? # && matches_casa_org? # TODO do this *in* is_admin - what might that break?
+    is_admin? && reimbursement_enabled? # && matches_casa_org? # TODO do this *in* is_admin - what might that break?
   end
 
   def matches_casa_org?
     @record&.casa_org == @user&.casa_org && !@record.casa_org.nil?
+  end
+
+  def reimbursement_enabled?
+    current_organization&.show_driving_reimbursement
   end
 
   def current_organization
