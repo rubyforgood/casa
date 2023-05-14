@@ -109,8 +109,8 @@ RSpec.describe "users/edit", type: :system do
     end
 
     it "displays current sign in date" do
-      formatted_current_sign_in_at = I18n.l(volunteer.current_sign_in_at, format: :full, default: nil)
-      formatted_last_sign_in_at = I18n.l(volunteer.last_sign_in_at, format: :full, default: nil)
+      formatted_current_sign_in_at = I18n.l(volunteer.current_sign_in_at, format: :edit_profile, default: nil)
+      formatted_last_sign_in_at = I18n.l(volunteer.last_sign_in_at, format: :edit_profile, default: nil)
       expect(page).to have_text("Last logged in #{formatted_current_sign_in_at}")
       expect(page).not_to have_text("Last logged in #{formatted_last_sign_in_at}")
     end
