@@ -1,8 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "casa_cases/show", type: :view do
-  let(:organization) { create(:casa_org) }
-  let(:user) { create(:casa_admin, casa_org: organization) }
+  let(:user) { create(:casa_admin) }
 
   before do
     enable_pundit(view, user)
@@ -22,18 +21,21 @@ RSpec.describe "casa_cases/show", type: :view do
       expect(rendered).to match("May 6, 2023")
     end
 
-    # it "render button to add court date" do
-    #   render
+    it "render button to add court date" do
+      casa_case = create(:casa_case)
+      assign(:casa_case, casa_case)
 
-    #   expect(rendered).to have_content("Add a court date")
-    # end
+      render
+
+      expect(rendered).to have_content("Add a court date")
+    end
   end
 
   context "where there is no court date" do
-    let!(:casa_case) { create(:casa_case, casa_org: organization, case_number: "111") }
-
-    before { assign(:casa_case, casa_case) }
     it "render casa case without court dates" do
+      casa_case = create(:casa_case)
+      assign(:casa_case, casa_case)
+
       render
 
       expect(rendered).to match(casa_case.case_number)
@@ -41,6 +43,9 @@ RSpec.describe "casa_cases/show", type: :view do
     end
 
     it "render button to add court date" do
+      casa_case = create(:casa_case)
+      assign(:casa_case, casa_case)
+
       render
 
       expect(rendered).to have_content("Add a court date")
@@ -61,10 +66,10 @@ RSpec.describe "casa_cases/show", type: :view do
   end
 
   context "where there is no placement" do
-    let!(:casa_case) { create(:casa_case, casa_org: organization, case_number: "111") }
-
-    before { assign(:casa_case, casa_case) }
     it "renders casa case without placements" do
+      casa_case = create(:casa_case)
+      assign(:casa_case, casa_case)
+
       render
 
       expect(rendered).to match(casa_case.case_number)

@@ -49,11 +49,11 @@ class SupervisorsController < ApplicationController
 
   def update
     authorize @supervisor
-    @supervisor.skip_reconfirmation!
-
     if @supervisor.update(update_supervisor_params)
+      notice = check_unconfirmed_email_notice(@supervisor)
+
       @supervisor.filter_old_emails!(@supervisor.email)
-      redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was successfully updated."
+      redirect_to edit_supervisor_path(@supervisor), notice: notice
     else
       render :edit
     end

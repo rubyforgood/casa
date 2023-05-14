@@ -214,14 +214,27 @@ RSpec.describe "/volunteers", type: :request do
     context "with valid params" do
       it "updates the volunteer" do
         patch volunteer_path(volunteer), params: {
-          volunteer: {email: "newemail@gmail.com", display_name: "New Name", phone_number: "+15463457898"}
+          volunteer: {display_name: "New Name", phone_number: "+15463457898"}
         }
         expect(response).to have_http_status(:redirect)
 
         volunteer.reload
         expect(volunteer.display_name).to eq "New Name"
-        expect(volunteer.email).to eq "newemail@gmail.com"
         expect(volunteer.phone_number).to eq "+15463457898"
+      end
+
+      it "sends the volunteer a confirmation email upon email change" do
+        patch volunteer_path(volunteer), params: {
+          volunteer: {email: "newemail@gmail.com"}
+        }
+        expect(response).to have_http_status(:redirect)
+
+        volunteer.reload
+        expect(volunteer.unconfirmed_email).to eq("newemail@gmail.com")
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
+        expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
+        expect(ActionMailer::Base.deliveries.first.body.encoded)
+          .to match("You can confirm your account email through the link below:")
       end
     end
 

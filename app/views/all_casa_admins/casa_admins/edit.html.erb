@@ -3,7 +3,7 @@
     <h2>Edit Admin</h2>
   </div>
 </div>
-
+<%= render 'layouts/flash_messages' %>
 <div class="card-style">
   <div class="card-body">
     <%= form_for @casa_admin, as: :all_casa_admin, url: all_casa_admins_casa_org_casa_admin_path do |form| %>

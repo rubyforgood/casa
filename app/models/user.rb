@@ -8,6 +8,7 @@ class User < ApplicationRecord
 
   before_update :record_previous_email
   after_create :skip_email_confirmation_upon_creation
+  before_save :normalize_phone_number
 
   validates_with UserValidator
 
@@ -170,6 +171,14 @@ class User < ApplicationRecord
 
   def after_confirmation
     send_email_changed_notification
+  end
+
+  private
+
+  def normalize_phone_number
+    if phone_number&.length == 10
+      self.phone_number = "+1#{phone_number}"
+    end
   end
 end
 # == Schema Information
