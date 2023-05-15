@@ -1,45 +1,57 @@
 <div class="notes">
-  <h1 class="pt-5">Notes</h1>
+  <h1 class="pt-5 mb-2">Notes</h1>
 
   <div class="card card-container">
     <div class="card-body">
       <% if @volunteer.notes != [] %>
-        <h3>Notes About This Volunteer</h3>
-        <table class="table table-striped table-bordered">
-          <thead>
-            <tr>
-              <th>Note</th>
-              <th>Creator</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @volunteer.notes.each do |note| %>
+        <h3 class="mb-4">Notes About This Volunteer</h3>
+        <div class="table-wrapper table-responsive">
+          <table class="table">
+            <thead>
               <tr>
-                <td><%= note.content %></td>
-                <td><%= note.creator.display_name %></td>
-                <td><%= l(note.created_at, format: :standard) %></td>
-                <td>
-                  <%= link_to "Edit", edit_volunteer_note_path(@volunteer, note), class: "btn btn-primary" %>
-                  <%= link_to "Delete", volunteer_note_path(@volunteer, note), class: "btn btn-primary", method: :delete %>
-                </td>
+                <th>Note</th>
+                <th>Creator</th>
+                <th>Date</th>
+                <th>Actions</th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <% @volunteer.notes.each do |note| %>
+                <tr>
+                  <td class="min-width"><%= note.content %></td>
+                  <td class="min-width"><%= note.creator.display_name %></td>
+                  <td class="min-width"><%= l(note.created_at, format: :standard) %></td>
+                  <td class="min-width">
+                    <%= link_to edit_volunteer_note_path(@volunteer, note), class: "main-btn primary-btn btn-hover btn-sm" do %>
+                      <i class="lni lni-pencil-alt mr-5"></i> Edit
+                    <% end %>
+                    <%= link_to volunteer_note_path(@volunteer, note), class: "main-btn danger-btn btn-hover btn-sm", method: :delete do %>
+                      <i class="lni lni-trash-can mr-5"></i> Delete
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
       <% end %>
       <br>
       <%= form_with(model: @volunteer.notes.new, local: true, url: volunteer_notes_path(@volunteer),
 id: "volunteer-note-form") do |form| %>
-        <h3>Create a New Note</h3>
-        <div class="form-group">
+        <h3 class="mb-3">Create a New Note</h3>
+        <div class="input-style-1">
           <%= form.text_area :content, :rows => 5, placeholder: "Enter a note regarding the volunteer. These notes are only visible to CASA administrators and supervisors.",
-class: "form-control" %>
+          class: "form-control" %>
         </div>
 
         <div class="actions">
-          <%= form.submit "Save Note", class: "btn btn-primary", id: "note-submit" %>
+          <%= button_tag(
+            type: "submit",
+            class: "main-btn primary-btn btn-hover btn-sm",
+            id: "note-submit"
+          ) do %>
+            <i class="lni lni-save mr-5"></i> Save Note
+          <% end %>
         </div>
       <% end %>
     </div>

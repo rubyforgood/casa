@@ -52,7 +52,10 @@ class VolunteersController < ApplicationController
   def update
     authorize @volunteer
     if @volunteer.update(update_volunteer_params)
-      redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was successfully updated."
+      notice = check_unconfirmed_email_notice(@volunteer)
+
+      @volunteer.filter_old_emails!(@volunteer.email)
+      redirect_to edit_volunteer_path(@volunteer), notice: notice
     else
       render :edit
     end

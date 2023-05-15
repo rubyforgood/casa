@@ -25,7 +25,7 @@ RSpec.describe "users/edit", type: :system do
     it "displays password errors messages when user is unable to set a password with incorrect current password" do
       click_on "Change Password"
 
-      fill_in "Current Password", with: "12345"
+      fill_in "current_password", with: "12345"
       fill_in "New Password", with: "123456789"
       fill_in "New Password Confirmation", with: "123456789"
 
@@ -37,7 +37,7 @@ RSpec.describe "users/edit", type: :system do
     it "displays password errors messages when user is unable to set a password" do
       click_on "Change Password"
 
-      fill_in "Current Password", with: "12345678"
+      fill_in "current_password", with: "12345678"
       fill_in "New Password", with: "123"
       fill_in "New Password Confirmation", with: "1234"
 
@@ -56,7 +56,7 @@ RSpec.describe "users/edit", type: :system do
     it "notifies a user when they update their password" do
       click_on "Change Password"
 
-      fill_in "Current Password", with: "12345678"
+      fill_in "current_password", with: "12345678"
       fill_in "New Password", with: "123456789"
       fill_in "New Password Confirmation", with: "123456789"
 
@@ -68,7 +68,7 @@ RSpec.describe "users/edit", type: :system do
     it "notifies password changed by email", :aggregate_failures do
       click_on "Change Password"
 
-      fill_in "Current Password", with: "12345678"
+      fill_in "current_password", with: "12345678"
       fill_in "New Password", with: "123456789"
       fill_in "Password Confirmation", with: "123456789"
 
@@ -82,13 +82,35 @@ RSpec.describe "users/edit", type: :system do
         .to match("Your CASA password has been changed.")
     end
 
-    it "is not able to update the email if user is a volunteer" do
-      expect(page).to have_field("Email", disabled: true)
+    it "is able to send a confrimation email when Volunteer updates their email" do
+      click_on "Change Email"
+      expect(page).to have_field("New Email", disabled: false)
+
+      fill_in "current_password_email", with: "12345678"
+
+      fill_in "New Email", with: "new_volunteer@example.com"
+      click_on "Update Email"
+
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
+      expect(ActionMailer::Base.deliveries.first.body.encoded)
+        .to have_text("You can confirm your account email through the link below:")
+    end
+
+    it "displays email errors messages when user is unable to set a email with incorrect current password" do
+      click_on "Change Email"
+
+      fill_in "current_password_email", with: "12345"
+      fill_in "New Email", with: "new_volunteer@example.com"
+
+      click_on "Update Email"
+      expect(page).to have_content "1 error prohibited this Volunteer from being saved:"
+      expect(page).to have_text("Current password is incorrect")
     end
 
     it "displays current sign in date" do
-      formatted_current_sign_in_at = I18n.l(volunteer.current_sign_in_at, format: :full, default: nil)
-      formatted_last_sign_in_at = I18n.l(volunteer.last_sign_in_at, format: :full, default: nil)
+      formatted_current_sign_in_at = I18n.l(volunteer.current_sign_in_at, format: :edit_profile, default: nil)
+      formatted_last_sign_in_at = I18n.l(volunteer.last_sign_in_at, format: :edit_profile, default: nil)
       expect(page).to have_text("Last logged in #{formatted_current_sign_in_at}")
       expect(page).not_to have_text("Last logged in #{formatted_last_sign_in_at}")
     end
@@ -128,7 +150,7 @@ RSpec.describe "users/edit", type: :system do
     it "notifies password changed by email", :aggregate_failures do
       click_on "Change Password"
 
-      fill_in "Current Password", with: "12345678"
+      fill_in "current_password", with: "12345678"
       fill_in "New Password", with: "123456789"
       fill_in "Password Confirmation", with: "123456789"
 
@@ -142,8 +164,30 @@ RSpec.describe "users/edit", type: :system do
         .to match("Your CASA password has been changed.")
     end
 
-    it "is not able to update the email if user is a supervisor" do
-      expect(page).to have_field("Email", disabled: true)
+    it "is able to send a confrimation email when supervisor is updating email" do
+      click_on "Change Email"
+      expect(page).to have_field("New Email", disabled: false)
+
+      fill_in "current_password_email", with: "12345678"
+
+      fill_in "New Email", with: "new_supervisor@example.com"
+      click_on "Update Email"
+
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
+      expect(ActionMailer::Base.deliveries.first.body.encoded)
+        .to match("You can confirm your account email through the link below:")
+    end
+
+    it "displays email errors messages when user is unable to set a email with incorrect current password" do
+      click_on "Change Email"
+
+      fill_in "current_password_email", with: "12345"
+      fill_in "New Email", with: "new_supervisor@example"
+
+      click_on "Update Email"
+      expect(page).to have_content "1 error prohibited this Supervisor from being saved:"
+      expect(page).to have_text("Current password is incorrect")
     end
 
     it "displays sms notification events for the supervisor user" do
@@ -183,19 +227,36 @@ RSpec.describe "users/edit", type: :system do
 
     it_should_behave_like "shows error for invalid phone numbers"
 
-    it "is able to update the email if user is a admin" do
-      expect(page).to have_field("Email", disabled: false)
-      fill_in "Email", with: "new_admin@example.com"
-      click_on "Update Profile"
-      expect(page).to have_text("Profile was successfully updated.")
-      expect(page).to have_text("new_admin@example.com")
-      assert_equal "new_admin@example.com", admin.reload.email
+    it "is able to send a confrimation email when Casa Admin updates their email" do
+      click_on "Change Email"
+      expect(page).to have_field("New Email", disabled: false)
+
+      fill_in "current_password_email", with: "12345678"
+
+      fill_in "New Email", with: "new_admin@example.com"
+      click_on "Update Email"
+
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
+      expect(ActionMailer::Base.deliveries.first.body.encoded)
+        .to match("You can confirm your account email through the link below:")
+    end
+
+    it "displays email errors messages when user is unable to set a email with incorrect current password" do
+      click_on "Change Email"
+
+      fill_in "current_password_email", with: "12345"
+      fill_in "New Email", with: "new_admin@example.com"
+
+      click_on "Update Email"
+      expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
+      expect(page).to have_text("Current password is incorrect")
     end
 
     it "displays password errors messages when admin is unable to set a password" do
       click_on "Change Password"
 
-      fill_in "Current Password", with: "12345678"
+      fill_in "current_password", with: "12345678"
       fill_in "New Password", with: "123"
       fill_in "Password Confirmation", with: "1234"
 
@@ -208,7 +269,7 @@ RSpec.describe "users/edit", type: :system do
     it "display success message when admin update password" do
       click_on "Change Password"
 
-      fill_in "Current Password", with: "12345678"
+      fill_in "current_password", with: "12345678"
       fill_in "New Password", with: "123456789"
       fill_in "Password Confirmation", with: "123456789"
 
@@ -226,7 +287,7 @@ RSpec.describe "users/edit", type: :system do
     it "notifies password changed by email", :aggregate_failures do
       click_on "Change Password"
 
-      fill_in "Current Password", with: "12345678"
+      fill_in "current_password", with: "12345678"
       fill_in "New Password", with: "123456789"
       fill_in "Password Confirmation", with: "123456789"
 

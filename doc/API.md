@@ -1,4 +1,4 @@
-### `/casa_cases.json`  
+### POST `/casa_cases.json`  
 Creates a casa case
 ### Params:  
  - **casa_case**  

@@ -9,14 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
 const handleReportFormSubmit = (event) => {
   event.preventDefault()
 
-  const buttonText = event.target.value
+  const buttonText = event.target.innerHTML
 
   event.target.disabled = 'disabled'
-  event.target.value = event.target.dataset.disableWith
+  event.target.innerHTML = event.target.dataset.disableWith
   event.target.form.submit()
 
   setTimeout(() => {
     event.target.disabled = false
-    event.target.value = buttonText
+    event.target.innerHTML = buttonText
   }, 3000)
 }

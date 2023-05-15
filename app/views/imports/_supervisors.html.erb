@@ -3,7 +3,7 @@
     1.
     <%= link_to "/supervisors.csv", format: :csv, download: "supervisors.csv" do %>
        Download and reference example Supervisor CSV file
-      <i class="fa fa-file-download"></i>
+      <i class="lni lni-download"></i>
     <% end %>
   </h4>
 </div>
@@ -11,11 +11,11 @@
 <div class="mb-3">
   <h4>
     2. Upload your CSV file
-    <i class="fa fa-file-csv" aria-hidden="true"></i>
+    <i class="lni lni-upload" aria-hidden="true"></i>
   </h4>
   <%= form_with(url: imports_path, local: :true, id: "supervisor-import-form") do |f| %>
     <%= f.hidden_field :import_type, value: "supervisor" %>
-    <ul>
+    <ul style="list-style-type: disc;" class="mx-4">
       <li>Click the choose file button and navigate to the saved file and select it.</li>
       <li><strong>Do not</strong> change any of the values in the first line of the example csv file.</li>
       <li>Then click the "Import Supervisors CSV" button to import your supervisors.</li>
@@ -23,13 +23,14 @@
     <%= f.file_field :file,
                      id: 'supervisor-file',
                      accept: 'text/csv',
-                     class: 'form-control-file',
+                     class: 'form-control mt-4',
+                     type: 'file',
                      style: "margin: auto;" %>
     </div>
 
     <%= render "sms_opt_in_modal", { form: f } if @sms_opt_in_warning == "supervisor" %>
-    <%= button_tag id: "supervisor-import-button", class: "btn btn-md btn-success pull-right",
-                   disabled: true, data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Importing File"} do %>
-      <i class="fa fa-upload"></i> Import Supervisors CSV
+    <%= button_tag id: "supervisor-import-button", class: "main-btn primary-btn btn-hover pull-right",
+                   disabled: true, data: { disable_with: "<div class='spinner-border spinner-border-sm'></div> Importing File"} do %>
+      <i class="lni lni-upload"></i> Import Supervisors CSV
     <% end %>
   <% end %>

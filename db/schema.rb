@@ -426,11 +426,32 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_041745) do
     t.index ["patch_note_type_id"], name: "index_patch_notes_on_patch_note_type_id"
   end
 
+  create_table "placement_types", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "casa_org_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_org_id"], name: "index_placement_types_on_casa_org_id"
+  end
+
+  create_table "placements", force: :cascade do |t|
+    t.datetime "placement_started_at", null: false
+    t.bigint "placement_type_id", null: false
+    t.bigint "creator_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "casa_case_id", null: false
+    t.index ["casa_case_id"], name: "index_placements_on_casa_case_id"
+    t.index ["creator_id"], name: "index_placements_on_creator_id"
+    t.index ["placement_type_id"], name: "index_placements_on_placement_type_id"
+  end
+
   create_table "preference_sets", force: :cascade do |t|
     t.bigint "user_id"
     t.jsonb "case_volunteer_columns", default: "{}", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "table_state", default: {}
     t.index ["user_id"], name: "index_preference_sets_on_user_id"
   end
 
@@ -522,7 +543,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_041745) do
     t.string "phone_number", default: ""
     t.boolean "receive_sms_notifications", default: false, null: false
     t.boolean "receive_email_notifications", default: true
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.string "old_emails", default: [], array: true
     t.index ["casa_org_id"], name: "index_users_on_casa_org_id"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invitations_count"], name: "index_users_on_invitations_count"
@@ -555,6 +582,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_041745) do
   add_foreign_key "other_duties", "users", column: "creator_id"
   add_foreign_key "patch_notes", "patch_note_groups"
   add_foreign_key "patch_notes", "patch_note_types"
+  add_foreign_key "placement_types", "casa_orgs"
+  add_foreign_key "placements", "placement_types"
+  add_foreign_key "placements", "users", column: "creator_id"
   add_foreign_key "preference_sets", "users"
   add_foreign_key "sent_emails", "casa_orgs"
   add_foreign_key "sent_emails", "users"

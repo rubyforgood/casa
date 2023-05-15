@@ -103,16 +103,9 @@ class CasaCasePolicy < ApplicationPolicy
   alias_method :save_emancipation?, :index? # Should this be the same as edit?
   alias_method :edit?, :same_org_supervisor_admin_or_assigned?
   alias_method :update?, :same_org_supervisor_admin_or_assigned?
-  alias_method :new?, :same_org_supervisor_admin?
-  alias_method :create?, :same_org_supervisor_admin?
-  alias_method :destroy?, :same_org_supervisor_admin?
-
-  # TODO:
-  # The dashboard policy only shows the "New Case" button to admins, but here
-  # we allow supervisors to also access new. View spec specifically tests the
-  # casa_cases/new.html.erb view against supervisors.
-  #
-  # Should supervisors be able to create cases?
+  alias_method :new?, :is_admin_same_org?
+  alias_method :create?, :is_admin_same_org?
+  alias_method :destroy?, :is_admin_same_org?
 
   private
 

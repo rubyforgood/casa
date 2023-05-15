@@ -1,80 +1,102 @@
-<h1>Editing CASA Organization</h1>
-
-<div class="card card-container">
-  <div class="card-body">
-    <%= form_with(model: current_organization, local: true) do |form| %>
-      <%= render "/shared/error_messages", resource: current_organization %>
-      <div class="field form-group">
-        <%= form.label :name, "Name" %>
-        <%= form.text_field :name, class: "form-control", required: true %>
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h2>
+          Editing CASA Organization
+        </h2>
       </div>
-      <div class="field form-group">
-        <%= form.label :display_name, "Display name" %>
-        <%= form.text_field :display_name, class: "form-control" %>
-      </div>
-      <div class="field form-group">
-        <%= form.label :address, "Address" %>
-        <%= form.text_field :address, class: "form-control" %>
-      </div>
-      <div class="custom-file mb-5">
-        <%= form.label :logo, "Logo" %>
-        <%= form.file_field :logo, class: "form-control", accept: ".png,.gif,.jpg,.jpeg,.webp,.svg" %>
-      </div>
-      <div class="custom-file mb-5">
-        <%= form.label :court_report_template, "Court report template" %>
-        <%= form.file_field :court_report_template, class: "form-control" %>
-      </div>
-      <div class="field form-group">
-        <div class="form-check">
-          <%= form.check_box :show_driving_reimbursement, class: 'form-check-input' %>
-          <%= form.label :show_driving_reimbursement, "Show driving reimbursement", class: 'form-check-label' %>
-        </div>
-      </div>
-      <hr>
-      <div class="field form-group">
-          <%= form.label :twilio_phone_number, "Twilio Phone Number" %>
-          <%= form.text_field :twilio_phone_number, class: "form-control" %>
-      </div>
-      <div class="field form-group">
-          <%= form.label :twilio_account_sid, "Twilio Account SID" %>
-          <%= form.text_field :twilio_account_sid, class: "form-control" %>
-      </div>
-      <div class="field form-group">
-          <%= form.label :twilio_api_key_sid, "Twilio API Key SID" %>
-          <%= form.text_field :twilio_api_key_sid, class: "form-control" %>
-      </div>
-      <div class="field form-group">
-          <%= form.label :twilio_api_key_secret, "Twilio API Key Secret" %>
-          <%= form.text_field :twilio_api_key_secret, class: "form-control" %>
-      </div>
-      <div class="actions">
-        <%= form.submit "Submit", class: "btn btn-primary" %>
-      </div>
-    <% end %>
+    </div>
   </div>
 </div>
-
-<div class="mt-5 card card-container">
-  <div class="card-body">
-    <%= render "languages", languages: current_organization.languages %>
+<div class="card-style mb-30">
+  <%= form_with(model: current_organization, local: true) do |form| %>
+    <%= render "/shared/error_messages", resource: current_organization %>
+    <div class="input-style-1">
+      <%= form.label :name, "Name" %>
+      <%= form.text_field :name, class: "form-control", required: true %>
+    </div>
+    <div class="input-style-1">
+      <%= form.label :display_name, "Display name" %>
+      <%= form.text_field :display_name, class: "form-control" %>
+    </div>
+    <div class="input-style-1">
+      <%= form.label :address, "Address" %>
+      <%= form.text_field :address, class: "form-control" %>
+    </div>
+    <div class="input-style-1">
+      <%= form.label :logo, "Logo" %>
+      <%= form.file_field :logo, class: "form-control h-auto", accept: ".png,.gif,.jpg,.jpeg,.webp,.svg" %>
+    </div>
+    <div class="input-style-1">
+      <%= form.label :court_report_template, "Court report template" %>
+      <%= form.file_field :court_report_template, class: "form-control" %>
+    </div>
+    <div class="input-style-1">
+      <%= form.label :twilio_phone_number, "Twilio Phone Number" %>
+      <%= form.text_field :twilio_phone_number, class: "form-control" %>
+    </div>
+    <div class="input-style-1">
+      <%= form.label :twilio_account_sid, "Twilio Account SID" %>
+      <%= form.text_field :twilio_account_sid, class: "form-control" %>
+    </div>
+    <div class="input-style-1">
+      <%= form.label :twilio_api_key_sid, "Twilio API Key SID" %>
+      <%= form.text_field :twilio_api_key_sid, class: "form-control" %>
+    </div>
+    <div class="input-style-1">
+      <%= form.label :twilio_api_key_secret, "Twilio API Key Secret" %>
+      <%= form.text_field :twilio_api_key_secret, class: "form-control" %>
+    </div>
+    <hr>
+    <h3 class="mb-2">Organization Features</h3>
+    <div class="form-check checkbox-style mb-20">
+      <%= form.check_box :show_driving_reimbursement, class: 'form-check-input' %>
+      <%= form.label :show_driving_reimbursement, "Show driving reimbursement", class: 'form-check-label mb-2' %>
+    </div>
+    <div class="actions mb-10">
+      <%= button_tag(
+            type: "submit",
+            class: "btn-sm main-btn primary-btn btn-hover"
+          ) do %>
+        <i class="lni lni-checkmark-circle mr-10"></i> Submit
+      <% end %>
+    </div>
+  <% end %>
+</div>
+<div class="tables-wrapper">
+  <%= render "languages", languages: current_organization.languages %>
+</div>
+<!-- end -->
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h2>
+          Manage Contact Types
+        </h2>
+      </div>
+    </div>
   </div>
 </div>
-
-<h1 class="pt-5">Manage Contact Types</h1>
-
-<div class="card card-container">
-  <div class="card-body">
-    <%= render "contact_type_groups", contact_type_groups: @contact_type_groups %>
-    <%= render "contact_types", contact_types: @contact_types %>
+<div class="tables-wrapper">
+  <%= render "contact_type_groups", contact_type_groups: @contact_type_groups %>
+  <%= render "contact_types", contact_types: @contact_types %>
+</div>
+<!-- end -->
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h2>
+          Manage Court Details
+        </h2>
+      </div>
+    </div>
   </div>
 </div>
-
-<h1 class="pt-5">Manage Court Details</h1>
-
-<div class="card card-container">
-  <div class="card-body">
-    <%= render "hearing_types" %>
-    <%= render "judges" %>
-    <%= render "sent_emails" %>
-  </div>
+<div class="tables-wrapper">
+  <%= render "hearing_types" %>
+  <%= render "judges" %>
+  <%= render "sent_emails" %>
 </div>

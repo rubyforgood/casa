@@ -2,89 +2,96 @@
   <div class="card-body">
     <%= form_with(model: casa_case, local: true) do |form| %>
       <%= render "/shared/error_messages", resource: casa_case %>
-
       <% if casa_case.active %>
-        <div class="top-page-actions pull-right">
-          <%= form.submit casa_case.persisted? ? "Update CASA Case" : "Create CASA Case", class: "btn btn-primary" %>
+        <div class="top-page-actions pull-right z-1">
+          <%= button_tag(
+                type: "submit",
+                class: "btn-sm main-btn primary-btn btn-hove mb-3"
+              ) do %>
+            <% if casa_case.persisted? %>
+              <i class="lni lni-pencil-alt"></i>
+              Update CASA Case
+            <% else %>
+              <i class="lni lni-plus"></i>
+              Create CASA Case
+            <% end %>
+          <% end %>
         </div>
       <% end %>
-
+      <br>
       <% if casa_case.new_record? || policy(casa_case).update_case_number? %>
-        <div class="field form-group">
+        <div class="input-style-1">
           <%= form.label :case_number, "Case number" %>
-          <%= form.text_field :case_number, class: "form-control w-25", :required => 'required' %>
+          <%= form.text_field :case_number, class: "form-control", :required => 'required' %>
         </div>
       <% end %>
-
       <h2><%= form.label :court_details, "Court Details" %></h2>
-
       <% if policy(casa_case).update_birth_month_year_youth? %>
-        <div class="field form-group">
-          <%= form.label :birth_month_year_youth, "Youth's Birth Month & Year" %>
+        <div class="form-group my-3">
+          <%= form.label :birth_month_year_youth, "Youth's Birth Month & Year", class: 'my-2' %>
           <br>
           <span class="datetime-year-month">
             <%= form.date_select :birth_month_year_youth,
                                  {
-                                     order: [:month, :year],
-                                     start_year: Date.current.year,
-                                     end_year: 1989,
-                                     prompt: {month: "Month", year: "Year"},
-                                     discard_day: true
-                                 }, class: "select2 date-input" %>
+                                   order: [:month, :year],
+                                   start_year: Date.current.year,
+                                   end_year: 1989,
+                                   prompt: {month: "Month", year: "Year"},
+                                   discard_day: true
+                                 }, class: "form-control select-style-2" %>
           </span>
         </div>
       <% end %>
-
       <% if policy(casa_case).update_date_in_care_youth? %>
         <div class="field form-group">
-          <%= form.label :date_in_care, "Youth's Date in Care" %>
+          <%= form.label :date_in_care, "Youth's Date in Care", class: 'my-2' %>
           <br>
           <span class="datetime-year-month">
             <%= form.date_select :date_in_care,
-                                  {
-                                      order: [:month, :year],
-                                      start_year: Date.current.year,
-                                      end_year: 1989,
-                                      prompt: {month: "Month", year: "Year"},
-                                      discard_day: true
-                                  }, class: "select2 date-input" %>
+                                 {
+                                   order: [:month, :year],
+                                   start_year: Date.current.year,
+                                   end_year: 1989,
+                                   prompt: {month: "Month", year: "Year"},
+                                   discard_day: true
+                                 }, class: "form-control select-style-2" %>
           </span>
         </div>
       <% end %>
-
       <% if policy(casa_case).update_court_date? && casa_case.new_record? %>
         <%= form.fields_for :court_dates, casa_case.court_dates.new do |cdf| %>
           <div class="field form-group">
             <%= cdf.label :date, "Next Court Date" %>
             <br>
-            <div class="field form-group">
+            <div class="input-style-1">
               <%= cdf.text_field :date,
                                  data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
                                  class: "form-control" %>
             </div>
+          </div>
         <% end %>
         <%= form.check_box :empty_court_date, class: "toggle-court-date-input" %>
         <%= form.label :empty_court_date, "I don't know the court date yet" %>
       <% end %>
-
-      <div class="field form-group">
+      <div class="select-style-1">
         <%= form.label :court_report_status, "Court Report Status" %>
-        <%= form.select :court_report_status,
-                        CasaCase.court_report_statuses&.map { |status| [status.first.humanize, status.first] } %>
+        <div class="select-position">
+          <%= form.select :court_report_status,
+                          CasaCase.court_report_statuses&.map { |status| [status.first.humanize, status.first] } %>
+        </div>
       </div>
-
       <% if casa_case.persisted? %>
         <div class="field form-group court-orders">
           <% if policy(casa_case).update_court_orders? %>
             <%= render partial: "shared/court_order_list",
-locals: {casa_case: @casa_case, siblings_casa_cases: @siblings_casa_cases, form: form} %>
+                       locals: {casa_case: @casa_case, siblings_casa_cases: @siblings_casa_cases, form: form,
+                                resource: 'casa_case'} %>
           <% else %>
             <%= form.label :case_court_orders, "Court Orders" %>
             <div id="court-orders-list-container">
               <% @casa_case.case_court_orders.each do |order| %>
                 <div class="court-order-entry">
                   <textarea disabled><%= order.text %></textarea>
-
                   <% if order.implementation_status %>
                     <p class="implementation-status">
                       <strong>Status:</strong>
@@ -96,13 +103,11 @@ locals: {casa_case: @casa_case, siblings_casa_cases: @siblings_casa_cases, form:
             </div>
           <% end %>
         </div>
-
         <div class="field form-group past-court-dates">
           <%= render "court_dates", casa_case: @casa_case %>
         </div>
       <% end %>
-
-      <% if policy(casa_case).update_contact_types? %>
+      <% if Pundit.policy(current_user, casa_case).update_contact_types? %>
         <%= render "case_contacts/contact_types",
                    form: form,
                    model: casa_case,
@@ -110,35 +115,42 @@ locals: {casa_case: @casa_case, siblings_casa_cases: @siblings_casa_cases, form:
                    selected_case_contact_types: [],
                    checkbox_tag_name: "casa_case[casa_case_contact_types_attributes][][contact_type_id]" %>
       <% end %>
-
       <br>
-
-      <div class="actions">
+      <div class="actions-cc">
         <% if casa_case.active %>
-          <%= form.submit casa_case.persisted? ? "Update CASA Case" : "Create CASA Case", class: "btn btn-primary" %>
+          <%= button_tag(
+                type: "submit",
+                class: "btn-sm main-btn primary-btn btn-hove mb-3"
+              ) do %>
+            <% if casa_case.persisted? %>
+              <i class="lni lni-pencil-alt"></i>
+              Update CASA Case
+            <% else %>
+              <i class="lni lni-plus"></i>
+              Create CASA Case
+            <% end %>
+          <% end %>
           <%= link_to("Deactivate CASA Case",
                       deactivate_casa_case_path(casa_case),
                       method: :patch,
-                      class: "btn btn-outline-danger pull-right",
+                      class: "main-btn danger-btn-outline pull-right",
                       data: {
-                          confirm_swal:
-                              "Deactivating a CASA Case will unassign any volunteers currently assigned to this case.",
-                          reload: true,
-                          success: "Yes, deactivate",
-                          fail: "No, go back"
+                        confirm_swal:
+                          "Deactivating a CASA Case will unassign any volunteers currently assigned to this case.",
+                        reload: true,
+                        success: "Yes, deactivate",
+                        fail: "No, go back"
                       }) if Pundit.policy(current_user, casa_case).update_case_status? && casa_case.persisted? %>
         <% else %>
           <%= link_to("Reactivate CASA Case",
                       reactivate_casa_case_path(casa_case),
                       method: :patch,
-                      class: "btn btn-primary") if Pundit.policy(current_user, casa_case).update_case_status? %>
+                      class: "main-btn primary-btn btn-hover") if Pundit.policy(current_user, casa_case).update_case_status? %>
         <% end %>
       </div>
     <% end %>
-    </div>
   </div>
-
-  <% if Pundit.policy(current_user, @casa_case).assign_volunteers? && casa_case.persisted? %>
-    <%= render "volunteer_assignment" %>
-  <% end %>
 </div>
+<% if Pundit.policy(current_user, @casa_case).assign_volunteers? && casa_case.persisted? %>
+  <%= render "volunteer_assignment" %>
+<% end %>

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :language do
-    name { Faker::Nation.language }
+    sequence(:name) { |n| "Language #{n} - #{Faker::Nation.language}" }
     casa_org { CasaOrg.first || create(:casa_org) }
   end
 end

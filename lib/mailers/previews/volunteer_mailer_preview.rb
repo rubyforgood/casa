@@ -1,27 +1,32 @@
 # Preview all emails at http://localhost:3000/rails/mailers/volunteer_mailer
 # :nocov:
+require_relative "../debug_preview_mailer"
 class VolunteerMailerPreview < ActionMailer::Preview
   def account_setup
-    user = params.has_key?(:id) ? get_user(params[:id]) : Volunteer.last
-    VolunteerMailer.account_setup(user)
+    volunteer = params.has_key?(:id) ? Volunteer.find_by(id: params[:id]) : Volunteer.last
+    if volunteer.nil?
+      DebugPreviewMailer.invalid_user("volunteer")
+    else
+      VolunteerMailer.account_setup(volunteer)
+    end
   end
 
   def court_report_reminder
-    user = params.has_key?(:id) ? get_user(params[:id]) : Volunteer.last
-    VolunteerMailer.court_report_reminder(user, Date.today)
+    volunteer = params.has_key?(:id) ? Volunteer.find_by(id: params[:id]) : Volunteer.last
+    if volunteer.nil?
+      DebugPreviewMailer.invalid_user("volunteer")
+    else
+      VolunteerMailer.court_report_reminder(volunteer, Date.today)
+    end
   end
 
   def case_contacts_reminder
-    user = params.has_key?(:id) ? get_user(params[:id]) : Volunteer.last
-    user.supervisor = params.has_key?(:id) ? User.find_by(id: params[:id]) : User.first
-    VolunteerMailer.case_contacts_reminder(user, true)
-  end
-
-  private
-
-  def get_user(user_id)
-    user = User.find_by(id: user_id)
-    user&.volunteer? ? user : Volunteer.last
+    volunteer = params.has_key?(:id) ? Volunteer.find_by(id: params[:id]) : Volunteer.last
+    if volunteer.nil?
+      DebugPreviewMailer.invalid_user("volunteer")
+    else
+      VolunteerMailer.court_report_reminder(volunteer, true)
+    end
   end
 end
 # :nocov:

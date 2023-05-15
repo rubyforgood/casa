@@ -2,14 +2,14 @@
 
 source "https://rubygems.org"
 
-ruby "3.1.2"
+ruby "3.1.3"
 gem "rails", "~> 7.0.4"
 
 gem "after_party" # post-deployment tasks
 gem "amazing_print" # easier console reading
 gem "azure-storage-blob", require: false
 gem "bugsnag" # tracking errors in prod
-gem "caxlsx", "~> 3.3" # excel spreadsheets - TODO can we remove this version restriction?
+gem "caxlsx", "~> 3.4" # excel spreadsheets - TODO can we remove this version restriction?
 gem "caxlsx_rails", "~> 0.6.3" # excel spreadsheets - TODO can we remove this version restriction?
 gem "cssbundling-rails", "~> 1.1" # compiles css
 gem "delayed_job_active_record"
@@ -31,18 +31,18 @@ gem "net-smtp", require: false # needed for ruby upgrade to 3.1.0 for some dang 
 gem "net-pop" # needed for ruby upgrade to 3.1.0 https://www.ruby-lang.org/en/news/2021/12/25/ruby-3-1-0-released/
 gem "net-imap" # needed for ruby upgrade to 3.1.0 https://www.ruby-lang.org/en/news/2021/12/25/ruby-3-1-0-released/
 gem "noticed" # Notifications
+gem "view_component" # View components for reusability
 gem "paranoia" # For soft-deleting database objects
 gem "pdf-forms" # filling in fund request PDFs with user input
 gem "rexml" # pdf-forms needs this to deploy to heroku apparently
 gem "pg" # Use postgresql as the database for Active Record
 gem "pretender"
-gem "puma" # Use Puma as the app server
+gem "puma", "6.2.1" # 6.2.2 fails to install on m1 # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "rack-attack" # for blocking & throttling abusive requests
 gem "request_store"
 gem "sablon" # Word document templating tool for Case Court Reports
 gem "scout_apm"
-gem "sorbet-runtime" # Type definitions and checking
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "strong_migrations"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -65,8 +65,6 @@ group :development do
   gem "letter_opener" # Opens emails in new tab for easier testing
   gem "spring" # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring-commands-rspec"
-  gem "sorbet" # Type definitions and checking
-  gem "tapioca", require: false # Type definitions and checking
   gem "traceroute" # for finding unused routes
   gem "web-console", ">= 3.3.0" # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
 end

@@ -1,10 +1,13 @@
-<h1 class="pt-5">Manage Volunteers</h1>
-
-<div id="volunteer-assignment" class="card card-container">
-  <div class="card-body">
+<div class="col-md-6">
+  <div class="title mb-30 mt-30">
+    <h2 class="pt-5">Manage Volunteers</h2>
+  </div>
+</div>
+<div id="volunteer-assignment" class="card-style">
+  <div>
     <% if show_assigned_volunteers %>
       <%= yield :table_title %>
-      <div class="table-responsive">
+      <div class="table-wrapper table-responsive">
         <table class='table'>
           <thead>
             <tr>
@@ -25,16 +28,13 @@
         </table>
       </div>
     <% end %>
-
     <br>
-
-    <h3>Assign a New Volunteer</h3>
-
+    <h3 class="title">Assign a New Volunteer</h3>
     <fieldset class="border-0" <%= 'disabled' unless available_volunteers.any? %>>
       <%= form_for assignable_obj.new, url: assign_action do |form| %>
         <div class='form-group'>
-          <label for="<%= select_id %>">Select a Volunteer</label>
-          <select id="<%= select_id %>" name="<%= select_name %>" class='form-control select2'>
+          <label for="<%= select_id %>" class="mt-2">Select a Volunteer</label>
+          <select id="<%= select_id %>" name="<%= select_name %>" class='form-control select-style-2 mt-1'>
             <% available_volunteers.each do |volunteer| %>
               <option value="<%= volunteer.id %>"><%= volunteer.display_name %></option>
             <% end %>
@@ -43,8 +43,13 @@
         <% if @supervisor %>
           <%= form.hidden_field :supervisor_id, :value => @supervisor.id %>
         <% end %>
-
-        <%= form.submit "Assign Volunteer", class: 'btn btn-secondary' %>
+        <div class="actions mb-10">
+          <%= button_tag(
+            type: "submit",
+            class: "main-btn primary-btn btn-sm btn-hover"
+          ) do %><i class="lni lni-plus ml-10"></i> Assign Volunteer
+          <% end %>
+        </div>
       <% end %>
     </fieldset>
     <% unless available_volunteers.any? %>

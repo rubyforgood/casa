@@ -4,7 +4,7 @@
             "Reactivate CASA Case",
             reactivate_casa_case_path(@casa_case),
             method: :patch,
-            class: "btn btn-primary pull-right"
+            class: "main-btn primary-btn btn-hover pull-right"
         ) if Pundit.policy(current_user, @casa_case).update_case_status? %>
   </p>
 </div>

@@ -429,10 +429,13 @@ RSpec.describe CasaCasePolicy do
       end
     end
 
-    # TODO: What can supervisors do?
+    it "does not allow superivsors" do
+      is_expected.not_to permit(supervisor, casa_case)
+    end
 
     it "does not allow volunteers" do
       is_expected.not_to permit(volunteer, casa_case)
+      is_expected.not_to permit(other_org_volunteer, casa_case)
     end
   end
 

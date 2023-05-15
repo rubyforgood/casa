@@ -121,7 +121,7 @@ RSpec.describe SupervisorImporter do
 
       expect(alert[:type]).to eq(:error)
       expect(alert[:message]).to eq("Not all rows were imported.")
-      expect(alert[:exported_rows]).to include("Phone number must be 12 digits including country code (+1)")
+      expect(alert[:exported_rows]).to include("Phone number must be 10 digits or 12 digits including country code (+1)")
     end
   end
 
@@ -129,8 +129,8 @@ RSpec.describe SupervisorImporter do
     SupervisorImporter.new(supervisor_import_data_path, casa_org_id).import_supervisors
     data_using_instance = Supervisor.pluck(:email).sort
 
-    SentEmail.delete_all
-    Supervisor.delete_all
+    SentEmail.destroy_all
+    Supervisor.destroy_all
     SupervisorImporter.import_supervisors(supervisor_import_data_path, casa_org_id)
     data_using_static = Supervisor.pluck(:email).sort
 

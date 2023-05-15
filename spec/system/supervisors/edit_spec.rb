@@ -6,7 +6,7 @@ RSpec.describe "supervisors/edit", type: :system do
   context "logged in as an admin" do
     let(:user) { create(:casa_admin, casa_org: organization) }
 
-    it "can edit supervisor by clicking on the edit link from the supervisors list page" do
+    it "can edit supervisor by clicking on the edit link from the supervisors list page", js: true do
       supervisor_name = "Leslie Knope"
       create(:supervisor, display_name: supervisor_name, casa_org: organization)
       sign_in user
@@ -16,13 +16,13 @@ RSpec.describe "supervisors/edit", type: :system do
       expect(page).to have_text(supervisor_name)
 
       within "#supervisors" do
-        click_on "Edit"
+        click_on "Edit", match: :first
       end
 
       expect(page).to have_text("Editing Supervisor")
     end
 
-    it "can edit supervisor by clicking on the supervisor's name from the supervisors list page" do
+    it "can edit supervisor by clicking on the supervisor's name from the supervisors list page", js: true do
       supervisor_name = "Leslie Knope"
       create(:supervisor, display_name: supervisor_name, casa_org: organization)
       sign_in user
@@ -78,11 +78,11 @@ RSpec.describe "supervisors/edit", type: :system do
       visit edit_supervisor_path(supervisor)
 
       dismiss_confirm do
-        click_on "Deactivate supervisor"
+        find("a[href='#{deactivate_supervisor_path(supervisor)}']").click
       end
 
       accept_confirm do
-        click_on "Deactivate supervisor"
+        find("a[href='#{deactivate_supervisor_path(supervisor)}']").click
       end
       expect(page).to have_text("Supervisor was deactivated on")
 
@@ -156,18 +156,35 @@ RSpec.describe "supervisors/edit", type: :system do
     end
 
     context "when entering valid information" do
-      it "updates the e-mail address successfully" do
+      before do
         sign_in user
-        supervisor = create(:supervisor)
-        visit edit_supervisor_path(supervisor)
+        @supervisor = create(:supervisor)
+        @old_email = @supervisor.email
+        visit edit_supervisor_path(@supervisor)
+        fill_in "supervisor_email", with: "new_supervisor_email@example.com"
 
-        expect {
-          fill_in "supervisor_email", with: ""
-          fill_in "supervisor_email", with: "new" + supervisor.email
-          click_on "Submit"
-          page.find ".header-flash > div"
-          supervisor.reload
-        }.to change { supervisor.email }.to "new" + supervisor.email
+        click_on "Submit"
+        @supervisor.reload
+      end
+
+      it "sends a confirmaton email to the supervisor and displays current email" do
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
+        expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
+        expect(ActionMailer::Base.deliveries.first.body.encoded)
+          .to match("You can confirm your account email through the link below:")
+
+        expect(page).to have_text "Supervisor was successfully updated. Confirmation Email Sent."
+        expect(page).to have_field("Email", with: @old_email)
+        expect(@supervisor.unconfirmed_email).to eq("new_supervisor_email@example.com")
+      end
+
+      it "correctly updates the supervisor email once confirmed" do
+        @supervisor.confirm
+        @supervisor.reload
+        visit edit_supervisor_path(@supervisor)
+
+        expect(page).to have_field("Email", with: "new_supervisor_email@example.com")
+        expect(@supervisor.old_emails).to match([@old_email])
       end
     end
 

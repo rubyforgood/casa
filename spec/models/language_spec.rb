@@ -15,4 +15,18 @@ RSpec.describe Language, type: :model do
 
     expect(subject).not_to be_valid
   end
+
+  context "when calling valid?" do
+    it "removes surrounding spaces from the name attribute" do
+      subject = build(:language, name: "  spanish  ", casa_org: organization)
+      subject.valid?
+      expect(subject.name).to eq "spanish"
+    end
+
+    it "removes surrounding spaces from the name attribute but leaves in middle spaces" do
+      subject = build(:language, name: " Western Punjabi ", casa_org: organization)
+      subject.valid?
+      expect(subject.name).to eq "Western Punjabi"
+    end
+  end
 end

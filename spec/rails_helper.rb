@@ -6,6 +6,8 @@ require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
 require "pundit/rspec"
 require "webdrivers" unless ENV["DOCKER"]
+require "view_component/test_helpers"
+require "capybara/rspec"
 
 # Require all support folder files
 Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |f| require f }
@@ -32,6 +34,9 @@ RSpec.configure do |config|
   config.include CsvExporterHelper, type: :model
   config.include TemplateHelper
   config.include Warden::Test::Helpers
+  config.include ViewComponent::TestHelpers, type: :component
+  config.include ViewComponent::SystemTestHelpers, type: :component
+  config.include Capybara::RSpecMatchers, type: :component
 
   config.after do
     Warden.test_reset!
@@ -60,10 +65,6 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
 
   config.disable_monkey_patching!
-
-  if ENV["SKIP_BULLET"]
-    Bullet.enable = false
-  end
 
   config.around :each, :disable_bullet do |example|
     Bullet.raise = false

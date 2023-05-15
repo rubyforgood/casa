@@ -3,6 +3,10 @@ class UserPolicy < ApplicationPolicy
     admin_or_supervisor_same_org? || record == user
   end
 
+  def remove_language?
+    admin_or_supervisor_same_org? || record == user
+  end
+
   def edit?
     admin_or_supervisor_or_volunteer?
   end
@@ -43,6 +47,7 @@ class UserPolicy < ApplicationPolicy
 
   alias_method :update?, :edit?
   alias_method :update_password?, :edit?
+  alias_method :update_email?, :edit?
 
   class Scope
     attr_reader :user, :scope

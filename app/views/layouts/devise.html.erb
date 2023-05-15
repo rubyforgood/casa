@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link
+    rel="shortcut icon"
+    href="assets/images/favicon.svg"
+    type="image/x-icon">
+  <title>CASA Volunteer Tracker</title>
+
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+  <% if all_casa_admin_signed_in? %>
+    <%= javascript_include_tag 'all_casa_admin', 'data-turbolinks-track': 'reload', defer: true %>
+  <% end %>
+
+  <link rel="stylesheet" href="/assets/css/lineicons.css">
+  <link rel="stylesheet" href="/assets/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+<body>
+<section class="signin-section">
+  <div class="container-fluid">
+    <div class="row g-0 auth-row">
+      <div class="col-lg-6">
+        <div class="auth-cover-wrapper bg-primary-100">
+          <div class="auth-cover">
+            <div class="title text-center">
+              <h1 class="text-primary mb-10">Welcome Back</h1>
+              <p class="text-medium">
+                Sign in to your Existing account to continue
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end col -->
+      <div class="col-lg-6">
+        <%= yield %>
+      </div>
+      <!-- end col -->
+    </div>
+    <!-- end row -->
+  </div>
+</section>
+</body>
+</html>

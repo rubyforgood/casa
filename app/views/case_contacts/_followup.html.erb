@@ -1,14 +1,14 @@
 <% if followup %>
-  <div class="mr-2">
-    <%= button_to resolve_followup_path(followup), method: :patch, class: "btn btn-success" do %>
-      Resolve Reminder
+  <div>
+    <%= button_to resolve_followup_path(followup), method: :patch, class: "main-btn btn-sm success-btn btn-hover", id:"resolve" do %>
+      <i class="bi bi-calendar"></i>Resolve Reminder
     <% end %>
   </div>
 <% else %>
-  <div class="mr-2">
+  <div>
     <button type="button"
-            class="btn btn-outline-primary followup-button"
-            id="followup-button-<%= contact.id %>">
+            class="followup-button main-btn btn-sm primary-btn-outline btn-hover"
+            id="followup-button-<%= contact.id %>"><i class="lni lni-calendar mr-5"></i>
       Make Reminder
     </button>
   </div>

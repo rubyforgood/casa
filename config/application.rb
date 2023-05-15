@@ -21,6 +21,7 @@ module Casa
   class Application < Rails::Application
     config.action_mailer.preview_path ||= defined?(Rails.root) ? Rails.root.join("lib", "mailers", "previews") : nil
     config.eager_load_paths << Rails.root.join("app", "lib", "importers")
+    config.assets.paths << Rails.root.join("app", "assets", "webfonts")
     config.load_defaults 7.0
     config.active_storage.variant_processor = :mini_magick
     config.active_storage.content_types_to_serve_as_binary.delete("image/svg+xml")

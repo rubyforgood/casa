@@ -1,39 +1,42 @@
-<div class="field form-group">
+<div class="input-style-1">
   <%= f.label :email, "Email" %>
   <% if policy(resource).update_user_setting? %>
-    <%= f.text_field :email, class: "form-control" %>
+
+    <%= f.text_field :email, placeholder: "Email" %>
+
   <% else %>
-    <input class="form-control" type="text" placeholder="<%= resource.email %>" autocomplete="off" readonly>
+    <input type="text" placeholder="<%= resource.email %>" autocomplete="off" readonly>
   <% end %>
 </div>
 
-<div class="field form-group">
+<div class="input-style-1">
   <%= f.label :display_name, "Display name" %>
   <% if policy(resource).update_user_setting? %>
-    <%= f.text_field :display_name, class: "form-control" %>
+
+    <%= f.text_field :display_name, placeholder: "Display Name" %>
   <% else %>
-    <input class="form-control" type="text" placeholder="<%= resource.display_name %>" autocomplete="off" readonly>
+    <input type="text" placeholder="<%= resource.display_name %>" autocomplete="off" readonly>
   <% end %>
 </div>
 
-<div class="field form-group">
+<div class="input-style-1">
   <%= f.label :phone_number, "Phone number" %>
   <% if policy(resource).update_user_setting? %>
-    <%= f.text_field :phone_number, class: "form-control" %>
+    <%= f.text_field :phone_number, placeholder: "Phone Number" %>
   <% else %>
-    <input class="form-control" type="text" placeholder="<%= resource.phone_number %>" autocomplete="off" readonly>
+    <input type="text" placeholder="<%= resource.phone_number %>" autocomplete="off" readonly>
   <% end %>
 </div>
 <% if current_organization.show_driving_reimbursement && resource.role == "Volunteer" %>
-  <div class="field form-group">
+  <div class="input-style-1">
     <%= f.label :address, "Mailing address" %>
     <% if policy(resource).update_user_setting? %>
       <%= f.fields_for :address, (resource.address ? nil : Address.new) do |a| %>
-        <%= a.text_field :content, class: "form-control" %>
+        <%= a.text_field :content, placeholder: "Mailing Address" %>
       <% end %>
     <% else %>
       <%= f.fields_for :address, (resource.address ? nil : Address.new) do |a| %>
-        <%= a.text_field :content, class: "form-control", readonly: true %>
+        <%= a.text_field :content, readonly: true, placeholder: "Mailing Address" %>
       <% end %>
     <% end %>
   </div>

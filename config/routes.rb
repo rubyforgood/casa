@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   end
 
   devise_scope :user do
-    root to: "devise/sessions#new"
+    root to: "static#index"
   end
 
   devise_scope :all_casa_admins do
@@ -37,6 +37,8 @@ Rails.application.routes.draw do
     resource :fund_request, only: %i[new create]
 
     resources :court_dates, only: %i[create edit new show update destroy]
+
+    resources :placements, only: %i[create edit new show update destroy]
 
     member do
       patch :deactivate
@@ -159,7 +161,9 @@ Rails.application.routes.draw do
       get :edit
       patch :update
       patch "update_password"
+      patch "update_email"
       patch :add_language
+      delete :remove_language
     end
   end
   resources :languages, only: %i[new create edit update] do

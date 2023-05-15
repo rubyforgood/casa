@@ -24,6 +24,7 @@ class CaseContactReport
       .want_driving_reimbursement(args[:want_driving_reimbursement])
       .contact_type(args[:contact_type_ids])
       .contact_type_groups(args[:contact_type_group_ids])
+      .with_casa_case(args[:casa_case_ids])
   end
 
   def filtered_columns(args)

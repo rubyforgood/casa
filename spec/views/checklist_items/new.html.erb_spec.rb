@@ -19,7 +19,7 @@ RSpec.describe "checklist_items/new", type: :view do
     expect(rendered).to have_selector("input", id: "checklist_item_category")
     expect(rendered).to have_selector("input", id: "checklist_item_description")
     expect(rendered).to have_selector("input", id: "checklist_item_mandatory")
-    expect(rendered).to have_selector("input[type=submit]")
+    expect(rendered).to have_selector("button[type=submit]")
   end
 
   it "requires category text field" do

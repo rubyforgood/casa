@@ -1,9 +1,14 @@
-<%= submit_tag "Send Reminder",
-  class: "btn btn-primary casa-case-button",
+<%= button_tag(
+  type: "submit",
+  class: "main-btn primary-btn btn-hover btn-sm",
   id: "reminder_button",
   data_toggle: "tooltip",
-  title: "Remind volunteer to input case contacts".to_s %>
-<%= label_tag 'with_cc', class: 'unbold' do %>
-  <%= check_box_tag 'with_cc', 1 %>
-  <%= volunteer.decorate.cc_reminder_text %>
+  title: "Remind volunteer to input case contacts".to_s
+) do %>
+  <i class="lni lni-alarm mr-10"></i> Send Reminder
 <% end %>
+
+<div class="d-inline form-check">
+  <%= check_box_tag 'with_cc', 1, class: 'form-check-input' %>
+  <%= label_tag 'with_cc', 'Send CC to Supervisor and Admin', class: 'unbold form-check-label' %>
+</div>

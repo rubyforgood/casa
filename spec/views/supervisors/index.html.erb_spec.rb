@@ -35,8 +35,8 @@ RSpec.describe "supervisors/index", type: :view do
 
         parsed_html = Nokogiri.HTML5(rendered)
 
-        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to eq(1)
-        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to eq(1)
+        expect(parsed_html.css("#supervisors .success-bg").length).to eq(1)
+        expect(parsed_html.css("#supervisors .danger-bg").length).to eq(1)
       end
 
       it "accurately displays the number of active and inactive volunteers per supervisor" do
@@ -46,10 +46,10 @@ RSpec.describe "supervisors/index", type: :view do
 
         parsed_html = Nokogiri.HTML5(rendered)
 
-        active_bar = parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact")
-        inactive_bar = parsed_html.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact")
-        active_flex = active_bar.attribute("style").value.split.last
-        inactive_flex = inactive_bar.attribute("style").value.split.last
+        active_bar = parsed_html.css("#supervisors .success-bg")
+        inactive_bar = parsed_html.css("#supervisors .danger-bg")
+        active_flex = active_bar.inner_html
+        inactive_flex = inactive_bar.inner_html
         active_content = active_bar.children[0].text.strip
         inactive_content = inactive_bar.children[0].text.strip
 
@@ -72,8 +72,8 @@ RSpec.describe "supervisors/index", type: :view do
 
         parsed_html = Nokogiri.HTML5(rendered)
 
-        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to eq(0)
-        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to eq(1)
+        expect(parsed_html.css("#supervisors .success-bg").length).to eq(0)
+        expect(parsed_html.css("#supervisors .danger-bg").length).to eq(1)
       end
     end
 
@@ -89,9 +89,8 @@ RSpec.describe "supervisors/index", type: :view do
 
         parsed_html = Nokogiri.HTML5(rendered)
 
-        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to eq(1)
-        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact-end").length).to eq(1)
-        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to eq(0)
+        expect(parsed_html.css("#supervisors .success-bg").length).to eq(1)
+        expect(parsed_html.css("#supervisors .danger-bg").length).to eq(0)
       end
     end
 
@@ -104,9 +103,9 @@ RSpec.describe "supervisors/index", type: :view do
 
         parsed_html = Nokogiri.HTML5(rendered)
 
-        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .attempted-contact").length).to eq(0)
-        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .no-attempted-contact").length).to eq(0)
-        expect(parsed_html.css("#supervisors .supervisor_case_contact_stats .no-volunteers").length).to eq(1)
+        expect(parsed_html.css("#supervisors .success-bg").length).to eq(0)
+        expect(parsed_html.css("#supervisors .danger-bg").length).to eq(0)
+        expect(parsed_html.css("#supervisors .bg-secondary").length).to eq(1)
       end
     end
   end

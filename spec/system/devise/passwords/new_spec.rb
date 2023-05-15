@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "users/passwords/new", type: :system do
   before do
-    visit root_path
+    visit new_user_session_path
     click_on "Forgot your password?"
   end
 
@@ -22,7 +22,7 @@ RSpec.describe "users/passwords/new", type: :system do
 
     click_on "Send me reset password instructions"
     expect(page).to have_content "1 error prohibited this User from being saved:"
-    expect(page).to have_text("Phone number must be 12 digits including country code (+1)")
+    expect(page).to have_text("Phone number must be 10 digits or 12 digits including country code (+1)")
   end
 
   it "displays error if user tries to submit empty form" do

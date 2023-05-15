@@ -6,6 +6,10 @@ class User < ApplicationRecord
   include ByOrganizationScope
   include DateHelper
 
+  before_update :record_previous_email
+  after_create :skip_email_confirmation_upon_creation
+  before_save :normalize_phone_number
+
   validates_with UserValidator
 
   devise :database_authenticatable, :invitable, :recoverable, :validatable, :timeoutable, :trackable, :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
@@ -41,6 +45,8 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :user_sms_notification_events, :address, allow_destroy: true
 
+  after_create :create_preference_set
+
   scope :active, -> { where(active: true) }
 
   scope :inactive, -> { where(active: false) }
@@ -69,6 +75,10 @@ class User < ApplicationRecord
 
   def active_volunteers
     volunteers.active.size
+  end
+
+  def create_preference_set
+    self.preference_set = PreferenceSet.create
   end
 
   # all contacts this user has with this casa case
@@ -138,6 +148,38 @@ class User < ApplicationRecord
   def serving_transition_aged_youth?
     actively_assigned_and_active_cases.is_transitioned.any?
   end
+
+  def record_previous_email
+    if email_changed? && !old_emails.include?(email_was)
+      old_emails.push(email_was)
+    end
+  end
+
+  def filter_old_emails!(previous_email)
+    updated_emails = old_emails.reject { |old| old == previous_email }
+    update(old_emails: updated_emails)
+  end
+
+  def skip_email_confirmation_upon_creation
+    skip_confirmation!
+    confirm
+  end
+
+  def send_email_changed_notification?
+    false
+  end
+
+  def after_confirmation
+    send_email_changed_notification
+  end
+
+  private
+
+  def normalize_phone_number
+    if phone_number&.length == 10
+      self.phone_number = "+1#{phone_number}"
+    end
+  end
 end
 # == Schema Information
 #
@@ -145,6 +187,9 @@ end
 #
 #  id                          :bigint           not null, primary key
 #  active                      :boolean          default(TRUE)
+#  confirmation_sent_at        :datetime
+#  confirmation_token          :string
+#  confirmed_at                :datetime
 #  current_sign_in_at          :datetime
 #  current_sign_in_ip          :string
 #  display_name                :string           default(""), not null
@@ -159,6 +204,7 @@ end
 #  invited_by_type             :string
 #  last_sign_in_at             :datetime
 #  last_sign_in_ip             :string
+#  old_emails                  :string           default([]), is an Array
 #  phone_number                :string           default("")
 #  receive_email_notifications :boolean          default(TRUE)
 #  receive_sms_notifications   :boolean          default(FALSE), not null
@@ -166,6 +212,7 @@ end
 #  reset_password_token        :string
 #  sign_in_count               :integer          default(0), not null
 #  type                        :string
+#  unconfirmed_email           :string
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  casa_org_id                 :bigint           not null
@@ -174,6 +221,7 @@ end
 # Indexes
 #
 #  index_users_on_casa_org_id                        (casa_org_id)
+#  index_users_on_confirmation_token                 (confirmation_token) UNIQUE
 #  index_users_on_email                              (email) UNIQUE
 #  index_users_on_invitation_token                   (invitation_token) UNIQUE
 #  index_users_on_invitations_count                  (invitations_count)

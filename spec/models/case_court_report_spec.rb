@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 require "sablon"
 
 RSpec.describe CaseCourtReport, type: :model do
   let(:path_to_template) { Rails.root.join("app", "documents", "templates", "default_report_template.docx").to_s }
   let(:path_to_report) { Rails.root.join("tmp", "test_report.docx").to_s }
+
   context "#generate_to_string" do
     describe "when receiving valid case, volunteer, and path_to_template" do
       let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
@@ -104,6 +107,7 @@ RSpec.describe CaseCourtReport, type: :model do
           let(:contact_type) { create(:contact_type, name: document_data[:case_contact_type]) }
           let(:case_contact) { create(:case_contact, contact_made: false, occurred_at: document_data[:case_contact_time]) }
           let(:court_order) { create(:case_court_order, implementation_status: :partially_implemented) }
+          let(:document_inspector) { DocxInspector.new(docx_contents: report.generate_to_string) }
 
           before(:each) do
             casa_case_with_contacts.casa_org.update_attribute(:address, document_data[:org_address])
@@ -119,19 +123,47 @@ RSpec.describe CaseCourtReport, type: :model do
             volunteer.supervisor.update_attribute(:display_name, document_data[:supervisor_name])
           end
 
-          it "displays all the information" do
-            document_inspector = DocxInspector.new(docx_contents: report.generate_to_string)
-
+          it "displays the org address" do
             expect(document_inspector.word_list_header_contains?(document_data[:org_address])).to eq(true)
-            expect(document_inspector.word_list_document_contains?(Date.today.strftime("%B %-d, %Y"))).to eq(true)
+          end
+
+          it "displays today's date formatted" do
+            expect(document_inspector.word_list_document_contains?(Date.current.strftime("%B %-d, %Y"))).to eq(true)
+          end
+
+          it "displays the case hearing date date formatted" do
             expect(document_inspector.word_list_document_contains?(document_data[:case_hearing_date].strftime("%B %-d, %Y"))).to eq(true)
+          end
+
+          it "displays the case number" do
             expect(document_inspector.word_list_document_contains?(document_data[:case_number])).to eq(true)
+          end
+
+          it "displays th case contact type" do
             expect(document_inspector.word_list_document_contains?(document_data[:case_contact_type])).to eq(true)
+          end
+
+          it "displays the case contact tiime date formatted" do
             expect(document_inspector.word_list_document_contains?("#{document_data[:case_contact_time].strftime("%-m/%d")}*")).to eq(true)
+          end
+
+          it "displays the text" do
             expect(document_inspector.word_list_document_contains?(document_data[:text])).to eq(true)
+          end
+
+          it "displays the order status" do
             expect(document_inspector.word_list_document_contains?("Partially implemented")).to eq(true) # Order Status
+          end
+
+          it "displays the volunteer name" do
             expect(document_inspector.word_list_document_contains?(document_data[:volunteer_name])).to eq(true)
+          end
+
+          it "displays the volunteer case assignment date formatted" do
             expect(document_inspector.word_list_document_contains?(document_data[:volunteer_case_assignment_date].strftime("%B %-d, %Y"))).to eq(true)
+          end
+
+          it "displayes the supervisor name" do
             expect(document_inspector.word_list_document_contains?(document_data[:supervisor_name])).to eq(true)
           end
         end
@@ -167,6 +199,7 @@ RSpec.describe CaseCourtReport, type: :model do
           let(:contact_type) { create(:contact_type, name: document_data[:case_contact_type]) }
           let(:case_contact) { create(:case_contact, contact_made: false, occurred_at: document_data[:case_contact_time]) }
           let(:court_order) { create(:case_court_order, implementation_status: :partially_implemented) }
+          let(:document_inspector) { DocxInspector.new(docx_contents: report.generate_to_string) }
 
           before(:each) do
             casa_case.casa_org.update_attribute(:address, document_data[:org_address])
@@ -179,15 +212,31 @@ RSpec.describe CaseCourtReport, type: :model do
             court_order.update_attribute(:text, document_data[:text])
           end
 
-          it "display all expected information" do
-            document_inspector = DocxInspector.new(docx_contents: report.generate_to_string)
+          it "displays today's date formatted" do
+            expect(document_inspector.word_list_document_contains?(Date.current.strftime("%B %-d, %Y"))).to eq(true)
+          end
 
-            expect(document_inspector.word_list_document_contains?(Date.today.strftime("%B %-d, %Y"))).to eq(true)
+          it "displays the case hearing date formatted" do
             expect(document_inspector.word_list_document_contains?(document_data[:case_hearing_date].strftime("%B %-d, %Y"))).to eq(true)
+          end
+
+          it "displays the case numbet" do
             expect(document_inspector.word_list_document_contains?(document_data[:case_number])).to eq(true)
+          end
+
+          it "displays the case contact type" do
             expect(document_inspector.word_list_document_contains?(document_data[:case_contact_type])).to eq(true)
+          end
+
+          it "displays the case contact time formatted" do
             expect(document_inspector.word_list_document_contains?("#{document_data[:case_contact_time].strftime("%-m/%d")}*")).to eq(true)
+          end
+
+          it "displays the test" do
             expect(document_inspector.word_list_document_contains?(document_data[:text])).to eq(true)
+          end
+
+          it "displays the order status" do
             expect(document_inspector.word_list_document_contains?("Partially implemented")).to eq(true) # Order Status
           end
         end
@@ -217,6 +266,16 @@ RSpec.describe CaseCourtReport, type: :model do
       let(:court_order_unimplemented) { create(:case_court_order, casa_case: casa_case, text: "'q\"tE1LP-9W>,2)", implementation_status: :unimplemented) }
       let(:court_order_partially_implemented) { create(:case_court_order, casa_case: casa_case, text: "ZmCw@w@\d`&roct", implementation_status: :partially_implemented) }
       let(:court_order_not_specified) { create(:case_court_order, casa_case: casa_case, text: "(4WqOL7e'FRYd@%", implementation_status: nil) }
+      let(:args) do
+        {
+          case_id: casa_case.id,
+          path_to_template: path_to_template,
+          path_to_report: path_to_report
+        }
+      end
+      let(:context) { CaseCourtReportContext.new(args).context }
+      let(:case_report) { CaseCourtReport.new(path_to_template: path_to_template, context: context) }
+      let(:document_inspector) { DocxInspector.new(docx_contents: case_report.generate_to_string) }
 
       before(:each) do
         casa_case.case_court_orders << court_order_implemented
@@ -225,29 +284,39 @@ RSpec.describe CaseCourtReport, type: :model do
         casa_case.case_court_orders << court_order_not_specified
       end
 
-      it "should have all the court orders" do
-        args = {
-          case_id: casa_case.id,
-          path_to_template: path_to_template,
-          path_to_report: path_to_report
-        }
-        context = CaseCourtReportContext.new(args).context
-        case_report = CaseCourtReport.new(path_to_template: path_to_template, context: context)
-
-        document_inspector = DocxInspector.new(docx_contents: case_report.generate_to_string)
-
+      it "contains the case number" do
         expect(document_inspector.word_list_document_contains?(casa_case.case_number)).to eq(true)
+      end
 
+      it "contains the court order text" do
         expect(document_inspector.word_list_document_contains?(court_order_implemented.text)).to eq(true)
+      end
+
+      it "contains the exact value of 'Implemented'" do
         expect(document_inspector.word_list_document_contains?("Implemented")).to eq(true)
+      end
 
+      it "contains the court order text" do
         expect(document_inspector.word_list_document_contains?(court_order_unimplemented.text)).to eq(true)
+      end
+
+      it "contains the exact value of 'Unimplemented'" do
         expect(document_inspector.word_list_document_contains?("Unimplemented")).to eq(true)
+      end
 
+      it "contains the court order text" do
         expect(document_inspector.word_list_document_contains?(court_order_partially_implemented.text)).to eq(true)
-        expect(document_inspector.word_list_document_contains?("Partially implemented")).to eq(true)
+      end
 
+      it "contains the exact value of 'Partially implemented'" do
+        expect(document_inspector.word_list_document_contains?("Partially implemented")).to eq(true)
+      end
+
+      it "contains the court order text" do
         expect(document_inspector.word_list_document_contains?(court_order_not_specified.text)).to eq(true)
+      end
+
+      it "contains the exact value of 'Not specified'" do
         expect(document_inspector.word_list_document_contains?("Not specified")).to eq(true)
       end
     end

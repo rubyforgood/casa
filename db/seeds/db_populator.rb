@@ -49,6 +49,7 @@ class DbPopulator
     create_checklist_items
     create_judges(casa_org)
     create_languages(casa_org)
+    create_mileage_rates(casa_org)
     casa_org
   end
 
@@ -80,7 +81,8 @@ class DbPopulator
           password_confirmation: SEED_PASSWORD,
           display_name: Faker::Name.name,
           phone_number: Faker::PhoneNumber.cell_phone_in_e164,
-          active: true
+          active: true,
+          confirmed_at: Time.now
         }
         # Approximately 1 out of 30 volunteers should be set to inactive.
         if klass == Volunteer && rng.rand(30) == 0
@@ -198,7 +200,7 @@ class DbPopulator
         court_report_status: court_report_submitted ? :submitted : :not_submitted,
         birth_month_year_youth: birth_month_year_youth
       )
-      _new_court_date = CourtDate.find_or_create_by!(
+      new_court_date = CourtDate.find_or_create_by!(
         casa_case: new_casa_case,
         court_report_due_date: court_date + 1.month,
         date: court_date
@@ -214,13 +216,10 @@ class DbPopulator
         )
       CaseAssignment.find_or_create_by!(casa_case: new_casa_case, volunteer: volunteer)
 
-      random_case_contact_count.times do
-        create_case_contact(new_casa_case)
-      end
-
       random_court_order_count.times do
         CaseCourtOrder.create!(
           casa_case_id: new_casa_case.id,
+          court_date: new_court_date,
           text: order_choices.sample(random: rng),
           implementation_status: CaseCourtOrder::IMPLEMENTATION_STATUSES.values.sample(random: rng)
         )
@@ -238,6 +237,25 @@ class DbPopulator
           casa_case_id: new_casa_case.id,
           date: Date.today - (index + 1).weeks
         )
+      end
+
+      random_case_contact_count.times do
+        create_case_contact(new_casa_case)
+      end
+
+      # guarantee at least one case contact before and after most recent past court date
+      if most_recent_past_court_date(new_casa_case.id)
+        if !case_contact_before_last_court_date?(new_casa_case.id, most_recent_past_court_date(new_casa_case.id))
+          new_case_contact = create_case_contact(new_casa_case)
+          new_case_contact.occurred_at = most_recent_past_court_date(new_casa_case.id) - 24.hours
+          new_case_contact.save!
+        end
+
+        if !case_contact_after_last_court_date?(new_casa_case.id, most_recent_past_court_date(new_casa_case.id))
+          new_case_contact = create_case_contact(new_casa_case)
+          new_case_contact.occurred_at = most_recent_past_court_date(new_casa_case.id) + 24.hours
+          new_case_contact.save!
+        end
       end
 
       # guarantee at least one transition aged youth case to "volunteer1"
@@ -325,5 +343,49 @@ class DbPopulator
 
   def create_language(name, casa_org)
     Language.find_or_create_by!(name: name, casa_org: casa_org)
+  end
+
+  def create_mileage_rates(casa_org)
+    attempt_count = 5
+    i = 0
+
+    while i < attempt_count
+      begin
+        MileageRate.create!({
+          amount: Faker::Number.decimal(l_digits: 2, r_digits: 2),
+          effective_date: Faker::Date.forward(days: 700),
+          is_active: true,
+          casa_org_id: casa_org.id
+        })
+      rescue ActiveRecord::RecordInvalid
+        attempt_count += 1
+      end
+
+      i += 1
+    end
+  end
+
+  def most_recent_past_court_date(casa_case_id)
+    CourtDate.where(
+      "date < ? AND casa_case_id = ?",
+      Date.today,
+      casa_case_id
+    ).order(date: :desc).first&.date
+  end
+
+  def case_contact_before_last_court_date?(casa_case_id, date)
+    CaseContact.where(
+      "occurred_at < ? AND casa_case_id = ?",
+      date,
+      casa_case_id
+    ).any?
+  end
+
+  def case_contact_after_last_court_date?(case_case_id, date)
+    CaseContact.where(
+      "occurred_at > ? AND casa_case_id = ?",
+      date,
+      case_case_id
+    ).any?
   end
 end

@@ -20,10 +20,14 @@ class TwilioService
     to = params[:To]
     # returns a twilio API message object
     # refer to docs: https://www.twilio.com/docs/sms/api/message-resource#message-properties
-    @client.messages.create(
-      from: from,
-      body: body,
-      to: to
-    )
+    begin
+      @client.messages.create(
+        from: from,
+        body: body,
+        to: to
+      )
+    rescue => e
+      Rails.logger.error("send SMS failed: #{e}")
+    end
   end
 end

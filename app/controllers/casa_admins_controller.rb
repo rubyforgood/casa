@@ -16,10 +16,12 @@ class CasaAdminsController < ApplicationController
 
   def update
     authorize @casa_admin
-
     if @casa_admin.update(update_casa_admin_params)
+      notice = check_unconfirmed_email_notice(@casa_admin)
+
+      @casa_admin.filter_old_emails!(@casa_admin.email)
       respond_to do |format|
-        format.html { redirect_to casa_admins_path, notice: "New admin created successfully" }
+        format.html { redirect_to edit_casa_admin_path(@casa_admin), notice: notice }
         format.json { render json: @casa_admin, status: :ok }
       end
     else

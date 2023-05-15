@@ -4,6 +4,6 @@ class ErrorController < ApplicationController
   skip_before_action :authenticate_user!
 
   def index
-    render status: 500
+    raise StandardError.new "This is an intentional test exception"
   end
 end
