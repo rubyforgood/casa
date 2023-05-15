@@ -1,0 +1,14 @@
+---
+
+extends: default
+
+ignore-from-file: .gitignore
+
+rules:
+  # 80 chars should be enough, but don't fail if a line is longer
+  line-length:
+    max: 80
+    level: warning
+
+  # don't bother me with this rule
+  indentation: disable

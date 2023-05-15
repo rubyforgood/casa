@@ -1,11 +1,15 @@
+# yamllint disable-line rule:document-start
 blank_issues_enabled: false
 contact_links:
   - name: 📄Documentation addition/change
     about: 🔨What needs documenting? ✨
+    # yamllint disable-line rule:line-length
     url: https://github.com/rubyforgood/casa/issues/new?template=documentation.md&projects=rubyforgood/casa/1
   - name: 🧹Chore
     about: 🔨What needs updating or removing? ✨
+    # yamllint disable-line rule:line-length
     url: https://github.com/rubyforgood/casa/issues/new?template=chore.md&projects=rubyforgood/casa/1
   - name: 🙏Problem Validation
     about: 🔨Describe a stakeholder's issue✨
+    # yamllint disable-line rule:line-length
     url: https://github.com/rubyforgood/casa/issues/new?template=problem_validation.md&projects=rubyforgood/casa/1
