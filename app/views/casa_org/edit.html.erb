@@ -38,9 +38,9 @@
       <%= form.check_box :show_driving_reimbursement, class: 'form-check-input' %>
       <%= form.label :show_driving_reimbursement, "Show driving reimbursement", class: 'form-check-label mb-2' %>
     </div>
-    <div id="accordionTwilio" class='enable_twilio' class='form-check-input accordion' data-bs-toggle="collapse" data-bs-target="#collapseTwilio" aria-expanded="true">
+    <div>
       <div class="form-check checkbox-style mb-20">
-        <%= form.check_box :twilio_enabled, class: 'form-check-input'%>
+        <%= form.check_box :twilio_enabled, class: 'form-check-input accordionTwilio' %>
         <%= form.label :twilio_enabled, "Enable Twilio", class: 'form-check-label mb-2' %>
       </div>
       <div class="accordionGroup">
