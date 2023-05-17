@@ -127,7 +127,6 @@ RSpec.describe "supervisors/index", type: :view do
         expect(parsed_html.css("#supervisors .success-bg").length).to eq(0)
         expect(parsed_html.css("#supervisors .danger-bg").length).to eq(0)
         expect(parsed_html.css("#supervisors .bg-secondary").length).to eq(1)
-
       end
     end
   end
