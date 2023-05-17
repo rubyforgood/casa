@@ -33,8 +33,9 @@ RSpec.describe "supervisors/index", type: :view do
         expect(rendered).to have_text(casa_case.judge_name)
         expect(rendered).to have_text(casa_case.decorate.status)
         expect(rendered).to have_text(casa_case.decorate.transition_aged_youth)
-      end 
-      
+      end
+    end
+
     context "when a supervisor has volunteers who have and have not submitted a case contact in 14 days" do
       let(:supervisor) { create(:supervisor) }
       let!(:volunteer_with_recently_created_contacts) {
@@ -46,6 +47,7 @@ RSpec.describe "supervisors/index", type: :view do
 
       it "shows positive and negative numbers" do
         assign :supervisors, [supervisor]
+        assign :casa_cases, casa_cases
         render template: "supervisors/index"
 
         parsed_html = Nokogiri.HTML5(rendered)
@@ -57,6 +59,7 @@ RSpec.describe "supervisors/index", type: :view do
       it "accurately displays the number of active and inactive volunteers per supervisor" do
         create(:volunteer, :with_cases_and_contacts, supervisor: supervisor)
         assign :supervisors, [supervisor]
+        assign :casa_cases, casa_cases
         render template: "supervisors/index"
 
         parsed_html = Nokogiri.HTML5(rendered)
@@ -83,6 +86,7 @@ RSpec.describe "supervisors/index", type: :view do
 
       it "omits the attempted contact stat bar" do
         assign :supervisors, [supervisor]
+        assign :casa_cases, casa_cases
         render template: "supervisors/index"
 
         parsed_html = Nokogiri.HTML5(rendered)
@@ -100,6 +104,7 @@ RSpec.describe "supervisors/index", type: :view do
 
       it "shows the end of the attempted contact bar instead of the no attempted contact bar" do
         assign :supervisors, [supervisor]
+        assign :casa_cases, casa_cases
         render template: "supervisors/index"
 
         parsed_html = Nokogiri.HTML5(rendered)
@@ -114,6 +119,7 @@ RSpec.describe "supervisors/index", type: :view do
 
       it "shows a no assigned volunteers message instead of attempted and no attempted contact bars" do
         assign :supervisors, [supervisor]
+        assign :casa_cases, casa_cases
         render template: "supervisors/index"
 
         parsed_html = Nokogiri.HTML5(rendered)
