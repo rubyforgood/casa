@@ -127,6 +127,7 @@ end
 #  twilio_account_sid         :string
 #  twilio_api_key_secret      :string
 #  twilio_api_key_sid         :string
+#  twilio_enabled             :boolean          default(FALSE)
 #  twilio_phone_number        :string
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null
