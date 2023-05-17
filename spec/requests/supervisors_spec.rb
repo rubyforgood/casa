@@ -17,9 +17,6 @@ RSpec.describe "/supervisors", type: :request do
   web_mock.stub_network_connection
 
   describe "GET /index" do
-    let!(:active_supervisor) { create(:supervisor, casa_org: org, active: true) }
-    let!(:inactive_supervisor) { create(:supervisor, casa_org: org, active: false) }
-
     it "returns http status ok" do
       sign_in admin
 
