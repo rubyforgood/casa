@@ -47,7 +47,7 @@
         <div id="collapseTwilio" class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordionTwilio">
           <div class="input-style-1">
             <%= form.label :twilio_phone_number, "Twilio Phone Number" %>
-            <%= form.text_field :twilio_phone_number, class: "form-control" %>
+            <%= form.text_field :twilio_phone_number, class: "form-control", autocomplete: :on %>
           </div>
           <div class="input-style-1">
             <%= form.label :twilio_account_sid, "Twilio Account SID" %>

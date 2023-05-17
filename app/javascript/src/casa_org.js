@@ -1,4 +1,25 @@
 //class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordionTwilio"
+
+const TWILIO_PHONE_NUMBER = "#casa_org_twilio_phone_number"
+
+function hello(){
+    console.log("hello")
+    if ($('.accordionTwilio').is(":checked")) {
+        $("#casa_org_twilio_phone_number").attr("required", "true")
+        $("#casa_org_twilio_account_sid").attr("required", "true")
+        $("#casa_org_twilio_api_key_sid").attr("required", "true")
+        $("#casa_org_twilio_api_key_secret").attr("required", "true")
+    }else{
+        $("#casa_org_twilio_phone_number").removeAttr("required", "false")
+        $("#casa_org_twilio_phone_number").attr("value", "")
+        $("#casa_org_twilio_account_sid").removeAttr("required", "false")
+        $("#casa_org_twilio_account_sid").attr("value", "")
+        $("#casa_org_twilio_api_key_sid").removeAttr("required", "false")
+        $("#casa_org_twilio_api_key_sid").attr("value", "")
+        $("#casa_org_twilio_api_key_secret").removeAttr("required", "false")
+        $("#casa_org_twilio_api_key_secret").attr("value", "")
+    }
+}
 $('document').ready(() => {
     //class='enable_twilio' class='form-check-input' data - bs - toggle="collapse" data - bs - target="#collapseTwilio" aria - expanded="true"
     //$('.accordionTwilio').addClass("enable_twilio")
@@ -12,10 +33,12 @@ $('document').ready(() => {
         $('.accordionTwilio').removeAttr('aria_expanded')
         $('.accordionTwilio').removeClass('collapsed')
         $('#collapseTwilio').addClass('show')
+        
         //$('#accordionTwilio').removeClass('collapse')
         //$('#accordionTwilio').addClass('show')
-    }else{
-        //$('#accordionTwilio').val('0')
-        //$('#accordionTwilio').addClass('collapsed')
     }
+    ($('.accordionTwilio').on('click', hello))
+
+
+
 })
