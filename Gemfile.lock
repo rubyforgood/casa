@@ -296,7 +296,7 @@ GEM
     parallel (1.22.1)
     paranoia (2.6.1)
       activerecord (>= 5.1, < 7.1)
-    parser (3.2.1.1)
+    parser (3.2.2.1)
       ast (~> 2.4.1)
     pdf-forms (1.4.0)
       cliver (~> 0.3.2)
@@ -400,7 +400,7 @@ GEM
       nokogiri (>= 1.8.5)
       rubyzip (>= 1.1.1)
     safe_shell (1.1.0)
-    scout_apm (5.3.3)
+    scout_apm (5.3.5)
       parser
     selenium-webdriver (4.9.1)
       rexml (~> 3.2, >= 3.2.5)
