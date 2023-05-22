@@ -37,10 +37,10 @@ class CaseContactTypesReminder
 
   def send_sms_messages(volunteer, uncontacted_case_contact_type_names)
     volunteer_casa_org = volunteer.casa_org
-    if !valid_casa_twilio_creds(volunteer_casa_org)
+    if !valid_casa_twilio_creds(volunteer_casa_org)###checks for twilio_enabled###
       return
     end
-
+    
     twilio_service = TwilioService.new(volunteer_casa_org.twilio_api_key_sid, volunteer_casa_org.twilio_api_key_secret, volunteer_casa_org.twilio_account_sid)
     sms_params = {
       From: volunteer_casa_org.twilio_phone_number,
@@ -64,7 +64,7 @@ class CaseContactTypesReminder
   end
 
   def valid_casa_twilio_creds(casa_org)
-    casa_org.twilio_phone_number? && casa_org.twilio_account_sid? && casa_org.twilio_api_key_sid? && casa_org.twilio_api_key_secret?
+    casa_org.twilio_enabled? && casa_org.twilio_phone_number? && casa_org.twilio_account_sid? && casa_org.twilio_api_key_sid? && casa_org.twilio_api_key_secret?
   end
 
   def last_reminder_within_quarter(volunteer)

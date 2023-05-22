@@ -56,19 +56,24 @@ class ApplicationController < ActionController::Base
     to = resource.phone_number
     from = current_user.casa_org.twilio_phone_number
 
-    twilio = TwilioService.new(api_key, api_secret, acc_sid)
-    req_params = {
-      From: from,
-      Body: body,
-      To: to
-    }
+    twilio_enabled = current_user.casa_org.twilio_enabled?
+    if twilio_enabled
+      twilio = TwilioService.new(api_key, api_secret, acc_sid)
+      req_params = {
+        From: from,
+        Body: body,
+        To: to
+      }
 
-    begin
-      twilio_res = twilio.send_sms(req_params)
-      twilio_res.error_code.nil? ? "sent" : "error"
-    rescue Twilio::REST::RestError
-      "error"
-    end
+      begin
+        twilio_res = twilio.send_sms(req_params)
+        twilio_res.error_code.nil? ? "sent" : "error"
+      rescue Twilio::REST::RestError
+        "error"
+      end
+    else 
+      flash[:alert] = "SMS notice was not sent. Twilio Is Not Enabled"
+    end 
   end
 
   def sms_acct_creation_notice(resource_name, sms_status)

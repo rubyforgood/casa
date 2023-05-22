@@ -3,7 +3,7 @@ module SmsReminderService
 
   BASE_URL = Rails.application.credentials[:BASE_URL]
   def send_reminder(user, message)
-    return if !user[:receive_sms_notifications] || user[:phone_number].blank?
+    return if !user.casa_org.twilio_enabled? || !user[:receive_sms_notifications] || user[:phone_number].blank?
 
     user_casa_org = user.casa_org
     twilio_service = TwilioService.new(user_casa_org.twilio_api_key_sid, user_casa_org.twilio_api_key_secret, user_casa_org.twilio_account_sid)
