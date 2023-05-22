@@ -13,8 +13,8 @@ class PlacementExportCsvService
     CSV.generate(headers: true) do |csv|
       csv << full_data.keys.map(&:to_s).map(&:titleize)
       if placements.present?
-        placements.decorate.each do |placements|
-          csv << full_data(placements).values
+        placements.decorate.each do |placement|
+          csv << full_data(placement).values
         end
       end
     end
