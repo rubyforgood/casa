@@ -8,9 +8,9 @@ class DeliveryMethods::Sms < Noticed::DeliveryMethods::Base
       if sender.casa_org.twilio_enabled?
         twilio_api = TwilioService.new(sender.casa_org.twilio_api_key_sid, sender.casa_org.twilio_api_key_secret, sender.casa_org.twilio_account_sid)
         twilio_api.send_sms({From: sender.casa_org.twilio_phone_number, Body: case_contact_flagged_msg(sender.display_name, shortened_url), To: recipient.phone_number})
-      else 
+      else
         flash[:notice] = "SMS notice was not sent. Twilio is not Enabled."
-      end 
+      end
     end
   end
 

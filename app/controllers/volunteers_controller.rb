@@ -37,7 +37,7 @@ class VolunteersController < ApplicationController
       invitation_url = Rails.application.routes.url_helpers.accept_user_invitation_url(invitation_token: raw_token, host: request.base_url)
       hash_of_short_urls = @volunteer.phone_number.blank? ? {0 => nil, 1 => nil} : handle_short_url([invitation_url, request.base_url + "/users/edit"])
       body_msg = account_activation_msg("volunteer", hash_of_short_urls)
-      sms_status = deliver_sms_to @volunteer, body_msg###checks for twilio_enabled###
+      sms_status = deliver_sms_to @volunteer, body_msg # ##checks for twilio_enabled###
       redirect_to edit_volunteer_path(@volunteer), notice: sms_acct_creation_notice("volunteer", sms_status)
     else
       render :new
@@ -99,11 +99,14 @@ class VolunteersController < ApplicationController
   def send_reactivation_alert
     authorize @volunteer
     if @volunteer.save
-      ###checks for twilio_enabled###
+      # ##checks for twilio_enabled###
       send_sms_to(volunteers_phone_number, "Hello #{@volunteer.display_name}, \n \n Your CASA/Prince George’s County volunteer console account has been reactivated. You can login using the credentials you were already using. \n \n If you have any questions, please contact your most recent Case Supervisor for assistance. \n \n CASA/Prince George’s County")
-      redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer reactivation alert sent"
-    else
-      redirect_to edit_volunteer_path(@volunteer), alert: "Volunteer reactivation alert failed"
+      # ##refactor here, ntoice
+      if @volunteer.casa_org.twilio_enabled?
+        redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer reactivation alert sent"
+      else
+        redirect_to edit_volunteer_path(@volunteer), alert: "Volunteer reactivation alert failed."
+      end
     end
   end
 
@@ -175,8 +178,8 @@ class VolunteersController < ApplicationController
       else
         "SMS was not sent to Volunteer due to an error."
       end
-    else 
-      flash[:alert] = "SMS notice was not sent. Twilio Is Not Enabled"
-    end 
+    else
+      flash[:notice] = "SMS notice was not sent. Twilio Is Not Enabled"
+    end
   end
 end

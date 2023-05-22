@@ -43,9 +43,9 @@ class Users::PasswordsController < Devise::PasswordsController
         To: @phone_number
       }
       twilio_service.send_sms(sms_params)
-    else 
+    else
       flash[:alert] = "SMS notice was not sent. Twilio Is Not Enabled"
-    end 
+    end
   end
 
   def valid_params?(email, phone_number)

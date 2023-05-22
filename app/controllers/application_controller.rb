@@ -71,9 +71,9 @@ class ApplicationController < ActionController::Base
       rescue Twilio::REST::RestError
         "error"
       end
-    else 
+    else
       flash[:alert] = "SMS notice was not sent. Twilio Is Not Enabled"
-    end 
+    end
   end
 
   def sms_acct_creation_notice(resource_name, sms_status)

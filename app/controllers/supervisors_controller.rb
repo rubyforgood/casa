@@ -31,7 +31,7 @@ class SupervisorsController < ApplicationController
       invitation_url = Rails.application.routes.url_helpers.accept_user_invitation_url(invitation_token: raw_token, host: request.base_url)
       hash_of_short_urls = @supervisor.phone_number.blank? ? {0 => nil, 1 => nil} : handle_short_url([invitation_url, request.base_url + "/users/edit"])
       body_msg = account_activation_msg("supervisor", hash_of_short_urls)
-      sms_status = deliver_sms_to @supervisor, body_msg###checks for twilio_enabled###
+      sms_status = deliver_sms_to @supervisor, body_msg # ##checks for twilio_enabled###
       redirect_to edit_supervisor_path(@supervisor), notice: sms_acct_creation_notice("supervisor", sms_status)
     else
       render new_supervisor_path

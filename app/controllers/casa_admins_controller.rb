@@ -51,7 +51,7 @@ class CasaAdminsController < ApplicationController
         invitation_url = Rails.application.routes.url_helpers.accept_user_invitation_url(invitation_token: raw_token, host: request.base_url)
         hash_of_short_urls = handle_short_url([invitation_url, base_domain])
         body_msg = account_activation_msg("admin", hash_of_short_urls)
-        sms_status = deliver_sms_to casa_admin, body_msg###checks for twilio_enabled###
+        sms_status = deliver_sms_to casa_admin, body_msg # ##checks for twilio_enabled###
       end
       respond_to do |format|
         format.html { redirect_to casa_admins_path, notice: sms_acct_creation_notice("admin", sms_status) }
