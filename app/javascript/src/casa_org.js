@@ -6,42 +6,40 @@ function hello () {
   console.log('hello')
   if ($('.accordionTwilio').is(':checked')) {
     console.log('checked')
-    $('#casa_org_twilio_phone_number').attr('required', true)
-    $('#casa_org_twilio_phone_number').removeAttr('disabled')
-    $('#casa_org_twilio_account_sid').attr('required', true)
-    $('#casa_org_twilio_account_sid').removeAttr('disabled')
-    $('#casa_org_twilio_api_key_sid').attr('required', true)
-    $('#casa_org_twilio_api_key_sid').removeAttr('disabled')
-    $('#casa_org_twilio_api_key_secret').attr('required', true)
-    $('#casa_org_twilio_api_key_secret').removeAttr('disabled')
+    addCheckedAttr($('#casa_org_twilio_phone_number'));
+    addCheckedAttr($('#casa_org_twilio_account_sid'));
+    addCheckedAttr($('#casa_org_twilio_api_key_sid'));
+    addCheckedAttr($('#casa_org_twilio_api_key_secret'));
   } else {
     console.log('unchecked')
-    $('#casa_org_twilio_phone_number').removeAttr('required', false)
-    $('#casa_org_twilio_phone_number').attr('disabled', true)
-    $('#casa_org_twilio_account_sid').removeAttr('required', false)
-    $('#casa_org_twilio_account_sid').attr('disabled', true)
-    $('#casa_org_twilio_api_key_sid').removeAttr('required', false)
-    $('#casa_org_twilio_api_key_sid').attr('disabled', true)
-    $('#casa_org_twilio_api_key_secret').removeAttr('required', false)
-    $('#casa_org_twilio_api_key_secret').attr('disabled', true)
+    removeCheckedAttr($('#casa_org_twilio_phone_number'));
+    removeCheckedAttr($('#casa_org_twilio_account_sid'));
+    removeCheckedAttr($('#casa_org_twilio_api_key_sid'));
+    removeCheckedAttr($('#casa_org_twilio_api_key_secret'));
   }
 }
+
+function addCheckedAttr(el){
+  el.attr('required', true);
+  el.setAttribute('aria-disabled', false);
+  el.removeAttr('disabled');
+}
+
+function removeCheckedAttr(el){
+  el.removeAttr('disabled');
+  el.attr('disabled', true);
+  el.removeAttribute('aria-disabled', true);
+}
+
 $('document').ready(() => {
-  // class='enable_twilio' class='form-check-input' data - bs - toggle="collapse" data - bs - target="#collapseTwilio" aria - expanded="true"
-  // $('.accordionTwilio').addClass("enable_twilio")
   $('.accordionTwilio').attr('data-bs-toggle', 'collapse')
   $('.accordionTwilio').attr('data-bs-target', '#collapseTwilio')
-  $('.accordionTwilio').attr('aria-expanded', 'true')
+  $('.accordionTwilio').attr('aria-expanded', 'false')
   console.log('Accordion Twilio', $('.accordionTwilio').val())
   if ($('.accordionTwilio').is(':checked')) {
-    console.log('Check please')
-    // $('.accordionTwilio').val('1')
-    $('.accordionTwilio').removeAttr('aria_expanded')
+    $('.accordionTwilio').attr('aria_expanded')
     $('.accordionTwilio').removeClass('collapsed')
     $('#collapseTwilio').addClass('show')
-
-    // $('#accordionTwilio').removeClass('collapse')
-    // $('#accordionTwilio').addClass('show')
   }
   ($('.accordionTwilio').on('click', hello))
 })
