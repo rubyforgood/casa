@@ -119,14 +119,4 @@ class ApplicationController < ActionController::Base
     end
     notice
   end
-
-  def check_twilio_enabled?(resource)
-    if !resource&.casa_org.twilio_enabled?
-      false
-      # is there a way to stop a parent method from continuing?
-    else
-      # is there a way to stop a parent method from continuing?
-      true
-    end
-  end
 end
