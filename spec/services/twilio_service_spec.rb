@@ -12,7 +12,7 @@ RSpec.describe TwilioService do
       end
 
       let!(:casa_org) do
-          create(
+        create(
           :casa_org,
           twilio_phone_number: "+15555555555",
           twilio_account_sid: "articuno34",

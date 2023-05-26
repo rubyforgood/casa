@@ -102,13 +102,13 @@ class VolunteersController < ApplicationController
     authorize @volunteer
     if @volunteer.save
       # ##checks for twilio_enabled###
-      begin 
+      begin
         send_sms_to(volunteers_phone_number, "Hello #{@volunteer.display_name}, \n \n Your CASA/Prince George’s County volunteer console account has been reactivated. You can login using the credentials you were already using. \n \n If you have any questions, please contact your most recent Case Supervisor for assistance. \n \n CASA/Prince George’s County")
         redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer reactivation alert sent"
       rescue => e
         error = e
-       redirect_to edit_volunteer_path(@volunteer), alert: "Volunteer reactivation alert failed due to #{error}"
-      end 
+        redirect_to edit_volunteer_path(@volunteer), alert: "Volunteer reactivation alert failed due to #{error}"
+      end
     end
   end
 
@@ -168,11 +168,11 @@ class VolunteersController < ApplicationController
   end
 
   def send_sms_to(phone_number, body)
-      twilio = TwilioService.new(current_user.casa_org)
-      req_params = {From: current_user.casa_org.twilio_phone_number, Body: body, To: phone_number}
-      twilio_res = twilio.send_sms(req_params)
+    twilio = TwilioService.new(current_user.casa_org)
+    req_params = {From: current_user.casa_org.twilio_phone_number, Body: body, To: phone_number}
+    twilio_res = twilio.send_sms(req_params)
 
-      # Error handling for spec test purposes
+    # Error handling for spec test purposes
     if twilio_res.error_code.nil?
       "SMS has been sent to Volunteer!"
     else

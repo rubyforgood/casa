@@ -183,17 +183,17 @@ RSpec.describe "/volunteers", type: :request do
       end
 
       it "does not send a SMS if the casa_org does not have Twilio enabled" do
-        org = create(:casa_org, twilio_enabled: false);
+        org = create(:casa_org, twilio_enabled: false)
         admin = build(:casa_admin, casa_org: org)
-        
-        sign_in admin 
-        
+
+        sign_in admin
+
         params[:volunteer][:phone_number] = "+12222222222"
         post volunteers_url, params: params
         expect(response).to have_http_status(:redirect)
         follow_redirect!
         expect(flash[:notice]).to match(/New volunteer created successfully. SMS not sent due to Twilio not enabled for #{org.name}/)
-      end 
+      end
     end
 
     context "with invalid parameters" do
@@ -381,17 +381,17 @@ RSpec.describe "/volunteers", type: :request do
       expect(response.status).to match 302
     end
 
-    it "does not send a reactivation SMS when Casa Org has Twilio disabled" do 
-      org = create(:casa_org, twilio_enabled: false);
+    it "does not send a reactivation SMS when Casa Org has Twilio disabled" do
+      org = create(:casa_org, twilio_enabled: false)
       adm = create(:casa_admin, casa_org: org)
       vol = create(:volunteer, casa_org: org)
 
       sign_in adm
-      
+
       get send_reactivation_alert_volunteer_path(vol)
       expect(response).to redirect_to(edit_volunteer_path(vol))
       expect(flash[:alert]).to match(/Volunteer reactivation alert failed due to Twilio not enabled for #{org.name}/)
-    end 
+    end
   end
 
   describe "GET /impersonate" do

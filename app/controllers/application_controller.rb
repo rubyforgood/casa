@@ -49,19 +49,19 @@ class ApplicationController < ActionController::Base
     if resource.phone_number.blank?
       return "blank"
     end
-    #acc_sid = current_user.casa_org.twilio_account_sid
-    #api_key = current_user.casa_org.twilio_api_key_sid
-    #api_secret = current_user.casa_org.twilio_api_key_secret
+    # acc_sid = current_user.casa_org.twilio_account_sid
+    # api_key = current_user.casa_org.twilio_api_key_sid
+    # api_secret = current_user.casa_org.twilio_api_key_secret
     body = body_msg
     to = resource.phone_number
     from = current_user.casa_org.twilio_phone_number
     begin
       twilio = TwilioService.new(resource.casa_org)
-        req_params = {
-          From: from,
-          Body: body,
-          To: to
-        }
+      req_params = {
+        From: from,
+        Body: body,
+        To: to
+      }
       twilio_res = twilio.send_sms(req_params)
       twilio_res.error_code.nil? ? "sent" : "error"
     rescue TwilioService::TwilioCasaOrgError => error
@@ -83,8 +83,8 @@ class ApplicationController < ActionController::Base
       return "New #{resource_name} created successfully. SMS has been sent!"
     end
     if sms_status === "twilio_not_enabled"
-      return "New #{resource_name} created successfully. SMS not sent due to #{@error}."
-    end 
+      "New #{resource_name} created successfully. SMS not sent due to #{@error}."
+    end
   end
 
   private
@@ -121,12 +121,12 @@ class ApplicationController < ActionController::Base
   end
 
   def check_twilio_enabled?(resource)
-    if !resource&.casa_org.twilio_enabled? 
+    if !resource&.casa_org.twilio_enabled?
       false
-      #is there a way to stop a parent method from continuing? 
-    else 
-      #is there a way to stop a parent method from continuing? 
+      # is there a way to stop a parent method from continuing?
+    else
+      # is there a way to stop a parent method from continuing?
       true
-    end 
-  end 
+    end
+  end
 end

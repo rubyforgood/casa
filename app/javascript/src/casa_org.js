@@ -6,29 +6,29 @@ function hello () {
   console.log('hello')
   if ($('.accordionTwilio').is(':checked')) {
     console.log('checked')
-    addCheckedAttr($('#casa_org_twilio_phone_number'));
-    addCheckedAttr($('#casa_org_twilio_account_sid'));
-    addCheckedAttr($('#casa_org_twilio_api_key_sid'));
-    addCheckedAttr($('#casa_org_twilio_api_key_secret'));
+    addCheckedAttr($('#casa_org_twilio_phone_number'))
+    addCheckedAttr($('#casa_org_twilio_account_sid'))
+    addCheckedAttr($('#casa_org_twilio_api_key_sid'))
+    addCheckedAttr($('#casa_org_twilio_api_key_secret'))
   } else {
     console.log('unchecked')
-    removeCheckedAttr($('#casa_org_twilio_phone_number'));
-    removeCheckedAttr($('#casa_org_twilio_account_sid'));
-    removeCheckedAttr($('#casa_org_twilio_api_key_sid'));
-    removeCheckedAttr($('#casa_org_twilio_api_key_secret'));
+    removeCheckedAttr($('#casa_org_twilio_phone_number'))
+    removeCheckedAttr($('#casa_org_twilio_account_sid'))
+    removeCheckedAttr($('#casa_org_twilio_api_key_sid'))
+    removeCheckedAttr($('#casa_org_twilio_api_key_secret'))
   }
 }
 
-function addCheckedAttr(el){
-  el.attr('required', true);
-  el.setAttribute('aria-disabled', false);
-  el.removeAttr('disabled');
+function addCheckedAttr (el) {
+  el.attr('required', true)
+  el.setAttribute('aria-disabled', false)
+  el.removeAttr('disabled')
 }
 
-function removeCheckedAttr(el){
-  el.removeAttr('disabled');
-  el.attr('disabled', true);
-  el.removeAttribute('aria-disabled', true);
+function removeCheckedAttr (el) {
+  el.removeAttr('disabled')
+  el.attr('disabled', true)
+  el.removeAttribute('aria-disabled', true)
 }
 
 $('document').ready(() => {
