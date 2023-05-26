@@ -31,7 +31,8 @@
   <% end %>
   <% if current_user.casa_admin? %>
     <%= link_to send_reactivation_alert_volunteer_path(user),
-                class: "main-btn danger-btn-outline btn-hover btn-sm my-1" do %>
+               id: "#{current_user.casa_org.twilio_enabled? ? "twilio_enabled" : "twilio_disabled"}",
+               class: "main-btn danger-btn-outline btn-hover btn-sm my-1" do %>
       <i class="lni lni-alarm mr-10"></i> Send Reactivation Alert (SMS)
     <% end %>
   <% end %>
