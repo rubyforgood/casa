@@ -35,16 +35,16 @@ class Users::PasswordsController < Devise::PasswordsController
     @reset_token ||= @resource.generate_password_reset_token
 
     create_short_url
-    begin 
+    begin
       twilio_service = TwilioService.new(@resource.casa_org)
       sms_params = {
-       From: @resource.casa_org.twilio_phone_number,
+        From: @resource.casa_org.twilio_phone_number,
         Body: password_reset_msg(@resource.display_name, @short_io_service.short_url),
         To: @phone_number
       }
       twilio_service.send_sms(sms_params)
     rescue => e
-      flash[:alert] = "SMS not sent due to #{error}"
+      flash[:alert] = "SMS not sent due to #{e}"
     end
   end
 

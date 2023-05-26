@@ -9,7 +9,6 @@ function twilioToggle () {
     addCheckedAttr(accSid)
     addCheckedAttr(keySid)
     addCheckedAttr(secret)
-
   } else {
     removeCheckedAttr(phoneNumber)
     removeCheckedAttr(accSid)
