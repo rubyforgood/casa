@@ -8,14 +8,21 @@ RSpec.describe TwilioService do
         WebMockHelper.twilio_success_stub
         WebMockHelper.short_io_stub
         WebMock.disable_net_connect!
-        @acc_sid = "articuno34"
-        @api_key = "Aladdin"
-        @api_secret = "open sesame"
         @short_url = ShortUrlService.new
-        @twilio = TwilioService.new(@api_key, @api_secret, @acc_sid)
+      end
+
+      let!(:casa_org) do
+          create(
+          :casa_org,
+          twilio_phone_number: "+15555555555",
+          twilio_account_sid: "articuno34",
+          twilio_api_key_sid: "Aladdin",
+          twilio_api_key_secret: "open sesame"
+        )
       end
 
       it "can send a SMS with a short url successfully" do
+        @twilio = TwilioService.new(casa_org)
         @short_url.create_short_url("https://www.google.com")
         params = {
           From: "+15555555555",

@@ -36,7 +36,7 @@ class Users::PasswordsController < Devise::PasswordsController
 
     create_short_url
     if @resource.casa_org.twilio_enabled?
-      twilio_service = TwilioService.new(@resource.casa_org.twilio_api_key_sid, @resource.casa_org.twilio_api_key_secret, @resource.casa_org.twilio_account_sid)
+      twilio_service = TwilioService.new(@resource.casa_org)
       sms_params = {
         From: @resource.casa_org.twilio_phone_number,
         Body: password_reset_msg(@resource.display_name, @short_io_service.short_url),

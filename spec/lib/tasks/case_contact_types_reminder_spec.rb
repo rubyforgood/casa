@@ -48,7 +48,7 @@ RSpec.describe CaseContactTypesReminder do
   end
 
   context "volunteer with contacted contact types within last 60 days, sms notifications on, and no reminder in last quarter" do
-    it "should send not sms reminder" do
+    it "should not send sms reminder" do
       CaseContact.update_all(occurred_at: 1.months.ago)
       responses = CaseContactTypesReminder.new.send!
       expect(responses.count).to match 0
@@ -85,4 +85,15 @@ RSpec.describe CaseContactTypesReminder do
       expect(responses[0][:messages][2].body).to match CaseContactTypesReminder::THIRD_MESSAGE + "https://42ni.short.gy/jzTwdF"
     end
   end
+
+  context "volunteer with a casa_org that doesn't have Twilio enabled" do 
+    it "should not send a sms reminder" do 
+      pending 'Failure/Error: client.messages.list(limit: 1) WebMock::NetConnectNotAllowedError:'
+      
+      casa_org.update(twilio_enabled: false)
+      uncontacted_case_contact_type_names = uncontacted_case_contact_types(volunteer)
+      response = CaseContactTypesReminder.send_sms_messages(volunteer, uncontacted_case_contact_type_names)
+      expect(response).to be_nil
+    end 
+  end 
 end

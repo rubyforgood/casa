@@ -1,7 +1,7 @@
 class DeliveryMethods::Sms < Noticed::DeliveryMethods::Base
   include SmsBodyHelper
   def deliver
-    if sender.casa_org.twilio_enabled? && (sender.casa_admin? || sender.supervisor?)
+    if sender.casa_admin? || sender.supervisor?
       short_io_api = ShortUrlService.new
       short_io_api.create_short_url(case_contact_url)
       shortened_url = short_io_api.short_url

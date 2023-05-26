@@ -49,30 +49,26 @@ class ApplicationController < ActionController::Base
     if resource.phone_number.blank?
       return "blank"
     end
-    acc_sid = current_user.casa_org.twilio_account_sid
-    api_key = current_user.casa_org.twilio_api_key_sid
-    api_secret = current_user.casa_org.twilio_api_key_secret
+    #acc_sid = current_user.casa_org.twilio_account_sid
+    #api_key = current_user.casa_org.twilio_api_key_sid
+    #api_secret = current_user.casa_org.twilio_api_key_secret
     body = body_msg
     to = resource.phone_number
     from = current_user.casa_org.twilio_phone_number
-
-    twilio_enabled = current_user.casa_org.twilio_enabled?
-    if twilio_enabled
-      twilio = TwilioService.new(api_key, api_secret, acc_sid)
-      req_params = {
-        From: from,
-        Body: body,
-        To: to
-      }
-
-      begin
-        twilio_res = twilio.send_sms(req_params)
-        twilio_res.error_code.nil? ? "sent" : "error"
-      rescue Twilio::REST::RestError
-        "error"
-      end
-    else
-      flash[:alert] = "SMS notice was not sent. Twilio Is Not Enabled"
+    begin
+      twilio = TwilioService.new(resource.casa_org)
+        req_params = {
+          From: from,
+          Body: body,
+          To: to
+        }
+      twilio_res = twilio.send_sms(req_params)
+      twilio_res.error_code.nil? ? "sent" : "error"
+    rescue TwilioService::TwilioCasaOrgError => error
+      @error = error
+      "twilio_not_enabled"
+    rescue Twilio::REST::RestError
+      "error"
     end
   end
 
@@ -84,8 +80,11 @@ class ApplicationController < ActionController::Base
       return "New #{resource_name} created successfully. SMS not sent due to error."
     end
     if sms_status === "sent"
-      "New #{resource_name} created successfully. SMS has been sent!"
+      return "New #{resource_name} created successfully. SMS has been sent!"
     end
+    if sms_status === "twilio_not_enabled"
+      return "New #{resource_name} created successfully. SMS not sent due to #{@error}."
+    end 
   end
 
   private
@@ -120,4 +119,14 @@ class ApplicationController < ActionController::Base
     end
     notice
   end
+
+  def check_twilio_enabled?(resource)
+    if !resource&.casa_org.twilio_enabled? 
+      false
+      #is there a way to stop a parent method from continuing? 
+    else 
+      #is there a way to stop a parent method from continuing? 
+      true
+    end 
+  end 
 end

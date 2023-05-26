@@ -10,7 +10,7 @@ RSpec.describe "Users::PasswordsController", type: :request do
   before do
     allow(TwilioService).to(
       receive(:new).with(
-        org.twilio_api_key_sid, org.twilio_api_key_secret, org.twilio_account_sid
+        org
       ).and_return(twillio_service_double)
     )
 
