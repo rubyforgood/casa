@@ -13,6 +13,7 @@ require('@rails/activestorage').start()
 
 require('bootstrap-datepicker')
 
+
 require('./src/add_additional_expense')
 require('./src/add_to_calendar_button')
 require('./src/case_contact')
@@ -34,3 +35,4 @@ require('./src/sidebar')
 require('./src/tooltip')
 require('./src/session_timeout_poller.js')
 require('./src/casa_org')
+require('./src/sms_reactivation_alert')

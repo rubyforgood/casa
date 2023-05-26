@@ -1,5 +1,4 @@
 function twilioToggle () {
-  console.log('hello')
   const phoneNumber = $('#casa_org_twilio_phone_number')
   const accSid = $('#casa_org_twilio_account_sid')
   const keySid = $('#casa_org_twilio_api_key_sid')
@@ -10,6 +9,7 @@ function twilioToggle () {
     addCheckedAttr(accSid)
     addCheckedAttr(keySid)
     addCheckedAttr(secret)
+
   } else {
     removeCheckedAttr(phoneNumber)
     removeCheckedAttr(accSid)
@@ -21,24 +21,27 @@ function twilioToggle () {
 function addCheckedAttr (el) {
   el.attr('required', true)
   el.setAttribute('aria-disabled', false)
+  el.setAttribute('aria-required', true)
   el.removeAttr('disabled')
 }
 
 function removeCheckedAttr (el) {
-  el.removeAttr('disabled')
   el.attr('disabled', true)
+  el.setAttribute('aria-required', false)
   el.removeAttribute('aria-disabled', true)
+  el.removeAttr('required')
 }
 
 $('document').ready(() => {
   $('.accordionTwilio').attr('data-bs-toggle', 'collapse')
   $('.accordionTwilio').attr('data-bs-target', '#collapseTwilio')
   $('.accordionTwilio').attr('aria-expanded', 'false')
-  console.log('Accordion Twilio', $('.accordionTwilio').val())
+
   if ($('.accordionTwilio').is(':checked')) {
     $('.accordionTwilio').attr('aria_expanded')
     $('.accordionTwilio').removeClass('collapsed')
     $('#collapseTwilio').addClass('show')
   }
+
   ($('.accordionTwilio').on('click', twilioToggle))
 })
