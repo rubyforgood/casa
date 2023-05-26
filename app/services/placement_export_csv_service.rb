@@ -3,8 +3,8 @@ require "csv"
 class PlacementExportCsvService
   attr_reader :placements
 
-  def initialize(casa_org_id:)
-    @casa_org = CasaOrg.find(casa_org_id)
+  def initialize(casa_org:)
+    @casa_org = casa_org
   end
 
   def perform
@@ -12,10 +12,8 @@ class PlacementExportCsvService
 
     CSV.generate(headers: true) do |csv|
       csv << full_data.keys.map(&:to_s).map(&:titleize)
-      if placements.present?
-        placements.decorate.each do |placement|
-          csv << full_data(placement).values
-        end
+      placements.decorate.each do |placement|
+        csv << full_data(placement).values
       end
     end
   end
