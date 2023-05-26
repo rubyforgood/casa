@@ -2,20 +2,23 @@
 
 // const TWILIO_PHONE_NUMBER = '#casa_org_twilio_phone_number'
 
-function hello () {
+function twilioToggle () {
   console.log('hello')
+  const phoneNumber = $('#casa_org_twilio_phone_number')
+  const accSid = $('#casa_org_twilio_account_sid')
+  const keySid = $('#casa_org_twilio_api_key_sid')
+  const secret = $('#casa_org_twilio_api_key_secret')
+
   if ($('.accordionTwilio').is(':checked')) {
-    console.log('checked')
-    addCheckedAttr($('#casa_org_twilio_phone_number'))
-    addCheckedAttr($('#casa_org_twilio_account_sid'))
-    addCheckedAttr($('#casa_org_twilio_api_key_sid'))
-    addCheckedAttr($('#casa_org_twilio_api_key_secret'))
+    addCheckedAttr(phoneNumber)
+    addCheckedAttr(accSid)
+    addCheckedAttr(keySid)
+    addCheckedAttr(secret)
   } else {
-    console.log('unchecked')
-    removeCheckedAttr($('#casa_org_twilio_phone_number'))
-    removeCheckedAttr($('#casa_org_twilio_account_sid'))
-    removeCheckedAttr($('#casa_org_twilio_api_key_sid'))
-    removeCheckedAttr($('#casa_org_twilio_api_key_secret'))
+    removeCheckedAttr(phoneNumber)
+    removeCheckedAttr(accSid)
+    removeCheckedAttr(keySid)
+    removeCheckedAttr(secret)
   }
 }
 
@@ -41,5 +44,5 @@ $('document').ready(() => {
     $('.accordionTwilio').removeClass('collapsed')
     $('#collapseTwilio').addClass('show')
   }
-  ($('.accordionTwilio').on('click', hello))
+  ($('.accordionTwilio').on('click', twilioToggle))
 })
