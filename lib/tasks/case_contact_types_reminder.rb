@@ -40,7 +40,6 @@ class CaseContactTypesReminder
     if !valid_casa_twilio_creds(volunteer_casa_org) # ##checks for twilio_enabled###
       return
     end
-    debugger
     twilio_service = TwilioService.new(volunteer_casa_org)
     sms_params = {
       From: volunteer_casa_org.twilio_phone_number,
