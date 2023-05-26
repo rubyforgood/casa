@@ -37,7 +37,7 @@ class CaseContactTypesReminder
 
   def send_sms_messages(volunteer, uncontacted_case_contact_type_names)
     volunteer_casa_org = volunteer.casa_org
-    if !valid_casa_twilio_creds(volunteer_casa_org) # ##checks for twilio_enabled###
+    if !valid_casa_twilio_creds(volunteer_casa_org)
       return
     end
     twilio_service = TwilioService.new(volunteer_casa_org)

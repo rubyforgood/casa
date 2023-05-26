@@ -1,7 +1,3 @@
-// class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordionTwilio"
-
-// const TWILIO_PHONE_NUMBER = '#casa_org_twilio_phone_number'
-
 function twilioToggle () {
   console.log('hello')
   const phoneNumber = $('#casa_org_twilio_phone_number')

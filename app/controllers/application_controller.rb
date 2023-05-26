@@ -49,12 +49,11 @@ class ApplicationController < ActionController::Base
     if resource.phone_number.blank?
       return "blank"
     end
-    # acc_sid = current_user.casa_org.twilio_account_sid
-    # api_key = current_user.casa_org.twilio_api_key_sid
-    # api_secret = current_user.casa_org.twilio_api_key_secret
+
     body = body_msg
     to = resource.phone_number
     from = current_user.casa_org.twilio_phone_number
+
     begin
       twilio = TwilioService.new(resource.casa_org)
       req_params = {
