@@ -90,7 +90,39 @@ $('document').ready(() => {
   const casaCasePath = id => `/casa_cases/${id}`
   const volunteersTable = $('table#volunteers').DataTable({
     autoWidth: false,
-    stateSave: false,
+    stateSave: true,
+    initComplete: function (settings, json) {
+      this.api().columns().every(function (index) {
+        const columnVisible = this.visible()
+        $('#visibleColumns input[data-column="' + index + '"]').prop('checked', columnVisible)
+      })
+    },
+    stateSaveCallback: function (settings, data) {
+      $.ajax({
+        url: '/preference_sets/table_state_update/' + settings.nTable.id + '_table',
+
+        data: {
+          table_state: JSON.stringify(data)
+        },
+        dataType: 'json',
+        type: 'POST',
+        success: function (response) { }
+      })
+    },
+    stateSaveParams: function (settings, data) {
+      data.search.search = ''
+      return data
+    },
+    stateLoadCallback: function (settings, callback) {
+      $.ajax({
+        url: '/preference_sets/table_state/' + settings.nTable.id + '_table',
+        dataType: 'json',
+        type: 'GET',
+        success: function (json) {
+          callback(json)
+        }
+      })
+    },
     order: [[6, 'desc']],
     columns: [
       {
@@ -106,8 +138,7 @@ $('document').ready(() => {
       },
       {
         name: 'email',
-        render: (data, type, row, meta) => row.email,
-        visible: false
+        render: (data, type, row, meta) => row.email
       },
       {
         className: 'supervisor-column',
@@ -170,8 +201,7 @@ $('document').ready(() => {
             `
             : 'None ❌'
         },
-        searchable: false,
-        visible: true
+        searchable: false
       },
       {
         name: 'contacts_made_in_past_days',
@@ -181,8 +211,7 @@ $('document').ready(() => {
           ${row.contacts_made_in_past_days}
           `
         },
-        searchable: false,
-        visible: false
+        searchable: false
       },
       {
         name: 'hours_spent_in_days',
@@ -200,20 +229,19 @@ $('document').ready(() => {
           const languages = row.extra_languages.map(x => x.name).join(', ')
           return row.extra_languages.length > 0 ? `<span class="language-icon" data-toggle="tooltip" title="${languages}">🌎</span>` : ''
         },
-        searchable: false,
-        visible: true
+        searchable: false
       },
       {
         name: 'actions',
         orderable: false,
         render: (data, type, row, meta) => {
           return `
-            <span class="mobile-label">Actions</span>
-            <a href="${editVolunteerPath(row.id)}" class="main-btn primary-btn btn-hover btn-sm">
-              <i class="lni lni-pencil-alt mr-5"></i> Edit
+          <span class="mobile-label">Actions</span>
+            <a href="${editVolunteerPath(row.id)}" class="btn btn-primary">
+              Edit
             </a>
-            <a href="${impersonateVolunteerPath(row.id)}" class="main-btn dark-btn btn-hover btn-sm">
-              <i class="lni lni-user mr-5"></i> Impersonate
+            <a href="${impersonateVolunteerPath(row.id)}" class="btn btn-secondary">
+              Impersonate
             </a>
           `
         },
@@ -258,13 +286,7 @@ $('document').ready(() => {
   // columns are visible
   volunteersTable.columns().every(function (index) {
     const columnVisible = this.visible()
-
-    if (columnVisible) {
-      $('#visibleColumns input[data-column="' + index + '"]').prop('checked', true)
-    } else {
-      $('#visibleColumns input[data-column="' + index + '"]').prop('checked', false)
-    }
-
+    $('#visibleColumns input[data-column="' + index + '"]').prop('checked', columnVisible)
     return true
   })
 

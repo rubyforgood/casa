@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   devise_scope :all_casa_admins do
     root to: "all_casa_admins/sessions#new", as: :unauthenticated_all_casa_root
   end
-  
+
   resources :preference_sets, only: [] do
     collection do
       post "/table_state_update/:table_name", to: "preference_sets#table_state_update", as: :table_state_update
