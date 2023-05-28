@@ -38,6 +38,7 @@ controllers/notes_controller.rb
 controllers/notifications_controller.rb
 controllers/other_duties_controller.rb
 controllers/placements_controller.rb
+controllers/preference_sets_controller.rb
 controllers/reports_controller.rb
 controllers/supervisor_volunteers_controller.rb
 controllers/supervisors_controller.rb
