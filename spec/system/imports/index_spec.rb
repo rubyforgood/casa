@@ -78,12 +78,13 @@ RSpec.describe "imports/index", type: :system do
   end
 
   context "import supervisors csv without phone numbers", js: true do
-    let(:import_file_path) { Rails.root.join("spec", "fixtures", "supervisors_without_phone_numbers.csv") }
-
     it "shows successful import" do
+      import_file_path = Rails.root.join("spec", "fixtures", "supervisors_without_phone_numbers.csv")
+
       sign_in admin
       visit imports_path
-      click_link "supervisor-tab"
+
+      click_on "Import Supervisors"
 
       expect(page).to have_content("Import Supervisors")
 
