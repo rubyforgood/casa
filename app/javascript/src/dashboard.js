@@ -94,7 +94,7 @@ $('document').ready(() => {
     initComplete: function (settings, json) {
       this.api().columns().every(function (index) {
         const columnVisible = this.visible()
-        $('#visibleColumns input[data-column="' + index + '"]').prop('checked', columnVisible)
+        return $('#visibleColumns input[data-column="' + index + '"]').prop('checked', columnVisible)
       })
     },
     stateSaveCallback: function (settings, data) {
