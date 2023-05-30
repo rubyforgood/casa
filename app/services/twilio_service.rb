@@ -6,7 +6,7 @@ class TwilioService
   attr_writer :api_key, :api_secret, :acc_sid, :casa_org
 
   def initialize(casa_org)
-    raise TwilioCasaOrgError.new "Twilio not enabled for #{casa_org.name}" unless casa_org.twilio_enabled?
+    raise TwilioCasaOrgError.new "Twilio is disabled for #{casa_org.name}" unless casa_org.twilio_enabled?
 
     @api_key = casa_org.twilio_api_key_sid
     @api_secret = casa_org.twilio_api_key_secret

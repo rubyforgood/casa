@@ -106,7 +106,7 @@ class VolunteersController < ApplicationController
         redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer reactivation alert sent"
       rescue => e
         error = e
-        redirect_to edit_volunteer_path(@volunteer), alert: "Volunteer reactivation alert failed due to #{error}"
+        redirect_to edit_volunteer_path(@volunteer), alert: "Volunteer reactivation alert not sent. #{error}"
       end
     end
   end
