@@ -11,13 +11,13 @@ RSpec.describe ReimbursementPolicy do
   context "when org reimbursement is enabled" do
     permissions :index?, :change_complete_status? do
       it { is_expected.to permit(casa_admin) }
-      it { is_expected.to_not permit(supervisor) }
+      it { is_expected.to permit(supervisor) }
       it { is_expected.to_not permit(volunteer) }
     end
 
     permissions :datatable? do
       it { is_expected.to permit(casa_admin) }
-      it { is_expected.to_not permit(supervisor) }
+      it { is_expected.to permit(supervisor) }
       it { is_expected.to_not permit(volunteer) }
     end
   end
