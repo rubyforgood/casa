@@ -55,19 +55,24 @@ class ApplicationController < ActionController::Base
     from = current_user.casa_org.twilio_phone_number
 
     begin
-      twilio = TwilioService.new(resource.casa_org)
+      @twilio = TwilioService.new(resource.casa_org)
       req_params = {
         From: from,
         Body: body,
         To: to
       }
-      twilio_res = twilio.send_sms(req_params)
+      twilio_res = @twilio.send_sms(req_params)
       twilio_res.error_code.nil? ? "sent" : "error"
+
     rescue TwilioService::TwilioCasaOrgError => error
       @error = error
       "twilio_not_enabled"
     rescue Twilio::REST::RestError
       "error"
+    rescue StandardError #unverfied error isnt picked up by Twilio::Rest::RestError 
+      #https://www.twilio.com/docs/errors/21608
+      @error = "Phone number is unverifiied"
+      "unverified"
     end
   end
 
@@ -82,6 +87,9 @@ class ApplicationController < ActionController::Base
       return "New #{resource_name} created successfully. SMS has been sent!"
     end
     if sms_status === "twilio_not_enabled"
+      "New #{resource_name} created successfully. SMS not sent. #{@error}."
+    end
+    if sms_status === "unverified"
       "New #{resource_name} created successfully. SMS not sent. #{@error}."
     end
   end
