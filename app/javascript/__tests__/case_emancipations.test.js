@@ -4,7 +4,7 @@ import { Toggler } from '../src/case_emancipation'
 require('jest')
 
 let category
-let controlCategory
+let categoryOptions
 let categoryOptionsControl
 let categoryCollapseIcon
 let checkBox
