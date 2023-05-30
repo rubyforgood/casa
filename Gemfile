@@ -16,7 +16,7 @@ gem "delayed_job_active_record"
 gem "devise" # for authentication
 gem "devise_invitable"
 gem "httparty" # for making HTTP network requests 🥳
-gem "twilio-ruby" # twilio helper functions
+gem "twilio-ruby", ">= 6.0.1" # twilio helper functions
 gem "draper" # adds decorators for cleaner presentation logic
 gem "faker" # creates realistic seed data, valuable for staging and demos
 gem "filterrific" # filtering and sorting of models
