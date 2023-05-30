@@ -21,6 +21,17 @@ RSpec.describe TwilioService do
         )
       end
 
+      let!(:casa_org_twilio_disabled) do
+        create(
+          :casa_org,
+          twilio_phone_number: "+15555555555",
+          twilio_account_sid: "articuno34",
+          twilio_api_key_sid: "Aladdin",
+          twilio_api_key_secret: "open sesame",
+          twilio_enabled: false
+        )
+      end
+
       it "can send a SMS with a short url successfully" do
         @twilio = TwilioService.new(casa_org)
         @short_url.create_short_url("https://www.google.com")
@@ -37,6 +48,10 @@ RSpec.describe TwilioService do
         expect(response.status).to match "sent"
         expect(response.body).to match "Execute Order 66 - https://42ni.short.gy/jzTwdF"
       end
+
+      it "returns an error is the Casa Org does not have Twilio enabled" do
+       expect {TwilioService.new(casa_org_twilio_disabled)}.to raise_error(TwilioService::TwilioCasaOrgError)
+      end 
     end
   end
 end

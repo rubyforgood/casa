@@ -192,7 +192,7 @@ RSpec.describe "/volunteers", type: :request do
         post volunteers_url, params: params
         expect(response).to have_http_status(:redirect)
         follow_redirect!
-        expect(flash[:notice]).to match(/New volunteer created successfully. SMS not sent due to Twilio not enabled for #{org.name}/)
+        expect(flash[:notice]).to match(/New volunteer created successfully. SMS not sent. Twilio is disabled for #{org.name}./)
       end
     end
 
@@ -390,7 +390,7 @@ RSpec.describe "/volunteers", type: :request do
 
       get send_reactivation_alert_volunteer_path(vol)
       expect(response).to redirect_to(edit_volunteer_path(vol))
-      expect(flash[:alert]).to match(/Volunteer reactivation alert failed due to Twilio not enabled for #{org.name}/)
+      expect(flash[:alert]).to match(/Volunteer reactivation alert not sent. Twilio is disabled for #{org.name}/)
     end
   end
 

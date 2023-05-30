@@ -114,5 +114,10 @@ RSpec.describe ApplicationController, type: :controller do
     it "sms status is sent" do
       expect(controller.send(:sms_acct_creation_notice, "admin", "sent")).to eq("New admin created successfully. SMS has been sent!")
     end
+
+    it "sms status is twilio_not_enabled" do 
+      pending("no error")
+      expect(controller.send(:sms_acct_creation_notice, "admin", "twilio_not_enabled")).to eq("New admin created successfully. SMS not sent. Twilio is disabled for #{volunteer.casa_org.name}")
+    end 
   end
 end
