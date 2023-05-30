@@ -14,5 +14,9 @@ rules:
     allow-non-breakable-inline-mappings: true
 
   # don't bother me with this rule
-  indentation: disable
-  comments: disable
+  indentation:
+    spaces: 2
+    indent-sequences: consistent
+    check-multi-line-strings: false
+  comments:
+    require-starting-space: true

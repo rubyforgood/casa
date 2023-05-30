@@ -1,4 +1,3 @@
-# yamllint disable-line rule:document-start
 blank_issues_enabled: false
 contact_links:
   - name: 📄Documentation addition/change

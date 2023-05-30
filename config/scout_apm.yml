@@ -1,6 +1,5 @@
 # This configuration file is used for Scout APM.
 # https://scoutapm.com/docs/ruby/configuration
-# yamllint disable-line rule:document-start
 common: &defaults
 
   # key: Your Organization key for Scout APM. Found on the settings screen.
