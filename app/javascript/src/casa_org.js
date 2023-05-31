@@ -25,10 +25,10 @@ function addCheckedAttr (el) {
 }
 
 function removeCheckedAttr (el) {
-  el.attr('disabled', true)
-  el.setAttribute('aria-required', false)
-  el.removeAttribute('aria-disabled', true)
   el.removeAttr('required')
+  el.setAttribute('aria-required', false)
+  el.setAttribute('aria-disabled', true)
+  el.attr('disabled', true)
 }
 
 $('document').ready(() => {

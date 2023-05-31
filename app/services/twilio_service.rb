@@ -32,6 +32,7 @@ class TwilioService
       )
     rescue => e
       Rails.logger.error("send SMS failed: #{e}")
+      e
     end
   end
 end
