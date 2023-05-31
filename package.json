@@ -15,7 +15,7 @@
     "@fortawesome/fontawesome-free": "^6.4.0",
     "@popperjs/core": "^2.11.7",
     "@rails/actioncable": "^7.0.4",
-    "@rails/activestorage": "^7.0.4",
+    "@rails/activestorage": "^7.0.5",
     "@rails/ujs": "^7.0.4",
     "add2calendar": "^1.1.8",
     "bindings": "^1.5.0",
