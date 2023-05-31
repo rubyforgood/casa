@@ -76,7 +76,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def sms_acct_creation_notice(resource_name, sms_status) # switch case implement here (should read mutually exclusive)
+  def sms_acct_creation_notice(resource_name, sms_status)
     case sms_status
     when "blank"
       "New #{resource_name} created successfully."
