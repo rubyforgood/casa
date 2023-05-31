@@ -55,7 +55,7 @@ class ApplicationController < ActionController::Base
     from = current_user.casa_org.twilio_phone_number
 
     begin
-      @twilio = TwilioService.new(resource.casa_org)
+      @twilio = TwilioService.new(current_user.casa_org)
       req_params = {
         From: from,
         Body: body,
