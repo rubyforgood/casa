@@ -30,9 +30,9 @@ class TwilioService
         body: body,
         to: to
       )
-    rescue => e
-      Rails.logger.error("send SMS failed: #{e}")
-      e
+    rescue => error
+      Rails.logger.error("send SMS failed: #{error}")
+      error
     end
   end
 end

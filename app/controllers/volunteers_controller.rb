@@ -37,9 +37,7 @@ class VolunteersController < ApplicationController
       invitation_url = Rails.application.routes.url_helpers.accept_user_invitation_url(invitation_token: raw_token, host: request.base_url)
       hash_of_short_urls = @volunteer.phone_number.blank? ? {0 => nil, 1 => nil} : handle_short_url([invitation_url, request.base_url + "/users/edit"])
       body_msg = account_activation_msg("volunteer", hash_of_short_urls)
-      ###
-      sms_status = deliver_sms_to @volunteer, body_msg # ##checks for twilio_enabled###
-      ###
+      sms_status = deliver_sms_to @volunteer, body_msg
       redirect_to edit_volunteer_path(@volunteer), notice: sms_acct_creation_notice("volunteer", sms_status)
     else
       render :new
@@ -104,12 +102,8 @@ class VolunteersController < ApplicationController
       begin
         send_sms_to(volunteers_phone_number, "Hello #{@volunteer.display_name}, \n \n Your CASA/Prince George’s County volunteer console account has been reactivated. You can login using the credentials you were already using. \n \n If you have any questions, please contact your most recent Case Supervisor for assistance. \n \n CASA/Prince George’s County")
         redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer reactivation alert sent"
-      rescue StandardError => error
-        if error.kind_of? NoMethodError #Most likely unverified phone number
-          redirect_to edit_volunteer_path(@volunteer), notice: "SMS Not Sent. Volunteer Phone Number is not verified."
-        else 
+      rescue => error
         redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer reactivation alert not sent. #{error}"
-        end 
       end
     end
   end

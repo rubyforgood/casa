@@ -55,7 +55,7 @@ class ApplicationController < ActionController::Base
     from = current_user.casa_org.twilio_phone_number
 
     begin
-      @twilio = TwilioService.new(resource.casa_org)
+      @twilio = TwilioService.new(current_user.casa_org)
       req_params = {
         From: from,
         Body: body,
@@ -63,34 +63,27 @@ class ApplicationController < ActionController::Base
       }
       twilio_res = @twilio.send_sms(req_params)
       twilio_res.error_code.nil? ? "sent" : "error"
-
     rescue TwilioService::TwilioCasaOrgError => error
       @error = error
-      "twilio_not_enabled"
-    rescue Twilio::REST::RestError
       "error"
-    rescue StandardError #unverfied error isnt picked up by Twilio::Rest::RestError 
-      #https://www.twilio.com/docs/errors/21608
+    rescue Twilio::REST::RestError => error
+      @error = error
+      "error" # Find a better description for this
+    rescue # unverfied error isnt picked up by Twilio::Rest::RestError
+      # https://www.twilio.com/docs/errors/21608
       @error = "Phone number is unverifiied"
-      "unverified"
+      "error"
     end
   end
 
   def sms_acct_creation_notice(resource_name, sms_status)
-    if sms_status === "blank"
-      return "New #{resource_name} created successfully."
-    end
-    if sms_status === "error"
-      return "New #{resource_name} created successfully. SMS not sent due to error."
-    end
-    if sms_status === "sent"
-      return "New #{resource_name} created successfully. SMS has been sent!"
-    end
-    if sms_status === "twilio_not_enabled"
-      "New #{resource_name} created successfully. SMS not sent. #{@error}."
-    end
-    if sms_status === "unverified"
-      "New #{resource_name} created successfully. SMS not sent. #{@error}."
+    case sms_status
+    when "blank"
+      "New #{resource_name} created successfully."
+    when "error"
+      "New #{resource_name} created successfully. SMS not sent. Error: #{@error}."
+    when "sent"
+      "New #{resource_name} created successfully. SMS has been sent!"
     end
   end
 
