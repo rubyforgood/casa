@@ -102,6 +102,7 @@ RSpec.describe ApplicationController, type: :controller do
     end
   end
 
+
   describe "sms acct creation notice" do
     it "sms status is blank" do
       expect(controller.send(:sms_acct_creation_notice, "admin", "blank")).to eq("New admin created successfully.")
@@ -120,4 +121,29 @@ RSpec.describe ApplicationController, type: :controller do
       expect(controller.send(:sms_acct_creation_notice, "admin", "twilio_not_enabled")).to eq("New admin created successfully. SMS not sent. Twilio is disabled for #{volunteer.casa_org.name}")
     end 
   end
+
+  context "when deliver_sms_to raises a twilio error" do 
+    #let(:organization_twilio_enabled) { create(:casa_org) }
+    #let(:volunteer_twilio) { create(:volunteer, casa_org: organization_twilio_enabled) }  
+
+    #let(:organization_twilio_disabled) { create(:casa_org) }
+    #let(:volunteer_no_twilio) { create(:volunteer, casa_org: organization_twilio_disabled) } 
+
+    before do 
+      ##### Isolate this and make its own context block -> look where application controller is already being tested 
+      #run it every time!!!!
+      allow_any_instance_of(TwilioService).to receive(:initialize)
+      .and_raise(StandardError)
+      #focus on each error and making sure we get the response we want (whatever is rescued)
+      #####
+    end 
+    it "fails on and returns on first rescue" do 
+      debugger
+    end 
+    it "fails on and returns on second rescue" do 
+    end 
+    it "fails on and returns on third rescue" do 
+    end 
+
+  end 
 end
