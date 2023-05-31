@@ -105,20 +105,20 @@ RSpec.describe "Users::PasswordsController", type: :request do
       end
     end
 
-    context "when twilio is disabled" do 
+    context "when twilio is disabled" do
       let(:params) { {user: {email: user.email, phone_number: user.phone_number}} }
-      
-      before do 
+
+      before do
         org.update(twilio_enabled: false)
       end
 
-      it "does not send an sms, only an email" do 
+      it "does not send an sms, only an email" do
         expect_any_instance_of(User).to receive(:send_reset_password_instructions).once
         request
         expect(flash[:notice]).to(
           eq("You will receive an email or SMS with instructions on how to reset your password in a few minutes.")
         )
-      end 
-    end 
+      end
+    end
   end
 end
