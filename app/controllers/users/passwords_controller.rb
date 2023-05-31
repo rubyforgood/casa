@@ -9,7 +9,7 @@ class Users::PasswordsController < Devise::PasswordsController
 
     valid_params?(@email, @phone_number) ? send_password : render_error
     return if @errors
-    
+
     redirect_to after_sending_reset_password_instructions_path_for(resource_name), notice: "You will receive an email or SMS with instructions on how to reset your password in a few minutes."
   end
 
@@ -43,8 +43,8 @@ class Users::PasswordsController < Devise::PasswordsController
         To: @phone_number
       }
       twilio_service.send_sms(sms_params)
-    rescue => e 
-      Rails.logger.error("send SMS failed: #{e}") #User doesn't need to know about this
+    rescue => e
+      Rails.logger.error("send SMS failed: #{e}") # User doesn't need to know about this
     end
   end
 

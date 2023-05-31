@@ -83,7 +83,7 @@ module TwilioAPI
       .to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"Execute Order 66 - https://42ni.short.gy/jzTwdF\"}")
   end
 
-   def twilio_unverified_number_response_stub(resource = "")
+  def twilio_unverified_number_response_stub(resource = "")
     WebMock.stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno31/Messages.json")
       .with(
         headers: {
