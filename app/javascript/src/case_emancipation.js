@@ -66,7 +66,7 @@ export class Toggler {
   constructor (emancipationCategory) {
     this.emancipationCategory = emancipationCategory
     this.categoryCollapseIcon = this.emancipationCategory.find('.category-collapse-icon')
-    this.categoryOptionsContainer = this.emancipationCategory.siblings('.category-options')
+    this.categoryOptionsContainer = this.emancipationCategory.next('.category-options')
   }
 
   manageTogglerText () {
