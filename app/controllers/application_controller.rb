@@ -87,10 +87,10 @@ class ApplicationController < ActionController::Base
       return "New #{resource_name} created successfully. SMS has been sent!"
     end
     if sms_status === "twilio_not_enabled"
-      "New #{resource_name} created successfully. SMS not sent. #{@error}."
+      return "New #{resource_name} created successfully. SMS not sent. #{@error}."
     end
     if sms_status === "unverified"
-      "New #{resource_name} created successfully. SMS not sent. #{@error}."
+      return "New #{resource_name} created successfully. SMS not sent. #{@error}."
     end
   end
 
