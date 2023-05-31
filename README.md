@@ -70,20 +70,20 @@ Read about the [product sense](doc/productsense.md) that guides our approach to 
 
 The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer-description/) in Prince George's County.
 
-# Developing! ✨🛠✨  
-## How to Contribute  
+# Developing! ✨🛠✨
+## How to Contribute
   See our [contributing guide](./doc/CONTRIBUTING.md) 💖 ✨
 ## Installation
 ### General Setup Instructions
 **Downloading the Project**
 (*on a Mac or Linux machine*)
-1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine.  
-2. You can ask a [maintainer](https://github.com/rubyforgood/casa/wiki/Who's-who%3F) for permission to make a branch on this repo.  
-3. You can also [create a fork on GitHub](https://docs.github.com/en/get-started/quickstart/fork-a-repo) and make a pull request from the fork.  
+1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine.
+2. You can ask a [maintainer](https://github.com/rubyforgood/casa/wiki/Who's-who%3F) for permission to make a branch on this repo.
+3. You can also [create a fork on GitHub](https://docs.github.com/en/get-started/quickstart/fork-a-repo) and make a pull request from the fork.
 
 **Ruby**
 1. Install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
-1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`. Right now that's Ruby 3.1.2
+1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`. Right now that's Ruby 3.2.2
 1. `gem install bundler`
 
 **node.js**
@@ -120,11 +120,11 @@ If you are using Ubuntu on WSL and receive the following message when trying to 
     requires running local postgres, with a role created for whatever user you're running rails as
 1. `bin/rails db:seed:replant` generates test data (can be rerun to regenerate test data)
 
-**Compile Assets**  
-1.  `yarn build` compile javascript  
-&ensp;&ensp;`yarn build:dev` to auto recompile for when you edit js files  
-3.  `yarn build:css` compile css  
-&ensp;&ensp;`yarn build:css:dev` to auto recompile for when you edit sass files  
+**Compile Assets**
+1.  `yarn build` compile javascript
+&ensp;&ensp;`yarn build:dev` to auto recompile for when you edit js files
+3.  `yarn build:css` compile css
+&ensp;&ensp;`yarn build:css:dev` to auto recompile for when you edit sass files
 
 ### Platform Specific Installation Instructions
  - [Docker](doc/DOCKER.md)
@@ -161,7 +161,7 @@ If you are using Ubuntu on WSL and receive the following message when trying to 
 
 ## Running the App / Verifying Installation
 1. `bin/rails server` or `bin/rails s` to start the local webserver
-   
+
 **Logging in with seed users**
 
 Login as a regular user at http://localhost:3000/users/sign_in. Some example seed users:
