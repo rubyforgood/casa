@@ -116,11 +116,13 @@ RSpec.describe ApplicationController, type: :controller do
     end
   end
 
-  context "deliver_sms_to encounters an error" do
+  describe "deliver_sms_to encounters an error" do
     let(:organization_twilio_disabled) { create(:casa_org, twilio_enabled: false) }
 
-    it "when twilio is not enabled, raises a TwilioCasaOrgError" do
-      expect { TwilioService.new(organization_twilio_disabled) }.to raise_error(TwilioService::TwilioCasaOrgError)
+    context "when twilio is not enabled" do 
+      it "raises a TwilioCasaOrgError" do
+        expect { TwilioService.new(organization_twilio_disabled) }.to raise_error(TwilioService::TwilioCasaOrgError)
+      end
     end
   end
 end

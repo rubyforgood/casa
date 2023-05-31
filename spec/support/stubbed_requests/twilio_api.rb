@@ -82,15 +82,4 @@ module TwilioAPI
       )
       .to_return(body: "{\"error_code\":null, \"status\":\"sent\", \"body\":\"Execute Order 66 - https://42ni.short.gy/jzTwdF\"}")
   end
-
-  def twilio_unverified_number_response_stub(resource = "")
-    WebMock.stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/articuno31/Messages.json")
-      .with(
-        headers: {
-          "Content-Type" => "application/x-www-form-urlencoded",
-          "Authorization" => "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
-        }
-      )
-      .to_return(body: "{\"error_code\":\"42\", \"status\":\"failed\", \"body\":\"My tea's gone cold I wonder why\"}")
-  end
 end
