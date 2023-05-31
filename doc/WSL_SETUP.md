@@ -1,6 +1,6 @@
 
 
-This guide will walk you through setting up the neccessary environment using  [WSL](https://docs.microsoft.com/en-us/windows/wsl/install) (Windows Subsystem for Linux), which will allow you to run Ubuntu on your Windows machine. 
+This guide will walk you through setting up the neccessary environment using  [WSL](https://docs.microsoft.com/en-us/windows/wsl/install) (Windows Subsystem for Linux), which will allow you to run Ubuntu on your Windows machine.
 
 You will need the following local tools installed:
 
@@ -12,25 +12,25 @@ You will need the following local tools installed:
 
 ### WSL (Windows Subsystem for Linux)
 
-1. **Install [WSL](https://docs.microsoft.com/en-us/windows/wsl/install)**. 
+1. **Install [WSL](https://docs.microsoft.com/en-us/windows/wsl/install)**.
 
    `wsl --install`
 
    The above command only works if WSL is not installed at all, if you run `wsl --install `and see the WSL help text, do `--install -d Ubuntu`
 
 2. **Run Ubuntu on Windows**
-   
-   You can run Ubuntu on Windows [several different ways](https://docs.microsoft.com/en-us/windows/wsl/install#ways-to-run-multiple-linux-distributions-with-wsl), but we suggest using [Windows Terminal](https://docs.microsoft.com/en-us/windows/terminal/install). 
 
-   To open an Ubuntu tab in Terminal, click the downward arrow and choose 'Ubuntu'. 
+   You can run Ubuntu on Windows [several different ways](https://docs.microsoft.com/en-us/windows/wsl/install#ways-to-run-multiple-linux-distributions-with-wsl), but we suggest using [Windows Terminal](https://docs.microsoft.com/en-us/windows/terminal/install).
 
-   The following commands should all be run in an Ubuntu window. 
+   To open an Ubuntu tab in Terminal, click the downward arrow and choose 'Ubuntu'.
+
+   The following commands should all be run in an Ubuntu window.
 
 ### Ruby
 
 Install a ruby version manager like [rbenv](https://github.com/rbenv/rbenv#installation)
 
-  **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 3.1.2.** 
+  **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 3.2.2.**
 
 Instructions for rbenv:
 
@@ -50,13 +50,13 @@ Instructions for rbenv:
 
 5.  **[Install Ruby](https://github.com/rbenv/rbenv#installing-ruby-versions)**
 
-      **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 3.1.2.** 
+      **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 3.2.2.**
 
-      `rbenv install 3.1.2`
+      `rbenv install 3.2.2`
 
 6. **Set a Ruby version to finish installation and start**
 
-    `rbenv global 3.1.2` OR `rbenv local 3.1.2`
+    `rbenv global 3.2.2` OR `rbenv local 3.2.2`
 
 
 ### NodeJS
@@ -67,12 +67,12 @@ The Casa package frontend leverages several javascript packages managed through 
 
    NVM is a node version manager.
 
-2. **[Install yarn](https://classic.yarnpkg.com/en/docs/install)** 
+2. **[Install yarn](https://classic.yarnpkg.com/en/docs/install)**
 
    Expand 'Alternatives' and select 'Debian/Ubuntu' for detailed instructions.
 
    `curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -`
-   
+
    `echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list`
 
    `sudo apt update`
@@ -84,14 +84,14 @@ The Casa package frontend leverages several javascript packages managed through 
 1. **[Install PostgresSQL](https://docs.microsoft.com/en-us/windows/wsl/tutorials/wsl-database#install-postgresql) for WSL**
 
    `sudo apt install postgresql postgresql-contrib` - install
-   
+
    `psql --version` - confirm installation and see version number
-   
+
  2. **Install libpq-dev library**
- 
+
       `sudo apt-get install libpq-dev`
 
-3. **Start your postgresql service** 
+3. **Start your postgresql service**
 
    `sudo service postgresql start`
 
@@ -149,7 +149,7 @@ If you receive errors about needing the chromium snap while running the test sui
 
 ### Casa & Rails
 
-Casa's install will also install the correct version of Rails. 
+Casa's install will also install the correct version of Rails.
 
 1. **Download the project**
 
@@ -176,27 +176,26 @@ Casa's install will also install the correct version of Rails.
    Create a postgres user that matches your Ubuntu user:
 
    `sudo -u postgres createuser <username>` - create user
-   
+
    `sudo -u postgres psql` - logs in as the postgres user
-   
+
    `psql=# alter user <username> with encrypted password '<password>';` - add password
-   
+
    `psql=# alter user <username> CREATEDB;` - give permission to your user to create databases
- 
+
    Set up the Casa DB
 
     `bin/rails db:setup`  - sets up the db
-    
+
     `bin/rails db:seed:replant` - generates test data (can be rerun to regenerate test data)
-4. **Compile Assets**  
--  `yarn build` compile javascript  
-&ensp;&ensp;`yarn build:dev` to auto recompile for when you edit js files  
--  `yarn build:css` compile css  
-&ensp;&ensp;`yarn build:css:dev` to auto recompile for when you edit sass files  
+4. **Compile Assets**
+-  `yarn build` compile javascript
+&ensp;&ensp;`yarn build:dev` to auto recompile for when you edit js files
+-  `yarn build:css` compile css
+&ensp;&ensp;`yarn build:css:dev` to auto recompile for when you edit sass files
 
 ### Getting Started
 
-See [Running the App / Verifying Installation](https://github.com/rubyforgood/casa#running-the-app--verifying-installation). 
+See [Running the App / Verifying Installation](https://github.com/rubyforgood/casa#running-the-app--verifying-installation).
 
 A good option for editing files in WSL is [Visual Studio Code Remote- WSL](https://code.visualstudio.com/docs/remote/wsl)
-
