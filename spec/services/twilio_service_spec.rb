@@ -40,8 +40,7 @@ RSpec.describe TwilioService do
       end
     end
 
-    context "when twilio is disabled" do 
-
+    context "when twilio is disabled" do
       let!(:casa_org_twilio_disabled) do
         create(
           :casa_org,
