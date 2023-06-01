@@ -22,7 +22,7 @@ RSpec.describe VolunteersEmailsExportCsvService do
       expect(csv).not_to match(/#{other_org_volunteer.email}/)
     end
 
-    it "Exports correct data from volunteers, including old emails" do 
+    it "Exports correct data from volunteers, including old emails" do
       casa_org_2 = create(:casa_org)
       volunteer_with_old_emails = create(:volunteer, old_emails: ["old_email@example.com"], casa_org: casa_org_2)
       csv = described_class.new(casa_org_2).call
@@ -31,6 +31,6 @@ RSpec.describe VolunteersEmailsExportCsvService do
       expect(results.count).to eq(2)
       expect(results[0].split(",")).to eq(["Email", "Old Emails", "Case Number", "Volunteer Name", "Case Transition Aged Status"])
       expect(results[1]).to eq("#{volunteer_with_old_emails.email},#{volunteer_with_old_emails.old_emails.join(", ")},\"\",#{volunteer_with_old_emails.display_name},\"\"")
-    end 
+    end
   end
 end
