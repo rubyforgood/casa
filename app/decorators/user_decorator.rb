@@ -1,5 +1,4 @@
 class UserDecorator < Draper::Decorator
-  # include Users::TimeZone
   delegate_all
 
   def status
@@ -7,7 +6,7 @@ class UserDecorator < Draper::Decorator
   end
 
   def local_time_zone
-    browser_time_zone
+    h.browser_time_zone
   end
 
   def formatted_created_at
