@@ -26,6 +26,7 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
         sign_in all_casa_admin
         visit all_casa_admins_patch_notes_path
 
+        expect(page).to have_text("Patch Notes")
         within "#new-patch-note" do
           text_area = first(:css, "textarea").native
           text_area.send_keys(patch_note_text)
@@ -33,7 +34,12 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
           click_on "Create"
         end
 
-        wait_for_ajax
+        # wait_for_ajax
+        # Failure/Error: window_handles.slice(1..).each { |win| close_window(win) }
+        #
+        #           NoMethodError:
+        #             undefined method `slice' for nil:NilClass
+        expect(page).to have_text("Patch Notes")
 
         expect(page.find(".patch-note-list-item.new textarea")&.value).to eq(patch_note_text)
       end
