@@ -4,6 +4,8 @@ import { Toggler } from '../src/case_emancipation'
 require('jest')
 
 let category
+let categoryOptions
+let categoryOptionsControl
 let categoryCollapseIcon
 let checkBox
 let toggler
@@ -13,16 +15,31 @@ beforeEach(() => {
   <div class="card card-container">
     <div class="card-body">
         <div>
-          <h6 class="emancipation-category no-select" data-is-open='false'>
+          <h6 class="emancipation-category no-select" id="category-under-test" data-is-open='false'>
+            <input type="checkbox" class="emancipation-category-check-box" value="1">
+            <label>Youth has housing.</label>
+              <span class="category-collapse-icon" id="icon-under-test">+</span>
+          </h6>
+          <div
+            class="category-options"
+            id="category-options-under-test"
+            style="display: none;">
+              <div class="check-item">
+                <input type="checkbox" id="O1" class="emancipation-option-check-box" value="1" checked>
+                <label>With Friend</label>
+              </div>
+          </div>
+          <h6 class="emancipation-category no-select" id="category-control" data-is-open='false'>
             <input type="checkbox" class="emancipation-category-check-box" value="1">
             <label>Youth has housing.</label>
               <span class="category-collapse-icon">+</span>
           </h6>
           <div
             class="category-options"
+            id="category-options-control"
             style="display: none;">
               <div class="check-item">
-                <input type="checkbox" id="O1" class="emancipation-option-check-box" value="1" checked>
+                <input type="checkbox" id="O2" class="emancipation-option-check-box" value="1" checked>
                 <label>With Friend</label>
               </div>
           </div>
@@ -31,9 +48,11 @@ beforeEach(() => {
   </div>
   `
 
-  category = $('.emancipation-category')
-  categoryCollapseIcon = $('.category-collapse-icon')
-  checkBox = $('.emancipation-option-check-box')
+  category = $('#category-under-test')
+  categoryOptions = $('#category-options-under-test')
+  categoryOptionsControl = $('#category-options-control')
+  categoryCollapseIcon = $('#icon-under-test')
+  checkBox = $('#O1')
   toggler = new Toggler(category)
 })
 
@@ -50,6 +69,8 @@ describe('Function that opens the children of a given parent', () => {
   test('Opens the categoryOptionsContainer', () => {
     toggler.openChildren()
     expect(category.data('is-open')).toEqual(true)
+    expect(categoryOptions.css('display')).toEqual('block')
+    expect(categoryOptionsControl.css('display')).toEqual('none')
   })
 })
 
