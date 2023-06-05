@@ -1,13 +1,11 @@
 require "rails_helper"
 
 RSpec.describe "imports/index", type: :system do
-  let(:volunteer) { create(:volunteer) }
-  let(:admin) { create(:casa_admin) }
-
   context "as a volunteer" do
-    before { sign_in volunteer }
-
     it "redirects the user with an error message" do
+      volunteer = create(:volunteer)
+
+      sign_in volunteer
       visit imports_path
 
       expect(page).to have_selector(".alert", text: "Sorry, you are not authorized to perform this action.")
@@ -15,9 +13,10 @@ RSpec.describe "imports/index", type: :system do
   end
 
   context "import volunteer csv with phone numbers", js: true do
-    let(:import_file_path) { Rails.root.join("spec", "fixtures", "volunteers.csv") }
-
     it "shows sms opt in modal" do
+      import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
+      admin = create(:casa_admin)
+
       sign_in admin
       visit imports_path(:volunteer)
 
@@ -38,9 +37,10 @@ RSpec.describe "imports/index", type: :system do
   end
 
   context "import volunteer csv without phone numbers", js: true do
-    let(:import_file_path) { Rails.root.join("spec", "fixtures", "volunteers_without_phone_numbers.csv") }
-
     it "shows successful import" do
+      import_file_path = Rails.root.join("spec", "fixtures", "volunteers_without_phone_numbers.csv")
+      admin = create(:casa_admin)
+
       sign_in admin
       visit imports_path(:volunteer)
 
@@ -54,9 +54,10 @@ RSpec.describe "imports/index", type: :system do
   end
 
   context "import supervisors csv with phone numbers", js: true do
-    let(:import_file_path) { Rails.root.join("spec", "fixtures", "supervisors.csv") }
-
     it "shows sms opt in modal" do
+      import_file_path = Rails.root.join("spec", "fixtures", "supervisors.csv")
+      admin = create(:casa_admin)
+
       sign_in admin
       visit imports_path
       click_on "supervisor-tab"
@@ -78,12 +79,14 @@ RSpec.describe "imports/index", type: :system do
   end
 
   context "import supervisors csv without phone numbers", js: true do
-    let(:import_file_path) { Rails.root.join("spec", "fixtures", "supervisors_without_phone_numbers.csv") }
-
     it "shows successful import" do
+      import_file_path = Rails.root.join("spec", "fixtures", "supervisors_without_phone_numbers.csv")
+      admin = create(:casa_admin)
+
       sign_in admin
       visit imports_path
-      click_link "supervisor-tab"
+
+      click_on "Import Supervisors"
 
       expect(page).to have_content("Import Supervisors")
 
