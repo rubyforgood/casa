@@ -44,7 +44,7 @@ class Users::PasswordsController < Devise::PasswordsController
       }
       twilio_service.send_sms(sms_params)
     rescue => e
-      Rails.logger.error("send SMS failed: #{e}") # User doesn't need to know about this
+      Rails.logger.error("send SMS failed: #{e}")
     end
   end
 
