@@ -20,6 +20,9 @@ RSpec.describe "case_contacts/new", type: :system do
 
       visit casa_case_path(casa_case.id)
 
+      # assert to wait for page loading, to reduce flakiness
+      expect(page).to have_text("CASA Case Details")
+
       # does not show empty contact type groups
       expect(page).to_not have_text("Empty")
 
