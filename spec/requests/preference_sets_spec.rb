@@ -1,46 +1,29 @@
 require "rails_helper"
 
 RSpec.describe "PreferenceSets", type: :request do
-  describe "GET /preference_sets/table_state/volunteers_table" do
+  describe "#GET Table_State " do
+    let!(:supervisor) { create(:supervisor) }  # Assuming you have a User factory
+    let!(:preference_set) { supervisor.preference_set}
+    let!(:table_state) {  { "columns" => [{ "visible" => "false" }, { "visible" => "true" }, { "visible" => "false" }, { "visible" => "true" }] } }
     
-    let!(:casa_org) { create(:casa_org, ) }
-    let!(:supervisor) { create(:supervisor, casa_org: casa_org) }
-
-    let!(:table_state) { { "volunteers_table" => { "columns" => [{ "visible" => true }, { "visible" => false }] } } }
-    let!(:supervisor_table_state) { { "volunteers_table" => { "columns" => [{ "visible" => true }, { "visible" => false }] } } }
-    let!(:supervisor_preference_set) do
-      preference_set = PreferenceSet.create!(user: supervisor)
-      puts "Before update: #{preference_set.table_state}"
-      preference_set.update!(table_state: supervisor_table_state)
-      puts "After update: #{preference_set.reload.table_state}"
-      preference_set
-    end
-    
-    
-
-    it "returns http success" do
+    before do
       sign_in supervisor
-      get "/preference_sets/table_state/volunteers_table"
-      expect(response).to have_http_status(:success)
     end
 
-    it "returns the correct table state" do
-      sign_in supervisor
-      get table_state_preference_sets_path(table_name: "volunteers_table")
-      
-      puts "Response body: #{response.body}"
+    describe 'POST /preference_sets/table_state_update/volunteers_table' do
+      subject { post '/preference_sets/table_state_update/volunteers_table', params: { table_name: 'volunteers_table', table_state: table_state } }
 
-      expect(response.body).to eq(table_state.to_json)
-    end
+      it 'updates the table state' do
+        subject
+        preference_set.reload
 
-    it "testing test" do
-      sign_in supervisor
-      
-      puts "Before GET request: #{PreferenceSet.find_by(user: supervisor).reload.table_state}"
-      get table_state_preference_sets_path(table_name: "volunteers_table")
-      puts "After GET request: #{PreferenceSet.find_by(user: supervisor).table_state}"
-      
+        expect(preference_set.table_state['volunteers_table']).to eq(table_state)
+      end
+
+      it 'returns a 200 OK status' do
+        subject
+        expect(response).to have_http_status(:ok)
+      end
     end
-    
   end
 end
