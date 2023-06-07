@@ -11,6 +11,7 @@ class UserDecorator < Draper::Decorator
 
   def formatted_created_at
     format_key = context[:format] || :full
+
     if format_key == :edit_profile
       I18n.l(object.created_at&.in_time_zone(local_time_zone), format: format_key, default: nil)
     else
