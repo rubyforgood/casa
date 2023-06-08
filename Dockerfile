@@ -1,6 +1,4 @@
-FROM ruby:3.1.3-alpine AS builder
-
-LABEL maintainer="jeanine@littleforestconsulting.com"
+FROM ruby:3.2.2-alpine AS builder
 
 RUN apk update && apk upgrade && apk add --update --no-cache \
   build-base \
@@ -25,7 +23,7 @@ RUN yarn build && yarn build:css
 
 ### BUILD STEP DONE ###
 
-FROM ruby:3.1.3-alpine
+FROM ruby:3.2.2-alpine
 
 ARG RAILS_ROOT=/usr/src/app/
 

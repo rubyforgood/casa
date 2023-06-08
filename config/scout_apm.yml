@@ -4,7 +4,7 @@ common: &defaults
 
   # key: Your Organization key for Scout APM. Found on the settings screen.
   # - Default: none
-  key:  <%= ENV.fetch("SCOUT_APM_KEY", "local") %>
+  key: <%= ENV.fetch("SCOUT_APM_KEY", "local") %>
 
   # log_level: Verboseness of logs.
   # - Default: 'info'

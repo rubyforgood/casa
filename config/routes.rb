@@ -31,7 +31,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :health, only: %i[index]
+  resources :health, only: %i[index] do
+    collection do
+      get :case_contacts_creation_times_in_last_week
+    end
+  end
 
   get "/.well-known/assetlinks.json", to: "android_app_associations#index"
   resources :casa_cases, except: %i[destroy] do
@@ -106,6 +110,7 @@ Rails.application.routes.draw do
   resources :missing_data_reports, only: %i[index]
   resources :learning_hours_reports, only: %i[index]
   resources :followup_reports, only: :index
+  resources :placement_reports, only: :index
 
   resources :supervisors, except: %i[destroy show], concerns: %i[with_datatable] do
     member do
