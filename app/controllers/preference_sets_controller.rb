@@ -1,5 +1,6 @@
 class PreferenceSetsController < ApplicationController
   before_action :skip_authorization, :set_table_name
+
   def table_state
     render json: PreferenceSetTableStateService.new(user_id: current_user.id).table_state(
       table_name: @table_name
