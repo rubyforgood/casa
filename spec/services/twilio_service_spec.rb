@@ -21,6 +21,16 @@ RSpec.describe TwilioService do
           twilio_enabled: true
         )
       end
+      let!(:casa_org_twilio_disabled) do
+        create(
+          :casa_org,
+          twilio_phone_number: "+15555555553",
+          twilio_account_sid: "zapdos43",
+          twilio_api_key_sid: "Jasmine",
+          twilio_api_key_secret: "hakuna matata",
+          twilio_enabled: false
+        )
+      end
 
       it "can send a SMS with a short url successfully" do
         @twilio = TwilioService.new(casa_org)

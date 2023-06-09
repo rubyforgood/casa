@@ -63,7 +63,7 @@ class CaseContactTypesReminder
   end
 
   def valid_casa_twilio_creds(casa_org)
-    casa_org.twilio_phone_number? && casa_org.twilio_account_sid? && casa_org.twilio_api_key_sid? && casa_org.twilio_api_key_secret?
+    casa_org.twilio_enabled? && casa_org.twilio_phone_number? && casa_org.twilio_account_sid? && casa_org.twilio_api_key_sid? && casa_org.twilio_api_key_secret?
   end
 
   def last_reminder_within_quarter(volunteer)

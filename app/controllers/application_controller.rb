@@ -46,7 +46,7 @@ class ApplicationController < ActionController::Base
   # volunteer/supervisor/casa_admin controller uses to send SMS
   # returns appropriate flash notice for SMS
   def deliver_sms_to(resource, body_msg)
-    if resource.phone_number.blank?
+    if resource.phone_number.blank? #|| !resource.casa_org.twilio_enabled? 
       return "blank"
     end
 
@@ -63,9 +63,9 @@ class ApplicationController < ActionController::Base
       }
       twilio_res = @twilio.send_sms(req_params)
       twilio_res.error_code.nil? ? "sent" : "error"
-    rescue TwilioService::TwilioCasaOrgError => error
-      @error = error
-      "error"
+    rescue TwilioService::TwilioCasaOrgError => error########### remove
+      @error = error########### remove
+      "error"########### remove
     rescue Twilio::REST::RestError => error
       @error = error
       "error" # Find a better description for this

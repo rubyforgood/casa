@@ -33,7 +33,7 @@
     <%= link_to send_reactivation_alert_volunteer_path(user),
                id: "#{current_user.casa_org.twilio_enabled? ? "twilio_enabled" : "twilio_disabled"}",
                class: "main-btn danger-btn-outline btn-hover btn-sm my-1" do %>
-      <i class="lni lni-alarm mr-10"></i> Send Reactivation Alert (SMS)
+      <i class="lni lni-alarm mr-10"></i><%=current_user.casa_org.twilio_enabled? ? "Send Reactivation Alert (SMS)" : "Enable Twilio To Send Reactivation Alert (SMS)" %> 
     <% end %>
   <% end %>
 </div>
