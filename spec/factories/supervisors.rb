@@ -32,5 +32,9 @@ FactoryBot.define do
     trait :inactive do
       active { false }
     end
+
+    trait :receive_reimbursement_attachment do
+      receive_reimbursement_email { true }
+    end
   end
 end

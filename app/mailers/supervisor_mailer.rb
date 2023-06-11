@@ -11,6 +11,10 @@ class SupervisorMailer < UserMailer
     @casa_organization = supervisor.casa_org
     @inactive_messages = inactive_messages(supervisor)
     @show_notes = @inactive_messages.none?
+    if supervisor.receive_reimbursement_email
+      mileage_report_attachment = MileageReport.new(@casa_organization.id).to_csv
+      attachments["mileage-report-#{Time.current.strftime("%Y-%m-%d")}.csv"] = mileage_report_attachment
+    end
     mail(
       to: @supervisor.email,
       subject: "Weekly summary of volunteers' activities for the week of #{Date.today - 7.days}"
