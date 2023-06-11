@@ -1,29 +1,31 @@
 require "rails_helper"
 
 RSpec.describe "/contact_types", type: :request do
+  shared_examples "logged in as a non-admin user" do
+    it "redirects to root path" do
+      sign_in_as_volunteer
+
+      subject
+
+      expect(response).to redirect_to root_path
+      expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+    end
+  end
   let(:group) { create(:contact_type_group) }
 
   describe "GET /contact_types/new" do
+    subject { get new_contact_type_path }
     context "logged in as admin user" do
       it "can successfully access a contact type create page" do
         sign_in_as_admin
 
-        get new_contact_type_path
+        subject
 
         expect(response).to be_successful
       end
     end
 
-    context "logged in as a non-admin user" do
-      it "cannot access a contact type create page" do
-        sign_in_as_volunteer
-
-        get new_contact_type_path
-
-        expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
-      end
-    end
+    it_behaves_like "logged in as a non-admin user"
 
     context "unauthenticated request" do
       it "cannot access a contact type create page" do
@@ -36,6 +38,7 @@ RSpec.describe "/contact_types", type: :request do
 
   describe "POST /contact_types" do
     let(:params) { {contact_type: {name: "New Contact", contact_type_group_id: group.id, active: true}} }
+    subject { post contact_types_path, params: params }
 
     context "logged in as admin user" do
       it "can successfully create a contact type" do
@@ -53,19 +56,10 @@ RSpec.describe "/contact_types", type: :request do
         expect(contact_type.active).to be_truthy
         expect(response).to redirect_to edit_casa_org_path(casa_org)
         expect(response.request.flash[:notice]).to eq "Contact Type was successfully created."
+        expect(assigns(:default_checked)).to be_truthy
       end
     end
-
-    context "logged in as a non-admin user" do
-      it "cannot create a contact type" do
-        sign_in_as_volunteer
-
-        post contact_types_path, params: params
-
-        expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
-      end
-    end
+    it_behaves_like "logged in as a non-admin user"
 
     context "unauthenticated request" do
       it "cannot create a contact type" do
@@ -77,26 +71,18 @@ RSpec.describe "/contact_types", type: :request do
   end
 
   describe "GET /contact_types/:id/edit" do
+    subject { get edit_contact_type_path(create(:contact_type)) }
     context "logged in as admin user" do
       it "can successfully access a contact type edit page" do
         sign_in_as_admin
 
-        get edit_contact_type_path(create(:contact_type))
+        subject
 
         expect(response).to be_successful
+        expect(assigns(:default_checked)).to be_truthy
       end
     end
-
-    context "logged in as a non-admin user" do
-      it "cannot access a contact type edit page" do
-        sign_in_as_volunteer
-
-        get edit_contact_type_path(create(:contact_type))
-
-        expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
-      end
-    end
+    it_behaves_like "logged in as a non-admin user"
 
     context "unauthenticated request" do
       it "cannot access a contact type edit page" do
@@ -127,6 +113,7 @@ RSpec.describe "/contact_types", type: :request do
 
         expect(response).to redirect_to edit_casa_org_path(casa_org)
         expect(response.request.flash[:notice]).to eq "Contact Type was successfully updated."
+        expect(assigns(:default_checked)).to be_truthy
       end
     end
 

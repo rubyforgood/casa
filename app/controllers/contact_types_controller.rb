@@ -34,7 +34,7 @@ class ContactTypesController < ApplicationController
 
   private
 
-  def default_checked
+  def set_default_checked
     @default_checked = defined?(@casa_case) ? @casa_case.contact_types.empty? : true
   end
 
