@@ -1,5 +1,6 @@
 class ContactTypesController < ApplicationController
   before_action :set_contact_type, except: [:new, :create]
+  before_action :set_default_checked
   after_action :verify_authorized
 
   def new
@@ -32,6 +33,10 @@ class ContactTypesController < ApplicationController
   end
 
   private
+
+  def default_checked
+    @default_checked = defined?(@casa_case) ? @casa_case.contact_types.empty? : true
+  end
 
   def set_contact_type
     @contact_type = ContactType.find(params[:id])
