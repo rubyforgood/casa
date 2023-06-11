@@ -1,6 +1,7 @@
 class CasaCasesController < ApplicationController
   before_action :set_casa_case, only: %i[show edit update deactivate reactivate copy_court_orders]
   before_action :set_contact_types, only: %i[new edit update create deactivate reactivate]
+  before_action :set_contact_type_groups, only: %i[new edit update create deactivate reactivate]
   before_action :require_organization!
   after_action :verify_authorized
 
@@ -41,9 +42,9 @@ class CasaCasesController < ApplicationController
 
   def create
     @casa_case = CasaCase.new(
-      casa_case_create_params.merge(
-        casa_org: current_organization
-      )
+        casa_case_create_params.merge(
+            casa_org: current_organization
+        )
     )
     authorize @casa_case
 
@@ -136,6 +137,10 @@ class CasaCasesController < ApplicationController
 
   private
 
+  def set_contact_type_groups
+    @contact_type_groups = set_contact_types.map(&:contact_type_group).sort_by(&:name).uniq
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_casa_case
     @casa_case = current_organization.casa_cases.friendly.find(params[:id])
@@ -149,21 +154,21 @@ class CasaCasesController < ApplicationController
   # Only allow a list of trusted parameters through.
   def casa_case_params
     params.require(:casa_case).permit(
-      :case_number,
-      :birth_month_year_youth,
-      :court_report_due_date,
-      :empty_court_date,
-      casa_case_contact_types_attributes: [:contact_type_id],
-      court_dates_attributes: [:date]
+        :case_number,
+        :birth_month_year_youth,
+        :court_report_due_date,
+        :empty_court_date,
+        casa_case_contact_types_attributes: [:contact_type_id],
+        court_dates_attributes: [:date]
     )
   end
 
   def casa_case_create_params
     create_params = if court_date_unknown?
-      casa_case_params.except(:court_dates_attributes)
-    else
-      casa_case_params
-    end
+                      casa_case_params.except(:court_dates_attributes)
+                    else
+                      casa_case_params
+                    end
 
     create_params.except(:empty_court_date)
   end
@@ -174,7 +179,7 @@ class CasaCasesController < ApplicationController
   end
 
   def set_contact_types
-    @contact_types = ContactType.for_organization(current_organization)
+    @contact_types ||= ContactType.for_organization(current_organization)
   end
 
   def case_contact_csv_name(case_contacts)
