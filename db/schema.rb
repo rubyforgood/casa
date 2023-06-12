@@ -449,14 +449,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_212437) do
     t.index ["user_id"], name: "index_preference_sets_on_user_id"
   end
 
-  create_table "preferences", force: :cascade do |t|
-    t.bigint "user_id"
-    t.jsonb "case_volunteer_columns", default: "{}", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_preferences_on_user_id"
-  end
-
   create_table "sent_emails", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "casa_org_id", null: false
@@ -558,16 +550,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_212437) do
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
     t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by_type_and_invited_by_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-  end
-
-  create_table "versions", force: :cascade do |t|
-    t.string "item_type", null: false
-    t.bigint "item_id", null: false
-    t.string "event", null: false
-    t.string "whodunnit"
-    t.text "object"
-    t.datetime "created_at", precision: nil
-    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
