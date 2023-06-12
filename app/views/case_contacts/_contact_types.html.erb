@@ -13,13 +13,13 @@
       <% contact_type_groups.each do |group| %>
         <td class="align-top d-inline-block pr-5 pl-5 pb-4">
           <h5 class="mb-2"> <%= group.name %> </h5>
-          <% group.contact_types.alphabetically do |ct| #removes filter
+          <% group.contact_types.alphabetically.filter do |ct|
               selected_case_contact_types.blank? ||
                   selected_case_contact_types.include?(ct)
             end.each do |contact_type| %>
             <div class="form-check checkbox-style mb-1">
               <%=
-                contact_type_exists = @default_checked ? true : @casa_case.contact_types.include?(contact_type)
+                contact_type_exists = @contact_type_exists
                 contact_type_exists = false unless controller.controller_name == 'casa_cases'
 
                 check_box_tag checkbox_tag_name,
