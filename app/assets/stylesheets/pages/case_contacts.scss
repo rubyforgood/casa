@@ -48,10 +48,6 @@ legend {
     padding-right: 1.5rem !important;
 }
 
-.hide-field {
-    display: none;
-}
-
 .red-letter {
     color: #ff2229;
     font-weight: 900;
@@ -97,6 +93,10 @@ legend {
         }
     }
  }
+
+ .hide-field {
+  display: none;
+}
 
 .other-expenses li {
     margin-bottom: .2rem;
