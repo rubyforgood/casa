@@ -207,7 +207,7 @@ readonly: true %>
           <% end %>
           <% (9 - @case_contact.decorate.additional_expenses_count).times do |i| %>
             <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
-            <div class="expense-container row hide-field" id="<%= if @case_contact.decorate.additional_expenses_count === 0
+            <div class="expense-container row d-none" id="<%= if @case_contact.decorate.additional_expenses_count === 0
             then "expense" + (i + 2).to_s
             else "expense" + ((@case_contact.decorate.additional_expenses_count) + (i + 2)).to_s
             end %>">
