@@ -207,20 +207,20 @@ readonly: true %>
           <% end %>
           <% (9 - @case_contact.decorate.additional_expenses_count).times do |i| %>
             <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
-            <div class="expense-container row" id="<%= if @case_contact.decorate.additional_expenses_count === 0
+            <div class="expense-container row d-none" id="<%= if @case_contact.decorate.additional_expenses_count === 0
             then "expense" + (i + 2).to_s
             else "expense" + ((@case_contact.decorate.additional_expenses_count) + (i + 2)).to_s
             end %>">
               <div class="input-style-1 col-sm-3">
                 <%= ff.number_field :other_expense_amount,
                     placeholder: "Enter amount",
-                    class: "cc-italic cc-field other-expense-amount hide-field",
+                    class: "cc-italic cc-field other-expense-amount",
                   min: "0", max: 1000, step: 0.01 %>
               </div>
               <div class="input-style-1 col">
                 <%= ff.text_field :other_expenses_describe,
                     placeholder: "Describe the expense",
-                    class: "cc-italic cc-field other-expenses-describe hide-field" %>
+                    class: "cc-italic cc-field other-expenses-describe" %>
               </div>
             </div>
             <% end %>
