@@ -7,6 +7,7 @@
     <% else %>
       <h2><label for="case_contact_casa_case">1. Select relevant CASA case<span class="red-letter"> *</span></label></h2>
     <% end %>
+    <div class="casa-case-scroll">
     <% casa_cases.each_with_index do |casa_case, index| %>
       <div class="form-check checkbox-style mb-10 ml-5">
         <%= check_box_tag "case_contact[casa_case_id][]",
@@ -20,6 +21,7 @@
         </label>
       </div>
     <% end %>
+    </div>
   </div>
   <div class="card-style-1 pl-25 mb-10">
     <%= render "contact_types",
