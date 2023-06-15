@@ -141,10 +141,10 @@
     <% else %>
       <div class="form-check checkbox-style mb-20">
           <%= form.check_box :receive_sms_notifications, class: "toggle-sms-notifications form-check-input", disabled: true %>
-          <%= form.label :receive_sms_notifications, "Enable Twilio For Text Messaging", class: "form-check-label"%>
+          <%= form.label :receive_sms_notifications, "Enable Twilio For Text Messaging", class: "form-check-label" %>
       </div>
     <% end %>
-    
+
     <div class="actions mb-10">
       <%= form.submit "Save Preferences", class: "main-btn primary-btn btn-hover mb-3 save-preference" %>
     </div>
