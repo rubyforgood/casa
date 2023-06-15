@@ -41,5 +41,15 @@ RSpec.describe NoContactMadeSmsReminderService do
         expect(response).to be_nil
       end
     end
+
+    context "when volunteer's casa_org does not have twilio enabled" do 
+      let(:casa_org) {create(:casa_org, twilio_enabled: false)}
+      let(:volunteer) {create(:volunteer, casa_org: casa_org)}
+
+      it "should not send a SMS" do 
+        response = NoContactMadeSmsReminderService.no_contact_made_reminder(volunteer, contact_type)
+        expect(response).to be_nil
+      end 
+    end 
   end
 end

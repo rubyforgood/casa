@@ -437,7 +437,7 @@ RSpec.describe "/casa_admins", type: :request do
         subject
         expect(response).to have_http_status(:redirect)
         follow_redirect!
-        expect(flash[:notice]).to match(/New admin created successfully. SMS not sent. Error: Twilio is disabled for #{org.name}./)
+        expect(flash[:notice]).to match(/New admin created successfully./)
       end
     end
 

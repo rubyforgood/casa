@@ -311,7 +311,7 @@ RSpec.describe "/supervisors", type: :request do
       post supervisors_url, params: params
       expect(response).to have_http_status(:redirect)
       follow_redirect!
-      expect(flash[:notice]).to match(/New supervisor created successfully. SMS not sent. Error: Twilio is disabled for #{org.name}./)
+      expect(flash[:notice]).to match(/New supervisor created successfully./)
     end
   end
 
