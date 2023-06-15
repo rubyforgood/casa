@@ -142,6 +142,15 @@
               </li>
             <% end %>
 
+            <% if policy(:application).edit_system_settings? %>
+              <li>
+                <%= link_to settings_path, class: "#{active_class(settings_path)}" do %>
+                  <i class="lni lni-cog mr-10"></i>
+                  System Settings
+                <% end %>
+              </li>
+            <% end %>
+
             <% if policy(:application).see_mileage_rate? %>
               <li>
                 <%= link_to mileage_rates_path, class: "#{active_class(mileage_rates_path)}" do %>
