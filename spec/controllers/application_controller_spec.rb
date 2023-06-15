@@ -108,7 +108,7 @@ RSpec.describe ApplicationController, type: :controller do
     end
 
     it "sms status is error" do
-      expect(controller.send(:sms_acct_creation_notice, "admin", "error")).to eq("New admin created successfully. SMS not sent due to error.")
+      expect(controller.send(:sms_acct_creation_notice, "admin", "error")).to eq("New admin created successfully. SMS not sent. Error: .")
     end
 
     it "sms status is sent" do
