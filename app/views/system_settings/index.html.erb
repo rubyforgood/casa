@@ -11,7 +11,23 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="card-style mb-30">
-        TEST CARD
+        <h3>New Case Contact Form</h3>
+        <hr>
+        <%= form_with(url: settings_path, local: true) do |form| %>
+          <div class="form-check checkbox-style mb-20">
+            <%= check_box_tag :show_additional_expenses, 'true', @show_additional_expenses, class: 'form-check-input' %>
+            <%= form.label :show_additional_expenses, " Volunteers can add Other Expenses", class: 'form-check-label mb-2' %>
+          </div>
+
+          <div class="actions mb-10">
+            <%= button_tag(
+                  type: "submit",
+                  class: "btn-sm main-btn primary-btn btn-hover"
+                ) do %>
+              <i class="lni lni-checkmark-circle mr-10"></i> Submit
+            <% end %>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>
