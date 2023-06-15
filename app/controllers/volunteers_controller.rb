@@ -99,10 +99,12 @@ class VolunteersController < ApplicationController
   def send_reactivation_alert
     authorize @volunteer
     if @volunteer.save
-      send_sms_to(volunteers_phone_number, "Hello #{@volunteer.display_name}, \n \n Your CASA/Prince George’s County volunteer console account has been reactivated. You can login using the credentials you were already using. \n \n If you have any questions, please contact your most recent Case Supervisor for assistance. \n \n CASA/Prince George’s County")
-      redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer reactivation alert sent"
-    else
-      redirect_to edit_volunteer_path(@volunteer), alert: "Volunteer reactivation alert failed"
+      begin
+        send_sms_to(volunteers_phone_number, "Hello #{@volunteer.display_name}, \n \n Your CASA/Prince George’s County volunteer console account has been reactivated. You can login using the credentials you were already using. \n \n If you have any questions, please contact your most recent Case Supervisor for assistance. \n \n CASA/Prince George’s County")
+        redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer reactivation alert sent"
+      rescue
+        redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer reactivation alert not sent. Twilio is disabled for #{@volunteer.casa_org.name}."
+      end
     end
   end
 
@@ -162,7 +164,7 @@ class VolunteersController < ApplicationController
   end
 
   def send_sms_to(phone_number, body)
-    twilio = TwilioService.new(current_user.casa_org.twilio_api_key_sid, current_user.casa_org.twilio_api_key_secret, current_user.casa_org.twilio_account_sid)
+    twilio = TwilioService.new(current_user.casa_org)
     req_params = {From: current_user.casa_org.twilio_phone_number, Body: body, To: phone_number}
     twilio_res = twilio.send_sms(req_params)
 

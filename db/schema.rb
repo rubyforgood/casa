@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_15_155223) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_20_212437) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -140,7 +140,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_155223) do
     t.string "twilio_account_sid"
     t.string "twilio_api_key_sid"
     t.string "twilio_api_key_secret"
-    t.boolean "twilio_enabled", default: false
     t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 
