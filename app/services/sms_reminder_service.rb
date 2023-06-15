@@ -6,7 +6,8 @@ module SmsReminderService
     return if !user[:receive_sms_notifications] || user[:phone_number].blank? || !user.casa_org.twilio_enabled?
 
     user_casa_org = user.casa_org
-    twilio_service = TwilioService.new(user_casa_org)sms_params = {
+    twilio_service = TwilioService.new(user_casa_org)
+    sms_params = {
       From: user_casa_org.twilio_phone_number,
       Body: message,
       To: user.phone_number
