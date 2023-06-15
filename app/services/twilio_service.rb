@@ -12,36 +12,37 @@ class TwilioService
     @enabled = casa_org.twilio_enabled
   end
 
-  def client #lazy create client only if twilio enabled
+  def client # lazy create client only if twilio enabled
     @client = Twilio::REST::Client.new(@api_key, @api_secret, @acc_sid)
-  end 
+  end
 
-  def enabled? 
-   @enabled
-  end 
+  def enabled?
+    @enabled
+  end
+
   # this method takes in a hash
   # required keys are: From:, To:, Body:
   # to send a short url, set URL: key in hash
   def send_sms(params)
-    #return unless casa_org twilio enabled
-    #add check here, Twilio client
-    if !self.enabled? 
-      return nil 
-    end  
+    # return unless casa_org twilio enabled
+    # add check here, Twilio client
+    if !enabled?
+      return nil
+    end
     from = params[:From]
     body = params.key?(:URL) ? params[:Body] + params[:URL] : params[:Body]
     to = params[:To]
     # returns a twilio API message object
     # refer to docs: https://www.twilio.com/docs/sms/api/message-resource#message-properties
     begin
-      client 
+      client
       client.messages.create(
         from: from,
         body: body,
         to: to
       )
     rescue => error
-      Rails.logger.error("send SMS failed: #{error}") #help a person know whats going on, these messages can be inspected (Twilio)
+      Rails.logger.error("send SMS failed: #{error}") # help a person know whats going on, these messages can be inspected (Twilio)
       error
     end
   end
