@@ -18,8 +18,8 @@ label {
 }
 
 .casa-case-scroll {
-  width: 225px;
-  height: 350px;
+  width: 13rem;
+  height: 22rem;
   overflow-y: auto;
 }
 
@@ -83,36 +83,29 @@ div.row.volunteer-filters {
   .login-header {
     font-size: 0.75em !important;
   }
-
   .content {
     padding: 3rem 0;
     margin-left: 0;
   }
-
   .card-body {
     padding: 0.5rem;
   }
-
   table.table {
     thead {
       display: none;
     }
-
     tr {
       display: table;
       width: 100%;
       border-bottom: 1px solid #efefef;
-
-      >* {
+      > * {
         display: block;
       }
     }
-
     th,
     td {
       border-top: none;
       font-size: 1.25rem;
-
       span.mobile-label {
         color: #757575;
         display: block;
