@@ -63,7 +63,7 @@ RSpec.describe TwilioService do
           URL: @short_url.short_url
         }
         response = @twilio.send_sms(params)
-          expect(response).to eq nil
+        expect(response).to eq nil
       end
     end
   end

@@ -60,10 +60,10 @@ RSpec.describe Volunteer, type: :model do
       described_class.send_court_report_reminder
     end
 
-    it "should return nil when twilio is disabled" do 
+    it "should return nil when twilio is disabled" do
       response = CourtReportDueSmsReminderService.court_report_reminder(v5, Date.current + 7.days)
       expect(response).to eq(nil)
-    end 
+    end
   end
 
   describe "#activate" do

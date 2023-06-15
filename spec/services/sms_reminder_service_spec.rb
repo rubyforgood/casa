@@ -40,14 +40,14 @@ RSpec.describe SmsReminderService do
       end
     end
 
-    context "when a volunteer's casa_org does not have twilio enabled" do 
-      let(:casa_org_twilio_disabled) {create(:casa_org, twilio_enabled: false)}
-      let(:volunteer_twilio_disabled) {create(:volunteer, casa_org: casa_org_twilio_disabled)}
+    context "when a volunteer's casa_org does not have twilio enabled" do
+      let(:casa_org_twilio_disabled) { create(:casa_org, twilio_enabled: false) }
+      let(:volunteer_twilio_disabled) { create(:volunteer, casa_org: casa_org_twilio_disabled) }
 
-      it "should not send a SMS" do 
+      it "should not send a SMS" do
         response = SmsReminderService.send_reminder(volunteer_twilio_disabled, message)
         expect(response).to be_nil
-      end 
-    end 
+      end
+    end
   end
 end
