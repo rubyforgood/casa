@@ -46,7 +46,7 @@ class ApplicationController < ActionController::Base
   # volunteer/supervisor/casa_admin controller uses to send SMS
   # returns appropriate flash notice for SMS
   def deliver_sms_to(resource, body_msg)
-    if resource.phone_number.blank? #|| !resource.casa_org.twilio_enabled? 
+    if resource.phone_number.blank? || !resource.casa_org.twilio_enabled? 
       return "blank"
     end
 
@@ -54,21 +54,20 @@ class ApplicationController < ActionController::Base
     to = resource.phone_number
     from = current_user.casa_org.twilio_phone_number
 
-    begin
+    
       @twilio = TwilioService.new(current_user.casa_org)
       req_params = {
         From: from,
         Body: body,
         To: to
       }
+
+    begin
       twilio_res = @twilio.send_sms(req_params)
       twilio_res.error_code.nil? ? "sent" : "error"
-    rescue TwilioService::TwilioCasaOrgError => error########### remove
-      @error = error########### remove
-      "error"########### remove
     rescue Twilio::REST::RestError => error
       @error = error
-      "error" # Find a better description for this
+      "error" 
     rescue # unverfied error isnt picked up by Twilio::Rest::RestError
       # https://www.twilio.com/docs/errors/21608
       @error = "Phone number is unverifiied"

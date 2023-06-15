@@ -41,7 +41,7 @@ class CasaAdminsController < ApplicationController
     service = ::CreateCasaAdminService.new(current_organization, params, current_user)
     @casa_admin = service.build
     authorize @casa_admin
-    sms_status = "blank"
+    sms_status = "blank" #shami: why hard code here if deliver_sms_to takes care of this?
 
     begin
       casa_admin = service.create!

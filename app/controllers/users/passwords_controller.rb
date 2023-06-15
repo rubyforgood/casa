@@ -6,7 +6,6 @@ class Users::PasswordsController < Devise::PasswordsController
   def create
     @email, @phone_number = [params[resource_name][:email], params[resource_name][:phone_number]]
     @resource = @email.blank? ? User.find_by(phone_number: @phone_number) : User.find_by(email: @email)
-
     valid_params?(@email, @phone_number) ? send_password : render_error
     return if @errors
 
@@ -33,7 +32,6 @@ class Users::PasswordsController < Devise::PasswordsController
     # for case where user enters ONLY a phone number, generate a new reset token to use;
     # otherwise, use the same reset token as sent by devise mailer
     @reset_token ||= @resource.generate_password_reset_token
-
     create_short_url
     begin
       twilio_service = TwilioService.new(@resource.casa_org)
