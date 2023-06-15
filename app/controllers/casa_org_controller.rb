@@ -49,7 +49,8 @@ class CasaOrgController < ApplicationController
       :twilio_account_sid,
       :twilio_phone_number,
       :twilio_api_key_sid,
-      :twilio_api_key_secret
+      :twilio_api_key_secret,
+      :twilio_enabled
     )
   end
 
