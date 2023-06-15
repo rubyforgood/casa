@@ -24,8 +24,6 @@ class TwilioService
   # required keys are: From:, To:, Body:
   # to send a short url, set URL: key in hash
   def send_sms(params)
-    # return unless casa_org twilio enabled
-    # add check here, Twilio client
     if !enabled?
       return nil
     end
@@ -42,7 +40,7 @@ class TwilioService
         to: to
       )
     rescue => error
-      Rails.logger.error("send SMS failed: #{error}") # help a person know whats going on, these messages can be inspected (Twilio)
+      Rails.logger.error("send SMS failed: #{error}")
       error
     end
   end
