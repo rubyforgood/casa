@@ -140,12 +140,12 @@ RSpec.describe "users/edit", type: :system do
       expect(page).to have_field("toggle-sms-notification-event", type: "checkbox", disabled: true)
     end
 
-    it "disables SMS communication feature if user's casa_org has twilio disabled", js: true do 
+    it "disables SMS communication feature if user's casa_org has twilio disabled", js: true do
       pending "waiting on rebase"
       organization.update(twilio_enabled: false)
-      
+
       expect(page).to have_selector("#user_receive_sms_notifications", disabled: true)
-    end 
+    end
   end
 
   context "supervisor user" do

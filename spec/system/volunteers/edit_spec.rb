@@ -312,25 +312,25 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   describe "Send Reactivation (SMS)" do
-    pending "waiting on rebase" 
-    before do 
-      sign_in admin 
-    end 
-    it "allows admin to send a reactivation SMS to a volunteer if the org has twilio enabled", js: true  do 
+    pending "waiting on rebase"
+    before do
+      sign_in admin
+    end
+    it "allows admin to send a reactivation SMS to a volunteer if the org has twilio enabled", js: true do
       visit edit_volunteer_path(voluntter)
       expect(page).to have_content("Send Reactivation Alert (SMS)")
       expect(page).to have_selector("#twilio_enabled", disabled: false)
-    end 
+    end
 
-    it "is disabled if admin's organization does not have twilio enabled", js: true  do 
+    it "is disabled if admin's organization does not have twilio enabled", js: true do
       organization.update(twilio_enabled: false)
-      reload 
+      reload
       visit edit_volunteer_path(voluntter)
 
       expect(page).to have_content("Enable Twilio Send Reactivation Alert (SMS)")
       expect(page).to have_selector("#twilio_disabled", disabled: true)
-    end 
-  end 
+    end
+  end
 
   describe "send reminder as a supervisor", js: true do
     let(:supervisor) { create(:supervisor, casa_org: organization) }

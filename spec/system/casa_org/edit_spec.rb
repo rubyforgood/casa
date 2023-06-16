@@ -127,15 +127,15 @@ RSpec.describe "casa_org/edit", type: :system do
   end
 
   it "displays Twilio Form when Enable Twilio is checked", js: true do
-    check "Enable Twilio" 
-    
+    check "Enable Twilio"
+
     expect(page).to have_selector("#casa_org_twilio_account_sid", visible: :visible)
     expect(page).to have_selector("#casa_org_twilio_api_key_sid", visible: :visible)
     expect(page).to have_selector("#casa_org_twilio_api_key_secret", visible: :visible)
     expect(page).to have_selector("#casa_org_twilio_phone_number", visible: :visible)
-  end 
+  end
 
-  it "requires Twilio Form to be filled in correctly", js: true do 
+  it "requires Twilio Form to be filled in correctly", js: true do
     pending "rebase first PR"
 
     check "Enable Twilio"
@@ -143,7 +143,7 @@ RSpec.describe "casa_org/edit", type: :system do
     click_on "Submit"
 
     expect(page).to have_content("Please fill out this field.")
-  end 
+  end
 
   it "requires name text field" do
     expect(page).to have_selector("input[required=required]", id: "casa_org_name")
