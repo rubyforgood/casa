@@ -123,6 +123,7 @@ RSpec.describe "casa_org/edit", type: :system do
     expect(page).to have_text("Twilio API Key SID")
     expect(page).to have_text("Twilio API Key Secret")
     expect(page).to have_text("Twilio Phone Number")
+    expect(page).to have_text("Enable Twilio")
   end
 
   it "requires name text field" do
