@@ -2,7 +2,6 @@ require "json"
 require "twilio-ruby"
 
 class TwilioService
-  class TwilioCasaOrgError < StandardError; end
   attr_writer :api_key, :api_secret, :acc_sid, :casa_org
 
   def initialize(casa_org)
@@ -27,6 +26,7 @@ class TwilioService
     if !enabled?
       return nil
     end
+
     from = params[:From]
     body = params.key?(:URL) ? params[:Body] + params[:URL] : params[:Body]
     to = params[:To]
