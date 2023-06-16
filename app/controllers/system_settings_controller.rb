@@ -10,9 +10,9 @@ class SystemSettingsController < ApplicationController
   def create
     authorize :application, :edit_system_settings?
 
-    if(params[:show_additional_expenses]) 
+    if params[:show_additional_expenses]
       FeatureFlagService.enable!(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
-    else 
+    else
       FeatureFlagService.disable!(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
     end
   end

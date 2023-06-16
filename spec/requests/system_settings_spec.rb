@@ -20,7 +20,7 @@ RSpec.describe "/settings", type: :request do
     context "with show_additional_expense param" do
       let(:params) do
         {
-          show_additional_expenses: 'true'
+          show_additional_expenses: "true"
         }
       end
 
@@ -33,7 +33,7 @@ RSpec.describe "/settings", type: :request do
 
     context "without show_additional_expense param" do
       let(:params) do
-        { }
+        {}
       end
 
       it "enables the show additional expense flag" do
