@@ -425,7 +425,7 @@ RSpec.describe "/casa_admins", type: :request do
         expect(@twilio_activation_error_stub).to have_been_requested.times(1)
         expect(response).to have_http_status(:redirect)
         follow_redirect!
-        expect(flash[:notice]).to match(/New admin created successfully. SMS not sent due to error./)
+        expect(flash[:notice]).to match(/New admin created successfully. SMS not sent. Error: ./)
       end
     end
 
