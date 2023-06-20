@@ -201,7 +201,7 @@ RSpec.describe "casa_cases/show", type: :system do
         create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2, occurred_at: DateTime.now - 1)
 
         visit casa_case_path(casa_case.id)
-
+        #Flaky test here?
         expect(page).to have_css("#case_contacts_list .card-content", count: 1)
       end
     end
