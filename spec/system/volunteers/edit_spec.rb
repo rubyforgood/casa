@@ -312,23 +312,26 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   describe "Send Reactivation (SMS)" do
-    pending "waiting on rebase"
-    before do
+    it "allows admin to send a reactivation SMS to a volunteer if their org has twilio enabled", js: true do
       sign_in admin
-    end
-    it "allows admin to send a reactivation SMS to a volunteer if the org has twilio enabled", js: true do
-      visit edit_volunteer_path(voluntter)
+      visit edit_volunteer_path(volunteer)
       expect(page).to have_content("Send Reactivation Alert (SMS)")
-      expect(page).to have_selector("#twilio_enabled", disabled: false)
+      expect(page).not_to have_content("Enable Twilio")
+      expect(page).to have_selector("#twilio_enabled")
     end
 
-    it "is disabled if admin's organization does not have twilio enabled", js: true do
-      organization.update(twilio_enabled: false)
-      reload
-      visit edit_volunteer_path(voluntter)
+    context " admin's organization does not have twilio enabled" do
+      let(:org_twilio) { create(:casa_org, twilio_enabled: false) }
+      let(:admin_twilio) { create(:casa_admin, casa_org_id: org_twilio.id) }
+      let(:volunteer_twilio) { create(:volunteer, casa_org_id: org_twilio.id) }
 
-      expect(page).to have_content("Enable Twilio Send Reactivation Alert (SMS)")
-      expect(page).to have_selector("#twilio_disabled", disabled: true)
+      it "displays a disabed (SMS) button with appropriate message", js: true do
+        sign_in admin_twilio
+        visit edit_volunteer_path(volunteer_twilio)
+
+        expect(page).to have_content("Enable Twilio To Send Reactivation Alert (SMS)")
+        expect(page).to have_selector("#twilio_disabled")
+      end
     end
   end
 

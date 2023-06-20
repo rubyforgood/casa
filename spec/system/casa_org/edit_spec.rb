@@ -119,7 +119,8 @@ RSpec.describe "casa_org/edit", type: :system do
   end
 
   it "hides Twilio Form if twilio is not enabled", js: true do
-    expect(page).to have_text("Enable Twilio")
+    uncheck "Enable Twilio" # Casa Org factory set to enable_twilio: true
+
     expect(page).to have_selector("#casa_org_twilio_account_sid", visible: :hidden)
     expect(page).to have_selector("#casa_org_twilio_api_key_sid", visible: :hidden)
     expect(page).to have_selector("#casa_org_twilio_api_key_secret", visible: :hidden)
@@ -127,8 +128,8 @@ RSpec.describe "casa_org/edit", type: :system do
   end
 
   it "displays Twilio Form when Enable Twilio is checked", js: true do
-    check "Enable Twilio"
-
+    # Casa Org factory set to enable_twilio: true
+    expect(page).to have_text("Enable Twilio")
     expect(page).to have_selector("#casa_org_twilio_account_sid", visible: :visible)
     expect(page).to have_selector("#casa_org_twilio_api_key_sid", visible: :visible)
     expect(page).to have_selector("#casa_org_twilio_api_key_secret", visible: :visible)
@@ -136,13 +137,11 @@ RSpec.describe "casa_org/edit", type: :system do
   end
 
   it "requires Twilio Form to be filled in correctly", js: true do
-    pending "rebase first PR"
-
-    check "Enable Twilio"
-
+    fill_in "Twilio Phone Number", with: ""
     click_on "Submit"
 
-    expect(page).to have_content("Please fill out this field.")
+    message = find("#casa_org_twilio_phone_number").native.attribute("validationMessage")
+    expect(message).to eq "Please fill out this field."
   end
 
   it "requires name text field" do
