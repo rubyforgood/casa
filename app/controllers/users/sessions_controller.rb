@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Users::SessionsController < Devise::SessionsController
-  #respond_to :json
+  # respond_to :json
   include Accessible
   skip_before_action :check_user, only: :destroy
 
@@ -9,7 +9,7 @@ class Users::SessionsController < Devise::SessionsController
     respond_to do |format|
       format.html { super }
       format.json {
-        warden.authenticate!(:scope => resource_name, :recall => "#{controller_path}#faliure")
+        warden.authenticate!(scope: resource_name, recall: "#{controller_path}#faliure")
         render json: "Successfully authenticated", status: 200
       }
     end

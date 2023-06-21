@@ -81,5 +81,5 @@ Rails.application.configure do
   config.assets.digest = false
 
   # allow requests from ngrok
-  config.hosts << '.ngrok-free.app'
+  config.hosts << ".ngrok-free.app"
 end
