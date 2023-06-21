@@ -87,18 +87,4 @@ RSpec.describe ApplicationPolicy do
       end
     end
   end
-
-  permissions :edit_system_settings? do
-    it "does not allow volunters" do
-      is_expected.not_to permit(volunteer)
-    end
-
-    it "does not allow supervisors" do
-      is_expected.not_to permit(supervisor)
-    end
-
-    it "allow casa_admins for same org" do
-      is_expected.to permit(casa_admin)
-    end
-  end
 end

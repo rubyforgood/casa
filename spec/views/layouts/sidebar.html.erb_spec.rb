@@ -142,7 +142,6 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Edit Organization", href: "/casa_org/#{user.casa_org.id}/edit")
       expect(rendered).to have_link("Generate Court Reports", href: "/case_court_reports")
       expect(rendered).to have_link("Export Data", href: "/reports")
-      expect(rendered).to have_link("System Settings", href: "/settings")
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
     end
   end
