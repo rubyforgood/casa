@@ -30,10 +30,10 @@ RSpec.describe "additional_expenses", type: :system do
     expect(page).not_to have_text("Other Expenses")
   end
 
-  context "when setting additional expenses" do 
+  context "when setting additional expenses" do
     let(:contact_type_group) { build(:contact_type_group, casa_org: organization) }
 
-    before do 
+    before do
       create(:contact_type)
       create(:contact_type, name: "School", contact_type_group: contact_type_group)
     end
