@@ -65,6 +65,7 @@ models/concerns/by_organization_scope.rb
 models/concerns/roles.rb
 models/fund_request.rb
 models/notification.rb
+models/jwt_denylist.rb
 notifications/base_notification.rb
 notifications/delivery_methods/sms.rb
 notifications/emancipation_checklist_reminder_notification.rb
