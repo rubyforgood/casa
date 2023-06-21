@@ -550,7 +550,7 @@ DEPENDENCIES
   pundit
   rack-attack
   rack-cors
-  rails (~> 7.0.4)
+  rails (~> 7.0.5)
   rails-controller-testing
   rake
   request_store
