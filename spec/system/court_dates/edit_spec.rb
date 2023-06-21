@@ -27,11 +27,11 @@ RSpec.describe "court_dates/edit", type: :system do
 
     it "shows court orders" do
       court_order = court_date.case_court_orders.first
-  
+
       expect(page).to have_text(court_order.text)
       expect(page).to have_text(court_order.implementation_status.humanize)
     end
-  
+
     it "edits past court date", js: true do
       expect(page).to have_text("Editing Court Date")
       expect(page).to have_text("Case Number:")
@@ -44,27 +44,27 @@ RSpec.describe "court_dates/edit", type: :system do
       expect(page).to have_select("Hearing type")
       expect(page).to have_text("Court Orders - Please check that you didn't enter any youth names")
       expect(page).to have_text("Add a court order")
-  
+
       page.find("#add-court-order-button").click
       find("#court-orders-list-container").first("textarea").send_keys("Court Order Text One")
-  
+
       within ".top-page-actions" do
         click_on "Update"
       end
       expect(page).to have_text("Court Order Text One")
     end
-  
+
     it "can delete a future court date", js: true do
       visit root_path
       click_on "Cases"
       click_on casa_case.case_number
-  
+
       expect(CourtDate.count).to eq 2
       expect(page).to have_content future_court_date.date.strftime("%B %-d, %Y")
       page.find("a", text: future_court_date.date.strftime("%B %-d, %Y")).click
       page.find("a", text: "Delete Future Court Date").click
       page.driver.browser.switch_to.alert.accept
-  
+
       expect(page).to have_content "Court date was successfully deleted."
       expect(CourtDate.count).to eq 1
     end
@@ -73,17 +73,17 @@ RSpec.describe "court_dates/edit", type: :system do
   context "as a supervisor" do
     it "can delete a future court date", js: true do
       sign_in supervisor
-  
+
       visit root_path
       click_on "Cases"
       click_on casa_case.case_number
-  
+
       expect(CourtDate.count).to eq 2
       expect(page).to have_content future_court_date.date.strftime("%B %-d, %Y")
       page.find("a", text: future_court_date.date.strftime("%B %-d, %Y")).click
       page.find("a", text: "Delete Future Court Date").click
       page.driver.browser.switch_to.alert.accept
-  
+
       expect(page).to have_content "Court date was successfully deleted."
       expect(CourtDate.count).to eq 1
     end
