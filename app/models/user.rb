@@ -12,7 +12,7 @@ class User < ApplicationRecord
 
   validates_with UserValidator
 
-  devise :database_authenticatable, :invitable, :recoverable, :validatable, :timeoutable, :trackable, :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
+  devise :database_authenticatable, :invitable, :recoverable, :validatable, :timeoutable, :trackable, :confirmable, :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
 
   belongs_to :casa_org
 
