@@ -1,4 +1,7 @@
 const deviseTimeoutInMinutes = 180
+const timeoutDuration = 180;
+// I could do this below if this is preferred
+// const deviseTimeoutInMinutes = timeoutDuration || 180;
 const twoMinuteWarning = deviseTimeoutInMinutes - 2
 const totalTimerAmount = twoMinuteWarning * 60 * 1000
 const deviseTimeoutInMilliseconds = deviseTimeoutInMinutes * 60 * 1000

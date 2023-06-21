@@ -102,9 +102,9 @@ class ApplicationController < ActionController::Base
     RequestStore.store[:current_user] = current_user
   end
 
-  def set_timeout_duration
-    @timeout_duration = current_user.timeout_in
-  end
+  # def set_timeout_duration
+  #   @timeout_duration = current_user.timeout_in
+  # end
 
   def set_current_organization
     RequestStore.store[:current_organization] = current_organization
