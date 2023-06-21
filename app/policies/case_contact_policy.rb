@@ -8,7 +8,8 @@ class CaseContactPolicy < ApplicationPolicy
   end
 
   def additional_expenses_allowed?
-    FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+    FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) &&
+      current_organization.additional_expenses_enabled
   end
 
   alias_method :index?, :admin_or_supervisor_or_volunteer?
