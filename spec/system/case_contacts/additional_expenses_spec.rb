@@ -1,12 +1,38 @@
 require "rails_helper"
 require "action_view"
 
-RSpec.describe "addtional_expenses", type: :system do
-  it "additional expenses fields appearance", js: true do
-    FeatureFlagService.enable!("show_additional_expenses")
+RSpec.describe "additional_expenses", type: :system do
+  it "can be set per organization" do
+    FeatureFlagService.enable!(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
     organization = build(:casa_org)
     volunteer = create(:volunteer, casa_org: organization)
     casa_case = create(:casa_case, casa_org: organization)
+    create(:case_assignment, casa_case: casa_case, volunteer: volunteer)
+
+    other_organization = build(:casa_org)
+    other_volunteer = create(:volunteer, casa_org: other_organization)
+    other_casa_case = create(:casa_case, casa_org: other_organization)
+    create(:case_assignment, casa_case: other_casa_case, volunteer: other_volunteer)
+
+    sign_in volunteer
+    visit casa_case_path(casa_case.id)
+    click_on "New Case Contact"
+
+    expect(page).to have_text("Other Expenses")
+
+    sign_in other_volunteer
+    visit casa_case_path(other_casa_case.id)
+    click_on "New Case Contact"
+
+    expect(page).not_to have_text("Other Expenses")
+  end
+
+  it "additional expenses fields appearance", js: true do
+    FeatureFlagService.enable!(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+    organization = build(:casa_org)
+    volunteer = create(:volunteer, casa_org: organization)
+    casa_case = create(:casa_case, casa_org: organization)
+
     create(:case_assignment, casa_case: casa_case, volunteer: volunteer)
     contact_type_group = build(:contact_type_group, casa_org: organization)
     create(:contact_type)
