@@ -16,6 +16,41 @@ RSpec.describe "/supervisors", type: :request do
   web_mock = WebMockHelper.new(blacklist)
   web_mock.stub_network_connection
 
+  describe "GET /index" do
+    it "returns http status ok" do
+      sign_in admin
+
+      get supervisors_path
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    context "when casa case has court_dates" do
+      let!(:casa_case) { create(:casa_case, casa_org: org, court_dates: [court_date]) }
+      let(:court_date) { create(:court_date) }
+
+      it "does not return casa case" do
+        sign_in admin
+
+        get supervisors_path
+
+        expect(response.body).not_to include(casa_case.case_number)
+      end
+    end
+
+    context "when casa case does not have court_dates" do
+      let!(:casa_case) { create(:casa_case, casa_org: org, court_dates: []) }
+
+      it "does not return casa case" do
+        sign_in admin
+
+        get supervisors_path
+
+        expect(response.body).to include(casa_case.case_number)
+      end
+    end
+  end
+
   describe "GET /new" do
     it "admin can view the new supervisor page" do
       sign_in admin
@@ -263,7 +298,7 @@ RSpec.describe "/supervisors", type: :request do
       expect(@twilio_activation_error_stub).to have_been_requested.times(1)
       expect(response).to have_http_status(:redirect)
       follow_redirect!
-      expect(flash[:notice]).to match(/New supervisor created successfully. SMS not sent due to error./)
+      expect(flash[:notice]).to match(/New supervisor created successfully. SMS not sent. Error: ./)
     end
   end
 

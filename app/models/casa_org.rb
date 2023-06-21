@@ -8,7 +8,7 @@ class CasaOrg < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
   validates_with CasaOrgValidator
-  validate :validate_twilio_credentials, if: -> { twilio_account_sid.present? || twilio_api_key_sid.present? || twilio_api_key_secret.present? }, on: :update
+  validate :validate_twilio_credentials, if: -> { twilio_enabled || twilio_account_sid.present? || twilio_api_key_sid.present? || twilio_api_key_secret.present? }, on: :update
 
   has_many :users, dependent: :destroy
   has_many :casa_cases, dependent: :destroy
@@ -17,6 +17,7 @@ class CasaOrg < ApplicationRecord
   has_many :mileage_rates, dependent: :destroy
   has_many :case_assignments, through: :users, source: :casa_cases
   has_many :languages, dependent: :destroy
+  has_many :placements, through: :casa_cases
   has_one_attached :logo
   has_one_attached :court_report_template
 
@@ -127,6 +128,7 @@ end
 #  twilio_account_sid         :string
 #  twilio_api_key_secret      :string
 #  twilio_api_key_sid         :string
+#  twilio_enabled             :boolean          default(FALSE)
 #  twilio_phone_number        :string
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null

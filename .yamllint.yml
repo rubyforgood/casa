@@ -1,0 +1,21 @@
+extends: default
+
+ignore-from-file: .gitignore
+
+rules:
+  document-start:
+    present: false
+
+  # 80 chars should be enough, but don't fail if a line is longer
+  line-length:
+    max: 80
+    level: warning
+    allow-non-breakable-words: true
+    allow-non-breakable-inline-mappings: true
+
+  indentation:
+    spaces: 2
+    indent-sequences: consistent
+    check-multi-line-strings: false
+  comments:
+    require-starting-space: true

@@ -140,6 +140,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_041745) do
     t.string "twilio_account_sid"
     t.string "twilio_api_key_sid"
     t.string "twilio_api_key_secret"
+    t.boolean "twilio_enabled", default: false
     t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 

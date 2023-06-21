@@ -38,9 +38,11 @@ controllers/notes_controller.rb
 controllers/notifications_controller.rb
 controllers/other_duties_controller.rb
 controllers/placements_controller.rb
+controllers/placement_reports_controller.rb
 controllers/reports_controller.rb
 controllers/supervisor_volunteers_controller.rb
 controllers/supervisors_controller.rb
+controllers/system_settings_controller.rb
 controllers/users/passwords_controller.rb
 controllers/users/sessions_controller.rb
 controllers/users_controller.rb

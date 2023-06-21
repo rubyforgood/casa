@@ -50,6 +50,7 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Generate Court Reports", href: "/case_court_reports")
       expect(rendered).to have_link("Export Data", href: "/reports")
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists/0")
+      expect(rendered).to_not have_link("System Settings", href: "/settings")
     end
   end
 
@@ -76,6 +77,7 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to_not have_link("Volunteers", href: "/volunteers")
       expect(rendered).to_not have_link("Supervisors", href: "/supervisors")
       expect(rendered).to_not have_link("Admins", href: "/casa_admins")
+      expect(rendered).to_not have_link("System Settings", href: "/settings")
     end
 
     context "when the volunteer does not have a transitioning case" do
@@ -140,6 +142,7 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Edit Organization", href: "/casa_org/#{user.casa_org.id}/edit")
       expect(rendered).to have_link("Generate Court Reports", href: "/case_court_reports")
       expect(rendered).to have_link("Export Data", href: "/reports")
+      expect(rendered).to have_link("System Settings", href: "/settings")
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
     end
   end

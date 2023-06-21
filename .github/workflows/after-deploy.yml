@@ -1,6 +1,6 @@
 on:
   schedule:
-    - cron:  '0 7 * * *' # Run every day at 7AM UTC
+    - cron: '0 7 * * *' # Run every day at 7AM UTC
   workflow_dispatch: # Enable Manual Runs
 
 jobs:

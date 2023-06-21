@@ -142,5 +142,6 @@ class ApplicationPolicy
   end
 
   alias_method :modify_organization?, :is_admin?
+  alias_method :edit_system_settings?, :is_admin?
   alias_method :see_import_page?, :is_admin?
 end
