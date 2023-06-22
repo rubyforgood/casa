@@ -1,11 +1,12 @@
 const deviseTimeoutInMinutes = 180
+// const timeoutDuration = <%= 3.hours.to_i * 60 %>;
+// const timeoutDuration = <%= @timeout_duration || 180 %>;
 const timeoutDuration = 180;
 // I could do this below if this is preferred
 // const deviseTimeoutInMinutes = timeoutDuration || 180;
 const twoMinuteWarning = deviseTimeoutInMinutes - 2
 const totalTimerAmount = twoMinuteWarning * 60 * 1000
 const deviseTimeoutInMilliseconds = deviseTimeoutInMinutes * 60 * 1000
-// config.timeout_in = 3.hours
 const startTime = new Date().getTime()
 let lastTime = new Date().getTime()
 let currentTime
