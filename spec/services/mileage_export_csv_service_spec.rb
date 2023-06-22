@@ -14,9 +14,10 @@ RSpec.describe MileageExportCsvService do
       "Miles Driven",
       "Casa Case Number",
       "Creator Name",
+      "Supervisor Name",
       "Volunteer Address",
       "Reimbursed"
     ])
-    expect(results[1].split(",").count).to eq(8)
+    expect(results[1].split(",").count).to eq(9)
   end
 end
