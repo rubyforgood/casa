@@ -125,6 +125,10 @@ RSpec.describe "casa_org/edit", type: :system do
     expect(page).to have_text("Twilio Phone Number")
   end
 
+  it "has option to enable additional expenses" do
+    expect(page).to have_text("Volunteers can add Other Expenses")
+  end
+
   it "requires name text field" do
     expect(page).to have_selector("input[required=required]", id: "casa_org_name")
   end

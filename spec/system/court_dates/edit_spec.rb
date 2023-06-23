@@ -90,9 +90,11 @@ RSpec.describe "court_dates/edit", type: :system do
   end
 
   context "as a volunteer" do
-    it "can't delete a future court date", js: true do
-      volunteer.casa_cases = [casa_case]
-      sign_in volunteer
+     it "can't delete a future court date as volunteer", js: true do
+     sign_out admin
+     sleep(1) # flaky test??? sleep seems to be the only thing that makes this one pass :/
+     volunteer.casa_cases = [casa_case]
+     sign_in volunteer
 
       visit root_path
       click_on "Cases"
