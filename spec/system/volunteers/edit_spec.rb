@@ -311,6 +311,30 @@ RSpec.describe "volunteers/edit", type: :system do
     expect(deliveries.last.subject).to have_text "CASA Console invitation instructions"
   end
 
+  describe "Send Reactivation (SMS)" do
+    it "allows admin to send a reactivation SMS to a volunteer if their org has twilio enabled", js: true do
+      sign_in admin
+      visit edit_volunteer_path(volunteer)
+      expect(page).to have_content("Send Reactivation Alert (SMS)")
+      expect(page).not_to have_content("Enable Twilio")
+      expect(page).to have_selector("#twilio_enabled")
+    end
+
+    context " admin's organization does not have twilio enabled" do
+      let(:org_twilio) { create(:casa_org, twilio_enabled: false) }
+      let(:admin_twilio) { create(:casa_admin, casa_org_id: org_twilio.id) }
+      let(:volunteer_twilio) { create(:volunteer, casa_org_id: org_twilio.id) }
+
+      it "displays a disabed (SMS) button with appropriate message", js: true do
+        sign_in admin_twilio
+        visit edit_volunteer_path(volunteer_twilio)
+
+        expect(page).to have_content("Enable Twilio To Send Reactivation Alert (SMS)")
+        expect(page).to have_selector("#twilio_disabled")
+      end
+    end
+  end
+
   describe "send reminder as a supervisor", js: true do
     let(:supervisor) { create(:supervisor, casa_org: organization) }
 
