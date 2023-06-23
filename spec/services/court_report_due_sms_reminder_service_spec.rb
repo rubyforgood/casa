@@ -41,5 +41,15 @@ RSpec.describe CourtReportDueSmsReminderService do
         expect(response).to be_nil
       end
     end
+
+    context "when volunteer's casa_org does not have twilio enabled" do
+      let(:org) { create(:casa_org, twilio_enabled: false) }
+      let(:volunteer_2) { create(:volunteer, casa_org: org) }
+
+      it "should not send a SMS" do
+        response = CourtReportDueSmsReminderService.court_report_reminder(volunteer_2, report_due_date)
+        expect(response).to be_nil
+      end
+    end
   end
 end

@@ -300,6 +300,19 @@ RSpec.describe "/supervisors", type: :request do
       follow_redirect!
       expect(flash[:notice]).to match(/New supervisor created successfully. SMS not sent. Error: ./)
     end
+
+    it "does not send a SMS if the casa_org does not have Twilio enabled" do
+      org = create(:casa_org, twilio_enabled: false)
+      admin = build(:casa_admin, casa_org: org)
+
+      sign_in admin
+
+      params[:supervisor][:phone_number] = "+12222222222"
+      post supervisors_url, params: params
+      expect(response).to have_http_status(:redirect)
+      follow_redirect!
+      expect(flash[:notice]).to match(/New supervisor created successfully./)
+    end
   end
 
   describe "PATCH /activate" do
