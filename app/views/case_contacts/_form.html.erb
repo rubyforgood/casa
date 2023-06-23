@@ -166,7 +166,7 @@ readonly: true %>
       </div>
     <% end %>
 
-    <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
+    <% if Pundit.policy(current_user, case_contact).additional_expenses_allowed? %>
       <div class="other-expenses">
         <h5 class="mb-3"><%= form.label :additional_expense, "d. Other Expenses" %></h5>
         <ol>

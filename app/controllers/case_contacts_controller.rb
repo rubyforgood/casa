@@ -102,7 +102,7 @@ class CaseContactsController < ApplicationController
     @current_organization_groups = current_organization.contact_type_groups
 
     if @case_contact.update_cleaning_contact_types(update_case_contact_params)
-      if additional_expense_params&.any? && FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+      if additional_expense_params&.any? && policy(:case_contact).additional_expenses_allowed?
         update_or_create_additional_expense(additional_expense_params, @case_contact)
       end
       if @case_contact.valid?
@@ -156,7 +156,7 @@ class CaseContactsController < ApplicationController
 
   def create_case_contact_for_every_selected_casa_case(selected_cases)
     selected_cases.map do |casa_case|
-      if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+      if policy(:case_contact).additional_expenses_allowed?
         new_cc = casa_case.case_contacts.new(create_case_contact_params.except(:casa_case_attributes))
         update_or_create_additional_expense(additional_expense_params, new_cc)
         if new_cc.valid?

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_15_155223) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_21_161252) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -141,6 +141,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_155223) do
     t.string "twilio_api_key_sid"
     t.string "twilio_api_key_secret"
     t.boolean "twilio_enabled", default: false
+    t.boolean "additional_expenses_enabled", default: false
     t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 
@@ -543,6 +544,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_155223) do
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
     t.string "old_emails", default: [], array: true
+    t.boolean "receive_reimbursement_email", default: false
     t.index ["casa_org_id"], name: "index_users_on_casa_org_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true

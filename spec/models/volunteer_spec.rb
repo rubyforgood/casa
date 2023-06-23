@@ -3,27 +3,32 @@ require "rails_helper"
 RSpec.describe Volunteer, type: :model do
   describe ".email_court_report_reminder" do
     let!(:casa_org) { build(:casa_org) }
-
+    let!(:casa_org_twilio_disabled) { build(:casa_org, twilio_enabled: false) }
     # Should send email for this case
     let!(:casa_case1) { create(:casa_case, casa_org: casa_org) }
     let!(:court_date1) { create(:court_date, casa_case: casa_case1, court_report_due_date: Date.current + 7.days) }
 
-    # Should NOT send emails for these two cases
+    # Should NOT send emails for these cases
     let!(:casa_case2) { build(:casa_case, casa_org: casa_org) }
     let!(:court_date2) { create(:court_date, casa_case: casa_case2, court_report_due_date: Date.current + 8.days) }
     let!(:casa_case3) { build(:casa_case, casa_org: casa_org, court_report_submitted_at: Time.current, court_report_status: :submitted) }
     let!(:court_date3) { create(:court_date, casa_case: casa_case3, court_report_due_date: Date.current + 7.days) }
     let!(:casa_case4) { build(:casa_case, casa_org: casa_org) }
     let!(:court_date4) { create(:court_date, casa_case: casa_case4, court_report_due_date: Date.current + 7.days) }
+    let!(:casa_case5) { create(:casa_case, casa_org: casa_org_twilio_disabled) }
+    let!(:court_date5) { create(:court_date, casa_case: casa_case5, court_report_due_date: Date.current + 7.days) }
 
     let(:case_assignment1) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case1) }
     let(:case_assignment2) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case2) }
     let(:case_assignment3) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case3) }
     let(:case_assignment_unassigned) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case4, active: false) }
+    let(:case_assignment5) { build(:case_assignment, casa_org: casa_org_twilio_disabled, casa_case: casa_case5) }
+
     let!(:v1) { create(:volunteer, casa_org: casa_org, case_assignments: [case_assignment1, case_assignment2, case_assignment3]) }
     let!(:v2) { build_stubbed(:volunteer, casa_org: casa_org, active: false) }
     let!(:v3) { build_stubbed(:volunteer, casa_org: casa_org) }
     let!(:v4) { build_stubbed(:volunteer, casa_org: casa_org, case_assignments: [case_assignment_unassigned]) }
+    let!(:v5) { create(:volunteer, casa_org: casa_org_twilio_disabled, case_assignments: [case_assignment5]) }
 
     before do
       stub_const("Volunteer::COURT_REPORT_SUBMISSION_REMINDER", 7.days)
@@ -53,6 +58,11 @@ RSpec.describe Volunteer, type: :model do
     it "should not send sms about unassigned cases" do
       expect(CourtReportDueSmsReminderService).to_not receive(:court_report_reminder).with(v4, anything)
       described_class.send_court_report_reminder
+    end
+
+    it "should return nil when twilio is disabled" do
+      response = CourtReportDueSmsReminderService.court_report_reminder(v5, Date.current + 7.days)
+      expect(response).to eq(nil)
     end
   end
 

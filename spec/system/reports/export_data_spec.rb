@@ -57,7 +57,9 @@ RSpec.describe "case_contact_reports/index", type: :system do
   it "downloads mileage report", js: true do
     sign_in admin
 
-    case_contact_with_mileage = create(:case_contact, want_driving_reimbursement: true, miles_driven: 10)
+    supervisor = create(:supervisor)
+    volunteer = create(:volunteer, supervisor: supervisor)
+    case_contact_with_mileage = create(:case_contact, want_driving_reimbursement: true, miles_driven: 10, creator: volunteer)
     case_contact_without_mileage = create(:case_contact)
 
     visit reports_path
@@ -66,6 +68,7 @@ RSpec.describe "case_contact_reports/index", type: :system do
 
     expect(download_file_name).to match(/mileage-report-\d{4}-\d{2}-\d{2}.csv/)
     expect(download_content).to include(case_contact_with_mileage.creator.display_name)
+    expect(download_content).to include(case_contact_with_mileage.creator.supervisor.display_name)
     expect(download_content).not_to include(case_contact_without_mileage.creator.display_name)
   end
 
