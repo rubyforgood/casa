@@ -10,7 +10,7 @@ class CasaOrg < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
   validates_with CasaOrgValidator
-  validate :validate_twilio_credentials, if: -> { twilio_account_sid.present? || twilio_api_key_sid.present? || twilio_api_key_secret.present? }, on: :update
+  validate :validate_twilio_credentials, if: -> { twilio_enabled || twilio_account_sid.present? || twilio_api_key_sid.present? || twilio_api_key_secret.present? }, on: :update
 
   has_many :users, dependent: :destroy
   has_many :casa_cases, dependent: :destroy
@@ -119,20 +119,22 @@ end
 #
 # Table name: casa_orgs
 #
-#  id                         :bigint           not null, primary key
-#  address                    :string
-#  display_name               :string
-#  footer_links               :string           default([]), is an Array
-#  name                       :string           not null
-#  show_driving_reimbursement :boolean          default(TRUE)
-#  show_fund_request          :boolean          default(FALSE)
-#  slug                       :string
-#  twilio_account_sid         :string
-#  twilio_api_key_secret      :string
-#  twilio_api_key_sid         :string
-#  twilio_phone_number        :string
-#  created_at                 :datetime         not null
-#  updated_at                 :datetime         not null
+#  id                          :bigint           not null, primary key
+#  additional_expenses_enabled :boolean          default(FALSE)
+#  address                     :string
+#  display_name                :string
+#  footer_links                :string           default([]), is an Array
+#  name                        :string           not null
+#  show_driving_reimbursement  :boolean          default(TRUE)
+#  show_fund_request           :boolean          default(FALSE)
+#  slug                        :string
+#  twilio_account_sid          :string
+#  twilio_api_key_secret       :string
+#  twilio_api_key_sid          :string
+#  twilio_enabled              :boolean          default(FALSE)
+#  twilio_phone_number         :string
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
 #
 # Indexes
 #

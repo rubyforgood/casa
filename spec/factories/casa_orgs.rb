@@ -12,5 +12,6 @@ FactoryBot.define do
     trait :with_logo do
       logo { Rack::Test::UploadedFile.new(Rails.root.join("spec", "fixtures", "org_logo.jpeg")) }
     end
+    twilio_enabled { true }
   end
 end
