@@ -543,6 +543,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_155223) do
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
     t.string "old_emails", default: [], array: true
+    t.boolean "receive_reimbursement_email", default: false
     t.index ["casa_org_id"], name: "index_users_on_casa_org_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
