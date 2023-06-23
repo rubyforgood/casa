@@ -87,7 +87,6 @@ Rails.application.routes.draw do
       get :download_failed
     end
   end
-  resources :settings, only: %i[index create], controller: "system_settings"
   resources :case_contact_reports, only: %i[index]
   resources :mileage_reports, only: %i[index]
   resources :mileage_rates, only: %i[index new create edit update]
