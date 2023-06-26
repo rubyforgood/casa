@@ -270,7 +270,7 @@ GEM
     multipart-post (2.3.0)
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
-    net-imap (0.3.4)
+    net-imap (0.3.6)
       date
       net-protocol
     net-pop (0.1.2)
@@ -432,7 +432,7 @@ GEM
     strong_migrations (1.4.4)
       activerecord (>= 5.2)
     thor (1.2.2)
-    timeout (0.3.2)
+    timeout (0.4.0)
     traceroute (0.8.1)
       rails (>= 3.0.0)
     twilio-ruby (6.1.0)
