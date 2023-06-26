@@ -143,6 +143,7 @@ RSpec.describe "/case_contacts", type: :request do
 
         before do
           FeatureFlagService.enable!(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+          organization.additional_expenses_enabled = true
         end
 
         it "creates an additional expense with correct values", :aggregate_failures do

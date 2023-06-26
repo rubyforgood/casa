@@ -47,17 +47,15 @@ class ApplicationController < ActionController::Base
   # volunteer/supervisor/casa_admin controller uses to send SMS
   # returns appropriate flash notice for SMS
   def deliver_sms_to(resource, body_msg)
-    if resource.phone_number.blank?
+    if resource.phone_number.blank? || !resource.casa_org.twilio_enabled?
       return "blank"
     end
-    acc_sid = current_user.casa_org.twilio_account_sid
-    api_key = current_user.casa_org.twilio_api_key_sid
-    api_secret = current_user.casa_org.twilio_api_key_secret
+
     body = body_msg
     to = resource.phone_number
     from = current_user.casa_org.twilio_phone_number
 
-    twilio = TwilioService.new(api_key, api_secret, acc_sid)
+    @twilio = TwilioService.new(current_user.casa_org)
     req_params = {
       From: from,
       Body: body,
@@ -65,21 +63,25 @@ class ApplicationController < ActionController::Base
     }
 
     begin
-      twilio_res = twilio.send_sms(req_params)
+      twilio_res = @twilio.send_sms(req_params)
       twilio_res.error_code.nil? ? "sent" : "error"
-    rescue Twilio::REST::RestError
+    rescue Twilio::REST::RestError => error
+      @error = error
+      "error"
+    rescue # unverfied error isnt picked up by Twilio::Rest::RestError
+      # https://www.twilio.com/docs/errors/21608
+      @error = "Phone number is unverifiied"
       "error"
     end
   end
 
   def sms_acct_creation_notice(resource_name, sms_status)
-    if sms_status === "blank"
-      return "New #{resource_name} created successfully."
-    end
-    if sms_status === "error"
-      return "New #{resource_name} created successfully. SMS not sent due to error."
-    end
-    if sms_status === "sent"
+    case sms_status
+    when "blank"
+      "New #{resource_name} created successfully."
+    when "error"
+      "New #{resource_name} created successfully. SMS not sent. Error: #{@error}."
+    when "sent"
       "New #{resource_name} created successfully. SMS has been sent!"
     end
   end
