@@ -103,7 +103,7 @@ GEM
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (11.1.3)
-    capybara (3.39.1)
+    capybara (3.39.2)
       addressable
       matrix
       mini_mime (>= 0.1.3)
@@ -130,7 +130,7 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
-    cssbundling-rails (1.1.2)
+    cssbundling-rails (1.2.0)
       railties (>= 6.0.0)
     database_cleaner-active_record (2.1.0)
       activerecord (>= 5.a)
@@ -236,7 +236,7 @@ GEM
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
-    jsbundling-rails (1.1.1)
+    jsbundling-rails (1.1.2)
       railties (>= 6.0.0)
     jwt (2.7.1)
     launchy (2.5.0)
@@ -311,7 +311,7 @@ GEM
       byebug (~> 11.0)
       pry (>= 0.13, < 0.15)
     public_suffix (5.0.1)
-    puma (6.2.2)
+    puma (6.3.0)
       nio4r (~> 2.0)
     pundit (2.3.0)
       activesupport (>= 3.0.0)
@@ -354,7 +354,7 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.0.6)
-    regexp_parser (2.8.0)
+    regexp_parser (2.8.1)
     request_store (1.5.1)
       rack (>= 1.4)
     responders (3.1.0)
@@ -403,7 +403,7 @@ GEM
     safe_shell (1.1.0)
     scout_apm (5.3.5)
       parser
-    selenium-webdriver (4.9.1)
+    selenium-webdriver (4.10.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
@@ -446,7 +446,7 @@ GEM
     unf_ext (0.0.8.2)
     unicode-display_width (2.4.2)
     uniform_notifier (1.16.0)
-    view_component (3.1.0)
+    view_component (3.2.0)
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
@@ -498,7 +498,7 @@ DEPENDENCIES
   capybara-screenshot
   caxlsx (~> 3.4)
   caxlsx_rails (~> 0.6.3)
-  cssbundling-rails (~> 1.1)
+  cssbundling-rails (~> 1.2)
   database_cleaner-active_record
   delayed_job_active_record
   devise
@@ -526,7 +526,7 @@ DEPENDENCIES
   pretender
   pry
   pry-byebug
-  puma (= 6.2.2)
+  puma (= 6.3.0)
   pundit
   rack-attack
   rails (~> 7.0.5)
