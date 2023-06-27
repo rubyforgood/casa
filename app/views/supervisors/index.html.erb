@@ -136,10 +136,11 @@
               <!-- end table row-->
               </thead>
               <tbody>
-              <% @available_volunteers.each_with_index do |volunteer, index| %>
+              <%= form_with(url: bulk_assignment_supervisor_volunteers_path, id: :bulk_assignment_form, method: :post) do |form| %>
+              <% @available_volunteers.each do |volunteer| %>
                 <tr>
                   <td>
-                    <%= index + 1 %>
+                    <%= check_box_tag "volunteer_ids[]", volunteer.id, nil, {multiple: true}%>
                   </td>
                   <td>
                     <%= link_to volunteer.display_name, edit_volunteer_path(volunteer) %>
@@ -151,8 +152,21 @@
                   </td>
                 </tr>
               <% end %>
+              
               </tbody>
             </table>
+             <div class="select-style-1">
+              <label for='supervisor_volunteer_supervisor_id'>Select a Supervisor</label>
+              <select name='supervisor_volunteer[supervisor_id]' class='form-control select2'>
+               <% @supervisors.each do |supervisor| %>
+                  <option value="<%= supervisor.id %>"><%= supervisor.display_name %></option>
+                <% end %>
+             </select>
+            </div>
+            <%= form.button type: :submit do %>
+              Mass Assign 
+            <%end%>
+          <%end%>
         <% else %>
           There are no active volunteers without supervisors to display here
         <% end %>

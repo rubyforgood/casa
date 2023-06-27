@@ -11,6 +11,7 @@ class CasaAdminPolicy < UserPolicy
   alias_method :restore?, :is_admin?
   alias_method :datatable?, :index?
   alias_method :change_to_supervisor?, :is_admin?
+  alias_method :bulk_assignment?, :new?
 
   def edit?
     is_admin_same_org?

@@ -30,4 +30,5 @@ class SupervisorPolicy < UserPolicy
   alias_method :create?, :new?
   alias_method :datatable?, :index?
   alias_method :change_to_admin?, :is_admin?
+  alias_method :bulk_assignment?, :new?
 end
