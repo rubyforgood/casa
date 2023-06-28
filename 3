@@ -1,6 +1,6 @@
 /* global alert */
 /* global $ */
-const { Notifier } = require('./notifier')
+const AsyncNotifier = require('../src/async_notifier')
 let pageNotifier
 
 const defineCaseContactsTable = function () {
@@ -14,10 +14,10 @@ const defineCaseContactsTable = function () {
 }
 
 $(() => { // JQuery's callback for the DOM loading
-  const notificationsElement = $('#notifications')
+  const asyncNotificationsElement = $('#async-notifications')
 
-  if (notificationsElement.length) {
-    pageNotifier = new Notifier(notificationsElement)
+  if (asyncNotificationsElement.length) {
+    pageNotifier = new AsyncNotifier(asyncNotificationsElement)
   }
 
   $.fn.dataTable.ext.search.push(

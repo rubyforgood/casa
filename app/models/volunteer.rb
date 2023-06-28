@@ -3,6 +3,7 @@
 class Volunteer < User
   devise :invitable, invite_for: 1.year
 
+  BULK_COLUMN = "bulk"
   NAME_COLUMN = "name"
   EMAIL_COLUMN = "email"
   SUPERVISOR_COLUMN = "supervisor"
@@ -16,6 +17,7 @@ class Volunteer < User
   EXTRA_LANGUAGES_COLUMN = "has_any_extra_languages"
   ACTIONS_COLUMN = "actions"
   TABLE_COLUMNS = [
+    BULK_COLUMN,
     NAME_COLUMN,
     EMAIL_COLUMN,
     SUPERVISOR_COLUMN,

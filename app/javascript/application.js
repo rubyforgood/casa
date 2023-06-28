@@ -8,6 +8,8 @@ import 'trix'
 import '@rails/actiontext'
 
 require('datatables.net-dt')(null, window.jQuery) // First parameter is the global object. Defaults to window if null
+require('datatables.net-select')(null, window.jQuery)
+require('jquery-datatables-checkboxes')(null, window.jQuery)
 require('select2')(window.jQuery)
 require('@rails/ujs').start()
 require('@rails/activestorage').start()

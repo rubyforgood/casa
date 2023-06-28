@@ -175,6 +175,54 @@ RSpec.describe "view all volunteers", type: :system do
 
         expect(supervisor_cell.text).to eq ""
       end
+
+      context "when bulk assignments" do
+        it "displays supervisor's name when multiple volunteers assigned supervisor", js: true do
+          name = "Superduper Visor"
+          supervisor = create(:supervisor, display_name: name, casa_org: organization)
+          create(:volunteer, casa_org: organization)
+          create(:volunteer, casa_org: organization)
+          sign_in admin
+
+          visit volunteers_path
+
+          find("tr.odd").click
+          find("tr.even").click
+          click_on "Manage Volunteer"
+          select supervisor.display_name, from: "supervisor_volunteer[supervisor_id]"
+
+          click_on "Confirm"
+
+          supervisor_cell1 = page.find("tbody .odd .supervisor-column")
+          supervisor_cell2 = page.find("tbody .even .supervisor-column")
+
+          expect(supervisor_cell1.text).to eq supervisor.display_name
+          expect(supervisor_cell2.text).to eq supervisor.display_name
+        end
+
+        it "displays no supervisor name when multiple volunteers unassigned supervisor", js: true do
+          name = "Superduper Visor"
+          supervisor = create(:supervisor, display_name: name, casa_org: organization)
+          create(:volunteer, supervisor: supervisor, casa_org: organization)
+          create(:volunteer, supervisor: supervisor, casa_org: organization)
+          sign_in admin
+
+          visit volunteers_path
+
+          find("tr.odd").click
+          find("tr.even").click
+          click_on "Manage Volunteer"
+          select "-- No Supervisor --", from: "supervisor_volunteer[supervisor_id]"
+
+          click_on "Confirm"
+
+          supervisor_cell1 = page.find("tbody .odd .supervisor-column")
+          supervisor_cell2 = page.find("tbody .even .supervisor-column")
+
+          expect(supervisor_cell1.text).to eq ""
+          expect(supervisor_cell2.text).to eq ""
+        end
+      end
     end
 
     context "when timed out" do

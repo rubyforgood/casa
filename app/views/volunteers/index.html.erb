@@ -161,32 +161,88 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="card-style mb-30">
+        <h6 class="mb-10">Responsive Data Table</h6>
+        <span class="mb-3">
+          <button type="button" class="main-btn dark-btn btn-sm mb-2 mb-md-0" data-bs-toggle="modal" data-bs-target="#bulk-assigment-modal">
+            <i class="lni lni-users mr-10"></i>
+            Manage Volunteer<span class="d-inline" id="volunteers-selected"></span>
+          </button>
+        </span>
         <div class="table-responsive">
-          <table
-            class="table"
-            id="volunteers"
-            data-source="<%= datatable_volunteers_path format: :json %>">
-            <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Supervisor</th>
-              <th>Status</th>
-              <th>Assigned To Transition Aged Youth</th>
-              <th>Case Number(s)</th>
-              <th>Last Attempted Contact</th>
-              <th>Contacts Made in Past 60 Days</th>
-              <th>Hours spent in last 30 days</th>
-              <th>Extra Languages</th>
-              <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
+          <%= form_with(url: bulk_assignment_supervisor_volunteers_path, id: "form-bulk-assignment") do |form| %>
+            <table
+              class="table hover"
+              id="volunteers"
+              data-source="<%= datatable_volunteers_path format: :json %>">
+              <thead>
+              <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Supervisor</th>
+                <th>Status</th>
+                <th>Assigned To Transition Aged Youth</th>
+                <th>Case Number(s)</th>
+                <th>Last Attempted Contact</th>
+                <th>Contacts Made in Past 60 Days</th>
+                <th>Hours spent in last 30 days</th>
+                <th>Extra Languages</th>
+                <th>Actions</th>
+              </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+
+            <div class="warning-modal">
+              <div class="modal fade" id="bulk-assigment-modal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content card-style">
+                    <div class="modal-header px-0 border-0">
+                      <h5 class="text-bold">Bulk Volunteer Assignment</h5>
+                      <button
+                        class="border-0 bg-transparent h1"
+                        data-bs-dismiss="modal"
+                        type="button">
+                        <i class="lni lni-cross-circle"></i>
+                      </button>
+                    </div>
+                    <div class="modal-body px-0">
+                      <div class="mb-30">
+                       <div class="select-style-1">
+                        <label for='supervisor_volunteer_supervisor_id'>
+                           Choose a new supervisor from the dropdown below to reassign selected volunteers, or select “No Supervisor” to unassign volunteers. When you're ready, go ahead and click the "Confirm" button to apply the changes.
+                        </label>
+                        <select name='supervisor_volunteer[supervisor_id]' class='supervisor-bulk-assignment form-control' required="required">
+                          <option value="default">Choose A Supervisor</option>
+                          <option value="unassign">-- No Supervisor --</option>
+                          <% @supervisors&.active&.each do |supervisor| %>
+                            <option value="<%= supervisor.id %>"><%= supervisor.display_name %></option>
+                          <% end %>
+                       </select>
+                       </div>
+                      </div>
+                      <div class="action d-flex flex-wrap justify-content-end">
+                        <button
+                          data-bs-dismiss="modal"
+                          class="main-btn danger-btn-outline btn-hover m-1"
+                          type="button"><i class="lni lni-ban mr-10"></i>
+                          Close
+                        </button>
+                        <%= form.button type: :submit, class: "submit-bulk-assignment main-btn dark-btn btn-hover m-1" do %>
+                          Confirm
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
         </div>
       </div>
-    </div>
   </div>
+  </div>
+
 </div>
 </div>
