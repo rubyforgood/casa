@@ -1,5 +1,18 @@
 name: Yaml Lint
-on: [push]  # yamllint disable-line rule:truthy
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'doc/**'
+      - '**/*.md'
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches:
+      - main
+    paths-ignore:
+      - 'doc/**'
+      - '**/*.md'
 jobs:
   lintAllTheThings:
     runs-on: ubuntu-latest
