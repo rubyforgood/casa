@@ -125,7 +125,7 @@ class SupervisorsController < ApplicationController
   end
 
   def supervisor_params
-    params.require(:supervisor).permit(:display_name, :email, :old_emails, :phone_number, :active, volunteer_ids: [], supervisor_volunteer_ids: [])
+    params.require(:supervisor).permit(:display_name, :email, :old_emails, :phone_number, :active, :receive_reimbursement_email, volunteer_ids: [], supervisor_volunteer_ids: [])
   end
 
   def update_supervisor_params
