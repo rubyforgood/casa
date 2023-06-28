@@ -1,4 +1,3 @@
-
 $('document').ready(() => {
   if ($('#twilio_disabled').length) {
     $('#twilio_disabled').removeClass('main-btn danger-btn-outline btn-hover btn-sm my-1')
