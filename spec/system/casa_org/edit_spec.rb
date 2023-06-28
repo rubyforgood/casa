@@ -125,8 +125,28 @@ RSpec.describe "casa_org/edit", type: :system do
     expect(page).to have_text("Twilio Phone Number")
   end
 
-  it "has option to enable additional expenses" do
-    expect(page).to have_text("Volunteers can add Other Expenses")
+  describe "additional expense feature flag" do
+    context "enabled" do
+      before do
+        FeatureFlagService.enable!(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+        visit edit_casa_org_path(organization)
+      end
+
+      it "has option to enable additional expenses" do
+        expect(page).to have_text("Volunteers can add Other Expenses")
+      end
+    end
+
+    context "disabled" do
+      before do
+        FeatureFlagService.disable!(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+        visit edit_casa_org_path(organization)
+      end
+
+      it "has option to enable additional expenses" do
+        expect(page).not_to have_text("Volunteers can add Other Expenses")
+      end
+    end
   end
 
   it "requires name text field" do
