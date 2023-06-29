@@ -67,6 +67,12 @@
       <%= form.check_box :additional_expenses_enabled, class: 'form-check-input' %>
       <%= form.label :additional_expenses_enabled, "Volunteers can add Other Expenses", class: 'form-check-label mb-2' %>
     </div>
+    <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
+        <div class="form-check checkbox-style mb-20">
+          <%= form.check_box :additional_expenses_enabled, class: 'form-check-input' %>
+          <%= form.label :additional_expenses_enabled, "Volunteers can add Other Expenses", class: 'form-check-label mb-2' %>
+        </div>
+    <% end %>
     <div class="actions mb-10">
       <%= button_tag(
             type: "submit",
