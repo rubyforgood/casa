@@ -1,6 +1,6 @@
 ---
 name: Flaky Test
-about: 
+about: one of the tests is inconsistent and likely producing false positives
 title: "Bug: Flaky Test"
 labels: ["Type: Bug", "Help Wanted"]
 ---
