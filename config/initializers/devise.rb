@@ -348,10 +348,8 @@ Devise.setup do |config|
 
   # ==> Configuration for devise-jwt secret key generation
   config.jwt do |jwt|
-    begin
-      jwt.secret = Rails.application.credentials.devise.jwt_secret_key
-    rescue => e
-      Bugsnag.notify(e)
-    end
+    jwt.secret = Rails.application.credentials.devise.jwt_secret_key
+  rescue => e
+    Bugsnag.notify(e)
   end
 end
