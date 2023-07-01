@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+require 'pry'
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
@@ -348,6 +348,10 @@ Devise.setup do |config|
 
   # ==> Configuration for devise-jwt secret key generation
   config.jwt do |jwt|
-    jwt.secret = Rails.application.credentials.devise.jwt_secret_key
+    begin
+      jwt.secret = Rails.application.credentials.devise.jwt_secret_key
+    rescue => e
+      Bugsnag.notify(e)
+    end
   end
 end
