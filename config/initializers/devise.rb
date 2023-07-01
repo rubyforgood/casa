@@ -348,6 +348,6 @@ Devise.setup do |config|
 
   # ==> Configuration for devise-jwt secret key generation
   config.jwt do |jwt|
-    jwt.secret = Rails.application.credentials.devise.jwt_secret_key
+    jwt.secret = Rails.application.credentials.devise&.jwt_secret_key
   end
 end
