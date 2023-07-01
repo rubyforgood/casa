@@ -13,12 +13,13 @@ class SupervisorMailerPreview < ActionMailer::Preview
   end
 
   def weekly_digest
-    supervisor = params.has_key?(:id) ? Supervisor.find_by(id: params[:id]) : Supervisor.last
-    if supervisor.nil?
-      DebugPreviewMailer.invalid_user("supervisor")
-    else
-      SupervisorMailer.account_setup(supervisor)
-    end
+    supervisor = Supervisor.new(
+      display_name: "Jane Smith",
+      casa_org: CasaOrg.new(name: "CASA of Awesome County"),
+      volunteers: [Volunteer.new(display_name: "Anne Volunteerson"), Volunteer.new(display_name: "Betty McVolunteer")]
+    )
+    SupervisorMailer.weekly_digest(supervisor)
   end
 end
+
 # :nocov:
