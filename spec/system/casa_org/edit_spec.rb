@@ -119,8 +119,8 @@ RSpec.describe "casa_org/edit", type: :system do
   end
 
   it "hides Twilio Form if twilio is not enabled", js: true do
-    uncheck "Enable Twilio" # Casa Org factory set to enable_twilio: true
-
+    uncheck "Enable Twilio"
+    # Casa Org factory set to enable_twilio: true
     expect(page).to have_selector("#casa_org_twilio_account_sid", visible: :hidden)
     expect(page).to have_selector("#casa_org_twilio_api_key_sid", visible: :hidden)
     expect(page).to have_selector("#casa_org_twilio_api_key_secret", visible: :hidden)
