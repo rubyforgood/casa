@@ -15,8 +15,6 @@ gem "cssbundling-rails", "~> 1.2" # compiles css
 gem "delayed_job_active_record"
 gem "devise" # for authentication
 gem "devise_invitable"
-gem "devise-jwt"
-gem "rack-cors"
 gem "httparty" # for making HTTP network requests 🥳
 gem "twilio-ruby" # twilio helper functions
 gem "draper" # adds decorators for cleaner presentation logic
