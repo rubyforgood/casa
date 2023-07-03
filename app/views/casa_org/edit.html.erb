@@ -42,26 +42,28 @@
       <%= form.check_box :twilio_enabled, class: 'form-check-input accordionTwilio' %>
       <%= form.label :twilio_enabled, "Enable Twilio", class: 'form-check-label mb-2' %>
     </div>
-    <div class="accordionGroup">
-      <div id="collapseTwilio" class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordionTwilio">
-        <div class="input-style-1">
-          <%= form.label :twilio_phone_number, "Twilio Phone Number" %>
-          <%= form.text_field :twilio_phone_number, class: "form-control", required: true %>
-        </div>
-        <div class="input-style-1">
-          <%= form.label :twilio_account_sid, "Twilio Account SID" %>
-          <%= form.text_field :twilio_account_sid, class: "form-control", required: true %>
-        </div>
-        <div class="input-style-1">
-          <%= form.label :twilio_api_key_sid, "Twilio API Key SID" %>
-          <%= form.text_field :twilio_api_key_sid, class: "form-control", required: true %>
-        </div>
-        <div class="input-style-1">
-          <%= form.label :twilio_api_key_secret, "Twilio API Key Secret" %>
-          <%= form.text_field :twilio_api_key_secret, class: "form-control", required: true %>
+    <%# Twilio Form %>
+      <div class="accordionGroup">
+        <div id="collapseTwilio" class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordionTwilio">
+          <div class="input-style-1">
+            <%= form.label :twilio_phone_number, "Twilio Phone Number" %>
+            <%= form.text_field :twilio_phone_number, class: "form-control", required: true %>
+          </div>
+          <div class="input-style-1">
+            <%= form.label :twilio_account_sid, "Twilio Account SID" %>
+            <%= form.text_field :twilio_account_sid, class: "form-control", required: true %>
+          </div>
+          <div class="input-style-1">
+            <%= form.label :twilio_api_key_sid, "Twilio API Key SID" %>
+            <%= form.text_field :twilio_api_key_sid, class: "form-control", required: true %>
+          </div>
+          <div class="input-style-1">
+            <%= form.label :twilio_api_key_secret, "Twilio API Key Secret" %>
+            <%= form.text_field :twilio_api_key_secret, class: "form-control", required: true %>
+          </div>
         </div>
       </div>
-    </div>
+    <%# Twilio Form End %>
     <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
         <div class="form-check checkbox-style mb-20">
           <%= form.check_box :additional_expenses_enabled, class: 'form-check-input' %>
