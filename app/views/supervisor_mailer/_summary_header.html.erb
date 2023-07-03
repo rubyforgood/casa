@@ -1,0 +1,14 @@
+<tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+  <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 18px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+    <%= supervisor_display_name %>,
+  </td>
+</tr>
+<tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; margin: 0;">
+  <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+    <% if has_active_volunteers %>
+      You have no volunteers with assigned cases at the moment. When you do, you will see their status here.
+    <% else %>
+      Here's a summary of what happened with your volunteers this last week.
+    <% end %>
+  </td>
+</tr>

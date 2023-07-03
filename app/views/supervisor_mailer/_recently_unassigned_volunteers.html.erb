@@ -1,0 +1,17 @@
+<% if supervisor.recently_unassigned_volunteers.any? %>
+  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; text-align: left;">
+    <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+      <b><%= "The following volunteers have been unassigned from you:" %></b>
+      <br>
+
+      <% supervisor.recently_unassigned_volunteers.each  do |volunteer| %>
+        - <%= volunteer.display_name %>
+
+        <% unless volunteer.has_supervisor? %>
+          (not assigned to a new supervisor)
+        <% end %>
+        <br>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
