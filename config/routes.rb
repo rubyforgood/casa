@@ -136,6 +136,7 @@ Rails.application.routes.draw do
       get :unassign
       patch :unassign
       patch :show_hide_contacts
+      patch :reimbursement
     end
   end
   resources :case_court_orders, only: %i[destroy]

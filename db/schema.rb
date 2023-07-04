@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_21_161252) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_27_210040) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -152,6 +152,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_21_161252) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "hide_old_contacts", default: false
+    t.boolean "allow_reimbursement", default: true
     t.index ["casa_case_id"], name: "index_case_assignments_on_casa_case_id"
     t.index ["volunteer_id"], name: "index_case_assignments_on_volunteer_id"
   end
