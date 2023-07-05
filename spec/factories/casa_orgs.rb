@@ -8,5 +8,6 @@ FactoryBot.define do
     twilio_api_key_secret { "open sesame" }
     twilio_api_key_sid { "Aladdin" }
     twilio_phone_number { "+15555555555" }
+    twilio_enabled { true }
   end
 end

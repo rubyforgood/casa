@@ -25,7 +25,8 @@ RSpec.describe "CasaOrg", type: :request do
         {
           name: "name", display_name: "display_name", address: "address",
           twilio_account_sid: "articuno34", twilio_api_key_sid: "Aladdin",
-          twilio_api_key_secret: "open sesame", twilio_phone_number: "+12223334444"
+          twilio_api_key_secret: "open sesame", twilio_phone_number: "+12223334444",
+          show_driving_reimbursement: "1", additional_expenses_enabled: "1"
         }
       end
 
@@ -41,6 +42,8 @@ RSpec.describe "CasaOrg", type: :request do
         expect(casa_org.display_name).to eq "display_name"
         expect(casa_org.address).to eq "address"
         expect(casa_org.twilio_phone_number).to eq "+12223334444"
+        expect(casa_org.show_driving_reimbursement).to be true
+        expect(casa_org.additional_expenses_enabled).to be true
       end
 
       describe "on logo update" do
