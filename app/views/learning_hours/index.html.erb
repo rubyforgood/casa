@@ -17,13 +17,14 @@
             <th>Learning Type</th>
             <th>Date</th>
             <th>Time Spent</th>
-            <th>Action></th>
           </tr>
         </thead>
         <tbody>
           <% @learning_hours.order(occurred_at: :desc).each do |learning_hour| %>
             <tr>
-              <td> <%= learning_hour.name %> </td>
+              <td>
+                <%= link_to learning_hour.name, volunteer_learning_hour_path(id: learning_hour.id) %>
+              </td>
               <td> <%= (learning_hour.learning_type).humanize %> </td>
               <td> <%= learning_hour.occurred_at.strftime("%B %d, %Y") %> </td>
               <td>
@@ -32,7 +33,6 @@
               <% end %>
               <%= learning_hour.duration_minutes %> min
               </td>
-              <td><%= link_to 'See More', volunteer_learning_hour_path(id: learning_hour.id) %> </td>
             </tr>
           <% end %>
         </tbody>
