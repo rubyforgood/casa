@@ -252,9 +252,9 @@ RSpec.describe "view all volunteers", type: :system do
 
     it "can persist 'show/hide' column preference settings", js: true do
       sign_in supervisor
-      
+
       visit volunteers_path
-      
+
       expect(page).to have_text("Pick displayed columns")
       within("#volunteers") do
         expect(page).to have_text("Name")
@@ -265,7 +265,6 @@ RSpec.describe "view all volunteers", type: :system do
         expect(page).to have_text("Last Attempted Contact")
         expect(page).to have_text("Contacts Made in Past 60 Day")
       end
-
 
       click_button "Pick displayed columns"
 
@@ -288,11 +287,9 @@ RSpec.describe "view all volunteers", type: :system do
         expect(page).to have_text("Case Number(s)")
       end
 
- 
-
       sign_out supervisor
       visit volunteers_path
-      
+
       sign_in supervisor
       visit volunteers_path
 
