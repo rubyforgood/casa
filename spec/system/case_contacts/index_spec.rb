@@ -21,7 +21,9 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         case_contacts
         sign_in volunteer
         visit case_contacts_path
-        expect(page).to have_text("Bob Loblaw")
+        within(".full-card", match: :first) do
+          expect(page).to have_text("Bob Loblaw")
+        end
       end
 
       it "can navigate to edit volunteer page" do

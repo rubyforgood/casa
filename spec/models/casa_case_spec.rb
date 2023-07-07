@@ -370,5 +370,11 @@ RSpec.describe CasaCase, type: :model do
     it "should be parameterized from the case number" do
       expect(casa_case.slug).to eq "cina-21-1234"
     end
+
+    it "should update when the case number changes" do
+      casa_case.case_number = "CINA-21-1234-changed"
+      casa_case.save
+      expect(casa_case.slug).to eq "cina-21-1234-changed"
+    end
   end
 end

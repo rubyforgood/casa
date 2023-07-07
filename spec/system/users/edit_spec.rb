@@ -141,6 +141,20 @@ RSpec.describe "users/edit", type: :system do
     end
   end
 
+  context "when a user's casa organization does not have twilio enabled" do
+    let(:organization_twilio_disabled) { create(:casa_org, twilio_enabled: false) }
+    let(:volunteer_twilio_disabled) { create(:volunteer, casa_org_id: organization_twilio_disabled.id) }
+
+    before do
+      sign_in volunteer_twilio_disabled
+      visit edit_users_path
+    end
+
+    it "disables a users SMS communication checkbox", js: true do
+      expect(page).to have_field("Enable Twilio For Text Messaging", type: "checkbox", disabled: true)
+    end
+  end
+
   context "supervisor user" do
     before do
       sign_in supervisor

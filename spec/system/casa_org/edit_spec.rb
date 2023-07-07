@@ -118,11 +118,30 @@ RSpec.describe "casa_org/edit", type: :system do
     expect(organization.reload.logo.attachment).not_to be_nil
   end
 
-  it "has twilio API data required for SMS" do
-    expect(page).to have_text("Twilio Account SID")
-    expect(page).to have_text("Twilio API Key SID")
-    expect(page).to have_text("Twilio API Key Secret")
-    expect(page).to have_text("Twilio Phone Number")
+  it "hides Twilio Form if twilio is not enabled", js: true do
+    uncheck "Enable Twilio"
+    # Casa Org factory set to enable_twilio: true
+    expect(page).to have_selector("#casa_org_twilio_account_sid", visible: :hidden)
+    expect(page).to have_selector("#casa_org_twilio_api_key_sid", visible: :hidden)
+    expect(page).to have_selector("#casa_org_twilio_api_key_secret", visible: :hidden)
+    expect(page).to have_selector("#casa_org_twilio_phone_number", visible: :hidden)
+  end
+
+  it "displays Twilio Form when Enable Twilio is checked", js: true do
+    # Casa Org factory set to enable_twilio: true
+    expect(page).to have_text("Enable Twilio")
+    expect(page).to have_selector("#casa_org_twilio_account_sid", visible: :visible)
+    expect(page).to have_selector("#casa_org_twilio_api_key_sid", visible: :visible)
+    expect(page).to have_selector("#casa_org_twilio_api_key_secret", visible: :visible)
+    expect(page).to have_selector("#casa_org_twilio_phone_number", visible: :visible)
+  end
+
+  it "requires Twilio Form to be filled in correctly", js: true do
+    fill_in "Twilio Phone Number", with: ""
+    click_on "Submit"
+
+    message = find("#casa_org_twilio_phone_number").native.attribute("validationMessage")
+    expect(message).to eq "Please fill out this field."
   end
 
   describe "additional expense feature flag" do
