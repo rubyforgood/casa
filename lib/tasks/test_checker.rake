@@ -44,8 +44,13 @@ task test_checker: :environment do
   # @return the spec Ruby filespecs, with 'spec_' removed
   def spec_files
     @spec_files ||= ruby_files(spec_dir).map do |fspec|
-      fspec.sub("_spec.rb", ".rb")
-    end
+      if fspec.include?("requests/")
+        fspec.sub("requests", "controllers")
+          .sub("spec.rb", "controller.rb")
+      else
+        fspec.sub("_spec.rb", ".rb")
+      end
+    end.uniq
   end
 
   def ignore_files
