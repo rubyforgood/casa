@@ -2,7 +2,7 @@ on:
   schedule:
     # * is a special character in YAML so you have to quote this string
     - cron: '0 0 * * *'
-  workflow_dispatch: # Enable manual runs of the bot
+  workflow_dispatch:  # Enable manual runs of the bot
 
 jobs:
   unassign_issues:
@@ -14,8 +14,8 @@ jobs:
         id: unassign_issues
         with:
           token: ${{secrets.GITHUB_TOKEN}}
-          unassign_inactive_in_hours: 360 # 15 days
-          warning_inactive_in_hours: 240 # 10 days
+          unassign_inactive_in_hours: 360  # 15 days
+          warning_inactive_in_hours: 240  # 10 days
           office_hours: 'Tuesdays 6-8 PM PST'
           warning_inactive_message: 'If you are still working on this, comment here to tell the bot to give you more time'
       - name: Print the unassigned issues

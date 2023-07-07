@@ -27,6 +27,12 @@
     <input type="text" placeholder="<%= resource.phone_number %>" autocomplete="off" readonly>
   <% end %>
 </div>
+
+<div class="form-check checkbox-style mb-20">
+  <%= f.check_box :receive_reimbursement_email, class: "form-check-input" %>
+  <%= f.label :receive_reimbursement_email, "Email Reimbursement Requests", class: "form-check-label" %>
+</div>
+
 <% if current_organization.show_driving_reimbursement && resource.role == "Volunteer" %>
   <div class="input-style-1">
     <%= f.label :address, "Mailing address" %>

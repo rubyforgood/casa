@@ -18,7 +18,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
       @case_contact = create :case_contact, creator: volunteer, casa_case: casa_case, contact_made: true, occurred_at: Time.current - 6.days
       assign :supervisor, supervisor
       sign_in supervisor
-      @inactive_messages = supervisor_mailer.inactive_messages(supervisor)
+      @inactive_messages = InactiveMessagesService.new(supervisor).inactive_messages
       render template: "supervisor_mailer/weekly_digest"
     end
 
@@ -40,7 +40,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
     before(:each) do
       sign_in supervisor
       assign :supervisor, supervisor
-      @inactive_messages = supervisor_mailer.inactive_messages(supervisor)
+      @inactive_messages = InactiveMessagesService.new(supervisor).inactive_messages
       render template: "supervisor_mailer/weekly_digest"
     end
 
@@ -55,7 +55,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
       volunteer.casa_cases << casa_case
       sign_in supervisor
       assign :supervisor, supervisor
-      @inactive_messages = supervisor_mailer.inactive_messages(supervisor)
+      @inactive_messages = InactiveMessagesService.new(supervisor).inactive_messages
       render template: "supervisor_mailer/weekly_digest"
     end
 
@@ -91,7 +91,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
       new_supervisor.volunteers << volunteer
       volunteer.supervisor_volunteer.update(is_active: true)
       assign :supervisor, supervisor
-      @inactive_messages = supervisor_mailer.inactive_messages(supervisor)
+      @inactive_messages = []
 
       render template: "supervisor_mailer/weekly_digest"
     end
@@ -108,7 +108,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
       sign_in supervisor
       assign :supervisor, supervisor
       volunteer.supervisor_volunteer.update(is_active: false)
-      @inactive_messages = supervisor_mailer.inactive_messages(supervisor)
+      @inactive_messages = []
       render template: "supervisor_mailer/weekly_digest"
     end
 

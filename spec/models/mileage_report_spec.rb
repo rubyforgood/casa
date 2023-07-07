@@ -23,6 +23,7 @@ RSpec.describe MileageReport, type: :model do
         "Miles Driven",
         "Casa Case Number",
         "Creator Name",
+        "Supervisor Name",
         "Volunteer Address",
         "Reimbursed"
       ])
@@ -46,6 +47,7 @@ RSpec.describe MileageReport, type: :model do
         "Miles Driven",
         "Casa Case Number",
         "Creator Name",
+        "Supervisor Name",
         "Volunteer Address",
         "Reimbursed"
       ])

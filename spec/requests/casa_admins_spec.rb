@@ -425,7 +425,19 @@ RSpec.describe "/casa_admins", type: :request do
         expect(@twilio_activation_error_stub).to have_been_requested.times(1)
         expect(response).to have_http_status(:redirect)
         follow_redirect!
-        expect(flash[:notice]).to match(/New admin created successfully. SMS not sent due to error./)
+        expect(flash[:notice]).to match(/New admin created successfully. SMS not sent. Error: ./)
+      end
+
+      it "does not send SMS when Twilio is not enabled" do
+        org = create(:casa_org, twilio_enabled: false)
+        admin = build(:casa_admin, casa_org: org)
+
+        sign_in admin
+        params[:phone_number] = "+12222222222"
+        subject
+        expect(response).to have_http_status(:redirect)
+        follow_redirect!
+        expect(flash[:notice]).to match(/New admin created successfully./)
       end
     end
 
