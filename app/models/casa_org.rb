@@ -2,6 +2,8 @@ class CasaOrg < ApplicationRecord
   CASA_DEFAULT_COURT_REPORT = File.new(Rails.root.join("app", "documents", "templates", "default_report_template.docx"), "r")
   CASA_DEFAULT_LOGO = Rails.root.join("public", "logo.jpeg")
 
+  scope :with_logo, -> { joins(:logo_attachment) }
+
   before_create :set_slug
   before_update :sanitize_svg
   before_save :normalize_phone_number
