@@ -39,7 +39,7 @@ class CaseCourtReportContext
 
   def prepare_court_date
     return I18n.l(@court_date, format: :full, default: nil) if @court_date
-    return @casa_case.next_court_date.nil? ? "___<NEXT COURT DATE>____" : I18n.l(@casa_case.next_court_date.date, format: :full, default: nil)
+    @casa_case.next_court_date.nil? ? "___<NEXT COURT DATE>____" : I18n.l(@casa_case.next_court_date.date, format: :full, default: nil)
   end
 
   def prepare_case_contacts
