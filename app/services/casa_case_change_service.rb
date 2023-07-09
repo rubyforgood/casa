@@ -11,7 +11,7 @@ class CasaCaseChangeService
   end
 
   def changed_attributes_messages
-    changed_attributes = changed.select { |k, v| original[k] != v }.keys.delete_if { |k| k == :updated_at }
+    changed_attributes = changed.select { |k, v| original[k] != v }.keys.delete_if { |k| k.in?(%i[updated_at slug]) }
     return if changed_attributes.empty?
 
     changed_attributes.map do |att|

@@ -27,6 +27,7 @@ class MileageExportCsvService
       miles_driven: case_contact&.miles_driven,
       casa_case_number: case_contact&.casa_case&.case_number,
       creator_name: case_contact&.creator&.display_name,
+      supervisor_name: case_contact&.creator&.supervisor&.display_name,
       volunteer_address: case_contact&.creator&.address&.content,
       reimbursed: case_contact&.reimbursement_complete
     }

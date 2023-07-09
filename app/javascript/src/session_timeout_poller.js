@@ -1,4 +1,3 @@
-
 const deviseTimeoutInMinutes = 180
 const twoMinuteWarning = deviseTimeoutInMinutes - 2
 const totalTimerAmount = twoMinuteWarning * 60 * 1000

@@ -162,6 +162,7 @@ end
 #  old_emails                  :string           default([]), is an Array
 #  phone_number                :string           default("")
 #  receive_email_notifications :boolean          default(TRUE)
+#  receive_reimbursement_email :boolean          default(FALSE)
 #  receive_sms_notifications   :boolean          default(FALSE), not null
 #  reset_password_sent_at      :datetime
 #  reset_password_token        :string

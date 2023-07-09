@@ -255,6 +255,7 @@ RSpec.describe "/casa_cases", type: :request do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes2}
           casa_case.reload
           expect(casa_case.case_number).to eq "12345"
+          expect(casa_case.slug).to eq "12345"
           expect(casa_case.case_court_orders[0].text).to eq texts[0]
           expect(casa_case.case_court_orders[0].implementation_status).to eq implementation_statuses[0]
           expect(casa_case.case_court_orders[1].text).to eq texts[1]

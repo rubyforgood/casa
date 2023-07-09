@@ -24,6 +24,13 @@ Rails.application.routes.draw do
     root to: "all_casa_admins/sessions#new", as: :unauthenticated_all_casa_root
   end
 
+  resources :preference_sets, only: [] do
+    collection do
+      post "/table_state_update/:table_name", to: "preference_sets#table_state_update", as: :table_state_update
+      get "/table_state/:table_name", to: "preference_sets#table_state", as: :table_state
+    end
+  end
+
   resources :health, only: %i[index] do
     collection do
       get :case_contacts_creation_times_in_last_week
@@ -87,7 +94,6 @@ Rails.application.routes.draw do
       get :download_failed
     end
   end
-  resources :settings, only: %i[index create], controller: "system_settings"
   resources :case_contact_reports, only: %i[index]
   resources :mileage_reports, only: %i[index]
   resources :mileage_rates, only: %i[index new create edit update]
@@ -137,6 +143,7 @@ Rails.application.routes.draw do
       get :unassign
       patch :unassign
       patch :show_hide_contacts
+      patch :reimbursement
     end
   end
   resources :case_court_orders, only: %i[destroy]

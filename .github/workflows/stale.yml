@@ -17,6 +17,5 @@ jobs:
         stale-pr-message: "This PR has been open for a long time without any pushes or comments! What's up?"
         stale-issue-label: 'no-issue-activity'
         stale-pr-label: 'no-pr-activity'
-        days-before-issue-close: 9999 # don't do it
+        days-before-issue-close: 9999  # don't do it
         days-before-pr-close: 30
-  # https://github.com/actions/stale

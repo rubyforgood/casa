@@ -91,7 +91,7 @@ class ReimbursementsController < ApplicationController
   end
 
   def reimbursement_params
-    params.require(:case_contact).permit(:reimbursement_complete, :reimbursement_id)
+    params.require(:case_contact).permit(:reimbursement_complete)
   end
 
   def volunteers_for_filter(reimbursements)

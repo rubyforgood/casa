@@ -1,18 +1,13 @@
 require "rails_helper"
 
-RSpec.describe ReimbursementsController, type: :controller do
+RSpec.describe ReimbursementsController, type: :request do
   let(:admin) { create(:casa_admin) }
   let(:casa_org) { admin.casa_org }
+  let(:case_contact) { create(:case_contact) }
 
-  before do
-    allow(controller).to receive(:authenticate_user!).and_return(:admin)
-  end
+  before { sign_in(admin) }
 
-  describe "as admin" do
-    before do
-      allow(controller).to receive(:current_user).and_return(admin)
-    end
-
+  describe "GET /index" do
     it "calls ReimbursementPolicy::Scope to filter reimbursements" do
       contact_relation = double(CaseContact)
       allow(contact_relation).to receive_message_chain(
@@ -21,7 +16,7 @@ RSpec.describe ReimbursementsController, type: :controller do
         :filter_by_reimbursement_status
       ).and_return([])
       allow(ReimbursementPolicy::Scope).to receive(:new)
-        .with(controller.current_user, CaseContact.joins(:casa_case))
+        .with(admin, CaseContact.joins(:casa_case))
         .and_return(double(resolve: contact_relation))
 
       expect(contact_relation).to receive_message_chain(
@@ -30,24 +25,30 @@ RSpec.describe ReimbursementsController, type: :controller do
         :filter_by_reimbursement_status
       )
 
-      get :index
+      get reimbursements_url
 
       expect(ReimbursementPolicy::Scope).to have_received(:new)
-        .with(controller.current_user, CaseContact.joins(:casa_case))
+        .with(admin, CaseContact.joins(:casa_case))
     end
+  end
 
-    xit "can change reimbursement status to complete" do
-      patch :mark_as_complete
+  describe "PATCH /mark_as_complete" do
+    it "changes reimbursement status to complete" do
+      patch reimbursement_mark_as_complete_url(case_contact, case_contact: {reimbursement_complete: true})
       expect(response).to redirect_to(reimbursements_path)
       expect(response).to have_http_status(:redirect)
-      expect(assigns(:reimbursements)).to eq([])
+      expect(case_contact.reload.reimbursement_complete).to be_truthy
     end
+  end
 
-    xit "can change reimbursement status to needs review" do
-      patch :mark_as_needs_review
+  describe "PATCH /mark_as_needs_review" do
+    before { case_contact.update(reimbursement_complete: true) }
+
+    it "changes reimbursement status to needs review" do
+      patch reimbursement_mark_as_needs_review_url(case_contact, case_contact: {reimbursement_complete: false})
       expect(response).to redirect_to(reimbursements_path)
       expect(response).to have_http_status(:redirect)
-      expect(assigns(:reimbursements)).to eq([])
+      expect(case_contact.reload.reimbursement_complete).to be_falsey
     end
   end
 end
