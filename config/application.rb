@@ -26,8 +26,5 @@ module Casa
     config.active_storage.variant_processor = :mini_magick
     config.active_storage.content_types_to_serve_as_binary.delete("image/svg+xml")
     config.serve_static_assets = true
-    config.to_prepare do
-      DeviseController.respond_to :html, :json
-    end
   end
 end

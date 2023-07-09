@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_21_161252) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_04_123327) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -327,12 +327,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_21_161252) do
     t.index ["casa_org_id"], name: "index_judges_on_casa_org_id"
   end
 
-  create_table "jwt_denylist", force: :cascade do |t|
-    t.string "jti", null: false
-    t.datetime "exp", null: false
-    t.index ["jti"], name: "index_jwt_denylist_on_jti"
-  end
-
   create_table "languages", force: :cascade do |t|
     t.string "name"
     t.bigint "casa_org_id", null: false
@@ -581,6 +575,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_21_161252) do
   add_foreign_key "judges", "casa_orgs"
   add_foreign_key "languages", "casa_orgs"
   add_foreign_key "learning_hours", "users"
+  add_foreign_key "mileage_rates", "casa_orgs"
   add_foreign_key "mileage_rates", "users"
   add_foreign_key "other_duties", "users", column: "creator_id"
   add_foreign_key "patch_notes", "patch_note_groups"

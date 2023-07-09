@@ -1,0 +1,27 @@
+<% active_ever_assigned.each do |volunteer| %>
+  <tr>
+    <td class="content-block" style="font-size: 16px; padding: 0 0 10px">
+      <b>Summary for <%= link_to volunteer.display_name, edit_volunteer_url(volunteer) %></b>
+    </td>
+  </tr>
+  <% volunteer.case_assignments_with_cases.each do |case_assignment| %>
+    <% recently_unassigned = case_assignment.decorate.unassigned_in_past_week? %>
+    <% if case_assignment.active || recently_unassigned %>
+      <% casa_case = case_assignment.casa_case %>
+      <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; text-align: left;">
+        <%= render("active_volunteer_info",
+                   casa_case: casa_case,
+                   recently_unassigned: recently_unassigned,
+                   case_assignment: case_assignment,
+                   volunteer_display_name: volunteer.display_name
+            ) %>
+      </tr>
+    <% end %>
+  <% end %>
+  <!-- If the table elements don't wrap this <hr> then the <hr> gets moved to the outside of the table by the HTML renderer -->
+  <tr>
+    <td style="padding: 0 0 10px">
+      <hr>
+    </td>
+  </tr>
+<% end %>

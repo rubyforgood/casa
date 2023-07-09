@@ -1,0 +1,13 @@
+<% if supervisor.volunteers.no_recent_sign_in.any? %>
+  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; text-align: left;">
+    <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+      <b><%= "The following volunteers have not recently signed in, within 30 days" %></b>
+      <br>
+
+      <% supervisor.volunteers.no_recent_sign_in.each do |volunteer| %>
+        - <%= volunteer.display_name %>
+        <br>
+      <% end %>
+    </td>
+  </tr>
+<% end %>

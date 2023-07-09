@@ -208,6 +208,10 @@ class CasaCase < ApplicationRecord
   def contact_type_validation?
     validate_update
   end
+
+  def should_generate_new_friendly_id?
+    case_number_changed? || super
+  end
 end
 
 # == Schema Information
