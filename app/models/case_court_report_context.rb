@@ -9,6 +9,7 @@ class CaseCourtReportContext
     @casa_case = CasaCase.friendly.find(args[:case_id])
     @volunteer = Volunteer.find(args[:volunteer_id]) if args[:volunteer_id]
     @time_zone = args[:time_zone]
+    @court_date = args[:court_date]
     @path_to_template = args[:path_to_template]
   end
 
@@ -18,9 +19,11 @@ class CaseCourtReportContext
 
   private
 
-  def prepare_context(is_default_template)
-    latest_hearing_date = @casa_case.most_recent_past_court_date
+  def latest_hearing_date
+    @casa_case.most_recent_past_court_date
+  end
 
+  def prepare_context(is_default_template)
     {
       created_date: I18n.l(Time.current.in_time_zone(@time_zone).to_date, format: :full, default: nil),
       casa_case: prepare_case_details,
@@ -28,9 +31,15 @@ class CaseCourtReportContext
       case_court_orders: prepare_case_orders,
       case_mandates: prepare_case_orders, # backwards compatible with old Montgomery template - keep this! TODO test full generation
       latest_hearing_date: latest_hearing_date.nil? ? "___<LATEST HEARING DATE>____" : I18n.l(latest_hearing_date.date, format: :full, default: nil),
+      court_date: prepare_court_date,
       org_address: org_address(is_default_template),
       volunteer: volunteer_info
     }
+  end
+
+  def prepare_court_date
+    return I18n.l(@court_date, format: :full, default: nil) if @court_date
+    return @casa_case.next_court_date.nil? ? "___<NEXT COURT DATE>____" : I18n.l(@casa_case.next_court_date.date, format: :full, default: nil)
   end
 
   def prepare_case_contacts

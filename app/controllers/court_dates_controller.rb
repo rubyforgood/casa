@@ -11,7 +11,7 @@ class CourtDatesController < ApplicationController
     respond_to do |format|
       format.html {}
       format.docx do
-        send_data @court_date.generate_report,
+        send_data @court_date.generate_report(current_user, params[:time_zone]),
           type: :docx,
           filename: "#{@court_date.display_name}.docx",
           disposition: "attachment",

@@ -55,6 +55,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
       subject(:show) { get casa_case_court_date_path(casa_case, court_date), headers: headers }
 
       let(:headers) { {accept: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"} }
+      let(:formatted_court_date) { I18n.l(court_date.date, format: :full, default: nil) }
 
       it { expect(response).to be_successful }
 
@@ -63,63 +64,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
 
         document_inspector = DocxInspector.new(docx_contents: response.body)
 
-        expect(document_inspector.word_list_document_contains?(court_date.date.to_s)).to eq(true)
-      end
-
-      context "when a judge is attached" do
-        let!(:court_date) {
-          create(:court_date, date: Date.yesterday, judge: judge)
-        }
-        it "includes the judge's name in the document" do
-          show
-
-          document_inspector = DocxInspector.new(docx_contents: response.body)
-
-          expect(document_inspector.word_list_document_contains?(judge.name)).to eq(true)
-        end
-      end
-
-      context "without a judge" do
-        let!(:court_date) {
-          create(:court_date, date: Date.yesterday, judge: nil)
-        }
-        it "includes None for the judge's name in the document" do
-          show
-
-          document_inspector = DocxInspector.new(docx_contents: response.body)
-
-          expect(document_inspector.word_list_document_contains?(judge.name)).to eq(false)
-          expect(document_inspector.word_list_document_contains?("Judge:")).to eq(true) # Judge: None
-          expect(document_inspector.word_list_document_contains?("None")).to eq(true)
-        end
-      end
-
-      context "with a hearing type" do
-        let!(:court_date) {
-          create(:court_date, date: Date.yesterday, hearing_type: hearing_type)
-        }
-        it "includes the hearing type in the document" do
-          show
-
-          document_inspector = DocxInspector.new(docx_contents: response.body)
-
-          expect(document_inspector.word_list_document_contains?(hearing_type.name)).to eq(true)
-        end
-      end
-
-      context "without a hearing type" do
-        let!(:court_date) {
-          create(:court_date, date: Date.yesterday, hearing_type: nil)
-        }
-        it "includes None for the hearing type in the document" do
-          show
-
-          document_inspector = DocxInspector.new(docx_contents: response.body)
-
-          expect(document_inspector.word_list_document_contains?(hearing_type.name)).to eq(false)
-          expect(document_inspector.word_list_document_contains?("Hearing Type:")).to eq(true) # Hearing Type: None
-          expect(document_inspector.word_list_document_contains?("None")).to eq(true)
-        end
+        expect(document_inspector.word_list_document_contains?(formatted_court_date)).to eq(true)
       end
 
       context "with a court order" do
@@ -131,7 +76,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
 
           document_inspector = DocxInspector.new(docx_contents: response.body)
 
-          expect(document_inspector.word_list_document_contains?("Court Orders:")).to eq(true) # Court Orders:
+          expect(document_inspector.word_list_document_contains?("Ordered")).to eq(true) # Court Orders:
           expect(document_inspector.word_list_document_contains?(court_date.case_court_orders.first.text)).to eq(true)
           expect(document_inspector.word_list_document_contains?(court_date.case_court_orders.first.implementation_status.humanize)).to eq(true)
         end

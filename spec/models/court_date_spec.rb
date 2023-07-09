@@ -10,6 +10,8 @@ RSpec.describe CourtDate, type: :model do
   let(:older_court_date) { subject.date - 6.months }
   let(:path_to_template) { Rails.root.join("app", "documents", "templates", "default_report_template.docx").to_s }
   let(:path_to_report) { Rails.root.join("tmp", "test_report.docx").to_s }
+  let(:current_user) { build(:user) }
+  let(:time_zone) { Time.zone }
 
   it { is_expected.to belong_to(:casa_case) }
   it { is_expected.to validate_presence_of(:date) }
@@ -118,7 +120,7 @@ RSpec.describe CourtDate, type: :model do
   end
 
   describe "#generate_report" do
-    subject { court_date.generate_report }
+    subject { court_date.generate_report(current_user, time_zone) }
 
     # TODO write a better test for this
     it { is_expected.not_to be_nil }

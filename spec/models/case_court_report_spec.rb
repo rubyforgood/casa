@@ -200,12 +200,12 @@ RSpec.describe CaseCourtReport, type: :model do
           let(:case_contact) { create(:case_contact, contact_made: false, occurred_at: document_data[:case_contact_time]) }
           let(:court_order) { create(:case_court_order, implementation_status: :partially_implemented) }
           let(:document_inspector) { DocxInspector.new(docx_contents: report.generate_to_string) }
+          let!(:court_date) { create(:court_date, casa_case: casa_case, date: document_data[:case_hearing_date]) }
 
           before(:each) do
             casa_case.casa_org.update_attribute(:address, document_data[:org_address])
             casa_case.update_attribute(:birth_month_year_youth, document_data[:case_birthday])
             casa_case.update_attribute(:case_number, document_data[:case_number])
-            create(:court_date, casa_case: casa_case, date: document_data[:case_hearing_date])
             case_contact.contact_types << contact_type
             casa_case.case_contacts << case_contact
             casa_case.case_court_orders << court_order

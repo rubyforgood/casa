@@ -157,7 +157,7 @@ RSpec.describe CaseCourtReportsController, type: :controller do
 
             document_inspector = DocxInspector.new(docx_contents: response.body)
 
-            expect(document_inspector.word_list_header_contains?("YOUR CASA ORG’S NUMBER")).to eq(true)
+            expect(document_inspector.word_list_header_contains?("YOUR CASA ORG’S")).to eq(true)
           end
         end
         context "when a custom template is set" do
@@ -229,7 +229,7 @@ RSpec.describe CaseCourtReportsController, type: :controller do
 
             document_inspector = DocxInspector.new(docx_contents: response.body)
 
-            expect(document_inspector.word_list_header_contains?("YOUR CASA ORG’S NUMBER")).to eq(true)
+            expect(document_inspector.word_list_header_contains?("YOUR CASA ORG’S")).to eq(true)
           end
         end
         context "when a custom template is set" do

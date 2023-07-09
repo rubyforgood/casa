@@ -14,7 +14,7 @@ class CourtDate < ApplicationRecord
 
   scope :ordered_ascending, -> { order("date asc") }
 
-  DOCX_TEMPLATE_PATH = Rails.root.join("app", "documents", "templates", "default_past_court_date_template.docx")
+  DOCX_TEMPLATE_PATH = ::CasaOrg::CASA_DEFAULT_COURT_REPORT
 
   # get reports associated with the case this belongs to before this court date but after the court date before this one
   def associated_reports
@@ -34,10 +34,17 @@ class CourtDate < ApplicationRecord
     case_court_orders.any? || hearing_type || judge
   end
 
-  def generate_report
-    template = Sablon.template(File.expand_path(DOCX_TEMPLATE_PATH))
-
-    template.render_to_string(context_hash)
+  def generate_report(current_user, time_zone)
+    args = {
+      volunteer_id: current_user.volunteer? ? current_user.id : casa_case.assigned_volunteers.first&.id,
+      case_id: casa_case.id,
+      path_to_template: DOCX_TEMPLATE_PATH.to_path,
+      time_zone: time_zone,
+      court_date: date
+    }
+    context = CaseCourtReportContext.new(args).context
+    court_report = CaseCourtReport.new(path_to_template: DOCX_TEMPLATE_PATH.to_path, context: context)
+    return court_report.generate_to_string
   end
 
   def display_name

@@ -164,7 +164,7 @@ RSpec.describe "/case_court_reports", type: :request do
 
           document_inspector = DocxInspector.new(docx_contents: response.body)
 
-          expect(document_inspector.word_list_header_contains?("YOUR CASA ORG’S NUMBER")).to eq(true)
+          expect(document_inspector.word_list_header_contains?("YOUR CASA ORG’S")).to eq(true)
         end
 
         context "as a supervisor" do
