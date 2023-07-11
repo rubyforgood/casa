@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_04_123327) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_10_025852) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -327,6 +327,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_04_123327) do
     t.index ["casa_org_id"], name: "index_judges_on_casa_org_id"
   end
 
+  create_table "jwt_denylist", force: :cascade do |t|
+    t.string "jti", null: false
+    t.datetime "exp", null: false
+    t.index ["jti"], name: "index_jwt_denylist_on_jti"
+  end
+
   create_table "languages", force: :cascade do |t|
     t.string "name"
     t.bigint "casa_org_id", null: false
@@ -545,6 +551,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_04_123327) do
     t.string "unconfirmed_email"
     t.string "old_emails", default: [], array: true
     t.boolean "receive_reimbursement_email", default: false
+    t.string "token"
     t.index ["casa_org_id"], name: "index_users_on_casa_org_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true

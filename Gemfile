@@ -38,12 +38,14 @@ gem "pretender"
 gem "puma", "6.3.0" # 6.2.2 fails to install on m1 # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "rack-attack" # for blocking & throttling abusive requests
+gem "rack-cors" # for allowing cross-origin resource sharing
 gem "request_store"
 gem "sablon" # Word document templating tool for Case Court Reports
 gem "scout_apm"
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "strong_migrations"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem "active_model_serializers" # for JSON serialization
 
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries

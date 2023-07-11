@@ -46,6 +46,11 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active_model_serializers (0.10.13)
+      actionpack (>= 4.1, < 7.1)
+      activemodel (>= 4.1, < 7.1)
+      case_transform (>= 0.2)
+      jsonapi-renderer (>= 0.1.1.beta1, < 0.3)
     activejob (7.0.6)
       activesupport (= 7.0.6)
       globalid (>= 0.3.6)
@@ -115,6 +120,8 @@ GEM
     capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
+    case_transform (0.2)
+      activesupport
     caxlsx (3.4.1)
       htmlentities (~> 4.3, >= 4.3.4)
       marcel (~> 1.0)
@@ -238,6 +245,7 @@ GEM
       activesupport (>= 5.0.0)
     jsbundling-rails (1.1.2)
       railties (>= 6.0.0)
+    jsonapi-renderer (0.2.2)
     jwt (2.7.1)
     launchy (2.5.0)
       addressable (~> 2.7)
@@ -264,7 +272,6 @@ GEM
     method_source (1.0.0)
     mini_magick (4.11.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.2)
     minitest (5.18.1)
     multi_xml (0.6.0)
     multipart-post (2.3.0)
@@ -280,9 +287,6 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     nio4r (2.5.9)
-    nokogiri (1.15.2)
-      mini_portile2 (~> 2.8.2)
-      racc (~> 1.4)
     nokogiri (1.15.2-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.15.2-x86_64-darwin)
@@ -319,6 +323,8 @@ GEM
     rack (2.2.7)
     rack-attack (6.6.1)
       rack (>= 1.0, < 3)
+    rack-cors (2.0.1)
+      rack (>= 2.0.0)
     rack-test (2.1.0)
       rack (>= 1.3)
     rails (7.0.6)
@@ -478,7 +484,6 @@ PLATFORMS
   arm64-darwin-20
   arm64-darwin-21
   arm64-darwin-22
-  ruby
   x86_64-darwin-18
   x86_64-darwin-19
   x86_64-darwin-20
@@ -487,6 +492,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  active_model_serializers
   after_party
   amazing_print
   annotate
@@ -530,6 +536,7 @@ DEPENDENCIES
   puma (= 6.3.0)
   pundit
   rack-attack
+  rack-cors
   rails (~> 7.0.5)
   rails-controller-testing
   rake

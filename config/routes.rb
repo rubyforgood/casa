@@ -176,4 +176,13 @@ Rails.application.routes.draw do
   end
 
   get "/error", to: "error#index"
+
+  namespace :api do
+    namespace :v1 do
+      namespace :users do
+        post 'sign_in', to: 'sessions#create'
+        #get 'sign_out', to: 'sessions#destroy'
+      end
+    end
+  end
 end
