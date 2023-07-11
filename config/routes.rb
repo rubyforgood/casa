@@ -180,8 +180,8 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       namespace :users do
-        post 'sign_in', to: 'sessions#create'
-        #get 'sign_out', to: 'sessions#destroy'
+        post "sign_in", to: "sessions#create"
+        # get 'sign_out', to: 'sessions#destroy'
       end
     end
   end
