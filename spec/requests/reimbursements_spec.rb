@@ -40,4 +40,15 @@ RSpec.describe ReimbursementsController, type: :request do
       expect(case_contact.reload.reimbursement_complete).to be_truthy
     end
   end
+
+  describe "PATCH /mark_as_needs_review" do
+    before { case_contact.update(reimbursement_complete: true) }
+
+    it "changes reimbursement status to needs review" do
+      patch reimbursement_mark_as_needs_review_url(case_contact, case_contact: {reimbursement_complete: false})
+      expect(response).to redirect_to(reimbursements_path)
+      expect(response).to have_http_status(:redirect)
+      expect(case_contact.reload.reimbursement_complete).to be_falsey
+    end
+  end
 end
