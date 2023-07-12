@@ -39,7 +39,7 @@
         <% if Pundit.policy(current_user, contact).update? %>
           <%= render "case_contacts/followup", contact: contact, followup: contact.requested_followup %>
           <div class="mr-2">
-            <%= link_to edit_case_contact_path(contact), class: "text-danger h5" do %>
+            <%= link_to edit_case_contact_path(contact), class: "text-danger" do %>
               <i class="lni lni-pencil-alt"></i> Edit
             <% end %>
           </div>
