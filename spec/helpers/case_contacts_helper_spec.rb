@@ -84,4 +84,30 @@ RSpec.describe CaseContactsHelper do
       expect(helper.set_contact_made_false(case_contact)).to eq(false)
     end
   end
+
+  describe "#show_volunteer_reimbursement" do
+    before(:each) do
+      @casa_cases = []
+      @casa_cases << create(:casa_case)
+      @casa_org = @casa_cases[0].casa_org
+      @current_user = create(:volunteer, casa_org: @casa_org)
+    end
+
+    it "returns true if allow_reimbursement is true" do
+      create(:case_assignment, casa_case: @casa_cases[0], volunteer: @current_user)
+      allow(helper).to receive(:current_user).and_return(@current_user)
+      expect(helper.show_volunteer_reimbursement(@casa_cases)).to eq(true)
+    end
+
+    it "returns false if allow_reimbursement is false" do
+      create(:case_assignment, :disallow_reimbursement, casa_case: @casa_cases[0], volunteer: @current_user)
+      allow(helper).to receive(:current_user).and_return(@current_user)
+      expect(helper.show_volunteer_reimbursement(@casa_cases)).to eq(false)
+    end
+
+    it "returns false if no case_assigmnents are found" do
+      allow(helper).to receive(:current_user).and_return(@current_user)
+      expect(helper.show_volunteer_reimbursement(@casa_cases)).to eq(false)
+    end
+  end
 end
