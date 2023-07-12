@@ -51,7 +51,6 @@
               <th>Status</th>
               <th>Transition Aged Youth</th>
               <th>Assigned To</th>
-              <th>Actions</th>
               <th></th>
             </tr>
           </thead>
@@ -76,10 +75,6 @@
                   <% else %>
                     Case was deactivated on: <%= I18n.l(casa_case.updated_at, format: :standard, default: nil) %>
                   <% end %>
-                </td>
-                <td class="min-width">
-                  <i class="lni lni-search-alt text-active"></i>
-                  <%= link_to "Detail View", casa_case_path(casa_case) %>
                 </td>
                 <td>
                   <i class="lni lni-pencil-alt text-danger"></i>

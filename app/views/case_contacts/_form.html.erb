@@ -114,7 +114,7 @@
       </div>
     </div>
 
-    <% if current_organization.show_driving_reimbursement %>
+    <% if current_organization.show_driving_reimbursement && show_volunteer_reimbursement(casa_cases) %>
       <div class="field want-driving-reimbursement form-group">
         <h5 class="mb-3"><%= form.label :want_driving_reimbursement, "b. Want Driving Reimbursement" %></h5>
         <div class="form-check radio-style mb-20">

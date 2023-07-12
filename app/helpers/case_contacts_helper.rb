@@ -37,6 +37,17 @@ module CaseContactsHelper
     ].sample
   end
 
+  def show_volunteer_reimbursement(casa_cases)
+    if current_user.role == "Volunteer"
+      show = casa_cases.map do |casa_case|
+        casa_case.case_assignments.where(volunteer_id: current_user).first&.allow_reimbursement == true
+      end
+      show.any?
+    else
+      true
+    end
+  end
+
   private
 
   def send_home
