@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe ReimbursementsController, type: :request do
   let(:admin) { create(:casa_admin) }
   let(:casa_org) { admin.casa_org }
+  let(:case_contact) { create(:case_contact) }
 
   before { sign_in(admin) }
 
@@ -28,6 +29,15 @@ RSpec.describe ReimbursementsController, type: :request do
 
       expect(ReimbursementPolicy::Scope).to have_received(:new)
         .with(admin, CaseContact.joins(:casa_case))
+    end
+  end
+
+  describe "PATCH /mark_as_complete" do
+    it "changes reimbursement status to complete" do
+      patch reimbursement_mark_as_complete_url(case_contact, case_contact: {reimbursement_complete: true})
+      expect(response).to redirect_to(reimbursements_path)
+      expect(response).to have_http_status(:redirect)
+      expect(case_contact.reload.reimbursement_complete).to be_truthy
     end
   end
 end
