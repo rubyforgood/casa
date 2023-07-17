@@ -2,8 +2,7 @@
   <div class="navbar-logo">
     <% if current_organization&.logo&.attached? %>
       <%= link_to image_tag(current_organization.logo,
-                            width: 200,
-                            height: 171,
+                            style: 'max-width: 200px;',
                             alt: "CASA Logo"),
                   "/" %>
     <% else %>
