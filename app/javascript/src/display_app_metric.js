@@ -17,11 +17,12 @@ $(document).ready(function () {
       createChart(dataset)
     },
     error: function (xhr, status, error) {
-      const errorMessage = $('<p>', {
-        class: 'error-message',
-        text: getErrorMessage(xhr)
-      })
-      $('#chart-container').append(errorMessage)
+      console.error('Failed to fetch data for case contact entry times chart display')
+      console.error(error)
+      $('#chart-error-message').append(`
+        <div class="alert alert-danger" role="alert">
+           Failed to display metric chart. Check the console for error details.
+        </div>`)
       $('.text-center').hide()
     }
   })
