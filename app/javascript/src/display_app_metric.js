@@ -128,14 +128,3 @@ function getTooltipLabelCallback () {
     return datum.count + ' case contacts created on ' + days[datum.y] + ' at ' + datum.x + ':00'
   }
 }
-
-function getErrorMessage (xhr) {
-  // Get the specific error message based on status codes or response from server
-  if (xhr.status === 404) {
-    return 'The requested resource was not found'
-  } else if (xhr.status === 500) {
-    return 'Internal server error occurred.'
-  } else {
-    return 'An unknown error occurred.'
-  }
-}
