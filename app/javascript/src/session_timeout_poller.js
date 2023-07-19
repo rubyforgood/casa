@@ -1,8 +1,7 @@
-const deviseTimeoutInMinutes = 180
-// const timeoutDuration = 180
-const twoMinuteWarning = deviseTimeoutInMinutes - 2
+const timeout = 180
+const twoMinuteWarning = timeout - 2
 const totalTimerAmount = twoMinuteWarning * 60 * 1000
-const deviseTimeoutInMilliseconds = deviseTimeoutInMinutes * 60 * 1000
+const deviseTimeoutInMilliseconds = timeout * 60 * 1000
 const startTime = new Date().getTime()
 let lastTime = new Date().getTime()
 let currentTime
