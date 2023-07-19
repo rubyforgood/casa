@@ -19,8 +19,8 @@
  
   
   <script> 
-    var timeout = <%= @timeout_duration %>
-    console.log("here", timeout) 
+    window.timeout = <%= @timeout_duration %>
+ 
   </script>
   
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
