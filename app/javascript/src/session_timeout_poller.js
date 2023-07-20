@@ -4,10 +4,8 @@ const totalTimerAmount = twoMinuteWarning * 60 * 1000
 const deviseTimeoutInMilliseconds = timeout * 60 * 1000
 const startTime = new Date().getTime()
 let lastTime = new Date().getTime()
-
 let currentTime
 let timeElapsed
-
 
 function warningBoxAndReload () {
   window.alert('Warning: You will be logged off in 2 minutes due to inactivity.')
