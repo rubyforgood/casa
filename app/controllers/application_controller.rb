@@ -103,6 +103,8 @@ class ApplicationController < ActionController::Base
   end
 
   def set_timeout_duration
+    return unless current_user
+
     @timeout_duration = current_user.timeout_in
   end
 
