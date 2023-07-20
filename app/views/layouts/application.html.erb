@@ -16,7 +16,7 @@
 
   <%= render 'shared/favicons' %>
   <script>
-    window.timeout = <%= @timeout_duration %>
+    window.timeout = <%= @timeout_duration.to_json %>
   </script>
 
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
