@@ -1,4 +1,4 @@
-const timeoutInMinutes = window.timeout || 180;
+const timeout = window.timeout || 180
 const twoMinuteWarning = timeout - 2
 const totalTimerAmount = twoMinuteWarning * 60 * 1000
 const deviseTimeoutInMilliseconds = timeout * 60 * 1000
