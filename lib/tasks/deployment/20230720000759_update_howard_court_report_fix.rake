@@ -15,5 +15,4 @@ namespace :after_party do
     AfterParty::TaskRecord
         .create version: AfterParty::TaskRecorder.new(__FILE__).timestamp
   end
-  end
 end
