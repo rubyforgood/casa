@@ -69,7 +69,7 @@ function getDatasetFromCounts (counts) {
 function createChart (chartElement, dataset) {
   const ctx = chartElement.getContext('2d')
 
-  new Chart(ctx, {
+  return new Chart(ctx, {
     type: 'bubble',
     data: {
       datasets: [
