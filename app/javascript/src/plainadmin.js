@@ -28,7 +28,7 @@
       }
     })
   }
-  overlay.addEventListener('click', () => {
+  overlay?.addEventListener('click', () => {
     sidebarNavWrapper.classList.remove('active')
     overlay.classList.remove('active')
     mainWrapper.classList.remove('active')
