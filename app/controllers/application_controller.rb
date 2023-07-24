@@ -126,3 +126,4 @@ class ApplicationController < ActionController::Base
     notice
   end
 end
+ 
