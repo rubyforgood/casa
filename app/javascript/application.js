@@ -1,5 +1,4 @@
 /* global window */
-
 import './jQueryGlobalizer.js'
 import 'bootstrap'
 import 'bootstrap-select'
@@ -7,12 +6,9 @@ import './sweet-alert-confirm.js'
 
 require('datatables.net-dt')(null, window.jQuery) // First parameter is the global object. Defaults to window if null
 require('select2')(window.jQuery)
-
 require('@rails/ujs').start()
 require('@rails/activestorage').start()
-
 require('bootstrap-datepicker')
-
 require('./src/add_additional_expense')
 require('./src/add_to_calendar_button')
 require('./src/case_contact')
