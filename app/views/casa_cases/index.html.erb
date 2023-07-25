@@ -3,9 +3,9 @@
     <div class="col-md-6">
       <div class="title mb-30">
         <% if current_user.volunteer? %>
-          <h2>My <%= "Case".pluralize(@casa_cases.count) %></h2>
+          <h1>My <%= "Case".pluralize(@casa_cases.count) %></h1>
         <% else %>
-          <h2><%= "Case".pluralize(@casa_cases.count) %></h2>
+          <h1><%= "Case".pluralize(@casa_cases.count) %></h1>
         <% end %>
       </div>
     </div>
