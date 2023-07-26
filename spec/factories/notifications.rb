@@ -54,7 +54,7 @@ FactoryBot.define do
       type { "EmancipationChecklistReminderNotification" }
       params {
         {
-          casa_case: create(:casa_case, :with_one_case_assignment),
+          casa_case: create(:casa_case),
           created_by: creator
         }
       }
