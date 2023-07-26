@@ -3,7 +3,7 @@ FactoryBot.define do
     association :recipient, factory: :volunteer
     recipient_type { "User" }
     type { "Notification" }
-
+    
     trait :followup_with_note do
       transient do
         creator { build(:user) }
@@ -46,5 +46,25 @@ FactoryBot.define do
       }
       initialize_with { new(params: params) }
     end
+
+    trait :emancipation_checklist_reminder do
+      transient do
+        creator { create(:user) }
+      end
+      type { "EmancipationChecklistReminderNotification" }
+      params {
+        {
+          casa_case: create(:casa_case, :with_one_case_assignment),
+          created_by: creator
+        }
+      }
+      initialize_with { new(params: params) }
+    end
+
+    # trait :youth_birthday do
+    #   transient do
+    #     creator { build(:user) }
+    #   end
+    # end
   end
 end
