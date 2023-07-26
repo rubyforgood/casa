@@ -7,6 +7,7 @@ RSpec.describe NotificationComponent, type: :component do
   let(:followup_no_note) { create(:notification, :followup_without_note) }
   let(:followup_read) { create(:notification, :followup_read) }
   let(:emancipation_checklist_reminder) { create(:notification, :emancipation_checklist_reminder) }
+  let(:youth_birthday) { create(:notification, :youth_birthday) }
 
 
   it "renders a followup with note" do
@@ -49,5 +50,13 @@ RSpec.describe NotificationComponent, type: :component do
     render_inline(component)
     expect(page).to have_text("Emancipation Checklist Reminder")
     expect(page).to have_text(emancipation_checklist_reminder.to_notification.message)
+  end
+
+  it "renders a youth birthday notification" do
+    component = described_class.new(notification: youth_birthday.to_notification)
+
+    render_inline(component)
+    expect(page).to have_text("Youth Birthday")
+    expect(page).to have_text(youth_birthday.to_notification.message)
   end
 end
