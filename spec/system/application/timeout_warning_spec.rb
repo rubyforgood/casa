@@ -12,9 +12,13 @@ RSpec.describe "/*", type: :system do
       parsed_page = Nokogiri::HTML(page.html)
       expect(parsed_page.at('script').text.strip).to include(user.timeout_in.in_seconds.to_s)
     end
-  end
 
-  #     travel_to(1.day.ago) do
-  #       visit time_travel_verification_path
-  #       expect(page).to have_content('WOAH Time Travel!')
+    it "warns the user two mintues before logout" do
+      visit "/"
+      travel_to(user.timeout_in.from_now - 2.minutes - 1.seconds) do
+        sleep 2
+        page.accept_alert
+      end
+    end
+  end
 end

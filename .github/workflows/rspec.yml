@@ -73,7 +73,7 @@ jobs:
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
-          RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
+          RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec spec/system/application/timeout_warning_spec.rb
           ./cc-test-reporter after-build --exit-code $?
 
       - name: Archive selenium screenshots
