@@ -61,10 +61,18 @@ FactoryBot.define do
       initialize_with { new(params: params) }
     end
 
-    # trait :youth_birthday do
-    #   transient do
-    #     creator { build(:user) }
-    #   end
-    # end
+    trait :youth_birthday do
+      transient do
+        creator { create(:user) }
+      end
+      type { "YouthBirthdayNotification" }
+      params {
+        {
+          casa_case: create(:casa_case),
+          created_by: creator
+        }
+      }
+      initialize_with { new(params: params) }
+    end
   end
 end
