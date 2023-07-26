@@ -9,7 +9,6 @@ RSpec.describe NotificationComponent, type: :component do
   let(:emancipation_checklist_reminder) { create(:notification, :emancipation_checklist_reminder) }
   let(:youth_birthday) { create(:notification, :youth_birthday) }
 
-
   it "renders a followup with note" do
     component = described_class.new(notification: followup_with_note.to_notification)
 

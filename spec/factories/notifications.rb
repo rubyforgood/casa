@@ -3,7 +3,7 @@ FactoryBot.define do
     association :recipient, factory: :volunteer
     recipient_type { "User" }
     type { "Notification" }
-    
+
     trait :followup_with_note do
       transient do
         creator { build(:user) }
