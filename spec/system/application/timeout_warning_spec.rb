@@ -13,12 +13,16 @@ RSpec.describe "/*", type: :system do
       expect(parsed_page.at('script').text.strip).to include(user.timeout_in.in_seconds.to_s)
     end
 
-    it "warns the user two mintues before logout" do
+    it "warns the user two mintues before logout", js: true do
       visit "/"
       travel_to(user.timeout_in.from_now - 2.minutes - 1.seconds) do
         sleep 2
+        Capybara.using_wait_time(5) do
+          expect(page).to have_content('timeout')
+        end
         page.accept_alert
+        #check that there is an alert
       end
     end
-  end
+   end
 end
