@@ -8,6 +8,8 @@ RSpec.describe "notifications/index", type: :system do
   let(:volunteer) { build(:volunteer) }
   let(:case_contact) { create(:case_contact, creator: volunteer) }
   let(:casa_case) { case_contact.casa_case }
+  let(:next_month) {Time.now.month == 12 ? 1 : Time.now.month + 1}
+  let(:year) {Time.now.month == 12 ? Time.now.year + 1 : Time.now.year}
 
   before { casa_case.assigned_volunteers << volunteer }
 
@@ -141,8 +143,6 @@ RSpec.describe "notifications/index", type: :system do
   context "EmancipationChecklistReminder" do
     context "on the first of the month with a transition-aged youth" do
       before do
-        next_month = Time.now.month == 12 ? 1 : Time.now.month + 1
-        year = Time.now.month == 12 ? Time.now.year + 1 : Time.now.year
         travel_to Time.zone.local(year, next_month, 1) do
           sign_in volunteer
           Rake::Task.clear
@@ -161,8 +161,6 @@ RSpec.describe "notifications/index", type: :system do
 
     context "not on the first of the month" do
       before do
-        next_month = Time.now.month == 12 ? 1 : Time.now.month + 1
-        year = Time.now.month == 12 ? Time.now.year + 1 : Time.now.year
         travel_to Time.zone.local(year, next_month, 2) do
           sign_in volunteer
           Rake::Task.clear
@@ -185,8 +183,6 @@ RSpec.describe "notifications/index", type: :system do
       before { casa_case.assigned_volunteers << volunteer }
       
       before do
-        next_month = Time.now.month == 12 ? 1 : Time.now.month + 1
-        year = Time.now.month == 12 ? Time.now.year + 1 : Time.now.year
         travel_to Time.zone.local(year, next_month, 1) do
           sign_in volunteer
           Rake::Task.clear
@@ -206,8 +202,6 @@ RSpec.describe "notifications/index", type: :system do
 
   context "YouthBirthdayNotification" do
     context "when youth has birthday in the next calendar month" do
-      let(:next_month) {Time.now.month == 12 ? 1 : Time.now.month + 1}
-      let(:year) {Time.now.month == 12 ? Time.now.year + 1 : Time.now.year}
       let(:the_15th_of_next_month) {Time.zone.local(year, next_month, 15)}
       let(:youth_birthday) { the_15th_of_next_month - 16.years + 1.month }
       let(:casa_case) {build(:casa_case, birth_month_year_youth: youth_birthday)}
@@ -233,8 +227,6 @@ RSpec.describe "notifications/index", type: :system do
     end
 
     context "the youth has a birthday not in the next month" do
-      let(:next_month) {Time.now.month == 12 ? 1 : Time.now.month + 1}
-      let(:year) {Time.now.month == 12 ? Time.now.year + 1 : Time.now.year}
       let(:the_15th_of_next_month) {Time.zone.local(year, next_month, 15)}
       let(:youth_birthday) { the_15th_of_next_month - 16.years + 2.month }
       let(:casa_case) {build(:casa_case, birth_month_year_youth: youth_birthday)}
