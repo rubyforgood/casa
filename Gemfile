@@ -78,7 +78,6 @@ group :test do
   gem "rake"
   gem "selenium-webdriver"
   gem "simplecov"
-  gem "webdrivers" # easy installation and use of web drivers to run system tests with browsers
 end
 
 # gem "pdf-reader", "~> 2.9"
