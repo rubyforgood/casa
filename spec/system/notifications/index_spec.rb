@@ -1,6 +1,7 @@
 require "rails_helper"
 require "rake"
 Rake.application.rake_require "tasks/emancipation_checklist_reminder"
+Rake.application.rake_require "tasks/youth_birthday_reminder"
 
 RSpec.describe "notifications/index", type: :system do
   let(:admin) { create(:casa_admin) }
@@ -199,6 +200,62 @@ RSpec.describe "notifications/index", type: :system do
         expect(page).to_not have_content("Emancipation Checklist Reminder")
         expect(page).to_not have_content("Your case #{casa_case.case_number} is a transition aged youth. We want to make sure that along the way, we’re preparing our youth for emancipation. Make sure to check the emancipation checklist.")
         expect(page).to have_text(I18n.t(".notifications.index.no_notifications"))
+      end
+    end
+  end
+
+  context "YouthBirthdayNotification" do
+    context "when youth has birthday in the next calendar month" do
+      let(:next_month) {Time.now.month == 12 ? 1 : Time.now.month + 1}
+      let(:year) {Time.now.month == 12 ? Time.now.year + 1 : Time.now.year}
+      let(:the_15th_of_next_month) {Time.zone.local(year, next_month, 15)}
+      let(:youth_birthday) { the_15th_of_next_month - 16.years + 1.month }
+      let(:casa_case) {build(:casa_case, birth_month_year_youth: youth_birthday)}
+      let(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
+      before { casa_case.assigned_volunteers << volunteer }
+
+      before do
+        travel_to the_15th_of_next_month do
+          create(:case_assignment, casa_case: casa_case, volunteer: volunteer)
+          sign_in volunteer
+          Rake::Task.clear
+          Casa::Application.load_tasks
+          Rake::Task["youth_birthday_reminder"].invoke
+          visit notifications_path
+        end
+      end
+
+      it 'should display a notification on the notifications page' do
+        expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
+        expect(page).to have_content("Youth Birthday Notification")
+        expect(page).to have_content("Your youth, case number: #{casa_case.case_number} has a birthday next month.")
+      end
+    end
+
+    context "the youth has a birthday not in the next month" do
+      let(:next_month) {Time.now.month == 12 ? 1 : Time.now.month + 1}
+      let(:year) {Time.now.month == 12 ? Time.now.year + 1 : Time.now.year}
+      let(:the_15th_of_next_month) {Time.zone.local(year, next_month, 15)}
+      let(:youth_birthday) { the_15th_of_next_month - 16.years + 2.month }
+      let(:casa_case) {build(:casa_case, birth_month_year_youth: youth_birthday)}
+      let(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
+      before { casa_case.assigned_volunteers << volunteer }
+
+      before do
+        travel_to the_15th_of_next_month do
+          create(:case_assignment, casa_case: casa_case, volunteer: volunteer)
+          sign_in volunteer
+          Rake::Task.clear
+          Casa::Application.load_tasks
+          Rake::Task["youth_birthday_reminder"].invoke
+          visit notifications_path
+        end
+      end
+
+      it 'should not send a notification' do
+        expect(page).to have_text(I18n.t(".notifications.index.no_notifications"))
+        expect(page).to_not have_content("Youth Birthday Notification")
+        expect(page).to_not have_content("Your youth, case number: #{casa_case.case_number} has a birthday next month.")
       end
     end
   end
