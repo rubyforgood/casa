@@ -31,8 +31,6 @@ RSpec.describe SidebarHelper do
 
       context "when accessing an index route" do
         it "renders sidebar menu item as an active link" do
-          # allow(helper).to receive(:action_name).and_return("index")
-          # allow(helper).to receive(:current_page?).with({controller: "supervisors", action: "index"}).and_return(true)
           helper.request.path = "/supervisors"
 
           menu_item = helper.menu_item(label: "Supervisors", path: supervisors_path, visible: true)
