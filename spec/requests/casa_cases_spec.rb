@@ -568,6 +568,7 @@ RSpec.describe "/casa_cases", type: :request do
       end
 
       it "shows only duties from the user" do
+        FeatureFlagService.enable!("show_other_duties")
         mine = build(:other_duty)
         other = build(:other_duty)
 
