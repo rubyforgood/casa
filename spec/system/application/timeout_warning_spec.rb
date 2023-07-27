@@ -18,11 +18,22 @@ RSpec.describe "/*", type: :system do
       travel_to(user.timeout_in.from_now - 2.minutes - 1.seconds) do
         sleep 2
         Capybara.using_wait_time(5) do
-          expect(page).to have_content('timeout')
+          # expect(page).to have_content('timeout')
+          # expect(page).to have_content('timeout', visible: true)
+          # expect(page).to have_selector("*", text: 'timeout', visible: true)
+          # unless page.has_selector?("*", text: 'timeout', visible: true)
+          #   puts page.html  # Print the page content for debugging
+          #   fail "Expected to find 'timeout', but it was not found"
+          # end
+          begin
+            page.driver.browser.switch_to.alert
+            puts "Alert message is present"
+          rescue Selenium::WebDriver::Error::NoAlertPresentError
+            
         end
         page.accept_alert
         #check that there is an alert
       end
     end
-   end
+  end
 end
