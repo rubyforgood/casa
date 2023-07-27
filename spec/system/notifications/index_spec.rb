@@ -8,8 +8,8 @@ RSpec.describe "notifications/index", type: :system do
   let(:volunteer) { build(:volunteer) }
   let(:case_contact) { create(:case_contact, creator: volunteer) }
   let(:casa_case) { case_contact.casa_case }
-  let(:next_month) {Time.now.month == 12 ? 1 : Time.now.month + 1}
-  let(:year) {Time.now.month == 12 ? Time.now.year + 1 : Time.now.year}
+  let(:next_month) { Time.now.month == 12 ? 1 : Time.now.month + 1 }
+  let(:year) { Time.now.month == 12 ? Time.now.year + 1 : Time.now.year }
 
   before { casa_case.assigned_volunteers << volunteer }
 
@@ -177,11 +177,11 @@ RSpec.describe "notifications/index", type: :system do
       end
     end
 
-    context "youth is not of transition age" do 
-      let(:casa_case) {build(:casa_case, :pre_transition)}
+    context "youth is not of transition age" do
+      let(:casa_case) { build(:casa_case, :pre_transition) }
       let(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
       before { casa_case.assigned_volunteers << volunteer }
-      
+
       before do
         travel_to Time.zone.local(year, next_month, 1) do
           sign_in volunteer
@@ -202,9 +202,9 @@ RSpec.describe "notifications/index", type: :system do
 
   context "YouthBirthdayNotification" do
     context "when youth has birthday in the next calendar month" do
-      let(:the_15th_of_next_month) {Time.zone.local(year, next_month, 15)}
+      let(:the_15th_of_next_month) { Time.zone.local(year, next_month, 15) }
       let(:youth_birthday) { the_15th_of_next_month - 16.years + 1.month }
-      let(:casa_case) {build(:casa_case, birth_month_year_youth: youth_birthday)}
+      let(:casa_case) { build(:casa_case, birth_month_year_youth: youth_birthday) }
       let(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
       before { casa_case.assigned_volunteers << volunteer }
 
@@ -219,7 +219,7 @@ RSpec.describe "notifications/index", type: :system do
         end
       end
 
-      it 'should display a notification on the notifications page' do
+      it "should display a notification on the notifications page" do
         expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
         expect(page).to have_content("Youth Birthday Notification")
         expect(page).to have_content("Your youth, case number: #{casa_case.case_number} has a birthday next month.")
@@ -227,9 +227,9 @@ RSpec.describe "notifications/index", type: :system do
     end
 
     context "the youth has a birthday not in the next month" do
-      let(:the_15th_of_next_month) {Time.zone.local(year, next_month, 15)}
+      let(:the_15th_of_next_month) { Time.zone.local(year, next_month, 15) }
       let(:youth_birthday) { the_15th_of_next_month - 16.years + 2.month }
-      let(:casa_case) {build(:casa_case, birth_month_year_youth: youth_birthday)}
+      let(:casa_case) { build(:casa_case, birth_month_year_youth: youth_birthday) }
       let(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
       before { casa_case.assigned_volunteers << volunteer }
 
@@ -244,7 +244,7 @@ RSpec.describe "notifications/index", type: :system do
         end
       end
 
-      it 'should not send a notification' do
+      it "should not send a notification" do
         expect(page).to have_text(I18n.t(".notifications.index.no_notifications"))
         expect(page).to_not have_content("Youth Birthday Notification")
         expect(page).to_not have_content("Your youth, case number: #{casa_case.case_number} has a birthday next month.")
