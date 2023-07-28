@@ -3,8 +3,6 @@ require "rails_helper"
 RSpec.describe "casa_org/edit", type: :view do
   let(:organization) { create :casa_org }
   let(:admin) { build_stubbed(:all_casa_admin) }
-  let(:contact_type_groups) { [] }
-  let(:contact_types) { [] }
 
   before do
     allow(view).to receive(:current_organization).and_return(organization)
@@ -13,8 +11,6 @@ RSpec.describe "casa_org/edit", type: :view do
     assign(:hearing_types, [])
     assign(:judges, [])
     assign(:sent_emails, [])
-
-
 
     sign_in admin
 
