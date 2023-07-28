@@ -201,6 +201,12 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 
 If additional work arises from your pull request that is outside the scope of the issue it resolves, please open a new issue.
 
+**Stimulus**
+
+[Issue 5016](https://github.com/rubyforgood/casa/issues/5016) started a refactor of Javascript to use 
+[Hotwire's Stimulus](https://stimulus.hotwired.dev/handbook/origin). To see if it's working for you, go to 
+`/casa_cases` and see **Stimulus is working!** in your browser console.
+
 **Post-deployment tasks**
 
 We are using [After Party](https://github.com/theSteveMitchell/after_party) to
