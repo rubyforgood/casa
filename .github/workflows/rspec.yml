@@ -65,10 +65,10 @@ jobs:
           CASA_DATABASE_PASSWORD: password
           POSTGRES_HOST_AUTH_METHOD: trust
         run: |
-          for i in {1..10}
+          for i in {1..50}
           do
             echo "Run $i"
-            RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec spec/system/casa_org/edit_spec.rb:83
+            RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec spec/system/casa_org/edit_spec.rb:
           done
       - name: Archive selenium screenshots
         if: ${{ failure() }}
