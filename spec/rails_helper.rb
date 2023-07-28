@@ -7,6 +7,7 @@ require "rspec/rails"
 require "pundit/rspec"
 require "view_component/test_helpers"
 require "capybara/rspec"
+require "action_text/system_test_helper"
 
 # Require all support folder files
 Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |f| require f }
@@ -36,6 +37,7 @@ RSpec.configure do |config|
   config.include ViewComponent::TestHelpers, type: :component
   config.include ViewComponent::SystemTestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
+  config.include ActionText::SystemTestHelper, type: :system
 
   config.after do
     Warden.test_reset!

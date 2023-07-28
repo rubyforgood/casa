@@ -158,6 +158,15 @@
                 <% end %>
               </li>
             <% end %>
+
+            <% if policy(:application).see_banner_page? %>
+              <li>
+                <%= link_to banners_path, class: "#{active_class(banners_path)}" do %>
+                  <i class="lni lni-flag mr-10"></i>
+                  Banners
+                <% end %>
+              </li>
+            <% end %>
           </ul>
         </li>
         <li>

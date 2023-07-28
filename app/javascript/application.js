@@ -34,3 +34,5 @@ require('./src/session_timeout_poller.js')
 require('./src/display_app_metric.js')
 require('./src/casa_org')
 require('./src/sms_reactivation_toggle')
+import "trix"
+import "@rails/actiontext"
