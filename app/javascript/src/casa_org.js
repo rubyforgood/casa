@@ -43,5 +43,5 @@ $('document').ready(() => {
   }
 
   ($('.accordionTwilio').on('click', twilioToggle))
-  twilioToggle();
+  twilioToggle()
 })
