@@ -8,10 +8,10 @@ RSpec.describe "casa_org/edit", type: :view do
     assign(:judges, [])
     assign(:sent_emails, [])
 
-    sign_in build_stubbed(:all_casa_admin)
+    sign_in build_stubbed(:casa_admin)
   end
 
-  it "renders and does not show download prompt if new org" do
+  it "does not show download prompt with no custom template" do
     organization = create :casa_org
     allow(view).to receive(:current_organization).and_return(organization)
 
