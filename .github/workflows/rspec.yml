@@ -68,7 +68,7 @@ jobs:
           for i in {1..50}
           do
             echo "Run $i"
-            RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec spec/system/casa_org/edit_spec.rb
+            RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec spec/system/casa_org/edit_spec.rb:83
           done
       - name: Archive selenium screenshots
         if: ${{ failure() }}
