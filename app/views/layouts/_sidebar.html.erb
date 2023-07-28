@@ -69,11 +69,29 @@
           </li>
         <% end %>
         <% if current_user.volunteer? %>
-          <li class="<%= active_class(case_contacts_path) %> nav-item">
-            <%= link_to case_contacts_path do %>
-              <i class="lni lni-users mr-10"></i>
-              Case Contacts
-            <% end %>
+          <li class="nav-item nav-item-has-children">
+            <a
+              href="#0"
+              class=""
+              data-bs-toggle="collapse"
+              data-bs-target="#ddmenu_case_contacts"
+              aria-controls="ddmenu_case_contacts"
+              aria-expanded="true"
+              aria-label="Toggle navigation">
+                <span class="icon">
+                  <i class="lni lni-users mr-10"></i>
+                </span>
+              <span class="text">Case Contacts</span>
+            </a>
+            <ul id="ddmenu_case_contacts" class="collapse dropdown-nav">
+              <% current_user.case_contacts.map(&:casa_case).uniq.each do |casa_case| %>
+                <li>
+                  <%= link_to case_contacts_path(casa_case_id: casa_case.id) do %>
+                    <%= casa_case.case_number %>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
           </li>
           <li class="<%= active_class(volunteer_learning_hours_path(volunteer_id: current_user.id || 0)) %> nav-item">
             <%= link_to volunteer_learning_hours_path(volunteer_id: current_user.id || 0) do %>
