@@ -5,8 +5,6 @@ RSpec.describe "notifications/index", type: :system do
   let(:volunteer) { build(:volunteer) }
   let(:case_contact) { create(:case_contact, creator: volunteer) }
   let(:casa_case) { case_contact.casa_case }
-  let(:next_month) { Time.now.month == 12 ? 1 : Time.now.month + 1 }
-  let(:year) { Time.now.month == 12 ? Time.now.year + 1 : Time.now.year }
 
   before { casa_case.assigned_volunteers << volunteer }
 
@@ -144,10 +142,11 @@ RSpec.describe "notifications/index", type: :system do
       visit notifications_path
     end
 
-    it "should display a notification reminder that links to the emancipation checklist for each youth" do
+    it "should display a notification reminder that links to the emancipation checklist" do
+      notification_message = "Your case #{casa_case.case_number} is a transition aged youth. We want to make sure that along the way, we’re preparing our youth for emancipation. Make sure to check the emancipation checklist."
       expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
       expect(page).to have_content("Emancipation Checklist Reminder")
-      expect(page).to have_content("Your case #{casa_case.case_number} is a transition aged youth. We want to make sure that along the way, we’re preparing our youth for emancipation. Make sure to check the emancipation checklist.")
+      expect(page).to have_link(notification_message, href: casa_case_emancipation_path(casa_case.id))
     end
   end
 
@@ -159,9 +158,10 @@ RSpec.describe "notifications/index", type: :system do
     end
 
     it "should display a notification on the notifications page" do
+      notification_message = "Your youth, case number: #{casa_case.case_number} has a birthday next month."
       expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
       expect(page).to have_content("Youth Birthday Notification")
-      expect(page).to have_content("Your youth, case number: #{casa_case.case_number} has a birthday next month.")
+      expect(page).to have_link(notification_message, href: casa_case_path(casa_case.id))
     end
   end
 
