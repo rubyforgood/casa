@@ -1,5 +1,6 @@
 channels/application_cable/channel.rb
 channels/application_cable/connection.rb
+controllers/banners_controller.rb
 controllers/followup_reports_controller.rb
 controllers/mileage_reports_controller.rb
 controllers/placements_controller.rb
