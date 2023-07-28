@@ -1,5 +1,10 @@
 <%= form.label :case_court_orders, "Court Orders - Please check that you didn't enter any youth names" %>
-<div id="court-orders-list-container" data-resource="<%= resource %>">
+<template data-extended-nested-form-target="template">
+  <%= form.fields_for :case_court_orders, CaseCourtOrder.new, child_index: "NEW_RECORD" do |ff| %>
+    <%= render "shared/court_order_form", f: ff, casa_case: casa_case %>
+  <% end %>
+</template>
+<div id="court-orders-list-container" data-resource="<%= resource %>" data-court-order-list-target="list">
   <% if siblings_casa_cases && siblings_casa_cases.count >= 1 %>
     <div class="mb-4 mt-2">
       <% siblings_casa_cases_options = siblings_casa_cases.map { |scc| [scc.case_number, scc.id] } %>
@@ -17,24 +22,13 @@
     </div>
   <% end %>
   <%= form.fields_for :case_court_orders do |ff| %>
-    <div class="court-order-entry d-flex align-items-center select-style-1">
-      <div class="input-style-1">
-        <%= ff.text_area :text, class: 'input-style-1' %>
-      </div>
-      <div class="select-position">
-        <%=
-        ff.select :implementation_status,
-                    casa_case.decorate.court_order_select_options,
-                    {include_blank: 'Set Implementation Status'},
-                    {class: 'implementation-status'}
-        %>
-      </div>
-      <button type="button" class="remove-court-order-button align-self-center main-btn danger-btn btn-hover btn-sm">Delete</button>
-    </div>
+    <%= render "shared/court_order_form", f: ff, casa_case: casa_case %>
   <% end %>
+
+  <div data-extended-nested-form-target="target"></div>
 </div>
 <div class="add-container">
-  <button type="button" class="main-btn primary-btn btn-sm btn-hover" id="add-court-order-button">
+  <button type="button" class="main-btn primary-btn btn-sm btn-hover" data-action="extended-nested-form#add">
     <i class="lni lni-plus mr-10"></i> Add a court order
   </button>
 </div>

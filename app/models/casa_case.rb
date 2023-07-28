@@ -49,7 +49,7 @@ class CasaCase < ApplicationRecord
   accepts_nested_attributes_for :volunteers
 
   has_many :case_court_orders, -> { order "id asc" }, dependent: :destroy
-  accepts_nested_attributes_for :case_court_orders, reject_if: :all_blank
+  accepts_nested_attributes_for :case_court_orders, reject_if: :all_blank, allow_destroy: true
 
   enum court_report_status: {not_submitted: 0, submitted: 1, in_review: 2, completed: 3}, _prefix: :court_report
 

@@ -1,5 +1,6 @@
 <div class="card-style mb-30">
-  <%= form_with(model: court_date, url: [casa_case, court_date], local: true) do |form| %>
+  <%= form_with(model: court_date, url: [casa_case, court_date], local: true,
+    data: { controller: "extended-nested-form", nested_form_wrapper_selector_value: ".nested-form-wrapper" }) do |form| %>
     <%= render "/shared/error_messages", resource: court_date %>
     <div class="row align-items-center">
       <div class="col-md-6">
