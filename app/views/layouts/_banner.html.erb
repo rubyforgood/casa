@@ -1,8 +1,14 @@
 <% banner = current_organization.banners.active.first %>
-<% cookie_id = "banner_#{banner.id}" %>
-<% if !cookies["dismiss_#{cookie_id}"] %>
-  <div class="row bg-secondary-100 text-xl p-5" data-controller="dismiss" data-dismiss-target="element">
-    <%= banner.content %>
-    <a href="#" data-action="click->dismiss#dismiss" data-dismiss-id-param="<%= cookie_id %>">Dismiss</a>
-  </div>
+<% if banner %>
+  <% cookie_id = "banner_#{banner.id}" %>
+  <% if !cookies["dismiss_#{cookie_id}"] %>
+    <div class="bg-secondary-100 text-xl p-5 d-flex" data-controller="dismiss" data-dismiss-target="element">
+      <div class="">
+        <%= banner.content %>
+      </div>
+      <div class="ms-auto">
+        <a href="#" class="float-right" data-action="click->dismiss#dismiss" data-dismiss-id-param="<%= cookie_id %>">Dismiss</a>
+      </div>
+    </div>
+  <% end %>
 <% end %>
