@@ -4,18 +4,19 @@ about: 🔨What needs building? ✨
 labels: ["✨ New Feature", "Help Wanted"]
 ---
 
-**What type(s) of user does this feature affect?**
+## What type(s) of user does this feature affect?
  - volunteers?
  - supervisors?
  - admins?
  - all casa admins?
 
-**Description**
+## Description
 
 
-**Screenshots of current behavior, if any**  
+## Screenshots of current behavior, if any
 You can paste images on the clipboard here
 
+## How to access the QA site
 _Login Details:_  
 [Link to QA site](https://casa-qa.herokuapp.com/)  
 
