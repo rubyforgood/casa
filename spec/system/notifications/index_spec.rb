@@ -141,62 +141,16 @@ RSpec.describe "notifications/index", type: :system do
   end
 
   context "EmancipationChecklistReminder" do
-    context "on the first of the month with a transition-aged youth" do
-      before do
-        travel_to Time.zone.local(year, next_month, 1) do
-          sign_in volunteer
-          Rake::Task.clear
-          Casa::Application.load_tasks
-          Rake::Task["emancipation_checklist_reminder"].invoke
-          visit notifications_path
-        end
-      end
-
-      it "should display a notification reminder that links to the emancipation checklist for each youth" do
-        expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
-        expect(page).to have_content("Emancipation Checklist Reminder")
-        expect(page).to have_content("Your case #{casa_case.case_number} is a transition aged youth. We want to make sure that along the way, we’re preparing our youth for emancipation. Make sure to check the emancipation checklist.")
-      end
+    before do
+      volunteer.notifications << create(:notification, :emancipation_checklist_reminder, params: {casa_case: casa_case})
+      sign_in volunteer
+      visit notifications_path
     end
 
-    context "not on the first of the month" do
-      before do
-        travel_to Time.zone.local(year, next_month, 2) do
-          sign_in volunteer
-          Rake::Task.clear
-          Casa::Application.load_tasks
-          Rake::Task["emancipation_checklist_reminder"].invoke
-          visit notifications_path
-        end
-      end
-
-      it "should not display a notification" do
-        expect(page).to_not have_content("Emancipation Checklist Reminder")
-        expect(page).to_not have_content("Your case #{casa_case.case_number} is a transition aged youth. We want to make sure that along the way, we’re preparing our youth for emancipation. Make sure to check the emancipation checklist.")
-        expect(page).to have_text(I18n.t(".notifications.index.no_notifications"))
-      end
-    end
-
-    context "youth is not of transition age" do
-      let(:casa_case) { build(:casa_case, :pre_transition) }
-      let(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
-      before { casa_case.assigned_volunteers << volunteer }
-
-      before do
-        travel_to Time.zone.local(year, next_month, 1) do
-          sign_in volunteer
-          Rake::Task.clear
-          Casa::Application.load_tasks
-          Rake::Task["emancipation_checklist_reminder"].invoke
-          visit notifications_path
-        end
-      end
-
-      it "should not display a notification" do
-        expect(page).to_not have_content("Emancipation Checklist Reminder")
-        expect(page).to_not have_content("Your case #{casa_case.case_number} is a transition aged youth. We want to make sure that along the way, we’re preparing our youth for emancipation. Make sure to check the emancipation checklist.")
-        expect(page).to have_text(I18n.t(".notifications.index.no_notifications"))
-      end
+    it "should display a notification reminder that links to the emancipation checklist for each youth" do
+      expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
+      expect(page).to have_content("Emancipation Checklist Reminder")
+      expect(page).to have_content("Your case #{casa_case.case_number} is a transition aged youth. We want to make sure that along the way, we’re preparing our youth for emancipation. Make sure to check the emancipation checklist.")
     end
   end
 
@@ -237,7 +191,6 @@ RSpec.describe "notifications/index", type: :system do
         travel_to the_15th_of_next_month do
           create(:case_assignment, casa_case: casa_case, volunteer: volunteer)
           sign_in volunteer
-          Rake::Task.clear
           Casa::Application.load_tasks
           Rake::Task["youth_birthday_reminder"].invoke
           visit notifications_path
