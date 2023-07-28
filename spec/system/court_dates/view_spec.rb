@@ -15,7 +15,6 @@ RSpec.describe "court_dates/edit", type: :system do
     travel_to now
   end
 
-
   context "as a volunteer" do
     it "can download a report which focuses on the court date", js: true do
       volunteer.casa_cases = [casa_case]

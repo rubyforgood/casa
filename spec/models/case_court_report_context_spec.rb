@@ -47,13 +47,11 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
         context "when they specify a specific court date they are interested in looking at" do
           it "contains the selected court date in a human readable format" do
-            court_date_1 =  create(:court_date, date: 2.months.since)
+            court_date_1 = create(:court_date, date: 2.months.since)
             court_date_2 = create(:court_date, date: 5.months.since)
 
             casa_case.court_dates << court_date_1
             casa_case.court_dates << court_date_2
-
-
 
             court_report_context = build(:case_court_report_context, casa_case: casa_case, court_date: court_date_2)
             expect(court_report_context.context[:casa_case][:court_date]).to eq("June 1, 2021")

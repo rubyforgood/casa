@@ -95,7 +95,6 @@ class CourtDatesController < ApplicationController
     )
   end
 
-
   def generate_report_to_string(court_date, time_zone)
     casa_case = court_date.casa_case
     casa_case.casa_org.open_org_court_report_template do |template_docx_file|
