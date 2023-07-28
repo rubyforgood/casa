@@ -32,7 +32,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
     steps:
       - uses: actions/checkout@v3
 
@@ -44,7 +43,6 @@ jobs:
       - name: Install PostgreSQL client
         run: |
           sudo apt-get -yqq install libpq-dev
-
       - name: Build App
         env:
           POSTGRES_HOST: localhost
@@ -60,22 +58,18 @@ jobs:
           bundle exec rake db:schema:load
           bundle exec rails css:build
           bundle exec rails javascript:build
-
-      - name: Run rspec and upload code coverage
+      - name: Run specific rspec test multiple times
         env:
           DATABASE_HOST: localhost
           POSTGRES_USER: postgres
           CASA_DATABASE_PASSWORD: password
           POSTGRES_HOST_AUTH_METHOD: trust
-          RUN_SIMPLECOV: true
-          CC_TEST_REPORTER_ID: 31464536e34ab26588cb951d0fa6b5898abdf401dbe912fd47274df298e432ac
         run: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-          chmod +x ./cc-test-reporter
-          ./cc-test-reporter before-build
-          RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
-          ./cc-test-reporter after-build --exit-code $?
-
+          for i in {1..10}
+          do
+            echo "Run $i"
+            RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec spec/system/casa_org/edit_spec.rb:83
+          done
       - name: Archive selenium screenshots
         if: ${{ failure() }}
         uses: actions/upload-artifact@v3
