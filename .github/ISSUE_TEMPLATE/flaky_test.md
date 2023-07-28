@@ -7,8 +7,6 @@ labels: ["Type: Bug", "Help Wanted"]
 Flaky tests are defined as tests that return both passes and failures despite no changes to the code or the test itself
 Fix the test so it runs consistently.
 
-
-
 ### Environment
 ex: docker
 
