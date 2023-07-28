@@ -72,12 +72,11 @@ Rails.application.routes.draw do
     member do
       post :restore
     end
+    resources :case_contact_form, only: %i[show update], controller: "case_contact_forms"
     resources :followups, only: %i[create], controller: "case_contacts/followups", shallow: true do
       patch :resolve, on: :member
     end
   end
-
-  resources :case_contact_form
 
   resources :reports, only: %i[index]
   get :export_emails, to: "reports#export_emails"
