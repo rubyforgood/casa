@@ -28,7 +28,16 @@
     </div>
     <div class="input-style-1">
       <%= form.label :court_report_template, "Court report template" %>
-      <%= form.file_field :court_report_template, class: "form-control" %>
+      <div class="row">
+        <div class="col-sm">
+          <%= form.file_field :court_report_template, class: "form-control" %>
+        </div>
+         <div class="col-sm align-middle my-auto">
+          <% if current_organization.court_report_template.attached? %>
+            <%= link_to 'Download Current Template', rails_blob_path(current_organization.court_report_template, only_path: true), class: "btn btn-info"  %>
+          <% end %>
+        </div>
+      </div>
     </div>
     <hr>
     <h3 class="mb-2">Organization Features</h3>
