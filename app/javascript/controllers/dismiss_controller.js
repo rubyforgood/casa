@@ -4,7 +4,7 @@ export default class extends Controller {
   static targets = ['element']
 
   dismiss (event) {
-    event.preventDefault();
+    event.preventDefault()
 
     const { id } = event.params
     document.cookie = `dismiss_${id}=true`
