@@ -37,3 +37,6 @@
 @use "pages/reimbursements";
 @use "pages/supervisors";
 @use "pages/volunteers";
+
+@use 'trix/dist/trix.css';
+@use "actiontext";

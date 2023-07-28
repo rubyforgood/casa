@@ -4,5 +4,8 @@
 
 import { application } from './application'
 
+import DismissController from './dismiss_controller'
 import HelloController from './hello_controller'
+
+application.register('dismiss', DismissController)
 application.register('hello', HelloController)
