@@ -78,6 +78,7 @@ group :test do
   gem "rake"
   gem "selenium-webdriver"
   gem "simplecov"
+  gem "docx"
 end
 
 # gem "pdf-reader", "~> 2.9"

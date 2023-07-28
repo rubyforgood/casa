@@ -34,7 +34,7 @@
     <h3 class="mb-2">Organization Features</h3>
     <div class="form-check checkbox-style mb-20">
       <%= form.check_box :show_driving_reimbursement, class: 'form-check-input' %>
-      <%= form.label :show_driving_reimbursement, "Show driving reimbursement", class: 'form-check-label mb-2' %>
+      <%= form.label :show_driving_reimbursement, "Show driving reimbursement", required: true, class: 'form-check-label mb-2' %>
     </div>
     <div class="form-check checkbox-style mb-20">
       <%= form.check_box :twilio_enabled, class: 'form-check-input accordionTwilio' %>

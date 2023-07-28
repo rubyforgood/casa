@@ -10,6 +10,7 @@ class CaseCourtReportContext
     @volunteer = Volunteer.find(args[:volunteer_id]) if args[:volunteer_id]
     @time_zone = args[:time_zone]
     @path_to_template = args[:path_to_template]
+    @court_date = args[:court_date] || @casa_case.next_court_date
   end
 
   def context
@@ -65,11 +66,11 @@ class CaseCourtReportContext
 
   def prepare_case_details
     {
-      court_date: I18n.l(@casa_case.next_court_date&.date, format: :full, default: nil),
+      court_date: I18n.l(@court_date&.date, format: :full, default: nil),
       case_number: @casa_case.case_number,
       dob: I18n.l(@casa_case.birth_month_year_youth, format: :youth_date_of_birth, default: nil),
       is_transitioning: @casa_case.in_transition_age?,
-      judge_name: @casa_case.next_court_date&.judge&.name
+      judge_name: @court_date&.judge&.name
     }
   end
 
