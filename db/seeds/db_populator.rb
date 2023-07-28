@@ -198,7 +198,8 @@ class DbPopulator
         case_number: case_number,
         court_report_submitted_at: court_report_submitted ? Date.today : nil,
         court_report_status: court_report_submitted ? :submitted : :not_submitted,
-        birth_month_year_youth: birth_month_year_youth
+        birth_month_year_youth: birth_month_year_youth,
+        date_in_care: Date.today - (rand * 1500)
       )
       new_court_date = CourtDate.find_or_create_by!(
         casa_case: new_casa_case,
