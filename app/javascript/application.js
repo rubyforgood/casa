@@ -3,6 +3,7 @@ import './jQueryGlobalizer.js'
 import 'bootstrap'
 import 'bootstrap-select'
 import './sweet-alert-confirm.js'
+import './controllers'
 
 require('datatables.net-dt')(null, window.jQuery) // First parameter is the global object. Defaults to window if null
 require('select2')(window.jQuery)
