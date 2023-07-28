@@ -1,8 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Banner, type: :model do
-  describe '#valid?' do
-    it 'does not allow multiple active banners for same organization' do
+  describe "#valid?" do
+    it "does not allow multiple active banners for same organization" do
       casa_org = create(:casa_org)
       supervisor = create(:supervisor)
       create(:banner, casa_org: casa_org, user: supervisor)
@@ -11,7 +11,7 @@ RSpec.describe Banner, type: :model do
       expect(banner).to_not be_valid
     end
 
-    it 'does allow multiple active banners for different organization' do
+    it "does allow multiple active banners for different organization" do
       casa_org = create(:casa_org)
       supervisor = create(:supervisor, casa_org: casa_org)
       create(:banner, casa_org: casa_org, user: supervisor)
