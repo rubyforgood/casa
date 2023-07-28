@@ -18,7 +18,7 @@ module SidebarHelper
   private # private doesn't work in modules. It's here for semantic purposes
 
   def active_class(link_path)
-    if request_path_active?
+    if request_path_active?(link_path)
       "active"
     else
       ""
@@ -27,7 +27,7 @@ module SidebarHelper
     ""
   end
 
-  def request_path_active?
+  def request_path_active?(link_path)
     # The second check is needed because Sidebar menu item 'Emancipation
     # Checklist(s)' contains a redirect if any @casa_transitioning_cases are
     # found
