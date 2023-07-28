@@ -17,15 +17,13 @@ RSpec.describe LearningHoursReport, type: :model do
 
         expect(result.length).to eq(learning_hours.length + 1)
 
-        learning_hours.each_with_index do |learning_hour, index|
-          wait_for_csv_parse(learning_hour, result[index + 1], %i[name learning_type])
-          expect(result[index + 1]).to eq([
-            learning_hour.user.display_name,
-            learning_hour.name,
-            learning_hour.learning_type,
-            "#{learning_hour.duration_hours}:#{learning_hour.duration_minutes}",
-            learning_hour.occurred_at.strftime("%F")
-          ])
+        result.each_with_index do |row, index|
+          next if index.zero?
+          expect(row[0]).to eq learning_hours[index - 1].user.display_name
+          expect(row[1]).to eq learning_hours[index - 1].name
+          expect(row[2]).to eq learning_hours[index - 1].learning_type
+          expect(row[3]).to eq "#{learning_hours[index - 1].duration_hours}:#{learning_hours[index - 1].duration_minutes}"
+          expect(row[4]).to eq learning_hours[index - 1].occurred_at.strftime("%F")
         end
       end
     end

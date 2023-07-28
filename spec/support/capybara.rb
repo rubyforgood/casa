@@ -47,7 +47,6 @@ RSpec.configure do |config|
 
   config.before(:each, type: :system, js: true) do
     config.include DownloadHelpers
-    config.include CsvExporterHelper
     clear_downloads
     if ENV["DOCKER"]
       driven_by :selenium_chrome_headless_in_container
