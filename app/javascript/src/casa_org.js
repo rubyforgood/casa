@@ -19,15 +19,15 @@ function twilioToggle () {
 
 function addCheckedAttr (el) {
   el.attr('required', true)
-  el.setAttribute('aria-disabled', false)
-  el.setAttribute('aria-required', true)
+  el.attr('aria-disabled', false)
+  el.attr('aria-required', true)
   el.removeAttr('disabled')
 }
 
 function removeCheckedAttr (el) {
   el.removeAttr('required')
-  el.setAttribute('aria-required', false)
-  el.setAttribute('aria-disabled', true)
+  el.attr('aria-required', false)
+  el.attr('aria-disabled', true)
   el.attr('disabled', true)
 }
 
@@ -43,4 +43,5 @@ $('document').ready(() => {
   }
 
   ($('.accordionTwilio').on('click', twilioToggle))
+  twilioToggle()
 })
