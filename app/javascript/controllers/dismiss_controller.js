@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-  static targets = [ 'element' ]
+  static targets = ['element'];
 
   dismiss(event) {
     event.preventDefault();
