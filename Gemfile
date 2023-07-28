@@ -42,6 +42,7 @@ gem "request_store"
 gem "sablon" # Word document templating tool for Case Court Reports
 gem "scout_apm"
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
+gem "stimulus-rails"
 gem "strong_migrations"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 
@@ -60,6 +61,7 @@ end
 
 group :development do
   gem "annotate" # for adding db field listings to models as comments
+  gem "bundler-audit" # for checking for security issues in gems
   gem "letter_opener" # Opens emails in new tab for easier testing
   gem "spring" # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring-commands-rspec"
@@ -77,7 +79,6 @@ group :test do
   gem "rake"
   gem "selenium-webdriver"
   gem "simplecov"
-  gem "webdrivers" # easy installation and use of web drivers to run system tests with browsers
 end
 
 # gem "pdf-reader", "~> 2.9"
