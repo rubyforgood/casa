@@ -77,7 +77,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :case_contacts_form
+  resources :case_contact_form
 
   resources :reports, only: %i[index]
   get :export_emails, to: "reports#export_emails"
