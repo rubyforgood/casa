@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "casa_org/edit", type: :view do
-
   before do
     assign(:contact_type_groups, [])
     assign(:contact_types, [])
@@ -10,7 +9,6 @@ RSpec.describe "casa_org/edit", type: :view do
     assign(:sent_emails, [])
 
     sign_in build_stubbed(:all_casa_admin)
-
   end
 
   it "renders and does not show download prompt if new org" do
@@ -23,7 +21,6 @@ RSpec.describe "casa_org/edit", type: :view do
   end
 
   context "with a template uploaded" do
-
     it "renders a prompt to download current template" do
       organization = create :casa_org
       allow(view).to receive(:current_organization).and_return(organization)
