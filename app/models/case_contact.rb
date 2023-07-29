@@ -31,6 +31,8 @@ class CaseContact < ApplicationRecord
   accepts_nested_attributes_for :case_contact_contact_type
   accepts_nested_attributes_for :casa_case
 
+  enum status: {in_progress: 0, active: 1}
+
   scope :supervisors, ->(supervisor_ids = nil) {
     joins(:supervisor_volunteer).where(supervisor_volunteers: {supervisor_id: supervisor_ids}) if supervisor_ids.present?
   }
