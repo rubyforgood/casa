@@ -1,0 +1,24 @@
+<%= form_for(@case_contact, url: wizard_path, method: :put, local: true, id: "casa-contact-form") do |form| %>
+  <%= render "/shared/error_messages", resource: case_contact %>
+
+  <div class="card-style-1 pl-25 mb-10">
+    <div class="notes-header pr-25">
+      <h2 class="mb-3"><%= form.label :notes, "5. Enter Notes" %></h2>
+
+      <button id="open-highlight-modal" class="mb-3 btn-sm main-btn secondary-btn-outline btn-hover" data-bs-toggle="modal" data-target="#visibleColumns">+ Highlight</button>
+
+    </div>
+    <div class="cc-italic mb-3">
+      Please refer to individuals by their roles instead of by their names. Ex: My supervisor joined me for a call with the social worker to discuss my youth.
+    </div>
+    <div class="input-style-1 pr-25">
+    <%= form.text_area :notes, :rows => 5, placeholder: "Enter notes here", class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="actions mb-10">
+    <%= button_tag( type: "submit" , class: "btn-sm main-btn primary-btn btn-hover" ) do %>
+      <i class="lni lni-checkmark-circle mr-5"></i> Submit
+    <% end %>
+  </div>
+<% end %>

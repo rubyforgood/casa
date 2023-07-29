@@ -1,0 +1,78 @@
+<%= form_for(@case_contact, url: wizard_path, method: :put, local: true, id: "casa-contact-form") do |form| %>
+  <%= render "/shared/error_messages", resource: case_contact %>
+
+  <div id="enter-contact-details" class="card-style-1 pl-25 mb-10">
+    <h2 class="mb-3"><label for="case_contact_casa_case">3. Enter Contact Details</label><span class="red-letter"> *</span></h2>
+    <div class="">
+      <h5 class="mb-3"><%= form.label :contact_made, "a. Contact Made" %></h5>
+      <div class="form-check radio-style mb-20">
+        <%= form.radio_button :contact_made, true,
+                        checked: case_contact.contact_made,
+                        required: true,
+                        class: 'form-check-input' %>
+        <%= form.label "Yes", class: "form-check-label",
+                        for: "case_contact_contact_made_true" %>
+      </div>
+      <div class="form-check radio-style mb-20">
+        <%= form.radio_button :contact_made, false,
+                        checked: set_contact_made_false(case_contact),
+                        required: true,
+                        class: 'form-check-input' %>
+        <%= form.label "No", class: "form-check-label",
+                        for: "case_contact_contact_made_false" %>
+      </div>
+    </div>
+
+    <div class="field contact-medium form-group">
+      <h5 classs="mb-3"><%= form.label :medium_type, "b. Contact Medium" %></h5>
+      <%= form.collection_radio_buttons(:medium_type, contact_mediums, 'value', 'label') do |b| %>
+        <div class="form-check radio-style mb-20">
+          <%= b.radio_button(class: "form-check-input") %>
+          <%= b.label(class: "form-check-label") %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="pr-50">
+
+      <h5 class="mb-3"><%= form.label :occurred_at, "c. Occurred On" %></h5>
+      <div class="input-style-1">
+        <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
+        <%= form.text_field :occurred_at,
+                            value: occurred_at.to_date,
+                            data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
+                            class: "card-style-1" %>
+      </div>
+    </div>
+
+    <div class="pr-50 ">
+      <h5 class="mb-3"><label for="case_contact_casa_case">d. Duration of Meeting</label></h5>
+      <div class="row align-items-center">
+        <div class="input-style-1 col pl-0">
+          <%= form.number_field :duration_hours,
+                              id: "case-contact-duration-hours-display",
+                              min: 0,
+                              class: "inline-fields cc-field",
+                              size: "10",
+                              value: duration_hours(case_contact),
+                              required: true %> &nbsp; <strong> hour(s)</strong>
+        </div>
+        <div class="input-style-1 col">
+          <%= form.number_field :duration_minutes,
+                                id: "case-contact-duration-minutes-display",
+                                min: 0,
+                                class: "inline-fields cc-field",
+                                size: "10",
+                                value: duration_minutes(case_contact),
+                                required: true %> &nbsp; <strong> minute(s)</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions mb-10">
+    <%= button_tag( type: "submit" , class: "btn-sm main-btn primary-btn btn-hover" ) do %>
+      <i class="lni lni-checkmark-circle mr-5"></i> Submit
+    <% end %>
+  </div>
+<% end %>
