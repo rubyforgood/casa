@@ -155,9 +155,16 @@ RSpec.describe CaseCourtReportsController, type: :controller do
 
             get :show, params: {id: case_number, format: "docx"}
 
-            document_inspector = DocxInspector.new(docx_contents: response.body)
+            zip = download_docx.zip
+            files = zip.glob("word/header*.xml").map { |h| h.name }
+            filename_and_contents_pairs = files.map do |file|
+              simple_file_name = file.sub(/^word\//, "").sub(/\.xml$/, "")
+              [simple_file_name, Nokogiri::XML(@zip.read(file))]
+            end
 
-            expect(document_inspector.word_list_header_contains?("YOUR CASA ORG’S NUMBER")).to eq(true)
+            header_text = filename_and_contents_pairs.map { |name, doc| doc.text }.join("\n")
+
+            expect(header_text).to include("YOUR CASA ORG’S NUMBER")
           end
         end
         context "when a custom template is set" do
@@ -180,9 +187,7 @@ RSpec.describe CaseCourtReportsController, type: :controller do
 
             get :show, params: {id: case_number, format: "docx"}
 
-            document_inspector = DocxInspector.new(docx_contents: response.body)
-
-            expect(document_inspector.word_list_document_contains?("Did you forget to enter your court orders?")).to eq(true)
+            expect(download_docx.paragraphs.map(&:to_s)).to include("Did you forget to enter your court orders?")
           end
         end
       end
@@ -227,9 +232,7 @@ RSpec.describe CaseCourtReportsController, type: :controller do
 
             get :show, params: {id: case_number, format: "docx"}
 
-            document_inspector = DocxInspector.new(docx_contents: response.body)
-
-            expect(document_inspector.word_list_header_contains?("YOUR CASA ORG’S NUMBER")).to eq(true)
+            expect(download_docx.paragraphs.map(&:to_s)).to include("YOUR CASA ORG’S NUMBER")
           end
         end
         context "when a custom template is set" do
@@ -252,9 +255,7 @@ RSpec.describe CaseCourtReportsController, type: :controller do
 
             get :show, params: {id: case_number, format: "docx"}
 
-            document_inspector = DocxInspector.new(docx_contents: response.body)
-
-            expect(document_inspector.word_list_document_contains?("Did you forget to enter your court orders?")).to eq(true)
+            expect(download_docx.paragraphs.map(&:to_s)).to include("Did you forget to enter your court orders?")
           end
         end
       end
