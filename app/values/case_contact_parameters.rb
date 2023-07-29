@@ -12,7 +12,9 @@ class CaseContactParameters < SimpleDelegator
         :medium_type,
         :miles_driven,
         :want_driving_reimbursement,
+        :reimbursement_complete,
         :notes,
+        :status,
         case_contact_contact_type_attributes: [:contact_type_id],
         additional_expense_attributes: [:id, :other_expense_amount, :other_expenses_describe],
         casa_case_attributes: [:id, volunteers_attributes: [:id, address_attributes: [:id, :content]]]
