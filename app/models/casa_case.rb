@@ -3,7 +3,7 @@ class CasaCase < ApplicationRecord
   include DateHelper
   extend FriendlyId
 
-  self.ignored_columns = %w[hearing_type_id judge_id transition_aged_youth court_report_due_date]
+  self.ignored_columns = %w[transition_aged_youth court_report_due_date]
 
   attr_accessor :validate_contact_type
 
@@ -234,8 +234,6 @@ end
 #
 #  index_casa_cases_on_casa_org_id                  (casa_org_id)
 #  index_casa_cases_on_case_number_and_casa_org_id  (case_number,casa_org_id) UNIQUE
-#  index_casa_cases_on_hearing_type_id              (hearing_type_id)
-#  index_casa_cases_on_judge_id                     (judge_id)
 #  index_casa_cases_on_slug                         (slug)
 #
 # Foreign Keys
