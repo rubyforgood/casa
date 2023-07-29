@@ -215,6 +215,7 @@ class CaseContactsController < ApplicationController
 
   def current_organization_groups
     current_organization.contact_type_groups
+      .includes(:contact_types)
       .joins(:contact_types)
       .where(contact_types: {active: true})
       .uniq
