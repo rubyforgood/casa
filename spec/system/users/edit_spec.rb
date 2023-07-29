@@ -376,7 +376,7 @@ RSpec.describe "users/edit", type: :system do
       end
     end
 
-    it "is able to send a confrimation email when Casa Admin updates their email" do
+    it "is able to send a confirmation email when Casa Admin updates their email" do
       org = create(:casa_org)
       admin = create(:casa_admin, casa_org: org)
 

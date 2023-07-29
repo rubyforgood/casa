@@ -1,13 +1,18 @@
 require "rails_helper"
 
 RSpec.describe "volunteers/edit", type: :system do
-  let(:organization) { create(:casa_org) }
-  let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
-  let(:volunteer) { create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id) }
+  #let(:organization) { create(:casa_org) }
+  #let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
+  #let(:volunteer) { create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id) }
 
   it "shows invite and login info" do
+    organization = create(:casa_org)
+    admin = create(:casa_admin, casa_org_id: organization.id)
+    volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+
     sign_in admin
     visit edit_volunteer_path(volunteer)
+
     expect(page).to have_text "Added to system "
     expect(page).to have_text "Invitation email sent never"
     expect(page).to have_text "Last logged in"
@@ -17,72 +22,159 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   describe "updating volunteer personal data" do
-    before do
-      sign_in admin
-      visit edit_volunteer_path(volunteer)
-      fill_in "volunteer_display_name", with: "Kamisato Ayato"
-    end
-
     context "with valid data" do
       it "updates successfully" do
+        organization = create(:casa_org)
+        admin = create(:casa_admin, casa_org_id: organization.id)
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+
+        sign_in admin
+        visit edit_volunteer_path(volunteer)
+
+        fill_in "volunteer_display_name", with: "Kamisato Ayato"
         click_on "Submit"
+
         expect(page).to have_text "Volunteer was successfully updated."
       end
     end
 
     context "with invalid data" do
-      let(:role) { "volunteer" }
+      context "shows error for invalid phone number" do
+        it "shows error message for phone number < 12 digits" do
+          organization = create(:casa_org)
+          admin = create(:casa_admin, casa_org_id: organization.id)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
 
-      it_should_behave_like "shows error for invalid phone numbers"
+          sign_in admin
+          visit edit_volunteer_path(volunteer)
+
+          fill_in "volunteer_phone_number", with: "+141632489"
+          click_on "Submit"
+          expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
+        end
+
+        it "shows error message for phone number > 12 digits" do
+          organization = create(:casa_org)
+          admin = create(:casa_admin, casa_org_id: organization.id)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+
+          sign_in admin
+          visit edit_volunteer_path(volunteer)
+
+          fill_in "volunteer_phone_number", with: "+141632180923"
+          click_on "Submit"
+
+          expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
+        end
+
+        it "shows error message for bad phone number" do
+          organization = create(:casa_org)
+          admin = create(:casa_admin, casa_org_id: organization.id)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+
+          sign_in admin
+          visit edit_volunteer_path(volunteer)
+
+          fill_in "volunteer_phone_number", with: "+141632u809o"
+          click_on "Submit"
+
+          expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
+        end
+
+        it "shows error message for phone number without country code" do
+          organization = create(:casa_org)
+          admin = create(:casa_admin, casa_org_id: organization.id)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+
+          sign_in admin
+          visit edit_volunteer_path(volunteer)
+
+          fill_in "volunteer_phone_number", with: "+24163218092"
+          click_on "Submit"
+
+          expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
+        end
+      end
 
       it "shows error message for duplicate email" do
+        organization = create(:casa_org)
+        admin = create(:casa_admin, casa_org_id: organization.id)
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
         volunteer.supervisor = build(:supervisor)
+
+        sign_in admin
+        visit edit_volunteer_path(volunteer)
+
+        fill_in "volunteer_display_name", with: "Kamisato Ayato"
         fill_in "volunteer_email", with: admin.email
         fill_in "volunteer_display_name", with: "Mickey Mouse"
         click_on "Submit"
+
         expect(page).to have_text "already been taken"
       end
 
       it "shows error message for empty fields" do
+        organization = create(:casa_org)
+        admin = create(:casa_admin, casa_org_id: organization.id)
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
         volunteer.supervisor = create(:supervisor)
+
+        sign_in admin
+        visit edit_volunteer_path(volunteer)
+
         fill_in "volunteer_email", with: ""
         fill_in "volunteer_display_name", with: ""
         click_on "Submit"
+
         expect(page).to have_text "can't be blank"
       end
     end
   end
 
   describe "updating a volunteer's email" do
-    before do
-      sign_in admin
-      visit edit_volunteer_path(volunteer)
-      @old_email = volunteer.email
-      fill_in "Email", with: "newemail@example.com"
-      click_on "Submit"
-      volunteer.reload
-    end
-
     context "with a valid email" do
       it "sends volunteer a confirmation email and does not change the displayed email" do
+        organization = create(:casa_org)
+        admin = create(:casa_admin, casa_org: organization)
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+        old_email = volunteer.email
+
+        sign_in admin
+        visit edit_volunteer_path(volunteer)
+
+        fill_in "Email", with: "newemail@example.com"
+        click_on "Submit"
+        volunteer.reload
+
         expect(ActionMailer::Base.deliveries.count).to eq(1)
         expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
         expect(ActionMailer::Base.deliveries.first.body.encoded)
           .to match("You can confirm your account email through the link below:")
 
         expect(page).to have_text "Volunteer was successfully updated. Confirmation Email Sent."
-        expect(page).to have_field("Email", with: @old_email)
+        expect(page).to have_field("Email", with: old_email)
         expect(volunteer.unconfirmed_email).to eq("newemail@example.com")
       end
 
       it "succesfully displays the new email once the user confirms" do
+        organization = create(:casa_org)
+        admin = create(:casa_admin, casa_org: organization)
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+        old_email = volunteer.email
+
+        sign_in admin
+        visit edit_volunteer_path(volunteer)
+
+        fill_in "Email", with: "newemail@example.com"
+        click_on "Submit"
         volunteer.reload
         volunteer.confirm
 
         visit edit_volunteer_path(volunteer)
+
         expect(page).to have_field("Email", with: "newemail@example.com")
-        expect(page).to_not have_field("Email", with: @old_email)
-        expect(volunteer.old_emails).to eq([@old_email])
+        expect(page).to_not have_field("Email", with: old_email)
+        expect(volunteer.old_emails).to eq([old_email])
       end
     end
   end
