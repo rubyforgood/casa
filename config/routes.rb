@@ -109,6 +109,7 @@ Rails.application.routes.draw do
   resources :other_duties, only: %i[new create edit index update]
   resources :missing_data_reports, only: %i[index]
   resources :learning_hours_reports, only: %i[index]
+  resources :learning_hour_types, only: %i[new create edit update]
   resources :followup_reports, only: :index
   resources :placement_reports, only: :index
   resources :banners, only: %i[index new edit create update destroy]

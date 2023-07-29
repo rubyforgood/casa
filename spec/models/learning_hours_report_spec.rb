@@ -7,11 +7,12 @@ RSpec.describe LearningHoursReport, type: :model do
       it "includes all learning hours" do
         casa_org = build(:casa_org)
         users = create_list(:user, 3, casa_org: casa_org)
+        learning_hour_type = create(:learning_hour_type)
         learning_hours =
           [
-            create(:learning_hour, user: users[0]),
-            create(:learning_hour, user: users[1], learning_type: :movie),
-            create(:learning_hour, user: users[2], learning_type: :webinar)
+            create(:learning_hour, user: users[0], learning_hour_type: learning_hour_type),
+            create(:learning_hour, user: users[1], learning_type: :movie, learning_hour_type: learning_hour_type),
+            create(:learning_hour, user: users[2], learning_type: :webinar, learning_hour_type: learning_hour_type)
           ]
         result = CSV.parse(described_class.new(casa_org.id).to_csv)
 
@@ -21,7 +22,7 @@ RSpec.describe LearningHoursReport, type: :model do
           next if index.zero?
           expect(row[0]).to eq learning_hours[index - 1].user.display_name
           expect(row[1]).to eq learning_hours[index - 1].name
-          expect(row[2]).to eq learning_hours[index - 1].learning_type
+          expect(row[2]).to eq learning_hours[index - 1].learning_hour_type.name
           expect(row[3]).to eq "#{learning_hours[index - 1].duration_hours}:#{learning_hours[index - 1].duration_minutes}"
           expect(row[4]).to eq learning_hours[index - 1].occurred_at.strftime("%F")
         end
