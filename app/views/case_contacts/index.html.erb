@@ -132,12 +132,24 @@
 <% end %>
 
 <% unless @presenter.case_contacts.any? %>
-  <div class="card-style-1">
-    <div class="card-content">
-      <%= params[:filterrific] ?
-        "No case contacts have been found." :
-        "You have no case contacts for this case. \
+  <% if params.key?(:casa_case_id) %>
+    <div class="card-style-1 mb-5">
+      <div class="card-content">
+        <h3 class="mb-10"><%= @presenter.display_case_number(params[:casa_case_id].to_i) %></h3>
+        <%= params[:filterrific] ?
+              "No case contacts have been found." :
+              "You have no case contacts for this case. \
         Please click New Case Contact button above to create a case contact for your youth!" %>
+      </div>
     </div>
-  </div>
+  <% else %>
+    <div class="card-style-1">
+      <div class="card-content">
+        <%= params[:filterrific] ?
+              "No case contacts have been found." :
+              "You have no case contacts for this case. \
+        Please click New Case Contact button above to create a case contact for your youth!" %>
+      </div>
+    </div>
+  <% end %>
 <% end %>
