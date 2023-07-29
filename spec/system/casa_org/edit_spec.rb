@@ -98,7 +98,7 @@ RSpec.describe "casa_org/edit", type: :system do
     )
   end
 
-  it "can update show_driving_reimbursement flag" do
+  it "can update show_driving_reimbursement flag", js: true do
     check "Show driving reimbursement"
     click_on "Submit"
     has_no_checked_field? "Show driving reimbursement"

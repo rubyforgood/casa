@@ -12,10 +12,12 @@
     "build:css:dev": "sass app/assets/stylesheets/application.scss app/assets/builds/application.css --load-path=node_modules --watch"
   },
   "dependencies": {
+    "@babel/core": "^7.0.0",
     "@fortawesome/fontawesome-free": "^6.4.0",
     "@hotwired/stimulus": "^3.2.1",
     "@popperjs/core": "^2.11.8",
     "@rails/actioncable": "^7.0.6",
+    "@rails/actiontext": "^7.0.6",
     "@rails/activestorage": "^7.0.6",
     "@rails/ujs": "^7.0.6",
     "add2calendar": "^1.1.8",
@@ -41,6 +43,7 @@
     "stimulus-rails-nested-form": "^4.1.0",
     "strftime": "^0.10.2",
     "sweetalert2": "^11.3.5",
+    "trix": "^2.0.5",
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",

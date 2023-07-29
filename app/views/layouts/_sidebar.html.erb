@@ -61,7 +61,7 @@
           </li>
         <% end %>
         <% if all_casa_admin_signed_in? %>
-          <li class="<%= active_class(all_casa_admins_patch_notes_path) %> nav-item">
+          <li class="nav-item">
             <%= link_to all_casa_admins_patch_notes_path do %>
               <i class="lni lni-notepad mr-10"></i>
               Patch Notes
@@ -93,7 +93,7 @@
         <li class="nav-item nav-item-has-children">
           <a
             href="#0"
-            class=""
+            class="group-actions"
             data-bs-toggle="collapse"
             data-bs-target="#ddmenu_55"
             aria-controls="ddmenu_55"
@@ -155,6 +155,15 @@
                 <%= link_to edit_casa_org_path(current_organization), class: "#{active_class(edit_casa_org_path(current_organization))}" do %>
                   <i class="lni lni-cogs mr-10"></i>
                   Edit Organization
+                <% end %>
+              </li>
+            <% end %>
+
+            <% if policy(:application).see_banner_page? %>
+              <li>
+                <%= link_to banners_path, class: "#{active_class(banners_path)}" do %>
+                  <i class="lni lni-flag mr-10"></i>
+                  Banners
                 <% end %>
               </li>
             <% end %>

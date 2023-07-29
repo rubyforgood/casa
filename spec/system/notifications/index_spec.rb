@@ -135,6 +135,36 @@ RSpec.describe "notifications/index", type: :system do
     end
   end
 
+  context "EmancipationChecklistReminder" do
+    before do
+      volunteer.notifications << create(:notification, :emancipation_checklist_reminder, params: {casa_case: casa_case})
+      sign_in volunteer
+      visit notifications_path
+    end
+
+    it "should display a notification reminder that links to the emancipation checklist" do
+      notification_message = "Your case #{casa_case.case_number} is a transition aged youth. We want to make sure that along the way, we’re preparing our youth for emancipation. Make sure to check the emancipation checklist."
+      expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
+      expect(page).to have_content("Emancipation Checklist Reminder")
+      expect(page).to have_link(notification_message, href: casa_case_emancipation_path(casa_case.id))
+    end
+  end
+
+  context "YouthBirthdayNotification" do
+    before do
+      volunteer.notifications << create(:notification, :youth_birthday, params: {casa_case: casa_case})
+      sign_in volunteer
+      visit notifications_path
+    end
+
+    it "should display a notification on the notifications page" do
+      notification_message = "Your youth, case number: #{casa_case.case_number} has a birthday next month."
+      expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
+      expect(page).to have_content("Youth Birthday Notification")
+      expect(page).to have_link(notification_message, href: casa_case_path(casa_case.id))
+    end
+  end
+
   context "when there are no notifications" do
     it "displays a message to the user" do
       sign_in volunteer

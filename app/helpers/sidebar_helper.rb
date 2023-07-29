@@ -18,11 +18,20 @@ module SidebarHelper
   private # private doesn't work in modules. It's here for semantic purposes
 
   def active_class(link_path)
-    url_route_sections = link_path.split("/")
-    url_route_sections.delete("all_casa_admins")
-    controller_name = url_route_sections.second
-    current_page?({controller: controller_name, action: action_name}) ? "active" : ""
+    if request_path_active?(link_path)
+      "active"
+    else
+      ""
+    end
   rescue ActionController::UrlGenerationError
     ""
+  end
+
+  def request_path_active?(link_path)
+    # The second check is needed because Sidebar menu item 'Emancipation
+    # Checklist(s)' contains a redirect if any @casa_transitioning_cases are
+    # found
+    (request.path == link_path) ||
+      (link_path == "/emancipation_checklists" && request.path.match("emancipation"))
   end
 end

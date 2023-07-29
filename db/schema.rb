@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_12_080040) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_28_140249) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "action_text_rich_texts", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "body"
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
+  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -76,6 +86,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_12_080040) do
     t.index ["email"], name: "index_all_casa_admins_on_email", unique: true
     t.index ["invitation_token"], name: "index_all_casa_admins_on_invitation_token", unique: true
     t.index ["reset_password_token"], name: "index_all_casa_admins_on_reset_password_token", unique: true
+  end
+
+  create_table "banners", force: :cascade do |t|
+    t.bigint "casa_org_id", null: false
+    t.bigint "user_id", null: false
+    t.string "name"
+    t.boolean "active", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_org_id"], name: "index_banners_on_casa_org_id"
+    t.index ["user_id"], name: "index_banners_on_user_id"
   end
 
   create_table "casa_case_contact_types", force: :cascade do |t|
@@ -560,6 +581,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_12_080040) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "additional_expenses", "case_contacts"
   add_foreign_key "addresses", "users"
+  add_foreign_key "banners", "casa_orgs"
+  add_foreign_key "banners", "users"
   add_foreign_key "casa_case_emancipation_categories", "casa_cases"
   add_foreign_key "casa_case_emancipation_categories", "emancipation_categories"
   add_foreign_key "casa_cases", "casa_orgs"
