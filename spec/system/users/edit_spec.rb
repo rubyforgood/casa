@@ -134,6 +134,7 @@ RSpec.describe "users/edit", type: :system do
       organization = create(:casa_org)
       volunteer = create(
         :volunteer,
+        casa_org: organization,
         last_sign_in_at: "2020-01-01 00:00:00",
         current_sign_in_at: "2020-01-02 00:00:00"
       )
@@ -149,7 +150,7 @@ RSpec.describe "users/edit", type: :system do
 
     it "displays Volunteer error message if no communication preference is selected" do
       organization = create(:casa_org, twilio_enabled: true)
-      volunteer = create(:volunteer)
+      volunteer = create(:volunteer, casa_org: organization)
 
       sign_in volunteer
       visit edit_users_path
@@ -162,7 +163,7 @@ RSpec.describe "users/edit", type: :system do
 
     it "displays Volunteer error message if SMS communication preference is selected without adding a valid phone number" do
       organization = create(:casa_org, twilio_enabled: true)
-      volunteer = create(:volunteer)
+      volunteer = create(:volunteer, casa_org: organization)
 
       sign_in volunteer
       visit edit_users_path
@@ -176,7 +177,7 @@ RSpec.describe "users/edit", type: :system do
 
     it "displays notification events selection as enabled if sms notification preference is selected" do
       organization = create(:casa_org, twilio_enabled: true)
-      volunteer = create(:volunteer)
+      volunteer = create(:volunteer, casa_org: organization)
 
       sign_in volunteer
       visit edit_users_path
@@ -187,7 +188,7 @@ RSpec.describe "users/edit", type: :system do
 
     it "displays notification events selection as disabled if sms notification preference is not selected", js: true do
       organization = create(:casa_org, twilio_enabled: true)
-      volunteer = create(:volunteer)
+      volunteer = create(:volunteer, casa_org: organization)
 
       sign_in volunteer
       visit edit_users_path
