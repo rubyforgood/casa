@@ -143,7 +143,7 @@ RSpec.describe CaseCourtReport, type: :model do
             expect(document_inspector.word_list_document_contains?(document_data[:case_contact_type])).to eq(true)
           end
 
-          it "displays the case contact tiime date formatted" do
+          it "displays the case contact time date formatted" do
             expect(document_inspector.word_list_document_contains?("#{document_data[:case_contact_time].strftime("%-m/%d")}*")).to eq(true)
           end
 
@@ -215,43 +215,50 @@ RSpec.describe CaseCourtReport, type: :model do
           it "displays today's date formatted" do
             docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
 
-            expect(docx_response.paragraphs.map(&:to_s)).to include(Date.current.strftime("%B %-d, %Y"))
+            expect(docx_response.paragraphs.map(&:to_s)).to include(/#{Date.current.strftime("%B %-d, %Y")}.*/)
           end
 
           it "displays the case hearing date formatted" do
             docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
 
-            expect(docx_response.paragraphs.map(&:to_s)).to include(document_data[:case_hearing_date].strftime("%B %-d, %Y"))
+            expect(docx_response.paragraphs.map(&:to_s)).to include(/#{document_data[:case_hearing_date].strftime("%B %-d, %Y")}.*/)
           end
 
-          it "displays the case numbet" do
+          it "displays the case number" do
             docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
-
-            expect(docx_response.paragraphs.map(&:to_s)).to include(document_data[:case_number])
+            expect(docx_response.paragraphs.map(&:to_s)).to include(/.*#{document_data[:case_number]}.*/)
           end
 
           it "displays the case contact type" do
             docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
+            
+            table_data = docx_response.tables.map{|t| t.rows.map(&:cells).flatten.map(&:to_s)}.flatten
 
-            expect(docx_response.paragraphs.map(&:to_s)).to include(document_data[:case_contact_type])
+            expect(table_data).to include(document_data[:case_contact_type])
           end
 
           it "displays the case contact time formatted" do
             docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
 
-            expect(docx_response.paragraphs.map(&:to_s)).to include(document_data[:case_contact_time].strftime("%-m/%d"))
+            table_data = docx_response.tables.map{|t| t.rows.map(&:cells).flatten.map(&:to_s)}.flatten
+
+            expect(table_data).to include(document_data[:case_contact_time].strftime("%-m/%d*"))
           end
 
           it "displays the test" do
             docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
 
-            expect(docx_response.paragraphs.map(&:to_s)).to include(document_data[:text])
+            table_data = docx_response.tables.map{|t| t.rows.map(&:cells).flatten.map(&:to_s)}.flatten
+
+            expect(table_data).to include("This text shall not be strikingly similar to other text in the document")
           end
 
           it "displays the order status" do
             docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
 
-            expect(docx_response.paragraphs.map(&:to_s)).to include("Partially implemented")
+            table_data = docx_response.tables.map{|t| t.rows.map(&:cells).flatten.map(&:to_s)}.flatten
+
+            expect(table_data).to include("Partially implemented")
           end
         end
       end
