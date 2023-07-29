@@ -4,13 +4,13 @@ class CaseContact < ApplicationRecord
 
   attr_accessor :duration_hours
 
-  validate :contact_made_chosen, if: :active
-  validates :duration_minutes, numericality: {greater_than_or_equal_to: 15, message: "Minimum case contact duration should be 15 minutes."}, if: :active
-  validates :miles_driven, numericality: {greater_than_or_equal_to: 0, less_than: 10000}, if: :active
-  validates :medium_type, presence: true, if: :active
-  validates :occurred_at, presence: true, if: :active
-  validate :occurred_at_not_in_future, if: :active
-  validate :reimbursement_only_when_miles_driven, if: :active
+  validate :contact_made_chosen, if: :active?
+  validates :duration_minutes, numericality: {greater_than_or_equal_to: 15, message: "Minimum case contact duration should be 15 minutes."}, if: :active?
+  validates :miles_driven, numericality: {greater_than_or_equal_to: 0, less_than: 10000}, if: :active?
+  validates :medium_type, presence: true, if: :active?
+  validates :occurred_at, presence: true, if: :active?
+  validate :occurred_at_not_in_future, if: :active?
+  validate :reimbursement_only_when_miles_driven, if: :active?
 
   belongs_to :creator, class_name: "User"
   has_one :supervisor_volunteer, -> {
@@ -26,7 +26,7 @@ class CaseContact < ApplicationRecord
 
   has_many :additional_expenses
   accepts_nested_attributes_for :additional_expenses, reject_if: :all_blank
-  validates_associated :additional_expenses, if: :active
+  validates_associated :additional_expenses, if: :active?
 
   accepts_nested_attributes_for :case_contact_contact_type
   accepts_nested_attributes_for :casa_case
