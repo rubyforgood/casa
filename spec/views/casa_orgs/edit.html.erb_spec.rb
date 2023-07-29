@@ -36,14 +36,13 @@ RSpec.describe "casa_org/edit", type: :view do
       with_rows:
       [
         ["Contact type 1", "Yes", "Edit"]
-      ]
-    )
+      ])
   end
 
   it "has contact type groups content" do
     organization = build_stubbed(:casa_org)
     allow(view).to receive(:current_organization).and_return(organization)
-    contact_type_group = build_stubbed(:contact_type_group,  casa_org: organization, name: "Contact type group 1")
+    contact_type_group = build_stubbed(:contact_type_group, casa_org: organization, name: "Contact type group 1")
     assign(:contact_type_groups, [contact_type_group])
 
     render template: "casa_org/edit"
@@ -53,8 +52,7 @@ RSpec.describe "casa_org/edit", type: :view do
     expect(rendered).to have_table("contact-type-groups",
       with_rows: [
         ["Contact type group 1", "Yes", "Edit"]
-      ]
-    )
+      ])
   end
 
   it "has hearing types content" do
@@ -70,8 +68,7 @@ RSpec.describe "casa_org/edit", type: :view do
       with_rows:
       [
         ["Hearing type 1", "Yes", "Edit"]
-      ]
-    )
+      ])
   end
 
   it "has judge content" do
@@ -108,8 +105,7 @@ RSpec.describe "casa_org/edit", type: :view do
     expect(rendered).to have_table("sent-emails",
       with_rows: [
         ["Mailer Type", "Mail Action Category", admin.email, "12:30pm 02 Jan 2021"]
-      ]
-    )
+      ])
   end
 
   context "with a template uploaded" do
