@@ -3,7 +3,8 @@ require "support/stubbed_requests/webmock_helper"
 
 RSpec.describe SmsReminderService do
   describe "court report due sms reminder service" do
-    let!(:volunteer) { create(:volunteer, receive_sms_notifications: true, phone_number: "+12222222222") }
+    let(:org) { create(:casa_org, twilio_enabled: true) }
+    let!(:volunteer) { create(:volunteer, casa_org: org, receive_sms_notifications: true, phone_number: "+12222222222") }
     let!(:message) { "It's been two weeks since you've tried reaching 'test'. Try again! https://42ni.short.gy/jzTwdF" }
 
     before :each do

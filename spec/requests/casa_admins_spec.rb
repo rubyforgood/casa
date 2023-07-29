@@ -359,7 +359,10 @@ RSpec.describe "/casa_admins", type: :request do
     subject { post casa_admins_path, params: {casa_admin: params} }
 
     before do
-      sign_in_as_admin
+      org = create(:casa_org, twilio_enabled: true)
+      admin = create(:casa_admin, casa_org: org)
+
+      sign_in admin
       @twilio_activation_success_stub = WebMockHelper.twilio_activation_success_stub("admin")
       @twilio_activation_error_stub = WebMockHelper.twilio_activation_error_stub("admin")
       @short_io_stub = WebMockHelper.short_io_stub_sms
@@ -417,7 +420,7 @@ RSpec.describe "/casa_admins", type: :request do
       end
 
       it "does not send SMS when Twilio has an error" do
-        org = create(:casa_org, twilio_account_sid: "articuno31")
+        org = create(:casa_org, twilio_account_sid: "articuno31", twilio_enabled: true)
         admin = build(:casa_admin, casa_org: org)
         sign_in admin
         params[:phone_number] = "+12222222222"
