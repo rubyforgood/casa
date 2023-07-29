@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.describe CaseCourtReportsController, type: :controller do
+  include DownloadHelpers
   describe "GET index" do
     context "when volunteer" do
       it "successfully accesses 'Generate Court Report' page" do
@@ -155,16 +156,9 @@ RSpec.describe CaseCourtReportsController, type: :controller do
 
             get :show, params: {id: case_number, format: "docx"}
 
-            zip = download_docx.zip
-            files = zip.glob("word/header*.xml").map { |h| h.name }
-            filename_and_contents_pairs = files.map do |file|
-              simple_file_name = file.sub(/^word\//, "").sub(/\.xml$/, "")
-              [simple_file_name, Nokogiri::XML(@zip.read(file))]
-            end
+            docx_response = Docx::Document.open(StringIO.new(response.body))
 
-            header_text = filename_and_contents_pairs.map { |name, doc| doc.text }.join("\n")
-
-            expect(header_text).to include("YOUR CASA ORG’S NUMBER")
+            expect(header_text(docx_response)).to include("YOUR CASA ORG’S NUMBER")
           end
         end
         context "when a custom template is set" do
@@ -186,6 +180,8 @@ RSpec.describe CaseCourtReportsController, type: :controller do
             case_number = link_parts[link_parts.length - 1].sub(".docx", "")
 
             get :show, params: {id: case_number, format: "docx"}
+
+            download_docx = Docx::Document.open(StringIO.new(response.body))
 
             expect(download_docx.paragraphs.map(&:to_s)).to include("Did you forget to enter your court orders?")
           end
@@ -232,7 +228,8 @@ RSpec.describe CaseCourtReportsController, type: :controller do
 
             get :show, params: {id: case_number, format: "docx"}
 
-            expect(download_docx.paragraphs.map(&:to_s)).to include("YOUR CASA ORG’S NUMBER")
+            docx = Docx::Document.open(StringIO.new(response.body))
+            expect(header_text(docx)).to include("YOUR CASA ORG’S NUMBER")
           end
         end
         context "when a custom template is set" do
@@ -254,6 +251,8 @@ RSpec.describe CaseCourtReportsController, type: :controller do
             case_number = link_parts[link_parts.length - 1].sub(".docx", "")
 
             get :show, params: {id: case_number, format: "docx"}
+
+            download_docx = Docx::Document.open(StringIO.new(response.body))
 
             expect(download_docx.paragraphs.map(&:to_s)).to include("Did you forget to enter your court orders?")
           end

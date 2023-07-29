@@ -213,31 +213,45 @@ RSpec.describe CaseCourtReport, type: :model do
           end
 
           it "displays today's date formatted" do
-            expect(document_inspector.word_list_document_contains?(Date.current.strftime("%B %-d, %Y"))).to eq(true)
+            docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
+
+            expect(docx_response.paragraphs.map(&:to_s)).to include(Date.current.strftime("%B %-d, %Y"))
           end
 
           it "displays the case hearing date formatted" do
-            expect(document_inspector.word_list_document_contains?(document_data[:case_hearing_date].strftime("%B %-d, %Y"))).to eq(true)
+            docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
+
+            expect(docx_response.paragraphs.map(&:to_s)).to include(document_data[:case_hearing_date].strftime("%B %-d, %Y"))
           end
 
           it "displays the case numbet" do
-            expect(document_inspector.word_list_document_contains?(document_data[:case_number])).to eq(true)
+            docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
+
+            expect(docx_response.paragraphs.map(&:to_s)).to include(document_data[:case_number])
           end
 
           it "displays the case contact type" do
-            expect(document_inspector.word_list_document_contains?(document_data[:case_contact_type])).to eq(true)
+            docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
+
+            expect(docx_response.paragraphs.map(&:to_s)).to include(document_data[:case_contact_type])
           end
 
           it "displays the case contact time formatted" do
-            expect(document_inspector.word_list_document_contains?("#{document_data[:case_contact_time].strftime("%-m/%d")}*")).to eq(true)
+            docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
+
+            expect(docx_response.paragraphs.map(&:to_s)).to include(document_data[:case_contact_time].strftime("%-m/%d"))
           end
 
           it "displays the test" do
-            expect(document_inspector.word_list_document_contains?(document_data[:text])).to eq(true)
+            docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
+
+            expect(docx_response.paragraphs.map(&:to_s)).to include(document_data[:text])
           end
 
           it "displays the order status" do
-            expect(document_inspector.word_list_document_contains?("Partially implemented")).to eq(true) # Order Status
+            docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
+
+            expect(docx_response.paragraphs.map(&:to_s)).to include("Partially implemented")
           end
         end
       end
