@@ -68,9 +68,6 @@ RSpec.describe "notifications/index", type: :view do
 
         queryable_html = Nokogiri.HTML5(rendered)
 
-        patch_note_notification_information_container = queryable_html.css("#patch-note-notification .flex-row").first
-
-
         patch_note_type_a_header = queryable_html.xpath("//*[text()[contains(.,'#{patch_note_type_a.name}')]]").first
         patch_note_type_b_header = queryable_html.xpath("//*[text()[contains(.,'#{patch_note_type_b.name}')]]").first
 
