@@ -43,6 +43,11 @@ RSpec.describe "users/edit", type: :system do
       organization = create(:casa_org, twilio_enabled: true)
       volunteer = create(:volunteer, casa_org: organization)
 
+      SmsNotificationEvent.delete_all
+      SmsNotificationEvent.new(name: "sms_event_test_volunteer", user_type: Volunteer).save
+      SmsNotificationEvent.new(name: "sms_event_test_supervisor", user_type: Supervisor).save
+      SmsNotificationEvent.new(name: "sms_event_test_casa_admin", user_type: CasaAdmin).save
+
       sign_in volunteer
       visit edit_users_path
 
@@ -179,6 +184,11 @@ RSpec.describe "users/edit", type: :system do
       organization = create(:casa_org, twilio_enabled: true)
       volunteer = create(:volunteer, casa_org: organization)
 
+      SmsNotificationEvent.delete_all
+      SmsNotificationEvent.new(name: "sms_event_test_volunteer", user_type: Volunteer).save
+      SmsNotificationEvent.new(name: "sms_event_test_supervisor", user_type: Supervisor).save
+      SmsNotificationEvent.new(name: "sms_event_test_casa_admin", user_type: CasaAdmin).save
+
       sign_in volunteer
       visit edit_users_path
 
@@ -189,6 +199,11 @@ RSpec.describe "users/edit", type: :system do
     it "displays notification events selection as disabled if sms notification preference is not selected", js: true do
       organization = create(:casa_org, twilio_enabled: true)
       volunteer = create(:volunteer, casa_org: organization)
+
+      SmsNotificationEvent.delete_all
+      SmsNotificationEvent.new(name: "sms_event_test_volunteer", user_type: Volunteer).save
+      SmsNotificationEvent.new(name: "sms_event_test_supervisor", user_type: Supervisor).save
+      SmsNotificationEvent.new(name: "sms_event_test_casa_admin", user_type: CasaAdmin).save
 
       sign_in volunteer
       visit edit_users_path
@@ -275,6 +290,11 @@ RSpec.describe "users/edit", type: :system do
     it "displays sms notification events for the supervisor user" do
       org = create(:casa_org, twilio_enabled: true)
       supervisor = create(:supervisor, casa_org: org)
+
+      SmsNotificationEvent.delete_all
+      SmsNotificationEvent.new(name: "sms_event_test_volunteer", user_type: Volunteer).save
+      SmsNotificationEvent.new(name: "sms_event_test_supervisor", user_type: Supervisor).save
+      SmsNotificationEvent.new(name: "sms_event_test_casa_admin", user_type: CasaAdmin).save
 
       sign_in supervisor
       visit edit_users_path
@@ -455,6 +475,11 @@ RSpec.describe "users/edit", type: :system do
     it "displays sms notification events for the casa admin user" do
       org = create(:casa_org, twilio_enabled: true)
       admin = create(:casa_admin, casa_org: org)
+
+      SmsNotificationEvent.delete_all
+      SmsNotificationEvent.new(name: "sms_event_test_volunteer", user_type: Volunteer).save
+      SmsNotificationEvent.new(name: "sms_event_test_supervisor", user_type: Supervisor).save
+      SmsNotificationEvent.new(name: "sms_event_test_casa_admin", user_type: CasaAdmin).save
 
       sign_in admin
       visit edit_users_path
