@@ -211,17 +211,15 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Court Report Status: Not submitted")
       visit edit_casa_case_path(casa_case)
       select "Submitted", from: "casa_case_court_report_status"
-      check "Youth"
 
-      # fill_in "Court Report Due Date", with: Date.new(next_year.to_i, 9, 8).strftime("%Y/%m/%d\n")
-
-      page.find('button[data-action="extended-nested-form#add"]').click
+      scroll_to('button[data-action="extended-nested-form#add"]').click
       find("#court-orders-list-container").first("textarea").send_keys("Court Order Text One")
 
       select "Partially implemented", from: "casa_case[case_court_orders_attributes][0][implementation_status]"
 
       expect(page).to have_text("Set Implementation Status")
 
+      check "Youth"
       within ".actions-cc" do
         click_on "Update CASA Case"
       end
