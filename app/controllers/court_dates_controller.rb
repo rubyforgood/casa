@@ -11,7 +11,7 @@ class CourtDatesController < ApplicationController
     respond_to do |format|
       format.html {}
       format.docx do
-        send_data @court_date.generate_report,
+        send_data generate_report_to_string(@court_date, params[:time_zone]),
           type: :docx,
           filename: "#{@court_date.display_name}.docx",
           disposition: "attachment",
@@ -93,5 +93,23 @@ class CourtDatesController < ApplicationController
       :court_report_due_date,
       {case_court_orders_attributes: %i[text _destroy implementation_status id casa_case_id]}
     )
+  end
+
+  def generate_report_to_string(court_date, time_zone)
+    casa_case = court_date.casa_case
+    casa_case.casa_org.open_org_court_report_template do |template_docx_file|
+      args = {
+        volunteer_id: current_user.volunteer? ? current_user.id : casa_case.assigned_volunteers.first&.id,
+        case_id: casa_case.id,
+        path_to_template: template_docx_file.to_path,
+        time_zone: time_zone,
+        court_date: court_date,
+        case_court_orders: court_date.case_court_orders
+      }
+      context = CaseCourtReportContext.new(args).context
+      court_report = CaseCourtReport.new(path_to_template: template_docx_file.to_path, context: context)
+
+      court_report.generate_to_string
+    end
   end
 end

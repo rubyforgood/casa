@@ -15,6 +15,11 @@ module DownloadHelpers
     File.read(download)
   end
 
+  def download_docx
+    wait_for_download
+    Docx::Document.open(download)
+  end
+
   def download_file_name
     File.basename(download)
   end
