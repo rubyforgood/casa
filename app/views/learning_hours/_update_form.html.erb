@@ -19,7 +19,7 @@
       <%= form.label :learning_hour_type_id, "Type of Learning" %>
       <div class="select-position">
         <%= form.collection_select :learning_hour_type_id,
-                                   LearningHourType.for_organization(current_user.casa_org),
+                                   LearningHourType.for_organization(current_user.casa_org).active,
                                    :id,
                                    :name,
                                    prompt: "Select learning type",
