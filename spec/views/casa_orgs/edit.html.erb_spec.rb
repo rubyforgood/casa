@@ -12,7 +12,7 @@ RSpec.describe "casa_org/edit", type: :view do
   end
 
   it "has casa org edit page text" do
-    organization = create(:casa_org)
+    organization = build_stubbed(:casa_org)
     allow(view).to receive(:current_organization).and_return(organization)
 
     render template: "casa_org/edit"
@@ -23,9 +23,9 @@ RSpec.describe "casa_org/edit", type: :view do
   end
 
   it "has contact types content" do
-    organization = create(:casa_org)
+    organization = build_stubbed(:casa_org)
     allow(view).to receive(:current_organization).and_return(organization)
-    contact_type = create(:contact_type, name: "Contact type 1")
+    contact_type = build_stubbed(:contact_type, name: "Contact type 1")
     assign(:contact_types, [contact_type])
 
     render template: "casa_org/edit"
@@ -41,9 +41,9 @@ RSpec.describe "casa_org/edit", type: :view do
   end
 
   it "has contact type groups content" do
-    organization = create(:casa_org)
+    organization = build_stubbed(:casa_org)
     allow(view).to receive(:current_organization).and_return(organization)
-    contact_type_group = create(:contact_type_group,  casa_org: organization, name: "Contact type group 1")
+    contact_type_group = build_stubbed(:contact_type_group,  casa_org: organization, name: "Contact type group 1")
     assign(:contact_type_groups, [contact_type_group])
 
     render template: "casa_org/edit"
@@ -58,9 +58,9 @@ RSpec.describe "casa_org/edit", type: :view do
   end
 
   it "has hearing types content" do
-    organization = create(:casa_org)
+    organization = build_stubbed(:casa_org)
     allow(view).to receive(:current_organization).and_return(organization)
-    hearing_type = create(:hearing_type, casa_org: organization, name: "Hearing type 1")
+    hearing_type = build_stubbed(:hearing_type, casa_org: organization, name: "Hearing type 1")
     assign(:hearing_types, [hearing_type])
 
     render template: "casa_org/edit"
@@ -75,9 +75,9 @@ RSpec.describe "casa_org/edit", type: :view do
   end
 
   it "has judge content" do
-    organization = create(:casa_org)
+    organization = build_stubbed(:casa_org)
     allow(view).to receive(:current_organization).and_return(organization)
-    judge = create(:judge, casa_org: organization, name: "Joey Tom")
+    judge = build_stubbed(:judge, casa_org: organization, name: "Joey Tom")
     assign(:judges, [judge])
 
     render template: "casa_org/edit"
@@ -86,7 +86,7 @@ RSpec.describe "casa_org/edit", type: :view do
   end
 
   it "does not show download prompt with no custom template" do
-    organization = create :casa_org
+    organization = build_stubbed(:casa_org)
     allow(view).to receive(:current_organization).and_return(organization)
 
     render template: "casa_org/edit"
@@ -95,11 +95,11 @@ RSpec.describe "casa_org/edit", type: :view do
   end
 
   it "has sent emails content" do
-    organization = create :casa_org
-    admin = create(:casa_admin, casa_org: organization)
+    organization = build_stubbed(:casa_org)
+    admin = build_stubbed(:casa_admin, casa_org: organization)
     allow(view).to receive(:current_organization).and_return(organization)
 
-    sent_email = create(:sent_email, user: admin, created_at: Time.zone.local(2021, 1, 2, 12, 30, 0))
+    sent_email = build_stubbed(:sent_email, user: admin, created_at: Time.zone.local(2021, 1, 2, 12, 30, 0))
     assign(:sent_emails, [sent_email])
 
     render template: "casa_org/edit"
@@ -114,7 +114,7 @@ RSpec.describe "casa_org/edit", type: :view do
 
   context "with a template uploaded" do
     it "renders a prompt to download current template" do
-      organization = create :casa_org
+      organization = create(:casa_org)
       allow(view).to receive(:current_organization).and_return(organization)
 
       organization.court_report_template.attach(io: File.open("#{Rails.root}/app/documents/templates/default_report_template.docx"), filename: 'default_report_template
@@ -130,7 +130,7 @@ RSpec.describe "casa_org/edit", type: :view do
     context "enabled" do
       it "has option to enable additional expenses" do
         FeatureFlagService.enable!(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
-        organization = create :casa_org
+        organization = build_stubbed(:casa_org)
         allow(view).to receive(:current_organization).and_return(organization)
 
         render template: "casa_org/edit"
@@ -142,7 +142,7 @@ RSpec.describe "casa_org/edit", type: :view do
     context "disabled" do
       it "has option to enable additional expenses" do
         FeatureFlagService.disable!(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
-        organization = create :casa_org
+        organization = build_stubbed(:casa_org)
         allow(view).to receive(:current_organization).and_return(organization)
 
         render template: "casa_org/edit"
