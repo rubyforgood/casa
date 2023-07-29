@@ -322,7 +322,7 @@ RSpec.describe "view all volunteers", type: :system do
     end
 
     context "when timed out" do
-      it "prompts login", js: true do
+      it "prompts login" do
         sign_in supervisor
         visit volunteers_path
         click_on "Supervisor"
