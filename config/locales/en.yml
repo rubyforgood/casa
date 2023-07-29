@@ -31,6 +31,10 @@
 
 en:
   hello: "Hello world"
+  activerecord:
+    attributes:
+      learning_hour:
+        learning_hour_type: "Type of Learning"
   pundit:
     default: "Sorry, you are not authorized to perform this action."
     casa_case_policy:

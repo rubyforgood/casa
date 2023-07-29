@@ -2,6 +2,7 @@ channels/application_cable/channel.rb
 channels/application_cable/connection.rb
 controllers/banners_controller.rb
 controllers/followup_reports_controller.rb
+controllers/learning_hour_types_controller.rb
 controllers/mileage_reports_controller.rb
 controllers/placements_controller.rb
 controllers/users/sessions_controller.rb
@@ -30,6 +31,7 @@ notifications/followup_resolved_notification.rb
 notifications/youth_birthday_notification.rb
 policies/fund_request_policy.rb
 policies/learning_hour_policy.rb
+policies/learning_hour_type_policy.rb
 policies/note_policy.rb
 presenters/base_presenter.rb
 presenters/case_contact_presenter.rb

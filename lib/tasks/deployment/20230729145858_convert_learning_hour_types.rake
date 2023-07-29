@@ -9,9 +9,14 @@ namespace :after_party do
       learning_hours = LearningHour.where(user_id: user_ids)
 
       learning_types.each do |learning_type|
-        learning_hour_type = casa_org.learning_hour_types.new(name: learning_type.capitalize)
-        learning_hour_type.position = 99 if learning_type == "other"
-        learning_hour_type.save
+        learning_hour_type = if learning_type == "other"
+          casa_org.learning_hour_types.find_or_create_by!(
+            name: learning_type.capitalize,
+            position: 99
+          )
+        else
+          casa_org.learning_hour_types.find_or_create_by!(name: learning_type.capitalize)
+        end
 
         learning_hours.where(learning_type: learning_type).update_all(learning_hour_type_id: learning_hour_type.id)
       end

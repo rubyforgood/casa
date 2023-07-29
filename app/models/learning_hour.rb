@@ -1,6 +1,7 @@
 class LearningHour < ApplicationRecord
   belongs_to :user
-  belongs_to :learning_hour_type
+  # Set to optional to change validation message. See validates_presence_of :learning_hour_type below
+  belongs_to :learning_hour_type, optional: true
 
   # Deprecated with Issue 5028
   # Delete with Issue 5039 but only AFTER 5028 has been released to prod
@@ -17,6 +18,7 @@ class LearningHour < ApplicationRecord
   validates :duration_minutes, numericality: {greater_than: 0}, if: :zero_duration_hours?
   validates :name, presence: {message: "/ Title cannot be blank"}
   validates :occurred_at, presence: true
+  validates_presence_of :learning_hour_type, message: "cannot be blank"
   validate :occurred_at_not_in_future
 
   private
