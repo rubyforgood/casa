@@ -131,7 +131,7 @@
   </div>
 <% end %>
 
-<% unless @presenter.case_contacts.any? %>
+<% if @presenter.case_contacts.empty? %>
   <% if params.key?(:casa_case_id) %>
     <div class="card-style-1 mb-5">
       <div class="card-content">
