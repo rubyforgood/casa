@@ -6,6 +6,7 @@ RSpec.describe "casa_org/edit", type: :view do
     assign(:contact_types, [])
     assign(:hearing_types, [])
     assign(:judges, [])
+    assign(:learning_hour_types, [])
     assign(:sent_emails, [])
 
     sign_in build_stubbed(:casa_admin)

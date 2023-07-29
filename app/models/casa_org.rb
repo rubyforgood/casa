@@ -21,6 +21,7 @@ class CasaOrg < ApplicationRecord
   has_many :languages, dependent: :destroy
   has_many :placements, through: :casa_cases
   has_many :banners, dependent: :destroy
+  has_many :learning_hour_types, dependent: :destroy
   has_one_attached :logo
   has_one_attached :court_report_template
 

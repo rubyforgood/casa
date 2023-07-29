@@ -17,13 +17,14 @@ id: "learning-hours-form" do |form| %>
                           class:"mr-5" %>
     </div>
     <div class="select-style-1">
-      <%= form.label :learning_type, "Type of Learning" %>
+      <%= form.label :learning_hour_type_id, "Type of Learning" %>
       <div class="select-position">
-        <%= form.select :learning_type,
-                        LearningHour.learning_types&.map {|learning| [learning.first.humanize, learning.first]},
-                        prompt:"Select learning type",
-                        value: @learning_hour.learning_type,
-                        selected: @learning_hour.learning_type %>
+        <%= form.collection_select :learning_hour_type_id,
+          LearningHourType.for_organization(current_user.casa_org).active,
+                                   :id,
+                                   :name,
+                                   prompt: "Select learning type",
+                                   value: @learning_hour.learning_hour_type_id %>
       </div>
     </div>
   </div>
