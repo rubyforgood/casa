@@ -6,6 +6,7 @@ FactoryBot.define do
       casa_case { nil }
       court_date { nil }
       volunteer { nil }
+      case_court_orders { nil }
       path_to_report { Rails.root.join("tmp", "test_report.docx").to_s }
       path_to_template { Rails.root.join("app", "documents", "templates", "default_report_template.docx").to_s }
     end
@@ -23,7 +24,8 @@ FactoryBot.define do
         volunteer_id: volunteer_for_context.id,
         path_to_report: path_to_report,
         path_to_template: path_to_template,
-        court_date: court_date
+        court_date: court_date,
+        case_court_orders: case_court_orders
       )
     }
   end

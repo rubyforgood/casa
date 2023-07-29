@@ -103,7 +103,8 @@ class CourtDatesController < ApplicationController
         case_id: casa_case.id,
         path_to_template: template_docx_file.to_path,
         time_zone: time_zone,
-        court_date: court_date
+        court_date: court_date,
+        case_court_orders: court_date.case_court_orders
       }
       context = CaseCourtReportContext.new(args).context
       court_report = CaseCourtReport.new(path_to_template: template_docx_file.to_path, context: context)

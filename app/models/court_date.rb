@@ -35,27 +35,6 @@ class CourtDate < ApplicationRecord
   def display_name
     "#{casa_case.case_number} - Court Date - #{I18n.l(date.to_date)}"
   end
-
-  private
-
-  def context_hash
-    {
-      court_date: date,
-      case_number: casa_case.case_number,
-      judge_name: judge&.name || "None",
-      hearing_type_name: hearing_type&.name || "None",
-      case_court_orders: case_court_orders_context_hash
-    }
-  end
-
-  def case_court_orders_context_hash
-    case_court_orders.map do |order|
-      {
-        text: order.text,
-        implementation_status: order.implementation_status&.humanize
-      }
-    end
-  end
 end
 # == Schema Information
 #

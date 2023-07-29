@@ -32,6 +32,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
   before do
     travel_to Date.new(2021, 1, 1)
     sign_in admin
+    casa_case.casa_org.court_report_template.attach(io: File.new(Rails.root.join("spec", "fixtures", "files","default_past_court_date_template.docx")), filename: "test_past_date_template.docx")
   end
 
   describe "GET /show" do
