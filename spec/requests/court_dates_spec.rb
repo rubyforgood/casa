@@ -32,13 +32,17 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
   before do
     travel_to Date.new(2021, 1, 1)
     sign_in admin
-    casa_case.casa_org.court_report_template.attach(io: File.new(Rails.root.join("spec", "fixtures", "files","default_past_court_date_template.docx")), filename: "test_past_date_template.docx")
   end
 
   describe "GET /show" do
     subject(:show) { get casa_case_court_date_path(casa_case, court_date) }
 
-    before { show }
+    before do
+      casa_org = court_date.casa_case.casa_org
+      casa_org.court_report_template.attach(io: File.new(Rails.root.join("spec", "fixtures", "files", "default_past_court_date_template.docx")), filename: "test_past_date_template.docx")
+      casa_org.court_report_template.save!
+      show
+    end
 
     context "when the request is authenticated" do
       it { expect(response).to have_http_status(:success) }
@@ -64,7 +68,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
 
         document_inspector = DocxInspector.new(docx_contents: response.body)
 
-        expect(document_inspector.word_list_document_contains?(court_date.date.to_s)).to eq(true)
+        expect(document_inspector.word_list_document_contains?("December 25, 2020")).to eq(true)
       end
 
       context "when a judge is attached" do

@@ -109,7 +109,7 @@ class CourtDatesController < ApplicationController
       context = CaseCourtReportContext.new(args).context
       court_report = CaseCourtReport.new(path_to_template: template_docx_file.to_path, context: context)
 
-      return court_report.generate_to_string
+      court_report.generate_to_string
     end
   end
 end
