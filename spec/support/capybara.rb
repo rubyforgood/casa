@@ -14,7 +14,7 @@ end
 options = Selenium::WebDriver::Chrome::Options.new
 options.add_argument("--disable-gpu")
 options.add_argument("--ignore-certificate-errors")
-options.add_argument("--window-size=1280,900")
+options.add_argument("--window-size=1280,1900")
 
 options.add_preference(:browser, set_download_behavior: {behavior: "allow"})
 
