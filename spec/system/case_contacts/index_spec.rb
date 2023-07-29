@@ -102,28 +102,28 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
 
     it "can show only case contacts for one case" do
       travel_to Date.new(2021, 1, 2) do
-        create(:case_contact, creator: volunteer, casa_case: casa_case, notes: 'Case 1 Notes', occurred_at: Time.zone.yesterday - 1)
+        create(:case_contact, creator: volunteer, casa_case: casa_case, notes: "Case 1 Notes", occurred_at: Time.zone.yesterday - 1)
 
         another_case_number = "CINA-2"
         another_case = create(:casa_case, casa_org: organization, case_number: another_case_number)
         create(:case_assignment, volunteer: volunteer, casa_case: another_case)
-        create(:case_contact, creator: volunteer, casa_case: another_case, notes: 'Case 2 Notes', occurred_at: Time.zone.today)
+        create(:case_contact, creator: volunteer, casa_case: another_case, notes: "Case 2 Notes", occurred_at: Time.zone.today)
 
         sign_in volunteer
 
         # showing all cases
         visit root_path
-        click_on 'Case Contacts'
-        within '#ddmenu_case_contacts' do
-          click_on 'All'
+        click_on "Case Contacts"
+        within "#ddmenu_case_contacts" do
+          click_on "All"
         end
         expect(page).to have_text("Case 1 Notes")
         expect(page).to have_text("Case 2 Notes")
 
         # showing case 1
         visit root_path
-        click_on 'Case Contacts'
-        within '#ddmenu_case_contacts' do
+        click_on "Case Contacts"
+        within "#ddmenu_case_contacts" do
           click_on case_number
         end
         expect(page).to have_text("Case 1 Notes")
@@ -131,8 +131,8 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
 
         # showing case 2
         visit root_path
-        click_on 'Case Contacts'
-        within '#ddmenu_case_contacts' do
+        click_on "Case Contacts"
+        within "#ddmenu_case_contacts" do
           click_on another_case_number
         end
         expect(page).to have_text("Case 2 Notes")
@@ -148,8 +148,8 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
 
         # no contacts because we're only showing case 1 and that occurred before the filter dates
         visit root_path
-        click_on 'Case Contacts'
-        within '#ddmenu_case_contacts' do
+        click_on "Case Contacts"
+        within "#ddmenu_case_contacts" do
           click_on case_number
         end
         expect(page).to_not have_text("Case 1 Notes")
