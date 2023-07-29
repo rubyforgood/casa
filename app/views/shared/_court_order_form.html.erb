@@ -1,0 +1,19 @@
+<div class="court-order-entry d-flex align-items-center select-style-1 nested-form-wrapper"
+     data-new-record="<%= f.object.new_record? %>" data-type="COURT_ORDER">
+
+  <div class="input-style-1">
+    <%= f.text_area :text, class: 'input-style-1' %>
+  </div>
+  <div class="select-position">
+    <%= f.select :implementation_status,
+        casa_case.decorate.court_order_select_options,
+        {include_blank: 'Set Implementation Status'},
+        {class: 'implementation-status'} %>
+  </div>
+  <!-- remove-court-order-button -->
+  <button type="button" class="align-self-center main-btn danger-btn btn-hover btn-sm"
+          data-action="click->extended-nested-form#remove">
+    Delete</button>
+
+  <%= f.hidden_field :_destroy %>
+</div>
