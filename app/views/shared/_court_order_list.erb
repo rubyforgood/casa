@@ -1,7 +1,7 @@
 <%= form.label :case_court_orders, "Court Orders - Please check that you didn't enter any youth names" %>
 <template data-extended-nested-form-target="template">
   <%= form.fields_for :case_court_orders, CaseCourtOrder.new, child_index: "NEW_RECORD" do |ff| %>
-    <%= render "shared/court_order_form", f: ff, casa_case: casa_case %>
+    <%= render "shared/court_order_form", f: ff %>
   <% end %>
 </template>
 <div id="court-orders-list-container" data-resource="<%= resource %>" data-court-order-list-target="list">
@@ -24,7 +24,7 @@
     </div>
   <% end %>
   <%= form.fields_for :case_court_orders do |ff| %>
-    <%= render "shared/court_order_form", f: ff, casa_case: casa_case %>
+    <%= render "shared/court_order_form", f: ff %>
   <% end %>
 
   <div data-extended-nested-form-target="target"></div>
