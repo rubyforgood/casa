@@ -14,17 +14,13 @@ class BulkCourtDatesController < ApplicationController
 
     case_group_id = params[:court_date][:case_group_id]
     if case_group_id.empty?
-      @court_date = CourtDate.new(court_date_params(nil))
-      @court_date.errors.add(:base, "Case group must be selected.")
+      @court_date = build_court_date_with_error_message
       render :new
       return
     end
 
     case_group = current_organization.case_groups.find(case_group_id)
-
-    court_dates = case_group.casa_cases.map do |casa_case|
-      CourtDate.new(court_date_params(casa_case).merge(casa_case: casa_case))
-    end
+    court_dates = build_court_dates(case_group)
 
     court_date_with_error = nil
     ActiveRecord::Base.transaction do
@@ -41,6 +37,20 @@ class BulkCourtDatesController < ApplicationController
       render :new
     else
       redirect_to new_bulk_court_date_path, notice: "#{court_dates.size} #{"court date".pluralize(court_dates.size)} created!"
+    end
+  end
+
+  private
+
+  def build_court_date_with_error_message
+    court_date = CourtDate.new(court_date_params(nil))
+    court_date.errors.add(:base, "Case group must be selected.")
+    court_date
+  end
+
+  def build_court_dates(case_group)
+    case_group.casa_cases.map do |casa_case|
+      CourtDate.new(court_date_params(casa_case).merge(casa_case: casa_case))
     end
   end
 end
