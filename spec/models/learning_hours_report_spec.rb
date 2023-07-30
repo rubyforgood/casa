@@ -7,12 +7,12 @@ RSpec.describe LearningHoursReport, type: :model do
       it "includes all learning hours" do
         casa_org = build(:casa_org)
         users = create_list(:user, 3, casa_org: casa_org)
-        learning_hour_type = create(:learning_hour_type)
+        learning_hour_types = create_list(:learning_hour_type, 3)
         learning_hours =
           [
-            create(:learning_hour, user: users[0], learning_hour_type: learning_hour_type),
-            create(:learning_hour, user: users[1], learning_type: :movie, learning_hour_type: learning_hour_type),
-            create(:learning_hour, user: users[2], learning_type: :webinar, learning_hour_type: learning_hour_type)
+            create(:learning_hour, user: users[0], learning_hour_type: learning_hour_types[0]),
+            create(:learning_hour, user: users[1], learning_hour_type: learning_hour_types[1]),
+            create(:learning_hour, user: users[2], learning_hour_type: learning_hour_types[2])
           ]
         result = CSV.parse(described_class.new(casa_org.id).to_csv)
 

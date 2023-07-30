@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_29_213608) do
+ActiveRecord::Schema[7.0].define(version: 202307300103110) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -372,7 +372,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_29_213608) do
 
   create_table "learning_hours", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.integer "learning_type", default: 5
     t.string "name", null: false
     t.integer "duration_minutes", null: false
     t.integer "duration_hours", null: false
