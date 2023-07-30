@@ -104,7 +104,6 @@ RSpec.describe "casa_admins/edit", type: :system do
 
     expect(page).to have_content("Invitation sent")
 
-    
     retries = 0
     while retries < 4
       retries += 1
