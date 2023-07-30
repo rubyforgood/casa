@@ -31,6 +31,10 @@ module DownloadHelpers
     filename_and_contents_pairs.map { |name, doc| doc.text }.join("\n")
   end
 
+  def table_text(download_docx)
+    download_docx.tables.map{|t| t.rows.map(&:cells).flatten.map(&:to_s)}.flatten
+  end
+
   def download_file_name
     File.basename(download)
   end
