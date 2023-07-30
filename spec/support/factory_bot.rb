@@ -47,7 +47,9 @@ RSpec.configure do |config|
   end
 
   config.after(:suite) do
-    puts "How many objects did factory_bot create? (probably too many- let's tune some factories...)"
-    pp factory_bot_results
+    if ENV.fetch("SPEC_OUTPUT_FACTORY_BOT_OBJECT_CREATION_STATS", "false") == "true"
+      puts "How many objects did factory_bot create? (probably too many- let's tune some factories...)"
+      pp factory_bot_results
+    end
   end
 end
