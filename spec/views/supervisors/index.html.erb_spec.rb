@@ -21,13 +21,13 @@ RSpec.describe "supervisors/index", type: :view do
       user = create(:casa_admin)
       enable_pundit(view, user)
       casa_case1 = create(:casa_case,
-                          case_number: "123",
-                          active: true,
-                          birth_month_year_youth: Date.new(1900))
+        case_number: "123",
+        active: true,
+        birth_month_year_youth: Date.new(1900))
       casa_case2 = create(:casa_case,
-                          case_number: "456",
-                          active: false,
-                          birth_month_year_youth: Date.new(2100))
+        case_number: "456",
+        active: false,
+        birth_month_year_youth: Date.new(2100))
       assign :casa_cases, [casa_case1, casa_case2]
       assign :supervisors, []
       assign :available_volunteers, []
@@ -118,7 +118,6 @@ RSpec.describe "supervisors/index", type: :view do
     end
 
     context "when a supervisor only has volunteers who have submitted a case contact in 14 days" do
-
       it "shows the end of the attempted contact bar instead of the no attempted contact bar" do
         user = create(:casa_admin)
         enable_pundit(view, user)
