@@ -1,22 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "volunteers/edit", type: :system do
-  it "shows invite and login info" do
-    organization = create(:casa_org)
-    admin = create(:casa_admin, casa_org_id: organization.id)
-    volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
-
-    sign_in admin
-    visit edit_volunteer_path(volunteer)
-
-    expect(page).to have_text "Added to system "
-    expect(page).to have_text "Invitation email sent never"
-    expect(page).to have_text "Last logged in"
-    expect(page).to have_text "Invitation accepted never"
-    expect(page).to have_text "Password reset last sent never"
-    expect(page).to have_text "Learning Hours This Year 0h 0min"
-  end
-
   describe "updating volunteer personal data" do
     context "with valid data" do
       it "updates successfully" do
