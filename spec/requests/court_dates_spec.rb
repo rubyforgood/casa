@@ -82,7 +82,6 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
           docx_response = Docx::Document.open(StringIO.new(response.body))
 
           expect(docx_response.paragraphs.map(&:to_s)).to include(/#{judge.name}/)
-
         end
       end
 
@@ -96,7 +95,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
           docx_response = Docx::Document.open(StringIO.new(response.body))
 
           expect(docx_response.paragraphs.map(&:to_s)).not_to include(/#{judge.name}/)
-          expect(docx_response.paragraphs.map(&:to_s)).to include(/Judge\:/)
+          expect(docx_response.paragraphs.map(&:to_s)).to include(/Judge:/)
           expect(docx_response.paragraphs.map(&:to_s)).to include(/None/)
         end
       end
@@ -124,7 +123,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
           docx_response = Docx::Document.open(StringIO.new(response.body))
 
           expect(docx_response.paragraphs.map(&:to_s)).not_to include(/#{hearing_type.name}/)
-                    expect(docx_response.paragraphs.map(&:to_s)).to include(/Hearing Type\:/)
+          expect(docx_response.paragraphs.map(&:to_s)).to include(/Hearing Type:/)
           expect(docx_response.paragraphs.map(&:to_s)).to include(/None/)
         end
       end

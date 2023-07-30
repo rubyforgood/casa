@@ -146,7 +146,7 @@ RSpec.describe CaseCourtReport, type: :model do
           it "displays the case contact type" do
             docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
 
-            table_data = docx_response.tables.map{|t| t.rows.map(&:cells).flatten.map(&:to_s)}.flatten
+            table_data = docx_response.tables.map { |t| t.rows.map(&:cells).flatten.map(&:to_s) }.flatten
 
             expect(table_data).to include(/#{document_data[:case_contact_type]}.*/)
           end
@@ -154,7 +154,7 @@ RSpec.describe CaseCourtReport, type: :model do
           it "displays the case contact time date formatted" do
             docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
 
-            table_data = docx_response.tables.map{|t| t.rows.map(&:cells).flatten.map(&:to_s)}.flatten
+            table_data = docx_response.tables.map { |t| t.rows.map(&:cells).flatten.map(&:to_s) }.flatten
 
             expect(table_data).to include(/#{document_data[:case_contact_time].strftime("%-m/%d")}.*/)
           end
@@ -162,15 +162,15 @@ RSpec.describe CaseCourtReport, type: :model do
           it "displays the text" do
             docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
 
-            table_data = docx_response.tables.map{|t| t.rows.map(&:cells).flatten.map(&:to_s)}.flatten
+            table_data = docx_response.tables.map { |t| t.rows.map(&:cells).flatten.map(&:to_s) }.flatten
 
             expect(table_data).to include(/#{document_data[:text]}.*/)
           end
 
           it "displays the order status" do
-             docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
+            docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
 
-            table_data = docx_response.tables.map{|t| t.rows.map(&:cells).flatten.map(&:to_s)}.flatten
+            table_data = docx_response.tables.map { |t| t.rows.map(&:cells).flatten.map(&:to_s) }.flatten
 
             expect(table_data).to include("Partially implemented")
           end
@@ -178,7 +178,7 @@ RSpec.describe CaseCourtReport, type: :model do
           it "displays the volunteer name" do
             docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
 
-            table_data = docx_response.tables.map{|t| t.rows.map(&:cells).flatten.map(&:to_s)}.flatten
+            table_data = docx_response.tables.map { |t| t.rows.map(&:cells).flatten.map(&:to_s) }.flatten
 
             expect(table_data).to include(/#{document_data[:volunteer_name]}.*/)
           end
@@ -186,15 +186,15 @@ RSpec.describe CaseCourtReport, type: :model do
           it "displays the volunteer case assignment date formatted" do
             docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
 
-            table_data = docx_response.tables.map{|t| t.rows.map(&:cells).flatten.map(&:to_s)}.flatten
+            table_data = docx_response.tables.map { |t| t.rows.map(&:cells).flatten.map(&:to_s) }.flatten
 
             expect(table_data).to include(/#{document_data[:volunteer_case_assignment_date].strftime("%B %-d, %Y")}.*/)
           end
 
           it "displayes the supervisor name" do
-             docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
+            docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
 
-            table_data = docx_response.tables.map{|t| t.rows.map(&:cells).flatten.map(&:to_s)}.flatten
+            table_data = docx_response.tables.map { |t| t.rows.map(&:cells).flatten.map(&:to_s) }.flatten
 
             expect(table_data).to include(/#{document_data[:supervisor_name]}.*/)
           end
@@ -262,8 +262,8 @@ RSpec.describe CaseCourtReport, type: :model do
 
           it "displays the case contact type" do
             docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
-            
-            table_data = docx_response.tables.map{|t| t.rows.map(&:cells).flatten.map(&:to_s)}.flatten
+
+            table_data = docx_response.tables.map { |t| t.rows.map(&:cells).flatten.map(&:to_s) }.flatten
 
             expect(table_data).to include(document_data[:case_contact_type])
           end
@@ -271,7 +271,7 @@ RSpec.describe CaseCourtReport, type: :model do
           it "displays the case contact time formatted" do
             docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
 
-            table_data = docx_response.tables.map{|t| t.rows.map(&:cells).flatten.map(&:to_s)}.flatten
+            table_data = docx_response.tables.map { |t| t.rows.map(&:cells).flatten.map(&:to_s) }.flatten
 
             expect(table_data).to include(document_data[:case_contact_time].strftime("%-m/%d*"))
           end
@@ -279,7 +279,7 @@ RSpec.describe CaseCourtReport, type: :model do
           it "displays the test" do
             docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
 
-            table_data = docx_response.tables.map{|t| t.rows.map(&:cells).flatten.map(&:to_s)}.flatten
+            table_data = docx_response.tables.map { |t| t.rows.map(&:cells).flatten.map(&:to_s) }.flatten
 
             expect(table_data).to include("This text shall not be strikingly similar to other text in the document")
           end
@@ -287,7 +287,7 @@ RSpec.describe CaseCourtReport, type: :model do
           it "displays the order status" do
             docx_response = Docx::Document.open(StringIO.new(report.generate_to_string))
 
-            table_data = docx_response.tables.map{|t| t.rows.map(&:cells).flatten.map(&:to_s)}.flatten
+            table_data = docx_response.tables.map { |t| t.rows.map(&:cells).flatten.map(&:to_s) }.flatten
 
             expect(table_data).to include("Partially implemented")
           end

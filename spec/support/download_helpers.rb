@@ -32,7 +32,7 @@ module DownloadHelpers
   end
 
   def table_text(download_docx)
-    download_docx.tables.map{|t| t.rows.map(&:cells).flatten.map(&:to_s)}.flatten
+    download_docx.tables.map { |t| t.rows.map(&:cells).flatten.map(&:to_s) }.flatten
   end
 
   def download_file_name
