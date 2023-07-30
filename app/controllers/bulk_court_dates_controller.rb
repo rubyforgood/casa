@@ -22,15 +22,7 @@ class BulkCourtDatesController < ApplicationController
     case_group = current_organization.case_groups.find(case_group_id)
     court_dates = build_court_dates(case_group)
 
-    court_date_with_error = nil
-    ActiveRecord::Base.transaction do
-      court_dates.each do |court_date|
-        if !court_date.save
-          court_date_with_error = court_date
-          raise ActiveRecord::Rollback
-        end
-      end
-    end
+    court_date_with_error = create_court_dates(court_dates)
 
     if court_date_with_error
       @court_date = court_date_with_error
@@ -52,5 +44,18 @@ class BulkCourtDatesController < ApplicationController
     case_group.casa_cases.map do |casa_case|
       CourtDate.new(court_date_params(casa_case).merge(casa_case: casa_case))
     end
+  end
+
+  def create_court_dates(court_dates)
+    court_date_with_error = nil
+    ActiveRecord::Base.transaction do
+      court_dates.each do |court_date|
+        if !court_date.save
+          court_date_with_error = court_date
+          raise ActiveRecord::Rollback
+        end
+      end
+    end
+    court_date_with_error
   end
 end
