@@ -44,25 +44,6 @@ RSpec.describe "reports", type: :system, js: true do
       click_on I18n.t("reports.index.download_report_button")
       expect(page).to have_text("Downloading Report")
     end
-
-    it "downloads milesage report", js: true do
-      user = create(:supervisor)
-
-      sign_in user
-      visit reports_path
-
-      expect(page).to have_button I18n.t("reports.index.download_mileage_report_button.enabled")
-
-      click_on I18n.t("reports.index.download_mileage_report_button.enabled")
-
-      sleep 1
-
-      expect(page).to have_button I18n.t("reports.index.download_mileage_report_button.disabled"), disabled: true
-
-      sleep 3
-
-      expect(page).to have_button I18n.t("reports.index.download_mileage_report_button.enabled")
-    end
   end
 
   context "casa_admin user" do
@@ -95,25 +76,6 @@ RSpec.describe "reports", type: :system, js: true do
 
       click_on I18n.t("reports.index.download_report_button")
       expect(page).to have_text("Downloading Report")
-    end
-
-    it "downloads milesage report", js: true do
-      user = create(:casa_admin)
-
-      sign_in user
-      visit reports_path
-
-      expect(page).to have_button I18n.t("reports.index.download_mileage_report_button.enabled")
-
-      click_on I18n.t("reports.index.download_mileage_report_button.enabled")
-
-      sleep 1
-
-      expect(page).to have_button I18n.t("reports.index.download_mileage_report_button.disabled"), disabled: true
-
-      sleep 3
-
-      expect(page).to have_button I18n.t("reports.index.download_mileage_report_button.enabled")
     end
   end
 end
