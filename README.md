@@ -186,6 +186,17 @@ new tab in the browser.
 
 To see local email previews, check out http://localhost:3000/rails/mailers
 
+**Removing Columns**
+
+If you remove a column from the database, the Strong Migrations gem will prevent you from doing this in one 
+deployment. Most notably, you'll need to deploy the migration along with a line in the model that looks like this:
+```
+self.ignored_columns = ["COLUMN_NAME"]
+```
+
+Then you can write a ticket to remove this line after the migration has been deployed to prod. You can see 
+[Issue 5039](https://github.com/rubyforgood/casa/issues/5039) for an example of this.
+
 **Running Tests**
  - run the ruby test suite `bin/rails spec`
  - run the javascript test suite `yarn test`
