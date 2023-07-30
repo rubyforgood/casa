@@ -28,8 +28,9 @@ RSpec.describe "court_dates/new", type: :system do
       select judge.name, from: "Judge"
       select hearing_type.name, from: "Hearing type"
 
-      find("#add-court-order-button").click
-      fill_in "court_date_case_court_orders_attributes_0_text", with: text
+      click_on 'Add a court order'
+      text_area = first(:css, "textarea").native
+      text_area.send_keys(text)
       page.find("select.implementation-status").find(:option, text: "Partially implemented").select_option
 
       within ".top-page-actions" do
