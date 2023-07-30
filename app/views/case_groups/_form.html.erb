@@ -1,0 +1,42 @@
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h1>
+          <% if case_group.persisted? %>
+            Edit Case Group
+          <% else %>
+            New Case Group
+          <% end %>
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card-style mb-30">
+  <%= form_with model: case_group do |form| %>
+    <%= render "shared/error_messages", resource: case_group %>
+
+    <div class="input-style-1">
+      <%= form.label :name %>
+      <%= form.text_field :name, required: true %>
+    </div>
+
+    <div class="input-style-1">
+      <%= form.label :casa_case_ids %>
+      <%= form.collection_select(
+            :casa_case_ids,
+            current_organization.casa_cases,
+            :id, :case_number,
+            { include_hidden: false },
+            { class: "form-control", multiple: true }
+          ) %>
+    </div>
+
+    <div class="actions mb-10">
+      <%= button_tag(type: "submit", class: "btn-sm main-btn primary-btn btn-hover") do %>
+        <i class="lni lni-checkmark-circle mr-10"></i> Submit
+      <% end %>
+    </div>
+  <% end %>
+</div>

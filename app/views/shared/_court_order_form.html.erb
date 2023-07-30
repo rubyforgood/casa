@@ -6,7 +6,7 @@
   </div>
   <div class="select-position">
     <%= f.select :implementation_status,
-        casa_case.decorate.court_order_select_options,
+        court_order_select_options,
         {include_blank: 'Set Implementation Status'},
         {class: 'implementation-status'} %>
   </div>

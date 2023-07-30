@@ -18,7 +18,9 @@
         </div>
       </div>
       <%= button_tag "Copy", type: :button, class: "copy-court-button main-btn primary-btn btn-hover ml-1", id: "copy-court-button" %>
-      <%= form.hidden_field :casa_case, value: casa_case.id %>
+      <% if casa_case %>
+        <%= form.hidden_field :casa_case, value: casa_case.id %>
+      <% end %>
     </div>
   <% end %>
   <%= form.fields_for :case_court_orders do |ff| %>
@@ -28,7 +30,7 @@
   <div data-extended-nested-form-target="target"></div>
 </div>
 <div class="add-container">
-  <button type="button" class="main-btn primary-btn btn-sm btn-hover" data-action="extended-nested-form#add">
+  <button id="add-court-order-button" type="button" class="main-btn primary-btn btn-sm btn-hover" data-action="extended-nested-form#add">
     <i class="lni lni-plus mr-10"></i> Add a court order
   </button>
 </div>
