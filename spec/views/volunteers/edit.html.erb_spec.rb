@@ -124,7 +124,6 @@ RSpec.describe "volunteers/edit", type: :view do
       it "allows a supervisor to resend invitation to a volunteer" do
         volunteer = create :volunteer
         supervisor = build_stubbed :supervisor
-        admin = build_stubbed :casa_admin
 
         enable_pundit(view, supervisor)
         allow(view).to receive(:current_user).and_return(supervisor)
