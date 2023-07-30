@@ -1,5 +1,4 @@
 module CourtDateParams
-
   private
 
   def sanitized_court_date_params(casa_case)
