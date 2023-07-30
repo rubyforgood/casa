@@ -188,24 +188,6 @@
                 <% end %>
               </li>
             <% end %>
-
-            <% if policy(:application).admin_or_supervisor? %>
-              <li>
-                <%= link_to case_groups_path, class: "#{active_class(case_groups_path)}" do %>
-                  <i class="lni lni-flag mr-10"></i>
-                  Case Groups
-                <% end %>
-              </li>
-            <% end %>
-
-            <% if policy(:application).admin_or_supervisor? %>
-              <li>
-                <%= link_to new_bulk_court_date_path, class: "#{active_class(new_bulk_court_date_path)}" do %>
-                  <i class="lni lni-flag mr-10"></i>
-                  New Bulk Court Date
-                <% end %>
-              </li>
-            <% end %>
           </ul>
         </li>
         <li>
