@@ -1,6 +1,9 @@
 channels/application_cable/channel.rb
 channels/application_cable/connection.rb
 controllers/banners_controller.rb
+controllers/bulk_court_dates_controller.rb
+controllers/case_groups_controller.rb
+controllers/concerns/court_date_params.rb
 controllers/followup_reports_controller.rb
 controllers/learning_hour_types_controller.rb
 controllers/mileage_reports_controller.rb
@@ -19,6 +22,8 @@ helpers/template_helper.rb
 jobs/application_job.rb
 mailers/application_mailer.rb
 models/application_record.rb
+models/case_group.rb
+models/case_group_membership.rb
 models/concerns/by_organization_scope.rb
 models/concerns/roles.rb
 models/fund_request.rb
