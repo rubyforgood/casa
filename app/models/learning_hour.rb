@@ -8,11 +8,6 @@ class LearningHour < ApplicationRecord
   validates :occurred_at, presence: true
   validate :occurred_at_not_in_future
 
-  # Deprecated this column in Issue 5028. Removed column in Issue 5039. Strong migrations gem advised on this line
-  # with removal of the column. Added a final issue to complete clean up (). Added a note in README about how to make
-  # this two steps and not three.
-  self.ignored_columns = ["learning_type"]
-
   private
 
   def zero_duration_hours?
