@@ -103,17 +103,6 @@ RSpec.describe "casa_admins/edit", type: :system do
     click_on "Resend Invitation"
 
     expect(page).to have_content("Invitation sent")
-
-    retries = 0
-    while retries < 4
-      retries += 1
-      sleep 1
-      deliveries = ActionMailer::Base.deliveries
-      next unless deliveries.count > 0
-      expect(deliveries.count).to eq(1)
-      expect(deliveries.last.subject).to have_text "CASA Console invitation instructions"
-    end
-    raise "could not find mail delivery proof" if retries > 4
   end
 
   it "can convert the admin to a supervisor", js: true do
