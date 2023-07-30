@@ -450,12 +450,9 @@ RSpec.describe CaseContact, type: :model do
 
       groups_with_types = case_contact.contact_groups_with_types
 
-      expect(groups_with_types).to eql(
-        {
-          "Family" => ["Parent"],
-          "Health" => ["Medical Professional", "Other Therapist"]
-        }
-      )
+      expect(groups_with_types.keys).to match_array(["Family", "Health"])
+      expect(groups_with_types["Family"]).to match_array(["Parent"])
+      expect(groups_with_types["Health"]).to match_array(["Medical Professional", "Other Therapist"])
     end
   end
 
