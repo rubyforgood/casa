@@ -168,6 +168,7 @@ RSpec.describe "volunteers/edit", type: :system do
     visit edit_volunteer_path(volunteer)
 
     dismiss_confirm do
+      scroll_to(".actions")
       click_on "Deactivate volunteer"
     end
     expect(page).not_to have_text("Volunteer was deactivated on")
