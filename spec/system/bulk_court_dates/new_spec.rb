@@ -14,7 +14,7 @@ RSpec.describe "bulk_court_dates/new", type: :system do
 
   it "is successful", js: true do
     case_group = build(:case_group, casa_org: casa_org)
-    case_group.case_group_memberships.build(casa_case: casa_case)
+    case_group.case_group_memberships.first.casa_case = casa_case
     case_group.save!
 
     travel_to now
