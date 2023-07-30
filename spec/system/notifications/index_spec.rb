@@ -73,7 +73,7 @@ RSpec.describe "notifications/index", type: :system do
         within("#resolve", wait: 5) do
           expect(page).to have_content "Resolve Reminder"
         end
-        
+
         sign_in volunteer
         visit notifications_path
 
