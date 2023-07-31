@@ -151,6 +151,10 @@ class CaseContact < ApplicationRecord
     errors.add(:occurred_at, :invalid, message: "cannot be in the future")
   end
 
+  def occurred_at_display
+    occurred_at.strftime("%B %-d, %Y")
+  end
+
   def reimbursement_only_when_miles_driven
     return if miles_driven&.positive? || !want_driving_reimbursement
 
