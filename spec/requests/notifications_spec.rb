@@ -41,8 +41,8 @@ RSpec.describe "/notifications", type: :request do
       let(:patch_note_group_no_volunteers) { create(:patch_note_group, :only_supervisors_and_admins) }
       let(:patch_note_type_a) { create(:patch_note_type, name: "patch_note_type_a") }
       let(:patch_note_type_b) { create(:patch_note_type, name: "patch_note_type_b") }
-      let(:patch_note_1) { create(:patch_note, note: "*Sy@\\<iiF>(\\\"Q7", patch_note_type: patch_note_type_a) }
-      let(:patch_note_2) { create(:patch_note, note: "(W!;Ros>cIWNKX}", patch_note_type: patch_note_type_b) }
+      let(:patch_note_1) { create(:patch_note, note: "Patch Note 1", patch_note_type: patch_note_type_a) }
+      let(:patch_note_2) { create(:patch_note, note: "Patch Note B", patch_note_type: patch_note_type_b) }
 
       before do
         patch_note_1.update(created_at: Date.new(2020, 12, 31), patch_note_group: patch_note_group_all_users)
