@@ -8,7 +8,6 @@ let currentTime
 let timeElapsed
 
 function warningBoxAndReload () {
-  $('body').prepend('<p>############################</p>')
   window.alert('Warning: You will be logged off in 2 minutes due to inactivity.')
   window.location.reload()
 }
