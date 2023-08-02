@@ -22,8 +22,6 @@ helpers/template_helper.rb
 jobs/application_job.rb
 mailers/application_mailer.rb
 models/application_record.rb
-models/case_group.rb
-models/case_group_membership.rb
 models/concerns/by_organization_scope.rb
 models/concerns/roles.rb
 models/fund_request.rb

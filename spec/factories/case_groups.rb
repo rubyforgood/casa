@@ -4,7 +4,9 @@ FactoryBot.define do
     name { "A family" }
 
     after(:build) do |case_group, _|
-      case_group.case_group_memberships.build(casa_case: create(:casa_case))
+      if case_group.case_group_memberships.empty?
+        case_group.case_group_memberships.build(casa_case: create(:casa_case))
+      end
     end
   end
 end
