@@ -21,9 +21,10 @@
       <%= form.label :name %>
       <%= form.text_field :name, required: true %>
     </div>
-    <div data-controller="checkbox" class="form-check checkbox-style mb-20">
+    <div data-controller="checkbox reveal" data-action="checkbox:toggle->reveal#toggle" data-reveal-hidden-class="d-none" class="form-check checkbox-style mb-20">
       <%= form.check_box :active, data: { action: "click->checkbox#toggle", checkbox_target: "checkbox" }, class: 'form-check-input' %>
       <%= form.label :active, "Active?", class: 'form-check-label' %>
+      <span data-reveal-target="item" class="text-danger<%= form.object.active ? '' : ' d-none' %>">Warning: This will replace any current active banner</span>
     </div>
     <div class="input-style-1">
       <%= form.label :content %>

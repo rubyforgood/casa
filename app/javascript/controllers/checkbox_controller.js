@@ -6,11 +6,10 @@ export default class extends Controller {
 
   connect() {
     this.checked = this.hasCheckboxTarget && this.checkboxTarget.checked
-    console.log(`Checkbox is ${this.checked}`)
   }
 
-  toggle() {
+  toggle(e) {
     this.checked = !this.checked
-    console.log(`Checkbox is ${this.checked}`)
+    this.dispatch("toggle", { detail: { content: this.checkboxTarget.value } });
   }
 }
