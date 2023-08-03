@@ -21,8 +21,8 @@
       <%= form.label :name %>
       <%= form.text_field :name, required: true %>
     </div>
-    <div class="form-check checkbox-style mb-20">
-      <%= form.check_box :active, class: 'form-check-input' %>
+    <div data-controller="checkbox" class="form-check checkbox-style mb-20">
+      <%= form.check_box :active, data: { action: "click->checkbox#toggle", checkbox_target: "checkbox" }, class: 'form-check-input' %>
       <%= form.label :active, "Active?", class: 'form-check-label' %>
     </div>
     <div class="input-style-1">
