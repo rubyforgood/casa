@@ -49,7 +49,7 @@ RSpec.describe "casa_cases/new", type: :system do
         casa_org = build(:casa_org)
         admin = create(:casa_admin, casa_org: casa_org)
         contact_type_group = create(:contact_type_group, casa_org: casa_org)
-        contact_type = create(:contact_type, contact_type_group: contact_type_group)
+        create(:contact_type, contact_type_group: contact_type_group)
         case_number = "12345"
 
         sign_in admin
@@ -96,7 +96,7 @@ RSpec.describe "casa_cases/new", type: :system do
           casa_org = build(:casa_org)
           admin = create(:casa_admin, casa_org: casa_org)
           contact_type_group = create(:contact_type_group, casa_org: casa_org)
-          contact_type = create(:contact_type, contact_type_group: contact_type_group)
+          create(:contact_type, contact_type_group: contact_type_group)
           case_number = "12345"
 
           sign_in admin
@@ -124,8 +124,6 @@ RSpec.describe "casa_cases/new", type: :system do
         it "does not create a new case" do
           casa_org = build(:casa_org)
           admin = create(:casa_admin, casa_org: casa_org)
-          contact_type_group = create(:contact_type_group, casa_org: casa_org)
-          contact_type = create(:contact_type, contact_type_group: contact_type_group)
           case_number = "12345"
 
           sign_in admin
@@ -150,8 +148,6 @@ RSpec.describe "casa_cases/new", type: :system do
       it "does not create a new case" do
         casa_org = build(:casa_org)
         admin = create(:casa_admin, casa_org: casa_org)
-        contact_type_group = create(:contact_type_group, casa_org: casa_org)
-        contact_type = create(:contact_type, contact_type_group: contact_type_group)
         case_number = "12345"
         _existing_casa_case = create(:casa_case, case_number: case_number, casa_org: casa_org)
 

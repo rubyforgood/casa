@@ -8,7 +8,7 @@ RSpec.describe "casa_cases/index", type: :system do
     cina = build(:casa_case, active: true, casa_org: organization, case_number: "CINA-1")
     tpr = create(:casa_case, active: true, casa_org: organization, case_number: "TPR-100")
     no_prefix = create(:casa_case, active: true, casa_org: organization, case_number: "123-12-123")
-    case_assignment = create(:case_assignment, volunteer: volunteer, casa_case: cina)
+    create(:case_assignment, volunteer: volunteer, casa_case: cina)
 
     sign_in admin
     visit casa_cases_path
