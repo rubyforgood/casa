@@ -1,24 +1,19 @@
 require "rails_helper"
 
 RSpec.describe "casa_cases/new", type: :view do
-  subject { render template: "casa_cases/new" }
-
-  before(:each) do
-    assign :casa_case, CasaCase.new(casa_org: user.casa_org)
-    assign :contact_types, []
-
-    enable_pundit(view, user)
-    allow(view).to receive(:current_user).and_return(user)
-    allow(view).to receive(:current_organization).and_return(user.casa_org)
-  end
-
   context "while signed in as admin" do
-    let(:user) { build_stubbed(:casa_admin) }
+    it "has youth birth month and year" do
+      user = build_stubbed(:casa_admin)
+      enable_pundit(view, user)
+      allow(view).to receive(:current_user).and_return(user)
+      allow(view).to receive(:current_organization).and_return(user.casa_org)
 
-    before do
-      sign_in user
+      assign :casa_case, build(:casa_case, casa_org: user.casa_org)
+      assign :contact_types, []
+
+      render template: "casa_cases/new"
+
+      expect(rendered).to include CGI.escapeHTML("Youth's Birth Month & Year")
     end
-
-    it { is_expected.to include(CGI.escapeHTML("Youth's Birth Month & Year")) }
   end
 end
