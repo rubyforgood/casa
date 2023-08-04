@@ -163,19 +163,5 @@ RSpec.describe "casa_cases/new", type: :system do
         expect(page).to have_content("Case number has already been taken")
       end
     end
-
-    context "when trying to assign a volunteer to a case" do
-      # Move to view spec
-      it "should not be able to assign volunteers" do
-        casa_org = build(:casa_org)
-        admin = create(:casa_admin, casa_org: casa_org)
-
-        sign_in admin
-        visit new_casa_case_path
-
-        expect(page).not_to have_content("Manage Volunteers")
-        expect(page).not_to have_css("#volunteer-assignment")
-      end
-    end
   end
 end
