@@ -1,4 +1,6 @@
 class CourtDatesController < ApplicationController
+  include CourtDateParams
+
   before_action :set_casa_case
   before_action :set_court_date, only: %i[edit show generate update destroy]
   before_action :require_organization!
@@ -30,12 +32,8 @@ class CourtDatesController < ApplicationController
   end
 
   def create
-    @court_date = CourtDate.new(court_dates_params.merge(casa_case: @casa_case))
+    @court_date = CourtDate.new(court_date_params(@casa_case).merge(casa_case: @casa_case))
     authorize @court_date
-
-    if !@court_date.date.nil?
-      @court_date.court_report_due_date = @court_date.date - 3.weeks
-    end
 
     if @court_date.save && @casa_case.save
       redirect_to casa_case_court_date_path(@casa_case, @court_date), notice: "Court date was successfully created."
@@ -46,7 +44,7 @@ class CourtDatesController < ApplicationController
 
   def update
     authorize @court_date
-    if @court_date.update(court_dates_params)
+    if @court_date.update(court_date_params(@casa_case))
       redirect_to casa_case_court_date_path(@casa_case, @court_date), notice: "Court date was successfully updated."
     else
       render :edit
@@ -71,28 +69,6 @@ class CourtDatesController < ApplicationController
 
   def set_court_date
     @court_date = @casa_case.court_dates.find(params[:id])
-  end
-
-  def sanitized_params
-    params.require(:court_date).tap do |p|
-      p[:case_court_orders_attributes]&.reject! do |k, _|
-        p[:case_court_orders_attributes][k][:text].blank? && p[:case_court_orders_attributes][k][:implementation_status].blank?
-      end
-
-      p[:case_court_orders_attributes]&.each do |k, _|
-        p[:case_court_orders_attributes][k][:casa_case_id] = @casa_case.id
-      end
-    end
-  end
-
-  def court_dates_params
-    sanitized_params.permit(
-      :date,
-      :hearing_type_id,
-      :judge_id,
-      :court_report_due_date,
-      {case_court_orders_attributes: %i[text _destroy implementation_status id casa_case_id]}
-    )
   end
 
   def generate_report_to_string(court_date, time_zone)

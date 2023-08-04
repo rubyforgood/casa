@@ -34,6 +34,8 @@ class CasaCase < ApplicationRecord
   has_many :emancipation_options, through: :casa_cases_emancipation_options
   has_many :court_dates, dependent: :destroy
   has_many :placements, dependent: :destroy
+  has_many :case_group_memberships
+  has_many :case_groups, through: :case_group_memberships
   has_many_attached :court_reports
 
   validates :case_number, uniqueness: {scope: :casa_org_id, case_sensitive: false}, presence: true
