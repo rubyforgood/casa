@@ -1,15 +1,15 @@
-import { Controller } from "@hotwired/stimulus";
+import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-  static targets = [ "checkbox" ]
+  static targets = ['checkbox']
   static values = { checked: Boolean }
 
-  connect() {
+  connect () {
     this.checked = this.hasCheckboxTarget && this.checkboxTarget.checked
   }
 
-  toggle(e) {
+  toggle (e) {
     this.checked = !this.checked
-    this.dispatch("toggle", { detail: { content: this.checkboxTarget.value } });
+    this.dispatch('toggle', { detail: { content: this.checkboxTarget.value } })
   }
 }

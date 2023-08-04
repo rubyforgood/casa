@@ -39,7 +39,7 @@ class BannersController < ApplicationController
 
     @banner = current_organization.banners.find(params[:id])
     deactivate_alternate_active_banner if banner_params[:active]&.to_i == 1
-    
+
     if @banner.update(banner_params)
       redirect_to banners_path
     else
@@ -62,6 +62,6 @@ class BannersController < ApplicationController
 
   def deactivate_alternate_active_banner
     alternate_active_banner = current_organization.banners.where(active: true).where.not(id: @banner.id).first
-    alternate_active_banner.update(active: false) if alternate_active_banner
+    alternate_active_banner&.update(active: false)
   end
 end
