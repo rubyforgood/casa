@@ -10,14 +10,4 @@ RSpec.describe CaseContactContactType, type: :model do
       case_contact.contact_types << contact_type
     }.to raise_error(ActiveRecord::RecordInvalid)
   end
-
-  it "sorts contact types alphabetically" do
-    contact_type_groups = []
-    contact_type = create(:contact_type)
-    contact_type_b = create(:contact_type)
-    contact_type_groups << contact_type
-    contact_type_groups << contact_type_b
-
-    expect(contact_type_groups).to eq([contact_type, contact_type_b])
-  end
 end
