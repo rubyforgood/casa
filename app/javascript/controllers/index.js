@@ -8,10 +8,10 @@ import CheckboxController from './checkbox_controller'
 import DismissController from './dismiss_controller'
 import ExtendedNestedFormController from './extended_nested_form_controller'
 import HelloController from './hello_controller'
-import Reveal from 'stimulus-reveal-controller'
+import RevealController from 'stimulus-reveal-controller'
 
 application.register('checkbox', CheckboxController)
 application.register('dismiss', DismissController)
 application.register('extended-nested-form', ExtendedNestedFormController)
 application.register('hello', HelloController)
-application.register('reveal', Reveal)
+application.register('reveal', RevealController)
