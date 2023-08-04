@@ -129,7 +129,7 @@ class CaseContactsController < ApplicationController
     authorize CasaAdmin
 
     case_contact = authorize(current_organization.case_contacts.with_deleted.find(params[:id]))
-    case_contact.restore(recrusive: true)
+    case_contact.restore(recursive: true)
     flash[:notice] = "Contact is successfully restored."
     redirect_to request.referer
   end
