@@ -7,19 +7,21 @@
     <% else %>
       <h2><label for="case_contact_casa_case">1. Select relevant CASA case<span class="red-letter"> *</span></label></h2>
     <% end %>
-    <% casa_cases.each_with_index do |casa_case, index| %>
-      <div class="form-check checkbox-style mb-10 ml-5">
-        <%= check_box_tag "case_contact[casa_case_id][]",
-                          casa_case.id,
-                          @selected_cases.include?(casa_case),
-                          id: "case_contact_casa_case_id_#{index}",
-                          class: ["form-check-input", "casa-case-id"],
-                          disabled: case_contact.persisted? %>
-        <label class="form-check-label" for="case_contact_casa_case_id_<%= index %>">
-          <%= casa_case.case_number %>
-        </label>
-      </div>
-    <% end %>
+    <div class="casa-case-scroll">
+      <% casa_cases.each_with_index do |casa_case, index| %>
+        <div class="form-check checkbox-style mb-10 ml-5">
+          <%= check_box_tag "case_contact[casa_case_id][]",
+                            casa_case.id,
+                            @selected_cases.include?(casa_case),
+                            id: "case_contact_casa_case_id_#{index}",
+                            class: ["form-check-input", "casa-case-id"],
+                            disabled: case_contact.persisted? %>
+          <label class="form-check-label" for="case_contact_casa_case_id_<%= index %>">
+            <%= casa_case.case_number %>
+          </label>
+        </div>
+      <% end %>
+    </div>
   </div>
   <div class="card-style-1 pl-25 mb-10">
     <%= render "contact_types",
@@ -112,7 +114,7 @@
       </div>
     </div>
 
-    <% if current_organization.show_driving_reimbursement %>
+    <% if current_organization.show_driving_reimbursement && show_volunteer_reimbursement(casa_cases) %>
       <div class="field want-driving-reimbursement form-group">
         <h5 class="mb-3"><%= form.label :want_driving_reimbursement, "b. Want Driving Reimbursement" %></h5>
         <div class="form-check radio-style mb-20">
@@ -164,7 +166,7 @@ readonly: true %>
       </div>
     <% end %>
 
-    <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
+    <% if Pundit.policy(current_user, case_contact).additional_expenses_allowed? %>
       <div class="other-expenses">
         <h5 class="mb-3"><%= form.label :additional_expense, "d. Other Expenses" %></h5>
         <ol>
@@ -176,12 +178,12 @@ readonly: true %>
                 <div class="col input-style-1">
                   <%= ff.number_field :other_expense_amount,
                   placeholder: "Enter amount",
-                  class: "cc-italic cc-field other-expense-amount w-25 input-style-1 co",
+                  class: "cc-italic cc-field other-expense-amount w-25 co",
                   min: "0", max: 1000, step: 0.01 %>
                 </div>
                 <div class="col input-style-1">
                   <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
-                  class: "cc-italic cc-field other-expenses-describe input-style-1" %>
+                  class: "cc-italic cc-field other-expenses-describe" %>
                 </div>
               </div>
             </li>
@@ -207,20 +209,20 @@ readonly: true %>
           <% end %>
           <% (9 - @case_contact.decorate.additional_expenses_count).times do |i| %>
             <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
-            <div class="expense-container row" id="<%= if @case_contact.decorate.additional_expenses_count === 0
+            <div class="expense-container row d-none" id="<%= if @case_contact.decorate.additional_expenses_count === 0
             then "expense" + (i + 2).to_s
             else "expense" + ((@case_contact.decorate.additional_expenses_count) + (i + 2)).to_s
             end %>">
               <div class="input-style-1 col-sm-3">
                 <%= ff.number_field :other_expense_amount,
                     placeholder: "Enter amount",
-                    class: "cc-italic cc-field other-expense-amount hide-field",
+                    class: "cc-italic cc-field other-expense-amount",
                   min: "0", max: 1000, step: 0.01 %>
               </div>
               <div class="input-style-1 col">
                 <%= ff.text_field :other_expenses_describe,
                     placeholder: "Describe the expense",
-                    class: "cc-italic cc-field other-expenses-describe hide-field" %>
+                    class: "cc-italic cc-field other-expenses-describe" %>
               </div>
             </div>
             <% end %>

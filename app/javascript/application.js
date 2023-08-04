@@ -1,18 +1,17 @@
 /* global window */
-
 import './jQueryGlobalizer.js'
 import 'bootstrap'
 import 'bootstrap-select'
 import './sweet-alert-confirm.js'
+import './controllers'
+import 'trix'
+import '@rails/actiontext'
 
 require('datatables.net-dt')(null, window.jQuery) // First parameter is the global object. Defaults to window if null
 require('select2')(window.jQuery)
-
 require('@rails/ujs').start()
 require('@rails/activestorage').start()
-
 require('bootstrap-datepicker')
-
 require('./src/add_additional_expense')
 require('./src/add_to_calendar_button')
 require('./src/case_contact')
@@ -32,5 +31,8 @@ require('./src/require_communication_preference')
 require('./src/select')
 require('./src/sidebar')
 require('./src/tooltip')
+require('./src/time_zone')
 require('./src/session_timeout_poller.js')
 require('./src/display_app_metric.js')
+require('./src/casa_org')
+require('./src/sms_reactivation_toggle')

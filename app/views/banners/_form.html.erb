@@ -1,0 +1,38 @@
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h1>
+          <% if banner.persisted? %>
+            Edit Banner
+          <% else %>
+            New Banner
+          <% end %>
+        </h1>
+      </div>
+    </div>
+  </div>
+</div><!-- ==== end title ==== -->
+<div class="card-style mb-30">
+  <%= form_with model: banner do |form| %>
+    <%= render "shared/error_messages", resource: banner %>
+
+    <div class="input-style-1">
+      <%= form.label :name %>
+      <%= form.text_field :name, required: true %>
+    </div>
+    <div class="form-check checkbox-style mb-20">
+      <%= form.check_box :active, class: 'form-check-input' %>
+      <%= form.label :active, "Active?", class: 'form-check-label' %>
+    </div>
+    <div class="input-style-1">
+      <%= form.label :content %>
+      <%= form.rich_text_area :content %>
+    </div>
+    <div class="actions mb-10">
+      <%= button_tag(type: "submit", class: "btn-sm main-btn primary-btn btn-hover") do %>
+        <i class="lni lni-checkmark-circle mr-10"></i> Submit
+      <% end %>
+    </div>
+  <% end %>
+</div>

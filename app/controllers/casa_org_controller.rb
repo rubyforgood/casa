@@ -3,6 +3,7 @@ class CasaOrgController < ApplicationController
   before_action :set_contact_type_data, only: %i[edit update]
   before_action :set_hearing_types, only: %i[edit update]
   before_action :set_judges, only: %i[edit update]
+  before_action :set_learning_hour_types, only: %i[edit update]
   before_action :set_sent_emails, only: %i[edit update]
   before_action :require_organization!
   after_action :verify_authorized
@@ -46,10 +47,12 @@ class CasaOrgController < ApplicationController
       :logo,
       :court_report_template,
       :show_driving_reimbursement,
+      :additional_expenses_enabled,
       :twilio_account_sid,
       :twilio_phone_number,
       :twilio_api_key_sid,
-      :twilio_api_key_secret
+      :twilio_api_key_secret,
+      :twilio_enabled
     )
   end
 
@@ -64,6 +67,10 @@ class CasaOrgController < ApplicationController
 
   def set_judges
     @judges = Judge.for_organization(@casa_org)
+  end
+
+  def set_learning_hour_types
+    @learning_hour_types = LearningHourType.for_organization(@casa_org)
   end
 
   def set_sent_emails

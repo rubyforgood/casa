@@ -13,29 +13,32 @@
 
 A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates on behalf of a youth in their county's foster care system. CASA is also the namesake role of the national organization, CASA, which exists to cultivate and supervise volunteers carrying out this work – with county level chapters (operating relatively independently of each other) across the country.
 
-<!-- toc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
 
-- [Welcome contributors!](#welcome-contributors)
-  - [About this project](#about-this-project)
+  - [Welcome contributors!](#welcome-contributors)
+    - [About this project](#about-this-project)
 - [Developing! ✨🛠✨](#developing-)
   - [How to Contribute](#how-to-contribute)
   - [Installation](#installation)
     - [General Setup Instructions](#general-setup-instructions)
     - [Platform Specific Installation Instructions](#platform-specific-installation-instructions)
       - [Ubuntu and WSL](#ubuntu-and-wsl)
+    - [Common issues](#common-issues)
   - [Running the App / Verifying Installation](#running-the-app--verifying-installation)
 - [Other Documentation](#other-documentation)
-    - [Common issues](#common-issues)
+- [Acknowledgements](#acknowledgements)
 - [Communication and Collaboration](#communication-and-collaboration)
-- [History](#history)
+- [Feedback](#feedback)
 
-<!-- tocstop -->
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Welcome contributors!
 
 We are very happy to have you! CASA and Ruby for Good are committed to welcoming new contributors of all skill levels.
 
-We highly recommend that you join us in slack https://rubyforgood.herokuapp.com/ #casa channel to ask questions quickly and hear about office hours (currently Tuesday 5-7pm Pacific), stakeholder news, and upcoming new issues.
+We highly recommend that you join us in slack http://bit.ly/rubyforgood #casa channel to ask questions quickly and hear about office hours (currently Tuesday 5-7pm Pacific), stakeholder news, and upcoming new issues.
 
 Issues on the issue board https://github.com/rubyforgood/casa/projects/1 in the TODO column are fair game. An issue can be claimed by commenting on it.
 
@@ -198,6 +201,12 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 
 If additional work arises from your pull request that is outside the scope of the issue it resolves, please open a new issue.
 
+**Stimulus**
+
+[Issue 5016](https://github.com/rubyforgood/casa/issues/5016) started a refactor of Javascript to use 
+[Hotwire's Stimulus](https://stimulus.hotwired.dev/handbook/origin). To see if it's working for you, go to 
+`/casa_cases` and see **Stimulus is working!** in your browser console.
+
 **Post-deployment tasks**
 
 We are using [After Party](https://github.com/theSteveMitchell/after_party) to
@@ -225,14 +234,14 @@ There is a `doc` directory at the top level that includes:
 * [productsense.md](doc/productsense.md)(for team leads & product interested contributors)
 * [SECURITY.md](doc/SECURITY.md)
 
-# required acknowledgement
+# Acknowledgements
 
 Thank you to [Scout](https://ter.li/h8k29r) for letting us use their dashboard for free!
-[![Scout](https://user-images.githubusercontent.com/578159/165240278-c2c0ac30-c86f-4b67-9da6-e6a5e4ab4c37.png)](https://ter.li/h8k29r)
+[<img src="https://user-images.githubusercontent.com/578159/165240278-c2c0ac30-c86f-4b67-9da6-e6a5e4ab4c37.png" width="400" height="400" />](https://ter.li/h8k29r)
 
 # Communication and Collaboration
 
-Most conversation happens in the #casa channel of the Ruby For Good slack. Get access here: https://rubyforgood.herokuapp.com/
+Most conversation happens in the #casa channel of the Ruby For Good slack. Get access here: http://bit.ly/rubyforgood
 
 You can also open an issue or comment on an issue on GitHub and a maintainer will reply to you.
 

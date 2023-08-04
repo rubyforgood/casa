@@ -8,7 +8,6 @@
 @use "@fortawesome/fontawesome-free/scss/fontawesome";
 @use "@fortawesome/fontawesome-free/scss/solid";
 @use "select2/dist/css/select2";
-@use "select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme";
 
 // custom css for the app
 @use "base/breakpoints";
@@ -38,3 +37,6 @@
 @use "pages/reimbursements";
 @use "pages/supervisors";
 @use "pages/volunteers";
+
+@use 'trix/dist/trix.css';
+@use "actiontext";

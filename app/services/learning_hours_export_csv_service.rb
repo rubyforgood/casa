@@ -27,7 +27,7 @@ class LearningHoursExportCsvService
     {
       volunteer_name: learning_hour&.user&.display_name,
       learning_hours_title: learning_hour&.name,
-      learning_hours_type: learning_hour&.learning_type,
+      learning_hours_type: learning_hour&.learning_hour_type&.name,
       duration: get_duration(learning_hour),
       date_of_learning: learning_hour&.occurred_at&.strftime("%F")
     }

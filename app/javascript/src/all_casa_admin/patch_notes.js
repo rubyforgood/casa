@@ -6,12 +6,6 @@ const patchNoteFunctions = {} // A hack to be able to alphabetize functions
 
 let pageNotifier
 
-jQuery.ajaxSetup({
-  beforeSend: function () {
-    pageNotifier.startAsyncOperation()
-  }
-})
-
 // Inserts a patch note display after the create patch note form in the patch note list and styles it as new
 //  @param    {number} patchNoteGroupId  The id of the group allowed to view the patch note
 //  @param    {jQuery} patchNoteList     A jQuery object representing the patch note list
@@ -69,10 +63,22 @@ patchNoteFunctions.createPatchNote = function (patchNoteGroupId, patchNoteText, 
   TypeChecker.checkString(patchNoteText, 'patchNoteText')
 
   // Post request
-  return $.post(patchNotePath, {
-    note: patchNoteText,
-    patch_note_group_id: patchNoteGroupId,
-    patch_note_type_id: patchNoteTypeId
+  // return $.post(patchNotePath, {
+  //   note: patchNoteText,
+  //   patch_note_group_id: patchNoteGroupId,
+  //   patch_note_type_id: patchNoteTypeId
+  // })
+  return $.ajax({
+    url: patchNotePath,
+    type: 'POST',
+    data: {
+      note: patchNoteText,
+      patch_note_group_id: patchNoteGroupId,
+      patch_note_type_id: patchNoteTypeId
+    },
+    beforeSend: function () {
+      pageNotifier.startAsyncOperation()
+    }
   })
     .then(function (response, textStatus, jqXHR) {
       if (response.errors) {
@@ -100,7 +106,10 @@ patchNoteFunctions.deletePatchNote = function (patchNoteId) {
 
   return $.ajax({
     url: `${patchNotePath}/${patchNoteId}`,
-    type: 'DELETE'
+    type: 'DELETE',
+    beforeSend: function () {
+      pageNotifier.startAsyncOperation()
+    }
   })
     .then(function (response, textStatus, jqXHR) {
       if (response.errors) {
@@ -464,6 +473,9 @@ patchNoteFunctions.savePatchNote = function (patchNoteGroupId, patchNoteId, patc
       note: patchNoteText,
       patch_note_group_id: patchNoteGroupId,
       patch_note_type_id: patchNoteTypeId
+    },
+    beforeSend: function () {
+      pageNotifier.startAsyncOperation()
     }
   })
     .then(function (response, textStatus, jqXHR) {

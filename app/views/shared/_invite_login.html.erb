@@ -23,6 +23,10 @@
   <strong class="text-dark">Password reset last sent </strong>
   <%= resource&.decorate&.formatted_reset_password_sent_at || "never" %>
 </div>
+<div class="mb-1">
+  <strong class="text-dark">Will receive reimbursement request emails </strong>
+  <%= resource.receive_reimbursement_email ? "Yes" : "No" %>
+</div>
 
 <% if resource.is_a?(Volunteer) %>
   <div class="mb-1">
