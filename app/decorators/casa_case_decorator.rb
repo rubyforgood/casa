@@ -43,12 +43,6 @@ class CasaCaseDecorator < Draper::Decorator
     ]
   end
 
-  def court_order_select_options
-    CaseCourtOrder.implementation_statuses.map do |status|
-      [status[0].humanize, status[0]]
-    end
-  end
-
   def date_in_care
     return nil unless object.date_in_care
     I18n.l(object.date_in_care, format: :youth_date_of_birth)

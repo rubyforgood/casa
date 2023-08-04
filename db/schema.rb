@@ -214,6 +214,23 @@ ActiveRecord::Schema[7.0].define(version: 202307300103110) do
     t.index ["court_date_id"], name: "index_case_court_orders_on_court_date_id"
   end
 
+  create_table "case_group_memberships", force: :cascade do |t|
+    t.bigint "case_group_id", null: false
+    t.bigint "casa_case_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_case_id"], name: "index_case_group_memberships_on_casa_case_id"
+    t.index ["case_group_id"], name: "index_case_group_memberships_on_case_group_id"
+  end
+
+  create_table "case_groups", force: :cascade do |t|
+    t.bigint "casa_org_id", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_org_id"], name: "index_case_groups_on_casa_org_id"
+  end
+
   create_table "checklist_items", force: :cascade do |t|
     t.integer "hearing_type_id"
     t.text "description", null: false
@@ -600,6 +617,9 @@ ActiveRecord::Schema[7.0].define(version: 202307300103110) do
   add_foreign_key "case_contacts", "casa_cases"
   add_foreign_key "case_contacts", "users", column: "creator_id"
   add_foreign_key "case_court_orders", "casa_cases"
+  add_foreign_key "case_group_memberships", "casa_cases"
+  add_foreign_key "case_group_memberships", "case_groups"
+  add_foreign_key "case_groups", "casa_orgs"
   add_foreign_key "court_dates", "casa_cases"
   add_foreign_key "emancipation_options", "emancipation_categories"
   add_foreign_key "followups", "users", column: "creator_id"

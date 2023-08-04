@@ -12,6 +12,8 @@ class CourtDate < ApplicationRecord
 
   accepts_nested_attributes_for :case_court_orders, reject_if: :all_blank, allow_destroy: true
 
+  before_save :set_court_report_due_date
+
   scope :ordered_ascending, -> { order("date asc") }
 
   # get reports associated with the case this belongs to before this court date but after the court date before this one
@@ -34,6 +36,14 @@ class CourtDate < ApplicationRecord
 
   def display_name
     "#{casa_case.case_number} - Court Date - #{I18n.l(date.to_date)}"
+  end
+
+  private
+
+  def set_court_report_due_date
+    if date.present? && court_report_due_date.blank?
+      self.court_report_due_date = date - 3.weeks
+    end
   end
 end
 # == Schema Information
