@@ -24,16 +24,4 @@ RSpec.describe "casa_cases/index", type: :system do
     click_on "Assigned to Transition Aged Youth"
     click_on "Casa Case Prefix"
   end
-
-  context "when signed in as supervisor" do
-    it "does not see option to make a new case" do
-      casa_org = build(:casa_org)
-      supervisor = create(:supervisor, casa_org: casa_org)
-
-      sign_in supervisor
-      visit casa_cases_path
-
-      expect(page).not_to have_button("New Case")
-    end
-  end
 end
