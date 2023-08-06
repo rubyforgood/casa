@@ -14,7 +14,7 @@ end
 options = Selenium::WebDriver::Chrome::Options.new
 options.add_argument("--disable-gpu")
 options.add_argument("--ignore-certificate-errors")
-options.add_argument("--window-size=1280,900")
+options.add_argument("--window-size=1280,1900")
 
 options.add_preference(:browser, set_download_behavior: {behavior: "allow"})
 
@@ -47,7 +47,6 @@ RSpec.configure do |config|
 
   config.before(:each, type: :system, js: true) do
     config.include DownloadHelpers
-    config.include CsvExporterHelper
     clear_downloads
     if ENV["DOCKER"]
       driven_by :selenium_chrome_headless_in_container
@@ -56,6 +55,19 @@ RSpec.configure do |config|
       Capybara.app_host = "http://web:4000"
     else
       driven_by :selenium_chrome_headless
+    end
+  end
+
+  config.before(:each, type: :system, debug: true) do
+    config.include DownloadHelpers
+    clear_downloads
+    if ENV["DOCKER"]
+      driven_by :selenium_chrome_in_container
+      Capybara.server_host = "0.0.0.0"
+      Capybara.server_port = 4000
+      Capybara.app_host = "http://web:4000"
+    else
+      driven_by :selenium_chrome
     end
   end
 end

@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_29_154034) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_30_103110) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "action_text_rich_texts", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "body"
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
+  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -78,6 +88,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_29_154034) do
     t.index ["reset_password_token"], name: "index_all_casa_admins_on_reset_password_token", unique: true
   end
 
+  create_table "banners", force: :cascade do |t|
+    t.bigint "casa_org_id", null: false
+    t.bigint "user_id", null: false
+    t.string "name"
+    t.boolean "active", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_org_id"], name: "index_banners_on_casa_org_id"
+    t.index ["user_id"], name: "index_banners_on_user_id"
+  end
+
   create_table "casa_case_contact_types", force: :cascade do |t|
     t.bigint "contact_type_id", null: false
     t.bigint "casa_case_id", null: false
@@ -104,17 +125,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_29_154034) do
     t.bigint "casa_org_id", null: false
     t.datetime "birth_month_year_youth", precision: nil
     t.datetime "court_report_due_date", precision: nil
-    t.bigint "hearing_type_id"
     t.boolean "active", default: true, null: false
-    t.bigint "judge_id"
     t.datetime "court_report_submitted_at", precision: nil
     t.integer "court_report_status", default: 0
     t.string "slug"
     t.datetime "date_in_care"
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
     t.index ["case_number", "casa_org_id"], name: "index_casa_cases_on_case_number_and_casa_org_id", unique: true
-    t.index ["hearing_type_id"], name: "index_casa_cases_on_hearing_type_id"
-    t.index ["judge_id"], name: "index_casa_cases_on_judge_id"
     t.index ["slug"], name: "index_casa_cases_on_slug"
   end
 
@@ -196,6 +213,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_29_154034) do
     t.string "text"
     t.index ["casa_case_id"], name: "index_case_court_orders_on_casa_case_id"
     t.index ["court_date_id"], name: "index_case_court_orders_on_court_date_id"
+  end
+
+  create_table "case_group_memberships", force: :cascade do |t|
+    t.bigint "case_group_id", null: false
+    t.bigint "casa_case_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_case_id"], name: "index_case_group_memberships_on_casa_case_id"
+    t.index ["case_group_id"], name: "index_case_group_memberships_on_case_group_id"
+  end
+
+  create_table "case_groups", force: :cascade do |t|
+    t.bigint "casa_org_id", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_org_id"], name: "index_case_groups_on_casa_org_id"
   end
 
   create_table "checklist_items", force: :cascade do |t|
@@ -344,15 +378,26 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_29_154034) do
     t.index ["user_id"], name: "index_languages_users_on_user_id"
   end
 
+  create_table "learning_hour_types", force: :cascade do |t|
+    t.bigint "casa_org_id", null: false
+    t.string "name"
+    t.boolean "active", default: true
+    t.integer "position", default: 1
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_org_id"], name: "index_learning_hour_types_on_casa_org_id"
+  end
+
   create_table "learning_hours", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.integer "learning_type", default: 5
     t.string "name", null: false
     t.integer "duration_minutes", null: false
     t.integer "duration_hours", null: false
     t.datetime "occurred_at", precision: nil, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "learning_hour_type_id"
+    t.index ["learning_hour_type_id"], name: "index_learning_hours_on_learning_hour_type_id"
     t.index ["user_id"], name: "index_learning_hours_on_user_id"
   end
 
@@ -561,6 +606,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_29_154034) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "additional_expenses", "case_contacts"
   add_foreign_key "addresses", "users"
+  add_foreign_key "banners", "casa_orgs"
+  add_foreign_key "banners", "users"
   add_foreign_key "casa_case_emancipation_categories", "casa_cases"
   add_foreign_key "casa_case_emancipation_categories", "emancipation_categories"
   add_foreign_key "casa_cases", "casa_orgs"
@@ -571,11 +618,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_29_154034) do
   add_foreign_key "case_contacts", "casa_cases"
   add_foreign_key "case_contacts", "users", column: "creator_id"
   add_foreign_key "case_court_orders", "casa_cases"
+  add_foreign_key "case_group_memberships", "casa_cases"
+  add_foreign_key "case_group_memberships", "case_groups"
+  add_foreign_key "case_groups", "casa_orgs"
   add_foreign_key "court_dates", "casa_cases"
   add_foreign_key "emancipation_options", "emancipation_categories"
   add_foreign_key "followups", "users", column: "creator_id"
   add_foreign_key "judges", "casa_orgs"
   add_foreign_key "languages", "casa_orgs"
+  add_foreign_key "learning_hour_types", "casa_orgs"
+  add_foreign_key "learning_hours", "learning_hour_types"
   add_foreign_key "learning_hours", "users"
   add_foreign_key "mileage_rates", "casa_orgs"
   add_foreign_key "mileage_rates", "users"

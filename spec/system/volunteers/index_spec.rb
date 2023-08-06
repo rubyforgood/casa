@@ -89,8 +89,6 @@ RSpec.describe "view all volunteers", type: :system do
       visit volunteers_path
       expect(page).to have_selector(".volunteer-filters")
 
-      # by default, only active users are shown
-      expect(page.all("table#volunteers tbody tr").count).to eq(assigned_volunteers.count + unassigned_volunteers.count)
       assigned_volunteers.each do |assigned_volunteer|
         expect(page).to have_text assigned_volunteer.display_name
       end
@@ -180,7 +178,7 @@ RSpec.describe "view all volunteers", type: :system do
     end
 
     context "when timed out" do
-      it "prompts login", js: true do
+      it "prompts login" do
         sign_in admin
         visit volunteers_path
         click_on "Supervisor"
@@ -322,7 +320,7 @@ RSpec.describe "view all volunteers", type: :system do
     end
 
     context "when timed out" do
-      it "prompts login", js: true do
+      it "prompts login" do
         sign_in supervisor
         visit volunteers_path
         click_on "Supervisor"

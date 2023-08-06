@@ -45,7 +45,7 @@ RSpec.describe "court_dates/edit", type: :system do
       expect(page).to have_text("Court Orders - Please check that you didn't enter any youth names")
       expect(page).to have_text("Add a court order")
 
-      page.find("#add-court-order-button").click
+      page.find('button[data-action="extended-nested-form#add"]').click
       find("#court-orders-list-container").first("textarea").send_keys("Court Order Text One")
 
       within ".top-page-actions" do

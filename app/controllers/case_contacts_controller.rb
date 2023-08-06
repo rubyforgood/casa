@@ -129,7 +129,7 @@ class CaseContactsController < ApplicationController
     authorize CasaAdmin
 
     case_contact = authorize(current_organization.case_contacts.with_deleted.find(params[:id]))
-    case_contact.restore(recrusive: true)
+    case_contact.restore(recursive: true)
     flash[:notice] = "Contact is successfully restored."
     redirect_to request.referer
   end
@@ -215,13 +215,18 @@ class CaseContactsController < ApplicationController
 
   def current_organization_groups
     current_organization.contact_type_groups
+      .includes(:contact_types)
       .joins(:contact_types)
       .where(contact_types: {active: true})
       .uniq
   end
 
   def all_case_contacts
-    policy_scope(current_organization.case_contacts).includes(:creator, contact_types: :contact_type_group)
+    query = policy_scope(current_organization.case_contacts).includes(:creator, contact_types: :contact_type_group)
+    if params[:casa_case_id].present?
+      query = query.where(casa_case_id: params[:casa_case_id])
+    end
+    query
   end
 
   def additional_expense_params

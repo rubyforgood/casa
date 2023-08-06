@@ -31,8 +31,7 @@ RSpec.describe SidebarHelper do
 
       context "when accessing an index route" do
         it "renders sidebar menu item as an active link" do
-          allow(helper).to receive(:action_name).and_return("index")
-          allow(helper).to receive(:current_page?).with({controller: "supervisors", action: "index"}).and_return(true)
+          helper.request.path = "/supervisors"
 
           menu_item = helper.menu_item(label: "Supervisors", path: supervisors_path, visible: true)
 
@@ -42,10 +41,27 @@ RSpec.describe SidebarHelper do
 
       context "when accessing an all casa admin menu item" do
         it "renders the sidebar menu item as an active link" do
-          allow(helper).to receive(:action_name).and_return("index")
-          allow(helper).to receive(:current_page?).with({controller: "patch_notes", action: "index"}).and_return(true)
+          helper.request.path = "/all_casa_admins/patch_notes"
 
           menu_item = helper.menu_item(label: "Patch Notes", path: all_casa_admins_patch_notes_path, visible: true)
+
+          expect(menu_item).to match "class=\"list-group-item active\""
+        end
+      end
+
+      context "when accessing an volunteer emancipation checklist" do
+        it "renders the sidebar menu item as an active link with no redirect" do
+          helper.request.path = "/emancipation_checklists"
+
+          menu_item = helper.menu_item(label: "Emancipation Checklist(s)", path: emancipation_checklists_path, visible: true)
+
+          expect(menu_item).to match "class=\"list-group-item active\""
+        end
+
+        it "renders the sidebar menu item as an active link with redirect" do
+          helper.request.path = "/casa_cases/some-case-slug/emancipation"
+
+          menu_item = helper.menu_item(label: "Emancipation Checklist(s)", path: emancipation_checklists_path, visible: true)
 
           expect(menu_item).to match "class=\"list-group-item active\""
         end

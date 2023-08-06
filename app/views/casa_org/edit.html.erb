@@ -28,7 +28,16 @@
     </div>
     <div class="input-style-1">
       <%= form.label :court_report_template, "Court report template" %>
-      <%= form.file_field :court_report_template, class: "form-control" %>
+      <div class="row">
+        <div class="col-sm">
+          <%= form.file_field :court_report_template, class: "form-control" %>
+        </div>
+         <div class="col-sm align-middle my-auto">
+          <% if current_organization.court_report_template.attached? %>
+            <%= link_to 'Download Current Template', rails_blob_path(current_organization.court_report_template, only_path: true), class: "btn btn-info" %>
+          <% end %>
+        </div>
+      </div>
     </div>
     <hr>
     <h3 class="mb-2">Organization Features</h3>
@@ -113,4 +122,18 @@
   <%= render "hearing_types" %>
   <%= render "judges" %>
   <%= render "sent_emails" %>
+</div>
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h2>
+          Manage Learning Hours
+        </h2>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="tables-wrapper">
+  <%= render "learning_hour_types" %>
 </div>

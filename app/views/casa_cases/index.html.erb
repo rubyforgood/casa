@@ -20,11 +20,24 @@
         <span class="ml-5">
           <% if policy(:dashboard).see_volunteers_section? %>
             <%= link_to new_casa_case_path, class: "main-btn btn-sm primary-btn btn-hover ml-3" do %>
-          <i class="lni lni-plus"></i>
-            New Case
+              <i class="lni lni-plus"></i>
+              New Case
             <% end %>
           <% end %>
         </span>
+        <% if policy(:application).admin_or_supervisor? %>
+          <span class="ml-5">
+            <%= link_to case_groups_path, class: "main-btn btn-sm primary-btn btn-hover ml-3" do %>
+              Case Groups
+            <% end %>
+          </span>
+          <span class="ml-5">
+            <%= link_to new_bulk_court_date_path, class: "main-btn btn-sm primary-btn btn-hover ml-3" do %>
+              <i class="lni lni-plus"></i>
+              New Bulk Court Date
+            <% end %>
+          </span>
+        <% end %>
         <span class="ml-5">
           <% if policy(CasaCase).can_see_filters? %>
             <button

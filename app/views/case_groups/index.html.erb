@@ -1,0 +1,70 @@
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h1>Case Groups</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="tables-wrapper">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card-style mb-30">
+        <h3 class="mb-10">Case Groups</h3>
+        <p class="text-sm mb-20">
+          Case groups are used to bulk create court dates for all cases in a group. For example, if siblings attend the same court data you can create a case group for them and then use the
+          <%= link_to 'Bulk Court Date', new_bulk_court_date_path %>
+          form to create a court date for all of them.
+        </p>
+        <%= link_to new_case_group_path, class: "btn-sm main-btn primary-btn btn-hover" do %>
+          <i class="lni lni-plus mr-10"></i>
+          New Case Group
+        <% end %>
+        <div class="table-wrapper table-responsive">
+          <table class="table striped-table" id="case-groups">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Case Numbers</th>
+              <th>Updated At</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @case_groups.each do |case_group| %>
+              <tr>
+                <td class="min-width">
+                  <%= case_group.name %>
+                </td>
+                <td class="min-width">
+                  <ul>
+                    <% case_group.casa_cases.each do |casa_case| %>
+                      <li>
+                        <%= link_to casa_case.case_number, casa_case_path(casa_case) %>
+                      </li>
+                    <% end %>
+                  </ul>
+                </td>
+                <td class="min-width">
+                  <%= time_ago_in_words(case_group.updated_at) %> ago
+                </td>
+                <td>
+                  <%= link_to edit_case_group_path(case_group) do %>
+                    <div class="action">
+                      <button class="text-danger">
+                        <i class="lni lni-pencil-alt"></i> Edit
+                      </button>
+                    </div>
+                  <% end %>
+                  <%= link_to 'Delete', case_group_path(case_group), class: 'btn btn-danger', method: :delete, data: { confirm: "Are you sure that you want to delete this case group?" } %>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
