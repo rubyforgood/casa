@@ -1,7 +1,7 @@
 /* global alert */
 /* global $ */
-const AsyncNotifier = require("../src/async_notifier");
-let pageNotifier;
+const AsyncNotifier = require('../src/async_notifier')
+let pageNotifier
 
 const defineCaseContactsTable = function () {
   $('table#case_contacts').DataTable(
@@ -15,10 +15,10 @@ const defineCaseContactsTable = function () {
 
 $('document').ready(() => {
   try {
-    const asyncNotificationsElement = $("#async-notifications");
-    pageNotifier = new AsyncNotifier(asyncNotificationsElement);
+    const asyncNotificationsElement = $('#async-notifications')
+    pageNotifier = new AsyncNotifier(asyncNotificationsElement)
   } catch (err) {
-    console.error(err);
+    console.error(err)
   }
 
   $.fn.dataTable.ext.search.push(
@@ -117,10 +117,10 @@ $('document').ready(() => {
         type: 'POST',
         success: function (response) {
           if (response.error) {
-            pageNotifier.notify("Error while saving preferences", "error");
-            console.error(response.error);
+            pageNotifier.notify('Error while saving preferences', 'error')
+            console.error(response.error)
           }
-        },
+        }
       })
     },
     stateSaveParams: function (settings, data) {
