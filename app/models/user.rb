@@ -5,6 +5,7 @@ class User < ApplicationRecord
   include Roles
   include ByOrganizationScope
   include DateHelper
+  include GenerateToken
 
   before_update :record_previous_email
   after_create :skip_email_confirmation_upon_creation
@@ -172,17 +173,6 @@ class User < ApplicationRecord
 
   def after_confirmation
     send_email_changed_notification
-  end
-
-  def ensure_token
-    self.token = generate_hex(:token) unless token.present?
-  end
-
-  def generate_hex(column)
-    loop do
-      hex = SecureRandom.hex(32)
-      break hex unless self.class.where(column => hex).any?
-    end
   end
 
   private

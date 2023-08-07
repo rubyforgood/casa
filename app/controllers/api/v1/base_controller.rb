@@ -1,14 +1,18 @@
 class Api::V1::BaseController < ActionController::API
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
+  before_action :authenticate_user!, except: [:create]
 
   def authenticate_user!
     token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
-    return nil unless token && options.is_a?(hash)
+    # return nil unless token && options.is_a?(Hash)
     user = User.find_by(email: options[:email])
-    if user && ActiveSupport::SecurityUtils.secure_compare(user.token, token)
+    p "#######"
+    print token
+    p "#######"
+    if user && token && ActiveSupport::SecurityUtils.secure_compare(user.token, token)
       @current_user = user
     else
-      UnauthenticatedError
+      render json: {message: "Wrong password or email"}, status: 401
     end
   end
 

@@ -49,6 +49,15 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "token generation" do
+    it "generates a token before validation" do
+      user = User.new
+      expect(user.token).to be_nil
+      user.valid?
+      expect(user.token).not_to be_nil
+    end
+  end
+
   describe "#case_contacts_for" do
     let(:volunteer) { create(:volunteer, :with_casa_cases) }
     let(:case_of_interest) { volunteer.casa_cases.first }
