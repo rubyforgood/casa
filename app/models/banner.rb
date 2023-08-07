@@ -6,8 +6,17 @@ class Banner < ApplicationRecord
   scope :active, -> { where(active: true) }
 
   validates_presence_of :name
+  validate :only_one_banner_is_active_per_organization
 
   private
+
+  def only_one_banner_is_active_per_organization
+    is_other_banner_active = casa_org.banners.where.not(id: id).any?(&:active?)
+    more_than_one_banner_active = is_other_banner_active && active?
+    if more_than_one_banner_active
+      errors.add(:base, "Only one banner can be active at a time. Mark the other banners as not active before marking this banner as active.")
+    end
+  end
 end
 
 # == Schema Information
