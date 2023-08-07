@@ -28,7 +28,7 @@ A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates 
     - [Common issues](#common-issues)
   - [Running the App / Verifying Installation](#running-the-app--verifying-installation)
 - [Other Documentation](#other-documentation)
-- [required acknowledgement](#required-acknowledgement)
+- [Acknowledgements](#acknowledgements)
 - [Communication and Collaboration](#communication-and-collaboration)
 - [Feedback](#feedback)
 
@@ -201,6 +201,12 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 
 If additional work arises from your pull request that is outside the scope of the issue it resolves, please open a new issue.
 
+**Stimulus**
+
+[Issue 5016](https://github.com/rubyforgood/casa/issues/5016) started a refactor of Javascript to use 
+[Hotwire's Stimulus](https://stimulus.hotwired.dev/handbook/origin). To see if it's working for you, go to 
+`/casa_cases` and see **Stimulus is working!** in your browser console.
+
 **Post-deployment tasks**
 
 We are using [After Party](https://github.com/theSteveMitchell/after_party) to
@@ -228,10 +234,10 @@ There is a `doc` directory at the top level that includes:
 * [productsense.md](doc/productsense.md)(for team leads & product interested contributors)
 * [SECURITY.md](doc/SECURITY.md)
 
-# required acknowledgement
+# Acknowledgements
 
 Thank you to [Scout](https://ter.li/h8k29r) for letting us use their dashboard for free!
-[![Scout](https://user-images.githubusercontent.com/578159/165240278-c2c0ac30-c86f-4b67-9da6-e6a5e4ab4c37.png)](https://ter.li/h8k29r)
+[<img src="https://user-images.githubusercontent.com/578159/165240278-c2c0ac30-c86f-4b67-9da6-e6a5e4ab4c37.png" width="400" height="400" />](https://ter.li/h8k29r)
 
 # Communication and Collaboration
 

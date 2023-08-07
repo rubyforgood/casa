@@ -143,4 +143,5 @@ class ApplicationPolicy
 
   alias_method :modify_organization?, :is_admin?
   alias_method :see_import_page?, :is_admin?
+  alias_method :see_banner_page?, :admin_or_supervisor?
 end

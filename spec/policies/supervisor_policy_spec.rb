@@ -74,7 +74,7 @@ RSpec.describe SupervisorPolicy do
       end
     end
     context "different org" do
-      let(:record) { build_stubbed(:supervisor, casa_org: build_stubbed(:casa_org)) }
+      let(:record) { build_stubbed(:supervisor, casa_org: different_organization) }
       context "when user is admin" do
         it "cannot edit a supervisor" do
           is_expected.not_to permit(casa_admin, record)

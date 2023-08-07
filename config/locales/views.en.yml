@@ -239,7 +239,7 @@ en:
       title: Learning Hours
     form:
       learning_hours_title: Learning Hours Title
-      learning_type: Type of Learning
+      learning_hour_type_id: Type of Learning
       duration: Learning Duration
       occurred_on: Occurred On
       create_button: Create New Learning Hours Entry

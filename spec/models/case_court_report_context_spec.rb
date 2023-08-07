@@ -45,6 +45,19 @@ RSpec.describe CaseCourtReportContext, type: :model do
           end
         end
 
+        context "when they specify a specific court date they are interested in looking at" do
+          it "contains the selected court date in a human readable format" do
+            court_date_1 = create(:court_date, date: 2.months.since)
+            court_date_2 = create(:court_date, date: 5.months.since)
+
+            casa_case.court_dates << court_date_1
+            casa_case.court_dates << court_date_2
+
+            court_report_context = build(:case_court_report_context, casa_case: casa_case, court_date: court_date_2)
+            expect(court_report_context.context[:casa_case][:court_date]).to eq("June 1, 2021")
+          end
+        end
+
         context "when there are no future court dates" do
           let(:past_court_date) { create(:court_date, date: 2.months.ago) }
 
@@ -245,6 +258,14 @@ RSpec.describe CaseCourtReportContext, type: :model do
         casa_case.case_court_orders << court_order_partially_implemented
 
         casa_case.case_court_orders << court_order_unimplemented
+      end
+
+      context "when using specified orders to a specific casa date" do
+        it "does not lean on orders of the casa case if specified directly" do
+          court_order = build(:case_court_order, text: "Some Court Text", implementation_status: :implemented)
+          court_report_context = build(:case_court_report_context, casa_case: casa_case, case_court_orders: [court_order]).context
+          expect(court_report_context[:case_court_orders]).to eq([{order: "Some Court Text", status: "Implemented"}])
+        end
       end
 
       it "has a list of court orders the same length as all the court orders in the case" do

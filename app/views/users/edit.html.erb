@@ -2,7 +2,7 @@
   <div class="row align-items-center">
     <div class="col-lg-12">
       <div class="title mb-30">
-        <h2>Edit Profile</h2>
+        <h1>Edit Profile</h1>
       </div>
     </div>
     <div class="col-lg-12">
@@ -43,12 +43,12 @@
             <br>
           <div class="actions" id="accordionExample">
 
-              <%= form.submit "Update Profile", class: "main-btn primary-btn btn-hover mb-3" %>
-              <button class="main-btn warning-btn btn-hover accordion mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              <%= form.button "Update Profile", type: "submit", class: "main-btn primary-btn btn-hover mb-3" %>
+              <button class="main-btn primary-btn btn-hover accordion mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                 Change Password
               </button>
 
-              <button class="main-btn warning-btn btn-hover accordion mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+              <button class="main-btn primary-btn btn-hover accordion mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                 Change Email
               </button>
 
@@ -116,37 +116,41 @@
 
 <div>
   <%= form_for @user, as: :user, url: users_path do |form| %>
-    <br>
-    <h3>Communication Preferences</h3>
-    <p>Tell us how you'd like to receive notifications.</p>
-    <div class="form-check checkbox-style mb-20">
-      <%= form.check_box :receive_email_notifications, class: "toggle-email-notifications form-check-input" %>
-      <%= form.label :receive_email_notifications, "Email Me", class: "form-check-label" %>
+    <div class="title mb-30">
+      <h2>Communication Preferences</h3>
     </div>
 
-    <% if @user.casa_org.twilio_enabled? %>
+    <div class="card-style">
+      <p>Tell us how you'd like to receive notifications.</p>
       <div class="form-check checkbox-style mb-20">
-          <%= form.check_box :receive_sms_notifications, class: "toggle-sms-notifications form-check-input" %>
-          <%= form.label :receive_sms_notifications, "Text Me", class: "form-check-label" %>
+        <%= form.check_box :receive_email_notifications, class: "toggle-email-notifications form-check-input" %>
+        <%= form.label :receive_email_notifications, "Email Me", class: "form-check-label" %>
       </div>
-      <div class="ps-4 pb-4">
-        <%= form.collection_check_boxes("sms_notification_event_ids", SmsNotificationEvent.where(user_type: @user.type),
-  :id, :name) do |event| %>
-          <div class="form-check checkbox-style mb-20">
-            <%= event.check_box(class: "form-check-input form-check-input", id: "toggle-sms-notification-event") %>
-            <%= event.label(class: "form-check-label") %>
-          </div>
-        <% end %>
-      </div>
-    <% else %>
-      <div class="form-check checkbox-style mb-20">
-          <%= form.check_box :receive_sms_notifications, class: "toggle-sms-notifications form-check-input", disabled: true %>
-          <%= form.label :receive_sms_notifications, "Enable Twilio For Text Messaging", class: "form-check-label" %>
-      </div>
-    <% end %>
 
-    <div class="actions mb-10">
-      <%= form.submit "Save Preferences", class: "main-btn primary-btn btn-hover mb-3 save-preference" %>
+      <% if @user.casa_org.twilio_enabled? %>
+        <div class="form-check checkbox-style mb-20">
+            <%= form.check_box :receive_sms_notifications, class: "toggle-sms-notifications form-check-input" %>
+            <%= form.label :receive_sms_notifications, "Text Me", class: "form-check-label" %>
+        </div>
+        <div class="ps-4 pb-4">
+          <%= form.collection_check_boxes("sms_notification_event_ids", SmsNotificationEvent.where(user_type: @user.type),
+    :id, :name) do |event| %>
+            <div class="form-check checkbox-style mb-20">
+              <%= event.check_box(class: "form-check-input form-check-input", id: "toggle-sms-notification-event") %>
+              <%= event.label(class: "form-check-label") %>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="form-check checkbox-style mb-20">
+            <%= form.check_box :receive_sms_notifications, class: "toggle-sms-notifications form-check-input", disabled: true %>
+            <%= form.label :receive_sms_notifications, "Enable Twilio For Text Messaging", class: "form-check-label" %>
+        </div>
+      <% end %>
+
+      <div class="actions mb-10">
+        <%= form.submit "Save Preferences", class: "main-btn primary-btn btn-hover mb-3 save-preference" %>
+      </div>
     </div>
   <% end %>
 </div>

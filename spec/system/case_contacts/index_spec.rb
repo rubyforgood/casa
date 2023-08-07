@@ -5,7 +5,8 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
   let(:organization) { create(:casa_org) }
 
   context "with case contacts" do
-    let(:casa_case) { build(:casa_case, casa_org: organization, case_number: "CINA-1") }
+    let(:case_number) { "CINA-1" }
+    let(:casa_case) { build(:casa_case, casa_org: organization, case_number: case_number) }
     let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
 
     context "without filter" do
@@ -96,6 +97,63 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
             expect(title).to have_content(contact_group_text)
           end
         end
+      end
+    end
+
+    it "can show only case contacts for one case" do
+      travel_to Date.new(2021, 1, 2) do
+        create(:case_contact, creator: volunteer, casa_case: casa_case, notes: "Case 1 Notes", occurred_at: Time.zone.yesterday - 1)
+
+        another_case_number = "CINA-2"
+        another_case = create(:casa_case, casa_org: organization, case_number: another_case_number)
+        create(:case_assignment, volunteer: volunteer, casa_case: another_case)
+        create(:case_contact, creator: volunteer, casa_case: another_case, notes: "Case 2 Notes", occurred_at: Time.zone.today)
+
+        sign_in volunteer
+
+        # showing all cases
+        visit root_path
+        click_on "Case Contacts"
+        within "#ddmenu_case_contacts" do
+          click_on "All"
+        end
+        expect(page).to have_text("Case 1 Notes")
+        expect(page).to have_text("Case 2 Notes")
+
+        # showing case 1
+        visit root_path
+        click_on "Case Contacts"
+        within "#ddmenu_case_contacts" do
+          click_on case_number
+        end
+        expect(page).to have_text("Case 1 Notes")
+        expect(page).to_not have_text("Case 2 Notes")
+
+        # showing case 2
+        visit root_path
+        click_on "Case Contacts"
+        within "#ddmenu_case_contacts" do
+          click_on another_case_number
+        end
+        expect(page).to have_text("Case 2 Notes")
+        expect(page).to_not have_text("Case 1 Notes")
+
+        # filtering to only show case 2
+        click_button "Show / Hide"
+        fill_in "filterrific_occurred_starting_at", with: Time.zone.yesterday.to_s
+        fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow.to_s
+        click_button "Filter"
+        expect(page).to have_text("Case 2 Notes")
+        expect(page).to_not have_text("Case 1 Notes")
+
+        # no contacts because we're only showing case 1 and that occurred before the filter dates
+        visit root_path
+        click_on "Case Contacts"
+        within "#ddmenu_case_contacts" do
+          click_on case_number
+        end
+        expect(page).to_not have_text("Case 1 Notes")
+        expect(page).to_not have_text("Case 2 Notes")
       end
     end
   end

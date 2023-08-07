@@ -20,7 +20,7 @@
         <tbody>
           <tr>
             <td><%= @learning_hour.name %></td>
-            <td><%= (@learning_hour.learning_type).humanize %></td>
+            <td><%= @learning_hour.learning_hour_type.name %></td>
             <td><%= @learning_hour.occurred_at.strftime("%B %d, %Y") %></td>
             <td>
               <% if (@learning_hour.duration_hours > 0) %>

@@ -46,5 +46,25 @@ FactoryBot.define do
       }
       initialize_with { new(params: params) }
     end
+
+    trait :emancipation_checklist_reminder do
+      type { "EmancipationChecklistReminderNotification" }
+      params {
+        {
+          casa_case: create(:casa_case)
+        }
+      }
+      initialize_with { new(params: params) }
+    end
+
+    trait :youth_birthday do
+      type { "YouthBirthdayNotification" }
+      params {
+        {
+          casa_case: create(:casa_case)
+        }
+      }
+      initialize_with { new(params: params) }
+    end
   end
 end

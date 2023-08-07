@@ -57,10 +57,12 @@ class LearningHoursController < ApplicationController
   end
 
   def learning_hours_params
-    params.require(:learning_hour).permit(:occurred_at, :duration_minutes, :duration_hours, :name, :user_id, :learning_type)
+    params.require(:learning_hour).permit(:occurred_at, :duration_minutes, :duration_hours, :name, :user_id,
+      :learning_hour_type_id)
   end
 
   def update_learning_hours_params
-    params.require(:learning_hour).permit(:occurred_at, :duration_minutes, :duration_hours, :name, :learning_type)
+    params.require(:learning_hour).permit(:occurred_at, :duration_minutes, :duration_hours, :name,
+      :learning_hour_type_id)
   end
 end

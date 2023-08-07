@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "/case_court_reports", type: :request do
+  include DownloadHelpers
   let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
 
   before do
@@ -162,9 +163,9 @@ RSpec.describe "/case_court_reports", type: :request do
           request_generate_court_report
           get JSON.parse(response.body)["link"]
 
-          document_inspector = DocxInspector.new(docx_contents: response.body)
+          docx_response = Docx::Document.open(StringIO.new(response.body))
 
-          expect(document_inspector.word_list_header_contains?("YOUR CASA ORG’S NUMBER")).to eq(true)
+          expect(header_text(docx_response)).to include("YOUR CASA ORG’S NUMBER")
         end
 
         context "as a supervisor" do
@@ -203,9 +204,9 @@ RSpec.describe "/case_court_reports", type: :request do
         it "uses the custom template" do
           get JSON.parse(response.body)["link"]
 
-          document_inspector = DocxInspector.new(docx_contents: response.body)
+          docx_response = Docx::Document.open(StringIO.new(response.body))
 
-          expect(document_inspector.word_list_document_contains?("Did you forget to enter your court orders?")).to eq(true)
+          expect(docx_response.paragraphs.map(&:to_s)).to include("Did you forget to enter your court orders?")
         end
       end
     end
@@ -233,9 +234,9 @@ RSpec.describe "/case_court_reports", type: :request do
 
         get JSON.parse(response.body)["link"]
 
-        document_inspector = DocxInspector.new(docx_contents: response.body)
+        docx_response = Docx::Document.open(StringIO.new(response.body))
 
-        expect(document_inspector.word_list_document_contains?(I18n.l(user_different_timezone.at(server_time).to_date, format: :full, default: nil))).to eq(true)
+        expect(docx_response.paragraphs.map(&:to_s)).to include("Date Written: #{I18n.l(user_different_timezone.at(server_time).to_date, format: :full, default: nil)}")
       end
     end
   end

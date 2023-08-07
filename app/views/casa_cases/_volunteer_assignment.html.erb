@@ -32,6 +32,14 @@
             <%= I18n.l(assignment.updated_at, format: :full, default: nil) %>
           <% end %>
         </td>
+        <td>
+          <div class="form-check form-switch">
+            <%= form_with model: assignment, url: reimbursement_case_assignment_path(assignment), method: :patch do |form| %>
+              <%= form.check_box :allow_reimbursement, { class: "form-check-input", role: "switch", onchange: "this.form.submit();" } %>
+            <% end %>
+          </div>
+
+        </td>
         <td data-test="action">
           <% if policy(assignment).unassign? %>
             <%= button_to("Unassign Volunteer",

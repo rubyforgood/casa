@@ -5,7 +5,8 @@ RSpec.describe NoContactMadeSmsReminderService do
   include SmsBodyHelper
 
   describe "court report due sms reminder service" do
-    let!(:volunteer) { create(:volunteer, receive_sms_notifications: true, phone_number: "+12222222222") }
+    let(:org) { create(:casa_org, twilio_enabled: true) }
+    let!(:volunteer) { create(:volunteer, receive_sms_notifications: true, phone_number: "+12222222222", casa_org: org) }
     let!(:contact_type) { "test" }
 
     before :each do

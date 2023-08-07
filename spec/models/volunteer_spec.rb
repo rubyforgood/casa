@@ -341,11 +341,12 @@ RSpec.describe Volunteer, type: :model do
 
   describe "#learning_hours_spent_in_one_year" do
     let(:volunteer) { create :volunteer }
-    let!(:leraning_hours) do
+    let(:learning_hour_type) { create :learning_hour_type }
+    let!(:learning_hours) do
       [
-        create(:learning_hour, user: volunteer, duration_hours: 1, duration_minutes: 30),
-        create(:learning_hour, user: volunteer, duration_hours: 3, duration_minutes: 45),
-        create(:learning_hour, user: volunteer, duration_hours: 1, duration_minutes: 30, occurred_at: 2.year.ago)
+        create(:learning_hour, user: volunteer, duration_hours: 1, duration_minutes: 30, learning_hour_type: learning_hour_type),
+        create(:learning_hour, user: volunteer, duration_hours: 3, duration_minutes: 45, learning_hour_type: learning_hour_type),
+        create(:learning_hour, user: volunteer, duration_hours: 1, duration_minutes: 30, occurred_at: 2.year.ago, learning_hour_type: learning_hour_type)
       ]
     end
 

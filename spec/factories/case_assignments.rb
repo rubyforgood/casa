@@ -6,6 +6,7 @@ FactoryBot.define do
     end
 
     active { true }
+    allow_reimbursement { true }
 
     casa_case do
       if pre_transition
@@ -17,6 +18,10 @@ FactoryBot.define do
 
     volunteer do
       create(:volunteer, casa_org: @overrides[:casa_case].try(:casa_org) || casa_org)
+    end
+
+    trait :disallow_reimbursement do
+      allow_reimbursement { false }
     end
 
     trait :inactive do
