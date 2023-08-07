@@ -6,6 +6,7 @@ RSpec.describe CaseContactTypesReminder do
   let!(:casa_org) do
     create(
       :casa_org,
+      twilio_enabled: true,
       twilio_phone_number: "+15555555555",
       twilio_account_sid: "articuno34",
       twilio_api_key_sid: "Aladdin",

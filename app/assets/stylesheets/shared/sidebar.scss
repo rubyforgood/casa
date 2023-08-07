@@ -113,6 +113,16 @@
   }
 }
 
+.group-actions {
+  &:hover::before {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  &::before {
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+}
 // Media Queries
 @media only screen and (max-width: screen-sizes.$mobile) {
   .sidebar-wrapper {

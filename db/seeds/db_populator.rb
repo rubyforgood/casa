@@ -50,6 +50,7 @@ class DbPopulator
     create_judges(casa_org)
     create_languages(casa_org)
     create_mileage_rates(casa_org)
+    create_learning_hour_types(casa_org)
     casa_org
   end
 
@@ -198,7 +199,8 @@ class DbPopulator
         case_number: case_number,
         court_report_submitted_at: court_report_submitted ? Date.today : nil,
         court_report_status: court_report_submitted ? :submitted : :not_submitted,
-        birth_month_year_youth: birth_month_year_youth
+        birth_month_year_youth: birth_month_year_youth,
+        date_in_care: Date.today - (rand * 1500)
       )
       new_court_date = CourtDate.find_or_create_by!(
         casa_case: new_casa_case,
@@ -362,6 +364,16 @@ class DbPopulator
       end
 
       i += 1
+    end
+  end
+
+  def create_learning_hour_types(casa_org)
+    learning_types = %w[book movie webinar conference other]
+
+    learning_types.each do |learning_type|
+      learning_hour_type = casa_org.learning_hour_types.new(name: learning_type.capitalize)
+      learning_hour_type.position = 99 if learning_type == "other"
+      learning_hour_type.save
     end
   end
 

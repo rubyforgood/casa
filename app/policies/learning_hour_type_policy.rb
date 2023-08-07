@@ -1,0 +1,2 @@
+class LearningHourTypePolicy < ApplicationPolicy
+end

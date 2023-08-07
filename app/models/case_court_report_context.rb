@@ -10,6 +10,8 @@ class CaseCourtReportContext
     @volunteer = Volunteer.find(args[:volunteer_id]) if args[:volunteer_id]
     @time_zone = args[:time_zone]
     @path_to_template = args[:path_to_template]
+    @court_date = args[:court_date] || @casa_case.next_court_date
+    @case_court_orders = args[:case_court_orders] || @casa_case.case_court_orders
   end
 
   def context
@@ -29,7 +31,8 @@ class CaseCourtReportContext
       case_mandates: prepare_case_orders, # backwards compatible with old Montgomery template - keep this! TODO test full generation
       latest_hearing_date: latest_hearing_date.nil? ? "___<LATEST HEARING DATE>____" : I18n.l(latest_hearing_date.date, format: :full, default: nil),
       org_address: org_address(is_default_template),
-      volunteer: volunteer_info
+      volunteer: volunteer_info,
+      hearing_type_name: @court_date&.hearing_type&.name || "None"
     }
   end
 
@@ -42,16 +45,12 @@ class CaseCourtReportContext
   end
 
   def prepare_case_orders
-    case_order_data = []
-
-    @casa_case.case_court_orders.each do |case_order|
-      case_order_data << {
+    @case_court_orders.map do |case_order|
+      {
         order: case_order.text,
         status: case_order.implementation_status&.humanize
       }
     end
-
-    case_order_data
   end
 
   def filter_out_old_case_contacts(interviewees)
@@ -65,11 +64,11 @@ class CaseCourtReportContext
 
   def prepare_case_details
     {
-      court_date: I18n.l(@casa_case.next_court_date&.date, format: :full, default: nil),
+      court_date: I18n.l(@court_date&.date, format: :full, default: nil),
       case_number: @casa_case.case_number,
       dob: I18n.l(@casa_case.birth_month_year_youth, format: :youth_date_of_birth, default: nil),
       is_transitioning: @casa_case.in_transition_age?,
-      judge_name: @casa_case.next_court_date&.judge&.name
+      judge_name: @court_date&.judge&.name
     }
   end
 

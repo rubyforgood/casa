@@ -2,8 +2,7 @@
   <div class="navbar-logo">
     <% if current_organization&.logo&.attached? %>
       <%= link_to image_tag(current_organization.logo,
-                            width: 200,
-                            height: 100,
+                            style: "max-width: 200px;",
                             alt: "CASA Logo"),
                   "/" %>
     <% else %>
@@ -62,7 +61,7 @@
           </li>
         <% end %>
         <% if all_casa_admin_signed_in? %>
-          <li class="<%= active_class(all_casa_admins_patch_notes_path) %> nav-item">
+          <li class="nav-item">
             <%= link_to all_casa_admins_patch_notes_path do %>
               <i class="lni lni-notepad mr-10"></i>
               Patch Notes
@@ -70,11 +69,32 @@
           </li>
         <% end %>
         <% if current_user.volunteer? %>
-          <li class="<%= active_class(case_contacts_path) %> nav-item">
-            <%= link_to case_contacts_path do %>
-              <i class="lni lni-users mr-10"></i>
-              Case Contacts
-            <% end %>
+          <li class="nav-item nav-item-has-children">
+            <a
+              href="#0"
+              class=""
+              data-bs-toggle="collapse"
+              data-bs-target="#ddmenu_case_contacts"
+              aria-controls="ddmenu_case_contacts"
+              aria-expanded="true"
+              aria-label="Toggle navigation">
+                <span class="icon">
+                  <i class="lni lni-users mr-10"></i>
+                </span>
+              <span class="text">Case Contacts</span>
+            </a>
+            <ul id="ddmenu_case_contacts" class="collapse dropdown-nav">
+              <li>
+                <%= link_to 'All', case_contacts_path %>
+              </li>
+              <% current_user.casa_cases.each do |casa_case| %>
+                <li>
+                  <%= link_to case_contacts_path(casa_case_id: casa_case.id) do %>
+                    <%= casa_case.case_number %>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
           </li>
           <li class="<%= active_class(volunteer_learning_hours_path(volunteer_id: current_user.id || 0)) %> nav-item">
             <%= link_to volunteer_learning_hours_path(volunteer_id: current_user.id || 0) do %>
@@ -94,7 +114,7 @@
         <li class="nav-item nav-item-has-children">
           <a
             href="#0"
-            class=""
+            class="group-actions"
             data-bs-toggle="collapse"
             data-bs-target="#ddmenu_55"
             aria-controls="ddmenu_55"
@@ -156,6 +176,15 @@
                 <%= link_to edit_casa_org_path(current_organization), class: "#{active_class(edit_casa_org_path(current_organization))}" do %>
                   <i class="lni lni-cogs mr-10"></i>
                   Edit Organization
+                <% end %>
+              </li>
+            <% end %>
+
+            <% if policy(:application).see_banner_page? %>
+              <li>
+                <%= link_to banners_path, class: "#{active_class(banners_path)}" do %>
+                  <i class="lni lni-flag mr-10"></i>
+                  Banners
                 <% end %>
               </li>
             <% end %>

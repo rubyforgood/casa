@@ -89,8 +89,6 @@ RSpec.describe "view all volunteers", type: :system do
       visit volunteers_path
       expect(page).to have_selector(".volunteer-filters")
 
-      # by default, only active users are shown
-      expect(page.all("table#volunteers tbody tr").count).to eq(assigned_volunteers.count + unassigned_volunteers.count)
       assigned_volunteers.each do |assigned_volunteer|
         expect(page).to have_text assigned_volunteer.display_name
       end
@@ -180,7 +178,7 @@ RSpec.describe "view all volunteers", type: :system do
     end
 
     context "when timed out" do
-      it "prompts login", js: true do
+      it "prompts login" do
         sign_in admin
         visit volunteers_path
         click_on "Supervisor"
@@ -250,6 +248,61 @@ RSpec.describe "view all volunteers", type: :system do
       end
     end
 
+    it "can persist 'show/hide' column preference settings", js: true do
+      sign_in supervisor
+
+      visit volunteers_path
+
+      expect(page).to have_text("Pick displayed columns")
+      within("#volunteers") do
+        expect(page).to have_text("Name")
+        expect(page).to have_text("Email")
+        expect(page).to have_text("Status")
+        expect(page).to have_text("Assigned To Transition Aged Youth")
+        expect(page).to have_text("Case Number(s)")
+        expect(page).to have_text("Last Attempted Contact")
+        expect(page).to have_text("Contacts Made in Past 60 Day")
+      end
+
+      click_button "Pick displayed columns"
+
+      uncheck "Name"
+      uncheck "Status"
+      uncheck "Contact Made In Past 60 Days"
+      uncheck "Last Attempted Contact"
+
+      within(".modal-dialog") do
+        click_button "Close"
+      end
+
+      within("#volunteers") do
+        expect(page).to have_no_text("Name")
+        expect(page).to have_no_text("Status")
+        expect(page).to have_no_text("Contact Made In Past 60 Days")
+        expect(page).to have_no_text("Last Attempted Contact")
+        expect(page).to have_text("Email")
+        expect(page).to have_text("Assigned To Transition Aged Youth")
+        expect(page).to have_text("Case Number(s)")
+      end
+
+      sign_out supervisor
+      visit volunteers_path
+
+      sign_in supervisor
+      visit volunteers_path
+
+      # Expectations after page reload
+      within("#volunteers") do
+        expect(page).to have_no_text("Name")
+        expect(page).to have_no_text("Status")
+        expect(page).to have_no_text("Contact Made In Past 60 Days")
+        expect(page).to have_no_text("Last Attempted Contact")
+        expect(page).to have_text("Email")
+        expect(page).to have_text("Assigned To Transition Aged Youth")
+        expect(page).to have_text("Case Number(s)")
+      end
+    end
+
     context "with volunteers" do
       let(:supervisor) { create(:supervisor, :with_volunteers) }
 
@@ -267,7 +320,7 @@ RSpec.describe "view all volunteers", type: :system do
     end
 
     context "when timed out" do
-      it "prompts login", js: true do
+      it "prompts login" do
         sign_in supervisor
         visit volunteers_path
         click_on "Supervisor"

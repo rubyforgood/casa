@@ -7,10 +7,10 @@ RSpec.describe LearningHour, type: :model do
     expect(learning_hour.errors[:name]).to eq(["/ Title cannot be blank"])
   end
 
-  it "has a learning_type" do
-    learning_hour = build_stubbed(:learning_hour, learning_type: nil)
+  it "has a learning_hour_type" do
+    learning_hour = build_stubbed(:learning_hour, learning_hour_type: nil)
     expect(learning_hour).to_not be_valid
-    expect(learning_hour.errors[:learning_type]).to eq(["can't be blank"])
+    expect(learning_hour.errors[:learning_hour_type]).to eq(["must exist"])
   end
 
   context "duration_hours is zero" do

@@ -41,7 +41,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       select "Submitted", from: "casa_case_court_report_status"
       check contact_type.name
 
-      page.find("#add-court-order-button").click
+      page.find('button[data-action="extended-nested-form#add"]').click
       find("#court-orders-list-container").first("textarea").send_keys("Court Order Text One")
 
       within ".top-page-actions" do
@@ -211,17 +211,15 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Court Report Status: Not submitted")
       visit edit_casa_case_path(casa_case)
       select "Submitted", from: "casa_case_court_report_status"
-      check "Youth"
 
-      # fill_in "Court Report Due Date", with: Date.new(next_year.to_i, 9, 8).strftime("%Y/%m/%d\n")
-
-      page.find("#add-court-order-button").click
+      scroll_to('button[data-action="extended-nested-form#add"]').click
       find("#court-orders-list-container").first("textarea").send_keys("Court Order Text One")
 
       select "Partially implemented", from: "casa_case[case_court_orders_attributes][0][implementation_status]"
 
       expect(page).to have_text("Set Implementation Status")
 
+      check "Youth"
       within ".actions-cc" do
         click_on "Update CASA Case"
       end
@@ -389,13 +387,11 @@ RSpec.describe "Edit CASA Case", type: :system do
 
         expect(page).to have_text(text)
 
-        find("button.remove-court-order-button").click
+        find('button[data-action="click->extended-nested-form#remove"]').click
         expect(page).to have_text("Are you sure you want to remove this court order? Doing so will delete all records \
 of it unless it was included in a previous court report.")
 
         find("button.swal2-confirm").click
-        expect(page).to have_text("Court order has been removed.")
-        click_on "OK"
         expect(page).to_not have_text(text)
 
         within ".actions-cc" do
@@ -549,7 +545,7 @@ of it unless it was included in a previous court report.")
       expect(page).not_to have_text("Youth's Date in Care")
       expect(page).not_to have_text("Deactivate Case")
 
-      expect(page).to have_css("#add-court-order-button")
+      expect(page).to have_css('button[data-action="extended-nested-form#add"]')
 
       visit casa_case_path(casa_case)
       expect(page).to have_text("Court Report Status: Submitted")
