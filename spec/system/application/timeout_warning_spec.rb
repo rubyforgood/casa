@@ -11,8 +11,5 @@ RSpec.describe "/*", type: :system do
       parsed_page = Nokogiri::HTML(page.html)
       expect(parsed_page.at("script").text.strip).to include(user.timeout_in.in_seconds.to_s)
     end
-
-    xit "warns the user two mintues before logout", js: true do
-    end
   end
 end
