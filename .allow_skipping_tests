@@ -62,6 +62,7 @@ mailers/application_mailer.rb
 models/application_record.rb
 models/concerns/by_organization_scope.rb
 models/concerns/roles.rb
+models/concerns/generate_token.rb
 models/fund_request.rb
 models/notification.rb
 notifications/base_notification.rb
