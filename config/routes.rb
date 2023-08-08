@@ -193,8 +193,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       namespace :users do
         post "sign_in", to: "sessions#create"
-        # get 'sign_out', to: 'sessions#destroy'
       end
+      get "casa_cases", to: "casa_cases#index"
     end
   end
 end
