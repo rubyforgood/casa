@@ -44,7 +44,7 @@ RSpec.describe "Case Groups", type: :system, js: true do
     fill_in "Name", with: "A family"
     select casa_case.case_number, from: "Cases"
     click_on "Submit"
-   
+
     expect(page).to have_text("Name has already been taken")
 
     visit case_groups_path
