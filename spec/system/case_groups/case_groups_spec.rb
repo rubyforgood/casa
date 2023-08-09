@@ -44,9 +44,10 @@ RSpec.describe "Case Groups", type: :system, js: true do
     fill_in "Name", with: "A family"
     select casa_case.case_number, from: "Cases"
     click_on "Submit"
+   
+    expect(page).to have_text("Name has already been taken")
 
     visit case_groups_path
     expect(page).to have_text("A family").once
-    expect(flash[:notice]).to include("Group name must be unique.")
   end
 end
