@@ -59,6 +59,7 @@ RSpec.describe "Banners", type: :system, js: true do
 
         expect(page).to have_text("New active banner content.")
       end
+    end
     
     context "when a banner is submitted as inactive" do
       it "does not deactivate the current active banner" do
@@ -83,8 +84,6 @@ RSpec.describe "Banners", type: :system, js: true do
 
         expect(page).to have_text(active_banner.content.body.to_plain_text)
       end
-    end
-    
     end
   end
 end
