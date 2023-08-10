@@ -34,12 +34,12 @@ RSpec.describe "Banners", type: :system, js: true do
   describe "when an organization has an active banner" do
     let(:admin) { create(:casa_admin) }
     let(:organization) { create(:casa_org) }
-    let(:active_banner) { create(:banner, casa_org: organization)}
+    let(:active_banner) { create(:banner, casa_org: organization) }
 
     context "when a banner is submitted as active" do
       it "deactivates and replaces the current active banner" do
         active_banner
-        
+
         sign_in admin
 
         visit banners_path
@@ -60,11 +60,11 @@ RSpec.describe "Banners", type: :system, js: true do
         expect(page).to have_text("New active banner content.")
       end
     end
-    
+
     context "when a banner is submitted as inactive" do
       it "does not deactivate the current active banner" do
         active_banner
-        
+
         sign_in admin
 
         visit banners_path

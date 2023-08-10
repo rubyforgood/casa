@@ -20,7 +20,7 @@ RSpec.describe "banners/new", type: :view do
       expect(rendered).to have_css("span.d-none", text: "Warning: This will replace your current active banner")
     end
   end
-  
+
   context "when organization has an active banner" do
     context "when new banner is marked as active" do
       it "warns that current active banner will be deactivated" do
