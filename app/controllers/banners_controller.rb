@@ -41,13 +41,14 @@ class BannersController < ApplicationController
 
     @banner = current_organization.banners.find(params[:id])
     
-    deactivate_alternate_active_banner
-
-    if @banner.update(banner_params)
-      redirect_to banners_path
-    else
-      render :edit
+    Banner.transaction do
+      deactivate_alternate_active_banner
+      @banner.update!(banner_params)
     end
+
+    redirect_to banners_path
+  rescue
+    render :new
   end
 
   def destroy
