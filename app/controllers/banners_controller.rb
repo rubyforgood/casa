@@ -25,7 +25,7 @@ class BannersController < ApplicationController
     authorize :application, :admin_or_supervisor?
 
     @banner = current_organization.banners.build(banner_params)
-    deactivate_alternate_active_banner if banner_params[:active]&.to_i == 1
+    deactivate_alternate_active_banner if banner_params[:active].to_i == 1
 
     if @banner.save
       redirect_to banners_path
@@ -38,7 +38,7 @@ class BannersController < ApplicationController
     authorize :application, :admin_or_supervisor?
 
     @banner = current_organization.banners.find(params[:id])
-    deactivate_alternate_active_banner if banner_params[:active]&.to_i == 1
+    deactivate_alternate_active_banner if banner_params[:active].to_i == 1
 
     if @banner.update(banner_params)
       redirect_to banners_path
