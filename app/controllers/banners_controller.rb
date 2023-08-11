@@ -30,7 +30,7 @@ class BannersController < ApplicationController
       deactivate_alternate_active_banner
       @banner.save!
     end
-    
+
     redirect_to banners_path
   rescue
     render :new
@@ -40,7 +40,7 @@ class BannersController < ApplicationController
     authorize :application, :admin_or_supervisor?
 
     @banner = current_organization.banners.find(params[:id])
-    
+
     Banner.transaction do
       deactivate_alternate_active_banner
       @banner.update!(banner_params)
