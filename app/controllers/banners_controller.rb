@@ -26,13 +26,14 @@ class BannersController < ApplicationController
 
     @banner = current_organization.banners.build(banner_params)
 
-    deactivate_alternate_active_banner
-
-    if @banner.save
-      redirect_to banners_path
-    else
-      render :new
+    Banner.transaction do
+      deactivate_alternate_active_banner
+      @banner.save!
     end
+    
+    redirect_to banners_path
+  rescue
+    render :new
   end
 
   def update
@@ -65,7 +66,7 @@ class BannersController < ApplicationController
   def deactivate_alternate_active_banner
     if banner_params[:active].to_i == 1
       alternate_active_banner = current_organization.banners.where(active: true).where.not(id: @banner.id).first
-      alternate_active_banner&.update(active: false)
+      alternate_active_banner&.update!(active: false)
     end
   end
 end
