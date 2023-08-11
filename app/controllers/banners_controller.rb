@@ -48,7 +48,7 @@ class BannersController < ApplicationController
 
     redirect_to banners_path
   rescue
-    render :new
+    render :edit
   end
 
   def destroy
