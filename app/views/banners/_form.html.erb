@@ -22,9 +22,9 @@
       <%= form.text_field :name, required: true %>
     </div>
     <div data-controller="reveal" data-reveal-hidden-class="d-none" class="form-check checkbox-style mb-20">
-      <%= form.check_box :active, data: { action: @has_alternate_active_banner && 'click->reveal#toggle' }, class: 'form-check-input' %>
+      <%= form.check_box :active, data: { action: @org_has_alternate_active_banner && 'click->reveal#toggle' }, class: 'form-check-input' %>
       <%= form.label :active, "Active?", class: 'form-check-label' %>
-      <span data-reveal-target="item" class="text-danger<%= form.object.active && @has_alternate_active_banner ? '' : ' d-none' %>">Warning: This will replace your current active banner</span>
+      <span data-reveal-target="item" class="text-danger <%= conditionally_add_hidden_class(form.object.active) %>">Warning: This will replace your current active banner</span>
     </div>
     <div class="input-style-1">
       <%= form.label :content %>

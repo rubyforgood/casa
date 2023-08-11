@@ -11,14 +11,14 @@ class BannersController < ApplicationController
     authorize :application, :admin_or_supervisor?
 
     @banner = Banner.new
-    @has_alternate_active_banner = current_organization.banners.where(active: true).where.not(id: @banner.id).exists?
+    @org_has_alternate_active_banner = current_organization.banners.where(active: true).where.not(id: @banner.id).exists?
   end
 
   def edit
     authorize :application, :admin_or_supervisor?
 
     @banner = current_organization.banners.find(params[:id])
-    @has_alternate_active_banner = current_organization.banners.where(active: true).where.not(id: @banner.id).exists?
+    @org_has_alternate_active_banner = current_organization.banners.where(active: true).where.not(id: @banner.id).exists?
   end
 
   def create
