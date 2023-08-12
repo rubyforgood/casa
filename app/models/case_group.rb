@@ -3,7 +3,7 @@ class CaseGroup < ApplicationRecord
   has_many :case_group_memberships
   has_many :casa_cases, through: :case_group_memberships
 
-  validates :name, uniqueness: {scope: :casa_org}
+  validates :name, presence: true, uniqueness: {scope: :casa_org}
   validates_presence_of :case_group_memberships
 end
 
