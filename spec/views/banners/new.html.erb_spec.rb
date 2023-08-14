@@ -9,10 +9,10 @@ RSpec.describe "banners/new", type: :view do
 
       allow(view).to receive(:current_user).and_return(user)
       allow(view).to receive(:current_organization).and_return(current_organization)
+      allow(current_organization).to receive(:has_alternate_active_banner?).and_return(true)
 
       assign :banners, [current_organization_banner]
       assign :banner, Banner.new(active: false)
-      assign :has_alternate_active_banner, true
 
       render template: "banners/new"
 
@@ -27,13 +27,13 @@ RSpec.describe "banners/new", type: :view do
         user = build_stubbed(:casa_admin)
         current_organization = user.casa_org
         current_organization_banner = build(:banner, active: true, casa_org: current_organization)
-
+        
         allow(view).to receive(:current_user).and_return(user)
         allow(view).to receive(:current_organization).and_return(current_organization)
+        allow(current_organization).to receive(:has_alternate_active_banner?).and_return(true)
 
         assign :banners, [current_organization_banner]
         assign :banner, Banner.new(active: true)
-        assign :has_alternate_active_banner, true
 
         render template: "banners/new"
 
@@ -51,10 +51,10 @@ RSpec.describe "banners/new", type: :view do
 
         allow(view).to receive(:current_user).and_return(user)
         allow(view).to receive(:current_organization).and_return(current_organization)
+        allow(current_organization).to receive(:has_alternate_active_banner?).and_return(false)
 
         assign :banners, []
         assign :banner, Banner.new(active: true)
-        assign :has_alternate_active_banner, false
 
         render template: "banners/new"
 
