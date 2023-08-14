@@ -87,6 +87,10 @@ class CasaOrg < ApplicationRecord
     end
   end
 
+  def has_alternate_active_banner?(current_banner_id)
+    banners.where(active: true).where.not(id: current_banner_id).exists?
+  end
+
   private
 
   def sanitize_svg
