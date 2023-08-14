@@ -51,7 +51,11 @@ vendor/bundle/
 # produced by tests (?)
 *.csv
 
+# vim temp files
 .*.swp
+
+# krita temp files
+*.kra~
 
 # Used for local developmen on Nix systems
 .direnv/
