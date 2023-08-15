@@ -40,6 +40,9 @@ sudo apt update
 #   Install Postgres 12
 sudo apt install -y postgresql-12
 
+#   Turn the server on
+systemctl start postgresql
+
 #   Add user to Postgres:
 sudo -u postgres psql -c "CREATE USER $USER WITH CREATEDB"
 
