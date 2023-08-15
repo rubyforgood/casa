@@ -168,7 +168,7 @@ RSpec.describe "notifications/index", type: :system do
   context "ReimbursementCompleteNotification" do
     it "should display a notification on the notifications page" do
       case_contact = create(:case_contact, :wants_reimbursement)
-      volunteer.notifications << create(:notification, :reimbursement_complete, params: { case_contact: case_contact })
+      volunteer.notifications << create(:notification, :reimbursement_complete, params: {case_contact: case_contact})
       sign_in volunteer
       visit notifications_path
       notification_message = "Volunteer #{case_contact.creator.display_name}'s request for reimbursement for " \
