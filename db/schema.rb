@@ -382,6 +382,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_09_002819) do
 
   create_table "learning_hours", force: :cascade do |t|
     t.bigint "user_id", null: false
+    t.integer "learning_type", default: 5
     t.string "name", null: false
     t.integer "duration_minutes", null: false
     t.integer "duration_hours", null: false
