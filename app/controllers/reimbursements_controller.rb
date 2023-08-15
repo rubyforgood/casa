@@ -32,9 +32,9 @@ class ReimbursementsController < ApplicationController
     @grouped_case_contacts = fetch_reimbursements
       .where({occurred_at: @case_contact.occurred_at, creator_id: @case_contact.creator_id})
     @grouped_case_contacts.update_all(reimbursement_params.to_h)
-    ReimbursementCompleteNotification.with(case_contact: @case_contact).deliver(
-      [@case_contact.creator, @case_contact.supervisor].compact!
-    )
+    notification_recipients = [@case_contact.creator]
+    notification_recipients << @case_contact.supervisor if @case_contact.supervisor
+    ReimbursementCompleteNotification.with(case_contact: @case_contact).deliver(notification_recipients)
     redirect_to reimbursements_path unless params[:ajax]
   end
 
