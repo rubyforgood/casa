@@ -33,7 +33,7 @@ class ReimbursementsController < ApplicationController
       .where({occurred_at: @case_contact.occurred_at, creator_id: @case_contact.creator_id})
     @grouped_case_contacts.update_all(reimbursement_params.to_h)
     ReimbursementCompleteNotification.with(case_contact: @case_contact).deliver(
-      [@case_contact.creator, @case_contact.supervisor]
+      [@case_contact.creator, @case_contact.supervisor].compact!
     )
     redirect_to reimbursements_path unless params[:ajax]
   end

@@ -172,7 +172,7 @@ RSpec.describe "notifications/index", type: :system do
       sign_in volunteer
       visit notifications_path
       notification_message = "Volunteer #{case_contact.creator.display_name}'s request for reimbursement for " \
-        "#{case_contact.miles_driven}mi for $#{} on #{case_contact.occurred_at_display} has been processed and is " \
+        "#{case_contact.miles_driven}mi on #{case_contact.occurred_at_display} has been processed and is " \
         "en route."
       expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
       expect(page).to have_content("Reimbursement Approved")
