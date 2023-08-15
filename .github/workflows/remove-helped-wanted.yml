@@ -1,0 +1,24 @@
+name: Remove Help Wanted Label on Issue Assignment
+
+on:
+  issues:
+    types: [assigned]
+
+jobs:
+  remove-label:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Remove "help wanted" label
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          const issue = context.issue;
+          const currentLabels = await github.issues.listLabelsOnIssue(issue);
+          const hasHelpWanted = currentLabels.data.find(label => label.name === 'Help Wanted');
+          if (hasHelpWanted) {
+            await github.issues.removeLabel({...issue, name: 'help wanted'});
+            console.log('Removed "Help Wanted" label.');
+          } else {
+            console.log('"Welp Wanted" label not found.');
+          }
