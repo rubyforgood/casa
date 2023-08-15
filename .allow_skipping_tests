@@ -31,6 +31,7 @@ notifications/delivery_methods/sms.rb
 notifications/emancipation_checklist_reminder_notification.rb
 notifications/followup_notification.rb
 notifications/followup_resolved_notification.rb
+notifications/reimbursement_complete_notification.rb
 notifications/youth_birthday_notification.rb
 policies/fund_request_policy.rb
 policies/learning_hour_policy.rb
