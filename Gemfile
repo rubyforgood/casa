@@ -46,9 +46,10 @@ gem "sprockets-rails" # The original asset pipeline for Rails [https://github.co
 gem "stimulus-rails"
 gem "strong_migrations"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "active_model_serializers" # for JSON serialization
 gem "rswag-api"
 gem "rswag-ui"
+gem "blueprinter" # for JSON serialization
+gem "oj" # faster JSON parsing 🍊
 
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries

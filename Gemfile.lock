@@ -46,11 +46,6 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    active_model_serializers (0.10.13)
-      actionpack (>= 4.1, < 7.1)
-      activemodel (>= 4.1, < 7.1)
-      case_transform (>= 0.2)
-      jsonapi-renderer (>= 0.1.1.beta1, < 0.3)
     activejob (7.0.6)
       activesupport (= 7.0.6)
       globalid (>= 0.3.6)
@@ -100,6 +95,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bindex (0.8.1)
+    blueprinter (0.25.3)
     brakeman (6.0.1)
     bugsnag (6.26.0)
       concurrent-ruby (~> 1.0)
@@ -123,8 +119,6 @@ GEM
     capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
-    case_transform (0.2)
-      activesupport
     caxlsx (3.4.1)
       htmlentities (~> 4.3, >= 4.3.4)
       marcel (~> 1.0)
@@ -253,7 +247,6 @@ GEM
       railties (>= 6.0.0)
     json-schema (3.0.0)
       addressable (>= 2.8)
-    jsonapi-renderer (0.2.2)
     jwt (2.7.1)
     launchy (2.5.0)
       addressable (~> 2.7)
@@ -304,6 +297,7 @@ GEM
     noticed (1.6.3)
       http (>= 4.0.0)
       rails (>= 5.2.0)
+    oj (3.15.1)
     orm_adapter (0.5.0)
     parallel (1.22.1)
     paranoia (2.6.2)
@@ -508,11 +502,11 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  active_model_serializers
   after_party
   amazing_print
   annotate
   azure-storage-blob
+  blueprinter
   brakeman
   bugsnag
   bullet
@@ -545,6 +539,7 @@ DEPENDENCIES
   net-pop
   net-smtp
   noticed
+  oj
   paranoia
   pdf-forms
   pg
