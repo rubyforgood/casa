@@ -47,6 +47,8 @@ gem "stimulus-rails"
 gem "strong_migrations"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "active_model_serializers" # for JSON serialization
+gem "rswag-api"
+gem "rswag-ui"
 
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
@@ -57,6 +59,7 @@ group :development, :test do
   gem "pry"
   gem "pry-byebug"
   gem "rspec-rails"
+  gem "rswag-specs"
   gem "shoulda-matchers"
   gem "standard", "1.5.0" # 1.6.0 errors on all factorybot create variables
 end
