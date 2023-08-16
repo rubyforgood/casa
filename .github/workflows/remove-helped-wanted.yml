@@ -11,4 +11,3 @@ jobs:
       - uses: andymckay/labeler@master
         with:
           remove-labels: "Help Wanted"
-          ignore-if-assigned: false
