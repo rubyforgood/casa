@@ -10,5 +10,5 @@ jobs:
     steps:
       - uses: andymckay/labeler@master
         with:
-          remove-labels: "help-wanted"
+          remove-labels: "Help Wanted"
           ignore-if-assigned: false
