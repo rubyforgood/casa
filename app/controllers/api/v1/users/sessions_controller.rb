@@ -4,9 +4,9 @@ class Api::V1::Users::SessionsController < Api::V1::BaseController
     load_resource
     # p @user
     if @user
-      render json: @user, serializer: Api::V1::SessionSerializer, status: 201
+      render json: Api::V1::SessionBlueprint.render(@user), status: 201
     else
-      render json: {message: "Wrong password or username"}, status: 401
+      render json: {message: "Wrong password or email"}, status: 401
     end
   end
 
