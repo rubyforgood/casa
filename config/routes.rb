@@ -68,11 +68,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :case_contacts, except: %i[show] do
+  resources :case_contacts do
     member do
       post :restore
     end
-    resources :case_contact_form, only: %i[show update], controller: "case_contact_forms"
+    resources :form, controller: "case_contacts/form"
     resources :followups, only: %i[create], controller: "case_contacts/followups", shallow: true do
       patch :resolve, on: :member
     end
