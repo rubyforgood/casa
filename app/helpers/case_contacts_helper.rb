@@ -8,6 +8,10 @@ module CaseContactsHelper
     case_contact.duration_minutes.to_i.remainder(60)
   end
 
+  def new_case_contact
+    params[:casa_case_id].present? ? new_case_contact_path(id: params[:casa_case_id]) : new_case_contact_path
+  end
+
   def set_contact_made_false(case_contact)
     case_contact.persisted? && case_contact.contact_made == false
   end
