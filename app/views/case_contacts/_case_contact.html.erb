@@ -46,7 +46,7 @@
         <% end %>
         <div class="action">
         <% if policy(contact).destroy? && !contact.deleted? %>
-         <%= link_to case_contact_path(contact.id), class: "main-btn btn-sm danger-btn btn-hover", method: :delete  do %>
+         <%= link_to case_contact_path(contact.id), class: "main-btn btn-sm danger-btn btn-hover", method: :delete do %>
           <i class="lni lni-trash-can mr-5"></i>Delete
         <% end %>
         <% end %>
