@@ -1,7 +1,7 @@
 <%= form_for(@case_contact, url: wizard_path, method: :put, local: true, id: "casa-contact-form") do |form| %>
   <%= render "/shared/error_messages", resource: case_contact %>
 
-  <div class="card-style-1 pl-25 mb-10 pr-50">
+<div class="card-style-1 pl-25 mb-10 pr-50">
     <h2 class="mb-3"><label for="case_contact_casa_case">4. Enter Travel Details</label></h2>
     <div class="field miles-driven form-group">
       <h5 class="mb-3"><%= form.label :miles_driven, "a. Miles Driven" %></h5>

@@ -2,10 +2,10 @@
   <%= render "/shared/error_messages", resource: case_contact %>
 
   <div class="card-style-1 pl-25 mb-10">
-    <%= render "case_contacts/contact_types",
+    <%= render "contact_types",
         form: form,
         model: @case_contact,
-        contact_type_groups:  @current_organization_groups,
+        contact_type_groups: @current_organization_groups,
         selected_case_contact_types: @selected_case_contact_types,
         checkbox_tag_name: "case_contact[case_contact_contact_type_attributes][][contact_type_id]" %>
   </div>
