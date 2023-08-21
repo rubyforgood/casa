@@ -313,7 +313,7 @@ GEM
       byebug (~> 11.0)
       pry (>= 0.13, < 0.15)
     public_suffix (5.0.1)
-    puma (6.3.0)
+    puma (6.3.1)
       nio4r (~> 2.0)
     pundit (2.3.1)
       activesupport (>= 3.0.0)
@@ -528,7 +528,7 @@ DEPENDENCIES
   pretender
   pry
   pry-byebug
-  puma (= 6.3.0)
+  puma (= 6.3.1)
   pundit
   rack-attack
   rails (~> 7.0.7)

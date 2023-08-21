@@ -35,7 +35,7 @@ gem "pdf-forms" # filling in fund request PDFs with user input
 gem "rexml" # pdf-forms needs this to deploy to heroku apparently
 gem "pg" # Use postgresql as the database for Active Record
 gem "pretender"
-gem "puma", "6.3.0" # 6.2.2 fails to install on m1 # Use Puma as the app server
+gem "puma", "6.3.1" # 6.2.2 fails to install on m1 # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "rack-attack" # for blocking & throttling abusive requests
 gem "request_store"
