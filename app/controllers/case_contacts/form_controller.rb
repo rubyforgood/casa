@@ -1,44 +1,18 @@
 class CaseContacts::FormController < ApplicationController
   include Wicked::Wizard
 
-  before_action :find_and_authorize_case_contact, only: %i[show update]
+  before_action :set_case_contact
+  before_action :set_contact_types
+  before_action :require_organization!
 
-  steps :select_cases, :select_contact_types, :contact_details, :travel_details, :notes
+  steps :select_contact_types, :contact_details, :travel_details, :notes
+
+  # ===== NOTES =====
+  # Need to map the steps of the form
+  # Right now it will create one case contact per casa case at a time
 
   def show
-    @casa_cases = policy_scope(current_organization.casa_cases)
-
-    # Select the most likely case option
-    # - If there are cases defined in the params, select those cases (often coming from the case page)
-    # - If there is only one case, select that case
-    # - If there are no hints, let them select their case
-    @selected_cases =
-      if params.dig(:case_contact, :casa_case_id).present?
-        @casa_cases.where(id: params.dig(:case_contact, :casa_case_id))
-      elsif @casa_cases.count == 1
-        @casa_cases[0, 1]
-      else
-        []
-      end
-
-    @selected_case_contact_types = @casa_cases.flat_map(&:contact_types)
-
-    @current_organization_groups =
-      if @selected_case_contact_types.present?
-        @selected_case_contact_types.map(&:contact_type_group).uniq
-      else
-        current_organization
-          .contact_type_groups
-          .joins(:contact_types)
-          .where(contact_types: {active: true})
-          .alphabetically
-          .uniq
-      end
-
-    # TODO: Do we want this logic?
-    jump_to(:select_cases) if step.nil?
-
-    render_wizard @case_contact
+    render_wizard
   end
 
   def update
@@ -46,22 +20,69 @@ class CaseContacts::FormController < ApplicationController
 
     render_wizard @case_contact
   end
-
-  def create
-    params = CaseContactParameters.new(params, creator: current_user)
-    @case_contact = CaseContact.new(params)
-    authorize @case_contact
-    redirect_to wizard_path(steps.first, case_contact_id: @case_contact.id)
-  end
 end
 
 private
 
-def case_contact_params(step)
-  params.require(:case_contact).permit(helpers.permitted_attributes[step])
+def set_case_contact
+  if current_organization.case_contacts.exists?(params[:case_contact_id])
+    @case_contact = authorize(current_organization.case_contacts.find(params[:case_contact_id]))
+  else
+    redirect_to authenticated_user_root_path
+  end
 end
 
-def find_and_authorize_case_contact
-  @case_contact ||= CaseContact.find(params[:case_contact_id])
-  authorize @case_contact, :edit?
+def set_contact_types
+  @contact_types = ContactType.for_organization(current_organization)
+end
+
+def update_case_contact_for_every_selected_casa_case(selected_cases)
+  selected_cases.map do |casa_case|
+    casa_case.case_contacts.update(update_case_contact_params.except(:casa_case_attributes))
+  end
+end
+
+def update_case_contact_params
+  # Updating a case contact should not change its original creator
+  CaseContactParameters.new(params)
+end
+
+def current_organization_groups
+  current_organization.contact_type_groups
+    .joins(:contact_types)
+    .where(contact_types: {active: true})
+    .uniq
+end
+
+def all_case_contacts
+  policy_scope(current_organization.case_contacts).includes(:creator, contact_types: :contact_type_group)
+end
+
+def update_or_create_additional_expense(all_ae_params, cc)
+  all_ae_params.each do |ae_params|
+    id = ae_params[:id]
+    current = AdditionalExpense.find(:id)
+    if current
+      current.assign_attributes(other_expense_amount: ae_params[:other_expense_amount], other_expenses_describe: ae_params[:other_expenses_describe])
+      save_or_add_error(current, cc)
+    else
+      create_new_exp = cc.additional_expenses.build(ae_params)
+      save_or_add_error(create_new_exp, cc)
+    end
+  end
+end
+
+def save_or_add_error(obj, case_contact)
+  obj.valid? ? obj.save : case_contact.errors.add(:base, obj.errors.full_messages.to_sentence)
+end
+
+def update_volunteer_address(volunteer = current_user)
+  content = create_case_contact_params.dig(:casa_case_attributes, :volunteers_attributes, "0", :address_attributes, :content)
+  return if content.blank?
+  if volunteer.address
+    volunteer.address.update!(content: content)
+  else
+    volunteer.address = Address.new(content: content)
+    volunteer.save!
+  end
 end
