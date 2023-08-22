@@ -1656,11 +1656,15 @@ h6,
           background: rgba(74, 108, 247, 0.05); }
         .header .header-right .dropdown-menu li:last-child {
           border-bottom: none; }
-        .header .header-right .dropdown-menu li a {
+        .header .header-right .dropdown-menu li a,
+        .header .header-right .dropdown-menu li span {
           padding: 8px 12px;
           display: flex;
           color: rgba(0, 0, 0, 0.7);
           border-radius: 6px; }
+        .header .header-right .dropdown-menu li span {
+          font-size: 14px;
+        }
           .header .header-right .dropdown-menu li a .image {
             max-width: 35px;
             width: 100%;
