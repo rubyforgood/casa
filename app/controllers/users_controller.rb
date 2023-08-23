@@ -26,11 +26,15 @@ class UsersController < ApplicationController
       return render "edit"
     end
 
-    current_user.languages << @language
-    if current_user.save
-      redirect_to edit_users_path, notice: "#{@language.name} was added to your languages list."
+    if current_user.languages.include?(@language)
+      redirect_to edit_users_path, alert: "#{@language.name} is already in your languages list."
     else
-      redirect_to edit_users_path, alert: "Error unable to add #{@language.name} to your languages list!"
+      current_user.languages << @language
+      if current_user.save
+        redirect_to edit_users_path, notice: "#{@language.name} was added to your languages list."
+      else
+        redirect_to edit_users_path, alert: "Error unable to add #{@language.name} to your languages list!"
+      end
     end
   end
 
