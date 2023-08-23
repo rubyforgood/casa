@@ -78,7 +78,7 @@ class CaseContactsController < ApplicationController
     case_contacts = create_case_contact_for_every_selected_casa_case(@selected_cases)
     if case_contacts.any?(&:new_record?)
       @case_contact = case_contacts.first
-      @casa_cases = [@case_contact.casa_case]
+
       render :new
     elsif @selected_cases.count > 1
       redirect_to case_contacts_path(success: true), notice: "Case contacts successfully created"
