@@ -442,11 +442,11 @@ RSpec.describe "/users", type: :request do
           language_id: language.id
         }
       end
-    
+
       it "should not add the language again" do
         expect(volunteer.languages.count).to eq(1) # Ensure the language count remains the same
       end
-    
+
       it "should notify the user that the language is already in their list" do
         expect(response).to redirect_to(edit_users_path)
         expect(flash[:alert]).to eq "#{language.name} is already in your languages list."
