@@ -106,8 +106,8 @@ window.onload = function () {
     caseContactSubmit.disabled = false
   })
 
-  const caseContactSubmitFromModal = document.getElementById('modal-case-contact-submit')
-  caseContactSubmitFromModal.onclick = function () {
+  const caseContactSubmitFormModal = document.getElementById('modal-case-contact-submit')
+  caseContactSubmitFormModal.onclick = function () {
     $('#casa-contact-form').unbind('submit')
   }
 
