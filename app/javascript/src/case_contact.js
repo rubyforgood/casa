@@ -11,7 +11,7 @@ window.onload = function () {
   const durationHours = document.getElementById('case-contact-duration-hours-display')
   const durationMinutes = document.getElementById('case-contact-duration-minutes-display')
   const caseOccurredAt = document.getElementById('case_contact_occurred_at')
-  const caseContactSubmit = document.getElementById('case-contact-submit')
+  const caseContactSubmit = $('#case-contact-submit')
   const volunteerAddressFieldState = (hide) => {
     if (hide) $('.field.volunteer-address').addClass('hide-field')
     else $('.field.volunteer-address').removeClass('hide-field')
@@ -103,7 +103,7 @@ window.onload = function () {
   })
 
   $('#confirm-submit').on('hide.bs.modal', function () {
-    caseContactSubmit.disabled = false
+    caseContactSubmit.prop('disabled', false)
   })
 
   const caseContactSubmitFormModal = document.getElementById('modal-case-contact-submit')
@@ -111,12 +111,12 @@ window.onload = function () {
     $('#casa-contact-form').unbind('submit')
   }
 
-  caseContactSubmit.onclick = function (e) {
+  caseContactSubmit.on('click', function () {
     validateAtLeastOneChecked(document.querySelectorAll('.casa-case-id'))
     validateAtLeastOneChecked(document.querySelectorAll('.case-contact-contact-type'))
 
     validateDuration()
-  }
+  })
 }
 
 function validateOccurredAt (caseOccurredAt, eventType = '') {
